@@ -12,8 +12,8 @@ struct Card
 	struct Minion {
 		int cost;
 		int attack;
-		int hp_max;
 		int hp;
+		int hp_max;
 	};
 
 	struct Spell {
@@ -23,7 +23,7 @@ struct Card
 	struct Weapon {
 		int cost;
 		int attack;
-		int duration;
+		int durability;
 	};
 
 	struct Secret {
