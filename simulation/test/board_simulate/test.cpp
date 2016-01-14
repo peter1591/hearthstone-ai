@@ -6,7 +6,7 @@
 #include "deck-database.h"
 #include "board.h"
 
-#define TIMES_COPY 1000000
+#define TIMES_TEST 10000000
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -62,9 +62,10 @@ void InitializeBoard(Board &board)
 	board.PrintBoard();
 }
 
-void DoTask(const Board &board)
+void DoTask(const Board &origin_board)
 {
-	Board board_new = board;
+	Board board = origin_board; // copy
+
 }
 
 int main(void)
@@ -80,9 +81,9 @@ int main(void)
 			return -1;
 		}
 
-		std::cout << "Copying board for " << TIMES_COPY << " times... ";
+		std::cout << "Copying board for " << TIMES_TEST << " times... ";
 		std::cout.flush();
-		for (int i=TIMES_COPY; i>0; --i)
+		for (int i=TIMES_TEST; i>0; --i)
 		{
 			DoTask(board);
 		}

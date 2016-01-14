@@ -5,7 +5,9 @@ class Card
 {
 	public:
 		Card() : id(0) {}
-		Card(int id) : id(id) {}
+
+		void MarkInvalid();
+		bool IsValid() const;
 
 	public:
 		int id;
@@ -18,7 +20,6 @@ class Card
 			int cost;
 			int attack;
 			int hp;
-			int hp_max;
 		};
 
 		struct Spell {
@@ -40,7 +41,17 @@ class Card
 			Spell spell;
 			Weapon weapon;
 			Secret secret;
-		};
+		} data;
 };
+
+inline bool Card::IsValid() const
+{
+	return this->id != 0;
+}
+
+inline void Card::MarkInvalid()
+{
+	this->id = 0;
+}
 
 #endif
