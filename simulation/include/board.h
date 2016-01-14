@@ -5,15 +5,18 @@
 #include "opponent.h"
 
 // POD to support fast copy via memcpy()
-struct Board
+class Board
 {
-	Player player;
-	Opponent opponent;
+	public:
+		enum Turn {
+			TURN_PLAYER, TURN_OPPONENT, TURN_RNG
+		};
 
-	enum Turn {
-		TURN_PLAYER, TURN_OPPONENT, TURN_RNG
-	};
-	Turn turn;
+	public:
+		Player player;
+		Opponent opponent;
+
+		Turn turn;
 };
 
 #endif

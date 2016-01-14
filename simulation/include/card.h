@@ -1,41 +1,46 @@
 #ifndef _CARD_H
 #define _CARD_H
 
-struct Card
+class Card
 {
-	int id;
+	public:
+		Card() : id(0) {}
+		Card(int id) : id(id) {}
 
-	enum Type {
-		MINION, SPELL, WEAPON, SECRET
-	} type;
+	public:
+		int id;
 
-	struct Minion {
-		int cost;
-		int attack;
-		int hp;
-		int hp_max;
-	};
+		enum Type {
+			MINION, SPELL, WEAPON, SECRET
+		} type;
 
-	struct Spell {
-		// TODO
-	};
+		struct Minion {
+			int cost;
+			int attack;
+			int hp;
+			int hp_max;
+		};
 
-	struct Weapon {
-		int cost;
-		int attack;
-		int durability;
-	};
+		struct Spell {
+			// TODO
+		};
 
-	struct Secret {
-		// TODO
-	};
+		struct Weapon {
+			int cost;
+			int attack;
+			int durability;
+		};
 
-	union {
-		Minion minion;
-		Spell spell;
-		Weapon weapon;
-		Secret secret;
-	};
+		struct Secret {
+			// TODO
+		};
+
+		union {
+			Minion minion;
+			Spell spell;
+			Weapon weapon;
+			Secret secret;
+		};
 };
 
 #endif

@@ -5,18 +5,25 @@
 #include "player-stat.h"
 #include "card.h"
 
-struct Player
+class Player
 {
-	PlayerStat stat;
+	public:
+		PlayerStat stat;
 
-	Card secrets[MAX_SECRETS];
-	int secrets_len;
+		Card secrets[MAX_SECRETS];
+		int secrets_len;
 
-	Card hand[MAX_HAND];
-	int hand_len;
+		Card hand[MAX_HAND];
+		int hand_len;
 
-	Card deck[MAX_DECK];
-	int deck_len;
+		Card deck[MAX_DECK];
+		int deck_len;
+
+	public:
+		void AddCardToDeck(const Card &card) {
+			deck[deck_len] = card;
+			deck_len++;
+		}
 };
 
 #endif
