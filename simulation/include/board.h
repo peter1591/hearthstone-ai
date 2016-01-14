@@ -4,7 +4,6 @@
 #include "player.h"
 #include "opponent.h"
 
-// POD to support fast copy via memcpy()
 class Board
 {
 	public:

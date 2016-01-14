@@ -24,7 +24,13 @@ int main(void)
 	Board board1;
 	Board board2;
 
-	board1.player.AddCardToDeck(Card(111));
+	board1.player.hand.push_back(Card(111));
+	board1.player.hand.push_back(Card(222));
+	board1.player.deck.push_back(Card(222));
+	board1.player.deck.push_back(Card(222));
+	board1.player.deck.push_back(Card(222));
+	board1.player.deck.push_back(Card(222));
+	board1.player.deck.push_back(Card(222));
 
 	while (true) {
 		if (clock_gettime(CLOCK_MONOTONIC, &start) < 0) {
