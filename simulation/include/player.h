@@ -1,6 +1,7 @@
 #ifndef _PLAYER_H
 #define _PLAYER_H
 
+#include "settings.h"
 #include "player-stat.h"
 #include "card.h"
 
@@ -8,13 +9,13 @@ struct Player
 {
 	PlayerStat stat;
 
-	Card[MAX_SECRETS] secrets;
+	Card secrets[MAX_SECRETS];
 	int secrets_len;
 
-	Card[MAX_HAND] hand;
+	Card hand[MAX_HAND];
 	int hand_len;
 
-	Card[MAX_DECK] deck;
+	Card deck[MAX_DECK];
 	int deck_len;
 };
 
