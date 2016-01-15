@@ -7,8 +7,15 @@
 class HiddenDeck
 {
 	public:
+		HiddenDeck();
+
 		std::vector<Card> played_cards;
 		// TODO: we can guess the opponent deck type
 };
+
+inline HiddenDeck::HiddenDeck()
+{
+	this->played_cards.reserve(30);
+}
 
 #endif

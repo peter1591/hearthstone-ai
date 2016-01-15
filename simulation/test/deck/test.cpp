@@ -54,13 +54,6 @@ void AddCard(const DeckDatabase &deck_database, Deck &deck)
 //	PrintDeck(deck);
 }
 
-void RemoveCard(Deck &deck)
-{
-	deck.Draw();
-//	std::cout << "Removing a card: " << deck.RandomPickAndRemove().id << std::endl;
-//	PrintDeck(deck);
-}
-
 int main(void)
 {
 	struct timespec start, end;
@@ -84,7 +77,9 @@ int main(void)
 				if (rand() % 100 == 0) {
 					AddCard(deck_database, deck);
 				} else {
-					RemoveCard(deck);
+					deck.Draw();
+					//	std::cout << "Removing a card: " << deck.RandomPickAndRemove().id << std::endl;
+					//	PrintDeck(deck);
 				}
 			}
 		}

@@ -59,7 +59,7 @@ void InitializeBoard(Board &board)
 	minion.max_hp = 3;
 	board.player_minions.AddMinion(minion);
 
-	board.PrintBoard();
+	board.DebugPrint();
 }
 
 void DoTask(const Board &board)

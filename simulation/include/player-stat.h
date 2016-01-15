@@ -1,7 +1,7 @@
 #ifndef _PLAYER_STAT_H
 #define _PLAYER_STAT_H
 
-#include "card.h"
+#include "weapon.h"
 #include "hero-power.h"
 
 struct PlayerStat
@@ -14,7 +14,7 @@ struct PlayerStat
 	int crystals_locked;
 	int crystals_locked_next_turn;
 
-	Card weapon;
+	Weapon weapon;
 	HeroPower hero_power;
 };
 

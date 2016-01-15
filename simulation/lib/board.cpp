@@ -2,7 +2,18 @@
 
 #include "board.h"
 
-void Board::PrintBoard() const
+static Board::State
+
+std::list<Move> Board::GetNextMoves()
+{
+	Board::State stage = (Board::State)(this->state & Board::STATE_MASK_STAGE);
+	if (stage == Board::STATE_START_TURN) {
+		Move move;
+		move.next_state = BoardState::STATE_
+	}
+}
+
+void Board::DebugPrint() const
 {
 	std::cout << "=== Print Board START ===" << std::endl;
 
