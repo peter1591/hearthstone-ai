@@ -18,33 +18,56 @@ class BoardState
 {
 	public:
 		enum Stage {
+			STAGE_FLAG_RANDOM = 0x1000,
+			STAGE_MASK_RANDOM = 0xF000,
+
 			STAGE_UNKNOWN    = 0x0000,
 
 			STAGE_START_TURN = 0x0001, // this should be the first stage for the player/opponent
-			STAGE_DRAW       = 0x0002,
+			STAGE_DRAW       = 0x0002 | STAGE_FLAG_RANDOM,
 			STAGE_END_TURN   = 0x0003 // this should be the last stage for the player/opponent
 		};
 
 	public:
 		BoardState() : stage(STAGE_UNKNOWN) {}
 
-	private:
-		bool IsPlayerTurn() { return this->is_player_turn; }
-		bool IsRandomTurn() { return this->is_random_turn; }
+		void SetPlayerTurn() { this->is_player_turn = true; }
+		bool IsPlayerTurn() const { return this->is_player_turn; }
+
+		bool IsRandomTurn() const { return this->stage & STAGE_MASK_RANDOM; }
+
 		Stage GetStage() { return this->stage; }
+		const Stage & GetStage() const { return this->stage; }
 		void SetStage(Stage stage) { this->stage = stage; }
 
 	private:
 		bool is_player_turn;
-		bool is_random_turn;
 		Stage stage;
 };
 
 class Move
 {
 	public:
-		BoardState next_state;
-	// TODO
+		enum Action {
+			ACTION_UNKNOWN,
+			ACTION_STATE_TRANSFER
+		};
+
+		class StateTransferData {
+			public:
+				BoardState next_state;
+		};
+
+	public:
+		Action action;
+
+		union Data {
+			StateTransferData state_transfer;
+
+			Data() {}
+		} data;
+
+		void DebugPrint() const;
 };
 
 class Board
@@ -65,32 +88,29 @@ class Board
 		Minions opponent_minions;
 
 	public:
-		void SetStateToPlayerTurn(); // TODO: debug only
+		void PlayerTurnStart() {
+			// TODO: debug only
+			this->state.SetStage(BoardState::STAGE_START_TURN);
+			this->state.SetPlayerTurn();
+		}
+
+		const BoardState &GetState() const { return this->state; }
 
 		std::list<Move> GetNextMoves();
 		void ApplyMove(const Move &move);
 
 		void DebugPrint() const;
 
-	public:
-		inline bool IsPlayerTurn() { return this->state & STATE_FLAG_PLAYER_TURN; }
-		inline bool IsOpponentTurn() { return !this->IsPlayerTurn(); }
-		inline bool IsRandomTurn() { return this->state & STATE_FLAG_RANDOM_TURN; }
+	private:
+		std::list<Move> DoStartTurn();
+		std::list<Move> DoDraw();
 
 	private:
-
-	private:
-		State state;
+		BoardState state;
 };
 
 inline Board::Board()
 {
-	this->state = STATE_UNKNOWN;
-}
-
-inline void Board::SetStateToPlayerTurn()
-{
-	this->state = (Board::State)(Board::STATE_START_TURN | Board::STATE_FLAG_PLAYER_TURN);
 }
 
 #endif

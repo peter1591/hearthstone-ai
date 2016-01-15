@@ -59,20 +59,41 @@ void InitializeBoard(Board &board)
 	minion.max_hp = 3;
 	board.player_minions.AddMinion(minion);
 
-	board.PrintBoard();
+	board.PlayerTurnStart();
+
+	board.DebugPrint();
 }
 
 void DoTask(const Board &board)
 {
 	Board board_new = board;
 
+	std::list<Move> moves;
+	
+	moves = board_new.GetNextMoves();
+	std::cout << "Next moves: " << std::endl;
+	for (const auto &move : moves) {
+		move.DebugPrint();
+	}
 
+	//board_new.DebugPrint();
+	board_new.ApplyMove(moves.front());
+	//board_new.DebugPrint();
+	
+	moves = board_new.GetNextMoves();
+	board_new.DebugPrint();
+	std::cout << "Next moves: " << std::endl;
+	for (const auto &move : moves) {
+		move.DebugPrint();
+	}
 }
 
 int main(void)
 {
 	struct timespec start, end;
 	Board board;
+
+	srand(time(NULL));
 
 	InitializeBoard(board);
 
@@ -87,6 +108,7 @@ int main(void)
 		for (int i=TIMES_TEST; i>0; --i)
 		{
 			DoTask(board);
+			return 0;
 		}
 
 		if (clock_gettime(CLOCK_MONOTONIC, &end) < 0) {
