@@ -8,9 +8,7 @@
 #include <stdexcept>
 
 #include "card.h"
-
-#define LIKELY(expression) (__builtin_expect(!!(expression), 1))
-#define UNLIKELY(expression) (__builtin_expect(!!(expression), 0))
+#include "common.h"
 
 class Deck
 {
@@ -22,7 +20,7 @@ class Deck
 
 		Card Draw();
 
-		std::vector<Card> GetCards() const;
+		const std::vector<Card>& GetCards() const;
 
 	private:
 		std::vector<Card> cards;
@@ -58,7 +56,7 @@ inline Card Deck::Draw()
 	return ret;
 }
 
-inline std::vector<Card> Deck::GetCards() const
+inline const std::vector<Card>& Deck::GetCards() const
 {
 	return this->cards;
 }

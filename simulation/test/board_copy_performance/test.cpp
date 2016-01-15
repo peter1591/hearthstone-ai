@@ -52,12 +52,12 @@ void InitializeBoard(Board &board)
 	minion.card_id = 111;
 	minion.hp = 1;
 	minion.max_hp = 1;
-	board.player_minions.push_back(minion);
+	board.player_minions.AddMinion(minion);
 
 	minion.card_id = 213;
 	minion.hp = 2;
 	minion.max_hp = 3;
-	board.player_minions.push_back(minion);
+	board.player_minions.AddMinion(minion);
 
 	board.PrintBoard();
 }

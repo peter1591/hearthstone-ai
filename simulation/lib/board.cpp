@@ -17,9 +17,7 @@ void Board::PrintBoard() const
 	}
 
 	std::cout << "Player minions: " << std::endl;
-	for (const auto &minion : this->player_minions) {
-		std::cout << "\t" << minion.hp << " / " << minion.max_hp << std::endl;
-	}
+	this->player_minions.DebugPrint();
 
 	std::cout << "=== Print Board END   ===" << std::endl;
 }

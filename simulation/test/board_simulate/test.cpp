@@ -6,7 +6,7 @@
 #include "deck-database.h"
 #include "board.h"
 
-#define TIMES_TEST 10000000
+#define TIMES_TEST 1000000
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -52,19 +52,20 @@ void InitializeBoard(Board &board)
 	minion.card_id = 111;
 	minion.hp = 1;
 	minion.max_hp = 1;
-	board.player_minions.push_back(minion);
+	board.player_minions.AddMinion(minion);
 
 	minion.card_id = 213;
 	minion.hp = 2;
 	minion.max_hp = 3;
-	board.player_minions.push_back(minion);
+	board.player_minions.AddMinion(minion);
 
 	board.PrintBoard();
 }
 
-void DoTask(const Board &origin_board)
+void DoTask(const Board &board)
 {
-	Board board = origin_board; // copy
+	Board board_new = board;
+
 
 }
 
@@ -81,7 +82,7 @@ int main(void)
 			return -1;
 		}
 
-		std::cout << "Copying board for " << TIMES_TEST << " times... ";
+		std::cout << "Testing board for " << TIMES_TEST << " times... ";
 		std::cout.flush();
 		for (int i=TIMES_TEST; i>0; --i)
 		{

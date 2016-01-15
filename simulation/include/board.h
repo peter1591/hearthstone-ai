@@ -7,8 +7,8 @@
 #include "card.h"
 #include "deck.h"
 #include "hand.h"
-#include "secret.h"
-#include "minion.h"
+#include "secrets.h"
+#include "minions.h"
 #include "player-stat.h"
 #include "hidden-deck.h"
 #include "hidden-secrets.h"
@@ -25,17 +25,17 @@ class Board
 		Turn turn;
 
 		PlayerStat player_stat;
-		std::list<Secret> player_secrets;
+		Secrets player_secrets;
 		Hand player_hand;
 		Deck player_deck;
-		std::list<Minion> player_minions;
+		Minions player_minions;
 
 		PlayerStat opponent_stat;
 		HiddenSecrets opponent_secrets;
 		HiddenHand opponent_hand;
 		HiddenDeck opponent_deck;
+		Minions opponent_minions;
 		std::vector<Card> opponent_played_cards;
-		std::list<Minion> opponent_minions;
 
 	public:
 		void PlayCard(const Card &card) const;
