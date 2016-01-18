@@ -8,6 +8,5 @@
 #include "stages/start-turn.h"
 #include "stages/end-turn.h"
 #include "stages/choose-board-move.h"
-#include "stages/choose-put-minion-location.h"
 
 #endif

@@ -12,30 +12,34 @@ class StageChooseBoardMove
 	public:
 		static const bool is_random_node = false;
 
-		inline static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
+		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
 		{
 			bool can_play_minion = !board.player_minions.IsFull();
 			Move move;
 
-			next_moves.clear();
-			next_moves.reserve(1 + // end turn
-					board.player_hand.GetCards().size()); // play a card from hand
+			size_t guessed_next_moves;
+
+			guessed_next_moves = 1; // end turn
+			if (can_play_minion) {
+				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION) * (board.player_minions.GetMinions().size()+1);
+			}
+			next_moves.reserve(guessed_next_moves);
 
 			// the choice to end turn
 			move.action = Move::ACTION_END_TURN;
 			next_moves.push_back(move);
 
 			// the choices to play a card from hand
-			move.action = Move::ACTION_PLAY_HAND_CARD;
 			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCards().size(); ++hand_idx)
 			{
 				const Card &playing_card = board.player_hand.GetCards()[hand_idx];
-				if (playing_card.type == Card::MINION && !can_play_minion) {
-					continue;
+				switch (playing_card.type) {
+					case Card::TYPE_MINION:
+						if (!can_play_minion) continue;
+						StageChooseBoardMove::GetNextMoves_PlayMinion(hand_idx, board, next_moves);
+					default:
+						continue; // TODO: handle other card types
 				}
-
-				move.data.play_hand_card_data.idx = (int)hand_idx;
-				next_moves.push_back(move);
 			}
 
 			// the choices to attack by hero/minion
@@ -46,8 +50,8 @@ class StageChooseBoardMove
 		{
 			switch (move.action)
 			{
-				case Move::ACTION_PLAY_HAND_CARD:
-					return StageChooseBoardMove::PlayHandCard(board, move);
+				case Move::ACTION_PLAY_HAND_CARD_MINION:
+					return StageChooseBoardMove::PlayHandCardMinion(board, move);
 				case Move::ACTION_END_TURN:
 					return StageChooseBoardMove::EndTurn(board, move);
 
@@ -57,20 +61,38 @@ class StageChooseBoardMove
 		}
 
 	private:
-		static void PlayHandCard(Board &board, const Move &move)
+		static void GetNextMoves_PlayMinion(size_t hand_card_idx, const Board &board, std::vector<Move> &next_moves)
 		{
-			const Move::PlayHandCardData &data = move.data.play_hand_card_data;
+			size_t total_minions = board.player_minions.GetMinions().size();
+			Move move;
 
-			std::vector<Card> &hand = board.player_hand.GetCards();
-			std::vector<Card>::iterator it_playing_card = hand.begin() + data.idx;
+			move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
+			move.data.play_hand_card_minion_data.idx_hand_card = hand_card_idx;
 
-			if (it_playing_card->type == Card::MINION) {
-				board.data.play_minion_data.it_hand_card = it_playing_card;
-				board.state.Set(BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION);
-			} else {
-				// TODO: other card types
-				throw std::runtime_error("unknown hand card type for Board::DoPlayHandCard()");
+			for (size_t i=0; i<=total_minions; ++i) {
+				move.data.play_hand_card_minion_data.location = i;
+				next_moves.push_back(move);
 			}
+		}
+
+		static void PlayHandCardMinion(Board &board, const Move &move)
+		{
+			Minion minion;
+
+			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
+			std::vector<Card>::const_iterator it_hand_card = board.player_hand.GetCards().begin() + data.idx_hand_card;
+
+			// TODO: handle battlecry
+			minion.card_id = it_hand_card->id;
+			minion.max_hp = it_hand_card->data.minion.hp;
+			minion.hp = minion.max_hp;
+			minion.attack = it_hand_card->data.minion.attack;
+
+			board.player_minions.AddMinion(minion, data.location);
+
+			board.player_hand.RemoveCard(data.idx_hand_card);
+
+			board.state.Set(BoardState::STAGE_CHOOSE_BOARD_MOVE);
 		}
 
 		static void EndTurn(Board &board, const Move &)

@@ -13,7 +13,11 @@ class Card
 		int id;
 
 		enum Type {
-			MINION, SPELL, WEAPON, SECRET
+			TYPE_MINION = 0, // the smallest must be zero
+			TYPE_SPELL,
+			TYPE_WEAPON,
+			TYPE_SECRET,
+			TYPE_MAX = TYPE_SECRET // must be the largest
 		} type;
 
 		struct Minion {

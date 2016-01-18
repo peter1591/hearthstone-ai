@@ -17,9 +17,6 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
 			return StageChooseBoardMove::GetNextMoves(*this, next_moves);
 
-		case BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION:
-			return StageChoosePutMinionLocation::GetNextMoves(*this, next_moves);
-
 		case BoardState::STAGE_WIN:
 		case BoardState::STAGE_LOSS:
 			return;
@@ -40,8 +37,6 @@ void Board::ApplyMove(const Move &move)
 			return StageEndTurn::ApplyMove(*this, move);
 		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
 			return StageChooseBoardMove::ApplyMove(*this, move);
-		case BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION:
-			return StageChoosePutMinionLocation::ApplyMove(*this, move);
 
 		case BoardState::STAGE_WIN:
 		case BoardState::STAGE_LOSS:
@@ -63,8 +58,6 @@ bool BoardState::IsRandomNode() const
 			return StageEndTurn::is_random_node;
 		case STAGE_CHOOSE_BOARD_MOVE:
 			return StageChooseBoardMove::is_random_node;
-		case STAGE_CHOOSE_PUT_MINION_LOCATION:
-			return StageChoosePutMinionLocation::is_random_node;
 
 		case BoardState::STAGE_WIN:
 		case BoardState::STAGE_LOSS:
@@ -115,8 +108,9 @@ void Move::DebugPrint() const
 			std::cout << "[Game flow]";
 			break;
 
-		case Move::ACTION_PLAY_HAND_CARD:
-			std::cout << "[Play hand card] idx = " << this->data.play_hand_card_data.idx;
+		case Move::ACTION_PLAY_HAND_CARD_MINION:
+			std::cout << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.idx_hand_card
+				<< ", put location = " << this->data.play_hand_card_minion_data.location;
 			break;
 		case Move::ACTION_ATTACK:
 			std::cout << "[Attack] attacking = " << this->data.attack_data.attacking_idx
@@ -124,10 +118,6 @@ void Move::DebugPrint() const
 			break;
 		case Move::ACTION_END_TURN:
 			std::cout << "[End turn]";
-			break;
-
-		case Move::ACTION_CHOOSE_PUT_MINION_LOCATION:
-			std::cout << "[Choose put minion location:] idx = " << this->data.choose_put_minion_location_data.put_location;
 			break;
 
 		default:

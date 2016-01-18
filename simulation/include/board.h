@@ -22,7 +22,6 @@ class BoardState
 
 			// player's or opponent's choice turn
 			STAGE_CHOOSE_BOARD_MOVE, // play card from hand, minion attack, or end turn
-			STAGE_CHOOSE_PUT_MINION_LOCATION,
 //			STAGE_CHOOSE_HIDDEN_SECRET, // only for opponent
 //			STAGE_CHOOSE_DISCOVER_CARD,
 
@@ -64,17 +63,17 @@ class Move
 		enum {
 			ACTION_UNKNOWN,
 			ACTION_GAME_FLOW,
-			ACTION_PLAY_HAND_CARD,
+			ACTION_PLAY_HAND_CARD_MINION,
 			ACTION_ATTACK,
 			ACTION_END_TURN,
-			ACTION_CHOOSE_PUT_MINION_LOCATION
 		} action;
 
 		struct GameFlowData {
 		};
 
-		struct PlayHandCardData {
-			int idx; // play the 'idx' hand card
+		struct PlayHandCardMinionData {
+			int idx_hand_card; // play the 'idx' hand card
+			int location; // where to put the minion
 		};
 
 		struct AttackData {
@@ -88,7 +87,7 @@ class Move
 
 		union Data {
 			GameFlowData game_flow_data;
-			PlayHandCardData play_hand_card_data;
+			PlayHandCardMinionData play_hand_card_minion_data;
 			AttackData attack_data;
 			ChoosePutMinionLocationData choose_put_minion_location_data;
 
