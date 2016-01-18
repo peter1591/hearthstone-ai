@@ -2,189 +2,78 @@
 #include <stdexcept>
 
 #include "board.h"
-
-void Board::GetGameFlowMove(std::vector<Move> &moves) const
-{
-	Move move;
-	move.action = Move::ACTION_GAME_FLOW;
-	moves.push_back(move);
-}
-
-void Board::GetBoardMoves(std::vector<Move> &moves) const
-{
-	bool can_play_minion = !this->player_minions.IsFull();
-	Move move;
-
-	moves.clear();
-	moves.reserve(1 + // end turn
-		this->player_hand.GetCards().size()); // play a card from hand
-
-	// the choice to end turn
-	move.action = Move::ACTION_END_TURN;
-	moves.push_back(move);
-
-	// the choices to play a card from hand
-	move.action = Move::ACTION_PLAY_HAND_CARD;
-	for (size_t hand_idx = 0; hand_idx < this->player_hand.GetCards().size(); ++hand_idx)
-	{
-		const Card &playing_card = this->player_hand.GetCards()[hand_idx];
-		if (playing_card.type == Card::MINION && !can_play_minion) {
-			continue;
-		}
-
-		move.data.play_hand_card_data.idx = (int)hand_idx;
-		moves.push_back(move);
-	}
-
-	// the choices to attack by hero/minion
-	// TODO
-}
-
-void Board::GetPutMinionLocationMoves(std::vector<Move> &moves) const
-{
-	size_t total_minions = this->player_minions.GetMinions().size();
-	Move move;
-
-	moves.clear();
-	moves.reserve(1 + total_minions);
-
-	move.action = Move::ACTION_CHOOSE_PUT_MINION_LOCATION;
-
-	for (size_t i=0; i<=total_minions; ++i) {
-		move.data.choose_put_minion_location_data.put_location = i;
-		moves.push_back(move);
-	}
-}
-
-void Board::DoStartTurn()
-{
-	if (this->player_deck.GetCards().empty()) {
-		// no any card can draw, take damage
-		// TODO
-		this->state.Set(BoardState::STAGE_WIN);
-		return;
-	} else {
-		Card draw_card = this->player_deck.Draw();
-
-		if (this->player_hand.GetCards().size() < 10) {
-			this->player_hand.AddCard(draw_card);
-		} else {
-			// hand can have maximum of 10 cards
-			// TODO: distroy card (trigger deathrattle?)
-		}
-	}
-
-	this->state.Set(BoardState::STAGE_CHOOSE_BOARD_MOVE);
-}
-
-void Board::DoEndTurn()
-{
-	// TODO: change player/opponent
-	this->DoStartTurn();
-}
+#include "stages.h"
 
 void Board::GetNextMoves(std::vector<Move> &next_moves) const
 {
 	switch (this->state.GetStage())
 	{
-		// Manage game flow
 		case BoardState::STAGE_START_TURN:
+			return StageStartTurn::GetNextMoves(*this, next_moves);
+
 		case BoardState::STAGE_END_TURN:
-			this->GetGameFlowMove(next_moves);
-			break;
+			return StageEndTurn::GetNextMoves(*this, next_moves);
+
+		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
+			return StageChooseBoardMove::GetNextMoves(*this, next_moves);
+
+		case BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION:
+			return StageChoosePutMinionLocation::GetNextMoves(*this, next_moves);
 
 		case BoardState::STAGE_WIN:
 		case BoardState::STAGE_LOSS:
-			break;
+			return;
 
-		// player/opponent's choice
-		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
-			this->GetBoardMoves(next_moves);
-			break;
-
-		case BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION:
-			this->GetPutMinionLocationMoves(next_moves);
-			break;
-
-		default:
-			throw new std::runtime_error("Unknown state");
+		case BoardState::STAGE_UNKNOWN:
+			throw std::runtime_error("Unknown state for GetNextMoves()");
 	}
-}
-
-void Board::Go()
-{
-	switch (this->state.GetStage())
-	{
-		// Manage game flow
-		case BoardState::STAGE_START_TURN:
-			this->DoStartTurn();
-			break;
-
-		case BoardState::STAGE_END_TURN:
-			this->DoEndTurn();
-			break;
-
-		default:
-			throw new std::runtime_error("Unknown state for Board::Go()");
-	}
-}
-
-void Board::DoPlayHandCard(const Move::PlayHandCardData &data)
-{
-	std::vector<Card> &hand = this->player_hand.GetCards();
-	std::vector<Card>::iterator it_playing_card = hand.begin() + data.idx;
-
-	if (it_playing_card->type == Card::MINION) {
-		this->data.play_minion_data.it_hand_card = it_playing_card;
-		this->state.Set(BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION);
-	} else {
-		// TODO: other card types
-		throw std::runtime_error("unknown hand card type for Board::DoPlayHandCard()");
-	}
-}
-
-void Board::DoChoosePutMinionLocation(const Move::ChoosePutMinionLocationData &data)
-{
-	Minion minion;
-	std::vector<Card>::iterator it_hand_card = this->data.play_minion_data.it_hand_card;
-
-	// TODO: handle battlecry
-	minion.card_id = it_hand_card->id;
-	minion.max_hp = it_hand_card->data.minion.hp;
-	minion.hp = minion.max_hp;
-	minion.attack = it_hand_card->data.minion.attack;
-
-	this->player_minions.AddMinion(minion, data.put_location);
-
-	this->player_hand.GetCards().erase(it_hand_card);
-
-	this->state.Set(BoardState::STAGE_CHOOSE_BOARD_MOVE);
+	throw std::runtime_error("Unhandled state for GetNextMoves()");
 }
 
 void Board::ApplyMove(const Move &move)
 {
-	switch (move.action)
+	switch (this->state.GetStage())
 	{
-		case Move::ACTION_GAME_FLOW:
-			this->Go();
-			break;
+		case BoardState::STAGE_START_TURN:
+			return StageStartTurn::ApplyMove(*this, move);
+		case BoardState::STAGE_END_TURN:
+			return StageEndTurn::ApplyMove(*this, move);
+		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
+			return StageChooseBoardMove::ApplyMove(*this, move);
+		case BoardState::STAGE_CHOOSE_PUT_MINION_LOCATION:
+			return StageChoosePutMinionLocation::ApplyMove(*this, move);
 
-		case Move::ACTION_PLAY_HAND_CARD:
-			this->DoPlayHandCard(move.data.play_hand_card_data);
-			break;
+		case BoardState::STAGE_WIN:
+		case BoardState::STAGE_LOSS:
+			throw std::runtime_error("ApplyMove() should not be called when it's a win/loss");
 
-		case Move::ACTION_CHOOSE_PUT_MINION_LOCATION:
-			this->DoChoosePutMinionLocation(move.data.choose_put_minion_location_data);
-			break;
-
-		case Move::ACTION_END_TURN:
-			this->state.Set(BoardState::STAGE_END_TURN);
-			break;
-
-		default:
-			throw new std::runtime_error("Unknown move action");
+		case BoardState::STAGE_UNKNOWN:
+			throw std::runtime_error("Unknown state for ApplyMove()");
 	}
-	this->last_move = move;
+	throw std::runtime_error("Unhandled state for ApplyMove()");
+}
+
+bool BoardState::IsRandomNode() const
+{
+	switch (this->stage)
+	{
+		case STAGE_START_TURN:
+			return StageStartTurn::is_random_node;
+		case STAGE_END_TURN:
+			return StageEndTurn::is_random_node;
+		case STAGE_CHOOSE_BOARD_MOVE:
+			return StageChooseBoardMove::is_random_node;
+		case STAGE_CHOOSE_PUT_MINION_LOCATION:
+			return StageChoosePutMinionLocation::is_random_node;
+
+		case BoardState::STAGE_WIN:
+		case BoardState::STAGE_LOSS:
+			throw std::runtime_error("IsRandomNode() should not be called when it's a win/loss");
+
+		case BoardState::STAGE_UNKNOWN:
+			throw std::runtime_error("Unknown state for IsRandomNode()");
+	}
+	throw std::runtime_error("Unhandled state for IsRandomNode()");
 }
 
 void Board::DebugPrint() const

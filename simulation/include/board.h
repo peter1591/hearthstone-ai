@@ -23,8 +23,8 @@ class BoardState
 			// player's or opponent's choice turn
 			STAGE_CHOOSE_BOARD_MOVE, // play card from hand, minion attack, or end turn
 			STAGE_CHOOSE_PUT_MINION_LOCATION,
-			STAGE_CHOOSE_HIDDEN_SECRET, // only for opponent
-			STAGE_CHOOSE_DISCOVER_CARD,
+//			STAGE_CHOOSE_HIDDEN_SECRET, // only for opponent
+//			STAGE_CHOOSE_DISCOVER_CARD,
 
 			// game flow including randoms
 			// treated as random nodes in MCTS
@@ -42,27 +42,6 @@ class BoardState
 		{
 			this->is_player_turn = is_player_turn;
 			this->stage = stage;
-
-			switch (stage) {
-				case STAGE_CHOOSE_BOARD_MOVE:
-				case STAGE_CHOOSE_HIDDEN_SECRET:
-				case STAGE_CHOOSE_DISCOVER_CARD:
-				case STAGE_CHOOSE_PUT_MINION_LOCATION:
-					this->is_random_node = false;
-					break;
-
-				case STAGE_START_TURN:
-				case STAGE_END_TURN:
-				case STAGE_WIN:
-				case STAGE_LOSS:
-					this->is_random_node = true;
-					break;
-
-				case STAGE_UNKNOWN:
-					throw std::runtime_error("Invalid argument");
-					break;
-
-			}
 		}
 
 		inline void Set(Stage stage)
@@ -71,12 +50,11 @@ class BoardState
 		}
 
 		inline bool IsPlayerTurn() const { return this->is_player_turn; }
-		inline bool IsRandomTurn() const { return this->is_random_node; }
+		bool IsRandomNode() const;
 		inline const Stage & GetStage() const { return this->stage; }
 
 	private:
 		bool is_player_turn;
-		bool is_random_node;
 		Stage stage;
 };
 
@@ -126,8 +104,13 @@ class Move
 
 class Board
 {
+	friend class StageStartTurn;
+	friend class StageEndTurn;
+	friend class StageChooseBoardMove;
+	friend class StageChoosePutMinionLocation;
+
 	public:
-		Board();
+		Board() {}
 
 		PlayerStat player_stat;
 		Secrets player_secrets;
@@ -172,24 +155,7 @@ class Board
 		} data;
 
 	private:
-		void Go(); // do game flow
-
-		void DoStartTurn();
-		void DoPlayHandCard(const Move::PlayHandCardData &data);
-		void DoEndTurn();
-		void DoChoosePutMinionLocation(const Move::ChoosePutMinionLocationData &data);
-
-		void GetGameFlowMove(std::vector<Move> &moves) const;
-		void GetBoardMoves(std::vector<Move> &moves) const;
-		void GetPutMinionLocationMoves(std::vector<Move> &moves) const;
-
-	private:
 		BoardState state;
-		Move last_move;
 };
-
-inline Board::Board()
-{
-}
 
 #endif
