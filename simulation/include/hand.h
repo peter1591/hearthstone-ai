@@ -9,7 +9,8 @@ class Hand
 	public:
 		Hand();
 		void AddCard(const Card &card);
-		const std::vector<Card> &GetCards() const;
+		const std::vector<Card> &GetCards() const { return this->cards; }
+		std::vector<Card> &GetCards() { return this->cards; }
 
 	private:
 		std::vector<Card> cards;
@@ -23,11 +24,6 @@ inline Hand::Hand()
 inline void Hand::AddCard(const Card &card)
 {
 	this->cards.push_back(card);
-}
-
-inline const std::vector<Card> &Hand::GetCards() const
-{
-	return this->cards;
 }
 
 #endif

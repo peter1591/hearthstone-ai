@@ -6,7 +6,8 @@
 #include "deck-database.h"
 #include "board.h"
 
-#define TIMES_TEST 1000000
+#define TIMES_TEST 100000
+//#define INTERACTIVE
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -20,6 +21,16 @@ double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 
 void InitializeDeck1(const DeckDatabase &deck_database, Deck &deck)
 {
+	deck.AddCard(deck_database.GetCard(111));
+	deck.AddCard(deck_database.GetCard(211));
+	deck.AddCard(deck_database.GetCard(213));
+	deck.AddCard(deck_database.GetCard(222));
+	deck.AddCard(deck_database.GetCard(231));
+	deck.AddCard(deck_database.GetCard(111));
+	deck.AddCard(deck_database.GetCard(211));
+	deck.AddCard(deck_database.GetCard(213));
+	deck.AddCard(deck_database.GetCard(222));
+	deck.AddCard(deck_database.GetCard(231));
 	deck.AddCard(deck_database.GetCard(111));
 	deck.AddCard(deck_database.GetCard(211));
 	deck.AddCard(deck_database.GetCard(213));
@@ -60,31 +71,44 @@ void InitializeBoard(Board &board)
 	board.player_minions.AddMinion(minion);
 
 	board.PlayerTurnStart();
-
-	board.DebugPrint();
 }
 
-void DoTask(const Board &board)
+void DoTask(Board board)
 {
-	Board board_new = board;
+	int choose_move = -1;
 
-	std::list<Move> moves;
-	
-	moves = board_new.GetNextMoves();
-	std::cout << "Next moves: " << std::endl;
-	for (const auto &move : moves) {
-		move.DebugPrint();
-	}
+	while (true) {
+		std::vector<Move> next_moves;
 
-	//board_new.DebugPrint();
-	board_new.ApplyMove(moves.front());
-	//board_new.DebugPrint();
-	
-	moves = board_new.GetNextMoves();
-	board_new.DebugPrint();
-	std::cout << "Next moves: " << std::endl;
-	for (const auto &move : moves) {
-		move.DebugPrint();
+#ifdef INTERACTIVE
+		std::cout << "!!! Before Go()" << std::endl;
+		board.DebugPrint();
+#endif
+		board.GetNextMoves(next_moves);
+
+		if (next_moves.empty()) break;
+
+#ifdef INTERACTIVE
+		std::cout << "!!! Next moves: " << std::endl;
+		for (size_t i=0; i<next_moves.size(); ++i) {
+			std::cout << "\t";
+			std::cout << i << ". ";
+			next_moves[i].DebugPrint();
+			std::cout << std::endl;
+		}
+
+		choose_move = -1;
+		std::cout << "!!! Choose next move: ";
+		std::cin >> choose_move;
+
+		if (choose_move < 0 || choose_move >= (int)next_moves.size()) {
+			std::cout << "Invalid input, exiting" << std::endl;
+			exit(-1);
+		}
+#else
+		choose_move = rand() % next_moves.size();
+#endif
+		board.ApplyMove(next_moves[choose_move]);
 	}
 }
 
@@ -103,12 +127,14 @@ int main(void)
 			return -1;
 		}
 
-		std::cout << "Testing board for " << TIMES_TEST << " times... ";
+		std::cout << "Simulate board for " << TIMES_TEST << " times... ";
 		std::cout.flush();
 		for (int i=TIMES_TEST; i>0; --i)
 		{
 			DoTask(board);
-			return 0;
+#ifdef INTERACTIVE
+			return -1;
+#endif
 		}
 
 		if (clock_gettime(CLOCK_MONOTONIC, &end) < 0) {

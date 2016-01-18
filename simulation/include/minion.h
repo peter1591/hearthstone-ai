@@ -7,6 +7,7 @@ class Minion
 		Minion();
 
 		int card_id;
+		int attack;
 		int hp;
 		int max_hp;
 

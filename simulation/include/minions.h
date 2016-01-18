@@ -16,10 +16,14 @@ class Minions
 
 		// Insert minion to where the index is 'idx'
 		// Any existing minions will be shifted right
-		void AddMinion(const Minion &minion, int idx);
+		void AddMinion(const Minion &minion, size_t idx);
 
 		// Push the minion to be the rightmost
 		void AddMinion(const Minion &minion);
+
+		const std::vector<Minion> &GetMinions() const { return this->minions; }
+
+		bool IsFull() const { return this->minions.size() == MAX_MINIONS; }
 
 		void DebugPrint() const;
 
@@ -32,10 +36,16 @@ inline Minions::Minions()
 	this->minions.reserve(MAX_MINIONS);
 }
 
-inline void Minions::AddMinion(const Minion &minion, int idx)
+inline void Minions::AddMinion(const Minion &minion, size_t idx)
 {
+	if (UNLIKELY(idx == this->minions.size())) {
+		// push to the rightmost
+		this->minions.push_back(minion);
+		return;
+	}
+
 	this->minions.push_back(this->minions.back());
-	for (int i=this->minions.size()-1; i>idx; --i) {
+	for (size_t i=this->minions.size()-1; i>idx; --i) {
 		this->minions[i] = this->minions[i-1];
 	}
 	this->minions[idx] = minion;
@@ -50,7 +60,7 @@ inline void Minions::DebugPrint() const
 {
 	for (const auto &minion : this->minions) {
 		if (minion.IsValid()) {
-			std::cout << "\t[" << minion.card_id << "] " << minion.hp << " / " << minion.max_hp << std::endl;
+			std::cout << "\t[" << minion.card_id << "] " << minion.attack << " / " << minion.hp << " (max hp = " << minion.max_hp << ")" << std::endl;
 		} else {
 			std::cout << "\t[EMPTY]" << std::endl;
 		}
