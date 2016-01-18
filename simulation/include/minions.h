@@ -2,6 +2,7 @@
 #define _MINIONS_H
 
 #include <iostream>
+#include <vector>
 #include <stdexcept>
 #include "minion.h"
 #include "common.h"
@@ -23,44 +24,31 @@ class Minions
 		void DebugPrint() const;
 
 	private:
-		Minion minions[MAX_MINIONS];
-		int minions_len;
+		std::vector<Minion> minions;
 };
 
-inline Minions::Minions() : minions_len(0)
+inline Minions::Minions()
 {
+	this->minions.reserve(MAX_MINIONS);
 }
 
 inline void Minions::AddMinion(const Minion &minion, int idx)
 {
-	if (UNLIKELY(minions_len >= MAX_MINIONS)) {
-		throw std::runtime_error("Too many minions");
-	}
-
-	if (this->minions[idx].IsValid()) {
-		// shift the minions to right
-		for (int i=MAX_MINIONS-1; i>idx; ++i) {
-			this->minions[i] = this->minions[i-1];
-		}
+	this->minions.push_back(this->minions.back());
+	for (int i=this->minions.size()-1; i>idx; --i) {
+		this->minions[i] = this->minions[i-1];
 	}
 	this->minions[idx] = minion;
-	++minions_len;
 }
 
 inline void Minions::AddMinion(const Minion &minion)
 {
-	if (UNLIKELY(minions_len >= MAX_MINIONS)) {
-		throw std::runtime_error("Too many minions");
-	}
-
-	this->minions[minions_len] = minion;
-	++minions_len;
+	this->minions.push_back(minion);
 }
 
 inline void Minions::DebugPrint() const
 {
-	for (int i=0; i<MAX_MINIONS; ++i) {
-		const Minion &minion = this->minions[i];
+	for (const auto &minion : this->minions) {
 		if (minion.IsValid()) {
 			std::cout << "\t[" << minion.card_id << "] " << minion.hp << " / " << minion.max_hp << std::endl;
 		} else {
