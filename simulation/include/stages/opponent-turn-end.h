@@ -11,8 +11,7 @@ class StageOpponentTurnEnd
 {
 	public:
 		static const Stage stage = STAGE_OPPONENT_TURN_END;
-		static const bool is_random_node = true;
-		static const bool is_player_turn = false;
+		static const StageType stage_type = STAGE_TYPE_GAME_FLOW;
 		static std::string GetStageStringName() { return "StageOpponentTurnEnd"; }
 
 		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)

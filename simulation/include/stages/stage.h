@@ -1,6 +1,12 @@
 #ifndef _STAGES_STAGE_H
 #define _STAGES_STAGE_H
 
+enum StageType {
+	STAGE_TYPE_PLAYER,
+	STAGE_TYPE_OPPONENT,
+	STAGE_TYPE_GAME_FLOW // game flow including randoms
+};
+
 enum Stage {
 	STAGE_UNKNOWN = 0,
 

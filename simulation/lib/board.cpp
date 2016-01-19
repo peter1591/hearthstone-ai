@@ -57,10 +57,9 @@ void Board::ApplyMove(const Move &move)
 	return StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 }
 
-void Board::GetStage(bool &is_player_turn, bool &is_random_node, Stage &stage ) const
+void Board::GetStage(Stage &stage, StageType &type) const
 {
-	is_player_turn = StageFunctionCaller<StageFunctionChooser::Chooser_IsPlayerTurn>(this->stage);
-	is_random_node = StageFunctionCaller<StageFunctionChooser::Chooser_IsRandomNode>(this->stage);
+	type = StageFunctionCaller<StageFunctionChooser::Chooser_GetStageType>(this->stage);
 	stage = this->stage;
 }
 
@@ -71,18 +70,24 @@ void Board::SetStateToPlayerTurnStart()
 
 void Board::DebugPrint() const
 {
-	bool is_player_turn, is_random_node;
 	Stage stage;
+	StageType stage_type;
 
-	this->GetStage(is_player_turn, is_random_node, stage);
+	this->GetStage(stage, stage_type);
 
 	std::cout << "=== Print Board START ===" << std::endl;
 
-	if (is_player_turn) {
-		std::cout << "Player's turn." << std::endl;
-	} else {
-		std::cout << "Opponent's turn." << std::endl;
+	switch (stage_type) {
+		case STAGE_TYPE_PLAYER:
+			std::cout << "Player's turn." << std::endl;
+			break;
+		case STAGE_TYPE_OPPONENT:
+			std::cout << "Opponent's turn." << std::endl;
+			break;
+		case STAGE_TYPE_GAME_FLOW:
+			std::cout << "Game flow (random) turn." << std::endl;
 	}
+
 	std::cout << "Stage: [" << stage << "] "
 	   << StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage)
 	   << std::endl;

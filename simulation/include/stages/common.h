@@ -25,12 +25,8 @@ class StageCommonUtilities
 
 namespace StageFunctionChooser
 {
-	struct Chooser_IsPlayerTurn {
-		typedef bool ReturnType;
-	};
-
-	struct Chooser_IsRandomNode {
-		typedef bool ReturnType;
+	struct Chooser_GetStageType {
+		typedef StageType ReturnType;
 	};
 
 	struct Chooser_ApplyMove {
@@ -47,16 +43,10 @@ namespace StageFunctionChooser
 
 	template <typename Chooser> struct Caller {};
 
-	template<> struct Caller<Chooser_IsPlayerTurn> {
+	template<> struct Caller<Chooser_GetStageType> {
 		public:
 			template <typename Stage>
-			static Chooser_IsPlayerTurn::ReturnType Call() { return Stage::is_player_turn; }
-	};
-
-	template<> struct Caller<Chooser_IsRandomNode> {
-		public:
-			template <typename Stage>
-			static Chooser_IsRandomNode::ReturnType Call() { return Stage::is_random_node; }
+			static Chooser_GetStageType::ReturnType Call() { return Stage::stage_type; }
 	};
 
 	template<> struct Caller<Chooser_ApplyMove> {

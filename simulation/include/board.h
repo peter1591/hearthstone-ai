@@ -41,7 +41,7 @@ class Board
 	public:
 		void SetStateToPlayerTurnStart();
 
-		void GetStage(bool &is_player_turn, bool &is_random_node, Stage &stage) const;
+		void GetStage(Stage &stage, StageType &type) const;
 
 		bool IsPlayerTurn() const;
 		bool IsRandomNode() const;
