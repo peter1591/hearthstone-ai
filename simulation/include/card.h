@@ -13,7 +13,8 @@ class Card
 		int id;
 
 		enum Type {
-			TYPE_MINION = 0, // the smallest must be zero
+			TYPE_INVALID = 0, // the smallest must be zero
+			TYPE_MINION,
 			TYPE_SPELL,
 			TYPE_WEAPON,
 			TYPE_SECRET,

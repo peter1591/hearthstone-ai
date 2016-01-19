@@ -7,7 +7,7 @@
 #include "board.h"
 
 #define TIMES_TEST 100000
-#define INTERACTIVE
+//#define INTERACTIVE
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -56,16 +56,34 @@ void InitializeBoard(Board &board)
 {
 	DeckDatabase deck_database;
 
+	board.player_stat.hp = 30;
+	board.player_stat.armor = 0;
+	board.player_stat.crystals_total = 0;
+	board.player_stat.crystals_current = 0;
+	board.player_stat.crystals_locked = 0;
+	board.player_stat.crystals_locked_next_turn = 0;
+
+	board.opponent_stat.hp = 30;
+	board.opponent_stat.armor = 0;
+	board.opponent_stat.crystals_total = 0;
+	board.opponent_stat.crystals_current = 0;
+	board.opponent_stat.crystals_locked = 0;
+	board.opponent_stat.crystals_locked_next_turn = 0;
+
+	board.opponent_deck.Set(30);
+
 	InitializeDeck1(deck_database, board.player_deck);
 	InitializeHand1(deck_database, board.player_hand);
 	
 	Minion minion;
 	minion.card_id = 111;
+	minion.attack = 1;
 	minion.hp = 1;
 	minion.max_hp = 1;
 	board.player_minions.AddMinion(minion);
 
 	minion.card_id = 213;
+	minion.attack = 2;
 	minion.hp = 2;
 	minion.max_hp = 3;
 	board.player_minions.AddMinion(minion);

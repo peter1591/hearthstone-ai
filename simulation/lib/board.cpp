@@ -4,6 +4,7 @@
 #include "stages/player-turn-start.h"
 #include "stages/player-choose-board-move.h"
 #include "stages/player-turn-end.h"
+#include "stages/opponent-turn-start.h"
 
 #include "board.h"
 
@@ -19,8 +20,9 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 	switch (stage)
 	{
 		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnStart);
-		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnEnd);
 		SWITCH_CASE_HANDLE_CLASS(StagePlayerChooseBoardMove);
+		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnEnd);
+		SWITCH_CASE_HANDLE_CLASS(StageOpponentTurnStart);
 
 		case STAGE_WIN:
 		case STAGE_LOSS:
@@ -81,6 +83,11 @@ void Board::DebugPrint() const
 	   << StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage)
 	   << std::endl;
 
+	std::cout << "Opponent stat: " << this->opponent_stat.GetDebugString() << std::endl;
+	std::cout << "Opponent deck: " << this->opponent_deck.GetDebugString() << std::endl;
+	std::cout << "Opponent hand: " << this->opponent_hand.GetDebugString() << std::endl;
+
+	std::cout << "Player stat: " << this->player_stat.GetDebugString() << std::endl;
 	std::cout << "Player deck: " << std::endl;
 	std::cout << "\t";
 	for (const auto &card : this->player_deck.GetCards()) {
@@ -94,6 +101,9 @@ void Board::DebugPrint() const
 		std::cout << card.id << " ";
 	}
 	std::cout << std::endl;
+
+	std::cout << "Opponent minions: " << std::endl;
+	this->opponent_minions.DebugPrint();
 
 	std::cout << "Player minions: " << std::endl;
 	this->player_minions.DebugPrint();

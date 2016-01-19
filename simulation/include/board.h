@@ -19,8 +19,11 @@
 class Board
 {
 	friend class StagePlayerTurnStart;
-	friend class StagePlayerTurnEnd;
 	friend class StagePlayerChooseBoardMove;
+	friend class StagePlayerTurnEnd;
+	friend class StageOpponentTurnStart;
+	friend class STageOpponentChooseBoardMove;
+	friend class STageOpponentTurnEnd;
 
 	public:
 		Board() : stage(STAGE_UNKNOWN) {}
