@@ -79,10 +79,7 @@ class Board
 		Minions opponent_minions;
 
 	public:
-		void PlayerTurnStart() {
-			// TODO: debug only
-			this->stage = STAGE_PLAYER_TURN_START;
-		}
+		void SetStateToPlayerTurnStart();
 
 		void GetStage(bool &is_player_turn, bool &is_random_node, Stage &stage) const;
 

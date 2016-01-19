@@ -58,6 +58,11 @@ void Board::GetStage(bool &is_player_turn, bool &is_random_node, Stage &stage ) 
 	stage = this->stage;
 }
 
+void Board::SetStateToPlayerTurnStart()
+{
+	this->stage = StagePlayerTurnStart::stage;
+}
+
 void Board::DebugPrint() const
 {
 	bool is_player_turn, is_random_node;
