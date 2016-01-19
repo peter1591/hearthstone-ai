@@ -1,5 +1,5 @@
-#ifndef _STAGES_START_TURN_H
-#define _STAGES_START_TURN_H
+#ifndef _STAGES_PLAYER_TURN_START_H
+#define _STAGES_PLAYER_TURN_START_H
 
 #include <stdexcept>
 #include <vector>
@@ -7,10 +7,11 @@
 #include "stages/common.h"
 #include "board.h"
 
-class StageStartTurn
+class StagePlayerTurnStart
 {
 	public:
 		static const bool is_random_node = true;
+		static const bool is_player_turn = true;
 
 		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)
 		{
@@ -22,14 +23,14 @@ class StageStartTurn
 #ifdef ENABLE_DEBUG_CHECKS
 			if (move.action != Move::ACTION_GAME_FLOW)
 			{
-				throw std::runtime_error("Invalid move for StageStartTurn::ApplyMove()");
+				throw std::runtime_error("Invalid move for StagePlayerTurnStart::ApplyMove()");
 			}
 #endif
 
 			if (board.player_deck.GetCards().empty()) {
 				// no any card can draw, take damage
 				// TODO
-				board.GetState().Set(BoardState::STAGE_WIN);
+				board.stage = Board::STAGE_WIN;
 				return;
 			} else {
 				Card draw_card = board.player_deck.Draw();
@@ -41,7 +42,7 @@ class StageStartTurn
 					// TODO: distroy card (trigger deathrattle?)
 				}
 			}
-			board.GetState().Set(BoardState::STAGE_CHOOSE_BOARD_MOVE);
+			board.stage = Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 	}
 };
 

@@ -14,49 +14,6 @@
 #include "hidden-secrets.h"
 #include "hidden-hand.h"
 
-class BoardState
-{
-	public:
-		enum Stage {
-			STAGE_UNKNOWN = 0,
-
-			// player's or opponent's choice turn
-			STAGE_CHOOSE_BOARD_MOVE, // play card from hand, minion attack, or end turn
-//			STAGE_CHOOSE_HIDDEN_SECRET, // only for opponent
-//			STAGE_CHOOSE_DISCOVER_CARD,
-
-			// game flow including randoms
-			// treated as random nodes in MCTS
-			STAGE_START_TURN,
-			STAGE_END_TURN,
-
-			STAGE_WIN,
-			STAGE_LOSS
-		};
-
-	public:
-		BoardState() : stage(STAGE_UNKNOWN) {}
-
-		inline void Set(bool is_player_turn, Stage stage)
-		{
-			this->is_player_turn = is_player_turn;
-			this->stage = stage;
-		}
-
-		inline void Set(Stage stage)
-		{
-			this->Set(this->is_player_turn, stage);
-		}
-
-		inline bool IsPlayerTurn() const { return this->is_player_turn; }
-		bool IsRandomNode() const;
-		inline const Stage & GetStage() const { return this->stage; }
-
-	private:
-		bool is_player_turn;
-		Stage stage;
-};
-
 class Move
 {
 	public:
@@ -94,8 +51,6 @@ class Move
 			Data() {}
 		} data;
 
-		BoardState next_state;
-
 		Move() : action(ACTION_UNKNOWN) {}
 
 		void DebugPrint() const;
@@ -103,13 +58,27 @@ class Move
 
 class Board
 {
-	friend class StageStartTurn;
+	friend class StagePlayerTurnStart;
 	friend class StageEndTurn;
 	friend class StageChooseBoardMove;
-	friend class StageChoosePutMinionLocation;
 
 	public:
-		Board() {}
+		enum Stage {
+			STAGE_UNKNOWN = 0,
+
+			STAGE_PLAYER_TURN_START,
+			STAGE_PLAYER_CHOOSE_BOARD_MOVE, // play card from hand, minion attack, or end turn
+//			STAGE_CHOOSE_HIDDEN_SECRET, // only for opponent
+//			STAGE_CHOOSE_DISCOVER_CARD,
+
+			STAGE_PLAYER_TURN_END,
+
+			STAGE_WIN,
+			STAGE_LOSS
+		};
+
+	public:
+		Board() : stage(STAGE_UNKNOWN) {}
 
 		PlayerStat player_stat;
 		Secrets player_secrets;
@@ -126,11 +95,13 @@ class Board
 	public:
 		void PlayerTurnStart() {
 			// TODO: debug only
-			this->state.Set(true, BoardState::STAGE_START_TURN);
+			this->stage = STAGE_PLAYER_TURN_START;
 		}
 
-		const BoardState &GetState() const { return this->state; }
-		BoardState &GetState() { return this->state; }
+		void GetStage(bool &is_player_turn, bool &is_random_node, Stage stage) const;
+
+		bool IsPlayerTurn() const;
+		bool IsRandomNode() const;
 
 		// Return all possible boards after a player/opponent's action 
 		// If this is a random node, one of the random outcomes is returned
@@ -139,22 +110,14 @@ class Board
 
 		void DebugPrint() const;
 
-	private: // internal state data
-		/// the data to put a minion from hand to board
-		struct PlayMinionData {
-			std::vector<Card>::iterator it_hand_card; // the iterator to the playing card within hand
-			int put_location; // 0 indicates the leftmost
-		};
-
+	private: // internal state data for cross-stage communication
 		union Data {
-			PlayMinionData play_minion_data;
-
 			Data() {}
 			// TODO: implement comparison operator via memory-compare
 		} data;
 
 	private:
-		BoardState state;
+		Stage stage;
 };
 
 #endif

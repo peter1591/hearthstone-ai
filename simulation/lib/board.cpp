@@ -6,22 +6,22 @@
 
 void Board::GetNextMoves(std::vector<Move> &next_moves) const
 {
-	switch (this->state.GetStage())
+	switch (this->stage)
 	{
-		case BoardState::STAGE_START_TURN:
-			return StageStartTurn::GetNextMoves(*this, next_moves);
+		case STAGE_PLAYER_TURN_START:
+			return StagePlayerTurnStart::GetNextMoves(*this, next_moves);
 
-		case BoardState::STAGE_END_TURN:
+		case STAGE_PLAYER_TURN_END:
 			return StageEndTurn::GetNextMoves(*this, next_moves);
 
-		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
+		case STAGE_PLAYER_CHOOSE_BOARD_MOVE:
 			return StageChooseBoardMove::GetNextMoves(*this, next_moves);
 
-		case BoardState::STAGE_WIN:
-		case BoardState::STAGE_LOSS:
+		case STAGE_WIN:
+		case STAGE_LOSS:
 			return;
 
-		case BoardState::STAGE_UNKNOWN:
+		case STAGE_UNKNOWN:
 			throw std::runtime_error("Unknown state for GetNextMoves()");
 	}
 	throw std::runtime_error("Unhandled state for GetNextMoves()");
@@ -29,56 +29,45 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 
 void Board::ApplyMove(const Move &move)
 {
-	switch (this->state.GetStage())
+	switch (this->stage)
 	{
-		case BoardState::STAGE_START_TURN:
-			return StageStartTurn::ApplyMove(*this, move);
-		case BoardState::STAGE_END_TURN:
+		case STAGE_PLAYER_TURN_START:
+			return StagePlayerTurnStart::ApplyMove(*this, move);
+		case STAGE_PLAYER_TURN_END:
 			return StageEndTurn::ApplyMove(*this, move);
-		case BoardState::STAGE_CHOOSE_BOARD_MOVE:
+		case STAGE_PLAYER_CHOOSE_BOARD_MOVE:
 			return StageChooseBoardMove::ApplyMove(*this, move);
 
-		case BoardState::STAGE_WIN:
-		case BoardState::STAGE_LOSS:
+		case STAGE_WIN:
+		case STAGE_LOSS:
 			throw std::runtime_error("ApplyMove() should not be called when it's a win/loss");
 
-		case BoardState::STAGE_UNKNOWN:
+		case STAGE_UNKNOWN:
 			throw std::runtime_error("Unknown state for ApplyMove()");
 	}
 	throw std::runtime_error("Unhandled state for ApplyMove()");
 }
 
-bool BoardState::IsRandomNode() const
+void Board::GetStage(bool &is_player_turn, bool &is_random_node, Board::Stage stage ) const
 {
-	switch (this->stage)
-	{
-		case STAGE_START_TURN:
-			return StageStartTurn::is_random_node;
-		case STAGE_END_TURN:
-			return StageEndTurn::is_random_node;
-		case STAGE_CHOOSE_BOARD_MOVE:
-			return StageChooseBoardMove::is_random_node;
-
-		case BoardState::STAGE_WIN:
-		case BoardState::STAGE_LOSS:
-			throw std::runtime_error("IsRandomNode() should not be called when it's a win/loss");
-
-		case BoardState::STAGE_UNKNOWN:
-			throw std::runtime_error("Unknown state for IsRandomNode()");
-	}
-	throw std::runtime_error("Unhandled state for IsRandomNode()");
+	// TODO
 }
 
 void Board::DebugPrint() const
 {
+	bool is_player_turn, is_random_node;
+	Stage stage;
+
+	this->GetStage(is_player_turn, is_random_node, stage);
+
 	std::cout << "=== Print Board START ===" << std::endl;
 
-	if (this->state.IsPlayerTurn()) {
+	if (is_player_turn) {
 		std::cout << "Player's turn." << std::endl;
 	} else {
 		std::cout << "Opponent's turn." << std::endl;
 	}
-	std::cout << "Stage: " << this->state.GetStage() << std::endl;
+	std::cout << "Stage: " << stage << std::endl;
 
 	std::cout << "Player deck: " << std::endl;
 	std::cout << "\t";

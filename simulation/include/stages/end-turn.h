@@ -5,23 +5,24 @@
 #include <vector>
 
 #include "stages/common.h"
-#include "stages/start-turn.h"
+#include "stages/player-turn-start.h"
 #include "board.h"
 
 class StageEndTurn
 {
 	public:
-		static const bool is_random_node = StageStartTurn::is_random_node;
+		static const bool is_random_node = StagePlayerTurnStart::is_random_node;
+		static const bool is_player_turn = StagePlayerTurnStart::is_player_turn;
 
 		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
 		{
-			return StageStartTurn::GetNextMoves(board, next_moves);
+			return StagePlayerTurnStart::GetNextMoves(board, next_moves);
 		}
 
 		static void ApplyMove(Board &board, const Move &move)
 		{
 			// TODO: change player/opponent
-			return StageStartTurn::ApplyMove(board, move);
+			return StagePlayerTurnStart::ApplyMove(board, move);
 		}
 };
 

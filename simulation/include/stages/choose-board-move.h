@@ -11,6 +11,7 @@ class StageChooseBoardMove
 {
 	public:
 		static const bool is_random_node = false;
+		static const bool is_player_turn = true;
 
 		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
 		{
@@ -103,12 +104,12 @@ class StageChooseBoardMove
 
 			board.player_hand.RemoveCard(data.idx_hand_card);
 
-			board.state.Set(BoardState::STAGE_CHOOSE_BOARD_MOVE);
+			board.stage = Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}
 
 		static void EndTurn(Board &board, const Move &)
 		{
-			board.state.Set(BoardState::STAGE_END_TURN);
+			board.stage = Board::STAGE_PLAYER_TURN_END;
 		}
 };
 
