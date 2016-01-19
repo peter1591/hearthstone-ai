@@ -5,6 +5,8 @@
 #include "stages/player-choose-board-move.h"
 #include "stages/player-turn-end.h"
 #include "stages/opponent-turn-start.h"
+#include "stages/opponent-choose-board-move.h"
+#include "stages/opponent-turn-end.h"
 
 #include "board.h"
 
@@ -23,6 +25,8 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 		SWITCH_CASE_HANDLE_CLASS(StagePlayerChooseBoardMove);
 		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnEnd);
 		SWITCH_CASE_HANDLE_CLASS(StageOpponentTurnStart);
+		SWITCH_CASE_HANDLE_CLASS(StageOpponentChooseBoardMove);
+		SWITCH_CASE_HANDLE_CLASS(StageOpponentTurnEnd);
 
 		case STAGE_WIN:
 		case STAGE_LOSS:

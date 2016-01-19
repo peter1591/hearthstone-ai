@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "player-stat.h"
 #include "card.h"
 
 class OpponentCards
@@ -17,21 +18,28 @@ class OpponentCards
 		int GetHandCount() const { return this->hand_card_count; }
 		int GetDeckCount() const { return this->deck_card_count; }
 
+		void GetPossiblePlayableMinions(const PlayerStat &opponent_stat, std::vector<Card> &playable_cards) const
+		{
+			if (opponent_stat.crystals_current < 3) return;
+
+			// TODO
+			Card card;
+			card.type = Card::TYPE_MINION;
+			card.id = 333;
+			card.cost = 3;
+			card.data.minion.attack = 3;
+			card.data.minion.hp = 3;
+
+			playable_cards.push_back(card);
+		}
+
 		void AddCardToDeck(const Card &) {
 			++this->deck_card_count;
 			// TODO: record the added card
 		}
 
-		Card DrawFromHand() {
-			Card card;
-			card.type = Card::TYPE_MINION;
-			card.id = 333;
-			card.data.minion.cost = 3;
-			card.data.minion.attack = 3;
-			card.data.minion.hp = 3;
-
+		void PlayCardFromHand(const Card &) {
 			--this->hand_card_count;
-			return card; // TODO
 		}
 
 		void DrawFromDeckToHand() {

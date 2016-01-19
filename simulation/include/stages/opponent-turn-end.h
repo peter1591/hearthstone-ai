@@ -1,5 +1,5 @@
-#ifndef STAGES_PLAYER_TURN_END_H
-#define STAGES_PLAYER_TURN_END_H
+#ifndef STAGES_OPPONENT_TURN_END_H
+#define STAGES_OPPONENT_TURN_END_H
 
 #include <stdexcept>
 #include <vector>
@@ -7,13 +7,13 @@
 #include "stages/common.h"
 #include "board.h"
 
-class StagePlayerTurnEnd
+class StageOpponentTurnEnd
 {
 	public:
-		static const Stage stage = STAGE_PLAYER_TURN_END;
+		static const Stage stage = STAGE_OPPONENT_TURN_END;
 		static const bool is_random_node = true;
-		static const bool is_player_turn = true;
-		static std::string GetStageStringName() { return "StagePlayerTurnEnd"; }
+		static const bool is_player_turn = false;
+		static std::string GetStageStringName() { return "StageOpponentTurnEnd"; }
 
 		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)
 		{
@@ -28,7 +28,7 @@ class StagePlayerTurnEnd
 
 			// TODO: trigger end-turn actions
 
-			board.stage = STAGE_OPPONENT_TURN_START;
+			board.stage = STAGE_PLAYER_TURN_START;
 		}
 };
 

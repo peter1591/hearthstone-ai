@@ -18,15 +18,22 @@ std::string Move::GetDebugString() const
 			oss << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.idx_hand_card
 				<< ", put location = " << this->data.play_hand_card_minion_data.location;
 			break;
+
+		case Move::ACTION_OPPONENT_PLAY_MINION:
+			oss << "[Opponent play minion] card: " << this->data.opponent_play_minion_data.card.id
+				<< ", put location = " << this->data.opponent_play_minion_data.location;
+			break;
+
 		case Move::ACTION_ATTACK:
 			oss << "[Attack] attacking = " << this->data.attack_data.attacking_idx
 				<< ", attacked = " << this->data.attack_data.attacked_idx;
 			break;
+
 		case Move::ACTION_END_TURN:
 			oss << "[End turn]";
 			break;
 
-		default:
+		case Move::ACTION_UNKNOWN:
 			throw std::runtime_error("unknown action for Move::DebugPrint()");
 			break;
 	}

@@ -27,6 +27,12 @@ class StageOpponentTurnStart
 			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
 #endif
 
+			// get a crystal
+			board.opponent_stat.crystals_total++;
+			board.opponent_stat.crystals_current = board.opponent_stat.crystals_total - board.opponent_stat.crystals_locked_next_turn;
+			board.opponent_stat.crystals_locked = board.opponent_stat.crystals_locked_next_turn;
+			board.opponent_stat.crystals_locked_next_turn = 0;
+
 			if (board.player_deck.GetCards().empty()) {
 				// no any card can draw, take damage
 				// TODO
@@ -40,7 +46,7 @@ class StageOpponentTurnStart
 					// TODO: distroy card (trigger deathrattle?)
 				}
 			}
-			board.stage = STAGE_PLAYER_TURN_START;
+			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 	}
 };
 

@@ -22,7 +22,6 @@ class Card
 		} type;
 
 		struct Minion {
-			int cost;
 			int attack;
 			int hp;
 		};
@@ -32,7 +31,6 @@ class Card
 		};
 
 		struct Weapon {
-			int cost;
 			int attack;
 			int durability;
 		};
@@ -47,6 +45,8 @@ class Card
 			Weapon weapon;
 			Secret secret;
 		} data;
+
+		int cost;
 };
 
 inline bool Card::IsValid() const

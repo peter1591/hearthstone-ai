@@ -2,6 +2,7 @@
 #define MOVE_H
 
 #include <string>
+#include "card.h"
 
 class Move
 {
@@ -10,6 +11,7 @@ class Move
 			ACTION_UNKNOWN,
 			ACTION_GAME_FLOW,
 			ACTION_PLAY_HAND_CARD_MINION,
+			ACTION_OPPONENT_PLAY_MINION,
 			ACTION_ATTACK,
 			ACTION_END_TURN,
 		} action;
@@ -22,6 +24,11 @@ class Move
 			int location; // where to put the minion
 		};
 
+		struct OpponentPlayMinionData {
+			Card card;
+			int location; // where to put the minion
+		};
+
 		struct AttackData {
 			int attacking_idx; // 0 indicates the hero
 			int attacked_idx; // 0 indicates the hero
@@ -30,6 +37,7 @@ class Move
 		union Data {
 			GameFlowData game_flow_data;
 			PlayHandCardMinionData play_hand_card_minion_data;
+			OpponentPlayMinionData opponent_play_minion_data;
 			AttackData attack_data;
 
 			Data() {}
