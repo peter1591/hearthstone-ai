@@ -1,5 +1,5 @@
-#ifndef _SECRET_H
-#define _SECRET_H
+#ifndef SECRET_H
+#define SECRET_H
 
 class Secret
 {

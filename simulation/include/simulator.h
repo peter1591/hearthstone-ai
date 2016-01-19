@@ -1,5 +1,5 @@
-#ifndef _SIMULATOR_H
-#define _SIMULATOR_H
+#ifndef SIMULATOR_H
+#define SIMULATOR_H
 
 class Simulator
 {

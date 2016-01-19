@@ -1,5 +1,5 @@
-#ifndef _HIDDEN_HAND_H
-#define _HIDDEN_HAND_H
+#ifndef HIDDEN_HAND_H
+#define HIDDEN_HAND_H
 
 class HiddenHand
 {

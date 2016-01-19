@@ -1,5 +1,5 @@
-#ifndef _MINIONS_H
-#define _MINIONS_H
+#ifndef MINIONS_H
+#define MINIONS_H
 
 #include <iostream>
 #include <vector>

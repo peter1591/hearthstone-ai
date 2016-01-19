@@ -1,5 +1,5 @@
-#ifndef _STAGES_PLAYER_TURN_END_H
-#define _STAGES_PLAYER_TURN_END_H
+#ifndef STAGES_PLAYER_TURN_END_H
+#define STAGES_PLAYER_TURN_END_H
 
 #include <stdexcept>
 #include <vector>

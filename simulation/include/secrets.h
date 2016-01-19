@@ -1,5 +1,5 @@
-#ifndef _SECRETS_H
-#define _SECRETS_H
+#ifndef SECRETS_H
+#define SECRETS_H
 
 #include <vector>
 #include "secret.h"

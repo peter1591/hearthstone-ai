@@ -1,5 +1,5 @@
-#ifndef _STAGES_COMMON_H
-#define _STAGES_COMMON_H
+#ifndef STAGES_COMMON_H
+#define STAGES_COMMON_H
 
 // enable consistency checks? (introduce performance drops)
 #define ENABLE_DEBUG_CHECKS

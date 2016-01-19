@@ -1,5 +1,5 @@
-#ifndef _CARD_H
-#define _CARD_H
+#ifndef CARD_H
+#define CARD_H
 
 class Card
 {

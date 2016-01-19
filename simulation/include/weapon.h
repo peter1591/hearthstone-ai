@@ -1,5 +1,5 @@
-#ifndef _WEAPON_H
-#define _WEAPON_H
+#ifndef WEAPON_H
+#define WEAPON_H
 
 class Weapon
 {

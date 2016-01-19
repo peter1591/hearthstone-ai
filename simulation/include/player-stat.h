@@ -1,5 +1,5 @@
-#ifndef _PLAYER_STAT_H
-#define _PLAYER_STAT_H
+#ifndef PLAYER_STAT_H
+#define PLAYER_STAT_H
 
 #include "weapon.h"
 #include "hero-power.h"

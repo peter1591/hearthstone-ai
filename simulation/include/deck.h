@@ -1,5 +1,5 @@
-#ifndef _DECK_H
-#define _DECK_H
+#ifndef DECK_H
+#define DECK_H
 
 #include <iostream>
 #include <algorithm>

@@ -1,5 +1,5 @@
-#ifndef _DECK_DATABASE_H
-#define _DECK_DATABASE_H
+#ifndef DECK_DATABASE_H
+#define DECK_DATABASE_H
 
 #include "card.h"
 

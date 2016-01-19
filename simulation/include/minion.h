@@ -1,5 +1,5 @@
-#ifndef _MINION_H
-#define _MINION_H
+#ifndef MINION_H
+#define MINION_H
 
 class Minion
 {

@@ -1,5 +1,5 @@
-#ifndef _STAGES_PLAYER_CHOOSE_BOARD_MOVE_H
-#define _STAGES_PLAYER_CHOOSE_BOARD_MOVE_H
+#ifndef STAGES_PLAYER_CHOOSE_BOARD_MOVE_H
+#define STAGES_PLAYER_CHOOSE_BOARD_MOVE_H
 
 #include <stdexcept>
 #include <vector>

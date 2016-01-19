@@ -1,5 +1,5 @@
-#ifndef _BOARD_H
-#define _BOARD_H
+#ifndef BOARD_H
+#define BOARD_H
 
 #include <list>
 

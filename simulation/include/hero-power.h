@@ -1,5 +1,5 @@
-#ifndef _HERO_POWER_H
-#define _HERO_POWER_H
+#ifndef HERO_POWER_H
+#define HERO_POWER_H
 
 struct HeroPower
 {

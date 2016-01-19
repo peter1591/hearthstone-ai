@@ -1,5 +1,5 @@
-#ifndef _HIDDEN_DECK_H
-#define _HIDDEN_DECK_H
+#ifndef HIDDEN_DECK_H
+#define HIDDEN_DECK_H
 
 #include <vector>
 #include "card.h"
