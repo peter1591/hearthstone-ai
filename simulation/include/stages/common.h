@@ -7,6 +7,7 @@
 // options
 #define CHOOSE_WHERE_TO_PUT_MINION
 
+#include <string>
 #include <vector>
 #include "board.h"
 #include "stages/common.h"
@@ -40,6 +41,10 @@ namespace StageFunctionChooser
 		typedef void ReturnType;
 	};
 
+	struct Chooser_GetStageStringName {
+		typedef std::string ReturnType;
+	};
+
 	template <typename Chooser> struct Caller {};
 
 	template<> struct Caller<Chooser_IsPlayerTurn> {
@@ -64,6 +69,12 @@ namespace StageFunctionChooser
 		public:
 			template <typename Stage, typename... Params>
 			static Chooser_ApplyMove::ReturnType Call(Params & ... params) { return Stage::GetNextMoves(params...); }
+	};
+
+	template<> struct Caller<Chooser_GetStageStringName> {
+		public:
+			template <typename Stage, typename... Params>
+			static Chooser_GetStageStringName::ReturnType Call(Params & ... params) { return Stage::GetStageStringName(params...); }
 	};
 }
 

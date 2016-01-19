@@ -77,7 +77,9 @@ void Board::DebugPrint() const
 	} else {
 		std::cout << "Opponent's turn." << std::endl;
 	}
-	std::cout << "Stage: " << stage << std::endl;
+	std::cout << "Stage: [" << stage << "] "
+	   << StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage)
+	   << std::endl;
 
 	std::cout << "Player deck: " << std::endl;
 	std::cout << "\t";

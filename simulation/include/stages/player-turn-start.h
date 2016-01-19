@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <string>
 
 #include "stages/common.h"
 #include "board.h"
@@ -13,6 +14,7 @@ class StagePlayerTurnStart
 		static const Stage stage = STAGE_PLAYER_TURN_START;
 		static const bool is_random_node = true;
 		static const bool is_player_turn = true;
+		static std::string GetStageStringName() { return "StagePlayerTurnStart"; }
 
 		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)
 		{

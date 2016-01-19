@@ -14,6 +14,7 @@ class StagePlayerTurnEnd
 		static const Stage stage = STAGE_PLAYER_TURN_END;
 		static const bool is_random_node = StagePlayerTurnStart::is_random_node;
 		static const bool is_player_turn = StagePlayerTurnStart::is_player_turn;
+		static std::string GetStageStringName() { return "StagePlayerTurnEnd"; }
 
 		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
 		{
