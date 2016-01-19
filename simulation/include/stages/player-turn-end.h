@@ -11,7 +11,6 @@ class StagePlayerTurnEnd
 {
 	public:
 		static const Stage stage = STAGE_PLAYER_TURN_END;
-		static const StageType stage_type = STAGE_TYPE_GAME_FLOW;
 		static std::string GetStageStringName() { return "StagePlayerTurnEnd"; }
 
 		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)

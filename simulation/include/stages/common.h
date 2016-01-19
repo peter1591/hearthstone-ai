@@ -25,10 +25,6 @@ class StageCommonUtilities
 
 namespace StageFunctionChooser
 {
-	struct Chooser_GetStageType {
-		typedef StageType ReturnType;
-	};
-
 	struct Chooser_ApplyMove {
 		typedef void ReturnType;
 	};
@@ -42,12 +38,6 @@ namespace StageFunctionChooser
 	};
 
 	template <typename Chooser> struct Caller {};
-
-	template<> struct Caller<Chooser_GetStageType> {
-		public:
-			template <typename Stage>
-			static Chooser_GetStageType::ReturnType Call() { return Stage::stage_type; }
-	};
 
 	template<> struct Caller<Chooser_ApplyMove> {
 		public:

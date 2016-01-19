@@ -55,7 +55,7 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 
 void Board::ApplyMove(const Move &move)
 {
-	StageType stage_type_prev = StageFunctionCaller<StageFunctionChooser::Chooser_GetStageType>(this->stage);
+	StageType stage_type_prev = (StageType)(this->stage & STAGE_TYPE_FLAG);
 
 	const Move *current_move = &move;
 
@@ -68,7 +68,7 @@ void Board::ApplyMove(const Move &move)
 		this->GetNextMoves(this->cached_next_moves);
 		if (this->cached_next_moves.empty()) break;
 
-		StageType stage_type = StageFunctionCaller<StageFunctionChooser::Chooser_GetStageType>(this->stage);
+		StageType stage_type= (StageType)(this->stage & STAGE_TYPE_FLAG);
 		if (stage_type != STAGE_TYPE_GAME_FLOW) break;
 
 		current_move = &this->cached_next_moves.front();
@@ -77,8 +77,8 @@ void Board::ApplyMove(const Move &move)
 
 void Board::GetStage(Stage &stage, StageType &type) const
 {
-	type = StageFunctionCaller<StageFunctionChooser::Chooser_GetStageType>(this->stage);
 	stage = this->stage;
+	type = (StageType)(this->stage & STAGE_TYPE_FLAG);
 }
 
 void Board::SetStateToPlayerTurnStart()
@@ -104,6 +104,9 @@ void Board::DebugPrint() const
 			break;
 		case STAGE_TYPE_GAME_FLOW:
 			std::cout << "Game flow (random) turn." << std::endl;
+			break;
+		default:
+			throw std::runtime_error("unhandled stage type");
 	}
 
 	std::cout << "Stage: [" << stage << "] "

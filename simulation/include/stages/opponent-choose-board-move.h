@@ -12,7 +12,6 @@ class StageOpponentChooseBoardMove
 {
 	public:
 		static const Stage stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
-		static const StageType stage_type = STAGE_TYPE_OPPONENT;
 		static std::string GetStageStringName() { return "StageOpponentChooseBoardMove"; }
 
 		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)

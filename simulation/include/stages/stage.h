@@ -2,6 +2,7 @@
 #define _STAGES_STAGE_H
 
 enum StageType {
+	STAGE_TYPE_FLAG = 0x000F,
 	STAGE_TYPE_PLAYER = 0x0001,
 	STAGE_TYPE_OPPONENT = 0x0002,
 	STAGE_TYPE_GAME_FLOW = 0x0003 // game flow including randoms
