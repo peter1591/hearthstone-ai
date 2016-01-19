@@ -20,7 +20,7 @@ class OpponentCards
 
 		void GetPossiblePlayableMinions(const PlayerStat &opponent_stat, std::vector<Card> &playable_cards) const
 		{
-			if (opponent_stat.crystals_current < 3) return;
+			if (opponent_stat.crystal.GetCurrent() < 3) return;
 
 			// TODO
 			Card card;

@@ -43,7 +43,7 @@ class StagePlayerChooseBoardMove
 				switch (playing_card.type) {
 					case Card::TYPE_MINION:
 						if (!can_play_minion) continue;
-						if (board.player_stat.crystals_current < playing_card.cost) continue;
+						if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
 						StagePlayerChooseBoardMove::GetNextMoves_PlayMinion(hand_idx, board, next_moves);
 					default:
 						continue; // TODO: handle other card types
@@ -93,7 +93,7 @@ class StagePlayerChooseBoardMove
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
 			std::vector<Card>::const_iterator it_hand_card = board.player_hand.GetCards().begin() + data.idx_hand_card;
 
-			board.player_stat.crystals_current -= it_hand_card->cost;
+			board.player_stat.crystal.CostCrystals(it_hand_card->cost);
 
 			// TODO: handle battlecry
 			minion.card_id = it_hand_card->id;

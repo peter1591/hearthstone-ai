@@ -27,11 +27,7 @@ class StageOpponentTurnStart
 			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
 #endif
 
-			// get a crystal
-			board.opponent_stat.crystals_total++;
-			board.opponent_stat.crystals_current = board.opponent_stat.crystals_total - board.opponent_stat.crystals_locked_next_turn;
-			board.opponent_stat.crystals_locked = board.opponent_stat.crystals_locked_next_turn;
-			board.opponent_stat.crystals_locked_next_turn = 0;
+			board.opponent_stat.crystal.TurnStart();
 
 			if (board.player_deck.GetCards().empty()) {
 				// no any card can draw, take damage

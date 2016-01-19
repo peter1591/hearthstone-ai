@@ -87,7 +87,7 @@ class StageOpponentChooseBoardMove
 
 			const Move::OpponentPlayMinionData &data = move.data.opponent_play_minion_data;
 
-			board.opponent_stat.crystals_current -= data.card.cost;
+			board.opponent_stat.crystal.CostCrystals(data.card.cost);
 
 			// TODO: handle battlecry
 			minion.card_id = data.card.id;
