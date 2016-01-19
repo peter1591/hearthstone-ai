@@ -10,6 +10,7 @@
 class StagePlayerTurnStart
 {
 	public:
+		static const Stage stage = STAGE_PLAYER_TURN_START;
 		static const bool is_random_node = true;
 		static const bool is_player_turn = true;
 
@@ -30,7 +31,7 @@ class StagePlayerTurnStart
 			if (board.player_deck.GetCards().empty()) {
 				// no any card can draw, take damage
 				// TODO
-				board.stage = Board::STAGE_WIN;
+				board.stage = STAGE_WIN;
 				return;
 			} else {
 				Card draw_card = board.player_deck.Draw();
@@ -42,7 +43,7 @@ class StagePlayerTurnStart
 					// TODO: distroy card (trigger deathrattle?)
 				}
 			}
-			board.stage = Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE;
+			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 	}
 };
 

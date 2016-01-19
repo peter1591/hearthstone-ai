@@ -9,6 +9,7 @@
 
 #include <vector>
 #include "board.h"
+#include "stages/common.h"
 
 class StageCommonUtilities
 {

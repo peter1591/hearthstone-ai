@@ -10,6 +10,7 @@
 class StagePlayerChooseBoardMove
 {
 	public:
+		static const Stage stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		static const bool is_random_node = false;
 		static const bool is_player_turn = true;
 
@@ -104,12 +105,12 @@ class StagePlayerChooseBoardMove
 
 			board.player_hand.RemoveCard(data.idx_hand_card);
 
-			board.stage = Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE;
+			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}
 
 		static void EndTurn(Board &board, const Move &)
 		{
-			board.stage = Board::STAGE_PLAYER_TURN_END;
+			board.stage = STAGE_PLAYER_TURN_END;
 		}
 };
 

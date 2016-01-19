@@ -13,6 +13,7 @@
 #include "hidden-deck.h"
 #include "hidden-secrets.h"
 #include "hidden-hand.h"
+#include "stages/stage.h"
 
 class Move
 {
@@ -61,21 +62,6 @@ class Board
 	friend class StagePlayerTurnStart;
 	friend class StagePlayerTurnEnd;
 	friend class StagePlayerChooseBoardMove;
-
-	public:
-		enum Stage {
-			STAGE_UNKNOWN = 0,
-
-			STAGE_PLAYER_TURN_START,
-			STAGE_PLAYER_CHOOSE_BOARD_MOVE, // play card from hand, minion attack, or end turn
-//			STAGE_CHOOSE_HIDDEN_SECRET, // only for opponent
-//			STAGE_CHOOSE_DISCOVER_CARD,
-
-			STAGE_PLAYER_TURN_END,
-
-			STAGE_WIN,
-			STAGE_LOSS
-		};
 
 	public:
 		Board() : stage(STAGE_UNKNOWN) {}

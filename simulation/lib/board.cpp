@@ -1,28 +1,36 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "stages/player-turn-start.h"
+#include "stages/player-choose-board-move.h"
+#include "stages/player-turn-end.h"
+
 #include "board.h"
-#include "stages.h"
 
 template <typename Chooser, typename... Params, typename Return = typename Chooser::ReturnType>
-static Return StageFunctionCaller(Board::Stage stage, Params & ... params)
+static Return StageFunctionCaller(Stage stage, Params & ... params)
 {
 	typedef StageFunctionChooser::Caller<Chooser> Caller;
 
+#define SWITCH_CASE_HANDLE_CLASS(class_name) \
+	case class_name::stage: \
+		return Caller::template Call<class_name>(params...);
+
 	switch (stage)
 	{
-		case Board::STAGE_PLAYER_TURN_START:
-			return Caller::template Call<StagePlayerTurnStart>(params...);
+		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnStart);
+		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnEnd);
+		SWITCH_CASE_HANDLE_CLASS(StagePlayerChooseBoardMove);
 
-		case Board::STAGE_PLAYER_TURN_END:
-			return Caller::template Call<StagePlayerTurnEnd>(params...);
-
-		case Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE:
-			return Caller::template Call<StagePlayerChooseBoardMove>(params...);
-
-		default:
-			throw std::runtime_error("Unhandled state for StageFunctionCaller()");
+		case STAGE_WIN:
+		case STAGE_LOSS:
+		case STAGE_UNKNOWN:
+			break;
 	}
+
+#undef SWITCH_CASE_HANDLE_CLASS
+
+	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
 void Board::GetNextMoves(std::vector<Move> &next_moves) const
@@ -43,7 +51,7 @@ void Board::ApplyMove(const Move &move)
 	return StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 }
 
-void Board::GetStage(bool &is_player_turn, bool &is_random_node, Board::Stage &stage ) const
+void Board::GetStage(bool &is_player_turn, bool &is_random_node, Stage &stage ) const
 {
 	is_player_turn = StageFunctionCaller<StageFunctionChooser::Chooser_IsPlayerTurn>(this->stage);
 	is_random_node = StageFunctionCaller<StageFunctionChooser::Chooser_IsRandomNode>(this->stage);

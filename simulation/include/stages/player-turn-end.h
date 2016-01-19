@@ -11,6 +11,7 @@
 class StagePlayerTurnEnd
 {
 	public:
+		static const Stage stage = STAGE_PLAYER_TURN_END;
 		static const bool is_random_node = StagePlayerTurnStart::is_random_node;
 		static const bool is_player_turn = StagePlayerTurnStart::is_player_turn;
 
