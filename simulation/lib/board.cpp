@@ -15,10 +15,10 @@ static Return StageFunctionCaller(Board::Stage stage, Params & ... params)
 			return Caller::template Call<StagePlayerTurnStart>(params...);
 
 		case Board::STAGE_PLAYER_TURN_END:
-			return Caller::template Call<StageEndTurn>(params...);
+			return Caller::template Call<StagePlayerTurnEnd>(params...);
 
 		case Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE:
-			return Caller::template Call<StageChooseBoardMove>(params...);
+			return Caller::template Call<StagePlayerChooseBoardMove>(params...);
 
 		default:
 			throw std::runtime_error("Unhandled state for StageFunctionCaller()");

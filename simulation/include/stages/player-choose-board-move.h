@@ -1,5 +1,5 @@
-#ifndef _STAGES_CHOOSE_BOARD_MOVE_H
-#define _STAGES_CHOOSE_BOARD_MOVE_H
+#ifndef _STAGES_PLAYER_CHOOSE_BOARD_MOVE_H
+#define _STAGES_PLAYER_CHOOSE_BOARD_MOVE_H
 
 #include <stdexcept>
 #include <vector>
@@ -7,7 +7,7 @@
 #include "stages/common.h"
 #include "board.h"
 
-class StageChooseBoardMove
+class StagePlayerChooseBoardMove
 {
 	public:
 		static const bool is_random_node = false;
@@ -41,7 +41,7 @@ class StageChooseBoardMove
 				switch (playing_card.type) {
 					case Card::TYPE_MINION:
 						if (!can_play_minion) continue;
-						StageChooseBoardMove::GetNextMoves_PlayMinion(hand_idx, board, next_moves);
+						StagePlayerChooseBoardMove::GetNextMoves_PlayMinion(hand_idx, board, next_moves);
 					default:
 						continue; // TODO: handle other card types
 				}
@@ -56,12 +56,12 @@ class StageChooseBoardMove
 			switch (move.action)
 			{
 				case Move::ACTION_PLAY_HAND_CARD_MINION:
-					return StageChooseBoardMove::PlayHandCardMinion(board, move);
+					return StagePlayerChooseBoardMove::PlayHandCardMinion(board, move);
 				case Move::ACTION_END_TURN:
-					return StageChooseBoardMove::EndTurn(board, move);
+					return StagePlayerChooseBoardMove::EndTurn(board, move);
 
 				default:
-					throw std::runtime_error("Invalid action for StageChooseBoardMove");
+					throw std::runtime_error("Invalid action for StagePlayerChooseBoardMove");
 			}
 		}
 

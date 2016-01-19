@@ -1,5 +1,5 @@
-#ifndef _STAGES_END_TURN_H
-#define _STAGES_END_TURN_H
+#ifndef _STAGES_PLAYER_TURN_END_H
+#define _STAGES_PLAYER_TURN_END_H
 
 #include <stdexcept>
 #include <vector>
@@ -8,7 +8,7 @@
 #include "stages/player-turn-start.h"
 #include "board.h"
 
-class StageEndTurn
+class StagePlayerTurnEnd
 {
 	public:
 		static const bool is_random_node = StagePlayerTurnStart::is_random_node;

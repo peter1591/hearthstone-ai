@@ -59,8 +59,8 @@ class Move
 class Board
 {
 	friend class StagePlayerTurnStart;
-	friend class StageEndTurn;
-	friend class StageChooseBoardMove;
+	friend class StagePlayerTurnEnd;
+	friend class StagePlayerChooseBoardMove;
 
 	public:
 		enum Stage {
