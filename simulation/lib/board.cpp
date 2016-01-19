@@ -15,26 +15,21 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 {
 	typedef StageFunctionChooser::Caller<Chooser> Caller;
 
-#define SWITCH_CASE_HANDLE_CLASS(class_name) \
-	case class_name::stage: \
-		return Caller::template Call<class_name>(params...);
-
-	switch (stage)
-	{
-		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnStart);
-		SWITCH_CASE_HANDLE_CLASS(StagePlayerChooseBoardMove);
-		SWITCH_CASE_HANDLE_CLASS(StagePlayerTurnEnd);
-		SWITCH_CASE_HANDLE_CLASS(StageOpponentTurnStart);
-		SWITCH_CASE_HANDLE_CLASS(StageOpponentChooseBoardMove);
-		SWITCH_CASE_HANDLE_CLASS(StageOpponentTurnEnd);
-
-		case STAGE_WIN:
-		case STAGE_LOSS:
-		case STAGE_UNKNOWN:
-			break;
+#define IF_ELSE_HANDLE_STAGE_CLASS(class_name) \
+	else if (stage == class_name::stage) { \
+		return Caller::template Call<class_name>(params...); \
 	}
 
-#undef SWITCH_CASE_HANDLE_CLASS
+	if (false) {
+	}
+	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerChooseBoardMove)
+	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnEnd)
+	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentChooseBoardMove)
+	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentTurnEnd)
+	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnStart)
+	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentTurnStart)
+
+#undef IF_ELSE_HANDLE_STAGE_CLASS
 
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
