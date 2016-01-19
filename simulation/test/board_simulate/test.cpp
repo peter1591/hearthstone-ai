@@ -7,7 +7,7 @@
 #include "board.h"
 
 #define TIMES_TEST 100000
-#define INTERACTIVE
+//#define INTERACTIVE
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -126,6 +126,8 @@ int main(void)
 {
 	struct timespec start, end;
 	Board board;
+	double total_time = 0.0;
+	int run_times = 0;
 
 	srand(time(NULL));
 
@@ -152,7 +154,13 @@ int main(void)
 			return -1;
 		}
 
-		std::cout << timespec_diff_nsec(&start, &end) << " secs" << std::endl;
+		double duration = timespec_diff_nsec(&start, &end);
+		std::cout << duration << " secs";
+
+		total_time += duration;
+		run_times++;
+
+		std::cout << " (average: " << (total_time / run_times) << " secs)" << std::endl;
 		std::cout.flush();
 	}
 
