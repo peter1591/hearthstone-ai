@@ -4,53 +4,50 @@
 #include "board.h"
 #include "stages.h"
 
+template <typename Chooser, typename... Params, typename Return = typename Chooser::ReturnType>
+static Return StageFunctionCaller(Board::Stage stage, Params & ... params)
+{
+	typedef StageFunctionChooser::Caller<Chooser> Caller;
+
+	switch (stage)
+	{
+		case Board::STAGE_PLAYER_TURN_START:
+			return Caller::template Call<StagePlayerTurnStart>(params...);
+
+		case Board::STAGE_PLAYER_TURN_END:
+			return Caller::template Call<StageEndTurn>(params...);
+
+		case Board::STAGE_PLAYER_CHOOSE_BOARD_MOVE:
+			return Caller::template Call<StageChooseBoardMove>(params...);
+
+		default:
+			throw std::runtime_error("Unhandled state for StageFunctionCaller()");
+	}
+}
+
 void Board::GetNextMoves(std::vector<Move> &next_moves) const
 {
 	switch (this->stage)
 	{
-		case STAGE_PLAYER_TURN_START:
-			return StagePlayerTurnStart::GetNextMoves(*this, next_moves);
-
-		case STAGE_PLAYER_TURN_END:
-			return StageEndTurn::GetNextMoves(*this, next_moves);
-
-		case STAGE_PLAYER_CHOOSE_BOARD_MOVE:
-			return StageChooseBoardMove::GetNextMoves(*this, next_moves);
-
 		case STAGE_WIN:
 		case STAGE_LOSS:
 			return;
 
-		case STAGE_UNKNOWN:
-			throw std::runtime_error("Unknown state for GetNextMoves()");
+		default:
+			return StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_moves);
 	}
-	throw std::runtime_error("Unhandled state for GetNextMoves()");
 }
 
 void Board::ApplyMove(const Move &move)
 {
-	switch (this->stage)
-	{
-		case STAGE_PLAYER_TURN_START:
-			return StagePlayerTurnStart::ApplyMove(*this, move);
-		case STAGE_PLAYER_TURN_END:
-			return StageEndTurn::ApplyMove(*this, move);
-		case STAGE_PLAYER_CHOOSE_BOARD_MOVE:
-			return StageChooseBoardMove::ApplyMove(*this, move);
-
-		case STAGE_WIN:
-		case STAGE_LOSS:
-			throw std::runtime_error("ApplyMove() should not be called when it's a win/loss");
-
-		case STAGE_UNKNOWN:
-			throw std::runtime_error("Unknown state for ApplyMove()");
-	}
-	throw std::runtime_error("Unhandled state for ApplyMove()");
+	return StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 }
 
-void Board::GetStage(bool &is_player_turn, bool &is_random_node, Board::Stage stage ) const
+void Board::GetStage(bool &is_player_turn, bool &is_random_node, Board::Stage &stage ) const
 {
-	// TODO
+	is_player_turn = StageFunctionCaller<StageFunctionChooser::Chooser_IsPlayerTurn>(this->stage);
+	is_random_node = StageFunctionCaller<StageFunctionChooser::Chooser_IsRandomNode>(this->stage);
+	stage = this->stage;
 }
 
 void Board::DebugPrint() const

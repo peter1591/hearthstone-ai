@@ -98,7 +98,7 @@ class Board
 			this->stage = STAGE_PLAYER_TURN_START;
 		}
 
-		void GetStage(bool &is_player_turn, bool &is_random_node, Stage stage) const;
+		void GetStage(bool &is_player_turn, bool &is_random_node, Stage &stage) const;
 
 		bool IsPlayerTurn() const;
 		bool IsRandomNode() const;

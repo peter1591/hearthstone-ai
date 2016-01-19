@@ -59,6 +59,8 @@ void InitializeBoard(Board &board)
 	minion.max_hp = 3;
 	board.player_minions.AddMinion(minion);
 
+	board.PlayerTurnStart();
+
 	board.DebugPrint();
 }
 
