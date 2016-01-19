@@ -10,9 +10,8 @@
 #include "secrets.h"
 #include "minions.h"
 #include "player-stat.h"
-#include "hidden-deck.h"
+#include "opponent-cards.h"
 #include "hidden-secrets.h"
-#include "hidden-hand.h"
 #include "stages/stage.h"
 #include "move.h"
 
@@ -36,8 +35,7 @@ class Board
 
 		PlayerStat opponent_stat;
 		HiddenSecrets opponent_secrets;
-		HiddenHand opponent_hand;
-		HiddenDeck opponent_deck;
+		OpponentCards opponent_cards;
 		Minions opponent_minions;
 
 	public:

@@ -24,10 +24,7 @@ class StagePlayerTurnEnd
 		static void ApplyMove(Board &board, const Move &move)
 		{
 #ifdef ENABLE_DEBUG_CHECKS
-			if (move.action != Move::ACTION_GAME_FLOW)
-			{
-				throw std::runtime_error("Invalid move for StagePlayerTurnStart::ApplyMove()");
-			}
+			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
 #endif
 
 			// TODO: trigger end-turn actions

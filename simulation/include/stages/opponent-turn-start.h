@@ -24,10 +24,7 @@ class StageOpponentTurnStart
 		static void ApplyMove(Board &board, const Move &move)
 		{
 #ifdef ENABLE_DEBUG_CHECKS
-			if (move.action != Move::ACTION_GAME_FLOW)
-			{
-				throw std::runtime_error("Invalid move for StagePlayerTurnStart::ApplyMove()");
-			}
+			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
 #endif
 
 			if (board.player_deck.GetCards().empty()) {
@@ -36,10 +33,8 @@ class StageOpponentTurnStart
 				board.stage = STAGE_LOSS;
 				return;
 			} else {
-				Card draw_card = board.opponent_deck.Draw();
-
-				if (board.player_hand.GetCards().size() < 10) {
-					board.player_hand.AddCard(draw_card);
+				if (board.opponent_cards.GetHandCount() < 10) {
+					board.opponent_cards.DrawFromDeckToHand();
 				} else {
 					// hand can have maximum of 10 cards
 					// TODO: distroy card (trigger deathrattle?)

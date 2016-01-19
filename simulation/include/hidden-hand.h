@@ -9,6 +9,8 @@ class HiddenHand
 	public:
 		std::string GetDebugString() const;
 
+		int GetCardCount() const { return this->total_cards; }
+
 	private:
 		int total_cards;
 };

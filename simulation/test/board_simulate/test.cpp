@@ -70,7 +70,7 @@ void InitializeBoard(Board &board)
 	board.opponent_stat.crystals_locked = 0;
 	board.opponent_stat.crystals_locked_next_turn = 0;
 
-	board.opponent_deck.Set(30);
+	board.opponent_cards.Set(30);
 
 	InitializeDeck1(deck_database, board.player_deck);
 	InitializeHand1(deck_database, board.player_hand);

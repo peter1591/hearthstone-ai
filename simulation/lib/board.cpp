@@ -84,8 +84,7 @@ void Board::DebugPrint() const
 	   << std::endl;
 
 	std::cout << "Opponent stat: " << this->opponent_stat.GetDebugString() << std::endl;
-	std::cout << "Opponent deck: " << this->opponent_deck.GetDebugString() << std::endl;
-	std::cout << "Opponent hand: " << this->opponent_hand.GetDebugString() << std::endl;
+	std::cout << "Opponent cards: " << this->opponent_cards.GetDebugString() << std::endl;
 
 	std::cout << "Player stat: " << this->player_stat.GetDebugString() << std::endl;
 	std::cout << "Player deck: " << std::endl;
