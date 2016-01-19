@@ -41,6 +41,7 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 
 void Board::GetNextMoves(std::vector<Move> &next_moves) const
 {
+	next_moves.clear();
 	switch (this->stage)
 	{
 		case STAGE_WIN:
@@ -54,7 +55,24 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 
 void Board::ApplyMove(const Move &move)
 {
-	return StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
+	StageType stage_type_prev = StageFunctionCaller<StageFunctionChooser::Chooser_GetStageType>(this->stage);
+
+	const Move *current_move = &move;
+
+	do {
+		StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, *current_move);
+
+		// merge sequential game-flow nodes
+		if (stage_type_prev != STAGE_TYPE_GAME_FLOW) break;
+
+		this->GetNextMoves(this->cached_next_moves);
+		if (this->cached_next_moves.empty()) break;
+
+		StageType stage_type = StageFunctionCaller<StageFunctionChooser::Chooser_GetStageType>(this->stage);
+		if (stage_type != STAGE_TYPE_GAME_FLOW) break;
+
+		current_move = &this->cached_next_moves.front();
+	} while (true);
 }
 
 void Board::GetStage(Stage &stage, StageType &type) const

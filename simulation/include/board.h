@@ -61,6 +61,7 @@ class Board
 
 	private:
 		Stage stage;
+		std::vector<Move> cached_next_moves; // cache for moves pre-calculated in ApplyMove()
 };
 
 #endif

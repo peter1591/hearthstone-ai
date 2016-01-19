@@ -94,6 +94,9 @@ class StagePlayerChooseBoardMove
 
 			board.player_stat.crystal.CostCrystals(it_hand_card->cost);
 
+			// TODO: here should NOT introduce any random
+			// maybe we should handle game flow details in another stage
+
 			// TODO: handle battlecry
 			minion.card_id = it_hand_card->id;
 			minion.max_hp = it_hand_card->data.minion.hp;
