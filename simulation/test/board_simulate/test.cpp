@@ -7,7 +7,7 @@
 #include "board.h"
 
 #define TIMES_TEST 100000
-//#define INTERACTIVE
+#define INTERACTIVE
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -92,9 +92,7 @@ void DoTask(Board board)
 		std::cout << "!!! Next moves: " << std::endl;
 		for (size_t i=0; i<next_moves.size(); ++i) {
 			std::cout << "\t";
-			std::cout << i << ". ";
-			next_moves[i].DebugPrint();
-			std::cout << std::endl;
+			std::cout << i << ". " << next_moves[i].GetDebugString() << std::endl;
 		}
 
 		choose_move = -1;
