@@ -21,7 +21,11 @@ class StageChooseBoardMove
 
 			guessed_next_moves = 1; // end turn
 			if (can_play_minion) {
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
 				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION) * (board.player_minions.GetMinions().size()+1);
+#else
+				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION);
+#endif
 			}
 			next_moves.reserve(guessed_next_moves);
 
@@ -63,16 +67,19 @@ class StageChooseBoardMove
 	private:
 		static void GetNextMoves_PlayMinion(size_t hand_card_idx, const Board &board, std::vector<Move> &next_moves)
 		{
-			size_t total_minions = board.player_minions.GetMinions().size();
 			Move move;
 
 			move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
 			move.data.play_hand_card_minion_data.idx_hand_card = hand_card_idx;
 
-			for (size_t i=0; i<=total_minions; ++i) {
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+			for (size_t i=0; i<=board.player_minions.GetMinions().size(); ++i) {
 				move.data.play_hand_card_minion_data.location = i;
 				next_moves.push_back(move);
 			}
+#else
+			next_moves.push_back(move);
+#endif
 		}
 
 		static void PlayHandCardMinion(Board &board, const Move &move)
@@ -88,7 +95,11 @@ class StageChooseBoardMove
 			minion.hp = minion.max_hp;
 			minion.attack = it_hand_card->data.minion.attack;
 
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.player_minions.AddMinion(minion, data.location);
+#else
+			board.player_minions.AddMinion(minion); // add to the rightmost
+#endif
 
 			board.player_hand.RemoveCard(data.idx_hand_card);
 

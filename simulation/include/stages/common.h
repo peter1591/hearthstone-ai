@@ -4,6 +4,9 @@
 // enable consistency checks? (introduce performance drops)
 #define ENABLE_DEBUG_CHECKS
 
+// options
+#define CHOOSE_WHERE_TO_PUT_MINION
+
 #include <vector>
 #include "board.h"
 
