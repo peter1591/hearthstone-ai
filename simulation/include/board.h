@@ -52,8 +52,9 @@ class Board
 		bool IsPlayerTurn() const;
 		bool IsRandomNode() const;
 
-		// Return all possible boards after a player/opponent's action 
-		// If this is a random node, one of the random outcomes is returned
+		// Return all possible moves
+		// If this is a game flow node, you should skip this call
+		// Note: caller should clear 'next_moves' before calling
 		void GetNextMoves(std::vector<Move> &next_moves) const;
 
 		// Apply the move to the board
@@ -79,11 +80,15 @@ class Board
 
 			Data() {}
 			// TODO: implement comparison operator via memory-compare
-		} data;
+		};
+
+	private:
+		StageType GetStageType() const;
 
 	private:
 		Stage stage;
 		RandomGenerator random_generator;
+		Data data;
 };
 
 #endif

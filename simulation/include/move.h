@@ -46,6 +46,14 @@ class Move
 		Move() : action(ACTION_UNKNOWN) {}
 
 		std::string GetDebugString() const;
+
+	public:
+		static const Move & GetGameFlowMove()
+		{
+			static Move game_flow_move;
+			game_flow_move.action = ACTION_GAME_FLOW;
+			return game_flow_move;
+		}
 };
 
 #endif

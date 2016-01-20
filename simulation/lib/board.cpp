@@ -42,15 +42,18 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 
 void Board::GetNextMoves(std::vector<Move> &next_moves) const
 {
-	next_moves.clear();
-	switch (this->stage)
-	{
-		case STAGE_WIN:
-		case STAGE_LOSS:
+	switch (this->GetStageType()) {
+		case STAGE_TYPE_GAME_FLOW:
+			throw std::runtime_error("This is a game flow stage, you should skip the GetNextMoves() call, and apply the Move::GetGameFlowMove() directly.");
+		case STAGE_TYPE_GAME_END:
 			return;
 
-		default:
+		case STAGE_TYPE_PLAYER:
+		case STAGE_TYPE_OPPONENT:
 			return StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_moves);
+
+		default:
+			throw std::runtime_error("Unhandled case in GetNextMoves()");
 	}
 }
 
@@ -71,10 +74,15 @@ void Board::ApplyMove(const Move &move, bool &is_deterministic)
 #endif
 }
 
+StageType Board::GetStageType() const
+{
+	return (StageType)(this->stage & STAGE_TYPE_FLAG);
+}
+
 void Board::GetStage(Stage &stage, StageType &type) const
 {
 	stage = this->stage;
-	type = (StageType)(this->stage & STAGE_TYPE_FLAG);
+	type = this->GetStageType();
 }
 
 void Board::SetStateToPlayerTurnStart()
