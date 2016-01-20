@@ -22,10 +22,7 @@ class StagePlayerPutMinion
 			board.player_stat.crystal.CostCrystals(it_hand_card->cost);
 
 			// TODO: handle battlecry
-			minion.card_id = it_hand_card->id;
-			minion.max_hp = it_hand_card->data.minion.hp;
-			minion.hp = minion.max_hp;
-			minion.attack = it_hand_card->data.minion.attack;
+			minion.Summon(*it_hand_card);
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.player_minions.AddMinion(minion, data.location);

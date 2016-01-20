@@ -60,7 +60,7 @@ inline void Minions::DebugPrint() const
 {
 	for (const auto &minion : this->minions) {
 		if (minion.IsValid()) {
-			std::cout << "\t[" << minion.card_id << "] " << minion.attack << " / " << minion.hp << " (max hp = " << minion.max_hp << ")" << std::endl;
+			std::cout << "\t[" << minion.GetCardId() << "] " << minion.GetAttack() << " / " << minion.GetHP() << " (max hp = " << minion.GetMaxHP() << ")" << std::endl;
 		} else {
 			std::cout << "\t[EMPTY]" << std::endl;
 		}
