@@ -3,6 +3,7 @@
 
 #include "deck-database.h"
 #include "deck.h"
+#include "random-generator.h"
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -58,6 +59,7 @@ int main(void)
 {
 	struct timespec start, end;
 	DeckDatabase deck_database;
+	RandomGenerator random_generator;
 
 	srand(time(NULL));
 
@@ -68,7 +70,7 @@ int main(void)
 		}
 
 		for (int times=0; times<100000; times++) {
-			Deck deck;
+			Deck deck(random_generator);
 			for (int i=0; i<30; i++) {
 				AddCard(deck_database, deck);
 			}

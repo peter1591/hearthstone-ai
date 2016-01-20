@@ -49,14 +49,10 @@ void InitializeBoard(Board &board)
 	InitializeHand1(deck_database, board.player_hand);
 	
 	Minion minion;
-	minion.card_id = 111;
-	minion.hp = 1;
-	minion.max_hp = 1;
+	minion.Set(111, 1, 1, 1);
 	board.player_minions.AddMinion(minion);
 
-	minion.card_id = 213;
-	minion.hp = 2;
-	minion.max_hp = 3;
+	minion.Set(213, 2, 1, 3);
 	board.player_minions.AddMinion(minion);
 
 	board.SetStateToPlayerTurnStart();

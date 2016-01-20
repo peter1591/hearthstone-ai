@@ -6,7 +6,7 @@
 #include "deck-database.h"
 #include "board.h"
 
-#define TIMES_TEST 100000
+#define TIMES_TEST 10000
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
@@ -69,16 +69,10 @@ void InitializeBoard(Board &board)
 	InitializeHand1(deck_database, board.player_hand);
 	
 	Minion minion;
-	minion.card_id = 111;
-	minion.attack = 1;
-	minion.hp = 1;
-	minion.max_hp = 1;
+	minion.Set(111, 1, 1, 1);
 	board.player_minions.AddMinion(minion);
 
-	minion.card_id = 213;
-	minion.attack = 2;
-	minion.hp = 2;
-	minion.max_hp = 3;
+	minion.Set(213, 2, 2, 3);
 	board.player_minions.AddMinion(minion);
 
 	board.SetStateToPlayerTurnStart();
