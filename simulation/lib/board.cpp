@@ -52,24 +52,7 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 
 void Board::ApplyMove(const Move &move)
 {
-	StageType stage_type_prev = (StageType)(this->stage & STAGE_TYPE_FLAG);
-
-	const Move *current_move = &move;
-
-	do {
-		StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, *current_move);
-
-		// merge sequential game-flow nodes
-		if (stage_type_prev != STAGE_TYPE_GAME_FLOW) break;
-
-		this->GetNextMoves(this->cached_next_moves);
-		if (this->cached_next_moves.empty()) break;
-
-		StageType stage_type= (StageType)(this->stage & STAGE_TYPE_FLAG);
-		if (stage_type != STAGE_TYPE_GAME_FLOW) break;
-
-		current_move = &this->cached_next_moves.front();
-	} while (true);
+	return StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 }
 
 void Board::GetStage(Stage &stage, StageType &type) const
