@@ -9,6 +9,8 @@
 #include "stages/opponent-choose-board-move.h"
 #include "stages/opponent-turn-end.h"
 
+#include "random-generator.h"
+
 #include "board.h"
 
 template <typename Chooser, typename... Params, typename Return = typename Chooser::ReturnType>
@@ -50,9 +52,16 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 	}
 }
 
-void Board::ApplyMove(const Move &move)
+void Board::ApplyMove(const Move &move, bool &is_deterministic)
 {
-	return StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
+	bool has_random = false;
+
+	RandomGenerator::GetInstance().ClearFlags();
+
+	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
+
+	RandomGenerator::GetInstance().GetFlags(has_random);
+	is_deterministic = !has_random;
 }
 
 void Board::GetStage(Stage &stage, StageType &type) const

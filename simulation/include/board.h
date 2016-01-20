@@ -50,7 +50,10 @@ class Board
 		// Return all possible boards after a player/opponent's action 
 		// If this is a random node, one of the random outcomes is returned
 		void GetNextMoves(std::vector<Move> &next_moves) const;
-		void ApplyMove(const Move &move);
+
+		// Apply the move to the board
+		// @params   is_deterministic   [OUT] is the apply procedure deterministic (.e., introduce no random?)
+		void ApplyMove(const Move &move, bool &is_deterministic);
 
 		void DebugPrint() const;
 

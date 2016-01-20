@@ -9,6 +9,7 @@
 
 #include "card.h"
 #include "common.h"
+#include "random-generator.h"
 
 class Deck
 {
@@ -40,13 +41,18 @@ inline Card Deck::Draw()
 {
 	int rand_idx;
 	Card ret;
+	size_t card_count = this->cards.size();
 
-	if (UNLIKELY(this->cards.empty())) {
+	if (UNLIKELY(card_count == 0)) {
 		ret.MarkInvalid();
 		return ret;
 	}
 
-	rand_idx = rand() % this->cards.size();
+	if (UNLIKELY(card_count == 1)) {
+		rand_idx = 0;
+	} else {
+		rand_idx = RandomGenerator::GetInstance().GetRandom() % card_count;
+	}
 
 	ret = this->cards[rand_idx];
 

@@ -88,6 +88,7 @@ void InitializeBoard(Board &board)
 void DoTask(Board board)
 {
 	int choose_move = -1;
+	bool is_deterministic;
 
 	while (true) {
 		std::vector<Move> next_moves;
@@ -118,7 +119,16 @@ void DoTask(Board board)
 #else
 		choose_move = rand() % next_moves.size();
 #endif
-		board.ApplyMove(next_moves[choose_move]);
+
+		board.ApplyMove(next_moves[choose_move], is_deterministic);
+
+#ifdef INTERACTIVE
+		if (is_deterministic) {
+			std::cout << "The applying procedure introduce no random" << std::endl;
+		} else {
+			std::cout << "The applying procedure introduce randoms" << std::endl;
+		}
+#endif
 	}
 }
 
