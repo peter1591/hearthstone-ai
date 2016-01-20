@@ -21,7 +21,7 @@ class StagePlayerTurnStart
 
 		static void ApplyMove(Board &board, const Move &move)
 		{
-#ifdef ENABLE_DEBUG_CHECKS
+#ifdef DEBUG
 			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
 #endif
 

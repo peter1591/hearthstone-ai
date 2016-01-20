@@ -7,7 +7,6 @@
 #include "board.h"
 
 #define TIMES_TEST 100000
-//#define INTERACTIVE
 
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {

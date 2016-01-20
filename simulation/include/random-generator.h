@@ -10,21 +10,21 @@ class RandomGenerator
 		}
 
 		int GetRandom() {
-			has_called = true;
+			this->not_called = false;
 			return rand_r(&this->rand_seedp);
 		}
 
 		void ClearFlags() {
-			has_called = false;
+			this->not_called = true;
 		}
 
-		void GetFlags(bool &has_called) {
-			has_called = RandomGenerator::has_called;
+		void GetFlags(bool &not_called) {
+			not_called = this->not_called;
 		}
 
 	private:
 		unsigned int rand_seedp;
-		bool has_called;
+		bool not_called;
 };
 
 #endif

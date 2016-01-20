@@ -23,7 +23,7 @@ class StagePlayerPutMinion
 			Minion minion;
 			const Board::PlayerPutMinionData &data = board.data.player_put_minion_data;
 
-#ifdef ENABLE_DEBUG_CHECKS
+#ifdef DEBUG
 			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
 #endif
 
