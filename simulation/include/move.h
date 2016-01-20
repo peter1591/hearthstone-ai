@@ -12,7 +12,7 @@ class Move
 			ACTION_GAME_FLOW,
 			ACTION_PLAY_HAND_CARD_MINION,
 			ACTION_OPPONENT_PLAY_MINION,
-			ACTION_ATTACK,
+			ACTION_PLAYER_ATTACK,
 			ACTION_END_TURN,
 		} action;
 
@@ -29,16 +29,16 @@ class Move
 			int location; // where to put the minion
 		};
 
-		struct AttackData {
-			int attacking_idx; // 0 indicates the hero
-			int attacked_idx; // 0 indicates the hero
+		struct PlayerAttackData {
+			int attacker_idx; // -1 indicates the hero
+			int attacked_idx; // -1 indicates the hero
 		};
 
 		union Data {
 			GameFlowData game_flow_data;
 			PlayHandCardMinionData play_hand_card_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
-			AttackData attack_data;
+			PlayerAttackData player_attack_data;
 
 			Data() {}
 		} data;

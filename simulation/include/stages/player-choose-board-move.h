@@ -20,6 +20,8 @@ class StagePlayerChooseBoardMove
 			size_t guessed_next_moves;
 
 			guessed_next_moves = 1; // end turn
+
+			// for play minions
 			if (can_play_minion) {
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION) * (board.player_minions.GetMinions().size()+1);
@@ -27,6 +29,10 @@ class StagePlayerChooseBoardMove
 				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION);
 #endif
 			}
+
+			// for attack
+			guessed_next_moves += (board.player_minions.GetMinions().size()+1) * (board.opponent_minions.GetMinions().size()+1);
+
 			next_moves.reserve(guessed_next_moves);
 
 			// the choice to end turn
@@ -48,7 +54,17 @@ class StagePlayerChooseBoardMove
 			}
 
 			// the choices to attack by hero/minion
-			// TODO
+			for (int attacker_idx = -1; attacker_idx < (int)board.player_minions.GetMinions().size(); attacker_idx++) {
+				if (attacker_idx == -1) {
+					continue; // TODO: check if player has weapon
+				} else {
+					if (!board.player_minions.GetMinions()[attacker_idx].Attackable()) continue;
+				}
+
+				for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
+					StagePlayerChooseBoardMove::GetNextMoves_Attack(attacker_idx, attacked_idx, next_moves);
+				}
+			}
 		}
 
 		static void ApplyMove(Board &board, const Move &move)
@@ -57,6 +73,10 @@ class StagePlayerChooseBoardMove
 			{
 				case Move::ACTION_PLAY_HAND_CARD_MINION:
 					return StagePlayerChooseBoardMove::PlayHandCardMinion(board, move);
+
+				case Move::ACTION_PLAYER_ATTACK:
+					return StagePlayerChooseBoardMove::PlayerAttack(board, move);
+
 				case Move::ACTION_END_TURN:
 					return StagePlayerChooseBoardMove::EndTurn(board, move);
 
@@ -91,6 +111,27 @@ class StagePlayerChooseBoardMove
 			board.data.player_put_minion_data.location = data.location;
 
 			board.stage = STAGE_PLAYER_PUT_MINION;
+		}
+
+		static void GetNextMoves_Attack(int attacker_idx, int attacked_idx, std::vector<Move> &next_moves)
+		{
+			Move move;
+
+			move.action = Move::ACTION_PLAYER_ATTACK;
+			move.data.player_attack_data.attacker_idx = attacker_idx;
+			move.data.player_attack_data.attacked_idx = attacked_idx;
+
+			next_moves.push_back(move);
+		}
+
+		static void PlayerAttack(Board &board, const Move &move)
+		{
+			const Move::PlayerAttackData &data = move.data.player_attack_data;
+
+			board.data.player_attack_data.attacker_idx = data.attacker_idx;
+			board.data.player_attack_data.attacked_idx = data.attacked_idx;
+
+			board.stage = STAGE_PLAYER_ATTACK;
 		}
 
 		static void EndTurn(Board &board, const Move &)

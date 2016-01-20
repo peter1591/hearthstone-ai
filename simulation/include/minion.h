@@ -31,6 +31,11 @@ class Minion
 			this->summoned_this_turn = true;
 		}
 
+		void TurnStart() {
+			this->summoned_this_turn = false;
+			this->attacked_times = 0;
+		}
+
 		bool Attackable() const
 		{
 			if (this->summoned_this_turn) return false;
@@ -41,6 +46,11 @@ class Minion
 		void AttackedOnce()
 		{
 			this->attacked_times++;
+		}
+
+		void TakeDamage(int damage)
+		{
+			this->hp -= damage;
 		}
 
 		bool IsValid() const

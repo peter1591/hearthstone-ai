@@ -12,6 +12,9 @@
 class Minions
 {
 	public:
+		typedef std::vector<Minion> container_type;
+
+	public:
 		Minions();
 
 		// Insert minion to where the index is 'idx'
@@ -21,7 +24,8 @@ class Minions
 		// Push the minion to be the rightmost
 		void AddMinion(const Minion &minion);
 
-		const std::vector<Minion> &GetMinions() const { return this->minions; }
+		const container_type &GetMinions() const { return this->minions; }
+		container_type &GetMinions() { return this->minions; }
 
 		bool IsFull() const { return this->minions.size() == MAX_MINIONS; }
 
