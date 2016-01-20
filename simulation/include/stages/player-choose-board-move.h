@@ -89,26 +89,11 @@ class StagePlayerChooseBoardMove
 			Minion minion;
 
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
-			std::vector<Card>::const_iterator it_hand_card = board.player_hand.GetCards().begin() + data.idx_hand_card;
 
-			board.player_stat.crystal.CostCrystals(it_hand_card->cost);
+			board.data.player_put_minion_data.idx_hand_card = data.idx_hand_card;
+			board.data.player_put_minion_data.location = data.location;
 
-			// TODO: here should NOT introduce any random
-			// maybe we should handle game flow details in another stage
-
-			// TODO: handle battlecry
-			minion.card_id = it_hand_card->id;
-			minion.max_hp = it_hand_card->data.minion.hp;
-			minion.hp = minion.max_hp;
-			minion.attack = it_hand_card->data.minion.attack;
-
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			board.player_minions.AddMinion(minion, data.location);
-#else
-			board.player_minions.AddMinion(minion); // add to the rightmost
-#endif
-
-			board.player_hand.RemoveCard(data.idx_hand_card);
+			board.stage = STAGE_PLAYER_PUT_MINION;
 		}
 
 		static void EndTurn(Board &board, const Move &)

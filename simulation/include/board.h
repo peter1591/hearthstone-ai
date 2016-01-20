@@ -19,6 +19,7 @@ class Board
 {
 	friend class StagePlayerTurnStart;
 	friend class StagePlayerChooseBoardMove;
+	friend class StagePlayerPutMinion;
 	friend class StagePlayerTurnEnd;
 	friend class StageOpponentTurnStart;
 	friend class StageOpponentChooseBoardMove;
@@ -54,7 +55,14 @@ class Board
 		void DebugPrint() const;
 
 	private: // internal state data for cross-stage communication
+		struct PlayerPutMinionData {
+			int idx_hand_card; // play the 'idx' hand card
+			int location; // where to put the minion
+		};
+
 		union Data {
+			PlayerPutMinionData player_put_minion_data;
+
 			Data() {}
 			// TODO: implement comparison operator via memory-compare
 		} data;
