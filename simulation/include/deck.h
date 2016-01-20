@@ -14,7 +14,7 @@
 class Deck
 {
 	public:
-		Deck();
+		Deck(RandomGenerator &random_generator);
 
 		// Add a card to deck
 		void AddCard(const Card &card);
@@ -25,9 +25,11 @@ class Deck
 
 	private:
 		std::vector<Card> cards;
+		RandomGenerator &random_generator;
 };
 
-inline Deck::Deck()
+inline Deck::Deck(RandomGenerator &random_generator) :
+	random_generator(random_generator)
 {
 	this->cards.reserve(36);
 }
@@ -51,7 +53,7 @@ inline Card Deck::Draw()
 	if (UNLIKELY(card_count == 1)) {
 		rand_idx = 0;
 	} else {
-		rand_idx = RandomGenerator::GetRandom() % card_count;
+		rand_idx = this->random_generator.GetRandom() % card_count;
 	}
 
 	ret = this->cards[rand_idx];

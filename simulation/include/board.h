@@ -3,6 +3,7 @@
 
 #include <list>
 
+#include "random-generator.h"
 #include "common.h"
 #include "card.h"
 #include "deck.h"
@@ -26,7 +27,10 @@ class Board
 	friend class StageOpponentTurnEnd;
 
 	public:
-		Board() : stage(STAGE_UNKNOWN) {}
+		Board() :
+			player_deck(this->random_generator),
+			stage(STAGE_UNKNOWN)
+		{}
 
 		PlayerStat player_stat;
 		Secrets player_secrets;
@@ -72,6 +76,7 @@ class Board
 
 	private:
 		Stage stage;
+		RandomGenerator random_generator;
 };
 
 #endif

@@ -6,22 +6,25 @@
 class RandomGenerator
 {
 	public:
-		static int GetRandom() {
-			//has_called = true;
-			return rand();
+		RandomGenerator() : rand_seedp(1) {
 		}
 
-		static void ClearFlags() {
+		int GetRandom() {
+			has_called = true;
+			return rand_r(&this->rand_seedp);
+		}
+
+		void ClearFlags() {
 			has_called = false;
 		}
 
-		static void GetFlags(bool &has_called) {
+		void GetFlags(bool &has_called) {
 			has_called = RandomGenerator::has_called;
 		}
 
 	private:
-		// TODO: should be thread safe by introducing a thread-local variable
-		static bool has_called;
+		unsigned int rand_seedp;
+		bool has_called;
 };
 
 #endif
