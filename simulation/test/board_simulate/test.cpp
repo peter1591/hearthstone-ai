@@ -86,40 +86,63 @@ void InitializeBoard(Board &board)
 
 void DoTask(Board board)
 {
-	int choose_move = -1;
 	bool is_deterministic;
 
 	while (true) {
+		const Move *current_move = nullptr;
 		std::vector<Move> next_moves;
 
+		Stage stage;
+		StageType stage_type;
+
+		board.GetStage(stage, stage_type);
+
+		if (stage_type == STAGE_TYPE_GAME_FLOW) {
 #ifdef INTERACTIVE
-		std::cout << "!!! Before Go()" << std::endl;
-		board.DebugPrint();
+			board.DebugPrint();
+			std::cout << "!!! It's a game flow node, press Enter to apply game flow move...";
+			std::cin.get();
 #endif
-		board.GetNextMoves(next_moves);
+			current_move = &Move::GetGameFlowMove();
 
-		if (next_moves.empty()) break;
+		} else if (stage_type == STAGE_TYPE_GAME_END) {
+			break;
+
+		} else {
+#ifdef INTERACTIVE
+			std::cout << "!!! Before GetNextMoves()" << std::endl;
+			board.DebugPrint();
+#endif
+			board.GetNextMoves(next_moves);
+
+			if (next_moves.empty()) {
+				break;
+			}
 
 #ifdef INTERACTIVE
-		std::cout << "!!! Next moves: " << std::endl;
-		for (size_t i=0; i<next_moves.size(); ++i) {
-			std::cout << "\t";
-			std::cout << i << ". " << next_moves[i].GetDebugString() << std::endl;
-		}
+			std::cout << "!!! Next moves: " << std::endl;
+			for (size_t i=0; i<next_moves.size(); ++i) {
+				std::cout << "\t";
+				std::cout << i << ". " << next_moves[i].GetDebugString() << std::endl;
+			}
 
-		choose_move = -1;
-		std::cout << "!!! Choose next move: ";
-		std::cin >> choose_move;
+			int choose_move = -1;
+			std::cout << "!!! Choose next move: ";
+			std::cin >> choose_move;
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-		if (choose_move < 0 || choose_move >= (int)next_moves.size()) {
-			std::cout << "Invalid input, exiting" << std::endl;
-			exit(-1);
-		}
+			if (choose_move < 0 || choose_move >= (int)next_moves.size()) {
+				std::cout << "Invalid input, exiting" << std::endl;
+				exit(-1);
+			}
 #else
-		choose_move = rand() % next_moves.size();
-#endif
+			int choose_move = rand() % next_moves.size();
 
-		board.ApplyMove(next_moves[choose_move], is_deterministic);
+#endif
+			current_move = &next_moves[choose_move];
+		}
+
+		board.ApplyMove(*current_move, is_deterministic);
 
 #ifdef INTERACTIVE
 		if (is_deterministic) {
