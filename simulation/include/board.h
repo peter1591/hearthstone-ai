@@ -24,6 +24,7 @@ class Board
 	friend class StagePlayerTurnEnd;
 	friend class StageOpponentTurnStart;
 	friend class StageOpponentChooseBoardMove;
+	friend class StageOpponentPutMinion;
 	friend class StageOpponentTurnEnd;
 
 	public:
@@ -67,8 +68,14 @@ class Board
 			int location; // where to put the minion
 		};
 
+		struct OpponentPutMinionData {
+			Card card;
+			int location;
+		};
+
 		union Data {
 			PlayerPutMinionData player_put_minion_data;
+			OpponentPutMinionData opponent_put_minion_data;
 
 			Data() {}
 			// TODO: implement comparison operator via memory-compare

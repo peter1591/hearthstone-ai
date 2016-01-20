@@ -86,8 +86,6 @@ class StagePlayerChooseBoardMove
 
 		static void PlayHandCardMinion(Board &board, const Move &move)
 		{
-			Minion minion;
-
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
 
 			board.data.player_put_minion_data.idx_hand_card = data.idx_hand_card;

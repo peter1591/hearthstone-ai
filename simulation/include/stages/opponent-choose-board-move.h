@@ -81,25 +81,10 @@ class StageOpponentChooseBoardMove
 
 		static void PlayHandCardMinion(Board &board, const Move &move)
 		{
-			Minion minion;
-
 			const Move::OpponentPlayMinionData &data = move.data.opponent_play_minion_data;
-
-			board.opponent_stat.crystal.CostCrystals(data.card.cost);
-
-			// TODO: handle battlecry
-			minion.card_id = data.card.id;
-			minion.max_hp = data.card.data.minion.hp;
-			minion.hp = minion.max_hp;
-			minion.attack = data.card.data.minion.attack;
-
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			board.opponent_minions.AddMinion(minion, data.location);
-#else
-			board.opponent_minions.AddMinion(minion); // add to the rightmost
-#endif
-
-			board.opponent_cards.PlayCardFromHand(data.card);
+			board.data.opponent_put_minion_data.card = data.card;
+			board.data.opponent_put_minion_data.location = data.location;
+			board.stage = STAGE_OPPONENT_PUT_MINION;
 		}
 
 		static void EndTurn(Board &board, const Move &)

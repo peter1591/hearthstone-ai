@@ -7,6 +7,7 @@
 #include "stages/player-turn-end.h"
 #include "stages/opponent-turn-start.h"
 #include "stages/opponent-choose-board-move.h"
+#include "stages/opponent-put-minion.h"
 #include "stages/opponent-turn-end.h"
 
 #include "random-generator.h"
@@ -29,6 +30,7 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerPutMinion)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnEnd)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentChooseBoardMove)
+	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentPutMinion)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentTurnEnd)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnStart)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentTurnStart)
