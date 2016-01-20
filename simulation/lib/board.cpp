@@ -56,11 +56,11 @@ void Board::ApplyMove(const Move &move, bool &is_deterministic)
 {
 	bool has_random = false;
 
-	RandomGenerator::GetInstance().ClearFlags();
+	RandomGenerator::ClearFlags();
 
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 
-	RandomGenerator::GetInstance().GetFlags(has_random);
+	RandomGenerator::GetFlags(has_random);
 	is_deterministic = !has_random;
 }
 

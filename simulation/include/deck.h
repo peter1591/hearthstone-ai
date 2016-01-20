@@ -51,7 +51,7 @@ inline Card Deck::Draw()
 	if (UNLIKELY(card_count == 1)) {
 		rand_idx = 0;
 	} else {
-		rand_idx = RandomGenerator::GetInstance().GetRandom() % card_count;
+		rand_idx = RandomGenerator::GetRandom() % card_count;
 	}
 
 	ret = this->cards[rand_idx];
