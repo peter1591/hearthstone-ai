@@ -11,7 +11,6 @@ class StagePlayerPutMinion
 {
 	public:
 		static const Stage stage = STAGE_PLAYER_PUT_MINION;
-		static std::string GetStageStringName() { return "StagePlayerPutMinion"; }
 
 		static void Go(Board &board)
 		{

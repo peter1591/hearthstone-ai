@@ -1,6 +1,7 @@
 #ifndef STAGES_COMMON_H
 #define STAGES_COMMON_H
 
+#include <typeinfo>
 #include <string>
 #include <vector>
 #include "board.h"
@@ -14,7 +15,9 @@ namespace StageFunctionChooser
 	};
 	template<> struct Caller<Chooser_GetStageStringName> {
 		template <typename Stage, typename... Params>
-			static Chooser_GetStageStringName::ReturnType Call(Params & ... params) { return Stage::GetStageStringName(params...); }
+			static Chooser_GetStageStringName::ReturnType Call(Params & ...) {
+				return typeid(Stage).name();
+			}
 	};
 
 	struct Chooser_GetNextMoves {
@@ -71,6 +74,8 @@ namespace StageFunctionChooser
 		static Chooser_ApplyMove::ReturnType Call(Board &board, const Move &move) {
 #ifdef DEBUG
 			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
+#else
+			(void)move;
 #endif
 			return Stage::Go(board);
 		}

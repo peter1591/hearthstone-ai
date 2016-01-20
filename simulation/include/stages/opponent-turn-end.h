@@ -11,7 +11,6 @@ class StageOpponentTurnEnd
 {
 	public:
 		static const Stage stage = STAGE_OPPONENT_TURN_END;
-		static std::string GetStageStringName() { return "StageOpponentTurnEnd"; }
 
 		static void Go(Board &board)
 		{

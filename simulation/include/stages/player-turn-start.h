@@ -12,7 +12,6 @@ class StagePlayerTurnStart
 {
 	public:
 		static const Stage stage = STAGE_PLAYER_TURN_START;
-		static std::string GetStageStringName() { return "StagePlayerTurnStart"; }
 
 		static void Go(Board &board)
 		{
