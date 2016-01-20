@@ -14,12 +14,8 @@ class StagePlayerTurnStart
 		static const Stage stage = STAGE_PLAYER_TURN_START;
 		static std::string GetStageStringName() { return "StagePlayerTurnStart"; }
 
-		static void ApplyMove(Board &board, const Move &move)
+		static void Go(Board &board)
 		{
-#ifdef DEBUG
-			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
-#endif
-
 			board.player_stat.crystal.TurnStart();
 
 			if (board.player_deck.GetCards().empty()) {

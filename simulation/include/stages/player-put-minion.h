@@ -13,14 +13,10 @@ class StagePlayerPutMinion
 		static const Stage stage = STAGE_PLAYER_PUT_MINION;
 		static std::string GetStageStringName() { return "StagePlayerPutMinion"; }
 
-		static void ApplyMove(Board &board, const Move &move)
+		static void Go(Board &board)
 		{
 			Minion minion;
 			const Board::PlayerPutMinionData &data = board.data.player_put_minion_data;
-
-#ifdef DEBUG
-			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
-#endif
 
 			std::vector<Card>::const_iterator it_hand_card = board.player_hand.GetCards().begin() + data.idx_hand_card;
 

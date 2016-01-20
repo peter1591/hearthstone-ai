@@ -13,16 +13,12 @@ class StageOpponentPutMinion
 		static const Stage stage = STAGE_OPPONENT_PUT_MINION;
 		static std::string GetStageStringName() { return "StageOpponentPutMinion"; }
 
-		static void ApplyMove(Board &board, const Move &move)
+		static void Go(Board &board)
 		{
 			Minion minion;
 			const Board::OpponentPutMinionData &data = board.data.opponent_put_minion_data;
 
 			board.opponent_stat.crystal.CostCrystals(data.card.cost);
-
-#ifdef DEBUG
-			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
-#endif
 
 			// TODO: handle battlecry
 			minion.card_id = data.card.id;

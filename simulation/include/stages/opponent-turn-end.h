@@ -13,14 +13,9 @@ class StageOpponentTurnEnd
 		static const Stage stage = STAGE_OPPONENT_TURN_END;
 		static std::string GetStageStringName() { return "StageOpponentTurnEnd"; }
 
-		static void ApplyMove(Board &board, const Move &move)
+		static void Go(Board &board)
 		{
-#ifdef DEBUG
-			if (move.action != Move::ACTION_GAME_FLOW) throw std::runtime_error("Invalid move");
-#endif
-
 			// TODO: trigger end-turn actions
-
 			board.stage = STAGE_PLAYER_TURN_START;
 		}
 };
