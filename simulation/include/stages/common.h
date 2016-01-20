@@ -6,49 +6,61 @@
 #include "board.h"
 #include "stages/common.h"
 
-class StageCommonUtilities
-{
-	public:
-		static void GetGameFlowMove(std::vector<Move> &next_moves)
-		{
-			Move move;
-			move.action = Move::ACTION_GAME_FLOW;
-			next_moves.push_back(move);
-		}
-};
-
 namespace StageFunctionChooser
 {
-	struct Chooser_ApplyMove {
-		typedef void ReturnType;
+	template <typename Chooser> struct Caller {};
+
+	struct Chooser_GetStageStringName {
+		typedef std::string ReturnType;
+	};
+	template<> struct Caller<Chooser_GetStageStringName> {
+		template <typename Stage, typename... Params>
+			static Chooser_GetStageStringName::ReturnType Call(Params & ... params) { return Stage::GetStageStringName(params...); }
 	};
 
 	struct Chooser_GetNextMoves {
 		typedef void ReturnType;
 	};
 
-	struct Chooser_GetStageStringName {
-		typedef std::string ReturnType;
+	template <bool IsGameFlowStage>
+	struct CallerInternal_GetNextMoves{};
+
+	// IsGameFlowStage = true
+	template<> struct CallerInternal_GetNextMoves<true> {
+		template <typename Stage, typename... Params>
+		static Chooser_GetNextMoves::ReturnType Call(Params & ...) {
+			throw std::runtime_error("This is a game flow stage, the GetNextMoves() call should be avoided.");
+		}
 	};
 
-	template <typename Chooser> struct Caller {};
-
-	template<> struct Caller<Chooser_ApplyMove> {
-		public:
-			template <typename Stage, typename... Params>
-			static Chooser_ApplyMove::ReturnType Call(Params & ... params) { return Stage::ApplyMove(params...); }
+	// IsGameFlowStage = false
+	template<> struct CallerInternal_GetNextMoves<false> {
+		template <typename Stage, typename... Params>
+		static Chooser_GetNextMoves::ReturnType Call(Params & ... params) {
+			return Stage::GetNextMoves(params...);
+		}
 	};
 
 	template<> struct Caller<Chooser_GetNextMoves> {
 		public:
 			template <typename Stage, typename... Params>
-			static Chooser_ApplyMove::ReturnType Call(Params & ... params) { return Stage::GetNextMoves(params...); }
+			static Chooser_GetNextMoves::ReturnType Call(Params & ... params) {
+				constexpr bool is_game_flow_stage =
+					((Stage::stage & STAGE_TYPE_FLAG) == STAGE_TYPE_GAME_FLOW);
+
+				CallerInternal_GetNextMoves<is_game_flow_stage>::template Call<Stage, Params...>(params...);
+			}
+
+		private:
+
 	};
 
-	template<> struct Caller<Chooser_GetStageStringName> {
-		public:
-			template <typename Stage, typename... Params>
-			static Chooser_GetStageStringName::ReturnType Call(Params & ... params) { return Stage::GetStageStringName(params...); }
+	struct Chooser_ApplyMove {
+		typedef void ReturnType;
+	};
+	template<> struct Caller<Chooser_ApplyMove> {
+		template <typename Stage, typename... Params>
+			static Chooser_ApplyMove::ReturnType Call(Params & ... params) { return Stage::ApplyMove(params...); }
 	};
 }
 

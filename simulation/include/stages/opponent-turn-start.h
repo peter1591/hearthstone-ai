@@ -14,11 +14,6 @@ class StageOpponentTurnStart
 		static const Stage stage = STAGE_OPPONENT_TURN_START;
 		static std::string GetStageStringName() { return "StageOpponentTurnStart"; }
 
-		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)
-		{
-			return StageCommonUtilities::GetGameFlowMove(next_moves);
-		}
-
 		static void ApplyMove(Board &board, const Move &move)
 		{
 #ifdef DEBUG

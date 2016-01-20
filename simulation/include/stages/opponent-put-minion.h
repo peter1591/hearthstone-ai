@@ -13,11 +13,6 @@ class StageOpponentPutMinion
 		static const Stage stage = STAGE_OPPONENT_PUT_MINION;
 		static std::string GetStageStringName() { return "StageOpponentPutMinion"; }
 
-		static void GetNextMoves(const Board &, std::vector<Move> &next_moves)
-		{
-			return StageCommonUtilities::GetGameFlowMove(next_moves);
-		}
-
 		static void ApplyMove(Board &board, const Move &move)
 		{
 			Minion minion;
