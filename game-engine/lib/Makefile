@@ -2,7 +2,7 @@ include ../Makefile.inc
 
 OBJECTS = board.o deck-database.o move.o
 
-OUTPUT_LIB = libsimulation.a
+OUTPUT_LIB = libGameEngine.a
 
 CFLAGS = $(CFLAGS_PROJECT) -I../include
 

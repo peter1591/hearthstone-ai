@@ -8,6 +8,8 @@
 #include "stages/common.h"
 #include "board.h"
 
+namespace GameEngine {
+
 class StageOpponentTurnStart
 {
 	public:
@@ -40,5 +42,7 @@ class StageOpponentTurnStart
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 	}
 };
+
+} // namespace GameEngine
 
 #endif

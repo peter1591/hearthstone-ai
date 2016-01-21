@@ -1,6 +1,8 @@
 #ifndef CARD_H
 #define CARD_H
 
+namespace GameEngine {
+
 class Card
 {
 	public:
@@ -58,5 +60,7 @@ inline void Card::MarkInvalid()
 {
 	this->id = 0;
 }
+
+} // namespace GameEngine
 
 #endif

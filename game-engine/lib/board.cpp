@@ -16,6 +16,8 @@
 
 #include "board.h"
 
+namespace GameEngine {
+
 template <typename Chooser, typename... Params, typename Return = typename Chooser::ReturnType>
 static Return StageFunctionCaller(Stage stage, Params & ... params)
 {
@@ -147,3 +149,5 @@ void Board::DebugPrint() const
 
 	std::cout << "=== Print Board END   ===" << std::endl;
 }
+
+} // namespace GameEngine

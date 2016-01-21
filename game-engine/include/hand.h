@@ -4,6 +4,8 @@
 #include <vector>
 #include "card.h"
 
+namespace GameEngine {
+
 class Hand
 {
 	public:
@@ -43,5 +45,7 @@ inline void Hand::RemoveCard(int idx)
 	this->count_by_type[it->type]--;
 	this->cards.erase(it);
 }
+
+} // namespace GameEngine
 
 #endif

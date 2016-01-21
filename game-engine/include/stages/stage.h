@@ -1,6 +1,8 @@
 #ifndef _STAGES_STAGE_H
 #define _STAGES_STAGE_H
 
+namespace GameEngine {
+
 enum StageType {
 	STAGE_TYPE_FLAG = 0xF000,
 	STAGE_TYPE_PLAYER = 0x0000,
@@ -32,4 +34,6 @@ enum Stage {
 	STAGE_WIN = STAGE_TYPE_GAME_END + 1,
 	STAGE_LOSS,
 };
+
+} // namespace GameEngine
 #endif

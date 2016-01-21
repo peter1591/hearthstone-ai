@@ -4,6 +4,8 @@
 #include <vector>
 #include "secret.h"
 
+namespace GameEngine {
+
 class Secrets
 {
 	public:
@@ -17,5 +19,7 @@ inline Secrets::Secrets()
 {
 	this->secrets.reserve(5);
 }
+
+} // namespace GameEngine
 
 #endif

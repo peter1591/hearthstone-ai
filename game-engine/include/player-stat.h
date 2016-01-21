@@ -6,6 +6,8 @@
 #include "weapon.h"
 #include "hero-power.h"
 
+namespace GameEngine {
+
 class PlayerStat
 {
 	public:
@@ -61,5 +63,7 @@ inline std::string PlayerStat::GetDebugString() const
 		<< this->crystal.GetLocked() << "/" << this->crystal.GetLockedNextTurn();
 	return oss.str();
 }
+
+} // namespace GameEngine
 
 #endif

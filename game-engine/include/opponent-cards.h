@@ -7,6 +7,8 @@
 #include "player-stat.h"
 #include "card.h"
 
+namespace GameEngine {
+
 class OpponentCards
 {
 	public:
@@ -63,5 +65,7 @@ inline std::string OpponentCards::GetDebugString() const
 		<< ", Deck: " << this->deck_card_count;
 	return oss.str();
 }
+
+} // namespace GameEngine
 
 #endif

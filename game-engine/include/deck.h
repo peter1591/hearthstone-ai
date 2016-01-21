@@ -11,6 +11,8 @@
 #include "common.h"
 #include "random-generator.h"
 
+namespace GameEngine {
+
 class Deck
 {
 	public:
@@ -68,5 +70,7 @@ inline const std::vector<Card>& Deck::GetCards() const
 {
 	return this->cards;
 }
+
+} // namespace GameEngine
 
 #endif

@@ -4,6 +4,8 @@
 #include "stages/common.h"
 #include "board.h"
 
+namespace GameEngine {
+
 class StageHelper
 {
 	public:
@@ -86,4 +88,6 @@ inline bool StageHelper::RemoveDeadMinion(Minions::container_type &minions, Mini
 	minions.erase(it);
 	return true;
 }
+
+} // namespace GameEngine
 #endif

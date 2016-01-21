@@ -1,5 +1,7 @@
 #include "deck-database.h"
 
+namespace GameEngine {
+
 DeckDatabase::DeckDatabase()
 {
 	// TODO
@@ -57,3 +59,5 @@ Card DeckDatabase::GetCard(int card_id) const
 
 	return card;
 }
+
+} // namespace GameEngine

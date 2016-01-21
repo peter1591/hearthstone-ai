@@ -3,6 +3,8 @@
 
 #include "card.h"
 
+namespace GameEngine {
+
 class Minion
 {
 	public:
@@ -72,5 +74,7 @@ inline Minion::Minion() : card_id(0)
 {
 
 }
+
+} // namespace GameEngine
 
 #endif

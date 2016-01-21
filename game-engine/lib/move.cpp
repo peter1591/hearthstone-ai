@@ -4,6 +4,8 @@
 
 #include "move.h"
 
+namespace GameEngine {
+
 std::string Move::GetDebugString() const
 {
 	std::ostringstream oss;
@@ -45,3 +47,5 @@ std::string Move::GetDebugString() const
 
 	return oss.str();
 }
+
+} // namespace GameEngine

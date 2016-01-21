@@ -7,6 +7,8 @@
 #include "stages/common.h"
 #include "board.h"
 
+namespace GameEngine {
+
 class StageOpponentTurnEnd
 {
 	public:
@@ -18,5 +20,7 @@ class StageOpponentTurnEnd
 			board.stage = STAGE_PLAYER_TURN_START;
 		}
 };
+
+} // namespace GameEngine
 
 #endif

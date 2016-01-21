@@ -9,6 +9,8 @@
 
 #define MAX_MINIONS 7
 
+namespace GameEngine {
+
 class Minions
 {
 	public:
@@ -70,5 +72,7 @@ inline void Minions::DebugPrint() const
 		}
 	}
 }
+
+} // namespace GameEngine
 
 #endif

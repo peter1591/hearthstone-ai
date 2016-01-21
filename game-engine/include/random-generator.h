@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+namespace GameEngine {
+
 class RandomGenerator
 {
 	public:
@@ -26,5 +28,7 @@ class RandomGenerator
 		unsigned int rand_seedp;
 		bool not_called;
 };
+
+} // namespace GameEngine
 
 #endif

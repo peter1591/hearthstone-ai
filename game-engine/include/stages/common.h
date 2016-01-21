@@ -8,6 +8,8 @@
 
 #include "stages/helper.h"
 
+namespace GameEngine {
+
 namespace StageFunctionChooser
 {
 	template <typename Chooser> struct Caller {};
@@ -102,6 +104,9 @@ namespace StageFunctionChooser
 				return CallerInternal_ApplyMove<is_game_flow_stage>::template Call<Stage, Params...>(params...);
 			}
 	};
-}
+
+} // namespace StageFunctionChooser
+
+} // namespace GameEngine
 
 #endif

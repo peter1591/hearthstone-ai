@@ -7,6 +7,8 @@
 #include "stages/common.h"
 #include "board.h"
 
+namespace GameEngine {
+
 class StageOpponentAttack
 {
 	public:
@@ -25,5 +27,7 @@ class StageOpponentAttack
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}
 };
+
+} // namespace GameEngine
 
 #endif

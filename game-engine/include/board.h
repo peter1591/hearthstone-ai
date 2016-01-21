@@ -16,6 +16,8 @@
 #include "stages/stage.h"
 #include "move.h"
 
+namespace GameEngine {
+
 class Board
 {
 	friend class StageHelper;
@@ -105,5 +107,7 @@ class Board
 		RandomGenerator random_generator;
 		Data data;
 };
+
+} // namespace GameEngine
 
 #endif

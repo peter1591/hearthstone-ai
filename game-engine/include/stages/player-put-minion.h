@@ -7,6 +7,8 @@
 #include "stages/common.h"
 #include "board.h"
 
+namespace GameEngine {
+
 class StagePlayerPutMinion
 {
 	public:
@@ -35,5 +37,7 @@ class StagePlayerPutMinion
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}
 };
+
+} // namespace GameEngine
 
 #endif

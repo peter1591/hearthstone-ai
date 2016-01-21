@@ -3,6 +3,8 @@
 
 #include "card.h"
 
+namespace GameEngine {
+
 class DeckDatabase
 {
 	public:
@@ -10,5 +12,7 @@ class DeckDatabase
 
 		Card GetCard(int card_id) const;
 };
+
+} // namespace GameEngine
 
 #endif

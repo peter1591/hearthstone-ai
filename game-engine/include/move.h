@@ -4,6 +4,8 @@
 #include <string>
 #include "card.h"
 
+namespace GameEngine {
+
 class Move
 {
 	public:
@@ -62,5 +64,7 @@ class Move
 			return game_flow_move;
 		}
 };
+
+} // namespace GameEngine
 
 #endif
