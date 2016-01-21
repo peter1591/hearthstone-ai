@@ -1,5 +1,5 @@
-#ifndef OPPONENT_CARDS_H
-#define OPPONENT_CARDS_H
+#ifndef GAME_ENGINE_OPPONENT_CARDS_H
+#define GAME_ENGINE_OPPONENT_CARDS_H
 
 #include <sstream>
 #include <string>

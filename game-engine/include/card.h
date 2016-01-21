@@ -1,5 +1,5 @@
-#ifndef CARD_H
-#define CARD_H
+#ifndef GAME_ENGINE_CARD_H
+#define GAME_ENGINE_CARD_H
 
 namespace GameEngine {
 

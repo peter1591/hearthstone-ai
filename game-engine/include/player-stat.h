@@ -1,5 +1,5 @@
-#ifndef PLAYER_STAT_H
-#define PLAYER_STAT_H
+#ifndef GAME_ENGINE_PLAYER_STAT_H
+#define GAME_ENGINE_PLAYER_STAT_H
 
 #include <string>
 #include <sstream>

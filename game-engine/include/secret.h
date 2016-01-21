@@ -1,5 +1,5 @@
-#ifndef SECRET_H
-#define SECRET_H
+#ifndef GAME_ENGINE_SECRET_H
+#define GAME_ENGINE_SECRET_H
 
 namespace GameEngine {
 

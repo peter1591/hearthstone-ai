@@ -1,5 +1,5 @@
-#ifndef MOVE_H
-#define MOVE_H
+#ifndef GAME_ENGINE_MOVE_H
+#define GAME_ENGINE_MOVE_H
 
 #include <string>
 #include "card.h"

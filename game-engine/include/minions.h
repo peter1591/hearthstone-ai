@@ -1,5 +1,5 @@
-#ifndef MINIONS_H
-#define MINIONS_H
+#ifndef GAME_ENGINE_MINIONS_H
+#define GAME_ENGINE_MINIONS_H
 
 #include <iostream>
 #include <vector>

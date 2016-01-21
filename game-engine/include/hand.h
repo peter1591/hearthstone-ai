@@ -1,5 +1,5 @@
-#ifndef HAND_H
-#define HAND_H
+#ifndef GAME_ENGINE_HAND_H
+#define GAME_ENGINE_HAND_H
 
 #include <vector>
 #include "card.h"

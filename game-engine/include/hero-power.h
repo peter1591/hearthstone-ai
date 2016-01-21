@@ -1,5 +1,5 @@
-#ifndef HERO_POWER_H
-#define HERO_POWER_H
+#ifndef GAME_ENGINE_HERO_POWER_H
+#define GAME_ENGINE_HERO_POWER_H
 
 namespace GameEngine {
 

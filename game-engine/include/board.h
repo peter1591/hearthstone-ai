@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef GAME_ENGINE_BOARD_H
+#define GAME_ENGINE_BOARD_H
 
 #include <list>
 

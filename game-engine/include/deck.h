@@ -1,5 +1,5 @@
-#ifndef DECK_H
-#define DECK_H
+#ifndef GAME_ENGINE_DECK_H
+#define GAME_ENGINE_DECK_H
 
 #include <iostream>
 #include <algorithm>

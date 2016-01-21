@@ -1,5 +1,5 @@
-#ifndef SECRETS_H
-#define SECRETS_H
+#ifndef GAME_ENGINE_SECRETS_H
+#define GAME_ENGINE_SECRETS_H
 
 #include <vector>
 #include "secret.h"

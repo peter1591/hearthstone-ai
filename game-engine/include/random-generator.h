@@ -1,5 +1,5 @@
-#ifndef RANDOM_GENERATOR_H
-#define RANDOM_GENERATOR_H
+#ifndef GAME_ENGINE_RANDOM_GENERATOR_H
+#define GAME_ENGINE_RANDOM_GENERATOR_H
 
 #include <stdlib.h>
 

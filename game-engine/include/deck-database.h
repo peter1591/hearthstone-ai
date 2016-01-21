@@ -1,5 +1,5 @@
-#ifndef DECK_DATABASE_H
-#define DECK_DATABASE_H
+#ifndef GAME_ENGINE_DECK_DATABASE_H
+#define GAME_ENGINE_DECK_DATABASE_H
 
 #include "card.h"
 
