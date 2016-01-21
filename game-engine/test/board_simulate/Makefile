@@ -1,4 +1,4 @@
-include ../../Makefile.inc
+include ../../../Makefile.inc
 
 CFLAGS += $(CFLAGS_PROJECT) -I../../include
 LIBS = ../../lib/libGameEngine.a

@@ -1,6 +1,7 @@
+include ../../../Makefile.inc
 
-CFLAGS += -I. -I../../include
-CFLAGS += -O2 -Wall -std=c++11 -g -static
+CFLAGS += $(CFLAGS_PROJECT) -I../../include
+LIBS = ../../lib/libGameEngine.a
 
 all:
-	g++ $(CFLAGS) test.cpp ../../lib/*.cpp
+	g++ $(CFLAGS) test.cpp $(LIBS)

@@ -8,6 +8,8 @@
 
 #define TIMES_COPY 1000000
 
+using namespace GameEngine;
+
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
 	double duration = 0;

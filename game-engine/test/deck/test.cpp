@@ -5,6 +5,8 @@
 #include "deck.h"
 #include "random-generator.h"
 
+using namespace GameEngine;
+
 double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 {
 	double duration = 0;

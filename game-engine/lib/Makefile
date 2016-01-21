@@ -1,4 +1,4 @@
-include ../Makefile.inc
+include ../../Makefile.inc
 
 OBJECTS = board.o deck-database.o move.o
 
