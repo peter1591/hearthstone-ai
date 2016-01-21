@@ -44,6 +44,13 @@ Card DeckDatabase::GetCard(int card_id) const
 		card.data.minion.attack = 3;
 		card.data.minion.hp = 1;
 	}
+	else if (card_id == 233) {
+		card.id = card_id;
+		card.type = Card::TYPE_MINION;
+		card.cost = 2;
+		card.data.minion.attack = 3;
+		card.data.minion.hp = 3;
+	}
 	else {
 		card.id = 0;
 	}

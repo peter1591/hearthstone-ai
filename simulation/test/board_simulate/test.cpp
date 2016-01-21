@@ -20,6 +20,11 @@ double timespec_diff_nsec(struct timespec *start, struct timespec *stop)
 
 void InitializeDeck1(const DeckDatabase &deck_database, Deck &deck)
 {
+	deck.AddCard(deck_database.GetCard(233));
+	deck.AddCard(deck_database.GetCard(233));
+	deck.AddCard(deck_database.GetCard(233));
+	deck.AddCard(deck_database.GetCard(233));
+	deck.AddCard(deck_database.GetCard(233));
 	deck.AddCard(deck_database.GetCard(111));
 	deck.AddCard(deck_database.GetCard(211));
 	deck.AddCard(deck_database.GetCard(213));
@@ -75,10 +80,14 @@ void InitializeBoard(Board &board)
 	minion.Set(213, 2, 2, 3);
 	board.player_minions.AddMinion(minion);
 
+	minion.Set(333, 3, 3, 3);
+	board.opponent_minions.AddMinion(minion);
+
 	board.SetStateToPlayerTurnStart();
 }
 
-void DoTask(Board board)
+// return true if WIN, false if LOSS
+bool Simulate(Board board)
 {
 	bool is_deterministic;
 
@@ -100,7 +109,9 @@ void DoTask(Board board)
 			current_move = &Move::GetGameFlowMove();
 
 		} else if (stage_type == STAGE_TYPE_GAME_END) {
-			break;
+			if (stage == STAGE_WIN) return true;
+			else if (stage == STAGE_LOSS) return false;
+			else throw std::runtime_error("stage type is GAME_END, but it's not a win/loss"); // TODO: tie?
 
 		} else {
 #ifdef INTERACTIVE
@@ -110,7 +121,7 @@ void DoTask(Board board)
 			board.GetNextMoves(next_moves);
 
 			if (next_moves.empty()) {
-				break;
+				throw std::runtime_error("stage tpye is not GAME_END, but no next move is available");
 			}
 
 #ifdef INTERACTIVE
@@ -160,6 +171,9 @@ int main(void)
 	InitializeBoard(board);
 
 	while (true) {
+		int simulate_times;
+		int simulate_win_times;
+
 		if (clock_gettime(CLOCK_MONOTONIC, &start) < 0) {
 			std::cerr << "Failed at clock_gettime()" << std::endl;
 			return -1;
@@ -167,9 +181,15 @@ int main(void)
 
 		std::cout << "Simulate board for " << TIMES_TEST << " times... ";
 		std::cout.flush();
+
+		simulate_times = 0;
+		simulate_win_times = 0;
 		for (int i=TIMES_TEST; i>0; --i)
 		{
-			DoTask(board);
+			if (Simulate(board)) {
+				simulate_win_times++;
+			}
+			simulate_times++;
 #ifdef INTERACTIVE
 			return -1;
 #endif
@@ -182,6 +202,9 @@ int main(void)
 
 		double duration = timespec_diff_nsec(&start, &end);
 		std::cout << duration << " secs";
+
+		double win_rate = (double)simulate_win_times / simulate_times;
+		std::cout << ", win rate = " << win_rate*100 << "%";
 
 		total_time += duration;
 		run_times++;
