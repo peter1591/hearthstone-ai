@@ -26,6 +26,7 @@ class Board
 	friend class StageOpponentTurnStart;
 	friend class StageOpponentChooseBoardMove;
 	friend class StageOpponentPutMinion;
+	friend class StageOpponentAttack;
 	friend class StageOpponentTurnEnd;
 
 	public:
@@ -80,10 +81,16 @@ class Board
 			int attacked_idx; // -1 for the hero
 		};
 
+		struct OpponentAttackData {
+			int attacker_idx; // -1 for the hero
+			int attacked_idx; // -1 for the hero
+		};
+
 		union Data {
 			PlayerPutMinionData player_put_minion_data;
 			OpponentPutMinionData opponent_put_minion_data;
 			PlayerAttackData player_attack_data;
+			OpponentAttackData opponent_attack_data;
 
 			Data() {}
 			// TODO: implement comparison operator via memory-compare

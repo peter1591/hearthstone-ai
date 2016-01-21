@@ -34,6 +34,7 @@ class StagePlayerTurnStart
 				}
 			}
 
+			// reset minion stat
 			for (auto &minion : board.player_minions.GetMinions()) {
 				minion.TurnStart();
 			}

@@ -29,6 +29,11 @@ std::string Move::GetDebugString() const
 				<< ", attacked = " << this->data.player_attack_data.attacked_idx;
 			break;
 
+		case Move::ACTION_OPPONENT_ATTACK:
+			oss << "[Opponent Attack] attacking = " << this->data.opponent_attack_data.attacker_idx
+				<< ", attacked = " << this->data.opponent_attack_data.attacked_idx;
+			break;
+
 		case Move::ACTION_END_TURN:
 			oss << "[End turn]";
 			break;

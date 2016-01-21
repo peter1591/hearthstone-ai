@@ -17,6 +17,7 @@ class StageOpponentTurnStart
 		{
 			board.opponent_stat.crystal.TurnStart();
 
+			// draw a card
 			if (board.player_deck.GetCards().empty()) {
 				// no any card can draw, take damage
 				// TODO
@@ -30,6 +31,12 @@ class StageOpponentTurnStart
 					// TODO: distroy card (trigger deathrattle?)
 				}
 			}
+
+			// reset minion stat
+			for (auto &minion : board.opponent_minions.GetMinions()) {
+				minion.TurnStart();
+			}
+
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 	}
 };
