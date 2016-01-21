@@ -34,7 +34,7 @@ class Board
 
 	public:
 		Board() :
-			player_deck(this->random_generator),
+			player_deck(&this->random_generator),
 			stage(STAGE_UNKNOWN)
 		{}
 
@@ -53,6 +53,7 @@ class Board
 		void SetStateToPlayerTurnStart();
 
 		void GetStage(Stage &stage, StageType &type) const;
+		std::string GetStageName() const;
 
 		bool IsPlayerTurn() const;
 		bool IsRandomNode() const;

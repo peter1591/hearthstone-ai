@@ -16,7 +16,7 @@ namespace GameEngine {
 class Deck
 {
 	public:
-		Deck(RandomGenerator &random_generator);
+		Deck(RandomGenerator *random_generator);
 
 		// Add a card to deck
 		void AddCard(const Card &card);
@@ -27,12 +27,18 @@ class Deck
 
 	private:
 		std::vector<Card> cards;
-		RandomGenerator &random_generator;
+		RandomGenerator *random_generator;
 };
 
-inline Deck::Deck(RandomGenerator &random_generator) :
+inline Deck::Deck(RandomGenerator *random_generator) :
 	random_generator(random_generator)
 {
+#ifdef DEBUG
+	if (random_generator == nullptr) {
+		throw std::runtime_error("Deck should be initialized with a valid random generator");
+	}
+#endif
+
 	this->cards.reserve(36);
 }
 
@@ -55,7 +61,7 @@ inline Card Deck::Draw()
 	if (UNLIKELY(card_count == 1)) {
 		rand_idx = 0;
 	} else {
-		rand_idx = this->random_generator.GetRandom() % card_count;
+		rand_idx = this->random_generator->GetRandom() % card_count;
 	}
 
 	ret = this->cards[rand_idx];

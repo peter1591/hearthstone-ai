@@ -150,4 +150,9 @@ void Board::DebugPrint() const
 	std::cout << "=== Print Board END   ===" << std::endl;
 }
 
+std::string Board::GetStageName() const
+{
+	return StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage);
+}
+
 } // namespace GameEngine
