@@ -6,6 +6,8 @@
 #include <vector>
 #include "board.h"
 
+#include "stages/helper.h"
+
 namespace StageFunctionChooser
 {
 	template <typename Chooser> struct Caller {};

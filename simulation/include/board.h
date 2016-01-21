@@ -18,6 +18,7 @@
 
 class Board
 {
+	friend class StageHelper;
 	friend class StagePlayerTurnStart;
 	friend class StagePlayerChooseBoardMove;
 	friend class StagePlayerPutMinion;
