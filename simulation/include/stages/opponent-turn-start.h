@@ -18,10 +18,10 @@ class StageOpponentTurnStart
 			board.opponent_stat.crystal.TurnStart();
 
 			// draw a card
-			if (board.player_deck.GetCards().empty()) {
+			if (board.opponent_cards.GetDeckCount() == 0) {
 				// no any card can draw, take damage
 				// TODO
-				board.stage = STAGE_LOSS;
+				board.stage = STAGE_WIN;
 				return;
 			} else {
 				if (board.opponent_cards.GetHandCount() < 10) {
