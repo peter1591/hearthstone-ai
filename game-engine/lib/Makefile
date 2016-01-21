@@ -4,7 +4,7 @@ OBJECTS = board.o deck-database.o move.o
 
 OUTPUT_LIB = libGameEngine.a
 
-CFLAGS = $(CFLAGS_PROJECT) -I../include
+CFLAGS = $(CFLAGS_PROJECT) -I. -I../include
 
 .PHONY: all
 all: build

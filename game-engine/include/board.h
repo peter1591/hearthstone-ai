@@ -13,7 +13,7 @@
 #include "player-stat.h"
 #include "opponent-cards.h"
 #include "hidden-secrets.h"
-#include "stages/stage.h"
+#include "stage.h"
 #include "move.h"
 
 namespace GameEngine {
