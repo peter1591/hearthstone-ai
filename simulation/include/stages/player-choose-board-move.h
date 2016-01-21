@@ -99,6 +99,7 @@ class StagePlayerChooseBoardMove
 				next_moves.push_back(move);
 			}
 #else
+			(void)board; // suppress warning
 			next_moves.push_back(move);
 #endif
 		}

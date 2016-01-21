@@ -1,7 +1,0 @@
-[Compilation flags]
-
-* DEBUG
-  * checks if a player/opponent's turn introduce any randoms
-
-* CHOOSE_WHERE_TO_PUT_MINION
-  * add options to let player/opponent choose where to put a minion

@@ -91,6 +91,7 @@ class StageOpponentChooseBoardMove
 				next_moves.push_back(move);
 			}
 #else
+			(void)board;
 			next_moves.push_back(move);
 #endif
 		}
