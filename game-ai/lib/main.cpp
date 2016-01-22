@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include <iostream>
 
 #include "game-engine/board.h"
@@ -90,11 +92,26 @@ int main(void)
 	while (true) {
 		TreeNode *node = mcts.Select();
 
-		// TODO: if node is already a game-end state?
+		if (node->stage_type != GameEngine::STAGE_TYPE_GAME_END) {
+			GameEngine::Board board;
+			TreeNode *new_node = mcts.Expand(node, board);
+			bool is_win = mcts.Simulate(board);
+			mcts.BackPropagate(new_node, is_win);
 
-		TreeNode *new_node = mcts.Expand(node);
-		bool is_win = mcts.Simulate(new_node);
-		mcts.BackPropagate(new_node, is_win);
+		} else {
+			// if it's a game-end node, no need to expand & simulate
+			// just back propagate again from the leaf node
+			// TODO: check if this behavior is okay
+			bool is_win = (node->stage == GameEngine::STAGE_WIN);
+
+#ifdef DEBUG
+			if (node->stage_type != GameEngine::STAGE_TYPE_GAME_END) {
+				throw std::runtime_error("stage type is GAME_END, but it's not a win/loss");
+			}
+#endif
+
+			mcts.BackPropagate(node, is_win);
+		}
 
 		times++;
 
@@ -104,5 +121,6 @@ int main(void)
 			//std::cin.get();
 		}
 	}
+
 	return 0;
 }

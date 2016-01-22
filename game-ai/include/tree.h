@@ -20,7 +20,11 @@ class TreeNode
 		TreeNode *parent;
 		children_type children;
 
+		GameEngine::Stage stage;
+		GameEngine::StageType stage_type;
+#ifdef CHECK_MOVE_REAPPLIABLE
 		GameEngine::Board board;
+#endif
 
 		// what move lead us from parent to this state?
 		GameEngine::Move move;

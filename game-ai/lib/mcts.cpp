@@ -1,9 +1,13 @@
-#include <iostream>
+#include <stdlib.h>
+#include <time.h>
 #include <math.h>
 
+#include <iostream>
 #include <stdexcept>
 
 #include "mcts.h"
+
+#define EXLPORATION_FACTOR 0.1
 
 static double CalculateSelectionWeight(
 		int node_win, int node_simulations, double total_simulations_ln, double exploration_factor)
@@ -14,7 +18,7 @@ static double CalculateSelectionWeight(
 	return win_rate + exploration_factor * exploration_term;
 }
 
-static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration_factor = 5.0)
+static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration_factor = EXLPORATION_FACTOR)
 {
 	const TreeNode::children_type &children = parent_node->children;
 	const int &total_simulations = parent_node->count;
@@ -73,14 +77,17 @@ TreeNode * MCTS::Select()
 
 void MCTS::Initialize(const GameEngine::Board &board)
 {
-	GameEngine::Stage stage;
-	GameEngine::StageType stage_type;
+	this->rand_seed = time(NULL);
 
-	this->tree.GetRootNode().board = board;
+	this->root_node_board = board;
+#ifdef CHECK_MOVE_REAPPLIABLE
+	tree.GetRootNode().board = board;
+#endif
+	tree.GetRootNode().stage = board.GetStage();
+	tree.GetRootNode().stage_type = board.GetStageType();
 	tree.GetRootNode().parent = nullptr;
 	tree.GetRootNode().count = 0;
-	tree.GetRootNode().board.GetStage(stage, stage_type);
-	if (stage_type == GameEngine::STAGE_TYPE_PLAYER) {
+	if (tree.GetRootNode().stage_type == GameEngine::STAGE_TYPE_PLAYER) {
 		tree.GetRootNode().is_player_node = true;
 	} else {
 		// Note: if the starting node is a RANDOM node,
@@ -89,14 +96,32 @@ void MCTS::Initialize(const GameEngine::Board &board)
 	}
 }
 
-static TreeNode *ExpandNodeWithMove(TreeNode *parent, const GameEngine::Move &move)
+void MCTS::GetBoardByApplyingMoves(TreeNode *parent, GameEngine::Board &board) const
+{
+	bool dummy;
+
+	if (parent->parent == nullptr) {
+		board = this->root_node_board;
+		return;
+	}
+	this->GetBoardByApplyingMoves(parent->parent, board);
+
+	board.ApplyMove(parent->move, dummy);
+
+#ifdef CHECK_MOVE_REAPPLIABLE
+	if (board != parent->board) {
+		throw std::runtime_error("Game engine error!!! Move is not reappliable!");
+	}
+#endif
+}
+
+TreeNode *MCTS::ExpandNodeWithMove(TreeNode *parent, const GameEngine::Move &move, GameEngine::Board &new_board)
 {
 	bool is_deterministic;
 	TreeNode *new_node = new TreeNode;
 
-	new_node->board = parent->board;
 	new_node->move = move; // TODO: we can use move operator
-	new_node->board.ApplyMove(move, is_deterministic);
+	new_board.ApplyMove(move, is_deterministic);
 
 	if (parent->children.empty()) {
 		parent->has_random_playouts = !is_deterministic;
@@ -108,12 +133,15 @@ static TreeNode *ExpandNodeWithMove(TreeNode *parent, const GameEngine::Move &mo
 #endif
 	}
 
-	GameEngine::Stage stage;
-	GameEngine::StageType stage_type;
-	new_node->board.GetStage(stage, stage_type);
-	if (stage_type == GameEngine::STAGE_TYPE_PLAYER) {
+#ifdef CHECK_MOVE_REAPPLIABLE
+	new_node->board = new_board;
+#endif
+	new_node->stage = new_board.GetStage();
+	new_node->stage_type = new_board.GetStageType();
+
+	if (new_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
 		new_node->is_player_node = true;
-	} else if (stage_type == GameEngine::STAGE_TYPE_OPPONENT) {
+	} else if (new_node->stage_type == GameEngine::STAGE_TYPE_OPPONENT) {
 		new_node->is_player_node = false;
 	} else {
 		new_node->is_player_node = parent->is_player_node; // follow the parent's status
@@ -125,76 +153,56 @@ static TreeNode *ExpandNodeWithMove(TreeNode *parent, const GameEngine::Move &mo
 	
 }
 
-TreeNode * MCTS::Expand(TreeNode *node)
+TreeNode * MCTS::Expand(TreeNode *node, GameEngine::Board &new_board)
 {
 	TreeNode *new_node;
 
+	// get node's board
+	this->GetBoardByApplyingMoves(node, new_board);
+
 	// not expanded yet
 	if (node->children.empty()) {
-		GameEngine::Stage stage;
-		GameEngine::StageType stage_type;
-		node->board.GetStage(stage, stage_type);
-
-		if (stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			new_node = ExpandNodeWithMove(node, GameEngine::Move::GetGameFlowMove());
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+			new_node = this->ExpandNodeWithMove(node, GameEngine::Move::GetGameFlowMove(rand_r(&this->rand_seed)), new_board);
 		} else {
-			node->board.GetNextMoves(node->moves_not_yet_expanded);
-			new_node = ExpandNodeWithMove(node, node->moves_not_yet_expanded.back());
+			new_board.GetNextMoves(node->moves_not_yet_expanded);
+			new_node = this->ExpandNodeWithMove(node, node->moves_not_yet_expanded.back(), new_board);
 			node->moves_not_yet_expanded.pop_back();
-			node->moves_not_yet_expanded.shrink_to_fit(); // TODO: necessary?
 		}
 
 	// expanded previously
 	} else {
 		if (node->moves_not_yet_expanded.empty()) {
 #ifdef DEBUG
-			GameEngine::Stage parent_stage;
-			GameEngine::StageType parent_stage_type;
-			node->board.GetStage(parent_stage, parent_stage_type);
-			if (parent_stage_type != GameEngine::STAGE_TYPE_GAME_FLOW) {
+			if (node->stage_type != GameEngine::STAGE_TYPE_GAME_FLOW) {
 				throw std::runtime_error("This is not a game-flow stage, and all moves are already expanded. So this node should not be selected by MSTC selection phase.");
 			}
 #endif
 
-			new_node = ExpandNodeWithMove(node, GameEngine::Move::GetGameFlowMove());
+			new_node = this->ExpandNodeWithMove(node, GameEngine::Move::GetGameFlowMove(rand_r(&this->rand_seed)), new_board);
 
 		} else {
-			new_node = ExpandNodeWithMove(node, node->moves_not_yet_expanded.back());
+			new_node = this->ExpandNodeWithMove(node, node->moves_not_yet_expanded.back(), new_board);
 			node->moves_not_yet_expanded.pop_back();
-			node->moves_not_yet_expanded.shrink_to_fit(); // TODO: necessary?
 		}
 	}
 
 	return new_node;
 }
 
-// return true if WIN, false if LOSS
-static bool Simulate(GameEngine::Board board)
+void MCTS::SimulateWithBoard(GameEngine::Board &board)
 {
 	while (true) {
 		bool is_deterministic; // dummy
 		std::vector<GameEngine::Move> next_moves;
 
-		GameEngine::Stage stage;
-		GameEngine::StageType stage_type;
-
-		board.GetStage(stage, stage_type);
+		GameEngine::StageType stage_type = board.GetStageType();
 
 		if (stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			board.ApplyMove(GameEngine::Move::GetGameFlowMove(), is_deterministic);
+			board.ApplyMove(GameEngine::Move::GetGameFlowMove(rand_r(&this->rand_seed)), is_deterministic);
 
 		} else if (stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-			if (stage == GameEngine::STAGE_WIN) {
-				return true;
-			}
-			else if (stage == GameEngine::STAGE_LOSS) {
-				return false;
-			}
-#ifdef DEBUG
-			else {
-				throw std::runtime_error("stage type is GAME_END, but it's not a win/loss"); // TODO: tie?
-			}
-#endif
+			return;
 
 		} else {
 			board.GetNextMoves(next_moves);
@@ -213,10 +221,17 @@ static bool Simulate(GameEngine::Board board)
 }
 
 // return true if win; false otherwise
-bool MCTS::Simulate(TreeNode *node)
+bool MCTS::Simulate(GameEngine::Board &board)
 {
-	GameEngine::Board board = node->board; // make a copy
-	return ::Simulate(board);
+	this->SimulateWithBoard(board);
+
+#ifdef DEBUG
+	if (board.GetStageType() != GameEngine::STAGE_TYPE_GAME_END) {
+		throw std::runtime_error("Simulate should stop at game-end stage");
+	}
+#endif
+
+	return (board.GetStage() == GameEngine::STAGE_WIN);
 }
 
 void MCTS::BackPropagate(TreeNode *node, bool is_win)
@@ -244,7 +259,7 @@ void MCTS::PrintTree(TreeNode *node, int level, const int max_level)
 	if (level > max_level) return;
 
 	PrintLevelPrefix(level);
-	std::cout << "[" << node->board.GetStageName() << "] ";
+	std::cout << "[" << node->stage << "] ";
 
 	if (node != &this->tree.GetRootNode()) {
 		std::cout << node->move.GetDebugString();
@@ -262,7 +277,7 @@ void MCTS::PrintBestRoute()
 	int level = 0;
 	while (!node->children.empty()) {
 		PrintLevelPrefix(level);
-		std::cout << "[" << node->board.GetStageName() << "] ";
+		std::cout << "[" << node->stage << "] ";
 		if (node != &this->tree.GetRootNode()) {
 			std::cout << node->move.GetDebugString();
 		}
@@ -274,8 +289,25 @@ void MCTS::PrintBestRoute()
 	}
 }
 
+static void TotalTreeNodes(TreeNode *node, int &total)
+{
+	if (node == nullptr) return;
+	total++;
+	for (const auto &child : node->children) {
+		TotalTreeNodes(child, total);
+	}
+}
+
 void MCTS::DebugPrint()
 {
+	int tree_nodes = 0;
+	int tree_nodes_size = 0;
+	TotalTreeNodes(&this->tree.GetRootNode(), tree_nodes);
+	std::cout << "Total nodes: " << tree_nodes << std::endl;
+
+	tree_nodes_size = tree_nodes * sizeof(TreeNode);
+	std::cout << "Estimate tree nodes size: " << tree_nodes_size << std::endl;
+
 	//PrintTree(&this->tree.GetRootNode(), 0, 4);
-	PrintBestRoute();
+	//PrintBestRoute();
 }
