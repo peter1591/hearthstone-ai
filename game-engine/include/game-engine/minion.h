@@ -60,6 +60,23 @@ class Minion
 			return this->card_id != 0;
 		}
 
+		bool operator==(const Minion &rhs) const
+		{
+			if (this->card_id != rhs.card_id) return false;
+			if (this->attack != rhs.attack) return false;
+			if (this->hp != rhs.hp) return false;
+			if (this->max_hp != rhs.max_hp) return false;
+			if (this->attacked_times != rhs.attacked_times) return false;
+			if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
+
+			return true;
+		}
+
+		bool operator!=(const Minion &rhs) const
+		{
+			return !(*this == rhs);
+		}
+
 	private:
 		int card_id;
 		int attack;

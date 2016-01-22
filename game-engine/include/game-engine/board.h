@@ -1,6 +1,8 @@
 #ifndef GAME_ENGINE_BOARD_H
 #define GAME_ENGINE_BOARD_H
 
+#include <string.h>
+
 #include <list>
 
 #include "random-generator.h"
@@ -36,8 +38,32 @@ class Board
 		Board() :
 			player_deck(&this->random_generator),
 			stage(STAGE_UNKNOWN)
-		{}
+		{
+		}
 
+		Board(const Board &rhs) : player_deck(&this->random_generator) {
+			this->operator=(rhs);
+		}
+
+		Board & operator=(const Board &rhs) {
+			this->player_stat = rhs.player_stat;
+			this->player_secrets = rhs.player_secrets;
+			this->player_hand = rhs.player_hand;
+			this->player_deck.Assign(rhs.player_deck, &this->random_generator);
+			this->player_minions = rhs.player_minions;
+			this->opponent_stat = rhs.opponent_stat;
+			this->opponent_secrets = rhs.opponent_secrets;
+			this->opponent_cards = rhs.opponent_cards;
+			this->opponent_minions = rhs.opponent_minions;
+
+			this->stage = rhs.stage;
+			this->random_generator = rhs.random_generator;
+			this->data = rhs.data;
+
+			return *this;
+		}
+
+	public:
 		PlayerStat player_stat;
 		Secrets player_secrets;
 		Hand player_hand;
@@ -50,6 +76,8 @@ class Board
 		Minions opponent_minions;
 
 	public:
+		void Initialize(unsigned int rand_seed);
+
 		void SetStateToPlayerTurnStart();
 
 		Stage GetStage() const { return this->stage; }
@@ -69,6 +97,11 @@ class Board
 		void ApplyMove(const Move &move, bool &is_deterministic);
 
 		void DebugPrint() const;
+
+		bool operator==(const Board &rhs) const;
+		bool operator!=(const Board &rhs) const {
+			return !(*this == rhs);
+		}
 
 	private: // internal state data for cross-stage communication
 		struct PlayerPutMinionData {
@@ -98,7 +131,15 @@ class Board
 			OpponentAttackData opponent_attack_data;
 
 			Data() {}
-			// TODO: implement comparison operator via memory-compare
+
+			bool operator==(const Data &rhs) const {
+				if (memcmp(this, &rhs, sizeof(Data)) == 0) return true;
+				return false;
+			}
+
+			bool operator!=(const Data &rhs) const {
+				return !(*this == rhs);
+			}
 		};
 
 	private:

@@ -18,12 +18,27 @@ class Deck
 	public:
 		Deck(RandomGenerator *random_generator);
 
+	private:
+		Deck(const Deck &);
+		Deck &operator=(const Deck &);
+	public:
+		void Assign(const Deck &rhs, RandomGenerator *random_generator) {
+			this->cards = rhs.cards;
+			this->random_generator = random_generator;
+		}
+
+	public:
 		// Add a card to deck
 		void AddCard(const Card &card);
 
 		Card Draw();
 
 		const std::vector<Card>& GetCards() const;
+
+		bool operator==(const Deck &rhs) const;
+		bool operator!=(const Deck &rhs) const {
+			return !(*this == rhs);
+		}
 
 	private:
 		std::vector<Card> cards;
@@ -75,6 +90,12 @@ inline Card Deck::Draw()
 inline const std::vector<Card>& Deck::GetCards() const
 {
 	return this->cards;
+}
+
+inline bool Deck::operator==(const Deck &rhs) const
+{
+	if (this->cards != rhs.cards) return false;
+	return true;
 }
 
 } // namespace GameEngine

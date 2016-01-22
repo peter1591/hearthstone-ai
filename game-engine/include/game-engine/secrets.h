@@ -11,6 +11,15 @@ class Secrets
 	public:
 		Secrets();
 
+		bool operator==(const Secrets &rhs) const {
+			if (this->secrets != rhs.secrets) return false;
+			return true;
+		}
+
+		bool operator!=(const Secrets &rhs) const {
+			return !(*this == rhs);
+		}
+
 	private:
 		std::vector<Secret> secrets;
 };

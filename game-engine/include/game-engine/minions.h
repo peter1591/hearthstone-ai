@@ -33,6 +33,11 @@ class Minions
 
 		void DebugPrint() const;
 
+		bool operator==(const Minions &rhs) const;
+		bool operator!=(const Minions &rhs) const {
+			return !(*this == rhs);
+		}
+
 	private:
 		std::vector<Minion> minions;
 };
@@ -71,6 +76,12 @@ inline void Minions::DebugPrint() const
 			std::cout << "\t[EMPTY]" << std::endl;
 		}
 	}
+}
+
+inline bool Minions::operator==(const Minions &rhs) const
+{
+	if (this->minions != rhs.minions) return false;
+	return true;
 }
 
 } // namespace GameEngine

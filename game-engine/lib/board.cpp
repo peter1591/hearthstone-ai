@@ -142,4 +142,24 @@ std::string Board::GetStageName() const
 	return StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage);
 }
 
+bool Board::operator==(const Board &rhs) const
+{
+	if (this->player_stat != rhs.player_stat) return false;
+	if (this->player_secrets != rhs.player_secrets) return false;
+	if (this->player_hand != rhs.player_hand) return false;
+	if (this->player_deck != rhs.player_deck) return false;
+	if (this->player_minions != rhs.player_minions) return false;
+
+	if (this->opponent_stat != rhs.opponent_stat) return false;
+	if (this->opponent_secrets != rhs.opponent_secrets) return false;
+	if (this->opponent_cards != rhs.opponent_cards) return false;
+	if (this->opponent_minions != rhs.opponent_minions) return false;
+
+	if (this->stage != rhs.stage) return false;
+	if (this->random_generator != rhs.random_generator) return false;
+	if (this->data != rhs.data) return false;
+
+	return true;
+}
+
 } // namespace GameEngine

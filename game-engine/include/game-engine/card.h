@@ -11,6 +11,11 @@ class Card
 		void MarkInvalid();
 		bool IsValid() const;
 
+		bool operator==(const Card &rhs) const;
+		bool operator!=(const Card &rhs) const {
+			return !(*this == rhs);
+		}
+
 	public:
 		int id;
 
@@ -23,9 +28,21 @@ class Card
 			TYPE_MAX = TYPE_SECRET // must be the largest
 		} type;
 
+		int cost;
+
 		struct Minion {
 			int attack;
 			int hp;
+
+			bool operator==(const Minion &rhs) const {
+				if (this->attack != rhs.attack) return false;
+				if (this->hp != rhs.hp) return false;
+				return true;
+			}
+
+			bool operator!=(const Minion &rhs) const {
+				return !(*this == rhs);
+			}
 		};
 
 		struct Spell {
@@ -35,6 +52,16 @@ class Card
 		struct Weapon {
 			int attack;
 			int durability;
+
+			bool operator==(const Weapon &rhs) const {
+				if (this->attack != rhs.attack) return false;
+				if (this->durability != rhs.durability) return false;
+				return true;
+			}
+
+			bool operator!=(const Weapon &rhs) const {
+				return !(*this == rhs);
+			}
 		};
 
 		struct Secret {
@@ -47,8 +74,6 @@ class Card
 			Weapon weapon;
 			Secret secret;
 		} data;
-
-		int cost;
 };
 
 inline bool Card::IsValid() const
@@ -59,6 +84,25 @@ inline bool Card::IsValid() const
 inline void Card::MarkInvalid()
 {
 	this->id = 0;
+}
+
+inline bool Card::operator==(const Card &rhs) const
+{
+	if (this->id != rhs.id) return false;
+	if (this->type != rhs.type) return false;
+	if (this->cost != rhs.cost) return false;
+
+	switch (this->type) {
+		case TYPE_MINION:
+			if (this->data.minion != rhs.data.minion) return false;
+			break;
+
+		case TYPE_WEAPON:
+			if (this->data.weapon != rhs.data.weapon) return false;
+			break;
+	}
+
+	return true;
 }
 
 } // namespace GameEngine

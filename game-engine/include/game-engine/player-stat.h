@@ -34,6 +34,9 @@ class PlayerStat
 					this->locked_next_turn = 0;
 				}
 
+				bool operator==(const Crystal &rhs) const;
+				bool operator!=(const Crystal &rhs) const { return !(*this == rhs); }
+
 			private:
 				int current;
 				int total;
@@ -51,6 +54,9 @@ class PlayerStat
 		HeroPower hero_power;
 
 		std::string GetDebugString() const;
+
+		bool operator==(const PlayerStat &rhs) const;
+		bool operator!=(const PlayerStat &rhs) const { return !(*this == rhs); }
 };
 
 inline std::string PlayerStat::GetDebugString() const
@@ -62,6 +68,27 @@ inline std::string PlayerStat::GetDebugString() const
 		<< ", locked: "
 		<< this->crystal.GetLocked() << "/" << this->crystal.GetLockedNextTurn();
 	return oss.str();
+}
+
+inline bool PlayerStat::operator==(const PlayerStat &rhs) const
+{
+	if (this->hp != rhs.hp) return false;
+	if (this->armor != rhs.armor) return false;
+	if (this->crystal != rhs.crystal) return false;
+	if (this->weapon != rhs.weapon) return false;
+	if (this->hero_power != rhs.hero_power) return false;
+
+	return true;
+}
+
+inline bool PlayerStat::Crystal::operator==(const GameEngine::PlayerStat::Crystal &rhs) const
+{
+	if (this->current != rhs.current) return false;
+	if (this->total != rhs.total) return false;
+	if (this->locked != rhs.locked) return false;
+	if (this->locked_next_turn != rhs.locked_next_turn) return false;
+
+	return true;
 }
 
 } // namespace GameEngine

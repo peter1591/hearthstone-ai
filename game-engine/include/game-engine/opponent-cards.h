@@ -53,6 +53,16 @@ class OpponentCards
 
 		std::string GetDebugString() const;
 
+		bool operator==(const OpponentCards &rhs) const {
+			if (this->deck_card_count != rhs.deck_card_count) return false;
+			if (this->hand_card_count != rhs.hand_card_count) return false;
+			return true;
+		}
+
+		bool operator!=(const OpponentCards &rhs) const {
+			return !(*this == rhs);
+		}
+
 	private:
 		int deck_card_count;
 		int hand_card_count;

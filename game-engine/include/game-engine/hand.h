@@ -15,6 +15,11 @@ class Hand
 		int GetCountByCardType(Card::Type t) const;
 		void RemoveCard(int idx);
 
+		bool operator==(const Hand &rhs) const ;
+		bool operator!=(const Hand &rhs) const {
+			return !(*this == rhs);
+		}
+
 	private:
 		std::vector<Card> cards;
 		int count_by_type[Card::TYPE_MAX];
@@ -44,6 +49,15 @@ inline void Hand::RemoveCard(int idx)
 	std::vector<Card>::iterator it = this->cards.begin() + idx;
 	this->count_by_type[it->type]--;
 	this->cards.erase(it);
+}
+
+inline bool Hand::operator==(const Hand &rhs) const
+{
+	if (this->cards != rhs.cards) return false;
+
+	// no need to check count_by_type
+
+	return true;
 }
 
 } // namespace GameEngine
