@@ -80,17 +80,6 @@ void Board::ApplyMove(const Move &move, bool &is_deterministic)
 #endif
 }
 
-StageType Board::GetStageType() const
-{
-	return (StageType)(this->stage & STAGE_TYPE_FLAG);
-}
-
-void Board::GetStage(Stage &stage, StageType &type) const
-{
-	stage = this->stage;
-	type = this->GetStageType();
-}
-
 void Board::SetStateToPlayerTurnStart()
 {
 	this->stage = StagePlayerTurnStart::stage;
@@ -98,10 +87,8 @@ void Board::SetStateToPlayerTurnStart()
 
 void Board::DebugPrint() const
 {
-	Stage stage;
-	StageType stage_type;
-
-	this->GetStage(stage, stage_type);
+	Stage stage = this->GetStage();
+	StageType stage_type = this->GetStageType();
 
 	std::cout << "=== Print Board START ===" << std::endl;
 

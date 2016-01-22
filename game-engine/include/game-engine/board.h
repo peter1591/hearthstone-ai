@@ -52,7 +52,8 @@ class Board
 	public:
 		void SetStateToPlayerTurnStart();
 
-		void GetStage(Stage &stage, StageType &type) const;
+		Stage GetStage() const { return this->stage; }
+		StageType GetStageType() const { return (StageType)(this->stage & STAGE_TYPE_FLAG); }
 		std::string GetStageName() const;
 
 		bool IsPlayerTurn() const;
@@ -99,9 +100,6 @@ class Board
 			Data() {}
 			// TODO: implement comparison operator via memory-compare
 		};
-
-	private:
-		StageType GetStageType() const;
 
 	private:
 		Stage stage;
