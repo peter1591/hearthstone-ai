@@ -76,8 +76,6 @@ class Board
 		Minions opponent_minions;
 
 	public:
-		void Initialize(unsigned int rand_seed);
-
 		void SetStateToPlayerTurnStart();
 
 		Stage GetStage() const { return this->stage; }

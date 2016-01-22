@@ -20,6 +20,7 @@ class Move
 		} action;
 
 		struct GameFlowData {
+			unsigned int rand_seed;
 		};
 
 		struct PlayHandCardMinionData {
@@ -57,10 +58,11 @@ class Move
 		std::string GetDebugString() const;
 
 	public:
-		static const Move & GetGameFlowMove()
+		static const Move & GetGameFlowMove(unsigned int rand_seed)
 		{
 			static Move game_flow_move;
 			game_flow_move.action = ACTION_GAME_FLOW;
+			game_flow_move.data.game_flow_data.rand_seed = rand_seed;
 			return game_flow_move;
 		}
 };

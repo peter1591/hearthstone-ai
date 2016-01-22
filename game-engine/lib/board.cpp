@@ -65,6 +65,10 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 
 void Board::ApplyMove(const Move &move, bool &is_deterministic)
 {
+	if (this->GetStageType() == STAGE_TYPE_GAME_FLOW) {
+		this->random_generator.SetRandomSeed(move.data.game_flow_data.rand_seed);
+	}
+
 	this->random_generator.ClearFlags();
 
 #ifdef DEBUG

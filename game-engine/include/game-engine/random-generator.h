@@ -8,12 +8,20 @@ namespace GameEngine {
 class RandomGenerator
 {
 	public:
-		RandomGenerator() : rand_seedp(1) {
+		RandomGenerator() : rand_seed(1) {
+		}
+
+		void SetRandomSeed(unsigned int seed) {
+			this->rand_seed = seed;
+		}
+
+		unsigned int GetRandomSeed() const {
+			return this->rand_seed;
 		}
 
 		int GetRandom() {
 			this->not_called = false;
-			return rand_r(&this->rand_seedp);
+			return rand_r(&this->rand_seed);
 		}
 
 		void ClearFlags() {
@@ -24,8 +32,9 @@ class RandomGenerator
 			not_called = this->not_called;
 		}
 
+	public: // comparison
 		bool operator==(const RandomGenerator &rhs) const {
-			if (this->rand_seedp != rhs.rand_seedp) return false;
+			if (this->rand_seed != rhs.rand_seed) return false;
 			if (this->not_called != rhs.not_called) return false;
 			return true;
 		}
@@ -35,7 +44,7 @@ class RandomGenerator
 		}
 
 	private:
-		unsigned int rand_seedp;
+		unsigned int rand_seed;
 		bool not_called;
 };
 
