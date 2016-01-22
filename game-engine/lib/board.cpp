@@ -67,15 +67,17 @@ void Board::ApplyMove(const Move &move, bool &is_deterministic)
 {
 	this->random_generator.ClearFlags();
 
+#ifdef DEBUG
+	StageType stage_type_prev = this->GetStageType();
+#endif
+
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 
 	this->random_generator.GetFlags(is_deterministic);
 
 #ifdef DEBUG
-	if ((StageType)(this->stage & STAGE_TYPE_FLAG) != STAGE_TYPE_GAME_FLOW) {
-		if (is_deterministic == false) {
-			throw std::runtime_error("a player/opponent stage should not introduce any random");
-		}
+	if (stage_type_prev != STAGE_TYPE_GAME_FLOW && is_deterministic == false) {
+		throw std::runtime_error("a player/opponent stage should not introduce any random");
 	}
 #endif
 }
