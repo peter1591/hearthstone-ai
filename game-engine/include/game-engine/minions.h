@@ -1,6 +1,7 @@
 #ifndef GAME_ENGINE_MINIONS_H
 #define GAME_ENGINE_MINIONS_H
 
+#include <functional>
 #include <iostream>
 #include <vector>
 #include <stdexcept>
@@ -13,6 +14,8 @@ namespace GameEngine {
 
 class Minions
 {
+	friend std::hash<Minions>;
+
 	public:
 		typedef std::vector<Minion> container_type;
 
@@ -85,5 +88,23 @@ inline bool Minions::operator==(const Minions &rhs) const
 }
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::Minions> {
+		typedef GameEngine::Minions argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			for (auto minion: s.minions) {
+				GameEngine::hash_combine(result, hash<decltype(minion)>()(minion));
+			}
+
+			return result;
+		}
+	};
+
+}
 
 #endif

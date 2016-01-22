@@ -1,6 +1,7 @@
 #ifndef GAME_ENGINE_OPPONENT_CARDS_H
 #define GAME_ENGINE_OPPONENT_CARDS_H
 
+#include <functional>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -11,10 +12,10 @@ namespace GameEngine {
 
 class OpponentCards
 {
+	friend std::hash<OpponentCards>;
+
 	public:
 		OpponentCards() : deck_card_count(0), hand_card_count(0) {}
-
-		std::vector<Card> played_cards;
 
 		void Set(int deck_size) { this->deck_card_count = deck_size; }
 		int GetHandCount() const { return this->hand_card_count; }
@@ -77,5 +78,22 @@ inline std::string OpponentCards::GetDebugString() const
 }
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::OpponentCards> {
+		typedef GameEngine::OpponentCards argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<decltype(s.deck_card_count)>()(s.deck_card_count));
+			GameEngine::hash_combine(result, hash<decltype(s.hand_card_count)>()(s.hand_card_count));
+
+			return result;
+		}
+	};
+
+}
 
 #endif

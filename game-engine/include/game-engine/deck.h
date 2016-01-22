@@ -1,6 +1,7 @@
 #ifndef GAME_ENGINE_DECK_H
 #define GAME_ENGINE_DECK_H
 
+#include <functional>
 #include <iostream>
 #include <algorithm>
 #include <utility>
@@ -15,6 +16,8 @@ namespace GameEngine {
 
 class Deck
 {
+	friend std::hash<Deck>;
+
 	public:
 		Deck(RandomGenerator *random_generator);
 
@@ -99,5 +102,21 @@ inline bool Deck::operator==(const Deck &rhs) const
 }
 
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::Deck> {
+		typedef GameEngine::Deck argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			for (auto card: s.cards) {
+				GameEngine::hash_combine(result, hash<decltype(card)>()(card));
+			}
+
+			return result;
+		}
+	};
+}
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef GAME_ENGINE_HAND_H
 #define GAME_ENGINE_HAND_H
 
+#include <functional>
 #include <vector>
 #include "card.h"
 
@@ -8,6 +9,8 @@ namespace GameEngine {
 
 class Hand
 {
+	friend std::hash<Hand>;
+
 	public:
 		Hand();
 		void AddCard(const Card &card);
@@ -61,5 +64,23 @@ inline bool Hand::operator==(const Hand &rhs) const
 }
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::Hand> {
+		typedef GameEngine::Hand argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			for (auto card: s.cards) {
+				GameEngine::hash_combine(result, hash<decltype(card)>()(card));
+			}
+
+			return result;
+		}
+	};
+
+}
 
 #endif

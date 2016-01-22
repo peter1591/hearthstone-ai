@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 
 #include "stages/player-turn-start.h"
 #include "stages/player-choose-board-move.h"
@@ -97,6 +98,8 @@ void Board::DebugPrint() const
 	StageType stage_type = this->GetStageType();
 
 	std::cout << "=== Print Board START ===" << std::endl;
+
+	std::cout << "HASH: " << std::hash<GameEngine::Board>()(*this) << std::endl;
 
 	switch (stage_type) {
 		case STAGE_TYPE_PLAYER:

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <functional>
 #include "weapon.h"
 #include "hero-power.h"
 
@@ -12,6 +13,8 @@ class PlayerStat
 {
 	public:
 		class Crystal {
+			friend class std::hash<Crystal>;
+
 			public:
 				void Set(int current, int total, int locked, int locked_next_turn) {
 					this->current = current;
@@ -92,5 +95,39 @@ inline bool PlayerStat::Crystal::operator==(const GameEngine::PlayerStat::Crysta
 }
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::PlayerStat::Crystal> {
+		typedef GameEngine::PlayerStat::Crystal argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<int>()(s.current));
+			GameEngine::hash_combine(result, hash<int>()(s.total));
+			GameEngine::hash_combine(result, hash<int>()(s.locked));
+			GameEngine::hash_combine(result, hash<int>()(s.locked_next_turn));
+
+			return result;
+		}
+	};
+
+	template <> struct hash<GameEngine::PlayerStat> {
+		typedef GameEngine::PlayerStat argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<int>()(s.hp));
+			GameEngine::hash_combine(result, hash<int>()(s.armor));
+			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat::Crystal>()(s.crystal));
+			GameEngine::hash_combine(result, hash<GameEngine::Weapon>()(s.weapon));
+			GameEngine::hash_combine(result, hash<GameEngine::HeroPower>()(s.hero_power));
+
+			return result;
+		}
+	};
+}
 
 #endif

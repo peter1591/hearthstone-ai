@@ -1,6 +1,8 @@
 #ifndef GAME_ENGINE_HERO_POWER_H
 #define GAME_ENGINE_HERO_POWER_H
 
+#include <functional>
+
 namespace GameEngine {
 
 struct HeroPower
@@ -19,5 +21,19 @@ struct HeroPower
 };
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::HeroPower> {
+		typedef GameEngine::HeroPower argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &) const {
+			result_type result = 0;
+
+			return result;
+		}
+	};
+
+}
 
 #endif

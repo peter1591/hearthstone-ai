@@ -1,6 +1,8 @@
 #ifndef _STAGES_STAGE_H
 #define _STAGES_STAGE_H
 
+#include <functional>
+
 namespace GameEngine {
 
 enum StageType {
@@ -36,4 +38,20 @@ enum Stage {
 };
 
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::Stage> {
+		typedef GameEngine::Stage argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<int>()((int)s));
+
+			return result;
+		}
+	};
+
+}
+
 #endif

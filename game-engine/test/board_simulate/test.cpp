@@ -1,6 +1,8 @@
 #include <time.h>
+#include <stdlib.h>
 
 #include <iostream>
+#include <functional>
 
 #include "card.h"
 #include "deck-database.h"
@@ -97,10 +99,8 @@ bool Simulate(Board board)
 		const Move *current_move = nullptr;
 		std::vector<Move> next_moves;
 
-		Stage stage;
-		StageType stage_type;
-
-		board.GetStage(stage, stage_type);
+		Stage stage = board.GetStage();
+		StageType stage_type = board.GetStageType();
 
 		if (stage_type == STAGE_TYPE_GAME_FLOW) {
 #ifdef INTERACTIVE
@@ -108,7 +108,7 @@ bool Simulate(Board board)
 			std::cout << "!!! It's a game flow node, press Enter to apply game flow move...";
 			std::cin.get();
 #endif
-			current_move = &Move::GetGameFlowMove();
+			current_move = &Move::GetGameFlowMove(rand());
 
 		} else if (stage_type == STAGE_TYPE_GAME_END) {
 			if (stage == STAGE_WIN) return true;

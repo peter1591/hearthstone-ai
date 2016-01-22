@@ -1,6 +1,9 @@
 #ifndef GAME_ENGINE_CARD_H
 #define GAME_ENGINE_CARD_H
 
+#include <functional>
+#include "common.h"
+
 namespace GameEngine {
 
 class Card
@@ -100,11 +103,77 @@ inline bool Card::operator==(const Card &rhs) const
 		case TYPE_WEAPON:
 			if (this->data.weapon != rhs.data.weapon) return false;
 			break;
+
+		case TYPE_INVALID:
+		case TYPE_SPELL:
+		case TYPE_SECRET:
+			break;
 	}
 
 	return true;
 }
 
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::Card::Minion> {
+		typedef GameEngine::Card::Minion argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<decltype(s.attack)>()(s.attack));
+			GameEngine::hash_combine(result, hash<decltype(s.hp)>()(s.hp));
+
+			return result;
+		}
+	};
+
+	template <> struct hash<GameEngine::Card::Weapon> {
+		typedef GameEngine::Card::Weapon argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<decltype(s.attack)>()(s.attack));
+			GameEngine::hash_combine(result, hash<decltype(s.durability)>()(s.durability));
+
+			return result;
+		}
+	};
+
+	template <> struct hash<GameEngine::Card> {
+		typedef GameEngine::Card argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<decltype(s.id)>()(s.id));
+
+			/*
+			GameEngine::hash_combine(result, hash<int>()((int)s.type)); // TODO
+			GameEngine::hash_combine(result, hash<decltype(s.cost)>()(s.cost));
+
+			switch (s.type) {
+				case GameEngine::Card::TYPE_MINION:
+					GameEngine::hash_combine(result, hash<decltype(s.data.minion)>()(s.data.minion));
+					break;
+
+				case GameEngine::Card::TYPE_WEAPON:
+					GameEngine::hash_combine(result, hash<decltype(s.data.weapon)>()(s.data.weapon));
+					break;
+
+				case GameEngine::Card::TYPE_INVALID:
+				case GameEngine::Card::TYPE_SPELL:
+				case GameEngine::Card::TYPE_SECRET:
+					break;
+			}
+			*/
+
+			return result;
+		}
+	};
+
+}
 
 #endif

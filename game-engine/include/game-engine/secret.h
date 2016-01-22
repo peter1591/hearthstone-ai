@@ -1,6 +1,8 @@
 #ifndef GAME_ENGINE_SECRET_H
 #define GAME_ENGINE_SECRET_H
 
+#include <functional>
+
 namespace GameEngine {
 
 class Secret
@@ -21,5 +23,21 @@ class Secret
 };
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::Secret> {
+		typedef GameEngine::Secret argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<int>()(s.card_id));
+
+			return result;
+		}
+	};
+
+}
 
 #endif

@@ -3,6 +3,7 @@
 
 #include <string.h>
 
+#include <functional>
 #include <list>
 
 #include "random-generator.h"
@@ -22,6 +23,7 @@ namespace GameEngine {
 
 class Board
 {
+	friend std::hash<Board>;
 	friend class StageHelper;
 	friend class StagePlayerTurnStart;
 	friend class StagePlayerChooseBoardMove;
@@ -147,5 +149,57 @@ class Board
 };
 
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::Board> {
+		typedef GameEngine::Board argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat>()(s.player_stat));
+			GameEngine::hash_combine(result, hash<GameEngine::Secrets>()(s.player_secrets));
+			GameEngine::hash_combine(result, hash<GameEngine::Hand>()(s.player_hand));
+			GameEngine::hash_combine(result, hash<GameEngine::Deck>()(s.player_deck));
+			GameEngine::hash_combine(result, hash<GameEngine::Minions>()(s.player_minions));
+
+			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat>()(s.opponent_stat));
+			GameEngine::hash_combine(result, hash<GameEngine::HiddenSecrets>()(s.opponent_secrets));
+			GameEngine::hash_combine(result, hash<GameEngine::OpponentCards>()(s.opponent_cards));
+			GameEngine::hash_combine(result, hash<GameEngine::Minions>()(s.opponent_minions));
+
+			GameEngine::hash_combine(result, hash<GameEngine::Stage>()(s.stage));
+			GameEngine::hash_combine(result, hash<GameEngine::RandomGenerator>()(s.random_generator));
+
+			// hash for the union
+			switch (s.stage) {
+				case GameEngine::STAGE_PLAYER_PUT_MINION:
+					GameEngine::hash_combine(result, hash<int>()(s.data.player_put_minion_data.idx_hand_card));
+					GameEngine::hash_combine(result, hash<int>()(s.data.player_put_minion_data.location));
+					break;
+
+				case GameEngine::STAGE_OPPONENT_PUT_MINION:
+					GameEngine::hash_combine(result, hash<GameEngine::Card>()(s.data.opponent_put_minion_data.card));
+					GameEngine::hash_combine(result, hash<int>()(s.data.opponent_put_minion_data.location));
+					break;
+
+				case GameEngine::STAGE_PLAYER_ATTACK:
+					GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacker_idx));
+					GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacked_idx));
+					break;
+
+				case GameEngine::STAGE_OPPONENT_ATTACK:
+					GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacker_idx));
+					GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacked_idx));
+					break;
+
+				default:
+					break;
+			}
+
+			return result;
+		}
+	};
+}
 
 #endif

@@ -2,11 +2,16 @@
 #define GAME_ENGINE_RANDOM_GENERATOR_H
 
 #include <stdlib.h>
+#include "common.h"
+
+#include <functional>
 
 namespace GameEngine {
 
 class RandomGenerator
 {
+	friend std::hash<RandomGenerator>;
+
 	public:
 		RandomGenerator() : rand_seed(1) {
 		}
@@ -34,7 +39,8 @@ class RandomGenerator
 
 	public: // comparison
 		bool operator==(const RandomGenerator &rhs) const {
-			if (this->rand_seed != rhs.rand_seed) return false;
+			// NOTE: boards only differ with the rand seed is considered the same
+			//if (this->rand_seed != rhs.rand_seed) return false;
 			if (this->not_called != rhs.not_called) return false;
 			return true;
 		}
@@ -49,5 +55,22 @@ class RandomGenerator
 };
 
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::RandomGenerator> {
+		typedef GameEngine::RandomGenerator argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			// NOTE: boards only differ with the rand seed is considered the same
+			// GameEngine::hash_combine(result, hash<decltype(s.rand_seed)>()(s.rand_seed));
+
+			GameEngine::hash_combine(result, hash<decltype(s.not_called)>()(s.not_called));
+
+			return result;
+		}
+	};
+}
 
 #endif

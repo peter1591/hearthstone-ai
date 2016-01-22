@@ -1,12 +1,15 @@
 #ifndef GAME_ENGINE_MINION_H
 #define GAME_ENGINE_MINION_H
 
+#include <functional>
 #include "card.h"
 
 namespace GameEngine {
 
 class Minion
 {
+	friend std::hash<Minion>;
+
 	public:
 		Minion();
 
@@ -93,5 +96,26 @@ inline Minion::Minion() : card_id(0)
 }
 
 } // namespace GameEngine
+
+namespace std {
+
+	template <> struct hash<GameEngine::Minion> {
+		typedef GameEngine::Minion argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<decltype(s.card_id)>()(s.card_id));
+			GameEngine::hash_combine(result, hash<decltype(s.attack)>()(s.attack));
+			GameEngine::hash_combine(result, hash<decltype(s.hp)>()(s.hp));
+			GameEngine::hash_combine(result, hash<decltype(s.max_hp)>()(s.max_hp));
+			GameEngine::hash_combine(result, hash<decltype(s.attacked_times)>()(s.attacked_times));
+			GameEngine::hash_combine(result, hash<decltype(s.summoned_this_turn)>()(s.summoned_this_turn));
+
+			return result;
+		}
+	};
+
+}
 
 #endif
