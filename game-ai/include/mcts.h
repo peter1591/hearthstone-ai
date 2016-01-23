@@ -1,6 +1,7 @@
 #ifndef GAME_AI_MCTS_H
 #define GAME_AI_MCTS_H
 
+#include <unordered_map>
 #include "game-engine/board.h"
 #include "tree.h"
 
@@ -9,9 +10,10 @@ class MCTS
 	public:
 		void Initialize(const GameEngine::Board &board);
 
-		TreeNode* Select();
-
-		TreeNode* Expand(TreeNode *node, GameEngine::Board &new_board);
+		// Find a node to expand, and expand it
+		// @param board [OUT] the new board of the node
+		// @return the new node
+		TreeNode * SelectAndExpand(GameEngine::Board &board);
 
 		bool Simulate(GameEngine::Board &board);
 
@@ -20,8 +22,6 @@ class MCTS
 		void DebugPrint();
 
 	private:
-		TreeNode *ExpandNodeWithMove(TreeNode *parent, const GameEngine::Move &move, GameEngine::Board &new_board);
-		void GetBoardByApplyingMoves(TreeNode *parent, GameEngine::Board &board) const;
 		void SimulateWithBoard(GameEngine::Board &board);
 
 		void PrintBestRoute();
@@ -29,6 +29,7 @@ class MCTS
 
 		GameEngine::Board root_node_board;
 		Tree tree;
+		std::unordered_map<GameEngine::Board, TreeNode *> traversed_boards;
 		unsigned int rand_seed;
 };
 

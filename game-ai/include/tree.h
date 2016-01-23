@@ -41,10 +41,6 @@ class TreeNode
 		// number of simulations
 		int count;
 
-		// is this a GAME_FLOW node, and introduces some randoms?
-		// only valid if this node is expanded (i.e., has children)
-		bool has_random_playouts;
-
 		// only valid if this node is expanded (i.e., has children)
 		std::vector<GameEngine::Move> moves_not_yet_expanded;
 };
