@@ -3,11 +3,13 @@
 #include <math.h>
 
 #include <iostream>
+#include <queue>
+#include <unordered_set>
 #include <stdexcept>
 
 #include "mcts.h"
 
-#define EXLPORATION_FACTOR 5000000.0
+#define EXLPORATION_FACTOR 1.0
 
 static double CalculateSelectionWeight(
 		int node_win, int node_simulations, double total_simulations_ln, double exploration_factor)
@@ -15,7 +17,6 @@ static double CalculateSelectionWeight(
 	double win_rate = (double)node_win / node_simulations;
 	double exploration_term = sqrt(total_simulations_ln / node_simulations);
 
-	return -node_simulations;
 	return win_rate + exploration_factor * exploration_term;
 }
 
@@ -93,7 +94,7 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 				return expanding_node;
 
 			} else if (expanding_node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-				new_node->move = GameEngine::Move::GetGameFlowMove(rand_r(&this->rand_seed));
+				new_node->move = GameEngine::Move::GetGameFlowMove(rand());
 				board.ApplyMove(new_node->move);
 				break;
 
@@ -114,12 +115,15 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 
 		if (expanding_node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
 			// apply the game-flow move
-			new_node->move = GameEngine::Move::GetGameFlowMove(rand_r(&this->rand_seed));
+			new_node->move = GameEngine::Move::GetGameFlowMove(rand());
 			board.ApplyMove(new_node->move);
 
 			decltype(this->traversed_boards)::const_iterator it = this->traversed_boards.find(board);
 			if (it != this->traversed_boards.end()) {
 				// this node has been expanded before --> select the node in its sub-tree
+				if (it->second->parent != expanding_node) {
+					it->second->reachable_parents.push_back(expanding_node);
+				}
 				expanding_node = it->second;
 				continue;
 			} else {
@@ -179,7 +183,7 @@ void MCTS::SimulateWithBoard(GameEngine::Board &board)
 		GameEngine::StageType stage_type = board.GetStageType();
 
 		if (stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			board.ApplyMove(GameEngine::Move::GetGameFlowMove(rand_r(&this->rand_seed)));
+			board.ApplyMove(GameEngine::Move::GetGameFlowMove(rand()));
 
 		} else if (stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 			return;
@@ -216,14 +220,35 @@ bool MCTS::Simulate(GameEngine::Board &board)
 
 void MCTS::BackPropagate(TreeNode *node, bool is_win)
 {
-	while (node != nullptr) {
-		if (node->is_player_node) {
-			if (is_win == true) node->wins++; // from the player's respect
-		} else {
-			if (is_win == false) node->wins++; // from the opponent's respect
+	std::queue<TreeNode *> queue;
+	std::unordered_set<TreeNode *> visited;
+	queue.push(node);
+
+	while (!queue.empty()) {
+		TreeNode *processing_node = queue.front();
+		queue.pop();
+
+		if (visited.find(processing_node) != visited.end()) {
+			continue;
 		}
-		node->count++;
-		node = node->parent;
+
+		if (processing_node->is_player_node) {
+			if (is_win == true) processing_node->wins++; // from the player's respect
+		}
+		else {
+			if (is_win == false) processing_node->wins++; // from the opponent's respect
+		}
+		processing_node->count++;
+
+		visited.insert(processing_node);
+
+		if (processing_node->parent != nullptr) {
+			queue.push(processing_node->parent);
+		}
+		for (auto reachable_parent : processing_node->reachable_parents) {
+			// TODO: accelrate?
+			queue.push(reachable_parent);
+		}
 	}
 }
 
@@ -270,17 +295,20 @@ void MCTS::PrintBestRoute()
 
 	int level = 0;
 	while (!node->children.empty()) {
-		PrintLevelPrefix(level);
-		std::cout << "[" << node->stage << "] ";
-		if (node != &this->tree.GetRootNode()) {
-			std::cout << node->move.GetDebugString();
+
+		if (node->move.action != GameEngine::Move::ACTION_GAME_FLOW) {
+			PrintLevelPrefix(level);
+			std::cout << "[" << node->stage << "] ";
+			if (node != &this->tree.GetRootNode()) {
+				std::cout << node->move.GetDebugString();
+			}
+			std::cout << " " << node->wins << "/" << node->count << std::endl;
+			level++;
 		}
-		std::cout << " " << node->wins << "/" << node->count << std::endl;
 
-		//node = FindBestChildToPlay(node);
-		node = FindBestChildToExpand(node, 0.0);
+		node = FindBestChildToPlay(node);
+		//node = FindBestChildToExpand(node, 0.0);
 
-		level++;
 	}
 }
 
@@ -303,6 +331,6 @@ void MCTS::DebugPrint()
 	tree_nodes_size = tree_nodes * sizeof(TreeNode);
 	std::cout << "Estimate tree nodes size: " << tree_nodes_size << std::endl;
 
-	PrintTree(&this->tree.GetRootNode(), 0, 2);
-	//PrintBestRoute();
+	//PrintTree(&this->tree.GetRootNode(), 0, 2);
+	PrintBestRoute();
 }

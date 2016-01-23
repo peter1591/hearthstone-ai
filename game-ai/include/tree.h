@@ -18,6 +18,7 @@ class TreeNode
 		}
 
 		TreeNode *parent;
+		std::vector<TreeNode *> reachable_parents; // other nodes which can apply some kind of move to reach this node
 		children_type children;
 
 		GameEngine::Stage stage;

@@ -51,11 +51,11 @@ void InitializeBoard(GameEngine::Board &board)
 
 	board.player_stat.hp = 30;
 	board.player_stat.armor = 0;
-	board.player_stat.crystal.Set(0, 0, 0, 0);
+	board.player_stat.crystal.Set(2, 2, 0, 0);
 
 	board.opponent_stat.hp = 30;
 	board.opponent_stat.armor = 0;
-	board.opponent_stat.crystal.Set(0, 0, 0, 0);
+	board.opponent_stat.crystal.Set(2, 2, 0, 0);
 
 	board.opponent_cards.Set(30);
 
@@ -64,15 +64,19 @@ void InitializeBoard(GameEngine::Board &board)
 	
 	GameEngine::Minion minion;
 	minion.Set(111, 1, 1, 1);
+	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
 	minion.Set(213, 2, 2, 3);
+	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 3, 3, 3);
+	minion.Set(333, 30, 1, 3);
+	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
-	board.SetStateToPlayerChooseBoardMove();
+	//board.SetStateToPlayerChooseBoardMove();
+	board.SetStateToPlayerTurnStart();
 }
 
 
