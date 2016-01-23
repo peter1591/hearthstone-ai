@@ -64,32 +64,27 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 	}
 }
 
-void Board::ApplyMove(const Move &move, bool &is_deterministic)
+void Board::ApplyMove(const Move &move)
 {
 	if (this->GetStageType() == STAGE_TYPE_GAME_FLOW) {
 		this->random_generator.SetRandomSeed(move.data.game_flow_data.rand_seed);
 	}
-
-	this->random_generator.ClearFlags();
 
 #ifdef DEBUG
 	StageType stage_type_prev = this->GetStageType();
 #endif
 
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
-
-	this->random_generator.GetFlags(is_deterministic);
-
-#ifdef DEBUG
-	if (stage_type_prev != STAGE_TYPE_GAME_FLOW && is_deterministic == false) {
-		throw std::runtime_error("a player/opponent stage should not introduce any random");
-	}
-#endif
 }
 
 void Board::SetStateToPlayerTurnStart()
 {
 	this->stage = StagePlayerTurnStart::stage;
+}
+
+void Board::SetStateToPlayerChooseBoardMove()
+{
+	this->stage = StagePlayerChooseBoardMove::stage;
 }
 
 void Board::DebugPrint() const

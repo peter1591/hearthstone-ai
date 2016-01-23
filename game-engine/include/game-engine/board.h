@@ -79,6 +79,7 @@ class Board
 
 	public:
 		void SetStateToPlayerTurnStart();
+		void SetStateToPlayerChooseBoardMove();
 
 		Stage GetStage() const { return this->stage; }
 		StageType GetStageType() const { return (StageType)(this->stage & STAGE_TYPE_FLAG); }
@@ -93,8 +94,7 @@ class Board
 		void GetNextMoves(std::vector<Move> &next_moves) const;
 
 		// Apply the move to the board
-		// @params   is_deterministic   [OUT] is the apply procedure deterministic (.e., introduce no random?)
-		void ApplyMove(const Move &move, bool &is_deterministic);
+		void ApplyMove(const Move &move);
 
 		void DebugPrint() const;
 
