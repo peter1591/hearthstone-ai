@@ -1,7 +1,7 @@
 #ifndef GAME_ENGINE_RANDOM_GENERATOR_H
 #define GAME_ENGINE_RANDOM_GENERATOR_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include "common.h"
 
 #include <functional>
@@ -25,7 +25,11 @@ class RandomGenerator
 		}
 
 		int GetRandom() {
-			return rand_r(&this->rand_seed);
+			int r;
+			std::srand(this->rand_seed);
+			r = std::rand();
+			this->rand_seed = r;
+			return r;
 		}
 
 	public: // comparison
