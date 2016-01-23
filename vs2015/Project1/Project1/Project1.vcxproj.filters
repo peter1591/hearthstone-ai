@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\game-engine">
+      <UniqueIdentifier>{251a03a4-c72a-4c33-99e4-1ccc37ff0c48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game-engine">
+      <UniqueIdentifier>{62d17550-1676-4e2f-a115-31b5d63a8d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game-ai">
+      <UniqueIdentifier>{f899c79b-94d8-4556-becd-be38951e0320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game-engine\stages">
+      <UniqueIdentifier>{a0636d1b-7d69-487f-8cf2-3d8f53dd6fd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game-ai">
+      <UniqueIdentifier>{f9a68dcc-c054-43b0-8dfc-adee211c9212}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\game-engine\lib\board.cpp">
+      <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\deck-database.cpp">
+      <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\move.cpp">
+      <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-ai\lib\main.cpp">
+      <Filter>Source Files\game-ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
+      <Filter>Source Files\game-ai</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\common.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\helper.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-attack.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-choose-board-move.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-put-minion.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-turn-end.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-turn-start.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\player-attack.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\player-choose-board-move.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\player-put-minion.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-end.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\board.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\card.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\common.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\deck.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\deck-database.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\hand.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\hero-power.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\hidden-secrets.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\minion.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\minions.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\move.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\opponent-cards.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\player-stat.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\random-generator.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\secret.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\secrets.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\stage.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\include\game-engine\weapon.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-ai\include\mcts.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\game-ai\include\tree.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
