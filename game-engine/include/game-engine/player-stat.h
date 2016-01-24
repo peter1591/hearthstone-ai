@@ -13,7 +13,7 @@ class PlayerStat
 {
 	public:
 		class Crystal {
-			friend class std::hash<Crystal>;
+			friend struct std::hash<Crystal>;
 
 			public:
 				void Set(int current, int total, int locked, int locked_next_turn) {

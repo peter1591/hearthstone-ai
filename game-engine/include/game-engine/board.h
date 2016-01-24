@@ -132,14 +132,8 @@ class Board
 
 			Data() {}
 
-			bool operator==(const Data &rhs) const {
-				if (memcmp(this, &rhs, sizeof(Data)) == 0) return true;
-				return false;
-			}
-
-			bool operator!=(const Data &rhs) const {
-				return !(*this == rhs);
-			}
+			bool operator==(const Data &rhs) const = delete;
+			bool operator!=(const Data &rhs) const = delete;
 		};
 
 	private:
@@ -147,6 +141,50 @@ class Board
 		RandomGenerator random_generator;
 		Data data;
 };
+
+inline bool Board::operator==(const Board &rhs) const
+{
+	if (this->player_stat != rhs.player_stat) return false;
+	if (this->player_secrets != rhs.player_secrets) return false;
+	if (this->player_hand != rhs.player_hand) return false;
+	if (this->player_deck != rhs.player_deck) return false;
+	if (this->player_minions != rhs.player_minions) return false;
+
+	if (this->opponent_stat != rhs.opponent_stat) return false;
+	if (this->opponent_secrets != rhs.opponent_secrets) return false;
+	if (this->opponent_cards != rhs.opponent_cards) return false;
+	if (this->opponent_minions != rhs.opponent_minions) return false;
+
+	if (this->stage != rhs.stage) return false;
+	if (this->random_generator != rhs.random_generator) return false;
+
+	switch (this->stage) {
+	case STAGE_PLAYER_PUT_MINION:
+		if (this->data.player_put_minion_data.idx_hand_card != rhs.data.player_put_minion_data.idx_hand_card) return false;
+		if (this->data.player_put_minion_data.location != rhs.data.player_put_minion_data.location) return false;
+		break;
+
+	case GameEngine::STAGE_OPPONENT_PUT_MINION:
+		if (this->data.opponent_put_minion_data.card != rhs.data.opponent_put_minion_data.card) return false;
+		if (this->data.opponent_put_minion_data.location != rhs.data.opponent_put_minion_data.location) return false;
+		break;
+
+	case GameEngine::STAGE_PLAYER_ATTACK:
+		if (this->data.player_attack_data.attacker_idx != rhs.data.player_attack_data.attacker_idx) return false;
+		if (this->data.player_attack_data.attacked_idx != rhs.data.player_attack_data.attacked_idx) return false;
+		break;
+
+	case GameEngine::STAGE_OPPONENT_ATTACK:
+		if (this->data.opponent_attack_data.attacker_idx != rhs.data.opponent_attack_data.attacker_idx) return false;
+		if (this->data.opponent_attack_data.attacked_idx != rhs.data.opponent_attack_data.attacked_idx) return false;
+		break;
+
+	default:
+		break;
+	}
+
+	return true;
+}
 
 } // namespace GameEngine
 

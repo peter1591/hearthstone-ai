@@ -93,7 +93,7 @@ class StagePlayerChooseBoardMove
 			Move move;
 
 			move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
-			move.data.play_hand_card_minion_data.idx_hand_card = hand_card_idx;
+			move.data.play_hand_card_minion_data.idx_hand_card = (int)hand_card_idx;
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			for (size_t i=0; i<=board.player_minions.GetMinions().size(); ++i) {
