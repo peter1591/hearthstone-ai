@@ -2,26 +2,27 @@
 #define GAME_AI_TREE_H
 
 #include <vector>
+#include <unordered_map>
+#include <set>
 #include "game-engine/board.h"
 
 class TreeNode
 {
 	public:
-		typedef std::vector<TreeNode*> children_type;
+		typedef std::unordered_map<GameEngine::Board, TreeNode*> children_type;
 
 	public:
 		TreeNode() : wins(0), count(0) {}
 
-		void AddChild(TreeNode *node) {
-			this->children.push_back(node);
+		void AddChild(const GameEngine::Board &board, TreeNode *node) {
+			this->children.insert(std::make_pair(board, node));
 			node->parent = this;
 		}
 
-		void EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board);
+		void EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
 
 	public:
 		TreeNode *parent;
-		std::vector<TreeNode *> reachable_parents; // other nodes which can apply some kind of move to reach this node
 		children_type children;
 
 		GameEngine::Stage stage;
@@ -59,7 +60,7 @@ class Tree
 		TreeNode root_node;
 };
 
-inline void TreeNode::EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board)
+inline void TreeNode::EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const
 {
 	if (this->parent == nullptr) {
 		board = root_node_board;

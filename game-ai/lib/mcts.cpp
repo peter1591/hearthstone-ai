@@ -30,15 +30,15 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 	double total_simulations_ln = log((double)total_simulations);
 
-	TreeNode * max_weight_node = *it_child;
+	TreeNode * max_weight_node = it_child->second;
 
 	double max_weight = CalculateSelectionWeight(max_weight_node->wins, max_weight_node->count, total_simulations_ln, exploration_factor);
 
 	for (; it_child != children.end(); ++it_child) {
-		double weight = CalculateSelectionWeight((*it_child)->wins, (*it_child)->count, total_simulations_ln, exploration_factor);
+		double weight = CalculateSelectionWeight(it_child->second->wins, it_child->second->count, total_simulations_ln, exploration_factor);
 		if (weight > max_weight) {
 			max_weight = weight;
-			max_weight_node = *it_child;
+			max_weight_node = it_child->second;
 		}
 	}
 
@@ -65,7 +65,7 @@ void MCTS::Initialize(const GameEngine::Board &board)
 		tree.GetRootNode().is_player_node = false;
 	}
 
-	this->traversed_boards.Add(board, &this->tree.GetRootNode(), *this);
+	//this->traversed_boards.Add(board, &this->tree.GetRootNode(), *this);
 }
 
 TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board)
@@ -145,7 +145,6 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 
 	while (true)
 	{
-		GameEngine::Move move;
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 			delete new_node;
 			return node;
@@ -153,14 +152,19 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 
 		this->Expand(node, new_node->move, board);
 
-		// check if board has already been traversed via another path
-		TreeNode *node_found = this->traversed_boards.Find(board, *this);
-		if (node_found == nullptr) {
-			break; // this is a new board
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+			// check if random-generated game flow move has already expanded before
+			auto it_found = node->children.find(board);
+			if (it_found == node->children.end()) {
+				break; // new node
+			}
+			else {
+				node = this->Select(it_found->second, board);
+			}
 		}
-		// the board can be reached via another path
-		// --> select a node to expand among that subtree
-		node = this->Select(node_found, board);
+		else {
+			break; // always create a new node for non-random (i.e., non-game-flow) nodes
+		}
 	}
 
 #ifdef CHECK_MOVE_REAPPLIABLE
@@ -179,8 +183,8 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 		new_node->is_player_node = node->is_player_node; // follow the parent's status
 	}
 
-	node->AddChild(new_node);
-	this->traversed_boards.Add(board, new_node, *this);
+	node->AddChild(board, new_node);
+	//this->traversed_boards.Add(board, new_node, *this);
 
 	return new_node;
 }
@@ -230,17 +234,13 @@ bool MCTS::Simulate(GameEngine::Board &board)
 
 void MCTS::BackPropagate(TreeNode *node, bool is_win)
 {
+	// TODO: no need to use a queue now
 	std::queue<TreeNode *> queue;
-	std::unordered_set<TreeNode *> visited;
 	queue.push(node);
 
 	while (!queue.empty()) {
 		TreeNode *processing_node = queue.front();
 		queue.pop();
-
-		if (visited.find(processing_node) != visited.end()) {
-			continue;
-		}
 
 		if (processing_node->is_player_node) {
 			if (is_win == true) processing_node->wins++; // from the player's respect
@@ -250,14 +250,8 @@ void MCTS::BackPropagate(TreeNode *node, bool is_win)
 		}
 		processing_node->count++;
 
-		visited.insert(processing_node);
-
 		if (processing_node->parent != nullptr) {
 			queue.push(processing_node->parent);
-		}
-		for (auto reachable_parent : processing_node->reachable_parents) {
-			// TODO: accelrate?
-			queue.push(reachable_parent);
 		}
 	}
 }
@@ -281,7 +275,7 @@ void MCTS::PrintTree(TreeNode *node, int level, const int max_level)
 	}
 	std::cout << " " << node->wins << "/" << node->count << std::endl;
 	for (const auto &child: node->children) {
-		PrintTree(child, level+1, max_level);
+		PrintTree(child.second, level+1, max_level);
 	}
 }
 
@@ -289,10 +283,12 @@ static TreeNode *FindBestChildToPlay(TreeNode *node)
 {
 	if (node->children.empty()) throw std::runtime_error("failed");
 
-	TreeNode *most_simulated = node->children.front();
+	TreeNode *most_simulated = nullptr;
 	for (const auto &child: node->children) {
-		if (child->count > most_simulated->count) {
-			most_simulated = child;
+		if (most_simulated == nullptr ||
+			child.second->count > most_simulated->count)
+		{
+			most_simulated = child.second;
 		}
 	}
 
@@ -330,55 +326,30 @@ void MCTS::DebugPrint()
 	PrintBestRoute(10);
 }
 
-void MCTS::TraversedBoards_LowMemory::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)
+void MCTS::TraversedBoards::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
-
-	auto equal_range = this->data.equal_range(hash);
-
-	bool board_all_the_same = true;
-	for (auto it = equal_range.first; it != equal_range.second; ++it)
-	{
-		GameEngine::Board it_board;
-		it->second->EvaluateBoard(mcts.root_node_board, it_board);
-		if (board != it_board) {
-			board_all_the_same = false;
-		}
-	}
-	if (equal_range.first != equal_range.second) {
-		if (board_all_the_same == true) {
-			throw std::runtime_error("you should not add the same board twice");
-		}
-		else {
-			std::cout << "board collide" << std::endl;
-		}
-	}
-
 	this->data.insert(std::make_pair(hash, node));
 }
 
-TreeNode * MCTS::TraversedBoards_LowMemory::Find(const GameEngine::Board &board, const MCTS& mcts)
+TreeNode * MCTS::TraversedBoards::Find(const GameEngine::Board &board, const MCTS& mcts)
 {
+	TreeNode *ret = nullptr;
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 
 	auto equal_range = this->data.equal_range(hash);
-
-	if (std::distance(equal_range.first, equal_range.second) > 1) {
-		std::cout << "board collide" << std::endl;
-	}
 
 	for (auto it = equal_range.first; it != equal_range.second; ++it)
 	{
 		GameEngine::Board it_board;
 		it->second->EvaluateBoard(mcts.root_node_board, it_board);
 		if (board == it_board) {
-			return it->second; // found
+			ret = it->second; // found
+			break;
 		}
 	}
 
-	if (this->data.find(hash) == this->data.end()) {
-		return nullptr;
-	}
+	return ret;
 }
 
 void MCTS::TraversedBoards_HighMemory::Add(const GameEngine::Board &board, TreeNode *node, const MCTS&)
