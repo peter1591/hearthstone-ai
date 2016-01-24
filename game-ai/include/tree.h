@@ -17,6 +17,9 @@ class TreeNode
 			node->parent = this;
 		}
 
+		void EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board);
+
+	public:
 		TreeNode *parent;
 		std::vector<TreeNode *> reachable_parents; // other nodes which can apply some kind of move to reach this node
 		children_type children;
@@ -55,5 +58,22 @@ class Tree
 	private:
 		TreeNode root_node;
 };
+
+inline void TreeNode::EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board)
+{
+	if (this->parent == nullptr) {
+		board = root_node_board;
+		return;
+	}
+
+	this->parent->EvaluateBoard(root_node_board, board);
+	board.ApplyMove(this->move);
+
+#ifdef CHECK_MOVE_REAPPLIABLE
+	if (board != this->board) {
+		throw std::runtime_error("node board not match");
+	}
+#endif
+}
 
 #endif

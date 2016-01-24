@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include <iostream>
+#include <iterator>
 #include <queue>
 #include <unordered_set>
 #include <stdexcept>
@@ -46,7 +47,7 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 void MCTS::Initialize(const GameEngine::Board &board)
 {
-	this->rand_seed = time(NULL);
+	this->rand_seed = (unsigned int)time(NULL);
 
 	this->root_node_board = board;
 #ifdef CHECK_MOVE_REAPPLIABLE
@@ -64,7 +65,72 @@ void MCTS::Initialize(const GameEngine::Board &board)
 		tree.GetRootNode().is_player_node = false;
 	}
 
-	this->traversed_boards[board] = &tree.GetRootNode();
+	this->traversed_boards.Add(board, &this->tree.GetRootNode(), *this);
+}
+
+TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board)
+{
+	while (true)
+	{
+#ifdef CHECK_MOVE_REAPPLIABLE
+		if (board != node->board) {
+			throw std::runtime_error("board consistency check failed");
+		}
+#endif
+
+		if (node->children.empty()) {
+			return node;
+		}
+
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+			return node;
+		}
+
+		if (node->moves_not_yet_expanded.empty()) {
+			node = FindBestChildToExpand(node);
+			board.ApplyMove(node->move);
+			continue;
+		}
+		else {
+			return node;
+		}
+	}
+}
+
+void MCTS::Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board)
+{
+#ifdef DEBUG
+	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
+		throw std::runtime_error("a game-end stage should not be expanded");
+	}
+#endif
+
+#ifdef CHECK_MOVE_REAPPLIABLE
+	if (node->board != board) {
+		throw std::runtime_error("board consistency check failed");
+	}
+#endif
+
+	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
+	{
+		move = GameEngine::Move::GetGameFlowMove(rand());
+		board.ApplyMove(move);
+	}
+	else {
+		if (node->children.empty()) {
+			board.GetNextMoves(node->moves_not_yet_expanded);
+		}
+
+#ifdef DEBUG
+		if (node->moves_not_yet_expanded.empty()) {
+			throw std::runtime_error("a node with no non-expanded move should not be selected to be expanded");
+		}
+#endif
+
+		move = node->moves_not_yet_expanded.back();
+		node->moves_not_yet_expanded.pop_back();
+		board.ApplyMove(move);
+	}
 }
 
 // Find a node to expand, and expand it
@@ -72,87 +138,29 @@ void MCTS::Initialize(const GameEngine::Board &board)
 // @return the new node
 TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 {
-	TreeNode *expanding_node = &this->tree.GetRootNode();
-	board = this->root_node_board;
 	TreeNode *new_node = new TreeNode;
 
-	// Find a node to expand, and expand it.
-	// When loop exits:
-	//    'new_node' is expanded from 'expanding_node' with move 'new_node->move'
-	while (true) {
-		// Loop invariance:
-		//    'board' is the board of the node 'expanding_node'
-#ifdef CHECK_MOVE_REAPPLIABLE
-		if (board != expanding_node->board) {
-			throw std::runtime_error("board consistency check failed");
-		}
-#endif
+	board = this->root_node_board;
+	TreeNode *node = this->Select(&this->tree.GetRootNode(), board);
 
-		// if it's a leaf
-		if (expanding_node->children.empty()) {
-			if (expanding_node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-				return expanding_node;
-
-			} else if (expanding_node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-				new_node->move = GameEngine::Move::GetGameFlowMove(rand());
-				board.ApplyMove(new_node->move);
-				break;
-
-			} else {
-				board.GetNextMoves(expanding_node->moves_not_yet_expanded);
-				new_node->move = expanding_node->moves_not_yet_expanded.back();
-				board.ApplyMove(new_node->move);
-				expanding_node->moves_not_yet_expanded.pop_back();
-				break;
-			}
+	while (true)
+	{
+		GameEngine::Move move;
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
+			delete new_node;
+			return node;
 		}
 
-#ifdef DEBUG
-		if (expanding_node->count == 0) {
-			throw std::runtime_error("tree node has children, but simulation count is zero");
+		this->Expand(node, new_node->move, board);
+
+		// check if board has already been traversed via another path
+		TreeNode *node_found = this->traversed_boards.Find(board, *this);
+		if (node_found == nullptr) {
+			break; // this is a new board
 		}
-#endif
-
-		if (expanding_node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			// apply the game-flow move
-			new_node->move = GameEngine::Move::GetGameFlowMove(rand());
-			board.ApplyMove(new_node->move);
-
-			decltype(this->traversed_boards)::const_iterator it = this->traversed_boards.find(board);
-			if (it != this->traversed_boards.end()) {
-				// this node has been expanded before --> select the node in its sub-tree
-				if (it->second->parent != expanding_node) {
-					it->second->reachable_parents.push_back(expanding_node);
-				}
-				expanding_node = it->second;
-				continue;
-			} else {
-				break; // this is a new node
-			}
-
-		} else {
-#ifdef DEBUG
-			if (expanding_node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-				throw std::runtime_error("a game-end node should not has children nodes");
-			}
-#endif
-
-			if (expanding_node->moves_not_yet_expanded.empty()) {
-				expanding_node = FindBestChildToExpand(expanding_node);
-				if (expanding_node->parent == &this->tree.GetRootNode()) {
-				//	std::cout << "expanding root node, found node with count " << expanding_node->count << std::endl;
-				}
-				board.ApplyMove(expanding_node->move);
-				continue;
-
-			} else {
-				// some node has not yet been expanded, expand it
-				new_node->move = expanding_node->moves_not_yet_expanded.back();
-				board.ApplyMove(new_node->move);
-				expanding_node->moves_not_yet_expanded.pop_back();
-				break;
-			}
-		}
+		// the board can be reached via another path
+		// --> select a node to expand among that subtree
+		node = this->Select(node_found, board);
 	}
 
 #ifdef CHECK_MOVE_REAPPLIABLE
@@ -163,14 +171,16 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 
 	if (new_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
 		new_node->is_player_node = true;
-	} else if (new_node->stage_type == GameEngine::STAGE_TYPE_OPPONENT) {
+	}
+	else if (new_node->stage_type == GameEngine::STAGE_TYPE_OPPONENT) {
 		new_node->is_player_node = false;
-	} else {
-		new_node->is_player_node = expanding_node->is_player_node; // follow the parent's status
+	}
+	else {
+		new_node->is_player_node = node->is_player_node; // follow the parent's status
 	}
 
-	expanding_node->AddChild(new_node);
-	this->traversed_boards[board] = new_node;
+	node->AddChild(new_node);
+	this->traversed_boards.Add(board, new_node, *this);
 
 	return new_node;
 }
@@ -289,12 +299,12 @@ static TreeNode *FindBestChildToPlay(TreeNode *node)
 	return most_simulated;
 }
 
-void MCTS::PrintBestRoute()
+void MCTS::PrintBestRoute(int levels)
 {
 	TreeNode *node = &this->tree.GetRootNode();
 
 	int level = 0;
-	while (!node->children.empty()) {
+	while (!node->children.empty() && level <= levels) {
 
 		if (node->move.action != GameEngine::Move::ACTION_GAME_FLOW) {
 			PrintLevelPrefix(level);
@@ -308,7 +318,6 @@ void MCTS::PrintBestRoute()
 
 		node = FindBestChildToPlay(node);
 		//node = FindBestChildToExpand(node, 0.0);
-
 	}
 }
 
@@ -332,5 +341,58 @@ void MCTS::DebugPrint()
 	std::cout << "Estimate tree nodes size: " << tree_nodes_size << std::endl;
 
 	//PrintTree(&this->tree.GetRootNode(), 0, 2);
-	PrintBestRoute();
+	PrintBestRoute(5);
+}
+
+void MCTS::TraversedBoards::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)
+{
+	std::size_t hash = std::hash<GameEngine::Board>()(board);
+
+	auto equal_range = this->data.equal_range(hash);
+
+	bool board_all_the_same = true;
+	for (auto it = equal_range.first; it != equal_range.second; ++it)
+	{
+		GameEngine::Board it_board;
+		it->second->EvaluateBoard(mcts.root_node_board, it_board);
+		if (board != it_board) {
+			board_all_the_same = false;
+		}
+	}
+	if (equal_range.first != equal_range.second) {
+		if (board_all_the_same == true) {
+			throw std::runtime_error("you should not add the same board twice");
+		}
+		else {
+			std::cout << "board collide" << std::endl;
+		}
+	}
+
+	this->data.insert(std::make_pair(hash, node));
+}
+
+TreeNode * MCTS::TraversedBoards::Find(const GameEngine::Board &board, const MCTS& mcts)
+{
+	std::size_t hash = std::hash<GameEngine::Board>()(board);
+
+	auto equal_range = this->data.equal_range(hash);
+
+	if (std::distance(equal_range.first, equal_range.second) > 1) {
+		std::cout << "board collide" << std::endl;
+	}
+
+	for (auto it = equal_range.first; it != equal_range.second; ++it)
+	{
+		GameEngine::Board it_board;
+		it->second->EvaluateBoard(mcts.root_node_board, it_board);
+		if (board == it_board) {
+			return it->second; // found
+		}
+	}
+
+	if (this->data.find(hash) == this->data.end()) {
+		return nullptr;
+	}
+
+
 }

@@ -95,6 +95,7 @@ int main(void)
 
 	while (true) {
 		GameEngine::Board board;
+
 		TreeNode *node = mcts.SelectAndExpand(board);
 		bool is_win = mcts.Simulate(board);
 		mcts.BackPropagate(node, is_win);
