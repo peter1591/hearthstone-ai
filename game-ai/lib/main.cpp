@@ -67,22 +67,23 @@ void InitializeBoard(GameEngine::Board &board)
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(213, 2, 2, 3);
+	minion.Set(213, 3, 2, 3);
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 3, 1, 3);
+	minion.Set(333, 30, 3, 3);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
-	//board.SetStateToPlayerChooseBoardMove();
-	board.SetStateToPlayerTurnStart();
+	board.SetStateToPlayerChooseBoardMove();
+	//board.SetStateToPlayerTurnStart();
 }
 
 
 int main(void)
 {
 	MCTS mcts;
+	MCTS::TraversedPathInfo traversed_path_info;
 
 	GameEngine::Board board;
 
@@ -97,10 +98,11 @@ int main(void)
 
 	while (true) {
 		GameEngine::Board board;
+		traversed_path_info.Clear();
 
-		TreeNode *node = mcts.SelectAndExpand(board);
+		TreeNode *node = mcts.SelectAndExpand(board, traversed_path_info);
 		bool is_win = mcts.Simulate(board);
-		mcts.BackPropagate(node, is_win);
+		mcts.BackPropagate(traversed_path_info, is_win);
 
 		times++;
 
