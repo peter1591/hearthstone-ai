@@ -321,30 +321,16 @@ void MCTS::PrintBestRoute(int levels)
 	}
 }
 
-static void TotalTreeNodes(TreeNode *node, int &total)
-{
-	if (node == nullptr) return;
-	total++;
-	for (const auto &child : node->children) {
-		TotalTreeNodes(child, total);
-	}
-}
-
 void MCTS::DebugPrint()
 {
 	int tree_nodes = 0;
 	int tree_nodes_size = 0;
-	TotalTreeNodes(&this->tree.GetRootNode(), tree_nodes);
-	std::cout << "Total nodes: " << tree_nodes << std::endl;
-
-	tree_nodes_size = tree_nodes * sizeof(TreeNode);
-	std::cout << "Estimate tree nodes size: " << tree_nodes_size << std::endl;
 
 	//PrintTree(&this->tree.GetRootNode(), 0, 2);
-	PrintBestRoute(5);
+	PrintBestRoute(10);
 }
 
-void MCTS::TraversedBoards::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)
+void MCTS::TraversedBoards_LowMemory::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 
@@ -371,7 +357,7 @@ void MCTS::TraversedBoards::Add(const GameEngine::Board &board, TreeNode *node, 
 	this->data.insert(std::make_pair(hash, node));
 }
 
-TreeNode * MCTS::TraversedBoards::Find(const GameEngine::Board &board, const MCTS& mcts)
+TreeNode * MCTS::TraversedBoards_LowMemory::Find(const GameEngine::Board &board, const MCTS& mcts)
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 
@@ -393,6 +379,21 @@ TreeNode * MCTS::TraversedBoards::Find(const GameEngine::Board &board, const MCT
 	if (this->data.find(hash) == this->data.end()) {
 		return nullptr;
 	}
+}
 
+void MCTS::TraversedBoards_HighMemory::Add(const GameEngine::Board &board, TreeNode *node, const MCTS&)
+{
+	if (this->data.find(board) != this->data.end()) {
+		throw std::runtime_error("duplicate boards are inserted!");
+	}
 
+	this->data[board] = node;
+}
+
+TreeNode * MCTS::TraversedBoards_HighMemory::Find(const GameEngine::Board &board, const MCTS&)
+{
+	auto it = this->data.find(board);
+	if (it == this->data.end()) return nullptr;
+
+	return it->second;
 }

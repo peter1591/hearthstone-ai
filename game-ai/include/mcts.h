@@ -22,7 +22,7 @@ class MCTS
 		void DebugPrint();
 
 	private:
-		class TraversedBoards
+		class TraversedBoards_LowMemory
 		{
 		public:
 			void Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts);
@@ -32,6 +32,19 @@ class MCTS
 		private:
 			std::unordered_multimap<std::size_t, TreeNode *> data; // hash of board --> tree node
 		};
+
+		// save the board directly
+		class TraversedBoards_HighMemory
+		{
+		public:
+			void Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts);
+
+			TreeNode * Find(const GameEngine::Board &board, const MCTS& mcts);
+
+		private:
+			std::unordered_map<GameEngine::Board, TreeNode *> data; // hash of board --> tree node
+		};
+
 
 	private:
 		TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
@@ -44,7 +57,7 @@ class MCTS
 
 		GameEngine::Board root_node_board;
 		Tree tree;
-		TraversedBoards traversed_boards;
+		TraversedBoards_HighMemory traversed_boards;
 		unsigned int rand_seed;
 };
 

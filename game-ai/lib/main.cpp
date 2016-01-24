@@ -71,7 +71,7 @@ void InitializeBoard(GameEngine::Board &board)
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 30, 1, 3);
+	minion.Set(333, 3, 1, 3);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
@@ -93,6 +93,8 @@ int main(void)
 
 	int times = 0;
 
+	time_t start = time(NULL);
+
 	while (true) {
 		GameEngine::Board board;
 
@@ -103,6 +105,9 @@ int main(void)
 		times++;
 
 		if (times % 10000 == 0) {
+			time_t now = time(NULL);
+			int duration = now - start;
+			std::cout << "About " << (double)times / duration << " rounds per second" << std::endl;
 			mcts.DebugPrint();
 			//std::cout << "Press any key to continue..." << std::endl;
 			//std::cin.get();
