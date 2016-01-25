@@ -14,12 +14,8 @@ class TreeNode
 	public:
 		TreeNode() : wins(0), count(0) {}
 
-		void AddChild(TreeNode *node) {
-			this->children.push_back(node);
-			node->parent = this;
-		}
-
-		void EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
+		void AddChild(TreeNode *node);
+		void GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
 
 	public:
 		TreeNode *parent;
@@ -60,14 +56,20 @@ class Tree
 		TreeNode root_node;
 };
 
-inline void TreeNode::EvaluateBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const
+inline void TreeNode::AddChild(TreeNode *node)
+{
+	this->children.push_back(node);
+	node->parent = this;
+}
+
+inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const
 {
 	if (this->parent == nullptr) {
 		board = root_node_board;
 		return;
 	}
 
-	this->parent->EvaluateBoard(root_node_board, board);
+	this->parent->GetBoard(root_node_board, board);
 	board.ApplyMove(this->move);
 
 #ifdef CHECK_MOVE_REAPPLIABLE

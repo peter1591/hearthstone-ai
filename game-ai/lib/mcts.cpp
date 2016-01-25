@@ -253,7 +253,7 @@ void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
 	// so we also update them
 
 	GameEngine::Board board;
-	starting_node->EvaluateBoard(this->root_node_board, board);
+	starting_node->GetBoard(this->root_node_board, board);
 
 	auto updating_leaf_nodes = this->board_nodes_mapping.Find(board, *this);
 	for (const auto &updating_leaf_node : updating_leaf_nodes) {
@@ -356,7 +356,7 @@ std::unordered_set<TreeNode *> MCTS::BoardNodesMapping::Find(const GameEngine::B
 	auto possible_nodes = this->data[hash];
 	for (const auto &possible_node : possible_nodes) {
 		GameEngine::Board it_board;
-		possible_node->EvaluateBoard(mcts.root_node_board, it_board);
+		possible_node->GetBoard(mcts.root_node_board, it_board);
 		if (board == it_board) {
 			nodes.insert(possible_node);
 		}
