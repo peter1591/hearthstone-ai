@@ -373,13 +373,3 @@ std::unordered_set<TreeNode *> MCTS::BoardNodesMapping::Find(const GameEngine::B
 
 	return nodes;
 }
-
-void MCTS::BoardNodesMapping_HighMemory::Add(const GameEngine::Board &board, TreeNode *node, const MCTS&)
-{
-	this->data[board].insert(node);
-}
-
-std::unordered_set<TreeNode *> MCTS::BoardNodesMapping_HighMemory::Find(const GameEngine::Board &board, const MCTS&)
-{
-	return this->data[board];
-}

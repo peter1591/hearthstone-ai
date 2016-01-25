@@ -17,19 +17,6 @@ class MCTS
 		void DebugPrint();
 
 	private:
-
-		// save the board directly
-		class BoardNodesMapping_HighMemory
-		{
-		public:
-			void Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts);
-
-			std::unordered_set<TreeNode *> Find(const GameEngine::Board &board, const MCTS& mcts);
-
-		private:
-			std::unordered_map<GameEngine::Board, std::unordered_set<TreeNode *> > data; // board --> tree nodes
-		};
-
 		class BoardNodesMapping
 		{
 		public:
