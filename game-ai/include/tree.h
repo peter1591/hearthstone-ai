@@ -9,13 +9,13 @@
 class TreeNode
 {
 	public:
-		typedef std::unordered_map<GameEngine::Board, TreeNode*> children_type;
+		typedef std::list<TreeNode*> children_type;
 
 	public:
 		TreeNode() : wins(0), count(0) {}
 
-		void AddChild(const GameEngine::Board &board, TreeNode *node) {
-			this->children.insert(std::make_pair(board, node));
+		void AddChild(TreeNode *node) {
+			this->children.push_back(node);
 			node->parent = this;
 		}
 

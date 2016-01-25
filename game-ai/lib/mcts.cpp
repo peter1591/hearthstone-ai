@@ -10,7 +10,7 @@
 
 #include "mcts.h"
 
-#define EXLPORATION_FACTOR 2.0
+#define EXLPORATION_FACTOR 1.0
 
 static double CalculateSelectionWeight(
 		int node_win, int node_simulations, double total_simulations_ln, double exploration_factor)
@@ -30,15 +30,15 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 	double total_simulations_ln = log((double)total_simulations);
 
-	TreeNode * max_weight_node = it_child->second;
+	TreeNode * max_weight_node = *it_child;
 
 	double max_weight = CalculateSelectionWeight(max_weight_node->wins, max_weight_node->count, total_simulations_ln, exploration_factor);
 
 	for (; it_child != children.end(); ++it_child) {
-		double weight = CalculateSelectionWeight(it_child->second->wins, it_child->second->count, total_simulations_ln, exploration_factor);
+		double weight = CalculateSelectionWeight((*it_child)->wins, (*it_child)->count, total_simulations_ln, exploration_factor);
 		if (weight > max_weight) {
 			max_weight = weight;
-			max_weight_node = it_child->second;
+			max_weight_node = *it_child;
 		}
 	}
 
@@ -155,12 +155,25 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board, TraversedPathInfo &tr
 
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
 			// check if random-generated game flow move has already expanded before
-			auto it_found = node->children.find(board);
-			if (it_found == node->children.end()) {
-				break; // new node
+			auto it_possible_nodes = this->board_nodes_mapping.Find(board, *this);
+			TreeNode *found_node = nullptr;
+			for (const auto &it_possible_node : it_possible_nodes) {
+				if (it_possible_node->parent == node) {
+					found_node = it_possible_node;
+					break;
+				}
+			}
+
+			if (found_node != nullptr) {
+				// found --> this board is found via the parent node 'node' before
+				// --> select among that child node
+				node = this->Select(found_node, board, traversed_path_info);
+				continue;
 			}
 			else {
-				node = this->Select(it_found->second, board, traversed_path_info);
+				// not found --> this board is not found via the parent node 'node' before
+				// --> make a new node
+				break;
 			}
 		}
 		else {
@@ -184,7 +197,8 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board, TraversedPathInfo &tr
 		new_node->is_player_node = node->is_player_node; // follow the parent's status
 	}
 
-	node->AddChild(board, new_node);
+	node->AddChild(new_node);
+
 	traversed_path_info.Push(board, new_node);
 	board_nodes_mapping.Add(board, new_node, *this);
 
@@ -283,7 +297,7 @@ void MCTS::PrintTree(TreeNode *node, int level, const int max_level)
 	}
 	std::cout << " " << node->wins << "/" << node->count << std::endl;
 	for (const auto &child: node->children) {
-		PrintTree(child.second, level+1, max_level);
+		PrintTree(child, level+1, max_level);
 	}
 }
 
@@ -294,9 +308,9 @@ static TreeNode *FindBestChildToPlay(TreeNode *node)
 	TreeNode *most_simulated = nullptr;
 	for (const auto &child: node->children) {
 		if (most_simulated == nullptr ||
-			child.second->count > most_simulated->count)
+			child->count > most_simulated->count)
 		{
-			most_simulated = child.second;
+			most_simulated = child;
 		}
 	}
 
