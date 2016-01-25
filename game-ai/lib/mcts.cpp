@@ -68,7 +68,7 @@ void MCTS::Initialize(const GameEngine::Board &board)
 	this->board_nodes_mapping.Add(board, &tree.GetRootNode(), *this);
 }
 
-TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board, TraversedPathInfo &traversed_path_info)
+TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board)
 {
 	while (true)
 	{
@@ -77,7 +77,6 @@ TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board, TraversedPathI
 			throw std::runtime_error("board consistency check failed");
 		}
 #endif
-		traversed_path_info.Push(board, node);
 
 		if (node->children.empty()) {
 			return node;
@@ -137,12 +136,12 @@ void MCTS::Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &boa
 // Find a node to expand, and expand it
 // @param board [OUT] the new board of the node
 // @return the new node
-TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board, TraversedPathInfo &traversed_path_info)
+TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 {
 	TreeNode *new_node = new TreeNode;
 
 	board = this->root_node_board;
-	TreeNode *node = this->Select(&this->tree.GetRootNode(), board, traversed_path_info);
+	TreeNode *node = this->Select(&this->tree.GetRootNode(), board);
 
 	while (true)
 	{
@@ -167,7 +166,7 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board, TraversedPathInfo &tr
 			if (found_node != nullptr) {
 				// found --> this board is found via the parent node 'node' before
 				// --> select among that child node
-				node = this->Select(found_node, board, traversed_path_info);
+				node = this->Select(found_node, board);
 				continue;
 			}
 			else {
@@ -199,7 +198,6 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board, TraversedPathInfo &tr
 
 	node->AddChild(new_node);
 
-	traversed_path_info.Push(board, new_node);
 	board_nodes_mapping.Add(board, new_node, *this);
 
 	return new_node;
@@ -248,33 +246,28 @@ bool MCTS::Simulate(GameEngine::Board &board)
 	return (board.GetStage() == GameEngine::STAGE_WIN);
 }
 
-void MCTS::BackPropagate(TraversedPathInfo &info, bool is_win)
+void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
 {
+	// find all leaf nodes with the same board
+	// this simulation can also be seen as simulated from these leaf nodes
+	// so we also update them
+
 	GameEngine::Board board;
-	TreeNode *node; // dummy
+	starting_node->EvaluateBoard(this->root_node_board, board);
 
-	if (info.Pop(board, node) == false) {
-		return;
-	}
-
-	auto nodes = this->board_nodes_mapping.Find(board, *this);
-	for (const auto &node_same_board : nodes) {
-		this->BackPropagate(node_same_board, is_win);
-	}
-}
-
-void MCTS::BackPropagate(TreeNode *node, bool is_win)
-{
-	while (node != nullptr)
-	{
-		if (node->is_player_node) {
-			if (is_win == true) node->wins++; // from the player's respect
+	auto updating_leaf_nodes = this->board_nodes_mapping.Find(board, *this);
+	for (const auto &updating_leaf_node : updating_leaf_nodes) {
+		TreeNode *node = updating_leaf_node;
+		while (node != nullptr) {
+			if (node->is_player_node) {
+				if (is_win == true) node->wins++; // from the player's respect
+			}
+			else {
+				if (is_win == false) node->wins++; // from the opponent's respect
+			}
+			node->count++;
+			node = node->parent;
 		}
-		else {
-			if (is_win == false) node->wins++; // from the opponent's respect
-		}
-		node->count++;
-		node = node->parent;
 	}
 }
 

@@ -10,49 +10,16 @@
 class MCTS
 {
 	public:
-		class TraversedPathInfo
-		{
-		public:
-			void Push(GameEngine::Board board, TreeNode *node) {
-				NodeInfo info;
-				info.board = board;
-				info.node = node;
-				this->data.push_back(info);
-			}
-
-			bool Pop(GameEngine::Board &board, TreeNode * &node) {
-				if (data.empty()) return false;
-
-				NodeInfo info = this->data.back();
-				this->data.pop_back();
-				board = info.board;
-				node = info.node;
-				return true;
-			}
-
-			void Clear() {
-				this->data.clear();
-			}
-
-		private:
-			struct NodeInfo {
-				GameEngine::Board board;
-				TreeNode *node;
-			};
-			std::list<NodeInfo> data;
-		};
-
-	public:
 		void Initialize(const GameEngine::Board &board);
 
 		// Find a node to expand, and expand it
 		// @param board [OUT] the new board of the node
 		// @return the new node
-		TreeNode * SelectAndExpand(GameEngine::Board &board, TraversedPathInfo &traversed_path_info);
+		TreeNode * SelectAndExpand(GameEngine::Board &board);
 
 		bool Simulate(GameEngine::Board &board);
 
-		void BackPropagate(TraversedPathInfo &traversed_path_info, bool is_win);
+		void BackPropagate(TreeNode *node, bool is_win);
 
 		void DebugPrint();
 
@@ -82,12 +49,9 @@ class MCTS
 		};
 
 	private:
-		TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board, TraversedPathInfo &traversed_path_info);
+		TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
 		void Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
-
 		void SimulateWithBoard(GameEngine::Board &board);
-
-		void BackPropagate(TreeNode *node, bool is_win);
 
 		void PrintBestRoute(int levels);
 		void PrintTree(TreeNode *node, int level, const int max_level);

@@ -83,7 +83,6 @@ void InitializeBoard(GameEngine::Board &board)
 int main(void)
 {
 	MCTS mcts;
-	MCTS::TraversedPathInfo traversed_path_info;
 
 	GameEngine::Board board;
 
@@ -98,11 +97,10 @@ int main(void)
 
 	while (true) {
 		GameEngine::Board board;
-		traversed_path_info.Clear();
 
-		TreeNode *node = mcts.SelectAndExpand(board, traversed_path_info);
+		TreeNode *node = mcts.SelectAndExpand(board);
 		bool is_win = mcts.Simulate(board);
-		mcts.BackPropagate(traversed_path_info, is_win);
+		mcts.BackPropagate(node, is_win);
 
 		times++;
 
