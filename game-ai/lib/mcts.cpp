@@ -45,9 +45,9 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 	return max_weight_node;
 }
 
-void MCTS::Initialize(const GameEngine::Board &board)
+void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 {
-	this->rand_seed = (unsigned int)time(NULL);
+	this->rand_seed = rand_seed;
 
 	this->root_node_board = board;
 #ifdef CHECK_MOVE_REAPPLIABLE
@@ -339,6 +339,15 @@ void MCTS::DebugPrint()
 
 	//PrintTree(&this->tree.GetRootNode(), 0, 2);
 	PrintBestRoute(10);
+}
+
+void MCTS::Iterate()
+{
+	GameEngine::Board board;
+
+	TreeNode *node = this->SelectAndExpand(board);
+	bool is_win = this->Simulate(board);
+	this->BackPropagate(node, is_win);
 }
 
 void MCTS::BoardNodesMapping::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)

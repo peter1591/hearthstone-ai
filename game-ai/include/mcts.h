@@ -10,16 +10,9 @@
 class MCTS
 {
 	public:
-		void Initialize(const GameEngine::Board &board);
+		void Initialize(unsigned int rand_seed, const GameEngine::Board &starting_board);
 
-		// Find a node to expand, and expand it
-		// @param board [OUT] the new board of the node
-		// @return the new node
-		TreeNode * SelectAndExpand(GameEngine::Board &board);
-
-		bool Simulate(GameEngine::Board &board);
-
-		void BackPropagate(TreeNode *node, bool is_win);
+		void Iterate();
 
 		void DebugPrint();
 
@@ -49,13 +42,22 @@ class MCTS
 		};
 
 	private:
+		// Find a node to expand, and expand it
+		// @param board [OUT] the new board of the node
+		// @return the new node
+		TreeNode * SelectAndExpand(GameEngine::Board &board);
 		TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
 		void Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
+
+		bool Simulate(GameEngine::Board &board);
 		void SimulateWithBoard(GameEngine::Board &board);
+
+		void BackPropagate(TreeNode *node, bool is_win);
 
 		void PrintBestRoute(int levels);
 		void PrintTree(TreeNode *node, int level, const int max_level);
 
+	private:
 		GameEngine::Board root_node_board;
 		Tree tree;
 		BoardNodesMapping board_nodes_mapping;

@@ -89,19 +89,14 @@ int main(void)
 	InitializeBoard(board);
 	board.DebugPrint();
 
-	mcts.Initialize(board);
+	mcts.Initialize((unsigned int)time(NULL), board);
 
 	int times = 0;
 
 	time_t start = time(NULL);
 
 	while (true) {
-		GameEngine::Board board;
-
-		TreeNode *node = mcts.SelectAndExpand(board);
-		bool is_win = mcts.Simulate(board);
-		mcts.BackPropagate(node, is_win);
-
+		mcts.Iterate();
 		times++;
 
 		if (times % 10000 == 0) {
@@ -109,8 +104,6 @@ int main(void)
 			int duration = now - start;
 			std::cout << "About " << (double)times / duration << " rounds per second" << std::endl;
 			mcts.DebugPrint();
-			//std::cout << "Press any key to continue..." << std::endl;
-			//std::cin.get();
 		}
 	}
 
