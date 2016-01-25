@@ -39,11 +39,11 @@
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp">
       <Filter>Source Files\game-engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\main.cpp">
-      <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
       <Filter>Source Files\game-ai</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

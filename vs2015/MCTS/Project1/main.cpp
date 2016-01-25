@@ -61,7 +61,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 	InitializeDeck1(deck_database, board.player_deck);
 	InitializeHand1(deck_database, board.player_hand);
-	
+
 	GameEngine::Minion minion;
 	minion.Set(111, 1, 1, 1);
 	minion.TurnStart();
