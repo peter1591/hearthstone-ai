@@ -1,6 +1,7 @@
 #ifndef GAME_ENGINE_MOVE_H
 #define GAME_ENGINE_MOVE_H
 
+#include <functional>
 #include <string>
 #include "card.h"
 
@@ -9,7 +10,7 @@ namespace GameEngine {
 class Move
 {
 	public:
-		enum {
+		enum Action {
 			ACTION_UNKNOWN,
 			ACTION_GAME_FLOW,
 			ACTION_PLAY_HAND_CARD_MINION,
@@ -17,7 +18,7 @@ class Move
 			ACTION_PLAYER_ATTACK,
 			ACTION_OPPONENT_ATTACK,
 			ACTION_END_TURN,
-		} action;
+		};
 
 		struct GameFlowData {
 			unsigned int rand_seed;
@@ -74,6 +75,7 @@ class Move
 		}
 
 	public:
+		Action action;
 		Data data;
 };
 
@@ -126,5 +128,56 @@ inline bool Move::operator!=(const Move &rhs) const
 }
 
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::Move> {
+		typedef GameEngine::Move argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, hash<int>()(s.action));
+
+			// hash for the union
+			switch (s.action) {
+			case GameEngine::Move::ACTION_UNKNOWN:
+				break;
+
+			case GameEngine::Move::ACTION_GAME_FLOW:
+				GameEngine::hash_combine(result, hash<unsigned int>()(s.data.game_flow_data.rand_seed));
+				break;
+
+			case GameEngine::Move::ACTION_PLAY_HAND_CARD_MINION:
+				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.idx_hand_card));
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.location));
+#endif
+				break;
+
+			case GameEngine::Move::ACTION_OPPONENT_PLAY_MINION:
+				GameEngine::hash_combine(result, hash<GameEngine::Card>()(s.data.opponent_play_minion_data.card));
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+				GameEngine::hash_combine(result, hash<int>()(s.data.opponent_play_minion_data.location));
+#endif
+				break;
+
+			case GameEngine::Move::ACTION_PLAYER_ATTACK:
+				GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacked_idx));
+				GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacker_idx));
+				break;
+
+			case GameEngine::Move::ACTION_OPPONENT_ATTACK:
+				GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacked_idx));
+				GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacker_idx));
+				break;
+
+			case GameEngine::Move::ACTION_END_TURN:
+				break;
+			}
+
+			return result;
+		}
+	};
+}
 
 #endif
