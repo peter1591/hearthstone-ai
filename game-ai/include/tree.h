@@ -22,6 +22,8 @@ class TreeNode
 		void AddChild(TreeNode *node);
 		void GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
 
+		static void CopyWithoutChildren(const TreeNode &source, TreeNode &target);
+
 	public:
 		TreeNode *parent;
 		children_type children;
@@ -75,7 +77,6 @@ class Tree
 		static void ClearSubtree(TreeNode *node);
 		static void CopySubtree(const TreeNode *source, TreeNode *target, std::function<void(TreeNode*, TreeNode*)> node_update_callback);
 		static bool CompareSubtree(const TreeNode *lhs, const TreeNode *rhs);
-		static void CopyNodeWithoutChildren(const TreeNode &source, TreeNode &target);
 
 	private:
 		TreeNode root_node;
@@ -162,7 +163,7 @@ inline void Tree::ClearSubtree(TreeNode *node)
 	node->children.clear();
 }
 
-inline void Tree::CopyNodeWithoutChildren(const TreeNode &source, TreeNode &target)
+inline void TreeNode::CopyWithoutChildren(const TreeNode &source, TreeNode &target)
 {
 	target.parent = nullptr;
 	target.stage = source.stage;
@@ -188,7 +189,7 @@ inline void Tree::CopySubtree(const TreeNode *source, TreeNode *target, std::fun
 	for (const auto &child : source->children)
 	{
 		TreeNode *new_node = new TreeNode;
-		CopyNodeWithoutChildren(*child, *new_node);
+		TreeNode::CopyWithoutChildren(*child, *new_node);
 		target->AddChild(new_node);
 		node_update_callback(child, new_node);
 
@@ -202,7 +203,7 @@ inline Tree Tree::Clone(std::function<void(TreeNode*, TreeNode*)> node_update_ca
 
 	new_tree.root_node.parent = nullptr;
 	new_tree.root_node.children.clear();
-	CopyNodeWithoutChildren(this->root_node, new_tree.root_node);
+	TreeNode::CopyWithoutChildren(this->root_node, new_tree.root_node);
 
 	// copy child nodes
 	Tree::CopySubtree(&this->root_node, &new_tree.root_node, node_update_callback);

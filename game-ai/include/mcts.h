@@ -25,6 +25,8 @@ class MCTS
 
 		void Iterate();
 
+		void Merge(const MCTS&& rhs);
+
 		void DebugPrint();
 
 	private:
@@ -58,6 +60,11 @@ class MCTS
 		void SimulateWithBoard(GameEngine::Board &board);
 
 		void BackPropagate(TreeNode *node, bool is_win);
+
+		void MergeMCTSNodes(const TreeNode *source, TreeNode *target);
+		void MergeMCTSNodeToParent(const TreeNode *source, TreeNode *parent,
+			const std::unordered_map<GameEngine::Move, TreeNode*> &parent_move_map,
+			std::unordered_set<GameEngine::Move> &parent_rest_moves);
 
 		void PrintBestRoute(int levels);
 		void PrintTree(TreeNode *node, int level, const int max_level);

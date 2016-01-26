@@ -2,6 +2,7 @@
 #include <time.h>
 #include <math.h>
 
+#include <unordered_map>
 #include <map>
 #include <random>
 #include <iostream>
@@ -339,7 +340,7 @@ void MCTS::DebugPrint()
 	int tree_nodes = 0;
 	int tree_nodes_size = 0;
 
-	//PrintTree(&this->tree.GetRootNode(), 0, 2);
+	//PrintTree(&this->tree.GetRootNode(), 0, 20);
 	PrintBestRoute(10);
 }
 
@@ -465,4 +466,114 @@ bool MCTS::BoardNodesMapping::operator==(const MCTS::BoardNodesMapping &rhs) con
 bool MCTS::BoardNodesMapping::operator!=(const MCTS::BoardNodesMapping &rhs) const
 {
 	return !(*this == rhs);
+}
+
+void MCTS::MergeMCTSNodeToParent(const TreeNode *source, TreeNode *parent,
+	const std::unordered_map<GameEngine::Move, TreeNode*> &parent_move_map,
+	std::unordered_set<GameEngine::Move> &parent_rest_moves)
+{
+	if (source->move.action == GameEngine::Move::ACTION_GAME_FLOW) {
+		if (!parent->moves_not_yet_expanded.empty()) {
+			throw std::runtime_error("this should be a game-flow stage, thus should have no non-expanded moves");
+		}
+
+		GameEngine::Board board;
+		parent->GetBoard(this->root_node_board, board);
+		board.ApplyMove(source->move);
+
+		// check if this board has already expanded in parent
+		auto it_possible_nodes = this->board_nodes_mapping.Find(board, *this);
+		TreeNode *found_node = nullptr;
+		for (const auto &it_possible_node : it_possible_nodes) {
+			if (it_possible_node->parent == parent) {
+				found_node = it_possible_node;
+				break;
+			}
+		}
+
+		if (found_node != nullptr) {
+			// merge node data
+			this->MergeMCTSNodes(source, found_node);
+		}
+		else {
+			// not found --> this board is not found via the parent node 'node' before
+			// --> make a new node
+			TreeNode *new_node = new TreeNode;
+			TreeNode::CopyWithoutChildren(*source, *new_node);
+			parent->AddChild(new_node);
+			this->MergeMCTSNodes(source, new_node);
+		}
+	}
+	else {
+		auto it_merging_child = parent_move_map.find(source->move);
+		if (it_merging_child != parent_move_map.end()) {
+			// this move has been traversed in the target
+			// --> merge node
+			this->MergeMCTSNodes(source, it_merging_child->second);
+		}
+		else {
+			// this move has not been traversed yet
+			// make a new node
+			TreeNode *new_node = new TreeNode;
+			TreeNode::CopyWithoutChildren(*source, *new_node);
+			parent->AddChild(new_node);
+			parent_rest_moves.erase(source->move);
+			this->MergeMCTSNodes(source, new_node);
+		}
+	}
+}
+
+void MCTS::MergeMCTSNodes(const TreeNode *source, TreeNode *target)
+{
+#ifdef DEBUG
+	if (source->stage != target->stage) throw std::runtime_error("consistency check error");
+	if (source->stage_type != target->stage_type) throw std::runtime_error("consistency check error");
+	if (source->is_player_node != target->is_player_node) throw std::runtime_error("consistency check error");
+	if (source->move != target->move) throw std::runtime_error("consistency check error");
+#endif
+
+	target->wins += source->wins;
+	target->count += source->count;
+
+	if (target->children.empty())
+	{
+		// move sub-tree directly
+		target->moves_not_yet_expanded = std::move(source->moves_not_yet_expanded);
+		target->children = std::move(source->children);
+		for (const auto &child : target->children) {
+			child->parent = target;
+		}
+		return;
+	}
+
+	std::unordered_map<GameEngine::Move, TreeNode*> parent_move_map;
+	for (const auto &target_child : target->children) {
+		parent_move_map.insert(std::make_pair(target_child->move, target_child));
+	}
+
+	auto source_rest_moves = source->moves_not_yet_expanded;
+	std::unordered_set<GameEngine::Move> target_rest_moves;
+
+	for (const auto &target_rest_move : target->moves_not_yet_expanded) {
+		target_rest_moves.insert(target_rest_move);
+	}
+
+	for (const auto &source_child : source->children) {
+		this->MergeMCTSNodeToParent(source_child, target, parent_move_map, target_rest_moves);
+	}
+
+	target->moves_not_yet_expanded.clear();
+	for (const auto &target_rest_move : target_rest_moves) {
+		target->moves_not_yet_expanded.push_back(target_rest_move);
+	}
+}
+
+void MCTS::Merge(const MCTS&& rhs)
+{
+	if (this->root_node_board != rhs.root_node_board)
+	{
+		throw std::runtime_error("MCTS with different root boards cannot be merged");
+	}
+
+	this->MergeMCTSNodes(&rhs.tree.GetRootNode(), &this->tree.GetRootNode());
 }
