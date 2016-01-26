@@ -102,7 +102,9 @@ class StageOpponentChooseBoardMove
 		{
 			const Move::OpponentPlayMinionData &data = move.data.opponent_play_minion_data;
 			board.data.opponent_put_minion_data.card = data.card;
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.data.opponent_put_minion_data.location = data.location;
+#endif
 			board.stage = STAGE_OPPONENT_PUT_MINION;
 		}
 

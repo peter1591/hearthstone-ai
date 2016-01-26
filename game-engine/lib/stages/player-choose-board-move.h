@@ -111,7 +111,9 @@ class StagePlayerChooseBoardMove
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
 
 			board.data.player_put_minion_data.idx_hand_card = data.idx_hand_card;
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.data.player_put_minion_data.location = data.location;
+#endif
 
 			board.stage = STAGE_PLAYER_PUT_MINION;
 		}

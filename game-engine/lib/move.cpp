@@ -17,13 +17,17 @@ std::string Move::GetDebugString() const
 			break;
 
 		case Move::ACTION_PLAY_HAND_CARD_MINION:
-			oss << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.idx_hand_card
-				<< ", put location = " << this->data.play_hand_card_minion_data.location;
+			oss << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.idx_hand_card;
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+			oss << ", put location = " << this->data.play_hand_card_minion_data.location;
+#endif
 			break;
 
 		case Move::ACTION_OPPONENT_PLAY_MINION:
-			oss << "[Opponent play minion] card: " << this->data.opponent_play_minion_data.card.id
-				<< ", put location = " << this->data.opponent_play_minion_data.location;
+			oss << "[Opponent play minion] card: " << this->data.opponent_play_minion_data.card.id;
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+			oss << ", put location = " << this->data.opponent_play_minion_data.location;
+#endif
 			break;
 
 		case Move::ACTION_PLAYER_ATTACK:
