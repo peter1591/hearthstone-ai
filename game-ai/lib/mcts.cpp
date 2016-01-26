@@ -2,6 +2,8 @@
 #include <time.h>
 #include <math.h>
 
+#include <map>
+#include <random>
 #include <iostream>
 #include <iterator>
 #include <queue>
@@ -47,7 +49,7 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 {
-	this->rand_seed = rand_seed;
+	this->random_generator.seed(rand_seed);
 
 	this->root_node_board = board;
 #ifdef CHECK_MOVE_REAPPLIABLE
@@ -113,7 +115,7 @@ void MCTS::Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &boa
 
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
 	{
-		move = GameEngine::Move::GetGameFlowMove(rand());
+		move = GameEngine::Move::GetGameFlowMove(this->GetRandom());
 		board.ApplyMove(move);
 	}
 	else {
@@ -211,7 +213,7 @@ void MCTS::SimulateWithBoard(GameEngine::Board &board)
 		GameEngine::StageType stage_type = board.GetStageType();
 
 		if (stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			board.ApplyMove(GameEngine::Move::GetGameFlowMove(rand()));
+			board.ApplyMove(GameEngine::Move::GetGameFlowMove(this->GetRandom()));
 
 		} else if (stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 			return;
@@ -226,7 +228,7 @@ void MCTS::SimulateWithBoard(GameEngine::Board &board)
 #endif
 
 			// do random move here
-			int choose_move = rand() % next_moves.size();
+			int choose_move = this->GetRandom() % next_moves.size();
 			board.ApplyMove(next_moves[choose_move]);
 		}
 	}
@@ -372,4 +374,95 @@ std::unordered_set<TreeNode *> MCTS::BoardNodesMapping::Find(const GameEngine::B
 	}
 
 	return nodes;
+}
+
+void MCTS::BoardNodesMapping::UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map)
+{
+	for (auto &node : this->data) {
+		auto &origin_nodes = node.second;
+		std::unordered_set<TreeNode*> new_nodes;
+		for (const auto &origin_pointer : origin_nodes) {
+			auto it_new_pointer = node_map.find(origin_pointer);
+			if (it_new_pointer == node_map.end())
+			{
+				new_nodes.insert(origin_pointer); // this node is not modified
+			}
+			else {
+				new_nodes.insert(it_new_pointer->second); // this node is modified
+			}
+		}
+		node.second = std::move(new_nodes);
+	}
+}
+
+MCTS::MCTS()
+{
+}
+
+MCTS::MCTS(const MCTS& rhs)
+{
+	*this = rhs;
+}
+
+MCTS::MCTS(MCTS&& rhs)
+{
+	*this = std::move(rhs);
+}
+
+MCTS & MCTS::operator=(const MCTS& rhs)
+{
+	std::unordered_map<TreeNode *, TreeNode *> node_update_map;
+	auto node_update_callback = [&node_update_map](TreeNode *origin_pointer, TreeNode *new_pointer) {
+		node_update_map.insert(std::make_pair(origin_pointer, new_pointer));
+	};
+
+	this->root_node_board = rhs.root_node_board;
+	this->tree = rhs.tree.Clone(node_update_callback);
+	this->board_nodes_mapping = rhs.board_nodes_mapping;
+	this->board_nodes_mapping.UpdateNodePointers(node_update_map);
+	this->random_generator = rhs.random_generator;
+
+	return *this;
+}
+
+MCTS & MCTS::operator=(MCTS&& rhs)
+{
+	this->root_node_board = std::move(rhs.root_node_board);
+	this->tree = std::move(rhs.tree);
+	this->board_nodes_mapping = std::move(rhs.board_nodes_mapping);
+	this->random_generator = std::move(rhs.random_generator);
+	return *this;
+}
+
+bool MCTS::operator==(const MCTS& rhs) const
+{
+	if (this->root_node_board != rhs.root_node_board) return false;
+	if (this->tree != rhs.tree) return false;
+
+	// skip checking for internal consistency data
+	// if (this->board_nodes_mapping != rhs.board_nodes_mapping) return false;
+
+	if (this->random_generator != rhs.random_generator) return false;
+
+	return true;
+}
+
+bool MCTS::operator!=(const MCTS& rhs) const
+{
+	return !(*this == rhs);
+}
+
+int MCTS::GetRandom()
+{
+	return this->random_generator();
+}
+
+bool MCTS::BoardNodesMapping::operator==(const MCTS::BoardNodesMapping &rhs) const
+{
+	return this->data == rhs.data;
+}
+
+bool MCTS::BoardNodesMapping::operator!=(const MCTS::BoardNodesMapping &rhs) const
+{
+	return !(*this == rhs);
 }

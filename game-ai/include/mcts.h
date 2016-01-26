@@ -1,6 +1,7 @@
 #ifndef GAME_AI_MCTS_H
 #define GAME_AI_MCTS_H
 
+#include <random>
 #include <list>
 #include <unordered_map>
 #include <unordered_set>
@@ -9,6 +10,16 @@
 
 class MCTS
 {
+	public:
+		MCTS();
+		MCTS(const MCTS&);
+		MCTS &operator=(const MCTS&);
+		MCTS(MCTS&&);
+		MCTS &operator=(MCTS&&);
+
+		bool operator==(const MCTS&) const;
+		bool operator!=(const MCTS&) const;
+
 	public:
 		void Initialize(unsigned int rand_seed, const GameEngine::Board &starting_board);
 
@@ -20,7 +31,12 @@ class MCTS
 		class BoardNodesMapping
 		{
 		public:
+			bool operator==(const BoardNodesMapping &rhs) const;
+			bool operator!=(const BoardNodesMapping &rhs) const;
+
+		public:
 			void Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts);
+			void UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map);
 
 			std::unordered_set<TreeNode *> Find(const GameEngine::Board &board, const MCTS& mcts);
 
@@ -29,6 +45,8 @@ class MCTS
 		};
 
 	private:
+		int GetRandom();
+
 		// Find a node to expand, and expand it
 		// @param board [OUT] the new board of the node
 		// @return the new node
@@ -48,7 +66,7 @@ class MCTS
 		GameEngine::Board root_node_board;
 		Tree tree;
 		BoardNodesMapping board_nodes_mapping;
-		unsigned int rand_seed;
+		std::mt19937 random_generator;
 };
 
 #endif
