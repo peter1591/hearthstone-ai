@@ -1,9 +1,7 @@
 #include <time.h>
-#include <map>
-#include <iostream>
-
+#include <chrono>
 #include "game-engine/deck-database.h"
-#include "task.h"
+#include "mcts.h"
 #include "decider.h"
 
 void InitializeDeck1(const GameEngine::DeckDatabase &deck_database, GameEngine::Deck &deck)
@@ -70,7 +68,7 @@ void InitializeBoard(GameEngine::Board &board)
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 2, 3, 3);
+	minion.Set(333, 10, 3, 3);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
@@ -78,85 +76,117 @@ void InitializeBoard(GameEngine::Board &board)
 	//board.SetStateToPlayerTurnStart();
 }
 
-static void Run()
+static void TestOperators()
 {
-	constexpr int threads = 4;
-	constexpr int sec_each_run = 1;
-
+	constexpr int threads = 2;
+	MCTS mcts_debug;
 	MCTS mcts[threads];
-	std::vector<Task*> tasks;
-	std::map<Task*, Task::PauseNotifier*> pause_notifiers;
-
+	unsigned int rand_seed = (unsigned int)time(NULL);
 	GameEngine::Board board;
+
 	InitializeBoard(board);
-	board.DebugPrint();
 
 	for (int i = 0; i < threads; ++i) {
-		//mcts[i].Initialize((unsigned int)time(nullptr), board);
-		mcts[i].Initialize(i, board);
-		Task *new_task = new Task(&mcts[i]);
-		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
-		tasks.push_back(new_task);
+		mcts[i].Initialize(rand_seed, board);
+	}
+	mcts_debug.Initialize(rand_seed, board);
 
-		pause_notifiers[new_task] = new Task::PauseNotifier;
+	for (int times = 0; ; ++times)
+	{
+		mcts[0].Iterate();
+		mcts_debug.Iterate();
 
-		auto now = std::chrono::steady_clock::now();
-		auto run_until = now + std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
-		new_task->Start(run_until, pause_notifiers[new_task]);
+		if (mcts[0] != mcts_debug) // test comparison
+		{
+			throw std::runtime_error("check failed");
+		}
+
+		mcts[1] = mcts[0]; // test copy
+		if (mcts[0] != mcts[1]) {
+			throw std::runtime_error("check failed");
+		}
+
+		mcts[1].Iterate();
+		mcts_debug.Iterate();
+		if (mcts[1] != mcts_debug)
+		{
+			throw std::runtime_error("check failed");
+		}
+
+		mcts[0] = std::move(mcts[1]); // test move
+
+		if (times % 1000 == 0) {
+			Decider decider(std::move(mcts_debug));
+			decider.DebugPrint();
+		}
+	}
+}
+
+static void TestMerge()
+{
+	constexpr int threads = 4;
+	MCTS mcts[threads];
+	GameEngine::Board board;
+
+	InitializeBoard(board);
+
+	for (int i = 0; i < threads; ++i) {
+		mcts[i].Initialize((unsigned int)time(NULL), board);
 	}
 
 	auto start = std::chrono::steady_clock::now();
-	for (int times = 0;; times++)
+	for (int times = 0;; ++times)
 	{
-		MCTS mcts_copy[threads];
+		MCTS mcts_copy;
 
-		int elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
-
-		std::cout << "Waiting... (Elasped " << elapsed_ms << "ms)" << std::endl;
-		std::cout.flush();
-		for (const auto &task : tasks)
-		{
-			pause_notifiers[task]->WaitUntilPaused();
+		for (int i = 0; i < threads; ++i) {
+			for (int j = 0; j < 1000; ++j) {
+				mcts[i].Iterate();
+			}
 		}
 
-		std::cout << "Copying..." << std::endl;
-		std::cout.flush();
-		for (int i = 0; i < threads; ++i) mcts_copy[i] = mcts[0];
-
-		// start all threads for 10 second
-		std::cout << "Resuming..." << std::endl;
-		std::cout.flush();
-		auto now = std::chrono::steady_clock::now();
-		auto run_until = now + std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
-		for (const auto &task : tasks)
-		{
-			task->Start(run_until, pause_notifiers[task]);
-		}
-
-		std::cout << "Merging..." << std::endl;
-		std::cout.flush();
-		Decider decider(std::move(mcts_copy[0]));
+		mcts_copy = mcts[0];
+		Decider decider(std::move(mcts_copy));
 		for (int i = 1; i < threads; ++i) {
-			decider.Merge(std::move(mcts_copy[i]));
+			mcts_copy = mcts[i];
+			decider.Merge(std::move(mcts_copy));
 		}
-		decider.DebugPrint();
-	}
 
-	for (const auto &task : tasks)
-	{
-		task->Stop();
-	}
-	for (const auto &task : tasks)
-	{
-		task->Join();
-	}
+		if (times % 1 == 0)
+		{
+			decider.DebugPrint();
 
-	std::cout << "Threads stopped" << std::endl;
+			auto now = std::chrono::steady_clock::now();
+			auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+			auto avg = (double)elapsed_ms / times;
+			std::cout << "Average: " << avg << " ms per iteration" << std::endl;
+		}
+	}
+}
+
+static void TestBasic()
+{
+	MCTS mcts;
+	unsigned int rand_seed = (unsigned int)time(NULL);
+	GameEngine::Board board;
+
+	InitializeBoard(board);
+
+	mcts.Initialize(rand_seed, board);
+
+	for (int times = 0;; ++times)
+	{
+		mcts.Iterate();
+		if (times % 10000 == 0) {
+			Decider decider(std::move(mcts));
+			decider.DebugPrint();
+		}
+	}
 }
 
 int main(void)
 {
-	Run();
-
-	return 0;
+	//TestBasic();
+	//TestOperators();
+	TestMerge();
 }

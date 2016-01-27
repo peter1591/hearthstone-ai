@@ -7,32 +7,29 @@
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Source Files\game-ai">
-      <UniqueIdentifier>{534157e3-e460-4f7a-b6d3-15a3c97895b8}</UniqueIdentifier>
+      <UniqueIdentifier>{5a3f04d7-9ed6-4ac6-8f78-ca1a8540e7d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\game-engine">
-      <UniqueIdentifier>{76ab9bee-39f7-4323-8abb-18eb7f7216e7}</UniqueIdentifier>
+      <UniqueIdentifier>{1ab49289-278a-4840-a782-02c7e508f2b1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game-ai">
-      <UniqueIdentifier>{fe25da21-6a3c-437a-9f9d-243c8cfb606e}</UniqueIdentifier>
+      <UniqueIdentifier>{335b066d-b918-4a1f-b950-c485e71e7caa}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game-engine">
-      <UniqueIdentifier>{4b4492a5-687e-4dcd-aeb8-aeaef5a99e07}</UniqueIdentifier>
+      <UniqueIdentifier>{f218c91a-812a-4655-bd2e-0ada3b7ca070}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\game-engine\stages">
-      <UniqueIdentifier>{1ed2234c-518f-49bc-b0f9-9274a63b977d}</UniqueIdentifier>
+      <UniqueIdentifier>{ac8d647e-0115-4745-acc8-39fe15a75c16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
@@ -45,8 +42,8 @@
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp">
       <Filter>Source Files\game-engine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\task.cpp">
-      <Filter>Source Files\game-ai</Filter>
+    <ClCompile Include="merge-test.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp">
       <Filter>Source Files\game-ai</Filter>
@@ -154,18 +151,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h">
       <Filter>Header Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\task.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\decider.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\mcts-merger.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\board-node-map.h">
-      <Filter>Header Files\game-ai</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
