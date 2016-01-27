@@ -53,7 +53,7 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	this->random_generator.seed(rand_seed);
 
 	this->root_node_board = board;
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	tree.GetRootNode().board = board;
 #endif
 	tree.GetRootNode().stage = board.GetStage();
@@ -75,7 +75,7 @@ TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board)
 {
 	while (true)
 	{
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 		if (board != node->board) {
 			throw std::runtime_error("board consistency check failed");
 		}
@@ -108,7 +108,7 @@ void MCTS::Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &boa
 	}
 #endif
 
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	if (node->board != board) {
 		throw std::runtime_error("board consistency check failed");
 	}
@@ -183,7 +183,7 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 		}
 	}
 
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	new_node->board = board;
 #endif
 	new_node->stage = board.GetStage();

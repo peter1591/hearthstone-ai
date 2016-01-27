@@ -59,7 +59,7 @@ void MCTSMerger::MergeToParent(TreeNode *source, TreeNode *parent, const GameEng
 	GameEngine::Board board = parent_board;
 	board.ApplyMove(source->move);
 
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	if (source->board != board) throw std::runtime_error("consistency check failed");
 #endif
 

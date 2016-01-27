@@ -9,4 +9,4 @@ CFLAGS_PROJECT  += -Wall -Wpedantic -Wextra -g -static
 CFLAGS_PROJECT += -DDEBUG
 
 # check if move can re-applied determinstically
-CFLAGS_PROJECT += -DCHECK_MOVE_REAPPLIABLE
+CFLAGS_PROJECT += -DDEBUG_SAVE_BOARD

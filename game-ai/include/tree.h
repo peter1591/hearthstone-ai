@@ -30,7 +30,7 @@ class TreeNode
 
 		GameEngine::Stage stage;
 		GameEngine::StageType stage_type;
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 		GameEngine::Board board;
 #endif
 
@@ -93,7 +93,7 @@ inline TreeNode & TreeNode::operator=(TreeNode &&rhs)
 	this->children = std::move(rhs.children);
 	this->stage = rhs.stage;
 	this->stage_type = rhs.stage_type;
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	this->board = std::move(rhs.board);
 #endif
 	this->move = std::move(rhs.move);
@@ -120,7 +120,7 @@ inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEng
 	this->parent->GetBoard(root_node_board, board);
 	board.ApplyMove(this->move);
 
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	if (board != this->board) {
 		throw std::runtime_error("node board not match");
 	}
@@ -168,7 +168,7 @@ inline void TreeNode::CopyWithoutChildren(const TreeNode &source, TreeNode &targ
 	target.parent = nullptr;
 	target.stage = source.stage;
 	target.stage_type = source.stage_type;
-#ifdef CHECK_MOVE_REAPPLIABLE
+#ifdef DEBUG_SAVE_BOARD
 	target.board = source.board;
 #endif
 	target.move = source.move;
