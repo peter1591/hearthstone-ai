@@ -207,7 +207,7 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 	return new_node;
 }
 
-void MCTS::SimulateWithBoard(GameEngine::Board &board)
+bool MCTS::Simulate(GameEngine::Board &board)
 {
 	while (true) {
 		std::vector<GameEngine::Move> next_moves;
@@ -218,7 +218,7 @@ void MCTS::SimulateWithBoard(GameEngine::Board &board)
 			board.ApplyMove(GameEngine::Move::GetGameFlowMove(this->GetRandom()));
 
 		} else if (stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-			return;
+			return (board.GetStage() == GameEngine::STAGE_WIN);
 
 		} else {
 			board.GetNextMoves(next_moves);
@@ -234,20 +234,6 @@ void MCTS::SimulateWithBoard(GameEngine::Board &board)
 			board.ApplyMove(next_moves[choose_move]);
 		}
 	}
-}
-
-// return true if win; false otherwise
-bool MCTS::Simulate(GameEngine::Board &board)
-{
-	this->SimulateWithBoard(board);
-
-#ifdef DEBUG
-	if (board.GetStageType() != GameEngine::STAGE_TYPE_GAME_END) {
-		throw std::runtime_error("Simulate should stop at game-end stage");
-	}
-#endif
-
-	return (board.GetStage() == GameEngine::STAGE_WIN);
 }
 
 void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
