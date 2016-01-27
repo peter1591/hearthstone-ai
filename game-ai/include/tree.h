@@ -1,6 +1,7 @@
 #ifndef GAME_AI_TREE_H
 #define GAME_AI_TREE_H
 
+#include <queue>
 #include <functional>
 #include <vector>
 #include <unordered_map>
@@ -9,100 +10,70 @@
 
 class TreeNode
 {
-	public:
-		typedef std::list<TreeNode*> children_type;
+public:
+	typedef std::list<TreeNode*> children_type;
 
-	public:
-		TreeNode() : wins(0), count(0) {}
-		TreeNode(const TreeNode &rhs) = delete;
-		TreeNode &operator=(const TreeNode &rhs) = delete;
-		TreeNode(TreeNode &&rhs);
-		TreeNode &operator=(TreeNode &&rhs);
+public:
+	void AddChild(TreeNode *node);
+	void GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
 
-		void AddChild(TreeNode *node);
-		void GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
+public:
+	TreeNode *parent;
+	children_type children;
 
-		static void CopyWithoutChildren(const TreeNode &source, TreeNode &target);
-
-	public:
-		TreeNode *parent;
-		children_type children;
-
-		GameEngine::Stage stage;
-		GameEngine::StageType stage_type;
+	GameEngine::Stage stage;
+	GameEngine::StageType stage_type;
 #ifdef DEBUG_SAVE_BOARD
-		GameEngine::Board board;
+	GameEngine::Board board;
 #endif
 
-		// what move lead us from parent to this state?
-		GameEngine::Move move;
+	// what move lead us from parent to this state?
+	GameEngine::Move move;
 
-		// if this is a player's turn, then it's true
-		// if this is a random node, and it came out due to a player's action, then it's true
-		// otherwise, it's false
-		bool is_player_node;
+	// if this is a player's turn, then it's true
+	// if this is a random node, and it came out due to a player's action, then it's true
+	// otherwise, it's false
+	bool is_player_node;
 
-		// if it's player's turn, this is the number of WINNINGS in all children
-		// if it's opponent's turn, this is the number of LOSSES in all children
-		int wins;
+	// if it's player's turn, this is the number of WINNINGS in all children
+	// if it's opponent's turn, this is the number of LOSSES in all children
+	int wins;
 
-		// number of simulations
-		int count;
+	// number of simulations
+	int count;
 
-		// only valid if this node is expanded (i.e., has children)
-		std::vector<GameEngine::Move> moves_not_yet_expanded;
+	// only valid if this node is expanded (i.e., has children)
+	std::vector<GameEngine::Move> moves_not_yet_expanded;
 };
 
 class Tree
 {
-	public:
-		Tree();
-		~Tree();
+public:
+	Tree();
+	~Tree();
 
-		Tree(const Tree& rhs) = delete;
-		Tree & operator=(const Tree& rhs) = delete;
+	Tree(const Tree& rhs) = delete;
+	Tree & operator=(const Tree& rhs) = delete;
 
-		Tree(Tree&& rhs);
-		Tree & operator=(Tree&& rhs);
+	Tree(Tree&& rhs);
+	Tree & operator=(Tree&& rhs);
 
-		Tree Clone(std::function<void(TreeNode*, TreeNode*)> node_update_callback) const;
-		bool operator==(const Tree& rhs) const;
-		bool operator!=(const Tree& rhs) const;
+	Tree Clone(std::function<void(TreeNode*, TreeNode*)> node_update_callback = nullptr) const;
+	bool operator==(const Tree& rhs) const;
+	bool operator!=(const Tree& rhs) const;
 
-	public:
-		TreeNode & GetRootNode() { return this->root_node; }
-		const TreeNode & GetRootNode() const { return this->root_node; }
+public:
+	TreeNode & GetRootNode() { return this->root_node; }
+	const TreeNode & GetRootNode() const { return this->root_node; }
 
-	private:
-		static void ClearSubtree(TreeNode *node);
-		static void CopySubtree(const TreeNode *source, TreeNode *target, std::function<void(TreeNode*, TreeNode*)> node_update_callback);
-		static bool CompareSubtree(const TreeNode *lhs, const TreeNode *rhs);
+private:
+	static void ClearSubtree(TreeNode *node);
+	static void CopySubtree(const TreeNode *source, TreeNode *target, std::function<void(TreeNode*, TreeNode*)> node_update_callback);
+	static bool CompareSubtree(const TreeNode *lhs, const TreeNode *rhs);
 
-	private:
-		TreeNode root_node;
+private:
+	TreeNode root_node;
 };
-
-inline TreeNode::TreeNode(TreeNode &&rhs)
-{
-	*this = std::move(rhs);
-}
-
-inline TreeNode & TreeNode::operator=(TreeNode &&rhs)
-{
-	this->parent = rhs.parent;
-	this->children = std::move(rhs.children);
-	this->stage = rhs.stage;
-	this->stage_type = rhs.stage_type;
-#ifdef DEBUG_SAVE_BOARD
-	this->board = std::move(rhs.board);
-#endif
-	this->move = std::move(rhs.move);
-	this->is_player_node = std::move(rhs.is_player_node);
-	this->wins = rhs.wins;
-	this->count = rhs.count;
-	this->moves_not_yet_expanded = std::move(rhs.moves_not_yet_expanded);
-	return *this;
-}
 
 inline void TreeNode::AddChild(TreeNode *node)
 {
@@ -129,6 +100,7 @@ inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEng
 
 inline Tree::Tree()
 {
+	this->root_node.parent = nullptr;
 }
 
 inline Tree::~Tree()
@@ -163,21 +135,6 @@ inline void Tree::ClearSubtree(TreeNode *node)
 	node->children.clear();
 }
 
-inline void TreeNode::CopyWithoutChildren(const TreeNode &source, TreeNode &target)
-{
-	target.parent = nullptr;
-	target.stage = source.stage;
-	target.stage_type = source.stage_type;
-#ifdef DEBUG_SAVE_BOARD
-	target.board = source.board;
-#endif
-	target.move = source.move;
-	target.is_player_node = source.is_player_node;
-	target.wins = source.wins;
-	target.count = source.count;
-	target.moves_not_yet_expanded = source.moves_not_yet_expanded;
-}
-
 inline void Tree::CopySubtree(const TreeNode *source, TreeNode *target, std::function<void(TreeNode*, TreeNode*)> node_update_callback)
 {
 #ifdef DEBUG
@@ -188,10 +145,11 @@ inline void Tree::CopySubtree(const TreeNode *source, TreeNode *target, std::fun
 
 	for (const auto &child : source->children)
 	{
-		TreeNode *new_node = new TreeNode;
-		TreeNode::CopyWithoutChildren(*child, *new_node);
+		TreeNode *new_node = new TreeNode(*child);
+		new_node->children.clear();
 		target->AddChild(new_node);
-		node_update_callback(child, new_node);
+
+		if (node_update_callback != nullptr) node_update_callback(child, new_node);
 
 		Tree::CopySubtree(child, new_node, node_update_callback);
 	}
@@ -201,9 +159,9 @@ inline Tree Tree::Clone(std::function<void(TreeNode*, TreeNode*)> node_update_ca
 {
 	Tree new_tree;
 
+	new_tree.root_node = this->root_node;
 	new_tree.root_node.parent = nullptr;
 	new_tree.root_node.children.clear();
-	TreeNode::CopyWithoutChildren(this->root_node, new_tree.root_node);
 
 	// copy child nodes
 	Tree::CopySubtree(&this->root_node, &new_tree.root_node, node_update_callback);

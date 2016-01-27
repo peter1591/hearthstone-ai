@@ -3,10 +3,11 @@
 
 #include <random>
 #include <list>
-#include <unordered_map>
+#include <map>
 #include <unordered_set>
 #include "game-engine/board.h"
 #include "tree.h"
+#include "board-node-map.h"
 
 class MCTS
 {
@@ -25,27 +26,6 @@ class MCTS
 
 		void Iterate();
 
-		void Merge(const MCTS&& rhs);
-
-		void DebugPrint();
-
-	private:
-		class BoardNodesMapping
-		{
-		public:
-			bool operator==(const BoardNodesMapping &rhs) const;
-			bool operator!=(const BoardNodesMapping &rhs) const;
-
-		public:
-			void Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts);
-			void UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map);
-
-			std::unordered_set<TreeNode *> Find(const GameEngine::Board &board, const MCTS& mcts);
-
-		private:
-			std::unordered_map<std::size_t, std::unordered_set<TreeNode *> > data; // hash of board --> tree nodes
-		};
-
 	private:
 		int GetRandom();
 
@@ -61,18 +41,10 @@ class MCTS
 
 		void BackPropagate(TreeNode *node, bool is_win);
 
-		void MergeMCTSNodes(const TreeNode *source, TreeNode *target);
-		void MergeMCTSNodeToParent(const TreeNode *source, TreeNode *parent,
-			const std::unordered_map<GameEngine::Move, TreeNode*> &parent_move_map,
-			std::unordered_set<GameEngine::Move> &parent_rest_moves);
-
-		void PrintBestRoute(int levels);
-		void PrintTree(TreeNode *node, int level, const int max_level);
-
-	private:
+	public:
 		GameEngine::Board root_node_board;
 		Tree tree;
-		BoardNodesMapping board_nodes_mapping;
+		BoardNodeMap board_node_map;
 		std::mt19937 random_generator;
 };
 

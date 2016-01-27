@@ -80,8 +80,8 @@ void MCTSMerger::MergeToParent(TreeNode *source, TreeNode *parent, const GameEng
 	else {
 		// not found --> this board is not found via the parent node 'node' before
 		// --> make a new node
-		target_node = new TreeNode;
-		TreeNode::CopyWithoutChildren(*source, *target_node);
+		target_node = new TreeNode(*source);
+		target_node->children.clear();
 		parent->AddChild(target_node);
 		this->mcts.board_node_map.Add(board, target_node, this->mcts);
 	}
