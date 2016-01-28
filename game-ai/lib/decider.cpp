@@ -49,8 +49,25 @@ Decider::Decider(MCTS &&mcts) : mcts(std::move(mcts))
 {
 }
 
+void Decider::PrintTree(TreeNode const *node, int level, const int max_level)
+{
+	if (level >= max_level) return;
+
+	PrintLevelPrefix(level);
+	std::cout << "[" << node->stage << "] ";
+	if (node != &this->mcts.tree.GetRootNode()) {
+		std::cout << node->move.GetDebugString();
+	}
+	std::cout << " " << node->wins << "/" << node->count << std::endl;
+
+	for (auto const& child : node->children) {
+		this->PrintTree(child, level + 1, max_level);
+	}
+}
+
 void Decider::DebugPrint()
 {
+	//this->PrintTree(&this->mcts.tree.GetRootNode(), 0, 5);
 	this->PrintBestRoute(20);
 }
 

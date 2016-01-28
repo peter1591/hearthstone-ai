@@ -11,37 +11,40 @@
 
 class MCTS
 {
-	public:
-		MCTS();
-		MCTS(const MCTS&);
-		MCTS &operator=(const MCTS&);
-		MCTS(MCTS&&);
-		MCTS &operator=(MCTS&&);
+public:
+	MCTS();
+	MCTS(const MCTS&);
+	MCTS &operator=(const MCTS&);
+	MCTS(MCTS&&);
+	MCTS &operator=(MCTS&&);
 
-		bool operator==(const MCTS&) const;
-		bool operator!=(const MCTS&) const;
+	bool operator==(const MCTS&) const;
+	bool operator!=(const MCTS&) const;
 
-	public:
-		void Initialize(unsigned int rand_seed, const GameEngine::Board &starting_board);
-		void Iterate();
+public:
+	void Initialize(unsigned int rand_seed, const GameEngine::Board &starting_board);
+	void Iterate();
 
-	private:
+private:
 
-		TreeNode * SelectAndExpand(GameEngine::Board &board);
-		TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
-		void Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
+	TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
+	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
+	bool Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board);
 
-		bool Simulate(GameEngine::Board &board);
-		void BackPropagate(TreeNode *node, bool is_win);
-		TreeNode* IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board);
+	bool Simulate(GameEngine::Board &board);
+	void BackPropagate(TreeNode *node, bool is_win);
+	TreeNode* IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board);
 
-		int GetRandom();
+	int GetRandom();
 
-	public:
-		GameEngine::Board root_node_board;
-		Tree tree;
-		BoardNodeMap board_node_map;
-		std::mt19937 random_generator;
+public:
+	GameEngine::Board root_node_board;
+	Tree tree;
+	BoardNodeMap board_node_map;
+	std::mt19937 random_generator;
+
+private:
+	TreeNode *allocated_node;
 };
 
 #endif

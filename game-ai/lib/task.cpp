@@ -2,6 +2,8 @@
 
 #include "task.h"
 
+#include "decider.h"
+
 Task::Task(MCTS *mcts)
 {
 	this->mcts = mcts;
@@ -95,7 +97,6 @@ void Task::MainLoop()
 		{
 			this->SetState(Task::STATE_PAUSE);
 		}
-
 		this->mcts->Iterate();
 	}
 }

@@ -101,13 +101,8 @@ TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board)
 	}
 }
 
-void MCTS::Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board)
+void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board)
 {
-#ifdef DEBUG
-	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-		throw std::runtime_error("a game-end stage should not be expanded");
-	}
-#endif
 
 #ifdef DEBUG_SAVE_BOARD
 	if (node->board != board) {
@@ -158,39 +153,35 @@ TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_c
 	return nullptr; // not found
 }
 
-// Find a node to expand, and expand it
-TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
+// return false if 'new_node' is an expanded node
+bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board)
 {
-	TreeNode *new_node = new TreeNode;
-	TreeNode *node = &this->tree.GetRootNode();
-	board = this->root_node_board;
-
-	while (true)
-	{
-		node = this->Select(node, board);
-
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-			delete new_node;
-			return node;
-		}
-
-		this->Expand(node, new_node->move, board);
-
-		TreeNode *found_node = this->IsBoardTraversed(node, board);
-		if (found_node == nullptr) {
-			break; // create a new node
-		}
-		else {
-			node = found_node; // select again among that subtree
-		}
+	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
+		// node cannot be expand further (i.e., game-end)
+		new_node = node;
+		new_board = board;
+		return true;
 	}
+
+	new_board = board;
+	this->GetNextState(node, this->allocated_node->move, new_board);
+
+	TreeNode *found_node = this->IsBoardTraversed(node, new_board);
+	if (found_node != nullptr) {
+		// expanded before -> select again among that subtree
+		new_node = found_node; 
+		return false;
+	}
+
+	new_node = this->allocated_node;
+	this->allocated_node = new TreeNode;
 
 	new_node->wins = 0;
 	new_node->count = 0;
-	new_node->stage = board.GetStage();
-	new_node->stage_type = board.GetStageType();
+	new_node->stage = new_board.GetStage();
+	new_node->stage_type = new_board.GetStageType();
 #ifdef DEBUG_SAVE_BOARD
-	new_node->board = board;
+	new_node->board = new_board;
 #endif
 
 	if (new_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
@@ -205,9 +196,9 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 
 	node->AddChild(new_node);
 
-	board_node_map.Add(board, new_node, *this);
+	board_node_map.Add(new_board, new_node, *this);
 
-	return new_node;
+	return true;
 }
 
 bool MCTS::Simulate(GameEngine::Board &board)
@@ -266,15 +257,26 @@ void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
 
 void MCTS::Iterate()
 {
-	GameEngine::Board board;
+	TreeNode *node = &this->tree.GetRootNode();
+	GameEngine::Board board = this->root_node_board;;
 
-	TreeNode *node = this->SelectAndExpand(board);
+	TreeNode *new_node = nullptr;
+	
+	// loop if expand failed
+	while (true)
+	{
+		node = this->Select(node, board);
+		if (this->Expand(node, board, new_node, board)) break;
+		node = new_node;
+	}
+
 	bool is_win = this->Simulate(board);
-	this->BackPropagate(node, is_win);
+	this->BackPropagate(new_node, is_win);
 }
 
 MCTS::MCTS()
 {
+	this->allocated_node = new TreeNode;
 }
 
 MCTS::MCTS(const MCTS& rhs)

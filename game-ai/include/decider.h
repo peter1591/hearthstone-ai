@@ -14,6 +14,7 @@ public:
 	void DebugPrint();
 
 private:
+	void PrintTree(TreeNode const *node, int level, const int max_level);
 	void PrintBestRoute(int levels);
 
 private:
