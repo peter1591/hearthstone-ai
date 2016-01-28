@@ -33,6 +33,7 @@ class MCTS
 
 		bool Simulate(GameEngine::Board &board);
 		void BackPropagate(TreeNode *node, bool is_win);
+		TreeNode* IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board);
 
 		int GetRandom();
 

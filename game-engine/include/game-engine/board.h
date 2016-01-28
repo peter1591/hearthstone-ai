@@ -48,6 +48,8 @@ class Board
 		}
 
 		Board & operator=(const Board &rhs) {
+			if (this == &rhs) return *this;
+
 			this->player_stat = rhs.player_stat;
 			this->player_secrets = rhs.player_secrets;
 			this->player_hand = rhs.player_hand;

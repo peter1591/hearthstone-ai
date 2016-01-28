@@ -137,16 +137,38 @@ void MCTS::Expand(TreeNode *node, GameEngine::Move &move, GameEngine::Board &boa
 	}
 }
 
+// if the board has not been traversed, return nullptr
+// if the board has been traversed, return the pointer to the child node
+TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board)
+{
+	if (parent->stage_type != GameEngine::STAGE_TYPE_GAME_FLOW) {
+		// always create a new node for non-random (i.e., non-game-flow) nodes
+		// since it must just expanded by a new move in Expand()
+		return nullptr;
+	}
+
+	// check if random-generated game flow move has already expanded before
+	auto it_possible_nodes = this->board_node_map.Find(new_child_board, *this);
+	for (const auto &it_possible_node : it_possible_nodes) {
+		if (it_possible_node->parent == parent) {
+			return it_possible_node;
+		}
+	}
+
+	return nullptr; // not found
+}
+
 // Find a node to expand, and expand it
 TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 {
 	TreeNode *new_node = new TreeNode;
-
+	TreeNode *node = &this->tree.GetRootNode();
 	board = this->root_node_board;
-	TreeNode *node = this->Select(&this->tree.GetRootNode(), board);
 
 	while (true)
 	{
+		node = this->Select(node, board);
+
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 			delete new_node;
 			return node;
@@ -154,31 +176,12 @@ TreeNode * MCTS::SelectAndExpand(GameEngine::Board &board)
 
 		this->Expand(node, new_node->move, board);
 
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			// check if random-generated game flow move has already expanded before
-			auto it_possible_nodes = this->board_node_map.Find(board, *this);
-			TreeNode *found_node = nullptr;
-			for (const auto &it_possible_node : it_possible_nodes) {
-				if (it_possible_node->parent == node) {
-					found_node = it_possible_node;
-					break;
-				}
-			}
-
-			if (found_node != nullptr) {
-				// found --> this board is found via the parent node 'node' before
-				// --> select among that child node
-				node = this->Select(found_node, board);
-				continue;
-			}
-			else {
-				// not found --> this board is not found via the parent node 'node' before
-				// --> make a new node
-				break;
-			}
+		TreeNode *found_node = this->IsBoardTraversed(node, board);
+		if (found_node == nullptr) {
+			break; // create a new node
 		}
 		else {
-			break; // always create a new node for non-random (i.e., non-game-flow) nodes
+			node = found_node; // select again among that subtree
 		}
 	}
 
