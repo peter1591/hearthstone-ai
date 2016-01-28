@@ -92,8 +92,7 @@ static void Run()
 	board.DebugPrint();
 
 	for (int i = 0; i < threads; ++i) {
-		//mcts[i].Initialize((unsigned int)time(nullptr), board);
-		mcts[i].Initialize(i, board);
+		mcts[i].Initialize((unsigned int)time(nullptr), board);
 		Task *new_task = new Task(&mcts[i]);
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
 		tasks.push_back(new_task);
@@ -110,9 +109,7 @@ static void Run()
 	{
 		MCTS mcts_copy[threads];
 
-		int elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
-
-		std::cout << "Waiting... (Elasped " << elapsed_ms << "ms)" << std::endl;
+		std::cout << "Waiting..." << std::endl;
 		std::cout.flush();
 		for (const auto &task : tasks)
 		{
@@ -125,7 +122,14 @@ static void Run()
 		for (int i = 0; i < threads; ++i) {
 			decider.Add(mcts[i]);
 		}
-		decider.DebugPrint();
+		auto best_moves = decider.GetBestMoves();
+		best_moves.DebugPrint();
+
+		int elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+		double total_counts = best_moves.moves.front().count;
+		std::cout << "Elapsed " << elapsed_ms << " ms"
+			<< ", about " << (total_counts * 1000 / elapsed_ms) << " per second." << std::endl;
+		std::cout.flush();
 
 		// start all threads for 10 second
 		std::cout << "Resuming..." << std::endl;

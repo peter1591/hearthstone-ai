@@ -172,7 +172,7 @@ std::unordered_map<GameEngine::Move, TreeNode> Decider::AggregateProgressChildre
 }
 
 // return false if no next step is available
-bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board &board)
+bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board &board, MoveInfo &move_info)
 {
 	if (progress.empty()) return false;
 
@@ -204,9 +204,12 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 			return false;
 		}
 
-		std::cout << "Got move: " << most_simulated_child->move.GetDebugString() << std::endl;
+		move_info.move = most_simulated_child->move;
+		move_info.wins = -1;
+		move_info.count = -1;
+
 		GameEngine::Board current_board = board;
-		board.ApplyMove(most_simulated_child->move);
+		board.ApplyMove(move_info.move);
 		this->GoToNextProgress(progress, current_board, &chosen_progress, most_simulated_child, board);
 	}
 	else {
@@ -218,16 +221,35 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 			return false;
 		}
 
-		GameEngine::Move const& move = it_most_simulated_child->first;
-		auto const& node = it_most_simulated_child->second;
-		std::cout << "Got move: " << move.GetDebugString() << ", " << node.wins << "/" << node.count << std::endl;
-		board.ApplyMove(it_most_simulated_child->first);
-		this->GoToNextProgress(progress, move);
+		move_info.move = it_most_simulated_child->first;
+		move_info.wins = it_most_simulated_child->second.wins;
+		move_info.count = it_most_simulated_child->second.count;
+		
+		board.ApplyMove(move_info.move);
+		this->GoToNextProgress(progress, move_info.move);
 	}
 }
 
-void Decider::FindBestRoute()
+void Decider::DebugPrint()
 {
+	//this->PrintTree(&this->mcts.tree.GetRootNode(), 0, 5);
+	this->PrintBestRoute(20);
+}
+
+void Decider::Add(const MCTS& mcts)
+{
+	this->data.push_back(&mcts);
+}
+
+int Decider::GetRandom()
+{
+	return rand();
+}
+
+Decider::MovesInfo Decider::GetBestMoves()
+{
+	MovesInfo moves;
+
 	if (this->data.empty()) {
 		throw std::runtime_error("no any MCTS available");
 	}
@@ -251,24 +273,18 @@ void Decider::FindBestRoute()
 	}
 
 	while (true) {
-		if (this->GetNextStep(progresses, board) == false) break;
+		MoveInfo move;
+		if (this->GetNextStep(progresses, board, move) == false) break;
+		moves.moves.push_back(move);
 	}
+
+	return moves;
 }
 
-void Decider::DebugPrint()
+void Decider::MovesInfo::DebugPrint()
 {
-	//this->PrintTree(&this->mcts.tree.GetRootNode(), 0, 5);
-	//this->PrintBestRoute(20);
-
-	this->FindBestRoute();
-}
-
-void Decider::Add(const MCTS& mcts)
-{
-	this->data.push_back(&mcts);
-}
-
-int Decider::GetRandom()
-{
-	return rand();
+	for (auto const& move : this->moves)
+	{
+		std::cout << "Got move: " << move.move.GetDebugString() << ", " << move.wins << "/" << move.count << std::endl;
+	}
 }
