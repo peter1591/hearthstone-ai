@@ -72,32 +72,34 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	this->board_node_map.Add(board, &tree.GetRootNode(), *this);
 }
 
-TreeNode * MCTS::Select(TreeNode *node, GameEngine::Board &board)
+// Note: &board can equal to &new_board for no-copy operation
+void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board)
 {
+	new_node = node;
+	new_board = board; // no copy if &board == &new_board
+
 	while (true)
 	{
 #ifdef DEBUG_SAVE_BOARD
-		if (board != node->board) {
+		if (new_board != new_node->board) {
 			throw std::runtime_error("board consistency check failed");
 		}
 #endif
 
-		if (node->children.empty()) {
-			return node;
+		if (new_node->children.empty()) {
+			return;
 		}
 
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			return node;
+		if (new_node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+			return;
 		}
 
-		if (node->moves_not_yet_expanded.empty()) {
-			node = FindBestChildToExpand(node);
-			board.ApplyMove(node->move);
-			continue;
+		if (!new_node->moves_not_yet_expanded.empty()) {
+			return;
 		}
-		else {
-			return node;
-		}
+
+		new_node = FindBestChildToExpand(new_node);
+		new_board.ApplyMove(new_node->move);
 	}
 }
 
@@ -147,21 +149,21 @@ TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, GameEngine::Board const& pare
 }
 
 // return false if 'new_node' is an expanded node
+// Note: &board should not equal to &new_board
 bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board)
 {
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-		// node cannot be expand further (i.e., game-end)
+		// node cannot be expanded further (i.e., game-end)
 		new_node = node;
 		new_board = board;
 		return true;
 	}
 
-	GameEngine::Board board_copy = board; // in case &board == &new_board
-
 	new_board = board;
+
 	this->GetNextState(node, this->allocated_node->move, new_board);
 
-	TreeNode *found_node = this->IsBoardTraversed(node, board_copy, new_board);
+	TreeNode *found_node = this->IsBoardTraversed(node, board, new_board);
 	if (found_node != nullptr) {
 		// expanded before -> select again among that subtree
 		new_node = found_node; 
@@ -256,16 +258,20 @@ void MCTS::Iterate()
 	GameEngine::Board board = this->root_node_board;;
 
 	TreeNode *new_node = nullptr;
+	GameEngine::Board new_board;
 	
-	// loop if expand failed
+	// loop if expand a duplicated node
 	while (true)
 	{
-		node = this->Select(node, board);
-		if (this->Expand(node, board, new_node, board)) break;
+		this->Select(node, board, node, board); // directly update to (node, board)
+
+		if (this->Expand(node, board, new_node, new_board)) break;
+
 		node = new_node;
+		board = new_board;
 	}
 
-	bool is_win = this->Simulate(board);
+	bool is_win = this->Simulate(new_board);
 	this->BackPropagate(new_node, is_win);
 }
 

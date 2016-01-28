@@ -26,8 +26,8 @@ public:
 	void Iterate();
 
 private:
-	TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
-	bool Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board);
+	void Select(TreeNode* const& node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
+	bool Expand(TreeNode *node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(TreeNode *node, bool is_win);
 
