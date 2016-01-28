@@ -22,14 +22,16 @@ void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
 	this->data[board_hash].insert(node);
 }
 
-std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board, const MCTS& mcts)
+std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board, const MCTS& mcts) const
 {
 	TreeNode *ret = nullptr;
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 	std::unordered_set<TreeNode *> nodes;
 
-	auto possible_nodes = this->data[hash];
-	for (const auto &possible_node : possible_nodes) {
+	auto it_found = this->data.find(hash);
+	if (it_found == this->data.end()) return nodes;
+
+	for (const auto &possible_node : it_found->second) {
 		GameEngine::Board it_board;
 		possible_node->GetBoard(mcts.root_node_board, it_board);
 		if (board == it_board) {

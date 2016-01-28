@@ -17,7 +17,7 @@ public:
 	void Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts);
 	void Add(std::size_t board_hash, TreeNode *node);
 
-	std::unordered_set<TreeNode *> Find(const GameEngine::Board &board, const MCTS& mcts);
+	std::unordered_set<TreeNode *> Find(const GameEngine::Board &board, const MCTS& mcts) const;
 
 public: // used to copy/merge tree
 	void UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map);

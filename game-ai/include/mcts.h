@@ -26,15 +26,13 @@ public:
 	void Iterate();
 
 private:
-
 	TreeNode * Select(TreeNode *starting_node, GameEngine::Board &board);
-	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
 	bool Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board);
-
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(TreeNode *node, bool is_win);
-	TreeNode* IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board);
 
+	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
+	TreeNode* IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board);
 	int GetRandom();
 
 public:
