@@ -50,7 +50,7 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 {
-	this->random_generator.seed(rand_seed);
+	srand(rand_seed);
 
 	this->root_node_board = board;
 #ifdef DEBUG_SAVE_BOARD
@@ -301,7 +301,6 @@ MCTS & MCTS::operator=(const MCTS& rhs)
 	this->tree = rhs.tree.Clone(node_update_callback);
 	this->board_node_map = rhs.board_node_map;
 	this->board_node_map.UpdateNodePointers(node_update_map);
-	this->random_generator = rhs.random_generator;
 
 	return *this;
 }
@@ -311,7 +310,6 @@ MCTS & MCTS::operator=(MCTS&& rhs)
 	this->root_node_board = std::move(rhs.root_node_board);
 	this->tree = std::move(rhs.tree);
 	this->board_node_map = std::move(rhs.board_node_map);
-	this->random_generator = std::move(rhs.random_generator);
 	return *this;
 }
 
@@ -323,8 +321,6 @@ bool MCTS::operator==(const MCTS& rhs) const
 	// skip checking for internal consistency data
 	// if (this->board_node_map != rhs.board_node_map) return false;
 
-	if (this->random_generator != rhs.random_generator) return false;
-
 	return true;
 }
 
@@ -335,5 +331,5 @@ bool MCTS::operator!=(const MCTS& rhs) const
 
 int MCTS::GetRandom()
 {
-	return this->random_generator();
+	return rand();
 }

@@ -39,7 +39,6 @@ public:
 	GameEngine::Board root_node_board;
 	Tree tree;
 	BoardNodeMap board_node_map;
-	std::mt19937 random_generator;
 
 private:
 	TreeNode *allocated_node;

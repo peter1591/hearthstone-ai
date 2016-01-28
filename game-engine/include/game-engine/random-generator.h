@@ -2,6 +2,7 @@
 #define GAME_ENGINE_RANDOM_GENERATOR_H
 
 #include <cstdlib>
+#include <random>
 #include "common.h"
 
 #include <functional>
@@ -13,23 +14,16 @@ class RandomGenerator
 	friend std::hash<RandomGenerator>;
 
 	public:
-		RandomGenerator() : rand_seed(1) {
+		RandomGenerator()
+		{
 		}
 
 		void SetRandomSeed(unsigned int seed) {
-			this->rand_seed = seed;
-		}
-
-		unsigned int GetRandomSeed() const {
-			return this->rand_seed;
+			srand(seed);
 		}
 
 		int GetRandom() {
-			int r;
-			std::srand(this->rand_seed);
-			r = std::rand();
-			this->rand_seed = r;
-			return r;
+			return rand();
 		}
 
 	public: // comparison
@@ -42,9 +36,6 @@ class RandomGenerator
 		bool operator!=(const RandomGenerator &rhs) const {
 			return !(*this == rhs);
 		}
-
-	private:
-		unsigned int rand_seed;
 };
 
 } // namespace GameEngine
