@@ -28,10 +28,10 @@ class OpponentCards
 			// TODO
 			Card card;
 			card.type = Card::TYPE_MINION;
-			card.id = 222;
+			card.id = 223;
 			card.cost = 2;
 			card.data.minion.attack = 2;
-			card.data.minion.hp = 2;
+			card.data.minion.hp = 3;
 
 			playable_cards.push_back(card);
 		}
