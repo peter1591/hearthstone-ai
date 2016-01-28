@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\mcts-merger.cpp">
-      <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>

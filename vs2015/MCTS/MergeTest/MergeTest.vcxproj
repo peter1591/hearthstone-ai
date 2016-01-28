@@ -116,7 +116,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,7 +127,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp" />
-    <ClCompile Include="..\..\..\game-ai\lib\mcts-merger.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\deck-database.cpp" />

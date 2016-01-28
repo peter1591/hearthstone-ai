@@ -66,11 +66,11 @@ void InitializeBoard(GameEngine::Board &board)
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(213, 3, 2, 3);
+	minion.Set(213, 2, 2, 3);
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 2, 3, 3);
+	minion.Set(333, 3, 5, 3);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
@@ -119,9 +119,13 @@ static void Run()
 			pause_notifiers[task]->WaitUntilPaused();
 		}
 
-		std::cout << "Copying..." << std::endl;
+		std::cout << "Deciding..." << std::endl;
 		std::cout.flush();
-		for (int i = 0; i < threads; ++i) mcts_copy[i] = mcts[0];
+		Decider decider;
+		for (int i = 0; i < threads; ++i) {
+			decider.Add(mcts[i]);
+		}
+		decider.DebugPrint();
 
 		// start all threads for 10 second
 		std::cout << "Resuming..." << std::endl;
@@ -132,14 +136,6 @@ static void Run()
 		{
 			task->Start(run_until, pause_notifiers[task]);
 		}
-
-		std::cout << "Merging..." << std::endl;
-		std::cout.flush();
-		Decider decider(std::move(mcts_copy[0]));
-		for (int i = 1; i < threads; ++i) {
-			decider.Merge(std::move(mcts_copy[i]));
-		}
-		decider.DebugPrint();
 	}
 
 	for (const auto &task : tasks)
@@ -152,6 +148,9 @@ static void Run()
 	}
 
 	std::cout << "Threads stopped" << std::endl;
+	std::cin.clear();
+	std::cout << "Press Enter to exit...";
+	std::cin.get();
 }
 
 int main(void)

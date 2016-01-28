@@ -64,11 +64,11 @@ void InitializeBoard(GameEngine::Board &board)
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(213, 3, 2, 3);
+	minion.Set(213, 2, 2, 3);
 	minion.TurnStart();
 	board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 10, 3, 3);
+	minion.Set(333, 3, 5, 3);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
@@ -116,50 +116,9 @@ static void TestOperators()
 		mcts[0] = std::move(mcts[1]); // test move
 
 		if (times % 1000 == 0) {
-			Decider decider(std::move(mcts_debug));
+			Decider decider;
+			decider.Add(mcts_debug);
 			decider.DebugPrint();
-		}
-	}
-}
-
-static void TestMerge()
-{
-	constexpr int threads = 4;
-	MCTS mcts[threads];
-	GameEngine::Board board;
-
-	InitializeBoard(board);
-
-	for (int i = 0; i < threads; ++i) {
-		mcts[i].Initialize((unsigned int)time(NULL), board);
-	}
-
-	auto start = std::chrono::steady_clock::now();
-	for (int times = 0;; ++times)
-	{
-		MCTS mcts_copy;
-
-		for (int i = 0; i < threads; ++i) {
-			for (int j = 0; j < 1000; ++j) {
-				mcts[i].Iterate();
-			}
-		}
-
-		mcts_copy = mcts[0];
-		Decider decider(std::move(mcts_copy));
-		for (int i = 1; i < threads; ++i) {
-			mcts_copy = mcts[i];
-			decider.Merge(std::move(mcts_copy));
-		}
-
-		if (times % 1 == 0)
-		{
-			decider.DebugPrint();
-
-			auto now = std::chrono::steady_clock::now();
-			auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
-			auto avg = (double)elapsed_ms / times;
-			std::cout << "Average: " << avg << " ms per iteration" << std::endl;
 		}
 	}
 }
@@ -167,7 +126,8 @@ static void TestMerge()
 static void TestBasic()
 {
 	MCTS mcts;
-	unsigned int rand_seed = (unsigned int)time(NULL);
+	//unsigned int rand_seed = (unsigned int)time(NULL);
+	unsigned int rand_seed = 0;
 	GameEngine::Board board;
 
 	InitializeBoard(board);
@@ -178,15 +138,17 @@ static void TestBasic()
 	{
 		mcts.Iterate();
 		if (times % 10000 == 0) {
-			Decider decider(std::move(mcts));
+			Decider decider;
+			decider.Add(mcts);
 			decider.DebugPrint();
+			//std::cout << "Press Enter to continue...";
+			//std::cin.get();
 		}
 	}
 }
 
 int main(void)
 {
-	//TestBasic();
+	TestBasic();
 	//TestOperators();
-	TestMerge();
 }

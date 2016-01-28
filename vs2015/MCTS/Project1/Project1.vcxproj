@@ -117,7 +117,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -129,7 +129,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp" />
-    <ClCompile Include="..\..\..\game-ai\lib\mcts-merger.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\task.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
@@ -140,7 +139,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\game-ai\include\board-node-map.h" />
     <ClInclude Include="..\..\..\game-ai\include\decider.h" />
-    <ClInclude Include="..\..\..\game-ai\include\mcts-merger.h" />
     <ClInclude Include="..\..\..\game-ai\include\task.h" />
     <ClInclude Include="..\..\..\game-ai\include\mcts.h" />
     <ClInclude Include="..\..\..\game-ai\include\tree.h" />
