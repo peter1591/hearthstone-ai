@@ -42,6 +42,26 @@ std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board
 	return nodes;
 }
 
+TreeNode * BoardNodeMap::FindUnderParent(const GameEngine::Board &board, TreeNode const* parent, GameEngine::Board const& parent_board, const MCTS& mcts) const
+{
+	TreeNode *ret = nullptr;
+	std::size_t hash = std::hash<GameEngine::Board>()(board);
+
+	auto it_found = this->data.find(hash);
+	if (it_found == this->data.end()) return nullptr;
+
+	for (const auto &possible_node : it_found->second) {
+		if (possible_node->parent != parent) continue;
+		GameEngine::Board it_board = parent_board;
+		it_board.ApplyMove(possible_node->move);
+		if (board == it_board) {
+			return possible_node;
+		}
+	}
+
+	return nullptr;
+}
+
 void BoardNodeMap::UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map)
 {
 	for (auto &node : this->data) {

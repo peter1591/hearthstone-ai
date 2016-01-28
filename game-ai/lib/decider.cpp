@@ -96,18 +96,8 @@ static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSi
 	return it_most_simulated_node;
 }
 
-static TreeNode* FindChildNodeWithBoard(TreeNode const* parent, GameEngine::Board const& next_board, MCTS const& mcts)
-{
-	auto possible_nodes = mcts.board_node_map.Find(next_board, mcts);
-	for (auto const& possible_node : possible_nodes)
-	{
-		if (possible_node->parent == parent) return possible_node;
-	}
-	return nullptr;
-}
-
-void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, ProgressData const* stepping_progress,
-	TreeNode const* stepping_node, const GameEngine::Board &next_board)
+void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Board const& current_board,
+	ProgressData const* stepping_progress, TreeNode const* stepping_node, const GameEngine::Board &next_board)
 {
 	for (std::vector<ProgressData>::iterator it_progress = progresses.begin(); it_progress != progresses.end();)
 	{
@@ -121,7 +111,7 @@ void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, ProgressDa
 		}
 
 		// find the 'next_board' among the child
-		progress.node = FindChildNodeWithBoard(progress.node, next_board, *progress.mcts);
+		progress.node = progress.mcts->board_node_map.FindUnderParent(next_board, progress.node, current_board, *progress.mcts);
 		if (progress.node == nullptr) {
 			it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
 		}
@@ -215,8 +205,9 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 		}
 
 		std::cout << "Got move: " << most_simulated_child->move.GetDebugString() << std::endl;
+		GameEngine::Board current_board = board;
 		board.ApplyMove(most_simulated_child->move);
-		this->GoToNextProgress(progress, &chosen_progress, most_simulated_child, board);
+		this->GoToNextProgress(progress, current_board, &chosen_progress, most_simulated_child, board);
 	}
 	else {
 		// select the best move --> the most simulated node

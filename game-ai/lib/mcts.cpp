@@ -134,7 +134,7 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 
 // if the board has not been traversed, return nullptr
 // if the board has been traversed, return the pointer to the child node
-TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_child_board)
+TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, GameEngine::Board const& parent_board, const GameEngine::Board new_child_board)
 {
 	if (parent->stage_type != GameEngine::STAGE_TYPE_GAME_FLOW) {
 		// always create a new node for non-random (i.e., non-game-flow) nodes
@@ -143,14 +143,7 @@ TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, const GameEngine::Board new_c
 	}
 
 	// check if random-generated game flow move has already expanded before
-	auto it_possible_nodes = this->board_node_map.Find(new_child_board, *this);
-	for (const auto &it_possible_node : it_possible_nodes) {
-		if (it_possible_node->parent == parent) {
-			return it_possible_node;
-		}
-	}
-
-	return nullptr; // not found
+	return this->board_node_map.FindUnderParent(new_child_board, parent, parent_board, *this);
 }
 
 // return false if 'new_node' is an expanded node
@@ -163,10 +156,12 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 		return true;
 	}
 
+	GameEngine::Board board_copy = board; // in case &board == &new_board
+
 	new_board = board;
 	this->GetNextState(node, this->allocated_node->move, new_board);
 
-	TreeNode *found_node = this->IsBoardTraversed(node, new_board);
+	TreeNode *found_node = this->IsBoardTraversed(node, board_copy, new_board);
 	if (found_node != nullptr) {
 		// expanded before -> select again among that subtree
 		new_node = found_node; 
