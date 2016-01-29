@@ -51,17 +51,19 @@ void InitializeHand1(const GameEngine::DeckDatabase &deck_database, GameEngine::
 	hand.AddCard(deck_database.GetCard(222));
 	hand.AddCard(deck_database.GetCard(222));
 	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
 }
 
 void InitializeBoard(GameEngine::Board &board)
 {
 	GameEngine::DeckDatabase deck_database;
 
-	board.player_stat.hp = 5;
+	board.player_stat.hp = 14;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(2, 2, 0, 0);
 
-	board.opponent_stat.hp = 5;
+	board.opponent_stat.hp = 20;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(2, 2, 0, 0);
 
@@ -71,9 +73,9 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeHand1(deck_database, board.player_hand);
 
 	GameEngine::Minion minion;
-	//minion.Set(111, 1, 3, 1);
-	//minion.TurnStart();
-	//board.player_minions.AddMinion(minion);
+	minion.Set(111, 2, 2, 1);
+	minion.TurnStart();
+	board.player_minions.AddMinion(minion);
 
 	//minion.Set(213, 2, 2, 3);
 	//minion.TurnStart();
@@ -89,7 +91,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 1;
+	constexpr int threads = 4;
 	constexpr int sec_each_run = 1;
 
 	std::mt19937 random_generator(time(nullptr));
@@ -103,7 +105,6 @@ static void Run()
 
 	for (int i = 0; i < threads; ++i) {
 		mcts[i].Initialize(random_generator(), board);
-		//mcts[i].Initialize((unsigned int)time(nullptr), board);
 		Task *new_task = new Task(&mcts[i]);
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
 		tasks.push_back(new_task);
@@ -135,9 +136,10 @@ static void Run()
 		best_moves.DebugPrint();
 
 		int elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
-		double total_counts = best_moves.moves.front().count;
-		std::cout << "Elapsed " << elapsed_ms << " ms"
-			<< ", about " << (total_counts * 1000 / elapsed_ms) << " per second." << std::endl;
+		int total_iterations = 0;
+		for (auto const& task : tasks) total_iterations += task->GetIterationCount();
+		std::cout << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
+			<< " (Average: " << (total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
 		std::cout.flush();
 
 		// start all threads for 10 second

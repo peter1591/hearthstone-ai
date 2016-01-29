@@ -149,5 +149,8 @@
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h">
       <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\game-engine\lib\stages\weighted-moves.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

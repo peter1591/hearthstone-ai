@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-put-minion.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h" />
+    <ClInclude Include="..\..\..\game-engine\lib\stages\weighted-moves.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
