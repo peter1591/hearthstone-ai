@@ -86,6 +86,8 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNod
 		}
 #endif
 
+		this->traversed_nodes.push_back(new_node);
+
 		if (new_node->children.empty()) {
 			return;
 		}
@@ -195,6 +197,8 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 
 	board_node_map.Add(new_board, new_node);
 
+	this->traversed_nodes.push_back(new_node);
+
 	return true;
 }
 
@@ -219,10 +223,13 @@ bool MCTS::Simulate(GameEngine::Board &board)
 	}
 }
 
-void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
+void MCTS::BackPropagate(bool is_win)
 {
-	TreeNode *node = starting_node;
-	while (node != nullptr) {
+	while (!this->traversed_nodes.empty())
+	{
+		TreeNode *node = this->traversed_nodes.back();
+		this->traversed_nodes.pop_back();
+
 		if (node->is_player_node) {
 			if (is_win == true) node->wins++; // from the player's respect
 		}
@@ -230,7 +237,6 @@ void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
 			if (is_win == false) node->wins++; // from the opponent's respect
 		}
 		node->count++;
-		node = node->parent;
 	}
 }
 
@@ -241,6 +247,10 @@ void MCTS::Iterate()
 
 	TreeNode *new_node = nullptr;
 	GameEngine::Board new_board;
+
+#ifdef DEBUG
+	if (!this->traversed_nodes.empty()) throw std::runtime_error("consistency check failed");
+#endif
 	
 	// loop if expand a duplicated node
 	while (true)
@@ -254,7 +264,7 @@ void MCTS::Iterate()
 	}
 
 	bool is_win = this->Simulate(new_board);
-	this->BackPropagate(new_node, is_win);
+	this->BackPropagate(is_win);
 }
 
 MCTS::MCTS()

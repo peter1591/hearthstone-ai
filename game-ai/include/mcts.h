@@ -25,23 +25,25 @@ public:
 	void Initialize(unsigned int rand_seed, const GameEngine::Board &starting_board);
 	void Iterate();
 
-private:
-	void Select(TreeNode* const& node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
-	bool Expand(TreeNode *node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
-	bool Simulate(GameEngine::Board &board);
-	void BackPropagate(TreeNode *node, bool is_win);
-
-	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
-	TreeNode* IsBoardTraversed(TreeNode *parent, GameEngine::Board const& parent_board, const GameEngine::Board new_child_board);
-	int GetRandom();
-
 public:
 	GameEngine::Board root_node_board;
 	Tree tree;
 	BoardNodeMap board_node_map;
 
 private:
+	void Select(TreeNode* const& node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
+	bool Expand(TreeNode *node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
+	bool Simulate(GameEngine::Board &board);
+	void BackPropagate(bool is_win);
+
+	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
+	TreeNode* IsBoardTraversed(TreeNode *parent, GameEngine::Board const& parent_board, const GameEngine::Board new_child_board);
+	int GetRandom();
+
+private: // for internal use
 	TreeNode *allocated_node;
+
+	std::vector<TreeNode*> traversed_nodes;
 };
 
 #endif
