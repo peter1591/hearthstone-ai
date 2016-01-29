@@ -37,7 +37,6 @@ private:
 	void BackPropagate(bool is_win);
 
 	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
-	TreeNode* IsBoardTraversed(TreeNode *parent, GameEngine::Board const& parent_board, const GameEngine::Board new_child_board);
 	int GetRandom();
 
 private: // for internal use

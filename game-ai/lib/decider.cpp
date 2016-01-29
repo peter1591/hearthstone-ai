@@ -30,7 +30,8 @@ void Decider::PrintBestRoute(int levels)
 	TreeNode const*node = &mcts.tree.GetRootNode();
 
 	int level = 0;
-	while (!node->children.empty() && level <= levels) {
+	while (node != nullptr && !node->children.empty() && level <= levels) {
+		if (node->equivalent_node != nullptr) node = node->equivalent_node;
 
 		if (node->move.action != GameEngine::Move::ACTION_GAME_FLOW) {
 			PrintLevelPrefix(level);
@@ -58,6 +59,8 @@ void Decider::PrintTree(TreeNode const *node, int level, const int max_level)
 		std::cout << node->move.GetDebugString();
 	}
 	std::cout << " " << node->wins << "/" << node->count << std::endl;
+
+	if (node->equivalent_node != nullptr) node = node->equivalent_node;
 
 	for (auto const& child : node->children) {
 		this->PrintTree(child, level + 1, max_level);
@@ -106,18 +109,22 @@ void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine
 		// special case: the progress is the stepping progress
 		if (&progress == stepping_progress) {
 			progress.node = stepping_node;
+			if (progress.node->equivalent_node != nullptr) progress.node = progress.node->equivalent_node;
 			++it_progress;
-			continue;
-		}
-
-		// find the 'next_board' among the child
-		progress.node = progress.mcts->board_node_map.FindUnderParent(next_board, progress.node, current_board);
-		if (progress.node == nullptr) {
-			it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
 		}
 		else {
-			++it_progress;
+			// find the 'next_board' among the child
+			progress.node = progress.mcts->board_node_map.FindUnderParent(next_board, progress.node, current_board);
+			if (progress.node == nullptr) {
+				it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
+			}
+			else {
+				if (progress.node->equivalent_node != nullptr) progress.node = progress.node->equivalent_node;
+				++it_progress;
+			}
 		}
+
+		
 	}
 }
 
@@ -132,6 +139,7 @@ void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine
 		{
 			if (child->move == move) {
 				progress.node = child;
+				if (progress.node->equivalent_node != nullptr) progress.node = progress.node->equivalent_node;
 				found = true;
 				break;
 			}

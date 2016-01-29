@@ -1,53 +1,24 @@
 #include "mcts.h"
 #include "board-node-map.h"
 
-bool BoardNodeMap::operator==(const BoardNodeMap &rhs) const
-{
-	if (this->map != rhs.map) return false;
-	if (this->parent_map != rhs.parent_map) return false;
-	return true;
-}
-
-bool BoardNodeMap::operator!=(const BoardNodeMap &rhs) const
-{
-	return !(*this == rhs);
-}
-
-void BoardNodeMap::Add(const GameEngine::Board &board, TreeNode *node)
+TreeNode * BoardNodeMap::FindWithoutRedirectNode(const GameEngine::Board &board, const MCTS& mcts) const
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
-	this->Add(hash, node);
-}
-
-void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
-{
-	this->map[board_hash].insert(node);
-	this->parent_map[node->parent][board_hash].insert(node);
-}
-
-std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board, const MCTS& mcts) const
-{
-	TreeNode *ret = nullptr;
-	std::size_t hash = std::hash<GameEngine::Board>()(board);
-	std::unordered_set<TreeNode *> nodes;
 
 	auto it_found = this->map.find(hash);
-	if (it_found == this->map.end()) return nodes;
+	if (it_found == this->map.end()) return nullptr;
 
 	for (const auto &possible_node : it_found->second) {
 		GameEngine::Board it_board;
 		possible_node->GetBoard(mcts.root_node_board, it_board);
-		if (board == it_board) {
-			nodes.insert(possible_node);
-		}
+		if (board == it_board) return possible_node;
 	}
 
-	return nodes;
+	return nullptr;
 }
 
 TreeNode * BoardNodeMap::FindUnderParent(const GameEngine::Board &board, TreeNode const* parent, GameEngine::Board const& parent_board) const
 {
-	TreeNode *ret = nullptr;
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 
 	auto it_parent_map = this->parent_map.find(parent);

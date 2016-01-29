@@ -14,6 +14,8 @@ public:
 	typedef std::list<TreeNode*> children_type;
 
 public:
+	TreeNode() : parent(nullptr), equivalent_node(nullptr) {}
+
 	void AddChild(TreeNode *node);
 	void GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
 
@@ -21,6 +23,9 @@ public:
 	TreeNode *parent;
 	children_type children;
 
+	TreeNode *equivalent_node; // the board is the same as this node, only wins/count are valid info in this node
+
+public:
 	GameEngine::Stage stage;
 	GameEngine::StageType stage_type;
 #ifdef DEBUG_SAVE_BOARD

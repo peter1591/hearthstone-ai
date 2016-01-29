@@ -13,12 +13,23 @@
 
 #include "mcts.h"
 
-#define EXLPORATION_FACTOR 5.0
+#define EXLPORATION_FACTOR 2.0
 
-static double CalculateSelectionWeight(
-		int node_win, int node_simulations, double total_simulations_ln, double exploration_factor)
+static double CalculateSelectionWeight(TreeNode *node, double total_simulations_ln, double exploration_factor)
 {
-	double win_rate = (double)node_win / node_simulations;
+	auto const& node_win = node->wins;
+	auto const& node_simulations = node->count;
+
+	double win_rate;
+	if (node->equivalent_node == nullptr) {
+		// normal node
+		win_rate = (double)node_win / node_simulations;
+	}
+	else {
+		// redirect node
+		win_rate = (double)node->equivalent_node->wins / node->equivalent_node->count;
+	}
+
 	double exploration_term = sqrt(total_simulations_ln / node_simulations);
 
 	return win_rate + exploration_factor * exploration_term;
@@ -35,10 +46,11 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 	TreeNode * max_weight_node = *it_child;
 
-	double max_weight = CalculateSelectionWeight(max_weight_node->wins, max_weight_node->count, total_simulations_ln, exploration_factor);
+	double max_weight = CalculateSelectionWeight(max_weight_node, total_simulations_ln, exploration_factor);
+	++it_child;
 
 	for (; it_child != children.end(); ++it_child) {
-		double weight = CalculateSelectionWeight((*it_child)->wins, (*it_child)->count, total_simulations_ln, exploration_factor);
+		double weight = CalculateSelectionWeight(*it_child, total_simulations_ln, exploration_factor);
 		if (weight > max_weight) {
 			max_weight = weight;
 			max_weight_node = *it_child;
@@ -78,6 +90,12 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNod
 	new_node = node;
 	new_board = board; // no copy if &board == &new_board
 
+#ifdef DEBUG
+	if (new_node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
+#endif
+
+	this->traversed_nodes.push_back(new_node);
+
 	while (true)
 	{
 #ifdef DEBUG_SAVE_BOARD
@@ -85,8 +103,6 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNod
 			throw std::runtime_error("board consistency check failed");
 		}
 #endif
-
-		this->traversed_nodes.push_back(new_node);
 
 		if (new_node->children.empty()) {
 			return;
@@ -101,6 +117,11 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNod
 		}
 
 		new_node = FindBestChildToExpand(new_node);
+
+		this->traversed_nodes.push_back(new_node); // back-propagate should update the node (not the redirected one)
+		if (new_node->equivalent_node != nullptr) 
+			new_node = new_node->equivalent_node;
+
 		new_board.ApplyMove(new_node->move);
 	}
 }
@@ -136,20 +157,6 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 	}
 }
 
-// if the board has not been traversed, return nullptr
-// if the board has been traversed, return the pointer to the child node
-TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, GameEngine::Board const& parent_board, const GameEngine::Board new_child_board)
-{
-	if (parent->stage_type != GameEngine::STAGE_TYPE_GAME_FLOW) {
-		// always create a new node for non-random (i.e., non-game-flow) nodes
-		// since it must just expanded by a new move in Expand()
-		return nullptr;
-	}
-
-	// check if random-generated game flow move has already expanded before
-	return this->board_node_map.FindUnderParent(new_child_board, parent, parent_board);
-}
-
 // return false if 'new_node' is an expanded node
 // Note: &board should not equal to &new_board
 bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board)
@@ -161,14 +168,36 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 		return true;
 	}
 
+#ifdef DEBUG
+	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
+#endif
+
 	new_board = board;
 
 	this->GetNextState(node, this->allocated_node->move, new_board);
 
-	TreeNode *found_node = this->IsBoardTraversed(node, board, new_board);
-	if (found_node != nullptr) {
-		// expanded before -> select again among that subtree
-		new_node = found_node; 
+	TreeNode *found_node = this->board_node_map.FindWithoutRedirectNode(new_board, *this);
+	if (found_node != nullptr)
+	{
+		if (found_node->parent == node)
+		{
+			// expanded before under the same parent
+			// --> no need to create a redirect node
+		}
+		else {
+			// expanded before in other paths
+			// --> create a redirect node
+			new_node = this->allocated_node;
+			this->allocated_node = new TreeNode;
+
+			new_node->wins = 0;
+			new_node->count = 0;
+			new_node->equivalent_node = found_node;
+			node->AddChild(new_node);
+			this->board_node_map.AddRedirectNode(new_board, new_node);
+		}
+
+		new_node = found_node;
 		return false;
 	}
 
@@ -195,7 +224,7 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 
 	node->AddChild(new_node);
 
-	board_node_map.Add(new_board, new_node);
+	this->board_node_map.Add(new_board, new_node);
 
 	this->traversed_nodes.push_back(new_node);
 
