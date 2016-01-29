@@ -25,8 +25,12 @@ public: // used to copy/merge tree
 	void FillHash(std::map<TreeNode*, std::size_t> &nodes) const;
 
 	void Clear();
-	void Erase(const std::map<TreeNode *, std::size_t> &erasing_nodes);
 
 private:
-	std::unordered_map<std::size_t, std::unordered_set<TreeNode *> > data; // hash of board --> tree nodes
+	typedef std::unordered_map<std::size_t, std::unordered_set<TreeNode*> > MapBoardToNodes;
+
+private:
+	MapBoardToNodes map; // hash of board --> tree nodes
+
+	std::unordered_map<TreeNode const*, MapBoardToNodes> parent_map; // parent node --> child node map
 };

@@ -3,7 +3,9 @@
 
 bool BoardNodeMap::operator==(const BoardNodeMap &rhs) const
 {
-	return this->data == rhs.data;
+	if (this->map != rhs.map) return false;
+	if (this->parent_map != rhs.parent_map) return false;
+	return true;
 }
 
 bool BoardNodeMap::operator!=(const BoardNodeMap &rhs) const
@@ -14,12 +16,13 @@ bool BoardNodeMap::operator!=(const BoardNodeMap &rhs) const
 void BoardNodeMap::Add(const GameEngine::Board &board, TreeNode *node)
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
-	this->data[hash].insert(node);
+	this->Add(hash, node);
 }
 
 void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
 {
-	this->data[board_hash].insert(node);
+	this->map[board_hash].insert(node);
+	this->parent_map[node->parent][board_hash].insert(node);
 }
 
 std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board, const MCTS& mcts) const
@@ -28,8 +31,8 @@ std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 	std::unordered_set<TreeNode *> nodes;
 
-	auto it_found = this->data.find(hash);
-	if (it_found == this->data.end()) return nodes;
+	auto it_found = this->map.find(hash);
+	if (it_found == this->map.end()) return nodes;
 
 	for (const auto &possible_node : it_found->second) {
 		GameEngine::Board it_board;
@@ -47,8 +50,11 @@ TreeNode * BoardNodeMap::FindUnderParent(const GameEngine::Board &board, TreeNod
 	TreeNode *ret = nullptr;
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 
-	auto it_found = this->data.find(hash);
-	if (it_found == this->data.end()) return nullptr;
+	auto it_parent_map = this->parent_map.find(parent);
+	if (it_parent_map == this->parent_map.end()) return nullptr;
+
+	auto it_found = it_parent_map->second.find(hash);
+	if (it_found == it_parent_map->second.end()) return nullptr;
 
 	for (const auto &possible_node : it_found->second) {
 		if (possible_node->parent != parent) continue;
@@ -62,12 +68,14 @@ TreeNode * BoardNodeMap::FindUnderParent(const GameEngine::Board &board, TreeNod
 	return nullptr;
 }
 
-void BoardNodeMap::UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map)
+static void UpdateNodePointersInternal(
+	std::unordered_map<std::size_t, std::unordered_set<TreeNode*> > &data,
+	std::unordered_map<TreeNode*, TreeNode*> const& node_map)
 {
-	for (auto &node : this->data) {
-		auto &origin_nodes = node.second;
+	for (auto &node : data) {
 		std::unordered_set<TreeNode*> new_nodes;
-		for (const auto &origin_pointer : origin_nodes) {
+
+		for (const auto &origin_pointer : node.second) {
 			auto it_new_pointer = node_map.find(origin_pointer);
 			if (it_new_pointer == node_map.end())
 			{
@@ -81,9 +89,19 @@ void BoardNodeMap::UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNo
 	}
 }
 
+void BoardNodeMap::UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map)
+{
+	UpdateNodePointersInternal(this->map, node_map);
+
+	for (auto &parent_map_info : this->parent_map)
+	{
+		UpdateNodePointersInternal(parent_map_info.second, node_map);
+	}
+}
+
 void BoardNodeMap::FillHash(std::map<TreeNode*, std::size_t> &nodes) const
 {
-	for (const auto &node : this->data) {
+	for (const auto &node : this->map) {
 		const std::size_t &hash = node.first;
 		for (const auto &tree_node : node.second) {
 			auto it_filling_node = nodes.find(tree_node);
@@ -96,16 +114,6 @@ void BoardNodeMap::FillHash(std::map<TreeNode*, std::size_t> &nodes) const
 
 void BoardNodeMap::Clear()
 {
-	this->data.clear();
-}
-
-void BoardNodeMap::Erase(const std::map<TreeNode *, std::size_t> &erasing_nodes)
-{
-	for (const auto &node : erasing_nodes) {
-		TreeNode* const& tree_node = node.first;
-		std::size_t const& hash = node.second;
-
-		auto existing_nodes = this->data[hash];
-		existing_nodes.erase(tree_node);
-	}
+	this->map.clear();
+	this->parent_map.clear();
 }
