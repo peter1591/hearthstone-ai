@@ -8,6 +8,7 @@ Task::Task(MCTS *mcts)
 {
 	this->mcts = mcts;
 	this->pause_notifier = nullptr;
+	this->iterations = 0;
 
 	// Note: Initialize() might be called after MainLoop() is entered
 	this->state = Task::STATE_SPAWNED;
@@ -35,12 +36,26 @@ Task & Task::operator=(Task &&task)
 
 Task::State Task::GetState()
 {
-	return this->state; // TODO: lock?
+	std::unique_lock<std::mutex> lck(this->mtx_state);
+	return this->state;
 }
 
 void Task::SetState(Task::State state)
 {
-	this->state = state; // TODO: lock?
+	std::unique_lock<std::mutex> lck(this->mtx_state);
+	this->state = state;
+}
+
+int Task::GetIterationCount()
+{
+	std::unique_lock<std::mutex> lck(this->mtx_iterations);
+	return this->iterations;
+}
+
+void Task::IncreaseIterationCount()
+{
+	std::unique_lock<std::mutex> lck(this->mtx_iterations);
+	++this->iterations;
 }
 
 void Task::Initialize(std::thread &&thread)
@@ -98,6 +113,7 @@ void Task::MainLoop()
 			this->SetState(Task::STATE_PAUSE);
 		}
 		this->mcts->Iterate();
+		this->IncreaseIterationCount();
 	}
 }
 

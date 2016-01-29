@@ -48,6 +48,8 @@ public:
 	Task(MCTS *mcts);
 	~Task();
 
+	static void ThreadCreatedCallback(Task *task);
+
 	void Initialize(std::thread &&thread);
 
 	// In Windows, if the thread don't yield CPU, the main thread never got a chance to run
@@ -57,9 +59,7 @@ public:
 	void Stop();
 	void Join();
 
-	void MainLoop();
-
-	static void ThreadCreatedCallback(Task *task);
+	int GetIterationCount();
 
 public: // not copyable; only movable
 	Task(const Task &task) = delete;
@@ -76,11 +76,21 @@ private:
 	};
 
 private:
+	void MainLoop();
+
 	State GetState();
 	void SetState(State state);
 
-private:
+	void IncreaseIterationCount();
+
+private: // shared (might be altered by other threads)
+	std::mutex mtx_state;
 	State state;
+
+	std::mutex mtx_iterations;
+	int iterations;
+
+private: // private (will not be altered by other threads)
 	std::thread thread;
 	PauseNotifier *pause_notifier;
 	std::chrono::time_point<std::chrono::steady_clock> run_until;
