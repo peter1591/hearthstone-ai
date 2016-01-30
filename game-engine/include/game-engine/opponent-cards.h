@@ -17,21 +17,27 @@ class OpponentCards
 	public:
 		OpponentCards() : deck_card_count(0), hand_card_count(0) {}
 
-		void Set(int deck_size) { this->deck_card_count = deck_size; }
+		void Set(int hand_card_count, int deck_card_count) {
+			this->hand_card_count = hand_card_count;
+			this->deck_card_count = deck_card_count;
+		}
+
 		int GetHandCount() const { return this->hand_card_count; }
 		int GetDeckCount() const { return this->deck_card_count; }
 
 		void GetPossiblePlayableMinions(const PlayerStat &opponent_stat, std::vector<Card> &playable_cards) const
 		{
-			if (opponent_stat.crystal.GetCurrent() < 3) return;
+			if (this->hand_card_count <= 0) return;
 
 			// TODO
 			Card card;
 			card.type = Card::TYPE_MINION;
-			card.id = 222;
+			card.id = 223;
 			card.cost = 2;
 			card.data.minion.attack = 2;
-			card.data.minion.hp = 2;
+			card.data.minion.hp = 3;
+
+			if (opponent_stat.crystal.GetCurrent() < card.cost) return;
 
 			playable_cards.push_back(card);
 		}

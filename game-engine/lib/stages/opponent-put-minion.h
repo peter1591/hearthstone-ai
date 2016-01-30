@@ -19,6 +19,8 @@ class StageOpponentPutMinion
 			Minion minion;
 			const Board::OpponentPutMinionData &data = board.data.opponent_put_minion_data;
 
+			board.opponent_cards.PlayCardFromHand(data.card);
+
 			board.opponent_stat.crystal.CostCrystals(data.card.cost);
 
 			// TODO: handle battlecry
@@ -29,8 +31,6 @@ class StageOpponentPutMinion
 #else
 			board.opponent_minions.AddMinion(minion); // add to the rightmost
 #endif
-
-			board.opponent_cards.PlayCardFromHand(data.card);
 
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}
