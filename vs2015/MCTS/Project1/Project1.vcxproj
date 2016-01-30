@@ -66,18 +66,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\..\game-ai\include;..\..\..\game-engine\include;..\..\..\game-engine\include\game-engine;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\..\game-ai\include;..\..\..\game-engine\include;..\..\..\game-engine\include\game-engine;$(IncludePath)</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..\..\..\game-ai\include;..\..\..\game-engine\include;..\..\..\game-engine\include\game-engine;$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\game-ai\include;..\..\..\game-engine\include;..\..\..\game-engine\include\game-engine;$(IncludePath)</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -92,6 +86,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -118,6 +113,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,12 +123,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\contrib\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\..\contrib\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\task.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\deck-database.cpp" />
+    <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -145,7 +144,6 @@
     <ClInclude Include="..\..\..\game-engine\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\game-engine\include\game-engine\card.h" />
     <ClInclude Include="..\..\..\game-engine\include\game-engine\common.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\deck-database.h" />
     <ClInclude Include="..\..\..\game-engine\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\game-engine\include\game-engine\hand.h" />
     <ClInclude Include="..\..\..\game-engine\include\game-engine\hero-power.h" />

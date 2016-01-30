@@ -30,17 +30,17 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\contrib\lib\lib_json\json_reader.cpp">
-      <Filter>Source Files\libjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\contrib\lib\lib_json\json_value.cpp">
-      <Filter>Source Files\libjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\contrib\lib\lib_json\json_writer.cpp">
-      <Filter>Source Files\libjson</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\game-engine\lib\card-database.cpp">
       <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\lib_json\json_reader.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\lib_json\json_value.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\lib_json\json_writer.cpp">
+      <Filter>Source Files\libjson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,9 +101,6 @@
     <ClInclude Include="..\..\..\..\include\game-engine\deck.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\game-engine\deck-database.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\game-engine\hand.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
@@ -146,10 +143,5 @@
     <ClInclude Include="..\..\..\..\include\game-engine\card-database.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\contrib\lib\lib_json\json_valueiterator.inl">
-      <Filter>Source Files\libjson</Filter>
-    </None>
   </ItemGroup>
 </Project>

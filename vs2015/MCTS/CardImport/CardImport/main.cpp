@@ -9,17 +9,9 @@
 
 int main(void)
 {
-	std::ifstream cards_file("../../../../database/cards.json");
-
-	Json::Reader reader;
-	Json::Value cards_json;
-	if (reader.parse(cards_file, cards_json, false) == false)
-	{
-		throw std::runtime_error("cannot parse file");
-	}
-
 	GameEngine::CardDatabase card_database;
-	card_database.ReadFromJson(cards_json);
+
+	card_database.ReadFromJsonFile("../../../../database/cards.json");
 
 	// write mapping header
 	std::ofstream header_file("../../../../include/game-engine/card-id-map.h");

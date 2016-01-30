@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MCTS", "Project1\Project1.v
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MergeTest", "MergeTest\MergeTest.vcxproj", "{662E6EAF-E440-48BF-BD0F-6620770A984D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CardImport", "CardImport\CardImport\CardImport.vcxproj", "{E4552EEF-5349-47D7-B425-134E60864E49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,14 @@ Global
 		{662E6EAF-E440-48BF-BD0F-6620770A984D}.Release|Win32.Build.0 = Release|Win32
 		{662E6EAF-E440-48BF-BD0F-6620770A984D}.Release|x64.ActiveCfg = Release|x64
 		{662E6EAF-E440-48BF-BD0F-6620770A984D}.Release|x64.Build.0 = Release|x64
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Debug|Win32.Build.0 = Debug|Win32
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Debug|x64.ActiveCfg = Debug|x64
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Debug|x64.Build.0 = Debug|x64
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Release|Win32.ActiveCfg = Release|Win32
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Release|Win32.Build.0 = Release|Win32
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Release|x64.ActiveCfg = Release|x64
+		{E4552EEF-5349-47D7-B425-134E60864E49}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

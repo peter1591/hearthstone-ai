@@ -122,9 +122,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\contrib\lib\lib_json\json_reader.cpp" />
-    <ClCompile Include="..\..\..\..\contrib\lib\lib_json\json_value.cpp" />
-    <ClCompile Include="..\..\..\..\contrib\lib\lib_json\json_writer.cpp" />
+    <ClCompile Include="..\..\..\..\contrib\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\..\..\contrib\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -145,7 +145,6 @@
     <ClInclude Include="..\..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\..\include\game-engine\card.h" />
     <ClInclude Include="..\..\..\..\include\game-engine\common.h" />
-    <ClInclude Include="..\..\..\..\include\game-engine\deck-database.h" />
     <ClInclude Include="..\..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\..\include\game-engine\hand.h" />
     <ClInclude Include="..\..\..\..\include\game-engine\hero-power.h" />
@@ -163,9 +162,6 @@
     <ClInclude Include="..\..\..\..\include\mcts.h" />
     <ClInclude Include="..\..\..\..\include\task.h" />
     <ClInclude Include="..\..\..\..\include\tree.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\contrib\lib\lib_json\json_valueiterator.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

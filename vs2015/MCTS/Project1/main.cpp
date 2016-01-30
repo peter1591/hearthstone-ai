@@ -3,87 +3,61 @@
 #include <map>
 #include <iostream>
 
-#include "game-engine/deck-database.h"
+#include "game-engine/card-id-map.h"
+#include "game-engine/card-database.h"
 #include "task.h"
 #include "decider.h"
 
-void InitializeDeck1(const GameEngine::DeckDatabase &deck_database, GameEngine::Deck &deck)
-{
-	/*
-	deck.AddCard(deck_database.GetCard(233));
-	deck.AddCard(deck_database.GetCard(233));
-	deck.AddCard(deck_database.GetCard(233));
-	deck.AddCard(deck_database.GetCard(233));
-	deck.AddCard(deck_database.GetCard(233));
-	deck.AddCard(deck_database.GetCard(111));
-	deck.AddCard(deck_database.GetCard(211));
-	deck.AddCard(deck_database.GetCard(213));
-	deck.AddCard(deck_database.GetCard(222));
-	deck.AddCard(deck_database.GetCard(231));
-	deck.AddCard(deck_database.GetCard(111));
-	deck.AddCard(deck_database.GetCard(211));
-	deck.AddCard(deck_database.GetCard(213));
-	deck.AddCard(deck_database.GetCard(222));
-	deck.AddCard(deck_database.GetCard(231));
-	deck.AddCard(deck_database.GetCard(111));
-	deck.AddCard(deck_database.GetCard(211));
-	deck.AddCard(deck_database.GetCard(213));
-	deck.AddCard(deck_database.GetCard(222));
-	deck.AddCard(deck_database.GetCard(231));
-	deck.AddCard(deck_database.GetCard(111));
-	deck.AddCard(deck_database.GetCard(211));
-	deck.AddCard(deck_database.GetCard(213));
-	deck.AddCard(deck_database.GetCard(222));
-	deck.AddCard(deck_database.GetCard(231));
-	*/
-	
+void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::Deck &deck)
+{	
 	for (int i = 0; i < 30; ++i) {
-		deck.AddCard(deck_database.GetCard(222));
+		deck.AddCard(card_database.GetCard(CARD_ID_CS2_120));
 	}
 }
 
-void InitializeHand1(const GameEngine::DeckDatabase &deck_database, GameEngine::Hand &hand)
+void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::Hand &hand)
 {
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t));
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
 }
 
 void InitializeBoard(GameEngine::Board &board)
 {
-	GameEngine::DeckDatabase deck_database;
+	GameEngine::CardDatabase card_database;
 
-	board.player_stat.hp = 14;
+	std::cout << "Loading card database..." << std::endl;
+	if (!card_database.ReadFromJsonFile("../../../database/cards.json"))
+		throw std::runtime_error("failed to load card data");
+
+	board.player_stat.hp = 30;
 	board.player_stat.armor = 0;
-	board.player_stat.crystal.Set(2, 2, 0, 0);
+	board.player_stat.crystal.Set(1, 1, 0, 0);
+	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 20;
+	board.opponent_stat.hp = 30;
 	board.opponent_stat.armor = 0;
-	board.opponent_stat.crystal.Set(2, 2, 0, 0);
+	board.opponent_stat.crystal.Set(0, 0, 0, 0);
+	board.opponent_stat.fatigue_damage = 0;
 
-	board.opponent_cards.Set(30);
+	board.opponent_cards.Set(4, 26);
 
-	InitializeDeck1(deck_database, board.player_deck);
-	InitializeHand1(deck_database, board.player_hand);
+	InitializeDeck1(card_database, board.player_deck);
+	InitializeHand1(card_database, board.player_hand);
 
 	GameEngine::Minion minion;
-	minion.Set(111, 2, 2, 1);
-	minion.TurnStart();
-	board.player_minions.AddMinion(minion);
+	//minion.Set(111, 1, 1, 1);
+	//minion.TurnStart();
+	//board.player_minions.AddMinion(minion);
 
 	//minion.Set(213, 2, 2, 3);
 	//minion.TurnStart();
 	//board.player_minions.AddMinion(minion);
 
-	minion.Set(222, 2, 2, 2);
-	minion.TurnStart();
-	board.opponent_minions.AddMinion(minion);
+	//minion.Set(222, 2, 2, 2);
+	//minion.TurnStart();
+	//board.opponent_minions.AddMinion(minion);
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();

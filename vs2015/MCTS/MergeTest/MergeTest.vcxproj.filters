@@ -28,15 +28,15 @@
     <Filter Include="Header Files\game-engine\stages">
       <UniqueIdentifier>{ac8d647e-0115-4745-acc8-39fe15a75c16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\libjson">
+      <UniqueIdentifier>{8407d611-c406-4ee2-a802-fee2201a3828}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\deck-database.cpp">
       <Filter>Source Files\game-engine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp">
@@ -50,6 +50,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp">
       <Filter>Source Files\game-ai</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp">
+      <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\contrib\lib_json\json_reader.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\contrib\lib_json\json_value.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp">
+      <Filter>Source Files\libjson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +78,6 @@
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\game-engine\include\game-engine\common.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\deck-database.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\game-engine\include\game-engine\deck.h">
