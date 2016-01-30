@@ -8,24 +8,68 @@ namespace GameEngine {
 
 class StageHelper
 {
-	public:
-		// handle minion/hero attack, calculate damages
-		static void HandleAttack(
-				PlayerStat &attacker_hero,
-				Minions::container_type &attacker_minions,
-				int attacker_idx, // -1 for the hero
-				PlayerStat &attacked_hero,
-				Minions::container_type &attacked_minions,
-				int attacked_idx);
+public: // return true if game state changed (e.g., win/loss)
+	static bool PlayerDrawCard(Board &board);
+	static bool OpponentDrawCard(Board &board);
 
-		// check if one of the heros dead, and move to the corresponding stage
-		// return true if game ends (i.e., state changed)
-		static bool CheckWinLoss(Board &board);
+	// check if one of the heros dead, and move to the corresponding stage
+	// return true if game ends (i.e., state changed)
+	static bool CheckWinLoss(Board &board);
 
-	private:
-		// return true if dead
-		static bool RemoveDeadMinion(Minions::container_type &minions, Minions::container_type::iterator it);
+public:
+	// handle minion/hero attack, calculate damages
+	static void HandleAttack(
+		PlayerStat &attacker_hero,
+		Minions::container_type &attacker_minions,
+		int attacker_idx, // -1 for the hero
+		PlayerStat &attacked_hero,
+		Minions::container_type &attacked_minions,
+		int attacked_idx);
+
+private:
+	// return true if dead
+	static bool RemoveDeadMinion(Minions::container_type &minions, Minions::container_type::iterator it);
+
+	static void Fatigue(PlayerStat &player_stat);
 };
+
+inline bool StageHelper::PlayerDrawCard(Board & board)
+{
+	if (board.player_deck.GetCards().empty()) {
+		StageHelper::Fatigue(board.player_stat);
+		return StageHelper::CheckWinLoss(board);
+	}
+
+	Card draw_card = board.player_deck.Draw();
+
+	if (board.player_hand.GetCards().size() < 10) {
+		board.player_hand.AddCard(draw_card);
+	}
+	else {
+		// hand can have maximum of 10 cards
+		// TODO: distroy card (trigger deathrattle?)
+	}
+
+	return false;
+}
+
+inline bool StageHelper::OpponentDrawCard(Board & board)
+{
+	if (board.opponent_cards.GetDeckCount() == 0) {
+		StageHelper::Fatigue(board.opponent_stat);
+		return StageHelper::CheckWinLoss(board);
+	}
+
+	if (board.opponent_cards.GetHandCount() < 10) {
+		board.opponent_cards.DrawFromDeckToHand();
+	}
+	else {
+		// hand can have maximum of 10 cards
+		// TODO: distroy card (trigger deathrattle?)
+	}
+
+	return false;
+}
 
 inline void StageHelper::HandleAttack(
 		PlayerStat &attacker_hero,
@@ -87,6 +131,12 @@ inline bool StageHelper::RemoveDeadMinion(Minions::container_type &minions, Mini
 
 	minions.erase(it);
 	return true;
+}
+
+inline void StageHelper::Fatigue(PlayerStat & player_stat)
+{
+	++player_stat.fatigue_damage;
+	player_stat.hp -= player_stat.fatigue_damage;
 }
 
 } // namespace GameEngine

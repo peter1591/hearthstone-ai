@@ -6,6 +6,7 @@
 #include <string>
 
 #include "stages/common.h"
+#include "stages/helper.h"
 #include "board.h"
 
 namespace GameEngine {
@@ -19,20 +20,7 @@ class StageOpponentTurnStart
 		{
 			board.opponent_stat.crystal.TurnStart();
 
-			// draw a card
-			if (board.opponent_cards.GetDeckCount() == 0) {
-				// no any card can draw, take damage
-				// TODO
-				board.stage = STAGE_WIN;
-				return;
-			} else {
-				if (board.opponent_cards.GetHandCount() < 10) {
-					board.opponent_cards.DrawFromDeckToHand();
-				} else {
-					// hand can have maximum of 10 cards
-					// TODO: distroy card (trigger deathrattle?)
-				}
-			}
+			if (StageHelper::OpponentDrawCard(board)) return;
 
 			// reset minion stat
 			for (auto &minion : board.opponent_minions.GetMinions()) {

@@ -56,6 +56,8 @@ class PlayerStat
 		Weapon weapon;
 		HeroPower hero_power;
 
+		int fatigue_damage;
+
 		std::string GetDebugString() const;
 
 		bool operator==(const PlayerStat &rhs) const;
@@ -69,7 +71,8 @@ inline std::string PlayerStat::GetDebugString() const
 		<< ", crystals: "
 		<< this->crystal.GetCurrent() << "/" << this->crystal.GetTotal()
 		<< ", locked: "
-		<< this->crystal.GetLocked() << "/" << this->crystal.GetLockedNextTurn();
+		<< this->crystal.GetLocked() << "/" << this->crystal.GetLockedNextTurn()
+		<< ", fatigue: " << this->fatigue_damage;
 	return oss.str();
 }
 
@@ -80,6 +83,7 @@ inline bool PlayerStat::operator==(const PlayerStat &rhs) const
 	if (this->crystal != rhs.crystal) return false;
 	if (this->weapon != rhs.weapon) return false;
 	if (this->hero_power != rhs.hero_power) return false;
+	if (this->fatigue_damage != rhs.fatigue_damage) return false;
 
 	return true;
 }
@@ -124,6 +128,7 @@ namespace std {
 			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat::Crystal>()(s.crystal));
 			GameEngine::hash_combine(result, hash<GameEngine::Weapon>()(s.weapon));
 			GameEngine::hash_combine(result, hash<GameEngine::HeroPower>()(s.hero_power));
+			GameEngine::hash_combine(result, hash<int>()(s.fatigue_damage));
 
 			return result;
 		}
