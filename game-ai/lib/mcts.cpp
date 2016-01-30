@@ -176,7 +176,7 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 
 	this->GetNextState(node, this->allocated_node->move, new_board);
 
-	TreeNode *found_node = this->board_node_map.FindWithoutRedirectNode(new_board, *this);
+	TreeNode *found_node = this->board_node_map.Find(new_board, *this);
 	if (found_node != nullptr)
 	{
 		if (found_node->parent == node)
@@ -194,7 +194,6 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 			new_node->count = 0;
 			new_node->equivalent_node = found_node;
 			node->AddChild(new_node);
-			this->board_node_map.AddRedirectNode(new_board, new_node);
 		}
 
 		new_node = found_node;
