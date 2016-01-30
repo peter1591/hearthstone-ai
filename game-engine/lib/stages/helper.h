@@ -2,7 +2,7 @@
 #define STAGES_HELPER_H
 
 #include "stages/common.h"
-#include "board.h"
+#include "game-engine/board.h"
 
 namespace GameEngine {
 

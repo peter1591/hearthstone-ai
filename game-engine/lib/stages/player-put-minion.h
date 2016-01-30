@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "stages/common.h"
-#include "board.h"
+#include "game-engine/board.h"
 
 namespace GameEngine {
 
@@ -19,14 +19,14 @@ class StagePlayerPutMinion
 			Minion minion;
 			const Board::PlayerPutMinionData &data = board.data.player_put_minion_data;
 
-			std::vector<Card>::const_iterator it_hand_card = board.player_hand.GetCards().begin() + data.idx_hand_card;
+			auto playing_card = *(board.player_hand.GetCards().begin() + data.idx_hand_card);
 
 			board.player_hand.RemoveCard(data.idx_hand_card);
 
-			board.player_stat.crystal.CostCrystals(it_hand_card->cost);
+			board.player_stat.crystal.CostCrystals(playing_card.cost);
 
 			// TODO: handle battlecry
-			minion.Summon(*it_hand_card);
+			minion.Summon(playing_card);
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.player_minions.AddMinion(minion, data.location);

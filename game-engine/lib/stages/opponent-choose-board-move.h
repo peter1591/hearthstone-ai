@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "stages/common.h"
-#include "board.h"
+#include "game-engine/board.h"
 
 namespace GameEngine {
 

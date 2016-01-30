@@ -2,7 +2,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "move.h"
+#include "game-engine/move.h"
 
 namespace GameEngine {
 

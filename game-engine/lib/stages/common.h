@@ -4,7 +4,7 @@
 #include <typeinfo>
 #include <string>
 #include <vector>
-#include "board.h"
+#include "game-engine/board.h"
 
 #include "stages/helper.h"
 

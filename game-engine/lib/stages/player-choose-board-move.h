@@ -7,7 +7,7 @@
 
 #include "stages/common.h"
 #include "stages/weighted-moves.h"
-#include "board.h"
+#include "game-engine/board.h"
 
 namespace GameEngine {
 

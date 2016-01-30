@@ -13,9 +13,9 @@
 #include "stages/opponent-attack.h"
 #include "stages/opponent-turn-end.h"
 
-#include "random-generator.h"
+#include "game-engine/random-generator.h"
 
-#include "board.h"
+#include "game-engine/board.h"
 
 namespace GameEngine {
 
