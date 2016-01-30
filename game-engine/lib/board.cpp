@@ -85,6 +85,7 @@ void Board::SetStateToPlayerTurnStart()
 void Board::SetStateToPlayerChooseBoardMove()
 {
 	this->stage = StagePlayerChooseBoardMove::stage;
+	//this->stage = StageOpponentChooseBoardMove::stage;
 }
 
 void Board::DebugPrint() const

@@ -1,4 +1,5 @@
 #include <time.h>
+#include <random>
 #include <map>
 #include <iostream>
 
@@ -8,6 +9,7 @@
 
 void InitializeDeck1(const GameEngine::DeckDatabase &deck_database, GameEngine::Deck &deck)
 {
+	/*
 	deck.AddCard(deck_database.GetCard(233));
 	deck.AddCard(deck_database.GetCard(233));
 	deck.AddCard(deck_database.GetCard(233));
@@ -33,26 +35,33 @@ void InitializeDeck1(const GameEngine::DeckDatabase &deck_database, GameEngine::
 	deck.AddCard(deck_database.GetCard(213));
 	deck.AddCard(deck_database.GetCard(222));
 	deck.AddCard(deck_database.GetCard(231));
+	*/
+	
+	for (int i = 0; i < 30; ++i) {
+		deck.AddCard(deck_database.GetCard(222));
+	}
 }
 
 void InitializeHand1(const GameEngine::DeckDatabase &deck_database, GameEngine::Hand &hand)
 {
-	hand.AddCard(deck_database.GetCard(111));
-	hand.AddCard(deck_database.GetCard(211));
-	hand.AddCard(deck_database.GetCard(213));
 	hand.AddCard(deck_database.GetCard(222));
-	hand.AddCard(deck_database.GetCard(231));
+	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
+	hand.AddCard(deck_database.GetCard(222));
 }
 
 void InitializeBoard(GameEngine::Board &board)
 {
 	GameEngine::DeckDatabase deck_database;
 
-	board.player_stat.hp = 30;
+	board.player_stat.hp = 5;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(2, 2, 0, 0);
 
-	board.opponent_stat.hp = 30;
+	board.opponent_stat.hp = 5;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(2, 2, 0, 0);
 
@@ -62,15 +71,15 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeHand1(deck_database, board.player_hand);
 
 	GameEngine::Minion minion;
-	minion.Set(111, 1, 7, 1);
-	minion.TurnStart();
-	board.player_minions.AddMinion(minion);
+	//minion.Set(111, 1, 3, 1);
+	//minion.TurnStart();
+	//board.player_minions.AddMinion(minion);
 
-	minion.Set(213, 2, 2, 3);
-	minion.TurnStart();
-	board.player_minions.AddMinion(minion);
+	//minion.Set(213, 2, 2, 3);
+	//minion.TurnStart();
+	//board.player_minions.AddMinion(minion);
 
-	minion.Set(333, 3, 5, 3);
+	minion.Set(222, 2, 2, 2);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 
@@ -80,9 +89,10 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 4;
+	constexpr int threads = 1;
 	constexpr int sec_each_run = 1;
 
+	std::mt19937 random_generator(time(nullptr));
 	MCTS mcts[threads];
 	std::vector<Task*> tasks;
 	std::map<Task*, Task::PauseNotifier*> pause_notifiers;
@@ -92,7 +102,8 @@ static void Run()
 	board.DebugPrint();
 
 	for (int i = 0; i < threads; ++i) {
-		mcts[i].Initialize((unsigned int)time(nullptr), board);
+		mcts[i].Initialize(random_generator(), board);
+		//mcts[i].Initialize((unsigned int)time(nullptr), board);
 		Task *new_task = new Task(&mcts[i]);
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
 		tasks.push_back(new_task);
@@ -107,8 +118,6 @@ static void Run()
 	auto start = std::chrono::steady_clock::now();
 	for (int times = 0;; times++)
 	{
-		MCTS mcts_copy[threads];
-
 		std::cout << "Waiting..." << std::endl;
 		std::cout.flush();
 		for (const auto &task : tasks)
