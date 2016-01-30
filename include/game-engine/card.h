@@ -2,6 +2,8 @@
 #define GAME_ENGINE_CARD_H
 
 #include <functional>
+#include <string>
+#include <sstream>
 #include "common.h"
 
 namespace GameEngine {
@@ -11,13 +13,12 @@ class Card
 	public:
 		Card() : id(0) {}
 
+		bool operator==(const Card &rhs) const;
+		bool operator!=(const Card &rhs) const;
+
 		void MarkInvalid();
 		bool IsValid() const;
-
-		bool operator==(const Card &rhs) const;
-		bool operator!=(const Card &rhs) const {
-			return !(*this == rhs);
-		}
+		std::string GetDebugString() const;
 
 	public:
 		int id;
@@ -89,6 +90,27 @@ inline void Card::MarkInvalid()
 	this->id = 0;
 }
 
+inline std::string Card::GetDebugString() const
+{
+	if (!this->IsValid()) return "INVALID";
+
+	std::ostringstream oss;
+
+	if (this->type == TYPE_MINION)
+	{
+		oss << "M" << this->cost << this->data.minion.attack << this->data.minion.hp;
+	}
+	else if (this->type == TYPE_SPELL)
+	{
+		oss << "S" << this->cost;
+	}
+	else {
+		oss << "???";
+	}
+
+	return oss.str();
+}
+
 inline bool Card::operator==(const Card &rhs) const
 {
 	if (this->id != rhs.id) return false;
@@ -111,6 +133,11 @@ inline bool Card::operator==(const Card &rhs) const
 	}
 
 	return true;
+}
+
+inline bool Card::operator!=(const Card &rhs) const
+{
+	return !(*this == rhs);
 }
 
 } // namespace GameEngine

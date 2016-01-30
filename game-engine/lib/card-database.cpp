@@ -1,5 +1,5 @@
-#include <iostream>
-
+#include <fstream>
+#include "json/reader.h"
 #include "game-engine/card-database.h"
 
 namespace GameEngine {
@@ -7,6 +7,18 @@ namespace GameEngine {
 	CardDatabase::CardDatabase()
 	{
 		this->Clear();
+	}
+
+	bool CardDatabase::ReadFromJsonFile(std::string const & filepath)
+	{
+		Json::Reader reader;
+		Json::Value cards_json;
+
+		std::ifstream cards_file(filepath);
+
+		if (reader.parse(cards_file, cards_json, false) == false) return false;
+
+		return this->ReadFromJson(cards_json);
 	}
 
 	bool CardDatabase::ReadFromJson(Json::Value const & cards_json)
@@ -91,7 +103,7 @@ namespace GameEngine {
 		return id;
 	}
 
-	Card GameEngine::CardDatabase::GetCard(int card_id)
+	Card GameEngine::CardDatabase::GetCard(int card_id) const
 	{
 		auto it = this->cards.find(card_id);
 		if (it == this->cards.end())
@@ -109,7 +121,7 @@ namespace GameEngine {
 		return this->origin_id_map;
 	}
 
-	int CardDatabase::GetCardIdFromOriginalId(std::string const & origin_id)
+	int CardDatabase::GetCardIdFromOriginalId(std::string const & origin_id) const
 	{
 		auto it = this->origin_id_map.find(origin_id);
 		if (it == this->origin_id_map.end()) return -1;

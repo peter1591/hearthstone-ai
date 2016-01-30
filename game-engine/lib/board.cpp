@@ -139,14 +139,14 @@ void Board::DebugPrint() const
 	std::cout << "Player deck: " << std::endl;
 	std::cout << "\t";
 	for (const auto &card : this->player_deck.GetCards()) {
-		std::cout << card.id << " ";
+		std::cout << card.GetDebugString() << " ";
 	}
 	std::cout << std::endl;
 
 	std::cout << "Player hand: " << std::endl;
 	std::cout << "\t";
 	for (const auto &card : this->player_hand.GetCards()) {
-		std::cout << card.id << " ";
+		std::cout << card.GetDebugString() << " ";
 	}
 	std::cout << std::endl;
 

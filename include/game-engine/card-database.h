@@ -11,12 +11,13 @@ namespace GameEngine {
 	public:
 		CardDatabase();
 
+		bool ReadFromJsonFile(std::string const& filepath);
 		bool ReadFromJson(Json::Value const& json);
 
-		Card GetCard(int card_id);
+		Card GetCard(int card_id) const;
 
 		std::unordered_map<std::string, int> const& GetOriginalIdMap() const;
-		int GetCardIdFromOriginalId(std::string const& origin_id);
+		int GetCardIdFromOriginalId(std::string const& origin_id) const;
 
 	private:
 		void AddCard(Card const & card, std::string const & origin_id);
