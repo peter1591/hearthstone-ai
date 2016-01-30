@@ -64,6 +64,23 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 	}
 }
 
+void Board::GetGoodMove(Move & next_move, unsigned int rand) const
+{
+	switch (this->GetStageType()) {
+	case STAGE_TYPE_GAME_FLOW:
+		throw std::runtime_error("This is a game flow stage, you should skip the GetNextMoves() call, and apply the Move::GetGameFlowMove() directly.");
+	case STAGE_TYPE_GAME_END:
+		return;
+
+	case STAGE_TYPE_PLAYER:
+	case STAGE_TYPE_OPPONENT:
+		return StageFunctionCaller<StageFunctionChooser::Chooser_GetGoodMove>(this->stage, *this, next_move, rand);
+
+	default:
+		throw std::runtime_error("Unhandled case in GetGoodMove()");
+	}
+}
+
 void Board::ApplyMove(const Move &move)
 {
 	if (this->GetStageType() == STAGE_TYPE_GAME_FLOW) {

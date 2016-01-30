@@ -13,7 +13,7 @@
 
 #include "mcts.h"
 
-#define EXLPORATION_FACTOR 1.0
+#define EXLPORATION_FACTOR 5.0
 
 static double CalculateSelectionWeight(
 		int node_win, int node_simulations, double total_simulations_ln, double exploration_factor)
@@ -212,17 +212,9 @@ bool MCTS::Simulate(GameEngine::Board &board)
 			return (board.GetStage() == GameEngine::STAGE_WIN);
 
 		} else {
-			board.GetNextMoves(next_moves);
-
-#ifdef DEBUG
-			if (next_moves.empty()) {
-				throw std::runtime_error("stage type is not GAME_END, but no next move is available");
-			}
-#endif
-
-			// do random move here
-			int choose_move = this->GetRandom() % next_moves.size();
-			board.ApplyMove(next_moves[choose_move]);
+			GameEngine::Move move;
+			board.GetGoodMove(move, this->GetRandom());
+			board.ApplyMove(move);
 		}
 	}
 }

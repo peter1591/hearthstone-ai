@@ -58,9 +58,42 @@ namespace StageFunctionChooser
 
 				return CallerInternal_GetNextMoves<is_game_flow_stage>::template Call<Stage, Params...>(params...);
 			}
+	};
 
-		private:
+	struct Chooser_GetGoodMove {
+		typedef void ReturnType;
+	};
 
+	template <bool IsGameFlowStage>
+	struct CallerInternal_GetGoodMove {};
+
+	// IsGameFlowStage = true
+	// A game flow stage's GetNextMoves() always return the game-flow move,
+	// So this call should be avoided for perfomance issue
+	template<> struct CallerInternal_GetGoodMove<true> {
+		template <typename Stage, typename... Params>
+		static Chooser_GetGoodMove::ReturnType Call(Params & ...) {
+			throw std::runtime_error("This is a game flow stage, the GetGoodMove() call should be avoided.");
+		}
+	};
+
+	// IsGameFlowStage = false
+	template<> struct CallerInternal_GetGoodMove<false> {
+		template <typename Stage, typename... Params>
+		static Chooser_GetGoodMove::ReturnType Call(Params & ... params) {
+			return Stage::GetGoodMove(params...);
+		}
+	};
+
+	template<> struct Caller<Chooser_GetGoodMove> {
+	public:
+		template <typename Stage, typename... Params>
+		static Chooser_GetGoodMove::ReturnType Call(Params & ... params) {
+			constexpr bool is_game_flow_stage =
+				((Stage::stage & STAGE_TYPE_FLAG) == STAGE_TYPE_GAME_FLOW);
+
+			return CallerInternal_GetGoodMove<is_game_flow_stage>::template Call<Stage, Params...>(params...);
+		}
 	};
 
 	struct Chooser_ApplyMove {

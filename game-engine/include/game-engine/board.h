@@ -87,13 +87,12 @@ class Board
 		StageType GetStageType() const { return (StageType)(this->stage & STAGE_TYPE_FLAG); }
 		std::string GetStageName() const;
 
-		bool IsPlayerTurn() const;
-		bool IsRandomNode() const;
-
 		// Return all possible moves
 		// If this is a game flow node, you should skip this call
 		// Note: caller should clear 'next_moves' before calling
 		void GetNextMoves(std::vector<Move> &next_moves) const;
+
+		void GetGoodMove(Move &next_move, unsigned int rand) const;
 
 		// Apply the move to the board
 		void ApplyMove(const Move &move);
