@@ -21,9 +21,6 @@ class Deck
 	public:
 		Deck(RandomGenerator *random_generator);
 
-	private:
-		Deck(const Deck &);
-		Deck &operator=(const Deck &);
 	public:
 		void Assign(const Deck &rhs, RandomGenerator *random_generator) {
 			this->cards = rhs.cards;

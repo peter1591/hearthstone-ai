@@ -11,7 +11,7 @@ bool BoardNodeMap::operator!=(const BoardNodeMap &rhs) const
 	return !(*this == rhs);
 }
 
-void BoardNodeMap::Add(const GameEngine::Board &board, TreeNode *node, const MCTS& mcts)
+void BoardNodeMap::Add(const GameEngine::Board &board, TreeNode *node)
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 	this->data[hash].insert(node);
@@ -42,7 +42,7 @@ std::unordered_set<TreeNode *> BoardNodeMap::Find(const GameEngine::Board &board
 	return nodes;
 }
 
-TreeNode * BoardNodeMap::FindUnderParent(const GameEngine::Board &board, TreeNode const* parent, GameEngine::Board const& parent_board, const MCTS& mcts) const
+TreeNode * BoardNodeMap::FindUnderParent(const GameEngine::Board &board, TreeNode const* parent, GameEngine::Board const& parent_board) const
 {
 	TreeNode *ret = nullptr;
 	std::size_t hash = std::hash<GameEngine::Board>()(board);

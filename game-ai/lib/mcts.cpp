@@ -69,7 +69,7 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 		tree.GetRootNode().is_player_node = false;
 	}
 
-	this->board_node_map.Add(board, &tree.GetRootNode(), *this);
+	this->board_node_map.Add(board, &tree.GetRootNode());
 }
 
 // Note: &board can equal to &new_board for no-copy operation
@@ -145,7 +145,7 @@ TreeNode* MCTS::IsBoardTraversed(TreeNode *parent, GameEngine::Board const& pare
 	}
 
 	// check if random-generated game flow move has already expanded before
-	return this->board_node_map.FindUnderParent(new_child_board, parent, parent_board, *this);
+	return this->board_node_map.FindUnderParent(new_child_board, parent, parent_board);
 }
 
 // return false if 'new_node' is an expanded node
@@ -193,7 +193,7 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 
 	node->AddChild(new_node);
 
-	board_node_map.Add(new_board, new_node, *this);
+	board_node_map.Add(new_board, new_node);
 
 	return true;
 }
@@ -229,26 +229,16 @@ bool MCTS::Simulate(GameEngine::Board &board)
 
 void MCTS::BackPropagate(TreeNode *starting_node, bool is_win)
 {
-	// find all leaf nodes with the same board
-	// this simulation can also be seen as simulated from these leaf nodes
-	// so we also update them
-
-	GameEngine::Board board;
-	starting_node->GetBoard(this->root_node_board, board);
-
-	auto updating_leaf_nodes = this->board_node_map.Find(board, *this);
-	for (const auto &updating_leaf_node : updating_leaf_nodes) {
-		TreeNode *node = updating_leaf_node;
-		while (node != nullptr) {
-			if (node->is_player_node) {
-				if (is_win == true) node->wins++; // from the player's respect
-			}
-			else {
-				if (is_win == false) node->wins++; // from the opponent's respect
-			}
-			node->count++;
-			node = node->parent;
+	TreeNode *node = starting_node;
+	while (node != nullptr) {
+		if (node->is_player_node) {
+			if (is_win == true) node->wins++; // from the player's respect
 		}
+		else {
+			if (is_win == false) node->wins++; // from the opponent's respect
+		}
+		node->count++;
+		node = node->parent;
 	}
 }
 
