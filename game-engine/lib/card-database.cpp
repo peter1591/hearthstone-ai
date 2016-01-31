@@ -4,6 +4,22 @@
 
 namespace GameEngine {
 
+	static Card::MinionRace GetMinionRace(Json::Value const& json_card)
+	{
+		if (!json_card.isMember("race")) return Card::RACE_NORMAL;
+
+		std::string race = json_card["race"].asString();
+		if (race == "BEAST") return Card::RACE_BEAST;
+		if (race == "DEMON") return Card::RACE_DEMON;
+		if (race == "DRAGON") return Card::RACE_DRAGON;
+		if (race == "MECHANICAL") return Card::RACE_MECH;
+		if (race == "MURLOC") return Card::RACE_MURLOC;
+		if (race == "PIRATE") return Card::RACE_PIRATE;
+		if (race == "TOTEM") return Card::RACE_TOTEM;
+
+		throw std::runtime_error("unknown race");
+	}
+
 	CardDatabase::CardDatabase()
 	{
 		this->Clear();
@@ -65,6 +81,7 @@ namespace GameEngine {
 		new_card.cost = json_card["cost"].asInt();
 		new_card.data.minion.attack = json_card["attack"].asInt();
 		new_card.data.minion.hp = json_card["health"].asInt();
+		new_card.data.minion.race = GetMinionRace(json_card);
 		new_card.id = this->GetAvailableCardId();
 
 		this->AddCard(new_card, origin_id);

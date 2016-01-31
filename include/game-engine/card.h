@@ -32,11 +32,23 @@ class Card
 			TYPE_MAX = TYPE_SECRET // must be the largest
 		} type;
 
+		enum MinionRace {
+			RACE_NORMAL,
+			RACE_BEAST,
+			RACE_DEMON,
+			RACE_DRAGON,
+			RACE_MECH,
+			RACE_MURLOC,
+			RACE_PIRATE,
+			RACE_TOTEM
+		};
+
 		int cost;
 
 		struct Minion {
 			int attack;
 			int hp;
+			MinionRace race;
 
 			bool operator==(const Minion &rhs) const {
 				if (this->attack != rhs.attack) return false;

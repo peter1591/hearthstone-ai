@@ -7,6 +7,7 @@
 #include <vector>
 #include "player-stat.h"
 #include "card.h"
+#include "card-id-map.h"
 
 namespace GameEngine {
 
@@ -32,10 +33,10 @@ class OpponentCards
 			// TODO
 			Card card;
 			card.type = Card::TYPE_MINION;
-			card.id = 223;
-			card.cost = 2;
-			card.data.minion.attack = 2;
-			card.data.minion.hp = 3;
+			card.id = CARD_ID_GVG_092t;
+			card.cost = 1;
+			card.data.minion.attack = 1;
+			card.data.minion.hp = 1;
 
 			if (opponent_stat.crystal.GetCurrent() < card.cost) return;
 
