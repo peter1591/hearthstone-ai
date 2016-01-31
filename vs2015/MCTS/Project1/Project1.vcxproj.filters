@@ -74,57 +74,6 @@
     <ClInclude Include="..\..\..\game-ai\include\tree.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\board.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\card.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\common.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\deck.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\hand.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\hero-power.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\hidden-secrets.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\minion.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\minions.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\move.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\opponent-cards.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\player-stat.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\random-generator.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\secret.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\secrets.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\stage.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\weapon.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\game-engine\lib\stages\common.h">
       <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
@@ -169,6 +118,63 @@
     </ClInclude>
     <ClInclude Include="..\..\..\game-ai\include\board-node-map.h">
       <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\card.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\card-database.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\card-id-map.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\common.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\deck.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hand.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hero-power.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hidden-secrets.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\minion.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\minions.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\move.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\opponent-cards.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\player-stat.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\random-generator.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\secret.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\secrets.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stage.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\weapon.h">
+      <Filter>Header Files\game-engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

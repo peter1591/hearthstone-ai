@@ -11,16 +11,18 @@
 void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::Deck &deck)
 {	
 	for (int i = 0; i < 30; ++i) {
-		deck.AddCard(card_database.GetCard(CARD_ID_CS2_120));
+		deck.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
 	}
 }
 
 void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::Hand &hand)
 {
-	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t));
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
+	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
+
+	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_120)); // 223
 }
 
 void InitializeBoard(GameEngine::Board &board)
