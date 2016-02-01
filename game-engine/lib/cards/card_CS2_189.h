@@ -16,7 +16,7 @@ public:
 
 	static bool BattleCry()
 	{
-		std::cout << "battle CRY!!!!!" << std::endl;
+		//std::cout << "battle CRY!!!!!" << std::endl;
 
 		return true;
 	}

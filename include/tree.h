@@ -48,7 +48,7 @@ public:
 	int count;
 
 	// only valid if this node is expanded (i.e., has children)
-	std::vector<GameEngine::Move> moves_not_yet_expanded;
+	GameEngine::NextMoveGetter next_move_getter;
 };
 
 class Tree
@@ -182,7 +182,7 @@ inline bool Tree::CompareSubtree(const TreeNode *lhs, const TreeNode *rhs)
 	if (lhs->is_player_node != rhs->is_player_node) return false;
 	if (lhs->wins != rhs->wins) return false;
 	if (lhs->count != rhs->count) return false;
-	if (lhs->moves_not_yet_expanded != rhs->moves_not_yet_expanded) return false;
+	if (lhs->next_move_getter != rhs->next_move_getter) return false;
 
 	if (lhs->children.size() != rhs->children.size()) return false;
 

@@ -47,7 +47,7 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
-void Board::GetNextMoves(std::vector<Move> &next_moves) const
+void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
 {
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:
@@ -57,7 +57,7 @@ void Board::GetNextMoves(std::vector<Move> &next_moves) const
 
 		case STAGE_TYPE_PLAYER:
 		case STAGE_TYPE_OPPONENT:
-			return StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_moves);
+			return StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_move_getter);
 
 		default:
 			throw std::runtime_error("Unhandled case in GetNextMoves()");

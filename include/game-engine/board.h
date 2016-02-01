@@ -17,6 +17,7 @@
 #include "opponent-cards.h"
 #include "hidden-secrets.h"
 #include "stage.h"
+#include "next-move-getter.h"
 #include "move.h"
 
 namespace GameEngine {
@@ -90,7 +91,7 @@ class Board
 		// Return all possible moves
 		// If this is a game flow node, you should skip this call
 		// Note: caller should clear 'next_moves' before calling
-		void GetNextMoves(std::vector<Move> &next_moves) const;
+		void GetNextMoves(NextMoveGetter &next_move_getter) const;
 
 		void GetGoodMove(Move &next_move, unsigned int rand) const;
 

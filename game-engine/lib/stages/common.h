@@ -7,6 +7,7 @@
 #include "game-engine/board.h"
 
 #include "stages/helper.h"
+#include "game-engine/next-move-getter.h"
 
 namespace GameEngine {
 

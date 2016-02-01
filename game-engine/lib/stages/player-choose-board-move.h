@@ -8,6 +8,7 @@
 #include "stages/common.h"
 #include "stages/weighted-moves.h"
 #include "game-engine/board.h"
+#include "game-engine/next-move-getter.h"
 
 namespace GameEngine {
 
@@ -16,14 +17,14 @@ class StagePlayerChooseBoardMove
 	public:
 		static const Stage stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 
-		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
+		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
+			std::vector<Move> next_moves;
+
 			bool can_play_minion = !board.player_minions.IsFull();
 			Move move;
 
-			size_t guessed_next_moves;
-
-			guessed_next_moves = 1; // end turn
+			size_t guessed_next_moves = 0;
 
 			// for play minions
 			if (can_play_minion) {
@@ -38,10 +39,6 @@ class StagePlayerChooseBoardMove
 			guessed_next_moves += (board.player_minions.GetMinions().size()+1) * (board.opponent_minions.GetMinions().size()+1);
 
 			next_moves.reserve(guessed_next_moves);
-
-			// the choice to end turn
-			move.action = Move::ACTION_END_TURN;
-			next_moves.push_back(move);
 
 			// the choices to play a card from hand
 			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCards().size(); ++hand_idx)
@@ -69,6 +66,14 @@ class StagePlayerChooseBoardMove
 					StagePlayerChooseBoardMove::GetNextMoves_Attack(attacker_idx, attacked_idx, next_moves);
 				}
 			}
+
+			NextMoveGetter::ItemGetMoves *next_move_getter_item = new NextMoveGetter::ItemGetMoves();
+			next_move_getter_item->moves.swap(next_moves);
+			next_move_getter.items.push_back(next_move_getter_item);
+
+			// the choice to end turn
+			move.action = Move::ACTION_END_TURN;
+			next_move_getter.items.push_back(new NextMoveGetter::ItemGetMove(move));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)

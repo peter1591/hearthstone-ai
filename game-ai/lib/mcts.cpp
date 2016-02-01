@@ -112,7 +112,7 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNod
 			return;
 		}
 
-		if (!new_node->moves_not_yet_expanded.empty()) {
+		if (!new_node->next_move_getter.Empty()) {
 			return;
 		}
 
@@ -142,17 +142,17 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 	}
 	else {
 		if (node->children.empty()) {
-			board.GetNextMoves(node->moves_not_yet_expanded);
-		}
+			board.GetNextMoves(node->next_move_getter);
 
 #ifdef DEBUG
-		if (node->moves_not_yet_expanded.empty()) {
+			if (node->next_move_getter.Empty()) throw std::runtime_error("should at least return one possible move");
+#endif
+		}
+
+		if (node->next_move_getter.GetNextMove(move) == false) {
 			throw std::runtime_error("a node with no non-expanded move should not be selected to be expanded");
 		}
-#endif
 
-		move = node->moves_not_yet_expanded.back();
-		node->moves_not_yet_expanded.pop_back();
 		board.ApplyMove(move);
 	}
 }

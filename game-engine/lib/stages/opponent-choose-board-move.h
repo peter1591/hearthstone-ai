@@ -6,6 +6,7 @@
 
 #include "stages/common.h"
 #include "game-engine/board.h"
+#include "game-engine/next-move-getter.h"
 
 namespace GameEngine {
 
@@ -14,8 +15,10 @@ class StageOpponentChooseBoardMove
 	public:
 		static const Stage stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 
-		static void GetNextMoves(const Board &board, std::vector<Move> &next_moves)
+		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
+			std::vector<Move> next_moves;
+
 			size_t guessed_next_moves;
 			bool can_play_minion = !board.opponent_minions.IsFull();
 			Move move;
@@ -61,6 +64,10 @@ class StageOpponentChooseBoardMove
 					StageOpponentChooseBoardMove::GetNextMoves_Attack(attacker_idx, attacked_idx, next_moves);
 				}
 			}
+
+			NextMoveGetter::ItemGetMoves *next_move_getter_item = new NextMoveGetter::ItemGetMoves();
+			next_move_getter_item->moves.swap(next_moves);
+			next_move_getter.items.push_back(next_move_getter_item);
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
