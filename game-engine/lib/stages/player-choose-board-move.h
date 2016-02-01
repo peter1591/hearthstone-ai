@@ -9,6 +9,7 @@
 #include "stages/weighted-moves.h"
 #include "game-engine/board.h"
 #include "game-engine/next-move-getter.h"
+#include "game-engine/targetor.h"
 
 namespace GameEngine {
 
@@ -35,9 +36,6 @@ class StagePlayerChooseBoardMove
 #endif
 			}
 
-			// for attack
-			guessed_next_moves += (board.player_minions.GetMinions().size()+1) * (board.opponent_minions.GetMinions().size()+1);
-
 			next_moves.reserve(guessed_next_moves);
 
 			// the choices to play a card from hand
@@ -54,22 +52,27 @@ class StagePlayerChooseBoardMove
 				}
 			}
 
-			// the choices to attack by hero/minion
-			for (int attacker_idx = -1; attacker_idx < (int)board.player_minions.GetMinions().size(); attacker_idx++) {
-				if (attacker_idx == -1) {
-					continue; // TODO: check if player has weapon
-				} else {
-					if (!board.player_minions.GetMinions()[attacker_idx].Attackable()) continue;
-				}
-
-				for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
-					StagePlayerChooseBoardMove::GetNextMoves_Attack(attacker_idx, attacked_idx, next_moves);
-				}
-			}
+			next_move_getter.items.reserve(3);
 
 			NextMoveGetter::ItemGetMoves *next_move_getter_item = new NextMoveGetter::ItemGetMoves();
 			next_move_getter_item->moves.swap(next_moves);
 			next_move_getter.items.push_back(next_move_getter_item);
+
+			// the choices to attack by hero/minion
+			TargetorBitmap attacker;
+			TargetorBitmap attacked;
+
+			// TODO: check if player has weapon
+			for (int attacker_idx = 0; attacker_idx < (int)board.player_minions.GetMinions().size(); attacker_idx++) {
+				if (board.player_minions.GetMinions()[attacker_idx].Attackable()) {
+					attacker.SetOneTarget(Targetor::GetPlayerMinionIndex(attacker_idx));
+				}
+			}
+			attacked.SetOneTarget(Targetor::GetOpponentHeroIndex());
+			for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
+				attacked.SetOneTarget(Targetor::GetOpponentMinionIndex(attacked_idx));
+			}
+			next_move_getter.items.push_back(new NextMoveGetter::ItemPlayerAttack(std::move(attacker), std::move(attacked)));
 
 			// the choice to end turn
 			move.action = Move::ACTION_END_TURN;
@@ -131,8 +134,8 @@ class StagePlayerChooseBoardMove
 
 				for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
 					move.action = Move::ACTION_PLAYER_ATTACK;
-					move.data.player_attack_data.attacker_idx = attacker_idx;
-					move.data.player_attack_data.attacked_idx = attacked_idx;
+					move.data.player_attack_data.attacker_idx = attacker_idx + Targetor::GetPlayerMinionIndex(0);
+					move.data.player_attack_data.attacked_idx = attacked_idx + Targetor::GetOpponentMinionIndex(0);
 					moves.AddMove(move, weight_attack);
 				}
 			}
@@ -191,17 +194,6 @@ class StagePlayerChooseBoardMove
 #endif
 
 			board.stage = STAGE_PLAYER_PUT_MINION;
-		}
-
-		static void GetNextMoves_Attack(int attacker_idx, int attacked_idx, std::vector<Move> &next_moves)
-		{
-			Move move;
-
-			move.action = Move::ACTION_PLAYER_ATTACK;
-			move.data.player_attack_data.attacker_idx = attacker_idx;
-			move.data.player_attack_data.attacked_idx = attacked_idx;
-
-			next_moves.push_back(move);
 		}
 
 		static void PlayerAttack(Board &board, const Move &move)

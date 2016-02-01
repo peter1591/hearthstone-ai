@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "move.h"
+#include "targetor.h"
 
 namespace GameEngine
 {
@@ -74,6 +75,64 @@ public:
 	private:
 		Move move;
 		bool empty;
+	};
+
+	class ItemPlayerAttack : public ItemBase
+	{
+	public:
+		ItemPlayerAttack(TargetorBitmap && attacker, TargetorBitmap && attacked)
+		{
+			this->attacker = attacker;
+			this->attacked_origin = attacked;
+		}
+
+		ItemPlayerAttack* Clone() const { return new ItemPlayerAttack(*this); }
+
+		bool Empty() 
+		{ 
+			if (this->attacked_origin.None()) return true;
+			if (this->attacker.None()) return true;
+			if (this->attacked.None() && this->attacker.Count() == 1) return true;
+			return false;
+		}
+
+		bool GetNextMove(Move & move)
+		{
+			if (this->attacker.None()) return false;
+			if (this->attacked.None()) {
+				this->attacker.ClearOneTarget(this->attacker.GetOneTarget());
+				if (this->attacker.None()) return false;
+
+				this->attacked = this->attacked_origin;
+			}
+
+			size_t attacker_idx = this->attacker.GetOneTarget();
+			size_t attacked_idx = this->attacked.GetOneTarget();
+
+			move.action = Move::ACTION_PLAYER_ATTACK;
+			move.data.player_attack_data.attacker_idx = attacker_idx;
+			move.data.player_attack_data.attacked_idx = attacked_idx;
+
+			this->attacked.ClearOneTarget(attacked_idx);
+
+			return true;
+		}
+
+		bool operator==(ItemPlayerAttack const& rhs) const {
+			if (this->attacker != rhs.attacker) return false;
+			if (this->attacked != rhs.attacked) return false;
+			if (this->attacked_origin != rhs.attacked_origin) return false;
+			return true;
+		}
+
+		bool operator!=(ItemPlayerAttack const& rhs) const {
+			return !(*this == rhs);
+		}
+	
+	private:
+		TargetorBitmap attacker;
+		TargetorBitmap attacked;
+		TargetorBitmap attacked_origin;
 	};
 
 public:
