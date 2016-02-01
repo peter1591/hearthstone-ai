@@ -136,11 +136,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\game-ai\include\board-node-map.h" />
-    <ClInclude Include="..\..\..\game-ai\include\decider.h" />
-    <ClInclude Include="..\..\..\game-ai\include\task.h" />
-    <ClInclude Include="..\..\..\game-ai\include\mcts.h" />
-    <ClInclude Include="..\..\..\game-ai\include\tree.h" />
     <ClInclude Include="..\..\..\game-engine\lib\cards\card_CS2_189.h" />
     <ClInclude Include="..\..\..\game-engine\lib\cards\common.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\common.h" />
@@ -156,6 +151,8 @@
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\weighted-moves.h" />
+    <ClInclude Include="..\..\..\include\board-node-map.h" />
+    <ClInclude Include="..\..\..\include\decider.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
@@ -168,13 +165,18 @@
     <ClInclude Include="..\..\..\include\game-engine\minion.h" />
     <ClInclude Include="..\..\..\include\game-engine\minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\move.h" />
+    <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h" />
     <ClInclude Include="..\..\..\include\game-engine\opponent-cards.h" />
     <ClInclude Include="..\..\..\include\game-engine\player-stat.h" />
     <ClInclude Include="..\..\..\include\game-engine\random-generator.h" />
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />
     <ClInclude Include="..\..\..\include\game-engine\secrets.h" />
     <ClInclude Include="..\..\..\include\game-engine\stage.h" />
+    <ClInclude Include="..\..\..\include\game-engine\targetor.h" />
     <ClInclude Include="..\..\..\include\game-engine\weapon.h" />
+    <ClInclude Include="..\..\..\include\mcts.h" />
+    <ClInclude Include="..\..\..\include\task.h" />
+    <ClInclude Include="..\..\..\include\tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

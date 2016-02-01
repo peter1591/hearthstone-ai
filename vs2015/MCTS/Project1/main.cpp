@@ -67,7 +67,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 4;
+	constexpr int threads = 1;
 	constexpr int sec_each_run = 1;
 
 	std::mt19937 random_generator(time(nullptr));

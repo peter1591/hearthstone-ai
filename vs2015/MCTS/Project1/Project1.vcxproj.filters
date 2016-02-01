@@ -71,21 +71,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\game-ai\include\mcts.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\tree.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\task.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\decider.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-ai\include\board-node-map.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
@@ -187,6 +172,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\game-engine\lib\cards\card_CS2_189.h">
       <Filter>Source Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\board-node-map.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\decider.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\mcts.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\task.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\tree.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\targetor.h">
+      <Filter>Header Files\game-engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
