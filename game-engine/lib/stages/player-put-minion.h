@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "stages/common.h"
+#include "cards/common.h"
 #include "game-engine/board.h"
 
 namespace GameEngine {
@@ -25,7 +26,8 @@ class StagePlayerPutMinion
 
 			board.player_stat.crystal.CostCrystals(playing_card.cost);
 
-			// TODO: handle battlecry
+			Cards::CardCallbackManager::BattleCry(playing_card.id, board);
+
 			minion.Summon(playing_card);
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION

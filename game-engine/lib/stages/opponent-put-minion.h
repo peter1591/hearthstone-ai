@@ -23,8 +23,11 @@ class StageOpponentPutMinion
 
 			board.opponent_stat.crystal.CostCrystals(data.card.cost);
 
-			// TODO: handle battlecry
+			// Get initialized minion with original card's attack/hp/max-hp
 			minion.Summon(data.card);
+
+			// TODO: handle battlecry
+
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.opponent_minions.AddMinion(minion, data.location);
