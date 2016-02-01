@@ -19,8 +19,8 @@ void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::
 {
 	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
-	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
+	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
 
 	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_120)); // 223
 }

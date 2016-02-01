@@ -141,6 +141,8 @@
     <ClInclude Include="..\..\..\game-ai\include\task.h" />
     <ClInclude Include="..\..\..\game-ai\include\mcts.h" />
     <ClInclude Include="..\..\..\game-ai\include\tree.h" />
+    <ClInclude Include="..\..\..\game-engine\lib\cards\card_CS2_189.h" />
+    <ClInclude Include="..\..\..\game-engine\lib\cards\common.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\common.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\helper.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-attack.h" />
@@ -153,6 +155,7 @@
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-put-minion.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h" />
+    <ClInclude Include="..\..\..\game-engine\lib\stages\weighted-moves.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
