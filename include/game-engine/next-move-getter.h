@@ -13,7 +13,6 @@ public:
 	class ItemBase
 	{
 	public:
-		virtual bool Empty() = 0;
 		virtual ItemBase* Clone() const = 0;
 		virtual bool GetNextMove(Move &move) = 0;
 	};
@@ -21,8 +20,6 @@ public:
 	class ItemGetMoves : public ItemBase
 	{
 	public:
-		bool Empty() { return this->moves.empty(); }
-
 		ItemGetMoves* Clone() const { return new ItemGetMoves(*this); }
 
 		bool GetNextMove(Move &move)
@@ -51,8 +48,6 @@ public:
 		ItemGetMove(Move const& rhs) : empty(false) { this->move = rhs; }
 
 		ItemGetMove* Clone() const { return new ItemGetMove(*this); }
-
-		bool Empty() { return this->empty; }
 
 		bool GetNextMove(Move & move)
 		{
@@ -87,14 +82,6 @@ public:
 		}
 
 		ItemPlayerAttack* Clone() const { return new ItemPlayerAttack(*this); }
-
-		bool Empty() 
-		{ 
-			if (this->attacked_origin.None()) return true;
-			if (this->attacker.None()) return true;
-			if (this->attacked.None() && this->attacker.Count() == 1) return true;
-			return false;
-		}
 
 		bool GetNextMove(Move & move)
 		{
@@ -136,7 +123,7 @@ public:
 	};
 
 public:
-	NextMoveGetter() {}
+	NextMoveGetter() : is_cached_move_valid(false) {}
 	~NextMoveGetter()
 	{
 		for (auto it = this->items.begin(); it != this->items.end(); ++it) {
@@ -155,11 +142,20 @@ public:
 		for (auto it = rhs.items.begin(); it != rhs.items.end(); ++it) {
 			this->items.push_back((*it)->Clone());
 		}
+		this->is_cached_move_valid = rhs.is_cached_move_valid;
+		if (this->is_cached_move_valid) this->cached_move = rhs.cached_move;
 		return *this;
 	}
 
 	bool GetNextMove(Move &move)
 	{
+		if (this->is_cached_move_valid)
+		{
+			move = this->cached_move;
+			this->is_cached_move_valid = false;
+			return true;
+		}
+
 		while (this->items.empty() == false)
 		{
 			auto &item = this->items.back();
@@ -171,13 +167,11 @@ public:
 
 	bool Empty() 
 	{
-		while (this->items.empty() == false)
-		{
-			auto &item = this->items.back();
-			if (item->Empty() == false) return false;
-			this->items.pop_back();
-		}
-		return true;
+		if (this->is_cached_move_valid) return false;
+		if (this->GetNextMove(this->cached_move) == false) return true;
+
+		this->is_cached_move_valid = true;
+		return false;
 	}
 
 	void Clear()
@@ -186,12 +180,16 @@ public:
 			delete *it;
 			it = this->items.erase(it);
 		}
+		this->is_cached_move_valid = false;
 	}
 
 	bool operator==(NextMoveGetter const& rhs) const
 	{
 		auto const& items_count = this->items.size();
 		if (items_count != rhs.items.size()) return false;
+		if (this->is_cached_move_valid != rhs.is_cached_move_valid) return false;
+		if (this->is_cached_move_valid)
+			if (this->cached_move != rhs.cached_move) return false;
 
 		for (auto i = 0; i < items_count; ++i)
 		{
@@ -223,6 +221,10 @@ private:
 		}
 		return true;
 	}
+
+private:
+	bool is_cached_move_valid;
+	Move cached_move;
 };
 
 }
