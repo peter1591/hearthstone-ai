@@ -16,18 +16,19 @@ public:
 
 	// Elven Archer
 
-	static void GetRequiredTargetBitmap(GameEngine::Board const& board, TargetorBitmap &targets)
+	static void GetRequiredTargets(GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
 	{
 		targets.SetOneTarget(Targetor::GetOpponentHeroIndex());
 		for (size_t i = 0; i < board.opponent_minions.GetMinions().size(); ++i)
 		{
 			targets.SetOneTarget(Targetor::GetOpponentMinionIndex(i));
 		}
+		meet_requirements = true;
 	}
 
-	static void BattleCry()
+	static void BattleCry(GameEngine::Board & board)
 	{
-		//std::cout << "battle CRY!!!!!" << std::endl;
+
 	}
 };
 
