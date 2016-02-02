@@ -45,7 +45,7 @@ public:
 	class ItemPlayerPlayMinion : public ItemBase
 	{
 	public:
-		ItemPlayerPlayMinion(Hand::CardsBitmap hand_cards, TargetorBitmap put_locations);
+		ItemPlayerPlayMinion(Hand::CardsBitmap hand_cards, int put_locations_min, int put_locations_max);
 		ItemPlayerPlayMinion* Clone() const;
 		bool GetNextMove(Move & move);
 		bool operator==(ItemPlayerPlayMinion const& rhs) const;
@@ -53,8 +53,9 @@ public:
 
 	private:
 		Hand::CardsBitmap hand_cards;
-		TargetorBitmap put_locations_origin;
-		TargetorBitmap put_locations;
+		int put_locations_min;
+		int put_locations_max;
+		int put_locations_current;
 	};
 
 	class ItemPlayerAttack : public ItemBase
@@ -254,9 +255,11 @@ inline bool GameEngine::NextMoveGetter::ItemGetMove::operator!=(ItemGetMove cons
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(Hand::CardsBitmap hand_cards, TargetorBitmap put_locations)
-	: hand_cards(hand_cards), put_locations_origin(put_locations)
+inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
+	Hand::CardsBitmap hand_cards, int put_locations_min, int put_locations_max)
+	: hand_cards(hand_cards), put_locations_min(put_locations_min), put_locations_max(put_locations_max)
 {
+	this->put_locations_current = 0;
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGetter::ItemPlayerPlayMinion::Clone() const
@@ -269,10 +272,10 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 	if (this->hand_cards.None()) return false;
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-	if (this->put_locations.None()) {
+	if (this->put_locations_current >= this->put_locations_max) {
 		this->hand_cards.ClearOneCard(this->hand_cards.GetOneCard());
 		if (this->hand_cards.None()) return false;
-		this->put_locations = this->put_locations_origin;
+		this->put_locations_current = this->put_locations_min;
 	}
 #endif
 
@@ -280,8 +283,8 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 	move.data.play_hand_card_minion_data.hand_card = this->hand_cards.GetOneCard();
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-	move.data.play_hand_card_minion_data.location = this->put_locations.GetOneTarget();
-	this->put_locations.ClearOneTarget(move.data.play_hand_card_minion_data.location);
+	move.data.play_hand_card_minion_data.location = this->put_locations_current;
+	++this->put_locations_current;
 #else
 	this->hand_cards.ClearOneCard(move.data.play_hand_card_minion_data.hand_card);
 #endif
@@ -290,7 +293,9 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator==(ItemPlayerPlayMinion const & rhs) const
 {
 	if (this->hand_cards != rhs.hand_cards) return false;
-	if (this->put_locations != rhs.put_locations) return false;
+	if (this->put_locations_min != rhs.put_locations_min) return false;
+	if (this->put_locations_max != rhs.put_locations_max) return false;
+	if (this->put_locations_current != rhs.put_locations_current) return false;
 	return true;
 }
 

@@ -40,15 +40,8 @@ class StagePlayerChooseBoardMove
 			}
 
 			if (!playable_minions.None() && can_play_minion) {
-				TargetorBitmap put_locations;
-
-				put_locations.SetOneTarget(0);
-				for (size_t i = 0; i < board.player_minions.GetMinions().size(); ++i)
-				{
-					put_locations.SetOneTarget(i + 1);
-				}
-
-				NextMoveGetter::ItemPlayerPlayMinion *play_minion = new NextMoveGetter::ItemPlayerPlayMinion(playable_minions, put_locations);
+				NextMoveGetter::ItemPlayerPlayMinion *play_minion = new NextMoveGetter::ItemPlayerPlayMinion(
+					playable_minions, Targetor::GetPlayerMinionIndex(0), Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size()));
 				next_move_getter.items.push_back(play_minion);
 			}
 
