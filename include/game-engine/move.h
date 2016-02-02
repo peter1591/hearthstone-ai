@@ -16,8 +16,7 @@ class Move
 			ACTION_GAME_FLOW,
 			ACTION_PLAY_HAND_CARD_MINION,
 			ACTION_OPPONENT_PLAY_MINION,
-			ACTION_PLAYER_ATTACK,
-			ACTION_OPPONENT_ATTACK,
+			ACTION_ATTACK,
 			ACTION_END_TURN,
 		};
 
@@ -39,22 +38,16 @@ class Move
 #endif
 		};
 
-		struct PlayerAttackData {
-			int attacker_idx; // -1 indicates the hero
-			int attacked_idx; // -1 indicates the hero
-		};
-
-		struct OpponentAttackData {
-			int attacker_idx; // -1 indicates the hero
-			int attacked_idx; // -1 indicates the hero
+		struct AttackData {
+			int attacker_idx;
+			int attacked_idx;
 		};
 
 		union Data {
 			GameFlowData game_flow_data;
 			PlayHandCardMinionData play_hand_card_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
-			PlayerAttackData player_attack_data;
-			OpponentAttackData opponent_attack_data;
+			AttackData attack_data;
 
 			Data() {}
 		};
@@ -106,14 +99,9 @@ inline bool Move::operator==(const Move &rhs) const
 #endif
 		break;
 
-	case ACTION_PLAYER_ATTACK:
-		if (this->data.player_attack_data.attacked_idx != rhs.data.player_attack_data.attacked_idx) return false;
-		if (this->data.player_attack_data.attacker_idx != rhs.data.player_attack_data.attacker_idx) return false;
-		break;
-
-	case ACTION_OPPONENT_ATTACK:
-		if (this->data.opponent_attack_data.attacked_idx != rhs.data.opponent_attack_data.attacked_idx) return false;
-		if (this->data.opponent_attack_data.attacker_idx != rhs.data.opponent_attack_data.attacker_idx) return false;
+	case ACTION_ATTACK:
+		if (this->data.attack_data.attacked_idx != rhs.data.attack_data.attacked_idx) return false;
+		if (this->data.attack_data.attacker_idx != rhs.data.attack_data.attacker_idx) return false;
 		break;
 
 	case ACTION_END_TURN:
@@ -162,14 +150,9 @@ namespace std {
 #endif
 				break;
 
-			case GameEngine::Move::ACTION_PLAYER_ATTACK:
-				GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacked_idx));
-				GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacker_idx));
-				break;
-
-			case GameEngine::Move::ACTION_OPPONENT_ATTACK:
-				GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacked_idx));
-				GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacker_idx));
+			case GameEngine::Move::ACTION_ATTACK:
+				GameEngine::hash_combine(result, hash<int>()(s.data.attack_data.attacked_idx));
+				GameEngine::hash_combine(result, hash<int>()(s.data.attack_data.attacker_idx));
 				break;
 
 			case GameEngine::Move::ACTION_END_TURN:

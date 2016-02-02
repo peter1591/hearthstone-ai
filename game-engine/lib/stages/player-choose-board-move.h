@@ -57,7 +57,7 @@ class StagePlayerChooseBoardMove
 			}
 
 			if (!attacker.None()) {
-				NextMoveGetter::ItemPlayerAttack player_attack_move(std::move(attacker), std::move(attacked));
+				NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
 				next_move_getter.AddItem(std::move(player_attack_move));
 			}
 			
@@ -121,9 +121,9 @@ class StagePlayerChooseBoardMove
 				}
 
 				for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
-					move.action = Move::ACTION_PLAYER_ATTACK;
-					move.data.player_attack_data.attacker_idx = attacker_idx + Targetor::GetPlayerMinionIndex(0);
-					move.data.player_attack_data.attacked_idx = attacked_idx + Targetor::GetOpponentMinionIndex(0);
+					move.action = Move::ACTION_ATTACK;
+					move.data.attack_data.attacker_idx = attacker_idx + Targetor::GetPlayerMinionIndex(0);
+					move.data.attack_data.attacked_idx = attacked_idx + Targetor::GetOpponentMinionIndex(0);
 					moves.AddMove(move, weight_attack);
 				}
 			}
@@ -142,7 +142,7 @@ class StagePlayerChooseBoardMove
 				case Move::ACTION_PLAY_HAND_CARD_MINION:
 					return StagePlayerChooseBoardMove::PlayHandCardMinion(board, move);
 
-				case Move::ACTION_PLAYER_ATTACK:
+				case Move::ACTION_ATTACK:
 					return StagePlayerChooseBoardMove::PlayerAttack(board, move);
 
 				case Move::ACTION_END_TURN:
@@ -168,7 +168,7 @@ class StagePlayerChooseBoardMove
 
 		static void PlayerAttack(Board &board, const Move &move)
 		{
-			const Move::PlayerAttackData &data = move.data.player_attack_data;
+			const Move::AttackData &data = move.data.attack_data;
 
 			board.data.player_attack_data.attacker_idx = data.attacker_idx;
 			board.data.player_attack_data.attacked_idx = data.attacked_idx;

@@ -30,14 +30,9 @@ std::string Move::GetDebugString() const
 #endif
 			break;
 
-		case Move::ACTION_PLAYER_ATTACK:
-			oss << "[Player Attack] attacking = " << this->data.player_attack_data.attacker_idx
-				<< ", attacked = " << this->data.player_attack_data.attacked_idx;
-			break;
-
-		case Move::ACTION_OPPONENT_ATTACK:
-			oss << "[Opponent Attack] attacking = " << this->data.opponent_attack_data.attacker_idx
-				<< ", attacked = " << this->data.opponent_attack_data.attacked_idx;
+		case Move::ACTION_ATTACK:
+			oss << "[Attack] attacking = " << this->data.attack_data.attacker_idx
+				<< ", attacked = " << this->data.attack_data.attacked_idx;
 			break;
 
 		case Move::ACTION_END_TURN:

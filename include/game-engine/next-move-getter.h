@@ -28,14 +28,14 @@ public:
 		int put_locations_current;
 	};
 
-	class ItemPlayerAttack
+	class ItemAttack
 	{
 	public:
-		ItemPlayerAttack(TargetorBitmap && attacker, TargetorBitmap && attacked);
-		ItemPlayerAttack* Clone() const;
+		ItemAttack(TargetorBitmap && attacker, TargetorBitmap && attacked);
+		ItemAttack* Clone() const;
 		bool GetNextMove(Move & move);
-		bool operator==(ItemPlayerAttack const& rhs) const;
-		bool operator!=(ItemPlayerAttack const& rhs) const;
+		bool operator==(ItemAttack const& rhs) const;
+		bool operator!=(ItemAttack const& rhs) const;
 	
 	private:
 		TargetorBitmap attacker;
@@ -47,10 +47,10 @@ public:
 	NextMoveGetter();
 
 	void AddItem(Move && move);
-	void AddItem(ItemPlayerAttack && items);
+	void AddItem(ItemAttack && items);
 	void AddItem(ItemPlayerPlayMinion && items);
 	void AddItems(std::list<Move> && items);
-	void AddItems(std::list<ItemPlayerAttack> && items);
+	void AddItems(std::list<ItemAttack> && items);
 	void AddItems(std::list<ItemPlayerPlayMinion> && items);
 
 	bool GetNextMove(Move &move);
@@ -65,7 +65,7 @@ private:
 
 private:
 	std::list<Move> moves;
-	std::list<ItemPlayerAttack> items_player_attack;
+	std::list<ItemAttack> items_player_attack;
 	std::list<ItemPlayerPlayMinion> items_player_play_minion;
 
 	bool is_cached_move_valid;
@@ -110,12 +110,12 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::Move> && 
 	this->moves.splice(this->moves.end(), std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerAttack && item)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemAttack && item)
 {
 	this->items_player_attack.push_back(std::move(item));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerAttack> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemAttack> && items)
 {
 	this->items_player_attack.splice(this->items_player_attack.end(), std::move(items));
 }
@@ -233,18 +233,18 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator!=(ItemPla
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayerAttack::ItemPlayerAttack(TargetorBitmap && attacker, TargetorBitmap && attacked)
+inline GameEngine::NextMoveGetter::ItemAttack::ItemAttack(TargetorBitmap && attacker, TargetorBitmap && attacked)
 {
 	this->attacker = attacker;
 	this->attacked_origin = attacked;
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayerAttack * GameEngine::NextMoveGetter::ItemPlayerAttack::Clone() const
+inline GameEngine::NextMoveGetter::ItemAttack * GameEngine::NextMoveGetter::ItemAttack::Clone() const
 {
-	return new ItemPlayerAttack(*this);
+	return new ItemAttack(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerAttack::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::ItemAttack::GetNextMove(Move & move)
 {
 	if (this->attacker.None()) return false;
 	if (this->attacked.None()) {
@@ -257,16 +257,16 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerAttack::GetNextMove(Move & mov
 	size_t attacker_idx = this->attacker.GetOneTarget();
 	size_t attacked_idx = this->attacked.GetOneTarget();
 
-	move.action = Move::ACTION_PLAYER_ATTACK;
-	move.data.player_attack_data.attacker_idx = attacker_idx;
-	move.data.player_attack_data.attacked_idx = attacked_idx;
+	move.action = Move::ACTION_ATTACK;
+	move.data.attack_data.attacker_idx = attacker_idx;
+	move.data.attack_data.attacked_idx = attacked_idx;
 
 	this->attacked.ClearOneTarget(attacked_idx);
 
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerAttack::operator==(ItemPlayerAttack const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemAttack::operator==(ItemAttack const & rhs) const
 {
 	if (this->attacker != rhs.attacker) return false;
 	if (this->attacked != rhs.attacked) return false;
@@ -274,7 +274,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerAttack::operator==(ItemPlayerA
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerAttack::operator!=(ItemPlayerAttack const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemAttack::operator!=(ItemAttack const & rhs) const
 {
 	return !(*this == rhs);
 }

@@ -104,9 +104,9 @@ class StageOpponentChooseBoardMove
 				}
 
 				for (int attacked_idx = -1; attacked_idx < (int)board.player_minions.GetMinions().size(); attacked_idx++) {
-					move.action = Move::ACTION_OPPONENT_ATTACK;
-					move.data.opponent_attack_data.attacker_idx = attacker_idx;
-					move.data.opponent_attack_data.attacked_idx = attacked_idx;
+					move.action = Move::ACTION_ATTACK;
+					move.data.attack_data.attacker_idx = attacker_idx;
+					move.data.attack_data.attacked_idx = attacked_idx;
 					moves.AddMove(move, weight_attack);
 				}
 			}
@@ -124,7 +124,7 @@ class StageOpponentChooseBoardMove
 			{
 				case Move::ACTION_OPPONENT_PLAY_MINION:
 					return StageOpponentChooseBoardMove::PlayHandCardMinion(board, move);
-				case Move::ACTION_OPPONENT_ATTACK:
+				case Move::ACTION_ATTACK:
 					return StageOpponentChooseBoardMove::OpponentAttack(board, move);
 				case Move::ACTION_END_TURN:
 					return StageOpponentChooseBoardMove::EndTurn(board, move);
@@ -167,16 +167,16 @@ class StageOpponentChooseBoardMove
 		{
 			Move move;
 
-			move.action = Move::ACTION_OPPONENT_ATTACK;
-			move.data.opponent_attack_data.attacker_idx = attacker_idx;
-			move.data.opponent_attack_data.attacked_idx = attacked_idx;
+			move.action = Move::ACTION_ATTACK;
+			move.data.attack_data.attacker_idx = attacker_idx;
+			move.data.attack_data.attacked_idx = attacked_idx;
 
 			next_moves.push_back(move);
 		}
 
 		static void OpponentAttack(Board &board, const Move &move)
 		{
-			const Move::OpponentAttackData &data = move.data.opponent_attack_data;
+			const Move::AttackData &data = move.data.attack_data;
 
 			board.data.opponent_attack_data.attacker_idx = data.attacker_idx;
 			board.data.opponent_attack_data.attacked_idx = data.attacked_idx;
