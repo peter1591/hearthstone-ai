@@ -187,13 +187,22 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 		else {
 			// expanded before in other paths
 			// --> create a redirect node
-			new_node = this->allocated_node;
-			this->allocated_node = new TreeNode;
 
-			new_node->wins = 0;
-			new_node->count = 0;
-			new_node->equivalent_node = found_node;
-			node->AddChild(new_node);
+			// check if a redirect node is already created
+			bool found_redirect_node = false;
+			for (auto const& child_node : node->children)
+			{
+				if (child_node->equivalent_node == found_node) found_redirect_node = true;
+			}
+			if (found_redirect_node == false) {
+				new_node = this->allocated_node;
+				this->allocated_node = new TreeNode;
+
+				new_node->wins = 0;
+				new_node->count = 0;
+				new_node->equivalent_node = found_node;
+				node->AddChild(new_node);
+			}
 		}
 
 		new_node = found_node;
