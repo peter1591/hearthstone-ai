@@ -67,7 +67,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 1;
+	constexpr int threads = 4;
 	constexpr int sec_each_run = 1;
 
 	std::mt19937 random_generator(time(nullptr));
@@ -115,7 +115,7 @@ static void Run()
 		int total_iterations = 0;
 		for (auto const& task : tasks) total_iterations += task->GetIterationCount();
 		std::cout << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
-			<< " (Average: " << (total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
+			<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
 		std::cout.flush();
 
 		// start all threads for 10 second
