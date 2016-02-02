@@ -22,9 +22,8 @@ class StagePlayerChooseBoardMove
 		{
 			bool const can_play_minion = !board.player_minions.IsFull();
 
-			std::vector<NextMoveGetter::ItemPlayerPlayMinion> play_minion_moves;
+			std::list<NextMoveGetter::ItemPlayerPlayMinion> play_minion_moves;
 
-			play_minion_moves.reserve(board.player_hand.GetCount());
 			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
 				const Card &playing_card = board.player_hand.GetCard(hand_idx);

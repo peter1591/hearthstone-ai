@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include "move.h"
 #include "targetor.h"
 
@@ -75,10 +76,10 @@ public:
 	void AddItem(ItemGetMoves && items);
 	void AddItem(ItemPlayerAttack && items);
 	void AddItem(ItemPlayerPlayMinion && items);
-	void AddItems(std::vector<ItemGetMove> && items);
-	void AddItems(std::vector<ItemGetMoves> && items);
-	void AddItems(std::vector<ItemPlayerAttack> && items);
-	void AddItems(std::vector<ItemPlayerPlayMinion> && items);
+	void AddItems(std::list<ItemGetMove> && items);
+	void AddItems(std::list<ItemGetMoves> && items);
+	void AddItems(std::list<ItemPlayerAttack> && items);
+	void AddItems(std::list<ItemPlayerPlayMinion> && items);
 
 	bool GetNextMove(Move &move);
 	bool Empty();
@@ -87,14 +88,14 @@ public:
 	bool operator!=(NextMoveGetter const& rhs) const;
 
 private:
-	template <typename T> bool GetNextMoveFromContainer(std::vector<T> & container, Move &move);
-	template <typename T> static bool IsEqual(std::vector<T> const& lhs, std::vector<T> const& rhs);
+	template <typename T> bool GetNextMoveFromContainer(std::list<T> & container, Move &move);
+	template <typename T> static bool IsEqual(std::list<T> const& lhs, std::list<T> const& rhs);
 
 private:
-	std::vector<ItemGetMove> items_get_move;
-	std::vector<ItemGetMoves> items_get_moves;
-	std::vector<ItemPlayerAttack> items_player_attack;
-	std::vector<ItemPlayerPlayMinion> items_player_play_minion;
+	std::list<ItemGetMove> items_get_move;
+	std::list<ItemGetMoves> items_get_moves;
+	std::list<ItemPlayerAttack> items_player_attack;
+	std::list<ItemPlayerPlayMinion> items_player_play_minion;
 
 	bool is_cached_move_valid;
 	Move cached_move;
@@ -108,14 +109,24 @@ inline GameEngine::NextMoveGetter::NextMoveGetter()
 }
 
 template<typename T>
-inline bool GameEngine::NextMoveGetter::IsEqual(std::vector<T> const & lhs, std::vector<T> const & rhs)
+inline bool GameEngine::NextMoveGetter::IsEqual(std::list<T> const & lhs, std::list<T> const & rhs)
 {
-	if (lhs.size() != rhs.size()) return false;
-	for (size_t i = 0; i < lhs.size(); ++i)
+	auto it_lhs = lhs.cbegin();
+	auto it_rhs = rhs.cbegin();
+
+	while (true)
 	{
-		if (lhs[i] != rhs[i]) return false;
+		if (it_lhs == lhs.cend()) break;
+		if (it_rhs == rhs.cend()) break;
+
+		if (*it_lhs != *it_rhs) return false;
+
+		++it_lhs;
+		++it_rhs;
 	}
-	return true;
+
+	if (it_lhs == lhs.cend() && it_rhs == rhs.cend()) return true;
+	return false;
 }
 
 inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemGetMove && items)
@@ -123,7 +134,7 @@ inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::Item
 	this->items_get_move.push_back(std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::vector<GameEngine::NextMoveGetter::ItemGetMove> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemGetMove> && items)
 {
 	this->items_get_move.insert(
 		this->items_get_move.end(),
@@ -136,7 +147,7 @@ inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::Item
 	this->items_get_moves.push_back(std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::vector<GameEngine::NextMoveGetter::ItemGetMoves> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemGetMoves> && items)
 {
 	this->items_get_moves.insert(
 		this->items_get_moves.end(),
@@ -149,7 +160,7 @@ inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::Item
 	this->items_player_attack.push_back(std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::vector<GameEngine::NextMoveGetter::ItemPlayerAttack> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerAttack> && items)
 {
 	this->items_player_attack.insert(
 		this->items_player_attack.end(),
@@ -162,7 +173,7 @@ inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::Item
 	this->items_player_play_minion.push_back(std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::vector<GameEngine::NextMoveGetter::ItemPlayerPlayMinion> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerPlayMinion> && items)
 {
 	this->items_player_play_minion.insert(
 		this->items_player_play_minion.end(),
@@ -171,7 +182,7 @@ inline void GameEngine::NextMoveGetter::AddItems(std::vector<GameEngine::NextMov
 }
 
 template<typename T>
-inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::vector<T>& container, Move &move)
+inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& container, Move &move)
 {
 	while (!container.empty())
 	{
