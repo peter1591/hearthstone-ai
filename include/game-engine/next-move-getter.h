@@ -42,6 +42,21 @@ public:
 		bool empty;
 	};
 
+	class ItemPlayerPlayMinion : public ItemBase
+	{
+	public:
+		ItemPlayerPlayMinion(Hand::CardsBitmap hand_cards, TargetorBitmap put_locations);
+		ItemPlayerPlayMinion* Clone() const;
+		bool GetNextMove(Move & move);
+		bool operator==(ItemPlayerPlayMinion const& rhs) const;
+		bool operator!=(ItemPlayerPlayMinion const& rhs) const;
+
+	private:
+		Hand::CardsBitmap hand_cards;
+		TargetorBitmap put_locations_origin;
+		TargetorBitmap put_locations;
+	};
+
 	class ItemPlayerAttack : public ItemBase
 	{
 	public:
@@ -235,6 +250,51 @@ inline bool GameEngine::NextMoveGetter::ItemGetMove::operator==(ItemGetMove cons
 }
 
 inline bool GameEngine::NextMoveGetter::ItemGetMove::operator!=(ItemGetMove const & rhs) const
+{
+	return !(*this == rhs);
+}
+
+inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(Hand::CardsBitmap hand_cards, TargetorBitmap put_locations)
+	: hand_cards(hand_cards), put_locations_origin(put_locations)
+{
+}
+
+inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGetter::ItemPlayerPlayMinion::Clone() const
+{
+	return new ItemPlayerPlayMinion(*this);
+}
+
+inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move & move)
+{
+	if (this->hand_cards.None()) return false;
+
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+	if (this->put_locations.None()) {
+		this->hand_cards.ClearOneCard(this->hand_cards.GetOneCard());
+		if (this->hand_cards.None()) return false;
+		this->put_locations = this->put_locations_origin;
+	}
+#endif
+
+	move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
+	move.data.play_hand_card_minion_data.hand_card = this->hand_cards.GetOneCard();
+
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+	move.data.play_hand_card_minion_data.location = this->put_locations.GetOneTarget();
+	this->put_locations.ClearOneTarget(move.data.play_hand_card_minion_data.location);
+#else
+	this->hand_cards.ClearOneCard(move.data.play_hand_card_minion_data.hand_card);
+#endif
+}
+
+inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator==(ItemPlayerPlayMinion const & rhs) const
+{
+	if (this->hand_cards != rhs.hand_cards) return false;
+	if (this->put_locations != rhs.put_locations) return false;
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator!=(ItemPlayerPlayMinion const & rhs) const
 {
 	return !(*this == rhs);
 }

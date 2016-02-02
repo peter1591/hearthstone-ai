@@ -20,43 +20,37 @@ class StagePlayerChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			std::vector<Move> next_moves;
+			bool const can_play_minion = !board.player_minions.IsFull();
 
-			bool can_play_minion = !board.player_minions.IsFull();
-			Move move;
+			next_move_getter.items.reserve(3); // play minion + attack + end-turn
 
-			size_t guessed_next_moves = 0;
-
-			// for play minions
-			if (can_play_minion) {
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION) * (board.player_minions.GetMinions().size()+1);
-#else
-				guessed_next_moves += board.player_hand.GetCountByCardType(Card::TYPE_MINION);
-#endif
-			}
-
-			next_moves.reserve(guessed_next_moves);
-
-			// the choices to play a card from hand
+			Hand::CardsBitmap playable_minions;
 			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCards().size(); ++hand_idx)
 			{
 				const Card &playing_card = board.player_hand.GetCards()[hand_idx];
 				switch (playing_card.type) {
-					case Card::TYPE_MINION:
-						if (!can_play_minion) continue;
-						if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
-						StagePlayerChooseBoardMove::GetNextMoves_PlayMinion(hand_idx, board, next_moves);
-					default:
-						continue; // TODO: handle other card types
+				case Card::TYPE_MINION:
+					if (!can_play_minion) continue;
+					// TODO: check play requirements
+					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
+					playable_minions.SetOneCard(hand_idx);
+				default:
+					continue; // TODO: handle other card types
 				}
 			}
 
-			next_move_getter.items.reserve(3);
+			if (!playable_minions.None() && can_play_minion) {
+				TargetorBitmap put_locations;
 
-			NextMoveGetter::ItemGetMoves *next_move_getter_item = new NextMoveGetter::ItemGetMoves();
-			next_move_getter_item->moves.swap(next_moves);
-			next_move_getter.items.push_back(next_move_getter_item);
+				put_locations.SetOneTarget(0);
+				for (size_t i = 0; i < board.player_minions.GetMinions().size(); ++i)
+				{
+					put_locations.SetOneTarget(i + 1);
+				}
+
+				NextMoveGetter::ItemPlayerPlayMinion *play_minion = new NextMoveGetter::ItemPlayerPlayMinion(playable_minions, put_locations);
+				next_move_getter.items.push_back(play_minion);
+			}
 
 			// the choices to attack by hero/minion
 			TargetorBitmap attacker;
@@ -72,7 +66,10 @@ class StagePlayerChooseBoardMove
 			for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
 				attacked.SetOneTarget(Targetor::GetOpponentMinionIndex(attacked_idx));
 			}
-			next_move_getter.items.push_back(new NextMoveGetter::ItemPlayerAttack(std::move(attacker), std::move(attacked)));
+
+			if (!attacker.None()) {
+				next_move_getter.items.push_back(new NextMoveGetter::ItemPlayerAttack(std::move(attacker), std::move(attacked)));
+			}
 
 			// the choice to end turn
 			Move move_end_turn;

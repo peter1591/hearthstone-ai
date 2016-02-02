@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include "minion.h"
 #include "common.h"
+#include "targetor.h"
 
 #define MAX_MINIONS 7
 

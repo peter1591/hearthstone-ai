@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <vector>
+#include <bitset>
 #include "card.h"
 
 namespace GameEngine {
@@ -14,18 +15,47 @@ class Hand
 public:
 	typedef size_t Locator;
 
+	class CardsBitmap
+	{
+	public:
+		bool None() const { return this->bitmap.none(); }
+
+		void SetOneCard(int idx) { this->bitmap.set(idx); }
+
+		int GetOneCard() const {
+			for (int i = 0; i < max_cards; ++i) {
+				if (this->bitmap[i]) return i;
+			}
+			throw std::runtime_error("no card available");
+		}
+
+		void ClearOneCard(int idx) { this->bitmap.set(idx, false); }
+
+		bool operator==(CardsBitmap const& rhs) const {
+			return this->bitmap == rhs.bitmap;
+		}
+
+		bool operator!=(CardsBitmap const& rhs) const {
+			return !(*this == rhs);
+		}
+		
+	private:
+		static constexpr int max_cards = 10;
+		std::bitset<max_cards> bitmap;
+	};
+
 public:
 	Hand();
 
 	void AddCard(const Card &card);
 
-	size_t GetCount() const { return this->cards.size(); }
-	int GetCountByCardType(Card::Type t) const;
-
 	const std::vector<Card> &GetCards() const { return this->cards; }
 	Card const& GetCard(Locator idx) const { return *(this->cards.begin() + idx); }
 
 	void RemoveCard(Locator idx);
+
+	size_t GetCount() const { return this->cards.size(); }
+	int GetCountByCardType(Card::Type t) const;
 
 	bool operator==(const Hand &rhs) const;
 	bool operator!=(const Hand &rhs) const { return !(*this == rhs); }
