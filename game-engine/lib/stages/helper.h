@@ -3,6 +3,7 @@
 
 #include "stages/common.h"
 #include "game-engine/board.h"
+#include "game-engine/targetor.h"
 
 namespace GameEngine {
 
@@ -18,15 +19,11 @@ public: // return true if game state changed (e.g., win/loss)
 
 public:
 	// handle minion/hero attack, calculate damages
-	static void HandleAttack(
-		PlayerStat &attacker_hero,
-		Minions::container_type &attacker_minions,
-		int attacker_idx, // -1 for the hero
-		PlayerStat &attacked_hero,
-		Minions::container_type &attacked_minions,
-		int attacked_idx);
+	static void HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx);
 
 private:
+	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
+
 	// return true if dead
 	static bool RemoveDeadMinion(Minions::container_type &minions, Minions::container_type::iterator it);
 
@@ -71,39 +68,55 @@ inline bool StageHelper::OpponentDrawCard(Board & board)
 	return false;
 }
 
-inline void StageHelper::HandleAttack(
-		PlayerStat &attacker_hero,
-		Minions::container_type &attacker_minions,
-		int attacker_idx, // -1 for the hero
-		PlayerStat &attacked_hero,
-		Minions::container_type &attacked_minions,
-		int attacked_idx)
+inline Minions::container_type::iterator StageHelper::GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container)
+{
+	int minion_idx;
+	if (Targetor::IsPlayerMinion(pos, minion_idx)) {
+		container = &board.player_minions;
+	}
+	else if (Targetor::IsOpponentMinion(pos, minion_idx)) {
+		container = &board.opponent_minions;
+	}
+	else {
+		throw std::runtime_error("logic error");
+	}
+
+	return container->GetMinions().begin() + minion_idx;
+}
+
+inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx)
 {
 	// TODO: trigger secrets
 
-	if (attacker_idx < 0) {
+	if (attacker_idx == Targetor::GetPlayerHeroIndex() ||
+		attacker_idx == Targetor::GetOpponentHeroIndex())
+	{
 		// TODO: attacker is hero
-		(void)attacker_hero;
 
-	} else {
-		Minions::container_type::iterator attacker = attacker_minions.begin() + attacker_idx;
+	}
+	else  
+	{
+		Minions * attacker_container = nullptr;
+		Minions::container_type::iterator attacker = GetMinionIterator(board, attacker_idx, attacker_container);
 
-		if (attacked_idx < 0) {
-			// target is hero
-			attacked_hero.hp -= attacker->GetAttack();
+		if (attacked_idx == Targetor::GetPlayerHeroIndex()) {
+			board.player_stat.hp -= attacker->GetAttack();
 			attacker->AttackedOnce();
-
+		} else if (attacked_idx == Targetor::GetOpponentHeroIndex()) {
+			board.opponent_stat.hp -= attacker->GetAttack();
+			attacker->AttackedOnce();
 		} else {
-			Minions::container_type::iterator attacked = attacked_minions.begin() + attacked_idx;
+			Minions * attacked_container = nullptr;
+			Minions::container_type::iterator attacked = GetMinionIterator(board, attacked_idx, attacked_container);
 
 			attacked->TakeDamage(attacker->GetAttack());
 			attacker->TakeDamage(attacked->GetAttack());
 
 			// check minion dead
-			if (StageHelper::RemoveDeadMinion(attacker_minions, attacker) == false) {
+			if (StageHelper::RemoveDeadMinion(attacker_container->GetMinions(), attacker) == false) {
 				attacker->AttackedOnce();
 			}
-			StageHelper::RemoveDeadMinion(attacked_minions, attacked);
+			StageHelper::RemoveDeadMinion(attacked_container->GetMinions(), attacked);
 		}
 	}
 }
