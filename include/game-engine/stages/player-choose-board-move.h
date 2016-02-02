@@ -5,12 +5,12 @@
 #include <vector>
 #include <memory>
 
-#include "stages/common.h"
-#include "stages/weighted-moves.h"
+#include "game-engine/stages/common.h"
+#include "game-engine/stages/weighted-moves.h"
 #include "game-engine/board.h"
 #include "game-engine/next-move-getter.h"
 #include "game-engine/targetor.h"
-#include "cards/common.h"
+#include "game-engine/cards/common.h"
 
 namespace GameEngine {
 

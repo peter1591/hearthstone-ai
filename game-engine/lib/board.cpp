@@ -2,16 +2,16 @@
 #include <stdexcept>
 #include <functional>
 
-#include "stages/player-turn-start.h"
-#include "stages/player-choose-board-move.h"
-#include "stages/player-put-minion.h"
-#include "stages/player-attack.h"
-#include "stages/player-turn-end.h"
-#include "stages/opponent-turn-start.h"
-#include "stages/opponent-choose-board-move.h"
-#include "stages/opponent-put-minion.h"
-#include "stages/opponent-attack.h"
-#include "stages/opponent-turn-end.h"
+#include "game-engine/stages/player-turn-start.h"
+#include "game-engine/stages/player-choose-board-move.h"
+#include "game-engine/stages/player-put-minion.h"
+#include "game-engine/stages/player-attack.h"
+#include "game-engine/stages/player-turn-end.h"
+#include "game-engine/stages/opponent-turn-start.h"
+#include "game-engine/stages/opponent-choose-board-move.h"
+#include "game-engine/stages/opponent-put-minion.h"
+#include "game-engine/stages/opponent-attack.h"
+#include "game-engine/stages/opponent-turn-end.h"
 
 #include "game-engine/random-generator.h"
 

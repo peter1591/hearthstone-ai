@@ -4,8 +4,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include "stages/common.h"
-#include "cards/common.h"
+#include "game-engine/stages/common.h"
+#include "game-engine/cards/common.h"
 #include "game-engine/board.h"
 #include "game-engine/targetor.h"
 

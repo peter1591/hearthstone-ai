@@ -1,7 +1,7 @@
 #ifndef STAGES_HELPER_H
 #define STAGES_HELPER_H
 
-#include "stages/common.h"
+#include "game-engine/stages/common.h"
 #include "game-engine/board.h"
 #include "game-engine/targetor.h"
 
