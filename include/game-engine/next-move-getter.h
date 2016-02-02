@@ -13,7 +13,7 @@ public:
 	class ItemPlayerPlayMinion
 	{
 	public:
-		ItemPlayerPlayMinion(Hand::Locator hand_card, int put_locations_min, int put_locations_max);
+		ItemPlayerPlayMinion(Hand::Locator hand_card, int put_locations_min, int put_locations_max, TargetorBitmap required_targets);
 		ItemPlayerPlayMinion* Clone() const;
 		bool GetNextMove(Move & move);
 		bool operator==(ItemPlayerPlayMinion const& rhs) const;
@@ -26,6 +26,8 @@ public:
 		int put_locations_min;
 		int put_locations_max;
 		int put_locations_current;
+
+		TargetorBitmap required_targets;
 	};
 
 	class ItemAttack
@@ -191,8 +193,8 @@ inline bool GameEngine::NextMoveGetter::Empty()
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
-	Hand::Locator hand_card, int put_locations_min, int put_locations_max)
-	: hand_card(hand_card), put_locations_min(put_locations_min), put_locations_max(put_locations_max)
+	Hand::Locator hand_card, int put_locations_min, int put_locations_max, TargetorBitmap required_targets)
+	: hand_card(hand_card), put_locations_min(put_locations_min), put_locations_max(put_locations_max), required_targets(required_targets)
 {
 	this->put_locations_current = this->put_locations_min;
 	this->hand_card_played = false;

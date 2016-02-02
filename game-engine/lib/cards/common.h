@@ -25,7 +25,8 @@ namespace GameEngine {
 			template <typename TestResult, typename... Params> \
 			static bool CallInternal(std::enable_if_t<(sizeof(TestResult) == sizeof(test_ret_if_yes))>*, Params&&... params) \
 		{ \
-			return Card:: ## MethodName(params...); \
+			Card:: ## MethodName(params...); \
+			return true; \
 		} \
 		template <typename TestResult, typename... Params> \
 		static bool CallInternal(std::enable_if_t<(sizeof(TestResult) != sizeof(test_ret_if_yes))>*, Params&&... params) \
@@ -48,10 +49,16 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id);
 	}
 
+	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, TargetorBitmap &targets)
+	{
+		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, targets);
+	}
+
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
 
 	DECLARE_CARD_CALLBACK(BattleCry)
+	DECLARE_CARD_CALLBACK(GetRequiredTargets)
 
 #undef DECLARE_CARD_CALLBACK
 

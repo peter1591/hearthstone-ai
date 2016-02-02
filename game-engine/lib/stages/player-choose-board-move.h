@@ -10,6 +10,7 @@
 #include "game-engine/board.h"
 #include "game-engine/next-move-getter.h"
 #include "game-engine/targetor.h"
+#include "cards/common.h"
 
 namespace GameEngine {
 
@@ -22,24 +23,19 @@ class StagePlayerChooseBoardMove
 		{
 			bool const can_play_minion = !board.player_minions.IsFull();
 
-			std::list<NextMoveGetter::ItemPlayerPlayMinion> play_minion_moves;
-
 			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
 				const Card &playing_card = board.player_hand.GetCard(hand_idx);
+
 				switch (playing_card.type) {
 				case Card::TYPE_MINION:
 					if (!can_play_minion) continue;
-					// TODO: check play requirements
-					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
+					GetNextMove_PlayMinion(board, hand_idx, next_move_getter);
 
-					play_minion_moves.push_back(NextMoveGetter::ItemPlayerPlayMinion(
-						hand_idx, Targetor::GetPlayerMinionIndex(0), Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size())));
 				default:
 					continue; // TODO: handle other card types
 				}
 			}
-			next_move_getter.AddItems(std::move(play_minion_moves));
 
 			// the choices to attack by hero/minion
 			TargetorBitmap attacker;
@@ -154,6 +150,23 @@ class StagePlayerChooseBoardMove
 		}
 
 	private:
+		static void GetNextMove_PlayMinion(Board const& board, Hand::Locator hand_card, NextMoveGetter &next_move_getter)
+		{
+			const Card &playing_card = board.player_hand.GetCard(hand_card);
+
+			// TODO: check play requirements
+			if (board.player_stat.crystal.GetCurrent() < playing_card.cost) return;
+
+			TargetorBitmap required_targets;
+			Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets);
+
+			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
+				hand_card,
+				Targetor::GetPlayerMinionIndex(0), Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size()),
+				required_targets
+				));
+		}
+
 		static void PlayHandCardMinion(Board &board, const Move &move)
 		{
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
