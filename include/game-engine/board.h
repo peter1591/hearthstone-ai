@@ -83,7 +83,9 @@ class Board
 		void GetGoodMove(Move &next_move, unsigned int rand) const;
 
 		// Apply the move to the board
-		void ApplyMove(const Move &move);
+		// @param move  [IN] the move to apply on the board
+		// @param introduced_random [OUT] does the move application introduced any random?
+		void ApplyMove(const Move &move, bool * introduced_random = nullptr);
 
 		void DebugPrint() const;
 

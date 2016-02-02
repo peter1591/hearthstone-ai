@@ -26,6 +26,9 @@ class RandomGenerator
 			return rand();
 		}
 
+		void ClearFlag_HasCalled() { this->has_called = false; }
+		bool GetFlag_HasCalled() const { return this->has_called; }
+
 	public: // comparison
 		bool operator==(const RandomGenerator &) const {
 			// NOTE: boards only differ with the rand seed is considered the same
@@ -36,6 +39,9 @@ class RandomGenerator
 		bool operator!=(const RandomGenerator &rhs) const {
 			return !(*this == rhs);
 		}
+
+	private:
+		bool has_called;
 };
 
 } // namespace GameEngine

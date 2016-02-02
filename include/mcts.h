@@ -36,7 +36,7 @@ private:
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 
-	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board);
+	void GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board, bool & introduced_random);
 	int GetRandom();
 
 private: // for internal use

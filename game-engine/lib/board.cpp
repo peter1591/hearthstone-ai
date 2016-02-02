@@ -81,17 +81,15 @@ void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 	}
 }
 
-void Board::ApplyMove(const Move &move)
+void Board::ApplyMove(const Move &move, bool * introduced_random)
 {
 	if (this->GetStageType() == STAGE_TYPE_GAME_FLOW) {
 		this->random_generator.SetRandomSeed(move.data.game_flow_data.rand_seed);
 	}
 
-#ifdef DEBUG
-	StageType stage_type_prev = this->GetStageType();
-#endif
-
+	if (introduced_random != nullptr) this->random_generator.ClearFlag_HasCalled();
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
+	if (introduced_random != nullptr) *introduced_random = this->random_generator.GetFlag_HasCalled();
 }
 
 void Board::SetStateToPlayerTurnStart()

@@ -126,7 +126,7 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNod
 	}
 }
 
-void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board)
+void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board, bool & introduced_random)
 {
 
 #ifdef DEBUG_SAVE_BOARD
@@ -138,7 +138,7 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
 	{
 		move = GameEngine::Move::GetGameFlowMove(this->GetRandom());
-		board.ApplyMove(move);
+		board.ApplyMove(move, &introduced_random);
 	}
 	else {
 		if (node->children.empty()) {
@@ -153,7 +153,8 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 			throw std::runtime_error("a node with no non-expanded move should not be selected to be expanded");
 		}
 
-		board.ApplyMove(move);
+		board.ApplyMove(move, &introduced_random);
+		if (introduced_random) throw std::runtime_error("non-game-flow node should be deterministic!");
 	}
 }
 
@@ -174,9 +175,38 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 
 	new_board = board;
 
-	this->GetNextState(node, this->allocated_node->move, new_board);
+	bool introduced_random;
+	this->GetNextState(node, this->allocated_node->move, new_board, introduced_random);
 
-	TreeNode *found_node = this->board_node_map.Find(new_board, *this);
+	TreeNode *found_node = nullptr;
+
+	// quickly find node for moves without random
+	if (introduced_random == false && node->children.empty() == false) {
+		// a deterministic node --> find in children node with 'move'
+		if (board.GetStageType() == GameEngine::STAGE_TYPE_GAME_FLOW) {
+			found_node = node->children.front();
+		}
+		else {
+			for (auto const& child : node->children)
+			{
+				if (child->move == this->allocated_node->move) {
+					found_node = child;
+					break;
+				}
+			}
+		}
+
+		if (found_node) {
+			if (found_node->equivalent_node != nullptr) {
+				found_node = found_node->equivalent_node;
+			}
+			new_node = found_node;
+			return false;
+		}
+	}
+
+	found_node = this->board_node_map.Find(new_board, *this);
+
 	if (found_node != nullptr)
 	{
 		if (found_node->parent == node)
