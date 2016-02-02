@@ -17,29 +17,16 @@ class StageOpponentChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			std::vector<Move> next_moves;
+			std::list<Move> next_moves;
 
 			size_t guessed_next_moves;
 			bool can_play_minion = !board.opponent_minions.IsFull();
 			Move move;
+
 			std::vector<Card> playable_minions;
-
-			guessed_next_moves = 1; // end turn
-
-			// for play minions
 			if (can_play_minion) {
 				board.opponent_cards.GetPossiblePlayableMinions(board.opponent_stat, playable_minions);
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-				guessed_next_moves += playable_minions.size() * (board.opponent_minions.GetMinions().size()+1);
-#else
-				guessed_next_moves += playable_minions.size();
-#endif
 			}
-
-			// for attack
-			guessed_next_moves += (board.opponent_minions.GetMinions().size()+1) * (board.opponent_minions.GetMinions().size()+1);
-
-			next_moves.reserve(guessed_next_moves);
 
 			// the choice to end turn
 			move.action = Move::ACTION_END_TURN;
@@ -65,9 +52,7 @@ class StageOpponentChooseBoardMove
 				}
 			}
 
-			NextMoveGetter::ItemGetMoves next_move_getter_item = NextMoveGetter::ItemGetMoves();
-			next_move_getter_item.moves.swap(next_moves);
-			next_move_getter.AddItem(std::move(next_move_getter_item));
+			next_move_getter.AddItems(std::move(next_moves));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
@@ -150,7 +135,7 @@ class StageOpponentChooseBoardMove
 		}
 
 	private:
-		static void GetNextMoves_PlayMinion(const Card &card, const Board &board, std::vector<Move> &next_moves)
+		static void GetNextMoves_PlayMinion(const Card &card, const Board &board, std::list<Move> &next_moves)
 		{
 			Move move;
 
@@ -178,7 +163,7 @@ class StageOpponentChooseBoardMove
 			board.stage = STAGE_OPPONENT_PUT_MINION;
 		}
 
-		static void GetNextMoves_Attack(int attacker_idx, int attacked_idx, std::vector<Move> &next_moves)
+		static void GetNextMoves_Attack(int attacker_idx, int attacked_idx, std::list<Move> &next_moves)
 		{
 			Move move;
 

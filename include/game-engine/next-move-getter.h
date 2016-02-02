@@ -10,32 +10,6 @@ namespace GameEngine {
 class NextMoveGetter
 {
 public:
-	class ItemGetMoves
-	{
-	public:
-		ItemGetMoves* Clone() const;
-		bool GetNextMove(Move &move);
-		bool operator==(ItemGetMoves const& rhs) const;
-		bool operator!=(ItemGetMoves const& rhs) const;
-
-	public:
-		std::vector<Move> moves;
-	};
-
-	class ItemGetMove
-	{
-	public:
-		ItemGetMove(Move && rhs);
-		ItemGetMove* Clone() const;
-		bool GetNextMove(Move & move);
-		bool operator==(ItemGetMove const& rhs) const;
-		bool operator!=(ItemGetMove const& rhs) const;
-
-	private:
-		Move move;
-		bool empty;
-	};
-
 	class ItemPlayerPlayMinion
 	{
 	public:
@@ -72,12 +46,10 @@ public:
 public:
 	NextMoveGetter();
 
-	void AddItem(ItemGetMove && items);
-	void AddItem(ItemGetMoves && items);
+	void AddItem(Move && move);
 	void AddItem(ItemPlayerAttack && items);
 	void AddItem(ItemPlayerPlayMinion && items);
-	void AddItems(std::list<ItemGetMove> && items);
-	void AddItems(std::list<ItemGetMoves> && items);
+	void AddItems(std::list<Move> && items);
 	void AddItems(std::list<ItemPlayerAttack> && items);
 	void AddItems(std::list<ItemPlayerPlayMinion> && items);
 
@@ -92,8 +64,7 @@ private:
 	template <typename T> static bool IsEqual(std::list<T> const& lhs, std::list<T> const& rhs);
 
 private:
-	std::list<ItemGetMove> items_get_move;
-	std::list<ItemGetMoves> items_get_moves;
+	std::list<Move> moves;
 	std::list<ItemPlayerAttack> items_player_attack;
 	std::list<ItemPlayerPlayMinion> items_player_play_minion;
 
@@ -129,56 +100,34 @@ inline bool GameEngine::NextMoveGetter::IsEqual(std::list<T> const & lhs, std::l
 	return false;
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemGetMove && items)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::Move && item)
 {
-	this->items_get_move.push_back(std::move(items));
+	this->moves.push_back(std::move(item));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemGetMove> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::Move> && items)
 {
-	this->items_get_move.insert(
-		this->items_get_move.end(),
-		std::make_move_iterator(items.begin()),
-		std::make_move_iterator(items.end()));
+	this->moves.splice(this->moves.end(), std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemGetMoves && items)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerAttack && item)
 {
-	this->items_get_moves.push_back(std::move(items));
-}
-
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemGetMoves> && items)
-{
-	this->items_get_moves.insert(
-		this->items_get_moves.end(),
-		std::make_move_iterator(items.begin()),
-		std::make_move_iterator(items.end()));
-}
-
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerAttack && items)
-{
-	this->items_player_attack.push_back(std::move(items));
+	this->items_player_attack.push_back(std::move(item));
 }
 
 inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerAttack> && items)
 {
-	this->items_player_attack.insert(
-		this->items_player_attack.end(),
-		std::make_move_iterator(items.begin()),
-		std::make_move_iterator(items.end()));
+	this->items_player_attack.splice(this->items_player_attack.end(), std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerPlayMinion && items)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerPlayMinion && item)
 {
-	this->items_player_play_minion.push_back(std::move(items));
+	this->items_player_play_minion.push_back(std::move(item));
 }
 
 inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerPlayMinion> && items)
 {
-	this->items_player_play_minion.insert(
-		this->items_player_play_minion.end(),
-		std::make_move_iterator(items.begin()),
-		std::make_move_iterator(items.end()));
+	this->items_player_play_minion.splice(this->items_player_play_minion.end(), std::move(items));
 }
 
 template<typename T>
@@ -202,8 +151,12 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
 		return true;
 	}
 
-	if (this->GetNextMoveFromContainer(this->items_get_move, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_get_moves, move)) return true;
+	if (!this->moves.empty()) {
+		move = this->moves.back();
+		this->moves.pop_back();
+		return true;
+	}
+
 	if (this->GetNextMoveFromContainer(this->items_player_attack, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_player_play_minion, move)) return true;
 	return false;
@@ -211,8 +164,7 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
 
 inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) const
 {
-	if (!IsEqual(this->items_get_move, rhs.items_get_move)) return false;
-	if (!IsEqual(this->items_get_moves, rhs.items_get_moves)) return false;
+	if (!IsEqual(this->moves, rhs.moves)) return false;
 	if (!IsEqual(this->items_player_attack, rhs.items_player_attack)) return false;
 	if (!IsEqual(this->items_player_play_minion, rhs.items_player_play_minion)) return false;
 	return true;
@@ -230,61 +182,6 @@ inline bool GameEngine::NextMoveGetter::Empty()
 
 	this->is_cached_move_valid = true;
 	return false;
-}
-
-inline GameEngine::NextMoveGetter::ItemGetMoves * GameEngine::NextMoveGetter::ItemGetMoves::Clone() const
-{
-	return new ItemGetMoves(*this);
-}
-
-inline bool GameEngine::NextMoveGetter::ItemGetMoves::GetNextMove(Move & move)
-{
-	if (this->moves.empty()) return false;
-	move = this->moves.back();
-	this->moves.pop_back();
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemGetMoves::operator==(ItemGetMoves const & rhs) const
-{
-	if (this->moves != rhs.moves) return false;
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemGetMoves::operator!=(ItemGetMoves const & rhs) const
-{
-	return !(*this == rhs);
-}
-
-inline GameEngine::NextMoveGetter::ItemGetMove::ItemGetMove(Move && rhs)
-	: empty(false) 
-{
-	this->move = rhs;
-}
-
-inline GameEngine::NextMoveGetter::ItemGetMove * GameEngine::NextMoveGetter::ItemGetMove::Clone() const
-{
-	return new ItemGetMove(*this);
-}
-
-inline bool GameEngine::NextMoveGetter::ItemGetMove::GetNextMove(Move & move)
-{
-	if (this->empty) return false;
-	move = this->move;
-	this->empty = true;
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemGetMove::operator==(ItemGetMove const & rhs) const
-{
-	if (this->empty != rhs.empty) return false;
-	if (this->move != rhs.move) return false;
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemGetMove::operator!=(ItemGetMove const & rhs) const
-{
-	return !(*this == rhs);
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(

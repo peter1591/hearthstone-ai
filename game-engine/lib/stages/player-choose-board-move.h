@@ -64,8 +64,7 @@ class StagePlayerChooseBoardMove
 			// the choice to end turn
 			Move move_end_turn;
 			move_end_turn.action = Move::ACTION_END_TURN;
-			NextMoveGetter::ItemGetMove end_turn_move = NextMoveGetter::ItemGetMove(std::move(move_end_turn));
-			next_move_getter.AddItem(std::move(end_turn_move));
+			next_move_getter.AddItem(std::move(move_end_turn));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
