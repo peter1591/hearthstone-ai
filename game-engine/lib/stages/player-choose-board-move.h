@@ -75,8 +75,9 @@ class StagePlayerChooseBoardMove
 			next_move_getter.items.push_back(new NextMoveGetter::ItemPlayerAttack(std::move(attacker), std::move(attacked)));
 
 			// the choice to end turn
-			move.action = Move::ACTION_END_TURN;
-			next_move_getter.items.push_back(new NextMoveGetter::ItemGetMove(move));
+			Move move_end_turn;
+			move_end_turn.action = Move::ACTION_END_TURN;
+			next_move_getter.items.push_back(new NextMoveGetter::ItemGetMove(std::move(move_end_turn)));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)

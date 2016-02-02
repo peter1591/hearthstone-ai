@@ -32,6 +32,7 @@ public:
 		for (size_t i = 0; i < bitset_size; ++i) {
 			if (this->bitmap[i]) return i;
 		}
+		throw std::runtime_error("no target available");
 	}
 
 	void ClearOneTarget(int idx) { this->bitmap.set(idx, false); }

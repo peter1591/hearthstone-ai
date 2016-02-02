@@ -2,6 +2,7 @@
 #define GAME_ENGINE_CARDS_COMMON_H
 
 #include <type_traits>
+#include "game-engine/board.h"
 #include "card_CS2_189.h"
 
 namespace GameEngine {
