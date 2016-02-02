@@ -65,9 +65,9 @@ class StageOpponentChooseBoardMove
 				}
 			}
 
-			NextMoveGetter::ItemGetMoves *next_move_getter_item = new NextMoveGetter::ItemGetMoves();
-			next_move_getter_item->moves.swap(next_moves);
-			next_move_getter.items.push_back(next_move_getter_item);
+			NextMoveGetter::ItemGetMoves next_move_getter_item = NextMoveGetter::ItemGetMoves();
+			next_move_getter_item.moves.swap(next_moves);
+			next_move_getter.AddItem(std::move(next_move_getter_item));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)

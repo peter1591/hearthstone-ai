@@ -22,28 +22,25 @@ class StagePlayerChooseBoardMove
 		{
 			bool const can_play_minion = !board.player_minions.IsFull();
 
-			next_move_getter.items.reserve(3); // play minion + attack + end-turn
+			std::vector<NextMoveGetter::ItemPlayerPlayMinion> play_minion_moves;
 
-			Hand::CardsBitmap playable_minions;
-			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCards().size(); ++hand_idx)
+			play_minion_moves.reserve(board.player_hand.GetCount());
+			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
-				const Card &playing_card = board.player_hand.GetCards()[hand_idx];
+				const Card &playing_card = board.player_hand.GetCard(hand_idx);
 				switch (playing_card.type) {
 				case Card::TYPE_MINION:
 					if (!can_play_minion) continue;
 					// TODO: check play requirements
 					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
-					playable_minions.SetOneCard(hand_idx);
+
+					play_minion_moves.push_back(NextMoveGetter::ItemPlayerPlayMinion(
+						hand_idx, Targetor::GetPlayerMinionIndex(0), Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size())));
 				default:
 					continue; // TODO: handle other card types
 				}
 			}
-
-			if (!playable_minions.None() && can_play_minion) {
-				NextMoveGetter::ItemPlayerPlayMinion *play_minion = new NextMoveGetter::ItemPlayerPlayMinion(
-					playable_minions, Targetor::GetPlayerMinionIndex(0), Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size()));
-				next_move_getter.items.push_back(play_minion);
-			}
+			next_move_getter.AddItems(std::move(play_minion_moves));
 
 			// the choices to attack by hero/minion
 			TargetorBitmap attacker;
@@ -61,13 +58,15 @@ class StagePlayerChooseBoardMove
 			}
 
 			if (!attacker.None()) {
-				next_move_getter.items.push_back(new NextMoveGetter::ItemPlayerAttack(std::move(attacker), std::move(attacked)));
+				NextMoveGetter::ItemPlayerAttack player_attack_move(std::move(attacker), std::move(attacked));
+				next_move_getter.AddItem(std::move(player_attack_move));
 			}
-
+			
 			// the choice to end turn
 			Move move_end_turn;
 			move_end_turn.action = Move::ACTION_END_TURN;
-			next_move_getter.items.push_back(new NextMoveGetter::ItemGetMove(std::move(move_end_turn)));
+			NextMoveGetter::ItemGetMove end_turn_move = NextMoveGetter::ItemGetMove(std::move(move_end_turn));
+			next_move_getter.AddItem(std::move(end_turn_move));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
