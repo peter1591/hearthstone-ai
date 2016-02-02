@@ -10,7 +10,7 @@
 
 void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::Deck &deck)
 {	
-	for (int i = 0; i < 30; ++i) {
+	for (int i = 0; i < 27; ++i) {
 		deck.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
 	}
 }
@@ -33,12 +33,12 @@ void InitializeBoard(GameEngine::Board &board)
 	if (!card_database.ReadFromJsonFile("../../../database/cards.json"))
 		throw std::runtime_error("failed to load card data");
 
-	board.player_stat.hp = 30;
+	board.player_stat.hp = 2;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 30;
+	board.opponent_stat.hp = 5;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -57,7 +57,7 @@ void InitializeBoard(GameEngine::Board &board)
 	//minion.TurnStart();
 	//board.player_minions.AddMinion(minion);
 
-	//minion.Set(222, 2, 2, 2);
+	//minion.Set(222, 10, 1, 2);
 	//minion.TurnStart();
 	//board.opponent_minions.AddMinion(minion);
 

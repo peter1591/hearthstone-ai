@@ -28,11 +28,11 @@
     <Filter Include="Source Files\libjson">
       <UniqueIdentifier>{a9af3935-0e4a-4bf0-bf52-aec2b9b50adf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine\stages">
-      <UniqueIdentifier>{b78ff45a-1056-4977-84ef-fa72d64e1cb6}</UniqueIdentifier>
+    <Filter Include="Header Files\game-engine\cards">
+      <UniqueIdentifier>{8874ceb8-7444-4ed7-b98c-756cbbe400a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine\cards">
-      <UniqueIdentifier>{b4000ea3-6cd7-47bf-b4bb-3a00e4525f09}</UniqueIdentifier>
+    <Filter Include="Header Files\game-engine\stages">
+      <UniqueIdentifier>{4af59b99-7273-46d6-bfa9-0f27ab7679c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -128,51 +128,6 @@
     <ClInclude Include="..\..\..\include\game-engine\weapon.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\common.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\helper.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-attack.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-choose-board-move.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-put-minion.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-turn-end.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-turn-start.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-attack.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-choose-board-move.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-put-minion.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-end.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\stages\weighted-moves.h">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\cards\common.h">
-      <Filter>Source Files\game-engine\cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\game-engine\lib\cards\card_CS2_189.h">
-      <Filter>Source Files\game-engine\cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
@@ -193,6 +148,51 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\targetor.h">
       <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\common.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\common.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-put-minion.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-end.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-start.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-attack.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-choose-board-move.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-put-minion.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h">
+      <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

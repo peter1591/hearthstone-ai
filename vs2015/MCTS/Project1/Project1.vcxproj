@@ -85,7 +85,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -136,27 +136,14 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\game-engine\lib\cards\card_CS2_189.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\cards\common.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\common.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\helper.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-attack.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-choose-board-move.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-put-minion.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-turn-end.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\opponent-turn-start.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-attack.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-choose-board-move.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-put-minion.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-end.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\player-turn-start.h" />
-    <ClInclude Include="..\..\..\game-engine\lib\stages\weighted-moves.h" />
     <ClInclude Include="..\..\..\include\board-node-map.h" />
     <ClInclude Include="..\..\..\include\decider.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
@@ -172,6 +159,19 @@
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />
     <ClInclude Include="..\..\..\include\game-engine\secrets.h" />
     <ClInclude Include="..\..\..\include\game-engine\stage.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\common.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-put-minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-end.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-start.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-attack.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-choose-board-move.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-put-minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h" />
     <ClInclude Include="..\..\..\include\game-engine\targetor.h" />
     <ClInclude Include="..\..\..\include\game-engine\weapon.h" />
     <ClInclude Include="..\..\..\include\mcts.h" />
