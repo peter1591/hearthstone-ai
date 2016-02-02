@@ -53,7 +53,7 @@ inline Minions::Minions()
 
 inline void Minions::AddMinion(const Minion &minion, size_t idx)
 {
-	if (UNLIKELY(idx == this->minions.size())) {
+	if (idx == this->minions.size()) {
 		// push to the rightmost
 		this->minions.push_back(minion);
 		return;

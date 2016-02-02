@@ -7,6 +7,7 @@
 #include "stages/common.h"
 #include "cards/common.h"
 #include "game-engine/board.h"
+#include "game-engine/targetor.h"
 
 namespace GameEngine {
 
@@ -31,7 +32,8 @@ class StagePlayerPutMinion
 			minion.Summon(playing_card);
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			board.player_minions.AddMinion(minion, data.location);
+			int put_minion_location = data.location - Targetor::GetPlayerMinionIndex(0);
+			board.player_minions.AddMinion(minion, put_minion_location);
 #else
 			board.player_minions.AddMinion(minion); // add to the rightmost
 #endif

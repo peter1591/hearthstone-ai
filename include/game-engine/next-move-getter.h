@@ -259,7 +259,7 @@ inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
 	Hand::CardsBitmap hand_cards, int put_locations_min, int put_locations_max)
 	: hand_cards(hand_cards), put_locations_min(put_locations_min), put_locations_max(put_locations_max)
 {
-	this->put_locations_current = 0;
+	this->put_locations_current = this->put_locations_min;
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGetter::ItemPlayerPlayMinion::Clone() const
@@ -272,7 +272,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 	if (this->hand_cards.None()) return false;
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-	if (this->put_locations_current >= this->put_locations_max) {
+	if (this->put_locations_current > this->put_locations_max) {
 		this->hand_cards.ClearOneCard(this->hand_cards.GetOneCard());
 		if (this->hand_cards.None()) return false;
 		this->put_locations_current = this->put_locations_min;

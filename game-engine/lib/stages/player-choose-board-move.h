@@ -73,7 +73,7 @@ class StagePlayerChooseBoardMove
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
 		{
 			// heuristic goes here
-			// 1. play minion is good (always put minion at the leftmost)
+			// 1. play minion is good (always put minion to the rightmost)
 			// 2. minion attack is good
 			// 3. hero attack is good
 			// 4. effective spell is good
@@ -106,7 +106,7 @@ class StagePlayerChooseBoardMove
 					move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
 					move.data.play_hand_card_minion_data.hand_card = hand_idx;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-					move.data.play_hand_card_minion_data.location = 0;
+					move.data.play_hand_card_minion_data.location = Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size());
 #endif
 					moves.AddMove(move, weight_play_minion);
 				default:
@@ -157,24 +157,6 @@ class StagePlayerChooseBoardMove
 		}
 
 	private:
-		static void GetNextMoves_PlayMinion(size_t hand_card_idx, const Board &board, std::vector<Move> &next_moves)
-		{
-			Move move;
-
-			move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
-			move.data.play_hand_card_minion_data.hand_card = hand_card_idx;
-
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (size_t i=0; i<=board.player_minions.GetMinions().size(); ++i) {
-				move.data.play_hand_card_minion_data.location = i;
-				next_moves.push_back(move);
-			}
-#else
-			(void)board; // suppress warning
-			next_moves.push_back(move);
-#endif
-		}
-
 		static void PlayHandCardMinion(Board &board, const Move &move)
 		{
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
