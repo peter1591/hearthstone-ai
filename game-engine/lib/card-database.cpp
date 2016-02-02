@@ -64,7 +64,7 @@ namespace GameEngine {
 			return this->AddMinionCard(card);
 		}
 		else if (type == "SPELL") {
-			return this->AddMinionCard(card);
+			return this->AddSpellCard(card);
 		}
 		else {
 			// ignored
