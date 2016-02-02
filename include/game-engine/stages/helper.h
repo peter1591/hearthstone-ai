@@ -17,6 +17,8 @@ public: // return true if game state changed (e.g., win/loss)
 	// return true if game ends (i.e., state changed)
 	static bool CheckWinLoss(Board &board);
 
+	static bool CheckHeroMinionDead(Board & board);
+
 public:
 	// handle minion/hero attack, calculate damages
 	static void HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx);
@@ -24,11 +26,12 @@ public:
 	static void TakeDamage(GameEngine::Board & board, int taker_idx, int damage);
 
 private:
-	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
 	static void TakeDamage(Minions::container_type::iterator taker, int damage);
+	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
 
 	// return true if dead
-	static bool RemoveDeadMinion(Minions::container_type &minions, Minions::container_type::iterator it);
+	static bool RemoveDeadMinion(Minions & minions, Minions::container_type::iterator & it);
+	static void RemoveDeadMinions(Minions & minions);
 
 	static void Fatigue(PlayerStat &player_stat);
 };
@@ -91,9 +94,12 @@ inline void StageHelper::TakeDamage(GameEngine::Board & board, int taker_idx, in
 {
 	if (taker_idx == Targetor::GetPlayerHeroIndex()) {
 		board.player_stat.hp -= damage;
+		return;
 	}
-	else if (taker_idx == Targetor::GetOpponentHeroIndex()) {
+
+	if (taker_idx == Targetor::GetOpponentHeroIndex()) {
 		board.opponent_stat.hp -= damage;
+		return;
 	}
 
 	Minions * container = nullptr;
@@ -114,7 +120,7 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 		attacker_idx == Targetor::GetOpponentHeroIndex())
 	{
 		// TODO: attacker is hero
-
+		throw std::runtime_error("not implemented");
 	}
 	else  
 	{
@@ -135,10 +141,10 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 			TakeDamage(attacker, attacked->GetAttack());
 
 			// check minion dead
-			if (StageHelper::RemoveDeadMinion(attacker_container->GetMinions(), attacker) == false) {
+			if (StageHelper::RemoveDeadMinion(*attacker_container, attacker) == false) {
 				attacker->AttackedOnce();
 			}
-			StageHelper::RemoveDeadMinion(attacked_container->GetMinions(), attacked);
+			StageHelper::RemoveDeadMinion(*attacked_container, attacked);
 		}
 	}
 }
@@ -159,12 +165,31 @@ inline bool StageHelper::CheckWinLoss(Board &board)
 	return false;
 }
 
+inline void GameEngine::StageHelper::RemoveDeadMinions(Minions & minions)
+{
+	for (auto it = minions.GetMinions().begin(); it != minions.GetMinions().end();)
+	{
+		if (RemoveDeadMinion(minions, it) == false) ++it;
+	}
+}
+
+inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
+{
+	if (CheckWinLoss(board)) return true;
+
+	RemoveDeadMinions(board.player_minions);
+	RemoveDeadMinions(board.opponent_minions);
+
+	return false;
+}
+
 // return true if dead
-inline bool StageHelper::RemoveDeadMinion(Minions::container_type &minions, Minions::container_type::iterator it)
+inline bool StageHelper::RemoveDeadMinion(Minions & minions, Minions::container_type::iterator & it)
 {
 	if (it->GetHP() > 0) return false;
 
-	minions.erase(it);
+	// TODO: deathrattle
+	it = minions.GetMinions().erase(it);
 	return true;
 }
 

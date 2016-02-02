@@ -5,6 +5,7 @@
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
 #include "game-engine/targetor.h"
+#include "game-engine/stages/helper.h"
 
 namespace GameEngine {
 namespace Cards {
@@ -28,7 +29,10 @@ public:
 
 	static void BattleCry(GameEngine::Board & board)
 	{
+		constexpr int damage = 1;
+		int damage_taker_idx = board.data.player_put_minion_data.required_target;
 
+		StageHelper::TakeDamage(board, damage_taker_idx, damage);
 	}
 };
 

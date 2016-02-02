@@ -205,7 +205,9 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 
 	move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
 	move.data.play_hand_card_minion_data.hand_card = this->hand_card;
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
 	move.data.play_hand_card_minion_data.location = this->put_location;
+#endif
 	move.data.play_hand_card_minion_data.required_target = this->required_targets.GetOneTarget();
 
 	this->required_targets.ClearOneTarget(move.data.play_hand_card_minion_data.required_target);
@@ -228,6 +230,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator!=(ItemPla
 inline GameEngine::NextMoveGetter::ItemAttack::ItemAttack(TargetorBitmap && attacker, TargetorBitmap && attacked)
 {
 	this->attacker = attacker;
+	this->attacked = attacked;
 	this->attacked_origin = attacked;
 }
 

@@ -8,6 +8,7 @@
 #include "game-engine/cards/common.h"
 #include "game-engine/board.h"
 #include "game-engine/targetor.h"
+#include "game-engine/stages/helper.h"
 
 namespace GameEngine {
 
@@ -28,6 +29,7 @@ class StagePlayerPutMinion
 			board.player_stat.crystal.CostCrystals(playing_card.cost);
 
 			Cards::CardCallbackManager::BattleCry(playing_card.id, board);
+			if (StageHelper::CheckHeroMinionDead(board)) return;
 
 			minion.Summon(playing_card);
 

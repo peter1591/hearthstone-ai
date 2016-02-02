@@ -91,6 +91,7 @@ inline bool Move::operator==(const Move &rhs) const
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 		if (this->data.play_hand_card_minion_data.location != rhs.data.play_hand_card_minion_data.location) return false;
 #endif
+		if (this->data.play_hand_card_minion_data.required_target != rhs.data.play_hand_card_minion_data.required_target) return false;
 		break;
 
 	case ACTION_OPPONENT_PLAY_MINION:
@@ -142,6 +143,7 @@ namespace std {
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.location));
 #endif
+				GameEngine::hash_combine(result, hash<decltype(s.data.play_hand_card_minion_data.required_target)>()(s.data.play_hand_card_minion_data.required_target));
 				break;
 
 			case GameEngine::Move::ACTION_OPPONENT_PLAY_MINION:

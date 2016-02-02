@@ -99,8 +99,11 @@ class StagePlayerChooseBoardMove
 					if (!can_play_minion) continue;
 					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-					Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets, meet_requirements);
-					if (meet_requirements == false) break;
+					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets, meet_requirements)
+						&& meet_requirements == false)
+					{
+						break;
+					}
 
 					move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
 					move.data.play_hand_card_minion_data.hand_card = hand_idx;
@@ -167,8 +170,11 @@ class StagePlayerChooseBoardMove
 
 			TargetorBitmap required_targets;
 			bool meet_requirements;
-			Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets, meet_requirements);
-			if (meet_requirements == false) return;
+			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets, meet_requirements) &&
+				meet_requirements == false)
+			{
+				return;
+			}
 
 			// TODO: check play requirements
 

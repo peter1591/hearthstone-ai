@@ -152,6 +152,7 @@ inline bool Board::operator==(const Board &rhs) const
 	case STAGE_PLAYER_PUT_MINION:
 		if (this->data.player_put_minion_data.hand_card != rhs.data.player_put_minion_data.hand_card) return false;
 		if (this->data.player_put_minion_data.location != rhs.data.player_put_minion_data.location) return false;
+		if (this->data.player_put_minion_data.required_target != rhs.data.player_put_minion_data.required_target) return false;
 		break;
 
 	case GameEngine::STAGE_OPPONENT_PUT_MINION:
@@ -204,6 +205,7 @@ namespace std {
 				case GameEngine::STAGE_PLAYER_PUT_MINION:
 					GameEngine::hash_combine(result, hash<decltype(s.data.player_put_minion_data.hand_card)>()(s.data.player_put_minion_data.hand_card));
 					GameEngine::hash_combine(result, hash<int>()(s.data.player_put_minion_data.location));
+					GameEngine::hash_combine(result, hash<decltype(s.data.player_put_minion_data.required_target)>()(s.data.player_put_minion_data.required_target));
 					break;
 
 				case GameEngine::STAGE_OPPONENT_PUT_MINION:
