@@ -21,8 +21,11 @@ public:
 	// handle minion/hero attack, calculate damages
 	static void HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx);
 
+	static void TakeDamage(GameEngine::Board & board, int taker_idx, int damage);
+
 private:
 	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
+	static void TakeDamage(Minions::container_type::iterator taker, int damage);
 
 	// return true if dead
 	static bool RemoveDeadMinion(Minions::container_type &minions, Minions::container_type::iterator it);
@@ -84,6 +87,25 @@ inline Minions::container_type::iterator StageHelper::GetMinionIterator(GameEngi
 	return container->GetMinions().begin() + minion_idx;
 }
 
+inline void StageHelper::TakeDamage(GameEngine::Board & board, int taker_idx, int damage)
+{
+	if (taker_idx == Targetor::GetPlayerHeroIndex()) {
+		board.player_stat.hp -= damage;
+	}
+	else if (taker_idx == Targetor::GetOpponentHeroIndex()) {
+		board.opponent_stat.hp -= damage;
+	}
+
+	Minions * container = nullptr;
+	Minions::container_type::iterator taker = GetMinionIterator(board, taker_idx, container);
+	return TakeDamage(taker, damage);
+}
+
+inline void StageHelper::TakeDamage(Minions::container_type::iterator taker, int damage)
+{
+	taker->TakeDamage(damage);
+}
+
 inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx)
 {
 	// TODO: trigger secrets
@@ -109,8 +131,8 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 			Minions * attacked_container = nullptr;
 			Minions::container_type::iterator attacked = GetMinionIterator(board, attacked_idx, attacked_container);
 
-			attacked->TakeDamage(attacker->GetAttack());
-			attacker->TakeDamage(attacked->GetAttack());
+			TakeDamage(attacked, attacker->GetAttack());
+			TakeDamage(attacker, attacked->GetAttack());
 
 			// check minion dead
 			if (StageHelper::RemoveDeadMinion(attacker_container->GetMinions(), attacker) == false) {
