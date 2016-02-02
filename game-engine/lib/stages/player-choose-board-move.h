@@ -106,15 +106,15 @@ class StagePlayerChooseBoardMove
 
 			// the choices to play a card from hand
 			bool can_play_minion = !board.player_minions.IsFull();
-			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCards().size(); ++hand_idx)
+			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
-				const Card &playing_card = board.player_hand.GetCards()[hand_idx];
+				Card const& playing_card = board.player_hand.GetCard(hand_idx);
 				switch (playing_card.type) {
 				case Card::TYPE_MINION:
 					if (!can_play_minion) continue;
 					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
 					move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
-					move.data.play_hand_card_minion_data.idx_hand_card = (int)hand_idx;
+					move.data.play_hand_card_minion_data.hand_card = hand_idx;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 					move.data.play_hand_card_minion_data.location = 0;
 #endif
@@ -172,7 +172,7 @@ class StagePlayerChooseBoardMove
 			Move move;
 
 			move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
-			move.data.play_hand_card_minion_data.idx_hand_card = (int)hand_card_idx;
+			move.data.play_hand_card_minion_data.hand_card = hand_card_idx;
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			for (size_t i=0; i<=board.player_minions.GetMinions().size(); ++i) {
@@ -189,7 +189,7 @@ class StagePlayerChooseBoardMove
 		{
 			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
 
-			board.data.player_put_minion_data.idx_hand_card = data.idx_hand_card;
+			board.data.player_put_minion_data.hand_card = data.hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			board.data.player_put_minion_data.location = data.location;
 #endif

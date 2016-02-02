@@ -11,21 +11,28 @@ class Hand
 {
 	friend std::hash<Hand>;
 
-	public:
-		Hand();
-		void AddCard(const Card &card);
-		const std::vector<Card> &GetCards() const { return this->cards; }
-		int GetCountByCardType(Card::Type t) const;
-		void RemoveCard(int idx);
+public:
+	typedef size_t Locator;
 
-		bool operator==(const Hand &rhs) const ;
-		bool operator!=(const Hand &rhs) const {
-			return !(*this == rhs);
-		}
+public:
+	Hand();
 
-	private:
-		std::vector<Card> cards;
-		int count_by_type[Card::TYPE_MAX];
+	void AddCard(const Card &card);
+
+	size_t GetCount() const { return this->cards.size(); }
+	int GetCountByCardType(Card::Type t) const;
+
+	const std::vector<Card> &GetCards() const { return this->cards; }
+	Card const& GetCard(Locator idx) const { return *(this->cards.begin() + idx); }
+
+	void RemoveCard(Locator idx);
+
+	bool operator==(const Hand &rhs) const;
+	bool operator!=(const Hand &rhs) const { return !(*this == rhs); }
+
+private:
+	std::vector<Card> cards;
+	int count_by_type[Card::TYPE_MAX];
 };
 
 inline Hand::Hand()
@@ -47,7 +54,7 @@ inline int Hand::GetCountByCardType(Card::Type t) const
 	return this->count_by_type[t];
 }
 
-inline void Hand::RemoveCard(int idx)
+inline void Hand::RemoveCard(Locator idx)
 {
 	std::vector<Card>::iterator it = this->cards.begin() + idx;
 	this->count_by_type[it->type]--;

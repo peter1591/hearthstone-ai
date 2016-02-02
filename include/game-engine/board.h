@@ -107,7 +107,7 @@ class Board
 
 	private: // internal state data for cross-stage communication
 		struct PlayerPutMinionData {
-			int idx_hand_card; // play the 'idx' hand card
+			Hand::Locator hand_card;
 			int location; // where to put the minion
 		};
 
@@ -162,7 +162,7 @@ inline bool Board::operator==(const Board &rhs) const
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
-		if (this->data.player_put_minion_data.idx_hand_card != rhs.data.player_put_minion_data.idx_hand_card) return false;
+		if (this->data.player_put_minion_data.hand_card != rhs.data.player_put_minion_data.hand_card) return false;
 		if (this->data.player_put_minion_data.location != rhs.data.player_put_minion_data.location) return false;
 		break;
 
@@ -214,7 +214,7 @@ namespace std {
 			// hash for the union
 			switch (s.stage) {
 				case GameEngine::STAGE_PLAYER_PUT_MINION:
-					GameEngine::hash_combine(result, hash<int>()(s.data.player_put_minion_data.idx_hand_card));
+					GameEngine::hash_combine(result, hash<decltype(s.data.player_put_minion_data.hand_card)>()(s.data.player_put_minion_data.hand_card));
 					GameEngine::hash_combine(result, hash<int>()(s.data.player_put_minion_data.location));
 					break;
 

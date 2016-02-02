@@ -20,9 +20,9 @@ class StagePlayerPutMinion
 			Minion minion;
 			const Board::PlayerPutMinionData &data = board.data.player_put_minion_data;
 
-			auto playing_card = *(board.player_hand.GetCards().begin() + data.idx_hand_card);
+			auto playing_card = board.player_hand.GetCard(data.hand_card);
 
-			board.player_hand.RemoveCard(data.idx_hand_card);
+			board.player_hand.RemoveCard(data.hand_card);
 
 			board.player_stat.crystal.CostCrystals(playing_card.cost);
 

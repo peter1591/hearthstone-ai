@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include "card.h"
+#include "hand.h"
 
 namespace GameEngine {
 
@@ -25,7 +26,7 @@ class Move
 		};
 
 		struct PlayHandCardMinionData {
-			int idx_hand_card; // play the 'idx' hand card
+			Hand::Locator hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			int location; // where to put the minion
 #endif
@@ -92,7 +93,7 @@ inline bool Move::operator==(const Move &rhs) const
 		break;
 
 	case ACTION_PLAY_HAND_CARD_MINION:
-		if (this->data.play_hand_card_minion_data.idx_hand_card != rhs.data.play_hand_card_minion_data.idx_hand_card) return false;
+		if (this->data.play_hand_card_minion_data.hand_card != rhs.data.play_hand_card_minion_data.hand_card) return false;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 		if (this->data.play_hand_card_minion_data.location != rhs.data.play_hand_card_minion_data.location) return false;
 #endif
@@ -148,7 +149,7 @@ namespace std {
 				break;
 
 			case GameEngine::Move::ACTION_PLAY_HAND_CARD_MINION:
-				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.idx_hand_card));
+				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.hand_card));
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.location));
 #endif

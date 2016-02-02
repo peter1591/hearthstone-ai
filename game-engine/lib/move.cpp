@@ -17,7 +17,7 @@ std::string Move::GetDebugString() const
 			break;
 
 		case Move::ACTION_PLAY_HAND_CARD_MINION:
-			oss << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.idx_hand_card;
+			oss << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			oss << ", put location = " << this->data.play_hand_card_minion_data.location;
 #endif

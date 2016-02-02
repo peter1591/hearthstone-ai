@@ -42,7 +42,7 @@ inline bool StageHelper::PlayerDrawCard(Board & board)
 
 	Card draw_card = board.player_deck.Draw();
 
-	if (board.player_hand.GetCards().size() < 10) {
+	if (board.player_hand.GetCount() < 10) {
 		board.player_hand.AddCard(draw_card);
 	}
 	else {
