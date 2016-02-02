@@ -29,6 +29,7 @@ class Move
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			int location; // where to put the minion
 #endif
+			int required_target;
 		};
 
 		struct OpponentPlayMinionData {

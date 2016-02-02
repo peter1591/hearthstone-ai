@@ -21,6 +21,7 @@ std::string Move::GetDebugString() const
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			oss << ", put location = " << this->data.play_hand_card_minion_data.location;
 #endif
+			oss << ", target = " << this->data.play_hand_card_minion_data.required_target;
 			break;
 
 		case Move::ACTION_OPPONENT_PLAY_MINION:

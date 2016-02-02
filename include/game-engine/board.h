@@ -24,19 +24,6 @@ namespace GameEngine {
 
 class Board
 {
-	friend std::hash<Board>;
-	friend class StageHelper;
-	friend class StagePlayerTurnStart;
-	friend class StagePlayerChooseBoardMove;
-	friend class StagePlayerPutMinion;
-	friend class StagePlayerAttack;
-	friend class StagePlayerTurnEnd;
-	friend class StageOpponentTurnStart;
-	friend class StageOpponentChooseBoardMove;
-	friend class StageOpponentPutMinion;
-	friend class StageOpponentAttack;
-	friend class StageOpponentTurnEnd;
-
 	public:
 		Board() :
 			player_deck(&this->random_generator),
@@ -105,10 +92,11 @@ class Board
 			return !(*this == rhs);
 		}
 
-	private: // internal state data for cross-stage communication
+	public: // internal state data for cross-stage communication
 		struct PlayerPutMinionData {
 			Hand::Locator hand_card;
 			int location; // where to put the minion
+			int required_target;
 		};
 
 		struct OpponentPutMinionData {
@@ -117,13 +105,13 @@ class Board
 		};
 
 		struct PlayerAttackData {
-			int attacker_idx; // -1 for the hero
-			int attacked_idx; // -1 for the hero
+			int attacker_idx;
+			int attacked_idx;
 		};
 
 		struct OpponentAttackData {
-			int attacker_idx; // -1 for the hero
-			int attacked_idx; // -1 for the hero
+			int attacker_idx;
+			int attacked_idx;
 		};
 
 		union Data {
@@ -138,7 +126,7 @@ class Board
 			bool operator!=(const Data &rhs) const = delete;
 		};
 
-	private:
+	public:
 		Stage stage;
 		RandomGenerator random_generator;
 		Data data;

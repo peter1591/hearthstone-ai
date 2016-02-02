@@ -46,12 +46,12 @@ class CardCallbackManager
 public:
 	static bool BattleCry(int card_id, GameEngine::Board &board)
 	{
-		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id);
+		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board);
 	}
 
-	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, TargetorBitmap &targets)
+	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
 	{
-		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, targets);
+		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, targets, meet_requirements);
 	}
 
 private:
