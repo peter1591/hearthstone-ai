@@ -122,8 +122,8 @@ class StagePlayerChooseBoardMove
 
 				for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
 					move.action = Move::ACTION_ATTACK;
-					move.data.attack_data.attacker_idx = attacker_idx + Targetor::GetPlayerMinionIndex(0);
-					move.data.attack_data.attacked_idx = attacked_idx + Targetor::GetOpponentMinionIndex(0);
+					move.data.attack_data.attacker_idx = Targetor::GetPlayerMinionIndex(attacker_idx);
+					move.data.attack_data.attacked_idx = Targetor::GetOpponentMinionIndex(attacked_idx);
 					moves.AddMove(move, weight_attack);
 				}
 			}

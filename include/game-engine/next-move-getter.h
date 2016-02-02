@@ -46,6 +46,7 @@ public:
 public:
 	NextMoveGetter();
 
+	void AddItem(Move const& move);
 	void AddItem(Move && move);
 	void AddItem(ItemAttack && items);
 	void AddItem(ItemPlayerPlayMinion && items);
@@ -98,6 +99,11 @@ inline bool GameEngine::NextMoveGetter::IsEqual(std::list<T> const & lhs, std::l
 
 	if (it_lhs == lhs.cend() && it_rhs == rhs.cend()) return true;
 	return false;
+}
+
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::Move const& item)
+{
+	this->moves.push_back(item);
 }
 
 inline void GameEngine::NextMoveGetter::AddItem(GameEngine::Move && item)

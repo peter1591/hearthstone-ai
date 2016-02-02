@@ -17,48 +17,50 @@ class StageOpponentChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			std::list<Move> next_moves;
-
-			size_t guessed_next_moves;
 			bool can_play_minion = !board.opponent_minions.IsFull();
-			Move move;
 
 			std::vector<Card> playable_minions;
 			if (can_play_minion) {
 				board.opponent_cards.GetPossiblePlayableMinions(board.opponent_stat, playable_minions);
 			}
 
-			// the choice to end turn
-			move.action = Move::ACTION_END_TURN;
-			next_moves.push_back(move);
-
 			// the choices to play a card from hand
 			if (can_play_minion) {
 				for (const auto &card : playable_minions) {
-					StageOpponentChooseBoardMove::GetNextMoves_PlayMinion(card, board, next_moves);
+					StageOpponentChooseBoardMove::GetNextMoves_PlayMinion(card, board, next_move_getter);
 				}
 			}
 
 			// the choices to attack by hero/minion
-			for (int attacker_idx = -1; attacker_idx < (int)board.opponent_minions.GetMinions().size(); attacker_idx++) {
-				if (attacker_idx == -1) {
-					continue; // TODO: check if opponenthas weapon
-				} else {
-					if (!board.opponent_minions.GetMinions()[attacker_idx].Attackable()) continue;
-				}
+			TargetorBitmap attacker;
+			TargetorBitmap attacked;
 
-				for (int attacked_idx = -1; attacked_idx < (int)board.player_minions.GetMinions().size(); attacked_idx++) {
-					StageOpponentChooseBoardMove::GetNextMoves_Attack(attacker_idx, attacked_idx, next_moves);
+			// TODO: check if opponent has weapon
+			for (int attacker_idx = 0; attacker_idx < (int)board.opponent_minions.GetMinions().size(); attacker_idx++) {
+				if (board.opponent_minions.GetMinions()[attacker_idx].Attackable()) {
+					attacker.SetOneTarget(Targetor::GetOpponentMinionIndex(attacker_idx));
 				}
 			}
+			attacked.SetOneTarget(Targetor::GetPlayerHeroIndex());
+			for (int attacked_idx = -1; attacked_idx < (int)board.player_minions.GetMinions().size(); attacked_idx++) {
+				attacked.SetOneTarget(Targetor::GetPlayerMinionIndex(attacked_idx));
+			}
 
-			next_move_getter.AddItems(std::move(next_moves));
+			if (!attacker.None()) {
+				NextMoveGetter::ItemAttack attack_move(std::move(attacker), std::move(attacked));
+				next_move_getter.AddItem(std::move(attack_move));
+			}
+
+			// the choice to end turn
+			Move end_turn_move;
+			end_turn_move.action = Move::ACTION_END_TURN;
+			next_move_getter.AddItem(std::move(end_turn_move));
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
 		{
 			// heuristic goes here
-			// 1. play minion is good (always put minion at the leftmost)
+			// 1. play minion is good (always put minion at the right-most)
 			// 2. minion attack is good
 			// 3. hero attack is good
 			// 4. effective spell is good
@@ -88,7 +90,7 @@ class StageOpponentChooseBoardMove
 					move.action = Move::ACTION_OPPONENT_PLAY_MINION;
 					move.data.opponent_play_minion_data.card = card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-					move.data.opponent_play_minion_data.location = 0;
+					move.data.opponent_play_minion_data.location = board.opponent_minions.GetMinions().size();
 #endif
 					moves.AddMove(move, weight_play_minion);
 				}
@@ -105,8 +107,8 @@ class StageOpponentChooseBoardMove
 
 				for (int attacked_idx = -1; attacked_idx < (int)board.player_minions.GetMinions().size(); attacked_idx++) {
 					move.action = Move::ACTION_ATTACK;
-					move.data.attack_data.attacker_idx = attacker_idx;
-					move.data.attack_data.attacked_idx = attacked_idx;
+					move.data.attack_data.attacker_idx = Targetor::GetOpponentMinionIndex(attacker_idx);
+					move.data.attack_data.attacked_idx = Targetor::GetPlayerMinionIndex(attacked_idx);
 					moves.AddMove(move, weight_attack);
 				}
 			}
@@ -135,7 +137,7 @@ class StageOpponentChooseBoardMove
 		}
 
 	private:
-		static void GetNextMoves_PlayMinion(const Card &card, const Board &board, std::list<Move> &next_moves)
+		static void GetNextMoves_PlayMinion(const Card &card, const Board &board, NextMoveGetter &next_move_getter)
 		{
 			Move move;
 
@@ -145,11 +147,11 @@ class StageOpponentChooseBoardMove
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			for (size_t i=0; i<=board.opponent_minions.GetMinions().size(); ++i) {
 				move.data.opponent_play_minion_data.location = i;
-				next_moves.push_back(move);
+				next_move_getter.AddItem(move);
 			}
 #else
 			(void)board;
-			next_moves.push_back(move);
+			next_move_getter.AddItem(move);
 #endif
 		}
 
