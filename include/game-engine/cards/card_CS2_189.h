@@ -20,7 +20,7 @@ public:
 	static void GetRequiredTargets(GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
 	{
 		targets.SetOneTarget(Targetor::GetOpponentHeroIndex());
-		for (size_t i = 0; i < board.opponent_minions.GetMinions().size(); ++i)
+		for (int i = 0; i < (int)board.opponent_minions.GetMinions().size(); ++i)
 		{
 			targets.SetOneTarget(Targetor::GetOpponentMinionIndex(i));
 		}

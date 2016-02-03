@@ -249,8 +249,8 @@ inline bool GameEngine::NextMoveGetter::ItemAttack::GetNextMove(Move & move)
 		this->attacked = this->attacked_origin;
 	}
 
-	size_t attacker_idx = this->attacker.GetOneTarget();
-	size_t attacked_idx = this->attacked.GetOneTarget();
+	auto const attacker_idx = this->attacker.GetOneTarget();
+	auto const attacked_idx = this->attacked.GetOneTarget();
 
 	move.action = Move::ACTION_ATTACK;
 	move.data.attack_data.attacker_idx = attacker_idx;

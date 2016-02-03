@@ -36,20 +36,20 @@ class TargetorBitmap
 public:
 	static constexpr int bitset_size = 16;
 
-	void SetOneTarget(size_t idx) { this->bitmap.set(idx); }
+	void SetOneTarget(int idx) { this->bitmap.set(idx); }
 
 	bool None() const { return this->bitmap.none(); }
-	size_t Count() const { return this->bitmap.count(); }
+	int Count() const { return (int)this->bitmap.count(); }
 
-	size_t GetOneTarget() const
+	int GetOneTarget() const
 	{
-		for (size_t i = 0; i < bitset_size; ++i) {
+		for (int i = 0; i < bitset_size; ++i) {
 			if (this->bitmap[i]) return i;
 		}
 		throw std::runtime_error("no target available");
 	}
 
-	void ClearOneTarget(size_t idx) { this->bitmap.set(idx, false); }
+	void ClearOneTarget(int idx) { this->bitmap.set(idx, false); }
 	void Clear() { this->bitmap.reset(); }
 
 	bool operator==(TargetorBitmap const& rhs) const {

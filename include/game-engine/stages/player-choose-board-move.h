@@ -108,7 +108,7 @@ class StagePlayerChooseBoardMove
 					move.action = Move::ACTION_PLAYER_PLAY_MINION;
 					move.data.player_play_minion_data.hand_card = hand_idx;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-					move.data.player_play_minion_data.location = Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size());
+					move.data.player_play_minion_data.location = Targetor::GetPlayerMinionIndex((int)board.player_minions.GetMinions().size());
 #endif
 					if (required_targets.None()) move.data.player_play_minion_data.required_target = 0;
 					else move.data.player_play_minion_data.required_target = required_targets.GetOneTarget();
@@ -178,7 +178,7 @@ class StagePlayerChooseBoardMove
 
 			// TODO: check play requirements
 
-			for (int i = Targetor::GetPlayerMinionIndex(0); i <= Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size()); ++i)
+			for (int i = Targetor::GetPlayerMinionIndex(0); i <= Targetor::GetPlayerMinionIndex((int)board.player_minions.GetMinions().size()); ++i)
 			{
 				next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, i, required_targets));
 			}

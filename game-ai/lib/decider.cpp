@@ -77,7 +77,7 @@ static TreeNode const* FindMostSimulatedChild(std::list<TreeNode*> const& childr
 	{
 		if (child->count > most_simulated_count) {
 			most_simulated_node = child;
-			int most_simulated_count = most_simulated_node->count;
+			most_simulated_count = most_simulated_node->count;
 		}
 	}
 	return most_simulated_node;

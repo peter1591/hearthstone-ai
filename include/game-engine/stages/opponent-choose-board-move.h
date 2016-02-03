@@ -90,7 +90,7 @@ class StageOpponentChooseBoardMove
 					move.action = Move::ACTION_OPPONENT_PLAY_MINION;
 					move.data.opponent_play_minion_data.card = card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-					move.data.opponent_play_minion_data.location = board.opponent_minions.GetMinions().size();
+					move.data.opponent_play_minion_data.location = (int)board.opponent_minions.GetMinions().size();
 #endif
 					moves.AddMove(move, weight_play_minion);
 				}
@@ -145,7 +145,7 @@ class StageOpponentChooseBoardMove
 			move.data.opponent_play_minion_data.card = card;
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (size_t i=0; i<=board.opponent_minions.GetMinions().size(); ++i) {
+			for (int i = 0; i <= (int)board.opponent_minions.GetMinions().size(); ++i) {
 				move.data.opponent_play_minion_data.location = i;
 				next_move_getter.AddItem(move);
 			}
