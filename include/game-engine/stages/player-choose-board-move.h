@@ -105,13 +105,13 @@ class StagePlayerChooseBoardMove
 						break;
 					}
 
-					move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
-					move.data.play_hand_card_minion_data.hand_card = hand_idx;
+					move.action = Move::ACTION_PLAYER_PLAY_MINION;
+					move.data.player_play_minion_data.hand_card = hand_idx;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-					move.data.play_hand_card_minion_data.location = Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size());
+					move.data.player_play_minion_data.location = Targetor::GetPlayerMinionIndex(board.player_minions.GetMinions().size());
 #endif
-					if (required_targets.None()) move.data.play_hand_card_minion_data.required_target = 0;
-					else move.data.play_hand_card_minion_data.required_target = required_targets.GetOneTarget();
+					if (required_targets.None()) move.data.player_play_minion_data.required_target = 0;
+					else move.data.player_play_minion_data.required_target = required_targets.GetOneTarget();
 
 					moves.AddMove(move, weight_play_minion);
 				default:
@@ -147,7 +147,7 @@ class StagePlayerChooseBoardMove
 		{
 			switch (move.action)
 			{
-				case Move::ACTION_PLAY_HAND_CARD_MINION:
+				case Move::ACTION_PLAYER_PLAY_MINION:
 					return StagePlayerChooseBoardMove::PlayHandCardMinion(board, move);
 
 				case Move::ACTION_ATTACK:
@@ -186,7 +186,7 @@ class StagePlayerChooseBoardMove
 
 		static void PlayHandCardMinion(Board &board, const Move &move)
 		{
-			const Move::PlayHandCardMinionData &data = move.data.play_hand_card_minion_data;
+			const Move::PlayerPlayMinionData &data = move.data.player_play_minion_data;
 
 			board.data.player_put_minion_data.hand_card = data.hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION

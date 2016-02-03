@@ -203,14 +203,14 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 {
 	if (this->required_targets.None()) return false;
 
-	move.action = Move::ACTION_PLAY_HAND_CARD_MINION;
-	move.data.play_hand_card_minion_data.hand_card = this->hand_card;
+	move.action = Move::ACTION_PLAYER_PLAY_MINION;
+	move.data.player_play_minion_data.hand_card = this->hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-	move.data.play_hand_card_minion_data.location = this->put_location;
+	move.data.player_play_minion_data.location = this->put_location;
 #endif
-	move.data.play_hand_card_minion_data.required_target = this->required_targets.GetOneTarget();
+	move.data.player_play_minion_data.required_target = this->required_targets.GetOneTarget();
 
-	this->required_targets.ClearOneTarget(move.data.play_hand_card_minion_data.required_target);
+	this->required_targets.ClearOneTarget(move.data.player_play_minion_data.required_target);
 	return true;
 }
 

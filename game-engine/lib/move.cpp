@@ -16,12 +16,12 @@ std::string Move::GetDebugString() const
 			oss << "[Game flow]";
 			break;
 
-		case Move::ACTION_PLAY_HAND_CARD_MINION:
-			oss << "[Play hand card minion] hand idx = " << this->data.play_hand_card_minion_data.hand_card;
+		case Move::ACTION_PLAYER_PLAY_MINION:
+			oss << "[Player play minion] hand idx = " << this->data.player_play_minion_data.hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			oss << ", put location = " << this->data.play_hand_card_minion_data.location;
+			oss << ", put location = " << this->data.player_play_minion_data.location;
 #endif
-			oss << ", target = " << this->data.play_hand_card_minion_data.required_target;
+			oss << ", target = " << this->data.player_play_minion_data.required_target;
 			break;
 
 		case Move::ACTION_OPPONENT_PLAY_MINION:

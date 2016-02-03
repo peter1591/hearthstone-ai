@@ -14,7 +14,7 @@ class Move
 		enum Action {
 			ACTION_UNKNOWN,
 			ACTION_GAME_FLOW,
-			ACTION_PLAY_HAND_CARD_MINION,
+			ACTION_PLAYER_PLAY_MINION,
 			ACTION_OPPONENT_PLAY_MINION,
 			ACTION_ATTACK,
 			ACTION_END_TURN,
@@ -24,7 +24,7 @@ class Move
 			unsigned int rand_seed;
 		};
 
-		struct PlayHandCardMinionData {
+		struct PlayerPlayMinionData {
 			Hand::Locator hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			int location; // where to put the minion
@@ -46,7 +46,7 @@ class Move
 
 		union Data {
 			GameFlowData game_flow_data;
-			PlayHandCardMinionData play_hand_card_minion_data;
+			PlayerPlayMinionData player_play_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
 			AttackData attack_data;
 
@@ -86,12 +86,12 @@ inline bool Move::operator==(const Move &rhs) const
 		if (this->data.game_flow_data.rand_seed != rhs.data.game_flow_data.rand_seed) return false;
 		break;
 
-	case ACTION_PLAY_HAND_CARD_MINION:
-		if (this->data.play_hand_card_minion_data.hand_card != rhs.data.play_hand_card_minion_data.hand_card) return false;
+	case ACTION_PLAYER_PLAY_MINION:
+		if (this->data.player_play_minion_data.hand_card != rhs.data.player_play_minion_data.hand_card) return false;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-		if (this->data.play_hand_card_minion_data.location != rhs.data.play_hand_card_minion_data.location) return false;
+		if (this->data.player_play_minion_data.location != rhs.data.player_play_minion_data.location) return false;
 #endif
-		if (this->data.play_hand_card_minion_data.required_target != rhs.data.play_hand_card_minion_data.required_target) return false;
+		if (this->data.player_play_minion_data.required_target != rhs.data.player_play_minion_data.required_target) return false;
 		break;
 
 	case ACTION_OPPONENT_PLAY_MINION:
@@ -138,12 +138,12 @@ namespace std {
 				GameEngine::hash_combine(result, hash<unsigned int>()(s.data.game_flow_data.rand_seed));
 				break;
 
-			case GameEngine::Move::ACTION_PLAY_HAND_CARD_MINION:
-				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.hand_card));
+			case GameEngine::Move::ACTION_PLAYER_PLAY_MINION:
+				GameEngine::hash_combine(result, hash<int>()(s.data.player_play_minion_data.hand_card));
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-				GameEngine::hash_combine(result, hash<int>()(s.data.play_hand_card_minion_data.location));
+				GameEngine::hash_combine(result, hash<int>()(s.data.player_play_minion_data.location));
 #endif
-				GameEngine::hash_combine(result, hash<decltype(s.data.play_hand_card_minion_data.required_target)>()(s.data.play_hand_card_minion_data.required_target));
+				GameEngine::hash_combine(result, hash<decltype(s.data.player_play_minion_data.required_target)>()(s.data.player_play_minion_data.required_target));
 				break;
 
 			case GameEngine::Move::ACTION_OPPONENT_PLAY_MINION:
