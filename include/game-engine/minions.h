@@ -42,6 +42,9 @@ class Minions
 			return !(*this == rhs);
 		}
 
+	public: // hooks
+		void TurnEnd();
+
 	private:
 		std::vector<Minion> minions;
 };
@@ -86,6 +89,14 @@ inline bool Minions::operator==(const Minions &rhs) const
 {
 	if (this->minions != rhs.minions) return false;
 	return true;
+}
+
+inline void Minions::TurnEnd()
+{
+	for (auto &minion : this->minions)
+	{
+		minion.TurnEnd();
+	}
 }
 
 } // namespace GameEngine

@@ -16,6 +16,9 @@ class StagePlayerTurnEnd
 
 		static void Go(Board &board)
 		{
+			board.player_minions.TurnEnd();
+			board.opponent_minions.TurnEnd();
+
 			// TODO: trigger end-turn actions
 			board.stage = STAGE_OPPONENT_TURN_START;
 		}

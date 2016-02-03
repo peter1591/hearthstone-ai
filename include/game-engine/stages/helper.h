@@ -20,6 +20,8 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool CheckHeroMinionDead(Board & board);
 
 public:
+	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
+
 	// handle minion/hero attack, calculate damages
 	static void HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx);
 
@@ -27,7 +29,6 @@ public:
 
 private:
 	static void TakeDamage(Minions::container_type::iterator taker, int damage);
-	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
 
 	// return true if dead
 	static bool RemoveDeadMinion(Minions & minions, Minions::container_type::iterator & it);

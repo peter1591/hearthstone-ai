@@ -1,7 +1,7 @@
 #ifndef GAME_ENGINE_CARDS_CARD_CS2_189
 #define GAME_ENGINE_CARDS_CARD_CS2_189
 
-#include <iostream>
+#include <stdexcept>
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
 #include "game-engine/targetor.h"
@@ -31,6 +31,10 @@ public:
 	{
 		constexpr int damage = 1;
 		int damage_taker_idx = board.data.player_put_minion_data.required_target;
+
+#ifdef DEBUG
+		if (damage_taker_idx < 0) throw std::runtime_error("logic error");
+#endif
 
 		StageHelper::TakeDamage(board, damage_taker_idx, damage);
 	}

@@ -68,7 +68,6 @@ class Board
 		Minions opponent_minions;
 
 	public:
-		void SetStateToPlayerTurnStart();
 		void SetStateToPlayerChooseBoardMove();
 
 		Stage GetStage() const { return this->stage; }

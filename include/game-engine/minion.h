@@ -1,6 +1,8 @@
 #ifndef GAME_ENGINE_MINION_H
 #define GAME_ENGINE_MINION_H
 
+#include <list>
+#include <memory>
 #include <functional>
 #include "card.h"
 
@@ -18,73 +20,38 @@ class Minion
 		int GetHP() const { return this->hp; }
 		int GetMaxHP() const {return this->max_hp; }
 
-		void Set(int card_id, int attack, int hp, int max_hp)
-		{
-			this->card_id = card_id;
-			this->attack = attack;
-			this->hp = hp;
-			this->max_hp = max_hp;
-		}
+		void Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp);
+		void AddAttackThisTurn(int attack);
 
-		void Summon(const Card &card) {
-			this->card_id = card.id;
-			this->max_hp = card.data.minion.hp;
-			this->hp = this->max_hp;
-			this->attack = card.data.minion.attack;
+		void Summon(const Card &card);
 
-			this->attacked_times = 0;
-			this->summoned_this_turn = true;
-		}
+		void TurnStart();
+		void TurnEnd();
 
-		void TurnStart() {
-			this->summoned_this_turn = false;
-			this->attacked_times = 0;
-		}
+		bool Attackable() const;
+		void AttackedOnce();
+		void TakeDamage(int damage);
 
-		bool Attackable() const
-		{
-			if (this->summoned_this_turn) return false;
-			if (attacked_times > 0) return false;
-			return true;
-		}
+		bool IsValid() const { return this->card_id != 0; }
 
-		void AttackedOnce()
-		{
-			this->attacked_times++;
-		}
-
-		void TakeDamage(int damage)
-		{
-			this->hp -= damage;
-		}
-
-		bool IsValid() const
-		{
-			return this->card_id != 0;
-		}
-
-		bool operator==(const Minion &rhs) const
-		{
-			if (this->card_id != rhs.card_id) return false;
-			if (this->attack != rhs.attack) return false;
-			if (this->hp != rhs.hp) return false;
-			if (this->max_hp != rhs.max_hp) return false;
-			if (this->attacked_times != rhs.attacked_times) return false;
-			if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
-
-			return true;
-		}
-
-		bool operator!=(const Minion &rhs) const
-		{
-			return !(*this == rhs);
-		}
+		bool operator==(const Minion &rhs) const;
+		bool operator!=(const Minion &rhs) const;
 
 	private:
 		int card_id;
+
+		// used when silenced
+		int origin_attack;
+		int origin_hp;
+		int origin_max_hp;
+
+		// current stat
 		int attack;
 		int hp;
 		int max_hp;
+
+		// enchantments
+		int attack_bias_when_turn_ends;
 
 		int attacked_times;
 		bool summoned_this_turn;
@@ -93,6 +60,99 @@ class Minion
 inline Minion::Minion() : card_id(0)
 {
 
+}
+
+inline bool Minion::operator==(Minion const& rhs) const
+{
+	if (this->card_id != rhs.card_id) return false;
+	if (this->origin_attack != rhs.origin_attack) return false;
+	if (this->origin_hp != rhs.origin_hp) return false;
+	if (this->origin_max_hp != rhs.origin_max_hp) return false;
+
+	if (this->attack != rhs.attack) return false;
+	if (this->hp != rhs.hp) return false;
+	if (this->max_hp != rhs.max_hp) return false;
+
+	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
+	if (this->attacked_times != rhs.attacked_times) return false;
+	if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
+
+	return true;
+}
+
+inline bool Minion::operator!=(Minion const& rhs) const
+{
+	return !(*this == rhs);
+}
+
+inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp)
+{
+	this->card_id = card_id;
+	this->origin_attack = origin_attack;
+	this->origin_hp = origin_hp;
+	this->origin_max_hp = origin_max_hp;
+
+	this->attack = this->origin_attack;
+	this->hp = this->origin_hp;
+	this->max_hp = this->origin_max_hp;
+
+	this->attack_bias_when_turn_ends = 0;
+}
+
+inline void Minion::AddAttackThisTurn(int attack)
+{
+	if (this->attack + attack <= 0) {
+		// cannot reduced below zero
+		attack = -this->attack;
+	}
+	this->attack += attack;
+	this->attack_bias_when_turn_ends -= attack;
+}
+
+inline void Minion::Summon(const Card & card) 
+{
+	this->card_id = card.id;
+	this->origin_max_hp = card.data.minion.hp;
+	this->origin_hp = this->origin_max_hp;
+	this->origin_attack = card.data.minion.attack;
+
+	this->attack = this->origin_attack;
+	this->hp = this->origin_hp;
+	this->max_hp = this->origin_max_hp;
+
+	this->attacked_times = 0;
+	this->summoned_this_turn = true;
+	this->attack_bias_when_turn_ends = 0;
+}
+
+inline void Minion::TurnStart()
+{
+	this->summoned_this_turn = false;
+	this->attacked_times = 0;
+}
+
+inline void Minion::TurnEnd()
+{
+	this->attack += this->attack_bias_when_turn_ends;
+	this->attack_bias_when_turn_ends = 0;
+}
+
+inline bool Minion::Attackable() const
+{
+	if (this->summoned_this_turn) return false;
+	if (attacked_times > 0) return false;
+	if (this->GetAttack() <= 0) return false;
+	return true;
+}
+
+inline void Minion::AttackedOnce()
+{
+	this->attacked_times++;
+}
+
+inline void Minion::TakeDamage(int damage)
+{
+	this->hp -= damage;
 }
 
 } // namespace GameEngine
@@ -106,9 +166,13 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.card_id);
+			GameEngine::hash_combine(result, s.origin_attack);
+			GameEngine::hash_combine(result, s.origin_hp);
+			GameEngine::hash_combine(result, s.origin_max_hp);
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);
 			GameEngine::hash_combine(result, s.max_hp);
+			GameEngine::hash_combine(result, s.attack_bias_when_turn_ends);
 			GameEngine::hash_combine(result, s.attacked_times);
 			GameEngine::hash_combine(result, s.summoned_this_turn);
 

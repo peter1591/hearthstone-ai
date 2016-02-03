@@ -92,11 +92,6 @@ void Board::ApplyMove(const Move &move, bool * introduced_random)
 	if (introduced_random != nullptr) *introduced_random = this->random_generator.GetFlag_HasCalled();
 }
 
-void Board::SetStateToPlayerTurnStart()
-{
-	this->stage = StagePlayerTurnStart::stage;
-}
-
 void Board::SetStateToPlayerChooseBoardMove()
 {
 	this->stage = StagePlayerChooseBoardMove::stage;

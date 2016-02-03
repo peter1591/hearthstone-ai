@@ -3,6 +3,7 @@
 
 #include <type_traits>
 #include "game-engine/board.h"
+#include "card_CS2_188.h"
 #include "card_CS2_189.h"
 
 namespace GameEngine {
@@ -76,6 +77,7 @@ inline bool CardCallbackManager::HandleCallback(int card_id, Params&&... params)
 	case CardClassName::card_id: \
 		return CardCallbackCaller<CardClassName, Callback>::Call(params...);
 
+HANDLE_CARD_CALLBACK(Card_CS2_188)
 HANDLE_CARD_CALLBACK(Card_CS2_189)
 
 #undef HANDLE_CARD_CALLBACK

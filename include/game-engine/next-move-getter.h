@@ -23,6 +23,7 @@ public:
 		Hand::Locator hand_card;
 		int put_location;
 		TargetorBitmap required_targets;
+		bool done;
 	};
 
 	class ItemAttack
@@ -191,7 +192,7 @@ inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
 	Hand::Locator hand_card, int put_location, TargetorBitmap required_targets)
 	: hand_card(hand_card), put_location(put_location), required_targets(required_targets)
 {
-	if (this->required_targets.None()) this->required_targets.SetOneTarget(0); // used as flag
+	this->done = false;
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGetter::ItemPlayerPlayMinion::Clone() const
@@ -201,16 +202,23 @@ inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGe
 
 inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move & move)
 {
-	if (this->required_targets.None()) return false;
+	if (this->done) return false;
 
 	move.action = Move::ACTION_PLAYER_PLAY_MINION;
 	move.data.player_play_minion_data.hand_card = this->hand_card;
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 	move.data.player_play_minion_data.location = this->put_location;
 #endif
-	move.data.player_play_minion_data.required_target = this->required_targets.GetOneTarget();
-
-	this->required_targets.ClearOneTarget(move.data.player_play_minion_data.required_target);
+	if (this->required_targets.None())
+	{
+		move.data.player_play_minion_data.required_target = -1;
+		this->done = true;
+	}
+	else {
+		move.data.player_play_minion_data.required_target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.player_play_minion_data.required_target);
+		if (this->required_targets.None()) this->done = true;
+	}
 	return true;
 }
 
