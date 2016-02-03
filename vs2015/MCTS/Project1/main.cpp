@@ -18,6 +18,8 @@ void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::
 void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::Hand &hand)
 {
 	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+	//hand.AddCard(card_database.GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
+	//hand.AddCard(card_database.GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
 	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
@@ -33,12 +35,12 @@ void InitializeBoard(GameEngine::Board &board)
 	if (!card_database.ReadFromJsonFile("../../../database/cards.json"))
 		throw std::runtime_error("failed to load card data");
 
-	board.player_stat.hp = 10;
+	board.player_stat.hp = 30;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 10;
+	board.opponent_stat.hp = 30;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -58,6 +60,7 @@ void InitializeBoard(GameEngine::Board &board)
 	//board.player_minions.AddMinion(minion);
 
 	minion.Set(222, 10, 1, 2);
+	minion.SetStealth(true);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 

@@ -69,6 +69,9 @@
     <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp">
+      <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\game-engine\board.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h">
       <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h">
+      <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
