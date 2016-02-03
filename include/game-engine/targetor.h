@@ -36,7 +36,7 @@ class TargetorBitmap
 public:
 	static constexpr int bitset_size = 16;
 
-	void SetOneTarget(int idx) { this->bitmap.set(idx); }
+	void SetOneTarget(size_t idx) { this->bitmap.set(idx); }
 
 	bool None() const { return this->bitmap.none(); }
 	size_t Count() const { return this->bitmap.count(); }
@@ -49,7 +49,7 @@ public:
 		throw std::runtime_error("no target available");
 	}
 
-	void ClearOneTarget(int idx) { this->bitmap.set(idx, false); }
+	void ClearOneTarget(size_t idx) { this->bitmap.set(idx, false); }
 	void Clear() { this->bitmap.reset(); }
 
 	bool operator==(TargetorBitmap const& rhs) const {
