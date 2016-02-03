@@ -18,7 +18,7 @@ void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::
 void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::Hand &hand)
 {
 	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
-	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
 
@@ -33,12 +33,12 @@ void InitializeBoard(GameEngine::Board &board)
 	if (!card_database.ReadFromJsonFile("../../../database/cards.json"))
 		throw std::runtime_error("failed to load card data");
 
-	board.player_stat.hp = 2;
+	board.player_stat.hp = 10;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 5;
+	board.opponent_stat.hp = 10;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -57,9 +57,9 @@ void InitializeBoard(GameEngine::Board &board)
 	//minion.TurnStart();
 	//board.player_minions.AddMinion(minion);
 
-	//minion.Set(222, 10, 1, 2);
-	//minion.TurnStart();
-	//board.opponent_minions.AddMinion(minion);
+	minion.Set(222, 10, 1, 2);
+	minion.TurnStart();
+	board.opponent_minions.AddMinion(minion);
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();
@@ -67,10 +67,10 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 4;
+	constexpr int threads = 1;
 	constexpr int sec_each_run = 1;
 
-	std::mt19937 random_generator(time(nullptr));
+	std::mt19937 random_generator((unsigned int)time(nullptr));
 	MCTS mcts[threads];
 	std::vector<Task*> tasks;
 	std::map<Task*, Task::PauseNotifier*> pause_notifiers;
@@ -111,7 +111,7 @@ static void Run()
 		auto best_moves = decider.GetBestMoves();
 		best_moves.DebugPrint();
 
-		int elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+		auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
 		int total_iterations = 0;
 		for (auto const& task : tasks) total_iterations += task->GetIterationCount();
 		std::cout << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"

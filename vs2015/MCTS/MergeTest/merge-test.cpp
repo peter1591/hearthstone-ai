@@ -1,5 +1,9 @@
 #include <time.h>
+
+#include <sstream>
 #include <chrono>
+#include <vector>
+
 #include "game-engine/card-id-map.h"
 #include "game-engine/card-database.h"
 #include "mcts.h"
@@ -7,17 +11,19 @@
 
 void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::Deck &deck)
 {
-	for (int i = 0; i < 30; ++i) {
-		deck.AddCard(card_database.GetCard(CARD_ID_CS2_120));
+	for (int i = 0; i < 27; ++i) {
+		deck.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
 	}
 }
 
 void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::Hand &hand)
 {
-	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t));
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_120));
+	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
+	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
+	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
+
+	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_120)); // 223
 }
 
 void InitializeBoard(GameEngine::Board &board)
@@ -28,12 +34,12 @@ void InitializeBoard(GameEngine::Board &board)
 	if (!card_database.ReadFromJsonFile("../../../database/cards.json"))
 		throw std::runtime_error("failed to load card data");
 
-	board.player_stat.hp = 30;
+	board.player_stat.hp = 10;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 30;
+	board.opponent_stat.hp = 10;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -52,9 +58,9 @@ void InitializeBoard(GameEngine::Board &board)
 	//minion.TurnStart();
 	//board.player_minions.AddMinion(minion);
 
-	//minion.Set(222, 2, 2, 2);
-	//minion.TurnStart();
-	//board.opponent_minions.AddMinion(minion);
+	minion.Set(222, 10, 1, 2);
+	minion.TurnStart();
+	board.opponent_minions.AddMinion(minion);
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();
@@ -131,8 +137,97 @@ static void TestBasic()
 	}
 }
 
+static void InteractiveTest()
+{
+	MCTS mcts;
+	//unsigned int rand_seed = (unsigned int)time(NULL);
+	unsigned int rand_seed = 0;
+	GameEngine::Board board;
+
+	InitializeBoard(board);
+
+	srand((unsigned int)time(nullptr));
+
+	while (true)
+	{
+		board.DebugPrint();
+
+		if (board.GetStageType() == GameEngine::STAGE_TYPE_GAME_END)
+		{
+			std::cout << "Game ends!!!!!" << std::endl;
+			break;
+		}
+
+		GameEngine::Move next_move;
+		if (board.GetStageType() == GameEngine::STAGE_TYPE_GAME_FLOW)
+		{
+			unsigned int rand_seed = (unsigned int) rand();
+			std::cout << "Choose random for game flow move: (default: " << rand_seed << "): ";
+			std::string str_rand_seed;
+			std::getline(std::cin, str_rand_seed);
+			if (!str_rand_seed.empty()) {
+				std::stringstream ss;
+				ss << str_rand_seed;
+				ss >> rand_seed;
+			}
+			next_move = GameEngine::Move::GetGameFlowMove(rand_seed);
+		}
+		else
+		{
+			std::vector<GameEngine::Move> next_moves;
+
+			GameEngine::NextMoveGetter next_move_getter;
+			board.GetNextMoves(next_move_getter);
+			while (!next_move_getter.Empty()) {
+				GameEngine::Move move;
+				next_move_getter.GetNextMove(move);
+				next_moves.push_back(move);
+			}
+
+			while (true) {
+				int idx = 0;
+				std::cout << "Next moves: " << std::endl;
+				for (auto const& next_move_candidate : next_moves)
+				{
+					std::cout << "\t" << idx << ". " << next_move_candidate.GetDebugString() << std::endl;
+					idx++;
+				}
+
+				std::cout << "Please choose next move (default: 0): ";
+				int next_move_idx = 0;
+
+				std::string str_next_move_idx;
+				std::getline(std::cin, str_next_move_idx);
+				if (str_next_move_idx.empty())
+				{
+					if (std::cin.eof()) break;
+				}
+				else {
+					std::stringstream ss;
+					ss << str_next_move_idx;
+					ss >> next_move_idx;
+
+					if (next_move_idx < 0 || next_move_idx >= next_moves.size()) {
+						std::cout << "Please enter a correct number (Ctrl+Z to exit)" << std::endl;
+						continue;
+					}
+				}
+
+				next_move = next_moves[next_move_idx];
+				break;
+			}
+		}
+
+		if (std::cin.eof()) break;
+
+		board.ApplyMove(next_move);
+	}
+}
+
 int main(void)
 {
 	//TestBasic();
-	TestOperators();
+	//TestOperators();
+
+	InteractiveTest();
 }

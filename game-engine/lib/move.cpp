@@ -13,7 +13,7 @@ std::string Move::GetDebugString() const
 	switch (this->action)
 	{
 		case Move::ACTION_GAME_FLOW:
-			oss << "[Game flow]";
+			oss << "[Game flow] random: " << this->data.game_flow_data.rand_seed;
 			break;
 
 		case Move::ACTION_PLAYER_PLAY_MINION:
