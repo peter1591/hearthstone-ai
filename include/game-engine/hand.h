@@ -111,7 +111,7 @@ namespace std {
 			result_type result = 0;
 
 			for (auto card: s.cards) {
-				GameEngine::hash_combine(result, hash<decltype(card)>()(card));
+				GameEngine::hash_combine(result, card);
 			}
 
 			return result;

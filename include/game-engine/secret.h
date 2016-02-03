@@ -32,7 +32,7 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<int>()(s.card_id));
+			GameEngine::hash_combine(result, s.card_id);
 
 			return result;
 		}

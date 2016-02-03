@@ -105,12 +105,12 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<decltype(s.card_id)>()(s.card_id));
-			GameEngine::hash_combine(result, hash<decltype(s.attack)>()(s.attack));
-			GameEngine::hash_combine(result, hash<decltype(s.hp)>()(s.hp));
-			GameEngine::hash_combine(result, hash<decltype(s.max_hp)>()(s.max_hp));
-			GameEngine::hash_combine(result, hash<decltype(s.attacked_times)>()(s.attacked_times));
-			GameEngine::hash_combine(result, hash<decltype(s.summoned_this_turn)>()(s.summoned_this_turn));
+			GameEngine::hash_combine(result, s.card_id);
+			GameEngine::hash_combine(result, s.attack);
+			GameEngine::hash_combine(result, s.hp);
+			GameEngine::hash_combine(result, s.max_hp);
+			GameEngine::hash_combine(result, s.attacked_times);
+			GameEngine::hash_combine(result, s.summoned_this_turn);
 
 			return result;
 		}

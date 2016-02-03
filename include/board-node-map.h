@@ -50,6 +50,12 @@ inline void BoardNodeMap::Add(const GameEngine::Board &board, TreeNode *node)
 
 inline void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
 {
+#ifdef DEBUG
+	if (this->map.find(board_hash) != this->map.end())
+	{
+		std::cout << "hash collision" << std::endl;
+	}
+#endif
+
 	this->map[board_hash].insert(node);
-	//this->parent_map[node->parent][board_hash].insert(node);
 }

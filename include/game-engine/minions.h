@@ -99,7 +99,7 @@ namespace std {
 			result_type result = 0;
 
 			for (auto minion: s.minions) {
-				GameEngine::hash_combine(result, hash<decltype(minion)>()(minion));
+				GameEngine::hash_combine(result, minion);
 			}
 
 			return result;

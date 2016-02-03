@@ -53,6 +53,7 @@ class Card
 			bool operator==(const Minion &rhs) const {
 				if (this->attack != rhs.attack) return false;
 				if (this->hp != rhs.hp) return false;
+				if (this->race != rhs.race) return false;
 				return true;
 			}
 
@@ -161,8 +162,9 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<decltype(s.attack)>()(s.attack));
-			GameEngine::hash_combine(result, hash<decltype(s.hp)>()(s.hp));
+			GameEngine::hash_combine(result, s.attack);
+			GameEngine::hash_combine(result, s.hp);
+			GameEngine::hash_combine(result, (int)s.race);
 
 			return result;
 		}
@@ -174,8 +176,8 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<decltype(s.attack)>()(s.attack));
-			GameEngine::hash_combine(result, hash<decltype(s.durability)>()(s.durability));
+			GameEngine::hash_combine(result, s.attack);
+			GameEngine::hash_combine(result, s.durability);
 
 			return result;
 		}
@@ -187,19 +189,18 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<decltype(s.id)>()(s.id));
+			GameEngine::hash_combine(result, s.id);
 
-			/*
-			GameEngine::hash_combine(result, hash<int>()((int)s.type)); // TODO
-			GameEngine::hash_combine(result, hash<decltype(s.cost)>()(s.cost));
+			GameEngine::hash_combine(result, (int)s.type); // TODO
+			GameEngine::hash_combine(result, s.cost);
 
 			switch (s.type) {
 				case GameEngine::Card::TYPE_MINION:
-					GameEngine::hash_combine(result, hash<decltype(s.data.minion)>()(s.data.minion));
+					GameEngine::hash_combine(result, s.data.minion);
 					break;
 
 				case GameEngine::Card::TYPE_WEAPON:
-					GameEngine::hash_combine(result, hash<decltype(s.data.weapon)>()(s.data.weapon));
+					GameEngine::hash_combine(result, s.data.weapon);
 					break;
 
 				case GameEngine::Card::TYPE_INVALID:
@@ -207,7 +208,6 @@ namespace std {
 				case GameEngine::Card::TYPE_SECRET:
 					break;
 			}
-			*/
 
 			return result;
 		}

@@ -127,7 +127,7 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<int>()(s.action));
+			GameEngine::hash_combine(result, (int)s.action);
 
 			// hash for the union
 			switch (s.action) {
@@ -135,27 +135,27 @@ namespace std {
 				break;
 
 			case GameEngine::Move::ACTION_GAME_FLOW:
-				GameEngine::hash_combine(result, hash<unsigned int>()(s.data.game_flow_data.rand_seed));
+				GameEngine::hash_combine(result, s.data.game_flow_data.rand_seed);
 				break;
 
 			case GameEngine::Move::ACTION_PLAYER_PLAY_MINION:
-				GameEngine::hash_combine(result, hash<int>()(s.data.player_play_minion_data.hand_card));
+				GameEngine::hash_combine(result, s.data.player_play_minion_data.hand_card);
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-				GameEngine::hash_combine(result, hash<int>()(s.data.player_play_minion_data.location));
+				GameEngine::hash_combine(result,s.data.player_play_minion_data.location);
 #endif
-				GameEngine::hash_combine(result, hash<decltype(s.data.player_play_minion_data.required_target)>()(s.data.player_play_minion_data.required_target));
+				GameEngine::hash_combine(result, s.data.player_play_minion_data.required_target);
 				break;
 
 			case GameEngine::Move::ACTION_OPPONENT_PLAY_MINION:
-				GameEngine::hash_combine(result, hash<GameEngine::Card>()(s.data.opponent_play_minion_data.card));
+				GameEngine::hash_combine(result, s.data.opponent_play_minion_data.card);
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-				GameEngine::hash_combine(result, hash<int>()(s.data.opponent_play_minion_data.location));
+				GameEngine::hash_combine(result, s.data.opponent_play_minion_data.location);
 #endif
 				break;
 
 			case GameEngine::Move::ACTION_ATTACK:
-				GameEngine::hash_combine(result, hash<int>()(s.data.attack_data.attacked_idx));
-				GameEngine::hash_combine(result, hash<int>()(s.data.attack_data.attacker_idx));
+				GameEngine::hash_combine(result, s.data.attack_data.attacked_idx);
+				GameEngine::hash_combine(result, s.data.attack_data.attacker_idx);
 				break;
 
 			case GameEngine::Move::ACTION_END_TURN:

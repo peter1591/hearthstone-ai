@@ -94,8 +94,8 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<decltype(s.deck_card_count)>()(s.deck_card_count));
-			GameEngine::hash_combine(result, hash<decltype(s.hand_card_count)>()(s.hand_card_count));
+			GameEngine::hash_combine(result, s.deck_card_count);
+			GameEngine::hash_combine(result, s.hand_card_count);
 
 			return result;
 		}

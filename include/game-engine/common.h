@@ -14,8 +14,10 @@
 
 namespace GameEngine
 {
-	inline void hash_combine(std::size_t &seed, std::size_t new_hash)
+	template <typename T>
+	inline void hash_combine(std::size_t &seed, T const& new_value)
 	{
+		std::size_t new_hash = std::hash<T>()(new_value);
 		seed ^= new_hash + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 	}
 }

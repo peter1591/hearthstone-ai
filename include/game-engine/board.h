@@ -136,6 +136,8 @@ class Board
 
 inline bool Board::operator==(const Board &rhs) const
 {
+	if (this->stage != rhs.stage) return false;
+
 	if (this->player_stat != rhs.player_stat) return false;
 	if (this->player_secrets != rhs.player_secrets) return false;
 	if (this->player_hand != rhs.player_hand) return false;
@@ -146,9 +148,6 @@ inline bool Board::operator==(const Board &rhs) const
 	if (this->opponent_secrets != rhs.opponent_secrets) return false;
 	if (this->opponent_cards != rhs.opponent_cards) return false;
 	if (this->opponent_minions != rhs.opponent_minions) return false;
-
-	if (this->stage != rhs.stage) return false;
-	if (this->random_generator != rhs.random_generator) return false;
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
@@ -188,41 +187,40 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat>()(s.player_stat));
-			GameEngine::hash_combine(result, hash<GameEngine::Secrets>()(s.player_secrets));
-			GameEngine::hash_combine(result, hash<GameEngine::Hand>()(s.player_hand));
-			GameEngine::hash_combine(result, hash<GameEngine::Deck>()(s.player_deck));
-			GameEngine::hash_combine(result, hash<GameEngine::Minions>()(s.player_minions));
+			GameEngine::hash_combine(result, s.player_stat);
+			GameEngine::hash_combine(result, s.player_secrets);
+			GameEngine::hash_combine(result, s.player_hand);
+			GameEngine::hash_combine(result, s.player_deck);
+			GameEngine::hash_combine(result, s.player_minions);
 
-			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat>()(s.opponent_stat));
-			GameEngine::hash_combine(result, hash<GameEngine::HiddenSecrets>()(s.opponent_secrets));
-			GameEngine::hash_combine(result, hash<GameEngine::OpponentCards>()(s.opponent_cards));
-			GameEngine::hash_combine(result, hash<GameEngine::Minions>()(s.opponent_minions));
+			GameEngine::hash_combine(result, s.opponent_stat);
+			GameEngine::hash_combine(result, s.opponent_secrets);
+			GameEngine::hash_combine(result, s.opponent_cards);
+			GameEngine::hash_combine(result, s.opponent_minions);
 
-			GameEngine::hash_combine(result, hash<GameEngine::Stage>()(s.stage));
-			GameEngine::hash_combine(result, hash<GameEngine::RandomGenerator>()(s.random_generator));
+			GameEngine::hash_combine(result, s.stage);
 
 			// hash for the union
 			switch (s.stage) {
 				case GameEngine::STAGE_PLAYER_PUT_MINION:
-					GameEngine::hash_combine(result, hash<decltype(s.data.player_put_minion_data.hand_card)>()(s.data.player_put_minion_data.hand_card));
-					GameEngine::hash_combine(result, hash<int>()(s.data.player_put_minion_data.location));
-					GameEngine::hash_combine(result, hash<decltype(s.data.player_put_minion_data.required_target)>()(s.data.player_put_minion_data.required_target));
+					GameEngine::hash_combine(result, s.data.player_put_minion_data.hand_card);
+					GameEngine::hash_combine(result, s.data.player_put_minion_data.location);
+					GameEngine::hash_combine(result, s.data.player_put_minion_data.required_target);
 					break;
 
 				case GameEngine::STAGE_OPPONENT_PUT_MINION:
-					GameEngine::hash_combine(result, hash<GameEngine::Card>()(s.data.opponent_put_minion_data.card));
-					GameEngine::hash_combine(result, hash<int>()(s.data.opponent_put_minion_data.location));
+					GameEngine::hash_combine(result, s.data.opponent_put_minion_data.card);
+					GameEngine::hash_combine(result, s.data.opponent_put_minion_data.location);
 					break;
 
 				case GameEngine::STAGE_PLAYER_ATTACK:
-					GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacker_idx));
-					GameEngine::hash_combine(result, hash<int>()(s.data.player_attack_data.attacked_idx));
+					GameEngine::hash_combine(result, s.data.player_attack_data.attacker_idx);
+					GameEngine::hash_combine(result, s.data.player_attack_data.attacked_idx);
 					break;
 
 				case GameEngine::STAGE_OPPONENT_ATTACK:
-					GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacker_idx));
-					GameEngine::hash_combine(result, hash<int>()(s.data.opponent_attack_data.attacked_idx));
+					GameEngine::hash_combine(result, s.data.opponent_attack_data.attacker_idx);
+					GameEngine::hash_combine(result, s.data.opponent_attack_data.attacked_idx);
 					break;
 
 				default:

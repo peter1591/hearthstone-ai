@@ -108,10 +108,10 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<int>()(s.current));
-			GameEngine::hash_combine(result, hash<int>()(s.total));
-			GameEngine::hash_combine(result, hash<int>()(s.locked));
-			GameEngine::hash_combine(result, hash<int>()(s.locked_next_turn));
+			GameEngine::hash_combine(result, s.current);
+			GameEngine::hash_combine(result, s.total);
+			GameEngine::hash_combine(result, s.locked);
+			GameEngine::hash_combine(result, s.locked_next_turn);
 
 			return result;
 		}
@@ -123,12 +123,12 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, hash<int>()(s.hp));
-			GameEngine::hash_combine(result, hash<int>()(s.armor));
-			GameEngine::hash_combine(result, hash<GameEngine::PlayerStat::Crystal>()(s.crystal));
-			GameEngine::hash_combine(result, hash<GameEngine::Weapon>()(s.weapon));
-			GameEngine::hash_combine(result, hash<GameEngine::HeroPower>()(s.hero_power));
-			GameEngine::hash_combine(result, hash<int>()(s.fatigue_damage));
+			GameEngine::hash_combine(result, s.hp);
+			GameEngine::hash_combine(result, s.armor);
+			GameEngine::hash_combine(result, s.crystal);
+			GameEngine::hash_combine(result, s.weapon);
+			GameEngine::hash_combine(result, s.hero_power);
+			GameEngine::hash_combine(result, s.fatigue_damage);
 
 			return result;
 		}

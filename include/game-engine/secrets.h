@@ -43,7 +43,7 @@ namespace std {
 			result_type result = 0;
 
 			for (auto secret: s.secrets) {
-				GameEngine::hash_combine(result, hash<decltype(secret)>()(secret));
+				GameEngine::hash_combine(result, secret);
 			}
 
 			return result;
