@@ -52,6 +52,7 @@ class Card
 			bool taunt;
 			bool charge;
 			bool shield;
+			bool stealth;
 
 			void Clear() {
 				this->attack = 0;
@@ -60,6 +61,7 @@ class Card
 				this->taunt = false;
 				this->charge = false;
 				this->shield = false;
+				this->stealth = false;
 			}
 
 			bool operator==(const Minion &rhs) const {
@@ -69,6 +71,7 @@ class Card
 				if (this->taunt != rhs.taunt) return false;
 				if (this->charge != rhs.charge) return false;
 				if (this->shield != rhs.shield) return false;
+				if (this->stealth != rhs.stealth) return false;
 				return true;
 			}
 
@@ -186,6 +189,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.taunt);
 			GameEngine::hash_combine(result, s.charge);
 			GameEngine::hash_combine(result, s.shield);
+			GameEngine::hash_combine(result, s.stealth);
 
 			return result;
 		}

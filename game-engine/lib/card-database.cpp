@@ -31,6 +31,7 @@ namespace GameEngine {
 		new_card.data.minion.taunt = false;
 		new_card.data.minion.charge = false;
 		new_card.data.minion.shield = false;
+		new_card.data.minion.stealth = false;
 
 		for (auto const& json_mechanic: json_mechanics)
 		{
@@ -44,7 +45,8 @@ namespace GameEngine {
 			else if (mechanic == "DIVINE_SHIELD") {
 				new_card.data.minion.shield = true;
 			}
-			else if (mechanic == "STEALTH") { // TODO
+			else if (mechanic == "STEALTH") {
+				new_card.data.minion.stealth = true;
 			}
 			else if (mechanic == "FORGETFUL") { // TODO
 			}

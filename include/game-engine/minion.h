@@ -31,12 +31,14 @@ class Minion
 		void SetTaunt(bool taunt) { this->taunt = taunt; }
 		void SetCharge(bool charge) { this->charge = charge; }
 		void SetShield(bool shield) { this->shield = shield; }
+		void SetStealth(bool stealth) { this->stealth = stealth; }
 
 		// Getters
 		bool Attackable() const;
 		bool IsTaunt() const { return this->taunt; }
 		bool IsCharge() const { return this->charge; }
 		bool IsShield() const { return this->shield; }
+		bool IsStealth() const { return this->stealth; }
 
 		// Hooks
 		void TurnStart();
@@ -62,6 +64,7 @@ class Minion
 		bool taunt;
 		bool charge;
 		bool shield;
+		bool stealth;
 
 		// enchantments
 		int attack_bias_when_turn_ends;
@@ -88,6 +91,7 @@ inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origi
 	this->taunt = false;
 	this->charge = false;
 	this->shield = false;
+	this->stealth = false;
 
 	this->attack_bias_when_turn_ends = 0;
 }
@@ -105,6 +109,7 @@ inline void Minion::Summon(const Card & card)
 	this->taunt = card.data.minion.taunt;
 	this->charge = card.data.minion.charge;
 	this->shield = card.data.minion.shield;
+	this->stealth = card.data.minion.stealth;
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -146,6 +151,7 @@ inline bool Minion::Attackable() const
 inline void Minion::AttackedOnce()
 {
 	this->attacked_times++;
+	this->stealth = false;
 }
 
 inline void Minion::TakeDamage(int damage)
@@ -171,6 +177,7 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->taunt != rhs.taunt) return false;
 	if (this->charge != rhs.charge) return false;
 	if (this->shield != rhs.shield) return false;
+	if (this->stealth != rhs.stealth) return false;
 
 	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
 	if (this->attacked_times != rhs.attacked_times) return false;
@@ -201,6 +208,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.taunt);
 			GameEngine::hash_combine(result, s.charge);
 			GameEngine::hash_combine(result, s.shield);
+			GameEngine::hash_combine(result, s.stealth);
 
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);

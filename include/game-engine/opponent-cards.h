@@ -39,7 +39,8 @@ class OpponentCards
 			card.data.minion.hp = 1;
 			card.data.minion.taunt = false;
 			card.data.minion.charge = false;
-			card.data.minion.shield = true;
+			card.data.minion.shield = false;
+			card.data.minion.stealth = true;
 
 			if (opponent_stat.crystal.GetCurrent() < card.cost) return;
 

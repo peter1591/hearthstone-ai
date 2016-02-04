@@ -29,6 +29,8 @@ class Minions
 		Minions() = delete;
 		Minions(Side side);
 
+		bool IsPlayerSide() const { return this->side == PLAYER_SIDE; }
+
 		// Insert minion to where the index is 'idx'
 		// Any existing minions will be shifted right
 		void AddMinion(const Minion &minion, size_t idx);
@@ -62,10 +64,9 @@ class Minions
 		Side side;
 };
 
-inline Minions::Minions(Side side)
+inline Minions::Minions(Side side) : side(side)
 {
 	this->minions.reserve(MAX_MINIONS);
-	this->side = side;
 }
 
 inline void Minions::AddMinion(const Minion &minion, size_t idx)
@@ -123,9 +124,13 @@ inline TargetorBitmap Minions::GetTargetsToBeAttacked(bool & has_taunt) const
 	}
 	has_taunt = false;
 
-	// 2. No taunt minions --> all minions are attackable
+	// 2. No taunt minions --> minions without stealth are attackable
 	for (int i = 0; i < this->minions.size(); ++i)
 	{
+		auto const& minion = this->minions[i];
+
+		if (minion.IsStealth()) continue;
+
 		targetors.SetOneTarget(this->GetTargetorByMinionIndex(i));
 	}
 	return targetors;
@@ -140,6 +145,7 @@ inline void Minions::DebugPrint() const
 			if (minion.IsTaunt()) std::cout << " [TAUNT]";
 			if (minion.IsCharge()) std::cout << " [CHARGE]";
 			if (minion.IsShield()) std::cout << " [SHIELD]";
+			if (minion.IsStealth()) std::cout << " [STEALTH]";
 
 			std::cout << std::endl;
 		} else {
