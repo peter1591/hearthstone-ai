@@ -4,6 +4,21 @@
 
 namespace GameEngine {
 
+	static Card::Rarity GetRarity(Json::Value const& json_card)
+	{
+		if (!json_card.isMember("rarity")) return Card::RARITY_UNKNOWN;
+
+		std::string rarity = json_card["rarity"].asString();
+
+		if (rarity == "FREE") return Card::RARITY_FREE;
+		if (rarity == "COMMON") return Card::RARITY_COMMON;
+		if (rarity == "RARE") return Card::RARITY_RARE;
+		if (rarity == "EPIC") return Card::RARITY_EPIC;
+		if (rarity == "LEGENDARY") return Card::RARITY_LEGENDARY;
+
+		throw std::runtime_error("parse error");
+	}
+
 	static Card::MinionRace GetMinionRace(Json::Value const& json_card)
 	{
 		if (!json_card.isMember("race")) return Card::RACE_NORMAL;
@@ -111,11 +126,13 @@ namespace GameEngine {
 	{
 		std::string type = card["type"].asString();
 
+		Card new_card;
+
 		if (type == "MINION") {
-			return this->AddMinionCard(card);
+			return this->AddMinionCard(card, new_card);
 		}
 		else if (type == "SPELL") {
-			return this->AddSpellCard(card);
+			return this->AddSpellCard(card, new_card);
 		}
 		else {
 			// ignored
@@ -123,11 +140,11 @@ namespace GameEngine {
 		}
 	}
 
-	bool CardDatabase::AddMinionCard(Json::Value const & json_card)
+	bool CardDatabase::AddMinionCard(Json::Value const & json_card, Card & new_card)
 	{
 		std::string origin_id = json_card["id"].asString();
 
-		Card new_card;
+		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_MINION;
 		new_card.cost = json_card["cost"].asInt();
 		new_card.data.minion.Clear();
@@ -143,11 +160,11 @@ namespace GameEngine {
 		return true;
 	}
 
-	bool CardDatabase::AddSpellCard(Json::Value const & json_card)
+	bool CardDatabase::AddSpellCard(Json::Value const & json_card, Card & new_card)
 	{
 		std::string origin_id = json_card["id"].asString();
 
-		Card new_card;
+		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_SPELL;
 		new_card.cost = json_card["cost"].asInt();
 		new_card.id = this->GetAvailableCardId();

@@ -22,8 +22,8 @@ namespace GameEngine {
 	private:
 		void AddCard(Card const & card, std::string const & origin_id);
 		bool AddCard(Json::Value const& card);
-		bool AddMinionCard(Json::Value const& card);
-		bool AddSpellCard(Json::Value const& card);
+		bool AddMinionCard(Json::Value const& card, Card & new_card);
+		bool AddSpellCard(Json::Value const& card, Card & new_card);
 
 		void Clear();
 

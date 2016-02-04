@@ -11,6 +11,17 @@ namespace GameEngine {
 class Card
 {
 	public:
+		enum Rarity
+		{
+			RARITY_FREE,
+			RARITY_COMMON,
+			RARITY_RARE,
+			RARITY_EPIC,
+			RARITY_LEGENDARY,
+			RARITY_UNKNOWN
+		};
+
+	public:
 		Card() : id(0) {}
 
 		bool operator==(const Card &rhs) const;
@@ -22,6 +33,8 @@ class Card
 
 	public:
 		int id;
+
+		Rarity rarity;
 
 		enum Type {
 			TYPE_INVALID = 0, // the smallest must be zero
