@@ -35,7 +35,7 @@ namespace GameEngine {
 		throw std::runtime_error("unknown race");
 	}
 
-	static void ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
+	static void ProcessMinionCardMechanics(std::string const& origin_id, Json::Value const& json_card, Card & new_card)
 	{
 		if (!json_card.isMember("mechanics")) return;
 
@@ -132,6 +132,7 @@ namespace GameEngine {
 			delete[] this->final_cards;
 		}
 		this->final_cards = new GameEngine::Card[max_card_id];
+		this->final_cards_size = max_card_id;
 		for (auto const& card_info : this->cards)
 		{
 			this->final_cards[card_info.first] = card_info.second;
@@ -142,26 +143,38 @@ namespace GameEngine {
 
 	bool CardDatabase::AddCard(Json::Value const & card)
 	{
+		std::string origin_id = card["id"].asString();
+
 		std::string type = card["type"].asString();
 
 		Card new_card;
 
 		if (type == "MINION") {
-			return this->AddMinionCard(card, new_card);
+			this->AddMinionCard(origin_id, card, new_card);
 		}
 		else if (type == "SPELL") {
-			return this->AddSpellCard(card, new_card);
+			this->AddSpellCard(origin_id, card, new_card);
 		}
 		else {
 			// ignored
-			return true;
+			return false;
 		}
+
+		// fix error data
+		if (origin_id == "GVG_065")
+		{
+			new_card.data.minion.forgetful = true;
+		}
+
+		new_card.id = this->GetAvailableCardId();
+
+		this->AddCard(new_card, origin_id);
+
+		return true;
 	}
 
-	bool CardDatabase::AddMinionCard(Json::Value const & json_card, Card & new_card)
+	void CardDatabase::AddMinionCard(std::string  const& origin_id, Json::Value const & json_card, Card & new_card)
 	{
-		std::string origin_id = json_card["id"].asString();
-
 		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_MINION;
 		new_card.cost = json_card["cost"].asInt();
@@ -170,26 +183,16 @@ namespace GameEngine {
 		new_card.data.minion.hp = json_card["health"].asInt();
 		new_card.data.minion.race = GetMinionRace(json_card);
 
-		ProcessMinionCardMechanics(json_card, new_card);
-
-		new_card.id = this->GetAvailableCardId();
-
-		this->AddCard(new_card, origin_id);
-		return true;
+		ProcessMinionCardMechanics(origin_id, json_card, new_card);
 	}
 
-	bool CardDatabase::AddSpellCard(Json::Value const & json_card, Card & new_card)
+	void CardDatabase::AddSpellCard(std::string  const& origin_id, Json::Value const & json_card, Card & new_card)
 	{
-		std::string origin_id = json_card["id"].asString();
-
 		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_SPELL;
 		new_card.cost = json_card["cost"].asInt();
 		new_card.id = this->GetAvailableCardId();
 		new_card.data.spell.Clear();
-
-		this->AddCard(new_card, origin_id);
-		return true;
 	}
 
 	void CardDatabase::AddCard(Card const & card, std::string const& origin_id)
@@ -219,6 +222,7 @@ namespace GameEngine {
 
 	Card CardDatabase::GetCard(int card_id) const
 	{
+		if (card_id < 0 || card_id >= this->final_cards_size) throw std::runtime_error("out of range");
 		return this->final_cards[card_id];
 	}
 
