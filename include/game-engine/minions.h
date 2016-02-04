@@ -20,8 +20,14 @@ class Minions
 	public:
 		typedef std::vector<Minion> container_type;
 
+		enum Side {
+			PLAYER_SIDE,
+			OPPONENT_SIDE
+		};
+
 	public:
-		Minions();
+		Minions() = delete;
+		Minions(Side side);
 
 		// Insert minion to where the index is 'idx'
 		// Any existing minions will be shifted right
@@ -32,6 +38,9 @@ class Minions
 
 		const container_type &GetMinions() const { return this->minions; }
 		container_type &GetMinions() { return this->minions; }
+
+		TargetorBitmap GetTargetsToAttack() const;
+		TargetorBitmap GetTargetsToBeAttacked(bool &has_taunt) const;
 
 		bool IsFull() const { return this->minions.size() == MAX_MINIONS; }
 
@@ -46,12 +55,17 @@ class Minions
 		void TurnEnd();
 
 	private:
+		int GetTargetorByMinionIndex(int idx) const;
+
+	private:
 		std::vector<Minion> minions;
+		Side side;
 };
 
-inline Minions::Minions()
+inline Minions::Minions(Side side)
 {
 	this->minions.reserve(MAX_MINIONS);
+	this->side = side;
 }
 
 inline void Minions::AddMinion(const Minion &minion, size_t idx)
@@ -74,11 +88,60 @@ inline void Minions::AddMinion(const Minion &minion)
 	this->minions.push_back(minion);
 }
 
+inline TargetorBitmap Minions::GetTargetsToAttack() const
+{
+	TargetorBitmap targetors;
+	for (int i = 0; i < this->minions.size(); ++i)
+	{
+		auto const& minion = this->minions[i];
+
+		if (!minion.Attackable()) continue;
+
+		targetors.SetOneTarget(this->GetTargetorByMinionIndex(i));
+	}
+	return targetors;
+}
+
+inline TargetorBitmap Minions::GetTargetsToBeAttacked(bool & has_taunt) const
+{
+	TargetorBitmap targetors;
+	
+	// 1. Find taunt minions
+	for (int i = 0; i < this->minions.size(); ++i)
+	{
+		auto const& minion = this->minions[i];
+
+		if (!minion.IsTaunt()) continue;
+
+		targetors.SetOneTarget(this->GetTargetorByMinionIndex(i));
+	}
+
+	if (!targetors.None())
+	{
+		has_taunt = true;
+		return targetors; // has taunt minions
+	}
+	has_taunt = false;
+
+	// 2. No taunt minions --> all minions are attackable
+	for (int i = 0; i < this->minions.size(); ++i)
+	{
+		targetors.SetOneTarget(this->GetTargetorByMinionIndex(i));
+	}
+	return targetors;
+}
+
 inline void Minions::DebugPrint() const
 {
 	for (const auto &minion : this->minions) {
 		if (minion.IsValid()) {
-			std::cout << "\t[" << minion.GetCardId() << "] " << minion.GetAttack() << " / " << minion.GetHP() << " (max hp = " << minion.GetMaxHP() << ")" << std::endl;
+			std::cout << "\t[" << minion.GetCardId() << "] " << minion.GetAttack() << " / " << minion.GetHP() << " (max hp = " << minion.GetMaxHP() << ")";
+
+			if (minion.IsTaunt()) {
+				std::cout << " [TAUNT]";
+			}
+
+			std::cout << std::endl;
 		} else {
 			std::cout << "\t[EMPTY]" << std::endl;
 		}
@@ -87,7 +150,12 @@ inline void Minions::DebugPrint() const
 
 inline bool Minions::operator==(const Minions &rhs) const
 {
+#ifdef DEBUG
+	if (this->side != rhs.side) throw std::runtime_error("logic error");
+#endif
+
 	if (this->minions != rhs.minions) return false;
+
 	return true;
 }
 
@@ -97,6 +165,12 @@ inline void Minions::TurnEnd()
 	{
 		minion.TurnEnd();
 	}
+}
+
+inline int Minions::GetTargetorByMinionIndex(int idx) const
+{
+	if (this->side == PLAYER_SIDE) return Targetor::GetPlayerMinionIndex(idx);
+	else return Targetor::GetOpponentMinionIndex(idx);
 }
 
 } // namespace GameEngine

@@ -20,6 +20,23 @@ namespace GameEngine {
 		throw std::runtime_error("unknown race");
 	}
 
+	static void ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
+	{
+		if (!json_card.isMember("mechanics")) return;
+
+		Json::Value json_mechanics = json_card["mechanics"];
+
+		if (json_mechanics.isArray() == false) return;
+
+		for (auto const& json_mechanic: json_mechanics)
+		{
+			std::string mechanic = json_mechanic.asString();
+			if (mechanic == "TAUNT") {
+				new_card.data.minion.taunt = true;
+			}
+		}
+	}
+
 	CardDatabase::CardDatabase()
 	{
 		this->Clear();
@@ -82,6 +99,9 @@ namespace GameEngine {
 		new_card.data.minion.attack = json_card["attack"].asInt();
 		new_card.data.minion.hp = json_card["health"].asInt();
 		new_card.data.minion.race = GetMinionRace(json_card);
+
+		ProcessMinionCardMechanics(json_card, new_card);
+
 		new_card.id = this->GetAvailableCardId();
 
 		this->AddCard(new_card, origin_id);

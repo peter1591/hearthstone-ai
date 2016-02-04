@@ -42,17 +42,13 @@ class StagePlayerChooseBoardMove
 			TargetorBitmap attacked;
 
 			// TODO: check if player has weapon
-			for (int attacker_idx = 0; attacker_idx < (int)board.player_minions.GetMinions().size(); attacker_idx++) {
-				if (board.player_minions.GetMinions()[attacker_idx].Attackable()) {
-					attacker.SetOneTarget(Targetor::GetPlayerMinionIndex(attacker_idx));
-				}
-			}
-			attacked.SetOneTarget(Targetor::GetOpponentHeroIndex());
-			for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
-				attacked.SetOneTarget(Targetor::GetOpponentMinionIndex(attacked_idx));
-			}
+			attacker = board.player_minions.GetTargetsToAttack();
 
 			if (!attacker.None()) {
+				bool has_taunt;
+				attacked = board.opponent_minions.GetTargetsToBeAttacked(has_taunt);
+				if (!has_taunt) attacked.SetOneTarget(Targetor::GetOpponentHeroIndex());
+
 				NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
 				next_move_getter.AddItem(std::move(player_attack_move));
 			}
@@ -120,20 +116,31 @@ class StagePlayerChooseBoardMove
 			}
 
 			// the choices to attack by hero/minion
-			for (int attacker_idx = -1; attacker_idx < (int)board.player_minions.GetMinions().size(); attacker_idx++) {
-				if (attacker_idx == -1) {
-					continue; // TODO: check if player has weapon
-				}
-				else {
-					if (!board.player_minions.GetMinions()[attacker_idx].Attackable()) continue;
-				}
+			TargetorBitmap attacker;
+			TargetorBitmap attacked;
 
-				for (int attacked_idx = -1; attacked_idx < (int)board.opponent_minions.GetMinions().size(); attacked_idx++) {
-					move.action = Move::ACTION_ATTACK;
-					move.data.attack_data.attacker_idx = Targetor::GetPlayerMinionIndex(attacker_idx);
-					move.data.attack_data.attacked_idx = Targetor::GetOpponentMinionIndex(attacked_idx);
-					moves.AddMove(move, weight_attack);
-				}
+			// TODO: check if player has weapon
+			attacker = board.player_minions.GetTargetsToAttack();
+
+			if (!attacker.None()) {
+				bool has_taunt;
+				attacked = board.opponent_minions.GetTargetsToBeAttacked(has_taunt);
+				if (!has_taunt) attacked.SetOneTarget(Targetor::GetOpponentHeroIndex());
+
+				while (!attacker.None()) {
+					int attacker_idx = attacker.GetOneTarget();
+					attacker.ClearOneTarget(attacker_idx);
+
+					while (!attacked.None()) {
+						int attacked_idx = attacked.GetOneTarget();
+						attacked.ClearOneTarget(attacked_idx);
+
+						move.action = Move::ACTION_ATTACK;
+						move.data.attack_data.attacker_idx = attacker_idx;
+						move.data.attack_data.attacked_idx = attacked_idx;
+						moves.AddMove(move, weight_attack);
+					} // for attacked
+				} // for attacker
 			}
 
 			if (moves.Choose(rand, good_move) == false) {

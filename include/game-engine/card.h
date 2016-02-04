@@ -49,11 +49,13 @@ class Card
 			int attack;
 			int hp;
 			MinionRace race;
+			bool taunt;
 
 			bool operator==(const Minion &rhs) const {
 				if (this->attack != rhs.attack) return false;
 				if (this->hp != rhs.hp) return false;
 				if (this->race != rhs.race) return false;
+				if (this->taunt != rhs.taunt) return false;
 				return true;
 			}
 
@@ -165,6 +167,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);
 			GameEngine::hash_combine(result, (int)s.race);
+			GameEngine::hash_combine(result, s.taunt);
 
 			return result;
 		}
