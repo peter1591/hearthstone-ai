@@ -8,6 +8,7 @@
 #include "player-stat.h"
 #include "card.h"
 #include "card-id-map.h"
+#include "card-database.h"
 
 namespace GameEngine {
 
@@ -31,16 +32,7 @@ class OpponentCards
 			if (this->hand_card_count <= 0) return;
 
 			// TODO
-			Card card;
-			card.type = Card::TYPE_MINION;
-			card.id = CARD_ID_GVG_092t;
-			card.cost = 1;
-			card.data.minion.attack = 1;
-			card.data.minion.hp = 1;
-			card.data.minion.taunt = false;
-			card.data.minion.charge = false;
-			card.data.minion.shield = false;
-			card.data.minion.stealth = false;
+			Card card = CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t);
 
 			if (opponent_stat.crystal.GetCurrent() < card.cost) return;
 

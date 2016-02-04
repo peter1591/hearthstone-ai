@@ -93,7 +93,14 @@ namespace GameEngine {
 
 	CardDatabase::CardDatabase()
 	{
+		this->final_cards = nullptr;
 		this->Clear();
+	}
+
+	CardDatabase & CardDatabase::GetInstance()
+	{
+		static CardDatabase instance;
+		return instance;
 	}
 
 	bool CardDatabase::ReadFromJsonFile(std::string const & filepath)
@@ -117,6 +124,17 @@ namespace GameEngine {
 		for (auto const& card_json : cards_json)
 		{
 			this->AddCard(card_json);
+		}
+
+		int max_card_id = this->next_card_id;
+		if (this->final_cards != nullptr)
+		{
+			delete[] this->final_cards;
+		}
+		this->final_cards = new GameEngine::Card[max_card_id];
+		for (auto const& card_info : this->cards)
+		{
+			this->final_cards[card_info.first] = card_info.second;
 		}
 
 		return true;
@@ -177,6 +195,12 @@ namespace GameEngine {
 	void CardDatabase::AddCard(Card const & card, std::string const& origin_id)
 	{
 		this->cards[card.id] = card;
+
+		if (this->origin_id_map.find(origin_id) != this->origin_id_map.end())
+		{
+			throw std::runtime_error("origin id collision.");
+		}
+
 		this->origin_id_map[origin_id] = card.id;
 	}
 
@@ -195,15 +219,7 @@ namespace GameEngine {
 
 	Card CardDatabase::GetCard(int card_id) const
 	{
-		auto it = this->cards.find(card_id);
-		if (it == this->cards.end())
-		{
-			Card ret;
-			ret.MarkInvalid();
-			return ret;
-		}
-
-		return it->second;
+		return this->final_cards[card_id];
 	}
 
 	std::unordered_map<std::string, int> const & CardDatabase::GetOriginalIdMap() const
