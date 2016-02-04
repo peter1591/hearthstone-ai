@@ -36,13 +36,10 @@ class StageOpponentChooseBoardMove
 			TargetorBitmap attacked;
 
 			// TODO: check if player has weapon
-			attacker = board.opponent_minions.GetTargetsToAttack();
+			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				bool has_taunt;
-				attacked = board.player_minions.GetTargetsToBeAttacked(has_taunt);
-
-				if (!has_taunt) attacked.SetOneTarget(Targetor::GetPlayerHeroIndex());
+				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED, board);
 
 				NextMoveGetter::ItemAttack attack_move(std::move(attacker), std::move(attacked));
 				next_move_getter.AddItem(std::move(attack_move));
@@ -97,14 +94,11 @@ class StageOpponentChooseBoardMove
 			TargetorBitmap attacker;
 			TargetorBitmap attacked;
 
-			// TODO: check if player has weapon
-			attacker = board.opponent_minions.GetTargetsToAttack();
+			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				bool has_taunt;
-				attacked = board.player_minions.GetTargetsToBeAttacked(has_taunt);
-				if (!has_taunt) attacked.SetOneTarget(Targetor::GetPlayerHeroIndex());
-
+				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_ATTACKABLE, board);
+				
 				while (!attacker.None()) {
 					int attacker_idx = attacker.GetOneTarget();
 					attacker.ClearOneTarget(attacker_idx);

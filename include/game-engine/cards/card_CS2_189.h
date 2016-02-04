@@ -19,12 +19,14 @@ public:
 
 	static void GetRequiredTargets(GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
 	{
-		targets.SetOneTarget(Targetor::GetOpponentHeroIndex());
-		for (int i = 0; i < (int)board.opponent_minions.GetMinions().size(); ++i)
-		{
-			targets.SetOneTarget(Targetor::GetOpponentMinionIndex(i));
+		if (board.GetStageType() == GameEngine::STAGE_TYPE_PLAYER) {
+			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
+		} 
+		else {
+			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
 		}
-		meet_requirements = true;
+
+		meet_requirements = true; // it's fine even if no target available
 	}
 
 	static void BattleCry(GameEngine::Board & board)

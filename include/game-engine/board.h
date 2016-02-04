@@ -27,16 +27,12 @@ class Board
 	public:
 		Board() :
 			player_deck(&this->random_generator),
-			stage(STAGE_UNKNOWN),
-			player_minions(Minions::PLAYER_SIDE),
-			opponent_minions(Minions::OPPONENT_SIDE)
+			stage(STAGE_UNKNOWN)
 		{
 		}
 
 		Board(const Board &rhs) : 
-			player_deck(&this->random_generator),
-			player_minions(Minions::PLAYER_SIDE),
-			opponent_minions(Minions::OPPONENT_SIDE)
+			player_deck(&this->random_generator)
 		{
 			this->operator=(rhs);
 		}
