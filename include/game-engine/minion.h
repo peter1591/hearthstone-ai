@@ -21,7 +21,7 @@ class Minion
 		int GetMaxHP() const {return this->max_hp; }
 
 		// Initializer
-		void Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp, bool taunt = false);
+		void Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp, bool taunt = false, bool charge = false);
 		void Summon(const Card &card);
 
 		// Modifiers
@@ -29,10 +29,12 @@ class Minion
 		void AttackedOnce();
 		void TakeDamage(int damage);
 		void SetTaunt(bool taunt) { this->taunt = taunt; }
+		void SetCharge(bool charge) { this->charge = charge; }
 
 		// Getters
 		bool Attackable() const;
 		bool IsTaunt() const { return this->taunt; }
+		bool IsCharge() const { return this->charge; }
 
 		// Hooks
 		void TurnStart();
@@ -56,6 +58,7 @@ class Minion
 		int hp;
 		int max_hp;
 		bool taunt;
+		bool charge;
 
 		// enchantments
 		int attack_bias_when_turn_ends;
@@ -69,7 +72,7 @@ inline Minion::Minion() : card_id(0)
 
 }
 
-inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp, bool taunt)
+inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp, bool taunt, bool charge)
 {
 	this->card_id = card_id;
 	this->origin_attack = origin_attack;
@@ -80,6 +83,7 @@ inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origi
 	this->hp = this->origin_hp;
 	this->max_hp = this->origin_max_hp;
 	this->taunt = taunt;
+	this->charge = charge;
 
 	this->attack_bias_when_turn_ends = 0;
 }
@@ -95,6 +99,7 @@ inline void Minion::Summon(const Card & card)
 	this->hp = this->origin_hp;
 	this->max_hp = this->origin_max_hp;
 	this->taunt = card.data.minion.taunt;
+	this->charge = card.data.minion.charge;
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -125,9 +130,11 @@ inline void Minion::TurnEnd()
 
 inline bool Minion::Attackable() const
 {
-	if (this->summoned_this_turn) return false;
+	if (this->summoned_this_turn && !this->charge) return false;
+
 	if (attacked_times > 0) return false;
 	if (this->GetAttack() <= 0) return false;
+
 	return true;
 }
 
@@ -152,6 +159,7 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->hp != rhs.hp) return false;
 	if (this->max_hp != rhs.max_hp) return false;
 	if (this->taunt != rhs.taunt) return false;
+	if (this->charge != rhs.charge) return false;
 
 	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
 	if (this->attacked_times != rhs.attacked_times) return false;
@@ -180,6 +188,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.origin_hp);
 			GameEngine::hash_combine(result, s.origin_max_hp);
 			GameEngine::hash_combine(result, s.taunt);
+			GameEngine::hash_combine(result, s.charge);
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);
 			GameEngine::hash_combine(result, s.max_hp);

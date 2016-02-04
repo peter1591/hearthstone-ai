@@ -50,12 +50,22 @@ class Card
 			int hp;
 			MinionRace race;
 			bool taunt;
+			bool charge;
+
+			void Clear() {
+				this->attack = 0;
+				this->hp = 0;
+				this->race = RACE_NORMAL;
+				this->taunt = false;
+				this->charge = false;
+			}
 
 			bool operator==(const Minion &rhs) const {
 				if (this->attack != rhs.attack) return false;
 				if (this->hp != rhs.hp) return false;
 				if (this->race != rhs.race) return false;
 				if (this->taunt != rhs.taunt) return false;
+				if (this->charge != rhs.charge) return false;
 				return true;
 			}
 
@@ -66,6 +76,9 @@ class Card
 
 		struct Spell {
 			// TODO
+
+			void Clear() {
+			}
 		};
 
 		struct Weapon {
@@ -168,6 +181,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.hp);
 			GameEngine::hash_combine(result, (int)s.race);
 			GameEngine::hash_combine(result, s.taunt);
+			GameEngine::hash_combine(result, s.charge);
 
 			return result;
 		}

@@ -137,9 +137,8 @@ inline void Minions::DebugPrint() const
 		if (minion.IsValid()) {
 			std::cout << "\t[" << minion.GetCardId() << "] " << minion.GetAttack() << " / " << minion.GetHP() << " (max hp = " << minion.GetMaxHP() << ")";
 
-			if (minion.IsTaunt()) {
-				std::cout << " [TAUNT]";
-			}
+			if (minion.IsTaunt()) std::cout << " [TAUNT]";
+			if (minion.IsCharge()) std::cout << " [CHARGE]";
 
 			std::cout << std::endl;
 		} else {

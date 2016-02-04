@@ -28,11 +28,45 @@ namespace GameEngine {
 
 		if (json_mechanics.isArray() == false) return;
 
+		new_card.data.minion.taunt = false;
+		new_card.data.minion.charge = false;
 		for (auto const& json_mechanic: json_mechanics)
 		{
 			std::string mechanic = json_mechanic.asString();
 			if (mechanic == "TAUNT") {
 				new_card.data.minion.taunt = true;
+			}
+			else if (mechanic == "CHARGE") {
+				new_card.data.minion.charge = true;
+			}
+			else if (mechanic == "STEALTH") { // TODO
+			}
+			else if (mechanic == "FORGETFUL") { // TODO
+			}
+			else if (mechanic == "FREEZE") { // TODO
+			}
+			else if (mechanic == "POISONOUS") { // TODO
+			}
+			else if (mechanic == "WINDFURY") { // TODO
+			}
+			else if (mechanic == "DIVINE_SHIELD") { // TODO
+			}
+			else if (mechanic == "OVERLOAD") { // TODO
+			}
+			else if (mechanic == "AURA" ||
+				mechanic == "DEATHRATTLE" ||
+				mechanic == "INSPIRE" ||
+				mechanic == "BATTLECRY" ||
+				mechanic == "SPELLPOWER" ||
+				mechanic == "COMBO" ||
+				mechanic == "ENRAGED" ||
+				mechanic == "ADJACENT_BUFF" ||
+				mechanic == "InvisibleDeathrattle" ||
+				mechanic == "ImmuneToSpellpower") {
+				// write hard-coded
+			}
+			else {
+				throw std::runtime_error("unknown error");
 			}
 		}
 	}
@@ -62,12 +96,7 @@ namespace GameEngine {
 
 		for (auto const& card_json : cards_json)
 		{
-			try {
-				this->AddCard(card_json);
-			}
-			catch (std::exception const&) {
-				continue; // ignore error
-			}
+			this->AddCard(card_json);
 		}
 
 		return true;
@@ -96,6 +125,7 @@ namespace GameEngine {
 		Card new_card;
 		new_card.type = Card::TYPE_MINION;
 		new_card.cost = json_card["cost"].asInt();
+		new_card.data.minion.Clear();
 		new_card.data.minion.attack = json_card["attack"].asInt();
 		new_card.data.minion.hp = json_card["health"].asInt();
 		new_card.data.minion.race = GetMinionRace(json_card);
@@ -116,12 +146,13 @@ namespace GameEngine {
 		new_card.type = Card::TYPE_SPELL;
 		new_card.cost = json_card["cost"].asInt();
 		new_card.id = this->GetAvailableCardId();
+		new_card.data.spell.Clear();
 
 		this->AddCard(new_card, origin_id);
 		return true;
 	}
 
-	void GameEngine::CardDatabase::AddCard(Card const & card, std::string const& origin_id)
+	void CardDatabase::AddCard(Card const & card, std::string const& origin_id)
 	{
 		this->cards[card.id] = card;
 		this->origin_id_map[origin_id] = card.id;
@@ -140,7 +171,7 @@ namespace GameEngine {
 		return id;
 	}
 
-	Card GameEngine::CardDatabase::GetCard(int card_id) const
+	Card CardDatabase::GetCard(int card_id) const
 	{
 		auto it = this->cards.find(card_id);
 		if (it == this->cards.end())
