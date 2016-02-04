@@ -165,6 +165,18 @@ namespace GameEngine {
 		{
 			new_card.data.minion.forgetful = true;
 		}
+		else if (origin_id == "GVG_088")
+		{
+			new_card.data.minion.forgetful = true;
+		}
+		else if (origin_id == "GVG_112")
+		{
+			new_card.data.minion.forgetful = true;
+		}
+		else if (origin_id == "AT_088")
+		{
+			new_card.data.minion.forgetful = true;
+		}
 
 		new_card.id = this->GetAvailableCardId();
 

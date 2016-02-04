@@ -26,13 +26,15 @@ namespace GameEngine {
 
 		void AddCard(Card const & card, std::string const & origin_id);
 		bool AddCard(Json::Value const& card);
-		bool AddMinionCard(Json::Value const& card, Card & new_card);
-		bool AddSpellCard(Json::Value const& card, Card & new_card);
+		void AddMinionCard(std::string  const& origin_id, Json::Value const& card, Card & new_card);
+		void AddSpellCard(std::string  const& origin_id, Json::Value const& card, Card & new_card);
 
 		void Clear();
 
 	private:
 		Card * final_cards; // array of cards; good for thread-safe usage
+		int final_cards_size;
+
 		std::unordered_map<int, Card> cards;
 		std::unordered_map<std::string, int> origin_id_map;
 		int next_card_id;
