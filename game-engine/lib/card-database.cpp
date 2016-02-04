@@ -30,6 +30,8 @@ namespace GameEngine {
 
 		new_card.data.minion.taunt = false;
 		new_card.data.minion.charge = false;
+		new_card.data.minion.shield = false;
+
 		for (auto const& json_mechanic: json_mechanics)
 		{
 			std::string mechanic = json_mechanic.asString();
@@ -38,6 +40,9 @@ namespace GameEngine {
 			}
 			else if (mechanic == "CHARGE") {
 				new_card.data.minion.charge = true;
+			}
+			else if (mechanic == "DIVINE_SHIELD") {
+				new_card.data.minion.shield = true;
 			}
 			else if (mechanic == "STEALTH") { // TODO
 			}
@@ -48,8 +53,6 @@ namespace GameEngine {
 			else if (mechanic == "POISONOUS") { // TODO
 			}
 			else if (mechanic == "WINDFURY") { // TODO
-			}
-			else if (mechanic == "DIVINE_SHIELD") { // TODO
 			}
 			else if (mechanic == "OVERLOAD") { // TODO
 			}

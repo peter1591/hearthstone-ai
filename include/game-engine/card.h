@@ -51,6 +51,7 @@ class Card
 			MinionRace race;
 			bool taunt;
 			bool charge;
+			bool shield;
 
 			void Clear() {
 				this->attack = 0;
@@ -58,6 +59,7 @@ class Card
 				this->race = RACE_NORMAL;
 				this->taunt = false;
 				this->charge = false;
+				this->shield = false;
 			}
 
 			bool operator==(const Minion &rhs) const {
@@ -66,6 +68,7 @@ class Card
 				if (this->race != rhs.race) return false;
 				if (this->taunt != rhs.taunt) return false;
 				if (this->charge != rhs.charge) return false;
+				if (this->shield != rhs.shield) return false;
 				return true;
 			}
 
@@ -182,6 +185,7 @@ namespace std {
 			GameEngine::hash_combine(result, (int)s.race);
 			GameEngine::hash_combine(result, s.taunt);
 			GameEngine::hash_combine(result, s.charge);
+			GameEngine::hash_combine(result, s.shield);
 
 			return result;
 		}

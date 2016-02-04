@@ -139,6 +139,7 @@ inline void Minions::DebugPrint() const
 
 			if (minion.IsTaunt()) std::cout << " [TAUNT]";
 			if (minion.IsCharge()) std::cout << " [CHARGE]";
+			if (minion.IsShield()) std::cout << " [SHIELD]";
 
 			std::cout << std::endl;
 		} else {

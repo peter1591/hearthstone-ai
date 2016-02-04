@@ -27,11 +27,11 @@ public:
 
 	static void BattleCry(GameEngine::Board & board)
 	{
-		constexpr int attack_boost = -2;
+		constexpr int attack_boost = 2;
 
 		int target_idx = board.data.player_put_minion_data.required_target;
 		if (target_idx < 0) {
-			// no target
+			// no target to buff
 			return;
 		}
 
