@@ -139,23 +139,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\game-ai\include\mcts.h" />
     <ClInclude Include="..\..\..\game-ai\include\tree.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\board.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\card.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\common.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\deck.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\hand.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\hero-power.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\hidden-secrets.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\minion.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\minions.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\move.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\opponent-cards.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\player-stat.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\random-generator.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\secret.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\secrets.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\stage.h" />
-    <ClInclude Include="..\..\..\game-engine\include\game-engine\weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
