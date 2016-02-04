@@ -9,35 +9,30 @@
 #include "mcts.h"
 #include "decider.h"
 
-void InitializeDeck1(const GameEngine::CardDatabase &card_database, GameEngine::Deck &deck)
+void InitializeDeck1(GameEngine::Deck &deck)
 {
 	for (int i = 0; i < 27; ++i) {
-		deck.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
+		deck.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	}
 }
 
-void InitializeHand1(const GameEngine::CardDatabase &card_database, GameEngine::Hand &hand)
+void InitializeHand1(GameEngine::Hand &hand)
 {
-	hand.AddCard(card_database.GetCard(CARD_ID_GVG_092t)); // 111
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
-	hand.AddCard(card_database.GetCard(CARD_ID_AT_087)); // 321 [CHARGE] [SHIELD]
-	hand.AddCard(card_database.GetCard(CARD_ID_EX1_522)); // 321 [POISON] [STEALTH]
-	hand.AddCard(card_database.GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
-	//hand.AddCard(card_database.GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
-	//hand.AddCard(card_database.GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
-	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_025)); // arcane explosion
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_AT_087)); // 321 [CHARGE] [SHIELD]
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_522)); // 321 [POISON] [STEALTH]
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_065)); // 344 [FORGETFUL]
+	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
+	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
+	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // arcane explosion
 
-	//hand.AddCard(card_database.GetCard(CARD_ID_CS2_120)); // 223
+	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
 }
 
 void InitializeBoard(GameEngine::Board &board)
 {
-	GameEngine::CardDatabase card_database;
-
-	std::cout << "Loading card database..." << std::endl;
-	if (!card_database.ReadFromJsonFile("../../../database/cards.json"))
-		throw std::runtime_error("failed to load card data");
-
 	board.player_stat.hp = 30;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(3, 3, 0, 0);
@@ -50,8 +45,8 @@ void InitializeBoard(GameEngine::Board &board)
 
 	board.opponent_cards.Set(4, 26);
 
-	InitializeDeck1(card_database, board.player_deck);
-	InitializeHand1(card_database, board.player_hand);
+	InitializeDeck1(board.player_deck);
+	InitializeHand1(board.player_hand);
 
 	GameEngine::Minion minion;
 	//minion.Set(111, 1, 1, 1);
@@ -62,7 +57,7 @@ void InitializeBoard(GameEngine::Board &board)
 	//minion.TurnStart();
 	//board.player_minions.AddMinion(minion);
 
-	minion.Set(222, 10, 1, 2);
+	minion.Set(222, 10, 10, 2);
 	minion.TurnStart();
 	minion.SetTaunt(true);
 	minion.SetStealth(true);
@@ -226,12 +221,19 @@ static void InteractiveTest()
 
 		if (std::cin.eof()) break;
 
-		board.ApplyMove(next_move);
+		bool is_random;
+		board.ApplyMove(next_move, &is_random);
+		if (is_random) std::cout << "!!! This move is random!!!" << std::endl;
+		else std::cout << "!!! This move is non-random!!!" << std::endl;
 	}
 }
 
 int main(void)
 {
+	std::cout << "Loading card database..." << std::endl;
+	if (!GameEngine::CardDatabase::GetInstance().ReadFromJsonFile("../../../database/cards.json"))
+		throw std::runtime_error("failed to load card data");
+
 	//TestBasic();
 	//TestOperators();
 
