@@ -23,6 +23,7 @@ class RandomGenerator
 		}
 
 		int GetRandom() {
+			this->has_called = true;
 			return rand();
 		}
 

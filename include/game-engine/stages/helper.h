@@ -30,6 +30,8 @@ public:
 private:
 	static void TakeDamage(Minions::container_type::iterator taker, int damage);
 
+	static int GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked);
+
 	// return true if dead
 	static bool RemoveDeadMinion(Minions & minions, Minions::container_type::iterator & it);
 	static void RemoveDeadMinions(Minions & minions);
@@ -113,6 +115,44 @@ inline void StageHelper::TakeDamage(Minions::container_type::iterator taker, int
 	taker->TakeDamage(damage);
 }
 
+inline int StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked)
+{
+	bool player_side = Targetor::IsPlayerSide(origin_attacked);
+
+	int possible_targets = 1 - 1; // +1 for the hero, -1 for the original attack target
+	if (player_side) possible_targets += board.player_minions.GetMinions().size();
+	else possible_targets += board.opponent_minions.GetMinions().size();
+
+	if (possible_targets == 0)
+	{
+		// no other target available --> attack original target
+		return origin_attacked;
+	}
+
+	int r = board.random_generator.GetRandom() % possible_targets;
+	
+	if (player_side) {
+		if (origin_attacked != Targetor::GetPlayerHeroIndex()) {
+			// now we have a chance to attack the hero
+			if (r == possible_targets - 1) {
+				return Targetor::GetPlayerHeroIndex();
+			}
+		}
+		// now we can only hit the minions
+		return Targetor::GetPlayerMinionIndex(r);
+	}
+	else {
+		if (origin_attacked != Targetor::GetOpponentHeroIndex()) {
+			// now we have a chance to attack the hero
+			if (r == possible_targets - 1) {
+				return Targetor::GetOpponentHeroIndex();
+			}
+		}
+		// now we can only hit the minions
+		return Targetor::GetOpponentMinionIndex(r);
+	}
+}
+
 inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx)
 {
 	// TODO: trigger secrets
@@ -127,6 +167,16 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 	{
 		Minions * attacker_container = nullptr;
 		Minions::container_type::iterator attacker = GetMinionIterator(board, attacker_idx, attacker_container);
+
+		// check if attacker is forgetful
+		if (attacker->IsForgetful())
+		{
+			int r = board.random_generator.GetRandom() % 2;
+			if (r == 0) {
+				// trigger forgetful effect
+				attacked_idx = StageHelper::GetNewAttackedTargetForForgetfulAttack(board, attacked_idx);
+			}
+		}
 
 		if (attacked_idx == Targetor::GetPlayerHeroIndex()) {
 			board.player_stat.hp -= attacker->GetAttack();
@@ -145,7 +195,9 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 			if (StageHelper::RemoveDeadMinion(*attacker_container, attacker) == false) {
 				attacker->AttackedOnce();
 			}
-			StageHelper::RemoveDeadMinion(*attacked_container, attacked);
+			if (StageHelper::RemoveDeadMinion(*attacked_container, attacked) == false) {
+				attacked->AttackedOnce(); // lose stealth if attacked by forgetful attack
+			}
 		}
 	}
 }

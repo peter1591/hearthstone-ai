@@ -47,6 +47,7 @@ namespace GameEngine {
 		new_card.data.minion.charge = false;
 		new_card.data.minion.shield = false;
 		new_card.data.minion.stealth = false;
+		new_card.data.minion.forgetful = false;
 
 		for (auto const& json_mechanic: json_mechanics)
 		{
@@ -63,7 +64,8 @@ namespace GameEngine {
 			else if (mechanic == "STEALTH") {
 				new_card.data.minion.stealth = true;
 			}
-			else if (mechanic == "FORGETFUL") { // TODO
+			else if (mechanic == "FORGETFUL") {
+				new_card.data.minion.forgetful = true;
 			}
 			else if (mechanic == "FREEZE") { // TODO
 			}

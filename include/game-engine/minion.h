@@ -32,6 +32,7 @@ class Minion
 		void SetCharge(bool charge) { this->charge = charge; }
 		void SetShield(bool shield) { this->shield = shield; }
 		void SetStealth(bool stealth) { this->stealth = stealth; }
+		void SetForgetful(bool forgetful) { this->forgetful = forgetful; }
 
 		// Getters
 		bool Attackable() const;
@@ -39,6 +40,7 @@ class Minion
 		bool IsCharge() const { return this->charge; }
 		bool IsShield() const { return this->shield; }
 		bool IsStealth() const { return this->stealth; }
+		bool IsForgetful() const { return this->forgetful; }
 
 		// Hooks
 		void TurnStart();
@@ -65,6 +67,7 @@ class Minion
 		bool charge;
 		bool shield;
 		bool stealth;
+		bool forgetful;
 
 		// enchantments
 		int attack_bias_when_turn_ends;
@@ -92,6 +95,7 @@ inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origi
 	this->charge = false;
 	this->shield = false;
 	this->stealth = false;
+	this->forgetful = false;
 
 	this->attack_bias_when_turn_ends = 0;
 }
@@ -110,6 +114,7 @@ inline void Minion::Summon(const Card & card)
 	this->charge = card.data.minion.charge;
 	this->shield = card.data.minion.shield;
 	this->stealth = card.data.minion.stealth;
+	this->forgetful = card.data.minion.forgetful;
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -178,6 +183,7 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->charge != rhs.charge) return false;
 	if (this->shield != rhs.shield) return false;
 	if (this->stealth != rhs.stealth) return false;
+	if (this->forgetful != rhs.forgetful) return false;
 
 	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
 	if (this->attacked_times != rhs.attacked_times) return false;
@@ -209,6 +215,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.charge);
 			GameEngine::hash_combine(result, s.shield);
 			GameEngine::hash_combine(result, s.stealth);
+			GameEngine::hash_combine(result, s.forgetful);
 
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);

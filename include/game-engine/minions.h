@@ -84,6 +84,7 @@ inline void Minions::DebugPrint() const
 			if (minion.IsCharge()) std::cout << " [CHARGE]";
 			if (minion.IsShield()) std::cout << " [SHIELD]";
 			if (minion.IsStealth()) std::cout << " [STEALTH]";
+			if (minion.IsForgetful()) std::cout << " [FORGETFUL]";
 
 			std::cout << std::endl;
 		} else {

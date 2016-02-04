@@ -58,6 +58,10 @@ namespace GameEngine {
 			if (minion_idx < 0 || minion_idx >= 8) return false;
 			return true;
 		}
+		static bool IsPlayerSide(int const pos)
+		{
+			return (pos >= TARGETOR_PLAYER_HERO && pos < TARGETOR_OPPONENT_HERO);
+		}
 
 		static int GetOpponentMinionIndex(int pos) { return TARGETOR_OPPONENT_MINION_START + pos; }
 		static bool IsOpponentMinion(int const pos, int &minion_idx)
@@ -65,6 +69,10 @@ namespace GameEngine {
 			minion_idx = pos - TARGETOR_OPPONENT_MINION_START;
 			if (minion_idx < 0 || minion_idx >= 8) return false;
 			return true;
+		}
+		static bool IsOpponentSide(int const pos)
+		{
+			return (pos >= TARGETOR_OPPONENT_HERO && pos < TARGETOR_MAX);
 		}
 
 	public: // Generate targetor bitmap
