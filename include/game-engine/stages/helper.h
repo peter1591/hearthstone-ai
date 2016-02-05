@@ -4,7 +4,6 @@
 #include "game-engine/stages/common.h"
 #include "game-engine/board.h"
 #include "game-engine/targetor.h"
-#include "game-engine/triggers.h"
 
 namespace GameEngine {
 
@@ -19,7 +18,11 @@ public: // return true if game state changed (e.g., win/loss)
 
 	static bool CheckHeroMinionDead(Board & board);
 
+	// include battle cry, and summoning minion
 	static bool PlayMinion(Board & board, Card const& card, PlayMinionData const& data);
+
+	// no battle cry
+	static bool SummonMinion(Board & board, Card const& card, PlayMinionData const& data);
 
 public:
 	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
@@ -32,8 +35,6 @@ public:
 private:
 	static int GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked);
 
-	// return true if dead
-	static bool RemoveMinionIfDead(Board & board, Minions & minions, Minions::container_type::iterator & it);
 	static void RemoveMinionsIfDead(Board & board, Minions & minions);
 
 	static void Fatigue(PlayerStat &player_stat);
@@ -191,26 +192,41 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 
 inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, Minions & minions)
 {
-	for (auto it = minions.MinionsBegin(); it != minions.MinionsEnd();)
-	{
-		if (RemoveMinionIfDead(board, minions, it) == false) ++it;
+	int targetor_idx;
+
+	if (&minions == &board.player_minions) targetor_idx = Targetor::GetPlayerMinionIndex(0);
+	else if (&minions == &board.opponent_minions) targetor_idx = Targetor::GetOpponentMinionIndex(0);
+	else throw std::runtime_error("consistency check failed");
+
+	while (true) { // loop until no deathrattle are triggered
+		std::list<std::function<void(Board &)>> death_triggers;
+
+		for (auto it = minions.MinionsBegin(); it != minions.MinionsEnd();)
+		{
+			if (it->GetHP() > 0)
+			{
+				++it;
+				++targetor_idx;
+				continue;
+			}
+
+			for (auto const& trigger : it->MoveOutOnDeathTriggers())
+			{
+				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, targetor_idx));
+			}
+
+			it = minions.MinionsErase(it);
+			++targetor_idx;
+		}
+
+		// trigger deathrattles
+		if (death_triggers.empty()) break;
+
+		for (auto const& death_trigger : death_triggers)
+		{
+			death_trigger(board);
+		}
 	}
-}
-
-// return true if dead
-inline bool StageHelper::RemoveMinionIfDead(Board & board, Minions & minions, Minions::container_type::iterator & it)
-{
-	if (it->GetHP() > 0) return false;
-
-	auto triggers = it->MoveOutOnDeathTriggers();
-	it = minions.MinionsErase(it);
-
-	for (auto const& trigger : triggers)
-	{
-		(*trigger)(board, minions, it);
-	}
-
-	return true;
 }
 
 inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)

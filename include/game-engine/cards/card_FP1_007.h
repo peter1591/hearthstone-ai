@@ -7,7 +7,6 @@
 #include "game-engine/minion.h"
 #include "game-engine/minions.h"
 #include "game-engine/stages/helper.h"
-#include "game-engine/triggers.h"
 
 namespace GameEngine {
 namespace Cards {
@@ -19,16 +18,22 @@ public:
 
 	// Nerubian Egg
 
-	static void Deathrattle(GameEngine::Board & board, Minions & minions, Minions::container_type::iterator it_minion)
+	static void Deathrattle(GameEngine::Board & board, int targetor_idx)
 	{
 		// summon Nerubian (AT_036t) when death at [pos]
+		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
+		
+		GameEngine::Move::PlayMinionData data;
+		data.put_location = targetor_idx;
+		data.target = -1;
+
+		StageHelper::SummonMinion(board, card, data);
 	}
 
-	static void OnSummon(GameEngine::Board & board, GameEngine::Minion & summoning_minion)
+	static void OnSummon(GameEngine::Board const&, int, int, GameEngine::Minion & summoning_minion)
 	{
 		// summon Nerubian (AT_036t) when death
-		auto deathrattle = new OnDeathTrigger(Deathrattle);
-		summoning_minion.AddOnDeathTrigger(deathrattle);
+		summoning_minion.AddOnDeathTrigger(Minion::OnDeathTrigger(Deathrattle));
 	}
 };
 

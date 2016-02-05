@@ -9,11 +9,13 @@
 namespace GameEngine {
 
 class Board;
-class OnDeathTrigger;
 
 class Minion
 {
 	friend std::hash<Minion>;
+
+	public:
+		typedef std::function<void(Board& board, int idx)> OnDeathTrigger;
 
 	public:
 		Minion();
@@ -46,8 +48,8 @@ class Minion
 		bool IsForgetful() const { return this->forgetful; }
 
 		// Triggers
-		void AddOnDeathTrigger(OnDeathTrigger *func) { this->triggers_on_death.push_back(func); }
-		std::list<OnDeathTrigger*> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
+		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
+		std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
 
 		// Hooks
 		void TurnStart();
@@ -82,7 +84,7 @@ class Minion
 		int attacked_times;
 		bool summoned_this_turn;
 
-		std::list<OnDeathTrigger*> triggers_on_death;
+		std::list<OnDeathTrigger> triggers_on_death;
 };
 
 inline Minion::Minion() : card_id(0)

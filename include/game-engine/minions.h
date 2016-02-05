@@ -25,10 +25,10 @@ class Minions
 
 		// Insert minion to where the index is 'idx'
 		// Any existing minions will be shifted right
-		void AddMinion(const Minion &minion, size_t idx);
+		Minion& AddMinion(const Minion &minion, size_t idx);
 
 		// Push the minion to be the rightmost
-		void AddMinion(const Minion &minion);
+		Minion& AddMinion(const Minion &minion);
 
 		int GetMinionCount() const { return (int)this->minions.size(); }
 
@@ -59,12 +59,10 @@ inline Minions::Minions()
 	this->minions.reserve(MAX_MINIONS);
 }
 
-inline void Minions::AddMinion(const Minion &minion, size_t idx)
+inline Minion& Minions::AddMinion(const Minion &minion, size_t idx)
 {
 	if (idx == this->minions.size()) {
-		// push to the rightmost
-		this->minions.push_back(minion);
-		return;
+		return this->AddMinion(minion); // push to the rightmost
 	}
 
 	this->minions.push_back(this->minions.back());
@@ -72,11 +70,13 @@ inline void Minions::AddMinion(const Minion &minion, size_t idx)
 		this->minions[i] = this->minions[i-1];
 	}
 	this->minions[idx] = minion;
+	return this->minions[idx];
 }
 
-inline void Minions::AddMinion(const Minion &minion)
+inline Minion& Minions::AddMinion(const Minion &minion)
 {
 	this->minions.push_back(minion);
+	return this->minions.back();
 }
 
 inline void Minions::DebugPrint() const

@@ -48,6 +48,11 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
+	static bool OnSummon(int card_id, GameEngine::Board const& board, int playing_hero, int put_location, GameEngine::Minion & summoning_minion)
+	{
+		return CardCallbackManager::HandleCallback<Callback_OnSummon>(card_id, board, playing_hero, put_location, summoning_minion);
+	}
+
 	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
 	{
 		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, playing_hero, targets, meet_requirements);
@@ -61,6 +66,7 @@ public:
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
 
+	DECLARE_CARD_CALLBACK(OnSummon)
 	DECLARE_CARD_CALLBACK(BattleCry)
 	DECLARE_CARD_CALLBACK(GetRequiredTargets)
 
