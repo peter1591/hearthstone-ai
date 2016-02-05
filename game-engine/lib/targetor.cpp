@@ -9,9 +9,12 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (int i = 0; i < minions.GetMinions().size(); ++i)
-		{
-			auto const& minion = minions.GetMinions()[i];
+		int i = 0;
+		auto it = minions.MinionsBegin();
+		while (true) {
+			if (it == minions.MinionsEnd()) break;
+
+			auto const& minion = *it;
 
 			if (minion.IsTaunt() && !minion.IsStealth()) { // taunt with stealth will not act as taunt
 				if (&board.player_minions == &minions) bitmap.SetOneTarget(Targetor::GetPlayerMinionIndex(i));
@@ -19,6 +22,9 @@ namespace GameEngine {
 				else throw std::runtime_error("logic error");
 				ret = true;
 			}
+
+			i++;
+			it++;
 		}
 
 		return ret;
@@ -30,9 +36,12 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (int i = 0; i < minions.GetMinions().size(); ++i)
-		{
-			auto const& minion = minions.GetMinions()[i];
+		int i = 0;
+		auto it = minions.MinionsBegin();
+		while (true) {
+			if (it == minions.MinionsEnd()) break;
+
+			auto const& minion = *it;
 
 			if (!minion.IsStealth()) {
 				if (&board.player_minions == &minions) bitmap.SetOneTarget(Targetor::GetPlayerMinionIndex(i));
@@ -40,6 +49,9 @@ namespace GameEngine {
 				else throw std::runtime_error("logic error");
 				ret = true;
 			}
+
+			i++;
+			it++;
 		}
 
 		return ret;
@@ -51,12 +63,18 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (int i = 0; i < minions.GetMinions().size(); ++i)
-		{
+		int i = 0;
+		auto it = minions.MinionsBegin();
+		while (true) {
+			if (it == minions.MinionsEnd()) break;
+
 			if (&board.player_minions == &minions) bitmap.SetOneTarget(Targetor::GetPlayerMinionIndex(i));
 			else if (&board.opponent_minions == &minions) bitmap.SetOneTarget(Targetor::GetOpponentMinionIndex(i));
 			else throw std::runtime_error("logic error");
 			ret = true;
+
+			i++;
+			it++;
 		}
 
 		return ret;
@@ -67,9 +85,12 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (int i = 0; i < minions.GetMinions().size(); ++i)
-		{
-			auto const& minion = minions.GetMinions()[i];
+		int i = 0;
+		auto it = minions.MinionsBegin();
+		while (true) {
+			if (it == minions.MinionsEnd()) break;
+
+			auto const& minion = *it;
 
 			if (minion.Attackable()) {
 				if (&board.player_minions == &minions) bitmap.SetOneTarget(Targetor::GetPlayerMinionIndex(i));
@@ -77,6 +98,9 @@ namespace GameEngine {
 				else throw std::runtime_error("logic error");
 				ret = true;
 			}
+
+			i++;
+			it++;
 		}
 
 		return ret;

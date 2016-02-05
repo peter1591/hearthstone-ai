@@ -28,13 +28,11 @@ public:
 	static void TakeDamage(GameEngine::Board & board, int taker_idx, int damage);
 
 private:
-	static void TakeDamage(Minions::container_type::iterator taker, int damage);
-
 	static int GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked);
 
 	// return true if dead
-	static bool RemoveDeadMinion(Minions & minions, Minions::container_type::iterator & it);
-	static void RemoveDeadMinions(Minions & minions);
+	static bool RemoveMinionIfDead(Minions & minions, Minions::container_type::iterator & it);
+	static void RemoveMinionsIfDead(Minions & minions);
 
 	static void Fatigue(PlayerStat &player_stat);
 };
@@ -90,7 +88,7 @@ inline Minions::container_type::iterator StageHelper::GetMinionIterator(GameEngi
 		throw std::runtime_error("logic error");
 	}
 
-	return container->GetMinions().begin() + minion_idx;
+	return container->MinionsBegin() + minion_idx;
 }
 
 inline void StageHelper::TakeDamage(GameEngine::Board & board, int taker_idx, int damage)
@@ -107,11 +105,6 @@ inline void StageHelper::TakeDamage(GameEngine::Board & board, int taker_idx, in
 
 	Minions * container = nullptr;
 	Minions::container_type::iterator taker = GetMinionIterator(board, taker_idx, container);
-	return TakeDamage(taker, damage);
-}
-
-inline void StageHelper::TakeDamage(Minions::container_type::iterator taker, int damage)
-{
 	taker->TakeDamage(damage);
 }
 
@@ -120,8 +113,8 @@ inline int StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine::Board
 	bool player_side = Targetor::IsPlayerSide(origin_attacked);
 
 	int possible_targets = 1 - 1; // +1 for the hero, -1 for the original attack target
-	if (player_side) possible_targets += board.player_minions.GetMinions().size();
-	else possible_targets += board.opponent_minions.GetMinions().size();
+	if (player_side) possible_targets += board.player_minions.GetMinionCount();
+	else possible_targets += board.opponent_minions.GetMinionCount();
 
 	if (possible_targets == 0)
 	{
@@ -188,14 +181,14 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 			Minions * attacked_container = nullptr;
 			Minions::container_type::iterator attacked = GetMinionIterator(board, attacked_idx, attacked_container);
 
-			TakeDamage(attacked, attacker->GetAttack());
-			TakeDamage(attacker, attacked->GetAttack());
+			attacked->TakeDamage(attacker->GetAttack());
+			attacker->TakeDamage(attacked->GetAttack());
 
 			// check minion dead
-			if (StageHelper::RemoveDeadMinion(*attacker_container, attacker) == false) {
+			if (StageHelper::RemoveMinionIfDead(*attacker_container, attacker) == false) {
 				attacker->AttackedOnce();
 			}
-			if (StageHelper::RemoveDeadMinion(*attacked_container, attacked) == false) {
+			if (StageHelper::RemoveMinionIfDead(*attacked_container, attacked) == false) {
 				attacked->AttackedOnce(); // lose stealth if attacked by forgetful attack
 			}
 		}
@@ -218,11 +211,11 @@ inline bool StageHelper::CheckWinLoss(Board &board)
 	return false;
 }
 
-inline void GameEngine::StageHelper::RemoveDeadMinions(Minions & minions)
+inline void GameEngine::StageHelper::RemoveMinionsIfDead(Minions & minions)
 {
-	for (auto it = minions.GetMinions().begin(); it != minions.GetMinions().end();)
+	for (auto it = minions.MinionsBegin(); it != minions.MinionsEnd();)
 	{
-		if (RemoveDeadMinion(minions, it) == false) ++it;
+		if (RemoveMinionIfDead(minions, it) == false) ++it;
 	}
 }
 
@@ -230,19 +223,19 @@ inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
 {
 	if (CheckWinLoss(board)) return true;
 
-	RemoveDeadMinions(board.player_minions);
-	RemoveDeadMinions(board.opponent_minions);
+	RemoveMinionsIfDead(board.player_minions);
+	RemoveMinionsIfDead(board.opponent_minions);
 
 	return false;
 }
 
 // return true if dead
-inline bool StageHelper::RemoveDeadMinion(Minions & minions, Minions::container_type::iterator & it)
+inline bool StageHelper::RemoveMinionIfDead(Minions & minions, Minions::container_type::iterator & it)
 {
 	if (it->GetHP() > 0) return false;
 
 	// TODO: deathrattle
-	it = minions.GetMinions().erase(it);
+	it = minions.MinionsErase(it);
 	return true;
 }
 

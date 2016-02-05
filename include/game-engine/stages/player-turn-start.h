@@ -23,8 +23,8 @@ class StagePlayerTurnStart
 			if (StageHelper::PlayerDrawCard(board)) return;
 
 			// reset minion stat
-			for (auto &minion : board.player_minions.GetMinions()) {
-				minion.TurnStart();
+			for (auto it = board.player_minions.MinionsBegin(); it != board.player_minions.MinionsEnd(); ++it) {
+				it->TurnStart();
 			}
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
