@@ -3,8 +3,11 @@
 
 #include <type_traits>
 #include "game-engine/board.h"
+#include "game-engine/move.h"
+
 #include "card_CS2_188.h"
 #include "card_CS2_189.h"
+#include "card_FP1_007.h"
 
 namespace GameEngine {
 	namespace Cards {
@@ -45,14 +48,14 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool BattleCry(int card_id, GameEngine::Board &board)
+	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
 	{
-		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board);
+		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, playing_hero, targets, meet_requirements);
 	}
 
-	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
+	static bool BattleCry(int card_id, GameEngine::Board &board, GameEngine::Move::PlayMinionData const& play_minion_data)
 	{
-		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, targets, meet_requirements);
+		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, play_minion_data);
 	}
 
 private:

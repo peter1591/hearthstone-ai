@@ -17,9 +17,9 @@ public:
 
 	// Elven Archer
 
-	static void GetRequiredTargets(GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Board const& board, bool playing_hero, TargetorBitmap &targets, bool & meet_requirements)
 	{
-		if (board.GetStageType() == GameEngine::STAGE_TYPE_PLAYER) {
+		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
 			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
 		} 
 		else {
@@ -29,16 +29,15 @@ public:
 		meet_requirements = true; // it's fine even if no target available
 	}
 
-	static void BattleCry(GameEngine::Board & board)
+	static void BattleCry(GameEngine::Board & board, GameEngine::Move::PlayMinionData const& play_minion_data)
 	{
 		constexpr int damage = 1;
-		int damage_taker_idx = board.data.player_play_minion_data.data.target;
 
 #ifdef DEBUG
-		if (damage_taker_idx < 0) throw std::runtime_error("logic error");
+		if (play_minion_data.target < 0) throw std::runtime_error("logic error");
 #endif
 
-		StageHelper::TakeDamage(board, damage_taker_idx, damage);
+		StageHelper::TakeDamage(board, play_minion_data.target, damage);
 	}
 };
 

@@ -93,7 +93,7 @@ class StagePlayerChooseBoardMove
 					if (!can_play_minion) continue;
 					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets, meet_requirements)
+					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetPlayerHeroIndex(), required_targets, meet_requirements)
 						&& meet_requirements == false)
 					{
 						break;
@@ -170,7 +170,7 @@ class StagePlayerChooseBoardMove
 
 			TargetorBitmap required_targets;
 			bool meet_requirements;
-			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, required_targets, meet_requirements) &&
+			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetPlayerHeroIndex(), required_targets, meet_requirements) &&
 				meet_requirements == false)
 			{
 				return;

@@ -16,31 +16,32 @@ public:
 
 	// Abusive Sergant
 
-	static void GetRequiredTargets(GameEngine::Board const& board, TargetorBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
 	{
 		Targetor::TargetType target_type;
 
-		if (board.GetStageType() == GameEngine::STAGE_TYPE_PLAYER)
+		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
 			target_type = Targetor::TARGET_TYPE_PLAYER_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL;
-		else
+		}
+		else {
 			target_type = Targetor::TARGET_TYPE_OPPONENT_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL;
+		}
 
 		targets = Targetor::GetTargets(target_type, board);
 		meet_requirements = true; // it's fine even if no target available
 	}
 
-	static void BattleCry(GameEngine::Board & board)
+	static void BattleCry(GameEngine::Board & board, GameEngine::Move::PlayMinionData const& play_minion_data)
 	{
 		constexpr int attack_boost = 2;
 
-		int target_idx = board.data.player_play_minion_data.data.target;
-		if (target_idx < 0) {
+		if (play_minion_data.target < 0) {
 			// no target to buff
 			return;
 		}
 
 		Minions *minions;
-		auto minion_it = GameEngine::StageHelper::GetMinionIterator(board, target_idx, minions);
+		auto minion_it = GameEngine::StageHelper::GetMinionIterator(board, play_minion_data.target, minions);
 		minion_it->AddAttackThisTurn(attack_boost);
 	}
 };
