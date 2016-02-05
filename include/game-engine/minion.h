@@ -59,7 +59,7 @@ class Minion
 		int origin_hp;
 		int origin_max_hp;
 
-		// current stat
+		// current stat (exclude aura)
 		int attack;
 		int hp;
 		int max_hp;

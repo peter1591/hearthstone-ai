@@ -13,10 +13,6 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayerDrawCard(Board &board);
 	static bool OpponentDrawCard(Board &board);
 
-	// check if one of the heros dead, and move to the corresponding stage
-	// return true if game ends (i.e., state changed)
-	static bool CheckWinLoss(Board &board);
-
 	static bool CheckHeroMinionDead(Board & board);
 
 public:
@@ -41,7 +37,7 @@ inline bool StageHelper::PlayerDrawCard(Board & board)
 {
 	if (board.player_deck.GetCards().empty()) {
 		StageHelper::Fatigue(board.player_stat);
-		return StageHelper::CheckWinLoss(board);
+		return StageHelper::CheckHeroMinionDead(board);
 	}
 
 	Card draw_card = board.player_deck.Draw();
@@ -61,7 +57,7 @@ inline bool StageHelper::OpponentDrawCard(Board & board)
 {
 	if (board.opponent_cards.GetDeckCount() == 0) {
 		StageHelper::Fatigue(board.opponent_stat);
-		return StageHelper::CheckWinLoss(board);
+		return StageHelper::CheckHeroMinionDead(board);
 	}
 
 	if (board.opponent_cards.GetHandCount() < 10) {
@@ -183,32 +179,8 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 
 			attacked->TakeDamage(attacker->GetAttack());
 			attacker->TakeDamage(attacked->GetAttack());
-
-			// check minion dead
-			if (StageHelper::RemoveMinionIfDead(*attacker_container, attacker) == false) {
-				attacker->AttackedOnce();
-			}
-			if (StageHelper::RemoveMinionIfDead(*attacked_container, attacked) == false) {
-				attacked->AttackedOnce(); // lose stealth if attacked by forgetful attack
-			}
 		}
 	}
-}
-
-// return true if player's dead
-inline bool StageHelper::CheckWinLoss(Board &board)
-{
-	if (UNLIKELY(board.player_stat.hp <= 0)) {
-		board.stage = STAGE_LOSS;
-		return true;
-	}
-
-	if (UNLIKELY(board.opponent_stat.hp <= 0)) {
-		board.stage = STAGE_WIN;
-		return true;
-	}
-
-	return false;
 }
 
 inline void GameEngine::StageHelper::RemoveMinionsIfDead(Minions & minions)
@@ -221,12 +193,20 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Minions & minions)
 
 inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
 {
-	if (CheckWinLoss(board)) return true;
+	if (UNLIKELY(board.player_stat.hp <= 0)) {
+		board.stage = STAGE_LOSS;
+		return true;
+	}
+
+	if (UNLIKELY(board.opponent_stat.hp <= 0)) {
+		board.stage = STAGE_WIN;
+		return true;
+	}
 
 	RemoveMinionsIfDead(board.player_minions);
 	RemoveMinionsIfDead(board.opponent_minions);
 
-	return false;
+	return false; // state not changed
 }
 
 // return true if dead
