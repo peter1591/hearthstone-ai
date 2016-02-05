@@ -1,5 +1,5 @@
-#ifndef GAME_ENGINE_CARDS_CARD_FP1_007
-#define GAME_ENGINE_CARDS_CARD_FP1_007
+#ifndef GAME_ENGINE_CARDS_CARD_FP1_002
+#define GAME_ENGINE_CARDS_CARD_FP1_002
 
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
@@ -11,28 +11,28 @@
 namespace GameEngine {
 namespace Cards {
 
-class Card_FP1_007
+class Card_FP1_002
 {
 public:
-	static constexpr int card_id = CARD_ID_FP1_007;
+	static constexpr int card_id = CARD_ID_FP1_002;
 
-	// Nerubian Egg
+	// Haunted Creeper
 
 	static void Deathrattle(GameEngine::Board & board, int targetor_idx)
 	{
-		// summon Nerubian (AT_036t) when death at [pos]
-		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
+		// summon (FP1_002t) * 2 when death
+		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
 		
 		GameEngine::Move::PlayMinionData data;
 		data.put_location = targetor_idx;
 		data.target = -1;
 
 		StageHelper::SummonMinion(board, card, data);
+		StageHelper::SummonMinion(board, card, data);
 	}
 
 	static void OnSummon(GameEngine::Board const&, int, int, GameEngine::Minion & summoning_minion)
 	{
-		// summon Nerubian (AT_036t) when death
 		summoning_minion.AddOnDeathTrigger(Deathrattle);
 	}
 };

@@ -36,7 +36,10 @@ class Minions
 		container_type::iterator MinionsBegin() { return this->minions.begin(); }
 		container_type::const_iterator MinionsEnd() const { return this->minions.cend(); }
 		container_type::iterator MinionsEnd() { return this->minions.end(); }
-		container_type::iterator MinionsErase(container_type::iterator it) { return this->minions.erase(it); }
+		container_type::iterator MinionsErase(container_type::iterator it) 
+		{
+			return this->minions.erase(it); 
+		}
 
 		bool IsFull() const { return this->minions.size() == MAX_MINIONS; }
 
