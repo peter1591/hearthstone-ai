@@ -33,7 +33,7 @@ namespace GameEngine {
 			return true; \
 		} \
 		template <typename TestResult, typename... Params> \
-		static bool CallInternal(std::enable_if_t<(sizeof(TestResult) != sizeof(test_ret_if_yes))>*, Params&&... params) \
+		static bool CallInternal(std::enable_if_t<(sizeof(TestResult) != sizeof(test_ret_if_yes))>*, Params&&...) \
 		{ \
 			return false; \
 		} \

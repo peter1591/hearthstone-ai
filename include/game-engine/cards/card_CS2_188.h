@@ -23,8 +23,11 @@ public:
 		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
 			target_type = Targetor::TARGET_TYPE_PLAYER_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL;
 		}
-		else {
+		else if (playing_hero == Targetor::GetOpponentHeroIndex()) {
 			target_type = Targetor::TARGET_TYPE_OPPONENT_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL;
+		}
+		else {
+			throw std::runtime_error("consistency check failed");
 		}
 
 		targets = Targetor::GetTargets(target_type, board);

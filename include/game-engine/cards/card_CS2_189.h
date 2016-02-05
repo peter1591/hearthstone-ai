@@ -22,8 +22,11 @@ public:
 		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
 			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
 		} 
-		else {
+		else if (playing_hero == Targetor::GetOpponentHeroIndex()) {
 			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
+		}
+		else {
+			throw std::runtime_error("consistency check failed");
 		}
 
 		meet_requirements = true; // it's fine even if no target available
