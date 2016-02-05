@@ -24,20 +24,30 @@ class Move
 			unsigned int rand_seed;
 		};
 
+		struct PlayMinionData
+		{
+			int put_location;
+			int target;
+
+			bool operator==(PlayMinionData const& rhs) const
+			{
+				if (this->put_location != rhs.put_location) return false;
+				if (this->target != rhs.target) return false;
+				return true;
+			}
+
+			bool operator!=(PlayMinionData const& rhs) const { return !(*this == rhs); }
+		};
+
 		struct PlayerPlayMinionData {
 			Hand::Locator hand_card;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			int location; // where to put the minion
-#endif
-			int required_target;
+
+			PlayMinionData data;
 
 			bool operator==(PlayerPlayMinionData const& rhs) const
 			{
 				if (this->hand_card != rhs.hand_card) return false;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-				if (this->location != rhs.location) return false;
-#endif
-				if (this->required_target != rhs.required_target) return false;
+				if (this->data != rhs.data) return false;
 				return true;
 			}
 
@@ -46,16 +56,12 @@ class Move
 
 		struct OpponentPlayMinionData {
 			Card card;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			int location; // where to put the minion
-#endif
+			PlayMinionData data;
 
 			bool operator==(OpponentPlayMinionData const& rhs) const
 			{
 				if (this->card != rhs.card) return false;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-				if (this->location != rhs.location) return false;
-#endif
+				if (this->data != rhs.data) return false;
 				return true;
 			}
 
@@ -145,6 +151,19 @@ inline bool Move::operator!=(const Move &rhs) const
 } // namespace GameEngine
 
 namespace std {
+	template <> struct hash<GameEngine::Move::PlayMinionData> {
+		typedef GameEngine::Move::PlayMinionData argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.put_location);
+			GameEngine::hash_combine(result, s.target);
+
+			return result;
+		}
+	};
+
 	template <> struct hash<GameEngine::Move::PlayerPlayMinionData> {
 		typedef GameEngine::Move::PlayerPlayMinionData argument_type;
 		typedef std::size_t result_type;
@@ -152,10 +171,7 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.hand_card);
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			GameEngine::hash_combine(result, s.location);
-#endif
-			GameEngine::hash_combine(result, s.required_target);
+			GameEngine::hash_combine(result, s.data);
 
 			return result;
 		}
@@ -168,9 +184,7 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.card);
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			GameEngine::hash_combine(result, s.location);
-#endif
+			GameEngine::hash_combine(result, s.data);
 
 			return result;
 		}

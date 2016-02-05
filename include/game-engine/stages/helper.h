@@ -10,11 +10,16 @@ namespace GameEngine {
 
 class StageHelper
 {
+public:
+	typedef Move::PlayMinionData PlayMinionData;
+
 public: // return true if game state changed (e.g., win/loss)
 	static bool PlayerDrawCard(Board &board);
 	static bool OpponentDrawCard(Board &board);
 
 	static bool CheckHeroMinionDead(Board & board);
+
+	static bool PlayMinion(Board & board, Card const& card, PlayMinionData const& data);
 
 public:
 	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);

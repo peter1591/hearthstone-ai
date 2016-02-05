@@ -83,9 +83,7 @@ class StageOpponentChooseBoardMove
 				for (const auto &card : playable_minions) {
 					move.action = Move::ACTION_OPPONENT_PLAY_MINION;
 					move.data.opponent_play_minion_data.card = card;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-					move.data.opponent_play_minion_data.location = (int)board.opponent_minions.GetMinionCount();
-#endif
+					move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount());
 					moves.AddMove(move, weight_play_minion);
 				}
 			}
@@ -148,11 +146,11 @@ class StageOpponentChooseBoardMove
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
 			for (int i = 0; i <= (int)board.opponent_minions.GetMinionCount(); ++i) {
-				move.data.opponent_play_minion_data.location = i;
+				move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex(i);
 				next_move_getter.AddItem(move);
 			}
 #else
-			(void)board;
+			move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount());
 			next_move_getter.AddItem(move);
 #endif
 		}

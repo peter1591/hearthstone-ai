@@ -19,26 +19,14 @@ class StagePlayerPutMinion
 
 		static void Go(Board &board)
 		{
-			Minion minion;
 			const Board::PlayerPlayMinionData &data = board.data.player_play_minion_data;
 
 			auto playing_card = board.player_hand.GetCard(data.hand_card);
-
 			board.player_hand.RemoveCard(data.hand_card);
 
 			board.player_stat.crystal.CostCrystals(playing_card.cost);
 
-			Cards::CardCallbackManager::BattleCry(playing_card.id, board);
-			if (StageHelper::CheckHeroMinionDead(board)) return;
-
-			minion.Summon(playing_card);
-
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			int put_minion_location = data.location - Targetor::GetPlayerMinionIndex(0);
-			board.player_minions.AddMinion(minion, put_minion_location);
-#else
-			board.player_minions.AddMinion(minion); // add to the rightmost
-#endif
+			StageHelper::PlayMinion(board, playing_card, data.data);
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}

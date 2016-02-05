@@ -16,25 +16,14 @@ class StageOpponentPutMinion
 
 		static void Go(Board &board)
 		{
-			Minion minion;
 			const Board::OpponentPlayMinionData &data = board.data.opponent_play_minion_data;
 
 			board.opponent_cards.PlayCardFromHand(data.card);
 
 			board.opponent_stat.crystal.CostCrystals(data.card.cost);
 
-			// Get initialized minion with original card's attack/hp/max-hp
-			minion.Summon(data.card);
-
-			// TODO: handle battlecry
-
-
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			board.opponent_minions.AddMinion(minion, data.location);
-#else
-			board.opponent_minions.AddMinion(minion); // add to the rightmost
-#endif
-
+			StageHelper::PlayMinion(board, data.card, data.data);
+			
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}
 };

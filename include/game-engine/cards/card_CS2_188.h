@@ -33,14 +33,14 @@ public:
 	{
 		constexpr int attack_boost = 2;
 
-		int target_idx = board.data.player_play_minion_data.required_target;
+		int target_idx = board.data.player_play_minion_data.data.target;
 		if (target_idx < 0) {
 			// no target to buff
 			return;
 		}
 
 		Minions *minions;
-		auto minion_it = StageHelper::GetMinionIterator(board, target_idx, minions);
+		auto minion_it = GameEngine::StageHelper::GetMinionIterator(board, target_idx, minions);
 		minion_it->AddAttackThisTurn(attack_boost);
 	}
 };
