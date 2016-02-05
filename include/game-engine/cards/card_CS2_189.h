@@ -17,7 +17,7 @@ public:
 
 	// Elven Archer
 
-	static void GetRequiredTargets(GameEngine::Board const& board, bool playing_hero, TargetorBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
 	{
 		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
 			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);

@@ -80,10 +80,23 @@ class StageOpponentChooseBoardMove
 			bool can_play_minion = !board.opponent_minions.IsFull();
 			board.opponent_cards.GetPossiblePlayableMinions(board.opponent_stat, playable_minions);
 			if (can_play_minion) {
-				for (const auto &card : playable_minions) {
+				for (const auto &playing_card : playable_minions) {
+					if (board.opponent_stat.crystal.GetCurrent() < playing_card.cost) continue;
+
+					TargetorBitmap required_targets;
+					bool meet_requirements;
+					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetOpponentHeroIndex(), required_targets, meet_requirements)
+						&& meet_requirements == false)
+					{
+						break;
+					}
+
 					move.action = Move::ACTION_OPPONENT_PLAY_MINION;
-					move.data.opponent_play_minion_data.card = card;
+					move.data.opponent_play_minion_data.card = playing_card;
 					move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount());
+					if (required_targets.None()) move.data.opponent_play_minion_data.data.target = 0;
+					else move.data.opponent_play_minion_data.data.target = required_targets.GetOneTarget();
+
 					moves.AddMove(move, weight_play_minion);
 				}
 			}
@@ -137,21 +150,27 @@ class StageOpponentChooseBoardMove
 		}
 
 	private:
-		static void GetNextMoves_PlayMinion(const Card &card, const Board &board, NextMoveGetter &next_move_getter)
+		static void GetNextMoves_PlayMinion(const Card &playing_card, const Board &board, NextMoveGetter &next_move_getter)
 		{
-			Move move;
+			if (board.opponent_stat.crystal.GetCurrent() < playing_card.cost) return;
 
-			move.action = Move::ACTION_OPPONENT_PLAY_MINION;
-			move.data.opponent_play_minion_data.card = card;
+			TargetorBitmap required_targets;
+			bool meet_requirements;
+			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetOpponentHeroIndex(), required_targets, meet_requirements) &&
+				meet_requirements == false)
+			{
+				return;
+		}
+
+			// TODO: check play requirements
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = 0; i <= (int)board.opponent_minions.GetMinionCount(); ++i) {
-				move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex(i);
-				next_move_getter.AddItem(move);
+			for (int i = Targetor::GetOpponentMinionIndex(0); i <= Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount()); ++i)
+			{
+				next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, i, required_targets));
 			}
 #else
-			move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount());
-			next_move_getter.AddItem(move);
+			next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount()), required_targets));
 #endif
 		}
 

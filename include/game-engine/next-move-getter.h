@@ -26,6 +26,22 @@ public:
 		bool done;
 	};
 
+	class ItemOpponentPlayMinion
+	{
+	public:
+		ItemOpponentPlayMinion(Card card, int put_location, TargetorBitmap required_targets);
+		ItemOpponentPlayMinion* Clone() const;
+		bool GetNextMove(Move & move);
+		bool operator==(ItemOpponentPlayMinion const& rhs) const;
+		bool operator!=(ItemOpponentPlayMinion const& rhs) const;
+
+	private:
+		Card playing_card;
+		int put_location;
+		TargetorBitmap required_targets;
+		bool done;
+	};
+
 	class ItemAttack
 	{
 	public:
@@ -48,9 +64,11 @@ public:
 	void AddItem(Move && move);
 	void AddItem(ItemAttack && items);
 	void AddItem(ItemPlayerPlayMinion && items);
+	void AddItem(ItemOpponentPlayMinion && items);
 	void AddItems(std::list<Move> && items);
 	void AddItems(std::list<ItemAttack> && items);
 	void AddItems(std::list<ItemPlayerPlayMinion> && items);
+	void AddItems(std::list<ItemOpponentPlayMinion> && items);
 
 	bool GetNextMove(Move &move);
 	bool Empty();
@@ -66,6 +84,7 @@ private:
 	std::list<Move> moves;
 	std::list<ItemAttack> items_player_attack;
 	std::list<ItemPlayerPlayMinion> items_player_play_minion;
+	std::list<ItemOpponentPlayMinion> items_opponent_play_minion;
 
 	bool is_cached_move_valid;
 	Move cached_move;
@@ -134,6 +153,16 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveG
 	this->items_player_play_minion.splice(this->items_player_play_minion.end(), std::move(items));
 }
 
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemOpponentPlayMinion && item)
+{
+	this->items_opponent_play_minion.push_back(std::move(item));
+}
+
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemOpponentPlayMinion> && items)
+{
+	this->items_opponent_play_minion.splice(this->items_opponent_play_minion.end(), std::move(items));
+}
+
 template<typename T>
 inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& container, Move &move)
 {
@@ -163,6 +192,7 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
 
 	if (this->GetNextMoveFromContainer(this->items_player_attack, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_player_play_minion, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_opponent_play_minion, move)) return true;
 	return false;
 }
 
@@ -171,6 +201,7 @@ inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) c
 	if (!IsEqual(this->moves, rhs.moves)) return false;
 	if (!IsEqual(this->items_player_attack, rhs.items_player_attack)) return false;
 	if (!IsEqual(this->items_player_play_minion, rhs.items_player_play_minion)) return false;
+	if (!IsEqual(this->items_opponent_play_minion, rhs.items_opponent_play_minion)) return false;
 	return true;
 }
 
@@ -230,6 +261,52 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator==(ItemPla
 }
 
 inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator!=(ItemPlayerPlayMinion const & rhs) const
+{
+	return !(*this == rhs);
+}
+
+inline GameEngine::NextMoveGetter::ItemOpponentPlayMinion::ItemOpponentPlayMinion(
+	Card playing_card, int put_location, TargetorBitmap required_targets)
+	: playing_card(playing_card), put_location(put_location), required_targets(required_targets)
+{
+	this->done = false;
+}
+
+inline GameEngine::NextMoveGetter::ItemOpponentPlayMinion * GameEngine::NextMoveGetter::ItemOpponentPlayMinion::Clone() const
+{
+	return new ItemOpponentPlayMinion(*this);
+}
+
+inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::GetNextMove(Move & move)
+{
+	if (this->done) return false;
+
+	move.action = Move::ACTION_OPPONENT_PLAY_MINION;
+	move.data.opponent_play_minion_data.card = this->playing_card;
+	move.data.opponent_play_minion_data.data.put_location = this->put_location;
+
+	if (this->required_targets.None())
+	{
+		move.data.opponent_play_minion_data.data.target = -1;
+		this->done = true;
+	}
+	else {
+		move.data.opponent_play_minion_data.data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.opponent_play_minion_data.data.target);
+		if (this->required_targets.None()) this->done = true;
+	}
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator==(ItemOpponentPlayMinion const & rhs) const
+{
+	if (this->playing_card != rhs.playing_card) return false;
+	if (this->put_location != rhs.put_location) return false;
+	if (this->required_targets != rhs.required_targets) return false;
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator!=(ItemOpponentPlayMinion const & rhs) const
 {
 	return !(*this == rhs);
 }

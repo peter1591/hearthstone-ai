@@ -82,6 +82,7 @@ inline bool CardCallbackManager::HandleCallback(int card_id, Params&&... params)
 
 HANDLE_CARD_CALLBACK(Card_CS2_188)
 HANDLE_CARD_CALLBACK(Card_CS2_189)
+HANDLE_CARD_CALLBACK(Card_FP1_007)
 
 #undef HANDLE_CARD_CALLBACK
 	default:
