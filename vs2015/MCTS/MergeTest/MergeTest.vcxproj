@@ -133,6 +133,7 @@
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
+    <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp" />
     <ClCompile Include="merge-test.cpp" />
   </ItemGroup>
@@ -143,6 +144,10 @@
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />

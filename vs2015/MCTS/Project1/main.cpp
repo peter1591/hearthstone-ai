@@ -8,8 +8,10 @@
 #include "task.h"
 #include "decider.h"
 
+#include "game-engine/cards/card_FP1_007.h"
+
 void InitializeDeck1(GameEngine::Deck &deck)
-{	
+{
 	for (int i = 0; i < 27; ++i) {
 		deck.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	}
@@ -17,25 +19,27 @@ void InitializeDeck1(GameEngine::Deck &deck)
 
 void InitializeHand1(GameEngine::Hand &hand)
 {
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
-	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
-	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
-	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
+	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
+	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // arcane explosion
 
-	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
 }
 
 void InitializeBoard(GameEngine::Board &board)
 {
-	board.player_stat.hp = 10;
+	board.player_stat.hp = 20;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 10;
+	board.opponent_stat.hp = 20;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -46,15 +50,25 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeHand1(board.player_hand);
 
 	GameEngine::Minion minion;
-	//minion.Set(111, 1, 1, 1);
-	//minion.TurnStart();
-	//board.player_minions.AddMinion(minion);
 
+	minion = GameEngine::Minion();
+	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
+	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
+	minion.TurnStart();
+	board.player_minions.AddMinion(minion);
+
+	//minion = GameEngine::Minion();
 	//minion.Set(213, 2, 2, 3);
 	//minion.TurnStart();
 	//board.player_minions.AddMinion(minion);
 
-	minion.Set(222, 30, 1, 2);
+	minion = GameEngine::Minion();
+	minion.Set(222, 30, 2, 2);
+	minion.TurnStart();
+	board.opponent_minions.AddMinion(minion);
+
+	minion = GameEngine::Minion();
+	minion.Set(222, 10, 7, 7);
 	minion.TurnStart();
 	board.opponent_minions.AddMinion(minion);
 

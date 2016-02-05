@@ -31,6 +31,12 @@
     <Filter Include="Source Files\libjson">
       <UniqueIdentifier>{8407d611-c406-4ee2-a802-fee2201a3828}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\cards">
+      <UniqueIdentifier>{f36eda17-845d-4622-a742-877b0722f6bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game-engine\stages">
+      <UniqueIdentifier>{126e8ab6-5b8e-42ae-84e4-76de048faf8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
@@ -65,6 +71,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp">
       <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp">
+      <Filter>Source Files\game-engine\stages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +184,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h">
       <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\common.h">
+      <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

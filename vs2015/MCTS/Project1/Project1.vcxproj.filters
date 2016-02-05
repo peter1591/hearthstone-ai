@@ -34,6 +34,9 @@
     <Filter Include="Header Files\game-engine\stages">
       <UniqueIdentifier>{4af59b99-7273-46d6-bfa9-0f27ab7679c6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game-engine\stages">
+      <UniqueIdentifier>{7f410f1e-36cc-4df5-b7d9-bf66907ad796}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp">
       <Filter>Source Files\game-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp">
+      <Filter>Source Files\game-engine\stages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h">
       <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\triggers.h">
+      <Filter>Header Files\game-engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
