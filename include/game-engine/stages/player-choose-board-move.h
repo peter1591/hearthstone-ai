@@ -102,7 +102,7 @@ class StagePlayerChooseBoardMove
 					move.action = Move::ACTION_PLAYER_PLAY_MINION;
 					move.data.player_play_minion_data.hand_card = hand_idx;
 					move.data.player_play_minion_data.data.put_location = Targetor::GetPlayerMinionIndex((int)board.player_minions.GetMinionCount());
-					if (required_targets.None()) move.data.player_play_minion_data.data.target = 0;
+					if (required_targets.None()) move.data.player_play_minion_data.data.target = -1;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
 
 					moves.AddMove(move, weight_play_minion);

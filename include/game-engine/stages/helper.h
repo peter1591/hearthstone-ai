@@ -226,6 +226,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, Minions 
 		{
 			death_trigger(board);
 		}
+		death_triggers.clear();
 	}
 }
 
