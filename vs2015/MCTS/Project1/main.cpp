@@ -19,7 +19,7 @@ void InitializeHand1(GameEngine::Hand &hand)
 {
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
-	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
 	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
@@ -30,12 +30,12 @@ void InitializeHand1(GameEngine::Hand &hand)
 
 void InitializeBoard(GameEngine::Board &board)
 {
-	board.player_stat.hp = 30;
+	board.player_stat.hp = 10;
 	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 30;
+	board.opponent_stat.hp = 10;
 	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -64,7 +64,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 4;
+	constexpr int threads = 1;
 	constexpr int sec_each_run = 1;
 
 	std::mt19937 random_generator((unsigned int)time(nullptr));
