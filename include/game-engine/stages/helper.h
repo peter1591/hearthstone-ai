@@ -4,6 +4,7 @@
 #include "game-engine/stages/common.h"
 #include "game-engine/board.h"
 #include "game-engine/targetor.h"
+#include "game-engine/triggers.h"
 
 namespace GameEngine {
 
@@ -27,8 +28,8 @@ private:
 	static int GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked);
 
 	// return true if dead
-	static bool RemoveMinionIfDead(Minions & minions, Minions::container_type::iterator & it);
-	static void RemoveMinionsIfDead(Minions & minions);
+	static bool RemoveMinionIfDead(Board & board, Minions & minions, Minions::container_type::iterator & it);
+	static void RemoveMinionsIfDead(Board & board, Minions & minions);
 
 	static void Fatigue(PlayerStat &player_stat);
 };
@@ -183,12 +184,28 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_id
 	}
 }
 
-inline void GameEngine::StageHelper::RemoveMinionsIfDead(Minions & minions)
+inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, Minions & minions)
 {
 	for (auto it = minions.MinionsBegin(); it != minions.MinionsEnd();)
 	{
-		if (RemoveMinionIfDead(minions, it) == false) ++it;
+		if (RemoveMinionIfDead(board, minions, it) == false) ++it;
 	}
+}
+
+// return true if dead
+inline bool StageHelper::RemoveMinionIfDead(Board & board, Minions & minions, Minions::container_type::iterator & it)
+{
+	if (it->GetHP() > 0) return false;
+
+	auto triggers = it->MoveOutOnDeathTriggers();
+	it = minions.MinionsErase(it);
+
+	for (auto const& trigger : triggers)
+	{
+		(*trigger)(board, minions, it);
+	}
+
+	return true;
 }
 
 inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
@@ -203,20 +220,10 @@ inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
 		return true;
 	}
 
-	RemoveMinionsIfDead(board.player_minions);
-	RemoveMinionsIfDead(board.opponent_minions);
+	RemoveMinionsIfDead(board, board.player_minions);
+	RemoveMinionsIfDead(board, board.opponent_minions);
 
 	return false; // state not changed
-}
-
-// return true if dead
-inline bool StageHelper::RemoveMinionIfDead(Minions & minions, Minions::container_type::iterator & it)
-{
-	if (it->GetHP() > 0) return false;
-
-	// TODO: deathrattle
-	it = minions.MinionsErase(it);
-	return true;
 }
 
 inline void StageHelper::Fatigue(PlayerStat & player_stat)
