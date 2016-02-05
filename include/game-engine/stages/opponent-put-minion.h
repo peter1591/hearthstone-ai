@@ -17,7 +17,7 @@ class StageOpponentPutMinion
 		static void Go(Board &board)
 		{
 			Minion minion;
-			const Board::OpponentPutMinionData &data = board.data.opponent_put_minion_data;
+			const Board::OpponentPlayMinionData &data = board.data.opponent_play_minion_data;
 
 			board.opponent_cards.PlayCardFromHand(data.card);
 

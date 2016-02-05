@@ -97,7 +97,7 @@ class StageOpponentChooseBoardMove
 			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_ATTACKABLE, board);
+				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED, board);
 				
 				while (!attacker.None()) {
 					int attacker_idx = attacker.GetOneTarget();
@@ -159,11 +159,7 @@ class StageOpponentChooseBoardMove
 
 		static void PlayHandCardMinion(Board &board, const Move &move)
 		{
-			const Move::OpponentPlayMinionData &data = move.data.opponent_play_minion_data;
-			board.data.opponent_put_minion_data.card = data.card;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			board.data.opponent_put_minion_data.location = data.location;
-#endif
+			board.data.opponent_play_minion_data = move.data.opponent_play_minion_data;
 			board.stage = STAGE_OPPONENT_PUT_MINION;
 		}
 
@@ -180,11 +176,7 @@ class StageOpponentChooseBoardMove
 
 		static void OpponentAttack(Board &board, const Move &move)
 		{
-			const Move::AttackData &data = move.data.attack_data;
-
-			board.data.opponent_attack_data.attacker_idx = data.attacker_idx;
-			board.data.opponent_attack_data.attacked_idx = data.attacked_idx;
-
+			board.data.attack_data = move.data.attack_data;
 			board.stage = STAGE_OPPONENT_ATTACK;
 		}
 

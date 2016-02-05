@@ -96,32 +96,15 @@ class Board
 		}
 
 	public: // internal state data for cross-stage communication
-		struct PlayerPutMinionData {
-			Hand::Locator hand_card;
-			int location; // where to put the minion
-			int required_target;
-		};
 
-		struct OpponentPutMinionData {
-			Card card;
-			int location;
-		};
-
-		struct PlayerAttackData {
-			int attacker_idx;
-			int attacked_idx;
-		};
-
-		struct OpponentAttackData {
-			int attacker_idx;
-			int attacked_idx;
-		};
+		typedef Move::PlayerPlayMinionData PlayerPlayMinionData;
+		typedef Move::OpponentPlayMinionData OpponentPlayMinionData;
+		typedef Move::AttackData AttackData;
 
 		union Data {
-			PlayerPutMinionData player_put_minion_data;
-			OpponentPutMinionData opponent_put_minion_data;
-			PlayerAttackData player_attack_data;
-			OpponentAttackData opponent_attack_data;
+			PlayerPlayMinionData player_play_minion_data;
+			OpponentPlayMinionData opponent_play_minion_data;
+			AttackData attack_data;
 
 			Data() {}
 
@@ -152,24 +135,16 @@ inline bool Board::operator==(const Board &rhs) const
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
-		if (this->data.player_put_minion_data.hand_card != rhs.data.player_put_minion_data.hand_card) return false;
-		if (this->data.player_put_minion_data.location != rhs.data.player_put_minion_data.location) return false;
-		if (this->data.player_put_minion_data.required_target != rhs.data.player_put_minion_data.required_target) return false;
+		if (this->data.player_play_minion_data != rhs.data.player_play_minion_data) return false;
 		break;
 
 	case GameEngine::STAGE_OPPONENT_PUT_MINION:
-		if (this->data.opponent_put_minion_data.card != rhs.data.opponent_put_minion_data.card) return false;
-		if (this->data.opponent_put_minion_data.location != rhs.data.opponent_put_minion_data.location) return false;
+		if (this->data.opponent_play_minion_data != rhs.data.opponent_play_minion_data) return false;
 		break;
 
 	case GameEngine::STAGE_PLAYER_ATTACK:
-		if (this->data.player_attack_data.attacker_idx != rhs.data.player_attack_data.attacker_idx) return false;
-		if (this->data.player_attack_data.attacked_idx != rhs.data.player_attack_data.attacked_idx) return false;
-		break;
-
 	case GameEngine::STAGE_OPPONENT_ATTACK:
-		if (this->data.opponent_attack_data.attacker_idx != rhs.data.opponent_attack_data.attacker_idx) return false;
-		if (this->data.opponent_attack_data.attacked_idx != rhs.data.opponent_attack_data.attacked_idx) return false;
+		if (this->data.attack_data != rhs.data.attack_data) return false;
 		break;
 
 	default:
@@ -204,24 +179,16 @@ namespace std {
 			// hash for the union
 			switch (s.stage) {
 				case GameEngine::STAGE_PLAYER_PUT_MINION:
-					GameEngine::hash_combine(result, s.data.player_put_minion_data.hand_card);
-					GameEngine::hash_combine(result, s.data.player_put_minion_data.location);
-					GameEngine::hash_combine(result, s.data.player_put_minion_data.required_target);
+					GameEngine::hash_combine(result, s.data.player_play_minion_data);
 					break;
 
 				case GameEngine::STAGE_OPPONENT_PUT_MINION:
-					GameEngine::hash_combine(result, s.data.opponent_put_minion_data.card);
-					GameEngine::hash_combine(result, s.data.opponent_put_minion_data.location);
+					GameEngine::hash_combine(result, s.data.opponent_play_minion_data);
 					break;
 
 				case GameEngine::STAGE_PLAYER_ATTACK:
-					GameEngine::hash_combine(result, s.data.player_attack_data.attacker_idx);
-					GameEngine::hash_combine(result, s.data.player_attack_data.attacked_idx);
-					break;
-
 				case GameEngine::STAGE_OPPONENT_ATTACK:
-					GameEngine::hash_combine(result, s.data.opponent_attack_data.attacker_idx);
-					GameEngine::hash_combine(result, s.data.opponent_attack_data.attacked_idx);
+					GameEngine::hash_combine(result, s.data.attack_data);
 					break;
 
 				default:

@@ -32,7 +32,7 @@ public:
 	static void BattleCry(GameEngine::Board & board)
 	{
 		constexpr int damage = 1;
-		int damage_taker_idx = board.data.player_put_minion_data.required_target;
+		int damage_taker_idx = board.data.player_play_minion_data.required_target;
 
 #ifdef DEBUG
 		if (damage_taker_idx < 0) throw std::runtime_error("logic error");

@@ -20,7 +20,7 @@ class StagePlayerPutMinion
 		static void Go(Board &board)
 		{
 			Minion minion;
-			const Board::PlayerPutMinionData &data = board.data.player_put_minion_data;
+			const Board::PlayerPlayMinionData &data = board.data.player_play_minion_data;
 
 			auto playing_card = board.player_hand.GetCard(data.hand_card);
 

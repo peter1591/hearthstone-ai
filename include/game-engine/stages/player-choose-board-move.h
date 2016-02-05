@@ -150,7 +150,7 @@ class StagePlayerChooseBoardMove
 			switch (move.action)
 			{
 				case Move::ACTION_PLAYER_PLAY_MINION:
-					return StagePlayerChooseBoardMove::PlayHandCardMinion(board, move);
+					return StagePlayerChooseBoardMove::PlayMinion(board, move);
 
 				case Move::ACTION_ATTACK:
 					return StagePlayerChooseBoardMove::PlayerAttack(board, move);
@@ -186,26 +186,15 @@ class StagePlayerChooseBoardMove
 			}
 		}
 
-		static void PlayHandCardMinion(Board &board, const Move &move)
+		static void PlayMinion(Board &board, const Move &move)
 		{
-			const Move::PlayerPlayMinionData &data = move.data.player_play_minion_data;
-
-			board.data.player_put_minion_data.hand_card = data.hand_card;
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			board.data.player_put_minion_data.location = data.location;
-#endif
-			board.data.player_put_minion_data.required_target = data.required_target;
-
+			board.data.player_play_minion_data = move.data.player_play_minion_data;
 			board.stage = STAGE_PLAYER_PUT_MINION;
 		}
 
 		static void PlayerAttack(Board &board, const Move &move)
 		{
-			const Move::AttackData &data = move.data.attack_data;
-
-			board.data.player_attack_data.attacker_idx = data.attacker_idx;
-			board.data.player_attack_data.attacked_idx = data.attacked_idx;
-
+			board.data.attack_data = move.data.attack_data;
 			board.stage = STAGE_PLAYER_ATTACK;
 		}
 

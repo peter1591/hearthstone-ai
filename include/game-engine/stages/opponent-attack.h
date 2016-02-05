@@ -16,7 +16,7 @@ class StageOpponentAttack
 
 		static void Go(Board &board)
 		{
-			const Board::OpponentAttackData &data = board.data.opponent_attack_data;
+			const Board::AttackData &data = board.data.attack_data;
 
 			StageHelper::HandleAttack(board, data.attacker_idx, data.attacked_idx);
 
