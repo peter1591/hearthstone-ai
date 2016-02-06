@@ -41,6 +41,8 @@ class Minion : public ObjectBase
 		void SetShield(bool shield) { this->shield = shield; }
 		void SetStealth(bool stealth) { this->stealth = stealth; }
 		void SetForgetful(bool forgetful) { this->forgetful = forgetful; }
+		void SetFreezeAttacker(bool freeze) { this->freeze_attacker = freeze; }
+		void SetFreezed(bool freezed) { this->freezed = freezed; }
 
 		// Getters
 		bool Attackable() const;
@@ -49,14 +51,16 @@ class Minion : public ObjectBase
 		bool IsShield() const { return this->shield; }
 		bool IsStealth() const { return this->stealth; }
 		bool IsForgetful() const { return this->forgetful; }
+		bool IsFreezeAttacker() const { return this->freeze_attacker; }
+		bool IsFreezed() const { return this->freezed; }
 
 		// Triggers
 		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
 		std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
 
 		// Hooks
-		void TurnStart();
-		void TurnEnd();
+		void TurnStart(bool owner_turn);
+		void TurnEnd(bool owner_turn);
 
 		bool IsValid() const { return this->card_id != 0; }
 
@@ -83,6 +87,8 @@ class Minion : public ObjectBase
 		bool shield;
 		bool stealth;
 		bool forgetful;
+		bool freeze_attacker;
+		bool freezed;
 
 		// enchantments
 		int attack_bias_when_turn_ends;
@@ -113,6 +119,8 @@ inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origi
 	this->shield = false;
 	this->stealth = false;
 	this->forgetful = false;
+	this->freeze_attacker = false;
+	this->freezed = false;
 
 	this->attack_bias_when_turn_ends = 0;
 }
@@ -132,6 +140,8 @@ inline void Minion::Summon(const Card & card)
 	this->shield = card.data.minion.shield;
 	this->stealth = card.data.minion.stealth;
 	this->forgetful = card.data.minion.forgetful;
+	this->freeze_attacker = card.data.minion.freeze;
+	this->freezed = false;
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -148,21 +158,32 @@ inline void Minion::AddAttackThisTurn(int attack)
 	this->attack_bias_when_turn_ends -= attack;
 }
 
-inline void Minion::TurnStart()
+inline void Minion::TurnStart(bool)
 {
 	this->summoned_this_turn = false;
 	this->attacked_times = 0;
 }
 
-inline void Minion::TurnEnd()
+inline void Minion::TurnEnd(bool owner_turn)
 {
 	this->attack += this->attack_bias_when_turn_ends;
 	this->attack_bias_when_turn_ends = 0;
+
+	if (owner_turn) {
+		// check thaw
+		if (this->attacked_times == 0 && !this->summoned_this_turn)
+		{
+			// if summon in this turn, and freeze it, then the minion will not be unfrozen
+			this->freezed = false;
+		}
+	}
 }
 
 inline bool Minion::Attackable() const
 {
 	if (this->summoned_this_turn && !this->charge) return false;
+
+	if (this->freezed) return false;
 
 	if (attacked_times > 0) return false;
 	if (this->GetAttack() <= 0) return false;
@@ -201,6 +222,8 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->shield != rhs.shield) return false;
 	if (this->stealth != rhs.stealth) return false;
 	if (this->forgetful != rhs.forgetful) return false;
+	if (this->freeze_attacker != rhs.freeze_attacker) return false;
+	if (this->freezed != rhs.freezed) return false;
 
 	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
 	if (this->attacked_times != rhs.attacked_times) return false;
@@ -229,6 +252,8 @@ inline std::string Minion::GetDebugString() const
 		if (this->IsShield()) oss << " [SHIELD]";
 		if (this->IsStealth()) oss << " [STEALTH]";
 		if (this->IsForgetful()) oss << " [FORGETFUL]";
+		if (this->IsFreezeAttacker()) oss << " [FREEZE]";
+		if (this->IsFreezed()) oss << " [FREEZED]";
 	}
 
 	return oss.str();
@@ -254,6 +279,8 @@ namespace std {
 			GameEngine::hash_combine(result, s.shield);
 			GameEngine::hash_combine(result, s.stealth);
 			GameEngine::hash_combine(result, s.forgetful);
+			GameEngine::hash_combine(result, s.freeze_attacker);
+			GameEngine::hash_combine(result, s.freezed);
 
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);

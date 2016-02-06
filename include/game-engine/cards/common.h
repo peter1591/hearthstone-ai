@@ -9,6 +9,7 @@
 #include "card_CS2_189.h"
 #include "card_FP1_007.h"
 #include "card_FP1_002.h"
+#include "card_EX1_029.h"
 
 namespace GameEngine {
 	namespace Cards {
@@ -91,6 +92,7 @@ HANDLE_CARD_CALLBACK(Card_CS2_188)
 HANDLE_CARD_CALLBACK(Card_CS2_189)
 HANDLE_CARD_CALLBACK(Card_FP1_007)
 HANDLE_CARD_CALLBACK(Card_FP1_002)
+HANDLE_CARD_CALLBACK(Card_EX1_029)
 
 #undef HANDLE_CARD_CALLBACK
 	default:

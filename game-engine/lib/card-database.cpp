@@ -35,7 +35,7 @@ namespace GameEngine {
 		throw std::runtime_error("unknown race");
 	}
 
-	static void ProcessMinionCardMechanics(std::string const& origin_id, Json::Value const& json_card, Card & new_card)
+	static void ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
 	{
 		if (!json_card.isMember("mechanics")) return;
 
@@ -48,6 +48,7 @@ namespace GameEngine {
 		new_card.data.minion.shield = false;
 		new_card.data.minion.stealth = false;
 		new_card.data.minion.forgetful = false;
+		new_card.data.minion.freeze = false;
 
 		for (auto const& json_mechanic: json_mechanics)
 		{
@@ -67,7 +68,8 @@ namespace GameEngine {
 			else if (mechanic == "FORGETFUL") {
 				new_card.data.minion.forgetful = true;
 			}
-			else if (mechanic == "FREEZE") { // TODO
+			else if (mechanic == "FREEZE") {
+				new_card.data.minion.freeze = true;
 			}
 			else if (mechanic == "POISONOUS") { // TODO
 			}
@@ -152,10 +154,10 @@ namespace GameEngine {
 		Card new_card;
 
 		if (type == "MINION") {
-			this->AddMinionCard(origin_id, card, new_card);
+			this->AddMinionCard(card, new_card);
 		}
 		else if (type == "SPELL") {
-			this->AddSpellCard(origin_id, card, new_card);
+			this->AddSpellCard(card, new_card);
 		}
 		else {
 			// ignored
@@ -187,7 +189,7 @@ namespace GameEngine {
 		return true;
 	}
 
-	void CardDatabase::AddMinionCard(std::string  const& origin_id, Json::Value const & json_card, Card & new_card)
+	void CardDatabase::AddMinionCard(Json::Value const & json_card, Card & new_card)
 	{
 		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_MINION;
@@ -197,10 +199,10 @@ namespace GameEngine {
 		new_card.data.minion.hp = json_card["health"].asInt();
 		new_card.data.minion.race = GetMinionRace(json_card);
 
-		ProcessMinionCardMechanics(origin_id, json_card, new_card);
+		ProcessMinionCardMechanics(json_card, new_card);
 	}
 
-	void CardDatabase::AddSpellCard(std::string  const& origin_id, Json::Value const & json_card, Card & new_card)
+	void CardDatabase::AddSpellCard(Json::Value const & json_card, Card & new_card)
 	{
 		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_SPELL;

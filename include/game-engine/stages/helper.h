@@ -152,6 +152,9 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::Slo
 	}
 
 	attacker->AttackedOnce();
+
+	if (attacker->IsFreezeAttacker()) attacked->SetFreezed(true);
+	if (attacked->IsFreezeAttacker()) attacker->SetFreezed(true);
 }
 
 inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)

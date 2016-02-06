@@ -30,6 +30,11 @@ public:
 
 	bool IsForgetful() const;
 
+	void SetFreezeAttacker(bool freeze);
+	void SetFreezed(bool freezed);
+	bool IsFreezeAttacker() const;
+	bool IsFreezed() const;
+
 	std::string GetDebugString() const;
 
 private:
@@ -79,6 +84,26 @@ inline void GameEngine::BoardObjects::Hero::AttackedOnce()
 }
 
 inline bool GameEngine::BoardObjects::Hero::IsForgetful() const
+{
+	throw std::runtime_error("not yet implemented");
+}
+
+inline void GameEngine::BoardObjects::Hero::SetFreezeAttacker(bool)
+{
+	throw std::runtime_error("not yet implemented");
+}
+
+inline void GameEngine::BoardObjects::Hero::SetFreezed(bool)
+{
+	// TODO
+}
+
+inline bool GameEngine::BoardObjects::Hero::IsFreezeAttacker() const
+{
+	return false;
+}
+
+inline bool GameEngine::BoardObjects::Hero::IsFreezed() const
 {
 	throw std::runtime_error("not yet implemented");
 }

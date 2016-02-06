@@ -23,7 +23,7 @@ public:
 		
 		GameEngine::Move::PlayMinionData data;
 		data.put_location = targetor_idx;
-		data.target = SLOT_INVALID;// not used when summonion a minion
+		data.target = SLOT_INVALID;// not used when summoning a minion
 
 		StageHelper::SummonMinion(board, card, data);
 		StageHelper::SummonMinion(board, card, data);

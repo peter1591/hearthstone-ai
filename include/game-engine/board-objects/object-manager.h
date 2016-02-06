@@ -249,26 +249,26 @@ inline void ObjectManager::EraseMinion(MinionIterator & it)
 
 inline void ObjectManager::PlayerTurnStart()
 {
-	for (auto & minion : this->player_minions) minion.TurnStart();
-	for (auto & minion : this->opponent_minions) minion.TurnStart();
+	for (auto & minion : this->player_minions) minion.TurnStart(true);
+	for (auto & minion : this->opponent_minions) minion.TurnStart(false);
 }
 
 inline void ObjectManager::PlayerTurnEnd()
 {
-	for (auto & minion : this->player_minions) minion.TurnEnd();
-	for (auto & minion : this->opponent_minions) minion.TurnEnd();
+	for (auto & minion : this->player_minions) minion.TurnEnd(true);
+	for (auto & minion : this->opponent_minions) minion.TurnEnd(false);
 }
 
 inline void ObjectManager::OpponentTurnStart()
 {
-	for (auto & minion : this->player_minions) minion.TurnStart();
-	for (auto & minion : this->opponent_minions) minion.TurnStart();
+	for (auto & minion : this->opponent_minions) minion.TurnStart(true);
+	for (auto & minion : this->player_minions) minion.TurnStart(false);
 }
 
 inline void ObjectManager::OpponentTurnEnd()
 {
-	for (auto & minion : this->player_minions) minion.TurnEnd();
-	for (auto & minion : this->opponent_minions) minion.TurnEnd();
+	for (auto & minion : this->opponent_minions) minion.TurnEnd(true);
+	for (auto & minion : this->player_minions) minion.TurnEnd(false);
 }
 
 inline void ObjectManager::DebugPrint() const

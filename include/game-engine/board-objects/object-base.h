@@ -17,6 +17,11 @@ public:
 
 	virtual void AttackedOnce() = 0;
 
+	virtual void SetFreezeAttacker(bool freeze) = 0;
+	virtual void SetFreezed(bool freezed) = 0;
+	virtual bool IsFreezeAttacker() const = 0;
+	virtual bool IsFreezed() const = 0;
+
 	/*
 	virtual int GetCardId() = 0;
 	virtual int GetMaxHP() = 0;
