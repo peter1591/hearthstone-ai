@@ -3,7 +3,6 @@
 
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
-#include "game-engine/targetor.h"
 #include "game-engine/stages/helper.h"
 
 namespace GameEngine {
@@ -16,21 +15,15 @@ public:
 
 	// Abusive Sergant
 
-	static void GetRequiredTargets(GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		Targetor::TargetType target_type;
-
-		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
-			target_type = Targetor::TARGET_TYPE_PLAYER_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL;
-		}
-		else if (playing_hero == Targetor::GetOpponentHeroIndex()) {
-			target_type = Targetor::TARGET_TYPE_OPPONENT_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL;
+		if (SlotIndexHelper::IsPlayerSide(side)) {
+			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, board);
 		}
 		else {
-			throw std::runtime_error("consistency check failed");
+			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, board);
 		}
 
-		targets = Targetor::GetTargets(target_type, board);
 		meet_requirements = true; // it's fine even if no target available
 	}
 
@@ -43,9 +36,16 @@ public:
 			return;
 		}
 
-		Minions *minions;
-		auto minion_it = GameEngine::StageHelper::GetMinionIterator(board, play_minion_data.target, minions);
-		minion_it->AddAttackThisTurn(attack_boost);
+		auto buff_target = dynamic_cast<GameEngine::BoardObjects::Minion*>(board.object_manager.GetObject(play_minion_data.target));
+		if (buff_target == nullptr)
+		{
+#ifdef DEBUG
+			std::cout << "WARNING: buff target vanished." << std::endl;
+#endif
+			return;
+		}
+
+		buff_target->AddAttackThisTurn(attack_boost);
 	}
 };
 

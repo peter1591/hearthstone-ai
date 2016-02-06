@@ -143,11 +143,7 @@ void Board::DebugPrint() const
 	}
 	std::cout << std::endl;
 
-	std::cout << "Opponent minions: " << std::endl;
-	this->opponent_minions.DebugPrint();
-
-	std::cout << "Player minions: " << std::endl;
-	this->player_minions.DebugPrint();
+	this->object_manager.DebugPrint();
 
 	std::cout << "=== Print Board END   ===" << std::endl;
 }

@@ -7,7 +7,6 @@
 #include "game-engine/stages/common.h"
 #include "game-engine/cards/common.h"
 #include "game-engine/board.h"
-#include "game-engine/targetor.h"
 #include "game-engine/stages/helper.h"
 
 namespace GameEngine {

@@ -132,8 +132,8 @@
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
+    <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +150,7 @@
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
+    <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />
     <ClInclude Include="..\..\..\include\game-engine\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\hidden-secrets.h" />
     <ClInclude Include="..\..\..\include\game-engine\minion.h" />

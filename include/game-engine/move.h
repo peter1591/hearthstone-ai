@@ -5,6 +5,7 @@
 #include <string>
 #include "card.h"
 #include "hand.h"
+#include "game-engine/slot-index.h"
 
 namespace GameEngine {
 
@@ -26,8 +27,8 @@ class Move
 
 		struct PlayMinionData
 		{
-			int put_location;
-			int target;
+			SlotIndex put_location;
+			SlotIndex target;
 
 			bool operator==(PlayMinionData const& rhs) const
 			{
@@ -69,8 +70,8 @@ class Move
 		};
 
 		struct AttackData {
-			int attacker_idx;
-			int attacked_idx;
+			SlotIndex attacker_idx;
+			SlotIndex attacked_idx;
 
 			bool operator==(AttackData const& rhs) const
 			{

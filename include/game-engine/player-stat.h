@@ -4,8 +4,6 @@
 #include <string>
 #include <sstream>
 #include <functional>
-#include "weapon.h"
-#include "hero-power.h"
 
 namespace GameEngine {
 
@@ -48,13 +46,7 @@ class PlayerStat
 		};
 
 	public:
-		int hp;
-		int armor;
-
 		Crystal crystal;
-
-		Weapon weapon;
-		HeroPower hero_power;
 
 		int fatigue_damage;
 
@@ -67,22 +59,17 @@ class PlayerStat
 inline std::string PlayerStat::GetDebugString() const
 {
 	std::ostringstream oss;
-	oss << "HP: " << this->hp << " + " << this->armor
-		<< ", crystals: "
+	oss << "crystals: "
 		<< this->crystal.GetCurrent() << "/" << this->crystal.GetTotal()
 		<< ", locked: "
 		<< this->crystal.GetLocked() << "/" << this->crystal.GetLockedNextTurn()
-		<< ", fatigue: " << this->fatigue_damage;
+		<< ", next fatigue: " << this->fatigue_damage;
 	return oss.str();
 }
 
 inline bool PlayerStat::operator==(const PlayerStat &rhs) const
 {
-	if (this->hp != rhs.hp) return false;
-	if (this->armor != rhs.armor) return false;
 	if (this->crystal != rhs.crystal) return false;
-	if (this->weapon != rhs.weapon) return false;
-	if (this->hero_power != rhs.hero_power) return false;
 	if (this->fatigue_damage != rhs.fatigue_damage) return false;
 
 	return true;
@@ -123,11 +110,7 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, s.hp);
-			GameEngine::hash_combine(result, s.armor);
 			GameEngine::hash_combine(result, s.crystal);
-			GameEngine::hash_combine(result, s.weapon);
-			GameEngine::hash_combine(result, s.hero_power);
 			GameEngine::hash_combine(result, s.fatigue_damage);
 
 			return result;

@@ -3,7 +3,6 @@
 
 #include "game-engine/stages/common.h"
 #include "game-engine/board.h"
-#include "game-engine/targetor.h"
 
 namespace GameEngine {
 
@@ -25,25 +24,23 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool SummonMinion(Board & board, Card const& card, PlayMinionData const& data);
 
 public:
-	static Minions::container_type::iterator GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container);
-
 	// handle minion/hero attack, calculate damages
-	static void HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx);
+	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
 
-	static void TakeDamage(GameEngine::Board & board, int taker_idx, int damage);
+	static void TakeDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage);
 
 private:
-	static int GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked);
+	static SlotIndex GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
 
-	static void RemoveMinionsIfDead(Board & board, Minions & minions);
+	static void RemoveMinionsIfDead(Board & board, SlotIndex side);
 
-	static void Fatigue(PlayerStat &player_stat);
+	static void Fatigue(GameEngine::Board & board, SlotIndex side);
 };
 
 inline bool StageHelper::PlayerDrawCard(Board & board)
 {
 	if (board.player_deck.GetCards().empty()) {
-		StageHelper::Fatigue(board.player_stat);
+		StageHelper::Fatigue(board, SLOT_PLAYER_SIDE);
 		return StageHelper::CheckHeroMinionDead(board);
 	}
 
@@ -63,7 +60,7 @@ inline bool StageHelper::PlayerDrawCard(Board & board)
 inline bool StageHelper::OpponentDrawCard(Board & board)
 {
 	if (board.opponent_cards.GetDeckCount() == 0) {
-		StageHelper::Fatigue(board.opponent_stat);
+		StageHelper::Fatigue(board, SLOT_OPPONENT_SIDE);
 		return StageHelper::CheckHeroMinionDead(board);
 	}
 
@@ -78,46 +75,18 @@ inline bool StageHelper::OpponentDrawCard(Board & board)
 	return false;
 }
 
-inline Minions::container_type::iterator StageHelper::GetMinionIterator(GameEngine::Board & board, int pos, Minions * & container)
+inline void StageHelper::TakeDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage)
 {
-	int minion_idx;
-	if (Targetor::IsPlayerMinion(pos, minion_idx)) {
-		container = &board.player_minions;
-	}
-	else if (Targetor::IsOpponentMinion(pos, minion_idx)) {
-		container = &board.opponent_minions;
-	}
-	else {
-		throw std::runtime_error("logic error");
-	}
-
-	return container->MinionsBegin() + minion_idx;
+	board.object_manager.GetObject(taker_idx)->TakeDamage(damage);
 }
 
-inline void StageHelper::TakeDamage(GameEngine::Board & board, int taker_idx, int damage)
+inline SlotIndex StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
 {
-	if (taker_idx == Targetor::GetPlayerHeroIndex()) {
-		board.player_stat.hp -= damage;
-		return;
-	}
-
-	if (taker_idx == Targetor::GetOpponentHeroIndex()) {
-		board.opponent_stat.hp -= damage;
-		return;
-	}
-
-	Minions * container = nullptr;
-	Minions::container_type::iterator taker = GetMinionIterator(board, taker_idx, container);
-	taker->TakeDamage(damage);
-}
-
-inline int StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, int origin_attacked)
-{
-	bool player_side = Targetor::IsPlayerSide(origin_attacked);
+	const bool player_side = SlotIndexHelper::IsPlayerSide(origin_attacked);
 
 	int possible_targets = 1 - 1; // +1 for the hero, -1 for the original attack target
-	if (player_side) possible_targets += board.player_minions.GetMinionCount();
-	else possible_targets += board.opponent_minions.GetMinionCount();
+	if (player_side) possible_targets += board.object_manager.GetPlayerMinionsCount();
+	else possible_targets += board.object_manager.GetOpponentMinionsCount();
 
 	if (possible_targets == 0)
 	{
@@ -128,95 +97,81 @@ inline int StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine::Board
 	int r = board.random_generator.GetRandom() % possible_targets;
 	
 	if (player_side) {
-		if (origin_attacked != Targetor::GetPlayerHeroIndex()) {
-			// now we have a chance to attack the hero
+		if (origin_attacked != SLOT_PLAYER_HERO) {
+			// now we have a chance to attack the hero, take care of it first
 			if (r == possible_targets - 1) {
-				return Targetor::GetPlayerHeroIndex();
+				return SLOT_PLAYER_HERO;
 			}
 		}
 		// now we can only hit the minions
-		return Targetor::GetPlayerMinionIndex(r);
+		return SlotIndexHelper::GetPlayerMinionIndex(r);
 	}
 	else {
-		if (origin_attacked != Targetor::GetOpponentHeroIndex()) {
-			// now we have a chance to attack the hero
+		if (origin_attacked != SLOT_OPPONENT_HERO) {
+			// now we have a chance to attack the hero, take care of it first
 			if (r == possible_targets - 1) {
-				return Targetor::GetOpponentHeroIndex();
+				return SLOT_OPPONENT_HERO;
 			}
 		}
 		// now we can only hit the minions
-		return Targetor::GetOpponentMinionIndex(r);
+		return SlotIndexHelper::GetOpponentMinionIndex(r);
 	}
 }
 
-inline void StageHelper::HandleAttack(GameEngine::Board & board, int attacker_idx, int attacked_idx)
+inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx)
 {
 	// TODO: trigger secrets
 
-	if (attacker_idx == Targetor::GetPlayerHeroIndex() ||
-		attacker_idx == Targetor::GetOpponentHeroIndex())
+	GameEngine::BoardObjects::ObjectBase * attacker = board.object_manager.GetObject(attacker_idx);
+	
+	if (attacker->IsForgetful())
 	{
-		// TODO: attacker is hero
-		throw std::runtime_error("not implemented");
-	}
-	else  
-	{
-		Minions * attacker_container = nullptr;
-		Minions::container_type::iterator attacker = GetMinionIterator(board, attacker_idx, attacker_container);
-
-		// check if attacker is forgetful
-		if (attacker->IsForgetful())
-		{
-			int r = board.random_generator.GetRandom() % 2;
-			if (r == 0) {
-				// trigger forgetful effect
-				attacked_idx = StageHelper::GetNewAttackedTargetForForgetfulAttack(board, attacked_idx);
-			}
-		}
-
-		if (attacked_idx == Targetor::GetPlayerHeroIndex()) {
-			board.player_stat.hp -= attacker->GetAttack();
-			attacker->AttackedOnce();
-		} else if (attacked_idx == Targetor::GetOpponentHeroIndex()) {
-			board.opponent_stat.hp -= attacker->GetAttack();
-			attacker->AttackedOnce();
-		} else {
-			Minions * attacked_container = nullptr;
-			Minions::container_type::iterator attacked = GetMinionIterator(board, attacked_idx, attacked_container);
-
-			attacked->TakeDamage(attacker->GetAttack());
-			attacker->TakeDamage(attacked->GetAttack());
+		int r = board.random_generator.GetRandom() % 2;
+		if (r == 0) {
+			// trigger forgetful effect
+			attacked_idx = StageHelper::GetNewAttackedTargetForForgetfulAttack(board, attacked_idx);
 		}
 	}
+
+	GameEngine::BoardObjects::ObjectBase * attacked = board.object_manager.GetObject(attacked_idx);
+
+	GameEngine::BoardObjects::Hero * attacked_hero = dynamic_cast<GameEngine::BoardObjects::Hero*>(attacked);
+	GameEngine::BoardObjects::Minion * attacked_minion = dynamic_cast<GameEngine::BoardObjects::Minion*>(attacked);
+
+	if (attacked_hero != nullptr)
+	{
+		attacked_hero->TakeDamage(attacker->GetAttack()); // attacked is hero
+	}
+	else if (attacked_minion != nullptr) {
+		// attacked is a minion
+		attacked_minion->TakeDamage(attacker->GetAttack());
+		attacker->TakeDamage(attacked_minion->GetAttack());
+	}
+	else {
+		std::runtime_error("invalid argument");
+	}
+
+	attacker->AttackedOnce();
 }
 
-inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, Minions & minions)
+inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 {
-	int targetor_idx;
-
-	if (&minions == &board.player_minions) targetor_idx = Targetor::GetPlayerMinionIndex(0);
-	else if (&minions == &board.opponent_minions) targetor_idx = Targetor::GetOpponentMinionIndex(0);
-	else throw std::runtime_error("consistency check failed");
-
 	while (true) { // loop until no deathrattle are triggered
 		std::list<std::function<void(Board &)>> death_triggers;
 
-		for (auto it = minions.MinionsBegin(); it != minions.MinionsEnd();)
+		for (auto it = board.object_manager.GetMinionsIterator(side); !it.IsEnd();)
 		{
-			if (it->GetHP() > 0)
-			{
-				++it;
-				++targetor_idx;
+			if (it->GetHP() > 0) {
+				it.GoToNext();
 				continue;
 			}
 
 			for (auto const& trigger : it->MoveOutOnDeathTriggers())
 			{
-				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, targetor_idx));
+				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it.GetSlotIdx()));
 			}
 
-			it = minions.MinionsErase(it);
-			++targetor_idx;
+			board.object_manager.EraseMinion(it);
 		}
 
 		// trigger deathrattles
@@ -232,26 +187,33 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, Minions 
 
 inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
 {
-	if (UNLIKELY(board.player_stat.hp <= 0)) {
+	if (board.object_manager.GetPlayerHero()->GetHP() <= 0) {
 		board.stage = STAGE_LOSS;
 		return true;
 	}
 
-	if (UNLIKELY(board.opponent_stat.hp <= 0)) {
+	if (board.object_manager.GetOpponentHero()->GetHP() <= 0) {
 		board.stage = STAGE_WIN;
 		return true;
 	}
 
-	RemoveMinionsIfDead(board, board.player_minions);
-	RemoveMinionsIfDead(board, board.opponent_minions);
+	RemoveMinionsIfDead(board, SLOT_PLAYER_SIDE);
+	RemoveMinionsIfDead(board, SLOT_OPPONENT_SIDE);
 
 	return false; // state not changed
 }
 
-inline void StageHelper::Fatigue(PlayerStat & player_stat)
+inline void StageHelper::Fatigue(GameEngine::Board & board, SlotIndex side)
 {
-	++player_stat.fatigue_damage;
-	player_stat.hp -= player_stat.fatigue_damage;
+	if (SlotIndexHelper::IsPlayerSide(side))
+	{
+		++board.player_stat.fatigue_damage;
+		board.object_manager.GetPlayerHero()->TakeDamage(board.player_stat.fatigue_damage);
+	}
+	else {
+		++board.opponent_stat.fatigue_damage;
+		board.object_manager.GetPlayerHero()->TakeDamage(board.opponent_stat.fatigue_damage);
+	}
 }
 
 } // namespace GameEngine

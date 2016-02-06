@@ -3,7 +3,7 @@
 #include <vector>
 #include <list>
 #include "move.h"
-#include "targetor.h"
+#include "slot-index.h"
 
 namespace GameEngine {
 
@@ -13,7 +13,7 @@ public:
 	class ItemPlayerPlayMinion
 	{
 	public:
-		ItemPlayerPlayMinion(Hand::Locator hand_card, int put_location, TargetorBitmap required_targets);
+		ItemPlayerPlayMinion(Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets);
 		ItemPlayerPlayMinion* Clone() const;
 		bool GetNextMove(Move & move);
 		bool operator==(ItemPlayerPlayMinion const& rhs) const;
@@ -21,15 +21,15 @@ public:
 
 	private:
 		Hand::Locator hand_card;
-		int put_location;
-		TargetorBitmap required_targets;
+		SlotIndex put_location;
+		SlotIndexBitmap required_targets;
 		bool done;
 	};
 
 	class ItemOpponentPlayMinion
 	{
 	public:
-		ItemOpponentPlayMinion(Card card, int put_location, TargetorBitmap required_targets);
+		ItemOpponentPlayMinion(Card card, SlotIndex put_location, SlotIndexBitmap required_targets);
 		ItemOpponentPlayMinion* Clone() const;
 		bool GetNextMove(Move & move);
 		bool operator==(ItemOpponentPlayMinion const& rhs) const;
@@ -37,24 +37,24 @@ public:
 
 	private:
 		Card playing_card;
-		int put_location;
-		TargetorBitmap required_targets;
+		SlotIndex put_location;
+		SlotIndexBitmap required_targets;
 		bool done;
 	};
 
 	class ItemAttack
 	{
 	public:
-		ItemAttack(TargetorBitmap && attacker, TargetorBitmap && attacked);
+		ItemAttack(SlotIndexBitmap && attacker, SlotIndexBitmap && attacked);
 		ItemAttack* Clone() const;
 		bool GetNextMove(Move & move);
 		bool operator==(ItemAttack const& rhs) const;
 		bool operator!=(ItemAttack const& rhs) const;
 	
 	private:
-		TargetorBitmap attacker;
-		TargetorBitmap attacked;
-		TargetorBitmap attacked_origin;
+		SlotIndexBitmap attacker;
+		SlotIndexBitmap attacked;
+		SlotIndexBitmap attacked_origin;
 	};
 
 public:
@@ -220,7 +220,7 @@ inline bool GameEngine::NextMoveGetter::Empty()
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
-	Hand::Locator hand_card, int put_location, TargetorBitmap required_targets)
+	Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets)
 	: hand_card(hand_card), put_location(put_location), required_targets(required_targets)
 {
 	this->done = false;
@@ -241,7 +241,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move &
 
 	if (this->required_targets.None())
 	{
-		move.data.player_play_minion_data.data.target = -1;
+		move.data.player_play_minion_data.data.target = SLOT_INVALID;
 		this->done = true;
 	}
 	else {
@@ -266,7 +266,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator!=(ItemPla
 }
 
 inline GameEngine::NextMoveGetter::ItemOpponentPlayMinion::ItemOpponentPlayMinion(
-	Card playing_card, int put_location, TargetorBitmap required_targets)
+	Card playing_card, SlotIndex put_location, SlotIndexBitmap required_targets)
 	: playing_card(playing_card), put_location(put_location), required_targets(required_targets)
 {
 	this->done = false;
@@ -287,7 +287,7 @@ inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::GetNextMove(Move
 
 	if (this->required_targets.None())
 	{
-		move.data.opponent_play_minion_data.data.target = -1;
+		move.data.opponent_play_minion_data.data.target = SLOT_INVALID;
 		this->done = true;
 	}
 	else {
@@ -311,7 +311,7 @@ inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator!=(ItemO
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemAttack::ItemAttack(TargetorBitmap && attacker, TargetorBitmap && attacked)
+inline GameEngine::NextMoveGetter::ItemAttack::ItemAttack(SlotIndexBitmap && attacker, SlotIndexBitmap && attacked)
 {
 	this->attacker = attacker;
 	this->attacked = attacked;

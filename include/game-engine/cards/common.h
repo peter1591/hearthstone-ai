@@ -49,14 +49,14 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool OnSummon(int card_id, GameEngine::Board const& board, int playing_hero, int put_location, GameEngine::Minion & summoning_minion)
+	static bool OnSummon(int card_id, GameEngine::Board const& board, SlotIndex side, SlotIndex put_location, GameEngine::BoardObjects::Minion & summoning_minion)
 	{
-		return CardCallbackManager::HandleCallback<Callback_OnSummon>(card_id, board, playing_hero, put_location, summoning_minion);
+		return CardCallbackManager::HandleCallback<Callback_OnSummon>(card_id, board, side, put_location, summoning_minion);
 	}
 
-	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
+	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, playing_hero, targets, meet_requirements);
+		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, side, targets, meet_requirements);
 	}
 
 	static bool BattleCry(int card_id, GameEngine::Board &board, GameEngine::Move::PlayMinionData const& play_minion_data)

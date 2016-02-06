@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
-#include "game-engine/targetor.h"
 #include "game-engine/stages/helper.h"
 
 namespace GameEngine {
@@ -17,16 +16,13 @@ public:
 
 	// Elven Archer
 
-	static void GetRequiredTargets(GameEngine::Board const& board, int playing_hero, TargetorBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		if (playing_hero == Targetor::GetPlayerHeroIndex()) {
-			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
+		if (SlotIndexHelper::IsPlayerSide(side)) {
+			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
 		} 
-		else if (playing_hero == Targetor::GetOpponentHeroIndex()) {
-			targets = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
-		}
 		else {
-			throw std::runtime_error("consistency check failed");
+			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
 		}
 
 		meet_requirements = true; // it's fine even if no target available

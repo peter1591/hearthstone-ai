@@ -9,7 +9,6 @@
 #include "game-engine/stages/weighted-moves.h"
 #include "game-engine/board.h"
 #include "game-engine/next-move-getter.h"
-#include "game-engine/targetor.h"
 #include "game-engine/cards/common.h"
 
 namespace GameEngine {
@@ -21,7 +20,7 @@ class StagePlayerChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			bool const can_play_minion = !board.player_minions.IsFull();
+			bool const can_play_minion = !board.object_manager.IsPlayerMinionsFull();
 
 			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
@@ -38,14 +37,14 @@ class StagePlayerChooseBoardMove
 			}
 
 			// the choices to attack by hero/minion
-			TargetorBitmap attacker;
-			TargetorBitmap attacked;
+			SlotIndexBitmap attacker;
+			SlotIndexBitmap attacked;
 
 			// TODO: check if player has weapon
-			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_ATTACKABLE, board);
+			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
+				attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
 
 				NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
 				next_move_getter.AddItem(std::move(player_attack_move));
@@ -82,8 +81,8 @@ class StagePlayerChooseBoardMove
 			moves.AddMove(move, weight_end_turn);
 
 			// the choices to play a card from hand
-			bool can_play_minion = !board.player_minions.IsFull();
-			TargetorBitmap required_targets;
+			bool can_play_minion = !board.object_manager.IsPlayerMinionsFull();
+			SlotIndexBitmap required_targets;
 			bool meet_requirements;
 			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
@@ -93,7 +92,7 @@ class StagePlayerChooseBoardMove
 					if (!can_play_minion) continue;
 					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetPlayerHeroIndex(), required_targets, meet_requirements)
+					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements)
 						&& meet_requirements == false)
 					{
 						break;
@@ -101,8 +100,8 @@ class StagePlayerChooseBoardMove
 
 					move.action = Move::ACTION_PLAYER_PLAY_MINION;
 					move.data.player_play_minion_data.hand_card = hand_idx;
-					move.data.player_play_minion_data.data.put_location = Targetor::GetPlayerMinionIndex((int)board.player_minions.GetMinionCount());
-					if (required_targets.None()) move.data.player_play_minion_data.data.target = -1;
+					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.GetPlayerMinionsCount());
+					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
 
 					moves.AddMove(move, weight_play_minion);
@@ -112,20 +111,20 @@ class StagePlayerChooseBoardMove
 			}
 
 			// the choices to attack by hero/minion
-			TargetorBitmap attacker;
-			TargetorBitmap attacked;
+			SlotIndexBitmap attacker;
+			SlotIndexBitmap attacked;
 
-			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_ATTACKABLE, board);
+			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
+				attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
 
 				while (!attacker.None()) {
-					int attacker_idx = attacker.GetOneTarget();
+					SlotIndex attacker_idx = attacker.GetOneTarget();
 					attacker.ClearOneTarget(attacker_idx);
 
 					while (!attacked.None()) {
-						int attacked_idx = attacked.GetOneTarget();
+						SlotIndex attacked_idx = attacked.GetOneTarget();
 						attacked.ClearOneTarget(attacked_idx);
 
 						move.action = Move::ACTION_ATTACK;
@@ -168,9 +167,9 @@ class StagePlayerChooseBoardMove
 
 			if (board.player_stat.crystal.GetCurrent() < playing_card.cost) return;
 
-			TargetorBitmap required_targets;
+			SlotIndexBitmap required_targets;
 			bool meet_requirements;
-			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetPlayerHeroIndex(), required_targets, meet_requirements) &&
+			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements) &&
 				meet_requirements == false)
 			{
 				return;
@@ -179,12 +178,14 @@ class StagePlayerChooseBoardMove
 			// TODO: check play requirements
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = Targetor::GetPlayerMinionIndex(0); i <= Targetor::GetPlayerMinionIndex((int)board.player_minions.GetMinionCount()); ++i)
+			for (int i = 0; i < board.object_manager.GetPlayerMinionsCount(); ++i)
 			{
-				next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, i, required_targets));
+				SlotIndex idx = SlotIndexHelper::GetPlayerMinionIndex(i);
+				next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets));
 			}
 #else
-			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, Targetor::GetPlayerMinionIndex((int)board.player_minions.GetMinionCount()), required_targets));
+			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
+				hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.GetPlayerMinionsCount()), required_targets));
 #endif
 		}
 

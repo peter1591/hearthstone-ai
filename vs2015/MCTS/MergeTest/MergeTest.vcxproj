@@ -133,28 +133,32 @@
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
+    <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp" />
     <ClCompile Include="merge-test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\game-ai\include\mcts.h" />
     <ClInclude Include="..\..\..\game-ai\include\tree.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\object-base.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
-    <ClInclude Include="..\..\..\include\game-engine\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\hidden-secrets.h" />
-    <ClInclude Include="..\..\..\include\game-engine\minion.h" />
-    <ClInclude Include="..\..\..\include\game-engine\minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\move.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h" />
     <ClInclude Include="..\..\..\include\game-engine\opponent-cards.h" />
@@ -162,6 +166,7 @@
     <ClInclude Include="..\..\..\include\game-engine\random-generator.h" />
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />
     <ClInclude Include="..\..\..\include\game-engine\secrets.h" />
+    <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />
     <ClInclude Include="..\..\..\include\game-engine\stage.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\helper.h" />
@@ -176,8 +181,6 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h" />
-    <ClInclude Include="..\..\..\include\game-engine\targetor.h" />
-    <ClInclude Include="..\..\..\include\game-engine\weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

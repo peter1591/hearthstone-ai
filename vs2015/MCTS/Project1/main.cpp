@@ -34,43 +34,40 @@ void InitializeHand1(GameEngine::Hand &hand)
 
 void InitializeBoard(GameEngine::Board &board)
 {
-	board.player_stat.hp = 20;
-	board.player_stat.armor = 0;
 	board.player_stat.crystal.Set(1, 1, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
-	board.opponent_stat.hp = 20;
-	board.opponent_stat.armor = 0;
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
+
+	GameEngine::BoardObjects::Hero player_hero, opponent_hero;
+
+	player_hero.Set(20, 0);
+	opponent_hero.Set(20, 0);
+	board.object_manager.SetHero(player_hero, opponent_hero);
 
 	board.opponent_cards.Set(4, 26);
 
 	InitializeDeck1(board.player_deck);
 	InitializeHand1(board.player_hand);
 
-	GameEngine::Minion minion;
+	GameEngine::BoardObjects::Minion minion;
 
-	minion = GameEngine::Minion();
-	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
+	minion = GameEngine::BoardObjects::Minion();
+	minion.Set(CARD_ID_FP1_007, 2, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
 	minion.TurnStart();
-	board.player_minions.AddMinion(minion);
+	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
-	//minion = GameEngine::Minion();
-	//minion.Set(213, 2, 2, 3);
-	//minion.TurnStart();
-	//board.player_minions.AddMinion(minion);
-
-	minion = GameEngine::Minion();
+	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(222, 30, 2, 2);
 	minion.TurnStart();
-	board.opponent_minions.AddMinion(minion);
+	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
 
-	minion = GameEngine::Minion();
+	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(222, 10, 7, 7);
 	minion.TurnStart();
-	board.opponent_minions.AddMinion(minion);
+	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();

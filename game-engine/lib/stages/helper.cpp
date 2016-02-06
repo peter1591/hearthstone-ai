@@ -16,23 +16,21 @@ namespace GameEngine {
 
 	bool StageHelper::SummonMinion(Board & board, Card const & card, PlayMinionData const & data)
 	{
-		Minion minion;
+		BoardObjects::Minion minion;
 		minion.Summon(card);
 
-		if (Targetor::IsPlayerSide(data.put_location))
+		if (SlotIndexHelper::IsPlayerSide(data.put_location))
 		{
-			if (board.player_minions.IsFull()) return false;
+			if (board.object_manager.IsPlayerMinionsFull()) return false;
 
-			int idx = data.put_location - Targetor::GetPlayerMinionIndex(0);
-			Minion & summoning_minion = board.player_minions.AddMinion(minion, idx);
-			Cards::CardCallbackManager::OnSummon(card.id, board, Targetor::GetPlayerHeroIndex(), data.put_location, summoning_minion);
+			BoardObjects::Minion & summoning_minion = board.object_manager.AddMinion(data.put_location, minion);
+			Cards::CardCallbackManager::OnSummon(card.id, board, SLOT_PLAYER_SIDE, data.put_location, summoning_minion);
 		}
 		else {
-			if (board.opponent_minions.IsFull()) return false;
+			if (board.object_manager.IsOpponentMinionsFull()) return false;
 
-			int idx = data.put_location - Targetor::GetOpponentMinionIndex(0);
-			Minion & summoning_minion = board.opponent_minions.AddMinion(minion, idx);
-			Cards::CardCallbackManager::OnSummon(card.id, board, Targetor::GetOpponentHeroIndex(), data.put_location, summoning_minion);
+			BoardObjects::Minion & summoning_minion = board.object_manager.AddMinion(data.put_location, minion);
+			Cards::CardCallbackManager::OnSummon(card.id, board, SLOT_OPPONENT_SIDE, data.put_location, summoning_minion);
 		}
 
 		return true;

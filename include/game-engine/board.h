@@ -6,13 +6,14 @@
 #include <functional>
 #include <list>
 
+#include "game-engine/board-objects/object-manager.h"
+
 #include "random-generator.h"
 #include "common.h"
 #include "card.h"
 #include "deck.h"
 #include "hand.h"
 #include "secrets.h"
-#include "minions.h"
 #include "player-stat.h"
 #include "opponent-cards.h"
 #include "hidden-secrets.h"
@@ -44,11 +45,11 @@ class Board
 			this->player_secrets = rhs.player_secrets;
 			this->player_hand = rhs.player_hand;
 			this->player_deck.Assign(rhs.player_deck, &this->random_generator);
-			this->player_minions = rhs.player_minions;
 			this->opponent_stat = rhs.opponent_stat;
 			this->opponent_secrets = rhs.opponent_secrets;
 			this->opponent_cards = rhs.opponent_cards;
-			this->opponent_minions = rhs.opponent_minions;
+
+			this->object_manager = rhs.object_manager;
 
 			this->stage = rhs.stage;
 			this->random_generator = rhs.random_generator;
@@ -62,12 +63,12 @@ class Board
 		Secrets player_secrets;
 		Hand player_hand;
 		Deck player_deck;
-		Minions player_minions;
 
 		PlayerStat opponent_stat;
 		HiddenSecrets opponent_secrets;
 		OpponentCards opponent_cards;
-		Minions opponent_minions;
+
+		BoardObjects::ObjectManager object_manager;
 
 	public:
 		void SetStateToPlayerChooseBoardMove();
@@ -126,12 +127,12 @@ inline bool Board::operator==(const Board &rhs) const
 	if (this->player_secrets != rhs.player_secrets) return false;
 	if (this->player_hand != rhs.player_hand) return false;
 	if (this->player_deck != rhs.player_deck) return false;
-	if (this->player_minions != rhs.player_minions) return false;
 
 	if (this->opponent_stat != rhs.opponent_stat) return false;
 	if (this->opponent_secrets != rhs.opponent_secrets) return false;
 	if (this->opponent_cards != rhs.opponent_cards) return false;
-	if (this->opponent_minions != rhs.opponent_minions) return false;
+
+	if (this->object_manager != rhs.object_manager) return false;
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
@@ -167,12 +168,12 @@ namespace std {
 			GameEngine::hash_combine(result, s.player_secrets);
 			GameEngine::hash_combine(result, s.player_hand);
 			GameEngine::hash_combine(result, s.player_deck);
-			GameEngine::hash_combine(result, s.player_minions);
 
 			GameEngine::hash_combine(result, s.opponent_stat);
 			GameEngine::hash_combine(result, s.opponent_secrets);
 			GameEngine::hash_combine(result, s.opponent_cards);
-			GameEngine::hash_combine(result, s.opponent_minions);
+
+			GameEngine::hash_combine(result, s.object_manager);
 
 			GameEngine::hash_combine(result, s.stage);
 

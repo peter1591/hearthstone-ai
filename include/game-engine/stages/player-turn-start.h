@@ -18,14 +18,10 @@ class StagePlayerTurnStart
 
 		static void Go(Board &board)
 		{
-			board.player_stat.crystal.TurnStart();
-
 			if (StageHelper::PlayerDrawCard(board)) return;
 
-			// reset minion stat
-			for (auto it = board.player_minions.MinionsBegin(); it != board.player_minions.MinionsEnd(); ++it) {
-				it->TurnStart();
-			}
+			board.player_stat.crystal.TurnStart();
+			board.object_manager.PlayerTurnStart();
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 	}

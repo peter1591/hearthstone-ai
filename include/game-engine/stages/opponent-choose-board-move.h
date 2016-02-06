@@ -17,7 +17,7 @@ class StageOpponentChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			bool can_play_minion = !board.opponent_minions.IsFull();
+			bool can_play_minion = !board.object_manager.IsMinionsFull(SLOT_OPPONENT_HERO);
 
 			std::vector<Card> playable_minions;
 			if (can_play_minion) {
@@ -32,14 +32,14 @@ class StageOpponentChooseBoardMove
 			}
 
 			// the choices to attack by hero/minion
-			TargetorBitmap attacker;
-			TargetorBitmap attacked;
+			SlotIndexBitmap attacker;
+			SlotIndexBitmap attacked;
 
 			// TODO: check if player has weapon
-			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
+			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED, board);
+				attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED, board);
 
 				NextMoveGetter::ItemAttack attack_move(std::move(attacker), std::move(attacked));
 				next_move_getter.AddItem(std::move(attack_move));
@@ -77,15 +77,15 @@ class StageOpponentChooseBoardMove
 
 			// the choices to play a card from hand
 			std::vector<Card> playable_minions;
-			bool can_play_minion = !board.opponent_minions.IsFull();
+			bool can_play_minion = !board.object_manager.IsOpponentMinionsFull();
 			board.opponent_cards.GetPossiblePlayableMinions(board.opponent_stat, playable_minions);
 			if (can_play_minion) {
 				for (const auto &playing_card : playable_minions) {
 					if (board.opponent_stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-					TargetorBitmap required_targets;
+					SlotIndexBitmap required_targets;
 					bool meet_requirements;
-					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetOpponentHeroIndex(), required_targets, meet_requirements)
+					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_OPPONENT_SIDE, required_targets, meet_requirements)
 						&& meet_requirements == false)
 					{
 						break;
@@ -93,8 +93,8 @@ class StageOpponentChooseBoardMove
 
 					move.action = Move::ACTION_OPPONENT_PLAY_MINION;
 					move.data.opponent_play_minion_data.card = playing_card;
-					move.data.opponent_play_minion_data.data.put_location = Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount());
-					if (required_targets.None()) move.data.opponent_play_minion_data.data.target = -1;
+					move.data.opponent_play_minion_data.data.put_location = SlotIndexHelper::GetOpponentMinionIndex(board.object_manager.GetOpponentMinionsCount());
+					if (required_targets.None()) move.data.opponent_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.opponent_play_minion_data.data.target = required_targets.GetOneTarget();
 
 					moves.AddMove(move, weight_play_minion);
@@ -102,20 +102,20 @@ class StageOpponentChooseBoardMove
 			}
 
 			// the choices to attack by hero/minion
-			TargetorBitmap attacker;
-			TargetorBitmap attacked;
+			SlotIndexBitmap attacker;
+			SlotIndexBitmap attacked;
 
-			attacker = Targetor::GetTargets(Targetor::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
+			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
 
 			if (!attacker.None()) {
-				attacked = Targetor::GetTargets(Targetor::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED, board);
+				attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED, board);
 				
 				while (!attacker.None()) {
-					int attacker_idx = attacker.GetOneTarget();
+					SlotIndex attacker_idx = attacker.GetOneTarget();
 					attacker.ClearOneTarget(attacker_idx);
 
 					while (!attacked.None()) {
-						int attacked_idx = attacked.GetOneTarget();
+						SlotIndex attacked_idx = attacked.GetOneTarget();
 						attacked.ClearOneTarget(attacked_idx);
 
 						move.action = Move::ACTION_ATTACK;
@@ -154,9 +154,9 @@ class StageOpponentChooseBoardMove
 		{
 			if (board.opponent_stat.crystal.GetCurrent() < playing_card.cost) return;
 
-			TargetorBitmap required_targets;
+			SlotIndexBitmap required_targets;
 			bool meet_requirements;
-			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, Targetor::GetOpponentHeroIndex(), required_targets, meet_requirements) &&
+			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_OPPONENT_SIDE, required_targets, meet_requirements) &&
 				meet_requirements == false)
 			{
 				return;
@@ -165,12 +165,13 @@ class StageOpponentChooseBoardMove
 			// TODO: check play requirements
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = Targetor::GetOpponentMinionIndex(0); i <= Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount()); ++i)
+			for (int i = 0; i <= board.object_manager.GetOpponentMinionsCount(); ++i)
 			{
-				next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, i, required_targets));
+				SlotIndex idx = SlotIndexHelper::GetOpponentMinionIndex(i);
+				next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, idx, required_targets));
 			}
 #else
-			next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, Targetor::GetOpponentMinionIndex((int)board.opponent_minions.GetMinionCount()), required_targets));
+			next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, SlotIndexHelper::GetOpponentMinionIndex(board.object_manager.GetOpponentMinionsCount()), required_targets));
 #endif
 		}
 
@@ -178,17 +179,6 @@ class StageOpponentChooseBoardMove
 		{
 			board.data.opponent_play_minion_data = move.data.opponent_play_minion_data;
 			board.stage = STAGE_OPPONENT_PUT_MINION;
-		}
-
-		static void GetNextMoves_Attack(int attacker_idx, int attacked_idx, std::list<Move> &next_moves)
-		{
-			Move move;
-
-			move.action = Move::ACTION_ATTACK;
-			move.data.attack_data.attacker_idx = attacker_idx;
-			move.data.attack_data.attacked_idx = attacked_idx;
-
-			next_moves.push_back(move);
 		}
 
 		static void OpponentAttack(Board &board, const Move &move)

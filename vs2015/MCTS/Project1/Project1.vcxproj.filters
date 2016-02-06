@@ -72,11 +72,11 @@
     <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\targetor.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp">
       <Filter>Source Files\game-engine\stages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp">
+      <Filter>Source Files\game-engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +210,9 @@
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\triggers.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\slot-index.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
   </ItemGroup>

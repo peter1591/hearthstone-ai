@@ -3,9 +3,7 @@
 
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
-#include "game-engine/targetor.h"
 #include "game-engine/minion.h"
-#include "game-engine/minions.h"
 #include "game-engine/stages/helper.h"
 
 namespace GameEngine {
@@ -18,20 +16,20 @@ public:
 
 	// Haunted Creeper
 
-	static void Deathrattle(GameEngine::Board & board, int targetor_idx)
+	static void Deathrattle(GameEngine::Board & board, SlotIndex targetor_idx)
 	{
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
 		
 		GameEngine::Move::PlayMinionData data;
 		data.put_location = targetor_idx;
-		data.target = -1;
+		data.target = SLOT_INVALID;// not used when summonion a minion
 
 		StageHelper::SummonMinion(board, card, data);
 		StageHelper::SummonMinion(board, card, data);
 	}
 
-	static void OnSummon(GameEngine::Board const&, int, int, GameEngine::Minion & summoning_minion)
+	static void OnSummon(GameEngine::Board const&, SlotIndex, SlotIndex, GameEngine::BoardObjects::Minion & summoning_minion)
 	{
 		summoning_minion.AddOnDeathTrigger(Deathrattle);
 	}
