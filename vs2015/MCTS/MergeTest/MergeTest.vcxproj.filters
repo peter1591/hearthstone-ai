@@ -209,5 +209,8 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

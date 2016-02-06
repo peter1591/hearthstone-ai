@@ -6,11 +6,9 @@
 
 #include "game-engine/card-id-map.h"
 #include "game-engine/card-database.h"
+#include "game-engine/cards/common.h"
 #include "mcts.h"
 #include "decider.h"
-
-#include "game-engine/cards/card_FP1_007.h"
-#include "game-engine/cards/card_FP1_002.h"
 
 void InitializeDeck1(GameEngine::Deck &deck)
 {
@@ -58,53 +56,59 @@ void InitializeBoard(GameEngine::Board &board)
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 2, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart();
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(CARD_ID_FP1_002, 1, 2, 2);
-	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_002::Deathrattle);
-	minion.TurnStart();
-	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
-
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
-	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart();
+	minion.Set(CARD_ID_EX1_029, 2, 1, 1);
+	minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart();
+	minion.TurnStart(true);
+	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
+
+	minion = GameEngine::BoardObjects::Minion();
+	minion.Set(CARD_ID_CS2_033, 3, 6, 6);
+	minion.SetFreezeAttacker(true);
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart();
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart();
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart();
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 30, 2, 2);
-	minion.TurnStart();
+	minion.Set(222, 1, 20, 2);
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
 
 	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 10, 7, 7);
-	minion.TurnStart();
+	minion.Set(222, 3, 10, 7);
+	minion.TurnStart(true);
+	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
+
+	minion = GameEngine::BoardObjects::Minion();
+	minion.Set(CARD_ID_EX1_029, 2, 1, 1);
+	minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
+	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
 
 	board.SetStateToPlayerChooseBoardMove();

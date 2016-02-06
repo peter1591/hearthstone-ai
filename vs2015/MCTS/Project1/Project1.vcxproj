@@ -176,9 +176,6 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h" />
-    <ClInclude Include="..\..\..\include\game-engine\targetor.h" />
-    <ClInclude Include="..\..\..\include\game-engine\triggers.h" />
-    <ClInclude Include="..\..\..\include\game-engine\weapon.h" />
     <ClInclude Include="..\..\..\include\mcts.h" />
     <ClInclude Include="..\..\..\include\task.h" />
     <ClInclude Include="..\..\..\include\tree.h" />
