@@ -21,12 +21,8 @@ public:
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
 		
-		GameEngine::Move::PlayMinionData data;
-		data.put_location = targetor_idx;
-		data.target = SLOT_INVALID;// not used when summoning a minion
-
-		StageHelper::SummonMinion(board, card, data);
-		StageHelper::SummonMinion(board, card, data);
+		StageHelper::SummonMinion(board, card, targetor_idx);
+		StageHelper::SummonMinion(board, card, targetor_idx);
 	}
 
 	static void OnSummon(GameEngine::Board const&, SlotIndex, SlotIndex, GameEngine::BoardObjects::Minion & summoning_minion)

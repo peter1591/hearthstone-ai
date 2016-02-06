@@ -21,11 +21,7 @@ public:
 		// summon Nerubian (AT_036t) when death at [pos]
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
 		
-		GameEngine::Move::PlayMinionData data;
-		data.put_location = targetor_idx;
-		data.target = SLOT_INVALID;// not used when summonion a minion
-
-		StageHelper::SummonMinion(board, card, data);
+		StageHelper::SummonMinion(board, card, targetor_idx);
 	}
 
 	static void OnSummon(GameEngine::Board const&, SlotIndex, SlotIndex, GameEngine::BoardObjects::Minion & summoning_minion)

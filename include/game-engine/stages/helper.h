@@ -21,7 +21,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayMinion(Board & board, Card const& card, PlayMinionData const& data);
 
 	// no battle cry
-	static bool SummonMinion(Board & board, Card const& card, PlayMinionData const& data);
+	static bool SummonMinion(Board & board, Card const& card, SlotIndex location);
 
 public:
 	// handle minion/hero attack, calculate damages
