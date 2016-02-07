@@ -14,14 +14,14 @@ namespace BoardObjects {
 		friend std::hash<Effect>;
 		
 	public:
-		enum Type
+		enum LifeTime
 		{
 			VALID_UNTIL_REMOVED,
 			VALID_THIS_TURN
 		};
 
 	public:
-		static Effect CreateEffect(Type type, MinionStat effect_stat);
+		static Effect CreateEffect(LifeTime life_time, MinionStat effect_stat);
 
 		bool operator==(Effect const& rhs) const;
 		bool operator!=(Effect const& rhs) const;
@@ -38,7 +38,7 @@ namespace BoardObjects {
 	private:
 		Effect() {}
 
-		Type type;
+		LifeTime life_time;
 		MinionStat effect_stat;
 	};
 
@@ -112,10 +112,10 @@ namespace BoardObjects {
 		container_type effects;
 	};
 
-	inline Effect Effect::CreateEffect(Type type, MinionStat effect_stat)
+	inline Effect Effect::CreateEffect(LifeTime life_time, MinionStat effect_stat)
 	{
 		Effect effect;
-		effect.type = type;
+		effect.life_time = life_time;
 		effect.effect_stat = effect_stat;
 		return effect;
 	}
@@ -142,7 +142,7 @@ namespace BoardObjects {
 	// return false if this effect vanished
 	inline bool Effect::TurnEnd()
 	{
-		if (this->type == Effect::VALID_THIS_TURN) return false;
+		if (this->life_time == Effect::VALID_THIS_TURN) return false;
 
 		return true;
 	}
