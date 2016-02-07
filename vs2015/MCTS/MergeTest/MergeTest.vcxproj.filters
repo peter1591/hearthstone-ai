@@ -212,5 +212,11 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\effects.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-stat.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

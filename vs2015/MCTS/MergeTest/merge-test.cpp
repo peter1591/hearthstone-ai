@@ -53,6 +53,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 	GameEngine::BoardObjects::Minion minion;
 
+	/*
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 2, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
@@ -88,6 +89,7 @@ void InitializeBoard(GameEngine::Board &board)
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
 	minion.TurnStart(true);
 	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
+	*/
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
