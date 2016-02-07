@@ -87,18 +87,10 @@ public: // Manipulate minions
 	bool IsOpponentMinionsFull() const;
 
 	int GetPlayerMinionsCount() const { return (int)this->player_minions.size(); }
-	Minions::iterator PlayerMinionsBegin() { return this->player_minions.begin(); }
-	Minions::iterator PlayerMinionsEnd() { return this->player_minions.end(); }
-	Minions::const_iterator PlayerMinionsBegin() const { return this->player_minions.cbegin(); }
-	Minions::const_iterator PlayerMinionsEnd() const { return this->player_minions.cend(); }
 	MinionConstIterator GetPlayerMinionsIterator() const { return MinionConstIterator(SLOT_PLAYER_MINION_START, this->player_minions.begin(), this->player_minions); }
 	MinionIterator GetPlayerMinionsIterator() { return MinionIterator(SLOT_PLAYER_MINION_START, this->player_minions.begin(), this->player_minions); }
 
 	int GetOpponentMinionsCount() const { return (int)this->opponent_minions.size(); }
-	Minions::iterator OpponentMinionsBegin() { return this->opponent_minions.begin(); }
-	Minions::iterator OpponentMinionsEnd() { return this->opponent_minions.end(); }
-	Minions::const_iterator OpponentMinionsBegin() const { return this->opponent_minions.cbegin(); }
-	Minions::const_iterator OpponentMinionsEnd() const { return this->opponent_minions.cend(); }
 	MinionConstIterator GetOpponentMinionsIterator() const { return MinionConstIterator(SLOT_OPPONENT_MINION_START, this->opponent_minions.begin(), this->opponent_minions); }
 	MinionIterator GetOpponentMinionsIterator() { return MinionIterator(SLOT_OPPONENT_MINION_START, this->opponent_minions.begin(), this->opponent_minions); }
 
