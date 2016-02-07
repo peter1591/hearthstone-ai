@@ -22,7 +22,11 @@ public:
 		FLAG_MAX
 	};
 
+	typedef std::bitset<FLAG_MAX> Flags;
+
 public:
+	MinionStat() : attack(0), hp(0), max_hp(0) {}
+
 	bool operator==(MinionStat const& rhs) const
 	{
 		if (this->attack != rhs.attack) return false;
@@ -45,12 +49,13 @@ public:
 	bool GetFlag(Flag flag) const { return this->flags[flag]; }
 
 	void ClearFlags() { this->flags.reset(); }
+	void MergeFlags(MinionStat const& rhs) { this->flags |= rhs.flags; }
 
 private:
 	int attack;
 	int hp;
 	int max_hp;
-	std::bitset<FLAG_MAX> flags;
+	Flags flags;
 };
 
 }

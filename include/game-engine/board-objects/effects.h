@@ -14,12 +14,32 @@ namespace BoardObjects {
 		friend std::hash<Effect>;
 		
 	public:
+		enum Type
+		{
+			VALID_UNTIL_REMOVED,
+			VALID_THIS_TURN
+		};
+
+	public:
+		static Effect CreateEffect(Type type, MinionStat effect_stat);
+
 		bool operator==(Effect const& rhs) const;
 		bool operator!=(Effect const& rhs) const;
 
-	public: // hooks
+	public:
 		// return true if modified
-		bool UpdateStat(MinionStat & stat) const;
+		void UpdateStat(MinionStat & stat) const;
+
+	public:
+		// return true if this effect still valid,
+		// return false if this effect vanished
+		bool TurnEnd();
+
+	private:
+		Effect() {}
+
+		Type type;
+		MinionStat effect_stat;
 	};
 
 	class RegisteredEffect
@@ -49,7 +69,12 @@ namespace BoardObjects {
 		bool operator!=(Effects const& rhs) const;
 
 	public:
-		RegisteredEffect Add(Effect && effect)
+		void Add(Effect && effect)
+		{
+			this->effects.push_back(std::move(effect));
+		}
+
+		RegisteredEffect AddRemovableEffect(Effect && effect)
 		{
 			this->effects.push_back(std::move(effect));
 			
@@ -60,19 +85,40 @@ namespace BoardObjects {
 		}
 
 		// return true if modified
-		bool UpdateStat(MinionStat & stat) const
+		void UpdateStat(MinionStat & stat) const
 		{
-			bool ret = false;
 			for (auto const& effect : this->effects)
 			{
-				ret |= effect.UpdateStat(stat);
+				effect.UpdateStat(stat);
 			}
-			return ret;
+		}
+
+	public: // hooks
+		void TurnEnd()
+		{
+			for (auto it = this->effects.begin(); it != this->effects.end();)
+			{
+				if (it->TurnEnd() == false) {
+					// effect vanished
+					it = this->effects.erase(it);
+				}
+				else {
+					++it;
+				}
+			}
 		}
 
 	private:
 		container_type effects;
 	};
+
+	inline Effect Effect::CreateEffect(Type type, MinionStat effect_stat)
+	{
+		Effect effect;
+		effect.type = type;
+		effect.effect_stat = effect_stat;
+		return effect;
+	}
 
 	inline bool Effect::operator==(Effect const & rhs) const
 	{
@@ -84,9 +130,21 @@ namespace BoardObjects {
 		return !(*this == rhs);
 	}
 
-	inline bool Effect::UpdateStat(MinionStat & stat) const
+	inline void Effect::UpdateStat(MinionStat & stat) const
 	{
-		return false;
+		stat.SetAttack(stat.GetAttack() + this->effect_stat.GetAttack());
+		stat.SetHP(stat.GetHP() + this->effect_stat.GetHP());
+		stat.SetMaxHP(stat.GetMaxHP() + this->effect_stat.GetMaxHP());
+		stat.MergeFlags(stat);
+	}
+
+	// return true if this effect still valid,
+	// return false if this effect vanished
+	inline bool Effect::TurnEnd()
+	{
+		if (this->type == Effect::VALID_THIS_TURN) return false;
+
+		return true;
 	}
 
 	inline bool Effects::operator==(Effects const & rhs) const

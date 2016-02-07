@@ -36,7 +36,6 @@ class Minion : public ObjectBase
 		void Summon(const Card &card);
 
 		// Modifiers
-		void AddAttackThisTurn(int attack);
 		void AttackedOnce();
 		void TakeDamage(int damage);
 		void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
@@ -61,6 +60,10 @@ class Minion : public ObjectBase
 		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
 		std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
 
+		// Effects
+		void AddEffect(Effect && effect) { return this->effects.Add(std::move(effect)); }
+		RegisteredEffect AddRemovableEffect(Effect && effect) { return this->effects.AddRemovableEffect(std::move(effect)); }
+
 		// Hooks
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
@@ -83,9 +86,6 @@ class Minion : public ObjectBase
 
 		// current stat (including non-removable effects; excluding aura)
 		MinionStat stat;
-
-		// enchantments
-		int attack_bias_when_turn_ends;
 
 		int attacked_times;
 		bool summoned_this_turn;
@@ -135,8 +135,6 @@ inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origi
 	this->stat.SetHP(this->origin_hp);
 	this->stat.SetMaxHP(this->origin_max_hp);
 	this->stat.ClearFlags();
-
-	this->attack_bias_when_turn_ends = 0;
 }
 
 inline void Minion::Summon(const Card & card)
@@ -159,18 +157,6 @@ inline void Minion::Summon(const Card & card)
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
-	this->attack_bias_when_turn_ends = 0;
-}
-
-inline void Minion::AddAttackThisTurn(int attack_boost)
-{
-	int current_attack = this->stat.GetAttack();
-	if (current_attack + attack_boost <= 0) {
-		// cannot reduced below zero
-		attack_boost = -current_attack;
-	}
-	this->stat.SetAttack(current_attack + attack_boost);
-	this->attack_bias_when_turn_ends -= attack_boost;
 }
 
 inline void Minion::TurnStart(bool)
@@ -181,9 +167,6 @@ inline void Minion::TurnStart(bool)
 
 inline void Minion::TurnEnd(bool owner_turn)
 {
-	this->stat.SetAttack(this->stat.GetAttack() + this->attack_bias_when_turn_ends);
-	this->attack_bias_when_turn_ends = 0;
-
 	if (owner_turn) {
 		// check thaw
 		if (this->attacked_times == 0 && !this->summoned_this_turn)
@@ -192,6 +175,8 @@ inline void Minion::TurnEnd(bool owner_turn)
 			this->stat.SetFlag(MinionStat::FLAG_FREEZED, false);
 		}
 	}
+
+	this->effects.TurnEnd();
 }
 
 inline bool Minion::Attackable() const
@@ -231,7 +216,6 @@ inline bool Minion::operator==(Minion const& rhs) const
 
 	if (this->stat != rhs.stat) return false;
 
-	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
 	if (this->attacked_times != rhs.attacked_times) return false;
 	if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
 
@@ -284,7 +268,6 @@ namespace std {
 			
 			GameEngine::hash_combine(result, s.stat);
 			
-			GameEngine::hash_combine(result, s.attack_bias_when_turn_ends);
 			GameEngine::hash_combine(result, s.attacked_times);
 			GameEngine::hash_combine(result, s.summoned_this_turn);
 

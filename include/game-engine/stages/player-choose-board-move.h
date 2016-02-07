@@ -178,7 +178,7 @@ class StagePlayerChooseBoardMove
 			// TODO: check play requirements
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = 0; i < board.object_manager.GetPlayerMinionsCount(); ++i)
+			for (int i = 0; i <= board.object_manager.GetPlayerMinionsCount(); ++i)
 			{
 				SlotIndex idx = SlotIndexHelper::GetPlayerMinionIndex(i);
 				next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets));
