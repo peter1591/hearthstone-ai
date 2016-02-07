@@ -3,7 +3,6 @@
 
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
-#include "game-engine/minion.h"
 #include "game-engine/stages/helper.h"
 
 namespace GameEngine {
