@@ -8,6 +8,7 @@
 #include "game-engine/slot-index.h"
 #include "object-base.h"
 #include "effects.h"
+#include "minion-stat.h"
 
 namespace GameEngine {
 
@@ -22,60 +23,13 @@ class Minion : public ObjectBase
 	public:
 		typedef std::function<void(Board& board, SlotIndex idx)> OnDeathTrigger;
 
-		class Stat
-		{
-			friend std::hash<Stat>;
-
-		public:
-			enum Flag {
-				FLAG_TAUNT = 0,
-				FLAG_CHARGE,
-				FLAG_SHIELD,
-				FLAG_STEALTH,
-				FLAG_FORGETFUL,
-				FLAG_FREEZE_ATTACKER,
-				FLAG_FREEZED,
-				FLAG_MAX
-			};
-
-		public:
-			bool operator==(Stat const& rhs) const
-			{
-				if (this->attack != rhs.attack) return false;
-				if (this->hp != rhs.hp) return false;
-				if (this->max_hp != rhs.max_hp) return false;
-				if (this->flags != rhs.flags) return false;
-				return true;
-			}
-
-			bool operator!=(Stat const& rhs) const { return !(*this == rhs); }
-
-			void SetAttack(int attack) { this->attack = attack; }
-			void SetHP(int hp) { this->hp = hp; }
-			void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
-			void SetFlag(Flag flag, bool val) { this->flags.set(flag, val); }
-
-			int GetAttack() const { return this->attack; }
-			int GetHP() const { return this->hp; }
-			int GetMaxHP() const { return this->max_hp; }
-			bool GetFlag(Flag flag) const { return this->flags[flag]; }
-
-			void ClearFlags() { this->flags.reset(); }
-
-		private:
-			int attack;
-			int hp;
-			int max_hp;
-			std::bitset<FLAG_MAX> flags;
-		};
-
 	public:
 		Minion();
 
 		int GetCardId() const { return this->card_id;}
-		int GetAttack() const { return this->stat.GetAttack(); }
-		int GetHP() const { return this->stat.GetHP(); }
-		int GetMaxHP() const {return this->stat.GetMaxHP(); }
+		int GetAttack() const;
+		int GetHP() const;
+		int GetMaxHP() const;
 
 		// Initializer
 		void Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp);
@@ -85,23 +39,23 @@ class Minion : public ObjectBase
 		void AddAttackThisTurn(int attack);
 		void AttackedOnce();
 		void TakeDamage(int damage);
-		void SetTaunt(bool val) { this->stat.SetFlag(Stat::FLAG_TAUNT, val); }
-		void SetCharge(bool val) { this->stat.SetFlag(Stat::FLAG_CHARGE, val); }
-		void SetShield(bool val) { this->stat.SetFlag(Stat::FLAG_SHIELD, val); }
-		void SetStealth(bool val) { this->stat.SetFlag(Stat::FLAG_STEALTH, val); }
-		void SetForgetful(bool val) { this->stat.SetFlag(Stat::FLAG_FORGETFUL, val); }
-		void SetFreezeAttacker(bool val) { this->stat.SetFlag(Stat::FLAG_FREEZE_ATTACKER, val); }
-		void SetFreezed(bool val) { this->stat.SetFlag(Stat::FLAG_FREEZED, val); }
+		void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
+		void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
+		void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
+		void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
+		void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
+		void SetFreezeAttacker(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, val); }
+		void SetFreezed(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZED, val); }
 
 		// Getters
 		bool Attackable() const;
-		bool IsTaunt() const { return this->stat.GetFlag(Stat::FLAG_TAUNT); }
-		bool IsCharge() const { return this->stat.GetFlag(Stat::FLAG_CHARGE); }
-		bool IsShield() const { return this->stat.GetFlag(Stat::FLAG_SHIELD); }
-		bool IsStealth() const { return this->stat.GetFlag(Stat::FLAG_STEALTH); }
-		bool IsForgetful() const { return this->stat.GetFlag(Stat::FLAG_FORGETFUL); }
-		bool IsFreezeAttacker() const { return this->stat.GetFlag(Stat::FLAG_FREEZE_ATTACKER); }
-		bool IsFreezed() const { return this->stat.GetFlag(Stat::FLAG_FREEZED); }
+		bool IsTaunt() const { return this->stat.GetFlag(MinionStat::FLAG_TAUNT); }
+		bool IsCharge() const { return this->stat.GetFlag(MinionStat::FLAG_CHARGE); }
+		bool IsShield() const { return this->stat.GetFlag(MinionStat::FLAG_SHIELD); }
+		bool IsStealth() const { return this->stat.GetFlag(MinionStat::FLAG_STEALTH); }
+		bool IsForgetful() const { return this->stat.GetFlag(MinionStat::FLAG_FORGETFUL); }
+		bool IsFreezeAttacker() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER); }
+		bool IsFreezed() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZED); }
 
 		// Triggers
 		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
@@ -128,7 +82,7 @@ class Minion : public ObjectBase
 		int origin_max_hp;
 
 		// current stat (including non-removable effects; excluding aura)
-		Stat stat;
+		MinionStat stat;
 
 		// enchantments
 		int attack_bias_when_turn_ends;
@@ -144,6 +98,21 @@ class Minion : public ObjectBase
 inline Minion::Minion() : card_id(0)
 {
 
+}
+
+inline int Minion::GetAttack() const
+{
+	return this->stat.GetAttack();
+}
+
+inline int Minion::GetHP() const
+{
+	return this->stat.GetHP();
+}
+
+inline int Minion::GetMaxHP() const
+{
+	return this->stat.GetMaxHP();
 }
 
 inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp)
@@ -171,13 +140,13 @@ inline void Minion::Summon(const Card & card)
 	this->stat.SetAttack(this->origin_attack);
 	this->stat.SetHP(this->origin_hp);
 	this->stat.SetMaxHP(this->origin_max_hp);
-	this->stat.SetFlag(Stat::FLAG_TAUNT, card.data.minion.taunt);
-	this->stat.SetFlag(Stat::FLAG_CHARGE, card.data.minion.charge);
-	this->stat.SetFlag(Stat::FLAG_SHIELD, card.data.minion.shield);
-	this->stat.SetFlag(Stat::FLAG_STEALTH, card.data.minion.stealth);
-	this->stat.SetFlag(Stat::FLAG_FORGETFUL, card.data.minion.forgetful);
-	this->stat.SetFlag(Stat::FLAG_FREEZE_ATTACKER, card.data.minion.freeze);
-	this->stat.SetFlag(Stat::FLAG_FREEZED, false);
+	this->SetTaunt(card.data.minion.taunt);
+	this->SetCharge(card.data.minion.charge);
+	this->SetShield(card.data.minion.shield);
+	this->SetStealth(card.data.minion.stealth);
+	this->SetForgetful(card.data.minion.forgetful);
+	this->SetFreezeAttacker(card.data.minion.freeze);
+	this->SetFreezed(false);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -211,16 +180,16 @@ inline void Minion::TurnEnd(bool owner_turn)
 		if (this->attacked_times == 0 && !this->summoned_this_turn)
 		{
 			// if summon in this turn, and freeze it, then the minion will not be unfrozen
-			this->stat.SetFlag(Stat::FLAG_FREEZED, false);
+			this->stat.SetFlag(MinionStat::FLAG_FREEZED, false);
 		}
 	}
 }
 
 inline bool Minion::Attackable() const
 {
-	if (this->summoned_this_turn && !this->stat.GetFlag(Stat::FLAG_CHARGE)) return false;
+	if (this->summoned_this_turn && !this->stat.GetFlag(MinionStat::FLAG_CHARGE)) return false;
 
-	if (this->stat.GetFlag(Stat::FLAG_FREEZED)) return false;
+	if (this->stat.GetFlag(MinionStat::FLAG_FREEZED)) return false;
 
 	if (attacked_times > 0) return false;
 	if (this->GetAttack() <= 0) return false;
@@ -231,13 +200,13 @@ inline bool Minion::Attackable() const
 inline void Minion::AttackedOnce()
 {
 	this->attacked_times++;
-	this->stat.SetFlag(Stat::FLAG_STEALTH, false);
+	this->stat.SetFlag(MinionStat::FLAG_STEALTH, false);
 }
 
 inline void Minion::TakeDamage(int damage)
 {
-	if (this->stat.GetFlag(Stat::FLAG_SHIELD)) {
-		this->stat.SetFlag(Stat::FLAG_SHIELD, false);
+	if (this->stat.GetFlag(MinionStat::FLAG_SHIELD)) {
+		this->stat.SetFlag(MinionStat::FLAG_SHIELD, false);
 	}
 	else {
 		this->stat.SetHP(this->stat.GetHP() - damage);
@@ -293,22 +262,6 @@ inline std::string Minion::GetDebugString() const
 }
 
 namespace std {
-
-	template <> struct hash<GameEngine::BoardObjects::Minion::Stat> {
-		typedef GameEngine::BoardObjects::Minion::Stat argument_type;
-		typedef std::size_t result_type;
-		result_type operator()(const argument_type &s) const {
-			result_type result = 0;
-
-			GameEngine::hash_combine(result, s.attack);
-			GameEngine::hash_combine(result, s.hp);
-			GameEngine::hash_combine(result, s.max_hp);
-			GameEngine::hash_combine(result, s.flags);
-
-			return result;
-		}
-	};
-
 	template <> struct hash<GameEngine::BoardObjects::Minion> {
 		typedef GameEngine::BoardObjects::Minion argument_type;
 		typedef std::size_t result_type;
