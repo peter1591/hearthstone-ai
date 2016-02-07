@@ -3,6 +3,7 @@
 #include <list>
 #include <memory>
 #include <functional>
+#include <bitset>
 #include "game-engine/card.h"
 #include "game-engine/slot-index.h"
 #include "object-base.h"
@@ -21,13 +22,60 @@ class Minion : public ObjectBase
 	public:
 		typedef std::function<void(Board& board, SlotIndex idx)> OnDeathTrigger;
 
+		class Stat
+		{
+			friend std::hash<Stat>;
+
+		public:
+			enum Flag {
+				FLAG_TAUNT = 0,
+				FLAG_CHARGE,
+				FLAG_SHIELD,
+				FLAG_STEALTH,
+				FLAG_FORGETFUL,
+				FLAG_FREEZE_ATTACKER,
+				FLAG_FREEZED,
+				FLAG_MAX
+			};
+
+		public:
+			bool operator==(Stat const& rhs) const
+			{
+				if (this->attack != rhs.attack) return false;
+				if (this->hp != rhs.hp) return false;
+				if (this->max_hp != rhs.max_hp) return false;
+				if (this->flags != rhs.flags) return false;
+				return true;
+			}
+
+			bool operator!=(Stat const& rhs) const { return !(*this == rhs); }
+
+			void SetAttack(int attack) { this->attack = attack; }
+			void SetHP(int hp) { this->hp = hp; }
+			void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
+			void SetFlag(Flag flag, bool val) { this->flags.set(flag, val); }
+
+			int GetAttack() const { return this->attack; }
+			int GetHP() const { return this->hp; }
+			int GetMaxHP() const { return this->max_hp; }
+			bool GetFlag(Flag flag) const { return this->flags[flag]; }
+
+			void ClearFlags() { this->flags.reset(); }
+
+		private:
+			int attack;
+			int hp;
+			int max_hp;
+			std::bitset<FLAG_MAX> flags;
+		};
+
 	public:
 		Minion();
 
 		int GetCardId() const { return this->card_id;}
-		int GetAttack() const { return this->attack; }
-		int GetHP() const { return this->hp; }
-		int GetMaxHP() const {return this->max_hp; }
+		int GetAttack() const { return this->stat.GetAttack(); }
+		int GetHP() const { return this->stat.GetHP(); }
+		int GetMaxHP() const {return this->stat.GetMaxHP(); }
 
 		// Initializer
 		void Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp);
@@ -37,23 +85,23 @@ class Minion : public ObjectBase
 		void AddAttackThisTurn(int attack);
 		void AttackedOnce();
 		void TakeDamage(int damage);
-		void SetTaunt(bool taunt) { this->taunt = taunt; }
-		void SetCharge(bool charge) { this->charge = charge; }
-		void SetShield(bool shield) { this->shield = shield; }
-		void SetStealth(bool stealth) { this->stealth = stealth; }
-		void SetForgetful(bool forgetful) { this->forgetful = forgetful; }
-		void SetFreezeAttacker(bool freeze) { this->freeze_attacker = freeze; }
-		void SetFreezed(bool freezed) { this->freezed = freezed; }
+		void SetTaunt(bool val) { this->stat.SetFlag(Stat::FLAG_TAUNT, val); }
+		void SetCharge(bool val) { this->stat.SetFlag(Stat::FLAG_CHARGE, val); }
+		void SetShield(bool val) { this->stat.SetFlag(Stat::FLAG_SHIELD, val); }
+		void SetStealth(bool val) { this->stat.SetFlag(Stat::FLAG_STEALTH, val); }
+		void SetForgetful(bool val) { this->stat.SetFlag(Stat::FLAG_FORGETFUL, val); }
+		void SetFreezeAttacker(bool val) { this->stat.SetFlag(Stat::FLAG_FREEZE_ATTACKER, val); }
+		void SetFreezed(bool val) { this->stat.SetFlag(Stat::FLAG_FREEZED, val); }
 
 		// Getters
 		bool Attackable() const;
-		bool IsTaunt() const { return this->taunt; }
-		bool IsCharge() const { return this->charge; }
-		bool IsShield() const { return this->shield; }
-		bool IsStealth() const { return this->stealth; }
-		bool IsForgetful() const { return this->forgetful; }
-		bool IsFreezeAttacker() const { return this->freeze_attacker; }
-		bool IsFreezed() const { return this->freezed; }
+		bool IsTaunt() const { return this->stat.GetFlag(Stat::FLAG_TAUNT); }
+		bool IsCharge() const { return this->stat.GetFlag(Stat::FLAG_CHARGE); }
+		bool IsShield() const { return this->stat.GetFlag(Stat::FLAG_SHIELD); }
+		bool IsStealth() const { return this->stat.GetFlag(Stat::FLAG_STEALTH); }
+		bool IsForgetful() const { return this->stat.GetFlag(Stat::FLAG_FORGETFUL); }
+		bool IsFreezeAttacker() const { return this->stat.GetFlag(Stat::FLAG_FREEZE_ATTACKER); }
+		bool IsFreezed() const { return this->stat.GetFlag(Stat::FLAG_FREEZED); }
 
 		// Triggers
 		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
@@ -74,22 +122,13 @@ class Minion : public ObjectBase
 	private:
 		int card_id;
 
-		// used when silenced
+		// used when being silenced
 		int origin_attack;
 		int origin_hp;
 		int origin_max_hp;
 
-		// current stat (exclude aura)
-		int attack;
-		int hp;
-		int max_hp;
-		bool taunt;
-		bool charge;
-		bool shield;
-		bool stealth;
-		bool forgetful;
-		bool freeze_attacker;
-		bool freezed;
+		// current stat (including non-removable effects; excluding aura)
+		Stat stat;
 
 		// enchantments
 		int attack_bias_when_turn_ends;
@@ -114,16 +153,10 @@ inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origi
 	this->origin_hp = origin_hp;
 	this->origin_max_hp = origin_max_hp;
 
-	this->attack = this->origin_attack;
-	this->hp = this->origin_hp;
-	this->max_hp = this->origin_max_hp;
-	this->taunt = false;
-	this->charge = false;
-	this->shield = false;
-	this->stealth = false;
-	this->forgetful = false;
-	this->freeze_attacker = false;
-	this->freezed = false;
+	this->stat.SetAttack(this->origin_attack);
+	this->stat.SetHP(this->origin_hp);
+	this->stat.SetMaxHP(this->origin_max_hp);
+	this->stat.ClearFlags();
 
 	this->attack_bias_when_turn_ends = 0;
 }
@@ -135,30 +168,31 @@ inline void Minion::Summon(const Card & card)
 	this->origin_hp = this->origin_max_hp;
 	this->origin_attack = card.data.minion.attack;
 
-	this->attack = this->origin_attack;
-	this->hp = this->origin_hp;
-	this->max_hp = this->origin_max_hp;
-	this->taunt = card.data.minion.taunt;
-	this->charge = card.data.minion.charge;
-	this->shield = card.data.minion.shield;
-	this->stealth = card.data.minion.stealth;
-	this->forgetful = card.data.minion.forgetful;
-	this->freeze_attacker = card.data.minion.freeze;
-	this->freezed = false;
+	this->stat.SetAttack(this->origin_attack);
+	this->stat.SetHP(this->origin_hp);
+	this->stat.SetMaxHP(this->origin_max_hp);
+	this->stat.SetFlag(Stat::FLAG_TAUNT, card.data.minion.taunt);
+	this->stat.SetFlag(Stat::FLAG_CHARGE, card.data.minion.charge);
+	this->stat.SetFlag(Stat::FLAG_SHIELD, card.data.minion.shield);
+	this->stat.SetFlag(Stat::FLAG_STEALTH, card.data.minion.stealth);
+	this->stat.SetFlag(Stat::FLAG_FORGETFUL, card.data.minion.forgetful);
+	this->stat.SetFlag(Stat::FLAG_FREEZE_ATTACKER, card.data.minion.freeze);
+	this->stat.SetFlag(Stat::FLAG_FREEZED, false);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
 	this->attack_bias_when_turn_ends = 0;
 }
 
-inline void Minion::AddAttackThisTurn(int attack)
+inline void Minion::AddAttackThisTurn(int attack_boost)
 {
-	if (this->attack + attack <= 0) {
+	int current_attack = this->stat.GetAttack();
+	if (current_attack + attack_boost <= 0) {
 		// cannot reduced below zero
-		attack = -this->attack;
+		attack_boost = -current_attack;
 	}
-	this->attack += attack;
-	this->attack_bias_when_turn_ends -= attack;
+	this->stat.SetAttack(current_attack + attack_boost);
+	this->attack_bias_when_turn_ends -= attack_boost;
 }
 
 inline void Minion::TurnStart(bool)
@@ -169,7 +203,7 @@ inline void Minion::TurnStart(bool)
 
 inline void Minion::TurnEnd(bool owner_turn)
 {
-	this->attack += this->attack_bias_when_turn_ends;
+	this->stat.SetAttack(this->stat.GetAttack() + this->attack_bias_when_turn_ends);
 	this->attack_bias_when_turn_ends = 0;
 
 	if (owner_turn) {
@@ -177,16 +211,16 @@ inline void Minion::TurnEnd(bool owner_turn)
 		if (this->attacked_times == 0 && !this->summoned_this_turn)
 		{
 			// if summon in this turn, and freeze it, then the minion will not be unfrozen
-			this->freezed = false;
+			this->stat.SetFlag(Stat::FLAG_FREEZED, false);
 		}
 	}
 }
 
 inline bool Minion::Attackable() const
 {
-	if (this->summoned_this_turn && !this->charge) return false;
+	if (this->summoned_this_turn && !this->stat.GetFlag(Stat::FLAG_CHARGE)) return false;
 
-	if (this->freezed) return false;
+	if (this->stat.GetFlag(Stat::FLAG_FREEZED)) return false;
 
 	if (attacked_times > 0) return false;
 	if (this->GetAttack() <= 0) return false;
@@ -197,16 +231,16 @@ inline bool Minion::Attackable() const
 inline void Minion::AttackedOnce()
 {
 	this->attacked_times++;
-	this->stealth = false;
+	this->stat.SetFlag(Stat::FLAG_STEALTH, false);
 }
 
 inline void Minion::TakeDamage(int damage)
 {
-	if (this->shield) {
-		this->shield = false;
+	if (this->stat.GetFlag(Stat::FLAG_SHIELD)) {
+		this->stat.SetFlag(Stat::FLAG_SHIELD, false);
 	}
 	else {
-		this->hp -= damage;
+		this->stat.SetHP(this->stat.GetHP() - damage);
 	}
 }
 
@@ -217,16 +251,7 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->origin_hp != rhs.origin_hp) return false;
 	if (this->origin_max_hp != rhs.origin_max_hp) return false;
 
-	if (this->attack != rhs.attack) return false;
-	if (this->hp != rhs.hp) return false;
-	if (this->max_hp != rhs.max_hp) return false;
-	if (this->taunt != rhs.taunt) return false;
-	if (this->charge != rhs.charge) return false;
-	if (this->shield != rhs.shield) return false;
-	if (this->stealth != rhs.stealth) return false;
-	if (this->forgetful != rhs.forgetful) return false;
-	if (this->freeze_attacker != rhs.freeze_attacker) return false;
-	if (this->freezed != rhs.freezed) return false;
+	if (this->stat != rhs.stat) return false;
 
 	if (this->attack_bias_when_turn_ends != rhs.attack_bias_when_turn_ends) return false;
 	if (this->attacked_times != rhs.attacked_times) return false;
@@ -269,6 +294,21 @@ inline std::string Minion::GetDebugString() const
 
 namespace std {
 
+	template <> struct hash<GameEngine::BoardObjects::Minion::Stat> {
+		typedef GameEngine::BoardObjects::Minion::Stat argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.attack);
+			GameEngine::hash_combine(result, s.hp);
+			GameEngine::hash_combine(result, s.max_hp);
+			GameEngine::hash_combine(result, s.flags);
+
+			return result;
+		}
+	};
+
 	template <> struct hash<GameEngine::BoardObjects::Minion> {
 		typedef GameEngine::BoardObjects::Minion argument_type;
 		typedef std::size_t result_type;
@@ -279,17 +319,9 @@ namespace std {
 			GameEngine::hash_combine(result, s.origin_attack);
 			GameEngine::hash_combine(result, s.origin_hp);
 			GameEngine::hash_combine(result, s.origin_max_hp);
-			GameEngine::hash_combine(result, s.taunt);
-			GameEngine::hash_combine(result, s.charge);
-			GameEngine::hash_combine(result, s.shield);
-			GameEngine::hash_combine(result, s.stealth);
-			GameEngine::hash_combine(result, s.forgetful);
-			GameEngine::hash_combine(result, s.freeze_attacker);
-			GameEngine::hash_combine(result, s.freezed);
-
-			GameEngine::hash_combine(result, s.attack);
-			GameEngine::hash_combine(result, s.hp);
-			GameEngine::hash_combine(result, s.max_hp);
+			
+			GameEngine::hash_combine(result, s.stat);
+			
 			GameEngine::hash_combine(result, s.attack_bias_when_turn_ends);
 			GameEngine::hash_combine(result, s.attacked_times);
 			GameEngine::hash_combine(result, s.summoned_this_turn);
@@ -300,4 +332,3 @@ namespace std {
 		}
 	};
 }
-
