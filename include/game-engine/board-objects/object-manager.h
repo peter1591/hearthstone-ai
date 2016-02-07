@@ -2,6 +2,7 @@
 #define GAME_ENGINE_BOARD_OBJECTS_OBJECT_MANAGER_H
 
 #include <vector>
+#include <list>
 #include <stdexcept>
 #include <iostream>
 
@@ -18,7 +19,7 @@ class ObjectManager
 	friend std::hash<ObjectManager>;
 
 public:
-	typedef std::vector<Minion> Minions;
+	typedef std::list<Minion> Minions;
 
 	class MinionIterator
 	{
@@ -127,7 +128,7 @@ private:
 	static constexpr int max_minions = 7;
 
 private:
-	static Minion& AddMinionInternal(std::vector<Minion> & minions, Minion const& minion, int idx);
+	static Minions::iterator GetMinionIterator(Minions & minions, int idx);
 
 private:
 	Hero player_hero;
@@ -139,8 +140,6 @@ private:
 
 inline ObjectManager::ObjectManager()
 {
-	this->player_minions.reserve(max_minions);
-	this->opponent_minions.reserve(max_minions);
 }
 
 inline bool ObjectManager::operator==(ObjectManager const & rhs) const
@@ -173,11 +172,11 @@ inline ObjectBase * ObjectManager::GetObject(SlotIndex idx)
 		else if (idx == SLOT_PLAYER_HERO)
 			return &this->player_hero;
 		else if (idx < SLOT_OPPONENT_HERO)
-			return &this->player_minions[idx - SLOT_PLAYER_MINION_START];
+			return &(*GetMinionIterator(this->player_minions, idx - SLOT_PLAYER_MINION_START));
 		else if (idx == SLOT_OPPONENT_HERO)
 			return &this->opponent_hero;
 		else if (idx < SLOT_MAX)
-			return &this->opponent_minions[idx - SLOT_OPPONENT_MINION_START];
+			return &(*GetMinionIterator(this->opponent_minions, idx - SLOT_OPPONENT_MINION_START));
 		else
 			throw std::runtime_error("invalid argument");
 	}
@@ -223,7 +222,9 @@ inline Minion & GameEngine::BoardObjects::ObjectManager::AddMinion(SlotIndex idx
 		
 		int minions_idx = idx - SLOT_PLAYER_MINION_START;
 		if (minions_idx > this->player_minions.size()) throw std::runtime_error("invalid argument");
-		return AddMinionInternal(this->player_minions, minion, minions_idx);
+
+		auto it = GetMinionIterator(this->player_minions, minions_idx);
+		this->player_minions.insert(it, minion);
 	}
 	else if (idx == SLOT_OPPONENT_HERO) {
 		throw std::runtime_error("invalid argument");
@@ -234,7 +235,9 @@ inline Minion & GameEngine::BoardObjects::ObjectManager::AddMinion(SlotIndex idx
 
 		int minions_idx = idx - SLOT_OPPONENT_MINION_START;
 		if (minions_idx > this->opponent_minions.size()) throw std::runtime_error("invalid argument");
-		return AddMinionInternal(this->opponent_minions, minion, minions_idx);
+
+		auto it = GetMinionIterator(this->opponent_minions, minions_idx);
+		this->opponent_minions.insert(it, minion);
 	}
 	else {
 		throw std::runtime_error("invalid argument");
@@ -287,27 +290,11 @@ inline void ObjectManager::DebugPrint() const
 	}
 }
 
-// Provided that the 'idx' is valid
-inline Minion & ObjectManager::AddMinionInternal(std::vector<Minion> & minions, Minion const & minion, int idx)
+inline ObjectManager::Minions::iterator ObjectManager::GetMinionIterator(Minions & minions, int idx)
 {
-#ifdef DEBUG
-	if (idx > minions.size()) throw std::runtime_error("out of range");
-#endif
-
-	// shift minions to the right
-	if (minions.empty())
-	{
-		minions.push_back(minion);
-	}
-	else {
-		minions.push_back(minions.back());
-		for (int i = (int)minions.size() - 2; i > idx; --i)
-		{
-			minions[i] = minions[i - 1];
-		}
-		minions[idx] = minion;
-	}
-	return minions[idx];
+	ObjectManager::Minions::iterator it = minions.begin();
+	for (; idx > 0; --idx) ++it;
+	return it;
 }
 
 } // namespace BoardObjects
