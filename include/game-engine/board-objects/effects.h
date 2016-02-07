@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include "minion.h"
+#include "minion-stat.h"
 
 namespace GameEngine {
 
@@ -12,12 +12,14 @@ namespace BoardObjects {
 	class Effect
 	{
 		friend std::hash<Effect>;
-
+		
 	public:
 		bool operator==(Effect const& rhs) const;
 		bool operator!=(Effect const& rhs) const;
 
 	public: // hooks
+		// return true if modified
+		bool UpdateStat(MinionStat & stat) const;
 	};
 
 	class RegisteredEffect
@@ -57,6 +59,17 @@ namespace BoardObjects {
 			return RegisteredEffect(this->effects, it);
 		}
 
+		// return true if modified
+		bool UpdateStat(MinionStat & stat) const
+		{
+			bool ret = false;
+			for (auto const& effect : this->effects)
+			{
+				ret |= effect.UpdateStat(stat);
+			}
+			return ret;
+		}
+
 	private:
 		container_type effects;
 	};
@@ -69,6 +82,11 @@ namespace BoardObjects {
 	inline bool Effect::operator!=(Effect const & rhs) const
 	{
 		return !(*this == rhs);
+	}
+
+	inline bool Effect::UpdateStat(MinionStat & stat) const
+	{
+		return false;
 	}
 
 	inline bool Effects::operator==(Effects const & rhs) const

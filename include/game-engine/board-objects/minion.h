@@ -102,17 +102,26 @@ inline Minion::Minion() : card_id(0)
 
 inline int Minion::GetAttack() const
 {
-	return this->stat.GetAttack();
+	// TODO: find a timing to update the effects, and cache the updated stat
+	MinionStat final_stat = this->stat;
+	this->effects.UpdateStat(final_stat);
+	return final_stat.GetAttack();
 }
 
 inline int Minion::GetHP() const
 {
-	return this->stat.GetHP();
+	// TODO: find a timing to update the effects, and cache the updated stat
+	MinionStat final_stat = this->stat;
+	this->effects.UpdateStat(final_stat);
+	return final_stat.GetHP();
 }
 
 inline int Minion::GetMaxHP() const
 {
-	return this->stat.GetMaxHP();
+	// TODO: find a timing to update the effects, and cache the updated stat
+	MinionStat final_stat = this->stat;
+	this->effects.UpdateStat(final_stat);
+	return final_stat.GetMaxHP();
 }
 
 inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp)
