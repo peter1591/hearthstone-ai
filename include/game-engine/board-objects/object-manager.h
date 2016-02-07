@@ -9,7 +9,7 @@
 #include "game-engine/slot-index.h"
 
 #include "hero.h"
-#include "minion.h"
+#include "minions.h"
 
 namespace GameEngine {
 namespace BoardObjects {
@@ -17,52 +17,6 @@ namespace BoardObjects {
 class ObjectManager
 {
 	friend std::hash<ObjectManager>;
-
-public:
-	typedef std::list<Minion> Minions;
-
-	class MinionIterator
-	{
-	public:
-		MinionIterator(SlotIndex slot_idx_begin, Minions::iterator it, Minions &minions) 
-			: slot_idx(slot_idx_begin), it(it), minions(&minions) { }
-
-		bool IsEnd() const { return this->it == minions->end(); }
-
-		void GoToNext() { this->it++; SlotIndexHelper::Increase(this->slot_idx); }
-		void EraseAndGoToNext(Minions & minions) { 
-			this->it = minions.erase(this->it);
-		}
-
-		Minions::iterator::pointer operator->() { return this->it.operator->(); }
-
-		SlotIndex GetSlotIdx() const { return this->slot_idx; }
-
-	private:
-		SlotIndex slot_idx;
-		Minions::iterator it;
-		Minions * const minions;
-	};
-
-	class MinionConstIterator
-	{
-	public:
-		MinionConstIterator(SlotIndex slot_idx_begin, Minions::const_iterator it, Minions const& minions)
-			: slot_idx(slot_idx_begin), it(it), minions(&minions) { }
-
-		bool IsEnd() const { return this->it == minions->end(); }
-
-		void GoToNext() { this->it++; SlotIndexHelper::Increase(this->slot_idx); }
-
-		Minions::const_iterator::pointer operator->() { return this->it.operator->(); }
-
-		SlotIndex GetSlotIdx() const { return this->slot_idx; }
-
-	private:
-		SlotIndex slot_idx;
-		Minions::const_iterator it;
-		Minions const* const minions;
-	};
 
 public:
 	ObjectManager();
@@ -82,30 +36,31 @@ public: // Manipulate heros
 public: // Manipulate minions
 	ObjectBase* GetObject(SlotIndex idx);
 
-	bool IsMinionsFull(SlotIndex idx) const;
-	bool IsPlayerMinionsFull() const;
-	bool IsOpponentMinionsFull() const;
+	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
+	bool IsOpponentMinionsFull() const { return this->opponent_minions.IsFull(); }
+	bool IsMinionsFull(SlotIndex side) const {
+		if (SlotIndexHelper::IsPlayerSide(side)) return this->IsPlayerMinionsFull();
+		else return this->IsOpponentMinionsFull();
+	}
 
-	int GetPlayerMinionsCount() const { return (int)this->player_minions.size(); }
-	MinionConstIterator GetPlayerMinionsIterator() const { return MinionConstIterator(SLOT_PLAYER_MINION_START, this->player_minions.begin(), this->player_minions); }
-	MinionIterator GetPlayerMinionsIterator() { return MinionIterator(SLOT_PLAYER_MINION_START, this->player_minions.begin(), this->player_minions); }
+	int GetPlayerMinionsCount() const { return this->player_minions.GetMinionCount(); }
+	Minions::MinionConstIterator GetPlayerMinionsIterator() const { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
+	Minions::MinionIterator GetPlayerMinionsIterator() { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
 
-	int GetOpponentMinionsCount() const { return (int)this->opponent_minions.size(); }
-	MinionConstIterator GetOpponentMinionsIterator() const { return MinionConstIterator(SLOT_OPPONENT_MINION_START, this->opponent_minions.begin(), this->opponent_minions); }
-	MinionIterator GetOpponentMinionsIterator() { return MinionIterator(SLOT_OPPONENT_MINION_START, this->opponent_minions.begin(), this->opponent_minions); }
+	int GetOpponentMinionsCount() const { return this->opponent_minions.GetMinionCount(); }
+	Minions::MinionConstIterator GetOpponentMinionsIterator() const { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
+	Minions::MinionIterator GetOpponentMinionsIterator() { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
 
-	MinionIterator GetMinionsIterator(SlotIndex side) { 
+	Minions::MinionIterator GetMinionsIterator(SlotIndex side) {
 		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIterator();
 		else return this->GetOpponentMinionsIterator();
 	}
-	MinionConstIterator GetMinionsIterator(SlotIndex side) const {
+	Minions::MinionConstIterator GetMinionsIterator(SlotIndex side) const {
 		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIterator();
 		else return this->GetOpponentMinionsIterator();
 	}
 
 	Minion & AddMinion(SlotIndex idx, Minion const& minion);
-
-	void EraseMinion(MinionIterator &it);
 
 public: // hooks
 	void PlayerTurnStart();
@@ -115,12 +70,6 @@ public: // hooks
 
 public:
 	void DebugPrint() const;
-
-private:
-	static constexpr int max_minions = 7;
-
-private:
-	static Minions::iterator GetMinionIterator(Minions & minions, int idx);
 
 private:
 	Hero player_hero;
@@ -164,40 +113,14 @@ inline ObjectBase * ObjectManager::GetObject(SlotIndex idx)
 		else if (idx == SLOT_PLAYER_HERO)
 			return &this->player_hero;
 		else if (idx < SLOT_OPPONENT_HERO)
-			return &(*GetMinionIterator(this->player_minions, idx - SLOT_PLAYER_MINION_START));
+			return &this->player_minions.GetMinion(idx - SLOT_PLAYER_MINION_START);
 		else if (idx == SLOT_OPPONENT_HERO)
 			return &this->opponent_hero;
 		else if (idx < SLOT_MAX)
-			return &(*GetMinionIterator(this->opponent_minions, idx - SLOT_OPPONENT_MINION_START));
+			return &this->opponent_minions.GetMinion(idx - SLOT_OPPONENT_MINION_START);
 		else
 			throw std::runtime_error("invalid argument");
 	}
-}
-
-inline bool ObjectManager::IsMinionsFull(SlotIndex idx) const
-{
-	if (idx < SLOT_PLAYER_HERO) {
-		throw std::runtime_error("invalid argument");
-	}
-	else if (idx < SLOT_OPPONENT_HERO) {
-		return this->IsPlayerMinionsFull(); // player's side
-	}
-	else if (idx < SLOT_MAX) {
-		return this->IsOpponentMinionsFull(); // opponent's side
-	}
-	else {
-		throw std::runtime_error("invalid argument");
-	}
-}
-
-inline bool ObjectManager::IsPlayerMinionsFull() const
-{
-	return (this->player_minions.size() >= max_minions);
-}
-
-inline bool ObjectManager::IsOpponentMinionsFull() const
-{
-	return (this->opponent_minions.size() >= max_minions);
 }
 
 inline Minion & GameEngine::BoardObjects::ObjectManager::AddMinion(SlotIndex idx, Minion const& minion)
@@ -210,60 +133,52 @@ inline Minion & GameEngine::BoardObjects::ObjectManager::AddMinion(SlotIndex idx
 	}
 	else if (idx < SLOT_OPPONENT_HERO) {
 		// add to player's side
-		if (this->player_minions.size() >= max_minions) throw std::runtime_error("minion full");
+		if (this->player_minions.IsFull()) throw std::runtime_error("minion full");
 		
 		int minions_idx = idx - SLOT_PLAYER_MINION_START;
-		if (minions_idx > this->player_minions.size()) throw std::runtime_error("invalid argument");
-
-		auto it = GetMinionIterator(this->player_minions, minions_idx);
-		this->player_minions.insert(it, minion);
+		if (minions_idx > this->player_minions.GetMinionCount()) throw std::runtime_error("invalid argument");
+		
+		this->player_minions.AddMinion(minions_idx, minion);
 	}
 	else if (idx == SLOT_OPPONENT_HERO) {
 		throw std::runtime_error("invalid argument");
 	}
 	else if (idx < SLOT_MAX) {
 		// add to opponent's side
-		if (this->opponent_minions.size() >= max_minions) throw std::runtime_error("minion full");
+		if (this->opponent_minions.IsFull()) throw std::runtime_error("minion full");
 
 		int minions_idx = idx - SLOT_OPPONENT_MINION_START;
-		if (minions_idx > this->opponent_minions.size()) throw std::runtime_error("invalid argument");
+		if (minions_idx > this->opponent_minions.GetMinionCount()) throw std::runtime_error("invalid argument");
 
-		auto it = GetMinionIterator(this->opponent_minions, minions_idx);
-		this->opponent_minions.insert(it, minion);
+		this->opponent_minions.AddMinion(minions_idx, minion);
 	}
 	else {
 		throw std::runtime_error("invalid argument");
 	}
 }
 
-inline void ObjectManager::EraseMinion(MinionIterator & it)
-{
-	if (SlotIndexHelper::IsPlayerSide(it.GetSlotIdx())) it.EraseAndGoToNext(this->player_minions);
-	else it.EraseAndGoToNext(this->opponent_minions);
-}
-
 inline void ObjectManager::PlayerTurnStart()
 {
-	for (auto & minion : this->player_minions) minion.TurnStart(true);
-	for (auto & minion : this->opponent_minions) minion.TurnStart(false);
+	this->player_minions.TurnStart(true);
+	this->opponent_minions.TurnStart(false);
 }
 
 inline void ObjectManager::PlayerTurnEnd()
 {
-	for (auto & minion : this->player_minions) minion.TurnEnd(true);
-	for (auto & minion : this->opponent_minions) minion.TurnEnd(false);
+	this->player_minions.TurnEnd(true);
+	this->opponent_minions.TurnEnd(false);
 }
 
 inline void ObjectManager::OpponentTurnStart()
 {
-	for (auto & minion : this->opponent_minions) minion.TurnStart(true);
-	for (auto & minion : this->player_minions) minion.TurnStart(false);
+	this->opponent_minions.TurnStart(true);
+	this->player_minions.TurnStart(false);
 }
 
 inline void ObjectManager::OpponentTurnEnd()
 {
-	for (auto & minion : this->opponent_minions) minion.TurnEnd(true);
-	for (auto & minion : this->player_minions) minion.TurnEnd(false);
+	this->opponent_minions.TurnEnd(true);
+	this->player_minions.TurnEnd(false);
 }
 
 inline void ObjectManager::DebugPrint() const
@@ -272,21 +187,10 @@ inline void ObjectManager::DebugPrint() const
 	std::cout << "Opponent Hero: " << this->opponent_hero.GetDebugString() << std::endl;
 
 	std::cout << "Opponent minions: " << std::endl;
-	for (const auto &minion : this->opponent_minions) {
-		std::cout << "\t" << minion.GetDebugString() << std::endl;
-	}
+	this->opponent_minions.DebugPrint();
 
 	std::cout << "Player minions: " << std::endl;
-	for (const auto &minion : this->player_minions) {
-		std::cout << "\t" << minion.GetDebugString() << std::endl;
-	}
-}
-
-inline ObjectManager::Minions::iterator ObjectManager::GetMinionIterator(Minions & minions, int idx)
-{
-	ObjectManager::Minions::iterator it = minions.begin();
-	for (; idx > 0; --idx) ++it;
-	return it;
+	this->player_minions.DebugPrint();
 }
 
 } // namespace BoardObjects
@@ -300,14 +204,10 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.player_hero);
-			for (auto const& minion : s.player_minions) {
-				GameEngine::hash_combine(result, minion);
-			}
+			GameEngine::hash_combine(result, s.player_minions);
 
 			GameEngine::hash_combine(result, s.opponent_hero);
-			for (auto const& minion : s.opponent_minions) {
-				GameEngine::hash_combine(result, minion);
-			}
+			GameEngine::hash_combine(result, s.opponent_minions);
 
 			return result;
 		}

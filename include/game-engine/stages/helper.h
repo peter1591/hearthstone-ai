@@ -174,7 +174,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it.GetSlotIdx()));
 			}
 
-			board.object_manager.EraseMinion(it);
+			it.EraseAndGoToNext();
 			break; // process one died minion at a time; otherwise the slot index might be wrong for deathrattle
 		}
 
