@@ -6,6 +6,7 @@
 #include "game-engine/card.h"
 #include "game-engine/slot-index.h"
 #include "object-base.h"
+#include "effects.h"
 
 namespace GameEngine {
 
@@ -97,6 +98,8 @@ class Minion : public ObjectBase
 		bool summoned_this_turn;
 
 		std::list<OnDeathTrigger> triggers_on_death;
+
+		Effects effects;
 };
 
 inline Minion::Minion() : card_id(0)
@@ -229,6 +232,8 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->attacked_times != rhs.attacked_times) return false;
 	if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
 
+	if (this->effects != rhs.effects) return false;
+
 	return true;
 }
 
@@ -288,6 +293,8 @@ namespace std {
 			GameEngine::hash_combine(result, s.attack_bias_when_turn_ends);
 			GameEngine::hash_combine(result, s.attacked_times);
 			GameEngine::hash_combine(result, s.summoned_this_turn);
+
+			GameEngine::hash_combine(result, s.effects);
 
 			return result;
 		}
