@@ -6,7 +6,7 @@ namespace GameEngine {
 	// return true if any
 	static bool MarkAttackableMinions(
 		GameEngine::Board const& board,
-		BoardObjects::MinionsConstIteratorWithIndex & minion_iterator,
+		BoardObjects::MinionsConstIteratorWithIndex && minion_iterator,
 		SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
@@ -25,7 +25,7 @@ namespace GameEngine {
 	// return true if any
 	static bool MarkTauntMinions(
 		GameEngine::Board const& board,
-		BoardObjects::MinionsConstIteratorWithIndex & minion_iterator,
+		BoardObjects::MinionsConstIteratorWithIndex && minion_iterator,
 		SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
@@ -44,7 +44,7 @@ namespace GameEngine {
 	// return true if any
 	static bool MarkMinionsWithoutStealth(
 		GameEngine::Board const& board,
-		BoardObjects::MinionsConstIteratorWithIndex & minion_iterator,
+		BoardObjects::MinionsConstIteratorWithIndex && minion_iterator,
 		SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
@@ -63,7 +63,7 @@ namespace GameEngine {
 	// return true if any
 	static bool MarkMinions(
 		GameEngine::Board const& board,
-		BoardObjects::MinionsConstIteratorWithIndex & minion_iterator,
+		BoardObjects::MinionsConstIteratorWithIndex && minion_iterator,
 		SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;

@@ -35,8 +35,6 @@ public: // Manipulate heros
 
 public: // Manipulate minions
 	ObjectBase* GetObject(SlotIndex idx);
-	Minions::iterator GetMinionIterator(SlotIndex idx);
-	Minions::const_iterator GetMinionIterator(SlotIndex idx) const;
 
 	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
 	bool IsOpponentMinionsFull() const { return this->opponent_minions.IsFull(); }
@@ -113,46 +111,14 @@ inline ObjectBase * ObjectManager::GetObject(SlotIndex idx)
 		else if (idx == SLOT_PLAYER_HERO)
 			return &this->player_hero;
 		else if (idx < SLOT_OPPONENT_HERO)
-			return &(*this->player_minions.GetIterator(idx - SLOT_PLAYER_MINION_START));
+			return &this->player_minions.Get(idx - SLOT_PLAYER_MINION_START);
 		else if (idx == SLOT_OPPONENT_HERO)
 			return &this->opponent_hero;
 		else if (idx < SLOT_MAX)
-			return &(*this->opponent_minions.GetIterator(idx - SLOT_OPPONENT_MINION_START));
+			return &this->opponent_minions.Get(idx - SLOT_OPPONENT_MINION_START);
 		else
 			throw std::runtime_error("invalid argument");
 	}
-}
-
-inline Minions::iterator ObjectManager::GetMinionIterator(SlotIndex idx)
-{
-	if (idx < SLOT_PLAYER_HERO)
-		throw std::runtime_error("invalid argument");
-	else if (idx == SLOT_PLAYER_HERO)
-		throw std::runtime_error("invalid argument");
-	else if (idx < SLOT_OPPONENT_HERO)
-		return this->player_minions.GetIterator(idx - SLOT_PLAYER_MINION_START);
-	else if (idx == SLOT_OPPONENT_HERO)
-		throw std::runtime_error("invalid argument");
-	else if (idx < SLOT_MAX)
-		return this->opponent_minions.GetIterator(idx - SLOT_OPPONENT_MINION_START);
-	else
-		throw std::runtime_error("invalid argument");
-}
-
-inline Minions::const_iterator ObjectManager::GetMinionIterator(SlotIndex idx) const
-{
-	if (idx < SLOT_PLAYER_HERO)
-		throw std::runtime_error("invalid argument");
-	else if (idx == SLOT_PLAYER_HERO)
-		throw std::runtime_error("invalid argument");
-	else if (idx < SLOT_OPPONENT_HERO)
-		return this->player_minions.GetIterator(idx - SLOT_PLAYER_MINION_START);
-	else if (idx == SLOT_OPPONENT_HERO)
-		throw std::runtime_error("invalid argument");
-	else if (idx < SLOT_MAX)
-		return this->opponent_minions.GetIterator(idx - SLOT_OPPONENT_MINION_START);
-	else
-		throw std::runtime_error("invalid argument");
 }
 
 inline void ObjectManager::PlayerTurnStart()

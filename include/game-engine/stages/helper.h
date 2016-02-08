@@ -159,11 +159,18 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::Slo
 
 inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 {
+	std::list<std::function<void(Board &)>> death_triggers;
+
 	while (true) { // loop until no deathrattle are triggered
-		std::list<std::function<void(Board &)>> death_triggers;
+		death_triggers.clear();
 
 		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
 		{
+			if (it.IsPendingRemoval()) {
+				it.GoToNext();
+				continue;
+			}
+
 			if (it->GetHP() > 0) {
 				it.GoToNext();
 				continue;
@@ -174,18 +181,27 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it));
 			}
 
-			it.EraseAndGoToNext();
-			break; // process one died minion at a time; otherwise the slot index might be wrong for deathrattle
+			it.MarkPendingRemoval();
 		}
 
 		// trigger deathrattles
-		if (death_triggers.empty()) break;
-
 		for (auto const& death_trigger : death_triggers)
 		{
 			death_trigger(board);
 		}
-		death_triggers.clear();
+
+		// actually remove died minions
+		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
+		{
+			if (it.IsPendingRemoval()) {
+				it.EraseAndGoToNext();
+			}
+			else {
+				it.GoToNext();
+			}
+		}
+
+		if (death_triggers.empty()) break;
 	}
 }
 

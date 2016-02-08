@@ -17,8 +17,22 @@ namespace GameEngine {
 			SlotIndexHelper::Increase(this->slot_idx);
 		}
 
+		inline bool MinionsIteratorWithIndex::IsPendingRemoval() const
+		{
+			return this->it->IsPendingRemoval();
+		}
+
+		inline void MinionsIteratorWithIndex::MarkPendingRemoval()
+		{
+			if (this->it->IsPendingRemoval()) return;
+
+			this->it->SetPendingRemoval();
+			this->container.pending_removal_count++;
+		}
+
 		inline void MinionsIteratorWithIndex::EraseAndGoToNext()
 		{
+			if (this->it->IsPendingRemoval()) this->container.pending_removal_count--;
 			this->it = this->container.minions.erase(this->it);
 		}
 
@@ -29,7 +43,7 @@ namespace GameEngine {
 #ifdef DEBUG
 			if (this->slot_idx == SLOT_OPPONENT_SIDE || this->slot_idx == SLOT_MAX) throw std::runtime_error("minion excess range");
 #endif
-			return *ret;
+			return ret->Get();
 		}
 
 		inline bool MinionsConstIteratorWithIndex::IsEnd() const
@@ -40,6 +54,11 @@ namespace GameEngine {
 		inline void MinionsConstIteratorWithIndex::GoToNext()
 		{
 			this->it++; SlotIndexHelper::Increase(this->slot_idx);
+		}
+
+		inline bool MinionsConstIteratorWithIndex::IsPendingRemoval() const
+		{
+			return this->it->IsPendingRemoval();
 		}
 
 	}

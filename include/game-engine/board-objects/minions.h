@@ -14,17 +14,20 @@ class Minions
 	friend class MinionsConstIteratorWithIndex;
 
 public:
-	typedef std::list<Minion> container_type;
+	typedef std::list<MinionsItem> container_type;
 	typedef container_type::iterator iterator;
 	typedef container_type::const_iterator const_iterator;
-			
+
 public:
+	Minions() : pending_removal_count(0) {}
+
 	bool operator==(Minions const& rhs) const { return this->minions == rhs.minions; }
 	bool operator!=(Minions const& rhs) const { return !(*this == rhs); }
 
 public: // getters
-	int GetMinionCount() const { return (int)this->minions.size(); }
+	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }
 	bool IsFull() const { return this->GetMinionCount() >= max_minions; }
+
 	MinionsConstIteratorWithIndex GetIteratorWithIndex(SlotIndex start_slot) const { 
 		return MinionsConstIteratorWithIndex(start_slot, this->minions.begin(), *this);
 	}
@@ -32,39 +35,30 @@ public: // getters
 		return MinionsIteratorWithIndex(start_slot, this->minions.begin(), *this);
 	}
 
-	const_iterator GetIterator(int idx) const {
+	Minion const& Get(int idx) const {
 		auto it = this->minions.cbegin();
 		for (; idx > 0; --idx) ++it;
-		return it;
+		return it->Get();
 	}
 
-	iterator GetIterator(int idx) {
+	Minion & Get(int idx) {
 		auto it = this->minions.begin();
 		for (; idx > 0; --idx) ++it;
-		return it;
-	}
-
-public: // add
-	Minion & AddMinion(int idx, Minion const& minion) {
-		iterator it;
-		if (idx == this->minions.size()) it = this->minions.end();
-		else it = this->GetIterator(idx);
-
-		return *this->minions.insert(it, minion); 
+		return it->Get();
 	}
 
 public: // hooks
 	void TurnStart(bool owner_turn) {
-		for (auto & minion : this->minions) minion.TurnStart(owner_turn);
+		for (auto & minion : this->minions) minion.Get().TurnStart(owner_turn);
 	}
 	void TurnEnd(bool owner_turn) {
-		for (auto & minion : this->minions) minion.TurnEnd(owner_turn);
+		for (auto & minion : this->minions) minion.Get().TurnEnd(owner_turn);
 	}
 
 public: // debug
 	void DebugPrint() const {
 		for (const auto &minion : this->minions) {
-			std::cout << "\t" << minion.GetDebugString() << std::endl;
+			std::cout << "\t" << minion.Get().GetDebugString() << std::endl;
 		}
 	}
 
@@ -72,7 +66,7 @@ private:
 	static constexpr int max_minions = 7;
 
 private:
-
+	int pending_removal_count;
 	container_type minions;
 };
 
