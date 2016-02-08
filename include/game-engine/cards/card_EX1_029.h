@@ -13,13 +13,13 @@ namespace GameEngine {
 			static constexpr int card_id = CARD_ID_EX1_029;
 
 			// Leper Gnome
-
-			static void Deathrattle(GameEngine::Board & board, SlotIndex location)
+			
+			static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex triggering_minion)
 			{
 				// deal 2 damage to opponent hero
 				constexpr int damage = 2;
 				
-				if (SlotIndexHelper::IsPlayerSide(location))
+				if (SlotIndexHelper::IsPlayerSide(triggering_minion.GetSlotIdx()))
 				{
 					board.object_manager.GetOpponentHero()->TakeDamage(damage);
 				}
@@ -28,9 +28,9 @@ namespace GameEngine {
 				}
 			}
 
-			static void OnSummon(GameEngine::Board const&, SlotIndex, SlotIndex, GameEngine::BoardObjects::Minion & summoning_minion)
+			static void AfterSummoned(GameEngine::Board const&, GameEngine::BoardObjects::Minion & summoned_minion)
 			{
-				summoning_minion.AddOnDeathTrigger(Deathrattle);
+				summoned_minion.AddOnDeathTrigger(Deathrattle);
 			}
 		};
 

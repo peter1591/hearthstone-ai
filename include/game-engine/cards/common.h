@@ -50,9 +50,9 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool OnSummon(int card_id, GameEngine::Board const& board, SlotIndex side, SlotIndex put_location, GameEngine::BoardObjects::Minion & summoning_minion)
+	static bool AfterSummoned(int card_id, GameEngine::Board const& board, GameEngine::BoardObjects::Minion & summoned_minion)
 	{
-		return CardCallbackManager::HandleCallback<Callback_OnSummon>(card_id, board, side, put_location, summoning_minion);
+		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, board, summoned_minion);
 	}
 
 	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
@@ -60,15 +60,15 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, side, targets, meet_requirements);
 	}
 
-	static bool BattleCry(int card_id, GameEngine::Board &board, GameEngine::Move::PlayMinionData const& play_minion_data)
+	static bool BattleCry(int card_id, GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::PlayMinionData const& play_minion_data)
 	{
-		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, play_minion_data);
+		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, playing_side, play_minion_data);
 	}
 
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
 
-	DECLARE_CARD_CALLBACK(OnSummon)
+	DECLARE_CARD_CALLBACK(AfterSummoned)
 	DECLARE_CARD_CALLBACK(BattleCry)
 	DECLARE_CARD_CALLBACK(GetRequiredTargets)
 

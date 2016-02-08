@@ -28,7 +28,7 @@ public:
 		meet_requirements = true; // it's fine even if no target available
 	}
 
-	static void BattleCry(GameEngine::Board & board, GameEngine::Move::PlayMinionData const& play_minion_data)
+	static void BattleCry(GameEngine::Board & board, SlotIndex, GameEngine::Move::PlayMinionData const& play_minion_data)
 	{
 		constexpr int damage = 1;
 

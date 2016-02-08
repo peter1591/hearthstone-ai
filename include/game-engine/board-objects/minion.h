@@ -16,12 +16,15 @@ class Board;
 
 namespace BoardObjects {
 
+class MinionsIteratorWithIndex;
+class MinionsConstIteratorWithIndex;
+
 class Minion : public ObjectBase
 {
 	friend std::hash<Minion>;
 
 	public:
-		typedef std::function<void(Board& board, SlotIndex idx)> OnDeathTrigger;
+		typedef std::function<void(Board& board, MinionsIteratorWithIndex triggering_minion)> OnDeathTrigger;
 
 	public:
 		Minion();

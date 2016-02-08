@@ -15,18 +15,18 @@ public:
 
 	// Haunted Creeper
 
-	static void Deathrattle(GameEngine::Board & board, SlotIndex targetor_idx)
+	static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex triggering_minion)
 	{
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
 		
-		StageHelper::SummonMinion(board, card, targetor_idx);
-		StageHelper::SummonMinion(board, card, targetor_idx);
+		StageHelper::SummonMinion(board, card, triggering_minion);
+		StageHelper::SummonMinion(board, card, triggering_minion);
 	}
 
-	static void OnSummon(GameEngine::Board const&, SlotIndex, SlotIndex, GameEngine::BoardObjects::Minion & summoning_minion)
+	static void AfterSummoned(GameEngine::Board const&, GameEngine::BoardObjects::Minion & summoned_minion)
 	{
-		summoning_minion.AddOnDeathTrigger(Deathrattle);
+		summoned_minion.AddOnDeathTrigger(Deathrattle);
 	}
 };
 

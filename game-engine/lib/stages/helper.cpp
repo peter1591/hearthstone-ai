@@ -4,34 +4,30 @@
 namespace GameEngine {
 
 	// return true if stage changed
-	bool StageHelper::PlayMinion(Board & board, Card const& card, PlayMinionData const & data)
+	bool StageHelper::PlayMinion(Board & board, Card const& card, SlotIndex playing_side, PlayMinionData const & data)
 	{
-		Cards::CardCallbackManager::BattleCry(card.id, board, data);
+		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
 		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
-		StageHelper::SummonMinion(board, card, data.put_location);
+		auto location = board.object_manager.GetMinionIteratorWithIndex(data.put_location);
+		StageHelper::SummonMinion(board, card, location);
 
 		return false;
 	}
 
-	bool StageHelper::SummonMinion(Board & board, Card const & card, SlotIndex location)
+	bool StageHelper::SummonMinion(Board & board, Card const & card, BoardObjects::MinionsIteratorWithIndex location)
 	{
-		BoardObjects::Minion minion;
-		minion.Summon(card);
+		BoardObjects::Minion summoning_minion;
+		summoning_minion.Summon(card);
 
-		if (SlotIndexHelper::IsPlayerSide(location))
-		{
-			if (board.object_manager.IsPlayerMinionsFull()) return false;
+		auto minions = location.GetOwner();
 
-			BoardObjects::Minion & summoning_minion = board.object_manager.AddMinion(location, minion);
-			Cards::CardCallbackManager::OnSummon(card.id, board, SLOT_PLAYER_SIDE, location, summoning_minion);
-		}
-		else {
-			if (board.object_manager.IsOpponentMinionsFull()) return false;
+		if (minions.IsFull()) return false;
 
-			BoardObjects::Minion & summoning_minion = board.object_manager.AddMinion(location, minion);
-			Cards::CardCallbackManager::OnSummon(card.id, board, SLOT_OPPONENT_SIDE, location, summoning_minion);
-		}
+		// summon
+		auto summoned_minion = location.InsertBefore(std::move(summoning_minion));
+
+		Cards::CardCallbackManager::AfterSummoned(card.id, board, summoned_minion);
 
 		return true;
 	}

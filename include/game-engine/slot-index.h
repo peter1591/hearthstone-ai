@@ -74,6 +74,12 @@ namespace GameEngine {
 
 		static bool IsOpponentSide(SlotIndex idx) { return !IsPlayerSide(idx); }
 
+		static SlotIndex GetSide(SlotIndex idx)
+		{
+			if (IsPlayerSide(idx)) return SLOT_PLAYER_SIDE;
+			else return SLOT_OPPONENT_SIDE;
+		}
+
 		enum TargetType {
 			TARGET_TYPE_PLAYER_ATTACKABLE,
 			TARGET_TYPE_OPPONENT_ATTACKABLE,

@@ -18,10 +18,10 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool CheckHeroMinionDead(Board & board);
 
 	// include battle cry, and summoning minion
-	static bool PlayMinion(Board & board, Card const& card, PlayMinionData const& data);
+	static bool PlayMinion(Board & board, Card const& card, SlotIndex playing_side, PlayMinionData const& data);
 
 	// no battle cry
-	static bool SummonMinion(Board & board, Card const& card, SlotIndex location);
+	static bool SummonMinion(Board & board, Card const& card, BoardObjects::MinionsIteratorWithIndex location);
 
 public:
 	// handle minion/hero attack, calculate damages
@@ -171,7 +171,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 
 			for (auto const& trigger : it->MoveOutOnDeathTriggers())
 			{
-				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it.GetSlotIdx()));
+				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it));
 			}
 
 			it.EraseAndGoToNext();
