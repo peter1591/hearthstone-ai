@@ -23,7 +23,7 @@ public:
 		StageHelper::SummonMinion(board, card, triggering_minion);
 	}
 
-	static void AfterSummoned(GameEngine::Board const&, GameEngine::BoardObjects::Minion & summoned_minion)
+	static void AfterSummoned(GameEngine::Board &, GameEngine::BoardObjects::Minion & summoned_minion)
 	{
 		// summon Nerubian (AT_036t) when death
 		summoned_minion.AddOnDeathTrigger(Deathrattle);

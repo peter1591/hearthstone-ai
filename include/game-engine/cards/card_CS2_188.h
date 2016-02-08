@@ -48,7 +48,7 @@ public:
 		BoardObjects::MinionStat buff_stat;
 		buff_stat.SetAttack(attack_boost);
 
-		BoardObjects::Effect effect = BoardObjects::Effect::CreateEffect(BoardObjects::Effect::VALID_THIS_TURN, buff_stat);
+		BoardObjects::Effect effect = BoardObjects::Effect::CreateEffect(BoardObjects::Effect::VALID_THIS_TURN, std::move(buff_stat));
 		buff_target->AddEffect(std::move(effect));
 	}
 };

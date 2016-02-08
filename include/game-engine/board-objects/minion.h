@@ -66,6 +66,7 @@ class Minion : public ObjectBase
 		// Effects
 		void AddEffect(Effect && effect) { return this->effects.Add(std::move(effect)); }
 		RegisteredEffect AddRemovableEffect(Effect && effect) { return this->effects.AddRemovableEffect(std::move(effect)); }
+		void RemoveEffects() { return this->effects.Clear(); }
 
 		// Hooks
 		void TurnStart(bool owner_turn);

@@ -30,6 +30,11 @@ namespace GameEngine {
 			this->container.pending_removal_count++;
 		}
 
+		inline void MinionsIteratorWithIndex::RemoveAllEffects()
+		{
+			this->it->Get().RemoveEffects();
+		}
+
 		inline void MinionsIteratorWithIndex::EraseAndGoToNext()
 		{
 			if (this->it->IsPendingRemoval()) this->container.pending_removal_count--;

@@ -20,6 +20,7 @@
 #include "stage.h"
 #include "next-move-getter.h"
 #include "move.h"
+#include "aura.h"
 
 namespace GameEngine {
 
@@ -50,6 +51,7 @@ class Board
 			this->opponent_cards = rhs.opponent_cards;
 
 			this->object_manager = rhs.object_manager;
+			this->aura_manager = rhs.aura_manager;
 
 			this->stage = rhs.stage;
 			this->random_generator = rhs.random_generator;
@@ -69,6 +71,7 @@ class Board
 		OpponentCards opponent_cards;
 
 		BoardObjects::ObjectManager object_manager;
+		AuraManager aura_manager;
 
 	public:
 		void SetStateToPlayerChooseBoardMove();
@@ -92,9 +95,7 @@ class Board
 		void DebugPrint() const;
 
 		bool operator==(const Board &rhs) const;
-		bool operator!=(const Board &rhs) const {
-			return !(*this == rhs);
-		}
+		bool operator!=(const Board &rhs) const;
 
 	public: // internal state data for cross-stage communication
 
@@ -133,6 +134,7 @@ inline bool Board::operator==(const Board &rhs) const
 	if (this->opponent_cards != rhs.opponent_cards) return false;
 
 	if (this->object_manager != rhs.object_manager) return false;
+	if (this->aura_manager != rhs.aura_manager) return false;
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
@@ -155,6 +157,11 @@ inline bool Board::operator==(const Board &rhs) const
 	return true;
 }
 
+inline bool Board::operator!=(Board const& rhs) const
+{
+	return !(*this == rhs);
+}
+
 } // namespace GameEngine
 
 namespace std {
@@ -174,6 +181,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.opponent_cards);
 
 			GameEngine::hash_combine(result, s.object_manager);
+			GameEngine::hash_combine(result, s.aura_manager);
 
 			GameEngine::hash_combine(result, s.stage);
 

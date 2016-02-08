@@ -1,7 +1,9 @@
 #pragma once
 
+#include <iostream>
 #include <list>
 #include "minion-stat.h"
+#include "game-engine/aura.h"
 
 namespace GameEngine {
 
@@ -14,6 +16,12 @@ namespace BoardObjects {
 		friend std::hash<Effect>;
 		
 	public:
+		enum Type
+		{
+			TYPE_SELF, // only buff itself
+			TYPE_AURA
+		};
+
 		enum LifeTime
 		{
 			VALID_UNTIL_REMOVED,
@@ -21,7 +29,11 @@ namespace BoardObjects {
 		};
 
 	public:
-		static Effect CreateEffect(LifeTime life_time, MinionStat effect_stat);
+		// create a effect with type 'TYPE_SELF'
+		static Effect CreateEffect(LifeTime life_time, MinionStat && effect_stat);
+
+		// craete a effect with type 'TYPE_AURA'
+		static Effect CreateEffect(LifeTime life_time, RegisteredAura && aura);
 
 		bool operator==(Effect const& rhs) const;
 		bool operator!=(Effect const& rhs) const;
@@ -30,16 +42,22 @@ namespace BoardObjects {
 		// return true if modified
 		void UpdateStat(MinionStat & stat) const;
 
-	public:
+	public: // hooks
 		// return true if this effect still valid,
 		// return false if this effect vanished
 		bool TurnEnd();
 
+		void BeforeRemoved();
+
 	private:
-		Effect() {}
+		Effect();
+
+		Type type;
 
 		LifeTime life_time;
+
 		MinionStat effect_stat;
+		RegisteredAura aura;
 	};
 
 	class RegisteredEffect
@@ -84,12 +102,19 @@ namespace BoardObjects {
 			return RegisteredEffect(this->effects, it);
 		}
 
-		// return true if modified
 		void UpdateStat(MinionStat & stat) const
 		{
 			for (auto const& effect : this->effects)
 			{
 				effect.UpdateStat(stat);
+			}
+		}
+
+		void Clear()
+		{
+			for (auto it = this->effects.begin(); it != this->effects.end();)
+			{
+				it = this->Remove(it);
 			}
 		}
 
@@ -99,8 +124,7 @@ namespace BoardObjects {
 			for (auto it = this->effects.begin(); it != this->effects.end();)
 			{
 				if (it->TurnEnd() == false) {
-					// effect vanished
-					it = this->effects.erase(it);
+					it = this->Remove(it); // effect died
 				}
 				else {
 					++it;
@@ -109,19 +133,49 @@ namespace BoardObjects {
 		}
 
 	private:
+		container_type::iterator Remove(container_type::iterator it)
+		{
+			it->BeforeRemoved();
+			return this->effects.erase(it);
+		}
+
+	private:
 		container_type effects;
 	};
 
-	inline Effect Effect::CreateEffect(LifeTime life_time, MinionStat effect_stat)
+	inline Effect Effect::CreateEffect(LifeTime life_time, MinionStat && effect_stat)
 	{
 		Effect effect;
+		effect.type = TYPE_SELF;
 		effect.life_time = life_time;
-		effect.effect_stat = effect_stat;
+		effect.effect_stat = std::move(effect_stat);
+		return effect;
+	}
+
+	inline Effect Effect::CreateEffect(LifeTime life_time, RegisteredAura && aura)
+	{
+		Effect effect;
+		effect.type = TYPE_AURA;
+		effect.life_time = life_time;
+		effect.aura = std::move(aura);
 		return effect;
 	}
 
 	inline bool Effect::operator==(Effect const & rhs) const
 	{
+		if (this->type != rhs.type) return false;
+		if (this->life_time != rhs.life_time) return false;
+		
+		switch (this->type) {
+		case TYPE_SELF:
+			if (this->effect_stat != rhs.effect_stat) return false;
+			break;
+
+		case TYPE_AURA:
+			if (this->aura != rhs.aura) return false;
+			break;
+		}
+
 		return true;
 	}
 
@@ -147,6 +201,22 @@ namespace BoardObjects {
 		return true;
 	}
 
+	inline void Effect::BeforeRemoved()
+	{
+		switch (this->type) {
+		case TYPE_SELF:
+			break;
+
+		case TYPE_AURA:
+			this->aura.Remove();
+			break;
+		}
+	}
+
+	inline Effect::Effect()
+	{
+	}
+
 	inline bool Effects::operator==(Effects const & rhs) const
 	{
 		if (this->effects != rhs.effects) return false;
@@ -168,6 +238,19 @@ namespace std {
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.type);
+			GameEngine::hash_combine(result, s.life_time);
+
+			switch (s.type) {
+			case GameEngine::BoardObjects::Effect::TYPE_SELF:
+				GameEngine::hash_combine(result, s.effect_stat);
+				break;
+
+			case GameEngine::BoardObjects::Effect::TYPE_AURA:
+				GameEngine::hash_combine(result, s.aura);
+				break;
+			}
 
 			return result;
 		}

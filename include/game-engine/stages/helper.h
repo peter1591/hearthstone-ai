@@ -164,6 +164,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 	while (true) { // loop until no deathrattle are triggered
 		death_triggers.clear();
 
+		// mark as pending death
 		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
 		{
 			if (it.IsPendingRemoval()) {
@@ -193,7 +194,11 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 		// actually remove died minions
 		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
 		{
-			if (it.IsPendingRemoval()) {
+			if (it.IsPendingRemoval()) 
+			{
+				// remove all effects (including auras)
+				it.RemoveAllEffects();
+
 				it.EraseAndGoToNext();
 			}
 			else {

@@ -56,6 +56,8 @@ public:
 	bool IsPendingRemoval() const;
 	void MarkPendingRemoval();
 
+	void RemoveAllEffects();
+
 	Minion* operator->() { return &(this->it->Get()) ; }
 
 	Minions & GetOwner() const { return this->container; }
