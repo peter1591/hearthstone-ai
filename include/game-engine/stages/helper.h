@@ -162,7 +162,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 	while (true) { // loop until no deathrattle are triggered
 		std::list<std::function<void(Board &)>> death_triggers;
 
-		for (auto it = board.object_manager.GetMinionsIterator(side); !it.IsEnd();)
+		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
 		{
 			if (it->GetHP() > 0) {
 				it.GoToNext();

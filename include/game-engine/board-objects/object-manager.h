@@ -35,6 +35,8 @@ public: // Manipulate heros
 
 public: // Manipulate minions
 	ObjectBase* GetObject(SlotIndex idx);
+	Minions::iterator GetMinionIterator(SlotIndex idx);
+	Minions::const_iterator GetMinionIterator(SlotIndex idx) const;
 
 	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
 	bool IsOpponentMinionsFull() const { return this->opponent_minions.IsFull(); }
@@ -44,20 +46,20 @@ public: // Manipulate minions
 	}
 
 	int GetPlayerMinionsCount() const { return this->player_minions.GetMinionCount(); }
-	Minions::ConstIteratorWithIndex GetPlayerMinionsIterator() const { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
-	Minions::IteratorWithIndex GetPlayerMinionsIterator() { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
+	Minions::ConstIteratorWithIndex GetPlayerMinionsIteratorWithIndex() const { return this->player_minions.GetIteratorWithIndex(SLOT_PLAYER_MINION_START); }
+	Minions::IteratorWithIndex GetPlayerMinionsIteratorWithIndex() { return this->player_minions.GetIteratorWithIndex(SLOT_PLAYER_MINION_START); }
 
 	int GetOpponentMinionsCount() const { return this->opponent_minions.GetMinionCount(); }
-	Minions::ConstIteratorWithIndex GetOpponentMinionsIterator() const { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
-	Minions::IteratorWithIndex GetOpponentMinionsIterator() { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
+	Minions::ConstIteratorWithIndex GetOpponentMinionsIteratorWithIndex() const { return this->opponent_minions.GetIteratorWithIndex(SLOT_OPPONENT_MINION_START); }
+	Minions::IteratorWithIndex GetOpponentMinionsIteratorWithIndex() { return this->opponent_minions.GetIteratorWithIndex(SLOT_OPPONENT_MINION_START); }
 
-	Minions::IteratorWithIndex GetMinionsIterator(SlotIndex side) {
-		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIterator();
-		else return this->GetOpponentMinionsIterator();
+	Minions::IteratorWithIndex GetMinionIteratorWithIndex(SlotIndex side) {
+		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIteratorWithIndex();
+		else return this->GetOpponentMinionsIteratorWithIndex();
 	}
-	Minions::ConstIteratorWithIndex GetMinionsIterator(SlotIndex side) const {
-		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIterator();
-		else return this->GetOpponentMinionsIterator();
+	Minions::ConstIteratorWithIndex GetMinionIteratorWithIndex(SlotIndex side) const {
+		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIteratorWithIndex();
+		else return this->GetOpponentMinionsIteratorWithIndex();
 	}
 
 	Minion & AddMinion(SlotIndex idx, Minion const& minion);
@@ -113,14 +115,46 @@ inline ObjectBase * ObjectManager::GetObject(SlotIndex idx)
 		else if (idx == SLOT_PLAYER_HERO)
 			return &this->player_hero;
 		else if (idx < SLOT_OPPONENT_HERO)
-			return &this->player_minions.GetMinion(idx - SLOT_PLAYER_MINION_START);
+			return &(*this->player_minions.GetIterator(idx - SLOT_PLAYER_MINION_START));
 		else if (idx == SLOT_OPPONENT_HERO)
 			return &this->opponent_hero;
 		else if (idx < SLOT_MAX)
-			return &this->opponent_minions.GetMinion(idx - SLOT_OPPONENT_MINION_START);
+			return &(*this->opponent_minions.GetIterator(idx - SLOT_OPPONENT_MINION_START));
 		else
 			throw std::runtime_error("invalid argument");
 	}
+}
+
+inline Minions::iterator ObjectManager::GetMinionIterator(SlotIndex idx)
+{
+	if (idx < SLOT_PLAYER_HERO)
+		throw std::runtime_error("invalid argument");
+	else if (idx == SLOT_PLAYER_HERO)
+		throw std::runtime_error("invalid argument");
+	else if (idx < SLOT_OPPONENT_HERO)
+		return this->player_minions.GetIterator(idx - SLOT_PLAYER_MINION_START);
+	else if (idx == SLOT_OPPONENT_HERO)
+		throw std::runtime_error("invalid argument");
+	else if (idx < SLOT_MAX)
+		return this->opponent_minions.GetIterator(idx - SLOT_OPPONENT_MINION_START);
+	else
+		throw std::runtime_error("invalid argument");
+}
+
+inline Minions::const_iterator ObjectManager::GetMinionIterator(SlotIndex idx) const
+{
+	if (idx < SLOT_PLAYER_HERO)
+		throw std::runtime_error("invalid argument");
+	else if (idx == SLOT_PLAYER_HERO)
+		throw std::runtime_error("invalid argument");
+	else if (idx < SLOT_OPPONENT_HERO)
+		return this->player_minions.GetIterator(idx - SLOT_PLAYER_MINION_START);
+	else if (idx == SLOT_OPPONENT_HERO)
+		throw std::runtime_error("invalid argument");
+	else if (idx < SLOT_MAX)
+		return this->opponent_minions.GetIterator(idx - SLOT_OPPONENT_MINION_START);
+	else
+		throw std::runtime_error("invalid argument");
 }
 
 inline Minion & GameEngine::BoardObjects::ObjectManager::AddMinion(SlotIndex idx, Minion const& minion)

@@ -66,12 +66,20 @@ namespace GameEngine {
 		public: // getters
 			int GetMinionCount() const { return (int)this->minions.size(); }
 			bool IsFull() const { return this->GetMinionCount() >= max_minions; }
-			ConstIteratorWithIndex GetMinionsIterator(SlotIndex start_slot) const { return ConstIteratorWithIndex(start_slot, this->minions.begin(), this->minions); }
-			IteratorWithIndex GetMinionsIterator(SlotIndex start_slot) { return IteratorWithIndex(start_slot, this->minions.begin(), this->minions); }
+			ConstIteratorWithIndex GetIteratorWithIndex(SlotIndex start_slot) const { return ConstIteratorWithIndex(start_slot, this->minions.begin(), this->minions); }
+			IteratorWithIndex GetIteratorWithIndex(SlotIndex start_slot) { return IteratorWithIndex(start_slot, this->minions.begin(), this->minions); }
 
+			const_iterator GetIterator(int idx) const {
+				auto it = this->minions.cbegin();
+				for (; idx > 0; --idx) ++it;
+				return it;
+			}
 
-			Minion & GetMinion(int idx) { return *this->GetIterator(idx); }
-			Minion const& GetMinion(int idx) const { return *this->GetIterator(idx); }
+			iterator GetIterator(int idx) {
+				auto it = this->minions.begin();
+				for (; idx > 0; --idx) ++it;
+				return it;
+			}
 
 		public: // add
 			Minion & AddMinion(int idx, Minion const& minion) {
@@ -101,17 +109,6 @@ namespace GameEngine {
 			static constexpr int max_minions = 7;
 
 		private:
-			const_iterator GetIterator(int idx) const {
-				auto it = this->minions.cbegin();
-				for (; idx > 0; --idx) ++it;
-				return it;
-			}
-
-			iterator GetIterator(int idx) {
-				auto it = this->minions.begin();
-				for (; idx > 0; --idx) ++it;
-				return it;
-			}
 
 			container_type minions;
 		};
