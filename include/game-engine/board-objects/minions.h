@@ -16,10 +16,10 @@ namespace GameEngine {
 			typedef container_type::const_iterator const_iterator;
 
 		public:
-			class MinionIterator
+			class IteratorWithIndex
 			{
 			public:
-				MinionIterator(SlotIndex slot_idx_begin, container_type::iterator it, container_type &container)
+				IteratorWithIndex(SlotIndex slot_idx_begin, container_type::iterator it, container_type &container)
 					: slot_idx(slot_idx_begin), it(it), container(&container) { }
 
 				bool IsEnd() const { return this->it == container->end(); }
@@ -39,10 +39,10 @@ namespace GameEngine {
 				container_type * const container;
 			};
 
-			class MinionConstIterator
+			class ConstIteratorWithIndex
 			{
 			public:
-				MinionConstIterator(SlotIndex slot_idx_begin, container_type::const_iterator it, container_type const& container)
+				ConstIteratorWithIndex(SlotIndex slot_idx_begin, container_type::const_iterator it, container_type const& container)
 					: slot_idx(slot_idx_begin), it(it), container(&container) { }
 
 				bool IsEnd() const { return this->it == container->end(); }
@@ -66,8 +66,9 @@ namespace GameEngine {
 		public: // getters
 			int GetMinionCount() const { return (int)this->minions.size(); }
 			bool IsFull() const { return this->GetMinionCount() >= max_minions; }
-			MinionConstIterator GetMinionsIterator(SlotIndex start_slot) const { return MinionConstIterator(start_slot, this->minions.begin(), this->minions); }
-			MinionIterator GetMinionsIterator(SlotIndex start_slot) { return MinionIterator(start_slot, this->minions.begin(), this->minions); }
+			ConstIteratorWithIndex GetMinionsIterator(SlotIndex start_slot) const { return ConstIteratorWithIndex(start_slot, this->minions.begin(), this->minions); }
+			IteratorWithIndex GetMinionsIterator(SlotIndex start_slot) { return IteratorWithIndex(start_slot, this->minions.begin(), this->minions); }
+
 
 			Minion & GetMinion(int idx) { return *this->GetIterator(idx); }
 			Minion const& GetMinion(int idx) const { return *this->GetIterator(idx); }

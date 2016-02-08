@@ -44,18 +44,18 @@ public: // Manipulate minions
 	}
 
 	int GetPlayerMinionsCount() const { return this->player_minions.GetMinionCount(); }
-	Minions::MinionConstIterator GetPlayerMinionsIterator() const { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
-	Minions::MinionIterator GetPlayerMinionsIterator() { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
+	Minions::ConstIteratorWithIndex GetPlayerMinionsIterator() const { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
+	Minions::IteratorWithIndex GetPlayerMinionsIterator() { return this->player_minions.GetMinionsIterator(SLOT_PLAYER_MINION_START); }
 
 	int GetOpponentMinionsCount() const { return this->opponent_minions.GetMinionCount(); }
-	Minions::MinionConstIterator GetOpponentMinionsIterator() const { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
-	Minions::MinionIterator GetOpponentMinionsIterator() { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
+	Minions::ConstIteratorWithIndex GetOpponentMinionsIterator() const { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
+	Minions::IteratorWithIndex GetOpponentMinionsIterator() { return this->opponent_minions.GetMinionsIterator(SLOT_OPPONENT_MINION_START); }
 
-	Minions::MinionIterator GetMinionsIterator(SlotIndex side) {
+	Minions::IteratorWithIndex GetMinionsIterator(SlotIndex side) {
 		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIterator();
 		else return this->GetOpponentMinionsIterator();
 	}
-	Minions::MinionConstIterator GetMinionsIterator(SlotIndex side) const {
+	Minions::ConstIteratorWithIndex GetMinionsIterator(SlotIndex side) const {
 		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetPlayerMinionsIterator();
 		else return this->GetOpponentMinionsIterator();
 	}
