@@ -53,21 +53,24 @@ void InitializeBoard(GameEngine::Board &board)
 
 	GameEngine::BoardObjects::Minion minion;
 
+	auto player_minion_iterator = board.object_manager.GetPlayerMinionsIteratorWithIndex();
+	auto opponent_minion_iterator = board.object_manager.GetOpponentMinionsIteratorWithIndex();
+
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 2, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
 	minion.TurnStart(true);
-	board.object_manager.AddMinion(GameEngine::SLOT_PLAYER_MINION_START, minion);
+	player_minion_iterator.InsertBefore(std::move(minion));
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(222, 30, 2, 2);
 	minion.TurnStart(true);
-	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
+	opponent_minion_iterator.InsertBefore(std::move(minion));
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(222, 10, 7, 7);
 	minion.TurnStart(true);
-	board.object_manager.AddMinion(GameEngine::SLOT_OPPONENT_MINION_START, minion);
+	opponent_minion_iterator.InsertBefore(std::move(minion));
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();

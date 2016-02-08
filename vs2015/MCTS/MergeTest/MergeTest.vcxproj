@@ -114,7 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -144,6 +144,8 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-stat.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions-iterator.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\object-base.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\effects.h" />
@@ -184,6 +186,9 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
