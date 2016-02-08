@@ -26,6 +26,10 @@ class Deck
 			this->cards = rhs.cards;
 			this->random_generator = random_generator;
 		}
+		void Assign(Deck &&rhs, RandomGenerator *random_generator) {
+			this->cards = std::move(rhs.cards);
+			this->random_generator = random_generator;
+		}
 
 	public:
 		// Add a card to deck

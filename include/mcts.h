@@ -13,8 +13,8 @@ class MCTS
 {
 public:
 	MCTS();
-	MCTS(const MCTS&);
-	MCTS &operator=(const MCTS&);
+	MCTS(const MCTS&) = delete;
+	MCTS &operator=(const MCTS&) = delete;
 	MCTS(MCTS&&);
 	MCTS &operator=(MCTS&&);
 
@@ -31,8 +31,8 @@ public:
 	BoardNodeMap board_node_map;
 
 private:
-	void Select(TreeNode* const& node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
-	bool Expand(TreeNode *node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board);
+	void Select(TreeNode* const& node, GameEngine::Board && board, TreeNode* & new_node, GameEngine::Board & new_board);
+	bool Expand(TreeNode *node, GameEngine::Board && board, TreeNode* & new_node, GameEngine::Board & new_board);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 

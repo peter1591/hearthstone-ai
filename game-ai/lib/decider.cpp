@@ -99,13 +99,13 @@ static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSi
 	return it_most_simulated_node;
 }
 
-static TreeNode const* FindChildNodeWithBoard(TreeNode const* parent, GameEngine::Board const& parent_board, GameEngine::Board const& child_board)
+static TreeNode const* FindChildNodeWithBoard(TreeNode const* parent, GameEngine::Board && parent_board, GameEngine::Board const& child_board)
 {
 	for (auto child : parent->children)
 	{
 		if (child->equivalent_node != nullptr) child = child->equivalent_node;
 
-		GameEngine::Board current_child_board = parent_board;
+		GameEngine::Board current_child_board = std::move(parent_board);
 		current_child_board.ApplyMove(child->move);
 		if (current_child_board == child_board) return child;
 	}
@@ -113,7 +113,7 @@ static TreeNode const* FindChildNodeWithBoard(TreeNode const* parent, GameEngine
 	return nullptr;
 }
 
-void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Board const& current_board,
+void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Board && current_board,
 	ProgressData const* stepping_progress, TreeNode const* stepping_node, const GameEngine::Board &next_board)
 {
 	for (std::vector<ProgressData>::iterator it_progress = progresses.begin(); it_progress != progresses.end();)
@@ -128,7 +128,7 @@ void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine
 		}
 		else {
 			// find the 'next_board' among the child
-			progress.node = FindChildNodeWithBoard(progress.node, current_board, next_board);
+			progress.node = FindChildNodeWithBoard(progress.node, std::move(current_board), next_board);
 			if (progress.node == nullptr) {
 				it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
 			}
@@ -229,9 +229,12 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 		move_info.wins = -1;
 		move_info.count = -1;
 
-		GameEngine::Board current_board = board;
+		GameEngine::Board current_board;
+		current_board.CloneFrom(board); // TODO: the copy will fail if a enchantment exists, we need to re-apply all moves to get the copy
+
 		board.ApplyMove(move_info.move);
-		this->GoToNextProgress(progress, current_board, &chosen_progress, most_simulated_child, board);
+
+		this->GoToNextProgress(progress, std::move(current_board), &chosen_progress, most_simulated_child, board);
 		return true;
 	}
 	else {
@@ -286,7 +289,9 @@ Decider::MovesInfo Decider::GetBestMoves()
 		}
 	}
 
-	GameEngine::Board board = this->data.front()->root_node_board;
+	GameEngine::Board board;
+	board.CloneFrom(this->data.front()->root_node_board);
+
 	std::vector<ProgressData> progresses;
 	for (int i = 0; i < this->data.size(); ++i) {
 		ProgressData progress;

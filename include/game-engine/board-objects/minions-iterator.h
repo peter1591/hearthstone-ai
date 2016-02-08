@@ -51,14 +51,13 @@ public:
 
 	void GoToNext();
 	void EraseAndGoToNext();
-	Minion& InsertBefore(Minion && minion);
+	MinionsIteratorWithIndex InsertBefore(Minion && minion);
 
 	bool IsPendingRemoval() const;
 	void MarkPendingRemoval();
 
-	void RemoveAllEffects();
-
 	Minion* operator->() { return &(this->it->Get()) ; }
+	Minion& operator*() { return this->it->Get(); }
 
 	Minions & GetOwner() const { return this->container; }
 	SlotIndex GetSlotIdx() const { return this->slot_idx; }
@@ -84,6 +83,7 @@ public:
 	bool IsPendingRemoval() const;
 
 	Minion const* operator->() { return &(this->it->Get()); }
+	Minion const& operator*() { return this->it->Get(); }
 
 	Minions const& GetOwner() const { return this->container; }
 	SlotIndex GetSlotIdx() const { return this->slot_idx; }

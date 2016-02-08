@@ -4,6 +4,7 @@
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
 #include "game-engine/stages/helper.h"
+#include "game-engine/board-objects/enchantment.h"
 
 namespace GameEngine {
 namespace Cards {
@@ -45,11 +46,8 @@ public:
 			return;
 		}
 
-		BoardObjects::MinionStat buff_stat;
-		buff_stat.SetAttack(attack_boost);
-
-		BoardObjects::Effect effect = BoardObjects::Effect::CreateEffect(BoardObjects::Effect::VALID_THIS_TURN, std::move(buff_stat));
-		buff_target->AddEffect(std::move(effect));
+		auto enchant = new BoardObjects::Enchantment_AttackHPBoost<attack_boost, 0, true>();
+		buff_target->AddEnchantment(enchant, nullptr);
 	}
 };
 

@@ -13,8 +13,8 @@ namespace GameEngine {
 
 		inline void MinionsIteratorWithIndex::GoToNext()
 		{
+			if (!this->IsPendingRemoval()) SlotIndexHelper::Increase(this->slot_idx);
 			this->it++;
-			SlotIndexHelper::Increase(this->slot_idx);
 		}
 
 		inline bool MinionsIteratorWithIndex::IsPendingRemoval() const
@@ -30,25 +30,23 @@ namespace GameEngine {
 			this->container.pending_removal_count++;
 		}
 
-		inline void MinionsIteratorWithIndex::RemoveAllEffects()
-		{
-			this->it->Get().RemoveEffects();
-		}
-
 		inline void MinionsIteratorWithIndex::EraseAndGoToNext()
 		{
 			if (this->it->IsPendingRemoval()) this->container.pending_removal_count--;
 			this->it = this->container.minions.erase(this->it);
 		}
 
-		inline Minion & MinionsIteratorWithIndex::InsertBefore(Minion && minion)
+		inline MinionsIteratorWithIndex MinionsIteratorWithIndex::InsertBefore(Minion && minion)
 		{
-			auto ret = this->container.minions.insert(this->it, std::move(minion));
-			SlotIndexHelper::Increase(this->slot_idx);
+			auto new_it = this->container.minions.insert(this->it, std::move(minion));
+			auto new_slot_idx = this->slot_idx;
+
+			if (this->IsEnd() || !this->IsPendingRemoval()) SlotIndexHelper::Increase(this->slot_idx);
 #ifdef DEBUG
 			if (this->slot_idx == SLOT_OPPONENT_SIDE || this->slot_idx == SLOT_MAX) throw std::runtime_error("minion excess range");
 #endif
-			return ret->Get();
+
+			return MinionsIteratorWithIndex(new_slot_idx, new_it, this->container);
 		}
 
 		inline bool MinionsConstIteratorWithIndex::IsEnd() const

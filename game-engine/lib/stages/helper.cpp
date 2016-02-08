@@ -20,7 +20,7 @@ namespace GameEngine {
 		BoardObjects::Minion summoning_minion;
 		summoning_minion.Summon(card);
 
-		auto minions = location.GetOwner();
+		auto & minions = location.GetOwner();
 
 		if (minions.IsFull()) return false;
 

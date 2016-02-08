@@ -7,8 +7,9 @@
 #include "game-engine/card.h"
 #include "game-engine/slot-index.h"
 #include "object-base.h"
-#include "effects.h"
 #include "minion-stat.h"
+#include "enchantments.h"
+#include "aura.h"
 
 namespace GameEngine {
 
@@ -22,12 +23,19 @@ class MinionsConstIteratorWithIndex;
 class Minion : public ObjectBase
 {
 	friend std::hash<Minion>;
+	template <int, int, bool> friend class Enchantment_AttackHPBoost;
 
 	public:
 		typedef std::function<void(Board& board, MinionsIteratorWithIndex triggering_minion)> OnDeathTrigger;
 
 	public:
 		Minion();
+
+		// Runtime check since the minion cannot be cloned safely
+		void CheckCanBeSafelyCloned() const;
+
+		bool operator==(const Minion &rhs) const;
+		bool operator!=(const Minion &rhs) const;
 
 		int GetCardId() const { return this->card_id;}
 		int GetAttack() const;
@@ -63,10 +71,14 @@ class Minion : public ObjectBase
 		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
 		std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
 
-		// Effects
-		void AddEffect(Effect && effect) { return this->effects.Add(std::move(effect)); }
-		RegisteredEffect AddRemovableEffect(Effect && effect) { return this->effects.AddRemovableEffect(std::move(effect)); }
-		void RemoveEffects() { return this->effects.Clear(); }
+		// Enchantment
+		void ClearEnchantments() { this->enchantments.Clear(this); }
+		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) { this->enchantments.Add(enchantment, this, owner); }
+		void RemoveEnchantment(Enchantment * enchantment) { this->enchantments.Remove(enchantment, this); }
+
+		// Aura
+		void AddAura(Aura * aura) { this->auras.Add(aura); }
+		void ClearAuras() { this->auras.Clear(); }
 
 		// Hooks
 		void TurnStart(bool owner_turn);
@@ -74,21 +86,12 @@ class Minion : public ObjectBase
 
 		bool IsValid() const { return this->card_id != 0; }
 
-		bool operator==(const Minion &rhs) const;
-		bool operator!=(const Minion &rhs) const;
-
 	public:
 		std::string GetDebugString() const;
 
 	private:
 		int card_id;
 
-		// used when being silenced
-		int origin_attack;
-		int origin_hp;
-		int origin_max_hp;
-
-		// current stat (including non-removable effects; excluding aura)
 		MinionStat stat;
 
 		int attacked_times;
@@ -96,7 +99,8 @@ class Minion : public ObjectBase
 
 		std::list<OnDeathTrigger> triggers_on_death;
 
-		Effects effects;
+		Enchantments enchantments;
+		Auras auras;
 };
 
 inline Minion::Minion() : card_id(0)
@@ -106,51 +110,36 @@ inline Minion::Minion() : card_id(0)
 
 inline int Minion::GetAttack() const
 {
-	// TODO: find a timing to update the effects, and cache the updated stat
-	MinionStat final_stat = this->stat;
-	this->effects.UpdateStat(final_stat);
-	return final_stat.GetAttack();
+	return this->stat.GetAttack();
 }
 
 inline int Minion::GetHP() const
 {
-	// TODO: find a timing to update the effects, and cache the updated stat
-	MinionStat final_stat = this->stat;
-	this->effects.UpdateStat(final_stat);
-	return final_stat.GetHP();
+	return this->stat.GetHP();
 }
 
 inline int Minion::GetMaxHP() const
 {
-	// TODO: find a timing to update the effects, and cache the updated stat
-	MinionStat final_stat = this->stat;
-	this->effects.UpdateStat(final_stat);
-	return final_stat.GetMaxHP();
+	return this->stat.GetMaxHP();
 }
 
-inline void Minion::Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp)
+inline void Minion::Set(int card_id, int attack, int hp, int max_hp)
 {
 	this->card_id = card_id;
-	this->origin_attack = origin_attack;
-	this->origin_hp = origin_hp;
-	this->origin_max_hp = origin_max_hp;
 
-	this->stat.SetAttack(this->origin_attack);
-	this->stat.SetHP(this->origin_hp);
-	this->stat.SetMaxHP(this->origin_max_hp);
+	this->stat.SetAttack(attack);
+	this->stat.SetHP(hp);
+	this->stat.SetMaxHP(max_hp);
 	this->stat.ClearFlags();
 }
 
 inline void Minion::Summon(const Card & card)
 {
 	this->card_id = card.id;
-	this->origin_max_hp = card.data.minion.hp;
-	this->origin_hp = this->origin_max_hp;
-	this->origin_attack = card.data.minion.attack;
 
-	this->stat.SetAttack(this->origin_attack);
-	this->stat.SetHP(this->origin_hp);
-	this->stat.SetMaxHP(this->origin_max_hp);
+	this->stat.SetAttack(card.data.minion.attack);
+	this->stat.SetHP(card.data.minion.hp);
+	this->stat.SetMaxHP(card.data.minion.hp);
 	this->SetTaunt(card.data.minion.taunt);
 	this->SetCharge(card.data.minion.charge);
 	this->SetShield(card.data.minion.shield);
@@ -180,7 +169,7 @@ inline void Minion::TurnEnd(bool owner_turn)
 		}
 	}
 
-	this->effects.TurnEnd();
+	this->enchantments.TurnEnd(this);
 }
 
 inline bool Minion::Attackable() const
@@ -211,19 +200,22 @@ inline void Minion::TakeDamage(int damage)
 	}
 }
 
+inline void Minion::CheckCanBeSafelyCloned() const
+{
+	this->enchantments.CheckCanBeSafelyCloned();
+	this->auras.CheckCanBeSafelyCloned();
+}
+
 inline bool Minion::operator==(Minion const& rhs) const
 {
 	if (this->card_id != rhs.card_id) return false;
-	if (this->origin_attack != rhs.origin_attack) return false;
-	if (this->origin_hp != rhs.origin_hp) return false;
-	if (this->origin_max_hp != rhs.origin_max_hp) return false;
 
 	if (this->stat != rhs.stat) return false;
 
 	if (this->attacked_times != rhs.attacked_times) return false;
 	if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
 
-	if (this->effects != rhs.effects) return false;
+	if (this->enchantments != rhs.enchantments) return false;
 
 	return true;
 }
@@ -266,16 +258,13 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.card_id);
-			GameEngine::hash_combine(result, s.origin_attack);
-			GameEngine::hash_combine(result, s.origin_hp);
-			GameEngine::hash_combine(result, s.origin_max_hp);
 			
 			GameEngine::hash_combine(result, s.stat);
 			
 			GameEngine::hash_combine(result, s.attacked_times);
 			GameEngine::hash_combine(result, s.summoned_this_turn);
 
-			GameEngine::hash_combine(result, s.effects);
+			GameEngine::hash_combine(result, s.enchantments);
 
 			return result;
 		}

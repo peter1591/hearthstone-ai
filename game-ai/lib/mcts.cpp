@@ -64,7 +64,7 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 {
 	srand(rand_seed);
 
-	this->root_node_board = board;
+	this->root_node_board.CloneFrom(board);
 #ifdef DEBUG_SAVE_BOARD
 	tree.GetRootNode().board = board;
 #endif
@@ -85,10 +85,10 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 }
 
 // Note: &board can equal to &new_board for no-copy operation
-void MCTS::Select(TreeNode* const& node, GameEngine::Board const& board, TreeNode* & new_node, GameEngine::Board & new_board)
+void MCTS::Select(TreeNode* const& node, GameEngine::Board && board, TreeNode* & new_node, GameEngine::Board & new_board)
 {
 	new_node = node;
-	new_board = board; // no copy if &board == &new_board
+	new_board = std::move(board); // no copy if &board == &new_board
 
 #ifdef DEBUG
 	if (new_node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
@@ -160,12 +160,12 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 
 // return false if 'new_node' is an expanded node
 // Note: &board should not equal to &new_board
-bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new_node, GameEngine::Board &new_board)
+bool MCTS::Expand(TreeNode *node, GameEngine::Board && board, TreeNode* &new_node, GameEngine::Board &new_board)
 {
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 		// node cannot be expanded further (i.e., game-end)
 		new_node = node;
-		new_board = board;
+		new_board = std::move(board);
 		return true;
 	}
 
@@ -173,7 +173,7 @@ bool MCTS::Expand(TreeNode *node, const GameEngine::Board &board, TreeNode* &new
 	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
 #endif
 
-	new_board = board;
+	new_board = std::move(board);
 
 	bool introduced_random;
 	this->GetNextState(node, this->allocated_node->move, new_board, introduced_random);
@@ -310,7 +310,8 @@ void MCTS::BackPropagate(bool is_win)
 void MCTS::Iterate()
 {
 	TreeNode *node = &this->tree.GetRootNode();
-	GameEngine::Board board = this->root_node_board;;
+	GameEngine::Board board;
+	board.CloneFrom(this->root_node_board);
 
 	TreeNode *new_node = nullptr;
 	GameEngine::Board new_board;
@@ -322,12 +323,12 @@ void MCTS::Iterate()
 	// loop if expand a duplicated node
 	while (true)
 	{
-		this->Select(node, board, node, board); // directly update to (node, board)
+		this->Select(node, std::move(board), node, board); // directly update to (node, board)
 
-		if (this->Expand(node, board, new_node, new_board)) break;
+		if (this->Expand(node, std::move(board), new_node, new_board)) break;
 
 		node = new_node;
-		board = new_board;
+		board = std::move(new_board);
 	}
 
 	bool is_win = this->Simulate(new_board);
@@ -338,15 +339,10 @@ MCTS::MCTS()
 {
 	this->allocated_node = new TreeNode;
 }
-
+/*
 MCTS::MCTS(const MCTS& rhs)
 {
 	*this = rhs;
-}
-
-MCTS::MCTS(MCTS&& rhs)
-{
-	*this = std::move(rhs);
 }
 
 MCTS & MCTS::operator=(const MCTS& rhs)
@@ -362,6 +358,11 @@ MCTS & MCTS::operator=(const MCTS& rhs)
 	this->board_node_map.UpdateNodePointers(node_update_map);
 
 	return *this;
+}*/
+
+MCTS::MCTS(MCTS&& rhs)
+{
+	*this = std::move(rhs);
 }
 
 MCTS & MCTS::operator=(MCTS&& rhs)

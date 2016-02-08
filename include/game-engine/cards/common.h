@@ -7,6 +7,7 @@
 
 #include "card_CS2_188.h"
 #include "card_CS2_189.h"
+#include "card_CS2_222.h"
 #include "card_FP1_007.h"
 #include "card_FP1_002.h"
 #include "card_EX1_029.h"
@@ -50,7 +51,7 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool AfterSummoned(int card_id, GameEngine::Board & board, GameEngine::BoardObjects::Minion & summoned_minion)
+	static bool AfterSummoned(int card_id, GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
 	{
 		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, board, summoned_minion);
 	}
@@ -90,6 +91,7 @@ inline bool CardCallbackManager::HandleCallback(int card_id, Params&&... params)
 
 HANDLE_CARD_CALLBACK(Card_CS2_188)
 HANDLE_CARD_CALLBACK(Card_CS2_189)
+HANDLE_CARD_CALLBACK(Card_CS2_222)
 HANDLE_CARD_CALLBACK(Card_FP1_007)
 HANDLE_CARD_CALLBACK(Card_FP1_002)
 HANDLE_CARD_CALLBACK(Card_EX1_029)

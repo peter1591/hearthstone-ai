@@ -20,7 +20,6 @@
 #include "stage.h"
 #include "next-move-getter.h"
 #include "move.h"
-#include "aura.h"
 
 namespace GameEngine {
 
@@ -33,13 +32,10 @@ class Board
 		{
 		}
 
-		Board(const Board &rhs) : 
-			player_deck(&this->random_generator)
-		{
-			this->operator=(rhs);
-		}
+		Board(const Board &rhs) = delete;
+		Board & operator=(const Board &rhs) = delete;
 
-		Board & operator=(const Board &rhs) {
+		Board & CloneFrom(Board const& rhs) {
 			if (this == &rhs) return *this;
 
 			this->player_stat = rhs.player_stat;
@@ -50,12 +46,32 @@ class Board
 			this->opponent_secrets = rhs.opponent_secrets;
 			this->opponent_cards = rhs.opponent_cards;
 
-			this->object_manager = rhs.object_manager;
-			this->aura_manager = rhs.aura_manager;
+			this->object_manager.CloneFrom(rhs.object_manager);
 
 			this->stage = rhs.stage;
 			this->random_generator = rhs.random_generator;
 			this->data = rhs.data;
+
+			return *this;
+		}
+
+		Board(Board && rhs) : player_deck(&this->random_generator) { *this = std::move(rhs); }
+		Board & operator=(Board && rhs) {
+			if (this == &rhs) return *this;
+
+			this->player_stat = std::move(rhs.player_stat);
+			this->player_secrets = std::move(rhs.player_secrets);
+			this->player_hand = std::move(rhs.player_hand);
+			this->player_deck.Assign(std::move(rhs.player_deck), &this->random_generator);
+			this->opponent_stat = std::move(rhs.opponent_stat);
+			this->opponent_secrets = std::move(rhs.opponent_secrets);
+			this->opponent_cards = std::move(rhs.opponent_cards);
+
+			this->object_manager = std::move(rhs.object_manager);
+
+			this->stage = std::move(rhs.stage);
+			this->random_generator = std::move(rhs.random_generator);
+			this->data = std::move(rhs.data);
 
 			return *this;
 		}
@@ -71,7 +87,6 @@ class Board
 		OpponentCards opponent_cards;
 
 		BoardObjects::ObjectManager object_manager;
-		AuraManager aura_manager;
 
 	public:
 		void SetStateToPlayerChooseBoardMove();
@@ -134,7 +149,6 @@ inline bool Board::operator==(const Board &rhs) const
 	if (this->opponent_cards != rhs.opponent_cards) return false;
 
 	if (this->object_manager != rhs.object_manager) return false;
-	if (this->aura_manager != rhs.aura_manager) return false;
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
@@ -181,7 +195,6 @@ namespace std {
 			GameEngine::hash_combine(result, s.opponent_cards);
 
 			GameEngine::hash_combine(result, s.object_manager);
-			GameEngine::hash_combine(result, s.aura_manager);
 
 			GameEngine::hash_combine(result, s.stage);
 

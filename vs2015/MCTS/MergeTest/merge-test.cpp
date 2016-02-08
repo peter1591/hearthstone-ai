@@ -24,7 +24,7 @@ void InitializeHand1(GameEngine::Hand &hand)
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_009t)); // 111 [TAUNT]
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
-	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_222)); // Stormwind Champion
 	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	//hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // arcane explosion
 
@@ -34,7 +34,7 @@ void InitializeHand1(GameEngine::Hand &hand)
 
 void InitializeBoard(GameEngine::Board &board)
 {
-	board.player_stat.crystal.Set(1, 1, 0, 0);
+	board.player_stat.crystal.Set(10, 10, 0, 0);
 	board.player_stat.fatigue_damage = 0;
 
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
@@ -73,7 +73,7 @@ void InitializeBoard(GameEngine::Board &board)
 	opponent_minion_iterator.InsertBefore(std::move(minion));
 
 	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(CARD_ID_EX1_029, 2, 1, 1);
+	minion.Set(CARD_ID_EX1_029, 10, 10, 10);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
 	minion.TurnStart(true);
 	opponent_minion_iterator.InsertBefore(std::move(minion));
@@ -107,10 +107,7 @@ static void TestOperators()
 			throw std::runtime_error("check failed");
 		}
 
-		mcts[1] = mcts[0]; // test copy
-		if (mcts[0] != mcts[1]) {
-			throw std::runtime_error("check failed");
-		}
+		mcts[1] = std::move(mcts[0]); // test move
 
 		mcts[1].Iterate();
 		mcts_debug.Iterate();
@@ -240,6 +237,10 @@ static void InteractiveTest()
 		board.ApplyMove(next_move, &is_random);
 		if (is_random) std::cout << "!!! This move is random!!!" << std::endl;
 		else std::cout << "!!! This move is non-random!!!" << std::endl;
+
+		// TODO
+		GameEngine::Board test;
+		test.CloneFrom(board);
 	}
 }
 

@@ -21,6 +21,33 @@ public:
 public:
 	Minions() : pending_removal_count(0) {}
 
+	Minions(Minions const& rhs) = delete;
+	Minions & operator=(Minions const& rhs) = delete;
+	Minions & CloneFrom(Minions const& rhs);
+
+	Minions(Minions && rhs) { *this = std::move(rhs); }
+	Minions & operator=(Minions && rhs);
+
+	// for copy
+	void FillMinionPointersMap(Minions const& rhs, std::map<Minion const*, Minion const*> & minion_ptr_map) const
+	{
+		if (this->minions.size() != rhs.minions.size()) throw std::runtime_error("minions should equal after copying");
+
+		auto it_lhs = this->minions.begin();
+		auto it_rhs = rhs.minions.begin();
+
+		while (true)
+		{
+			if (it_lhs == this->minions.end()) break;
+			if (it_rhs == rhs.minions.end()) break;
+
+			minion_ptr_map[&it_lhs->Get()] = &it_rhs->Get();
+
+			it_lhs++;
+			it_rhs++;
+		}
+	}
+
 	bool operator==(Minions const& rhs) const { return this->minions == rhs.minions; }
 	bool operator!=(Minions const& rhs) const { return !(*this == rhs); }
 
@@ -87,6 +114,32 @@ namespace std {
 			return result;
 		}
 	};
+}
+
+inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::CloneFrom(Minions const & rhs)
+{
+	// The MCTS should only clone board from the initialized state
+	// If caller need to clone the initialized state (which has some enchantment placed on heap)
+	// we need to ask the caller to re-initialized the board as he did at the first place
+#ifdef DEBUG
+	for (auto const& minion : rhs.minions)
+	{
+		minion.Get().CheckCanBeSafelyCloned();
+	}
+#endif
+
+	this->pending_removal_count = rhs.pending_removal_count;
+	this->minions = rhs.minions;
+
+	return *this;
+}
+
+inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions && rhs)
+{
+	this->pending_removal_count = std::move(rhs.pending_removal_count);
+	this->minions = std::move(rhs.minions);
+
+	return *this;
 }
 
 #include "minions-iterator-impl.h"

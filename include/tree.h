@@ -89,7 +89,7 @@ inline void TreeNode::AddChild(TreeNode *node)
 inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const
 {
 	if (this->parent == nullptr) {
-		board = root_node_board;
+		board.CloneFrom(root_node_board);
 		return;
 	}
 

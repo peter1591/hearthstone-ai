@@ -129,6 +129,7 @@
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\task.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp" />
+    <ClCompile Include="..\..\..\game-engine\lib\board-objects\enchantments.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
