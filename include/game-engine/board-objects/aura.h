@@ -8,10 +8,12 @@ namespace GameEngine {
 	namespace BoardObjects {
 
 		class Minion;
-		class MinionsIteratorWithIndex;
+		class MinionManipulator;
 
 		class Aura
 		{
+			friend std::hash<Aura>;
+
 		public:
 			Aura() {}
 			virtual ~Aura() {}
@@ -20,12 +22,12 @@ namespace GameEngine {
 			bool operator!=(Aura const& rhs) const { return !(*this == rhs); }
 
 		public: // hooks
-			virtual void AfterAdded(Board & board, MinionsIteratorWithIndex & owner) {}
-			virtual void BeforeRemoved(Board & board, MinionsIteratorWithIndex & owner) {}
+			virtual void AfterAdded(MinionManipulator & owner) {}
+			virtual void BeforeRemoved(MinionManipulator & owner) {}
 
-			virtual void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion) {}
-			virtual void HookAfterOwnerEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &enraged_aura_owner) {}
-			virtual void HookAfterOwnerUnEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &unenraged_aura_owner) {}
+			virtual void HookAfterMinionAdded(MinionManipulator & aura_owner, MinionManipulator & added_minion) {}
+			virtual void HookAfterOwnerEnraged(MinionManipulator &enraged_aura_owner) {}
+			virtual void HookAfterOwnerUnEnraged(MinionManipulator &unenraged_aura_owner) {}
 
 		protected:
 			virtual bool EqualsTo(Aura const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -34,6 +36,8 @@ namespace GameEngine {
 
 		class Auras
 		{
+			friend std::hash<Auras>;
+
 		public:
 			Auras() {}
 			~Auras()
@@ -76,30 +80,30 @@ namespace GameEngine {
 			bool operator!=(Auras const& rhs) const { return !(*this == rhs); }
 
 		public:
-			void Add(Board & board, MinionsIteratorWithIndex & owner, Aura* aura)
+			void Add(MinionManipulator & owner, Aura* aura)
 			{
 				this->auras.push_back(aura);
-				aura->AfterAdded(board, owner);
+				aura->AfterAdded(owner);
 			}
 
-			void Clear(Board & board, MinionsIteratorWithIndex & owner)
+			void Clear(MinionManipulator & owner)
 			{
-				for (auto & aura : this->auras) aura->BeforeRemoved(board, owner);
+				for (auto & aura : this->auras) aura->BeforeRemoved(owner);
 				this->auras.clear();
 			}
 
 		public: // hooks
-			void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion)
+			void HookAfterMinionAdded(MinionManipulator & aura_owner, MinionManipulator & added_minion)
 			{
-				for (auto & aura : this->auras) aura->HookAfterMinionAdded(board, aura_owner, added_minion);
+				for (auto & aura : this->auras) aura->HookAfterMinionAdded(aura_owner, added_minion);
 			}
-			void HookAfterOwnerEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &enraged_aura_owner)
+			void HookAfterOwnerEnraged(MinionManipulator &enraged_aura_owner)
 			{
-				for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(board, enraged_aura_owner);
+				for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(enraged_aura_owner);
 			}
-			void HookAfterOwnerUnEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &unenraged_aura_owner)
+			void HookAfterOwnerUnEnraged(MinionManipulator &unenraged_aura_owner)
 			{
-				for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(board, unenraged_aura_owner);
+				for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(unenraged_aura_owner);
 			}
 
 		private:
@@ -108,3 +112,26 @@ namespace GameEngine {
 
 	} // namespace BoardObjects
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::BoardObjects::Aura> {
+		typedef GameEngine::BoardObjects::Aura argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			return s.GetHash();
+		}
+	};
+	template <> struct hash<GameEngine::BoardObjects::Auras> {
+		typedef GameEngine::BoardObjects::Auras argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			for (auto const& aura : s.auras) {
+				GameEngine::hash_combine(result, aura);
+			}
+
+			return result;
+		}
+	};
+}

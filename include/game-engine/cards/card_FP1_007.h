@@ -4,6 +4,7 @@
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
 #include "game-engine/stages/helper.h"
+#include "game-engine/board-objects/minion-manipulator.h"
 
 namespace GameEngine {
 namespace Cards {
@@ -15,18 +16,24 @@ public:
 
 	// Nerubian Egg
 
-	static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex triggering_minion)
+	static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionManipulator triggering_minion)
 	{
 		// summon Nerubian (AT_036t) when death at [pos]
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
+
+		auto inserter = BoardObjects::MinionInserter::GetInserterBefore(triggering_minion);
+#ifdef DEBUG
+		if (inserter.IsEnd()) {
+			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
+		}
+#endif
 		
-		StageHelper::SummonMinion(board, card, triggering_minion);
+		StageHelper::SummonMinion(board, card, inserter);
 	}
 
-	static void AfterSummoned(GameEngine::Board &, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
+	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 	{
-		// summon Nerubian (AT_036t) when death
-		summoned_minion->AddOnDeathTrigger(Deathrattle);
+		summoned_minion.minion->AddOnDeathTrigger(Deathrattle);
 	}
 };
 

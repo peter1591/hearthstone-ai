@@ -9,35 +9,26 @@ namespace GameEngine {
 		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
 		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
-		auto location = board.object_manager.GetMinionIteratorWithIndexFromSlotIndex(data.put_location);
-		StageHelper::SummonMinion(board, card, location);
+		auto inserter = board.object_manager.GetMinionInserter(board, data.put_location);
+
+		StageHelper::SummonMinion(board, card, inserter);
 
 		return false;
 	}
 
-	bool StageHelper::SummonMinion(Board & board, Card const & card, BoardObjects::MinionsIteratorWithIndex location)
+	bool StageHelper::SummonMinion(Board & board, Card const & card, BoardObjects::MinionInserter & inserter)
 	{
 		BoardObjects::Minion summoning_minion;
 		summoning_minion.Summon(card);
 
-		auto & minions = location.GetOwner();
-
-		if (minions.IsFull()) return false;
+		if (inserter.minions->IsFull()) return false;
 
 		// add minion
-		auto summoned_minion = location.InsertBefore(std::move(summoning_minion));
+		auto summoned_minion = inserter.InsertBefore(std::move(summoning_minion));
 		
-		Cards::CardCallbackManager::AfterSummoned(card.id, board, summoned_minion);
-
-#ifdef DEBUG
-		if (&board.object_manager.GetMinionIteratorWithIndexForSide(SlotIndexHelper::GetSide(summoned_minion.GetSlotIdx())).GetOwner() 
-			!= &summoned_minion.GetOwner())
-		{
-			throw std::runtime_error("owner's slot index does not match");
-		}
-#endif
-
-		board.object_manager.HookAfterMinionAdded(board, summoned_minion);
+		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
+		
+		board.object_manager.HookAfterMinionAdded(summoned_minion);
 
 		return true;
 	}

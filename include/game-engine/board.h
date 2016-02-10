@@ -222,4 +222,6 @@ namespace std {
 	};
 }
 
+#include "game-engine/board-objects/minion-manipulator-impl.h"
+
 #endif

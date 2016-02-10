@@ -17,7 +17,7 @@ namespace GameEngine {
 			virtual ~AuraEnrage() {}
 
 		protected: // hooks
-			void AfterAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
+			void AfterAdded(MinionManipulator & owner)
 			{
 				if (aura_owner->GetHP() < aura_owner->GetMaxHP())
 				{
@@ -25,14 +25,14 @@ namespace GameEngine {
 				}
 			}
 
-			void BeforeRemoved()
+			void BeforeRemoved(MinionManipulator & owner)
 			{
 				// Note: there should be no way to remove the enrage mechanism without removing the enrage enhancement
-				this->enchantments_manager.RemoveOwnedEnchantments();
+				this->enchantments_manager.RemoveOwnedEnchantments(owner);
 			}
 
-			virtual void HookMinionEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & enraged_minion) = 0;
-			virtual void HookMinionUnEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & enraged_minion) = 0;
+			virtual void HookMinionEnraged(MinionManipulator &aura_owner, MinionManipulator & enraged_minion) = 0;
+			virtual void HookMinionUnEnraged(MinionManipulator &aura_owner, MinionManipulator & unenraged_minion) = 0;
 
 		protected:
 			GameEngine::BoardObjects::EnchantmentOwner enchantments_manager;

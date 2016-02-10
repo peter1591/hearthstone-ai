@@ -25,12 +25,12 @@ public:
 	bool operator!=(Enchantment const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
-	virtual void AfterAdded(Minion * minion) {}
+	virtual void AfterAdded(MinionManipulator & minion) {}
 
-	virtual void BeforeRemoved(Minion * minion) {}
+	virtual void BeforeRemoved(MinionManipulator & minion) {}
 
 	// return false if enchant vanished
-	virtual bool TurnEnd(Minion * minion) { return true; }
+	virtual bool TurnEnd(MinionManipulator & minion) { return true; }
 
 protected:
 	virtual bool EqualsTo(Enchantment const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -48,16 +48,16 @@ public:
 #endif
 	}
 
-	void AfterAdded(Minion * minion)
+	void AfterAdded(MinionManipulator & minion)
 	{
 #ifdef DEBUG
 		this->after_added_called = true;
 #endif
 
 		// attack cannot below to zero
-		if (minion->GetAttack() + attack_boost < 0)
+		if (minion.minion->GetAttack() + attack_boost < 0)
 		{
-			this->actual_attack_boost = -minion->GetAttack();
+			this->actual_attack_boost = -minion.minion->GetAttack();
 		}
 		else {
 			this->actual_attack_boost = attack_boost;
@@ -65,16 +65,16 @@ public:
 
 		if (this->actual_attack_boost != 0)
 		{
-			minion->AddAttack(this->actual_attack_boost);
+			minion.minion->AddAttack(this->actual_attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion->IncreaseCurrentAndMaxHP(hp_boost);
+			minion.minion->IncreaseCurrentAndMaxHP(hp_boost);
 		}
 	}
 
-	void BeforeRemoved(Minion * minion)
+	void BeforeRemoved(MinionManipulator & minion)
 	{
 #ifdef DEBUG
 		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
@@ -82,15 +82,21 @@ public:
 
 		if (this->actual_attack_boost != 0)
 		{
-			minion->AddAttack(-this->actual_attack_boost);
+			minion.minion->AddAttack(-this->actual_attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion->DecreaseMaxHP(hp_boost);
+			minion.minion->DecreaseMaxHP(hp_boost);
 
 			// TODO: trigger enrage
 		}
+	}
+
+	bool TurnEnd(MinionManipulator & minion)
+	{
+		if (one_turn) return false; // one-turn effect 
+		else return true;
 	}
 
 	bool EqualsTo(Enchantment const& rhs_base) const
@@ -101,12 +107,6 @@ public:
 		if (this->actual_attack_boost != rhs->actual_attack_boost) return false;
 
 		return true;
-	}
-
-	bool TurnEnd(Minion *)
-	{
-		if (one_turn) return false; // one-turn effect 
-		else return true;
 	}
 
 	std::size_t GetHash() const

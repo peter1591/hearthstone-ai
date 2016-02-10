@@ -3,10 +3,10 @@
 #include <stdexcept>
 #include <sstream>
 
-#include "minions-iterator.h"
 #include "weapon.h"
 #include "hero-power.h"
 #include "object-base.h"
+#include "minion-manipulator.h"
 
 namespace GameEngine {
 namespace BoardObjects{
@@ -37,7 +37,7 @@ public:
 	bool IsFreezed() const;
 
 public: // hooks
-	void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & minion);
+	void HookAfterMinionAdded(MinionManipulator & minion);
 
 public:
 	std::string GetDebugString() const;
@@ -113,7 +113,7 @@ inline bool GameEngine::BoardObjects::Hero::IsFreezed() const
 	throw std::runtime_error("not yet implemented");
 }
 
-inline void GameEngine::BoardObjects::Hero::HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & minion)
+inline void GameEngine::BoardObjects::Hero::HookAfterMinionAdded(MinionManipulator & minion)
 {
 	// TODO
 	return;

@@ -3,6 +3,7 @@
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
 #include "game-engine/stages/helper.h"
+#include "game-engine/board-objects/minion-manipulator.h"
 
 namespace GameEngine {
 	namespace Cards {
@@ -14,13 +15,12 @@ namespace GameEngine {
 
 			// Leper Gnome
 			
-			static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex triggering_minion)
+			static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionManipulator triggering_minion)
 			{
 				// deal 2 damage to opponent hero
 				constexpr int damage = 2;
-				
-				if (SlotIndexHelper::IsPlayerSide(triggering_minion.GetSlotIdx()))
-				{
+
+				if (triggering_minion.IsPlayerSide()) {
 					StageHelper::DealDamage(board, board.object_manager.GetOpponentHero(), damage);
 				}
 				else {
@@ -28,9 +28,9 @@ namespace GameEngine {
 				}
 			}
 
-			static void AfterSummoned(GameEngine::Board &, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
+			static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 			{
-				summoned_minion->AddOnDeathTrigger(Deathrattle);
+				summoned_minion.minion->AddOnDeathTrigger(Deathrattle);
 			}
 		};
 

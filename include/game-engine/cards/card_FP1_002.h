@@ -4,6 +4,7 @@
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"
 #include "game-engine/stages/helper.h"
+#include "game-engine/board-objects/minion-manipulator.h"
 
 namespace GameEngine {
 namespace Cards {
@@ -15,18 +16,25 @@ public:
 
 	// Haunted Creeper
 
-	static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex triggering_minion)
+	static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionManipulator triggering_minion)
 	{
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
-		
-		StageHelper::SummonMinion(board, card, triggering_minion);
-		StageHelper::SummonMinion(board, card, triggering_minion);
+
+		auto inserter = BoardObjects::MinionInserter::GetInserterBefore(triggering_minion);
+#ifdef DEBUG
+		if (inserter.IsEnd()) {
+			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
+		}
+#endif
+
+		StageHelper::SummonMinion(board, card, inserter);
+		StageHelper::SummonMinion(board, card, inserter);
 	}
 
-	static void AfterSummoned(GameEngine::Board &, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
+	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 	{
-		summoned_minion->AddOnDeathTrigger(Deathrattle);
+		summoned_minion.minion->AddOnDeathTrigger(Deathrattle);
 	}
 };
 

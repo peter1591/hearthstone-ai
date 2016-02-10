@@ -9,6 +9,7 @@ namespace BoardObjects {
 class Minion;
 class Enchantment;
 class EnchantmentOwner;
+class MinionManipulator;
 
 // Maintains the lifetime of Enchantment
 class Enchantments
@@ -26,17 +27,17 @@ public:
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
 
-	void Add(Enchantment * enchantment, Minion * target, EnchantmentOwner * owner);
-	void Remove(Enchantment * enchantment, Minion * target);
-	void Clear(Minion * target);
+	void Add(Enchantment * enchantment, EnchantmentOwner * owner, GameEngine::BoardObjects::MinionManipulator & minion);
+	void Remove(Enchantment * enchantment, GameEngine::BoardObjects::MinionManipulator & target);
+	void Clear(GameEngine::BoardObjects::MinionManipulator & target);
 
 public: // hooks
-	void TurnEnd(Minion * target);
+	void TurnEnd(GameEngine::BoardObjects::MinionManipulator & target);
 
 private:
 	typedef std::list<std::pair<Enchantment *, EnchantmentOwner*>> container_type;
 
-	container_type::iterator Remove(container_type::iterator enchantment, Minion * target);
+	container_type::iterator Remove(container_type::iterator enchantment, GameEngine::BoardObjects::MinionManipulator & target);
 
 	container_type enchantments;
 };
@@ -44,11 +45,11 @@ private:
 class EnchantmentOwner
 {
 public:
-	void RemoveOwnedEnchantments();
+	void RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator & owner);
 
 	// hooks
-	void EnchantmentAdded(Enchantment * enchantment, Minion * target) { this->enchantments[enchantment] = target; }
-	void EnchantmentRemoved(Enchantment * enchantment, Minion *) { this->enchantments.erase(enchantment); }
+	void EnchantmentAdded(Enchantment * enchantment, MinionManipulator & target);
+	void EnchantmentRemoved(Enchantment * enchantment, MinionManipulator & target);
 
 private:
 	std::map<Enchantment *, Minion *> enchantments;

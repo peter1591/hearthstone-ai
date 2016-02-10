@@ -3,6 +3,7 @@
 
 #include "game-engine/stages/common.h"
 #include "game-engine/board.h"
+#include "game-engine/board-objects/minion-manipulator.h"
 
 namespace GameEngine {
 
@@ -21,7 +22,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayMinion(Board & board, Card const& card, SlotIndex playing_side, PlayMinionData const& data);
 
 	// no battle cry
-	static bool SummonMinion(Board & board, Card const& card, BoardObjects::MinionsIteratorWithIndex location);
+	static bool SummonMinion(Board & board, Card const& card, BoardObjects::MinionInserter & location);
 
 public:
 	// handle minion/hero attack, calculate damages
@@ -29,7 +30,7 @@ public:
 
 	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage);
 	static void DealDamage(GameEngine::Board & board, BoardObjects::Hero * target, int damage);
-	static void DealDamage(GameEngine::Board & board, BoardObjects::MinionsIteratorWithIndex & target, int damage);
+	static void DealDamage(BoardObjects::MinionManipulator & target, int damage);
 
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
@@ -86,9 +87,21 @@ inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_i
 		return StageHelper::DealDamage(board, target_hero, damage);
 	}
 	else {
-		auto target_minion = board.object_manager.GetMinionIteratorWithIndexFromSlotIndex(taker_idx);
-		return StageHelper::DealDamage(board, target_minion, damage);
+		auto target_minion = board.object_manager.GetMinionManipulator(board, taker_idx);
+		return StageHelper::DealDamage(target_minion, damage);
 	}
+}
+
+inline void StageHelper::DealDamage(GameEngine::Board & board, BoardObjects::Hero * target, int damage)
+{
+	target->TakeDamage(damage);
+}
+
+inline void StageHelper::DealDamage(BoardObjects::MinionManipulator & target, int damage)
+{
+	target.minion->TakeDamage(damage);
+
+	target.HookMinionCheckEnraged();
 }
 
 inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
@@ -134,18 +147,6 @@ inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & bo
 	}
 }
 
-inline void StageHelper::DealDamage(GameEngine::Board & board, BoardObjects::Hero * target, int damage)
-{
-	target->TakeDamage(damage);
-}
-
-inline void StageHelper::DealDamage(GameEngine::Board & board, BoardObjects::MinionsIteratorWithIndex & target, int damage)
-{
-	target->TakeDamage(damage);
-
-	target->HookMinionCheckEnraged(board, target);
-}
-
 inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx)
 {
 	// TODO: trigger secrets
@@ -173,7 +174,7 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::Slo
 	if (attacked->IsFreezeAttacker()) attacker->SetFreezed(true);
 }
 
-inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
+inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 {
 	std::list<std::function<void(Board &)>> death_triggers;
 
@@ -181,53 +182,47 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 		death_triggers.clear();
 
 		// mark as pending death
-		for (auto it = board.object_manager.GetMinionIteratorWithIndexForSide(side); !it.IsEnd();)
+		for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(board, side); !it.IsEnd(); it.GoToNext())
 		{
-			if (it.IsPendingRemoval()) {
-				it.GoToNext();
-				continue;
-			}
+			if (it.IsPendingRemoval()) continue;
 
-			if (it->GetHP() > 0) {
-				it.GoToNext();
-				continue;
-			}
-
-			for (auto const& trigger : it->MoveOutOnDeathTriggers())
-			{
-				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it));
-			}
+			if (it.it_minion->GetHP() > 0) continue;
 
 			it.MarkPendingRemoval();
+
+			for (auto const& trigger : it.it_minion->MoveOutOnDeathTriggers()) {
+				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it.ConverToManipulator()));
+			}
 		}
 
 		// trigger deathrattles
-		for (auto const& death_trigger : death_triggers)
-		{
+		for (auto const& death_trigger : death_triggers) {
 			death_trigger(board);
 		}
 
 		// actually remove died minions
-		for (auto it = board.object_manager.GetMinionIteratorWithIndexForSide(side); !it.IsEnd();)
+		for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(board, side); !it.IsEnd();)
 		{
-			if (it.IsPendingRemoval()) 
-			{
-				// remove all effects (including auras)
-				it->ClearEnchantments();
-				it->ClearAuras(board, it);
-
-				it.EraseAndGoToNext();
-			}
-			else {
+			if (!it.IsPendingRemoval()) {
 				it.GoToNext();
+				continue;
 			}
+
+			// remove died minion
+			auto & manipulator = it.ConverToManipulator();
+
+			// remove all effects (including auras)
+			manipulator.ClearEnchantments();
+			manipulator.ClearAuras();
+
+			it.EraseAndGoToNext();
 		}
 
 		if (death_triggers.empty()) break;
 	}
 }
 
-inline bool GameEngine::StageHelper::CheckHeroMinionDead(Board & board)
+inline bool StageHelper::CheckHeroMinionDead(Board & board)
 {
 	if (board.object_manager.GetPlayerHero()->GetHP() <= 0) {
 		board.stage = STAGE_LOSS;

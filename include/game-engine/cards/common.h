@@ -51,9 +51,9 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool AfterSummoned(int card_id, GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
+	static bool AfterSummoned(int card_id, GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 	{
-		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, board, summoned_minion);
+		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, summoned_minion);
 	}
 
 	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)

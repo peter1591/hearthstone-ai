@@ -3,6 +3,7 @@
 #include <iostream>
 #include <list>
 #include "minion.h"
+#include "minion-manipulator.h"
 #include "minions-iterator.h"
 
 namespace GameEngine {
@@ -11,11 +12,11 @@ namespace BoardObjects {
 class Minions
 {
 	friend std::hash<Minions>;
-	friend class MinionsIteratorWithIndex;
-	friend class MinionsConstIteratorWithIndex;
+	friend class MinionConstIteratorWithSlotIndex;
+	friend class MinionInserter;
 
 public:
-	typedef std::list<MinionsItem> container_type;
+	typedef std::list<Minion> container_type;
 	typedef container_type::iterator iterator;
 	typedef container_type::const_iterator const_iterator;
 
@@ -36,37 +37,67 @@ public: // getters
 	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }
 	bool IsFull() const { return this->GetMinionCount() >= max_minions; }
 
-	MinionsConstIteratorWithIndex GetIteratorWithIndex(SlotIndex start_slot) const { 
-		return MinionsConstIteratorWithIndex(start_slot, this->minions.begin(), *this);
+	MinionConstIteratorWithSlotIndex GetIteratorWithSlotIndex(SlotIndex start_slot) const { 
+		return MinionConstIteratorWithSlotIndex(start_slot, this->minions.begin(), *this);
 	}
-	MinionsIteratorWithIndex GetIteratorWithIndex(SlotIndex start_slot) { 
-		return MinionsIteratorWithIndex(start_slot, this->minions.begin(), *this);
+
+	MinionInserter GetInserter(GameEngine::Board & board, int minion_idx) {
+		auto it = this->minions.begin();
+		for (; minion_idx > 0; --minion_idx) {
+			++it;
+			if (it == this->minions.end()) break;
+		}
+		return MinionInserter(board, *this, it);
+	}
+
+	MinionManipulator GetManipulator(GameEngine::Board & board, int minion_idx) {
+		auto inserter = this->GetInserter(board, minion_idx);
+		if (inserter.IsEnd()) throw std::runtime_error("invalid argument");
+		return inserter.ConverToManipulator();
+	}
+
+	MinionManipulator GetManipulator(GameEngine::Board & board, Minion * minion) {
+#ifdef DEBUG
+		bool found = false;
+		for (auto const& item : this->minions) {
+			if (&item == minion) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) throw std::runtime_error("cannot find minion");
+#endif
+
+		return MinionManipulator(board, *this, *minion);
 	}
 
 	Minion const& Get(int idx) const {
 		auto it = this->minions.cbegin();
 		for (; idx > 0; --idx) ++it;
-		return it->Get();
+		return *it;
 	}
 
 	Minion & Get(int idx) {
 		auto it = this->minions.begin();
-		for (; idx > 0; --idx) ++it;
-		return it->Get();
+		for (; idx > 0; --idx) {
+			++it;
+			if (it == this->minions.end()) break;
+		}
+		return *it;
 	}
 
-public: // hooks
-	void TurnStart(bool owner_turn) {
-		for (auto & minion : this->minions) minion.Get().TurnStart(owner_turn);
-	}
-	void TurnEnd(bool owner_turn) {
-		for (auto & minion : this->minions) minion.Get().TurnEnd(owner_turn);
+	container_type::iterator GetIterator(Minion * const minion)
+	{
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			if (&(*it) == minion) return it;
+		}
+		return this->minions.end();
 	}
 
 public: // debug
 	void DebugPrint() const {
 		for (const auto &minion : this->minions) {
-			std::cout << "\t" << minion.Get().GetDebugString() << std::endl;
+			std::cout << "\t" << minion.GetDebugString() << std::endl;
 		}
 	}
 
@@ -105,7 +136,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::Cl
 #ifdef DEBUG
 	for (auto const& minion : rhs.minions)
 	{
-		minion.Get().CheckCanBeSafelyCloned();
+		minion.CheckCanBeSafelyCloned();
 	}
 #endif
 
@@ -124,3 +155,4 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 }
 
 #include "minions-iterator-impl.h"
+#include "enchantments-impl.h"

@@ -14,98 +14,90 @@
 
 namespace GameEngine {
 
-	class Board;
+class Board;
 
 namespace BoardObjects {
 
-class MinionsIteratorWithIndex;
-class MinionsConstIteratorWithIndex;
+class MinionInserter;
+class MinionManipulator;
+class MinionConstIteratorWithSlotIndex;
 
 class Minion : public ObjectBase
 {
 	friend std::hash<Minion>;
+	friend MinionInserter;
+	friend MinionManipulator;
+	friend MinionConstIteratorWithSlotIndex; // to get the is_pending_removal
 
-	public:
-		typedef std::function<void(Board& board, MinionsIteratorWithIndex triggering_minion)> OnDeathTrigger;
+public:
+	typedef std::function<void(GameEngine::Board &, MinionManipulator & triggering_minion)> OnDeathTrigger;
 
-	public:
-		Minion();
+public:
+	Minion();
 
-		// Shallow copy is allowed to be compliance to STL containers
-		// Runtime check for deep-clone since enchantments and auras are put on heap
-		void CheckCanBeSafelyCloned() const;
+	// Shallow copy is allowed to be compliance to STL containers
+	// Runtime check for deep-clone since enchantments and auras are put on heap
+	void CheckCanBeSafelyCloned() const;
 
-		bool operator==(const Minion &rhs) const;
-		bool operator!=(const Minion &rhs) const;
+	bool operator==(const Minion &rhs) const;
+	bool operator!=(const Minion &rhs) const;
 
-		// Initializer
-		void Set(int card_id, int attack, int hp, int max_hp);
-		void Summon(const Card &card);
+	// Initializer
+	void Set(int card_id, int attack, int hp, int max_hp);
+	void Summon(const Card &card);
 
-		// Getters
-		int GetCardId() const { return this->card_id; }
-		int GetAttack() const { return this->stat.GetAttack(); }
-		int GetHP() const { return this->stat.GetHP(); }
-		int GetMaxHP() const { return this->stat.GetMaxHP(); }
-		bool Attackable() const;
-		bool IsTaunt() const { return this->stat.GetFlag(MinionStat::FLAG_TAUNT); }
-		bool IsCharge() const { return this->stat.GetFlag(MinionStat::FLAG_CHARGE); }
-		bool IsShield() const { return this->stat.GetFlag(MinionStat::FLAG_SHIELD); }
-		bool IsStealth() const { return this->stat.GetFlag(MinionStat::FLAG_STEALTH); }
-		bool IsForgetful() const { return this->stat.GetFlag(MinionStat::FLAG_FORGETFUL); }
-		bool IsFreezeAttacker() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER); }
-		bool IsFreezed() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZED); }
+	// Getters
+	int GetCardId() const { return this->card_id; }
+	int GetAttack() const { return this->stat.GetAttack(); }
+	int GetHP() const { return this->stat.GetHP(); }
+	int GetMaxHP() const { return this->stat.GetMaxHP(); }
+	bool Attackable() const;
+	bool IsTaunt() const { return this->stat.GetFlag(MinionStat::FLAG_TAUNT); }
+	bool IsCharge() const { return this->stat.GetFlag(MinionStat::FLAG_CHARGE); }
+	bool IsShield() const { return this->stat.GetFlag(MinionStat::FLAG_SHIELD); }
+	bool IsStealth() const { return this->stat.GetFlag(MinionStat::FLAG_STEALTH); }
+	bool IsForgetful() const { return this->stat.GetFlag(MinionStat::FLAG_FORGETFUL); }
+	bool IsFreezeAttacker() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER); }
+	bool IsFreezed() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZED); }
 
-		// Setters
-		void AttackedOnce();
-		void AddAttack(int val) { this->stat.SetAttack(this->stat.GetAttack() + val); }
-		void IncreaseCurrentAndMaxHP(int val);
-		void DecreaseMaxHP(int val);
-		void TakeDamage(int damage);
-		void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
-		void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
-		void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
-		void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
-		void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
-		void SetFreezeAttacker(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, val); }
-		void SetFreezed(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZED, val); }
+	// Setters
+	void AttackedOnce();
+	void AddAttack(int val) { this->stat.SetAttack(this->stat.GetAttack() + val); }
+	void IncreaseCurrentAndMaxHP(int val);
+	void DecreaseMaxHP(int val);
+	void TakeDamage(int damage);
+	void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
+	void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
+	void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
+	void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
+	void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
+	void SetFreezeAttacker(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, val); }
+	void SetFreezed(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZED, val); }
 
-		// Triggers
-		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
-		std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
+	// Triggers
+	void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
+	std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
 
-		// Enchantment
-		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) { this->enchantments.Add(enchantment, this, owner); }
-		void RemoveEnchantment(Enchantment * enchantment) { this->enchantments.Remove(enchantment, this); }
-		void ClearEnchantments() { this->enchantments.Clear(this); }
+	bool IsValid() const { return this->card_id != 0; }
 
-		// Aura
-		void AddAura(GameEngine::Board & board, MinionsIteratorWithIndex &myself, Aura * aura) { this->auras.Add(board, myself, aura); }
-		void ClearAuras(GameEngine::Board & board, MinionsIteratorWithIndex &myself) { this->auras.Clear(board, myself); }
+public:
+	std::string GetDebugString() const;
 
-		// Hooks
-		void TurnStart(bool owner_turn);
-		void TurnEnd(bool owner_turn);
-		void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & myself, MinionsIteratorWithIndex & added_minion);
-		void HookMinionCheckEnraged(Board & board, MinionsIteratorWithIndex & myself);
+private:
+	int card_id;
 
-		bool IsValid() const { return this->card_id != 0; }
+	MinionStat stat;
 
-	public:
-		std::string GetDebugString() const;
+	int attacked_times;
+	bool summoned_this_turn;
 
-	private:
-		int card_id;
+	// mark as pending death when triggering deathrattles
+	bool pending_removal;
 
-		MinionStat stat;
+	std::list<OnDeathTrigger> triggers_on_death;
 
-		int attacked_times;
-		bool summoned_this_turn;
-
-		std::list<OnDeathTrigger> triggers_on_death;
-
-		Enchantments enchantments;
-		Auras auras; // owned auras
+	Enchantments enchantments;
+	Auras auras; // owned auras
 };
 
 inline Minion::Minion() : card_id(0)
@@ -140,44 +132,6 @@ inline void Minion::Summon(const Card & card)
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
-}
-
-inline void Minion::TurnStart(bool)
-{
-	this->summoned_this_turn = false;
-	this->attacked_times = 0;
-}
-
-inline void Minion::TurnEnd(bool owner_turn)
-{
-	if (owner_turn) {
-		// check thaw
-		if (this->attacked_times == 0 && !this->summoned_this_turn)
-		{
-			// if summon in this turn, and freeze it, then the minion will not be unfrozen
-			this->stat.SetFlag(MinionStat::FLAG_FREEZED, false);
-		}
-	}
-
-	this->enchantments.TurnEnd(this);
-}
-
-inline void Minion::HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & myself, MinionsIteratorWithIndex & added_minion)
-{
-	this->auras.HookAfterMinionAdded(board, myself, added_minion);
-}
-
-inline void Minion::HookMinionCheckEnraged(Board & board, MinionsIteratorWithIndex & myself)
-{
-	if (this->stat.GetHP() < this->stat.GetMaxHP()) {
-		this->auras.HookAfterOwnerEnraged(board, myself); // enraged
-	}
-	else if (this->stat.GetHP() == this->stat.GetMaxHP()) {
-		this->auras.HookAfterOwnerUnEnraged(board, myself); // unenraged
-	}
-	else {
-		throw std::runtime_error("hp should not be larger than max-hp");
-	}
 }
 
 inline bool Minion::Attackable() const
@@ -238,7 +192,10 @@ inline bool Minion::operator==(Minion const& rhs) const
 	if (this->attacked_times != rhs.attacked_times) return false;
 	if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
 
+	if (this->pending_removal != rhs.pending_removal) return false;
+
 	if (this->enchantments != rhs.enchantments) return false;
+	if (this->auras != rhs.auras) return false;
 
 	return true;
 }
@@ -287,7 +244,10 @@ namespace std {
 			GameEngine::hash_combine(result, s.attacked_times);
 			GameEngine::hash_combine(result, s.summoned_this_turn);
 
+			GameEngine::hash_combine(result, s.pending_removal);
+
 			GameEngine::hash_combine(result, s.enchantments);
+			GameEngine::hash_combine(result, s.auras);
 
 			return result;
 		}

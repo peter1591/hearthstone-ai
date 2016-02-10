@@ -37,8 +37,8 @@ public:
 			return;
 		}
 
-		auto buff_target = dynamic_cast<GameEngine::BoardObjects::Minion*>(board.object_manager.GetObject(play_minion_data.target));
-		if (buff_target == nullptr)
+		auto buff_target = board.object_manager.GetMinionInserter(board, play_minion_data.target);
+		if (buff_target.IsEnd())
 		{
 #ifdef DEBUG
 			std::cout << "WARNING: buff target vanished." << std::endl;
@@ -47,7 +47,7 @@ public:
 		}
 
 		auto enchant = new BoardObjects::Enchantment_AttackHPBoost<attack_boost, 0, true>();
-		buff_target->AddEnchantment(enchant, nullptr);
+		buff_target.ConverToManipulator().AddEnchantment(enchant, nullptr);
 	}
 };
 

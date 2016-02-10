@@ -17,19 +17,22 @@ namespace GameEngine {
 			virtual ~AuraToAllMinions() {}
 
 		protected: // hooks
-			void AfterAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
+			void AfterAdded(MinionManipulator & aura_owner)
 			{
-				for (auto it = board.object_manager.GetPlayerMinionsIteratorWithIndex(); !it.IsEnd(); it.GoToNext()) {
-					HookAfterMinionAdded(board, aura_owner, it);
+				for (auto it = aura_owner.board->object_manager.GetMinionInserterAtBeginOfSide(*aura_owner.board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
+					this->HookAfterMinionAdded(aura_owner, it.ConverToManipulator());
+				}
+				for (auto it = aura_owner.board->object_manager.GetMinionInserterAtBeginOfSide(*aura_owner.board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
+					this->HookAfterMinionAdded(aura_owner, it.ConverToManipulator());
 				}
 			}
 
-			void BeforeRemoved(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
+			void BeforeRemoved(MinionManipulator & owner)
 			{
-				this->enchantments_manager.RemoveOwnedEnchantments();
+				this->enchantments_manager.RemoveOwnedEnchantments(owner);
 			}
 
-			virtual void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion) = 0;
+			virtual void HookAfterMinionAdded(MinionManipulator & aura_owner, MinionManipulator & added_minion) = 0;
 
 		protected:
 			GameEngine::BoardObjects::EnchantmentOwner enchantments_manager;
