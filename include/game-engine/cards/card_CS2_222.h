@@ -6,7 +6,7 @@
 #include "game-engine/card-id-map.h"
 #include "game-engine/stages/helper.h"
 #include "game-engine/common.h"
-#include "game-engine/board-objects/aura.h"
+#include "game-engine/board-objects/aura-to-all-minions.h"
 #include "game-engine/board-objects/enchantment.h"
 
 namespace GameEngine {
@@ -19,27 +19,9 @@ namespace GameEngine {
 
 			// Stormwind Champion
 
-			class Aura : public GameEngine::BoardObjects::Aura
+			class Aura : public GameEngine::BoardObjects::AuraToAllMinions
 			{
 			private: // hooks
-				void AfterAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
-				{
-					// add aura effect to existing minions
-					SlotIndex side = SlotIndexHelper::GetSide(aura_owner.GetSlotIdx());
-
-					for (auto it_friendly_minions = board.object_manager.GetMinionIteratorWithIndex(side); !it_friendly_minions.IsEnd(); it_friendly_minions.GoToNext())
-					{
-						if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, it_friendly_minions)) {
-							this->AddAuraEnchantmentToMinion(*it_friendly_minions);
-						}
-					}
-				}
-
-				void BeforeRemoved()
-				{
-					this->enchantments_manager.RemoveOwnedEnchantments();
-				}
-
 				void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, BoardObjects::MinionsIteratorWithIndex &minion)
 				{
 					if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, minion)) {
@@ -84,9 +66,6 @@ namespace GameEngine {
 
 					return result;
 				}
-
-			private:
-				GameEngine::BoardObjects::EnchantmentOwner enchantments_manager;
 			};
 
 			static void AfterSummoned(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
