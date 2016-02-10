@@ -42,8 +42,11 @@ namespace GameEngine {
 			auto new_slot_idx = this->slot_idx;
 
 			if (this->IsEnd() || !this->IsPendingRemoval()) SlotIndexHelper::Increase(this->slot_idx);
+
 #ifdef DEBUG
-			if (this->slot_idx == SLOT_OPPONENT_SIDE || this->slot_idx == SLOT_MAX) throw std::runtime_error("minion excess range");
+			if (!this->IsEnd()) {
+				if (this->slot_idx == SLOT_OPPONENT_SIDE || this->slot_idx == SLOT_MAX) throw std::runtime_error("minion excess range");
+			}
 #endif
 
 			return MinionsIteratorWithIndex(new_slot_idx, new_it, this->container);
