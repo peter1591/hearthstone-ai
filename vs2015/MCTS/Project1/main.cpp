@@ -78,8 +78,9 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 1;
+	constexpr int threads = 4;
 	constexpr int sec_each_run = 1;
+	constexpr int msec_total = 20 * 1000;
 
 	std::mt19937 random_generator((unsigned int)time(nullptr));
 	MCTS mcts[threads];
@@ -129,6 +130,8 @@ static void Run()
 			<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
 		std::cout.flush();
 
+		if (elapsed_ms > msec_total) break;
+
 		// start all threads for 10 second
 		std::cout << "Resuming..." << std::endl;
 		std::cout.flush();
@@ -151,8 +154,11 @@ static void Run()
 
 	std::cout << "Threads stopped" << std::endl;
 	std::cin.clear();
-	std::cout << "Press Enter to exit...";
-	std::cin.get();
+
+	for (const auto &task : tasks)
+	{
+		delete task;
+	}
 }
 
 int main(void)
@@ -162,6 +168,9 @@ int main(void)
 		throw std::runtime_error("failed to load card data");
 
 	Run();
+
+	std::cout << "Press Enter to exit...";
+	std::cin.get();
 
 	return 0;
 }

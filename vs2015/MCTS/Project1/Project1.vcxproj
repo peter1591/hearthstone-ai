@@ -140,6 +140,19 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\board-node-map.h" />
     <ClInclude Include="..\..\..\include\decider.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-stat.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions-iterator.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\object-base.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
