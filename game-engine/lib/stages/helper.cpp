@@ -29,6 +29,13 @@ namespace GameEngine {
 		
 		Cards::CardCallbackManager::AfterSummoned(card.id, board, summoned_minion);
 
+#ifdef DEBUG
+		if (&board.object_manager.GetMinionIteratorWithIndex(summoned_minion.GetSlotIdx()).GetOwner() != &summoned_minion.GetOwner())
+		{
+			throw std::runtime_error("owner's slot index does not match");
+		}
+#endif
+
 		board.object_manager.HookAfterMinionAdded(board, summoned_minion);
 
 		return true;

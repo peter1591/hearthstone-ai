@@ -28,12 +28,6 @@ namespace GameEngine {
 					
 					SlotIndex side = SlotIndexHelper::GetSide(aura_owner.GetSlotIdx());
 
-#ifdef DEBUG
-					if (&board.object_manager.GetMinionIteratorWithIndex(side).GetOwner() != &aura_owner.GetOwner())
-					{
-						throw std::runtime_error("owner's slot index does not match");
-					}
-#endif
 
 					for (auto it_friendly_minions = board.object_manager.GetMinionIteratorWithIndex(side); !it_friendly_minions.IsEnd(); it_friendly_minions.GoToNext())
 					{
