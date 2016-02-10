@@ -113,7 +113,7 @@ static TreeNode const* FindChildNodeWithBoard(TreeNode const* parent, GameEngine
 	return nullptr;
 }
 
-void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Board && current_board,
+void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, 
 	ProgressData const* stepping_progress, TreeNode const* stepping_node, const GameEngine::Board &next_board)
 {
 	for (std::vector<ProgressData>::iterator it_progress = progresses.begin(); it_progress != progresses.end();)
@@ -128,7 +128,9 @@ void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine
 		}
 		else {
 			// find the 'next_board' among the child
+			GameEngine::Board current_board = std::move(this->GetCurrentBoard()); // A O(N) algorithm since board cannot be cloned
 			progress.node = FindChildNodeWithBoard(progress.node, std::move(current_board), next_board);
+
 			if (progress.node == nullptr) {
 				it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
 			}
@@ -229,12 +231,8 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 		move_info.wins = -1;
 		move_info.count = -1;
 
-		GameEngine::Board current_board;
-		current_board.CloneFrom(board); // TODO: the copy will fail if a enchantment exists, we need to re-apply all moves to get the copy
-
 		board.ApplyMove(move_info.move);
-
-		this->GoToNextProgress(progress, std::move(current_board), &chosen_progress, most_simulated_child, board);
+		this->GoToNextProgress(progress, &chosen_progress, most_simulated_child, board);
 		return true;
 	}
 	else {
@@ -256,6 +254,20 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 	}
 }
 
+GameEngine::Board Decider::GetCurrentBoard()
+{
+	GameEngine::Board board;
+
+	if (this->data.empty()) throw std::runtime_error("logic error");
+
+	board.CloneFrom(this->data.front()->root_node_board);
+	for (auto const& move : this->best_moves.moves)
+	{
+		board.ApplyMove(move.move);
+	}
+	return std::move(board);
+}
+
 void Decider::DebugPrint()
 {
 	//this->PrintTree(&this->mcts.tree.GetRootNode(), 0, 5);
@@ -274,7 +286,7 @@ int Decider::GetRandom()
 
 Decider::MovesInfo Decider::GetBestMoves()
 {
-	MovesInfo moves;
+	this->best_moves.Clear();
 
 	if (this->data.empty()) {
 		throw std::runtime_error("no any MCTS available");
@@ -303,10 +315,10 @@ Decider::MovesInfo Decider::GetBestMoves()
 	while (true) {
 		MoveInfo move;
 		if (this->GetNextStep(progresses, board, move) == false) break;
-		moves.moves.push_back(move);
+		this->best_moves.moves.push_back(move);
 	}
 
-	return moves;
+	return this->best_moves;
 }
 
 void Decider::MovesInfo::DebugPrint()
