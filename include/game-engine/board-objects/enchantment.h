@@ -88,6 +88,8 @@ public:
 		if (hp_boost != 0)
 		{
 			minion->DecreaseMaxHP(hp_boost);
+
+			// TODO: trigger enrage
 		}
 	}
 

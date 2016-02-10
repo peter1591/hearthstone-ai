@@ -14,7 +14,7 @@
 
 namespace GameEngine {
 
-class Board;
+	class Board;
 
 namespace BoardObjects {
 
@@ -197,8 +197,6 @@ inline void Minion::DecreaseMaxHP(int val)
 {
 	this->stat.SetMaxHP(this->stat.GetMaxHP() - val);
 	this->stat.SetHP(std::min(this->stat.GetHP(), this->stat.GetMaxHP()));
-
-	// TODO: check enrage
 }
 
 inline void Minion::TakeDamage(int damage)

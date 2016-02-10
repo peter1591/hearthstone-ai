@@ -30,7 +30,7 @@ public:
 	static void TakeDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage);
 
 private:
-	static SlotIndex GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
+	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
 
 	static void RemoveMinionsIfDead(Board & board, SlotIndex side);
 
@@ -80,7 +80,7 @@ inline void StageHelper::TakeDamage(GameEngine::Board & board, SlotIndex taker_i
 	board.object_manager.GetObject(taker_idx)->TakeDamage(damage);
 }
 
-inline SlotIndex StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
+inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
 {
 	const bool player_side = SlotIndexHelper::IsPlayerSide(origin_attacked);
 
@@ -91,6 +91,11 @@ inline SlotIndex StageHelper::GetNewAttackedTargetForForgetfulAttack(GameEngine:
 	if (possible_targets == 0)
 	{
 		// no other target available --> attack original target
+		return origin_attacked;
+	}
+
+	if (board.random_generator.GetRandom() % 2 == 0) {
+		// forgetful effect does not triggered
 		return origin_attacked;
 	}
 
@@ -126,11 +131,7 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::Slo
 	
 	if (attacker->IsForgetful())
 	{
-		int r = board.random_generator.GetRandom() % 2;
-		if (r == 0) {
-			// trigger forgetful effect
-			attacked_idx = StageHelper::GetNewAttackedTargetForForgetfulAttack(board, attacked_idx);
-		}
+		attacked_idx = StageHelper::GetTargetForForgetfulAttack(board, attacked_idx);
 	}
 
 	GameEngine::BoardObjects::ObjectBase * attacked = board.object_manager.GetObject(attacked_idx);
