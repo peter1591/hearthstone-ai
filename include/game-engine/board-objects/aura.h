@@ -24,6 +24,8 @@ namespace GameEngine {
 			virtual void BeforeRemoved() {}
 
 			virtual void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion) {}
+			virtual void HookAfterOwnerEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &enraged_aura_owner) {}
+			virtual void HookAfterOwnerUnEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &unenraged_aura_owner) {}
 
 		protected:
 			virtual bool EqualsTo(Aura const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -90,6 +92,14 @@ namespace GameEngine {
 			void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion)
 			{
 				for (auto & aura : this->auras) aura->HookAfterMinionAdded(board, aura_owner, added_minion);
+			}
+			void HookAfterOwnerEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &enraged_aura_owner)
+			{
+				for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(board, enraged_aura_owner);
+			}
+			void HookAfterOwnerUnEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &unenraged_aura_owner)
+			{
+				for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(board, unenraged_aura_owner);
 			}
 
 		private:

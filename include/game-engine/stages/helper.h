@@ -143,7 +143,7 @@ inline void StageHelper::DealDamage(GameEngine::Board & board, BoardObjects::Min
 {
 	target->TakeDamage(damage);
 
-	target->HookMinionEnraged(board, target);
+	target->HookMinionCheckEnraged(board, target);
 }
 
 inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx)

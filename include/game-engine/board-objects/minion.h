@@ -87,6 +87,7 @@ class Minion : public ObjectBase
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
 		void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & myself, MinionsIteratorWithIndex & added_minion);
+		void HookMinionCheckEnraged(Board & board, MinionsIteratorWithIndex & myself);
 
 		bool IsValid() const { return this->card_id != 0; }
 
@@ -164,6 +165,19 @@ inline void Minion::TurnEnd(bool owner_turn)
 inline void Minion::HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & myself, MinionsIteratorWithIndex & added_minion)
 {
 	this->auras.HookAfterMinionAdded(board, myself, added_minion);
+}
+
+inline void Minion::HookMinionCheckEnraged(Board & board, MinionsIteratorWithIndex & myself)
+{
+	if (this->stat.GetHP() < this->stat.GetMaxHP()) {
+		this->auras.HookAfterOwnerEnraged(board, myself); // enraged
+	}
+	else if (this->stat.GetHP() == this->stat.GetMaxHP()) {
+		this->auras.HookAfterOwnerUnEnraged(board, myself); // unenraged
+	}
+	else {
+		throw std::runtime_error("hp should not be larger than max-hp");
+	}
 }
 
 inline bool Minion::Attackable() const
