@@ -24,7 +24,7 @@ namespace GameEngine {
 				}
 			}
 
-			void BeforeRemoved()
+			void BeforeRemoved(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
 			{
 				this->enchantments_manager.RemoveOwnedEnchantments();
 			}

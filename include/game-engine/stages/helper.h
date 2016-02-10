@@ -214,7 +214,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 			{
 				// remove all effects (including auras)
 				it->ClearEnchantments();
-				it->ClearAuras();
+				it->ClearAuras(board, it);
 
 				it.EraseAndGoToNext();
 			}

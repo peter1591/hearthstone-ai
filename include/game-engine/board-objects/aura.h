@@ -21,7 +21,7 @@ namespace GameEngine {
 
 		public: // hooks
 			virtual void AfterAdded(Board & board, MinionsIteratorWithIndex & owner) {}
-			virtual void BeforeRemoved() {}
+			virtual void BeforeRemoved(Board & board, MinionsIteratorWithIndex & owner) {}
 
 			virtual void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion) {}
 			virtual void HookAfterOwnerEnraged(Board & board, BoardObjects::MinionsIteratorWithIndex &enraged_aura_owner) {}
@@ -82,9 +82,9 @@ namespace GameEngine {
 				aura->AfterAdded(board, owner);
 			}
 
-			void Clear()
+			void Clear(Board & board, MinionsIteratorWithIndex & owner)
 			{
-				for (auto & aura : this->auras) aura->BeforeRemoved();
+				for (auto & aura : this->auras) aura->BeforeRemoved(board, owner);
 				this->auras.clear();
 			}
 

@@ -81,7 +81,7 @@ class Minion : public ObjectBase
 
 		// Aura
 		void AddAura(GameEngine::Board & board, MinionsIteratorWithIndex &myself, Aura * aura) { this->auras.Add(board, myself, aura); }
-		void ClearAuras() { this->auras.Clear(); }
+		void ClearAuras(GameEngine::Board & board, MinionsIteratorWithIndex &myself) { this->auras.Clear(board, myself); }
 
 		// Hooks
 		void TurnStart(bool owner_turn);
