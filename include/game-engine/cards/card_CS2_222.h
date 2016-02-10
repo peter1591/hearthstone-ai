@@ -21,22 +21,60 @@ namespace GameEngine {
 
 			class Aura : public GameEngine::BoardObjects::Aura
 			{
-				friend class Card_CS2_222;
+			private: // hooks
+				void AfterAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
+				{
+					// add aura effect to existing minions
+					
+					SlotIndex side = SlotIndexHelper::GetSide(aura_owner.GetSlotIdx());
 
-			private:
+#ifdef DEBUG
+					if (&board.object_manager.GetMinionIteratorWithIndex(side).GetOwner() != &aura_owner.GetOwner())
+					{
+						throw std::runtime_error("owner's slot index does not match");
+					}
+#endif
+
+					for (auto it_friendly_minions = board.object_manager.GetMinionIteratorWithIndex(side); !it_friendly_minions.IsEnd(); it_friendly_minions.GoToNext())
+					{
+						if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, it_friendly_minions)) {
+							this->AddAuraEnchantmentToMinion(*it_friendly_minions);
+						}
+					}
+				}
+
 				void BeforeRemoved()
 				{
 					this->enchantments_manager.RemoveOwnedEnchantments();
 				}
 
-				void AddAuraEffectToMinion(GameEngine::Board & board, GameEngine::BoardObjects::Minion & minion)
+				void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, BoardObjects::MinionsIteratorWithIndex &minion)
+				{
+					if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, minion)) {
+						this->AddAuraEnchantmentToMinion(*minion);
+					}
+				}
+
+			private:
+				bool CheckMinionShouldHaveAuraEnchantment(BoardObjects::MinionsIteratorWithIndex &aura_owner, BoardObjects::MinionsIteratorWithIndex const& minion)
+				{
+					// only add aura to friendly minions
+					if (&minion.GetOwner() != &aura_owner.GetOwner()) return false;
+
+					// only add aura to others
+					if (&(*minion) == &(*aura_owner)) return false;
+
+					return true;
+				}
+
+				void AddAuraEnchantmentToMinion(BoardObjects::Minion &target_minion)
 				{
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 1;
 
-					auto * enchantment = new GameEngine::BoardObjects::Enchantment_AttackHPBoost<attack_boost, hp_boost, false>();
+					auto * enchantment = new BoardObjects::Enchantment_AttackHPBoost<attack_boost, hp_boost, false>();
 
-					minion.AddEnchantment(enchantment, &this->enchantments_manager);
+					target_minion.AddEnchantment(enchantment, &this->enchantments_manager);
 				}
 
 			private: // for comparison
@@ -61,19 +99,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
 			{
-				Aura * aura = new Aura();
-
-				// TODO: add aura effect to existing minions
-				for (auto minion_it = board.object_manager.GetMinionIteratorWithIndex(SlotIndexHelper::GetSide(summoned_minion.GetSlotIdx()));
-						!minion_it.IsEnd();
-						minion_it.GoToNext())
-				{
-					// add aura to others
-					if (&(*minion_it) == &(*summoned_minion)) continue;
-					aura->AddAuraEffectToMinion(board, *minion_it);
-				}
-
-				summoned_minion->AddAura(aura);
+				summoned_minion.AddAura(board, new Aura());
 			}
 		};
 

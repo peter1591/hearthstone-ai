@@ -53,14 +53,25 @@ public:
 	void EraseAndGoToNext();
 	MinionsIteratorWithIndex InsertBefore(Minion && minion);
 
+	// Aura
+	void AddAura(GameEngine::Board & board, Aura * aura) { this->it->Get().auras.Add(board, *this, aura); }
+	void ClearAuras() { this->it->Get().auras.Clear(); }
+
 	bool IsPendingRemoval() const;
 	void MarkPendingRemoval();
 
-	Minion* operator->() { return &(this->it->Get()) ; }
+	Minion* operator->() { return &(this->it->Get()); }
+	Minion const* operator->() const { return &(this->it->Get()) ; }
 	Minion& operator*() { return this->it->Get(); }
+	Minion const& operator*() const { return this->it->Get(); }
 
 	Minions & GetOwner() const { return this->container; }
 	SlotIndex GetSlotIdx() const { return this->slot_idx; }
+
+public: // hooks
+	void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & added_minion) {
+		this->it->Get().HookAfterMinionAdded(board, *this, added_minion);
+	}
 
 private:
 	SlotIndex slot_idx;
@@ -83,7 +94,9 @@ public:
 	bool IsPendingRemoval() const;
 
 	Minion const* operator->() { return &(this->it->Get()); }
+	Minion const* operator->() const { return &(this->it->Get()); }
 	Minion const& operator*() { return this->it->Get(); }
+	Minion const& operator*() const { return this->it->Get(); }
 
 	Minions const& GetOwner() const { return this->container; }
 	SlotIndex GetSlotIdx() const { return this->slot_idx; }

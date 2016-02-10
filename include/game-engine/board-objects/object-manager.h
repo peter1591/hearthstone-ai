@@ -75,6 +75,8 @@ public: // hooks
 	void OpponentTurnStart();
 	void OpponentTurnEnd();
 
+	void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & minion);
+
 public:
 	void DebugPrint() const;
 
@@ -176,6 +178,19 @@ inline void ObjectManager::OpponentTurnEnd()
 {
 	this->opponent_minions.TurnEnd(true);
 	this->player_minions.TurnEnd(false);
+}
+
+inline void ObjectManager::HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & minion)
+{
+	this->player_hero.HookAfterMinionAdded(board, minion);
+	this->opponent_hero.HookAfterMinionAdded(board, minion);
+
+	for (auto it = this->GetPlayerMinionsIteratorWithIndex(); !it.IsEnd(); it.GoToNext()) {
+		it.HookAfterMinionAdded(board, minion);
+	}
+	for (auto it = this->GetOpponentMinionsIteratorWithIndex(); !it.IsEnd(); it.GoToNext()) {
+		it.HookAfterMinionAdded(board, minion);
+	}
 }
 
 inline void ObjectManager::DebugPrint() const

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <sstream>
 
+#include "minions-iterator.h"
 #include "weapon.h"
 #include "hero-power.h"
 #include "object-base.h"
@@ -35,6 +36,10 @@ public:
 	bool IsFreezeAttacker() const;
 	bool IsFreezed() const;
 
+public: // hooks
+	void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & minion);
+
+public:
 	std::string GetDebugString() const;
 
 private:
@@ -106,6 +111,12 @@ inline bool GameEngine::BoardObjects::Hero::IsFreezeAttacker() const
 inline bool GameEngine::BoardObjects::Hero::IsFreezed() const
 {
 	throw std::runtime_error("not yet implemented");
+}
+
+inline void GameEngine::BoardObjects::Hero::HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & minion)
+{
+	// TODO
+	return;
 }
 
 inline std::string GameEngine::BoardObjects::Hero::GetDebugString() const

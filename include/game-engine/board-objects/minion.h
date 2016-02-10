@@ -23,7 +23,8 @@ class MinionsConstIteratorWithIndex;
 class Minion : public ObjectBase
 {
 	friend std::hash<Minion>;
-	template <int, int, bool> friend class Enchantment_AttackHPBoost;
+	template <int, int, bool> friend class Enchantment_AttackHPBoost; // TODO: remove since cards might custom its enchantment
+	friend class MinionsIteratorWithIndex;
 
 	public:
 		typedef std::function<void(Board& board, MinionsIteratorWithIndex triggering_minion)> OnDeathTrigger;
@@ -76,13 +77,10 @@ class Minion : public ObjectBase
 		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) { this->enchantments.Add(enchantment, this, owner); }
 		void RemoveEnchantment(Enchantment * enchantment) { this->enchantments.Remove(enchantment, this); }
 
-		// Aura
-		void AddAura(Aura * aura) { this->auras.Add(aura); }
-		void ClearAuras() { this->auras.Clear(); }
-
 		// Hooks
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
+		void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & myself, MinionsIteratorWithIndex & added_minion);
 
 		bool IsValid() const { return this->card_id != 0; }
 
@@ -170,6 +168,11 @@ inline void Minion::TurnEnd(bool owner_turn)
 	}
 
 	this->enchantments.TurnEnd(this);
+}
+
+inline void Minion::HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & myself, MinionsIteratorWithIndex & added_minion)
+{
+	this->auras.HookAfterMinionAdded(board, myself, added_minion);
 }
 
 inline bool Minion::Attackable() const

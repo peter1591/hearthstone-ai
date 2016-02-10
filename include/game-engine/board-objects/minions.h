@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <list>
 #include "minion.h"
 #include "minions-iterator.h"

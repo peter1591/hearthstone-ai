@@ -24,10 +24,12 @@ namespace GameEngine {
 
 		if (minions.IsFull()) return false;
 
-		// summon
+		// add minion
 		auto summoned_minion = location.InsertBefore(std::move(summoning_minion));
-
+		
 		Cards::CardCallbackManager::AfterSummoned(card.id, board, summoned_minion);
+
+		board.object_manager.HookAfterMinionAdded(board, summoned_minion);
 
 		return true;
 	}

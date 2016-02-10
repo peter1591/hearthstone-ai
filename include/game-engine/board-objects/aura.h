@@ -8,6 +8,7 @@ namespace GameEngine {
 	namespace BoardObjects {
 
 		class Minion;
+		class MinionsIteratorWithIndex;
 
 		class Aura
 		{
@@ -19,9 +20,10 @@ namespace GameEngine {
 			bool operator!=(Aura const& rhs) const { return !(*this == rhs); }
 
 		public: // hooks
+			virtual void AfterAdded(Board & board, MinionsIteratorWithIndex & owner) {}
 			virtual void BeforeRemoved() {}
 
-			virtual void AfterMinionSummoned(Board &, Minion &) {}
+			virtual void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion) {}
 
 		protected:
 			virtual bool EqualsTo(Aura const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -72,9 +74,10 @@ namespace GameEngine {
 			bool operator!=(Auras const& rhs) const { return !(*this == rhs); }
 
 		public:
-			void Add(Aura* aura)
+			void Add(Board & board, MinionsIteratorWithIndex & owner, Aura* aura)
 			{
 				this->auras.push_back(aura);
+				aura->AfterAdded(board, owner);
 			}
 
 			void Clear()
@@ -84,7 +87,10 @@ namespace GameEngine {
 			}
 
 		public: // hooks
-			void AfterMinionSummoned();
+			void HookAfterMinionAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner, MinionsIteratorWithIndex & added_minion)
+			{
+				for (auto & aura : this->auras) aura->HookAfterMinionAdded(board, aura_owner, added_minion);
+			}
 
 		private:
 			std::list<Aura*> auras;
