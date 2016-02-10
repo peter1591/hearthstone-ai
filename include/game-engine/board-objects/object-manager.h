@@ -186,10 +186,10 @@ inline void ObjectManager::HookAfterMinionAdded(Board & board, MinionsIteratorWi
 	this->opponent_hero.HookAfterMinionAdded(board, minion);
 
 	for (auto it = this->GetPlayerMinionsIteratorWithIndex(); !it.IsEnd(); it.GoToNext()) {
-		it.HookAfterMinionAdded(board, minion);
+		it->HookAfterMinionAdded(board, it, minion);
 	}
 	for (auto it = this->GetOpponentMinionsIteratorWithIndex(); !it.IsEnd(); it.GoToNext()) {
-		it.HookAfterMinionAdded(board, minion);
+		it->HookAfterMinionAdded(board, it, minion);
 	}
 }
 

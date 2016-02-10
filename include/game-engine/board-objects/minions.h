@@ -29,26 +29,6 @@ public:
 	Minions(Minions && rhs) { *this = std::move(rhs); }
 	Minions & operator=(Minions && rhs);
 
-	// for copy
-	void FillMinionPointersMap(Minions const& rhs, std::map<Minion const*, Minion const*> & minion_ptr_map) const
-	{
-		if (this->minions.size() != rhs.minions.size()) throw std::runtime_error("minions should equal after copying");
-
-		auto it_lhs = this->minions.begin();
-		auto it_rhs = rhs.minions.begin();
-
-		while (true)
-		{
-			if (it_lhs == this->minions.end()) break;
-			if (it_rhs == rhs.minions.end()) break;
-
-			minion_ptr_map[&it_lhs->Get()] = &it_rhs->Get();
-
-			it_lhs++;
-			it_rhs++;
-		}
-	}
-
 	bool operator==(Minions const& rhs) const { return this->minions == rhs.minions; }
 	bool operator!=(Minions const& rhs) const { return !(*this == rhs); }
 

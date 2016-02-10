@@ -64,11 +64,6 @@ public:
 	Minions & GetOwner() const { return this->container; }
 	SlotIndex GetSlotIdx() const { return this->slot_idx; }
 
-public: // hooks
-	void HookAfterMinionAdded(Board & board, MinionsIteratorWithIndex & added_minion) {
-		this->it->Get().HookAfterMinionAdded(board, *this, added_minion);
-	}
-
 private:
 	SlotIndex slot_idx;
 	container_type::iterator it;
