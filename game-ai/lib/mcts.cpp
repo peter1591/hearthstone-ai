@@ -339,26 +339,11 @@ MCTS::MCTS()
 {
 	this->allocated_node = new TreeNode;
 }
-/*
-MCTS::MCTS(const MCTS& rhs)
+
+MCTS::~MCTS()
 {
-	*this = rhs;
+	if (this->allocated_node) delete this->allocated_node;
 }
-
-MCTS & MCTS::operator=(const MCTS& rhs)
-{
-	std::unordered_map<TreeNode *, TreeNode *> node_update_map;
-	auto node_update_callback = [&node_update_map](TreeNode *origin_pointer, TreeNode *new_pointer) {
-		node_update_map.insert(std::make_pair(origin_pointer, new_pointer));
-	};
-
-	this->root_node_board = rhs.root_node_board;
-	this->tree = rhs.tree.Clone(node_update_callback);
-	this->board_node_map = rhs.board_node_map;
-	this->board_node_map.UpdateNodePointers(node_update_map);
-
-	return *this;
-}*/
 
 MCTS::MCTS(MCTS&& rhs)
 {
@@ -370,6 +355,10 @@ MCTS & MCTS::operator=(MCTS&& rhs)
 	this->root_node_board = std::move(rhs.root_node_board);
 	this->tree = std::move(rhs.tree);
 	this->board_node_map = std::move(rhs.board_node_map);
+
+	this->allocated_node = std::move(rhs.allocated_node);
+	this->traversed_nodes = std::move(rhs.traversed_nodes);
+
 	return *this;
 }
 

@@ -31,7 +31,17 @@ namespace GameEngine {
 		class Auras
 		{
 		public:
+			Auras() {}
+			~Auras()
+			{
+				for (auto const& aura : this->auras)
+				{
+					delete aura;
+				}
+			}
 
+			// default copy constructor/assignment are used for shallow copy
+			// deep copy (i.e., Clone) are prevented by the following function.
 			void CheckCanBeSafelyCloned() const
 			{
 				// Since auras are placed on heap, which is not safe by shallow copy
@@ -61,6 +71,7 @@ namespace GameEngine {
 
 			bool operator!=(Auras const& rhs) const { return !(*this == rhs); }
 
+		public:
 			void Add(Aura* aura)
 			{
 				this->auras.push_back(aura);

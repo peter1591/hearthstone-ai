@@ -2,6 +2,14 @@
 #include "game-engine\board-objects\enchantment.h"
 #include "game-engine\board-objects\minion.h"
 
+GameEngine::BoardObjects::Enchantments::~Enchantments()
+{
+	for (auto const& item : this->enchantments)
+	{
+		delete item.first;
+	}
+}
+
 void GameEngine::BoardObjects::Enchantments::CheckCanBeSafelyCloned() const
 {
 	// Since enchantments are placed on heap, which is not safe by shallow copy
@@ -85,6 +93,9 @@ GameEngine::BoardObjects::Enchantments::container_type::iterator GameEngine::Boa
 {
 	it->first->BeforeRemoved(target);
 	if (it->second) it->second->EnchantmentRemoved(it->first, target);
+	
+	delete it->first;
+
 	return this->enchantments.erase(it);
 }
 
@@ -105,6 +116,6 @@ void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments()
 	while (!this->enchantments.empty())
 	{
 		auto it = this->enchantments.begin();
-		it->second->RemoveEnchantment(it->first); // this will actually remove the iterator
+		it->second->RemoveEnchantment(it->first); // this will actually remove the iterator 'it'
 	}
 }

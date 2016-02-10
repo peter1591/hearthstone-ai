@@ -17,8 +17,10 @@ class Enchantments
 
 public:
 	Enchantments() {}
-	~Enchantments() {}
+	~Enchantments();
 
+	// default copy constructor/assignment are used for shallow copy
+	// deep copy (i.e., Clone) are prevented by the following function.
 	void CheckCanBeSafelyCloned() const;
 
 	bool operator==(Enchantments const& rhs) const;
@@ -46,7 +48,7 @@ public:
 
 	// hooks
 	void EnchantmentAdded(Enchantment * enchantment, Minion * target) { this->enchantments[enchantment] = target; }
-	void EnchantmentRemoved(Enchantment * enchantment, Minion * target) { this->enchantments.erase(enchantment); }
+	void EnchantmentRemoved(Enchantment * enchantment, Minion *) { this->enchantments.erase(enchantment); }
 
 private:
 	std::map<Enchantment *, Minion *> enchantments;

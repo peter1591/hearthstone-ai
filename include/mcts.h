@@ -13,6 +13,7 @@ class MCTS
 {
 public:
 	MCTS();
+	~MCTS();
 	MCTS(const MCTS&) = delete;
 	MCTS &operator=(const MCTS&) = delete;
 	MCTS(MCTS&&);
