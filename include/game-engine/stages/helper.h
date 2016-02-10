@@ -78,6 +78,7 @@ inline bool StageHelper::OpponentDrawCard(Board & board)
 inline void StageHelper::TakeDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage)
 {
 	board.object_manager.GetObject(taker_idx)->TakeDamage(damage);
+	
 }
 
 inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
@@ -166,7 +167,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 		death_triggers.clear();
 
 		// mark as pending death
-		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
+		for (auto it = board.object_manager.GetMinionIteratorWithIndexForSide(side); !it.IsEnd();)
 		{
 			if (it.IsPendingRemoval()) {
 				it.GoToNext();
@@ -193,7 +194,7 @@ inline void GameEngine::StageHelper::RemoveMinionsIfDead(Board & board, SlotInde
 		}
 
 		// actually remove died minions
-		for (auto it = board.object_manager.GetMinionIteratorWithIndex(side); !it.IsEnd();)
+		for (auto it = board.object_manager.GetMinionIteratorWithIndexForSide(side); !it.IsEnd();)
 		{
 			if (it.IsPendingRemoval()) 
 			{

@@ -9,7 +9,7 @@ namespace GameEngine {
 		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
 		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
-		auto location = board.object_manager.GetMinionIteratorWithIndex(data.put_location);
+		auto location = board.object_manager.GetMinionIteratorWithIndexFromSlotIndex(data.put_location);
 		StageHelper::SummonMinion(board, card, location);
 
 		return false;
@@ -30,7 +30,8 @@ namespace GameEngine {
 		Cards::CardCallbackManager::AfterSummoned(card.id, board, summoned_minion);
 
 #ifdef DEBUG
-		if (&board.object_manager.GetMinionIteratorWithIndex(summoned_minion.GetSlotIdx()).GetOwner() != &summoned_minion.GetOwner())
+		if (&board.object_manager.GetMinionIteratorWithIndexForSide(SlotIndexHelper::GetSide(summoned_minion.GetSlotIdx())).GetOwner() 
+			!= &summoned_minion.GetOwner())
 		{
 			throw std::runtime_error("owner's slot index does not match");
 		}
