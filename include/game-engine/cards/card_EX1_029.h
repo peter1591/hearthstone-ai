@@ -21,10 +21,10 @@ namespace GameEngine {
 				
 				if (SlotIndexHelper::IsPlayerSide(triggering_minion.GetSlotIdx()))
 				{
-					board.object_manager.GetOpponentHero()->TakeDamage(damage);
+					StageHelper::DealDamage(board, board.object_manager.GetOpponentHero(), damage);
 				}
 				else {
-					board.object_manager.GetPlayerHero()->TakeDamage(damage);
+					StageHelper::DealDamage(board, board.object_manager.GetPlayerHero(), damage);
 				}
 			}
 

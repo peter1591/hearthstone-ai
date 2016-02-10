@@ -72,6 +72,18 @@ namespace GameEngine {
 			}
 		}
 
+		static bool IsHero(SlotIndex idx)
+		{
+			if (idx < SLOT_PLAYER_HERO || idx >= SLOT_MAX) {
+				throw std::runtime_error("invalid argument");
+			}
+
+			if (idx == SLOT_PLAYER_HERO || idx == SLOT_OPPONENT_HERO) return true;
+			else return false;
+		}
+
+		static bool IsMinion(SlotIndex idx) { return !IsHero(idx); }
+
 		static bool IsOpponentSide(SlotIndex idx) { return !IsPlayerSide(idx); }
 
 		static SlotIndex GetSide(SlotIndex idx)

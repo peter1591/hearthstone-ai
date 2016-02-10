@@ -36,7 +36,7 @@ public:
 		if (play_minion_data.target < 0) throw std::runtime_error("logic error");
 #endif
 
-		StageHelper::TakeDamage(board, play_minion_data.target, damage);
+		StageHelper::DealDamage(board, play_minion_data.target, damage);
 	}
 };
 
