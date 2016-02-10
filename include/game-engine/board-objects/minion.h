@@ -23,8 +23,7 @@ class MinionsConstIteratorWithIndex;
 class Minion : public ObjectBase
 {
 	friend std::hash<Minion>;
-	template <int, int, bool> friend class Enchantment_AttackHPBoost; // TODO: remove since cards might custom its enchantment
-	friend class MinionsIteratorWithIndex;
+	friend class MinionsIteratorWithIndex; // should rename to something like 'mutable' or 'manipulator'
 
 	public:
 		typedef std::function<void(Board& board, MinionsIteratorWithIndex triggering_minion)> OnDeathTrigger;
@@ -32,33 +31,22 @@ class Minion : public ObjectBase
 	public:
 		Minion();
 
-		// Runtime check since the minion cannot be cloned safely
+		// Shallow copy is allowed to be compliance to STL containers
+		// Runtime check for deep-clone since enchantments and auras are put on heap
 		void CheckCanBeSafelyCloned() const;
 
 		bool operator==(const Minion &rhs) const;
 		bool operator!=(const Minion &rhs) const;
 
-		int GetCardId() const { return this->card_id;}
-		int GetAttack() const;
-		int GetHP() const;
-		int GetMaxHP() const;
-
 		// Initializer
-		void Set(int card_id, int origin_attack, int origin_hp, int origin_max_hp);
+		void Set(int card_id, int attack, int hp, int max_hp);
 		void Summon(const Card &card);
 
-		// Modifiers
-		void AttackedOnce();
-		void TakeDamage(int damage);
-		void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
-		void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
-		void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
-		void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
-		void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
-		void SetFreezeAttacker(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, val); }
-		void SetFreezed(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZED, val); }
-
 		// Getters
+		int GetCardId() const { return this->card_id; }
+		int GetAttack() const { return this->stat.GetAttack(); }
+		int GetHP() const { return this->stat.GetHP(); }
+		int GetMaxHP() const { return this->stat.GetMaxHP(); }
 		bool Attackable() const;
 		bool IsTaunt() const { return this->stat.GetFlag(MinionStat::FLAG_TAUNT); }
 		bool IsCharge() const { return this->stat.GetFlag(MinionStat::FLAG_CHARGE); }
@@ -68,14 +56,28 @@ class Minion : public ObjectBase
 		bool IsFreezeAttacker() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER); }
 		bool IsFreezed() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZED); }
 
+		// Setters
+		void AttackedOnce();
+		void SetAttack(int val) { this->stat.SetAttack(val); }
+		void SetHP(int val) { this->stat.SetHP(val); }
+		void SetMaxHP(int val) { this->stat.SetMaxHP(val); }
+		void TakeDamage(int damage);
+		void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
+		void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
+		void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
+		void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
+		void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
+		void SetFreezeAttacker(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, val); }
+		void SetFreezed(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZED, val); }
+
 		// Triggers
 		void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
 		std::list<OnDeathTrigger> && MoveOutOnDeathTriggers() { return std::move(this->triggers_on_death); }
 
 		// Enchantment
-		void ClearEnchantments() { this->enchantments.Clear(this); }
 		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) { this->enchantments.Add(enchantment, this, owner); }
 		void RemoveEnchantment(Enchantment * enchantment) { this->enchantments.Remove(enchantment, this); }
+		void ClearEnchantments() { this->enchantments.Clear(this); }
 
 		// Hooks
 		void TurnStart(bool owner_turn);
@@ -104,21 +106,6 @@ class Minion : public ObjectBase
 inline Minion::Minion() : card_id(0)
 {
 
-}
-
-inline int Minion::GetAttack() const
-{
-	return this->stat.GetAttack();
-}
-
-inline int Minion::GetHP() const
-{
-	return this->stat.GetHP();
-}
-
-inline int Minion::GetMaxHP() const
-{
-	return this->stat.GetMaxHP();
 }
 
 inline void Minion::Set(int card_id, int attack, int hp, int max_hp)

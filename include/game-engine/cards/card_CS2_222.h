@@ -25,9 +25,7 @@ namespace GameEngine {
 				void AfterAdded(Board & board, BoardObjects::MinionsIteratorWithIndex &aura_owner)
 				{
 					// add aura effect to existing minions
-					
 					SlotIndex side = SlotIndexHelper::GetSide(aura_owner.GetSlotIdx());
-
 
 					for (auto it_friendly_minions = board.object_manager.GetMinionIteratorWithIndex(side); !it_friendly_minions.IsEnd(); it_friendly_minions.GoToNext())
 					{

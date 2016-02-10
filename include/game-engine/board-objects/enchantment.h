@@ -45,13 +45,13 @@ public:
 	{
 		if (attack_boost != 0)
 		{
-			minion->stat.SetAttack(minion->stat.GetAttack() + attack_boost);
+			minion->SetAttack(minion->GetAttack() + attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion->stat.SetMaxHP(minion->stat.GetMaxHP() + hp_boost);
-			minion->stat.SetHP(minion->stat.GetHP() + hp_boost);
+			minion->SetMaxHP(minion->GetMaxHP() + hp_boost);
+			minion->SetHP(minion->GetHP() + hp_boost);
 		}
 	}
 
@@ -59,14 +59,13 @@ public:
 	{
 		if (attack_boost != 0)
 		{
-			minion->stat.SetAttack(minion->stat.GetAttack() - attack_boost);
+			minion->SetAttack(minion->GetAttack() - attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion->stat.SetMaxHP(minion->stat.GetMaxHP() - hp_boost);
-			minion->stat.SetHP(
-				std::min(minion->stat.GetHP(), minion->stat.GetMaxHP()));
+			minion->SetMaxHP(minion->GetMaxHP() - hp_boost);
+			minion->SetHP(std::min(minion->GetHP(), minion->GetMaxHP()));
 		}
 	}
 
