@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include <cmath>
+#include <algorithm>
 
 namespace GameEngine {
 namespace BoardObjects {
@@ -41,31 +41,53 @@ template <int attack_boost, int hp_boost, bool one_turn>
 class Enchantment_AttackHPBoost : public Enchantment
 {
 public:
+	Enchantment_AttackHPBoost()
+	{
+#ifdef DEBUG
+		this->after_added_called = false;
+#endif
+	}
+
 	void AfterAdded(Minion * minion)
 	{
-		if (attack_boost != 0)
+#ifdef DEBUG
+		this->after_added_called = true;
+#endif
+
+		// attack cannot below to zero
+		if (minion->GetAttack() + attack_boost < 0)
 		{
-			minion->SetAttack(minion->GetAttack() + attack_boost);
+			this->actual_attack_boost = -minion->GetAttack();
+		}
+		else {
+			this->actual_attack_boost = attack_boost;
+		}
+
+		if (this->actual_attack_boost != 0)
+		{
+			minion->AddAttack(this->actual_attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion->SetMaxHP(minion->GetMaxHP() + hp_boost);
-			minion->SetHP(minion->GetHP() + hp_boost);
+			minion->IncreaseCurrentAndMaxHP(hp_boost);
 		}
 	}
 
 	void BeforeRemoved(Minion * minion)
 	{
-		if (attack_boost != 0)
+#ifdef DEBUG
+		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
+#endif
+
+		if (this->actual_attack_boost != 0)
 		{
-			minion->SetAttack(minion->GetAttack() - attack_boost);
+			minion->AddAttack(-this->actual_attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion->SetMaxHP(minion->GetMaxHP() - hp_boost);
-			minion->SetHP(std::min(minion->GetHP(), minion->GetMaxHP()));
+			minion->DecreaseMaxHP(hp_boost);
 		}
 	}
 
@@ -73,6 +95,8 @@ public:
 	{
 		auto rhs = dynamic_cast<decltype(this)>(&rhs_base);
 		if (!rhs) return false;
+
+		if (this->actual_attack_boost != rhs->actual_attack_boost) return false;
 
 		return true;
 	}
@@ -87,12 +111,18 @@ public:
 	{
 		std::size_t result = std::hash<int>()(Enchantment::UniqueIdForHash::TypeAttackHPBoost);
 
-		GameEngine::hash_combine(result, attack_boost);
+		GameEngine::hash_combine(result, this->actual_attack_boost);
 		GameEngine::hash_combine(result, hp_boost);
 		GameEngine::hash_combine(result, one_turn);
 
 		return result;
 	}
+
+private:
+#ifdef DEBUG
+	bool after_added_called;
+#endif
+	int actual_attack_boost; // attack cannot be negative
 };
 
 } // namespace BoardObjects

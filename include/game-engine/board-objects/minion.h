@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <list>
 #include <memory>
 #include <functional>
@@ -58,9 +59,9 @@ class Minion : public ObjectBase
 
 		// Setters
 		void AttackedOnce();
-		void SetAttack(int val) { this->stat.SetAttack(val); }
-		void SetHP(int val) { this->stat.SetHP(val); }
-		void SetMaxHP(int val) { this->stat.SetMaxHP(val); }
+		void AddAttack(int val) { this->stat.SetAttack(this->stat.GetAttack() + val); }
+		void IncreaseCurrentAndMaxHP(int val);
+		void DecreaseMaxHP(int val);
 		void TakeDamage(int damage);
 		void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
 		void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
@@ -178,6 +179,23 @@ inline void Minion::AttackedOnce()
 {
 	this->attacked_times++;
 	this->stat.SetFlag(MinionStat::FLAG_STEALTH, false);
+}
+
+inline void Minion::IncreaseCurrentAndMaxHP(int val)
+{
+#ifdef DEBUG
+	if (val < 0) throw std::runtime_error("should we trigger heal? enrage effect? damaged effect? use TakeDamage() for that.");
+#endif
+	this->stat.SetMaxHP(this->stat.GetMaxHP() + val);
+	this->stat.SetHP(this->stat.GetHP() + val);
+}
+
+inline void Minion::DecreaseMaxHP(int val)
+{
+	this->stat.SetMaxHP(this->stat.GetMaxHP() - val);
+	this->stat.SetHP(std::min(this->stat.GetHP(), this->stat.GetMaxHP()));
+
+	// TODO: check enrage
 }
 
 inline void Minion::TakeDamage(int damage)
