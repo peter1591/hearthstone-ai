@@ -53,10 +53,6 @@ public:
 	void EraseAndGoToNext();
 	MinionsIteratorWithIndex InsertBefore(Minion && minion);
 
-	// Aura
-	void AddAura(GameEngine::Board & board, Aura * aura) { this->it->Get().auras.Add(board, *this, aura); }
-	void ClearAuras() { this->it->Get().auras.Clear(); }
-
 	bool IsPendingRemoval() const;
 	void MarkPendingRemoval();
 

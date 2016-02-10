@@ -70,7 +70,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::Board & board, GameEngine::BoardObjects::MinionsIteratorWithIndex & summoned_minion)
 			{
-				summoned_minion.AddAura(board, new Aura());
+				summoned_minion->AddAura(board, summoned_minion, new Aura());
 			}
 		};
 

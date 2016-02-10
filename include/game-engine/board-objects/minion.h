@@ -24,7 +24,6 @@ class MinionsConstIteratorWithIndex;
 class Minion : public ObjectBase
 {
 	friend std::hash<Minion>;
-	friend class MinionsIteratorWithIndex; // should rename to something like 'mutable' or 'manipulator'
 
 	public:
 		typedef std::function<void(Board& board, MinionsIteratorWithIndex triggering_minion)> OnDeathTrigger;
@@ -80,6 +79,10 @@ class Minion : public ObjectBase
 		void RemoveEnchantment(Enchantment * enchantment) { this->enchantments.Remove(enchantment, this); }
 		void ClearEnchantments() { this->enchantments.Clear(this); }
 
+		// Aura
+		void AddAura(GameEngine::Board & board, MinionsIteratorWithIndex &myself, Aura * aura) { this->auras.Add(board, myself, aura); }
+		void ClearAuras() { this->auras.Clear(); }
+
 		// Hooks
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
@@ -101,7 +104,7 @@ class Minion : public ObjectBase
 		std::list<OnDeathTrigger> triggers_on_death;
 
 		Enchantments enchantments;
-		Auras auras;
+		Auras auras; // owned auras
 };
 
 inline Minion::Minion() : card_id(0)
