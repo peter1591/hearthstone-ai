@@ -40,9 +40,6 @@
     <Filter Include="Header Files\game-engine\board-objects">
       <UniqueIdentifier>{422966ba-2743-417e-9d37-89e1d9021612}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine\board-objects">
-      <UniqueIdentifier>{9162df81-dcdc-4725-8dd5-3988b1133e7b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
@@ -80,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp">
       <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\board-objects\enchantments.cpp">
-      <Filter>Source Files\game-engine\board-objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +218,6 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\aura.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
@@ -250,6 +241,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\tree.h">
       <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-to-all-minions.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

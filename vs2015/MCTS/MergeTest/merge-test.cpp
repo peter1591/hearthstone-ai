@@ -9,6 +9,7 @@
 #include "game-engine/cards/common.h"
 #include "mcts.h"
 #include "decider.h"
+#include "game-engine/slot-index.h"
 
 void InitializeDeck1(GameEngine::Deck &deck)
 {
@@ -53,30 +54,26 @@ void InitializeBoard(GameEngine::Board &board)
 
 	GameEngine::BoardObjects::Minion minion;
 
-	auto player_minion_iterator = board.object_manager.GetPlayerMinionsIteratorWithIndex();
-	auto opponent_minion_iterator = board.object_manager.GetOpponentMinionsIteratorWithIndex();
+	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_PLAYER_SIDE);
+	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_OPPONENT_SIDE);
 	
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart(true);
-	player_minion_iterator.InsertBefore(std::move(minion));
+	player_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 1, 20, 2);
-	minion.TurnStart(true);
-	opponent_minion_iterator.InsertBefore(std::move(minion));
+	minion.Set(222, 1, 20, 20);
+	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 3, 10, 7);
-	minion.TurnStart(true);
-	opponent_minion_iterator.InsertBefore(std::move(minion));
+	minion.Set(222, 3, 10, 10);
+	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_EX1_029, 10, 10, 10);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
-	minion.TurnStart(true);
-	opponent_minion_iterator.InsertBefore(std::move(minion));
+	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();
@@ -237,10 +234,6 @@ static void InteractiveTest()
 		board.ApplyMove(next_move, &is_random);
 		if (is_random) std::cout << "!!! This move is random!!!" << std::endl;
 		else std::cout << "!!! This move is non-random!!!" << std::endl;
-
-		// TODO
-		GameEngine::Board test;
-		test.CloneFrom(board);
 	}
 }
 

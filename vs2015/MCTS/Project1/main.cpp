@@ -53,24 +53,21 @@ void InitializeBoard(GameEngine::Board &board)
 
 	GameEngine::BoardObjects::Minion minion;
 
-	auto player_minion_iterator = board.object_manager.GetPlayerMinionsIteratorWithIndex();
-	auto opponent_minion_iterator = board.object_manager.GetOpponentMinionsIteratorWithIndex();
+	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_PLAYER_SIDE);
+	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_OPPONENT_SIDE);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(CARD_ID_FP1_007, 2, 2, 2);
 	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	minion.TurnStart(true);
-	player_minion_iterator.InsertBefore(std::move(minion));
+	player_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(222, 30, 2, 2);
-	minion.TurnStart(true);
-	opponent_minion_iterator.InsertBefore(std::move(minion));
+	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	minion = GameEngine::BoardObjects::Minion();
 	minion.Set(222, 10, 7, 7);
-	minion.TurnStart(true);
-	opponent_minion_iterator.InsertBefore(std::move(minion));
+	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();
@@ -78,7 +75,7 @@ void InitializeBoard(GameEngine::Board &board)
 
 static void Run()
 {
-	constexpr int threads = 4;
+	constexpr int threads = 1;
 	constexpr int sec_each_run = 1;
 	constexpr int msec_total = 20 * 1000;
 
