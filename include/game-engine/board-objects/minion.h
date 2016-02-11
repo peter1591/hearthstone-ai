@@ -100,7 +100,7 @@ private:
 	Auras auras; // owned auras
 };
 
-inline Minion::Minion() : card_id(0)
+inline Minion::Minion() : card_id(0), pending_removal(false)
 {
 
 }

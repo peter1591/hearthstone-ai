@@ -94,6 +94,7 @@ inline void GameEngine::BoardObjects::MinionInserter::GoToNext()
 
 inline void GameEngine::BoardObjects::MinionInserter::EraseAndGoToNext()
 {
+	if (this->it_minion->pending_removal) this->minions->pending_removal_count--;
 	this->it_minion = this->minions->minions.erase(this->it_minion);
 }
 
@@ -104,19 +105,13 @@ inline bool GameEngine::BoardObjects::MinionInserter::IsPendingRemoval() const
 
 inline void GameEngine::BoardObjects::MinionInserter::MarkPendingRemoval()
 {
-	if (this->it_minion->pending_removal == false) return;
+	if (this->it_minion->pending_removal) return;
 	this->it_minion->pending_removal = true;
 	this->minions->pending_removal_count++;
 }
 
 inline GameEngine::BoardObjects::MinionManipulator GameEngine::BoardObjects::MinionInserter::ConverToManipulator()
 {
-#ifdef DEBUG
-	if (this->it_minion->pending_removal) {
-		throw std::runtime_error("Warning!!! trying to manipulate a pending-death minion!");
-	}
-#endif
-
 	return MinionManipulator(*this->board, *this->minions, *this->it_minion);
 }
 

@@ -20,8 +20,6 @@ public:
 	bool IsEnd() const;
 	void GoToNext();
 
-	bool IsPendingRemoval() const;
-
 	Minion const* operator->() { return &(*this->it); }
 	Minion const* operator->() const { return &(*this->it); }
 	Minion const& operator*() { return *this->it; }

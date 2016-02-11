@@ -104,6 +104,7 @@ class StagePlayerChooseBoardMove
 					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
 
+
 					moves.AddMove(move, weight_play_minion);
 				default:
 					continue; // TODO: handle other card types
