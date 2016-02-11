@@ -25,7 +25,7 @@ class Minion
 	friend std::hash<Minion>;
 
 public:
-	typedef std::function<void(GameEngine::Board &, MinionManipulator & triggering_minion)> OnDeathTrigger;
+	typedef std::function<void(MinionManipulator & triggering_minion)> OnDeathTrigger;
 
 public:
 	Minion();

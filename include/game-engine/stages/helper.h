@@ -22,7 +22,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayMinion(Board & board, Card const& card, SlotIndex playing_side, PlayMinionData const& data);
 
 	// no battle cry
-	static bool SummonMinion(Board & board, Card const& card, BoardObjects::MinionInserter & location);
+	static bool SummonMinion(Card const& card, BoardObjects::MinionInserter & location);
 
 public:
 	// handle minion/hero attack, calculate damages
@@ -161,7 +161,7 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::Slo
 
 inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 {
-	std::list<std::function<void(Board &)>> death_triggers;
+	std::list<std::function<void()>> death_triggers;
 
 	while (true) { // loop until no deathrattle are triggered
 		death_triggers.clear();
@@ -177,13 +177,13 @@ inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 			it.MarkPendingRemoval();
 
 			for (auto const& trigger : manipulator.GetAndClearOnDeathTriggers()) {
-				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it.ConverToManipulator()));
+				death_triggers.push_back(std::bind(trigger, it.ConverToManipulator()));
 			}
 		}
 
 		// trigger deathrattles
 		for (auto const& death_trigger : death_triggers) {
-			death_trigger(board);
+			death_trigger();
 		}
 
 		// actually remove died minions

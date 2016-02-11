@@ -15,10 +15,12 @@ namespace GameEngine {
 
 			// Leper Gnome
 			
-			static void Deathrattle(GameEngine::Board & board, GameEngine::BoardObjects::MinionManipulator triggering_minion)
+			static void Deathrattle(GameEngine::BoardObjects::MinionManipulator triggering_minion)
 			{
 				// deal 2 damage to opponent hero
 				constexpr int damage = 2;
+
+				auto & board = triggering_minion.GetBoard();
 
 				if (triggering_minion.IsPlayerSide()) {
 					StageHelper::DealDamage(board.object_manager.GetOpponentHero(board), damage);

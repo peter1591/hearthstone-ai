@@ -11,12 +11,12 @@ namespace GameEngine {
 
 		auto inserter = board.object_manager.GetMinionInserter(board, data.put_location);
 
-		StageHelper::SummonMinion(board, card, inserter);
+		StageHelper::SummonMinion(card, inserter);
 
 		return false;
 	}
 
-	bool StageHelper::SummonMinion(Board & board, Card const & card, BoardObjects::MinionInserter & inserter)
+	bool StageHelper::SummonMinion(Card const & card, BoardObjects::MinionInserter & inserter)
 	{
 		BoardObjects::Minion summoning_minion;
 		summoning_minion.Summon(card);
@@ -28,7 +28,7 @@ namespace GameEngine {
 		
 		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
 		
-		board.object_manager.HookAfterMinionAdded(summoned_minion);
+		inserter.GetBoard().object_manager.HookAfterMinionAdded(summoned_minion);
 
 		return true;
 	}
