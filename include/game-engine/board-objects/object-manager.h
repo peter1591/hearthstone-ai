@@ -273,10 +273,10 @@ inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion
 	this->player_hero.HookAfterMinionAdded(added_minion);
 	this->opponent_hero.HookAfterMinionAdded(added_minion);
 
-	for (auto it = this->GetMinionInserterAtBeginOfSide(*added_minion.board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
+	for (auto it = this->GetMinionInserterAtBeginOfSide(added_minion.GetBoard(), SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().HookAfterMinionAdded(added_minion);
 	}
-	for (auto it = this->GetMinionInserterAtBeginOfSide(*added_minion.board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
+	for (auto it = this->GetMinionInserterAtBeginOfSide(added_minion.GetBoard(), SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().HookAfterMinionAdded(added_minion);
 	}
 }

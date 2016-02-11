@@ -34,10 +34,10 @@ namespace GameEngine {
 				bool CheckMinionShouldHaveAuraEnchantment(BoardObjects::MinionManipulator const& aura_owner, BoardObjects::MinionManipulator const& minion)
 				{
 					// only add aura to friendly minions
-					if (aura_owner.minions != minion.minions) return false;
+					if (&aura_owner.GetMinions() != &minion.GetMinions()) return false;
 
 					// only add aura to others
-					if (aura_owner.minion == minion.minion) return false;
+					if (&aura_owner.GetMinion() == &minion.GetMinion()) return false;
 
 					return true;
 				}

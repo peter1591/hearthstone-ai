@@ -52,7 +52,7 @@ public:
 	void EnchantmentRemoved(Enchantment * enchantment, MinionManipulator const& target);
 
 private:
-	std::map<Enchantment *, Minion *> enchantments;
+	std::map<Enchantment *, Minion const*> enchantments;
 };
 
 } // namespace BoardObjects

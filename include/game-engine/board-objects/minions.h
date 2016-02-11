@@ -56,19 +56,20 @@ public: // getters
 		return inserter.ConverToManipulator();
 	}
 
-	MinionManipulator GetManipulator(GameEngine::Board & board, Minion * minion) {
-#ifdef DEBUG
-		bool found = false;
-		for (auto const& item : this->minions) {
-			if (&item == minion) {
-				found = true;
-				break;
-			}
+	container_type::iterator GetIterator(Minion const* minion)
+	{
+		// Note: A linear search alrogithm
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			if (&(*it) == minion) return it;
 		}
-		if (!found) throw std::runtime_error("cannot find minion");
-#endif
+		return this->minions.end();
+	}
 
-		return MinionManipulator(board, *this, *minion);
+	MinionManipulator GetManipulator(GameEngine::Board & board, Minion const* minion) 
+	{
+		auto it = this->GetIterator(minion);
+		if (it == this->minions.end()) throw std::runtime_error("cannot find minion");
+		return MinionManipulator(board, *this, *it);
 	}
 
 	Minion const& Get(int idx) const {
@@ -84,14 +85,6 @@ public: // getters
 			if (it == this->minions.end()) break;
 		}
 		return *it;
-	}
-
-	container_type::iterator GetIterator(Minion * const minion)
-	{
-		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			if (&(*it) == minion) return it;
-		}
-		return this->minions.end();
 	}
 
 public: // debug

@@ -118,13 +118,13 @@ inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(
 {
 	while (!this->enchantments.empty()) {
 		auto it = this->enchantments.begin();
-		owner.minions->GetManipulator(*owner.board, it->second).RemoveEnchantment(it->first);
+		owner.GetMinions().GetManipulator(owner.GetBoard(), it->second).RemoveEnchantment(it->first);
 	}
 }
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentAdded(Enchantment * enchantment, MinionManipulator const& target)
 {
-	this->enchantments[enchantment] = target.minion;
+	this->enchantments[enchantment] = &target.GetMinion();
 }
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentRemoved(Enchantment * enchantment, MinionManipulator const& target)

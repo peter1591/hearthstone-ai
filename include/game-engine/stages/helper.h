@@ -171,11 +171,12 @@ inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 		{
 			if (it.IsPendingRemoval()) continue;
 
-			if (it.ConverToManipulator().GetHP() > 0) continue;
+			auto manipulator = it.ConverToManipulator();
+			if (manipulator.GetHP() > 0) continue;
 
 			it.MarkPendingRemoval();
 
-			for (auto const& trigger : it.it_minion->MoveOutOnDeathTriggers()) {
+			for (auto const& trigger : manipulator.GetAndClearOnDeathTriggers()) {
 				death_triggers.push_back(std::bind(trigger, std::placeholders::_1, it.ConverToManipulator()));
 			}
 		}

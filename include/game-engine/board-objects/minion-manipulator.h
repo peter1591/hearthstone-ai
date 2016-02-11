@@ -20,6 +20,10 @@ namespace BoardObjects {
 			: board(&board), minions(&minions), minion(&minion)
 		{}
 
+		Board & GetBoard() const { return *this->board; }
+		Minions & GetMinions() const { return *this->minions; }
+		Minion const& GetMinion() const { return *this->minion; }
+
 	public: // basic operations on minion (including interface to ObjectBase)
 		int GetHP() const;
 		int GetMaxHP() const;
@@ -34,6 +38,14 @@ namespace BoardObjects {
 		void SetFreezed(bool freezed);
 		bool IsFreezeAttacker() const;
 		bool IsFreezed() const;
+
+	public:
+		void AddAttack(int val) const;
+		void IncreaseCurrentAndMaxHP(int val) const;
+		void DecreaseMaxHP(int val) const;
+
+		void AddOnDeathTrigger(Minion::OnDeathTrigger func) const;
+		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers() const;
 
 	public: // auras
 		void AddAura(Aura * aura) const;
@@ -55,7 +67,7 @@ namespace BoardObjects {
 		bool IsPlayerSide() const;
 		bool IsOpponentSide() const;
 
-	public:
+	private:
 		Board * const board;
 		Minions * const minions;
 		Minion * const minion;

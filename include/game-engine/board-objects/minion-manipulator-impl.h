@@ -58,6 +58,40 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsFreezed() const
 	return this->minion->stat.IsFreezed();
 }
 
+inline void GameEngine::BoardObjects::MinionManipulator::AddAttack(int val) const
+{
+	this->minion->stat.SetAttack(this->minion->stat.GetAttack() + val);
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::IncreaseCurrentAndMaxHP(int val) const
+{
+#ifdef DEBUG
+	if (val < 0) throw std::runtime_error("should we trigger heal? enrage effect? damaged effect? use TakeDamage() for that.");
+#endif
+	this->minion->stat.SetMaxHP(this->minion->stat.GetMaxHP() + val);
+	this->minion->stat.SetHP(this->minion->stat.GetHP() + val);
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val) const
+{
+	this->minion->stat.SetMaxHP(this->minion->stat.GetMaxHP() - val);
+	this->minion->stat.SetHP(std::min(this->minion->stat.GetHP(), this->minion->stat.GetMaxHP()));
+
+	// TODO: trigger enrage
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::AddOnDeathTrigger(Minion::OnDeathTrigger func) const
+{
+	this->minion->triggers_on_death.push_back(func);
+}
+
+inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::BoardObjects::MinionManipulator::GetAndClearOnDeathTriggers() const
+{
+	std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> ret;
+	this->minion->triggers_on_death.swap(ret);
+	return ret;
+}
+
 inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura) const
 {
 	this->minion->auras.Add(*this, aura);
@@ -139,8 +173,8 @@ inline bool GameEngine::BoardObjects::MinionInserter::IsEnd() const
 
 inline GameEngine::BoardObjects::MinionInserter GameEngine::BoardObjects::MinionInserter::GetInserterBefore(MinionManipulator & minion)
 {
-	auto it = minion.minions->GetIterator(minion.minion);
-	return MinionInserter(*minion.board, *minion.minions, it);
+	auto it = minion.GetMinions().GetIterator(&minion.GetMinion());
+	return MinionInserter(minion.GetBoard(), minion.GetMinions(), it);
 }
 
 inline void GameEngine::BoardObjects::MinionInserter::GoToNext()

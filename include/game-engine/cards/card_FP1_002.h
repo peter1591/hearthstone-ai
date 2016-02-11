@@ -34,7 +34,7 @@ public:
 
 	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 	{
-		summoned_minion.minion->AddOnDeathTrigger(Deathrattle);
+		summoned_minion.AddOnDeathTrigger(Deathrattle);
 	}
 };
 

@@ -19,10 +19,10 @@ namespace GameEngine {
 		protected: // hooks
 			void AfterAdded(MinionManipulator const& aura_owner)
 			{
-				for (auto it = aura_owner.board->object_manager.GetMinionInserterAtBeginOfSide(*aura_owner.board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
+				for (auto it = aura_owner.GetBoard().object_manager.GetMinionInserterAtBeginOfSide(aura_owner.GetBoard(), SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 					this->HookAfterMinionAdded(aura_owner, it.ConverToManipulator());
 				}
-				for (auto it = aura_owner.board->object_manager.GetMinionInserterAtBeginOfSide(*aura_owner.board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
+				for (auto it = aura_owner.GetBoard().object_manager.GetMinionInserterAtBeginOfSide(aura_owner.GetBoard(), SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
 					this->HookAfterMinionAdded(aura_owner, it.ConverToManipulator());
 				}
 			}

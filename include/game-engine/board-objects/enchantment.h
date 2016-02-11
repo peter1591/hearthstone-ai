@@ -64,12 +64,12 @@ public:
 
 		if (this->actual_attack_boost != 0)
 		{
-			minion.minion->AddAttack(this->actual_attack_boost);
+			minion.AddAttack(this->actual_attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion.minion->IncreaseCurrentAndMaxHP(hp_boost);
+			minion.IncreaseCurrentAndMaxHP(hp_boost);
 		}
 	}
 
@@ -81,12 +81,12 @@ public:
 
 		if (this->actual_attack_boost != 0)
 		{
-			minion.minion->AddAttack(-this->actual_attack_boost);
+			minion.AddAttack(-this->actual_attack_boost);
 		}
 
 		if (hp_boost != 0)
 		{
-			minion.minion->DecreaseMaxHP(hp_boost);
+			minion.DecreaseMaxHP(hp_boost);
 
 			// TODO: trigger enrage
 		}
