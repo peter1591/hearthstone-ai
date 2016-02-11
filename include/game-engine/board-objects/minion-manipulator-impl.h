@@ -96,6 +96,11 @@ inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::B
 	return ret;
 }
 
+inline void GameEngine::BoardObjects::MinionManipulator::SetMinionStatFlag(MinionStat::Flag flag, bool val) const
+{
+	this->minion->stat.SetFlag(flag, val);
+}
+
 inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura) const
 {
 	this->minion->auras.Add(*this, aura);

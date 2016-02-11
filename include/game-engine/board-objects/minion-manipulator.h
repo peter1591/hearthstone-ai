@@ -47,6 +47,8 @@ namespace BoardObjects {
 		void AddOnDeathTrigger(Minion::OnDeathTrigger func) const;
 		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers() const;
 
+		void SetMinionStatFlag(MinionStat::Flag flag, bool val) const;
+
 	public: // auras
 		void AddAura(Aura * aura) const;
 		void ClearAuras() const;

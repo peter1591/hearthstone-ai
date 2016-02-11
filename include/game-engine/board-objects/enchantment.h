@@ -36,11 +36,13 @@ protected:
 	virtual std::size_t GetHash() const = 0; // this is a pure virtual class (i.e., no member to be hashed)
 };
 
-template <int attack_boost, int hp_boost, bool one_turn>
-class Enchantment_AttackHPBoost : public Enchantment
+// Introduce some attack/hp/taunt/charge/etc. buffs on minion
+// buff_flags are ORed flags for MinionStat::Flag
+template <int attack_boost, int hp_boost, int buff_flags, bool one_turn>
+class Enchantment_BuffStat : public Enchantment
 {
 public:
-	Enchantment_AttackHPBoost()
+	Enchantment_BuffStat()
 	{
 #ifdef DEBUG
 		this->after_added_called = false;
@@ -71,6 +73,8 @@ public:
 		{
 			minion.IncreaseCurrentAndMaxHP(hp_boost);
 		}
+
+		this->SetMinionFlags(minion, true);
 	}
 
 	void BeforeRemoved(MinionManipulator const& minion)
@@ -88,6 +92,8 @@ public:
 		{
 			minion.DecreaseMaxHP(hp_boost);
 		}
+
+		this->SetMinionFlags(minion, false);
 	}
 
 	bool TurnEnd(MinionManipulator const& minion)
@@ -115,6 +121,19 @@ public:
 		GameEngine::hash_combine(result, one_turn);
 
 		return result;
+	}
+
+private:
+	void SetMinionFlags(MinionManipulator const& minion, bool val)
+	{
+		// TOOD: can use template programming to enforce compile-time loop unrolling
+		for (int stat_flag = 0; stat_flag < MinionStat::FLAG_MAX; stat_flag++) {
+			int shifted_stat_flag = 1 << stat_flag;
+
+			if ((buff_flags & shifted_stat_flag) == 0) continue; // no buff on this flag
+
+			minion.SetMinionStatFlag((MinionStat::Flag)stat_flag, val);
+		}
 	}
 
 private:

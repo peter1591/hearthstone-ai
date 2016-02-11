@@ -19,6 +19,7 @@ public:
 		FLAG_FORGETFUL,
 		FLAG_FREEZE_ATTACKER,
 		FLAG_FREEZED,
+		FLAG_WINDFURY,
 		FLAG_MAX
 	};
 
@@ -50,6 +51,7 @@ public:
 	bool IsForgetful() const { return this->flags[MinionStat::FLAG_FORGETFUL] > 0; }
 	bool IsFreezeAttacker() const { return this->flags[MinionStat::FLAG_FREEZE_ATTACKER] > 0; }
 	bool IsFreezed() const { return this->flags[MinionStat::FLAG_FREEZED] > 0; }
+	bool IsWindFury() const { return this->flags[MinionStat::FLAG_WINDFURY] > 0; }
 
 	void SetAttack(int attack) { this->attack = attack; }
 	void SetHP(int hp) { this->hp = hp; }
@@ -61,8 +63,8 @@ public:
 	void SetForgetful(bool val) { this->SetFlag(FLAG_FORGETFUL, val); }
 	void SetFreezeAttacker(bool val) { this->SetFlag(FLAG_FREEZE_ATTACKER, val); }
 	void SetFreezed(bool val) { this->SetFlag(FLAG_FREEZED, val); }
+	void SetWindFury(bool val) { this->SetFlag(FLAG_WINDFURY, val); }
 
-private:
 	void SetFlag(Flag flag, bool set)
 	{
 		if (set) {

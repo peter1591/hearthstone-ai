@@ -9,12 +9,12 @@
 namespace GameEngine {
 	namespace Cards {
 
-		class Card_GVG_051
+		class Card_EX1_412
 		{
 		public:
-			static constexpr int card_id = CARD_ID_GVG_051;
+			static constexpr int card_id = CARD_ID_EX1_412;
 
-			// Warbot
+			// Raging Worgen
 
 			class Aura : public GameEngine::BoardObjects::AuraEnrage
 			{
@@ -23,8 +23,9 @@ namespace GameEngine {
 				{
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 0;
+					constexpr int buff_stat = 1 << BoardObjects::MinionStat::FLAG_WINDFURY;
 
-					auto * enchantment = new BoardObjects::Enchantment_BuffStat<attack_boost, hp_boost, 0, false>();
+					auto * enchantment = new BoardObjects::Enchantment_BuffStat<attack_boost, hp_boost, buff_stat, false>();
 
 					aura_owner.AddEnchantment(enchantment, &this->enchantments_manager);
 				}

@@ -24,7 +24,7 @@ namespace GameEngine {
 					constexpr int attack_boost = 3;
 					constexpr int hp_boost = 0;
 
-					auto * enchantment = new BoardObjects::Enchantment_AttackHPBoost<attack_boost, hp_boost, false>();
+					auto * enchantment = new BoardObjects::Enchantment_BuffStat<attack_boost, hp_boost, 0, false>();
 
 					aura_owner.AddEnchantment(enchantment, &this->enchantments_manager);
 				}

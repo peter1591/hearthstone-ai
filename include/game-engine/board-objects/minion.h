@@ -42,7 +42,6 @@ public:
 	void Summon(const Card &card);
 
 	// Getters
-	int GetMaxHP() const { return this->stat.GetMaxHP(); }
 	bool Attackable() const;
 
 	bool IsValid() const { return this->card_id != 0; }
@@ -106,7 +105,11 @@ inline bool Minion::Attackable() const
 
 	if (this->stat.IsFreezed()) return false;
 
-	if (attacked_times > 0) return false;
+	int max_attacked_times = 1;
+	if (this->stat.IsWindFury()) max_attacked_times = 2;
+
+	if (this->attacked_times >= max_attacked_times) return false;
+
 	if (this->stat.GetAttack() <= 0) return false;
 
 	return true;
@@ -157,6 +160,7 @@ inline std::string Minion::GetDebugString() const
 		if (this->stat.IsForgetful()) oss << " [FORGETFUL]";
 		if (this->stat.IsFreezeAttacker()) oss << " [FREEZE]";
 		if (this->stat.IsFreezed()) oss << " [FREEZED]";
+		if (this->stat.IsWindFury()) oss << " [WINDFURY]";
 	}
 
 	return oss.str();
