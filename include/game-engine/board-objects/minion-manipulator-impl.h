@@ -77,7 +77,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val) 
 	this->minion->stat.SetMaxHP(this->minion->stat.GetMaxHP() - val);
 	this->minion->stat.SetHP(std::min(this->minion->stat.GetHP(), this->minion->stat.GetMaxHP()));
 
-	// TODO: trigger enrage
+	this->HookMinionCheckEnraged();
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::AddOnDeathTrigger(Minion::OnDeathTrigger func) const
@@ -203,5 +203,9 @@ inline GameEngine::BoardObjects::MinionManipulator GameEngine::BoardObjects::Min
 {
 	auto new_it = this->minions->minions.insert(this->it_minion, std::move(minion));
 
-	return GameEngine::BoardObjects::MinionManipulator(*this->board, *this->minions, *new_it);
+	auto summoned_minion = GameEngine::BoardObjects::MinionManipulator(*this->board, *this->minions, *new_it);
+
+	this->board->object_manager.HookAfterMinionAdded(summoned_minion);
+
+	return summoned_minion;
 }

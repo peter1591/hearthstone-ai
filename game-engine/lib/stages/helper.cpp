@@ -27,8 +27,6 @@ namespace GameEngine {
 		auto summoned_minion = inserter.InsertBefore(std::move(summoning_minion));
 		
 		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
-		
-		inserter.GetBoard().object_manager.HookAfterMinionAdded(summoned_minion);
 
 		return true;
 	}
