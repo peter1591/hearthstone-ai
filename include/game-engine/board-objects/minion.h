@@ -79,7 +79,6 @@ inline void Minion::Set(int card_id, int attack, int hp, int max_hp)
 	this->stat.SetAttack(attack);
 	this->stat.SetHP(hp);
 	this->stat.SetMaxHP(max_hp);
-	this->stat.ClearFlags();
 }
 
 inline void Minion::Summon(const Card & card)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bitset>
+#include <array>
 #include "game-engine/common.h"
 
 namespace GameEngine {
@@ -22,10 +22,12 @@ public:
 		FLAG_MAX
 	};
 
-	typedef std::bitset<FLAG_MAX> Flags;
+	typedef std::array<int, FLAG_MAX> Flags;
 
 public:
-	MinionStat() : attack(0), hp(0), max_hp(0) {}
+	MinionStat() : attack(0), hp(0), max_hp(0), flags()
+	{
+	}
 
 	bool operator==(MinionStat const& rhs) const
 	{
@@ -41,27 +43,35 @@ public:
 	int GetAttack() const { return this->attack; }
 	int GetHP() const { return this->hp; }
 	int GetMaxHP() const { return this->max_hp; }
-	bool IsTaunt() const { return this->flags[MinionStat::FLAG_TAUNT]; }
-	bool IsCharge() const { return this->flags[MinionStat::FLAG_CHARGE]; }
-	bool IsShield() const { return this->flags[MinionStat::FLAG_SHIELD]; }
-	bool IsStealth() const { return this->flags[MinionStat::FLAG_STEALTH]; }
-	bool IsForgetful() const { return this->flags[MinionStat::FLAG_FORGETFUL]; }
-	bool IsFreezeAttacker() const { return this->flags[MinionStat::FLAG_FREEZE_ATTACKER]; }
-	bool IsFreezed() const { return this->flags[MinionStat::FLAG_FREEZED]; }
+	bool IsTaunt() const { return this->flags[MinionStat::FLAG_TAUNT] > 0; }
+	bool IsCharge() const { return this->flags[MinionStat::FLAG_CHARGE] > 0; }
+	bool IsShield() const { return this->flags[MinionStat::FLAG_SHIELD] > 0; }
+	bool IsStealth() const { return this->flags[MinionStat::FLAG_STEALTH] > 0; }
+	bool IsForgetful() const { return this->flags[MinionStat::FLAG_FORGETFUL] > 0; }
+	bool IsFreezeAttacker() const { return this->flags[MinionStat::FLAG_FREEZE_ATTACKER] > 0; }
+	bool IsFreezed() const { return this->flags[MinionStat::FLAG_FREEZED] > 0; }
 
 	void SetAttack(int attack) { this->attack = attack; }
 	void SetHP(int hp) { this->hp = hp; }
 	void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
-	void SetTaunt(bool val) { this->flags.set(MinionStat::FLAG_TAUNT, val); }
-	void SetCharge(bool val) { this->flags.set(MinionStat::FLAG_CHARGE, val); }
-	void SetShield(bool val) { this->flags.set(MinionStat::FLAG_SHIELD, val); }
-	void SetStealth(bool val) { this->flags.set(MinionStat::FLAG_STEALTH, val); }
-	void SetForgetful(bool val) { this->flags.set(MinionStat::FLAG_FORGETFUL, val); }
-	void SetFreezeAttacker(bool val) { this->flags.set(MinionStat::FLAG_FREEZE_ATTACKER, val); }
-	void SetFreezed(bool val) { this->flags.set(MinionStat::FLAG_FREEZED, val); }
+	void SetTaunt(bool val) { this->SetFlag(FLAG_TAUNT, val); }
+	void SetCharge(bool val) { this->SetFlag(FLAG_CHARGE, val); }
+	void SetShield(bool val) { this->SetFlag(FLAG_SHIELD, val); }
+	void SetStealth(bool val) { this->SetFlag(FLAG_STEALTH, val); }
+	void SetForgetful(bool val) { this->SetFlag(FLAG_FORGETFUL, val); }
+	void SetFreezeAttacker(bool val) { this->SetFlag(FLAG_FREEZE_ATTACKER, val); }
+	void SetFreezed(bool val) { this->SetFlag(FLAG_FREEZED, val); }
 
-	void ClearFlags() { this->flags.reset(); }
-	void MergeFlags(MinionStat const& rhs) { this->flags |= rhs.flags; }
+private:
+	void SetFlag(Flag flag, bool set)
+	{
+		if (set) {
+			++this->flags[flag];
+		}
+		else {
+			--this->flags[flag];
+		}
+	}
 
 private:
 	int attack;
@@ -84,7 +94,9 @@ namespace std {
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);
 			GameEngine::hash_combine(result, s.max_hp);
-			GameEngine::hash_combine(result, s.flags);
+			for (auto const& flag : s.flags) {
+				GameEngine::hash_combine(result, flag);
+			}
 
 			return result;
 		}
