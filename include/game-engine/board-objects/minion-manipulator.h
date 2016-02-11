@@ -1,5 +1,6 @@
 #pragma once
 
+#include "object-base.h"
 #include "game-engine/board-objects/minion.h"
 
 namespace GameEngine {
@@ -12,12 +13,27 @@ namespace BoardObjects {
 
 	// Manipulator is designed to modify data members for Minion structure,
 	// and will trigger related hooks on-the-fly
-	class MinionManipulator
+	class MinionManipulator : public ObjectBase
 	{
 	public:
 		MinionManipulator(Board & board, Minions & minions, Minion & minion)
 			: board(&board), minions(&minions), minion(&minion)
 		{}
+
+	public: // basic operations on minion (including interface to ObjectBase)
+		int GetHP() const;
+		int GetMaxHP() const;
+		int GetAttack() const;
+
+		void TakeDamage(int damage);
+		bool IsForgetful() const;
+
+		void AttackedOnce();
+
+		void SetFreezeAttacker(bool freeze);
+		void SetFreezed(bool freezed);
+		bool IsFreezeAttacker() const;
+		bool IsFreezed() const;
 
 	public: // auras
 		void AddAura(Aura * aura);

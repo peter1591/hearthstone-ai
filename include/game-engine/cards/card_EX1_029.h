@@ -21,10 +21,10 @@ namespace GameEngine {
 				constexpr int damage = 2;
 
 				if (triggering_minion.IsPlayerSide()) {
-					StageHelper::DealDamage(board, board.object_manager.GetOpponentHero(), damage);
+					StageHelper::DealDamage(board.object_manager.GetOpponentHero(board), damage);
 				}
 				else {
-					StageHelper::DealDamage(board, board.object_manager.GetPlayerHero(), damage);
+					StageHelper::DealDamage(board.object_manager.GetPlayerHero(board), damage);
 				}
 			}
 

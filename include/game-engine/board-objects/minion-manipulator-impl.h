@@ -2,6 +2,62 @@
 #include "game-engine/board-objects/minion.h"
 #include "game-engine/board-objects/minion-manipulator.h"
 
+inline int GameEngine::BoardObjects::MinionManipulator::GetHP() const
+{
+	return this->minion->stat.GetHP();
+}
+
+inline int GameEngine::BoardObjects::MinionManipulator::GetMaxHP() const
+{
+	return this->minion->stat.GetMaxHP();
+}
+
+inline int GameEngine::BoardObjects::MinionManipulator::GetAttack() const
+{
+	return this->minion->stat.GetAttack();
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage)
+{
+	if (this->minion->stat.GetFlag(MinionStat::FLAG_SHIELD)) {
+		this->minion->stat.SetFlag(MinionStat::FLAG_SHIELD, false);
+	}
+	else {
+		this->minion->stat.SetHP(this->minion->stat.GetHP() - damage);
+	}
+}
+
+inline bool GameEngine::BoardObjects::MinionManipulator::IsForgetful() const
+{
+	return this->minion->stat.GetFlag(MinionStat::FLAG_FORGETFUL);
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce()
+{
+	this->minion->attacked_times++;
+	this->minion->stat.SetFlag(MinionStat::FLAG_STEALTH, false);
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze)
+{
+	this->minion->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, freeze);
+}
+
+inline void GameEngine::BoardObjects::MinionManipulator::SetFreezed(bool freezed)
+{
+	this->minion->stat.SetFlag(MinionStat::FLAG_FREEZED, freezed);
+}
+
+inline bool GameEngine::BoardObjects::MinionManipulator::IsFreezeAttacker() const
+{
+	return this->minion->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER);
+}
+
+inline bool GameEngine::BoardObjects::MinionManipulator::IsFreezed() const
+{
+	return this->minion->stat.GetFlag(MinionStat::FLAG_FREEZED);
+}
+
 inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura)
 {
 	this->minion->auras.Add(*this, aura);
@@ -35,10 +91,10 @@ inline void GameEngine::BoardObjects::MinionManipulator::HookAfterMinionAdded(Mi
 inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged()
 {
 	auto & minion = *this->minion;
-	if (minion.GetHP() < minion.GetMaxHP()) {
+	if (this->GetHP() < this->GetMaxHP()) {
 		minion.auras.HookAfterOwnerEnraged(*this); // enraged
 	}
-	else if (minion.GetHP() == minion.GetMaxHP()) {
+	else if (this->GetHP() == this->GetMaxHP()) {
 		minion.auras.HookAfterOwnerUnEnraged(*this); // un-enraged
 	}
 	else {

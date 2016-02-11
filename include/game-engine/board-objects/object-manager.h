@@ -15,6 +15,47 @@
 namespace GameEngine {
 namespace BoardObjects {
 
+class BoardObject
+{
+public:
+	explicit BoardObject(Hero * hero) : hero(hero),
+		minion(*(Board*)(nullptr), *(Minions*)(nullptr), *(Minion*)(nullptr))
+	{
+		this->ptr = this->hero;
+	}
+
+	explicit BoardObject(MinionManipulator && minion) : minion(minion)
+	{
+		this->ptr = &this->minion;
+	}
+
+	bool IsHero() const { return this->ptr == this->hero; }
+	bool IsMinion() const { return this->ptr == &this->minion; }
+
+	Hero * GetHero()
+	{
+#ifdef DEBUG
+		if (this->IsHero() == false) throw std::runtime_error("type not match.");
+#endif
+		return this->hero;
+	}
+
+	MinionManipulator GetMinion()
+	{
+#ifdef DEBUG
+		if (this->IsMinion() == false) throw std::runtime_error("type not match.");
+#endif
+		return this->minion;
+	}
+
+	ObjectBase * operator->() const { return this->ptr; }
+
+private:
+	Hero * hero;
+	MinionManipulator minion; // a pointer to the actual memory location
+	ObjectBase * ptr;
+};
+
 class ObjectManager
 {
 	friend std::hash<ObjectManager>;
@@ -34,18 +75,15 @@ public:
 	bool operator==(ObjectManager const& rhs) const;
 	bool operator!=(ObjectManager const& rhs) const;
 
+public: // Get object
+	BoardObject GetObject(GameEngine::Board & board, SlotIndex idx);
+	BoardObject GetPlayerHero(GameEngine::Board & board) { return BoardObject(&this->player_hero); }
+	BoardObject GetOpponentHero(GameEngine::Board & board) { return BoardObject(&this->opponent_hero); }
+
 public: // Manipulate heros
-	Hero * GetPlayerHero() { return &this->player_hero; }
-	Hero const* GetPlayerHero() const { return &this->player_hero; }
-
-	Hero * GetOpponentHero() { return &this->opponent_hero; }
-	Hero const* GetOpponentHero() const { return &this->opponent_hero; }
-
 	void SetHero(Hero const& player, Hero const& opponent);
 
 public: // Manipulate minions
-	ObjectBase* GetObject(SlotIndex idx);
-
 	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
 	bool IsOpponentMinionsFull() const { return this->opponent_minions.IsFull(); }
 	bool IsMinionsFull(SlotIndex side) const {
@@ -139,18 +177,18 @@ inline void ObjectManager::SetHero(Hero const & player, Hero const & opponent)
 	this->opponent_hero = opponent;
 }
 
-inline ObjectBase * ObjectManager::GetObject(SlotIndex idx)
+inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex idx)
 {
 	if (idx < SLOT_PLAYER_HERO)
 		throw std::runtime_error("invalid argument");
 	else if (idx == SLOT_PLAYER_HERO)
-		return &this->player_hero;
+		return BoardObject(&this->player_hero);
 	else if (idx < SLOT_OPPONENT_HERO)
-		return &this->player_minions.Get(idx - SLOT_PLAYER_MINION_START);
+		return BoardObject(this->GetMinionManipulator(board, idx));
 	else if (idx == SLOT_OPPONENT_HERO)
-		return &this->opponent_hero;
+		return BoardObject(&this->opponent_hero);
 	else if (idx < SLOT_MAX)
-		return &this->opponent_minions.Get(idx - SLOT_OPPONENT_MINION_START);
+		return BoardObject(this->GetMinionManipulator(board, idx));
 	else
 		throw std::runtime_error("invalid argument");
 }

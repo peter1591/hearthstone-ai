@@ -55,9 +55,9 @@ public:
 #endif
 
 		// attack cannot below to zero
-		if (minion.minion->GetAttack() + attack_boost < 0)
+		if (minion.GetAttack() + attack_boost < 0)
 		{
-			this->actual_attack_boost = -minion.minion->GetAttack();
+			this->actual_attack_boost = -minion.GetAttack();
 		}
 		else {
 			this->actual_attack_boost = attack_boost;

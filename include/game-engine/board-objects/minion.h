@@ -22,7 +22,7 @@ class MinionInserter;
 class MinionManipulator;
 class MinionConstIteratorWithSlotIndex;
 
-class Minion : public ObjectBase
+class Minion
 {
 	friend std::hash<Minion>;
 	friend MinionInserter;
@@ -48,31 +48,22 @@ public:
 
 	// Getters
 	int GetCardId() const { return this->card_id; }
-	int GetAttack() const { return this->stat.GetAttack(); }
-	int GetHP() const { return this->stat.GetHP(); }
 	int GetMaxHP() const { return this->stat.GetMaxHP(); }
 	bool Attackable() const;
 	bool IsTaunt() const { return this->stat.GetFlag(MinionStat::FLAG_TAUNT); }
 	bool IsCharge() const { return this->stat.GetFlag(MinionStat::FLAG_CHARGE); }
 	bool IsShield() const { return this->stat.GetFlag(MinionStat::FLAG_SHIELD); }
 	bool IsStealth() const { return this->stat.GetFlag(MinionStat::FLAG_STEALTH); }
-	bool IsForgetful() const { return this->stat.GetFlag(MinionStat::FLAG_FORGETFUL); }
-	bool IsFreezeAttacker() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER); }
-	bool IsFreezed() const { return this->stat.GetFlag(MinionStat::FLAG_FREEZED); }
 
 	// Setters
-	void AttackedOnce();
 	void AddAttack(int val) { this->stat.SetAttack(this->stat.GetAttack() + val); }
 	void IncreaseCurrentAndMaxHP(int val);
 	void DecreaseMaxHP(int val);
-	void TakeDamage(int damage);
 	void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
 	void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
 	void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
 	void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
 	void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
-	void SetFreezeAttacker(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, val); }
-	void SetFreezed(bool val) { this->stat.SetFlag(MinionStat::FLAG_FREEZED, val); }
 
 	// Triggers
 	void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
@@ -127,8 +118,8 @@ inline void Minion::Summon(const Card & card)
 	this->SetShield(card.data.minion.shield);
 	this->SetStealth(card.data.minion.stealth);
 	this->SetForgetful(card.data.minion.forgetful);
-	this->SetFreezeAttacker(card.data.minion.freeze);
-	this->SetFreezed(false);
+	this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, card.data.minion.freeze);
+	this->stat.SetFlag(MinionStat::FLAG_FREEZED, false);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -141,15 +132,9 @@ inline bool Minion::Attackable() const
 	if (this->stat.GetFlag(MinionStat::FLAG_FREEZED)) return false;
 
 	if (attacked_times > 0) return false;
-	if (this->GetAttack() <= 0) return false;
+	if (this->stat.GetAttack() <= 0) return false;
 
 	return true;
-}
-
-inline void Minion::AttackedOnce()
-{
-	this->attacked_times++;
-	this->stat.SetFlag(MinionStat::FLAG_STEALTH, false);
 }
 
 inline void Minion::IncreaseCurrentAndMaxHP(int val)
@@ -165,16 +150,6 @@ inline void Minion::DecreaseMaxHP(int val)
 {
 	this->stat.SetMaxHP(this->stat.GetMaxHP() - val);
 	this->stat.SetHP(std::min(this->stat.GetHP(), this->stat.GetMaxHP()));
-}
-
-inline void Minion::TakeDamage(int damage)
-{
-	if (this->stat.GetFlag(MinionStat::FLAG_SHIELD)) {
-		this->stat.SetFlag(MinionStat::FLAG_SHIELD, false);
-	}
-	else {
-		this->stat.SetHP(this->stat.GetHP() - damage);
-	}
 }
 
 inline void Minion::CheckCanBeSafelyCloned() const
@@ -213,15 +188,17 @@ inline std::string Minion::GetDebugString() const
 		oss << "[EMPTY]";
 	}
 	else {
-		oss << "[" << this->GetCardId() << "] " << this->GetAttack() << " / " << this->GetHP() << " (max hp = " << this->GetMaxHP() << ")";
+		oss << "[" << this->GetCardId() << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
 
 		if (this->IsTaunt()) oss << " [TAUNT]";
 		if (this->IsCharge()) oss << " [CHARGE]";
 		if (this->IsShield()) oss << " [SHIELD]";
 		if (this->IsStealth()) oss << " [STEALTH]";
-		if (this->IsForgetful()) oss << " [FORGETFUL]";
+
+		// TODO!!!!!!!!!!!! move these functions to MinionStat
+		/*if (this->IsForgetful()) oss << " [FORGETFUL]";
 		if (this->IsFreezeAttacker()) oss << " [FREEZE]";
-		if (this->IsFreezed()) oss << " [FREEZED]";
+		if (this->IsFreezed()) oss << " [FREEZED]";*/
 	}
 
 	return oss.str();

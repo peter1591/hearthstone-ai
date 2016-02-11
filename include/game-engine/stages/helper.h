@@ -29,8 +29,7 @@ public:
 	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
 
 	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage);
-	static void DealDamage(GameEngine::Board & board, BoardObjects::Hero * target, int damage);
-	static void DealDamage(BoardObjects::MinionManipulator & target, int damage);
+	static void DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage);
 
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
@@ -80,28 +79,16 @@ inline bool StageHelper::OpponentDrawCard(Board & board)
 
 inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage)
 {
-	if (SlotIndexHelper::IsHero(taker_idx)) {
-		auto target = board.object_manager.GetObject(taker_idx);
-		auto target_hero = dynamic_cast<BoardObjects::Hero *>(target);
-		if (!target_hero) throw std::runtime_error("consistency check failed");
-		return StageHelper::DealDamage(board, target_hero, damage);
-	}
-	else {
-		auto target_minion = board.object_manager.GetMinionManipulator(board, taker_idx);
-		return StageHelper::DealDamage(target_minion, damage);
-	}
+	return StageHelper::DealDamage(board.object_manager.GetObject(board, taker_idx), damage);
 }
 
-inline void StageHelper::DealDamage(GameEngine::Board & board, BoardObjects::Hero * target, int damage)
+inline void StageHelper::DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage)
 {
-	target->TakeDamage(damage);
-}
+	taker->TakeDamage(damage);
 
-inline void StageHelper::DealDamage(BoardObjects::MinionManipulator & target, int damage)
-{
-	target.minion->TakeDamage(damage);
-
-	target.HookMinionCheckEnraged();
+	if (taker.IsMinion()) {
+		taker.GetMinion().HookMinionCheckEnraged();
+	}
 }
 
 inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
@@ -151,21 +138,19 @@ inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::Slo
 {
 	// TODO: trigger secrets
 
-	GameEngine::BoardObjects::ObjectBase * attacker = board.object_manager.GetObject(attacker_idx);
+	auto attacker = board.object_manager.GetObject(board, attacker_idx);
 	
 	if (attacker->IsForgetful())
 	{
 		attacked_idx = StageHelper::GetTargetForForgetfulAttack(board, attacked_idx);
 	}
 
-	GameEngine::BoardObjects::ObjectBase * attacked = board.object_manager.GetObject(attacked_idx);
+	auto attacked = board.object_manager.GetObject(board, attacked_idx);
+	StageHelper::DealDamage(attacked, attacker->GetAttack());
 
-	StageHelper::DealDamage(board, attacked_idx, attacker->GetAttack());
-	if (!SlotIndexHelper::IsHero(attacked_idx))
-	{
-		// If hero, no damage to the attacker
+	if (attacked.IsMinion()) {
 		// If minion, deal damage equal to the attacked's attack
-		StageHelper::DealDamage(board, attacker_idx, attacked->GetAttack());
+		StageHelper::DealDamage(attacker, attacked->GetAttack());
 	}
 	
 	attacker->AttackedOnce();
@@ -186,7 +171,7 @@ inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 		{
 			if (it.IsPendingRemoval()) continue;
 
-			if (it.it_minion->GetHP() > 0) continue;
+			if (it.ConverToManipulator().GetHP() > 0) continue;
 
 			it.MarkPendingRemoval();
 
@@ -224,12 +209,12 @@ inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 
 inline bool StageHelper::CheckHeroMinionDead(Board & board)
 {
-	if (board.object_manager.GetPlayerHero()->GetHP() <= 0) {
+	if (board.object_manager.GetPlayerHero(board)->GetHP() <= 0) {
 		board.stage = STAGE_LOSS;
 		return true;
 	}
 
-	if (board.object_manager.GetOpponentHero()->GetHP() <= 0) {
+	if (board.object_manager.GetOpponentHero(board)->GetHP() <= 0) {
 		board.stage = STAGE_WIN;
 		return true;
 	}
@@ -244,11 +229,11 @@ inline void StageHelper::Fatigue(GameEngine::Board & board, SlotIndex side)
 {
 	if (SlotIndexHelper::IsPlayerSide(side)) {
 		++board.player_stat.fatigue_damage;
-		StageHelper::DealDamage(board, board.object_manager.GetPlayerHero(), board.player_stat.fatigue_damage);
+		StageHelper::DealDamage(board.object_manager.GetPlayerHero(board), board.player_stat.fatigue_damage);
 	}
 	else {
 		++board.opponent_stat.fatigue_damage;
-		StageHelper::DealDamage(board, board.object_manager.GetOpponentHero(), board.opponent_stat.fatigue_damage);
+		StageHelper::DealDamage(board.object_manager.GetOpponentHero(board), board.opponent_stat.fatigue_damage);
 	}
 }
 
