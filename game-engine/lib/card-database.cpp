@@ -73,8 +73,6 @@ namespace GameEngine {
 			}
 			else if (mechanic == "POISONOUS") { // TODO
 			}
-			else if (mechanic == "WINDFURY") { // TODO
-			}
 			else if (mechanic == "OVERLOAD") { // TODO
 			}
 			else if (mechanic == "AURA" ||
@@ -86,11 +84,12 @@ namespace GameEngine {
 				mechanic == "ENRAGED" ||
 				mechanic == "ADJACENT_BUFF" ||
 				mechanic == "InvisibleDeathrattle" ||
-				mechanic == "ImmuneToSpellpower") {
+				mechanic == "ImmuneToSpellpower" ||
+				mechanic == "WINDFURY") {
 				// write hard-coded
 			}
 			else {
-				throw std::runtime_error("unknown error");
+				throw std::runtime_error("unsupported mechanic");
 			}
 		}
 	}
