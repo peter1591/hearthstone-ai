@@ -46,14 +46,14 @@ inline bool GameEngine::BoardObjects::Enchantments::operator!=(Enchantments cons
 	return !(*this == rhs);
 }
 
-inline void GameEngine::BoardObjects::Enchantments::Add(Enchantment * enchantment, EnchantmentOwner * owner, GameEngine::BoardObjects::MinionManipulator & target)
+inline void GameEngine::BoardObjects::Enchantments::Add(Enchantment * enchantment, EnchantmentOwner * owner, GameEngine::BoardObjects::MinionManipulator const& target)
 {
 	this->enchantments.push_back(std::make_pair(enchantment, owner));
 	if (owner) owner->EnchantmentAdded(enchantment, target);
 	enchantment->AfterAdded(target);
 }
 
-inline void GameEngine::BoardObjects::Enchantments::Remove(Enchantment * enchantment, GameEngine::BoardObjects::MinionManipulator & target)
+inline void GameEngine::BoardObjects::Enchantments::Remove(Enchantment * enchantment, GameEngine::BoardObjects::MinionManipulator const& target)
 {
 	// A O(N) algorithm, since the enchantment should not be large in a normal play
 	for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
@@ -69,7 +69,7 @@ inline void GameEngine::BoardObjects::Enchantments::Remove(Enchantment * enchant
 	throw std::runtime_error("enchantment not found");
 }
 
-inline void GameEngine::BoardObjects::Enchantments::Clear(GameEngine::BoardObjects::MinionManipulator & target)
+inline void GameEngine::BoardObjects::Enchantments::Clear(GameEngine::BoardObjects::MinionManipulator const& target)
 {
 	for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
 	{
@@ -77,7 +77,7 @@ inline void GameEngine::BoardObjects::Enchantments::Clear(GameEngine::BoardObjec
 	}
 }
 
-inline void GameEngine::BoardObjects::Enchantments::TurnEnd(GameEngine::BoardObjects::MinionManipulator & target)
+inline void GameEngine::BoardObjects::Enchantments::TurnEnd(GameEngine::BoardObjects::MinionManipulator const& target)
 {
 	for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
 	{
@@ -92,7 +92,7 @@ inline void GameEngine::BoardObjects::Enchantments::TurnEnd(GameEngine::BoardObj
 }
 
 inline GameEngine::BoardObjects::Enchantments::container_type::iterator GameEngine::BoardObjects::Enchantments::Remove(
-	container_type::iterator it, GameEngine::BoardObjects::MinionManipulator & target)
+	container_type::iterator it, GameEngine::BoardObjects::MinionManipulator const& target)
 {
 	it->first->BeforeRemoved(target);
 	if (it->second) it->second->EnchantmentRemoved(it->first, target);
@@ -114,7 +114,7 @@ inline std::size_t std::hash<GameEngine::BoardObjects::Enchantments>::operator()
 	return result;
 }
 
-inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator & owner)
+inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator const& owner)
 {
 	while (!this->enchantments.empty()) {
 		auto it = this->enchantments.begin();
@@ -122,12 +122,12 @@ inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(
 	}
 }
 
-inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentAdded(Enchantment * enchantment, MinionManipulator & target)
+inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentAdded(Enchantment * enchantment, MinionManipulator const& target)
 {
 	this->enchantments[enchantment] = target.minion;
 }
 
-inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentRemoved(Enchantment * enchantment, MinionManipulator & target)
+inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentRemoved(Enchantment * enchantment, MinionManipulator const& target)
 {
 	this->enchantments.erase(enchantment);
 }

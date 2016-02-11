@@ -194,7 +194,7 @@ inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
 			}
 
 			// remove died minion
-			auto & manipulator = it.ConverToManipulator();
+			auto manipulator = it.ConverToManipulator();
 
 			// remove all effects (including auras)
 			manipulator.ClearEnchantments();

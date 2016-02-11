@@ -25,12 +25,11 @@ public:
 	bool operator!=(Enchantment const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
-	virtual void AfterAdded(MinionManipulator & minion) {}
-
-	virtual void BeforeRemoved(MinionManipulator & minion) {}
+	virtual void AfterAdded(MinionManipulator const& minion) {}
+	virtual void BeforeRemoved(MinionManipulator const& minion) {}
 
 	// return false if enchant vanished
-	virtual bool TurnEnd(MinionManipulator & minion) { return true; }
+	virtual bool TurnEnd(MinionManipulator const& minion) { return true; }
 
 protected:
 	virtual bool EqualsTo(Enchantment const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -48,7 +47,7 @@ public:
 #endif
 	}
 
-	void AfterAdded(MinionManipulator & minion)
+	void AfterAdded(MinionManipulator const& minion)
 	{
 #ifdef DEBUG
 		this->after_added_called = true;
@@ -74,7 +73,7 @@ public:
 		}
 	}
 
-	void BeforeRemoved(MinionManipulator & minion)
+	void BeforeRemoved(MinionManipulator const& minion)
 	{
 #ifdef DEBUG
 		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
@@ -93,7 +92,7 @@ public:
 		}
 	}
 
-	bool TurnEnd(MinionManipulator & minion)
+	bool TurnEnd(MinionManipulator const& minion)
 	{
 		if (one_turn) return false; // one-turn effect 
 		else return true;

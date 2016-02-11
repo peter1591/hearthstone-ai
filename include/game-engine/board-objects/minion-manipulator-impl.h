@@ -58,37 +58,37 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsFreezed() const
 	return this->minion->stat.GetFlag(MinionStat::FLAG_FREEZED);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura)
+inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura) const
 {
 	this->minion->auras.Add(*this, aura);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras()
+inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras() const
 {
 	this->minion->auras.Clear(*this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner)
+inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) const
 {
 	this->minion->enchantments.Add(enchantment, owner, *this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment * enchantment)
+inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment * enchantment) const
 {
 	this->minion->enchantments.Remove(enchantment, *this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::ClearEnchantments()
+inline void GameEngine::BoardObjects::MinionManipulator::ClearEnchantments() const
 {
 	this->minion->enchantments.Clear(*this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::HookAfterMinionAdded(MinionManipulator & added_minion)
+inline void GameEngine::BoardObjects::MinionManipulator::HookAfterMinionAdded(MinionManipulator & added_minion) const
 {
 	this->minion->auras.HookAfterMinionAdded(*this, added_minion);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged()
+inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged() const
 {
 	auto & minion = *this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
@@ -102,13 +102,13 @@ inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged(
 	}
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::TurnStart(bool owner_turn)
+inline void GameEngine::BoardObjects::MinionManipulator::TurnStart(bool owner_turn) const
 {
 	this->minion->summoned_this_turn = false;
 	this->minion->attacked_times = 0;
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn)
+inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn) const
 {
 	if (owner_turn) {
 		// check thaw

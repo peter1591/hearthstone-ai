@@ -36,20 +36,20 @@ namespace BoardObjects {
 		bool IsFreezed() const;
 
 	public: // auras
-		void AddAura(Aura * aura);
-		void ClearAuras();
+		void AddAura(Aura * aura) const;
+		void ClearAuras() const;
 
 	public: // enchantments
-		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner);
-		void RemoveEnchantment(Enchantment * enchantment);
-		void ClearEnchantments();
+		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) const;
+		void RemoveEnchantment(Enchantment * enchantment) const;
+		void ClearEnchantments() const;
 
 	public: // hooks
-		void HookAfterMinionAdded(MinionManipulator & added_minion);
-		void HookMinionCheckEnraged();
+		void HookAfterMinionAdded(MinionManipulator & added_minion) const;
+		void HookMinionCheckEnraged() const;
 
-		void TurnStart(bool owner_turn);
-		void TurnEnd(bool owner_turn);
+		void TurnStart(bool owner_turn) const;
+		void TurnEnd(bool owner_turn) const;
 
 	public:
 		Board * const board;
