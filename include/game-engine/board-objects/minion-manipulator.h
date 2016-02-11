@@ -57,11 +57,13 @@ namespace BoardObjects {
 		void ClearEnchantments() const;
 
 	public: // hooks
+		void TurnStart(bool owner_turn) const;
+		void TurnEnd(bool owner_turn) const;
+
+	public: // triggering hooks
 		void HookAfterMinionAdded(MinionManipulator & added_minion) const;
 		void HookMinionCheckEnraged() const;
 
-		void TurnStart(bool owner_turn) const;
-		void TurnEnd(bool owner_turn) const;
 
 	public:
 		bool IsPlayerSide() const;

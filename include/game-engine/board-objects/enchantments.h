@@ -45,6 +45,8 @@ private:
 class EnchantmentOwner
 {
 public:
+	bool IsEmpty() const { return this->enchantments.empty(); }
+
 	void RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator const& owner);
 
 	// hooks

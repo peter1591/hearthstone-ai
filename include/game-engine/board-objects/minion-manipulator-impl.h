@@ -24,6 +24,8 @@ inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage)
 	}
 	else {
 		this->minion->stat.SetHP(this->minion->stat.GetHP() - damage);
+
+		this->HookMinionCheckEnraged();
 	}
 }
 
@@ -70,6 +72,8 @@ inline void GameEngine::BoardObjects::MinionManipulator::IncreaseCurrentAndMaxHP
 #endif
 	this->minion->stat.SetMaxHP(this->minion->stat.GetMaxHP() + val);
 	this->minion->stat.SetHP(this->minion->stat.GetHP() + val);
+
+	// no need to check enrage, since we add the hp and max-hp by the same amount
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val) const
@@ -77,7 +81,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val) 
 	this->minion->stat.SetMaxHP(this->minion->stat.GetMaxHP() - val);
 	this->minion->stat.SetHP(std::min(this->minion->stat.GetHP(), this->minion->stat.GetMaxHP()));
 
-	this->HookMinionCheckEnraged();
+	this->HookMinionCheckEnraged(); // might become un-enraged if max-hp lowered to current-hp
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::AddOnDeathTrigger(Minion::OnDeathTrigger func) const
