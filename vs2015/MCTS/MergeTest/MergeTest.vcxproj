@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp" />
     <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp" />
+    <ClCompile Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClCompile Include="merge-test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +168,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_051.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
@@ -200,7 +202,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

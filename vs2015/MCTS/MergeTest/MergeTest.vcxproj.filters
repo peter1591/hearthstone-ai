@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp">
       <Filter>Source Files\game-engine</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\include\game-engine\cards\card_EX1_390.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\game-engine\board.h">
@@ -257,11 +260,13 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_051.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
