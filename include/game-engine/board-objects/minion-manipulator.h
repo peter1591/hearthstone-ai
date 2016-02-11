@@ -87,7 +87,6 @@ namespace BoardObjects {
 			: board(&board), minions(&minions), it_minion(it_minion)
 		{}
 
-		static MinionInserter GetInserterBefore(MinionManipulator & minion);
 		MinionManipulator ConverToManipulator();
 
 	public:

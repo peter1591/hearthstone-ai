@@ -171,12 +171,6 @@ inline bool GameEngine::BoardObjects::MinionInserter::IsEnd() const
 	return this->it_minion == this->minions->minions.end();
 }
 
-inline GameEngine::BoardObjects::MinionInserter GameEngine::BoardObjects::MinionInserter::GetInserterBefore(MinionManipulator & minion)
-{
-	auto it = minion.GetMinions().GetIterator(&minion.GetMinion());
-	return MinionInserter(minion.GetBoard(), minion.GetMinions(), it);
-}
-
 inline void GameEngine::BoardObjects::MinionInserter::GoToNext()
 {
 	this->it_minion++;

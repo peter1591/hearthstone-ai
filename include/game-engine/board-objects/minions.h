@@ -50,6 +50,10 @@ public: // getters
 		return MinionInserter(board, *this, it);
 	}
 
+	MinionInserter GetInserterBefore(GameEngine::Board & board, Minion const& minion) {
+		return MinionInserter(board, *this, this->GetIterator(&minion));
+	}
+
 	MinionManipulator GetManipulator(GameEngine::Board & board, int minion_idx) {
 		auto inserter = this->GetInserter(board, minion_idx);
 		if (inserter.IsEnd()) throw std::runtime_error("invalid argument");
@@ -70,21 +74,6 @@ public: // getters
 		auto it = this->GetIterator(minion);
 		if (it == this->minions.end()) throw std::runtime_error("cannot find minion");
 		return MinionManipulator(board, *this, *it);
-	}
-
-	Minion const& Get(int idx) const {
-		auto it = this->minions.cbegin();
-		for (; idx > 0; --idx) ++it;
-		return *it;
-	}
-
-	Minion & Get(int idx) {
-		auto it = this->minions.begin();
-		for (; idx > 0; --idx) {
-			++it;
-			if (it == this->minions.end()) break;
-		}
-		return *it;
 	}
 
 public: // debug

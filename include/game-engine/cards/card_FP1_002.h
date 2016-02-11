@@ -21,7 +21,7 @@ public:
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
 
-		auto inserter = BoardObjects::MinionInserter::GetInserterBefore(triggering_minion);
+		auto inserter = triggering_minion.GetMinions().GetInserterBefore(board, triggering_minion.GetMinion());
 #ifdef DEBUG
 		if (inserter.IsEnd()) {
 			std::cout << "deathrattle triggering minion is vanished!" << std::endl;

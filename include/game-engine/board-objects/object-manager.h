@@ -195,21 +195,14 @@ inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex
 
 inline MinionManipulator ObjectManager::GetMinionManipulator(GameEngine::Board & board, SlotIndex slot_idx)
 {
-	int minion_idx;
-	Minions * minions = nullptr;
-
 	if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx < SLOT_OPPONENT_HERO) {
-		minions = &this->player_minions;
-		minion_idx = slot_idx - SLOT_PLAYER_MINION_START;
-		return MinionManipulator(board, *minions, minions->Get(minion_idx));
+		return this->player_minions.GetManipulator(board, slot_idx - SLOT_PLAYER_MINION_START);
 	}
 	else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx < SLOT_MAX) {
-		minions = &this->opponent_minions;
-		minion_idx = slot_idx - SLOT_OPPONENT_MINION_START;
-		return MinionManipulator(board, *minions, minions->Get(minion_idx));
+		return this->opponent_minions.GetManipulator(board, slot_idx - SLOT_OPPONENT_MINION_START);
 	}
 	else throw std::runtime_error("invalid argument");
 }
