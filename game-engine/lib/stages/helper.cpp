@@ -21,7 +21,7 @@ namespace GameEngine {
 		BoardObjects::Minion summoning_minion;
 		summoning_minion.Summon(card);
 
-		if (inserter.minions->IsFull()) return false;
+		if (inserter.GetMinions().IsFull()) return false;
 
 		// add minion
 		auto summoned_minion = inserter.InsertBefore(std::move(summoning_minion));

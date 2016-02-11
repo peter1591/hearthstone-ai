@@ -12,6 +12,8 @@ namespace BoardObjects {
 class Minions
 {
 	friend std::hash<Minions>;
+
+	// Iterators for minions
 	friend class MinionConstIteratorWithSlotIndex;
 	friend class MinionInserter;
 

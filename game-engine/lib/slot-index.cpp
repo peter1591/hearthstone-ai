@@ -26,7 +26,7 @@ namespace GameEngine {
 
 		for (; !minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
-			if (minion_iterator->GetStat().IsTaunt() && !minion_iterator->GetStat().IsStealth()) { // taunt with stealth will not act as taunt
+			if (minion_iterator->stat.IsTaunt() && !minion_iterator->stat.IsStealth()) { // taunt with stealth will not act as taunt
 				bitmap.SetOneTarget(minion_iterator.GetSlotIdx());
 				ret = true;
 			}
@@ -42,7 +42,7 @@ namespace GameEngine {
 
 		for (; !minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
-			if (!minion_iterator->GetStat().IsStealth()) {
+			if (!minion_iterator->stat.IsStealth()) {
 				bitmap.SetOneTarget(minion_iterator.GetSlotIdx());
 				ret = true;
 			}

@@ -18,16 +18,11 @@ class Board;
 
 namespace BoardObjects {
 
-class MinionInserter;
 class MinionManipulator;
-class MinionConstIteratorWithSlotIndex;
 
 class Minion
 {
 	friend std::hash<Minion>;
-	friend MinionInserter;
-	friend MinionManipulator;
-	friend MinionConstIteratorWithSlotIndex; // to get the is_pending_removal
 
 public:
 	typedef std::function<void(GameEngine::Board &, MinionManipulator & triggering_minion)> OnDeathTrigger;
@@ -47,17 +42,15 @@ public:
 	void Summon(const Card &card);
 
 	// Getters
-	int GetCardId() const { return this->card_id; }
 	int GetMaxHP() const { return this->stat.GetMaxHP(); }
 	bool Attackable() const;
-	MinionStat const& GetStat() const { return this->stat; }
 
 	bool IsValid() const { return this->card_id != 0; }
 
 public:
 	std::string GetDebugString() const;
 
-private:
+public:
 	int card_id;
 
 	MinionStat stat;
@@ -156,7 +149,7 @@ inline std::string Minion::GetDebugString() const
 		oss << "[EMPTY]";
 	}
 	else {
-		oss << "[" << this->GetCardId() << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
+		oss << "[" << this->card_id << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
 
 		if (this->stat.IsTaunt()) oss << " [TAUNT]";
 		if (this->stat.IsCharge()) oss << " [CHARGE]";

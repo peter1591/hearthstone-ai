@@ -87,6 +87,9 @@ namespace BoardObjects {
 			: board(&board), minions(&minions), it_minion(it_minion)
 		{}
 
+		Board & GetBoard() const { return *this->board; }
+		Minions & GetMinions() const { return *this->minions; }
+
 		MinionManipulator ConverToManipulator();
 
 	public:
@@ -100,7 +103,7 @@ namespace BoardObjects {
 
 		MinionManipulator InsertBefore(Minion && minion);
 
-	public:
+	private:
 		Board * const board;
 		Minions * const minions;
 		minions_iterator it_minion;
