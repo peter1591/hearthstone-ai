@@ -82,7 +82,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -200,6 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

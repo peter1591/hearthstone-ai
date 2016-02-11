@@ -56,24 +56,34 @@ void InitializeBoard(GameEngine::Board &board)
 
 	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_PLAYER_SIDE);
 	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_OPPONENT_SIDE);
-	
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(CARD_ID_FP1_007, 0, 2, 2);
-	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	player_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
 
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 1, 20, 20);
-	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(CARD_ID_FP1_007, 0, 2, 2);
+		auto added_minion = player_minion_inserter.InsertBefore(std::move(minion));
+		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
+		added_minion.TurnStart(true);
+	}
 
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 3, 10, 10);
-	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(222, 1, 20, 20);
+		opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	}
 
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(CARD_ID_EX1_029, 10, 10, 10);
-	minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
-	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(222, 3, 10, 10);
+		opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	}
+
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(CARD_ID_EX1_029, 10, 10, 10);
+		auto added_minion = opponent_minion_inserter.InsertBefore(std::move(minion));
+		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
+		added_minion.TurnStart(true);
+	}
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();
@@ -150,8 +160,6 @@ static void TestBasic()
 static void InteractiveTest()
 {
 	MCTS mcts;
-	//unsigned int rand_seed = (unsigned int)time(NULL);
-	unsigned int rand_seed = 0;
 	GameEngine::Board board;
 
 	InitializeBoard(board);

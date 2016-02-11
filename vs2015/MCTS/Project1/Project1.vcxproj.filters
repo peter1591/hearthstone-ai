@@ -37,9 +37,6 @@
     <Filter Include="Source Files\game-engine\stages">
       <UniqueIdentifier>{7f410f1e-36cc-4df5-b7d9-bf66907ad796}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine\board-objects">
-      <UniqueIdentifier>{47a3ad2f-3ed7-4d38-86cc-6fa9e58331f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-engine\board-objects">
       <UniqueIdentifier>{433f4e36-c874-4d5f-9d0c-27ed8e00f529}</UniqueIdentifier>
     </Filter>
@@ -83,9 +80,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp">
       <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\board-objects\enchantments.cpp">
-      <Filter>Source Files\game-engine\board-objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -51,23 +51,28 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeDeck1(board.player_deck);
 	InitializeHand1(board.player_hand);
 
-	GameEngine::BoardObjects::Minion minion;
-
 	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_PLAYER_SIDE);
 	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_OPPONENT_SIDE);
 
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(CARD_ID_FP1_007, 2, 2, 2);
-	minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
-	player_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(CARD_ID_FP1_007, 2, 2, 2);
+		auto added_minion = player_minion_inserter.InsertBefore(std::move(minion));
+		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
+		added_minion.TurnStart(true);
+	}
 
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 30, 2, 2);
-	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(222, 30, 2, 2);
+		opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	}
 
-	minion = GameEngine::BoardObjects::Minion();
-	minion.Set(222, 10, 7, 7);
-	opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	{
+		auto minion = GameEngine::BoardObjects::Minion();
+		minion.Set(222, 10, 7, 7);
+		opponent_minion_inserter.InsertBefore(std::move(minion)).TurnStart(true);
+	}
 
 	board.SetStateToPlayerChooseBoardMove();
 	//board.SetStateToPlayerTurnStart();

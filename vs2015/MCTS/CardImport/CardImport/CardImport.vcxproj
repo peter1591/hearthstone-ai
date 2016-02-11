@@ -125,7 +125,6 @@
     <ClCompile Include="..\..\..\..\contrib\lib_json\json_reader.cpp" />
     <ClCompile Include="..\..\..\..\contrib\lib_json\json_value.cpp" />
     <ClCompile Include="..\..\..\..\contrib\lib_json\json_writer.cpp" />
-    <ClCompile Include="..\..\..\..\game-engine\lib\board-objects\enchantments.cpp" />
     <ClCompile Include="..\..\..\..\game-engine\lib\card-database.cpp" />
     <ClCompile Include="..\..\..\..\game-engine\lib\stages\helper.cpp" />
     <ClCompile Include="main.cpp" />

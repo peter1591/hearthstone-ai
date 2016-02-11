@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\..\..\game-engine\lib\stages\helper.cpp">
       <Filter>Source Files\game-engine\stages</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\game-engine\lib\board-objects\enchantments.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\contrib\include\json\assertions.h">
