@@ -52,13 +52,13 @@ namespace BoardObjects {
 		void TurnEnd(bool owner_turn) const;
 
 	public:
+		bool IsPlayerSide() const;
+		bool IsOpponentSide() const;
+
+	public:
 		Board * const board;
 		Minions * const minions;
 		Minion * const minion;
-
-	public:
-		bool IsPlayerSide() const;
-		bool IsOpponentSide() const;
 	};
 
 	// Inserter can be used to insert minion into minions, and

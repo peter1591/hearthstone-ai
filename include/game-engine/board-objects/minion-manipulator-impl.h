@@ -19,8 +19,8 @@ inline int GameEngine::BoardObjects::MinionManipulator::GetAttack() const
 
 inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage)
 {
-	if (this->minion->stat.GetFlag(MinionStat::FLAG_SHIELD)) {
-		this->minion->stat.SetFlag(MinionStat::FLAG_SHIELD, false);
+	if (this->minion->stat.IsShield()) {
+		this->minion->stat.SetShield(false);
 	}
 	else {
 		this->minion->stat.SetHP(this->minion->stat.GetHP() - damage);
@@ -29,33 +29,33 @@ inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage)
 
 inline bool GameEngine::BoardObjects::MinionManipulator::IsForgetful() const
 {
-	return this->minion->stat.GetFlag(MinionStat::FLAG_FORGETFUL);
+	return this->minion->stat.IsForgetful();
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce()
 {
 	this->minion->attacked_times++;
-	this->minion->stat.SetFlag(MinionStat::FLAG_STEALTH, false);
+	this->minion->stat.SetStealth(false);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze)
 {
-	this->minion->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, freeze);
+	this->minion->stat.SetFreezeAttacker(freeze);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::SetFreezed(bool freezed)
 {
-	this->minion->stat.SetFlag(MinionStat::FLAG_FREEZED, freezed);
+	this->minion->stat.SetFreezed(freezed);
 }
 
 inline bool GameEngine::BoardObjects::MinionManipulator::IsFreezeAttacker() const
 {
-	return this->minion->stat.GetFlag(MinionStat::FLAG_FREEZE_ATTACKER);
+	return this->minion->stat.IsFreezeAttacker();
 }
 
 inline bool GameEngine::BoardObjects::MinionManipulator::IsFreezed() const
 {
-	return this->minion->stat.GetFlag(MinionStat::FLAG_FREEZED);
+	return this->minion->stat.IsFreezed();
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura) const
@@ -115,7 +115,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn
 		if (this->minion->attacked_times == 0 && !this->minion->summoned_this_turn)
 		{
 			// if summon in this turn, and freeze it, then the minion will not be unfrozen
-			this->minion->stat.SetFlag(MinionStat::FLAG_FREEZED, false);
+			this->minion->stat.SetFreezed(false);
 		}
 	}
 

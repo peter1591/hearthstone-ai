@@ -50,20 +50,12 @@ public:
 	int GetCardId() const { return this->card_id; }
 	int GetMaxHP() const { return this->stat.GetMaxHP(); }
 	bool Attackable() const;
-	bool IsTaunt() const { return this->stat.GetFlag(MinionStat::FLAG_TAUNT); }
-	bool IsCharge() const { return this->stat.GetFlag(MinionStat::FLAG_CHARGE); }
-	bool IsShield() const { return this->stat.GetFlag(MinionStat::FLAG_SHIELD); }
-	bool IsStealth() const { return this->stat.GetFlag(MinionStat::FLAG_STEALTH); }
+	MinionStat const& GetStat() const { return this->stat; }
 
 	// Setters
 	void AddAttack(int val) { this->stat.SetAttack(this->stat.GetAttack() + val); }
 	void IncreaseCurrentAndMaxHP(int val);
 	void DecreaseMaxHP(int val);
-	void SetTaunt(bool val) { this->stat.SetFlag(MinionStat::FLAG_TAUNT, val); }
-	void SetCharge(bool val) { this->stat.SetFlag(MinionStat::FLAG_CHARGE, val); }
-	void SetShield(bool val) { this->stat.SetFlag(MinionStat::FLAG_SHIELD, val); }
-	void SetStealth(bool val) { this->stat.SetFlag(MinionStat::FLAG_STEALTH, val); }
-	void SetForgetful(bool val) { this->stat.SetFlag(MinionStat::FLAG_FORGETFUL, val); }
 
 	// Triggers
 	void AddOnDeathTrigger(OnDeathTrigger func) { this->triggers_on_death.push_back(func); }
@@ -113,13 +105,13 @@ inline void Minion::Summon(const Card & card)
 	this->stat.SetAttack(card.data.minion.attack);
 	this->stat.SetHP(card.data.minion.hp);
 	this->stat.SetMaxHP(card.data.minion.hp);
-	this->SetTaunt(card.data.minion.taunt);
-	this->SetCharge(card.data.minion.charge);
-	this->SetShield(card.data.minion.shield);
-	this->SetStealth(card.data.minion.stealth);
-	this->SetForgetful(card.data.minion.forgetful);
-	this->stat.SetFlag(MinionStat::FLAG_FREEZE_ATTACKER, card.data.minion.freeze);
-	this->stat.SetFlag(MinionStat::FLAG_FREEZED, false);
+	this->stat.SetTaunt(card.data.minion.taunt);
+	this->stat.SetCharge(card.data.minion.charge);
+	this->stat.SetShield(card.data.minion.shield);
+	this->stat.SetStealth(card.data.minion.stealth);
+	this->stat.SetForgetful(card.data.minion.forgetful);
+	this->stat.SetFreezeAttacker(card.data.minion.freeze);
+	this->stat.SetFreezed(false);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -127,9 +119,9 @@ inline void Minion::Summon(const Card & card)
 
 inline bool Minion::Attackable() const
 {
-	if (this->summoned_this_turn && !this->stat.GetFlag(MinionStat::FLAG_CHARGE)) return false;
+	if (this->summoned_this_turn && !this->stat.IsCharge()) return false;
 
-	if (this->stat.GetFlag(MinionStat::FLAG_FREEZED)) return false;
+	if (this->stat.IsFreezed()) return false;
 
 	if (attacked_times > 0) return false;
 	if (this->stat.GetAttack() <= 0) return false;
@@ -190,15 +182,13 @@ inline std::string Minion::GetDebugString() const
 	else {
 		oss << "[" << this->GetCardId() << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
 
-		if (this->IsTaunt()) oss << " [TAUNT]";
-		if (this->IsCharge()) oss << " [CHARGE]";
-		if (this->IsShield()) oss << " [SHIELD]";
-		if (this->IsStealth()) oss << " [STEALTH]";
-
-		// TODO!!!!!!!!!!!! move these functions to MinionStat
-		/*if (this->IsForgetful()) oss << " [FORGETFUL]";
-		if (this->IsFreezeAttacker()) oss << " [FREEZE]";
-		if (this->IsFreezed()) oss << " [FREEZED]";*/
+		if (this->stat.IsTaunt()) oss << " [TAUNT]";
+		if (this->stat.IsCharge()) oss << " [CHARGE]";
+		if (this->stat.IsShield()) oss << " [SHIELD]";
+		if (this->stat.IsStealth()) oss << " [STEALTH]";
+		if (this->stat.IsForgetful()) oss << " [FORGETFUL]";
+		if (this->stat.IsFreezeAttacker()) oss << " [FREEZE]";
+		if (this->stat.IsFreezed()) oss << " [FREEZED]";
 	}
 
 	return oss.str();

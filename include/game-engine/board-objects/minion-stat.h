@@ -38,15 +38,27 @@ public:
 
 	bool operator!=(MinionStat const& rhs) const { return !(*this == rhs); }
 
-	void SetAttack(int attack) { this->attack = attack; }
-	void SetHP(int hp) { this->hp = hp; }
-	void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
-	void SetFlag(Flag flag, bool val) { this->flags.set(flag, val); }
-
 	int GetAttack() const { return this->attack; }
 	int GetHP() const { return this->hp; }
 	int GetMaxHP() const { return this->max_hp; }
-	bool GetFlag(Flag flag) const { return this->flags[flag]; }
+	bool IsTaunt() const { return this->flags[MinionStat::FLAG_TAUNT]; }
+	bool IsCharge() const { return this->flags[MinionStat::FLAG_CHARGE]; }
+	bool IsShield() const { return this->flags[MinionStat::FLAG_SHIELD]; }
+	bool IsStealth() const { return this->flags[MinionStat::FLAG_STEALTH]; }
+	bool IsForgetful() const { return this->flags[MinionStat::FLAG_FORGETFUL]; }
+	bool IsFreezeAttacker() const { return this->flags[MinionStat::FLAG_FREEZE_ATTACKER]; }
+	bool IsFreezed() const { return this->flags[MinionStat::FLAG_FREEZED]; }
+
+	void SetAttack(int attack) { this->attack = attack; }
+	void SetHP(int hp) { this->hp = hp; }
+	void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
+	void SetTaunt(bool val) { this->flags.set(MinionStat::FLAG_TAUNT, val); }
+	void SetCharge(bool val) { this->flags.set(MinionStat::FLAG_CHARGE, val); }
+	void SetShield(bool val) { this->flags.set(MinionStat::FLAG_SHIELD, val); }
+	void SetStealth(bool val) { this->flags.set(MinionStat::FLAG_STEALTH, val); }
+	void SetForgetful(bool val) { this->flags.set(MinionStat::FLAG_FORGETFUL, val); }
+	void SetFreezeAttacker(bool val) { this->flags.set(MinionStat::FLAG_FREEZE_ATTACKER, val); }
+	void SetFreezed(bool val) { this->flags.set(MinionStat::FLAG_FREEZED, val); }
 
 	void ClearFlags() { this->flags.reset(); }
 	void MergeFlags(MinionStat const& rhs) { this->flags |= rhs.flags; }
