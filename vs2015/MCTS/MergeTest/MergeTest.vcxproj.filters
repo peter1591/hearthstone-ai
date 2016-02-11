@@ -263,6 +263,9 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_051.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h">

@@ -20,6 +20,7 @@ void InitializeDeck1(GameEngine::Deck &deck)
 
 void InitializeHand1(GameEngine::Hand &hand)
 {
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_412)); // Raging Worgen
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_390)); // Tauren Warrior
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_051)); // Warbot
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
@@ -51,8 +52,6 @@ void InitializeBoard(GameEngine::Board &board)
 
 	InitializeDeck1(board.player_deck);
 	InitializeHand1(board.player_hand);
-
-	GameEngine::BoardObjects::Minion minion;
 
 	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_PLAYER_SIDE);
 	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_OPPONENT_SIDE);
