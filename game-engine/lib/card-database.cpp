@@ -71,6 +71,9 @@ namespace GameEngine {
 			else if (mechanic == "FREEZE") {
 				new_card.data.minion.freeze = true;
 			}
+			else if (mechanic == "WINDFURY") {
+				new_card.data.minion.windfury = true;
+			}
 			else if (mechanic == "POISONOUS") { // TODO
 			}
 			else if (mechanic == "OVERLOAD") { // TODO
@@ -84,8 +87,7 @@ namespace GameEngine {
 				mechanic == "ENRAGED" ||
 				mechanic == "ADJACENT_BUFF" ||
 				mechanic == "InvisibleDeathrattle" ||
-				mechanic == "ImmuneToSpellpower" ||
-				mechanic == "WINDFURY") {
+				mechanic == "ImmuneToSpellpower") {
 				// write hard-coded
 			}
 			else {

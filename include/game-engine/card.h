@@ -68,6 +68,7 @@ class Card
 			bool stealth;
 			bool forgetful;
 			bool freeze;
+			bool windfury;
 
 			void Clear() {
 				this->attack = 0;
@@ -79,6 +80,7 @@ class Card
 				this->stealth = false;
 				this->forgetful = false;
 				this->freeze = false;
+				this->windfury = false;
 			}
 
 			bool operator==(const Minion &rhs) const {
@@ -91,6 +93,7 @@ class Card
 				if (this->stealth != rhs.stealth) return false;
 				if (this->forgetful != rhs.forgetful) return false;
 				if (this->freeze != rhs.freeze) return false;
+				if (this->windfury != rhs.windfury) return false;
 				return true;
 			}
 
@@ -211,6 +214,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.stealth);
 			GameEngine::hash_combine(result, s.forgetful);
 			GameEngine::hash_combine(result, s.freeze);
+			GameEngine::hash_combine(result, s.windfury);
 
 			return result;
 		}

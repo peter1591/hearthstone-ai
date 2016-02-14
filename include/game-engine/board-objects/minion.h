@@ -94,6 +94,7 @@ inline void Minion::Summon(const Card & card)
 	if (card.data.minion.stealth) this->stat.SetStealth(true);
 	if (card.data.minion.forgetful) this->stat.SetForgetful(true);
 	if (card.data.minion.freeze) this->stat.SetFreezeAttacker(true);
+	if (card.data.minion.windfury) this->stat.SetWindFury(true);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
