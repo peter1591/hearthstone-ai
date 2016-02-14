@@ -87,13 +87,13 @@ inline void Minion::Summon(const Card & card)
 	this->stat.SetAttack(card.data.minion.attack);
 	this->stat.SetHP(card.data.minion.hp);
 	this->stat.SetMaxHP(card.data.minion.hp);
-	this->stat.SetTaunt(card.data.minion.taunt);
-	this->stat.SetCharge(card.data.minion.charge);
-	this->stat.SetShield(card.data.minion.shield);
-	this->stat.SetStealth(card.data.minion.stealth);
-	this->stat.SetForgetful(card.data.minion.forgetful);
-	this->stat.SetFreezeAttacker(card.data.minion.freeze);
-	this->stat.SetFreezed(false);
+
+	if (card.data.minion.taunt) this->stat.SetTaunt(true);
+	if (card.data.minion.charge) this->stat.SetCharge(true);
+	if (card.data.minion.shield) this->stat.SetShield(true);
+	if (card.data.minion.stealth) this->stat.SetStealth(true);
+	if (card.data.minion.forgetful) this->stat.SetForgetful(true);
+	if (card.data.minion.freeze) this->stat.SetFreezeAttacker(true);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;

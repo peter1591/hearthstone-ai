@@ -37,7 +37,7 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsForgetful() const
 inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce()
 {
 	this->minion->attacked_times++;
-	this->minion->stat.SetStealth(false);
+	if (this->minion->stat.IsStealth()) this->minion->stat.SetStealth(false);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze)
@@ -155,10 +155,9 @@ inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn
 {
 	if (owner_turn) {
 		// check thaw
-		if (this->minion->attacked_times == 0 && !this->minion->summoned_this_turn)
-		{
-			// if summon in this turn, and freeze it, then the minion will not be unfrozen
-			this->minion->stat.SetFreezed(false);
+		// Note: if summon in this turn, and freeze it, then the minion will not be unfrozen
+		if (this->minion->attacked_times == 0 && !this->minion->summoned_this_turn) {
+			if (this->minion->stat.IsFreezed()) this->minion->stat.SetFreezed(false);
 		}
 	}
 

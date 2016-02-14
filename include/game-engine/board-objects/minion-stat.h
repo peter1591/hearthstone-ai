@@ -72,6 +72,9 @@ public:
 		}
 		else {
 			--this->flags[flag];
+#ifdef DEBUG
+			if (this->flags[flag] < 0) throw std::runtime_error("should not below zero");
+#endif
 		}
 	}
 
