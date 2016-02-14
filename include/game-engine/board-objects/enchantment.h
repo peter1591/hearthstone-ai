@@ -124,16 +124,32 @@ public:
 	}
 
 private:
+	template <int alternating_flag>
+	class MinionFlagsSetter {
+	public:
+		static void SetFlag(MinionManipulator const& minion, bool val) {
+			constexpr int shifted_flag = 1 << alternating_flag;
+			constexpr bool alternating = (buff_flags & shifted_flag) != 0;
+
+			if (alternating) {
+				minion.SetMinionStatFlag((MinionStat::Flag)alternating_flag, val);
+			}
+
+			MinionFlagsSetter<alternating_flag - 1>::SetFlag(minion, val);
+		}
+	};
+
+	template <>
+	class MinionFlagsSetter<0> {
+	public:
+		static void SetFlag(MinionManipulator const& minion, bool val) {
+			return;
+		}
+	};
+
 	void SetMinionFlags(MinionManipulator const& minion, bool val)
 	{
-		// TOOD: can use template programming to enforce compile-time loop unrolling
-		for (int stat_flag = 0; stat_flag < MinionStat::FLAG_MAX; stat_flag++) {
-			int shifted_stat_flag = 1 << stat_flag;
-
-			if ((buff_flags & shifted_stat_flag) == 0) continue; // no buff on this flag
-
-			minion.SetMinionStatFlag((MinionStat::Flag)stat_flag, val);
-		}
+		MinionFlagsSetter<MinionStat::FLAG_MAX - 1>::SetFlag(minion, val);
 	}
 
 private:
