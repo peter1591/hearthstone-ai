@@ -4,7 +4,7 @@
 namespace GameEngine {
 
 	// return true if any
-	static bool MarkAttackableMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
+	inline bool SlotIndexHelper::MarkAttackableMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
 
@@ -20,7 +20,7 @@ namespace GameEngine {
 	}
 
 	// return true if any
-	static bool MarkTauntMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
+	inline bool SlotIndexHelper::MarkTauntMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
 
@@ -36,7 +36,7 @@ namespace GameEngine {
 	}
 
 	// return true if any
-	static bool MarkMinionsWithoutStealth(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
+	inline bool SlotIndexHelper::MarkMinionsWithoutStealth(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
 
@@ -52,7 +52,7 @@ namespace GameEngine {
 	}
 
 	// return true if any
-	static bool MarkMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
+	inline bool SlotIndexHelper::MarkMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap &bitmap)
 	{
 		bool ret = false;
 
@@ -65,7 +65,7 @@ namespace GameEngine {
 		return ret;
 	}
 
-	SlotIndexBitmap SlotIndexHelper::GetTargets(SlotIndexHelper::TargetType type, GameEngine::Board const & board)
+	inline SlotIndexBitmap SlotIndexHelper::GetTargets(SlotIndexHelper::TargetType type, GameEngine::Board const & board)
 	{
 		SlotIndexBitmap targets;
 

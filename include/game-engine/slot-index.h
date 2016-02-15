@@ -5,6 +5,10 @@
 namespace GameEngine {
 	class Board;
 
+namespace BoardObjects {
+	class MinionConstIteratorWithSlotIndex;
+}
+
 	enum SlotIndex {
 		SLOT_INVALID = -1,
 		SLOT_PLAYER_SIDE = 0,
@@ -112,5 +116,11 @@ namespace GameEngine {
 			TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL,
 		};
 		static SlotIndexBitmap GetTargets(TargetType type, GameEngine::Board const& board);
+
+	private:
+		static bool MarkAttackableMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
+		static bool MarkTauntMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
+		static bool MarkMinionsWithoutStealth(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
+		static bool MarkMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
 	};
 }

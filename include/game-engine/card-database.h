@@ -31,6 +31,10 @@ namespace GameEngine {
 
 		void Clear();
 
+		Card::Rarity GetRarity(Json::Value const & json_card);
+		Card::MinionRace GetMinionRace(Json::Value const & json_card);
+		void ProcessMinionCardMechanics(Json::Value const & json_card, Card & new_card);
+
 	private:
 		Card * final_cards; // array of cards; good for thread-safe usage
 		int final_cards_size;

@@ -5,7 +5,7 @@
 
 #include "json/reader.h"
 
-#include "game-engine/card-database.h"
+#include "game-engine/game-engine.h"
 
 int main(void)
 {

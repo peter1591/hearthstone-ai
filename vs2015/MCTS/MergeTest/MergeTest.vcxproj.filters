@@ -16,9 +16,6 @@
     <Filter Include="Source Files\game-ai">
       <UniqueIdentifier>{5a3f04d7-9ed6-4ac6-8f78-ca1a8540e7d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine">
-      <UniqueIdentifier>{1ab49289-278a-4840-a782-02c7e508f2b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-ai">
       <UniqueIdentifier>{335b066d-b918-4a1f-b950-c485e71e7caa}</UniqueIdentifier>
     </Filter>
@@ -34,9 +31,6 @@
     <Filter Include="Header Files\game-engine\cards">
       <UniqueIdentifier>{f36eda17-845d-4622-a742-877b0722f6bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine\stages">
-      <UniqueIdentifier>{126e8ab6-5b8e-42ae-84e4-76de048faf8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-engine\board-objects">
       <UniqueIdentifier>{422966ba-2743-417e-9d37-89e1d9021612}</UniqueIdentifier>
     </Filter>
@@ -44,12 +38,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
       <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\board.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\move.cpp">
-      <Filter>Source Files\game-engine</Filter>
     </ClCompile>
     <ClCompile Include="merge-test.cpp">
       <Filter>Source Files</Filter>
@@ -60,9 +48,6 @@
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
@@ -71,15 +56,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\include\game-engine\cards\card_EX1_390.h">
-      <Filter>Header Files\game-engine\cards</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +241,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h">
       <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-impl.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\game-engine.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\card-database-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h">
+      <Filter>Header Files\game-engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,9 +16,6 @@
     <Filter Include="Source Files\game-ai">
       <UniqueIdentifier>{534157e3-e460-4f7a-b6d3-15a3c97895b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine">
-      <UniqueIdentifier>{76ab9bee-39f7-4323-8abb-18eb7f7216e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-ai">
       <UniqueIdentifier>{fe25da21-6a3c-437a-9f9d-243c8cfb606e}</UniqueIdentifier>
     </Filter>
@@ -34,9 +31,6 @@
     <Filter Include="Header Files\game-engine\stages">
       <UniqueIdentifier>{4af59b99-7273-46d6-bfa9-0f27ab7679c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine\stages">
-      <UniqueIdentifier>{7f410f1e-36cc-4df5-b7d9-bf66907ad796}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-engine\board-objects">
       <UniqueIdentifier>{433f4e36-c874-4d5f-9d0c-27ed8e00f529}</UniqueIdentifier>
     </Filter>
@@ -48,12 +42,6 @@
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\board.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\move.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\game-ai\lib\task.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
@@ -63,9 +51,6 @@
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp">
-      <Filter>Source Files\game-engine</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
@@ -74,12 +59,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp">
-      <Filter>Source Files\game-engine\stages</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp">
-      <Filter>Source Files\game-engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

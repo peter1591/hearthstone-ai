@@ -133,6 +133,10 @@ class Board
 		Stage stage;
 		RandomGenerator random_generator;
 		Data data;
+
+	private:
+		template<typename Chooser, typename... Params>
+		static typename Chooser::ReturnType StageFunctionCaller(Stage const stage, Params && ...params);
 };
 
 inline bool Board::operator==(const Board &rhs) const

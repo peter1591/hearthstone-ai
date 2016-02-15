@@ -5,7 +5,7 @@
 #include <list>
 #include <map>
 #include <unordered_set>
-#include "game-engine/board.h"
+#include "game-engine/game-engine.h"
 #include "tree.h"
 #include "board-node-map.h"
 

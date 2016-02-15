@@ -4,12 +4,9 @@
 #include <chrono>
 #include <vector>
 
-#include "game-engine/card-id-map.h"
-#include "game-engine/card-database.h"
-#include "game-engine/cards/common.h"
+#include "game-engine/game-engine.h"
 #include "mcts.h"
 #include "decider.h"
-#include "game-engine/slot-index.h"
 
 void InitializeDeck1(GameEngine::Deck &deck)
 {

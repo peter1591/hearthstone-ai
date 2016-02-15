@@ -19,8 +19,8 @@
 
 namespace GameEngine {
 
-template <typename Chooser, typename... Params, typename Return = typename Chooser::ReturnType>
-static Return StageFunctionCaller(Stage stage, Params & ... params)
+template <typename Chooser, typename... Params>
+inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage, Params&&... params)
 {
 	typedef StageFunctionChooser::Caller<Chooser> Caller;
 
@@ -47,7 +47,7 @@ static Return StageFunctionCaller(Stage stage, Params & ... params)
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
-void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
+inline void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
 {
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:
@@ -57,14 +57,14 @@ void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
 
 		case STAGE_TYPE_PLAYER:
 		case STAGE_TYPE_OPPONENT:
-			return StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_move_getter);
+			return Board::StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_move_getter);
 
 		default:
 			throw std::runtime_error("Unhandled case in GetNextMoves()");
 	}
 }
 
-void Board::GetGoodMove(Move & next_move, unsigned int rand) const
+inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 {
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
@@ -81,7 +81,7 @@ void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 	}
 }
 
-void Board::ApplyMove(const Move &move, bool * introduced_random)
+inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 {
 	if (this->GetStageType() == STAGE_TYPE_GAME_FLOW) {
 		this->random_generator.SetRandomSeed(move.data.game_flow_data.rand_seed);
@@ -92,13 +92,13 @@ void Board::ApplyMove(const Move &move, bool * introduced_random)
 	if (introduced_random != nullptr) *introduced_random = this->random_generator.GetFlag_HasCalled();
 }
 
-void Board::SetStateToPlayerChooseBoardMove()
+inline void Board::SetStateToPlayerChooseBoardMove()
 {
 	this->stage = StagePlayerChooseBoardMove::stage;
 	//this->stage = StageOpponentChooseBoardMove::stage;
 }
 
-void Board::DebugPrint() const
+inline void Board::DebugPrint() const
 {
 	Stage stage = this->GetStage();
 	StageType stage_type = this->GetStageType();
@@ -148,7 +148,7 @@ void Board::DebugPrint() const
 	std::cout << "=== Print Board END   ===" << std::endl;
 }
 
-std::string Board::GetStageName() const
+inline std::string Board::GetStageName() const
 {
 	return StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage);
 }

@@ -109,7 +109,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -130,17 +130,12 @@
     <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp" />
     <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\board.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\card-database.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\move.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\slot-index.cpp" />
-    <ClCompile Include="..\..\..\game-engine\lib\stages\helper.cpp" />
-    <ClCompile Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClCompile Include="merge-test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\board-node-map.h" />
     <ClInclude Include="..\..\..\include\decider.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-to-all-minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura.h" />
@@ -159,6 +154,7 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
+    <ClInclude Include="..\..\..\include\game-engine\card-database-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
@@ -166,6 +162,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
@@ -173,6 +170,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
+    <ClInclude Include="..\..\..\include\game-engine\game-engine.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
     <ClInclude Include="..\..\..\include\game-engine\hidden-secrets.h" />
     <ClInclude Include="..\..\..\include\game-engine\move.h" />
@@ -182,9 +180,11 @@
     <ClInclude Include="..\..\..\include\game-engine\random-generator.h" />
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />
     <ClInclude Include="..\..\..\include\game-engine\secrets.h" />
+    <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />
     <ClInclude Include="..\..\..\include\game-engine\stage.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\common.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\helper.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h" />

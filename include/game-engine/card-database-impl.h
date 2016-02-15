@@ -4,7 +4,7 @@
 
 namespace GameEngine {
 
-	static Card::Rarity GetRarity(Json::Value const& json_card)
+	inline Card::Rarity CardDatabase::GetRarity(Json::Value const& json_card)
 	{
 		if (!json_card.isMember("rarity")) return Card::RARITY_UNKNOWN;
 
@@ -19,7 +19,7 @@ namespace GameEngine {
 		throw std::runtime_error("parse error");
 	}
 
-	static Card::MinionRace GetMinionRace(Json::Value const& json_card)
+	inline Card::MinionRace CardDatabase::GetMinionRace(Json::Value const& json_card)
 	{
 		if (!json_card.isMember("race")) return Card::RACE_NORMAL;
 
@@ -35,7 +35,7 @@ namespace GameEngine {
 		throw std::runtime_error("unknown race");
 	}
 
-	static void ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
+	inline void CardDatabase::ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
 	{
 		if (!json_card.isMember("mechanics")) return;
 
@@ -96,19 +96,19 @@ namespace GameEngine {
 		}
 	}
 
-	CardDatabase::CardDatabase()
+	inline CardDatabase::CardDatabase()
 	{
 		this->final_cards = nullptr;
 		this->Clear();
 	}
 
-	CardDatabase & CardDatabase::GetInstance()
+	inline CardDatabase & CardDatabase::GetInstance()
 	{
 		static CardDatabase instance;
 		return instance;
 	}
 
-	bool CardDatabase::ReadFromJsonFile(std::string const & filepath)
+	inline bool CardDatabase::ReadFromJsonFile(std::string const & filepath)
 	{
 		Json::Reader reader;
 		Json::Value cards_json;
@@ -120,7 +120,7 @@ namespace GameEngine {
 		return this->ReadFromJson(cards_json);
 	}
 
-	bool CardDatabase::ReadFromJson(Json::Value const & cards_json)
+	inline bool CardDatabase::ReadFromJson(Json::Value const & cards_json)
 	{
 		this->Clear();
 
@@ -146,7 +146,7 @@ namespace GameEngine {
 		return true;
 	}
 
-	bool CardDatabase::AddCard(Json::Value const & card)
+	inline bool CardDatabase::AddCard(Json::Value const & card)
 	{
 		std::string origin_id = card["id"].asString();
 
@@ -190,7 +190,7 @@ namespace GameEngine {
 		return true;
 	}
 
-	void CardDatabase::AddMinionCard(Json::Value const & json_card, Card & new_card)
+	inline void CardDatabase::AddMinionCard(Json::Value const & json_card, Card & new_card)
 	{
 		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_MINION;
@@ -203,7 +203,7 @@ namespace GameEngine {
 		ProcessMinionCardMechanics(json_card, new_card);
 	}
 
-	void CardDatabase::AddSpellCard(Json::Value const & json_card, Card & new_card)
+	inline void CardDatabase::AddSpellCard(Json::Value const & json_card, Card & new_card)
 	{
 		new_card.rarity = GetRarity(json_card);
 		new_card.type = Card::TYPE_SPELL;
@@ -212,7 +212,7 @@ namespace GameEngine {
 		new_card.data.spell.Clear();
 	}
 
-	void CardDatabase::AddCard(Card const & card, std::string const& origin_id)
+	inline void CardDatabase::AddCard(Card const & card, std::string const& origin_id)
 	{
 		this->cards[card.id] = card;
 
@@ -224,31 +224,31 @@ namespace GameEngine {
 		this->origin_id_map[origin_id] = card.id;
 	}
 
-	void CardDatabase::Clear()
+	inline void CardDatabase::Clear()
 	{
 		this->cards.clear();
 		this->next_card_id = 1;
 	}
 
-	int CardDatabase::GetAvailableCardId()
+	inline int CardDatabase::GetAvailableCardId()
 	{
 		int id = this->next_card_id;
 		++this->next_card_id;
 		return id;
 	}
 
-	Card CardDatabase::GetCard(int card_id) const
+	inline Card CardDatabase::GetCard(int card_id) const
 	{
 		if (card_id < 0 || card_id >= this->final_cards_size) throw std::runtime_error("out of range");
 		return this->final_cards[card_id];
 	}
 
-	std::unordered_map<std::string, int> const & CardDatabase::GetOriginalIdMap() const
+	inline std::unordered_map<std::string, int> const & CardDatabase::GetOriginalIdMap() const
 	{
 		return this->origin_id_map;
 	}
 
-	int CardDatabase::GetCardIdFromOriginalId(std::string const & origin_id) const
+	inline int CardDatabase::GetCardIdFromOriginalId(std::string const & origin_id) const
 	{
 		auto it = this->origin_id_map.find(origin_id);
 		if (it == this->origin_id_map.end()) return -1;

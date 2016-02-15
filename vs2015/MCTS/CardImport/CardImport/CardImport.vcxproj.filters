@@ -22,19 +22,10 @@
     <Filter Include="Header Files\game-engine">
       <UniqueIdentifier>{3ba599a3-6548-48f8-a3ac-1658af13ed53}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-engine">
-      <UniqueIdentifier>{2d6775c8-1580-48ea-a333-6e1505cbe83a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\game-engine\stages">
-      <UniqueIdentifier>{63e423fb-9526-4026-b6ab-6f322fcb33c1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\game-engine\lib\card-database.cpp">
-      <Filter>Source Files\game-engine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\contrib\lib_json\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
@@ -44,9 +35,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\game-engine\lib\stages\helper.cpp">
-      <Filter>Source Files\game-engine\stages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
