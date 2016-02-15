@@ -11,6 +11,7 @@
 #include "hero.h"
 #include "minions.h"
 #include "minion-manipulator.h"
+#include "hero-manipulator.h"
 
 namespace GameEngine {
 namespace BoardObjects {
@@ -18,21 +19,22 @@ namespace BoardObjects {
 class BoardObject
 {
 public:
-	explicit BoardObject(Hero * hero) : hero(hero),
+	explicit BoardObject(HeroManipulator && hero) : hero(hero),
 		minion(*(Board*)(nullptr), *(Minions*)(nullptr), *(Minion*)(nullptr))
 	{
-		this->ptr = this->hero;
+		this->ptr = &this->hero;
 	}
 
-	explicit BoardObject(MinionManipulator && minion) : minion(minion)
+	explicit BoardObject(MinionManipulator && minion) : minion(minion),
+		hero(*(Board*)(nullptr), *(Hero*)(nullptr))
 	{
 		this->ptr = &this->minion;
 	}
 
-	bool IsHero() const { return this->ptr == this->hero; }
+	bool IsHero() const { return this->ptr == &this->hero; }
 	bool IsMinion() const { return this->ptr == &this->minion; }
 
-	Hero * GetHero()
+	HeroManipulator GetHero()
 	{
 #ifdef DEBUG
 		if (this->IsHero() == false) throw std::runtime_error("type not match.");
@@ -51,7 +53,7 @@ public:
 	ObjectBase * operator->() const { return this->ptr; }
 
 private:
-	Hero * hero;
+	HeroManipulator hero;
 	MinionManipulator minion; // a pointer to the actual memory location
 	ObjectBase * ptr;
 };
@@ -77,8 +79,8 @@ public:
 
 public: // Get object
 	BoardObject GetObject(GameEngine::Board & board, SlotIndex idx);
-	BoardObject GetPlayerHero(GameEngine::Board & board) { return BoardObject(&this->player_hero); }
-	BoardObject GetOpponentHero(GameEngine::Board & board) { return BoardObject(&this->opponent_hero); }
+	BoardObject GetPlayerHero(GameEngine::Board & board) { return this->GetObject(board, SLOT_PLAYER_HERO); }
+	BoardObject GetOpponentHero(GameEngine::Board & board) { return this->GetObject(board, SLOT_OPPONENT_HERO); }
 
 public: // Manipulate heros
 	void SetHero(Hero const& player, Hero const& opponent);
@@ -182,11 +184,11 @@ inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex
 	if (idx < SLOT_PLAYER_HERO)
 		throw std::runtime_error("invalid argument");
 	else if (idx == SLOT_PLAYER_HERO)
-		return BoardObject(&this->player_hero);
+		return BoardObject(HeroManipulator(board, this->player_hero));
 	else if (idx < SLOT_OPPONENT_HERO)
 		return BoardObject(this->GetMinionManipulator(board, idx));
 	else if (idx == SLOT_OPPONENT_HERO)
-		return BoardObject(&this->opponent_hero);
+		return BoardObject(HeroManipulator(board, this->opponent_hero));
 	else if (idx < SLOT_MAX)
 		return BoardObject(this->GetMinionManipulator(board, idx));
 	else
@@ -263,9 +265,6 @@ inline void ObjectManager::OpponentTurnEnd(GameEngine::Board & board)
 
 inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion)
 {
-	this->player_hero.HookAfterMinionAdded(added_minion);
-	this->opponent_hero.HookAfterMinionAdded(added_minion);
-
 	for (auto it = this->GetMinionInserterAtBeginOfSide(added_minion.GetBoard(), SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().HookAfterMinionAdded(added_minion);
 	}
