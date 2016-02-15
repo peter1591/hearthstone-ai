@@ -260,6 +260,9 @@
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h">

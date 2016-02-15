@@ -142,6 +142,7 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator-impl.h" />
