@@ -67,6 +67,7 @@ class Card
 			bool forgetful;
 			bool freeze;
 			bool windfury;
+			bool poisonous;
 
 			void Clear() {
 				this->attack = 0;
@@ -79,6 +80,7 @@ class Card
 				this->forgetful = false;
 				this->freeze = false;
 				this->windfury = false;
+				this->poisonous = false;
 			}
 
 			bool operator==(const Minion &rhs) const {
@@ -92,6 +94,7 @@ class Card
 				if (this->forgetful != rhs.forgetful) return false;
 				if (this->freeze != rhs.freeze) return false;
 				if (this->windfury != rhs.windfury) return false;
+				if (this->poisonous != rhs.poisonous) return false;
 				return true;
 			}
 
@@ -213,6 +216,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.forgetful);
 			GameEngine::hash_combine(result, s.freeze);
 			GameEngine::hash_combine(result, s.windfury);
+			GameEngine::hash_combine(result, s.poisonous);
 
 			return result;
 		}

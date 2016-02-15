@@ -43,18 +43,14 @@ namespace GameEngine
 		return false;
 	}
 
-	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage)
+	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous)
 	{
-		return StageHelper::DealDamage(board.object_manager.GetObject(board, taker_idx), damage);
+		return StageHelper::DealDamage(board.object_manager.GetObject(board, taker_idx), damage, poisonous);
 	}
 
-	inline void StageHelper::DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage)
+	inline void StageHelper::DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage, bool poisonous)
 	{
-		taker->TakeDamage(damage);
-
-		if (taker.IsMinion()) {
-			taker.GetMinion().HookMinionCheckEnraged();
-		}
+		taker->TakeDamage(damage, poisonous);
 	}
 
 	inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
@@ -106,17 +102,16 @@ namespace GameEngine
 
 		auto attacker = board.object_manager.GetObject(board, attacker_idx);
 
-		if (attacker->IsForgetful())
-		{
+		if (attacker->IsForgetful()) {
 			attacked_idx = StageHelper::GetTargetForForgetfulAttack(board, attacked_idx);
 		}
 
 		auto attacked = board.object_manager.GetObject(board, attacked_idx);
-		StageHelper::DealDamage(attacked, attacker->GetAttack());
+		StageHelper::DealDamage(attacked, attacker->GetAttack(), attacker->IsPoisonous());
 
 		if (attacked.IsMinion()) {
 			// If minion, deal damage equal to the attacked's attack
-			StageHelper::DealDamage(attacker, attacked->GetAttack());
+			StageHelper::DealDamage(attacker, attacked->GetAttack(), attacked->IsPoisonous());
 		}
 
 		attacker->AttackedOnce();
@@ -135,10 +130,8 @@ namespace GameEngine
 			// mark as pending death
 			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(board, side); !it.IsEnd(); it.GoToNext())
 			{
-				if (it.IsPendingRemoval()) continue;
-
 				auto manipulator = it.ConverToManipulator();
-				if (manipulator.GetHP() > 0) continue;
+				if (!it.IsPendingRemoval() && manipulator.GetHP() > 0) continue;
 
 				it.MarkPendingRemoval();
 
@@ -225,11 +218,11 @@ namespace GameEngine
 	{
 		if (SlotIndexHelper::IsPlayerSide(side)) {
 			++board.player_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetPlayerHero(board), board.player_stat.fatigue_damage);
+			StageHelper::DealDamage(board.object_manager.GetPlayerHero(board), board.player_stat.fatigue_damage, false);
 		}
 		else {
 			++board.opponent_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetOpponentHero(board), board.opponent_stat.fatigue_damage);
+			StageHelper::DealDamage(board.object_manager.GetOpponentHero(board), board.opponent_stat.fatigue_damage, false);
 		}
 	}
 }

@@ -28,8 +28,8 @@ public:
 	// handle minion/hero attack, calculate damages
 	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
 
-	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage);
-	static void DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage);
+	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous);
+	static void DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage, bool poisonous);
 
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);

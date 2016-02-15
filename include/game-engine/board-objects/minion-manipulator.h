@@ -29,7 +29,7 @@ namespace BoardObjects {
 		int GetMaxHP() const;
 		int GetAttack() const;
 
-		void TakeDamage(int damage);
+		void TakeDamage(int damage, bool poisonous);
 		bool IsForgetful() const;
 
 		void AttackedOnce();
@@ -38,6 +38,8 @@ namespace BoardObjects {
 		void SetFreezed(bool freezed);
 		bool IsFreezeAttacker() const;
 		bool IsFreezed() const;
+
+		bool IsPoisonous() const;
 
 	public:
 		void AddAttack(int val) const;
@@ -48,6 +50,9 @@ namespace BoardObjects {
 		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers() const;
 
 		void SetMinionStatFlag(MinionStat::Flag flag, bool val) const;
+
+		bool IsPendingRemoval() const;
+		void MarkPendingRemoval() const;
 
 	public: // auras
 		void AddAura(Aura * aura) const;

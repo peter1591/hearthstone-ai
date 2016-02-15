@@ -74,7 +74,8 @@ namespace GameEngine {
 			else if (mechanic == "WINDFURY") {
 				new_card.data.minion.windfury = true;
 			}
-			else if (mechanic == "POISONOUS") { // TODO
+			else if (mechanic == "POISONOUS") {
+				new_card.data.minion.poisonous = true;
 			}
 			else if (mechanic == "OVERLOAD") { // TODO
 			}

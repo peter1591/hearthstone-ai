@@ -20,6 +20,7 @@ public:
 		FLAG_FREEZE_ATTACKER,
 		FLAG_FREEZED,
 		FLAG_WINDFURY,
+		FLAG_POISONOUS,
 		FLAG_MAX
 	};
 
@@ -52,6 +53,7 @@ public:
 	bool IsFreezeAttacker() const { return this->flags[MinionStat::FLAG_FREEZE_ATTACKER] > 0; }
 	bool IsFreezed() const { return this->flags[MinionStat::FLAG_FREEZED] > 0; }
 	bool IsWindFury() const { return this->flags[MinionStat::FLAG_WINDFURY] > 0; }
+	bool IsPoisonous() const { return this->flags[MinionStat::FLAG_POISONOUS] > 0; }
 
 	void SetAttack(int attack) { this->attack = attack; }
 	void SetHP(int hp) { this->hp = hp; }
@@ -64,6 +66,7 @@ public:
 	void SetFreezeAttacker(bool val) { this->SetFlag(FLAG_FREEZE_ATTACKER, val); }
 	void SetFreezed(bool val) { this->SetFlag(FLAG_FREEZED, val); }
 	void SetWindFury(bool val) { this->SetFlag(FLAG_WINDFURY, val); }
+	void SetPoisonous(bool val) { this->SetFlag(FLAG_POISONOUS, val); }
 
 	void SetFlag(Flag flag, bool set)
 	{

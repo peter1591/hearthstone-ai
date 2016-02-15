@@ -25,7 +25,7 @@ public:
 	int GetHP() const { return this->hp; }
 	int GetAttack() const;
 
-	void TakeDamage(int);
+	void TakeDamage(int damage, bool poisonous);
 
 	void AttackedOnce();
 
@@ -35,6 +35,8 @@ public:
 	void SetFreezed(bool freezed);
 	bool IsFreezeAttacker() const;
 	bool IsFreezed() const;
+
+	bool IsPoisonous() const;
 
 public: // hooks
 	void HookAfterMinionAdded(MinionManipulator & minion);
@@ -79,8 +81,9 @@ inline int GameEngine::BoardObjects::Hero::GetAttack() const
 	throw std::runtime_error("not yet implemented");
 }
 
-inline void GameEngine::BoardObjects::Hero::TakeDamage(int damage)
+inline void GameEngine::BoardObjects::Hero::TakeDamage(int damage, bool poisonous)
 {
+	// Note: poisonous have no effect on heros
 	this->hp -= damage;
 }
 
@@ -111,6 +114,11 @@ inline bool GameEngine::BoardObjects::Hero::IsFreezeAttacker() const
 inline bool GameEngine::BoardObjects::Hero::IsFreezed() const
 {
 	throw std::runtime_error("not yet implemented");
+}
+
+inline bool GameEngine::BoardObjects::Hero::IsPoisonous() const
+{
+	return false;
 }
 
 inline void GameEngine::BoardObjects::Hero::HookAfterMinionAdded(MinionManipulator & minion)

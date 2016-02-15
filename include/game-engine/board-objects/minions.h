@@ -8,6 +8,9 @@
 
 namespace GameEngine {
 namespace BoardObjects {
+namespace Impl {
+	class MinionIteratorHelper;
+}
 
 class Minions
 {
@@ -16,6 +19,7 @@ class Minions
 	// Iterators for minions
 	friend class MinionConstIteratorWithSlotIndex;
 	friend class MinionInserter;
+	friend class Impl::MinionIteratorHelper;
 
 public:
 	typedef std::list<Minion> container_type;

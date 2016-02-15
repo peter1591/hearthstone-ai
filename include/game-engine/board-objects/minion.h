@@ -95,6 +95,7 @@ inline void Minion::Summon(const Card & card)
 	if (card.data.minion.forgetful) this->stat.SetForgetful(true);
 	if (card.data.minion.freeze) this->stat.SetFreezeAttacker(true);
 	if (card.data.minion.windfury) this->stat.SetWindFury(true);
+	if (card.data.minion.poisonous) this->stat.SetPoisonous(true);
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
@@ -162,6 +163,7 @@ inline std::string Minion::GetDebugString() const
 		if (this->stat.IsFreezeAttacker()) oss << " [FREEZE]";
 		if (this->stat.IsFreezed()) oss << " [FREEZED]";
 		if (this->stat.IsWindFury()) oss << " [WINDFURY]";
+		if (this->stat.IsPoisonous()) oss << " [POISONOUS]";
 	}
 
 	return oss.str();
