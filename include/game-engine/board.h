@@ -123,8 +123,6 @@ class Board
 			OpponentPlayMinionData opponent_play_minion_data;
 			AttackData attack_data;
 
-			Data() {}
-
 			bool operator==(const Data &rhs) const = delete;
 			bool operator!=(const Data &rhs) const = delete;
 		};

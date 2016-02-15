@@ -88,8 +88,6 @@ class Move
 			PlayerPlayMinionData player_play_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
 			AttackData attack_data;
-
-			Data() {}
 		};
 
 	public:

@@ -22,8 +22,6 @@ class Card
 		};
 
 	public:
-		Card() : id(0) {}
-
 		bool operator==(const Card &rhs) const;
 		bool operator!=(const Card &rhs) const;
 
