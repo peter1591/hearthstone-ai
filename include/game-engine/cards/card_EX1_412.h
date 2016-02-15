@@ -25,7 +25,7 @@ namespace GameEngine {
 					constexpr int hp_boost = 0;
 					constexpr int buff_stat = 1 << BoardObjects::MinionStat::FLAG_WINDFURY;
 
-					auto * enchantment = new BoardObjects::Enchantment_BuffStat<attack_boost, hp_boost, buff_stat, false>();
+					auto * enchantment = new BoardObjects::Enchantment_BuffMinion<attack_boost, hp_boost, buff_stat, false>();
 
 					aura_owner.AddEnchantment(enchantment, &this->enchantments_manager);
 				}

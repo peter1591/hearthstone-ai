@@ -47,7 +47,7 @@ namespace GameEngine {
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 1;
 
-					auto * enchantment = new BoardObjects::Enchantment_BuffStat<attack_boost, hp_boost, 0, false>();
+					auto * enchantment = new BoardObjects::Enchantment_BuffMinion<attack_boost, hp_boost, 0, false>();
 
 					target_minion.AddEnchantment(enchantment, &this->enchantments_manager);
 				}

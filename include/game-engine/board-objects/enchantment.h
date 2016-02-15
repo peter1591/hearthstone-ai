@@ -14,7 +14,7 @@ class Enchantment
 
 public:
 	enum UniqueIdForHash {
-		TypeAttackHPBoost
+		TypeBuffMinion
 	};
 
 public:
@@ -39,10 +39,10 @@ protected:
 // Introduce some attack/hp/taunt/charge/etc. buffs on minion
 // buff_flags are ORed flags for MinionStat::Flag
 template <int attack_boost, int hp_boost, int buff_flags, bool one_turn>
-class Enchantment_BuffStat : public Enchantment
+class Enchantment_BuffMinion : public Enchantment
 {
 public:
-	Enchantment_BuffStat()
+	Enchantment_BuffMinion()
 	{
 #ifdef DEBUG
 		this->after_added_called = false;
@@ -114,10 +114,11 @@ public:
 
 	std::size_t GetHash() const
 	{
-		std::size_t result = std::hash<int>()(Enchantment::UniqueIdForHash::TypeAttackHPBoost);
+		std::size_t result = std::hash<int>()(Enchantment::UniqueIdForHash::TypeBuffMinion);
 
 		GameEngine::hash_combine(result, this->actual_attack_boost);
 		GameEngine::hash_combine(result, hp_boost);
+		GameEngine::hash_combine(result, buff_flags);
 		GameEngine::hash_combine(result, one_turn);
 
 		return result;

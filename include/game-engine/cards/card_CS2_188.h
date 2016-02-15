@@ -46,7 +46,7 @@ public:
 			return;
 		}
 
-		auto enchant = new BoardObjects::Enchantment_BuffStat<attack_boost, 0, 0, true>();
+		auto enchant = new BoardObjects::Enchantment_BuffMinion<attack_boost, 0, 0, true>();
 		buff_target.ConverToManipulator().AddEnchantment(enchant, nullptr);
 	}
 };
