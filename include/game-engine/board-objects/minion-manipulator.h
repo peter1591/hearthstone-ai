@@ -29,13 +29,13 @@ namespace BoardObjects {
 		int GetMaxHP() const;
 		int GetAttack() const;
 
-		void TakeDamage(int damage, bool poisonous) const;
+		void TakeDamage(int damage, bool poisonous);
 		bool IsForgetful() const;
 
-		void AttackedOnce() const;
+		void AttackedOnce();
 
-		void SetFreezeAttacker(bool freeze) const;
-		void SetFreezed(bool freezed) const;
+		void SetFreezeAttacker(bool freeze);
+		void SetFreezed(bool freezed);
 		bool IsFreezeAttacker() const;
 		bool IsFreezed() const;
 

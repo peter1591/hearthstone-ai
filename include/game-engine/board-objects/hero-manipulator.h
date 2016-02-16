@@ -28,12 +28,12 @@ namespace GameEngine {
 
 			int GetAttack() const { return this->hero.GetAttack(); }
 
-			void TakeDamage(int damage, bool poisonous) const {
+			void TakeDamage(int damage, bool poisonous) {
 				// Note: poisonous have no effect on heros
 				this->hero.hp -= damage;
 			}
 
-			void AttackedOnce() const {
+			void AttackedOnce() {
 				if (this->hero.weapon.IsVaild()) {
 					--this->hero.weapon.durability;
 
@@ -53,7 +53,7 @@ namespace GameEngine {
 				return this->hero.weapon.freeze_attack;
 			}
 
-			void SetFreezed(bool freezed) const {
+			void SetFreezed(bool freezed) {
 				this->hero.freezed = freezed;
 			}
 
@@ -67,12 +67,12 @@ namespace GameEngine {
 			}
 
 		public: // hooks
-			void TurnStart(bool owner_turn) const
+			void TurnStart(bool owner_turn)
 			{
 				this->hero.attacked_times = 0;
 			}
 
-			void TurnEnd(bool owner_turn) const
+			void TurnEnd(bool owner_turn)
 			{
 				if (owner_turn) {
 					// check thaw
@@ -82,13 +82,13 @@ namespace GameEngine {
 				}
 			}
 
-			void DestroyWeapon() const
+			void DestroyWeapon()
 			{
 				// TODO: trigger weapon deathrattle
 				this->hero.weapon.InValidate();
 			}
 
-			void EquipWeapon(Card const& card) const
+			void EquipWeapon(Card const& card)
 			{
 #ifdef DEBUG
 				if (card.type != Card::TYPE_WEAPON) throw std::runtime_error("invalid argument");

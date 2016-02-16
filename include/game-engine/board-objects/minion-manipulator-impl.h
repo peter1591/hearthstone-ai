@@ -36,7 +36,7 @@ inline int GameEngine::BoardObjects::MinionManipulator::GetAttack() const
 	return this->minion->stat.GetAttack();
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage, bool poisonous) const
+inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage, bool poisonous)
 {
 	if (this->minion->stat.IsShield()) {
 		this->minion->stat.SetShield(false);
@@ -57,18 +57,18 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsForgetful() const
 	return this->minion->stat.IsForgetful();
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce() const
+inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce()
 {
 	this->minion->attacked_times++;
 	if (this->minion->stat.IsStealth()) this->minion->stat.SetStealth(false);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze) const
+inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze)
 {
 	this->minion->stat.SetFreezeAttacker(freeze);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::SetFreezed(bool freezed) const
+inline void GameEngine::BoardObjects::MinionManipulator::SetFreezed(bool freezed)
 {
 	this->minion->stat.SetFreezed(freezed);
 }
