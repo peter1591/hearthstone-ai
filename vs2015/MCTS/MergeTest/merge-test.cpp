@@ -17,7 +17,8 @@ void InitializeDeck1(GameEngine::Deck &deck)
 
 void InitializeHand1(GameEngine::Hand &hand)
 {
-	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_522)); // Patient Assassin
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_409t)); // Weapon: Heavy Axe
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_002)); // Snowchugger
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_522)); // Patient Assassin
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_222)); // Stormwind Champion
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_NEW1_010)); // Raymond Swanland
@@ -44,8 +45,23 @@ void InitializeBoard(GameEngine::Board &board)
 
 	GameEngine::BoardObjects::Hero player_hero, opponent_hero;
 
-	player_hero.Set(20, 0);
-	opponent_hero.Set(20, 0);
+	player_hero.hp = 20;
+	player_hero.armor = 0;
+	player_hero.weapon.Clear();
+	player_hero.weapon.card_id = 99999;
+	player_hero.weapon.cost = 2;
+	player_hero.weapon.attack = 3;
+	player_hero.weapon.durability = 10;
+
+	opponent_hero.hp = 20;
+	opponent_hero.armor = 0;
+	opponent_hero.weapon.Clear();
+	opponent_hero.weapon.card_id = 99999;
+	opponent_hero.weapon.cost = 2;
+	opponent_hero.weapon.attack = 3;
+	opponent_hero.weapon.durability = 10;
+	opponent_hero.weapon.windfury = true;
+
 	board.object_manager.SetHero(player_hero, opponent_hero);
 
 	board.opponent_cards.Set(4, 26);

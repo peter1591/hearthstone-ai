@@ -16,7 +16,7 @@ namespace GameEngine {
 		if (rarity == "EPIC") return Card::RARITY_EPIC;
 		if (rarity == "LEGENDARY") return Card::RARITY_LEGENDARY;
 
-		throw std::runtime_error("parse error");
+		return Card::RARITY_UNKNOWN;
 	}
 
 	inline Card::MinionRace CardDatabase::GetMinionRace(Json::Value const& json_card)
@@ -161,6 +161,9 @@ namespace GameEngine {
 		else if (type == "SPELL") {
 			this->AddSpellCard(card, new_card);
 		}
+		else if (type == "WEAPON") {
+			this->AddWeaponCard(card, new_card);
+		}
 		else {
 			// ignored
 			return false;
@@ -211,6 +214,16 @@ namespace GameEngine {
 		new_card.cost = json_card["cost"].asInt();
 		new_card.id = this->GetAvailableCardId();
 		new_card.data.spell.Clear();
+	}
+
+	inline void CardDatabase::AddWeaponCard(Json::Value const & json_card, Card & new_card)
+	{
+		new_card.rarity = GetRarity(json_card);
+		new_card.type = Card::TYPE_WEAPON;
+		new_card.cost = json_card["cost"].asInt();
+		new_card.data.weapon.attack = json_card["attack"].asInt();
+		new_card.data.weapon.durability = json_card["durability"].asInt();
+		new_card.id = this->GetAvailableCardId();
 	}
 
 	inline void CardDatabase::AddCard(Card const & card, std::string const& origin_id)

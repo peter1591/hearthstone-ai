@@ -28,6 +28,7 @@ namespace GameEngine {
 		bool AddCard(Json::Value const& card);
 		void AddMinionCard(Json::Value const& card, Card & new_card);
 		void AddSpellCard(Json::Value const& card, Card & new_card);
+		void AddWeaponCard(Json::Value const& card, Card & new_card);
 
 		void Clear();
 
