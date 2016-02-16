@@ -6,6 +6,7 @@
 #include "weapon.h"
 #include "hero-power.h"
 #include "object-base.h"
+#include "enchantments.h"
 
 namespace GameEngine {
 namespace BoardObjects{
@@ -18,21 +19,28 @@ class Hero
 	friend class HeroManipulator;
 
 public:
+	Hero() : attacked_times(0), freezed(false) {}
+
 	bool operator==(Hero const& rhs) const;
 	bool operator!=(Hero const& rhs) const;
 
 public:
-	void Set(int hp, int armor);
+	// Getters
+	bool Attackable() const;
+	int GetAttack() const;
 
 public:
 	std::string GetDebugString() const;
 
-private:
+public:
 	int hp;
 	int armor;
 
 	Weapon weapon;
 	HeroPower hero_power;
+
+	int attacked_times;
+	bool freezed;
 };
 
 } // BoardObjects
@@ -44,6 +52,8 @@ inline bool GameEngine::BoardObjects::Hero::operator==(Hero const & rhs) const
 	if (this->armor != rhs.armor) return false;
 	if (this->weapon != rhs.weapon) return false;
 	if (this->hero_power != rhs.hero_power) return false;
+	if (this->attacked_times != rhs.attacked_times) return false;
+	if (this->freezed != rhs.freezed) return false;
 
 	return true;
 }
@@ -53,16 +63,37 @@ inline bool GameEngine::BoardObjects::Hero::operator!=(Hero const & rhs) const
 	return !(*this == rhs);
 }
 
-inline void GameEngine::BoardObjects::Hero::Set(int hp, int armor)
+inline bool GameEngine::BoardObjects::Hero::Attackable() const
 {
-	this->hp = hp;
-	this->armor = armor;
+	if (this->freezed) return false;
+
+	int max_attacked_times = 1;
+	if (this->weapon.windfury) max_attacked_times = 2;
+
+	if (this->attacked_times >= max_attacked_times) return false;
+
+	if (this->GetAttack() <= 0) return false;
+
+	return true;
+}
+
+inline int GameEngine::BoardObjects::Hero::GetAttack() const
+{
+	int attack = 0;
+	if (this->weapon.IsVaild()) {
+		attack += this->weapon.attack;
+	}
+	// TODO: hero can have its attack value in addition to the weapon
+	return attack;
 }
 
 inline std::string GameEngine::BoardObjects::Hero::GetDebugString() const
 {
 	std::ostringstream oss;
 	oss << "HP: " << this->hp << " + " << this->armor << std::endl;
+	if (this->weapon.IsVaild()) {
+		oss << "Weapon: [" << this->weapon.card_id << "] " << this->weapon.attack << " " << this->weapon.durability << std::endl;
+	}
 
 	return oss.str();
 }
@@ -78,6 +109,8 @@ namespace std {
 			GameEngine::hash_combine(result, s.armor);
 			GameEngine::hash_combine(result, s.weapon);
 			GameEngine::hash_combine(result, s.hero_power);
+			GameEngine::hash_combine(result, s.attacked_times);
+			GameEngine::hash_combine(result, s.freezed);
 
 			return result;
 		}

@@ -36,7 +36,7 @@ inline int GameEngine::BoardObjects::MinionManipulator::GetAttack() const
 	return this->minion->stat.GetAttack();
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage, bool poisonous)
+inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage, bool poisonous) const
 {
 	if (this->minion->stat.IsShield()) {
 		this->minion->stat.SetShield(false);
@@ -57,18 +57,18 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsForgetful() const
 	return this->minion->stat.IsForgetful();
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce()
+inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce() const
 {
 	this->minion->attacked_times++;
 	if (this->minion->stat.IsStealth()) this->minion->stat.SetStealth(false);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze)
+inline void GameEngine::BoardObjects::MinionManipulator::SetFreezeAttacker(bool freeze) const
 {
 	this->minion->stat.SetFreezeAttacker(freeze);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::SetFreezed(bool freezed)
+inline void GameEngine::BoardObjects::MinionManipulator::SetFreezed(bool freezed) const
 {
 	this->minion->stat.SetFreezed(freezed);
 }
@@ -195,7 +195,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn
 		// check thaw
 		// Note: if summon in this turn, and freeze it, then the minion will not be unfrozen
 		if (this->minion->attacked_times == 0 && !this->minion->summoned_this_turn) {
-			if (this->minion->stat.IsFreezed()) this->minion->stat.SetFreezed(false);
+			if (this->IsFreezed()) this->minion->stat.SetFreezed(false);
 		}
 	}
 

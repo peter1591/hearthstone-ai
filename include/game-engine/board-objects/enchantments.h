@@ -38,7 +38,7 @@ public: // hooks
 private:
 	typedef typename std::list<std::pair<Enchantment<Target> *, EnchantmentOwner*>> container_type;
 
-	typename container_type::iterator Remove(typename container_type::iterator enchantment, Target const& target);
+	typename container_type::iterator Remove(typename container_type::iterator it, Target const& target);
 
 	container_type enchantments;
 };

@@ -29,13 +29,13 @@ namespace BoardObjects {
 		int GetMaxHP() const;
 		int GetAttack() const;
 
-		void TakeDamage(int damage, bool poisonous);
+		void TakeDamage(int damage, bool poisonous) const;
 		bool IsForgetful() const;
 
-		void AttackedOnce();
+		void AttackedOnce() const;
 
-		void SetFreezeAttacker(bool freeze);
-		void SetFreezed(bool freezed);
+		void SetFreezeAttacker(bool freeze) const;
+		void SetFreezed(bool freezed) const;
 		bool IsFreezeAttacker() const;
 		bool IsFreezed() const;
 
@@ -70,7 +70,6 @@ namespace BoardObjects {
 	public: // triggering hooks
 		void HookAfterMinionAdded(MinionManipulator & added_minion) const;
 		void HookMinionCheckEnraged() const;
-
 
 	public:
 		bool IsPlayerSide() const;

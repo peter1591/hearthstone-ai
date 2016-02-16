@@ -4,6 +4,7 @@
 
 #include "hero.h"
 #include "object-base.h"
+#include "enchantments.h"
 
 namespace GameEngine {
 	class Board;
@@ -21,47 +22,64 @@ namespace GameEngine {
 			Hero const& GetHero() const { return this->hero; }
 
 		public:
-			int GetHP() const { return this->hero.hp; }
-			int GetAttack() const {
-				throw std::runtime_error("not yet implemented");
+			int GetHP() const { 
+				return this->hero.hp; 
 			}
 
-			void TakeDamage(int damage, bool poisonous) {
+			int GetAttack() const { return this->hero.GetAttack(); }
+
+			void TakeDamage(int damage, bool poisonous) const {
 				// Note: poisonous have no effect on heros
 				this->hero.hp -= damage;
 			}
 
-			void AttackedOnce() {
-				// TODO
+			void AttackedOnce() const {
+				if (this->hero.weapon.IsVaild()) {
+					--this->hero.weapon.durability;
+
+					if (this->hero.weapon.durability <= 0) {
+						// destroy weapon
+						this->hero.weapon.InValidate();
+					}
+				}
+				++this->hero.attacked_times;
 			}
 
-			bool IsForgetful() const { 
-				// TODO
-				throw std::runtime_error("not yet implemented");
-			}
-
-			void SetFreezeAttacker(bool freeze) {
-				throw std::runtime_error("not yet implemented");
+			bool IsForgetful() const {
+				return this->hero.weapon.forgetful;
 			}
 
 			bool IsFreezeAttacker() const {
-				// TODO
-				return false;
+				return this->hero.weapon.freeze_attack;
 			}
 
-			void SetFreezed(bool freezed) {
-				// TODO
-				throw std::runtime_error("not yet implemented");
+			void SetFreezed(bool freezed) const {
+				this->hero.freezed = freezed;
 			}
 
 			bool IsFreezed() const {
-				// TODO
-				return false;
+				return this->hero.freezed;
 			}
 
 			bool IsPoisonous() const {
-				// TODO
+				// There's currently no way to make hero attack to be poisonous
 				return false;
+			}
+
+		public: // hooks
+			void TurnStart(bool owner_turn) const
+			{
+				this->hero.attacked_times = 0;
+			}
+
+			void TurnEnd(bool owner_turn) const
+			{
+				if (owner_turn) {
+					// check thaw
+					if (this->hero.attacked_times == 0 && this->IsFreezed()) {
+						this->SetFreezed(false);
+					}
+				}
 			}
 
 		private:

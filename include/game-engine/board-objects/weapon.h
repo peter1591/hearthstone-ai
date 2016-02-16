@@ -11,10 +11,34 @@ namespace GameEngine {
 		{
 		public:
 			int card_id;
+			int cost;
+			int attack;
+			int durability;
+			bool forgetful;
+			bool freeze_attack; // freeze the attacked target?
+			bool windfury;
+
+			Weapon() : card_id(-1) {}
+
+			bool IsVaild() const { return this->card_id > 0; }
+			void InValidate() { this->card_id = -1; }
+
+			void Clear() {
+				this->InValidate();
+				this->forgetful = false;
+				this->freeze_attack = false;
+				this->windfury = false;
+			}
 
 			bool operator==(const Weapon &rhs) const
 			{
 				if (this->card_id != rhs.card_id) return false;
+				if (this->cost != rhs.cost) return false;
+				if (this->attack != rhs.attack) return false;
+				if (this->durability != rhs.durability) return false;
+				if (this->forgetful != rhs.forgetful) return false;
+				if (this->freeze_attack != rhs.freeze_attack) return false;
+				if (this->windfury != rhs.windfury) return false;
 				return true;
 			}
 
@@ -35,6 +59,12 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.card_id);
+			GameEngine::hash_combine(result, s.cost);
+			GameEngine::hash_combine(result, s.attack);
+			GameEngine::hash_combine(result, s.durability);
+			GameEngine::hash_combine(result, s.forgetful);
+			GameEngine::hash_combine(result, s.freeze_attack);
+			GameEngine::hash_combine(result, s.windfury);
 
 			return result;
 		}
