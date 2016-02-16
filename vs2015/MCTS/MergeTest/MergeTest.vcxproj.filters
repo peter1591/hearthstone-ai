@@ -263,6 +263,12 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-equip-weapon.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-equip-weapon.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h">

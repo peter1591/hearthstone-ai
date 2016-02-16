@@ -48,10 +48,6 @@ void InitializeBoard(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
-	player_hero.weapon.card_id = 99999;
-	player_hero.weapon.cost = 2;
-	player_hero.weapon.attack = 3;
-	player_hero.weapon.durability = 10;
 
 	opponent_hero.hp = 20;
 	opponent_hero.armor = 0;

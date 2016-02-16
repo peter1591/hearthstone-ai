@@ -42,8 +42,14 @@ void InitializeBoard(GameEngine::Board &board)
 
 	GameEngine::BoardObjects::Hero player_hero, opponent_hero;
 
-	player_hero.Set(20, 0);
-	opponent_hero.Set(20, 0);
+	player_hero.hp = 20;
+	player_hero.armor = 0;
+	player_hero.weapon.Clear();
+
+	opponent_hero.hp = 20;
+	opponent_hero.armor = 0;
+	opponent_hero.weapon.Clear();
+
 	board.object_manager.SetHero(player_hero, opponent_hero);
 
 	board.opponent_cards.Set(4, 26);

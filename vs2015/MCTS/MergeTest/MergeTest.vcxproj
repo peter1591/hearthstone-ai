@@ -189,11 +189,13 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\helper.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-equip-weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-put-minion.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-attack.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-choose-board-move.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-equip-weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-put-minion.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
