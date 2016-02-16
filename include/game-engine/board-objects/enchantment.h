@@ -7,7 +7,9 @@ namespace GameEngine {
 namespace BoardObjects {
 
 class Minion;
+class MinionManipulator;
 
+template <typename Target>
 class Enchantment
 {
 	friend std::hash<Enchantment>;
@@ -21,25 +23,25 @@ public:
 	Enchantment() {}
 	virtual ~Enchantment() {}
 
-	bool operator==(Enchantment const& rhs) const { return this->EqualsTo(rhs); }
-	bool operator!=(Enchantment const& rhs) const { return !(*this == rhs); }
+	bool operator==(Enchantment<Target> const& rhs) const { return this->EqualsTo(rhs); }
+	bool operator!=(Enchantment<Target> const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
-	virtual void AfterAdded(MinionManipulator const& minion) {}
-	virtual void BeforeRemoved(MinionManipulator const& minion) {}
+	virtual void AfterAdded(Target const& minion) {}
+	virtual void BeforeRemoved(Target const& minion) {}
 
 	// return false if enchant vanished
-	virtual bool TurnEnd(MinionManipulator const& minion) { return true; }
+	virtual bool TurnEnd(Target const& minion) { return true; }
 
 protected:
-	virtual bool EqualsTo(Enchantment const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
+	virtual bool EqualsTo(Enchantment<Target> const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
 	virtual std::size_t GetHash() const = 0; // this is a pure virtual class (i.e., no member to be hashed)
 };
 
 // Introduce some attack/hp/taunt/charge/etc. buffs on minion
 // buff_flags are ORed flags for MinionStat::Flag
 template <int attack_boost, int hp_boost, int buff_flags, bool one_turn>
-class Enchantment_BuffMinion : public Enchantment
+class Enchantment_BuffMinion : public Enchantment<MinionManipulator>
 {
 public:
 	Enchantment_BuffMinion()
@@ -164,8 +166,8 @@ private:
 } // namespace GameEngine
 
 namespace std {
-	template <> struct hash<GameEngine::BoardObjects::Enchantment> {
-		typedef GameEngine::BoardObjects::Enchantment argument_type;
+	template <typename Target> struct hash<GameEngine::BoardObjects::Enchantment<Target> > {
+		typedef GameEngine::BoardObjects::Enchantment<Target> argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			return s.GetHash();

@@ -59,8 +59,8 @@ namespace BoardObjects {
 		void ClearAuras() const;
 
 	public: // enchantments
-		void AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) const;
-		void RemoveEnchantment(Enchantment * enchantment) const;
+		void AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner) const;
+		void RemoveEnchantment(Enchantment<MinionManipulator> * enchantment) const;
 		void ClearEnchantments() const;
 
 	public: // hooks

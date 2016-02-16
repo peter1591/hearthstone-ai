@@ -7,11 +7,12 @@ namespace GameEngine {
 namespace BoardObjects {
 
 class Minion;
-class Enchantment;
+template <typename Target> class Enchantment;
 class EnchantmentOwner;
 class MinionManipulator;
 
 // Maintains the lifetime of Enchantment
+template <typename Target>
 class Enchantments
 {
 	friend std::hash<Enchantments>;
@@ -27,17 +28,17 @@ public:
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
 
-	void Add(Enchantment * enchantment, EnchantmentOwner * owner, GameEngine::BoardObjects::MinionManipulator const& minion);
-	void Remove(Enchantment * enchantment, GameEngine::BoardObjects::MinionManipulator const& target);
-	void Clear(GameEngine::BoardObjects::MinionManipulator const& target);
+	void Add(Enchantment<Target> * enchantment, EnchantmentOwner * owner, Target const& minion);
+	void Remove(Enchantment<Target> * enchantment, Target const& target);
+	void Clear(Target const& target);
 
 public: // hooks
-	void TurnEnd(GameEngine::BoardObjects::MinionManipulator const& target);
+	void TurnEnd(Target const& target);
 
 private:
-	typedef std::list<std::pair<Enchantment *, EnchantmentOwner*>> container_type;
+	typedef typename std::list<std::pair<Enchantment<Target> *, EnchantmentOwner*>> container_type;
 
-	container_type::iterator Remove(container_type::iterator enchantment, GameEngine::BoardObjects::MinionManipulator const& target);
+	typename container_type::iterator Remove(typename container_type::iterator enchantment, Target const& target);
 
 	container_type enchantments;
 };
@@ -45,24 +46,24 @@ private:
 class EnchantmentOwner
 {
 public:
-	bool IsEmpty() const { return this->enchantments.empty(); }
+	bool IsEmpty() const;
 
 	void RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator const& owner);
 
 	// hooks
-	void EnchantmentAdded(Enchantment * enchantment, MinionManipulator const& target);
-	void EnchantmentRemoved(Enchantment * enchantment, MinionManipulator const& target);
+	void EnchantmentAdded(Enchantment<MinionManipulator> * enchantment, MinionManipulator const& target);
+	void EnchantmentRemoved(Enchantment<MinionManipulator> * enchantment, MinionManipulator const& target);
 
 private:
-	std::map<Enchantment *, Minion const*> enchantments;
+	std::map<Enchantment<MinionManipulator> *, Minion const*> minion_enchantments;
 };
 
 } // namespace BoardObjects
 } // namespace GameEngine
 
 namespace std {
-	template <> struct hash<GameEngine::BoardObjects::Enchantments> {
-		typedef GameEngine::BoardObjects::Enchantments argument_type;
+	template <typename Target> struct hash<GameEngine::BoardObjects::Enchantments<Target> > {
+		typedef GameEngine::BoardObjects::Enchantments<Target> argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const;
 	};

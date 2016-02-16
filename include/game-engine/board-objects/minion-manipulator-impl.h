@@ -149,12 +149,12 @@ inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras() const
 	this->minion->auras.Clear(*this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment * enchantment, EnchantmentOwner * owner) const
+inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner) const
 {
 	this->minion->enchantments.Add(enchantment, owner, *this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment * enchantment) const
+inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment<MinionManipulator> * enchantment) const
 {
 	this->minion->enchantments.Remove(enchantment, *this);
 }

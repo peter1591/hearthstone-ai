@@ -62,7 +62,7 @@ public:
 
 	std::list<OnDeathTrigger> triggers_on_death;
 
-	Enchantments enchantments;
+	Enchantments<MinionManipulator> enchantments;
 	Auras auras; // owned auras
 };
 
