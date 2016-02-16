@@ -116,11 +116,15 @@ class Board
 
 		typedef Move::PlayerPlayMinionData PlayerPlayMinionData;
 		typedef Move::OpponentPlayMinionData OpponentPlayMinionData;
+		typedef Move::PlayerEquipWeaponData PlayerEquipWeaponData;
+		typedef Move::OpponentEquipWeaponData OpponentEquipWeaponData;
 		typedef Move::AttackData AttackData;
 
 		union Data {
 			PlayerPlayMinionData player_play_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
+			PlayerEquipWeaponData player_equip_weapon_data;
+			OpponentEquipWeaponData opponent_equip_weapon_data;
 			AttackData attack_data;
 
 			bool operator==(const Data &rhs) const = delete;
@@ -157,12 +161,20 @@ inline bool Board::operator==(const Board &rhs) const
 		if (this->data.player_play_minion_data != rhs.data.player_play_minion_data) return false;
 		break;
 
-	case GameEngine::STAGE_OPPONENT_PUT_MINION:
+	case STAGE_OPPONENT_PUT_MINION:
 		if (this->data.opponent_play_minion_data != rhs.data.opponent_play_minion_data) return false;
 		break;
 
-	case GameEngine::STAGE_PLAYER_ATTACK:
-	case GameEngine::STAGE_OPPONENT_ATTACK:
+	case STAGE_PLAYER_EQUIP_WEAPON:
+		if (this->data.player_equip_weapon_data != rhs.data.player_equip_weapon_data) return false;
+		break;
+
+	case STAGE_OPPONENT_EQUIP_WEAPON:
+		if (this->data.opponent_equip_weapon_data != rhs.data.opponent_equip_weapon_data) return false;
+		break;
+
+	case STAGE_PLAYER_ATTACK:
+	case STAGE_OPPONENT_ATTACK:
 		if (this->data.attack_data != rhs.data.attack_data) return false;
 		break;
 
@@ -208,6 +220,14 @@ namespace std {
 
 				case GameEngine::STAGE_OPPONENT_PUT_MINION:
 					GameEngine::hash_combine(result, s.data.opponent_play_minion_data);
+					break;
+
+				case GameEngine::STAGE_PLAYER_EQUIP_WEAPON:
+					GameEngine::hash_combine(result, s.data.player_equip_weapon_data);
+					break;
+
+				case GameEngine::STAGE_OPPONENT_EQUIP_WEAPON:
+					GameEngine::hash_combine(result, s.data.opponent_equip_weapon_data);
 					break;
 
 				case GameEngine::STAGE_PLAYER_ATTACK:

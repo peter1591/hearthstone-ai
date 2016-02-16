@@ -113,6 +113,9 @@ class Card
 		struct Weapon {
 			int attack;
 			int durability;
+			bool forgetful;
+			bool freeze;
+			bool windfury;
 
 			bool operator==(const Weapon &rhs) const {
 				if (this->attack != rhs.attack) return false;
@@ -160,6 +163,10 @@ inline std::string Card::GetDebugString() const
 	else if (this->type == TYPE_SPELL)
 	{
 		oss << "S" << this->cost;
+	}
+	else if (this->type == TYPE_WEAPON)
+	{
+		oss << "W" << this->cost << this->data.weapon.attack << this->data.weapon.durability;
 	}
 	else {
 		oss << "???";

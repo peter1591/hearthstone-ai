@@ -35,7 +35,6 @@ class StageOpponentChooseBoardMove
 			SlotIndexBitmap attacker;
 			SlotIndexBitmap attacked;
 
-			// TODO: check if player has weapon
 			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE, board);
 
 			if (!attacker.None()) {

@@ -24,6 +24,8 @@ public: // return true if game state changed (e.g., win/loss)
 	// no battle cry
 	static bool SummonMinion(Card const& card, BoardObjects::MinionInserter & inserter);
 
+	static bool EquipWeapon(Board & board, Card const& card, SlotIndex playing_side, Move::EquipWeaponData const& data);
+
 public:
 	// handle minion/hero attack, calculate damages
 	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);

@@ -30,9 +30,14 @@ class StagePlayerChooseBoardMove
 				case Card::TYPE_MINION:
 					if (!can_play_minion) continue;
 					GetNextMove_PlayMinion(board, hand_idx, next_move_getter);
+					break;
+
+				case Card::TYPE_WEAPON:
+					GetNextMove_EquipWeapon(board, hand_idx, next_move_getter);
+					break;
 
 				default:
-					continue; // TODO: handle other card types
+					break;
 				}
 			}
 
@@ -40,7 +45,6 @@ class StagePlayerChooseBoardMove
 			SlotIndexBitmap attacker;
 			SlotIndexBitmap attacked;
 
-			// TODO: check if player has weapon
 			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE, board);
 
 			if (!attacker.None()) {
@@ -72,6 +76,7 @@ class StagePlayerChooseBoardMove
 
 			constexpr int weight_end_turn = 1;
 			constexpr int weight_play_minion = 100;
+			constexpr int weight_equip_weapon = 100;
 			constexpr int weight_attack = 100;
 
 			moves.Clear();
@@ -103,11 +108,29 @@ class StagePlayerChooseBoardMove
 					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.GetPlayerMinionsCount());
 					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
+					
+					moves.AddMove(move, weight_play_minion);
+					break;
 
+				case Card::TYPE_WEAPON:
+					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
+
+					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements)
+						&& meet_requirements == false)
+					{
+						break;
+					}
+
+					move.action = Move::ACTION_PLAYER_EQUIP_WEAPON;
+					move.data.player_equip_weapon_data.hand_card = hand_idx;
+					if (required_targets.None()) move.data.player_equip_weapon_data.data.target = SLOT_INVALID;
+					else move.data.player_equip_weapon_data.data.target = required_targets.GetOneTarget();
 
 					moves.AddMove(move, weight_play_minion);
+					break;
+
 				default:
-					continue; // TODO: handle other card types
+					break; // TODO: handle other card types
 				}
 			}
 
@@ -150,6 +173,9 @@ class StagePlayerChooseBoardMove
 				case Move::ACTION_PLAYER_PLAY_MINION:
 					return StagePlayerChooseBoardMove::PlayMinion(board, move);
 
+				case Move::ACTION_PLAYER_EQUIP_WEAPON:
+					return StagePlayerChooseBoardMove::EquipWeapon(board, move);
+
 				case Move::ACTION_ATTACK:
 					return StagePlayerChooseBoardMove::PlayerAttack(board, move);
 
@@ -190,10 +216,35 @@ class StagePlayerChooseBoardMove
 #endif
 		}
 
+		static void GetNextMove_EquipWeapon(Board const& board, Hand::Locator hand_card, NextMoveGetter &next_move_getter)
+		{
+			const Card &playing_card = board.player_hand.GetCard(hand_card);
+
+			if (board.player_stat.crystal.GetCurrent() < playing_card.cost) return;
+
+			SlotIndexBitmap required_targets;
+			bool meet_requirements;
+			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements) &&
+				meet_requirements == false)
+			{
+				return;
+			}
+
+			// TODO: check play requirements
+
+			next_move_getter.AddItem(NextMoveGetter::ItemPlayerEquipWeapon(hand_card, required_targets));
+		}
+
 		static void PlayMinion(Board &board, const Move &move)
 		{
 			board.data.player_play_minion_data = move.data.player_play_minion_data;
 			board.stage = STAGE_PLAYER_PUT_MINION;
+		}
+
+		static void EquipWeapon(Board &board, const Move &move)
+		{
+			board.data.player_equip_weapon_data = move.data.player_equip_weapon_data;
+			board.stage = STAGE_PLAYER_EQUIP_WEAPON;
 		}
 
 		static void PlayerAttack(Board &board, const Move &move)

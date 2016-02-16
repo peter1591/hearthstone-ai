@@ -69,11 +69,17 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, playing_side, play_minion_data);
 	}
 
+	static bool BattleCry_Weapon(int card_id, GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+	{
+		return CardCallbackManager::HandleCallback<Callback_BattleCry_Weapon>(card_id, board, playing_side, equip_weapon_data);
+	}
+
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
 
 	DECLARE_CARD_CALLBACK(AfterSummoned)
 	DECLARE_CARD_CALLBACK(BattleCry)
+	DECLARE_CARD_CALLBACK(BattleCry_Weapon)
 	DECLARE_CARD_CALLBACK(GetRequiredTargets)
 
 #undef DECLARE_CARD_CALLBACK

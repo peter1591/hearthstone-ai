@@ -17,6 +17,8 @@ class Move
 			ACTION_GAME_FLOW,
 			ACTION_PLAYER_PLAY_MINION,
 			ACTION_OPPONENT_PLAY_MINION,
+			ACTION_PLAYER_EQUIP_WEAPON,
+			ACTION_OPPONENT_EQUIP_WEAPON,
 			ACTION_ATTACK,
 			ACTION_END_TURN,
 		};
@@ -38,6 +40,19 @@ class Move
 			}
 
 			bool operator!=(PlayMinionData const& rhs) const { return !(*this == rhs); }
+		};
+
+		struct EquipWeaponData
+		{
+			SlotIndex target;
+
+			bool operator==(EquipWeaponData const& rhs) const
+			{
+				if (this->target != rhs.target) return false;
+				return true;
+			}
+
+			bool operator!=(EquipWeaponData const& rhs) const { return !(*this == rhs); }
 		};
 
 		struct PlayerPlayMinionData {
@@ -69,6 +84,34 @@ class Move
 			bool operator!=(OpponentPlayMinionData const& rhs) const { return !(*this == rhs); }
 		};
 
+		struct PlayerEquipWeaponData {
+			Hand::Locator hand_card;
+			EquipWeaponData data;
+
+			bool operator==(PlayerEquipWeaponData const& rhs) const
+			{
+				if (this->hand_card != rhs.hand_card) return false;
+				if (this->data != rhs.data) return false;
+				return true;
+			}
+
+			bool operator!=(PlayerEquipWeaponData const& rhs) const { return !(*this == rhs); }
+		};
+
+		struct OpponentEquipWeaponData {
+			Card card;
+			EquipWeaponData data;
+
+			bool operator==(OpponentEquipWeaponData const& rhs) const
+			{
+				if (this->card != rhs.card) return false;
+				if (this->data != rhs.data) return false;
+				return true;
+			}
+
+			bool operator!=(OpponentEquipWeaponData const& rhs) const { return !(*this == rhs); }
+		};
+
 		struct AttackData {
 			SlotIndex attacker_idx;
 			SlotIndex attacked_idx;
@@ -87,6 +130,8 @@ class Move
 			GameFlowData game_flow_data;
 			PlayerPlayMinionData player_play_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
+			PlayerEquipWeaponData player_equip_weapon_data;
+			OpponentEquipWeaponData opponent_equip_weapon_data;
 			AttackData attack_data;
 		};
 
@@ -131,6 +176,14 @@ inline bool Move::operator==(const Move &rhs) const
 		if (this->data.opponent_play_minion_data != rhs.data.opponent_play_minion_data) return false;
 		break;
 
+	case ACTION_PLAYER_EQUIP_WEAPON:
+		if (this->data.player_equip_weapon_data != rhs.data.player_equip_weapon_data) return false;
+		break;
+
+	case ACTION_OPPONENT_EQUIP_WEAPON:
+		if (this->data.opponent_equip_weapon_data != rhs.data.opponent_equip_weapon_data) return false;
+		break;
+
 	case ACTION_ATTACK:
 		if (this->data.attack_data != rhs.data.attack_data) return false;
 		break;
@@ -169,6 +222,16 @@ inline std::string Move::GetDebugString() const
 		oss << ", target = " << this->data.opponent_play_minion_data.data.target;
 		break;
 
+	case Move::ACTION_PLAYER_EQUIP_WEAPON:
+		oss << "[Player equip weapon] hand idx = " << this->data.player_equip_weapon_data.hand_card;
+		oss << ", target = " << this->data.player_equip_weapon_data.data.target;
+		break;
+
+	case Move::ACTION_OPPONENT_EQUIP_WEAPON:
+		oss << "[Opponent equip weapon] card = " << this->data.opponent_equip_weapon_data.card.id;
+		oss << ", target = " << this->data.opponent_equip_weapon_data.data.target;
+		break;
+
 	case Move::ACTION_ATTACK:
 		oss << "[Attack] attacking = " << this->data.attack_data.attacker_idx
 			<< ", attacked = " << this->data.attack_data.attacked_idx;
@@ -202,6 +265,18 @@ namespace std {
 		}
 	};
 
+	template <> struct hash<GameEngine::Move::EquipWeaponData> {
+		typedef GameEngine::Move::EquipWeaponData argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.target);
+
+			return result;
+		}
+	};
+
 	template <> struct hash<GameEngine::Move::PlayerPlayMinionData> {
 		typedef GameEngine::Move::PlayerPlayMinionData argument_type;
 		typedef std::size_t result_type;
@@ -217,6 +292,32 @@ namespace std {
 
 	template <> struct hash<GameEngine::Move::OpponentPlayMinionData> {
 		typedef GameEngine::Move::OpponentPlayMinionData argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.card);
+			GameEngine::hash_combine(result, s.data);
+
+			return result;
+		}
+	};
+
+	template <> struct hash<GameEngine::Move::PlayerEquipWeaponData> {
+		typedef GameEngine::Move::PlayerEquipWeaponData argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.hand_card);
+			GameEngine::hash_combine(result, s.data);
+
+			return result;
+		}
+	};
+
+	template <> struct hash<GameEngine::Move::OpponentEquipWeaponData> {
+		typedef GameEngine::Move::OpponentEquipWeaponData argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

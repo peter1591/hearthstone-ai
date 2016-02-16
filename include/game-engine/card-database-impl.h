@@ -37,18 +37,20 @@ namespace GameEngine {
 
 	inline void CardDatabase::ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
 	{
-		if (!json_card.isMember("mechanics")) return;
-
-		Json::Value json_mechanics = json_card["mechanics"];
-
-		if (json_mechanics.isArray() == false) return;
-
 		new_card.data.minion.taunt = false;
 		new_card.data.minion.charge = false;
 		new_card.data.minion.shield = false;
 		new_card.data.minion.stealth = false;
 		new_card.data.minion.forgetful = false;
 		new_card.data.minion.freeze = false;
+		new_card.data.minion.windfury = false;
+		new_card.data.minion.poisonous = false;
+
+		if (!json_card.isMember("mechanics")) return;
+
+		Json::Value json_mechanics = json_card["mechanics"];
+
+		if (json_mechanics.isArray() == false) return;
 
 		for (auto const& json_mechanic: json_mechanics)
 		{
@@ -76,6 +78,50 @@ namespace GameEngine {
 			}
 			else if (mechanic == "POISONOUS") {
 				new_card.data.minion.poisonous = true;
+			}
+			else if (mechanic == "OVERLOAD") { // TODO
+			}
+			else if (mechanic == "AURA" ||
+				mechanic == "DEATHRATTLE" ||
+				mechanic == "INSPIRE" ||
+				mechanic == "BATTLECRY" ||
+				mechanic == "SPELLPOWER" ||
+				mechanic == "COMBO" ||
+				mechanic == "ENRAGED" ||
+				mechanic == "ADJACENT_BUFF" ||
+				mechanic == "InvisibleDeathrattle" ||
+				mechanic == "ImmuneToSpellpower") {
+				// write hard-coded
+			}
+			else {
+				throw std::runtime_error("unsupported mechanic");
+			}
+		}
+	}
+
+	inline void CardDatabase::ProcessWeaponCardMechanics(Json::Value const& json_card, Card & new_card)
+	{
+		new_card.data.weapon.forgetful = false;
+		new_card.data.weapon.freeze = false;
+		new_card.data.weapon.windfury = false;
+
+		if (!json_card.isMember("mechanics")) return;
+
+		Json::Value json_mechanics = json_card["mechanics"];
+
+		if (json_mechanics.isArray() == false) return;
+
+		for (auto const& json_mechanic : json_mechanics)
+		{
+			std::string mechanic = json_mechanic.asString();
+			if (mechanic == "FORGETFUL") {
+				new_card.data.minion.forgetful = true;
+			}
+			else if (mechanic == "FREEZE") {
+				new_card.data.minion.freeze = true;
+			}
+			else if (mechanic == "WINDFURY") {
+				new_card.data.minion.windfury = true;
 			}
 			else if (mechanic == "OVERLOAD") { // TODO
 			}
@@ -224,6 +270,8 @@ namespace GameEngine {
 		new_card.data.weapon.attack = json_card["attack"].asInt();
 		new_card.data.weapon.durability = json_card["durability"].asInt();
 		new_card.id = this->GetAvailableCardId();
+
+		ProcessWeaponCardMechanics(json_card, new_card);
 	}
 
 	inline void CardDatabase::AddCard(Card const & card, std::string const& origin_id)

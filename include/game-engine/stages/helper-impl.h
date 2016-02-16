@@ -214,6 +214,20 @@ namespace GameEngine
 		return true;
 	}
 
+	inline bool StageHelper::EquipWeapon(Board & board, Card const & card, SlotIndex playing_side, Move::EquipWeaponData const & data)
+	{
+		auto & playing_hero = board.object_manager.GetHeroBySide(board, playing_side);
+
+		playing_hero.DestroyWeapon();
+
+		Cards::CardCallbackManager::BattleCry_Weapon(card.id, board, playing_side, data);
+		if (StageHelper::CheckHeroMinionDead(board)) return true;
+
+		playing_hero.EquipWeapon(card);
+
+		return false;
+	}
+
 	inline void StageHelper::Fatigue(GameEngine::Board & board, SlotIndex side)
 	{
 		if (SlotIndexHelper::IsPlayerSide(side)) {

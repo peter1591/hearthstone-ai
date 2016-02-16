@@ -42,6 +42,36 @@ public:
 		bool done;
 	};
 
+	class ItemPlayerEquipWeapon
+	{
+	public:
+		ItemPlayerEquipWeapon(Hand::Locator hand_card, SlotIndexBitmap required_targets);
+		ItemPlayerEquipWeapon* Clone() const;
+		bool GetNextMove(Move & move);
+		bool operator==(ItemPlayerEquipWeapon const& rhs) const;
+		bool operator!=(ItemPlayerEquipWeapon const& rhs) const;
+
+	private:
+		Hand::Locator hand_card;
+		SlotIndexBitmap required_targets;
+		bool done;
+	};
+
+	class ItemOpponentEquipWeapon
+	{
+	public:
+		ItemOpponentEquipWeapon(Card card, SlotIndexBitmap required_targets);
+		ItemOpponentEquipWeapon* Clone() const;
+		bool GetNextMove(Move & move);
+		bool operator==(ItemOpponentEquipWeapon const& rhs) const;
+		bool operator!=(ItemOpponentEquipWeapon const& rhs) const;
+
+	private:
+		Card playing_card;
+		SlotIndexBitmap required_targets;
+		bool done;
+	};
+
 	class ItemAttack
 	{
 	public:
@@ -65,10 +95,14 @@ public:
 	void AddItem(ItemAttack && items);
 	void AddItem(ItemPlayerPlayMinion && items);
 	void AddItem(ItemOpponentPlayMinion && items);
+	void AddItem(ItemPlayerEquipWeapon && items);
+	void AddItem(ItemOpponentEquipWeapon && items);
 	void AddItems(std::list<Move> && items);
 	void AddItems(std::list<ItemAttack> && items);
 	void AddItems(std::list<ItemPlayerPlayMinion> && items);
 	void AddItems(std::list<ItemOpponentPlayMinion> && items);
+	void AddItems(std::list<ItemPlayerEquipWeapon> && items);
+	void AddItems(std::list<ItemOpponentEquipWeapon> && items);
 
 	bool GetNextMove(Move &move);
 	bool Empty();
@@ -85,6 +119,8 @@ private:
 	std::list<ItemAttack> items_player_attack;
 	std::list<ItemPlayerPlayMinion> items_player_play_minion;
 	std::list<ItemOpponentPlayMinion> items_opponent_play_minion;
+	std::list<ItemPlayerEquipWeapon> items_player_equip_weapon;
+	std::list<ItemOpponentEquipWeapon> items_opponent_equip_weapon;
 
 	bool is_cached_move_valid;
 	Move cached_move;
@@ -163,6 +199,26 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveG
 	this->items_opponent_play_minion.splice(this->items_opponent_play_minion.end(), std::move(items));
 }
 
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerEquipWeapon && item)
+{
+	this->items_player_equip_weapon.push_back(std::move(item));
+}
+
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerEquipWeapon> && items)
+{
+	this->items_player_equip_weapon.splice(this->items_player_equip_weapon.end(), std::move(items));
+}
+
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemOpponentEquipWeapon && item)
+{
+	this->items_opponent_equip_weapon.push_back(std::move(item));
+}
+
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemOpponentEquipWeapon> && items)
+{
+	this->items_opponent_equip_weapon.splice(this->items_opponent_equip_weapon.end(), std::move(items));
+}
+
 template<typename T>
 inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& container, Move &move)
 {
@@ -193,6 +249,8 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
 	if (this->GetNextMoveFromContainer(this->items_player_attack, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_player_play_minion, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_opponent_play_minion, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_player_equip_weapon, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_opponent_equip_weapon, move)) return true;
 	return false;
 }
 
@@ -202,6 +260,8 @@ inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) c
 	if (!IsEqual(this->items_player_attack, rhs.items_player_attack)) return false;
 	if (!IsEqual(this->items_player_play_minion, rhs.items_player_play_minion)) return false;
 	if (!IsEqual(this->items_opponent_play_minion, rhs.items_opponent_play_minion)) return false;
+	if (!IsEqual(this->items_player_equip_weapon, rhs.items_player_equip_weapon)) return false;
+	if (!IsEqual(this->items_opponent_equip_weapon, rhs.items_opponent_equip_weapon)) return false;
 	return true;
 }
 
@@ -307,6 +367,94 @@ inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator==(ItemO
 }
 
 inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator!=(ItemOpponentPlayMinion const & rhs) const
+{
+	return !(*this == rhs);
+}
+
+inline GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::ItemPlayerEquipWeapon(
+	Hand::Locator hand_card, SlotIndexBitmap required_targets)
+	: hand_card(hand_card), required_targets(required_targets)
+{
+	this->done = false;
+}
+
+inline GameEngine::NextMoveGetter::ItemPlayerEquipWeapon * GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::Clone() const
+{
+	return new ItemPlayerEquipWeapon(*this);
+}
+
+inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::GetNextMove(Move & move)
+{
+	if (this->done) return false;
+
+	move.action = Move::ACTION_PLAYER_EQUIP_WEAPON;
+	move.data.player_equip_weapon_data.hand_card = this->hand_card;
+
+	if (this->required_targets.None())
+	{
+		move.data.player_equip_weapon_data.data.target = SLOT_INVALID;
+		this->done = true;
+	}
+	else {
+		move.data.player_equip_weapon_data.data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.player_equip_weapon_data.data.target);
+		if (this->required_targets.None()) this->done = true;
+	}
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::operator==(ItemPlayerEquipWeapon const & rhs) const
+{
+	if (this->hand_card != rhs.hand_card) return false;
+	if (this->required_targets != rhs.required_targets) return false;
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::operator!=(ItemPlayerEquipWeapon const & rhs) const
+{
+	return !(*this == rhs);
+}
+
+inline GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::ItemOpponentEquipWeapon(
+	Card playing_card, SlotIndexBitmap required_targets)
+	: playing_card(playing_card), required_targets(required_targets)
+{
+	this->done = false;
+}
+
+inline GameEngine::NextMoveGetter::ItemOpponentEquipWeapon * GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::Clone() const
+{
+	return new ItemOpponentEquipWeapon(*this);
+}
+
+inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::GetNextMove(Move & move)
+{
+	if (this->done) return false;
+
+	move.action = Move::ACTION_OPPONENT_EQUIP_WEAPON;
+	move.data.opponent_equip_weapon_data.card = this->playing_card;
+
+	if (this->required_targets.None())
+	{
+		move.data.opponent_equip_weapon_data.data.target = SLOT_INVALID;
+		this->done = true;
+	}
+	else {
+		move.data.opponent_equip_weapon_data.data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.opponent_equip_weapon_data.data.target);
+		if (this->required_targets.None()) this->done = true;
+	}
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::operator==(ItemOpponentEquipWeapon const & rhs) const
+{
+	if (this->playing_card != rhs.playing_card) return false;
+	if (this->required_targets != rhs.required_targets) return false;
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::operator!=(ItemOpponentEquipWeapon const & rhs) const
 {
 	return !(*this == rhs);
 }

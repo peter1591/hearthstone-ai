@@ -87,6 +87,8 @@ public: // Manipulate heros
 	bool IsPlayerHeroAttackable() const { return this->player_hero.Attackable(); }
 	bool IsOpponentHeroAttackable() const { return this->opponent_hero.Attackable(); }
 
+	HeroManipulator GetHeroBySide(GameEngine::Board & board, SlotIndex side);
+
 public: // Manipulate minions
 	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
 	bool IsOpponentMinionsFull() const { return this->opponent_minions.IsFull(); }
@@ -179,6 +181,13 @@ inline void ObjectManager::SetHero(Hero const & player, Hero const & opponent)
 {
 	this->player_hero = player;
 	this->opponent_hero = opponent;
+}
+
+inline HeroManipulator ObjectManager::GetHeroBySide(GameEngine::Board & board, SlotIndex side)
+{
+	if (side == SLOT_PLAYER_SIDE) return HeroManipulator(board, this->player_hero);
+	else if (side == SLOT_OPPONENT_SIDE) return HeroManipulator(board, this->opponent_hero);
+	else throw std::runtime_error("invalid argument");
 }
 
 inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex idx)

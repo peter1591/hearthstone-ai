@@ -82,6 +82,27 @@ namespace GameEngine {
 				}
 			}
 
+			void DestroyWeapon() const
+			{
+				// TODO: trigger weapon deathrattle
+				this->hero.weapon.InValidate();
+			}
+
+			void EquipWeapon(Card const& card) const
+			{
+#ifdef DEBUG
+				if (card.type != Card::TYPE_WEAPON) throw std::runtime_error("invalid argument");
+#endif
+
+				this->hero.weapon.card_id = card.id;
+				this->hero.weapon.cost = card.cost;
+				this->hero.weapon.attack = card.data.weapon.attack;
+				this->hero.weapon.durability = card.data.weapon.durability;
+				this->hero.weapon.forgetful = card.data.weapon.forgetful;
+				this->hero.weapon.freeze_attack = card.data.weapon.freeze;
+				this->hero.weapon.windfury = card.data.weapon.windfury;
+			}
+
 		private:
 			Board & board;
 			Hero & hero;
