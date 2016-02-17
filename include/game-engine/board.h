@@ -27,21 +27,18 @@ class Board
 {
 	public:
 		Board() :
-			player_deck(&this->random_generator),
+			player_deck(this->random_generator),
 			stage(STAGE_UNKNOWN)
 		{
 		}
 
-		Board(const Board &rhs) = delete;
-		Board & operator=(const Board &rhs) = delete;
-
-		Board & CloneFrom(Board const& rhs) {
-			if (this == &rhs) return *this;
-
+	private: // deep copy; marked as private, so caller need to call Clone()
+		Board(const Board &rhs) :
+			player_deck(this->random_generator, rhs.player_deck)
+		{
 			this->player_stat = rhs.player_stat;
 			this->player_secrets = rhs.player_secrets;
 			this->player_hand = rhs.player_hand;
-			this->player_deck.Assign(rhs.player_deck, &this->random_generator);
 			this->opponent_stat = rhs.opponent_stat;
 			this->opponent_secrets = rhs.opponent_secrets;
 			this->opponent_cards = rhs.opponent_cards;
@@ -51,27 +48,31 @@ class Board
 			this->stage = rhs.stage;
 			this->random_generator = rhs.random_generator;
 			this->data = rhs.data;
+		}
+		Board & operator=(const Board &rhs) = delete;
 
-			return *this;
+	public:
+		static Board Clone(Board const& rhs) {
+			return Board(rhs);
 		}
 
-		Board(Board && rhs) : player_deck(&this->random_generator) { *this = std::move(rhs); }
+		Board(Board && rhs) : player_deck(this->random_generator) { *this = std::move(rhs); }
 		Board & operator=(Board && rhs) {
-			if (this == &rhs) return *this;
+			if (this != &rhs) {
+				this->player_stat = std::move(rhs.player_stat);
+				this->player_secrets = std::move(rhs.player_secrets);
+				this->player_hand = std::move(rhs.player_hand);
+				this->player_deck = std::move(rhs.player_deck);
+				this->opponent_stat = std::move(rhs.opponent_stat);
+				this->opponent_secrets = std::move(rhs.opponent_secrets);
+				this->opponent_cards = std::move(rhs.opponent_cards);
 
-			this->player_stat = std::move(rhs.player_stat);
-			this->player_secrets = std::move(rhs.player_secrets);
-			this->player_hand = std::move(rhs.player_hand);
-			this->player_deck.Assign(std::move(rhs.player_deck), &this->random_generator);
-			this->opponent_stat = std::move(rhs.opponent_stat);
-			this->opponent_secrets = std::move(rhs.opponent_secrets);
-			this->opponent_cards = std::move(rhs.opponent_cards);
+				this->object_manager = std::move(rhs.object_manager);
 
-			this->object_manager = std::move(rhs.object_manager);
-
-			this->stage = std::move(rhs.stage);
-			this->random_generator = std::move(rhs.random_generator);
-			this->data = std::move(rhs.data);
+				this->stage = std::move(rhs.stage);
+				this->random_generator = std::move(rhs.random_generator);
+				this->data = std::move(rhs.data);
+			}
 
 			return *this;
 		}

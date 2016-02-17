@@ -19,17 +19,15 @@ class Deck
 	friend std::hash<Deck>;
 
 	public:
-		Deck(RandomGenerator *random_generator);
+		Deck(RandomGenerator & random_generator);
 
-	public:
-		void Assign(const Deck &rhs, RandomGenerator *random_generator) {
-			this->cards = rhs.cards;
-			this->random_generator = random_generator;
-		}
-		void Assign(Deck &&rhs, RandomGenerator *random_generator) {
-			this->cards = std::move(rhs.cards);
-			this->random_generator = random_generator;
-		}
+		Deck(Deck const& rhs) = delete;
+		Deck(RandomGenerator & random_generator, Deck const& rhs);
+		Deck & operator=(Deck const& rhs);
+
+		Deck(Deck && rhs) = delete;
+		Deck(RandomGenerator & random_generator, Deck && rhs); // move
+		Deck & operator=(Deck && rhs);
 
 	public:
 		// Add a card to deck
@@ -46,19 +44,35 @@ class Deck
 
 	private:
 		std::vector<Card> cards;
-		RandomGenerator *random_generator;
+		RandomGenerator & random_generator;
 };
 
-inline Deck::Deck(RandomGenerator *random_generator) :
+inline Deck::Deck(RandomGenerator & random_generator) :
 	random_generator(random_generator)
 {
-#ifdef DEBUG
-	if (random_generator == nullptr) {
-		throw std::runtime_error("Deck should be initialized with a valid random generator");
-	}
-#endif
-
 	this->cards.reserve(36);
+}
+
+inline Deck::Deck(RandomGenerator & random_generator, Deck const & rhs) :
+	random_generator(random_generator)
+{
+	*this = rhs;
+}
+
+inline Deck & Deck::operator=(Deck const& rhs) {
+	this->cards = rhs.cards;
+	return *this;
+}
+
+inline Deck::Deck(RandomGenerator & random_generator, Deck && rhs) :
+	random_generator(random_generator)
+{
+	*this = std::move(rhs);
+}
+
+inline Deck & Deck::operator=(Deck && rhs) {
+	this->cards = std::move(rhs.cards);
+	return *this;
 }
 
 inline void Deck::AddCard(const Card &card)
@@ -80,7 +94,7 @@ inline Card Deck::Draw()
 	if (UNLIKELY(card_count == 1)) {
 		rand_idx = 0;
 	} else {
-		rand_idx = this->random_generator->GetRandom() % card_count;
+		rand_idx = this->random_generator.GetRandom() % card_count;
 	}
 
 	ret = this->cards[rand_idx];

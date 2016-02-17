@@ -64,7 +64,7 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 {
 	srand(rand_seed);
 
-	this->root_node_board.CloneFrom(board);
+	this->root_node_board = GameEngine::Board::Clone(board);
 #ifdef DEBUG_SAVE_BOARD
 	tree.GetRootNode().board = board;
 #endif
@@ -317,8 +317,7 @@ void MCTS::BackPropagate(bool is_win)
 void MCTS::Iterate()
 {
 	TreeNode *node = &this->tree.GetRootNode();
-	GameEngine::Board board;
-	board.CloneFrom(this->root_node_board);
+	GameEngine::Board board = GameEngine::Board::Clone(this->root_node_board);
 
 #ifdef DEBUG
 	if (!this->traversed_nodes.empty()) throw std::runtime_error("consistency check failed");
