@@ -27,12 +27,12 @@ public:
 	typedef container_type::const_iterator const_iterator;
 
 public:
-	Minions() : pending_removal_count(0) {}
+	Minions(Board & board) : board(board), pending_removal_count(0) {}
 
 	Minions(Minions const& rhs) = delete;
 	Minions & operator=(Minions const& rhs);
 
-	Minions(Minions && rhs) { *this = std::move(rhs); }
+	Minions(Board & board, Minions && rhs) : board(board) { *this = std::move(rhs); }
 	Minions & operator=(Minions && rhs);
 
 	bool operator==(Minions const& rhs) const { return this->minions == rhs.minions; }
@@ -82,19 +82,19 @@ public: // getters
 	}
 
 public: // hooks
-	void TurnStart(GameEngine::Board & board, bool owner_turn) {
+	void TurnStart(bool owner_turn) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			MinionManipulator(board, *this, *it).TurnStart(owner_turn);
+			MinionManipulator(this->board, *this, *it).TurnStart(owner_turn);
 		}
 	}
-	void TurnEnd(GameEngine::Board & board, bool owner_turn) {
+	void TurnEnd( bool owner_turn) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			MinionManipulator(board, *this, *it).TurnEnd(owner_turn);
+			MinionManipulator(this->board, *this, *it).TurnEnd(owner_turn);
 		}
 	}
-	void HookAfterMinionAdded(GameEngine::Board & board, MinionManipulator & added_minion) {
+	void HookAfterMinionAdded(MinionManipulator & added_minion) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			MinionManipulator(board, *this, *it).HookAfterMinionAdded(added_minion);
+			MinionManipulator(this->board, *this, *it).HookAfterMinionAdded(added_minion);
 		}
 	}
 
@@ -108,7 +108,8 @@ public: // debug
 private:
 	static constexpr int max_minions = 7;
 
-private:
+	Board & board;
+
 	int pending_removal_count;
 	container_type minions;
 };

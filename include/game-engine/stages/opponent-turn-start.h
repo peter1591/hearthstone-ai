@@ -21,7 +21,7 @@ class StageOpponentTurnStart
 			if (StageHelper::OpponentDrawCard(board)) return;
 
 			board.opponent_stat.crystal.TurnStart();
-			board.object_manager.OpponentTurnStart(board);
+			board.object_manager.OpponentTurnStart();
 
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 	}

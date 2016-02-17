@@ -16,7 +16,7 @@ class StageOpponentTurnEnd
 
 		static void Go(Board &board)
 		{
-			board.object_manager.OpponentTurnEnd(board);
+			board.object_manager.OpponentTurnEnd();
 
 			// TODO: trigger end-turn actions
 			board.stage = STAGE_PLAYER_TURN_START;

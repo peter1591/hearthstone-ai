@@ -112,10 +112,10 @@ public: // Manipulate minions
 	}
 
 public: // hooks
-	void PlayerTurnStart(GameEngine::Board & board);
-	void PlayerTurnEnd(GameEngine::Board & board);
-	void OpponentTurnStart(GameEngine::Board & board);
-	void OpponentTurnEnd(GameEngine::Board & board);
+	void PlayerTurnStart();
+	void PlayerTurnEnd();
+	void OpponentTurnStart();
+	void OpponentTurnEnd();
 
 	void HookAfterMinionAdded(MinionManipulator & minion);
 
@@ -133,12 +133,14 @@ private:
 };
 
 inline ObjectManager::ObjectManager(Board & board) :
-	board(board), player_hero(board), opponent_hero(board)
+	board(board), player_hero(board), opponent_hero(board),
+	player_minions(board), opponent_minions(board)
 {
 }
 
 inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs) : 
-	board(board), player_hero(board), opponent_hero(board)
+	board(board), player_hero(board), opponent_hero(board),
+	player_minions(board), opponent_minions(board)
 {
 	this->player_hero = rhs.player_hero;
 	this->opponent_hero = rhs.opponent_hero;
@@ -147,7 +149,8 @@ inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs) :
 }
 
 inline ObjectManager::ObjectManager(Board & board, ObjectManager && rhs) :
-	board(board), player_hero(board), opponent_hero(board)
+	board(board), player_hero(board), opponent_hero(board),
+	player_minions(board), opponent_minions(board)
 {
 	*this = std::move(rhs);
 }
@@ -235,42 +238,42 @@ inline MinionInserter ObjectManager::GetMinionInserter(GameEngine::Board & board
 	else throw std::runtime_error("invalid argument");
 }
 
-inline void ObjectManager::PlayerTurnStart(GameEngine::Board & board)
+inline void ObjectManager::PlayerTurnStart()
 {
 	this->player_hero.TurnStart(true);
 	this->opponent_hero.TurnStart(false);
-	this->player_minions.TurnStart(board, true);
-	this->opponent_minions.TurnStart(board, false);
+	this->player_minions.TurnStart(true);
+	this->opponent_minions.TurnStart(false);
 }
 
-inline void ObjectManager::PlayerTurnEnd(GameEngine::Board & board)
+inline void ObjectManager::PlayerTurnEnd()
 {
 	this->player_hero.TurnEnd(true);
 	this->opponent_hero.TurnEnd(false);
-	this->player_minions.TurnEnd(board, true);
-	this->opponent_minions.TurnEnd(board, false);
+	this->player_minions.TurnEnd(true);
+	this->opponent_minions.TurnEnd(false);
 }
 
-inline void ObjectManager::OpponentTurnStart(GameEngine::Board & board)
+inline void ObjectManager::OpponentTurnStart()
 {
 	this->opponent_hero.TurnStart(true);
 	this->player_hero.TurnStart(false);
-	this->opponent_minions.TurnStart(board, true);
-	this->player_minions.TurnStart(board, false);
+	this->opponent_minions.TurnStart(true);
+	this->player_minions.TurnStart(false);
 }
 
-inline void ObjectManager::OpponentTurnEnd(GameEngine::Board & board)
+inline void ObjectManager::OpponentTurnEnd()
 {
 	this->opponent_hero.TurnEnd(true);
 	this->player_hero.TurnEnd(false);
-	this->opponent_minions.TurnEnd(board, true);
-	this->player_minions.TurnEnd(board, false);
+	this->opponent_minions.TurnEnd(true);
+	this->player_minions.TurnEnd(false);
 }
 
 inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion)
 {
-	this->player_minions.HookAfterMinionAdded(this->board, added_minion);
-	this->opponent_minions.HookAfterMinionAdded(this->board, added_minion);
+	this->player_minions.HookAfterMinionAdded(added_minion);
+	this->opponent_minions.HookAfterMinionAdded(added_minion);
 }
 
 inline void ObjectManager::DebugPrint() const
