@@ -85,7 +85,7 @@ namespace BoardObjects {
 	// it can be used as a iterator to iterates all the minions
 	class MinionInserter
 	{
-	private:
+	public:
 		typedef std::list<Minion> minions_container_type;
 		typedef minions_container_type::iterator minions_iterator;
 		typedef minions_container_type::const_iterator minions_const_iterator;

@@ -37,17 +37,17 @@ public:
 			return;
 		}
 
-		auto buff_target = board.object_manager.GetMinionInserter(play_minion_data.target);
-		if (buff_target.IsEnd())
-		{
+		try {
+			auto buff_target = board.object_manager.GetMinionManipulator(play_minion_data.target);
+			auto enchant = new BoardObjects::Enchantment_BuffMinion<attack_boost, 0, 0, true>();
+			buff_target.AddEnchantment(enchant, nullptr);
+		}
+		catch (std::out_of_range ex) {
 #ifdef DEBUG
 			std::cout << "WARNING: buff target vanished." << std::endl;
 #endif
 			return;
 		}
-
-		auto enchant = new BoardObjects::Enchantment_BuffMinion<attack_boost, 0, 0, true>();
-		buff_target.ConverToManipulator().AddEnchantment(enchant, nullptr);
 	}
 };
 

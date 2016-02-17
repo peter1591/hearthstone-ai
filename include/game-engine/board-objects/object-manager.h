@@ -87,8 +87,12 @@ public: // Manipulate heros
 	HeroManipulator & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions
-	MinionConstIteratorWithSlotIndex GetPlayerMinionsIteratorWithIndex() const { return this->player_minions.GetIteratorWithSlotIndex(SLOT_PLAYER_MINION_START); }
-	MinionConstIteratorWithSlotIndex GetOpponentMinionsIteratorWithIndex() const { return this->opponent_minions.GetIteratorWithSlotIndex(SLOT_OPPONENT_MINION_START); }
+	MinionConstIteratorWithSlotIndex GetPlayerMinionsIteratorWithIndex() const { 
+		return MinionConstIteratorWithSlotIndex(this->player_minions, this->player_minions.begin(), SLOT_PLAYER_MINION_START);
+	}
+	MinionConstIteratorWithSlotIndex GetOpponentMinionsIteratorWithIndex() const { 
+		return MinionConstIteratorWithSlotIndex(this->opponent_minions, this->opponent_minions.begin(), SLOT_OPPONENT_MINION_START);
+	}
 
 	MinionManipulator GetMinionManipulator(SlotIndex idx);
 	MinionInserter GetMinionInserter(SlotIndex idx);

@@ -2,7 +2,6 @@
 
 #include "aura.h"
 #include "enchantments.h"
-#include "minions-iterator.h"
 #include "game-engine/board.h"
 
 namespace GameEngine {

@@ -185,7 +185,7 @@ namespace GameEngine
 		return false; // state not changed
 	}
 
-	// return true if stage changedW
+	// return true if stage changed
 	inline bool StageHelper::PlayMinion(Board & board, Card const & card, SlotIndex playing_side, PlayMinionData const & data)
 	{
 		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
@@ -198,7 +198,7 @@ namespace GameEngine
 		return false;
 	}
 
-	// return true if stage changedW
+	// return true if stage changed
 	inline bool StageHelper::SummonMinion(Card const & card, BoardObjects::MinionInserter & inserter)
 	{
 		BoardObjects::Minion summoning_minion;
