@@ -30,8 +30,7 @@ public:
 	Minions() : pending_removal_count(0) {}
 
 	Minions(Minions const& rhs) = delete;
-	Minions & operator=(Minions const& rhs) = delete;
-	Minions & CloneFrom(Minions const& rhs);
+	Minions & operator=(Minions const& rhs);
 
 	Minions(Minions && rhs) { *this = std::move(rhs); }
 	Minions & operator=(Minions && rhs);
@@ -82,6 +81,23 @@ public: // getters
 		return MinionManipulator(board, *this, *it);
 	}
 
+public: // hooks
+	void TurnStart(GameEngine::Board & board, bool owner_turn) {
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			MinionManipulator(board, *this, *it).TurnStart(owner_turn);
+		}
+	}
+	void TurnEnd(GameEngine::Board & board, bool owner_turn) {
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			MinionManipulator(board, *this, *it).TurnEnd(owner_turn);
+		}
+	}
+	void HookAfterMinionAdded(GameEngine::Board & board, MinionManipulator & added_minion) {
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			MinionManipulator(board, *this, *it).HookAfterMinionAdded(added_minion);
+		}
+	}
+
 public: // debug
 	void DebugPrint() const {
 		for (const auto &minion : this->minions) {
@@ -116,11 +132,11 @@ namespace std {
 	};
 }
 
-inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::CloneFrom(Minions const & rhs)
+inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions const & rhs)
 {
 	// The MCTS should only clone board from the initialized state
 	// If caller need to clone the initialized state (which has some enchantment placed on heap)
-	// we need to ask the caller to re-initialized the board as he did at the first place
+	// we need to ask the caller to re-initialized the board as he did at the first time
 #ifdef DEBUG
 	for (auto const& minion : rhs.minions)
 	{

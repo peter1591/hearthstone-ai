@@ -169,12 +169,12 @@ namespace GameEngine
 
 	inline bool StageHelper::CheckHeroMinionDead(Board & board)
 	{
-		if (board.object_manager.GetPlayerHero()->GetHP() <= 0) {
+		if (board.object_manager.GetObject(board, SLOT_PLAYER_HERO)->GetHP() <= 0) {
 			board.stage = STAGE_LOSS;
 			return true;
 		}
 
-		if (board.object_manager.GetOpponentHero()->GetHP() <= 0) {
+		if (board.object_manager.GetObject(board, SLOT_OPPONENT_HERO)->GetHP() <= 0) {
 			board.stage = STAGE_WIN;
 			return true;
 		}
@@ -232,11 +232,11 @@ namespace GameEngine
 	{
 		if (SlotIndexHelper::IsPlayerSide(side)) {
 			++board.player_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetPlayerHero(), board.player_stat.fatigue_damage, false);
+			StageHelper::DealDamage(board.object_manager.GetObject(board, SLOT_PLAYER_HERO), board.player_stat.fatigue_damage, false);
 		}
 		else {
 			++board.opponent_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetOpponentHero(), board.opponent_stat.fatigue_damage, false);
+			StageHelper::DealDamage(board.object_manager.GetObject(board, SLOT_OPPONENT_HERO), board.opponent_stat.fatigue_damage, false);
 		}
 	}
 }

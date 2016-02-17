@@ -19,18 +19,19 @@ namespace BoardObjects {
 class BoardObject
 {
 public:
-	explicit BoardObject(HeroManipulator & hero) : hero(&hero),
+	explicit BoardObject(HeroManipulator & hero) : hero(hero),
 		minion(*(Board*)(nullptr), *(Minions*)(nullptr), *(Minion*)(nullptr))
 	{
-		this->ptr = this->hero;
+		this->ptr = &this->hero;
 	}
 
-	explicit BoardObject(MinionManipulator && minion) : minion(minion), hero(nullptr)
+	explicit BoardObject(MinionManipulator && minion) : minion(minion), 
+		hero(*(HeroManipulator*)(nullptr))
 	{
 		this->ptr = &this->minion;
 	}
 
-	bool IsHero() const { return this->ptr == this->hero; }
+	bool IsHero() const { return this->ptr == &this->hero; }
 	bool IsMinion() const { return this->ptr == &this->minion; }
 
 	HeroManipulator & GetHero()
@@ -38,7 +39,7 @@ public:
 #ifdef DEBUG
 		if (this->IsHero() == false) throw std::runtime_error("type not match.");
 #endif
-		return *this->hero;
+		return this->hero;
 	}
 
 	MinionManipulator GetMinion()
@@ -52,7 +53,7 @@ public:
 	ObjectBase * operator->() const { return this->ptr; }
 
 private:
-	HeroManipulator * hero;
+	HeroManipulator & hero;
 	MinionManipulator minion; // a pointer to the actual memory location
 	ObjectBase * ptr;
 };
@@ -77,8 +78,6 @@ public:
 
 public: // Get manipulate object
 	BoardObject GetObject(GameEngine::Board & board, SlotIndex idx);
-	BoardObject GetPlayerHero();
-	BoardObject GetOpponentHero();
 
 public: // Manipulate heros
 	void SetHero(Hero const& player, Hero const& opponent);
@@ -124,6 +123,8 @@ public:
 	void DebugPrint() const;
 
 private:
+	Board & board;
+
 	HeroManipulator player_hero;
 	HeroManipulator opponent_hero;
 
@@ -132,23 +133,21 @@ private:
 };
 
 inline ObjectManager::ObjectManager(Board & board) :
-	player_hero(board), opponent_hero(board)
+	board(board), player_hero(board), opponent_hero(board)
 {
 }
 
-inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs)
-	: player_hero(board), opponent_hero(board)
+inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs) : 
+	board(board), player_hero(board), opponent_hero(board)
 {
 	this->player_hero = rhs.player_hero;
 	this->opponent_hero = rhs.opponent_hero;
-
-	// copy minions
-	this->player_minions.CloneFrom(rhs.player_minions);
-	this->opponent_minions.CloneFrom(rhs.opponent_minions);
+	this->player_minions = rhs.player_minions;
+	this->opponent_minions = rhs.opponent_minions;
 }
 
 inline ObjectManager::ObjectManager(Board & board, ObjectManager && rhs) :
-	player_hero(board), opponent_hero(board)
+	board(board), player_hero(board), opponent_hero(board)
 {
 	*this = std::move(rhs);
 }
@@ -197,25 +196,15 @@ inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex
 	if (idx < SLOT_PLAYER_HERO)
 		throw std::runtime_error("invalid argument");
 	else if (idx == SLOT_PLAYER_HERO)
-		return this->GetPlayerHero();
+		return BoardObject(this->player_hero);
 	else if (idx < SLOT_OPPONENT_HERO)
 		return BoardObject(this->GetMinionManipulator(board, idx));
 	else if (idx == SLOT_OPPONENT_HERO)
-		return this->GetOpponentHero();
+		return BoardObject(this->opponent_hero);
 	else if (idx < SLOT_MAX)
 		return BoardObject(this->GetMinionManipulator(board, idx));
 	else
 		throw std::runtime_error("invalid argument");
-}
-
-inline BoardObject ObjectManager::GetPlayerHero()
-{
-	return BoardObject(this->player_hero);
-}
-
-inline BoardObject ObjectManager::GetOpponentHero()
-{
-	return BoardObject(this->opponent_hero);
 }
 
 inline MinionManipulator ObjectManager::GetMinionManipulator(GameEngine::Board & board, SlotIndex slot_idx)
@@ -248,64 +237,40 @@ inline MinionInserter ObjectManager::GetMinionInserter(GameEngine::Board & board
 
 inline void ObjectManager::PlayerTurnStart(GameEngine::Board & board)
 {
-	this->GetPlayerHero().GetHero().TurnStart(true);
-	this->GetOpponentHero().GetHero().TurnStart(false);
-
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnStart(true);
-	}
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnStart(false);
-	}
+	this->player_hero.TurnStart(true);
+	this->opponent_hero.TurnStart(false);
+	this->player_minions.TurnStart(board, true);
+	this->opponent_minions.TurnStart(board, false);
 }
 
 inline void ObjectManager::PlayerTurnEnd(GameEngine::Board & board)
 {
-	this->GetPlayerHero().GetHero().TurnEnd(true);
-	this->GetOpponentHero().GetHero().TurnEnd(false);
-
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnEnd(true);
-	}
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnEnd(false);
-	}
+	this->player_hero.TurnEnd(true);
+	this->opponent_hero.TurnEnd(false);
+	this->player_minions.TurnEnd(board, true);
+	this->opponent_minions.TurnEnd(board, false);
 }
 
 inline void ObjectManager::OpponentTurnStart(GameEngine::Board & board)
 {
-	this->GetOpponentHero().GetHero().TurnStart(true);
-	this->GetPlayerHero().GetHero().TurnStart(false);
-
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnStart(true);
-	}
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnStart(false);
-	}
+	this->opponent_hero.TurnStart(true);
+	this->player_hero.TurnStart(false);
+	this->opponent_minions.TurnStart(board, true);
+	this->player_minions.TurnStart(board, false);
 }
 
 inline void ObjectManager::OpponentTurnEnd(GameEngine::Board & board)
 {
-	this->GetOpponentHero().GetHero().TurnEnd(true);
-	this->GetPlayerHero().GetHero().TurnEnd(false);
-
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnEnd(true);
-	}
-	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().TurnEnd(false);
-	}
+	this->opponent_hero.TurnEnd(true);
+	this->player_hero.TurnEnd(false);
+	this->opponent_minions.TurnEnd(board, true);
+	this->player_minions.TurnEnd(board, false);
 }
 
 inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion)
 {
-	for (auto it = this->GetMinionInserterAtBeginOfSide(added_minion.GetBoard(), SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().HookAfterMinionAdded(added_minion);
-	}
-	for (auto it = this->GetMinionInserterAtBeginOfSide(added_minion.GetBoard(), SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-		it.ConverToManipulator().HookAfterMinionAdded(added_minion);
-	}
+	this->player_minions.HookAfterMinionAdded(this->board, added_minion);
+	this->opponent_minions.HookAfterMinionAdded(this->board, added_minion);
 }
 
 inline void ObjectManager::DebugPrint() const
