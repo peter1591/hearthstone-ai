@@ -14,11 +14,25 @@ namespace GameEngine {
 		class HeroManipulator : public ObjectBase
 		{
 		public:
-			HeroManipulator(Board & board, Hero & hero)
-				: board(board), hero(hero)
-			{}
+			HeroManipulator() : board(nullptr) {}
 
-			Board & GetBoard() const { return this->board; }
+			HeroManipulator(HeroManipulator const& rhs) : board(rhs.board), hero(rhs.hero) {}
+			HeroManipulator & operator=(HeroManipulator const& rhs) {
+				this->board = rhs.board;
+				this->hero = rhs.hero;
+				return *this;
+			}
+
+			HeroManipulator(HeroManipulator && rhs) : board(rhs.board), hero(rhs.hero) {}
+			HeroManipulator & operator=(HeroManipulator && rhs) {
+				this->board = std::move(rhs.board);
+				this->hero = std::move(rhs.hero);
+				return *this;
+			}
+
+			Board & GetBoard() const { return *this->board; }
+
+			void SetHero(Hero const& hero) { this->hero = hero; }
 			Hero const& GetHero() const { return this->hero; }
 
 		public:
@@ -104,8 +118,8 @@ namespace GameEngine {
 			}
 
 		private:
-			Board & board;
-			Hero & hero;
+			Board * board;
+			Hero hero;
 		};
 
 	} // BoardObjects

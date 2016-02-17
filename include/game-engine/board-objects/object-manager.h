@@ -19,27 +19,26 @@ namespace BoardObjects {
 class BoardObject
 {
 public:
-	explicit BoardObject(HeroManipulator && hero) : hero(hero),
+	explicit BoardObject(HeroManipulator & hero) : hero(&hero),
 		minion(*(Board*)(nullptr), *(Minions*)(nullptr), *(Minion*)(nullptr))
 	{
-		this->ptr = &this->hero;
+		this->ptr = this->hero;
 	}
 
-	explicit BoardObject(MinionManipulator && minion) : minion(minion),
-		hero(*(Board*)(nullptr), *(Hero*)(nullptr))
+	explicit BoardObject(MinionManipulator && minion) : minion(minion), hero(nullptr)
 	{
 		this->ptr = &this->minion;
 	}
 
-	bool IsHero() const { return this->ptr == &this->hero; }
+	bool IsHero() const { return this->ptr == this->hero; }
 	bool IsMinion() const { return this->ptr == &this->minion; }
 
-	HeroManipulator GetHero()
+	HeroManipulator & GetHero()
 	{
 #ifdef DEBUG
 		if (this->IsHero() == false) throw std::runtime_error("type not match.");
 #endif
-		return this->hero;
+		return *this->hero;
 	}
 
 	MinionManipulator GetMinion()
@@ -53,7 +52,7 @@ public:
 	ObjectBase * operator->() const { return this->ptr; }
 
 private:
-	HeroManipulator hero;
+	HeroManipulator * hero;
 	MinionManipulator minion; // a pointer to the actual memory location
 	ObjectBase * ptr;
 };
@@ -84,10 +83,10 @@ public: // Get manipulate object
 
 public: // Manipulate heros
 	void SetHero(Hero const& player, Hero const& opponent);
-	bool IsPlayerHeroAttackable() const { return this->player_hero.Attackable(); }
-	bool IsOpponentHeroAttackable() const { return this->opponent_hero.Attackable(); }
+	bool IsPlayerHeroAttackable() const { return this->player_hero.GetHero().Attackable(); }
+	bool IsOpponentHeroAttackable() const { return this->opponent_hero.GetHero().Attackable(); }
 
-	HeroManipulator GetHeroBySide(GameEngine::Board & board, SlotIndex side);
+	HeroManipulator & GetHeroBySide(GameEngine::Board & board, SlotIndex side);
 
 public: // Manipulate minions
 	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
@@ -126,8 +125,8 @@ public:
 	void DebugPrint() const;
 
 private:
-	Hero player_hero;
-	Hero opponent_hero;
+	HeroManipulator player_hero;
+	HeroManipulator opponent_hero;
 
 	Minions player_minions;
 	Minions opponent_minions;
@@ -163,8 +162,8 @@ inline ObjectManager & ObjectManager::CloneFrom(ObjectManager const & rhs)
 
 inline bool ObjectManager::operator==(ObjectManager const & rhs) const
 {
-	if (this->player_hero != rhs.player_hero) return false;
-	if (this->opponent_hero != rhs.opponent_hero) return false;
+	if (this->player_hero.GetHero() != rhs.player_hero.GetHero()) return false;
+	if (this->opponent_hero.GetHero() != rhs.opponent_hero.GetHero()) return false;
 
 	if (this->player_minions != rhs.player_minions) return false;
 	if (this->opponent_minions != rhs.opponent_minions) return false;
@@ -179,14 +178,14 @@ inline bool ObjectManager::operator!=(ObjectManager const & rhs) const
 
 inline void ObjectManager::SetHero(Hero const & player, Hero const & opponent)
 {
-	this->player_hero = player;
-	this->opponent_hero = opponent;
+	this->player_hero.SetHero(player);
+	this->opponent_hero.SetHero(opponent);
 }
 
-inline HeroManipulator ObjectManager::GetHeroBySide(GameEngine::Board & board, SlotIndex side)
+inline HeroManipulator & ObjectManager::GetHeroBySide(GameEngine::Board & board, SlotIndex side)
 {
-	if (side == SLOT_PLAYER_SIDE) return HeroManipulator(board, this->player_hero);
-	else if (side == SLOT_OPPONENT_SIDE) return HeroManipulator(board, this->opponent_hero);
+	if (side == SLOT_PLAYER_SIDE) return this->player_hero;
+	else if (side == SLOT_OPPONENT_SIDE) return this->opponent_hero;
 	else throw std::runtime_error("invalid argument");
 }
 
@@ -208,12 +207,12 @@ inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex
 
 inline BoardObject ObjectManager::GetPlayerHero(GameEngine::Board & board)
 {
-	return BoardObject(HeroManipulator(board, this->player_hero));
+	return BoardObject(this->player_hero);
 }
 
 inline BoardObject ObjectManager::GetOpponentHero(GameEngine::Board & board)
 {
-	return BoardObject(HeroManipulator(board, this->opponent_hero));
+	return BoardObject(this->opponent_hero);
 }
 
 inline MinionManipulator ObjectManager::GetMinionManipulator(GameEngine::Board & board, SlotIndex slot_idx)
@@ -308,8 +307,8 @@ inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion
 
 inline void ObjectManager::DebugPrint() const
 {
-	std::cout << "Player Hero: " << this->player_hero.GetDebugString() << std::endl;
-	std::cout << "Opponent Hero: " << this->opponent_hero.GetDebugString() << std::endl;
+	std::cout << "Player Hero: " << this->player_hero.GetHero().GetDebugString() << std::endl;
+	std::cout << "Opponent Hero: " << this->opponent_hero.GetHero().GetDebugString() << std::endl;
 
 	std::cout << "Opponent minions: " << std::endl;
 	this->opponent_minions.DebugPrint();
@@ -328,10 +327,10 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, s.player_hero);
+			GameEngine::hash_combine(result, s.player_hero.GetHero());
 			GameEngine::hash_combine(result, s.player_minions);
 
-			GameEngine::hash_combine(result, s.opponent_hero);
+			GameEngine::hash_combine(result, s.opponent_hero.GetHero());
 			GameEngine::hash_combine(result, s.opponent_minions);
 
 			return result;
