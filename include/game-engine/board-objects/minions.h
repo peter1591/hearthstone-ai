@@ -17,11 +17,10 @@ class Minions
 	friend std::hash<Minions>;
 
 	// Iterators for minions
-	friend class MinionInserter;
 	friend class Impl::MinionIteratorHelper;
 
 public:
-	typedef MinionInserter::minions_container_type container_type;
+	typedef MinionIterator::container_type container_type;
 	typedef container_type::iterator iterator;
 	typedef container_type::const_iterator const_iterator;
 
@@ -65,14 +64,6 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(&minion));
 	}
 
-	MinionInserter GetInserter(int minion_idx) {
-		return MinionInserter(this->board, *this, this->GetRawIterator(minion_idx));
-	}
-
-	MinionInserter GetInserterBefore(Minion const& minion) {
-		return MinionInserter(this->board, *this, this->GetRawIterator(&minion));
-	}
-
 	MinionManipulator GetManipulator(int minion_idx) {
 		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
@@ -90,6 +81,8 @@ public: // getters
 
 public: // modifiers
 	MinionManipulator InsertBefore(MinionIterator const& it, Minion && minion);
+	void MarkPendingRemoval(MinionIterator const& it);
+	void EraseAndGoToNext(MinionIterator & it);
 
 public: // hooks
 	void TurnStart(bool owner_turn) {

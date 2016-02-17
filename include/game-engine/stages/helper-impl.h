@@ -128,15 +128,15 @@ namespace GameEngine
 			death_triggers.clear();
 
 			// mark as pending death
-			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(side); !it.IsEnd(); it.GoToNext())
+			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd(); it.GoToNext())
 			{
-				auto manipulator = it.ConverToManipulator();
-				if (!it.IsPendingRemoval() && manipulator.GetHP() > 0) continue;
+				auto manipulator = it.ConvertToManipulator();
+				if (!it->pending_removal && manipulator.GetHP() > 0) continue;
 
-				it.MarkPendingRemoval();
+				it.GetMinions().MarkPendingRemoval(it);
 
 				for (auto const& trigger : manipulator.GetAndClearOnDeathTriggers()) {
-					death_triggers.push_back(std::bind(trigger, it.ConverToManipulator()));
+					death_triggers.push_back(std::bind(trigger, manipulator));
 				}
 			}
 
@@ -146,21 +146,21 @@ namespace GameEngine
 			}
 
 			// actually remove died minions
-			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(side); !it.IsEnd();)
+			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd();)
 			{
-				if (!it.IsPendingRemoval()) {
+				if (!it->pending_removal) {
 					it.GoToNext();
 					continue;
 				}
 
 				// remove died minion
-				auto manipulator = it.ConverToManipulator();
+				auto manipulator = it.ConvertToManipulator();
 
 				// remove all effects (including auras)
 				manipulator.ClearEnchantments();
 				manipulator.ClearAuras();
 
-				it.EraseAndGoToNext();
+				it.GetMinions().EraseAndGoToNext(it);
 			}
 
 			if (death_triggers.empty()) break;

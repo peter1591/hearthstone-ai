@@ -81,41 +81,5 @@ namespace BoardObjects {
 		Minion * const minion;
 	};
 
-	// Inserter can be used to insert minion into minions, and
-	// it can be used as a iterator to iterates all the minions
-	class MinionInserter
-	{
-	public:
-		typedef std::list<Minion> minions_container_type;
-		typedef minions_container_type::iterator minions_iterator;
-		typedef minions_container_type::const_iterator minions_const_iterator;
-
-	public:
-		MinionInserter(Board & board, Minions & minions, minions_iterator it_minion)
-			: board(&board), minions(&minions), it_minion(it_minion)
-		{}
-
-		Board & GetBoard() const { return *this->board; }
-		Minions & GetMinions() const { return *this->minions; }
-
-		MinionManipulator ConverToManipulator();
-
-	public:
-		bool IsEnd() const;
-
-		void GoToNext();
-		void EraseAndGoToNext();
-
-		bool IsPendingRemoval() const;
-		void MarkPendingRemoval();
-
-		MinionManipulator InsertBefore(Minion && minion);
-
-	private:
-		Board * const board;
-		Minions * const minions;
-		minions_iterator it_minion;
-	};
-
 } // BoardObjects
 } // GameEngine
