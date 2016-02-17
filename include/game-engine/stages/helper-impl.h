@@ -45,7 +45,7 @@ namespace GameEngine
 
 	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous)
 	{
-		return StageHelper::DealDamage(board.object_manager.GetObject(board, taker_idx), damage, poisonous);
+		return StageHelper::DealDamage(board.object_manager.GetObject(taker_idx), damage, poisonous);
 	}
 
 	inline void StageHelper::DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage, bool poisonous)
@@ -100,13 +100,13 @@ namespace GameEngine
 	{
 		// TODO: trigger secrets
 
-		auto attacker = board.object_manager.GetObject(board, attacker_idx);
+		auto attacker = board.object_manager.GetObject(attacker_idx);
 
 		if (attacker->IsForgetful()) {
 			attacked_idx = StageHelper::GetTargetForForgetfulAttack(board, attacked_idx);
 		}
 
-		auto attacked = board.object_manager.GetObject(board, attacked_idx);
+		auto attacked = board.object_manager.GetObject(attacked_idx);
 		StageHelper::DealDamage(attacked, attacker->GetAttack(), attacker->IsPoisonous());
 
 		if (attacked.IsMinion()) {
@@ -128,7 +128,7 @@ namespace GameEngine
 			death_triggers.clear();
 
 			// mark as pending death
-			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(board, side); !it.IsEnd(); it.GoToNext())
+			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(side); !it.IsEnd(); it.GoToNext())
 			{
 				auto manipulator = it.ConverToManipulator();
 				if (!it.IsPendingRemoval() && manipulator.GetHP() > 0) continue;
@@ -146,7 +146,7 @@ namespace GameEngine
 			}
 
 			// actually remove died minions
-			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(board, side); !it.IsEnd();)
+			for (auto it = board.object_manager.GetMinionInserterAtBeginOfSide(side); !it.IsEnd();)
 			{
 				if (!it.IsPendingRemoval()) {
 					it.GoToNext();
@@ -169,12 +169,12 @@ namespace GameEngine
 
 	inline bool StageHelper::CheckHeroMinionDead(Board & board)
 	{
-		if (board.object_manager.GetObject(board, SLOT_PLAYER_HERO)->GetHP() <= 0) {
+		if (board.object_manager.GetObject(SLOT_PLAYER_HERO)->GetHP() <= 0) {
 			board.stage = STAGE_LOSS;
 			return true;
 		}
 
-		if (board.object_manager.GetObject(board, SLOT_OPPONENT_HERO)->GetHP() <= 0) {
+		if (board.object_manager.GetObject(SLOT_OPPONENT_HERO)->GetHP() <= 0) {
 			board.stage = STAGE_WIN;
 			return true;
 		}
@@ -191,7 +191,7 @@ namespace GameEngine
 		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
 		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
-		auto inserter = board.object_manager.GetMinionInserter(board, data.put_location);
+		auto inserter = board.object_manager.GetMinionInserter(data.put_location);
 
 		StageHelper::SummonMinion(card, inserter);
 
@@ -216,7 +216,7 @@ namespace GameEngine
 
 	inline bool StageHelper::EquipWeapon(Board & board, Card const & card, SlotIndex playing_side, Move::EquipWeaponData const & data)
 	{
-		auto & playing_hero = board.object_manager.GetHeroBySide(board, playing_side);
+		auto & playing_hero = board.object_manager.GetHeroBySide(playing_side);
 
 		playing_hero.DestroyWeapon();
 
@@ -232,11 +232,11 @@ namespace GameEngine
 	{
 		if (SlotIndexHelper::IsPlayerSide(side)) {
 			++board.player_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetObject(board, SLOT_PLAYER_HERO), board.player_stat.fatigue_damage, false);
+			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_PLAYER_HERO), board.player_stat.fatigue_damage, false);
 		}
 		else {
 			++board.opponent_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetObject(board, SLOT_OPPONENT_HERO), board.opponent_stat.fatigue_damage, false);
+			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_OPPONENT_HERO), board.opponent_stat.fatigue_damage, false);
 		}
 	}
 }

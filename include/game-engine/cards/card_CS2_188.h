@@ -37,7 +37,7 @@ public:
 			return;
 		}
 
-		auto buff_target = board.object_manager.GetMinionInserter(board, play_minion_data.target);
+		auto buff_target = board.object_manager.GetMinionInserter(play_minion_data.target);
 		if (buff_target.IsEnd())
 		{
 #ifdef DEBUG

@@ -77,14 +77,14 @@ public:
 	bool operator!=(ObjectManager const& rhs) const;
 
 public: // Get manipulate object
-	BoardObject GetObject(GameEngine::Board & board, SlotIndex idx);
+	BoardObject GetObject(SlotIndex idx);
 
 public: // Manipulate heros
 	void SetHero(Hero const& player, Hero const& opponent);
 	bool IsPlayerHeroAttackable() const { return this->player_hero.GetHero().Attackable(); }
 	bool IsOpponentHeroAttackable() const { return this->opponent_hero.GetHero().Attackable(); }
 
-	HeroManipulator & GetHeroBySide(GameEngine::Board & board, SlotIndex side);
+	HeroManipulator & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions
 	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
@@ -103,12 +103,12 @@ public: // Manipulate minions
 	int GetOpponentMinionsCount() const { return this->opponent_minions.GetMinionCount(); }
 	MinionConstIteratorWithSlotIndex GetOpponentMinionsIteratorWithIndex() const { return this->opponent_minions.GetIteratorWithSlotIndex(SLOT_OPPONENT_MINION_START); }
 
-	MinionManipulator GetMinionManipulator(GameEngine::Board & board, SlotIndex idx);
-	MinionInserter GetMinionInserter(GameEngine::Board & board, SlotIndex idx);
+	MinionManipulator GetMinionManipulator(SlotIndex idx);
+	MinionInserter GetMinionInserter(SlotIndex idx);
 
-	MinionInserter GetMinionInserterAtBeginOfSide(GameEngine::Board & board, SlotIndex side) {
-		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetMinionInserter(board, SLOT_PLAYER_MINION_START);
-		else return this->GetMinionInserter(board, SLOT_OPPONENT_MINION_START);
+	MinionInserter GetMinionInserterAtBeginOfSide(SlotIndex side) {
+		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetMinionInserter(SLOT_PLAYER_MINION_START);
+		else return this->GetMinionInserter(SLOT_OPPONENT_MINION_START);
 	}
 
 public: // hooks
@@ -187,53 +187,53 @@ inline void ObjectManager::SetHero(Hero const & player, Hero const & opponent)
 	this->opponent_hero.SetHero(opponent);
 }
 
-inline HeroManipulator & ObjectManager::GetHeroBySide(GameEngine::Board & board, SlotIndex side)
+inline HeroManipulator & ObjectManager::GetHeroBySide(SlotIndex side)
 {
 	if (side == SLOT_PLAYER_SIDE) return this->player_hero;
 	else if (side == SLOT_OPPONENT_SIDE) return this->opponent_hero;
 	else throw std::runtime_error("invalid argument");
 }
 
-inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex idx)
+inline BoardObject ObjectManager::GetObject(SlotIndex idx)
 {
 	if (idx < SLOT_PLAYER_HERO)
 		throw std::runtime_error("invalid argument");
 	else if (idx == SLOT_PLAYER_HERO)
 		return BoardObject(this->player_hero);
 	else if (idx < SLOT_OPPONENT_HERO)
-		return BoardObject(this->GetMinionManipulator(board, idx));
+		return BoardObject(this->GetMinionManipulator(idx));
 	else if (idx == SLOT_OPPONENT_HERO)
 		return BoardObject(this->opponent_hero);
 	else if (idx < SLOT_MAX)
-		return BoardObject(this->GetMinionManipulator(board, idx));
+		return BoardObject(this->GetMinionManipulator(idx));
 	else
 		throw std::runtime_error("invalid argument");
 }
 
-inline MinionManipulator ObjectManager::GetMinionManipulator(GameEngine::Board & board, SlotIndex slot_idx)
+inline MinionManipulator ObjectManager::GetMinionManipulator(SlotIndex slot_idx)
 {
 	if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx < SLOT_OPPONENT_HERO) {
-		return this->player_minions.GetManipulator(board, slot_idx - SLOT_PLAYER_MINION_START);
+		return this->player_minions.GetManipulator(slot_idx - SLOT_PLAYER_MINION_START);
 	}
 	else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx < SLOT_MAX) {
-		return this->opponent_minions.GetManipulator(board, slot_idx - SLOT_OPPONENT_MINION_START);
+		return this->opponent_minions.GetManipulator(slot_idx - SLOT_OPPONENT_MINION_START);
 	}
 	else throw std::runtime_error("invalid argument");
 }
 
-inline MinionInserter ObjectManager::GetMinionInserter(GameEngine::Board & board, SlotIndex slot_idx)
+inline MinionInserter ObjectManager::GetMinionInserter(SlotIndex slot_idx)
 {
 	if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx < SLOT_OPPONENT_HERO) {
-		return this->player_minions.GetInserter(board, slot_idx - SLOT_PLAYER_MINION_START);
+		return this->player_minions.GetInserter(slot_idx - SLOT_PLAYER_MINION_START);
 	}
 	else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx < SLOT_MAX) {
-		return this->opponent_minions.GetInserter(board, slot_idx - SLOT_OPPONENT_MINION_START);
+		return this->opponent_minions.GetInserter(slot_idx - SLOT_OPPONENT_MINION_START);
 	}
 	else throw std::runtime_error("invalid argument");
 }

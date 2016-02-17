@@ -46,21 +46,21 @@ public: // getters
 		return MinionConstIteratorWithSlotIndex(start_slot, this->minions.begin(), *this);
 	}
 
-	MinionInserter GetInserter(GameEngine::Board & board, int minion_idx) {
+	MinionInserter GetInserter(int minion_idx) {
 		auto it = this->minions.begin();
 		for (; minion_idx > 0; --minion_idx) {
 			++it;
 			if (it == this->minions.end()) break;
 		}
-		return MinionInserter(board, *this, it);
+		return MinionInserter(this->board, *this, it);
 	}
 
-	MinionInserter GetInserterBefore(GameEngine::Board & board, Minion const& minion) {
-		return MinionInserter(board, *this, this->GetIterator(&minion));
+	MinionInserter GetInserterBefore(Minion const& minion) {
+		return MinionInserter(this->board, *this, this->GetIterator(&minion));
 	}
 
-	MinionManipulator GetManipulator(GameEngine::Board & board, int minion_idx) {
-		auto inserter = this->GetInserter(board, minion_idx);
+	MinionManipulator GetManipulator(int minion_idx) {
+		auto inserter = this->GetInserter(minion_idx);
 		if (inserter.IsEnd()) throw std::runtime_error("invalid argument");
 		return inserter.ConverToManipulator();
 	}
@@ -74,11 +74,11 @@ public: // getters
 		return this->minions.end();
 	}
 
-	MinionManipulator GetManipulator(GameEngine::Board & board, Minion const* minion) 
+	MinionManipulator GetManipulator(Minion const* minion) 
 	{
 		auto it = this->GetIterator(minion);
 		if (it == this->minions.end()) throw std::runtime_error("cannot find minion");
-		return MinionManipulator(board, *this, *it);
+		return MinionManipulator(this->board, *this, *it);
 	}
 
 public: // hooks

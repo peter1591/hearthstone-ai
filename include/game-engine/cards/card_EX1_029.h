@@ -23,10 +23,10 @@ namespace GameEngine {
 				auto & board = triggering_minion.GetBoard();
 
 				if (triggering_minion.IsPlayerSide()) {
-					StageHelper::DealDamage(board.object_manager.GetObject(board, SLOT_OPPONENT_HERO), damage, false);
+					StageHelper::DealDamage(board.object_manager.GetObject(SLOT_OPPONENT_HERO), damage, false);
 				}
 				else {
-					StageHelper::DealDamage(board.object_manager.GetObject(board, SLOT_PLAYER_HERO), damage, false);
+					StageHelper::DealDamage(board.object_manager.GetObject(SLOT_PLAYER_HERO), damage, false);
 				}
 			}
 

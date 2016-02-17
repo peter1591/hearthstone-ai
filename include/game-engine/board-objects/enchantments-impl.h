@@ -135,7 +135,7 @@ inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(
 {
 	while (!this->minion_enchantments.empty()) {
 		auto it = this->minion_enchantments.begin();
-		owner.GetMinions().GetManipulator(owner.GetBoard(), it->second).RemoveEnchantment(it->first);
+		owner.GetMinions().GetManipulator(it->second).RemoveEnchantment(it->first);
 	}
 }
 
