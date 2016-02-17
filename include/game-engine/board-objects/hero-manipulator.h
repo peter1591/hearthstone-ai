@@ -22,7 +22,7 @@ namespace GameEngine {
 				return *this;
 			}
 
-			HeroManipulator(Board & board, HeroManipulator && rhs) : board(rhs.board) { *this = std::move(rhs); }
+			HeroManipulator(Board & board, HeroManipulator && rhs) : board(board) { *this = std::move(rhs); }
 			HeroManipulator & operator=(HeroManipulator && rhs) {
 				this->hero = std::move(rhs.hero);
 				return *this;

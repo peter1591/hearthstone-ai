@@ -13,7 +13,7 @@ namespace GameEngine {
 
 		inline bool MinionConstIteratorWithSlotIndex::IsEnd() const
 		{
-			return this->it == this->container.minions.end();
+			return this->it == this->container.end();
 		}
 	}
 }

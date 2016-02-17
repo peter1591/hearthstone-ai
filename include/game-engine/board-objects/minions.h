@@ -17,7 +17,6 @@ class Minions
 	friend std::hash<Minions>;
 
 	// Iterators for minions
-	friend class MinionConstIteratorWithSlotIndex;
 	friend class MinionInserter;
 	friend class Impl::MinionIteratorHelper;
 
@@ -43,7 +42,7 @@ public: // getters
 	bool IsFull() const { return this->GetMinionCount() >= max_minions; }
 
 	MinionConstIteratorWithSlotIndex GetIteratorWithSlotIndex(SlotIndex start_slot) const { 
-		return MinionConstIteratorWithSlotIndex(start_slot, this->minions.begin(), *this);
+		return MinionConstIteratorWithSlotIndex(this->minions, this->minions.begin(), start_slot);
 	}
 
 	MinionInserter GetInserter(int minion_idx) {
