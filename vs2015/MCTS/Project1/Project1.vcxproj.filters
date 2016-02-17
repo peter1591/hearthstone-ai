@@ -227,5 +227,23 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-to-all-minions.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

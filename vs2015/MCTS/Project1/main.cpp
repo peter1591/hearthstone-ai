@@ -57,8 +57,8 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeDeck1(board.player_deck);
 	InitializeHand1(board.player_hand);
 
-	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_PLAYER_SIDE);
-	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(board, GameEngine::SLOT_OPPONENT_SIDE);
+	auto player_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE);
+	auto opponent_minion_inserter = board.object_manager.GetMinionInserterAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE);
 
 	{
 		auto minion = GameEngine::BoardObjects::Minion();
