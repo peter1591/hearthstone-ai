@@ -204,12 +204,12 @@ inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn
 
 inline bool GameEngine::BoardObjects::MinionManipulator::IsPlayerSide() const
 {
-	return this->board->object_manager.IsPlayerSide(this->minions);
+	return &this->board->object_manager.player_minions == this->minions;
 }
 
 inline bool GameEngine::BoardObjects::MinionManipulator::IsOpponentSide() const
 {
-	return this->board->object_manager.IsOpponentSide(this->minions);
+	return &this->board->object_manager.opponent_minions == this->minions;
 }
 
 inline bool GameEngine::BoardObjects::MinionInserter::IsEnd() const

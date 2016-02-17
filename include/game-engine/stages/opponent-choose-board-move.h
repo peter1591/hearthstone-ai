@@ -17,7 +17,7 @@ class StageOpponentChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			bool can_play_minion = !board.object_manager.IsMinionsFull(SLOT_OPPONENT_HERO);
+			bool can_play_minion = !board.object_manager.opponent_minions.IsFull();
 
 			std::vector<Card> playable_minions;
 			if (can_play_minion) {
@@ -76,7 +76,7 @@ class StageOpponentChooseBoardMove
 
 			// the choices to play a card from hand
 			std::vector<Card> playable_minions;
-			bool can_play_minion = !board.object_manager.IsOpponentMinionsFull();
+			bool can_play_minion = !board.object_manager.opponent_minions.IsFull();
 			board.opponent_cards.GetPossiblePlayableMinions(board.opponent_stat, playable_minions);
 			if (can_play_minion) {
 				for (const auto &playing_card : playable_minions) {
@@ -92,7 +92,7 @@ class StageOpponentChooseBoardMove
 
 					move.action = Move::ACTION_OPPONENT_PLAY_MINION;
 					move.data.opponent_play_minion_data.card = playing_card;
-					move.data.opponent_play_minion_data.data.put_location = SlotIndexHelper::GetOpponentMinionIndex(board.object_manager.GetOpponentMinionsCount());
+					move.data.opponent_play_minion_data.data.put_location = SlotIndexHelper::GetOpponentMinionIndex(board.object_manager.opponent_minions.GetMinionCount());
 					if (required_targets.None()) move.data.opponent_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.opponent_play_minion_data.data.target = required_targets.GetOneTarget();
 
@@ -164,13 +164,13 @@ class StageOpponentChooseBoardMove
 			// TODO: check play requirements
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = 0; i <= board.object_manager.GetOpponentMinionsCount(); ++i)
+			for (int i = 0; i <= board.object_manager.opponent_minions.GetMinionCount(); ++i)
 			{
 				SlotIndex idx = SlotIndexHelper::GetOpponentMinionIndex(i);
 				next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, idx, required_targets));
 			}
 #else
-			next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, SlotIndexHelper::GetOpponentMinionIndex(board.object_manager.GetOpponentMinionsCount()), required_targets));
+			next_move_getter.AddItem(NextMoveGetter::ItemOpponentPlayMinion(playing_card, SlotIndexHelper::GetOpponentMinionIndex(board.object_manager.opponent_minions.GetMinionCount()), required_targets));
 #endif
 		}
 

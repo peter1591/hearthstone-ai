@@ -87,20 +87,7 @@ public: // Manipulate heros
 	HeroManipulator & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions
-	bool IsPlayerMinionsFull() const { return this->player_minions.IsFull(); }
-	bool IsOpponentMinionsFull() const { return this->opponent_minions.IsFull(); }
-	bool IsMinionsFull(SlotIndex side) const {
-		if (SlotIndexHelper::IsPlayerSide(side)) return this->IsPlayerMinionsFull();
-		else return this->IsOpponentMinionsFull();
-	}
-
-	bool IsPlayerSide(Minions * minions) const { return &this->player_minions == minions; }
-	bool IsOpponentSide(Minions * minions) const { return &this->opponent_minions == minions; }
-
-	int GetPlayerMinionsCount() const { return this->player_minions.GetMinionCount(); }
 	MinionConstIteratorWithSlotIndex GetPlayerMinionsIteratorWithIndex() const { return this->player_minions.GetIteratorWithSlotIndex(SLOT_PLAYER_MINION_START); }
-
-	int GetOpponentMinionsCount() const { return this->opponent_minions.GetMinionCount(); }
 	MinionConstIteratorWithSlotIndex GetOpponentMinionsIteratorWithIndex() const { return this->opponent_minions.GetIteratorWithSlotIndex(SLOT_OPPONENT_MINION_START); }
 
 	MinionManipulator GetMinionManipulator(SlotIndex idx);
@@ -122,14 +109,15 @@ public: // hooks
 public:
 	void DebugPrint() const;
 
-private:
-	Board & board;
-
+public:
 	HeroManipulator player_hero;
 	HeroManipulator opponent_hero;
 
 	Minions player_minions;
 	Minions opponent_minions;
+
+private:
+	Board & board;
 };
 
 inline ObjectManager::ObjectManager(Board & board) :

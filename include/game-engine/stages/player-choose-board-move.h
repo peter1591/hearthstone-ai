@@ -20,7 +20,7 @@ class StagePlayerChooseBoardMove
 
 		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
 		{
-			bool const can_play_minion = !board.object_manager.IsPlayerMinionsFull();
+			bool const can_play_minion = !board.object_manager.player_minions.IsFull();
 
 			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{
@@ -86,7 +86,7 @@ class StagePlayerChooseBoardMove
 			moves.AddMove(move, weight_end_turn);
 
 			// the choices to play a card from hand
-			bool can_play_minion = !board.object_manager.IsPlayerMinionsFull();
+			bool can_play_minion = !board.object_manager.player_minions.IsFull();
 			SlotIndexBitmap required_targets;
 			bool meet_requirements;
 			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
@@ -105,7 +105,7 @@ class StagePlayerChooseBoardMove
 
 					move.action = Move::ACTION_PLAYER_PLAY_MINION;
 					move.data.player_play_minion_data.hand_card = hand_idx;
-					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.GetPlayerMinionsCount());
+					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount());
 					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
 					
@@ -205,14 +205,14 @@ class StagePlayerChooseBoardMove
 			// TODO: check play requirements
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = 0; i <= board.object_manager.GetPlayerMinionsCount(); ++i)
+			for (int i = 0; i <= board.object_manager.player_minions.GetMinionCount(); ++i)
 			{
 				SlotIndex idx = SlotIndexHelper::GetPlayerMinionIndex(i);
 				next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets));
 			}
 #else
 			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
-				hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.GetPlayerMinionsCount()), required_targets));
+				hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount()), required_targets));
 #endif
 		}
 
