@@ -35,12 +35,13 @@ class Board
 
 	private: // deep copy; marked as private, so caller need to call Clone()
 		Board(const Board &rhs) :
-			player_deck(this->random_generator, rhs.player_deck),
+			player_deck(this->random_generator),
 			object_manager(*this, rhs.object_manager)
 		{
 			this->player_stat = rhs.player_stat;
 			this->player_secrets = rhs.player_secrets;
 			this->player_hand = rhs.player_hand;
+			this->player_deck = rhs.player_deck;
 			this->opponent_stat = rhs.opponent_stat;
 			this->opponent_secrets = rhs.opponent_secrets;
 			this->opponent_cards = rhs.opponent_cards;

@@ -22,11 +22,9 @@ class Deck
 		Deck(RandomGenerator & random_generator);
 
 		Deck(Deck const& rhs) = delete;
-		Deck(RandomGenerator & random_generator, Deck const& rhs);
 		Deck & operator=(Deck const& rhs);
 
 		Deck(Deck && rhs) = delete;
-		Deck(RandomGenerator & random_generator, Deck && rhs); // move
 		Deck & operator=(Deck && rhs);
 
 	public:
@@ -53,21 +51,9 @@ inline Deck::Deck(RandomGenerator & random_generator) :
 	this->cards.reserve(36);
 }
 
-inline Deck::Deck(RandomGenerator & random_generator, Deck const & rhs) :
-	random_generator(random_generator)
-{
-	*this = rhs;
-}
-
 inline Deck & Deck::operator=(Deck const& rhs) {
 	this->cards = rhs.cards;
 	return *this;
-}
-
-inline Deck::Deck(RandomGenerator & random_generator, Deck && rhs) :
-	random_generator(random_generator)
-{
-	*this = std::move(rhs);
 }
 
 inline Deck & Deck::operator=(Deck && rhs) {

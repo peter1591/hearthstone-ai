@@ -16,13 +16,17 @@ namespace GameEngine {
 		public:
 			HeroManipulator(Board & board) : board(board) {}
 
-			HeroManipulator(Board & board, HeroManipulator const& rhs) : board(board) { *this = rhs; }
+		private:
+			HeroManipulator(HeroManipulator const& rhs) : board(rhs.board) { *this = rhs; }
+		public:
 			HeroManipulator & operator=(HeroManipulator const& rhs) {
 				this->hero = rhs.hero;
 				return *this;
 			}
 
-			HeroManipulator(Board & board, HeroManipulator && rhs) : board(board) { *this = std::move(rhs); }
+		private:
+			HeroManipulator(HeroManipulator && rhs) : board(std::move(rhs.board)) { *this = std::move(rhs); }
+		public:
 			HeroManipulator & operator=(HeroManipulator && rhs) {
 				this->hero = std::move(rhs.hero);
 				return *this;
