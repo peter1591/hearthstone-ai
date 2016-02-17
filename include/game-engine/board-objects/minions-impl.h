@@ -24,6 +24,13 @@ namespace GameEngine {
 			this->pending_removal_count++;
 		}
 
+		inline void Minions::MarkPendingRemoval(MinionManipulator const & minion)
+		{
+			if (minion.minion->pending_removal) return;
+			minion.minion->pending_removal = true;
+			this->pending_removal_count++;
+		}
+
 		inline void Minions::EraseAndGoToNext(MinionIterator & it)
 		{
 			if (it->pending_removal) this->pending_removal_count--;

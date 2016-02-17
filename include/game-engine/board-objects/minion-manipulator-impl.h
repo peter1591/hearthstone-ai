@@ -2,25 +2,6 @@
 #include "game-engine/board-objects/minion.h"
 #include "game-engine/board-objects/minion-manipulator.h"
 
-namespace GameEngine {
-	namespace BoardObjects {
-		namespace Impl {
-			class MinionIteratorHelper {
-			public:
-				static bool IsPendingRemoval(Minions const& minions, Minion const& minion) {
-					return minion.pending_removal;
-				}
-
-				static void MarkPendingRemoval(Minions & minions, Minion & minion) {
-					if (minion.pending_removal) return;
-					minion.pending_removal = true;
-					minions.pending_removal_count++;
-				}
-			};
-		}
-	}
-}
-
 inline int GameEngine::BoardObjects::MinionManipulator::GetHP() const
 {
 	return this->minion->stat.GetHP();
@@ -45,7 +26,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::TakeDamage(int damage, 
 		this->minion->stat.SetHP(this->minion->stat.GetHP() - damage);
 
 		if (poisonous) {
-			this->MarkPendingRemoval();
+			this->GetMinions().MarkPendingRemoval(*this);
 		}
 
 		this->HookMinionCheckEnraged();
@@ -127,16 +108,6 @@ inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::B
 inline void GameEngine::BoardObjects::MinionManipulator::SetMinionStatFlag(MinionStat::Flag flag, bool val) const
 {
 	this->minion->stat.SetFlag(flag, val);
-}
-
-inline bool GameEngine::BoardObjects::MinionManipulator::IsPendingRemoval() const
-{
-	return Impl::MinionIteratorHelper::IsPendingRemoval(*this->minions, *this->minion);
-}
-
-inline void GameEngine::BoardObjects::MinionManipulator::MarkPendingRemoval() const
-{
-	Impl::MinionIteratorHelper::MarkPendingRemoval(*this->minions, *this->minion);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura) const

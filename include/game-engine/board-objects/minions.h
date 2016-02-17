@@ -8,16 +8,10 @@
 
 namespace GameEngine {
 namespace BoardObjects {
-namespace Impl {
-	class MinionIteratorHelper;
-}
 
 class Minions
 {
 	friend std::hash<Minions>;
-
-	// Iterators for minions
-	friend class Impl::MinionIteratorHelper;
 
 public:
 	typedef MinionIterator::container_type container_type;
@@ -82,6 +76,7 @@ public: // getters
 public: // modifiers
 	MinionManipulator InsertBefore(MinionIterator const& it, Minion && minion);
 	void MarkPendingRemoval(MinionIterator const& it);
+	void MarkPendingRemoval(MinionManipulator const& minion);
 	void EraseAndGoToNext(MinionIterator & it);
 
 public: // hooks

@@ -15,6 +15,8 @@ namespace BoardObjects {
 	// and will trigger related hooks on-the-fly
 	class MinionManipulator : public ObjectBase
 	{
+		friend class Minions;
+
 	public:
 		MinionManipulator(Board & board, Minions & minions, Minion & minion)
 			: board(&board), minions(&minions), minion(&minion)
@@ -50,9 +52,6 @@ namespace BoardObjects {
 		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers() const;
 
 		void SetMinionStatFlag(MinionStat::Flag flag, bool val) const;
-
-		bool IsPendingRemoval() const;
-		void MarkPendingRemoval() const;
 
 	public: // auras
 		void AddAura(Aura * aura) const;
