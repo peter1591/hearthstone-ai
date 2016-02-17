@@ -204,9 +204,6 @@
     <ClInclude Include="..\..\..\include\task.h" />
     <ClInclude Include="..\..\..\include\tree.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

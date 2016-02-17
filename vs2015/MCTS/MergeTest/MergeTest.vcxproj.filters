@@ -270,9 +270,4 @@
       <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </None>
-  </ItemGroup>
 </Project>
