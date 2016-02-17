@@ -84,17 +84,13 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	this->board_node_map.Add(board, &tree.GetRootNode());
 }
 
-// Note: &board can equal to &new_board for no-copy operation
-void MCTS::Select(TreeNode* const& node, GameEngine::Board && board, TreeNode* & new_node, GameEngine::Board & new_board)
+void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 {
-	new_node = node;
-	new_board = std::move(board); // no copy if &board == &new_board
-
 #ifdef DEBUG
-	if (new_node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
+	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
 #endif
 
-	this->traversed_nodes.push_back(new_node);
+	this->traversed_nodes.push_back(node);
 
 	while (true)
 	{
@@ -104,31 +100,32 @@ void MCTS::Select(TreeNode* const& node, GameEngine::Board && board, TreeNode* &
 		}
 #endif
 
-		if (new_node->children.empty()) {
+		if (node->children.empty()) {
 			return;
 		}
 
-		if (new_node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
 			return;
 		}
 
-		if (!new_node->next_move_getter.Empty()) {
+		if (!node->next_move_getter.Empty()) {
 			return;
 		}
 
-		new_node = FindBestChildToExpand(new_node);
+		node = FindBestChildToExpand(node);
 
-		this->traversed_nodes.push_back(new_node); // back-propagate should update the node (not the redirected one)
-		if (new_node->equivalent_node != nullptr) 
-			new_node = new_node->equivalent_node;
+		this->traversed_nodes.push_back(node); // back-propagate should update the node (not the redirected one)
 
-		new_board.ApplyMove(new_node->move);
+		board.ApplyMove(node->move);
+
+		if (node->equivalent_node != nullptr) {
+			node = node->equivalent_node;
+		}
 	}
 }
 
 void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board, bool & introduced_random)
 {
-
 #ifdef DEBUG_SAVE_BOARD
 	if (node->board != board) {
 		throw std::runtime_error("board consistency check failed");
@@ -153,43 +150,48 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 			throw std::runtime_error("a node with no non-expanded move should not be selected to be expanded");
 		}
 
+#ifdef DEBUG
 		board.ApplyMove(move, &introduced_random);
 		if (introduced_random) throw std::runtime_error("non-game-flow node should be deterministic!");
+#else
+		board.ApplyMove(move);
+		introduced_random = false;
+#endif
 	}
 }
 
 // return false if 'new_node' is an expanded node
-// Note: &board should not equal to &new_board
-bool MCTS::Expand(TreeNode *node, GameEngine::Board && board, TreeNode* &new_node, GameEngine::Board &new_board)
+bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 {
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-		// node cannot be expanded further (i.e., game-end)
-		new_node = node;
-		new_board = std::move(board);
-		return true;
+		return true; // node cannot be expanded further (i.e., game-end)
 	}
 
 #ifdef DEBUG
 	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
 #endif
 
-	new_board = std::move(board);
-
 	bool introduced_random;
-	this->GetNextState(node, this->allocated_node->move, new_board, introduced_random);
+	auto & new_move = this->allocated_node->move;
+
+	this->GetNextState(node, new_move, board, introduced_random);
+	// Note: now the 'board' is the node 'node' plus the move 'new_move'
 
 	TreeNode *found_node = nullptr;
 
 	// quickly find node for moves without random
 	if (introduced_random == false && node->children.empty() == false) {
 		// a deterministic node --> find in children node with 'move'
-		if (board.GetStageType() == GameEngine::STAGE_TYPE_GAME_FLOW) {
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+#ifdef DEBUG
+			if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
+#endif
 			found_node = node->children.front();
 		}
 		else {
 			for (auto const& child : node->children)
 			{
-				if (child->move == this->allocated_node->move) {
+				if (child->move == new_move) {
 					found_node = child;
 					break;
 				}
@@ -200,12 +202,12 @@ bool MCTS::Expand(TreeNode *node, GameEngine::Board && board, TreeNode* &new_nod
 			if (found_node->equivalent_node != nullptr) {
 				found_node = found_node->equivalent_node;
 			}
-			new_node = found_node;
+			node = found_node;
 			return false;
 		}
 	}
 
-	found_node = this->board_node_map.Find(new_board, *this);
+	found_node = this->board_node_map.Find(board, *this);
 
 	if (found_node != nullptr)
 	{
@@ -220,14 +222,17 @@ bool MCTS::Expand(TreeNode *node, GameEngine::Board && board, TreeNode* &new_nod
 
 			// check if a redirect node is already created
 			bool found_redirect_node = false;
-			for (auto const& child_node : node->children)
-			{
-				if (child_node->equivalent_node == found_node) found_redirect_node = true;
+			for (auto const& child_node : node->children) {
+				if (child_node->equivalent_node == found_node) {
+					found_redirect_node = true;
+					break;
+				}
 			}
 			if (found_redirect_node == false) {
-				new_node = this->allocated_node;
+				TreeNode * new_node = this->allocated_node;
 				this->allocated_node = new TreeNode;
 
+				new_node->move = new_move;
 				new_node->wins = 0;
 				new_node->count = 0;
 				new_node->equivalent_node = found_node;
@@ -235,19 +240,21 @@ bool MCTS::Expand(TreeNode *node, GameEngine::Board && board, TreeNode* &new_nod
 			}
 		}
 
-		new_node = found_node;
+		node = found_node;
 		return false;
 	}
 
-	new_node = this->allocated_node;
+	TreeNode * new_node = this->allocated_node;
 	this->allocated_node = new TreeNode;
 
+	new_node->equivalent_node = nullptr;
+	new_node->move = new_move;
 	new_node->wins = 0;
 	new_node->count = 0;
-	new_node->stage = new_board.GetStage();
-	new_node->stage_type = new_board.GetStageType();
+	new_node->stage = board.GetStage();
+	new_node->stage_type = board.GetStageType();
 #ifdef DEBUG_SAVE_BOARD
-	new_node->board = new_board;
+	new_node->board = board;
 #endif
 
 	if (new_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
@@ -262,9 +269,9 @@ bool MCTS::Expand(TreeNode *node, GameEngine::Board && board, TreeNode* &new_nod
 
 	node->AddChild(new_node);
 
-	this->board_node_map.Add(new_board, new_node);
-
-	this->traversed_nodes.push_back(new_node);
+	node = new_node;
+	this->board_node_map.Add(board, node);
+	this->traversed_nodes.push_back(node);
 
 	return true;
 }
@@ -313,25 +320,17 @@ void MCTS::Iterate()
 	GameEngine::Board board;
 	board.CloneFrom(this->root_node_board);
 
-	TreeNode *new_node = nullptr;
-	GameEngine::Board new_board;
-
 #ifdef DEBUG
 	if (!this->traversed_nodes.empty()) throw std::runtime_error("consistency check failed");
 #endif
 	
 	// loop if expand a duplicated node
-	while (true)
-	{
-		this->Select(node, std::move(board), node, board); // directly update to (node, board)
-
-		if (this->Expand(node, std::move(board), new_node, new_board)) break;
-
-		node = new_node;
-		board = std::move(new_board);
+	while (true) {
+		this->Select(node, board);
+		if (this->Expand(node, board)) break;
 	}
 
-	bool is_win = this->Simulate(new_board);
+	bool is_win = this->Simulate(board);
 	this->BackPropagate(is_win);
 }
 

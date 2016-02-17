@@ -23,7 +23,7 @@ public:
 	TreeNode *parent;
 	children_type children;
 
-	TreeNode *equivalent_node; // the board is the same as this node, only wins/count are valid info in this node
+	TreeNode *equivalent_node; // the board is the same as this node, only move/wins/count are valid info for this node
 
 public:
 	GameEngine::Stage stage;
