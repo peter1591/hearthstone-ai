@@ -28,13 +28,15 @@ class Board
 	public:
 		Board() :
 			player_deck(this->random_generator),
+			object_manager(*this),
 			stage(STAGE_UNKNOWN)
 		{
 		}
 
 	private: // deep copy; marked as private, so caller need to call Clone()
 		Board(const Board &rhs) :
-			player_deck(this->random_generator, rhs.player_deck)
+			player_deck(this->random_generator, rhs.player_deck),
+			object_manager(*this, rhs.object_manager)
 		{
 			this->player_stat = rhs.player_stat;
 			this->player_secrets = rhs.player_secrets;
@@ -42,8 +44,6 @@ class Board
 			this->opponent_stat = rhs.opponent_stat;
 			this->opponent_secrets = rhs.opponent_secrets;
 			this->opponent_cards = rhs.opponent_cards;
-
-			this->object_manager.CloneFrom(rhs.object_manager);
 
 			this->stage = rhs.stage;
 			this->random_generator = rhs.random_generator;
@@ -56,7 +56,10 @@ class Board
 			return Board(rhs);
 		}
 
-		Board(Board && rhs) : player_deck(this->random_generator) { *this = std::move(rhs); }
+		Board(Board && rhs) : player_deck(this->random_generator), object_manager(*this)
+		{
+			*this = std::move(rhs); 
+		}
 		Board & operator=(Board && rhs) {
 			if (this != &rhs) {
 				this->player_stat = std::move(rhs.player_stat);

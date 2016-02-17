@@ -62,16 +62,15 @@ class ObjectManager
 	friend std::hash<ObjectManager>;
 
 public:
-	ObjectManager();
+	ObjectManager(Board & board);
 	~ObjectManager() {}
 
 	ObjectManager(ObjectManager const& rhs) = delete;
+	ObjectManager(Board & board, ObjectManager const& rhs);
 	ObjectManager& operator=(ObjectManager const& rhs) = delete;
 
-	ObjectManager(ObjectManager && rhs) { *this = std::move(rhs); }
+	ObjectManager(Board & board, ObjectManager && rhs);
 	ObjectManager& operator=(ObjectManager && rhs);
-
-	ObjectManager & CloneFrom(ObjectManager const& rhs);
 
 	bool operator==(ObjectManager const& rhs) const;
 	bool operator!=(ObjectManager const& rhs) const;
@@ -132,8 +131,26 @@ private:
 	Minions opponent_minions;
 };
 
-inline ObjectManager::ObjectManager()
+inline ObjectManager::ObjectManager(Board & board) :
+	player_hero(board), opponent_hero(board)
 {
+}
+
+inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs)
+	: player_hero(board), opponent_hero(board)
+{
+	this->player_hero = rhs.player_hero;
+	this->opponent_hero = rhs.opponent_hero;
+
+	// copy minions
+	this->player_minions.CloneFrom(rhs.player_minions);
+	this->opponent_minions.CloneFrom(rhs.opponent_minions);
+}
+
+inline ObjectManager::ObjectManager(Board & board, ObjectManager && rhs) :
+	player_hero(board), opponent_hero(board)
+{
+	*this = std::move(rhs);
 }
 
 inline ObjectManager & ObjectManager::operator=(ObjectManager && rhs)
@@ -142,20 +159,6 @@ inline ObjectManager & ObjectManager::operator=(ObjectManager && rhs)
 	this->opponent_hero = std::move(rhs.opponent_hero);
 	this->player_minions = std::move(rhs.player_minions);
 	this->opponent_minions = std::move(rhs.opponent_minions);
-
-	return *this;
-}
-
-inline ObjectManager & ObjectManager::CloneFrom(ObjectManager const & rhs)
-{
-	using GameEngine::BoardObjects::Minion;
-
-	this->player_hero = rhs.player_hero;
-	this->opponent_hero = rhs.opponent_hero;
-
-	// copy minions
-	this->player_minions.CloneFrom(rhs.player_minions);
-	this->opponent_minions.CloneFrom(rhs.opponent_minions);
 
 	return *this;
 }
