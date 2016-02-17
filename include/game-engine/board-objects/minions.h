@@ -57,16 +57,24 @@ public: // getters
 		return *it;
 	}
 
+	MinionIterator GetIterator(int minion_idx) {
+		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
+	}
+
+	MinionIterator GetIterator(Minion const& minion) {
+		return MinionIterator(this->board, *this, this->GetRawIterator(&minion));
+	}
+
 	MinionInserter GetInserter(int minion_idx) {
-		return MinionInserter(this->board, *this, this->GetIterator(minion_idx));
+		return MinionInserter(this->board, *this, this->GetRawIterator(minion_idx));
 	}
 
 	MinionInserter GetInserterBefore(Minion const& minion) {
-		return MinionInserter(this->board, *this, this->GetIterator(&minion));
+		return MinionInserter(this->board, *this, this->GetRawIterator(&minion));
 	}
 
 	MinionManipulator GetManipulator(int minion_idx) {
-		auto it = this->GetIterator(minion_idx);
+		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
 			throw std::out_of_range("minion idx out of range");
 		}
@@ -75,10 +83,13 @@ public: // getters
 
 	MinionManipulator GetManipulator(Minion const* minion) 
 	{
-		auto it = this->GetIterator(minion);
+		auto it = this->GetRawIterator(minion);
 		if (it == this->minions.end()) throw std::runtime_error("cannot find minion");
 		return MinionManipulator(this->board, *this, *it);
 	}
+
+public: // modifiers
+	MinionManipulator InsertBefore(MinionIterator const& it, Minion && minion);
 
 public: // hooks
 	void TurnStart(bool owner_turn) {
@@ -105,7 +116,7 @@ public: // debug
 	}
 
 private:
-	container_type::iterator GetIterator(int minion_idx) {
+	container_type::iterator GetRawIterator(int minion_idx) {
 		auto it = this->minions.begin();
 		for (; minion_idx > 0; --minion_idx) {
 			++it;
@@ -114,7 +125,7 @@ private:
 		return it;
 	}
 
-	container_type::iterator GetIterator(Minion const* minion)
+	container_type::iterator GetRawIterator(Minion const* minion)
 	{
 		// Note: A linear search alrogithm
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {

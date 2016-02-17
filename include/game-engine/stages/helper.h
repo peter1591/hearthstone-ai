@@ -22,7 +22,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayMinion(Board & board, Card const& card, SlotIndex playing_side, PlayMinionData const& data);
 
 	// no battle cry
-	static bool SummonMinion(Card const& card, BoardObjects::MinionInserter & inserter);
+	static bool SummonMinion(Card const& card, BoardObjects::MinionIterator & it);
 
 	static bool EquipWeapon(Board & board, Card const& card, SlotIndex playing_side, Move::EquipWeaponData const& data);
 

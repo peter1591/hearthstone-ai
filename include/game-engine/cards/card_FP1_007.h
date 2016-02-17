@@ -21,14 +21,13 @@ public:
 		// summon Nerubian (AT_036t) when death at [pos]
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
 
-		auto inserter = triggering_minion.GetMinions().GetInserterBefore(triggering_minion.GetMinion());
-#ifdef DEBUG
-		if (inserter.IsEnd()) {
+		auto it = triggering_minion.GetMinions().GetIterator(triggering_minion.GetMinion());
+		if (it.IsEnd()) {
 			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
+			return;
 		}
-#endif
 		
-		StageHelper::SummonMinion(card, inserter);
+		StageHelper::SummonMinion(card, it);
 	}
 
 	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)

@@ -191,23 +191,23 @@ namespace GameEngine
 		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
 		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
-		auto inserter = board.object_manager.GetMinionInserter(data.put_location);
+		auto it = board.object_manager.GetMinionIterator(data.put_location);
 
-		StageHelper::SummonMinion(card, inserter);
+		StageHelper::SummonMinion(card, it);
 
 		return false;
 	}
 
 	// return true if stage changed
-	inline bool StageHelper::SummonMinion(Card const & card, BoardObjects::MinionInserter & inserter)
+	inline bool StageHelper::SummonMinion(Card const & card, BoardObjects::MinionIterator & it)
 	{
 		BoardObjects::Minion summoning_minion;
 		summoning_minion.Summon(card);
 
-		if (inserter.GetMinions().IsFull()) return false;
+		if (it.GetMinions().IsFull()) return false;
 
 		// add minion
-		auto summoned_minion = inserter.InsertBefore(std::move(summoning_minion));
+		auto summoned_minion = it.GetMinions().InsertBefore(it, std::move(summoning_minion));
 
 		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
 

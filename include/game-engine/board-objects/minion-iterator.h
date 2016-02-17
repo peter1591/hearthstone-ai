@@ -42,6 +42,10 @@ public:
 	MinionIterator(Board & board, Minions & minions, container_type::iterator it)
 		: board(board), minions(minions), it(it) {}
 
+	Board & GetBoard() const { return this->board; }
+	Minions & GetMinions() const { return this->minions; }
+	container_type::iterator GetIterator() const { return it; }
+
 	void GoToNext();
 	bool IsEnd() const;
 
@@ -53,7 +57,7 @@ public:
 private:
 	Board & board;
 	Minions & minions;
-	container_type::const_iterator it;
+	container_type::iterator it;
 };
 
 } // BoardObjects

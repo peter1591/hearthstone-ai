@@ -250,5 +250,6 @@ namespace std {
 }
 
 #include "game-engine/board-objects/minion-manipulator-impl.h"
+#include "game-engine/board-objects/minions-impl.h"
 
 #endif

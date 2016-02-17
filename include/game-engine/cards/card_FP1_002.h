@@ -21,15 +21,14 @@ public:
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
 
-		auto inserter = triggering_minion.GetMinions().GetInserterBefore(triggering_minion.GetMinion());
-#ifdef DEBUG
-		if (inserter.IsEnd()) {
+		auto it = triggering_minion.GetMinions().GetIterator(triggering_minion.GetMinion());
+		if (it.IsEnd()) {
 			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
+			return;
 		}
-#endif
 
-		StageHelper::SummonMinion(card, inserter);
-		StageHelper::SummonMinion(card, inserter);
+		StageHelper::SummonMinion(card, it);
+		StageHelper::SummonMinion(card, it);
 	}
 
 	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)

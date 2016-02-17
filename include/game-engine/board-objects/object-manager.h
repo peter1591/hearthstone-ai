@@ -94,8 +94,9 @@ public: // Manipulate minions
 		return MinionConstIteratorWithSlotIndex(this->opponent_minions, this->opponent_minions.begin(), SLOT_OPPONENT_MINION_START);
 	}
 
-	MinionManipulator GetMinionManipulator(SlotIndex idx);
-	MinionInserter GetMinionInserter(SlotIndex idx);
+	MinionIterator GetMinionIterator(SlotIndex slot_idx);
+	MinionManipulator GetMinionManipulator(SlotIndex slot_idx);
+	MinionInserter GetMinionInserter(SlotIndex slot_idx);
 
 	MinionInserter GetMinionInserterAtBeginOfSide(SlotIndex side) {
 		if (SlotIndexHelper::IsPlayerSide(side)) return this->GetMinionInserter(SLOT_PLAYER_MINION_START);
@@ -200,6 +201,20 @@ inline BoardObject ObjectManager::GetObject(SlotIndex idx)
 		return BoardObject(this->GetMinionManipulator(idx));
 	else
 		throw std::runtime_error("invalid argument");
+}
+
+inline MinionIterator ObjectManager::GetMinionIterator(SlotIndex slot_idx)
+{
+	if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
+	else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
+	else if (slot_idx < SLOT_OPPONENT_HERO) {
+		return this->player_minions.GetIterator(slot_idx - SLOT_PLAYER_MINION_START);
+	}
+	else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
+	else if (slot_idx < SLOT_MAX) {
+		return this->opponent_minions.GetIterator(slot_idx - SLOT_OPPONENT_MINION_START);
+	}
+	else throw std::runtime_error("invalid argument");
 }
 
 inline MinionManipulator ObjectManager::GetMinionManipulator(SlotIndex slot_idx)
