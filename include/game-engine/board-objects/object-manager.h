@@ -78,8 +78,8 @@ public:
 
 public: // Get manipulate object
 	BoardObject GetObject(GameEngine::Board & board, SlotIndex idx);
-	BoardObject GetPlayerHero(GameEngine::Board & board);
-	BoardObject GetOpponentHero(GameEngine::Board & board);
+	BoardObject GetPlayerHero();
+	BoardObject GetOpponentHero();
 
 public: // Manipulate heros
 	void SetHero(Hero const& player, Hero const& opponent);
@@ -194,23 +194,23 @@ inline BoardObject ObjectManager::GetObject(GameEngine::Board & board, SlotIndex
 	if (idx < SLOT_PLAYER_HERO)
 		throw std::runtime_error("invalid argument");
 	else if (idx == SLOT_PLAYER_HERO)
-		return this->GetPlayerHero(board);
+		return this->GetPlayerHero();
 	else if (idx < SLOT_OPPONENT_HERO)
 		return BoardObject(this->GetMinionManipulator(board, idx));
 	else if (idx == SLOT_OPPONENT_HERO)
-		return this->GetOpponentHero(board);
+		return this->GetOpponentHero();
 	else if (idx < SLOT_MAX)
 		return BoardObject(this->GetMinionManipulator(board, idx));
 	else
 		throw std::runtime_error("invalid argument");
 }
 
-inline BoardObject ObjectManager::GetPlayerHero(GameEngine::Board & board)
+inline BoardObject ObjectManager::GetPlayerHero()
 {
 	return BoardObject(this->player_hero);
 }
 
-inline BoardObject ObjectManager::GetOpponentHero(GameEngine::Board & board)
+inline BoardObject ObjectManager::GetOpponentHero()
 {
 	return BoardObject(this->opponent_hero);
 }
@@ -245,8 +245,8 @@ inline MinionInserter ObjectManager::GetMinionInserter(GameEngine::Board & board
 
 inline void ObjectManager::PlayerTurnStart(GameEngine::Board & board)
 {
-	this->GetPlayerHero(board).GetHero().TurnStart(true);
-	this->GetOpponentHero(board).GetHero().TurnStart(false);
+	this->GetPlayerHero().GetHero().TurnStart(true);
+	this->GetOpponentHero().GetHero().TurnStart(false);
 
 	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().TurnStart(true);
@@ -258,8 +258,8 @@ inline void ObjectManager::PlayerTurnStart(GameEngine::Board & board)
 
 inline void ObjectManager::PlayerTurnEnd(GameEngine::Board & board)
 {
-	this->GetPlayerHero(board).GetHero().TurnEnd(true);
-	this->GetOpponentHero(board).GetHero().TurnEnd(false);
+	this->GetPlayerHero().GetHero().TurnEnd(true);
+	this->GetOpponentHero().GetHero().TurnEnd(false);
 
 	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().TurnEnd(true);
@@ -271,8 +271,8 @@ inline void ObjectManager::PlayerTurnEnd(GameEngine::Board & board)
 
 inline void ObjectManager::OpponentTurnStart(GameEngine::Board & board)
 {
-	this->GetOpponentHero(board).GetHero().TurnStart(true);
-	this->GetPlayerHero(board).GetHero().TurnStart(false);
+	this->GetOpponentHero().GetHero().TurnStart(true);
+	this->GetPlayerHero().GetHero().TurnStart(false);
 
 	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().TurnStart(true);
@@ -284,8 +284,8 @@ inline void ObjectManager::OpponentTurnStart(GameEngine::Board & board)
 
 inline void ObjectManager::OpponentTurnEnd(GameEngine::Board & board)
 {
-	this->GetOpponentHero(board).GetHero().TurnEnd(true);
-	this->GetPlayerHero(board).GetHero().TurnEnd(false);
+	this->GetOpponentHero().GetHero().TurnEnd(true);
+	this->GetPlayerHero().GetHero().TurnEnd(false);
 
 	for (auto it = this->GetMinionInserterAtBeginOfSide(board, SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
 		it.ConverToManipulator().TurnEnd(true);
