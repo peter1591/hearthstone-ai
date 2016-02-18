@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "object-base.h"
 #include "game-engine/board-objects/minion.h"
 

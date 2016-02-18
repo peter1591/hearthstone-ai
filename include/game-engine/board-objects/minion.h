@@ -62,11 +62,13 @@ public:
 
 	std::list<OnDeathTrigger> triggers_on_death;
 
-	Enchantments<MinionManipulator> enchantments;
-	Auras auras; // owned auras
+	std::shared_ptr<Enchantments<MinionManipulator>> enchantments;
+	std::shared_ptr<Auras> auras; // owned auras
 };
 
-inline Minion::Minion() : card_id(0), pending_removal(false)
+inline Minion::Minion() : card_id(0), pending_removal(false),
+	enchantments(new Enchantments<MinionManipulator>()),
+	auras(new Auras)
 {
 
 }
@@ -119,8 +121,8 @@ inline bool Minion::Attackable() const
 
 inline void Minion::CheckCanBeSafelyCloned() const
 {
-	this->enchantments.CheckCanBeSafelyCloned();
-	this->auras.CheckCanBeSafelyCloned();
+	this->enchantments->CheckCanBeSafelyCloned();
+	this->auras->CheckCanBeSafelyCloned();
 }
 
 inline bool Minion::operator==(Minion const& rhs) const
@@ -134,8 +136,8 @@ inline bool Minion::operator==(Minion const& rhs) const
 
 	if (this->pending_removal != rhs.pending_removal) return false;
 
-	if (this->enchantments != rhs.enchantments) return false;
-	if (this->auras != rhs.auras) return false;
+	if (*this->enchantments != *rhs.enchantments) return false;
+	if (*this->auras != *rhs.auras) return false;
 
 	return true;
 }
@@ -188,8 +190,8 @@ namespace std {
 
 			GameEngine::hash_combine(result, s.pending_removal);
 
-			GameEngine::hash_combine(result, s.enchantments);
-			GameEngine::hash_combine(result, s.auras);
+			GameEngine::hash_combine(result, *s.enchantments);
+			GameEngine::hash_combine(result, *s.auras);
 
 			return result;
 		}

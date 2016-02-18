@@ -112,42 +112,42 @@ inline void GameEngine::BoardObjects::MinionManipulator::SetMinionStatFlag(Minio
 
 inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura)
 {
-	this->minion.auras.Add(*this, aura);
+	this->minion.auras->Add(*this, aura);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras()
 {
-	this->minion.auras.Clear(*this);
+	this->minion.auras->Clear(*this);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner)
 {
-	this->minion.enchantments.Add(enchantment, owner, *this);
+	this->minion.enchantments->Add(enchantment, owner, *this);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment<MinionManipulator> * enchantment)
 {
-	this->minion.enchantments.Remove(enchantment, *this);
+	this->minion.enchantments->Remove(enchantment, *this);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::ClearEnchantments()
 {
-	this->minion.enchantments.Clear(*this);
+	this->minion.enchantments->Clear(*this);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::HookAfterMinionAdded(MinionManipulator & added_minion)
 {
-	this->minion.auras.HookAfterMinionAdded(*this, added_minion);
+	this->minion.auras->HookAfterMinionAdded(*this, added_minion);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged()
 {
 	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
-		minion.auras.HookAfterOwnerEnraged(*this); // enraged
+		minion.auras->HookAfterOwnerEnraged(*this); // enraged
 	}
 	else if (this->GetHP() == this->GetMaxHP()) {
-		minion.auras.HookAfterOwnerUnEnraged(*this); // un-enraged
+		minion.auras->HookAfterOwnerUnEnraged(*this); // un-enraged
 	}
 	else {
 		throw std::runtime_error("hp should not be larger than max-hp");
@@ -170,7 +170,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn
 		}
 	}
 
-	this->minion.enchantments.TurnEnd(*this);
+	this->minion.enchantments->TurnEnd(*this);
 }
 
 inline bool GameEngine::BoardObjects::MinionManipulator::IsPlayerSide() const
