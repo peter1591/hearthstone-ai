@@ -43,8 +43,8 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}
 
-	MinionIterator GetIterator(Minion const& minion) {
-		return MinionIterator(this->board, *this, this->GetRawIterator(&minion));
+	MinionIterator GetIterator(MinionManipulator const& minion) {
+		return MinionIterator(this->board, *this, this->GetRawIterator(minion));
 	}
 
 	MinionManipulator & GetManipulator(int minion_idx) {
@@ -52,13 +52,6 @@ public: // getters
 		if (it == this->minions.end()) {
 			throw std::out_of_range("minion idx out of range");
 		}
-		return *it;
-	}
-
-	MinionManipulator & GetManipulator(Minion const* minion) 
-	{
-		auto it = this->GetRawIterator(minion);
-		if (it == this->minions.end()) throw std::runtime_error("cannot find minion");
 		return *it;
 	}
 
@@ -96,17 +89,15 @@ private:
 	container_type::iterator GetRawIterator(int minion_idx) {
 		auto it = this->minions.begin();
 		for (; minion_idx > 0; --minion_idx) {
-			++it;
 			if (it == this->minions.end()) break;
+			++it;
 		}
 		return it;
 	}
 
-	container_type::iterator GetRawIterator(Minion const* minion)
-	{
-		// Note: A linear search alrogithm
+	container_type::iterator GetRawIterator(MinionManipulator const& minion) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			if (&it->GetMinion() == minion) return it;
+			if (&(*it) == &minion) return it;
 		}
 		return this->minions.end();
 	}
@@ -141,18 +132,12 @@ namespace std {
 
 inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions const & rhs)
 {
-	// The MCTS should only clone board from the initialized state
-	// If caller need to clone the initialized state (which has some enchantment placed on heap)
-	// we need to ask the caller to re-initialized the board as he did at the first time
-#ifdef DEBUG
-	for (auto const& minion : rhs.minions)
-	{
-		minion.GetMinion().CheckCanBeSafelyCloned();
-	}
-#endif
-
 	this->pending_removal_count = rhs.pending_removal_count;
-	this->minions = rhs.minions;
+
+	this->minions.clear();
+	for (auto const& minion : rhs.minions) {
+		this->minions.push_back(MinionManipulator(this->board, *this, minion));
+	}
 
 	return *this;
 }
@@ -160,10 +145,13 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions && rhs)
 {
 	this->pending_removal_count = std::move(rhs.pending_removal_count);
-	this->minions = std::move(rhs.minions);
+
+	this->minions.clear();
+	for (auto & minion : rhs.minions) {
+		this->minions.push_back(MinionManipulator(this->board, *this, minion));
+	}
 
 	return *this;
 }
 
 #include "minion-iterator-impl.h"
-#include "enchantments-impl.h"

@@ -17,6 +17,17 @@ namespace GameEngine {
 		}
 
 
+		inline MinionIterator::MinionIterator(Board & board, Minions & minions, container_type::iterator it)
+			: board(board), minions(minions), it(it)
+		{
+#ifdef DEBUG
+			if (it != minions.end()) {
+				if (&it->GetBoard() != &board) throw std::runtime_error("consistency check failed");
+				if (&it->GetMinions() != &minions) throw std::runtime_error("consistency check failed");
+			}
+#endif
+		}
+
 		inline void MinionIterator::GoToNext() { this->it++; }
 		inline bool MinionIterator::IsEnd() const { return this->it == this->minions.end(); }
 

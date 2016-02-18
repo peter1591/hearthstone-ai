@@ -14,15 +14,6 @@ inline GameEngine::BoardObjects::Enchantments<Target>::~Enchantments()
 }
 
 template <typename Target>
-inline void GameEngine::BoardObjects::Enchantments<Target>::CheckCanBeSafelyCloned() const
-{
-	// Since enchantments are placed on heap, which is not safe by shallow copy
-	if (!this->enchantments.empty()) {
-		throw std::runtime_error("You should not clone a board with enchantments.");
-	}
-}
-
-template <typename Target>
 inline bool GameEngine::BoardObjects::Enchantments<Target>::operator==(Enchantments const & rhs) const
 {
 	if (this->enchantments.size() != rhs.enchantments.size()) return false;
@@ -55,7 +46,7 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::Add(
 	Enchantment<Target> * enchantment, EnchantmentOwner * owner, Target & target)
 {
 	this->enchantments.push_back(std::make_pair(enchantment, owner));
-	if (owner) owner->EnchantmentAdded(enchantment, target);
+	if (owner) owner->EnchantmentAdded(enchantment);
 	enchantment->AfterAdded(target);
 }
 
@@ -106,7 +97,7 @@ inline typename GameEngine::BoardObjects::Enchantments<Target>::container_type::
 	typename container_type::iterator it, Target & target)
 {
 	it->first->BeforeRemoved(target);
-	if (it->second) it->second->EnchantmentRemoved(it->first, target);
+	if (it->second) it->second->EnchantmentRemoved(it->first);
 	
 	delete it->first;
 
@@ -133,20 +124,30 @@ inline bool GameEngine::BoardObjects::EnchantmentOwner::IsEmpty() const
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator & owner)
 {
+	// remove enchantment from minions
 	while (!this->minion_enchantments.empty()) {
-		auto it = this->minion_enchantments.begin();
-		owner.GetMinions().GetManipulator(it->second).RemoveEnchantment(it->first);
+		Enchantment<MinionManipulator> * removing_enchant = this->minion_enchantments.front();
+
+		for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
+			it.ConvertToManipulator().RemoveEnchantment(removing_enchant);
+		}
+		for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
+			it.ConvertToManipulator().RemoveEnchantment(removing_enchant);
+		}
 	}
 }
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentAdded(
-	Enchantment<GameEngine::BoardObjects::MinionManipulator> * enchantment, MinionManipulator & target)
+	Enchantment<GameEngine::BoardObjects::MinionManipulator> * enchantment)
 {
-	this->minion_enchantments[enchantment] = &target.GetMinion();
+	this->minion_enchantments.push_back(enchantment);
 }
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentRemoved(
-	Enchantment<GameEngine::BoardObjects::MinionManipulator> * enchantment, MinionManipulator & target)
+	Enchantment<GameEngine::BoardObjects::MinionManipulator> * enchantment)
 {
-	this->minion_enchantments.erase(enchantment);
+	for (auto it = this->minion_enchantments.begin(); it != this->minion_enchantments.end(); ) {
+		if (*it == enchantment) it = this->minion_enchantments.erase(it);
+		else it++;
+	}
 }

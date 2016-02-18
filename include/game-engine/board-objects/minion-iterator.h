@@ -16,8 +16,7 @@ public:
 	typedef std::list<MinionManipulator> container_type;
 
 public:
-	MinionIterator(Board & board, Minions & minions, container_type::iterator it)
-		: board(board), minions(minions), it(it) {}
+	MinionIterator(Board & board, Minions & minions, container_type::iterator it);
 
 	Board & GetBoard() const { return this->board; }
 	Minions & GetMinions() const { return this->minions; }

@@ -16,9 +16,11 @@ namespace BoardObjects {
 	// and will trigger related hooks on-the-fly
 	class MinionManipulator : public ObjectBase
 	{
-		friend class Minions; // only class 'Minions' can create a new instance
+		friend class Minions; // only class 'Minions' can create/copy/move
 
-	public:
+	private: // copy semantics should only be used in Minions
+		MinionManipulator(MinionManipulator const& rhs) = delete;
+
 		MinionManipulator(Board & board, Minions & minions, Minion const& minion)
 			: board(board), minions(minions), minion(minion)
 		{}
@@ -27,10 +29,16 @@ namespace BoardObjects {
 			: board(board), minions(minions), minion(std::move(minion))
 		{}
 
-		MinionManipulator(MinionManipulator const& rhs)
-			: board(rhs.board), minions(rhs.minions), minion(rhs.minion)
+		MinionManipulator(Board & board, Minions & minions, MinionManipulator const& minion)
+			: board(board), minions(minions), minion(minion.minion)
 		{}
 
+		MinionManipulator(Board & board, Minions & minions, MinionManipulator && minion)
+			: board(board), minions(minions), minion(std::move(minion.minion))
+		{}
+
+	public:
+		// move semantics should only be used by container (i.e., std::list<MinionManipulator>)
 		MinionManipulator(MinionManipulator && rhs)
 			: board(rhs.board), minions(rhs.minions), minion(std::move(rhs.minion))
 		{}
@@ -38,6 +46,7 @@ namespace BoardObjects {
 		MinionManipulator & operator=(MinionManipulator const& rhs) = delete;
 		MinionManipulator & operator=(MinionManipulator && rhs) = delete;
 
+	public:
 		bool operator==(MinionManipulator const& rhs) const { return this->GetMinion() == rhs.GetMinion(); }
 		bool operator!=(MinionManipulator const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
 

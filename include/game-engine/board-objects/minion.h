@@ -30,9 +30,33 @@ public:
 public:
 	Minion();
 
-	// Shallow copy is allowed to be compliance to STL containers
-	// Runtime check for deep-clone since enchantments and auras are put on heap
-	void CheckCanBeSafelyCloned() const;
+	Minion(Minion const& rhs) {
+		// If minion has enchantments/auras, then it cannot be cloned
+		// Note: The only chance we need to copy minion is to copy root node board in MCTS
+		// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
+		if (!this->enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
+		if (!this->auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
+
+		this->card_id = rhs.card_id;
+		this->stat = rhs.stat;
+		this->attacked_times = rhs.attacked_times;
+		this->summoned_this_turn = rhs.summoned_this_turn;
+		this->pending_removal = rhs.pending_removal;
+		this->triggers_on_death = rhs.triggers_on_death;
+	}
+	Minion & operator=(Minion const& rhs) = delete;
+
+	Minion(Minion && rhs) {
+		this->card_id = std::move(rhs.card_id);
+		this->stat = std::move(rhs.stat);
+		this->attacked_times = std::move(rhs.attacked_times);
+		this->summoned_this_turn = std::move(rhs.summoned_this_turn);
+		this->pending_removal = std::move(rhs.pending_removal);
+		this->triggers_on_death = std::move(rhs.triggers_on_death);
+		this->enchantments = std::move(rhs.enchantments);
+		this->auras = std::move(rhs.auras);
+	}
+	Minion & operator=(Minion && rhs) = delete;
 
 	bool operator==(const Minion &rhs) const;
 	bool operator!=(const Minion &rhs) const;
@@ -62,13 +86,11 @@ public:
 
 	std::list<OnDeathTrigger> triggers_on_death;
 
-	std::shared_ptr<Enchantments<MinionManipulator>> enchantments;
-	std::shared_ptr<Auras> auras; // owned auras
+	Enchantments<MinionManipulator> enchantments;
+	Auras auras; // owned auras
 };
 
-inline Minion::Minion() : card_id(0), pending_removal(false),
-	enchantments(new Enchantments<MinionManipulator>()),
-	auras(new Auras)
+inline Minion::Minion() : card_id(0), pending_removal(false)
 {
 
 }
@@ -119,12 +141,6 @@ inline bool Minion::Attackable() const
 	return true;
 }
 
-inline void Minion::CheckCanBeSafelyCloned() const
-{
-	this->enchantments->CheckCanBeSafelyCloned();
-	this->auras->CheckCanBeSafelyCloned();
-}
-
 inline bool Minion::operator==(Minion const& rhs) const
 {
 	if (this->card_id != rhs.card_id) return false;
@@ -136,8 +152,8 @@ inline bool Minion::operator==(Minion const& rhs) const
 
 	if (this->pending_removal != rhs.pending_removal) return false;
 
-	if (*this->enchantments != *rhs.enchantments) return false;
-	if (*this->auras != *rhs.auras) return false;
+	if (this->enchantments != rhs.enchantments) return false;
+	if (this->auras != rhs.auras) return false;
 
 	return true;
 }
@@ -190,8 +206,8 @@ namespace std {
 
 			GameEngine::hash_combine(result, s.pending_removal);
 
-			GameEngine::hash_combine(result, *s.enchantments);
-			GameEngine::hash_combine(result, *s.auras);
+			GameEngine::hash_combine(result, s.enchantments);
+			GameEngine::hash_combine(result, s.auras);
 
 			return result;
 		}

@@ -40,7 +40,7 @@ public:
 		return this->hero;
 	}
 
-	MinionManipulator GetMinion()
+	MinionManipulator & GetMinion()
 	{
 #ifdef DEBUG
 		if (this->IsMinion() == false) throw std::runtime_error("type not match.");

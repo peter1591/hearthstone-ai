@@ -21,7 +21,7 @@ public:
 		// summon Nerubian (AT_036t) when death at [pos]
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
 
-		auto it = triggering_minion.GetMinions().GetIterator(triggering_minion.GetMinion());
+		auto it = triggering_minion.GetMinions().GetIterator(triggering_minion);
 		if (it.IsEnd()) {
 			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
 			return;

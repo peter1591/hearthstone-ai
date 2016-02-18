@@ -49,15 +49,11 @@ namespace GameEngine {
 			}
 
 			Auras(Auras const& rhs) = delete;
-
-			// default copy constructor/assignment are used for shallow copy
-			// deep copy (i.e., Clone) are prevented by the following function.
-			void CheckCanBeSafelyCloned() const
-			{
-				// Since auras are placed on heap, which is not safe by shallow copy
-				if (!this->auras.empty()) {
-					throw std::runtime_error("You should not clone a board with auras.");
-				}
+			Auras & operator=(Auras const& rhs) = delete;
+			Auras(Auras && rhs) { *this = std::move(rhs); }
+			Auras & operator=(Auras && rhs) {
+				this->auras = std::move(rhs.auras);
+				return *this;
 			}
 
 			bool operator==(Auras const& rhs) const
@@ -93,6 +89,8 @@ namespace GameEngine {
 				for (auto & aura : this->auras) aura->BeforeRemoved(owner);
 				this->auras.clear();
 			}
+
+			bool Empty() const { return this->auras.empty(); }
 
 		public: // hooks
 			void HookAfterMinionAdded(MinionManipulator & aura_owner, MinionManipulator & added_minion)

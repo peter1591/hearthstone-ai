@@ -22,10 +22,13 @@ public:
 	~Enchantments();
 
 	Enchantments(Enchantments<Target> const& rhs) = delete;
-
-	// default copy constructor/assignment are used for shallow copy
-	// deep copy (i.e., Clone) are prevented by the following function.
-	void CheckCanBeSafelyCloned() const;
+	Enchantments<Target> operator=(Enchantments<Target> const& rhs) = delete;
+	
+	Enchantments(Enchantments<Target> && rhs) { *this = std::move(rhs); }
+	Enchantments<Target> & operator=(Enchantments<Target> && rhs) {
+		this->enchantments = std::move(rhs.enchantments);
+		return *this;
+	}
 
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
@@ -33,6 +36,7 @@ public:
 	void Add(Enchantment<Target> * enchantment, EnchantmentOwner * owner, Target & minion);
 	void Remove(Enchantment<Target> * enchantment, Target & target);
 	void Clear(Target & target);
+	bool Empty() const { return this->enchantments.empty(); }
 
 public: // hooks
 	void TurnEnd(Target & target);
@@ -53,11 +57,11 @@ public:
 	void RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator & owner);
 
 	// hooks
-	void EnchantmentAdded(Enchantment<MinionManipulator> * enchantment, MinionManipulator & target);
-	void EnchantmentRemoved(Enchantment<MinionManipulator> * enchantment, MinionManipulator & target);
+	void EnchantmentAdded(Enchantment<MinionManipulator> * enchantment);
+	void EnchantmentRemoved(Enchantment<MinionManipulator> * enchantment);
 
 private:
-	std::map<Enchantment<MinionManipulator> *, Minion const*> minion_enchantments;
+	std::list<Enchantment<MinionManipulator> *> minion_enchantments;
 };
 
 } // namespace BoardObjects
