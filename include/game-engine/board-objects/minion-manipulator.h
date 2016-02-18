@@ -19,12 +19,23 @@ namespace BoardObjects {
 
 	public:
 		MinionManipulator(Board & board, Minions & minions, Minion & minion)
-			: board(&board), minions(&minions), minion(&minion)
+			: board(board), minions(minions), minion(minion)
 		{}
 
-		Board & GetBoard() const { return *this->board; }
-		Minions & GetMinions() const { return *this->minions; }
-		Minion const& GetMinion() const { return *this->minion; }
+		MinionManipulator(MinionManipulator const& rhs)
+			: board(rhs.board), minions(rhs.minions), minion(rhs.minion)
+		{}
+
+		MinionManipulator(MinionManipulator && rhs)
+			: board(rhs.board), minions(rhs.minions), minion(rhs.minion)
+		{}
+
+		MinionManipulator & operator=(MinionManipulator const& rhs) = delete;
+		MinionManipulator & operator=(MinionManipulator && rhs) = delete;
+
+		Board & GetBoard() const { return this->board; }
+		Minions & GetMinions() const { return this->minions; }
+		Minion const& GetMinion() const { return this->minion; }
 
 	public: // basic operations on minion (including interface to ObjectBase)
 		int GetHP() const;
@@ -75,9 +86,9 @@ namespace BoardObjects {
 		bool IsOpponentSide() const;
 
 	private:
-		Board * const board;
-		Minions * const minions;
-		Minion * const minion;
+		Board & board;
+		Minions & minions;
+		Minion & minion;
 	};
 
 } // BoardObjects
