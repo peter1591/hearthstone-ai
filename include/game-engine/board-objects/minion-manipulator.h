@@ -15,7 +15,7 @@ namespace BoardObjects {
 	// and will trigger related hooks on-the-fly
 	class MinionManipulator : public ObjectBase
 	{
-		friend class Minions;
+		friend class Minions; // only class 'Minions' can create a new instance
 
 	public:
 		MinionManipulator(Board & board, Minions & minions, Minion const& minion)

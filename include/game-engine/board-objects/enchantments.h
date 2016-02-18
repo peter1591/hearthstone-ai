@@ -21,6 +21,8 @@ public:
 	Enchantments() {}
 	~Enchantments();
 
+	Enchantments(Enchantments<Target> const& rhs) = delete;
+
 	// default copy constructor/assignment are used for shallow copy
 	// deep copy (i.e., Clone) are prevented by the following function.
 	void CheckCanBeSafelyCloned() const;
