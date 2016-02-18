@@ -19,7 +19,7 @@ namespace GameEngine {
 
 		inline void Minions::MarkPendingRemoval(MinionIterator const & it)
 		{
-			if (it->pending_removal) return;
+			if (it.it->pending_removal) return;
 			it.it->pending_removal = true;
 			this->pending_removal_count++;
 		}
@@ -33,7 +33,7 @@ namespace GameEngine {
 
 		inline void Minions::EraseAndGoToNext(MinionIterator & it)
 		{
-			if (it->pending_removal) this->pending_removal_count--;
+			if (it.it->pending_removal) this->pending_removal_count--;
 			it.it = this->minions.erase(it.it);
 		}
 	}

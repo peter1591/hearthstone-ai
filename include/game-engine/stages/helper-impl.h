@@ -131,7 +131,7 @@ namespace GameEngine
 			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd(); it.GoToNext())
 			{
 				auto manipulator = it.ConvertToManipulator();
-				if (!it->pending_removal && manipulator.GetHP() > 0) continue;
+				if (!it.GetMinion().pending_removal && manipulator.GetHP() > 0) continue;
 
 				it.GetMinions().MarkPendingRemoval(it);
 
@@ -148,7 +148,7 @@ namespace GameEngine
 			// actually remove died minions
 			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd();)
 			{
-				if (!it->pending_removal) {
+				if (!it.GetMinion().pending_removal) {
 					it.GoToNext();
 					continue;
 				}

@@ -22,14 +22,10 @@ public:
 	Board & GetBoard() const { return this->board; }
 	Minions & GetMinions() const { return this->minions; }
 	container_type::iterator GetIterator() const { return it; }
+	Minion const& GetMinion() const { return *it; }
 
 	void GoToNext();
 	bool IsEnd() const;
-
-	Minion const* operator->() { return &(*this->it); }
-	Minion const* operator->() const { return &(*this->it); }
-	Minion const& operator*() { return *this->it; }
-	Minion const& operator*() const { return *this->it; }
 
 	MinionManipulator ConvertToManipulator() { 
 		if (this->IsEnd()) throw std::runtime_error("minion vanished");
@@ -51,13 +47,10 @@ public:
 	MinionConstIteratorWithSlotIndex(Minions const& minions, container_type::const_iterator it_begin, SlotIndex slot_idx_begin)
 		: minions(minions), it(it_begin), slot_idx(slot_idx_begin) { }
 
+	Minion const& GetMinion() const { return *it; }
+
 	void GoToNext();
 	bool IsEnd() const;
-
-	Minion const* operator->() { return &(*this->it); }
-	Minion const* operator->() const { return &(*this->it); }
-	Minion const& operator*() { return *this->it; }
-	Minion const& operator*() const { return *this->it; }
 
 	SlotIndex GetSlotIdx() const { return this->slot_idx; }
 
