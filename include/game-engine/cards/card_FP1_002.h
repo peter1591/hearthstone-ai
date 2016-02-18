@@ -16,7 +16,7 @@ public:
 
 	// Haunted Creeper
 
-	static void Deathrattle(GameEngine::BoardObjects::MinionManipulator triggering_minion)
+	static void Deathrattle(GameEngine::BoardObjects::MinionManipulator & triggering_minion)
 	{
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);

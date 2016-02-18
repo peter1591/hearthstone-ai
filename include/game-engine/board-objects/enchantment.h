@@ -27,11 +27,11 @@ public:
 	bool operator!=(Enchantment<Target> const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
-	virtual void AfterAdded(Target const& minion) {}
-	virtual void BeforeRemoved(Target const& minion) {}
+	virtual void AfterAdded(Target & minion) {}
+	virtual void BeforeRemoved(Target & minion) {}
 
 	// return false if enchant vanished
-	virtual bool TurnEnd(Target const& minion) { return true; }
+	virtual bool TurnEnd(Target & minion) { return true; }
 
 protected:
 	virtual bool EqualsTo(Enchantment<Target> const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -51,7 +51,7 @@ public:
 #endif
 	}
 
-	void AfterAdded(MinionManipulator const& minion)
+	void AfterAdded(MinionManipulator & minion)
 	{
 #ifdef DEBUG
 		this->after_added_called = true;
@@ -79,7 +79,7 @@ public:
 		this->SetMinionFlags(minion, true);
 	}
 
-	void BeforeRemoved(MinionManipulator const& minion)
+	void BeforeRemoved(MinionManipulator & minion)
 	{
 #ifdef DEBUG
 		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
@@ -98,7 +98,7 @@ public:
 		this->SetMinionFlags(minion, false);
 	}
 
-	bool TurnEnd(MinionManipulator const& minion)
+	bool TurnEnd(MinionManipulator & minion)
 	{
 		if (one_turn) return false; // one-turn effect 
 		else return true;
@@ -130,7 +130,7 @@ private:
 	template <int alternating_flag>
 	class MinionFlagsSetter {
 	public:
-		static void SetFlag(MinionManipulator const& minion, bool val) {
+		static void SetFlag(MinionManipulator & minion, bool val) {
 			constexpr int shifted_flag = 1 << alternating_flag;
 			constexpr bool alternating = (buff_flags & shifted_flag) != 0;
 
@@ -145,12 +145,12 @@ private:
 	template <>
 	class MinionFlagsSetter<0> {
 	public:
-		static void SetFlag(MinionManipulator const& minion, bool val) {
+		static void SetFlag(MinionManipulator & minion, bool val) {
 			return;
 		}
 	};
 
-	void SetMinionFlags(MinionManipulator const& minion, bool val)
+	void SetMinionFlags(MinionManipulator & minion, bool val)
 	{
 		MinionFlagsSetter<MinionStat::FLAG_MAX - 1>::SetFlag(minion, val);
 	}

@@ -23,7 +23,7 @@ namespace GameEngine {
 			class Aura : public GameEngine::BoardObjects::AuraToAllMinions
 			{
 			private: // hooks
-				void HookAfterMinionAdded(BoardObjects::MinionManipulator const& aura_owner, BoardObjects::MinionManipulator const& added_minion)
+				void HookAfterMinionAdded(BoardObjects::MinionManipulator & aura_owner, BoardObjects::MinionManipulator & added_minion)
 				{
 					if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, added_minion)) {
 						this->AddAuraEnchantmentToMinion(added_minion);
@@ -31,7 +31,7 @@ namespace GameEngine {
 				}
 
 			private:
-				bool CheckMinionShouldHaveAuraEnchantment(BoardObjects::MinionManipulator const& aura_owner, BoardObjects::MinionManipulator const& minion)
+				bool CheckMinionShouldHaveAuraEnchantment(BoardObjects::MinionManipulator & aura_owner, BoardObjects::MinionManipulator & minion)
 				{
 					// only add aura to friendly minions
 					if (&aura_owner.GetMinions() != &minion.GetMinions()) return false;
@@ -42,7 +42,7 @@ namespace GameEngine {
 					return true;
 				}
 
-				void AddAuraEnchantmentToMinion(BoardObjects::MinionManipulator const& target_minion)
+				void AddAuraEnchantmentToMinion(BoardObjects::MinionManipulator & target_minion)
 				{
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 1;
@@ -69,7 +69,7 @@ namespace GameEngine {
 				}
 			};
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator const& summoned_minion)
+			static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 			{
 				summoned_minion.AddAura(new Aura());
 			}

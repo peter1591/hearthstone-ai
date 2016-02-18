@@ -18,8 +18,12 @@ namespace BoardObjects {
 		friend class Minions;
 
 	public:
-		MinionManipulator(Board & board, Minions & minions, Minion & minion)
+		MinionManipulator(Board & board, Minions & minions, Minion const& minion)
 			: board(board), minions(minions), minion(minion)
+		{}
+
+		MinionManipulator(Board & board, Minions & minions, Minion && minion)
+			: board(board), minions(minions), minion(std::move(minion))
 		{}
 
 		MinionManipulator(MinionManipulator const& rhs)
@@ -27,11 +31,14 @@ namespace BoardObjects {
 		{}
 
 		MinionManipulator(MinionManipulator && rhs)
-			: board(rhs.board), minions(rhs.minions), minion(rhs.minion)
+			: board(rhs.board), minions(rhs.minions), minion(std::move(rhs.minion))
 		{}
 
 		MinionManipulator & operator=(MinionManipulator const& rhs) = delete;
 		MinionManipulator & operator=(MinionManipulator && rhs) = delete;
+
+		bool operator==(MinionManipulator const& rhs) const { return this->GetMinion() == rhs.GetMinion(); }
+		bool operator!=(MinionManipulator const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
 
 		Board & GetBoard() const { return this->board; }
 		Minions & GetMinions() const { return this->minions; }
@@ -55,31 +62,31 @@ namespace BoardObjects {
 		bool IsPoisonous() const;
 
 	public:
-		void AddAttack(int val) const;
-		void IncreaseCurrentAndMaxHP(int val) const;
-		void DecreaseMaxHP(int val) const;
+		void AddAttack(int val);
+		void IncreaseCurrentAndMaxHP(int val);
+		void DecreaseMaxHP(int val);
 
-		void AddOnDeathTrigger(Minion::OnDeathTrigger func) const;
-		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers() const;
+		void AddOnDeathTrigger(Minion::OnDeathTrigger func);
+		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers();
 
-		void SetMinionStatFlag(MinionStat::Flag flag, bool val) const;
+		void SetMinionStatFlag(MinionStat::Flag flag, bool val);
 
 	public: // auras
-		void AddAura(Aura * aura) const;
-		void ClearAuras() const;
+		void AddAura(Aura * aura);
+		void ClearAuras();
 
 	public: // enchantments
-		void AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner) const;
-		void RemoveEnchantment(Enchantment<MinionManipulator> * enchantment) const;
-		void ClearEnchantments() const;
+		void AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner);
+		void RemoveEnchantment(Enchantment<MinionManipulator> * enchantment);
+		void ClearEnchantments();
 
 	public: // hooks
-		void TurnStart(bool owner_turn) const;
-		void TurnEnd(bool owner_turn) const;
+		void TurnStart(bool owner_turn);
+		void TurnEnd(bool owner_turn);
 
 	public: // triggering hooks
-		void HookAfterMinionAdded(MinionManipulator & added_minion) const;
-		void HookMinionCheckEnraged() const;
+		void HookAfterMinionAdded(MinionManipulator & added_minion);
+		void HookMinionCheckEnraged();
 
 	public:
 		bool IsPlayerSide() const;
@@ -88,7 +95,7 @@ namespace BoardObjects {
 	private:
 		Board & board;
 		Minions & minions;
-		Minion & minion;
+		Minion minion;
 	};
 
 } // BoardObjects

@@ -38,18 +38,7 @@ public:
 public: // getters
 	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }
 	bool IsFull() const { return this->GetMinionCount() >= max_minions; }
-
-	Minion& GetMinion(int minion_idx) {
-		auto it = this->minions.begin();
-		for (; minion_idx > 0; --minion_idx) {
-			++it;
-			if (it == this->minions.end()) {
-				throw std::out_of_range("minion idx out of range");
-			}
-		}
-		return *it;
-	}
-
+	
 	MinionIterator GetIterator(int minion_idx) {
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}
@@ -58,48 +47,48 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(&minion));
 	}
 
-	MinionManipulator GetManipulator(int minion_idx) {
+	MinionManipulator & GetManipulator(int minion_idx) {
 		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
 			throw std::out_of_range("minion idx out of range");
 		}
-		return MinionManipulator(this->board, *this, *it);
+		return *it;
 	}
 
-	MinionManipulator GetManipulator(Minion const* minion) 
+	MinionManipulator & GetManipulator(Minion const* minion) 
 	{
 		auto it = this->GetRawIterator(minion);
 		if (it == this->minions.end()) throw std::runtime_error("cannot find minion");
-		return MinionManipulator(this->board, *this, *it);
+		return *it;
 	}
 
 public: // modifiers
-	MinionManipulator InsertBefore(MinionIterator const& it, Minion && minion);
+	MinionManipulator & InsertBefore(MinionIterator const& it, Minion && minion);
 	void MarkPendingRemoval(MinionIterator const& it);
-	void MarkPendingRemoval(MinionManipulator const& minion);
+	void MarkPendingRemoval(MinionManipulator & minion);
 	void EraseAndGoToNext(MinionIterator & it);
 
 public: // hooks
 	void TurnStart(bool owner_turn) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			MinionManipulator(this->board, *this, *it).TurnStart(owner_turn);
+			it->TurnStart(owner_turn);
 		}
 	}
 	void TurnEnd( bool owner_turn) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			MinionManipulator(this->board, *this, *it).TurnEnd(owner_turn);
+			it->TurnEnd(owner_turn);
 		}
 	}
 	void HookAfterMinionAdded(MinionManipulator & added_minion) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			MinionManipulator(this->board, *this, *it).HookAfterMinionAdded(added_minion);
+			it->HookAfterMinionAdded(added_minion);
 		}
 	}
 
 public: // debug
 	void DebugPrint() const {
 		for (const auto &minion : this->minions) {
-			std::cout << "\t" << minion.GetDebugString() << std::endl;
+			std::cout << "\t" << minion.GetMinion().GetDebugString() << std::endl;
 		}
 	}
 
@@ -117,7 +106,7 @@ private:
 	{
 		// Note: A linear search alrogithm
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			if (&(*it) == minion) return it;
+			if (&it->GetMinion() == minion) return it;
 		}
 		return this->minions.end();
 	}
@@ -142,7 +131,7 @@ namespace std {
 			result_type result = 0;
 
 			for (auto const& minion : s.minions) {
-				GameEngine::hash_combine(result, minion);
+				GameEngine::hash_combine(result, minion.GetMinion());
 			}
 
 			return result;
@@ -158,7 +147,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 #ifdef DEBUG
 	for (auto const& minion : rhs.minions)
 	{
-		minion.CheckCanBeSafelyCloned();
+		minion.GetMinion().CheckCanBeSafelyCloned();
 	}
 #endif
 

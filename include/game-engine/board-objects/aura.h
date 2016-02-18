@@ -22,12 +22,12 @@ namespace GameEngine {
 			bool operator!=(Aura const& rhs) const { return !(*this == rhs); }
 
 		public: // hooks
-			virtual void AfterAdded(MinionManipulator const& owner) {}
-			virtual void BeforeRemoved(MinionManipulator const& owner) {}
+			virtual void AfterAdded(MinionManipulator & owner) {}
+			virtual void BeforeRemoved(MinionManipulator & owner) {}
 
-			virtual void HookAfterMinionAdded(MinionManipulator const& aura_owner, MinionManipulator const& added_minion) {}
-			virtual void HookAfterOwnerEnraged(MinionManipulator const&enraged_aura_owner) {}
-			virtual void HookAfterOwnerUnEnraged(MinionManipulator const&unenraged_aura_owner) {}
+			virtual void HookAfterMinionAdded(MinionManipulator & aura_owner, MinionManipulator & added_minion) {}
+			virtual void HookAfterOwnerEnraged(MinionManipulator &enraged_aura_owner) {}
+			virtual void HookAfterOwnerUnEnraged(MinionManipulator &unenraged_aura_owner) {}
 
 		protected:
 			virtual bool EqualsTo(Aura const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -80,28 +80,28 @@ namespace GameEngine {
 			bool operator!=(Auras const& rhs) const { return !(*this == rhs); }
 
 		public:
-			void Add(MinionManipulator const& owner, Aura* aura)
+			void Add(MinionManipulator & owner, Aura* aura)
 			{
 				this->auras.push_back(aura);
 				aura->AfterAdded(owner);
 			}
 
-			void Clear(MinionManipulator const& owner)
+			void Clear(MinionManipulator & owner)
 			{
 				for (auto & aura : this->auras) aura->BeforeRemoved(owner);
 				this->auras.clear();
 			}
 
 		public: // hooks
-			void HookAfterMinionAdded(MinionManipulator const& aura_owner, MinionManipulator const& added_minion)
+			void HookAfterMinionAdded(MinionManipulator & aura_owner, MinionManipulator & added_minion)
 			{
 				for (auto & aura : this->auras) aura->HookAfterMinionAdded(aura_owner, added_minion);
 			}
-			void HookAfterOwnerEnraged(MinionManipulator const&enraged_aura_owner)
+			void HookAfterOwnerEnraged(MinionManipulator &enraged_aura_owner)
 			{
 				for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(enraged_aura_owner);
 			}
-			void HookAfterOwnerUnEnraged(MinionManipulator const&unenraged_aura_owner)
+			void HookAfterOwnerUnEnraged(MinionManipulator &unenraged_aura_owner)
 			{
 				for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(unenraged_aura_owner);
 			}

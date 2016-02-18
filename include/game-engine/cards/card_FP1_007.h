@@ -16,7 +16,7 @@ public:
 
 	// Nerubian Egg
 
-	static void Deathrattle(GameEngine::BoardObjects::MinionManipulator triggering_minion)
+	static void Deathrattle(GameEngine::BoardObjects::MinionManipulator & triggering_minion)
 	{
 		// summon Nerubian (AT_036t) when death at [pos]
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);

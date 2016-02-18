@@ -7,7 +7,7 @@ namespace GameEngine {
 
 		inline void MinionConstIteratorWithSlotIndex::GoToNext() 
 		{
-			if (!this->it->pending_removal) SlotIndexHelper::Increase(this->slot_idx);
+			if (!this->it->GetMinion().pending_removal) SlotIndexHelper::Increase(this->slot_idx);
 			this->it++;
 		}
 

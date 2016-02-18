@@ -13,7 +13,7 @@ class MinionIterator
 	friend class Minions;
 
 public:
-	typedef std::list<Minion> container_type;
+	typedef std::list<MinionManipulator> container_type;
 
 public:
 	MinionIterator(Board & board, Minions & minions, container_type::iterator it)
@@ -22,14 +22,14 @@ public:
 	Board & GetBoard() const { return this->board; }
 	Minions & GetMinions() const { return this->minions; }
 	container_type::iterator GetIterator() const { return it; }
-	Minion const& GetMinion() const { return *it; }
+	Minion const& GetMinion() const { return it->GetMinion(); }
 
 	void GoToNext();
 	bool IsEnd() const;
 
-	MinionManipulator ConvertToManipulator() { 
+	MinionManipulator & ConvertToManipulator() { 
 		if (this->IsEnd()) throw std::runtime_error("minion vanished");
-		return MinionManipulator(this->board, this->minions, *it); 
+		return *it;
 	}
 
 private:
@@ -47,7 +47,7 @@ public:
 	MinionConstIteratorWithSlotIndex(Minions const& minions, container_type::const_iterator it_begin, SlotIndex slot_idx_begin)
 		: minions(minions), it(it_begin), slot_idx(slot_idx_begin) { }
 
-	Minion const& GetMinion() const { return *it; }
+	Minion const& GetMinion() const { return it->GetMinion(); }
 
 	void GoToNext();
 	bool IsEnd() const;

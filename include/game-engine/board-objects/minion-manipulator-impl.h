@@ -69,12 +69,12 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsPoisonous() const
 	return this->minion.stat.IsPoisonous();
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddAttack(int val) const
+inline void GameEngine::BoardObjects::MinionManipulator::AddAttack(int val)
 {
 	this->minion.stat.SetAttack(this->minion.stat.GetAttack() + val);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::IncreaseCurrentAndMaxHP(int val) const
+inline void GameEngine::BoardObjects::MinionManipulator::IncreaseCurrentAndMaxHP(int val)
 {
 #ifdef DEBUG
 	if (val < 0) throw std::runtime_error("should we trigger heal? enrage effect? damaged effect? use TakeDamage() for that.");
@@ -85,7 +85,7 @@ inline void GameEngine::BoardObjects::MinionManipulator::IncreaseCurrentAndMaxHP
 	// no need to check enrage, since we add the hp and max-hp by the same amount
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val) const
+inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val)
 {
 	this->minion.stat.SetMaxHP(this->minion.stat.GetMaxHP() - val);
 	this->minion.stat.SetHP(std::min(this->minion.stat.GetHP(), this->minion.stat.GetMaxHP()));
@@ -93,54 +93,54 @@ inline void GameEngine::BoardObjects::MinionManipulator::DecreaseMaxHP(int val) 
 	this->HookMinionCheckEnraged(); // might become un-enraged if max-hp lowered to current-hp
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddOnDeathTrigger(Minion::OnDeathTrigger func) const
+inline void GameEngine::BoardObjects::MinionManipulator::AddOnDeathTrigger(Minion::OnDeathTrigger func)
 {
 	this->minion.triggers_on_death.push_back(func);
 }
 
-inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::BoardObjects::MinionManipulator::GetAndClearOnDeathTriggers() const
+inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::BoardObjects::MinionManipulator::GetAndClearOnDeathTriggers()
 {
 	std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> ret;
 	this->minion.triggers_on_death.swap(ret);
 	return ret;
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::SetMinionStatFlag(MinionStat::Flag flag, bool val) const
+inline void GameEngine::BoardObjects::MinionManipulator::SetMinionStatFlag(MinionStat::Flag flag, bool val)
 {
 	this->minion.stat.SetFlag(flag, val);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura) const
+inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura)
 {
 	this->minion.auras.Add(*this, aura);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras() const
+inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras()
 {
 	this->minion.auras.Clear(*this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner) const
+inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner)
 {
 	this->minion.enchantments.Add(enchantment, owner, *this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment<MinionManipulator> * enchantment) const
+inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment<MinionManipulator> * enchantment)
 {
 	this->minion.enchantments.Remove(enchantment, *this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::ClearEnchantments() const
+inline void GameEngine::BoardObjects::MinionManipulator::ClearEnchantments()
 {
 	this->minion.enchantments.Clear(*this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::HookAfterMinionAdded(MinionManipulator & added_minion) const
+inline void GameEngine::BoardObjects::MinionManipulator::HookAfterMinionAdded(MinionManipulator & added_minion)
 {
 	this->minion.auras.HookAfterMinionAdded(*this, added_minion);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged() const
+inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged()
 {
 	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
@@ -154,13 +154,13 @@ inline void GameEngine::BoardObjects::MinionManipulator::HookMinionCheckEnraged(
 	}
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::TurnStart(bool owner_turn) const
+inline void GameEngine::BoardObjects::MinionManipulator::TurnStart(bool owner_turn)
 {
 	this->minion.summoned_this_turn = false;
 	this->minion.attacked_times = 0;
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn) const
+inline void GameEngine::BoardObjects::MinionManipulator::TurnEnd(bool owner_turn)
 {
 	if (owner_turn) {
 		// check thaw

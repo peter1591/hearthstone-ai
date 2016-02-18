@@ -19,14 +19,12 @@ namespace BoardObjects {
 class BoardObject
 {
 public:
-	explicit BoardObject(HeroManipulator & hero) : hero(hero),
-		minion(*(Board*)(nullptr), *(Minions*)(nullptr), *(Minion*)(nullptr))
+	explicit BoardObject(HeroManipulator & hero) : hero(hero), minion(*(MinionManipulator*)(nullptr))
 	{
 		this->ptr = &this->hero;
 	}
 
-	explicit BoardObject(MinionManipulator && minion) : minion(minion), 
-		hero(*(HeroManipulator*)(nullptr))
+	explicit BoardObject(MinionManipulator & minion) : minion(minion), hero(*(HeroManipulator*)(nullptr))
 	{
 		this->ptr = &this->minion;
 	}
@@ -54,7 +52,7 @@ public:
 
 private:
 	HeroManipulator & hero;
-	MinionManipulator minion; // a pointer to the actual memory location
+	MinionManipulator & minion;
 	ObjectBase * ptr;
 };
 
@@ -101,7 +99,7 @@ public: // Manipulate minions
 		else throw std::runtime_error("invalid argument");
 	}
 
-	MinionManipulator GetMinionManipulator(SlotIndex slot_idx);
+	MinionManipulator & GetMinionManipulator(SlotIndex slot_idx);
 
 public: // hooks
 	void PlayerTurnStart();
@@ -217,7 +215,7 @@ inline MinionIterator ObjectManager::GetMinionIterator(SlotIndex slot_idx)
 	else throw std::runtime_error("invalid argument");
 }
 
-inline MinionManipulator ObjectManager::GetMinionManipulator(SlotIndex slot_idx)
+inline MinionManipulator & ObjectManager::GetMinionManipulator(SlotIndex slot_idx)
 {
 	if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
