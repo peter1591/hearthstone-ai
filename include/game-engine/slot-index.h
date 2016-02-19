@@ -118,9 +118,9 @@ namespace BoardObjects {
 		static SlotIndexBitmap GetTargets(TargetType type, GameEngine::Board const& board);
 
 	private:
-		static bool MarkAttackableMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
-		static bool MarkTauntMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
-		static bool MarkMinionsWithoutStealth(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
-		static bool MarkMinions(BoardObjects::MinionConstIteratorWithSlotIndex && minion_iterator, SlotIndexBitmap & bitmap);
+		static bool MarkAttackableMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
+		static bool MarkTauntMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
+		static bool MarkMinionsWithoutStealth(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
+		static bool MarkMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
 	};
 }
