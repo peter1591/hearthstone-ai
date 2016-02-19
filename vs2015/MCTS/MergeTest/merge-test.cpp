@@ -71,7 +71,7 @@ void InitializeBoard(GameEngine::Board &board)
 	{
 		auto minion = GameEngine::BoardObjects::Minion();
 		minion.Set(CARD_ID_FP1_007, 0, 2, 2);
-		auto added_minion = board.object_manager.player_minions.InsertBefore(player_minion_it, std::move(minion));
+		auto & added_minion = board.object_manager.player_minions.InsertBefore(player_minion_it, std::move(minion));
 		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
 		added_minion.TurnStart(true);
 	}
@@ -90,10 +90,9 @@ void InitializeBoard(GameEngine::Board &board)
 
 	{
 		auto minion = GameEngine::BoardObjects::Minion();
-		minion.Set(CARD_ID_EX1_029, 1, 10, 10);
-		minion.stat.SetShield(true);
+		minion.Set(CARD_ID_EX1_029, 1, 1, 1);
 		minion.stat.SetPoisonous(true);
-		auto added_minion = board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion));
+		auto & added_minion = board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion));
 		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
 		added_minion.TurnStart(true);
 	}
@@ -177,7 +176,8 @@ static void InteractiveTest()
 
 	InitializeBoard(board);
 
-	srand((unsigned int)time(nullptr));
+	//srand((unsigned int)time(nullptr));
+	srand(0);
 
 	while (true)
 	{
@@ -264,8 +264,7 @@ int main(void)
 	if (!GameEngine::CardDatabase::GetInstance().ReadFromJsonFile("../../../database/cards.json"))
 		throw std::runtime_error("failed to load card data");
 
-	//TestBasic();
+	TestBasic();
 	//TestOperators();
-
-	InteractiveTest();
+	//InteractiveTest();
 }
