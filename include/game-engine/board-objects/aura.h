@@ -61,7 +61,10 @@ namespace GameEngine {
 					if (it_lhs == this->auras.end()) break;
 					if (it_rhs == rhs.auras.end()) break;
 
-					if (*it_lhs != *it_rhs) return false;
+					if (**it_lhs != **it_rhs) return false;
+
+					++it_lhs;
+					++it_rhs;
 				}
 				// both iterators should reach end here, since the size is equal
 
@@ -122,7 +125,7 @@ namespace std {
 			result_type result = 0;
 
 			for (auto const& aura : s.auras) {
-				GameEngine::hash_combine(result, aura);
+				GameEngine::hash_combine(result, *aura);
 			}
 
 			return result;
