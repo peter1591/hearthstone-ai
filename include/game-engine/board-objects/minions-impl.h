@@ -11,6 +11,9 @@ namespace GameEngine {
 			auto new_minion = MinionManipulator(this->board, *this, std::move(minion));
 
 			auto new_it = this->minions.insert(it.GetIterator(), std::move(new_minion));
+#ifdef DEBUG
+			this->change_id++;
+#endif
 
 			auto & summoned_minion = *new_it;
 
@@ -37,6 +40,10 @@ namespace GameEngine {
 		{
 			if (it.GetMinion().pending_removal) this->pending_removal_count--;
 			it.it = this->minions.erase(it.it);
+#ifdef DEBUG
+			this->change_id++; // TODO: test only
+			it.container_change_id = this->change_id;
+#endif
 		}
 	}
 }

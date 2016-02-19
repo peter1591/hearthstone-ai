@@ -19,7 +19,12 @@ public:
 	typedef container_type::const_iterator const_iterator;
 
 public:
-	Minions(Board & board) : board(board), pending_removal_count(0) {}
+	Minions(Board & board) : board(board), pending_removal_count(0) 
+	{
+#ifdef DEBUG
+		this->change_id = 0;
+#endif
+	}
 
 	Minions(Minions const& rhs) = delete;
 	Minions & operator=(Minions const& rhs);
@@ -102,6 +107,11 @@ private:
 
 	int pending_removal_count;
 	container_type minions;
+
+public:
+#ifdef DEBUG
+	int change_id;
+#endif
 };
 
 } // BoardObjects

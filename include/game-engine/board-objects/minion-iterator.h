@@ -19,10 +19,10 @@ private: // only Minions can create instance
 	MinionIterator(Board & board, Minions & minions, container_type::iterator it);
 
 public:
-	Board & GetBoard() const { return this->board; }
-	Minions & GetMinions() const { return this->minions; }
-	container_type::iterator GetIterator() const { return it; }
-	Minion const& GetMinion() const { return it->GetMinion(); }
+	Board & GetBoard() const;
+	Minions & GetMinions() const;
+	container_type::iterator GetIterator() const;
+	Minion const& GetMinion() const;
 
 	bool IsPlayerSide() const;
 	bool IsOpponentSide() const;
@@ -36,9 +36,16 @@ public:
 	}
 
 private:
+	void CheckChangeId() const;
+
+private:
 	Board & board;
 	Minions & minions;
 	container_type::iterator it;
+
+#ifdef DEBUG
+	int container_change_id;
+#endif
 };
 
 class MinionConstIteratorWithSlotIndex
@@ -49,21 +56,26 @@ public:
 	typedef MinionIterator::container_type container_type;
 
 private: // only Minions can create instance
-	MinionConstIteratorWithSlotIndex(Minions const& minions, container_type::const_iterator it_begin, SlotIndex slot_idx_begin)
-		: minions(minions), it(it_begin), slot_idx(slot_idx_begin) { }
+	MinionConstIteratorWithSlotIndex(Minions const& minions, container_type::const_iterator it_begin, SlotIndex slot_idx_begin);
 
 public:
-	Minion const& GetMinion() const { return it->GetMinion(); }
+	Minion const& GetMinion() const;
+	SlotIndex GetSlotIdx() const;
 
 	void GoToNext();
 	bool IsEnd() const;
 
-	SlotIndex GetSlotIdx() const { return this->slot_idx; }
+private:
+	void CheckChangeId() const;
 
 private:
 	Minions const& minions;
 	container_type::const_iterator it;
 	SlotIndex slot_idx;
+
+#ifdef DEBUG
+	int container_change_id;
+#endif
 };
 
 } // BoardObjects
