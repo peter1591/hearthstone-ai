@@ -85,12 +85,12 @@ public: // Manipulate heros
 	HeroManipulator & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions
-	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndex(SlotIndex side) const {
+	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const {
 		if (side == SLOT_PLAYER_SIDE) {
-			return MinionConstIteratorWithSlotIndex(this->player_minions, this->player_minions.begin(), SLOT_PLAYER_MINION_START);
+			return this->player_minions.GetMinionsIteratorWithIndexAtBegin(SLOT_PLAYER_MINION_START);
 		}
 		else if (side == SLOT_OPPONENT_SIDE) {
-			return MinionConstIteratorWithSlotIndex(this->opponent_minions, this->opponent_minions.begin(), SLOT_OPPONENT_MINION_START);
+			return this->opponent_minions.GetMinionsIteratorWithIndexAtBegin(SLOT_OPPONENT_MINION_START);
 		}
 		else throw std::runtime_error("invalid argument");
 	}

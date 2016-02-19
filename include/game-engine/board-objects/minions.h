@@ -38,7 +38,11 @@ public:
 public: // getters
 	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }
 	bool IsFull() const { return this->GetMinionCount() >= max_minions; }
-	
+
+	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBegin(SlotIndex start_idx) const {
+		return MinionConstIteratorWithSlotIndex(*this, this->minions.begin(), start_idx);
+	}
+
 	MinionIterator GetIterator(int minion_idx) {
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}

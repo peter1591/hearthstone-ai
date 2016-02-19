@@ -8,7 +8,7 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndex(side);
+		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
 			if (minion_iterator.GetMinion().Attackable()) {
@@ -25,7 +25,7 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndex(side);
+		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
 			if (minion_iterator.GetMinion().stat.IsTaunt() && !minion_iterator.GetMinion().stat.IsStealth()) { // taunt with stealth will not act as taunt
@@ -42,7 +42,7 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndex(side);
+		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
 			if (!minion_iterator.GetMinion().stat.IsStealth()) {
@@ -59,7 +59,7 @@ namespace GameEngine {
 	{
 		bool ret = false;
 
-		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndex(side);
+		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
 			bitmap.SetOneTarget(minion_iterator.GetSlotIdx());

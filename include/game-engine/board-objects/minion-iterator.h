@@ -15,9 +15,10 @@ class MinionIterator
 public:
 	typedef std::list<MinionManipulator> container_type;
 
-public:
+private: // only Minions can create instance
 	MinionIterator(Board & board, Minions & minions, container_type::iterator it);
 
+public:
 	Board & GetBoard() const { return this->board; }
 	Minions & GetMinions() const { return this->minions; }
 	container_type::iterator GetIterator() const { return it; }
@@ -42,13 +43,16 @@ private:
 
 class MinionConstIteratorWithSlotIndex
 {
+	friend class Minions;
+
 public:
 	typedef MinionIterator::container_type container_type;
 
-public:
+private: // only Minions can create instance
 	MinionConstIteratorWithSlotIndex(Minions const& minions, container_type::const_iterator it_begin, SlotIndex slot_idx_begin)
 		: minions(minions), it(it_begin), slot_idx(slot_idx_begin) { }
 
+public:
 	Minion const& GetMinion() const { return it->GetMinion(); }
 
 	void GoToNext();
