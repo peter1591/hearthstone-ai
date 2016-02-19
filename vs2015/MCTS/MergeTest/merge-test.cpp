@@ -4,9 +4,7 @@
 #include <chrono>
 #include <vector>
 
-#include "game-engine/game-engine.h"
-#include "mcts.h"
-#include "decider.h"
+#include "game-ai.h"
 
 void InitializeDeck1(GameEngine::Deck &deck)
 {
@@ -154,6 +152,7 @@ static void TestBasic()
 
 	InitializeBoard(board);
 
+	srand(rand_seed);
 	mcts.Initialize(rand_seed, board);
 
 	for (int times = 0;; ++times)

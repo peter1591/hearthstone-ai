@@ -45,9 +45,6 @@
     <ClCompile Include="..\..\..\game-ai\lib\decider.cpp">
       <Filter>Source Files\game-ai</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\board-node-map.cpp">
-      <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
@@ -268,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\stages\player-equip-weapon.h">
       <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\board-node-map-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai.h">
+      <Filter>Header Files\game-ai</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
