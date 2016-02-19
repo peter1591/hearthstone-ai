@@ -49,17 +49,13 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::Remove(
 	Enchantment<Target> * enchantment, Target & target)
 {
 	// A O(N) algorithm, since the enchantment should not be large in a normal play
-	for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
-	{
-		if (it->first.get() == enchantment)
-		{
+	for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it) {
+		if (it->first.get() == enchantment) {
 			// found, remove it
 			this->Remove(it, target);
 			return;
 		}
 	}
-
-	throw std::runtime_error("enchantment not found");
 }
 
 template <typename Target>

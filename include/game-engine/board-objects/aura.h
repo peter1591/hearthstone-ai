@@ -73,8 +73,9 @@ namespace GameEngine {
 		public:
 			void Add(MinionManipulator & owner, std::unique_ptr<Aura> && aura)
 			{
+				auto ref_ptr = aura.get();
 				this->auras.push_back(std::move(aura));
-				aura->AfterAdded(owner);
+				ref_ptr->AfterAdded(owner);
 			}
 
 			void Clear(MinionManipulator & owner)
