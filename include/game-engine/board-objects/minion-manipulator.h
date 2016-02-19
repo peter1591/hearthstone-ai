@@ -82,11 +82,11 @@ namespace BoardObjects {
 		void SetMinionStatFlag(MinionStat::Flag flag, bool val);
 
 	public: // auras
-		void AddAura(Aura * aura);
+		void AddAura(std::unique_ptr<Aura> && aura);
 		void ClearAuras();
 
 	public: // enchantments
-		void AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner);
+		void AddEnchantment(std::unique_ptr<Enchantment<MinionManipulator>> && enchantment, EnchantmentOwner * owner);
 		void RemoveEnchantment(Enchantment<MinionManipulator> * enchantment);
 		void ClearEnchantments();
 

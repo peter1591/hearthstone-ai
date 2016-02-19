@@ -40,13 +40,6 @@ namespace GameEngine {
 
 		public:
 			Auras() {}
-			~Auras()
-			{
-				for (auto const& aura : this->auras)
-				{
-					delete aura;
-				}
-			}
 
 			Auras(Auras const& rhs) = delete;
 			Auras & operator=(Auras const& rhs) = delete;
@@ -78,9 +71,9 @@ namespace GameEngine {
 			bool operator!=(Auras const& rhs) const { return !(*this == rhs); }
 
 		public:
-			void Add(MinionManipulator & owner, Aura* aura)
+			void Add(MinionManipulator & owner, std::unique_ptr<Aura> && aura)
 			{
-				this->auras.push_back(aura);
+				this->auras.push_back(std::move(aura));
 				aura->AfterAdded(owner);
 			}
 
@@ -107,7 +100,7 @@ namespace GameEngine {
 			}
 
 		private:
-			std::list<Aura*> auras;
+			std::list<std::unique_ptr<Aura>> auras;
 		};
 
 	} // namespace BoardObjects

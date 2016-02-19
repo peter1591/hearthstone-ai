@@ -25,9 +25,9 @@ namespace GameEngine {
 					constexpr int hp_boost = 0;
 					constexpr int buff_stat = 1 << BoardObjects::MinionStat::FLAG_WINDFURY;
 
-					auto * enchantment = new BoardObjects::Enchantment_BuffMinion<attack_boost, hp_boost, buff_stat, false>();
+					auto enchantment = std::make_unique<BoardObjects::Enchantment_BuffMinion<attack_boost, hp_boost, buff_stat, false>>();
 
-					aura_owner.AddEnchantment(enchantment, &this->enchantments_manager);
+					aura_owner.AddEnchantment(std::move(enchantment), &this->enchantments_manager);
 				}
 
 			private: // for comparison
@@ -49,7 +49,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
 			{
-				summoned_minion.AddAura(new Aura());
+				summoned_minion.AddAura(std::make_unique<Aura>());
 			}
 		};
 

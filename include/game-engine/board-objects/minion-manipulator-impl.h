@@ -110,9 +110,9 @@ inline void GameEngine::BoardObjects::MinionManipulator::SetMinionStatFlag(Minio
 	this->minion.stat.SetFlag(flag, val);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddAura(Aura * aura)
+inline void GameEngine::BoardObjects::MinionManipulator::AddAura(std::unique_ptr<Aura> && aura)
 {
-	this->minion.auras.Add(*this, aura);
+	this->minion.auras.Add(*this, std::move(aura));
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras()
@@ -120,9 +120,10 @@ inline void GameEngine::BoardObjects::MinionManipulator::ClearAuras()
 	this->minion.auras.Clear(*this);
 }
 
-inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(Enchantment<MinionManipulator> * enchantment, EnchantmentOwner * owner)
+inline void GameEngine::BoardObjects::MinionManipulator::AddEnchantment(
+	std::unique_ptr<Enchantment<MinionManipulator>> && enchantment, EnchantmentOwner * owner)
 {
-	this->minion.enchantments.Add(enchantment, owner, *this);
+	this->minion.enchantments.Add(std::move(enchantment), owner, *this);
 }
 
 inline void GameEngine::BoardObjects::MinionManipulator::RemoveEnchantment(Enchantment<MinionManipulator> * enchantment)

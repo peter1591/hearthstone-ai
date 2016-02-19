@@ -2,6 +2,7 @@
 
 #include <list>
 #include <map>
+#include <memory>
 
 namespace GameEngine {
 namespace BoardObjects {
@@ -19,7 +20,6 @@ class Enchantments
 
 public:
 	Enchantments() {}
-	~Enchantments();
 
 	Enchantments(Enchantments<Target> const& rhs) = delete;
 	Enchantments<Target> operator=(Enchantments<Target> const& rhs) = delete;
@@ -33,7 +33,7 @@ public:
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
 
-	void Add(Enchantment<Target> * enchantment, EnchantmentOwner * owner, Target & minion);
+	void Add(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & minion);
 	void Remove(Enchantment<Target> * enchantment, Target & target);
 	void Clear(Target & target);
 	bool Empty() const { return this->enchantments.empty(); }
@@ -42,7 +42,7 @@ public: // hooks
 	void TurnEnd(Target & target);
 
 private:
-	typedef typename std::list<std::pair<Enchantment<Target> *, EnchantmentOwner*>> container_type;
+	typedef typename std::list<std::pair<std::unique_ptr<Enchantment<Target>>, EnchantmentOwner*>> container_type;
 
 	typename container_type::iterator Remove(typename container_type::iterator it, Target & target);
 

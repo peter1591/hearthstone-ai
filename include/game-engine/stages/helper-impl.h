@@ -136,7 +136,7 @@ namespace GameEngine
 				it.GetMinions().MarkPendingRemoval(it);
 
 				for (auto const& trigger : manipulator.GetAndClearOnDeathTriggers()) {
-					death_triggers.push_back(std::bind(trigger, std::ref(it)));
+					death_triggers.push_back(std::bind(trigger, it));
 				}
 			}
 
@@ -145,7 +145,7 @@ namespace GameEngine
 				death_trigger();
 			}
 
-			// actually remove died minions
+			// actually remove dead minions
 			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd();)
 			{
 				if (!it.GetMinion().pending_removal) {
@@ -153,7 +153,7 @@ namespace GameEngine
 					continue;
 				}
 
-				// remove died minion
+				// remove dead minion
 				auto & manipulator = it.ConvertToManipulator();
 
 				// remove all effects (including auras)

@@ -5,15 +5,6 @@
 #include "game-engine\board-objects\minions.h"
 
 template <typename Target>
-inline GameEngine::BoardObjects::Enchantments<Target>::~Enchantments()
-{
-	for (auto const& item : this->enchantments)
-	{
-		delete item.first;
-	}
-}
-
-template <typename Target>
 inline bool GameEngine::BoardObjects::Enchantments<Target>::operator==(Enchantments const & rhs) const
 {
 	if (this->enchantments.size() != rhs.enchantments.size()) return false;
@@ -43,11 +34,14 @@ inline bool GameEngine::BoardObjects::Enchantments<Target>::operator!=(Enchantme
 
 template <typename Target>
 inline void GameEngine::BoardObjects::Enchantments<Target>::Add(
-	Enchantment<Target> * enchantment, EnchantmentOwner * owner, Target & target)
+	std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & target)
 {
-	this->enchantments.push_back(std::make_pair(enchantment, owner));
-	if (owner) owner->EnchantmentAdded(enchantment);
-	enchantment->AfterAdded(target);
+	auto ref_ptr = enchantment.get();
+
+	this->enchantments.push_back(std::make_pair(std::move(enchantment), owner));
+	
+	if (owner) owner->EnchantmentAdded(ref_ptr);
+	ref_ptr->AfterAdded(target);
 }
 
 template <typename Target>
@@ -57,7 +51,7 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::Remove(
 	// A O(N) algorithm, since the enchantment should not be large in a normal play
 	for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
 	{
-		if (it->first == enchantment)
+		if (it->first.get() == enchantment)
 		{
 			// found, remove it
 			this->Remove(it, target);
@@ -97,10 +91,8 @@ inline typename GameEngine::BoardObjects::Enchantments<Target>::container_type::
 	typename container_type::iterator it, Target & target)
 {
 	it->first->BeforeRemoved(target);
-	if (it->second) it->second->EnchantmentRemoved(it->first);
+	if (it->second) it->second->EnchantmentRemoved(it->first.get());
 	
-	delete it->first;
-
 	return this->enchantments.erase(it);
 }
 
