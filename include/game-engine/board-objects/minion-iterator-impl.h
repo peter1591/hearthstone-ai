@@ -28,6 +28,16 @@ namespace GameEngine {
 #endif
 		}
 
+		inline bool MinionIterator::IsPlayerSide() const
+		{
+			return &this->minions == &this->board.object_manager.player_minions;
+		}
+
+		inline bool MinionIterator::IsOpponentSide() const
+		{
+			return &this->minions == &this->board.object_manager.opponent_minions;
+		}
+
 		inline void MinionIterator::GoToNext() { this->it++; }
 		inline bool MinionIterator::IsEnd() const { return this->it == this->minions.end(); }
 

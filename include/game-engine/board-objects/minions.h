@@ -43,10 +43,6 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}
 
-	MinionIterator GetIterator(MinionManipulator const& minion) {
-		return MinionIterator(this->board, *this, this->GetRawIterator(minion));
-	}
-
 	MinionManipulator & GetManipulator(int minion_idx) {
 		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
@@ -93,13 +89,6 @@ private:
 			++it;
 		}
 		return it;
-	}
-
-	container_type::iterator GetRawIterator(MinionManipulator const& minion) {
-		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			if (&(*it) == &minion) return it;
-		}
-		return this->minions.end();
 	}
 
 private:
@@ -153,5 +142,3 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 
 	return *this;
 }
-
-#include "minion-iterator-impl.h"

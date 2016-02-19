@@ -23,6 +23,9 @@ public:
 	container_type::iterator GetIterator() const { return it; }
 	Minion const& GetMinion() const { return it->GetMinion(); }
 
+	bool IsPlayerSide() const;
+	bool IsOpponentSide() const;
+
 	void GoToNext();
 	bool IsEnd() const;
 

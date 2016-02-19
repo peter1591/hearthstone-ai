@@ -16,19 +16,12 @@ public:
 
 	// Haunted Creeper
 
-	static void Deathrattle(GameEngine::BoardObjects::MinionManipulator & triggering_minion)
+	static void Deathrattle(GameEngine::BoardObjects::MinionIterator & triggering_minion)
 	{
 		// summon (FP1_002t) * 2 when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002t);
-
-		auto it = triggering_minion.GetMinions().GetIterator(triggering_minion);
-		if (it.IsEnd()) {
-			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
-			return;
-		}
-
-		StageHelper::SummonMinion(card, it);
-		StageHelper::SummonMinion(card, it);
+		StageHelper::SummonMinion(card, triggering_minion);
+		StageHelper::SummonMinion(card, triggering_minion);
 	}
 
 	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)

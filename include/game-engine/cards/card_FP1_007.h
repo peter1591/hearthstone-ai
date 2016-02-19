@@ -16,18 +16,11 @@ public:
 
 	// Nerubian Egg
 
-	static void Deathrattle(GameEngine::BoardObjects::MinionManipulator & triggering_minion)
+	static void Deathrattle(GameEngine::BoardObjects::MinionIterator & triggering_minion)
 	{
-		// summon Nerubian (AT_036t) when death at [pos]
+		// summon Nerubian (AT_036t) when death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
-
-		auto it = triggering_minion.GetMinions().GetIterator(triggering_minion);
-		if (it.IsEnd()) {
-			std::cout << "deathrattle triggering minion is vanished!" << std::endl;
-			return;
-		}
-		
-		StageHelper::SummonMinion(card, it);
+		StageHelper::SummonMinion(card, triggering_minion);
 	}
 
 	static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)

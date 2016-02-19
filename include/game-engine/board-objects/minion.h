@@ -19,13 +19,14 @@ class Board;
 namespace BoardObjects {
 
 class MinionManipulator;
+class MinionIterator;
 
 class Minion
 {
 	friend std::hash<Minion>;
 
 public:
-	typedef std::function<void(MinionManipulator & triggering_minion)> OnDeathTrigger;
+	typedef std::function<void(MinionIterator & triggering_minion)> OnDeathTrigger;
 
 public:
 	Minion();
