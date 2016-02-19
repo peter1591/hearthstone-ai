@@ -11,6 +11,8 @@
 #include <unordered_set>
 #include <stdexcept>
 
+#include "game-ai.h"
+
 #include "mcts.h"
 
 #define EXLPORATION_FACTOR 2.0

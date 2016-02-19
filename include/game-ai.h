@@ -1,0 +1,11 @@
+#pragma once
+
+// depends on game-engine
+#include "game-engine/game-engine.h"
+
+// game-ai headers
+#include "mcts.h"
+#include "decider.h"
+
+// game-ai implementation details
+#include "board-node-map-impl.h"

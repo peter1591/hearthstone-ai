@@ -18,12 +18,6 @@ public:
 	void Add(std::size_t board_hash, TreeNode *node);
 	TreeNode * Find(const GameEngine::Board &board, const MCTS& mcts) const;
 
-public: // used to copy/merge tree
-	void UpdateNodePointers(const std::unordered_map<TreeNode*, TreeNode*>& node_map);
-	void FillHash(std::map<TreeNode*, std::size_t> &nodes) const;
-
-	void Clear();
-
 private:
 	typedef std::unordered_map<std::size_t, std::unordered_set<TreeNode*> > MapBoardToNodes;
 
@@ -53,7 +47,24 @@ inline void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
 #ifdef DEBUG
 	if (this->map.find(board_hash) != this->map.end())
 	{
-		std::cout << "hash collision" << std::endl;
+		auto const& exist_node = *this->map[board_hash].begin();
+
+		std::cout << "hash collision: " << board_hash << std::endl;
+
+		std::function<void(TreeNode*)> print_backtrace;
+		print_backtrace = [&print_backtrace](TreeNode * node) {
+			if (node == nullptr) return;
+			print_backtrace(node->parent);
+			if (node->parent != nullptr) std::cout << "Move: " << node->move.GetDebugString() << std::endl;
+			else std::cout << "(from root board)" << std::endl;
+		};
+
+		std::cout << "Existing board comes from moves: " << std::endl;
+		print_backtrace(exist_node);
+
+		std::cout << "===============================" << std::endl;
+		std::cout << "New board comes from moves: " << std::endl;
+		print_backtrace(node);
 	}
 #endif
 
