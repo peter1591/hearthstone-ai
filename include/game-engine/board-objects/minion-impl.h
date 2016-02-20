@@ -114,14 +114,14 @@ inline void GameEngine::BoardObjects::Minion::DecreaseMaxHP(int val)
 	this->HookMinionCheckEnraged(); // might become un-enraged if max-hp lowered to current-hp
 }
 
-inline void GameEngine::BoardObjects::Minion::AddOnDeathTrigger(MinionData::OnDeathTrigger func)
+inline void GameEngine::BoardObjects::Minion::AddOnDeathTrigger(OnDeathTrigger && func)
 {
-	this->minion.triggers_on_death.push_back(func);
+	this->minion.triggers_on_death.push_back(std::move(func));
 }
 
-inline std::list<GameEngine::BoardObjects::MinionData::OnDeathTrigger> GameEngine::BoardObjects::Minion::GetAndClearOnDeathTriggers()
+inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::BoardObjects::Minion::GetAndClearOnDeathTriggers()
 {
-	std::list<GameEngine::BoardObjects::MinionData::OnDeathTrigger> ret;
+	std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> ret;
 	this->minion.triggers_on_death.swap(ret);
 	return ret;
 }

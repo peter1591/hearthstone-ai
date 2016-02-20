@@ -16,6 +16,9 @@ namespace BoardObjects {
 	{
 		friend class Minions; // only class 'Minions' can create/copy/move
 
+	public:
+		typedef MinionData::OnDeathTrigger OnDeathTrigger;
+
 	private: // copy semantics should only be used in Minions
 		Minion(Minion const& rhs) = delete;
 
@@ -75,8 +78,8 @@ namespace BoardObjects {
 		void IncreaseCurrentAndMaxHP(int val);
 		void DecreaseMaxHP(int val);
 
-		void AddOnDeathTrigger(MinionData::OnDeathTrigger func);
-		std::list<MinionData::OnDeathTrigger> GetAndClearOnDeathTriggers();
+		void AddOnDeathTrigger(OnDeathTrigger && func);
+		std::list<OnDeathTrigger> GetAndClearOnDeathTriggers();
 
 		void SetMinionStatFlag(MinionStat::Flag flag, bool val);
 

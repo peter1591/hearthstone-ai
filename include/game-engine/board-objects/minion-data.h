@@ -11,6 +11,7 @@
 #include "minion-stat.h"
 #include "enchantments.h"
 #include "aura.h"
+#include "game-engine/on-death-trigger.h"
 
 namespace GameEngine {
 
@@ -26,7 +27,7 @@ class MinionData
 	friend std::hash<MinionData>;
 
 public:
-	typedef std::function<void(MinionIterator & triggering_minion)> OnDeathTrigger;
+	typedef GameEngine::OnDeathTrigger<MinionIterator &> OnDeathTrigger;
 
 public:
 	MinionData();
@@ -134,6 +135,8 @@ inline bool MinionData::operator==(MinionData const& rhs) const
 
 	if (this->pending_removal != rhs.pending_removal) return false;
 
+	if (this->triggers_on_death != rhs.triggers_on_death) return false;
+
 	if (this->enchantments != rhs.enchantments) return false;
 	if (this->auras != rhs.auras) return false;
 
@@ -187,6 +190,10 @@ namespace std {
 			GameEngine::hash_combine(result, s.summoned_this_turn);
 
 			GameEngine::hash_combine(result, s.pending_removal);
+
+			for (auto const& trigger : s.triggers_on_death) {
+				GameEngine::hash_combine(result, trigger);
+			}
 
 			GameEngine::hash_combine(result, s.enchantments);
 			GameEngine::hash_combine(result, s.auras);

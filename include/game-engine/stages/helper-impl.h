@@ -135,7 +135,8 @@ namespace GameEngine
 				it.GetMinions().MarkPendingRemoval(it);
 
 				for (auto const& trigger : it->GetAndClearOnDeathTriggers()) {
-					death_triggers.push_back(std::bind(trigger, it));
+					std::function<void(BoardObjects::MinionIterator&)> functor(trigger.func);
+					death_triggers.push_back(std::bind(functor, it));
 				}
 			}
 

@@ -32,7 +32,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::BoardObjects::Minion & summoned_minion)
 			{
-				summoned_minion.AddOnDeathTrigger(Deathrattle);
+				summoned_minion.AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(Deathrattle));
 			}
 		};
 
