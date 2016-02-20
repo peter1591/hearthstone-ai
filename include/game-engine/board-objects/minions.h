@@ -40,6 +40,8 @@ public:
 	container_type::iterator end() { return this->minions.end(); }
 	container_type::const_iterator end() const { return this->minions.end(); }
 
+	Board & GetBoard() const { return this->board; }
+
 public: // getters
 	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }
 	bool IsFull() const { return this->GetMinionCount() >= max_minions; }
@@ -139,7 +141,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 
 	this->minions.clear();
 	for (auto const& minion : rhs.minions) {
-		this->minions.push_back(Minion(this->board, *this, minion));
+		this->minions.push_back(Minion(*this, minion));
 	}
 
 	return *this;
@@ -151,7 +153,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 
 	this->minions.clear();
 	for (auto & minion : rhs.minions) {
-		this->minions.push_back(Minion(this->board, *this, minion));
+		this->minions.push_back(Minion(*this, minion));
 	}
 
 	return *this;

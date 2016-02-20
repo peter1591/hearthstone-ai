@@ -19,26 +19,26 @@ namespace BoardObjects {
 	private: // copy semantics should only be used in Minions
 		Minion(Minion const& rhs) = delete;
 
-		Minion(Board & board, Minions & minions, MinionData const& minion)
-			: board(board), minions(minions), minion(minion)
+		Minion(Minions & minions, MinionData const& minion)
+			: minions(minions), minion(minion)
 		{}
 
-		Minion(Board & board, Minions & minions, MinionData && minion)
-			: board(board), minions(minions), minion(std::move(minion))
+		Minion(Minions & minions, MinionData && minion)
+			: minions(minions), minion(std::move(minion))
 		{}
 
-		Minion(Board & board, Minions & minions, Minion const& minion)
-			: board(board), minions(minions), minion(minion.minion)
+		Minion(Minions & minions, Minion const& minion)
+			: minions(minions), minion(minion.minion)
 		{}
 
-		Minion(Board & board, Minions & minions, Minion && minion)
-			: board(board), minions(minions), minion(std::move(minion.minion))
+		Minion(Minions & minions, Minion && minion)
+			: minions(minions), minion(std::move(minion.minion))
 		{}
 
 	public:
 		// move semantics should only be used by container (i.e., std::list<Minion>)
 		Minion(Minion && rhs)
-			: board(rhs.board), minions(rhs.minions), minion(std::move(rhs.minion))
+			: minions(rhs.minions), minion(std::move(rhs.minion))
 		{}
 
 		Minion & operator=(Minion const& rhs) = delete;
@@ -48,7 +48,7 @@ namespace BoardObjects {
 		bool operator==(Minion const& rhs) const { return this->GetMinion() == rhs.GetMinion(); }
 		bool operator!=(Minion const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
 
-		Board & GetBoard() const { return this->board; }
+		Board & GetBoard() const;
 		Minions & GetMinions() const { return this->minions; }
 		MinionData const& GetMinion() const { return this->minion; }
 
@@ -102,7 +102,6 @@ namespace BoardObjects {
 		bool IsOpponentSide() const;
 
 	private:
-		Board & board;
 		Minions & minions;
 		MinionData minion;
 	};

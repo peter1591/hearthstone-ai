@@ -2,6 +2,11 @@
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/board-objects/minion.h"
 
+inline GameEngine::Board & GameEngine::BoardObjects::Minion::GetBoard() const
+{
+	return this->minions.GetBoard();
+}
+
 inline int GameEngine::BoardObjects::Minion::GetHP() const
 {
 	return this->minion.stat.GetHP();
@@ -192,10 +197,10 @@ inline void GameEngine::BoardObjects::Minion::TurnEnd(bool owner_turn)
 
 inline bool GameEngine::BoardObjects::Minion::IsPlayerSide() const
 {
-	return &this->board.object_manager.player_minions == &this->minions;
+	return &this->GetBoard().object_manager.player_minions == &this->minions;
 }
 
 inline bool GameEngine::BoardObjects::Minion::IsOpponentSide() const
 {
-	return &this->board.object_manager.opponent_minions == &this->minions;
+	return &this->GetBoard().object_manager.opponent_minions == &this->minions;
 }

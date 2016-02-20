@@ -8,7 +8,7 @@ namespace GameEngine {
 		
 		inline Minion & Minions::InsertBefore(MinionIterator const& it, MinionData && minion)
 		{
-			auto new_minion = Minion(this->board, *this, std::move(minion));
+			auto new_minion = Minion(*this, std::move(minion));
 
 			auto new_it = this->minions.insert(it.GetIterator(), std::move(new_minion));
 #ifdef DEBUG
