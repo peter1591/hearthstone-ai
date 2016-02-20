@@ -38,6 +38,22 @@ inline bool GameEngine::BoardObjects::MinionManipulator::IsForgetful() const
 	return this->minion.stat.IsForgetful();
 }
 
+inline bool GameEngine::BoardObjects::MinionManipulator::Attackable() const
+{
+	if (this->minion.summoned_this_turn && !this->minion.stat.IsCharge()) return false;
+
+	if (this->minion.stat.IsFreezed()) return false;
+
+	int max_attacked_times = 1;
+	if (this->minion.stat.IsWindFury()) max_attacked_times = 2;
+
+	if (this->minion.attacked_times >= max_attacked_times) return false;
+
+	if (this->minion.stat.GetAttack() <= 0) return false;
+
+	return true;
+}
+
 inline void GameEngine::BoardObjects::MinionManipulator::AttackedOnce()
 {
 	this->minion.attacked_times++;

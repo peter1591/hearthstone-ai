@@ -54,13 +54,16 @@ class MinionConstIteratorWithSlotIndex
 
 public:
 	typedef MinionIterator::container_type container_type;
+	typedef container_type::const_iterator const_iterator;
 
 private: // only Minions can create instance
-	MinionConstIteratorWithSlotIndex(Minions const& minions, container_type::const_iterator it_begin, SlotIndex slot_idx_begin);
+	MinionConstIteratorWithSlotIndex(Minions const& minions, const_iterator it_begin, SlotIndex slot_idx_begin);
 
 public:
-	Minion const& GetMinion() const;
 	SlotIndex GetSlotIdx() const;
+
+	const_iterator::pointer operator->();
+	const_iterator::reference & operator*();
 
 	void GoToNext();
 	bool IsEnd() const;
@@ -70,7 +73,7 @@ private:
 
 private:
 	Minions const& minions;
-	container_type::const_iterator it;
+	const_iterator it;
 	SlotIndex slot_idx;
 
 #ifdef DEBUG

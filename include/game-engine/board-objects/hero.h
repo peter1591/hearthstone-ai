@@ -13,6 +13,7 @@ namespace BoardObjects{
 
 class HeroManipulator;
 
+// POD
 class Hero
 {
 	friend std::hash<Hero>;
@@ -23,11 +24,6 @@ public:
 
 	bool operator==(Hero const& rhs) const;
 	bool operator!=(Hero const& rhs) const;
-
-public:
-	// Getters
-	bool Attackable() const;
-	int GetAttack() const;
 
 public:
 	std::string GetDebugString() const;
@@ -61,30 +57,6 @@ inline bool GameEngine::BoardObjects::Hero::operator==(Hero const & rhs) const
 inline bool GameEngine::BoardObjects::Hero::operator!=(Hero const & rhs) const
 {
 	return !(*this == rhs);
-}
-
-inline bool GameEngine::BoardObjects::Hero::Attackable() const
-{
-	if (this->freezed) return false;
-
-	int max_attacked_times = 1;
-	if (this->weapon.windfury) max_attacked_times = 2;
-
-	if (this->attacked_times >= max_attacked_times) return false;
-
-	if (this->GetAttack() <= 0) return false;
-
-	return true;
-}
-
-inline int GameEngine::BoardObjects::Hero::GetAttack() const
-{
-	int attack = 0;
-	if (this->weapon.IsVaild()) {
-		attack += this->weapon.attack;
-	}
-	// TODO: hero can have its attack value in addition to the weapon
-	return attack;
 }
 
 inline std::string GameEngine::BoardObjects::Hero::GetDebugString() const

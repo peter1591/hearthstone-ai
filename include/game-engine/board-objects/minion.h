@@ -66,9 +66,6 @@ public:
 	void Set(int card_id, int attack, int hp, int max_hp);
 	void Summon(const Card &card);
 
-	// Getters
-	bool Attackable() const;
-
 	bool IsValid() const { return this->card_id != 0; }
 
 public:
@@ -124,22 +121,6 @@ inline void Minion::Summon(const Card & card)
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
-}
-
-inline bool Minion::Attackable() const
-{
-	if (this->summoned_this_turn && !this->stat.IsCharge()) return false;
-
-	if (this->stat.IsFreezed()) return false;
-
-	int max_attacked_times = 1;
-	if (this->stat.IsWindFury()) max_attacked_times = 2;
-
-	if (this->attacked_times >= max_attacked_times) return false;
-
-	if (this->stat.GetAttack() <= 0) return false;
-
-	return true;
 }
 
 inline bool Minion::operator==(Minion const& rhs) const

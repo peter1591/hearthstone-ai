@@ -59,10 +59,11 @@ namespace BoardObjects {
 		int GetMaxHP() const;
 		int GetAttack() const;
 
+		bool Attackable() const;
+		void AttackedOnce();
+
 		void TakeDamage(int damage, bool poisonous);
 		bool IsForgetful() const;
-
-		void AttackedOnce();
 
 		void SetFreezeAttacker(bool freeze);
 		void SetFreezed(bool freezed);

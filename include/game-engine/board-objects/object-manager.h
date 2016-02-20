@@ -79,8 +79,6 @@ public: // Get manipulate object
 
 public: // Manipulate heros
 	void SetHero(Hero const& player, Hero const& opponent);
-	bool IsPlayerHeroAttackable() const { return this->player_hero.GetHero().Attackable(); }
-	bool IsOpponentHeroAttackable() const { return this->opponent_hero.GetHero().Attackable(); }
 
 	HeroManipulator & GetHeroBySide(SlotIndex side);
 

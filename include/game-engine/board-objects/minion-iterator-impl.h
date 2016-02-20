@@ -13,16 +13,20 @@ namespace GameEngine {
 #endif
 		}
 
-		inline Minion const & GameEngine::BoardObjects::MinionConstIteratorWithSlotIndex::GetMinion() const
-		{
-			this->CheckChangeId();
-			return this->it->GetMinion();
-		}
-
 		inline SlotIndex GameEngine::BoardObjects::MinionConstIteratorWithSlotIndex::GetSlotIdx() const
 		{
 			this->CheckChangeId();
 			return this->slot_idx;
+		}
+
+		inline MinionConstIteratorWithSlotIndex::const_iterator::pointer MinionConstIteratorWithSlotIndex::operator->()
+		{
+			return this->it.operator->();
+		}
+
+		inline MinionConstIteratorWithSlotIndex::const_iterator::reference & MinionConstIteratorWithSlotIndex::operator*()
+		{
+			return this->it.operator*();
 		}
 
 		inline void GameEngine::BoardObjects::MinionConstIteratorWithSlotIndex::CheckChangeId() const

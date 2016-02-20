@@ -11,7 +11,7 @@ namespace GameEngine {
 		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
-			if (minion_iterator.GetMinion().Attackable()) {
+			if (minion_iterator->Attackable()) {
 				bitmap.SetOneTarget(minion_iterator.GetSlotIdx());
 				ret = true;
 			}
@@ -28,7 +28,7 @@ namespace GameEngine {
 		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
-			if (minion_iterator.GetMinion().stat.IsTaunt() && !minion_iterator.GetMinion().stat.IsStealth()) { // taunt with stealth will not act as taunt
+			if (minion_iterator->GetMinion().stat.IsTaunt() && !minion_iterator->GetMinion().stat.IsStealth()) { // taunt with stealth will not act as taunt
 				bitmap.SetOneTarget(minion_iterator.GetSlotIdx());
 				ret = true;
 			}
@@ -45,7 +45,7 @@ namespace GameEngine {
 		for (auto minion_iterator = board.object_manager.GetMinionsIteratorWithIndexAtBeginOfSide(side);
 			!minion_iterator.IsEnd(); minion_iterator.GoToNext())
 		{
-			if (!minion_iterator.GetMinion().stat.IsStealth()) {
+			if (!minion_iterator->GetMinion().stat.IsStealth()) {
 				bitmap.SetOneTarget(minion_iterator.GetSlotIdx());
 				ret = true;
 			}
@@ -76,14 +76,14 @@ namespace GameEngine {
 		switch (type)
 		{
 		case TARGET_TYPE_PLAYER_ATTACKABLE:
-			if (board.object_manager.IsPlayerHeroAttackable()) {
+			if (board.object_manager.player_hero.Attackable()) {
 				targets.SetOneTarget(SLOT_PLAYER_HERO);
 			}
 			MarkAttackableMinions(board, SLOT_PLAYER_SIDE, targets);
 			break;
 
 		case TARGET_TYPE_OPPONENT_ATTACKABLE:
-			if (board.object_manager.IsOpponentHeroAttackable()) {
+			if (board.object_manager.opponent_hero.Attackable()) {
 				targets.SetOneTarget(SLOT_OPPONENT_HERO);
 			}
 			MarkAttackableMinions(board, SLOT_OPPONENT_SIDE, targets);

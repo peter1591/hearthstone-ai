@@ -42,7 +42,29 @@ namespace GameEngine {
 				return this->hero.hp; 
 			}
 
-			int GetAttack() const { return this->hero.GetAttack(); }
+			int GetAttack() const 
+			{
+				int attack = 0;
+				if (this->hero.weapon.IsVaild()) {
+					attack += this->hero.weapon.attack;
+				}
+				// TODO: hero can have its attack value in addition to the weapon
+				return attack;
+			}
+
+			bool Attackable() const
+			{
+				if (this->hero.freezed) return false;
+
+				int max_attacked_times = 1;
+				if (this->hero.weapon.windfury) max_attacked_times = 2;
+
+				if (this->hero.attacked_times >= max_attacked_times) return false;
+
+				if (this->GetAttack() <= 0) return false;
+
+				return true;
+			}
 
 			void TakeDamage(int damage, bool poisonous) {
 				// Note: poisonous have no effect on heros
