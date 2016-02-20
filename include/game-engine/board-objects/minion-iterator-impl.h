@@ -83,7 +83,7 @@ namespace GameEngine {
 			return it;
 		}
 
-		inline Minion const & MinionIterator::GetMinion() const
+		inline MinionData const & MinionIterator::GetMinion() const
 		{
 			this->CheckChangeId();
 			return it->GetMinion();

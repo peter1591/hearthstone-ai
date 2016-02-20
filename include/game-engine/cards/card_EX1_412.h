@@ -19,7 +19,7 @@ namespace GameEngine {
 			class Aura : public GameEngine::BoardObjects::AuraEnrage
 			{
 			private:
-				void AddEnrageEnchantment(GameEngine::BoardObjects::MinionManipulator & aura_owner)
+				void AddEnrageEnchantment(GameEngine::BoardObjects::Minion & aura_owner)
 				{
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 0;
@@ -47,7 +47,7 @@ namespace GameEngine {
 				}
 			};
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
+			static void AfterSummoned(GameEngine::BoardObjects::Minion & summoned_minion)
 			{
 				summoned_minion.AddAura(std::make_unique<Aura>());
 			}

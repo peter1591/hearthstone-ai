@@ -2,7 +2,7 @@
 
 #include <memory>
 #include "object-base.h"
-#include "game-engine/board-objects/minion.h"
+#include "game-engine/board-objects/minion-data.h"
 
 namespace GameEngine {
 
@@ -12,47 +12,47 @@ namespace BoardObjects {
 
 	class Minions;
 
-	// Manipulator is designed to modify data members for Minion structure,
+	// Manipulator is designed to modify data members for MinionData structure,
 	// and will trigger related hooks on-the-fly
-	class MinionManipulator : public ObjectBase
+	class Minion : public ObjectBase
 	{
 		friend class Minions; // only class 'Minions' can create/copy/move
 
 	private: // copy semantics should only be used in Minions
-		MinionManipulator(MinionManipulator const& rhs) = delete;
+		Minion(Minion const& rhs) = delete;
 
-		MinionManipulator(Board & board, Minions & minions, Minion const& minion)
+		Minion(Board & board, Minions & minions, MinionData const& minion)
 			: board(board), minions(minions), minion(minion)
 		{}
 
-		MinionManipulator(Board & board, Minions & minions, Minion && minion)
+		Minion(Board & board, Minions & minions, MinionData && minion)
 			: board(board), minions(minions), minion(std::move(minion))
 		{}
 
-		MinionManipulator(Board & board, Minions & minions, MinionManipulator const& minion)
+		Minion(Board & board, Minions & minions, Minion const& minion)
 			: board(board), minions(minions), minion(minion.minion)
 		{}
 
-		MinionManipulator(Board & board, Minions & minions, MinionManipulator && minion)
+		Minion(Board & board, Minions & minions, Minion && minion)
 			: board(board), minions(minions), minion(std::move(minion.minion))
 		{}
 
 	public:
-		// move semantics should only be used by container (i.e., std::list<MinionManipulator>)
-		MinionManipulator(MinionManipulator && rhs)
+		// move semantics should only be used by container (i.e., std::list<Minion>)
+		Minion(Minion && rhs)
 			: board(rhs.board), minions(rhs.minions), minion(std::move(rhs.minion))
 		{}
 
-		MinionManipulator & operator=(MinionManipulator const& rhs) = delete;
-		MinionManipulator & operator=(MinionManipulator && rhs) = delete;
+		Minion & operator=(Minion const& rhs) = delete;
+		Minion & operator=(Minion && rhs) = delete;
 
 	public:
-		bool operator==(MinionManipulator const& rhs) const { return this->GetMinion() == rhs.GetMinion(); }
-		bool operator!=(MinionManipulator const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
+		bool operator==(Minion const& rhs) const { return this->GetMinion() == rhs.GetMinion(); }
+		bool operator!=(Minion const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
 
 		Board & GetBoard() const { return this->board; }
 		Minions & GetMinions() const { return this->minions; }
-		Minion const& GetMinion() const { return this->minion; }
+		MinionData const& GetMinion() const { return this->minion; }
 
 	public: // basic operations on minion (including interface to ObjectBase)
 		int GetHP() const;
@@ -77,8 +77,8 @@ namespace BoardObjects {
 		void IncreaseCurrentAndMaxHP(int val);
 		void DecreaseMaxHP(int val);
 
-		void AddOnDeathTrigger(Minion::OnDeathTrigger func);
-		std::list<Minion::OnDeathTrigger> GetAndClearOnDeathTriggers();
+		void AddOnDeathTrigger(MinionData::OnDeathTrigger func);
+		std::list<MinionData::OnDeathTrigger> GetAndClearOnDeathTriggers();
 
 		void SetMinionStatFlag(MinionStat::Flag flag, bool val);
 
@@ -87,8 +87,8 @@ namespace BoardObjects {
 		void ClearAuras();
 
 	public: // enchantments
-		void AddEnchantment(std::unique_ptr<Enchantment<MinionManipulator>> && enchantment, EnchantmentOwner * owner);
-		void RemoveEnchantment(Enchantment<MinionManipulator> * enchantment);
+		void AddEnchantment(std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner * owner);
+		void RemoveEnchantment(Enchantment<Minion> * enchantment);
 		void ClearEnchantments();
 
 	public: // hooks
@@ -96,7 +96,7 @@ namespace BoardObjects {
 		void TurnEnd(bool owner_turn);
 
 	public: // triggering hooks
-		void HookAfterMinionAdded(MinionManipulator & added_minion);
+		void HookAfterMinionAdded(Minion & added_minion);
 		void HookMinionCheckEnraged();
 
 	public:
@@ -106,7 +106,7 @@ namespace BoardObjects {
 	private:
 		Board & board;
 		Minions & minions;
-		Minion minion;
+		MinionData minion;
 	};
 
 } // BoardObjects

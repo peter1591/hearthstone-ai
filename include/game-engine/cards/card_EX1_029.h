@@ -30,7 +30,7 @@ namespace GameEngine {
 				}
 			}
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionManipulator & summoned_minion)
+			static void AfterSummoned(GameEngine::BoardObjects::Minion & summoned_minion)
 			{
 				summoned_minion.AddOnDeathTrigger(Deathrattle);
 			}

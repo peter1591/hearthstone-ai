@@ -7,10 +7,10 @@
 namespace GameEngine {
 namespace BoardObjects {
 
-class Minion;
+class MinionData;
 template <typename Target> class Enchantment;
 class EnchantmentOwner;
-class MinionManipulator;
+class Minion;
 
 // Maintains the lifetime of Enchantment
 template <typename Target>
@@ -54,14 +54,14 @@ class EnchantmentOwner
 public:
 	bool IsEmpty() const;
 
-	void RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator & owner);
+	void RemoveOwnedEnchantments(GameEngine::BoardObjects::Minion & owner);
 
 	// hooks
-	void EnchantmentAdded(Enchantment<MinionManipulator> * enchantment);
-	void EnchantmentRemoved(Enchantment<MinionManipulator> * enchantment);
+	void EnchantmentAdded(Enchantment<Minion> * enchantment);
+	void EnchantmentRemoved(Enchantment<Minion> * enchantment);
 
 private:
-	std::list<Enchantment<MinionManipulator> *> minion_enchantments;
+	std::list<Enchantment<Minion> *> minion_enchantments;
 };
 
 } // namespace BoardObjects

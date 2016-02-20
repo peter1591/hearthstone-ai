@@ -6,8 +6,8 @@
 namespace GameEngine {
 namespace BoardObjects {
 
+class MinionData;
 class Minion;
-class MinionManipulator;
 
 template <typename Target>
 class Enchantment
@@ -41,7 +41,7 @@ protected:
 // Introduce some attack/hp/taunt/charge/etc. buffs on minion
 // buff_flags are ORed flags for MinionStat::Flag
 template <int attack_boost, int hp_boost, int buff_flags, bool one_turn>
-class Enchantment_BuffMinion : public Enchantment<MinionManipulator>
+class Enchantment_BuffMinion : public Enchantment<Minion>
 {
 public:
 	Enchantment_BuffMinion()
@@ -51,7 +51,7 @@ public:
 #endif
 	}
 
-	void AfterAdded(MinionManipulator & minion)
+	void AfterAdded(Minion & minion)
 	{
 #ifdef DEBUG
 		this->after_added_called = true;
@@ -79,7 +79,7 @@ public:
 		this->SetMinionFlags(minion, true);
 	}
 
-	void BeforeRemoved(MinionManipulator & minion)
+	void BeforeRemoved(Minion & minion)
 	{
 #ifdef DEBUG
 		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
@@ -98,7 +98,7 @@ public:
 		this->SetMinionFlags(minion, false);
 	}
 
-	bool TurnEnd(MinionManipulator & minion)
+	bool TurnEnd(Minion & minion)
 	{
 		if (one_turn) return false; // one-turn effect 
 		else return true;
@@ -130,7 +130,7 @@ private:
 	template <int alternating_flag>
 	class MinionFlagsSetter {
 	public:
-		static void SetFlag(MinionManipulator & minion, bool val) {
+		static void SetFlag(Minion & minion, bool val) {
 			constexpr int shifted_flag = 1 << alternating_flag;
 			constexpr bool alternating = (buff_flags & shifted_flag) != 0;
 
@@ -145,12 +145,12 @@ private:
 	template <>
 	class MinionFlagsSetter<0> {
 	public:
-		static void SetFlag(MinionManipulator & minion, bool val) {
+		static void SetFlag(Minion & minion, bool val) {
 			return;
 		}
 	};
 
-	void SetMinionFlags(MinionManipulator & minion, bool val)
+	void SetMinionFlags(Minion & minion, bool val)
 	{
 		MinionFlagsSetter<MinionStat::FLAG_MAX - 1>::SetFlag(minion, val);
 	}

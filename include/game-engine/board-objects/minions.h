@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <list>
-#include "minion.h"
+#include "minion-data.h"
 #include "minion-iterator.h"
 #include "minion-manipulator.h"
 
@@ -52,7 +52,7 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}
 
-	MinionManipulator & GetManipulator(int minion_idx) {
+	Minion & GetManipulator(int minion_idx) {
 		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
 			throw std::out_of_range("minion idx out of range");
@@ -61,9 +61,9 @@ public: // getters
 	}
 
 public: // modifiers
-	MinionManipulator & InsertBefore(MinionIterator const& it, Minion && minion);
+	Minion & InsertBefore(MinionIterator const& it, MinionData && minion);
 	void MarkPendingRemoval(MinionIterator const& it);
-	void MarkPendingRemoval(MinionManipulator & minion);
+	void MarkPendingRemoval(Minion & minion);
 	void EraseAndGoToNext(MinionIterator & it);
 
 public: // hooks
@@ -77,7 +77,7 @@ public: // hooks
 			it->TurnEnd(owner_turn);
 		}
 	}
-	void HookAfterMinionAdded(MinionManipulator & added_minion) {
+	void HookAfterMinionAdded(Minion & added_minion) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
 			it->HookAfterMinionAdded(added_minion);
 		}
@@ -139,7 +139,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 
 	this->minions.clear();
 	for (auto const& minion : rhs.minions) {
-		this->minions.push_back(MinionManipulator(this->board, *this, minion));
+		this->minions.push_back(Minion(this->board, *this, minion));
 	}
 
 	return *this;
@@ -151,7 +151,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 
 	this->minions.clear();
 	for (auto & minion : rhs.minions) {
-		this->minions.push_back(MinionManipulator(this->board, *this, minion));
+		this->minions.push_back(Minion(this->board, *this, minion));
 	}
 
 	return *this;

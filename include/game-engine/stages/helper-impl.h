@@ -201,7 +201,7 @@ namespace GameEngine
 	// return true if stage changed
 	inline bool StageHelper::SummonMinion(Card const & card, BoardObjects::MinionIterator & it)
 	{
-		BoardObjects::Minion summoning_minion;
+		BoardObjects::MinionData summoning_minion;
 		summoning_minion.Summon(card);
 
 		if (it.GetMinions().IsFull()) return false;

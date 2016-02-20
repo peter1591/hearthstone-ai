@@ -1,90 +1,166 @@
 #pragma once
 
 #include <stdexcept>
-#include <sstream>
 
-#include "weapon.h"
-#include "hero-power.h"
+#include "hero-data.h"
 #include "object-base.h"
 #include "enchantments.h"
 
 namespace GameEngine {
-namespace BoardObjects{
+	class Board;
 
-class HeroManipulator;
+	namespace BoardObjects {
 
-// POD
-class Hero
-{
-	friend std::hash<Hero>;
-	friend class HeroManipulator;
+		class Hero : public ObjectBase
+		{
+			friend std::hash<Hero>;
 
-public:
-	Hero() : attacked_times(0), freezed(false) {}
+		public:
+			Hero(Board & board) : board(board) {}
 
-	bool operator==(Hero const& rhs) const;
-	bool operator!=(Hero const& rhs) const;
+		private:
+			Hero(Hero const& rhs) : board(rhs.board) { *this = rhs; }
+		public:
+			Hero & operator=(Hero const& rhs) {
+				this->hero = rhs.hero;
+				return *this;
+			}
 
-public:
-	std::string GetDebugString() const;
+		private:
+			Hero(Hero && rhs) : board(std::move(rhs.board)) { *this = std::move(rhs); }
+		public:
+			Hero & operator=(Hero && rhs) {
+				this->hero = std::move(rhs.hero);
+				return *this;
+			}
 
-public:
-	int hp;
-	int armor;
+			bool operator==(Hero const& rhs) const { return this->hero == rhs.hero; }
+			bool operator!=(Hero const& rhs) const { return this->hero != rhs.hero; }
 
-	Weapon weapon;
-	HeroPower hero_power;
+			Board & GetBoard() const { return this->board; }
 
-	int attacked_times;
-	bool freezed;
-};
+			void SetHero(HeroData const& hero) { this->hero = hero; }
 
-} // BoardObjects
+			std::string GetDebugString() const { return this->hero.GetDebugString(); }
+
+		public:
+			int GetHP() const { 
+				return this->hero.hp; 
+			}
+
+			int GetAttack() const 
+			{
+				int attack = 0;
+				if (this->hero.weapon.IsVaild()) {
+					attack += this->hero.weapon.attack;
+				}
+				// TODO: hero can have its attack value in addition to the weapon
+				return attack;
+			}
+
+			bool Attackable() const
+			{
+				if (this->hero.freezed) return false;
+
+				int max_attacked_times = 1;
+				if (this->hero.weapon.windfury) max_attacked_times = 2;
+
+				if (this->hero.attacked_times >= max_attacked_times) return false;
+
+				if (this->GetAttack() <= 0) return false;
+
+				return true;
+			}
+
+			void TakeDamage(int damage, bool poisonous) {
+				// Note: poisonous have no effect on heros
+				this->hero.hp -= damage;
+			}
+
+			void AttackedOnce() {
+				if (this->hero.weapon.IsVaild()) {
+					--this->hero.weapon.durability;
+
+					if (this->hero.weapon.durability <= 0) {
+						// destroy weapon
+						this->hero.weapon.InValidate();
+					}
+				}
+				++this->hero.attacked_times;
+			}
+
+			bool IsForgetful() const {
+				return this->hero.weapon.forgetful;
+			}
+
+			bool IsFreezeAttacker() const {
+				return this->hero.weapon.freeze_attack;
+			}
+
+			void SetFreezed(bool freezed) {
+				this->hero.freezed = freezed;
+			}
+
+			bool IsFreezed() const {
+				return this->hero.freezed;
+			}
+
+			bool IsPoisonous() const {
+				// There's currently no way to make hero attack to be poisonous
+				return false;
+			}
+
+		public: // hooks
+			void TurnStart(bool owner_turn)
+			{
+				this->hero.attacked_times = 0;
+			}
+
+			void TurnEnd(bool owner_turn)
+			{
+				if (owner_turn) {
+					// check thaw
+					if (this->hero.attacked_times == 0 && this->IsFreezed()) {
+						this->SetFreezed(false);
+					}
+				}
+			}
+
+			void DestroyWeapon()
+			{
+				// TODO: trigger weapon deathrattle
+				this->hero.weapon.InValidate();
+			}
+
+			void EquipWeapon(Card const& card)
+			{
+#ifdef DEBUG
+				if (card.type != Card::TYPE_WEAPON) throw std::runtime_error("invalid argument");
+#endif
+
+				this->hero.weapon.card_id = card.id;
+				this->hero.weapon.cost = card.cost;
+				this->hero.weapon.attack = card.data.weapon.attack;
+				this->hero.weapon.durability = card.data.weapon.durability;
+				this->hero.weapon.forgetful = card.data.weapon.forgetful;
+				this->hero.weapon.freeze_attack = card.data.weapon.freeze;
+				this->hero.weapon.windfury = card.data.weapon.windfury;
+			}
+
+		private:
+			Board & board;
+			HeroData hero;
+		};
+
+	} // BoardObjects
 } // GameEngine
-
-inline bool GameEngine::BoardObjects::Hero::operator==(Hero const & rhs) const
-{
-	if (this->hp != rhs.hp) return false;
-	if (this->armor != rhs.armor) return false;
-	if (this->weapon != rhs.weapon) return false;
-	if (this->hero_power != rhs.hero_power) return false;
-	if (this->attacked_times != rhs.attacked_times) return false;
-	if (this->freezed != rhs.freezed) return false;
-
-	return true;
-}
-
-inline bool GameEngine::BoardObjects::Hero::operator!=(Hero const & rhs) const
-{
-	return !(*this == rhs);
-}
-
-inline std::string GameEngine::BoardObjects::Hero::GetDebugString() const
-{
-	std::ostringstream oss;
-	oss << "HP: " << this->hp << " + " << this->armor << std::endl;
-	if (this->weapon.IsVaild()) {
-		oss << "Weapon: [" << this->weapon.card_id << "] " << this->weapon.attack << " " << this->weapon.durability << std::endl;
-	}
-
-	return oss.str();
-}
 
 namespace std {
 	template <> struct hash<GameEngine::BoardObjects::Hero> {
 		typedef GameEngine::BoardObjects::Hero argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
-			result_type result = 0;
-
-			GameEngine::hash_combine(result, s.hp);
-			GameEngine::hash_combine(result, s.armor);
-			GameEngine::hash_combine(result, s.weapon);
-			GameEngine::hash_combine(result, s.hero_power);
-			GameEngine::hash_combine(result, s.attacked_times);
-			GameEngine::hash_combine(result, s.freezed);
-
-			return result;
+			return std::hash<decltype(s.hero)>()(s.hero);
 		}
 	};
 }

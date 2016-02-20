@@ -8,10 +8,10 @@
 
 #include "game-engine/slot-index.h"
 
-#include "hero.h"
+#include "hero-data.h"
 #include "minions.h"
 #include "minion-manipulator.h"
-#include "hero-manipulator.h"
+#include "hero.h"
 
 namespace GameEngine {
 namespace BoardObjects {
@@ -19,12 +19,12 @@ namespace BoardObjects {
 class BoardObject
 {
 public:
-	explicit BoardObject(HeroManipulator & hero) : hero(hero), minion(*(MinionManipulator*)(nullptr))
+	explicit BoardObject(Hero & hero) : hero(hero), minion(*(Minion*)(nullptr))
 	{
 		this->ptr = &this->hero;
 	}
 
-	explicit BoardObject(MinionManipulator & minion) : minion(minion), hero(*(HeroManipulator*)(nullptr))
+	explicit BoardObject(Minion & minion) : minion(minion), hero(*(Hero*)(nullptr))
 	{
 		this->ptr = &this->minion;
 	}
@@ -32,7 +32,7 @@ public:
 	bool IsHero() const { return this->ptr == &this->hero; }
 	bool IsMinion() const { return this->ptr == &this->minion; }
 
-	HeroManipulator & GetHero()
+	Hero & GetHero()
 	{
 #ifdef DEBUG
 		if (this->IsHero() == false) throw std::runtime_error("type not match.");
@@ -40,7 +40,7 @@ public:
 		return this->hero;
 	}
 
-	MinionManipulator & GetMinion()
+	Minion & GetMinion()
 	{
 #ifdef DEBUG
 		if (this->IsMinion() == false) throw std::runtime_error("type not match.");
@@ -51,8 +51,8 @@ public:
 	ObjectBase * operator->() const { return this->ptr; }
 
 private:
-	HeroManipulator & hero;
-	MinionManipulator & minion;
+	Hero & hero;
+	Minion & minion;
 	ObjectBase * ptr;
 };
 
@@ -78,9 +78,9 @@ public: // Get manipulate object
 	BoardObject GetObject(SlotIndex idx);
 
 public: // Manipulate heros
-	void SetHero(Hero const& player, Hero const& opponent);
+	void SetHero(HeroData const& player, HeroData const& opponent);
 
-	HeroManipulator & GetHeroBySide(SlotIndex side);
+	Hero & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions
 	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const {
@@ -100,7 +100,7 @@ public: // Manipulate minions
 		else throw std::runtime_error("invalid argument");
 	}
 
-	MinionManipulator & GetMinionManipulator(SlotIndex slot_idx);
+	Minion & GetMinionManipulator(SlotIndex slot_idx);
 
 public: // hooks
 	void PlayerTurnStart();
@@ -108,14 +108,14 @@ public: // hooks
 	void OpponentTurnStart();
 	void OpponentTurnEnd();
 
-	void HookAfterMinionAdded(MinionManipulator & minion);
+	void HookAfterMinionAdded(Minion & minion);
 
 public:
 	void DebugPrint() const;
 
 public:
-	HeroManipulator player_hero;
-	HeroManipulator opponent_hero;
+	Hero player_hero;
+	Hero opponent_hero;
 
 	Minions player_minions;
 	Minions opponent_minions;
@@ -173,13 +173,13 @@ inline bool ObjectManager::operator!=(ObjectManager const & rhs) const
 	return !(*this == rhs);
 }
 
-inline void ObjectManager::SetHero(Hero const & player, Hero const & opponent)
+inline void ObjectManager::SetHero(HeroData const & player, HeroData const & opponent)
 {
 	this->player_hero.SetHero(player);
 	this->opponent_hero.SetHero(opponent);
 }
 
-inline HeroManipulator & ObjectManager::GetHeroBySide(SlotIndex side)
+inline Hero & ObjectManager::GetHeroBySide(SlotIndex side)
 {
 	if (side == SLOT_PLAYER_SIDE) return this->player_hero;
 	else if (side == SLOT_OPPONENT_SIDE) return this->opponent_hero;
@@ -216,7 +216,7 @@ inline MinionIterator ObjectManager::GetMinionIterator(SlotIndex slot_idx)
 	else throw std::runtime_error("invalid argument");
 }
 
-inline MinionManipulator & ObjectManager::GetMinionManipulator(SlotIndex slot_idx)
+inline Minion & ObjectManager::GetMinionManipulator(SlotIndex slot_idx)
 {
 	if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 	else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
@@ -262,7 +262,7 @@ inline void ObjectManager::OpponentTurnEnd()
 	this->player_minions.TurnEnd(false);
 }
 
-inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion)
+inline void ObjectManager::HookAfterMinionAdded(Minion & added_minion)
 {
 	this->player_minions.HookAfterMinionAdded(added_minion);
 	this->opponent_minions.HookAfterMinionAdded(added_minion);

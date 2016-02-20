@@ -13,7 +13,7 @@ class MinionIterator
 	friend class Minions;
 
 public:
-	typedef std::list<MinionManipulator> container_type;
+	typedef std::list<Minion> container_type;
 
 private: // only Minions can create instance
 	MinionIterator(Board & board, Minions & minions, container_type::iterator it);
@@ -22,7 +22,7 @@ public:
 	Board & GetBoard() const;
 	Minions & GetMinions() const;
 	container_type::iterator GetIterator() const;
-	Minion const& GetMinion() const;
+	MinionData const& GetMinion() const;
 
 	bool IsPlayerSide() const;
 	bool IsOpponentSide() const;
@@ -30,7 +30,7 @@ public:
 	void GoToNext();
 	bool IsEnd() const;
 
-	MinionManipulator & ConvertToManipulator() { 
+	Minion & ConvertToManipulator() { 
 		if (this->IsEnd()) throw std::runtime_error("minion vanished");
 		return *it;
 	}

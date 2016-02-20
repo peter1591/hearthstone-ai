@@ -18,20 +18,20 @@ class Board;
 
 namespace BoardObjects {
 
-class MinionManipulator;
+class Minion;
 class MinionIterator;
 
-class Minion
+class MinionData
 {
-	friend std::hash<Minion>;
+	friend std::hash<MinionData>;
 
 public:
 	typedef std::function<void(MinionIterator & triggering_minion)> OnDeathTrigger;
 
 public:
-	Minion();
+	MinionData();
 
-	Minion(Minion const& rhs) {
+	MinionData(MinionData const& rhs) {
 		// If minion has enchantments/auras, then it cannot be cloned
 		// Note: The only chance we need to copy minion is to copy root node board in MCTS
 		// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
@@ -45,9 +45,9 @@ public:
 		this->pending_removal = rhs.pending_removal;
 		this->triggers_on_death = rhs.triggers_on_death;
 	}
-	Minion & operator=(Minion const& rhs) = delete;
+	MinionData & operator=(MinionData const& rhs) = delete;
 
-	Minion(Minion && rhs) {
+	MinionData(MinionData && rhs) {
 		this->card_id = std::move(rhs.card_id);
 		this->stat = std::move(rhs.stat);
 		this->attacked_times = std::move(rhs.attacked_times);
@@ -57,10 +57,10 @@ public:
 		this->enchantments = std::move(rhs.enchantments);
 		this->auras = std::move(rhs.auras);
 	}
-	Minion & operator=(Minion && rhs) = delete;
+	MinionData & operator=(MinionData && rhs) = delete;
 
-	bool operator==(const Minion &rhs) const;
-	bool operator!=(const Minion &rhs) const;
+	bool operator==(const MinionData &rhs) const;
+	bool operator!=(const MinionData &rhs) const;
 
 	// Initializer
 	void Set(int card_id, int attack, int hp, int max_hp);
@@ -84,16 +84,16 @@ public:
 
 	std::list<OnDeathTrigger> triggers_on_death;
 
-	Enchantments<MinionManipulator> enchantments;
+	Enchantments<Minion> enchantments;
 	Auras auras; // owned auras
 };
 
-inline Minion::Minion() : card_id(0), pending_removal(false)
+inline MinionData::MinionData() : card_id(0), pending_removal(false)
 {
 
 }
 
-inline void Minion::Set(int card_id, int attack, int hp, int max_hp)
+inline void MinionData::Set(int card_id, int attack, int hp, int max_hp)
 {
 	this->card_id = card_id;
 
@@ -102,7 +102,7 @@ inline void Minion::Set(int card_id, int attack, int hp, int max_hp)
 	this->stat.SetMaxHP(max_hp);
 }
 
-inline void Minion::Summon(const Card & card)
+inline void MinionData::Summon(const Card & card)
 {
 	this->card_id = card.id;
 
@@ -123,7 +123,7 @@ inline void Minion::Summon(const Card & card)
 	this->summoned_this_turn = true;
 }
 
-inline bool Minion::operator==(Minion const& rhs) const
+inline bool MinionData::operator==(MinionData const& rhs) const
 {
 	if (this->card_id != rhs.card_id) return false;
 
@@ -140,12 +140,12 @@ inline bool Minion::operator==(Minion const& rhs) const
 	return true;
 }
 
-inline bool Minion::operator!=(Minion const& rhs) const
+inline bool MinionData::operator!=(MinionData const& rhs) const
 {
 	return !(*this == rhs);
 }
 
-inline std::string Minion::GetDebugString() const
+inline std::string MinionData::GetDebugString() const
 {
 	std::ostringstream oss;
 
@@ -173,8 +173,8 @@ inline std::string Minion::GetDebugString() const
 }
 
 namespace std {
-	template <> struct hash<GameEngine::BoardObjects::Minion> {
-		typedef GameEngine::BoardObjects::Minion argument_type;
+	template <> struct hash<GameEngine::BoardObjects::MinionData> {
+		typedef GameEngine::BoardObjects::MinionData argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

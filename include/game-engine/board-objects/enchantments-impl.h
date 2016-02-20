@@ -1,6 +1,6 @@
 #include "game-engine\board-objects\enchantments.h"
 #include "game-engine\board-objects\enchantment.h"
-#include "game-engine\board-objects\minion.h"
+#include "game-engine\board-objects\minion-data.h"
 #include "game-engine\board-objects\minion-manipulator.h"
 #include "game-engine\board-objects\minions.h"
 
@@ -110,11 +110,11 @@ inline bool GameEngine::BoardObjects::EnchantmentOwner::IsEmpty() const
 	return this->minion_enchantments.empty();
 }
 
-inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(GameEngine::BoardObjects::MinionManipulator & owner)
+inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(GameEngine::BoardObjects::Minion & owner)
 {
 	// remove enchantment from minions
 	while (!this->minion_enchantments.empty()) {
-		Enchantment<MinionManipulator> * removing_enchant = this->minion_enchantments.front();
+		Enchantment<Minion> * removing_enchant = this->minion_enchantments.front();
 
 		for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 			it.ConvertToManipulator().RemoveEnchantment(removing_enchant);
@@ -126,13 +126,13 @@ inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(
 }
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentAdded(
-	Enchantment<GameEngine::BoardObjects::MinionManipulator> * enchantment)
+	Enchantment<GameEngine::BoardObjects::Minion> * enchantment)
 {
 	this->minion_enchantments.push_back(enchantment);
 }
 
 inline void GameEngine::BoardObjects::EnchantmentOwner::EnchantmentRemoved(
-	Enchantment<GameEngine::BoardObjects::MinionManipulator> * enchantment)
+	Enchantment<GameEngine::BoardObjects::Minion> * enchantment)
 {
 	for (auto it = this->minion_enchantments.begin(); it != this->minion_enchantments.end(); ) {
 		if (*it == enchantment) it = this->minion_enchantments.erase(it);

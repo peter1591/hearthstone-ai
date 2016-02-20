@@ -6,9 +6,9 @@
 namespace GameEngine {
 	namespace BoardObjects {
 		
-		inline MinionManipulator & Minions::InsertBefore(MinionIterator const& it, Minion && minion)
+		inline Minion & Minions::InsertBefore(MinionIterator const& it, MinionData && minion)
 		{
-			auto new_minion = MinionManipulator(this->board, *this, std::move(minion));
+			auto new_minion = Minion(this->board, *this, std::move(minion));
 
 			auto new_it = this->minions.insert(it.GetIterator(), std::move(new_minion));
 #ifdef DEBUG
@@ -29,7 +29,7 @@ namespace GameEngine {
 			this->pending_removal_count++;
 		}
 
-		inline void Minions::MarkPendingRemoval(MinionManipulator & minion)
+		inline void Minions::MarkPendingRemoval(Minion & minion)
 		{
 			if (minion.minion.pending_removal) return;
 			minion.minion.pending_removal = true;
