@@ -70,9 +70,14 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, playing_side, play_minion_data);
 	}
 
-	static bool BattleCry_Weapon(int card_id, GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+	static bool Weapon_AfterEquipped(int card_id, GameEngine::BoardObjects::Hero & equipped_hero)
 	{
-		return CardCallbackManager::HandleCallback<Callback_BattleCry_Weapon>(card_id, board, playing_side, equip_weapon_data);
+		return CardCallbackManager::HandleCallback<Callback_Weapon_AfterEquipped>(card_id, equipped_hero);
+	}
+
+	static bool Weapon_BattleCry(int card_id, GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+	{
+		return CardCallbackManager::HandleCallback<Callback_Weapon_BattleCry>(card_id, board, playing_side, equip_weapon_data);
 	}
 
 private:
@@ -80,8 +85,9 @@ private:
 
 	DECLARE_CARD_CALLBACK(AfterSummoned)
 	DECLARE_CARD_CALLBACK(BattleCry)
-	DECLARE_CARD_CALLBACK(BattleCry_Weapon)
 	DECLARE_CARD_CALLBACK(GetRequiredTargets)
+	DECLARE_CARD_CALLBACK(Weapon_BattleCry)
+	DECLARE_CARD_CALLBACK(Weapon_AfterEquipped)
 
 #undef DECLARE_CARD_CALLBACK
 

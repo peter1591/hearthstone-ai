@@ -1,23 +1,21 @@
 #ifndef GAME_ENGINE_BOARD_OBJECTS_WEAPON_H
 #define GAME_ENGINE_BOARD_OBJECTS_WEAPON_H
 
+#include <list>
 #include <functional>
+#include "game-engine/on-death-trigger.h"
 #include "game-engine/common.h"
 
 namespace GameEngine {
 	namespace BoardObjects {
+		class Hero;
 
 		class Weapon
 		{
 		public:
-			int card_id;
-			int cost;
-			int attack;
-			int durability;
-			bool forgetful;
-			bool freeze_attack; // freeze the attacked target?
-			bool windfury;
+			typedef GameEngine::OnDeathTrigger<GameEngine::BoardObjects::Hero &> OnDeathTrigger;
 
+		public:
 			Weapon() : card_id(-1) {}
 
 			bool IsValid() const { return this->card_id > 0; }
@@ -39,6 +37,7 @@ namespace GameEngine {
 				if (this->forgetful != rhs.forgetful) return false;
 				if (this->freeze_attack != rhs.freeze_attack) return false;
 				if (this->windfury != rhs.windfury) return false;
+				if (this->on_death_triggers != rhs.on_death_triggers) return false;
 				return true;
 			}
 
@@ -46,6 +45,17 @@ namespace GameEngine {
 			{
 				return !(*this == rhs);
 			}
+
+		public:
+			int card_id;
+			int cost;
+			int attack;
+			int durability;
+			bool forgetful;
+			bool freeze_attack; // freeze the attacked target?
+			bool windfury;
+
+			std::list<OnDeathTrigger> on_death_triggers;
 		};
 	} // namespace BoardObjects
 } // namespace GameEngine
@@ -65,6 +75,10 @@ namespace std {
 			GameEngine::hash_combine(result, s.forgetful);
 			GameEngine::hash_combine(result, s.freeze_attack);
 			GameEngine::hash_combine(result, s.windfury);
+
+			for (auto const& trigger : s.on_death_triggers) {
+				GameEngine::hash_combine(result, trigger);
+			}
 
 			return result;
 		}

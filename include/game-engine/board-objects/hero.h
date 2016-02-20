@@ -63,14 +63,14 @@ namespace GameEngine {
 
 			bool Attackable() const
 			{
+				if (this->GetAttack() <= 0) return false;
+
 				if (this->hero.freezed) return false;
 
 				int max_attacked_times = 1;
 				if (this->hero.weapon.windfury) max_attacked_times = 2;
 
 				if (this->hero.attacked_times >= max_attacked_times) return false;
-
-				if (this->GetAttack() <= 0) return false;
 
 				return true;
 			}
@@ -86,7 +86,7 @@ namespace GameEngine {
 
 					if (this->hero.weapon.durability <= 0) {
 						// destroy weapon
-						this->hero.weapon.InValidate();
+						this->DestroyWeapon();
 					}
 				}
 				++this->hero.attacked_times;
@@ -113,6 +113,10 @@ namespace GameEngine {
 				return false;
 			}
 
+			void AddWeaponOnDeathTrigger(Weapon::OnDeathTrigger && func) {
+				this->hero.weapon.on_death_triggers.push_back(std::move(func));
+			}
+
 		public: // hooks
 			void TurnStart(bool owner_turn)
 			{
@@ -131,7 +135,12 @@ namespace GameEngine {
 
 			void DestroyWeapon()
 			{
-				// TODO: trigger weapon deathrattle
+				auto triggers = this->GetAndClearWeaponOnDeathTriggers();
+
+				for (auto const& trigger : triggers) {
+					trigger.func(*this);
+				}
+
 				this->hero.weapon.InValidate();
 			}
 
@@ -148,6 +157,13 @@ namespace GameEngine {
 				this->hero.weapon.forgetful = card.data.weapon.forgetful;
 				this->hero.weapon.freeze_attack = card.data.weapon.freeze;
 				this->hero.weapon.windfury = card.data.weapon.windfury;
+			}
+
+		private:
+			std::list<Weapon::OnDeathTrigger> GetAndClearWeaponOnDeathTriggers() {
+				std::list<Weapon::OnDeathTrigger> ret;
+				this->hero.weapon.on_death_triggers.swap(ret);
+				return ret;
 			}
 
 		private:

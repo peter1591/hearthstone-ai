@@ -217,10 +217,12 @@ namespace GameEngine
 
 		playing_hero.DestroyWeapon();
 
-		Cards::CardCallbackManager::BattleCry_Weapon(card.id, board, playing_side, data);
+		Cards::CardCallbackManager::Weapon_BattleCry(card.id, board, playing_side, data);
 		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
 		playing_hero.EquipWeapon(card);
+		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, playing_hero);
+		if (StageHelper::CheckHeroMinionDead(board)) return true;
 
 		return false;
 	}
