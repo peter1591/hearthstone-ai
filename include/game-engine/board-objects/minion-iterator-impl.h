@@ -83,12 +83,6 @@ namespace GameEngine {
 			return it;
 		}
 
-		inline MinionData const & MinionIterator::GetMinion() const
-		{
-			this->CheckChangeId();
-			return it->GetMinion();
-		}
-
 		inline bool MinionIterator::IsPlayerSide() const
 		{
 			this->CheckChangeId();

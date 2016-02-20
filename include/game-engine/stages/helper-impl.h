@@ -131,7 +131,7 @@ namespace GameEngine
 			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd(); it.GoToNext())
 			{
 				auto & manipulator = it.ConvertToManipulator();
-				if (!it.GetMinion().pending_removal && manipulator.GetHP() > 0) continue;
+				if (!manipulator.GetMinion().pending_removal && manipulator.GetHP() > 0) continue;
 
 				it.GetMinions().MarkPendingRemoval(it);
 
@@ -148,13 +148,12 @@ namespace GameEngine
 			// actually remove dead minions
 			for (auto it = board.object_manager.GetMinionIteratorAtBeginOfSide(side); !it.IsEnd();)
 			{
-				if (!it.GetMinion().pending_removal) {
+				auto & manipulator = it.ConvertToManipulator();
+
+				if (!manipulator.GetMinion().pending_removal) {
 					it.GoToNext();
 					continue;
 				}
-
-				// remove dead minion
-				auto & manipulator = it.ConvertToManipulator();
 
 				// remove all effects (including auras)
 				manipulator.ClearEnchantments();

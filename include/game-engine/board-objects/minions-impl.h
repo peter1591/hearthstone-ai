@@ -24,7 +24,7 @@ namespace GameEngine {
 
 		inline void Minions::MarkPendingRemoval(MinionIterator const & it)
 		{
-			if (it.GetMinion().pending_removal) return;
+			if (it.it->minion.pending_removal) return;
 			it.it->minion.pending_removal = true;
 			this->pending_removal_count++;
 		}
@@ -38,7 +38,7 @@ namespace GameEngine {
 
 		inline void Minions::EraseAndGoToNext(MinionIterator & it)
 		{
-			if (it.GetMinion().pending_removal) this->pending_removal_count--;
+			if (it.it->minion.pending_removal) this->pending_removal_count--;
 			it.it = this->minions.erase(it.it);
 #ifdef DEBUG
 			this->change_id++; // TODO: test only

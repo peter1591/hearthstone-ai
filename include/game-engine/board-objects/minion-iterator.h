@@ -22,7 +22,6 @@ public:
 	Board & GetBoard() const;
 	Minions & GetMinions() const;
 	container_type::iterator GetIterator() const;
-	MinionData const& GetMinion() const;
 
 	bool IsPlayerSide() const;
 	bool IsOpponentSide() const;
