@@ -63,7 +63,7 @@ inline std::string GameEngine::BoardObjects::HeroData::GetDebugString() const
 {
 	std::ostringstream oss;
 	oss << "HP: " << this->hp << " + " << this->armor << std::endl;
-	if (this->weapon.IsVaild()) {
+	if (this->weapon.IsValid()) {
 		oss << "Weapon: [" << this->weapon.card_id << "] " << this->weapon.attack << " " << this->weapon.durability << std::endl;
 	}
 

@@ -50,12 +50,15 @@ namespace GameEngine {
 
 			int GetAttack() const 
 			{
-				int attack = 0;
-				if (this->hero.weapon.IsVaild()) {
-					attack += this->hero.weapon.attack;
-				}
+				int attack = this->GetWeaponAttack();
 				// TODO: hero can have its attack value in addition to the weapon
 				return attack;
+			}
+
+			int GetWeaponAttack() const
+			{
+				if (!this->hero.weapon.IsValid()) return 0;
+				return this->hero.weapon.attack;
 			}
 
 			bool Attackable() const
@@ -78,7 +81,7 @@ namespace GameEngine {
 			}
 
 			void AttackedOnce() {
-				if (this->hero.weapon.IsVaild()) {
+				if (this->hero.weapon.IsValid()) {
 					--this->hero.weapon.durability;
 
 					if (this->hero.weapon.durability <= 0) {

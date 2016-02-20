@@ -20,7 +20,7 @@ namespace GameEngine {
 
 			Weapon() : card_id(-1) {}
 
-			bool IsVaild() const { return this->card_id > 0; }
+			bool IsValid() const { return this->card_id > 0; }
 			void InValidate() { this->card_id = -1; }
 
 			void Clear() {
