@@ -158,9 +158,6 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
@@ -169,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h">
       <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
@@ -186,9 +180,6 @@
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minions.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions-iterator.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h">
@@ -257,9 +248,6 @@
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-equip-weapon.h">
       <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
@@ -271,6 +259,30 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai.h">
       <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-iterator.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-iterator-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-data.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-data.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_018.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

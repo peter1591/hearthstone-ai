@@ -16,6 +16,7 @@ void InitializeDeck1(GameEngine::Deck &deck)
 void InitializeHand1(GameEngine::Hand &hand)
 {
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_409t)); // Weapon: Heavy Axe
+	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_NEW1_018)); // Bloodsail Raider
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_002)); // Snowchugger
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_522)); // Patient Assassin
 	hand.AddCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_222)); // Stormwind Champion
@@ -41,7 +42,7 @@ void InitializeBoard(GameEngine::Board &board)
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
 
-	GameEngine::BoardObjects::Hero player_hero, opponent_hero;
+	GameEngine::BoardObjects::HeroData player_hero, opponent_hero;
 
 	player_hero.hp = 20;
 	player_hero.armor = 0;
@@ -63,34 +64,39 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeDeck1(board.player_deck);
 	InitializeHand1(board.player_hand);
 
-	auto player_minion_it = board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE);
-	auto opponent_minion_it = board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE);
-
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(CARD_ID_FP1_007, 0, 2, 2);
-		auto & added_minion = board.object_manager.player_minions.InsertBefore(player_minion_it, std::move(minion));
+		auto & added_minion = board.object_manager.player_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE), 
+			std::move(minion));
 		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
 		added_minion.TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(222, 1, 20, 20);
-		board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion)).TurnStart(true);
+		board.object_manager.opponent_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
+			std::move(minion)).TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(222, 3, 10, 10);
-		board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion)).TurnStart(true);
+		board.object_manager.opponent_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
+			std::move(minion)).TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(CARD_ID_EX1_029, 1, 1, 1);
 		minion.stat.SetPoisonous(true);
-		auto & added_minion = board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion));
+		auto & added_minion = board.object_manager.opponent_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
+			std::move(minion));
 		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_EX1_029::Deathrattle);
 		added_minion.TurnStart(true);
 	}
@@ -263,7 +269,7 @@ int main(void)
 	if (!GameEngine::CardDatabase::GetInstance().ReadFromJsonFile("../../../database/cards.json"))
 		throw std::runtime_error("failed to load card data");
 
-	TestBasic();
+	//TestBasic();
 	//TestOperators();
-	//InteractiveTest();
+	InteractiveTest();
 }

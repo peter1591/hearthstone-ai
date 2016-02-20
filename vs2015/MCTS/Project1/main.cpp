@@ -51,7 +51,7 @@ void InitializeBoard(GameEngine::Board &board)
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
 
-	GameEngine::BoardObjects::Hero player_hero, opponent_hero;
+	GameEngine::BoardObjects::HeroData player_hero, opponent_hero;
 
 	player_hero.hp = 20;
 	player_hero.armor = 0;
@@ -68,27 +68,30 @@ void InitializeBoard(GameEngine::Board &board)
 	InitializeDeck1(board.player_deck);
 	InitializeHand1(board.player_hand);
 
-	auto player_minion_it = board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE);
-	auto opponent_minion_it = board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE);
-
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(CARD_ID_FP1_007, 2, 2, 2);
-		auto & added_minion = board.object_manager.player_minions.InsertBefore(player_minion_it, std::move(minion));
+		auto & added_minion = board.object_manager.player_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
+			std::move(minion));
 		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
 		added_minion.TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(222, 30, 2, 2);
-		board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion)).TurnStart(true);
+		board.object_manager.opponent_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
+			std::move(minion)).TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::Minion();
+		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(222, 10, 7, 7);
-		board.object_manager.opponent_minions.InsertBefore(opponent_minion_it, std::move(minion)).TurnStart(true);
+		board.object_manager.opponent_minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
+			std::move(minion)).TurnStart(true);
 	}
 
 	board.SetStateToPlayerChooseBoardMove();

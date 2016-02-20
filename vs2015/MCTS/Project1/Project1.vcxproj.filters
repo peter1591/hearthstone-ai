@@ -236,9 +236,6 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\minions-iterator-impl.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-iterator.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
