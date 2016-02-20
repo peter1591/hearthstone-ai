@@ -1,6 +1,6 @@
 #include "game-engine/board.h"
 #include "game-engine/board-objects/minion-data.h"
-#include "game-engine/board-objects/minion-manipulator.h"
+#include "game-engine/board-objects/minion.h"
 
 inline int GameEngine::BoardObjects::Minion::GetHP() const
 {

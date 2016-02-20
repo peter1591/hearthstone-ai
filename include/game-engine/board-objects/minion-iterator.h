@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include "minion-manipulator.h"
+#include "minion.h"
 
 namespace GameEngine {
 namespace BoardObjects {

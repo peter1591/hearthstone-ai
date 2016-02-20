@@ -10,7 +10,7 @@
 
 #include "hero-data.h"
 #include "minions.h"
-#include "minion-manipulator.h"
+#include "minion.h"
 #include "hero.h"
 
 namespace GameEngine {

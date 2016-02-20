@@ -3,7 +3,7 @@
 
 #include "game-engine/stages/common.h"
 #include "game-engine/board.h"
-#include "game-engine/board-objects/minion-manipulator.h"
+#include "game-engine/board-objects/minion.h"
 
 namespace GameEngine {
 

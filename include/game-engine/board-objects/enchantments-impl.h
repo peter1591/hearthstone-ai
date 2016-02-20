@@ -1,7 +1,7 @@
 #include "game-engine\board-objects\enchantments.h"
 #include "game-engine\board-objects\enchantment.h"
 #include "game-engine\board-objects\minion-data.h"
-#include "game-engine\board-objects\minion-manipulator.h"
+#include "game-engine\board-objects\minion.h"
 #include "game-engine\board-objects\minions.h"
 
 template <typename Target>

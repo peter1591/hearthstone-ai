@@ -4,7 +4,7 @@
 #include <list>
 #include "minion-data.h"
 #include "minion-iterator.h"
-#include "minion-manipulator.h"
+#include "minion.h"
 
 namespace GameEngine {
 namespace BoardObjects {
