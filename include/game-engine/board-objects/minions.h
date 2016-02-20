@@ -52,7 +52,7 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}
 
-	Minion & GetManipulator(int minion_idx) {
+	Minion & GetMinion(int minion_idx) {
 		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
 			throw std::out_of_range("minion idx out of range");

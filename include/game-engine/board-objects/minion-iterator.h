@@ -14,14 +14,15 @@ class MinionIterator
 
 public:
 	typedef std::list<Minion> container_type;
+	typedef container_type::iterator iterator;
 
 private: // only Minions can create instance
-	MinionIterator(Board & board, Minions & minions, container_type::iterator it);
+	MinionIterator(Board & board, Minions & minions, iterator it);
 
 public:
 	Board & GetBoard() const;
 	Minions & GetMinions() const;
-	container_type::iterator GetIterator() const;
+	iterator GetIterator() const;
 
 	bool IsPlayerSide() const;
 	bool IsOpponentSide() const;
@@ -29,10 +30,8 @@ public:
 	void GoToNext();
 	bool IsEnd() const;
 
-	Minion & ConvertToManipulator() { 
-		if (this->IsEnd()) throw std::runtime_error("minion vanished");
-		return *it;
-	}
+	iterator::pointer operator->();
+	iterator::reference operator*();
 
 private:
 	void CheckChangeId() const;
@@ -40,7 +39,7 @@ private:
 private:
 	Board & board;
 	Minions & minions;
-	container_type::iterator it;
+	iterator it;
 
 #ifdef DEBUG
 	int container_change_id;

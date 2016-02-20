@@ -117,10 +117,10 @@ inline void GameEngine::BoardObjects::EnchantmentOwner::RemoveOwnedEnchantments(
 		Enchantment<Minion> * removing_enchant = this->minion_enchantments.front();
 
 		for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-			it.ConvertToManipulator().RemoveEnchantment(removing_enchant);
+			it->RemoveEnchantment(removing_enchant);
 		}
 		for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-			it.ConvertToManipulator().RemoveEnchantment(removing_enchant);
+			it->RemoveEnchantment(removing_enchant);
 		}
 	}
 }

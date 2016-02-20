@@ -115,5 +115,15 @@ namespace GameEngine {
 			return this->it == this->minions.end();
 		}
 
+		inline MinionIterator::iterator::pointer MinionIterator::operator->()
+		{
+			return this->it.operator->();
+		}
+
+		inline MinionIterator::iterator::reference MinionIterator::operator*()
+		{
+			return this->it.operator*();
+		}
+
 	} // BoardObjects
 } // GameEngine

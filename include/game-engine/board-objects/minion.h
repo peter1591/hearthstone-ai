@@ -12,8 +12,6 @@ namespace BoardObjects {
 
 	class Minions;
 
-	// Manipulator is designed to modify data members for MinionData structure,
-	// and will trigger related hooks on-the-fly
 	class Minion : public ObjectBase
 	{
 		friend class Minions; // only class 'Minions' can create/copy/move
