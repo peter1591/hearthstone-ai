@@ -11,6 +11,7 @@ public:
 
 	virtual int GetHP() const = 0;
 
+	virtual bool Attackable() const = 0;
 	virtual int GetAttack() const = 0;
 
 	virtual void TakeDamage(int damage, bool poisonous) = 0;
@@ -25,7 +26,6 @@ public:
 	virtual bool IsPoisonous() const = 0;
 
 	/*
-	virtual int GetCardId() = 0;
 	virtual int GetMaxHP() = 0;
 	*/
 };

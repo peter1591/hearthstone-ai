@@ -159,8 +159,8 @@ inline ObjectManager & ObjectManager::operator=(ObjectManager && rhs)
 
 inline bool ObjectManager::operator==(ObjectManager const & rhs) const
 {
-	if (this->player_hero.GetHero() != rhs.player_hero.GetHero()) return false;
-	if (this->opponent_hero.GetHero() != rhs.opponent_hero.GetHero()) return false;
+	if (this->player_hero != rhs.player_hero) return false;
+	if (this->opponent_hero != rhs.opponent_hero) return false;
 
 	if (this->player_minions != rhs.player_minions) return false;
 	if (this->opponent_minions != rhs.opponent_minions) return false;
@@ -270,8 +270,8 @@ inline void ObjectManager::HookAfterMinionAdded(MinionManipulator & added_minion
 
 inline void ObjectManager::DebugPrint() const
 {
-	std::cout << "Player Hero: " << this->player_hero.GetHero().GetDebugString() << std::endl;
-	std::cout << "Opponent Hero: " << this->opponent_hero.GetHero().GetDebugString() << std::endl;
+	std::cout << "Player Hero: " << this->player_hero.GetDebugString() << std::endl;
+	std::cout << "Opponent Hero: " << this->opponent_hero.GetDebugString() << std::endl;
 
 	std::cout << "Opponent minions: " << std::endl;
 	this->opponent_minions.DebugPrint();
@@ -290,10 +290,10 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, s.player_hero.GetHero());
+			GameEngine::hash_combine(result, s.player_hero);
 			GameEngine::hash_combine(result, s.player_minions);
 
-			GameEngine::hash_combine(result, s.opponent_hero.GetHero());
+			GameEngine::hash_combine(result, s.opponent_hero);
 			GameEngine::hash_combine(result, s.opponent_minions);
 
 			return result;

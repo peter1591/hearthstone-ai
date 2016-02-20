@@ -13,6 +13,8 @@ namespace GameEngine {
 
 		class HeroManipulator : public ObjectBase
 		{
+			friend std::hash<HeroManipulator>;
+
 		public:
 			HeroManipulator(Board & board) : board(board) {}
 
@@ -32,10 +34,14 @@ namespace GameEngine {
 				return *this;
 			}
 
+			bool operator==(HeroManipulator const& rhs) const { return this->hero == rhs.hero; }
+			bool operator!=(HeroManipulator const& rhs) const { return this->hero != rhs.hero; }
+
 			Board & GetBoard() const { return this->board; }
 
 			void SetHero(Hero const& hero) { this->hero = hero; }
-			Hero const& GetHero() const { return this->hero; }
+
+			std::string GetDebugString() const { return this->hero.GetDebugString(); }
 
 		public:
 			int GetHP() const { 
@@ -148,3 +154,13 @@ namespace GameEngine {
 
 	} // BoardObjects
 } // GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::BoardObjects::HeroManipulator> {
+		typedef GameEngine::BoardObjects::HeroManipulator argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			return std::hash<decltype(s.hero)>()(s.hero);
+		}
+	};
+}
