@@ -47,7 +47,7 @@ namespace GameEngine {
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 1;
 
-					auto enchantment = std::make_unique<BoardObjects::Enchantment_BuffMinion<attack_boost, hp_boost, 0, false>>();
+					auto enchantment = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, false>>();
 
 					target_minion.AddEnchantment(std::move(enchantment), &this->enchantments_manager);
 				}

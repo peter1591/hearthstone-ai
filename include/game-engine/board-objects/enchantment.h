@@ -16,7 +16,8 @@ class Enchantment
 
 public:
 	enum UniqueIdForHash {
-		TypeBuffMinion
+		TypeBuffMinion,
+		TypeBuffMinion_C
 	};
 
 public:
@@ -40,12 +41,11 @@ protected:
 
 // Introduce some attack/hp/taunt/charge/etc. buffs on minion
 // buff_flags are ORed flags for MinionStat::Flag
-template <int attack_boost, int hp_boost, int buff_flags, bool one_turn>
 class Enchantment_BuffMinion : public Enchantment<Minion>
 {
 public:
-	Enchantment_BuffMinion();
-	bool EqualsTo(Enchantment const& rhs_base) const;
+	Enchantment_BuffMinion(int attack_boost, int hp_boost, int buff_flags, bool one_turn);
+	bool EqualsTo(Enchantment<Minion> const& rhs_base) const;
 	std::size_t GetHash() const;
 
 public:
@@ -54,20 +54,30 @@ public:
 	bool TurnEnd(Minion & minion);
 
 private:
-	template <int alternating_flag>
-	class MinionFlagsSetter {
-	public:
-		static void SetFlag(Minion & minion, bool val);
-	};
+#ifdef DEBUG
+	bool after_added_called;
+#endif
+	int attack_boost;
+	int hp_boost;
+	int buff_flags;
+	bool one_turn;
+	int actual_attack_boost; // attack cannot be negative
+};
 
-	template<>
-	class MinionFlagsSetter<0> {
-	public:
-		static void SetFlag(Minion & minion, bool val) { return; }
-	};
+// Introduce some attack/hp/taunt/charge/etc. buffs on minion
+// buff_flags are ORed flags for MinionStat::Flag
+template <int attack_boost, int hp_boost, int buff_flags, bool one_turn>
+class Enchantment_BuffMinion_C : public Enchantment<Minion>
+{
+public:
+	Enchantment_BuffMinion_C();
+	bool EqualsTo(Enchantment<Minion> const& rhs_base) const;
+	std::size_t GetHash() const;
 
-private:
-	void SetMinionFlags(Minion & minion, bool val);
+public:
+	void AfterAdded(Minion & minion);
+	void BeforeRemoved(Minion & minion);
+	bool TurnEnd(Minion & minion);
 
 private:
 #ifdef DEBUG

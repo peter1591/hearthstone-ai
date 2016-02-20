@@ -39,7 +39,7 @@ public:
 
 		try {
 			auto & buff_target = board.object_manager.GetMinionManipulator(play_minion_data.target);
-			auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion<attack_boost, 0, 0, true>>();
+			auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<attack_boost, 0, 0, true>>();
 			buff_target.AddEnchantment(std::move(enchant), nullptr);
 		}
 		catch (std::out_of_range ex) {
