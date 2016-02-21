@@ -33,6 +33,28 @@ namespace GameEngine {
 				}
 
 			private:
+				static void AfterAdded_AttackHP(int attack_boost, int hp_boost, int &actual_attack_boost, Minion & minion)
+				{
+					// attack cannot below to zero
+					if (minion.GetAttack() + attack_boost < 0)
+					{
+						actual_attack_boost = -minion.GetAttack();
+					}
+					else {
+						actual_attack_boost = attack_boost;
+					}
+
+					if (actual_attack_boost != 0)
+					{
+						minion.AddAttack(actual_attack_boost);
+					}
+
+					if (hp_boost != 0)
+					{
+						minion.IncreaseCurrentAndMaxHP(hp_boost);
+					}
+				}
+
 				static void BeforeRemoved_AttackHP(int attack_boost, int hp_boost, int actual_attack_boost, Minion & minion)
 				{
 					if (actual_attack_boost != 0)
@@ -46,6 +68,16 @@ namespace GameEngine {
 					}
 				}
 
+				static void AlternateStatFlag(Minion & minion, MinionStat::Flag const& flag , bool val)
+				{
+					if (val) {
+						minion.SetMinionStatFlag(flag);
+					}
+					else {
+						minion.RemoveMinionStatFlag(flag);
+					}
+				}
+
 				template <int buff_flags, int alternating_flag>
 				class MinionFlagsSetter {
 				public:
@@ -54,7 +86,7 @@ namespace GameEngine {
 						constexpr bool alternating = (buff_flags & shifted_flag) != 0;
 
 						if (alternating) {
-							minion.SetMinionStatFlag((MinionStat::Flag)alternating_flag, val);
+							AlternateStatFlag(minion, (MinionStat::Flag)alternating_flag, val);
 						}
 
 						MinionFlagsSetter<buff_flags, alternating_flag - 1>::SetFlag(minion, val);
@@ -80,30 +112,8 @@ namespace GameEngine {
 						bool alternating = (buff_flags & shifted_flag) != 0;
 
 						if (alternating) {
-							minion.SetMinionStatFlag((MinionStat::Flag)alternating_flag, val);
+							AlternateStatFlag(minion, (MinionStat::Flag)alternating_flag, val);
 						}
-					}
-				}
-
-				static void AfterAdded_AttackHP(int attack_boost, int hp_boost, int &actual_attack_boost, Minion & minion)
-				{
-					// attack cannot below to zero
-					if (minion.GetAttack() + attack_boost < 0)
-					{
-						actual_attack_boost = -minion.GetAttack();
-					}
-					else {
-						actual_attack_boost = attack_boost;
-					}
-
-					if (actual_attack_boost != 0)
-					{
-						minion.AddAttack(actual_attack_boost);
-					}
-
-					if (hp_boost != 0)
-					{
-						minion.IncreaseCurrentAndMaxHP(hp_boost);
 					}
 				}
 			};

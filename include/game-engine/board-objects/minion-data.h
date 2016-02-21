@@ -111,14 +111,14 @@ inline void MinionData::Summon(const Card & card)
 	this->stat.SetHP(card.data.minion.hp);
 	this->stat.SetMaxHP(card.data.minion.hp);
 
-	if (card.data.minion.taunt) this->stat.SetTaunt(true);
-	if (card.data.minion.charge) this->stat.SetCharge(true);
-	if (card.data.minion.shield) this->stat.SetShield(true);
-	if (card.data.minion.stealth) this->stat.SetStealth(true);
-	if (card.data.minion.forgetful) this->stat.SetForgetful(true);
-	if (card.data.minion.freeze) this->stat.SetFreezeAttacker(true);
-	if (card.data.minion.windfury) this->stat.SetWindFury(true);
-	if (card.data.minion.poisonous) this->stat.SetPoisonous(true);
+	if (card.data.minion.taunt) this->stat.SetTaunt();
+	if (card.data.minion.charge) this->stat.SetCharge();
+	if (card.data.minion.shield) this->stat.SetShield();
+	if (card.data.minion.stealth) this->stat.SetStealth();
+	if (card.data.minion.forgetful) this->stat.SetForgetful();
+	if (card.data.minion.freeze) this->stat.SetFreezeAttacker();
+	if (card.data.minion.windfury) this->stat.SetWindFury();
+	if (card.data.minion.poisonous) this->stat.SetPoisonous();
 
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;

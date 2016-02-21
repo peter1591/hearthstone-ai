@@ -100,8 +100,12 @@ namespace GameEngine {
 				return this->hero.weapon.freeze_attack;
 			}
 
-			void SetFreezed(bool freezed) {
-				this->hero.freezed = freezed;
+			void SetFreezed() {
+				this->hero.freezed = true;
+			}
+
+			void ClearFreezed() {
+				this->hero.freezed = false;
 			}
 
 			bool IsFreezed() const {
@@ -128,7 +132,7 @@ namespace GameEngine {
 				if (owner_turn) {
 					// check thaw
 					if (this->hero.attacked_times == 0 && this->IsFreezed()) {
-						this->SetFreezed(false);
+						this->ClearFreezed();
 					}
 				}
 			}

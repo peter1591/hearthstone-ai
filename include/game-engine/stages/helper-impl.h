@@ -116,8 +116,8 @@ namespace GameEngine
 
 		attacker->AttackedOnce();
 
-		if (attacker.IsMinion() && attacker->IsFreezeAttacker()) attacked->SetFreezed(true);
-		if (attacked.IsMinion() && attacked->IsFreezeAttacker()) attacker->SetFreezed(true);
+		if (attacker.IsMinion() && attacker->IsFreezeAttacker()) attacked->SetFreezed();
+		if (attacked.IsMinion() && attacked->IsFreezeAttacker()) attacker->SetFreezed();
 	}
 
 	inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)

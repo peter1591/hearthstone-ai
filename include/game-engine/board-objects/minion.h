@@ -66,8 +66,7 @@ namespace BoardObjects {
 		void TakeDamage(int damage, bool poisonous);
 		bool IsForgetful() const;
 
-		void SetFreezeAttacker(bool freeze);
-		void SetFreezed(bool freezed);
+		void SetFreezed();
 		bool IsFreezeAttacker() const;
 		bool IsFreezed() const;
 
@@ -81,7 +80,9 @@ namespace BoardObjects {
 		void AddOnDeathTrigger(OnDeathTrigger && func);
 		std::list<OnDeathTrigger> GetAndClearOnDeathTriggers();
 
-		void SetMinionStatFlag(MinionStat::Flag flag, bool val);
+		void SetMinionStatFlag(MinionStat::Flag flag);
+		void RemoveMinionStatFlag(MinionStat::Flag flag);
+		void ClearMinionStatFlag(MinionStat::Flag flag);
 
 	public: // auras
 		void AddAura(std::unique_ptr<Aura> && aura);

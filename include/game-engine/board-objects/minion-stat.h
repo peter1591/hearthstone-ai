@@ -58,27 +58,43 @@ public:
 	void SetAttack(int attack) { this->attack = attack; }
 	void SetHP(int hp) { this->hp = hp; }
 	void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
-	void SetTaunt(bool val) { this->SetFlag(FLAG_TAUNT, val); }
-	void SetCharge(bool val) { this->SetFlag(FLAG_CHARGE, val); }
-	void SetShield(bool val) { this->SetFlag(FLAG_SHIELD, val); }
-	void SetStealth(bool val) { this->SetFlag(FLAG_STEALTH, val); }
-	void SetForgetful(bool val) { this->SetFlag(FLAG_FORGETFUL, val); }
-	void SetFreezeAttacker(bool val) { this->SetFlag(FLAG_FREEZE_ATTACKER, val); }
-	void SetFreezed(bool val) { this->SetFlag(FLAG_FREEZED, val); }
-	void SetWindFury(bool val) { this->SetFlag(FLAG_WINDFURY, val); }
-	void SetPoisonous(bool val) { this->SetFlag(FLAG_POISONOUS, val); }
 
-	void SetFlag(Flag flag, bool set)
+	// Add one count to the flag
+	void SetTaunt() { this->SetFlag(FLAG_TAUNT); }
+	void SetCharge() { this->SetFlag(FLAG_CHARGE); }
+	void SetShield() { this->SetFlag(FLAG_SHIELD); }
+	void SetStealth() { this->SetFlag(FLAG_STEALTH); }
+	void SetForgetful() { this->SetFlag(FLAG_FORGETFUL); }
+	void SetFreezeAttacker() { this->SetFlag(FLAG_FREEZE_ATTACKER); }
+	void SetFreezed() { this->SetFlag(FLAG_FREEZED); }
+	void SetWindFury() { this->SetFlag(FLAG_WINDFURY); }
+	void SetPoisonous() { this->SetFlag(FLAG_POISONOUS); }
+	void SetFlag(Flag flag)
 	{
-		if (set) {
-			++this->flags[flag];
-		}
-		else {
+		++this->flags[flag];
+	}
+
+	// Remove one count from the flag
+	void RemoveFlag(Flag flag)
+	{
+		if (this->flags[flag] > 0) {
 			--this->flags[flag];
-#ifdef DEBUG
-			if (this->flags[flag] < 0) throw std::runtime_error("should not below zero");
-#endif
 		}
+	}
+
+	// Clear all counts of the flag
+	void ClearTaunt() { this->ClearFlag(FLAG_TAUNT); }
+	void ClearCharge() { this->ClearFlag(FLAG_CHARGE); }
+	void ClearShield() { this->ClearFlag(FLAG_SHIELD); }
+	void ClearStealth() { this->ClearFlag(FLAG_STEALTH); }
+	void ClearForgetful() { this->ClearFlag(FLAG_FORGETFUL); }
+	void ClearFreezeAttacker() { this->ClearFlag(FLAG_FREEZE_ATTACKER); }
+	void ClearFreezed() { this->ClearFlag(FLAG_FREEZED); }
+	void ClearWindFury() { this->ClearFlag(FLAG_WINDFURY); }
+	void ClearPoisonous() { this->ClearFlag(FLAG_POISONOUS); }
+	void ClearFlag(Flag flag)
+	{
+		this->flags[flag] = 0;
 	}
 
 private:

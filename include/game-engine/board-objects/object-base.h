@@ -19,7 +19,7 @@ public:
 
 	virtual void AttackedOnce() = 0;
 
-	virtual void SetFreezed(bool freezed) = 0;
+	virtual void SetFreezed() = 0;
 	virtual bool IsFreezeAttacker() const = 0;
 	virtual bool IsFreezed() const = 0;
 

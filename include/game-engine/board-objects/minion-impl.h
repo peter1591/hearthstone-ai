@@ -25,7 +25,7 @@ inline int GameEngine::BoardObjects::Minion::GetAttack() const
 inline void GameEngine::BoardObjects::Minion::TakeDamage(int damage, bool poisonous)
 {
 	if (this->minion.stat.IsShield()) {
-		this->minion.stat.SetShield(false);
+		this->minion.stat.ClearShield();
 	}
 	else {
 		this->minion.stat.SetHP(this->minion.stat.GetHP() - damage);
@@ -62,17 +62,12 @@ inline bool GameEngine::BoardObjects::Minion::Attackable() const
 inline void GameEngine::BoardObjects::Minion::AttackedOnce()
 {
 	this->minion.attacked_times++;
-	if (this->minion.stat.IsStealth()) this->minion.stat.SetStealth(false);
+	if (this->minion.stat.IsStealth()) this->minion.stat.ClearStealth();
 }
 
-inline void GameEngine::BoardObjects::Minion::SetFreezeAttacker(bool freeze)
+inline void GameEngine::BoardObjects::Minion::SetFreezed()
 {
-	this->minion.stat.SetFreezeAttacker(freeze);
-}
-
-inline void GameEngine::BoardObjects::Minion::SetFreezed(bool freezed)
-{
-	this->minion.stat.SetFreezed(freezed);
+	this->minion.stat.SetFreezed();
 }
 
 inline bool GameEngine::BoardObjects::Minion::IsFreezeAttacker() const
@@ -126,9 +121,19 @@ inline std::list<GameEngine::BoardObjects::Minion::OnDeathTrigger> GameEngine::B
 	return ret;
 }
 
-inline void GameEngine::BoardObjects::Minion::SetMinionStatFlag(MinionStat::Flag flag, bool val)
+inline void GameEngine::BoardObjects::Minion::SetMinionStatFlag(MinionStat::Flag flag)
 {
-	this->minion.stat.SetFlag(flag, val);
+	this->minion.stat.SetFlag(flag);
+}
+
+inline void GameEngine::BoardObjects::Minion::RemoveMinionStatFlag(MinionStat::Flag flag)
+{
+	this->minion.stat.RemoveFlag(flag);
+}
+
+inline void GameEngine::BoardObjects::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
+{
+	this->minion.stat.ClearFlag(flag);
 }
 
 inline void GameEngine::BoardObjects::Minion::AddAura(std::unique_ptr<Aura> && aura)
@@ -188,7 +193,7 @@ inline void GameEngine::BoardObjects::Minion::TurnEnd(bool owner_turn)
 		// check thaw
 		// Note: if summon in this turn, and freeze it, then the minion will not be unfrozen
 		if (this->minion.attacked_times == 0 && !this->minion.summoned_this_turn) {
-			if (this->IsFreezed()) this->minion.stat.SetFreezed(false);
+			if (this->IsFreezed()) this->minion.stat.ClearFreezed();
 		}
 	}
 
