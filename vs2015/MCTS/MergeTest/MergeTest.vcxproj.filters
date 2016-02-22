@@ -215,12 +215,6 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-to-all-minions.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator-impl.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
@@ -283,6 +277,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_BRM_019.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_021.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_112.h">
+      <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
