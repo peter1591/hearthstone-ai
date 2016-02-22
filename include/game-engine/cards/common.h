@@ -16,6 +16,7 @@
 #include "card_FP1_021.h"
 #include "card_GVG_051.h"
 #include "card_GVG_059.h"
+#include "card_GVG_112.h"
 #include "card_BRM_019.h"
 #include "card_NEW1_018.h"
 
@@ -119,6 +120,7 @@ HANDLE_CARD_CALLBACK(Card_FP1_007)
 HANDLE_CARD_CALLBACK(Card_FP1_021)
 HANDLE_CARD_CALLBACK(Card_GVG_051)
 HANDLE_CARD_CALLBACK(Card_GVG_059)
+HANDLE_CARD_CALLBACK(Card_GVG_112)
 HANDLE_CARD_CALLBACK(Card_BRM_019)
 HANDLE_CARD_CALLBACK(Card_NEW1_018)
 
