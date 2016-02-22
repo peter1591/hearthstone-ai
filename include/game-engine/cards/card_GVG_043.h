@@ -28,8 +28,7 @@ namespace GameEngine {
 				const int minion_count = playing_side_minions->GetMinionCount();
 				if (minion_count == 0) return;
 
-				int minion_chosen = 0;
-				if (minion_count > 1) minion_chosen = board.random_generator.GetRandom() % minion_count;
+				const int minion_chosen = board.random_generator.GetRandom(minion_count);
 
 				auto & buff_target = playing_side_minions->GetMinion(minion_chosen);
 				auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<attack_boost, 0, 0, false>>();

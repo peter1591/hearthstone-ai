@@ -68,7 +68,6 @@ inline void Deck::AddCard(const Card &card)
 
 inline Card Deck::Draw()
 {
-	int rand_idx;
 	Card ret;
 	size_t card_count = this->cards.size();
 
@@ -77,11 +76,7 @@ inline Card Deck::Draw()
 		return ret;
 	}
 
-	if (UNLIKELY(card_count == 1)) {
-		rand_idx = 0;
-	} else {
-		rand_idx = this->random_generator.GetRandom() % card_count;
-	}
+	const int rand_idx = this->random_generator.GetRandom(card_count);
 
 	ret = this->cards[rand_idx];
 

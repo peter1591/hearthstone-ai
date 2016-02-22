@@ -27,8 +27,8 @@ namespace GameEngine {
 				const int minion_count = minions->GetMinionCount();
 				if (minion_count == 0) return; // no minion to buff
 
-				int r = 0;
-				if (minion_count > 1) board.random_generator.GetRandom() % minion_count;
+				const int r = board.random_generator.GetRandom(minion_count);
+
 				auto & buff_target = minions->GetMinion(r);
 				constexpr int buff_flags =
 					(1 << BoardObjects::MinionStat::FLAG_SHIELD) |

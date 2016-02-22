@@ -22,9 +22,13 @@ class RandomGenerator
 			srand(seed);
 		}
 
-		int GetRandom() {
-			this->has_called = true;
-			return rand();
+		int GetRandom(int exclusive_max) {
+			if (exclusive_max <= 0) throw std::runtime_error("invalid argument");
+			else if (exclusive_max == 1) return 0;
+			else {
+				this->has_called = true;
+				return rand() % exclusive_max;
+			}
 		}
 
 		void ClearFlag_HasCalled() { this->has_called = false; }

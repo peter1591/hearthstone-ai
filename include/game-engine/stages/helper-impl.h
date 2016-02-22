@@ -67,12 +67,12 @@ namespace GameEngine
 			return origin_attacked;
 		}
 
-		if (board.random_generator.GetRandom() % 2 == 0) {
+		if (board.random_generator.GetRandom(2) == 0) {
 			// forgetful effect does not triggered
 			return origin_attacked;
 		}
 
-		int r = board.random_generator.GetRandom() % possible_targets;
+		int r = board.random_generator.GetRandom(possible_targets);
 
 		if (player_side) {
 			if (origin_attacked != SLOT_PLAYER_HERO) {
