@@ -7,6 +7,7 @@ namespace GameEngine {
 
 	namespace BoardObjects {
 
+		class Minions;
 		class MinionData;
 		class Minion;
 
@@ -28,6 +29,7 @@ namespace GameEngine {
 			virtual void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion) {}
 			virtual void HookAfterOwnerEnraged(Minion &enraged_aura_owner) {}
 			virtual void HookAfterOwnerUnEnraged(Minion &unenraged_aura_owner) {}
+			virtual void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage) {}
 
 		protected:
 			virtual bool EqualsTo(Aura const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
@@ -101,6 +103,9 @@ namespace GameEngine {
 			void HookAfterOwnerUnEnraged(Minion &unenraged_aura_owner)
 			{
 				for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(unenraged_aura_owner);
+			}
+			void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage) {
+				for (auto & aura : this->auras) aura->HookAfterMinionDamaged(minions, minion, damage);
 			}
 
 		private:

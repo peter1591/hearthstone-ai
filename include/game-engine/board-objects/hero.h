@@ -137,6 +137,14 @@ namespace GameEngine {
 				}
 			}
 
+			void HookAfterMinionAdded(Minion & added_minion) {
+			}
+
+			void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage) {
+
+			}
+
+
 			void DestroyWeapon()
 			{
 				auto triggers = this->GetAndClearWeaponOnDeathTriggers();

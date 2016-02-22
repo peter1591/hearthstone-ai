@@ -35,6 +35,7 @@ inline void GameEngine::BoardObjects::Minion::TakeDamage(int damage, bool poison
 		}
 
 		this->HookMinionCheckEnraged();
+		this->GetBoard().object_manager.HookAfterMinionDamaged(this->minions, *this, damage);
 	}
 }
 
@@ -179,6 +180,11 @@ inline void GameEngine::BoardObjects::Minion::HookMinionCheckEnraged()
 	else {
 		throw std::runtime_error("hp should not be larger than max-hp");
 	}
+}
+
+inline void GameEngine::BoardObjects::Minion::HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage)
+{
+	this->minion.auras.HookAfterMinionDamaged(minions, minion, damage);
 }
 
 inline void GameEngine::BoardObjects::Minion::TurnStart(bool owner_turn)

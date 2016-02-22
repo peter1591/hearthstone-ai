@@ -109,6 +109,7 @@ public: // hooks
 	void OpponentTurnEnd();
 
 	void HookAfterMinionAdded(Minion & minion);
+	void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage);
 
 public:
 	void DebugPrint() const;
@@ -264,8 +265,18 @@ inline void ObjectManager::OpponentTurnEnd()
 
 inline void ObjectManager::HookAfterMinionAdded(Minion & added_minion)
 {
+	this->player_hero.HookAfterMinionAdded(added_minion);
+	this->opponent_hero.HookAfterMinionAdded(added_minion);
 	this->player_minions.HookAfterMinionAdded(added_minion);
 	this->opponent_minions.HookAfterMinionAdded(added_minion);
+}
+
+inline void ObjectManager::HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage)
+{
+	this->player_hero.HookAfterMinionDamaged(minions, minion, damage);
+	this->opponent_hero.HookAfterMinionDamaged(minions, minion, damage);
+	this->player_minions.HookAfterMinionDamaged(minions, minion, damage);
+	this->opponent_minions.HookAfterMinionDamaged(minions, minion, damage);
 }
 
 inline void ObjectManager::DebugPrint() const
