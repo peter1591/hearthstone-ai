@@ -15,6 +15,7 @@
 #include "card_FP1_002.h"
 #include "card_GVG_051.h"
 #include "card_GVG_059.h"
+#include "card_BRM_019.h"
 #include "card_NEW1_018.h"
 
 namespace GameEngine {
@@ -116,6 +117,7 @@ HANDLE_CARD_CALLBACK(Card_FP1_007)
 HANDLE_CARD_CALLBACK(Card_FP1_002)
 HANDLE_CARD_CALLBACK(Card_GVG_051)
 HANDLE_CARD_CALLBACK(Card_GVG_059)
+HANDLE_CARD_CALLBACK(Card_BRM_019)
 HANDLE_CARD_CALLBACK(Card_NEW1_018)
 
 #undef HANDLE_CARD_CALLBACK
