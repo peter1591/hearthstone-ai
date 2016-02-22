@@ -62,9 +62,16 @@ inline bool GameEngine::BoardObjects::HeroData::operator!=(HeroData const & rhs)
 inline std::string GameEngine::BoardObjects::HeroData::GetDebugString() const
 {
 	std::ostringstream oss;
-	oss << "HP: " << this->hp << " + " << this->armor << std::endl;
+	oss << "HP: " << this->hp << " + " << this->armor;
+	if (this->freezed) oss << " [FREEZED]";
+	oss << std::endl;
+
 	if (this->weapon.IsValid()) {
-		oss << "Weapon: [" << this->weapon.card_id << "] " << this->weapon.attack << " " << this->weapon.durability << std::endl;
+		oss << "Weapon: [" << this->weapon.card_id << "] " << this->weapon.attack << " " << this->weapon.durability;
+		if (this->weapon.freeze_attack) oss << " [FREEZE]";
+		if (this->weapon.forgetful) oss << " [FORGETFUL]";
+
+		oss << std::endl;
 	}
 
 	return oss.str();

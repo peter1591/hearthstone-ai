@@ -74,7 +74,7 @@ void InitializeBoard(GameEngine::Board &board)
 		auto & added_minion = board.object_manager.player_minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion));
-		added_minion.AddOnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle);
+		added_minion.AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
 		added_minion.TurnStart(true);
 	}
 

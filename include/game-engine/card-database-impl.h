@@ -216,21 +216,23 @@ namespace GameEngine {
 		}
 
 		// fix error data
-		if (origin_id == "GVG_065")
-		{
+		if (origin_id == "GVG_065") {
 			new_card.data.minion.forgetful = true;
 		}
-		else if (origin_id == "GVG_088")
-		{
+		else if (origin_id == "GVG_066") {
 			new_card.data.minion.forgetful = true;
 		}
-		else if (origin_id == "GVG_112")
-		{
+		else if (origin_id == "GVG_088") {
 			new_card.data.minion.forgetful = true;
 		}
-		else if (origin_id == "AT_088")
-		{
+		else if (origin_id == "GVG_112") {
 			new_card.data.minion.forgetful = true;
+		}
+		else if (origin_id == "AT_088") {
+			new_card.data.minion.forgetful = true;
+		}
+		else if (origin_id == "GVG_054") {
+			new_card.data.weapon.forgetful = true;
 		}
 
 		new_card.id = this->GetAvailableCardId();
