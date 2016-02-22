@@ -102,7 +102,7 @@ namespace GameEngine
 
 		auto attacker = board.object_manager.GetObject(attacker_idx);
 
-		if (attacker->IsForgetful()) {
+		for (int forgetful_count = attacker->GetForgetfulCount(); forgetful_count > 0; --forgetful_count) {
 			attacked_idx = StageHelper::GetTargetForForgetfulAttack(board, attacked_idx);
 		}
 

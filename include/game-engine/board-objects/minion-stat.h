@@ -74,6 +74,13 @@ public:
 		++this->flags[flag];
 	}
 
+	// Get count of the flag
+	int GetForgetfulCount() const { return this->GetFlagCount(FLAG_FORGETFUL); }
+	int GetFlagCount(Flag flag) const
+	{
+		return this->flags[flag];
+	}
+
 	// Remove one count from the flag
 	void RemoveFlag(Flag flag)
 	{

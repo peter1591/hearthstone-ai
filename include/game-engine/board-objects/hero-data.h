@@ -69,7 +69,7 @@ inline std::string GameEngine::BoardObjects::HeroData::GetDebugString() const
 	if (this->weapon.IsValid()) {
 		oss << "Weapon: [" << this->weapon.card_id << "] " << this->weapon.attack << " " << this->weapon.durability;
 		if (this->weapon.freeze_attack) oss << " [FREEZE]";
-		if (this->weapon.forgetful) oss << " [FORGETFUL]";
+		if (this->weapon.forgetful > 0) oss << " [FORGETFUL:" << this->weapon.forgetful << "]";
 
 		oss << std::endl;
 	}

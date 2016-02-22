@@ -64,7 +64,7 @@ namespace BoardObjects {
 		void AttackedOnce();
 
 		void TakeDamage(int damage, bool poisonous);
-		bool IsForgetful() const;
+		int GetForgetfulCount() const;
 
 		void SetFreezed();
 		bool IsFreezeAttacker() const;

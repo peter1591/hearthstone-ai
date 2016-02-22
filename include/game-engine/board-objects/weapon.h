@@ -23,7 +23,7 @@ namespace GameEngine {
 
 			void Clear() {
 				this->InValidate();
-				this->forgetful = false;
+				this->forgetful = 0;
 				this->freeze_attack = false;
 				this->windfury = false;
 			}
@@ -51,7 +51,7 @@ namespace GameEngine {
 			int cost;
 			int attack;
 			int durability;
-			bool forgetful;
+			int forgetful;
 			bool freeze_attack; // freeze the attacked target?
 			bool windfury;
 

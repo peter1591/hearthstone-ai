@@ -162,7 +162,7 @@ inline std::string MinionData::GetDebugString() const
 		if (this->stat.IsCharge()) oss << " [CHARGE]";
 		if (this->stat.IsShield()) oss << " [SHIELD]";
 		if (this->stat.IsStealth()) oss << " [STEALTH]";
-		if (this->stat.IsForgetful()) oss << " [FORGETFUL]";
+		if (this->stat.IsForgetful()) oss << " [FORGETFUL:" << this->stat.GetForgetfulCount() << "]";
 		if (this->stat.IsFreezeAttacker()) oss << " [FREEZE]";
 		if (this->stat.IsFreezed()) oss << " [FREEZED]";
 		if (this->stat.IsWindFury()) oss << " [WINDFURY]";

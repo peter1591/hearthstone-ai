@@ -39,9 +39,9 @@ inline void GameEngine::BoardObjects::Minion::TakeDamage(int damage, bool poison
 	}
 }
 
-inline bool GameEngine::BoardObjects::Minion::IsForgetful() const
+inline int GameEngine::BoardObjects::Minion::GetForgetfulCount() const
 {
-	return this->minion.stat.IsForgetful();
+	return this->minion.stat.GetForgetfulCount();
 }
 
 inline bool GameEngine::BoardObjects::Minion::Attackable() const
