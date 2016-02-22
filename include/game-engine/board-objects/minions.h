@@ -54,6 +54,10 @@ public: // getters
 		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
 	}
 
+	MinionIterator GetIteratorForSpecificMinion(Minion const& minion) {
+		return MinionIterator(this->board, *this, this->GetRawIteratorForSpecificMinion(minion));
+	}
+
 	Minion & GetMinion(int minion_idx) {
 		auto it = this->GetRawIterator(minion_idx);
 		if (it == this->minions.end()) {
@@ -105,6 +109,13 @@ private:
 			++it;
 		}
 		return it;
+	}
+
+	container_type::iterator GetRawIteratorForSpecificMinion(Minion const& minion) {
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			if (&(*it) == &minion) return it;
+		}
+		return this->minions.end();
 	}
 
 private:
