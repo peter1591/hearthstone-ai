@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_021.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_043.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_051.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_112.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_018.h" />
