@@ -16,6 +16,9 @@ namespace GameEngine {
 			friend std::hash<Hero>;
 
 		public:
+			typedef Weapon::OnDeathTrigger WeaponOnDeathTrigger;
+
+		public:
 			Hero(Board & board) : board(board) {}
 
 		private:
@@ -117,7 +120,7 @@ namespace GameEngine {
 				return false;
 			}
 
-			void AddWeaponOnDeathTrigger(Weapon::OnDeathTrigger && func) {
+			void AddWeaponOnDeathTrigger(WeaponOnDeathTrigger && func) {
 				this->hero.weapon.on_death_triggers.push_back(std::move(func));
 			}
 
@@ -172,8 +175,8 @@ namespace GameEngine {
 			}
 
 		private:
-			std::list<Weapon::OnDeathTrigger> GetAndClearWeaponOnDeathTriggers() {
-				std::list<Weapon::OnDeathTrigger> ret;
+			std::list<WeaponOnDeathTrigger> GetAndClearWeaponOnDeathTriggers() {
+				std::list<WeaponOnDeathTrigger> ret;
 				this->hero.weapon.on_death_triggers.swap(ret);
 				return ret;
 			}
