@@ -1,11 +1,7 @@
 #ifndef GAME_ENGINE_CARDS_CARD_BRM_019
 #define GAME_ENGINE_CARDS_CARD_BRM_019
 
-#include "game-engine/board.h"
-#include "game-engine/card-id-map.h"
-#include "game-engine/stages/helper.h"
-#include "game-engine/board-objects/enchantment.h"
-#include "game-engine/board-objects/aura.h"
+#include "card-base.h"
 
 namespace GameEngine {
 	namespace Cards {

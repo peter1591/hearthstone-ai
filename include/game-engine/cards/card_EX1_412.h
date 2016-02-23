@@ -1,10 +1,6 @@
 #pragma once
 
-#include "game-engine/board.h"
-#include "game-engine/card-id-map.h"
-#include "game-engine/stages/helper.h"
-#include "game-engine/board-objects/minion.h"
-#include "game-engine/board-objects/aura-enrage.h"
+#include "card-base.h"
 
 namespace GameEngine {
 	namespace Cards {

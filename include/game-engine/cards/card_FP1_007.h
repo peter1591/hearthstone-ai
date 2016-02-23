@@ -1,10 +1,7 @@
 #ifndef GAME_ENGINE_CARDS_CARD_FP1_007
 #define GAME_ENGINE_CARDS_CARD_FP1_007
 
-#include "game-engine/board.h"
-#include "game-engine/card-id-map.h"
-#include "game-engine/stages/helper.h"
-#include "game-engine/board-objects/minion.h"
+#include "card-base.h"
 
 namespace GameEngine {
 namespace Cards {

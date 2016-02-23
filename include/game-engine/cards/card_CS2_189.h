@@ -2,9 +2,7 @@
 #define GAME_ENGINE_CARDS_CARD_CS2_189
 
 #include <stdexcept>
-#include "game-engine/board.h"
-#include "game-engine/card-id-map.h"
-#include "game-engine/stages/helper.h"
+#include "card-base.h"
 
 namespace GameEngine {
 namespace Cards {
