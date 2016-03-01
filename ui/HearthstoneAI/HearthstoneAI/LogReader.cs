@@ -61,28 +61,10 @@ namespace HearthstoneAI
             this.power_log_offset += Encoding.UTF8.GetByteCount(content);
             
             var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-            foreach (string line in lines)
+            foreach (var ret in this.log_parser.Process(lines))
             {
-                this.ProcessLog(line);
+                // do nothing
             }
-        }
-
-        private void ProcessLog(string log)
-        {
-            if (!log.StartsWith("D ")) return;
-
-            LogItem log_item;
-
-            try
-            {
-                log_item = LogItem.Parse(log);
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-
-            this.log_parser.Process(log_item);
         }
 
         public GameState GetGameState()

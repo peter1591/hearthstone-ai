@@ -16,6 +16,8 @@ namespace HearthstoneAI
 
         public static LogItem Parse(string line)
         {
+            if (!line.StartsWith("D ")) throw new Exception("wrong format");
+
             DateTime time;
 
             if (line.Length < 19) throw new Exception("wrong format");

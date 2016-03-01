@@ -33,12 +33,14 @@ namespace HearthstoneAI
         public static readonly Regex TagChangeRegex =
             new Regex(@"^[\s]*TAG_CHANGE\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
-        public static readonly Regex UpdatingEntityRegex =
+        public static readonly Regex ShowEntityRegex =
             new Regex(@"^[\s]*SHOW_ENTITY\ -\ Updating\ Entity=(?<entity>(.+))\ CardID=(?<cardId>(\w*))");
 
         public static readonly Regex HideEntityRegex =
             new Regex(@"^[\s]*HIDE_ENTITY\ -\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
+        public static readonly Regex MetadataRegex = new Regex(@"^[\s]*META_DATA\ -\ ");
+        public static readonly Regex MetadataInfoRegex = new Regex(@"^[\s]*Info\[\d+\]");
 
         public static readonly Regex EntityChoicesCreate =
             new Regex(@"^[\s]*id=(?<id>(.*))\ Player=(?<player_entity>.*)\ TaskList=(.*)\ ChoiceType=(?<choice_type>.*)\ CountMin=(.*)\ CountMax=(.*)");
@@ -49,10 +51,7 @@ namespace HearthstoneAI
 
         public GameState GameState { get; }
 
-        private int current_entity_id;
         private readonly List<GameState.Entity> tmp_entities = new List<GameState.Entity>();
-
-        private int current_entity_choice_id;
 
         public LogParser(frmMain frm)
         {
@@ -65,17 +64,33 @@ namespace HearthstoneAI
         private static string PowerLogPrefix = "GameState.DebugPrintPower() - ";
         private static string EntityChoicesLogPrefix = "GameState.DebugPrintEntityChoices() - ";
 
-        public void Process(LogItem item)
+        private string parsing_log;
+        public IEnumerable<bool> Process(string [] log_lines)
         {
-            string log = item.Content;
+            IEnumerator<bool> power_log = ParsePowerLog().GetEnumerator();
+            IEnumerator<bool> entity_choices_log = ParseEntityChoicesLog().GetEnumerator();
 
-            if (log.StartsWith(PowerLogPrefix))
+            foreach (var log_line in log_lines)
             {
-                ParsePowerLog(log.Substring(PowerLogPrefix.Length));
-            }
-            else if (log.StartsWith(EntityChoicesLogPrefix))
-            {
-                ParseEntityChoicesLog(log.Substring(EntityChoicesLogPrefix.Length));
+                LogItem log_item;
+
+                try { log_item = LogItem.Parse(log_line); }
+                catch (Exception ex) { continue; }
+
+                string log = log_item.Content;
+
+                if (log.StartsWith(PowerLogPrefix))
+                {
+                    this.parsing_log = log.Substring(PowerLogPrefix.Length);
+                    power_log.MoveNext();
+                    yield return power_log.Current;
+                }
+                else if (log.StartsWith(EntityChoicesLogPrefix))
+                {
+                    this.parsing_log = log.Substring(EntityChoicesLogPrefix.Length);
+                    entity_choices_log.MoveNext();
+                    yield return entity_choices_log.Current;
+                }
             }
         }
 
@@ -115,216 +130,293 @@ namespace HearthstoneAI
             return entityId;
         }
 
-        private void ParsePowerLog(string content)
+        private bool ParseIfMatched_CreatingTag(int entity_id)
         {
-            //this.frmMain.AddLog("[Read Power Log] " + content);
+            if (!CreationTagRegex.IsMatch(this.parsing_log)) return false;
 
-            if (content.Contains("SHOW_ENTITY - Updating Entity=[id=13 cardId= type=INVALID zone=DECK zonePos=0 player=1] CardID=GVG_038"))
-            {
-                ;
-            }
+            var match = CreationTagRegex.Match(this.parsing_log);
+            GameState.ChangeTag(entity_id, match.Groups["tag"].Value, match.Groups["value"].Value);
+            return true;
+        }
 
-            if (GameEntityRegex.IsMatch(content))
+        private IEnumerable<bool> ParsePowerLog()
+        {
+            while (true)
             {
-                var match = GameEntityRegex.Match(content);
-                var id = int.Parse(match.Groups["id"].Value);
-                GameState.CreateGameEntity(id);
-                this.current_entity_id = id;
-            }
-            else if (PlayerEntityRegex.IsMatch(content))
-            {
-                var match = PlayerEntityRegex.Match(content);
-                var id = int.Parse(match.Groups["id"].Value);
-                if (!GameState.Entities.ContainsKey(id))
-                    GameState.Entities.Add(id, new GameState.Entity(id));
-                this.current_entity_id = id;
-            }
-            else if (TagChangeRegex.IsMatch(content))
-            {
-                var match = TagChangeRegex.Match(content);
-                var entity_raw = match.Groups["entity"].Value;
-                int entityId = GetEntityIdFromRawString(entity_raw);
+                //this.frmMain.AddLog("[Read Power Log] " + this.parsing_log);
 
-                if (entityId >= 0)
+                if (CreateGame.IsMatch(this.parsing_log))
                 {
-                    GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+                    yield return true;
                 }
-                else
+                else if (GameEntityRegex.IsMatch(this.parsing_log))
                 {
-                    // failed to get entity id
-                    // save the information to tmp_entities; insert to game state when the entity id is parsed
-                    var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_raw);
-                    if (tmpEntity == null)
+                    var match = GameEntityRegex.Match(this.parsing_log);
+                    var id = int.Parse(match.Groups["id"].Value);
+                    GameState.CreateGameEntity(id);
+                    yield return true;
+
+                    while (true)
                     {
-                        tmpEntity = new GameState.Entity(this.tmp_entities.Count + 1) { Name = entity_raw };
-                        this.tmp_entities.Add(tmpEntity);
+                        if (this.ParseIfMatched_CreatingTag(id)) yield return true;
+                        else break;
+                    }
+                    continue;
+                }
+                else if (PlayerEntityRegex.IsMatch(this.parsing_log))
+                {
+                    var match = PlayerEntityRegex.Match(this.parsing_log);
+                    var id = int.Parse(match.Groups["id"].Value);
+                    if (!GameState.Entities.ContainsKey(id))
+                        GameState.Entities.Add(id, new GameState.Entity(id));
+                    yield return true;
+
+                    while (true)
+                    {
+                        if (this.ParseIfMatched_CreatingTag(id)) yield return true;
+                        else break;
+                    }
+                    continue;
+                }
+                else if (CreationRegex.IsMatch(this.parsing_log))
+                {
+                    var match = CreationRegex.Match(this.parsing_log);
+                    var id = int.Parse(match.Groups["id"].Value);
+                    var cardId = match.Groups["cardId"].Value;
+                    if (!GameState.Entities.ContainsKey(id))
+                    {
+                        GameState.Entities.Add(id, new GameState.Entity(id) { CardId = cardId });
+                    }
+                    yield return true;
+
+                    while (true)
+                    {
+                        if (this.ParseIfMatched_CreatingTag(id)) yield return true;
+                        else break;
+                    }
+                    continue;
+                }
+                else if (ShowEntityRegex.IsMatch(this.parsing_log))
+                {
+                    var match = ShowEntityRegex.Match(this.parsing_log);
+                    var cardId = match.Groups["cardId"].Value;
+                    int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
+
+                    if (entityId < 0)
+                    {
+                        this.frmMain.AddLog("[ERROR] Parse error: cannot find entity id. '" + this.parsing_log + "'");
+                        yield return false;
                     }
 
-                    var tag_value = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
-                    tmpEntity.SetTag(tag_value);
-                    if (tmpEntity.HasTag(GameTag.ENTITY_ID))
-                    {
-                        var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
-                        if (!GameState.Entities.ContainsKey(id))
-                        {
-                            this.frmMain.AddLog("[ERROR] TMP ENTITY (" + entity_raw + ") NOW HAS A KEY, BUT GAME.ENTITIES DOES NOT CONTAIN THIS KEY");
-                        }
-                        else { 
-                            GameState.Entities[id].Name = tmpEntity.Name;
-                            foreach (var t in tmpEntity.Tags)
-                                GameState.Entities[id].SetTag(t.Key, t.Value);
-                            this.tmp_entities.Remove(tmpEntity);
-                        }
-                    }
-                }
-            }
-            else if (CreationRegex.IsMatch(content))
-            {
-                var match = CreationRegex.Match(content);
-                var id = int.Parse(match.Groups["id"].Value);
-                var cardId = match.Groups["cardId"].Value;
-                if (!GameState.Entities.ContainsKey(id))
-                {
-                    GameState.Entities.Add(id, new GameState.Entity(id) { CardId = cardId });
-                }
-                this.current_entity_id = id;
-            }
-            else if (UpdatingEntityRegex.IsMatch(content))
-            {
-                var match = UpdatingEntityRegex.Match(content);
-                var cardId = match.Groups["cardId"].Value;
-                int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
-
-                if (entityId >= 0)
-                {
-                    this.current_entity_id = entityId;
                     if (!GameState.Entities.ContainsKey(entityId))
                         GameState.Entities.Add(entityId, new GameState.Entity(entityId));
                     GameState.Entities[entityId].CardId = cardId;
+                    yield return true;
+
+                    while (true)
+                    {
+                        if (this.ParseIfMatched_CreatingTag(entityId)) yield return true;
+                        else break;
+                    }
+                    continue;
                 }
-            }
-            else if (HideEntityRegex.IsMatch(content))
-            {
-                var match = HideEntityRegex.Match(content);
-                int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
-                GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
-            }
-            else if (CreationTagRegex.IsMatch(content))
-            {
-                // We can skip 'HIDE_ENTITY'
-                var match = CreationTagRegex.Match(content);
-                GameState.ChangeTag(this.current_entity_id, match.Groups["tag"].Value, match.Groups["value"].Value);
-            }
-            else if (ActionStartRegex.IsMatch(content))
-            {
-                var match = ActionStartRegex.Match(content);
-
-                var entity_raw = match.Groups["entity"].Value.Trim();
-                var block_type = match.Groups["block_type"].Value.Trim();
-                var index = match.Groups["index"].Value.Trim();
-                var target_raw = match.Groups["target"].Value.Trim();
-
-                var entity_id = this.GetEntityIdFromRawString(entity_raw);
-                if (entity_id < 0)
+                else if (TagChangeRegex.IsMatch(this.parsing_log))
                 {
-                    this.frmMain.AddLog("[ERROR] Cannot get entity id for action.");
-                    return;
+                    var match = TagChangeRegex.Match(this.parsing_log);
+                    var entity_raw = match.Groups["entity"].Value;
+                    int entityId = GetEntityIdFromRawString(entity_raw);
+
+                    if (entityId >= 0)
+                    {
+                        GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+                    }
+                    else
+                    {
+                        // failed to get entity id
+                        // save the information to tmp_entities; insert to game state when the entity id is parsed
+                        var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_raw);
+                        if (tmpEntity == null)
+                        {
+                            tmpEntity = new GameState.Entity(this.tmp_entities.Count + 1) { Name = entity_raw };
+                            this.tmp_entities.Add(tmpEntity);
+                        }
+
+                        var tag_value = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
+                        tmpEntity.SetTag(tag_value);
+                        if (tmpEntity.HasTag(GameTag.ENTITY_ID))
+                        {
+                            var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
+                            if (!GameState.Entities.ContainsKey(id))
+                            {
+                                this.frmMain.AddLog("[ERROR] TMP ENTITY (" + entity_raw + ") NOW HAS A KEY, BUT GAME.ENTITIES DOES NOT CONTAIN THIS KEY");
+                            }
+                            else {
+                                GameState.Entities[id].Name = tmpEntity.Name;
+                                foreach (var t in tmpEntity.Tags)
+                                    GameState.Entities[id].SetTag(t.Key, t.Value);
+                                this.tmp_entities.Remove(tmpEntity);
+                            }
+                        }
+                    }
+                    yield return true;
                 }
-
-                var target_id = this.GetEntityIdFromRawString(target_raw);
-
-                if (block_type != "TRIGGER")
+                else if (HideEntityRegex.IsMatch(this.parsing_log))
                 {
-                    this.frmMain.AddLog("[INFO] Got action. entity = " + entity_id.ToString() +
-                        " block type = " + block_type +
-                        " index = " + index +
-                        " target = " + target_id.ToString());
+                    var match = HideEntityRegex.Match(this.parsing_log);
+                    int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
+                    GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+                    yield return true;
                 }
-            }
-            else if (CreateGame.IsMatch(content)) { }
-            else if (ActionEndRegex.IsMatch(content)) { }
-            else
-            {
-                this.frmMain.AddLog("[ERROR] Parse power log failed: " + content);
+                else if (ActionStartRegex.IsMatch(this.parsing_log))
+                {
+                    var match = ActionStartRegex.Match(this.parsing_log);
+
+                    var entity_raw = match.Groups["entity"].Value.Trim();
+                    var block_type = match.Groups["block_type"].Value.Trim();
+                    var index = match.Groups["index"].Value.Trim();
+                    var target_raw = match.Groups["target"].Value.Trim();
+
+                    var entity_id = this.GetEntityIdFromRawString(entity_raw);
+                    if (entity_id < 0)
+                    {
+                        this.frmMain.AddLog("[ERROR] Cannot get entity id for action.");
+                        yield return false;
+                    }
+
+                    var target_id = this.GetEntityIdFromRawString(target_raw);
+
+                    if (block_type != "TRIGGER")
+                    {
+                        this.frmMain.AddLog("[INFO] Got action. entity = " + entity_id.ToString() +
+                            " block type = " + block_type +
+                            " index = " + index +
+                            " target = " + target_id.ToString());
+                    }
+                    yield return true;
+                }
+                else if (ActionEndRegex.IsMatch(this.parsing_log))
+                {
+                    yield return true;
+                }
+                else if (MetadataRegex.IsMatch(this.parsing_log))
+                {
+                    yield return true; // ignore
+                    while (MetadataInfoRegex.IsMatch(this.parsing_log))
+                    {
+                        yield return true;
+                    }
+                }
+                else
+                {
+                    this.frmMain.AddLog("[ERROR] Parse power log failed: " + this.parsing_log);
+                    yield return true;
+                }
+
             }
         }
 
-        private void ParseEntityChoicesLog(string content)
+        private bool ParseIfMatch_EntityChoiceCreate(out int entity_choice_id)
         {
-            if (EntityChoicesCreate.IsMatch(content))
+            entity_choice_id = -1;
+            if (!EntityChoicesCreate.IsMatch(this.parsing_log)) return false;
+
+            var match = EntityChoicesCreate.Match(this.parsing_log);
+
+            if (int.TryParse(match.Groups["id"].Value.Trim(), out entity_choice_id) == false)
             {
-                var match = EntityChoicesCreate.Match(content);
-
-                int id;
-                if (int.TryParse(match.Groups["id"].Value.Trim(), out id) == false)
-                {
-                    this.frmMain.AddLog("[ERROR] Parse failed: " + content);
-                    return;
-                }
-
-                var player_entity_raw = match.Groups["player_entity"].Value.Trim();
-                int player_entity_id = GetEntityIdFromRawString(player_entity_raw);
-
-                var choice_type = match.Groups["choice_type"].Value.Trim();
-
-                if (GameState.EntityChoices.ContainsKey(id))
-                {
-                    this.frmMain.AddLog("[ERROR] Entity choice index overlapped (overwritting)");
-                    GameState.EntityChoices.Remove(id);
-                }
-
-                GameState.EntityChoices[id] = new GameState.EntityChoice();
-                GameState.EntityChoices[id].id = id;
-                GameState.EntityChoices[id].choice_type = choice_type;
-                GameState.EntityChoices[id].player_entity_id = player_entity_id;
-
-                this.current_entity_choice_id = id;
+                this.frmMain.AddLog("[ERROR] Parse failed: " + this.parsing_log);
+                return false;
             }
-            else if (EntityChoicesSource.IsMatch(content))
+
+            var player_entity_raw = match.Groups["player_entity"].Value.Trim();
+            int player_entity_id = GetEntityIdFromRawString(player_entity_raw);
+
+            var choice_type = match.Groups["choice_type"].Value.Trim();
+
+            if (GameState.EntityChoices.ContainsKey(entity_choice_id))
             {
-                var match = EntityChoicesSource.Match(content);
-
-                if (GameState.EntityChoices.ContainsKey(this.current_entity_choice_id) == false)
-                {
-                    this.frmMain.AddLog("[ERROR] missing current entity choice id");
-                    return;
-                }
-
-                GameState.EntityChoices[this.current_entity_choice_id].source = match.Groups["source"].Value.Trim();
+                this.frmMain.AddLog("[ERROR] Entity choice index overlapped (overwritting)");
+                GameState.EntityChoices.Remove(entity_choice_id);
             }
-            else if (EntityChoicesEntities.IsMatch(content))
+
+            GameState.EntityChoices[entity_choice_id] = new GameState.EntityChoice();
+            GameState.EntityChoices[entity_choice_id].id = entity_choice_id;
+            GameState.EntityChoices[entity_choice_id].choice_type = choice_type;
+            GameState.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
+
+            return true;
+        }
+
+        private bool ParseIfMatch_EntityChoiceSource(int entity_choice_id)
+        {
+            if (!EntityChoicesSource.IsMatch(this.parsing_log)) return false;
+
+            var match = EntityChoicesSource.Match(this.parsing_log);
+            GameState.EntityChoices[entity_choice_id].source = match.Groups["source"].Value.Trim();
+
+            return true;
+        }
+
+        private bool ParseIfMatch_EntityChoiceEntity(int entity_choice_id)
+        {
+            if (!EntityChoicesEntities.IsMatch(this.parsing_log)) return false;
+
+            var match = EntityChoicesEntities.Match(this.parsing_log);
+
+            if (GameState.EntityChoices.ContainsKey(entity_choice_id) == false)
             {
-                var match = EntityChoicesEntities.Match(content);
-
-                if (GameState.EntityChoices.ContainsKey(this.current_entity_choice_id) == false)
-                {
-                    this.frmMain.AddLog("[ERROR] missing current entity choice id");
-                    return;
-                }
-
-                int idx;
-                if (int.TryParse(match.Groups["idx"].Value.Trim(), out idx) == false)
-                {
-                    this.frmMain.AddLog("[ERROR] Parse failed: " + content);
-                    return;
-                }
-
-                var entity_raw = match.Groups["entity"].Value.Trim();
-                int entity_id = GetEntityIdFromRawString(entity_raw);
-                if (entity_id < 0)
-                {
-                    this.frmMain.AddLog("[ERROR] Failed to get entity id: " + content);
-                    return;
-                }
-
-                GameState.EntityChoices[this.current_entity_choice_id].choices[idx] = entity_id;
-
-                // Trigger
-                this.EntityChoiceAdded(this.current_entity_choice_id);
+                this.frmMain.AddLog("[ERROR] missing current entity choice id");
+                return false;
             }
-            else
+
+            int idx;
+            if (int.TryParse(match.Groups["idx"].Value.Trim(), out idx) == false)
             {
-                this.frmMain.AddLog("[ERROR] Unhandled entity chocies log");
+                this.frmMain.AddLog("[ERROR] Parse failed: " + this.parsing_log);
+                return false;
+            }
+
+            var entity_raw = match.Groups["entity"].Value.Trim();
+            int entity_id = GetEntityIdFromRawString(entity_raw);
+            if (entity_id < 0)
+            {
+                this.frmMain.AddLog("[ERROR] Failed to get entity id: " + this.parsing_log);
+                return false;
+            }
+
+            GameState.EntityChoices[entity_choice_id].choices[idx] = entity_id;
+
+            // Trigger
+            this.EntityChoiceAdded(entity_choice_id);
+            return true;
+        }
+
+        private IEnumerable<bool> ParseEntityChoicesLog()
+        {
+            while (true)
+            {
+                int entity_choice_id;
+
+                if (ParseIfMatch_EntityChoiceCreate(out entity_choice_id))
+                {
+                    yield return true;
+
+                    if (ParseIfMatch_EntityChoiceSource(entity_choice_id)) yield return true;
+                    else continue;
+
+                    while (true)
+                    {
+                        if (ParseIfMatch_EntityChoiceEntity(entity_choice_id)) yield return true;
+                        else break;
+                    }
+                    continue;
+                }
+                else
+                {
+                    this.frmMain.AddLog("[ERROR] Unhandled entity chocies log");
+                    yield return true;
+                }
+
             }
         }
 
