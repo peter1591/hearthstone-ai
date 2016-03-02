@@ -14,7 +14,7 @@ namespace HearthstoneAI
         public static readonly Regex GameEntityRegex = new Regex(@"^[\s]*GameEntity\ EntityID=(?<id>(\d+))");
 
         public static readonly Regex ActionStartRegex =
-            new Regex(@"^[\s]*ACTION_START[\s]+Entity=(?<entity>(.*))[\s]+BlockType=(?<block_type>.*)[\s+]Index=(?<index>.*)[\s]+Target=(?<target>.*)");
+            new Regex(@"^(?<indent>[\s]*)ACTION_START[\s]+Entity=(?<entity>(.*))[\s]+BlockType=(?<block_type>.*)[\s+]Index=(?<index>.*)[\s]+Target=(?<target>.*)");
         public static readonly Regex ActionEndRegex = new Regex(@"^[\s]*ACTION_END");
 
         public static readonly Regex CardIdRegex = new Regex(@"cardId=(?<cardId>(\w+))");
@@ -66,9 +66,18 @@ namespace HearthstoneAI
         private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
         private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
 
+        public enum ParsingStage
+        {
+            STAGE_OK,
+            STAGE_WAITING // waiting to more log for a valid game state
+        }
+        public ParsingStage parsing_stage;
+
         private string parsing_log;
         public IEnumerable<bool> Process(string [] log_lines)
         {
+            this.parsing_stage = ParsingStage.STAGE_WAITING;
+
             IEnumerator<bool> power_log = ParsePowerLog().GetEnumerator();
             IEnumerator<bool> entity_choices_log = ParseEntityChoicesLog().GetEnumerator();
 
@@ -198,7 +207,7 @@ namespace HearthstoneAI
 
         // return for each consumed line
         // break if error and the line is not consumed
-        private IEnumerable<bool> ParsePowerLog_ShowEntities()
+        private IEnumerable<bool> ParsePowerLog_ShowEntities(string action_block_type)
         {
             if (!ShowEntityRegex.IsMatch(this.parsing_log)) yield break;
 
@@ -224,7 +233,7 @@ namespace HearthstoneAI
             }
         }
 
-        private IEnumerable<bool> ParsePowerLog_FullEntity()
+        private IEnumerable<bool> ParsePowerLog_FullEntity(string action_block_type = "")
         {
             if (!FullEntityRegex.IsMatch(this.parsing_log)) yield break;
             var match = FullEntityRegex.Match(this.parsing_log);
@@ -234,6 +243,13 @@ namespace HearthstoneAI
             {
                 GameState.Entities.Add(id, new GameState.Entity(id) { CardId = cardId });
             }
+
+            // triggers
+            if (action_block_type == "JOUST")
+            {
+                GameState.joust_information.AddEntityId(id);
+            }
+
             yield return true;
 
             while (true)
@@ -243,12 +259,24 @@ namespace HearthstoneAI
             }
         }
 
+        private int GetIndent(string log)
+        {
+            int i = 0;
+            foreach (char c in log)
+            {
+                if (c == ' ') i++;
+                else break;
+            }
+            return i;
+        }
+
         private IEnumerable<bool> ParsePowerLog_Action()
         {
             if (!ActionStartRegex.IsMatch(this.parsing_log)) yield break;
 
             var match = ActionStartRegex.Match(this.parsing_log);
 
+            var indent = match.Groups["indent"].Value;
             var entity_raw = match.Groups["entity"].Value.Trim();
             var block_type = match.Groups["block_type"].Value.Trim();
             var index = match.Groups["index"].Value.Trim();
@@ -277,14 +305,26 @@ namespace HearthstoneAI
                 // possible logs within an action block
                 bool rule_matched = false;
 
-                foreach (var ret in this.ParsePowerLog_FullEntity())
+                if (ActionEndRegex.IsMatch(this.parsing_log))
+                {
+                    yield return true;
+                    break;
+                }
+
+                // Note: sometimes the ACTION_END is missing, so we use indent to check
+                if (this.GetIndent(this.parsing_log) != indent.Length + 4)
+                {
+                    break;
+                }
+
+                foreach (var ret in this.ParsePowerLog_FullEntity(block_type))
                 {
                     rule_matched = true;
                     yield return ret;
                 }
                 if (rule_matched) continue;
 
-                foreach (var ret in this.ParsePowerLog_ShowEntities())
+                foreach (var ret in this.ParsePowerLog_ShowEntities(block_type))
                 {
                     rule_matched = true;
                     yield return ret;
@@ -312,12 +352,6 @@ namespace HearthstoneAI
                     yield return ret;
                 }
                 if (rule_matched) continue;
-
-                if (ActionEndRegex.IsMatch(this.parsing_log))
-                {
-                    yield return true;
-                    break;
-                }
 
                 if (MetadataRegex.IsMatch(this.parsing_log))
                 {
@@ -381,6 +415,7 @@ namespace HearthstoneAI
             while (true)
             {
                 bool rule_matched = false;
+                this.parsing_stage = ParsingStage.STAGE_OK;
 
                 foreach (var ret in this.ParsePowerLog_FullEntity())
                 {
@@ -395,6 +430,7 @@ namespace HearthstoneAI
                     continue;
                 }
 
+                this.parsing_stage = ParsingStage.STAGE_WAITING;
                 foreach (var ret in this.ParsePowerLog_Action())
                 {
                     rule_matched = true;
@@ -402,6 +438,7 @@ namespace HearthstoneAI
                 }
                 if (rule_matched) continue;
 
+                this.parsing_stage = ParsingStage.STAGE_WAITING;
                 break;
             }
         }

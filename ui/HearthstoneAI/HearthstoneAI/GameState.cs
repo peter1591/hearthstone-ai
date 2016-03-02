@@ -139,6 +139,20 @@ namespace HearthstoneAI
             public Dictionary<int, int> choices;
         }
 
+        public class JoustInformation
+        {
+            public JoustInformation() { this.entities = new List<int>(); }
+
+            public int AddEntityId(int entity_id)
+            {
+                if (this.entities.Contains(entity_id)) return 0;
+                this.entities.Add(entity_id);
+                return 1;
+            }
+
+            public readonly List<int> entities;
+        }
+
         public GameState()
         {
             this.Reset();
@@ -146,11 +160,12 @@ namespace HearthstoneAI
 
         public void Reset()
         {
-            this.Entities = new Dictionary<int, Entity>();
-            this.EntityChoices = new Dictionary<int, EntityChoice>();
             this.GameEntityId = -1;
             this.PlayerEntityId = -1;
             this.OpponentEntityId = -1;
+            this.Entities = new Dictionary<int, Entity>();
+            this.EntityChoices = new Dictionary<int, EntityChoice>();
+            this.joust_information= new GameState.JoustInformation();
         }
 
         public Dictionary<int, Entity> Entities { get; set; }
@@ -158,6 +173,8 @@ namespace HearthstoneAI
         private int GameEntityId { get; set; }
         public int PlayerEntityId { get; set; }
         public int OpponentEntityId { get; set; }
+
+        public JoustInformation joust_information { get; set; }
 
         public void CreateGameEntity(int id)
         {

@@ -43,12 +43,18 @@ namespace HearthstoneAI
         {
             this.log_added = false;
 
-            this.log_reader.Process();
+            bool parse_success = this.log_reader.Process();
 
             if (this.log_added)
             {
                 this.listBoxProcessedLogs.SelectedIndex = this.listBoxProcessedLogs.Items.Count - 1;
                 this.listBoxProcessedLogs.TopIndex = this.listBoxProcessedLogs.Items.Count - 1;
+            }
+
+            if (!parse_success)
+            {
+                this.txtGameEntity.Text = "Parse failed";
+                return;
             }
 
             this.UpdateBoard();
@@ -337,6 +343,20 @@ namespace HearthstoneAI
             return "Known Card ID = " + entity.CardId + Environment.NewLine;
         }
 
+        private string GetJoustsInformation(GameState game, int controller)
+        {
+            string result = "[Joust flip cards]" + Environment.NewLine;
+
+            foreach (var joust_entity_id in game.joust_information.entities)
+            {
+                var joust_card = game.Entities[joust_entity_id];
+                if (joust_card.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
+                result += joust_card.CardId + Environment.NewLine;
+            }
+
+            return result;
+        }
+
         private string GetDeckText(GameState game, int controller, TAG_ZONE zone)
         {
             string result = "";
@@ -361,6 +381,10 @@ namespace HearthstoneAI
             {
                 result += this.GetDeckCardText(game, entry);
             }
+
+            // get known cards from jousts
+            result += Environment.NewLine;
+            result += GetJoustsInformation(game, controller);
 
             return result;
         }

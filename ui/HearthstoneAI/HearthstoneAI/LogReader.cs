@@ -32,13 +32,18 @@ namespace HearthstoneAI
             return Path.Combine(installation_path, "Logs\\Power.log");
         }
 
-        public void Process()
+        private bool IsParseSuccess()
         {
-            if (File.Exists(this.GetPowerLogPath()) == false) return;
+            return this.log_parser.parsing_stage == LogParser.ParsingStage.STAGE_OK;
+        }
+
+        public bool Process()
+        {
+            if (File.Exists(this.GetPowerLogPath()) == false) return false;
 
             var power_log = new FileStream(this.GetPowerLogPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            
-            if (power_log.Length == this.power_log_offset) return;
+
+            if (power_log.Length == this.power_log_offset) return IsParseSuccess();
 
             if (power_log.Length < this.power_log_offset)
             {
@@ -49,7 +54,7 @@ namespace HearthstoneAI
             power_log.Seek(power_log_offset, SeekOrigin.Begin);
             var power_log_stream = new StreamReader(power_log);
 
-            if (power_log_stream.EndOfStream) return;
+            if (power_log_stream.EndOfStream) return IsParseSuccess();
 
             string content_all = power_log_stream.ReadToEnd();
 
@@ -65,6 +70,8 @@ namespace HearthstoneAI
             {
                 // do nothing
             }
+
+            return IsParseSuccess();
         }
 
         public GameState GetGameState()
