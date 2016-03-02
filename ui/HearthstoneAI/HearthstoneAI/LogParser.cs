@@ -102,7 +102,7 @@ namespace HearthstoneAI
                 else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
                 else
                 {
-                    this.frmMain.AddLog("Failed when parsing: " + log_line);
+                    //this.frmMain.AddLog("Failed when parsing: " + log_line);
                 }
             }
         }
@@ -161,8 +161,10 @@ namespace HearthstoneAI
                 if (CreateGame.IsMatch(this.parsing_log))
                 {
                     yield return true;
+                    continue;
                 }
-                else if (GameEntityRegex.IsMatch(this.parsing_log))
+
+                if (GameEntityRegex.IsMatch(this.parsing_log))
                 {
                     var match = GameEntityRegex.Match(this.parsing_log);
                     var id = int.Parse(match.Groups["id"].Value);
@@ -176,7 +178,8 @@ namespace HearthstoneAI
                     }
                     continue;
                 }
-                else if (PlayerEntityRegex.IsMatch(this.parsing_log))
+
+                if (PlayerEntityRegex.IsMatch(this.parsing_log))
                 {
                     var match = PlayerEntityRegex.Match(this.parsing_log);
                     var id = int.Parse(match.Groups["id"].Value);
@@ -191,7 +194,8 @@ namespace HearthstoneAI
                     }
                     continue;
                 }
-                else if (CreationRegex.IsMatch(this.parsing_log))
+
+                if (CreationRegex.IsMatch(this.parsing_log))
                 {
                     var match = CreationRegex.Match(this.parsing_log);
                     var id = int.Parse(match.Groups["id"].Value);
@@ -209,7 +213,8 @@ namespace HearthstoneAI
                     }
                     continue;
                 }
-                else if (ShowEntityRegex.IsMatch(this.parsing_log))
+
+                if (ShowEntityRegex.IsMatch(this.parsing_log))
                 {
                     var match = ShowEntityRegex.Match(this.parsing_log);
                     var cardId = match.Groups["cardId"].Value;
@@ -233,7 +238,8 @@ namespace HearthstoneAI
                     }
                     continue;
                 }
-                else if (TagChangeRegex.IsMatch(this.parsing_log))
+
+                if (TagChangeRegex.IsMatch(this.parsing_log))
                 {
                     var match = TagChangeRegex.Match(this.parsing_log);
                     var entity_raw = match.Groups["entity"].Value;
@@ -272,15 +278,19 @@ namespace HearthstoneAI
                         }
                     }
                     yield return true;
+                    continue;
                 }
-                else if (HideEntityRegex.IsMatch(this.parsing_log))
+
+                if (HideEntityRegex.IsMatch(this.parsing_log))
                 {
                     var match = HideEntityRegex.Match(this.parsing_log);
                     int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
                     GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                     yield return true;
+                    continue;
                 }
-                else if (ActionStartRegex.IsMatch(this.parsing_log))
+
+                if (ActionStartRegex.IsMatch(this.parsing_log))
                 {
                     var match = ActionStartRegex.Match(this.parsing_log);
 
@@ -306,25 +316,27 @@ namespace HearthstoneAI
                             " target = " + target_id.ToString());
                     }
                     yield return true;
+                    continue;
                 }
-                else if (ActionEndRegex.IsMatch(this.parsing_log))
+
+                if (ActionEndRegex.IsMatch(this.parsing_log))
                 {
                     yield return true;
+                    continue;
                 }
-                else if (MetadataRegex.IsMatch(this.parsing_log))
+
+                if (MetadataRegex.IsMatch(this.parsing_log))
                 {
                     yield return true; // ignore
                     while (MetadataInfoRegex.IsMatch(this.parsing_log))
                     {
                         yield return true;
                     }
-                }
-                else
-                {
-                    this.frmMain.AddLog("[ERROR] Parse power log failed: " + this.parsing_log);
-                    yield return true;
+                    continue;
                 }
 
+                this.frmMain.AddLog("[ERROR] Parse power log failed: " + this.parsing_log);
+                yield return true;
             }
         }
 
