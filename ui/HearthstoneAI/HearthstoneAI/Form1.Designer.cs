@@ -39,6 +39,12 @@
             this.listBoxProcessedLogs = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txtMulligan = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtOpponentMinions = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.txtOpponentSecrets = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.txtPlayerSecrets = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -59,12 +65,6 @@
             this.txtGameEntity = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.label12 = new System.Windows.Forms.Label();
-            this.txtOpponentSecrets = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txtOpponentMinions = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.txtMulligan = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -92,7 +92,7 @@
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(1125, 764);
+            this.tabPageSettings.Size = new System.Drawing.Size(944, 764);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
@@ -144,7 +144,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1061, 764);
+            this.tabPage2.Size = new System.Drawing.Size(944, 764);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Log";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -157,7 +157,7 @@
             this.listBoxProcessedLogs.FormattingEnabled = true;
             this.listBoxProcessedLogs.Location = new System.Drawing.Point(11, 28);
             this.listBoxProcessedLogs.Name = "listBoxProcessedLogs";
-            this.listBoxProcessedLogs.Size = new System.Drawing.Size(1042, 732);
+            this.listBoxProcessedLogs.Size = new System.Drawing.Size(925, 732);
             this.listBoxProcessedLogs.TabIndex = 1;
             // 
             // label1
@@ -202,6 +202,63 @@
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Board";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(8, 257);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(46, 13);
+            this.label14.TabIndex = 23;
+            this.label14.Text = "Mulligan";
+            // 
+            // txtMulligan
+            // 
+            this.txtMulligan.Location = new System.Drawing.Point(8, 273);
+            this.txtMulligan.Multiline = true;
+            this.txtMulligan.Name = "txtMulligan";
+            this.txtMulligan.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtMulligan.Size = new System.Drawing.Size(179, 242);
+            this.txtMulligan.TabIndex = 22;
+            this.txtMulligan.WordWrap = false;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(566, 14);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(93, 13);
+            this.label13.TabIndex = 21;
+            this.label13.Text = "Opponent Minions";
+            // 
+            // txtOpponentMinions
+            // 
+            this.txtOpponentMinions.Location = new System.Drawing.Point(566, 30);
+            this.txtOpponentMinions.Multiline = true;
+            this.txtOpponentMinions.Name = "txtOpponentMinions";
+            this.txtOpponentMinions.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtOpponentMinions.Size = new System.Drawing.Size(179, 726);
+            this.txtOpponentMinions.TabIndex = 20;
+            this.txtOpponentMinions.WordWrap = false;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(745, 227);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(93, 13);
+            this.label12.TabIndex = 19;
+            this.label12.Text = "Opponent Secrets";
+            // 
+            // txtOpponentSecrets
+            // 
+            this.txtOpponentSecrets.Location = new System.Drawing.Point(751, 243);
+            this.txtOpponentSecrets.Multiline = true;
+            this.txtOpponentSecrets.Name = "txtOpponentSecrets";
+            this.txtOpponentSecrets.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtOpponentSecrets.Size = new System.Drawing.Size(173, 153);
+            this.txtOpponentSecrets.TabIndex = 18;
+            this.txtOpponentSecrets.WordWrap = false;
             // 
             // label11
             // 
@@ -377,63 +434,6 @@
             // timerMainLoop
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(745, 227);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(93, 13);
-            this.label12.TabIndex = 19;
-            this.label12.Text = "Opponent Secrets";
-            // 
-            // txtOpponentSecrets
-            // 
-            this.txtOpponentSecrets.Location = new System.Drawing.Point(751, 243);
-            this.txtOpponentSecrets.Multiline = true;
-            this.txtOpponentSecrets.Name = "txtOpponentSecrets";
-            this.txtOpponentSecrets.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOpponentSecrets.Size = new System.Drawing.Size(173, 153);
-            this.txtOpponentSecrets.TabIndex = 18;
-            this.txtOpponentSecrets.WordWrap = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(566, 14);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(93, 13);
-            this.label13.TabIndex = 21;
-            this.label13.Text = "Opponent Minions";
-            // 
-            // txtOpponentMinions
-            // 
-            this.txtOpponentMinions.Location = new System.Drawing.Point(566, 30);
-            this.txtOpponentMinions.Multiline = true;
-            this.txtOpponentMinions.Name = "txtOpponentMinions";
-            this.txtOpponentMinions.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOpponentMinions.Size = new System.Drawing.Size(179, 726);
-            this.txtOpponentMinions.TabIndex = 20;
-            this.txtOpponentMinions.WordWrap = false;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(8, 257);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(46, 13);
-            this.label14.TabIndex = 23;
-            this.label14.Text = "Mulligan";
-            // 
-            // txtMulligan
-            // 
-            this.txtMulligan.Location = new System.Drawing.Point(8, 273);
-            this.txtMulligan.Multiline = true;
-            this.txtMulligan.Name = "txtMulligan";
-            this.txtMulligan.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtMulligan.Size = new System.Drawing.Size(179, 242);
-            this.txtMulligan.TabIndex = 22;
-            this.txtMulligan.WordWrap = false;
             // 
             // frmMain
             // 

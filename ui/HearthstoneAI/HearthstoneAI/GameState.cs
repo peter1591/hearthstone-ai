@@ -81,44 +81,47 @@ namespace HearthstoneAI
 
             private static int ParseTagValue(GameTag tag, string raw_value)
             {
-                int value;
                 switch (tag)
                 {
+                    case GameTag.STEP:
+                        TAG_STEP step;
+                        if (Enum.TryParse(raw_value, out step)) return (int)step;
+                        break;
+
                     case GameTag.ZONE:
                         TAG_ZONE zone;
-                        Enum.TryParse(raw_value, out zone);
-                        value = (int)zone;
+                        if (Enum.TryParse(raw_value, out zone)) return (int)zone;
                         break;
 
                     case GameTag.MULLIGAN_STATE:
                         {
                             TAG_MULLIGAN state;
-                            Enum.TryParse(raw_value, out state);
-                            value = (int)state;
+                            if (Enum.TryParse(raw_value, out state)) return (int)state;
                         }
                         break;
                     case GameTag.PLAYSTATE:
                         {
                             TAG_PLAYSTATE state;
-                            Enum.TryParse(raw_value, out state);
-                            value = (int)state;
+                            if (Enum.TryParse(raw_value, out state)) return (int)state;
                         }
                         break;
                     case GameTag.CARDTYPE:
                         TAG_CARDTYPE type;
-                        Enum.TryParse(raw_value, out type);
-                        value = (int)type;
+                        if (Enum.TryParse(raw_value, out type)) return (int)type;
                         break;
+
                     case GameTag.CLASS:
                         TAG_CLASS @class;
-                        Enum.TryParse(raw_value, out @class);
-                        value = (int)@class;
+                        if (Enum.TryParse(raw_value, out @class)) return (int)@class;
                         break;
+
                     default:
-                        int.TryParse(raw_value, out value);
+                        int value;
+                        if (int.TryParse(raw_value, out value)) return value;
                         break;
                 }
-                return value;
+
+                return -1;
             }
         }
 

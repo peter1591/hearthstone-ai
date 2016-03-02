@@ -60,7 +60,7 @@ namespace HearthstoneAI
             string content = content_all.Substring(0, content_end + 1);
             this.power_log_offset += Encoding.UTF8.GetByteCount(content);
             
-            var lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+            var lines = content.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.None);
             foreach (var ret in this.log_parser.Process(lines))
             {
                 // do nothing

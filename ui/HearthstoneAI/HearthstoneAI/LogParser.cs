@@ -63,6 +63,8 @@ namespace HearthstoneAI
 
         private static string PowerLogPrefix = "GameState.DebugPrintPower() - ";
         private static string EntityChoicesLogPrefix = "GameState.DebugPrintEntityChoices() - ";
+        private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
+        private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
 
         private string parsing_log;
         public IEnumerable<bool> Process(string [] log_lines)
@@ -72,10 +74,15 @@ namespace HearthstoneAI
 
             foreach (var log_line in log_lines)
             {
+                if (log_line == "") continue;
+
                 LogItem log_item;
 
                 try { log_item = LogItem.Parse(log_line); }
-                catch (Exception ex) { continue; }
+                catch (Exception ex) {
+                    this.frmMain.AddLog("Failed when parsing: " + log_line);
+                    continue;
+                }
 
                 string log = log_item.Content;
 
@@ -90,6 +97,12 @@ namespace HearthstoneAI
                     this.parsing_log = log.Substring(EntityChoicesLogPrefix.Length);
                     entity_choices_log.MoveNext();
                     yield return entity_choices_log.Current;
+                }
+                else if (log.StartsWith(PowerTaskListDebugDumpLogPrefix)) { }
+                else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
+                else
+                {
+                    this.frmMain.AddLog("Failed when parsing: " + log_line);
                 }
             }
         }
@@ -413,7 +426,7 @@ namespace HearthstoneAI
                 }
                 else
                 {
-                    this.frmMain.AddLog("[ERROR] Unhandled entity chocies log");
+                    this.frmMain.AddLog("[ERROR] Unhandled entity chocies log: " + this.parsing_log);
                     yield return true;
                 }
 
