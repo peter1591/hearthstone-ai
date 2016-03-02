@@ -74,45 +74,55 @@ namespace HearthstoneAI
         public ParsingStage parsing_stage;
 
         private string parsing_log;
-        public IEnumerable<bool> Process(string [] log_lines)
+        public string[] new_log_lines; // for Process()
+
+        // return true if still parsing; false if all lines are parsed
+        // never break
+        public IEnumerable<bool> Process()
         {
             this.parsing_stage = ParsingStage.STAGE_WAITING;
 
             IEnumerator<bool> power_log = ParsePowerLog().GetEnumerator();
             IEnumerator<bool> entity_choices_log = ParseEntityChoicesLog().GetEnumerator();
 
-            foreach (var log_line in log_lines)
+            while (true)
             {
-                if (log_line == "") continue;
-
-                LogItem log_item;
-
-                try { log_item = LogItem.Parse(log_line); }
-                catch (Exception ex) {
-                    this.frmMain.AddLog("Failed when parsing: " + log_line);
-                    continue;
-                }
-
-                string log = log_item.Content;
-
-                if (log.StartsWith(PowerLogPrefix))
+                foreach (var log_line in this.new_log_lines)
                 {
-                    this.parsing_log = log.Substring(PowerLogPrefix.Length);
-                    power_log.MoveNext();
-                    yield return power_log.Current;
+                    if (log_line == "") continue;
+
+                    LogItem log_item;
+
+                    try { log_item = LogItem.Parse(log_line); }
+                    catch (Exception ex)
+                    {
+                        this.frmMain.AddLog("Failed when parsing: " + log_line);
+                        continue;
+                    }
+
+                    string log = log_item.Content;
+
+                    if (log.StartsWith(PowerLogPrefix))
+                    {
+                        this.parsing_log = log.Substring(PowerLogPrefix.Length);
+                        power_log.MoveNext();
+                        yield return true;
+                    }
+                    else if (log.StartsWith(EntityChoicesLogPrefix))
+                    {
+                        this.parsing_log = log.Substring(EntityChoicesLogPrefix.Length);
+                        entity_choices_log.MoveNext();
+                        yield return true;
+                    }
+                    else if (log.StartsWith(PowerTaskListDebugDumpLogPrefix)) { }
+                    else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
+                    else
+                    {
+                        //this.frmMain.AddLog("Failed when parsing: " + log_line);
+                    }
                 }
-                else if (log.StartsWith(EntityChoicesLogPrefix))
-                {
-                    this.parsing_log = log.Substring(EntityChoicesLogPrefix.Length);
-                    entity_choices_log.MoveNext();
-                    yield return entity_choices_log.Current;
-                }
-                else if (log.StartsWith(PowerTaskListDebugDumpLogPrefix)) { }
-                else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
-                else
-                {
-                    //this.frmMain.AddLog("Failed when parsing: " + log_line);
-                }
+
+                yield return false;
             }
         }
 
