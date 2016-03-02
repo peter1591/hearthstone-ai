@@ -243,50 +243,39 @@ namespace HearthstoneAI
             }
         }
 
-        private IEnumerable<bool> ParsePowerLog()
+        private IEnumerable<bool> ParsePowerLog_Action()
         {
+            if (!ActionStartRegex.IsMatch(this.parsing_log)) yield break;
+
+            var match = ActionStartRegex.Match(this.parsing_log);
+
+            var entity_raw = match.Groups["entity"].Value.Trim();
+            var block_type = match.Groups["block_type"].Value.Trim();
+            var index = match.Groups["index"].Value.Trim();
+            var target_raw = match.Groups["target"].Value.Trim();
+
+            var entity_id = this.GetEntityIdFromRawString(entity_raw);
+            if (entity_id < 0)
+            {
+                this.frmMain.AddLog("[ERROR] Cannot get entity id for action.");
+                yield return false;
+            }
+
+            var target_id = this.GetEntityIdFromRawString(target_raw);
+
+            if (block_type != "TRIGGER")
+            {
+                this.frmMain.AddLog("[INFO] Got action. entity = " + entity_id.ToString() +
+                    " block type = " + block_type +
+                    " index = " + index +
+                    " target = " + target_id.ToString());
+            }
+            yield return true;
+
             while (true)
             {
+                // possible logs within an action block
                 bool rule_matched = false;
-
-                //this.frmMain.AddLog("[Read Power Log] " + this.parsing_log);
-
-                if (CreateGame.IsMatch(this.parsing_log))
-                {
-                    yield return true;
-                    continue;
-                }
-
-                if (GameEntityRegex.IsMatch(this.parsing_log))
-                {
-                    var match = GameEntityRegex.Match(this.parsing_log);
-                    var id = int.Parse(match.Groups["id"].Value);
-                    GameState.CreateGameEntity(id);
-                    yield return true;
-
-                    while (true)
-                    {
-                        if (this.ParseIfMatched_CreatingTag(id)) yield return true;
-                        else break;
-                    }
-                    continue;
-                }
-
-                if (PlayerEntityRegex.IsMatch(this.parsing_log))
-                {
-                    var match = PlayerEntityRegex.Match(this.parsing_log);
-                    var id = int.Parse(match.Groups["id"].Value);
-                    if (!GameState.Entities.ContainsKey(id))
-                        GameState.Entities.Add(id, new GameState.Entity(id));
-                    yield return true;
-
-                    while (true)
-                    {
-                        if (this.ParseIfMatched_CreatingTag(id)) yield return true;
-                        else break;
-                    }
-                    continue;
-                }
 
                 foreach (var ret in this.ParsePowerLog_FullEntity())
                 {
@@ -302,50 +291,32 @@ namespace HearthstoneAI
                 }
                 if (rule_matched) continue;
 
-                if (this.ParseIfMatched_TagChange()) continue;
+                if (this.ParseIfMatched_TagChange())
+                {
+                    yield return true;
+                    continue;
+                }
 
                 if (HideEntityRegex.IsMatch(this.parsing_log))
                 {
-                    var match = HideEntityRegex.Match(this.parsing_log);
+                    match = HideEntityRegex.Match(this.parsing_log);
                     int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
                     GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                     yield return true;
                     continue;
                 }
 
-                if (ActionStartRegex.IsMatch(this.parsing_log))
+                foreach (var ret in this.ParsePowerLog_Action())
                 {
-                    var match = ActionStartRegex.Match(this.parsing_log);
-
-                    var entity_raw = match.Groups["entity"].Value.Trim();
-                    var block_type = match.Groups["block_type"].Value.Trim();
-                    var index = match.Groups["index"].Value.Trim();
-                    var target_raw = match.Groups["target"].Value.Trim();
-
-                    var entity_id = this.GetEntityIdFromRawString(entity_raw);
-                    if (entity_id < 0)
-                    {
-                        this.frmMain.AddLog("[ERROR] Cannot get entity id for action.");
-                        yield return false;
-                    }
-
-                    var target_id = this.GetEntityIdFromRawString(target_raw);
-
-                    if (block_type != "TRIGGER")
-                    {
-                        this.frmMain.AddLog("[INFO] Got action. entity = " + entity_id.ToString() +
-                            " block type = " + block_type +
-                            " index = " + index +
-                            " target = " + target_id.ToString());
-                    }
-                    yield return true;
-                    continue;
+                    rule_matched = true;
+                    yield return ret;
                 }
+                if (rule_matched) continue;
 
                 if (ActionEndRegex.IsMatch(this.parsing_log))
                 {
                     yield return true;
-                    continue;
+                    break;
                 }
 
                 if (MetadataRegex.IsMatch(this.parsing_log))
@@ -357,6 +328,96 @@ namespace HearthstoneAI
                     }
                     continue;
                 }
+
+                this.frmMain.AddLog("[ERROR] Parse failed: " + this.parsing_log);
+                break;
+            }
+        }
+
+        private IEnumerable<bool> ParsePowerLog_CreateGame()
+        {
+            if (!CreateGame.IsMatch(this.parsing_log)) yield break;
+            yield return true;
+            GameState.Reset();
+
+            if (!GameEntityRegex.IsMatch(this.parsing_log))
+            {
+                this.frmMain.AddLog("[ERROR] Expecting the game entity log.");
+                yield break;
+            }
+
+            var game_entity_match = GameEntityRegex.Match(this.parsing_log);
+            var game_entity_id = int.Parse(game_entity_match.Groups["id"].Value);
+            GameState.CreateGameEntity(game_entity_id);
+            yield return true;
+
+            while (true)
+            {
+                if (this.ParseIfMatched_CreatingTag(game_entity_id)) yield return true;
+                else break;
+            }
+
+            for (int i = 0; i < 2; i++) // two players
+            {
+                if (!PlayerEntityRegex.IsMatch(this.parsing_log))
+                {
+                    this.frmMain.AddLog("[ERROR] Expecting the player entity log.");
+                    yield break;
+                }
+
+                var match = PlayerEntityRegex.Match(this.parsing_log);
+                var id = int.Parse(match.Groups["id"].Value);
+                if (!GameState.Entities.ContainsKey(id))
+                    GameState.Entities.Add(id, new GameState.Entity(id));
+                yield return true;
+
+                while (true)
+                {
+                    if (this.ParseIfMatched_CreatingTag(id)) yield return true;
+                    else break;
+                }
+            }
+
+            while (true)
+            {
+                bool rule_matched = false;
+
+                foreach (var ret in this.ParsePowerLog_FullEntity())
+                {
+                    rule_matched = true;
+                    yield return ret;
+                }
+                if (rule_matched) continue;
+
+                if (this.ParseIfMatched_TagChange())
+                {
+                    yield return true;
+                    continue;
+                }
+
+                foreach (var ret in this.ParsePowerLog_Action())
+                {
+                    rule_matched = true;
+                    yield return ret;
+                }
+                if (rule_matched) continue;
+
+                break;
+            }
+        }
+
+        private IEnumerable<bool> ParsePowerLog()
+        {
+            while (true)
+            {
+                bool rule_matched = false;
+
+                foreach (var ret in this.ParsePowerLog_CreateGame())
+                {
+                    rule_matched = true;
+                    yield return ret;
+                }
+                if (rule_matched) continue;
 
                 this.frmMain.AddLog("[ERROR] Parse power log failed: " + this.parsing_log);
                 yield return true;

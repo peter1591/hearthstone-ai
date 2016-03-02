@@ -161,12 +161,6 @@ namespace HearthstoneAI
 
         public void CreateGameEntity(int id)
         {
-            if (Entities.ContainsKey(id))
-            {
-                // game entity has already been set, clearing all data
-                this.Reset();
-            }
-
             Entities.Add(id, new GameState.Entity(id) { Name = "GameEntity" });
             this.GameEntityId = id;
         }
