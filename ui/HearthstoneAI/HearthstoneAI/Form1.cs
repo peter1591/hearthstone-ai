@@ -43,18 +43,12 @@ namespace HearthstoneAI
         {
             this.log_added = false;
 
-            bool parse_success = this.log_reader.Process();
+            this.log_reader.Process();
 
             if (this.log_added)
             {
                 this.listBoxProcessedLogs.SelectedIndex = this.listBoxProcessedLogs.Items.Count - 1;
                 this.listBoxProcessedLogs.TopIndex = this.listBoxProcessedLogs.Items.Count - 1;
-            }
-
-            if (!parse_success)
-            {
-                this.txtGameEntity.Text = "Parse failed";
-                return;
             }
 
             this.UpdateBoard();

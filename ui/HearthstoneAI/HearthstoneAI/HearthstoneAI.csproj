@@ -57,7 +57,9 @@
     <Compile Include="LogItem.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="LogReader.cs" />
+    <Compile Include="Parsers\EntityChoicesParser.cs" />
     <Compile Include="Parsers\ParserUtilities.cs" />
+    <Compile Include="Parsers\PowerLogParser.cs" />
     <Compile Include="Parsers\SendChoicesParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
