@@ -250,6 +250,9 @@ namespace HearthstoneAI
             result += "Overload: current = " + overload_this_turn.ToString() +
                 " next = " + overload_next_turn.ToString() + Environment.NewLine;
 
+            int fatigue = entity.GetTagOrDefault(GameTag.FATIGUE, 0);
+            result += "Fatigue: " + fatigue.ToString() + Environment.NewLine;
+
             int hero_entity_id = entity.GetTagOrDefault(GameTag.HERO_ENTITY, -1);
             if (game.Entities.ContainsKey(hero_entity_id))
             {
@@ -432,7 +435,9 @@ namespace HearthstoneAI
             string result = "[Enchantments]" + Environment.NewLine;
             foreach (var enchant in enchantments)
             {
-                result += "   " + enchant.CardId + Environment.NewLine;
+                int creator = enchant.GetTagOrDefault(GameTag.CREATOR, -1);
+
+                result += "   " + enchant.CardId + " Creator: " + creator.ToString() + Environment.NewLine;
             }
             return result;
         }
@@ -441,6 +446,7 @@ namespace HearthstoneAI
         {
             string result = "[Minion]" + Environment.NewLine;
 
+            result += "Entity ID = " + entity.Id + Environment.NewLine;
             result += "Card ID = " + entity.CardId + Environment.NewLine;
 
             int max_hp = entity.GetTagOrDefault(GameTag.HEALTH, -1);
@@ -462,6 +468,11 @@ namespace HearthstoneAI
 
             int exhausted = entity.GetTagOrDefault(GameTag.EXHAUSTED, 0);
             result += "exhausted: " + exhausted + Environment.NewLine;
+
+            if (entity.GetTagOrDefault(GameTag.SILENCED, 0) == 1)
+            {
+                result += "Silenced!" + Environment.NewLine;
+            }
 
             result += this.GetEntityExtraStateText(game, entity);
 
@@ -644,7 +655,7 @@ namespace HearthstoneAI
             return result;
         }
 
-        private string GetMulliganText(GameState game)
+        private string GetChoicesText(GameState game)
         {
             GameState.Entity player;
             if (!game.TryGetPlayerEntity(out player)) return "";
@@ -660,6 +671,23 @@ namespace HearthstoneAI
             result += this.GetMulliganText(game, opponent);
             result += Environment.NewLine;
 
+            int last_choice_id = -1;
+            foreach (var choice_id in game.EntityChoices.Keys) last_choice_id = Math.Max(last_choice_id, choice_id);
+            var last_choice = game.EntityChoices[last_choice_id];
+            if (last_choice.choice_type != "MULLIGAN" && last_choice.player_entity_id == game.PlayerEntityId)
+            {
+                if (last_choice.choices_has_sent == false)
+                {
+                    result += "[Player Choices]" + Environment.NewLine;
+                    foreach (var choice in last_choice.choices)
+                    {
+                        string card_id = game.Entities[choice.Value].CardId;
+
+                        result += "   [EntityId:" + choice.Value + "] " + card_id + Environment.NewLine;
+                    }
+                } 
+            }
+
             return result;
         }
 
@@ -668,7 +696,7 @@ namespace HearthstoneAI
             var game = this.log_reader.GetGameState();
 
             this.txtGameEntity.Text = this.GetGameEntityText(game);
-            this.txtMulligan.Text = this.GetMulliganText(game);
+            this.txtChoices.Text = this.GetChoicesText(game);
 
             this.txtPlayerHero.Text = this.GetPlayerHeroText(game);
             this.txtOpponentHero.Text = this.GetOpponentHeroText(game);

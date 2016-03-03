@@ -22,10 +22,6 @@ namespace HearthstoneAI
         public static readonly Regex FullEntityRegex = new Regex(@"^[\s]*FULL_ENTITY - Creating[\s]+ID=(?<id>(\d+))[\s]+CardID=(?<cardId>(\w*))");
         public static readonly Regex CreationTagRegex = new Regex(@"^[\s]*tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
-        public static readonly Regex EntityRegex =
-            new Regex(
-                @"(?=id=(?<id>(\d+)))(?=name=(?<name>(\w+)))?(?=zone=(?<zone>(\w+)))?(?=zonePos=(?<zonePos>(\d+)))?(?=cardId=(?<cardId>(\w+)))?(?=player=(?<player>(\d+)))?(?=type=(?<type>(\w+)))?");
-
 
         public static readonly Regex PlayerEntityRegex =
             new Regex(@"^[\s]*Player\ EntityID=(?<id>(\d+))\ PlayerID=(?<playerId>(\d+))\ GameAccountId=(?<gameAccountId>(.+))");
@@ -57,33 +53,50 @@ namespace HearthstoneAI
         {
             this.frmMain = frm;
             this.GameState = new GameState();
+            this.actions_nested_count = 0;
         }
 
         private frmMain frmMain;
 
         private static string PowerLogPrefix = "GameState.DebugPrintPower() - ";
         private static string EntityChoicesLogPrefix = "GameState.DebugPrintEntityChoices() - ";
+        private static string SendChoicesLogPrefix = "GameState.SendChoices() - ";
         private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
         private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
 
-        public enum ParsingStage
+        private enum ParsingStage
         {
-            STAGE_OK,
+            STAGE_OK, // basic game entity and two players' entities are parsed
             STAGE_WAITING // waiting to more log for a valid game state
         }
-        public ParsingStage parsing_stage;
+        private int actions_nested_count;
+        private ParsingStage parsing_stage;
 
         private string parsing_log;
         public string[] new_log_lines; // for Process()
+
+        public bool IsParseSuccess()
+        {
+            if (this.parsing_stage != ParsingStage.STAGE_OK) return false;
+
+            // the ACTION_END is not present when doing mulligan
+            // so we don't check ACTION_END
+            //if (this.actions_nested_count != 0) return false;
+
+            return true;
+        }
 
         // return true if still parsing; false if all lines are parsed
         // never break
         public IEnumerable<bool> Process()
         {
+            Parsers.SendChoicesParser send_choices_parser = new Parsers.SendChoicesParser(this.frmMain, this.GameState);
+
             this.parsing_stage = ParsingStage.STAGE_WAITING;
 
             IEnumerator<bool> power_log = ParsePowerLog().GetEnumerator();
             IEnumerator<bool> entity_choices_log = ParseEntityChoicesLog().GetEnumerator();
+            IEnumerator<bool> send_choices_log = send_choices_parser.Process().GetEnumerator();
 
             while (true)
             {
@@ -114,6 +127,12 @@ namespace HearthstoneAI
                         entity_choices_log.MoveNext();
                         yield return true;
                     }
+                    else if (log.StartsWith(SendChoicesLogPrefix))
+                    {
+                        send_choices_parser.parsing_log = log.Substring(SendChoicesLogPrefix.Length);
+                        send_choices_log.MoveNext();
+                        yield return true;
+                    }
                     else if (log.StartsWith(PowerTaskListDebugDumpLogPrefix)) { }
                     else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
                     else
@@ -124,42 +143,6 @@ namespace HearthstoneAI
 
                 yield return false;
             }
-        }
-
-        private int GetEntityIdFromRawString(string rawEntity)
-        {
-            rawEntity = rawEntity.Replace("UNKNOWN ENTITY ", "");
-            int entityId = -1;
-
-            // Get entity id - Method 1
-            if (rawEntity.StartsWith("[") && EntityRegex.IsMatch(rawEntity))
-            {
-                entityId = int.Parse(EntityRegex.Match(rawEntity).Groups["id"].Value);
-            }
-
-            // Get entity id - Method 2
-            if (entityId < 0)
-            {
-                if (!int.TryParse(rawEntity, out entityId)) entityId = -1;
-            }
-
-            // Get entity id - Method 3
-            if (entityId < 0)
-            {
-                var entity = GameState.Entities.FirstOrDefault(x => x.Value.Name == rawEntity);
-
-                if (entity.Value == null)
-                {
-                    // TODO: check when this happens?
-                    entity = GameState.Entities.FirstOrDefault(x => x.Value.Name == "UNKNOWN HUMAN PLAYER");
-                    if (entity.Value != null) entity.Value.Name = rawEntity;
-                }
-
-                if (entity.Value != null) entityId = entity.Key;
-                else entityId = -1;
-            }
-
-            return entityId;
         }
 
         private bool ParseIfMatched_CreatingTag(int entity_id)
@@ -177,7 +160,7 @@ namespace HearthstoneAI
 
             var match = TagChangeRegex.Match(this.parsing_log);
             var entity_raw = match.Groups["entity"].Value;
-            int entityId = GetEntityIdFromRawString(entity_raw);
+            int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, entity_raw);
 
             if (entityId >= 0)
             {
@@ -195,18 +178,18 @@ namespace HearthstoneAI
                 }
 
                 var tag_value = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
-                tmpEntity.SetTag(tag_value);
+                tmpEntity.SetTag(tag_value.Item1, tag_value.Item2);
                 if (tmpEntity.HasTag(GameTag.ENTITY_ID))
                 {
                     var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
                     if (!GameState.Entities.ContainsKey(id))
                     {
-                        this.frmMain.AddLog("[ERROR] TMP ENTITY (" + entity_raw + ") NOW HAS A KEY, BUT GAME.ENTITIES DOES NOT CONTAIN THIS KEY");
+                        this.frmMain.AddLog("[ERROR] The temporary entity (" + entity_raw + ") now has entity_id, but it is missing from the entities set.");
                     }
                     else {
                         GameState.Entities[id].Name = tmpEntity.Name;
                         foreach (var t in tmpEntity.Tags)
-                            GameState.Entities[id].SetTag(t.Key, t.Value);
+                            GameState.ChangeTag(id, t.Key, t.Value);
                         this.tmp_entities.Remove(tmpEntity);
                     }
                 }
@@ -223,7 +206,7 @@ namespace HearthstoneAI
 
             var match = ShowEntityRegex.Match(this.parsing_log);
             var cardId = match.Groups["cardId"].Value;
-            int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
+            int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, match.Groups["entity"].Value);
 
             if (entityId < 0)
             {
@@ -246,6 +229,7 @@ namespace HearthstoneAI
         private IEnumerable<bool> ParsePowerLog_FullEntity(string action_block_type = "")
         {
             if (!FullEntityRegex.IsMatch(this.parsing_log)) yield break;
+
             var match = FullEntityRegex.Match(this.parsing_log);
             var id = int.Parse(match.Groups["id"].Value);
             var cardId = match.Groups["cardId"].Value;
@@ -280,9 +264,13 @@ namespace HearthstoneAI
             return i;
         }
 
+        // if at least one item is returned,
+        // upon exits, the last line is guarnteed to be ACTION_END, and that line is not consumed
         private IEnumerable<bool> ParsePowerLog_Action()
         {
             if (!ActionStartRegex.IsMatch(this.parsing_log)) yield break;
+
+            this.actions_nested_count++;
 
             var match = ActionStartRegex.Match(this.parsing_log);
 
@@ -292,14 +280,10 @@ namespace HearthstoneAI
             var index = match.Groups["index"].Value.Trim();
             var target_raw = match.Groups["target"].Value.Trim();
 
-            var entity_id = this.GetEntityIdFromRawString(entity_raw);
-            if (entity_id < 0)
-            {
-                this.frmMain.AddLog("[ERROR] Cannot get entity id for action.");
-                yield return false;
-            }
+            var entity_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, entity_raw);
+            if (entity_id < 0) this.frmMain.AddLog("[INFO] Cannot get entity id for action.");
 
-            var target_id = this.GetEntityIdFromRawString(target_raw);
+            var target_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, target_raw);
 
             if (block_type != "TRIGGER")
             {
@@ -316,13 +300,6 @@ namespace HearthstoneAI
                 bool rule_matched = false;
 
                 if (ActionEndRegex.IsMatch(this.parsing_log))
-                {
-                    yield return true;
-                    break;
-                }
-
-                // Note: sometimes the ACTION_END is missing, so we use indent to check
-                if (this.GetIndent(this.parsing_log) != indent.Length + 4)
                 {
                     break;
                 }
@@ -350,7 +327,7 @@ namespace HearthstoneAI
                 if (HideEntityRegex.IsMatch(this.parsing_log))
                 {
                     match = HideEntityRegex.Match(this.parsing_log);
-                    int entityId = GetEntityIdFromRawString(match.Groups["entity"].Value);
+                    int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, match.Groups["entity"].Value);
                     GameState.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                     yield return true;
                     continue;
@@ -373,16 +350,31 @@ namespace HearthstoneAI
                     continue;
                 }
 
-                this.frmMain.AddLog("[ERROR] Parse failed: " + this.parsing_log);
-                break;
+                this.frmMain.AddLog("[ERROR] Parse failed within action (ignoring): " + this.parsing_log);
+                yield return true;
             }
+
+            this.actions_nested_count--;
+            yield return true;
         }
 
         private IEnumerable<bool> ParsePowerLog_CreateGame()
         {
             if (!CreateGame.IsMatch(this.parsing_log)) yield break;
             yield return true;
-            GameState.Reset();
+
+            // a CREATE_GAME will present for every 30 minutes
+            // or maybe when you re-connected to the game?
+            // So here we don't reset the game unless the Game State is COMPLETE
+            if (GameState.GameEntityId > 0)
+            {
+                var game_entity = GameState.Entities[GameState.GameEntityId];
+                if (game_entity.GetTagOrDefault(GameTag.STATE, (int)TAG_STATE.RUNNING) == (int)TAG_STATE.COMPLETE)
+                {
+                    this.GameState.Reset();
+                }
+            }
+            //GameState.Reset();
 
             if (!GameEntityRegex.IsMatch(this.parsing_log))
             {
@@ -413,6 +405,7 @@ namespace HearthstoneAI
                 var id = int.Parse(match.Groups["id"].Value);
                 if (!GameState.Entities.ContainsKey(id))
                     GameState.Entities.Add(id, new GameState.Entity(id));
+                if (i == 1) this.parsing_stage = ParsingStage.STAGE_OK;
                 yield return true;
 
                 while (true)
@@ -425,7 +418,6 @@ namespace HearthstoneAI
             while (true)
             {
                 bool rule_matched = false;
-                this.parsing_stage = ParsingStage.STAGE_OK;
 
                 foreach (var ret in this.ParsePowerLog_FullEntity())
                 {
@@ -440,7 +432,6 @@ namespace HearthstoneAI
                     continue;
                 }
 
-                this.parsing_stage = ParsingStage.STAGE_WAITING;
                 foreach (var ret in this.ParsePowerLog_Action())
                 {
                     rule_matched = true;
@@ -448,7 +439,6 @@ namespace HearthstoneAI
                 }
                 if (rule_matched) continue;
 
-                this.parsing_stage = ParsingStage.STAGE_WAITING;
                 break;
             }
         }
@@ -471,21 +461,20 @@ namespace HearthstoneAI
             }
         }
 
-        private bool ParseIfMatch_EntityChoiceCreate(out int entity_choice_id)
+        private IEnumerable<bool> ParseIfMatch_EntityChoiceCreate()
         {
-            entity_choice_id = -1;
-            if (!EntityChoicesCreate.IsMatch(this.parsing_log)) return false;
+            if (!EntityChoicesCreate.IsMatch(this.parsing_log)) yield break;
 
             var match = EntityChoicesCreate.Match(this.parsing_log);
 
+            int entity_choice_id = -1;
             if (int.TryParse(match.Groups["id"].Value.Trim(), out entity_choice_id) == false)
             {
-                this.frmMain.AddLog("[ERROR] Parse failed: " + this.parsing_log);
-                return false;
+                this.frmMain.AddLog("[INFO] Cannot get entity choice id (ignoring): " + this.parsing_log);
             }
 
             var player_entity_raw = match.Groups["player_entity"].Value.Trim();
-            int player_entity_id = GetEntityIdFromRawString(player_entity_raw);
+            int player_entity_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, player_entity_raw);
 
             var choice_type = match.Groups["choice_type"].Value.Trim();
 
@@ -499,8 +488,26 @@ namespace HearthstoneAI
             GameState.EntityChoices[entity_choice_id].id = entity_choice_id;
             GameState.EntityChoices[entity_choice_id].choice_type = choice_type;
             GameState.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
+            GameState.EntityChoices[entity_choice_id].choices_has_sent = false;
 
-            return true;
+            yield return true;
+
+            while (true)
+            {
+                if (!ParseIfMatch_EntityChoiceSource(entity_choice_id))
+                {
+                    this.frmMain.AddLog("[INFO] Waiting for entity source, but got " + this.parsing_log + " (ignoring)");
+                    continue;
+                }
+                yield return true;
+                break;
+            }
+
+            while (true)
+            {
+                if (ParseIfMatch_EntityChoiceEntity(entity_choice_id)) yield return true;
+                else break;
+            }
         }
 
         private bool ParseIfMatch_EntityChoiceSource(int entity_choice_id)
@@ -533,7 +540,7 @@ namespace HearthstoneAI
             }
 
             var entity_raw = match.Groups["entity"].Value.Trim();
-            int entity_id = GetEntityIdFromRawString(entity_raw);
+            int entity_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.GameState, entity_raw);
             if (entity_id < 0)
             {
                 this.frmMain.AddLog("[ERROR] Failed to get entity id: " + this.parsing_log);
@@ -551,28 +558,17 @@ namespace HearthstoneAI
         {
             while (true)
             {
-                int entity_choice_id;
+                bool rule_matched = false;
 
-                if (ParseIfMatch_EntityChoiceCreate(out entity_choice_id))
+                foreach (var ret in this.ParseIfMatch_EntityChoiceCreate())
                 {
-                    yield return true;
-
-                    if (ParseIfMatch_EntityChoiceSource(entity_choice_id)) yield return true;
-                    else continue;
-
-                    while (true)
-                    {
-                        if (ParseIfMatch_EntityChoiceEntity(entity_choice_id)) yield return true;
-                        else break;
-                    }
-                    continue;
+                    rule_matched = true;
+                    yield return ret;
                 }
-                else
-                {
-                    this.frmMain.AddLog("[ERROR] Unhandled entity chocies log: " + this.parsing_log);
-                    yield return true;
-                }
+                if (rule_matched) continue;
 
+                this.frmMain.AddLog("[ERROR] Unhandled entity chocies log: " + this.parsing_log);
+                yield return true;
             }
         }
 

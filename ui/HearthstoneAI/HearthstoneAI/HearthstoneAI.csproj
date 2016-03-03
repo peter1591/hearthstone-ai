@@ -57,6 +57,8 @@
     <Compile Include="LogItem.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="LogReader.cs" />
+    <Compile Include="Parsers\ParserUtilities.cs" />
+    <Compile Include="Parsers\SendChoicesParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

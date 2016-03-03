@@ -8,6 +8,7 @@ namespace HearthstoneAI
 {
     public enum GameTag
     {
+        INVALID = -1,
         IGNORE_DAMAGE = 1,
         TAG_SCRIPT_DATA_NUM_1 = 2,
         TAG_SCRIPT_DATA_NUM_2 = 3,
@@ -355,5 +356,11 @@ namespace HearthstoneAI
         WARLOCK,
         WARRIOR,
         DREAM
+    }
+
+    public enum TAG_STATE
+    {
+        RUNNING,
+        COMPLETE
     }
 }

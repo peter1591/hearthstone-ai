@@ -40,7 +40,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label14 = new System.Windows.Forms.Label();
-            this.txtMulligan = new System.Windows.Forms.TextBox();
+            this.txtChoices = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.txtOpponentMinions = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -172,7 +172,7 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.label14);
-            this.tabPage1.Controls.Add(this.txtMulligan);
+            this.tabPage1.Controls.Add(this.txtChoices);
             this.tabPage1.Controls.Add(this.label13);
             this.tabPage1.Controls.Add(this.txtOpponentMinions);
             this.tabPage1.Controls.Add(this.label12);
@@ -208,19 +208,19 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(8, 257);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(46, 13);
+            this.label14.Size = new System.Drawing.Size(45, 13);
             this.label14.TabIndex = 23;
-            this.label14.Text = "Mulligan";
+            this.label14.Text = "Choices";
             // 
-            // txtMulligan
+            // txtChoices
             // 
-            this.txtMulligan.Location = new System.Drawing.Point(8, 273);
-            this.txtMulligan.Multiline = true;
-            this.txtMulligan.Name = "txtMulligan";
-            this.txtMulligan.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtMulligan.Size = new System.Drawing.Size(179, 242);
-            this.txtMulligan.TabIndex = 22;
-            this.txtMulligan.WordWrap = false;
+            this.txtChoices.Location = new System.Drawing.Point(8, 273);
+            this.txtChoices.Multiline = true;
+            this.txtChoices.Name = "txtChoices";
+            this.txtChoices.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtChoices.Size = new System.Drawing.Size(179, 242);
+            this.txtChoices.TabIndex = 22;
+            this.txtChoices.WordWrap = false;
             // 
             // label13
             // 
@@ -492,7 +492,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtOpponentMinions;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox txtMulligan;
+        private System.Windows.Forms.TextBox txtChoices;
     }
 }
 

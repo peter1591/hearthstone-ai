@@ -44,11 +44,6 @@ namespace HearthstoneAI
                 return value;
             }
 
-            public void SetTag(Tuple<GameTag, int> tag_value)
-            {
-                this.SetTag(tag_value.Item1, tag_value.Item2);
-            }
-
             public void SetTag(GameTag tag, int value)
             {
                 if (!Tags.ContainsKey(tag))
@@ -65,7 +60,7 @@ namespace HearthstoneAI
                     int raw_tag_int;
                     if (!int.TryParse(raw_tag, out raw_tag_int))
                     {
-                        throw new Exception("Failed when parsing tag.");
+                        return new Tuple<GameTag, int>(GameTag.INVALID, -1);
                     }
 
                     if (Enum.IsDefined(typeof(GameTag), raw_tag_int))
@@ -115,6 +110,13 @@ namespace HearthstoneAI
                         if (Enum.TryParse(raw_value, out @class)) return (int)@class;
                         break;
 
+                    case GameTag.STATE:
+                        {
+                            TAG_STATE state;
+                            if (Enum.TryParse(raw_value, out state)) return (int)state;
+                        }
+                        break;
+
                     default:
                         int value;
                         if (int.TryParse(raw_value, out value)) return value;
@@ -130,6 +132,8 @@ namespace HearthstoneAI
             public EntityChoice()
             {
                 choices = new Dictionary<int, int>();
+                choices_has_sent = false;
+                sent_choices = new List<int>();
             }
 
             public int id;
@@ -137,6 +141,9 @@ namespace HearthstoneAI
             public int player_entity_id;
             public string source;
             public Dictionary<int, int> choices;
+
+            public bool choices_has_sent;
+            public List<int> sent_choices;
         }
 
         public class JoustInformation
@@ -170,7 +177,7 @@ namespace HearthstoneAI
 
         public Dictionary<int, Entity> Entities { get; set; }
         public Dictionary<int, EntityChoice> EntityChoices { get; set; }
-        private int GameEntityId { get; set; }
+        public int GameEntityId { get; set; }
         public int PlayerEntityId { get; set; }
         public int OpponentEntityId { get; set; }
 
@@ -178,7 +185,10 @@ namespace HearthstoneAI
 
         public void CreateGameEntity(int id)
         {
-            Entities.Add(id, new GameState.Entity(id) { Name = "GameEntity" });
+            if (!Entities.ContainsKey(id))
+            {
+                Entities.Add(id, new GameState.Entity(id) { Name = "GameEntity" });
+            }
             this.GameEntityId = id;
         }
 
@@ -226,29 +236,31 @@ namespace HearthstoneAI
             return false;
         }
 
-        public void ChangeTag(int entity_id, string raw_tag, string raw_value)
+        public void ChangeTag(int entity_id, GameTag tag, int tag_value)
         {
             if (!this.Entities.ContainsKey(entity_id))
             {
                 this.Entities.Add(entity_id, new Entity(entity_id));
             }
 
-            bool has_prev_value = this.Entities[entity_id].HasTag(GameTag.ZONE);
             int prev_value = -1;
-            if (has_prev_value) prev_value = this.Entities[entity_id].GetTag(GameTag.ZONE);
+            bool has_prev_value = this.Entities[entity_id].HasTag(tag);
+            if (has_prev_value) prev_value = this.Entities[entity_id].GetTag(tag);
 
-            var tag_value = Entity.ParseTag(raw_tag, raw_value);
-            this.Entities[entity_id].SetTag(tag_value);
-
-            var tag = tag_value.Item1;
-            var value = tag_value.Item2;
+            this.Entities[entity_id].SetTag(tag, tag_value);
 
             switch (tag)
             {
                 case GameTag.MULLIGAN_STATE:
-                    this.MulliganStateChanged(entity_id, GameTag.MULLIGAN_STATE, has_prev_value, prev_value, value);
+                    this.MulliganStateChanged(entity_id, GameTag.MULLIGAN_STATE, has_prev_value, prev_value, tag_value);
                     break;
             }
+        }
+
+        public void ChangeTag(int entity_id, string raw_tag, string raw_value)
+        {
+            var tag_value = Entity.ParseTag(raw_tag, raw_value);
+            this.ChangeTag(entity_id, tag_value.Item1, tag_value.Item2);
         }
 
         private void MulliganStateChanged(int entity_id, GameTag tag, bool has_prev, int prev_value, int value)
