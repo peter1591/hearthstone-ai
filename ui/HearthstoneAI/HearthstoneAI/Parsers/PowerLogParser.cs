@@ -43,13 +43,22 @@ namespace HearthstoneAI.Parsers
         {
             this.frm_main = frm;
             this.game_state = game_state;
+
+            this.enumerator = this.Process().GetEnumerator();
         }
 
-        public string parsing_log;
+        public void Process(string log_line)
+        {
+            this.parsing_log = log_line;
+            this.enumerator.MoveNext();
+        }
+
+        private string parsing_log;
         private frmMain frm_main;
         private GameState game_state;
+        private IEnumerator<bool> enumerator;
 
-        public IEnumerable<bool> Process()
+        private IEnumerable<bool> Process()
         {
             while (true)
             {

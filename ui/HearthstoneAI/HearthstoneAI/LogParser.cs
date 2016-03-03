@@ -19,70 +19,51 @@ namespace HearthstoneAI
         {
             this.frmMain = frm;
             this.GameState = new GameState();
+
+            this.power_log_parser = new Parsers.PowerLogParser(this.frmMain, this.GameState);
+            this.entity_choices_parser = new Parsers.EntityChoicesParser(this.frmMain, this.GameState);
+            this.send_choices_parser = new Parsers.SendChoicesParser(this.frmMain, this.GameState);
         }
 
         private frmMain frmMain;
+        private Parsers.PowerLogParser power_log_parser;
+        private Parsers.SendChoicesParser send_choices_parser;
+        private Parsers.EntityChoicesParser entity_choices_parser;
 
         public GameState GameState { get; }
 
-        public string[] new_log_lines; // for Process()
-
-        // return true if still parsing; false if all lines are parsed
-        // never break
-        public IEnumerable<bool> Process()
+        public void Process(string log_line)
         {
-            Parsers.PowerLogParser power_log_parser = new Parsers.PowerLogParser(this.frmMain, this.GameState);
-            Parsers.SendChoicesParser send_choices_parser = new Parsers.SendChoicesParser(this.frmMain, this.GameState);
-            Parsers.EntityChoicesParser entity_choices_parser = new Parsers.EntityChoicesParser(this.frmMain, this.GameState);
+            if (log_line == "") return;
 
-            IEnumerator<bool> power_log = power_log_parser.Process().GetEnumerator();
-            IEnumerator<bool> entity_choices_log = entity_choices_parser.Process().GetEnumerator();
-            IEnumerator<bool> send_choices_log = send_choices_parser.Process().GetEnumerator();
+            LogItem log_item;
 
-            while (true)
+            try { log_item = LogItem.Parse(log_line); }
+            catch (Exception ex)
             {
-                foreach (var log_line in this.new_log_lines)
-                {
-                    if (log_line == "") continue;
+                this.frmMain.AddLog("Failed when parsing: " + log_line);
+                return;
+            }
 
-                    LogItem log_item;
+            string log = log_item.Content;
 
-                    try { log_item = LogItem.Parse(log_line); }
-                    catch (Exception ex)
-                    {
-                        this.frmMain.AddLog("Failed when parsing: " + log_line);
-                        continue;
-                    }
-
-                    string log = log_item.Content;
-
-                    if (log.StartsWith(PowerLogPrefix))
-                    {
-                        power_log_parser.parsing_log = log.Substring(PowerLogPrefix.Length);
-                        power_log.MoveNext();
-                        yield return true;
-                    }
-                    else if (log.StartsWith(EntityChoicesLogPrefix))
-                    {
-                        entity_choices_parser.parsing_log = log.Substring(EntityChoicesLogPrefix.Length);
-                        entity_choices_log.MoveNext();
-                        yield return true;
-                    }
-                    else if (log.StartsWith(SendChoicesLogPrefix))
-                    {
-                        send_choices_parser.parsing_log = log.Substring(SendChoicesLogPrefix.Length);
-                        send_choices_log.MoveNext();
-                        yield return true;
-                    }
-                    else if (log.StartsWith(PowerTaskListDebugDumpLogPrefix)) { }
-                    else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
-                    else
-                    {
-                        //this.frmMain.AddLog("Failed when parsing: " + log_line);
-                    }
-                }
-
-                yield return false;
+            if (log.StartsWith(PowerLogPrefix))
+            {
+                this.power_log_parser.Process(log.Substring(PowerLogPrefix.Length));
+            }
+            else if (log.StartsWith(EntityChoicesLogPrefix))
+            {
+                entity_choices_parser.Process(log.Substring(EntityChoicesLogPrefix.Length));
+            }
+            else if (log.StartsWith(SendChoicesLogPrefix))
+            {
+                send_choices_parser.Process(log.Substring(SendChoicesLogPrefix.Length));
+            }
+            else if (log.StartsWith(PowerTaskListDebugDumpLogPrefix)) { }
+            else if (log.StartsWith(PowerTaskListDebugPrintPowerLogPrefix)) { }
+            else
+            {
+                //this.frmMain.AddLog("Failed when parsing: " + log_line);
             }
         }
     }

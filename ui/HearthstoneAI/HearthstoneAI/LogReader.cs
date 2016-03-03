@@ -13,8 +13,6 @@ namespace HearthstoneAI
 
         private long power_log_offset;
         private LogParser log_parser;
-        bool log_parser_enumerator_initailized;
-        IEnumerator<bool> log_parser_enumerator;
 
         public LogReader(frmMain frm)
         {
@@ -26,7 +24,6 @@ namespace HearthstoneAI
         {
             this.power_log_offset = 0;
             log_parser = new LogParser(this.frmMain);
-            log_parser_enumerator_initailized = false;
         }
 
         private string GetPowerLogPath()
@@ -63,17 +60,11 @@ namespace HearthstoneAI
             string content = content_all.Substring(0, content_end + 1);
             this.power_log_offset += Encoding.UTF8.GetByteCount(content);
 
-            this.log_parser.new_log_lines = content.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.None);
+            var new_log_lines = content.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.None);
 
-            if (!this.log_parser_enumerator_initailized)
+            foreach (var new_log_line in new_log_lines)
             {
-                this.log_parser_enumerator = this.log_parser.Process().GetEnumerator();
-                this.log_parser_enumerator_initailized = true;
-            }
-
-            while (this.log_parser_enumerator.MoveNext())
-            {
-                if (this.log_parser_enumerator.Current == false) break; // parsed to the eof
+                this.log_parser.Process(new_log_line);
             }
         }
 
