@@ -39,7 +39,7 @@ namespace HearthstoneAI
             LogItem log_item;
 
             try { log_item = LogItem.Parse(log_line); }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.frmMain.AddLog("Failed when parsing: " + log_line);
                 return;

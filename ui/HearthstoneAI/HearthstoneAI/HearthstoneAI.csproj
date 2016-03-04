@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Board\Game.cs" />
+    <Compile Include="Board\Crystal.cs" />
+    <Compile Include="Board\Enchantment.cs" />
+    <Compile Include="Board\Enchantments.cs" />
+    <Compile Include="Board\Hero.cs" />
+    <Compile Include="Board\HeroPower.cs" />
+    <Compile Include="Board\Player.cs" />
+    <Compile Include="Board\Secret.cs" />
+    <Compile Include="Board\Secrets.cs" />
+    <Compile Include="Board\Status.cs" />
+    <Compile Include="Board\Weapon.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
