@@ -14,16 +14,22 @@ namespace HearthstoneAI
         private long power_log_offset;
         private LogParser log_parser;
 
+        private int change_id;
+
         public LogReader(frmMain frm)
         {
+            this.change_id = 1;
             this.frmMain = frm;
             this.Reset();
         }
+
+        public int GetChangeId() { return this.change_id; }
 
         private void Reset()
         {
             this.power_log_offset = 0;
             log_parser = new LogParser(this.frmMain);
+            this.change_id++;
         }
 
         private string GetPowerLogPath()
@@ -66,6 +72,8 @@ namespace HearthstoneAI
             {
                 this.log_parser.Process(new_log_line);
             }
+
+            this.change_id++;
         }
 
         public GameState GetGameState()

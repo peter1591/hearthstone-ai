@@ -177,33 +177,6 @@ namespace HearthstoneAI
             return "(unknown)";
         }
 
-        private string PrintStateText(GameState.Entity entity, GameTag tag)
-        {
-            int value = entity.GetTagOrDefault(tag, 0);
-            if (value <= 0) return "";
-
-            return "[" + tag.ToString() + ": " + value.ToString() + "] ";
-        }
-
-        private string GetEntityExtraStateText(GameState game, GameState.Entity entity)
-        {
-            string result = "";
-
-            result += this.PrintStateText(entity, GameTag.CHARGE);
-            result += this.PrintStateText(entity, GameTag.TAUNT);
-            result += this.PrintStateText(entity, GameTag.DIVINE_SHIELD);
-            result += this.PrintStateText(entity, GameTag.STEALTH);
-            result += this.PrintStateText(entity, GameTag.FORGETFUL);
-            result += this.PrintStateText(entity, GameTag.FREEZE);
-            result += this.PrintStateText(entity, GameTag.FROZEN);
-            result += this.PrintStateText(entity, GameTag.POISONOUS);
-            result += this.PrintStateText(entity, GameTag.WINDFURY);
-
-            if (result != "") result += Environment.NewLine;
-
-            return result;
-        }
-
         private string PrintStateText(string name, int value)
         {
             if (value <= 0) return "";
@@ -285,130 +258,38 @@ namespace HearthstoneAI
             return result;
         }
 
-        private string GetHandCardText(GameState game, GameState.Entity entity)
-        {
-            return "[Card] Card ID = " + entity.CardId + Environment.NewLine;
-        }
-
-        private string GetHandText(GameState game, int controller, TAG_ZONE zone)
+        private string GetHandText(Board.Hand hand)
         {
             string result = "";
 
-            List<GameState.Entity> items = new List<GameState.Entity>();
-
-            foreach (var entity in game.Entities)
+            foreach (var card in hand.cards)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
-
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)zone) continue;
-
-                items.Add(entity.Value);
-            }
-
-            items.Sort(GameState.ZonePositionSorter);
-
-            foreach (var entry in items)
-            {
-                result += this.GetHandCardText(game, entry);
+                result += "[Card] Card ID = " + card + Environment.NewLine;
             }
 
             return result;
         }
 
-        private string GetPlayerHandText(GameState game)
-        {
-            GameState.Entity player_entity;
-            if (!game.TryGetPlayerEntity(out player_entity)) return "";
-
-            int controller = player_entity.GetTagOrDefault(GameTag.CONTROLLER, -1);
-            if (controller < 0) return "";
-
-            return GetHandText(game, controller, TAG_ZONE.HAND);
-        }
-
-        private string GetOpponentHandText(GameState game)
-        {
-            GameState.Entity player_entity;
-            if (!game.TryGetOpponentEntity(out player_entity)) return "";
-
-            int controller = player_entity.GetTagOrDefault(GameTag.CONTROLLER, -1);
-            if (controller < 0) return "";
-
-            return GetHandText(game, controller, TAG_ZONE.HAND);
-        }
-
-        private string GetDeckCardText(GameState game, GameState.Entity entity)
-        {
-            return "Known Card ID = " + entity.CardId + Environment.NewLine;
-        }
-
-        private string GetJoustsInformation(GameState game, int controller)
-        {
-            string result = "[Joust flip cards]" + Environment.NewLine;
-
-            foreach (var joust_entity_id in game.joust_information.entities)
-            {
-                var joust_card = game.Entities[joust_entity_id];
-                if (joust_card.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
-                result += joust_card.CardId + Environment.NewLine;
-            }
-
-            return result;
-        }
-
-        private string GetDeckText(GameState game, int controller, TAG_ZONE zone)
+        private string GetDeckText(Board.Deck deck)
         {
             string result = "";
 
-            int total_cards = 0;
-            List<GameState.Entity> known_cards = new List<GameState.Entity>();
+            result += "Total cards: " + deck.total_cards.ToString() + Environment.NewLine;
 
-            foreach (var entity in game.Entities)
+            foreach (var card in deck.known_cards)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
-
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)zone) continue;
-
-                total_cards++;
-                if (entity.Value.CardId != "") known_cards.Add(entity.Value);
-            }
-
-            result += "Total cards: " + total_cards.ToString() + Environment.NewLine;
-
-            foreach (var entry in known_cards)
-            {
-                result += this.GetDeckCardText(game, entry);
+                result += "Known Card ID = " + card + Environment.NewLine;
             }
 
             // get known cards from jousts
             result += Environment.NewLine;
-            result += GetJoustsInformation(game, controller);
+            result += "[Joust flip cards]" + Environment.NewLine;
+            foreach (var joust_card in deck.joust_cards)
+            {
+                result += joust_card + Environment.NewLine;
+            }
 
             return result;
-        }
-
-        private string GetPlayerDeckText(GameState game)
-        {
-            GameState.Entity player_entity;
-            if (!game.TryGetPlayerEntity(out player_entity)) return "";
-
-            int controller = player_entity.GetTagOrDefault(GameTag.CONTROLLER, -1);
-            if (controller < 0) return "";
-
-            return GetDeckText(game, controller, TAG_ZONE.DECK);
-        }
-
-        private string GetOpponentDeckText(GameState game)
-        {
-            GameState.Entity player_entity;
-            if (!game.TryGetOpponentEntity(out player_entity)) return "";
-
-            int controller = player_entity.GetTagOrDefault(GameTag.CONTROLLER, -1);
-            if (controller < 0) return "";
-
-            return GetDeckText(game, controller, TAG_ZONE.DECK);
         }
 
         private string GetEnchantmentsText(Board.Enchantments enchantments)
@@ -416,130 +297,46 @@ namespace HearthstoneAI
             string result = "[Enchantments]" + Environment.NewLine;
             foreach (var enchant in enchantments)
             {
-                result += "   " + enchant.card_id + " Creator: " + enchant.creator.ToString() + Environment.NewLine;
+                result += "   " + enchant.card_id + " Creator: " + enchant.creator_entity_id.ToString() + Environment.NewLine;
             }
             return result;
         }
 
-        private string GetEnchantmentsText(GameState game, GameState.Entity target)
-        {
-            List<GameState.Entity> enchantments = new List<GameState.Entity>();
-
-            foreach (var entity in game.Entities)
-            {
-                if (!entity.Value.HasTag(GameTag.CARDTYPE)) continue;
-                var card_type = (TAG_CARDTYPE)entity.Value.GetTag(GameTag.CARDTYPE);
-
-                if (card_type != TAG_CARDTYPE.ENCHANTMENT) continue;
-
-                if (entity.Value.GetTagOrDefault(GameTag.ATTACHED, target.Id - 1) != target.Id) continue;
-
-                enchantments.Add(entity.Value);
-            }
-
-            if (enchantments.Count == 0) return "";
-
-            string result = "[Enchantments]" + Environment.NewLine;
-            foreach (var enchant in enchantments)
-            {
-                int creator = enchant.GetTagOrDefault(GameTag.CREATOR, -1);
-
-                result += "   " + enchant.CardId + " Creator: " + creator.ToString() + Environment.NewLine;
-            }
-            return result;
-        }
-
-        private string GetPlayMinionText(GameState game, GameState.Entity entity)
+        private string GetPlayMinionText(Board.Minion minion)
         {
             string result = "[Minion]" + Environment.NewLine;
 
-            result += "Entity ID = " + entity.Id + Environment.NewLine;
-            result += "Card ID = " + entity.CardId + Environment.NewLine;
+            result += "Entity ID = " + minion.entity_id + Environment.NewLine;
+            result += "Card ID = " + minion.card_id + Environment.NewLine;
 
-            int max_hp = entity.GetTagOrDefault(GameTag.HEALTH, -1);
-            int damage = entity.GetTagOrDefault(GameTag.DAMAGE, 0);
-            if (max_hp > 0)
-            {
-                int current_hp = max_hp - damage;
-                result += "HP: " + current_hp.ToString() + " / " + max_hp.ToString() + Environment.NewLine;
-            }
+            int current_hp = minion.max_hp - minion.damage;
+            result += "HP: " + current_hp.ToString() + " / " + minion.max_hp.ToString() + Environment.NewLine;
 
-            int attack = entity.GetTagOrDefault(GameTag.ATK, 0);
-            if (attack > 0)
-            {
-                result += "Attack: " + attack.ToString() + Environment.NewLine;
-            }
+            result += "Attack: " + minion.attack.ToString() + Environment.NewLine;
 
-            int attacked_this_turn = entity.GetTagOrDefault(GameTag.NUM_ATTACKS_THIS_TURN, 0);
-            result += "attacked times: " + attacked_this_turn + Environment.NewLine;
+            result += "attacked times: " + minion.attacks_this_turn + Environment.NewLine;
 
-            int exhausted = entity.GetTagOrDefault(GameTag.EXHAUSTED, 0);
-            result += "exhausted: " + exhausted + Environment.NewLine;
+            result += "exhausted: " + minion.exhausted + Environment.NewLine;
 
-            if (entity.GetTagOrDefault(GameTag.SILENCED, 0) == 1)
-            {
-                result += "Silenced!" + Environment.NewLine;
-            }
+            if (minion.silenced) result += "Silenced!" + Environment.NewLine;
 
-            result += this.GetEntityExtraStateText(game, entity);
+            result += this.GetEntityExtraStateText(minion.status);
 
-            result += this.GetEnchantmentsText(game, entity);
+            result += this.GetEnchantmentsText(minion.enchantments);
 
             return result;
         }
 
-        private string GetPlayMinionsText(GameState game, int controller, TAG_ZONE zone)
+        private string GetPlayMinionsText(Board.Minions minions)
         {
             string result = "";
 
-            List<GameState.Entity> sorted_minions = new List<GameState.Entity>();
-
-            foreach (var entity in game.Entities)
+            foreach (var minion in minions)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
-
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)zone) continue;
-
-                if (!entity.Value.HasTag(GameTag.CARDTYPE)) continue;
-                var card_type = (TAG_CARDTYPE)entity.Value.GetTag(GameTag.CARDTYPE);
-
-                if (card_type != TAG_CARDTYPE.MINION) continue;
-
-                sorted_minions.Add(entity.Value);
-            }
-
-            sorted_minions.Sort(GameState.ZonePositionSorter);
-
-            foreach (var minion in sorted_minions)
-            {
-                result += this.GetPlayMinionText(game, minion);
-                result += Environment.NewLine;
+                result += this.GetPlayMinionText(minion) + Environment.NewLine;
             }
 
             return result;
-        }
-
-        private string GetPlayerMinionsText(GameState game)
-        {
-            GameState.Entity player_entity;
-            if (!game.TryGetPlayerEntity(out player_entity)) return "";
-
-            int controller = player_entity.GetTagOrDefault(GameTag.CONTROLLER, -1);
-            if (controller < 0) return "";
-
-            return GetPlayMinionsText(game, controller, TAG_ZONE.PLAY);
-        }
-
-        private string GetOpponentMinionsText(GameState game)
-        {
-            GameState.Entity player_entity;
-            if (!game.TryGetOpponentEntity(out player_entity)) return "";
-
-            int controller = player_entity.GetTagOrDefault(GameTag.CONTROLLER, -1);
-            if (controller < 0) return "";
-
-            return GetPlayMinionsText(game, controller, TAG_ZONE.PLAY);
         }
 
         private string GetSecretsText(Board.Secrets secrets)
@@ -628,12 +425,12 @@ namespace HearthstoneAI
             this.txtOpponentHero.Text = GetPlayerEntityText(game.opponent);
             this.txtPlayerSecrets.Text = this.GetSecretsText(game.player.secrets);
             this.txtOpponentSecrets.Text = this.GetSecretsText(game.opponent.secrets);
-            this.txtPlayerHand.Text = this.GetPlayerHandText(raw_game);
-            this.txtOpponentHand.Text = this.GetOpponentHandText(raw_game);
-            this.txtPlayerDeck.Text = this.GetPlayerDeckText(raw_game);
-            this.txtOpponentDeck.Text = this.GetOpponentDeckText(raw_game);
-            this.txtPlayerMinions.Text = this.GetPlayerMinionsText(raw_game);
-            this.txtOpponentMinions.Text = this.GetOpponentMinionsText(raw_game);
+            this.txtPlayerHand.Text = this.GetHandText(game.player.hand);
+            this.txtOpponentHand.Text = this.GetHandText(game.opponent.hand);
+            this.txtPlayerDeck.Text = this.GetDeckText(game.player.deck);
+            this.txtOpponentDeck.Text = this.GetDeckText(game.opponent.deck);
+            this.txtPlayerMinions.Text = this.GetPlayMinionsText(game.player.minions);
+            this.txtOpponentMinions.Text = this.GetPlayMinionsText(game.opponent.minions);
         }
 
         private void frmMain_Load(object sender, EventArgs e)

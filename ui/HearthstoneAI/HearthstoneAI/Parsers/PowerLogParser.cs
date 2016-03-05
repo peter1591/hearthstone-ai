@@ -287,10 +287,12 @@ namespace HearthstoneAI.Parsers
 
             if (block_type != "TRIGGER")
             {
+                /*
                 this.frm_main.AddLog("[INFO] Got action. entity = " + entity_id.ToString() +
                     " block type = " + block_type +
                     " index = " + index +
                     " target = " + target_id.ToString());
+                    */
             }
             yield return true;
 

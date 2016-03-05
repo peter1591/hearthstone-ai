@@ -47,12 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Board\Deck.cs" />
     <Compile Include="Board\Game.cs" />
     <Compile Include="Board\Crystal.cs" />
     <Compile Include="Board\Enchantment.cs" />
     <Compile Include="Board\Enchantments.cs" />
+    <Compile Include="Board\Hand.cs" />
     <Compile Include="Board\Hero.cs" />
     <Compile Include="Board\HeroPower.cs" />
+    <Compile Include="Board\Minion.cs" />
+    <Compile Include="Board\Minions.cs" />
     <Compile Include="Board\Player.cs" />
     <Compile Include="Board\Secret.cs" />
     <Compile Include="Board\Secrets.cs" />

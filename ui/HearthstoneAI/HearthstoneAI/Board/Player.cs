@@ -28,6 +28,15 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Secrets secrets = new Secrets();
 
+        [DataMember]
+        public Minions minions = new Minions();
+
+        [DataMember]
+        public Hand hand = new Hand();
+
+        [DataMember]
+        public Deck deck = new Deck();
+
         public bool Parse(GameState game, GameState.Entity entity)
         {
             bool ret = true;
@@ -51,6 +60,12 @@ namespace HearthstoneAI.Board
             ret = this.weapon.Parse(game, entity) && ret;
 
             ret = this.secrets.Parse(game, entity) && ret;
+
+            ret = this.minions.Parse(game, entity) && ret;
+
+            ret = this.hand.Parse(game, entity) && ret;
+
+            ret = this.deck.Parse(game, entity) && ret;
             
             return ret;
         }
