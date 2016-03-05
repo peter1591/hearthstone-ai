@@ -46,5 +46,20 @@ namespace HearthstoneAI.Board
 
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            Minions rhs = obj as Minions;
+            if (rhs == null) return false;
+            return this.SequenceEqual(rhs);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = HashHelper.init;
+            foreach (var obj in this)
+                HashHelper.Update(ref hash, obj);
+            return hash;
+        }
     }
 }

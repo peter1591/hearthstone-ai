@@ -23,5 +23,23 @@ namespace HearthstoneAI.Board
 
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            Enchantment rhs = obj as Enchantment;
+            if (rhs == null) return false;
+            if (!this.card_id.Equals(rhs.card_id)) return false;
+            if (!this.creator_entity_id.Equals(rhs.creator_entity_id)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.card_id,
+                this.creator_entity_id
+            }.GetHashCode();
+        }
     }
 }

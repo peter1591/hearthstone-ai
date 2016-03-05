@@ -155,6 +155,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxProcessedLogs.FormattingEnabled = true;
+            this.listBoxProcessedLogs.HorizontalScrollbar = true;
             this.listBoxProcessedLogs.Location = new System.Drawing.Point(11, 28);
             this.listBoxProcessedLogs.Name = "listBoxProcessedLogs";
             this.listBoxProcessedLogs.Size = new System.Drawing.Size(925, 732);

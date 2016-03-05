@@ -149,6 +149,22 @@ namespace HearthstoneAI.Parsers
                     continue;
                 }
 
+                foreach (var ret in this.ParseShowEntities())
+                {
+                    rule_matched = true;
+                    yield return ret;
+                }
+                if (rule_matched) continue;
+
+                if (HideEntityRegex.IsMatch(this.parsing_log))
+                {
+                    var match = HideEntityRegex.Match(this.parsing_log);
+                    int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
+                    this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+                    yield return true;
+                    continue;
+                }
+
                 foreach (var ret in this.ParseAction())
                 {
                     rule_matched = true;
@@ -215,7 +231,7 @@ namespace HearthstoneAI.Parsers
 
         // return for each consumed line
         // break if error and the line is not consumed
-        private IEnumerable<bool> ParseShowEntities(string action_block_type)
+        private IEnumerable<bool> ParseShowEntities()
         {
             if (!ShowEntityRegex.IsMatch(this.parsing_log)) yield break;
 
@@ -313,7 +329,7 @@ namespace HearthstoneAI.Parsers
                 }
                 if (rule_matched) continue;
 
-                foreach (var ret in this.ParseShowEntities(block_type))
+                foreach (var ret in this.ParseShowEntities())
                 {
                     rule_matched = true;
                     yield return ret;

@@ -69,5 +69,38 @@ namespace HearthstoneAI.Board
             
             return ret;
         }
+
+        public override bool Equals(object obj)
+        {
+            Player rhs = obj as Player;
+            if (rhs == null) return false;
+            if (!this.crystal.Equals(rhs.crystal)) return false;
+            if (!this.fatigue.Equals(rhs.fatigue)) return false;
+            if (!this.enchantments.Equals(rhs.enchantments)) return false;
+            if (!this.hero.Equals(rhs.hero)) return false;
+            if (!this.weapon.Equals(rhs.weapon)) return false;
+            if (!this.secrets.Equals(rhs.secrets)) return false;
+            if (!this.minions.Equals(rhs.minions)) return false;
+            if (!this.hand.Equals(rhs.hand)) return false;
+            if (!this.deck.Equals(rhs.deck)) return false;
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.crystal,
+                this.fatigue,
+                this.enchantments,
+                this.hero,
+                this.weapon,
+                this.secrets,
+                this.minions,
+                this.hand,
+                this.deck
+            }.GetHashCode();
+        }
     }
 }

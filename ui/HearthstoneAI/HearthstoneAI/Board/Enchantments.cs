@@ -30,5 +30,19 @@ namespace HearthstoneAI.Board
             return ret;
         }
 
+        public override bool Equals(object obj)
+        {
+            Enchantments rhs = obj as Enchantments;
+            if (rhs == null) return false;
+            return this.SequenceEqual(rhs);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = HashHelper.init;
+            foreach (var obj in this)
+                HashHelper.Update(ref hash, obj);
+            return hash;
+        }
     }
 }

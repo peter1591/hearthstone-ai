@@ -44,7 +44,8 @@ namespace HearthstoneAI
         private int last_invoke_log_change_id = -1;
         private int last_stable_change_id = -1;
         private DateTime last_stable_time = DateTime.Now;
-        private TimeSpan stable_time_to_invoke_AI = new TimeSpan(0, 0, 0, 0, 1000);
+        private TimeSpan stable_time_to_invoke_AI = new TimeSpan(0, 0, 0, 0, 100);
+        private Board.Game last_invoke_board = new Board.Game();
         private void UpdateBoardIfNecessary()
         {
             int current_change_id = this.log_reader.GetChangeId();
@@ -78,12 +79,43 @@ namespace HearthstoneAI
             if (parse_success == false)
             {
                 this.txtGameEntity.Text = "parse failed";
+                return;
             }
-            else
+            
+            if (board.Equals(this.last_invoke_board))
             {
-                this.UpdateBoard(board);
+                //this.AddLog("Log changed, but board are the same as the last-invoked one -> skipping");
+                return;
             }
 
+            var game = this.log_reader.GetGameState();
+
+            GameState.Entity game_entity;
+            if (!game.TryGetGameEntity(out game_entity))
+            {
+                this.txtGameEntity.Text = "Parse failed: game entity not exists";
+                return;
+            }
+
+            var game_stage = this.GetGameStage(game);
+
+            txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
+
+            if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
+            {
+                MemoryStream stream = new MemoryStream();
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Board.Game));
+                serializer.WriteObject(stream, board);
+                stream.Position = 0;
+                var sr = new StreamReader(stream);
+                var json = sr.ReadToEnd();
+
+                this.AddLog("[INFO] Invoking AI with board: " + json);
+
+                this.last_invoke_board = board;
+            }
+
+            this.UpdateBoard(board);
         }
 
         private void timerMainLoop_Tick(object sender, EventArgs e)
@@ -157,23 +189,6 @@ namespace HearthstoneAI
 
             GameState.Entity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) return "";
-
-            var game_stage = this.GetGameStage(game);
-
-            result += "Stage: " + game_stage.ToString() + Environment.NewLine;
-
-            if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
-            {
-                this.AddLog("[INFO] Entering player choice stage, should now invoke AI program.");
-
-                //MemoryStream stream = new MemoryStream();
-                //DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Board.Game));
-                //serializer.WriteObject(stream, board);
-                //stream.Position = 0;
-                //var sr = new StreamReader(stream);
-                //var json = sr.ReadToEnd();
-                //Console.Write(json);
-            }
 
             if (game_entity.HasTag(GameTag.STEP))
             {
@@ -460,7 +475,7 @@ namespace HearthstoneAI
         {
             var raw_game = this.log_reader.GetGameState();
 
-            this.txtGameEntity.Text = this.GetGameEntityText(raw_game);
+            this.txtGameEntity.Text += this.GetGameEntityText(raw_game);
             this.txtChoices.Text = this.GetChoicesText(raw_game);
 
             this.txtPlayerHero.Text = GetPlayerEntityText(game.player);

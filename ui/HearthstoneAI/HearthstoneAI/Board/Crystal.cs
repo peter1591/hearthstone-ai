@@ -36,5 +36,29 @@ namespace HearthstoneAI.Board
 
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            Crystal rhs = obj as Crystal;
+            if (rhs == null) return false;
+            if (!this.total.Equals(rhs.total)) return false;
+            if (!this.used.Equals(rhs.used)) return false;
+            if (!this.this_turn.Equals(rhs.this_turn)) return false;
+            if (!this.overload.Equals(rhs.overload)) return false;
+            if (!this.overload_next_turn.Equals(rhs.overload_next_turn)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.total,
+                this.used,
+                this.this_turn,
+                this.overload,
+                this.overload_next_turn
+            }.GetHashCode();
+        }
     }
 }

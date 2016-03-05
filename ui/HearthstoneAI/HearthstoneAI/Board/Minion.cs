@@ -57,5 +57,39 @@ namespace HearthstoneAI.Board
 
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            Minion rhs = obj as Minion;
+            if (rhs == null) return false;
+            if (!this.entity_id.Equals(rhs.entity_id)) return false;
+            if (!this.card_id.Equals(rhs.card_id)) return false;
+            if (!this.max_hp.Equals(rhs.max_hp)) return false;
+            if (!this.damage.Equals(rhs.damage)) return false;
+            if (!this.attack.Equals(rhs.attack)) return false;
+            if (!this.attacks_this_turn.Equals(rhs.attacks_this_turn)) return false;
+            if (!this.exhausted.Equals(rhs.exhausted)) return false;
+            if (!this.silenced.Equals(rhs.silenced)) return false;
+            if (!this.status.Equals(rhs.status)) return false;
+            if (!this.enchantments.Equals(rhs.enchantments)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.entity_id,
+                this.card_id,
+                this.max_hp,
+                this.damage,
+                this.attack,
+                this.attacks_this_turn,
+                this.exhausted,
+                this.silenced,
+                this.status,
+                this.enchantments
+            }.GetHashCode();
+        }
     }
 }

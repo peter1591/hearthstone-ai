@@ -23,5 +23,23 @@ namespace HearthstoneAI.Board
 
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            HeroPower rhs = obj as HeroPower;
+            if (rhs == null) return false;
+            if (!this.card_id.Equals(rhs.card_id)) return false;
+            if (!this.used.Equals(rhs.used)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.card_id,
+                this.used
+            }.GetHashCode();
+        }
     }
 }

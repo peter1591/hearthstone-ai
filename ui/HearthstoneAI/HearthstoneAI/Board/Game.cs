@@ -36,5 +36,19 @@ namespace HearthstoneAI.Board
 
             return ret;
         }
+
+        public override bool Equals(object obj)
+        {
+            Game rhs = obj as Game;
+            if (rhs == null) return false;
+            if (!this.player.Equals(rhs.player)) return false;
+            if (!this.opponent.Equals(rhs.opponent)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new { this.player, this.opponent }.GetHashCode();
+        }
     }
 }

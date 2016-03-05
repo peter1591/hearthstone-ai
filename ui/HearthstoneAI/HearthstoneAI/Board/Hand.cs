@@ -42,5 +42,20 @@ namespace HearthstoneAI.Board
 
             return ret;
         }
+
+        public override bool Equals(object obj)
+        {
+            Hand rhs = obj as Hand;
+            if (rhs == null) return false;
+            return this.cards.SequenceEqual(rhs.cards);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = HashHelper.init;
+            foreach (var card in this.cards)
+                HashHelper.Update(ref hash, card);
+            return hash;
+        }
     }
 }

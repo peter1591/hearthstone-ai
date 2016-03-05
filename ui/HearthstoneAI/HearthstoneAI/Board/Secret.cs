@@ -32,5 +32,23 @@ namespace HearthstoneAI.Board
 
             return ret;
         }
+
+        public override bool Equals(object obj)
+        {
+            Secret rhs = obj as Secret;
+            if (rhs == null) return false;
+            if (!this.card_id.Equals(rhs.card_id)) return false;
+            if (!this.@class.Equals(rhs.@class)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.card_id,
+                this.@class
+            }.GetHashCode();
+        }
     }
 }

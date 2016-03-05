@@ -48,5 +48,26 @@ namespace HearthstoneAI.Board
 
             return ret;
         }
+
+        public override bool Equals(object obj)
+        {
+            Deck rhs = obj as Deck;
+            if (rhs == null) return false;
+            if (!this.total_cards.Equals(rhs.total_cards)) return false;
+            if (!this.known_cards.SequenceEqual(rhs.known_cards)) return false;
+            if (!this.joust_cards.SequenceEqual(rhs.joust_cards)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = HashHelper.init;
+            HashHelper.Update(ref hash, this.total_cards);
+            foreach (var obj in this.known_cards)
+               HashHelper.Update(ref hash, obj);
+            foreach (var obj in this.joust_cards)
+                HashHelper.Update(ref hash, obj);
+            return hash;
+        }
     }
 }

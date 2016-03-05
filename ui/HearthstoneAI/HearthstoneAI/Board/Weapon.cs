@@ -14,7 +14,7 @@ namespace HearthstoneAI.Board
         public bool equipped;
 
         [DataMember]
-        public string card_id;
+        public string card_id = "";
 
         [DataMember]
         public Enchantments enchantments = new Enchantments();
@@ -53,6 +53,26 @@ namespace HearthstoneAI.Board
             }
 
             return ret;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Weapon rhs = obj as Weapon;
+            if (rhs == null) return false;
+            if (!this.equipped.Equals(rhs.equipped)) return false;
+            if (!this.card_id.Equals(rhs.card_id)) return false;
+            if (!this.enchantments.Equals(rhs.enchantments)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                this.equipped,
+                this.card_id,
+                this.enchantments
+            }.GetHashCode();
         }
     }
 }
