@@ -49,21 +49,21 @@ inline void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
 	{
 		auto const& exist_node = *this->map[board_hash].begin();
 
-		std::cout << "hash collision: " << board_hash << std::endl;
+		std::cerr << "hash collision: " << board_hash << std::endl;
 
 		std::function<void(TreeNode*)> print_backtrace;
 		print_backtrace = [&print_backtrace](TreeNode * node) {
 			if (node == nullptr) return;
 			print_backtrace(node->parent);
-			if (node->parent != nullptr) std::cout << "Move: " << node->move.GetDebugString() << std::endl;
-			else std::cout << "(from root board)" << std::endl;
+			if (node->parent != nullptr) std::cerr << "Move: " << node->move.GetDebugString() << std::endl;
+			else std::cerr << "(from root board)" << std::endl;
 		};
 
-		std::cout << "Existing board comes from moves: " << std::endl;
+		std::cerr << "Existing board comes from moves: " << std::endl;
 		print_backtrace(exist_node);
 
-		std::cout << "===============================" << std::endl;
-		std::cout << "New board comes from moves: " << std::endl;
+		std::cerr << "===============================" << std::endl;
+		std::cerr << "New board comes from moves: " << std::endl;
 		print_backtrace(node);
 	}
 #endif

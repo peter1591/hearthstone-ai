@@ -5,16 +5,40 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HearthstoneAI", "HearthstoneAI\HearthstoneAI.csproj", "{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AI", "AI\AI.vcxproj", "{F4C95031-B490-483E-AF39-F9C8D6232771}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|x64.Build.0 = Debug|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|x86.Build.0 = Debug|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x64.ActiveCfg = Release|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x64.Build.0 = Release|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x86.Build.0 = Release|Any CPU
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Debug|x64.ActiveCfg = Debug|x64
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Debug|x64.Build.0 = Debug|x64
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Debug|x86.ActiveCfg = Debug|Win32
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Debug|x86.Build.0 = Debug|Win32
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Release|Any CPU.ActiveCfg = Release|Win32
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Release|x64.ActiveCfg = Release|x64
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Release|x64.Build.0 = Release|x64
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Release|x86.ActiveCfg = Release|Win32
+		{F4C95031-B490-483E-AF39-F9C8D6232771}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

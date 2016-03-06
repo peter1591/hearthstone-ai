@@ -16,7 +16,7 @@ inline TreeNode * BoardNodeMap::Find(const GameEngine::Board &board, const MCTS&
 		if (board == it_board) return possible_node;
 
 #ifdef DEBUG
-		std::cout << "hash collision!" << std::endl;
+		std::cerr << "hash collision!" << std::endl;
 #endif
 	}
 

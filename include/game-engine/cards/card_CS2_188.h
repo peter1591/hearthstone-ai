@@ -41,7 +41,7 @@ public:
 		}
 		catch (std::out_of_range ex) {
 #ifdef DEBUG
-			std::cout << "WARNING: buff target vanished." << std::endl;
+			std::cerr << "WARNING: buff target vanished." << std::endl;
 #endif
 			return;
 		}

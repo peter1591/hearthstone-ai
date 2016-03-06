@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -63,6 +63,10 @@
     <Compile Include="Board\Secrets.cs" />
     <Compile Include="Board\Status.cs" />
     <Compile Include="Board\Weapon.cs" />
+    <Compile Include="Communicator\ActionBase.cs" />
+    <Compile Include="Communicator\ActionCancel.cs" />
+    <Compile Include="Communicator\ActionGetBestMove.cs" />
+    <Compile Include="Communicator\ActionGetCurrentBestMove.cs" />
     <Compile Include="Communicator\AICommunicator.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

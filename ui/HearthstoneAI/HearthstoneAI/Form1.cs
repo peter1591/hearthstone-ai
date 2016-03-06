@@ -15,6 +15,7 @@ namespace HearthstoneAI
     public partial class frmMain : Form
     {
         LogReader log_reader;
+        Communicator.AICommunicator ai_communicator;
 
         public string HearthstoneInstallationPath
         {
@@ -24,6 +25,8 @@ namespace HearthstoneAI
         public frmMain()
         {
             InitializeComponent();
+
+            this.ai_communicator = new Communicator.AICommunicator(this);
         }
 
         private void btnChangeHearthstoneInstallationPath_Click(object sender, EventArgs e)
@@ -36,6 +39,8 @@ namespace HearthstoneAI
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            this.ai_communicator.Start();
+
             this.log_reader = new LogReader(this);
 
             timerMainLoop.Enabled = true;
@@ -103,16 +108,12 @@ namespace HearthstoneAI
 
             if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
             {
-                MemoryStream stream = new MemoryStream();
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Board.Game));
-                serializer.WriteObject(stream, board);
-                stream.Position = 0;
-                var sr = new StreamReader(stream);
-                var json = sr.ReadToEnd();
-
-                this.AddLog("[INFO] Invoking AI with board: " + json);
+                this.ai_communicator.HandleGameBoard(board);
 
                 this.last_invoke_board = board;
+            } else
+            {
+                this.ai_communicator.Cancel();
             }
 
             this.UpdateBoard(board);
@@ -125,13 +126,15 @@ namespace HearthstoneAI
             int change_id = this.log_reader.GetChangeId();
             this.log_reader.Process();
 
+            this.UpdateBoardIfNecessary();
+
+            this.ai_communicator.Process();
+
             if (this.log_added)
             {
                 this.listBoxProcessedLogs.SelectedIndex = this.listBoxProcessedLogs.Items.Count - 1;
                 this.listBoxProcessedLogs.TopIndex = this.listBoxProcessedLogs.Items.Count - 1;
             }
-
-            this.UpdateBoardIfNecessary();
         }
 
         enum GameStage
@@ -498,7 +501,9 @@ namespace HearthstoneAI
         private bool log_added;
         public void AddLog(string log)
         {
-            this.listBoxProcessedLogs.Items.Add(log);
+            string prefix = DateTime.Now.ToString("HH:mm:ss.FFFFFF");
+
+            this.listBoxProcessedLogs.Items.Add(prefix + " " + log);
             this.log_added = true;
         }
     }
