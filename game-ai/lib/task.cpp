@@ -97,8 +97,11 @@ void Task::MainLoop()
 
 		case Task::STATE_PAUSE:
 			if (this->pause_notifier != nullptr) {
-				this->pause_notifier->NotifyPaused();
+				// Set the notifier to nullptr first, since after the NotifyPaused() is called
+				// Other threads might call Start(), which sets the pause notifier again
+				auto saved_notifier = this->pause_notifier;
 				this->pause_notifier = nullptr;
+				saved_notifier->NotifyPaused();
 			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			continue;
@@ -111,7 +114,9 @@ void Task::MainLoop()
 		if (now > this->run_until)
 		{
 			this->SetState(Task::STATE_PAUSE);
+			continue;
 		}
+
 		this->mcts->Iterate();
 		this->IncreaseIterationCount();
 	}
