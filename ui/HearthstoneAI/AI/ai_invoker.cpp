@@ -158,6 +158,7 @@ void AIInvoker::HandleCurrentJob()
 {
 	constexpr int threads = 4;
 	constexpr int sec_each_run = 1;
+	constexpr int msec_total = 70 * 1000;
 
 	bool just_initailized = false;
 
@@ -186,37 +187,37 @@ void AIInvoker::HandleCurrentJob()
 		just_initailized = true;
 	}
 
-	// start all threads
-	auto run_until = std::chrono::steady_clock::now() +
-		std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
-	for (const auto &task : this->tasks) 
-	{
-		if (pause_notifiers.find(task) == pause_notifiers.end()) {
-			pause_notifiers[task] = new Task::PauseNotifier();
-		}
-		task->Start(run_until, pause_notifiers[task]);
+	if (!just_initailized) {
+		auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - this->start_time).count();
+		int total_iterations = 0;
+		for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
+		std::cerr << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
+			<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
+		std::cerr.flush();
+
+		//if (elapsed_ms > msec_total)
+		//{
+		//	std::cerr << "ERROR: TIMEOUT!!!!" << std::endl;
+		//	this->StopCurrentJob();
+		//	return;
+		//}
 	}
 
-	if (just_initailized == false) {
+	if (!just_initailized ) {
 		for (const auto &task : this->tasks) {
 			pause_notifiers[task]->WaitUntilPaused();
 		}
 	}
 
-	constexpr int msec_total = 70 * 1000;
-
-	auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - this->start_time).count();
-	int total_iterations = 0;
-	for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
-	std::cerr << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
-		<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
-	std::cerr.flush();
-
-	if (elapsed_ms > msec_total)
+	// start all threads
+	auto run_until = std::chrono::steady_clock::now() +
+		std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
+	for (const auto &task : this->tasks)
 	{
-		std::cerr << "ERROR: TIMEOUT!!!!" << std::endl;
-		this->StopCurrentJob();
-		return;
+		if (pause_notifiers.find(task) == pause_notifiers.end()) {
+			pause_notifiers[task] = new Task::PauseNotifier();
+		}
+		task->Start(run_until, pause_notifiers[task]);
 	}
 }
 
