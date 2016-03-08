@@ -49,6 +49,8 @@ private: // non-thread-safe functions
 
 	void GenerateCurrentBestMoves_Internal();
 
+	void InitializeBoard(GameEngine::Board &board);
+
 private: // thread-safe functions
 	void SetState(State state);
 	State GetState();
