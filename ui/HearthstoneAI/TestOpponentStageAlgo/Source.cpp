@@ -5,6 +5,7 @@
 #include <vector>
 #include <chrono>
 #include <string>
+#include <functional>
 
 static bool RandomHitProbability(double prob)
 {
@@ -265,25 +266,14 @@ private:
 		unsigned int accumulated_mulligan_weight = 0;
 		if (mulligan_input.size() != data.mulligan_cards) throw new std::exception("should be allocated in constructor first");
 		size_t mulligan_input_size = 0;
-		for (int i = 0; i < data.mulligan_cards; ++i)
-		{
-			int draw_idx = -1;
-			if (i < data.hand_cards_mulligan_kept) {
-				// these cards are known to be kept from mulligan
-				// so, draw them from 'mulligan_keepable_cards'
-				draw_idx = this->draw_helper.RandomDrawOneMulliganKeptCard();
-			}
-			else {
-				draw_idx = this->draw_helper.RandomDrawOneMulliganCard();
-			}
+		this->draw_helper.RandomDrawMulliganCards([this, &data, &mulligan_input_size, &accumulated_mulligan_weight] (int draw_idx) {
+			if (draw_idx < 0) return;
 
-			if (draw_idx >= 0) {
-				CalcData::Card const& card = data.hidden_cards[(unsigned int)draw_idx];
+			CalcData::Card const& card = data.hidden_cards[(unsigned int)draw_idx];
 
-				mulligan_input[mulligan_input_size++] = card;
-				accumulated_mulligan_weight += (unsigned int)card.mulligan_keep_weight;
-			}
-		}
+			this->mulligan_input[mulligan_input_size++] = card;
+			accumulated_mulligan_weight += (unsigned int)card.mulligan_keep_weight;
+		});
 
 		// determine the mulligan-kept cards
 		for (int i = 0; i < data.hand_cards_mulligan_kept; ++i)
@@ -351,6 +341,8 @@ private:
 
 		size_t RandomDrawOneMulliganKeptCard()
 		{
+			if (this->mulligan_keepable_size <= 0) throw std::runtime_error("logic error");
+
 			// random draw from 'mulligan_keepable'
 			unsigned int r = (unsigned int)rand() % (unsigned int)this->mulligan_keepable_size;
 			size_t ret = this->mulligan_keepable[r];
@@ -360,7 +352,7 @@ private:
 
 		// return >=0 if drawn from hidden_cards
 		// return -1 if drawn a played card
-		int RandomDrawOneMulliganCard()
+		int RandomDrawOneMulliganCard(bool & drawn_a_keepable_card)
 		{
 			// random draw from 'mulligan_keepable', 'mulligan_non_keepable_and_not_played', and 'mulligan_non_keepable_and_played'
 			unsigned int total_outcomes = this->mulligan_keepable_size + this->mulligan_non_keepable_and_not_played_size
@@ -371,9 +363,12 @@ private:
 			if (r < this->mulligan_keepable_size) {
 				size_t ret = this->mulligan_keepable[r];
 				this->RemoveFromMulliganKeepable(r);
+				drawn_a_keepable_card = true;
 				return (int)ret;
 			}
 			r -= this->mulligan_keepable_size;
+
+			drawn_a_keepable_card = false;
 
 			if (r < this->mulligan_non_keepable_and_not_played_size) {
 				size_t ret = this->mulligan_non_keepable_and_not_played[r];
@@ -383,6 +378,34 @@ private:
 
 			this->RemoveFromMulliganKeepableAndPlayed();
 			return -1; // draw a played card
+		}
+
+		void RandomDrawMulliganCards(std::function<void(int)> draw_callback)
+		{
+			std::vector<int> draws;
+			while (true) {
+				draws.clear();
+
+				int keepable_cards = 0;
+				for (int i = 0; i < data.mulligan_cards; ++i) {
+					bool keepable;
+					int draw_idx = this->RandomDrawOneMulliganCard(keepable);
+					if (keepable) keepable_cards++;
+					draws.push_back(draw_idx);
+				}
+
+				if (keepable_cards < data.hand_cards_mulligan_kept) {
+					// not a valid mulligan input
+					continue;
+				}
+				else {
+					break;
+				}
+			}
+
+			for (auto draw_idx : draws) {
+				draw_callback(draw_idx);
+			}
 		}
 
 		size_t RandomDrawOneHiddenCard()
@@ -587,26 +610,17 @@ private:
 
 int main(int argc, char ** argv)
 {
-	constexpr int total_hidden_cards = 15;
+	constexpr int total_hidden_cards = 2;
 
 	CalcData data;
-	data.mulligan_cards = 3; // 3 for first player; 4 for second player
-	data.mulligan_draw_from = 30;
-	data.hand_cards_mulligan_kept = 2;
-	data.hand_cards_from_normal_draw = 7;
+	data.mulligan_cards = 2; // 3 for first player; 4 for second player
+	data.mulligan_draw_from = 3;
+	data.hand_cards_mulligan_kept = 1;
+	data.hand_cards_from_normal_draw = 0;
 
 	int sequence_id = 1;
-	data.hidden_cards.push_back({ sequence_id++, true, 100 });
-	data.hidden_cards.push_back({ sequence_id++, false, 100 });
-	data.hidden_cards.push_back({ sequence_id++, true, 50 });
-	data.hidden_cards.push_back({ sequence_id++, true, 200 });
-	data.hidden_cards.push_back({ sequence_id++, false, 0 });
-	data.hidden_cards.push_back({ sequence_id++, false, 0 });
-	data.hidden_cards.push_back({ sequence_id++, false, 0 });
-	data.hidden_cards.push_back({ sequence_id++, false, 0 });
-	data.hidden_cards.push_back({ sequence_id++, false, 0 });
-	data.hidden_cards.push_back({ sequence_id++, true, 0 });
-	data.hidden_cards.push_back({ sequence_id++, true, 0 });
+	data.hidden_cards.push_back({ sequence_id++, true, 1 });
+	data.hidden_cards.push_back({ sequence_id++, true, 1000000 });
 	while (data.hidden_cards.size() < total_hidden_cards) {
 		data.hidden_cards.push_back({ sequence_id++, false, 0 });
 	}
