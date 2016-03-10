@@ -212,10 +212,8 @@ private:
 class Refined : public CalcBase
 {
 public:
-	Refined(CalcData data) : draw_helper(data)
+	Refined(CalcData data) : origin_data(data), draw_helper(this->origin_data)
 	{
-		this->origin_data = data;
-
 		for (int i = 0; i < data.mulligan_cards; ++i) {
 			CalcData::Card invalid_card;
 			invalid_card.sequence_id = -1;
