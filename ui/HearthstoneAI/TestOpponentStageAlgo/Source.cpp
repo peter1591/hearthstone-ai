@@ -212,34 +212,9 @@ private:
 class Refined : public CalcBase
 {
 public:
-	Refined(CalcData data)
+	Refined(CalcData data) : draw_helper(data)
 	{
 		this->origin_data = data;
-
-		// prepare mulligan data
-		// the mulligan deck must contains at least 'data.hand_cards_mulligan_kept' mulligan-keepable-cards
-		for (auto const& hidden_card : data.hidden_cards) {
-			if (hidden_card.mulligan_keep_weight > 0) {
-				mulligan_keepable_cards.push_back(hidden_card);
-			}
-			else {
-				mulligan_non_keepable_cards.push_back(hidden_card);
-			}
-		}
-
-		if (mulligan_keepable_cards.size() < data.hand_cards_mulligan_kept)
-			throw std::exception("not enough cards to be kept from mulligan");
-		if (mulligan_keepable_cards.size() + mulligan_non_keepable_cards.size() > data.mulligan_draw_from)
-			throw new std::exception("invalid argument: too many initial cards");
-
-		// fill up played-cards to mulligan_deck
-		for (size_t i = mulligan_keepable_cards.size() + mulligan_non_keepable_cards.size(); i < data.mulligan_draw_from; ++i) {
-			CalcData::Card played_card;
-			played_card.sequence_id = -1; // indicates a played card
-			mulligan_non_keepable_cards.push_back(played_card);
-		}
-		if (mulligan_keepable_cards.size() + mulligan_non_keepable_cards.size() < data.mulligan_cards)
-			throw new std::exception("invalid argument: too less mulligan deck cards");
 
 		for (int i = 0; i < data.mulligan_cards; ++i) {
 			CalcData::Card invalid_card;
@@ -256,37 +231,17 @@ public:
 private:
 	int GetNextPlayableCard(CalcData data)
 	{
+		this->draw_helper.Reset();
+
 		// deal with mulligan-kept cards
 		hand_cards.clear();
 		this->DetermineMuliganKeptCards(data, hand_cards);
 
-		// Remove the hand cards from hidden-cards, since they are already drawn to hand by mulligan
-		for (auto it = data.hidden_cards.begin(); it != data.hidden_cards.end();)
-		{
-			bool already_in_hand = false;
-			for (auto const& hand_card : hand_cards) {
-				if (hand_card.sequence_id == it->sequence_id) {
-					already_in_hand = true;
-					break;
-				}
-			}
-
-			// card in hand --> remove from hidden_cards set
-			if (already_in_hand) {
-				it = data.hidden_cards.erase(it);
-			}
-			else {
-				++it;
-			}
-		}
-
 		// draw random cards to hand
 		if (data.hand_cards_from_normal_draw > data.hidden_cards.size()) throw new std::exception("not enough hidden cards");
 		for (int i = 0; i < data.hand_cards_from_normal_draw; ++i) {
-			int r = rand() % data.hidden_cards.size();
-			hand_cards.push_back(data.hidden_cards[r]);
-			std::swap(data.hidden_cards[r], data.hidden_cards.back());
-			data.hidden_cards.pop_back();
+			int draw_idx = this->draw_helper.RandomDrawOneHiddenCard();
+			hand_cards.push_back(data.hidden_cards[draw_idx]);
 		}
 
 		// discard non-playable-card from hand
@@ -309,55 +264,27 @@ private:
 	{
 		if (data.hand_cards_mulligan_kept == 0) return;
 
-		// Mulligan keepable cards: possible to be kept in mulligan
-		// the mulligan deck contains the cards possible to be mulligan input
-		//     which is 'mulligan_keepable_cards' + 'mulligan_non_keepable_cards'
-
-		size_t mulligan_keepable_cards_size = mulligan_keepable_cards.size();
-		size_t mulligan_non_keepable_cards_size = mulligan_non_keepable_cards.size();
-
 		unsigned int accumulated_mulligan_weight = 0;
 		if (mulligan_input.size() != data.mulligan_cards) throw new std::exception("should be allocated in constructor first");
 		size_t mulligan_input_size = 0;
 		for (int i = 0; i < data.mulligan_cards; ++i)
 		{
-			int rand_count = 0;
+			int draw_idx = -1;
 			if (i < data.hand_cards_mulligan_kept) {
 				// these cards are known to be kept from mulligan
 				// so, draw them from 'mulligan_keepable_cards'
-				rand_count = mulligan_keepable_cards_size;
+				draw_idx = this->draw_helper.RandomDrawOneMulliganKeptCard();
 			}
 			else {
-				rand_count = mulligan_keepable_cards_size + mulligan_non_keepable_cards_size;
+				draw_idx = this->draw_helper.RandomDrawOneMulliganCard();
 			}
 
-			int r = rand() % rand_count;
-
-			if (r < mulligan_keepable_cards_size) {
-				CalcData::Card const& card = mulligan_keepable_cards[r];
+			if (draw_idx >= 0) {
+				CalcData::Card const& card = data.hidden_cards[(unsigned int)draw_idx];
 
 				mulligan_input[mulligan_input_size++] = card;
 				accumulated_mulligan_weight += (unsigned int)card.mulligan_keep_weight;
-
-				mulligan_keepable_cards_size--;
-				std::swap(mulligan_keepable_cards[r], mulligan_keepable_cards[mulligan_keepable_cards_size]);
 			}
-			else {
-				r -= mulligan_keepable_cards_size;
-				
-				CalcData::Card const& card = mulligan_non_keepable_cards[r];
-				if (card.sequence_id < 0) {
-					// a played card --> do not add to mulligan_input
-				}
-				else {
-					mulligan_input[mulligan_input_size++] = card;
-					accumulated_mulligan_weight += (unsigned int)card.mulligan_keep_weight;
-				}
-
-				mulligan_non_keepable_cards_size--;
-				std::swap(mulligan_non_keepable_cards[r], mulligan_non_keepable_cards[mulligan_non_keepable_cards_size]);
-			}
-
 		}
 
 		// determine the mulligan-kept cards
@@ -391,7 +318,126 @@ private:
 	}
 
 private:
+	class CardDrawHelper
+	{
+	public:
+		CardDrawHelper(CalcData const& data) : data(data)
+		{
+			// prepare mulligan data
+			// the mulligan deck must contains at least 'data.hand_cards_mulligan_kept' mulligan-keepable-cards
+			for (size_t i = 0; i < data.hidden_cards.size(); ++i) {
+				auto const& hidden_card = data.hidden_cards[i];
+				if (hidden_card.mulligan_keep_weight > 0) {
+					mulligan_keepable.push_back(i);
+				}
+				else {
+					mulligan_non_keepable_and_not_played.push_back(i);
+				}
+			}
+
+			if (mulligan_keepable.size() < data.hand_cards_mulligan_kept)
+				throw std::exception("not enough cards to be kept from mulligan");
+			if (mulligan_keepable.size() + mulligan_non_keepable_and_not_played.size() > data.mulligan_draw_from)
+				throw new std::exception("invalid argument: too many initial cards");
+
+			this->Reset();
+		}
+
+		void Reset()
+		{
+			this->mulligan_keepable_size = this->mulligan_keepable.size();
+			this->mulligan_non_keepable_and_not_played_size = this->mulligan_non_keepable_and_not_played.size();
+			this->mulligan_non_keepable_and_played_size =
+				data.mulligan_draw_from - this->mulligan_keepable_size - this->mulligan_non_keepable_and_not_played_size;
+		}
+
+		size_t RandomDrawOneMulliganKeptCard()
+		{
+			// random draw from 'mulligan_keepable'
+			unsigned int r = (unsigned int)rand() % (unsigned int)this->mulligan_keepable_size;
+			size_t ret = this->mulligan_keepable[r];
+			this->RemoveFromMulliganKeepable(r);
+			return ret;
+		}
+
+		// return >=0 if drawn from hidden_cards
+		// return -1 if drawn a played card
+		int RandomDrawOneMulliganCard()
+		{
+			// random draw from 'mulligan_keepable', 'mulligan_non_keepable_and_not_played', and 'mulligan_non_keepable_and_played'
+			unsigned int total_outcomes = this->mulligan_keepable_size + this->mulligan_non_keepable_and_not_played_size
+				+ this->mulligan_non_keepable_and_played_size;
+
+			unsigned int r = (unsigned int)rand() % total_outcomes;
+			
+			if (r < this->mulligan_keepable_size) {
+				size_t ret = this->mulligan_keepable[r];
+				this->RemoveFromMulliganKeepable(r);
+				return (int)ret;
+			}
+			r -= this->mulligan_keepable_size;
+
+			if (r < this->mulligan_non_keepable_and_not_played_size) {
+				size_t ret = this->mulligan_non_keepable_and_not_played[r];
+				this->RemoveFromMulliganKeepableAndNotPlayed(r);
+				return (int)ret;
+			}
+
+			this->RemoveFromMulliganKeepableAndPlayed();
+			return -1; // draw a played card
+		}
+
+		size_t RandomDrawOneHiddenCard()
+		{
+			// random draw from 'mulligan_keepable' and 'mulligan_non_keepable_and_not_played'
+			// random draw from 'mulligan_keepable', 'mulligan_non_keepable_and_not_played', and 'mulligan_non_keepable_and_played'
+			unsigned int total_outcomes = this->mulligan_keepable_size + this->mulligan_non_keepable_and_not_played_size;
+
+			unsigned int r = (unsigned int)rand() % total_outcomes;
+
+			if (r < this->mulligan_keepable_size) {
+				size_t ret = this->mulligan_keepable[r];
+				this->RemoveFromMulliganKeepable(r);
+				return ret;
+			}
+			r -= this->mulligan_keepable_size;
+
+			size_t ret = this->mulligan_non_keepable_and_not_played[r];
+			this->RemoveFromMulliganKeepableAndNotPlayed(r);
+			return ret;
+		}
+
+	private:
+		void RemoveFromMulliganKeepable(size_t idx) {
+			this->mulligan_keepable_size--;
+			std::swap(this->mulligan_keepable[idx], this->mulligan_keepable[this->mulligan_keepable_size]);
+		}
+
+		void RemoveFromMulliganKeepableAndNotPlayed(size_t idx) {
+			this->mulligan_non_keepable_and_not_played_size--;
+			std::swap(this->mulligan_non_keepable_and_not_played[idx],
+				this->mulligan_non_keepable_and_not_played[this->mulligan_non_keepable_and_not_played_size]);
+		}
+
+		void RemoveFromMulliganKeepableAndPlayed() {
+			this->mulligan_non_keepable_and_played_size--;
+		}
+
+	private:
+		CalcData const& data;
+
+		std::vector<size_t> mulligan_keepable;
+		unsigned int mulligan_keepable_size;
+
+		std::vector<size_t> mulligan_non_keepable_and_not_played;
+		unsigned int mulligan_non_keepable_and_not_played_size;
+
+		unsigned int mulligan_non_keepable_and_played_size;
+	};
+
+private:
 	CalcData origin_data;
+	CardDrawHelper draw_helper;
 
 	std::vector<CalcData::Card> hand_cards;
 	std::vector<CalcData::Card> mulligan_keepable_cards;
