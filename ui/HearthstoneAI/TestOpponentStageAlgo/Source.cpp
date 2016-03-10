@@ -611,17 +611,29 @@ private:
 
 int main(int argc, char ** argv)
 {
-	constexpr int total_hidden_cards = 2;
+	constexpr int total_hidden_cards = 20;
 
 	CalcData data;
 	data.mulligan_cards = 2; // 3 for first player; 4 for second player
-	data.mulligan_draw_from = 3;
+	data.mulligan_draw_from = 30;
 	data.hand_cards_mulligan_kept = 1;
 	data.hand_cards_from_normal_draw = 0;
 
 	int sequence_id = 1;
 	data.hidden_cards.push_back({ sequence_id++, true, 1 });
-	data.hidden_cards.push_back({ sequence_id++, true, 1000000 });
+	data.hidden_cards.push_back({ sequence_id++, true, 1 });
+	data.hidden_cards.push_back({ sequence_id++, true, 1 });
+	data.hidden_cards.push_back({ sequence_id++, true, 1 });
+	data.hidden_cards.push_back({ sequence_id++, true, 1 });
+	data.hidden_cards.push_back({ sequence_id++, true, 2 });
+	data.hidden_cards.push_back({ sequence_id++, true, 2 });
+	data.hidden_cards.push_back({ sequence_id++, true, 2 });
+	data.hidden_cards.push_back({ sequence_id++, true, 2 });
+	data.hidden_cards.push_back({ sequence_id++, true, 2 });
+	data.hidden_cards.push_back({ sequence_id++, true, 0 });
+	data.hidden_cards.push_back({ sequence_id++, true, 0 });
+	data.hidden_cards.push_back({ sequence_id++, false, 0 });
+	data.hidden_cards.push_back({ sequence_id++, false, 0 });
 	while (data.hidden_cards.size() < total_hidden_cards) {
 		data.hidden_cards.push_back({ sequence_id++, false, 0 });
 	}
