@@ -384,6 +384,7 @@ private:
 		{
 			std::vector<int> draws;
 			while (true) {
+				this->Reset();
 				draws.clear();
 
 				int keepable_cards = 0;
