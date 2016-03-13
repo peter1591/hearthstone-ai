@@ -30,7 +30,7 @@ namespace GameEngine {
 			}
 
 		private:
-			Hero(Hero && rhs) : board(std::move(rhs.board)) { *this = std::move(rhs); }
+			Hero(Hero && rhs) : board(rhs.board) { *this = std::move(rhs); }
 		public:
 			Hero & operator=(Hero && rhs) {
 				this->hero = std::move(rhs.hero);

@@ -76,7 +76,7 @@ inline Card Deck::Draw()
 		return ret;
 	}
 
-	const int rand_idx = this->random_generator.GetRandom(card_count);
+	const int rand_idx = this->random_generator.GetRandom((int)card_count);
 
 	ret = this->cards[rand_idx];
 
