@@ -153,6 +153,27 @@ void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngin
 	}
 }
 
+TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move &next_move, GameEngine::Board const& next_board, bool introduced_random)
+{
+	// quickly find node by move
+	if (introduced_random == false && node->children.empty() == false) {
+		// a deterministic node --> find in children node with 'move'
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+#ifdef DEBUG
+			if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
+#endif
+			return node->children.front();
+		}
+		else {
+			for (auto const& child : node->children) {
+				if (child->move == next_move) return child;
+			}
+		}
+	}
+
+	return this->board_node_map.Find(next_board, *this);
+}
+
 // return false if 'new_node' is an expanded node
 bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 {
@@ -172,49 +193,23 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 	board.ApplyMove(new_move, &introduced_random);
 	// Note: now the 'board' is the node 'node' plus the move 'new_move'
 
-	TreeNode *found_node = nullptr;
+	TreeNode *found_node = this->FindDuplicateNode(node, new_move, board, introduced_random);
 
-	// quickly find node for moves without random
-	if (introduced_random == false && node->children.empty() == false) {
-		// a deterministic node --> find in children node with 'move'
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-#ifdef DEBUG
-			if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
-#endif
-			found_node = node->children.front();
-		}
-		else {
-			for (auto const& child : node->children)
-			{
-				if (child->move == new_move) {
-					found_node = child;
-					break;
-				}
-			}
-		}
-
-		if (found_node) {
-			if (found_node->equivalent_node != nullptr) {
-				found_node = found_node->equivalent_node;
-			}
-			node = found_node;
-			return false;
-		}
-	}
-
-	found_node = this->board_node_map.Find(board, *this);
-
-	if (found_node != nullptr)
+	if (found_node)
 	{
-		if (found_node->parent == node)
-		{
-			// expanded before under the same parent
-			// --> no need to create a redirect node
-		}
-		else {
+		bool create_redirect_node = false;
+
+		if (found_node->parent != node) {
 			// expanded before in other paths
 			// --> create a redirect node
+			create_redirect_node = true;
+		}
 
+		if (found_node->equivalent_node != nullptr) {
+			found_node = found_node->equivalent_node;
+		}
+
+		if (create_redirect_node) {
 			// check if a redirect node is already created
 			bool found_redirect_node = false;
 			for (auto const& child_node : node->children) {
