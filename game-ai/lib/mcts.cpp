@@ -172,6 +172,27 @@ TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move &next_move,
 	return this->board_node_map.Find(next_board, *this);
 }
 
+TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node)
+{
+	// check if a redirect node is already created
+	for (auto const& child_node : parent->children) {
+		if (child_node->equivalent_node == target_node) {
+			return child_node;
+		}
+	}
+
+	TreeNode * new_node = this->allocated_node;
+	this->allocated_node = new TreeNode;
+
+	new_node->move = move;
+	new_node->wins = 0;
+	new_node->count = 0;
+	new_node->equivalent_node = target_node;
+	parent->AddChild(new_node);
+
+	return new_node;
+}
+
 // return false if 'new_node' is an expanded node
 bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 {
@@ -195,39 +216,20 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 
 	if (found_node)
 	{
-		this->traversed_nodes.push_back(found_node);
-
-		bool create_redirect_node = false;
-
-		if (found_node->parent != node) {
-			// expanded before in other paths
-			// --> create a redirect node
-			create_redirect_node = true;
-		}
-
-		if (found_node->equivalent_node != nullptr) {
-			found_node = found_node->equivalent_node;
-		}
-
-		if (create_redirect_node) {
-			// check if a redirect node is already created
-			bool found_redirect_node = false;
-			for (auto const& child_node : node->children) {
-				if (child_node->equivalent_node == found_node) {
-					found_redirect_node = true;
-					break;
-				}
+		if (found_node->parent == node) {
+			// expanded before in the same parent --> no need to create a new redirect node
+			this->traversed_nodes.push_back(found_node);
+			if (found_node->equivalent_node != nullptr) {
+				found_node = found_node->equivalent_node;
 			}
-			if (found_redirect_node == false) {
-				TreeNode * new_node = this->allocated_node;
-				this->allocated_node = new TreeNode;
-
-				new_node->move = new_move;
-				new_node->wins = 0;
-				new_node->count = 0;
-				new_node->equivalent_node = found_node;
-				node->AddChild(new_node);
+		}
+		else {
+			// expanded before in other paths --> create a redirect node
+			if (found_node->equivalent_node != nullptr) {
+				found_node = found_node->equivalent_node;
 			}
+			TreeNode * redirect_node = this->CreateRedirectNode(node, new_move, found_node);
+			this->traversed_nodes.push_back(redirect_node);
 		}
 
 		node = found_node;
