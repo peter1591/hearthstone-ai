@@ -126,7 +126,7 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 	}
 }
 
-void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Board &board, bool & introduced_random)
+void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngine::Move &next_move)
 {
 #ifdef DEBUG_SAVE_BOARD
 	if (node->board != board) {
@@ -136,8 +136,7 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
 	{
-		move = GameEngine::Move::GetGameFlowMove(this->GetRandom());
-		board.ApplyMove(move, &introduced_random);
+		next_move = GameEngine::Move::GetGameFlowMove(this->GetRandom());
 	}
 	else {
 		if (node->children.empty()) {
@@ -148,17 +147,9 @@ void MCTS::GetNextState(TreeNode *node, GameEngine::Move &move, GameEngine::Boar
 #endif
 		}
 
-		if (node->next_move_getter.GetNextMove(move) == false) {
-			throw std::runtime_error("a node with no non-expanded move should not be selected to be expanded");
+		if (node->next_move_getter.GetNextMove(next_move) == false) {
+			throw std::runtime_error("a node with no expandable move should not be selected to be expanded");
 		}
-
-#ifdef DEBUG
-		board.ApplyMove(move, &introduced_random);
-		if (introduced_random) throw std::runtime_error("non-game-flow node should be deterministic!");
-#else
-		board.ApplyMove(move);
-		introduced_random = false;
-#endif
 	}
 }
 
@@ -173,10 +164,12 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
 #endif
 
-	bool introduced_random;
 	auto & new_move = this->allocated_node->move;
 
-	this->GetNextState(node, new_move, board, introduced_random);
+	this->GetNextMove(node, board, new_move);
+
+	bool introduced_random;
+	board.ApplyMove(new_move, &introduced_random);
 	// Note: now the 'board' is the node 'node' plus the move 'new_move'
 
 	TreeNode *found_node = nullptr;
