@@ -87,6 +87,33 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	this->board_node_map.Add(board, &tree.GetRootNode());
 }
 
+TreeNode * MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Move & best_move)
+{
+	if (parent->children.empty()) return nullptr; // not yet expanded before
+
+	if (!parent->next_moves_are_random) {
+		// next moves are deterministic, and they are stored in next_move_getter
+
+#ifdef DEBUG
+		if (parent->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) throw std::runtime_error("game-flow stages should all with non-deterministic next moves");
+#endif
+
+		if (!parent->next_move_getter.Empty()) return nullptr; // not fully-expanded yet
+
+		TreeNode * best_child = ::FindBestChildToExpand(parent);
+#ifdef DEBUG
+		if (best_child == nullptr) throw std::runtime_error("cannot find best child to expand");
+#endif
+		return best_child;
+	}
+
+	// next moves are non-deterministic
+	// --> get new next moves
+	// --> expand them
+	// we done these in Expand()
+	return nullptr;
+}
+
 void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 {
 #ifdef DEBUG
@@ -95,13 +122,11 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 
 	while (true)
 	{
-		if (node->children.empty()) return; // not yet expanded before
+		GameEngine::Move best_move;
 
-		if (!node->next_moves_are_random && !node->next_move_getter.Empty()) return; // not fully-expanded yet
-
-		if (node->next_moves_are_random) return; // try to get the new next moves in Expand()
-
-		node = FindBestChildToExpand(node);
+		TreeNode * best_child = this->FindBestChildToExpand(node, best_move);
+		if (best_child == nullptr) return; // need to expand
+		node = best_child;
 
 		this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
 
