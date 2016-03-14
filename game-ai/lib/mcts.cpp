@@ -151,7 +151,7 @@ void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngin
 	}
 }
 
-TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move &next_move, GameEngine::Board const& next_board, bool introduced_random)
+TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random)
 {
 	// quickly find node by move
 	if (introduced_random == false && node->children.empty() == false) {

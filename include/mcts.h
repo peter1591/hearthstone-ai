@@ -39,7 +39,7 @@ private:
 
 	void GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngine::Move &next_move);
 	int GetRandom();
-	TreeNode * FindDuplicateNode(TreeNode * node, GameEngine::Move &next_move, GameEngine::Board const& next_board, bool introduced_random);
+	TreeNode * FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random);
 	TreeNode * CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 
 private: // for internal use
