@@ -49,6 +49,7 @@ public:
 
 	// only valid if this node is expanded (i.e., has children)
 	GameEngine::NextMoveGetter next_move_getter;
+	bool next_moves_are_random; // The next moves might differ from time to time. E.g., game-flow moves
 };
 
 class Tree

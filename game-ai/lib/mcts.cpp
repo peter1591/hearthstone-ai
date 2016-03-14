@@ -104,9 +104,7 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 			return;
 		}
 
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			return;
-		}
+		if (node->next_moves_are_random) return; // try to get the new next moves in Expand()
 
 		if (!node->next_move_getter.Empty()) {
 			return;
@@ -134,7 +132,7 @@ void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngin
 
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
 	{
-		board.GetNextMoves(this->GetRandom(), next_move);
+		board.GetNextMoves(this->GetRandom(), next_move, &node->next_moves_are_random);
 	}
 	else {
 		if (node->children.empty()) {
@@ -148,6 +146,8 @@ void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngin
 		if (node->next_move_getter.GetNextMove(next_move) == false) {
 			throw std::runtime_error("a node with no expandable move should not be selected to be expanded");
 		}
+
+		node->next_moves_are_random = false; // currently the next-move-getter is deterministic
 	}
 }
 
@@ -208,11 +208,11 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 
 	this->GetNextMove(node, board, new_move);
 
-	bool introduced_random;
-	board.ApplyMove(new_move, &introduced_random);
+	bool next_board_is_random;
+	board.ApplyMove(new_move, &next_board_is_random);
 	// Note: now the 'board' is the node 'node' plus the move 'new_move'
 
-	TreeNode *found_node = this->FindDuplicateNode(node, new_move, board, introduced_random);
+	TreeNode *found_node = this->FindDuplicateNode(node, new_move, board, next_board_is_random);
 
 	if (found_node)
 	{

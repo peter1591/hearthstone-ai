@@ -51,7 +51,7 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
-inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move) const
+inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool * introduced_random) const
 {
 	static Move game_flow_move;
 
@@ -59,6 +59,7 @@ inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_
 	case STAGE_TYPE_GAME_FLOW:
 		next_move.action = GameEngine::Move::ACTION_GAME_FLOW;
 		next_move.data.game_flow_data.rand_seed = rand_seed;
+		if (introduced_random) *introduced_random = true;
 		return;
 
 	case STAGE_TYPE_GAME_END:
@@ -95,10 +96,10 @@ inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 {
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
-		throw std::runtime_error("You can not choose a good move when in a game-flow stage.");
+		throw std::runtime_error("You cannot choose a good move when in a game-flow stage.");
 
 	case STAGE_TYPE_GAME_END:
-		throw std::runtime_error("You can not choose a good move when in a game-end stage.");
+		throw std::runtime_error("You cannot choose a good move when in a game-end stage.");
 
 	case STAGE_TYPE_PLAYER:
 	case STAGE_TYPE_OPPONENT:
