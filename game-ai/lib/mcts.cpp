@@ -37,7 +37,10 @@ static double CalculateSelectionWeight(TreeNode *node, double total_simulations_
 	return win_rate + exploration_factor * exploration_term;
 }
 
-static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration_factor = EXLPORATION_FACTOR)
+static TreeNode *FindBestChildToExpand(
+	TreeNode *parent_node,
+	double exploration_factor = EXLPORATION_FACTOR,
+	std::function<bool(TreeNode*)> * is_valid_child = nullptr)
 {
 	const TreeNode::children_type &children = parent_node->children;
 	const int &total_simulations = parent_node->count;
@@ -46,12 +49,13 @@ static TreeNode *FindBestChildToExpand(TreeNode *parent_node, double exploration
 
 	double total_simulations_ln = log((double)total_simulations);
 
-	TreeNode * max_weight_node = *it_child;
+	TreeNode * max_weight_node = nullptr;
 
-	double max_weight = CalculateSelectionWeight(max_weight_node, total_simulations_ln, exploration_factor);
-	++it_child;
+	double max_weight = -std::numeric_limits<double>::max();
 
 	for (; it_child != children.end(); ++it_child) {
+		if (is_valid_child && (*is_valid_child)(*it_child)) continue;
+
 		double weight = CalculateSelectionWeight(*it_child, total_simulations_ln, exploration_factor);
 		if (weight > max_weight) {
 			max_weight = weight;
