@@ -87,26 +87,29 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	this->board_node_map.Add(board, &tree.GetRootNode());
 }
 
+bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
+{
+	GameEngine::Move & expanding_move = this->allocated_node->move;
+
+	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
+		board.GetNextMoves(this->GetRandom(), expanding_move, &node->next_moves_are_random);
+	}
+	else {
+		board.GetNextMoves(node->next_move_getter);
+		if (node->next_move_getter.GetNextMove(expanding_move) == false) {
+			throw std::runtime_error("should at least return one possible move");
+		}
+		node->next_moves_are_random = false; // currently the next-move-getter is deterministic
+	}
+	return this->Expand(node, board, expanding_move);
+
+}
+
 // return true if a new node is added; 'node' and 'board' will be the new node
 // return false if an existing node is chosen; 'node' and 'board' will be the existing node
 bool MCTS::ExpandBestChild(TreeNode * & node, GameEngine::Board & board)
 {
 	GameEngine::Move & expanding_move = this->allocated_node->move;
-
-	if (node->children.empty()) {
-		// not expanded before
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			board.GetNextMoves(this->GetRandom(), expanding_move, &node->next_moves_are_random);
-		}
-		else {
-			board.GetNextMoves(node->next_move_getter);
-			if (node->next_move_getter.GetNextMove(expanding_move) == false) {
-				throw std::runtime_error("should at least return one possible move");
-			}
-			node->next_moves_are_random = false; // currently the next-move-getter is deterministic
-		}
-		return this->Expand(node, board, expanding_move);
-	}
 
 	if (!node->next_moves_are_random) {
 		// next moves are deterministic, and they are stored in next_move_getter
@@ -168,8 +171,12 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) return;
 
-		if (this->ExpandBestChild(node, board)) {
-			return; // expand successfully
+		if (node->children.empty()) {
+			// not expanded before
+			if (this->ExpandNewNode(node, board)) return; // expanded successfully
+		}
+		else {
+			if (this->ExpandBestChild(node, board)) return; // expand successfully
 		}
 	}
 }
