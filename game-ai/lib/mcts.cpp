@@ -240,7 +240,7 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 	this->allocated_node = new TreeNode;
 
 	new_node->equivalent_node = nullptr;
-	new_node->move = new_move;
+	//new_node->move = new_move; // we've already done this, since new_move is a reference to new_node->move
 	new_node->wins = 0;
 	new_node->count = 0;
 	new_node->stage = board.GetStage();
