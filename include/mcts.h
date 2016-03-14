@@ -41,7 +41,8 @@ private:
 	TreeNode * FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random);
 	TreeNode * CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 	bool ExpandNewNode(TreeNode * & node, GameEngine::Board & board);
-	bool ExpandBestChild(TreeNode * & node, GameEngine::Board & board);
+	bool ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board & board);
+	bool ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
 	TreeNode *allocated_node;
