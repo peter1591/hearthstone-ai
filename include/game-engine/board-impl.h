@@ -51,13 +51,36 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
+inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move) const
+{
+	static Move game_flow_move;
+
+	switch (this->GetStageType()) {
+	case STAGE_TYPE_GAME_FLOW:
+		next_move.action = GameEngine::Move::ACTION_GAME_FLOW;
+		next_move.data.game_flow_data.rand_seed = rand_seed;
+		return;
+
+	case STAGE_TYPE_GAME_END:
+		throw std::runtime_error("Game end stage has no next move");
+
+	case STAGE_TYPE_PLAYER:
+	case STAGE_TYPE_OPPONENT:
+		throw std::runtime_error("This is not a game flow stage, you should call GetNextMoves() and get the next-move-getter");
+
+	default:
+		throw std::runtime_error("Unhandled case in GetNextMoves()");
+	}
+}
+
 inline void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
 {
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:
-			throw std::runtime_error("This is a game flow stage, you should skip the GetNextMoves() call, and apply the Move::GetGameFlowMove() directly.");
+			throw std::runtime_error("This is a game flow stage, you should call the GetNextMove() to get the next move directly.");
+
 		case STAGE_TYPE_GAME_END:
-			return;
+			throw std::runtime_error("Game end stage has no next move");
 
 		case STAGE_TYPE_PLAYER:
 		case STAGE_TYPE_OPPONENT:
@@ -72,9 +95,10 @@ inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 {
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
-		throw std::runtime_error("This is a game flow stage, you should skip the GetNextMoves() call, and apply the Move::GetGameFlowMove() directly.");
+		throw std::runtime_error("You can not choose a good move when in a game-flow stage.");
+
 	case STAGE_TYPE_GAME_END:
-		return;
+		throw std::runtime_error("You can not choose a good move when in a game-end stage.");
 
 	case STAGE_TYPE_PLAYER:
 	case STAGE_TYPE_OPPONENT:

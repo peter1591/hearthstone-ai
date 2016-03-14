@@ -134,7 +134,7 @@ void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngin
 
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
 	{
-		next_move = GameEngine::Move::GetGameFlowMove(this->GetRandom());
+		board.GetNextMoves(this->GetRandom(), next_move);
 	}
 	else {
 		if (node->children.empty()) {
@@ -271,12 +271,12 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 bool MCTS::Simulate(GameEngine::Board &board)
 {
 	while (true) {
-		std::vector<GameEngine::Move> next_moves;
-
 		GameEngine::StageType stage_type = board.GetStageType();
 
 		if (stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-			board.ApplyMove(GameEngine::Move::GetGameFlowMove(this->GetRandom()));
+			GameEngine::Move next_move;
+			board.GetNextMoves(this->GetRandom(), next_move);
+			board.ApplyMove(next_move);
 
 		} else if (stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 			return (board.GetStage() == GameEngine::STAGE_WIN);

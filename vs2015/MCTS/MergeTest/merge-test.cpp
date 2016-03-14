@@ -214,7 +214,7 @@ static void InteractiveTest()
 				ss << str_rand_seed;
 				ss >> rand_seed;
 			}
-			next_move = GameEngine::Move::GetGameFlowMove(rand_seed);
+			board.GetNextMoves(rand_seed, next_move);
 		}
 		else
 		{
