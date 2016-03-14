@@ -91,11 +91,11 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 
 	while (true)
 	{
-		if (node->children.empty()) return;
+		if (node->children.empty()) return; // not yet expanded before
+
+		if (!node->next_moves_are_random && !node->next_move_getter.Empty()) return; // not fully-expanded yet
 
 		if (node->next_moves_are_random) return; // try to get the new next moves in Expand()
-
-		if (!node->next_move_getter.Empty()) return;
 
 		node = FindBestChildToExpand(node);
 
