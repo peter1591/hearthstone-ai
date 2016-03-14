@@ -32,8 +32,8 @@ public:
 	BoardNodeMap board_node_map;
 
 private:
-	void Select(TreeNode* & node, GameEngine::Board & board);
-	bool Expand(TreeNode* & node, GameEngine::Board & board);
+	bool Select(TreeNode* & node, GameEngine::Board & board, GameEngine::Move & expanding_move);
+	bool Expand(TreeNode* & node, GameEngine::Board & board, GameEngine::Move const& expanding_move);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 
@@ -41,7 +41,7 @@ private:
 	int GetRandom();
 	TreeNode * FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random);
 	TreeNode * CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
-	TreeNode * FindBestChildToExpand(TreeNode * parent, GameEngine::Move & best_move);
+	TreeNode * FindBestChildToExpand(TreeNode * parent, GameEngine::Board const& parent_board, GameEngine::Move & best_move);
 
 private: // for internal use
 	TreeNode *allocated_node;
