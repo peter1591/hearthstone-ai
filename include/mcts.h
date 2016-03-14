@@ -33,7 +33,10 @@ public:
 
 private:
 	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
-	bool Expand(TreeNode* const node, GameEngine::Board & board, GameEngine::Move const& expanding_move, TreeNode* & new_node);
+	bool Expand(
+		TreeNode* const node,
+		GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random,
+		TreeNode* & new_node);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 

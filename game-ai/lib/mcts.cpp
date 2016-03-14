@@ -103,8 +103,12 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	}
 
 	TreeNode * new_node;
-	bool ret = this->Expand(node, board, expanding_move, new_node);
+	bool next_board_is_random;
+
+	board.ApplyMove(expanding_move, &next_board_is_random);
+	bool ret = this->Expand(node, expanding_move, board, next_board_is_random, new_node);
 	node = new_node;
+
 	return ret;
 }
 
@@ -121,8 +125,12 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 	if (node->next_move_getter.GetNextMove(expanding_move)) {
 		// not fully expanded yet
 		TreeNode * new_node;
-		bool ret = this->Expand(node, board, expanding_move, new_node);
+		bool next_board_is_random;
+
+		board.ApplyMove(expanding_move, &next_board_is_random);
+		bool ret = this->Expand(node, expanding_move, board, next_board_is_random, new_node);
 		node = new_node;
+
 		return ret;
 	}
 
@@ -168,8 +176,12 @@ bool MCTS::ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & boar
 #endif
 
 	TreeNode * new_node;
-	bool ret = this->Expand(node, board, expanding_move, new_node);
+	bool next_board_is_random;
+
+	board.ApplyMove(expanding_move, &next_board_is_random);
+	bool ret = this->Expand(node, expanding_move, board, next_board_is_random, new_node);
 	node = new_node;
+
 	return ret;
 }
 
@@ -239,15 +251,16 @@ TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& m
 }
 
 // return false if 'new_node' is an expanded node
-bool MCTS::Expand(TreeNode* const node, GameEngine::Board & board, GameEngine::Move const& expanding_move, TreeNode* & new_node)
+bool MCTS::Expand(
+	TreeNode* const node,
+	GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random,
+	TreeNode* & new_node)
 {
-	bool next_board_is_random;
-	board.ApplyMove(expanding_move, &next_board_is_random);
-	// Note: now the 'board' is the node 'node' plus the move 'new_move'
+	// Note: now the 'next_board' is the node 'node' plus the move 'next_move'
 
-	TreeNode *found_node = this->FindDuplicateNode(node, expanding_move, board, next_board_is_random);
+	TreeNode *found_node = this->FindDuplicateNode(node, next_move, next_board, next_board_is_random);
 
-	if (found_node == nullptr) found_node = this->board_node_map.Find(board, *this);
+	if (found_node == nullptr) found_node = this->board_node_map.Find(next_board, *this);
 
 	if (found_node)
 	{
@@ -263,7 +276,7 @@ bool MCTS::Expand(TreeNode* const node, GameEngine::Board & board, GameEngine::M
 			if (found_node->equivalent_node != nullptr) {
 				found_node = found_node->equivalent_node;
 			}
-			TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, found_node);
+			TreeNode * redirect_node = this->CreateRedirectNode(node, next_move, found_node);
 			this->traversed_nodes.push_back(redirect_node);
 		}
 
@@ -276,13 +289,13 @@ bool MCTS::Expand(TreeNode* const node, GameEngine::Board & board, GameEngine::M
 
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
-	if (&new_node->move != &expanding_move) throw std::runtime_error("it should be");
+	if (&new_node->move != &next_move) throw std::runtime_error("it should be");
 	//new_node->move = expanding_move; // we've already done this, since new_move is a reference to new_node->move
 #endif
 	new_node->wins = 0;
 	new_node->count = 0;
-	new_node->stage = board.GetStage();
-	new_node->stage_type = board.GetStageType();
+	new_node->stage = next_board.GetStage();
+	new_node->stage_type = next_board.GetStageType();
 
 	if (new_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
 		new_node->is_player_node = true;
@@ -296,7 +309,7 @@ bool MCTS::Expand(TreeNode* const node, GameEngine::Board & board, GameEngine::M
 
 	node->AddChild(new_node);
 
-	this->board_node_map.Add(board, new_node);
+	this->board_node_map.Add(next_board, new_node);
 	this->traversed_nodes.push_back(new_node);
 
 	return true;
