@@ -170,29 +170,6 @@ bool MCTS::Select(TreeNode* & node, GameEngine::Board & board, GameEngine::Move 
 	}
 }
 
-void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngine::Move &next_move)
-{
-	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
-	{
-		board.GetNextMoves(this->GetRandom(), next_move, &node->next_moves_are_random);
-	}
-	else {
-		if (node->children.empty()) {
-			board.GetNextMoves(node->next_move_getter);
-
-#ifdef DEBUG
-			if (node->next_move_getter.Empty()) throw std::runtime_error("should at least return one possible move");
-#endif
-		}
-
-		if (node->next_move_getter.GetNextMove(next_move) == false) {
-			throw std::runtime_error("a node with no expandable move should not be selected to be expanded");
-		}
-
-		node->next_moves_are_random = false; // currently the next-move-getter is deterministic
-	}
-}
-
 TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random)
 {
 	// quickly find node by move
