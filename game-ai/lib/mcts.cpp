@@ -146,18 +146,24 @@ TreeNode * MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Board cons
 	return nullptr;
 }
 
-bool MCTS::Select(TreeNode* & node, GameEngine::Board & board, GameEngine::Move & expanding_move)
+void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 {
-#ifdef DEBUG
-	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
-#endif
-
 	while (true)
 	{
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) return false;
+#ifdef DEBUG
+		if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
+#endif
+
+		GameEngine::Move & expanding_move = this->allocated_node->move;
+
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) return;
 
 		TreeNode * best_child = this->FindBestChildToExpand(node, board, expanding_move);
-		if (best_child == nullptr) return true; // need to expand
+		if (best_child == nullptr) {
+			// need to expand
+			if (this->Expand(node, board, expanding_move)) return;
+			continue;
+		}
 		node = best_child;
 
 		this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
@@ -174,7 +180,7 @@ TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move const& next
 {
 	// quickly find node by move
 	if (introduced_random == false && node->children.empty() == false) {
-		// a deterministic node --> find in children node with 'move'
+		// a deterministic node --> find in children node with 'next_move'
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
 #ifdef DEBUG
 			if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
@@ -188,7 +194,7 @@ TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move const& next
 		}
 	}
 
-	return this->board_node_map.Find(next_board, *this);
+	return nullptr;
 }
 
 TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node)
@@ -224,6 +230,8 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board, GameEngine::Move 
 	// Note: now the 'board' is the node 'node' plus the move 'new_move'
 
 	TreeNode *found_node = this->FindDuplicateNode(node, expanding_move, board, next_board_is_random);
+
+	if (found_node == nullptr) found_node = this->board_node_map.Find(board, *this);
 
 	if (found_node)
 	{
@@ -330,15 +338,7 @@ void MCTS::Iterate()
 
 	this->traversed_nodes.push_back(node);
 
-	// loop if expand a duplicated node
-	while (true) {
-		GameEngine::Move & expanding_move = this->allocated_node->move;
-
-		if (this->Select(node, board, expanding_move) == false) break;
-
-		if (this->Expand(node, board, expanding_move)) break;
-	}
-
+	this->SelectAndExpand(node, board);
 	bool is_win = this->Simulate(board);
 	this->BackPropagate(is_win);
 }

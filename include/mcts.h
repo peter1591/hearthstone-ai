@@ -32,7 +32,7 @@ public:
 	BoardNodeMap board_node_map;
 
 private:
-	bool Select(TreeNode* & node, GameEngine::Board & board, GameEngine::Move & expanding_move);
+	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
 	bool Expand(TreeNode* & node, GameEngine::Board & board, GameEngine::Move const& expanding_move);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
