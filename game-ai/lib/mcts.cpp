@@ -67,9 +67,6 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	srand(rand_seed);
 
 	this->root_node_board = GameEngine::Board::Clone(board);
-#ifdef DEBUG_SAVE_BOARD
-	tree.GetRootNode().board = board;
-#endif
 	tree.GetRootNode().stage = board.GetStage();
 	tree.GetRootNode().stage_type = board.GetStageType();
 	tree.GetRootNode().parent = nullptr;
@@ -94,21 +91,13 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 
 	while (true)
 	{
-#ifdef DEBUG_SAVE_BOARD
-		if (new_board != new_node->board) {
-			throw std::runtime_error("board consistency check failed");
-		}
-#endif
-
 		if (node->children.empty()) {
 			return;
 		}
 
 		if (node->next_moves_are_random) return; // try to get the new next moves in Expand()
 
-		if (!node->next_move_getter.Empty()) {
-			return;
-		}
+		if (!node->next_move_getter.Empty()) return;
 
 		node = FindBestChildToExpand(node);
 
@@ -124,12 +113,6 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 
 void MCTS::GetNextMove(TreeNode *node, GameEngine::Board const& board, GameEngine::Move &next_move)
 {
-#ifdef DEBUG_SAVE_BOARD
-	if (node->board != board) {
-		throw std::runtime_error("board consistency check failed");
-	}
-#endif
-
 	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW)
 	{
 		board.GetNextMoves(this->GetRandom(), next_move, &node->next_moves_are_random);
@@ -245,9 +228,6 @@ bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 	new_node->count = 0;
 	new_node->stage = board.GetStage();
 	new_node->stage_type = board.GetStageType();
-#ifdef DEBUG_SAVE_BOARD
-	new_node->board = board;
-#endif
 
 	if (new_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
 		new_node->is_player_node = true;

@@ -203,9 +203,6 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 	for (int i = 1; i < progress.size(); i++) {
 		if (progress[i].node->stage != progress[0].node->stage) throw std::runtime_error("consistency check failed");
 		if (progress[i].node->stage_type != progress[0].node->stage_type) throw std::runtime_error("consistency check failed");
-#ifdef DEBUG_SAVE_BOARD
-		if (progress[i].node->board != progress[0].node->board) throw std::runtime_error("consistency check failed");
-#endif
 	}
 #endif
 

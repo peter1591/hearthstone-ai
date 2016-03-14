@@ -28,9 +28,6 @@ public:
 public:
 	GameEngine::Stage stage;
 	GameEngine::StageType stage_type;
-#ifdef DEBUG_SAVE_BOARD
-	GameEngine::Board board;
-#endif
 
 	// what move lead us from parent to this state?
 	GameEngine::Move move;
@@ -96,12 +93,6 @@ inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEng
 
 	this->parent->GetBoard(root_node_board, board);
 	board.ApplyMove(this->move);
-
-#ifdef DEBUG_SAVE_BOARD
-	if (board != this->board) {
-		throw std::runtime_error("node board not match");
-	}
-#endif
 }
 
 inline Tree::Tree()
