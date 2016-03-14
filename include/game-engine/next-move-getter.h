@@ -88,8 +88,6 @@ public:
 	};
 
 public:
-	NextMoveGetter();
-
 	void AddItem(Move const& move);
 	void AddItem(Move && move);
 	void AddItem(ItemAttack && items);
@@ -121,17 +119,9 @@ private:
 	std::list<ItemOpponentPlayMinion> items_opponent_play_minion;
 	std::list<ItemPlayerEquipWeapon> items_player_equip_weapon;
 	std::list<ItemOpponentEquipWeapon> items_opponent_equip_weapon;
-
-	bool is_cached_move_valid;
-	Move cached_move;
 };
 
 } // namespace GameEngine
-
-inline GameEngine::NextMoveGetter::NextMoveGetter()
-	: is_cached_move_valid(false)
-{
-}
 
 template<typename T>
 inline bool GameEngine::NextMoveGetter::IsEqual(std::list<T> const & lhs, std::list<T> const & rhs)
@@ -233,13 +223,6 @@ inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& c
 
 inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
 {
-	if (this->is_cached_move_valid)
-	{
-		move = this->cached_move;
-		this->is_cached_move_valid = false;
-		return true;
-	}
-
 	if (!this->moves.empty()) {
 		move = this->moves.back();
 		this->moves.pop_back();
@@ -268,15 +251,6 @@ inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) c
 inline bool GameEngine::NextMoveGetter::operator!=(NextMoveGetter const & rhs) const
 {
 	return !(*this == rhs);
-}
-
-inline bool GameEngine::NextMoveGetter::Empty()
-{
-	if (this->is_cached_move_valid) return false;
-	if (this->GetNextMove(this->cached_move) == false) return true;
-
-	this->is_cached_move_valid = true;
-	return false;
 }
 
 inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
