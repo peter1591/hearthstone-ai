@@ -87,9 +87,11 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 	this->board_node_map.Add(board, &tree.GetRootNode());
 }
 
+
+
 // if an existing child is chosen for expansion, returns the node
 // if a new child should be created for expansion, the 'best_move' is filled, and returns nullptr
-TreeNode * MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Board const& parent_board, GameEngine::Move & best_move)
+void MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Board const& parent_board, TreeNode * & best_child, GameEngine::Move & best_move)
 {
 	if (parent->children.empty()) {
 		// not expanded before
@@ -103,7 +105,8 @@ TreeNode * MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Board cons
 			}
 			parent->next_moves_are_random = false; // currently the next-move-getter is deterministic
 		}
-		return nullptr;
+		best_child = nullptr;
+		return;
 	}
 
 	if (!parent->next_moves_are_random) {
@@ -114,14 +117,15 @@ TreeNode * MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Board cons
 #endif
 
 		if (parent->next_move_getter.GetNextMove(best_move)) {
-			return nullptr; // not fully expanded yet
+			best_child = nullptr;
+			return; // not fully expanded yet
 		}
 
-		TreeNode * best_child = ::FindBestChildToExpand(parent);
+		best_child = ::FindBestChildToExpand(parent);
 #ifdef DEBUG
 		if (best_child == nullptr) throw std::runtime_error("cannot find best child to expand");
 #endif
-		return best_child;
+		return;
 	}
 
 	// next moves are non-deterministic
@@ -143,7 +147,8 @@ TreeNode * MCTS::FindBestChildToExpand(TreeNode * parent, GameEngine::Board cons
 	}
 #endif
 
-	return nullptr;
+	best_child = nullptr;
+	return;
 }
 
 void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
@@ -158,7 +163,8 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) return;
 
-		TreeNode * best_child = this->FindBestChildToExpand(node, board, expanding_move);
+		TreeNode * best_child = nullptr;
+		this->FindBestChildToExpand(node, board, best_child, expanding_move);
 		if (best_child == nullptr) {
 			// need to expand
 			if (this->Expand(node, board, expanding_move)) return;

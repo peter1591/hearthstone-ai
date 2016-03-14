@@ -40,7 +40,7 @@ private:
 	int GetRandom();
 	TreeNode * FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random);
 	TreeNode * CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
-	TreeNode * FindBestChildToExpand(TreeNode * parent, GameEngine::Board const& parent_board, GameEngine::Move & best_move);
+	void FindBestChildToExpand(TreeNode * parent, GameEngine::Board const& parent_board, TreeNode * & best_child, GameEngine::Move & best_move);
 
 private: // for internal use
 	TreeNode *allocated_node;
