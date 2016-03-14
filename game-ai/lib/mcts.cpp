@@ -106,7 +106,7 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	bool next_board_is_random;
 
 	board.ApplyMove(expanding_move, &next_board_is_random);
-	bool ret = this->Expand(node, expanding_move, board, next_board_is_random, new_node);
+	bool ret = this->CreateChildNode(node, expanding_move, board, next_board_is_random, new_node);
 	node = new_node;
 
 	return ret;
@@ -128,7 +128,7 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 		bool next_board_is_random;
 
 		board.ApplyMove(expanding_move, &next_board_is_random);
-		bool ret = this->Expand(node, expanding_move, board, next_board_is_random, new_node);
+		bool ret = this->CreateChildNode(node, expanding_move, board, next_board_is_random, new_node);
 		node = new_node;
 
 		return ret;
@@ -179,7 +179,7 @@ bool MCTS::ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & boar
 	bool next_board_is_random;
 
 	board.ApplyMove(expanding_move, &next_board_is_random);
-	bool ret = this->Expand(node, expanding_move, board, next_board_is_random, new_node);
+	bool ret = this->CreateChildNode(node, expanding_move, board, next_board_is_random, new_node);
 	node = new_node;
 
 	return ret;
@@ -251,7 +251,7 @@ TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& m
 }
 
 // return false if 'new_node' is an expanded node
-bool MCTS::Expand(
+bool MCTS::CreateChildNode(
 	TreeNode* const node,
 	GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random,
 	TreeNode* & new_node)
