@@ -91,9 +91,7 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 
 	while (true)
 	{
-		if (node->children.empty()) {
-			return;
-		}
+		if (node->children.empty()) return;
 
 		if (node->next_moves_are_random) return; // try to get the new next moves in Expand()
 
@@ -101,7 +99,7 @@ void MCTS::Select(TreeNode* & node, GameEngine::Board & board)
 
 		node = FindBestChildToExpand(node);
 
-		this->traversed_nodes.push_back(node); // back-propagate should update the node (not the redirected one)
+		this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
 
 		board.ApplyMove(node->move);
 
@@ -179,10 +177,6 @@ TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& m
 // return false if 'new_node' is an expanded node
 bool MCTS::Expand(TreeNode* & node, GameEngine::Board & board)
 {
-	if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
-		return true; // node cannot be expanded further (i.e., game-end)
-	}
-
 #ifdef DEBUG
 	if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
 #endif
@@ -305,6 +299,9 @@ void MCTS::Iterate()
 	// loop if expand a duplicated node
 	while (true) {
 		this->Select(node, board);
+
+		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) break;
+
 		if (this->Expand(node, board)) break;
 	}
 
