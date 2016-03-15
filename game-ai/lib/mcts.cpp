@@ -142,8 +142,10 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 		board.ApplyMove(expanding_move, &next_board_is_random);
 
 #ifdef DEBUG
-		if (this->FindDuplicateNode(node, expanding_move, board, next_board_is_random)) {
-			throw std::runtime_error("this move is generated, but next-move-getter returns it again!");
+		for (auto const& child : node->children) {
+			if (child->move == expanding_move) {
+				throw std::runtime_error("this move is generated, but next-move-getter returns it again!");
+			}
 		}
 #endif
 
@@ -281,27 +283,6 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 			if (this->ExpandNodeWithDeterministicMoves(node, board)) return;
 		}
 	}
-}
-
-TreeNode * MCTS::FindDuplicateNode(TreeNode * node, GameEngine::Move const& next_move, GameEngine::Board const& next_board, bool introduced_random)
-{
-	// quickly find node by move
-	if (introduced_random == false && node->children.empty() == false) {
-		// a deterministic node --> find in children node with 'next_move'
-		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-#ifdef DEBUG
-			if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
-#endif
-			return node->children.front();
-		}
-		else {
-			for (auto const& child : node->children) {
-				if (child->move == next_move) return child;
-			}
-		}
-	}
-
-	return nullptr;
 }
 
 TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node)
