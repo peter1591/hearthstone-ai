@@ -105,9 +105,18 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	bool next_board_is_random;
 	board.ApplyMove(expanding_move, &next_board_is_random);
 
-	TreeNode * transposition_node = this->HandleTransposition(node, expanding_move, board, next_board_is_random);
-	if (transposition_node != nullptr) {
-		// a transposition is found
+	// find transposition node (i.e., other node with the same board)
+	TreeNode *transposition_node = this->board_node_map.Find(board, *this);
+	if (transposition_node) {
+		// a transposition node is found
+#ifdef DEBUG
+		if (transposition_node->parent == node) throw std::runtime_error("logic error: 'node' should have no parent in ExpandNewNode()");
+		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
+#endif
+
+		TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
+		this->traversed_nodes.push_back(redirect_node);
+
 		node = transposition_node;
 		return false;
 	}
@@ -268,7 +277,6 @@ TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& m
 TreeNode* MCTS::HandleTransposition(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random)
 {
 	TreeNode *found_node = this->FindDuplicateNode(node, next_move, next_board, next_board_is_random);
-
 	if (found_node == nullptr) found_node = this->board_node_map.Find(next_board, *this);
 
 	if (!found_node) return nullptr;
