@@ -34,10 +34,7 @@ public:
 private:
 	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
 	TreeNode* HandleTransposition(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random);
-	bool CreateChildNode(
-		TreeNode* const node,
-		GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random,
-		TreeNode* & new_node);
+	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 

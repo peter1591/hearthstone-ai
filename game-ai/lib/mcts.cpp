@@ -102,14 +102,18 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 		node->next_moves_are_random = false; // currently the next-move-getter is deterministic
 	}
 
-	TreeNode * new_node;
 	bool next_board_is_random;
-
 	board.ApplyMove(expanding_move, &next_board_is_random);
-	bool ret = this->CreateChildNode(node, expanding_move, board, next_board_is_random, new_node);
-	node = new_node;
 
-	return ret;
+	TreeNode * transposition_node = this->HandleTransposition(node, expanding_move, board, next_board_is_random);
+	if (transposition_node != nullptr) {
+		// a transposition is found
+		node = transposition_node;
+		return false;
+	}
+
+	node = this->CreateChildNode(node, expanding_move, board);
+	return true;
 }
 
 bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board & board)
@@ -124,14 +128,19 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 
 	if (node->next_move_getter.GetNextMove(expanding_move)) {
 		// not fully expanded yet
-		TreeNode * new_node;
 		bool next_board_is_random;
 
 		board.ApplyMove(expanding_move, &next_board_is_random);
-		bool ret = this->CreateChildNode(node, expanding_move, board, next_board_is_random, new_node);
-		node = new_node;
 
-		return ret;
+		TreeNode * transposition_node = this->HandleTransposition(node, expanding_move, board, next_board_is_random);
+		if (transposition_node != nullptr) {
+			// a transposition is found
+			node = transposition_node;
+			return false;
+		}
+
+		node = this->CreateChildNode(node, expanding_move, board);
+		return true;
 	}
 
 	node = ::FindBestChildToExpand(node);
@@ -175,14 +184,18 @@ bool MCTS::ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & boar
 	}
 #endif
 
-	TreeNode * new_node;
 	bool next_board_is_random;
-
 	board.ApplyMove(expanding_move, &next_board_is_random);
-	bool ret = this->CreateChildNode(node, expanding_move, board, next_board_is_random, new_node);
-	node = new_node;
 
-	return ret;
+	TreeNode * transposition_node = this->HandleTransposition(node, expanding_move, board, next_board_is_random);
+	if (transposition_node != nullptr) {
+		// a transposition is found
+		node = transposition_node;
+		return false;
+	}
+
+	node = this->CreateChildNode(node, expanding_move, board);
+	return true;
 }
 
 void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
@@ -281,20 +294,11 @@ TreeNode* MCTS::HandleTransposition(TreeNode* const node, GameEngine::Move const
 
 // return true if a new (normal) node is created; 'new_node' will be the created new child
 // return false is a redirect node is created; 'new_node' will be the target node
-bool MCTS::CreateChildNode(
-	TreeNode* const node,
-	GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random,
-	TreeNode* & new_node)
+TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board)
 {
 	// Note: now the 'next_board' is the node 'node' plus the move 'next_move'
 
-	new_node = this->HandleTransposition(node, next_move, next_board, next_board_is_random);
-	if (new_node != nullptr) {
-		// a transposition is found
-		return false;
-	}
-
-	new_node = this->allocated_node;
+	TreeNode * new_node = this->allocated_node;
 	this->allocated_node = new TreeNode;
 
 	new_node->equivalent_node = nullptr;
@@ -322,7 +326,7 @@ bool MCTS::CreateChildNode(
 	this->board_node_map.Add(next_board, new_node);
 	this->traversed_nodes.push_back(new_node);
 
-	return true;
+	return new_node;
 }
 
 bool MCTS::Simulate(GameEngine::Board &board)
