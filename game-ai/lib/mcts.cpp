@@ -325,34 +325,6 @@ TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& m
 	return new_node;
 }
 
-// return the target node if a transposition is found
-// return nullptr if no transposition is found
-TreeNode* MCTS::HandleTransposition(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board, bool next_board_is_random)
-{
-	TreeNode *found_node = this->FindDuplicateNode(node, next_move, next_board, next_board_is_random);
-	if (found_node == nullptr) found_node = this->board_node_map.Find(next_board, *this);
-
-	if (!found_node) return nullptr;
-
-	if (found_node->parent == node) {
-		// expanded before in the same parent --> no need to create a new redirect node
-		this->traversed_nodes.push_back(found_node);
-		if (found_node->equivalent_node != nullptr) {
-			found_node = found_node->equivalent_node;
-		}
-	}
-	else {
-		// expanded before in other paths --> create a redirect node
-		if (found_node->equivalent_node != nullptr) {
-			found_node = found_node->equivalent_node;
-		}
-		TreeNode * redirect_node = this->CreateRedirectNode(node, next_move, found_node);
-		this->traversed_nodes.push_back(redirect_node);
-	}
-
-	return found_node;
-}
-
 // return true if a new (normal) node is created; 'new_node' will be the created new child
 // return false is a redirect node is created; 'new_node' will be the target node
 TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board)
