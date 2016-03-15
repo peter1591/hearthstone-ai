@@ -141,9 +141,28 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 
 		board.ApplyMove(expanding_move, &next_board_is_random);
 
-		TreeNode * transposition_node = this->HandleTransposition(node, expanding_move, board, next_board_is_random);
-		if (transposition_node != nullptr) {
-			// a transposition is found
+#ifdef DEBUG
+		if (this->FindDuplicateNode(node, expanding_move, board, next_board_is_random)) {
+			throw std::runtime_error("this move is generated, but next-move-getter returns it again!");
+		}
+#endif
+
+		TreeNode *transposition_node = this->board_node_map.Find(board, *this);
+		if (transposition_node) {
+#ifdef DEBUG
+			if (transposition_node->parent == node) {
+				// expanded before under the same parent but with different move
+				// --> no need to create a new redirect node
+				throw std::runtime_error("two different moves under the same parent yield identical game states, why is this happening?");
+				// Note: we can still create redirect node, but we want to know why this is happening
+			}
+			if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
+#endif
+
+			// create a redirect node
+			TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
+			this->traversed_nodes.push_back(redirect_node);
+
 			node = transposition_node;
 			return false;
 		}
