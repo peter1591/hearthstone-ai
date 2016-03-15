@@ -36,6 +36,9 @@ private:
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 
+	// return true if the stage uses next-move-getter to get next moves
+	bool UseNextMoveGetter(TreeNode * node);
+
 	int GetRandom();
 	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
 	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
