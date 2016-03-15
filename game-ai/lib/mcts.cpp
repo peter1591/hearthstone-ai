@@ -144,7 +144,7 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 #ifdef DEBUG
 		for (auto const& child : node->children) {
 			if (child->move == expanding_move) {
-				throw std::runtime_error("this move is generated, but next-move-getter returns it again!");
+				throw std::runtime_error("next-move-getter returns one particular move twice!");
 			}
 		}
 #endif
@@ -159,6 +159,12 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 				// Note: we can still create redirect node, but we want to know why this is happening
 			}
 			if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
+
+			for (auto const& child_node : node->children) {
+				if (child_node->equivalent_node == transposition_node) {
+					throw std::runtime_error("two different moves yield an identical board, why is this happening?");
+				}
+			}
 #endif
 
 			// create a redirect node
@@ -287,13 +293,6 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 
 TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node)
 {
-	// check if a redirect node is already created
-	for (auto const& child_node : parent->children) {
-		if (child_node->equivalent_node == target_node) {
-			return child_node;
-		}
-	}
-
 	TreeNode * new_node = this->allocated_node;
 	this->allocated_node = new TreeNode;
 
@@ -317,8 +316,8 @@ TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& n
 
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
-	if (&new_node->move != &next_move) throw std::runtime_error("it should be");
-	//new_node->move = expanding_move; // we've already done this, since new_move is a reference to new_node->move
+	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
+	//new_node->move = expanding_move; // optimized out
 #endif
 	new_node->wins = 0;
 	new_node->count = 0;

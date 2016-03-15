@@ -33,12 +33,12 @@ public:
 
 private:
 	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
-	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
 
 	int GetRandom();
-	TreeNode * CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
+	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
+	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 	bool ExpandNewNode(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & board);
