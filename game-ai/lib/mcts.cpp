@@ -201,72 +201,80 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 	return false;
 }
 
+bool MCTS::ExpandNodeWithSingleRandomMove(TreeNode * & node, GameEngine::Board & board)
+{
+	// we only have one possible next move,
+	// so we don't need to create redirect nodes
+	// Note: redirect nodes are important in the MCTS selection phase,
+	//       however, since we only have one possible next move,
+	//       we re-generate a new game-flow move, and follow it
+
+	GameEngine::Move & expanding_move = this->allocated_node->move;
+
+#ifdef DEBUG
+	bool prev_next_moves_are_random = node->next_moves_are_random;
+#endif
+	board.GetNextMoves(this->GetRandom(), expanding_move, &node->next_moves_are_random);
+#ifdef DEBUG
+	if (node->next_moves_are_random != prev_next_moves_are_random) {
+		throw std::runtime_error("parent->next_moves_are_random should not be altered.");
+	}
+#endif
+
+	bool next_board_is_random;
+	board.ApplyMove(expanding_move, &next_board_is_random);
+
+	TreeNode * transposition_node = nullptr;
+
+	if (next_board_is_random == false) {
+		// game-flow move is deterministic for this board
+		// --> that is, all game-flow moves are deterministic
+		// --> so, we have only one outcome
+
+#ifdef DEBUG
+		if (node->children.empty()) throw std::runtime_error("You should call ExpandNewNode() to expand at least once.");
+		if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
+#endif
+
+		transposition_node = node->children.front();
+
+		this->traversed_nodes.push_back(transposition_node);
+		if (transposition_node->equivalent_node != nullptr) {
+			transposition_node = transposition_node->equivalent_node;
+		}
+		node = transposition_node;
+		return false;
+	}
+
+	// game-flow move is non-determinsitic for this board
+	transposition_node = this->board_node_map.Find(board, *this);
+	if (transposition_node) {
+#ifdef DEBUG
+		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
+#endif
+
+		this->traversed_nodes.push_back(transposition_node);
+		node = transposition_node;
+		return false;
+	}
+
+	node = this->CreateChildNode(node, expanding_move, board);
+	return true;
+
+}
+
 // return true if a new node is added; 'node' and 'board' will be the new node
 // return false if an existing node is chosen; 'node' and 'board' will be the existing node
 bool MCTS::ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & board)
 {
 	GameEngine::Move & expanding_move = this->allocated_node->move;
 
-	if (this->UseNextMoveGetter(node)) {
-		throw std::runtime_error("currently only stages with only one next move are supported if the stage's next moves are random.");
+	if (!this->UseNextMoveGetter(node)) {
+		// quick process for special case
+		return this->ExpandNodeWithSingleRandomMove(node, board);
 	}
-	else {
-		// we only have one possible next move,
-		// so we don't need to create redirect nodes
-		// Note: redirect nodes are important in the MCTS selection phase,
-		//       however, since we only have one possible next move,
-		//       we re-generate a new game-flow move, and follow it
 
-#ifdef DEBUG
-		bool prev_next_moves_are_random = node->next_moves_are_random;
-#endif
-		board.GetNextMoves(this->GetRandom(), expanding_move, &node->next_moves_are_random);
-#ifdef DEBUG
-		if (node->next_moves_are_random != prev_next_moves_are_random) {
-			throw std::runtime_error("parent->next_moves_are_random should not be altered.");
-		}
-#endif
-
-		bool next_board_is_random;
-		board.ApplyMove(expanding_move, &next_board_is_random);
-
-		TreeNode * transposition_node = nullptr;
-
-		if (next_board_is_random == false) {
-			// game-flow move is deterministic for this board
-			// --> that is, all game-flow moves are deterministic
-			// --> so, we have only one outcome
-
-#ifdef DEBUG
-			if (node->children.empty()) throw std::runtime_error("You should call ExpandNewNode() to expand at least once.");
-			if (node->children.size() != 1) throw std::runtime_error("a deterministic game-flow move should only have one outcome (i.e., one child)!");
-#endif
-
-			transposition_node = node->children.front();
-
-			this->traversed_nodes.push_back(transposition_node);
-			if (transposition_node->equivalent_node != nullptr) {
-				transposition_node = transposition_node->equivalent_node;
-			}
-			node = transposition_node;
-			return false;
-		}
-
-		// game-flow move is non-determinsitic for this board
-		transposition_node = this->board_node_map.Find(board, *this);
-		if (transposition_node) {
-#ifdef DEBUG
-			if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
-#endif
-
-			this->traversed_nodes.push_back(transposition_node);
-			node = transposition_node;
-			return false;
-		}
-
-		node = this->CreateChildNode(node, expanding_move, board);
-		return true;
-	}
+	throw std::runtime_error("currently only stages with only one next move are supported if the stage's next moves are random.");
 }
 
 void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)

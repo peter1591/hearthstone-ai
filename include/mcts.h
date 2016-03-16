@@ -44,6 +44,7 @@ private:
 	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 	bool ExpandNewNode(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board & board);
+	bool ExpandNodeWithSingleRandomMove(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
