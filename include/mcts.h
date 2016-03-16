@@ -45,7 +45,7 @@ private:
 	bool ExpandNewNode(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Board & board);
-	bool ExpandNodeWithRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
+	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
 	TreeNode *allocated_node;

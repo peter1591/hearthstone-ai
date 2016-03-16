@@ -201,6 +201,8 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 	return false;
 }
 
+// return true if a new node is added; 'node' and 'board' will be the new node
+// return false if an existing node is chosen; 'node' and 'board' will be the existing node
 bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Board & board)
 {
 	// we only have one possible next move,
@@ -227,8 +229,8 @@ bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Boa
 	TreeNode * transposition_node = nullptr;
 
 	if (next_board_is_random == false) {
-		// game-flow move is deterministic for this board
-		// --> that is, all game-flow moves are deterministic
+		// the move is applied in a deterministic way
+		// --> that is, all moves are deterministic
 		// --> so, we have only one outcome
 
 #ifdef DEBUG
@@ -260,20 +262,12 @@ bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Boa
 
 	node = this->CreateChildNode(node, expanding_move, board);
 	return true;
-
 }
 
 // return true if a new node is added; 'node' and 'board' will be the new node
 // return false if an existing node is chosen; 'node' and 'board' will be the existing node
-bool MCTS::ExpandNodeWithRandomNextMoves(TreeNode * & node, GameEngine::Board & board)
+bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board)
 {
-	GameEngine::Move & expanding_move = this->allocated_node->move;
-
-	if (!this->UseNextMoveGetter(node)) {
-		// quick process for special case
-		return this->ExpandNodeWithSingleRandomNextMove(node, board);
-	}
-
 	throw std::runtime_error("currently only stages with only one next move are supported if the stage's next moves are random.");
 }
 
@@ -292,7 +286,13 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 			if (this->ExpandNewNode(node, board)) return;
 		}
 		else if (node->next_moves_are_random) {
-			if (this->ExpandNodeWithRandomNextMoves(node, board)) return;
+			if (!this->UseNextMoveGetter(node)) {
+				// quick process if we have only one next move
+				if (this->ExpandNodeWithSingleRandomNextMove(node, board)) return;
+			}
+			else {
+				if (this->ExpandNodeWithMultipleRandomNextMoves(node, board)) return;
+			}
 		}
 		else {
 			if (this->ExpandNodeWithDeterministicNextMoves(node, board)) return;
