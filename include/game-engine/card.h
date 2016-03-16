@@ -21,6 +21,13 @@ class Card
 			RARITY_UNKNOWN
 		};
 
+		enum SpecialCardIDs
+		{
+			SPECIAL_CARD_INVALID = -1,
+			SPECIAL_CARD_NORMAL_DRAW = -2,
+			SPECIAL_CARD_MULLIGAN_KEPT = -3
+		};
+
 	public:
 		bool operator==(const Card &rhs) const;
 		bool operator!=(const Card &rhs) const;
@@ -142,17 +149,27 @@ class Card
 
 inline bool Card::IsValid() const
 {
-	return this->id != 0;
+	return this->id > 0;
 }
 
 inline void Card::MarkInvalid()
 {
-	this->id = 0;
+	this->id = SPECIAL_CARD_INVALID;
 }
 
 inline std::string Card::GetDebugString() const
 {
-	if (!this->IsValid()) return "INVALID";
+	if (!this->IsValid()) {
+		switch (this->id) {
+		case SPECIAL_CARD_INVALID:
+			return "INVALID";
+		case SPECIAL_CARD_NORMAL_DRAW:
+			return "NORMAL_DRAW";
+		case SPECIAL_CARD_MULLIGAN_KEPT:
+			return "MULLIGAN_KEPT";
+		}
+		return "UNKNOWN";
+	}
 
 	std::ostringstream oss;
 
