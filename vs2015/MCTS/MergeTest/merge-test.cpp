@@ -222,9 +222,9 @@ static void InteractiveTest()
 
 			GameEngine::NextMoveGetter next_move_getter;
 			board.GetNextMoves(next_move_getter);
-			GameEngine::Move next_move;
-			while (next_move_getter.GetNextMove(next_move)) {
-				next_moves.push_back(next_move);
+			GameEngine::Move next_move_getter_result;
+			while (next_move_getter.GetNextMove(next_move_getter_result)) {
+				next_moves.push_back(next_move_getter_result);
 			}
 
 			while (true) {
