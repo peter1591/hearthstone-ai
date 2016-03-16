@@ -131,7 +131,7 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	return true;
 }
 
-bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board & board)
+bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::Board & board)
 {
 	// next moves are deterministic, and they are stored in next_move_getter
 
@@ -143,9 +143,6 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 
 	if (node->next_move_getter.GetNextMove(expanding_move)) {
 		// not fully expanded yet
-		bool next_board_is_random;
-
-		board.ApplyMove(expanding_move, &next_board_is_random);
 
 #ifdef DEBUG
 		for (auto const& child : node->children) {
@@ -154,6 +151,9 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 			}
 		}
 #endif
+
+		bool next_board_is_random;
+		board.ApplyMove(expanding_move, &next_board_is_random);
 
 		TreeNode *transposition_node = this->board_node_map.Find(board, *this);
 		if (transposition_node) {
@@ -201,7 +201,7 @@ bool MCTS::ExpandNodeWithDeterministicMoves(TreeNode * & node, GameEngine::Board
 	return false;
 }
 
-bool MCTS::ExpandNodeWithSingleRandomMove(TreeNode * & node, GameEngine::Board & board)
+bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Board & board)
 {
 	// we only have one possible next move,
 	// so we don't need to create redirect nodes
@@ -265,13 +265,13 @@ bool MCTS::ExpandNodeWithSingleRandomMove(TreeNode * & node, GameEngine::Board &
 
 // return true if a new node is added; 'node' and 'board' will be the new node
 // return false if an existing node is chosen; 'node' and 'board' will be the existing node
-bool MCTS::ExpandNodeWithRandomMoves(TreeNode * & node, GameEngine::Board & board)
+bool MCTS::ExpandNodeWithRandomNextMoves(TreeNode * & node, GameEngine::Board & board)
 {
 	GameEngine::Move & expanding_move = this->allocated_node->move;
 
 	if (!this->UseNextMoveGetter(node)) {
 		// quick process for special case
-		return this->ExpandNodeWithSingleRandomMove(node, board);
+		return this->ExpandNodeWithSingleRandomNextMove(node, board);
 	}
 
 	throw std::runtime_error("currently only stages with only one next move are supported if the stage's next moves are random.");
@@ -292,10 +292,10 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 			if (this->ExpandNewNode(node, board)) return;
 		}
 		else if (node->next_moves_are_random) {
-			if (this->ExpandNodeWithRandomMoves(node, board)) return;
+			if (this->ExpandNodeWithRandomNextMoves(node, board)) return;
 		}
 		else {
-			if (this->ExpandNodeWithDeterministicMoves(node, board)) return;
+			if (this->ExpandNodeWithDeterministicNextMoves(node, board)) return;
 		}
 	}
 }
