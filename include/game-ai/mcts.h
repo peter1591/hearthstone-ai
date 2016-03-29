@@ -6,8 +6,9 @@
 #include <map>
 #include <unordered_set>
 #include "game-engine/game-engine.h"
-#include "tree.h"
-#include "board-node-map.h"
+#include "game-ai/tree.h"
+#include "game-ai/board-node-map.h"
+#include "game-ai/start-board.h"
 
 class MCTS
 {
@@ -23,7 +24,7 @@ public:
 	bool operator!=(const MCTS&) const;
 
 public:
-	void Initialize(unsigned int rand_seed, const GameEngine::Board &starting_board);
+	void Initialize(unsigned int rand_seed, StartBoard && start_board);
 	void Iterate();
 
 public:

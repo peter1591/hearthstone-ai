@@ -116,21 +116,6 @@
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\board-node-map.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\decider.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\mcts.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\task.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\tree.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
@@ -253,6 +238,33 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\stages\player-equip-weapon.h">
       <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-node-map.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-node-map-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\decider.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\game-ai.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\mcts.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\start-board.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\task.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\tree.h">
+      <Filter>Header Files\game-ai</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

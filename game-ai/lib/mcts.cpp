@@ -64,13 +64,14 @@ static TreeNode *FindBestChildToExpand(
 	return max_weight_node;
 }
 
-void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
+void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
 {
 	srand(rand_seed);
 
-	this->root_node_board = GameEngine::Board::Clone(board);
-	tree.GetRootNode().stage = board.GetStage();
-	tree.GetRootNode().stage_type = board.GetStageType();
+	// TODO: generate the first board in Iterate()
+	this->root_node_board = start_board.GetBoard(rand_seed); // TODO: modify logic
+	tree.GetRootNode().stage = this->root_node_board.GetStage();
+	tree.GetRootNode().stage_type = this->root_node_board.GetStageType();
 	tree.GetRootNode().parent = nullptr;
 	tree.GetRootNode().wins = 0;
 	tree.GetRootNode().count = 0;
@@ -82,7 +83,7 @@ void MCTS::Initialize(unsigned int rand_seed, const GameEngine::Board &board)
 		tree.GetRootNode().is_player_node = false;
 	}
 
-	this->board_node_map.Add(board, &tree.GetRootNode());
+	this->board_node_map.Add(this->root_node_board, &tree.GetRootNode());
 }
 
 bool MCTS::UseNextMoveGetter(TreeNode * node)

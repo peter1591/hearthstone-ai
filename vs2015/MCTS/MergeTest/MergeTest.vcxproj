@@ -132,10 +132,15 @@
     <ClCompile Include="merge-test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\board-node-map-impl.h" />
-    <ClInclude Include="..\..\..\include\board-node-map.h" />
-    <ClInclude Include="..\..\..\include\decider.h" />
-    <ClInclude Include="..\..\..\include\game-ai.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-node-map-impl.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-node-map.h" />
+    <ClInclude Include="..\..\..\include\game-ai\decider.h" />
+    <ClInclude Include="..\..\..\include\game-ai\game-ai.h" />
+    <ClInclude Include="..\..\..\include\game-ai\mcts.h" />
+    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h" />
+    <ClInclude Include="..\..\..\include\game-ai\start-board.h" />
+    <ClInclude Include="..\..\..\include\game-ai\task.h" />
+    <ClInclude Include="..\..\..\include\game-ai\tree.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-to-all-minions.h" />
@@ -210,9 +215,6 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h" />
-    <ClInclude Include="..\..\..\include\mcts.h" />
-    <ClInclude Include="..\..\..\include\task.h" />
-    <ClInclude Include="..\..\..\include\tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
