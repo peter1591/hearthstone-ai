@@ -17,22 +17,22 @@ public:
 	~MCTS();
 	MCTS(const MCTS&) = delete;
 	MCTS &operator=(const MCTS&) = delete;
-	MCTS(MCTS&&);
-	MCTS &operator=(MCTS&&);
-
-	bool operator==(const MCTS&) const;
-	bool operator!=(const MCTS&) const;
+	MCTS(MCTS&&) = delete;
+	MCTS &operator=(MCTS&&) = delete;
 
 public:
 	void Initialize(unsigned int rand_seed, StartBoard && start_board);
 	void Iterate();
 
-public:
-	GameEngine::Board root_node_board;
+public: // TODO: to be private?
+	StartBoard start_board;
+	GameEngine::Board current_iteration_root_node_board;
 	Tree tree;
 	BoardNodeMap board_node_map;
+	bool tree_root_node_initialized;
 
 private:
+	void GenerateRootNodeBoard();
 	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);

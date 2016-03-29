@@ -12,7 +12,7 @@ inline TreeNode * BoardNodeMap::Find(const GameEngine::Board &board, const MCTS&
 
 	for (const auto &possible_node : it_found->second) {
 		GameEngine::Board it_board;
-		possible_node->GetBoard(mcts.root_node_board, it_board);
+		possible_node->GetBoard(mcts.current_iteration_root_node_board, it_board);
 		if (board == it_board) return possible_node;
 
 #ifdef DEBUG

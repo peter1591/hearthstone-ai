@@ -99,9 +99,12 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	//board.SetStateToPlayerTurnStart();
 }
 
-inline GameEngine::Board StartBoard::GetBoard(unsigned int rand_seed)
+inline StartBoard::StartBoard()
 {
-	GameEngine::Board board;
-	InitializeDebugBoard1(board);
-	return board;
+	InitializeDebugBoard1(this->board_debug1);
+}
+
+inline GameEngine::Board StartBoard::GetBoard(int rand_seed)
+{
+	return GameEngine::Board::Clone(this->board_debug1);
 }

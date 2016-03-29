@@ -253,9 +253,11 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 
 GameEngine::Board Decider::GetCurrentBoard()
 {
+	// TODO: each MCTS should get its current board from its starting board?
+
 	if (this->data.empty()) throw std::runtime_error("logic error");
 
-	GameEngine::Board board = GameEngine::Board::Clone(this->data.front()->root_node_board);
+	GameEngine::Board board = GameEngine::Board::Clone(this->data.front()->current_iteration_root_node_board);
 
 	for (auto const& move : this->best_moves.moves)
 	{
@@ -292,12 +294,9 @@ Decider::MovesInfo Decider::GetBestMoves()
 	for (int i = 1; i < this->data.size(); ++i) {
 		MCTS const& mcts_ref = *this->data.front();
 		MCTS const& mcts_current = *this->data[i];
-		if (mcts_current.root_node_board != mcts_ref.root_node_board) {
-			throw std::runtime_error("All MCTSes must have the same root board");
-		}
 	}
 
-	GameEngine::Board board = GameEngine::Board::Clone(this->data.front()->root_node_board);
+	GameEngine::Board board = GameEngine::Board::Clone(this->data.front()->current_iteration_root_node_board);
 
 	std::vector<ProgressData> progresses;
 	for (int i = 0; i < this->data.size(); ++i) {

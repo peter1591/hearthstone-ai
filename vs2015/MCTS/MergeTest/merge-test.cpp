@@ -6,49 +6,6 @@
 
 #include "game-ai/game-ai.h"
 
-static void TestOperators()
-{
-	constexpr int threads = 2;
-	MCTS mcts_debug;
-	MCTS mcts[threads];
-	unsigned int rand_seed = (unsigned int)time(NULL);
-
-	for (int i = 0; i < threads; ++i) {
-		StartBoard start_board;
-		mcts[i].Initialize(rand_seed, std::move(start_board));
-	}
-	StartBoard start_board_debug;
-	mcts_debug.Initialize(rand_seed, std::move(start_board_debug));
-
-	for (int times = 0; ; ++times)
-	{
-		mcts[0].Iterate();
-		mcts_debug.Iterate();
-
-		if (mcts[0] != mcts_debug) // test comparison
-		{
-			throw std::runtime_error("check failed");
-		}
-
-		mcts[1] = std::move(mcts[0]); // test move
-
-		mcts[1].Iterate();
-		mcts_debug.Iterate();
-		if (mcts[1] != mcts_debug)
-		{
-			throw std::runtime_error("check failed");
-		}
-
-		mcts[0] = std::move(mcts[1]); // test move
-
-		if (times % 1000 == 0) {
-			Decider decider;
-			decider.Add(mcts_debug);
-			decider.DebugPrint();
-		}
-	}
-}
-
 static void TestBasic()
 {
 	MCTS mcts;
@@ -168,6 +125,5 @@ int main(void)
 		throw std::runtime_error("failed to load card data");
 
 	//TestBasic();
-	//TestOperators();
 	InteractiveTest();
 }

@@ -67,23 +67,8 @@ static TreeNode *FindBestChildToExpand(
 void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
 {
 	srand(rand_seed);
-
-	// TODO: generate the first board in Iterate()
-	this->root_node_board = start_board.GetBoard(rand_seed); // TODO: modify logic
-	tree.GetRootNode().stage = this->root_node_board.GetStage();
-	tree.GetRootNode().stage_type = this->root_node_board.GetStageType();
-	tree.GetRootNode().parent = nullptr;
-	tree.GetRootNode().wins = 0;
-	tree.GetRootNode().count = 0;
-	if (tree.GetRootNode().stage_type == GameEngine::STAGE_TYPE_PLAYER) {
-		tree.GetRootNode().is_player_node = true;
-	} else {
-		// Note: if the starting node is a RANDOM node,
-		// then the root node's is_player_node doesn't matter
-		tree.GetRootNode().is_player_node = false;
-	}
-
-	this->board_node_map.Add(this->root_node_board, &tree.GetRootNode());
+	this->start_board = std::move(start_board);
+	this->tree_root_node_initialized = false;
 }
 
 bool MCTS::UseNextMoveGetter(TreeNode * node)
@@ -393,10 +378,40 @@ void MCTS::BackPropagate(bool is_win)
 	}
 }
 
+void MCTS::GenerateRootNodeBoard()
+{
+	int current_rand = rand();
+
+	this->current_iteration_root_node_board = this->start_board.GetBoard(current_rand);
+
+	if (this->tree_root_node_initialized == false)
+	{
+		tree.GetRootNode().stage = this->current_iteration_root_node_board.GetStage();
+		tree.GetRootNode().stage_type = this->current_iteration_root_node_board.GetStageType();
+		tree.GetRootNode().parent = nullptr;
+		tree.GetRootNode().wins = 0;
+		tree.GetRootNode().count = 0;
+		if (tree.GetRootNode().stage_type == GameEngine::STAGE_TYPE_PLAYER) {
+			tree.GetRootNode().is_player_node = true;
+		}
+		else {
+			// Note: if the starting node is a RANDOM node,
+			// then the root node's is_player_node doesn't matter
+			tree.GetRootNode().is_player_node = false;
+		}
+
+		this->board_node_map.Add(this->current_iteration_root_node_board, &tree.GetRootNode());
+
+		this->tree_root_node_initialized = true;
+	}
+}
+
 void MCTS::Iterate()
 {
+	this->GenerateRootNodeBoard();
+
 	TreeNode *node = &this->tree.GetRootNode();
-	GameEngine::Board board = GameEngine::Board::Clone(this->root_node_board);
+	GameEngine::Board board = GameEngine::Board::Clone(this->current_iteration_root_node_board);
 
 #ifdef DEBUG
 	if (!this->traversed_nodes.empty()) throw std::runtime_error("consistency check failed");
@@ -417,39 +432,6 @@ MCTS::MCTS()
 MCTS::~MCTS()
 {
 	if (this->allocated_node) delete this->allocated_node;
-}
-
-MCTS::MCTS(MCTS&& rhs)
-{
-	*this = std::move(rhs);
-}
-
-MCTS & MCTS::operator=(MCTS&& rhs)
-{
-	this->root_node_board = std::move(rhs.root_node_board);
-	this->tree = std::move(rhs.tree);
-	this->board_node_map = std::move(rhs.board_node_map);
-
-	this->allocated_node = std::move(rhs.allocated_node);
-	this->traversed_nodes = std::move(rhs.traversed_nodes);
-
-	return *this;
-}
-
-bool MCTS::operator==(const MCTS& rhs) const
-{
-	if (this->root_node_board != rhs.root_node_board) return false;
-	if (this->tree != rhs.tree) return false;
-
-	// skip checking for internal consistency data
-	// if (this->board_node_map != rhs.board_node_map) return false;
-
-	return true;
-}
-
-bool MCTS::operator!=(const MCTS& rhs) const
-{
-	return !(*this == rhs);
 }
 
 int MCTS::GetRandom()
