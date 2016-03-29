@@ -4,7 +4,7 @@
 #include <chrono>
 #include <vector>
 
-#include "game-ai.h"
+#include "game-ai/game-ai.h"
 
 void InitializeDeck1(GameEngine::Deck &deck)
 {

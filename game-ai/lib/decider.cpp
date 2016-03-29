@@ -1,4 +1,4 @@
-#include "decider.h"
+#include "game-ai/decider.h"
 
 static void PrintLevelPrefix(int level)
 {

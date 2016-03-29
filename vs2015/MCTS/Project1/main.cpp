@@ -5,8 +5,8 @@
 
 #include "game-engine/card-id-map.h"
 #include "game-engine/card-database.h"
-#include "task.h"
-#include "decider.h"
+#include "game-ai/game-ai.h"
+#include "game-ai/task.h"
 
 #include "game-engine/cards/card_FP1_007.h"
 

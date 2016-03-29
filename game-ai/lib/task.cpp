@@ -1,8 +1,6 @@
 #include <thread>
-
-#include "task.h"
-
-#include "decider.h"
+#include "game-ai/decider.h"
+#include "game-ai/task.h"
 
 Task::Task(MCTS *mcts)
 {
