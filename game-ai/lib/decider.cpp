@@ -115,33 +115,22 @@ static TreeNode const* FindChildNodeWithBoard(TreeNode const* parent, GameEngine
 	return nullptr;
 }
 
-void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, 
-	ProgressData const* stepping_progress, TreeNode const* stepping_node, const GameEngine::Board &next_board)
+void Decider::GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &progresses)
 {
 	for (std::vector<ProgressData>::iterator it_progress = progresses.begin(); it_progress != progresses.end();)
 	{
 		ProgressData &progress = *it_progress;
 
-		// special case: the progress is the stepping progress
-		if (&progress == stepping_progress) {
-			progress.node = stepping_node;
-			if (progress.node->equivalent_node != nullptr) progress.node = progress.node->equivalent_node;
+		if (progress.node->children.empty()) {
+			it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
+		}
+		else if (progress.node->children.size() == 1) {
+			progress.node = progress.node->children.front();
 			++it_progress;
 		}
 		else {
-			// find the 'next_board' among the child
-			GameEngine::Board current_board = std::move(this->GetCurrentBoard()); // A O(N) algorithm since board cannot be cloned
-			progress.node = FindChildNodeWithBoard(progress.node, std::move(current_board), next_board);
-
-			if (progress.node == nullptr) {
-				it_progress = progresses.erase(it_progress); // no next node in this MCTS tree
-			}
-			else {
-				++it_progress;
-			}
+			throw std::runtime_error("this node is not a deterministic game-flow move");
 		}
-
-		
 	}
 }
 
@@ -197,7 +186,7 @@ std::unordered_map<GameEngine::Move, TreeNode> Decider::AggregateProgressChildre
 }
 
 // return false if no next step is available
-bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board &board, MoveInfo &move_info)
+bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move_info)
 {
 	if (progress.empty()) return false;
 
@@ -214,24 +203,25 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 		return false;
 	}
 	else if (node_ref->stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
-		// Randomly select a game-flow move
-		// Since the MCTS randomly select a game-flow move,
-		// this is equivalent to select the most-simulated node
-		int r = this->GetRandom() % progress.size();
-		ProgressData const& chosen_progress = progress[r];
+		// If there's only one game-flow outcome (i.e., deterministic)
+		// Then, the decider can get the next move
+		// However, if there's several different outcomes (i.e., non-deterministic)
+		// Then, the best move depends on the actual outcome after play
+		// It's meaningless if we choose one of the non-deterministic outcomes here
 
-		TreeNode const* most_simulated_child = FindMostSimulatedChild(chosen_progress.node->children);
-
-		if (most_simulated_child == nullptr) {
-			return false;
+		for (auto const& current_progress : progress) {
+			if (current_progress.node->children.size() > 1) {
+				return false;
+			}
 		}
 
-		move_info.move = most_simulated_child->move;
+		this->GoToNextDeterministicGameFlowProgress(progress);
+
+		move_info.move.action = GameEngine::Move::ACTION_GAME_FLOW;
+		move_info.move.data.game_flow_data.rand_seed = 0;
 		move_info.wins = -1;
 		move_info.count = -1;
 
-		board.ApplyMove(move_info.move);
-		this->GoToNextProgress(progress, &chosen_progress, most_simulated_child, board);
 		return true;
 	}
 	else {
@@ -247,25 +237,9 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, GameEngine::Board
 		move_info.wins = it_most_simulated_child->second.wins;
 		move_info.count = it_most_simulated_child->second.count;
 		
-		board.ApplyMove(move_info.move);
 		this->GoToNextProgress(progress, move_info.move);
 		return true;
 	}
-}
-
-GameEngine::Board Decider::GetCurrentBoard()
-{
-	// TODO: each MCTS should get its current board from its starting board?
-
-	if (this->data.empty()) throw std::runtime_error("logic error");
-
-	GameEngine::Board board = GameEngine::Board::Clone(this->data.front()->current_iteration_root_node_board);
-
-	for (auto const& move : this->best_moves.moves)
-	{
-		board.ApplyMove(move.move);
-	}
-	return std::move(board);
 }
 
 void Decider::DebugPrint()
@@ -298,8 +272,6 @@ Decider::MovesInfo Decider::GetBestMoves()
 		MCTS const& mcts_current = *this->data[i];
 	}
 
-	GameEngine::Board board = GameEngine::Board::Clone(this->data.front()->current_iteration_root_node_board);
-
 	std::vector<ProgressData> progresses;
 	for (int i = 0; i < this->data.size(); ++i) {
 		ProgressData progress;
@@ -310,7 +282,7 @@ Decider::MovesInfo Decider::GetBestMoves()
 
 	while (true) {
 		MoveInfo move;
-		if (this->GetNextStep(progresses, board, move) == false) break;
+		if (this->GetNextStep(progresses, move) == false) break;
 		this->best_moves.moves.push_back(move);
 	}
 

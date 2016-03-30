@@ -29,7 +29,6 @@ public:
 
 public: // TODO: to be private?
 	GameEngine::Board current_iteration_root_node_board;
-	BoardNodeMap board_node_map;
 
 private:
 	void GenerateRootNodeBoard();
@@ -51,9 +50,9 @@ private:
 private: // for internal use
 	StartBoard start_board;
 	Tree tree;
+	BoardNodeMap board_node_map;
 
 	TreeNode *allocated_node;
-
 	std::vector<TreeNode*> traversed_nodes;
 };
 
