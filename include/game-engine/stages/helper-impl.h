@@ -7,7 +7,7 @@ namespace GameEngine
 {
 	inline bool StageHelper::PlayerDrawCard(Board & board)
 	{
-		if (board.player_hand.IsDeckEmpty()) {
+		if (board.player_hand.HasCardToDraw()) {
 			StageHelper::Fatigue(board, SLOT_PLAYER_SIDE);
 			return StageHelper::CheckHeroMinionDead(board);
 		}

@@ -4,6 +4,8 @@
 #include <functional>
 #include <vector>
 #include <bitset>
+
+#include "hand-card.h"
 #include "card.h"
 
 namespace GameEngine {
@@ -22,32 +24,32 @@ public:
 	Hand(RandomGenerator & random_generator, Hand && rhs);
 	Hand & operator=(Hand && rhs);
 
+	bool operator==(const Hand &rhs) const;
+	bool operator!=(const Hand &rhs) const;
+
 public: // initializer
-	void Initialize_AddHandCard(Card const& card);
+	void Initialize_AddPlayerHandCard(Card const & card);
 
 public: // operations
+	bool HasCardToDraw() const;
 	void DrawOneCardToHand();
 	Card DrawOneCardAndDiscard();
 
-	Card const& GetCard(Locator idx) const { return *(this->cards.begin() + idx); }
+	Card const& GetCard(Locator idx) const;
 	void RemoveCard(Locator idx);
-	size_t GetCount() const { return this->cards.size(); }
+	size_t GetCount() const;
 
 	void AddCardToDeck(Card const& card);
-	bool IsDeckEmpty() const;
-
-	bool operator==(const Hand &rhs) const;
-	bool operator!=(const Hand &rhs) const { return !(*this == rhs); }
 
 	std::string GetDebugString() const;
 
 private:
-	Card DrawFromDeck();
+	Card DrawOneCardFromDeck();
 
 private:
 	RandomGenerator & random_generator;
 
-	std::vector<Card> cards;
+	std::vector<HandCard> cards;
 	std::vector<Card> deck_cards;
 };
 

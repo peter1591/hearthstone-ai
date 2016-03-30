@@ -29,40 +29,33 @@ namespace GameEngine {
 		return *this;
 	}
 
-	inline void Hand::Initialize_AddHandCard(Card const & card)
+	inline void Hand::Initialize_AddPlayerHandCard(Card const & card)
 	{
-		this->cards.push_back(card);
+		HandCard hand_card;
+		hand_card.type = HandCard::TYPE_DETERMINED;
+		hand_card.card = card;
+		this->cards.push_back(hand_card);
 	}
 
-	inline void Hand::DrawOneCardToHand()
-	{
-		Card draw_card = this->DrawFromDeck();
-
-		this->cards.push_back(draw_card);
-	}
-
-	inline Card Hand::DrawOneCardAndDiscard()
-	{
-		return this->DrawFromDeck();
-	}
-
-	inline void Hand::RemoveCard(Locator idx)
-	{
-		std::vector<Card>::iterator it = this->cards.begin() + idx;
-		this->cards.erase(it);
-	}
-
-	inline void Hand::AddCardToDeck(Card const & card)
-	{
-		this->deck_cards.push_back(card);
-	}
-
-	inline bool Hand::IsDeckEmpty() const
+	inline bool Hand::HasCardToDraw() const
 	{
 		return this->deck_cards.empty();
 	}
 
-	inline Card Hand::DrawFromDeck()
+	inline void Hand::DrawOneCardToHand()
+	{
+		HandCard hand_card;
+		hand_card.type = HandCard::TYPE_DETERMINED; // TODO: add a new type TYPE_DRAW_FROM_HIDDEN_CARDS
+		hand_card.card = this->DrawOneCardFromDeck();
+		this->cards.push_back(hand_card);
+	}
+
+	inline Card Hand::DrawOneCardAndDiscard()
+	{
+		return this->DrawOneCardFromDeck();
+	}
+
+	inline Card Hand::DrawOneCardFromDeck()
 	{
 		Card ret;
 		size_t deck_count = this->deck_cards.size();
@@ -82,14 +75,55 @@ namespace GameEngine {
 		return ret;
 	}
 
+	inline Card const & Hand::GetCard(Locator idx) const
+	{
+		return (this->cards.begin() + idx)->card;
+	}
+
+	inline void Hand::RemoveCard(Locator idx)
+	{
+		std::vector<HandCard>::iterator it = this->cards.begin() + idx;
+		this->cards.erase(it);
+	}
+
+	inline size_t Hand::GetCount() const
+	{
+		return this->cards.size();
+	}
+
+	inline void Hand::AddCardToDeck(Card const & card)
+	{
+		this->deck_cards.push_back(card);
+	}
+
 	inline bool Hand::operator==(const Hand &rhs) const
 	{
-		if (this->cards != rhs.cards) return false;
+		// special logic to compare different kinds of hand cards
+		if (this->cards.size() != rhs.cards.size()) return false;
+		for (size_t i = 0; i < this->cards.size(); ++i) {
+			auto const& lhs_card = this->cards[i];
+			auto const& rhs_card = rhs.cards[i];
+
+			if (lhs_card.type != rhs_card.type) return false;
+
+			switch (lhs_card.type) {
+			case HandCard::TYPE_DETERMINED:
+				if (lhs_card.card != rhs_card.card) return false;
+				break;
+
+			default:
+				throw std::runtime_error("invalid hand card type");
+			}
+		}
+
 		if (this->deck_cards != rhs.deck_cards) return false;
 
-		// no need to check count_by_type
-
 		return true;
+	}
+
+	inline bool Hand::operator!=(Hand const& rhs) const
+	{
+		return !(*this == rhs);
 	}
 
 	inline std::string Hand::GetDebugString() const
@@ -104,7 +138,7 @@ namespace GameEngine {
 
 		result += "Hand: ";
 		for (const auto &card : this->cards) {
-			result += card.GetDebugString() + " ";
+			result += card.card.GetDebugString() + " ";
 		}
 
 		return result;
@@ -121,7 +155,17 @@ namespace std {
 			result_type result = 0;
 
 			for (auto card : s.cards) {
-				GameEngine::hash_combine(result, card);
+				GameEngine::hash_combine(result, card.type);
+
+				switch (card.type)
+				{
+				case GameEngine::HandCard::TYPE_DETERMINED:
+					GameEngine::hash_combine(result, card.card);
+					break;
+
+				default:
+					throw std::runtime_error("invalid hand card type");
+				}
 			}
 
 			for (auto deck_card : s.deck_cards) {
