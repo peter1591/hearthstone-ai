@@ -126,6 +126,7 @@ void Decider::GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &p
 		}
 		else if (progress.node->children.size() == 1) {
 			progress.node = progress.node->children.front();
+			if (progress.node->equivalent_node != nullptr) progress.node = progress.node->equivalent_node;
 			++it_progress;
 		}
 		else {
