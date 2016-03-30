@@ -411,14 +411,12 @@ void MCTS::CreateRootNode(GameEngine::Board const& board)
 void MCTS::Iterate()
 {
 	int current_rand = rand();
-	this->current_iteration_root_node_board = this->start_board.GetBoard(current_rand);
+	GameEngine::Board board = this->start_board.GetBoard(current_rand);
 
 	if (!this->tree.GetRootNode()) {
-		this->CreateRootNode(this->current_iteration_root_node_board);
+		this->CreateRootNode(board);
 	}
-
 	TreeNode *node = this->tree.GetRootNode();
-	GameEngine::Board board = GameEngine::Board::Clone(this->current_iteration_root_node_board);
 
 #ifdef DEBUG
 	if (!this->traversed_nodes.empty()) throw std::runtime_error("consistency check failed");

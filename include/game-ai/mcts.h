@@ -48,7 +48,6 @@ private: // for internal use
 	StartBoard start_board;
 	Tree tree;
 	BoardNodeMap board_node_map;
-	GameEngine::Board current_iteration_root_node_board;
 
 	TreeNode *allocated_node;
 	std::vector<TreeNode*> traversed_nodes;
