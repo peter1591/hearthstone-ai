@@ -17,7 +17,7 @@ public:
 	TreeNode() : parent(nullptr), equivalent_node(nullptr) {}
 
 	void AddChild(TreeNode *node);
-	void GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const;
+	void GetBoard(GameEngine::Board & initialized_board) const;
 
 public:
 	TreeNode *parent;
@@ -80,14 +80,13 @@ inline void TreeNode::AddChild(TreeNode *node)
 	node->parent = this;
 }
 
-inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEngine::Board &board) const
+inline void TreeNode::GetBoard(GameEngine::Board & board) const
 {
 	if (this->parent == nullptr) {
-		board = GameEngine::Board::Clone(root_node_board);
 		return;
 	}
 
-	this->parent->GetBoard(root_node_board, board);
+	this->parent->GetBoard(board);
 	board.ApplyMove(this->move);
 }
 
