@@ -36,8 +36,8 @@ public:
 		// If minion has enchantments/auras, then it cannot be cloned
 		// Note: The only chance we need to copy minion is to copy root node board in MCTS
 		// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
-		if (!this->enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
-		if (!this->auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
+		if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
+		if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
 
 		this->card_id = rhs.card_id;
 		this->stat = rhs.stat;
