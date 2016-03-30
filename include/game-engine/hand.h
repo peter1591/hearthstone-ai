@@ -46,9 +46,9 @@ public:
 
 public:
 	Hand(RandomGenerator & random_generator);
-	Hand(Hand const& rhs) = delete;
-	Hand & operator=(Hand const& rhs);
-	Hand(Hand && rhs) = delete;
+	Hand(RandomGenerator & random_generator, Hand const& rhs);
+	Hand & operator=(Hand const& rhs) = delete;
+	Hand(RandomGenerator & random_generator, Hand && rhs);
 	Hand & operator=(Hand && rhs);
 
 	void AddCard(const Card &card);
@@ -86,25 +86,30 @@ inline Hand::Hand(RandomGenerator & random_generator) :
 	this->deck_cards.reserve(36);
 }
 
-inline Hand & Hand::operator=(Hand const& rhs)
+inline Hand::Hand(RandomGenerator & random_generator, Hand const& rhs) :
+	random_generator(random_generator), cards(rhs.cards), deck_cards(rhs.deck_cards)
 {
-	this->cards = rhs.cards;
-	for (int i = 0; i < Card::TYPE_MAX; ++i) {
-		this->count_by_type[i] = rhs.count_by_type[i];
+	for (int i = 0; i<Card::TYPE_MAX; ++i) {
+		this->count_by_type[i] = 0;
 	}
-	this->deck_cards = rhs.deck_cards;
+}
 
-	return *this;
+inline Hand::Hand(RandomGenerator & random_generator, Hand && rhs) :
+	random_generator(random_generator),
+	cards(std::move(rhs.cards)), deck_cards(std::move(rhs.deck_cards))
+{
+	for (int i = 0; i<Card::TYPE_MAX; ++i) {
+		this->count_by_type[i] = 0;
+	}
 }
 
 inline Hand & Hand::operator=(Hand && rhs)
 {
 	this->cards = std::move(rhs.cards);
-	for (int i = 0; i < Card::TYPE_MAX; ++i) {
-		this->count_by_type[i] = rhs.count_by_type[i];
-	}
 	this->deck_cards = std::move(rhs.deck_cards);
-
+	for (int i = 0; i<Card::TYPE_MAX; ++i) {
+		this->count_by_type[i] = 0;
+	}
 	return *this;
 }
 
