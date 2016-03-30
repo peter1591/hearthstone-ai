@@ -386,21 +386,23 @@ void MCTS::GenerateRootNodeBoard()
 
 	if (this->tree_root_node_initialized == false)
 	{
-		tree.GetRootNode().stage = this->current_iteration_root_node_board.GetStage();
-		tree.GetRootNode().stage_type = this->current_iteration_root_node_board.GetStageType();
-		tree.GetRootNode().parent = nullptr;
-		tree.GetRootNode().wins = 0;
-		tree.GetRootNode().count = 0;
-		if (tree.GetRootNode().stage_type == GameEngine::STAGE_TYPE_PLAYER) {
-			tree.GetRootNode().is_player_node = true;
+		TreeNode * root_node = tree.GetRootNode();
+
+		root_node->stage = this->current_iteration_root_node_board.GetStage();
+		root_node->stage_type = this->current_iteration_root_node_board.GetStageType();
+		root_node->parent = nullptr;
+		root_node->wins = 0;
+		root_node->count = 0;
+		if (root_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
+			root_node->is_player_node = true;
 		}
 		else {
 			// Note: if the starting node is a RANDOM node,
 			// then the root node's is_player_node doesn't matter
-			tree.GetRootNode().is_player_node = false;
+			root_node->is_player_node = false;
 		}
 
-		this->board_node_map.Add(this->current_iteration_root_node_board, &tree.GetRootNode());
+		this->board_node_map.Add(this->current_iteration_root_node_board, root_node);
 
 		this->tree_root_node_initialized = true;
 	}
@@ -410,7 +412,7 @@ void MCTS::Iterate()
 {
 	this->GenerateRootNodeBoard();
 
-	TreeNode *node = &this->tree.GetRootNode();
+	TreeNode *node = this->tree.GetRootNode();
 	GameEngine::Board board = GameEngine::Board::Clone(this->current_iteration_root_node_board);
 
 #ifdef DEBUG

@@ -27,7 +27,7 @@ void Decider::PrintBestRoute(int levels)
 {
 	const MCTS& mcts = *this->data.front();
 
-	TreeNode const*node = &mcts.tree.GetRootNode();
+	TreeNode const*node = mcts.tree.GetRootNode();
 
 	int level = 0;
 	while (node != nullptr && !node->children.empty() && level <= levels) {
@@ -36,7 +36,7 @@ void Decider::PrintBestRoute(int levels)
 		if (node->move.action != GameEngine::Move::ACTION_GAME_FLOW) {
 			PrintLevelPrefix(level);
 			std::cout << "[" << node->stage << "] ";
-			if (node != &mcts.tree.GetRootNode()) {
+			if (node != mcts.tree.GetRootNode()) {
 				std::cout << node->move.GetDebugString();
 			}
 			std::cout << " " << node->wins << "/" << node->count << std::endl;
@@ -55,7 +55,7 @@ void Decider::PrintTree(TreeNode const *node, int level, const int max_level)
 
 	PrintLevelPrefix(level);
 	std::cout << "[" << node->stage << "] ";
-	if (node != &mcts.tree.GetRootNode()) {
+	if (node != mcts.tree.GetRootNode()) {
 		std::cout << node->move.GetDebugString();
 	}
 	std::cout << " " << node->wins << "/" << node->count << std::endl;
@@ -302,7 +302,7 @@ Decider::MovesInfo Decider::GetBestMoves()
 	for (int i = 0; i < this->data.size(); ++i) {
 		ProgressData progress;
 		progress.mcts = this->data[i];
-		progress.node = &progress.mcts->tree.GetRootNode();
+		progress.node = progress.mcts->tree.GetRootNode();
 		progresses.push_back(progress);
 	}
 

@@ -62,14 +62,15 @@ public:
 	Tree & operator=(Tree&& rhs) = delete;
 
 public:
-	TreeNode & GetRootNode() { return this->root_node; }
-	const TreeNode & GetRootNode() const { return this->root_node; }
+	void CreateRootNode();
+	TreeNode * GetRootNode() const;
 
 private:
 	static void ClearSubtree(TreeNode *node);
 
 private:
-	TreeNode root_node;
+	TreeNode * root_node;
+
 };
 
 inline void TreeNode::AddChild(TreeNode *node)
@@ -91,12 +92,26 @@ inline void TreeNode::GetBoard(const GameEngine::Board &root_node_board, GameEng
 
 inline Tree::Tree()
 {
-	this->root_node.parent = nullptr;
+	this->root_node = nullptr;
 }
 
 inline Tree::~Tree()
 {
-	Tree::ClearSubtree(&this->root_node);
+	if (this->root_node) {
+		Tree::ClearSubtree(this->root_node);
+		delete this->root_node;
+	}
+}
+
+inline void Tree::CreateRootNode()
+{
+	if (this->root_node) throw std::runtime_error("root node already exists");
+	this->root_node = new TreeNode;
+}
+
+inline TreeNode * Tree::GetRootNode() const
+{
+	return this->root_node;
 }
 
 inline void Tree::ClearSubtree(TreeNode *node)
