@@ -47,6 +47,10 @@ public:
 	// only valid if this node is expanded (i.e., has children)
 	GameEngine::NextMoveGetter next_move_getter; // not valid for game-flow nodes
 	bool next_moves_are_random; // The next moves might differ from time to time. E.g., game-flow moves
+
+#ifdef DEBUG
+	size_t board_hash;
+#endif
 };
 
 class Tree

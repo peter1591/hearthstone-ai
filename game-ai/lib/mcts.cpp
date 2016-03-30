@@ -260,6 +260,8 @@ void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 	{
 #ifdef DEBUG
 		if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
+		size_t current_hash = std::hash<GameEngine::Board>()(board);
+		if (node->board_hash != current_hash) throw std::runtime_error("consistency check failed: board hash changed");
 #endif
 
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) return;
@@ -326,6 +328,10 @@ TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& n
 		new_node->is_player_node = node->is_player_node; // follow the parent's status
 	}
 
+#ifdef DEBUG
+	new_node->board_hash = std::hash<GameEngine::Board>()(next_board);
+#endif
+
 	node->AddChild(new_node);
 
 	this->board_node_map.Add(next_board, new_node);
@@ -377,38 +383,39 @@ void MCTS::BackPropagate(bool is_win)
 	}
 }
 
-void MCTS::GenerateRootNodeBoard()
+void MCTS::CreateRootNode()
 {
-	int current_rand = rand();
+	tree.CreateRootNode();
+	TreeNode * root_node = tree.GetRootNode();
 
-	this->current_iteration_root_node_board = this->start_board.GetBoard(current_rand);
-
-	if (!tree.GetRootNode())
-	{
-		tree.CreateRootNode();
-		TreeNode * root_node = tree.GetRootNode();
-
-		root_node->stage = this->current_iteration_root_node_board.GetStage();
-		root_node->stage_type = this->current_iteration_root_node_board.GetStageType();
-		root_node->parent = nullptr;
-		root_node->wins = 0;
-		root_node->count = 0;
-		if (root_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
-			root_node->is_player_node = true;
-		}
-		else {
-			// Note: if the starting node is a RANDOM node,
-			// then the root node's is_player_node doesn't matter
-			root_node->is_player_node = false;
-		}
-
-		this->board_node_map.Add(this->current_iteration_root_node_board, root_node);
+	root_node->stage = this->current_iteration_root_node_board.GetStage();
+	root_node->stage_type = this->current_iteration_root_node_board.GetStageType();
+	root_node->parent = nullptr;
+	root_node->wins = 0;
+	root_node->count = 0;
+	if (root_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
+		root_node->is_player_node = true;
 	}
+	else {
+		// Note: if the starting node is a RANDOM node,
+		// then the root node's is_player_node doesn't matter
+		root_node->is_player_node = false;
+	}
+#ifdef DEBUG
+	root_node->board_hash = std::hash<GameEngine::Board>()(this->current_iteration_root_node_board);
+#endif
+
+	this->board_node_map.Add(this->current_iteration_root_node_board, root_node);
 }
 
 void MCTS::Iterate()
 {
-	this->GenerateRootNodeBoard();
+	int current_rand = rand();
+	this->current_iteration_root_node_board = this->start_board.GetBoard(current_rand);
+
+	if (!this->tree.GetRootNode()) {
+		this->CreateRootNode();
+	}
 
 	TreeNode *node = this->tree.GetRootNode();
 	GameEngine::Board board = GameEngine::Board::Clone(this->current_iteration_root_node_board);

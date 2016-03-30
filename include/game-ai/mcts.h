@@ -28,7 +28,7 @@ public:
 	Tree const& GetTree() const;
 
 private:
-	void GenerateRootNodeBoard();
+	void CreateRootNode();
 	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
 	bool Simulate(GameEngine::Board &board);
 	void BackPropagate(bool is_win);
