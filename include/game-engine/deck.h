@@ -28,12 +28,13 @@ class Deck
 		Deck & operator=(Deck && rhs);
 
 	public:
-		// Add a card to deck
+		bool IsEmpty() const;
+
 		void AddCard(const Card &card);
 
 		Card Draw();
 
-		const std::vector<Card>& GetCards() const;
+		const std::string GetDebugString() const;
 
 		bool operator==(const Deck &rhs) const;
 		bool operator!=(const Deck &rhs) const {
@@ -61,6 +62,11 @@ inline Deck & Deck::operator=(Deck && rhs) {
 	return *this;
 }
 
+inline bool Deck::IsEmpty() const
+{
+	return this->cards.empty();
+}
+
 inline void Deck::AddCard(const Card &card)
 {
 	this->cards.push_back(card);
@@ -86,9 +92,13 @@ inline Card Deck::Draw()
 	return ret;
 }
 
-inline const std::vector<Card>& Deck::GetCards() const
+inline const std::string Deck::GetDebugString() const
 {
-	return this->cards;
+	std::string result;
+	for (const auto &card : this->cards) {
+		result += card.GetDebugString() + " ";
+	}
+	return result;
 }
 
 inline bool Deck::operator==(const Deck &rhs) const
