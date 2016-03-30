@@ -58,12 +58,8 @@ public:
 	Tree(const Tree& rhs) = delete;
 	Tree & operator=(const Tree& rhs) = delete;
 
-	Tree(Tree&& rhs);
-	Tree & operator=(Tree&& rhs);
-
-	Tree Clone(std::function<void(TreeNode*, TreeNode*)> node_update_callback = nullptr) const;
-	bool operator==(const Tree& rhs) const;
-	bool operator!=(const Tree& rhs) const;
+	Tree(Tree&& rhs) = delete;
+	Tree & operator=(Tree&& rhs) = delete;
 
 public:
 	TreeNode & GetRootNode() { return this->root_node; }
@@ -71,8 +67,6 @@ public:
 
 private:
 	static void ClearSubtree(TreeNode *node);
-	static void CopySubtree(const TreeNode *source, TreeNode *target, std::function<void(TreeNode*, TreeNode*)> node_update_callback);
-	static bool CompareSubtree(const TreeNode *lhs, const TreeNode *rhs);
 
 private:
 	TreeNode root_node;
@@ -105,23 +99,6 @@ inline Tree::~Tree()
 	Tree::ClearSubtree(&this->root_node);
 }
 
-inline Tree::Tree(Tree&& rhs)
-{
-	*this = std::move(rhs);
-}
-
-inline Tree& Tree::operator=(Tree&& rhs)
-{
-	this->ClearSubtree(&this->root_node);
-	for (auto &first_level_child : rhs.root_node.children)
-	{
-		first_level_child->parent = &this->root_node;
-	}
-	this->root_node = std::move(rhs.root_node);
-
-	return *this;
-}
-
 inline void Tree::ClearSubtree(TreeNode *node)
 {
 	for (const auto &child : node->children)
@@ -130,73 +107,6 @@ inline void Tree::ClearSubtree(TreeNode *node)
 		delete child;
 	}
 	node->children.clear();
-}
-
-inline void Tree::CopySubtree(const TreeNode *source, TreeNode *target, std::function<void(TreeNode*, TreeNode*)> node_update_callback)
-{
-#ifdef DEBUG
-	if (!target->children.empty()) {
-		throw std::runtime_error("should clear target first");
-	}
-#endif
-
-	for (const auto &child : source->children)
-	{
-		TreeNode *new_node = new TreeNode(*child);
-		new_node->children.clear();
-		target->AddChild(new_node);
-
-		if (node_update_callback != nullptr) node_update_callback(child, new_node);
-
-		Tree::CopySubtree(child, new_node, node_update_callback);
-	}
-}
-
-inline Tree Tree::Clone(std::function<void(TreeNode*, TreeNode*)> node_update_callback) const
-{
-	Tree new_tree;
-
-	new_tree.root_node = this->root_node;
-	new_tree.root_node.parent = nullptr;
-	new_tree.root_node.children.clear();
-
-	// copy child nodes
-	Tree::CopySubtree(&this->root_node, &new_tree.root_node, node_update_callback);
-
-	return std::move(new_tree);
-}
-
-inline bool Tree::CompareSubtree(const TreeNode *lhs, const TreeNode *rhs)
-{
-	if (lhs->stage != rhs->stage) return false;
-	if (lhs->stage_type != rhs->stage_type) return false;
-	if (lhs->move != rhs->move) return false;
-	if (lhs->is_player_node != rhs->is_player_node) return false;
-	if (lhs->wins != rhs->wins) return false;
-	if (lhs->count != rhs->count) return false;
-	if (lhs->next_move_getter != rhs->next_move_getter) return false;
-
-	if (lhs->children.size() != rhs->children.size()) return false;
-
-	auto lhs_child = lhs->children.begin();
-	auto rhs_child = rhs->children.begin();
-	while (lhs_child != lhs->children.end() && rhs_child != rhs->children.end()) {
-		if (Tree::CompareSubtree(*lhs_child, *rhs_child) == false) return false;
-		lhs_child++;
-		rhs_child++;
-	}
-
-	return true;
-}
-
-inline bool Tree::operator==(const Tree& rhs) const
-{
-	return Tree::CompareSubtree(&this->root_node, &rhs.root_node);
-}
-
-inline bool Tree::operator!=(const Tree& rhs) const
-{
-	return !(*this == rhs);
 }
 
 #endif
