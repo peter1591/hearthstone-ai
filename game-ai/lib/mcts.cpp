@@ -68,7 +68,6 @@ void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
 {
 	srand(rand_seed);
 	this->start_board = std::move(start_board);
-	this->tree_root_node_initialized = false;
 }
 
 bool MCTS::UseNextMoveGetter(TreeNode * node)
@@ -384,8 +383,9 @@ void MCTS::GenerateRootNodeBoard()
 
 	this->current_iteration_root_node_board = this->start_board.GetBoard(current_rand);
 
-	if (this->tree_root_node_initialized == false)
+	if (!tree.GetRootNode())
 	{
+		tree.CreateRootNode();
 		TreeNode * root_node = tree.GetRootNode();
 
 		root_node->stage = this->current_iteration_root_node_board.GetStage();
@@ -403,8 +403,6 @@ void MCTS::GenerateRootNodeBoard()
 		}
 
 		this->board_node_map.Add(this->current_iteration_root_node_board, root_node);
-
-		this->tree_root_node_initialized = true;
 	}
 }
 

@@ -29,7 +29,6 @@ public: // TODO: to be private?
 	GameEngine::Board current_iteration_root_node_board;
 	Tree tree;
 	BoardNodeMap board_node_map;
-	bool tree_root_node_initialized;
 
 private:
 	void GenerateRootNodeBoard();
