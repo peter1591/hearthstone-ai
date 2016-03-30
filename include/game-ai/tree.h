@@ -99,7 +99,7 @@ inline Tree::~Tree()
 {
 	if (this->root_node) {
 		Tree::ClearSubtree(this->root_node);
-		delete this->root_node;
+		this->root_node = nullptr;
 	}
 }
 
@@ -119,9 +119,8 @@ inline void Tree::ClearSubtree(TreeNode *node)
 	for (const auto &child : node->children)
 	{
 		Tree::ClearSubtree(child);
-		delete child;
 	}
-	node->children.clear();
+	delete node;
 }
 
 #endif
