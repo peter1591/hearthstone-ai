@@ -8,44 +8,30 @@ namespace GameEngine {
 		random_generator(random_generator)
 	{
 		this->cards.reserve(10);
-		for (int i = 0; i<Card::TYPE_MAX; ++i) {
-			this->count_by_type[i] = 0;
-		}
-
 		this->deck_cards.reserve(36);
 	}
 
 	inline Hand::Hand(RandomGenerator & random_generator, Hand const& rhs) :
 		random_generator(random_generator), cards(rhs.cards), deck_cards(rhs.deck_cards)
 	{
-		for (int i = 0; i<Card::TYPE_MAX; ++i) {
-			this->count_by_type[i] = 0;
-		}
 	}
 
 	inline Hand::Hand(RandomGenerator & random_generator, Hand && rhs) :
 		random_generator(random_generator),
 		cards(std::move(rhs.cards)), deck_cards(std::move(rhs.deck_cards))
 	{
-		for (int i = 0; i<Card::TYPE_MAX; ++i) {
-			this->count_by_type[i] = 0;
-		}
 	}
 
 	inline Hand & Hand::operator=(Hand && rhs)
 	{
 		this->cards = std::move(rhs.cards);
 		this->deck_cards = std::move(rhs.deck_cards);
-		for (int i = 0; i<Card::TYPE_MAX; ++i) {
-			this->count_by_type[i] = 0;
-		}
 		return *this;
 	}
 
 	inline void Hand::Initialize_AddHandCard(Card const & card)
 	{
 		this->cards.push_back(card);
-		this->count_by_type[card.type]++;
 	}
 
 	inline void Hand::DrawOneCardToHand()
@@ -53,7 +39,6 @@ namespace GameEngine {
 		Card draw_card = this->DrawFromDeck();
 
 		this->cards.push_back(draw_card);
-		this->count_by_type[draw_card.type]++;
 	}
 
 	inline Card Hand::DrawOneCardAndDiscard()
@@ -61,15 +46,9 @@ namespace GameEngine {
 		return this->DrawFromDeck();
 	}
 
-	inline int Hand::GetCountByCardType(Card::Type t) const
-	{
-		return this->count_by_type[t];
-	}
-
 	inline void Hand::RemoveCard(Locator idx)
 	{
 		std::vector<Card>::iterator it = this->cards.begin() + idx;
-		this->count_by_type[it->type]--;
 		this->cards.erase(it);
 	}
 

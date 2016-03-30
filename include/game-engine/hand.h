@@ -32,7 +32,6 @@ public: // operations
 	Card const& GetCard(Locator idx) const { return *(this->cards.begin() + idx); }
 	void RemoveCard(Locator idx);
 	size_t GetCount() const { return this->cards.size(); }
-	int GetCountByCardType(Card::Type t) const;
 
 	void AddCardToDeck(Card const& card);
 	bool IsDeckEmpty() const;
@@ -49,8 +48,6 @@ private:
 	RandomGenerator & random_generator;
 
 	std::vector<Card> cards;
-	int count_by_type[Card::TYPE_MAX];
-
 	std::vector<Card> deck_cards;
 };
 
