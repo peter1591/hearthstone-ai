@@ -266,5 +266,26 @@
     <ClInclude Include="..\..\..\include\game-ai\tree.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hand-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\card-database-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\game-engine.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\on-death-trigger.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hand-card.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
