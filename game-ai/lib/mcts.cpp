@@ -424,6 +424,11 @@ void MCTS::Iterate()
 	this->BackPropagate(is_win);
 }
 
+Tree const & MCTS::GetTree() const
+{
+	return this->tree;
+}
+
 MCTS::MCTS()
 {
 	this->allocated_node = new TreeNode;

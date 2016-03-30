@@ -20,14 +20,15 @@ public:
 	MCTS(MCTS&&) = delete;
 	MCTS &operator=(MCTS&&) = delete;
 
-public:
+public: // Operations
 	void Initialize(unsigned int rand_seed, StartBoard && start_board);
 	void Iterate();
 
+public:
+	Tree const& GetTree() const;
+
 public: // TODO: to be private?
-	StartBoard start_board;
 	GameEngine::Board current_iteration_root_node_board;
-	Tree tree;
 	BoardNodeMap board_node_map;
 
 private:
@@ -48,6 +49,9 @@ private:
 	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
+	StartBoard start_board;
+	Tree tree;
+
 	TreeNode *allocated_node;
 
 	std::vector<TreeNode*> traversed_nodes;

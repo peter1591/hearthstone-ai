@@ -63,7 +63,8 @@ public:
 
 public:
 	void CreateRootNode();
-	TreeNode * GetRootNode() const;
+	TreeNode * GetRootNode();
+	TreeNode const* GetRootNode() const;
 
 private:
 	static void ClearSubtree(TreeNode *node);
@@ -109,7 +110,12 @@ inline void Tree::CreateRootNode()
 	this->root_node = new TreeNode;
 }
 
-inline TreeNode * Tree::GetRootNode() const
+inline TreeNode * Tree::GetRootNode()
+{
+	return this->root_node;
+}
+
+inline TreeNode const* Tree::GetRootNode() const
 {
 	return this->root_node;
 }
