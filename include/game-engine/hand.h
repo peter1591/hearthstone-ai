@@ -45,32 +45,67 @@ public:
 	};
 
 public:
-	Hand();
+	Hand(RandomGenerator & random_generator);
+	Hand(Hand const& rhs) = delete;
+	Hand & operator=(Hand const& rhs);
+	Hand(Hand && rhs) = delete;
+	Hand & operator=(Hand && rhs);
 
 	void AddCard(const Card &card);
-
-	const std::vector<Card> &GetCards() const { return this->cards; }
 	Card const& GetCard(Locator idx) const { return *(this->cards.begin() + idx); }
-
 	void RemoveCard(Locator idx);
-
 	size_t GetCount() const { return this->cards.size(); }
 	int GetCountByCardType(Card::Type t) const;
+
+	void AddCardToDeck(Card const& card);
+	bool IsDeckEmpty() const;
+	Card DrawFromDeck();
 
 	bool operator==(const Hand &rhs) const;
 	bool operator!=(const Hand &rhs) const { return !(*this == rhs); }
 
+	std::string GetDebugString() const;
+
 private:
+	RandomGenerator & random_generator;
+
 	std::vector<Card> cards;
 	int count_by_type[Card::TYPE_MAX];
+
+	std::vector<Card> deck_cards;
 };
 
-inline Hand::Hand()
+inline Hand::Hand(RandomGenerator & random_generator) :
+	random_generator(random_generator)
 {
 	this->cards.reserve(10);
 	for (int i=0; i<Card::TYPE_MAX; ++i) {
 		this->count_by_type[i] = 0;
 	}
+
+	this->deck_cards.reserve(36);
+}
+
+inline Hand & Hand::operator=(Hand const& rhs)
+{
+	this->cards = rhs.cards;
+	for (int i = 0; i < Card::TYPE_MAX; ++i) {
+		this->count_by_type[i] = rhs.count_by_type[i];
+	}
+	this->deck_cards = rhs.deck_cards;
+
+	return *this;
+}
+
+inline Hand & Hand::operator=(Hand && rhs)
+{
+	this->cards = std::move(rhs.cards);
+	for (int i = 0; i < Card::TYPE_MAX; ++i) {
+		this->count_by_type[i] = rhs.count_by_type[i];
+	}
+	this->deck_cards = std::move(rhs.deck_cards);
+
+	return *this;
 }
 
 inline void Hand::AddCard(const Card &card)
@@ -91,13 +126,62 @@ inline void Hand::RemoveCard(Locator idx)
 	this->cards.erase(it);
 }
 
+inline void Hand::AddCardToDeck(Card const & card)
+{
+	this->deck_cards.push_back(card);
+}
+
+inline bool Hand::IsDeckEmpty() const
+{
+	return this->deck_cards.empty();
+}
+
+inline Card Hand::DrawFromDeck()
+{
+	Card ret;
+	size_t deck_count = this->deck_cards.size();
+
+	if (UNLIKELY(deck_count == 0)) {
+		ret.MarkInvalid();
+		return ret;
+	}
+
+	const int rand_idx = this->random_generator.GetRandom((int)deck_count);
+
+	ret = this->deck_cards[rand_idx];
+
+	this->deck_cards[rand_idx] = this->deck_cards.back();
+	this->deck_cards.pop_back();
+
+	return ret;
+}
+
 inline bool Hand::operator==(const Hand &rhs) const
 {
 	if (this->cards != rhs.cards) return false;
+	if (this->deck_cards != rhs.deck_cards) return false;
 
 	// no need to check count_by_type
 
 	return true;
+}
+
+inline std::string Hand::GetDebugString() const
+{
+	std::string result;
+
+	result += "Deck: ";
+	for (const auto &deck_card : this->deck_cards) {
+		result += deck_card.GetDebugString() + " ";
+	}
+	result += "\n";
+
+	result += "Hand: ";
+	for (const auto &card : this->cards) {
+		result += card.GetDebugString() + " ";
+	}
+
+	return result;
 }
 
 } // namespace GameEngine
@@ -112,6 +196,10 @@ namespace std {
 
 			for (auto card: s.cards) {
 				GameEngine::hash_combine(result, card);
+			}
+
+			for (auto deck_card : s.deck_cards) {
+				GameEngine::hash_combine(result, deck_card);
 			}
 
 			return result;

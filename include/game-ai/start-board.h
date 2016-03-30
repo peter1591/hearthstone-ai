@@ -10,7 +10,7 @@ public:
 	GameEngine::Board GetBoard(int rand_seed) const;
 
 private: // for debug only
-	static void InitializeDebugDeck1(GameEngine::Deck &deck);
+	static void InitializeDebugDeck1(GameEngine::Hand &deck);
 	static void InitializeDebugHand1(GameEngine::Hand &hand);
 	static void InitializeDebugBoard1(GameEngine::Board & board);
 
