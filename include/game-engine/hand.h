@@ -22,7 +22,13 @@ public:
 	Hand(RandomGenerator & random_generator, Hand && rhs);
 	Hand & operator=(Hand && rhs);
 
-	void AddCard(const Card &card);
+public: // initializer
+	void Initialize_AddHandCard(Card const& card);
+
+public: // operations
+	void DrawOneCardToHand();
+	Card DrawOneCardAndDiscard();
+
 	Card const& GetCard(Locator idx) const { return *(this->cards.begin() + idx); }
 	void RemoveCard(Locator idx);
 	size_t GetCount() const { return this->cards.size(); }
@@ -30,12 +36,14 @@ public:
 
 	void AddCardToDeck(Card const& card);
 	bool IsDeckEmpty() const;
-	Card DrawFromDeck();
 
 	bool operator==(const Hand &rhs) const;
 	bool operator!=(const Hand &rhs) const { return !(*this == rhs); }
 
 	std::string GetDebugString() const;
+
+private:
+	Card DrawFromDeck();
 
 private:
 	RandomGenerator & random_generator;

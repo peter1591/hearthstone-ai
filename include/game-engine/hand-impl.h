@@ -42,10 +42,23 @@ namespace GameEngine {
 		return *this;
 	}
 
-	inline void Hand::AddCard(const Card &card)
+	inline void Hand::Initialize_AddHandCard(Card const & card)
 	{
 		this->cards.push_back(card);
 		this->count_by_type[card.type]++;
+	}
+
+	inline void Hand::DrawOneCardToHand()
+	{
+		Card draw_card = this->DrawFromDeck();
+
+		this->cards.push_back(draw_card);
+		this->count_by_type[draw_card.type]++;
+	}
+
+	inline Card Hand::DrawOneCardAndDiscard()
+	{
+		return this->DrawFromDeck();
 	}
 
 	inline int Hand::GetCountByCardType(Card::Type t) const

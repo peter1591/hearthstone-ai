@@ -12,13 +12,12 @@ namespace GameEngine
 			return StageHelper::CheckHeroMinionDead(board);
 		}
 
-		Card draw_card = board.player_hand.DrawFromDeck();
-
 		if (board.player_hand.GetCount() < 10) {
-			board.player_hand.AddCard(draw_card);
+			board.player_hand.DrawOneCardToHand();
 		}
 		else {
 			// hand can have maximum of 10 cards
+			board.player_hand.DrawOneCardAndDiscard();
 			// TODO: distroy card (trigger deathrattle?)
 		}
 
