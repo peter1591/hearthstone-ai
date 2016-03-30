@@ -169,7 +169,7 @@ inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::op
 
 	this->minions.clear();
 	for (auto & minion : rhs.minions) {
-		this->minions.push_back(Minion(*this, minion));
+		this->minions.push_back(Minion(*this, std::move(minion)));
 	}
 
 	return *this;
