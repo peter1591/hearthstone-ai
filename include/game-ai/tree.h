@@ -92,6 +92,12 @@ inline void TreeNode::GetBoard(GameEngine::Board & board) const
 
 	this->parent->GetBoard(board);
 	board.ApplyMove(this->move);
+#ifdef DEBUG
+	size_t current_hash = std::hash<GameEngine::Board>()(board);
+	if (this->board_hash != current_hash) {
+		throw std::runtime_error("consistency check failed: board hash changed");
+	}
+#endif
 }
 
 inline Tree::Tree()

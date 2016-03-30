@@ -7,7 +7,7 @@ class StartBoard
 public:
 	StartBoard();
 
-	GameEngine::Board GetBoard(int rand_seed);
+	GameEngine::Board GetBoard(int rand_seed) const;
 
 private: // for debug only
 	static void InitializeDebugDeck1(GameEngine::Deck &deck);

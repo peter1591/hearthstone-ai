@@ -104,7 +104,7 @@ inline StartBoard::StartBoard()
 	InitializeDebugBoard1(this->board_debug1);
 }
 
-inline GameEngine::Board StartBoard::GetBoard(int rand_seed)
+inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const
 {
 	return GameEngine::Board::Clone(this->board_debug1);
 }
