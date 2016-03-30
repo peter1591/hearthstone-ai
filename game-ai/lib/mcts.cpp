@@ -95,7 +95,7 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	board.ApplyMove(expanding_move, &next_board_is_random);
 
 	// find transposition node (i.e., other node with the same board)
-	TreeNode *transposition_node = this->board_node_map.Find(board, *this);
+	TreeNode *transposition_node = this->board_node_map.Find(board, this->current_iteration_root_node_board);
 	if (transposition_node) {
 		// a transposition node is found
 #ifdef DEBUG
@@ -138,7 +138,7 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 		bool next_board_is_random;
 		board.ApplyMove(expanding_move, &next_board_is_random);
 
-		TreeNode *transposition_node = this->board_node_map.Find(board, *this);
+		TreeNode *transposition_node = this->board_node_map.Find(board, this->current_iteration_root_node_board);
 		if (transposition_node) {
 #ifdef DEBUG
 			if (transposition_node->parent == node) {
@@ -232,7 +232,7 @@ bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Boa
 	}
 
 	// game-flow move is non-determinsitic for this board
-	transposition_node = this->board_node_map.Find(board, *this);
+	transposition_node = this->board_node_map.Find(board, this->current_iteration_root_node_board);
 	if (transposition_node) {
 #ifdef DEBUG
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
