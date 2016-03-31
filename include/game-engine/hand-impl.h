@@ -133,8 +133,7 @@ namespace GameEngine {
 		// check hidden cards
 		if (this->hidden_cards != rhs.hidden_cards) return false;
 
-		// TODO: do we really need to check deck cards?
-		if (this->deck_cards != rhs.deck_cards) return false;
+		// don't compare deck_cards; all the necessary decision information is already in hidden_cards
 
 		return true;
 	}
@@ -204,11 +203,7 @@ namespace std {
 				GameEngine::hash_combine(result, hidden_card);
 			}
 
-			// TODO: do we really need to check deck cards?
-			// TODO: the order is not important
-			for (auto const& deck_card : s.deck_cards) {
-				GameEngine::hash_combine(result, deck_card);
-			}
+			// don't compare deck_cards; all the necessary decision information is already in hidden_cards
 
 			return result;
 		}
