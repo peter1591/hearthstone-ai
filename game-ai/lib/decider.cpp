@@ -224,11 +224,6 @@ void Decider::Add(const MCTS& mcts)
 	this->data.push_back(&mcts);
 }
 
-int Decider::GetRandom()
-{
-	return rand();
-}
-
 Decider::MovesInfo Decider::GetBestMoves()
 {
 	this->best_moves.Clear();

@@ -36,8 +36,6 @@ private:
 	};
 
 private:
-	int GetRandom();
-
 	std::unordered_map<GameEngine::Move, TreeNode> AggregateProgressChildren(std::vector<ProgressData> const& progresses);
 	void GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &progresses);
 	void GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Move const& move);
