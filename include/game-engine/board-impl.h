@@ -126,7 +126,7 @@ inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 
 inline void Board::SetRandomSeed(unsigned int random_seed)
 {
-	this->random_generator.SetRandomSeed(random_seed);
+	this->random_seed = random_seed;
 }
 
 inline void Board::SetStateToPlayerChooseBoardMove()

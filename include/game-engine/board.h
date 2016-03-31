@@ -46,6 +46,8 @@ namespace GameEngine {
 			this->stage = rhs.stage;
 			this->random_generator = rhs.random_generator;
 			this->data = rhs.data;
+
+			this->random_seed = rhs.random_seed;
 		}
 		Board & operator=(const Board &rhs) = delete;
 
@@ -72,6 +74,8 @@ namespace GameEngine {
 				this->stage = std::move(rhs.stage);
 				this->random_generator = std::move(rhs.random_generator);
 				this->data = std::move(rhs.data);
+
+				this->random_seed = std::move(rhs.random_seed);
 			}
 
 			return *this;
