@@ -176,6 +176,7 @@
     <ClInclude Include="..\..\..\include\game-engine\hand-card.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
+    <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\on-death-trigger.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />

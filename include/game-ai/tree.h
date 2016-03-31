@@ -45,7 +45,7 @@ public:
 	int count;
 
 	// only valid if this node is expanded (i.e., has children)
-	GameEngine::NextMoveGetter next_move_getter; // not valid for game-flow nodes
+	GameEngine::NextMoveGetter next_move_getter; // not valid if next moves are not deterministic
 	bool next_moves_are_deterministic; // The next moves always the same for identical boards? E.g., Game-flow are not deterministic
 
 #ifdef DEBUG

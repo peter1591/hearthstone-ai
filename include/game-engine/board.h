@@ -241,9 +241,4 @@ namespace std {
 	};
 }
 
-#include "game-engine/board-objects/minion-iterator-impl.h"
-#include "game-engine/board-objects/minion-impl.h"
-#include "game-engine/board-objects/minions-impl.h"
-#include "game-engine/board-objects/enchantments-impl.h"
-
 #endif
