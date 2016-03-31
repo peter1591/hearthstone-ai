@@ -89,18 +89,18 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveG
 }
 
 template<typename T>
-inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& container, Move &move)
+inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& container, Board const& board, Move &move)
 {
 	while (!container.empty())
 	{
 		T & item = container.back();
-		if (item.GetNextMove(move)) return true;
+		if (item.GetNextMove(board, move)) return true;
 		container.pop_back();
 	}
 	return false;
 }
 
-inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (!this->moves.empty()) {
 		move = this->moves.back();
@@ -108,11 +108,11 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(Move & move)
 		return true;
 	}
 
-	if (this->GetNextMoveFromContainer(this->items_player_attack, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_player_play_minion, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_opponent_play_minion, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_player_equip_weapon, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_opponent_equip_weapon, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_player_attack, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_player_play_minion, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_opponent_play_minion, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_player_equip_weapon, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_opponent_equip_weapon, board, move)) return true;
 	return false;
 }
 
@@ -144,7 +144,7 @@ inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGe
 	return new ItemPlayerPlayMinion(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
@@ -190,7 +190,7 @@ inline GameEngine::NextMoveGetter::ItemOpponentPlayMinion * GameEngine::NextMove
 	return new ItemOpponentPlayMinion(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
@@ -236,7 +236,7 @@ inline GameEngine::NextMoveGetter::ItemPlayerEquipWeapon * GameEngine::NextMoveG
 	return new ItemPlayerEquipWeapon(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
@@ -280,7 +280,7 @@ inline GameEngine::NextMoveGetter::ItemOpponentEquipWeapon * GameEngine::NextMov
 	return new ItemOpponentEquipWeapon(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
@@ -324,7 +324,7 @@ inline GameEngine::NextMoveGetter::ItemAttack * GameEngine::NextMoveGetter::Item
 	return new ItemAttack(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemAttack::GetNextMove(Move & move)
+inline bool GameEngine::NextMoveGetter::ItemAttack::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->attacker.None()) return false;
 	if (this->attacked.None()) {

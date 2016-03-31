@@ -15,7 +15,7 @@ public:
 	public:
 		ItemPlayerPlayMinion(Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets);
 		ItemPlayerPlayMinion* Clone() const;
-		bool GetNextMove(Move & move);
+		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemPlayerPlayMinion const& rhs) const;
 		bool operator!=(ItemPlayerPlayMinion const& rhs) const;
 
@@ -31,7 +31,7 @@ public:
 	public:
 		ItemOpponentPlayMinion(Card card, SlotIndex put_location, SlotIndexBitmap required_targets);
 		ItemOpponentPlayMinion* Clone() const;
-		bool GetNextMove(Move & move);
+		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemOpponentPlayMinion const& rhs) const;
 		bool operator!=(ItemOpponentPlayMinion const& rhs) const;
 
@@ -47,7 +47,7 @@ public:
 	public:
 		ItemPlayerEquipWeapon(Hand::Locator hand_card, SlotIndexBitmap required_targets);
 		ItemPlayerEquipWeapon* Clone() const;
-		bool GetNextMove(Move & move);
+		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemPlayerEquipWeapon const& rhs) const;
 		bool operator!=(ItemPlayerEquipWeapon const& rhs) const;
 
@@ -62,7 +62,7 @@ public:
 	public:
 		ItemOpponentEquipWeapon(Card card, SlotIndexBitmap required_targets);
 		ItemOpponentEquipWeapon* Clone() const;
-		bool GetNextMove(Move & move);
+		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemOpponentEquipWeapon const& rhs) const;
 		bool operator!=(ItemOpponentEquipWeapon const& rhs) const;
 
@@ -77,7 +77,7 @@ public:
 	public:
 		ItemAttack(SlotIndexBitmap && attacker, SlotIndexBitmap && attacked);
 		ItemAttack* Clone() const;
-		bool GetNextMove(Move & move);
+		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemAttack const& rhs) const;
 		bool operator!=(ItemAttack const& rhs) const;
 	
@@ -102,14 +102,14 @@ public:
 	void AddItems(std::list<ItemPlayerEquipWeapon> && items);
 	void AddItems(std::list<ItemOpponentEquipWeapon> && items);
 
-	bool GetNextMove(Move &move);
+	bool GetNextMove(Board const& board, Move &move);
 	bool Empty();
 
 	bool operator==(NextMoveGetter const& rhs) const;
 	bool operator!=(NextMoveGetter const& rhs) const;
 
 private:
-	template <typename T> bool GetNextMoveFromContainer(std::list<T> & container, Move &move);
+	template <typename T> bool GetNextMoveFromContainer(std::list<T> & container, Board const& board, Move &move);
 	template <typename T> static bool IsEqual(std::list<T> const& lhs, std::list<T> const& rhs);
 
 private:

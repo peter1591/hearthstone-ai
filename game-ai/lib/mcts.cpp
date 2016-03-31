@@ -82,7 +82,7 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 
 	if (this->UseNextMoveGetter(node)) {
 		board.GetNextMoves(node->next_move_getter, node->next_moves_are_deterministic);
-		if (node->next_move_getter.GetNextMove(expanding_move) == false) {
+		if (node->next_move_getter.GetNextMove(board, expanding_move) == false) {
 			throw std::runtime_error("should at least return one possible move");
 		}
 	}
@@ -123,7 +123,7 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 	if (!this->UseNextMoveGetter(node)) throw std::runtime_error("game-flow stages should all with non-deterministic next moves");
 #endif
 
-	if (node->next_move_getter.GetNextMove(expanding_move)) {
+	if (node->next_move_getter.GetNextMove(board, expanding_move)) {
 		// not fully expanded yet
 
 #ifdef DEBUG
