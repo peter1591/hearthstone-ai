@@ -189,7 +189,6 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move_in
 		this->GoToNextDeterministicGameFlowProgress(progress);
 
 		move_info.move.action = GameEngine::Move::ACTION_GAME_FLOW;
-		move_info.move.data.game_flow_data.rand_seed = 0;
 		move_info.wins = -1;
 		move_info.count = -1;
 

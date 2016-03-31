@@ -106,5 +106,7 @@ inline StartBoard::StartBoard()
 
 inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const
 {
-	return GameEngine::Board::Clone(this->board_debug1);
+	GameEngine::Board board = GameEngine::Board::Clone(this->board_debug1);
+	board.SetRandomSeed(rand_seed);
+	return std::move(board);
 }

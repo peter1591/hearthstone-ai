@@ -53,14 +53,13 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
-inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool & is_deterministic) const
+inline void Board::GetNextMoves(GameEngine::Move & next_move, bool & is_deterministic) const
 {
 	static Move game_flow_move;
 
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
 		next_move.action = GameEngine::Move::ACTION_GAME_FLOW;
-		next_move.data.game_flow_data.rand_seed = rand_seed;
 		is_deterministic = false;
 		return;
 
@@ -114,13 +113,14 @@ inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 
 inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 {
-	if (this->GetStageType() == STAGE_TYPE_GAME_FLOW) {
-		this->random_generator.SetRandomSeed(move.data.game_flow_data.rand_seed);
-	}
-
 	if (introduced_random != nullptr) this->random_generator.ClearFlag_HasCalled();
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 	if (introduced_random != nullptr) *introduced_random = this->random_generator.GetFlag_HasCalled();
+}
+
+inline void Board::SetRandomSeed(unsigned int random_seed)
+{
+	this->random_generator.SetRandomSeed(random_seed);
 }
 
 inline void Board::SetStateToPlayerChooseBoardMove()

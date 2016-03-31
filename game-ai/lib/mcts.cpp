@@ -99,7 +99,7 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 		}
 	}
 	else {
-		board.GetNextMoves(this->GetRandom(), expanding_move, node->next_moves_are_deterministic);
+		board.GetNextMoves(expanding_move, node->next_moves_are_deterministic);
 	}
 
 	bool next_board_is_random;
@@ -206,7 +206,7 @@ bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Boa
 #ifdef DEBUG
 	bool prev_next_moves_are_deterministic = node->next_moves_are_deterministic;
 #endif
-	board.GetNextMoves(this->GetRandom(), expanding_move, node->next_moves_are_deterministic);
+	board.GetNextMoves(expanding_move, node->next_moves_are_deterministic);
 #ifdef DEBUG
 	if (node->next_moves_are_deterministic != prev_next_moves_are_deterministic) {
 		throw std::runtime_error("parent->next_moves_are_random should not be altered.");
@@ -425,7 +425,7 @@ bool MCTS::Simulate(GameEngine::Board &board)
 		if (stage_type == GameEngine::STAGE_TYPE_GAME_FLOW) {
 			GameEngine::Move next_move;
 			bool is_deterministic;
-			board.GetNextMoves(this->GetRandom(), next_move, is_deterministic);
+			board.GetNextMoves(next_move, is_deterministic);
 			board.ApplyMove(next_move);
 
 		} else if (stage_type == GameEngine::STAGE_TYPE_GAME_END) {

@@ -23,10 +23,6 @@ class Move
 			ACTION_END_TURN,
 		};
 
-		struct GameFlowData {
-			unsigned int rand_seed;
-		};
-
 		struct PlayMinionData
 		{
 			SlotIndex put_location;
@@ -131,7 +127,6 @@ class Move
 		};
 
 		union Data {
-			GameFlowData game_flow_data;
 			PlayerPlayMinionData player_play_minion_data;
 			OpponentPlayMinionData opponent_play_minion_data;
 			PlayerEquipWeaponData player_equip_weapon_data;
@@ -160,7 +155,6 @@ inline bool Move::operator==(const Move &rhs) const
 		break;
 
 	case ACTION_GAME_FLOW:
-		if (this->data.game_flow_data.rand_seed != rhs.data.game_flow_data.rand_seed) return false;
 		break;
 
 	case ACTION_PLAYER_PLAY_MINION:
@@ -202,7 +196,7 @@ inline std::string Move::GetDebugString() const
 	switch (this->action)
 	{
 	case Move::ACTION_GAME_FLOW:
-		oss << "[Game flow] random: " << this->data.game_flow_data.rand_seed;
+		oss << "[Game flow]";
 		break;
 
 	case Move::ACTION_PLAYER_PLAY_MINION:
@@ -355,7 +349,6 @@ namespace std {
 				break;
 
 			case GameEngine::Move::ACTION_GAME_FLOW:
-				GameEngine::hash_combine(result, s.data.game_flow_data.rand_seed);
 				break;
 
 			case GameEngine::Move::ACTION_PLAYER_PLAY_MINION:

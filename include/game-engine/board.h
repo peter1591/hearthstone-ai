@@ -89,6 +89,7 @@ namespace GameEngine {
 		BoardObjects::ObjectManager object_manager;
 
 	public:
+		void SetRandomSeed(unsigned int random_seed);
 		void SetStateToPlayerChooseBoardMove();
 
 		Stage GetStage() const { return this->stage; }
@@ -97,7 +98,7 @@ namespace GameEngine {
 
 		// Return all possible moves
 		void GetNextMoves(NextMoveGetter &next_move_getter, bool & is_deterministic) const;
-		void GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool & is_deterministic) const;
+		void GetNextMoves(GameEngine::Move & next_move, bool & is_deterministic) const;
 
 		void GetGoodMove(Move &next_move, unsigned int rand) const;
 
@@ -112,7 +113,6 @@ namespace GameEngine {
 		bool operator!=(const Board &rhs) const;
 
 	public: // internal state data for cross-stage communication
-
 		typedef Move::PlayerPlayMinionData PlayerPlayMinionData;
 		typedef Move::OpponentPlayMinionData OpponentPlayMinionData;
 		typedef Move::PlayerEquipWeaponData PlayerEquipWeaponData;
