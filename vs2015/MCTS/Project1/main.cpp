@@ -14,7 +14,7 @@ static void Run()
 {
 	constexpr int threads = 1;
 	constexpr int sec_each_run = 1;
-	constexpr int msec_total = 60 * 1000;
+	constexpr int msec_total = 60000 * 1000;
 
 	std::mt19937 random_generator((unsigned int)time(nullptr));
 	MCTS mcts[threads];
