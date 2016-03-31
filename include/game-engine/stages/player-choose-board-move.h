@@ -114,6 +114,7 @@ class StagePlayerChooseBoardMove
 
 					move.action = Move::ACTION_PLAYER_PLAY_MINION;
 					move.data.player_play_minion_data.hand_card = hand_idx;
+					move.data.player_play_minion_data.card_id = playing_card.id;
 					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount());
 					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();

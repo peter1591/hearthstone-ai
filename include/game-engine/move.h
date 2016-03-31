@@ -57,6 +57,7 @@ class Move
 
 		struct PlayerPlayMinionData {
 			Hand::Locator hand_card;
+			int card_id; // to distinguish moves for different boards merged into one MCTS tree node
 
 			PlayMinionData data;
 
@@ -64,6 +65,7 @@ class Move
 			{
 				if (this->hand_card != rhs.hand_card) return false;
 				if (this->data != rhs.data) return false;
+				if (this->card_id != rhs.card_id) return false;
 				return true;
 			}
 
@@ -203,6 +205,7 @@ inline std::string Move::GetDebugString() const
 
 	case Move::ACTION_PLAYER_PLAY_MINION:
 		oss << "[Player play minion] hand idx = " << this->data.player_play_minion_data.hand_card;
+		oss << ", card id = " << this->data.player_play_minion_data.card_id;
 		oss << ", put location = " << this->data.player_play_minion_data.data.put_location;
 		oss << ", target = " << this->data.player_play_minion_data.data.target;
 		break;
@@ -275,6 +278,7 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.hand_card);
+			GameEngine::hash_combine(result, s.card_id);
 			GameEngine::hash_combine(result, s.data);
 
 			return result;

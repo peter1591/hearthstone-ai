@@ -148,8 +148,11 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(GameEn
 {
 	if (this->done) return false;
 
+	auto const& playing_card = board.player_hand.GetCard(this->hand_card);
+
 	move.action = Move::ACTION_PLAYER_PLAY_MINION;
 	move.data.player_play_minion_data.hand_card = this->hand_card;
+	move.data.player_play_minion_data.card_id = playing_card.id;
 	move.data.player_play_minion_data.data.put_location = this->put_location;
 
 	if (this->required_targets.None())
