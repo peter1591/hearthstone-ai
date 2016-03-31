@@ -29,7 +29,7 @@ namespace GameEngine {
 		return *this;
 	}
 
-	inline void Hand::Initialize_AddPlayerHandCard(Card const & card)
+	inline void Hand::AddDeterminedCard(Card const & card)
 	{
 		HandCard hand_card;
 		hand_card.type = HandCard::TYPE_DETERMINED;

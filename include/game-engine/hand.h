@@ -27,20 +27,21 @@ public:
 	bool operator==(const Hand &rhs) const;
 	bool operator!=(const Hand &rhs) const;
 
-public: // initializer
-	void Initialize_AddPlayerHandCard(Card const & card);
-
-public: // operations
+public: // game operations
 	bool HasCardToDraw() const;
 	void DrawOneCardToHand();
 	Card DrawOneCardAndDiscard();
 
+public: // operations to hand
+	void AddDeterminedCard(Card const& card);
 	Card const& GetCard(Locator idx) const;
 	void RemoveCard(Locator idx);
 	size_t GetCount() const;
 
+public: // operations to deck
 	void AddCardToDeck(Card const& card);
 
+public: // debug
 	std::string GetDebugString() const;
 
 private:
