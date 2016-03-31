@@ -32,6 +32,7 @@ public:
 	// what move lead us from parent to this state?
 	GameEngine::Move move;
 	int start_board_random; // (any) one of the start board randoms which leads us to this node
+	std::list<GameEngine::Move> preceeding_moves; // all moves applied to the start boards
 
 	// if this is a player's turn, then it's true
 	// if this is a random node, and it came out due to a player's action, then it's true
@@ -87,12 +88,10 @@ inline void TreeNode::AddChild(TreeNode *node)
 
 inline void TreeNode::GetBoard(GameEngine::Board & board) const
 {
-	if (this->parent == nullptr) {
-		return;
+	for (auto const& move : this->preceeding_moves) {
+		board.ApplyMove(move);
 	}
 
-	this->parent->GetBoard(board);
-	board.ApplyMove(this->move);
 #ifdef DEBUG
 	size_t current_hash = std::hash<GameEngine::Board>()(board);
 	if (this->board_hash != current_hash) {

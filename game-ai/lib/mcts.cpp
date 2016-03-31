@@ -104,6 +104,7 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 
 	bool next_board_is_random;
 	board.ApplyMove(expanding_move, &next_board_is_random);
+	this->applied_moves.push_back(expanding_move);
 
 	// find transposition node (i.e., other node with the same board)
 	TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
@@ -144,6 +145,7 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 
 		bool next_board_is_random;
 		board.ApplyMove(expanding_move, &next_board_is_random);
+		this->applied_moves.push_back(expanding_move);
 
 		TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
 		if (transposition_node) {
@@ -183,6 +185,7 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 	this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
 
 	board.ApplyMove(node->move);
+	this->applied_moves.push_back(node->move);
 
 	if (node->equivalent_node != nullptr) {
 		node = node->equivalent_node;
@@ -215,6 +218,7 @@ bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Boa
 
 	bool next_board_is_random;
 	board.ApplyMove(expanding_move, &next_board_is_random);
+	this->applied_moves.push_back(expanding_move);
 
 	TreeNode * transposition_node = nullptr;
 
@@ -280,6 +284,7 @@ bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::
 			// this move has not been expanded --> expand it
 			bool next_board_is_random;
 			board.ApplyMove(expanding_move, &next_board_is_random);
+			this->applied_moves.push_back(expanding_move);
 
 			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
 			if (transposition_node) {
@@ -323,6 +328,7 @@ bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::
 	this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
 
 	board.ApplyMove(node->move);
+	this->applied_moves.push_back(node->move);
 
 	if (node->equivalent_node != nullptr) {
 		node = node->equivalent_node;
@@ -387,6 +393,7 @@ TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& n
 	this->allocated_node = new TreeNode;
 
 	new_node->start_board_random = this->current_start_board_random;
+	new_node->preceeding_moves = this->applied_moves; // copy
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
 	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
@@ -409,6 +416,10 @@ TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& n
 
 #ifdef DEBUG
 	new_node->board_hash = std::hash<GameEngine::Board>()(next_board);
+
+	GameEngine::Board test_board = this->start_board.GetBoard(new_node->start_board_random);
+	new_node->GetBoard(test_board);
+	if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
 #endif
 
 	node->AddChild(new_node);
@@ -469,6 +480,7 @@ void MCTS::CreateRootNode(GameEngine::Board const& board)
 	TreeNode * root_node = tree.GetRootNode();
 
 	root_node->start_board_random = this->current_start_board_random;
+	root_node->preceeding_moves.clear();
 	root_node->stage = board.GetStage();
 	root_node->stage_type = board.GetStageType();
 	root_node->parent = nullptr;
@@ -493,6 +505,7 @@ void MCTS::Iterate()
 {
 	this->current_start_board_random = rand();
 	GameEngine::Board board = this->start_board.GetBoard(this->current_start_board_random);
+	this->applied_moves.clear();
 
 	if (!this->tree.GetRootNode()) {
 		this->CreateRootNode(board);

@@ -53,6 +53,7 @@ private: // for internal use
 	std::vector<TreeNode*> traversed_nodes;
 
 	int current_start_board_random;
+	std::list<GameEngine::Move> applied_moves; // all moves applied to the start boards
 };
 
 #endif
