@@ -35,20 +35,23 @@ static double CalculateSelectionWeight(TreeNode *node, double total_simulations_
 	return win_rate + exploration_factor * exploration_term;
 }
 
-static TreeNode *FindBestChildToExpand(
-	TreeNode *parent_node,
-	double exploration_factor = EXLPORATION_FACTOR)
+static TreeNode *FindBestChildToExpand(std::list<TreeNode*> children, int total_simulations, double exploration_factor)
 {
-	const TreeNode::children_type &children = parent_node->children;
-	const int &total_simulations = parent_node->count;
+	if (children.empty()) return nullptr;
+
+#ifdef DEBUG
+	int total_simulations_debug = 0;
+#endif
 
 	TreeNode::children_type::const_iterator it_child = children.begin();
-
 	double total_simulations_ln = log((double)total_simulations);
 
-	TreeNode * max_weight_node = nullptr;
-
-	double max_weight = -std::numeric_limits<double>::max();
+	TreeNode * max_weight_node = *it_child;
+	double max_weight = CalculateSelectionWeight(*it_child, total_simulations_ln, exploration_factor);
+#ifdef DEBUG
+	total_simulations_debug += (*it_child)->count;
+#endif
+	++it_child;
 
 	for (; it_child != children.end(); ++it_child) {
 		double weight = CalculateSelectionWeight(*it_child, total_simulations_ln, exploration_factor);
@@ -56,9 +59,23 @@ static TreeNode *FindBestChildToExpand(
 			max_weight = weight;
 			max_weight_node = *it_child;
 		}
+#ifdef DEBUG
+		total_simulations_debug += (*it_child)->count;
+#endif
 	}
 
+#ifdef DEBUG
+	if (total_simulations != total_simulations_debug) throw std::runtime_error("simulation count not match.");
+#endif
+
 	return max_weight_node;
+}
+
+static TreeNode *FindBestChildToExpand(
+	TreeNode *parent_node,
+	double exploration_factor = EXLPORATION_FACTOR)
+{
+	return FindBestChildToExpand(parent_node->children, parent_node->count, exploration_factor);
 }
 
 void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
