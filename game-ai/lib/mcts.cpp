@@ -35,22 +35,30 @@ static double CalculateSelectionWeight(TreeNode *node, double total_simulations_
 	return win_rate + exploration_factor * exploration_term;
 }
 
-static TreeNode *FindBestChildToExpand(std::list<TreeNode*> children, int total_simulations, double exploration_factor)
+static TreeNode * FindChildWithMove(std::list<TreeNode*> const& children, GameEngine::Move const& move)
+{
+	// TODO: use a faster data structure to quickly find a child with certain move
+	for (auto const& child : children)
+	{
+		if (child->move == move) return child;
+	}
+	return nullptr;
+}
+
+static TreeNode *FindBestChildToExpand(std::list<TreeNode*> children, double exploration_factor = EXLPORATION_FACTOR)
 {
 	if (children.empty()) return nullptr;
 
-#ifdef DEBUG
-	int total_simulations_debug = 0;
-#endif
+	int total_simulations = 0;
+	for (auto const& child : children) {
+		total_simulations += child->count;
+	}
 
 	TreeNode::children_type::const_iterator it_child = children.begin();
 	double total_simulations_ln = log((double)total_simulations);
 
 	TreeNode * max_weight_node = *it_child;
 	double max_weight = CalculateSelectionWeight(*it_child, total_simulations_ln, exploration_factor);
-#ifdef DEBUG
-	total_simulations_debug += (*it_child)->count;
-#endif
 	++it_child;
 
 	for (; it_child != children.end(); ++it_child) {
@@ -59,23 +67,9 @@ static TreeNode *FindBestChildToExpand(std::list<TreeNode*> children, int total_
 			max_weight = weight;
 			max_weight_node = *it_child;
 		}
-#ifdef DEBUG
-		total_simulations_debug += (*it_child)->count;
-#endif
 	}
 
-#ifdef DEBUG
-	if (total_simulations != total_simulations_debug) throw std::runtime_error("simulation count not match.");
-#endif
-
 	return max_weight_node;
-}
-
-static TreeNode *FindBestChildToExpand(
-	TreeNode *parent_node,
-	double exploration_factor = EXLPORATION_FACTOR)
-{
-	return FindBestChildToExpand(parent_node->children, parent_node->count, exploration_factor);
 }
 
 void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
@@ -145,11 +139,7 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 		// not fully expanded yet
 
 #ifdef DEBUG
-		for (auto const& child : node->children) {
-			if (child->move == expanding_move) {
-				throw std::runtime_error("next-move-getter returns one particular move twice!");
-			}
-		}
+		if (::FindChildWithMove(node->children, expanding_move)) throw std::runtime_error("next-move-getter returns one particular move twice!");
 #endif
 
 		bool next_board_is_random;
@@ -185,7 +175,7 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 		return true;
 	}
 
-	node = ::FindBestChildToExpand(node);
+	node = ::FindBestChildToExpand(node->children);
 #ifdef DEBUG
 	if (node == nullptr) throw std::runtime_error("cannot find best child to expand");
 #endif
@@ -268,7 +258,77 @@ bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Boa
 // return false if an existing node is chosen; 'node' and 'board' will be the existing node
 bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board)
 {
-	throw std::runtime_error("currently only stages with only one next move are supported if the stage's next moves are random.");
+	GameEngine::Move & expanding_move = this->allocated_node->move;
+
+#ifdef DEBUG
+	if (!this->UseNextMoveGetter(node)) throw std::runtime_error("game-flow stages should with only one next move");
+#endif
+
+	GameEngine::NextMoveGetter next_move_getter;
+	bool is_deterministic;
+	board.GetNextMoves(next_move_getter, is_deterministic);
+#ifdef DEBUG
+	if (is_deterministic == true) throw std::runtime_error("this node should be with non-deterministic next moves");
+#endif
+
+	std::list<TreeNode*> children;
+	while (true) {
+		if (next_move_getter.GetNextMove(board, expanding_move) == false) break;
+
+		TreeNode * child_found = FindChildWithMove(node->children, expanding_move);
+		if (child_found == nullptr) {
+			// this move has not been expanded --> expand it
+			bool next_board_is_random;
+			board.ApplyMove(expanding_move, &next_board_is_random);
+
+			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
+			if (transposition_node) {
+#ifdef DEBUG
+				if (transposition_node->parent == node) {
+					// expanded before under the same parent but with different move
+					// --> no need to create a new redirect node
+					throw std::runtime_error("two different moves under the same parent yield identical game states, why is this happening?");
+					// Note: we can still create redirect node, but we want to know why this is happening
+				}
+				if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
+
+				for (auto const& child_node : node->children) {
+					if (child_node->equivalent_node == transposition_node) {
+						throw std::runtime_error("two different moves yield an identical board, why is this happening?");
+					}
+				}
+#endif
+
+				// create a redirect node
+				TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
+				this->traversed_nodes.push_back(redirect_node);
+
+				node = transposition_node;
+				return false;
+			}
+
+			node = this->CreateChildNode(node, expanding_move, board);
+			return true;
+		}
+
+		// this move is expanded before
+		children.push_back(child_found);
+	}
+
+	node = ::FindBestChildToExpand(children);
+#ifdef DEBUG
+	if (node == nullptr) throw std::runtime_error("cannot find best child to expand");
+#endif
+
+	this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
+
+	board.ApplyMove(node->move);
+
+	if (node->equivalent_node != nullptr) {
+		node = node->equivalent_node;
+	}
+
+	return false;
 }
 
 void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
@@ -428,8 +488,7 @@ void MCTS::CreateRootNode(GameEngine::Board const& board)
 
 void MCTS::Iterate()
 {
-	int current_rand = rand();
-	GameEngine::Board board = this->start_board.GetBoard(current_rand);
+	GameEngine::Board board = this->start_board.GetBoard(rand());
 
 	if (!this->tree.GetRootNode()) {
 		this->CreateRootNode(board);

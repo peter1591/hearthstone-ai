@@ -253,8 +253,11 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::GetNextMove(GameE
 {
 	if (this->done) return false;
 
+	auto const& playing_card = board.player_hand.GetCard(this->hand_card);
+
 	move.action = Move::ACTION_PLAYER_EQUIP_WEAPON;
 	move.data.player_equip_weapon_data.hand_card = this->hand_card;
+	move.data.player_equip_weapon_data.card_id = playing_card.id;
 
 	if (this->required_targets.None())
 	{

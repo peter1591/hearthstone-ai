@@ -133,6 +133,7 @@ class StagePlayerChooseBoardMove
 
 					move.action = Move::ACTION_PLAYER_EQUIP_WEAPON;
 					move.data.player_equip_weapon_data.hand_card = hand_idx;
+					move.data.player_equip_weapon_data.card_id = playing_card.id;
 					if (required_targets.None()) move.data.player_equip_weapon_data.data.target = SLOT_INVALID;
 					else move.data.player_equip_weapon_data.data.target = required_targets.GetOneTarget();
 

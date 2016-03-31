@@ -57,7 +57,7 @@ inline TreeNode * BoardNodeMap::Find(const GameEngine::Board &board, StartBoard 
 	if (it_found == this->map.end()) return nullptr;
 
 	for (const auto &possible_node : it_found->second) {
-		GameEngine::Board it_board = start_board.GetBoard(0); // any of a random number should be identical
+		GameEngine::Board it_board = start_board.GetBoard(0); // any number should be okay
 		possible_node->GetBoard(it_board);
 		if (board == it_board) return possible_node;
 

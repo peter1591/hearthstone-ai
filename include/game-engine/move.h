@@ -88,12 +88,14 @@ class Move
 
 		struct PlayerEquipWeaponData {
 			Hand::Locator hand_card;
+			int card_id; // to distinguish moves for different boards merged into one MCTS tree node
 			EquipWeaponData data;
 
 			bool operator==(PlayerEquipWeaponData const& rhs) const
 			{
 				if (this->hand_card != rhs.hand_card) return false;
 				if (this->data != rhs.data) return false;
+				if (this->card_id != rhs.card_id) return false;
 				return true;
 			}
 
@@ -218,6 +220,7 @@ inline std::string Move::GetDebugString() const
 
 	case Move::ACTION_PLAYER_EQUIP_WEAPON:
 		oss << "[Player equip weapon] hand idx = " << this->data.player_equip_weapon_data.hand_card;
+		oss << ", card id = " << this->data.player_equip_weapon_data.card_id;
 		oss << ", target = " << this->data.player_equip_weapon_data.data.target;
 		break;
 
@@ -306,6 +309,7 @@ namespace std {
 
 			GameEngine::hash_combine(result, s.hand_card);
 			GameEngine::hash_combine(result, s.data);
+			GameEngine::hash_combine(result, s.card_id);
 
 			return result;
 		}
