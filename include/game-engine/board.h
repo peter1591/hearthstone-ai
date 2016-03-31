@@ -96,10 +96,8 @@ class Board
 		std::string GetStageName() const;
 
 		// Return all possible moves
-		// If this is a game flow node, you should skip this call
-		// Note: caller should clear 'next_moves' before calling
 		void GetNextMoves(NextMoveGetter &next_move_getter) const;
-		void GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool * introduced_random = nullptr) const;
+		void GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool * is_deterministic = nullptr) const;
 
 		void GetGoodMove(Move &next_move, unsigned int rand) const;
 
