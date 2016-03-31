@@ -38,6 +38,15 @@ namespace GameEngine {
 		this->cards.push_back(hand_card);
 	}
 
+	inline bool Hand::AllCardsDetermined() const
+	{
+		for (auto const& hand_card : this->cards)
+		{
+			if (hand_card.type != HandCard::TYPE_DETERMINED) return true;
+		}
+		return false;
+	}
+
 	inline bool Hand::HasCardToDraw() const
 	{
 		return this->deck_cards.empty();

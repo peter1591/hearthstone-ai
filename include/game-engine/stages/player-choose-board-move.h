@@ -18,9 +18,20 @@ class StagePlayerChooseBoardMove
 	public:
 		static const Stage stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 
-		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter)
+		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter, bool * is_deterministic)
 		{
 			bool const can_play_minion = !board.object_manager.player_minions.IsFull();
+
+			if (is_deterministic) {
+				// if all the hand cards are determined,
+				// then all identical boards have the same next moves
+				// --> is_deterministic is true
+				// if some of the hand cards are not yet determined
+				// then some different boards might considered as the identical boards in MCTS tree
+				// and those different boards might produce different set of next moves
+				// --> is_deterministic is false
+				*is_deterministic = board.player_hand.AllCardsDetermined();
+			}
 
 			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
 			{

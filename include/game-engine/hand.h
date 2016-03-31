@@ -36,6 +36,8 @@ public: // game operations
 public: // operations to hand
 	void AddDeterminedCard(Card const& card);
 
+	bool AllCardsDetermined() const;
+
 	Card const& GetCard(Locator idx) const;
 	void RemoveCard(Locator idx);
 	size_t GetCount() const;

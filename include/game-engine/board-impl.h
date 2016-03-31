@@ -74,7 +74,7 @@ inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_
 	}
 }
 
-inline void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
+inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool * is_deterministic) const
 {
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:
@@ -85,7 +85,7 @@ inline void Board::GetNextMoves(NextMoveGetter &next_move_getter) const
 
 		case STAGE_TYPE_PLAYER:
 		case STAGE_TYPE_OPPONENT:
-			return Board::StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_move_getter);
+			return Board::StageFunctionCaller<StageFunctionChooser::Chooser_GetNextMoves>(this->stage, *this, next_move_getter, is_deterministic);
 
 		default:
 			throw std::runtime_error("Unhandled case in GetNextMoves()");
