@@ -371,6 +371,7 @@ TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move const& m
 	new_node->wins = 0;
 	new_node->count = 0;
 	new_node->equivalent_node = target_node;
+	new_node->start_board_random = this->current_start_board_random; // TODO: might not be used
 	parent->AddChild(new_node);
 
 	return new_node;
@@ -385,6 +386,7 @@ TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move const& n
 	TreeNode * new_node = this->allocated_node;
 	this->allocated_node = new TreeNode;
 
+	new_node->start_board_random = this->current_start_board_random;
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
 	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
@@ -466,6 +468,7 @@ void MCTS::CreateRootNode(GameEngine::Board const& board)
 	tree.CreateRootNode();
 	TreeNode * root_node = tree.GetRootNode();
 
+	root_node->start_board_random = this->current_start_board_random;
 	root_node->stage = board.GetStage();
 	root_node->stage_type = board.GetStageType();
 	root_node->parent = nullptr;
@@ -488,7 +491,8 @@ void MCTS::CreateRootNode(GameEngine::Board const& board)
 
 void MCTS::Iterate()
 {
-	GameEngine::Board board = this->start_board.GetBoard(rand());
+	this->current_start_board_random = rand();
+	GameEngine::Board board = this->start_board.GetBoard(this->current_start_board_random);
 
 	if (!this->tree.GetRootNode()) {
 		this->CreateRootNode(board);

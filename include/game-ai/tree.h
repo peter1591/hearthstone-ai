@@ -31,6 +31,7 @@ public:
 
 	// what move lead us from parent to this state?
 	GameEngine::Move move;
+	int start_board_random; // (any) one of the start board randoms which leads us to this node
 
 	// if this is a player's turn, then it's true
 	// if this is a random node, and it came out due to a player's action, then it's true

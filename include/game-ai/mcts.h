@@ -51,6 +51,8 @@ private: // for internal use
 
 	TreeNode *allocated_node;
 	std::vector<TreeNode*> traversed_nodes;
+
+	int current_start_board_random;
 };
 
 #endif
