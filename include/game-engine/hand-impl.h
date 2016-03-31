@@ -67,6 +67,8 @@ namespace GameEngine {
 		auto it = this->hidden_cards.find(card.id);
 		if (it == this->hidden_cards.end()) throw std::runtime_error("consistency check failed: cannot find the draw card from hidden cards");
 		this->hidden_cards.erase(it);
+
+		return card;
 	}
 
 	inline Card Hand::DrawOneCardFromDeck()
