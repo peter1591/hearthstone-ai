@@ -8,7 +8,8 @@ namespace GameEngine
 	{
 	public:
 		enum Type {
-			TYPE_DETERMINED
+			TYPE_DETERMINED,
+			TYPE_DRAW_FROM_HIDDEN_CARDS, // draw from the hidden cards in hand and deck
 		};
 
 	public: // cannot be compared as normal

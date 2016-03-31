@@ -4,6 +4,7 @@
 #include <functional>
 #include <vector>
 #include <bitset>
+#include <set>
 
 #include "hand-card.h"
 #include "card.h"
@@ -34,6 +35,7 @@ public: // game operations
 
 public: // operations to hand
 	void AddDeterminedCard(Card const& card);
+
 	Card const& GetCard(Locator idx) const;
 	void RemoveCard(Locator idx);
 	size_t GetCount() const;
@@ -52,6 +54,8 @@ private:
 
 	std::vector<HandCard> cards;
 	std::vector<Card> deck_cards;
+
+	std::multiset<int> hidden_cards; // hidden cards from hand and deck
 };
 
 } // namespace GameEngine

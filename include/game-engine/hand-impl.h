@@ -12,13 +12,13 @@ namespace GameEngine {
 	}
 
 	inline Hand::Hand(RandomGenerator & random_generator, Hand const& rhs) :
-		random_generator(random_generator), cards(rhs.cards), deck_cards(rhs.deck_cards)
+		random_generator(random_generator), cards(rhs.cards), deck_cards(rhs.deck_cards), hidden_cards(rhs.hidden_cards)
 	{
 	}
 
 	inline Hand::Hand(RandomGenerator & random_generator, Hand && rhs) :
 		random_generator(random_generator),
-		cards(std::move(rhs.cards)), deck_cards(std::move(rhs.deck_cards))
+		cards(std::move(rhs.cards)), deck_cards(std::move(rhs.deck_cards)), hidden_cards(std::move(rhs.hidden_cards))
 	{
 	}
 
@@ -26,6 +26,7 @@ namespace GameEngine {
 	{
 		this->cards = std::move(rhs.cards);
 		this->deck_cards = std::move(rhs.deck_cards);
+		this->hidden_cards = std::move(rhs.hidden_cards);
 		return *this;
 	}
 
@@ -45,14 +46,18 @@ namespace GameEngine {
 	inline void Hand::DrawOneCardToHand()
 	{
 		HandCard hand_card;
-		hand_card.type = HandCard::TYPE_DETERMINED; // TODO: add a new type TYPE_DRAW_FROM_HIDDEN_CARDS
+		hand_card.type = HandCard::TYPE_DRAW_FROM_HIDDEN_CARDS;
 		hand_card.card = this->DrawOneCardFromDeck();
 		this->cards.push_back(hand_card);
 	}
 
 	inline Card Hand::DrawOneCardAndDiscard()
 	{
-		return this->DrawOneCardFromDeck();
+		Card card = this->DrawOneCardFromDeck();
+
+		auto it = this->hidden_cards.find(card.id);
+		if (it == this->hidden_cards.end()) throw std::runtime_error("consistency check failed: cannot find the draw card from hidden cards");
+		this->hidden_cards.erase(it);
 	}
 
 	inline Card Hand::DrawOneCardFromDeck()
@@ -61,8 +66,7 @@ namespace GameEngine {
 		size_t deck_count = this->deck_cards.size();
 
 		if (UNLIKELY(deck_count == 0)) {
-			ret.MarkInvalid();
-			return ret;
+			throw std::runtime_error("no card to draw");
 		}
 
 		const int rand_idx = this->random_generator.GetRandom((int)deck_count);
@@ -93,7 +97,13 @@ namespace GameEngine {
 
 	inline void Hand::AddCardToDeck(Card const & card)
 	{
+		// TODO: This operation should INVALIDATE all the hand cards with type TYPE_DRAW_FROM_HIDDEN_CARDS
+		// Since the probability distribution differs due to a new card in deck
+		// However, in a normal play, we didn't add a lot cards to deck
+		// so we don't invalidate the existing hand cards
+
 		this->deck_cards.push_back(card);
+		this->hidden_cards.insert(card.id);
 	}
 
 	inline bool Hand::operator==(const Hand &rhs) const
@@ -111,11 +121,19 @@ namespace GameEngine {
 				if (lhs_card.card != rhs_card.card) return false;
 				break;
 
+			case HandCard::TYPE_DRAW_FROM_HIDDEN_CARDS:
+				// no need to compare card id
+				break;
+
 			default:
 				throw std::runtime_error("invalid hand card type");
 			}
 		}
 
+		// check hidden cards
+		if (this->hidden_cards != rhs.hidden_cards) return false;
+
+		// TODO: do we really need to check deck cards?
 		if (this->deck_cards != rhs.deck_cards) return false;
 
 		return true;
@@ -138,6 +156,15 @@ namespace GameEngine {
 
 		result += "Hand: ";
 		for (const auto &card : this->cards) {
+			switch (card.type)
+			{
+			case HandCard::TYPE_DETERMINED:
+				result += "[D]";
+				break;
+			case HandCard::TYPE_DRAW_FROM_HIDDEN_CARDS:
+				result += "[H]";
+				break;
+			}
 			result += card.card.GetDebugString() + " ";
 		}
 
@@ -163,12 +190,23 @@ namespace std {
 					GameEngine::hash_combine(result, card.card);
 					break;
 
+				case GameEngine::HandCard::TYPE_DRAW_FROM_HIDDEN_CARDS:
+					// no need to check card id
+					break;
+
 				default:
 					throw std::runtime_error("invalid hand card type");
 				}
 			}
 
-			for (auto deck_card : s.deck_cards) {
+			for (auto const& hidden_card : s.hidden_cards)
+			{
+				GameEngine::hash_combine(result, hidden_card);
+			}
+
+			// TODO: do we really need to check deck cards?
+			// TODO: the order is not important
+			for (auto const& deck_card : s.deck_cards) {
 				GameEngine::hash_combine(result, deck_card);
 			}
 
