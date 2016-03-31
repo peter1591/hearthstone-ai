@@ -18,12 +18,13 @@ class RandomGenerator
 		{
 		}
 
-		void SetRandomSeed(unsigned int seed) {
+		void SetRandomSeed(unsigned int seed) const {
 			srand(seed);
 		}
 
 		int GetRandom(int exclusive_max) {
-			if (exclusive_max <= 0) throw std::runtime_error("invalid argument");
+			if (exclusive_max < 0) throw std::runtime_error("invalid argument");
+			else if (exclusive_max == 0) return rand();
 			else if (exclusive_max == 1) return 0;
 			else {
 				this->has_called = true;

@@ -138,6 +138,9 @@ namespace GameEngine {
 	private:
 		template<typename Chooser, typename... Params>
 		static typename Chooser::ReturnType StageFunctionCaller(Stage const stage, Params && ...params);
+
+	private:
+		int random_seed;
 	};
 
 } // namespace GameEngine

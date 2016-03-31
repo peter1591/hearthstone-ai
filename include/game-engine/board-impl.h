@@ -55,12 +55,10 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 
 inline void Board::GetNextMoves(GameEngine::Move & next_move, bool & is_deterministic) const
 {
-	static Move game_flow_move;
-
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
 		next_move.action = GameEngine::Move::ACTION_GAME_FLOW;
-		is_deterministic = false;
+		is_deterministic = false; // TODO: check this
 		return;
 
 	case STAGE_TYPE_GAME_END:
@@ -77,6 +75,8 @@ inline void Board::GetNextMoves(GameEngine::Move & next_move, bool & is_determin
 
 inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool & is_deterministic) const
 {
+	this->random_generator.SetRandomSeed(this->random_seed);
+
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:
 			throw std::runtime_error("This is a game flow stage, you should call the GetNextMove() to get the next move directly.");
@@ -95,6 +95,8 @@ inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool & is_dete
 
 inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 {
+	this->random_generator.SetRandomSeed(this->random_seed);
+
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
 		throw std::runtime_error("You cannot choose a good move when in a game-flow stage.");
@@ -113,9 +115,13 @@ inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 
 inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 {
+	this->random_generator.SetRandomSeed(this->random_seed);
+
 	if (introduced_random != nullptr) this->random_generator.ClearFlag_HasCalled();
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 	if (introduced_random != nullptr) *introduced_random = this->random_generator.GetFlag_HasCalled();
+
+	this->random_seed = this->random_generator.GetRandom(0);
 }
 
 inline void Board::SetRandomSeed(unsigned int random_seed)
