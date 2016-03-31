@@ -42,9 +42,9 @@ namespace GameEngine {
 	{
 		for (auto const& hand_card : this->cards)
 		{
-			if (hand_card.type != HandCard::TYPE_DETERMINED) return true;
+			if (hand_card.type != HandCard::TYPE_DETERMINED) return false;
 		}
-		return false;
+		return true;
 	}
 
 	inline bool Hand::HasCardToDraw() const

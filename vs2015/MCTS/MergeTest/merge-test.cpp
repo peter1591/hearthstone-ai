@@ -53,6 +53,7 @@ static void InteractiveTest()
 		GameEngine::Move next_move;
 		if (board.GetStageType() == GameEngine::STAGE_TYPE_GAME_FLOW)
 		{
+			bool is_deterministic;
 			unsigned int rand_seed = (unsigned int) rand();
 			std::cout << "Choose random for game flow move: (default: " << rand_seed << "): ";
 			std::string str_rand_seed;
@@ -62,14 +63,15 @@ static void InteractiveTest()
 				ss << str_rand_seed;
 				ss >> rand_seed;
 			}
-			board.GetNextMoves(rand_seed, next_move);
+			board.GetNextMoves(rand_seed, next_move, is_deterministic);
 		}
 		else
 		{
+			bool is_deterministic;
 			std::vector<GameEngine::Move> next_moves;
 
 			GameEngine::NextMoveGetter next_move_getter;
-			board.GetNextMoves(next_move_getter);
+			board.GetNextMoves(next_move_getter, is_deterministic);
 			GameEngine::Move next_move_getter_result;
 			while (next_move_getter.GetNextMove(next_move_getter_result)) {
 				next_moves.push_back(next_move_getter_result);

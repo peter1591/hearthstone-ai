@@ -96,8 +96,8 @@ class Board
 		std::string GetStageName() const;
 
 		// Return all possible moves
-		void GetNextMoves(NextMoveGetter &next_move_getter, bool * is_deterministic = nullptr) const;
-		void GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool * is_deterministic = nullptr) const;
+		void GetNextMoves(NextMoveGetter &next_move_getter, bool & is_deterministic) const;
+		void GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool & is_deterministic) const;
 
 		void GetGoodMove(Move &next_move, unsigned int rand) const;
 

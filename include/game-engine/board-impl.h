@@ -51,7 +51,7 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 	throw std::runtime_error("Unhandled state for StageFunctionCaller()");
 }
 
-inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool * is_deterministic) const
+inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_move, bool & is_deterministic) const
 {
 	static Move game_flow_move;
 
@@ -59,7 +59,7 @@ inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_
 	case STAGE_TYPE_GAME_FLOW:
 		next_move.action = GameEngine::Move::ACTION_GAME_FLOW;
 		next_move.data.game_flow_data.rand_seed = rand_seed;
-		if (is_deterministic) *is_deterministic = false;
+		is_deterministic = false;
 		return;
 
 	case STAGE_TYPE_GAME_END:
@@ -74,7 +74,7 @@ inline void Board::GetNextMoves(unsigned int rand_seed, GameEngine::Move & next_
 	}
 }
 
-inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool * is_deterministic) const
+inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool & is_deterministic) const
 {
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:

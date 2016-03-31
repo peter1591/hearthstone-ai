@@ -15,15 +15,12 @@ class StageOpponentChooseBoardMove
 	public:
 		static const Stage stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 
-		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter, bool * is_deterministic)
+		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter, bool & is_deterministic)
 		{
 			bool can_play_minion = !board.object_manager.opponent_minions.IsFull();
 
-			if (is_deterministic)
-			{
-				// TODO: use Hand class as opponent_cards
-				*is_deterministic = true;
-			}
+			// TODO: use Hand class as opponent_cards
+			is_deterministic = true;
 
 
 			std::vector<Card> playable_minions;
