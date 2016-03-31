@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <stdexcept>
 #include <functional>
@@ -168,6 +170,54 @@ inline void Board::DebugPrint() const
 inline std::string Board::GetStageName() const
 {
 	return StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage);
+}
+
+inline bool Board::operator==(const Board &rhs) const
+{
+	if (this->stage != rhs.stage) return false;
+
+	if (this->player_stat != rhs.player_stat) return false;
+	if (this->player_secrets != rhs.player_secrets) return false;
+	if (this->player_hand != rhs.player_hand) return false;
+
+	if (this->opponent_stat != rhs.opponent_stat) return false;
+	if (this->opponent_secrets != rhs.opponent_secrets) return false;
+	if (this->opponent_cards != rhs.opponent_cards) return false;
+
+	if (this->object_manager != rhs.object_manager) return false;
+
+	switch (this->stage) {
+	case STAGE_PLAYER_PUT_MINION:
+		if (this->data.player_play_minion_data != rhs.data.player_play_minion_data) return false;
+		break;
+
+	case STAGE_OPPONENT_PUT_MINION:
+		if (this->data.opponent_play_minion_data != rhs.data.opponent_play_minion_data) return false;
+		break;
+
+	case STAGE_PLAYER_EQUIP_WEAPON:
+		if (this->data.player_equip_weapon_data != rhs.data.player_equip_weapon_data) return false;
+		break;
+
+	case STAGE_OPPONENT_EQUIP_WEAPON:
+		if (this->data.opponent_equip_weapon_data != rhs.data.opponent_equip_weapon_data) return false;
+		break;
+
+	case STAGE_PLAYER_ATTACK:
+	case STAGE_OPPONENT_ATTACK:
+		if (this->data.attack_data != rhs.data.attack_data) return false;
+		break;
+
+	default:
+		break;
+	}
+
+	return true;
+}
+
+inline bool Board::operator!=(Board const& rhs) const
+{
+	return !(*this == rhs);
 }
 
 } // namespace GameEngine
