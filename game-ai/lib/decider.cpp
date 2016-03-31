@@ -69,22 +69,6 @@ void Decider::PrintTree(TreeNode const* node, int level, const int max_level)
 	}
 }
 
-static TreeNode const* FindMostSimulatedChild(std::list<TreeNode*> const& children)
-{
-	if (children.empty()) return nullptr;
-
-	TreeNode const* most_simulated_node = children.front();
-	int most_simulated_count = most_simulated_node->count;
-	for (auto const& child : children)
-	{
-		if (child->count > most_simulated_count) {
-			most_simulated_node = child;
-			most_simulated_count = most_simulated_node->count;
-		}
-	}
-	return most_simulated_node;
-}
-
 static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSimulatedChild(std::unordered_map<GameEngine::Move, TreeNode> const& children)
 {
 	if (children.empty()) return children.end();
@@ -99,20 +83,6 @@ static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSi
 		}
 	}
 	return it_most_simulated_node;
-}
-
-static TreeNode const* FindChildNodeWithBoard(TreeNode const* parent, GameEngine::Board && parent_board, GameEngine::Board const& child_board)
-{
-	for (auto child : parent->children)
-	{
-		if (child->equivalent_node != nullptr) child = child->equivalent_node;
-
-		GameEngine::Board current_child_board = std::move(parent_board);
-		current_child_board.ApplyMove(child->move);
-		if (current_child_board == child_board) return child;
-	}
-
-	return nullptr;
 }
 
 void Decider::GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &progresses)
@@ -265,12 +235,6 @@ Decider::MovesInfo Decider::GetBestMoves()
 
 	if (this->data.empty()) {
 		throw std::runtime_error("no any MCTS available");
-	}
-
-	// check root node boards are identical
-	for (int i = 1; i < this->data.size(); ++i) {
-		MCTS const& mcts_ref = *this->data.front();
-		MCTS const& mcts_current = *this->data[i];
 	}
 
 	std::vector<ProgressData> progresses;
