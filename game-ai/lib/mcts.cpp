@@ -85,6 +85,10 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 		if (node->next_move_getter.GetNextMove(board, expanding_move) == false) {
 			throw std::runtime_error("should at least return one possible move");
 		}
+		if (!node->next_moves_are_deterministic) {
+			// we will not use next move getter for non-deterministic nodes
+			node->next_move_getter.Clear();
+		}
 	}
 	else {
 		board.GetNextMoves(this->GetRandom(), expanding_move, node->next_moves_are_deterministic);

@@ -116,6 +116,16 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(GameEngine::Board const& boa
 	return false;
 }
 
+inline void GameEngine::NextMoveGetter::Clear()
+{
+	this->moves.clear();
+	this->items_player_attack.clear();
+	this->items_player_play_minion.clear();
+	this->items_opponent_play_minion.clear();
+	this->items_player_equip_weapon.clear();
+	this->items_opponent_equip_weapon.clear();
+}
+
 inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) const
 {
 	if (!IsEqual(this->moves, rhs.moves)) return false;

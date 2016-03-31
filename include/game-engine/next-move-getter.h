@@ -104,6 +104,7 @@ public:
 
 	bool GetNextMove(Board const& board, Move &move);
 	bool Empty();
+	void Clear();
 
 	bool operator==(NextMoveGetter const& rhs) const;
 	bool operator!=(NextMoveGetter const& rhs) const;
