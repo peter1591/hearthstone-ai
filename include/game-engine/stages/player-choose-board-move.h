@@ -21,32 +21,7 @@ class StagePlayerChooseBoardMove
 		static void GetNextMoves(
 			const Board &board, NextMoveGetter &next_move_getter, bool & is_deterministic)
 		{
-			// if all the hand cards are determined,
-			// then all identical boards have the same next moves
-			// --> is_deterministic is true
-			// if some of the hand cards are not yet determined
-			// then some different boards might considered as the identical boards in MCTS tree
-			// and those different boards might produce different set of next moves
-			// --> is_deterministic is false
-			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player, next_move_getter, is_deterministic);
-
-			// the choices to attack by hero/minion
-			SlotIndexBitmap attacker;
-			SlotIndexBitmap attacked;
-
-			attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE, board);
-
-			if (!attacker.None()) {
-				attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
-
-				NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
-				next_move_getter.AddItem(std::move(player_attack_move));
-			}
-			
-			// the choice to end turn
-			Move move_end_turn;
-			move_end_turn.action = Move::ACTION_END_TURN;
-			next_move_getter.AddItem(std::move(move_end_turn));
+			StageHelper::GetBoardMoves(board, SlotIndex::SLOT_PLAYER_SIDE, board.player, next_move_getter, is_deterministic);
 		}
 
 		static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)

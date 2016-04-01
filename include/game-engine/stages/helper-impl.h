@@ -42,11 +42,18 @@ namespace GameEngine
 		return false;
 	}
 
-	inline void StageHelper::GetBoardMoves_HandCards(
+	inline void StageHelper::GetBoardMoves(
 		Board const & board, SlotIndex side, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined)
 	{
 		bool const minions_full = !player.minions.IsFull();
 
+		// if all the hand cards are determined,
+		// then all identical boards have the same next moves
+		// --> is_deterministic is true
+		// if some of the hand cards are not yet determined
+		// then some different boards might considered as the identical boards in MCTS tree
+		// and those different boards might produce different set of next moves
+		// --> is_deterministic is false
 		all_cards_determined = true;
 
 		for (Hand::Locator hand_idx = 0; hand_idx < board.player.hand.GetCount(); ++hand_idx)
@@ -69,6 +76,14 @@ namespace GameEngine
 				break;
 			}
 		}
+
+		// the choices to attack by hero/minion
+		GetBoardMoves_Attack(board, side, player, next_moves);
+
+		// the choice to end turn
+		Move move_end_turn;
+		move_end_turn.action = Move::ACTION_END_TURN;
+		next_moves.AddItem(std::move(move_end_turn));
 	}
 
 	inline void StageHelper::GetBoardMoves_PlayMinion(
@@ -112,6 +127,21 @@ namespace GameEngine
 		}
 
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayerEquipWeapon(hand_card, required_targets)); // TODO: unify for both player and opponent
+	}
+
+	inline void StageHelper::GetBoardMoves_Attack(Board const & board, SlotIndex side, Player const & player, NextMoveGetter & next_move_getter)
+	{
+		SlotIndexBitmap attacker;
+		SlotIndexBitmap attacked;
+
+		attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE, board);
+
+		if (!attacker.None()) {
+			attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
+
+			NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
+			next_move_getter.AddItem(std::move(player_attack_move));
+		}
 	}
 
 	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous)

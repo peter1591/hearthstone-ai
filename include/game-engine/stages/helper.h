@@ -16,12 +16,14 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayerDrawCard(Board &board);
 	static bool OpponentDrawCard(Board &board);
 
-	static void GetBoardMoves_HandCards(
+	static void GetBoardMoves(
 		Board const & board, SlotIndex side, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined);
 	static void GetBoardMoves_PlayMinion(
 		Board const& board, SlotIndex side, Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter);
 	static void GetBoardMoves_EquipWeapon(
 		Board const& board, SlotIndex side, Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter);
+	static void GetBoardMoves_Attack(
+		Board const& board, SlotIndex side, Player const& player, NextMoveGetter &next_move_getter);
 
 	static bool CheckHeroMinionDead(Board & board);
 
