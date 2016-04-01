@@ -79,13 +79,14 @@ bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	GameEngine::Move & expanding_move = this->allocated_node->move;
 
 	if (this->UseNextMoveGetter(node)) {
-		board.GetNextMoves(node->next_move_getter, node->next_moves_are_deterministic);
-		if (node->next_move_getter.GetNextMove(board, expanding_move) == false) {
+		node->next_move_getter.reset(new GameEngine::NextMoveGetter());
+		board.GetNextMoves(*node->next_move_getter, node->next_moves_are_deterministic);
+		if (node->next_move_getter->GetNextMove(board, expanding_move) == false) {
 			throw std::runtime_error("should at least return one possible move");
 		}
 		if (!node->next_moves_are_deterministic) {
 			// we will not use next move getter for non-deterministic nodes
-			node->next_move_getter.Clear();
+			node->next_move_getter.reset(nullptr);
 		}
 	}
 	else {
@@ -126,47 +127,52 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 	if (!this->UseNextMoveGetter(node)) throw std::runtime_error("game-flow stages should all with non-deterministic next moves");
 #endif
 
-	if (node->next_move_getter.GetNextMove(board, expanding_move)) {
-		// not fully expanded yet
-
+	if (node->next_move_getter) {
+		if (node->next_move_getter->GetNextMove(board, expanding_move)) {
+			// not fully expanded yet
 #ifdef DEBUG
-		for (auto const& child : node->children) {
-			if (child->move == expanding_move) throw std::runtime_error("next-move-getter returns one particular move twice!");
-		}
+			for (auto const& child : node->children) {
+				if (child->move == expanding_move) throw std::runtime_error("next-move-getter returns one particular move twice!");
+			}
 #endif
 
-		bool next_board_is_random;
-		board.ApplyMove(expanding_move, &next_board_is_random);
+			bool next_board_is_random;
+			board.ApplyMove(expanding_move, &next_board_is_random);
 
-		TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
-		if (transposition_node) {
+			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
+			if (transposition_node) {
 #ifdef DEBUG
-			if (transposition_node->parent == node) {
-				// expanded before under the same parent but with different move
-				// --> no need to create a new redirect node
-				throw std::runtime_error("two different moves under the same parent yield identical game states, why is this happening?");
-				// Note: we can still create redirect node, but we want to know why this is happening
-			}
-			if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
-
-			for (auto const& child_node : node->children) {
-				if (child_node->equivalent_node == transposition_node) {
-					throw std::runtime_error("two different moves yield an identical board, why is this happening?");
+				if (transposition_node->parent == node) {
+					// expanded before under the same parent but with different move
+					// --> no need to create a new redirect node
+					throw std::runtime_error("two different moves under the same parent yield identical game states, why is this happening?");
+					// Note: we can still create redirect node, but we want to know why this is happening
 				}
-			}
+				if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
+
+				for (auto const& child_node : node->children) {
+					if (child_node->equivalent_node == transposition_node) {
+						throw std::runtime_error("two different moves yield an identical board, why is this happening?");
+					}
+				}
 #endif
 
-			// create a redirect node
-			TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
-			this->traversed_nodes.push_back(redirect_node);
-			this->traversed_path.AddRedirectNode(redirect_node);
+				// create a redirect node
+				TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
+				this->traversed_nodes.push_back(redirect_node);
+				this->traversed_path.AddRedirectNode(redirect_node);
 
-			node = transposition_node;
-			return false;
+				node = transposition_node;
+				return false;
+			}
+
+			node = this->CreateChildNode(node, expanding_move, board);
+			return true;
 		}
-
-		node = this->CreateChildNode(node, expanding_move, board);
-		return true;
+		else {
+			// fully-expanded
+			node->next_move_getter.reset(nullptr);
+		}
 	}
 
 	node = ::FindBestChildToExpand(node->children);
