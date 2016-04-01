@@ -79,7 +79,6 @@ public: // Get manipulate object
 
 public: // Manipulate heros
 	void SetHero(HeroData const& player, HeroData const& opponent);
-
 	Hero & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions

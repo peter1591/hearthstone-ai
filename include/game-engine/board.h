@@ -25,61 +25,15 @@ namespace GameEngine {
 	class Board
 	{
 	public:
-		Board() :
-			player_hand(this->random_generator),
-			object_manager(*this),
-			stage(STAGE_UNKNOWN)
-		{
-		}
+		Board();
 
 	private: // deep copy; marked as private, so caller need to call Clone()
-		Board(const Board &rhs) :
-			player_hand(this->random_generator, rhs.player_hand),
-			object_manager(*this, rhs.object_manager)
-		{
-			this->player_stat = rhs.player_stat;
-			this->player_secrets = rhs.player_secrets;
-			this->opponent_stat = rhs.opponent_stat;
-			this->opponent_secrets = rhs.opponent_secrets;
-			this->opponent_cards = rhs.opponent_cards;
-
-			this->stage = rhs.stage;
-			this->random_generator = rhs.random_generator;
-			this->data = rhs.data;
-
-			this->random_seed = rhs.random_seed;
-		}
+		Board(const Board &rhs);
 		Board & operator=(const Board &rhs) = delete;
-
 	public:
-		static Board Clone(Board const& rhs) {
-			return Board(rhs);
-		}
-
-		Board(Board && rhs) : player_hand(this->random_generator), object_manager(*this)
-		{
-			*this = std::move(rhs);
-		}
-		Board & operator=(Board && rhs) {
-			if (this != &rhs) {
-				this->player_stat = std::move(rhs.player_stat);
-				this->player_secrets = std::move(rhs.player_secrets);
-				this->player_hand = std::move(rhs.player_hand);
-				this->opponent_stat = std::move(rhs.opponent_stat);
-				this->opponent_secrets = std::move(rhs.opponent_secrets);
-				this->opponent_cards = std::move(rhs.opponent_cards);
-
-				this->object_manager = std::move(rhs.object_manager);
-
-				this->stage = std::move(rhs.stage);
-				this->random_generator = std::move(rhs.random_generator);
-				this->data = std::move(rhs.data);
-
-				this->random_seed = std::move(rhs.random_seed);
-			}
-
-			return *this;
-		}
+		static Board Clone(Board const& rhs);
+		Board(Board && rhs);
+		Board & operator=(Board && rhs);
 
 	public:
 		PlayerStat player_stat;
