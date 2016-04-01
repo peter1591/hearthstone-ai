@@ -19,6 +19,7 @@
 #include "stage.h"
 #include "next-move-getter.h"
 #include "move.h"
+#include "player.h"
 
 namespace GameEngine {
 
@@ -36,9 +37,7 @@ namespace GameEngine {
 		Board & operator=(Board && rhs);
 
 	public:
-		PlayerStat player_stat;
-		Secrets player_secrets;
-		Hand player_hand;
+		Player player;
 
 		PlayerStat opponent_stat;
 		HiddenSecrets opponent_secrets;
@@ -110,9 +109,7 @@ namespace std {
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
 
-			GameEngine::hash_combine(result, s.player_stat);
-			GameEngine::hash_combine(result, s.player_secrets);
-			GameEngine::hash_combine(result, s.player_hand);
+			GameEngine::hash_combine(result, s.player);
 
 			GameEngine::hash_combine(result, s.opponent_stat);
 			GameEngine::hash_combine(result, s.opponent_secrets);

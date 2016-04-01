@@ -72,6 +72,7 @@ inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 	this->board_node_map.Add(board, root_node);
 }
 
+__declspec(noinline)
 inline void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 {
 	while (true)

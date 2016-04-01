@@ -20,10 +20,10 @@ class StagePlayerEquipWeapon
 		{
 			const Board::PlayerEquipWeaponData &data = board.data.player_equip_weapon_data;
 
-			auto playing_card = board.player_hand.GetCard(data.hand_card);
-			board.player_hand.RemoveCard(data.hand_card);
+			auto playing_card = board.player.hand.GetCard(data.hand_card);
+			board.player.hand.RemoveCard(data.hand_card);
 
-			board.player_stat.crystal.CostCrystals(playing_card.cost);
+			board.player.stat.crystal.CostCrystals(playing_card.cost);
 
 			StageHelper::EquipWeapon(board, playing_card, SLOT_PLAYER_SIDE, data.data);
 

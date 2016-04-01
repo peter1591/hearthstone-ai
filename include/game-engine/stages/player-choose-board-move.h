@@ -28,7 +28,7 @@ class StagePlayerChooseBoardMove
 			// then some different boards might considered as the identical boards in MCTS tree
 			// and those different boards might produce different set of next moves
 			// --> is_deterministic is false
-			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player_stat, board.player_hand, board.object_manager.player_minions, next_move_getter, is_deterministic);
+			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player.stat, board.player.hand, board.object_manager.player_minions, next_move_getter, is_deterministic);
 
 			// the choices to attack by hero/minion
 			SlotIndexBitmap attacker;
@@ -78,13 +78,13 @@ class StagePlayerChooseBoardMove
 			bool can_play_minion = !board.object_manager.player_minions.IsFull();
 			SlotIndexBitmap required_targets;
 			bool meet_requirements;
-			for (size_t hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
+			for (size_t hand_idx = 0; hand_idx < board.player.hand.GetCount(); ++hand_idx)
 			{
-				Card const& playing_card = board.player_hand.GetCard(hand_idx);
+				Card const& playing_card = board.player.hand.GetCard(hand_idx);
 				switch (playing_card.type) {
 				case Card::TYPE_MINION:
 					if (!can_play_minion) continue;
-					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
+					if (board.player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
 					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements)
 						&& meet_requirements == false)
@@ -103,7 +103,7 @@ class StagePlayerChooseBoardMove
 					break;
 
 				case Card::TYPE_WEAPON:
-					if (board.player_stat.crystal.GetCurrent() < playing_card.cost) continue;
+					if (board.player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
 					if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements)
 						&& meet_requirements == false)

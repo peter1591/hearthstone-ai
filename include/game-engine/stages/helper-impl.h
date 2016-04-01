@@ -7,17 +7,17 @@ namespace GameEngine
 {
 	inline bool StageHelper::PlayerDrawCard(Board & board)
 	{
-		if (board.player_hand.HasCardToDraw()) {
+		if (board.player.hand.HasCardToDraw()) {
 			StageHelper::Fatigue(board, SLOT_PLAYER_SIDE);
 			return StageHelper::CheckHeroMinionDead(board);
 		}
 
-		if (board.player_hand.GetCount() < 10) {
-			board.player_hand.DrawOneCardToHand();
+		if (board.player.hand.GetCount() < 10) {
+			board.player.hand.DrawOneCardToHand();
 		}
 		else {
 			// hand can have maximum of 10 cards
-			board.player_hand.DrawOneCardAndDiscard();
+			board.player.hand.DrawOneCardAndDiscard();
 			// TODO: distroy card (trigger deathrattle?)
 		}
 
@@ -48,11 +48,11 @@ namespace GameEngine
 	{
 		bool const minions_full = !minions.IsFull();
 
-		all_cards_determined = board.player_hand.AllCardsDetermined(); // TODO: use the following for-loop directly
+		all_cards_determined = board.player.hand.AllCardsDetermined(); // TODO: use the following for-loop directly
 
-		for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
+		for (Hand::Locator hand_idx = 0; hand_idx < board.player.hand.GetCount(); ++hand_idx)
 		{
-			const Card &playing_card = board.player_hand.GetCard(hand_idx);
+			const Card &playing_card = board.player.hand.GetCard(hand_idx);
 
 			switch (playing_card.type) {
 			case Card::TYPE_MINION:
@@ -300,8 +300,8 @@ namespace GameEngine
 	inline void StageHelper::Fatigue(GameEngine::Board & board, SlotIndex side)
 	{
 		if (SlotIndexHelper::IsPlayerSide(side)) {
-			++board.player_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_PLAYER_HERO), board.player_stat.fatigue_damage, false);
+			++board.player.stat.fatigue_damage;
+			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_PLAYER_HERO), board.player.stat.fatigue_damage, false);
 		}
 		else {
 			++board.opponent_stat.fatigue_damage;

@@ -125,18 +125,16 @@ inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 }
 
 inline Board::Board() :
-	player_hand(this->random_generator),
+	player(*this),
 	object_manager(*this),
 	stage(STAGE_UNKNOWN)
 {
 }
 
 inline Board::Board(const Board & rhs) :
-	player_hand(this->random_generator, rhs.player_hand),
+	player(*this, rhs.player),
 	object_manager(*this, rhs.object_manager)
 {
-	this->player_stat = rhs.player_stat;
-	this->player_secrets = rhs.player_secrets;
 	this->opponent_stat = rhs.opponent_stat;
 	this->opponent_secrets = rhs.opponent_secrets;
 	this->opponent_cards = rhs.opponent_cards;
@@ -153,18 +151,23 @@ inline Board Board::Clone(Board const & rhs)
 	return Board(rhs);
 }
 
-inline Board::Board(Board && rhs)
-	: player_hand(this->random_generator), object_manager(*this)
+inline Board::Board(Board && rhs) :
+	player(*this, std::move(rhs.player)),
+	opponent_stat(std::move(rhs.opponent_stat)),
+	opponent_secrets(std::move(rhs.opponent_secrets)),
+	opponent_cards(std::move(rhs.opponent_cards)),
+	object_manager(*this, std::move(rhs.object_manager)),
+	stage(std::move(rhs.stage)),
+	random_generator(std::move(rhs.random_generator)),
+	data(std::move(rhs.data)),
+	random_seed(std::move(rhs.random_seed))
 {
-	*this = std::move(rhs);
 }
 
 inline Board & Board::operator=(Board && rhs)
 {
 	if (this != &rhs) {
-		this->player_stat = std::move(rhs.player_stat);
-		this->player_secrets = std::move(rhs.player_secrets);
-		this->player_hand = std::move(rhs.player_hand);
+		this->player = std::move(rhs.player);
 		this->opponent_stat = std::move(rhs.opponent_stat);
 		this->opponent_secrets = std::move(rhs.opponent_secrets);
 		this->opponent_cards = std::move(rhs.opponent_cards);
@@ -222,8 +225,8 @@ inline void Board::DebugPrint() const
 	std::cout << "Opponent stat: " << this->opponent_stat.GetDebugString() << std::endl;
 	std::cout << "Opponent cards: " << this->opponent_cards.GetDebugString() << std::endl;
 
-	std::cout << "Player stat: " << this->player_stat.GetDebugString() << std::endl;
-	std::cout << "Player cards: " << this->player_hand.GetDebugString() << std::endl;
+	std::cout << "Player stat: " << this->player.stat.GetDebugString() << std::endl;
+	std::cout << "Player cards: " << this->player.hand.GetDebugString() << std::endl;
 
 	this->object_manager.DebugPrint();
 
@@ -239,9 +242,7 @@ inline bool Board::operator==(const Board &rhs) const
 {
 	if (this->stage != rhs.stage) return false;
 
-	if (this->player_stat != rhs.player_stat) return false;
-	if (this->player_secrets != rhs.player_secrets) return false;
-	if (this->player_hand != rhs.player_hand) return false;
+	if (this->player != rhs.player) return false;
 
 	if (this->opponent_stat != rhs.opponent_stat) return false;
 	if (this->opponent_secrets != rhs.opponent_secrets) return false;

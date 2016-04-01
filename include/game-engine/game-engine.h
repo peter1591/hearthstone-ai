@@ -2,6 +2,7 @@
 
 #include "game-engine/board.h"
 
+#include "game-engine/player-impl.h"
 #include "game-engine/next-move-getter-impl.h"
 #include "game-engine/board-objects/minion-iterator-impl.h"
 #include "game-engine/board-objects/minion-impl.h"

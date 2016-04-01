@@ -46,8 +46,8 @@ inline void StartBoard::InitializeDebugHand1(GameEngine::Hand &hand)
 
 inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 {
-	board.player_stat.crystal.Set(1, 1, 0, 0);
-	board.player_stat.fatigue_damage = 0;
+	board.player.stat.crystal.Set(1, 1, 0, 0);
+	board.player.stat.fatigue_damage = 0;
 
 	board.opponent_stat.crystal.Set(0, 0, 0, 0);
 	board.opponent_stat.fatigue_damage = 0;
@@ -66,8 +66,8 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 
 	board.opponent_cards.Set(4, 26);
 
-	InitializeDebugDeck1(board.player_hand);
-	InitializeDebugHand1(board.player_hand);
+	InitializeDebugDeck1(board.player.hand);
+	InitializeDebugHand1(board.player.hand);
 
 	{
 		auto minion = GameEngine::BoardObjects::MinionData();
