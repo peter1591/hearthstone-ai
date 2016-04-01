@@ -1,6 +1,10 @@
 #include <thread>
 #include "game-ai/decider.h"
 #include "game-ai/task.h"
+#include "game-ai/traversed-path-recorder-impl.h"
+#include "game-ai/start-board-impl.h"
+#include "game-ai/board-node-map-impl.h"
+#include "game-ai/mcts-impl.h"
 
 Task::Task(MCTS *mcts)
 {

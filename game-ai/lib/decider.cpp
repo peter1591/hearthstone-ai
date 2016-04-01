@@ -1,3 +1,7 @@
+#include "game-ai/traversed-path-recorder-impl.h"
+#include "game-ai/start-board-impl.h"
+#include "game-ai/board-node-map-impl.h"
+#include "game-ai/mcts-impl.h"
 #include "game-ai/decider.h"
 
 static void PrintLevelPrefix(int level)

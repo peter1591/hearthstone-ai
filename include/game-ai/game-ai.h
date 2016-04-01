@@ -12,3 +12,4 @@
 #include "traversed-path-recorder-impl.h"
 #include "start-board-impl.h"
 #include "board-node-map-impl.h"
+#include "mcts-impl.h"

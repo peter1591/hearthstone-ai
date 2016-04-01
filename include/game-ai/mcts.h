@@ -40,12 +40,18 @@ private:
 	int GetRandom();
 	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
 	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
+
+	TreeNode *FindBestChildToExpand(std::list<TreeNode*> const& children);
+	double CalculateSelectionWeight(TreeNode *node, double total_simulations_ln);
+
 	bool ExpandNewNode(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
+	static constexpr double exploration_factor = 2.0;
+
 	StartBoard start_board;
 	Tree tree;
 	BoardNodeMap board_node_map;
