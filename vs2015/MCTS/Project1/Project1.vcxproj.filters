@@ -290,5 +290,11 @@
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

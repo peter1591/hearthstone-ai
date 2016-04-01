@@ -139,6 +139,8 @@
     <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\start-board.h" />
     <ClInclude Include="..\..\..\include\game-ai\task.h" />
+    <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h" />
+    <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h" />
     <ClInclude Include="..\..\..\include\game-ai\tree.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h" />
