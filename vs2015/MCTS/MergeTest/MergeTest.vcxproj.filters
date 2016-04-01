@@ -36,14 +36,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
-      <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
     <ClCompile Include="merge-test.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\decider.cpp">
-      <Filter>Source Files\game-ai</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
