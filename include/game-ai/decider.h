@@ -41,6 +41,8 @@ private:
 	void GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Move const& move);
 	bool GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move);
 
+	void PrintLevelPrefix(int level);
+	TreeNode *FindBestChildToPlay(const TreeNode *node);
 	void PrintTree(TreeNode const *node, int level, const int max_level);
 	void PrintBestRoute(int levels);
 

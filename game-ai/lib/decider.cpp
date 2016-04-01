@@ -4,14 +4,14 @@
 #include "game-ai/mcts-impl.h"
 #include "game-ai/decider.h"
 
-static void PrintLevelPrefix(int level)
+void Decider::PrintLevelPrefix(int level)
 {
 	for (int i = 0; i<level; i++) {
 		std::cout << "..";
 	}
 }
 
-static TreeNode *FindBestChildToPlay(const TreeNode *node)
+TreeNode * Decider::FindBestChildToPlay(const TreeNode *node)
 {
 	if (node->children.empty()) throw std::runtime_error("failed");
 
