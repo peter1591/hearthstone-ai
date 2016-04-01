@@ -6,7 +6,6 @@
 #include "game-engine/card-id-map.h"
 #include "game-engine/card-database.h"
 #include "game-ai/game-ai.h"
-#include "game-ai/task.h"
 
 #include "game-engine/cards/card_FP1_007.h"
 
@@ -25,7 +24,7 @@ static void Run()
 		StartBoard start_board;
 		mcts[i].Initialize(random_generator(), std::move(start_board));
 
-		Task *new_task = new Task(&mcts[i]);
+		Task *new_task = new Task(mcts[i]);
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
 		tasks.push_back(new_task);
 

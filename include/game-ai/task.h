@@ -45,8 +45,7 @@ public:
 	};
 
 public:
-	// TODO: use reference
-	Task(MCTS *mcts);
+	Task(MCTS & mcts);
 
 	static void ThreadCreatedCallback(Task *task);
 
@@ -63,9 +62,9 @@ public:
 
 public: // not copyable; only movable
 	Task(const Task &task) = delete;
-	Task(Task &&task);
+	Task(Task &&task) = delete;
 	Task &operator=(const Task &task) = delete;
-	Task &operator=(Task &&task);
+	Task &operator=(Task &&task) = delete;
 
 private:
 	enum State {
@@ -95,5 +94,5 @@ private: // private (will not be altered by other threads)
 	PauseNotifier *pause_notifier;
 	std::chrono::time_point<std::chrono::steady_clock> run_until;
 
-	MCTS *mcts;
+	MCTS & mcts;
 };

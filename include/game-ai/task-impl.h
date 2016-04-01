@@ -3,30 +3,13 @@
 #include <thread>
 #include "task.h"
 
-inline Task::Task(MCTS *mcts)
+inline Task::Task(MCTS & mcts) : mcts(mcts)
 {
-	this->mcts = mcts;
 	this->pause_notifier = nullptr;
 	this->iterations = 0;
 
 	// Note: Initialize() might be called after MainLoop() is entered
 	this->state = Task::STATE_SPAWNED;
-}
-
-inline Task::Task(Task &&task)
-{
-	*this = std::move(task);
-}
-
-inline Task & Task::operator=(Task &&task)
-{
-	this->state = std::move(task.state);
-	this->thread = std::move(task.thread);
-	this->pause_notifier = std::move(task.pause_notifier);
-	this->run_until = std::move(task.run_until);
-	this->mcts = std::move(task.mcts);
-
-	return *this;
 }
 
 inline Task::State Task::GetState()
@@ -112,7 +95,7 @@ inline void Task::MainLoop()
 			continue;
 		}
 
-		this->mcts->Iterate();
+		this->mcts.Iterate();
 		this->IncreaseIterationCount();
 	}
 }
