@@ -49,8 +49,8 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	board.player.stat.crystal.Set(1, 1, 0, 0);
 	board.player.stat.fatigue_damage = 0;
 
-	board.opponent_stat.crystal.Set(0, 0, 0, 0);
-	board.opponent_stat.fatigue_damage = 0;
+	board.opponent.stat.crystal.Set(0, 0, 0, 0);
+	board.opponent.stat.fatigue_damage = 0;
 
 	GameEngine::BoardObjects::HeroData player_hero, opponent_hero;
 
@@ -67,8 +67,8 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	InitializeDebugDeck1(board.player.hand);
 	InitializeDebugHand1(board.player.hand);
 
-	InitializeDebugDeck1(board.opponent_hand);
-	InitializeDebugHand1(board.opponent_hand);
+	InitializeDebugDeck1(board.opponent.hand);
+	InitializeDebugHand1(board.opponent.hand);
 
 	{
 		auto minion = GameEngine::BoardObjects::MinionData();
@@ -83,7 +83,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	{
 		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(222, 30, 2, 2);
-		board.object_manager.opponent_minions.InsertBefore(
+		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion)).TurnStart(true);
 	}
@@ -91,7 +91,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	{
 		auto minion = GameEngine::BoardObjects::MinionData();
 		minion.Set(222, 10, 7, 7);
-		board.object_manager.opponent_minions.InsertBefore(
+		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion)).TurnStart(true);
 	}

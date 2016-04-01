@@ -1,5 +1,6 @@
 #pragma once
 
+#include "game-engine/card-database.h"
 #include "game-engine/common.h"
 #include "game-engine/board.h"
 #include "game-engine/card-id-map.h"

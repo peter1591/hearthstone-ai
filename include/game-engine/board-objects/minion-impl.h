@@ -213,5 +213,5 @@ inline bool GameEngine::BoardObjects::Minion::IsPlayerSide() const
 
 inline bool GameEngine::BoardObjects::Minion::IsOpponentSide() const
 {
-	return &this->GetBoard().object_manager.opponent_minions == &this->minions;
+	return &this->GetBoard().opponent.minions == &this->minions;
 }

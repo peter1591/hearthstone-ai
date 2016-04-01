@@ -37,10 +37,7 @@ namespace GameEngine {
 
 	public:
 		Player player;
-
-		PlayerStat opponent_stat;
-		HiddenSecrets opponent_secrets;
-		Hand opponent_hand;
+		Player opponent;
 
 		BoardObjects::ObjectManager object_manager;
 
@@ -105,12 +102,7 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.player);
-
-			GameEngine::hash_combine(result, s.opponent_stat);
-			GameEngine::hash_combine(result, s.opponent_secrets);
-			GameEngine::hash_combine(result, s.opponent_hand);
-
-			GameEngine::hash_combine(result, s.object_manager);
+			GameEngine::hash_combine(result, s.opponent);
 
 			GameEngine::hash_combine(result, s.stage);
 

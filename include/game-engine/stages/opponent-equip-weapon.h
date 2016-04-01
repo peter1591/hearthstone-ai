@@ -16,8 +16,16 @@ class StageOpponentEquipWeapon
 
 		static void Go(Board &board)
 		{
-			// TODO: implement
-			throw std::runtime_error("not implemented");;
+			const Board::PlayHandWeaponData &data = board.data.play_hand_weapon_data;
+
+			auto playing_card = board.opponent.hand.GetCard(data.hand_card);
+			board.opponent.hand.RemoveCard(data.hand_card);
+
+			board.opponent.stat.crystal.CostCrystals(playing_card.cost);
+
+			StageHelper::EquipWeapon(board, playing_card, SLOT_OPPONENT_SIDE, data.data);
+
+			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}
 };
 

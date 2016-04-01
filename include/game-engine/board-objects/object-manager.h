@@ -65,14 +65,12 @@ public:
 	~ObjectManager() {}
 
 	ObjectManager(ObjectManager const& rhs) = delete;
-	ObjectManager(Board & board, ObjectManager const& rhs);
+	ObjectManager(ObjectManager && rhs) = delete;
 	ObjectManager& operator=(ObjectManager const& rhs) = delete;
+	ObjectManager& operator=(ObjectManager && rhs) = delete;
 
-	ObjectManager(Board & board, ObjectManager && rhs);
-	ObjectManager& operator=(ObjectManager && rhs);
-
-	bool operator==(ObjectManager const& rhs) const;
-	bool operator!=(ObjectManager const& rhs) const;
+	bool operator==(ObjectManager const& rhs) const = delete;
+	bool operator!=(ObjectManager const& rhs) const = delete;
 
 public: // Get manipulate object
 	BoardObject GetObject(SlotIndex idx);
@@ -101,29 +99,10 @@ public: // hooks
 public:
 	void DebugPrint() const;
 
-public:
-	Hero opponent_hero;
-	Minions opponent_minions;
-
 private:
 	Board & board;
 };
 
 } // namespace BoardObjects
 } // namespace GameEngine
-
-namespace std {
-	template <> struct hash<GameEngine::BoardObjects::ObjectManager> {
-		typedef GameEngine::BoardObjects::ObjectManager argument_type;
-		typedef std::size_t result_type;
-		result_type operator()(const argument_type &s) const {
-			result_type result = 0;
-
-			GameEngine::hash_combine(result, s.opponent_hero);
-			GameEngine::hash_combine(result, s.opponent_minions);
-
-			return result;
-		}
-	};
-}
 #endif

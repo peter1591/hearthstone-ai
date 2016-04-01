@@ -92,7 +92,7 @@ namespace GameEngine {
 		inline bool MinionIterator::IsOpponentSide() const
 		{
 			this->CheckChangeId();
-			return &this->minions == &this->board.object_manager.opponent_minions;
+			return &this->minions == &this->board.opponent.minions;
 		}
 
 		inline void MinionIterator::CheckChangeId() const

@@ -25,7 +25,7 @@ namespace GameEngine {
 				for (auto it = board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 					all_minions.push_back(it);
 				}
-				for (auto it = board.object_manager.opponent_minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+				for (auto it = board.opponent.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 					all_minions.push_back(it);
 				}
 

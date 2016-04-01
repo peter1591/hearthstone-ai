@@ -161,6 +161,7 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-iterator.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\object-base.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\board.h" />
@@ -180,6 +181,8 @@
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\on-death-trigger.h" />
+    <ClInclude Include="..\..\..\include\game-engine\player-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\player.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />
     <ClInclude Include="..\..\..\include\game-engine\hero-power.h" />
@@ -188,7 +191,6 @@
     <ClInclude Include="..\..\..\include\game-engine\minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\move.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h" />
-    <ClInclude Include="..\..\..\include\game-engine\opponent-cards.h" />
     <ClInclude Include="..\..\..\include\game-engine\player-stat.h" />
     <ClInclude Include="..\..\..\include\game-engine\random-generator.h" />
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />

@@ -18,7 +18,7 @@ namespace GameEngine {
 				BoardObjects::Hero * playing_hero = nullptr;
 
 				if (summoned_minion.IsPlayerSide()) playing_hero = &summoned_minion.GetBoard().player.hero;
-				else playing_hero = &summoned_minion.GetBoard().object_manager.opponent_hero;
+				else playing_hero = &summoned_minion.GetBoard().opponent.hero;
 
 				const int attack_boost = playing_hero->GetWeaponAttack();
 

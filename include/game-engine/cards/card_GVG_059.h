@@ -21,7 +21,7 @@ namespace GameEngine {
 				GameEngine::BoardObjects::Minions * minions = nullptr;
 
 				if (playing_side == SLOT_PLAYER_SIDE) minions = &board.player.minions;
-				else if (playing_side == SLOT_OPPONENT_SIDE) minions = &board.object_manager.opponent_minions;
+				else if (playing_side == SLOT_OPPONENT_SIDE) minions = &board.opponent.minions;
 				else throw std::runtime_error("invalid argument");
 
 				const int minion_count = minions->GetMinionCount();

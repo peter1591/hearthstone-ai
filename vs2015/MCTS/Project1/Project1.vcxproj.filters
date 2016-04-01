@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\game-ai">
-      <UniqueIdentifier>{534157e3-e460-4f7a-b6d3-15a3c97895b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-ai">
       <UniqueIdentifier>{fe25da21-6a3c-437a-9f9d-243c8cfb606e}</UniqueIdentifier>
     </Filter>
@@ -84,9 +81,6 @@
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\move.h">
-      <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\opponent-cards.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\player-stat.h">
@@ -295,6 +289,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\decider-impl.h">
       <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\player.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\object-manager-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\player-impl.h">
+      <Filter>Header Files\game-engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

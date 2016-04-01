@@ -10,7 +10,7 @@ namespace GameEngine
 		inline void ObjectManager::SetHero(HeroData const & player, HeroData const & opponent)
 		{
 			this->board.player.hero.SetHero(player);
-			this->opponent_hero.SetHero(opponent);
+			this->board.opponent.hero.SetHero(opponent);
 		}
 
 		inline BoardObject ObjectManager::GetObject(SlotIndex idx)
@@ -22,7 +22,7 @@ namespace GameEngine
 			else if (idx < SLOT_OPPONENT_HERO)
 				return BoardObject(this->GetMinion(idx));
 			else if (idx == SLOT_OPPONENT_HERO)
-				return BoardObject(this->opponent_hero);
+				return BoardObject(this->board.opponent.hero);
 			else if (idx < SLOT_MAX)
 				return BoardObject(this->GetMinion(idx));
 			else
@@ -30,47 +30,14 @@ namespace GameEngine
 		}
 
 		inline ObjectManager::ObjectManager(Board & board) :
-			board(board), opponent_hero(board), opponent_minions(board)
+			board(board)
 		{
-		}
-
-		inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs) :
-			board(board), opponent_hero(board, std::move(rhs.opponent_hero)),
-			opponent_minions(board, rhs.opponent_minions)
-		{
-		}
-
-		inline ObjectManager::ObjectManager(Board & board, ObjectManager && rhs) :
-			board(board), opponent_hero(board), opponent_minions(board)
-		{
-			*this = std::move(rhs);
-		}
-
-		inline ObjectManager & ObjectManager::operator=(ObjectManager && rhs)
-		{
-			this->opponent_hero = std::move(rhs.opponent_hero);
-			this->opponent_minions = std::move(rhs.opponent_minions);
-
-			return *this;
-		}
-
-		inline bool ObjectManager::operator==(ObjectManager const & rhs) const
-		{
-			if (this->opponent_hero != rhs.opponent_hero) return false;
-			if (this->opponent_minions != rhs.opponent_minions) return false;
-
-			return true;
-		}
-
-		inline bool ObjectManager::operator!=(ObjectManager const & rhs) const
-		{
-			return !(*this == rhs);
 		}
 
 		inline Hero & ObjectManager::GetHeroBySide(SlotIndex side)
 		{
 			if (side == SLOT_PLAYER_SIDE) return this->board.player.hero;
-			else if (side == SLOT_OPPONENT_SIDE) return this->opponent_hero;
+			else if (side == SLOT_OPPONENT_SIDE) return this->board.opponent.hero;
 			else throw std::runtime_error("invalid argument");
 		}
 
@@ -80,7 +47,7 @@ namespace GameEngine
 				return this->board.player.minions.GetMinionsIteratorWithIndexAtBegin(SLOT_PLAYER_MINION_START);
 			}
 			else if (side == SLOT_OPPONENT_SIDE) {
-				return this->opponent_minions.GetMinionsIteratorWithIndexAtBegin(SLOT_OPPONENT_MINION_START);
+				return this->board.opponent.minions.GetMinionsIteratorWithIndexAtBegin(SLOT_OPPONENT_MINION_START);
 			}
 			else throw std::runtime_error("invalid argument");
 		}
@@ -94,7 +61,7 @@ namespace GameEngine
 			}
 			else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx < SLOT_MAX) {
-				return this->opponent_minions.GetIterator(slot_idx - SLOT_OPPONENT_MINION_START);
+				return this->board.opponent.minions.GetIterator(slot_idx - SLOT_OPPONENT_MINION_START);
 			}
 			else throw std::runtime_error("invalid argument");
 		}
@@ -115,7 +82,7 @@ namespace GameEngine
 			}
 			else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx < SLOT_MAX) {
-				return this->opponent_minions.GetMinion(slot_idx - SLOT_OPPONENT_MINION_START);
+				return this->board.opponent.minions.GetMinion(slot_idx - SLOT_OPPONENT_MINION_START);
 			}
 			else throw std::runtime_error("invalid argument");
 		}
@@ -123,58 +90,58 @@ namespace GameEngine
 		inline void ObjectManager::PlayerTurnStart()
 		{
 			this->board.player.hero.TurnStart(true);
-			this->opponent_hero.TurnStart(false);
+			this->board.opponent.hero.TurnStart(false);
 			this->board.player.minions.TurnStart(true);
-			this->opponent_minions.TurnStart(false);
+			this->board.opponent.minions.TurnStart(false);
 		}
 
 		inline void ObjectManager::PlayerTurnEnd()
 		{
 			this->board.player.hero.TurnEnd(true);
-			this->opponent_hero.TurnEnd(false);
+			this->board.opponent.hero.TurnEnd(false);
 			this->board.player.minions.TurnEnd(true);
-			this->opponent_minions.TurnEnd(false);
+			this->board.opponent.minions.TurnEnd(false);
 		}
 
 		inline void ObjectManager::OpponentTurnStart()
 		{
-			this->opponent_hero.TurnStart(true);
+			this->board.opponent.hero.TurnStart(true);
 			this->board.player.hero.TurnStart(false);
-			this->opponent_minions.TurnStart(true);
+			this->board.opponent.minions.TurnStart(true);
 			this->board.player.minions.TurnStart(false);
 		}
 
 		inline void ObjectManager::OpponentTurnEnd()
 		{
-			this->opponent_hero.TurnEnd(true);
+			this->board.opponent.hero.TurnEnd(true);
 			this->board.player.hero.TurnEnd(false);
-			this->opponent_minions.TurnEnd(true);
+			this->board.opponent.minions.TurnEnd(true);
 			this->board.player.minions.TurnEnd(false);
 		}
 
 		inline void ObjectManager::HookAfterMinionAdded(Minion & added_minion)
 		{
 			this->board.player.hero.HookAfterMinionAdded(added_minion);
-			this->opponent_hero.HookAfterMinionAdded(added_minion);
+			this->board.opponent.hero.HookAfterMinionAdded(added_minion);
 			this->board.player.minions.HookAfterMinionAdded(added_minion);
-			this->opponent_minions.HookAfterMinionAdded(added_minion);
+			this->board.opponent.minions.HookAfterMinionAdded(added_minion);
 		}
 
 		inline void ObjectManager::HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage)
 		{
 			this->board.player.hero.HookAfterMinionDamaged(minions, minion, damage);
-			this->opponent_hero.HookAfterMinionDamaged(minions, minion, damage);
+			this->board.opponent.hero.HookAfterMinionDamaged(minions, minion, damage);
 			this->board.player.minions.HookAfterMinionDamaged(minions, minion, damage);
-			this->opponent_minions.HookAfterMinionDamaged(minions, minion, damage);
+			this->board.opponent.minions.HookAfterMinionDamaged(minions, minion, damage);
 		}
 
 		inline void ObjectManager::DebugPrint() const
 		{
 			std::cout << "Player Hero: " << this->board.player.hero.GetDebugString() << std::endl;
-			std::cout << "Opponent Hero: " << this->opponent_hero.GetDebugString() << std::endl;
+			std::cout << "Opponent Hero: " << this->board.opponent.hero.GetDebugString() << std::endl;
 
 			std::cout << "Opponent minions: " << std::endl;
-			this->opponent_minions.DebugPrint();
+			this->board.opponent.minions.DebugPrint();
 
 			std::cout << "Player minions: " << std::endl;
 			this->board.player.minions.DebugPrint();

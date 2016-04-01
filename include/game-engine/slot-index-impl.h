@@ -83,7 +83,7 @@ namespace GameEngine {
 			break;
 
 		case TARGET_TYPE_OPPONENT_ATTACKABLE:
-			if (board.object_manager.opponent_hero.Attackable()) {
+			if (board.opponent.hero.Attackable()) {
 				targets.SetOneTarget(SLOT_OPPONENT_HERO);
 			}
 			MarkAttackableMinions(board, SLOT_OPPONENT_SIDE, targets);

@@ -5,7 +5,7 @@
 
 namespace GameEngine
 {
-	inline bool StageHelper::PlayerDrawCard(Board & board)
+	inline bool StageHelper::PlayerDrawCard(Board & board, Player & player)
 	{
 		if (board.player.hand.HasCardToDraw()) {
 			StageHelper::Fatigue(board, SLOT_PLAYER_SIDE);
@@ -24,12 +24,6 @@ namespace GameEngine
 		return false;
 	}
 
-	inline bool StageHelper::OpponentDrawCard(Board & board)
-	{
-		// TODO: implement
-		throw std::runtime_error("not implemented");
-	}
-
 	inline void StageHelper::GetBoardMoves(
 		Board const & board, SlotIndex side, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined)
 	{
@@ -44,10 +38,10 @@ namespace GameEngine
 		// --> is_deterministic is false
 		all_cards_determined = true;
 
-		for (Hand::Locator hand_idx = 0; hand_idx < board.player.hand.GetCount(); ++hand_idx)
+		for (Hand::Locator hand_idx = 0; hand_idx < player.hand.GetCount(); ++hand_idx)
 		{
 			bool hand_card_determined = false;
-			const Card &playing_card = board.player.hand.GetCard(hand_idx, hand_card_determined);
+			const Card &playing_card = player.hand.GetCard(hand_idx, hand_card_determined);
 			if (!hand_card_determined) all_cards_determined = false;
 
 			switch (playing_card.type) {
@@ -96,7 +90,7 @@ namespace GameEngine
 		}
 #else
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(
-			hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.player.minions.GetMinionCount()), required_targets));
+			hand_card, SlotIndexHelper::GetPlayerMinionIndex(player.minions.GetMinionCount()), required_targets));
 #endif
 	}
 
@@ -108,7 +102,7 @@ namespace GameEngine
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
-		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements) &&
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, side, required_targets, meet_requirements) &&
 			meet_requirements == false)
 		{
 			return;
@@ -122,14 +116,144 @@ namespace GameEngine
 		SlotIndexBitmap attacker;
 		SlotIndexBitmap attacked;
 
-		attacker = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE, board);
+		SlotIndexHelper::TargetType target_attacker, target_attacked;
+		if (side == SLOT_PLAYER_SIDE) {
+			target_attacker = SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE;
+			target_attacked = SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED;
+		}
+		else {
+			target_attacker = SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE;
+			target_attacked = SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED;
+		}
+
+		attacker = SlotIndexHelper::GetTargets(target_attacker, board);
 
 		if (!attacker.None()) {
-			attacked = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED, board);
+			attacked = SlotIndexHelper::GetTargets(target_attacked, board);
 
 			NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
 			next_move_getter.AddItem(std::move(player_attack_move));
 		}
+	}
+
+	inline void StageHelper::GetGoodBoardMove(
+		unsigned int rand, Board const& board, SlotIndex side, Player const & player,
+		Move &good_move)
+	{
+		// heuristic goes here
+		// 1. play minion is good (always put minion to the rightmost)
+		// 2. minion attack is good
+		// 3. hero attack is good
+		// 4. effective spell is good
+
+		thread_local static std::unique_ptr<WeightedMoves> ptr_moves = nullptr;
+		if (!ptr_moves) ptr_moves.reset(new WeightedMoves());
+
+		WeightedMoves & moves = *ptr_moves; // do not re-allocate at each call
+		Move move;
+
+		constexpr int weight_end_turn = 1;
+		constexpr int weight_play_minion = 100;
+		constexpr int weight_equip_weapon = 100;
+		constexpr int weight_attack = 100;
+
+		moves.Clear();
+
+		// the choice to end turn
+		move.action = Move::ACTION_END_TURN;
+		moves.AddMove(move, weight_end_turn);
+
+		// the choices to play a card from hand
+		bool can_play_minion = !player.minions.IsFull();
+		SlotIndexBitmap required_targets;
+		bool meet_requirements;
+		for (size_t hand_idx = 0; hand_idx < player.hand.GetCount(); ++hand_idx)
+		{
+			Card const& playing_card = player.hand.GetCard(hand_idx);
+			switch (playing_card.type) {
+			case Card::TYPE_MINION:
+				if (!can_play_minion) continue;
+				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
+
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, side, required_targets, meet_requirements)
+					&& meet_requirements == false)
+				{
+					break;
+				}
+
+				move.action = Move::ACTION_PLAY_HAND_MINION;
+				move.data.play_hand_minion_data.hand_card = hand_idx;
+				move.data.play_hand_minion_data.card_id = playing_card.id;
+				move.data.play_hand_minion_data.data.put_location = SlotIndexHelper::GetMinionIndex(side, player.minions.GetMinionCount());
+				if (required_targets.None()) move.data.play_hand_minion_data.data.target = SLOT_INVALID;
+				else move.data.play_hand_minion_data.data.target = required_targets.GetOneTarget();
+
+				moves.AddMove(move, weight_play_minion);
+				break;
+
+			case Card::TYPE_WEAPON:
+				if (board.player.stat.crystal.GetCurrent() < playing_card.cost) continue;
+
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, side, required_targets, meet_requirements)
+					&& meet_requirements == false)
+				{
+					break;
+				}
+
+				move.action = Move::ACTION_PLAY_HAND_WEAPON;
+				move.data.play_hand_weapon_data.hand_card = hand_idx;
+				move.data.play_hand_weapon_data.card_id = playing_card.id;
+				if (required_targets.None()) move.data.play_hand_weapon_data.data.target = SLOT_INVALID;
+				else move.data.play_hand_weapon_data.data.target = required_targets.GetOneTarget();
+
+				moves.AddMove(move, weight_play_minion);
+				break;
+
+			default:
+				break; // TODO: handle other card types
+			}
+		}
+
+		// the choices to attack by hero/minion
+		SlotIndexBitmap attacker;
+		SlotIndexBitmap attacked;
+
+		SlotIndexHelper::TargetType target_attacker, target_attacked;
+		if (side == SLOT_PLAYER_SIDE) {
+			target_attacker = SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE;
+			target_attacked = SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED;
+		}
+		else {
+			target_attacker = SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE;
+			target_attacked = SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED;
+		}
+
+		attacker = SlotIndexHelper::GetTargets(target_attacker, board);
+
+		if (!attacker.None()) {
+			attacked = SlotIndexHelper::GetTargets(target_attacked, board);
+
+			while (!attacker.None()) {
+				SlotIndex attacker_idx = attacker.GetOneTarget();
+				attacker.ClearOneTarget(attacker_idx);
+
+				while (!attacked.None()) {
+					SlotIndex attacked_idx = attacked.GetOneTarget();
+					attacked.ClearOneTarget(attacked_idx);
+
+					move.action = Move::ACTION_ATTACK;
+					move.data.attack_data.attacker_idx = attacker_idx;
+					move.data.attack_data.attacked_idx = attacked_idx;
+					moves.AddMove(move, weight_attack);
+				} // for attacked
+			} // for attacker
+		}
+
+		if (moves.Choose(rand, good_move) == false) {
+			throw std::runtime_error("no action is available (should not happen)");
+		}
+
+		return;
 	}
 
 	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous)
@@ -148,7 +272,7 @@ namespace GameEngine
 
 		int possible_targets = 1 - 1; // +1 for the hero, -1 for the original attack target
 		if (player_side) possible_targets += board.player.minions.GetMinionCount();
-		else possible_targets += board.object_manager.opponent_minions.GetMinionCount();
+		else possible_targets += board.opponent.minions.GetMinionCount();
 
 		if (possible_targets == 0)
 		{
@@ -323,8 +447,8 @@ namespace GameEngine
 			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_PLAYER_HERO), board.player.stat.fatigue_damage, false);
 		}
 		else {
-			++board.opponent_stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_OPPONENT_HERO), board.opponent_stat.fatigue_damage, false);
+			++board.opponent.stat.fatigue_damage;
+			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_OPPONENT_HERO), board.opponent.stat.fatigue_damage, false);
 		}
 	}
 }
