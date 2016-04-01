@@ -47,11 +47,13 @@ namespace GameEngine
 	{
 		bool const minions_full = !player.minions.IsFull();
 
-		all_cards_determined = board.player.hand.AllCardsDetermined(); // TODO: use the following for-loop directly
+		all_cards_determined = true;
 
 		for (Hand::Locator hand_idx = 0; hand_idx < board.player.hand.GetCount(); ++hand_idx)
 		{
-			const Card &playing_card = board.player.hand.GetCard(hand_idx);
+			bool hand_card_determined = false;
+			const Card &playing_card = board.player.hand.GetCard(hand_idx, hand_card_determined);
+			if (!hand_card_determined) all_cards_determined = false;
 
 			switch (playing_card.type) {
 			case Card::TYPE_MINION:

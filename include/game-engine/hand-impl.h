@@ -38,15 +38,6 @@ namespace GameEngine {
 		this->cards.push_back(hand_card);
 	}
 
-	inline bool Hand::AllCardsDetermined() const
-	{
-		for (auto const& hand_card : this->cards)
-		{
-			if (hand_card.type != HandCard::TYPE_DETERMINED) return false;
-		}
-		return true;
-	}
-
 	inline bool Hand::HasCardToDraw() const
 	{
 		return this->deck_cards.empty();
@@ -88,6 +79,13 @@ namespace GameEngine {
 		this->deck_cards.pop_back();
 
 		return ret;
+	}
+
+	inline Card const & Hand::GetCard(Locator idx, bool & is_determined) const
+	{
+		auto const& card = *(this->cards.begin() + idx);
+		is_determined = card.type == HandCard::TYPE_DETERMINED;
+		return card.card;
 	}
 
 	inline Card const & Hand::GetCard(Locator idx) const
