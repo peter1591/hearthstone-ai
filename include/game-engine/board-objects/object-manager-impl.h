@@ -37,10 +37,9 @@ namespace GameEngine
 
 		inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs) :
 			board(board), opponent_hero(board, std::move(rhs.opponent_hero)),
-			player_minions(board), opponent_minions(board)
+			player_minions(board, rhs.player_minions),
+			opponent_minions(board, rhs.opponent_minions)
 		{
-			this->player_minions = rhs.player_minions;
-			this->opponent_minions = rhs.opponent_minions;
 		}
 
 		inline ObjectManager::ObjectManager(Board & board, ObjectManager && rhs) :

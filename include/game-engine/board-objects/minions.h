@@ -26,8 +26,8 @@ public:
 #endif
 	}
 
-	Minions(Minions const& rhs) = delete;
-	Minions & operator=(Minions const& rhs);
+	Minions(Board & board, Minions const& rhs);
+	Minions & operator=(Minions const& rhs) = delete;
 
 	Minions(Board & board, Minions && rhs) : board(board) { *this = std::move(rhs); }
 	Minions & operator=(Minions && rhs);
@@ -151,16 +151,12 @@ namespace std {
 	};
 }
 
-inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions const & rhs)
+inline GameEngine::BoardObjects::Minions::Minions(GameEngine::Board & board, Minions const& rhs) :
+	board(board), pending_removal_count(rhs.pending_removal_count)
 {
-	this->pending_removal_count = rhs.pending_removal_count;
-
-	this->minions.clear();
 	for (auto const& minion : rhs.minions) {
-		this->minions.push_back(Minion(*this, minion));
+		this->minions.push_back(GameEngine::BoardObjects::Minion(*this, minion));
 	}
-
-	return *this;
 }
 
 inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions && rhs)
