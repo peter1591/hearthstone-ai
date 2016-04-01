@@ -16,6 +16,8 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayerDrawCard(Board &board);
 	static bool OpponentDrawCard(Board &board);
 
+	static void GetBoardMoves_HandCards(Board const& board, NextMoveGetter & next_moves, bool & is_deterministic);
+
 	static bool CheckHeroMinionDead(Board & board);
 
 	// include battle cry, and summoning minion

@@ -42,6 +42,10 @@ namespace GameEngine
 		return false;
 	}
 
+	inline void StageHelper::GetBoardMoves_HandCards(Board const & board, NextMoveGetter & next_moves, bool & is_deterministic)
+	{
+	}
+
 	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous)
 	{
 		return StageHelper::DealDamage(board.object_manager.GetObject(taker_idx), damage, poisonous);
