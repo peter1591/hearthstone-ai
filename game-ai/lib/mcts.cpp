@@ -45,7 +45,7 @@ static TreeNode * FindChildWithMove(std::list<TreeNode*> const& children, GameEn
 	return nullptr;
 }
 
-static TreeNode *FindBestChildToExpand(std::list<TreeNode*> children, double exploration_factor = EXLPORATION_FACTOR)
+static TreeNode *FindBestChildToExpand(std::list<TreeNode*> const& children, double exploration_factor = EXLPORATION_FACTOR)
 {
 	if (children.empty()) return nullptr;
 
