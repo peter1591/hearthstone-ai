@@ -28,7 +28,7 @@ class StagePlayerChooseBoardMove
 			// then some different boards might considered as the identical boards in MCTS tree
 			// and those different boards might produce different set of next moves
 			// --> is_deterministic is false
-			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player.stat, board.player.hand, board.player.minions, next_move_getter, is_deterministic);
+			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player, next_move_getter, is_deterministic);
 
 			// the choices to attack by hero/minion
 			SlotIndexBitmap attacker;

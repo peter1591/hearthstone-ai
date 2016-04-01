@@ -43,10 +43,9 @@ namespace GameEngine
 	}
 
 	inline void StageHelper::GetBoardMoves_HandCards(
-		Board const & board, SlotIndex side, PlayerStat const& player_stat , Hand const& hand, BoardObjects::Minions const& minions, // TODO: group these parameters
-		NextMoveGetter & next_moves, bool & all_cards_determined)
+		Board const & board, SlotIndex side, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined)
 	{
-		bool const minions_full = !minions.IsFull();
+		bool const minions_full = !player.minions.IsFull();
 
 		all_cards_determined = board.player.hand.AllCardsDetermined(); // TODO: use the following for-loop directly
 
@@ -57,11 +56,11 @@ namespace GameEngine
 			switch (playing_card.type) {
 			case Card::TYPE_MINION:
 				if (!minions_full) continue;
-				GetBoardMoves_PlayMinion(board, side, player_stat, hand_idx, playing_card, minions, next_moves);
+				GetBoardMoves_PlayMinion(board, side, player, hand_idx, playing_card, next_moves);
 				break;
 
 			case Card::TYPE_WEAPON:
-				GetBoardMoves_EquipWeapon(board, side, player_stat, hand_idx, playing_card, minions, next_moves);
+				GetBoardMoves_EquipWeapon(board, side, player, hand_idx, playing_card, next_moves);
 				break;
 
 			default:
@@ -71,10 +70,10 @@ namespace GameEngine
 	}
 
 	inline void StageHelper::GetBoardMoves_PlayMinion(
-		Board const& board, SlotIndex side, PlayerStat const& player_stat, Hand::Locator hand_card, Card const& playing_card, BoardObjects::Minions const& minions,
+		Board const& board, SlotIndex side, Player const& player, Hand::Locator hand_card, Card const& playing_card,
 		NextMoveGetter &next_move_getter)
 	{
-		if (player_stat.crystal.GetCurrent() < playing_card.cost) return;
+		if (player.stat.crystal.GetCurrent() < playing_card.cost) return;
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
@@ -85,7 +84,7 @@ namespace GameEngine
 		}
 
 #ifdef CHOOSE_WHERE_TO_PUT_MINION
-		for (int i = 0; i <= minions.GetMinionCount(); ++i)
+		for (int i = 0; i <= player.minions.GetMinionCount(); ++i)
 		{
 			SlotIndex idx = SlotIndexHelper::GetMinionIndex(side, i);
 			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets)); // TODO: unify for both player and opponent
@@ -97,10 +96,10 @@ namespace GameEngine
 	}
 
 	inline void StageHelper::GetBoardMoves_EquipWeapon(
-		Board const& board, SlotIndex side, PlayerStat const& player_stat, Hand::Locator hand_card, Card const& playing_card, BoardObjects::Minions const& minions,
+		Board const& board, SlotIndex side, Player const& player, Hand::Locator hand_card, Card const& playing_card,
 		NextMoveGetter &next_move_getter)
 	{
-		if (player_stat.crystal.GetCurrent() < playing_card.cost) return;
+		if (player.stat.crystal.GetCurrent() < playing_card.cost) return;
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;

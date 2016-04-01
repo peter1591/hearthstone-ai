@@ -103,7 +103,6 @@ public:
 
 public:
 	Hero opponent_hero;
-
 	Minions opponent_minions;
 
 private:

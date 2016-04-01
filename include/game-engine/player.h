@@ -16,13 +16,9 @@ namespace GameEngine {
 
 	public:
 		Player(Board & board);
-
 		Player(Board & board, Player const& rhs);
-
 		Player(Board & board, Player && rhs);
-
 		Player & operator=(Player const& rhs) = delete;
-
 		Player & operator=(Player && rhs);
 
 		bool operator==(Player const& rhs) const;
