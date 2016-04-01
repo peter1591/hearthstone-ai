@@ -64,10 +64,11 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 
 	board.object_manager.SetHero(player_hero, opponent_hero);
 
-	board.opponent_cards.Set(4, 26);
-
 	InitializeDebugDeck1(board.player.hand);
 	InitializeDebugHand1(board.player.hand);
+
+	InitializeDebugDeck1(board.opponent_hand);
+	InitializeDebugHand1(board.opponent_hand);
 
 	{
 		auto minion = GameEngine::BoardObjects::MinionData();

@@ -14,7 +14,6 @@
 #include "hand.h"
 #include "secrets.h"
 #include "player-stat.h"
-#include "opponent-cards.h"
 #include "hidden-secrets.h"
 #include "stage.h"
 #include "next-move-getter.h"
@@ -41,7 +40,7 @@ namespace GameEngine {
 
 		PlayerStat opponent_stat;
 		HiddenSecrets opponent_secrets;
-		OpponentCards opponent_cards;
+		Hand opponent_hand;
 
 		BoardObjects::ObjectManager object_manager;
 
@@ -113,7 +112,7 @@ namespace std {
 
 			GameEngine::hash_combine(result, s.opponent_stat);
 			GameEngine::hash_combine(result, s.opponent_secrets);
-			GameEngine::hash_combine(result, s.opponent_cards);
+			GameEngine::hash_combine(result, s.opponent_hand);
 
 			GameEngine::hash_combine(result, s.object_manager);
 

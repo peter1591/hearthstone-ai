@@ -26,20 +26,8 @@ namespace GameEngine
 
 	inline bool StageHelper::OpponentDrawCard(Board & board)
 	{
-		if (board.opponent_cards.GetDeckCount() == 0) {
-			StageHelper::Fatigue(board, SLOT_OPPONENT_SIDE);
-			return StageHelper::CheckHeroMinionDead(board);
-		}
-
-		if (board.opponent_cards.GetHandCount() < 10) {
-			board.opponent_cards.DrawFromDeckToHand();
-		}
-		else {
-			// hand can have maximum of 10 cards
-			// TODO: distroy card (trigger deathrattle?)
-		}
-
-		return false;
+		// TODO: implement
+		throw std::runtime_error("not implemented");
 	}
 
 	inline void StageHelper::GetBoardMoves(
@@ -108,7 +96,7 @@ namespace GameEngine
 		}
 #else
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
-			hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount()), required_targets));
+			hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.player.minions.GetMinionCount()), required_targets));
 #endif
 	}
 
