@@ -14,3 +14,4 @@
 #include "board-node-map-impl.h"
 #include "mcts-impl.h"
 #include "task-impl.h"
+#include "decider-impl.h"

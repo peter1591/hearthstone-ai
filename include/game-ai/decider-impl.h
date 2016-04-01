@@ -1,17 +1,15 @@
-#include "game-ai/traversed-path-recorder-impl.h"
-#include "game-ai/start-board-impl.h"
-#include "game-ai/board-node-map-impl.h"
-#include "game-ai/mcts-impl.h"
+#pragma once
+
 #include "game-ai/decider.h"
 
-void Decider::PrintLevelPrefix(int level)
+inline void Decider::PrintLevelPrefix(int level)
 {
 	for (int i = 0; i<level; i++) {
 		std::cout << "..";
 	}
 }
 
-TreeNode * Decider::FindBestChildToPlay(const TreeNode *node)
+inline TreeNode * Decider::FindBestChildToPlay(const TreeNode *node)
 {
 	if (node->children.empty()) throw std::runtime_error("failed");
 
@@ -27,7 +25,7 @@ TreeNode * Decider::FindBestChildToPlay(const TreeNode *node)
 	return most_simulated;
 }
 
-void Decider::PrintBestRoute(int levels)
+inline void Decider::PrintBestRoute(int levels)
 {
 	const MCTS& mcts = *this->data.front();
 
@@ -53,7 +51,7 @@ void Decider::PrintBestRoute(int levels)
 	}
 }
 
-void Decider::PrintTree(TreeNode const* node, int level, const int max_level)
+inline void Decider::PrintTree(TreeNode const* node, int level, const int max_level)
 {
 	const MCTS& mcts = *this->data.front();
 
@@ -73,7 +71,7 @@ void Decider::PrintTree(TreeNode const* node, int level, const int max_level)
 	}
 }
 
-static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSimulatedChild(std::unordered_map<GameEngine::Move, TreeNode> const& children)
+inline static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSimulatedChild(std::unordered_map<GameEngine::Move, TreeNode> const& children)
 {
 	if (children.empty()) return children.end();
 
@@ -89,7 +87,7 @@ static std::unordered_map<GameEngine::Move, TreeNode>::const_iterator FindMostSi
 	return it_most_simulated_node;
 }
 
-void Decider::GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &progresses)
+inline void Decider::GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &progresses)
 {
 	for (std::vector<ProgressData>::iterator it_progress = progresses.begin(); it_progress != progresses.end();)
 	{
@@ -109,7 +107,7 @@ void Decider::GoToNextDeterministicGameFlowProgress(std::vector<ProgressData> &p
 	}
 }
 
-void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Move const& move)
+inline void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine::Move const& move)
 {
 	for (std::vector<ProgressData>::iterator it_progress = progresses.begin(); it_progress != progresses.end();)
 	{
@@ -135,7 +133,7 @@ void Decider::GoToNextProgress(std::vector<ProgressData> &progresses, GameEngine
 	}
 }
 
-std::unordered_map<GameEngine::Move, TreeNode> Decider::AggregateProgressChildren(std::vector<ProgressData> const& progresses)
+inline std::unordered_map<GameEngine::Move, TreeNode> Decider::AggregateProgressChildren(std::vector<ProgressData> const& progresses)
 {
 	std::unordered_map<GameEngine::Move, TreeNode> result;
 
@@ -161,7 +159,7 @@ std::unordered_map<GameEngine::Move, TreeNode> Decider::AggregateProgressChildre
 }
 
 // return false if no next step is available
-bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move_info)
+inline bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move_info)
 {
 	if (progress.empty()) return false;
 
@@ -201,7 +199,7 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move_in
 	else {
 		// select the best move --> the most simulated node
 		std::unordered_map<GameEngine::Move, TreeNode> aggregated_children = this->AggregateProgressChildren(progress);
-		
+
 		auto it_most_simulated_child = FindMostSimulatedChild(aggregated_children);
 		if (it_most_simulated_child == aggregated_children.end()) {
 			return false;
@@ -210,24 +208,24 @@ bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &move_in
 		move_info.move = it_most_simulated_child->first;
 		move_info.wins = it_most_simulated_child->second.wins;
 		move_info.count = it_most_simulated_child->second.count;
-		
+
 		this->GoToNextProgress(progress, move_info.move);
 		return true;
 	}
 }
 
-void Decider::DebugPrint()
+inline void Decider::DebugPrint()
 {
 	//this->PrintTree(&this->mcts.tree.GetRootNode(), 0, 5);
 	this->PrintBestRoute(20);
 }
 
-void Decider::Add(const MCTS& mcts)
+inline void Decider::Add(const MCTS& mcts)
 {
 	this->data.push_back(&mcts);
 }
 
-Decider::MovesInfo Decider::GetBestMoves()
+inline Decider::MovesInfo Decider::GetBestMoves()
 {
 	this->best_moves.Clear();
 
@@ -252,7 +250,7 @@ Decider::MovesInfo Decider::GetBestMoves()
 	return this->best_moves;
 }
 
-void Decider::MovesInfo::DebugPrint()
+inline void Decider::MovesInfo::DebugPrint()
 {
 	for (auto const& move : this->moves)
 	{
