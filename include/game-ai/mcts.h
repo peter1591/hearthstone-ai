@@ -51,7 +51,7 @@ private: // for internal use
 	BoardNodeMap board_node_map;
 
 	TreeNode *allocated_node;
-	std::vector<TreeNode*> traversed_nodes;
+	std::list<TreeNode*> traversed_nodes;
 
 	int current_start_board_random;
 	TraversedPathRecorder traversed_path;
