@@ -22,7 +22,7 @@ namespace GameEngine {
 				// We need to get all minions at once, since a minion might summon another minion when the damage is dealt
 				// And by the game rule, the newly-summoned minion should not get damaged
 				std::list<GameEngine::BoardObjects::MinionIterator> all_minions;
-				for (auto it = board.object_manager.player_minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+				for (auto it = board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 					all_minions.push_back(it);
 				}
 				for (auto it = board.object_manager.opponent_minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {

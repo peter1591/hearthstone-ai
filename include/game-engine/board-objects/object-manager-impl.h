@@ -30,21 +30,18 @@ namespace GameEngine
 		}
 
 		inline ObjectManager::ObjectManager(Board & board) :
-			board(board), opponent_hero(board),
-			player_minions(board), opponent_minions(board)
+			board(board), opponent_hero(board), opponent_minions(board)
 		{
 		}
 
 		inline ObjectManager::ObjectManager(Board & board, ObjectManager const & rhs) :
 			board(board), opponent_hero(board, std::move(rhs.opponent_hero)),
-			player_minions(board, rhs.player_minions),
 			opponent_minions(board, rhs.opponent_minions)
 		{
 		}
 
 		inline ObjectManager::ObjectManager(Board & board, ObjectManager && rhs) :
-			board(board), opponent_hero(board),
-			player_minions(board), opponent_minions(board)
+			board(board), opponent_hero(board), opponent_minions(board)
 		{
 			*this = std::move(rhs);
 		}
@@ -52,7 +49,6 @@ namespace GameEngine
 		inline ObjectManager & ObjectManager::operator=(ObjectManager && rhs)
 		{
 			this->opponent_hero = std::move(rhs.opponent_hero);
-			this->player_minions = std::move(rhs.player_minions);
 			this->opponent_minions = std::move(rhs.opponent_minions);
 
 			return *this;
@@ -61,8 +57,6 @@ namespace GameEngine
 		inline bool ObjectManager::operator==(ObjectManager const & rhs) const
 		{
 			if (this->opponent_hero != rhs.opponent_hero) return false;
-
-			if (this->player_minions != rhs.player_minions) return false;
 			if (this->opponent_minions != rhs.opponent_minions) return false;
 
 			return true;
@@ -80,12 +74,23 @@ namespace GameEngine
 			else throw std::runtime_error("invalid argument");
 		}
 
+		inline MinionConstIteratorWithSlotIndex ObjectManager::GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const
+		{
+			if (side == SLOT_PLAYER_SIDE) {
+				return this->board.player.minions.GetMinionsIteratorWithIndexAtBegin(SLOT_PLAYER_MINION_START);
+			}
+			else if (side == SLOT_OPPONENT_SIDE) {
+				return this->opponent_minions.GetMinionsIteratorWithIndexAtBegin(SLOT_OPPONENT_MINION_START);
+			}
+			else throw std::runtime_error("invalid argument");
+		}
+
 		inline MinionIterator ObjectManager::GetMinionIterator(SlotIndex slot_idx)
 		{
 			if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx < SLOT_OPPONENT_HERO) {
-				return this->player_minions.GetIterator(slot_idx - SLOT_PLAYER_MINION_START);
+				return this->board.player.minions.GetIterator(slot_idx - SLOT_PLAYER_MINION_START);
 			}
 			else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx < SLOT_MAX) {
@@ -94,12 +99,19 @@ namespace GameEngine
 			else throw std::runtime_error("invalid argument");
 		}
 
+		inline MinionIterator ObjectManager::GetMinionIteratorAtBeginOfSide(SlotIndex side)
+		{
+			if (side == SLOT_PLAYER_SIDE) return this->GetMinionIterator(SLOT_PLAYER_MINION_START);
+			else if (side == SLOT_OPPONENT_SIDE) return this->GetMinionIterator(SLOT_OPPONENT_MINION_START);
+			else throw std::runtime_error("invalid argument");
+		}
+
 		inline Minion & ObjectManager::GetMinion(SlotIndex slot_idx)
 		{
 			if (slot_idx < SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx == SLOT_PLAYER_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx < SLOT_OPPONENT_HERO) {
-				return this->player_minions.GetMinion(slot_idx - SLOT_PLAYER_MINION_START);
+				return this->board.player.minions.GetMinion(slot_idx - SLOT_PLAYER_MINION_START);
 			}
 			else if (slot_idx == SLOT_OPPONENT_HERO) throw std::runtime_error("invalid argument");
 			else if (slot_idx < SLOT_MAX) {
@@ -112,7 +124,7 @@ namespace GameEngine
 		{
 			this->board.player.hero.TurnStart(true);
 			this->opponent_hero.TurnStart(false);
-			this->player_minions.TurnStart(true);
+			this->board.player.minions.TurnStart(true);
 			this->opponent_minions.TurnStart(false);
 		}
 
@@ -120,7 +132,7 @@ namespace GameEngine
 		{
 			this->board.player.hero.TurnEnd(true);
 			this->opponent_hero.TurnEnd(false);
-			this->player_minions.TurnEnd(true);
+			this->board.player.minions.TurnEnd(true);
 			this->opponent_minions.TurnEnd(false);
 		}
 
@@ -129,7 +141,7 @@ namespace GameEngine
 			this->opponent_hero.TurnStart(true);
 			this->board.player.hero.TurnStart(false);
 			this->opponent_minions.TurnStart(true);
-			this->player_minions.TurnStart(false);
+			this->board.player.minions.TurnStart(false);
 		}
 
 		inline void ObjectManager::OpponentTurnEnd()
@@ -137,14 +149,14 @@ namespace GameEngine
 			this->opponent_hero.TurnEnd(true);
 			this->board.player.hero.TurnEnd(false);
 			this->opponent_minions.TurnEnd(true);
-			this->player_minions.TurnEnd(false);
+			this->board.player.minions.TurnEnd(false);
 		}
 
 		inline void ObjectManager::HookAfterMinionAdded(Minion & added_minion)
 		{
 			this->board.player.hero.HookAfterMinionAdded(added_minion);
 			this->opponent_hero.HookAfterMinionAdded(added_minion);
-			this->player_minions.HookAfterMinionAdded(added_minion);
+			this->board.player.minions.HookAfterMinionAdded(added_minion);
 			this->opponent_minions.HookAfterMinionAdded(added_minion);
 		}
 
@@ -152,7 +164,7 @@ namespace GameEngine
 		{
 			this->board.player.hero.HookAfterMinionDamaged(minions, minion, damage);
 			this->opponent_hero.HookAfterMinionDamaged(minions, minion, damage);
-			this->player_minions.HookAfterMinionDamaged(minions, minion, damage);
+			this->board.player.minions.HookAfterMinionDamaged(minions, minion, damage);
 			this->opponent_minions.HookAfterMinionDamaged(minions, minion, damage);
 		}
 
@@ -165,7 +177,7 @@ namespace GameEngine
 			this->opponent_minions.DebugPrint();
 
 			std::cout << "Player minions: " << std::endl;
-			this->player_minions.DebugPrint();
+			this->board.player.minions.DebugPrint();
 		}
 
 	}

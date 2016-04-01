@@ -5,7 +5,7 @@
 
 namespace GameEngine
 {
-	inline Player::Player(Board & board) : hand(board.random_generator), hero(board)
+	inline Player::Player(Board & board) : hand(board.random_generator), hero(board), minions(board)
 	{
 
 	}
@@ -14,7 +14,8 @@ namespace GameEngine
 		stat(rhs.stat),
 		secrets(rhs.secrets),
 		hand(board.random_generator, rhs.hand),
-		hero(board, rhs.hero)
+		hero(board, rhs.hero),
+		minions(board, rhs.minions)
 	{
 	}
 
@@ -22,7 +23,8 @@ namespace GameEngine
 		stat(std::move(rhs.stat)),
 		secrets(std::move(rhs.secrets)),
 		hand(board.random_generator, std::move(rhs.hand)),
-		hero(board, std::move(rhs.hero))
+		hero(board, std::move(rhs.hero)),
+		minions(board, std::move(rhs.minions))
 	{
 	}
 
@@ -32,6 +34,7 @@ namespace GameEngine
 		this->secrets = std::move(rhs.secrets);
 		this->hand = std::move(rhs.hand);
 		this->hero = std::move(rhs.hero);
+		this->minions = std::move(rhs.minions);
 		return *this;
 	}
 
@@ -41,6 +44,7 @@ namespace GameEngine
 		if (this->hand != rhs.hand) return false;
 		if (this->secrets != rhs.secrets) return false;
 		if (this->hero != rhs.hero) return false;
+		if (this->minions != rhs.minions) return false;
 		return true;
 	}
 

@@ -128,7 +128,7 @@ namespace GameEngine
 		const bool player_side = SlotIndexHelper::IsPlayerSide(origin_attacked);
 
 		int possible_targets = 1 - 1; // +1 for the hero, -1 for the original attack target
-		if (player_side) possible_targets += board.object_manager.player_minions.GetMinionCount();
+		if (player_side) possible_targets += board.player.minions.GetMinionCount();
 		else possible_targets += board.object_manager.opponent_minions.GetMinionCount();
 
 		if (possible_targets == 0)

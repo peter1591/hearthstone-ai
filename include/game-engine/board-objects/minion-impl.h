@@ -208,7 +208,7 @@ inline void GameEngine::BoardObjects::Minion::TurnEnd(bool owner_turn)
 
 inline bool GameEngine::BoardObjects::Minion::IsPlayerSide() const
 {
-	return &this->GetBoard().object_manager.player_minions == &this->minions;
+	return &this->GetBoard().player.minions == &this->minions;
 }
 
 inline bool GameEngine::BoardObjects::Minion::IsOpponentSide() const

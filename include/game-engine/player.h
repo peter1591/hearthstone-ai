@@ -4,6 +4,7 @@
 #include "secrets.h"
 #include "hand.h"
 #include "board-objects/hero.h"
+#include "board-objects/minions.h"
 
 namespace GameEngine {
 
@@ -32,6 +33,7 @@ namespace GameEngine {
 		Secrets secrets;
 		Hand hand;
 		BoardObjects::Hero hero;
+		BoardObjects::Minions minions;
 	};
 }
 
@@ -46,6 +48,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.secrets);
 			GameEngine::hash_combine(result, s.hand);
 			GameEngine::hash_combine(result, s.hero);
+			GameEngine::hash_combine(result, s.minions);
 
 			return result;
 		}

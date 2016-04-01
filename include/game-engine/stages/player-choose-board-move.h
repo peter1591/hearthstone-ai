@@ -28,7 +28,7 @@ class StagePlayerChooseBoardMove
 			// then some different boards might considered as the identical boards in MCTS tree
 			// and those different boards might produce different set of next moves
 			// --> is_deterministic is false
-			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player.stat, board.player.hand, board.object_manager.player_minions, next_move_getter, is_deterministic);
+			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player.stat, board.player.hand, board.player.minions, next_move_getter, is_deterministic);
 
 			// the choices to attack by hero/minion
 			SlotIndexBitmap attacker;
@@ -75,7 +75,7 @@ class StagePlayerChooseBoardMove
 			moves.AddMove(move, weight_end_turn);
 
 			// the choices to play a card from hand
-			bool can_play_minion = !board.object_manager.player_minions.IsFull();
+			bool can_play_minion = !board.player.minions.IsFull();
 			SlotIndexBitmap required_targets;
 			bool meet_requirements;
 			for (size_t hand_idx = 0; hand_idx < board.player.hand.GetCount(); ++hand_idx)
@@ -95,7 +95,7 @@ class StagePlayerChooseBoardMove
 					move.action = Move::ACTION_PLAYER_PLAY_MINION;
 					move.data.player_play_minion_data.hand_card = hand_idx;
 					move.data.player_play_minion_data.card_id = playing_card.id;
-					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount());
+					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.player.minions.GetMinionCount());
 					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
 					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
 					

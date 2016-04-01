@@ -82,22 +82,10 @@ public: // Manipulate heros
 	Hero & GetHeroBySide(SlotIndex side);
 
 public: // Manipulate minions
-	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const {
-		if (side == SLOT_PLAYER_SIDE) {
-			return this->player_minions.GetMinionsIteratorWithIndexAtBegin(SLOT_PLAYER_MINION_START);
-		}
-		else if (side == SLOT_OPPONENT_SIDE) {
-			return this->opponent_minions.GetMinionsIteratorWithIndexAtBegin(SLOT_OPPONENT_MINION_START);
-		}
-		else throw std::runtime_error("invalid argument");
-	}
+	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const;
 
 	MinionIterator GetMinionIterator(SlotIndex slot_idx);
-	MinionIterator GetMinionIteratorAtBeginOfSide(SlotIndex side) {
-		if (side == SLOT_PLAYER_SIDE) return this->GetMinionIterator(SLOT_PLAYER_MINION_START);
-		else if (side == SLOT_OPPONENT_SIDE) return this->GetMinionIterator(SLOT_OPPONENT_MINION_START);
-		else throw std::runtime_error("invalid argument");
-	}
+	MinionIterator GetMinionIteratorAtBeginOfSide(SlotIndex side);
 
 	Minion & GetMinion(SlotIndex slot_idx);
 
@@ -116,7 +104,6 @@ public:
 public:
 	Hero opponent_hero;
 
-	Minions player_minions;
 	Minions opponent_minions;
 
 private:
@@ -132,8 +119,6 @@ namespace std {
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
-
-			GameEngine::hash_combine(result, s.player_minions);
 
 			GameEngine::hash_combine(result, s.opponent_hero);
 			GameEngine::hash_combine(result, s.opponent_minions);
