@@ -9,6 +9,7 @@
 #include "game-ai/tree.h"
 #include "game-ai/board-node-map.h"
 #include "game-ai/start-board.h"
+#include "game-ai/traversed-path-recorder.h"
 
 class MCTS
 {
@@ -53,7 +54,7 @@ private: // for internal use
 	std::vector<TreeNode*> traversed_nodes;
 
 	int current_start_board_random;
-	std::list<GameEngine::Move> applied_moves; // all moves applied to the start boards
+	TraversedPathRecorder traversed_path;
 };
 
 #endif

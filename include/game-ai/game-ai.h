@@ -9,5 +9,6 @@
 #include "decider.h"
 
 // game-ai implementation details
+#include "traversed-path-recorder-impl.h"
 #include "start-board-impl.h"
 #include "board-node-map-impl.h"

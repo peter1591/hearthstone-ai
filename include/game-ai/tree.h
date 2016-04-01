@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <set>
 #include "game-engine/board.h"
+#include "traversed-path-recorder.h"
 
 class TreeNode
 {
@@ -32,7 +33,7 @@ public:
 	// what move lead us from parent to this state?
 	GameEngine::Move move;
 	int start_board_random; // (any) one of the start board randoms which leads us to this node
-	std::list<GameEngine::Move> preceeding_moves; // all moves applied to the start boards
+	TraversedPathRecorder path; // one of the paths leading to this node
 
 	// if this is a player's turn, then it's true
 	// if this is a random node, and it came out due to a player's action, then it's true
@@ -88,8 +89,18 @@ inline void TreeNode::AddChild(TreeNode *node)
 
 inline void TreeNode::GetBoard(GameEngine::Board & board) const
 {
-	for (auto const& move : this->preceeding_moves) {
-		board.ApplyMove(move);
+	std::list<TreeNode const*> path;
+	auto path_iterator = this->path.GetReverseIterator(this);
+
+	while (true) {
+		auto const& node = path_iterator.GetNodeAndMoveUpward();
+		if (node == nullptr) break;
+		if (node->parent == nullptr) break;
+		path.push_front(node);
+	}
+
+	for (auto const& path_node : path) {
+		board.ApplyMove(path_node->move);
 	}
 
 #ifdef DEBUG
