@@ -20,18 +20,9 @@ namespace GameEngine {
 
 		public:
 			Hero(Board & board) : board(board) {}
-
-		private:
-			Hero(Hero const& rhs) : board(rhs.board) { *this = rhs; }
-		public:
-			Hero & operator=(Hero const& rhs) {
-				this->hero = rhs.hero;
-				return *this;
-			}
-
-		private:
-			Hero(Hero && rhs) : board(rhs.board) { *this = std::move(rhs); }
-		public:
+			Hero(Board & board, Hero const& rhs) : board(board), hero(rhs.hero) {}
+			Hero & operator=(Hero const& rhs) = delete;
+			Hero(Board & board, Hero && rhs) : board(board), hero(std::move(rhs.hero)) {}
 			Hero & operator=(Hero && rhs) {
 				this->hero = std::move(rhs.hero);
 				return *this;

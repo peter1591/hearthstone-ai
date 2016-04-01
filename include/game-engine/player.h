@@ -3,6 +3,7 @@
 #include "player-stat.h"
 #include "secrets.h"
 #include "hand.h"
+#include "board-objects/hero.h"
 
 namespace GameEngine {
 
@@ -30,6 +31,7 @@ namespace GameEngine {
 		PlayerStat stat;
 		Secrets secrets;
 		Hand hand;
+		BoardObjects::Hero hero;
 	};
 }
 
@@ -43,6 +45,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.stat);
 			GameEngine::hash_combine(result, s.secrets);
 			GameEngine::hash_combine(result, s.hand);
+			GameEngine::hash_combine(result, s.hero);
 
 			return result;
 		}

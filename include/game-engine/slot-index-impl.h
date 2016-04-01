@@ -76,7 +76,7 @@ namespace GameEngine {
 		switch (type)
 		{
 		case TARGET_TYPE_PLAYER_ATTACKABLE:
-			if (board.object_manager.player_hero.Attackable()) {
+			if (board.player.hero.Attackable()) {
 				targets.SetOneTarget(SLOT_PLAYER_HERO);
 			}
 			MarkAttackableMinions(board, SLOT_PLAYER_SIDE, targets);
