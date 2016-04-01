@@ -13,3 +13,4 @@
 #include "start-board-impl.h"
 #include "board-node-map-impl.h"
 #include "mcts-impl.h"
+#include "task-impl.h"

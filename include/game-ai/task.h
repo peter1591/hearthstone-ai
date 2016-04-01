@@ -45,8 +45,8 @@ public:
 	};
 
 public:
+	// TODO: use reference
 	Task(MCTS *mcts);
-	~Task();
 
 	static void ThreadCreatedCallback(Task *task);
 

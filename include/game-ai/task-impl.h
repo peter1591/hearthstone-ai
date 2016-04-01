@@ -1,12 +1,9 @@
-#include <thread>
-#include "game-ai/decider.h"
-#include "game-ai/task.h"
-#include "game-ai/traversed-path-recorder-impl.h"
-#include "game-ai/start-board-impl.h"
-#include "game-ai/board-node-map-impl.h"
-#include "game-ai/mcts-impl.h"
+#pragma once
 
-Task::Task(MCTS *mcts)
+#include <thread>
+#include "task.h"
+
+inline Task::Task(MCTS *mcts)
 {
 	this->mcts = mcts;
 	this->pause_notifier = nullptr;
@@ -16,16 +13,12 @@ Task::Task(MCTS *mcts)
 	this->state = Task::STATE_SPAWNED;
 }
 
-Task::~Task()
-{
-}
-
-Task::Task(Task &&task)
+inline Task::Task(Task &&task)
 {
 	*this = std::move(task);
 }
 
-Task & Task::operator=(Task &&task)
+inline Task & Task::operator=(Task &&task)
 {
 	this->state = std::move(task.state);
 	this->thread = std::move(task.thread);
@@ -36,53 +29,53 @@ Task & Task::operator=(Task &&task)
 	return *this;
 }
 
-Task::State Task::GetState()
+inline Task::State Task::GetState()
 {
 	std::unique_lock<std::mutex> lck(this->mtx_state);
 	return this->state;
 }
 
-void Task::SetState(Task::State state)
+inline void Task::SetState(Task::State state)
 {
 	std::unique_lock<std::mutex> lck(this->mtx_state);
 	this->state = state;
 }
 
-int Task::GetIterationCount()
+inline int Task::GetIterationCount()
 {
 	std::unique_lock<std::mutex> lck(this->mtx_iterations);
 	return this->iterations;
 }
 
-void Task::IncreaseIterationCount()
+inline void Task::IncreaseIterationCount()
 {
 	std::unique_lock<std::mutex> lck(this->mtx_iterations);
 	++this->iterations;
 }
 
-void Task::Initialize(std::thread &&thread)
+inline void Task::Initialize(std::thread &&thread)
 {
 	this->thread = std::move(thread);
 }
 
-void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_until, Task::PauseNotifier *notifier)
+inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_until, Task::PauseNotifier *notifier)
 {
 	this->run_until = run_until;
 	this->pause_notifier = notifier;
 	this->SetState(Task::STATE_RUNNING);
 }
 
-void Task::Stop()
+inline void Task::Stop()
 {
 	this->SetState(Task::STATE_STOPPED);
 }
 
-void Task::ThreadCreatedCallback(Task *task)
+inline void Task::ThreadCreatedCallback(Task *task)
 {
 	task->MainLoop();
 }
 
-void Task::MainLoop()
+inline void Task::MainLoop()
 {
 	auto last_yield = std::chrono::steady_clock::now();
 	while (true)
@@ -124,7 +117,7 @@ void Task::MainLoop()
 	}
 }
 
-void Task::Join()
+inline void Task::Join()
 {
 	this->thread.join();
 }
