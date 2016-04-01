@@ -15,9 +15,8 @@ class Move
 		enum Action {
 			ACTION_UNKNOWN,
 			ACTION_GAME_FLOW,
-			ACTION_PLAY_MINION,
-			ACTION_PLAYER_EQUIP_WEAPON,
-			ACTION_OPPONENT_EQUIP_WEAPON,
+			ACTION_PLAY_HAND_MINION,
+			ACTION_PLAY_HAND_WEAPON,
 			ACTION_ATTACK,
 			ACTION_END_TURN,
 		};
@@ -67,12 +66,12 @@ class Move
 			bool operator!=(PlayHandMinionData const& rhs) const { return !(*this == rhs); }
 		};
 
-		struct PlayerEquipWeaponData {
+		struct PlayHandWeaponData {
 			Hand::Locator hand_card;
 			int card_id; // to distinguish moves for different boards merged into one MCTS tree node
 			EquipWeaponData data;
 
-			bool operator==(PlayerEquipWeaponData const& rhs) const
+			bool operator==(PlayHandWeaponData const& rhs) const
 			{
 				if (this->hand_card != rhs.hand_card) return false;
 				if (this->data != rhs.data) return false;
@@ -80,21 +79,7 @@ class Move
 				return true;
 			}
 
-			bool operator!=(PlayerEquipWeaponData const& rhs) const { return !(*this == rhs); }
-		};
-
-		struct OpponentEquipWeaponData {
-			Card card;
-			EquipWeaponData data;
-
-			bool operator==(OpponentEquipWeaponData const& rhs) const
-			{
-				if (this->card != rhs.card) return false;
-				if (this->data != rhs.data) return false;
-				return true;
-			}
-
-			bool operator!=(OpponentEquipWeaponData const& rhs) const { return !(*this == rhs); }
+			bool operator!=(PlayHandWeaponData const& rhs) const { return !(*this == rhs); }
 		};
 
 		struct AttackData {
@@ -113,8 +98,7 @@ class Move
 
 		union Data {
 			PlayHandMinionData play_hand_minion_data;
-			PlayerEquipWeaponData player_equip_weapon_data;
-			OpponentEquipWeaponData opponent_equip_weapon_data;
+			PlayHandWeaponData play_hand_weapon_data;
 			AttackData attack_data;
 		};
 
@@ -141,16 +125,12 @@ inline bool Move::operator==(const Move &rhs) const
 	case ACTION_GAME_FLOW:
 		break;
 
-	case ACTION_PLAY_MINION:
+	case ACTION_PLAY_HAND_MINION:
 		if (this->data.play_hand_minion_data != rhs.data.play_hand_minion_data) return false;
 		break;
 
-	case ACTION_PLAYER_EQUIP_WEAPON:
-		if (this->data.player_equip_weapon_data != rhs.data.player_equip_weapon_data) return false;
-		break;
-
-	case ACTION_OPPONENT_EQUIP_WEAPON:
-		if (this->data.opponent_equip_weapon_data != rhs.data.opponent_equip_weapon_data) return false;
+	case ACTION_PLAY_HAND_WEAPON:
+		if (this->data.play_hand_weapon_data != rhs.data.play_hand_weapon_data) return false;
 		break;
 
 	case ACTION_ATTACK:
@@ -179,22 +159,17 @@ inline std::string Move::GetDebugString() const
 		oss << "[Game flow]";
 		break;
 
-	case Move::ACTION_PLAY_MINION:
-		oss << "[Play minion] hand idx = " << this->data.play_hand_minion_data.hand_card;
+	case Move::ACTION_PLAY_HAND_MINION:
+		oss << "[Play hand minion] hand idx = " << this->data.play_hand_minion_data.hand_card;
 		oss << ", card id = " << this->data.play_hand_minion_data.card_id;
 		oss << ", put location = " << this->data.play_hand_minion_data.data.put_location;
 		oss << ", target = " << this->data.play_hand_minion_data.data.target;
 		break;
 
-	case Move::ACTION_PLAYER_EQUIP_WEAPON:
-		oss << "[Player equip weapon] hand idx = " << this->data.player_equip_weapon_data.hand_card;
-		oss << ", card id = " << this->data.player_equip_weapon_data.card_id;
-		oss << ", target = " << this->data.player_equip_weapon_data.data.target;
-		break;
-
-	case Move::ACTION_OPPONENT_EQUIP_WEAPON:
-		oss << "[Opponent equip weapon] card = " << this->data.opponent_equip_weapon_data.card.id;
-		oss << ", target = " << this->data.opponent_equip_weapon_data.data.target;
+	case Move::ACTION_PLAY_HAND_WEAPON:
+		oss << "[Play hand weapon] hand idx = " << this->data.play_hand_weapon_data.hand_card;
+		oss << ", card id = " << this->data.play_hand_weapon_data.card_id;
+		oss << ", target = " << this->data.play_hand_weapon_data.data.target;
 		break;
 
 	case Move::ACTION_ATTACK:
@@ -256,8 +231,8 @@ namespace std {
 		}
 	};
 
-	template <> struct hash<GameEngine::Move::PlayerEquipWeaponData> {
-		typedef GameEngine::Move::PlayerEquipWeaponData argument_type;
+	template <> struct hash<GameEngine::Move::PlayHandWeaponData> {
+		typedef GameEngine::Move::PlayHandWeaponData argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
@@ -265,19 +240,6 @@ namespace std {
 			GameEngine::hash_combine(result, s.hand_card);
 			GameEngine::hash_combine(result, s.data);
 			GameEngine::hash_combine(result, s.card_id);
-
-			return result;
-		}
-	};
-
-	template <> struct hash<GameEngine::Move::OpponentEquipWeaponData> {
-		typedef GameEngine::Move::OpponentEquipWeaponData argument_type;
-		typedef std::size_t result_type;
-		result_type operator()(const argument_type &s) const {
-			result_type result = 0;
-
-			GameEngine::hash_combine(result, s.card);
-			GameEngine::hash_combine(result, s.data);
 
 			return result;
 		}
@@ -312,7 +274,7 @@ namespace std {
 			case GameEngine::Move::ACTION_GAME_FLOW:
 				break;
 
-			case GameEngine::Move::ACTION_PLAY_MINION:
+			case GameEngine::Move::ACTION_PLAY_HAND_MINION:
 				GameEngine::hash_combine(result, s.data.play_hand_minion_data);
 				break;
 

@@ -253,19 +253,13 @@ inline bool Board::operator==(const Board &rhs) const
 
 	switch (this->stage) {
 	case STAGE_PLAYER_PUT_MINION:
-		if (this->data.player_play_minion_data != rhs.data.player_play_minion_data) return false;
-		break;
-
 	case STAGE_OPPONENT_PUT_MINION:
-		if (this->data.opponent_play_minion_data != rhs.data.opponent_play_minion_data) return false;
+		if (this->data.play_hand_minion_data != rhs.data.play_hand_minion_data) return false;
 		break;
 
 	case STAGE_PLAYER_EQUIP_WEAPON:
-		if (this->data.player_equip_weapon_data != rhs.data.player_equip_weapon_data) return false;
-		break;
-
 	case STAGE_OPPONENT_EQUIP_WEAPON:
-		if (this->data.opponent_equip_weapon_data != rhs.data.opponent_equip_weapon_data) return false;
+		if (this->data.play_hand_weapon_data != rhs.data.play_hand_weapon_data) return false;
 		break;
 
 	case STAGE_PLAYER_ATTACK:

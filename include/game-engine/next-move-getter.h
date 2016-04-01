@@ -10,14 +10,14 @@ namespace GameEngine {
 class NextMoveGetter
 {
 public:
-	class ItemPlayerPlayMinion
+	class ItemPlayHandMinion
 	{
 	public:
-		ItemPlayerPlayMinion(Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets);
-		ItemPlayerPlayMinion* Clone() const;
+		ItemPlayHandMinion(Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets);
+		ItemPlayHandMinion* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
-		bool operator==(ItemPlayerPlayMinion const& rhs) const;
-		bool operator!=(ItemPlayerPlayMinion const& rhs) const;
+		bool operator==(ItemPlayHandMinion const& rhs) const;
+		bool operator!=(ItemPlayHandMinion const& rhs) const;
 
 	private:
 		Hand::Locator hand_card;
@@ -26,48 +26,17 @@ public:
 		bool done;
 	};
 
-	class ItemOpponentPlayMinion
+	class ItemPlayHandWeapon
 	{
 	public:
-		ItemOpponentPlayMinion(Card card, SlotIndex put_location, SlotIndexBitmap required_targets);
-		ItemOpponentPlayMinion* Clone() const;
+		ItemPlayHandWeapon(Hand::Locator hand_card, SlotIndexBitmap required_targets);
+		ItemPlayHandWeapon* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
-		bool operator==(ItemOpponentPlayMinion const& rhs) const;
-		bool operator!=(ItemOpponentPlayMinion const& rhs) const;
-
-	private:
-		Card playing_card;
-		SlotIndex put_location;
-		SlotIndexBitmap required_targets;
-		bool done;
-	};
-
-	class ItemPlayerEquipWeapon
-	{
-	public:
-		ItemPlayerEquipWeapon(Hand::Locator hand_card, SlotIndexBitmap required_targets);
-		ItemPlayerEquipWeapon* Clone() const;
-		bool GetNextMove(Board const& board, Move & move);
-		bool operator==(ItemPlayerEquipWeapon const& rhs) const;
-		bool operator!=(ItemPlayerEquipWeapon const& rhs) const;
+		bool operator==(ItemPlayHandWeapon const& rhs) const;
+		bool operator!=(ItemPlayHandWeapon const& rhs) const;
 
 	private:
 		Hand::Locator hand_card;
-		SlotIndexBitmap required_targets;
-		bool done;
-	};
-
-	class ItemOpponentEquipWeapon
-	{
-	public:
-		ItemOpponentEquipWeapon(Card card, SlotIndexBitmap required_targets);
-		ItemOpponentEquipWeapon* Clone() const;
-		bool GetNextMove(Board const& board, Move & move);
-		bool operator==(ItemOpponentEquipWeapon const& rhs) const;
-		bool operator!=(ItemOpponentEquipWeapon const& rhs) const;
-
-	private:
-		Card playing_card;
 		SlotIndexBitmap required_targets;
 		bool done;
 	};
@@ -91,16 +60,12 @@ public:
 	void AddItem(Move const& move);
 	void AddItem(Move && move);
 	void AddItem(ItemAttack && items);
-	void AddItem(ItemPlayerPlayMinion && items);
-	void AddItem(ItemOpponentPlayMinion && items);
-	void AddItem(ItemPlayerEquipWeapon && items);
-	void AddItem(ItemOpponentEquipWeapon && items);
+	void AddItem(ItemPlayHandMinion && items);
+	void AddItem(ItemPlayHandWeapon && items);
 	void AddItems(std::list<Move> && items);
 	void AddItems(std::list<ItemAttack> && items);
-	void AddItems(std::list<ItemPlayerPlayMinion> && items);
-	void AddItems(std::list<ItemOpponentPlayMinion> && items);
-	void AddItems(std::list<ItemPlayerEquipWeapon> && items);
-	void AddItems(std::list<ItemOpponentEquipWeapon> && items);
+	void AddItems(std::list<ItemPlayHandMinion> && items);
+	void AddItems(std::list<ItemPlayHandWeapon> && items);
 
 	bool GetNextMove(Board const& board, Move &move);
 	bool Empty();
@@ -116,10 +81,8 @@ private:
 private:
 	std::list<Move> moves;
 	std::list<ItemAttack> items_player_attack;
-	std::list<ItemPlayerPlayMinion> items_player_play_minion;
-	std::list<ItemOpponentPlayMinion> items_opponent_play_minion;
-	std::list<ItemPlayerEquipWeapon> items_player_equip_weapon;
-	std::list<ItemOpponentEquipWeapon> items_opponent_equip_weapon;
+	std::list<ItemPlayHandMinion> items_play_hand_minion;
+	std::list<ItemPlayHandWeapon> items_play_hand_weapon;
 };
 
 } // namespace GameEngine

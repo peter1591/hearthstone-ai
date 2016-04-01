@@ -67,12 +67,12 @@ class StagePlayerChooseBoardMove
 						break;
 					}
 
-					move.action = Move::ACTION_PLAYER_PLAY_MINION;
-					move.data.player_play_minion_data.hand_card = hand_idx;
-					move.data.player_play_minion_data.card_id = playing_card.id;
-					move.data.player_play_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.player.minions.GetMinionCount());
-					if (required_targets.None()) move.data.player_play_minion_data.data.target = SLOT_INVALID;
-					else move.data.player_play_minion_data.data.target = required_targets.GetOneTarget();
+					move.action = Move::ACTION_PLAY_HAND_MINION;
+					move.data.play_hand_minion_data.hand_card = hand_idx;
+					move.data.play_hand_minion_data.card_id = playing_card.id;
+					move.data.play_hand_minion_data.data.put_location = SlotIndexHelper::GetPlayerMinionIndex(board.player.minions.GetMinionCount());
+					if (required_targets.None()) move.data.play_hand_minion_data.data.target = SLOT_INVALID;
+					else move.data.play_hand_minion_data.data.target = required_targets.GetOneTarget();
 					
 					moves.AddMove(move, weight_play_minion);
 					break;
@@ -86,11 +86,11 @@ class StagePlayerChooseBoardMove
 						break;
 					}
 
-					move.action = Move::ACTION_PLAYER_EQUIP_WEAPON;
-					move.data.player_equip_weapon_data.hand_card = hand_idx;
-					move.data.player_equip_weapon_data.card_id = playing_card.id;
-					if (required_targets.None()) move.data.player_equip_weapon_data.data.target = SLOT_INVALID;
-					else move.data.player_equip_weapon_data.data.target = required_targets.GetOneTarget();
+					move.action = Move::ACTION_PLAY_HAND_WEAPON;
+					move.data.play_hand_weapon_data.hand_card = hand_idx;
+					move.data.play_hand_weapon_data.card_id = playing_card.id;
+					if (required_targets.None()) move.data.play_hand_weapon_data.data.target = SLOT_INVALID;
+					else move.data.play_hand_weapon_data.data.target = required_targets.GetOneTarget();
 
 					moves.AddMove(move, weight_play_minion);
 					break;
@@ -136,10 +136,10 @@ class StagePlayerChooseBoardMove
 		{
 			switch (move.action)
 			{
-				case Move::ACTION_PLAYER_PLAY_MINION:
+				case Move::ACTION_PLAY_HAND_MINION:
 					return StagePlayerChooseBoardMove::PlayMinion(board, move);
 
-				case Move::ACTION_PLAYER_EQUIP_WEAPON:
+				case Move::ACTION_PLAY_HAND_WEAPON:
 					return StagePlayerChooseBoardMove::EquipWeapon(board, move);
 
 				case Move::ACTION_ATTACK:
@@ -156,13 +156,13 @@ class StagePlayerChooseBoardMove
 	private:
 		static void PlayMinion(Board &board, const Move &move)
 		{
-			board.data.player_play_minion_data = move.data.player_play_minion_data;
+			board.data.play_hand_minion_data = move.data.play_hand_minion_data;
 			board.stage = STAGE_PLAYER_PUT_MINION;
 		}
 
 		static void EquipWeapon(Board &board, const Move &move)
 		{
-			board.data.player_equip_weapon_data = move.data.player_equip_weapon_data;
+			board.data.play_hand_weapon_data = move.data.play_hand_weapon_data;
 			board.stage = STAGE_PLAYER_EQUIP_WEAPON;
 		}
 

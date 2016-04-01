@@ -48,44 +48,24 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveG
 	this->items_player_attack.splice(this->items_player_attack.end(), std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerPlayMinion && item)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayHandMinion && item)
 {
-	this->items_player_play_minion.push_back(std::move(item));
+	this->items_play_hand_minion.push_back(std::move(item));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerPlayMinion> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayHandMinion> && items)
 {
-	this->items_player_play_minion.splice(this->items_player_play_minion.end(), std::move(items));
+	this->items_play_hand_minion.splice(this->items_play_hand_minion.end(), std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemOpponentPlayMinion && item)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayHandWeapon && item)
 {
-	this->items_opponent_play_minion.push_back(std::move(item));
+	this->items_play_hand_weapon.push_back(std::move(item));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemOpponentPlayMinion> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayHandWeapon> && items)
 {
-	this->items_opponent_play_minion.splice(this->items_opponent_play_minion.end(), std::move(items));
-}
-
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayerEquipWeapon && item)
-{
-	this->items_player_equip_weapon.push_back(std::move(item));
-}
-
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayerEquipWeapon> && items)
-{
-	this->items_player_equip_weapon.splice(this->items_player_equip_weapon.end(), std::move(items));
-}
-
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemOpponentEquipWeapon && item)
-{
-	this->items_opponent_equip_weapon.push_back(std::move(item));
-}
-
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemOpponentEquipWeapon> && items)
-{
-	this->items_opponent_equip_weapon.splice(this->items_opponent_equip_weapon.end(), std::move(items));
+	this->items_play_hand_weapon.splice(this->items_play_hand_weapon.end(), std::move(items));
 }
 
 template<typename T>
@@ -109,10 +89,8 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(GameEngine::Board const& boa
 	}
 
 	if (this->GetNextMoveFromContainer(this->items_player_attack, board, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_player_play_minion, board, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_opponent_play_minion, board, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_player_equip_weapon, board, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_opponent_equip_weapon, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_play_hand_minion, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_play_hand_weapon, board, move)) return true;
 	return false;
 }
 
@@ -120,20 +98,16 @@ inline void GameEngine::NextMoveGetter::Clear()
 {
 	this->moves.clear();
 	this->items_player_attack.clear();
-	this->items_player_play_minion.clear();
-	this->items_opponent_play_minion.clear();
-	this->items_player_equip_weapon.clear();
-	this->items_opponent_equip_weapon.clear();
+	this->items_play_hand_minion.clear();
+	this->items_play_hand_weapon.clear();
 }
 
 inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) const
 {
 	if (!IsEqual(this->moves, rhs.moves)) return false;
 	if (!IsEqual(this->items_player_attack, rhs.items_player_attack)) return false;
-	if (!IsEqual(this->items_player_play_minion, rhs.items_player_play_minion)) return false;
-	if (!IsEqual(this->items_opponent_play_minion, rhs.items_opponent_play_minion)) return false;
-	if (!IsEqual(this->items_player_equip_weapon, rhs.items_player_equip_weapon)) return false;
-	if (!IsEqual(this->items_opponent_equip_weapon, rhs.items_opponent_equip_weapon)) return false;
+	if (!IsEqual(this->items_play_hand_minion, rhs.items_play_hand_minion)) return false;
+	if (!IsEqual(this->items_play_hand_weapon, rhs.items_play_hand_weapon)) return false;
 	return true;
 }
 
@@ -142,43 +116,43 @@ inline bool GameEngine::NextMoveGetter::operator!=(NextMoveGetter const & rhs) c
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion::ItemPlayerPlayMinion(
+inline GameEngine::NextMoveGetter::ItemPlayHandMinion::ItemPlayHandMinion(
 	Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets)
 	: hand_card(hand_card), put_location(put_location), required_targets(required_targets)
 {
 	this->done = false;
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayerPlayMinion * GameEngine::NextMoveGetter::ItemPlayerPlayMinion::Clone() const
+inline GameEngine::NextMoveGetter::ItemPlayHandMinion * GameEngine::NextMoveGetter::ItemPlayHandMinion::Clone() const
 {
-	return new ItemPlayerPlayMinion(*this);
+	return new ItemPlayHandMinion(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::GetNextMove(GameEngine::Board const& board, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
 	auto const& playing_card = board.player.hand.GetCard(this->hand_card);
 
-	move.action = Move::ACTION_PLAYER_PLAY_MINION;
-	move.data.player_play_minion_data.hand_card = this->hand_card;
-	move.data.player_play_minion_data.card_id = playing_card.id;
-	move.data.player_play_minion_data.data.put_location = this->put_location;
+	move.action = Move::ACTION_PLAY_HAND_MINION;
+	move.data.play_hand_minion_data.hand_card = this->hand_card;
+	move.data.play_hand_minion_data.card_id = playing_card.id;
+	move.data.play_hand_minion_data.data.put_location = this->put_location;
 
 	if (this->required_targets.None())
 	{
-		move.data.player_play_minion_data.data.target = SLOT_INVALID;
+		move.data.play_hand_minion_data.data.target = SLOT_INVALID;
 		this->done = true;
 	}
 	else {
-		move.data.player_play_minion_data.data.target = this->required_targets.GetOneTarget();
-		this->required_targets.ClearOneTarget(move.data.player_play_minion_data.data.target);
+		move.data.play_hand_minion_data.data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.play_hand_minion_data.data.target);
 		if (this->required_targets.None()) this->done = true;
 	}
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator==(ItemPlayerPlayMinion const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::operator==(ItemPlayHandMinion const & rhs) const
 {
 	if (this->hand_card != rhs.hand_card) return false;
 	if (this->put_location != rhs.put_location) return false;
@@ -186,144 +160,54 @@ inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator==(ItemPla
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerPlayMinion::operator!=(ItemPlayerPlayMinion const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::operator!=(ItemPlayHandMinion const & rhs) const
 {
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemOpponentPlayMinion::ItemOpponentPlayMinion(
-	Card playing_card, SlotIndex put_location, SlotIndexBitmap required_targets)
-	: playing_card(playing_card), put_location(put_location), required_targets(required_targets)
-{
-	this->done = false;
-}
-
-inline GameEngine::NextMoveGetter::ItemOpponentPlayMinion * GameEngine::NextMoveGetter::ItemOpponentPlayMinion::Clone() const
-{
-	return new ItemOpponentPlayMinion(*this);
-}
-
-inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::GetNextMove(GameEngine::Board const& board, Move & move)
-{
-	if (this->done) return false;
-
-	move.action = Move::ACTION_OPPONENT_PLAY_MINION;
-	move.data.opponent_play_minion_data.card = this->playing_card;
-	move.data.opponent_play_minion_data.data.put_location = this->put_location;
-
-	if (this->required_targets.None())
-	{
-		move.data.opponent_play_minion_data.data.target = SLOT_INVALID;
-		this->done = true;
-	}
-	else {
-		move.data.opponent_play_minion_data.data.target = this->required_targets.GetOneTarget();
-		this->required_targets.ClearOneTarget(move.data.opponent_play_minion_data.data.target);
-		if (this->required_targets.None()) this->done = true;
-	}
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator==(ItemOpponentPlayMinion const & rhs) const
-{
-	if (this->playing_card != rhs.playing_card) return false;
-	if (this->put_location != rhs.put_location) return false;
-	if (this->required_targets != rhs.required_targets) return false;
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemOpponentPlayMinion::operator!=(ItemOpponentPlayMinion const & rhs) const
-{
-	return !(*this == rhs);
-}
-
-inline GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::ItemPlayerEquipWeapon(
+inline GameEngine::NextMoveGetter::ItemPlayHandWeapon::ItemPlayHandWeapon(
 	Hand::Locator hand_card, SlotIndexBitmap required_targets)
 	: hand_card(hand_card), required_targets(required_targets)
 {
 	this->done = false;
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayerEquipWeapon * GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::Clone() const
+inline GameEngine::NextMoveGetter::ItemPlayHandWeapon * GameEngine::NextMoveGetter::ItemPlayHandWeapon::Clone() const
 {
-	return new ItemPlayerEquipWeapon(*this);
+	return new ItemPlayHandWeapon(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::GetNextMove(GameEngine::Board const& board, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
 	auto const& playing_card = board.player.hand.GetCard(this->hand_card);
 
-	move.action = Move::ACTION_PLAYER_EQUIP_WEAPON;
-	move.data.player_equip_weapon_data.hand_card = this->hand_card;
-	move.data.player_equip_weapon_data.card_id = playing_card.id;
+	move.action = Move::ACTION_PLAY_HAND_WEAPON;
+	move.data.play_hand_weapon_data.hand_card = this->hand_card;
+	move.data.play_hand_weapon_data.card_id = playing_card.id;
 
 	if (this->required_targets.None())
 	{
-		move.data.player_equip_weapon_data.data.target = SLOT_INVALID;
+		move.data.play_hand_weapon_data.data.target = SLOT_INVALID;
 		this->done = true;
 	}
 	else {
-		move.data.player_equip_weapon_data.data.target = this->required_targets.GetOneTarget();
-		this->required_targets.ClearOneTarget(move.data.player_equip_weapon_data.data.target);
+		move.data.play_hand_weapon_data.data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.play_hand_weapon_data.data.target);
 		if (this->required_targets.None()) this->done = true;
 	}
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::operator==(ItemPlayerEquipWeapon const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::operator==(ItemPlayHandWeapon const & rhs) const
 {
 	if (this->hand_card != rhs.hand_card) return false;
 	if (this->required_targets != rhs.required_targets) return false;
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayerEquipWeapon::operator!=(ItemPlayerEquipWeapon const & rhs) const
-{
-	return !(*this == rhs);
-}
-
-inline GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::ItemOpponentEquipWeapon(
-	Card playing_card, SlotIndexBitmap required_targets)
-	: playing_card(playing_card), required_targets(required_targets)
-{
-	this->done = false;
-}
-
-inline GameEngine::NextMoveGetter::ItemOpponentEquipWeapon * GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::Clone() const
-{
-	return new ItemOpponentEquipWeapon(*this);
-}
-
-inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::GetNextMove(GameEngine::Board const& board, Move & move)
-{
-	if (this->done) return false;
-
-	move.action = Move::ACTION_OPPONENT_EQUIP_WEAPON;
-	move.data.opponent_equip_weapon_data.card = this->playing_card;
-
-	if (this->required_targets.None())
-	{
-		move.data.opponent_equip_weapon_data.data.target = SLOT_INVALID;
-		this->done = true;
-	}
-	else {
-		move.data.opponent_equip_weapon_data.data.target = this->required_targets.GetOneTarget();
-		this->required_targets.ClearOneTarget(move.data.opponent_equip_weapon_data.data.target);
-		if (this->required_targets.None()) this->done = true;
-	}
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::operator==(ItemOpponentEquipWeapon const & rhs) const
-{
-	if (this->playing_card != rhs.playing_card) return false;
-	if (this->required_targets != rhs.required_targets) return false;
-	return true;
-}
-
-inline bool GameEngine::NextMoveGetter::ItemOpponentEquipWeapon::operator!=(ItemOpponentEquipWeapon const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::operator!=(ItemPlayHandWeapon const & rhs) const
 {
 	return !(*this == rhs);
 }

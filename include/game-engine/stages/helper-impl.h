@@ -92,10 +92,10 @@ namespace GameEngine
 		for (int i = 0; i <= player.minions.GetMinionCount(); ++i)
 		{
 			SlotIndex idx = SlotIndexHelper::GetMinionIndex(side, i);
-			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets)); // TODO: unify for both player and opponent
+			next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(hand_card, idx, required_targets));
 		}
 #else
-		next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(
 			hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.player.minions.GetMinionCount()), required_targets));
 #endif
 	}
@@ -114,7 +114,7 @@ namespace GameEngine
 			return;
 		}
 
-		next_move_getter.AddItem(NextMoveGetter::ItemPlayerEquipWeapon(hand_card, required_targets)); // TODO: unify for both player and opponent
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandWeapon(hand_card, required_targets));
 	}
 
 	inline void StageHelper::GetBoardMoves_Attack(Board const & board, SlotIndex side, Player const & player, NextMoveGetter & next_move_getter)

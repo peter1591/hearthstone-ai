@@ -69,17 +69,13 @@ namespace GameEngine {
 		bool operator!=(const Board &rhs) const;
 
 	public: // internal state data for cross-stage communication
-		typedef Move::PlayerPlayMinionData PlayerPlayMinionData;
-		typedef Move::OpponentPlayMinionData OpponentPlayMinionData;
-		typedef Move::PlayerEquipWeaponData PlayerEquipWeaponData;
-		typedef Move::OpponentEquipWeaponData OpponentEquipWeaponData;
+		typedef Move::PlayHandMinionData PlayHandMinionData;
+		typedef Move::PlayHandWeaponData PlayHandWeaponData;
 		typedef Move::AttackData AttackData;
 
 		union Data {
-			PlayerPlayMinionData player_play_minion_data;
-			OpponentPlayMinionData opponent_play_minion_data;
-			PlayerEquipWeaponData player_equip_weapon_data;
-			OpponentEquipWeaponData opponent_equip_weapon_data;
+			PlayHandMinionData play_hand_minion_data;
+			PlayHandWeaponData play_hand_weapon_data;
 			AttackData attack_data;
 
 			bool operator==(const Data &rhs) const = delete;
@@ -121,19 +117,13 @@ namespace std {
 			// hash for the union
 			switch (s.stage) {
 			case GameEngine::STAGE_PLAYER_PUT_MINION:
-				GameEngine::hash_combine(result, s.data.player_play_minion_data);
-				break;
-
 			case GameEngine::STAGE_OPPONENT_PUT_MINION:
-				GameEngine::hash_combine(result, s.data.opponent_play_minion_data);
+				GameEngine::hash_combine(result, s.data.play_hand_minion_data);
 				break;
 
 			case GameEngine::STAGE_PLAYER_EQUIP_WEAPON:
-				GameEngine::hash_combine(result, s.data.player_equip_weapon_data);
-				break;
-
 			case GameEngine::STAGE_OPPONENT_EQUIP_WEAPON:
-				GameEngine::hash_combine(result, s.data.opponent_equip_weapon_data);
+				GameEngine::hash_combine(result, s.data.play_hand_weapon_data);
 				break;
 
 			case GameEngine::STAGE_PLAYER_ATTACK:
