@@ -35,16 +35,6 @@ static double CalculateSelectionWeight(TreeNode *node, double total_simulations_
 	return win_rate + exploration_factor * exploration_term;
 }
 
-static TreeNode * FindChildWithMove(std::list<TreeNode*> const& children, GameEngine::Move const& move)
-{
-	// TODO: use a faster data structure to quickly find a child with certain move
-	for (auto const& child : children)
-	{
-		if (child->move == move) return child;
-	}
-	return nullptr;
-}
-
 static TreeNode *FindBestChildToExpand(std::list<TreeNode*> const& children, double exploration_factor = EXLPORATION_FACTOR)
 {
 	if (children.empty()) return nullptr;
@@ -140,7 +130,9 @@ bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::B
 		// not fully expanded yet
 
 #ifdef DEBUG
-		if (::FindChildWithMove(node->children, expanding_move)) throw std::runtime_error("next-move-getter returns one particular move twice!");
+		for (auto const& child : node->children) {
+			if (child->move == expanding_move) throw std::runtime_error("next-move-getter returns one particular move twice!");
+		}
 #endif
 
 		bool next_board_is_random;
