@@ -288,8 +288,7 @@ inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 		board.GetNextMoves(expanding_move, node->next_moves_are_deterministic);
 	}
 
-	bool next_board_is_random;
-	board.ApplyMove(expanding_move, &next_board_is_random);
+	board.ApplyMove(expanding_move);
 
 	// find transposition node (i.e., other node with the same board)
 	TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
@@ -331,8 +330,7 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 			}
 #endif
 
-			bool next_board_is_random;
-			board.ApplyMove(expanding_move, &next_board_is_random);
+			board.ApplyMove(expanding_move);
 
 			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
 			if (transposition_node) {
@@ -476,8 +474,7 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 		TreeNode * child_found = node->FindChildByMove(expanding_move);
 		if (child_found == nullptr) {
 			// this move has not been expanded --> expand it
-			bool next_board_is_random;
-			board.ApplyMove(expanding_move, &next_board_is_random);
+			board.ApplyMove(expanding_move);
 
 			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
 			if (transposition_node) {
