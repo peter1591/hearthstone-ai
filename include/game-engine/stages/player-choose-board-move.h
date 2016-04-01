@@ -18,10 +18,9 @@ class StagePlayerChooseBoardMove
 	public:
 		static const Stage stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 
-		static void GetNextMoves(const Board &board, NextMoveGetter &next_move_getter, bool & is_deterministic)
+		static void GetNextMoves(
+			const Board &board, NextMoveGetter &next_move_getter, bool & is_deterministic)
 		{
-			bool const can_play_minion = !board.object_manager.player_minions.IsFull();
-
 			// if all the hand cards are determined,
 			// then all identical boards have the same next moves
 			// --> is_deterministic is true
@@ -29,26 +28,7 @@ class StagePlayerChooseBoardMove
 			// then some different boards might considered as the identical boards in MCTS tree
 			// and those different boards might produce different set of next moves
 			// --> is_deterministic is false
-			is_deterministic = board.player_hand.AllCardsDetermined();
-
-			for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
-			{
-				const Card &playing_card = board.player_hand.GetCard(hand_idx);
-
-				switch (playing_card.type) {
-				case Card::TYPE_MINION:
-					if (!can_play_minion) continue;
-					GetNextMove_PlayMinion(board, hand_idx, next_move_getter);
-					break;
-
-				case Card::TYPE_WEAPON:
-					GetNextMove_EquipWeapon(board, hand_idx, next_move_getter);
-					break;
-
-				default:
-					break;
-				}
-			}
+			StageHelper::GetBoardMoves_HandCards(board, SlotIndex::SLOT_PLAYER_SIDE, board.player_stat, board.player_hand, board.object_manager.player_minions, next_move_getter, is_deterministic);
 
 			// the choices to attack by hero/minion
 			SlotIndexBitmap attacker;
@@ -199,53 +179,6 @@ class StagePlayerChooseBoardMove
 		}
 
 	private:
-		static void GetNextMove_PlayMinion(Board const& board, Hand::Locator hand_card, NextMoveGetter &next_move_getter)
-		{
-			const Card &playing_card = board.player_hand.GetCard(hand_card);
-
-			if (board.player_stat.crystal.GetCurrent() < playing_card.cost) return;
-
-			SlotIndexBitmap required_targets;
-			bool meet_requirements;
-			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements) &&
-				meet_requirements == false)
-			{
-				return;
-			}
-
-			// TODO: check play requirements
-
-#ifdef CHOOSE_WHERE_TO_PUT_MINION
-			for (int i = 0; i <= board.object_manager.player_minions.GetMinionCount(); ++i)
-			{
-				SlotIndex idx = SlotIndexHelper::GetPlayerMinionIndex(i);
-				next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets));
-			}
-#else
-			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
-				hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount()), required_targets));
-#endif
-		}
-
-		static void GetNextMove_EquipWeapon(Board const& board, Hand::Locator hand_card, NextMoveGetter &next_move_getter)
-		{
-			const Card &playing_card = board.player_hand.GetCard(hand_card);
-
-			if (board.player_stat.crystal.GetCurrent() < playing_card.cost) return;
-
-			SlotIndexBitmap required_targets;
-			bool meet_requirements;
-			if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements) &&
-				meet_requirements == false)
-			{
-				return;
-			}
-
-			// TODO: check play requirements
-
-			next_move_getter.AddItem(NextMoveGetter::ItemPlayerEquipWeapon(hand_card, required_targets));
-		}
-
 		static void PlayMinion(Board &board, const Move &move)
 		{
 			board.data.player_play_minion_data = move.data.player_play_minion_data;

@@ -42,8 +42,75 @@ namespace GameEngine
 		return false;
 	}
 
-	inline void StageHelper::GetBoardMoves_HandCards(Board const & board, NextMoveGetter & next_moves, bool & is_deterministic)
+	inline void StageHelper::GetBoardMoves_HandCards(
+		Board const & board, SlotIndex side, PlayerStat const& player_stat , Hand const& hand, BoardObjects::Minions const& minions, // TODO: group these parameters
+		NextMoveGetter & next_moves, bool & all_cards_determined)
 	{
+		bool const minions_full = !minions.IsFull();
+
+		all_cards_determined = board.player_hand.AllCardsDetermined(); // TODO: use the following for-loop directly
+
+		for (Hand::Locator hand_idx = 0; hand_idx < board.player_hand.GetCount(); ++hand_idx)
+		{
+			const Card &playing_card = board.player_hand.GetCard(hand_idx);
+
+			switch (playing_card.type) {
+			case Card::TYPE_MINION:
+				if (!minions_full) continue;
+				GetBoardMoves_PlayMinion(board, side, player_stat, hand_idx, playing_card, minions, next_moves);
+				break;
+
+			case Card::TYPE_WEAPON:
+				GetBoardMoves_EquipWeapon(board, side, player_stat, hand_idx, playing_card, minions, next_moves);
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	inline void StageHelper::GetBoardMoves_PlayMinion(
+		Board const& board, SlotIndex side, PlayerStat const& player_stat, Hand::Locator hand_card, Card const& playing_card, BoardObjects::Minions const& minions,
+		NextMoveGetter &next_move_getter)
+	{
+		if (player_stat.crystal.GetCurrent() < playing_card.cost) return;
+
+		SlotIndexBitmap required_targets;
+		bool meet_requirements;
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, side, required_targets, meet_requirements) &&
+			meet_requirements == false)
+		{
+			return;
+		}
+
+#ifdef CHOOSE_WHERE_TO_PUT_MINION
+		for (int i = 0; i <= minions.GetMinionCount(); ++i)
+		{
+			SlotIndex idx = SlotIndexHelper::GetMinionIndex(side, i);
+			next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(hand_card, idx, required_targets)); // TODO: unify for both player and opponent
+		}
+#else
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayerPlayMinion(
+			hand_card, SlotIndexHelper::GetPlayerMinionIndex(board.object_manager.player_minions.GetMinionCount()), required_targets));
+#endif
+	}
+
+	inline void StageHelper::GetBoardMoves_EquipWeapon(
+		Board const& board, SlotIndex side, PlayerStat const& player_stat, Hand::Locator hand_card, Card const& playing_card, BoardObjects::Minions const& minions,
+		NextMoveGetter &next_move_getter)
+	{
+		if (player_stat.crystal.GetCurrent() < playing_card.cost) return;
+
+		SlotIndexBitmap required_targets;
+		bool meet_requirements;
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, SLOT_PLAYER_SIDE, required_targets, meet_requirements) &&
+			meet_requirements == false)
+		{
+			return;
+		}
+
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayerEquipWeapon(hand_card, required_targets)); // TODO: unify for both player and opponent
 	}
 
 	inline void StageHelper::DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous)

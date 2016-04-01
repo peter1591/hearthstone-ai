@@ -57,6 +57,12 @@ namespace BoardObjects {
 	{
 	public:
 		static void Increase(SlotIndex &idx) { idx = (SlotIndex)((int)idx + 1); }
+
+		static SlotIndex GetMinionIndex(SlotIndex side, int minion_idx) {
+			if (side == SLOT_PLAYER_SIDE) return GetPlayerMinionIndex(minion_idx);
+			else if (side == SLOT_OPPONENT_SIDE) return GetPlayerMinionIndex(minion_idx);
+			else throw std::runtime_error("invalid argument");
+		}
 		static SlotIndex GetPlayerMinionIndex(int minion_idx) { return (SlotIndex)(SLOT_PLAYER_MINION_START + minion_idx); }
 		static SlotIndex GetOpponentMinionIndex(int minion_idx) { return (SlotIndex)(SLOT_OPPONENT_MINION_START + minion_idx); }
 
