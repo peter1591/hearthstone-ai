@@ -280,7 +280,7 @@ bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::
 	while (true) {
 		if (next_move_getter.GetNextMove(board, expanding_move) == false) break;
 
-		TreeNode * child_found = FindChildWithMove(node->children, expanding_move);
+		TreeNode * child_found = node->FindChildByMove(expanding_move);
 		if (child_found == nullptr) {
 			// this move has not been expanded --> expand it
 			bool next_board_is_random;

@@ -144,7 +144,7 @@ std::unordered_map<GameEngine::Move, TreeNode> Decider::AggregateProgressChildre
 				TreeNode new_result;
 				new_result.wins = child->wins;
 				new_result.count = child->count;
-				result.insert(it_result, std::make_pair(child->move, new_result));
+				result.insert(it_result, std::make_pair(child->move, std::move(new_result)));
 			}
 			else {
 				// aggregate

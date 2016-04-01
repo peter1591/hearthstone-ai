@@ -19,6 +19,7 @@ public:
 
 	void AddChild(TreeNode *node);
 	void GetBoard(GameEngine::Board & initialized_board) const;
+	TreeNode * FindChildByMove(GameEngine::Move const& move);
 
 public:
 	TreeNode *parent;
@@ -29,6 +30,8 @@ public:
 public:
 	GameEngine::Stage stage;
 	GameEngine::StageType stage_type;
+
+	std::unique_ptr<std::unordered_map<GameEngine::Move, TreeNode *>> move_child_map;
 
 	// what move lead us from parent to this state?
 	GameEngine::Move move;
@@ -85,6 +88,10 @@ inline void TreeNode::AddChild(TreeNode *node)
 {
 	this->children.push_back(node);
 	node->parent = this;
+
+	if (this->move_child_map) {
+		this->move_child_map->insert(std::make_pair(node->move, node));
+	}
 }
 
 inline void TreeNode::GetBoard(GameEngine::Board & board) const
@@ -109,6 +116,26 @@ inline void TreeNode::GetBoard(GameEngine::Board & board) const
 		throw std::runtime_error("consistency check failed: board hash changed");
 	}
 #endif
+}
+
+inline TreeNode * TreeNode::FindChildByMove(GameEngine::Move const & move)
+{
+	if (this->move_child_map) {
+		auto it = this->move_child_map->find(move);
+		if (it == this->move_child_map->end()) return nullptr;
+		return it->second;
+	}
+
+	// create the map on demand
+	this->move_child_map.reset(new std::unordered_map<GameEngine::Move, TreeNode*>());
+
+	TreeNode * ret = nullptr;
+	for (auto const& child : this->children) {
+		this->move_child_map->insert(std::make_pair(child->move, child));
+		if (child->move == move) ret = child;
+	}
+
+	return ret;
 }
 
 inline Tree::Tree()
