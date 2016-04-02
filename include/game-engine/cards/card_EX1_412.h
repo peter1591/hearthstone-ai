@@ -43,9 +43,9 @@ namespace GameEngine {
 				}
 			};
 
-			static void AfterSummoned(GameEngine::BoardObjects::Minion & summoned_minion)
+			static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
 			{
-				summoned_minion.AddAura(std::make_unique<Aura>());
+				summoned_minion->AddAura(std::make_unique<Aura>());
 			}
 		};
 

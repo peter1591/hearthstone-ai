@@ -21,9 +21,9 @@ public:
 		StageHelper::SummonMinion(card, triggering_minion);
 	}
 
-	static void AfterSummoned(GameEngine::BoardObjects::Minion & summoned_minion)
+	static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
 	{
-		summoned_minion.AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(Deathrattle));
+		summoned_minion->AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(Deathrattle));
 	}
 };
 

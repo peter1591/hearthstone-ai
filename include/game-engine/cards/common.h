@@ -60,7 +60,7 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool AfterSummoned(int card_id, GameEngine::BoardObjects::Minion & summoned_minion)
+	static bool AfterSummoned(int card_id, GameEngine::BoardObjects::MinionIterator summoned_minion)
 	{
 		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, summoned_minion);
 	}

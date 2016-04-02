@@ -13,18 +13,18 @@ namespace GameEngine {
 
 			// Bloodsail Raider
 
-			static void AfterSummoned(GameEngine::BoardObjects::Minion & summoned_minion)
+			static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
 			{
 				BoardObjects::Hero * playing_hero = nullptr;
 
-				if (summoned_minion.IsPlayerSide()) playing_hero = &summoned_minion.GetBoard().player.hero;
+				if (summoned_minion->IsPlayerSide()) playing_hero = &summoned_minion.GetBoard().player.hero;
 				else playing_hero = &summoned_minion.GetBoard().opponent.hero;
 
 				const int attack_boost = playing_hero->GetWeaponAttack();
 
 				if (attack_boost > 0) {
 					auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion>(attack_boost, 0, 0, false);
-					summoned_minion.AddEnchantment(std::move(enchant), nullptr);
+					summoned_minion->AddEnchantment(std::move(enchant), nullptr);
 				}
 			}
 		};
