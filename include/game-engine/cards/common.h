@@ -11,6 +11,7 @@
 #include "card_EX1_029.h"
 #include "card_EX1_390.h"
 #include "card_EX1_412.h"
+#include "card_EX1_584.h"
 #include "card_FP1_002.h"
 #include "card_FP1_007.h"
 #include "card_FP1_021.h"
@@ -116,6 +117,7 @@ HANDLE_CARD_CALLBACK(Card_CS2_222)
 HANDLE_CARD_CALLBACK(Card_EX1_029)
 HANDLE_CARD_CALLBACK(Card_EX1_390)
 HANDLE_CARD_CALLBACK(Card_EX1_412)
+HANDLE_CARD_CALLBACK(Card_EX1_584)
 HANDLE_CARD_CALLBACK(Card_FP1_002)
 HANDLE_CARD_CALLBACK(Card_FP1_007)
 HANDLE_CARD_CALLBACK(Card_FP1_021)
