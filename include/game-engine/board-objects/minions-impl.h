@@ -6,7 +6,7 @@
 namespace GameEngine {
 	namespace BoardObjects {
 		
-		inline Minion & Minions::InsertBefore(MinionIterator const& it, MinionData && minion)
+		inline MinionIterator Minions::InsertBefore(MinionIterator const& it, MinionData && minion)
 		{
 			auto new_minion = Minion(*this, std::move(minion));
 
@@ -15,11 +15,9 @@ namespace GameEngine {
 			this->change_id++;
 #endif
 
-			auto & summoned_minion = *new_it;
+			this->board.hook_manager.HookAfterMinionAdded(*new_it);
 
-			this->board.hook_manager.HookAfterMinionAdded(summoned_minion);
-
-			return summoned_minion;
+			return MinionIterator(this->board, *this, new_it);
 		}
 
 		inline void Minions::MarkPendingRemoval(MinionIterator const & it)

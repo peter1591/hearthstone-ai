@@ -67,7 +67,7 @@ public: // getters
 	}
 
 public: // modifiers
-	Minion & InsertBefore(MinionIterator const& it, MinionData && minion);
+	MinionIterator InsertBefore(MinionIterator const& it, MinionData && minion);
 	void MarkPendingRemoval(MinionIterator const& it);
 	void MarkPendingRemoval(Minion & minion);
 	void EraseAndGoToNext(MinionIterator & it);
