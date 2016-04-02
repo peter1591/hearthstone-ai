@@ -10,15 +10,11 @@
 
 #include "random-generator.h"
 #include "common.h"
-#include "card.h"
-#include "hand.h"
-#include "secrets.h"
-#include "player-stat.h"
-#include "hidden-secrets.h"
 #include "stage.h"
 #include "next-move-getter.h"
 #include "move.h"
 #include "player.h"
+#include "hook-manager.h"
 
 namespace GameEngine {
 
@@ -57,6 +53,7 @@ namespace GameEngine {
 		// @param introduced_random [OUT] does the move application introduced any random?
 		void ApplyMove(const Move &move, bool * introduced_random = nullptr);
 
+	public: // debug
 		void DebugPrint() const;
 
 	public: // internal state data for cross-stage communication
@@ -76,6 +73,8 @@ namespace GameEngine {
 	public:
 		Player player;
 		Player opponent;
+
+		HookManager hook_manager;
 
 		BoardObjects::ObjectManager object_manager;
 

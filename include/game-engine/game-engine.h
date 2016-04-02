@@ -2,6 +2,7 @@
 
 #include "game-engine/board.h"
 
+#include "game-engine/hook-manager-impl.h"
 #include "game-engine/player-impl.h"
 #include "game-engine/board-objects/object-manager-impl.h"
 
