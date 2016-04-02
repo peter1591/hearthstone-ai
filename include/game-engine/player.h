@@ -27,6 +27,7 @@ namespace GameEngine {
 	public:
 		Board & board;
 		const SlotIndex side;
+		const SlotIndex opposite_side;
 
 		PlayerStat stat;
 		Secrets secrets;

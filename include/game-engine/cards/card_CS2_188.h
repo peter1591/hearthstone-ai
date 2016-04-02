@@ -15,13 +15,7 @@ public:
 
 	static void GetRequiredTargets(GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		if (SlotIndexHelper::IsPlayerSide(side)) {
-			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, board);
-		}
-		else {
-			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, board);
-		}
-
+		targets = SlotIndexHelper::GetTargets(side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, board);
 		meet_requirements = true; // it's fine even if no target available
 	}
 

@@ -114,20 +114,10 @@ namespace GameEngine
 		SlotIndexBitmap attacker;
 		SlotIndexBitmap attacked;
 
-		SlotIndexHelper::TargetType target_attacker, target_attacked;
-		if (player.side == SLOT_PLAYER_SIDE) {
-			target_attacker = SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE;
-			target_attacked = SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED;
-		}
-		else {
-			target_attacker = SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE;
-			target_attacked = SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED;
-		}
-
-		attacker = SlotIndexHelper::GetTargets(target_attacker, player.board);
+		attacker = SlotIndexHelper::GetTargets(player.side, SlotIndexHelper::TARGET_TYPE_ATTACKABLE, player.board);
 
 		if (!attacker.None()) {
-			attacked = SlotIndexHelper::GetTargets(target_attacked, player.board);
+			attacked = SlotIndexHelper::GetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CAN_BE_ATTACKED, player.board);
 
 			NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
 			next_move_getter.AddItem(std::move(player_attack_move));
@@ -214,20 +204,10 @@ namespace GameEngine
 		SlotIndexBitmap attacker;
 		SlotIndexBitmap attacked;
 
-		SlotIndexHelper::TargetType target_attacker, target_attacked;
-		if (player.side == SLOT_PLAYER_SIDE) {
-			target_attacker = SlotIndexHelper::TARGET_TYPE_PLAYER_ATTACKABLE;
-			target_attacked = SlotIndexHelper::TARGET_TYPE_OPPONENT_CAN_BE_ATTACKED;
-		}
-		else {
-			target_attacker = SlotIndexHelper::TARGET_TYPE_OPPONENT_ATTACKABLE;
-			target_attacked = SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED;
-		}
-
-		attacker = SlotIndexHelper::GetTargets(target_attacker, player.board);
+		attacker = SlotIndexHelper::GetTargets(player.side, SlotIndexHelper::TARGET_TYPE_ATTACKABLE, player.board);
 
 		if (!attacker.None()) {
-			attacked = SlotIndexHelper::GetTargets(target_attacked, player.board);
+			attacked = SlotIndexHelper::GetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CAN_BE_ATTACKED, player.board);
 
 			while (!attacker.None()) {
 				SlotIndex attacker_idx = attacker.GetOneTarget();

@@ -16,12 +16,15 @@ public:
 
 	static void GetRequiredTargets(GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
+		// TODO: refine parameter, may be pass board.player?
+		SlotIndex opposite_side;
 		if (SlotIndexHelper::IsPlayerSide(side)) {
-			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_OPPONENT_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
+			opposite_side = SlotIndex::SLOT_OPPONENT_SIDE;
 		} 
 		else {
-			targets = SlotIndexHelper::GetTargets(SlotIndexHelper::TARGET_TYPE_PLAYER_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
+			opposite_side = SlotIndex::SLOT_PLAYER_SIDE;
 		}
+		targets = SlotIndexHelper::GetTargets(opposite_side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
 
 		meet_requirements = true; // it's fine even if no target available
 	}
