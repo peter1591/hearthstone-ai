@@ -10,7 +10,7 @@
 #include "game-engine/board-objects/minion-iterator-impl.h"
 #include "game-engine/board-objects/minion-impl.h"
 #include "game-engine/board-objects/minions-impl.h"
-#include "game-engine/board-objects/enchantments-impl.h"
+#include "game-engine/enchantments/enchantments-impl.h"
 #include "game-engine/hand-impl.h"
 #include "game-engine/board-impl.h"
 #include "game-engine/stages/helper-impl.h"

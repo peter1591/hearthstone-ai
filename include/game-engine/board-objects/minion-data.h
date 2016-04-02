@@ -9,7 +9,7 @@
 #include "game-engine/slot-index.h"
 #include "object-base.h"
 #include "minion-stat.h"
-#include "enchantments.h"
+#include "game-engine/enchantments/enchantments.h"
 #include "aura.h"
 #include "game-engine/on-death-trigger.h"
 

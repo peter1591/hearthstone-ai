@@ -28,9 +28,9 @@ public:
 	bool IsOpponentSide() const;
 
 	bool IsBegin() const;
-	void GoToPrevious();
+	MinionIterator& GoToPrevious();
 
-	void GoToNext();
+	MinionIterator& GoToNext();
 	bool IsEnd() const;
 
 	iterator::pointer operator->();

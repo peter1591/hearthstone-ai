@@ -4,7 +4,7 @@
 
 #include "hero-data.h"
 #include "object-base.h"
-#include "enchantments.h"
+#include "game-engine/enchantments/enchantments.h"
 
 namespace GameEngine {
 	class Board;

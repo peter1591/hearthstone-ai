@@ -101,10 +101,11 @@ namespace GameEngine {
 			return this->it == this->minions.begin();
 		}
 
-		inline void MinionIterator::GoToPrevious()
+		inline MinionIterator & MinionIterator::GoToPrevious()
 		{
 			this->CheckChangeId();
 			this->it--;
+			return *this;
 		}
 
 		inline void MinionIterator::CheckChangeId() const
@@ -116,10 +117,11 @@ namespace GameEngine {
 #endif
 		}
 
-		inline void MinionIterator::GoToNext() 
+		inline MinionIterator & MinionIterator::GoToNext() 
 		{
 			this->CheckChangeId();
 			this->it++;
+			return *this;
 		}
 
 		inline bool MinionIterator::IsEnd() const

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "aura.h"
-#include "enchantments.h"
+#include "game-engine/enchantments/enchantments.h"
 #include "game-engine/board.h"
 
 namespace GameEngine {

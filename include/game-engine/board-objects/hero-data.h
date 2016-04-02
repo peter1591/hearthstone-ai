@@ -6,7 +6,7 @@
 #include "weapon.h"
 #include "hero-power.h"
 #include "object-base.h"
-#include "enchantments.h"
+#include "game-engine/enchantments/enchantments.h"
 
 namespace GameEngine {
 namespace BoardObjects{

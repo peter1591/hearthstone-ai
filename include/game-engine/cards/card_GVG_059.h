@@ -5,7 +5,7 @@
 #include "game-engine/card-id-map.h"
 #include "game-engine/stages/helper.h"
 #include "game-engine/board-objects/minion.h"
-#include "game-engine/board-objects/enchantment.h"
+#include "game-engine/enchantments/enchantment.h"
 
 namespace GameEngine {
 	namespace Cards {
