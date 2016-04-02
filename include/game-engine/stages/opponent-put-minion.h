@@ -16,14 +16,15 @@ class StageOpponentPutMinion
 
 		static void Go(Board &board)
 		{
+			auto & player = board.opponent;
 			const Board::PlayHandMinionData &data = board.data.play_hand_minion_data;
 
-			auto playing_card = board.opponent.hand.GetCard(data.hand_card);
-			board.opponent.hand.RemoveCard(data.hand_card);
+			auto playing_card = player.hand.GetCard(data.hand_card);
+			player.hand.RemoveCard(data.hand_card);
 
-			board.opponent.stat.crystal.CostCrystals(playing_card.cost);
+			player.stat.crystal.CostCrystals(playing_card.cost);
 
-			StageHelper::PlayMinion(board.opponent, playing_card, data.data);
+			StageHelper::PlayMinion(player, playing_card, data.data);
 
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}

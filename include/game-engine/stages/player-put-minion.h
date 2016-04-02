@@ -18,14 +18,15 @@ class StagePlayerPutMinion
 
 		static void Go(Board &board)
 		{
+			auto & player = board.player;
 			const Board::PlayHandMinionData &data = board.data.play_hand_minion_data;
 
-			auto playing_card = board.player.hand.GetCard(data.hand_card);
-			board.player.hand.RemoveCard(data.hand_card);
+			auto playing_card = player.hand.GetCard(data.hand_card);
+			player.hand.RemoveCard(data.hand_card);
 
-			board.player.stat.crystal.CostCrystals(playing_card.cost);
+			player.stat.crystal.CostCrystals(playing_card.cost);
 
-			StageHelper::PlayMinion(board.player, playing_card, data.data);
+			StageHelper::PlayMinion(player, playing_card, data.data);
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}
