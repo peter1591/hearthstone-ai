@@ -4,93 +4,117 @@
 #include "game-engine\board-objects\minion.h"
 #include "game-engine\board-objects\minions.h"
 
-template <typename Target>
-inline bool GameEngine::Enchantments<Target>::operator==(Enchantments const & rhs) const
+namespace GameEngine
 {
-	if (this->enchantments.size() != rhs.enchantments.size()) return false;
 
-	auto it_lhs = this->enchantments.begin();
-	auto it_rhs = rhs.enchantments.begin();
-	while (true)
+	template<typename Target>
+	inline Enchantments<Target>::Enchantments(Enchantments<Target>&& rhs)
 	{
-		if (it_lhs == this->enchantments.end()) break;
-		if (it_rhs == rhs.enchantments.end()) break;
-
-		if (*(it_lhs->first) != *(it_rhs->first)) return false;
-
-		it_lhs++;
-		it_rhs++;
+		*this = std::move(rhs);
 	}
-	// the size of both lists are equal, so here it_lhs and it_rhs should both reaches end
 
-	return true;
-}
+	template<typename Target>
+	inline Enchantments<Target>& Enchantments<Target>::operator=(Enchantments<Target>&& rhs)
+	{
+		this->enchantments = std::move(rhs.enchantments);
+		return *this;
+	}
 
-template <typename Target>
-inline bool GameEngine::Enchantments<Target>::operator!=(Enchantments const & rhs) const
-{
-	return !(*this == rhs);
-}
+	template <typename Target>
+	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
+	{
+		if (this->enchantments.size() != rhs.enchantments.size()) return false;
 
-template <typename Target>
-inline void GameEngine::Enchantments<Target>::Add(
-	std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & target)
-{
-	auto ref_ptr = enchantment.get();
+		auto it_lhs = this->enchantments.begin();
+		auto it_rhs = rhs.enchantments.begin();
+		while (true)
+		{
+			if (it_lhs == this->enchantments.end()) break;
+			if (it_rhs == rhs.enchantments.end()) break;
 
-	this->enchantments.push_back(std::make_pair(std::move(enchantment), owner));
-	
-	if (owner) owner->EnchantmentAdded(ref_ptr);
-	ref_ptr->AfterAdded(target);
-}
+			if (*(it_lhs->first) != *(it_rhs->first)) return false;
 
-template <typename Target>
-inline void GameEngine::Enchantments<Target>::Remove(
-	Enchantment<Target> * enchantment, Target & target)
-{
-	// A O(N) algorithm, since the enchantment should not be large in a normal play
-	for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it) {
-		if (it->first.get() == enchantment) {
-			// found, remove it
-			this->Remove(it, target);
-			return;
+			it_lhs++;
+			it_rhs++;
+		}
+		// the size of both lists are equal, so here it_lhs and it_rhs should both reaches end
+
+		return true;
+	}
+
+	template <typename Target>
+	inline bool Enchantments<Target>::operator!=(Enchantments const & rhs) const
+	{
+		return !(*this == rhs);
+	}
+
+	template <typename Target>
+	inline void Enchantments<Target>::Add(
+		std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & target)
+	{
+		auto ref_ptr = enchantment.get();
+
+		this->enchantments.push_back(std::make_pair(std::move(enchantment), owner));
+
+		if (owner) owner->EnchantmentAdded(ref_ptr);
+		ref_ptr->AfterAdded(target);
+	}
+
+	template <typename Target>
+	inline void Enchantments<Target>::Remove(
+		Enchantment<Target> * enchantment, Target & target)
+	{
+		// A O(N) algorithm, since the enchantment should not be large in a normal play
+		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it) {
+			if (it->first.get() == enchantment) {
+				// found, remove it
+				this->Remove(it, target);
+				return;
+			}
 		}
 	}
-}
 
-template <typename Target>
-inline void GameEngine::Enchantments<Target>::Clear(Target & target)
-{
-	for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
+	template <typename Target>
+	inline void Enchantments<Target>::Clear(Target & target)
 	{
-		it = this->Remove(it, target);
-	}
-}
-
-template <typename Target>
-inline void GameEngine::Enchantments<Target>::TurnEnd(Target & target)
-{
-	for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
-	{
-		if (it->first->TurnEnd(target) == false) {
-			// enchant vanished
+		for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
+		{
 			it = this->Remove(it, target);
 		}
-		else {
-			it++;
+	}
+
+	template<typename Target>
+	inline bool Enchantments<Target>::Empty() const
+	{
+		return this->enchantments.empty();
+	}
+
+	template <typename Target>
+	inline void Enchantments<Target>::TurnEnd(Target & target)
+	{
+		for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
+		{
+			if (it->first->TurnEnd(target) == false) {
+				// enchant vanished
+				it = this->Remove(it, target);
+			}
+			else {
+				it++;
+			}
 		}
 	}
-}
 
-template <typename Target>
-inline typename GameEngine::Enchantments<Target>::container_type::iterator GameEngine::Enchantments<Target>::Remove(
-	typename container_type::iterator it, Target & target)
-{
-	it->first->BeforeRemoved(target);
-	if (it->second) it->second->EnchantmentRemoved(it->first.get());
-	
-	return this->enchantments.erase(it);
-}
+	template <typename Target>
+	inline typename Enchantments<Target>::container_type::iterator Enchantments<Target>::Remove(
+		typename container_type::iterator it, Target & target)
+	{
+		it->first->BeforeRemoved(target);
+		if (it->second) it->second->EnchantmentRemoved(it->first.get());
+
+		return this->enchantments.erase(it);
+	}
+
+} // namespace GameEngine
 
 template <typename Target>
 inline std::size_t std::hash<GameEngine::Enchantments<Target>>::operator()(const argument_type &s) const

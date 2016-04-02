@@ -22,12 +22,8 @@ public:
 
 	Enchantments(Enchantments<Target> const& rhs) = delete;
 	Enchantments<Target> operator=(Enchantments<Target> const& rhs) = delete;
-	
-	Enchantments(Enchantments<Target> && rhs) { *this = std::move(rhs); }
-	Enchantments<Target> & operator=(Enchantments<Target> && rhs) {
-		this->enchantments = std::move(rhs.enchantments);
-		return *this;
-	}
+	Enchantments(Enchantments<Target> && rhs);
+	Enchantments<Target> & operator=(Enchantments<Target> && rhs);
 
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
@@ -35,7 +31,7 @@ public:
 	void Add(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & minion);
 	void Remove(Enchantment<Target> * enchantment, Target & target);
 	void Clear(Target & target);
-	bool Empty() const { return this->enchantments.empty(); }
+	bool Empty() const;
 
 public: // hooks
 	void TurnEnd(Target & target);
