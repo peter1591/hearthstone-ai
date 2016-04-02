@@ -35,7 +35,7 @@ inline void GameEngine::BoardObjects::Minion::TakeDamage(int damage, bool poison
 		}
 
 		this->HookMinionCheckEnraged();
-		this->GetBoard().object_manager.HookAfterMinionDamaged(this->minions, *this, damage);
+		this->GetBoard().hook_manager.HookAfterMinionDamaged(this->minions, *this, damage);
 	}
 }
 

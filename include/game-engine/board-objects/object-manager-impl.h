@@ -73,53 +73,5 @@ namespace GameEngine
 			}
 			else throw std::runtime_error("invalid argument");
 		}
-
-		inline void ObjectManager::PlayerTurnStart()
-		{
-			this->board.player.hero.TurnStart(true);
-			this->board.opponent.hero.TurnStart(false);
-			this->board.player.minions.TurnStart(true);
-			this->board.opponent.minions.TurnStart(false);
-		}
-
-		inline void ObjectManager::PlayerTurnEnd()
-		{
-			this->board.player.hero.TurnEnd(true);
-			this->board.opponent.hero.TurnEnd(false);
-			this->board.player.minions.TurnEnd(true);
-			this->board.opponent.minions.TurnEnd(false);
-		}
-
-		inline void ObjectManager::OpponentTurnStart()
-		{
-			this->board.opponent.hero.TurnStart(true);
-			this->board.player.hero.TurnStart(false);
-			this->board.opponent.minions.TurnStart(true);
-			this->board.player.minions.TurnStart(false);
-		}
-
-		inline void ObjectManager::OpponentTurnEnd()
-		{
-			this->board.opponent.hero.TurnEnd(true);
-			this->board.player.hero.TurnEnd(false);
-			this->board.opponent.minions.TurnEnd(true);
-			this->board.player.minions.TurnEnd(false);
-		}
-
-		inline void ObjectManager::HookAfterMinionAdded(Minion & added_minion)
-		{
-			this->board.player.hero.HookAfterMinionAdded(added_minion);
-			this->board.opponent.hero.HookAfterMinionAdded(added_minion);
-			this->board.player.minions.HookAfterMinionAdded(added_minion);
-			this->board.opponent.minions.HookAfterMinionAdded(added_minion);
-		}
-
-		inline void ObjectManager::HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage)
-		{
-			this->board.player.hero.HookAfterMinionDamaged(minions, minion, damage);
-			this->board.opponent.hero.HookAfterMinionDamaged(minions, minion, damage);
-			this->board.player.minions.HookAfterMinionDamaged(minions, minion, damage);
-			this->board.opponent.minions.HookAfterMinionDamaged(minions, minion, damage);
-		}
 	}
 }

@@ -21,7 +21,7 @@ class StagePlayerTurnStart
 			if (StageHelper::PlayerDrawCard(board.player)) return;
 
 			board.player.stat.crystal.TurnStart();
-			board.object_manager.PlayerTurnStart();
+			board.hook_manager.PlayerTurnStart();
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 	}

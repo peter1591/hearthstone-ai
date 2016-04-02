@@ -17,7 +17,7 @@ namespace GameEngine {
 
 			auto & summoned_minion = *new_it;
 
-			this->board.object_manager.HookAfterMinionAdded(summoned_minion);
+			this->board.hook_manager.HookAfterMinionAdded(summoned_minion);
 
 			return summoned_minion;
 		}

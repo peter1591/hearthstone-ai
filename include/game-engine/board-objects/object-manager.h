@@ -83,15 +83,6 @@ public: // Manipulate minions
 
 	Minion & GetMinion(SlotIndex slot_idx);
 
-public: // hooks
-	void PlayerTurnStart();
-	void PlayerTurnEnd();
-	void OpponentTurnStart();
-	void OpponentTurnEnd();
-
-	void HookAfterMinionAdded(Minion & minion);
-	void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage);
-
 private:
 	Board & board;
 };
