@@ -88,9 +88,9 @@ public: // hooks
 			it->HookAfterMinionAdded(added_minion);
 		}
 	}
-	void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage) {
+	void HookAfterMinionDamaged(Minion & minion, int damage) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
-			it->HookAfterMinionDamaged(minions, minion, damage);
+			it->HookAfterMinionDamaged(minion, damage);
 		}
 	}
 

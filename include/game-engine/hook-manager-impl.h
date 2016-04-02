@@ -50,11 +50,11 @@ namespace GameEngine
 		this->board.opponent.minions.HookAfterMinionAdded(added_minion);
 	}
 
-	inline void HookManager::HookAfterMinionDamaged(BoardObjects::Minions & minions, BoardObjects::Minion & minion, int damage)
+	inline void HookManager::HookAfterMinionDamaged(BoardObjects::Minion & minion, int damage)
 	{
-		this->board.player.hero.HookAfterMinionDamaged(minions, minion, damage);
-		this->board.opponent.hero.HookAfterMinionDamaged(minions, minion, damage);
-		this->board.player.minions.HookAfterMinionDamaged(minions, minion, damage);
-		this->board.opponent.minions.HookAfterMinionDamaged(minions, minion, damage);
+		this->board.player.hero.HookAfterMinionDamaged(minion, damage);
+		this->board.opponent.hero.HookAfterMinionDamaged(minion, damage);
+		this->board.player.minions.HookAfterMinionDamaged(minion, damage);
+		this->board.opponent.minions.HookAfterMinionDamaged(minion, damage);
 	}
 }

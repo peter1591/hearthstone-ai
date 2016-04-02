@@ -35,7 +35,7 @@ inline void GameEngine::BoardObjects::Minion::TakeDamage(int damage, bool poison
 		}
 
 		this->HookMinionCheckEnraged();
-		this->GetBoard().hook_manager.HookAfterMinionDamaged(this->minions, *this, damage);
+		this->GetBoard().hook_manager.HookAfterMinionDamaged(*this, damage);
 	}
 }
 
@@ -182,9 +182,9 @@ inline void GameEngine::BoardObjects::Minion::HookMinionCheckEnraged()
 	}
 }
 
-inline void GameEngine::BoardObjects::Minion::HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage)
+inline void GameEngine::BoardObjects::Minion::HookAfterMinionDamaged(Minion & minion, int damage)
 {
-	this->minion.auras.HookAfterMinionDamaged(minions, minion, damage);
+	this->minion.auras.HookAfterMinionDamaged(minion, damage);
 }
 
 inline void GameEngine::BoardObjects::Minion::TurnStart(bool owner_turn)

@@ -20,13 +20,13 @@ namespace GameEngine {
 
 				void AfterAdded(GameEngine::BoardObjects::Minion & owner) { this->owner = &owner; }
 
-				void HookAfterMinionDamaged(GameEngine::BoardObjects::Minions & minions, GameEngine::BoardObjects::Minion & minion, int damage) 
+				void HookAfterMinionDamaged(GameEngine::BoardObjects::Minion & minion, int damage) 
 				{
 					if (&minion != this->owner) return;
 
 					if (minion.GetMinion().stat.GetHP() <= 0) return; // not survives the damage
 
-					auto it_owner = minions.GetIteratorForSpecificMinion(*this->owner);
+					auto it_owner = minion.GetMinions().GetIteratorForSpecificMinion(*this->owner);
 					if (it_owner.IsEnd()) throw std::runtime_error("owner vanished");
 					Card card = CardDatabase::GetInstance().GetCard(CARD_ID_BRM_019);
 					it_owner.GoToNext(); // summon the new patron to the right

@@ -100,7 +100,7 @@ namespace BoardObjects {
 	public: // triggering hooks
 		void HookAfterMinionAdded(Minion & added_minion);
 		void HookMinionCheckEnraged();
-		void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage);
+		void HookAfterMinionDamaged(Minion & minion, int damage);
 
 	public:
 		bool IsPlayerSide() const;

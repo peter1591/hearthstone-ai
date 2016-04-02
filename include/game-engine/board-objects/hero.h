@@ -134,7 +134,7 @@ namespace GameEngine {
 			void HookAfterMinionAdded(Minion & added_minion) {
 			}
 
-			void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage) {
+			void HookAfterMinionDamaged(Minion & minion, int damage) {
 
 			}
 
