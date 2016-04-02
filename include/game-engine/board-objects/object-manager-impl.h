@@ -134,18 +134,5 @@ namespace GameEngine
 			this->board.player.minions.HookAfterMinionDamaged(minions, minion, damage);
 			this->board.opponent.minions.HookAfterMinionDamaged(minions, minion, damage);
 		}
-
-		inline void ObjectManager::DebugPrint() const
-		{
-			std::cout << "Player Hero: " << this->board.player.hero.GetDebugString() << std::endl;
-			std::cout << "Opponent Hero: " << this->board.opponent.hero.GetDebugString() << std::endl;
-
-			std::cout << "Opponent minions: " << std::endl;
-			this->board.opponent.minions.DebugPrint();
-
-			std::cout << "Player minions: " << std::endl;
-			this->board.player.minions.DebugPrint();
-		}
-
 	}
 }

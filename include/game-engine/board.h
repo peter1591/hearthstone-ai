@@ -35,11 +35,8 @@ namespace GameEngine {
 		Board(Board && rhs);
 		Board & operator=(Board && rhs);
 
-	public:
-		Player player;
-		Player opponent;
-
-		BoardObjects::ObjectManager object_manager;
+		bool operator==(const Board &rhs) const;
+		bool operator!=(const Board &rhs) const;
 
 	public:
 		void SetRandomSeed(unsigned int random_seed);
@@ -62,9 +59,6 @@ namespace GameEngine {
 
 		void DebugPrint() const;
 
-		bool operator==(const Board &rhs) const;
-		bool operator!=(const Board &rhs) const;
-
 	public: // internal state data for cross-stage communication
 		typedef Move::PlayHandMinionData PlayHandMinionData;
 		typedef Move::PlayHandWeaponData PlayHandWeaponData;
@@ -78,6 +72,12 @@ namespace GameEngine {
 			bool operator==(const Data &rhs) const = delete;
 			bool operator!=(const Data &rhs) const = delete;
 		};
+
+	public:
+		Player player;
+		Player opponent;
+
+		BoardObjects::ObjectManager object_manager;
 
 	public:
 		Stage stage;

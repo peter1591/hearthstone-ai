@@ -96,9 +96,6 @@ public: // hooks
 	void HookAfterMinionAdded(Minion & minion);
 	void HookAfterMinionDamaged(Minions & minions, Minion & minion, int damage);
 
-public:
-	void DebugPrint() const;
-
 private:
 	Board & board;
 };

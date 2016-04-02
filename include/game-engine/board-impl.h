@@ -220,7 +220,14 @@ inline void Board::DebugPrint() const
 	std::cout << "Player stat: " << this->player.stat.GetDebugString() << std::endl;
 	std::cout << "Player cards: " << this->player.hand.GetDebugString() << std::endl;
 
-	this->object_manager.DebugPrint();
+	std::cout << "Player Hero: " << this->player.hero.GetDebugString() << std::endl;
+	std::cout << "Opponent Hero: " << this->opponent.hero.GetDebugString() << std::endl;
+
+	std::cout << "Opponent minions: " << std::endl;
+	this->opponent.minions.DebugPrint();
+
+	std::cout << "Player minions: " << std::endl;
+	this->player.minions.DebugPrint();
 
 	std::cout << "=== Print Board END   ===" << std::endl;
 }
