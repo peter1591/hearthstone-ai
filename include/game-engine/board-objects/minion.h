@@ -74,6 +74,7 @@ namespace GameEngine {
 		void AddAttack(int val);
 		void IncreaseCurrentAndMaxHP(int val);
 		void DecreaseMaxHP(int val);
+		void AddSpellDamage(int val);
 
 		void AddOnDeathTrigger(OnDeathTrigger && func);
 		std::list<OnDeathTrigger> GetAndClearOnDeathTriggers();

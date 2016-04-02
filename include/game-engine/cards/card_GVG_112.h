@@ -27,7 +27,7 @@ namespace GameEngine {
 				{
 					constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
 
-					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, buff_stat, false>>();
+					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, 0, buff_stat, false>>();
 
 					target_minion.AddEnchantment(std::move(enchantment), &this->enchantments_manager);
 				}

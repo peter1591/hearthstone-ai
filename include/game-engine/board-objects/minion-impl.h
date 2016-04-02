@@ -110,6 +110,11 @@ inline void GameEngine::Minion::DecreaseMaxHP(int val)
 	this->HookMinionCheckEnraged(); // might become un-enraged if max-hp lowered to current-hp
 }
 
+inline void GameEngine::Minion::AddSpellDamage(int val)
+{
+	this->minion.stat.SetSpellDamage(this->minion.stat.GetSpellDamage() + val);
+}
+
 inline void GameEngine::Minion::AddOnDeathTrigger(OnDeathTrigger && func)
 {
 	this->minion.triggers_on_death.push_back(std::move(func));

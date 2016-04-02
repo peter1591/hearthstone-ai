@@ -9,7 +9,7 @@ namespace GameEngine
 	class Enchantment_BuffMinion : public Enchantment<Minion>
 	{
 	public:
-		Enchantment_BuffMinion(int attack_boost, int hp_boost, int buff_flags, bool one_turn);
+		Enchantment_BuffMinion(int attack_boost, int hp_boost, int damage_spell_boost, int buff_flags, bool one_turn);
 		bool EqualsTo(Enchantment<Minion> const& rhs_base) const;
 		std::size_t GetHash() const;
 
@@ -24,6 +24,7 @@ namespace GameEngine
 #endif
 		int attack_boost;
 		int hp_boost;
+		int damage_spell_boost;
 		int buff_flags;
 		bool one_turn;
 		int actual_attack_boost; // attack cannot be negative

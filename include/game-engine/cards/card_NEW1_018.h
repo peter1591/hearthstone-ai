@@ -23,7 +23,7 @@ namespace GameEngine {
 				const int attack_boost = playing_hero->GetWeaponAttack();
 
 				if (attack_boost > 0) {
-					auto enchant = std::make_unique<Enchantment_BuffMinion>(attack_boost, 0, 0, false);
+					auto enchant = std::make_unique<Enchantment_BuffMinion>(attack_boost, 0, 0, 0, false);
 					summoned_minion->AddEnchantment(std::move(enchant), nullptr);
 				}
 			}

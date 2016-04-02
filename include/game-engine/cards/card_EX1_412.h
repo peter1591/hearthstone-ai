@@ -21,7 +21,7 @@ namespace GameEngine {
 					constexpr int hp_boost = 0;
 					constexpr int buff_stat = 1 << MinionStat::FLAG_WINDFURY;
 
-					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, buff_stat, false>>();
+					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, buff_stat, false>>();
 
 					aura_owner.AddEnchantment(std::move(enchantment), &this->enchantments_manager);
 				}

@@ -7,63 +7,65 @@ namespace GameEngine {
 		class Enchantment_BuffMinion {
 		public:
 			template <int buff_flags>
-			static void AfterAdded(int attack_boost, int hp_boost, int &actual_attack_boost, Minion & minion)
+			static void AfterAdded(int attack_boost, int hp_boost, int spell_damage_boost, int &actual_attack_boost, Minion & minion)
 			{
-				AfterAdded_AttackHP(attack_boost, hp_boost, actual_attack_boost, minion);
+				AfterAdded_Stats(attack_boost, hp_boost, spell_damage_boost, actual_attack_boost, minion);
 				SetMinionFlags<buff_flags>(minion, true);
 			}
-			static void AfterAdded(int attack_boost, int hp_boost, int buff_flags, int &actual_attack_boost, Minion & minion)
+			static void AfterAdded(int attack_boost, int hp_boost, int spell_damage_boost, int buff_flags, int &actual_attack_boost, Minion & minion)
 			{
-				AfterAdded_AttackHP(attack_boost, hp_boost, actual_attack_boost, minion);
+				AfterAdded_Stats(attack_boost, hp_boost, spell_damage_boost, actual_attack_boost, minion);
 				SetMinionFlags(buff_flags, minion, true);
 			}
 
 			template <int buff_flags>
-			static void BeforeRemoved(int attack_boost, int hp_boost, int actual_attack_boost, Minion & minion)
+			static void BeforeRemoved(int attack_boost, int hp_boost, int spell_damage_boost, int actual_attack_boost, Minion & minion)
 			{
-				BeforeRemoved_AttackHP(attack_boost, hp_boost, actual_attack_boost, minion);
+				BeforeRemoved_Stats(attack_boost, hp_boost, spell_damage_boost, actual_attack_boost, minion);
 				SetMinionFlags<buff_flags>(minion, false);
 			}
 
-			static void BeforeRemoved(int attack_boost, int hp_boost, int buff_flags, int actual_attack_boost, Minion & minion)
+			static void BeforeRemoved(int attack_boost, int hp_boost, int spell_damage_boost, int buff_flags, int actual_attack_boost, Minion & minion)
 			{
-				BeforeRemoved_AttackHP(attack_boost, hp_boost, actual_attack_boost, minion);
+				BeforeRemoved_Stats(attack_boost, hp_boost, spell_damage_boost, actual_attack_boost, minion);
 				SetMinionFlags(buff_flags, minion, false);
 			}
 
 		private:
-			static void AfterAdded_AttackHP(int attack_boost, int hp_boost, int &actual_attack_boost, Minion & minion)
+			static void AfterAdded_Stats(int attack_boost, int hp_boost, int spell_damage_boost, int &actual_attack_boost, Minion & minion)
 			{
 				// attack cannot below to zero
-				if (minion.GetAttack() + attack_boost < 0)
-				{
+				if (minion.GetAttack() + attack_boost < 0) {
 					actual_attack_boost = -minion.GetAttack();
 				}
-				else {
+				else { 
 					actual_attack_boost = attack_boost;
 				}
-
-				if (actual_attack_boost != 0)
-				{
+				if (actual_attack_boost != 0) {
 					minion.AddAttack(actual_attack_boost);
 				}
 
-				if (hp_boost != 0)
-				{
+				if (hp_boost != 0) {
 					minion.IncreaseCurrentAndMaxHP(hp_boost);
+				}
+
+				if (spell_damage_boost != 0) {
+					minion.AddSpellDamage(spell_damage_boost);
 				}
 			}
 
-			static void BeforeRemoved_AttackHP(int attack_boost, int hp_boost, int actual_attack_boost, Minion & minion)
+			static void BeforeRemoved_Stats(int attack_boost, int hp_boost, int spell_damage_boost, int actual_attack_boost, Minion & minion)
 			{
-				if (actual_attack_boost != 0)
-				{
+				if (actual_attack_boost != 0) {
 					minion.AddAttack(-actual_attack_boost);
 				}
 
-				if (hp_boost != 0)
-				{
+				if (hp_boost != 0) {
 					minion.DecreaseMaxHP(hp_boost);
+				}
+
+				if (spell_damage_boost != 0) {
+					minion.AddSpellDamage(-spell_damage_boost);
 				}
 			}
 
