@@ -28,7 +28,7 @@ namespace GameEngine {
 
 					auto it_owner = minion.GetMinions().GetIteratorForSpecificMinion(*this->owner);
 					if (it_owner.IsEnd()) throw std::runtime_error("owner vanished");
-					Card card = CardDatabase::GetInstance().GetCard(CARD_ID_BRM_019);
+					Card card = CardDatabase::GetInstance().GetCard(Card_BRM_019::card_id);
 					it_owner.GoToNext(); // summon the new patron to the right
 					StageHelper::SummonMinion(card, it_owner);
 				}
@@ -45,7 +45,7 @@ namespace GameEngine {
 
 				std::size_t GetHash() const
 				{
-					std::size_t result = std::hash<int>()(card_id);
+					std::size_t result = std::hash<int>()(Card_BRM_019::card_id);
 
 					return result;
 				}
