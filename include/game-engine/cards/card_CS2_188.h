@@ -13,9 +13,9 @@ public:
 
 	// Abusive Sergant
 
-	static void GetRequiredTargets(GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		targets = SlotIndexHelper::GetTargets(side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, board);
+		targets = SlotIndexHelper::GetTargets(player.side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, player.board);
 		meet_requirements = true; // it's fine even if no target available
 	}
 

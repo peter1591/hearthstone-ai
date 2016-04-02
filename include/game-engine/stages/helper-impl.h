@@ -76,7 +76,7 @@ namespace GameEngine
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
-		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements) &&
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player, required_targets, meet_requirements) &&
 			meet_requirements == false)
 		{
 			return;
@@ -100,7 +100,7 @@ namespace GameEngine
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
-		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements) &&
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player, required_targets, meet_requirements) &&
 			meet_requirements == false)
 		{
 			return;
@@ -161,7 +161,7 @@ namespace GameEngine
 				if (!can_play_minion) continue;
 				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements)
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player, required_targets, meet_requirements)
 					&& meet_requirements == false)
 				{
 					break;
@@ -180,7 +180,7 @@ namespace GameEngine
 			case Card::TYPE_WEAPON:
 				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements)
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player, required_targets, meet_requirements)
 					&& meet_requirements == false)
 				{
 					break;

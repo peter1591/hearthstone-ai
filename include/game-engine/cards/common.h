@@ -65,9 +65,9 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, summoned_minion);
 	}
 
-	static bool GetRequiredTargets(int card_id, GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
+	static bool GetRequiredTargets(int card_id, GameEngine::Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, board, side, targets, meet_requirements);
+		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, player, targets, meet_requirements);
 	}
 
 	static bool BattleCry(int card_id, GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::PlayMinionData const& play_minion_data)

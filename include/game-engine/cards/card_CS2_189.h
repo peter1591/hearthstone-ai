@@ -14,18 +14,9 @@ public:
 
 	// Elven Archer
 
-	static void GetRequiredTargets(GameEngine::Board const& board, SlotIndex side, SlotIndexBitmap &targets, bool & meet_requirements)
+	static void GetRequiredTargets(GameEngine::Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
-		// TODO: refine parameter, may be pass board.player?
-		SlotIndex opposite_side;
-		if (SlotIndexHelper::IsPlayerSide(side)) {
-			opposite_side = SlotIndex::SLOT_OPPONENT_SIDE;
-		} 
-		else {
-			opposite_side = SlotIndex::SLOT_PLAYER_SIDE;
-		}
-		targets = SlotIndexHelper::GetTargets(opposite_side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, board);
-
+		targets = SlotIndexHelper::GetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, player.board);
 		meet_requirements = true; // it's fine even if no target available
 	}
 
