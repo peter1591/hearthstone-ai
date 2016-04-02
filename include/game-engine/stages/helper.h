@@ -37,6 +37,8 @@ public:
 
 	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous);
 	static void DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage, bool poisonous);
+	static void DealDamage(GameEngine::BoardObjects::Hero & taker, int damage, bool poisonous);
+	static void DealDamage(GameEngine::BoardObjects::Minion & taker, int damage, bool poisonous);
 
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);

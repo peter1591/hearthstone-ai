@@ -14,6 +14,7 @@ namespace GameEngine {
 
 			// Stormwind Champion
 
+			// TODO: add an convenient class for this kind of aura
 			class Aura : public GameEngine::BoardObjects::AuraToAllMinions
 			{
 			private: // hooks
@@ -57,7 +58,7 @@ namespace GameEngine {
 
 				std::size_t GetHash() const
 				{
-					std::size_t result = std::hash<int>()(card_id);
+					std::size_t result = std::hash<int>()(Card_CS2_222::card_id); // provided that this minion has only one kidn of aura
 
 					return result;
 				}

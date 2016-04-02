@@ -242,6 +242,16 @@ namespace GameEngine
 		taker->TakeDamage(damage, poisonous);
 	}
 
+	inline void StageHelper::DealDamage(GameEngine::BoardObjects::Hero & taker, int damage, bool poisonous)
+	{
+		taker.TakeDamage(damage, poisonous);
+	}
+
+	inline void StageHelper::DealDamage(GameEngine::BoardObjects::Minion & taker, int damage, bool poisonous)
+	{
+		taker.TakeDamage(damage, poisonous);
+	}
+
 	inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
 	{
 		const bool player_side = SlotIndexHelper::IsPlayerSide(origin_attacked);
