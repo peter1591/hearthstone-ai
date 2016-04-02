@@ -6,12 +6,13 @@
 namespace GameEngine
 {
 	inline Player::Player(Board & board, SlotIndex side) :
-		side(side), hand(board.random_generator), hero(board), minions(board)
+		board(board), side(side), hand(board.random_generator), hero(board), minions(board)
 	{
 
 	}
 
 	inline Player::Player(Board & board, Player const & rhs) :
+		board(board),
 		side(rhs.side),
 		stat(rhs.stat),
 		secrets(rhs.secrets),
@@ -22,6 +23,7 @@ namespace GameEngine
 	}
 
 	inline Player::Player(Board & board, Player && rhs) :
+		board(board),
 		side(rhs.side),
 		stat(std::move(rhs.stat)),
 		secrets(std::move(rhs.secrets)),

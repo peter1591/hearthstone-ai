@@ -18,7 +18,7 @@ class StageOpponentTurnStart
 
 		static void Go(Board &board)
 		{
-			if (StageHelper::PlayerDrawCard(board, board.opponent)) return;
+			if (StageHelper::PlayerDrawCard(board.opponent)) return;
 
 			board.opponent.stat.crystal.TurnStart();
 			board.object_manager.OpponentTurnStart();

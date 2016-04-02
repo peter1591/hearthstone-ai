@@ -5,8 +5,10 @@
 
 namespace GameEngine
 {
-	inline bool StageHelper::PlayerDrawCard(Board & board, Player & player)
+	inline bool StageHelper::PlayerDrawCard(Player & player)
 	{
+		auto & board = player.board;
+
 		if (player.hand.HasCardToDraw()) {
 			StageHelper::Fatigue(board, player.side);
 			return StageHelper::CheckHeroMinionDead(board);
@@ -24,8 +26,7 @@ namespace GameEngine
 		return false;
 	}
 
-	inline void StageHelper::GetBoardMoves(
-		Board const & board, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined)
+	inline void StageHelper::GetBoardMoves(Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined)
 	{
 		bool const minions_full = player.minions.IsFull();
 
@@ -47,11 +48,11 @@ namespace GameEngine
 			switch (playing_card.type) {
 			case Card::TYPE_MINION:
 				if (minions_full) continue;
-				GetBoardMoves_PlayMinion(board, player, hand_idx, playing_card, next_moves);
+				GetBoardMoves_PlayMinion(player, hand_idx, playing_card, next_moves);
 				break;
 
 			case Card::TYPE_WEAPON:
-				GetBoardMoves_EquipWeapon(board, player, hand_idx, playing_card, next_moves);
+				GetBoardMoves_EquipWeapon(player, hand_idx, playing_card, next_moves);
 				break;
 
 			default:
@@ -60,7 +61,7 @@ namespace GameEngine
 		}
 
 		// the choices to attack by hero/minion
-		GetBoardMoves_Attack(board, player, next_moves);
+		GetBoardMoves_Attack(player, next_moves);
 
 		// the choice to end turn
 		Move move_end_turn;
@@ -68,15 +69,14 @@ namespace GameEngine
 		next_moves.AddItem(std::move(move_end_turn));
 	}
 
-	inline void StageHelper::GetBoardMoves_PlayMinion(
-		Board const& board, Player const& player, Hand::Locator hand_card, Card const& playing_card,
+	inline void StageHelper::GetBoardMoves_PlayMinion(Player const& player, Hand::Locator hand_card, Card const& playing_card,
 		NextMoveGetter &next_move_getter)
 	{
 		if (player.stat.crystal.GetCurrent() < playing_card.cost) return;
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
-		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, player.side, required_targets, meet_requirements) &&
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements) &&
 			meet_requirements == false)
 		{
 			return;
@@ -94,15 +94,13 @@ namespace GameEngine
 #endif
 	}
 
-	inline void StageHelper::GetBoardMoves_EquipWeapon(
-		Board const& board, Player const& player, Hand::Locator hand_card, Card const& playing_card,
-		NextMoveGetter &next_move_getter)
+	inline void StageHelper::GetBoardMoves_EquipWeapon(Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter)
 	{
 		if (player.stat.crystal.GetCurrent() < playing_card.cost) return;
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
-		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, player.side, required_targets, meet_requirements) &&
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements) &&
 			meet_requirements == false)
 		{
 			return;
@@ -111,7 +109,7 @@ namespace GameEngine
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandWeapon(player, hand_card, required_targets));
 	}
 
-	inline void StageHelper::GetBoardMoves_Attack(Board const & board, Player const & player, NextMoveGetter & next_move_getter)
+	inline void StageHelper::GetBoardMoves_Attack(Player const & player, NextMoveGetter & next_move_getter)
 	{
 		SlotIndexBitmap attacker;
 		SlotIndexBitmap attacked;
@@ -126,17 +124,17 @@ namespace GameEngine
 			target_attacked = SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED;
 		}
 
-		attacker = SlotIndexHelper::GetTargets(target_attacker, board);
+		attacker = SlotIndexHelper::GetTargets(target_attacker, player.board);
 
 		if (!attacker.None()) {
-			attacked = SlotIndexHelper::GetTargets(target_attacked, board);
+			attacked = SlotIndexHelper::GetTargets(target_attacked, player.board);
 
 			NextMoveGetter::ItemAttack player_attack_move(std::move(attacker), std::move(attacked));
 			next_move_getter.AddItem(std::move(player_attack_move));
 		}
 	}
 
-	inline void StageHelper::GetGoodBoardMove(unsigned int rand, Board const& board, Player const & player, Move &good_move)
+	inline void StageHelper::GetGoodBoardMove(unsigned int rand, Player const & player, Move &good_move)
 	{
 		// heuristic goes here
 		// 1. play minion is good (always put minion to the rightmost)
@@ -173,7 +171,7 @@ namespace GameEngine
 				if (!can_play_minion) continue;
 				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, player.side, required_targets, meet_requirements)
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements)
 					&& meet_requirements == false)
 				{
 					break;
@@ -192,7 +190,7 @@ namespace GameEngine
 			case Card::TYPE_WEAPON:
 				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
-				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, player.side, required_targets, meet_requirements)
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player.board, player.side, required_targets, meet_requirements)
 					&& meet_requirements == false)
 				{
 					break;
@@ -226,10 +224,10 @@ namespace GameEngine
 			target_attacked = SlotIndexHelper::TARGET_TYPE_PLAYER_CAN_BE_ATTACKED;
 		}
 
-		attacker = SlotIndexHelper::GetTargets(target_attacker, board);
+		attacker = SlotIndexHelper::GetTargets(target_attacker, player.board);
 
 		if (!attacker.None()) {
-			attacked = SlotIndexHelper::GetTargets(target_attacked, board);
+			attacked = SlotIndexHelper::GetTargets(target_attacked, player.board);
 
 			while (!attacker.None()) {
 				SlotIndex attacker_idx = attacker.GetOneTarget();

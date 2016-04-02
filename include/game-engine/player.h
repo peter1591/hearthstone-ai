@@ -25,6 +25,7 @@ namespace GameEngine {
 		bool operator!=(Player const& rhs) const;
 
 	public:
+		Board & board;
 		const SlotIndex side;
 
 		PlayerStat stat;
