@@ -29,7 +29,7 @@ public: // return true if game state changed (e.g., win/loss)
 	// no battle cry
 	static bool SummonMinion(Card const& card, BoardObjects::MinionIterator & it);
 
-	static bool EquipWeapon(Board & board, Card const& card, SlotIndex playing_side, Move::EquipWeaponData const& data);
+	static bool EquipWeapon(Player & player, Card const& card, Move::EquipWeaponData const& data);
 
 public:
 	// handle minion/hero attack, calculate damages

@@ -420,18 +420,18 @@ namespace GameEngine
 		return true;
 	}
 
-	inline bool StageHelper::EquipWeapon(Board & board, Card const & card, SlotIndex playing_side, Move::EquipWeaponData const & data)
+	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, Move::EquipWeaponData const & data)
 	{
-		auto & playing_hero = board.object_manager.GetHeroBySide(playing_side);
+		auto & playing_hero = player.board.object_manager.GetHeroBySide(player.side);
 
 		playing_hero.DestroyWeapon();
 
-		Cards::CardCallbackManager::Weapon_BattleCry(card.id, board, playing_side, data);
-		if (StageHelper::CheckHeroMinionDead(board)) return true;
+		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player.board, player.side, data);
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		playing_hero.EquipWeapon(card);
 		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, playing_hero);
-		if (StageHelper::CheckHeroMinionDead(board)) return true;
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;
 	}
