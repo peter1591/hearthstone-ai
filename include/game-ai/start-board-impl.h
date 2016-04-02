@@ -67,6 +67,7 @@ inline void StartBoard::InitializeDebugBoard1_OpponentHand(GameEngine::Hand &han
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
 	
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_142)); // 222 spell+1
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_584)); // adjacent spell+1
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
@@ -129,7 +130,7 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	board.player.stat.crystal.Set(0, 0, 0, 0);
 	board.player.stat.fatigue_damage = 0;
 
-	board.opponent.stat.crystal.Set(1, 1, 0, 0);
+	board.opponent.stat.crystal.Set(10, 10, 0, 0);
 	board.opponent.stat.fatigue_damage = 0;
 
 	GameEngine::HeroData player_hero;

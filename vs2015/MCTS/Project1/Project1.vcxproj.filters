@@ -31,6 +31,12 @@
     <Filter Include="Header Files\game-engine\board-objects">
       <UniqueIdentifier>{433f4e36-c874-4d5f-9d0c-27ed8e00f529}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\enchantments">
+      <UniqueIdentifier>{848fc1f1-4900-4d86-80e2-2e37d9ccb78c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game-engine\enchantments\impl">
+      <UniqueIdentifier>{00dcc16c-3074-4ebe-8c8b-84087ba2fb62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -328,6 +334,42 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card-base.h">
       <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_584.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c-impl.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-impl.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment-impl.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-impl.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\owner.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\owner-impl.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\impl\buff-minion.h">
+      <Filter>Header Files\game-engine\enchantments\impl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

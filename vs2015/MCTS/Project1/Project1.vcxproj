@@ -177,6 +177,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_584.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_021.h" />
@@ -187,6 +188,17 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_018.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\impl\buff-minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\owner-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\owner.h" />
     <ClInclude Include="..\..\..\include\game-engine\game-engine.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand-card.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand-impl.h" />
