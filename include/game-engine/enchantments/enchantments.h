@@ -18,30 +18,33 @@ class Enchantments
 	friend std::hash<Enchantments>;
 
 public:
-	Enchantments() {}
+	Enchantments(Target & target) : target(target) {}
 
 	Enchantments(Enchantments<Target> const& rhs) = delete;
 	Enchantments<Target> operator=(Enchantments<Target> const& rhs) = delete;
-	Enchantments(Enchantments<Target> && rhs);
+	Enchantments(Target & target, Enchantments<Target> && rhs);
 	Enchantments<Target> & operator=(Enchantments<Target> && rhs) = delete;
 
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
 
-	void Add(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & minion);
-	void Remove(Enchantment<Target> * enchantment, Target & target);
-	void Clear(Target & target);
+	void Add(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner);
+	void Remove(Enchantment<Target> * enchantment);
+	void Clear();
 	bool Empty() const;
 
 public: // hooks
-	void TurnEnd(Target & target);
+	void TurnEnd();
 
 private:
 	typedef typename std::list<std::pair<std::unique_ptr<Enchantment<Target>>, EnchantmentOwner*>> container_type;
 
-	typename container_type::iterator Remove(typename container_type::iterator it, Target & target);
+	typename container_type::iterator Remove(typename container_type::iterator it);
 
 	container_type enchantments;
+
+private:
+	Target & target;
 };
 
 } // namespace GameEngine

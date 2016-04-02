@@ -8,8 +8,8 @@ namespace GameEngine
 {
 
 	template<typename Target>
-	inline Enchantments<Target>::Enchantments(Enchantments<Target>&& rhs)
-		: enchantments(std::move(rhs.enchantments))
+	inline Enchantments<Target>::Enchantments(Target & target, Enchantments<Target>&& rhs)
+		: target(target), enchantments(std::move(rhs.enchantments))
 	{
 	}
 
@@ -42,8 +42,7 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Add(
-		std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & target)
+	inline void Enchantments<Target>::Add(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner)
 	{
 		auto ref_ptr = enchantment.get();
 
@@ -54,25 +53,24 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Remove(
-		Enchantment<Target> * enchantment, Target & target)
+	inline void Enchantments<Target>::Remove(Enchantment<Target> * enchantment)
 	{
 		// A O(N) algorithm, since the enchantment should not be large in a normal play
 		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it) {
 			if (it->first.get() == enchantment) {
 				// found, remove it
-				this->Remove(it, target);
+				this->Remove(it);
 				return;
 			}
 		}
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Clear(Target & target)
+	inline void Enchantments<Target>::Clear()
 	{
 		for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
 		{
-			it = this->Remove(it, target);
+			it = this->Remove(it);
 		}
 	}
 
@@ -83,13 +81,13 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::TurnEnd(Target & target)
+	inline void Enchantments<Target>::TurnEnd()
 	{
 		for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
 		{
-			if (it->first->TurnEnd(target) == false) {
+			if (it->first->TurnEnd(this->target) == false) {
 				// enchant vanished
-				it = this->Remove(it, target);
+				it = this->Remove(it);
 			}
 			else {
 				it++;
@@ -98,10 +96,9 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline typename Enchantments<Target>::container_type::iterator Enchantments<Target>::Remove(
-		typename container_type::iterator it, Target & target)
+	inline typename Enchantments<Target>::container_type::iterator Enchantments<Target>::Remove(typename container_type::iterator it)
 	{
-		it->first->BeforeRemoved(target);
+		it->first->BeforeRemoved(this->target);
 		if (it->second) it->second->EnchantmentRemoved(it->first.get());
 
 		return this->enchantments.erase(it);

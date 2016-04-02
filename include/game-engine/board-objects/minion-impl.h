@@ -4,35 +4,36 @@
 
 inline GameEngine::Minion::Minion(Minion && rhs)
 	: minions(rhs.minions), minion(std::move(rhs.minion)),
-	enchantments(std::move(rhs.enchantments)),
+	enchantments(*this, std::move(rhs.enchantments)),
 	auras(std::move(rhs.auras))
 {
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
-	: minions(minions), minion(rhs.minion)
+	: minions(minions), minion(rhs.minion), enchantments(*this)
 {
 	// If minion has enchantments/auras, then it cannot be cloned
 	// Note: The only chance we need to copy minion is to copy root node board in MCTS
 	// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
+	// TODO: how about faceless manipulator?
 	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
 	if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion && minion)
 	: minions(minions), minion(std::move(minion.minion)),
-	enchantments(std::move(minion.enchantments)),
+	enchantments(*this, std::move(minion.enchantments)),
 	auras(std::move(minion.auras))
 {
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, MinionData const & minion)
-	: minions(minions), minion(minion)
+	: minions(minions), minion(minion), enchantments(*this)
 {
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, MinionData && minion)
-	: minions(minions), minion(std::move(minion))
+	: minions(minions), minion(std::move(minion)), enchantments(*this)
 {
 }
 
@@ -189,17 +190,17 @@ inline void GameEngine::Minion::ClearAuras()
 inline void GameEngine::Minion::AddEnchantment(
 	std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner * owner)
 {
-	this->enchantments.Add(std::move(enchantment), owner, *this);
+	this->enchantments.Add(std::move(enchantment), owner);
 }
 
 inline void GameEngine::Minion::RemoveEnchantment(Enchantment<Minion> * enchantment)
 {
-	this->enchantments.Remove(enchantment, *this);
+	this->enchantments.Remove(enchantment);
 }
 
 inline void GameEngine::Minion::ClearEnchantments()
 {
-	this->enchantments.Clear(*this);
+	this->enchantments.Clear();
 }
 
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
@@ -242,7 +243,7 @@ inline void GameEngine::Minion::TurnEnd(bool owner_turn)
 		}
 	}
 
-	this->enchantments.TurnEnd(*this);
+	this->enchantments.TurnEnd();
 }
 
 inline bool GameEngine::Minion::IsPlayerSide() const
