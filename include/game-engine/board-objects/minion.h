@@ -20,39 +20,18 @@ namespace GameEngine {
 	public:
 		typedef MinionData::OnDeathTrigger OnDeathTrigger;
 
+	public:
+		// move semantics should only be used by container (i.e., std::list<Minion>)
+		// TODO: use unique_ptr in container? or try reference_wrapper
+		Minion(Minion && rhs);
+
 	private: // copy semantics should only be used in Minions
 		Minion(Minion const& rhs) = delete;
 
-		Minion(Minions & minions, Minion const& rhs)
-			: minions(minions), minion(rhs.minion)
-		{
-			// If minion has enchantments/auras, then it cannot be cloned
-			// Note: The only chance we need to copy minion is to copy root node board in MCTS
-			// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
-			if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
-			if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
-		}
-
-		Minion(Minions & minions, Minion && minion)
-			: minions(minions), minion(std::move(minion.minion)),
-			enchantments(std::move(minion.enchantments)), auras(std::move(minion.auras))
-		{
-		}
-
-		Minion(Minions & minions, MinionData const& minion)
-			: minions(minions), minion(minion)
-		{
-		}
-
-		Minion(Minions & minions, MinionData && minion)
-			: minions(minions), minion(std::move(minion))
-		{}
-
-	public:
-		// move semantics should only be used by container (i.e., std::list<Minion>)
-		Minion(Minion && rhs)
-			: minions(rhs.minions), minion(std::move(rhs.minion))
-		{}
+		Minion(Minions & minions, Minion const& rhs);
+		Minion(Minions & minions, Minion && minion);
+		Minion(Minions & minions, MinionData const& minion);
+		Minion(Minions & minions, MinionData && minion);
 
 		Minion & operator=(Minion const& rhs) = delete;
 		Minion & operator=(Minion && rhs) = delete;

@@ -2,6 +2,40 @@
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/board-objects/minion.h"
 
+inline GameEngine::Minion::Minion(Minion && rhs)
+	: minions(rhs.minions), minion(std::move(rhs.minion)),
+	enchantments(std::move(rhs.enchantments)),
+	auras(std::move(rhs.auras))
+{
+}
+
+inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
+	: minions(minions), minion(rhs.minion)
+{
+	// If minion has enchantments/auras, then it cannot be cloned
+	// Note: The only chance we need to copy minion is to copy root node board in MCTS
+	// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
+	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
+	if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
+}
+
+inline GameEngine::Minion::Minion(Minions & minions, Minion && minion)
+	: minions(minions), minion(std::move(minion.minion)),
+	enchantments(std::move(minion.enchantments)),
+	auras(std::move(minion.auras))
+{
+}
+
+inline GameEngine::Minion::Minion(Minions & minions, MinionData const & minion)
+	: minions(minions), minion(minion)
+{
+}
+
+inline GameEngine::Minion::Minion(Minions & minions, MinionData && minion)
+	: minions(minions), minion(std::move(minion))
+{
+}
+
 inline GameEngine::Board & GameEngine::Minion::GetBoard() const
 {
 	return this->minions.GetBoard();
