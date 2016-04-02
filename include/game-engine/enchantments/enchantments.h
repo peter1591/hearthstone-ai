@@ -4,6 +4,8 @@
 #include <map>
 #include <memory>
 
+#include "managed-enchantment.h"
+
 namespace GameEngine {
 
 class MinionData;
@@ -17,6 +19,11 @@ class Enchantments
 {
 	friend std::hash<Enchantments>;
 
+private:
+	typedef Enchantment<Target> EnchantmentType;
+	typedef ManagedEnchantment<Target> ManagedEnchantmentType;
+	typedef typename std::list<std::pair<ManagedEnchantmentType, EnchantmentOwner*>> container_type;
+
 public:
 	Enchantments(Target & target) : target(target) {}
 
@@ -28,8 +35,8 @@ public:
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
 
-	void Add(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner);
-	void Remove(Enchantment<Target> * enchantment);
+	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner * owner);
+	void Remove(EnchantmentType * enchantment);
 	void Clear();
 	bool Empty() const;
 
@@ -37,10 +44,7 @@ public: // hooks
 	void TurnEnd();
 
 private:
-	typedef typename std::list<std::pair<std::unique_ptr<Enchantment<Target>>, EnchantmentOwner*>> container_type;
-
 	typename container_type::iterator Remove(typename container_type::iterator it);
-
 	container_type enchantments;
 
 private:
