@@ -125,8 +125,8 @@ inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 }
 
 inline Board::Board() :
-	player(*this),
-	opponent(*this),
+	player(*this, SlotIndex::SLOT_PLAYER_SIDE),
+	opponent(*this, SlotIndex::SLOT_OPPONENT_SIDE),
 	object_manager(*this),
 	stage(STAGE_UNKNOWN)
 {

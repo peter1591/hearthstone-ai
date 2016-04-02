@@ -15,7 +15,7 @@ namespace GameEngine {
 		friend std::hash<Player>;
 
 	public:
-		Player(Board & board);
+		Player(Board & board, SlotIndex side);
 		Player(Board & board, Player const& rhs);
 		Player(Board & board, Player && rhs);
 		Player & operator=(Player const& rhs) = delete;
@@ -25,6 +25,8 @@ namespace GameEngine {
 		bool operator!=(Player const& rhs) const;
 
 	public:
+		const SlotIndex side;
+
 		PlayerStat stat;
 		Secrets secrets;
 		Hand hand;
@@ -39,6 +41,8 @@ namespace std {
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
+
+			// side will not change; don't need for equality comparison
 
 			GameEngine::hash_combine(result, s.stat);
 			GameEngine::hash_combine(result, s.secrets);
