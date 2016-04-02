@@ -23,7 +23,7 @@ public:
 	Enchantments(Enchantments<Target> const& rhs) = delete;
 	Enchantments<Target> operator=(Enchantments<Target> const& rhs) = delete;
 	Enchantments(Enchantments<Target> && rhs);
-	Enchantments<Target> & operator=(Enchantments<Target> && rhs);
+	Enchantments<Target> & operator=(Enchantments<Target> && rhs) = delete;
 
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;

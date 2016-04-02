@@ -9,15 +9,8 @@ namespace GameEngine
 
 	template<typename Target>
 	inline Enchantments<Target>::Enchantments(Enchantments<Target>&& rhs)
+		: enchantments(std::move(rhs.enchantments))
 	{
-		*this = std::move(rhs);
-	}
-
-	template<typename Target>
-	inline Enchantments<Target>& Enchantments<Target>::operator=(Enchantments<Target>&& rhs)
-	{
-		this->enchantments = std::move(rhs.enchantments);
-		return *this;
 	}
 
 	template <typename Target>

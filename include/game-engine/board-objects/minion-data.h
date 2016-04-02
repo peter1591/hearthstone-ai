@@ -47,14 +47,15 @@ namespace GameEngine {
 		}
 		MinionData & operator=(MinionData const& rhs) = delete;
 
-		MinionData(MinionData && rhs) {
+		MinionData(MinionData && rhs) :
+			enchantments(std::move(rhs.enchantments))
+		{
 			this->card_id = std::move(rhs.card_id);
 			this->stat = std::move(rhs.stat);
 			this->attacked_times = std::move(rhs.attacked_times);
 			this->summoned_this_turn = std::move(rhs.summoned_this_turn);
 			this->pending_removal = std::move(rhs.pending_removal);
 			this->triggers_on_death = std::move(rhs.triggers_on_death);
-			this->enchantments = std::move(rhs.enchantments);
 			this->auras = std::move(rhs.auras);
 		}
 		MinionData & operator=(MinionData && rhs) = delete;
