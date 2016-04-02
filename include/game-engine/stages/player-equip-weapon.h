@@ -18,14 +18,15 @@ class StagePlayerEquipWeapon
 
 		static void Go(Board &board)
 		{
+			auto & player = board.player;
 			const Board::PlayHandWeaponData &data = board.data.play_hand_weapon_data;
 
-			auto playing_card = board.player.hand.GetCard(data.hand_card);
-			board.player.hand.RemoveCard(data.hand_card);
+			auto playing_card = player.hand.GetCard(data.hand_card);
+			player.hand.RemoveCard(data.hand_card);
 
-			board.player.stat.crystal.CostCrystals(playing_card.cost);
+			player.stat.crystal.CostCrystals(playing_card.cost);
 
-			StageHelper::EquipWeapon(board.player, playing_card, data.data);
+			StageHelper::EquipWeapon(player, playing_card, data.data);
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}
