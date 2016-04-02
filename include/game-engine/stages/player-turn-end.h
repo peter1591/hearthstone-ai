@@ -18,7 +18,6 @@ class StagePlayerTurnEnd
 		{
 			board.hook_manager.PlayerTurnEnd();
 
-			// TODO: trigger end-turn actions
 			board.stage = STAGE_OPPONENT_TURN_START;
 		}
 };
