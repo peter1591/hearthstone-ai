@@ -414,7 +414,7 @@ namespace GameEngine
 	{
 		player.hero.DestroyWeapon();
 
-		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player.board, player.side, data);
+		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, data);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		player.hero.EquipWeapon(card);

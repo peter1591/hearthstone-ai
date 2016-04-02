@@ -13,21 +13,16 @@ namespace GameEngine {
 
 			// Weapon: Glaivezooka
 
-			static void Weapon_BattleCry(GameEngine::Board & board, SlotIndex playing_side, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+			static void Weapon_BattleCry(GameEngine::Player & equipping_player, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
 			{
 				constexpr int attack_boost = 1;
 
-				GameEngine::BoardObjects::Minions * playing_side_minions = nullptr;
-				if (playing_side == SLOT_PLAYER_SIDE) playing_side_minions = &board.player.minions;
-				else if (playing_side == SLOT_OPPONENT_SIDE) playing_side_minions = &board.opponent.minions;
-				else throw std::runtime_error("invalid argument");
-
-				const int minion_count = playing_side_minions->GetMinionCount();
+				const int minion_count = equipping_player.minions.GetMinionCount();
 				if (minion_count == 0) return;
 
-				const int minion_chosen = board.random_generator.GetRandom(minion_count);
+				const int minion_chosen = equipping_player.board.random_generator.GetRandom(minion_count);
 
-				auto & buff_target = playing_side_minions->GetMinion(minion_chosen);
+				auto & buff_target = equipping_player.minions.GetMinion(minion_chosen);
 				auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<attack_boost, 0, 0, false>>();
 				buff_target.AddEnchantment(std::move(enchant), nullptr);
 			}

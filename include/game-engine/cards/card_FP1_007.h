@@ -15,7 +15,7 @@ public:
 
 	static void Deathrattle(GameEngine::BoardObjects::MinionIterator & triggering_minion)
 	{
-		// summon Nerubian (AT_036t) when death
+		// summon Nerubian (AT_036t) on death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
 		StageHelper::SummonMinion(card, triggering_minion);
 	}

@@ -36,7 +36,7 @@ namespace GameEngine {
 
 				std::size_t GetHash() const
 				{
-					std::size_t result = std::hash<int>()(card_id);
+					std::size_t result = std::hash<int>()(Card_EX1_390::card_id);
 
 					return result;
 				}

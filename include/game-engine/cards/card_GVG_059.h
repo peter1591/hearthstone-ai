@@ -16,20 +16,14 @@ namespace GameEngine {
 			static constexpr int card_id = CARD_ID_GVG_059;
 
 			// Coghammer
-			static void Weapon_BattleCry(GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+			static void Weapon_BattleCry(GameEngine::Player &equipping_player, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
 			{
-				GameEngine::BoardObjects::Minions * minions = nullptr;
-
-				if (playing_side == SLOT_PLAYER_SIDE) minions = &board.player.minions;
-				else if (playing_side == SLOT_OPPONENT_SIDE) minions = &board.opponent.minions;
-				else throw std::runtime_error("invalid argument");
-
-				const int minion_count = minions->GetMinionCount();
+				const int minion_count = equipping_player.minions.GetMinionCount();
 				if (minion_count == 0) return; // no minion to buff
 
-				const int r = board.random_generator.GetRandom(minion_count);
+				const int r = equipping_player.board.random_generator.GetRandom(minion_count);
 
-				auto & buff_target = minions->GetMinion(r);
+				auto & buff_target = equipping_player.minions.GetMinion(r);
 				constexpr int buff_flags =
 					(1 << BoardObjects::MinionStat::FLAG_SHIELD) |
 					(1 << BoardObjects::MinionStat::FLAG_TAUNT);
