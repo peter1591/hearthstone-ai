@@ -9,4 +9,6 @@
 #include "game-engine/board-objects/aura-enrage.h"
 #include "game-engine/board-objects/aura-to-all-minions.h"
 #include "game-engine/enchantments/enchantment.h"
+#include "game-engine/enchantments/buff-minion.h"
+#include "game-engine/enchantments/buff-minion-c.h"
 #include "game-engine/board-objects/aura.h"

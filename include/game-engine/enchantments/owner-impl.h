@@ -39,4 +39,4 @@ namespace GameEngine
 			else it++;
 		}
 	}
-}
+} // namespace GameEngine

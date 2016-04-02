@@ -18,4 +18,4 @@ namespace GameEngine {
 	private:
 		std::list<Enchantment<Minion> *> minion_enchantments;
 	};
-}
+} // namespace GameEngine
