@@ -184,8 +184,8 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 
 inline StartBoard::StartBoard()
 {
-	InitializeDebugBoard1(this->board_debug1);
-	//InitializeDebugBoard2(this->board_debug1);
+	//InitializeDebugBoard1(this->board_debug1);
+	InitializeDebugBoard2(this->board_debug1);
 }
 
 inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const

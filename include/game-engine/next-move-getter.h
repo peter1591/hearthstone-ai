@@ -4,6 +4,7 @@
 #include <list>
 #include "move.h"
 #include "slot-index.h"
+#include "player.h"
 
 namespace GameEngine {
 
@@ -13,13 +14,14 @@ public:
 	class ItemPlayHandMinion
 	{
 	public:
-		ItemPlayHandMinion(Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets);
+		ItemPlayHandMinion(Player const& player, Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets);
 		ItemPlayHandMinion* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemPlayHandMinion const& rhs) const;
 		bool operator!=(ItemPlayHandMinion const& rhs) const;
 
 	private:
+		Player const& player;
 		Hand::Locator hand_card;
 		SlotIndex put_location;
 		SlotIndexBitmap required_targets;
@@ -29,13 +31,14 @@ public:
 	class ItemPlayHandWeapon
 	{
 	public:
-		ItemPlayHandWeapon(Hand::Locator hand_card, SlotIndexBitmap required_targets);
+		ItemPlayHandWeapon(Player const& player, Hand::Locator hand_card, SlotIndexBitmap required_targets);
 		ItemPlayHandWeapon* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemPlayHandWeapon const& rhs) const;
 		bool operator!=(ItemPlayHandWeapon const& rhs) const;
 
 	private:
+		Player const& player;
 		Hand::Locator hand_card;
 		SlotIndexBitmap required_targets;
 		bool done;

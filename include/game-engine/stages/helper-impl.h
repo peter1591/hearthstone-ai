@@ -86,7 +86,7 @@ namespace GameEngine
 		for (int i = 0; i <= player.minions.GetMinionCount(); ++i)
 		{
 			SlotIndex idx = SlotIndexHelper::GetMinionIndex(side, i);
-			next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(hand_card, idx, required_targets));
+			next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(player, hand_card, idx, required_targets));
 		}
 #else
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(
@@ -108,7 +108,7 @@ namespace GameEngine
 			return;
 		}
 
-		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandWeapon(hand_card, required_targets));
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandWeapon(player, hand_card, required_targets));
 	}
 
 	inline void StageHelper::GetBoardMoves_Attack(Board const & board, SlotIndex side, Player const & player, NextMoveGetter & next_move_getter)
@@ -192,7 +192,7 @@ namespace GameEngine
 				break;
 
 			case Card::TYPE_WEAPON:
-				if (board.player.stat.crystal.GetCurrent() < playing_card.cost) continue;
+				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
 
 				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, board, side, required_targets, meet_requirements)
 					&& meet_requirements == false)
