@@ -26,7 +26,7 @@ namespace GameEngine
 			if (it_lhs == this->enchantments.end()) break;
 			if (it_rhs == rhs.enchantments.end()) break;
 
-			if (*(it_lhs->first.GetEnchantment()) != *(it_rhs->first.GetEnchantment())) return false;
+			if (it_lhs->first != it_rhs->first) return false;
 
 			it_lhs++;
 			it_rhs++;
@@ -115,7 +115,7 @@ inline std::size_t std::hash<GameEngine::Enchantments<Target>>::operator()(const
 
 	for (auto const& enchantment : s.enchantments)
 	{
-		GameEngine::hash_combine(result, *enchantment.first.GetEnchantment());
+		GameEngine::hash_combine(result, enchantment.first);
 	}
 
 	return result;
