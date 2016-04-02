@@ -197,6 +197,8 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\impl\buff-minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\owner-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\owner.h" />
     <ClInclude Include="..\..\..\include\game-engine\game-engine.h" />
