@@ -422,15 +422,13 @@ namespace GameEngine
 
 	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, Move::EquipWeaponData const & data)
 	{
-		auto & playing_hero = player.board.object_manager.GetHeroBySide(player.side);
-
-		playing_hero.DestroyWeapon();
+		player.hero.DestroyWeapon();
 
 		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player.board, player.side, data);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		playing_hero.EquipWeapon(card);
-		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, playing_hero);
+		player.hero.EquipWeapon(card);
+		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, player.hero);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;

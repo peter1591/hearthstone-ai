@@ -34,13 +34,6 @@ namespace GameEngine
 		{
 		}
 
-		inline Hero & ObjectManager::GetHeroBySide(SlotIndex side)
-		{
-			if (side == SLOT_PLAYER_SIDE) return this->board.player.hero;
-			else if (side == SLOT_OPPONENT_SIDE) return this->board.opponent.hero;
-			else throw std::runtime_error("invalid argument");
-		}
-
 		inline MinionConstIteratorWithSlotIndex ObjectManager::GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const
 		{
 			if (side == SLOT_PLAYER_SIDE) {
