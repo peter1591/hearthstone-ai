@@ -31,6 +31,7 @@ public:
 
 public:
 	MinionData();
+	MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage);
 
 	MinionData(MinionData const& rhs) {
 		// If minion has enchantments/auras, then it cannot be cloned
@@ -63,8 +64,6 @@ public:
 	bool operator==(const MinionData &rhs) const;
 	bool operator!=(const MinionData &rhs) const;
 
-	// Initializer
-	void Set(int card_id, int attack, int hp, int max_hp);
 	void Summon(const Card &card);
 
 	bool IsValid() const { return this->card_id != 0; }
@@ -94,13 +93,14 @@ inline MinionData::MinionData() : card_id(0), pending_removal(false)
 
 }
 
-inline void MinionData::Set(int card_id, int attack, int hp, int max_hp)
+inline MinionData::MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage)
 {
 	this->card_id = card_id;
 
 	this->stat.SetAttack(attack);
 	this->stat.SetHP(hp);
 	this->stat.SetMaxHP(max_hp);
+	this->stat.SetSpellDamage(spell_damage);
 }
 
 inline void MinionData::Summon(const Card & card)

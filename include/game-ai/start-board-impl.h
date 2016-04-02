@@ -99,8 +99,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData();
-		minion.Set(CARD_ID_FP1_007, 2, 2, 2);
+		auto minion = GameEngine::BoardObjects::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
 		auto & added_minion = board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion));
@@ -109,16 +108,14 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData();
-		minion.Set(222, 30, 2, 2);
+		auto minion = GameEngine::BoardObjects::MinionData(9999999, 30, 2, 2, 0);
 		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion)).TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData();
-		minion.Set(222, 10, 7, 7);
+		auto minion = GameEngine::BoardObjects::MinionData(9999999, 10, 7, 7, 0);
 		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion)).TurnStart(true);
