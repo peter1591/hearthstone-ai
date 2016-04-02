@@ -392,12 +392,12 @@ namespace GameEngine
 	}
 
 	// return true if stage changed
-	inline bool StageHelper::PlayMinion(Board & board, Card const & card, SlotIndex playing_side, PlayMinionData const & data)
+	inline bool StageHelper::PlayMinion(Player & player, Card const & card, PlayMinionData const & data)
 	{
-		Cards::CardCallbackManager::BattleCry(card.id, board, playing_side, data);
-		if (StageHelper::CheckHeroMinionDead(board)) return true;
+		Cards::CardCallbackManager::BattleCry(card.id, player.board, player.side, data);
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		auto it = board.object_manager.GetMinionIterator(data.put_location);
+		auto it = player.board.object_manager.GetMinionIterator(data.put_location);
 
 		StageHelper::SummonMinion(card, it);
 
