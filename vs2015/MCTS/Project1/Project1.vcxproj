@@ -83,7 +83,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -169,26 +169,36 @@
     <ClInclude Include="..\..\..\include\game-engine\card-database.h" />
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card-base.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_BRM_019.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_021.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_043.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_051.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_059.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_112.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_018.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
-    <ClInclude Include="..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\include\game-engine\game-engine.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand-card.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook-manager-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook-manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\on-death-trigger.h" />
     <ClInclude Include="..\..\..\include\game-engine\player-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\player.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />
-    <ClInclude Include="..\..\..\include\game-engine\hero-power.h" />
-    <ClInclude Include="..\..\..\include\game-engine\hidden-secrets.h" />
-    <ClInclude Include="..\..\..\include\game-engine\minion.h" />
-    <ClInclude Include="..\..\..\include\game-engine\minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\move.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h" />
     <ClInclude Include="..\..\..\include\game-engine\player-stat.h" />
