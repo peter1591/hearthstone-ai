@@ -9,8 +9,6 @@
 #include "game-engine/slot-index.h"
 #include "object-base.h"
 #include "minion-stat.h"
-#include "game-engine/enchantments/enchantments.h"
-#include "aura.h"
 #include "game-engine/on-death-trigger.h"
 
 namespace GameEngine {
@@ -31,13 +29,8 @@ namespace GameEngine {
 		MinionData();
 		MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage);
 
-		MinionData(MinionData const& rhs) {
-			// If minion has enchantments/auras, then it cannot be cloned
-			// Note: The only chance we need to copy minion is to copy root node board in MCTS
-			// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
-			if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
-			if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
-
+		MinionData(MinionData const& rhs)
+		{
 			this->card_id = rhs.card_id;
 			this->stat = rhs.stat;
 			this->attacked_times = rhs.attacked_times;
@@ -47,8 +40,7 @@ namespace GameEngine {
 		}
 		MinionData & operator=(MinionData const& rhs) = delete;
 
-		MinionData(MinionData && rhs) :
-			enchantments(std::move(rhs.enchantments))
+		MinionData(MinionData && rhs)
 		{
 			this->card_id = std::move(rhs.card_id);
 			this->stat = std::move(rhs.stat);
@@ -56,7 +48,6 @@ namespace GameEngine {
 			this->summoned_this_turn = std::move(rhs.summoned_this_turn);
 			this->pending_removal = std::move(rhs.pending_removal);
 			this->triggers_on_death = std::move(rhs.triggers_on_death);
-			this->auras = std::move(rhs.auras);
 		}
 		MinionData & operator=(MinionData && rhs) = delete;
 
@@ -83,8 +74,6 @@ namespace GameEngine {
 
 		std::list<OnDeathTrigger> triggers_on_death;
 
-		Enchantments<Minion> enchantments;
-		Auras auras; // owned auras
 	};
 
 	inline MinionData::MinionData() : card_id(0), pending_removal(false)
@@ -137,9 +126,6 @@ namespace GameEngine {
 		if (this->pending_removal != rhs.pending_removal) return false;
 
 		if (this->triggers_on_death != rhs.triggers_on_death) return false;
-
-		if (this->enchantments != rhs.enchantments) return false;
-		if (this->auras != rhs.auras) return false;
 
 		return true;
 	}
@@ -196,9 +182,6 @@ namespace std {
 			for (auto const& trigger : s.triggers_on_death) {
 				GameEngine::hash_combine(result, trigger);
 			}
-
-			GameEngine::hash_combine(result, s.enchantments);
-			GameEngine::hash_combine(result, s.auras);
 
 			return result;
 		}

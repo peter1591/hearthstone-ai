@@ -144,43 +144,43 @@ inline void GameEngine::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
 
 inline void GameEngine::Minion::AddAura(std::unique_ptr<Aura> && aura)
 {
-	this->minion.auras.Add(*this, std::move(aura));
+	this->auras.Add(*this, std::move(aura));
 }
 
 inline void GameEngine::Minion::ClearAuras()
 {
-	this->minion.auras.Clear(*this);
+	this->auras.Clear(*this);
 }
 
 inline void GameEngine::Minion::AddEnchantment(
 	std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner * owner)
 {
-	this->minion.enchantments.Add(std::move(enchantment), owner, *this);
+	this->enchantments.Add(std::move(enchantment), owner, *this);
 }
 
 inline void GameEngine::Minion::RemoveEnchantment(Enchantment<Minion> * enchantment)
 {
-	this->minion.enchantments.Remove(enchantment, *this);
+	this->enchantments.Remove(enchantment, *this);
 }
 
 inline void GameEngine::Minion::ClearEnchantments()
 {
-	this->minion.enchantments.Clear(*this);
+	this->enchantments.Clear(*this);
 }
 
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 {
-	this->minion.auras.HookAfterMinionAdded(*this, added_minion);
+	this->auras.HookAfterMinionAdded(*this, added_minion);
 }
 
 inline void GameEngine::Minion::HookMinionCheckEnraged()
 {
 	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
-		minion.auras.HookAfterOwnerEnraged(*this); // enraged
+		this->auras.HookAfterOwnerEnraged(*this); // enraged
 	}
 	else if (this->GetHP() == this->GetMaxHP()) {
-		minion.auras.HookAfterOwnerUnEnraged(*this); // un-enraged
+		this->auras.HookAfterOwnerUnEnraged(*this); // un-enraged
 	}
 	else {
 		throw std::runtime_error("hp should not be larger than max-hp");
@@ -189,7 +189,7 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 
 inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion, int damage)
 {
-	this->minion.auras.HookAfterMinionDamaged(minion, damage);
+	this->auras.HookAfterMinionDamaged(minion, damage);
 }
 
 inline void GameEngine::Minion::TurnStart(bool owner_turn)
@@ -208,7 +208,7 @@ inline void GameEngine::Minion::TurnEnd(bool owner_turn)
 		}
 	}
 
-	this->minion.enchantments.TurnEnd(*this);
+	this->enchantments.TurnEnd(*this);
 }
 
 inline bool GameEngine::Minion::IsPlayerSide() const

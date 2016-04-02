@@ -3,6 +3,8 @@
 #include <memory>
 #include "object-base.h"
 #include "game-engine/board-objects/minion-data.h"
+#include "game-engine/enchantments/enchantments.h"
+#include "aura.h"
 
 namespace GameEngine {
 
@@ -12,6 +14,7 @@ namespace GameEngine {
 
 	class Minion : public ObjectBase
 	{
+		friend std::hash<Minion>;
 		friend class Minions; // only class 'Minions' can create/copy/move
 
 	public:
@@ -20,20 +23,29 @@ namespace GameEngine {
 	private: // copy semantics should only be used in Minions
 		Minion(Minion const& rhs) = delete;
 
+		Minion(Minions & minions, Minion const& rhs)
+			: minions(minions), minion(rhs.minion)
+		{
+			// If minion has enchantments/auras, then it cannot be cloned
+			// Note: The only chance we need to copy minion is to copy root node board in MCTS
+			// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
+			if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
+			if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
+		}
+
+		Minion(Minions & minions, Minion && minion)
+			: minions(minions), minion(std::move(minion.minion)),
+			enchantments(std::move(minion.enchantments)), auras(std::move(minion.auras))
+		{
+		}
+
 		Minion(Minions & minions, MinionData const& minion)
 			: minions(minions), minion(minion)
-		{}
+		{
+		}
 
 		Minion(Minions & minions, MinionData && minion)
 			: minions(minions), minion(std::move(minion))
-		{}
-
-		Minion(Minions & minions, Minion const& minion)
-			: minions(minions), minion(minion.minion)
-		{}
-
-		Minion(Minions & minions, Minion && minion)
-			: minions(minions), minion(std::move(minion.minion))
 		{}
 
 	public:
@@ -46,7 +58,13 @@ namespace GameEngine {
 		Minion & operator=(Minion && rhs) = delete;
 
 	public:
-		bool operator==(Minion const& rhs) const { return this->GetMinion() == rhs.GetMinion(); }
+		bool operator==(Minion const& rhs) const
+		{
+			if (this->GetMinion() != rhs.GetMinion()) return false;
+			if (this->enchantments != rhs.enchantments) return false;
+			if (this->auras != rhs.auras) return false;
+			return true;
+		}
 		bool operator!=(Minion const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
 
 		Board & GetBoard() const;
@@ -108,6 +126,24 @@ namespace GameEngine {
 	private:
 		Minions & minions;
 		MinionData minion;
+		Enchantments<Minion> enchantments;
+		Auras auras; // owned auras
 	};
 
 } // GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::Minion> {
+		typedef GameEngine::Minion argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			result = std::hash<decltype(s.minion)>()(s.minion);
+			GameEngine::hash_combine(result, s.enchantments);
+			GameEngine::hash_combine(result, s.auras);
+
+			return result;
+		}
+	};
+}

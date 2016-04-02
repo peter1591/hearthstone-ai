@@ -140,7 +140,7 @@ namespace std {
 			result_type result = 0;
 
 			for (auto const& minion : s.minions) {
-				GameEngine::hash_combine(result, minion.GetMinion());
+				GameEngine::hash_combine(result, minion);
 			}
 
 			return result;
