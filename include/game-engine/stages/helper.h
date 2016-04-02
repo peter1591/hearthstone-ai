@@ -13,7 +13,7 @@ public:
 	typedef Move::PlayMinionData PlayMinionData;
 
 public: // return true if game state changed (e.g., win/loss)
-	static bool PlayerDrawCard(Board &board, Player & player);
+	static bool PlayerDrawCard(Board &board, Player & player, SlotIndex side);
 
 	static void GetBoardMoves(
 		Board const & board, SlotIndex side, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined);

@@ -5,19 +5,19 @@
 
 namespace GameEngine
 {
-	inline bool StageHelper::PlayerDrawCard(Board & board, Player & player)
+	inline bool StageHelper::PlayerDrawCard(Board & board, Player & player, SlotIndex side)
 	{
-		if (board.player.hand.HasCardToDraw()) {
-			StageHelper::Fatigue(board, SLOT_PLAYER_SIDE);
+		if (player.hand.HasCardToDraw()) {
+			StageHelper::Fatigue(board, side);
 			return StageHelper::CheckHeroMinionDead(board);
 		}
 
-		if (board.player.hand.GetCount() < 10) {
-			board.player.hand.DrawOneCardToHand();
+		if (player.hand.GetCount() < 10) {
+			player.hand.DrawOneCardToHand();
 		}
 		else {
 			// hand can have maximum of 10 cards
-			board.player.hand.DrawOneCardAndDiscard();
+			player.hand.DrawOneCardAndDiscard();
 			// TODO: distroy card (trigger deathrattle?)
 		}
 
@@ -90,7 +90,7 @@ namespace GameEngine
 		}
 #else
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(
-			hand_card, SlotIndexHelper::GetPlayerMinionIndex(player.minions.GetMinionCount()), required_targets));
+			player, hand_card, SlotIndexHelper::GetPlayerMinionIndex(player.minions.GetMinionCount()), required_targets));
 #endif
 	}
 
