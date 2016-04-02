@@ -31,44 +31,27 @@ public:
 		switch (move.action)
 		{
 		case Move::ACTION_PLAY_HAND_MINION:
-			return StageOpponentChooseBoardMove::PlayMinion(board, move);
+			board.data.play_hand_minion_data = move.data.play_hand_minion_data;
+			board.stage = STAGE_OPPONENT_PUT_MINION;
+			return;
 
 		case Move::ACTION_PLAY_HAND_WEAPON:
-			return StageOpponentChooseBoardMove::EquipWeapon(board, move);
+			board.data.play_hand_weapon_data = move.data.play_hand_weapon_data;
+			board.stage = STAGE_OPPONENT_EQUIP_WEAPON;
+			return;
 
 		case Move::ACTION_ATTACK:
-			return StageOpponentChooseBoardMove::PlayerAttack(board, move);
+			board.data.attack_data = move.data.attack_data;
+			board.stage = STAGE_OPPONENT_ATTACK;
+			return;
 
 		case Move::ACTION_END_TURN:
-			return StageOpponentChooseBoardMove::EndTurn(board, move);
+			board.stage = STAGE_OPPONENT_TURN_END;
+			return;
 
 		default:
 			throw std::runtime_error("Invalid action for StageOpponentChooseBoardMove");
 		}
-	}
-
-private:
-	static void PlayMinion(Board &board, const Move &move)
-	{
-		board.data.play_hand_minion_data = move.data.play_hand_minion_data;
-		board.stage = STAGE_OPPONENT_PUT_MINION;
-	}
-
-	static void EquipWeapon(Board &board, const Move &move)
-	{
-		board.data.play_hand_weapon_data = move.data.play_hand_weapon_data;
-		board.stage = STAGE_OPPONENT_EQUIP_WEAPON;
-	}
-
-	static void PlayerAttack(Board &board, const Move &move)
-	{
-		board.data.attack_data = move.data.attack_data;
-		board.stage = STAGE_OPPONENT_ATTACK;
-	}
-
-	static void EndTurn(Board &board, const Move &)
-	{
-		board.stage = STAGE_OPPONENT_TURN_END;
 	}
 };
 
