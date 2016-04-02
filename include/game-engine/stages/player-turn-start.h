@@ -18,7 +18,7 @@ class StagePlayerTurnStart
 
 		static void Go(Board &board)
 		{
-			if (StageHelper::PlayerDrawCard(board, board.player, SlotIndex::SLOT_PLAYER_SIDE)) return;
+			if (StageHelper::PlayerDrawCard(board, board.player)) return;
 
 			board.player.stat.crystal.TurnStart();
 			board.object_manager.PlayerTurnStart();

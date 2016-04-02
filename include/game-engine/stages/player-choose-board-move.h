@@ -21,12 +21,12 @@ public:
 	static void GetNextMoves(
 		const Board &board, NextMoveGetter &next_move_getter, bool & is_deterministic)
 	{
-		StageHelper::GetBoardMoves(board, SlotIndex::SLOT_PLAYER_SIDE, board.player, next_move_getter, is_deterministic);
+		StageHelper::GetBoardMoves(board, board.player, next_move_getter, is_deterministic);
 	}
 
 	static void GetGoodMove(Board const& board, Move &good_move, unsigned int rand)
 	{
-		StageHelper::GetGoodBoardMove(rand, board, SlotIndex::SLOT_PLAYER_SIDE, board.player, good_move);
+		StageHelper::GetGoodBoardMove(rand, board, board.player, good_move);
 	}
 
 	static void ApplyMove(Board &board, const Move &move)
