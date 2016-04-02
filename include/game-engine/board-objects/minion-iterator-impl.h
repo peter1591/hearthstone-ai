@@ -95,6 +95,18 @@ namespace GameEngine {
 			return &this->minions == &this->board.opponent.minions;
 		}
 
+		inline bool MinionIterator::IsBegin() const
+		{
+			this->CheckChangeId();
+			return this->it == this->minions.begin();
+		}
+
+		inline void MinionIterator::GoToPrevious()
+		{
+			this->CheckChangeId();
+			this->it--;
+		}
+
 		inline void MinionIterator::CheckChangeId() const
 		{
 #ifdef DEBUG
@@ -109,6 +121,7 @@ namespace GameEngine {
 			this->CheckChangeId();
 			this->it++;
 		}
+
 		inline bool MinionIterator::IsEnd() const
 		{
 			this->CheckChangeId();

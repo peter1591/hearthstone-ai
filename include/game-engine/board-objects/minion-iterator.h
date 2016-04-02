@@ -27,6 +27,9 @@ public:
 	bool IsPlayerSide() const;
 	bool IsOpponentSide() const;
 
+	bool IsBegin() const;
+	void GoToPrevious();
+
 	void GoToNext();
 	bool IsEnd() const;
 
