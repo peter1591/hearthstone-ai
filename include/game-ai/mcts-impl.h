@@ -218,7 +218,7 @@ inline TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move c
 	new_node->wins = 0;
 	new_node->count = 0;
 	new_node->equivalent_node = target_node;
-	new_node->start_board_random = this->current_start_board_random; // TODO: might not be used
+	new_node->start_board_random = this->current_start_board_random; // it's not used, but it's harmless to fill it anyway
 	parent->AddChild(new_node);
 
 	return new_node;

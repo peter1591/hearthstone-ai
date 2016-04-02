@@ -106,7 +106,7 @@ namespace GameEngine {
 
 	inline void Hand::AddCardToDeck(Card const & card)
 	{
-		// TODO: This operation should INVALIDATE all the hand cards with type TYPE_DRAW_FROM_HIDDEN_CARDS
+		// Note: This operation should INVALIDATE all the hand cards with type TYPE_DRAW_FROM_HIDDEN_CARDS
 		// Since the probability distribution differs due to a new card in deck
 		// However, in a normal play, we didn't add a lot cards to deck
 		// so we don't invalidate the existing hand cards

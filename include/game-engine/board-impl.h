@@ -58,7 +58,7 @@ inline void Board::GetNextMoves(GameEngine::Move & next_move, bool & is_determin
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
 		next_move.action = GameEngine::Move::ACTION_GAME_FLOW;
-		is_deterministic = false; // TODO: check this
+		is_deterministic = false; // although the next move is always the 'game-flow', but it may be non-deterministic when applying that
 		return;
 
 	case STAGE_TYPE_GAME_END:
