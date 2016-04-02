@@ -32,7 +32,7 @@ namespace GameEngine
 
 	inline std::size_t Enchantment_BuffMinion::GetHash() const
 	{
-		std::size_t result = std::hash<int>()(Enchantment::UniqueIdForHash::TypeBuffMinion);
+		std::size_t result = typeid(decltype(*this)).hash_code();
 
 		GameEngine::hash_combine(result, this->attack_boost);
 		GameEngine::hash_combine(result, this->hp_boost);

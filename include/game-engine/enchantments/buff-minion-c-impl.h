@@ -51,14 +51,8 @@ namespace GameEngine {
 	template<int attack_boost, int hp_boost, int spell_damage_boost, int buff_flags, bool one_turn>
 	inline std::size_t Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::GetHash() const
 	{
-		std::size_t result = std::hash<int>()(Enchantment::UniqueIdForHash::TypeBuffMinion_C);
-
+		std::size_t result = typeid(decltype(*this)).hash_code();
 		GameEngine::hash_combine(result, this->actual_attack_boost);
-		GameEngine::hash_combine(result, hp_boost);
-		GameEngine::hash_combine(result, spell_damage_boost);
-		GameEngine::hash_combine(result, buff_flags);
-		GameEngine::hash_combine(result, one_turn);
-
 		return result;
 	}
 } // namespace GameEngine

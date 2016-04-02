@@ -14,12 +14,6 @@ class Enchantment
 	friend std::hash<Enchantment>;
 
 public:
-	enum UniqueIdForHash {
-		TypeBuffMinion,
-		TypeBuffMinion_C
-	};
-
-public:
 	Enchantment();
 	virtual ~Enchantment();
 
@@ -27,12 +21,12 @@ public:
 	bool operator!=(Enchantment<Target> const& rhs) const;
 
 public: // hooks
-	virtual void AfterAdded(Target & minion) {}
-	virtual void BeforeRemoved(Target & minion) {}
+	virtual void AfterAdded(Target & target) {}
+	virtual void BeforeRemoved(Target & target) {}
 
 	// return false if enchant vanished
 	// TODO: modify this; use return value in this way might be bad...
-	virtual bool TurnEnd(Target & minion) { return true; }
+	virtual bool TurnEnd(Target & target) { return true; }
 
 protected:
 	virtual bool EqualsTo(Enchantment<Target> const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
