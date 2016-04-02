@@ -35,8 +35,28 @@ namespace GameEngine {
 		throw std::runtime_error("unknown race");
 	}
 
+	inline int CardDatabase::GetSpellPowerValue(std::string const& origin_id)
+	{
+		if (origin_id == "EX1_284") return 1;
+		else if (origin_id == "CS2_142") return 1;
+		else if (origin_id == "GVG_123") return 1;
+		else if (origin_id == "CS2_052") return 1;
+		else if (origin_id == "GVG_109") return 1;
+		else if (origin_id == "AT_093") return 1;
+		else if (origin_id == "CS2_155") return 1;
+		else if (origin_id == "CS2_197") return 1;
+		else if (origin_id == "GVG_123e") return 2;
+		else if (origin_id == "EX1_563") return 5;
+		else if (origin_id == "EX1_582") return 1;
+		else if (origin_id == "EX1_012") return 1;
+
+		return 0;
+	}
+
 	inline void CardDatabase::ProcessMinionCardMechanics(Json::Value const& json_card, Card & new_card)
 	{
+		std::string origin_id = json_card["id"].asString();
+
 		new_card.data.minion.taunt = false;
 		new_card.data.minion.charge = false;
 		new_card.data.minion.shield = false;
@@ -79,13 +99,15 @@ namespace GameEngine {
 			else if (mechanic == "POISONOUS") {
 				new_card.data.minion.poisonous = true;
 			}
+			else if (mechanic == "SPELLPOWER") {
+				new_card.data.minion.spell_damage = this->GetSpellPowerValue(origin_id);
+			}
 			else if (mechanic == "OVERLOAD") { // TODO
 			}
 			else if (mechanic == "AURA" ||
 				mechanic == "DEATHRATTLE" ||
 				mechanic == "INSPIRE" ||
 				mechanic == "BATTLECRY" ||
-				mechanic == "SPELLPOWER" ||
 				mechanic == "COMBO" ||
 				mechanic == "ENRAGED" ||
 				mechanic == "ADJACENT_BUFF" ||

@@ -34,8 +34,10 @@ namespace GameEngine {
 
 		Card::Rarity GetRarity(Json::Value const & json_card);
 		Card::MinionRace GetMinionRace(Json::Value const & json_card);
-		void ProcessMinionCardMechanics(Json::Value const & json_card, Card & new_card);
 
+		int CardDatabase::GetSpellPowerValue(std::string const& origin_id);
+
+		void ProcessMinionCardMechanics(Json::Value const & json_card, Card & new_card);
 		void ProcessWeaponCardMechanics(Json::Value const & json_card, Card & new_card);
 
 	private:

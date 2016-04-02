@@ -120,6 +120,8 @@ inline void MinionData::Summon(const Card & card)
 	if (card.data.minion.windfury) this->stat.SetWindFury();
 	if (card.data.minion.poisonous) this->stat.SetPoisonous();
 
+	if (card.data.minion.spell_damage > 0) this->stat.SetSpellDamage(card.data.minion.spell_damage);
+
 	this->attacked_times = 0;
 	this->summoned_this_turn = true;
 }
@@ -157,6 +159,8 @@ inline std::string MinionData::GetDebugString() const
 	}
 	else {
 		oss << "[" << this->card_id << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
+
+		if (this->stat.GetSpellDamage() > 0) oss << " [SPELL=" << this->stat.GetSpellDamage() << "]";
 
 		if (this->stat.IsTaunt()) oss << " [TAUNT]";
 		if (this->stat.IsCharge()) oss << " [CHARGE]";

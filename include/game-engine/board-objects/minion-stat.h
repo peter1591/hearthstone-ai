@@ -27,7 +27,7 @@ public:
 	typedef std::array<int, FLAG_MAX> Flags;
 
 public:
-	MinionStat() : attack(0), hp(0), max_hp(0), flags()
+	MinionStat() : attack(0), hp(0), max_hp(0), flags(), spell_damage(0)
 	{
 	}
 
@@ -37,6 +37,7 @@ public:
 		if (this->hp != rhs.hp) return false;
 		if (this->max_hp != rhs.max_hp) return false;
 		if (this->flags != rhs.flags) return false;
+		if (this->spell_damage != rhs.spell_damage) return false;
 		return true;
 	}
 
@@ -45,6 +46,7 @@ public:
 	int GetAttack() const { return this->attack; }
 	int GetHP() const { return this->hp; }
 	int GetMaxHP() const { return this->max_hp; }
+	int GetSpellDamage() const { return this->spell_damage; }
 	bool IsTaunt() const { return this->flags[MinionStat::FLAG_TAUNT] > 0; }
 	bool IsCharge() const { return this->flags[MinionStat::FLAG_CHARGE] > 0; }
 	bool IsShield() const { return this->flags[MinionStat::FLAG_SHIELD] > 0; }
@@ -58,6 +60,7 @@ public:
 	void SetAttack(int attack) { this->attack = attack; }
 	void SetHP(int hp) { this->hp = hp; }
 	void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
+	void SetSpellDamage(int spell_damage) { this->spell_damage = spell_damage; }
 
 	// Add one count to the flag
 	void SetTaunt() { this->SetFlag(FLAG_TAUNT); }
@@ -109,6 +112,7 @@ private:
 	int hp;
 	int max_hp;
 	Flags flags;
+	int spell_damage;
 };
 
 }
@@ -125,6 +129,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.attack);
 			GameEngine::hash_combine(result, s.hp);
 			GameEngine::hash_combine(result, s.max_hp);
+			GameEngine::hash_combine(result, s.spell_damage);
 			for (auto const& flag : s.flags) {
 				GameEngine::hash_combine(result, flag);
 			}

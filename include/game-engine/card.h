@@ -76,6 +76,8 @@ class Card
 			bool windfury;
 			bool poisonous;
 
+			int spell_damage;
+
 			void Clear() {
 				this->attack = 0;
 				this->hp = 0;
@@ -88,6 +90,7 @@ class Card
 				this->freeze = false;
 				this->windfury = false;
 				this->poisonous = false;
+				this->spell_damage = 0;
 			}
 
 			bool operator==(const Minion &rhs) const {
@@ -102,6 +105,7 @@ class Card
 				if (this->freeze != rhs.freeze) return false;
 				if (this->windfury != rhs.windfury) return false;
 				if (this->poisonous != rhs.poisonous) return false;
+				if (this->spell_damage != rhs.spell_damage) return false;
 				return true;
 			}
 
