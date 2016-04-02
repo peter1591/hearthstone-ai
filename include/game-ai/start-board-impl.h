@@ -96,7 +96,8 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
 
-	board.object_manager.SetHero(player_hero, opponent_hero);
+	board.player.hero.SetHero(player_hero);
+	board.opponent.hero.SetHero(opponent_hero);
 
 	InitializeDebugBoard1_PlayerHand(board.player.hand);
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);
@@ -148,7 +149,8 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
 
-	board.object_manager.SetHero(player_hero, opponent_hero);
+	board.player.hero.SetHero(player_hero);
+	board.opponent.hero.SetHero(opponent_hero);
 
 	InitializeDebugBoard1_PlayerHand(board.player.hand);
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);

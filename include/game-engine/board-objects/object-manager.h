@@ -75,9 +75,6 @@ public:
 public: // Get manipulate object
 	BoardObject GetObject(SlotIndex idx);
 
-public: // Manipulate heros
-	void SetHero(HeroData const& player, HeroData const& opponent);
-
 public: // Manipulate minions
 	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const;
 

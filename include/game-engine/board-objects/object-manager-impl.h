@@ -7,12 +7,6 @@ namespace GameEngine
 {
 	namespace BoardObjects {
 
-		inline void ObjectManager::SetHero(HeroData const & player, HeroData const & opponent)
-		{
-			this->board.player.hero.SetHero(player);
-			this->board.opponent.hero.SetHero(opponent);
-		}
-
 		inline BoardObject ObjectManager::GetObject(SlotIndex idx)
 		{
 			if (idx < SLOT_PLAYER_HERO)
