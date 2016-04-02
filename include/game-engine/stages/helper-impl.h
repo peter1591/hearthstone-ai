@@ -27,7 +27,7 @@ namespace GameEngine
 	inline void StageHelper::GetBoardMoves(
 		Board const & board, SlotIndex side, Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined)
 	{
-		bool const minions_full = !player.minions.IsFull();
+		bool const minions_full = player.minions.IsFull();
 
 		// if all the hand cards are determined,
 		// then all identical boards have the same next moves
@@ -46,7 +46,7 @@ namespace GameEngine
 
 			switch (playing_card.type) {
 			case Card::TYPE_MINION:
-				if (!minions_full) continue;
+				if (minions_full) continue;
 				GetBoardMoves_PlayMinion(board, side, player, hand_idx, playing_card, next_moves);
 				break;
 

@@ -132,7 +132,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::GetNextMove(GameEngi
 {
 	if (this->done) return false;
 
-	auto const& playing_card = board.player.hand.GetCard(this->hand_card);
+	auto const& playing_card = board.player.hand.GetCard(this->hand_card); // TODO
 
 	move.action = Move::ACTION_PLAY_HAND_MINION;
 	move.data.play_hand_minion_data.hand_card = this->hand_card;
@@ -181,7 +181,7 @@ inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::GetNextMove(GameEngi
 {
 	if (this->done) return false;
 
-	auto const& playing_card = board.player.hand.GetCard(this->hand_card);
+	auto const& playing_card = board.player.hand.GetCard(this->hand_card); // TODO
 
 	move.action = Move::ACTION_PLAY_HAND_WEAPON;
 	move.data.play_hand_weapon_data.hand_card = this->hand_card;

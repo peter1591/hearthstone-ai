@@ -60,7 +60,7 @@ namespace BoardObjects {
 
 		static SlotIndex GetMinionIndex(SlotIndex side, int minion_idx) {
 			if (side == SLOT_PLAYER_SIDE) return GetPlayerMinionIndex(minion_idx);
-			else if (side == SLOT_OPPONENT_SIDE) return GetPlayerMinionIndex(minion_idx);
+			else if (side == SLOT_OPPONENT_SIDE) return GetOpponentMinionIndex(minion_idx);
 			else throw std::runtime_error("invalid argument");
 		}
 		static SlotIndex GetPlayerMinionIndex(int minion_idx) { return (SlotIndex)(SLOT_PLAYER_MINION_START + minion_idx); }

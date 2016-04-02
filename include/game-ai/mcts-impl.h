@@ -104,6 +104,7 @@ inline void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 	}
 }
 
+__declspec(noinline)
 inline bool MCTS::Simulate(GameEngine::Board &board)
 {
 	while (true) {
