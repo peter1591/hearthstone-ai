@@ -82,12 +82,12 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	board.opponent.stat.crystal.Set(0, 0, 0, 0);
 	board.opponent.stat.fatigue_damage = 0;
 
-	GameEngine::BoardObjects::HeroData player_hero;
+	GameEngine::HeroData player_hero;
 	player_hero.hp = 20;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
 
-	GameEngine::BoardObjects::HeroData opponent_hero;
+	GameEngine::HeroData opponent_hero;
 	opponent_hero.hp = 20;
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
@@ -99,23 +99,23 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
+		auto minion = GameEngine::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
 		auto & added_minion = board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion));
-		added_minion->AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
+		added_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
 		added_minion->TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData(9999999, 30, 2, 2, 0);
+		auto minion = GameEngine::MinionData(9999999, 30, 2, 2, 0);
 		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion))->TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData(9999999, 10, 7, 7, 0);
+		auto minion = GameEngine::MinionData(9999999, 10, 7, 7, 0);
 		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion))->TurnStart(true);
@@ -132,12 +132,12 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	board.opponent.stat.crystal.Set(1, 1, 0, 0);
 	board.opponent.stat.fatigue_damage = 0;
 
-	GameEngine::BoardObjects::HeroData player_hero;
+	GameEngine::HeroData player_hero;
 	player_hero.hp = 20;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
 
-	GameEngine::BoardObjects::HeroData opponent_hero;
+	GameEngine::HeroData opponent_hero;
 	opponent_hero.hp = 20;
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
@@ -149,23 +149,23 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
+		auto minion = GameEngine::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
 		auto & added_minion = board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion));
-		added_minion->AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
+		added_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
 		added_minion->TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData(999999, 30, 2, 2, 0);
+		auto minion = GameEngine::MinionData(999999, 30, 2, 2, 0);
 		board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion))->TurnStart(true);
 	}
 
 	{
-		auto minion = GameEngine::BoardObjects::MinionData(999999, 10, 7, 7, 0);
+		auto minion = GameEngine::MinionData(999999, 10, 7, 7, 0);
 		board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion))->TurnStart(true);

@@ -14,26 +14,26 @@ namespace GameEngine {
 
 			// Mogor the Ogre
 
-			class Aura : public GameEngine::BoardObjects::AuraToAllMinions
+			class Aura : public GameEngine::AuraToAllMinions
 			{
 			private: // hooks
-				void HookAfterMinionAdded(BoardObjects::Minion & aura_owner, BoardObjects::Minion & added_minion)
+				void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
 				{
 					this->AddAuraEnchantmentToMinion(added_minion);
 				}
 
 			private:
-				void AddAuraEnchantmentToMinion(BoardObjects::Minion & target_minion)
+				void AddAuraEnchantmentToMinion(Minion & target_minion)
 				{
-					constexpr int buff_stat = 1 << BoardObjects::MinionStat::FLAG_FORGETFUL;
+					constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
 
-					auto enchantment = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<0, 0, buff_stat, false>>();
+					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, buff_stat, false>>();
 
 					target_minion.AddEnchantment(std::move(enchantment), &this->enchantments_manager);
 				}
 
 			private: // for comparison
-				bool EqualsTo(GameEngine::BoardObjects::Aura const& rhs_base) const
+				bool EqualsTo(GameEngine::Aura const& rhs_base) const
 				{
 					auto rhs = dynamic_cast<decltype(this)>(&rhs_base);
 					if (!rhs) return false;
@@ -49,7 +49,7 @@ namespace GameEngine {
 				}
 			};
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
+			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
 				summoned_minion->AddAura(std::make_unique<Aura>());
 			}

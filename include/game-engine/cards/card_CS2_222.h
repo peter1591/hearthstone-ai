@@ -15,10 +15,10 @@ namespace GameEngine {
 			// Stormwind Champion
 
 			// TODO: add an convenient class for this kind of aura
-			class Aura : public GameEngine::BoardObjects::AuraToAllMinions
+			class Aura : public GameEngine::AuraToAllMinions
 			{
 			private: // hooks
-				void HookAfterMinionAdded(BoardObjects::Minion & aura_owner, BoardObjects::Minion & added_minion)
+				void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
 				{
 					if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, added_minion)) {
 						this->AddAuraEnchantmentToMinion(added_minion);
@@ -26,7 +26,7 @@ namespace GameEngine {
 				}
 
 			private:
-				bool CheckMinionShouldHaveAuraEnchantment(BoardObjects::Minion & aura_owner, BoardObjects::Minion & minion)
+				bool CheckMinionShouldHaveAuraEnchantment(Minion & aura_owner, Minion & minion)
 				{
 					// only add aura to friendly minions
 					if (&aura_owner.GetMinions() != &minion.GetMinions()) return false;
@@ -37,18 +37,18 @@ namespace GameEngine {
 					return true;
 				}
 
-				void AddAuraEnchantmentToMinion(BoardObjects::Minion & target_minion)
+				void AddAuraEnchantmentToMinion(Minion & target_minion)
 				{
 					constexpr int attack_boost = 1;
 					constexpr int hp_boost = 1;
 
-					auto enchantment = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, false>>();
+					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, false>>();
 
 					target_minion.AddEnchantment(std::move(enchantment), &this->enchantments_manager);
 				}
 
 			private: // for comparison
-				bool EqualsTo(GameEngine::BoardObjects::Aura const& rhs_base) const
+				bool EqualsTo(GameEngine::Aura const& rhs_base) const
 				{
 					auto rhs = dynamic_cast<decltype(this)>(&rhs_base);
 					if (!rhs) return false;
@@ -64,7 +64,7 @@ namespace GameEngine {
 				}
 			};
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
+			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
 				summoned_minion->AddAura(std::make_unique<Aura>());
 			}

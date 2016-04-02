@@ -4,20 +4,18 @@
 #include "enchantment.h"
 
 namespace GameEngine {
-	namespace BoardObjects {
-		class EnchantmentOwner
-		{
-		public:
-			bool IsEmpty() const;
+	class EnchantmentOwner
+	{
+	public:
+		bool IsEmpty() const;
 
-			void RemoveOwnedEnchantments(GameEngine::BoardObjects::Minion & owner);
+		void RemoveOwnedEnchantments(GameEngine::Minion & owner);
 
-			// hooks
-			void EnchantmentAdded(Enchantment<Minion> * enchantment);
-			void EnchantmentRemoved(Enchantment<Minion> * enchantment);
+		// hooks
+		void EnchantmentAdded(Enchantment<Minion> * enchantment);
+		void EnchantmentRemoved(Enchantment<Minion> * enchantment);
 
-		private:
-			std::list<Enchantment<Minion> *> minion_enchantments;
-		};
-	}
+	private:
+		std::list<Enchantment<Minion> *> minion_enchantments;
+	};
 }

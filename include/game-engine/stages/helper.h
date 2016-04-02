@@ -27,7 +27,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool PlayMinion(Player & player, Card const& card, PlayMinionData const& data);
 
 	// no battle cry
-	static bool SummonMinion(Card const& card, BoardObjects::MinionIterator & it);
+	static bool SummonMinion(Card const& card, MinionIterator & it);
 
 	static bool EquipWeapon(Player & player, Card const& card, Move::EquipWeaponData const& data);
 
@@ -36,9 +36,9 @@ public:
 	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
 
 	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous);
-	static void DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage, bool poisonous);
-	static void DealDamage(GameEngine::BoardObjects::Hero & taker, int damage, bool poisonous);
-	static void DealDamage(GameEngine::BoardObjects::Minion & taker, int damage, bool poisonous);
+	static void DealDamage(GameEngine::BoardObject taker, int damage, bool poisonous);
+	static void DealDamage(GameEngine::Hero & taker, int damage, bool poisonous);
+	static void DealDamage(GameEngine::Minion & taker, int damage, bool poisonous);
 
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);

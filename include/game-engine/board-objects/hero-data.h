@@ -9,7 +9,6 @@
 #include "game-engine/enchantments/enchantments.h"
 
 namespace GameEngine {
-namespace BoardObjects{
 
 class Hero;
 
@@ -39,10 +38,9 @@ public:
 	bool freezed;
 };
 
-} // BoardObjects
 } // GameEngine
 
-inline bool GameEngine::BoardObjects::HeroData::operator==(HeroData const & rhs) const
+inline bool GameEngine::HeroData::operator==(HeroData const & rhs) const
 {
 	if (this->hp != rhs.hp) return false;
 	if (this->armor != rhs.armor) return false;
@@ -54,12 +52,12 @@ inline bool GameEngine::BoardObjects::HeroData::operator==(HeroData const & rhs)
 	return true;
 }
 
-inline bool GameEngine::BoardObjects::HeroData::operator!=(HeroData const & rhs) const
+inline bool GameEngine::HeroData::operator!=(HeroData const & rhs) const
 {
 	return !(*this == rhs);
 }
 
-inline std::string GameEngine::BoardObjects::HeroData::GetDebugString() const
+inline std::string GameEngine::HeroData::GetDebugString() const
 {
 	std::ostringstream oss;
 	oss << "HP: " << this->hp << " + " << this->armor;
@@ -78,8 +76,8 @@ inline std::string GameEngine::BoardObjects::HeroData::GetDebugString() const
 }
 
 namespace std {
-	template <> struct hash<GameEngine::BoardObjects::HeroData> {
-		typedef GameEngine::BoardObjects::HeroData argument_type;
+	template <> struct hash<GameEngine::HeroData> {
+		typedef GameEngine::HeroData argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

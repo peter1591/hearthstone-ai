@@ -237,17 +237,17 @@ namespace GameEngine
 		return StageHelper::DealDamage(board.object_manager.GetObject(taker_idx), damage, poisonous);
 	}
 
-	inline void StageHelper::DealDamage(GameEngine::BoardObjects::BoardObject taker, int damage, bool poisonous)
+	inline void StageHelper::DealDamage(GameEngine::BoardObject taker, int damage, bool poisonous)
 	{
 		taker->TakeDamage(damage, poisonous);
 	}
 
-	inline void StageHelper::DealDamage(GameEngine::BoardObjects::Hero & taker, int damage, bool poisonous)
+	inline void StageHelper::DealDamage(GameEngine::Hero & taker, int damage, bool poisonous)
 	{
 		taker.TakeDamage(damage, poisonous);
 	}
 
-	inline void StageHelper::DealDamage(GameEngine::BoardObjects::Minion & taker, int damage, bool poisonous)
+	inline void StageHelper::DealDamage(GameEngine::Minion & taker, int damage, bool poisonous)
 	{
 		taker.TakeDamage(damage, poisonous);
 	}
@@ -334,7 +334,7 @@ namespace GameEngine
 				it.GetMinions().MarkPendingRemoval(it);
 
 				for (auto const& trigger : it->GetAndClearOnDeathTriggers()) {
-					std::function<void(BoardObjects::MinionIterator&)> functor(trigger.func);
+					std::function<void(MinionIterator&)> functor(trigger.func);
 					death_triggers.push_back(std::bind(functor, it));
 				}
 			}
@@ -395,9 +395,9 @@ namespace GameEngine
 	}
 
 	// return true if stage changed
-	inline bool StageHelper::SummonMinion(Card const & card, BoardObjects::MinionIterator & it)
+	inline bool StageHelper::SummonMinion(Card const & card, MinionIterator & it)
 	{
-		BoardObjects::MinionData summoning_minion;
+		MinionData summoning_minion;
 		summoning_minion.Summon(card);
 
 		if (it.GetMinions().IsFull()) return false;

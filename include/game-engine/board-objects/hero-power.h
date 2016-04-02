@@ -5,30 +5,27 @@
 #include "game-engine/common.h"
 
 namespace GameEngine {
-	namespace BoardObjects {
+	struct HeroPower
+	{
+		// TODO
 
-		struct HeroPower
+		bool operator==(const HeroPower &) const
 		{
-			// TODO
+			return true;
+		}
 
-			bool operator==(const HeroPower &) const
-			{
-				return true;
-			}
+		bool operator!=(const HeroPower &rhs) const
+		{
+			return !(*this == rhs);
+		}
+	};
 
-			bool operator!=(const HeroPower &rhs) const
-			{
-				return !(*this == rhs);
-			}
-		};
-
-	} // namespace BoardObjects
 } // namespace GameEngine
 
 namespace std {
 
-	template <> struct hash<GameEngine::BoardObjects::HeroPower> {
-		typedef GameEngine::BoardObjects::HeroPower argument_type;
+	template <> struct hash<GameEngine::HeroPower> {
+		typedef GameEngine::HeroPower argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &) const {
 			result_type result = 0;

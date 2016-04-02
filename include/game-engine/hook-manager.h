@@ -22,8 +22,8 @@ namespace GameEngine
 		void OpponentTurnStart();
 		void OpponentTurnEnd();
 
-		void HookAfterMinionAdded(BoardObjects::Minion & minion);
-		void HookAfterMinionDamaged(BoardObjects::Minion & minion, int damage);
+		void HookAfterMinionAdded(Minion & minion);
+		void HookAfterMinionDamaged(Minion & minion, int damage);
 
 	private:
 		Board & board;

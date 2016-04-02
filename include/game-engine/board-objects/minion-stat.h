@@ -4,8 +4,6 @@
 #include "game-engine/common.h"
 
 namespace GameEngine {
-namespace BoardObjects {
-
 class MinionStat
 {
 	friend std::hash<MinionStat>;
@@ -115,13 +113,12 @@ private:
 	int spell_damage;
 };
 
-}
-}
+} // namespace GameEngine
 
 namespace std {
 
-	template <> struct hash<GameEngine::BoardObjects::MinionStat> {
-		typedef GameEngine::BoardObjects::MinionStat argument_type;
+	template <> struct hash<GameEngine::MinionStat> {
+		typedef GameEngine::MinionStat argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

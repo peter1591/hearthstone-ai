@@ -60,7 +60,7 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool AfterSummoned(int card_id, GameEngine::BoardObjects::MinionIterator summoned_minion)
+	static bool AfterSummoned(int card_id, GameEngine::MinionIterator summoned_minion)
 	{
 		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, summoned_minion);
 	}
@@ -75,7 +75,7 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, playing_side, play_minion_data);
 	}
 
-	static bool Weapon_AfterEquipped(int card_id, GameEngine::BoardObjects::Hero & equipped_hero)
+	static bool Weapon_AfterEquipped(int card_id, GameEngine::Hero & equipped_hero)
 	{
 		return CardCallbackManager::HandleCallback<Callback_Weapon_AfterEquipped>(card_id, equipped_hero);
 	}

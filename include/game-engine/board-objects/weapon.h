@@ -7,63 +7,61 @@
 #include "game-engine/common.h"
 
 namespace GameEngine {
-	namespace BoardObjects {
-		class Hero;
+	class Hero;
 
-		class Weapon
+	class Weapon
+	{
+	public:
+		typedef GameEngine::OnDeathTrigger<GameEngine::Hero &> OnDeathTrigger;
+
+	public:
+		Weapon() : card_id(-1) {}
+
+		bool IsValid() const { return this->card_id > 0; }
+		void InValidate() { this->card_id = -1; }
+
+		void Clear() {
+			this->InValidate();
+			this->forgetful = 0;
+			this->freeze_attack = false;
+			this->windfury = false;
+		}
+
+		bool operator==(const Weapon &rhs) const
 		{
-		public:
-			typedef GameEngine::OnDeathTrigger<GameEngine::BoardObjects::Hero &> OnDeathTrigger;
+			if (this->card_id != rhs.card_id) return false;
+			if (this->cost != rhs.cost) return false;
+			if (this->attack != rhs.attack) return false;
+			if (this->durability != rhs.durability) return false;
+			if (this->forgetful != rhs.forgetful) return false;
+			if (this->freeze_attack != rhs.freeze_attack) return false;
+			if (this->windfury != rhs.windfury) return false;
+			if (this->on_death_triggers != rhs.on_death_triggers) return false;
+			return true;
+		}
 
-		public:
-			Weapon() : card_id(-1) {}
+		bool operator!=(const Weapon &rhs) const
+		{
+			return !(*this == rhs);
+		}
 
-			bool IsValid() const { return this->card_id > 0; }
-			void InValidate() { this->card_id = -1; }
+	public:
+		int card_id;
+		int cost;
+		int attack;
+		int durability;
+		int forgetful;
+		bool freeze_attack; // freeze the attacked target?
+		bool windfury;
 
-			void Clear() {
-				this->InValidate();
-				this->forgetful = 0;
-				this->freeze_attack = false;
-				this->windfury = false;
-			}
-
-			bool operator==(const Weapon &rhs) const
-			{
-				if (this->card_id != rhs.card_id) return false;
-				if (this->cost != rhs.cost) return false;
-				if (this->attack != rhs.attack) return false;
-				if (this->durability != rhs.durability) return false;
-				if (this->forgetful != rhs.forgetful) return false;
-				if (this->freeze_attack != rhs.freeze_attack) return false;
-				if (this->windfury != rhs.windfury) return false;
-				if (this->on_death_triggers != rhs.on_death_triggers) return false;
-				return true;
-			}
-
-			bool operator!=(const Weapon &rhs) const
-			{
-				return !(*this == rhs);
-			}
-
-		public:
-			int card_id;
-			int cost;
-			int attack;
-			int durability;
-			int forgetful;
-			bool freeze_attack; // freeze the attacked target?
-			bool windfury;
-
-			std::list<OnDeathTrigger> on_death_triggers;
-		};
-	} // namespace BoardObjects
+		std::list<OnDeathTrigger> on_death_triggers;
+	};
 } // namespace GameEngine
 
 namespace std {
 
-	template <> struct hash<GameEngine::BoardObjects::Weapon> {
-		typedef GameEngine::BoardObjects::Weapon argument_type;
+	template <> struct hash<GameEngine::Weapon> {
+		typedef GameEngine::Weapon argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

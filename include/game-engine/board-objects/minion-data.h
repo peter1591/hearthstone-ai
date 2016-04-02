@@ -15,173 +15,170 @@
 
 namespace GameEngine {
 
-class Board;
+	class Board;
 
-namespace BoardObjects {
+	class Minion;
+	class MinionIterator;
 
-class Minion;
-class MinionIterator;
+	class MinionData
+	{
+		friend std::hash<MinionData>;
 
-class MinionData
-{
-	friend std::hash<MinionData>;
+	public:
+		typedef GameEngine::OnDeathTrigger<MinionIterator &> OnDeathTrigger;
 
-public:
-	typedef GameEngine::OnDeathTrigger<MinionIterator &> OnDeathTrigger;
+	public:
+		MinionData();
+		MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage);
 
-public:
-	MinionData();
-	MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage);
+		MinionData(MinionData const& rhs) {
+			// If minion has enchantments/auras, then it cannot be cloned
+			// Note: The only chance we need to copy minion is to copy root node board in MCTS
+			// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
+			if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
+			if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
 
-	MinionData(MinionData const& rhs) {
-		// If minion has enchantments/auras, then it cannot be cloned
-		// Note: The only chance we need to copy minion is to copy root node board in MCTS
-		// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
-		if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
-		if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
+			this->card_id = rhs.card_id;
+			this->stat = rhs.stat;
+			this->attacked_times = rhs.attacked_times;
+			this->summoned_this_turn = rhs.summoned_this_turn;
+			this->pending_removal = rhs.pending_removal;
+			this->triggers_on_death = rhs.triggers_on_death;
+		}
+		MinionData & operator=(MinionData const& rhs) = delete;
 
-		this->card_id = rhs.card_id;
-		this->stat = rhs.stat;
-		this->attacked_times = rhs.attacked_times;
-		this->summoned_this_turn = rhs.summoned_this_turn;
-		this->pending_removal = rhs.pending_removal;
-		this->triggers_on_death = rhs.triggers_on_death;
-	}
-	MinionData & operator=(MinionData const& rhs) = delete;
+		MinionData(MinionData && rhs) {
+			this->card_id = std::move(rhs.card_id);
+			this->stat = std::move(rhs.stat);
+			this->attacked_times = std::move(rhs.attacked_times);
+			this->summoned_this_turn = std::move(rhs.summoned_this_turn);
+			this->pending_removal = std::move(rhs.pending_removal);
+			this->triggers_on_death = std::move(rhs.triggers_on_death);
+			this->enchantments = std::move(rhs.enchantments);
+			this->auras = std::move(rhs.auras);
+		}
+		MinionData & operator=(MinionData && rhs) = delete;
 
-	MinionData(MinionData && rhs) {
-		this->card_id = std::move(rhs.card_id);
-		this->stat = std::move(rhs.stat);
-		this->attacked_times = std::move(rhs.attacked_times);
-		this->summoned_this_turn = std::move(rhs.summoned_this_turn);
-		this->pending_removal = std::move(rhs.pending_removal);
-		this->triggers_on_death = std::move(rhs.triggers_on_death);
-		this->enchantments = std::move(rhs.enchantments);
-		this->auras = std::move(rhs.auras);
-	}
-	MinionData & operator=(MinionData && rhs) = delete;
+		bool operator==(const MinionData &rhs) const;
+		bool operator!=(const MinionData &rhs) const;
 
-	bool operator==(const MinionData &rhs) const;
-	bool operator!=(const MinionData &rhs) const;
+		void Summon(const Card &card);
 
-	void Summon(const Card &card);
+		bool IsValid() const { return this->card_id != 0; }
 
-	bool IsValid() const { return this->card_id != 0; }
+	public:
+		std::string GetDebugString() const;
 
-public:
-	std::string GetDebugString() const;
+	public:
+		int card_id;
 
-public:
-	int card_id;
+		MinionStat stat;
 
-	MinionStat stat;
+		int attacked_times;
+		bool summoned_this_turn;
 
-	int attacked_times;
-	bool summoned_this_turn;
+		// mark as pending death when triggering deathrattles
+		bool pending_removal;
 
-	// mark as pending death when triggering deathrattles
-	bool pending_removal;
+		std::list<OnDeathTrigger> triggers_on_death;
 
-	std::list<OnDeathTrigger> triggers_on_death;
+		Enchantments<Minion> enchantments;
+		Auras auras; // owned auras
+	};
 
-	Enchantments<Minion> enchantments;
-	Auras auras; // owned auras
-};
+	inline MinionData::MinionData() : card_id(0), pending_removal(false)
+	{
 
-inline MinionData::MinionData() : card_id(0), pending_removal(false)
-{
-
-}
-
-inline MinionData::MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage)
-{
-	this->card_id = card_id;
-
-	this->stat.SetAttack(attack);
-	this->stat.SetHP(hp);
-	this->stat.SetMaxHP(max_hp);
-	this->stat.SetSpellDamage(spell_damage);
-}
-
-inline void MinionData::Summon(const Card & card)
-{
-	this->card_id = card.id;
-
-	this->stat.SetAttack(card.data.minion.attack);
-	this->stat.SetHP(card.data.minion.hp);
-	this->stat.SetMaxHP(card.data.minion.hp);
-
-	if (card.data.minion.taunt) this->stat.SetTaunt();
-	if (card.data.minion.charge) this->stat.SetCharge();
-	if (card.data.minion.shield) this->stat.SetShield();
-	if (card.data.minion.stealth) this->stat.SetStealth();
-	if (card.data.minion.forgetful) this->stat.SetForgetful();
-	if (card.data.minion.freeze) this->stat.SetFreezeAttacker();
-	if (card.data.minion.windfury) this->stat.SetWindFury();
-	if (card.data.minion.poisonous) this->stat.SetPoisonous();
-
-	if (card.data.minion.spell_damage > 0) this->stat.SetSpellDamage(card.data.minion.spell_damage);
-
-	this->attacked_times = 0;
-	this->summoned_this_turn = true;
-}
-
-inline bool MinionData::operator==(MinionData const& rhs) const
-{
-	if (this->card_id != rhs.card_id) return false;
-
-	if (this->stat != rhs.stat) return false;
-
-	if (this->attacked_times != rhs.attacked_times) return false;
-	if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
-
-	if (this->pending_removal != rhs.pending_removal) return false;
-
-	if (this->triggers_on_death != rhs.triggers_on_death) return false;
-
-	if (this->enchantments != rhs.enchantments) return false;
-	if (this->auras != rhs.auras) return false;
-
-	return true;
-}
-
-inline bool MinionData::operator!=(MinionData const& rhs) const
-{
-	return !(*this == rhs);
-}
-
-inline std::string MinionData::GetDebugString() const
-{
-	std::ostringstream oss;
-
-	if (!this->IsValid()) {
-		oss << "[EMPTY]";
-	}
-	else {
-		oss << "[" << this->card_id << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
-
-		if (this->stat.GetSpellDamage() > 0) oss << " [SPELL=" << this->stat.GetSpellDamage() << "]";
-
-		if (this->stat.IsTaunt()) oss << " [TAUNT]";
-		if (this->stat.IsCharge()) oss << " [CHARGE]";
-		if (this->stat.IsShield()) oss << " [SHIELD]";
-		if (this->stat.IsStealth()) oss << " [STEALTH]";
-		if (this->stat.IsForgetful()) oss << " [FORGETFUL:" << this->stat.GetForgetfulCount() << "]";
-		if (this->stat.IsFreezeAttacker()) oss << " [FREEZE]";
-		if (this->stat.IsFreezed()) oss << " [FREEZED]";
-		if (this->stat.IsWindFury()) oss << " [WINDFURY]";
-		if (this->stat.IsPoisonous()) oss << " [POISONOUS]";
 	}
 
-	return oss.str();
-}
+	inline MinionData::MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage)
+	{
+		this->card_id = card_id;
+
+		this->stat.SetAttack(attack);
+		this->stat.SetHP(hp);
+		this->stat.SetMaxHP(max_hp);
+		this->stat.SetSpellDamage(spell_damage);
+	}
+
+	inline void MinionData::Summon(const Card & card)
+	{
+		this->card_id = card.id;
+
+		this->stat.SetAttack(card.data.minion.attack);
+		this->stat.SetHP(card.data.minion.hp);
+		this->stat.SetMaxHP(card.data.minion.hp);
+
+		if (card.data.minion.taunt) this->stat.SetTaunt();
+		if (card.data.minion.charge) this->stat.SetCharge();
+		if (card.data.minion.shield) this->stat.SetShield();
+		if (card.data.minion.stealth) this->stat.SetStealth();
+		if (card.data.minion.forgetful) this->stat.SetForgetful();
+		if (card.data.minion.freeze) this->stat.SetFreezeAttacker();
+		if (card.data.minion.windfury) this->stat.SetWindFury();
+		if (card.data.minion.poisonous) this->stat.SetPoisonous();
+
+		if (card.data.minion.spell_damage > 0) this->stat.SetSpellDamage(card.data.minion.spell_damage);
+
+		this->attacked_times = 0;
+		this->summoned_this_turn = true;
+	}
+
+	inline bool MinionData::operator==(MinionData const& rhs) const
+	{
+		if (this->card_id != rhs.card_id) return false;
+
+		if (this->stat != rhs.stat) return false;
+
+		if (this->attacked_times != rhs.attacked_times) return false;
+		if (this->summoned_this_turn != rhs.summoned_this_turn) return false;
+
+		if (this->pending_removal != rhs.pending_removal) return false;
+
+		if (this->triggers_on_death != rhs.triggers_on_death) return false;
+
+		if (this->enchantments != rhs.enchantments) return false;
+		if (this->auras != rhs.auras) return false;
+
+		return true;
+	}
+
+	inline bool MinionData::operator!=(MinionData const& rhs) const
+	{
+		return !(*this == rhs);
+	}
+
+	inline std::string MinionData::GetDebugString() const
+	{
+		std::ostringstream oss;
+
+		if (!this->IsValid()) {
+			oss << "[EMPTY]";
+		}
+		else {
+			oss << "[" << this->card_id << "] " << this->stat.GetAttack() << " / " << this->stat.GetHP() << " (max hp = " << this->stat.GetMaxHP() << ")";
+
+			if (this->stat.GetSpellDamage() > 0) oss << " [SPELL=" << this->stat.GetSpellDamage() << "]";
+
+			if (this->stat.IsTaunt()) oss << " [TAUNT]";
+			if (this->stat.IsCharge()) oss << " [CHARGE]";
+			if (this->stat.IsShield()) oss << " [SHIELD]";
+			if (this->stat.IsStealth()) oss << " [STEALTH]";
+			if (this->stat.IsForgetful()) oss << " [FORGETFUL:" << this->stat.GetForgetfulCount() << "]";
+			if (this->stat.IsFreezeAttacker()) oss << " [FREEZE]";
+			if (this->stat.IsFreezed()) oss << " [FREEZED]";
+			if (this->stat.IsWindFury()) oss << " [WINDFURY]";
+			if (this->stat.IsPoisonous()) oss << " [POISONOUS]";
+		}
+
+		return oss.str();
+	}
 
 } // namespace GameEngine
-}
 
 namespace std {
-	template <> struct hash<GameEngine::BoardObjects::MinionData> {
-		typedef GameEngine::BoardObjects::MinionData argument_type;
+	template <> struct hash<GameEngine::MinionData> {
+		typedef GameEngine::MinionData argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

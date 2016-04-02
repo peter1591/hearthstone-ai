@@ -42,7 +42,7 @@ namespace GameEngine
 		this->board.player.minions.TurnEnd(false);
 	}
 
-	inline void HookManager::HookAfterMinionAdded(BoardObjects::Minion & added_minion)
+	inline void HookManager::HookAfterMinionAdded(Minion & added_minion)
 	{
 		this->board.player.hero.HookAfterMinionAdded(added_minion);
 		this->board.opponent.hero.HookAfterMinionAdded(added_minion);
@@ -50,7 +50,7 @@ namespace GameEngine
 		this->board.opponent.minions.HookAfterMinionAdded(added_minion);
 	}
 
-	inline void HookManager::HookAfterMinionDamaged(BoardObjects::Minion & minion, int damage)
+	inline void HookManager::HookAfterMinionDamaged(Minion & minion, int damage)
 	{
 		this->board.player.hero.HookAfterMinionDamaged(minion, damage);
 		this->board.opponent.hero.HookAfterMinionDamaged(minion, damage);

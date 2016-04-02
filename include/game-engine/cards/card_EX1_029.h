@@ -12,7 +12,7 @@ namespace GameEngine {
 
 			// Leper Gnome
 			
-			static void Deathrattle(GameEngine::BoardObjects::MinionIterator & triggering_minion)
+			static void Deathrattle(GameEngine::MinionIterator & triggering_minion)
 			{
 				// deal 2 damage to opponent hero
 				constexpr int damage = 2;
@@ -27,9 +27,9 @@ namespace GameEngine {
 				}
 			}
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
+			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
-				summoned_minion->AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(Deathrattle));
+				summoned_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(Deathrattle));
 			}
 		};
 

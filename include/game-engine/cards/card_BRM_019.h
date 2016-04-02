@@ -13,14 +13,14 @@ namespace GameEngine {
 
 			// Grim Patron
 
-			class Aura : public GameEngine::BoardObjects::Aura
+			class Aura : public GameEngine::Aura
 			{
 			public:
 				Aura() : owner(nullptr) {}
 
-				void AfterAdded(GameEngine::BoardObjects::Minion & owner) { this->owner = &owner; }
+				void AfterAdded(GameEngine::Minion & owner) { this->owner = &owner; }
 
-				void HookAfterMinionDamaged(GameEngine::BoardObjects::Minion & minion, int damage) 
+				void HookAfterMinionDamaged(GameEngine::Minion & minion, int damage) 
 				{
 					if (&minion != this->owner) return;
 
@@ -35,7 +35,7 @@ namespace GameEngine {
 
 
 			private: // for comparison
-				bool EqualsTo(GameEngine::BoardObjects::Aura const& rhs_base) const
+				bool EqualsTo(GameEngine::Aura const& rhs_base) const
 				{
 					auto rhs = dynamic_cast<decltype(this)>(&rhs_base);
 					if (!rhs) return false;
@@ -51,10 +51,10 @@ namespace GameEngine {
 				}
 
 			private:
-				GameEngine::BoardObjects::Minion * owner;
+				GameEngine::Minion * owner;
 			};
 
-			static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
+			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
 				summoned_minion->AddAura(std::make_unique<Aura>());
 			}

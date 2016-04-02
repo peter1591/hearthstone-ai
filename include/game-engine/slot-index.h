@@ -4,10 +4,7 @@
 
 namespace GameEngine {
 	class Board;
-
-namespace BoardObjects {
 	class MinionConstIteratorWithSlotIndex;
-}
 
 	enum SlotIndex {
 		SLOT_INVALID = -1,

@@ -1,8 +1,6 @@
 #pragma once
 
 namespace GameEngine {
-namespace BoardObjects {
-
 class ObjectBase
 {
 public:
@@ -30,5 +28,4 @@ public:
 	*/
 };
 
-} // namespace Board
 } // namespace GameEngine

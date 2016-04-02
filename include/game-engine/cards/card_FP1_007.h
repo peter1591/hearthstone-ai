@@ -13,16 +13,16 @@ public:
 
 	// Nerubian Egg
 
-	static void Deathrattle(GameEngine::BoardObjects::MinionIterator & triggering_minion)
+	static void Deathrattle(GameEngine::MinionIterator & triggering_minion)
 	{
 		// summon Nerubian (AT_036t) on death
 		Card card = CardDatabase::GetInstance().GetCard(CARD_ID_AT_036t);
 		StageHelper::SummonMinion(card, triggering_minion);
 	}
 
-	static void AfterSummoned(GameEngine::BoardObjects::MinionIterator summoned_minion)
+	static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 	{
-		summoned_minion->AddOnDeathTrigger(GameEngine::BoardObjects::Minion::OnDeathTrigger(Deathrattle));
+		summoned_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(Deathrattle));
 	}
 };
 

@@ -14,8 +14,6 @@
 #include "hero.h"
 
 namespace GameEngine {
-namespace BoardObjects {
-
 class BoardObject
 {
 public:
@@ -87,6 +85,5 @@ private:
 	Board & board;
 };
 
-} // namespace BoardObjects
 } // namespace GameEngine
 #endif

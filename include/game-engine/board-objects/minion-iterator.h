@@ -4,8 +4,6 @@
 #include "minion.h"
 
 namespace GameEngine {
-namespace BoardObjects {
-
 class Minions;
 
 class MinionIterator
@@ -82,5 +80,4 @@ private:
 #endif
 };
 
-} // BoardObjects
 } // GameEngine

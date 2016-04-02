@@ -5,7 +5,6 @@
 #include <memory>
 
 namespace GameEngine {
-namespace BoardObjects {
 
 class MinionData;
 template <typename Target> class Enchantment;
@@ -49,12 +48,11 @@ private:
 	container_type enchantments;
 };
 
-} // namespace BoardObjects
 } // namespace GameEngine
 
 namespace std {
-	template <typename Target> struct hash<GameEngine::BoardObjects::Enchantments<Target> > {
-		typedef GameEngine::BoardObjects::Enchantments<Target> argument_type;
+	template <typename Target> struct hash<GameEngine::Enchantments<Target> > {
+		typedef GameEngine::Enchantments<Target> argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const;
 	};

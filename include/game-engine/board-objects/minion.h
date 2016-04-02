@@ -6,9 +6,7 @@
 
 namespace GameEngine {
 
-class Board;
-
-namespace BoardObjects {
+	class Board;
 
 	class Minions;
 
@@ -111,5 +109,4 @@ namespace BoardObjects {
 		MinionData minion;
 	};
 
-} // BoardObjects
 } // GameEngine

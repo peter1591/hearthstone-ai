@@ -7,8 +7,6 @@
 #include "minion.h"
 
 namespace GameEngine {
-namespace BoardObjects {
-
 class Minions
 {
 	friend std::hash<Minions>;
@@ -132,12 +130,11 @@ public:
 #endif
 };
 
-} // BoardObjects
 } // GameEngine
 
 namespace std {
-	template <> struct hash<GameEngine::BoardObjects::Minions> {
-		typedef GameEngine::BoardObjects::Minions argument_type;
+	template <> struct hash<GameEngine::Minions> {
+		typedef GameEngine::Minions argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
@@ -151,15 +148,15 @@ namespace std {
 	};
 }
 
-inline GameEngine::BoardObjects::Minions::Minions(GameEngine::Board & board, Minions const& rhs) :
+inline GameEngine::Minions::Minions(GameEngine::Board & board, Minions const& rhs) :
 	board(board), pending_removal_count(rhs.pending_removal_count)
 {
 	for (auto const& minion : rhs.minions) {
-		this->minions.push_back(GameEngine::BoardObjects::Minion(*this, minion));
+		this->minions.push_back(GameEngine::Minion(*this, minion));
 	}
 }
 
-inline GameEngine::BoardObjects::Minions & GameEngine::BoardObjects::Minions::operator=(Minions && rhs)
+inline GameEngine::Minions & GameEngine::Minions::operator=(Minions && rhs)
 {
 	this->pending_removal_count = std::move(rhs.pending_removal_count);
 

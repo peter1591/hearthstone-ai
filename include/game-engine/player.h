@@ -32,8 +32,8 @@ namespace GameEngine {
 		PlayerStat stat;
 		Secrets secrets;
 		Hand hand;
-		BoardObjects::Hero hero;
-		BoardObjects::Minions minions;
+		Hero hero;
+		Minions minions;
 	};
 }
 

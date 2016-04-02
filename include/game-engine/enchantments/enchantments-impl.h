@@ -5,7 +5,7 @@
 #include "game-engine\board-objects\minions.h"
 
 template <typename Target>
-inline bool GameEngine::BoardObjects::Enchantments<Target>::operator==(Enchantments const & rhs) const
+inline bool GameEngine::Enchantments<Target>::operator==(Enchantments const & rhs) const
 {
 	if (this->enchantments.size() != rhs.enchantments.size()) return false;
 
@@ -27,13 +27,13 @@ inline bool GameEngine::BoardObjects::Enchantments<Target>::operator==(Enchantme
 }
 
 template <typename Target>
-inline bool GameEngine::BoardObjects::Enchantments<Target>::operator!=(Enchantments const & rhs) const
+inline bool GameEngine::Enchantments<Target>::operator!=(Enchantments const & rhs) const
 {
 	return !(*this == rhs);
 }
 
 template <typename Target>
-inline void GameEngine::BoardObjects::Enchantments<Target>::Add(
+inline void GameEngine::Enchantments<Target>::Add(
 	std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner, Target & target)
 {
 	auto ref_ptr = enchantment.get();
@@ -45,7 +45,7 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::Add(
 }
 
 template <typename Target>
-inline void GameEngine::BoardObjects::Enchantments<Target>::Remove(
+inline void GameEngine::Enchantments<Target>::Remove(
 	Enchantment<Target> * enchantment, Target & target)
 {
 	// A O(N) algorithm, since the enchantment should not be large in a normal play
@@ -59,7 +59,7 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::Remove(
 }
 
 template <typename Target>
-inline void GameEngine::BoardObjects::Enchantments<Target>::Clear(Target & target)
+inline void GameEngine::Enchantments<Target>::Clear(Target & target)
 {
 	for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
 	{
@@ -68,7 +68,7 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::Clear(Target & targe
 }
 
 template <typename Target>
-inline void GameEngine::BoardObjects::Enchantments<Target>::TurnEnd(Target & target)
+inline void GameEngine::Enchantments<Target>::TurnEnd(Target & target)
 {
 	for (container_type::iterator it = this->enchantments.begin(); it != this->enchantments.end();)
 	{
@@ -83,7 +83,7 @@ inline void GameEngine::BoardObjects::Enchantments<Target>::TurnEnd(Target & tar
 }
 
 template <typename Target>
-inline typename GameEngine::BoardObjects::Enchantments<Target>::container_type::iterator GameEngine::BoardObjects::Enchantments<Target>::Remove(
+inline typename GameEngine::Enchantments<Target>::container_type::iterator GameEngine::Enchantments<Target>::Remove(
 	typename container_type::iterator it, Target & target)
 {
 	it->first->BeforeRemoved(target);
@@ -93,7 +93,7 @@ inline typename GameEngine::BoardObjects::Enchantments<Target>::container_type::
 }
 
 template <typename Target>
-inline std::size_t std::hash<GameEngine::BoardObjects::Enchantments<Target>>::operator()(const argument_type &s) const
+inline std::size_t std::hash<GameEngine::Enchantments<Target>>::operator()(const argument_type &s) const
 {
 	result_type result = 0;
 

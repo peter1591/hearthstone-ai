@@ -23,7 +23,7 @@ namespace GameEngine {
 				const int minion_chosen = equipping_player.board.random_generator.GetRandom(minion_count);
 
 				auto & buff_target = equipping_player.minions.GetMinion(minion_chosen);
-				auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<attack_boost, 0, 0, false>>();
+				auto enchant = std::make_unique<Enchantment_BuffMinion_C<attack_boost, 0, 0, false>>();
 				buff_target.AddEnchantment(std::move(enchant), nullptr);
 			}
 		};

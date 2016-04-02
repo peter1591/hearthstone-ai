@@ -76,7 +76,7 @@ namespace GameEngine {
 
 		HookManager hook_manager;
 
-		BoardObjects::ObjectManager object_manager;
+		ObjectManager object_manager;
 
 	public:
 		Stage stage;

@@ -25,9 +25,9 @@ namespace GameEngine {
 
 				auto & buff_target = equipping_player.minions.GetMinion(r);
 				constexpr int buff_flags =
-					(1 << BoardObjects::MinionStat::FLAG_SHIELD) |
-					(1 << BoardObjects::MinionStat::FLAG_TAUNT);
-				auto enchant = std::make_unique<BoardObjects::Enchantment_BuffMinion_C<0, 0, buff_flags, false>>();
+					(1 << MinionStat::FLAG_SHIELD) |
+					(1 << MinionStat::FLAG_TAUNT);
+				auto enchant = std::make_unique<Enchantment_BuffMinion_C<0, 0, buff_flags, false>>();
 				buff_target.AddEnchantment(std::move(enchant), nullptr);
 			}
 		};

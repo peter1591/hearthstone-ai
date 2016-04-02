@@ -4,7 +4,6 @@
 #include <algorithm>
 
 namespace GameEngine {
-namespace BoardObjects {
 
 class MinionData;
 class Minion;
@@ -86,12 +85,11 @@ private:
 	int actual_attack_boost; // attack cannot be negative
 };
 
-} // namespace BoardObjects
 } // namespace GameEngine
 
 namespace std {
-	template <typename Target> struct hash<GameEngine::BoardObjects::Enchantment<Target> > {
-		typedef GameEngine::BoardObjects::Enchantment<Target> argument_type;
+	template <typename Target> struct hash<GameEngine::Enchantment<Target> > {
+		typedef GameEngine::Enchantment<Target> argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			return s.GetHash();
