@@ -4,7 +4,6 @@
 #include "object-base.h"
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/enchantments/enchantments.h"
-#include "game-engine/hook/listeners.h" // TODO: remove me
 #include "game-engine/hook/minion-auras.h"
 
 namespace GameEngine {

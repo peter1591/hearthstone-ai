@@ -56,7 +56,7 @@ namespace GameEngine
 				break;
 
 			default:
-				break;
+				break; // TODO: handle other card types
 			}
 		}
 

@@ -1,6 +1,7 @@
 #ifndef GAME_ENGINE_CARD_H
 #define GAME_ENGINE_CARD_H
 
+#include <stdexcept>
 #include <functional>
 #include <string>
 #include <sstream>
@@ -199,10 +200,13 @@ inline std::string Card::GetDebugString() const
 inline bool Card::operator==(const Card &rhs) const
 {
 	if (this->id != rhs.id) return false;
-	if (this->type != rhs.type) return false;
-	if (this->cost != rhs.cost) return false;
 
-	switch (this->type) {
+#ifdef DEBUG
+	std::function<bool(Card const&)> is_same = [this](Card const& rhs) {
+		if (this->type != rhs.type) return false;
+		if (this->cost != rhs.cost) return false;
+
+		switch (this->type) {
 		case TYPE_MINION:
 			if (this->data.minion != rhs.data.minion) return false;
 			break;
@@ -215,7 +219,13 @@ inline bool Card::operator==(const Card &rhs) const
 		case TYPE_SPELL:
 		case TYPE_SECRET:
 			break;
+		}
+		return true;
+	};
+	if (is_same(rhs) == false) {
+		throw std::runtime_error("card id is identical, but with different stats");
 	}
+#endif
 
 	return true;
 }
@@ -271,23 +281,8 @@ namespace std {
 
 			GameEngine::hash_combine(result, s.id);
 
-			GameEngine::hash_combine(result, (int)s.type); // TODO
-			GameEngine::hash_combine(result, s.cost);
-
-			switch (s.type) {
-				case GameEngine::Card::TYPE_MINION:
-					GameEngine::hash_combine(result, s.data.minion);
-					break;
-
-				case GameEngine::Card::TYPE_WEAPON:
-					GameEngine::hash_combine(result, s.data.weapon);
-					break;
-
-				case GameEngine::Card::TYPE_INVALID:
-				case GameEngine::Card::TYPE_SPELL:
-				case GameEngine::Card::TYPE_SECRET:
-					break;
-			}
+			// skip hash for other fields
+			// since there should no duplicate card ids with different stats
 
 			return result;
 		}
