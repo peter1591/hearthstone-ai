@@ -14,7 +14,7 @@ namespace GameEngine
 	template <>
 	inline void EnchantmentOwner<Minion>::RemoveOwnedEnchantments()
 	{
-		for (auto & item : this->enchantments) { item.Remove(); }
+		while (!this->enchantments.empty()) this->enchantments.begin()->Remove();
 	}
 
 	template <typename EnchantmentTarget>
@@ -27,13 +27,14 @@ namespace GameEngine
 	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(
 		EnchantmentsItemType<EnchantmentTarget> const& managed_enchantment)
 	{
-		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); )
+		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
 		{
 			typename std::list<ManagedEnchantment<EnchantmentTarget>>::const_iterator it_const = it;
 			if (*it_const->Get() != managed_enchantment) continue;
 
 			this->enchantments.erase(it);
-			break;
+			return;
 		}
+		throw std::runtime_error("cannot find enchantment to be removed");
 	}
 } // namespace GameEngine

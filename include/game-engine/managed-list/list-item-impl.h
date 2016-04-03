@@ -11,6 +11,18 @@ namespace GameEngine
 	}
 
 	template<typename ItemType>
+	inline ManagedListItem<ItemType>::ManagedListItem(ManagedListItem<ItemType> const & rhs)
+		: container(rhs.container), it(rhs.it)
+	{
+	}
+
+	template<typename ItemType>
+	inline ManagedListItem<ItemType>::ManagedListItem(ManagedListItem<ItemType>&& rhs)
+		: container(rhs.container), it(std::move(rhs.it))
+	{
+	}
+
+	template<typename ItemType>
 	inline void ManagedListItem<ItemType>::Remove()
 	{
 		this->container.Erase(this->it);

@@ -13,18 +13,16 @@ namespace GameEngine
 
 		friend class Manager; // only manager can manage underlying item
 
-	public:
+	private: // only accessible to Manager
 		ManagedEnchantment(Enchantments<Target> & manager, ManagedItem const& item)
 			: manager(manager), item(item)
 		{
 		}
 
-		ManagedItem const& Get() const { return this->item; }
+	public:
+		ManagedItem Get() const { return this->item; }
 
 		void Remove() { this->manager.Remove(*this); }
-
-	private: // only accessible to Manager
-		ManagedItem & Get() { return this->item; }
 
 	private:
 		Manager & manager;

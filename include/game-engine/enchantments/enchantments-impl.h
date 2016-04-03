@@ -32,9 +32,12 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Remove(ManagedEnchantment<Target> & item)
+	inline void Enchantments<Target>::Remove(ManagedEnchantment<Target> & item) 
 	{
-		auto & managed_item = item.Get();
+		// Note: the following line should be a copy, rather than a reference
+		// Since the parameter 'item' is a referece from owner's enchantments list
+		// which will be erased when 'this->BeforeRemove()'
+		auto managed_item = item.Get(); // Note: need to use copy (not reference)
 
 		this->BeforeRemove(*managed_item);
 		managed_item.Remove();
@@ -59,13 +62,11 @@ namespace GameEngine
 	inline void Enchantments<Target>::TurnEnd()
 	{
 		this->enchantments.RemoveIf([this](auto & item) {
-			if (item.enchantment->TurnEnd(this->target)) {
-				this->BeforeRemove(item);
-				return true; // enchant vanished if return value is true
-			}
-			else {
-				return false;
-			}
+			if (item.enchantment->TurnEnd(this->target)) return false;
+			
+			// enchant vanished if return value is false
+			this->BeforeRemove(item);
+			return true;
 		});
 	}
 

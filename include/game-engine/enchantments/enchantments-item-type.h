@@ -16,7 +16,10 @@ namespace GameEngine
 		{
 		}
 
-		bool operator==(EnchantmentsItemType const& rhs) const { return *this->enchantment == *rhs.enchantment; }
+		bool operator==(EnchantmentsItemType const& rhs) const
+		{
+			return *this->enchantment == *rhs.enchantment;
+		}
 		bool operator!=(EnchantmentsItemType const& rhs) const { return !(*this == rhs); }
 
 		std::unique_ptr<Enchantment<Target>> enchantment;

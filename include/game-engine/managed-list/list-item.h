@@ -16,8 +16,8 @@ namespace GameEngine
 
 	public:
 		ManagedListItem(Container & container, UnderlyingIterator it);
-		ManagedListItem(ManagedListItem<ItemType> const& rhs) : container(rhs.container), it(rhs.it) {}
-		ManagedListItem(ManagedListItem<ItemType> && rhs) : container(rhs.container), it(std::move(rhs.it)) {}
+		ManagedListItem(ManagedListItem<ItemType> const& rhs);
+		ManagedListItem(ManagedListItem<ItemType> && rhs);
 
 	public:
 		typename UnderlyingIterator::reference operator*() const { return it.operator*(); }
