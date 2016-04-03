@@ -4,8 +4,6 @@
 #include <map>
 #include <memory>
 
-#include "managed-enchantment.h"
-
 namespace GameEngine {
 
 class MinionData;
@@ -21,8 +19,8 @@ class Enchantments
 
 private:
 	typedef Enchantment<Target> EnchantmentType;
-	typedef ManagedEnchantment<Target> ManagedEnchantmentType;
-	typedef typename std::list<std::pair<ManagedEnchantmentType, EnchantmentOwner*>> container_type;
+	typedef std::pair<std::unique_ptr<EnchantmentType>, EnchantmentOwner*> ItemType;
+	typedef typename std::list<ItemType> container_type;
 
 public:
 	Enchantments(Target & target) : target(target) {}

@@ -39,6 +39,7 @@ namespace std {
 	template <typename Target> struct hash<GameEngine::Enchantment<Target> > {
 		typedef GameEngine::Enchantment<Target> argument_type;
 		typedef std::size_t result_type;
+
 		result_type operator()(const argument_type &s) const {
 			return s.GetHash();
 		}
