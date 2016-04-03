@@ -1,6 +1,8 @@
 #pragma once
 
 #include <list>
+#include <functional>
+
 #include "game-engine/managed-list/list-item.h"
 
 namespace GameEngine
@@ -35,8 +37,20 @@ namespace GameEngine
 		ManagedItem PushBack(ItemType const& item) { return ManagedItem(this->items.insert(this->items.end(), item)); }
 		ManagedItem PushBack(ItemType && item) { return ManagedItem(this->items.insert(this->items.end(), std::move(item))); }
 
-		// TODO: remove_if
-		// TODO: for_each
+		void ForEach(std::function<void(ItemType &)> func) {
+			for (auto & item : this->items) func(item);
+		}
+		void ForEach(std::function<void(ItemType const&)> func) const {
+			for (auto const& item : this->items) func(item);
+		}
+
+		// Note: Invalidate all ManagedItem which are removed
+		void RemoveIf(std::function<bool(ItemType &)> func) {
+			for (auto it = this->items.begin(); it != this->items.end();) {
+				if (func(*it)) it = this->items.erase(it);
+				else ++it;
+			}
+		}
 
 	public: // only used by ManagedListIterator
 		void Erase(typename UnderlyingContainer::iterator it) { this->items.erase(it); }
