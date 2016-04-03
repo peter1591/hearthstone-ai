@@ -21,21 +21,19 @@ namespace GameEngine
 		using UnderlyingContainer = typename ManagedItem::UnderlyingContainer;
 
 		ManagedList() {}
-		ManagedList(ManagedList<ItemType> && rhs)
-		{
-			this->items.splice(this->items.begin(), std::move(rhs.items)); // maintain the iterator (i.e., ManagedItem) validity
-		}
+		ManagedList(ManagedList<ItemType> const& rhs) = delete;
+		ManagedList(ManagedList<ItemType> && rhs) = delete;
 
 		bool operator==(ManagedList const& rhs) const { return this->items == rhs.items; }
 		bool operator!=(ManagedList const& rhs) const { return this->items != rhs.items; }
 
 		bool Empty() const { return this->items.empty(); }
 
-		ManagedItem PushFront(ItemType const& item) { return ManagedItem(this->items.insert(this->items.begin(), item)); }
-		ManagedItem PushFront(ItemType && item) { return ManagedItem(this->items.insert(this->items.begin(), std::move(item))); }
+		ManagedItem PushFront(ItemType const& item) { return ManagedItem(*this, this->items.insert(this->items.begin(), item)); }
+		ManagedItem PushFront(ItemType && item) { return ManagedItem(*this, this->items.insert(this->items.begin(), std::move(item))); }
 
-		ManagedItem PushBack(ItemType const& item) { return ManagedItem(this->items.insert(this->items.end(), item)); }
-		ManagedItem PushBack(ItemType && item) { return ManagedItem(this->items.insert(this->items.end(), std::move(item))); }
+		ManagedItem PushBack(ItemType const& item) { return ManagedItem(*this, this->items.insert(this->items.end(), item)); }
+		ManagedItem PushBack(ItemType && item) { return ManagedItem(*this, this->items.insert(this->items.end(), std::move(item))); }
 
 		void ForEach(std::function<void(ItemType &)> func) {
 			for (auto & item : this->items) func(item);

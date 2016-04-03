@@ -15,11 +15,12 @@ namespace GameEngine
 		typedef typename UnderlyingContainer::iterator UnderlyingIterator;
 
 	public:
-		ManagedListItem(UnderlyingIterator it);
+		ManagedListItem(Container & container, UnderlyingIterator it);
 
-		void Remove(Container & container);
+		void Remove();
 
 	private:
+		Container & container;
 		UnderlyingIterator it;
 	};
 } // namespace GameEngine
