@@ -37,6 +37,9 @@
     <Filter Include="Header Files\game-engine\enchantments\impl">
       <UniqueIdentifier>{00dcc16c-3074-4ebe-8c8b-84087ba2fb62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\managed-list">
+      <UniqueIdentifier>{25da454d-b808-41e4-963b-f3eedbcce468}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -376,6 +379,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment-impl.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\managed-list\list.h">
+      <Filter>Header Files\game-engine\managed-list</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item.h">
+      <Filter>Header Files\game-engine\managed-list</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item-impl.h">
+      <Filter>Header Files\game-engine\managed-list</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

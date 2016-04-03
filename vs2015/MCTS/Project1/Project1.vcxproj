@@ -207,6 +207,9 @@
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook-manager-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook-manager.h" />
+    <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item.h" />
+    <ClInclude Include="..\..\..\include\game-engine\managed-list\list.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\on-death-trigger.h" />
     <ClInclude Include="..\..\..\include\game-engine\player-impl.h" />
