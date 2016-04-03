@@ -20,6 +20,10 @@ inline void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
 
 inline void MCTS::Iterate()
 {
+#ifdef DEBUG_PRINT_MOVE
+	std::cout << "MCTS iterate start" << std::endl;
+#endif
+
 	this->current_start_board_random = rand();
 	GameEngine::Board board = this->start_board.GetBoard(this->current_start_board_random);
 	this->traversed_path.Clear();

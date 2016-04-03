@@ -115,6 +115,10 @@ inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 
 inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 {
+#ifdef DEBUG_PRINT_MOVE
+	std::cout << "Applying move: " << move.GetDebugString() << std::endl;
+#endif
+
 	this->random_generator.SetRandomSeed(this->random_seed);
 
 	if (introduced_random != nullptr) this->random_generator.ClearFlag_HasCalled();
