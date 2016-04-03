@@ -28,7 +28,7 @@ namespace GameEngine {
 					(1 << MinionStat::FLAG_SHIELD) |
 					(1 << MinionStat::FLAG_TAUNT);
 				auto enchant = std::make_unique<Enchantment_BuffMinion_C<0, 0, 0, buff_flags, false>>();
-				buff_target.AddEnchantment(std::move(enchant), nullptr);
+				buff_target.enchantments.Add(std::move(enchant), nullptr);
 			}
 		};
 

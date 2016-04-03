@@ -24,7 +24,7 @@ namespace GameEngine {
 
 				auto & buff_target = equipping_player.minions.GetMinion(minion_chosen);
 				auto enchant = std::make_unique<Enchantment_BuffMinion_C<attack_boost, 0, 0, 0, false>>();
-				buff_target.AddEnchantment(std::move(enchant), nullptr);
+				buff_target.enchantments.Add(std::move(enchant), nullptr);
 			}
 		};
 

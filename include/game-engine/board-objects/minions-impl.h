@@ -38,6 +38,7 @@ namespace GameEngine {
 
 #ifdef DEBUG
 		// check minion can be destructed
+		if (!it->auras.Empty()) throw std::runtime_error("auras should be cleared first");
 		if (!it->hook_listeners.Empty()) throw std::runtime_error("auras should be cleared first");
 #endif
 

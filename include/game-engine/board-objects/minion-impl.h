@@ -5,16 +5,19 @@
 inline GameEngine::Minion::Minion(Minion && rhs)
 	: minions(rhs.minions), minion(std::move(rhs.minion)),
 	enchantments(*this),
-	hook_listeners(std::move(rhs.hook_listeners))
+	hook_listeners(std::move(rhs.hook_listeners)),
+	auras(*this)
 {
 	// If minion has enchantments, it cannot be moved
 	// TODO: we can use a unique_ptr to wrap the enchantments class,
 	//       so we can support move
+	// Same for auras
 	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not move minion with enchantments");
+	if (!rhs.auras.Empty()) throw std::runtime_error("You should not move minion with auras");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
-	: minions(minions), minion(rhs.minion), enchantments(*this)
+	: minions(minions), minion(rhs.minion), enchantments(*this), auras(*this)
 {
 	// If minion has enchantments/auras, then it cannot be cloned
 	// Note: The only chance we need to copy minion is to copy root node board in MCTS
@@ -22,26 +25,29 @@ inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
 	// TODO: how about faceless manipulator?
 	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
 	if (!rhs.hook_listeners.Empty()) throw std::runtime_error("You should not copy minion with hook listeners (including auras)");
+	if (!rhs.auras.Empty()) throw std::runtime_error("You should not move minion with auras");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion && minion)
 	: minions(minions), minion(std::move(minion.minion)),
 	enchantments(*this),
-	hook_listeners(std::move(minion.hook_listeners))
+	hook_listeners(std::move(minion.hook_listeners)),
+	auras(*this)
 {
 	// If minion has enchantments, it cannot be moved
 	// TODO: we can use a unique_ptr to wrap the enchantments class,
 	//       so we can support move
 	if (!minion.enchantments.Empty()) throw std::runtime_error("You should not move minion with enchantments");
+	if (!minion.auras.Empty()) throw std::runtime_error("You should not move minion with auras");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, MinionData const & minion)
-	: minions(minions), minion(minion), enchantments(*this)
+	: minions(minions), minion(minion), enchantments(*this), auras(*this)
 {
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, MinionData && minion)
-	: minions(minions), minion(std::move(minion)), enchantments(*this)
+	: minions(minions), minion(std::move(minion)), enchantments(*this), auras(*this)
 {
 }
 
@@ -195,20 +201,10 @@ inline void GameEngine::Minion::ClearHookListener()
 	this->hook_listeners.Clear(*this);
 }
 
-inline void GameEngine::Minion::AddEnchantment(
-	std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner<Minion> * owner)
-{
-	this->enchantments.Add(std::move(enchantment), owner);
-}
-
-inline void GameEngine::Minion::ClearEnchantments()
-{
-	this->enchantments.Clear();
-}
-
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 {
 	this->hook_listeners.HookAfterMinionAdded(*this, added_minion);
+	this->auras.HookAfterMinionAdded(*this, added_minion);
 }
 
 inline void GameEngine::Minion::HookMinionCheckEnraged()
@@ -216,9 +212,11 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
 		this->hook_listeners.HookAfterOwnerEnraged(*this); // enraged
+		this->auras.HookAfterOwnerEnraged(*this); // enraged
 	}
 	else if (this->GetHP() == this->GetMaxHP()) {
 		this->hook_listeners.HookAfterOwnerUnEnraged(*this); // un-enraged
+		this->auras.HookAfterOwnerUnEnraged(*this); // un-enraged
 	}
 	else {
 		throw std::runtime_error("hp should not be larger than max-hp");
@@ -228,6 +226,7 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion, int damage)
 {
 	this->hook_listeners.HookAfterMinionDamaged(minion, damage);
+	this->auras.HookAfterMinionDamaged(minion, damage);
 }
 
 inline void GameEngine::Minion::TurnStart(bool owner_turn)

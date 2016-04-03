@@ -48,14 +48,35 @@ namespace GameEngine
 		{
 			Aura * aura = new Aura(this->minion, params...);
 			this->auras.push_back(aura);
+			aura->AfterAdded(owner);
 		}
+
+		bool Empty() const { return this->auras.empty(); }
 
 		void Clear()
 		{
 			for (auto aura : this->auras) {
+				aura->BeforeRemoved(this->minion);
 				delete aura;
 			}
 			this->auras.clear();
+		}
+
+	public: // hooks
+		void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
+		{
+			for (auto & aura : this->auras) aura->HookAfterMinionAdded(aura_owner, added_minion);
+		}
+		void HookAfterOwnerEnraged(Minion &enraged_aura_owner)
+		{
+			for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(enraged_aura_owner);
+		}
+		void HookAfterOwnerUnEnraged(Minion &unenraged_aura_owner)
+		{
+			for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(unenraged_aura_owner);
+		}
+		void HookAfterMinionDamaged(Minion & minion, int damage) {
+			for (auto & aura : this->auras) aura->HookAfterMinionDamaged(minion, damage);
 		}
 
 	private:

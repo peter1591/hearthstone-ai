@@ -17,12 +17,12 @@ namespace GameEngine {
 
 				if (summoned_minion.IsBegin() == false) {
 					auto prev = summoned_minion;
-					prev.GoToPrevious()->AddEnchantment(std::make_unique<EnchantType>(), nullptr);
+					prev.GoToPrevious()->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
 				}
 
 				auto next = summoned_minion;
 				next.GoToNext();
-				if (next.IsEnd() == false) next->AddEnchantment(std::make_unique<EnchantType>(), nullptr);
+				if (next.IsEnd() == false) next->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
 			}
 		};
 

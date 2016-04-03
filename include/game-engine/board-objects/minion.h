@@ -4,7 +4,8 @@
 #include "object-base.h"
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/enchantments/enchantments.h"
-#include "game-engine/hook/listeners.h"
+#include "game-engine/hook/listeners.h" // TODO: remove me
+#include "game-engine/hook/minion-auras.h"
 
 namespace GameEngine {
 
@@ -42,6 +43,7 @@ namespace GameEngine {
 			if (this->GetMinion() != rhs.GetMinion()) return false;
 			if (this->enchantments != rhs.enchantments) return false;
 			if (this->hook_listeners != rhs.hook_listeners) return false;
+			if (this->auras != rhs.auras) return false;
 			return true;
 		}
 		bool operator!=(Minion const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
@@ -81,12 +83,8 @@ namespace GameEngine {
 		void ClearMinionStatFlag(MinionStat::Flag flag);
 
 	public: // auras
-		void AddHookListener(std::unique_ptr<HookListener> && aura);
-		void ClearHookListener();
-
-	public: // enchantments
-		void AddEnchantment(std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner<Minion> * owner);
-		void ClearEnchantments();
+		void AddHookListener(std::unique_ptr<HookListener> && aura); // TODO: remove me
+		void ClearHookListener(); // TODO: remove me
 
 	public: // hooks
 		void TurnStart(bool owner_turn);
@@ -101,11 +99,14 @@ namespace GameEngine {
 		bool IsPlayerSide() const;
 		bool IsOpponentSide() const;
 
+	public:
+		Enchantments<Minion> enchantments;
+		MinionAuras auras;
+
 	private:
 		Minions & minions;
 		MinionData minion;
-		Enchantments<Minion> enchantments;
-		HookListeners hook_listeners; // owned auras
+		HookListeners hook_listeners; // TODO: remove me
 	};
 
 } // GameEngine
