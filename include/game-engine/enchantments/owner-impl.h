@@ -24,13 +24,12 @@ namespace GameEngine
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(
-		EnchantmentsItemType<EnchantmentTarget> const& managed_enchantment)
+	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(ManagedItem managed_item)
 	{
 		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
 		{
 			typename std::list<ManagedEnchantment<EnchantmentTarget>>::const_iterator it_const = it;
-			if (*it_const->Get() != managed_enchantment) continue;
+			if (it_const->Get() != managed_item) continue;
 
 			this->enchantments.erase(it);
 			return;

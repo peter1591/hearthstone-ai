@@ -9,7 +9,7 @@ namespace GameEngine
 	{
 	public:
 		typedef Enchantments<Target> Manager;
-		typedef typename Manager::container_type::ManagedItem ManagedItem;
+		typedef typename Manager::ManagedItem ManagedItem;
 
 		friend class Manager; // only manager can manage underlying item
 

@@ -43,10 +43,14 @@ namespace GameEngine
 		}
 
 		// Note: Invalidate all ManagedItem which are removed
-		void RemoveIf(std::function<bool(ItemType &)> func) {
+		void RemoveIf(std::function<bool(ManagedItem)> func) {
 			for (auto it = this->items.begin(); it != this->items.end();) {
-				if (func(*it)) it = this->items.erase(it);
-				else ++it;
+				if (func(ManagedItem(*this, it))) {
+					it = this->items.erase(it);
+				}
+				else {
+					++it;
+				}
 			}
 		}
 

@@ -22,7 +22,8 @@ class Enchantments
 public:
 	typedef Enchantment<Target> EnchantmentType;
 	typedef EnchantmentsItemType<Target> ItemType;
-	typedef typename ManagedList<ItemType> container_type;
+	typedef typename ManagedList<ItemType> ManagedContainer;
+	typedef typename ManagedContainer::ManagedItem ManagedItem;
 
 public:
 	Enchantments(Target & target) : target(target) {}
@@ -36,7 +37,7 @@ public:
 	bool operator!=(Enchantments const& rhs) const;
 
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner);
-	void Remove(ManagedEnchantment<Target> & item);
+	void Remove(ManagedEnchantment<Target> & item); // interface for enchantment owner
 	void Clear();
 	bool Empty() const;
 
@@ -44,9 +45,9 @@ public: // hooks
 	void TurnEnd();
 
 private:
-	inline void BeforeRemove(ItemType & item);
+	inline void BeforeRemove(ManagedItem item);
 
-	container_type enchantments;
+	ManagedContainer enchantments;
 
 private:
 	Target & target;
