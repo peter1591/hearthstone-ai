@@ -7,7 +7,7 @@
 namespace GameEngine {
 	// This class add enchantments to all minions
 	// and will invoke the hook 'HookAfterMinionAdded' for every existing minions
-	class AuraToAllMinions : public Aura
+	class AuraToAllMinions : public HookListener
 	{
 	public:
 		AuraToAllMinions() {}

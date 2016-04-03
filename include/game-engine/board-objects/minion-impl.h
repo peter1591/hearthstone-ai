@@ -185,7 +185,7 @@ inline void GameEngine::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
 	this->minion.stat.ClearFlag(flag);
 }
 
-inline void GameEngine::Minion::AddAura(std::unique_ptr<Aura> && aura)
+inline void GameEngine::Minion::AddAura(std::unique_ptr<HookListener> && aura)
 {
 	this->auras.Add(*this, std::move(aura));
 }

@@ -11,4 +11,5 @@
 #include "game-engine/enchantments/enchantment.h"
 #include "game-engine/enchantments/buff-minion.h"
 #include "game-engine/enchantments/buff-minion-c.h"
+#include "game-engine/hook/listener.h"
 #include "game-engine/board-objects/aura.h"

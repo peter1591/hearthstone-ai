@@ -81,7 +81,7 @@ namespace GameEngine {
 		void ClearMinionStatFlag(MinionStat::Flag flag);
 
 	public: // auras
-		void AddAura(std::unique_ptr<Aura> && aura);
+		void AddAura(std::unique_ptr<HookListener> && aura);
 		void ClearAuras();
 
 	public: // enchantments

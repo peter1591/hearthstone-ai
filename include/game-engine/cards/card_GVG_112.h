@@ -33,7 +33,7 @@ namespace GameEngine {
 				}
 
 			private: // for comparison
-				bool EqualsTo(GameEngine::Aura const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base); }
+				bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base); }
 				std::size_t GetHash() const { return typeid(*this).hash_code(); }
 			};
 
