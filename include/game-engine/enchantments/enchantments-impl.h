@@ -46,7 +46,7 @@ namespace GameEngine
 		
 		if (owner) owner->EnchantmentAdded(ManagedEnchantment<Target>(*this, managed_item));
 
-		ref_ptr->AfterAdded(target);
+		ref_ptr->AfterAdded(this->target);
 	}
 
 	template <typename Target>
