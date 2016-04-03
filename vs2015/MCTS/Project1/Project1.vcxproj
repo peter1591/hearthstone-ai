@@ -143,7 +143,6 @@
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h" />
     <ClInclude Include="..\..\..\include\game-ai\tree.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments.h" />
@@ -207,6 +206,7 @@
     <ClInclude Include="..\..\..\include\game-engine\hook-manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\listener.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-enrage.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-to-all-minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras.h" />

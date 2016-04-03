@@ -1,22 +1,22 @@
 #pragma once
 
-#include "game-engine/board.h"
-#include "game-engine/enchantments/enchantments.h"
-#include "game-engine/enchantments/owner.h"
-#include "game-engine/hook/listener.h"
+#include "game-engine/board-objects/minion.h"
+#include "game-engine/hook/minion-aura.h"
 
 namespace GameEngine {
 	// This class add enchantments to all minions
 	// and will invoke the hook 'HookAfterMinionAdded' for every existing minions
-	class AuraEnrage : public HookListener
+	class AuraEnrage : public MinionAura
 	{
 	public:
-		AuraEnrage() {}
+		AuraEnrage(Minion & owner) : MinionAura(owner) {}
 		virtual ~AuraEnrage() {}
 
-	protected: // hooks
+	public: // hooks
 		void AfterAdded(Minion & aura_owner)
 		{
+			MinionAura::AfterAdded(aura_owner);
+
 			if (aura_owner.GetHP() < aura_owner.GetMaxHP()) {
 				this->HookAfterOwnerEnraged(aura_owner);
 			}
@@ -25,23 +25,19 @@ namespace GameEngine {
 			}
 		}
 
-		void BeforeRemoved(Minion & owner)
-		{
-			this->enchantments_manager.RemoveOwnedEnchantments();
-		}
-
 		void HookAfterOwnerEnraged(Minion & aura_owner) {
+			MinionAura::HookAfterOwnerEnraged(aura_owner);
+
 			if (this->enchantments_manager.IsEmpty()) this->AddEnrageEnchantment(aura_owner);
 		}
 
 		void HookAfterOwnerUnEnraged(Minion & aura_owner) {
+			MinionAura::HookAfterOwnerUnEnraged(aura_owner);
+
 			this->enchantments_manager.RemoveOwnedEnchantments();
 		}
 
 		virtual void AddEnrageEnchantment(Minion & aura_owner) = 0;
-
-	protected:
-		GameEngine::EnchantmentOwner<Minion> enchantments_manager;
 	};
 
 } // namespace GameEngine

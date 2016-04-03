@@ -14,6 +14,9 @@ namespace GameEngine {
 
 			class Aura : public GameEngine::AuraEnrage
 			{
+			public:
+				Aura(GameEngine::Minion & owner) : AuraEnrage(owner) {}
+
 			private:
 				void AddEnrageEnchantment(GameEngine::Minion & aura_owner)
 				{
@@ -32,7 +35,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
-				summoned_minion->AddHookListener(std::make_unique<Aura>());
+				summoned_minion->auras.Add<Aura>();
 			}
 		};
 
