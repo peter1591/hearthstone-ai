@@ -15,7 +15,6 @@ namespace GameEngine
 	public:
 		MinionAuras(Minion & minion) : minion(minion) {}
 
-		__declspec(noinline)
 		~MinionAuras()
 		{
 #ifdef DEBUG
@@ -25,7 +24,6 @@ namespace GameEngine
 #endif
 		}
 
-		__declspec(noinline)
 		bool operator==(MinionAuras const& rhs) const
 		{
 			if (this->auras.size() != rhs.auras.size()) return false;
