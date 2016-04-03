@@ -5,17 +5,14 @@
 namespace GameEngine
 {
 	template<typename ItemType>
-	inline ManagedListItem<ItemType>::ManagedListItem(
-		typename ManagedListItem<ItemType>::Container & container,
-		typename ManagedListItem<ItemType>::UnderlyingIterator it) :
-		container(container), it(it)
+	inline ManagedListItem<ItemType>::ManagedListItem(typename ManagedListItem<ItemType>::UnderlyingIterator it)
+		: it(it)
 	{
-
 	}
 
 	template<typename ItemType>
-	inline void ManagedListItem<ItemType>::Remove()
+	inline void ManagedListItem<ItemType>::Remove(Container & container)
 	{
-		this->container->Erase(this->it);
+		container->Erase(this->it);
 	}
 } // namespace GameEngine

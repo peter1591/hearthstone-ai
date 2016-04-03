@@ -15,7 +15,7 @@ namespace GameEngine
 		ManagedList() {}
 		ManagedList(ManagedList<ItemType> && rhs)
 		{
-			this->items.splice(this->items.begin(), std::move(rhs)); // maintain the iterator validity
+			this->items.splice(this->items.begin(), std::move(rhs)); // maintain the iterator (i.e., ManagedItem) validity
 		}
 
 		ManagedItem PushFront(ItemType && item) { return ManagedItem(*this, this->items.push_front(item)); }
