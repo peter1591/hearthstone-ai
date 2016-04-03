@@ -32,7 +32,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
-				summoned_minion->AddAura(std::make_unique<Aura>());
+				summoned_minion->AddHookListener(std::make_unique<Aura>());
 			}
 		};
 

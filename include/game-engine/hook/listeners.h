@@ -1,7 +1,10 @@
 #pragma once
 
+#include <memory>
 #include <list>
+#include <functional>
 
+#include "game-engine/common.h"
 #include "game-engine/hook/listener.h"
 
 namespace GameEngine {
@@ -11,22 +14,22 @@ namespace GameEngine {
 	class MinionData;
 	class Minion;
 
-	class Auras
+	class HookListeners
 	{
-		friend std::hash<Auras>;
+		friend std::hash<HookListeners>;
 
 	public:
-		Auras() {}
+		HookListeners() {}
 
-		Auras(Auras const& rhs) = delete;
-		Auras & operator=(Auras const& rhs) = delete;
-		Auras(Auras && rhs) { *this = std::move(rhs); }
-		Auras & operator=(Auras && rhs) {
+		HookListeners(HookListeners const& rhs) = delete;
+		HookListeners & operator=(HookListeners const& rhs) = delete;
+		HookListeners(HookListeners && rhs) { *this = std::move(rhs); }
+		HookListeners & operator=(HookListeners && rhs) {
 			this->auras = std::move(rhs.auras);
 			return *this;
 		}
 
-		bool operator==(Auras const& rhs) const
+		bool operator==(HookListeners const& rhs) const
 		{
 			if (this->auras.size() != rhs.auras.size()) return false;
 
@@ -48,7 +51,7 @@ namespace GameEngine {
 			return true;
 		}
 
-		bool operator!=(Auras const& rhs) const { return !(*this == rhs); }
+		bool operator!=(HookListeners const& rhs) const { return !(*this == rhs); }
 
 	public:
 		void Add(Minion & owner, std::unique_ptr<HookListener> && aura)
@@ -90,8 +93,8 @@ namespace GameEngine {
 } // namespace GameEngine
 
 namespace std {
-	template <> struct hash<GameEngine::Auras> {
-		typedef GameEngine::Auras argument_type;
+	template <> struct hash<GameEngine::HookListeners> {
+		typedef GameEngine::HookListeners argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

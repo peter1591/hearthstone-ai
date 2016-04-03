@@ -1,9 +1,9 @@
 #pragma once
 
-#include "aura.h"
+#include "game-engine/board.h"
 #include "game-engine/enchantments/enchantments.h"
 #include "game-engine/enchantments/owner.h"
-#include "game-engine/board.h"
+#include "game-engine/hook/listener.h"
 
 namespace GameEngine {
 	// This class add enchantments to all minions

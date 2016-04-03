@@ -5,7 +5,7 @@
 inline GameEngine::Minion::Minion(Minion && rhs)
 	: minions(rhs.minions), minion(std::move(rhs.minion)),
 	enchantments(*this),
-	auras(std::move(rhs.auras))
+	hook_listeners(std::move(rhs.hook_listeners))
 {
 	// If minion has enchantments, it cannot be moved
 	// TODO: we can use a unique_ptr to wrap the enchantments class,
@@ -21,13 +21,13 @@ inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
 	// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
 	// TODO: how about faceless manipulator?
 	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
-	if (!rhs.auras.Empty()) throw std::runtime_error("You should not copy minion with auras");
+	if (!rhs.hook_listeners.Empty()) throw std::runtime_error("You should not copy minion with hook listeners (including auras)");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion && minion)
 	: minions(minions), minion(std::move(minion.minion)),
 	enchantments(*this),
-	auras(std::move(minion.auras))
+	hook_listeners(std::move(minion.hook_listeners))
 {
 	// If minion has enchantments, it cannot be moved
 	// TODO: we can use a unique_ptr to wrap the enchantments class,
@@ -185,14 +185,14 @@ inline void GameEngine::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
 	this->minion.stat.ClearFlag(flag);
 }
 
-inline void GameEngine::Minion::AddAura(std::unique_ptr<HookListener> && aura)
+inline void GameEngine::Minion::AddHookListener(std::unique_ptr<HookListener> && aura)
 {
-	this->auras.Add(*this, std::move(aura));
+	this->hook_listeners.Add(*this, std::move(aura));
 }
 
-inline void GameEngine::Minion::ClearAuras()
+inline void GameEngine::Minion::ClearHookListener()
 {
-	this->auras.Clear(*this);
+	this->hook_listeners.Clear(*this);
 }
 
 inline void GameEngine::Minion::AddEnchantment(
@@ -208,17 +208,17 @@ inline void GameEngine::Minion::ClearEnchantments()
 
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 {
-	this->auras.HookAfterMinionAdded(*this, added_minion);
+	this->hook_listeners.HookAfterMinionAdded(*this, added_minion);
 }
 
 inline void GameEngine::Minion::HookMinionCheckEnraged()
 {
 	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
-		this->auras.HookAfterOwnerEnraged(*this); // enraged
+		this->hook_listeners.HookAfterOwnerEnraged(*this); // enraged
 	}
 	else if (this->GetHP() == this->GetMaxHP()) {
-		this->auras.HookAfterOwnerUnEnraged(*this); // un-enraged
+		this->hook_listeners.HookAfterOwnerUnEnraged(*this); // un-enraged
 	}
 	else {
 		throw std::runtime_error("hp should not be larger than max-hp");
@@ -227,7 +227,7 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 
 inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion, int damage)
 {
-	this->auras.HookAfterMinionDamaged(minion, damage);
+	this->hook_listeners.HookAfterMinionDamaged(minion, damage);
 }
 
 inline void GameEngine::Minion::TurnStart(bool owner_turn)

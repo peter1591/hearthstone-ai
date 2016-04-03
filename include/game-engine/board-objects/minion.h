@@ -4,7 +4,7 @@
 #include "object-base.h"
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/enchantments/enchantments.h"
-#include "aura.h"
+#include "game-engine/hook/listeners.h"
 
 namespace GameEngine {
 
@@ -41,7 +41,7 @@ namespace GameEngine {
 		{
 			if (this->GetMinion() != rhs.GetMinion()) return false;
 			if (this->enchantments != rhs.enchantments) return false;
-			if (this->auras != rhs.auras) return false;
+			if (this->hook_listeners != rhs.hook_listeners) return false;
 			return true;
 		}
 		bool operator!=(Minion const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
@@ -81,8 +81,8 @@ namespace GameEngine {
 		void ClearMinionStatFlag(MinionStat::Flag flag);
 
 	public: // auras
-		void AddAura(std::unique_ptr<HookListener> && aura);
-		void ClearAuras();
+		void AddHookListener(std::unique_ptr<HookListener> && aura);
+		void ClearHookListener();
 
 	public: // enchantments
 		void AddEnchantment(std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner<Minion> * owner);
@@ -105,7 +105,7 @@ namespace GameEngine {
 		Minions & minions;
 		MinionData minion;
 		Enchantments<Minion> enchantments;
-		Auras auras; // owned auras
+		HookListeners hook_listeners; // owned auras
 	};
 
 } // GameEngine
@@ -119,7 +119,7 @@ namespace std {
 
 			result = std::hash<decltype(s.minion)>()(s.minion);
 			GameEngine::hash_combine(result, s.enchantments);
-			GameEngine::hash_combine(result, s.auras);
+			GameEngine::hash_combine(result, s.hook_listeners);
 
 			return result;
 		}

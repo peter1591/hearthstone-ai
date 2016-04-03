@@ -40,6 +40,9 @@
     <Filter Include="Header Files\game-engine\managed-list">
       <UniqueIdentifier>{25da454d-b808-41e4-963b-f3eedbcce468}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\hook">
+      <UniqueIdentifier>{ccd364cb-eec5-4606-83a5-73ab506e3534}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -148,9 +151,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h">
       <Filter>Header Files\game-engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
@@ -388,6 +388,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\listener.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h">
+      <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
