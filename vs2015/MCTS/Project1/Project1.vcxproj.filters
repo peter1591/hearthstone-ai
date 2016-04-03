@@ -374,12 +374,6 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\impl\buff-minion.h">
       <Filter>Header Files\game-engine\enchantments\impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment.h">
-      <Filter>Header Files\game-engine\enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment-impl.h">
-      <Filter>Header Files\game-engine\enchantments</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\managed-list\list.h">
       <Filter>Header Files\game-engine\managed-list</Filter>
     </ClInclude>
@@ -388,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item-impl.h">
       <Filter>Header Files\game-engine\managed-list</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-item-type.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
