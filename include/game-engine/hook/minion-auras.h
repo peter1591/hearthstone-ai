@@ -10,12 +10,38 @@ namespace GameEngine
 
 	class MinionAuras
 	{
+		friend std::hash<MinionAuras>;
+
 	public:
 		MinionAuras(Minion & minion) : minion(minion) {}
 		~MinionAuras()
 		{
 			this->Clear();
 		}
+
+		bool operator==(MinionAuras const& rhs) const
+		{
+			if (this->auras.size() != rhs.auras.size()) return false;
+
+			auto it_lhs = this->auras.begin();
+			auto it_rhs = rhs.auras.begin();
+
+			while (true)
+			{
+				if (it_lhs == this->auras.end()) break;
+				if (it_rhs == rhs.auras.end()) break;
+
+				if (**it_lhs != **it_rhs) return false;
+
+				++it_lhs;
+				++it_rhs;
+			}
+			// both iterators should reach end here, since the size is equal
+
+			return true;
+		}
+
+		bool operator!=(MinionAuras const& rhs) const { return !(*this == rhs); }
 
 		template <typename Aura, typename... Params>
 		void Add(Params&&... params)
@@ -37,3 +63,19 @@ namespace GameEngine
 		std::list<MinionAura *> auras;
 	};
 } // namespace GameEngine
+
+namespace std {
+	template <> struct hash<GameEngine::MinionAuras> {
+		typedef GameEngine::MinionAuras argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			for (auto const& aura : s.auras) {
+				GameEngine::hash_combine(result, *aura);
+			}
+
+			return result;
+		}
+	};
+}
