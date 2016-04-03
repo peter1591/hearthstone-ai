@@ -11,6 +11,22 @@ template <typename Target> class Enchantment;
 class EnchantmentOwner;
 class Minion;
 
+template <typename Target>
+class EnchantmentsItemType
+{
+public:
+	EnchantmentsItemType(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentOwner * owner) :
+		enchantment(std::move(enchantment)), owner(owner)
+	{
+	}
+
+	bool operator==(EnchantmentsItemType const& rhs) const { return *this->enchantment == *rhs.enchantment; }
+	bool operator!=(EnchantmentsItemType const& rhs) const { return !(*this == rhs); }
+
+	std::unique_ptr<Enchantment<Target>> enchantment;
+	EnchantmentOwner * owner;
+};
+
 // Maintains the lifetime of Enchantment
 template <typename Target>
 class Enchantments
@@ -19,22 +35,7 @@ class Enchantments
 
 private:
 	typedef Enchantment<Target> EnchantmentType;
-
-	class ItemType
-	{
-	public:
-		ItemType(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner * owner) :
-			enchantment(std::move(enchantment)), owner(owner)
-		{
-		}
-
-		bool operator==(ItemType const& rhs) const { return *this->enchantment == *rhs.enchantment; }
-		bool operator!=(ItemType const& rhs) const { return !(*this == rhs); }
-
-		std::unique_ptr<EnchantmentType> enchantment;
-		EnchantmentOwner * owner;
-	};
-
+	typedef EnchantmentsItemType<Target> ItemType;
 	typedef typename std::list<ItemType> container_type;
 
 public:
@@ -67,6 +68,15 @@ private:
 } // namespace GameEngine
 
 namespace std {
+	template <typename Target>
+	struct hash<GameEngine::EnchantmentsItemType<Target>> {
+		typedef GameEngine::EnchantmentsItemType<Target> argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			return std::hash<GameEngine::Enchantment<Target>>()(*s.enchantment);
+		}
+	};
+
 	template <typename Target> struct hash<GameEngine::Enchantments<Target> > {
 		typedef GameEngine::Enchantments<Target> argument_type;
 		typedef std::size_t result_type;

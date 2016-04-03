@@ -98,7 +98,7 @@ inline std::size_t std::hash<GameEngine::Enchantments<Target>>::operator()(const
 
 	for (auto const& enchantment : s.enchantments)
 	{
-		GameEngine::hash_combine(result, *enchantment.enchantment);
+		GameEngine::hash_combine(result, enchantment);
 	}
 
 	return result;
