@@ -23,12 +23,12 @@ namespace GameEngine
 		typename UnderlyingIterator::reference operator*() const { return it.operator*(); }
 		typename UnderlyingIterator::pointer operator->() const { return it.operator->(); }
 
-		bool operator==(ManagedListItem<ItemType> const& rhs)
+		bool operator==(ManagedListItem<ItemType> const& rhs) const
 		{
 			if (&this->container != &rhs.container) return false;
 			return this->it == rhs.it;
 		}
-		bool operator!=(ManagedListItem<ItemType> const& rhs) { return !(*this == rhs); }
+		bool operator!=(ManagedListItem<ItemType> const& rhs) const { return !(*this == rhs); }
 
 		void Remove();
 
