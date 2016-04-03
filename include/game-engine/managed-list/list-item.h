@@ -17,6 +17,12 @@ namespace GameEngine
 	public:
 		ManagedListItem(Container & container, UnderlyingIterator it);
 
+		typename UnderlyingIterator::reference operator*() { return it.operator*(); }
+		typename UnderlyingIterator::pointer operator->() { return it.operator->(); }
+
+		bool operator==(ManagedListItem<ItemType> const& rhs) { return this->it == rhs.it; }
+		bool operator!=(ManagedListItem<ItemType> const& rhs) { return this->it != rhs.it; }
+
 		void Remove();
 
 	private:
