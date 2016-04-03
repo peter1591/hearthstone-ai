@@ -5,7 +5,6 @@
 inline GameEngine::Minion::Minion(Minion && rhs)
 	: minions(rhs.minions), minion(std::move(rhs.minion)),
 	enchantments(*this),
-	hook_listeners(std::move(rhs.hook_listeners)),
 	auras(*this)
 {
 	// If minion has enchantments, it cannot be moved
@@ -24,14 +23,12 @@ inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
 	// If root node board has enchantments/auras, then ask the caller to prepare the root node board again
 	// TODO: how about faceless manipulator?
 	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not copy minion with enchantments");
-	if (!rhs.hook_listeners.Empty()) throw std::runtime_error("You should not copy minion with hook listeners (including auras)");
 	if (!rhs.auras.Empty()) throw std::runtime_error("You should not move minion with auras");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion && minion)
 	: minions(minions), minion(std::move(minion.minion)),
 	enchantments(*this),
-	hook_listeners(std::move(minion.hook_listeners)),
 	auras(*this)
 {
 	// If minion has enchantments, it cannot be moved
@@ -197,19 +194,8 @@ inline void GameEngine::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
 	this->minion.stat.ClearFlag(flag);
 }
 
-inline void GameEngine::Minion::AddHookListener(std::unique_ptr<HookListener> && aura)
-{
-	this->hook_listeners.Add(*this, std::move(aura));
-}
-
-inline void GameEngine::Minion::ClearHookListener()
-{
-	this->hook_listeners.Clear(*this);
-}
-
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 {
-	this->hook_listeners.HookAfterMinionAdded(*this, added_minion);
 	this->auras.HookAfterMinionAdded(*this, added_minion);
 }
 
@@ -217,11 +203,9 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 {
 	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
-		this->hook_listeners.HookAfterOwnerEnraged(*this); // enraged
 		this->auras.HookAfterOwnerEnraged(*this); // enraged
 	}
 	else if (this->GetHP() == this->GetMaxHP()) {
-		this->hook_listeners.HookAfterOwnerUnEnraged(*this); // un-enraged
 		this->auras.HookAfterOwnerUnEnraged(*this); // un-enraged
 	}
 	else {
@@ -231,7 +215,6 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 
 inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion, int damage)
 {
-	this->hook_listeners.HookAfterMinionDamaged(minion, damage);
 	this->auras.HookAfterMinionDamaged(minion, damage);
 }
 

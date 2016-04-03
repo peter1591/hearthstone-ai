@@ -42,7 +42,6 @@ namespace GameEngine {
 		{
 			if (this->GetMinion() != rhs.GetMinion()) return false;
 			if (this->enchantments != rhs.enchantments) return false;
-			if (this->hook_listeners != rhs.hook_listeners) return false;
 			if (this->auras != rhs.auras) return false;
 			return true;
 		}
@@ -84,10 +83,6 @@ namespace GameEngine {
 		void RemoveMinionStatFlag(MinionStat::Flag flag);
 		void ClearMinionStatFlag(MinionStat::Flag flag);
 
-	public: // auras
-		void AddHookListener(std::unique_ptr<HookListener> && aura); // TODO: remove me
-		void ClearHookListener(); // TODO: remove me
-
 	public: // hooks
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
@@ -108,7 +103,6 @@ namespace GameEngine {
 	private:
 		Minions & minions;
 		MinionData minion;
-		HookListeners hook_listeners; // TODO: remove me
 	};
 
 } // GameEngine
@@ -122,7 +116,7 @@ namespace std {
 
 			result = std::hash<decltype(s.minion)>()(s.minion);
 			GameEngine::hash_combine(result, s.enchantments);
-			GameEngine::hash_combine(result, s.hook_listeners);
+			GameEngine::hash_combine(result, s.auras);
 
 			return result;
 		}

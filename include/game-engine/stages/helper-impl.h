@@ -355,7 +355,6 @@ namespace GameEngine
 				// remove all effects (including auras)
 				it->enchantments.Clear();
 				it->auras.Clear();
-				it->ClearHookListener();
 
 				it.GetMinions().EraseAndGoToNext(it);
 			}
