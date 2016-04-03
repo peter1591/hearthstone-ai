@@ -1,8 +1,8 @@
 #pragma once
 
-#include <list>
-#include <map>
 #include <memory>
+
+#include "game-engine/managed-list/list.h"
 
 namespace GameEngine {
 
@@ -36,7 +36,7 @@ class Enchantments
 private:
 	typedef Enchantment<Target> EnchantmentType;
 	typedef EnchantmentsItemType<Target> ItemType;
-	typedef typename std::list<ItemType> container_type;
+	typedef typename ManagedList<ItemType> container_type;
 
 public:
 	Enchantments(Target & target) : target(target) {}
@@ -58,7 +58,8 @@ public: // hooks
 	void TurnEnd();
 
 private:
-	typename container_type::iterator Remove(typename container_type::iterator it);
+	inline void BeforeRemove(ItemType & item);
+
 	container_type enchantments;
 
 private:
