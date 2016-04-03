@@ -7,12 +7,6 @@
 
 namespace GameEngine
 {
-	template<typename Target>
-	inline Enchantments<Target>::Enchantments(Target & target, Enchantments<Target>&& rhs)
-		: target(target), enchantments(std::move(rhs.enchantments))
-	{
-	}
-
 	template <typename Target>
 	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
 	{

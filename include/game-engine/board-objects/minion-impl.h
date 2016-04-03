@@ -4,9 +4,13 @@
 
 inline GameEngine::Minion::Minion(Minion && rhs)
 	: minions(rhs.minions), minion(std::move(rhs.minion)),
-	enchantments(*this, std::move(rhs.enchantments)),
+	enchantments(*this),
 	auras(std::move(rhs.auras))
 {
+	// If minion has enchantments, it cannot be moved
+	// TODO: we can use a unique_ptr to wrap the enchantments class,
+	//       so we can support move
+	if (!rhs.enchantments.Empty()) throw std::runtime_error("You should not move minion with enchantments");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
@@ -22,9 +26,13 @@ inline GameEngine::Minion::Minion(Minions & minions, Minion const & rhs)
 
 inline GameEngine::Minion::Minion(Minions & minions, Minion && minion)
 	: minions(minions), minion(std::move(minion.minion)),
-	enchantments(*this, std::move(minion.enchantments)),
+	enchantments(*this),
 	auras(std::move(minion.auras))
 {
+	// If minion has enchantments, it cannot be moved
+	// TODO: we can use a unique_ptr to wrap the enchantments class,
+	//       so we can support move
+	if (!minion.enchantments.Empty()) throw std::runtime_error("You should not move minion with enchantments");
 }
 
 inline GameEngine::Minion::Minion(Minions & minions, MinionData const & minion)
