@@ -27,7 +27,6 @@ namespace GameEngine {
 
 		void BeforeRemoved(Minion & owner)
 		{
-			// Note: there should be no way to remove the enrage mechanism without removing the enrage enhancement
 			this->enchantments_manager.RemoveOwnedEnchantments();
 		}
 

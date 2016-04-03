@@ -35,6 +35,12 @@ namespace GameEngine {
 	inline void Minions::EraseAndGoToNext(MinionIterator & it)
 	{
 		if (it.it->minion.pending_removal) this->pending_removal_count--;
+
+#ifdef DEBUG
+		// check minion can be destructed
+		if (!it->auras.Empty()) throw std::runtime_error("auras should be cleared first");
+#endif
+
 		it.it = this->minions.erase(it.it);
 #ifdef DEBUG
 		this->change_id++; // TODO: test only
