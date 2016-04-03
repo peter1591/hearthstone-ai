@@ -14,7 +14,9 @@ namespace GameEngine
 	template <>
 	inline void EnchantmentOwner<Minion>::RemoveOwnedEnchantments()
 	{
-		while (!this->enchantments.empty()) this->enchantments.begin()->Remove();
+		while (!this->enchantments.empty()) {
+			this->enchantments.begin()->Remove();
+		}
 	}
 
 	template <typename EnchantmentTarget>
