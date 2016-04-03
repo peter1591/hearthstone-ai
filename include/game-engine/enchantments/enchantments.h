@@ -19,7 +19,19 @@ class Enchantments
 
 private:
 	typedef Enchantment<Target> EnchantmentType;
-	typedef std::pair<std::unique_ptr<EnchantmentType>, EnchantmentOwner*> ItemType;
+
+	class ItemType
+	{
+	public:
+		ItemType(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner * owner) :
+			enchantment(std::move(enchantment)), owner(owner)
+		{
+		}
+
+		std::unique_ptr<EnchantmentType> enchantment;
+		EnchantmentOwner * owner;
+	};
+
 	typedef typename std::list<ItemType> container_type;
 
 public:
