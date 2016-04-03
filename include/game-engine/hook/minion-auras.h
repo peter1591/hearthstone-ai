@@ -48,7 +48,7 @@ namespace GameEngine
 		{
 			Aura * aura = new Aura(this->minion, params...);
 			this->auras.push_back(aura);
-			aura->AfterAdded(owner);
+			aura->AfterAdded(this->minion);
 		}
 
 		bool Empty() const { return this->auras.empty(); }

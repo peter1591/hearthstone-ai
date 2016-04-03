@@ -17,6 +17,8 @@ namespace GameEngine
 	public:
 		MinionAura(Minion & owner) : owner(owner) {}
 
+		Minion & GetOwner() const { return this->owner; }
+
 	private:
 		Minion & owner;
 	};
