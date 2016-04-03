@@ -13,20 +13,18 @@ namespace GameEngine {
 
 			// Grim Patron
 
-			class Aura : public GameEngine::HookListener
+			class Aura : public GameEngine::MinionAura
 			{
 			public:
-				Aura() : owner(nullptr) {}
-
-				void AfterAdded(GameEngine::Minion & owner) { this->owner = &owner; }
+				Aura(GameEngine::Minion & minion) : GameEngine::MinionAura(minion) {}
 
 				void HookAfterMinionDamaged(GameEngine::Minion & minion, int damage) 
 				{
-					if (&minion != this->owner) return;
+					if (&minion != &this->GetOwner()) return;
 
 					if (minion.GetMinion().stat.GetHP() <= 0) return; // not survives the damage
 
-					auto it_owner = minion.GetMinions().GetIteratorForSpecificMinion(*this->owner);
+					auto it_owner = minion.GetMinions().GetIteratorForSpecificMinion(this->GetOwner()); // TODO: add interface 'GetIterator() on minion
 					if (it_owner.IsEnd()) throw std::runtime_error("owner vanished");
 					Card card = CardDatabase::GetInstance().GetCard(Card_BRM_019::card_id);
 					it_owner.GoToNext(); // summon the new patron to the right
@@ -36,14 +34,11 @@ namespace GameEngine {
 			private: // for comparison
 				bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base); }
 				std::size_t GetHash() const { return typeid(*this).hash_code(); }
-
-			private:
-				GameEngine::Minion * owner;
 			};
 
 			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
-				summoned_minion->AddHookListener(std::make_unique<Aura>());
+				summoned_minion->auras.Add<Aura>();
 			}
 		};
 

@@ -17,9 +17,14 @@ namespace GameEngine {
 			// TODO: add an convenient class for this kind of aura
 			class Aura : public GameEngine::AuraToAllMinions
 			{
+			public:
+				Aura(GameEngine::Minion & owner) : GameEngine::AuraToAllMinions(owner) {}
+
 			private: // hooks
 				void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
 				{
+					GameEngine::AuraToAllMinions::HookAfterMinionAdded(aura_owner, added_minion);
+
 					if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, added_minion)) {
 						this->AddAuraEnchantmentToMinion(added_minion);
 					}
@@ -54,7 +59,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
-				summoned_minion->AddHookListener(std::make_unique<Aura>());
+				summoned_minion->auras.Add<Aura>();
 			}
 		};
 

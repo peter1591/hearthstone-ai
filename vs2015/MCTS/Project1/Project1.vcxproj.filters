@@ -185,9 +185,6 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-enrage.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\aura-to-all-minions.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
@@ -393,6 +390,15 @@
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-to-all-minions.h">
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
   </ItemGroup>

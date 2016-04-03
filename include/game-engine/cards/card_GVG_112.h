@@ -16,20 +16,17 @@ namespace GameEngine {
 
 			class Aura : public GameEngine::AuraToAllMinions
 			{
+			public:
+				Aura(Minion & owner) : AuraToAllMinions(owner) {}
+
 			private: // hooks
 				void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
-				{
-					this->AddAuraEnchantmentToMinion(added_minion);
-				}
-
-			private:
-				void AddAuraEnchantmentToMinion(Minion & target_minion)
 				{
 					constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
 
 					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, 0, buff_stat, false>>();
 
-					target_minion.enchantments.Add(std::move(enchantment), &this->enchantments_manager);
+					added_minion.enchantments.Add(std::move(enchantment), &this->enchantments_manager);
 				}
 
 			private: // for comparison
@@ -39,7 +36,7 @@ namespace GameEngine {
 
 			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
 			{
-				summoned_minion->AddHookListener(std::make_unique<Aura>());
+				summoned_minion->auras.Add<Aura>();
 			}
 		};
 
