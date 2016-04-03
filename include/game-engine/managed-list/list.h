@@ -12,6 +12,12 @@ namespace GameEngine
 		using ManagedItem = ManagedListItem<ItemType>;
 		using UnderlyingContainer = typename ManagedItem::UnderlyingContainer;
 
+		ManagedList() {}
+		ManagedList(ManagedList<ItemType> && rhs)
+		{
+			this->items.splice(this->items.begin(), std::move(rhs)); // maintain the iterator validity
+		}
+
 		ManagedItem PushFront(ItemType && item) { return ManagedItem(*this, this->items.push_front(item)); }
 		ManagedItem PushBack(ItemType && item) { return ManagedItem(*this, this->items.push_back(item)); }
 
