@@ -62,11 +62,16 @@ namespace GameEngine
 	inline void Enchantments<Target>::TurnEnd()
 	{
 		this->enchantments.RemoveIf([this](auto item) {
-			if (item->enchantment->TurnEnd(this->target)) return false;
-			
-			// enchant vanished if return value is false
-			this->BeforeRemove(item);
-			return true;
+			bool expired;
+			item->enchantment->TurnEnd(this->target, expired);
+
+			if (expired) {
+				this->BeforeRemove(item);
+				return true; // enchant expired --> remove it
+			}
+			else {
+				return false;
+			}
 		});
 	}
 

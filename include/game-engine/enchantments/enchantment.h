@@ -25,8 +25,7 @@ public: // hooks
 	virtual void BeforeRemoved(Target & target) {}
 
 	// return false if enchant vanished
-	// TODO: modify this; use return value in this way might be bad...
-	virtual bool TurnEnd(Target & target) { return true; }
+	virtual void TurnEnd(Target & target, bool & expired) { expired = false; }
 
 protected:
 	virtual bool EqualsTo(Enchantment<Target> const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)

@@ -16,7 +16,7 @@ namespace GameEngine
 	public:
 		void AfterAdded(Minion & minion);
 		void BeforeRemoved(Minion & minion);
-		bool TurnEnd(Minion & minion);
+		void TurnEnd(Minion & minion, bool & expired);
 
 	private:
 #ifdef DEBUG
