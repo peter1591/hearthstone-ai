@@ -17,23 +17,7 @@ namespace GameEngine
 	template <typename Target>
 	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
 	{
-		if (this->enchantments.size() != rhs.enchantments.size()) return false;
-
-		auto it_lhs = this->enchantments.begin();
-		auto it_rhs = rhs.enchantments.begin();
-		while (true)
-		{
-			if (it_lhs == this->enchantments.end()) break;
-			if (it_rhs == rhs.enchantments.end()) break;
-
-			if (*it_lhs->enchantment.get() != *it_rhs->enchantment.get()) return false;
-
-			it_lhs++;
-			it_rhs++;
-		}
-		// the size of both lists are equal, so here it_lhs and it_rhs should both reaches end
-
-		return true;
+		return this->enchantments == rhs.enchantments;
 	}
 
 	template <typename Target>

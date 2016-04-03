@@ -28,6 +28,9 @@ private:
 		{
 		}
 
+		bool operator==(ItemType const& rhs) const { return *this->enchantment == *rhs.enchantment; }
+		bool operator!=(ItemType const& rhs) const { return !(*this == rhs); }
+
 		std::unique_ptr<EnchantmentType> enchantment;
 		EnchantmentOwner * owner;
 	};
