@@ -20,8 +20,8 @@ namespace GameEngine
 		ManagedListItem(ManagedListItem<ItemType> && rhs) : container(rhs.container), it(std::move(rhs.it)) {}
 
 	public:
-		typename UnderlyingIterator::reference operator*() { return it.operator*(); }
-		typename UnderlyingIterator::pointer operator->() { return it.operator->(); }
+		typename UnderlyingIterator::reference operator*() const { return it.operator*(); }
+		typename UnderlyingIterator::pointer operator->() const { return it.operator->(); }
 
 		bool operator==(ManagedListItem<ItemType> const& rhs) { return this->it == rhs.it; }
 		bool operator!=(ManagedListItem<ItemType> const& rhs) { return this->it != rhs.it; }

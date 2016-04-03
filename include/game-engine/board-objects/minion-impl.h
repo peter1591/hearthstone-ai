@@ -201,11 +201,6 @@ inline void GameEngine::Minion::AddEnchantment(
 	this->enchantments.Add(std::move(enchantment), owner);
 }
 
-inline void GameEngine::Minion::RemoveEnchantment(Enchantment<Minion> * enchantment)
-{
-	this->enchantments.Remove(enchantment);
-}
-
 inline void GameEngine::Minion::ClearEnchantments()
 {
 	this->enchantments.Clear();

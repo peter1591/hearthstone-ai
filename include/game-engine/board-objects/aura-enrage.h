@@ -28,7 +28,7 @@ namespace GameEngine {
 		void BeforeRemoved(Minion & owner)
 		{
 			// Note: there should be no way to remove the enrage mechanism without removing the enrage enhancement
-			this->enchantments_manager.RemoveOwnedEnchantments(owner);
+			this->enchantments_manager.RemoveOwnedEnchantments();
 		}
 
 		void HookAfterOwnerEnraged(Minion & aura_owner) {
@@ -36,7 +36,7 @@ namespace GameEngine {
 		}
 
 		void HookAfterOwnerUnEnraged(Minion & aura_owner) {
-			this->enchantments_manager.RemoveOwnedEnchantments(aura_owner);
+			this->enchantments_manager.RemoveOwnedEnchantments();
 		}
 
 		virtual void AddEnrageEnchantment(Minion & aura_owner) = 0;

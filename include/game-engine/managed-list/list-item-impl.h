@@ -13,6 +13,6 @@ namespace GameEngine
 	template<typename ItemType>
 	inline void ManagedListItem<ItemType>::Remove()
 	{
-		this->container->Erase(this->it);
+		this->container.Erase(this->it);
 	}
 } // namespace GameEngine

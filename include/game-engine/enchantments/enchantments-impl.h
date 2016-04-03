@@ -3,6 +3,7 @@
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/board-objects/minion.h"
 #include "game-engine/board-objects/minions.h"
+#include "game-engine/enchantments/managed-enchantment.h"
 
 namespace GameEngine
 {
@@ -23,24 +24,20 @@ namespace GameEngine
 	{
 		auto ref_ptr = enchantment.get();
 
-		this->enchantments.PushBack(ItemType(std::move(enchantment), owner));
+		auto managed_item = this->enchantments.PushBack(ItemType(std::move(enchantment), owner));
+		
+		if (owner) owner->EnchantmentAdded(ManagedEnchantment<Target>(*this, managed_item));
 
-		if (owner) owner->EnchantmentAdded(ref_ptr);
 		ref_ptr->AfterAdded(target);
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Remove(EnchantmentType * enchantment)
+	inline void Enchantments<Target>::Remove(ManagedEnchantment<Target> & item)
 	{
-		this->enchantments.RemoveIf([this, enchantment](auto & item) {
-			if (item.enchantment.get() == enchantment) {
-				this->BeforeRemove(item);
-				return true; // enchant vanished if return value is true
-			}
-			else {
-				return false;
-			}
-		});
+		auto & managed_item = item.Get();
+
+		this->BeforeRemove(*managed_item);
+		managed_item.Remove();
 	}
 
 	template <typename Target>
@@ -76,7 +73,7 @@ namespace GameEngine
 	inline void Enchantments<Target>::BeforeRemove(typename Enchantments<Target>::ItemType & item)
 	{
 		item.enchantment->BeforeRemoved(this->target);
-		if (item.owner) item.owner->EnchantmentRemoved(item.enchantment.get());
+		if (item.owner) item.owner->EnchantmentRemoved(item);
 	}
 } // namespace GameEngine
 

@@ -386,5 +386,8 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-item-type.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

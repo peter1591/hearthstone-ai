@@ -12,33 +12,28 @@ namespace GameEngine
 	}
 
 	template <>
-	inline void EnchantmentOwner<Minion>::RemoveOwnedEnchantments(Minion & owner)
+	inline void EnchantmentOwner<Minion>::RemoveOwnedEnchantments()
 	{
-		// remove enchantment from minions
-		while (!this->enchantments.empty()) {
-			Enchantment<Minion> * removing_enchant = this->enchantments.front();
-
-			for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-				it->RemoveEnchantment(removing_enchant);
-			}
-			for (auto it = owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-				it->RemoveEnchantment(removing_enchant);
-			}
-		}
+		for (auto & item : this->enchantments) { item.Remove(); }
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentAdded(Enchantment<EnchantmentTarget> * enchantment)
+	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment)
 	{
-		this->enchantments.push_back(enchantment);
+		this->enchantments.push_back(managed_enchantment);
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(Enchantment<EnchantmentTarget> * enchantment)
+	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(
+		EnchantmentsItemType<EnchantmentTarget> const& managed_enchantment)
 	{
-		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ) {
-			if (*it == enchantment) it = this->enchantments.erase(it);
-			else it++;
+		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); )
+		{
+			typename std::list<ManagedEnchantment<EnchantmentTarget>>::const_iterator it_const = it;
+			if (*it_const->Get() != managed_enchantment) continue;
+
+			this->enchantments.erase(it);
+			break;
 		}
 	}
 } // namespace GameEngine

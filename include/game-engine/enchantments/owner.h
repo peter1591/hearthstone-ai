@@ -2,6 +2,7 @@
 
 #include <list>
 #include "enchantment.h"
+#include "managed-enchantment.h"
 
 namespace GameEngine
 {
@@ -11,13 +12,13 @@ namespace GameEngine
 	public:
 		bool IsEmpty() const;
 
-		void RemoveOwnedEnchantments(EnchantmentTarget & owner);
+		void RemoveOwnedEnchantments();
 
 		// hooks
-		void EnchantmentAdded(Enchantment<EnchantmentTarget> * enchantment);
-		void EnchantmentRemoved(Enchantment<EnchantmentTarget> * enchantment);
+		void EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment);
+		void EnchantmentRemoved(EnchantmentsItemType<EnchantmentTarget> const& managed_enchantment);
 
 	private:
-		std::list<Enchantment<EnchantmentTarget> *> enchantments;
+		std::list<ManagedEnchantment<EnchantmentTarget>> enchantments;
 	};
 } // namespace GameEngine

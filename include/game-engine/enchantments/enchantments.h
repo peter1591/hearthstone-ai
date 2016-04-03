@@ -9,6 +9,7 @@ namespace GameEngine {
 
 class MinionData;
 template <typename Target> class Enchantment;
+template <typename Target> class ManagedEnchantment;
 template <typename EnchantmentTarget> class EnchantmentOwner;
 class Minion;
 
@@ -18,7 +19,7 @@ class Enchantments
 {
 	friend std::hash<Enchantments>;
 
-private:
+public:
 	typedef Enchantment<Target> EnchantmentType;
 	typedef EnchantmentsItemType<Target> ItemType;
 	typedef typename ManagedList<ItemType> container_type;
@@ -35,7 +36,7 @@ public:
 	bool operator!=(Enchantments const& rhs) const;
 
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner);
-	void Remove(EnchantmentType * enchantment);
+	void Remove(ManagedEnchantment<Target> & item);
 	void Clear();
 	bool Empty() const;
 

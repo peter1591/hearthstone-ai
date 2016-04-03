@@ -86,7 +86,6 @@ namespace GameEngine {
 
 	public: // enchantments
 		void AddEnchantment(std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner<Minion> * owner);
-		void RemoveEnchantment(Enchantment<Minion> * enchantment);
 		void ClearEnchantments();
 
 	public: // hooks

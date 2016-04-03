@@ -26,7 +26,7 @@ namespace GameEngine {
 
 		void BeforeRemoved(Minion & owner)
 		{
-			this->enchantments_manager.RemoveOwnedEnchantments(owner);
+			this->enchantments_manager.RemoveOwnedEnchantments();
 		}
 
 		virtual void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion) = 0;
