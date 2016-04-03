@@ -75,6 +75,13 @@ inline void StartBoard::InitializeDebugBoard1_OpponentHand(GameEngine::Hand &han
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // arcane explosion
 }
 
+inline void StartBoard::InitializeDebugBoard3_Hand(GameEngine::Hand &hand)
+{
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_222));
+}
+
 inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 {
 	board.player.stat.crystal.Set(1, 1, 0, 0);
@@ -175,10 +182,45 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	board.SetStateToPlayerChooseBoardMove();
 }
 
+inline void StartBoard::InitializeDebugBoard3(GameEngine::Board &board)
+{
+	board.player.stat.crystal.Set(10, 10, 0, 0);
+	board.player.stat.fatigue_damage = 0;
+
+	board.opponent.stat.crystal.Set(10, 10, 0, 0);
+	board.opponent.stat.fatigue_damage = 0;
+
+	GameEngine::HeroData player_hero;
+	player_hero.hp = 20;
+	player_hero.armor = 0;
+	player_hero.weapon.Clear();
+
+	GameEngine::HeroData opponent_hero;
+	opponent_hero.hp = 20;
+	opponent_hero.armor = 0;
+	opponent_hero.weapon.Clear();
+
+	board.player.hero.SetHero(player_hero);
+	board.opponent.hero.SetHero(opponent_hero);
+
+	//InitializeDebugBoard3_Hand(board.player.hand);
+	InitializeDebugBoard3_Hand(board.opponent.hand);
+
+	{
+		auto minion = GameEngine::MinionData(9999999, 10, 7, 7, 0);
+		board.player.minions.InsertBefore(
+			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
+			std::move(minion))->TurnStart(true);
+	}
+
+	board.SetStateToPlayerChooseBoardMove();
+}
+
 inline StartBoard::StartBoard()
 {
 	//InitializeDebugBoard1(this->board_debug1);
 	InitializeDebugBoard2(this->board_debug1);
+	//InitializeDebugBoard3(this->board_debug1);
 }
 
 inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const
