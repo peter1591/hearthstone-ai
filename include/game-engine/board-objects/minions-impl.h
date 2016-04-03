@@ -48,4 +48,11 @@ namespace GameEngine {
 		it.container_change_id = this->change_id;
 #endif
 	}
+
+	inline void Minions::Destroy()
+	{
+		for (auto & minion : this->minions) {
+			minion.Destroy();
+		}
+	}
 } // namespace GameEngine

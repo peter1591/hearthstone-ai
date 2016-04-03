@@ -33,6 +33,8 @@ public:
 	bool operator==(Minions const& rhs) const { return this->minions == rhs.minions; }
 	bool operator!=(Minions const& rhs) const { return !(*this == rhs); }
 
+	void Destroy();
+
 	container_type::iterator begin() { return this->minions.begin(); }
 	container_type::const_iterator begin() const { return this->minions.begin(); }
 	container_type::iterator end() { return this->minions.end(); }

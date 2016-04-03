@@ -63,4 +63,9 @@ namespace GameEngine
 		return !(*this == rhs);
 	}
 
+	inline void Player::Destroy()
+	{
+		this->minions.Destroy();
+	}
+
 } // namespace GameEngine

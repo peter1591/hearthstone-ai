@@ -51,6 +51,12 @@ inline GameEngine::Minion::Minion(Minions & minions, MinionData && minion)
 {
 }
 
+inline void GameEngine::Minion::Destroy()
+{
+	this->enchantments.Destroy();
+	this->auras.Destroy();
+}
+
 inline GameEngine::Board & GameEngine::Minion::GetBoard() const
 {
 	return this->minions.GetBoard();

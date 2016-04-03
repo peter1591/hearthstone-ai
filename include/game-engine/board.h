@@ -22,6 +22,7 @@ namespace GameEngine {
 	{
 	public:
 		Board();
+		~Board();
 
 	private: // deep copy; marked as private, so caller need to call Clone()
 		Board(const Board &rhs);
@@ -75,7 +76,6 @@ namespace GameEngine {
 		Player opponent;
 
 		HookManager hook_manager;
-
 		ObjectManager object_manager;
 
 	public:

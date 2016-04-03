@@ -27,6 +27,7 @@ public:
 
 public:
 	Enchantments(Target & target) : target(target) {}
+	~Enchantments();
 
 	Enchantments(Enchantments<Target> const& rhs) = delete;
 	Enchantments<Target> operator=(Enchantments<Target> const& rhs) = delete;
@@ -35,6 +36,9 @@ public:
 
 	bool operator==(Enchantments const& rhs) const;
 	bool operator!=(Enchantments const& rhs) const;
+
+	// destory all allocated resource without triggering any hooks (since the whole board is going to be destroyed)
+	void Destroy();
 
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner);
 	void Remove(ManagedEnchantment<Target> & item); // interface for enchantment owner

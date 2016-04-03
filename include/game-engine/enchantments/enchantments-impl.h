@@ -7,6 +7,16 @@
 
 namespace GameEngine
 {
+	template<typename Target>
+	inline Enchantments<Target>::~Enchantments()
+	{
+#ifdef DEBUG
+		if (!this->enchantments.Empty()) {
+			throw std::runtime_error("enchantments should be cleared first");
+		}
+#endif
+	}
+
 	template <typename Target>
 	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
 	{
@@ -17,6 +27,14 @@ namespace GameEngine
 	inline bool Enchantments<Target>::operator!=(Enchantments const & rhs) const
 	{
 		return !(*this == rhs);
+	}
+
+	template<typename Target>
+	inline void Enchantments<Target>::Destroy()
+	{
+		this->enchantments.RemoveIf([this](auto item) {
+			return true;
+		});
 	}
 
 	template <typename Target>

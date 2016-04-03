@@ -133,6 +133,12 @@ inline Board::Board() :
 {
 }
 
+inline Board::~Board()
+{
+	this->player.Destroy();
+	this->opponent.Destroy();
+}
+
 inline Board::Board(const Board & rhs) :
 	player(*this, rhs.player),
 	opponent(*this, rhs.opponent),

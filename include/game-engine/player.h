@@ -24,6 +24,8 @@ namespace GameEngine {
 		bool operator==(Player const& rhs) const;
 		bool operator!=(Player const& rhs) const;
 
+		void Destroy();
+
 	public:
 		Board & board;
 		const SlotIndex side;

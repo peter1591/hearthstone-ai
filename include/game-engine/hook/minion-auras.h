@@ -14,11 +14,18 @@ namespace GameEngine
 
 	public:
 		MinionAuras(Minion & minion) : minion(minion) {}
+
+		__declspec(noinline)
 		~MinionAuras()
 		{
-			this->Clear();
+#ifdef DEBUG
+			if (!this->auras.empty()) {
+				throw std::runtime_error("auras should be cleared first");
+			}
+#endif
 		}
 
+		__declspec(noinline)
 		bool operator==(MinionAuras const& rhs) const
 		{
 			if (this->auras.size() != rhs.auras.size()) return false;
@@ -59,6 +66,13 @@ namespace GameEngine
 				aura->BeforeRemoved(this->minion);
 				delete aura;
 			}
+			this->auras.clear();
+		}
+
+		// destroy all allocated resources without triggering any hooks (since the whole board is going to be destroyed)
+		void Destroy()
+		{
+			for (auto aura : this->auras) delete aura;
 			this->auras.clear();
 		}
 

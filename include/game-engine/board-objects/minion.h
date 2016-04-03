@@ -48,6 +48,8 @@ namespace GameEngine {
 		}
 		bool operator!=(Minion const& rhs) const { return this->GetMinion() != rhs.GetMinion(); }
 
+		void Destroy();
+
 		Board & GetBoard() const;
 		Minions & GetMinions() const { return this->minions; }
 		MinionData const& GetMinion() const { return this->minion; }
