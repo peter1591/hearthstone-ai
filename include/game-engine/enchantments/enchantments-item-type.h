@@ -23,3 +23,14 @@ namespace GameEngine
 		EnchantmentOwner<Target> * owner;
 	};
 } // namespace GameEngine
+
+namespace std {
+	template <typename Target>
+	struct hash<GameEngine::EnchantmentsItemType<Target>> {
+		typedef GameEngine::EnchantmentsItemType<Target> argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			return std::hash<GameEngine::Enchantment<Target>>()(*s.enchantment);
+		}
+	};
+}
