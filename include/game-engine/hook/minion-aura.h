@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "game-engine/hook/listener.h"
+#include "game-engine/enchantments/owner.h"
 
 namespace GameEngine
 {
@@ -18,6 +19,16 @@ namespace GameEngine
 		MinionAura(Minion & owner) : owner(owner) {}
 
 		Minion & GetOwner() const { return this->owner; }
+
+	public:
+		void BeforeRemoved(Minion & owner)
+		{
+			HookListener::BeforeRemoved(owner);
+			this->enchantments_manager.RemoveOwnedEnchantments();
+		}
+
+	protected:
+		EnchantmentOwner<Minion> enchantments_manager;
 
 	private:
 		Minion & owner;
