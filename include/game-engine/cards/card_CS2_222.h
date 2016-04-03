@@ -48,20 +48,8 @@ namespace GameEngine {
 				}
 
 			private: // for comparison
-				bool EqualsTo(GameEngine::Aura const& rhs_base) const
-				{
-					auto rhs = dynamic_cast<decltype(this)>(&rhs_base);
-					if (!rhs) return false;
-
-					return true;
-				}
-
-				std::size_t GetHash() const
-				{
-					std::size_t result = std::hash<int>()(Card_CS2_222::card_id); // provided that this minion has only one kidn of aura
-
-					return result;
-				}
+				bool EqualsTo(GameEngine::Aura const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base); }
+				std::size_t GetHash() const { return typeid(*this).hash_code(); }
 			};
 
 			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
