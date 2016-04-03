@@ -18,6 +18,6 @@ namespace GameEngine
 		void EnchantmentRemoved(Enchantment<EnchantmentTarget> * enchantment);
 
 	private:
-		std::list<Enchantment<EnchantmentTarget> *> minion_enchantments;
+		std::list<Enchantment<EnchantmentTarget> *> enchantments;
 	};
 } // namespace GameEngine
