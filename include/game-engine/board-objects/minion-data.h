@@ -82,6 +82,7 @@ namespace GameEngine {
 	}
 
 	inline MinionData::MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage)
+		: pending_removal(false)
 	{
 		this->card_id = card_id;
 
