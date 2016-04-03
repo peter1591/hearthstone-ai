@@ -85,7 +85,7 @@ namespace GameEngine {
 		void ClearAuras();
 
 	public: // enchantments
-		void AddEnchantment(std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner * owner);
+		void AddEnchantment(std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner<Minion> * owner);
 		void RemoveEnchantment(Enchantment<Minion> * enchantment);
 		void ClearEnchantments();
 

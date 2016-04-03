@@ -32,7 +32,7 @@ namespace GameEngine {
 		virtual void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion) = 0;
 
 	protected:
-		GameEngine::EnchantmentOwner enchantments_manager;
+		EnchantmentOwner<Minion> enchantments_manager;
 	};
 
 } // namespace GameEngine

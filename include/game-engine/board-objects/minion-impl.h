@@ -188,7 +188,7 @@ inline void GameEngine::Minion::ClearAuras()
 }
 
 inline void GameEngine::Minion::AddEnchantment(
-	std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner * owner)
+	std::unique_ptr<Enchantment<Minion>> && enchantment, EnchantmentOwner<Minion> * owner)
 {
 	this->enchantments.Add(std::move(enchantment), owner);
 }

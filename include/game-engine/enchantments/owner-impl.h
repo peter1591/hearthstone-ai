@@ -5,12 +5,14 @@
 
 namespace GameEngine
 {
-	inline bool EnchantmentOwner::IsEmpty() const
+	template <typename EnchantmentTarget>
+	inline bool EnchantmentOwner<typename EnchantmentTarget>::IsEmpty() const
 	{
 		return this->minion_enchantments.empty();
 	}
 
-	inline void EnchantmentOwner::RemoveOwnedEnchantments(Minion & owner)
+	template <>
+	inline void EnchantmentOwner<Minion>::RemoveOwnedEnchantments(Minion & owner)
 	{
 		// remove enchantment from minions
 		while (!this->minion_enchantments.empty()) {
@@ -25,14 +27,14 @@ namespace GameEngine
 		}
 	}
 
-	inline void EnchantmentOwner::EnchantmentAdded(
-		Enchantment<Minion> * enchantment)
+	template <typename EnchantmentTarget>
+	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentAdded(Enchantment<EnchantmentTarget> * enchantment)
 	{
 		this->minion_enchantments.push_back(enchantment);
 	}
 
-	inline void EnchantmentOwner::EnchantmentRemoved(
-		Enchantment<Minion> * enchantment)
+	template <typename EnchantmentTarget>
+	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(Enchantment<EnchantmentTarget> * enchantment)
 	{
 		for (auto it = this->minion_enchantments.begin(); it != this->minion_enchantments.end(); ) {
 			if (*it == enchantment) it = this->minion_enchantments.erase(it);

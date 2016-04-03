@@ -42,7 +42,7 @@ namespace GameEngine {
 		virtual void AddEnrageEnchantment(Minion & aura_owner) = 0;
 
 	protected:
-		GameEngine::EnchantmentOwner enchantments_manager;
+		GameEngine::EnchantmentOwner<Minion> enchantments_manager;
 	};
 
 } // namespace GameEngine

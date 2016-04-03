@@ -26,7 +26,7 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner * owner)
+	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner)
 	{
 		auto ref_ptr = enchantment.get();
 

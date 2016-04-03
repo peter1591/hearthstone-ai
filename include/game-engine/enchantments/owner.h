@@ -3,19 +3,21 @@
 #include <list>
 #include "enchantment.h"
 
-namespace GameEngine {
+namespace GameEngine
+{
+	template <typename EnchantmentTarget>
 	class EnchantmentOwner
 	{
 	public:
 		bool IsEmpty() const;
 
-		void RemoveOwnedEnchantments(GameEngine::Minion & owner);
+		void RemoveOwnedEnchantments(EnchantmentTarget & owner);
 
 		// hooks
-		void EnchantmentAdded(Enchantment<Minion> * enchantment);
-		void EnchantmentRemoved(Enchantment<Minion> * enchantment);
+		void EnchantmentAdded(Enchantment<EnchantmentTarget> * enchantment);
+		void EnchantmentRemoved(Enchantment<EnchantmentTarget> * enchantment);
 
 	private:
-		std::list<Enchantment<Minion> *> minion_enchantments;
+		std::list<Enchantment<EnchantmentTarget> *> minion_enchantments;
 	};
 } // namespace GameEngine
