@@ -45,12 +45,11 @@ public: // hooks
 	void TurnEnd();
 
 private:
-	inline void BeforeRemove(ManagedItem item);
-
-	ManagedContainer enchantments;
+	void BeforeRemove(ManagedItem item);
 
 private:
 	Target & target;
+	ManagedContainer enchantments;
 };
 
 } // namespace GameEngine
