@@ -30,8 +30,7 @@ namespace GameEngine
 	{
 		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
 		{
-			typename std::list<ManagedEnchantment<EnchantmentTarget>>::const_iterator it_const = it;
-			if (it_const->Get() != managed_item) continue;
+			if (!it->EqualsTo(managed_item)) continue;
 
 			this->enchantments.erase(it);
 			return;
