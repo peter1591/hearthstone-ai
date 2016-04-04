@@ -24,18 +24,24 @@ namespace GameEngine
 		void BeforeRemoved(Minion & owner)
 		{
 			HookListener::BeforeRemoved(owner);
-			this->minion_enchantments.RemoveOwnedEnchantments();
+
+			if (this->minion_enchantments) {
+				this->minion_enchantments->RemoveOwnedEnchantments();
+			}
 		}
 
 	public:
 		EnchantmentOwner<Minion> & GetMinionEnchantmentsOwner()
 		{
-			return this->minion_enchantments;
+			if (!this->minion_enchantments) {
+				this->minion_enchantments.reset(new EnchantmentOwner<Minion>());
+			}
+			return *this->minion_enchantments;
 		}
 
 	private:
 		Minion & owner;
-		EnchantmentOwner<Minion> minion_enchantments;
+		std::unique_ptr<EnchantmentOwner<Minion>> minion_enchantments;
 	};
 
 } // namespace GameEngine
