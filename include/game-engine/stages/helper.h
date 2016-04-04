@@ -39,6 +39,7 @@ public:
 	// handle minion/hero attack, calculate damages
 	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
 
+	// TODO: remove poisonous (most of damages are not poisonous)
 	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous);
 	static void DealDamage(GameEngine::BoardObject taker, int damage, bool poisonous);
 	static void DealDamage(GameEngine::Hero & taker, int damage, bool poisonous);
@@ -50,6 +51,7 @@ public:
 	static void Transform(Board & board, SlotIndex target, int new_card_id);
 
 public: // randomly choose
+	// TODO: use BoardTargets interface
 	static Minion & RandomChooseMinion(Minions & minions);
 
 private:

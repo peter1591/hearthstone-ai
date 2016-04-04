@@ -20,6 +20,7 @@ class StageOpponentAttack
 
 			StageHelper::HandleAttack(board, data.attacker_idx, data.attacked_idx);
 
+			// TODO: check dead in HandleAttack()
 			if (StageHelper::CheckHeroMinionDead(board)) return; // game ends;
 
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
