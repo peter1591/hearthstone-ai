@@ -31,7 +31,7 @@ namespace GameEngine {
 	}
 
 	template<int attack_boost, int hp_boost, int spell_damage_boost, int buff_flags, bool one_turn>
-	inline void Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::TurnEnd(Minion & minion, bool & expired)
+	inline void Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::TurnEnd(Minion &, bool & expired)
 	{
 		if (one_turn) expired = true; // one-turn effect 
 		else expired = false;

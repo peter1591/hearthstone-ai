@@ -21,11 +21,11 @@ public:
 	bool operator!=(Enchantment<Target> const& rhs) const;
 
 public: // hooks
-	virtual void AfterAdded(Target & target) {}
-	virtual void BeforeRemoved(Target & target) {}
+	virtual void AfterAdded(Target & target) { (void)target; }
+	virtual void BeforeRemoved(Target & target) { (void)target; }
 
 	// return false if enchant vanished
-	virtual void TurnEnd(Target & target, bool & expired) { expired = false; }
+	virtual void TurnEnd(Target & target, bool & expired) { (void)target; expired = false; }
 
 protected:
 	virtual bool EqualsTo(Enchantment<Target> const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)

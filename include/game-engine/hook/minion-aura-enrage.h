@@ -37,6 +37,8 @@ namespace GameEngine {
 
 		void HookAfterOwnerUnEnraged(Minion & aura_owner)
 		{
+			(void)aura_owner;
+
 			MinionAura::HookAfterOwnerUnEnraged();
 
 			if (!enraged) return;

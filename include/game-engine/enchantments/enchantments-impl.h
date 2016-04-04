@@ -34,7 +34,7 @@ namespace GameEngine
 	template<typename Target>
 	inline void Enchantments<Target>::Destroy()
 	{
-		this->enchantments.RemoveIf([this](auto item) {
+		this->enchantments.RemoveIf([this](auto) {
 			return true;
 		});
 	}

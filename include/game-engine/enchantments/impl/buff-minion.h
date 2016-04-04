@@ -97,9 +97,9 @@ namespace GameEngine {
 			};
 
 			template<int buff_flags>
-			class MinionFlagsSetter<buff_flags, -1> {
+			class MinionFlagsSetter<buff_flags, -1> { // boundary condition
 			public:
-				static void SetFlag(Minion & minion, bool val) { return; }
+				static void SetFlag(Minion &, bool) { return; }
 			};
 
 			template <int buff_flags>

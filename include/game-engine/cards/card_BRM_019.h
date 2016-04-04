@@ -20,6 +20,8 @@ namespace GameEngine {
 
 				void HookAfterMinionDamaged(GameEngine::Minion & minion, int damage) 
 				{
+					(void)damage;
+
 					if (&minion != &this->GetOwner()) return;
 
 					if (minion.GetMinion().stat.GetHP() <= 0) return; // not survives the damage
