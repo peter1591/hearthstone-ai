@@ -29,6 +29,10 @@ namespace GameEngine {
 
 		bool operator==(const Weapon &rhs) const
 		{
+			if (this->IsValid() != rhs.IsValid()) return false;
+
+			if (!this->IsValid()) return true;
+
 			if (this->card_id != rhs.card_id) return false;
 			if (this->cost != rhs.cost) return false;
 			if (this->attack != rhs.attack) return false;
@@ -65,6 +69,10 @@ namespace std {
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.IsValid());
+
+			if (!s.IsValid()) return result;
 
 			GameEngine::hash_combine(result, s.card_id);
 			GameEngine::hash_combine(result, s.cost);
