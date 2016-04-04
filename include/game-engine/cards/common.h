@@ -46,32 +46,32 @@ namespace GameEngine {
 class CardCallbackManager
 {
 public:
-	static bool AfterSummoned(int card_id, GameEngine::MinionIterator summoned_minion)
+	static bool AfterSummoned(int card_id, MinionIterator summoned_minion)
 	{
 		return CardCallbackManager::HandleCallback<Callback_AfterSummoned>(card_id, summoned_minion);
 	}
 
-	static bool GetRequiredTargets(int card_id, GameEngine::Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
+	static bool GetRequiredTargets(int card_id, Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
 	{
 		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, player, targets, meet_requirements);
 	}
 
-	static bool BattleCry(int card_id, GameEngine::Board &board, SlotIndex playing_side, GameEngine::Move::PlayMinionData const& play_minion_data)
+	static bool BattleCry(int card_id, Board &board, SlotIndex playing_side, Move::PlayMinionData const& play_minion_data)
 	{
 		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, playing_side, play_minion_data);
 	}
 
-	static bool Weapon_AfterEquipped(int card_id, GameEngine::Hero & equipped_hero)
+	static bool Weapon_AfterEquipped(int card_id, Hero & equipped_hero)
 	{
 		return CardCallbackManager::HandleCallback<Callback_Weapon_AfterEquipped>(card_id, equipped_hero);
 	}
 
-	static bool Weapon_BattleCry(int card_id, GameEngine::Player &equipping_player, SlotIndex target)
+	static bool Weapon_BattleCry(int card_id, Player &equipping_player, SlotIndex target)
 	{
 		return CardCallbackManager::HandleCallback<Callback_Weapon_BattleCry>(card_id, equipping_player, target);
 	}
 
-	static bool Spell_Go(int card_id, GameEngine::Player &player, SlotIndex target)
+	static bool Spell_Go(int card_id, Player &player, SlotIndex target)
 	{
 		return CardCallbackManager::HandleCallback<Callback_Spell_Go>(card_id, player, target);
 	}
@@ -102,6 +102,7 @@ inline bool CardCallbackManager::HandleCallback(int card_id, Params&&... params)
 	case CardClassName::card_id: \
 		return CardCallbackCaller<CardClassName, Callback>::Call(params...);
 
+HANDLE_CARD_CALLBACK(Card_CS2_023)
 HANDLE_CARD_CALLBACK(Card_CS2_025)
 HANDLE_CARD_CALLBACK(Card_CS2_188)
 HANDLE_CARD_CALLBACK(Card_CS2_189)
