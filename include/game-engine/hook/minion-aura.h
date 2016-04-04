@@ -28,10 +28,14 @@ namespace GameEngine
 		}
 
 	public:
-		EnchantmentOwner<Minion> minion_enchantments;
+		EnchantmentOwner<Minion> & GetMinionEnchantmentsOwner()
+		{
+			return this->minion_enchantments;
+		}
 
 	private:
 		Minion & owner;
+		EnchantmentOwner<Minion> minion_enchantments;
 	};
 
 } // namespace GameEngine

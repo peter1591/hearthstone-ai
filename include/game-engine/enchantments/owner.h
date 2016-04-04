@@ -13,6 +13,12 @@ namespace GameEngine
 		using Manager = typename ManagedEnchantment<EnchantmentTarget>::Manager;
 		using ManagedItem =typename Manager::ManagedItem;
 
+		EnchantmentOwner() {}
+		EnchantmentOwner(EnchantmentOwner<EnchantmentTarget> const& rhs) = delete;
+		EnchantmentOwner(EnchantmentOwner<EnchantmentTarget> && rhs) = delete;
+		EnchantmentOwner<EnchantmentTarget> & operator=(EnchantmentOwner<EnchantmentTarget> const& rhs) = delete;
+		EnchantmentOwner<EnchantmentTarget> & operator=(EnchantmentOwner<EnchantmentTarget> && rhs) = delete;
+
 		bool IsEmpty() const;
 
 		void RemoveOwnedEnchantments();

@@ -41,7 +41,7 @@ namespace GameEngine {
 
 			if (!enraged) return;
 
-			this->minion_enchantments.RemoveOwnedEnchantments();
+			this->GetMinionEnchantmentsOwner().RemoveOwnedEnchantments();
 			enraged = false;
 		}
 
