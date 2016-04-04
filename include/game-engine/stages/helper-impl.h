@@ -490,13 +490,10 @@ namespace GameEngine
 	// return true if stage changed
 	inline bool StageHelper::SummonMinion(Card const & card, MinionIterator & it)
 	{
-		MinionData summoning_minion;
-		summoning_minion.Summon(card);
-
 		if (it.GetMinions().IsFull()) return false;
 
 		// add minion
-		auto summoned_minion = it.GetMinions().InsertBefore(it, std::move(summoning_minion));
+		auto summoned_minion = it.GetMinions().InsertBefore(it, MinionData::FromCard(card));
 
 		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
 

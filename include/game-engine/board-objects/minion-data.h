@@ -29,7 +29,15 @@ namespace GameEngine {
 		MinionData();
 		MinionData(int card_id, int attack, int hp, int max_hp, int spell_damage);
 
+		static MinionData FromCard(Card const& card);
+
 		MinionData(MinionData const& rhs)
+		{
+			*this = rhs;
+		}
+
+		// for transformation
+		MinionData & operator=(MinionData const& rhs)
 		{
 			this->card_id = rhs.card_id;
 			this->stat = rhs.stat;
@@ -37,8 +45,8 @@ namespace GameEngine {
 			this->summoned_this_turn = rhs.summoned_this_turn;
 			this->pending_removal = rhs.pending_removal;
 			this->triggers_on_death = rhs.triggers_on_death;
+			return *this;
 		}
-		MinionData & operator=(MinionData const& rhs) = delete;
 
 		MinionData(MinionData && rhs)
 		{
@@ -53,8 +61,6 @@ namespace GameEngine {
 
 		bool operator==(const MinionData &rhs) const;
 		bool operator!=(const MinionData &rhs) const;
-
-		void Summon(const Card &card);
 
 		bool IsValid() const { return this->card_id != 0; }
 
@@ -92,27 +98,30 @@ namespace GameEngine {
 		this->stat.SetSpellDamage(spell_damage);
 	}
 
-	inline void MinionData::Summon(const Card & card)
+	inline MinionData MinionData::FromCard(Card const & card)
 	{
-		this->card_id = card.id;
+		MinionData ret;
+		ret.card_id = card.id;
 
-		this->stat.SetAttack(card.data.minion.attack);
-		this->stat.SetHP(card.data.minion.hp);
-		this->stat.SetMaxHP(card.data.minion.hp);
+		ret.stat.SetAttack(card.data.minion.attack);
+		ret.stat.SetHP(card.data.minion.hp);
+		ret.stat.SetMaxHP(card.data.minion.hp);
 
-		if (card.data.minion.taunt) this->stat.SetTaunt();
-		if (card.data.minion.charge) this->stat.SetCharge();
-		if (card.data.minion.shield) this->stat.SetShield();
-		if (card.data.minion.stealth) this->stat.SetStealth();
-		if (card.data.minion.forgetful) this->stat.SetForgetful();
-		if (card.data.minion.freeze) this->stat.SetFreezeAttacker();
-		if (card.data.minion.windfury) this->stat.SetWindFury();
-		if (card.data.minion.poisonous) this->stat.SetPoisonous();
+		if (card.data.minion.taunt) ret.stat.SetTaunt();
+		if (card.data.minion.charge) ret.stat.SetCharge();
+		if (card.data.minion.shield) ret.stat.SetShield();
+		if (card.data.minion.stealth) ret.stat.SetStealth();
+		if (card.data.minion.forgetful) ret.stat.SetForgetful();
+		if (card.data.minion.freeze) ret.stat.SetFreezeAttacker();
+		if (card.data.minion.windfury) ret.stat.SetWindFury();
+		if (card.data.minion.poisonous) ret.stat.SetPoisonous();
 
-		if (card.data.minion.spell_damage > 0) this->stat.SetSpellDamage(card.data.minion.spell_damage);
+		if (card.data.minion.spell_damage > 0) ret.stat.SetSpellDamage(card.data.minion.spell_damage);
 
-		this->attacked_times = 0;
-		this->summoned_this_turn = true;
+		ret.attacked_times = 0;
+		ret.summoned_this_turn = true;
+
+		return ret;
 	}
 
 	inline bool MinionData::operator==(MinionData const& rhs) const
