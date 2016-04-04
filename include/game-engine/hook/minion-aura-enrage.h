@@ -28,13 +28,13 @@ namespace GameEngine {
 		void HookAfterOwnerEnraged(Minion & aura_owner) {
 			MinionAura::HookAfterOwnerEnraged(aura_owner);
 
-			if (this->enchantments_manager.IsEmpty()) this->AddEnrageEnchantment(aura_owner);
+			if (this->minion_enchantments.IsEmpty()) this->AddEnrageEnchantment(aura_owner);
 		}
 
 		void HookAfterOwnerUnEnraged(Minion & aura_owner) {
 			MinionAura::HookAfterOwnerUnEnraged(aura_owner);
 
-			this->enchantments_manager.RemoveOwnedEnchantments();
+			this->minion_enchantments.RemoveOwnedEnchantments();
 		}
 
 		virtual void AddEnrageEnchantment(Minion & aura_owner) = 0;

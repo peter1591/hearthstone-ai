@@ -25,7 +25,7 @@ namespace GameEngine {
 
 					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, 0, false>>();
 
-					aura_owner.enchantments.Add(std::move(enchantment), &this->enchantments_manager);
+					aura_owner.enchantments.Add(std::move(enchantment), &this->minion_enchantments);
 				}
 
 			private: // for comparison

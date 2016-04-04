@@ -9,8 +9,7 @@ namespace GameEngine
 {
 	class Minion;
 
-	// An aura hold by a minion
-	// An aura is actually a hook listener
+	// An aura (i.e., hook listener) hold by a minion
 	class MinionAura : public HookListener
 	{
 		friend std::hash<MinionAura>;
@@ -25,11 +24,11 @@ namespace GameEngine
 		void BeforeRemoved(Minion & owner)
 		{
 			HookListener::BeforeRemoved(owner);
-			this->enchantments_manager.RemoveOwnedEnchantments();
+			this->minion_enchantments.RemoveOwnedEnchantments();
 		}
 
 	protected:
-		EnchantmentOwner<Minion> enchantments_manager;
+		EnchantmentOwner<Minion> minion_enchantments;
 
 	private:
 		Minion & owner;
