@@ -18,6 +18,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static void GetBoardMoves(Player const& player, NextMoveGetter & next_moves, bool & all_cards_determined);
 	static void GetBoardMoves_PlayMinion(Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter);
 	static void GetBoardMoves_EquipWeapon(Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter);
+	static void GetBoardMoves_PlaySpell(Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter);
 	static void GetBoardMoves_Attack(Player const& player, NextMoveGetter &next_move_getter);
 	static void GetGoodBoardMove(unsigned int rand, Player const & player, Move &good_move);
 
@@ -30,6 +31,8 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool SummonMinion(Card const& card, MinionIterator & it);
 
 	static bool EquipWeapon(Player & player, Card const& card, Move::EquipWeaponData const& data);
+
+	static bool PlaySpell(Player & player, Card const& card, Move::EquipWeaponData const& data);
 
 public:
 	// handle minion/hero attack, calculate damages

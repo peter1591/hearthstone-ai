@@ -31,7 +31,7 @@ public:
 	class ItemPlayHandCard // no put location
 	{
 	public:
-		ItemPlayHandCard(Player const& player, Hand::Locator hand_card, SlotIndexBitmap required_targets);
+		ItemPlayHandCard(Player const& player, Hand::Locator hand_card, Move::Action move_action, SlotIndexBitmap required_targets);
 		ItemPlayHandCard* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemPlayHandCard const& rhs) const;
@@ -39,6 +39,7 @@ public:
 
 	private:
 		Player const& player;
+		Move::Action move_action;
 		Hand::Locator hand_card;
 		SlotIndexBitmap required_targets;
 		bool done;

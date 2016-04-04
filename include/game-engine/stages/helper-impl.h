@@ -55,6 +55,10 @@ namespace GameEngine
 				GetBoardMoves_EquipWeapon(player, hand_idx, playing_card, next_moves);
 				break;
 
+			case Card::TYPE_SPELL:
+				GetBoardMoves_PlaySpell(player, hand_idx, playing_card, next_moves);
+				break;
+
 			default:
 				throw std::runtime_error("unknown hand card type");
 				break;
@@ -107,7 +111,22 @@ namespace GameEngine
 			return;
 		}
 
-		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandCard(player, hand_card, required_targets));
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandCard(player, hand_card, Move::ACTION_PLAY_HAND_WEAPON, required_targets));
+	}
+
+	inline void StageHelper::GetBoardMoves_PlaySpell(Player const& player, Hand::Locator hand_card, Card const& playing_card, NextMoveGetter &next_move_getter)
+	{
+		if (player.stat.crystal.GetCurrent() < playing_card.cost) return;
+
+		SlotIndexBitmap required_targets;
+		bool meet_requirements;
+		if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player, required_targets, meet_requirements) &&
+			meet_requirements == false)
+		{
+			return;
+		}
+
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandCard(player, hand_card, Move::ACTION_PLAY_HAND_SPELL, required_targets));
 	}
 
 	inline void StageHelper::GetBoardMoves_Attack(Player const & player, NextMoveGetter & next_move_getter)
@@ -142,6 +161,7 @@ namespace GameEngine
 		constexpr int weight_end_turn = 1;
 		constexpr int weight_play_minion = 100;
 		constexpr int weight_equip_weapon = 100;
+		constexpr int weight_play_spell = 100;
 		constexpr int weight_attack = 100;
 
 		moves.Clear();
@@ -194,6 +214,24 @@ namespace GameEngine
 				else move.data.play_hand_card_data.data.target = required_targets.GetOneTarget();
 
 				moves.AddMove(move, weight_play_minion);
+				break;
+
+			case Card::TYPE_SPELL:
+				if (player.stat.crystal.GetCurrent() < playing_card.cost) continue;
+
+				if (Cards::CardCallbackManager::GetRequiredTargets(playing_card.id, player, required_targets, meet_requirements)
+					&& meet_requirements == false)
+				{
+					break;
+				}
+
+				move.action = Move::ACTION_PLAY_HAND_SPELL;
+				move.data.play_hand_card_data.hand_card = hand_idx;
+				move.data.play_hand_card_data.card_id = playing_card.id;
+				if (required_targets.None()) move.data.play_hand_card_data.data.target = SLOT_INVALID;
+				else move.data.play_hand_card_data.data.target = required_targets.GetOneTarget();
+
+				moves.AddMove(move, weight_play_spell);
 				break;
 
 			default:
@@ -385,6 +423,8 @@ namespace GameEngine
 	// return true if stage changed
 	inline bool StageHelper::PlayMinion(Player & player, Card const & card, PlayMinionData const & data)
 	{
+		// TODO: check hand card type is minion
+
 		Cards::CardCallbackManager::BattleCry(card.id, player.board, player.side, data);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
@@ -413,6 +453,8 @@ namespace GameEngine
 
 	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, Move::EquipWeaponData const & data)
 	{
+		// TODO: check hand card type is weapon
+
 		player.hero.DestroyWeapon();
 
 		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, data);
@@ -423,6 +465,13 @@ namespace GameEngine
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;
+	}
+
+	inline bool StageHelper::PlaySpell(Player & player, Card const & card, Move::EquipWeaponData const & data)
+	{
+		// TODO: check hand card type is spell
+
+		throw std::runtime_error("not yet implemented");
 	}
 
 	inline void StageHelper::Fatigue(GameEngine::Board & board, SlotIndex side)

@@ -8,12 +8,14 @@
 #include "game-engine/stages/player-choose-board-move.h"
 #include "game-engine/stages/player-put-minion.h"
 #include "game-engine/stages/player-equip-weapon.h"
+#include "game-engine/stages/player-play-spell.h"
 #include "game-engine/stages/player-attack.h"
 #include "game-engine/stages/player-turn-end.h"
 #include "game-engine/stages/opponent-turn-start.h"
 #include "game-engine/stages/opponent-choose-board-move.h"
 #include "game-engine/stages/opponent-put-minion.h"
 #include "game-engine/stages/opponent-equip-weapon.h"
+#include "game-engine/stages/opponent-play-spell.h"
 #include "game-engine/stages/opponent-attack.h"
 #include "game-engine/stages/opponent-turn-end.h"
 
@@ -43,6 +45,8 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentPutMinion)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerEquipWeapon)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentEquipWeapon)
+	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerPlaySpell)
+	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentPlaySpell)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnStart)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentTurnStart)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnEnd)
@@ -267,6 +271,8 @@ inline bool Board::operator==(const Board &rhs) const
 
 	case STAGE_PLAYER_EQUIP_WEAPON:
 	case STAGE_OPPONENT_EQUIP_WEAPON:
+	case STAGE_PLAYER_PLAY_SPELL:
+	case STAGE_OPPONENT_PLAY_SPELL:
 		if (this->data.play_hand_card_data != rhs.data.play_hand_card_data) return false;
 		break;
 
@@ -276,6 +282,7 @@ inline bool Board::operator==(const Board &rhs) const
 		break;
 
 	default:
+		// TODO: throw exception for unhandled cases
 		break;
 	}
 

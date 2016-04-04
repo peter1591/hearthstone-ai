@@ -17,6 +17,7 @@ class Move
 			ACTION_GAME_FLOW,
 			ACTION_PLAY_HAND_MINION,
 			ACTION_PLAY_HAND_WEAPON,
+			ACTION_PLAY_HAND_SPELL,
 			ACTION_ATTACK,
 			ACTION_END_TURN,
 		};
@@ -130,6 +131,7 @@ inline bool Move::operator==(const Move &rhs) const
 		break;
 
 	case ACTION_PLAY_HAND_WEAPON:
+	case ACTION_PLAY_HAND_SPELL:
 		if (this->data.play_hand_card_data != rhs.data.play_hand_card_data) return false;
 		break;
 
@@ -168,6 +170,12 @@ inline std::string Move::GetDebugString() const
 
 	case Move::ACTION_PLAY_HAND_WEAPON:
 		oss << "[Play hand weapon] hand idx = " << this->data.play_hand_card_data.hand_card;
+		oss << ", card id = " << this->data.play_hand_card_data.card_id;
+		oss << ", target = " << this->data.play_hand_card_data.data.target;
+		break;
+
+	case Move::ACTION_PLAY_HAND_SPELL:
+		oss << "[Play hand spell] hand idx = " << this->data.play_hand_card_data.hand_card;
 		oss << ", card id = " << this->data.play_hand_card_data.card_id;
 		oss << ", target = " << this->data.play_hand_card_data.data.target;
 		break;
@@ -275,6 +283,7 @@ namespace std {
 				break;
 
 			case GameEngine::Move::ACTION_PLAY_HAND_MINION:
+			case GameEngine::Move::ACTION_PLAY_HAND_SPELL:
 				GameEngine::hash_combine(result, s.data.play_hand_minion_data);
 				break;
 

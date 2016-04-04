@@ -114,6 +114,8 @@ namespace std {
 
 			case GameEngine::STAGE_PLAYER_EQUIP_WEAPON:
 			case GameEngine::STAGE_OPPONENT_EQUIP_WEAPON:
+			case GameEngine::STAGE_PLAYER_PLAY_SPELL:
+			case GameEngine::STAGE_OPPONENT_PLAY_SPELL:
 				GameEngine::hash_combine(result, s.data.play_hand_card_data);
 				break;
 
@@ -123,6 +125,7 @@ namespace std {
 				break;
 
 			default:
+				// TODO: throw exception for unhandled cases
 				break;
 			}
 
