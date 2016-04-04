@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card-base.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_AT_117.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_BRM_019.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />

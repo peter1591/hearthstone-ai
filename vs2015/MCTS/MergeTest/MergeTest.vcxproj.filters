@@ -326,5 +326,8 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c-impl.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_AT_117.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

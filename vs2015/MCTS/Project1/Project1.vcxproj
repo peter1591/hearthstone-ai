@@ -164,7 +164,9 @@
     <ClInclude Include="..\..\..\include\game-engine\card-id-map.h" />
     <ClInclude Include="..\..\..\include\game-engine\card.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card-base.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_AT_117.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_BRM_019.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_025.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h" />
@@ -172,6 +174,9 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_584.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_example_minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_example_spell.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_example_weapon.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_002.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_007.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_FP1_021.h" />
@@ -233,12 +238,14 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-equip-weapon.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-play-spell.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-put-minion.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-attack.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-choose-board-move.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-equip-weapon.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-play-spell.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-put-minion.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
