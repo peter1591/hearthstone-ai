@@ -9,7 +9,7 @@ namespace GameEngine {
 	class AuraEnrage : public MinionAura
 	{
 	public:
-		AuraEnrage(Minion & owner) : MinionAura(owner) {}
+		AuraEnrage(Minion & owner) : MinionAura(owner), enraged(false) {}
 		virtual ~AuraEnrage() {}
 
 	public: // hooks
@@ -25,19 +25,34 @@ namespace GameEngine {
 			}
 		}
 
-		void HookAfterOwnerEnraged(Minion & aura_owner) {
+		void HookAfterOwnerEnraged(Minion & aura_owner)
+		{
 			MinionAura::HookAfterOwnerEnraged(aura_owner);
 
-			if (this->minion_enchantments.IsEmpty()) this->AddEnrageEnchantment(aura_owner);
+			if (enraged) return;
+
+			this->AddEnrageEnchantment(aura_owner);
+			enraged = true;
 		}
 
-		void HookAfterOwnerUnEnraged(Minion & aura_owner) {
+			void HookAfterOwnerUnEnraged(Minion & aura_owner)
+		{
 			MinionAura::HookAfterOwnerUnEnraged(aura_owner);
 
+#ifdef DEBUG
+			if (!this->minion_enchantments.IsEmpty() && !enraged)
+				throw std::runtime_error("there should be no way to trigger the enrage effect without using hook");
+#endif
+			if (!enraged) return;
+
 			this->minion_enchantments.RemoveOwnedEnchantments();
+			enraged = false;
 		}
 
 		virtual void AddEnrageEnchantment(Minion & aura_owner) = 0;
+
+	private:
+		bool enraged;
 	};
 
 } // namespace GameEngine
