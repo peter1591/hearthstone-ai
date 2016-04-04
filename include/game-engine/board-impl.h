@@ -241,6 +241,9 @@ inline void Board::DebugPrint() const
 	std::cout << "Player minions: " << std::endl;
 	this->player.minions.DebugPrint();
 
+	std::cout << "Player total spell damage: " << this->player.GetTotalSpellDamage() << std::endl;
+	std::cout << "Opponent total spell damage: " << this->opponent.GetTotalSpellDamage() << std::endl;
+
 	std::cout << "=== Print Board END   ===" << std::endl;
 }
 

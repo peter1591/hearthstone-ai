@@ -76,6 +76,14 @@ public: // getters
 		return *it;
 	}
 
+	int GetTotalSpellDamage() const {
+		int spell_damage = 0;
+		for (auto const& minion : this->minions) {
+			spell_damage += minion.minion.stat.GetSpellDamage();
+		}
+		return spell_damage;
+	}
+
 public: // modifiers
 	MinionIterator InsertBefore(MinionIterator const& it, MinionData && minion);
 	void MarkPendingRemoval(MinionIterator const& it);

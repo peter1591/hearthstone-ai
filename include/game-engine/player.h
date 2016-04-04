@@ -28,6 +28,9 @@ namespace GameEngine {
 		void Destroy();
 
 	public:
+		int GetTotalSpellDamage() const;
+
+	public:
 		Board & board;
 		const SlotIndex side;
 		const SlotIndex opposite_side;

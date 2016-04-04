@@ -88,4 +88,9 @@ namespace GameEngine
 		this->minions.Destroy();
 	}
 
+	inline int Player::GetTotalSpellDamage() const
+	{
+		return this->stat.spell_damage + this->minions.GetTotalSpellDamage();
+	}
+
 } // namespace GameEngine
