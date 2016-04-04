@@ -35,14 +35,10 @@ namespace GameEngine {
 			enraged = true;
 		}
 
-			void HookAfterOwnerUnEnraged(Minion & aura_owner)
+		void HookAfterOwnerUnEnraged(Minion & aura_owner)
 		{
 			MinionAura::HookAfterOwnerUnEnraged(aura_owner);
 
-#ifdef DEBUG
-			if (!this->minion_enchantments.IsEmpty() && !enraged)
-				throw std::runtime_error("there should be no way to trigger the enrage effect without using hook");
-#endif
 			if (!enraged) return;
 
 			this->minion_enchantments.RemoveOwnedEnchantments();
