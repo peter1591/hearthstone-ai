@@ -128,12 +128,12 @@ namespace GameEngine {
 		return this->it == this->minions.end();
 	}
 
-	inline MinionIterator::iterator::pointer MinionIterator::operator->()
+	inline MinionIterator::iterator::pointer MinionIterator::operator->() const
 	{
 		return this->it.operator->();
 	}
 
-	inline MinionIterator::iterator::reference MinionIterator::operator*()
+	inline MinionIterator::iterator::reference MinionIterator::operator*() const
 	{
 		return this->it.operator*();
 	}

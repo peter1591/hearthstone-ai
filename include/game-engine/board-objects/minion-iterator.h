@@ -31,8 +31,8 @@ public:
 	MinionIterator& GoToNext();
 	bool IsEnd() const;
 
-	iterator::pointer operator->();
-	iterator::reference operator*();
+	iterator::pointer operator->() const;
+	iterator::reference operator*() const;
 
 private:
 	void CheckChangeId() const;
