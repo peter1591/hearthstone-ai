@@ -425,5 +425,17 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_example_spell.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_023.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\board-object.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets-impl.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

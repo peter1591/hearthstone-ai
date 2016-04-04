@@ -143,6 +143,7 @@
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h" />
     <ClInclude Include="..\..\..\include\game-ai\tree.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\board-object.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card-base.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_AT_117.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_BRM_019.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_023.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_025.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
@@ -234,6 +236,8 @@
     <ClInclude Include="..\..\..\include\game-engine\stage.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\helper-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\helper.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h" />

@@ -27,6 +27,7 @@ inline void StartBoard::InitializeDebugBoard1_PlayerHand(GameEngine::Hand &hand)
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_029)); // Leper Gnome
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
@@ -128,7 +129,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	}
 
 	{
-		auto minion = GameEngine::MinionData(9999999, 10, 7, 7, 0);
+		auto minion = GameEngine::MinionData(9999999, 10, 1, 7, 0);
 		board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion))->TurnStart(true);
@@ -178,7 +179,7 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	}
 
 	{
-		auto minion = GameEngine::MinionData(999999, 10, 7, 7, 0);
+		auto minion = GameEngine::MinionData(999999, 10, 1, 7, 0);
 		board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion))->TurnStart(true);
