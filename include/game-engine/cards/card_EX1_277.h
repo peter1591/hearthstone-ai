@@ -4,7 +4,7 @@ DEFINE_CARD_CLASS_START(EX1_277)
 
 // Arcane Missle
 
-static void Spell_Go(Player &player, SlotIndex target)
+static void Spell_Go(Player &player, SlotIndex)
 {
 	int times = 3 + player.GetTotalSpellDamage();
 

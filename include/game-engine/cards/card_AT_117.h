@@ -3,7 +3,7 @@
 
 DEFINE_CARD_CLASS_START(AT_117)
 // Master of Ceremonies
-static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
+static void AfterSummoned(MinionIterator summoned_minion)
 {
 	if (summoned_minion.GetMinions().GetPlayer().GetTotalSpellDamage() > 0) {
 		summoned_minion->enchantments.Add(std::make_unique<Enchantment_BuffMinion_C<2, 2, 0, 0, false>>());

@@ -15,13 +15,7 @@ static void GetRequiredTargets(Player const& player, SlotIndexBitmap &targets, b
 
 static void BattleCry(Board & board, SlotIndex, Move::PlayMinionData const& play_minion_data)
 {
-	constexpr int damage = 1;
-
-#ifdef DEBUG
-	if (play_minion_data.target < 0) throw std::runtime_error("logic error");
-#endif
-
-	StageHelper::DealDamage(board, play_minion_data.target, damage, false);
+	StageHelper::DealDamage(board, play_minion_data.target, 1, false);
 }
 
 DEFINE_CARD_CLASS_END()
