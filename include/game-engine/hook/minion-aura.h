@@ -35,6 +35,9 @@ namespace GameEngine
 		}
 
 	public:
+		template <typename Target> void GetEnchantmentsOwner(EnchantmentOwner<Target> * &owner);
+		template <> void GetEnchantmentsOwner(EnchantmentOwner<Minion> * &owner) { owner = &this->GetMinionEnchantmentsOwner(); }
+		template <> void GetEnchantmentsOwner(EnchantmentOwner<Player> * &owner) { owner = &this->GetPlayerEnchantmentsOwner(); }
 
 		EnchantmentOwner<Minion> & GetMinionEnchantmentsOwner()
 		{

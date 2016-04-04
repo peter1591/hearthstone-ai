@@ -1,5 +1,6 @@
 #include "game-engine/enchantments/enchantments.h"
 #include "game-engine/enchantments/enchantment.h"
+#include "game-engine/enchantments/owner.h"
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/board-objects/minion.h"
 #include "game-engine/board-objects/minions.h"
@@ -38,16 +39,12 @@ namespace GameEngine
 		});
 	}
 
-	template <>
-	inline void Enchantments<Minion>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
+	template <typename Target>
+	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
 	{
-		return this->Add(std::move(enchantment), &aura.GetMinionEnchantmentsOwner());
-	}
-
-	template <>
-	inline void Enchantments<Player>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
-	{
-		return this->Add(std::move(enchantment), &aura.GetPlayerEnchantmentsOwner());
+		EnchantmentOwner<Target> * owner;
+		aura.GetEnchantmentsOwner(owner);
+		return this->Add(std::move(enchantment), owner);
 	}
 
 	template <typename Target>
