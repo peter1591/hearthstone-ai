@@ -423,7 +423,9 @@ namespace GameEngine
 	// return true if stage changed
 	inline bool StageHelper::PlayMinion(Player & player, Card const & card, PlayMinionData const & data)
 	{
-		// TODO: check hand card type is minion
+#ifdef DEBUG
+		if (card.type != Card::TYPE_MINION) throw std::runtime_error("card type is not minion");
+#endif
 
 		Cards::CardCallbackManager::BattleCry(card.id, player.board, player.side, data);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
@@ -453,7 +455,9 @@ namespace GameEngine
 
 	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, SlotIndex target)
 	{
-		// TODO: check hand card type is weapon
+#ifdef DEBUG
+		if (card.type != Card::TYPE_WEAPON) throw std::runtime_error("card type is not weapon");
+#endif
 
 		player.hero.DestroyWeapon();
 
@@ -469,7 +473,9 @@ namespace GameEngine
 
 	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex target)
 	{
-		// TODO: check hand card type is spell
+#ifdef DEBUG
+		if (card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
+#endif
 
 		Cards::CardCallbackManager::Spell_Go(card.id, player, target);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;

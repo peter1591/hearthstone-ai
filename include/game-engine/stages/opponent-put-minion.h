@@ -22,6 +22,10 @@ class StageOpponentPutMinion
 			auto playing_card = player.hand.GetCard(data.hand_card);
 			player.hand.RemoveCard(data.hand_card);
 
+#ifdef DEBUG
+			if (playing_card.type != Card::TYPE_MINION) throw std::runtime_error("card type is not minion");
+#endif
+
 			player.stat.crystal.CostCrystals(playing_card.cost);
 
 			StageHelper::PlayMinion(player, playing_card, data.data);

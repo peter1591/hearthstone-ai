@@ -7,15 +7,15 @@ DEFINE_CARD_CLASS_START(CS2_222)
 // Stormwind Champion
 
 // TODO: add an convenient class for this kind of aura
-class Aura : public GameEngine::AuraToAllMinions
+class Aura : public AuraToAllMinions
 {
 public:
-	Aura(GameEngine::Minion & owner) : GameEngine::AuraToAllMinions(owner) {}
+	Aura(Minion & owner) : AuraToAllMinions(owner) {}
 
 private: // hooks
 	void HookAfterMinionAdded(Minion & added_minion)
 	{
-		GameEngine::AuraToAllMinions::HookAfterMinionAdded(added_minion);
+		AuraToAllMinions::HookAfterMinionAdded(added_minion);
 
 		if (this->CheckMinionShouldHaveAuraEnchantment(added_minion)) {
 			this->AddAuraEnchantmentToMinion(added_minion);
@@ -45,11 +45,11 @@ private:
 	}
 
 private: // for comparison
-	bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
+	bool EqualsTo(HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
 	std::size_t GetHash() const { return typeid(*this).hash_code(); }
 };
 
-static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
+static void AfterSummoned(MinionIterator summoned_minion)
 {
 	summoned_minion->auras.Add<Aura>();
 }

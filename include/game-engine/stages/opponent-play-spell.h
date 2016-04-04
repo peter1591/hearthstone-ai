@@ -24,7 +24,9 @@ namespace GameEngine {
 			auto playing_card = player.hand.GetCard(data.hand_card);
 			player.hand.RemoveCard(data.hand_card);
 
-			// TODO: check playing card type is spell
+#ifdef DEBUG
+			if (playing_card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
+#endif
 
 			player.stat.crystal.CostCrystals(playing_card.cost);
 

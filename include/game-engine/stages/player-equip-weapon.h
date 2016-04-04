@@ -24,6 +24,10 @@ class StagePlayerEquipWeapon
 			auto playing_card = player.hand.GetCard(data.hand_card);
 			player.hand.RemoveCard(data.hand_card);
 
+#ifdef DEBUG
+			if (playing_card.type != Card::TYPE_WEAPON) throw std::runtime_error("card type is not weapon");
+#endif
+
 			player.stat.crystal.CostCrystals(playing_card.cost);
 
 			StageHelper::EquipWeapon(player, playing_card, data.target);
