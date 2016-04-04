@@ -42,13 +42,13 @@ namespace GameEngine
 	template <typename Target>
 	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
 	{
-		EnchantmentOwner<Target> * owner;
+		EnchantmentsOwner<Target> * owner;
 		aura.GetEnchantmentsOwner(owner);
 		return this->Add(std::move(enchantment), owner);
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner)
+	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner)
 	{
 		auto ref_ptr = enchantment.get();
 

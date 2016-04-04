@@ -6,13 +6,13 @@
 namespace GameEngine
 {
 	template <typename EnchantmentTarget>
-	inline bool EnchantmentOwner<typename EnchantmentTarget>::IsEmpty() const
+	inline bool EnchantmentsOwner<typename EnchantmentTarget>::IsEmpty() const
 	{
 		return this->enchantments.empty();
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentOwner<EnchantmentTarget>::RemoveOwnedEnchantments()
+	inline void EnchantmentsOwner<EnchantmentTarget>::RemoveOwnedEnchantments()
 	{
 		while (!this->enchantments.empty()) {
 			this->enchantments.begin()->Remove();
@@ -20,13 +20,13 @@ namespace GameEngine
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment)
+	inline void EnchantmentsOwner<typename EnchantmentTarget>::EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment)
 	{
 		this->enchantments.push_back(managed_enchantment);
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentOwner<typename EnchantmentTarget>::EnchantmentRemoved(ManagedItem managed_item)
+	inline void EnchantmentsOwner<typename EnchantmentTarget>::EnchantmentRemoved(ManagedItem managed_item)
 	{
 		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
 		{

@@ -35,30 +35,30 @@ namespace GameEngine
 		}
 
 	public:
-		template <typename Target> void GetEnchantmentsOwner(EnchantmentOwner<Target> * &owner);
-		template <> void GetEnchantmentsOwner(EnchantmentOwner<Minion> * &owner) { owner = &this->GetMinionEnchantmentsOwner(); }
-		template <> void GetEnchantmentsOwner(EnchantmentOwner<Player> * &owner) { owner = &this->GetPlayerEnchantmentsOwner(); }
+		template <typename Target> void GetEnchantmentsOwner(EnchantmentsOwner<Target> * &owner);
+		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Minion> * &owner) { owner = &this->GetMinionEnchantmentsOwner(); }
+		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Player> * &owner) { owner = &this->GetPlayerEnchantmentsOwner(); }
 
-		EnchantmentOwner<Minion> & GetMinionEnchantmentsOwner()
+		EnchantmentsOwner<Minion> & GetMinionEnchantmentsOwner()
 		{
 			if (!this->minion_enchantments) {
-				this->minion_enchantments.reset(new EnchantmentOwner<Minion>());
+				this->minion_enchantments.reset(new EnchantmentsOwner<Minion>());
 			}
 			return *this->minion_enchantments;
 		}
 
-		EnchantmentOwner<Player> & GetPlayerEnchantmentsOwner()
+		EnchantmentsOwner<Player> & GetPlayerEnchantmentsOwner()
 		{
 			if (!this->player_enchantments) {
-				this->player_enchantments.reset(new EnchantmentOwner<Player>());
+				this->player_enchantments.reset(new EnchantmentsOwner<Player>());
 			}
 			return *this->player_enchantments;
 		}
 
 	private:
 		Minion & owner;
-		std::unique_ptr<EnchantmentOwner<Minion>> minion_enchantments;
-		std::unique_ptr<EnchantmentOwner<Player>> player_enchantments;
+		std::unique_ptr<EnchantmentsOwner<Minion>> minion_enchantments;
+		std::unique_ptr<EnchantmentsOwner<Player>> player_enchantments;
 	};
 
 } // namespace GameEngine

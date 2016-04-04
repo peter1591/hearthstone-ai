@@ -7,17 +7,17 @@
 namespace GameEngine
 {
 	template <typename EnchantmentTarget>
-	class EnchantmentOwner
+	class EnchantmentsOwner
 	{
 	public:
 		using Manager = typename ManagedEnchantment<EnchantmentTarget>::Manager;
 		using ManagedItem =typename Manager::ManagedItem;
 
-		EnchantmentOwner() {}
-		EnchantmentOwner(EnchantmentOwner<EnchantmentTarget> const& rhs) = delete;
-		EnchantmentOwner(EnchantmentOwner<EnchantmentTarget> && rhs) = delete;
-		EnchantmentOwner<EnchantmentTarget> & operator=(EnchantmentOwner<EnchantmentTarget> const& rhs) = delete;
-		EnchantmentOwner<EnchantmentTarget> & operator=(EnchantmentOwner<EnchantmentTarget> && rhs) = delete;
+		EnchantmentsOwner() {}
+		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> const& rhs) = delete;
+		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> && rhs) = delete;
+		EnchantmentsOwner<EnchantmentTarget> & operator=(EnchantmentsOwner<EnchantmentTarget> const& rhs) = delete;
+		EnchantmentsOwner<EnchantmentTarget> & operator=(EnchantmentsOwner<EnchantmentTarget> && rhs) = delete;
 
 		bool IsEmpty() const;
 

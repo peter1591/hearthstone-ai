@@ -10,7 +10,7 @@ namespace GameEngine {
 class MinionData;
 template <typename Target> class Enchantment;
 template <typename Target> class ManagedEnchantment;
-template <typename EnchantmentTarget> class EnchantmentOwner;
+template <typename EnchantmentTarget> class EnchantmentsOwner;
 class Minion;
 class MinionAura;
 
@@ -42,7 +42,7 @@ public:
 	void Destroy();
 
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura);
-	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner);
+	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner);
 
 	void Remove(ManagedEnchantment<Target> & item); // interface for enchantment owner
 	void Clear();
