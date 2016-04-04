@@ -69,6 +69,7 @@ namespace GameEngine {
 
 		void TakeDamage(int damage, bool poisonous) {
 			// Note: poisonous have no effect on heros
+			(void)poisonous;
 			this->hero.hp -= damage;
 		}
 
@@ -116,6 +117,7 @@ namespace GameEngine {
 	public: // hooks
 		void TurnStart(bool owner_turn)
 		{
+			(void)owner_turn;
 			this->hero.attacked_times = 0;
 		}
 
@@ -129,11 +131,15 @@ namespace GameEngine {
 			}
 		}
 
-		void HookAfterMinionAdded(Minion & added_minion) {
+		void HookAfterMinionAdded(Minion & added_minion)
+		{
+			(void)added_minion;
 		}
 
-		void HookAfterMinionDamaged(Minion & minion, int damage) {
-
+		void HookAfterMinionDamaged(Minion & minion, int damage)
+		{
+			(void)minion;
+			(void)damage;
 		}
 
 

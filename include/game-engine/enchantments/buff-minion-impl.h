@@ -60,7 +60,7 @@ namespace GameEngine
 		return Impl::Enchantment_BuffMinion::BeforeRemoved(this->attack_boost, this->hp_boost, this->damage_spell_boost, this->buff_flags, this->actual_attack_boost, minion);
 	}
 
-	inline void Enchantment_BuffMinion::TurnEnd(Minion & minion, bool & expired)
+	inline void Enchantment_BuffMinion::TurnEnd(Minion &, bool & expired)
 	{
 		if (one_turn) expired = true; // one-turn effect 
 		else expired = false;

@@ -34,7 +34,7 @@ public:
 			this->minions.push_back(GameEngine::Minion(*this, minion));
 		}
 	}
-	Minions(Player & Player, Minions && rhs) : player(player) { *this = std::move(rhs); }
+	Minions(Player & player, Minions && rhs) : player(player) { *this = std::move(rhs); }
 
 	Minions & operator=(Minions const& rhs) = delete;
 	Minions & operator=(Minions && rhs);

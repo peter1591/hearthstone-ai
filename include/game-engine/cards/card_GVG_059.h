@@ -16,7 +16,7 @@ namespace GameEngine {
 			static constexpr int card_id = CARD_ID_GVG_059;
 
 			// Coghammer
-			static void Weapon_BattleCry(GameEngine::Player &equipping_player, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+			static void Weapon_BattleCry(GameEngine::Player &equipping_player, GameEngine::Move::EquipWeaponData const&)
 			{
 				const int minion_count = equipping_player.minions.GetMinionCount();
 				if (minion_count == 0) return; // no minion to buff

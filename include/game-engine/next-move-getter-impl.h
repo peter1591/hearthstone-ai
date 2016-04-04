@@ -128,7 +128,7 @@ inline GameEngine::NextMoveGetter::ItemPlayHandMinion * GameEngine::NextMoveGett
 	return new ItemPlayHandMinion(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::GetNextMove(GameEngine::Board const& board, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::GetNextMove(GameEngine::Board const&, Move & move)
 {
 	if (this->done) return false;
 
@@ -177,7 +177,7 @@ inline GameEngine::NextMoveGetter::ItemPlayHandWeapon * GameEngine::NextMoveGett
 	return new ItemPlayHandWeapon(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::GetNextMove(GameEngine::Board const& board, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::GetNextMove(GameEngine::Board const&, Move & move)
 {
 	if (this->done) return false;
 
@@ -224,7 +224,7 @@ inline GameEngine::NextMoveGetter::ItemAttack * GameEngine::NextMoveGetter::Item
 	return new ItemAttack(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemAttack::GetNextMove(GameEngine::Board const& board, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemAttack::GetNextMove(GameEngine::Board const&, Move & move)
 {
 	if (this->attacker.None()) return false;
 	if (this->attacked.None()) {

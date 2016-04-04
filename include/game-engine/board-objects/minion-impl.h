@@ -219,6 +219,7 @@ inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion, int dama
 
 inline void GameEngine::Minion::TurnStart(bool owner_turn)
 {
+	(void)owner_turn;
 	this->minion.summoned_this_turn = false;
 	this->minion.attacked_times = 0;
 }

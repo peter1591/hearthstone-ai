@@ -21,6 +21,8 @@ public:
 
 	static void BattleCry(GameEngine::Board & board, SlotIndex playing_side, GameEngine::Move::PlayMinionData const& play_minion_data)
 	{
+		(void)playing_side;
+
 		constexpr int attack_boost = 2;
 
 		if (play_minion_data.target < 0) {

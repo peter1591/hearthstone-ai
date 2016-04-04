@@ -13,7 +13,7 @@ namespace GameEngine {
 
 			// Weapon: Glaivezooka
 
-			static void Weapon_BattleCry(GameEngine::Player & equipping_player, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+			static void Weapon_BattleCry(GameEngine::Player & equipping_player, GameEngine::Move::EquipWeaponData const&)
 			{
 				constexpr int attack_boost = 1;
 

@@ -56,6 +56,8 @@ namespace GameEngine {
 
 			static void BeforeRemoved_Stats(int attack_boost, int hp_boost, int spell_damage_boost, int actual_attack_boost, Minion & minion)
 			{
+				(void)attack_boost;
+
 				if (actual_attack_boost != 0) {
 					minion.AddAttack(-actual_attack_boost);
 				}
