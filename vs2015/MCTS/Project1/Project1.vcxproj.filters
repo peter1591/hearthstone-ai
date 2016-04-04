@@ -152,12 +152,6 @@
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h">
       <Filter>Header Files\game-engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
@@ -180,9 +174,6 @@
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h">
@@ -399,6 +390,12 @@
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-enrage.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_LOE_051.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras-impl.h">
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
   </ItemGroup>

@@ -143,9 +143,6 @@
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h" />
     <ClInclude Include="..\..\..\include\game-ai\tree.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantment.h" />
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments-impl.h" />
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\enchantments.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
@@ -182,6 +179,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_051.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_059.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GVG_112.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_LOE_051.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_018.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
@@ -209,6 +207,7 @@
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-enrage.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-to-all-minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras.h" />
     <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\managed-list\list-item.h" />
