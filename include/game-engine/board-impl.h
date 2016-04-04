@@ -196,6 +196,7 @@ inline Board & Board::operator=(Board && rhs)
 inline void Board::SetRandomSeed(unsigned int random_seed_)
 {
 	this->random_seed = random_seed_;
+	this->random_generator.SetRandomSeed(this->random_seed);
 }
 
 inline void Board::SetStateToPlayerChooseBoardMove()
