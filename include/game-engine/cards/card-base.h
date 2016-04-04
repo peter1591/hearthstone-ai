@@ -44,6 +44,7 @@ public: \
 #include "card_EX1_390.h"
 #include "card_EX1_412.h"
 #include "card_EX1_584.h"
+#include "card_EX1_593.h"
 #include "card_FP1_002.h"
 #include "card_FP1_007.h"
 #include "card_FP1_021.h"
