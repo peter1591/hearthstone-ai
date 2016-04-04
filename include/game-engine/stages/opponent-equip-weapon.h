@@ -17,7 +17,7 @@ class StageOpponentEquipWeapon
 		static void Go(Board &board)
 		{
 			auto & player = board.opponent;
-			const Board::PlayHandWeaponData &data = board.data.play_hand_weapon_data;
+			const Board::PlayHandCardData &data = board.data.play_hand_card_data;
 
 			auto playing_card = player.hand.GetCard(data.hand_card);
 			player.hand.RemoveCard(data.hand_card);

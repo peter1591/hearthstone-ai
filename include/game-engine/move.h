@@ -66,12 +66,12 @@ class Move
 			bool operator!=(PlayHandMinionData const& rhs) const { return !(*this == rhs); }
 		};
 
-		struct PlayHandWeaponData {
+		struct PlayHandCardData {
 			Hand::Locator hand_card;
 			int card_id; // to distinguish moves for different boards merged into one MCTS tree node
 			EquipWeaponData data;
 
-			bool operator==(PlayHandWeaponData const& rhs) const
+			bool operator==(PlayHandCardData const& rhs) const
 			{
 				if (this->hand_card != rhs.hand_card) return false;
 				if (this->data != rhs.data) return false;
@@ -79,7 +79,7 @@ class Move
 				return true;
 			}
 
-			bool operator!=(PlayHandWeaponData const& rhs) const { return !(*this == rhs); }
+			bool operator!=(PlayHandCardData const& rhs) const { return !(*this == rhs); }
 		};
 
 		struct AttackData {
@@ -98,7 +98,7 @@ class Move
 
 		union Data {
 			PlayHandMinionData play_hand_minion_data;
-			PlayHandWeaponData play_hand_weapon_data;
+			PlayHandCardData play_hand_card_data;
 			AttackData attack_data;
 		};
 
@@ -130,7 +130,7 @@ inline bool Move::operator==(const Move &rhs) const
 		break;
 
 	case ACTION_PLAY_HAND_WEAPON:
-		if (this->data.play_hand_weapon_data != rhs.data.play_hand_weapon_data) return false;
+		if (this->data.play_hand_card_data != rhs.data.play_hand_card_data) return false;
 		break;
 
 	case ACTION_ATTACK:
@@ -167,9 +167,9 @@ inline std::string Move::GetDebugString() const
 		break;
 
 	case Move::ACTION_PLAY_HAND_WEAPON:
-		oss << "[Play hand weapon] hand idx = " << this->data.play_hand_weapon_data.hand_card;
-		oss << ", card id = " << this->data.play_hand_weapon_data.card_id;
-		oss << ", target = " << this->data.play_hand_weapon_data.data.target;
+		oss << "[Play hand weapon] hand idx = " << this->data.play_hand_card_data.hand_card;
+		oss << ", card id = " << this->data.play_hand_card_data.card_id;
+		oss << ", target = " << this->data.play_hand_card_data.data.target;
 		break;
 
 	case Move::ACTION_ATTACK:
@@ -231,8 +231,8 @@ namespace std {
 		}
 	};
 
-	template <> struct hash<GameEngine::Move::PlayHandWeaponData> {
-		typedef GameEngine::Move::PlayHandWeaponData argument_type;
+	template <> struct hash<GameEngine::Move::PlayHandCardData> {
+		typedef GameEngine::Move::PlayHandCardData argument_type;
 		typedef std::size_t result_type;
 		result_type operator()(const argument_type &s) const {
 			result_type result = 0;

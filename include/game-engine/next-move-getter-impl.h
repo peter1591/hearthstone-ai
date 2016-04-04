@@ -58,14 +58,14 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveG
 	this->items_play_hand_minion.splice(this->items_play_hand_minion.end(), std::move(items));
 }
 
-inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayHandWeapon && item)
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemPlayHandCard && item)
 {
-	this->items_play_hand_weapon.push_back(std::move(item));
+	this->items_play_hand_card.push_back(std::move(item));
 }
 
-inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayHandWeapon> && items)
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemPlayHandCard> && items)
 {
-	this->items_play_hand_weapon.splice(this->items_play_hand_weapon.end(), std::move(items));
+	this->items_play_hand_card.splice(this->items_play_hand_card.end(), std::move(items));
 }
 
 template<typename T>
@@ -90,7 +90,7 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(GameEngine::Board const& boa
 
 	if (this->GetNextMoveFromContainer(this->items_player_attack, board, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_play_hand_minion, board, move)) return true;
-	if (this->GetNextMoveFromContainer(this->items_play_hand_weapon, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_play_hand_card, board, move)) return true;
 	return false;
 }
 
@@ -99,7 +99,7 @@ inline void GameEngine::NextMoveGetter::Clear()
 	this->moves.clear();
 	this->items_player_attack.clear();
 	this->items_play_hand_minion.clear();
-	this->items_play_hand_weapon.clear();
+	this->items_play_hand_card.clear();
 }
 
 inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) const
@@ -107,7 +107,7 @@ inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) c
 	if (!IsEqual(this->moves, rhs.moves)) return false;
 	if (!IsEqual(this->items_player_attack, rhs.items_player_attack)) return false;
 	if (!IsEqual(this->items_play_hand_minion, rhs.items_play_hand_minion)) return false;
-	if (!IsEqual(this->items_play_hand_weapon, rhs.items_play_hand_weapon)) return false;
+	if (!IsEqual(this->items_play_hand_card, rhs.items_play_hand_card)) return false;
 	return true;
 }
 
@@ -165,49 +165,49 @@ inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::operator!=(ItemPlayH
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayHandWeapon::ItemPlayHandWeapon(
+inline GameEngine::NextMoveGetter::ItemPlayHandCard::ItemPlayHandCard(
 	Player const& player, Hand::Locator hand_card, SlotIndexBitmap required_targets)
 	: player(player), hand_card(hand_card), required_targets(required_targets)
 {
 	this->done = false;
 }
 
-inline GameEngine::NextMoveGetter::ItemPlayHandWeapon * GameEngine::NextMoveGetter::ItemPlayHandWeapon::Clone() const
+inline GameEngine::NextMoveGetter::ItemPlayHandCard * GameEngine::NextMoveGetter::ItemPlayHandCard::Clone() const
 {
-	return new ItemPlayHandWeapon(*this);
+	return new ItemPlayHandCard(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::GetNextMove(GameEngine::Board const&, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandCard::GetNextMove(GameEngine::Board const&, Move & move)
 {
 	if (this->done) return false;
 
 	auto const& playing_card = this->player.hand.GetCard(this->hand_card);
 
 	move.action = Move::ACTION_PLAY_HAND_WEAPON;
-	move.data.play_hand_weapon_data.hand_card = this->hand_card;
-	move.data.play_hand_weapon_data.card_id = playing_card.id;
+	move.data.play_hand_card_data.hand_card = this->hand_card;
+	move.data.play_hand_card_data.card_id = playing_card.id;
 
 	if (this->required_targets.None())
 	{
-		move.data.play_hand_weapon_data.data.target = SLOT_INVALID;
+		move.data.play_hand_card_data.data.target = SLOT_INVALID;
 		this->done = true;
 	}
 	else {
-		move.data.play_hand_weapon_data.data.target = this->required_targets.GetOneTarget();
-		this->required_targets.ClearOneTarget(move.data.play_hand_weapon_data.data.target);
+		move.data.play_hand_card_data.data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.play_hand_card_data.data.target);
 		if (this->required_targets.None()) this->done = true;
 	}
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::operator==(ItemPlayHandWeapon const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemPlayHandCard::operator==(ItemPlayHandCard const & rhs) const
 {
 	if (this->hand_card != rhs.hand_card) return false;
 	if (this->required_targets != rhs.required_targets) return false;
 	return true;
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandWeapon::operator!=(ItemPlayHandWeapon const & rhs) const
+inline bool GameEngine::NextMoveGetter::ItemPlayHandCard::operator!=(ItemPlayHandCard const & rhs) const
 {
 	return !(*this == rhs);
 }

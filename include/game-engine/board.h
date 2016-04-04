@@ -59,12 +59,12 @@ namespace GameEngine {
 
 	public: // internal state data for cross-stage communication
 		typedef Move::PlayHandMinionData PlayHandMinionData;
-		typedef Move::PlayHandWeaponData PlayHandWeaponData;
+		typedef Move::PlayHandCardData PlayHandCardData;
 		typedef Move::AttackData AttackData;
 
 		union Data {
 			PlayHandMinionData play_hand_minion_data;
-			PlayHandWeaponData play_hand_weapon_data;
+			PlayHandCardData play_hand_card_data;
 			AttackData attack_data;
 
 			bool operator==(const Data &rhs) const = delete;
@@ -114,7 +114,7 @@ namespace std {
 
 			case GameEngine::STAGE_PLAYER_EQUIP_WEAPON:
 			case GameEngine::STAGE_OPPONENT_EQUIP_WEAPON:
-				GameEngine::hash_combine(result, s.data.play_hand_weapon_data);
+				GameEngine::hash_combine(result, s.data.play_hand_card_data);
 				break;
 
 			case GameEngine::STAGE_PLAYER_ATTACK:

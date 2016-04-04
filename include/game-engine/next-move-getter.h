@@ -28,14 +28,14 @@ public:
 		bool done;
 	};
 
-	class ItemPlayHandWeapon
+	class ItemPlayHandCard // no put location
 	{
 	public:
-		ItemPlayHandWeapon(Player const& player, Hand::Locator hand_card, SlotIndexBitmap required_targets);
-		ItemPlayHandWeapon* Clone() const;
+		ItemPlayHandCard(Player const& player, Hand::Locator hand_card, SlotIndexBitmap required_targets);
+		ItemPlayHandCard* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
-		bool operator==(ItemPlayHandWeapon const& rhs) const;
-		bool operator!=(ItemPlayHandWeapon const& rhs) const;
+		bool operator==(ItemPlayHandCard const& rhs) const;
+		bool operator!=(ItemPlayHandCard const& rhs) const;
 
 	private:
 		Player const& player;
@@ -64,11 +64,11 @@ public:
 	void AddItem(Move && move);
 	void AddItem(ItemAttack && items);
 	void AddItem(ItemPlayHandMinion && items);
-	void AddItem(ItemPlayHandWeapon && items);
+	void AddItem(ItemPlayHandCard && items);
 	void AddItems(std::list<Move> && items);
 	void AddItems(std::list<ItemAttack> && items);
 	void AddItems(std::list<ItemPlayHandMinion> && items);
-	void AddItems(std::list<ItemPlayHandWeapon> && items);
+	void AddItems(std::list<ItemPlayHandCard> && items);
 
 	bool GetNextMove(Board const& board, Move &move);
 	bool Empty();
@@ -85,7 +85,7 @@ private:
 	std::list<Move> moves;
 	std::list<ItemAttack> items_player_attack;
 	std::list<ItemPlayHandMinion> items_play_hand_minion;
-	std::list<ItemPlayHandWeapon> items_play_hand_weapon;
+	std::list<ItemPlayHandCard> items_play_hand_card;
 };
 
 } // namespace GameEngine

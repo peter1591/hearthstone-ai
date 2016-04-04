@@ -107,7 +107,7 @@ namespace GameEngine
 			return;
 		}
 
-		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandWeapon(player, hand_card, required_targets));
+		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandCard(player, hand_card, required_targets));
 	}
 
 	inline void StageHelper::GetBoardMoves_Attack(Player const & player, NextMoveGetter & next_move_getter)
@@ -188,10 +188,10 @@ namespace GameEngine
 				}
 
 				move.action = Move::ACTION_PLAY_HAND_WEAPON;
-				move.data.play_hand_weapon_data.hand_card = hand_idx;
-				move.data.play_hand_weapon_data.card_id = playing_card.id;
-				if (required_targets.None()) move.data.play_hand_weapon_data.data.target = SLOT_INVALID;
-				else move.data.play_hand_weapon_data.data.target = required_targets.GetOneTarget();
+				move.data.play_hand_card_data.hand_card = hand_idx;
+				move.data.play_hand_card_data.card_id = playing_card.id;
+				if (required_targets.None()) move.data.play_hand_card_data.data.target = SLOT_INVALID;
+				else move.data.play_hand_card_data.data.target = required_targets.GetOneTarget();
 
 				moves.AddMove(move, weight_play_minion);
 				break;

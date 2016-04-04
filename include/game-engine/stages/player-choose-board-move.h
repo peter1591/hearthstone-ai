@@ -39,7 +39,7 @@ public:
 				return;
 
 			case Move::ACTION_PLAY_HAND_WEAPON:
-				board.data.play_hand_weapon_data = move.data.play_hand_weapon_data;
+				board.data.play_hand_card_data = move.data.play_hand_card_data;
 				board.stage = STAGE_PLAYER_EQUIP_WEAPON;
 				return;
 
