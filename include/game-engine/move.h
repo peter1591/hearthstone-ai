@@ -128,6 +128,9 @@ inline bool Move::operator==(const Move &rhs) const
 
 	case ACTION_END_TURN:
 		break;
+
+	default:
+		std::runtime_error("unknown move action");
 	}
 
 	return true;
@@ -258,8 +261,12 @@ namespace std {
 				break;
 
 			case GameEngine::Move::ACTION_PLAY_HAND_MINION:
-			case GameEngine::Move::ACTION_PLAY_HAND_SPELL:
 				GameEngine::hash_combine(result, s.data.play_hand_minion_data);
+				break;
+
+			case GameEngine::Move::ACTION_PLAY_HAND_WEAPON:
+			case GameEngine::Move::ACTION_PLAY_HAND_SPELL:
+				GameEngine::hash_combine(result, s.data.play_hand_card_data);
 				break;
 
 			case GameEngine::Move::ACTION_ATTACK:
@@ -268,6 +275,9 @@ namespace std {
 
 			case GameEngine::Move::ACTION_END_TURN:
 				break;
+
+			default:
+				throw std::runtime_error("unknown move action");
 			}
 
 			return result;

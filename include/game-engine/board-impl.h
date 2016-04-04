@@ -281,8 +281,16 @@ inline bool Board::operator==(const Board &rhs) const
 		if (this->data.attack_data != rhs.data.attack_data) return false;
 		break;
 
+	case STAGE_PLAYER_CHOOSE_BOARD_MOVE:
+	case STAGE_OPPONENT_CHOOSE_BOARD_MOVE:
+	case STAGE_PLAYER_TURN_START:
+	case STAGE_PLAYER_TURN_END:
+	case STAGE_OPPONENT_TURN_START:
+	case STAGE_OPPONENT_TURN_END:
+		break;
+
 	default:
-		// TODO: throw exception for unhandled cases
+		throw std::runtime_error("unknown stage");
 		break;
 	}
 

@@ -124,8 +124,16 @@ namespace std {
 				GameEngine::hash_combine(result, s.data.attack_data);
 				break;
 
+			case GameEngine::STAGE_PLAYER_CHOOSE_BOARD_MOVE:
+			case GameEngine::STAGE_OPPONENT_CHOOSE_BOARD_MOVE:
+			case GameEngine::STAGE_PLAYER_TURN_START:
+			case GameEngine::STAGE_PLAYER_TURN_END:
+			case GameEngine::STAGE_OPPONENT_TURN_START:
+			case GameEngine::STAGE_OPPONENT_TURN_END:
+				break;
+
 			default:
-				// TODO: throw exception for unhandled cases
+				throw std::runtime_error("unknown stage");
 				break;
 			}
 
