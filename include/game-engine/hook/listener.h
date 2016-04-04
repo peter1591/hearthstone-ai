@@ -19,9 +19,9 @@ namespace GameEngine {
 		virtual void AfterAdded(Minion & owner) { (void)owner; }
 		virtual void BeforeRemoved(Minion & owner) { (void)owner; }
 
-		virtual void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion) { (void)aura_owner; (void)added_minion; }
-		virtual void HookAfterOwnerEnraged(Minion &enraged_aura_owner) { (void)enraged_aura_owner; }
-		virtual void HookAfterOwnerUnEnraged(Minion &unenraged_aura_owner) { (void)unenraged_aura_owner; }
+		virtual void HookAfterMinionAdded(Minion & added_minion) { (void)added_minion; }
+		virtual void HookAfterOwnerEnraged() {}
+		virtual void HookAfterOwnerUnEnraged() {}
 		virtual void HookAfterMinionDamaged(Minion & minion, int damage) { (void)minion; (void)damage; }
 
 	protected:

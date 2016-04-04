@@ -20,7 +20,7 @@ namespace GameEngine {
 				Aura(Minion & owner) : AuraToAllMinions(owner) {}
 
 			private: // hooks
-				void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
+				void HookAfterMinionAdded(Minion & added_minion)
 				{
 					constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
 

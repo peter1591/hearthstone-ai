@@ -21,23 +21,23 @@ namespace GameEngine {
 				Aura(GameEngine::Minion & owner) : GameEngine::AuraToAllMinions(owner) {}
 
 			private: // hooks
-				void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
+				void HookAfterMinionAdded(Minion & added_minion)
 				{
-					GameEngine::AuraToAllMinions::HookAfterMinionAdded(aura_owner, added_minion);
+					GameEngine::AuraToAllMinions::HookAfterMinionAdded(added_minion);
 
-					if (this->CheckMinionShouldHaveAuraEnchantment(aura_owner, added_minion)) {
+					if (this->CheckMinionShouldHaveAuraEnchantment(added_minion)) {
 						this->AddAuraEnchantmentToMinion(added_minion);
 					}
 				}
 
 			private:
-				bool CheckMinionShouldHaveAuraEnchantment(Minion & aura_owner, Minion & minion)
+				bool CheckMinionShouldHaveAuraEnchantment(Minion & minion)
 				{
 					// only add aura to friendly minions
-					if (&aura_owner.GetMinions() != &minion.GetMinions()) return false;
+					if (&this->GetOwner().GetMinions() != &minion.GetMinions()) return false;
 
 					// only add aura to others
-					if (&aura_owner.GetMinion() == &minion.GetMinion()) return false;
+					if (&this->GetOwner().GetMinion() == &minion.GetMinion()) return false;
 
 					return true;
 				}

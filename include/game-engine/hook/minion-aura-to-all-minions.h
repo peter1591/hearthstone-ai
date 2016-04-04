@@ -16,13 +16,17 @@ namespace GameEngine {
 	public: // hooks
 		void AfterAdded(Minion & aura_owner)
 		{
+#ifdef DEBUG
+			if (&aura_owner != &this->GetOwner()) throw std::runtime_error("aura owner should be the same with the one actually added this aura");
+#endif
+
 			MinionAura::AfterAdded(aura_owner);
 
 			for (auto it = aura_owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-				this->HookAfterMinionAdded(aura_owner, *it);
+				this->HookAfterMinionAdded(*it);
 			}
 			for (auto it = aura_owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-				this->HookAfterMinionAdded(aura_owner, *it);
+				this->HookAfterMinionAdded(*it);
 			}
 		}
 	};
