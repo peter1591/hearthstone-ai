@@ -1,6 +1,7 @@
 #pragma once
 
 #include "minion-auras.h"
+#include "minion-aura.h"
 
 namespace GameEngine
 {

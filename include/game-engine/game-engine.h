@@ -6,6 +6,7 @@
 #include "game-engine/player-impl.h"
 #include "game-engine/board-objects/object-manager-impl.h"
 
+#include "game-engine/hook/minion-auras-impl.h"
 #include "game-engine/next-move-getter-impl.h"
 #include "game-engine/board-objects/minion-iterator-impl.h"
 #include "game-engine/board-objects/minion-impl.h"
@@ -20,5 +21,3 @@
 #include "game-engine/stages/helper-impl.h"
 #include "game-engine/card-database-impl.h"
 #include "game-engine/slot-index-impl.h"
-
-#include "game-engine/hook/minion-auras-impl.h"

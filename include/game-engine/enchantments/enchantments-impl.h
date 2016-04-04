@@ -4,6 +4,7 @@
 #include "game-engine/board-objects/minion.h"
 #include "game-engine/board-objects/minions.h"
 #include "game-engine/enchantments/managed-enchantment.h"
+#include "game-engine/hook/minion-aura.h"
 
 namespace GameEngine
 {
@@ -35,6 +36,12 @@ namespace GameEngine
 		this->enchantments.RemoveIf([this](auto item) {
 			return true;
 		});
+	}
+
+	template<typename Target>
+	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
+	{
+		return this->Add(std::move(enchantment), &aura.minion_enchantments);
 	}
 
 	template <typename Target>

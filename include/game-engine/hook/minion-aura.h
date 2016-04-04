@@ -27,7 +27,7 @@ namespace GameEngine
 			this->minion_enchantments.RemoveOwnedEnchantments();
 		}
 
-	protected:
+	public:
 		EnchantmentOwner<Minion> minion_enchantments;
 
 	private:

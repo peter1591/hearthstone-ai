@@ -12,6 +12,7 @@ template <typename Target> class Enchantment;
 template <typename Target> class ManagedEnchantment;
 template <typename EnchantmentTarget> class EnchantmentOwner;
 class Minion;
+class MinionAura;
 
 // Maintains the lifetime of Enchantment
 template <typename Target>
@@ -40,7 +41,9 @@ public:
 	// destory all allocated resource without triggering any hooks (since the whole board is going to be destroyed)
 	void Destroy();
 
+	void Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura);
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentOwner<Target> * owner);
+
 	void Remove(ManagedEnchantment<Target> & item); // interface for enchantment owner
 	void Clear();
 	bool Empty() const;
