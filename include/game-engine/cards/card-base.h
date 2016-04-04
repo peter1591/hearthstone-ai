@@ -33,6 +33,7 @@ public: \
 //#include "card_example_weapon.h"
 //#include "card_example_spell.h"
 
+#include "card_CS2_022.h"
 #include "card_CS2_023.h"
 #include "card_CS2_025.h"
 #include "card_CS2_029.h"
