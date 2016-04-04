@@ -467,20 +467,14 @@ namespace GameEngine
 		return false;
 	}
 
-	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex data)
+	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex target)
 	{
 		// TODO: check hand card type is spell
 
-
-
-		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, data);
+		Cards::CardCallbackManager::Spell_Go(card.id, player, target);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		player.hero.EquipWeapon(card);
-		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, player.hero);
-		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
-
-		throw std::runtime_error("not yet implemented");
+		return false;
 	}
 
 	inline void StageHelper::Fatigue(GameEngine::Board & board, SlotIndex side)

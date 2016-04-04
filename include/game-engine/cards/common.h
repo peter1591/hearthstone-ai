@@ -71,6 +71,11 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_Weapon_BattleCry>(card_id, equipping_player, target);
 	}
 
+	static bool Spell_Go(int card_id, GameEngine::Player &player, SlotIndex target)
+	{
+		return CardCallbackManager::HandleCallback<Callback_Spell_Go>(card_id, player, target);
+	}
+
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
 
@@ -79,6 +84,7 @@ private:
 	DECLARE_CARD_CALLBACK(GetRequiredTargets)
 	DECLARE_CARD_CALLBACK(Weapon_BattleCry)
 	DECLARE_CARD_CALLBACK(Weapon_AfterEquipped)
+	DECLARE_CARD_CALLBACK(Spell_Go)
 
 #undef DECLARE_CARD_CALLBACK
 
