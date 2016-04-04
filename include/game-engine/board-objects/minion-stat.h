@@ -55,10 +55,10 @@ public:
 	bool IsWindFury() const { return this->flags[MinionStat::FLAG_WINDFURY] > 0; }
 	bool IsPoisonous() const { return this->flags[MinionStat::FLAG_POISONOUS] > 0; }
 
-	void SetAttack(int attack) { this->attack = attack; }
-	void SetHP(int hp) { this->hp = hp; }
-	void SetMaxHP(int max_hp) { this->max_hp = max_hp; }
-	void SetSpellDamage(int spell_damage) { this->spell_damage = spell_damage; }
+	void SetAttack(int attack_) { this->attack = attack_; }
+	void SetHP(int hp_) { this->hp = hp_; }
+	void SetMaxHP(int max_hp_) { this->max_hp = max_hp_; }
+	void SetSpellDamage(int spell_damage_) { this->spell_damage = spell_damage_; }
 
 	// Add one count to the flag
 	void SetTaunt() { this->SetFlag(FLAG_TAUNT); }

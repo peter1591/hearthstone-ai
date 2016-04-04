@@ -18,10 +18,10 @@ inline Task::State Task::GetState()
 	return this->state;
 }
 
-inline void Task::SetState(Task::State state)
+inline void Task::SetState(Task::State state_)
 {
 	std::unique_lock<std::mutex> lck(this->mtx_state);
-	this->state = state;
+	this->state = state_;
 }
 
 inline int Task::GetIterationCount()
@@ -36,14 +36,14 @@ inline void Task::IncreaseIterationCount()
 	++this->iterations;
 }
 
-inline void Task::Initialize(std::thread &&thread)
+inline void Task::Initialize(std::thread &&thread_)
 {
-	this->thread = std::move(thread);
+	this->thread = std::move(thread_);
 }
 
-inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_until, Task::PauseNotifier *notifier)
+inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_until_, Task::PauseNotifier *notifier)
 {
-	this->run_until = run_until;
+	this->run_until = run_until_;
 	this->pause_notifier = notifier;
 	this->SetState(Task::STATE_RUNNING);
 }

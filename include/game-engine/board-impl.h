@@ -189,9 +189,9 @@ inline Board & Board::operator=(Board && rhs)
 	return *this;
 }
 
-inline void Board::SetRandomSeed(unsigned int random_seed)
+inline void Board::SetRandomSeed(unsigned int random_seed_)
 {
-	this->random_seed = random_seed;
+	this->random_seed = random_seed_;
 }
 
 inline void Board::SetStateToPlayerChooseBoardMove()
@@ -202,7 +202,6 @@ inline void Board::SetStateToPlayerChooseBoardMove()
 
 inline void Board::DebugPrint() const
 {
-	Stage stage = this->GetStage();
 	StageType stage_type = this->GetStageType();
 
 	std::cout << "=== Print Board START ===" << std::endl;
@@ -223,8 +222,8 @@ inline void Board::DebugPrint() const
 			throw std::runtime_error("unhandled stage type");
 	}
 
-	std::cout << "Stage: [" << stage << "] "
-	   << StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(stage)
+	std::cout << "Stage: [" << this->stage << "] "
+	   << StageFunctionCaller<StageFunctionChooser::Chooser_GetStageStringName>(this->stage)
 	   << std::endl;
 
 	std::cout << "Opponent stat: " << this->opponent.stat.GetDebugString() << std::endl;

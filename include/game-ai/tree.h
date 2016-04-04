@@ -96,17 +96,17 @@ inline void TreeNode::AddChild(TreeNode *node)
 
 inline void TreeNode::GetBoard(GameEngine::Board & board) const
 {
-	std::list<TreeNode const*> path;
+	std::list<TreeNode const*> path_nodes;
 	auto path_iterator = this->path.GetReverseIterator(this);
 
 	while (true) {
 		auto const& node = path_iterator.GetNodeAndMoveUpward();
 		if (node == nullptr) break;
 		if (node->parent == nullptr) break;
-		path.push_front(node);
+		path_nodes.push_front(node);
 	}
 
-	for (auto const& path_node : path) {
+	for (auto const& path_node : path_nodes) {
 		board.ApplyMove(path_node->move);
 	}
 
@@ -118,10 +118,10 @@ inline void TreeNode::GetBoard(GameEngine::Board & board) const
 #endif
 }
 
-inline TreeNode * TreeNode::FindChildByMove(GameEngine::Move const & move)
+inline TreeNode * TreeNode::FindChildByMove(GameEngine::Move const & child_move)
 {
 	if (this->move_child_map) {
-		auto it = this->move_child_map->find(move);
+		auto it = this->move_child_map->find(child_move);
 		if (it == this->move_child_map->end()) return nullptr;
 		return it->second;
 	}
@@ -132,7 +132,7 @@ inline TreeNode * TreeNode::FindChildByMove(GameEngine::Move const & move)
 	TreeNode * ret = nullptr;
 	for (auto const& child : this->children) {
 		this->move_child_map->insert(std::make_pair(child->move, child));
-		if (child->move == move) ret = child;
+		if (child->move == child_move) ret = child;
 	}
 
 	return ret;

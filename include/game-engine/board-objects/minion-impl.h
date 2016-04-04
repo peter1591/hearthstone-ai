@@ -212,9 +212,9 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 	}
 }
 
-inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion, int damage)
+inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion_, int damage)
 {
-	this->auras.HookAfterMinionDamaged(minion, damage);
+	this->auras.HookAfterMinionDamaged(minion_, damage);
 }
 
 inline void GameEngine::Minion::TurnStart(bool owner_turn)

@@ -31,7 +31,7 @@ namespace GameEngine {
 
 		Board & GetBoard() const { return this->board; }
 
-		void SetHero(HeroData const& hero) { this->hero = hero; }
+		void SetHero(HeroData const& hero_) { this->hero = hero_; }
 
 		std::string GetDebugString() const { return this->hero.GetDebugString(); }
 

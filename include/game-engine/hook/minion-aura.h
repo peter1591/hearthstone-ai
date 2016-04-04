@@ -22,9 +22,9 @@ namespace GameEngine
 		Minion & GetOwner() const { return this->owner; }
 
 	public:
-		void BeforeRemoved(Minion & owner)
+		void BeforeRemoved(Minion & owner_)
 		{
-			HookListener::BeforeRemoved(owner);
+			HookListener::BeforeRemoved(owner_);
 
 			if (this->minion_enchantments) {
 				this->minion_enchantments->RemoveOwnedEnchantments();
@@ -36,8 +36,8 @@ namespace GameEngine
 
 	public:
 		template <typename Target> void GetEnchantmentsOwner(EnchantmentsOwner<Target> * &owner);
-		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Minion> * &owner) { owner = &this->GetMinionEnchantmentsOwner(); }
-		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Player> * &owner) { owner = &this->GetPlayerEnchantmentsOwner(); }
+		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Minion> * &owner_) { owner_ = &this->GetMinionEnchantmentsOwner(); }
+		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Player> * &owner_) { owner_ = &this->GetPlayerEnchantmentsOwner(); }
 
 		EnchantmentsOwner<Minion> & GetMinionEnchantmentsOwner()
 		{

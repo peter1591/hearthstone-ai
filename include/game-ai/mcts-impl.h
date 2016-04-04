@@ -12,10 +12,10 @@ inline MCTS::~MCTS()
 	if (this->allocated_node) delete this->allocated_node;
 }
 
-inline void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board)
+inline void MCTS::Initialize(unsigned int rand_seed, StartBoard && start_board_)
 {
 	srand(rand_seed);
-	this->start_board = std::move(start_board);
+	this->start_board = std::move(start_board_);
 }
 
 inline void MCTS::Iterate()

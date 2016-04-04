@@ -14,11 +14,11 @@ class PlayerStat
 			friend struct std::hash<Crystal>;
 
 			public:
-				void Set(int current, int total, int locked, int locked_next_turn) {
-					this->current = current;
-					this->total = total;
-					this->locked = locked;
-					this->locked_next_turn = locked_next_turn;
+				void Set(int current_, int total_, int locked_, int locked_next_turn_) {
+					this->current = current_;
+					this->total = total_;
+					this->locked = locked_;
+					this->locked_next_turn = locked_next_turn_;
 				}
 
 				int GetCurrent() const { return this->current; }
@@ -27,7 +27,7 @@ class PlayerStat
 				int GetLockedNextTurn() const { return this->locked_next_turn; }
 
 				void CostCrystals(int cost) { this->current -= cost; }
-				void LockCrystals(int locked) { this->locked_next_turn -= locked; }
+				void LockCrystals(int locked_) { this->locked_next_turn -= locked_; }
 				void TurnStart() {
 					this->total++;
 					this->locked = this->locked_next_turn;
