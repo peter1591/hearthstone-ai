@@ -6,21 +6,10 @@
 DEFINE_CARD_CLASS_START(CS2_222)
 // Stormwind Champion
 
-// TODO: add an convenient class for this kind of aura
 class Aura : public AuraToAllMinions
 {
 public:
 	Aura(Minion & owner) : AuraToAllMinions(owner) {}
-
-private: // hooks
-	void HookAfterMinionAdded(Minion & added_minion)
-	{
-		AuraToAllMinions::HookAfterMinionAdded(added_minion);
-
-		if (this->CheckMinionShouldHaveAuraEnchantment(added_minion)) {
-			this->AddAuraEnchantmentToMinion(added_minion);
-		}
-	}
 
 private:
 	bool CheckMinionShouldHaveAuraEnchantment(Minion & minion)

@@ -28,4 +28,5 @@ static void AfterSummoned(MinionIterator summoned_minion)
 {
 	summoned_minion->auras.Add<Aura>();
 }
+
 DEFINE_CARD_CLASS_END()

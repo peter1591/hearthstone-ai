@@ -23,10 +23,28 @@ namespace GameEngine {
 			MinionAura::AfterAdded(aura_owner);
 
 			for (auto it = aura_owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
-				this->HookAfterMinionAdded(*it);
+				this->Invoke(*it);
 			}
 			for (auto it = aura_owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
-				this->HookAfterMinionAdded(*it);
+				this->Invoke(*it);
+			}
+		}
+
+		void HookAfterMinionAdded(Minion & added_minion)
+		{
+			MinionAura::HookAfterMinionAdded(added_minion);
+			this->Invoke(added_minion);
+		}
+
+		// default: apply to all minions
+		virtual bool CheckMinionShouldHaveAuraEnchantment(Minion & minion) { return true; }
+		virtual void AddAuraEnchantmentToMinion(Minion & target_minion) = 0;
+
+	private:
+		void Invoke(Minion & minion)
+		{
+			if (this->CheckMinionShouldHaveAuraEnchantment(minion)) {
+				this->AddAuraEnchantmentToMinion(minion);
 			}
 		}
 	};
