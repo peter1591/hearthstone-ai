@@ -6,8 +6,9 @@
 namespace GameEngine
 {
 	template <int spell_damage_boost, bool one_turn>
-	void Enchantment_BuffPlayer_C<spell_damage_boost, one_turn>::AfterAdded(Player & player)
+	void Enchantment_BuffPlayer_C<spell_damage_boost, one_turn>::Apply(Player & player)
 	{
+		Enchantment<Player>::Apply(player);
 		player.stat.spell_damage += spell_damage_boost;
 
 #ifdef DEBUG
@@ -16,8 +17,9 @@ namespace GameEngine
 	}
 
 	template<int spell_damage_boost, bool one_turn>
-	inline void Enchantment_BuffPlayer_C<spell_damage_boost, one_turn>::BeforeRemoved(Player & player)
+	inline void Enchantment_BuffPlayer_C<spell_damage_boost, one_turn>::Remove(Player & player)
 	{
+		Enchantment<Player>::Remove(player);
 		player.stat.spell_damage -= spell_damage_boost;
 	}
 

@@ -13,8 +13,8 @@ namespace GameEngine
 		std::size_t GetHash() const;
 
 	public:
-		void AfterAdded(Minion & minion);
-		void BeforeRemoved(Minion & minion);
+		void Apply(Minion & minion);
+		void Remove(Minion & minion);
 		void TurnEnd(Minion & minion, bool & expired);
 
 	private:

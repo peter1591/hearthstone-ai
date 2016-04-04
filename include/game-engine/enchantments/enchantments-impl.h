@@ -58,7 +58,7 @@ namespace GameEngine
 		
 		if (owner) owner->EnchantmentAdded(ManagedEnchantment<Target>(*this, managed_item));
 
-		ref_ptr->AfterAdded(this->target);
+		ref_ptr->Apply(this->target);
 	}
 
 	template <typename Target>
@@ -108,7 +108,7 @@ namespace GameEngine
 	template <typename Target>
 	inline void Enchantments<Target>::BeforeRemove(typename ManagedContainer::ManagedItem item)
 	{
-		item->enchantment->BeforeRemoved(this->target);
+		item->enchantment->Remove(this->target);
 		if (item->owner) item->owner->EnchantmentRemoved(item);
 	}
 } // namespace GameEngine

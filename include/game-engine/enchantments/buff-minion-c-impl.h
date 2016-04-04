@@ -13,8 +13,9 @@ namespace GameEngine {
 	}
 
 	template<int attack_boost, int hp_boost, int spell_damage_boost, int buff_flags, bool one_turn>
-	inline void Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::AfterAdded(Minion & minion)
+	inline void Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::Apply(Minion & minion)
 	{
+		Enchantment<Minion>::Apply(minion);
 #ifdef DEBUG
 		this->after_added_called = true;
 #endif
@@ -22,8 +23,9 @@ namespace GameEngine {
 	}
 
 	template<int attack_boost, int hp_boost, int spell_damage_boost, int buff_flags, bool one_turn>
-	inline void Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::BeforeRemoved(Minion & minion)
+	inline void Enchantment_BuffMinion_C<attack_boost, hp_boost, spell_damage_boost, buff_flags, one_turn>::Remove(Minion & minion)
 	{
+		Enchantment<Minion>::Remove(minion);
 #ifdef DEBUG
 		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
 #endif

@@ -14,14 +14,19 @@ class Enchantment
 	friend std::hash<Enchantment>;
 
 public:
-	Enchantment() : applied(false) {}
+	Enchantment()
+	{
+#ifdef DEBUG
+		this->applied = false;
+#endif
+	}
 	virtual ~Enchantment() {}
 
 	bool operator==(Enchantment<Target> const& rhs) const { return this->EqualsTo(rhs); }
 	bool operator!=(Enchantment<Target> const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
-	virtual void AfterAdded(Target & target)
+	virtual void Apply(Target & target)
 	{
 		(void)target;
 #ifdef DEBUG
@@ -29,7 +34,7 @@ public: // hooks
 		this->applied = true;
 #endif
 	}
-	virtual void BeforeRemoved(Target & target)
+	virtual void Remove(Target & target)
 	{
 		(void)target;
 #ifdef DEBUG

@@ -15,8 +15,8 @@ namespace GameEngine
 		std::size_t GetHash() const { return typeid(decltype(*this)).hash_code(); }
 
 	public:
-		void AfterAdded(Player & player);
-		void BeforeRemoved(Player & player);
+		void Apply(Player & player);
+		void Remove(Player & player);
 		void TurnEnd(Player & player, bool & expired);
 	};
 } // namespace GameEngine

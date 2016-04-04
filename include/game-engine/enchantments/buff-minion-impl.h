@@ -44,16 +44,18 @@ namespace GameEngine
 		return result;
 	}
 
-	inline void Enchantment_BuffMinion::AfterAdded(Minion & minion)
+	inline void Enchantment_BuffMinion::Apply(Minion & minion)
 	{
+		Enchantment<Minion>::Apply(minion);
 #ifdef DEBUG
 		this->after_added_called = true;
 #endif
 		return Impl::Enchantment_BuffMinion::AfterAdded(this->attack_boost, this->hp_boost, this->damage_spell_boost, this->buff_flags, this->actual_attack_boost, minion);
 	}
 
-	inline void Enchantment_BuffMinion::BeforeRemoved(Minion & minion)
+	inline void Enchantment_BuffMinion::Remove(Minion & minion)
 	{
+		Enchantment<Minion>::Remove(minion);
 #ifdef DEBUG
 		if (this->after_added_called == false) throw std::runtime_error("AfterAdded() should be called before");
 #endif
