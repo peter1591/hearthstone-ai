@@ -6,6 +6,7 @@
 #include <bitset>
 #include <set>
 
+#include "game-engine/random-generator.h"
 #include "hand-card.h"
 #include "card.h"
 

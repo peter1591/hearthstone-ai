@@ -20,3 +20,5 @@
 #include "game-engine/stages/helper-impl.h"
 #include "game-engine/card-database-impl.h"
 #include "game-engine/slot-index-impl.h"
+
+#include "game-engine/hook/minion-auras-impl.h"
