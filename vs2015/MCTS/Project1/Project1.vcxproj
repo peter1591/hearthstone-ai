@@ -187,6 +187,8 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-player-c-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-player-c.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-impl.h" />

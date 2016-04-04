@@ -65,7 +65,8 @@ inline void StartBoard::InitializeDebugBoard1_OpponentHand(GameEngine::Hand &han
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // arcane explosion
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
-	
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_051)); // both player spell+2
+
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_142)); // 222 spell+1
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_584)); // adjacent spell+1
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
@@ -77,9 +78,15 @@ inline void StartBoard::InitializeDebugBoard1_OpponentHand(GameEngine::Hand &han
 
 inline void StartBoard::InitializeDebugBoard3_Hand(GameEngine::Hand &hand)
 {
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_222)); // Stormwind Champion
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_051)); // both player spell+2
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_142)); // 222 spell+1
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_584)); // adjacent spell+1
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
-	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_222));
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // arcane explosion
 }
 
 inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
@@ -203,7 +210,7 @@ inline void StartBoard::InitializeDebugBoard3(GameEngine::Board &board)
 	board.player.hero.SetHero(player_hero);
 	board.opponent.hero.SetHero(opponent_hero);
 
-	//InitializeDebugBoard3_Hand(board.player.hand);
+	InitializeDebugBoard3_Hand(board.player.hand);
 	InitializeDebugBoard3_Hand(board.opponent.hand);
 
 	{

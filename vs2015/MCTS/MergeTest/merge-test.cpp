@@ -111,6 +111,39 @@ static void InteractiveTest()
 	}
 }
 
+class A
+{
+public:
+	virtual bool EqualsTo(A const& rhs) const = 0;
+};
+
+class B : public A
+{
+public:
+	bool EqualsTo(A const& rhs) const { return dynamic_cast<decltype(this)>(&rhs) != nullptr; }
+};
+
+class C : public A
+{
+public:
+	bool EqualsTo(A const& rhs) const { return dynamic_cast<decltype(this)>(&rhs) != nullptr; }
+};
+
+static void TestClassEquality()
+{
+	B b1, b2;
+	C c1, c2;
+
+	if (!b1.EqualsTo(b2)) std::cout << "failed" << std::endl;
+	if (!c1.EqualsTo(c2)) std::cout << "failed" << std::endl;
+	if (b1.EqualsTo(c1)) std::cout << "failed" << std::endl;
+	if (b1.EqualsTo(c2)) std::cout << "failed" << std::endl;
+	if (c1.EqualsTo(b1)) std::cout << "failed" << std::endl;
+	if (c1.EqualsTo(b2)) std::cout << "failed" << std::endl;
+
+	std::cout << "ok" << std::endl;
+}
+
 int main(void)
 {
 	std::cout << "Loading card database..." << std::endl;
@@ -119,4 +152,5 @@ int main(void)
 
 	//TestBasic();
 	InteractiveTest();
+	//TestClassEquality();
 }
