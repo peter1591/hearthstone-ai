@@ -11,7 +11,6 @@
 #include "game-engine/board-objects/minion-iterator-impl.h"
 #include "game-engine/board-objects/minion-impl.h"
 #include "game-engine/board-objects/minions-impl.h"
-#include "game-engine/enchantments/enchantment-impl.h"
 #include "game-engine/enchantments/buff-minion-impl.h"
 #include "game-engine/enchantments/buff-minion-c-impl.h"
 #include "game-engine/enchantments/buff-player-c-impl.h"

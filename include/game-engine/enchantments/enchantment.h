@@ -14,11 +14,11 @@ class Enchantment
 	friend std::hash<Enchantment>;
 
 public:
-	Enchantment();
-	virtual ~Enchantment();
+	Enchantment() {}
+	virtual ~Enchantment() {}
 
-	bool operator==(Enchantment<Target> const& rhs) const;
-	bool operator!=(Enchantment<Target> const& rhs) const;
+	bool operator==(Enchantment<Target> const& rhs) const { return this->EqualsTo(rhs); }
+	bool operator!=(Enchantment<Target> const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
 	virtual void AfterAdded(Target & target) { (void)target; }
@@ -44,5 +44,3 @@ namespace std {
 		}
 	};
 }
-
-#include "enchantment-impl.h"
