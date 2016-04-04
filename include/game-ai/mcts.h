@@ -50,8 +50,6 @@ private:
 	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
-	static constexpr double exploration_factor = 2.0;
-
 	StartBoard start_board;
 	Tree tree;
 	BoardNodeMap board_node_map;

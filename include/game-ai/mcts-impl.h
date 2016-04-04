@@ -271,7 +271,11 @@ inline double MCTS::CalculateSelectionWeight(TreeNode * node, double total_simul
 
 	double exploration_term = sqrt(total_simulations_ln / node_simulations);
 
-	return win_rate + this->exploration_factor * exploration_term;
+	double variance = win_rate * (1.0 - win_rate);
+	double ucb1_tuned_factor = variance + sqrt(2.0 * total_simulations_ln / node_simulations);
+	if (ucb1_tuned_factor < 0.25) ucb1_tuned_factor = 0.25;
+
+	return win_rate + exploration_term * ucb1_tuned_factor;
 }
 
 inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
