@@ -8,7 +8,7 @@ static void GetRequiredTargets(Player const& equipping_player, SlotIndexBitmap &
 {
 }
 
-static void Weapon_BattleCry(Player &equipping_player, Move::EquipWeaponData const&)
+static void Weapon_BattleCry(Player &equipping_player, SlotIndex target)
 {
 }
 

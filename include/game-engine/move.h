@@ -37,19 +37,6 @@ class Move
 			bool operator!=(PlayMinionData const& rhs) const { return !(*this == rhs); }
 		};
 
-		struct EquipWeaponData
-		{
-			SlotIndex target;
-
-			bool operator==(EquipWeaponData const& rhs) const
-			{
-				if (this->target != rhs.target) return false;
-				return true;
-			}
-
-			bool operator!=(EquipWeaponData const& rhs) const { return !(*this == rhs); }
-		};
-
 		struct PlayHandMinionData {
 			Hand::Locator hand_card;
 			int card_id; // to distinguish moves for different boards merged into one MCTS tree node
@@ -70,13 +57,13 @@ class Move
 		struct PlayHandCardData {
 			Hand::Locator hand_card;
 			int card_id; // to distinguish moves for different boards merged into one MCTS tree node
-			EquipWeaponData data;
+			SlotIndex target;
 
 			bool operator==(PlayHandCardData const& rhs) const
 			{
 				if (this->hand_card != rhs.hand_card) return false;
-				if (this->data != rhs.data) return false;
 				if (this->card_id != rhs.card_id) return false;
+				if (this->target != rhs.target) return false;
 				return true;
 			}
 
@@ -171,13 +158,13 @@ inline std::string Move::GetDebugString() const
 	case Move::ACTION_PLAY_HAND_WEAPON:
 		oss << "[Play hand weapon] hand idx = " << this->data.play_hand_card_data.hand_card;
 		oss << ", card id = " << this->data.play_hand_card_data.card_id;
-		oss << ", target = " << this->data.play_hand_card_data.data.target;
+		oss << ", target = " << this->data.play_hand_card_data.target;
 		break;
 
 	case Move::ACTION_PLAY_HAND_SPELL:
 		oss << "[Play hand spell] hand idx = " << this->data.play_hand_card_data.hand_card;
 		oss << ", card id = " << this->data.play_hand_card_data.card_id;
-		oss << ", target = " << this->data.play_hand_card_data.data.target;
+		oss << ", target = " << this->data.play_hand_card_data.target;
 		break;
 
 	case Move::ACTION_ATTACK:
@@ -213,18 +200,6 @@ namespace std {
 		}
 	};
 
-	template <> struct hash<GameEngine::Move::EquipWeaponData> {
-		typedef GameEngine::Move::EquipWeaponData argument_type;
-		typedef std::size_t result_type;
-		result_type operator()(const argument_type &s) const {
-			result_type result = 0;
-
-			GameEngine::hash_combine(result, s.target);
-
-			return result;
-		}
-	};
-
 	template <> struct hash<GameEngine::Move::PlayHandMinionData> {
 		typedef GameEngine::Move::PlayHandMinionData argument_type;
 		typedef std::size_t result_type;
@@ -246,8 +221,8 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.hand_card);
-			GameEngine::hash_combine(result, s.data);
 			GameEngine::hash_combine(result, s.card_id);
+			GameEngine::hash_combine(result, s.target);
 
 			return result;
 		}

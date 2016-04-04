@@ -4,7 +4,7 @@
 DEFINE_CARD_CLASS_START(GVG_043)
 // Weapon: Glaivezooka
 
-static void Weapon_BattleCry(GameEngine::Player & equipping_player, GameEngine::Move::EquipWeaponData const&)
+static void Weapon_BattleCry(GameEngine::Player & equipping_player, SlotIndex)
 {
 	constexpr int attack_boost = 1;
 

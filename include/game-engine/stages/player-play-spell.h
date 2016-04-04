@@ -26,7 +26,7 @@ namespace GameEngine {
 
 			player.stat.crystal.CostCrystals(playing_card.cost);
 
-			StageHelper::PlaySpell(player, playing_card, data.data);
+			StageHelper::PlaySpell(player, playing_card, data.target);
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}

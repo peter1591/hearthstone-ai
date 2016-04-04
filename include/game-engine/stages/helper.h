@@ -30,9 +30,9 @@ public: // return true if game state changed (e.g., win/loss)
 	// no battle cry
 	static bool SummonMinion(Card const& card, MinionIterator & it);
 
-	static bool EquipWeapon(Player & player, Card const& card, Move::EquipWeaponData const& data);
+	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
 
-	static bool PlaySpell(Player & player, Card const& card, Move::EquipWeaponData const& data);
+	static bool PlaySpell(Player & player, Card const& card, SlotIndex target);
 
 public:
 	// handle minion/hero attack, calculate damages

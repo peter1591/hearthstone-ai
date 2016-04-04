@@ -189,12 +189,12 @@ inline bool GameEngine::NextMoveGetter::ItemPlayHandCard::GetNextMove(GameEngine
 
 	if (this->required_targets.None())
 	{
-		move.data.play_hand_card_data.data.target = SLOT_INVALID;
+		move.data.play_hand_card_data.target = SLOT_INVALID;
 		this->done = true;
 	}
 	else {
-		move.data.play_hand_card_data.data.target = this->required_targets.GetOneTarget();
-		this->required_targets.ClearOneTarget(move.data.play_hand_card_data.data.target);
+		move.data.play_hand_card_data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.play_hand_card_data.target);
 		if (this->required_targets.None()) this->done = true;
 	}
 	return true;

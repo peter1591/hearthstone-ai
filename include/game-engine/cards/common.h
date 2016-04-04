@@ -66,9 +66,9 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_Weapon_AfterEquipped>(card_id, equipped_hero);
 	}
 
-	static bool Weapon_BattleCry(int card_id, GameEngine::Player &equipping_player, GameEngine::Move::EquipWeaponData const& equip_weapon_data)
+	static bool Weapon_BattleCry(int card_id, GameEngine::Player &equipping_player, SlotIndex target)
 	{
-		return CardCallbackManager::HandleCallback<Callback_Weapon_BattleCry>(card_id, equipping_player, equip_weapon_data);
+		return CardCallbackManager::HandleCallback<Callback_Weapon_BattleCry>(card_id, equipping_player, target);
 	}
 
 private:

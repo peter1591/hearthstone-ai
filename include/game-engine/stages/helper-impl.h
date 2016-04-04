@@ -210,8 +210,8 @@ namespace GameEngine
 				move.action = Move::ACTION_PLAY_HAND_WEAPON;
 				move.data.play_hand_card_data.hand_card = hand_idx;
 				move.data.play_hand_card_data.card_id = playing_card.id;
-				if (required_targets.None()) move.data.play_hand_card_data.data.target = SLOT_INVALID;
-				else move.data.play_hand_card_data.data.target = required_targets.GetOneTarget();
+				if (required_targets.None()) move.data.play_hand_card_data.target = SLOT_INVALID;
+				else move.data.play_hand_card_data.target = required_targets.GetOneTarget();
 
 				moves.AddMove(move, weight_play_minion);
 				break;
@@ -228,8 +228,8 @@ namespace GameEngine
 				move.action = Move::ACTION_PLAY_HAND_SPELL;
 				move.data.play_hand_card_data.hand_card = hand_idx;
 				move.data.play_hand_card_data.card_id = playing_card.id;
-				if (required_targets.None()) move.data.play_hand_card_data.data.target = SLOT_INVALID;
-				else move.data.play_hand_card_data.data.target = required_targets.GetOneTarget();
+				if (required_targets.None()) move.data.play_hand_card_data.target = SLOT_INVALID;
+				else move.data.play_hand_card_data.target = required_targets.GetOneTarget();
 
 				moves.AddMove(move, weight_play_spell);
 				break;
@@ -451,13 +451,13 @@ namespace GameEngine
 		return true;
 	}
 
-	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, Move::EquipWeaponData const & data)
+	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, SlotIndex target)
 	{
 		// TODO: check hand card type is weapon
 
 		player.hero.DestroyWeapon();
 
-		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, data);
+		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, target);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		player.hero.EquipWeapon(card);
@@ -467,9 +467,18 @@ namespace GameEngine
 		return false;
 	}
 
-	inline bool StageHelper::PlaySpell(Player & player, Card const & card, Move::EquipWeaponData const & data)
+	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex data)
 	{
 		// TODO: check hand card type is spell
+
+
+
+		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, data);
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
+
+		player.hero.EquipWeapon(card);
+		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, player.hero);
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		throw std::runtime_error("not yet implemented");
 	}
