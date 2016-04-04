@@ -291,6 +291,15 @@ namespace GameEngine
 		taker.TakeDamage(damage, poisonous);
 	}
 
+	inline Minion & StageHelper::RandomChooseMinion(Minions & minions)
+	{
+		int count = minions.GetMinionCount();
+		if (count == 0) throw std::runtime_error("invalid argument");
+
+		const int rand = minions.GetBoard().random_generator.GetRandom(count);
+		return minions.GetMinion(rand);
+	}
+
 	inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)
 	{
 		const bool player_side = SlotIndexHelper::IsPlayerSide(origin_attacked);

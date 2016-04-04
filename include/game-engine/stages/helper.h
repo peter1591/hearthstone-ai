@@ -43,6 +43,9 @@ public:
 	static void DealDamage(GameEngine::Hero & taker, int damage, bool poisonous);
 	static void DealDamage(GameEngine::Minion & taker, int damage, bool poisonous);
 
+public: // randomly choose
+	static Minion & RandomChooseMinion(Minions & minions);
+
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
 
