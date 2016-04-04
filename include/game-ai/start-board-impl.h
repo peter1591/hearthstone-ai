@@ -226,7 +226,43 @@ inline void StartBoard::InitializeDebugBoard3(GameEngine::Board &board)
 	board.SetStateToPlayerChooseBoardMove();
 }
 
-inline void StartBoard::InitializeDeck_Practice_Mage(GameEngine::Hand & hand)
+inline void StartBoard::InitializeDeck_Practice_Mage_Player(GameEngine::Hand & hand)
+{
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // Arcane Explosion
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // Arcane Explosion
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_023)); // Arcane Intellct
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_023)); // Arcane Intellct
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_277)); // Arcane Missiles
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_172)); // 232
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_200)); // 667
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_200)); // 667
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_029)); // Fireball
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_029)); // Fireball
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_168)); // 121
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_593)); // Nightblade
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_593)); // Nightblade
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_015)); // Novice Enginner
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_015)); // Novice Enginner
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_119)); // 427
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_119)); // 427
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_022)); // Polymorph
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_022)); // Polymorph
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_122)); // Raid Leader
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_179)); // 435 Taunt
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_179)); // 435 Taunt
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_124)); // 331 Charge
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_124)); // 331 Charge
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_277)); // Arcane Missiles
+
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_168)); // 121
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_122)); // Raid Leader
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_120)); // 223
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_172)); // 232
+}
+
+inline void StartBoard::InitializeDeck_Practice_Mage_Opponent(GameEngine::Hand & hand)
 {
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // Arcane Explosion
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_025)); // Arcane Explosion
@@ -258,14 +294,20 @@ inline void StartBoard::InitializeDeck_Practice_Mage(GameEngine::Hand & hand)
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_179)); // 435 Taunt
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_124)); // 331 Charge
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_124)); // 331 Charge
+
+	hand.DrawOneCardToHand();
+	hand.DrawOneCardToHand();
+	hand.DrawOneCardToHand();
+	hand.DrawOneCardToHand();
+	hand.DrawOneCardToHand();
 }
 
 inline void StartBoard::InitializeDebugBoard_Practice_Mage(GameEngine::Board & board)
 {
-	board.player.stat.crystal.Set(1, 1, 0, 0);
+	board.player.stat.crystal.Set(2, 2, 0, 0);
 	board.player.stat.fatigue_damage = 0;
 
-	board.opponent.stat.crystal.Set(0, 0, 0, 0);
+	board.opponent.stat.crystal.Set(1, 1, 0, 0);
 	board.opponent.stat.fatigue_damage = 0;
 
 	GameEngine::HeroData player_hero;
@@ -280,14 +322,8 @@ inline void StartBoard::InitializeDebugBoard_Practice_Mage(GameEngine::Board & b
 	opponent_hero.weapon.Clear();
 	board.opponent.hero.SetHero(opponent_hero);
 
-	InitializeDeck_Practice_Mage(board.player.hand);
-	InitializeDeck_Practice_Mage(board.opponent.hand);
-
-	for (int i = 0; i < 3; i++) {
-		board.player.hand.DrawOneCardToHand();
-		board.opponent.hand.DrawOneCardToHand();
-	}
-	board.opponent.hand.DrawOneCardToHand();
+	InitializeDeck_Practice_Mage_Player(board.player.hand);
+	InitializeDeck_Practice_Mage_Opponent(board.opponent.hand);
 
 	board.SetStateToPlayerChooseBoardMove();
 }
@@ -297,13 +333,16 @@ inline StartBoard::StartBoard()
 	//InitializeDebugBoard1(this->board_debug1);
 	//InitializeDebugBoard2(this->board_debug1);
 	//InitializeDebugBoard3(this->board_debug1);
-
-	InitializeDebugBoard_Practice_Mage(this->board_debug1);
 }
 
 inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const
 {
-	GameEngine::Board board = GameEngine::Board::Clone(this->board_debug1);
+	//GameEngine::Board board = GameEngine::Board::Clone(this->board_debug1);
+	//board.SetRandomSeed(rand_seed);
+	//return std::move(board);
+
+	GameEngine::Board board;
 	board.SetRandomSeed(rand_seed);
+	InitializeDebugBoard_Practice_Mage(board);
 	return std::move(board);
 }
