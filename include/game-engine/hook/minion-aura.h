@@ -4,6 +4,7 @@
 
 #include "game-engine/hook/listener.h"
 #include "game-engine/enchantments/owner.h"
+#include "game-engine/player.h"
 
 namespace GameEngine
 {
@@ -28,9 +29,13 @@ namespace GameEngine
 			if (this->minion_enchantments) {
 				this->minion_enchantments->RemoveOwnedEnchantments();
 			}
+			if (this->player_enchantments) {
+				this->player_enchantments->RemoveOwnedEnchantments();
+			}
 		}
 
 	public:
+
 		EnchantmentOwner<Minion> & GetMinionEnchantmentsOwner()
 		{
 			if (!this->minion_enchantments) {
@@ -39,9 +44,18 @@ namespace GameEngine
 			return *this->minion_enchantments;
 		}
 
+		EnchantmentOwner<Player> & GetPlayerEnchantmentsOwner()
+		{
+			if (!this->player_enchantments) {
+				this->player_enchantments.reset(new EnchantmentOwner<Player>());
+			}
+			return *this->player_enchantments;
+		}
+
 	private:
 		Minion & owner;
 		std::unique_ptr<EnchantmentOwner<Minion>> minion_enchantments;
+		std::unique_ptr<EnchantmentOwner<Player>> player_enchantments;
 	};
 
 } // namespace GameEngine

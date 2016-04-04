@@ -38,10 +38,16 @@ namespace GameEngine
 		});
 	}
 
-	template<typename Target>
-	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
+	template <>
+	inline void Enchantments<Minion>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
 	{
 		return this->Add(std::move(enchantment), &aura.GetMinionEnchantmentsOwner());
+	}
+
+	template <>
+	inline void Enchantments<Player>::Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura)
+	{
+		return this->Add(std::move(enchantment), &aura.GetPlayerEnchantmentsOwner());
 	}
 
 	template <typename Target>
