@@ -1,43 +1,31 @@
 #ifndef GAME_ENGINE_CARDS_CARD_LOE_051
 #define GAME_ENGINE_CARDS_CARD_LOE_051
 
-#include "card-base.h"
+DEFINE_CARD_CLASS_START(LOE_051)
+// Jungle Moonkin
 
-namespace GameEngine {
-	namespace Cards {
+class Aura : public MinionAura
+{
+public:
+	Aura(Minion & minion) : MinionAura(minion) {}
 
-		class Card_LOE_051
-		{
-		public:
-			static constexpr int card_id = CARD_ID_LOE_051;
+	void AfterAdded(Minion & owner_)
+	{
+		MinionAura::AfterAdded(owner_);
 
-			// Jungle Moonkin
+		this->GetOwner().GetBoard().player.enchantments.Add(std::make_unique<Enchantment_BuffPlayer_C<2, false>>(), *this);
+		this->GetOwner().GetBoard().opponent.enchantments.Add(std::make_unique<Enchantment_BuffPlayer_C<2, false>>(), *this);
+	}
 
-			class Aura : public GameEngine::MinionAura
-			{
-			public:
-				Aura(GameEngine::Minion & minion) : GameEngine::MinionAura(minion) {}
+private: // for comparison
+	bool EqualsTo(HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
+	std::size_t GetHash() const { return typeid(*this).hash_code(); }
+};
 
-				void AfterAdded(Minion & owner_)
-				{
-					MinionAura::AfterAdded(owner_);
-
-					this->GetOwner().GetBoard().player.enchantments.Add(std::make_unique<Enchantment_BuffPlayer_C<2, false>>(), *this);
-					this->GetOwner().GetBoard().opponent.enchantments.Add(std::make_unique<Enchantment_BuffPlayer_C<2, false>>(), *this);
-				}
-
-			private: // for comparison
-				bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
-				std::size_t GetHash() const { return typeid(*this).hash_code(); }
-			};
-
-			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
-			{
-				summoned_minion->auras.Add<Aura>();
-			}
-		};
-
-	} // namespace Cards
-} // namespace GameEngine
+static void AfterSummoned(MinionIterator summoned_minion)
+{
+	summoned_minion->auras.Add<Aura>();
+}
+DEFINE_CARD_CLASS_END()
 
 #endif

@@ -1,50 +1,39 @@
 #ifndef GAME_ENGINE_CARDS_CARD_CS2_188
 #define GAME_ENGINE_CARDS_CARD_CS2_188
 
-#include "card-base.h"
+DEFINE_CARD_CLASS_START(CS2_188)
 
-namespace GameEngine {
-namespace Cards {
+// Abusive Sergant
 
-class Card_CS2_188
+static void GetRequiredTargets(Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
 {
-public:
-	static constexpr int card_id = CARD_ID_CS2_188;
+	targets = SlotIndexHelper::GetTargets(player.side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, player.board);
+	meet_requirements = true; // it's fine even if no target available
+}
 
-	// Abusive Sergant
+static void BattleCry(Board & board, SlotIndex playing_side, Move::PlayMinionData const& play_minion_data)
+{
+	(void)playing_side;
 
-	static void GetRequiredTargets(GameEngine::Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
-	{
-		targets = SlotIndexHelper::GetTargets(player.side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, player.board);
-		meet_requirements = true; // it's fine even if no target available
+	constexpr int attack_boost = 2;
+
+	if (play_minion_data.target < 0) {
+		// no target to buff
+		return;
 	}
 
-	static void BattleCry(GameEngine::Board & board, SlotIndex playing_side, GameEngine::Move::PlayMinionData const& play_minion_data)
-	{
-		(void)playing_side;
-
-		constexpr int attack_boost = 2;
-
-		if (play_minion_data.target < 0) {
-			// no target to buff
-			return;
-		}
-
-		try {
-			auto & buff_target = board.object_manager.GetMinion(play_minion_data.target);
-			auto enchant = std::make_unique<Enchantment_BuffMinion_C<attack_boost, 0, 0, 0, true>>();
-			buff_target.enchantments.Add(std::move(enchant));
-		}
-		catch (std::out_of_range ex) {
+	try {
+		auto & buff_target = board.object_manager.GetMinion(play_minion_data.target);
+		auto enchant = std::make_unique<Enchantment_BuffMinion_C<attack_boost, 0, 0, 0, true>>();
+		buff_target.enchantments.Add(std::move(enchant));
+	}
+	catch (std::out_of_range ex) {
 #ifdef DEBUG
-			std::cerr << "WARNING: buff target vanished." << std::endl;
+		std::cerr << "WARNING: buff target vanished." << std::endl;
 #endif
-			return;
-		}
+		return;
 	}
-};
+}
 
-} // namespace Cards
-} // namespace GameEngine
-
+DEFINE_CARD_CLASS_END()
 #endif

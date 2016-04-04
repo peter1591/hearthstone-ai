@@ -1,37 +1,26 @@
 #pragma once
 
-#include "card-base.h"
+DEFINE_CARD_CLASS_START(EX1_029)
 
-namespace GameEngine {
-	namespace Cards {
+// Leper Gnome
+static void Deathrattle(MinionIterator & triggering_minion)
+{
+	// deal 2 damage to opponent hero
+	constexpr int damage = 2;
 
-		class Card_EX1_029
-		{
-		public:
-			static constexpr int card_id = CARD_ID_EX1_029;
+	auto & board = triggering_minion.GetBoard();
 
-			// Leper Gnome
-			
-			static void Deathrattle(GameEngine::MinionIterator & triggering_minion)
-			{
-				// deal 2 damage to opponent hero
-				constexpr int damage = 2;
+	if (triggering_minion.IsPlayerSide()) {
+		StageHelper::DealDamage(board.opponent.hero, damage, false);
+	}
+	else {
+		StageHelper::DealDamage(board.player.hero, damage, false);
+	}
+}
 
-				auto & board = triggering_minion.GetBoard();
+static void AfterSummoned(MinionIterator summoned_minion)
+{
+	summoned_minion->AddOnDeathTrigger(Minion::OnDeathTrigger(Deathrattle));
+}
 
-				if (triggering_minion.IsPlayerSide()) {
-					StageHelper::DealDamage(board.opponent.hero, damage, false);
-				}
-				else {
-					StageHelper::DealDamage(board.player.hero, damage, false);
-				}
-			}
-
-			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
-			{
-				summoned_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(Deathrattle));
-			}
-		};
-
-	} // namespace Cards
-} // namespace GameEngine
+DEFINE_CARD_CLASS_END()

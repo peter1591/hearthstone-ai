@@ -2,68 +2,57 @@
 #define GAME_ENGINE_CARDS_CARD_CS2_222
 
 #include <stdexcept>
-#include "card-base.h"
 
-namespace GameEngine {
-	namespace Cards {
+DEFINE_CARD_CLASS_START(CS2_222)
+// Stormwind Champion
 
-		class Card_CS2_222
-		{
-		public:
-			static constexpr int card_id = CARD_ID_CS2_222;
+// TODO: add an convenient class for this kind of aura
+class Aura : public GameEngine::AuraToAllMinions
+{
+public:
+	Aura(GameEngine::Minion & owner) : GameEngine::AuraToAllMinions(owner) {}
 
-			// Stormwind Champion
+private: // hooks
+	void HookAfterMinionAdded(Minion & added_minion)
+	{
+		GameEngine::AuraToAllMinions::HookAfterMinionAdded(added_minion);
 
-			// TODO: add an convenient class for this kind of aura
-			class Aura : public GameEngine::AuraToAllMinions
-			{
-			public:
-				Aura(GameEngine::Minion & owner) : GameEngine::AuraToAllMinions(owner) {}
+		if (this->CheckMinionShouldHaveAuraEnchantment(added_minion)) {
+			this->AddAuraEnchantmentToMinion(added_minion);
+		}
+	}
 
-			private: // hooks
-				void HookAfterMinionAdded(Minion & added_minion)
-				{
-					GameEngine::AuraToAllMinions::HookAfterMinionAdded(added_minion);
+private:
+	bool CheckMinionShouldHaveAuraEnchantment(Minion & minion)
+	{
+		// only add aura to friendly minions
+		if (&this->GetOwner().GetMinions() != &minion.GetMinions()) return false;
 
-					if (this->CheckMinionShouldHaveAuraEnchantment(added_minion)) {
-						this->AddAuraEnchantmentToMinion(added_minion);
-					}
-				}
+		// only add aura to others
+		if (&this->GetOwner().GetMinion() == &minion.GetMinion()) return false;
 
-			private:
-				bool CheckMinionShouldHaveAuraEnchantment(Minion & minion)
-				{
-					// only add aura to friendly minions
-					if (&this->GetOwner().GetMinions() != &minion.GetMinions()) return false;
+		return true;
+	}
 
-					// only add aura to others
-					if (&this->GetOwner().GetMinion() == &minion.GetMinion()) return false;
+	void AddAuraEnchantmentToMinion(Minion & target_minion)
+	{
+		constexpr int attack_boost = 1;
+		constexpr int hp_boost = 1;
 
-					return true;
-				}
+		auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, 0, false>>();
 
-				void AddAuraEnchantmentToMinion(Minion & target_minion)
-				{
-					constexpr int attack_boost = 1;
-					constexpr int hp_boost = 1;
+		target_minion.enchantments.Add(std::move(enchantment), *this);
+	}
 
-					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, 0, false>>();
+private: // for comparison
+	bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
+	std::size_t GetHash() const { return typeid(*this).hash_code(); }
+};
 
-					target_minion.enchantments.Add(std::move(enchantment), *this);
-				}
+static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
+{
+	summoned_minion->auras.Add<Aura>();
+}
 
-			private: // for comparison
-				bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
-				std::size_t GetHash() const { return typeid(*this).hash_code(); }
-			};
-
-			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
-			{
-				summoned_minion->auras.Add<Aura>();
-			}
-		};
-
-	} // namespace Cards
-} // namespace GameEngine
-
+DEFINE_CARD_CLASS_END()
 #endif

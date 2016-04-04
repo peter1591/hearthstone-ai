@@ -1,50 +1,40 @@
 #ifndef GAME_ENGINE_CARDS_CARD_BRM_019
 #define GAME_ENGINE_CARDS_CARD_BRM_019
 
-#include "card-base.h"
+DEFINE_CARD_CLASS_START(BRM_019)
 
-namespace GameEngine {
-	namespace Cards {
+// Grim Patron
 
-		class Card_BRM_019
-		{
-		public:
-			static constexpr int card_id = CARD_ID_BRM_019;
+class Aura : public MinionAura
+{
+public:
+	Aura(Minion & minion) : MinionAura(minion) {}
 
-			// Grim Patron
+	void HookAfterMinionDamaged(Minion & minion, int damage)
+	{
+		(void)damage;
 
-			class Aura : public GameEngine::MinionAura
-			{
-			public:
-				Aura(GameEngine::Minion & minion) : GameEngine::MinionAura(minion) {}
+		if (&minion != &this->GetOwner()) return;
 
-				void HookAfterMinionDamaged(GameEngine::Minion & minion, int damage) 
-				{
-					(void)damage;
+		if (minion.GetMinion().stat.GetHP() <= 0) return; // not survives the damage
 
-					if (&minion != &this->GetOwner()) return;
+		auto it_owner = minion.GetMinions().GetIteratorForSpecificMinion(this->GetOwner()); // TODO: add interface 'GetIterator() on minion
+		if (it_owner.IsEnd()) throw std::runtime_error("owner vanished");
+		Card card = CardDatabase::GetInstance().GetCard(Card_BRM_019::card_id);
+		it_owner.GoToNext(); // summon the new patron to the right
+		StageHelper::SummonMinion(card, it_owner);
+	}
 
-					if (minion.GetMinion().stat.GetHP() <= 0) return; // not survives the damage
+private: // for comparison
+	bool EqualsTo(HookListener const& rhs_base) const { return dynamic_cast<Aura const*>(&rhs_base) != nullptr; }
+	std::size_t GetHash() const { return typeid(*this).hash_code(); }
+};
 
-					auto it_owner = minion.GetMinions().GetIteratorForSpecificMinion(this->GetOwner()); // TODO: add interface 'GetIterator() on minion
-					if (it_owner.IsEnd()) throw std::runtime_error("owner vanished");
-					Card card = CardDatabase::GetInstance().GetCard(Card_BRM_019::card_id);
-					it_owner.GoToNext(); // summon the new patron to the right
-					StageHelper::SummonMinion(card, it_owner);
-				}
+static void AfterSummoned(MinionIterator summoned_minion)
+{
+	summoned_minion->auras.Add<Aura>();
+}
 
-			private: // for comparison
-				bool EqualsTo(HookListener const& rhs_base) const { return dynamic_cast<Aura const*>(&rhs_base) != nullptr; }
-				std::size_t GetHash() const { return typeid(*this).hash_code(); }
-			};
-
-			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
-			{
-				summoned_minion->auras.Add<Aura>();
-			}
-		};
-
-	} // namespace Cards
-} // namespace GameEngine
+DEFINE_CARD_CLASS_END()
 
 #endif

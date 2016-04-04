@@ -1,46 +1,33 @@
 #ifndef GAME_ENGINE_CARDS_CARD_GVG_112
 #define GAME_ENGINE_CARDS_CARD_GVG_112
 
-#include <stdexcept>
-#include "card-base.h"
+DEFINE_CARD_CLASS_START(GVG_112)
+// Mogor the Ogre
 
-namespace GameEngine {
-	namespace Cards {
+class Aura : public GameEngine::AuraToAllMinions
+{
+public:
+	Aura(Minion & owner) : AuraToAllMinions(owner) {}
 
-		class Card_GVG_112
-		{
-		public:
-			static constexpr int card_id = CARD_ID_GVG_112;
+private: // hooks
+	void HookAfterMinionAdded(Minion & added_minion)
+	{
+		constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
 
-			// Mogor the Ogre
+		auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, 0, buff_stat, false>>();
 
-			class Aura : public GameEngine::AuraToAllMinions
-			{
-			public:
-				Aura(Minion & owner) : AuraToAllMinions(owner) {}
+		added_minion.enchantments.Add(std::move(enchantment), *this);
+	}
 
-			private: // hooks
-				void HookAfterMinionAdded(Minion & added_minion)
-				{
-					constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
+private: // for comparison
+	bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
+	std::size_t GetHash() const { return typeid(*this).hash_code(); }
+};
 
-					auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, 0, buff_stat, false>>();
-
-					added_minion.enchantments.Add(std::move(enchantment), *this);
-				}
-
-			private: // for comparison
-				bool EqualsTo(GameEngine::HookListener const& rhs_base) const { return dynamic_cast<decltype(this)>(&rhs_base) != nullptr; }
-				std::size_t GetHash() const { return typeid(*this).hash_code(); }
-			};
-
-			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
-			{
-				summoned_minion->auras.Add<Aura>();
-			}
-		};
-
-	} // namespace Cards
-} // namespace GameEngine
+static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
+{
+	summoned_minion->auras.Add<Aura>();
+}
+DEFINE_CARD_CLASS_END()
 
 #endif

@@ -1,30 +1,20 @@
 #pragma once
 
-#include "card-base.h"
+DEFINE_CARD_CLASS_START(EX1_584)
 
-namespace GameEngine {
-	namespace Cards {
+// Ancient Mage
+static void AfterSummoned(MinionIterator summoned_minion)
+{
+	typedef Enchantment_BuffMinion_C<0, 0, 1, 0, false> EnchantType;
 
-		class Card_EX1_584
-		{
-		public:
-			static constexpr int card_id = CARD_ID_EX1_584;
+	if (summoned_minion.IsBegin() == false) {
+		auto prev = summoned_minion;
+		prev.GoToPrevious()->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
+	}
 
-			// Ancient Mage
-			static void AfterSummoned(GameEngine::MinionIterator summoned_minion)
-			{
-				typedef Enchantment_BuffMinion_C<0, 0, 1, 0, false> EnchantType;
+	auto next = summoned_minion;
+	next.GoToNext();
+	if (next.IsEnd() == false) next->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
+}
 
-				if (summoned_minion.IsBegin() == false) {
-					auto prev = summoned_minion;
-					prev.GoToPrevious()->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
-				}
-
-				auto next = summoned_minion;
-				next.GoToNext();
-				if (next.IsEnd() == false) next->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
-			}
-		};
-
-	} // namespace Cards
-} // namespace GameEngine
+DEFINE_CARD_CLASS_END()

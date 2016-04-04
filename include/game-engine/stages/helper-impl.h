@@ -56,7 +56,8 @@ namespace GameEngine
 				break;
 
 			default:
-				break; // TODO: handle other card types
+				throw std::runtime_error("unknown hand card type");
+				break;
 			}
 		}
 
@@ -196,7 +197,7 @@ namespace GameEngine
 				break;
 
 			default:
-				break; // TODO: handle other card types
+				throw std::runtime_error("unknown hand card type");
 			}
 		}
 
