@@ -291,6 +291,18 @@ namespace GameEngine
 		taker.TakeDamage(damage, poisonous);
 	}
 
+	inline void StageHelper::DealDamage(BoardTargets const & targets, int damage, bool poisonous)
+	{
+		// We need to get all minions at once, since a minion might summon another minion when the damage is dealt
+		// And by the game rule, the newly-summoned minion should not get damaged
+		// --> all the minions iterators are stored in 'targets'
+		for (auto & minion : targets.GetMinionIterators()) {
+			StageHelper::DealDamage(*minion, damage, poisonous);
+		}
+		if (targets.HasPlayerHero()) StageHelper::DealDamage(targets.GetBoard().player.hero, damage, poisonous);
+		if (targets.HasOpponentHero()) StageHelper::DealDamage(targets.GetBoard().opponent.hero, damage, poisonous);
+	}
+
 	inline Minion & StageHelper::RandomChooseMinion(Minions & minions)
 	{
 		int count = minions.GetMinionCount();

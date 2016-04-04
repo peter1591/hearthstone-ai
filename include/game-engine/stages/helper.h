@@ -4,6 +4,7 @@
 #include "game-engine/stages/common.h"
 #include "game-engine/board.h"
 #include "game-engine/board-objects/minion.h"
+#include "game-engine/stages/helper-targets.h"
 
 namespace GameEngine {
 
@@ -43,14 +44,14 @@ public:
 	static void DealDamage(GameEngine::Hero & taker, int damage, bool poisonous);
 	static void DealDamage(GameEngine::Minion & taker, int damage, bool poisonous);
 
+	static void DealDamage(BoardTargets const& targets, int damage, bool poisonous);
+
 public: // randomly choose
 	static Minion & RandomChooseMinion(Minions & minions);
 
 private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
-
 	static void RemoveMinionsIfDead(Board & board, SlotIndex side);
-
 	static void Fatigue(GameEngine::Board & board, SlotIndex side);
 };
 
