@@ -196,16 +196,16 @@ inline void GameEngine::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
 
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 {
-	this->auras.HookAfterMinionAdded(*this, added_minion);
+	this->auras.HookAfterMinionAdded(added_minion);
 }
 
 inline void GameEngine::Minion::HookMinionCheckEnraged()
 {
 	if (this->GetHP() < this->GetMaxHP()) {
-		this->auras.HookAfterOwnerEnraged(*this); // enraged
+		this->auras.HookAfterOwnerEnraged(); // enraged
 	}
 	else if (this->GetHP() == this->GetMaxHP()) {
-		this->auras.HookAfterOwnerUnEnraged(*this); // un-enraged
+		this->auras.HookAfterOwnerUnEnraged(); // un-enraged
 	}
 	else {
 		throw std::runtime_error("hp should not be larger than max-hp");

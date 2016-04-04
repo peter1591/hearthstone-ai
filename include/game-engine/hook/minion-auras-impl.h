@@ -66,19 +66,19 @@ namespace GameEngine
 		this->auras.clear();
 	}
 
-	inline void MinionAuras::HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion)
+	inline void MinionAuras::HookAfterMinionAdded(Minion & added_minion)
 	{
-		for (auto & aura : this->auras) aura->HookAfterMinionAdded(aura_owner, added_minion);
+		for (auto & aura : this->auras) aura->HookAfterMinionAdded(this->minion, added_minion);
 	}
 
-	inline void MinionAuras::HookAfterOwnerEnraged(Minion & enraged_aura_owner)
+	inline void MinionAuras::HookAfterOwnerEnraged()
 	{
-		for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(enraged_aura_owner);
+		for (auto & aura : this->auras) aura->HookAfterOwnerEnraged(this->minion);
 	}
 
-	inline void MinionAuras::HookAfterOwnerUnEnraged(Minion & unenraged_aura_owner)
+	inline void MinionAuras::HookAfterOwnerUnEnraged()
 	{
-		for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(unenraged_aura_owner);
+		for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged(this->minion);
 	}
 
 	inline void MinionAuras::HookAfterMinionDamaged(Minion & minion, int damage)

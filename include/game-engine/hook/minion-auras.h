@@ -31,9 +31,9 @@ namespace GameEngine
 		void Destroy();
 
 	public: // hooks
-		void HookAfterMinionAdded(Minion & aura_owner, Minion & added_minion);
-		void HookAfterOwnerEnraged(Minion &enraged_aura_owner);
-		void HookAfterOwnerUnEnraged(Minion &unenraged_aura_owner);
+		void HookAfterMinionAdded(Minion & added_minion);
+		void HookAfterOwnerEnraged();
+		void HookAfterOwnerUnEnraged();
 		void HookAfterMinionDamaged(Minion & minion, int damage);
 
 	private:
