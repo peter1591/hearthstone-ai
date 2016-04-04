@@ -22,6 +22,7 @@
 #include "card_BRM_019.h"
 #include "card_NEW1_018.h"
 #include "card_LOE_051.h"
+#include "card_AT_117.h"
 
 namespace GameEngine {
 	namespace Cards {
@@ -129,6 +130,7 @@ HANDLE_CARD_CALLBACK(Card_GVG_112)
 HANDLE_CARD_CALLBACK(Card_BRM_019)
 HANDLE_CARD_CALLBACK(Card_NEW1_018)
 HANDLE_CARD_CALLBACK(Card_LOE_051)
+HANDLE_CARD_CALLBACK(Card_AT_117)
 
 #undef HANDLE_CARD_CALLBACK
 	default:
