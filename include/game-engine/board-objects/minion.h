@@ -9,7 +9,7 @@
 namespace GameEngine {
 
 	class Board;
-
+	class Player;
 	class Minions;
 
 	class Minion : public ObjectBase
@@ -92,6 +92,7 @@ namespace GameEngine {
 		void HookAfterMinionDamaged(Minion & minion, int damage);
 
 	public:
+		Player & GetPlayer() const;
 		bool IsPlayerSide() const;
 		bool IsOpponentSide() const;
 

@@ -237,6 +237,12 @@ inline void GameEngine::Minion::TurnEnd(bool owner_turn)
 	this->enchantments.TurnEnd();
 }
 
+inline GameEngine::Player & GameEngine::Minion::GetPlayer() const
+{
+	if (this->IsPlayerSide()) return this->GetBoard().player;
+	else return this->GetBoard().opponent;
+}
+
 inline bool GameEngine::Minion::IsPlayerSide() const
 {
 	return &this->GetBoard().player.minions == &this->minions;
