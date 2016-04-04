@@ -54,6 +54,52 @@ namespace GameEngine
 		}
 	}
 
+	inline BoardTargets BoardTargets::FriendlyHero(Player & player)
+	{
+		BoardTargets ret(player.board);
+		if (&player.board.player == &player) ret.has_player_hero = true;
+		else {
+#ifdef DEBUG
+			if (&player.board.opponent != &player) throw std::runtime_error("consistency check failed");
+#endif
+			ret.has_opponent_hero = true;
+		}
+		return ret;
+	}
+
+	inline BoardTargets BoardTargets::EnemyHero(Player & player)
+	{
+		BoardTargets ret(player.board);
+		if (&player.board.player == &player) ret.has_opponent_hero = true;
+		else {
+#ifdef DEBUG
+			if (&player.board.opponent != &player) throw std::runtime_error("consistency check failed");
+#endif
+			ret.has_player_hero = true;
+		}
+		return ret;
+	}
+
+	inline BoardTargets BoardTargets::BothHero(Player & player)
+	{
+		BoardTargets ret(player.board);
+		ret.has_player_hero = true;
+		ret.has_opponent_hero = true;
+		return ret;
+	}
+
+	inline BoardTargets BoardTargets::AllMinions(Board & board)
+	{
+		BoardTargets ret(board);
+		for (auto it = board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+			ret.Add(it);
+		}
+		for (auto it = board.opponent.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+			ret.Add(it);
+		}
+		return ret;
+	}
+
 	inline void BoardTargets::Decide(Player & player, Player & choosing, Decider decider)
 	{
 		if (decider(BoardTarget(player, BoardObject(choosing.hero)))) this->Add(player, choosing);

@@ -35,6 +35,13 @@ namespace GameEngine
 		BoardTargets(Player & player, Decider decider);
 		BoardTargets(Minions & minions);
 
+	public:
+		static BoardTargets FriendlyHero(Player & player);
+		static BoardTargets EnemyHero(Player & player);
+		static BoardTargets BothHero(Player & player);
+
+		static BoardTargets AllMinions(Board & board);
+
 	public: // getters
 		Board & GetBoard() const { return this->board; }
 		bool HasPlayerHero() const { return this->has_player_hero; }
