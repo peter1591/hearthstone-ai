@@ -437,5 +437,23 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets-impl.h">
       <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_277.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_029.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_593.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_015.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_022.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_122.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

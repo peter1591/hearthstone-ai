@@ -200,8 +200,8 @@ inline void Board::SetRandomSeed(unsigned int random_seed_)
 
 inline void Board::SetStateToPlayerChooseBoardMove()
 {
-	//this->stage = StagePlayerChooseBoardMove::stage;
-	this->stage = StageOpponentChooseBoardMove::stage;
+	this->stage = StagePlayerChooseBoardMove::stage;
+	//this->stage = StageOpponentChooseBoardMove::stage;
 }
 
 inline void Board::DebugPrint() const
