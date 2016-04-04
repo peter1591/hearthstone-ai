@@ -14,15 +14,29 @@ class Enchantment
 	friend std::hash<Enchantment>;
 
 public:
-	Enchantment() {}
+	Enchantment() : applied(false) {}
 	virtual ~Enchantment() {}
 
 	bool operator==(Enchantment<Target> const& rhs) const { return this->EqualsTo(rhs); }
 	bool operator!=(Enchantment<Target> const& rhs) const { return !(*this == rhs); }
 
 public: // hooks
-	virtual void AfterAdded(Target & target) { (void)target; }
-	virtual void BeforeRemoved(Target & target) { (void)target; }
+	virtual void AfterAdded(Target & target)
+	{
+		(void)target;
+#ifdef DEBUG
+		if (this->applied) throw std::runtime_error("enchantment already applied");
+		this->applied = true;
+#endif
+	}
+	virtual void BeforeRemoved(Target & target)
+	{
+		(void)target;
+#ifdef DEBUG
+		if (!this->applied) throw std::runtime_error("enchantment not applied");
+		// do not set this->applied to false, since a enchantment is not designed to be applied twice
+#endif
+	}
 
 	// return false if enchant vanished
 	virtual void TurnEnd(Target & target, bool & expired) { (void)target; expired = false; }
@@ -30,6 +44,11 @@ public: // hooks
 protected:
 	virtual bool EqualsTo(Enchantment<Target> const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)
 	virtual std::size_t GetHash() const = 0; // this is a pure virtual class (i.e., no member to be hashed)
+
+private:
+#ifdef DEBUG
+	bool applied;
+#endif
 };
 
 } // namespace GameEngine
