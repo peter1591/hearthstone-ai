@@ -82,6 +82,8 @@ namespace GameEngine {
 		void RemoveMinionStatFlag(MinionStat::Flag flag);
 		void ClearMinionStatFlag(MinionStat::Flag flag);
 
+		void Transform(MinionData const& minion);
+
 	public: // hooks
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
@@ -90,6 +92,8 @@ namespace GameEngine {
 		void HookAfterMinionAdded(Minion & added_minion);
 		void HookMinionCheckEnraged();
 		void HookAfterMinionDamaged(Minion & minion, int damage);
+		void HookBeforeMinionTransform(Minion & minion, int new_card_id);
+		void HookAfterMinionTransformed(Minion & minion);
 
 	public:
 		Player & GetPlayer() const;

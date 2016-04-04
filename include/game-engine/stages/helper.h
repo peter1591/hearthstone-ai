@@ -47,6 +47,8 @@ public:
 
 	static void DealDamageToOneRandomValidTarget(BoardTargets const& targets, int damage, bool poisonous);
 
+	static void Transform(Board & board, SlotIndex target, int new_card_id);
+
 public: // randomly choose
 	static Minion & RandomChooseMinion(Minions & minions);
 

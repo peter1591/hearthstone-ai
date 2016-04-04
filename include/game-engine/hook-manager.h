@@ -24,6 +24,8 @@ namespace GameEngine
 
 		void HookAfterMinionAdded(Minion & minion);
 		void HookAfterMinionDamaged(Minion & minion, int damage);
+		void HookBeforeMinionTransform(Minion & minion, int new_card_id);
+		void HookAfterMinionTransformed(Minion & minion);
 
 	private:
 		Board & board;

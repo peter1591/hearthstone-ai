@@ -194,6 +194,11 @@ inline void GameEngine::Minion::ClearMinionStatFlag(MinionStat::Flag flag)
 	this->minion.stat.ClearFlag(flag);
 }
 
+inline void GameEngine::Minion::Transform(MinionData const & minion_)
+{
+	this->minion = minion_;
+}
+
 inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 {
 	this->auras.HookAfterMinionAdded(added_minion);
@@ -215,6 +220,16 @@ inline void GameEngine::Minion::HookMinionCheckEnraged()
 inline void GameEngine::Minion::HookAfterMinionDamaged(Minion & minion_, int damage)
 {
 	this->auras.HookAfterMinionDamaged(minion_, damage);
+}
+
+inline void GameEngine::Minion::HookBeforeMinionTransform(Minion & minion_, int new_card_id)
+{
+	this->auras.HookBeforeMinionTransform(minion_, new_card_id);
+}
+
+inline void GameEngine::Minion::HookAfterMinionTransformed(Minion & minion_)
+{
+	this->auras.HookAfterMinionTransformed(minion_);
 }
 
 inline void GameEngine::Minion::TurnStart(bool owner_turn)

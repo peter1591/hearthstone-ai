@@ -35,6 +35,8 @@ namespace GameEngine
 		void HookAfterOwnerEnraged();
 		void HookAfterOwnerUnEnraged();
 		void HookAfterMinionDamaged(Minion & minion, int damage);
+		void HookBeforeMinionTransform(Minion & minion, int new_card_id);
+		void HookAfterMinionTransformed(Minion & minion);
 
 	private:
 		Minion & minion;

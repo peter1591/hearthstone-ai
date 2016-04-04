@@ -316,6 +316,22 @@ namespace GameEngine
 		}
 	}
 
+	inline void StageHelper::Transform(Board & board, SlotIndex target, int new_card_id)
+	{
+		auto & minion = board.object_manager.GetMinion(target);
+
+		board.hook_manager.HookBeforeMinionTransform(minion, new_card_id);
+
+		// TODO: deathrattle should be in the MinionData
+		// do not trigger deathrattle
+		// do not trigger on-summon triggers
+		minion.enchantments.Clear();
+		minion.auras.Clear();
+		minion.Transform(MinionData::FromCard(CardDatabase::GetInstance().GetCard(new_card_id)));
+
+		board.hook_manager.HookAfterMinionTransformed(minion);
+	}
+
 	inline Minion & StageHelper::RandomChooseMinion(Minions & minions)
 	{
 		int count = minions.GetMinionCount();

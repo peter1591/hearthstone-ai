@@ -57,4 +57,20 @@ namespace GameEngine
 		this->board.player.minions.HookAfterMinionDamaged(minion, damage);
 		this->board.opponent.minions.HookAfterMinionDamaged(minion, damage);
 	}
+
+	inline void HookManager::HookBeforeMinionTransform(Minion & minion, int new_card_id)
+	{
+		this->board.player.hero.HookBeforeMinionTransform(minion, new_card_id);
+		this->board.opponent.hero.HookBeforeMinionTransform(minion, new_card_id);
+		this->board.player.minions.HookBeforeMinionTransform(minion, new_card_id);
+		this->board.opponent.minions.HookBeforeMinionTransform(minion, new_card_id);
+	}
+
+	inline void HookManager::HookAfterMinionTransformed(Minion & minion)
+	{
+		this->board.player.hero.HookAfterMinionTransformed(minion);
+		this->board.opponent.hero.HookAfterMinionTransformed(minion);
+		this->board.player.minions.HookAfterMinionTransformed(minion);
+		this->board.opponent.minions.HookAfterMinionTransformed(minion);
+	}
 }

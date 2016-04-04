@@ -142,6 +142,16 @@ namespace GameEngine {
 			(void)damage;
 		}
 
+		void HookBeforeMinionTransform(Minion & minion, int new_card_id)
+		{
+			(void)minion;
+			(void)new_card_id;
+		}
+
+		void HookAfterMinionTransformed(Minion & minion)
+		{
+			(void)minion;
+		}
 
 		void DestroyWeapon()
 		{

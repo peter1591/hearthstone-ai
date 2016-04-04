@@ -86,6 +86,16 @@ namespace GameEngine
 		for (auto & aura : this->auras) aura->HookAfterMinionDamaged(minion_, damage);
 	}
 
+	inline void MinionAuras::HookBeforeMinionTransform(Minion & minion_, int new_card_id)
+	{
+		for (auto & aura : this->auras) aura->HookBeforeMinionTransform(minion_, new_card_id);
+	}
+
+	inline void MinionAuras::HookAfterMinionTransformed(Minion & minion_)
+	{
+		for (auto & aura : this->auras) aura->HookAfterMinionTransformed(minion_);
+	}
+
 	template<typename Aura, typename ...Params>
 	inline void MinionAuras::Add(Params && ...params)
 	{

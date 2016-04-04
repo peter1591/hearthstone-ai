@@ -23,6 +23,8 @@ namespace GameEngine {
 		virtual void HookAfterOwnerEnraged() {}
 		virtual void HookAfterOwnerUnEnraged() {}
 		virtual void HookAfterMinionDamaged(Minion & minion, int damage) { (void)minion; (void)damage; }
+		virtual void HookBeforeMinionTransform(Minion & minion, int new_card_id) { (void)minion; (void)new_card_id; }
+		virtual void HookAfterMinionTransformed(Minion & minion) { (void)minion; }
 
 	protected:
 		virtual bool EqualsTo(HookListener const& rhs) const = 0; // this is a pure virtual class (i.e., no member to be compared)

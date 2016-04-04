@@ -112,6 +112,20 @@ public: // hooks
 		}
 	}
 
+	void HookBeforeMinionTransform(Minion & minion, int new_card_id)
+	{
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			it->HookBeforeMinionTransform(minion, new_card_id);
+		}
+	}
+	
+	void HookAfterMinionTransformed(Minion & minion)
+	{
+		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
+			it->HookAfterMinionTransformed(minion);
+		}
+	}
+
 public: // debug
 	void DebugPrint() const {
 		for (const auto &minion : this->minions) {
