@@ -5,6 +5,7 @@
 #include "hand.h"
 #include "board-objects/hero.h"
 #include "board-objects/minions.h"
+#include "game-engine/enchantments/enchantments.h"
 
 namespace GameEngine {
 
@@ -36,6 +37,8 @@ namespace GameEngine {
 		Hand hand;
 		Hero hero;
 		Minions minions;
+
+		Enchantments<Player> enchantments;
 	};
 }
 

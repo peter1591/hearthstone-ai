@@ -7,7 +7,8 @@ namespace GameEngine
 {
 	inline Player::Player(Board & board, SlotIndex side) :
 		board(board), side(side), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
-		hand(board.random_generator), hero(board), minions(board)
+		hand(board.random_generator), hero(board), minions(board),
+		enchantments(*this)
 	{
 
 	}
@@ -19,8 +20,14 @@ namespace GameEngine
 		secrets(rhs.secrets),
 		hand(board.random_generator, rhs.hand),
 		hero(board, rhs.hero),
-		minions(board, rhs.minions)
+		minions(board, rhs.minions),
+		enchantments(*this)
 	{
+#ifdef DEBUG
+		if (!rhs.enchantments.Empty()) {
+			throw std::runtime_error("you should not copy player with enchantments");
+		}
+#endif
 	}
 
 	inline Player::Player(Board & board, Player && rhs) :
@@ -30,12 +37,24 @@ namespace GameEngine
 		secrets(std::move(rhs.secrets)),
 		hand(board.random_generator, std::move(rhs.hand)),
 		hero(board, std::move(rhs.hero)),
-		minions(board, std::move(rhs.minions))
+		minions(board, std::move(rhs.minions)),
+		enchantments(*this)
 	{
+#ifdef DEBUG
+		if (!rhs.enchantments.Empty()) {
+			throw std::runtime_error("you should not move player with enchantments");
+		}
+#endif
 	}
 
 	inline Player & Player::operator=(Player && rhs)
 	{
+#ifdef DEBUG
+		if (!rhs.enchantments.Empty()) {
+			throw std::runtime_error("you should not move player with enchantments");
+		}
+#endif
+
 		if (this->side != rhs.side) throw std::runtime_error("you should not move across player/opponent");
 
 		this->stat = std::move(rhs.stat);
@@ -55,6 +74,7 @@ namespace GameEngine
 		if (this->secrets != rhs.secrets) return false;
 		if (this->hero != rhs.hero) return false;
 		if (this->minions != rhs.minions) return false;
+		if (this->enchantments != rhs.enchantments) return false;
 		return true;
 	}
 
