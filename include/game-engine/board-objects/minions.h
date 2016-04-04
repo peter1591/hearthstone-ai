@@ -50,6 +50,7 @@ public:
 	container_type::const_iterator end() const { return this->minions.end(); }
 
 	Board & GetBoard() const;
+	Player & GetPlayer() const;
 
 public: // getters
 	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }

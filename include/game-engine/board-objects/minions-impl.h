@@ -55,8 +55,14 @@ namespace GameEngine {
 			minion.Destroy();
 		}
 	}
+
 	inline Board & Minions::GetBoard() const
 	{
 		return this->player.board;
+	}
+
+	inline Player & Minions::GetPlayer() const
+	{
+		return this->player;
 	}
 } // namespace GameEngine
