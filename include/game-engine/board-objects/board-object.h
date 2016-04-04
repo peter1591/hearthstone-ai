@@ -24,7 +24,7 @@ namespace GameEngine
 		bool IsHero() const { return this->ptr == &this->hero; }
 		bool IsMinion() const { return this->ptr == &this->minion; }
 
-		Hero & GetHero()
+		Hero & GetHero() const
 		{
 #ifdef DEBUG
 			if (this->IsHero() == false) throw std::runtime_error("type not match.");
@@ -32,7 +32,7 @@ namespace GameEngine
 			return this->hero;
 		}
 
-		Minion & GetMinion()
+		Minion & GetMinion() const
 		{
 #ifdef DEBUG
 			if (this->IsMinion() == false) throw std::runtime_error("type not match.");
