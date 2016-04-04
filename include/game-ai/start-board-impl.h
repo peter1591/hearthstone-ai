@@ -108,7 +108,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 
 	{
 		auto minion = GameEngine::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
-		auto & added_minion = board.player.minions.InsertBefore(
+		auto added_minion = board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion));
 		added_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
@@ -158,7 +158,7 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 
 	{
 		auto minion = GameEngine::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
-		auto & added_minion = board.opponent.minions.InsertBefore(
+		auto added_minion = board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion));
 		added_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));

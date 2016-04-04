@@ -13,9 +13,9 @@ namespace GameEngine {
 		this->change_id++;
 #endif
 
-		this->board.hook_manager.HookAfterMinionAdded(*new_it);
+		this->GetBoard().hook_manager.HookAfterMinionAdded(*new_it);
 
-		return MinionIterator(this->board, *this, new_it);
+		return MinionIterator(this->GetBoard(), *this, new_it);
 	}
 
 	inline void Minions::MarkPendingRemoval(MinionIterator const & it)
@@ -54,5 +54,9 @@ namespace GameEngine {
 		for (auto & minion : this->minions) {
 			minion.Destroy();
 		}
+	}
+	inline Board & Minions::GetBoard() const
+	{
+		return this->player.board;
 	}
 } // namespace GameEngine

@@ -7,6 +7,9 @@
 #include "minion.h"
 
 namespace GameEngine {
+
+class Player;
+
 class Minions
 {
 	friend std::hash<Minions>;
@@ -17,17 +20,23 @@ public:
 	typedef container_type::const_iterator const_iterator;
 
 public:
-	Minions(Board & board) : board(board), pending_removal_count(0) 
+	Minions(Player & player) : player(player), pending_removal_count(0)
 	{
 #ifdef DEBUG
 		this->change_id = 0;
 #endif
 	}
 
-	Minions(Board & board, Minions const& rhs);
-	Minions & operator=(Minions const& rhs) = delete;
+	Minions(Player & player, Minions const& rhs) :
+		player(player), pending_removal_count(rhs.pending_removal_count)
+	{
+		for (auto const& minion : rhs.minions) {
+			this->minions.push_back(GameEngine::Minion(*this, minion));
+		}
+	}
+	Minions(Player & Player, Minions && rhs) : player(player) { *this = std::move(rhs); }
 
-	Minions(Board & board, Minions && rhs) : board(board) { *this = std::move(rhs); }
+	Minions & operator=(Minions const& rhs) = delete;
 	Minions & operator=(Minions && rhs);
 
 	bool operator==(Minions const& rhs) const { return this->minions == rhs.minions; }
@@ -40,7 +49,7 @@ public:
 	container_type::iterator end() { return this->minions.end(); }
 	container_type::const_iterator end() const { return this->minions.end(); }
 
-	Board & GetBoard() const { return this->board; }
+	Board & GetBoard() const;
 
 public: // getters
 	int GetMinionCount() const { return (int)this->minions.size() - this->pending_removal_count; }
@@ -51,11 +60,11 @@ public: // getters
 	}
 
 	MinionIterator GetIterator(int minion_idx) {
-		return MinionIterator(this->board, *this, this->GetRawIterator(minion_idx));
+		return MinionIterator(this->GetBoard(), *this, this->GetRawIterator(minion_idx));
 	}
 
 	MinionIterator GetIteratorForSpecificMinion(Minion const& minion) {
-		return MinionIterator(this->board, *this, this->GetRawIteratorForSpecificMinion(minion));
+		return MinionIterator(this->GetBoard(), *this, this->GetRawIteratorForSpecificMinion(minion));
 	}
 
 	Minion & GetMinion(int minion_idx) {
@@ -121,7 +130,7 @@ private:
 private:
 	static constexpr int max_minions = 7;
 
-	Board & board;
+	Player & player;
 
 	int pending_removal_count;
 	container_type minions;
@@ -148,14 +157,6 @@ namespace std {
 			return result;
 		}
 	};
-}
-
-inline GameEngine::Minions::Minions(GameEngine::Board & board, Minions const& rhs) :
-	board(board), pending_removal_count(rhs.pending_removal_count)
-{
-	for (auto const& minion : rhs.minions) {
-		this->minions.push_back(GameEngine::Minion(*this, minion));
-	}
 }
 
 inline GameEngine::Minions & GameEngine::Minions::operator=(Minions && rhs)

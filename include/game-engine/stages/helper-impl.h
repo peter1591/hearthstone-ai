@@ -403,7 +403,7 @@ namespace GameEngine
 		if (it.GetMinions().IsFull()) return false;
 
 		// add minion
-		auto & summoned_minion = it.GetMinions().InsertBefore(it, std::move(summoning_minion));
+		auto summoned_minion = it.GetMinions().InsertBefore(it, std::move(summoning_minion));
 
 		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
 

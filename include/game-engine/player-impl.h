@@ -7,7 +7,7 @@ namespace GameEngine
 {
 	inline Player::Player(Board & board, SlotIndex side) :
 		board(board), side(side), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
-		hand(board.random_generator), hero(board), minions(board),
+		hand(board.random_generator), hero(board), minions(*this),
 		enchantments(*this)
 	{
 
@@ -20,7 +20,7 @@ namespace GameEngine
 		secrets(rhs.secrets),
 		hand(board.random_generator, rhs.hand),
 		hero(board, rhs.hero),
-		minions(board, rhs.minions),
+		minions(*this, rhs.minions),
 		enchantments(*this)
 	{
 #ifdef DEBUG
@@ -37,7 +37,7 @@ namespace GameEngine
 		secrets(std::move(rhs.secrets)),
 		hand(board.random_generator, std::move(rhs.hand)),
 		hero(board, std::move(rhs.hero)),
-		minions(board, std::move(rhs.minions)),
+		minions(*this, std::move(rhs.minions)),
 		enchantments(*this)
 	{
 #ifdef DEBUG

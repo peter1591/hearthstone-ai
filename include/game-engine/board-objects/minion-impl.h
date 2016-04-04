@@ -201,7 +201,6 @@ inline void GameEngine::Minion::HookAfterMinionAdded(Minion & added_minion)
 
 inline void GameEngine::Minion::HookMinionCheckEnraged()
 {
-	auto & minion = this->minion;
 	if (this->GetHP() < this->GetMaxHP()) {
 		this->auras.HookAfterOwnerEnraged(*this); // enraged
 	}
