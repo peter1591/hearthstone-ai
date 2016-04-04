@@ -28,16 +28,19 @@ public: // return true if game state changed (e.g., win/loss)
 	// include battle cry, and summoning minion
 	static bool PlayMinion(Player & player, Card const& card, PlayMinionData const& data);
 
-	// no battle cry
+	// no battle cry, return true if minion is successfully summoned
 	static bool SummonMinion(Card const& card, MinionIterator & it);
 
+	// return true is game ends
 	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
 
+	// return true is game ends
 	static bool PlaySpell(Player & player, Card const& card, SlotIndex target);
 
 public:
 	// handle minion/hero attack, calculate damages
-	static void HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
+	// return true if game ends
+	static bool HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx);
 
 	// TODO: remove poisonous (most of damages are not poisonous)
 	static void DealDamage(GameEngine::Board & board, SlotIndex taker_idx, int damage, bool poisonous);

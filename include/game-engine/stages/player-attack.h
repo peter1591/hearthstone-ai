@@ -18,10 +18,7 @@ class StagePlayerAttack
 		{
 			const Board::AttackData &data = board.data.attack_data;
 
-			StageHelper::HandleAttack(board, data.attacker_idx, data.attacked_idx);
-
-			// TODO: move following line to stages/helper
-			if (StageHelper::CheckHeroMinionDead(board)) return; // game ends;
+			if (StageHelper::HandleAttack(board, data.attacker_idx, data.attacked_idx)) return; // game ends;
 
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}

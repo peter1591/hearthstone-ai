@@ -384,7 +384,7 @@ namespace GameEngine
 		}
 	}
 
-	inline void StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx)
+	inline bool StageHelper::HandleAttack(GameEngine::Board & board, GameEngine::SlotIndex attacker_idx, GameEngine::SlotIndex attacked_idx)
 	{
 		// TODO: trigger secrets
 
@@ -406,6 +406,9 @@ namespace GameEngine
 
 		if (attacker.IsMinion() && attacker->IsFreezeAttacker()) attacked->SetFreezed();
 		if (attacked.IsMinion() && attacked->IsFreezeAttacker()) attacker->SetFreezed();
+
+		if (StageHelper::CheckHeroMinionDead(board)) return true; // game ends;
+		return false;
 	}
 
 	inline void StageHelper::RemoveMinionsIfDead(Board & board, SlotIndex side)
@@ -470,7 +473,7 @@ namespace GameEngine
 		return false; // state not changed
 	}
 
-	// return true if stage changed
+	// return true if game ends
 	inline bool StageHelper::PlayMinion(Player & player, Card const & card, PlayMinionData const & data)
 	{
 #ifdef DEBUG
@@ -483,6 +486,7 @@ namespace GameEngine
 		auto it = player.board.object_manager.GetMinionIterator(data.put_location);
 
 		StageHelper::SummonMinion(card, it);
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;
 	}

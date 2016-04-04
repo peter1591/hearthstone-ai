@@ -28,7 +28,7 @@ class StageOpponentPutMinion
 
 			player.stat.crystal.CostCrystals(playing_card.cost);
 
-			StageHelper::PlayMinion(player, playing_card, data.data);
+			if (StageHelper::PlayMinion(player, playing_card, data.data)) return;
 
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}

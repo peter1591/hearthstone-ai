@@ -28,7 +28,7 @@ class StageOpponentEquipWeapon
 
 			player.stat.crystal.CostCrystals(playing_card.cost);
 
-			StageHelper::EquipWeapon(player, playing_card, data.target);
+			if (StageHelper::EquipWeapon(player, playing_card, data.target)) return; // game ends
 
 			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}
