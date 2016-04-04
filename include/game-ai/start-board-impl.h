@@ -63,6 +63,7 @@ inline void StartBoard::InitializeDebugBoard1_OpponentHand(GameEngine::Hand &han
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_LOE_051)); // both player spell+2
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_AT_117)); // +2/+2 if spell>0
 
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_029)); // fireball
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_142)); // 222 spell+1
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_584)); // adjacent spell+1
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
