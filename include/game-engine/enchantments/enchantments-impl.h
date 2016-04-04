@@ -9,15 +9,17 @@
 
 namespace GameEngine
 {
-	template<typename Target>
-	inline Enchantments<Target>::~Enchantments()
+	template<>
+	inline Enchantments<Minion>::~Enchantments()
 	{
 #ifdef DEBUG
 		if (!this->enchantments.Empty()) {
-			throw std::runtime_error("enchantments should be cleared first");
+			throw std::runtime_error("minion enchantments should be cleared first");
 		}
 #endif
 	}
+
+	template <typename Target> inline Enchantments<Target>::~Enchantments() {}
 
 	template <typename Target>
 	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
