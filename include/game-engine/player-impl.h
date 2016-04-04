@@ -5,17 +5,18 @@
 
 namespace GameEngine
 {
-	inline Player::Player(Board & board, SlotIndex side) :
-		board(board), side(side), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
+	inline Player::Player(Board & board, Player & opposite_player_, SlotIndex side) :
+		board(board), side(side),
+		opposite_player(opposite_player_), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
 		hand(board.random_generator), hero(board), minions(*this),
 		enchantments(*this)
 	{
 
 	}
 
-	inline Player::Player(Board & board, Player const & rhs) :
-		board(board),
-		side(rhs.side), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
+	inline Player::Player(Board & board, Player & opposite_player_, Player const & rhs) :
+		board(board), side(rhs.side), 
+		opposite_player(opposite_player_), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
 		stat(rhs.stat),
 		secrets(rhs.secrets),
 		hand(board.random_generator, rhs.hand),
@@ -30,9 +31,9 @@ namespace GameEngine
 #endif
 	}
 
-	inline Player::Player(Board & board, Player && rhs) :
-		board(board),
-		side(rhs.side), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
+	inline Player::Player(Board & board, Player & opposite_player_, Player && rhs) :
+		board(board), side(rhs.side), 
+		opposite_player(opposite_player_), opposite_side(SlotIndexHelper::GetOppositeSide(side)),
 		stat(std::move(rhs.stat)),
 		secrets(std::move(rhs.secrets)),
 		hand(board.random_generator, std::move(rhs.hand)),

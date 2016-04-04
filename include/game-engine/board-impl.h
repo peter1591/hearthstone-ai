@@ -133,8 +133,8 @@ inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 }
 
 inline Board::Board() :
-	player(*this, SlotIndex::SLOT_PLAYER_SIDE),
-	opponent(*this, SlotIndex::SLOT_OPPONENT_SIDE),
+	player(*this, this->opponent, SlotIndex::SLOT_PLAYER_SIDE),
+	opponent(*this, this->player, SlotIndex::SLOT_OPPONENT_SIDE),
 	hook_manager(*this),
 	object_manager(*this),
 	stage(STAGE_UNKNOWN)
@@ -148,8 +148,8 @@ inline Board::~Board()
 }
 
 inline Board::Board(const Board & rhs) :
-	player(*this, rhs.player),
-	opponent(*this, rhs.opponent),
+	player(*this, this->opponent, rhs.player),
+	opponent(*this, this->player, rhs.opponent),
 	hook_manager(*this),
 	object_manager(*this)
 {
@@ -166,8 +166,8 @@ inline Board Board::Clone(Board const & rhs)
 }
 
 inline Board::Board(Board && rhs) :
-	player(*this, std::move(rhs.player)),
-	opponent(*this, std::move(rhs.opponent)),
+	player(*this, this->opponent, std::move(rhs.player)),
+	opponent(*this, this->player, std::move(rhs.opponent)),
 	hook_manager(*this),
 	object_manager(*this),
 	stage(std::move(rhs.stage)),

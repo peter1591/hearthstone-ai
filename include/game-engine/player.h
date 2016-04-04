@@ -16,9 +16,9 @@ namespace GameEngine {
 		friend std::hash<Player>;
 
 	public:
-		Player(Board & board, SlotIndex side);
-		Player(Board & board, Player const& rhs);
-		Player(Board & board, Player && rhs);
+		Player(Board & board, Player & opposite_player, SlotIndex side);
+		Player(Board & board, Player & opposite_player, Player const& rhs);
+		Player(Board & board, Player & opposite_player, Player && rhs);
 		Player & operator=(Player const& rhs) = delete;
 		Player & operator=(Player && rhs);
 
@@ -35,6 +35,8 @@ namespace GameEngine {
 	public:
 		Board & board;
 		const SlotIndex side;
+
+		Player & opposite_player;
 		const SlotIndex opposite_side;
 
 		PlayerStat stat;
