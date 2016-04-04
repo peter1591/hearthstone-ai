@@ -96,6 +96,7 @@ inline bool CardCallbackManager::HandleCallback(int card_id, Params&&... params)
 	case CardClassName::card_id: \
 		return CardCallbackCaller<CardClassName, Callback>::Call(params...);
 
+HANDLE_CARD_CALLBACK(Card_CS2_025)
 HANDLE_CARD_CALLBACK(Card_CS2_188)
 HANDLE_CARD_CALLBACK(Card_CS2_189)
 HANDLE_CARD_CALLBACK(Card_CS2_222)

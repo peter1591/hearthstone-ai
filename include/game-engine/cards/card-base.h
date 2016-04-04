@@ -28,6 +28,10 @@ public: \
 } \
 }
 
+//#include "card_example_minion.h"
+//#include "card_example_weapon.h"
+
+#include "card_CS2_025.h"
 #include "card_CS2_188.h"
 #include "card_CS2_189.h"
 #include "card_CS2_222.h"

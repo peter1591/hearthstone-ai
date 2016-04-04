@@ -2,7 +2,7 @@
 
 DEFINE_CARD_CLASS_START(GVG_059)
 // Coghammer
-static void Weapon_BattleCry(GameEngine::Player &equipping_player, GameEngine::Move::EquipWeaponData const&)
+static void Weapon_BattleCry(Player &equipping_player, Move::EquipWeaponData const&)
 {
 	const int minion_count = equipping_player.minions.GetMinionCount();
 	if (minion_count == 0) return; // no minion to buff
