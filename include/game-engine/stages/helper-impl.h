@@ -461,7 +461,7 @@ namespace GameEngine
 		if (card.type != Card::TYPE_MINION) throw std::runtime_error("card type is not minion");
 #endif
 
-		Cards::CardCallbackManager::BattleCry(card.id, player.board, player.side, data);
+		Cards::CardCallbackManager::BattleCry(card.id, player, data);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		auto it = player.board.object_manager.GetMinionIterator(data.put_location);

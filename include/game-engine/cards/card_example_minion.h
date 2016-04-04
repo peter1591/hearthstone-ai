@@ -8,7 +8,7 @@ static void GetRequiredTargets(Player const& player, SlotIndexBitmap &targets, b
 {
 }
 
-static void BattleCry(Board & board, SlotIndex playing_side, Move::PlayMinionData const& play_minion_data)
+static void BattleCry(Player & player, Move::PlayMinionData const& play_minion_data)
 {
 }
 

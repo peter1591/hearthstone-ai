@@ -11,10 +11,8 @@ static void GetRequiredTargets(Player const& player, SlotIndexBitmap &targets, b
 	meet_requirements = true; // it's fine even if no target available
 }
 
-static void BattleCry(Board & board, SlotIndex playing_side, Move::PlayMinionData const& play_minion_data)
+static void BattleCry(Player & player, Move::PlayMinionData const& play_minion_data)
 {
-	(void)playing_side;
-
 	constexpr int attack_boost = 2;
 
 	if (play_minion_data.target < 0) {
@@ -23,7 +21,7 @@ static void BattleCry(Board & board, SlotIndex playing_side, Move::PlayMinionDat
 	}
 
 	try {
-		auto & buff_target = board.object_manager.GetMinion(play_minion_data.target);
+		auto & buff_target = player.board.object_manager.GetMinion(play_minion_data.target);
 		auto enchant = std::make_unique<Enchantment_BuffMinion_C<attack_boost, 0, 0, 0, true>>();
 		buff_target.enchantments.Add(std::move(enchant));
 	}

@@ -56,9 +56,9 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_GetRequiredTargets>(card_id, player, targets, meet_requirements);
 	}
 
-	static bool BattleCry(int card_id, Board &board, SlotIndex playing_side, Move::PlayMinionData const& play_minion_data)
+	static bool BattleCry(int card_id, Player & player, Move::PlayMinionData const& play_minion_data)
 	{
-		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, board, playing_side, play_minion_data);
+		return CardCallbackManager::HandleCallback<Callback_BattleCry>(card_id, player, play_minion_data);
 	}
 
 	static bool Weapon_AfterEquipped(int card_id, Hero & equipped_hero)

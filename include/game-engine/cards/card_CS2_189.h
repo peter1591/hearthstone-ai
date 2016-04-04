@@ -13,9 +13,9 @@ static void GetRequiredTargets(Player const& player, SlotIndexBitmap &targets, b
 	meet_requirements = true; // it's fine even if no target available
 }
 
-static void BattleCry(Board & board, SlotIndex, Move::PlayMinionData const& play_minion_data)
+static void BattleCry(Player & player, Move::PlayMinionData const& play_minion_data)
 {
-	StageHelper::DealDamage(board, play_minion_data.target, 1, false);
+	StageHelper::DealDamage(player.board, play_minion_data.target, 1, false);
 }
 
 DEFINE_CARD_CLASS_END()
