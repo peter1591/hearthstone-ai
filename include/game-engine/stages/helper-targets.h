@@ -35,10 +35,14 @@ namespace GameEngine
 		BoardTargets(Player & player, Decider decider);
 		BoardTargets(Minions & minions);
 
-	public:
+	public: // helper interfaces to create instance
 		static BoardTargets FriendlyHero(Player & player);
 		static BoardTargets EnemyHero(Player & player);
 		static BoardTargets BothHero(Player & player);
+
+		static BoardTargets FriendlyCharacters(Player & player);
+		static BoardTargets EnemyCharacters(Player & player);
+		static BoardTargets AllCharacters(Player & player);
 
 		static BoardTargets AllMinions(Board & board);
 
@@ -47,6 +51,10 @@ namespace GameEngine
 		bool HasPlayerHero() const { return this->has_player_hero; }
 		bool HasOpponentHero() const { return this->has_opponent_hero; }
 		std::list<MinionIterator> const& GetMinionIterators() const { return this->all_minions; }
+
+	public: // others
+		// throw exception if no valid target
+		BoardObject GetOneRandomValidTarget() const;
 
 	private:
 		void Decide(Player & player, Player & choosing, Decider decider);

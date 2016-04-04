@@ -86,6 +86,30 @@ namespace GameEngine
 		return ret;
 	}
 
+	inline BoardTargets BoardTargets::FriendlyCharacters(Player & player)
+	{
+		BoardTargets ret(player.minions);
+		if (player.IsPlayerSide()) ret.has_player_hero = true;
+		else ret.has_opponent_hero = true;
+		return ret;
+	}
+
+	inline BoardTargets BoardTargets::EnemyCharacters(Player & player)
+	{
+		BoardTargets ret(player.opposite_player.minions);
+		if (player.IsPlayerSide()) ret.has_opponent_hero = true;
+		else ret.has_player_hero = true;
+		return ret;
+	}
+
+	inline BoardTargets BoardTargets::AllCharacters(Player & player)
+	{
+		BoardTargets ret = BoardTargets::AllMinions(player.board);
+		ret.has_player_hero = true;
+		ret.has_opponent_hero = true;
+		return ret;
+	}
+
 	inline BoardTargets BoardTargets::AllMinions(Board & board)
 	{
 		BoardTargets ret(board);
@@ -96,6 +120,49 @@ namespace GameEngine
 			ret.Add(it);
 		}
 		return ret;
+	}
+
+	inline BoardObject BoardTargets::GetOneRandomValidTarget() const
+	{
+		std::vector<std::list<MinionIterator>::const_iterator> valid_idx_map;
+		valid_idx_map.reserve(this->all_minions.size());
+
+		int count = 0;
+		for (auto it = this->all_minions.cbegin(); it != this->all_minions.cend(); ++it)
+		{
+			if ((*it)->GetHP() <= 0) continue;
+			valid_idx_map.push_back(it);
+			++count;
+		}
+
+		bool has_player = this->has_player_hero;
+		if (has_player) {
+			if (this->board.player.hero.GetHP() <= 0) has_player = false;
+		}
+
+		bool has_opponent = this->has_opponent_hero;
+		if (has_opponent) {
+			if (this->board.opponent.hero.GetHP() <= 0) has_opponent = false;
+		}
+
+		if (has_player) ++count;
+		if (has_opponent) ++count;
+
+		if (count == 0) throw std::out_of_range("no valid target");
+
+		int r = this->board.random_generator.GetRandom(count);
+
+		if (has_player) {
+			if (r == 0) return BoardObject(this->board.player.hero);
+			--r;
+		}
+
+		if (has_opponent) {
+			if (r == 0) return BoardObject(this->board.opponent.hero);
+			--r;
+		}
+
+		return BoardObject(**valid_idx_map[r]);
 	}
 
 	inline void BoardTargets::Decide(Player & player, Player & choosing, Decider decider)

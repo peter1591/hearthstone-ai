@@ -43,8 +43,9 @@ public:
 	static void DealDamage(GameEngine::BoardObject taker, int damage, bool poisonous);
 	static void DealDamage(GameEngine::Hero & taker, int damage, bool poisonous);
 	static void DealDamage(GameEngine::Minion & taker, int damage, bool poisonous);
-
 	static void DealDamage(BoardTargets const& targets, int damage, bool poisonous);
+
+	static void DealDamageToOneRandomValidTarget(BoardTargets const& targets, int damage, bool poisonous);
 
 public: // randomly choose
 	static Minion & RandomChooseMinion(Minions & minions);

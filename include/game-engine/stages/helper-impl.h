@@ -303,6 +303,19 @@ namespace GameEngine
 		if (targets.HasOpponentHero()) StageHelper::DealDamage(targets.GetBoard().opponent.hero, damage, poisonous);
 	}
 
+	inline void StageHelper::DealDamageToOneRandomValidTarget(BoardTargets const & targets, int damage, bool poisonous)
+	{
+		try {
+			BoardObject obj = targets.GetOneRandomValidTarget();
+			StageHelper::DealDamage(obj, damage, poisonous);
+		}
+		catch (std::out_of_range oor)
+		{
+			// no valid target
+			return;
+		}
+	}
+
 	inline Minion & StageHelper::RandomChooseMinion(Minions & minions)
 	{
 		int count = minions.GetMinionCount();
