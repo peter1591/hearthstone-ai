@@ -30,6 +30,8 @@ namespace GameEngine {
 	public:
 		int GetTotalSpellDamage() const;
 
+		Player & GetOppositePlayer() const;
+
 	public:
 		Board & board;
 		const SlotIndex side;

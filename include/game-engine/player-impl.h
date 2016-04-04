@@ -93,4 +93,10 @@ namespace GameEngine
 		return this->stat.spell_damage + this->minions.GetTotalSpellDamage();
 	}
 
+	inline Player & Player::GetOppositePlayer() const
+	{
+		if (this == &this->board.player) return this->board.opponent;
+		else return this->board.player;
+	}
+
 } // namespace GameEngine
