@@ -100,4 +100,9 @@ namespace GameEngine
 		else return this->board.player;
 	}
 
+	inline bool Player::IsPlayerSide() const
+	{
+		return this->side == SlotIndex::SLOT_PLAYER_SIDE;
+	}
+
 } // namespace GameEngine

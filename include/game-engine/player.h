@@ -29,8 +29,8 @@ namespace GameEngine {
 
 	public:
 		int GetTotalSpellDamage() const;
-
 		Player & GetOppositePlayer() const;
+		bool IsPlayerSide() const;
 
 	public:
 		Board & board;
