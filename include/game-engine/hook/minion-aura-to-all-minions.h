@@ -36,6 +36,12 @@ namespace GameEngine {
 			this->Invoke(added_minion);
 		}
 
+		void HookAfterMinionTransformed(Minion & minion)
+		{
+			MinionAura::HookAfterMinionTransformed(minion);
+			this->Invoke(minion);
+		}
+
 		// default: apply to all minions
 		virtual bool CheckMinionShouldHaveAuraEnchantment(Minion & minion) { return true; }
 		virtual void AddAuraEnchantmentToMinion(Minion & target_minion) = 0;
