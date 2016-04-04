@@ -42,7 +42,7 @@ public:
 	void Destroy();
 
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura);
-	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner);
+	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner = nullptr);
 
 	void Remove(ManagedEnchantment<Target> & item); // interface for enchantment owner
 	void Clear();
