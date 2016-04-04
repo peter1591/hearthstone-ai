@@ -34,22 +34,20 @@ namespace GameEngine
 
 	inline BoardTargets::BoardTargets(Player & player, Decider decider) : BoardTargets(player.board)
 	{
-		Board & board = player.board;
-		this->Decide(player, board.player, decider);
-		this->Decide(player, board.opponent, decider);
+		this->Decide(player, this->board.player, decider);
+		this->Decide(player, this->board.opponent, decider);
 
-		for (auto it = board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+		for (auto it = this->board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 			this->Decide(player, it, decider);
 		}
-		for (auto it = board.opponent.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+		for (auto it = this->board.opponent.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 			this->Decide(player, it, decider);
 		}
 	}
 
 	inline BoardTargets::BoardTargets(Minions & minions) : BoardTargets(minions.GetBoard())
 	{
-		Board & board = minions.GetBoard();
-		for (auto it = board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+		for (auto it = this->board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 			this->Add(it);
 		}
 	}
