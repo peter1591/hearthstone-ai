@@ -47,6 +47,7 @@ class Card
 			TYPE_MINION,
 			TYPE_SPELL,
 			TYPE_WEAPON,
+			TYPE_HEROPOWER,
 			TYPE_SECRET,
 			TYPE_MAX = TYPE_SECRET // must be the largest
 		} type;

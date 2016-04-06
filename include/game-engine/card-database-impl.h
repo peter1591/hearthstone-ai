@@ -232,6 +232,9 @@ namespace GameEngine {
 		else if (type == "WEAPON") {
 			this->AddWeaponCard(card, new_card);
 		}
+		else if (type == "HERO_POWER") {
+			this->AddHeroPowerCard(card, new_card);
+		}
 		else {
 			// ignored
 			return false;
@@ -293,6 +296,14 @@ namespace GameEngine {
 		new_card.id = this->GetAvailableCardId();
 
 		ProcessWeaponCardMechanics(json_card, new_card);
+	}
+
+	inline void CardDatabase::AddHeroPowerCard(Json::Value const & json_card, Card & new_card)
+	{
+		new_card.rarity = GetRarity(json_card);
+		new_card.type = Card::TYPE_HEROPOWER;
+		new_card.cost = json_card["cost"].asInt();
+		new_card.id = this->GetAvailableCardId();
 	}
 
 	inline void CardDatabase::AddCard(Card const & card, std::string const& origin_id)
