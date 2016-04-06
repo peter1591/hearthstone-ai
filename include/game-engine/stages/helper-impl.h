@@ -587,11 +587,11 @@ namespace GameEngine
 	{
 		if (SlotIndexHelper::IsPlayerSide(side)) {
 			++board.player.stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_PLAYER_HERO), board.player.stat.fatigue_damage, false);
+			StageHelper::DealDamage(board.player.hero, board.player.stat.fatigue_damage, false);
 		}
 		else {
 			++board.opponent.stat.fatigue_damage;
-			StageHelper::DealDamage(board.object_manager.GetObject(SLOT_OPPONENT_HERO), board.opponent.stat.fatigue_damage, false);
+			StageHelper::DealDamage(board.opponent.hero, board.opponent.stat.fatigue_damage, false);
 		}
 	}
 }
