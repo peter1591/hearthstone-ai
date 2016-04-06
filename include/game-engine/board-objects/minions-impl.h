@@ -10,7 +10,7 @@ namespace GameEngine {
 
 		auto new_it = this->minions.insert(it.GetIterator(), std::move(new_minion));
 #ifdef DEBUG
-		this->change_id++;
+		// this->change_id++; // change id is not changed since we're using a std::list
 #endif
 
 		this->GetBoard().hook_manager.HookAfterMinionAdded(*new_it);
@@ -44,7 +44,7 @@ namespace GameEngine {
 
 		it.it = this->minions.erase(it.it);
 #ifdef DEBUG
-		this->change_id++; // TODO: test only
+		this->change_id++; // TODO: Iterators point to exist minions are still valid; but I'd like to know when this happens
 		it.container_change_id = this->change_id;
 #endif
 	}
