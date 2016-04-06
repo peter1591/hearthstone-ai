@@ -76,7 +76,7 @@ inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 	root_node->board_hash = std::hash<GameEngine::Board>()(board);
 #endif
 
-	this->board_node_map.Add(board, root_node);
+	this->board_finder.Add(board, root_node);
 }
 
 inline void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
@@ -209,7 +209,7 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	//if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
 #endif
 
-	this->board_node_map.Add(next_board, new_node);
+	this->board_finder.Add(next_board, new_node);
 	this->traversed_nodes.push_back(new_node);
 
 	return new_node;
@@ -303,7 +303,7 @@ inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	board.ApplyMove(expanding_move);
 
 	// find transposition node (i.e., other node with the same board)
-	TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
+	TreeNode *transposition_node = this->board_finder.Find(board, this->start_board);
 	if (transposition_node) {
 		// a transposition node is found
 #ifdef DEBUG
@@ -350,7 +350,7 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 
 			board.ApplyMove(expanding_move);
 
-			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
+			TreeNode *transposition_node = this->board_finder.Find(board, this->start_board);
 			if (transposition_node) {
 #ifdef DEBUG
 				if (transposition_node->parent == node) {
@@ -458,7 +458,7 @@ inline bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngi
 	}
 
 	// game-flow move is non-determinsitic for this board
-	transposition_node = this->board_node_map.Find(board, this->start_board);
+	transposition_node = this->board_finder.Find(board, this->start_board);
 	if (transposition_node) {
 #ifdef DEBUG
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
@@ -506,7 +506,7 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 			// this move has not been expanded --> expand it
 			board.ApplyMove(expanding_move);
 
-			TreeNode *transposition_node = this->board_node_map.Find(board, this->start_board);
+			TreeNode *transposition_node = this->board_finder.Find(board, this->start_board);
 			if (transposition_node) {
 #ifdef DEBUG
 				if (transposition_node->parent == node) {

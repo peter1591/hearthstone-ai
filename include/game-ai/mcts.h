@@ -10,6 +10,7 @@
 #include "game-ai/board-node-map.h"
 #include "game-ai/start-board.h"
 #include "game-ai/traversed-path-recorder.h"
+#include "game-ai/board-finder.h"
 
 class MCTS
 {
@@ -52,7 +53,7 @@ private:
 private: // for internal use
 	StartBoard start_board;
 	Tree tree;
-	BoardNodeMap board_node_map;
+	BoardFinder board_finder;
 
 	TreeNode *allocated_node;
 	std::list<TreeNode*> traversed_nodes;
