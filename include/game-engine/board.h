@@ -107,6 +107,10 @@ namespace std {
 
 			// hash for the union
 			switch (s.stage) {
+			case GameEngine::STAGE_WIN:
+			case GameEngine::STAGE_LOSS:
+				break;
+
 			case GameEngine::STAGE_PLAYER_PUT_MINION:
 			case GameEngine::STAGE_OPPONENT_PUT_MINION:
 				GameEngine::hash_combine(result, s.data.play_hand_minion_data);

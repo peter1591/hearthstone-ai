@@ -265,6 +265,10 @@ inline bool Board::operator==(const Board &rhs) const
 	if (this->opponent != rhs.opponent) return false;
 
 	switch (this->stage) {
+	case STAGE_WIN:
+	case STAGE_LOSS:
+		break;
+
 	case STAGE_PLAYER_PUT_MINION:
 	case STAGE_OPPONENT_PUT_MINION:
 		if (this->data.play_hand_minion_data != rhs.data.play_hand_minion_data) return false;
