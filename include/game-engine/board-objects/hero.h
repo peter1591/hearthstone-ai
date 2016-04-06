@@ -31,7 +31,13 @@ namespace GameEngine {
 
 		Board & GetBoard() const { return this->board; }
 
-		void SetHero(HeroData const& hero_) { this->hero = hero_; }
+		void SetHero(HeroData const& hero_)
+		{
+			this->hero = hero_;
+#ifdef DEBUG
+			if (!this->hero.hero_power.IsValid()) throw std::runtime_error("invalid hero power card");
+#endif
+		}
 
 		std::string GetDebugString() const { return this->hero.GetDebugString(); }
 
@@ -113,6 +119,8 @@ namespace GameEngine {
 		void AddWeaponOnDeathTrigger(WeaponOnDeathTrigger && func) {
 			this->hero.weapon.on_death_triggers.push_back(std::move(func));
 		}
+
+		HeroPower const& GetHeroPower() const { return this->hero.hero_power; }
 
 	public: // hooks
 		void TurnStart(bool owner_turn)
