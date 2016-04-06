@@ -69,9 +69,7 @@ namespace GameEngine
 		GetBoardMoves_Attack(player, next_moves);
 
 		// the choice to use hero power
-		if (player.stat.crystal.GetCurrent() >= player.hero.GetHeroPower().cost) {
-			GetBoardMoves_HeroPower(player, next_moves);
-		}
+		GetBoardMoves_HeroPower(player, next_moves);
 
 		// the choice to end turn
 		Move move_end_turn;
@@ -152,8 +150,7 @@ namespace GameEngine
 	inline void StageHelper::GetBoardMoves_HeroPower(Player const & player, NextMoveGetter & next_move_getter)
 	{
 		if (player.stat.crystal.GetCurrent() < player.hero.GetHeroPower().cost) return;
-
-		// TODO: check hero power can be used
+		if (player.hero.GetHeroPower().used_this_turn) return;
 
 		SlotIndexBitmap required_targets;
 		bool meet_requirements;
@@ -194,10 +191,9 @@ namespace GameEngine
 		moves.AddMove(move, weight_end_turn);
 
 		// the choice to use hero power
-		if (player.stat.crystal.GetCurrent() >= player.hero.GetHeroPower().cost) {
+		if (player.stat.crystal.GetCurrent() >= player.hero.GetHeroPower().cost && !player.hero.GetHeroPower().used_this_turn) {
 			SlotIndexBitmap hero_power_required_targets;
 			bool hero_power_meet_requirements;
-			// TODO: check hero power can be used
 			if (!Cards::CardCallbackManager::GetRequiredTargets(player.hero.GetHeroPower().card_id, player, hero_power_required_targets, hero_power_meet_requirements)
 				|| hero_power_meet_requirements)
 			{
@@ -578,10 +574,11 @@ namespace GameEngine
 	inline bool StageHelper::UseHeroPower(Player & player, SlotIndex target)
 	{
 		player.stat.crystal.CostCrystals(player.hero.GetHeroPower().cost);
-		Cards::CardCallbackManager::HeroPower_Go(player.hero.GetHeroPower().card_id, player, target);
-		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		// TODO: increase hero power used times
+		Cards::CardCallbackManager::HeroPower_Go(player.hero.GetHeroPower().card_id, player, target);
+		player.hero.UsedHeroPowerOnce();
+
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;
 	}

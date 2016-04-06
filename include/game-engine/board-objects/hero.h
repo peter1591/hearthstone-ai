@@ -121,12 +121,15 @@ namespace GameEngine {
 		}
 
 		HeroPower const& GetHeroPower() const { return this->hero.hero_power; }
+		void UsedHeroPowerOnce() { this->hero.hero_power.used_this_turn = true; }
 
 	public: // hooks
 		void TurnStart(bool owner_turn)
 		{
 			(void)owner_turn;
+
 			this->hero.attacked_times = 0;
+			this->hero.hero_power.used_this_turn = false;
 		}
 
 		void TurnEnd(bool owner_turn)

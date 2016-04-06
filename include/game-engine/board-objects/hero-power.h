@@ -12,6 +12,7 @@ namespace GameEngine {
 
 		int card_id;
 		int cost;
+		bool used_this_turn;
 
 		bool IsValid() const { return this->card_id > 0; }
 
@@ -22,6 +23,7 @@ namespace GameEngine {
 			if (this->IsValid()) {
 				if (this->card_id != rhs.card_id) return false;
 				if (this->cost != rhs.cost) return false;
+				if (this->used_this_turn != rhs.used_this_turn) return false;
 			}
 
 			return true;
@@ -36,7 +38,6 @@ namespace GameEngine {
 } // namespace GameEngine
 
 namespace std {
-
 	template <> struct hash<GameEngine::HeroPower> {
 		typedef GameEngine::HeroPower argument_type;
 		typedef std::size_t result_type;
@@ -48,12 +49,12 @@ namespace std {
 			if (s.IsValid()) {
 				GameEngine::hash_combine(result, s.card_id);
 				GameEngine::hash_combine(result, s.cost);
+				GameEngine::hash_combine(result, s.used_this_turn);
 			}
 
 			return result;
 		}
 	};
-
 }
 
 #endif
