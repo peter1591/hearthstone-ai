@@ -303,18 +303,12 @@ inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	board.ApplyMove(expanding_move);
 
 	// find transposition node (i.e., other node with the same board)
-	TreeNode *transposition_node = this->board_finder.Find(board, this->start_board);
+	TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->start_board);
 	if (transposition_node) {
 		// a transposition node is found
 #ifdef DEBUG
 		if (transposition_node->parent == node) throw std::runtime_error("logic error: 'node' should have no parent in ExpandNewNode()");
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
-#endif
-
-#ifdef DEBUG
-		if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
-			throw std::runtime_error("found a transposition node across turn? is this actually possible?");
-		}
 #endif
 
 		TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
@@ -350,7 +344,7 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 
 			board.ApplyMove(expanding_move);
 
-			TreeNode *transposition_node = this->board_finder.Find(board, this->start_board);
+			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->start_board);
 			if (transposition_node) {
 #ifdef DEBUG
 				if (transposition_node->parent == node) {
@@ -365,12 +359,6 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 					if (child_node->equivalent_node == transposition_node) {
 						throw std::runtime_error("two different moves yield an identical board, why is this happening?");
 					}
-				}
-#endif
-
-#ifdef DEBUG
-				if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
-					throw std::runtime_error("found a transposition node across turn? is this actually possible?");
 				}
 #endif
 
@@ -458,16 +446,10 @@ inline bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngi
 	}
 
 	// game-flow move is non-determinsitic for this board
-	transposition_node = this->board_finder.Find(board, this->start_board);
+	transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->start_board);
 	if (transposition_node) {
 #ifdef DEBUG
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
-#endif
-
-#ifdef DEBUG
-		if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
-			throw std::runtime_error("found a transposition node across turn? is this actually possible?");
-		}
 #endif
 
 		this->traversed_nodes.push_back(transposition_node);
@@ -506,7 +488,7 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 			// this move has not been expanded --> expand it
 			board.ApplyMove(expanding_move);
 
-			TreeNode *transposition_node = this->board_finder.Find(board, this->start_board);
+			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->start_board);
 			if (transposition_node) {
 #ifdef DEBUG
 				if (transposition_node->parent == node) {
@@ -521,12 +503,6 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 					if (child_node->equivalent_node == transposition_node) {
 						throw std::runtime_error("two different moves yield an identical board, why is this happening?");
 					}
-				}
-#endif
-
-#ifdef DEBUG
-				if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
-					throw std::runtime_error("found a transposition node across turn? is this actually possible?");
 				}
 #endif
 
