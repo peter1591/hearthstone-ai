@@ -144,6 +144,12 @@ static void TestClassEquality()
 	std::cout << "ok" << std::endl;
 }
 
+static void TestDeathrattle()
+{
+	auto d = GameEngine::Cards::CardCallbackManager::GetDeathrattle(CARD_ID_FP1_007);
+	auto e = GameEngine::Cards::CardCallbackManager::GetDeathrattle(CARD_ID_CS2_122);
+}
+
 int main(void)
 {
 	std::cout << "Loading card database..." << std::endl;
@@ -153,4 +159,5 @@ int main(void)
 	//TestBasic();
 	InteractiveTest();
 	//TestClassEquality();
+	//TestDeathrattle();
 }

@@ -455,5 +455,14 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_122.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\turn.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-finder.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-data-impl.h">
+      <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

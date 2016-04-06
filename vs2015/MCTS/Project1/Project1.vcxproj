@@ -128,6 +128,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\game-ai\board-finder.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-node-map-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-node-map.h" />
     <ClInclude Include="..\..\..\include\game-ai\decider-impl.h" />
@@ -142,11 +143,13 @@
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h" />
     <ClInclude Include="..\..\..\include\game-ai\tree.h" />
+    <ClInclude Include="..\..\..\include\game-ai\turn.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\board-object.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
+    <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-data-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-iterator-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator.h" />

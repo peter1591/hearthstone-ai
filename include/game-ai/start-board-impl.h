@@ -37,6 +37,7 @@ inline void StartBoard::InitializeDebugBoard1_PlayerHand(GameEngine::Hand &hand)
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_015)); // novice enginner
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_022)); // polymorph
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_122)); // Raid Leader
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_FP1_002)); // Haunted Creeper
 }
 
 inline void StartBoard::InitializeDebugBoard1_OpponentHand(GameEngine::Hand &hand)
@@ -117,11 +118,10 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);
 
 	{
-		auto minion = GameEngine::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
+		auto minion = GameEngine::MinionData::FromCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_FP1_007));
 		auto added_minion = board.player.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_PLAYER_SIDE),
 			std::move(minion));
-		added_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
 		added_minion->TurnStart(true);
 	}
 
@@ -167,11 +167,10 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	InitializeDebugBoard1_OpponentHand(board.opponent.hand);
 
 	{
-		auto minion = GameEngine::MinionData(CARD_ID_FP1_007, 2, 2, 2, 0);
+		auto minion = GameEngine::MinionData::FromCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_FP1_007));
 		auto added_minion = board.opponent.minions.InsertBefore(
 			board.object_manager.GetMinionIteratorAtBeginOfSide(GameEngine::SLOT_OPPONENT_SIDE),
 			std::move(minion));
-		added_minion->AddOnDeathTrigger(GameEngine::Minion::OnDeathTrigger(GameEngine::Cards::Card_FP1_007::Deathrattle));
 		added_minion->TurnStart(true);
 	}
 
