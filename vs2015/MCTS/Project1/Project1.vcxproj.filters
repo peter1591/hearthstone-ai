@@ -464,5 +464,17 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-data-impl.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-use-hero-power.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-use-hero-power.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_example_hero_power.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_034.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
