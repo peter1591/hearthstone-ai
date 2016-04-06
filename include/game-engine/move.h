@@ -19,6 +19,7 @@ class Move
 			ACTION_PLAY_HAND_WEAPON,
 			ACTION_PLAY_HAND_SPELL,
 			ACTION_ATTACK,
+			ACTION_HERO_POWER,
 			ACTION_END_TURN,
 		};
 
@@ -84,10 +85,23 @@ class Move
 			bool operator!=(AttackData const& rhs) const { return !(*this == rhs); }
 		};
 
+		struct UseHeroPowerData {
+			SlotIndex target;
+
+			bool operator==(UseHeroPowerData const& rhs) const
+			{
+				if (this->target != rhs.target) return false;
+				return true;
+			}
+
+			bool operator!=(UseHeroPowerData const& rhs) const { return !(*this == rhs); }
+		};
+
 		union Data {
 			PlayHandMinionData play_hand_minion_data;
 			PlayHandCardData play_hand_card_data;
 			AttackData attack_data;
+			UseHeroPowerData use_hero_power_data;
 		};
 
 	public:
@@ -124,6 +138,10 @@ inline bool Move::operator==(const Move &rhs) const
 
 	case ACTION_ATTACK:
 		if (this->data.attack_data != rhs.data.attack_data) return false;
+		break;
+
+	case ACTION_HERO_POWER:
+		if (this->data.use_hero_power_data != rhs.data.use_hero_power_data) return false;
 		break;
 
 	case ACTION_END_TURN:
@@ -173,6 +191,10 @@ inline std::string Move::GetDebugString() const
 	case Move::ACTION_ATTACK:
 		oss << "[Attack] attacking = " << this->data.attack_data.attacker_idx
 			<< ", attacked = " << this->data.attack_data.attacked_idx;
+		break;
+
+	case Move::ACTION_HERO_POWER:
+		oss << "[Hero power] target = " << this->data.use_hero_power_data.target;
 		break;
 
 	case Move::ACTION_END_TURN:
@@ -244,6 +266,18 @@ namespace std {
 		}
 	};
 
+	template <> struct hash<GameEngine::Move::UseHeroPowerData> {
+		typedef GameEngine::Move::UseHeroPowerData argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(const argument_type &s) const {
+			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.target);
+
+			return result;
+		}
+	};
+
 	template <> struct hash<GameEngine::Move> {
 		typedef GameEngine::Move argument_type;
 		typedef std::size_t result_type;
@@ -271,6 +305,10 @@ namespace std {
 
 			case GameEngine::Move::ACTION_ATTACK:
 				GameEngine::hash_combine(result, s.data.attack_data);
+				break;
+
+			case GameEngine::Move::ACTION_HERO_POWER:
+				GameEngine::hash_combine(result, s.data.use_hero_power_data);
 				break;
 
 			case GameEngine::Move::ACTION_END_TURN:
