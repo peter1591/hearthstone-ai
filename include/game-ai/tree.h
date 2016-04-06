@@ -38,6 +38,8 @@ public:
 	int start_board_random; // (any) one of the start board randoms which leads us to this node
 	TraversedPathRecorder path; // one of the paths leading to this node
 
+	int turn;
+
 	// if this is a player's turn, then it's true
 	// if this is a random node, and it came out due to a player's action, then it's true
 	// otherwise, it's false

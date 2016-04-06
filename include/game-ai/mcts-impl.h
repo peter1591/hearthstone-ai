@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mcts.h"
+#include "turn.h"
 
 inline MCTS::MCTS()
 {
@@ -60,6 +61,7 @@ inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 	root_node->stage = board.GetStage();
 	root_node->stage_type = board.GetStageType();
 	root_node->parent = nullptr;
+	root_node->turn = Turn::GetTurnForRootNode();
 	root_node->wins = 0;
 	root_node->count = 0;
 	if (root_node->stage_type == GameEngine::STAGE_TYPE_PLAYER) {
@@ -181,6 +183,7 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
 	//new_node->move = expanding_move; // optimized out
 #endif
+	new_node->turn = Turn::GetTurn(node, next_move);
 	new_node->wins = 0;
 	new_node->count = 0;
 	new_node->stage = next_board.GetStage();
@@ -308,6 +311,12 @@ inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
 #endif
 
+#ifdef DEBUG
+		if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
+			throw std::runtime_error("found a transposition node across turn? is this actually possible?");
+		}
+#endif
+
 		TreeNode * redirect_node = this->CreateRedirectNode(node, expanding_move, transposition_node);
 		this->traversed_nodes.push_back(redirect_node);
 		this->traversed_path.AddRedirectNode(redirect_node);
@@ -356,6 +365,12 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 					if (child_node->equivalent_node == transposition_node) {
 						throw std::runtime_error("two different moves yield an identical board, why is this happening?");
 					}
+				}
+#endif
+
+#ifdef DEBUG
+				if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
+					throw std::runtime_error("found a transposition node across turn? is this actually possible?");
 				}
 #endif
 
@@ -449,6 +464,12 @@ inline bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngi
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
 #endif
 
+#ifdef DEBUG
+		if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
+			throw std::runtime_error("found a transposition node across turn? is this actually possible?");
+		}
+#endif
+
 		this->traversed_nodes.push_back(transposition_node);
 		this->traversed_path.AddHiddenRedirectNode(node, transposition_node);
 		node = transposition_node;
@@ -500,6 +521,12 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 					if (child_node->equivalent_node == transposition_node) {
 						throw std::runtime_error("two different moves yield an identical board, why is this happening?");
 					}
+				}
+#endif
+
+#ifdef DEBUG
+				if (transposition_node->turn != Turn::GetTurn(node, expanding_move)) {
+					throw std::runtime_error("found a transposition node across turn? is this actually possible?");
 				}
 #endif
 
