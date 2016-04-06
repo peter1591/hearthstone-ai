@@ -20,7 +20,7 @@ namespace GameEngine {
 			const Board::UseHeroPowerData &data = board.data.use_hero_power_data;
 			if (StageHelper::UseHeroPower(board.opponent, data.target)) return; // game ends
 
-			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
+			board.stage = STAGE_OPPONENT_CHOOSE_BOARD_MOVE;
 		}
 	};
 
