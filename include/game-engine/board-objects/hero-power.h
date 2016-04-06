@@ -7,10 +7,23 @@
 namespace GameEngine {
 	struct HeroPower
 	{
-		// TODO
+		HeroPower() : card_id(-1) {}
+		HeroPower(int card_id) : card_id(card_id) {}
 
-		bool operator==(const HeroPower &) const
+		int card_id;
+		int cost;
+
+		bool IsValid() const { return this->card_id > 0; }
+
+		bool operator==(HeroPower const& rhs) const
 		{
+			if (this->IsValid() != rhs.IsValid()) return false;
+
+			if (this->IsValid()) {
+				if (this->card_id != rhs.card_id) return false;
+				if (this->cost != rhs.cost) return false;
+			}
+
 			return true;
 		}
 
@@ -27,8 +40,15 @@ namespace std {
 	template <> struct hash<GameEngine::HeroPower> {
 		typedef GameEngine::HeroPower argument_type;
 		typedef std::size_t result_type;
-		result_type operator()(const argument_type &) const {
+		result_type operator()(const argument_type &s) const {
 			result_type result = 0;
+
+			GameEngine::hash_combine(result, s.IsValid());
+
+			if (s.IsValid()) {
+				GameEngine::hash_combine(result, s.card_id);
+				GameEngine::hash_combine(result, s.cost);
+			}
 
 			return result;
 		}
