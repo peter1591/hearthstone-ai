@@ -313,12 +313,16 @@ inline void StartBoard::InitializeDebugBoard_Practice_Mage(GameEngine::Board & b
 	player_hero.hp = 30;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
+	player_hero.hero_power.card_id = CARD_ID_CS2_034;
+	player_hero.hero_power.cost = 2;
 	board.player.hero.SetHero(player_hero);
 
 	GameEngine::HeroData opponent_hero;
 	opponent_hero.hp = 30;
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
+	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
+	opponent_hero.hero_power.cost = 2;
 	board.opponent.hero.SetHero(opponent_hero);
 
 	InitializeDeck_Practice_Mage_Player(board.player.hand);
