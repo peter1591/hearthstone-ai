@@ -563,6 +563,8 @@ namespace GameEngine
 
 	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex target)
 	{
+		// TODO: reduce crystal here?
+
 #ifdef DEBUG
 		if (card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
 #endif
