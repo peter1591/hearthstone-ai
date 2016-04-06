@@ -68,6 +68,11 @@ namespace GameEngine
 		// the choices to attack by hero/minion
 		GetBoardMoves_Attack(player, next_moves);
 
+		// the choice to use hero power
+		if (player.stat.crystal.GetCurrent() >= player.hero.GetHeroPower().cost) {
+			GetBoardMoves_HeroPower(player, next_moves);
+		}
+
 		// the choice to end turn
 		Move move_end_turn;
 		move_end_turn.action = Move::ACTION_END_TURN;
@@ -144,6 +149,23 @@ namespace GameEngine
 		}
 	}
 
+	inline void StageHelper::GetBoardMoves_HeroPower(Player const & player, NextMoveGetter & next_move_getter)
+	{
+		if (player.stat.crystal.GetCurrent() < player.hero.GetHeroPower().cost) return;
+
+		// TODO: check hero power can be used
+
+		SlotIndexBitmap required_targets;
+		bool meet_requirements;
+		if (Cards::CardCallbackManager::GetRequiredTargets(player.hero.GetHeroPower().card_id, player, required_targets, meet_requirements) &&
+			meet_requirements == false)
+		{
+			return;
+		}
+
+		next_move_getter.AddItem(NextMoveGetter::ItemUseHeroPower(player, required_targets));
+	}
+
 	inline void StageHelper::GetGoodBoardMove(unsigned int rand, Player const & player, Move &good_move)
 	{
 		// heuristic goes here
@@ -163,12 +185,29 @@ namespace GameEngine
 		constexpr int weight_equip_weapon = 100;
 		constexpr int weight_play_spell = 100;
 		constexpr int weight_attack = 100;
+		constexpr int weight_hero_power = 100;
 
 		moves.Clear();
 
 		// the choice to end turn
 		move.action = Move::ACTION_END_TURN;
 		moves.AddMove(move, weight_end_turn);
+
+		// the choice to use hero power
+		if (player.stat.crystal.GetCurrent() >= player.hero.GetHeroPower().cost) {
+			SlotIndexBitmap hero_power_required_targets;
+			bool hero_power_meet_requirements;
+			// TODO: check hero power can be used
+			if (!Cards::CardCallbackManager::GetRequiredTargets(player.hero.GetHeroPower().card_id, player, hero_power_required_targets, hero_power_meet_requirements)
+				|| hero_power_meet_requirements)
+			{
+				move.action = Move::ACTION_HERO_POWER;
+				if (hero_power_required_targets.None()) move.data.use_hero_power_data.target = SLOT_INVALID;
+				else move.data.use_hero_power_data.target = hero_power_required_targets.GetOneTarget();
+
+				moves.AddMove(move, weight_hero_power);
+			}
+		}
 
 		// the choices to play a card from hand
 		bool can_play_minion = !player.minions.IsFull();
@@ -530,6 +569,17 @@ namespace GameEngine
 
 		Cards::CardCallbackManager::Spell_Go(card.id, player, target);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
+
+		return false;
+	}
+
+	inline bool StageHelper::UseHeroPower(Player & player, SlotIndex target)
+	{
+		player.stat.crystal.CostCrystals(player.hero.GetHeroPower().cost);
+		Cards::CardCallbackManager::HeroPower_Go(player.hero.GetHeroPower().card_id, player, target);
+		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
+
+		// TODO: increase hero power used times
 
 		return false;
 	}

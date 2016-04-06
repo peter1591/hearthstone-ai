@@ -78,6 +78,11 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_Spell_Go>(card_id, player, target);
 	}
 
+	static bool HeroPower_Go(int card_id, Player &player, SlotIndex target)
+	{
+		return CardCallbackManager::HandleCallback<Callback_HeroPower_Go>(card_id, player, target);
+	}
+
 	typedef void DeathrattleCallback(GameEngine::MinionIterator & triggering_minion);
 	static DeathrattleCallback* GetDeathrattle(int card_id)
 	{
@@ -96,6 +101,7 @@ private:
 	DECLARE_CARD_CALLBACK(Weapon_BattleCry)
 	DECLARE_CARD_CALLBACK(Weapon_AfterEquipped)
 	DECLARE_CARD_CALLBACK(Spell_Go)
+	DECLARE_CARD_CALLBACK(HeroPower_Go)
 #undef DECLARE_CARD_CALLBACK
 
 	struct Callback_GetDeathrattle;

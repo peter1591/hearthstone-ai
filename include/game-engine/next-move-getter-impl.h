@@ -68,6 +68,16 @@ inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveG
 	this->items_play_hand_card.splice(this->items_play_hand_card.end(), std::move(items));
 }
 
+inline void GameEngine::NextMoveGetter::AddItem(GameEngine::NextMoveGetter::ItemUseHeroPower && item)
+{
+	this->items_use_hero_power.push_back(std::move(item));
+}
+
+inline void GameEngine::NextMoveGetter::AddItems(std::list<GameEngine::NextMoveGetter::ItemUseHeroPower> && items)
+{
+	this->items_use_hero_power.splice(this->items_use_hero_power.end(), std::move(items));
+}
+
 template<typename T>
 inline bool GameEngine::NextMoveGetter::GetNextMoveFromContainer(std::list<T>& container, Board const& board, Move &move)
 {
@@ -91,6 +101,7 @@ inline bool GameEngine::NextMoveGetter::GetNextMove(GameEngine::Board const& boa
 	if (this->GetNextMoveFromContainer(this->items_player_attack, board, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_play_hand_minion, board, move)) return true;
 	if (this->GetNextMoveFromContainer(this->items_play_hand_card, board, move)) return true;
+	if (this->GetNextMoveFromContainer(this->items_use_hero_power, board, move)) return true;
 	return false;
 }
 
@@ -100,6 +111,7 @@ inline void GameEngine::NextMoveGetter::Clear()
 	this->items_player_attack.clear();
 	this->items_play_hand_minion.clear();
 	this->items_play_hand_card.clear();
+	this->items_use_hero_power.clear();
 }
 
 inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) const
@@ -108,6 +120,7 @@ inline bool GameEngine::NextMoveGetter::operator==(NextMoveGetter const & rhs) c
 	if (!IsEqual(this->items_player_attack, rhs.items_player_attack)) return false;
 	if (!IsEqual(this->items_play_hand_minion, rhs.items_play_hand_minion)) return false;
 	if (!IsEqual(this->items_play_hand_card, rhs.items_play_hand_card)) return false;
+	if (!IsEqual(this->items_use_hero_power, rhs.items_use_hero_power)) return false;
 	return true;
 }
 
@@ -255,6 +268,48 @@ inline bool GameEngine::NextMoveGetter::ItemAttack::operator==(ItemAttack const 
 }
 
 inline bool GameEngine::NextMoveGetter::ItemAttack::operator!=(ItemAttack const & rhs) const
+{
+	return !(*this == rhs);
+}
+
+inline GameEngine::NextMoveGetter::ItemUseHeroPower::ItemUseHeroPower(
+	Player const& player, SlotIndexBitmap required_targets)
+	: player(player), required_targets(required_targets)
+{
+	this->done = false;
+}
+
+inline GameEngine::NextMoveGetter::ItemUseHeroPower * GameEngine::NextMoveGetter::ItemUseHeroPower::Clone() const
+{
+	return new ItemUseHeroPower(*this);
+}
+
+inline bool GameEngine::NextMoveGetter::ItemUseHeroPower::GetNextMove(GameEngine::Board const&, Move & move)
+{
+	if (this->done) return false;
+
+	move.action = GameEngine::Move::ACTION_HERO_POWER;
+
+	if (this->required_targets.None())
+	{
+		move.data.use_hero_power_data.target = SLOT_INVALID;
+		this->done = true;
+	}
+	else {
+		move.data.use_hero_power_data.target = this->required_targets.GetOneTarget();
+		this->required_targets.ClearOneTarget(move.data.use_hero_power_data.target);
+		if (this->required_targets.None()) this->done = true;
+	}
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemUseHeroPower::operator==(ItemUseHeroPower const & rhs) const
+{
+	if (this->required_targets != rhs.required_targets) return false;
+	return true;
+}
+
+inline bool GameEngine::NextMoveGetter::ItemUseHeroPower::operator!=(ItemUseHeroPower const & rhs) const
 {
 	return !(*this == rhs);
 }

@@ -60,16 +60,33 @@ public:
 		SlotIndexBitmap attacked_origin;
 	};
 
+	class ItemUseHeroPower
+	{
+	public:
+		ItemUseHeroPower(Player const& player, SlotIndexBitmap required_targets);
+		ItemUseHeroPower* Clone() const;
+		bool GetNextMove(Board const& board, Move & move);
+		bool operator==(ItemUseHeroPower const& rhs) const;
+		bool operator!=(ItemUseHeroPower const& rhs) const;
+
+	private:
+		Player const& player;
+		SlotIndexBitmap required_targets;
+		bool done;
+	};
+
 public:
 	void AddItem(Move const& move);
 	void AddItem(Move && move);
 	void AddItem(ItemAttack && items);
 	void AddItem(ItemPlayHandMinion && items);
 	void AddItem(ItemPlayHandCard && items);
+	void AddItem(ItemUseHeroPower && items);
 	void AddItems(std::list<Move> && items);
 	void AddItems(std::list<ItemAttack> && items);
 	void AddItems(std::list<ItemPlayHandMinion> && items);
 	void AddItems(std::list<ItemPlayHandCard> && items);
+	void AddItems(std::list<ItemUseHeroPower> && items);
 
 	bool GetNextMove(Board const& board, Move &move);
 	bool Empty();
@@ -87,6 +104,7 @@ private:
 	std::list<ItemAttack> items_player_attack;
 	std::list<ItemPlayHandMinion> items_play_hand_minion;
 	std::list<ItemPlayHandCard> items_play_hand_card;
+	std::list<ItemUseHeroPower> items_use_hero_power;
 };
 
 } // namespace GameEngine

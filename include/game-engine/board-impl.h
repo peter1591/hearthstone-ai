@@ -10,6 +10,7 @@
 #include "game-engine/stages/player-equip-weapon.h"
 #include "game-engine/stages/player-play-spell.h"
 #include "game-engine/stages/player-attack.h"
+#include "game-engine/stages/player-use-hero-power.h"
 #include "game-engine/stages/player-turn-end.h"
 #include "game-engine/stages/opponent-turn-start.h"
 #include "game-engine/stages/opponent-choose-board-move.h"
@@ -17,6 +18,7 @@
 #include "game-engine/stages/opponent-equip-weapon.h"
 #include "game-engine/stages/opponent-play-spell.h"
 #include "game-engine/stages/opponent-attack.h"
+#include "game-engine/stages/opponent-use-hero-power.h"
 #include "game-engine/stages/opponent-turn-end.h"
 
 #include "game-engine/random-generator.h"
@@ -47,6 +49,8 @@ inline typename Chooser::ReturnType Board::StageFunctionCaller(Stage const stage
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentEquipWeapon)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerPlaySpell)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentPlaySpell)
+	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerUseHeroPower)
+	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentUseHeroPower)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnStart)
 	IF_ELSE_HANDLE_STAGE_CLASS(StageOpponentTurnStart)
 	IF_ELSE_HANDLE_STAGE_CLASS(StagePlayerTurnEnd)

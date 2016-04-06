@@ -53,6 +53,11 @@ public:
 				board.stage = STAGE_PLAYER_ATTACK;
 				return;
 
+			case Move::ACTION_HERO_POWER:
+				board.stage = STAGE_PLAYER_USE_HERO_POWER;
+				board.data.use_hero_power_data = move.data.use_hero_power_data;
+				return;
+
 			case Move::ACTION_END_TURN:
 				board.stage = STAGE_PLAYER_TURN_END;
 				return;
