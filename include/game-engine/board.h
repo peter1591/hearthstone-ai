@@ -61,11 +61,14 @@ namespace GameEngine {
 		typedef Move::PlayHandMinionData PlayHandMinionData;
 		typedef Move::PlayHandCardData PlayHandCardData;
 		typedef Move::AttackData AttackData;
+		typedef Move::UseHeroPowerData UseHeroPowerData;
 
+		// TODO: don't need to use union here
 		union Data {
 			PlayHandMinionData play_hand_minion_data;
 			PlayHandCardData play_hand_card_data;
 			AttackData attack_data;
+			UseHeroPowerData use_hero_power_data;
 
 			bool operator==(const Data &rhs) const = delete;
 			bool operator!=(const Data &rhs) const = delete;
@@ -126,6 +129,11 @@ namespace std {
 			case GameEngine::STAGE_PLAYER_ATTACK:
 			case GameEngine::STAGE_OPPONENT_ATTACK:
 				GameEngine::hash_combine(result, s.data.attack_data);
+				break;
+
+			case GameEngine::STAGE_PLAYER_USE_HERO_POWER:
+			case GameEngine::STAGE_OPPONENT_USE_HERO_POWER:
+				GameEngine::hash_combine(result, s.data.use_hero_power_data);
 				break;
 
 			case GameEngine::STAGE_PLAYER_CHOOSE_BOARD_MOVE:
