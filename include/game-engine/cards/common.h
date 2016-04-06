@@ -8,6 +8,8 @@
 #include "card-base.h"
 
 namespace GameEngine {
+	class MinionIterator;
+
 	namespace Cards {
 
 #define DECLARE_CARD_CALLBACK(MethodName) \
@@ -23,9 +25,9 @@ namespace GameEngine {
 			typedef test_ret_if_yes type; \
 		}; \
 		template <typename T> static typename TestResultWrapper<T>::type TestMethodExists(void*); \
-			template <typename T> static test_ret_if_no TestMethodExists(...); \
-			template <typename TestResult, typename... Params> \
-			static bool CallInternal(std::enable_if_t<(sizeof(TestResult) == sizeof(test_ret_if_yes))>*, Params&&... params) \
+		template <typename T> static test_ret_if_no TestMethodExists(...); \
+		template <typename TestResult, typename... Params> \
+		static bool CallInternal(std::enable_if_t<(sizeof(TestResult) == sizeof(test_ret_if_yes))>*, Params&&... params) \
 		{ \
 			Card:: ## MethodName(params...); \
 			return true; \
@@ -76,6 +78,15 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_Spell_Go>(card_id, player, target);
 	}
 
+	typedef void DeathrattleCallback(GameEngine::MinionIterator & triggering_minion);
+	static DeathrattleCallback* GetDeathrattle(int card_id)
+	{
+		DeathrattleCallback* deathrattle;
+		if (CardCallbackManager::HandleCallback<Callback_GetDeathrattle>(card_id, deathrattle)) return deathrattle;
+		else return nullptr;
+	}
+
+
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
 
@@ -85,8 +96,41 @@ private:
 	DECLARE_CARD_CALLBACK(Weapon_BattleCry)
 	DECLARE_CARD_CALLBACK(Weapon_AfterEquipped)
 	DECLARE_CARD_CALLBACK(Spell_Go)
-
 #undef DECLARE_CARD_CALLBACK
+
+	struct Callback_GetDeathrattle;
+
+	template <typename Card>
+	struct CardCallbackCaller<Card, Callback_GetDeathrattle>
+	{
+	private:
+		typedef char test_ret_if_yes;
+		typedef long test_ret_if_no;
+		template <class Card, typename T = decltype(&Card::Deathrattle)>
+		struct TestResultWrapper {
+			typedef test_ret_if_yes type;
+		};
+		template <typename T> static typename TestResultWrapper<T>::type TestMethodExists(void*);
+		template <typename T> static test_ret_if_no TestMethodExists(...);
+		template <typename TestResult>
+		static DeathrattleCallback* CallInternal(std::enable_if_t<(sizeof(TestResult) == sizeof(test_ret_if_yes))>*)
+		{
+			return &Card::Deathrattle;
+		}
+		template <typename TestResult>
+		static DeathrattleCallback* CallInternal(std::enable_if_t<(sizeof(TestResult) != sizeof(test_ret_if_yes))>*)
+		{
+			return nullptr;
+		}
+
+	public:
+		template <typename... Params> static bool Call(DeathrattleCallback * & deathrattle)
+		{
+			typedef decltype(TestMethodExists<Card>(nullptr)) TestResult;
+			deathrattle = CallInternal<TestResult>(nullptr);
+			return true;
+		}
+	};
 
 private:
 	template <typename Callback, typename... Params>

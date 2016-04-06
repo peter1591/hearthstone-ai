@@ -4,8 +4,8 @@
 
 #include "game-engine/hook-manager-impl.h"
 #include "game-engine/player-impl.h"
+#include "game-engine/board-objects/minion-data-impl.h"
 #include "game-engine/board-objects/object-manager-impl.h"
-
 #include "game-engine/hook/minion-auras-impl.h"
 #include "game-engine/next-move-getter-impl.h"
 #include "game-engine/board-objects/minion-iterator-impl.h"

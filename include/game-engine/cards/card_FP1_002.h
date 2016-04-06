@@ -12,10 +12,6 @@ static void Deathrattle(MinionIterator & triggering_minion)
 	StageHelper::SummonMinion(card, triggering_minion);
 }
 
-static void AfterSummoned(MinionIterator summoned_minion)
-{
-	summoned_minion->AddOnDeathTrigger(Minion::OnDeathTrigger(Deathrattle));
-}
 DEFINE_CARD_CLASS_END()
 
 #endif
