@@ -534,6 +534,9 @@ namespace GameEngine
 		// add minion
 		auto summoned_minion = it.GetMinions().InsertBefore(it, MinionData::FromCard(card));
 
+		// attach aura
+		Cards::CardCallbackManager::AttachAura(card.id, summoned_minion->auras);
+
 		Cards::CardCallbackManager::AfterSummoned(card.id, summoned_minion);
 
 		return true;

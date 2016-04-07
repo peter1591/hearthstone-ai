@@ -81,7 +81,6 @@ namespace GameEngine
 		for (auto & aura : this->auras) aura->HookAfterOwnerUnEnraged();
 	}
 
-	// TODO: can we pass minion iterator directly?
 	inline void MinionAuras::HookAfterMinionDamaged(Minion & minion_, int damage)
 	{
 		for (auto & aura : this->auras) aura->HookAfterMinionDamaged(minion_, damage);
