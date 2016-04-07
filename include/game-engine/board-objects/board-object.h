@@ -30,14 +30,14 @@ namespace GameEngine
 			return dynamic_cast<Minion*>(ptr) != nullptr;
 		}
 
-		Hero & GetHero() const
+		Hero & AsHero() const
 		{
 			auto p = dynamic_cast<Hero*>(ptr);
 			if (p) return *p;
 			else throw std::runtime_error("type not match");
 		}
 
-		Minion & GetMinion() const
+		Minion & AsMinion() const
 		{
 			auto p = dynamic_cast<Minion*>(ptr);
 			if (p) return *p;

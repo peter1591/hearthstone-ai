@@ -7,28 +7,28 @@ namespace GameEngine
 	inline bool BoardTarget::IsFriendlyHero() const
 	{
 		if (!this->choosing_object.IsHero()) return false;
-		if (&this->choosing_object.GetHero() != &this->player.hero) return false;
+		if (&this->choosing_object.AsHero() != &this->player.hero) return false;
 		return true;
 	}
 
 	inline bool BoardTarget::IsEnemyHero() const
 	{
 		if (!this->choosing_object.IsHero()) return false;
-		if (&this->choosing_object.GetHero() == &this->player.hero) return false;
+		if (&this->choosing_object.AsHero() == &this->player.hero) return false;
 		return true;
 	}
 
 	inline bool BoardTarget::IsFriendlyMinion() const
 	{
 		if (!this->choosing_object.IsMinion()) return false;
-		if (&this->choosing_object.GetMinion().GetMinions() != &this->player.minions) return false;
+		if (&this->choosing_object.AsMinion().GetMinions() != &this->player.minions) return false;
 		return true;
 	}
 
 	inline bool BoardTarget::IsEnemyMinion() const
 	{
 		if (!this->choosing_object.IsMinion()) return false;
-		if (&this->choosing_object.GetMinion().GetMinions() == &this->player.minions) return false;
+		if (&this->choosing_object.AsMinion().GetMinions() == &this->player.minions) return false;
 		return true;
 	}
 
