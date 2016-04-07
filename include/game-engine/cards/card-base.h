@@ -23,6 +23,9 @@ namespace Cards { \
 class Card_ ## CARD_ID { \
 public: \
 	static constexpr int card_id = CARD_ID_ ## CARD_ID; \
+\
+	class Aura; \
+
 
 #define DEFINE_CARD_CLASS_END() \
 }; \

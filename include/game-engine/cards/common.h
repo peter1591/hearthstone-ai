@@ -2,6 +2,7 @@
 #define GAME_ENGINE_CARDS_COMMON_H
 
 #include <type_traits>
+#include "has_destructor.h"
 #include "game-engine/board.h"
 #include "game-engine/move.h"
 
@@ -139,6 +140,38 @@ private:
 			return true;
 		}
 	};
+
+private: // aura
+	struct Callback_AttachAura;
+
+	template <typename Card>
+	struct CardCallbackCaller<Card, Callback_AttachAura>
+	{
+	private:
+		template <typename TestResult, typename... Params>
+		static bool CallInternal(std::enable_if_t<(sizeof(TestResult) == sizeof(has_destructor::test_ret_if_yes))>*, MinionAuras & auras, Params&&... params)
+		{
+			auras.Add<typename Card::Aura>(params...);
+			return true;
+		}
+		template <typename TestResult, typename... Params>
+		static bool CallInternal(std::enable_if_t<(sizeof(TestResult) != sizeof(has_destructor::test_ret_if_yes))>*, MinionAuras &, Params&&...)
+		{
+			return false;
+		}
+
+	public:
+		template <typename... Params>
+		static bool Call(MinionAuras & auras, Params&&... params)
+		{
+			return CallInternal<has_destructor<typename Card::Aura>::type, Params...>(nullptr, auras, params...);
+		}
+	};
+public:
+	static void AttachAura(int card_id, MinionAuras & auras)
+	{
+		CardCallbackManager::HandleCallback<Callback_AttachAura>(card_id, auras);
+	}
 
 private:
 	template <typename Callback, typename... Params>
