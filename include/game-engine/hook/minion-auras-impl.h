@@ -5,7 +5,7 @@
 
 namespace GameEngine
 {
-	MinionAuras::MinionAuras(Minion & minion)
+	inline MinionAuras::MinionAuras(Minion & minion)
 		: minion(minion)
 	{
 	}
@@ -106,7 +106,7 @@ namespace GameEngine
 
 } // namespace GameEngine
 
-std::size_t std::hash<GameEngine::MinionAuras>::operator()(const GameEngine::MinionAuras &s) const
+inline std::size_t std::hash<GameEngine::MinionAuras>::operator()(const GameEngine::MinionAuras &s) const
 {
 	result_type result = 0;
 
