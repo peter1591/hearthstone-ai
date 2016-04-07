@@ -476,5 +476,8 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_034.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\has_destructor.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

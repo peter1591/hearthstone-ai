@@ -200,6 +200,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_LOE_051.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_018.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\common.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\has_destructor.h" />
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-minion-c.h" />

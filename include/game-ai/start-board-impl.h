@@ -355,7 +355,7 @@ inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const
 
 	GameEngine::Board board;
 	board.SetRandomSeed(rand_seed);
-	InitializeDebugBoard1(board);
-	//InitializeDebugBoard_Practice_Mage(board);
+	//InitializeDebugBoard1(board);
+	InitializeDebugBoard_Practice_Mage(board);
 	return std::move(board);
 }
