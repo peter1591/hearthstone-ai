@@ -11,40 +11,42 @@ namespace GameEngine
 	class BoardObject
 	{
 	public:
-		explicit BoardObject(Hero & hero) : hero(hero), minion(*(Minion*)(nullptr))
+		explicit BoardObject(Hero & hero)
 		{
-			this->ptr = &this->hero;
+			this->ptr = &hero;
 		}
 
-		explicit BoardObject(Minion & minion) : minion(minion), hero(*(Hero*)(nullptr))
+		explicit BoardObject(Minion & minion)
 		{
-			this->ptr = &this->minion;
+			this->ptr = &minion;
 		}
 
-		bool IsHero() const { return this->ptr == &this->hero; }
-		bool IsMinion() const { return this->ptr == &this->minion; }
+		bool IsHero() const
+		{
+			return dynamic_cast<Hero*>(ptr) != nullptr;
+		}
+		bool IsMinion() const
+		{
+			return dynamic_cast<Minion*>(ptr) != nullptr;
+		}
 
 		Hero & GetHero() const
 		{
-#ifdef DEBUG
-			if (this->IsHero() == false) throw std::runtime_error("type not match.");
-#endif
-			return this->hero;
+			auto p = dynamic_cast<Hero*>(ptr);
+			if (p) return *p;
+			else throw std::runtime_error("type not match");
 		}
 
 		Minion & GetMinion() const
 		{
-#ifdef DEBUG
-			if (this->IsMinion() == false) throw std::runtime_error("type not match.");
-#endif
-			return this->minion;
+			auto p = dynamic_cast<Minion*>(ptr);
+			if (p) return *p;
+			else throw std::runtime_error("type not match");
 		}
 
 		ObjectBase * operator->() const { return this->ptr; }
 
 	private:
-		Hero & hero;
-		Minion & minion;
 		ObjectBase * ptr;
 	};
 
