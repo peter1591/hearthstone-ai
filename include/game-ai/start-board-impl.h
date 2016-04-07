@@ -105,13 +105,16 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
+	player_hero.hero_power.card_id = CARD_ID_CS2_034;
+	player_hero.hero_power.cost = 2;
+	board.player.hero.SetHero(player_hero);
 
 	GameEngine::HeroData opponent_hero;
 	opponent_hero.hp = 20;
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
-
-	board.player.hero.SetHero(player_hero);
+	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
+	opponent_hero.hero_power.cost = 2;
 	board.opponent.hero.SetHero(opponent_hero);
 
 	InitializeDebugBoard1_PlayerHand(board.player.hand);
@@ -154,13 +157,16 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
+	player_hero.hero_power.card_id = CARD_ID_CS2_034;
+	player_hero.hero_power.cost = 2;
+	board.player.hero.SetHero(player_hero);
 
 	GameEngine::HeroData opponent_hero;
 	opponent_hero.hp = 20;
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
-
-	board.player.hero.SetHero(player_hero);
+	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
+	opponent_hero.hero_power.cost = 2;
 	board.opponent.hero.SetHero(opponent_hero);
 
 	InitializeDebugBoard1_PlayerHand(board.player.hand);
@@ -203,13 +209,16 @@ inline void StartBoard::InitializeDebugBoard3(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.armor = 0;
 	player_hero.weapon.Clear();
+	player_hero.hero_power.card_id = CARD_ID_CS2_034;
+	player_hero.hero_power.cost = 2;
+	board.player.hero.SetHero(player_hero);
 
 	GameEngine::HeroData opponent_hero;
 	opponent_hero.hp = 20;
 	opponent_hero.armor = 0;
 	opponent_hero.weapon.Clear();
-
-	board.player.hero.SetHero(player_hero);
+	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
+	opponent_hero.hero_power.cost = 2;
 	board.opponent.hero.SetHero(opponent_hero);
 
 	InitializeDebugBoard3_Hand(board.player.hand);
@@ -346,6 +355,7 @@ inline GameEngine::Board StartBoard::GetBoard(int rand_seed) const
 
 	GameEngine::Board board;
 	board.SetRandomSeed(rand_seed);
-	InitializeDebugBoard_Practice_Mage(board);
+	InitializeDebugBoard1(board);
+	//InitializeDebugBoard_Practice_Mage(board);
 	return std::move(board);
 }
