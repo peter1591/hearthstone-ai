@@ -83,14 +83,6 @@ public:
 		return CardCallbackManager::HandleCallback<Callback_HeroPower_Go>(card_id, player, target);
 	}
 
-	typedef void DeathrattleCallback(GameEngine::MinionIterator & triggering_minion);
-	static DeathrattleCallback* GetDeathrattle(int card_id)
-	{
-		DeathrattleCallback* deathrattle;
-		if (CardCallbackManager::HandleCallback<Callback_GetDeathrattle>(card_id, deathrattle)) return deathrattle;
-		else return nullptr;
-	}
-
 
 private:
 	template <typename Card, typename Callback> struct CardCallbackCaller {};
@@ -104,6 +96,16 @@ private:
 	DECLARE_CARD_CALLBACK(HeroPower_Go)
 #undef DECLARE_CARD_CALLBACK
 
+
+public: // deathrattle
+	typedef void DeathrattleCallback(MinionIterator & triggering_minion);
+	static DeathrattleCallback* GetDeathrattle(int card_id)
+	{
+		DeathrattleCallback* deathrattle;
+		if (CardCallbackManager::HandleCallback<Callback_GetDeathrattle>(card_id, deathrattle)) return deathrattle;
+		else return nullptr;
+	}
+private:
 	struct Callback_GetDeathrattle;
 
 	template <typename Card>
