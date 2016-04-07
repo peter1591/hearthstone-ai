@@ -19,7 +19,7 @@ public:
 	{
 		int turn = node->turn;
 
-		for (int count = (turn - this->turn_maps.size()); count >= 0; --count)
+		for (int count = (turn - (int)this->turn_maps.size()); count >= 0; --count)
 		{
 			this->turn_maps.push_back(BoardNodeMap());
 		}
