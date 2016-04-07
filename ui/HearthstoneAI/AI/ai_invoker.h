@@ -7,8 +7,8 @@
 #include <functional>
 
 #include "json/value.h"
-#include "game-ai.h"
-#include "task.h"
+#include "game-ai/game-ai.h"
+#include "game-ai/task.h"
 
 class AIInvoker
 {
@@ -48,8 +48,6 @@ private: // non-thread-safe functions
 	void StopCurrentJob();
 
 	void GenerateCurrentBestMoves_Internal();
-
-	void InitializeBoard(GameEngine::Board &board);
 
 private: // thread-safe functions
 	void SetState(State state);

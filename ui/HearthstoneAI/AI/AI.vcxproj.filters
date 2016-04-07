@@ -16,9 +16,6 @@
     <Filter Include="Source Files\libjson">
       <UniqueIdentifier>{66dec7d3-4a16-4ec0-a10b-b86aee11ddaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game-ai">
-      <UniqueIdentifier>{c59e29ce-7e84-4a46-824a-5de3f5a7ddd0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\game-engine">
       <UniqueIdentifier>{ef5c52a9-b201-479c-a4d4-373fdc00538b}</UniqueIdentifier>
     </Filter>
@@ -38,15 +35,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\decider.cpp">
-      <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\mcts.cpp">
-      <Filter>Source Files\game-ai</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\game-ai\lib\task.cpp">
-      <Filter>Source Files\game-ai</Filter>
     </ClCompile>
     <ClCompile Include="request_handler.cpp">
       <Filter>Source Files</Filter>
@@ -137,9 +125,6 @@
     <ClInclude Include="..\..\..\include\decider.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-ai.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\mcts.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
@@ -147,6 +132,54 @@
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tree.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-finder.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-node-map.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-node-map-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\decider.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\decider-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\game-ai.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\mcts.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\mcts-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\start-board.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\task.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\task-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\tree.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\turn.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
   </ItemGroup>
