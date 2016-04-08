@@ -52,6 +52,8 @@ namespace GameEngine {
 		Minions & GetMinions() const { return this->minions; }
 		MinionData const& GetMinion() const { return this->minion; }
 
+		MinionData & GetMinionForBoardInitialization() { return this->minion; }
+
 	public: // basic operations on minion (including interface to ObjectBase)
 		int GetHP() const;
 		int GetMaxHP() const;

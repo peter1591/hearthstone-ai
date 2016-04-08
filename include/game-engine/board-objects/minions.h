@@ -64,6 +64,10 @@ public: // getters
 		return MinionIterator(this->GetBoard(), *this, this->GetRawIterator(minion_idx));
 	}
 
+	MinionIterator GetEndIterator() {
+		return MinionIterator(this->GetBoard(), *this, this->minions.end());
+	}
+
 	MinionIterator GetIteratorForSpecificMinion(Minion const& minion) {
 		return MinionIterator(this->GetBoard(), *this, this->GetRawIteratorForSpecificMinion(minion));
 	}
