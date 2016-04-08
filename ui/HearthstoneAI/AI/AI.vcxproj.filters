@@ -28,6 +28,9 @@
     <Filter Include="Header Files\game-ai\board-initializer">
       <UniqueIdentifier>{0a57db14-87c5-4373-9dca-f747f60c1ee3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\stages">
+      <UniqueIdentifier>{f3dd9500-bbc4-4893-bacf-e982614fb266}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -229,6 +232,75 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\json-parser.h">
       <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\deck-initializer.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\common.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-impl.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\helper-targets-impl.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-attack.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-choose-board-move.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-equip-weapon.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-play-spell.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-put-minion.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-end.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-turn-start.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\opponent-use-hero-power.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-attack.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-choose-board-move.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-equip-weapon.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-play-spell.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-put-minion.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-end.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\player-use-hero-power.h">
+      <Filter>Header Files\game-engine\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h">
+      <Filter>Header Files\game-engine\stages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

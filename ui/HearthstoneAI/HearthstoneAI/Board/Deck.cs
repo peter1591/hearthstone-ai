@@ -19,6 +19,9 @@ namespace HearthstoneAI.Board
         [DataMember]
         public List<string> joust_cards = new List<string>();
 
+        [DataMember]
+        public List<string> played_cards = new List<string>();
+
         public bool Parse(GameState game, GameState.Entity player)
         {
             bool ret = true;
@@ -44,6 +47,19 @@ namespace HearthstoneAI.Board
                 var joust_card = game.Entities[joust_entity_id];
                 if (joust_card.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
                 this.joust_cards.Add(joust_card.CardId);
+            }
+
+            List<string> raw_played_cards;
+            if (player.Id == game.PlayerEntityId) raw_played_cards = game.player_played_hand_cards;
+            else if (player.Id == game.OpponentEntityId) raw_played_cards = game.opponent_played_hand_cards;
+            else
+            {
+                raw_played_cards = new List<string>();
+            }
+
+            foreach (var played_card in raw_played_cards)
+            {
+                this.played_cards.Add(played_card);
             }
 
             return ret;

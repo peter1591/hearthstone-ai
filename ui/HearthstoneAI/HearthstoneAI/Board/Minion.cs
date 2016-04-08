@@ -35,7 +35,13 @@ namespace HearthstoneAI.Board
         public bool silenced;
 
         [DataMember]
+        public int spellpower;
+
+        [DataMember]
         public Status status = new Status();
+
+        [DataMember]
+        public bool summoned_this_turn;
 
         [DataMember]
         public Enchantments enchantments = new Enchantments();
@@ -51,6 +57,8 @@ namespace HearthstoneAI.Board
             this.attacks_this_turn = entity.GetTagOrDefault(GameTag.NUM_ATTACKS_THIS_TURN, 0);
             this.exhausted = (entity.GetTagOrDefault(GameTag.EXHAUSTED, 0) != 0);
             this.silenced = (entity.GetTagOrDefault(GameTag.SILENCED, 0) != 0);
+            this.spellpower = entity.GetTagOrDefault(GameTag.SPELLPOWER, 0);
+            this.summoned_this_turn = entity.GetTagOrDefault(GameTag.JUST_PLAYED, 0) != 0;
 
             this.status.Parse(game, entity);
             this.enchantments.Parse(game, entity);

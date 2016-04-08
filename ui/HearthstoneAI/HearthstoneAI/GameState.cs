@@ -15,13 +15,13 @@ namespace HearthstoneAI
                 Id = id;
                 Tags = new Dictionary<GameTag, int>();
                 Name = "";
-                CardId = ""; 
+                CardId = "";
             }
 
             public int Id { get; }
             public Dictionary<GameTag, int> Tags { get; }
             public string Name { get; set; }
-		    public string CardId { get; set; }
+            public string CardId { get; set; }
 
             public bool HasTag(GameTag tag)
             {
@@ -65,7 +65,7 @@ namespace HearthstoneAI
 
                     if (Enum.IsDefined(typeof(GameTag), raw_tag_int))
                     {
-                        tag = (GameTag) raw_tag_int;
+                        tag = (GameTag)raw_tag_int;
                     }
                 }
 
@@ -172,7 +172,9 @@ namespace HearthstoneAI
             this.OpponentEntityId = -1;
             this.Entities = new Dictionary<int, Entity>();
             this.EntityChoices = new Dictionary<int, EntityChoice>();
-            this.joust_information= new GameState.JoustInformation();
+            this.joust_information = new GameState.JoustInformation();
+            this.player_played_hand_cards.Clear();
+            this.opponent_played_hand_cards.Clear();
         }
 
         public Dictionary<int, Entity> Entities { get; set; }
@@ -182,6 +184,9 @@ namespace HearthstoneAI
         public int OpponentEntityId { get; set; }
 
         public JoustInformation joust_information { get; set; }
+
+        public List<string> player_played_hand_cards = new List<string>();
+        public List<string> opponent_played_hand_cards = new List<string>();
 
         public void CreateGameEntity(int id)
         {

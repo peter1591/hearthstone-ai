@@ -31,7 +31,7 @@ namespace HearthstoneAI.Parsers
             new Regex(@"^[\s]*HIDE_ENTITY\ -\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
         private static readonly Regex ActionStartRegex =
-            new Regex(@"^(?<indent>[\s]*)ACTION_START[\s]+Entity=(?<entity>(.*))[\s]+BlockType=(?<block_type>.*)[\s+]Index=(?<index>.*)[\s]+Target=(?<target>.*)");
+            new Regex(@"^(?<indent>[\s]*)ACTION_START[\s]+BlockType=(?<block_type>.*)[\s+]Entity=(?<entity>(.*))[\s]+EffectCardId=(?<effect_card_id>.*)[\s]+EffectIndex=(?<effect_index>.*)[\s]+Target=(?<target>.*)");
         private static readonly Regex ActionEndRegex = new Regex(@"^[\s]*ACTION_END");
 
         private static readonly Regex MetadataRegex = new Regex(@"^[\s]*META_DATA\ -\ ");
@@ -293,23 +293,12 @@ namespace HearthstoneAI.Parsers
             var indent = match.Groups["indent"].Value;
             var entity_raw = match.Groups["entity"].Value.Trim();
             var block_type = match.Groups["block_type"].Value.Trim();
-            var index = match.Groups["index"].Value.Trim();
             var target_raw = match.Groups["target"].Value.Trim();
 
             var entity_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
             if (entity_id < 0) this.frm_main.AddLog("[INFO] Cannot get entity id for action.");
 
             var target_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, target_raw);
-
-            if (block_type != "TRIGGER")
-            {
-                /*
-                this.frm_main.AddLog("[INFO] Got action. entity = " + entity_id.ToString() +
-                    " block type = " + block_type +
-                    " index = " + index +
-                    " target = " + target_id.ToString());
-                    */
-            }
             yield return true;
 
             while (true)
@@ -372,7 +361,74 @@ namespace HearthstoneAI.Parsers
                 yield return true;
             }
 
+            if (block_type == "PLAY")
+            {
+                this.frm_main.AddLog("[INFO] Got a play action. entity = " + entity_id.ToString() +
+                    " eneity card id = " + this.game_state.Entities[entity_id].CardId.ToString() +
+                    " block type = " + block_type +
+                    " target = " + target_id.ToString());
+                this.AnalyzePlayHandCardAction(entity_id);
+            }
+
             yield return true;
+        }
+
+        private void AnalyzePlayHandCardAction(int entity_id)
+        {
+            // get current player
+            int playing_entity = this.GetPlayingPlayerEntityID();
+            if (playing_entity < 0) return;
+
+            string playing_card = this.game_state.Entities[entity_id].CardId.ToString();
+
+            if (playing_entity == this.game_state.PlayerEntityId)
+            {
+                this.game_state.player_played_hand_cards.Add(playing_card);
+            }
+            else if (playing_entity == this.game_state.OpponentEntityId)
+            {
+                this.game_state.opponent_played_hand_cards.Add(playing_card);
+            }
+            else return;
+        }
+
+        private int GetPlayingPlayerEntityID()
+        {
+            GameState.Entity game_entity;
+            if (!this.game_state.TryGetGameEntity(out game_entity)) return -1;
+
+            GameState.Entity player_entity;
+            if (!this.game_state.TryGetPlayerEntity(out player_entity)) return -1;
+
+            GameState.Entity opponent_entity;
+            if (!this.game_state.TryGetOpponentEntity(out opponent_entity)) return -1;
+
+            if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
+            {
+                return -1;
+            }
+
+            if (opponent_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
+            {
+                return -1;
+            }
+
+            if (!game_entity.HasTag(GameTag.STEP)) return -1;
+
+            TAG_STEP game_entity_step = (TAG_STEP)game_entity.GetTag(GameTag.STEP);
+            if (game_entity_step != TAG_STEP.MAIN_ACTION) return -1;
+
+            bool player_first = false;
+            if (player_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
+            else if (opponent_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
+            else throw new Exception("parse failed");
+
+            int turn = game_entity.GetTagOrDefault(GameTag.TURN, -1);
+            if (turn < 0) return -1;
+
+            if (player_first && (turn % 2 == 1)) return player_entity.Id;
+            else if (!player_first && (turn % 2 == 0)) return player_entity.Id;
+            else return opponent_entity.Id;
         }
     }
 }

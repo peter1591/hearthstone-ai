@@ -61,7 +61,7 @@ void AIInvoker::GenerateCurrentBestMoves()
 
 void AIInvoker::HandleCurrentJob()
 {
-	constexpr int threads = 4;
+	constexpr int threads = 1; // TODO
 	constexpr int sec_each_run = 1;
 	constexpr int msec_total = 70 * 1000;
 

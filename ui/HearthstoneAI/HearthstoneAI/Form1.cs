@@ -334,7 +334,15 @@ namespace HearthstoneAI
         {
             string result = "";
 
-            result += "Total cards: " + deck.total_cards.ToString() + Environment.NewLine;
+            // get played cards
+            result += "[played hand cards]" + Environment.NewLine;
+            foreach (var played_card in deck.played_cards)
+            {
+                result += played_card + Environment.NewLine;
+            }
+
+            result += Environment.NewLine;
+            result += "Rest cards: " + deck.total_cards.ToString() + Environment.NewLine;
 
             foreach (var card in deck.known_cards)
             {
