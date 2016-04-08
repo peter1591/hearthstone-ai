@@ -27,7 +27,8 @@ inline void MCTS::Iterate()
 	std::cout << "MCTS iterate start with random: " << this->current_start_board_random << std::endl;
 #endif
 
-	GameEngine::Board board = this->board_initializer->GetBoard(this->current_start_board_random);
+	GameEngine::Board board;
+	this->board_initializer->InitializeBoard(this->current_start_board_random, board);
 	this->traversed_path.Clear();
 
 	if (!this->tree.GetRootNode()) {

@@ -8,7 +8,7 @@ class StartBoard : public BoardInitializer
 public:
 	StartBoard();
 
-	GameEngine::Board GetBoard(int rand_seed) const;
+	GameEngine::Board GetBoard(int rand_seed);
 
 private: // for debug only
 	static void InitializeDebugBoard1_PlayerHand(GameEngine::Hand &hand);
