@@ -73,9 +73,9 @@ void AIInvoker::HandleCurrentJob()
 		std::mt19937 random_generator((unsigned int)time(nullptr));
 
 		for (int i = 0; i < threads; ++i) {
-			StartBoard start_board;
+			std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(this->current_job->game));
 			MCTS * new_mcts = new MCTS();
-			new_mcts->Initialize(random_generator(), std::move(start_board));
+			new_mcts->Initialize(random_generator(), std::move(initializer));
 			this->mcts.push_back(new_mcts);
 
 			Task *new_task = new Task(*new_mcts);
