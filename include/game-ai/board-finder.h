@@ -27,13 +27,13 @@ public:
 		return this->turn_maps[turn].Add(board, node);
 	}
 
-	TreeNode * Find(int turn, const GameEngine::Board &board, StartBoard const& start_board) const
+	TreeNode * Find(int turn, const GameEngine::Board &board, BoardInitializer * board_initializer) const
 	{
 		if (turn >= this->turn_maps.size()) {
 			return nullptr;
 		}
 
-		return this->turn_maps[turn].Find(board, start_board);
+		return this->turn_maps[turn].Find(board, board_initializer);
 	}
 
 private:

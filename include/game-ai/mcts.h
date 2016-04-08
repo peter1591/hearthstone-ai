@@ -8,9 +8,9 @@
 #include "game-engine/game-engine.h"
 #include "game-ai/tree.h"
 #include "game-ai/board-node-map.h"
-#include "game-ai/start-board.h"
 #include "game-ai/traversed-path-recorder.h"
 #include "game-ai/board-finder.h"
+#include "game-ai/board-initializer/board-initializer.h"
 
 class MCTS
 {
@@ -23,7 +23,7 @@ public:
 	MCTS &operator=(MCTS&&) = delete;
 
 public: // Operations
-	void Initialize(unsigned int rand_seed, StartBoard && start_board);
+	void Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer);
 	void Iterate();
 
 public:
@@ -51,7 +51,7 @@ private:
 	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
-	StartBoard start_board;
+	std::unique_ptr<BoardInitializer> board_initializer;
 	Tree tree;
 	BoardFinder board_finder;
 

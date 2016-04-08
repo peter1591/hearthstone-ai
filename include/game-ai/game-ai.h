@@ -4,14 +4,17 @@
 #include "game-engine/game-engine.h"
 
 // game-ai headers
-#include "start-board.h"
+#include "game-ai/board-initializer/board-initializer.h"
 #include "mcts.h"
 #include "decider.h"
 
 // game-ai implementation details
 #include "traversed-path-recorder-impl.h"
-#include "start-board-impl.h"
 #include "board-node-map-impl.h"
 #include "mcts-impl.h"
 #include "task-impl.h"
 #include "decider-impl.h"
+
+#include "board-initializer/start-board.h"
+#include "board-initializer/start-board-impl.h"
+#include "board-initializer/json-parser.h"

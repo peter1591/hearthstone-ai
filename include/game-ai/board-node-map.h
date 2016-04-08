@@ -17,7 +17,7 @@ public:
 public:
 	void Add(const GameEngine::Board &board, TreeNode *node);
 	void Add(std::size_t board_hash, TreeNode *node);
-	TreeNode * Find(const GameEngine::Board &board, StartBoard const& start_board) const;
+	TreeNode * Find(const GameEngine::Board &board, BoardInitializer * board_initializer) const;
 
 private:
 	typedef std::unordered_map<std::size_t, std::unordered_set<TreeNode*> > MapBoardToNodes;
