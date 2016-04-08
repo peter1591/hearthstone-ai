@@ -130,9 +130,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\board-node-map-impl.h" />
-    <ClInclude Include="..\..\..\include\board-node-map.h" />
     <ClInclude Include="..\..\..\include\decider.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-finder.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-initializer.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\json-parser.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board-impl.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-node-map-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-node-map.h" />
     <ClInclude Include="..\..\..\include\game-ai\decider-impl.h" />
@@ -140,8 +143,6 @@
     <ClInclude Include="..\..\..\include\game-ai\game-ai.h" />
     <ClInclude Include="..\..\..\include\game-ai\mcts-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\mcts.h" />
-    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h" />
-    <ClInclude Include="..\..\..\include\game-ai\start-board.h" />
     <ClInclude Include="..\..\..\include\game-ai\task-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\task.h" />
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h" />
@@ -157,20 +158,33 @@
     <ClInclude Include="..\..\..\include\game-engine\common.h" />
     <ClInclude Include="..\..\..\include\game-engine\deck.h" />
     <ClInclude Include="..\..\..\include\game-engine\game-engine.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hand-card.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hand-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\hand.h" />
     <ClInclude Include="..\..\..\include\game-engine\hidden-secrets.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook-manager-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook-manager.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\listener.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-enrage.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-to-all-minions.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras-impl.h" />
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras.h" />
     <ClInclude Include="..\..\..\include\game-engine\move.h" />
+    <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\next-move-getter.h" />
     <ClInclude Include="..\..\..\include\game-engine\on-death-trigger.h" />
     <ClInclude Include="..\..\..\include\game-engine\opponent-cards.h" />
+    <ClInclude Include="..\..\..\include\game-engine\player-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\player-stat.h" />
+    <ClInclude Include="..\..\..\include\game-engine\player.h" />
     <ClInclude Include="..\..\..\include\game-engine\random-generator.h" />
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />
     <ClInclude Include="..\..\..\include\game-engine\secrets.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index.h" />
     <ClInclude Include="..\..\..\include\game-engine\stage.h" />
-    <ClInclude Include="..\..\..\include\mcts.h" />
     <ClInclude Include="..\..\..\include\task.h" />
     <ClInclude Include="..\..\..\include\tree.h" />
     <ClInclude Include="ai_invoker.h" />

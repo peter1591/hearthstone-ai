@@ -22,6 +22,12 @@
     <Filter Include="Header Files\game-ai">
       <UniqueIdentifier>{0fa4afa8-0008-44ce-a2c8-432a68b0744b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\hook">
+      <UniqueIdentifier>{cd4047e7-0069-481e-b59d-42651c9042e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game-ai\board-initializer">
+      <UniqueIdentifier>{0a57db14-87c5-4373-9dca-f747f60c1ee3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -116,16 +122,10 @@
     <ClInclude Include="ai_invoker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\board-node-map.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\board-node-map-impl.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\decider.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\mcts.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\task.h">
@@ -158,12 +158,6 @@
     <ClInclude Include="..\..\..\include\game-ai\mcts-impl.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-ai\start-board.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\task.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
@@ -181,6 +175,60 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\turn.h">
       <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hand-card.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hand-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook-manager.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook-manager-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\next-move-getter-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\player.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\player-impl.h">
+      <Filter>Header Files\game-engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\listener.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-enrage.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-auras-impl.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-to-all-minions.h">
+      <Filter>Header Files\game-engine\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board-impl.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-initializer.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\json-parser.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
