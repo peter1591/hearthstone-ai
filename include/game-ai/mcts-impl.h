@@ -244,11 +244,11 @@ inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & child
 	double total_simulations_ln = log((double)total_simulations);
 
 	TreeNode * max_weight_node = *it_child;
-	double max_weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln);
+	double max_weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln / (*it_child)->count);
 	++it_child;
 
 	for (; it_child != children.end(); ++it_child) {
-		double weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln);
+		double weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln / (*it_child)->count);
 		if (weight > max_weight) {
 			max_weight = weight;
 			max_weight_node = *it_child;
@@ -258,25 +258,22 @@ inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & child
 	return max_weight_node;
 }
 
-inline double MCTS::CalculateSelectionWeight(TreeNode * node, double total_simulations_ln)
+inline double MCTS::CalculateSelectionWeight(TreeNode * node, double total_simulations_ln_divides_node_simulations)
 {
-	auto const& node_win = node->wins;
-	auto const& node_simulations = node->count;
-
 	double win_rate;
 	if (node->equivalent_node == nullptr) {
 		// normal node
-		win_rate = (double)node_win / node_simulations;
+		win_rate = (double)node->wins / node->count;
 	}
 	else {
 		// redirect node
 		win_rate = (double)node->equivalent_node->wins / node->equivalent_node->count;
 	}
 
-	double exploration_term = sqrt(total_simulations_ln / node_simulations);
+	double exploration_term = sqrt(total_simulations_ln_divides_node_simulations);
 
 	double variance = win_rate * (1.0 - win_rate);
-	double ucb1_tuned_factor = variance + sqrt(2.0 * total_simulations_ln / node_simulations);
+	double ucb1_tuned_factor = variance + sqrt(2.0 * total_simulations_ln_divides_node_simulations);
 	if (ucb1_tuned_factor < 0.25) ucb1_tuned_factor = 0.25;
 
 	return win_rate + exploration_term * ucb1_tuned_factor;

@@ -43,7 +43,7 @@ private:
 	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 
 	TreeNode *FindBestChildToExpand(std::list<TreeNode*> const& children);
-	double CalculateSelectionWeight(TreeNode *node, double total_simulations_ln);
+	double CalculateSelectionWeight(TreeNode *node, double total_simulations_ln_divides_node_simulations);
 
 	bool ExpandNewNode(TreeNode * & node, GameEngine::Board & board);
 	bool ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEngine::Board & board);
