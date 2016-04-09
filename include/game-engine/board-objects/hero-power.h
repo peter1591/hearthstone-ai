@@ -7,8 +7,7 @@
 namespace GameEngine {
 	struct HeroPower
 	{
-		HeroPower() : card_id(-1) {}
-		HeroPower(int card_id) : card_id(card_id) {}
+		HeroPower() : card_id(-1), cost(0), used_this_turn(false) {}
 
 		int card_id;
 		int cost;
