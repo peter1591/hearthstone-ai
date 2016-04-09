@@ -43,6 +43,7 @@ private:
 	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
 	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 
+	TreeNode * FindBestNonDeterministicChildToExpand(std::list<TreeNode*> const & children);
 	TreeNode * FindBestChildToExpand(std::list<TreeNode*> const & children, std::list<double> const& total_simulations_ln_divides_child_count);
 	TreeNode *FindBestChildToExpand(std::list<TreeNode*> const& children);
 	double CalculateSelectionWeight(TreeNode *node, double total_simulations_ln_divides_node_simulations);

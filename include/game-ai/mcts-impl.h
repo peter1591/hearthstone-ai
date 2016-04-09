@@ -244,6 +244,31 @@ inline TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move c
 	return new_node;
 }
 
+inline TreeNode * MCTS::FindBestNonDeterministicChildToExpand(std::list<TreeNode*> const & children)
+{
+	std::list<double> total_simulations_ln_divides_child_count;
+
+	int max_count = 0;
+	for (auto const& child : children) {
+		if (child->nondeterminstic_move_selected_times > max_count) max_count = child->nondeterminstic_move_selected_times;
+	}
+
+	double total_simulations = 0.0;
+	for (auto const& child : children) {
+		double normalization_factor = (double)max_count / child->nondeterminstic_move_selected_times;
+		double normalized_child_count = normalization_factor * child->count;
+		total_simulations_ln_divides_child_count.push_back(normalized_child_count);
+		total_simulations += normalized_child_count;
+	}
+	double total_simulations_ln = log(total_simulations);
+
+	for (auto & val : total_simulations_ln_divides_child_count) {
+		val = total_simulations_ln / val;
+	}
+
+	return this->FindBestChildToExpand(children, total_simulations_ln_divides_child_count);
+}
+
 inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & children)
 {
 	std::list<double> total_simulations_ln_divides_child_count;
@@ -264,7 +289,6 @@ inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & child
 inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & children, std::list<double> const& total_simulations_ln_divides_child_count)
 {
 	if (children.empty()) return nullptr;
-
 
 	TreeNode::children_type::const_iterator it_child = children.begin();
 
@@ -567,7 +591,7 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 		chosen_child->nondeterminstic_move_selected_times++;
 	}
 
-	node = this->FindBestChildToExpand(children);
+	node = this->FindBestNonDeterministicChildToExpand(children);
 #ifdef DEBUG
 	if (node == nullptr) throw std::runtime_error("cannot find best child to expand");
 #endif
