@@ -244,13 +244,12 @@ inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & child
 	TreeNode::children_type::const_iterator it_child = children.begin();
 	double total_simulations_ln = log((double)total_simulations);
 
-	TreeNode * max_weight_node = *it_child;
-	double max_weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln / (*it_child)->count);
-	++it_child;
+	TreeNode * max_weight_node = nullptr;;
+	double max_weight = 0.0;
 
 	for (; it_child != children.end(); ++it_child) {
 		double weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln / (*it_child)->count);
-		if (weight > max_weight) {
+		if (max_weight_node == nullptr || weight > max_weight) {
 			max_weight = weight;
 			max_weight_node = *it_child;
 		}
