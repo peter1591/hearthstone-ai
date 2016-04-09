@@ -56,6 +56,10 @@ public:
 	std::unique_ptr<GameEngine::NextMoveGetter> next_move_getter; // not valid if next moves are not deterministic
 	bool next_moves_are_deterministic; // The next moves always the same for identical boards? E.g., Game-flow are not deterministic
 
+	// for a non-deterministic move, the select probability of its children are not uniform
+	// this number tracks the total times this child node have been chosen
+	int nondeterminstic_move_selected_times;
+
 #ifdef DEBUG
 	size_t board_hash;
 #endif

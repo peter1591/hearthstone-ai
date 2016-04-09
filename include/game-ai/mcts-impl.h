@@ -187,6 +187,7 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	new_node->turn = Turn::GetTurn(node, next_move);
 	new_node->wins = 0;
 	new_node->count = 0;
+	new_node->nondeterminstic_move_selected_times = 1; // Note: only non-deterministic move uses it
 	new_node->stage = next_board.GetStage();
 	new_node->stage_type = next_board.GetStageType();
 
@@ -519,6 +520,11 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 
 		// this move is expanded before
 		children.push_back(child_found);
+	}
+
+	for (auto const& chosen_child: children)
+	{
+		chosen_child->nondeterminstic_move_selected_times++;
 	}
 
 	node = this->FindBestChildToExpand(children);
