@@ -26,6 +26,7 @@ namespace GameEngine {
 			int GetLocked() const { return this->locked; }
 			int GetLockedNextTurn() const { return this->locked_next_turn; }
 
+			void IncreaseCrystalThisTurn(int amount) { this->current += amount; }
 			void CostCrystals(int cost) { this->current -= cost; }
 			void LockCrystals(int locked_) { this->locked_next_turn -= locked_; }
 			void TurnStart() {
