@@ -9,7 +9,7 @@
 class BoardJsonParser : public BoardInitializer
 {
 public:
-	BoardJsonParser(Json::Value const& json) : json(json)
+	BoardJsonParser(Json::Value const& json) : origin_json(json)
 	{
 		this->first_time_parse = true;
 	}
@@ -28,8 +28,8 @@ private:
 		player_deck.SetDeck_BasicPracticeMage();
 		opponent_deck.SetDeck_BasicPracticeMage();
 
-		this->ParsePlayer(this->json["player"], board.player, player_deck);
-		this->ParsePlayer(this->json["opponent"], board.opponent, opponent_deck);
+		this->ParsePlayer(this->origin_json["player"], board.player, player_deck);
+		this->ParsePlayer(this->origin_json["opponent"], board.opponent, opponent_deck);
 
 		// TODO: set stage
 		board.SetStateToPlayerChooseBoardMove();
@@ -175,6 +175,6 @@ private:
 	}
 
 private:
-	Json::Value json;
+	Json::Value origin_json;
 	bool first_time_parse;
 };
