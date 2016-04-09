@@ -347,15 +347,13 @@ inline StartBoard::StartBoard()
 	//InitializeDebugBoard3(this->board_debug1);
 }
 
-inline GameEngine::Board StartBoard::GetBoard(int rand_seed)
+inline void StartBoard::InitializeBoard(int rand_seed, GameEngine::Board & board)
 {
 	//GameEngine::Board board = GameEngine::Board::Clone(this->board_debug1);
 	//board.SetRandomSeed(rand_seed);
 	//return std::move(board);
 
-	GameEngine::Board board;
 	board.SetRandomSeed(rand_seed);
 	//InitializeDebugBoard1(board);
 	InitializeDebugBoard_Practice_Mage(board);
-	return std::move(board);
 }
