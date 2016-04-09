@@ -234,25 +234,39 @@ inline TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move c
 
 inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & children)
 {
-	if (children.empty()) return nullptr;
+	std::list<double> total_simulations_ln_divides_child_count;
 
 	double total_simulations = 0.0;
 	for (auto const& child : children) {
 		total_simulations += child->count;
 	}
+	double total_simulations_ln = log(total_simulations);
+	
+	for (auto const& child : children) {
+		total_simulations_ln_divides_child_count.push_back(total_simulations_ln / child->count);
+	}
+
+	return this->FindBestChildToExpand(children, total_simulations_ln_divides_child_count);
+}
+
+inline TreeNode * MCTS::FindBestChildToExpand(std::list<TreeNode*> const & children, std::list<double> const& total_simulations_ln_divides_child_count)
+{
+	if (children.empty()) return nullptr;
+
 
 	TreeNode::children_type::const_iterator it_child = children.begin();
-	double total_simulations_ln = log(total_simulations);
 
 	TreeNode * max_weight_node = nullptr;;
 	double max_weight = 0.0;
 
+	auto it_child_count = total_simulations_ln_divides_child_count.begin();
 	for (; it_child != children.end(); ++it_child) {
-		double weight = this->CalculateSelectionWeight(*it_child, total_simulations_ln / (*it_child)->count);
+		double weight = this->CalculateSelectionWeight(*it_child, *it_child_count);
 		if (max_weight_node == nullptr || weight > max_weight) {
 			max_weight = weight;
 			max_weight_node = *it_child;
 		}
+		++it_child_count;
 	}
 
 	return max_weight_node;
