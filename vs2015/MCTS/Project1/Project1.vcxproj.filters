@@ -43,6 +43,9 @@
     <Filter Include="Header Files\game-engine\hook">
       <UniqueIdentifier>{ccd364cb-eec5-4606-83a5-73ab506e3534}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-ai\board-initializer">
+      <UniqueIdentifier>{0dc1f06a-8422-4cb5-89ee-a6c1ea863d8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -216,12 +219,6 @@
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\mcts.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-ai\start-board.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\task.h">
@@ -478,6 +475,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\has_destructor.h">
       <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-initializer.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\deck-initializer.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\json-parser.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board-impl.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

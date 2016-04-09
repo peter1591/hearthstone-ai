@@ -129,6 +129,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\game-ai\board-finder.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-initializer.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\deck-initializer.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\json-parser.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board-impl.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-node-map-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-node-map.h" />
     <ClInclude Include="..\..\..\include\game-ai\decider-impl.h" />
@@ -136,8 +141,6 @@
     <ClInclude Include="..\..\..\include\game-ai\game-ai.h" />
     <ClInclude Include="..\..\..\include\game-ai\mcts-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\mcts.h" />
-    <ClInclude Include="..\..\..\include\game-ai\start-board-impl.h" />
-    <ClInclude Include="..\..\..\include\game-ai\start-board.h" />
     <ClInclude Include="..\..\..\include\game-ai\task-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\task.h" />
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h" />
