@@ -21,8 +21,7 @@ static void Run()
 	std::map<Task*, Task::PauseNotifier*> pause_notifiers;
 
 	for (int i = 0; i < threads; ++i) {
-		StartBoard start_board;
-		mcts[i].Initialize(random_generator(), std::move(start_board));
+		mcts[i].Initialize(random_generator(), std::unique_ptr<StartBoard>(new StartBoard()));
 
 		Task *new_task = new Task(mcts[i]);
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));

@@ -11,10 +11,9 @@ static void TestBasic()
 	MCTS mcts;
 	//unsigned int rand_seed = (unsigned int)time(NULL);
 	unsigned int rand_seed = 0;
-	StartBoard start_board;
 
 	srand(rand_seed);
-	mcts.Initialize(rand_seed, std::move(start_board));
+	mcts.Initialize(rand_seed, std::unique_ptr<BoardInitializer>(new StartBoard()));
 
 	for (int times = 0;; ++times)
 	{
@@ -38,7 +37,8 @@ static void InteractiveTest()
 
 	main_rand_seed = 0;
 	srand(main_rand_seed);
-	GameEngine::Board board = start_board.GetBoard(main_rand_seed);
+	GameEngine::Board board;
+	start_board.InitializeBoard(main_rand_seed, board);
 
 	while (true)
 	{
