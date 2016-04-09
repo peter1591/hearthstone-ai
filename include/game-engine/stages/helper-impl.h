@@ -98,7 +98,7 @@ namespace GameEngine
 		}
 #else
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(
-			player, hand_card, SlotIndexHelper::GetPlayerMinionIndex(player.minions.GetMinionCount()), required_targets));
+			player, hand_card, SlotIndexHelper::GetMinionIndex(player.side, player.minions.GetMinionCount()), required_targets));
 #endif
 	}
 
