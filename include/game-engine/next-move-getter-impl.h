@@ -131,8 +131,9 @@ inline bool GameEngine::NextMoveGetter::operator!=(NextMoveGetter const & rhs) c
 
 inline GameEngine::NextMoveGetter::ItemPlayHandMinion::ItemPlayHandMinion(
 	Player const& player, Hand::Locator hand_card, SlotIndex put_location, SlotIndexBitmap required_targets)
-	: player(player), hand_card(hand_card), put_location(put_location), required_targets(required_targets)
+	: hand_card(hand_card), put_location(put_location), required_targets(required_targets)
 {
+	this->is_player = player.IsPlayerSide();
 	this->done = false;
 }
 
@@ -141,11 +142,13 @@ inline GameEngine::NextMoveGetter::ItemPlayHandMinion * GameEngine::NextMoveGett
 	return new ItemPlayHandMinion(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::GetNextMove(GameEngine::Board const&, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
-	auto const& playing_card = this->player.hand.GetCard(this->hand_card);
+	auto const* const player = this->is_player ? &board.player : &board.opponent;
+
+	auto const& playing_card = player->hand.GetCard(this->hand_card);
 
 	move.action = Move::ACTION_PLAY_HAND_MINION;
 	move.data.play_hand_minion_data.hand_card = this->hand_card;
@@ -180,8 +183,9 @@ inline bool GameEngine::NextMoveGetter::ItemPlayHandMinion::operator!=(ItemPlayH
 
 inline GameEngine::NextMoveGetter::ItemPlayHandCard::ItemPlayHandCard(
 	Player const& player, Hand::Locator hand_card, Move::Action move_action, SlotIndexBitmap required_targets)
-	: player(player), hand_card(hand_card), move_action(move_action), required_targets(required_targets)
+	: hand_card(hand_card), move_action(move_action), required_targets(required_targets)
 {
+	this->is_player = player.IsPlayerSide();
 	this->done = false;
 }
 
@@ -190,11 +194,13 @@ inline GameEngine::NextMoveGetter::ItemPlayHandCard * GameEngine::NextMoveGetter
 	return new ItemPlayHandCard(*this);
 }
 
-inline bool GameEngine::NextMoveGetter::ItemPlayHandCard::GetNextMove(GameEngine::Board const&, Move & move)
+inline bool GameEngine::NextMoveGetter::ItemPlayHandCard::GetNextMove(GameEngine::Board const& board, Move & move)
 {
 	if (this->done) return false;
 
-	auto const& playing_card = this->player.hand.GetCard(this->hand_card);
+	auto const* const player = this->is_player ? &board.player : &board.opponent;
+
+	auto const& playing_card = player->hand.GetCard(this->hand_card);
 
 	move.action = this->move_action;
 	move.data.play_hand_card_data.hand_card = this->hand_card;
@@ -272,9 +278,8 @@ inline bool GameEngine::NextMoveGetter::ItemAttack::operator!=(ItemAttack const 
 	return !(*this == rhs);
 }
 
-inline GameEngine::NextMoveGetter::ItemUseHeroPower::ItemUseHeroPower(
-	Player const& player, SlotIndexBitmap required_targets)
-	: player(player), required_targets(required_targets)
+inline GameEngine::NextMoveGetter::ItemUseHeroPower::ItemUseHeroPower(SlotIndexBitmap required_targets)
+	: required_targets(required_targets)
 {
 	this->done = false;
 }

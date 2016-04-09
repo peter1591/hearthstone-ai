@@ -160,7 +160,7 @@ namespace GameEngine
 			return;
 		}
 
-		next_move_getter.AddItem(NextMoveGetter::ItemUseHeroPower(player, required_targets));
+		next_move_getter.AddItem(NextMoveGetter::ItemUseHeroPower(required_targets));
 	}
 
 	inline void StageHelper::GetGoodBoardMove(unsigned int rand, Player const & player, Move &good_move)

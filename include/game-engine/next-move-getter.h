@@ -21,7 +21,7 @@ public:
 		bool operator!=(ItemPlayHandMinion const& rhs) const;
 
 	private:
-		Player const& player;
+		bool is_player;
 		Hand::Locator hand_card;
 		SlotIndex put_location;
 		SlotIndexBitmap required_targets;
@@ -38,7 +38,7 @@ public:
 		bool operator!=(ItemPlayHandCard const& rhs) const;
 
 	private:
-		Player const& player;
+		bool is_player;
 		Move::Action move_action;
 		Hand::Locator hand_card;
 		SlotIndexBitmap required_targets;
@@ -63,14 +63,13 @@ public:
 	class ItemUseHeroPower
 	{
 	public:
-		ItemUseHeroPower(Player const& player, SlotIndexBitmap required_targets);
+		ItemUseHeroPower(SlotIndexBitmap required_targets);
 		ItemUseHeroPower* Clone() const;
 		bool GetNextMove(Board const& board, Move & move);
 		bool operator==(ItemUseHeroPower const& rhs) const;
 		bool operator!=(ItemUseHeroPower const& rhs) const;
 
 	private:
-		Player const& player;
 		SlotIndexBitmap required_targets;
 		bool done;
 	};
