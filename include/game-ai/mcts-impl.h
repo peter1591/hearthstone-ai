@@ -6,6 +6,10 @@
 inline MCTS::MCTS()
 {
 	this->allocated_node = new TreeNode;
+#ifdef DEBUG_PRINT_MOVE
+	this->iteration_count = 0;
+	this->debug_print_move.open("./debug-print-move", std::ios_base::out);
+#endif
 }
 
 inline MCTS::~MCTS()
@@ -24,7 +28,9 @@ inline void MCTS::Iterate()
 	this->current_start_board_random = rand();
 
 #ifdef DEBUG_PRINT_MOVE
-	std::cout << "MCTS iterate start with random: " << this->current_start_board_random << std::endl;
+	++this->iteration_count;
+	this->debug_print_move << "MCTS iterate " << this->iteration_count << " start with random: " << this->current_start_board_random << std::endl;
+	this->debug_print_move.flush();
 #endif
 
 	GameEngine::Board board;
@@ -120,6 +126,9 @@ inline bool MCTS::Simulate(GameEngine::Board &board)
 			GameEngine::Move next_move;
 			bool is_deterministic;
 			board.GetNextMoves(next_move, is_deterministic);
+#ifdef DEBUG_PRINT_MOVE
+			this->debug_print_move << "Applying move: " << next_move.GetDebugString() << std::endl;
+#endif
 			board.ApplyMove(next_move);
 
 		}
@@ -131,6 +140,9 @@ inline bool MCTS::Simulate(GameEngine::Board &board)
 			GameEngine::Move move;
 			board.GetGoodMove(move, this->GetRandom());
 			board.ApplyMove(move);
+#ifdef DEBUG_PRINT_MOVE
+			this->debug_print_move << "Applying move: " << move.GetDebugString() << std::endl;
+#endif
 		}
 	}
 }
@@ -312,6 +324,9 @@ inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 		board.GetNextMoves(expanding_move, node->next_moves_are_deterministic);
 	}
 
+#ifdef DEBUG_PRINT_MOVE
+	this->debug_print_move << "Applying move: " << expanding_move.GetDebugString() << std::endl;
+#endif
 	board.ApplyMove(expanding_move);
 
 	// find transposition node (i.e., other node with the same board)
@@ -354,6 +369,9 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 			}
 #endif
 
+#ifdef DEBUG_PRINT_MOVE
+			this->debug_print_move << "Applying move: " << expanding_move.GetDebugString() << std::endl;
+#endif
 			board.ApplyMove(expanding_move);
 
 			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->board_initializer.get());
@@ -399,6 +417,9 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 
 	this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
 
+#ifdef DEBUG_PRINT_MOVE
+	this->debug_print_move << "Applying move: " << node->move.GetDebugString() << std::endl;
+#endif
 	board.ApplyMove(node->move);
 
 	if (node->equivalent_node != nullptr) {
@@ -431,6 +452,9 @@ inline bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngi
 	}
 #endif
 
+#ifdef DEBUG_PRINT_MOVE
+	this->debug_print_move << "Applying move: " << expanding_move.GetDebugString() << std::endl;
+#endif
 	bool next_board_is_random;
 	board.ApplyMove(expanding_move, &next_board_is_random);
 
@@ -498,6 +522,9 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 		TreeNode * child_found = node->FindChildByMove(expanding_move);
 		if (child_found == nullptr) {
 			// this move has not been expanded --> expand it
+#ifdef DEBUG_PRINT_MOVE
+			this->debug_print_move << "Applying move: " << expanding_move.GetDebugString() << std::endl;
+#endif
 			board.ApplyMove(expanding_move);
 
 			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->board_initializer.get());
@@ -547,6 +574,9 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 
 	this->traversed_nodes.push_back(node); // back-propagate need to know the original node (not the redirected one)
 
+#ifdef DEBUG_PRINT_MOVE
+	this->debug_print_move << "Applying move: " << node->move.GetDebugString() << std::endl;
+#endif
 	board.ApplyMove(node->move);
 
 	if (node->equivalent_node != nullptr) {

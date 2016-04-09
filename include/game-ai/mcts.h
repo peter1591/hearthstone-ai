@@ -1,6 +1,7 @@
 #ifndef GAME_AI_MCTS_H
 #define GAME_AI_MCTS_H
 
+#include <fstream>
 #include <random>
 #include <list>
 #include <map>
@@ -61,6 +62,11 @@ private: // for internal use
 
 	int current_start_board_random;
 	TraversedPathRecorder traversed_path;
+
+#ifdef DEBUG_PRINT_MOVE
+	int iteration_count;
+	std::ofstream debug_print_move;
+#endif
 };
 
 #endif
