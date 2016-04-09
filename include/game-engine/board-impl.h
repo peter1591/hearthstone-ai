@@ -285,6 +285,11 @@ inline bool Board::operator==(const Board &rhs) const
 		if (this->data.play_hand_card_data != rhs.data.play_hand_card_data) return false;
 		break;
 
+	case STAGE_PLAYER_USE_HERO_POWER:
+	case STAGE_OPPONENT_USE_HERO_POWER:
+		if (this->data.use_hero_power_data != rhs.data.use_hero_power_data) return false;
+		break;
+
 	case STAGE_PLAYER_ATTACK:
 	case STAGE_OPPONENT_ATTACK:
 		if (this->data.attack_data != rhs.data.attack_data) return false;
