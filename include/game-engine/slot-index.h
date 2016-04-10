@@ -123,5 +123,7 @@ namespace GameEngine {
 		static bool MarkTauntMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
 		static bool MarkMinionsWithoutStealth(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
 		static bool MarkMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
+
+		static void SetTargets(SlotIndex side, SideTargetType type, GameEngine::Board const& board, SlotIndexBitmap & targets);
 	};
 }
