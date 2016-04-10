@@ -114,7 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -131,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\board-node-map-impl.h" />
-    <ClInclude Include="..\..\..\include\decider.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-finder.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-initializer.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\deck-initializer.h" />
@@ -165,13 +164,20 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_025.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_034.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_056.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_057.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_061.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_062.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_122.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_DS1_055.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_011.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_015.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_277.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_306.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_584.h" />

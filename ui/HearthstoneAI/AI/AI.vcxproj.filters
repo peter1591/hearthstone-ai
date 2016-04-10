@@ -131,9 +131,6 @@
     <ClInclude Include="..\..\..\include\board-node-map-impl.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\decider.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\task.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
@@ -408,6 +405,27 @@
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_GAME_005.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_056.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_057.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_061.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_062.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_DS1_055.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_011.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_306.h">
       <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
   </ItemGroup>
