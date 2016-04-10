@@ -1,3 +1,4 @@
+#include <fstream>
 #include <random>
 #include <thread>
 
@@ -73,6 +74,11 @@ void AIInvoker::HandleCurrentJob()
 		std::mt19937 random_generator((unsigned int)time(nullptr));
 
 		for (int i = 0; i < threads; ++i) {
+
+			std::ofstream last_board_logger("./last_board.json", std::ios_base::out);
+			last_board_logger << this->current_job->game.toStyledString();
+			last_board_logger.flush();
+
 			std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(this->current_job->game));
 			MCTS * new_mcts = new MCTS();
 			new_mcts->Initialize(random_generator(), std::move(initializer));
