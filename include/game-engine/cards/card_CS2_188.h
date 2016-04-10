@@ -7,7 +7,7 @@ DEFINE_CARD_CLASS_START(CS2_188)
 
 static void GetRequiredTargets(Player const& player, SlotIndexBitmap &targets, bool & meet_requirements)
 {
-	targets = SlotIndexHelper::GetTargets(player.side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, player.board);
+	targets = SlotIndexHelper::GetTargets(player, SlotIndexHelper::TARGET_SPELL_ALL_MINIONS);
 	meet_requirements = true; // it's fine even if no target available
 }
 

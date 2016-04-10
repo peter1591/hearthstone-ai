@@ -4,6 +4,7 @@
 
 namespace GameEngine {
 	class Board;
+	class Player;
 	class MinionConstIteratorWithSlotIndex;
 
 	enum SlotIndex {
@@ -117,6 +118,12 @@ namespace GameEngine {
 			TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL,
 		};
 		static SlotIndexBitmap GetTargets(SlotIndex side, SideTargetType type, GameEngine::Board const& board);
+
+		enum TargetType {
+			TARGET_SPELL_ALL_MINIONS,
+			TARGET_SPELL_ALL_CHARACTERS
+		};
+		static SlotIndexBitmap GetTargets(Player const& player, TargetType type);
 
 	private:
 		static bool MarkAttackableMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);

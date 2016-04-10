@@ -2,7 +2,6 @@
 #include "game-engine/board.h"
 
 namespace GameEngine {
-
 	// return true if any
 	inline bool SlotIndexHelper::MarkAttackableMinions(Board const& board, SlotIndex side, SlotIndexBitmap &bitmap)
 	{
@@ -69,10 +68,8 @@ namespace GameEngine {
 		return ret;
 	}
 
-	inline SlotIndexBitmap SlotIndexHelper::GetTargets(SlotIndex side, SlotIndexHelper::SideTargetType type, GameEngine::Board const & board)
+	inline void SlotIndexHelper::SetTargets(SlotIndex side, SideTargetType type, GameEngine::Board const & board, SlotIndexBitmap & targets)
 	{
-		SlotIndexBitmap targets;
-
 		Player const* player = nullptr;
 		SlotIndex hero;
 		if (side == SlotIndex::SLOT_PLAYER_SIDE) {
@@ -123,6 +120,34 @@ namespace GameEngine {
 			// cannot target stealth minions
 			MarkMinionsWithoutStealth(board, side, targets);
 			targets.SetOneTarget(hero);
+			break;
+
+		default:
+			throw std::runtime_error("unhandled case");
+		}
+	}
+
+	inline SlotIndexBitmap SlotIndexHelper::GetTargets(SlotIndex side, SlotIndexHelper::SideTargetType type, GameEngine::Board const & board)
+	{
+		SlotIndexBitmap targets;
+		SlotIndexHelper::SetTargets(side, type, board, targets);
+		return targets;
+	}
+
+	inline SlotIndexBitmap SlotIndexHelper::GetTargets(Player const& player, TargetType type)
+	{
+		SlotIndexBitmap targets;
+
+		switch (type)
+		{
+		case TARGET_SPELL_ALL_MINIONS:
+			SlotIndexHelper::SetTargets(player.side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, player.board, targets);
+			SlotIndexHelper::SetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_ENEMY_SPELL, player.board, targets);
+			break;
+
+		case TARGET_SPELL_ALL_CHARACTERS:
+			SlotIndexHelper::SetTargets(player.side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_FRIENDLY_SPELL, player.board, targets);
+			SlotIndexHelper::SetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, player.board, targets);
 			break;
 
 		default:
