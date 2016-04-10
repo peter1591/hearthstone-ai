@@ -29,6 +29,7 @@ public:
 
 public:
 	int hp;
+	int max_hp;
 	int armor;
 
 	Weapon weapon;
@@ -43,6 +44,7 @@ public:
 inline bool GameEngine::HeroData::operator==(HeroData const & rhs) const
 {
 	if (this->hp != rhs.hp) return false;
+	if (this->max_hp != rhs.max_hp) return false;
 	if (this->armor != rhs.armor) return false;
 	if (this->weapon != rhs.weapon) return false;
 	if (this->hero_power != rhs.hero_power) return false;
@@ -60,7 +62,7 @@ inline bool GameEngine::HeroData::operator!=(HeroData const & rhs) const
 inline std::string GameEngine::HeroData::GetDebugString() const
 {
 	std::ostringstream oss;
-	oss << "HP: " << this->hp << " + " << this->armor;
+	oss << "HP: " << this->hp << " + " << this->armor << " / " << this->max_hp;
 	if (this->freezed) oss << " [FREEZED]";
 	oss << std::endl;
 
@@ -83,6 +85,7 @@ namespace std {
 			result_type result = 0;
 
 			GameEngine::hash_combine(result, s.hp);
+			GameEngine::hash_combine(result, s.max_hp);
 			GameEngine::hash_combine(result, s.armor);
 			GameEngine::hash_combine(result, s.weapon);
 			GameEngine::hash_combine(result, s.hero_power);

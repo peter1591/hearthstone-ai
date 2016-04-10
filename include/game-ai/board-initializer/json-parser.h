@@ -73,7 +73,8 @@ private:
 		GameEngine::HeroData hero_data;
 
 		// card_id not used
-		hero_data.hp = json["max_hp"].asInt() - json["damage"].asInt();
+		hero_data.max_hp = json["max_hp"].asInt();
+		hero_data.hp = hero_data.max_hp - json["damage"].asInt();
 		hero_data.attacked_times = json["attacks_this_turn"].asInt();
 		hero_data.armor = json["armor"].asInt();
 		hero_data.freezed = json["status"]["frozen"].asInt() != 0;
