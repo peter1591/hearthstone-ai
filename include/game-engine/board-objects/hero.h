@@ -68,7 +68,7 @@ namespace GameEngine {
 			if (this->hero.freezed) return false;
 
 			int max_attacked_times = 1;
-			if (this->hero.weapon.windfury) max_attacked_times = 2;
+			if (this->hero.weapon.IsValid() && this->hero.weapon.windfury) max_attacked_times = 2;
 
 			if (this->hero.attacked_times >= max_attacked_times) return false;
 
@@ -94,10 +94,12 @@ namespace GameEngine {
 		}
 
 		int GetForgetfulCount() const {
+			if (!this->hero.weapon.IsValid()) return 0;
 			return this->hero.weapon.forgetful;
 		}
 
 		bool IsFreezeAttacker() const {
+			if (!this->hero.weapon.IsValid()) return false;
 			return this->hero.weapon.freeze_attack;
 		}
 
@@ -119,6 +121,7 @@ namespace GameEngine {
 		}
 
 		void AddWeaponOnDeathTrigger(WeaponOnDeathTrigger && func) {
+			if (!this->hero.weapon.IsValid()) throw std::runtime_error("no valid weapon");
 			this->hero.weapon.on_death_triggers.push_back(std::move(func));
 		}
 
