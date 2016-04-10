@@ -7,7 +7,7 @@ namespace GameEngine
 	class Player;
 
 	// Introduce buffs on player
-	template <int spell_damage_boost, bool one_turn>
+	template <int attack_boost, int spell_damage_boost, bool one_turn>
 	class Enchantment_BuffPlayer_C : public Enchantment<Player>
 	{
 	public:

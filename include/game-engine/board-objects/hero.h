@@ -46,11 +46,14 @@ namespace GameEngine {
 			return this->hero.hp;
 		}
 
-		int GetAttack() const
+		int GetAttack() const // Hero Attack + Weapon Attack
 		{
 			int attack = this->hero.attack + this->GetWeaponAttack();
 			return attack;
 		}
+
+		int GetHeroAttack() const { return this->hero.attack; }
+		void SetHeroAttack(int hero_attack) { this->hero.attack = hero_attack; }
 
 		int GetWeaponAttack() const
 		{
