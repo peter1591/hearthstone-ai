@@ -48,8 +48,7 @@ namespace GameEngine {
 
 		int GetAttack() const
 		{
-			int attack = this->GetWeaponAttack();
-			// TODO: hero can have its attack value in addition to the weapon
+			int attack = this->hero.attack + this->GetWeaponAttack();
 			return attack;
 		}
 
