@@ -23,8 +23,8 @@ public:
 		this->origin_deck.insert(CARD_ID_CS2_200); // 667
 		this->origin_deck.insert(CARD_ID_CS2_029); // Fireball
 		this->origin_deck.insert(CARD_ID_CS2_029); // Fireball
-		this->origin_deck.insert(CARD_ID_CS2_168); // 121
-		this->origin_deck.insert(CARD_ID_CS2_168); // 121
+		this->origin_deck.insert(CARD_ID_CS2_168); // Murloc Raider 121
+		this->origin_deck.insert(CARD_ID_CS2_168); // Murloc Raider 121
 		this->origin_deck.insert(CARD_ID_EX1_593); // Nightblade
 		this->origin_deck.insert(CARD_ID_EX1_593); // Nightblade
 		this->origin_deck.insert(CARD_ID_EX1_015); // Novice Enginner
@@ -35,12 +35,46 @@ public:
 		this->origin_deck.insert(CARD_ID_CS2_022); // Polymorph
 		this->origin_deck.insert(CARD_ID_CS2_122); // Raid Leader
 		this->origin_deck.insert(CARD_ID_CS2_122); // Raid Leader
-		this->origin_deck.insert(CARD_ID_CS2_120); // 223
-		this->origin_deck.insert(CARD_ID_CS2_120); // 223
+		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
+		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
 		this->origin_deck.insert(CARD_ID_CS2_179); // 435 Taunt
 		this->origin_deck.insert(CARD_ID_CS2_179); // 435 Taunt
-		this->origin_deck.insert(CARD_ID_CS2_124); // 331 Charge
-		this->origin_deck.insert(CARD_ID_CS2_124); // 331 Charge
+		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
+		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
+	}
+
+	void SetDeck_BasicPracticeWarlock()
+	{
+		this->origin_deck.insert(CARD_ID_CS2_182); // Chillwind Yeti
+		this->origin_deck.insert(CARD_ID_CS2_182); // Chillwind Yeti
+		this->origin_deck.insert(CARD_ID_DS1_055); // Darkscale Healer
+		this->origin_deck.insert(CARD_ID_DS1_055); // Darkscale Healer
+		this->origin_deck.insert(CARD_ID_CS2_061); // Drain Life
+		this->origin_deck.insert(CARD_ID_CS2_061); // Drain Life
+		this->origin_deck.insert(CARD_ID_CS2_062); // Hellfire
+		this->origin_deck.insert(CARD_ID_CS2_062); // Hellfire
+		this->origin_deck.insert(CARD_ID_CS2_142); // Kobold Geomancer
+		this->origin_deck.insert(CARD_ID_CS2_142); // Kobold Geomancer
+		this->origin_deck.insert(CARD_ID_CS2_168); // Murloc Raider 121
+		this->origin_deck.insert(CARD_ID_CS2_168); // Murloc Raider 121
+		this->origin_deck.insert(CARD_ID_CS2_197); // Ogre Magi
+		this->origin_deck.insert(CARD_ID_CS2_197); // Ogre Magi
+		this->origin_deck.insert(CARD_ID_CS2_213); // Reckless Rocketeer 652 CHARGE
+		this->origin_deck.insert(CARD_ID_CS2_213); // Reckless Rocketeer 652 CHARGE
+		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
+		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
+		this->origin_deck.insert(CARD_ID_CS2_057); // Shadow Bolt
+		this->origin_deck.insert(CARD_ID_CS2_057); // Shadow Bolt
+		this->origin_deck.insert(CARD_ID_EX1_306); // Succubus
+		this->origin_deck.insert(CARD_ID_EX1_306); // Succubus
+		this->origin_deck.insert(CARD_ID_CS2_065); // Voidwalker
+		this->origin_deck.insert(CARD_ID_CS2_065); // Voidwalker
+		this->origin_deck.insert(CARD_ID_EX1_011); // Woodoo doctor
+		this->origin_deck.insert(CARD_ID_EX1_011); // Woodoo doctor
+		this->origin_deck.insert(CARD_ID_CS2_186); // War Golem
+		this->origin_deck.insert(CARD_ID_CS2_186); // War Golem
+		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
+		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
 	}
 
 	void InitializeHand(Json::Value const& played_cards, Json::Value const& hand_cards, GameEngine::Hand & hand) const
