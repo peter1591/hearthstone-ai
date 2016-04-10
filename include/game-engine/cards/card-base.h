@@ -41,6 +41,7 @@ public: \
 #include "card_CS2_005.h"
 #include "card_CS2_007.h"
 #include "card_CS2_009.h"
+#include "card_CS2_013.h"
 #include "card_CS2_022.h"
 #include "card_CS2_023.h"
 #include "card_CS2_025.h"
