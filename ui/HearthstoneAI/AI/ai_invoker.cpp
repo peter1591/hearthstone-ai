@@ -9,6 +9,8 @@
 
 AIInvoker::AIInvoker()
 {
+	this->current_job = nullptr;
+	this->pending_job = nullptr;
 	this->state = STATE_NOT_SPAWNED;
 }
 
