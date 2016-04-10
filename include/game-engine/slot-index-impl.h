@@ -69,7 +69,7 @@ namespace GameEngine {
 		return ret;
 	}
 
-	inline SlotIndexBitmap SlotIndexHelper::GetTargets(SlotIndex side, SlotIndexHelper::TargetType type, GameEngine::Board const & board)
+	inline SlotIndexBitmap SlotIndexHelper::GetTargets(SlotIndex side, SlotIndexHelper::SideTargetType type, GameEngine::Board const & board)
 	{
 		SlotIndexBitmap targets;
 

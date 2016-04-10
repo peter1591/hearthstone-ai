@@ -106,7 +106,7 @@ namespace GameEngine {
 			else throw std::runtime_error("invalid argument");
 		}
 
-		enum TargetType {
+		enum SideTargetType {
 			TARGET_TYPE_ATTACKABLE,
 			TARGET_TYPE_CAN_BE_ATTACKED,
 
@@ -116,7 +116,7 @@ namespace GameEngine {
 			TARGET_TYPE_MINIONS_TARGETABLE_BY_ENEMY_SPELL,
 			TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL,
 		};
-		static SlotIndexBitmap GetTargets(SlotIndex side, TargetType type, GameEngine::Board const& board);
+		static SlotIndexBitmap GetTargets(SlotIndex side, SideTargetType type, GameEngine::Board const& board);
 
 	private:
 		static bool MarkAttackableMinions(Board const& board, SlotIndex side, SlotIndexBitmap & bitmap);
