@@ -19,8 +19,8 @@ public:
 		this->origin_deck.insert(CARD_ID_EX1_277); // Arcane Missiles
 		this->origin_deck.insert(CARD_ID_CS2_172); // 232
 		this->origin_deck.insert(CARD_ID_CS2_172); // 232
-		this->origin_deck.insert(CARD_ID_CS2_200); // 667
-		this->origin_deck.insert(CARD_ID_CS2_200); // 667
+		this->origin_deck.insert(CARD_ID_CS2_200); // Boulderfist Ogre 667
+		this->origin_deck.insert(CARD_ID_CS2_200); // Boulderfist Ogre 667
 		this->origin_deck.insert(CARD_ID_CS2_029); // Fireball
 		this->origin_deck.insert(CARD_ID_CS2_029); // Fireball
 		this->origin_deck.insert(CARD_ID_CS2_168); // Murloc Raider 121
@@ -29,8 +29,8 @@ public:
 		this->origin_deck.insert(CARD_ID_EX1_593); // Nightblade
 		this->origin_deck.insert(CARD_ID_EX1_015); // Novice Enginner
 		this->origin_deck.insert(CARD_ID_EX1_015); // Novice Enginner
-		this->origin_deck.insert(CARD_ID_CS2_119); // 427
-		this->origin_deck.insert(CARD_ID_CS2_119); // 427
+		this->origin_deck.insert(CARD_ID_CS2_119); // Oasis Snapjaw 427
+		this->origin_deck.insert(CARD_ID_CS2_119); // Oasis Snapjaw 427
 		this->origin_deck.insert(CARD_ID_CS2_022); // Polymorph
 		this->origin_deck.insert(CARD_ID_CS2_022); // Polymorph
 		this->origin_deck.insert(CARD_ID_CS2_122); // Raid Leader
@@ -75,6 +75,40 @@ public:
 		this->origin_deck.insert(CARD_ID_CS2_186); // War Golem
 		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
 		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
+	}
+
+	void SetDeck_BasicPracticeDruid()
+	{
+		this->origin_deck.insert(CARD_ID_CS2_200); // Boulderfist Ogre 667
+		this->origin_deck.insert(CARD_ID_CS2_200); // Boulderfist Ogre 667
+		this->origin_deck.insert(CARD_ID_CS2_182); // Chillwind Yeti
+		this->origin_deck.insert(CARD_ID_CS2_182); // Chillwind Yeti
+		this->origin_deck.insert(CARD_ID_CS2_005); // Claw
+		this->origin_deck.insert(CARD_ID_CS2_005); // Claw
+		this->origin_deck.insert(CARD_ID_CS2_201); // Core Hound
+		this->origin_deck.insert(CARD_ID_CS2_201); // Core Hound
+		this->origin_deck.insert(CARD_ID_DS1_055); // Darkscale Healer
+		this->origin_deck.insert(CARD_ID_DS1_055); // Darkscale Healer
+		this->origin_deck.insert(CARD_ID_CS2_189); // Elven Archer
+		this->origin_deck.insert(CARD_ID_CS2_189); // Elven Archer
+		this->origin_deck.insert(CARD_ID_CS2_007); // Healing Touch
+		this->origin_deck.insert(CARD_ID_CS2_007); // Healing Touch
+		this->origin_deck.insert(CARD_ID_EX1_169); // Innervate
+		this->origin_deck.insert(CARD_ID_EX1_169); // Innervate
+		this->origin_deck.insert(CARD_ID_CS2_162); // Lord of Arena
+		this->origin_deck.insert(CARD_ID_CS2_162); // Lord of Arena
+		this->origin_deck.insert(CARD_ID_CS2_009); // Mark of the Wild
+		this->origin_deck.insert(CARD_ID_CS2_009); // Mark of the Wild
+		this->origin_deck.insert(CARD_ID_EX1_593); // Nightblade
+		this->origin_deck.insert(CARD_ID_EX1_593); // Nightblade
+		this->origin_deck.insert(CARD_ID_CS2_119); // Oasis Snapjaw 427
+		this->origin_deck.insert(CARD_ID_CS2_119); // Oasis Snapjaw 427
+		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
+		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
+		this->origin_deck.insert(CARD_ID_CS2_127); // Silverback Patriarch
+		this->origin_deck.insert(CARD_ID_CS2_127); // Silverback Patriarch
+		this->origin_deck.insert(CARD_ID_CS2_013); // Wild Growth
+		this->origin_deck.insert(CARD_ID_CS2_013); // Wild Growth
 	}
 
 	void InitializeHand(Json::Value const& played_cards, Json::Value const& hand_cards, GameEngine::Hand & hand) const
