@@ -68,8 +68,9 @@ namespace GameEngine {
 		void SetFreezed();
 		bool IsFreezeAttacker() const;
 		bool IsFreezed() const;
-
 		bool IsPoisonous() const;
+
+		void Heal(int amount);
 
 	public:
 		void AddAttack(int val);

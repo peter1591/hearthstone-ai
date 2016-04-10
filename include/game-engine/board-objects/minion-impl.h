@@ -138,6 +138,17 @@ inline bool GameEngine::Minion::IsPoisonous() const
 	return this->minion.stat.IsPoisonous();
 }
 
+inline void GameEngine::Minion::Heal(int amount)
+{
+	int origin_hp = this->minion.stat.GetHP();
+	int max_hp = this->minion.stat.GetMaxHP();
+	int new_hp = origin_hp + amount;
+	if (new_hp > max_hp) new_hp = max_hp;
+	this->minion.stat.SetHP(new_hp);
+
+	// TODO: trigger
+}
+
 inline void GameEngine::Minion::AddAttack(int val)
 {
 	this->minion.stat.SetAttack(this->minion.stat.GetAttack() + val);

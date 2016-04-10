@@ -123,6 +123,15 @@ namespace GameEngine {
 		HeroPower const& GetHeroPower() const { return this->hero.hero_power; }
 		void UsedHeroPowerOnce() { this->hero.hero_power.used_this_turn = true; }
 
+		void Heal(int amount)
+		{
+			int new_hp = this->hero.hp + amount;
+			if (new_hp > this->hero.max_hp) new_hp = this->hero.max_hp;
+			this->hero.hp = new_hp;
+
+			// TODO: trigger hooks
+		}
+
 	public: // hooks
 		void TurnStart(bool owner_turn)
 		{
