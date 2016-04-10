@@ -20,6 +20,7 @@ namespace GameEngine
 
 	inline void HookManager::PlayerTurnEnd()
 	{
+		this->board.player.enchantments.TurnEnd();
 		this->board.player.hero.TurnEnd(true);
 		this->board.opponent.hero.TurnEnd(false);
 		this->board.player.minions.TurnEnd(true);
@@ -36,6 +37,7 @@ namespace GameEngine
 
 	inline void HookManager::OpponentTurnEnd()
 	{
+		this->board.opponent.enchantments.TurnEnd();
 		this->board.opponent.hero.TurnEnd(true);
 		this->board.player.hero.TurnEnd(false);
 		this->board.opponent.minions.TurnEnd(true);
