@@ -102,9 +102,9 @@ namespace GameEngine
 		return ret;
 	}
 
-	inline BoardTargets BoardTargets::AllCharacters(Player & player)
+	inline BoardTargets BoardTargets::AllCharacters(Board & board)
 	{
-		BoardTargets ret = BoardTargets::AllMinions(player.board);
+		BoardTargets ret = BoardTargets::AllMinions(board);
 		ret.has_player_hero = true;
 		ret.has_opponent_hero = true;
 		return ret;

@@ -42,7 +42,7 @@ namespace GameEngine
 
 		static BoardTargets FriendlyCharacters(Player & player);
 		static BoardTargets EnemyCharacters(Player & player);
-		static BoardTargets AllCharacters(Player & player);
+		static BoardTargets AllCharacters(Board & board);
 
 		static BoardTargets AllMinions(Board & board);
 
