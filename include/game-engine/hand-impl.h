@@ -62,6 +62,13 @@ namespace GameEngine {
 		return card;
 	}
 
+	inline void Hand::DiscardHandCard(Locator idx)
+	{
+		auto it = this->cards.begin() + idx;
+		this->cards.erase(it);
+		// TODO: trigger hooks
+	}
+
 	inline Card Hand::DrawOneCardFromDeck()
 	{
 		Card ret;

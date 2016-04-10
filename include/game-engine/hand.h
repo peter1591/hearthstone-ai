@@ -33,6 +33,7 @@ public: // game operations
 	bool HasCardToDraw() const;
 	void DrawOneCardToHand();
 	Card DrawOneCardAndDiscard();
+	void DiscardHandCard(Locator idx);
 
 public: // operations to hand
 	void AddDeterminedCard(Card const& card);
