@@ -184,6 +184,8 @@ namespace GameEngine
 		constexpr int weight_attack = 100;
 		constexpr int weight_hero_power = 100;
 
+		auto & board = player.board;
+
 		moves.Clear();
 
 		// the choice to end turn
@@ -199,7 +201,7 @@ namespace GameEngine
 			{
 				move.action = Move::ACTION_HERO_POWER;
 				if (hero_power_required_targets.None()) move.data.use_hero_power_data.target = SLOT_INVALID;
-				else move.data.use_hero_power_data.target = hero_power_required_targets.GetOneTarget();
+				else move.data.use_hero_power_data.target = GetOneRandomTarget(board, hero_power_required_targets);
 
 				moves.AddMove(move, weight_hero_power);
 			}
@@ -228,7 +230,7 @@ namespace GameEngine
 				move.data.play_hand_minion_data.card_id = playing_card.id;
 				move.data.play_hand_minion_data.data.put_location = SlotIndexHelper::GetMinionIndex(player.side, 0);
 				if (required_targets.None()) move.data.play_hand_minion_data.data.target = SLOT_INVALID;
-				else move.data.play_hand_minion_data.data.target = required_targets.GetOneTarget();
+				else move.data.play_hand_minion_data.data.target = GetOneRandomTarget(board, required_targets);
 
 				moves.AddMove(move, weight_play_minion);
 				break;
@@ -246,7 +248,7 @@ namespace GameEngine
 				move.data.play_hand_card_data.hand_card = hand_idx;
 				move.data.play_hand_card_data.card_id = playing_card.id;
 				if (required_targets.None()) move.data.play_hand_card_data.target = SLOT_INVALID;
-				else move.data.play_hand_card_data.target = required_targets.GetOneTarget();
+				else move.data.play_hand_card_data.target = GetOneRandomTarget(board, required_targets);
 
 				moves.AddMove(move, weight_play_minion);
 				break;
@@ -264,7 +266,7 @@ namespace GameEngine
 				move.data.play_hand_card_data.hand_card = hand_idx;
 				move.data.play_hand_card_data.card_id = playing_card.id;
 				if (required_targets.None()) move.data.play_hand_card_data.target = SLOT_INVALID;
-				else move.data.play_hand_card_data.target = required_targets.GetOneTarget();
+				else move.data.play_hand_card_data.target = GetOneRandomTarget(board, required_targets);
 
 				moves.AddMove(move, weight_play_spell);
 				break;
@@ -284,11 +286,11 @@ namespace GameEngine
 			attacked = SlotIndexHelper::GetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CAN_BE_ATTACKED, player.board);
 
 			while (!attacker.None()) {
-				SlotIndex attacker_idx = attacker.GetOneTarget();
+				SlotIndex attacker_idx = attacker.GetOneTarget(); // always choose the first attacker is reasonable, since all attackable minion will eventually got a chance to attack
 				attacker.ClearOneTarget(attacker_idx);
 
 				while (!attacked.None()) {
-					SlotIndex attacked_idx = attacked.GetOneTarget();
+					SlotIndex attacked_idx = GetOneRandomTarget(board, attacked);
 					attacked.ClearOneTarget(attacked_idx);
 
 					move.action = Move::ACTION_ATTACK;
@@ -374,6 +376,15 @@ namespace GameEngine
 
 		const int rand = minions.GetBoard().random_generator.GetRandom(count);
 		return minions.GetMinion(rand);
+	}
+
+	inline SlotIndex StageHelper::GetOneRandomTarget(GameEngine::Board & board, SlotIndexBitmap targets)
+	{
+		int rand = board.random_generator.GetRandom(targets.Count());
+		for (int i = 0; i < rand; ++i) {
+			targets.ClearOneTarget(targets.GetOneTarget());
+		}
+		return targets.GetOneTarget();
 	}
 
 	inline SlotIndex StageHelper::GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked)

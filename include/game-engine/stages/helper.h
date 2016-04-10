@@ -62,6 +62,8 @@ public: // randomly choose
 	static Minion & RandomChooseMinion(Minions & minions);
 
 private:
+	static SlotIndex GetOneRandomTarget(GameEngine::Board & board, SlotIndexBitmap targets);
+
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
 	static void RemoveMinionsIfDead(Board & board, SlotIndex side);
 	static void Fatigue(GameEngine::Board & board, SlotIndex side);
