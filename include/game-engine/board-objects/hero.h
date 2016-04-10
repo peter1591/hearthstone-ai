@@ -134,6 +134,10 @@ namespace GameEngine {
 			// TODO: trigger hooks
 		}
 
+		void GainArmor(int amount) {
+			this->hero.armor += amount;
+		}
+
 	public: // hooks
 		void TurnStart(bool owner_turn)
 		{
