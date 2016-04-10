@@ -110,6 +110,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.max_hp = 20;
 	player_hero.armor = 0;
+	player_hero.attack = 0;
 	player_hero.weapon.Clear();
 	player_hero.hero_power.card_id = CARD_ID_CS2_056;
 	player_hero.hero_power.cost = 2;
@@ -119,6 +120,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	opponent_hero.hp = 20;
 	opponent_hero.max_hp = 20;
 	opponent_hero.armor = 0;
+	opponent_hero.attack = 0;
 	opponent_hero.weapon.Clear();
 	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
 	opponent_hero.hero_power.cost = 2;
@@ -164,6 +166,7 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.max_hp = 20;
 	player_hero.armor = 0;
+	player_hero.attack = 0;
 	player_hero.weapon.Clear();
 	player_hero.hero_power.card_id = CARD_ID_CS2_034;
 	player_hero.hero_power.cost = 2;
@@ -173,6 +176,7 @@ inline void StartBoard::InitializeDebugBoard2(GameEngine::Board &board)
 	opponent_hero.hp = 20;
 	opponent_hero.max_hp = 20;
 	opponent_hero.armor = 0;
+	opponent_hero.attack = 0;
 	opponent_hero.weapon.Clear();
 	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
 	opponent_hero.hero_power.cost = 2;
@@ -218,6 +222,7 @@ inline void StartBoard::InitializeDebugBoard3(GameEngine::Board &board)
 	player_hero.hp = 20;
 	player_hero.max_hp = 20;
 	player_hero.armor = 0;
+	player_hero.attack = 0;
 	player_hero.weapon.Clear();
 	player_hero.hero_power.card_id = CARD_ID_CS2_034;
 	player_hero.hero_power.cost = 2;
@@ -227,6 +232,7 @@ inline void StartBoard::InitializeDebugBoard3(GameEngine::Board &board)
 	opponent_hero.hp = 20;
 	opponent_hero.max_hp = 20;
 	opponent_hero.armor = 0;
+	opponent_hero.attack = 0;
 	opponent_hero.weapon.Clear();
 	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
 	opponent_hero.hero_power.cost = 2;
@@ -332,6 +338,7 @@ inline void StartBoard::InitializeDebugBoard_Practice_Mage(GameEngine::Board & b
 	player_hero.hp = 30;
 	player_hero.max_hp = 30;
 	player_hero.armor = 0;
+	player_hero.attack = 0;
 	player_hero.weapon.Clear();
 	player_hero.hero_power.card_id = CARD_ID_CS2_034;
 	player_hero.hero_power.cost = 2;
@@ -341,6 +348,7 @@ inline void StartBoard::InitializeDebugBoard_Practice_Mage(GameEngine::Board & b
 	opponent_hero.hp = 30;
 	opponent_hero.max_hp = 30;
 	opponent_hero.armor = 0;
+	opponent_hero.attack = 0;
 	opponent_hero.weapon.Clear();
 	opponent_hero.hero_power.card_id = CARD_ID_CS2_034;
 	opponent_hero.hero_power.cost = 2;

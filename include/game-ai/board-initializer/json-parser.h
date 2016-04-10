@@ -80,6 +80,7 @@ private:
 		hero_data.attacked_times = json["attacks_this_turn"].asInt();
 		hero_data.armor = json["armor"].asInt();
 		hero_data.freezed = json["status"]["frozen"].asInt() != 0;
+		hero_data.attack = 0;
 
 		hero_data.hero_power.card_id = GameEngine::CardDatabase::GetInstance().GetCardIdFromOriginalId(json["hero_power"]["card_id"].asString());
 		GameEngine::Card card_hero_power = GameEngine::CardDatabase::GetInstance().GetCard(hero_data.hero_power.card_id);
