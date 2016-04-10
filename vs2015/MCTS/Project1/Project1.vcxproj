@@ -89,9 +89,10 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;DEBUG;DEBUG_PRINT_MOVE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;DEBUG_PRINT_MOVEA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -118,7 +119,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINION;DEBUG;DEBUG_PRINT_MOVEA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;DEBUG_PRINT_MOVEA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
     </ClCompile>
@@ -157,7 +158,6 @@
     <ClInclude Include="..\..\..\include\game-ai\turn.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\board-object.h" />
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\hero.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-data-impl.h" />
@@ -186,13 +186,19 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_025.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_034.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_057.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_061.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_062.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_122.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_DS1_055.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_011.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_015.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_277.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_306.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_412.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_584.h" />

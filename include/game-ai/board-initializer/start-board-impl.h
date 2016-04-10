@@ -27,7 +27,12 @@ inline void StartBoard::InitializeDebugBoard1_PlayerHand(GameEngine::Hand &hand)
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_BRMA15_4)); // 111 [CHARGE]
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GVG_092t)); // 111
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_DS1_055)); // Darkscale Healer
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_061)); // Drain Life
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_062)); // Hellfire
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_011)); // Voodoo doctor
 
+	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_306)); // Succubus
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_029)); // Leper Gnome
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_188)); // 121 Abusive Argant
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_189)); // 111 Elven Archer
@@ -361,6 +366,6 @@ inline void StartBoard::InitializeBoard(int rand_seed, GameEngine::Board & board
 	//return std::move(board);
 
 	board.SetRandomSeed(rand_seed);
-	//InitializeDebugBoard1(board);
-	InitializeDebugBoard_Practice_Mage(board);
+	//InitializeDebugBoard_Practice_Mage(board);
+	InitializeDebugBoard1(board);
 }

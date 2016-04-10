@@ -179,9 +179,6 @@
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\board-objects\hero-manipulator.h">
-      <Filter>Header Files\game-engine\board-objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\minion-manipulator.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
     </ClInclude>
@@ -490,6 +487,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\start-board-impl.h">
       <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_DS1_055.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_061.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_062.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_057.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_306.h">
+      <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_011.h">
+      <Filter>Header Files\game-engine\cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
