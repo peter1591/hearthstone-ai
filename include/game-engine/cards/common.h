@@ -188,6 +188,7 @@ inline bool CardCallbackManager::HandleCallback(int card_id, Params&&... params)
 		return CardCallbackCaller<CardClassName, Callback>::Call(params...);
 
 HANDLE_CARD_CALLBACK(Card_GAME_005)
+HANDLE_CARD_CALLBACK(Card_CS2_005)
 HANDLE_CARD_CALLBACK(Card_CS2_022)
 HANDLE_CARD_CALLBACK(Card_CS2_023)
 HANDLE_CARD_CALLBACK(Card_CS2_025)
