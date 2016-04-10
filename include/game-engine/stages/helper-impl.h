@@ -98,7 +98,7 @@ namespace GameEngine
 		}
 #else
 		next_move_getter.AddItem(NextMoveGetter::ItemPlayHandMinion(
-			player, hand_card, SlotIndexHelper::GetMinionIndex(player.side, player.minions.GetMinionCount()), required_targets));
+			player, hand_card, SlotIndexHelper::GetMinionIndex(player.side, 0), required_targets));
 #endif
 	}
 
@@ -226,7 +226,7 @@ namespace GameEngine
 				move.action = Move::ACTION_PLAY_HAND_MINION;
 				move.data.play_hand_minion_data.hand_card = hand_idx;
 				move.data.play_hand_minion_data.card_id = playing_card.id;
-				move.data.play_hand_minion_data.data.put_location = SlotIndexHelper::GetMinionIndex(player.side, player.minions.GetMinionCount());
+				move.data.play_hand_minion_data.data.put_location = SlotIndexHelper::GetMinionIndex(player.side, 0);
 				if (required_targets.None()) move.data.play_hand_minion_data.data.target = SLOT_INVALID;
 				else move.data.play_hand_minion_data.data.target = required_targets.GetOneTarget();
 
