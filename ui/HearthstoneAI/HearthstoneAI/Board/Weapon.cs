@@ -17,6 +17,15 @@ namespace HearthstoneAI.Board
         public string card_id = "";
 
         [DataMember]
+        public int attack;
+
+        [DataMember]
+        public int durability;
+
+        [DataMember]
+        public int damage;
+
+        [DataMember]
         public Enchantments enchantments = new Enchantments();
 
         public bool Parse(GameState game, GameState.Entity player)
@@ -47,6 +56,9 @@ namespace HearthstoneAI.Board
                 }
 
                 this.card_id = entity.Value.CardId;
+                this.attack = entity.Value.GetTagOrDefault(GameTag.ATK, 0);
+                this.durability = entity.Value.GetTagOrDefault(GameTag.DURABILITY, 0);
+                this.damage = entity.Value.GetTagOrDefault(GameTag.DAMAGE, 0);
                 ret = this.enchantments.Parse(game, entity.Value) && ret;
 
                 this.equipped = true;

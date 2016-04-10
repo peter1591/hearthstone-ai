@@ -312,6 +312,8 @@ namespace HearthstoneAI
             if (player.weapon.equipped)
             {
                 result += "[WEAPON] " + player.weapon.card_id + Environment.NewLine;
+                result += "Atk: " + player.weapon.attack.ToString();
+                result += " durability: " + (player.weapon.durability - player.weapon.damage).ToString() + " / " + player.weapon.durability.ToString() + Environment.NewLine;
                 result += this.GetEnchantmentsText(player.weapon.enchantments);
             }
 
