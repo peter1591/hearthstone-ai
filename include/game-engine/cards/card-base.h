@@ -43,6 +43,7 @@ public: \
 #include "card_CS2_029.h"
 #include "card_CS2_034.h"
 #include "card_CS2_061.h"
+#include "card_CS2_062.h"
 #include "card_CS2_122.h"
 #include "card_CS2_188.h"
 #include "card_CS2_189.h"
