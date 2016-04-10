@@ -13,6 +13,7 @@
 #include "game-engine/board-objects/minions-impl.h"
 #include "game-engine/enchantments/buff-minion-impl.h"
 #include "game-engine/enchantments/buff-minion-c-impl.h"
+#include "game-engine/enchantments/buff-player-impl.h"
 #include "game-engine/enchantments/buff-player-c-impl.h"
 #include "game-engine/enchantments/enchantments-impl.h"
 #include "game-engine/enchantments/owner-impl.h"
