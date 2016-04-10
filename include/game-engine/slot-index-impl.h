@@ -73,24 +73,15 @@ namespace GameEngine {
 	{
 		SlotIndexBitmap targets;
 
-		Player const* friendly_player = nullptr;
-		Player const* enemy_player = nullptr;
-		SlotIndex friendly_side, enemy_side, friendly_hero, enemy_hero;
+		Player const* player = nullptr;
+		SlotIndex hero;
 		if (side == SlotIndex::SLOT_PLAYER_SIDE) {
-			friendly_player = &board.player;
-			enemy_player = &board.opponent;
-			friendly_side = SlotIndex::SLOT_PLAYER_SIDE;
-			enemy_side = SlotIndex::SLOT_OPPONENT_SIDE;
-			friendly_hero = SlotIndex::SLOT_PLAYER_HERO;
-			enemy_hero = SlotIndex::SLOT_OPPONENT_HERO;
+			player = &board.player;
+			hero = SlotIndex::SLOT_PLAYER_HERO;
 		}
 		else if (side == SlotIndex::SLOT_OPPONENT_SIDE) {
-			friendly_player = &board.opponent;
-			enemy_player = &board.player;
-			friendly_side = SlotIndex::SLOT_OPPONENT_SIDE;
-			enemy_side = SlotIndex::SLOT_PLAYER_SIDE;
-			friendly_hero = SlotIndex::SLOT_OPPONENT_HERO;
-			enemy_hero = SlotIndex::SLOT_PLAYER_HERO;
+			player = &board.opponent;
+			hero = SlotIndex::SLOT_OPPONENT_HERO;
 		}
 		else {
 			throw std::runtime_error("invalid argument");
@@ -99,39 +90,39 @@ namespace GameEngine {
 		switch (type)
 		{
 		case TARGET_TYPE_ATTACKABLE:
-			if (friendly_player->hero.Attackable()) {
-				targets.SetOneTarget(friendly_hero);
+			if (player->hero.Attackable()) {
+				targets.SetOneTarget(hero);
 			}
-			MarkAttackableMinions(board, friendly_side, targets);
+			MarkAttackableMinions(board, side, targets);
 			break;
 
 		case TARGET_TYPE_CAN_BE_ATTACKED:
-			if (MarkTauntMinions(board, friendly_side, targets)) break;
+			if (MarkTauntMinions(board, side, targets)) break;
 
-			targets.SetOneTarget(friendly_hero);
-			MarkMinionsWithoutStealth(board, friendly_side, targets);
+			targets.SetOneTarget(hero);
+			MarkMinionsWithoutStealth(board, side, targets);
 			break;
 
 		case TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL:
 			// can also target stealth minions
-			MarkMinions(board, friendly_side, targets);
+			MarkMinions(board, side, targets);
 			break;
 
 		case TARGET_TYPE_CHARACTERS_TARGETABLE_BY_FRIENDLY_SPELL:
 			// can also target stealth minions
-			MarkMinions(board, friendly_side, targets);
-			targets.SetOneTarget(friendly_hero);
+			MarkMinions(board, side, targets);
+			targets.SetOneTarget(hero);
 			break;
 
 		case TARGET_TYPE_MINIONS_TARGETABLE_BY_ENEMY_SPELL:
 			// cannot target stealth minions
-			MarkMinionsWithoutStealth(board, friendly_side, targets);
+			MarkMinionsWithoutStealth(board, side, targets);
 			break;
 
 		case TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL:
 			// cannot target stealth minions
-			MarkMinionsWithoutStealth(board, friendly_side, targets);
-			targets.SetOneTarget(friendly_hero);
+			MarkMinionsWithoutStealth(board, side, targets);
+			targets.SetOneTarget(hero);
 			break;
 
 		default:
