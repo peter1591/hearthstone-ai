@@ -58,6 +58,7 @@ public: \
 #include "card_EX1_011.h"
 #include "card_EX1_015.h"
 #include "card_EX1_029.h"
+#include "card_EX1_169.h"
 #include "card_EX1_277.h"
 #include "card_EX1_306.h"
 #include "card_EX1_390.h"
