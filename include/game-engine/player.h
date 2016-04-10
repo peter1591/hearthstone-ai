@@ -63,6 +63,7 @@ namespace std {
 			GameEngine::hash_combine(result, s.hand);
 			GameEngine::hash_combine(result, s.hero);
 			GameEngine::hash_combine(result, s.minions);
+			GameEngine::hash_combine(result, s.enchantments);
 
 			return result;
 		}
