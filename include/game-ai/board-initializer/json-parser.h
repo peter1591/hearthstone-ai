@@ -56,7 +56,14 @@ private:
 		//      CURRENT_SPELLPOWER
 
 		// TODO: secrets
-		// TODO: enchantments
+
+		// TODO: add known enchantments (e.g., one-turn effects)
+		// add an enchantment to make the stat correct
+		int attack_boost = json["hero"]["attack"].asInt() - player.hero.GetAttack();
+		int spell_damage_boost = 0; // TODO: parse the player's spell damage boost
+		if (attack_boost > 0 || spell_damage_boost > 0) {
+			player.enchantments.Add(std::make_unique<GameEngine::Enchantment_BuffPlayer>(attack_boost, spell_damage_boost, false));
+		}
 	}
 
 	void ParseCrystal(Json::Value const& json, GameEngine::PlayerStat::Crystal & crystal) const
