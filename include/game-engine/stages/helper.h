@@ -57,6 +57,8 @@ public:
 
 	static void Transform(Board & board, SlotIndex target, int new_card_id);
 
+	static void Heal(GameEngine::Board & board, SlotIndex target_idx, int heal_amount);
+
 public: // randomly choose
 	// TODO: use BoardTargets interface
 	static Minion & RandomChooseMinion(Minions & minions);

@@ -369,6 +369,19 @@ namespace GameEngine
 		board.hook_manager.HookAfterMinionTransformed(minion);
 	}
 
+	inline void StageHelper::Heal(GameEngine::Board & board, SlotIndex target_idx, int heal_amount)
+	{
+		if (target_idx == SlotIndex::SLOT_PLAYER_HERO) {
+			board.player.hero.Heal(heal_amount);
+		}
+		else if (target_idx == SlotIndex::SLOT_OPPONENT_HERO) {
+			board.opponent.hero.Heal(heal_amount);
+		}
+		else {
+			board.object_manager.GetMinion(target_idx).Heal(heal_amount);
+		}
+	}
+
 	inline Minion & StageHelper::RandomChooseMinion(Minions & minions)
 	{
 		int count = minions.GetMinionCount();

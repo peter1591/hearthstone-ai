@@ -50,6 +50,7 @@ public: \
 #include "card_CS2_189.h"
 #include "card_CS2_222.h"
 #include "card_DS1_055.h"
+#include "card_EX1_011.h"
 #include "card_EX1_015.h"
 #include "card_EX1_029.h"
 #include "card_EX1_277.h"
