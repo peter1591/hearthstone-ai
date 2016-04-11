@@ -15,13 +15,16 @@ namespace GameEngine {
 		typedef GameEngine::OnDeathTrigger<GameEngine::Hero &> OnDeathTrigger;
 
 	public:
-		Weapon() : card_id(-1) {}
+		Weapon() { this->Clear(); }
 
 		bool IsValid() const { return this->card_id > 0; }
 		void InValidate() { this->card_id = -1; }
 
 		void Clear() {
 			this->InValidate();
+			this->cost = 0;
+			this->attack = 0;
+			this->durability = 0;
 			this->forgetful = 0;
 			this->freeze_attack = false;
 			this->windfury = false;
