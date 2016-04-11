@@ -54,6 +54,9 @@ private:
 	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
+	int initial_rand_seed;
+	int initialized_in_thread;
+
 	std::unique_ptr<BoardInitializer> board_initializer;
 	Tree tree;
 	BoardFinder board_finder;

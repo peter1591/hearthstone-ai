@@ -5,6 +5,7 @@
 
 inline MCTS::MCTS()
 {
+	this->initialized_in_thread = false;
 	this->allocated_node = new TreeNode;
 #ifdef DEBUG_PRINT_MOVE
 	this->iteration_count = 0;
@@ -19,12 +20,17 @@ inline MCTS::~MCTS()
 
 inline void MCTS::Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer_)
 {
-	srand(rand_seed);
+	this->initial_rand_seed = rand_seed;
+	this->initialized_in_thread = false;
 	this->board_initializer = std::move(board_initializer_);
 }
 
 inline void MCTS::Iterate()
 {
+	if (!this->initialized_in_thread) {
+		srand(this->initial_rand_seed);
+		this->initialized_in_thread = true;
+	}
 	this->current_start_board_random = rand();
 
 #ifdef DEBUG_PRINT_MOVE
