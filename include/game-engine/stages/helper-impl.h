@@ -605,6 +605,20 @@ namespace GameEngine
 		return false;
 	}
 
+	inline bool StageHelper::PlaySpell(Player & player, Board::PlayHandCardData const & data)
+	{
+		auto playing_card = player.hand.GetCard(data.hand_card);
+		player.hand.RemoveCard(data.hand_card);
+
+#ifdef DEBUG
+		if (playing_card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
+#endif
+
+		player.stat.crystal.CostCrystals(playing_card.cost);
+
+		return StageHelper::PlaySpell(player, playing_card, data.target);
+	}
+
 	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex target)
 	{
 		// TODO: reduce crystal here?

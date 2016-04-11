@@ -36,7 +36,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool EquipWeapon(Player & player, Board::PlayHandCardData const& data);
 
 	// return true is game ends
-	static bool PlaySpell(Player & player, Card const& card, SlotIndex target);
+	static bool PlaySpell(Player & player, Board::PlayHandCardData const& data);
 
 	// return true is game ends
 	static bool UseHeroPower(Player & player, SlotIndex target);
@@ -71,6 +71,7 @@ private:
 	static void Fatigue(GameEngine::Board & board, SlotIndex side);
 
 	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
+	static bool PlaySpell(Player & player, Card const& card, SlotIndex target);
 };
 
 } // namespace GameEngine

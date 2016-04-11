@@ -18,20 +18,7 @@ namespace GameEngine {
 
 		static void Go(Board &board)
 		{
-			auto & player = board.player;
-			const Board::PlayHandCardData &data = board.data.play_hand_card_data;
-
-			auto playing_card = player.hand.GetCard(data.hand_card);
-			player.hand.RemoveCard(data.hand_card);
-
-#ifdef DEBUG
-			if (playing_card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
-#endif
-
-			player.stat.crystal.CostCrystals(playing_card.cost);
-
-			if (StageHelper::PlaySpell(player, playing_card, data.target)) return; // game ends
-
+			if (StageHelper::PlaySpell(board.player, board.data.play_hand_card_data)) return; // game ends;
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 		}
 	};
