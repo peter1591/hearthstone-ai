@@ -533,6 +533,28 @@ namespace GameEngine
 		return false; // state not changed
 	}
 
+	inline bool StageHelper::PlayMinion(Player & player, Board::PlayHandMinionData & data)
+	{
+		Board & board = player.board;
+
+		auto playing_card = player.hand.GetCard(data.hand_card);
+		player.hand.RemoveCard(data.hand_card);
+
+#ifdef DEBUG
+		if (playing_card.type != Card::TYPE_MINION) throw std::runtime_error("card type is not minion");
+#endif
+
+		player.stat.crystal.CostCrystals(playing_card.cost);
+
+#ifndef CHOOSE_WHERE_TO_PUT_MINION
+		if (data.data.put_location != SlotIndexHelper::GetMinionIndex(player.side, 0)) throw std::runtime_error("check failed");
+		if (player.minions.GetMinionCount() >= 7) throw std::runtime_error("minions full");
+		data.data.put_location = SlotIndexHelper::GetMinionIndex(player.side, board.random_generator.GetRandom(player.minions.GetMinionCount() + 1));
+#endif
+
+		return StageHelper::PlayMinion(player, playing_card, data.data);
+	}
+
 	// return true if game ends
 	inline bool StageHelper::PlayMinion(Player & player, Card const & card, PlayMinionData const & data)
 	{
