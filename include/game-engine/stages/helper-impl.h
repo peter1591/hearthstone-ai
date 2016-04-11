@@ -359,11 +359,12 @@ namespace GameEngine
 
 		board.hook_manager.HookBeforeMinionTransform(minion, new_card_id);
 
-		// TODO: deathrattle should be in the MinionData
 		// do not trigger deathrattle
 		// do not trigger on-summon triggers
 		minion.enchantments.Clear();
 		minion.auras.Clear();
+
+		// deathrattle will be added in the MinionData::FromCard()
 		minion.Transform(MinionData::FromCard(CardDatabase::GetInstance().GetCard(new_card_id)));
 
 		board.hook_manager.HookAfterMinionTransformed(minion);

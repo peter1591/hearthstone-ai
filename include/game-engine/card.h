@@ -117,8 +117,6 @@ class Card
 		};
 
 		struct Spell {
-			// TODO
-
 			void Clear() {
 			}
 		};
