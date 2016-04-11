@@ -33,7 +33,7 @@ public: // return true if game state changed (e.g., win/loss)
 	static bool SummonMinion(Card const& card, MinionIterator & it);
 
 	// return true is game ends
-	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
+	static bool EquipWeapon(Player & player, Board::PlayHandCardData const& data);
 
 	// return true is game ends
 	static bool PlaySpell(Player & player, Card const& card, SlotIndex target);
@@ -69,6 +69,8 @@ private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
 	static void RemoveMinionsIfDead(Board & board, SlotIndex side);
 	static void Fatigue(GameEngine::Board & board, SlotIndex side);
+
+	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
 };
 
 } // namespace GameEngine

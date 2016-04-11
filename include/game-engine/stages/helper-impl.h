@@ -567,6 +567,21 @@ namespace GameEngine
 		return true;
 	}
 
+	inline bool StageHelper::EquipWeapon(Player & player, Board::PlayHandCardData const & data)
+	{
+		auto playing_card = player.hand.GetCard(data.hand_card);
+		player.hand.RemoveCard(data.hand_card);
+
+#ifdef DEBUG
+		if (playing_card.type != Card::TYPE_WEAPON) throw std::runtime_error("card type is not weapon");
+		// TODO: check card id
+#endif
+
+		player.stat.crystal.CostCrystals(playing_card.cost);
+
+		return StageHelper::EquipWeapon(player, playing_card, data.target);
+	}
+
 	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, SlotIndex target)
 	{
 #ifdef DEBUG
