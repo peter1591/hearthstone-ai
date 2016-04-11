@@ -574,7 +574,7 @@ namespace GameEngine
 
 #ifdef DEBUG
 		if (playing_card.type != Card::TYPE_WEAPON) throw std::runtime_error("card type is not weapon");
-		// TODO: check card id
+		if (playing_card.id != data.card_id) throw std::runtime_error("card id not match");
 #endif
 
 		player.stat.crystal.CostCrystals(playing_card.cost);
