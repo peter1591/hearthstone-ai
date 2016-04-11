@@ -54,12 +54,19 @@ private:
 
 		deck_initializer.InitializeHand(json["deck"]["played_cards"], json["hand"]["cards"], player.hand);
 
+		this->ParseWeapon(json["weapon"], player);
+
 		// TODO: spell damage
 		//      CURRENT_SPELLPOWER
 
 		// TODO: secrets
 
 		// TODO: add known enchantments (e.g., one-turn effects)
+
+		if (player.hero.GetWeaponAttack() != json["weapon"]["attack"].asInt()) {
+			throw std::runtime_error("weapon is enchanted? we're not supported it yet.");
+		}
+
 		// add an enchantment to make the stat correct
 		int attack_boost = json["hero"]["attack"].asInt() - player.hero.GetAttack();
 		int spell_damage_boost = 0; // TODO: parse the player's spell damage boost
@@ -96,9 +103,27 @@ private:
 		hero_data.hero_power.cost = card_hero_power.cost;
 		hero_data.hero_power.used_this_turn = json["hero_power"]["used"].asBool();
 
-		// TODO: hero_data.weapon
+		hero_data.weapon.Clear();
 
 		hero.SetHero(hero_data);
+	}
+
+	void ParseWeapon(Json::Value const& json, GameEngine::Player & player) const
+	{
+		if (json["equipped"].asBool() == false) return;
+
+		// TODO: test if this parse is correct
+		int weapon_card_id = GameEngine::CardDatabase::GetInstance().GetCardIdFromOriginalId(json["card_id"].asString());
+		GameEngine::Card weapon_card = GameEngine::CardDatabase::GetInstance().GetCard(weapon_card_id);
+
+		auto & weapon_data = player.hero.GetHeroDataForBoardInitialization().weapon;
+		weapon_data.card_id = weapon_card_id;
+		weapon_data.cost = weapon_card.cost;
+		weapon_data.attack = weapon_card.data.weapon.attack;
+		weapon_data.durability = json["durability"].asInt() - json["damage"].asInt();
+		weapon_data.forgetful = weapon_card.data.weapon.forgetful;
+		weapon_data.freeze_attack = weapon_card.data.weapon.freeze;
+		weapon_data.windfury = weapon_card.data.weapon.windfury;
 	}
 
 	void ParseMinions(Json::Value const& json, GameEngine::Minions & minions) const

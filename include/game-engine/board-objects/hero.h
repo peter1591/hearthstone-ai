@@ -30,6 +30,7 @@ namespace GameEngine {
 		bool operator!=(Hero const& rhs) const { return this->hero != rhs.hero; }
 
 		Board & GetBoard() const { return this->board; }
+		HeroData & GetHeroDataForBoardInitialization() { return this->hero; }
 
 		void SetHero(HeroData const& hero_)
 		{
