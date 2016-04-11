@@ -109,23 +109,25 @@ private:
 		for (unsigned int i = 0; i < json.size(); ++i)
 		{
 			auto const& json_minion = json[i];
+			int card_id = GameEngine::CardDatabase::GetInstance().GetCardIdFromOriginalId(json_minion["card_id"].asString());
 
 			bool silenced = json_minion["silenced"].asBool();
 
 			GameEngine::MinionData minion_data = this->ParseMinion(json_minion);
 
+			auto minion_it = minions.InsertBefore(minions.GetEndIterator(), std::move(minion_data));
+
 			if (silenced) {
 				// clear deathrattles
 				minion_data.triggers_on_death.clear();
 
-				// TODO: clear auras
+				// auras are not attached since it's slienced
 			}
 			else {
 				// original deathrattles have been added in 'ParseMinion'
+
+				GameEngine::Cards::CardCallbackManager::AttachAura(card_id, minion_it->auras);
 			}
-
-			auto minion_it = minions.InsertBefore(minions.GetEndIterator(), std::move(minion_data));
-
 
 			if (minion_it_map.size() != i) throw std::runtime_error("logic error");
 			minion_it_map.push_back(minion_it);
@@ -136,9 +138,10 @@ private:
 			auto const& json_minion = json[i];
 			auto minion_it = minion_it_map[i];
 
-			// TODO: enchantments
+			// TODO: add enchantments attached with aura
+			// TODO: add one turn enchantments
 
-			// TODO: set status
+			// set status
 			this->SetFinalMinionStatus(json_minion, minion_it);
 		}
 	}
