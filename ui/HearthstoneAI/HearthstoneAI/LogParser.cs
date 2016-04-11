@@ -23,6 +23,11 @@ namespace HearthstoneAI
             this.power_log_parser = new Parsers.PowerLogParser(this.frmMain, this.GameState);
             this.entity_choices_parser = new Parsers.EntityChoicesParser(this.frmMain, this.GameState);
             this.send_choices_parser = new Parsers.SendChoicesParser(this.frmMain, this.GameState);
+
+            this.power_log_parser.ActionStart += (sender, e) =>
+            {
+                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e));
+            };
         }
 
         private frmMain frmMain;
@@ -31,6 +36,12 @@ namespace HearthstoneAI
         private Parsers.EntityChoicesParser entity_choices_parser;
 
         public GameState GameState { get; }
+
+        public class ActionStartEventArgs : Parsers.PowerLogParser.ActionStartEventArgs
+        {
+            public ActionStartEventArgs(Parsers.PowerLogParser.ActionStartEventArgs e) : base(e) { }
+        };
+        public event EventHandler<ActionStartEventArgs> ActionStart;        
 
         public void Process(string log_line)
         {

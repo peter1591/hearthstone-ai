@@ -16,11 +16,22 @@ namespace HearthstoneAI
 
         private int change_id;
 
+        public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
+        public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
+
         public LogReader(frmMain frm)
         {
             this.change_id = 1;
             this.frmMain = frm;
             this.Reset();
+            this.log_parser.GameState.StartWaitingMainAction += (sender, e) =>
+            {
+                if (this.StartWaitingMainAction != null) this.StartWaitingMainAction(this, e);
+            };
+            this.log_parser.ActionStart += (sender, e) =>
+            {
+                if (this.ActionStart != null) this.ActionStart(this, e);
+            };
         }
 
         public int GetChangeId() { return this.change_id; }

@@ -39,6 +39,25 @@ namespace HearthstoneAI.Parsers
 
         private List<GameState.Entity> tmp_entities = new List<GameState.Entity>();
 
+        public class ActionStartEventArgs : EventArgs
+        {
+            public ActionStartEventArgs(ActionStartEventArgs e)
+            {
+                this.entity_id = e.entity_id;
+                this.block_type = e.block_type;
+            }
+
+            public ActionStartEventArgs(int entity_id, string block_type)
+            {
+                this.entity_id = entity_id;
+                this.block_type = block_type;
+            }
+
+            public int entity_id;
+            public string block_type;
+        }
+        public event EventHandler<ActionStartEventArgs> ActionStart;
+
         public PowerLogParser(frmMain frm, GameState game_state)
         {
             this.frm_main = frm;
@@ -299,6 +318,9 @@ namespace HearthstoneAI.Parsers
             if (entity_id < 0) this.frm_main.AddLog("[INFO] Cannot get entity id for action.");
 
             var target_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, target_raw);
+
+            if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(entity_id, block_type));
+
             yield return true;
 
             while (true)

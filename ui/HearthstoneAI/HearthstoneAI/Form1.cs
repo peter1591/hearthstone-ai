@@ -39,11 +39,28 @@ namespace HearthstoneAI
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            this.btnStart.Enabled = false;
+
             this.ai_communicator.Start();
 
             this.log_reader = new LogReader(this);
+            this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
+            this.log_reader.ActionStart += Log_reader_ActionStart;
 
             timerMainLoop.Enabled = true;
+        }
+
+        private void Log_reader_ActionStart(object sender, LogParser.ActionStartEventArgs e)
+        {
+            if (e.block_type == "TRIGGER") return;
+            if (e.block_type == "POWER") return;
+            if (e.block_type == "DEATHS") return;
+            this.AddLog("!!!!!!!!!!!!!!!!!!!! ACTION START [" + e.block_type + "] !!!!!!!!!!!!!!!!!!");
+        }
+
+        private void Log_reader_StartWaitingMainAction(object sender, GameState.StartWaitingMainActionEventArgs e)
+        {
+            //this.AddLog("StartWaitingMainAction called");
         }
 
         private int last_invoke_log_change_id = -1;
