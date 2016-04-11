@@ -612,6 +612,7 @@ namespace GameEngine
 
 #ifdef DEBUG
 		if (playing_card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
+		if (playing_card.id != data.card_id) throw std::runtime_error("card id not match");
 #endif
 
 		player.stat.crystal.CostCrystals(playing_card.cost);
