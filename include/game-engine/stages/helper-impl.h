@@ -579,25 +579,16 @@ namespace GameEngine
 
 		player.stat.crystal.CostCrystals(playing_card.cost);
 
-		return StageHelper::EquipWeapon(player, playing_card, data.target);
-	}
-
-	inline bool StageHelper::EquipWeapon(Player & player, Card const & card, SlotIndex target)
-	{
-#ifdef DEBUG
-		if (card.type != Card::TYPE_WEAPON) throw std::runtime_error("card type is not weapon");
-#endif
-
 		player.hero.DestroyWeapon();
 
-		Cards::CardCallbackManager::Weapon_BattleCry(card.id, player, target);
+		Cards::CardCallbackManager::Weapon_BattleCry(playing_card.id, player, data.target);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		player.hero.EquipWeapon(card);
-		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, player.hero);
+		player.hero.EquipWeapon(playing_card);
+		Cards::CardCallbackManager::Weapon_AfterEquipped(playing_card.id, player.hero);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		auto deathrattle = Cards::CardCallbackManager::GetWeaponDeathrattle(card.id);
+		auto deathrattle = Cards::CardCallbackManager::GetWeaponDeathrattle(playing_card.id);
 		if (deathrattle) {
 			player.hero.AddWeaponOnDeathTrigger(Hero::WeaponOnDeathTrigger(deathrattle));
 		}

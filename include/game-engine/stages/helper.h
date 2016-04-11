@@ -69,8 +69,6 @@ private:
 	static SlotIndex GetTargetForForgetfulAttack(GameEngine::Board & board, SlotIndex origin_attacked);
 	static void RemoveMinionsIfDead(Board & board, SlotIndex side);
 	static void Fatigue(GameEngine::Board & board, SlotIndex side);
-
-	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
 };
 
 } // namespace GameEngine
