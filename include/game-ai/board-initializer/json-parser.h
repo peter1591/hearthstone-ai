@@ -25,11 +25,11 @@ private:
 	{
 		// TODO: determine hand/deck type
 		DeckInitializer player_deck, opponent_deck;
-		//player_deck.SetDeck_BasicPracticeMage();
+		player_deck.SetDeck_BasicPracticeMage();
 		//opponent_deck.SetDeck_BasicPracticeMage();
 		//player_deck.SetDeck_BasicPracticeWarlock();
 		//opponent_deck.SetDeck_BasicPracticeWarlock();
-		player_deck.SetDeck_BasicPracticeDruid();
+		//player_deck.SetDeck_BasicPracticeDruid();
 		opponent_deck.SetDeck_BasicPracticeDruid();
 
 		this->ParsePlayer(this->origin_json["player"], board.player, player_deck);
