@@ -581,6 +581,11 @@ namespace GameEngine
 		Cards::CardCallbackManager::Weapon_AfterEquipped(card.id, player.hero);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
+		auto deathrattle = Cards::CardCallbackManager::GetWeaponDeathrattle(card.id);
+		if (deathrattle) {
+			player.hero.AddWeaponOnDeathTrigger(Hero::WeaponOnDeathTrigger(deathrattle));
+		}
+
 		return false;
 	}
 

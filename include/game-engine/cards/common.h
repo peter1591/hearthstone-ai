@@ -141,6 +141,49 @@ private:
 		}
 	};
 
+public: // weapon deathrattle
+	typedef void WeaponDeathrattleCallback(Hero & equipped_hero);
+	static WeaponDeathrattleCallback* GetWeaponDeathrattle(int card_id)
+	{
+		WeaponDeathrattleCallback* deathrattle;
+		if (CardCallbackManager::HandleCallback<Callback_GetWeaponDeathrattle>(card_id, deathrattle)) return deathrattle;
+		else return nullptr;
+	}
+private:
+	struct Callback_GetWeaponDeathrattle;
+
+	template <typename Card>
+	struct CardCallbackCaller<Card, Callback_GetWeaponDeathrattle>
+	{
+	private:
+		typedef char test_ret_if_yes;
+		typedef long test_ret_if_no;
+		template <class Card, typename T = decltype(&Card::WeaponDeathrattle)>
+		struct TestResultWrapper {
+			typedef test_ret_if_yes type;
+		};
+		template <typename T> static typename TestResultWrapper<T>::type TestMethodExists(void*);
+		template <typename T> static test_ret_if_no TestMethodExists(...);
+		template <typename TestResult>
+		static WeaponDeathrattleCallback* CallInternal(std::enable_if_t<(sizeof(TestResult) == sizeof(test_ret_if_yes))>*)
+		{
+			return &Card::WeaponDeathrattle;
+		}
+		template <typename TestResult>
+		static WeaponDeathrattleCallback* CallInternal(std::enable_if_t<(sizeof(TestResult) != sizeof(test_ret_if_yes))>*)
+		{
+			return nullptr;
+		}
+
+	public:
+		template <typename... Params> static bool Call(WeaponDeathrattleCallback * & deathrattle)
+		{
+			typedef decltype(TestMethodExists<Card>(nullptr)) TestResult;
+			deathrattle = CallInternal<TestResult>(nullptr);
+			return true;
+		}
+	};
+
 private: // aura
 	struct Callback_AttachAura;
 
