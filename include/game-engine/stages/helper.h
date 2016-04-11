@@ -28,7 +28,6 @@ public: // return true if game state changed (e.g., win/loss)
 
 	// include battle cry, and summoning minion
 	static bool PlayMinion(Player & player, Board::PlayHandMinionData & data);
-	static bool PlayMinion(Player & player, Card const& card, PlayMinionData const& data);
 
 	// no battle cry, return true if minion is successfully summoned
 	static bool SummonMinion(Card const& card, MinionIterator & it);

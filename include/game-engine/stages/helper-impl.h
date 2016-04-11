@@ -552,22 +552,12 @@ namespace GameEngine
 		data.data.put_location = SlotIndexHelper::GetMinionIndex(player.side, board.random_generator.GetRandom(player.minions.GetMinionCount() + 1));
 #endif
 
-		return StageHelper::PlayMinion(player, playing_card, data.data);
-	}
-
-	// return true if game ends
-	inline bool StageHelper::PlayMinion(Player & player, Card const & card, PlayMinionData const & data)
-	{
-#ifdef DEBUG
-		if (card.type != Card::TYPE_MINION) throw std::runtime_error("card type is not minion");
-#endif
-
-		Cards::CardCallbackManager::BattleCry(card.id, player, data);
+		Cards::CardCallbackManager::BattleCry(playing_card.id, player, data.data);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
-		auto it = player.board.object_manager.GetMinionIterator(data.put_location);
+		auto it = player.board.object_manager.GetMinionIterator(data.data.put_location);
 
-		StageHelper::SummonMinion(card, it);
+		StageHelper::SummonMinion(playing_card, it);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;
