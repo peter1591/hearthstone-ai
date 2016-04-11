@@ -616,18 +616,7 @@ namespace GameEngine
 
 		player.stat.crystal.CostCrystals(playing_card.cost);
 
-		return StageHelper::PlaySpell(player, playing_card, data.target);
-	}
-
-	inline bool StageHelper::PlaySpell(Player & player, Card const & card, SlotIndex target)
-	{
-		// TODO: reduce crystal here?
-
-#ifdef DEBUG
-		if (card.type != Card::TYPE_SPELL) throw std::runtime_error("card type is not spell");
-#endif
-
-		Cards::CardCallbackManager::Spell_Go(card.id, player, target);
+		Cards::CardCallbackManager::Spell_Go(playing_card.id, player, data.target);
 		if (StageHelper::CheckHeroMinionDead(player.board)) return true;
 
 		return false;

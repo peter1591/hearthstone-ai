@@ -71,7 +71,6 @@ private:
 	static void Fatigue(GameEngine::Board & board, SlotIndex side);
 
 	static bool EquipWeapon(Player & player, Card const& card, SlotIndex target);
-	static bool PlaySpell(Player & player, Card const& card, SlotIndex target);
 };
 
 } // namespace GameEngine
