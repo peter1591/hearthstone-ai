@@ -19,10 +19,7 @@ class StagePlayerTurnStart
 		static void Go(Board &board)
 		{
 			if (StageHelper::PlayerDrawCard(board.player)) return;
-
-			board.player.stat.crystal.TurnStart();
 			board.hook_manager.PlayerTurnStart();
-
 			board.stage = STAGE_PLAYER_CHOOSE_BOARD_MOVE;
 	}
 };

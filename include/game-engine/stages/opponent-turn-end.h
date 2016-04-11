@@ -17,7 +17,6 @@ class StageOpponentTurnEnd
 		static void Go(Board &board)
 		{
 			board.hook_manager.OpponentTurnEnd();
-
 			board.stage = STAGE_PLAYER_TURN_START;
 		}
 };

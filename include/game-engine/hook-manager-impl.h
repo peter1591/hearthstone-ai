@@ -12,6 +12,7 @@ namespace GameEngine
 
 	inline void HookManager::PlayerTurnStart()
 	{
+		this->board.player.stat.crystal.TurnStart();
 		this->board.player.hero.TurnStart(true);
 		this->board.opponent.hero.TurnStart(false);
 		this->board.player.minions.TurnStart(true);
@@ -29,6 +30,7 @@ namespace GameEngine
 
 	inline void HookManager::OpponentTurnStart()
 	{
+		this->board.opponent.stat.crystal.TurnStart();
 		this->board.opponent.hero.TurnStart(true);
 		this->board.player.hero.TurnStart(false);
 		this->board.opponent.minions.TurnStart(true);
