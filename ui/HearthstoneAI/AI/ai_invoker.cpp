@@ -143,9 +143,9 @@ void AIInvoker::HandleJob(NewGameJob * job)
 	for (const auto &task : this->tasks)
 	{
 		if (pause_notifiers.find(task) == pause_notifiers.end()) {
-			pause_notifiers[task] = new Task::PauseNotifier();
+			pause_notifiers[task].reset(new Task::PauseNotifier());
 		}
-		task->Start(run_until, pause_notifiers[task]);
+		task->Start(run_until, pause_notifiers[task].get());
 	}
 }
 
@@ -163,13 +163,8 @@ void AIInvoker::StopCurrentJob()
 	if (this->current_job) delete this->current_job;
 	this->current_job = nullptr;
 
-	for (const auto &task : this->tasks)
-	{
+	for (const auto &task : this->tasks) {
 		delete task;
-		if (this->pause_notifiers.find(task) != this->pause_notifiers.end()) {
-			delete this->pause_notifiers[task];
-		}
-		this->pause_notifiers.erase(task);
 	}
 	this->tasks.clear();
 

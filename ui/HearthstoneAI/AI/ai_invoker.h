@@ -85,5 +85,5 @@ private: // context for current job
 	std::chrono::time_point<std::chrono::steady_clock> start_time;
 	std::vector<MCTS*> mcts;
 	std::vector<Task*> tasks;
-	std::map<Task*, Task::PauseNotifier*> pause_notifiers;
+	std::map<Task*, std::unique_ptr<Task::PauseNotifier>> pause_notifiers;
 };
