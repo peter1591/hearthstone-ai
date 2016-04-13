@@ -73,6 +73,16 @@ namespace HearthstoneAI.Communicator
             this.last_get_best_move = DateTime.Now;
         }
 
+        public void HandleBoardActionStart(Board.Game game)
+        {
+            ActionBoardActionStart action = new ActionBoardActionStart(this.GetNextActionSequenceId(), game);
+            this.SendRequest(action);
+
+            this.request_running = true;
+            this.last_request_start = DateTime.Now;
+            this.last_get_best_move = DateTime.Now;
+        }
+
         public void Cancel()
         {
             this.SendRequest(new ActionCancel(this.GetNextActionSequenceId()));

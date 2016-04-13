@@ -55,7 +55,21 @@ namespace HearthstoneAI
             if (e.block_type == "TRIGGER") return;
             if (e.block_type == "POWER") return;
             if (e.block_type == "DEATHS") return;
-            this.AddLog("!!!!!!!!!!!!!!!!!!!! ACTION START [" + e.block_type + "] !!!!!!!!!!!!!!!!!!");
+
+            var game_stage = this.GetGameStage(e.game);
+            if (game_stage != GameStage.STAGE_PLAYER_CHOICE && game_stage != GameStage.STAGE_OPPONENT_CHOICE)
+            {
+                this.AddLog("!!!!!!!!!!!!!!!!!!!!!! Game stage is not a choice stage in action start callback !!!!!!!!!!!!!!");
+                return;
+            }
+            Board.Game board = new Board.Game();
+            bool parse_success = board.Parse(this.log_reader.GetGameState());
+            if (parse_success == false)
+            {
+                this.AddLog("!!!!!!!!!!!!!!!!!!!! Failed to parse board in action start callback!!!!!!!!!!!!!!!");
+                return;
+            }
+            this.ai_communicator.HandleBoardActionStart(board);
         }
 
         private void Log_reader_StartWaitingMainAction(object sender, GameState.StartWaitingMainActionEventArgs e)

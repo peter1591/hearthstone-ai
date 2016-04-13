@@ -64,6 +64,7 @@
     <Compile Include="Board\Status.cs" />
     <Compile Include="Board\Weapon.cs" />
     <Compile Include="Communicator\ActionBase.cs" />
+    <Compile Include="Communicator\ActionBoardActionStart.cs" />
     <Compile Include="Communicator\ActionCancel.cs" />
     <Compile Include="Communicator\ActionGetBestMove.cs" />
     <Compile Include="Communicator\ActionGetCurrentBestMove.cs" />
