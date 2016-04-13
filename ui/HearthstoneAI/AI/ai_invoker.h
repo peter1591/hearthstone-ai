@@ -80,6 +80,7 @@ private:
 
 	bool abort_flag;
 	bool flag_generate_best_move;
+	bool running;
 
 private: // context for current job
 	std::chrono::time_point<std::chrono::steady_clock> start_time;

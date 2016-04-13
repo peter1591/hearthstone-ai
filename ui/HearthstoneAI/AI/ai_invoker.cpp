@@ -49,6 +49,7 @@ void AIInvoker::CreateNewTask(Json::Value game)
 		NewGameJob * new_job = new NewGameJob();
 		new_job->game = game;
 		instance->DiscardAndSetPendingJob(new_job);
+		instance->running = true;
 	});
 }
 
@@ -57,7 +58,7 @@ void AIInvoker::CancelAllTasks()
 	std::unique_lock<std::mutex> lock(this->mtx_pending_operations);
 	this->pending_operations.push_back([] (AIInvoker* instance) {
 		instance->DiscardAndSetPendingJob(nullptr);
-		instance->StopCurrentJob();
+		instance->running = false; // just pause
 	});
 }
 
@@ -115,6 +116,8 @@ void AIInvoker::HandleJob(NewGameJob * job)
 		just_initailized = true;
 	}
 
+	if (!this->running) return;
+
 	if (!just_initailized) {
 		auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - this->start_time).count();
 		int total_iterations = 0;
@@ -134,6 +137,7 @@ void AIInvoker::HandleJob(NewGameJob * job)
 	if (!just_initailized ) {
 		for (const auto &task : this->tasks) {
 			pause_notifiers[task]->WaitUntilPaused();
+			pause_notifiers.erase(task);
 		}
 	}
 
@@ -151,12 +155,15 @@ void AIInvoker::HandleJob(NewGameJob * job)
 
 void AIInvoker::StopCurrentJob()
 {
-	for (const auto &task : this->tasks)
-	{
+	for (const auto &task : this->tasks) {
 		task->Stop();
+		if (this->pause_notifiers[task]) {
+			this->pause_notifiers[task]->WaitUntilPaused();
+			this->pause_notifiers.erase(task);
+		}
 	}
-	for (const auto &task : this->tasks)
-	{
+
+	for (const auto &task : this->tasks) {
 		task->Join();
 	}
 

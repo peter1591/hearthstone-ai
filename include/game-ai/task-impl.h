@@ -85,6 +85,9 @@ inline void Task::MainLoop()
 			continue;
 
 		case Task::STATE_STOPPED:
+			if (this->pause_notifier != nullptr) {
+				this->pause_notifier->NotifyPaused();
+			}
 			return;
 		}
 
