@@ -21,6 +21,7 @@ public:
 	void CancelAllTasks();
 	void GenerateCurrentBestMoves();
 	void GenerateBestMovesAndFinish();
+	void BoardActionStart(Json::Value game);
 
 	void Cleanup();
 
@@ -44,6 +45,12 @@ private:
 		Json::Value game;
 	};
 
+	class ActionStartJob : public Job
+	{
+	public:
+		Json::Value game;
+	};
+
 private: // non-thread-safe functions
 	void MainLoop();
 	static void ThreadCallBack(AIInvoker * instance);
@@ -54,6 +61,7 @@ private: // non-thread-safe functions
 	void StopCurrentJob();
 
 	void HandleJob(NewGameJob * job);
+	void HandleJob(ActionStartJob * job);
 
 	void GenerateCurrentBestMoves_Internal();
 

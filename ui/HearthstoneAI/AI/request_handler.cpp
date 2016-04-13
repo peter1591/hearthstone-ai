@@ -37,6 +37,11 @@ void RequestHandler::Process(std::string const& raw_input)
 		this->ai_invoker.GenerateCurrentBestMoves();
 		this->SendResponse_Ack(input);
 	}
+	else if (action == "BoardActionStart") {
+		this->SendResponse_Ack(input);
+		if (!input.isMember("game")) this->SendResponse_Error(input, "missing field: 'game'");
+		else this->ai_invoker.BoardActionStart(input["game"]);
+	}
 	else {
 		this->SendResponse_Error(input, "Unrecognized action");
 	}

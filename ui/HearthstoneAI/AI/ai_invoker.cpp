@@ -63,12 +63,27 @@ void AIInvoker::GenerateCurrentBestMoves()
 	});
 }
 
+void AIInvoker::BoardActionStart(Json::Value game)
+{
+	std::unique_lock<std::mutex> lock(this->mtx_pending_operations);
+	this->pending_operations.push_back([game](AIInvoker* instance) {
+		ActionStartJob * new_job = new ActionStartJob();
+		new_job->game = game;
+		instance->DiscardAndSetPendingJob(new_job);
+		instance->running = true;
+	});
+}
+
 void AIInvoker::HandleCurrentJob()
 {
 	if (this->current_job == nullptr) return;
 
 	if (dynamic_cast<NewGameJob*>(this->current_job) != nullptr) {
 		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job));
+	}
+
+	if (dynamic_cast<ActionStartJob*>(this->current_job) != nullptr) {
+		return this->HandleJob(dynamic_cast<ActionStartJob*>(this->current_job));
 	}
 
 	throw std::runtime_error("unhandled job type");
@@ -144,6 +159,21 @@ void AIInvoker::HandleJob(NewGameJob * job)
 		}
 		task->Start(run_until, pause_notifiers[task].get());
 	}
+}
+
+void AIInvoker::HandleJob(ActionStartJob * job)
+{
+	std::cerr << "@@@@@@@@@@@@@@@@@@ Got an action start job @@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
+
+	//auto test_job = new NewGameJob();
+	//test_job->game = job->game;
+	//this->HandleJob(test_job);
+	//delete test_job;
+
+	delete this->current_job;
+	this->current_job = nullptr;
+
+	return;
 }
 
 void AIInvoker::StopCurrentJob()
