@@ -71,6 +71,8 @@ void AIInvoker::GenerateCurrentBestMoves()
 
 void AIInvoker::HandleCurrentJob()
 {
+	if (this->current_job == nullptr) return;
+
 	if (dynamic_cast<NewGameJob*>(this->current_job) != nullptr) {
 		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job));
 	}
@@ -207,7 +209,7 @@ void AIInvoker::MainLoop()
 			this->current_job = new_job;
 		}
 
-		if (this->current_job) this->HandleCurrentJob();
+		this->HandleCurrentJob();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
