@@ -64,6 +64,7 @@ private: // non-thread-safe functions
 	void HandleJob(ActionStartJob * job);
 
 	void GenerateCurrentBestMoves_Internal();
+	void InitializeTasks(Json::Value const& game);
 
 private: // thread-safe functions
 	void SetState(State state);

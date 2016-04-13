@@ -91,32 +91,12 @@ void AIInvoker::HandleCurrentJob()
 
 void AIInvoker::HandleJob(NewGameJob * job)
 {
-	constexpr int threads = 1; // TODO
 	constexpr int sec_each_run = 1;
 	constexpr int msec_total = 70 * 1000;
 
 	if (this->mcts.empty())
 	{
-		// initialize the job
-		std::mt19937 random_generator((unsigned int)time(nullptr));
-
-		for (int i = 0; i < threads; ++i) {
-
-			std::ofstream last_board_logger("./last_board.json", std::ios_base::out);
-			last_board_logger << job->game.toStyledString();
-			last_board_logger.flush();
-
-			std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(job->game));
-			MCTS * new_mcts = new MCTS();
-			new_mcts->Initialize(random_generator(), std::move(initializer));
-			this->mcts.push_back(new_mcts);
-
-			Task *new_task = new Task(*new_mcts);
-			new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
-
-			this->tasks.push_back(new_task);
-		}
-
+		this->InitializeTasks(job->game);
 		this->start_time = std::chrono::steady_clock::now();
 	}
 
@@ -210,6 +190,31 @@ void AIInvoker::GenerateCurrentBestMoves_Internal()
 	}
 	auto best_moves = decider.GetBestMoves();
 	best_moves.DebugPrint();
+}
+
+void AIInvoker::InitializeTasks(Json::Value const& game)
+{
+	constexpr int threads = 1; // TODO
+
+	std::mt19937 random_generator((unsigned int)time(nullptr));
+
+	for (int i = 0; i < threads; ++i) {
+
+		std::ofstream last_board_logger("./last_board.json", std::ios_base::out);
+		last_board_logger << game.toStyledString();
+		last_board_logger.flush();
+
+		std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(game));
+		MCTS * new_mcts = new MCTS();
+		new_mcts->Initialize(random_generator(), std::move(initializer));
+		this->mcts.push_back(new_mcts);
+
+		Task *new_task = new Task(*new_mcts);
+		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
+
+		this->tasks.push_back(new_task);
+	}
+
 }
 
 void AIInvoker::MainLoop()
