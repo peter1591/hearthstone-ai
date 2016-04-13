@@ -1,0 +1,289 @@
+{
+   "opponent" : {
+      "crystal" : {
+         "overload" : 0,
+         "overload_next_turn" : 0,
+         "this_turn" : 0,
+         "total" : 7,
+         "used" : 6
+      },
+      "deck" : {
+         "joust_cards" : [],
+         "known_cards" : [],
+         "played_cards" : [
+            "GAME_005",
+            "CS2_017",
+            "CS2_017",
+            "CS2_120",
+            "CS2_189",
+            "CS2_119",
+            "CS2_017",
+            "CS2_009",
+            "CS2_200",
+            "CS2_009",
+            "CS2_120",
+            "CS2_017"
+         ],
+         "total_cards" : 19
+      },
+      "enchantments" : [],
+      "fatigue" : 0,
+      "hand" : {
+         "cards" : [ "", "", "", "" ]
+      },
+      "hero" : {
+         "armor" : 1,
+         "attack" : 1,
+         "attacks_this_turn" : 0,
+         "card_id" : "HERO_06",
+         "damage" : 24,
+         "enchantments" : [
+            {
+               "card_id" : "CS2_017o",
+               "creator_entity_id" : 67
+            }
+         ],
+         "hero_power" : {
+            "card_id" : "CS2_017",
+            "used" : true
+         },
+         "max_hp" : 30,
+         "status" : {
+            "charge" : 0,
+            "divine_shield" : 0,
+            "forgetful" : 0,
+            "freeze" : 0,
+            "frozen" : 0,
+            "poisonous" : 0,
+            "stealth" : 0,
+            "taunt" : 0,
+            "windfury" : 0
+         }
+      },
+      "minions" : [
+         {
+            "attack" : 2,
+            "attacks_this_turn" : 0,
+            "card_id" : "CS2_120",
+            "damage" : 0,
+            "enchantments" : [],
+            "entity_id" : 40,
+            "exhausted" : true,
+            "max_hp" : 3,
+            "silenced" : false,
+            "spellpower" : 0,
+            "status" : {
+               "charge" : 0,
+               "divine_shield" : 0,
+               "forgetful" : 0,
+               "freeze" : 0,
+               "frozen" : 0,
+               "poisonous" : 0,
+               "stealth" : 0,
+               "taunt" : 0,
+               "windfury" : 0
+            },
+            "summoned_this_turn" : true
+         },
+         {
+            "attack" : 8,
+            "attacks_this_turn" : 1,
+            "card_id" : "CS2_200",
+            "damage" : 6,
+            "enchantments" : [
+               {
+                  "card_id" : "CS2_009e",
+                  "creator_entity_id" : 56
+               }
+            ],
+            "entity_id" : 39,
+            "exhausted" : true,
+            "max_hp" : 9,
+            "silenced" : false,
+            "spellpower" : 0,
+            "status" : {
+               "charge" : 0,
+               "divine_shield" : 0,
+               "forgetful" : 0,
+               "freeze" : 0,
+               "frozen" : 0,
+               "poisonous" : 0,
+               "stealth" : 0,
+               "taunt" : 1,
+               "windfury" : 0
+            },
+            "summoned_this_turn" : false
+         },
+         {
+            "attack" : 1,
+            "attacks_this_turn" : 0,
+            "card_id" : "CS2_tk1",
+            "damage" : 0,
+            "enchantments" : [],
+            "entity_id" : 73,
+            "exhausted" : false,
+            "max_hp" : 1,
+            "silenced" : false,
+            "spellpower" : 0,
+            "status" : {
+               "charge" : 0,
+               "divine_shield" : 0,
+               "forgetful" : 0,
+               "freeze" : 0,
+               "frozen" : 0,
+               "poisonous" : 0,
+               "stealth" : 0,
+               "taunt" : 0,
+               "windfury" : 0
+            },
+            "summoned_this_turn" : false
+         },
+         {
+            "attack" : 1,
+            "attacks_this_turn" : 1,
+            "card_id" : "CS2_189",
+            "damage" : 0,
+            "enchantments" : [],
+            "entity_id" : 42,
+            "exhausted" : true,
+            "max_hp" : 1,
+            "silenced" : false,
+            "spellpower" : 0,
+            "status" : {
+               "charge" : 0,
+               "divine_shield" : 0,
+               "forgetful" : 0,
+               "freeze" : 0,
+               "frozen" : 0,
+               "poisonous" : 0,
+               "stealth" : 0,
+               "taunt" : 0,
+               "windfury" : 0
+            },
+            "summoned_this_turn" : false
+         }
+      ],
+      "secrets" : [],
+      "weapon" : {
+         "attack" : 0,
+         "card_id" : "",
+         "damage" : 0,
+         "durability" : 0,
+         "enchantments" : [],
+         "equipped" : false
+      }
+   },
+   "player" : {
+      "crystal" : {
+         "overload" : 0,
+         "overload_next_turn" : 0,
+         "this_turn" : 0,
+         "total" : 7,
+         "used" : 6
+      },
+      "deck" : {
+         "joust_cards" : [],
+         "known_cards" : [ "CS2_200", "CS2_122", "CS2_023" ],
+         "played_cards" : [
+            "EX1_277",
+            "EX1_277",
+            "CS2_168",
+            "CS2_172",
+            "CS2_029",
+            "EX1_593",
+            "CS2_022",
+            "CS2_120",
+            "CS2_200"
+         ],
+         "total_cards" : 20
+      },
+      "enchantments" : [],
+      "fatigue" : 0,
+      "hand" : {
+         "cards" : [ "CS2_124" ]
+      },
+      "hero" : {
+         "armor" : 0,
+         "attack" : 0,
+         "attacks_this_turn" : 0,
+         "card_id" : "HERO_08",
+         "damage" : 8,
+         "enchantments" : [],
+         "hero_power" : {
+            "card_id" : "CS2_034",
+            "used" : false
+         },
+         "max_hp" : 30,
+         "status" : {
+            "charge" : 0,
+            "divine_shield" : 0,
+            "forgetful" : 0,
+            "freeze" : 0,
+            "frozen" : 0,
+            "poisonous" : 0,
+            "stealth" : 0,
+            "taunt" : 0,
+            "windfury" : 0
+         }
+      },
+      "minions" : [
+         {
+            "attack" : 4,
+            "attacks_this_turn" : 0,
+            "card_id" : "EX1_593",
+            "damage" : 0,
+            "enchantments" : [],
+            "entity_id" : 14,
+            "exhausted" : true,
+            "max_hp" : 4,
+            "silenced" : false,
+            "spellpower" : 0,
+            "status" : {
+               "charge" : 0,
+               "divine_shield" : 0,
+               "forgetful" : 0,
+               "freeze" : 0,
+               "frozen" : 0,
+               "poisonous" : 0,
+               "stealth" : 0,
+               "taunt" : 0,
+               "windfury" : 0
+            },
+            "summoned_this_turn" : false
+         },
+         {
+            "attack" : 2,
+            "attacks_this_turn" : 0,
+            "card_id" : "CS2_120",
+            "damage" : 0,
+            "enchantments" : [],
+            "entity_id" : 22,
+            "exhausted" : true,
+            "max_hp" : 3,
+            "silenced" : false,
+            "spellpower" : 0,
+            "status" : {
+               "charge" : 0,
+               "divine_shield" : 0,
+               "forgetful" : 0,
+               "freeze" : 0,
+               "frozen" : 0,
+               "poisonous" : 0,
+               "stealth" : 0,
+               "taunt" : 0,
+               "windfury" : 0
+            },
+            "summoned_this_turn" : false
+         }
+      ],
+      "secrets" : [],
+      "weapon" : {
+         "attack" : 0,
+         "card_id" : "",
+         "damage" : 0,
+         "durability" : 0,
+         "enchantments" : [],
+         "equipped" : false
+      }
+   }
+}

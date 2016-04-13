@@ -1,0 +1,110 @@
+{
+   "opponent" : {
+      "crystal" : {
+         "overload" : 0,
+         "overload_next_turn" : 0,
+         "this_turn" : 0,
+         "total" : 2,
+         "used" : 2
+      },
+      "deck" : {
+         "joust_cards" : [],
+         "known_cards" : [],
+         "played_cards" : [ "GAME_005", "CS2_017", "CS2_017" ],
+         "total_cards" : 24
+      },
+      "enchantments" : [],
+      "fatigue" : 0,
+      "hand" : {
+         "cards" : [ "", "", "", "", "", "" ]
+      },
+      "hero" : {
+         "armor" : 0,
+         "attack" : 0,
+         "attacks_this_turn" : 1,
+         "card_id" : "HERO_06",
+         "damage" : 6,
+         "enchantments" : [],
+         "hero_power" : {
+            "card_id" : "CS2_017",
+            "used" : true
+         },
+         "max_hp" : 30,
+         "status" : {
+            "charge" : 0,
+            "divine_shield" : 0,
+            "forgetful" : 0,
+            "freeze" : 0,
+            "frozen" : 0,
+            "poisonous" : 0,
+            "stealth" : 0,
+            "taunt" : 0,
+            "windfury" : 0
+         }
+      },
+      "minions" : [],
+      "secrets" : [],
+      "weapon" : {
+         "attack" : 0,
+         "card_id" : "",
+         "damage" : 0,
+         "durability" : 0,
+         "enchantments" : [],
+         "equipped" : false
+      }
+   },
+   "player" : {
+      "crystal" : {
+         "overload" : 0,
+         "overload_next_turn" : 0,
+         "this_turn" : 0,
+         "total" : 3,
+         "used" : 0
+      },
+      "deck" : {
+         "joust_cards" : [],
+         "known_cards" : [ "CS2_200", "CS2_122", "CS2_023" ],
+         "played_cards" : [ "EX1_277", "EX1_277", "CS2_168" ],
+         "total_cards" : 24
+      },
+      "enchantments" : [],
+      "fatigue" : 0,
+      "hand" : {
+         "cards" : [ "CS2_029", "EX1_593", "CS2_172" ]
+      },
+      "hero" : {
+         "armor" : 0,
+         "attack" : 0,
+         "attacks_this_turn" : 0,
+         "card_id" : "HERO_08",
+         "damage" : 1,
+         "enchantments" : [],
+         "hero_power" : {
+            "card_id" : "CS2_034",
+            "used" : false
+         },
+         "max_hp" : 30,
+         "status" : {
+            "charge" : 0,
+            "divine_shield" : 0,
+            "forgetful" : 0,
+            "freeze" : 0,
+            "frozen" : 0,
+            "poisonous" : 0,
+            "stealth" : 0,
+            "taunt" : 0,
+            "windfury" : 0
+         }
+      },
+      "minions" : [],
+      "secrets" : [],
+      "weapon" : {
+         "attack" : 0,
+         "card_id" : "",
+         "damage" : 0,
+         "durability" : 0,
+         "enchantments" : [],
+         "equipped" : false
+      }
+   }
+}
