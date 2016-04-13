@@ -26,7 +26,7 @@ namespace HearthstoneAI
 
             this.power_log_parser.ActionStart += (sender, e) =>
             {
-                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e));
+                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, this.GameState));
             };
         }
 
@@ -39,7 +39,12 @@ namespace HearthstoneAI
 
         public class ActionStartEventArgs : Parsers.PowerLogParser.ActionStartEventArgs
         {
-            public ActionStartEventArgs(Parsers.PowerLogParser.ActionStartEventArgs e) : base(e) { }
+            public ActionStartEventArgs(Parsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
+            {
+                this.game = game;
+            }
+
+            public GameState game;
         };
         public event EventHandler<ActionStartEventArgs> ActionStart;        
 
