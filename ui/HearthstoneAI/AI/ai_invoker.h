@@ -35,6 +35,12 @@ private:
 	class Job
 	{
 	public:
+		virtual ~Job() {}
+	};
+
+	class NewGameJob : public Job
+	{
+	public:
 		Json::Value game;
 	};
 
@@ -46,6 +52,8 @@ private: // non-thread-safe functions
 
 	void HandleCurrentJob();
 	void StopCurrentJob();
+
+	void HandleJob(NewGameJob * job);
 
 	void GenerateCurrentBestMoves_Internal();
 

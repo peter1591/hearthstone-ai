@@ -46,7 +46,7 @@ void AIInvoker::CreateNewTask(Json::Value game)
 
 	std::unique_lock<std::mutex> lock(this->mtx_pending_operations);
 	this->pending_operations.push_back([game](AIInvoker* instance) {
-		Job * new_job = new Job();
+		NewGameJob * new_job = new NewGameJob();
 		new_job->game = game;
 		instance->DiscardAndSetPendingJob(new_job);
 	});
@@ -71,6 +71,15 @@ void AIInvoker::GenerateCurrentBestMoves()
 
 void AIInvoker::HandleCurrentJob()
 {
+	if (dynamic_cast<NewGameJob*>(this->current_job) != nullptr) {
+		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job));
+	}
+
+	throw std::runtime_error("unhandled job type");
+}
+
+void AIInvoker::HandleJob(NewGameJob * job)
+{
 	constexpr int threads = 1; // TODO
 	constexpr int sec_each_run = 1;
 	constexpr int msec_total = 70 * 1000;
@@ -85,10 +94,10 @@ void AIInvoker::HandleCurrentJob()
 		for (int i = 0; i < threads; ++i) {
 
 			std::ofstream last_board_logger("./last_board.json", std::ios_base::out);
-			last_board_logger << this->current_job->game.toStyledString();
+			last_board_logger << job->game.toStyledString();
 			last_board_logger.flush();
 
-			std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(this->current_job->game));
+			std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(job->game));
 			MCTS * new_mcts = new MCTS();
 			new_mcts->Initialize(random_generator(), std::move(initializer));
 			this->mcts.push_back(new_mcts);
