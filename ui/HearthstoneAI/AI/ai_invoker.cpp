@@ -95,8 +95,6 @@ void AIInvoker::HandleJob(NewGameJob * job)
 	constexpr int sec_each_run = 1;
 	constexpr int msec_total = 70 * 1000;
 
-	bool just_initailized = false;
-
 	if (this->mcts.empty())
 	{
 		// initialize the job
@@ -120,8 +118,6 @@ void AIInvoker::HandleJob(NewGameJob * job)
 		}
 
 		this->start_time = std::chrono::steady_clock::now();
-
-		just_initailized = true;
 	}
 
 	if (!this->running) return;
@@ -140,11 +136,12 @@ void AIInvoker::HandleJob(NewGameJob * job)
 	//	return;
 	//}
 
-	if (!just_initailized ) {
-		for (const auto &task : this->tasks) {
-			pause_notifiers[task]->WaitUntilPaused();
-			pause_notifiers.erase(task);
-		}
+	for (const auto &task : this->tasks) {
+		auto it = pause_notifiers.find(task);
+		if (it == pause_notifiers.end()) continue;
+
+		it->second->WaitUntilPaused();
+		pause_notifiers.erase(it);
 	}
 
 	// start all threads
