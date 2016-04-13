@@ -126,21 +126,19 @@ void AIInvoker::HandleJob(NewGameJob * job)
 
 	if (!this->running) return;
 
-	if (!just_initailized) {
-		auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - this->start_time).count();
-		int total_iterations = 0;
-		for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
-		std::cerr << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
-			<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
-		std::cerr.flush();
+	auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - this->start_time).count();
+	int total_iterations = 0;
+	for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
+	std::cerr << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
+		<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
+	std::cerr.flush();
 
-		//if (elapsed_ms > msec_total)
-		//{
-		//	std::cerr << "ERROR: TIMEOUT!!!!" << std::endl;
-		//	this->StopCurrentJob();
-		//	return;
-		//}
-	}
+	//if (elapsed_ms > msec_total)
+	//{
+	//	std::cerr << "ERROR: TIMEOUT!!!!" << std::endl;
+	//	this->StopCurrentJob();
+	//	return;
+	//}
 
 	if (!just_initailized ) {
 		for (const auto &task : this->tasks) {
