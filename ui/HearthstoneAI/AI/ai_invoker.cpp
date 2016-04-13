@@ -37,6 +37,13 @@ void AIInvoker::Cleanup()
 
 void AIInvoker::CreateNewTask(Json::Value game)
 {
+	static int task_record_count = 1;
+	std::stringstream task_record_filename;
+	task_record_filename << "./task_" << task_record_count++ << ".json";
+	std::ofstream last_board_logger(task_record_filename.str(), std::ios_base::out);
+	last_board_logger << game.toStyledString();
+	last_board_logger.flush();
+
 	std::unique_lock<std::mutex> lock(this->mtx_pending_operations);
 	this->pending_operations.push_back([game](AIInvoker* instance) {
 		Job * new_job = new Job();
