@@ -27,7 +27,8 @@ void RequestHandler::Process(std::string const& raw_input)
 
 	if (action == "GetBestMove") {
 		this->SendResponse_Ack(input);
-		this->Process_GetBestMove(input);
+		if (!input.isMember("game")) this->SendResponse_Error(input, "missing field: 'game'");
+		else this->ai_invoker.CreateNewTask(input["game"]);
 	}
 	else if (action == "Cancel") {
 		this->ai_invoker.CancelAllTasks();
@@ -69,13 +70,6 @@ std::string RequestHandler::GetActionOrDefault(Json::Value const& json, std::str
 		return default_value;
 	}
 	return value;
-}
-
-void RequestHandler::Process_GetBestMove(Json::Value const& input)
-{
-	if (!input.isMember("game")) return this->SendResponse_Error(input, "missing field: 'game'");
-
-	this->ai_invoker.CreateNewTask(input["game"]);
 }
 
 void RequestHandler::SendResponse_Ack(Json::Value const& input)
