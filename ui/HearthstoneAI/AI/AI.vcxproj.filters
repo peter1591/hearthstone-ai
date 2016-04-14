@@ -536,5 +536,8 @@
     <ClInclude Include="..\..\..\include\game-ai\json-board-finder\board-comparator.h">
       <Filter>Header Files\game-ai\json-board-finder</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\tree.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

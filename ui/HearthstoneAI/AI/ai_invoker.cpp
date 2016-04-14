@@ -140,14 +140,9 @@ void AIInvoker::HandleJob(ActionStartJob * job)
 
 	for (auto & each_mcts : this->mcts)
 	{
-		// TODO: find board in each thread
+		// TODO: find board in each thread?
 		JsonBoardFinder::JsonBoardFinder::UpdateMCTS(*each_mcts, job->game);
 	}
-
-	//auto test_job = new NewGameJob();
-	//test_job->game = job->game;
-	//this->HandleJob(test_job);
-	//delete test_job;
 
 	this->current_job.reset(nullptr);
 

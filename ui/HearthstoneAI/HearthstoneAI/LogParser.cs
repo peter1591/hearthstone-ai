@@ -28,6 +28,10 @@ namespace HearthstoneAI
             {
                 if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, this.GameState));
             };
+            this.GameState.EndTurnEvent += (sender, e) =>
+            {
+                if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs(e, this.GameState));
+            };
         }
 
         private frmMain frmMain;
@@ -46,7 +50,18 @@ namespace HearthstoneAI
 
             public GameState game;
         };
-        public event EventHandler<ActionStartEventArgs> ActionStart;        
+        public event EventHandler<ActionStartEventArgs> ActionStart;
+
+        public class EndTurnEventArgs : GameState.EndTurnEventArgs
+        {
+            public EndTurnEventArgs(GameState.EndTurnEventArgs e, GameState game) : base(e)
+            {
+                this.game = game;
+            }
+
+            public GameState game;
+        };
+        public event EventHandler<EndTurnEventArgs> EndTurnEvent;
 
         public void Process(string log_line)
         {

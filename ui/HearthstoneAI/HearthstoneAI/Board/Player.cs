@@ -17,6 +17,9 @@ namespace HearthstoneAI.Board
         public int fatigue;
 
         [DataMember]
+        public bool first_player;
+
+        [DataMember]
         public Enchantments enchantments = new Enchantments();
 
         [DataMember]
@@ -44,6 +47,8 @@ namespace HearthstoneAI.Board
             ret = this.crystal.Parse(game, entity) && ret;
 
             this.fatigue = entity.GetTagOrDefault(GameTag.FATIGUE, 0);
+
+            this.first_player = (entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) != 0);
 
             ret = this.enchantments.Parse(game, entity) && ret;
 

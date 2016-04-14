@@ -16,6 +16,9 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Player opponent = new Player();
 
+        [DataMember]
+        public int turn;
+
         public bool Parse(GameState game)
         {
             bool ret = true;
@@ -32,6 +35,13 @@ namespace HearthstoneAI.Board
             else
             {
                 ret = this.opponent.Parse(game, opponent_entity) && ret;
+            }
+
+            GameState.Entity game_entity;
+            if (!game.TryGetGameEntity(out game_entity)) ret = false;
+            else
+            {
+                this.turn = game_entity.GetTagOrDefault(GameTag.TURN, 0);
             }
 
             return ret;

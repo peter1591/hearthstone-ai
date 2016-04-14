@@ -18,6 +18,7 @@ namespace HearthstoneAI
 
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
         public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
+        public event EventHandler<LogParser.EndTurnEventArgs> EndTurnEvent;
 
         public LogReader(frmMain frm)
         {
@@ -28,9 +29,15 @@ namespace HearthstoneAI
             {
                 if (this.StartWaitingMainAction != null) this.StartWaitingMainAction(this, e);
             };
+
             this.log_parser.ActionStart += (sender, e) =>
             {
                 if (this.ActionStart != null) this.ActionStart(this, e);
+            };
+
+            this.log_parser.EndTurnEvent += (sender, e) =>
+            {
+                if (this.EndTurnEvent != null) this.EndTurnEvent(this, e);
             };
         }
 

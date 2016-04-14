@@ -46,8 +46,26 @@ namespace HearthstoneAI
             this.log_reader = new LogReader(this);
             this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             this.log_reader.ActionStart += Log_reader_ActionStart;
+            this.log_reader.EndTurnEvent += Log_reader_EndTurnEvent;
 
             timerMainLoop.Enabled = true;
+        }
+
+        private void TriggerAIHandleBoardAction(GameState game)
+        {
+            Board.Game board = new Board.Game();
+            bool parse_success = board.Parse(game);
+            if (parse_success == false)
+            {
+                this.AddLog("!!!!!!!!!!!!!!!!!!!! Failed to parse board in action start callback!!!!!!!!!!!!!!!");
+                return;
+            }
+            this.ai_communicator.HandleBoardActionStart(board);
+        }
+
+        private void Log_reader_EndTurnEvent(object sender, LogParser.EndTurnEventArgs e)
+        {
+            this.TriggerAIHandleBoardAction(e.game);
         }
 
         private void Log_reader_ActionStart(object sender, LogParser.ActionStartEventArgs e)
@@ -62,14 +80,8 @@ namespace HearthstoneAI
                 this.AddLog("!!!!!!!!!!!!!!!!!!!!!! Game stage is not a choice stage in action start callback !!!!!!!!!!!!!!");
                 return;
             }
-            Board.Game board = new Board.Game();
-            bool parse_success = board.Parse(this.log_reader.GetGameState());
-            if (parse_success == false)
-            {
-                this.AddLog("!!!!!!!!!!!!!!!!!!!! Failed to parse board in action start callback!!!!!!!!!!!!!!!");
-                return;
-            }
-            this.ai_communicator.HandleBoardActionStart(board);
+
+            this.TriggerAIHandleBoardAction(e.game);
         }
 
         private void Log_reader_StartWaitingMainAction(object sender, GameState.StartWaitingMainActionEventArgs e)

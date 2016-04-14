@@ -188,10 +188,16 @@ namespace HearthstoneAI
         public List<string> player_played_hand_cards = new List<string>();
         public List<string> opponent_played_hand_cards = new List<string>();
 
-        public class StartWaitingMainActionEventArgs : EventArgs
-        {
-        }
+        public class StartWaitingMainActionEventArgs : EventArgs { }
         public event EventHandler<StartWaitingMainActionEventArgs> StartWaitingMainAction;
+
+        public class EndTurnEventArgs : EventArgs
+        {
+            public EndTurnEventArgs() { }
+            public EndTurnEventArgs(EndTurnEventArgs e) { }
+        }
+        public event EventHandler<EndTurnEventArgs> EndTurnEvent;
+
 
         public void CreateGameEntity(int id)
         {
@@ -264,6 +270,12 @@ namespace HearthstoneAI
                 case GameTag.MULLIGAN_STATE:
                     this.MulliganStateChanged(entity_id, GameTag.MULLIGAN_STATE, has_prev_value, prev_value, tag_value);
                     break;
+            }
+
+            // trigger end-turn action
+            if (entity_id == this.GameEntityId && tag == GameTag.STEP && tag_value == (int)TAG_STEP.MAIN_END)
+            {
+                if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs());
             }
 
             if (entity_id == this.GameEntityId && tag == GameTag.STEP && tag_value == (int)TAG_STEP.MAIN_ACTION)
