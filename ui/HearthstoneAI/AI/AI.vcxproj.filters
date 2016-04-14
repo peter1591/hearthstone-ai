@@ -40,6 +40,9 @@
     <Filter Include="Header Files\game-engine\board-objects">
       <UniqueIdentifier>{8290bbed-a80a-4410-bc25-03e60cdc6e52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-ai\json-board-finder">
+      <UniqueIdentifier>{73f4b8cd-cd3a-4c89-87aa-46e5f91264ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -135,9 +138,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\board-node-map-impl.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\task.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\tree.h">
@@ -523,6 +523,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\board-objects\weapon.h">
       <Filter>Header Files\game-engine\board-objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\json-board-finder.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-with-moves.h">
+      <Filter>Header Files\game-ai\board-initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\json-board-finder-impl.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\board-comparator.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
