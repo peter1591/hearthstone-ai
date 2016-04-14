@@ -74,6 +74,17 @@ void AIInvoker::BoardActionStart(Json::Value game)
 	});
 }
 
+void AIInvoker::WaitCurrentJobPaused()
+{
+	for (const auto &task : this->tasks) {
+		auto it = pause_notifiers.find(task);
+		if (it == pause_notifiers.end()) continue;
+
+		it->second->WaitUntilPaused();
+		pause_notifiers.erase(it);
+	}
+}
+
 void AIInvoker::HandleCurrentJob()
 {
 	if (this->current_job == nullptr) return;
@@ -92,37 +103,17 @@ void AIInvoker::HandleCurrentJob()
 void AIInvoker::HandleJob(NewGameJob * job)
 {
 	constexpr int sec_each_run = 1;
-	constexpr int msec_total = 70 * 1000;
 
-	if (this->mcts.empty())
-	{
-		this->InitializeTasks(job->game);
-		this->start_time = std::chrono::steady_clock::now();
-	}
+	this->WaitCurrentJobPaused();
+
+	if (this->mcts.empty()) this->InitializeTasks(job->game);
 
 	if (!this->running) return;
 
-	auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - this->start_time).count();
 	int total_iterations = 0;
 	for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
-	std::cerr << "Done " << total_iterations << " iterations in " << elapsed_ms << " ms"
-		<< " (Average: " << ((double)total_iterations * 1000 / elapsed_ms) << " iterations per second.)" << std::endl;
+	std::cerr << "Done " << total_iterations << " iterations" << std::endl;
 	std::cerr.flush();
-
-	//if (elapsed_ms > msec_total)
-	//{
-	//	std::cerr << "ERROR: TIMEOUT!!!!" << std::endl;
-	//	this->StopCurrentJob();
-	//	return;
-	//}
-
-	for (const auto &task : this->tasks) {
-		auto it = pause_notifiers.find(task);
-		if (it == pause_notifiers.end()) continue;
-
-		it->second->WaitUntilPaused();
-		pause_notifiers.erase(it);
-	}
 
 	// start all threads
 	auto run_until = std::chrono::steady_clock::now() +
@@ -139,6 +130,8 @@ void AIInvoker::HandleJob(NewGameJob * job)
 void AIInvoker::HandleJob(ActionStartJob * job)
 {
 	std::cerr << "@@@@@@@@@@@@@@@@@@ Got an action start job @@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
+
+	this->WaitCurrentJobPaused();
 
 	//auto test_job = new NewGameJob();
 	//test_job->game = job->game;
@@ -182,6 +175,8 @@ void AIInvoker::StopCurrentJob()
 
 void AIInvoker::GenerateCurrentBestMoves_Internal()
 {
+	this->WaitCurrentJobPaused();
+
 	if (this->mcts.empty()) return;
 
 	Decider decider;
@@ -238,6 +233,8 @@ void AIInvoker::MainLoop()
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
+
+	this->StopCurrentJob();
 
 	this->SetState(STATE_STOPPED);
 }

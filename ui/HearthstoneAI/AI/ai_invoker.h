@@ -57,6 +57,7 @@ private: // non-thread-safe functions
 
 	void ProcessPendingOperations();
 
+	void WaitCurrentJobPaused();
 	void HandleCurrentJob();
 	void StopCurrentJob();
 
@@ -92,7 +93,6 @@ private:
 	bool running;
 
 private: // context for current job
-	std::chrono::time_point<std::chrono::steady_clock> start_time;
 	std::vector<MCTS*> mcts;
 	std::vector<Task*> tasks;
 	std::map<Task*, std::unique_ptr<Task::PauseNotifier>> pause_notifiers;
