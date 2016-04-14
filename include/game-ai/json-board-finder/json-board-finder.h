@@ -12,6 +12,22 @@ namespace JsonBoardFinder
 	{
 	public:
 		static void UpdateMCTS(MCTS & mcts, Json::Value const& json_board);
-		static std::unique_ptr<BoardInitializer> FindBoard(BoardInitializer * start_board, Json::Value const& json_board);
+
+	private:
+		JsonBoardFinder(BoardInitializer * start_board, Json::Value const& json_board);
+
+		bool Iterate();
+
+		GameEngine::Move GetOneRandomNextMove(GameEngine::Board const& board);
+
+	private:
+		std::unique_ptr<BoardInitializer> FindBoard();
+
+	private:
+		BoardInitializer const* start_board;
+		Json::Value const& json_board;
+
+		int found_start_board_rand;
+		std::list<GameEngine::Move> found_applied_moves;
 	};
 } // namespace JsonBaordFinder

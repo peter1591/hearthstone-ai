@@ -111,7 +111,7 @@ public:
 		this->origin_deck.insert(CARD_ID_CS2_013); // Wild Growth
 	}
 
-	void InitializeHand(Json::Value const& played_cards, Json::Value const& hand_cards, GameEngine::Hand & hand) const
+	void InitializeHand(Json::Value const& played_cards, Json::Value const& hand_cards, GameEngine::Hand & hand, bool hand_has_coin) const
 	{
 		std::multiset<int> deck(this->origin_deck);
 
@@ -147,6 +147,11 @@ public:
 
 		for (auto const& deck_card : deck) {
 			hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(deck_card));
+		}
+
+		if (hand_has_coin) {
+			hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_GAME_005));
+			hand_cards_draw_from_deck--;
 		}
 
 		for (int i = 0; i < hand_cards_draw_from_deck; ++i) {

@@ -38,6 +38,7 @@ namespace GameEngine {
 	public:
 		void SetRandomSeed(unsigned int random_seed);
 		void SetStateToPlayerChooseBoardMove();
+		void SetStateToOpponentChooseBoardMove();
 
 		Stage GetStage() const { return this->stage; }
 		StageType GetStageType() const { return (StageType)(this->stage & STAGE_TYPE_FLAG); }

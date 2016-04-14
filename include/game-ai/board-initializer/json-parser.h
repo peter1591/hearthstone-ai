@@ -31,22 +31,66 @@ private:
 		//player_deck.SetDeck_BasicPracticeDruid();
 		opponent_deck.SetDeck_BasicPracticeDruid();
 
-		this->ParsePlayer(this->origin_json["player"], board.player, player_deck);
-		this->ParsePlayer(this->origin_json["opponent"], board.opponent, opponent_deck);
+		this->ParsePlayer(this->origin_json["player"], board.player);
+		this->ParsePlayer(this->origin_json["opponent"], board.opponent);
 
-		// TODO: set stage
-		board.SetStateToPlayerChooseBoardMove();
+		// parse stage
+		bool player_goes_first = this->origin_json["player"]["first_player"].asBool();
+		int turn = this->origin_json["turn"].asInt();
+
+		if (player_goes_first && (turn % 2 == 1)) {
+			board.SetStateToPlayerChooseBoardMove();
+		}
+		else if (!player_goes_first && (turn % 2 == 0)) {
+			board.SetStateToPlayerChooseBoardMove();
+		}
+		else {
+			board.SetStateToOpponentChooseBoardMove();
+		}
+
+		
+
+		this->InitializeHand(
+			this->origin_json["player"]["deck"]["played_cards"], this->origin_json["player"]["hand"]["cards"], false,
+			player_deck, board.player.hand);
+		this->InitializeHand(
+			this->origin_json["opponent"]["deck"]["played_cards"], this->origin_json["opponent"]["hand"]["cards"], player_goes_first,
+			opponent_deck, board.opponent.hand);
 	}
 
-	void ParsePlayer(Json::Value const& json, GameEngine::Player & player, DeckInitializer const& deck_initializer) const
+	void InitializeHand(Json::Value const& played_cards, Json::Value const& hand_cards, bool add_coin_if_not_played, DeckInitializer const& deck, GameEngine::Hand & hand) const
+	{
+		bool hand_has_coin = false;
+
+		if (add_coin_if_not_played) {
+			bool played_the_coin = false;
+
+			constexpr int the_coin_card_id = CARD_ID_GAME_005;
+			for (auto const& played_card : played_cards)
+			{
+				int card_id = GameEngine::CardDatabase::GetInstance().GetCardIdFromOriginalId(played_card.asString());
+				if (card_id < 0) {
+					continue;
+				}
+				if (card_id == the_coin_card_id) {
+					played_the_coin = true;
+					break;
+				}
+			}
+
+			if (!played_the_coin) hand_has_coin = true;
+		}
+
+		deck.InitializeHand(played_cards, hand_cards, hand, hand_has_coin);
+	}
+
+	void ParsePlayer(Json::Value const& json, GameEngine::Player & player) const
 	{
 		this->ParseCrystal(json["crystal"], player.stat.crystal);
 		player.stat.fatigue_damage = json["fatigue"].asInt();
 
 		this->ParseHero(json["hero"], player.hero);
 		this->ParseMinions(json["minions"], player.minions);
-
-		deck_initializer.InitializeHand(json["deck"]["played_cards"], json["hand"]["cards"], player.hand);
 
 		this->ParseWeapon(json["weapon"], player);
 
@@ -77,7 +121,7 @@ private:
 		int overload = json["overload"].asInt();
 		int overload_next_turn = json["overload_next_turn"].asInt();
 
-		crystal.Set(total + this_turn - used, total + this_turn, overload, overload_next_turn);
+		crystal.Set(total + this_turn - used, total, overload, overload_next_turn);
 	}
 
 	void ParseHero(Json::Value const& json, GameEngine::Hero & hero) const

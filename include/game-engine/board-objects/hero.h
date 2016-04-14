@@ -30,6 +30,7 @@ namespace GameEngine {
 		bool operator!=(Hero const& rhs) const { return this->hero != rhs.hero; }
 
 		Board & GetBoard() const { return this->board; }
+		HeroData const& GetHeroData() const { return this->hero; }
 		HeroData & GetHeroDataForBoardInitialization() { return this->hero; }
 
 		void SetHero(HeroData const& hero_)
@@ -79,6 +80,16 @@ namespace GameEngine {
 		void TakeDamage(int damage, bool poisonous) {
 			// Note: poisonous have no effect on heros
 			(void)poisonous;
+
+			if (this->hero.armor > 0) {
+				int armor_take_damage = damage;
+				if (armor_take_damage > this->hero.armor) {
+					armor_take_damage = this->hero.armor;
+				}
+				damage -= armor_take_damage;
+				this->hero.armor -= armor_take_damage;
+			}
+
 			this->hero.hp -= damage;
 		}
 
