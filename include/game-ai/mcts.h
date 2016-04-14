@@ -28,6 +28,7 @@ public: // Operations
 	void Iterate();
 
 public:
+	BoardInitializer * GetBoardInitializer() const;
 	Tree const& GetTree() const;
 
 private:

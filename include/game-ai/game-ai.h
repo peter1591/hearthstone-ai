@@ -7,6 +7,7 @@
 #include "game-ai/board-initializer/board-initializer.h"
 #include "mcts.h"
 #include "decider.h"
+#include "game-ai/json-board-finder/json-board-finder.h"
 
 // game-ai implementation details
 #include "traversed-path-recorder-impl.h"
@@ -18,3 +19,5 @@
 #include "board-initializer/start-board.h"
 #include "board-initializer/start-board-impl.h"
 #include "board-initializer/json-parser.h"
+
+#include "json-board-finder/json-board-finder-impl.h"

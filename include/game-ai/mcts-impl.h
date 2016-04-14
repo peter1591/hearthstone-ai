@@ -59,6 +59,11 @@ inline void MCTS::Iterate()
 	this->BackPropagate(is_win);
 }
 
+inline BoardInitializer * MCTS::GetBoardInitializer() const
+{
+	return this->board_initializer.get();
+}
+
 inline Tree const & MCTS::GetTree() const
 {
 	return this->tree;
