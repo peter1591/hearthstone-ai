@@ -86,7 +86,7 @@ private:
 	std::mutex mtx_pending_operations;
 	std::list<std::function<void(AIInvoker*)>> pending_operations;
 
-	Job * current_job;
+	std::unique_ptr<Job> current_job;
 
 	bool abort_flag;
 	bool flag_generate_best_move;

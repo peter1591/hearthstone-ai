@@ -87,14 +87,14 @@ void AIInvoker::WaitCurrentJobPaused()
 
 void AIInvoker::HandleCurrentJob()
 {
-	if (this->current_job == nullptr) return;
+	if (!this->current_job) return;
 
-	if (dynamic_cast<NewGameJob*>(this->current_job) != nullptr) {
-		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job));
+	if (dynamic_cast<NewGameJob*>(this->current_job.get()) != nullptr) {
+		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job.get()));
 	}
 
-	if (dynamic_cast<ActionStartJob*>(this->current_job) != nullptr) {
-		return this->HandleJob(dynamic_cast<ActionStartJob*>(this->current_job));
+	if (dynamic_cast<ActionStartJob*>(this->current_job.get()) != nullptr) {
+		return this->HandleJob(dynamic_cast<ActionStartJob*>(this->current_job.get()));
 	}
 
 	throw std::runtime_error("unhandled job type");
@@ -138,8 +138,7 @@ void AIInvoker::HandleJob(ActionStartJob * job)
 	//this->HandleJob(test_job);
 	//delete test_job;
 
-	delete this->current_job;
-	this->current_job = nullptr;
+	this->current_job.reset(nullptr);
 
 	return;
 }
@@ -158,8 +157,7 @@ void AIInvoker::StopCurrentJob()
 		task->Join();
 	}
 
-	if (this->current_job) delete this->current_job;
-	this->current_job = nullptr;
+	this->current_job.reset(nullptr);
 
 	for (const auto &task : this->tasks) {
 		delete task;
@@ -226,8 +224,7 @@ void AIInvoker::MainLoop()
 			if (dynamic_cast<NewGameJob*>(new_job)) {
 				this->StopCurrentJob();
 			}
-			if (this->current_job) delete this->current_job;
-			this->current_job = new_job;
+			this->current_job.reset(new_job);
 		}
 
 		this->HandleCurrentJob();
