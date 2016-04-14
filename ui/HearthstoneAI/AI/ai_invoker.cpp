@@ -148,7 +148,7 @@ void AIInvoker::StopCurrentJob()
 {
 	for (const auto &task : this->tasks) {
 		task->Stop();
-		if (this->pause_notifiers[task]) {
+		if (this->pause_notifiers.find(task) != this->pause_notifiers.end()) {
 			this->pause_notifiers[task]->WaitUntilPaused();
 			this->pause_notifiers.erase(task);
 		}
@@ -223,9 +223,10 @@ void AIInvoker::MainLoop()
 
 		Job * new_job = this->GetAndClearPendingJob();
 		if (new_job) {
-			if (this->current_job) {
+			if (dynamic_cast<NewGameJob*>(new_job)) {
 				this->StopCurrentJob();
 			}
+			if (this->current_job) delete this->current_job;
 			this->current_job = new_job;
 		}
 
