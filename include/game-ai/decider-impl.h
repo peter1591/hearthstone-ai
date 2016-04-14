@@ -171,6 +171,7 @@ inline bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &
 #endif
 
 	TreeNode const* node_ref = progress.front().node;
+	if (node_ref == nullptr) return false;
 
 	if (node_ref->stage_type == GameEngine::STAGE_TYPE_GAME_END) {
 		return false;
