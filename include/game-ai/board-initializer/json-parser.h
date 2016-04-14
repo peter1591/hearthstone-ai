@@ -11,17 +11,16 @@ class BoardJsonParser : public BoardInitializer
 public:
 	BoardJsonParser(Json::Value const& json) : origin_json(json)
 	{
-		this->first_time_parse = true;
 	}
 
-	void InitializeBoard(int rand_seed, GameEngine::Board & board)
+	void InitializeBoard(int rand_seed, GameEngine::Board & board) const
 	{
 		board.SetRandomSeed(rand_seed);
 		this->Parse(board);
 	}
 
 private:
-	void Parse(GameEngine::Board & board)
+	void Parse(GameEngine::Board & board) const
 	{
 		// TODO: determine hand/deck type
 		DeckInitializer player_deck, opponent_deck;
@@ -37,11 +36,6 @@ private:
 
 		// TODO: set stage
 		board.SetStateToPlayerChooseBoardMove();
-
-		if (this->first_time_parse) {
-			board.DebugPrint();
-			this->first_time_parse = false;
-		}
 	}
 
 	void ParsePlayer(Json::Value const& json, GameEngine::Player & player, DeckInitializer const& deck_initializer) const
@@ -217,5 +211,4 @@ private:
 
 private:
 	Json::Value origin_json;
-	bool first_time_parse;
 };

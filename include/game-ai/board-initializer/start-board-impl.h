@@ -366,7 +366,7 @@ inline StartBoard::StartBoard()
 	//InitializeDebugBoard3(this->board_debug1);
 }
 
-inline void StartBoard::InitializeBoard(int rand_seed, GameEngine::Board & board)
+inline void StartBoard::InitializeBoard(int rand_seed, GameEngine::Board & board) const
 {
 	//GameEngine::Board board = GameEngine::Board::Clone(this->board_debug1);
 	//board.SetRandomSeed(rand_seed);

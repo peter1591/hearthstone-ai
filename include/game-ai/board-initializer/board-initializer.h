@@ -7,5 +7,5 @@ class BoardInitializer
 public:
 	virtual ~BoardInitializer() {}
 
-	virtual void InitializeBoard(int rand_seed, GameEngine::Board & board) = 0;
+	virtual void InitializeBoard(int rand_seed, GameEngine::Board & board) const = 0;
 };
