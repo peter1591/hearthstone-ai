@@ -148,6 +148,10 @@
     <ClInclude Include="..\..\..\include\game-ai\decider-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\decider.h" />
     <ClInclude Include="..\..\..\include\game-ai\game-ai.h" />
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\board-comparator.h" />
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\json-board-finder-impl.h" />
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\json-board-finder.h" />
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\tree.h" />
     <ClInclude Include="..\..\..\include\game-ai\mcts-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\mcts.h" />
     <ClInclude Include="..\..\..\include\game-ai\task-impl.h" />

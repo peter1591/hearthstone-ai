@@ -46,6 +46,9 @@
     <Filter Include="Header Files\game-ai\board-initializer">
       <UniqueIdentifier>{0dc1f06a-8422-4cb5-89ee-a6c1ea863d8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-ai\json-board-finder">
+      <UniqueIdentifier>{873db983-064d-4de3-839f-f5b189f276d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -535,6 +538,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_017.h">
       <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\board-comparator.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\json-board-finder.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\json-board-finder-impl.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\json-board-finder\tree.h">
+      <Filter>Header Files\game-ai\json-board-finder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
