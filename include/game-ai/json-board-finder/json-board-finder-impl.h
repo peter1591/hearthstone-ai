@@ -18,11 +18,14 @@ namespace JsonBoardFinder
 	inline JsonBoardFinder::JsonBoardFinder(BoardInitializer * start_board, Json::Value const& json_board)
 		: start_board(start_board), json_board(json_board)
 	{
-		srand(0); // TODO: use a random seed?
+		this->next_rand_seed = 0; // TODO: use a better random seed?
 	}
 
 	inline bool JsonBoardFinder::Iterate()
 	{
+		srand(this->next_rand_seed);
+		this->next_rand_seed = rand();
+
 		this->found_applied_moves.clear();
 		this->found_start_board_rand = rand();
 

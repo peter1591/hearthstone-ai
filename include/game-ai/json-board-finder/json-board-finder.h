@@ -27,6 +27,7 @@ namespace JsonBoardFinder
 		BoardInitializer const* start_board;
 		Json::Value const& json_board;
 
+		int next_rand_seed;
 		int found_start_board_rand;
 		std::list<GameEngine::Move> found_applied_moves;
 	};
