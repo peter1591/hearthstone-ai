@@ -57,7 +57,7 @@ private: // non-thread-safe functions
 
 	void ProcessPendingOperations();
 
-	void WaitCurrentJobPaused();
+	void WaitCurrentJob();
 	void HandleCurrentJob();
 	void StopCurrentJob();
 
@@ -95,5 +95,5 @@ private:
 private: // context for current job
 	std::vector<MCTS*> mcts;
 	std::vector<Task*> tasks;
-	std::map<Task*, std::unique_ptr<Task::PauseNotifier>> pause_notifiers;
+	std::map<Task*, std::unique_ptr<Task::Notifier>> task_done_notifiers;
 };

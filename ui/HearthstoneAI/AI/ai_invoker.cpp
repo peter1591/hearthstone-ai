@@ -74,14 +74,14 @@ void AIInvoker::BoardActionStart(Json::Value game)
 	});
 }
 
-void AIInvoker::WaitCurrentJobPaused()
+void AIInvoker::WaitCurrentJob()
 {
 	for (const auto &task : this->tasks) {
-		auto it = pause_notifiers.find(task);
-		if (it == pause_notifiers.end()) continue;
+		auto it = task_done_notifiers.find(task);
+		if (it == task_done_notifiers.end()) continue;
 
-		it->second->WaitUntilPaused();
-		pause_notifiers.erase(it);
+		it->second->WaitUntilNotified();
+		task_done_notifiers.erase(it);
 	}
 }
 
@@ -104,7 +104,7 @@ void AIInvoker::HandleJob(NewGameJob * job)
 {
 	constexpr int sec_each_run = 1;
 
-	this->WaitCurrentJobPaused();
+	this->WaitCurrentJob();
 
 	if (this->mcts.empty()) this->InitializeTasks(job->game);
 
@@ -120,29 +120,33 @@ void AIInvoker::HandleJob(NewGameJob * job)
 		std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
 	for (const auto &task : this->tasks)
 	{
-		if (pause_notifiers.find(task) == pause_notifiers.end()) {
-			pause_notifiers[task].reset(new Task::PauseNotifier());
+		if (this->task_done_notifiers.find(task) == task_done_notifiers.end()) {
+			task_done_notifiers[task].reset(new Task::Notifier());
 		}
-		task->Start(run_until, pause_notifiers[task].get());
+		task->Start(run_until, task_done_notifiers[task].get());
 	}
 }
 
 void AIInvoker::HandleJob(ActionStartJob * job)
 {
-	std::cerr << "@@@@@@@@@@@@@@@@@@ Got an action start job @@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
 
-	this->WaitCurrentJobPaused();
+	this->WaitCurrentJob();
 
 	if (this->mcts.empty()) {
 		this->InitializeTasks(job->game);
 		return;
 	}
 
-	for (auto & each_mcts : this->mcts)
-	{
-		// TODO: find board in each thread?
-		JsonBoardFinder::JsonBoardFinder::UpdateMCTS(*each_mcts, job->game);
+	std::list<std::unique_ptr<Task::Notifier>> notifiers;
+	for (auto const& task : this->tasks) {
+		auto notifier = std::make_unique<Task::Notifier>();
+		task->UpdateBoard(job->game, notifier.get());
+		notifiers.push_back(std::move(notifier));
 	}
+
+	std::cerr << "@@@@@@@@@@@@@@@@@@ Processing action start job @@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
+
+	for (auto const& notifier : notifiers) notifier->WaitUntilNotified();
 
 	this->current_job.reset(nullptr);
 
@@ -153,9 +157,9 @@ void AIInvoker::StopCurrentJob()
 {
 	for (const auto &task : this->tasks) {
 		task->Stop();
-		if (this->pause_notifiers.find(task) != this->pause_notifiers.end()) {
-			this->pause_notifiers[task]->WaitUntilPaused();
-			this->pause_notifiers.erase(task);
+		if (this->task_done_notifiers.find(task) != this->task_done_notifiers.end()) {
+			this->task_done_notifiers[task]->WaitUntilNotified();
+			this->task_done_notifiers.erase(task);
 		}
 	}
 
@@ -179,7 +183,7 @@ void AIInvoker::StopCurrentJob()
 
 void AIInvoker::GenerateCurrentBestMoves_Internal()
 {
-	this->WaitCurrentJobPaused();
+	this->WaitCurrentJob();
 
 	if (this->mcts.empty()) return;
 
