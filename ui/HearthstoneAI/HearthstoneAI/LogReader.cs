@@ -25,6 +25,20 @@ namespace HearthstoneAI
             this.change_id = 1;
             this.frmMain = frm;
             this.Reset();
+        }
+
+        public int GetChangeId() { return this.change_id; }
+
+        private void Reset()
+        {
+            this.power_log_offset = 0;
+            this.CreateLogParser();
+            this.change_id++;
+        }
+
+        private void CreateLogParser()
+        {
+            this.log_parser = new LogParser(this.frmMain);
             this.log_parser.GameState.StartWaitingMainAction += (sender, e) =>
             {
                 if (this.StartWaitingMainAction != null) this.StartWaitingMainAction(this, e);
@@ -39,15 +53,6 @@ namespace HearthstoneAI
             {
                 if (this.EndTurnEvent != null) this.EndTurnEvent(this, e);
             };
-        }
-
-        public int GetChangeId() { return this.change_id; }
-
-        private void Reset()
-        {
-            this.power_log_offset = 0;
-            log_parser = new LogParser(this.frmMain);
-            this.change_id++;
         }
 
         private string GetPowerLogPath()
