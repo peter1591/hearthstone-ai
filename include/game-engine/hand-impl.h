@@ -159,6 +159,41 @@ namespace GameEngine {
 		return !(*this == rhs);
 	}
 
+	inline void Hand::ShuffleHiddenInformation(std::function<int()> random_generator)
+	{
+		// TODO: we swap hand card with deck card
+		//       but there might be some enchantments applied on the hand card
+		//       how to record this information?
+		// Idea 1: record hand card enchantment with...
+		//      (1) which turn the hand card starts to be held in hand?
+		//      (2) enchantments records the turn it starts to take effect.
+
+		// Do a random permutation for hand cards with 'TYPE_DRAW_FROM_HIDDEN_CARDS'
+		std::vector<int> hidden_hand_card_map;
+		hidden_hand_card_map.reserve(this->cards.size());
+		for (size_t i = 0; i < this->cards.size(); ++i) {
+			auto const& card = this->cards[i];
+			if (card.type == HandCard::TYPE_DRAW_FROM_HIDDEN_CARDS) {
+				hidden_hand_card_map.push_back(i);
+			}
+		}
+		
+		// do random permutation (only for hand cards; since deck cards will always be drawn randomly)
+		for (int i = 0; i < hidden_hand_card_map.size(); ++i) {
+			int r = random_generator() % (hidden_hand_card_map.size() + this->deck_cards.size() - i) + i;
+
+			if (r < hidden_hand_card_map.size()) {
+				// swap with another hand card
+				std::iter_swap(this->cards.begin() + hidden_hand_card_map[i], this->cards.begin() + hidden_hand_card_map[r]);
+				continue;
+			}
+			r -= hidden_hand_card_map.size();
+
+			// swap with deck card
+			std::swap(this->cards[hidden_hand_card_map[i]].card, this->deck_cards[r]);
+		}
+	}
+
 	inline std::string Hand::GetDebugString() const
 	{
 		std::string result;

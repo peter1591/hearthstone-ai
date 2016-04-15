@@ -29,6 +29,9 @@ public:
 	bool operator==(const Hand &rhs) const;
 	bool operator!=(const Hand &rhs) const;
 
+public: // board initialization
+	void ShuffleHiddenInformation(std::function<int()> random_generator);
+
 public: // game operations
 	bool HasCardToDraw() const;
 	void DrawOneCardToHand();
