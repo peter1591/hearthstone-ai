@@ -112,16 +112,15 @@ namespace JsonBoardFinder
 			if (minion.GetAttack() != json["attack"].asInt()) return false;
 			if (minion.GetMinion().stat.GetSpellDamage() != json["spellpower"].asInt()) return false;
 
-			// summoned charge minion seems to not have CHARGE tag, just check attackable
-			//if (minion.GetMinion().stat.IsCharge() != (json["charge"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsTaunt() != (json["taunt"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsShield() != (json["divine_shield"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsStealth() != (json["stealth"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsForgetful() != (json["forgetful"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsFreezeAttacker() != (json["freeze"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsFreezed() != (json["frozen"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsPoisonous() != (json["poisonous"].asInt() > 0)) return false;
-			if (minion.GetMinion().stat.IsWindFury() != (json["windfury"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsCharge() != (json["status"]["charge"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsTaunt() != (json["status"]["taunt"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsShield() != (json["status"]["divine_shield"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsStealth() != (json["status"]["stealth"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsForgetful() != (json["status"]["forgetful"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsFreezeAttacker() != (json["status"]["freeze"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsFreezed() != (json["status"]["frozen"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsPoisonous() != (json["status"]["poisonous"].asInt() > 0)) return false;
+			if (minion.GetMinion().stat.IsWindFury() != (json["status"]["windfury"].asInt() > 0)) return false;
 
 			if (IsPlayingSide(minion)) {
 				if (minion.Attackable() == json["exhausted"].asBool()) return false;
