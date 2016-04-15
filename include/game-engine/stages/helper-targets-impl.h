@@ -47,7 +47,7 @@ namespace GameEngine
 
 	inline BoardTargets::BoardTargets(Minions & minions) : BoardTargets(minions.GetBoard())
 	{
-		for (auto it = this->board.player.minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
+		for (auto it = minions.GetIterator(0); !it.IsEnd(); it.GoToNext()) {
 			this->Add(it);
 		}
 	}
