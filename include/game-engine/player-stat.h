@@ -31,7 +31,11 @@ namespace GameEngine {
 				this->current += amount;
 				if (this->current > 10) this->current = 10;
 			}
-			void GainEmptyCrystals(int amount) { this->total += amount; }
+			void GainEmptyCrystals(int amount)
+			{
+				this->total += amount;
+				if (this->total > 10) this->total = 10;
+			}
 
 			void CostCrystals(int cost) { this->current -= cost; }
 			void LockCrystals(int locked_) { this->locked_next_turn -= locked_; }
