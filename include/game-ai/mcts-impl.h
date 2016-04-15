@@ -5,7 +5,6 @@
 
 inline MCTS::MCTS()
 {
-	this->initialized_in_thread = false;
 	this->allocated_node = new TreeNode;
 #ifdef DEBUG_PRINT_MOVE
 	this->iteration_count = 0;
@@ -20,18 +19,13 @@ inline MCTS::~MCTS()
 
 inline void MCTS::Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer_)
 {
-	this->initial_rand_seed = rand_seed;
-	this->initialized_in_thread = false;
+	this->random_generator.seed(rand_seed);
 	this->board_initializer = std::move(board_initializer_);
 }
 
 inline void MCTS::Iterate()
 {
-	if (!this->initialized_in_thread) {
-		srand(this->initial_rand_seed);
-		this->initialized_in_thread = true;
-	}
-	this->current_start_board_random = rand();
+	this->current_start_board_random = this->GetRandom();
 
 #ifdef DEBUG_PRINT_MOVE
 	++this->iteration_count;
@@ -186,9 +180,9 @@ inline bool MCTS::UseNextMoveGetter(TreeNode * node)
 	else return true;
 }
 
-inline int MCTS::GetRandom()
+inline unsigned int MCTS::GetRandom()
 {
-	return rand();
+	return this->random_generator();
 }
 
 // return true if a new (normal) node is created; 'new_node' will be the created new child

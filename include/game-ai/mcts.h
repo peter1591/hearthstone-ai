@@ -40,7 +40,7 @@ private:
 	// return true if the stage uses next-move-getter to get next moves
 	bool UseNextMoveGetter(TreeNode * node);
 
-	int GetRandom();
+	unsigned int GetRandom();
 	TreeNode* CreateChildNode(TreeNode* const node, GameEngine::Move const& next_move, GameEngine::Board & next_board);
 	TreeNode* CreateRedirectNode(TreeNode * parent, GameEngine::Move const& move, TreeNode * target_node);
 
@@ -55,8 +55,7 @@ private:
 	bool ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameEngine::Board & board);
 
 private: // for internal use
-	int initial_rand_seed;
-	int initialized_in_thread;
+	std::mt19937 random_generator;
 
 	std::unique_ptr<BoardInitializer> board_initializer;
 	Tree tree;
