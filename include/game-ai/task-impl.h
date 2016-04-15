@@ -78,10 +78,7 @@ inline void Task::MainLoop()
 			continue;
 
 		case Task::STATE_STOPPED:
-			if (this->done_notifier != nullptr) {
-				this->done_notifier->Notify();
-			}
-			return;
+			break;
 		}
 
 		auto now = std::chrono::steady_clock::now();
@@ -100,6 +97,10 @@ inline void Task::MainLoop()
 
 		this->mcts.Iterate();
 		this->IncreaseIterationCount();
+	}
+
+	if (this->done_notifier != nullptr) {
+		this->done_notifier->Notify();
 	}
 }
 
