@@ -2,6 +2,7 @@
 
 #include <thread>
 #include "task.h"
+#include "json-board-finder/json-board-finder.h"
 
 inline Task::Task(MCTS & mcts) : mcts(mcts)
 {
@@ -48,6 +49,14 @@ inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_u
 	this->SetState(Task::STATE_RUNNING);
 }
 
+inline void Task::UpdateBoard(Json::Value const & json_board, Task::Notifier *notifier)
+{
+	this->pending_operations.push_back([this, json_board, notifier] {
+		JsonBoardFinder::JsonBoardFinder::UpdateMCTS(this->mcts, json_board);
+		notifier->Notify();
+	});
+}
+
 inline void Task::Stop()
 {
 	this->SetState(Task::STATE_STOPPED);
@@ -63,40 +72,39 @@ inline void Task::MainLoop()
 	auto last_yield = std::chrono::steady_clock::now();
 	while (true)
 	{
-		switch (this->GetState())
-		{
-		case Task::STATE_SPAWNED:
-			// spawned but not started yet --> wait
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		if (this->GetState() == Task::STATE_STOPPED) break;
+
+		// process pending operations
+		if (!this->pending_operations.empty()) {
+			auto const& operation = this->pending_operations.front();
+			operation();
+			this->pending_operations.pop_front();
 			continue;
-
-		case Task::STATE_RUNNING:
-			break;
-
-		case Task::STATE_PAUSE:
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			continue;
-
-		case Task::STATE_STOPPED:
-			break;
 		}
 
-		auto now = std::chrono::steady_clock::now();
-		if (now > this->run_until)
-		{
-			this->SetState(Task::STATE_PAUSE);
-			if (this->done_notifier != nullptr) {
-				// Set the notifier to nullptr first, since after the Notify() is called
-				// Other threads might call Start(), which sets the notifier again
-				auto saved_notifier = this->done_notifier;
-				this->done_notifier = nullptr;
-				saved_notifier->Notify();
+		if (this->GetState() == Task::STATE_PAUSE) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			continue;
+		}
+
+		if (this->GetState() == Task::STATE_RUNNING) {
+			auto now = std::chrono::steady_clock::now();
+			if (now > this->run_until)
+			{
+				this->SetState(Task::STATE_PAUSE);
+				if (this->done_notifier != nullptr) {
+					// Set the notifier to nullptr first, since after the Notify() is called
+					// Other threads might call Start(), which sets the notifier again
+					auto saved_notifier = this->done_notifier;
+					this->done_notifier = nullptr;
+					saved_notifier->Notify();
+				}
+				continue;
 			}
-			continue;
-		}
 
-		this->mcts.Iterate();
-		this->IncreaseIterationCount();
+			this->mcts.Iterate();
+			this->IncreaseIterationCount();
+		}
 	}
 
 	if (this->done_notifier != nullptr) {

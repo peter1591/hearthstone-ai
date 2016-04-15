@@ -1,8 +1,9 @@
 #pragma once
+#include <list>
+#include <functional>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <list>
 
 #include "mcts.h"
 
@@ -54,6 +55,7 @@ public:
 	// In Windows, if the thread don't yield CPU, the main thread never got a chance to run
 	// So we need to pause after a duration, and let the main thread to resume us
 	void Start(std::chrono::time_point<std::chrono::steady_clock> run_until, Notifier *notifier = nullptr);
+	void UpdateBoard(Json::Value const& json_board, Task::Notifier *notifier);
 
 	void Stop();
 	void Join();
@@ -95,4 +97,6 @@ private: // private (will not be altered by other threads)
 	std::chrono::time_point<std::chrono::steady_clock> run_until;
 
 	MCTS & mcts;
+
+	std::list<std::function<void()>> pending_operations;
 };
