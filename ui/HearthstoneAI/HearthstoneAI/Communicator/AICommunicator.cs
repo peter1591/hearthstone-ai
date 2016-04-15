@@ -63,6 +63,11 @@ namespace HearthstoneAI.Communicator
             this.process.BeginErrorReadLine();
         }
 
+        public void Stop()
+        {
+            this.process.Kill();
+        }
+
         public void HandleGameBoard(Board.Game game)
         {
             ActionGetBestMove action = new ActionGetBestMove(this.GetNextActionSequenceId(), game);

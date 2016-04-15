@@ -47,8 +47,19 @@ namespace HearthstoneAI
             this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             this.log_reader.ActionStart += Log_reader_ActionStart;
             this.log_reader.EndTurnEvent += Log_reader_EndTurnEvent;
+            this.log_reader.CreateGameEvent += Log_reader_CreateGameEvent;
 
             timerMainLoop.Enabled = true;
+        }
+
+        private void Log_reader_CreateGameEvent(object sender, Parsers.PowerLogParser.CreateGameEventArgs e)
+        {
+            // Reset
+            this.ai_communicator.Stop();
+
+            this.AddLog("====== New Game Starts ======");
+
+            this.ai_communicator.Start();
         }
 
         private void TriggerAIHandleBoardAction(GameState game)

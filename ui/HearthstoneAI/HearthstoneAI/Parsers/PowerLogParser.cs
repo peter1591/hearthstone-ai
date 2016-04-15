@@ -58,6 +58,9 @@ namespace HearthstoneAI.Parsers
         }
         public event EventHandler<ActionStartEventArgs> ActionStart;
 
+        public class CreateGameEventArgs : EventArgs { }
+        public event EventHandler<CreateGameEventArgs> CreateGameEvent;
+
         public PowerLogParser(frmMain frm, GameState game_state)
         {
             this.frm_main = frm;
@@ -98,6 +101,9 @@ namespace HearthstoneAI.Parsers
         private IEnumerable<bool> ParseCreateGame()
         {
             if (!CreateGameRegex.IsMatch(this.parsing_log)) yield break;
+
+            if (this.CreateGameEvent != null) this.CreateGameEvent(this, new CreateGameEventArgs());
+
             yield return true;
 
             // a CREATE_GAME will present for every 30 minutes

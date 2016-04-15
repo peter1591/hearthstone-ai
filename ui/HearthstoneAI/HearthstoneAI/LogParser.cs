@@ -28,6 +28,10 @@ namespace HearthstoneAI
             {
                 if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, this.GameState));
             };
+            this.power_log_parser.CreateGameEvent += (sender, e) =>
+            {
+                if (this.CreateGameEvent != null) this.CreateGameEvent(this, e);
+            };
             this.GameState.EndTurnEvent += (sender, e) =>
             {
                 if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs(e, this.GameState));
@@ -62,6 +66,8 @@ namespace HearthstoneAI
             public GameState game;
         };
         public event EventHandler<EndTurnEventArgs> EndTurnEvent;
+
+        public event EventHandler<Parsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public void Process(string log_line)
         {
