@@ -16,18 +16,14 @@ namespace JsonBoardFinder
 	}
 
 	inline JsonBoardFinder::JsonBoardFinder(BoardInitializer * start_board, Json::Value const& json_board)
-		: start_board(start_board), json_board(json_board)
+		: start_board(start_board), json_board(json_board), random_generator() // use a better random seed?
 	{
-		this->next_rand_seed = 0; // TODO: use a better random seed?
 	}
 
 	inline bool JsonBoardFinder::Iterate()
 	{
-		srand(this->next_rand_seed);
-		this->next_rand_seed = rand();
-
 		this->found_applied_moves.clear();
-		this->found_start_board_rand = rand();
+		this->found_start_board_rand = this->random_generator();
 
 		GameEngine::Board board;
 		this->start_board->InitializeBoard(this->found_start_board_rand, board);
@@ -79,7 +75,7 @@ namespace JsonBoardFinder
 
 			int count = next_moves.size();
 			if (count == 0) throw std::runtime_error("no next move is available");
-			int r = rand() % count;
+			int r = this->random_generator() % count;
 			return next_moves[r];
 		}
 
