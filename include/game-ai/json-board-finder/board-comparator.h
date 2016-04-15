@@ -58,14 +58,17 @@ namespace JsonBoardFinder
 		{
 			Json::Value const& json_hand = json["hand"];
 
-			if (hand.GetCount() != json_hand.size()) return false;
+			if (hand.GetCount() != json_hand["cards"].size()) return false;
 
-			auto json_hand_it = json_hand.begin();
+			auto json_hand_it = json_hand["cards"].begin();
 			for (size_t i = 0; i < hand.GetCount(); ++i)
 			{
 				auto const& hand_card = hand.GetCard(i);
 				
-				
+				std::string json_card_id_s = json_hand_it->asString();
+				int json_card_id = GameEngine::CardDatabase::GetInstance().GetCardIdFromOriginalId(json_card_id_s);
+
+				if (hand_card.id != json_card_id) return false;
 
 				json_hand_it++;
 			}
@@ -75,7 +78,9 @@ namespace JsonBoardFinder
 
 		static bool CompareOpponentHand(GameEngine::Hand const& hand, Json::Value const& json)
 		{
-			// TODO
+			if (hand.GetCount() != json["hand"]["cards"].size()) return false;
+
+			// only compare hand card count for opponent
 			return true;
 		}
 
