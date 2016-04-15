@@ -18,17 +18,18 @@ class RandomGenerator
 		{
 		}
 
-		void SetRandomSeed(unsigned int seed) const {
-			srand(seed);
+		void SetRandomSeed(unsigned int seed)
+		{
+			this->random_generator.seed(seed);
 		}
 
-		int GetRandom(int exclusive_max) {
+		unsigned int GetRandom(unsigned int exclusive_max) {
 			if (exclusive_max < 0) throw std::runtime_error("invalid argument");
-			else if (exclusive_max == 0) return rand();
+			else if (exclusive_max == 0) return this->random_generator();
 			else if (exclusive_max == 1) return 0;
 			else {
 				this->has_called = true;
-				return rand() % exclusive_max;
+				return this->random_generator() % exclusive_max;
 			}
 		}
 
@@ -36,6 +37,7 @@ class RandomGenerator
 		bool GetFlag_HasCalled() const { return this->has_called; }
 
 	private:
+		std::mt19937 random_generator;
 		bool has_called;
 };
 
