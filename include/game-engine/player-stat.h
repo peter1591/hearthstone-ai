@@ -26,13 +26,19 @@ namespace GameEngine {
 			int GetLocked() const { return this->locked; }
 			int GetLockedNextTurn() const { return this->locked_next_turn; }
 
-			void IncreaseCrystalThisTurn(int amount) { this->current += amount; }
+			void IncreaseCrystalThisTurn(int amount)
+			{
+				this->current += amount;
+				if (this->current > 10) this->current = 10;
+			}
 			void GainEmptyCrystals(int amount) { this->total += amount; }
 
 			void CostCrystals(int cost) { this->current -= cost; }
 			void LockCrystals(int locked_) { this->locked_next_turn -= locked_; }
 			void TurnStart() {
 				this->total++;
+				if (this->total > 10) this->total = 10;
+
 				this->locked = this->locked_next_turn;
 				this->current = this->total - this->locked;
 				this->locked_next_turn = 0;
