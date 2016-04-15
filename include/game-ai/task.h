@@ -9,30 +9,30 @@
 class Task
 {
 public:
-	class PauseNotifier
+	class Notifier
 	{
 	public:
-		PauseNotifier()
+		Notifier()
 		{
 			this->caller_lock = new std::unique_lock<std::mutex>(this->mtx);
 		}
 
-		~PauseNotifier()
+		~Notifier()
 		{
 			delete this->caller_lock;
 		}
 
-		PauseNotifier(const PauseNotifier &) = delete;
-		PauseNotifier & operator=(const PauseNotifier &) = delete;
-		PauseNotifier(const PauseNotifier &&) = delete;
-		PauseNotifier & operator=(PauseNotifier &&) = delete;
+		Notifier(const Notifier &) = delete;
+		Notifier & operator=(const Notifier &) = delete;
+		Notifier(const Notifier &&) = delete;
+		Notifier & operator=(Notifier &&) = delete;
 
-		void WaitUntilPaused()
+		void WaitUntilNotified()
 		{
 			this->cv.wait(*this->caller_lock);
 		}
 
-		void NotifyPaused()
+		void Notify()
 		{
 			std::unique_lock<std::mutex> notifier_lock(this->mtx); // in case NotifyPaused() is called before WaitUntilPause()
 			this->cv.notify_all();
@@ -53,7 +53,7 @@ public:
 
 	// In Windows, if the thread don't yield CPU, the main thread never got a chance to run
 	// So we need to pause after a duration, and let the main thread to resume us
-	void Start(std::chrono::time_point<std::chrono::steady_clock> run_until, PauseNotifier *notifier = nullptr);
+	void Start(std::chrono::time_point<std::chrono::steady_clock> run_until, Notifier *notifier = nullptr);
 
 	void Stop();
 	void Join();
@@ -91,7 +91,7 @@ private: // shared (might be altered by other threads)
 
 private: // private (will not be altered by other threads)
 	std::thread thread;
-	PauseNotifier *pause_notifier;
+	Notifier *done_notifier;
 	std::chrono::time_point<std::chrono::steady_clock> run_until;
 
 	MCTS & mcts;

@@ -5,7 +5,7 @@
 
 inline Task::Task(MCTS & mcts) : mcts(mcts)
 {
-	this->pause_notifier = nullptr;
+	this->done_notifier = nullptr;
 	this->iterations = 0;
 
 	// Note: Initialize() might be called after MainLoop() is entered
@@ -41,10 +41,10 @@ inline void Task::Initialize(std::thread &&thread_)
 	this->thread = std::move(thread_);
 }
 
-inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_until_, Task::PauseNotifier *notifier)
+inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_until_, Task::Notifier *notifier)
 {
 	this->run_until = run_until_;
-	this->pause_notifier = notifier;
+	this->done_notifier = notifier;
 	this->SetState(Task::STATE_RUNNING);
 }
 
@@ -74,19 +74,12 @@ inline void Task::MainLoop()
 			break;
 
 		case Task::STATE_PAUSE:
-			if (this->pause_notifier != nullptr) {
-				// Set the notifier to nullptr first, since after the NotifyPaused() is called
-				// Other threads might call Start(), which sets the pause notifier again
-				auto saved_notifier = this->pause_notifier;
-				this->pause_notifier = nullptr;
-				saved_notifier->NotifyPaused();
-			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			continue;
 
 		case Task::STATE_STOPPED:
-			if (this->pause_notifier != nullptr) {
-				this->pause_notifier->NotifyPaused();
+			if (this->done_notifier != nullptr) {
+				this->done_notifier->Notify();
 			}
 			return;
 		}
@@ -95,6 +88,13 @@ inline void Task::MainLoop()
 		if (now > this->run_until)
 		{
 			this->SetState(Task::STATE_PAUSE);
+			if (this->done_notifier != nullptr) {
+				// Set the notifier to nullptr first, since after the Notify() is called
+				// Other threads might call Start(), which sets the notifier again
+				auto saved_notifier = this->done_notifier;
+				this->done_notifier = nullptr;
+				saved_notifier->Notify();
+			}
 			continue;
 		}
 
