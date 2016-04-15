@@ -56,7 +56,20 @@ namespace JsonBoardFinder
 
 		static bool ComparePlayerHand(GameEngine::Hand const& hand, Json::Value const& json)
 		{
-			// TODO
+			Json::Value const& json_hand = json["hand"];
+
+			if (hand.GetCount() != json_hand.size()) return false;
+
+			auto json_hand_it = json_hand.begin();
+			for (size_t i = 0; i < hand.GetCount(); ++i)
+			{
+				auto const& hand_card = hand.GetCard(i);
+				
+				
+
+				json_hand_it++;
+			}
+
 			return true;
 		}
 
