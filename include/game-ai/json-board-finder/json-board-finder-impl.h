@@ -28,11 +28,6 @@ namespace JsonBoardFinder
 		GameEngine::Board board;
 		this->start_board->InitializeBoard(this->found_start_board_rand, board);
 
-		if (BoardComparator::IsEqual(board, this->json_board)) {
-			// board not changed
-			return true;
-		}
-
 		while (true) {
 			GameEngine::Move move = this->GetOneRandomNextMove(board);
 			board.ApplyMove(move);
@@ -97,8 +92,7 @@ namespace JsonBoardFinder
 			std::cerr << "@@@@ " << move.GetDebugString() << std::endl;
 		}
 
-		// TODO: use the derived board
-		return std::make_unique<BoardJsonParser>(json_board);
+		return std::make_unique<BoardWithMoves>(this->found_start_board_rand, std::move(this->start_board), std::move(this->found_applied_moves));
 	}
 
 } // namespace JsonBoardFinder
