@@ -83,8 +83,6 @@ inline void Board::GetNextMoves(GameEngine::Move & next_move, bool & is_determin
 
 inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool & is_deterministic) const
 {
-	this->random_generator.SetRandomSeed(this->random_seed);
-
 	switch (this->GetStageType()) {
 		case STAGE_TYPE_GAME_FLOW:
 			throw std::runtime_error("This is a game flow stage, you should call the GetNextMove() to get the next move directly.");
@@ -103,8 +101,6 @@ inline void Board::GetNextMoves(NextMoveGetter &next_move_getter, bool & is_dete
 
 inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 {
-	this->random_generator.SetRandomSeed(this->random_seed);
-
 	switch (this->GetStageType()) {
 	case STAGE_TYPE_GAME_FLOW:
 		throw std::runtime_error("You cannot choose a good move when in a game-flow stage.");
