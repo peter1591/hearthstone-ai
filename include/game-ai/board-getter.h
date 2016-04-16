@@ -19,17 +19,7 @@ public:
 	{
 		this->start_board->InitializeBoard(this->start_board_random, board);
 
-		std::list<TreeNode const*> path_nodes;
-		auto path_iterator = this->path.GetReverseIterator(leaf);
-
-		while (true) {
-			auto const& node = path_iterator.GetNodeAndMoveUpward();
-			if (node == nullptr) break;
-			if (node->parent == nullptr) break;
-			path_nodes.push_front(node);
-		}
-
-		for (auto const& path_node : path_nodes) {
+		for (auto const& path_node : this->GetPathNodes(leaf)) {
 			board.ApplyMove(path_node->move);
 		}
 
@@ -39,6 +29,30 @@ public:
 			throw std::runtime_error("consistency check failed: board hash changed");
 		}
 #endif
+	}
+
+	std::list<TreeNode const*> GetPathNodes(TreeNode const* leaf_node) const
+	{
+		std::list<TreeNode const*> path_nodes;
+		auto path_iterator = this->path.GetReverseIterator(leaf_node);
+
+		while (true) {
+			auto const& node = path_iterator.GetNodeAndMoveUpward();
+			if (node == nullptr) break;
+			if (node->parent == nullptr) break;
+			path_nodes.push_front(node);
+		}
+
+		return path_nodes;
+	}
+
+	BoardWithMoves * GetCorrespondsBoardInitializer(TreeNode const* leaf) const
+	{
+		std::list<GameEngine::Move> moves;
+		for (auto const& path_node : this->GetPathNodes(leaf)) {
+			moves.push_back(path_node->move);
+		}
+		return new BoardWithMoves(this->start_board_random, std::unique_ptr<BoardInitializer>(this->start_board->Clone()), std::move(moves));
 	}
 
 #ifdef DEBUG
