@@ -43,6 +43,9 @@
     <Filter Include="Header Files\game-ai\json-board-finder">
       <UniqueIdentifier>{73f4b8cd-cd3a-4c89-87aa-46e5f91264ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\game-engine\random">
+      <UniqueIdentifier>{543fb1e3-f1c7-452f-aafd-8fb31b15dc2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -556,6 +559,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\tree-impl.h">
       <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\random\random_seed_manager.h">
+      <Filter>Header Files\game-engine\random</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

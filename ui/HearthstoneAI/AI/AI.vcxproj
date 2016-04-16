@@ -114,7 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUGA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -265,6 +265,7 @@
     <ClInclude Include="..\..\..\include\game-engine\player-stat.h" />
     <ClInclude Include="..\..\..\include\game-engine\player.h" />
     <ClInclude Include="..\..\..\include\game-engine\random-generator.h" />
+    <ClInclude Include="..\..\..\include\game-engine\random\random_seed_manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\secret.h" />
     <ClInclude Include="..\..\..\include\game-engine\secrets.h" />
     <ClInclude Include="..\..\..\include\game-engine\slot-index-impl.h" />
