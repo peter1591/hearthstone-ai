@@ -290,7 +290,6 @@
     <ClInclude Include="..\..\..\include\game-engine\stages\player-turn-start.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\player-use-hero-power.h" />
     <ClInclude Include="..\..\..\include\game-engine\stages\weighted-moves.h" />
-    <ClInclude Include="..\..\..\include\tree.h" />
     <ClInclude Include="ai_invoker.h" />
     <ClInclude Include="request_handler.h" />
   </ItemGroup>

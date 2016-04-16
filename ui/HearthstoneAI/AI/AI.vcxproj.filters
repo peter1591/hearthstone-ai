@@ -140,9 +140,6 @@
     <ClInclude Include="..\..\..\include\board-node-map-impl.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\tree.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\board-finder.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
