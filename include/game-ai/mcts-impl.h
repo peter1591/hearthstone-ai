@@ -29,22 +29,16 @@ inline void MCTS::UpdateRoot(Json::Value const & json_board)
 	// TODO: find among the existing tree first
 
 	JsonBoardFinder::JsonBoardFinder finder(std::move(this->board_initializer), json_board);
-	auto new_board = std::move(finder.FindBoard());
+	auto new_board_initializer = std::move(finder.FindBoard());
 
-	// update to MCTS
-	this->UpdateRoot(std::move(new_board));
-}
-
-inline void MCTS::UpdateRoot(std::unique_ptr<BoardInitializer>&& board_initializer_)
-{
 	// find existing node in tree
 	GameEngine::Board board;
-	board_initializer_->InitializeBoard(this->random_generator(), board);
+	new_board_initializer->InitializeBoard(this->random_generator(), board);
 	int found_turn = 0;
 	auto found_node = this->board_finder.FindInAllTurns(board, found_turn);
 	if (!found_node) {
 		std::cerr << "Cannot found board in existing MCTS tree!!!!!!!!!!!!!!!!!" << std::endl;
-		this->ChangeBoardInitializer(std::move(board_initializer_));
+		this->ChangeBoardInitializer(std::move(new_board_initializer));
 		this->tree.Clear();
 		this->board_finder.Clear();
 		return;
@@ -52,7 +46,7 @@ inline void MCTS::UpdateRoot(std::unique_ptr<BoardInitializer>&& board_initializ
 
 	// found board
 	std::cerr << "Found board in existing MCTS tree. Node @ " << found_node << ", turn = " << found_turn << std::endl;
-	this->ChangeBoardInitializer(std::move(board_initializer_), found_node);
+	this->ChangeBoardInitializer(std::move(new_board_initializer), found_node);
 }
 
 inline void MCTS::Iterate()

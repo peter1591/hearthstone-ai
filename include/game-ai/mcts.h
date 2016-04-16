@@ -27,7 +27,6 @@ public:
 public: // Operations
 	void Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer);
 	void UpdateRoot(Json::Value const& json_board);
-	void UpdateRoot(std::unique_ptr<BoardInitializer> && board_initializer);
 
 	void Iterate();
 
