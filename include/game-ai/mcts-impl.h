@@ -275,9 +275,9 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	node->AddChild(new_node);
 
 #ifdef DEBUG
-	GameEngine::Board test_board;
-	new_node->GetBoard(test_board);
-	if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
+	//GameEngine::Board test_board;
+	//new_node->GetBoard(test_board);
+	//if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
 #endif
 
 	this->board_finder.Add(next_board, new_node);

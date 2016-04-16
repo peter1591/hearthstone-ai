@@ -112,6 +112,7 @@ namespace HearthstoneAI.Communicator
 
             if (json.Contains('\r') || json.Contains('\n')) throw new Exception("request should not contains new line character");
 
+            //Console.WriteLine(json);
             process.StandardInput.Write(json);
             process.StandardInput.Write('\n');
         }
