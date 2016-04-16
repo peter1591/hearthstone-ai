@@ -119,13 +119,11 @@ inline void Board::GetGoodMove(Move & next_move, unsigned int rand) const
 
 inline void Board::ApplyMove(const Move &move, bool * introduced_random)
 {
-	this->random_generator.SetRandomSeed(this->random_seed);
+	this->random_generator.SetRandomSeed(this->random_seed_manager.GetNextRandomSeed());
 
 	if (introduced_random != nullptr) this->random_generator.ClearFlag_HasCalled();
 	StageFunctionCaller<StageFunctionChooser::Chooser_ApplyMove>(this->stage, *this, move);
 	if (introduced_random != nullptr) *introduced_random = this->random_generator.GetFlag_HasCalled();
-
-	this->random_seed = this->random_generator.GetRandom(0);
 }
 
 inline Board::Board() :
@@ -153,7 +151,7 @@ inline Board::Board(const Board & rhs) :
 	this->random_generator = rhs.random_generator;
 	this->data = rhs.data;
 
-	this->random_seed = rhs.random_seed;
+	this->random_seed_manager = rhs.random_seed_manager;
 }
 
 inline Board Board::Clone(Board const & rhs)
@@ -169,7 +167,7 @@ inline Board::Board(Board && rhs) :
 	stage(std::move(rhs.stage)),
 	random_generator(std::move(rhs.random_generator)),
 	data(std::move(rhs.data)),
-	random_seed(std::move(rhs.random_seed))
+	random_seed_manager(std::move(rhs.random_seed_manager))
 {
 }
 
@@ -183,16 +181,16 @@ inline Board & Board::operator=(Board && rhs)
 		this->random_generator = std::move(rhs.random_generator);
 		this->data = std::move(rhs.data);
 
-		this->random_seed = std::move(rhs.random_seed);
+		this->random_seed_manager = std::move(rhs.random_seed_manager);
 	}
 
 	return *this;
 }
 
-inline void Board::SetRandomSeed(unsigned int random_seed_)
+inline void Board::SetRandomSeed(unsigned int random_seed)
 {
-	this->random_seed = random_seed_;
-	this->random_generator.SetRandomSeed(this->random_seed);
+	this->random_seed_manager.Initialize(random_seed);
+	this->random_generator.SetRandomSeed(this->random_seed_manager.GetNextRandomSeed());
 }
 
 inline void Board::SetStateToPlayerChooseBoardMove()

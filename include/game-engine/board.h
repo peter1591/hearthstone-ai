@@ -15,6 +15,7 @@
 #include "move.h"
 #include "player.h"
 #include "hook-manager.h"
+#include "random/random_seed_manager.h"
 
 namespace GameEngine {
 
@@ -92,7 +93,7 @@ namespace GameEngine {
 		static typename Chooser::ReturnType StageFunctionCaller(Stage const stage, Params && ...params);
 
 	private:
-		int random_seed;
+		RandomSeedManager random_seed_manager;
 	};
 
 } // namespace GameEngine
