@@ -60,10 +60,6 @@ public:
 	// for a non-deterministic move, the select probability of its children are not uniform
 	// this number tracks the total times this child node have been chosen
 	int nondeterminstic_move_selected_times;
-
-#ifdef DEBUG
-	size_t board_hash;
-#endif
 };
 
 class Tree

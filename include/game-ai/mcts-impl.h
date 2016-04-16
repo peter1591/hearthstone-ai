@@ -85,6 +85,10 @@ inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 	TreeNode * root_node = tree.GetRootNode();
 
 	root_node->board_getter.reset(new BoardGetter(this->board_initializer.get(), this->current_start_board_random, TraversedPathRecorder()));
+#ifdef DEBUG
+	root_node->board_getter->SetBoardHash(std::hash<GameEngine::Board>()(board));
+#endif
+
 	root_node->stage = board.GetStage();
 	root_node->stage_type = board.GetStageType();
 	root_node->parent = nullptr;
@@ -99,9 +103,6 @@ inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 		// then the root node's is_player_node doesn't matter
 		root_node->is_player_node = false;
 	}
-#ifdef DEBUG
-	root_node->board_hash = std::hash<GameEngine::Board>()(board);
-#endif
 
 	this->board_finder.Add(board, root_node);
 }
@@ -113,7 +114,7 @@ inline void MCTS::SelectAndExpand(TreeNode* & node, GameEngine::Board & board)
 #ifdef DEBUG
 		if (node->equivalent_node != nullptr) throw std::runtime_error("consistency check failed");
 		size_t current_hash = std::hash<GameEngine::Board>()(board);
-		if (node->board_hash != current_hash) throw std::runtime_error("consistency check failed: board hash changed");
+		if (node->board_getter->GetBoardHash() != current_hash) throw std::runtime_error("consistency check failed: board hash changed");
 #endif
 
 		if (node->stage_type == GameEngine::STAGE_TYPE_GAME_END) return;
@@ -210,6 +211,10 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	this->allocated_node = new TreeNode;
 
 	new_node->board_getter.reset(new BoardGetter(this->board_initializer.get(), this->current_start_board_random, this->traversed_path));
+#ifdef DEBUG
+	new_node->board_getter->SetBoardHash(std::hash<GameEngine::Board>()(next_board));
+#endif
+
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
 	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
@@ -235,11 +240,9 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	node->AddChild(new_node);
 
 #ifdef DEBUG
-	new_node->board_hash = std::hash<GameEngine::Board>()(next_board);
-
-	//GameEngine::Board test_board;
-	//new_node->GetBoard(test_board);
-	//if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
+	GameEngine::Board test_board;
+	new_node->GetBoard(test_board);
+	if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
 #endif
 
 	this->board_finder.Add(next_board, new_node);

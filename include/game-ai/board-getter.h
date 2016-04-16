@@ -41,8 +41,17 @@ public:
 #endif
 	}
 
+#ifdef DEBUG
+	void SetBoardHash(size_t hash) { this->board_hash = hash; }
+	size_t GetBoardHash() const { return this->board_hash; }
+#endif
+
 private:
 	BoardInitializer * start_board;
 	int start_board_random; // (any) one of the start board randoms which leads us to this node
 	TraversedPathRecorder path; // one of the paths leading to this node
+
+#ifdef DEBUG
+	size_t board_hash;
+#endif
 };
