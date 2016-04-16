@@ -36,6 +36,18 @@ public:
 		return this->turn_maps[turn].Find(board, board_initializer);
 	}
 
+	TreeNode * FindInAllTurns(const GameEngine::Board & board, BoardInitializer * board_initializer, int & found_turn) const
+	{
+		for (int i = 0; i < turn_maps.size(); ++i) {
+			TreeNode * found_node = this->Find(i, board, board_initializer);
+			if (found_node) {
+				found_turn = i;
+				return found_node;
+			}
+		}
+		return nullptr;
+	}
+
 	void Clear()
 	{
 		this->turn_maps.clear();
