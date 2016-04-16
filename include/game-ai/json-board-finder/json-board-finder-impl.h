@@ -71,6 +71,13 @@ namespace JsonBoardFinder
 	{
 		std::cerr << "FindBoard() called with new json board" << std::endl;
 
+		// check if board is just the root board
+		GameEngine::Board board;
+		this->start_board->InitializeBoard(this->random_generator(), board);
+		if (BoardComparator::IsEqual(board, this->json_board)) {
+			return std::move(this->start_board);
+		}
+
 		int iteration_count = 0;
 		while (!this->Iterate())
 		{
