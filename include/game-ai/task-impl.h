@@ -52,7 +52,13 @@ inline void Task::Start(std::chrono::time_point<std::chrono::steady_clock> run_u
 inline void Task::UpdateBoard(Json::Value const & json_board, Task::Notifier *notifier)
 {
 	this->pending_operations.push_back([this, json_board, notifier] {
-		JsonBoardFinder::JsonBoardFinder::UpdateMCTS(this->mcts, json_board);
+		auto current_board = std::move(this->mcts.GetBoardInitializer());
+		JsonBoardFinder::JsonBoardFinder finder(std::move(current_board), json_board);
+		auto new_board = std::move(finder.FindBoard());
+
+		// update to MCTS
+		this->mcts.UpdateRoot(std::move(new_board));
+
 		notifier->Notify();
 	});
 }

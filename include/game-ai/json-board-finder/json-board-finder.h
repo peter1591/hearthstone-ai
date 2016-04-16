@@ -11,20 +11,15 @@ namespace JsonBoardFinder
 	class JsonBoardFinder
 	{
 	public:
-		static void UpdateMCTS(MCTS & mcts, Json::Value const& json_board);
-
-	private:
-		JsonBoardFinder(BoardInitializer * start_board, Json::Value const& json_board);
-
-		bool Iterate();
-
-		GameEngine::Move GetOneRandomNextMove(GameEngine::Board const& board);
-
-	private:
+		JsonBoardFinder(std::unique_ptr<BoardInitializer> start_board, Json::Value const& json_board);
 		std::unique_ptr<BoardInitializer> FindBoard();
 
 	private:
-		BoardInitializer const* start_board;
+		bool Iterate();
+		GameEngine::Move GetOneRandomNextMove(GameEngine::Board const& board);
+
+	private:
+		std::unique_ptr<BoardInitializer> start_board;
 		Json::Value const& json_board;
 
 		std::mt19937 random_generator;

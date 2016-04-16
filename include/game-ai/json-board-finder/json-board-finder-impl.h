@@ -5,18 +5,8 @@
 
 namespace JsonBoardFinder
 {
-	inline void JsonBoardFinder::UpdateMCTS(MCTS & mcts, Json::Value const & json_board)
-	{
-		JsonBoardFinder finder(mcts.GetBoardInitializer(), json_board);
-
-		auto new_board_initializer = finder.FindBoard();
-
-		std::mt19937 random_generator((unsigned int)time(nullptr));
-		mcts.Initialize(random_generator(), std::move(new_board_initializer));
-	}
-
-	inline JsonBoardFinder::JsonBoardFinder(BoardInitializer * start_board, Json::Value const& json_board)
-		: start_board(start_board), json_board(json_board), random_generator() // use a better random seed?
+	inline JsonBoardFinder::JsonBoardFinder(std::unique_ptr<BoardInitializer> start_board, Json::Value const& json_board)
+		: start_board(std::move(start_board)), json_board(json_board), random_generator() // use a better random seed?
 	{
 	}
 
