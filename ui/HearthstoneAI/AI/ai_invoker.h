@@ -61,6 +61,9 @@ private: // non-thread-safe functions
 	void HandleCurrentJob();
 	void StopCurrentJob();
 
+	void HandleNewJob(Job * job);
+	void HandleNewJob(NewGameJob * job);
+
 	void HandleJob(NewGameJob * job);
 	void HandleJob(ActionStartJob * job);
 

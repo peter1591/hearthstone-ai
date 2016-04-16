@@ -129,7 +129,6 @@ void AIInvoker::HandleJob(NewGameJob * job)
 
 void AIInvoker::HandleJob(ActionStartJob * job)
 {
-
 	this->WaitCurrentJob();
 
 	if (this->mcts.empty()) {
@@ -179,6 +178,19 @@ void AIInvoker::StopCurrentJob()
 		delete raw_mcts;
 	}
 	this->mcts.clear();
+}
+
+void AIInvoker::HandleNewJob(Job * job)
+{
+	auto new_game_job = dynamic_cast<NewGameJob*>(job);
+	if (new_game_job) {
+		this->HandleNewJob(new_game_job);
+	}
+}
+
+void AIInvoker::HandleNewJob(NewGameJob * job)
+{
+	this->StopCurrentJob();
 }
 
 void AIInvoker::GenerateCurrentBestMoves_Internal()
@@ -231,9 +243,7 @@ void AIInvoker::MainLoop()
 
 		Job * new_job = this->GetAndClearPendingJob();
 		if (new_job) {
-			if (dynamic_cast<NewGameJob*>(new_job)) {
-				this->StopCurrentJob();
-			}
+			this->HandleNewJob(new_job);
 			this->current_job.reset(new_job);
 		}
 
