@@ -71,7 +71,7 @@ namespace HearthstoneAI
                 this.AddLog("!!!!!!!!!!!!!!!!!!!! Failed to parse board in action start callback!!!!!!!!!!!!!!!");
                 return;
             }
-            this.ai_communicator.HandleBoardActionStart(board);
+            this.ai_communicator.UpdateBoard(board);
         }
 
         private void Log_reader_EndTurnEvent(object sender, LogParser.EndTurnEventArgs e)
@@ -162,9 +162,12 @@ namespace HearthstoneAI
 
             if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
             {
-                this.ai_communicator.HandleGameBoard(board);
+                this.ai_communicator.UpdateBoard(board);
 
-                this.last_invoke_board = board;
+                // TODO: this is a trigger point for automatic playing
+                // this.ai_communicator.HandleGameBoard(board);
+
+                //this.last_invoke_board = board;
             }
 
             this.UpdateBoard(board);

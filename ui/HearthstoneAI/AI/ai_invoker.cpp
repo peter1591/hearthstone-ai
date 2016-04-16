@@ -94,10 +94,6 @@ void AIInvoker::HandleCurrentJob()
 		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job.get()));
 	}
 
-	if (dynamic_cast<ActionStartJob*>(this->current_job.get()) != nullptr) {
-		return this->HandleJob(dynamic_cast<ActionStartJob*>(this->current_job.get()));
-	}
-
 	throw std::runtime_error("unhandled job type");
 }
 
@@ -122,18 +118,6 @@ void AIInvoker::HandleJob(NewGameJob * job)
 		}
 		task->Start(run_until, task_done_notifiers[task].get());
 	}
-}
-
-void AIInvoker::HandleJob(ActionStartJob * job)
-{
-	if (this->mcts.empty()) {
-		this->InitializeTasks(job->game);
-		return;
-	}
-
-	this->UpdateBoard(job->game);
-
-	this->current_job.reset(nullptr);
 }
 
 void AIInvoker::StopCurrentJob()
@@ -169,7 +153,15 @@ void AIInvoker::HandleNewJob(Job * job)
 	auto new_game_job = dynamic_cast<NewGameJob*>(job);
 	if (new_game_job) {
 		this->HandleNewJob(new_game_job);
+		return;
 	}
+
+	auto action_start_job = dynamic_cast<ActionStartJob*>(job);
+	if (action_start_job != nullptr) {
+		return this->HandleNewJob(action_start_job);
+	}
+
+	throw std::runtime_error("cannot handle new job");
 }
 
 void AIInvoker::HandleNewJob(NewGameJob * job)
@@ -178,8 +170,28 @@ void AIInvoker::HandleNewJob(NewGameJob * job)
 		this->InitializeTasks(job->game);
 	}
 	else {
-		this->UpdateBoard(job->game);
+		throw std::runtime_error("You should not call this twice");
 	}
+
+	this->current_job.reset(job);
+}
+
+void AIInvoker::HandleNewJob(ActionStartJob * job)
+{
+	if (!this->current_job) {
+		// start a new job
+		NewGameJob * adding_job = new NewGameJob();
+		adding_job->game = job->game;
+		return this->HandleNewJob(adding_job);
+	}
+
+	if (this->mcts.empty()) {
+		throw std::runtime_error("should not be called");
+		this->InitializeTasks(job->game);
+		return;
+	}
+
+	this->UpdateBoard(job->game);
 }
 
 void AIInvoker::UpdateBoard(Json::Value const & game)
@@ -244,7 +256,6 @@ void AIInvoker::MainLoop()
 		Job * new_job = this->GetAndClearPendingJob();
 		if (new_job) {
 			this->HandleNewJob(new_job);
-			this->current_job.reset(new_job);
 		}
 
 		this->HandleCurrentJob();

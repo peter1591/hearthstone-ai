@@ -78,9 +78,9 @@ namespace HearthstoneAI.Communicator
             this.last_get_best_move = DateTime.Now;
         }
 
-        public void HandleBoardActionStart(Board.Game game)
+        public void UpdateBoard(Board.Game game)
         {
-            ActionBoardActionStart action = new ActionBoardActionStart(this.GetNextActionSequenceId(), game);
+            ActionUpdateBoard action = new ActionUpdateBoard(this.GetNextActionSequenceId(), game);
             this.SendRequest(action);
 
             this.request_running = true;

@@ -62,9 +62,9 @@ private: // non-thread-safe functions
 
 	void HandleNewJob(Job * job);
 	void HandleNewJob(NewGameJob * job);
+	void HandleNewJob(ActionStartJob * job);
 
 	void HandleJob(NewGameJob * job);
-	void HandleJob(ActionStartJob * job);
 
 	void GenerateCurrentBestMoves_Internal();
 	void InitializeTasks(Json::Value const& game);

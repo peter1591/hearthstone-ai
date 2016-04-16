@@ -8,13 +8,13 @@ using System.Runtime.Serialization;
 namespace HearthstoneAI.Communicator
 {
     [DataContract]
-    class ActionBoardActionStart : ActionBase
+    class ActionUpdateBoard : ActionBase
     {
         [DataMember]
         Board.Game game;
 
-        public ActionBoardActionStart(int sequence, Board.Game game)
-            : base(sequence, "BoardActionStart")
+        public ActionUpdateBoard(int sequence, Board.Game game)
+            : base(sequence, "UpdateBoard")
         {
             this.game = game;
         }
