@@ -30,8 +30,6 @@ inline void MCTS::UpdateRoot(std::unique_ptr<BoardInitializer>&& board_initializ
 	// TODO: update the tree
 	this->tree.Clear();
 	this->board_finder.Clear();
-	this->traversed_nodes.clear();
-	this->traversed_path.Clear();
 }
 
 inline void MCTS::Iterate()
