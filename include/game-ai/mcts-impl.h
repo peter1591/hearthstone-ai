@@ -104,6 +104,7 @@ inline void MCTS::GetDecideInformation(Tree const* & tree, TreeNode const *& roo
 {
 	tree = &this->tree;
 	root_node = this->board_initializer_node;
+	if (root_node == nullptr) root_node = this->tree.GetRootNode();
 }
 
 inline void MCTS::ChangeBoardInitializer(std::unique_ptr<BoardInitializer>&& new_initializer, TreeNode * node)
