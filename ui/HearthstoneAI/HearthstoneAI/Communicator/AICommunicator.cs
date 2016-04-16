@@ -132,14 +132,9 @@ namespace HearthstoneAI.Communicator
 
             if (request_running)
             {
-                if ((DateTime.Now - this.last_request_start) > new TimeSpan(0, 0, 10))
+                if ((DateTime.Now - this.last_get_best_move) > new TimeSpan(0,0,5))
                 {
                     this.GetCurrentBestMove();
-                    this.Cancel();
-                }
-                else if ((DateTime.Now - this.last_get_best_move) > new TimeSpan(0,0,5))
-                {
-                    //this.GetCurrentBestMove();
                 }
             }
         }

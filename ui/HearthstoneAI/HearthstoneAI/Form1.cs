@@ -165,9 +165,6 @@ namespace HearthstoneAI
                 this.ai_communicator.HandleGameBoard(board);
 
                 this.last_invoke_board = board;
-            } else
-            {
-                this.ai_communicator.Cancel();
             }
 
             this.UpdateBoard(board);
