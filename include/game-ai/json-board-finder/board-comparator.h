@@ -14,7 +14,6 @@ namespace JsonBoardFinder
 			if (!ComparePlayer(board.player, json_board["player"])) return false;
 			if (!ComparePlayer(board.opponent, json_board["opponent"])) return false;
 
-			// TODO
 			return true;
 		}
 
@@ -38,7 +37,6 @@ namespace JsonBoardFinder
 
 			if (!CompareMinions(player.minions, json["minions"])) return false;
 
-			// TODO: compare hand cards
 			if (player.IsPlayerSide() && !ComparePlayerHand(player.hand, json)) return false;
 			if (!player.IsPlayerSide() && !CompareOpponentHand(player.hand, json)) return false;
 

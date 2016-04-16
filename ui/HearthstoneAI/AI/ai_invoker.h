@@ -17,10 +17,10 @@ public:
 
 	bool Initialize();
 
-	void CreateNewTask(Json::Value game); // TODO: use const& in parameter
+	void CreateNewTask(Json::Value const& game);
 	void CancelAllTasks();
 	void GenerateCurrentBestMoves();
-	void BoardActionStart(Json::Value game); // TODO: use const& in parameter
+	void BoardActionStart(Json::Value const& game);
 
 	void Cleanup();
 

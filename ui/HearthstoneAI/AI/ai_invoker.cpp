@@ -35,7 +35,7 @@ void AIInvoker::Cleanup()
 	this->main_thread.join();
 }
 
-void AIInvoker::CreateNewTask(Json::Value game)
+void AIInvoker::CreateNewTask(Json::Value const& game)
 {
 	std::unique_lock<std::mutex> lock(this->mtx_pending_operations);
 	this->pending_operations.push_back([game](AIInvoker* instance) {
@@ -63,7 +63,7 @@ void AIInvoker::GenerateCurrentBestMoves()
 	});
 }
 
-void AIInvoker::BoardActionStart(Json::Value game)
+void AIInvoker::BoardActionStart(Json::Value const& game)
 {
 	std::unique_lock<std::mutex> lock(this->mtx_pending_operations);
 	this->pending_operations.push_back([game](AIInvoker* instance) {
