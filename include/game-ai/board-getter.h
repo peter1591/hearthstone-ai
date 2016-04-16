@@ -4,18 +4,21 @@
 #include "tree.h"
 #include "traversed-path-recorder.h"
 #include "game-engine/board.h"
+#include "board-initializer/board-initializer.h"
 
 // Get a board for the corresponding tree node
 class BoardGetter
 {
 public:
-	BoardGetter(int start_board_random, TraversedPathRecorder const& path)
-		: start_board_random(start_board_random), path(path)
+	BoardGetter(BoardInitializer * start_board, int start_board_random, TraversedPathRecorder const& path)
+		: start_board(start_board), start_board_random(start_board_random), path(path)
 	{
 	}
 
 	void GetBoard(TreeNode const* leaf, GameEngine::Board & board) const
 	{
+		this->start_board->InitializeBoard(this->start_board_random, board);
+
 		std::list<TreeNode const*> path_nodes;
 		auto path_iterator = this->path.GetReverseIterator(leaf);
 
@@ -38,9 +41,8 @@ public:
 #endif
 	}
 
-	int GetStartBoardRandom() { return this->start_board_random; } // TODO: remove this
-
 private:
+	BoardInitializer * start_board;
 	int start_board_random; // (any) one of the start board randoms which leads us to this node
 	TraversedPathRecorder path; // one of the paths leading to this node
 };

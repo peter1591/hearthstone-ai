@@ -73,12 +73,18 @@ inline Tree const & MCTS::GetTree() const
 	return this->tree;
 }
 
+inline void MCTS::ChangeBoardInitializer(std::unique_ptr<BoardInitializer>&& new_initializer)
+{
+	this->history_board_initializer.push_back(std::move(this->board_initializer)); // move in to maintain lifetime
+	this->board_initializer = std::move(new_initializer);
+}
+
 inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 {
 	tree.CreateRootNode();
 	TreeNode * root_node = tree.GetRootNode();
 
-	root_node->board_getter.reset(new BoardGetter(this->current_start_board_random, TraversedPathRecorder()));
+	root_node->board_getter.reset(new BoardGetter(this->board_initializer.get(), this->current_start_board_random, TraversedPathRecorder()));
 	root_node->stage = board.GetStage();
 	root_node->stage_type = board.GetStageType();
 	root_node->parent = nullptr;
@@ -203,7 +209,7 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	TreeNode * new_node = this->allocated_node;
 	this->allocated_node = new TreeNode;
 
-	new_node->board_getter.reset(new BoardGetter(this->current_start_board_random, this->traversed_path));
+	new_node->board_getter.reset(new BoardGetter(this->board_initializer.get(), this->current_start_board_random, this->traversed_path));
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
 	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
@@ -231,7 +237,7 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 #ifdef DEBUG
 	new_node->board_hash = std::hash<GameEngine::Board>()(next_board);
 
-	//GameEngine::Board test_board = this->start_board.GetBoard(new_node->start_board_random);
+	//GameEngine::Board test_board;
 	//new_node->GetBoard(test_board);
 	//if (next_board != test_board) throw std::runtime_error("cannot deduce board repeatedly");
 #endif
@@ -366,7 +372,7 @@ inline bool MCTS::ExpandNewNode(TreeNode * & node, GameEngine::Board & board)
 	board.ApplyMove(expanding_move);
 
 	// find transposition node (i.e., other node with the same board)
-	TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->board_initializer.get());
+	TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board);
 	if (transposition_node) {
 		// a transposition node is found
 #ifdef DEBUG
@@ -410,7 +416,7 @@ inline bool MCTS::ExpandNodeWithDeterministicNextMoves(TreeNode * & node, GameEn
 #endif
 			board.ApplyMove(expanding_move);
 
-			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->board_initializer.get());
+			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board);
 			if (transposition_node) {
 #ifdef DEBUG
 				if (transposition_node->parent == node) {
@@ -518,7 +524,7 @@ inline bool MCTS::ExpandNodeWithSingleRandomNextMove(TreeNode * & node, GameEngi
 	}
 
 	// game-flow move is non-determinsitic for this board
-	transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->board_initializer.get());
+	transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board);
 	if (transposition_node) {
 #ifdef DEBUG
 		if (transposition_node->equivalent_node) throw std::runtime_error("logic error: 'board_node_map' should not store redirect nodes");
@@ -563,7 +569,7 @@ inline bool MCTS::ExpandNodeWithMultipleRandomNextMoves(TreeNode * & node, GameE
 #endif
 			board.ApplyMove(expanding_move);
 
-			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board, this->board_initializer.get());
+			TreeNode *transposition_node = this->board_finder.Find(Turn::GetTurn(node, expanding_move), board);
 			if (transposition_node) {
 #ifdef DEBUG
 				if (transposition_node->parent == node) {

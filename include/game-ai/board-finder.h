@@ -27,19 +27,19 @@ public:
 		return this->turn_maps[turn].Add(board, node);
 	}
 
-	TreeNode * Find(int turn, const GameEngine::Board &board, BoardInitializer * board_initializer) const
+	TreeNode * Find(int turn, const GameEngine::Board &board) const
 	{
 		if (turn >= this->turn_maps.size()) {
 			return nullptr;
 		}
 
-		return this->turn_maps[turn].Find(board, board_initializer);
+		return this->turn_maps[turn].Find(board);
 	}
 
-	TreeNode * FindInAllTurns(const GameEngine::Board & board, BoardInitializer * board_initializer, int & found_turn) const
+	TreeNode * FindInAllTurns(const GameEngine::Board & board, int & found_turn) const
 	{
 		for (int i = 0; i < turn_maps.size(); ++i) {
-			TreeNode * found_node = this->Find(i, board, board_initializer);
+			TreeNode * found_node = this->Find(i, board);
 			if (found_node) {
 				found_turn = i;
 				return found_node;

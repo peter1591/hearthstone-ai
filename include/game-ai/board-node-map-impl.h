@@ -49,7 +49,7 @@ inline void BoardNodeMap::Add(std::size_t board_hash, TreeNode *node)
 	this->map[board_hash].insert(node);
 }
 
-inline TreeNode * BoardNodeMap::Find(const GameEngine::Board &board, BoardInitializer * board_initializer) const
+inline TreeNode * BoardNodeMap::Find(const GameEngine::Board &board) const
 {
 	std::size_t hash = std::hash<GameEngine::Board>()(board);
 
@@ -58,7 +58,6 @@ inline TreeNode * BoardNodeMap::Find(const GameEngine::Board &board, BoardInitia
 
 	for (const auto &possible_node : it_found->second) {
 		GameEngine::Board it_board;
-		board_initializer->InitializeBoard(possible_node->board_getter->GetStartBoardRandom(), it_board);
 		possible_node->GetBoard(it_board);
 		if (board == it_board) return possible_node;
 

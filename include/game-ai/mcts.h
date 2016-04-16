@@ -34,6 +34,8 @@ public:
 	Tree const& GetTree() const;
 
 private:
+	void ChangeBoardInitializer(std::unique_ptr<BoardInitializer> && new_initializer);
+
 	void CreateRootNode(GameEngine::Board const& board);
 	void SelectAndExpand(TreeNode* & node, GameEngine::Board & board);
 	bool Simulate(GameEngine::Board &board);
@@ -59,7 +61,9 @@ private:
 private: // for internal use
 	std::mt19937 random_generator;
 
+	std::list<std::unique_ptr<BoardInitializer>> history_board_initializer; // a place to hold all history initialize boards
 	std::unique_ptr<BoardInitializer> board_initializer;
+
 	Tree tree;
 	BoardFinder board_finder;
 
