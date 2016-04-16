@@ -88,6 +88,7 @@ void AIInvoker::WaitCurrentJob()
 void AIInvoker::HandleCurrentJob()
 {
 	if (!this->current_job) return;
+	this->WaitCurrentJob();
 
 	if (dynamic_cast<NewGameJob*>(this->current_job.get()) != nullptr) {
 		return this->HandleJob(dynamic_cast<NewGameJob*>(this->current_job.get()));
@@ -103,10 +104,6 @@ void AIInvoker::HandleCurrentJob()
 void AIInvoker::HandleJob(NewGameJob * job)
 {
 	constexpr int sec_each_run = 1;
-
-	this->WaitCurrentJob();
-
-	if (this->mcts.empty()) this->InitializeTasks(job->game);
 
 	if (!this->running) return;
 
@@ -129,8 +126,6 @@ void AIInvoker::HandleJob(NewGameJob * job)
 
 void AIInvoker::HandleJob(ActionStartJob * job)
 {
-	this->WaitCurrentJob();
-
 	if (this->mcts.empty()) {
 		this->InitializeTasks(job->game);
 		return;
@@ -139,8 +134,6 @@ void AIInvoker::HandleJob(ActionStartJob * job)
 	this->UpdateBoard(job->game);
 
 	this->current_job.reset(nullptr);
-
-	return;
 }
 
 void AIInvoker::StopCurrentJob()
