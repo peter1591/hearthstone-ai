@@ -12,6 +12,7 @@ AIInvoker::AIInvoker()
 	this->current_job = nullptr;
 	this->pending_job = nullptr;
 	this->state = STATE_NOT_SPAWNED;
+	this->last_report_iteration_count = std::chrono::steady_clock::now();
 }
 
 bool AIInvoker::Initialize()
@@ -99,18 +100,21 @@ void AIInvoker::HandleCurrentJob()
 
 void AIInvoker::HandleJob(NewGameJob * job)
 {
-	constexpr int sec_each_run = 1;
+	constexpr int millis_each_run = 100;
 
 	if (!this->running) return;
 
-	int total_iterations = 0;
-	for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
-	std::cerr << "Done " << total_iterations << " iterations" << std::endl;
-	std::cerr.flush();
+	if (this->last_report_iteration_count + std::chrono::seconds(1) < std::chrono::steady_clock::now()) {
+		int total_iterations = 0;
+		for (auto const& task : this->tasks) total_iterations += task->GetIterationCount();
+		std::cerr << "Done " << total_iterations << " iterations" << std::endl;
+		std::cerr.flush();
+
+		this->last_report_iteration_count = std::chrono::steady_clock::now();
+	}
 
 	// start all threads
-	auto run_until = std::chrono::steady_clock::now() +
-		std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
+	auto run_until = std::chrono::steady_clock::now() + std::chrono::milliseconds(millis_each_run);
 	for (const auto &task : this->tasks)
 	{
 		if (this->task_done_notifiers.find(task) == task_done_notifiers.end()) {

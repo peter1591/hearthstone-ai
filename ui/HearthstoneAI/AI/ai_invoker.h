@@ -95,6 +95,8 @@ private:
 	bool flag_generate_best_move;
 	bool running;
 
+	std::chrono::time_point<std::chrono::steady_clock> last_report_iteration_count;
+
 private: // context for current job
 	std::vector<MCTS*> mcts;
 	std::vector<Task*> tasks;
