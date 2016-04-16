@@ -10,6 +10,11 @@
 class BoardWithMoves : public BoardInitializer
 {
 public:
+	BoardWithMoves(int start_board_rand, std::unique_ptr<BoardInitializer> board_initializer, std::list<GameEngine::Move> const& pending_moves)
+		: start_board_rand(start_board_rand), board_initializer(std::move(board_initializer)), pending_moves(pending_moves)
+	{
+	}
+
 	BoardWithMoves(int start_board_rand, std::unique_ptr<BoardInitializer> board_initializer, std::list<GameEngine::Move> && pending_moves)
 		: start_board_rand(start_board_rand), board_initializer(std::move(board_initializer)), pending_moves(std::move(pending_moves))
 	{
@@ -26,6 +31,14 @@ public:
 
 		std::mt19937 random_generator(rand_seed);
 		this->ShuffleHiddenInformation(random_generator, board);
+	}
+
+	BoardInitializer * Clone() const
+	{
+		return new BoardWithMoves(
+			this->start_board_rand,
+			std::unique_ptr<BoardInitializer>(this->board_initializer->Clone()),
+			this->pending_moves);
 	}
 
 private:

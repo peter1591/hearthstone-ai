@@ -19,6 +19,12 @@ public:
 		this->Parse(board);
 	}
 
+	BoardInitializer * Clone() const
+	{
+		BoardJsonParser * ret = new BoardJsonParser(this->origin_json);
+		return ret;
+	}
+
 private:
 	void Parse(GameEngine::Board & board) const
 	{
@@ -254,5 +260,5 @@ private:
 	}
 
 private:
-	Json::Value origin_json;
+	Json::Value const origin_json;
 };

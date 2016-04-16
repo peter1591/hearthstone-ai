@@ -359,20 +359,14 @@ inline void StartBoard::InitializeDebugBoard_Practice_Mage(GameEngine::Board & b
 	board.SetStateToPlayerChooseBoardMove();
 }
 
-inline StartBoard::StartBoard()
-{
-	//InitializeDebugBoard1(this->board_debug1);
-	//InitializeDebugBoard2(this->board_debug1);
-	//InitializeDebugBoard3(this->board_debug1);
-}
-
 inline void StartBoard::InitializeBoard(int rand_seed, GameEngine::Board & board) const
 {
-	//GameEngine::Board board = GameEngine::Board::Clone(this->board_debug1);
-	//board.SetRandomSeed(rand_seed);
-	//return std::move(board);
-
 	board.SetRandomSeed(rand_seed);
 	//InitializeDebugBoard_Practice_Mage(board);
 	InitializeDebugBoard1(board);
+}
+
+inline BoardInitializer * StartBoard::Clone() const
+{
+	return new StartBoard();
 }

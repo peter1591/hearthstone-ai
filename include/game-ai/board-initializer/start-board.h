@@ -6,9 +6,9 @@
 class StartBoard : public BoardInitializer
 {
 public:
-	StartBoard();
-
 	void InitializeBoard(int rand_seed, GameEngine::Board & board) const;
+
+	BoardInitializer * Clone() const;
 
 private: // for debug only
 	static void InitializeDebugBoard1_PlayerHand(GameEngine::Hand &hand);
@@ -23,6 +23,4 @@ private: // for debug only
 	static void InitializeDeck_Practice_Mage_Player(GameEngine::Hand & hand);
 	static void InitializeDeck_Practice_Mage_Opponent(GameEngine::Hand & hand);
 	static void InitializeDebugBoard_Practice_Mage(GameEngine::Board & board);
-
-	GameEngine::Board board_debug1;
 };
