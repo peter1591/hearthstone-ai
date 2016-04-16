@@ -21,7 +21,7 @@
 #include "game-engine/stages/opponent-use-hero-power.h"
 #include "game-engine/stages/opponent-turn-end.h"
 
-#include "game-engine/random-generator.h"
+#include "game-engine/random/random-generator.h"
 
 #include "game-engine/board.h"
 

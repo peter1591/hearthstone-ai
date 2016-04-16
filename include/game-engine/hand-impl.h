@@ -1,6 +1,6 @@
 #pragma once
 
-#include "random-generator.h"
+#include "random/random-generator.h"
 #include "hand.h"
 
 namespace GameEngine {

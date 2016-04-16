@@ -8,14 +8,15 @@
 
 #include "game-engine/board-objects/object-manager.h"
 
-#include "random-generator.h"
+#include "random/random-generator.h"
+#include "random/random_seed_manager.h"
+
 #include "common.h"
 #include "stage.h"
 #include "next-move-getter.h"
 #include "move.h"
 #include "player.h"
 #include "hook-manager.h"
-#include "random/random_seed_manager.h"
 
 namespace GameEngine {
 
