@@ -3,8 +3,8 @@
 #include "traversed-path-recorder.h"
 #include "tree.h"
 
-inline TraversedPathRecorderReverseIterator::TraversedPathRecorderReverseIterator(TreeNode const* leaf, list_type const& preceeding_nodes) :
-	preceeding_nodes(preceeding_nodes)
+inline TraversedPathRecorderReverseIterator::TraversedPathRecorderReverseIterator(TreeNode const* root_node, TreeNode const* leaf, list_type const& preceeding_nodes) :
+	root_node(root_node), preceeding_nodes(preceeding_nodes)
 {
 	this->current_node = leaf;
 	this->it_preceeding_nodes = this->preceeding_nodes.crbegin();
@@ -34,6 +34,11 @@ inline TreeNode const * TraversedPathRecorderReverseIterator::GetNodeAndMoveUpwa
 		}
 	}
 	else {
+		if (this->current_node == this->root_node) {
+			this->current_node = nullptr;
+			return nullptr;
+		}
+
 		TreeNode const* ret = this->current_node;
 		this->current_node = this->current_node->parent;
 		return ret;
@@ -65,8 +70,13 @@ inline void TraversedPathRecorderReverseIterator::FillNextRedirectInfo()
 	}
 }
 
-inline void TraversedPathRecorder::Clear()
+inline TraversedPathRecorder::TraversedPathRecorder() : root_node(nullptr)
 {
+}
+
+inline void TraversedPathRecorder::Reset(TreeNode const* root_node)
+{
+	this->root_node = root_node;
 	this->preceeding_nodes.clear();
 }
 
@@ -83,5 +93,5 @@ inline void TraversedPathRecorder::AddHiddenRedirectNode(TreeNode * redirect_par
 
 inline TraversedPathRecorderReverseIterator TraversedPathRecorder::GetReverseIterator(TreeNode const * leaf) const
 {
-	return TraversedPathRecorderReverseIterator(leaf, this->preceeding_nodes);
+	return TraversedPathRecorderReverseIterator(this->root_node, leaf, this->preceeding_nodes);
 }

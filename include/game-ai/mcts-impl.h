@@ -19,17 +19,29 @@ inline MCTS::~MCTS()
 
 inline void MCTS::Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer_)
 {
+	std::cerr << "MCTS Initialize from empty." << std::endl;
 	this->random_generator.seed(rand_seed);
-	this->board_initializer = std::move(board_initializer_);
+	this->ChangeBoardInitializer(std::move(board_initializer_));
 }
 
 inline void MCTS::UpdateRoot(std::unique_ptr<BoardInitializer>&& board_initializer_)
 {
-	this->board_initializer = std::move(board_initializer_);
+	// find existing node in tree
+	GameEngine::Board board;
+	board_initializer_->InitializeBoard(this->random_generator(), board);
+	int found_turn = 0;
+	auto found_node = this->board_finder.FindInAllTurns(board, found_turn);
+	if (!found_node) {
+		std::cerr << "Cannot found board in existing MCTS tree!!!!!!!!!!!!!!!!!" << std::endl;
+		this->ChangeBoardInitializer(std::move(board_initializer_));
+		this->tree.Clear();
+		this->board_finder.Clear();
+		return;
+	}
 
-	// TODO: update the tree
-	this->tree.Clear();
-	this->board_finder.Clear();
+	// found board
+	std::cerr << "Found board in existing MCTS tree. Node @ " << found_node << ", turn = " << found_turn << std::endl;
+	this->ChangeBoardInitializer(std::move(board_initializer_), found_node);
 }
 
 inline void MCTS::Iterate()
@@ -43,19 +55,27 @@ inline void MCTS::Iterate()
 #endif
 
 	GameEngine::Board board;
+	TreeNode *node = nullptr;
+	
 	this->board_initializer->InitializeBoard(this->current_start_board_random, board);
-	this->traversed_path.Clear();
-
-	if (!this->tree.GetRootNode()) {
-		this->CreateRootNode(board);
+	if (this->board_initializer_node == nullptr) {
+		if (!this->tree.GetRootNode()) {
+			this->CreateRootNode(board);
+		}
+		node = this->tree.GetRootNode();
 	}
-	TreeNode *node = this->tree.GetRootNode();
+	else {
+		node = this->board_initializer_node;
+#ifdef DEBUG
+		if (node->board_getter->GetBoardHash() != std::hash<GameEngine::Board>()(board)) throw std::runtime_error("root node hash not match");
+#endif
+	}
 
 #ifdef DEBUG
 	if (!this->traversed_nodes.empty()) throw std::runtime_error("consistency check failed");
 #endif
-
 	this->traversed_nodes.push_back(node);
+	this->traversed_path.Reset(node);
 
 	this->SelectAndExpand(node, board);
 	bool is_win = this->Simulate(board);
@@ -73,10 +93,11 @@ inline Tree const & MCTS::GetTree() const
 	return this->tree;
 }
 
-inline void MCTS::ChangeBoardInitializer(std::unique_ptr<BoardInitializer>&& new_initializer)
+inline void MCTS::ChangeBoardInitializer(std::unique_ptr<BoardInitializer>&& new_initializer, TreeNode * node)
 {
 	this->history_board_initializer.push_back(std::move(this->board_initializer)); // move in to maintain lifetime
 	this->board_initializer = std::move(new_initializer);
+	this->board_initializer_node = node;
 }
 
 inline void MCTS::CreateRootNode(GameEngine::Board const& board)

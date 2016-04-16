@@ -10,7 +10,7 @@ public:
 	typedef std::list<TreeNode*> list_type;
 
 public:
-	TraversedPathRecorderReverseIterator(TreeNode const* leaf, list_type const& preceeding_nodes);
+	TraversedPathRecorderReverseIterator(TreeNode const* root_node, TreeNode const* leaf, list_type const& preceeding_nodes);
 
 	TreeNode const* GetNodeAndMoveUpward();
 
@@ -19,6 +19,7 @@ private:
 	TreeNode const* GetParentNodeWithoutRedirectAndMoveUpward();
 
 private:
+	TreeNode const* root_node;
 	list_type const& preceeding_nodes;
 
 	TreeNode const* current_node;
@@ -32,7 +33,9 @@ private:
 class TraversedPathRecorder
 {
 public:
-	void Clear();
+	TraversedPathRecorder();
+
+	void Reset(TreeNode const* root_node);
 
 	void AddRedirectNode(TreeNode * redirect_node);
 
@@ -41,6 +44,8 @@ public:
 	TraversedPathRecorderReverseIterator GetReverseIterator(TreeNode const* leaf) const;
 
 private:
+	TreeNode const* root_node;
+
 	typedef TraversedPathRecorderReverseIterator::list_type list_type;
 	list_type preceeding_nodes;
 };
