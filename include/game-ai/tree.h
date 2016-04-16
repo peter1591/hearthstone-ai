@@ -9,6 +9,8 @@
 #include "game-engine/board.h"
 #include "traversed-path-recorder.h"
 
+class BoardGetter;
+
 class TreeNode
 {
 public:
@@ -35,8 +37,7 @@ public:
 
 	// what move lead us from parent to this state?
 	GameEngine::Move move;
-	int start_board_random; // (any) one of the start board randoms which leads us to this node
-	TraversedPathRecorder path; // one of the paths leading to this node
+	std::unique_ptr<BoardGetter> board_getter;
 
 	int turn;
 
@@ -100,96 +101,6 @@ inline void TreeNode::AddChild(TreeNode *node)
 	if (this->move_child_map) {
 		this->move_child_map->insert(std::make_pair(node->move, node));
 	}
-}
-
-inline void TreeNode::GetBoard(GameEngine::Board & board) const
-{
-	std::list<TreeNode const*> path_nodes;
-	auto path_iterator = this->path.GetReverseIterator(this);
-
-	while (true) {
-		auto const& node = path_iterator.GetNodeAndMoveUpward();
-		if (node == nullptr) break;
-		if (node->parent == nullptr) break;
-		path_nodes.push_front(node);
-	}
-
-	for (auto const& path_node : path_nodes) {
-		board.ApplyMove(path_node->move);
-	}
-
-#ifdef DEBUG
-	size_t current_hash = std::hash<GameEngine::Board>()(board);
-	if (this->board_hash != current_hash) {
-		throw std::runtime_error("consistency check failed: board hash changed");
-	}
-#endif
-}
-
-inline TreeNode * TreeNode::FindChildByMove(GameEngine::Move const & child_move)
-{
-	if (this->move_child_map) {
-		auto it = this->move_child_map->find(child_move);
-		if (it == this->move_child_map->end()) return nullptr;
-		return it->second;
-	}
-
-	// create the map on demand
-	this->move_child_map.reset(new std::unordered_map<GameEngine::Move, TreeNode*>());
-
-	TreeNode * ret = nullptr;
-	for (auto const& child : this->children) {
-		this->move_child_map->insert(std::make_pair(child->move, child));
-		if (child->move == child_move) ret = child;
-	}
-
-	return ret;
-}
-
-inline Tree::Tree()
-{
-	this->root_node = nullptr;
-}
-
-inline Tree::~Tree()
-{
-	if (this->root_node) {
-		Tree::ClearSubtree(this->root_node);
-		this->root_node = nullptr;
-	}
-}
-
-inline void Tree::CreateRootNode()
-{
-	if (this->root_node) throw std::runtime_error("root node already exists");
-	this->root_node = new TreeNode;
-}
-
-inline TreeNode * Tree::GetRootNode()
-{
-	return this->root_node;
-}
-
-inline TreeNode const* Tree::GetRootNode() const
-{
-	return this->root_node;
-}
-
-inline void Tree::Clear()
-{
-	if (this->root_node) {
-		this->ClearSubtree(this->root_node);
-		this->root_node = nullptr;
-	}
-}
-
-inline void Tree::ClearSubtree(TreeNode *node)
-{
-	for (const auto &child : node->children)
-	{
-		Tree::ClearSubtree(child);
-	}
-	delete node;
 }
 
 #endif

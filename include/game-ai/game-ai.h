@@ -10,6 +10,7 @@
 #include "game-ai/json-board-finder/json-board-finder.h"
 
 // game-ai implementation details
+#include "tree-impl.h"
 #include "traversed-path-recorder-impl.h"
 #include "board-node-map-impl.h"
 #include "mcts-impl.h"

@@ -77,8 +77,7 @@ inline void MCTS::CreateRootNode(GameEngine::Board const& board)
 	tree.CreateRootNode();
 	TreeNode * root_node = tree.GetRootNode();
 
-	root_node->start_board_random = this->current_start_board_random;
-	root_node->path.Clear();
+	root_node->board_getter.reset(new BoardGetter(this->current_start_board_random, TraversedPathRecorder()));
 	root_node->stage = board.GetStage();
 	root_node->stage_type = board.GetStageType();
 	root_node->parent = nullptr;
@@ -203,8 +202,7 @@ inline TreeNode * MCTS::CreateChildNode(TreeNode* const node, GameEngine::Move c
 	TreeNode * new_node = this->allocated_node;
 	this->allocated_node = new TreeNode;
 
-	new_node->start_board_random = this->current_start_board_random;
-	new_node->path = this->traversed_path; // copy
+	new_node->board_getter.reset(new BoardGetter(this->current_start_board_random, this->traversed_path));
 	new_node->equivalent_node = nullptr;
 #ifdef DEBUG
 	if (&new_node->move != &next_move) throw std::runtime_error("we've optimized by assuming next_move === this->allocated_node->move");
@@ -252,7 +250,6 @@ inline TreeNode * MCTS::CreateRedirectNode(TreeNode * parent, GameEngine::Move c
 	new_node->wins = 0;
 	new_node->count = 0;
 	new_node->equivalent_node = target_node;
-	new_node->start_board_random = this->current_start_board_random; // it's not used, but it's harmless to fill it anyway
 	parent->AddChild(new_node);
 
 	return new_node;
