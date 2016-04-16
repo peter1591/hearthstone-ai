@@ -82,6 +82,8 @@ public:
 	TreeNode * GetRootNode();
 	TreeNode const* GetRootNode() const;
 
+	void Clear();
+
 private:
 	static void ClearSubtree(TreeNode *node);
 
@@ -171,6 +173,14 @@ inline TreeNode * Tree::GetRootNode()
 inline TreeNode const* Tree::GetRootNode() const
 {
 	return this->root_node;
+}
+
+inline void Tree::Clear()
+{
+	if (this->root_node) {
+		this->ClearSubtree(this->root_node);
+		this->root_node = nullptr;
+	}
 }
 
 inline void Tree::ClearSubtree(TreeNode *node)

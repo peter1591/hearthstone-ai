@@ -136,16 +136,7 @@ void AIInvoker::HandleJob(ActionStartJob * job)
 		return;
 	}
 
-	std::list<std::unique_ptr<Task::Notifier>> notifiers;
-	for (auto const& task : this->tasks) {
-		auto notifier = std::make_unique<Task::Notifier>();
-		task->UpdateBoard(job->game, notifier.get());
-		notifiers.push_back(std::move(notifier));
-	}
-
-	std::cerr << "@@@@@@@@@@@@@@@@@@ Processing action start job @@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
-
-	for (auto const& notifier : notifiers) notifier->WaitUntilNotified();
+	this->UpdateBoard(job->game);
 
 	this->current_job.reset(nullptr);
 
@@ -190,7 +181,23 @@ void AIInvoker::HandleNewJob(Job * job)
 
 void AIInvoker::HandleNewJob(NewGameJob * job)
 {
-	this->StopCurrentJob();
+	if (this->mcts.empty()) {
+		this->InitializeTasks(job->game);
+	}
+	else {
+		this->UpdateBoard(job->game);
+	}
+}
+
+void AIInvoker::UpdateBoard(Json::Value const & game)
+{
+	std::list<std::unique_ptr<Task::Notifier>> notifiers;
+	for (auto const& task : this->tasks) {
+		auto notifier = std::make_unique<Task::Notifier>();
+		task->UpdateBoard(game, notifier.get());
+		notifiers.push_back(std::move(notifier));
+	}
+	for (auto const& notifier : notifiers) notifier->WaitUntilNotified();
 }
 
 void AIInvoker::GenerateCurrentBestMoves_Internal()

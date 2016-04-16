@@ -25,10 +25,12 @@ public:
 
 public: // Operations
 	void Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer);
+	void UpdateRoot(std::unique_ptr<BoardInitializer> && board_initializer);
+
 	void Iterate();
 
 public:
-	BoardInitializer * GetBoardInitializer() const;
+	std::unique_ptr<BoardInitializer> GetBoardInitializer();
 	Tree const& GetTree() const;
 
 private:

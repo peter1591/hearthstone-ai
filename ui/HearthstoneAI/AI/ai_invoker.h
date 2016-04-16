@@ -17,11 +17,10 @@ public:
 
 	bool Initialize();
 
-	void CreateNewTask(Json::Value game);
+	void CreateNewTask(Json::Value game); // TODO: use const& in parameter
 	void CancelAllTasks();
 	void GenerateCurrentBestMoves();
-	void GenerateBestMovesAndFinish();
-	void BoardActionStart(Json::Value game);
+	void BoardActionStart(Json::Value game); // TODO: use const& in parameter
 
 	void Cleanup();
 
@@ -69,6 +68,7 @@ private: // non-thread-safe functions
 
 	void GenerateCurrentBestMoves_Internal();
 	void InitializeTasks(Json::Value const& game);
+	void UpdateBoard(Json::Value const& game);
 
 private: // thread-safe functions
 	void SetState(State state);

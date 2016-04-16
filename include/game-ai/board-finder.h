@@ -36,6 +36,11 @@ public:
 		return this->turn_maps[turn].Find(board, board_initializer);
 	}
 
+	void Clear()
+	{
+		this->turn_maps.clear();
+	}
+
 private:
 	std::vector<BoardNodeMap> turn_maps;
 };

@@ -23,6 +23,17 @@ inline void MCTS::Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitia
 	this->board_initializer = std::move(board_initializer_);
 }
 
+inline void MCTS::UpdateRoot(std::unique_ptr<BoardInitializer>&& board_initializer_)
+{
+	this->board_initializer = std::move(board_initializer_);
+
+	// TODO: update the tree
+	this->tree.Clear();
+	this->board_finder.Clear();
+	this->traversed_nodes.clear();
+	this->traversed_path.Clear();
+}
+
 inline void MCTS::Iterate()
 {
 	this->current_start_board_random = this->GetRandom();
@@ -53,9 +64,9 @@ inline void MCTS::Iterate()
 	this->BackPropagate(is_win);
 }
 
-inline BoardInitializer * MCTS::GetBoardInitializer() const
+inline std::unique_ptr<BoardInitializer> MCTS::GetBoardInitializer()
 {
-	return this->board_initializer.get();
+	return std::move(this->board_initializer);
 }
 
 inline Tree const & MCTS::GetTree() const

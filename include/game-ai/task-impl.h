@@ -53,6 +53,9 @@ inline void Task::UpdateBoard(Json::Value const & json_board, Task::Notifier *no
 {
 	this->pending_operations.push_back([this, json_board, notifier] {
 		auto current_board = std::move(this->mcts.GetBoardInitializer());
+
+		if (!current_board) throw std::runtime_error("mcts should always with a valid board initializer");
+
 		JsonBoardFinder::JsonBoardFinder finder(std::move(current_board), json_board);
 		auto new_board = std::move(finder.FindBoard());
 
