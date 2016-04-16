@@ -29,7 +29,7 @@ public:
 
 		board.SetRandomSeed(rand_seed);
 
-		std::mt19937 random_generator(rand_seed);
+		std::mt19937_64 random_generator(rand_seed);
 		this->ShuffleHiddenInformation(random_generator, board);
 	}
 
@@ -42,7 +42,7 @@ public:
 	}
 
 private:
-	void ShuffleHiddenInformation(std::mt19937 & random_generator, GameEngine::Board & board) const
+	void ShuffleHiddenInformation(std::mt19937_64 & random_generator, GameEngine::Board & board) const
 	{
 		// boards only differs with hidden information are considered equal when comparing boards
 		// here we need to shuffle those information

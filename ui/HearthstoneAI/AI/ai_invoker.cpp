@@ -225,7 +225,7 @@ void AIInvoker::InitializeTasks(Json::Value const& game)
 {
 	constexpr int threads = 1; // TODO
 
-	std::mt19937 random_generator((unsigned int)time(nullptr));
+	std::mt19937_64 random_generator((unsigned int)time(nullptr));
 
 	for (int i = 0; i < threads; ++i)
 	{

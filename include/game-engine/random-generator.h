@@ -37,7 +37,7 @@ class RandomGenerator
 		bool GetFlag_HasCalled() const { return this->has_called; }
 
 	private:
-		std::mt19937 random_generator;
+		std::mt19937_64 random_generator;
 		bool has_called;
 };
 

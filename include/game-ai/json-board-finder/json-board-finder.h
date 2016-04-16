@@ -22,7 +22,7 @@ namespace JsonBoardFinder
 		std::unique_ptr<BoardInitializer> start_board;
 		Json::Value const& json_board;
 
-		std::mt19937 random_generator;
+		std::mt19937_64 random_generator;
 		int found_start_board_rand;
 		std::list<GameEngine::Move> found_applied_moves;
 	};
