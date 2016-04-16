@@ -24,6 +24,17 @@ inline void MCTS::Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitia
 	this->ChangeBoardInitializer(std::move(board_initializer_));
 }
 
+inline void MCTS::UpdateRoot(Json::Value const & json_board)
+{
+	// TODO: find among the existing tree first
+
+	JsonBoardFinder::JsonBoardFinder finder(std::move(this->board_initializer), json_board);
+	auto new_board = std::move(finder.FindBoard());
+
+	// update to MCTS
+	this->UpdateRoot(std::move(new_board));
+}
+
 inline void MCTS::UpdateRoot(std::unique_ptr<BoardInitializer>&& board_initializer_)
 {
 	// find existing node in tree
@@ -80,12 +91,6 @@ inline void MCTS::Iterate()
 	this->SelectAndExpand(node, board);
 	bool is_win = this->Simulate(board);
 	this->BackPropagate(is_win);
-}
-
-inline std::unique_ptr<BoardInitializer> MCTS::GetBoardInitializer()
-{
-	// return a new instance, since the old board initializer will be needed to derive boards for certain tree nodes
-	return std::move(std::unique_ptr<BoardInitializer>(this->board_initializer->Clone()));
 }
 
 inline void MCTS::GetDecideInformation(Tree const* & tree, TreeNode const *& root_node) const

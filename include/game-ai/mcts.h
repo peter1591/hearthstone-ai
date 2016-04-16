@@ -6,6 +6,7 @@
 #include <list>
 #include <map>
 #include <unordered_set>
+#include <json/json.h>
 #include "game-engine/game-engine.h"
 #include "game-ai/tree.h"
 #include "game-ai/board-node-map.h"
@@ -25,13 +26,12 @@ public:
 
 public: // Operations
 	void Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitializer> && board_initializer);
+	void UpdateRoot(Json::Value const& json_board);
 	void UpdateRoot(std::unique_ptr<BoardInitializer> && board_initializer);
 
 	void Iterate();
 
 public:
-	std::unique_ptr<BoardInitializer> GetBoardInitializer();
-
 	void GetDecideInformation(Tree const* &tree, TreeNode const* & root_node) const;
 
 private:
