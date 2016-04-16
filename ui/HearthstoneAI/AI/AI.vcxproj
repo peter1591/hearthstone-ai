@@ -91,6 +91,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>DEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,7 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>../../../include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -129,8 +130,8 @@
     <ClCompile Include="request_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\board-node-map-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-finder.h" />
+    <ClInclude Include="..\..\..\include\game-ai\board-getter.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-initializer.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\deck-initializer.h" />
     <ClInclude Include="..\..\..\include\game-ai\board-initializer\board-with-moves.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="..\..\..\include\game-ai\task.h" />
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\traversed-path-recorder.h" />
+    <ClInclude Include="..\..\..\include\game-ai\tree-impl.h" />
     <ClInclude Include="..\..\..\include\game-ai\tree.h" />
     <ClInclude Include="..\..\..\include\game-ai\turn.h" />
     <ClInclude Include="..\..\..\include\game-engine\board-impl.h" />

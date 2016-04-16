@@ -137,9 +137,6 @@
     <ClInclude Include="ai_invoker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\board-node-map-impl.h">
-      <Filter>Header Files\game-ai</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\board-finder.h">
       <Filter>Header Files\game-ai</Filter>
     </ClInclude>
@@ -553,6 +550,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_169.h">
       <Filter>Header Files\game-engine\cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\board-getter.h">
+      <Filter>Header Files\game-ai</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-ai\tree-impl.h">
+      <Filter>Header Files\game-ai</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
