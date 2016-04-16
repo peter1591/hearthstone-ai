@@ -43,7 +43,6 @@ private:
 
 	void PrintLevelPrefix(int level);
 	TreeNode *FindBestChildToPlay(const TreeNode *node);
-	void PrintTree(TreeNode const *node, int level, const int max_level);
 	void PrintBestRoute(int levels);
 
 private:

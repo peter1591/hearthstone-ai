@@ -31,7 +31,8 @@ public: // Operations
 
 public:
 	std::unique_ptr<BoardInitializer> GetBoardInitializer();
-	Tree const& GetTree() const;
+
+	void GetDecideInformation(Tree const* &tree, TreeNode const* & root_node) const;
 
 private:
 	void ChangeBoardInitializer(std::unique_ptr<BoardInitializer> && new_initializer, TreeNode * node = nullptr);

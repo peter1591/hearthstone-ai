@@ -187,8 +187,6 @@ void AIInvoker::HandleNewJob(ActionStartJob * job)
 
 	if (this->mcts.empty()) {
 		throw std::runtime_error("should not be called");
-		this->InitializeTasks(job->game);
-		return;
 	}
 
 	this->UpdateBoard(job->game);
@@ -225,12 +223,8 @@ void AIInvoker::InitializeTasks(Json::Value const& game)
 
 	std::mt19937 random_generator((unsigned int)time(nullptr));
 
-	for (int i = 0; i < threads; ++i) {
-
-		std::ofstream last_board_logger("./last_board.json", std::ios_base::out);
-		last_board_logger << game.toStyledString();
-		last_board_logger.flush();
-
+	for (int i = 0; i < threads; ++i)
+	{
 		std::unique_ptr<BoardInitializer> initializer(new BoardJsonParser(game));
 		MCTS * new_mcts = new MCTS();
 		new_mcts->Initialize(random_generator(), std::move(initializer));
@@ -241,7 +235,6 @@ void AIInvoker::InitializeTasks(Json::Value const& game)
 
 		this->tasks.push_back(new_task);
 	}
-
 }
 
 void AIInvoker::MainLoop()

@@ -88,9 +88,10 @@ inline std::unique_ptr<BoardInitializer> MCTS::GetBoardInitializer()
 	return std::move(std::unique_ptr<BoardInitializer>(this->board_initializer->Clone()));
 }
 
-inline Tree const & MCTS::GetTree() const
+inline void MCTS::GetDecideInformation(Tree const* & tree, TreeNode const *& root_node) const
 {
-	return this->tree;
+	tree = &this->tree;
+	root_node = this->board_initializer_node;
 }
 
 inline void MCTS::ChangeBoardInitializer(std::unique_ptr<BoardInitializer>&& new_initializer, TreeNode * node)

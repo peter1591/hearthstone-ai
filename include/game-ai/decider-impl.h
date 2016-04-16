@@ -29,9 +29,11 @@ inline void Decider::PrintBestRoute(int levels)
 {
 	const MCTS& mcts = *this->data.front();
 
-	Tree const& tree = mcts.GetTree();
+	Tree const* tree = nullptr;
+	TreeNode const* root_node = nullptr;
+	mcts.GetDecideInformation(tree, root_node);
 
-	TreeNode const* node = tree.GetRootNode();
+	TreeNode const* node = root_node;
 
 	int level = 0;
 	while (node != nullptr && !node->children.empty() && level <= levels) {
@@ -40,7 +42,7 @@ inline void Decider::PrintBestRoute(int levels)
 		if (node->move.action != GameEngine::Move::ACTION_GAME_FLOW) {
 			PrintLevelPrefix(level);
 			std::cout << "[" << node->stage << "] ";
-			if (node != tree.GetRootNode()) {
+			if (node != root_node) {
 				std::cout << node->move.GetDebugString();
 			}
 			std::cout << " " << node->wins << "/" << node->count << std::endl;
@@ -48,26 +50,6 @@ inline void Decider::PrintBestRoute(int levels)
 		}
 
 		node = FindBestChildToPlay(node);
-	}
-}
-
-inline void Decider::PrintTree(TreeNode const* node, int level, const int max_level)
-{
-	const MCTS& mcts = *this->data.front();
-
-	if (level >= max_level) return;
-
-	PrintLevelPrefix(level);
-	std::cout << "[" << node->stage << "] ";
-	if (node != mcts.GetTree().GetRootNode()) {
-		std::cout << node->move.GetDebugString();
-	}
-	std::cout << " " << node->wins << "/" << node->count << std::endl;
-
-	if (node->equivalent_node != nullptr) node = node->equivalent_node;
-
-	for (auto const& child : node->children) {
-		this->PrintTree(child, level + 1, max_level);
 	}
 }
 
@@ -217,7 +199,6 @@ inline bool Decider::GetNextStep(std::vector<ProgressData> &progress, MoveInfo &
 
 inline void Decider::DebugPrint()
 {
-	//this->PrintTree(&this->mcts.tree.GetRootNode(), 0, 5);
 	this->PrintBestRoute(20);
 }
 
@@ -238,7 +219,12 @@ inline Decider::MovesInfo Decider::GetBestMoves()
 	for (int i = 0; i < this->data.size(); ++i) {
 		ProgressData progress;
 		progress.mcts = this->data[i];
-		progress.node = progress.mcts->GetTree().GetRootNode();
+
+		Tree const* tree = nullptr;
+		TreeNode const* root_node = nullptr;
+		progress.mcts->GetDecideInformation(tree, root_node);
+
+		progress.node = root_node;
 		progresses.push_back(progress);
 	}
 
