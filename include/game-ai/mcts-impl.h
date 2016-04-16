@@ -64,7 +64,8 @@ inline void MCTS::Iterate()
 
 inline std::unique_ptr<BoardInitializer> MCTS::GetBoardInitializer()
 {
-	return std::move(this->board_initializer);
+	// return a new instance, since the old board initializer will be needed to derive boards for certain tree nodes
+	return std::move(std::unique_ptr<BoardInitializer>(this->board_initializer->Clone()));
 }
 
 inline Tree const & MCTS::GetTree() const
