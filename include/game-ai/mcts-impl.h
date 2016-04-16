@@ -26,7 +26,9 @@ inline void MCTS::Initialize(unsigned int rand_seed, std::unique_ptr<BoardInitia
 
 inline void MCTS::UpdateRoot(Json::Value const & json_board)
 {
-	// TODO: find among the existing tree first
+	if (this->tree.GetRootNode() == nullptr) {
+		return;
+	}
 
 	JsonBoardFinder::JsonBoardFinder finder(std::move(this->board_initializer), json_board);
 	auto new_board_initializer = std::move(finder.FindBoard());
