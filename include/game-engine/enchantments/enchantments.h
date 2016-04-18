@@ -41,7 +41,7 @@ public:
 	bool operator!=(Enchantments const& rhs) const;
 
 	// destory all allocated resource without triggering any hooks (since the whole board is going to be destroyed)
-	void Destroy();
+	void DestroyBoard();
 
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, MinionAura & aura);
 	void Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner = nullptr);

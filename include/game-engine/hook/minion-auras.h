@@ -28,7 +28,7 @@ namespace GameEngine
 		void Clear();
 
 		// destroy all allocated resources without triggering any hooks (since the whole board is going to be destroyed)
-		void Destroy();
+		void DestroyBoard();
 
 	public: // hooks
 		void HookAfterMinionAdded(Minion & added_minion);

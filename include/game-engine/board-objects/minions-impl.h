@@ -49,10 +49,10 @@ namespace GameEngine {
 #endif
 	}
 
-	inline void Minions::Destroy()
+	inline void Minions::DestroyBoard()
 	{
 		for (auto & minion : this->minions) {
-			minion.Destroy();
+			minion.DestroyBoard();
 		}
 	}
 

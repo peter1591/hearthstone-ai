@@ -137,8 +137,8 @@ inline Board::Board() :
 
 inline Board::~Board()
 {
-	this->player.Destroy();
-	this->opponent.Destroy();
+	this->player.DestroyBoard();
+	this->opponent.DestroyBoard();
 }
 
 inline Board::Board(const Board & rhs) :

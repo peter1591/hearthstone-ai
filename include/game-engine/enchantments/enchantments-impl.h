@@ -37,7 +37,7 @@ namespace GameEngine
 	}
 
 	template<typename Target>
-	inline void Enchantments<Target>::Destroy()
+	inline void Enchantments<Target>::DestroyBoard()
 	{
 		this->enchantments.RemoveIf([this](auto) {
 			return true;

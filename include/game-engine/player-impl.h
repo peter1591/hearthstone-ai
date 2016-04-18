@@ -84,9 +84,9 @@ namespace GameEngine
 		return !(*this == rhs);
 	}
 
-	inline void Player::Destroy()
+	inline void Player::DestroyBoard()
 	{
-		this->minions.Destroy();
+		this->minions.DestroyBoard();
 	}
 
 	inline int Player::GetTotalSpellDamage() const

@@ -60,7 +60,7 @@ namespace GameEngine
 		this->auras.clear();
 	}
 
-	inline void MinionAuras::Destroy()
+	inline void MinionAuras::DestroyBoard()
 	{
 		for (auto aura : this->auras) delete aura;
 		this->auras.clear();

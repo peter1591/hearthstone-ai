@@ -25,7 +25,7 @@ namespace GameEngine {
 		bool operator==(Player const& rhs) const;
 		bool operator!=(Player const& rhs) const;
 
-		void Destroy();
+		void DestroyBoard();
 
 	public:
 		int GetTotalSpellDamage() const;
