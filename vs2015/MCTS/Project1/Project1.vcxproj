@@ -92,7 +92,6 @@
       <PreprocessorDefinitions>CHOOSE_WHERE_TO_PUT_MINIONA;DEBUG;DEBUG_PRINT_MOVEA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>false</EnablePREfast>
-      <SmallerTypeCheck>true</SmallerTypeCheck>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
