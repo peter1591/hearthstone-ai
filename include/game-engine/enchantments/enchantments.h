@@ -3,12 +3,12 @@
 #include <memory>
 
 #include "game-engine/managed-list/list.h"
+#include "game-engine/enchantments/enchantment.h"
 #include "enchantments-item-type.h"
 
 namespace GameEngine {
 
 class MinionData;
-template <typename Target> class Enchantment;
 template <typename Target> class ManagedEnchantment;
 template <typename EnchantmentTarget> class EnchantmentsOwner;
 class Minion;
