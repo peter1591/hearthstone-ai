@@ -2,7 +2,7 @@
 
 #include <list>
 #include "enchantment.h"
-#include "managed-enchantment.h"
+#include "owner-item.h"
 #include "game-engine/enchantments/types.h"
 
 namespace GameEngine

@@ -10,7 +10,7 @@ namespace GameEngine
 	template <typename Target> class Enchantments;
 	template <typename Target> class EnchantmentsOwner;
 	template <typename Target> class EnchantmentsItemType;
-	template <typename Target> class ManagedEnchantment;
+	template <typename Target> class OwnerItem;
 	template <typename Target> class EnchantmentsHolder;
 
 	template <typename Target>
@@ -23,7 +23,7 @@ namespace GameEngine
 		using ManagerManagedItem = typename ManagerManagedContainer::ManagedItem;
 
 		using Owner = EnchantmentsOwner<Target>;
-		using OwnerItem = ManagedEnchantment<Target>;
+		using OwnerItem = OwnerItem<Target>;
 		using OwnerContainer = std::list<OwnerItem>;
 		using OwnerToken = typename OwnerContainer::iterator;
 

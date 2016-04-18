@@ -4,7 +4,7 @@
 #include "game-engine/board-objects/minion-data.h"
 #include "game-engine/board-objects/minion.h"
 #include "game-engine/board-objects/minions.h"
-#include "game-engine/enchantments/managed-enchantment.h"
+#include "game-engine/enchantments/owner-item.h"
 #include "game-engine/hook/minion-aura.h"
 
 namespace GameEngine
@@ -63,7 +63,7 @@ namespace GameEngine
 		
 		if (owner)
 		{
-			OwnerToken owner_token = owner->EnchantmentAdded(ManagedEnchantment<Target>(*this, managed_item));
+			OwnerToken owner_token = owner->EnchantmentAdded(OwnerItem<Target>(*this, managed_item));
 			managed_item->owner_token = new OwnerToken(owner_token);
 		}
 
@@ -71,7 +71,7 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::Remove(ManagedEnchantment<Target> & item) 
+	inline void Enchantments<Target>::Remove(OwnerItem<Target> & item)
 	{
 		// Note: the following line should be a copy, rather than a reference
 		// Since the parameter 'item' is a referece from owner's enchantments list

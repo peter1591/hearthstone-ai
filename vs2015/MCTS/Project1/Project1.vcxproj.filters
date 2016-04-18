@@ -365,9 +365,6 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-item-type.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\enchantments\managed-enchantment.h">
-      <Filter>Header Files\game-engine\enchantments</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\hook\listener.h">
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
@@ -552,6 +549,9 @@
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-holder.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\owner-item.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
   </ItemGroup>

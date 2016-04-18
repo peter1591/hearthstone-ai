@@ -12,7 +12,7 @@ namespace GameEngine
 	//    See: Enchantments::Remove()
 
 	template <typename Target>
-	class ManagedEnchantment
+	class OwnerItem
 	{
 	public:
 		typedef Enchantments<Target> Manager;
@@ -20,11 +20,11 @@ namespace GameEngine
 
 		friend class Manager; // only manager can manage underlying item
 
-		bool operator==(ManagedEnchantment<Target> const& rhs) const = delete;
-		bool operator!=(ManagedEnchantment<Target> const& rhs) const = delete;
+		bool operator==(OwnerItem<Target> const& rhs) const = delete;
+		bool operator!=(OwnerItem<Target> const& rhs) const = delete;
 
 	private: // only accessible to Manager
-		ManagedEnchantment(Enchantments<Target> & manager, ManagedItem const& item)
+		OwnerItem(Enchantments<Target> & manager, ManagedItem const& item)
 			: manager(manager), item(item)
 		{
 		}
