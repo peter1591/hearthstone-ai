@@ -27,6 +27,9 @@ namespace GameEngine
 		bool operator==(ManagedList const& rhs) const { return this->items == rhs.items; }
 		bool operator!=(ManagedList const& rhs) const { return this->items != rhs.items; }
 
+		typedef std::function<bool(ItemType const&, ItemType const&)> Comparator;
+		bool EqualsTo(ManagedList const& rhs, Comparator const& comparator) const;
+
 		bool Empty() const { return this->items.empty(); }
 
 		ManagedItem PushFront(ItemType const& item) { return ManagedItem(*this, this->items.insert(this->items.begin(), item)); }
@@ -60,6 +63,29 @@ namespace GameEngine
 	private:
 		UnderlyingContainer items;
 	};
+
+	template<typename ItemType>
+	inline bool ManagedList<ItemType>::EqualsTo(ManagedList<ItemType> const & rhs, Comparator const & comparator) const
+	{
+		if (this->items.size() != rhs.items.size()) return false;
+
+		auto it_lhs = this->items.begin();
+		auto it_rhs = rhs.items.begin();
+
+		while (true)
+		{
+			if (it_lhs == this->items.end()) break;
+			if (it_rhs == this->items.end()) throw std::runtime_error("both iterators should reach end at the same time");
+
+			if (!comparator(*it_lhs, *it_rhs)) return false;
+
+			it_lhs++;
+			it_rhs++;
+		}
+
+		// both iterators should reach end since they have the same size
+		return true;
+	}
 
 } // namespace GameEngine
 
