@@ -102,7 +102,7 @@ namespace GameEngine
 	inline void Enchantments<Target>::BeforeRemove(ManagedItem item)
 	{
 		this->holder.Get(item->GetHolderToken())->Remove(this->target);
-		if (item->GetOwner()) item->GetOwner()->EnchantmentRemoved(item->GetOwnerToken());
+		if (item->GetOwner()) item->GetOwner()->RemoveEnchantment(item->GetOwnerToken());
 
 		this->holder.Remove(item->GetHolderToken());
 	}

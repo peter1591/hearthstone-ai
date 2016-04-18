@@ -27,9 +27,8 @@ namespace GameEngine
 
 		void RemoveOwnedEnchantments();
 
-		// hooks
-		void EnchantmentAdded(OwnerItem const& managed_enchantment);
-		void EnchantmentRemoved(Token token);
+		void AddEnchantment(OwnerItem const& managed_enchantment);
+		void RemoveEnchantment(Token token);
 
 	private:
 		OwnerContainer enchantments;

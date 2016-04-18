@@ -31,6 +31,12 @@ namespace GameEngine
 			this->owner_token = std::make_unique<OwnerToken>(owner_token);
 		}
 
+		void UnsetOwner()
+		{
+			this->owner = nullptr;
+			this->owner_token.reset(nullptr);
+		}
+
 		bool operator==(EnchantmentsItemType const& rhs) const = delete;
 		bool operator!=(EnchantmentsItemType const& rhs) const = delete;
 

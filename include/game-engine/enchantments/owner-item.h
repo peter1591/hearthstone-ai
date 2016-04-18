@@ -26,7 +26,7 @@ namespace GameEngine
 		bool operator==(OwnerItem<Target> const& rhs) const = delete;
 		bool operator!=(OwnerItem<Target> const& rhs) const = delete;
 
-		Manager const& GetEnchantments() const { return this->manager; }
+		Manager & GetManager() const { return this->manager; }
 		ManagedItem Get() const { return this->item; }
 
 	public:
