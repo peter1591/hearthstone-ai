@@ -44,8 +44,7 @@ public:
 	void DestroyBoard();
 
 	ManagedItem Add(std::unique_ptr<EnchantmentType> && enchantment);
-
-	void Remove(OwnerItem<Target> & item); // interface for enchantment owner
+	void Remove(ManagedItem item);
 	void Clear();
 	bool Empty() const;
 

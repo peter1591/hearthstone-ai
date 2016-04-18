@@ -30,7 +30,10 @@ namespace GameEngine
 		ManagedItem Get() const { return this->item; }
 
 	public:
-		void Remove() { this->manager.Remove(*this); }
+		void Remove()
+		{
+			this->manager.Remove(this->item);
+		}
 
 	private:
 		Manager & manager;

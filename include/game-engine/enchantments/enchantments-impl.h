@@ -59,18 +59,9 @@ namespace GameEngine
 		return managed_item;
 	}
 
-	template <typename Target>
-	inline void Enchantments<Target>::Remove(OwnerItem<Target> & item)
+	template<typename Target>
+	inline void Enchantments<Target>::Remove(ManagedItem managed_item)
 	{
-#ifdef DEBUG
-		if (&item.GetEnchantments() != this) throw std::runtime_error("consistency check failed");
-#endif
-
-		// Note: the following line should be a copy, rather than a reference
-		// Since the parameter 'item' is a referece from owner's enchantments list
-		// which will be erased when 'this->BeforeRemove()'
-		auto managed_item = item.Get(); // Note: need to use copy (not reference)
-
 		this->BeforeRemove(managed_item);
 		managed_item.Remove();
 	}
