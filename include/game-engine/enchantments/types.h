@@ -1,5 +1,8 @@
 #pragma once
 
+#include <list>
+#include <vector>
+#include <memory>
 #include "game-engine/managed-list/list.h"
 
 namespace GameEngine
@@ -8,6 +11,7 @@ namespace GameEngine
 	template <typename Target> class EnchantmentsOwner;
 	template <typename Target> class EnchantmentsItemType;
 	template <typename Target> class ManagedEnchantment;
+	template <typename Target> class EnchantmentsHolder;
 
 	template <typename Target>
 	class EnchantmentTypes
@@ -22,5 +26,10 @@ namespace GameEngine
 		using OwnerItem = ManagedEnchantment<Target>;
 		using OwnerContainer = std::list<OwnerItem>;
 		using OwnerToken = typename OwnerContainer::iterator;
+
+		using Holder = EnchantmentsHolder<Target>;
+		using HolderItem = std::unique_ptr<Enchantment<Target>>;
+		using HolderContainer = std::vector<HolderItem>;
+		using HolderToken = size_t;
 	};
 } // namespace GameEngine

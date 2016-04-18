@@ -240,6 +240,7 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-player-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\buff-player.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment.h" />
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-holder.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments-item-type.h" />
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments.h" />

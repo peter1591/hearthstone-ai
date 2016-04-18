@@ -75,7 +75,9 @@ namespace GameEngine
 		while (true)
 		{
 			if (it_lhs == this->items.end()) break;
-			if (it_rhs == this->items.end()) throw std::runtime_error("both iterators should reach end at the same time");
+#ifdef DEBUG
+			if (it_rhs == rhs.items.end()) throw std::runtime_error("both iterators should reach end at the same time");
+#endif
 
 			if (!comparator(*it_lhs, *it_rhs)) return false;
 

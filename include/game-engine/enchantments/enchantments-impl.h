@@ -24,8 +24,8 @@ namespace GameEngine
 	template <typename Target>
 	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
 	{
-		auto comparator = [] (ItemType const& lhs_item, ItemType const& rhs_item) {
-			return lhs_item.EqualsTo(rhs_item);
+		auto comparator = [this, &rhs] (ItemType const& lhs_item, ItemType const& rhs_item) {
+			return lhs_item.EqualsTo(rhs_item, this->holder, rhs.holder);
 		};
 		return this->enchantments.EqualsTo(rhs.enchantments, comparator);
 	}
@@ -57,9 +57,9 @@ namespace GameEngine
 	{
 		using OwnerToken = typename EnchantmentTypes<Target>::OwnerToken;
 
-		auto ref_ptr = enchantment.get();
+		auto holder_token = this->holder.Add(std::move(enchantment));
 
-		auto managed_item = this->enchantments.PushBack(ItemType(std::move(enchantment), owner));
+		auto managed_item = this->enchantments.PushBack(ItemType(holder_token, owner));
 		
 		if (owner)
 		{
@@ -67,7 +67,7 @@ namespace GameEngine
 			managed_item->owner_token = new OwnerToken(owner_token);
 		}
 
-		ref_ptr->Apply(this->target);
+		this->holder.Get(holder_token)->Apply(this->target);
 	}
 
 	template <typename Target>
@@ -102,7 +102,7 @@ namespace GameEngine
 	{
 		this->enchantments.RemoveIf([this](auto item) {
 			bool expired;
-			item->enchantment->TurnEnd(this->target, expired);
+			this->holder.Get(item->holder_token)->TurnEnd(this->target, expired);
 
 			if (expired) {
 				this->BeforeRemove(item);
@@ -117,8 +117,10 @@ namespace GameEngine
 	template <typename Target>
 	inline void Enchantments<Target>::BeforeRemove(ManagedItem item)
 	{
-		item->enchantment->Remove(this->target);
+		this->holder.Get(item->holder_token)->Remove(this->target);
 		if (item->owner) item->owner->EnchantmentRemoved(*item->owner_token);
+
+		this->holder.Remove(item->holder_token);
 	}
 } // namespace GameEngine
 
@@ -127,8 +129,9 @@ inline std::size_t std::hash<GameEngine::Enchantments<Target>>::operator()(const
 {
 	result_type result = 0;
 
-	s.enchantments.ForEach([&result](auto const& enchantment) {
-		GameEngine::hash_combine(result, enchantment);
+	s.enchantments.ForEach([&s, &result](auto const& enchantment) {
+		GameEngine::Enchantment<Target> * enchant = s.holder.Get(enchantment.holder_token).get();
+		GameEngine::hash_combine(result, *enchant);
 	});
 
 	return result;

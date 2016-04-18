@@ -6,6 +6,7 @@
 #include "game-engine/enchantments/enchantment.h"
 #include "enchantments-item-type.h"
 #include "game-engine/enchantments/types.h"
+#include "enchantments-holder.h"
 
 namespace GameEngine {
 
@@ -58,6 +59,7 @@ private:
 private:
 	Target & target;
 	ManagedContainer enchantments;
+	EnchantmentsHolder<Target> holder;
 };
 
 } // namespace GameEngine
