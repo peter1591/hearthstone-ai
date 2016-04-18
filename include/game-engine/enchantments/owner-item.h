@@ -29,6 +29,7 @@ namespace GameEngine
 		{
 		}
 
+		Manager const& GetEnchantments() const { return this->manager; }
 		ManagedItem Get() const { return this->item; }
 
 	public:
