@@ -27,15 +27,8 @@ namespace GameEngine
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentsOwner<EnchantmentTarget>::EnchantmentRemoved(ManagerManagedItem managed_item)
+	inline void EnchantmentsOwner<EnchantmentTarget>::EnchantmentRemoved(Token token)
 	{
-		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
-		{
-			if (!it->EqualsTo(managed_item)) continue;
-
-			this->enchantments.erase(it);
-			return;
-		}
-		throw std::runtime_error("cannot find enchantment to be removed");
+		this->enchantments.erase(token);
 	}
 } // namespace GameEngine

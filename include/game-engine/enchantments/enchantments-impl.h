@@ -115,7 +115,7 @@ namespace GameEngine
 	inline void Enchantments<Target>::BeforeRemove(ManagedItem item)
 	{
 		item->enchantment->Remove(this->target);
-		if (item->owner) item->owner->EnchantmentRemoved(item);
+		if (item->owner) item->owner->EnchantmentRemoved(*item->owner_token);
 	}
 } // namespace GameEngine
 
