@@ -18,16 +18,13 @@ namespace GameEngine
 		typedef Enchantments<Target> Manager;
 		typedef typename Manager::ManagedItem ManagedItem;
 
-		friend class Manager; // only manager can manage underlying item
-
-		bool operator==(OwnerItem<Target> const& rhs) const = delete;
-		bool operator!=(OwnerItem<Target> const& rhs) const = delete;
-
-	private: // only accessible to Manager
 		OwnerItem(Enchantments<Target> & manager, ManagedItem const& item)
 			: manager(manager), item(item)
 		{
 		}
+
+		bool operator==(OwnerItem<Target> const& rhs) const = delete;
+		bool operator!=(OwnerItem<Target> const& rhs) const = delete;
 
 		Manager const& GetEnchantments() const { return this->manager; }
 		ManagedItem Get() const { return this->item; }

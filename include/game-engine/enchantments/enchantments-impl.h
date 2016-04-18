@@ -59,12 +59,11 @@ namespace GameEngine
 
 		auto holder_token = this->holder.Add(std::move(enchantment));
 
-		auto managed_item = this->enchantments.PushBack(ItemType(holder_token, owner));
+		auto managed_item = this->enchantments.PushBack(ItemType(holder_token));
 		
 		if (owner)
 		{
-			OwnerToken owner_token = owner->EnchantmentAdded(OwnerItem<Target>(*this, managed_item));
-			managed_item->owner_token = new OwnerToken(owner_token);
+			owner->EnchantmentAdded(OwnerItem<Target>(*this, managed_item));
 		}
 
 		this->holder.Get(holder_token)->Apply(this->target);
@@ -106,7 +105,7 @@ namespace GameEngine
 	{
 		this->enchantments.RemoveIf([this](auto item) {
 			bool expired;
-			this->holder.Get(item->holder_token)->TurnEnd(this->target, expired);
+			this->holder.Get(item->GetHolderToken())->TurnEnd(this->target, expired);
 
 			if (expired) {
 				this->BeforeRemove(item);
@@ -121,10 +120,10 @@ namespace GameEngine
 	template <typename Target>
 	inline void Enchantments<Target>::BeforeRemove(ManagedItem item)
 	{
-		this->holder.Get(item->holder_token)->Remove(this->target);
-		if (item->owner) item->owner->EnchantmentRemoved(*item->owner_token);
+		this->holder.Get(item->GetHolderToken())->Remove(this->target);
+		if (item->GetOwner()) item->GetOwner()->EnchantmentRemoved(item->GetOwnerToken());
 
-		this->holder.Remove(item->holder_token);
+		this->holder.Remove(item->GetHolderToken());
 	}
 } // namespace GameEngine
 
@@ -134,7 +133,7 @@ inline std::size_t std::hash<GameEngine::Enchantments<Target>>::operator()(const
 	result_type result = 0;
 
 	s.enchantments.ForEach([&s, &result](auto const& enchantment) {
-		GameEngine::Enchantment<Target> * enchant = s.holder.Get(enchantment.holder_token).get();
+		GameEngine::Enchantment<Target> * enchant = s.holder.Get(enchantment.GetHolderToken()).get();
 		GameEngine::hash_combine(result, *enchant);
 	});
 
