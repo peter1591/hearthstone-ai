@@ -20,8 +20,8 @@ namespace GameEngine
 
 		friend class Manager; // only manager can manage underlying item
 
-		bool operator==(ManagedEnchantment<Target> const& rhs) const { return this->item == rhs.item; }
-		bool operator!=(ManagedEnchantment<Target> const& rhs) const { return !(*this == rhs); }
+		bool operator==(ManagedEnchantment<Target> const& rhs) const = delete;
+		bool operator!=(ManagedEnchantment<Target> const& rhs) const = delete;
 
 		bool EqualsTo(ManagedItem const& rhs) const { return this->item == rhs; }
 
