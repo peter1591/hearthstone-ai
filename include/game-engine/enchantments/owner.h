@@ -3,18 +3,20 @@
 #include <list>
 #include "enchantment.h"
 #include "managed-enchantment.h"
+#include "game-engine/enchantments/types.h"
 
 namespace GameEngine
 {
 	template <typename EnchantmentTarget>
 	class EnchantmentsOwner
 	{
-	public:
-		using Manager = typename ManagedEnchantment<EnchantmentTarget>::Manager;
-		using ManagedItem = typename Manager::ManagedItem;
-		using Container = typename Enchantments<EnchantmentTarget>::OwnerContainer;
-		using Token = typename Enchantments<EnchantmentTarget>::OwnerToken;
+	private:
+		using ManagerManagedItem = typename EnchantmentTypes<EnchantmentTarget>::ManagerManagedItem;
+		using OwnerItem = typename EnchantmentTypes<EnchantmentTarget>::OwnerItem;
+		using OwnerContainer = typename EnchantmentTypes<EnchantmentTarget>::OwnerContainer;
+		using Token = typename EnchantmentTypes<EnchantmentTarget>::OwnerToken;
 
+	public:
 		EnchantmentsOwner() {}
 		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> const& rhs) = delete;
 		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> && rhs) = delete;
@@ -26,10 +28,10 @@ namespace GameEngine
 		void RemoveOwnedEnchantments();
 
 		// hooks
-		Token EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment);
-		void EnchantmentRemoved(ManagedItem managed_enchantment);
+		Token EnchantmentAdded(OwnerItem const& managed_enchantment);
+		void EnchantmentRemoved(ManagerManagedItem managed_enchantment);
 
 	private:
-		std::list<ManagedEnchantment<EnchantmentTarget>> enchantments;
+		OwnerContainer enchantments;
 	};
 } // namespace GameEngine

@@ -338,9 +338,6 @@
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantment-impl.h">
-      <Filter>Header Files\game-engine\enchantments</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\enchantments\enchantments.h">
       <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
@@ -550,6 +547,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\game-ai\json-board-finder\tree.h">
       <Filter>Header Files\game-ai\json-board-finder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\game-engine\enchantments\types.h">
+      <Filter>Header Files\game-engine\enchantments</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

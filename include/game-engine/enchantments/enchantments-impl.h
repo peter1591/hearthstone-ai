@@ -106,7 +106,7 @@ namespace GameEngine
 	}
 
 	template <typename Target>
-	inline void Enchantments<Target>::BeforeRemove(typename ManagedContainer::ManagedItem item)
+	inline void Enchantments<Target>::BeforeRemove(ManagedItem item)
 	{
 		item->enchantment->Remove(this->target);
 		if (item->owner) item->owner->EnchantmentRemoved(item);

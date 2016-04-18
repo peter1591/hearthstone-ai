@@ -5,6 +5,7 @@
 #include "game-engine/managed-list/list.h"
 #include "game-engine/enchantments/enchantment.h"
 #include "enchantments-item-type.h"
+#include "game-engine/enchantments/types.h"
 
 namespace GameEngine {
 
@@ -22,13 +23,9 @@ class Enchantments
 
 public:
 	typedef Enchantment<Target> EnchantmentType;
-	typedef EnchantmentsItemType<Target> ItemType;
-	typedef typename ManagedList<ItemType> ManagedContainer;
-	typedef typename ManagedContainer::ManagedItem ManagedItem;
-
-	// forward declaration for enchantments owner
-	using OwnerContainer = std::list<ManagedEnchantment<Target>>;
-	using OwnerToken = typename OwnerContainer::iterator;
+	typedef typename EnchantmentTypes<Target>::ManagerRawItem ItemType;
+	typedef typename EnchantmentTypes<Target>::ManagerManagedContainer ManagedContainer;
+	typedef typename EnchantmentTypes<Target>::ManagerManagedItem ManagedItem;
 
 public:
 	Enchantments(Target & target) : target(target) {}
