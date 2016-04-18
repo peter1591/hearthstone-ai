@@ -20,13 +20,14 @@ namespace GameEngine
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentsOwner<typename EnchantmentTarget>::EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment)
+	inline typename EnchantmentsOwner<EnchantmentTarget>::Token
+	EnchantmentsOwner<EnchantmentTarget>::EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment)
 	{
-		this->enchantments.push_back(managed_enchantment);
+		return this->enchantments.insert(this->enchantments.end(), managed_enchantment);
 	}
 
 	template <typename EnchantmentTarget>
-	inline void EnchantmentsOwner<typename EnchantmentTarget>::EnchantmentRemoved(ManagedItem managed_item)
+	inline void EnchantmentsOwner<EnchantmentTarget>::EnchantmentRemoved(ManagedItem managed_item)
 	{
 		for (auto it = this->enchantments.begin(); it != this->enchantments.end(); ++it)
 		{

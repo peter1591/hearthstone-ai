@@ -12,6 +12,8 @@ namespace GameEngine
 	public:
 		using Manager = typename ManagedEnchantment<EnchantmentTarget>::Manager;
 		using ManagedItem = typename Manager::ManagedItem;
+		using Container = std::list<ManagedEnchantment<EnchantmentTarget>>;
+		using Token = typename Container::iterator;
 
 		EnchantmentsOwner() {}
 		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> const& rhs) = delete;
@@ -24,7 +26,7 @@ namespace GameEngine
 		void RemoveOwnedEnchantments();
 
 		// hooks
-		void EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment);
+		Token EnchantmentAdded(ManagedEnchantment<EnchantmentTarget> const& managed_enchantment);
 		void EnchantmentRemoved(ManagedItem managed_enchantment);
 
 	private:
