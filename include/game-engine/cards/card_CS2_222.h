@@ -30,7 +30,7 @@ private:
 
 		auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, 0, false>>();
 
-		target_minion.enchantments.Add(std::move(enchantment), *this);
+		this->AddEnchantment(target_minion, std::move(enchantment));
 	}
 
 private: // for comparison

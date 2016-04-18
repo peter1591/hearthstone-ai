@@ -40,7 +40,7 @@ namespace GameEngine
 
 	private:
 		Minion & minion;
-		std::list<MinionAura *> auras;
+		std::list<MinionAura *> auras; // TODO: use unique_ptr
 	};
 } // namespace GameEngine
 

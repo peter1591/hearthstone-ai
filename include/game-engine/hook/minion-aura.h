@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "game-engine/hook/listener.h"
+#include "game-engine/enchantments/enchantment.h"
 #include "game-engine/enchantments/owner.h"
 #include "game-engine/player.h"
 
@@ -35,10 +36,17 @@ namespace GameEngine
 		}
 
 	public:
-		template <typename Target> void GetEnchantmentsOwner(EnchantmentsOwner<Target> * &owner);
-		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Minion> * &owner_) { owner_ = &this->GetMinionEnchantmentsOwner(); }
-		template <> void GetEnchantmentsOwner(EnchantmentsOwner<Player> * &owner_) { owner_ = &this->GetPlayerEnchantmentsOwner(); }
+		void AddEnchantment(Minion & minion, std::unique_ptr<Enchantment<Minion>> && enchantment)
+		{
+			minion.enchantments.AddA(std::move(enchantment), &this->GetMinionEnchantmentsOwner());
+		}
 
+		void AddEnchantment(Player & player, std::unique_ptr<Enchantment<Player>> && enchantment)
+		{
+			player.enchantments.AddA(std::move(enchantment), &this->GetPlayerEnchantmentsOwner());
+		}
+
+	protected:
 		EnchantmentsOwner<Minion> & GetMinionEnchantmentsOwner()
 		{
 			if (!this->minion_enchantments) {

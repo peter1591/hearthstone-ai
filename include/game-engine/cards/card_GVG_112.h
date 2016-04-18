@@ -15,7 +15,7 @@ private:
 	{
 		constexpr int buff_stat = 1 << MinionStat::FLAG_FORGETFUL;
 		auto enchantment = std::make_unique<Enchantment_BuffMinion_C<0, 0, 0, buff_stat, false>>();
-		target_minion.enchantments.Add(std::move(enchantment), *this);
+		this->AddEnchantment(target_minion, std::move(enchantment));
 	}
 
 private: // for comparison

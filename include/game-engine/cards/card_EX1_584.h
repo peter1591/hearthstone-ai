@@ -9,12 +9,12 @@ static void AfterSummoned(MinionIterator summoned_minion)
 
 	if (summoned_minion.IsBegin() == false) {
 		auto prev = summoned_minion;
-		prev.GoToPrevious()->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
+		prev.GoToPrevious()->enchantments.Add(std::make_unique<EnchantType>());
 	}
 
 	auto next = summoned_minion;
 	next.GoToNext();
-	if (next.IsEnd() == false) next->enchantments.Add(std::make_unique<EnchantType>(), nullptr);
+	if (next.IsEnd() == false) next->enchantments.Add(std::make_unique<EnchantType>());
 }
 
 DEFINE_CARD_CLASS_END()

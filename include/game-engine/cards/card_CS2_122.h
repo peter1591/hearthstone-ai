@@ -23,8 +23,7 @@ private:
 
 	void AddAuraEnchantmentToMinion(Minion & target_minion)
 	{
-		target_minion.enchantments.Add(
-			std::make_unique<Enchantment_BuffMinion_C<1, 0, 0, 0, false>>(), *this);
+		this->AddEnchantment(target_minion, std::make_unique<Enchantment_BuffMinion_C<1, 0, 0, 0, false>>());
 	}
 
 private: // for comparison

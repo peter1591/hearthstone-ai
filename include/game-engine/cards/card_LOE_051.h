@@ -13,8 +13,8 @@ public:
 	{
 		MinionAura::AfterAdded(owner_);
 
-		this->GetOwner().GetBoard().player.enchantments.Add(std::make_unique<Enchantment_BuffPlayer_C<0, 2, false>>(), *this);
-		this->GetOwner().GetBoard().opponent.enchantments.Add(std::make_unique<Enchantment_BuffPlayer_C<0, 2, false>>(), *this);
+		this->AddEnchantment(this->GetOwner().GetBoard().player, std::make_unique<Enchantment_BuffPlayer_C<0, 2, false>>());
+		this->AddEnchantment(this->GetOwner().GetBoard().opponent, std::make_unique<Enchantment_BuffPlayer_C<0, 2, false>>());
 	}
 
 private: // for comparison
