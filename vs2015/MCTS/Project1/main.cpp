@@ -19,7 +19,7 @@ static void Run()
 	std::mt19937 random_generator((unsigned int)time(nullptr));
 	MCTS mcts[threads];
 	std::vector<Task*> tasks;
-	std::map<Task*, Task::PauseNotifier*> pause_notifiers;
+	std::map<Task*, Task::Notifier*> pause_notifiers;
 
 	std::string board_json_path = "../../../ui/HearthstoneAI/bin/last_board.json";
 	std::ifstream board_json_file(board_json_path, std::ios_base::in);
@@ -35,7 +35,7 @@ static void Run()
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));
 		tasks.push_back(new_task);
 
-		pause_notifiers[new_task] = new Task::PauseNotifier;
+		pause_notifiers[new_task] = new Task::Notifier;
 
 		auto now = std::chrono::steady_clock::now();
 		auto run_until = now + std::chrono::duration_cast<std::chrono::seconds>(std::chrono::duration<double>(sec_each_run));
@@ -49,7 +49,7 @@ static void Run()
 		std::cout.flush();
 		for (const auto &task : tasks)
 		{
-			pause_notifiers[task]->WaitUntilPaused();
+			pause_notifiers[task]->WaitUntilNotified();
 		}
 
 		std::cout << "Deciding..." << std::endl;

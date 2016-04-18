@@ -11,7 +11,7 @@ namespace GameEngine
 	{
 	public:
 		using Manager = typename ManagedEnchantment<EnchantmentTarget>::Manager;
-		using ManagedItem =typename Manager::ManagedItem;
+		using ManagedItem = typename Manager::ManagedItem;
 
 		EnchantmentsOwner() {}
 		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> const& rhs) = delete;
