@@ -29,15 +29,12 @@ namespace GameEngine
 		}
 	}
 
-	template <typename EnchantmentTarget>
-	void EnchantmentsOwner<EnchantmentTarget>::AddEnchantment(OwnerItem const& managed_enchantment)
+	template<typename EnchantmentTarget>
+	inline void EnchantmentsOwner<EnchantmentTarget>::AddEnchantment(Manager & manager, ManagerManagedItem const & managed_item)
 	{
 		using OwnerToken = typename EnchantmentsOwner<EnchantmentTarget>::Token;
-
-		OwnerToken token = this->enchantments.insert(this->enchantments.end(), managed_enchantment);
-		OwnerItem & added_item = *token;
-
-		added_item.Get()->SetOwner(this, token);
+		OwnerToken token = this->enchantments.insert(this->enchantments.end(), OwnerItem(manager, managed_item));
+		managed_item->SetOwner(this, token);
 	}
 
 	template<typename EnchantmentTarget>

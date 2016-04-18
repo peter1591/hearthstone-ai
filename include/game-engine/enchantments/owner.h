@@ -11,6 +11,7 @@ namespace GameEngine
 	class EnchantmentsOwner
 	{
 	private:
+		using Manager = typename EnchantmentTypes<EnchantmentTarget>::Manager;
 		using ManagerManagedItem = typename EnchantmentTypes<EnchantmentTarget>::ManagerManagedItem;
 		using OwnerItem = typename EnchantmentTypes<EnchantmentTarget>::OwnerItem;
 		using OwnerContainer = typename EnchantmentTypes<EnchantmentTarget>::OwnerContainer;
@@ -27,7 +28,7 @@ namespace GameEngine
 
 		void RemoveOwnedEnchantments();
 
-		void AddEnchantment(OwnerItem const& managed_enchantment);
+		void AddEnchantment(Manager & manager, ManagerManagedItem const& managed_item);
 		void RemoveEnchantment(Token token);
 
 	private:

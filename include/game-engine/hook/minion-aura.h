@@ -43,7 +43,7 @@ namespace GameEngine
 
 			auto managed_item = minion.enchantments.Add(std::move(enchantment));
 
-			this->GetMinionEnchantmentsOwner().AddEnchantment(OwnerItem(minion.enchantments, managed_item));
+			this->GetMinionEnchantmentsOwner().AddEnchantment(minion.enchantments, managed_item);
 		}
 
 		void AddEnchantment(Player & player, std::unique_ptr<Enchantment<Player>> && enchantment)
@@ -52,7 +52,7 @@ namespace GameEngine
 
 			auto managed_item = player.enchantments.Add(std::move(enchantment));
 			
-			this->GetPlayerEnchantmentsOwner().AddEnchantment(OwnerItem(player.enchantments, managed_item));
+			this->GetPlayerEnchantmentsOwner().AddEnchantment(player.enchantments, managed_item);
 		}
 
 	protected:
