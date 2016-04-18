@@ -58,13 +58,13 @@ namespace GameEngine
 		auto holder_token = this->holder.Add(std::move(enchantment));
 
 		auto managed_item = this->enchantments.PushBack(ItemType(holder_token));
-		
+
+		this->holder.Get(holder_token)->Apply(this->target);
+
 		if (owner)
 		{
 			owner->EnchantmentAdded(OwnerItem<Target>(*this, managed_item));
 		}
-
-		this->holder.Get(holder_token)->Apply(this->target);
 	}
 
 	template <typename Target>
