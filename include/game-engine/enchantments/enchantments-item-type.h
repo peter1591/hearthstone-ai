@@ -24,6 +24,7 @@ namespace GameEngine
 
 		std::unique_ptr<Enchantment<Target>> enchantment;
 		EnchantmentsOwner<Target> * owner;
+
 	};
 } // namespace GameEngine
 

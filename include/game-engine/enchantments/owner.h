@@ -12,8 +12,8 @@ namespace GameEngine
 	public:
 		using Manager = typename ManagedEnchantment<EnchantmentTarget>::Manager;
 		using ManagedItem = typename Manager::ManagedItem;
-		using Container = std::list<ManagedEnchantment<EnchantmentTarget>>;
-		using Token = typename Container::iterator;
+		using Container = typename Enchantments<EnchantmentTarget>::OwnerContainer;
+		using Token = typename Enchantments<EnchantmentTarget>::OwnerToken;
 
 		EnchantmentsOwner() {}
 		EnchantmentsOwner(EnchantmentsOwner<EnchantmentTarget> const& rhs) = delete;

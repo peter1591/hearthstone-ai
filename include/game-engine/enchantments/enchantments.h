@@ -26,6 +26,10 @@ public:
 	typedef typename ManagedList<ItemType> ManagedContainer;
 	typedef typename ManagedContainer::ManagedItem ManagedItem;
 
+	// forward declaration for enchantments owner
+	using OwnerContainer = std::list<ManagedEnchantment<Target>>;
+	using OwnerToken = typename OwnerContainer::iterator;
+
 public:
 	Enchantments(Target & target) : target(target) {}
 	~Enchantments();
