@@ -52,11 +52,17 @@ namespace GameEngine
 	template <typename Target>
 	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner)
 	{
+		using OwnerToken = typename EnchantmentTypes<Target>::OwnerToken;
+
 		auto ref_ptr = enchantment.get();
 
 		auto managed_item = this->enchantments.PushBack(ItemType(std::move(enchantment), owner));
 		
-		if (owner) owner->EnchantmentAdded(ManagedEnchantment<Target>(*this, managed_item));
+		if (owner)
+		{
+			OwnerToken owner_token = owner->EnchantmentAdded(ManagedEnchantment<Target>(*this, managed_item));
+			managed_item->owner_token = new OwnerToken(owner_token);
+		}
 
 		ref_ptr->Apply(this->target);
 	}

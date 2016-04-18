@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "game-engine/enchantments/types.h"
+
 namespace GameEngine
 {
 	template <typename Target> class Enchantment;
@@ -12,7 +14,7 @@ namespace GameEngine
 	{
 	public:
 		EnchantmentsItemType(std::unique_ptr<Enchantment<Target>> && enchantment, EnchantmentsOwner<Target> * owner) :
-			enchantment(std::move(enchantment)), owner(owner)
+			enchantment(std::move(enchantment)), owner(owner), owner_token(nullptr)
 		{
 		}
 
@@ -23,8 +25,8 @@ namespace GameEngine
 		bool operator!=(EnchantmentsItemType const& rhs) const { return !(*this == rhs); }
 
 		std::unique_ptr<Enchantment<Target>> enchantment;
-		EnchantmentsOwner<Target> * owner;
-
+		typename EnchantmentTypes<Target>::Owner * owner;
+		typename EnchantmentTypes<Target>::OwnerToken * owner_token;
 	};
 } // namespace GameEngine
 
