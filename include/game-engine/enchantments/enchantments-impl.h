@@ -45,13 +45,8 @@ namespace GameEngine
 	}
 
 	template<typename Target>
-	inline void Enchantments<Target>::Add(std::unique_ptr<EnchantmentType>&& enchantment)
-	{
-		return this->AddA(std::move(enchantment), nullptr);
-	}
-
-	template <typename Target>
-	inline void Enchantments<Target>::AddA(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner)
+	inline typename Enchantments<Target>::ManagedItem
+	Enchantments<Target>::Add(std::unique_ptr<EnchantmentType>&& enchantment)
 	{
 		using OwnerToken = typename EnchantmentTypes<Target>::OwnerToken;
 
@@ -61,10 +56,7 @@ namespace GameEngine
 
 		this->holder.Get(holder_token)->Apply(this->target);
 
-		if (owner)
-		{
-			owner->EnchantmentAdded(OwnerItem<Target>(*this, managed_item));
-		}
+		return managed_item;
 	}
 
 	template <typename Target>

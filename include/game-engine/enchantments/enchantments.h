@@ -43,8 +43,7 @@ public:
 	// destory all allocated resource without triggering any hooks (since the whole board is going to be destroyed)
 	void DestroyBoard();
 
-	void Add(std::unique_ptr<EnchantmentType> && enchantment);
-	void AddA(std::unique_ptr<EnchantmentType> && enchantment, EnchantmentsOwner<Target> * owner);
+	ManagedItem Add(std::unique_ptr<EnchantmentType> && enchantment);
 
 	void Remove(OwnerItem<Target> & item); // interface for enchantment owner
 	void Clear();

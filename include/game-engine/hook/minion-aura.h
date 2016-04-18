@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "game-engine/hook/listener.h"
+#include "game-engine/enchantments/types.h"
 #include "game-engine/enchantments/enchantment.h"
 #include "game-engine/enchantments/owner.h"
 #include "game-engine/player.h"
@@ -38,12 +39,20 @@ namespace GameEngine
 	public:
 		void AddEnchantment(Minion & minion, std::unique_ptr<Enchantment<Minion>> && enchantment)
 		{
-			minion.enchantments.AddA(std::move(enchantment), &this->GetMinionEnchantmentsOwner());
+			using OwnerItem = EnchantmentTypes<Minion>::OwnerItem;
+
+			auto managed_item = minion.enchantments.Add(std::move(enchantment));
+
+			this->GetMinionEnchantmentsOwner().EnchantmentAdded(OwnerItem(minion.enchantments, managed_item));
 		}
 
 		void AddEnchantment(Player & player, std::unique_ptr<Enchantment<Player>> && enchantment)
 		{
-			player.enchantments.AddA(std::move(enchantment), &this->GetPlayerEnchantmentsOwner());
+			using OwnerItem = EnchantmentTypes<Player>::OwnerItem;
+
+			auto managed_item = player.enchantments.Add(std::move(enchantment));
+			
+			this->GetPlayerEnchantmentsOwner().EnchantmentAdded(OwnerItem(player.enchantments, managed_item));
 		}
 
 	protected:
