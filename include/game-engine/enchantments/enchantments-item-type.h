@@ -18,11 +18,13 @@ namespace GameEngine
 		{
 		}
 
-		bool operator==(EnchantmentsItemType const& rhs) const
+		bool operator==(EnchantmentsItemType const& rhs) const = delete;
+		bool operator!=(EnchantmentsItemType const& rhs) const = delete;
+
+		bool EqualsTo(EnchantmentsItemType const& rhs) const
 		{
 			return *this->enchantment == *rhs.enchantment;
 		}
-		bool operator!=(EnchantmentsItemType const& rhs) const { return !(*this == rhs); }
 
 		std::unique_ptr<Enchantment<Target>> enchantment;
 		typename EnchantmentTypes<Target>::Owner * owner;

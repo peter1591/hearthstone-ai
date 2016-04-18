@@ -24,7 +24,10 @@ namespace GameEngine
 	template <typename Target>
 	inline bool Enchantments<Target>::operator==(Enchantments const & rhs) const
 	{
-		return this->enchantments == rhs.enchantments;
+		auto comparator = [] (ItemType const& lhs_item, ItemType const& rhs_item) {
+			return lhs_item.EqualsTo(rhs_item);
+		};
+		return this->enchantments.EqualsTo(rhs.enchantments, comparator);
 	}
 
 	template <typename Target>
