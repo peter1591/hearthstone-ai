@@ -23,8 +23,6 @@ namespace GameEngine
 		bool operator==(ManagedEnchantment<Target> const& rhs) const = delete;
 		bool operator!=(ManagedEnchantment<Target> const& rhs) const = delete;
 
-		bool EqualsTo(ManagedItem const& rhs) const { return this->item == rhs; }
-
 	private: // only accessible to Manager
 		ManagedEnchantment(Enchantments<Target> & manager, ManagedItem const& item)
 			: manager(manager), item(item)
