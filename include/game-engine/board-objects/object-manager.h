@@ -35,6 +35,8 @@ public:
 public: // Get manipulate object
 	BoardObject GetObject(SlotIndex idx);
 
+	Player & GetPlayer(SlotIndex idx);
+
 public: // Manipulate minions
 	MinionConstIteratorWithSlotIndex GetMinionsIteratorWithIndexAtBeginOfSide(SlotIndex side) const;
 

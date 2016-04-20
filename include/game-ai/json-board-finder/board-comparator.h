@@ -117,7 +117,10 @@ namespace JsonBoardFinder
 			if (minion.GetMinion().card_id != card_id) return false;
 
 			if (IsPlayingSide(minion)) {
-				if (minion.GetMinion().summoned_this_turn != json["summoned_this_turn"].asBool()) return false;
+				// Summoned minions (e.g., from totemic call) seems to not have this flag
+				// --> just check the 'exhausted' property
+				//if (minion.GetMinion().summoned_this_turn != json["summoned_this_turn"].asBool()) return false;
+
 				if (minion.GetMinion().attacked_times != json["attacks_this_turn"].asInt()) return false;
 			}
 

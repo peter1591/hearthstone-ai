@@ -28,8 +28,8 @@ static void Run()
 	reader.parse(board_json_file, board_json);
 
 	for (int i = 0; i < threads; ++i) {
-		mcts[i].Initialize(random_generator(), std::unique_ptr<BoardInitializer>(new BoardJsonParser(board_json)));
-		//mcts[i].Initialize(random_generator(), std::unique_ptr<StartBoard>(new StartBoard()));
+		//mcts[i].Initialize(random_generator(), std::unique_ptr<BoardInitializer>(new BoardJsonParser(board_json)));
+		mcts[i].Initialize(random_generator(), std::unique_ptr<StartBoard>(new StartBoard()));
 
 		Task *new_task = new Task(mcts[i]);
 		new_task->Initialize(std::thread(Task::ThreadCreatedCallback, new_task));

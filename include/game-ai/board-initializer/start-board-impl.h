@@ -30,6 +30,12 @@ inline void StartBoard::InitializeDebugBoard1_PlayerHand(GameEngine::Hand &hand)
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_061)); // Drain Life
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_062)); // Hellfire
 	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_011)); // Voodoo doctor
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_041)); // Ancestral Healing
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_037)); // Frost shock
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_246)); // Hex
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_045)); // Rockbiter Weapon
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_039)); // Windfury
+	hand.AddCardToDeck(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_CS2_226)); // Frostwolf Warlord
 
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_306)); // Succubus
 	hand.AddDeterminedCard(GameEngine::CardDatabase::GetInstance().GetCard(CARD_ID_EX1_029)); // Leper Gnome
@@ -111,7 +117,7 @@ inline void StartBoard::InitializeDebugBoard1(GameEngine::Board &board)
 	player_hero.armor = 0;
 	player_hero.attack = 0;
 	player_hero.weapon.Clear();
-	player_hero.hero_power.card_id = CARD_ID_CS2_056;
+	player_hero.hero_power.card_id = CARD_ID_CS2_049;
 	player_hero.hero_power.cost = 2;
 	board.player.hero.SetHero(player_hero);
 

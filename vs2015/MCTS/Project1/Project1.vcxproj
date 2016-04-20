@@ -184,6 +184,7 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card-base.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_AT_117.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_BRM_019.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_NEW1_009.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_005.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_007.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_009.h" />
@@ -194,6 +195,11 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_025.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_034.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_037.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_039.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_041.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_045.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_049.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_056.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_057.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_061.h" />
@@ -202,11 +208,13 @@
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_188.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_189.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_222.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_CS2_226.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_DS1_055.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_011.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_015.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_029.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_169.h" />
+    <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_246.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_277.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_306.h" />
     <ClInclude Include="..\..\..\include\game-engine\cards\card_EX1_390.h" />

@@ -25,7 +25,7 @@ DEFINE_CARD_CLASS_START(CS2_013t)
 
 static void Spell_Go(Player &player, SlotIndex target)
 {
-	player.hand.DrawOneCardToHand();
+	StageHelper::PlayerDrawCard(player);
 }
 
 DEFINE_CARD_CLASS_END()

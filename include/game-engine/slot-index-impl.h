@@ -150,6 +150,22 @@ namespace GameEngine {
 			SlotIndexHelper::SetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, player.board, targets);
 			break;
 
+		case TARGET_SPELL_ENEMY_MINIONS:
+			SlotIndexHelper::SetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_ENEMY_SPELL, player.board, targets);
+			break;
+
+		case TARGET_SPELL_ENEMY_CHARACTERS:
+			SlotIndexHelper::SetTargets(player.opposite_side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_ENEMY_SPELL, player.board, targets);
+			break;
+
+		case TARGET_SPELL_FRIENDLY_MINIONS:
+			SlotIndexHelper::SetTargets(player.side, SlotIndexHelper::TARGET_TYPE_MINIONS_TARGETABLE_BY_FRIENDLY_SPELL, player.board, targets);
+			break;
+
+		case TARGET_SPELL_FRIENDLY_CHARACTERS:
+			SlotIndexHelper::SetTargets(player.side, SlotIndexHelper::TARGET_TYPE_CHARACTERS_TARGETABLE_BY_FRIENDLY_SPELL, player.board, targets);
+			break;
+
 		default:
 			throw std::runtime_error("unhandled case");
 		}

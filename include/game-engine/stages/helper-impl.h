@@ -383,6 +383,11 @@ namespace GameEngine
 		}
 	}
 
+	inline void StageHelper::Freeze(GameEngine::Board & board, SlotIndex target_idx)
+	{
+		board.object_manager.GetObject(target_idx)->SetFreezed();
+	}
+
 	inline Minion & StageHelper::RandomChooseMinion(Minions & minions)
 	{
 		int count = minions.GetMinionCount();

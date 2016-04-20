@@ -37,8 +37,8 @@ public:
 		this->origin_deck.insert(CARD_ID_CS2_122); // Raid Leader
 		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
 		this->origin_deck.insert(CARD_ID_CS2_120); // River Crocolisk 223
-		this->origin_deck.insert(CARD_ID_CS2_179); // 435 Taunt
-		this->origin_deck.insert(CARD_ID_CS2_179); // 435 Taunt
+		this->origin_deck.insert(CARD_ID_CS2_179); // Sen'jin Shieldmasta 435 Taunt
+		this->origin_deck.insert(CARD_ID_CS2_179); // Sen'jin Shieldmasta 435 Taunt
 		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
 		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
 	}
@@ -109,6 +109,40 @@ public:
 		this->origin_deck.insert(CARD_ID_CS2_127); // Silverback Patriarch
 		this->origin_deck.insert(CARD_ID_CS2_013); // Wild Growth
 		this->origin_deck.insert(CARD_ID_CS2_013); // Wild Growth
+	}
+
+	void SetDeck_BasicPracticeShaman()
+	{
+		this->origin_deck.insert(CARD_ID_CS2_041); // Ancestral Healing
+		this->origin_deck.insert(CARD_ID_CS2_041); // Ancestral Healing
+		this->origin_deck.insert(CARD_ID_CS2_187); // Booty Bay Bodyguard
+		this->origin_deck.insert(CARD_ID_CS2_187); // Booty Bay Bodyguard
+		this->origin_deck.insert(CARD_ID_CS2_200); // Boulderfist Ogre 667
+		this->origin_deck.insert(CARD_ID_CS2_200); // Boulderfist Ogre 667
+		this->origin_deck.insert(CARD_ID_CS2_182); // Chillwind Yeti
+		this->origin_deck.insert(CARD_ID_CS2_182); // Chillwind Yeti
+		this->origin_deck.insert(CARD_ID_CS2_037); // Frost shock
+		this->origin_deck.insert(CARD_ID_CS2_037); // Frost shock
+		this->origin_deck.insert(CARD_ID_CS2_121); // Frostwolf Grunt
+		this->origin_deck.insert(CARD_ID_CS2_121); // Frostwolf Grunt
+		this->origin_deck.insert(CARD_ID_CS2_226); // Frostwolf Warlord
+		this->origin_deck.insert(CARD_ID_CS2_226); // Frostwolf Warlord
+		this->origin_deck.insert(CARD_ID_EX1_246); // Hex
+		this->origin_deck.insert(CARD_ID_EX1_246); // Hex
+		this->origin_deck.insert(CARD_ID_CS2_122); // Raid Leader
+		this->origin_deck.insert(CARD_ID_CS2_122); // Raid Leader
+		this->origin_deck.insert(CARD_ID_CS2_213); // Reckless Rocketeer 652 CHARGE
+		this->origin_deck.insert(CARD_ID_CS2_213); // Reckless Rocketeer 652 CHARGE
+		this->origin_deck.insert(CARD_ID_CS2_045); // Rockbiter Weapon
+		this->origin_deck.insert(CARD_ID_CS2_045); // Rockbiter Weapon
+		this->origin_deck.insert(CARD_ID_CS2_179); // Sen'jin Shieldmasta 435 Taunt
+		this->origin_deck.insert(CARD_ID_CS2_179); // Sen'jin Shieldmasta 435 Taunt
+		this->origin_deck.insert(CARD_ID_CS2_171); // Stonetusk Boar
+		this->origin_deck.insert(CARD_ID_CS2_171); // Stonetusk Boar
+		this->origin_deck.insert(CARD_ID_CS2_039); // Windfury
+		this->origin_deck.insert(CARD_ID_CS2_039); // Windfury
+		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
+		this->origin_deck.insert(CARD_ID_CS2_124); // Wolf Rider 331 Charge
 	}
 
 	void InitializeHand(Json::Value const& played_cards, Json::Value const& hand_cards, GameEngine::Hand & hand, bool hand_has_coin) const

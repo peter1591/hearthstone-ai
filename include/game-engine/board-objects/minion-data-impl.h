@@ -95,6 +95,7 @@ namespace GameEngine
 
 		ret.attacked_times = 0;
 		ret.summoned_this_turn = true;
+		ret.pending_removal = false;
 
 		return ret;
 	}

@@ -59,6 +59,8 @@ public:
 
 	static void Heal(GameEngine::Board & board, SlotIndex target_idx, int heal_amount);
 
+	static void Freeze(GameEngine::Board & board, SlotIndex target_idx);
+
 public: // randomly choose
 	// TODO: use BoardTargets interface
 	static Minion & RandomChooseMinion(Minions & minions);

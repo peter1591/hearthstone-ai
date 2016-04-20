@@ -21,6 +21,22 @@ namespace GameEngine
 			throw std::runtime_error("invalid argument");
 	}
 
+	inline Player & ObjectManager::GetPlayer(SlotIndex idx)
+	{
+		if (idx < SLOT_PLAYER_HERO)
+			throw std::runtime_error("invalid argument");
+		else if (idx == SLOT_PLAYER_HERO)
+			return this->board.player;
+		else if (idx < SLOT_OPPONENT_HERO)
+			throw std::runtime_error("invalid argument");
+		else if (idx == SLOT_OPPONENT_HERO)
+			return this->board.opponent;
+		else if (idx < SLOT_MAX)
+			throw std::runtime_error("invalid argument");
+		else
+			throw std::runtime_error("invalid argument");
+	}
+
 	inline ObjectManager::ObjectManager(Board & board) :
 		board(board)
 	{
@@ -71,4 +87,5 @@ namespace GameEngine
 		}
 		else throw std::runtime_error("invalid argument");
 	}
+
 } // namespace GameEngine
