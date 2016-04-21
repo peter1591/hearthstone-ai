@@ -58,8 +58,25 @@ inline void MCTS::UpdateRoot(Json::Value const & json_board)
 	}
 
 	// found board
+	bool root_node_changed = (found_node == this->board_initializer_node);
 	std::cerr << "Found board in existing MCTS tree. Node @ " << found_node << ", turn = " << found_node->turn << std::endl;
 	this->ChangeBoardInitializer(std::move(new_board_initializer), found_node);
+
+	if (!root_node_changed) {
+		std::cerr << "found board is the current root node; skip updating tree nodes (identical trees)" << std::endl;
+		return;
+	}
+
+	// update tree node info
+	// --> clear field 'nondeterminstic_move_selected_times'
+	std::function<void(TreeNode *)> DFS = [&DFS](TreeNode * root) {
+		// TODO: we should only preserve the win-rate of the old tree
+		root->nondeterminstic_move_selected_times = 1;
+		for (TreeNode * child : root->children) {
+			DFS(child);
+		}
+	};
+	DFS(this->board_initializer_node);
 }
 
 inline void MCTS::Iterate()
@@ -81,6 +98,7 @@ inline void MCTS::Iterate()
 			this->CreateRootNode(board);
 		}
 		node = this->tree.GetRootNode();
+		this->board_initializer_node = this->tree.GetRootNode();
 	}
 	else {
 		node = this->board_initializer_node;
