@@ -91,7 +91,6 @@ namespace GameEngine {
 		void TurnStart(bool owner_turn);
 		void TurnEnd(bool owner_turn);
 
-	public: // triggering hooks
 		void HookAfterMinionAdded(Minion & added_minion);
 		void HookMinionCheckEnraged();
 		void HookAfterMinionDamaged(Minion & minion, int damage);

@@ -66,6 +66,16 @@ namespace GameEngine
 		this->auras.clear();
 	}
 
+	inline void MinionAuras::TurnStart(bool owner_turn)
+	{
+		for (auto & aura : this->auras) aura->TurnStart(owner_turn);
+	}
+
+	inline void MinionAuras::TurnEnd(bool owner_turn)
+	{
+		for (auto & aura : this->auras) aura->TurnEnd(owner_turn);
+	}
+
 	inline void MinionAuras::HookAfterMinionAdded(Minion & added_minion)
 	{
 		for (auto & aura : this->auras) aura->HookAfterMinionAdded(added_minion);

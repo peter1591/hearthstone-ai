@@ -100,11 +100,13 @@ public: // hooks
 			it->TurnStart(owner_turn);
 		}
 	}
+
 	void TurnEnd( bool owner_turn) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
 			it->TurnEnd(owner_turn);
 		}
 	}
+
 	void HookAfterMinionAdded(Minion & added_minion) {
 		for (auto it = this->minions.begin(); it != this->minions.end(); ++it) {
 			it->HookAfterMinionAdded(added_minion);

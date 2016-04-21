@@ -248,6 +248,8 @@ inline void GameEngine::Minion::TurnStart(bool owner_turn)
 	(void)owner_turn;
 	this->minion.summoned_this_turn = false;
 	this->minion.attacked_times = 0;
+
+	this->auras.TurnStart(owner_turn);
 }
 
 inline void GameEngine::Minion::TurnEnd(bool owner_turn)
@@ -261,6 +263,8 @@ inline void GameEngine::Minion::TurnEnd(bool owner_turn)
 	}
 
 	this->enchantments.TurnEnd();
+
+	this->auras.TurnEnd(owner_turn);
 }
 
 inline GameEngine::Player & GameEngine::Minion::GetPlayer() const

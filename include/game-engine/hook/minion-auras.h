@@ -31,6 +31,9 @@ namespace GameEngine
 		void DestroyBoard();
 
 	public: // hooks
+		void TurnStart(bool owner_turn);
+		void TurnEnd(bool owner_turn);
+
 		void HookAfterMinionAdded(Minion & added_minion);
 		void HookAfterOwnerEnraged();
 		void HookAfterOwnerUnEnraged();
