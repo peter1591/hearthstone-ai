@@ -263,7 +263,6 @@
     <ClInclude Include="..\..\..\include\game-engine\hook-manager-impl.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook-manager.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\listener.h" />
-    <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-enrage.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura-to-all-minions.h" />
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h" />

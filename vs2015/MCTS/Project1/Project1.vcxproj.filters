@@ -368,9 +368,6 @@
     <ClInclude Include="..\..\..\include\game-engine\hook\listener.h">
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\game-engine\hook\listeners.h">
-      <Filter>Header Files\game-engine\hook</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\game-engine\hook\minion-aura.h">
       <Filter>Header Files\game-engine\hook</Filter>
     </ClInclude>
