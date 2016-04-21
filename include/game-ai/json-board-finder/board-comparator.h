@@ -143,7 +143,7 @@ namespace JsonBoardFinder
 
 			if (IsPlayingSide(minion)) {
 				// only compare exhausted if the minion have attack
-				if (minion.GetAttack() > 0) {
+				if (minion.GetAttack() > 0 && !minion.GetMinion().stat.IsFreezed()) {
 					if (minion.Attackable() == json["exhausted"].asBool()) return false;
 				}
 			}
