@@ -16,9 +16,6 @@ namespace GameEngine {
 		bool operator!=(HookListener const& rhs) const { return !(*this == rhs); }
 
 	public: // hooks
-		virtual void AfterAdded(Minion & owner) { (void)owner; }
-		virtual void BeforeRemoved(Minion & owner) { (void)owner; }
-
 		virtual void HookAfterMinionAdded(Minion & added_minion) { (void)added_minion; }
 		virtual void HookAfterOwnerEnraged() {}
 		virtual void HookAfterOwnerUnEnraged() {}

@@ -24,10 +24,13 @@ namespace GameEngine
 		Minion & GetOwner() const { return this->owner; }
 
 	public:
-		void BeforeRemoved(Minion & owner_)
+		virtual void AfterAdded(Minion & owner)
 		{
-			HookListener::BeforeRemoved(owner_);
+			(void)owner;
+		}
 
+		virtual void BeforeRemoved(Minion & owner_)
+		{
 			if (this->minion_enchantments) {
 				this->minion_enchantments->RemoveOwnedEnchantments();
 			}
