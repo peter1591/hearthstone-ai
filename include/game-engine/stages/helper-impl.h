@@ -177,7 +177,7 @@ namespace GameEngine
 		WeightedMoves & moves = *ptr_moves; // do not re-allocate at each call
 		Move move;
 
-		constexpr int weight_end_turn = 100; // uniform distrubution with other choices
+		constexpr int weight_end_turn = 10; // uniform distrubution with other choices
 		constexpr int weight_play_minion = 100;
 		constexpr int weight_equip_weapon = 100;
 		constexpr int weight_play_spell = 100;
