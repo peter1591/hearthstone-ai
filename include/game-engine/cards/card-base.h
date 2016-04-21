@@ -13,7 +13,6 @@
 #include "game-engine/enchantments/buff-player.h"
 #include "game-engine/enchantments/buff-player-c.h"
 #include "game-engine/hook/listener.h"
-#include "game-engine/hook/listeners.h"
 #include "game-engine/hook/minion-aura-to-all-minions.h"
 #include "game-engine/hook/minion-aura-enrage.h"
 
