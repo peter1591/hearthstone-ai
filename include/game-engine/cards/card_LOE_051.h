@@ -9,9 +9,9 @@ class Aura : public MinionAura
 public:
 	Aura(Minion & minion) : MinionAura(minion) {}
 
-	void AfterAdded(Minion & owner_)
+	void AfterAdded()
 	{
-		MinionAura::AfterAdded(owner_);
+		MinionAura::AfterAdded();
 
 		this->AddEnchantment(this->GetOwner().GetBoard().player, std::make_unique<Enchantment_BuffPlayer_C<0, 2, false>>());
 		this->AddEnchantment(this->GetOwner().GetBoard().opponent, std::make_unique<Enchantment_BuffPlayer_C<0, 2, false>>());

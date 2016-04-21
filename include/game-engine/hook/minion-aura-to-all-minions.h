@@ -14,18 +14,14 @@ namespace GameEngine {
 		virtual ~AuraToAllMinions() {}
 
 	public: // hooks
-		void AfterAdded(Minion & aura_owner)
+		void AfterAdded()
 		{
-#ifdef DEBUG
-			if (&aura_owner != &this->GetOwner()) throw std::runtime_error("aura owner should be the same with the one actually added this aura");
-#endif
+			MinionAura::AfterAdded();
 
-			MinionAura::AfterAdded(aura_owner);
-
-			for (auto it = aura_owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
+			for (auto it = this->GetOwner().GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_PLAYER_SIDE); !it.IsEnd(); it.GoToNext()) {
 				this->Invoke(*it);
 			}
-			for (auto it = aura_owner.GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
+			for (auto it = this->GetOwner().GetBoard().object_manager.GetMinionIteratorAtBeginOfSide(SLOT_OPPONENT_SIDE); !it.IsEnd(); it.GoToNext()) {
 				this->Invoke(*it);
 			}
 		}

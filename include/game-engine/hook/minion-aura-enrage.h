@@ -13,19 +13,17 @@ namespace GameEngine {
 		virtual ~AuraEnrage() {}
 
 	public: // hooks
-		void AfterAdded(Minion & aura_owner)
+		void AfterAdded()
 		{
-			MinionAura::AfterAdded(aura_owner);
-
-			if (aura_owner.GetHP() < aura_owner.GetMaxHP()) {
-				this->HookAfterOwnerEnraged(aura_owner);
+			if (this->GetOwner().GetHP() < this->GetOwner().GetMaxHP()) {
+				this->HookAfterOwnerEnraged(this->GetOwner());
 			}
 			else {
-				this->HookAfterOwnerUnEnraged(aura_owner);
+				this->HookAfterOwnerUnEnraged(this->GetOwner());
 			}
 		}
 
-		void HookAfterOwnerEnraged(Minion & aura_owner)
+		void HookAfterOwnerEnraged(Minion & aura_owner) // TODO: check parameter
 		{
 			MinionAura::HookAfterOwnerEnraged();
 

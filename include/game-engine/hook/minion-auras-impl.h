@@ -54,7 +54,7 @@ namespace GameEngine
 	inline void MinionAuras::Clear()
 	{
 		for (auto aura : this->auras) {
-			aura->BeforeRemoved(this->minion);
+			aura->BeforeRemoved();
 			delete aura;
 		}
 		this->auras.clear();
@@ -101,7 +101,7 @@ namespace GameEngine
 	{
 		Aura * aura = new Aura(this->minion, params...);
 		this->auras.push_back(aura);
-		aura->AfterAdded(this->minion);
+		aura->AfterAdded();
 	}
 
 } // namespace GameEngine
