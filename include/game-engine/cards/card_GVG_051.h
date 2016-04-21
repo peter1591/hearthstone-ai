@@ -1,6 +1,7 @@
 #pragma once
 
 DEFINE_CARD_CLASS_START(GVG_051)
+
 // Warbot
 
 class Aura : public AuraEnrage
@@ -9,14 +10,14 @@ public:
 	Aura(Minion & owner) : AuraEnrage(owner) {}
 
 private:
-	void AddEnrageEnchantment(Minion & aura_owner)
+	void AddEnrageEnchantment()
 	{
 		constexpr int attack_boost = 1;
 		constexpr int hp_boost = 0;
 
 		auto enchantment = std::make_unique<Enchantment_BuffMinion_C<attack_boost, hp_boost, 0, 0, false>>();
 
-		this->AddEnchantment(aura_owner, std::move(enchantment));
+		this->AddEnchantment(this->GetOwner(), std::move(enchantment));
 	}
 
 private: // for comparison

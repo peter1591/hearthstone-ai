@@ -16,27 +16,25 @@ namespace GameEngine {
 		void AfterAdded()
 		{
 			if (this->GetOwner().GetHP() < this->GetOwner().GetMaxHP()) {
-				this->HookAfterOwnerEnraged(this->GetOwner());
+				this->HookAfterOwnerEnraged();
 			}
 			else {
-				this->HookAfterOwnerUnEnraged(this->GetOwner());
+				this->HookAfterOwnerUnEnraged();
 			}
 		}
 
-		void HookAfterOwnerEnraged(Minion & aura_owner) // TODO: check parameter
+		void HookAfterOwnerEnraged()
 		{
 			MinionAura::HookAfterOwnerEnraged();
 
 			if (enraged) return;
 
-			this->AddEnrageEnchantment(aura_owner);
+			this->AddEnrageEnchantment();
 			enraged = true;
 		}
 
-		void HookAfterOwnerUnEnraged(Minion & aura_owner)
+		void HookAfterOwnerUnEnraged()
 		{
-			(void)aura_owner;
-
 			MinionAura::HookAfterOwnerUnEnraged();
 
 			if (!enraged) return;
@@ -45,7 +43,7 @@ namespace GameEngine {
 			enraged = false;
 		}
 
-		virtual void AddEnrageEnchantment(Minion & aura_owner) = 0;
+		virtual void AddEnrageEnchantment() = 0;
 
 	private:
 		bool enraged;
