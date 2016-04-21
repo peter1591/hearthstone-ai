@@ -142,7 +142,10 @@ namespace JsonBoardFinder
 			if (minion.GetMinion().stat.IsWindFury() != (json["status"]["windfury"].asInt() > 0)) return false;
 
 			if (IsPlayingSide(minion)) {
-				if (minion.Attackable() == json["exhausted"].asBool()) return false;
+				// only compare exhausted if the minion have attack
+				if (minion.GetAttack() > 0) {
+					if (minion.Attackable() == json["exhausted"].asBool()) return false;
+				}
 			}
 
 			// TODO: check silenced: json["silenced"]
