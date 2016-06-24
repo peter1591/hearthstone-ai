@@ -14,8 +14,9 @@ But, to be on the safe side, I will take no responsbility if your account got lo
 2. AlphaGo uses Monte Carlo tree search.
 3. I don't know Monte Carlo tree search.
 4. I want to learn Monte Carlo tree search.
-5. I want to try it out for a game. A card game is chosen: HearthStone.
-6. This project is what I got.
+5. I want to try it out for a game.
+6. The card game is chosen: HearthStone.
+7. This project is what I have so far.
 
 ## Components
 
