@@ -37,7 +37,7 @@ But, to be on the safe side, I will take no responsbility if your account got lo
 
 ### Automatic Playback
 * The automatic play-back feature is not implemented yet
-** So, hey, you will not get your account locked!
+  * So, hey, you will not get your account locked!
 * Just refer to the move the AI suggested, and do it manually on the game client.
 
 ## Installation
