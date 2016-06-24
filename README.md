@@ -29,13 +29,13 @@ But, to be on the safe side, I will take no responsbility if your account got lo
 * Written in C++11
 * One of the design goals is **speed**.
 
-### Recognize Game Board
+### Game Board Recognition
 * Use the logging feature in HearthStone
 * Written in C# since no critical performance issue occurs here.
 * Parse the logs to get a picture of the game board.
 * Use the C# **yield** to parse the logs in a cleaner way.
 
-### Play back on game client
+### Automatic Playback
 * The automatic play-back feature is not implemented yet
 ** So, hey, you will not get your account locked!
 * Just refer to the move the AI suggested, and do it manually on the game client.
