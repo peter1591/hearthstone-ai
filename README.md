@@ -2,11 +2,11 @@
 
 This is a game bot for HearthStone.
 
-Your account shall be locked if you use this game bot to play it automatically.
+Your account shall be banned if you use this game bot to play it automatically.
 
-Your account shall *not* be locked if you just refer to the move suggested by this game bot, move your mouse on your own, drag the mouse on your own, and click the mouse on your own.
+Your account shall *not* be banned if you just refer to the move suggested by this game bot, move your mouse on your own, drag the mouse on your own, and click the mouse on your own.
 
-But, to be on the safe side, I will take no responsbility if your account got locked.
+But, to be on the safe side, I will take no responsbility if your account got banned.
 
 ## Motivation
 
@@ -37,7 +37,7 @@ But, to be on the safe side, I will take no responsbility if your account got lo
 
 ### Automatic Playback
 * The automatic play-back feature is not implemented yet
-  * So, hey, you will not get your account locked!
+  * So, hey, you will not get your account banned!
 * Just refer to the move the AI suggested, and do it manually on the game client.
 
 ## Installation
