@@ -7,13 +7,14 @@ namespace EventManager
 {
 	namespace Handlers
 	{
-		class MinionSummoned
+		class MinionSummonedOnce
 		{
 		public:
-			MinionSummoned(const std::string& s) : s_(s) {}
+			MinionSummonedOnce(const std::string& s) : s_(s) {}
 
 			void Handle(HandlersContainerController &controller) {
-				std::cout << "MinionSummoned called: " << s_ << std::endl;
+				std::cout << "MinionSummonedOnce called: " << s_ << std::endl;
+				controller.Remove();
 			}
 
 		private:

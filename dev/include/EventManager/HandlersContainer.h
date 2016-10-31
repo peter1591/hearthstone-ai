@@ -1,42 +1,42 @@
 #pragma once
 
 #include <list>
+#include <type_traits>
+#include <utility>
+
+#include "EventManager/HandlersContainerController.h"
 
 namespace EventManager
 {
-	template <typename HandlerType_>
+	template <typename HandlerType>
 	class HandlersContainer
 	{
 	public:
-		using HandlerType = HandlerType_;
-		typedef std::list<HandlerType> container_type;
-
-		class Token
+		void PushBack(const HandlerType & handler)
 		{
-		public:
-			using HandlersContainerType = HandlersContainer<HandlerType>;
-
-			Token(typename HandlersContainerType::container_type::iterator it) : it_(it) {}
-
-			typename HandlersContainerType::container_type::iterator it_;
-		};
-
-		Token PushBack(const HandlerType & handler) {
-			return Token(handlers_.insert(handlers_.end(), handler));
-		}
-
-		void Remove(Token token) {
-			handlers_.erase(token.it_);
+			handlers_.push_back(handler);
 		}
 
 		template <typename... Args>
-		void TriggerAll(const Args&... args) {
-			for (auto& handler : handlers_) {
-				handler.Handle(args...);
+		void TriggerAll(Args&&... args)
+		{
+			auto it = handlers_.begin();
+			while (it != handlers_.end()) {
+				HandlersContainerController controller;
+
+				it->Handle(controller, std::forward<Args>(args)...);
+
+				if (controller.IsRemoved()) {
+					it = handlers_.erase(it);
+				}
+				else {
+					++it;
+				}
 			}
 		}
 
 	private:
+		typedef std::list<HandlerType> container_type;
 		container_type handlers_;
 	};
 }
