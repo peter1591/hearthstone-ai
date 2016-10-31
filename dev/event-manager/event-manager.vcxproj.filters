@@ -19,6 +19,9 @@
     <Filter Include="Header Files\EventManager\Handlers">
       <UniqueIdentifier>{dd5dde84-e9e6-4399-a429-c921fb58e48e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CloneableContainer">
+      <UniqueIdentifier>{76a845fd-3170-42c0-acb5-ea2883536104}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h">
@@ -28,6 +31,18 @@
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
     <ClInclude Include="..\include\EventManager\HandlersContainer.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CloneableContainer\CloneableContainer.h">
+      <Filter>Header Files\CloneableContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\CategorizedHandlersContainer.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h">
+      <Filter>Header Files\EventManager\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\HandlersContainerController.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>

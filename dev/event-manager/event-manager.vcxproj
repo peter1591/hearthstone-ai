@@ -115,7 +115,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\CloneableContainer\CloneableContainer.h" />
+    <ClInclude Include="..\include\EventManager\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainer.h" />
+    <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
+    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h" />
     <ClInclude Include="..\include\EventManager\Manager.h" />
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h" />
   </ItemGroup>
