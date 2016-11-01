@@ -8,10 +8,15 @@
 
 namespace EventManager
 {
-	template <typename HandlerType>
+	template <typename HandlerType,
+			  typename std::enable_if<HandlerType::CloneableByCopySemantics, int>::type = 0>
 	class HandlersContainer
 	{
 	public:
+		// Cloneable by copy semantics
+		//    Since the STL container and the underlying HandlerType are with this property
+		static const bool CloneableByCopySemantics = true;
+
 		void PushBack(const HandlerType & handler)
 		{
 			handlers_.push_back(handler);

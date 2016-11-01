@@ -11,6 +11,10 @@ namespace EventManager
 	class Manager
 	{
 	public:
+		// Cloneable by copy semantics
+		//    Since the underlying data structures are all with this property.
+		static const bool CloneableByCopySemantics = true;
+
 		template <typename EventHandlerType_>
 		void PushBack(EventHandlerType_&& handler) {
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;

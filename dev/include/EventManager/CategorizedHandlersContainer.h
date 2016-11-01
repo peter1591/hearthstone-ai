@@ -10,6 +10,10 @@ namespace EventManager
 	class CategorizedHandlersContainer
 	{
 	public:
+		// Cloneable by copy semantics
+		//    Since the STL container and HandlersContainer are with this property
+		static const bool CloneableByCopySemantics = true;
+
 		void PushBack(const CategoryType& category, HandlerType&& handler)
 		{
 			categories_[category].PushBack(std::forward<HandlerType>(handler));

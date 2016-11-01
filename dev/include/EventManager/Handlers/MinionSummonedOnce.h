@@ -10,6 +10,8 @@ namespace EventManager
 		class MinionSummonedOnce
 		{
 		public:
+			static const bool CloneableByCopySemantics = true;
+
 			MinionSummonedOnce(const std::string& s) : s_(s) {}
 
 			void Handle(HandlersContainerController &controller) {
