@@ -51,30 +51,29 @@ namespace EventManager
 		CategorizedHandlersContainer<Category, EventHandlerType> & GetHandlersContainer();
 
 	private:
-		HandlersContainer<Handlers::MinionSummoned> minion_summoned_handlers_;
-		HandlersContainer<Handlers::MinionSummonedOnce> minion_summoned_once_handlers_;
+#define ADD_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
+	HandlersContainer<Handlers::TYPE_NAME> MEMBER_NAME; \
+	template <> HandlersContainer<Handlers::TYPE_NAME> & GetHandlersContainer() { \
+		return this->MEMBER_NAME; \
+	}
+#define ADD_HANDLER(TYPE_NAME) ADD_HANDLER_INTERNAL(TYPE_NAME, handler_ ## TYPE_NAME ## _)
 
-		CategorizedHandlersContainer<int, Handlers::MinionSummoned> categorized_minion_summoned_handlers_;
-		CategorizedHandlersContainer<int, Handlers::MinionSummonedOnce> categorized_minion_summoned_once_handlers_;
+#define ADD_CATEGORIZED_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
+	CategorizedHandlersContainer<int, Handlers::TYPE_NAME> MEMBER_NAME; \
+	template <> CategorizedHandlersContainer<int, Handlers::TYPE_NAME> & GetHandlersContainer() { \
+		return this->MEMBER_NAME; \
+	}
+#define ADD_CATEGORIZED_HANDLER(TYPE_NAME) ADD_CATEGORIZED_HANDLER_INTERNAL(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)
+
+		ADD_HANDLER(MinionSummoned);
+		ADD_HANDLER(MinionSummonedOnce);
+		ADD_CATEGORIZED_HANDLER(MinionSummoned);
+		ADD_CATEGORIZED_HANDLER(MinionSummonedOnce);
+
+#undef ADD_HANDLER_INTERNAL
+#undef ADD_HANDLER
+#undef ADD_CATEGORIZED_HANDLER_INTERNAL
+#undef ADD_CATEGORIZED_HANDLER
 	};
 
-	template <>
-	HandlersContainer<Handlers::MinionSummoned> & Manager::GetHandlersContainer() {
-		return this->minion_summoned_handlers_;
-	}
-
-	template <>
-	HandlersContainer<Handlers::MinionSummonedOnce> & Manager::GetHandlersContainer() {
-		return this->minion_summoned_once_handlers_;
-	}
-
-	template <>
-	CategorizedHandlersContainer<int, Handlers::MinionSummoned> & Manager::GetHandlersContainer() {
-		return this->categorized_minion_summoned_handlers_;
-	}
-
-	template <>
-	CategorizedHandlersContainer<int, Handlers::MinionSummonedOnce> & Manager::GetHandlersContainer() {
-		return this->categorized_minion_summoned_once_handlers_;
-	}
 }
