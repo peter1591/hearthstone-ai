@@ -14,9 +14,12 @@ namespace CloneableContainers
 	class Vector
 	{
 	public:
-		struct Identifier
+		class Identifier
 		{
-			int idx;
+			friend Vector<ItemType>;
+
+			explicit Identifier(size_t idx) : idx(idx) {}
+			size_t idx;
 		};
 
 		Vector() {}
@@ -26,8 +29,7 @@ namespace CloneableContainers
 
 		template <typename... Args>
 		Identifier Create(Args&&... args) {
-			Identifier ret;
-			ret.idx = items_.size();
+			Identifier ret(items_.size());
 			items_.push_back(ItemType(std::forward<Args>(args)...));
 			return ret;
 		}
@@ -38,6 +40,13 @@ namespace CloneableContainers
 
 		ItemType & Get(Identifier identifier) {
 			return items_[identifier.idx];
+		}
+
+	public: // iterate
+		Identifier GetFirst() { return Identifier(0); }
+		void StepNext(Identifier & id) { ++id.idx; }
+		bool ReachedEnd(const Identifier &id) {
+			return id.idx >= items_.size();
 		}
 
 	private:
