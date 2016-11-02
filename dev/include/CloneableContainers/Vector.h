@@ -28,7 +28,7 @@ namespace CloneableContainers
 		}
 
 		template <typename... Args>
-		Identifier Create(Args&&... args) {
+		Identifier PushBack(Args&&... args) {
 			Identifier ret(items_.size());
 			items_.push_back(ItemType(std::forward<Args>(args)...));
 			return ret;
