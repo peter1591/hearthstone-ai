@@ -115,7 +115,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\CloneableContainer\CloneableContainer.h" />
+    <ClInclude Include="..\include\Card.h" />
+    <ClInclude Include="..\include\CloneableContainers\Vector.h" />
+    <ClInclude Include="..\include\Enchantment\EnchantmentBase.h" />
     <ClInclude Include="..\include\EventManager\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
