@@ -22,9 +22,6 @@
     <Filter Include="Header Files\Enchantment">
       <UniqueIdentifier>{1f66bb95-46c8-4e57-9fcd-932a09e3150b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\CloneableContainers">
-      <UniqueIdentifier>{76a845fd-3170-42c0-acb5-ea2883536104}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h">
@@ -50,9 +47,6 @@
     </ClInclude>
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h">
       <Filter>Header Files\Enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CloneableContainers\Vector.h">
-      <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

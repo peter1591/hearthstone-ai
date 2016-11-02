@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7FEC491C-AC31-4E30-8BF3-BA93F35FB31C}</ProjectGuid>
-    <RootNamespace>eventmanager</RootNamespace>
+    <ProjectGuid>{70CCD065-53F7-46E4-A3F6-0821F0A67F71}</ProjectGuid>
+    <RootNamespace>cloneable_containers</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -68,11 +68,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\mycodes\hearthstone-ai\dev\include;$(IncludePath)</IncludePath>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\mycodes\hearthstone-ai\dev\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\MyCodes\hearthstone-ai\dev\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>D:\MyCodes\hearthstone-ai\dev\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,14 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Card.h" />
-    <ClInclude Include="..\include\Enchantment\EnchantmentBase.h" />
-    <ClInclude Include="..\include\EventManager\CategorizedHandlersContainer.h" />
-    <ClInclude Include="..\include\EventManager\HandlersContainer.h" />
-    <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h" />
-    <ClInclude Include="..\include\EventManager\Manager.h" />
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h" />
+    <ClInclude Include="..\..\include\CloneableContainers\Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
