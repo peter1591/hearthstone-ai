@@ -24,7 +24,7 @@ namespace CloneableContainers
 			items_.reserve(default_capacity);
 		}
 
-		template <typename Args...>
+		template <typename... Args>
 		Identifier Create(Args&&... args) {
 			Identifier ret;
 			ret.idx = items_.size();
