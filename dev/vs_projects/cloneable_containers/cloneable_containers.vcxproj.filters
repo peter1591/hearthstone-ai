@@ -21,6 +21,9 @@
     <ClInclude Include="..\..\include\CloneableContainers\Vector.h">
       <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h">
+      <Filter>Header Files\CloneableContainers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">

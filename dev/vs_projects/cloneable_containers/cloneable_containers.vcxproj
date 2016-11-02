@@ -115,6 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h" />
     <ClInclude Include="..\..\include\CloneableContainers\Vector.h" />
   </ItemGroup>
   <ItemGroup>
