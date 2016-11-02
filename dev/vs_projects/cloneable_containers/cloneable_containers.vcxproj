@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h" />
     <ClInclude Include="..\..\include\CloneableContainers\Vector.h" />
+    <ClInclude Include="..\..\include\CloneableContainers\CloneByCopyWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
