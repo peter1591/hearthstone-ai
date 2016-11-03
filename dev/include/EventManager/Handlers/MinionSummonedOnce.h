@@ -11,6 +11,7 @@ namespace EventManager
 		{
 		public:
 			static const bool CloneableByCopySemantics = true;
+			typedef std::tuple<> ArgsTuple;
 
 			MinionSummonedOnce(const std::string& s) : s_(s) {}
 
