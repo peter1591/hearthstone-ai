@@ -117,10 +117,10 @@
   <ItemGroup>
     <ClInclude Include="..\include\Card.h" />
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h" />
-    <ClInclude Include="..\include\EventManager\CategorizedHandlersContainer.h" />
-    <ClInclude Include="..\include\EventManager\HandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h" />
+    <ClInclude Include="..\include\EventManager\impl\CategorizedHandlersContainer.h" />
+    <ClInclude Include="..\include\EventManager\impl\HandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\Manager.h" />
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h" />
   </ItemGroup>

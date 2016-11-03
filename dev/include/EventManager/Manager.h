@@ -1,8 +1,8 @@
 #pragma once
 
 #include <utility>
-#include "EventManager/HandlersContainer.h"
-#include "EventManager/CategorizedHandlersContainer.h"
+#include "EventManager/impl/HandlersContainer.h"
+#include "EventManager/impl/CategorizedHandlersContainer.h"
 #include "EventManager/Handlers/MinionSummoned.h"
 #include "EventManager/Handlers/MinionSummonedOnce.h"
 
@@ -45,22 +45,22 @@ namespace EventManager
 
 	private:
 		template<typename EventHandlerType>
-		HandlersContainer<EventHandlerType> & GetHandlersContainer();
+		impl::HandlersContainer<EventHandlerType> & GetHandlersContainer();
 
 		template<typename Category, typename EventHandlerType>
-		CategorizedHandlersContainer<Category, EventHandlerType> & GetHandlersContainer();
+		impl::CategorizedHandlersContainer<Category, EventHandlerType> & GetHandlersContainer();
 
 	private:
 #define ADD_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
-	HandlersContainer<Handlers::TYPE_NAME> MEMBER_NAME; \
-	template <> HandlersContainer<Handlers::TYPE_NAME> & GetHandlersContainer() { \
+	impl::HandlersContainer<Handlers::TYPE_NAME> MEMBER_NAME; \
+	template <> impl::HandlersContainer<Handlers::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
 #define ADD_HANDLER(TYPE_NAME) ADD_HANDLER_INTERNAL(TYPE_NAME, handler_ ## TYPE_NAME ## _)
 
 #define ADD_CATEGORIZED_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
-	CategorizedHandlersContainer<int, Handlers::TYPE_NAME> MEMBER_NAME; \
-	template <> CategorizedHandlersContainer<int, Handlers::TYPE_NAME> & GetHandlersContainer() { \
+	impl::CategorizedHandlersContainer<int, Handlers::TYPE_NAME> MEMBER_NAME; \
+	template <> impl::CategorizedHandlersContainer<int, Handlers::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
 #define ADD_CATEGORIZED_HANDLER(TYPE_NAME) ADD_CATEGORIZED_HANDLER_INTERNAL(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)

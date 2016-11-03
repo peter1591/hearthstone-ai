@@ -22,6 +22,9 @@
     <Filter Include="Header Files\Enchantment">
       <UniqueIdentifier>{1f66bb95-46c8-4e57-9fcd-932a09e3150b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\EventManager\impl">
+      <UniqueIdentifier>{461a2477-e2be-4a10-9342-ca173d865c04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h">
@@ -30,23 +33,23 @@
     <ClInclude Include="..\include\EventManager\Manager.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\HandlersContainer.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\EventManager\CategorizedHandlersContainer.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h">
       <Filter>Header Files\EventManager\Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\EventManager\HandlersContainerController.h">
-      <Filter>Header Files\EventManager</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Card.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h">
       <Filter>Header Files\Enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\impl\CategorizedHandlersContainer.h">
+      <Filter>Header Files\EventManager\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\impl\HandlersContainer.h">
+      <Filter>Header Files\EventManager\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\HandlersContainerController.h">
+      <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
