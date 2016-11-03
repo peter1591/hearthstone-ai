@@ -16,6 +16,9 @@
     <Filter Include="Header Files\CloneableContainers">
       <UniqueIdentifier>{142e0bdf-8305-4871-b3d6-2484ae1eb5ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CloneableContainers\impl">
+      <UniqueIdentifier>{67295fa3-8b25-4108-bfe8-c7963ea940e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\CloneableContainers\Vector.h">
@@ -27,7 +30,10 @@
     <ClInclude Include="..\..\include\CloneableContainers\PtrVector.h">
       <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\CloneableContainers\CopyByCloneWrapper.h">
+    <ClInclude Include="..\..\include\CloneableContainers\impl\CopyByCloneWrapper.h">
+      <Filter>Header Files\CloneableContainers\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\CloneableContainers\RemovablePtrVector.h">
       <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
   </ItemGroup>

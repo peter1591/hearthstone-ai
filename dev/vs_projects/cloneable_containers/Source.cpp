@@ -5,7 +5,7 @@
 #include "CloneableContainers/Vector.h"
 #include "CloneableContainers/PtrVector.h"
 #include "CloneableContainers/RemovableVector.h"
-#include "CloneableContainers/CopyByCloneWrapper.h"
+#include "CloneableContainers/RemovablePtrVector.h"
 
 static void test1()
 {
@@ -144,28 +144,6 @@ private:
 	std::unique_ptr<int> v_;
 };
 
-static void test4()
-{
-	Wrap1 rawitem1(std::make_unique<int>(2002));
-	CopyByCloneWrapper<Wrap1> item1(std::move(rawitem1));
-
-	CloneableContainers::RemovableVector<CopyByCloneWrapper<Wrap1>> vec1;
-	auto token1 = vec1.PushBack(std::move(item1));
-	std::cout << "==" << std::endl;
-	std::cout << "value: " << vec1.Get(token1)->Get() << std::endl;
-
-	auto vec2 = vec1;
-	std::cout << "==" << std::endl;
-	std::cout << "value: " << vec1.Get(token1)->Get() << std::endl;
-	std::cout << "value: " << vec2.Get(token1)->Get() << std::endl;
-
-	vec1.Remove(token1);
-	std::cout << "==" << std::endl;
-	std::cout << "value 1: @" << vec1.Get(token1) << std::endl;
-	std::cout << "value 2: @" << vec2.Get(token1) << std::endl;
-	std::cout << "value 2: " << vec2.Get(token1)->Get() << std::endl;
-}
-
 class Wrap2_Base
 {
 public:
@@ -194,28 +172,6 @@ public:
 private:
 	int v_;
 };
-
-static void test5()
-{
-	auto rawitem1 = std::unique_ptr<Wrap2_Base>(new Wrap2(3003));
-	CopyByPtrCloneWrapper<std::unique_ptr<Wrap2_Base>> item1(std::move(rawitem1));
-
-	CloneableContainers::RemovableVector<CopyByPtrCloneWrapper<std::unique_ptr<Wrap2_Base>>> vec1;
-	auto token1 = vec1.PushBack(std::move(item1));
-	std::cout << "==" << std::endl;
-	vec1.Get(token1)->Get()->PrintDebug();
-
-	auto vec2 = vec1;
-	std::cout << "==" << std::endl;
-	vec1.Get(token1)->Get()->PrintDebug();
-	vec2.Get(token1)->Get()->PrintDebug();
-
-	vec1.Remove(token1);
-	std::cout << "==" << std::endl;
-	std::cout << "value 1: @" << vec1.Get(token1) << std::endl;
-	std::cout << "value 2: @" << vec2.Get(token1) << std::endl;
-	vec2.Get(token1)->Get()->PrintDebug();
-}
 
 template <typename T>
 static void PrintPointerInfo(T* item)
@@ -265,7 +221,64 @@ static void test6()
 
 static void test7()
 {
+	auto vec1_ptr = new CloneableContainers::RemovablePtrVector<Wrap2_Base*>();
+	CloneableContainers::RemovablePtrVector<Wrap2_Base*>& vec1 = *vec1_ptr;
 
+	auto token1 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(40007)));
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	auto token2 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3004005)));
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	auto vec2 = vec1;
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	vec1.Remove(token1);
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+	std::cout << "." << std::endl;
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	vec2.Remove(token2);
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+	std::cout << "." << std::endl;
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	vec2.Remove(token1);
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+	std::cout << "." << std::endl;
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	delete vec1_ptr;
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
 }
 
 int main(void)
