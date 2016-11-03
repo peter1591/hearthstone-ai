@@ -115,10 +115,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\CloneableContainers\CopyByClone_CRTPBase.h" />
+    <ClInclude Include="..\..\include\CloneableContainers\PtrVector.h" />
     <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h" />
     <ClInclude Include="..\..\include\CloneableContainers\Vector.h" />
-    <ClInclude Include="..\..\include\CloneableContainers\CloneByCopyWrapper.h" />
+    <ClInclude Include="..\..\include\CloneableContainers\CopyByCloneWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />

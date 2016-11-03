@@ -3,8 +3,9 @@
 #include <memory>
 
 #include "CloneableContainers/Vector.h"
+#include "CloneableContainers/PtrVector.h"
 #include "CloneableContainers/RemovableVector.h"
-#include "CloneableContainers/CloneByCopyWrapper.h"
+#include "CloneableContainers/CopyByCloneWrapper.h"
 
 static void test1()
 {
@@ -216,12 +217,65 @@ static void test5()
 	vec2.Get(token1)->Get()->PrintDebug();
 }
 
+template <typename T>
+static void PrintPointerInfo(T* item)
+{
+	std::cout << "[@" << item << "]";
+	if (item) std::cout << ": " << *item;
+	std::cout << std::endl;
+}
+
+template <>
+static void PrintPointerInfo(Wrap2_Base* item)
+{
+	item->PrintDebug();
+}
+
+static void test6()
+{
+	auto vec1_ptr = new CloneableContainers::PtrVector<Wrap2_Base*>();
+	CloneableContainers::PtrVector<Wrap2_Base*>& vec1 = *vec1_ptr;
+
+	auto token1 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(40007)));
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	auto token2 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3004005)));
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	auto vec2 = vec1;
+	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	delete vec1_ptr;
+	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+}
+
+static void test7()
+{
+
+}
+
 int main(void)
 {
 	//test1();
 	//test2();
 	//test3();
 	//test4();
-	test5();
+	//test5();
+	//test6();
+	test7();
 	return 0;
 }

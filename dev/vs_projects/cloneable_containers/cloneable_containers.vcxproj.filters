@@ -24,10 +24,10 @@
     <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h">
       <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\CloneableContainers\CloneByCopyWrapper.h">
+    <ClInclude Include="..\..\include\CloneableContainers\PtrVector.h">
       <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\CloneableContainers\CopyByClone_CRTPBase.h">
+    <ClInclude Include="..\..\include\CloneableContainers\CopyByCloneWrapper.h">
       <Filter>Header Files\CloneableContainers</Filter>
     </ClInclude>
   </ItemGroup>
