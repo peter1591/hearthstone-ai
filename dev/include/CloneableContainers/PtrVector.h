@@ -3,7 +3,7 @@
 #include <memory>
 #include <type_traits>
 #include "CloneableContainers/Vector.h"
-#include "CloneableContainers/CopyByCloneWrapper.h"
+#include "CloneableContainers/impl/CopyByCloneWrapper.h"
 
 namespace CloneableContainers
 {
@@ -14,7 +14,7 @@ namespace CloneableContainers
 	private:
 		typedef typename std::remove_pointer<PtrItemType>::type ItemType;
 		typedef std::unique_ptr<ItemType> ManagedItemType;
-		typedef CopyByPtrCloneWrapper<ManagedItemType> CopyableItemType;
+		typedef impl::CopyByPtrCloneWrapper<ManagedItemType> CopyableItemType;
 		typedef CloneableContainers::Vector<CopyableItemType> ContainerType;
 
 	public:
