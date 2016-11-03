@@ -16,30 +16,27 @@ namespace EventManager
 		static const bool CloneableByCopySemantics = true;
 
 		template <typename EventHandlerType_>
-		void PushBack(EventHandlerType_&& handler) {
+		void PushBack(EventHandlerType_ handler) {
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-			GetHandlersContainer<EventHandlerType>().PushBack(std::forward<EventHandlerType>(handler));
+			GetHandlersContainer<EventHandlerType>().PushBack(std::forward<EventHandlerType_>(handler));
 		}
 
 		template <typename Category, typename EventHandlerType_>
-		void PushBack(Category&& category, EventHandlerType_&& handler) {
+		void PushBack(Category category, EventHandlerType_ handler) {
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-
 			GetHandlersContainer<Category, EventHandlerType>().PushBack(
-				std::forward<Category>(category), std::forward<EventHandlerType>(handler));
+				std::forward<Category>(category), std::forward<EventHandlerType_>(handler));
 		}
 
 		template <typename EventHandlerType_, typename... Args>
-		void TriggerEvent(Args&&... args) {
+		void TriggerEvent(Args... args) {
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-
 			GetHandlersContainer<EventHandlerType>().TriggerAll(std::forward<Args>(args)...);
 		}
 
 		template <typename Category, typename EventHandlerType_, typename... Args>
-		void TriggerEvent(Category&& category, Args&&... args) {
+		void TriggerCategorizedEvent(Category category, Args... args) {
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-
 			GetHandlersContainer<Category, EventHandlerType>().TriggerAll(std::forward<Category>(category), std::forward<Args>(args)...);
 		}
 
