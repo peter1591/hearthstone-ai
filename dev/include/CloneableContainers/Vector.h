@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <vector>
+#include <type_traits>
 
 // This is a cloneable container, since the identifier is defined to be the index
 // On the contrary, if we use raw pointer as the identifier, those identifiers should be
@@ -10,7 +11,8 @@
 
 namespace CloneableContainers
 {
-	template <class ItemType>
+	template <class ItemType,
+			  typename std::enable_if<!std::is_pointer<ItemType>::value, int>::type = 0> // pointer is not cloneable
 	class Vector
 	{
 	public:
