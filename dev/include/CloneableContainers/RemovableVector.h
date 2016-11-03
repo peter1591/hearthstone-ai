@@ -34,9 +34,8 @@ namespace CloneableContainers
 		RemovableVector() {}
 		RemovableVector(size_t defualt_capacity) : items_(default_capacity) {}
 
-		template <typename... Args>
-		Identifier PushBack(Args&&... args) {
-			return items_.PushBack(InternalItemType(ItemType(std::forward<Args>(args)...)));
+		Identifier PushBack(ItemType&& item) {
+			return items_.PushBack(InternalItemType(std::forward<ItemType>(item)));
 		}
 
 		const ItemType * Get(Identifier identifier) const {
