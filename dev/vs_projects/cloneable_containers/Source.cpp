@@ -165,11 +165,63 @@ static void test4()
 	std::cout << "value 2: " << vec2.Get(token1)->Get() << std::endl;
 }
 
+class Wrap2_Base
+{
+public:
+	virtual ~Wrap2_Base() {}
+	virtual std::unique_ptr<Wrap2_Base> Clone() const = 0;
+
+	virtual void PrintDebug() const = 0;
+};
+
+class Wrap2 : public Wrap2_Base
+{
+public:
+	explicit Wrap2(int v) : v_(v) {}
+	Wrap2(const Wrap2& rhs) = default;
+
+	std::unique_ptr<Wrap2_Base> Clone() const
+	{
+		return std::unique_ptr<Wrap2_Base>(new Wrap2(*this));
+	}
+
+	void PrintDebug() const
+	{
+		std::cout << "[@" << this << "]: " << v_ << std::endl;
+	}
+
+private:
+	int v_;
+};
+
+static void test5()
+{
+	auto rawitem1 = std::unique_ptr<Wrap2_Base>(new Wrap2(3003));
+	CopyByPtrCloneWrapper<std::unique_ptr<Wrap2_Base>> item1(std::move(rawitem1));
+
+	CloneableContainers::RemovableVector<CopyByPtrCloneWrapper<std::unique_ptr<Wrap2_Base>>> vec1;
+	auto token1 = vec1.PushBack(std::move(item1));
+	std::cout << "==" << std::endl;
+	vec1.Get(token1)->Get()->PrintDebug();
+
+	auto vec2 = vec1;
+	std::cout << "==" << std::endl;
+	vec1.Get(token1)->Get()->PrintDebug();
+	vec2.Get(token1)->Get()->PrintDebug();
+
+	vec1.Remove(token1);
+	std::cout << "==" << std::endl;
+	std::cout << "value 1: @" << vec1.Get(token1) << std::endl;
+	std::cout << "value 2: @" << vec2.Get(token1) << std::endl;
+	vec2.Get(token1)->Get()->PrintDebug();
+}
+
 int main(void)
 {
 	//test1();
 	//test2();
 	//test3();
-	test4();
+	//test4();
+	test5();
 	return 0;
 }
