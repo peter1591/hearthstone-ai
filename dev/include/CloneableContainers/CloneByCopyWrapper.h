@@ -13,7 +13,7 @@ public:
 
 	CopyByCloneWrapper& operator=(const CopyByCloneWrapper<T>& rhs)
 	{
-		item_ = std::move(item_.Clone())
+		item_ = std::move(item_.Clone());
 		return *this;
 	}
 	CopyByCloneWrapper& operator=(CopyByCloneWrapper<T>&& rhs) = default;

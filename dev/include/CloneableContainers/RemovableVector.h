@@ -36,7 +36,7 @@ namespace CloneableContainers
 
 		template <typename... Args>
 		Identifier PushBack(Args&&... args) {
-			return items_.PushBack(InternalItemType(ItemType(std::forward<ItemType>(args)...)));
+			return items_.PushBack(InternalItemType(ItemType(std::forward<Args>(args)...)));
 		}
 
 		const ItemType * Get(Identifier identifier) const {
