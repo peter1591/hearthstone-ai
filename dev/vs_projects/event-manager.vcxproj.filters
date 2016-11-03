@@ -30,9 +30,6 @@
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h">
       <Filter>Header Files\EventManager\Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\Manager.h">
-      <Filter>Header Files\EventManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h">
       <Filter>Header Files\EventManager\Handlers</Filter>
     </ClInclude>
@@ -49,6 +46,9 @@
       <Filter>Header Files\EventManager\impl</Filter>
     </ClInclude>
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\Trigger.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>

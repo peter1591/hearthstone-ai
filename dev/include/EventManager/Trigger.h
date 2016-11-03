@@ -8,7 +8,7 @@
 
 namespace EventManager
 {
-	class Manager
+	class Trigger
 	{
 	public:
 		// Cloneable by copy semantics
