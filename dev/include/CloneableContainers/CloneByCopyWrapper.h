@@ -1,22 +1,22 @@
 #pragma once
 
 template <typename T>
-class CloneByCopyWrapper
+class CopyByCloneWrapper
 {
 public:
-	CloneByCopyWrapper(T&& item) : item_(std::move(item)) {}
-	CloneByCopyWrapper(const CloneByCopyWrapper<T>& rhs)
+	CopyByCloneWrapper(T&& item) : item_(std::move(item)) {}
+	CopyByCloneWrapper(const CopyByCloneWrapper<T>& rhs)
 		: item_(rhs.item_.Clone())
 	{
 	}
-	CloneByCopyWrapper(CloneByCopyWrapper<T>&& rhs) = default;
+	CopyByCloneWrapper(CopyByCloneWrapper<T>&& rhs) = default;
 
-	CloneByCopyWrapper& operator=(const CloneByCopyWrapper<T>& rhs)
+	CopyByCloneWrapper& operator=(const CopyByCloneWrapper<T>& rhs)
 	{
 		item_ = std::move(item_.Clone())
 		return *this;
 	}
-	CloneByCopyWrapper& operator=(CloneByCopyWrapper<T>&& rhs) = default;
+	CopyByCloneWrapper& operator=(CopyByCloneWrapper<T>&& rhs) = default;
 
 	T & Get() { return item_; }
 	const T & Get() const { return item_; }

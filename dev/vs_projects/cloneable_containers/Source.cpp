@@ -146,9 +146,9 @@ private:
 static void test4()
 {
 	Wrap1 rawitem1(std::make_unique<int>(2002));
-	CloneByCopyWrapper<Wrap1> item1(std::move(rawitem1));
+	CopyByCloneWrapper<Wrap1> item1(std::move(rawitem1));
 
-	CloneableContainers::RemovableVector<CloneByCopyWrapper<Wrap1>> vec1;
+	CloneableContainers::RemovableVector<CopyByCloneWrapper<Wrap1>> vec1;
 	auto token1 = vec1.PushBack(std::move(item1));
 	std::cout << "==" << std::endl;
 	std::cout << "value: " << vec1.Get(token1)->Get() << std::endl;
