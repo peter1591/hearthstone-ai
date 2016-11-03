@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\Card.h" />
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h" />
+    <ClInclude Include="..\include\EventManager\Event.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h" />
     <ClInclude Include="..\include\EventManager\impl\CategorizedHandlersContainer.h" />

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "EventManager/Trigger.h"
+#include "EventManager/Event.h"
 
 int main(void)
 {
@@ -10,60 +11,28 @@ int main(void)
 
 	EventManager::Handlers::MinionSummoned handler1("a");
 	EventManager::Handlers::MinionSummoned handler2("b");
+	EventManager::Handlers::MinionSummonedOnce handler3("once-c");
 
 	trigger.PushBack(handler1);
 	trigger.PushBack(handler2);
+	trigger.PushBack(handler3);
 
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummoned>();
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummonedOnce>();
+	trigger.PushBack(5, handler1);
+	trigger.PushBack(5, handler2);
+	trigger.PushBack(55, handler1);
+	trigger.PushBack(55, handler2);
 
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummoned>();
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummonedOnce>();
+	std::tuple<int> a;
 
-	std::cout << "===" << std::endl;
-	trigger.PushBack(EventManager::Handlers::MinionSummonedOnce("once-a"));
-	trigger.PushBack(EventManager::Handlers::MinionSummonedOnce("once-b"));
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummoned>();
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummonedOnce>();
+	EventManager::Event<EventManager::Handlers::MinionSummoned> ev1(987, "h199", 3.15);
+	EventManager::Event<EventManager::Handlers::MinionSummonedOnce> ev2;
+	ev1.TriggerEvent(trigger);
+	ev2.TriggerEvent(trigger);
 
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummoned>();
-	trigger.TriggerEvent<EventManager::Handlers::MinionSummonedOnce>();
-
-	std::cout << "===" << std::endl;
-	trigger.PushBack(3, EventManager::Handlers::MinionSummoned("cat-3.1"));
-	trigger.PushBack(3, EventManager::Handlers::MinionSummoned("cat-3.2"));
-	trigger.PushBack(9999, EventManager::Handlers::MinionSummoned("cat-9999.1"));
-	trigger.PushBack(9999, EventManager::Handlers::MinionSummoned("cat-9999.2"));
-	trigger.PushBack(3, EventManager::Handlers::MinionSummonedOnce("cat-3.3"));
-	trigger.PushBack(3, EventManager::Handlers::MinionSummonedOnce("cat-3.4"));
-	trigger.PushBack(9999, EventManager::Handlers::MinionSummonedOnce("cat-9999.3"));
-	trigger.PushBack(9999, EventManager::Handlers::MinionSummonedOnce("cat-9999.4"));
-
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummoned>(2);
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummonedOnce>(2);
-
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummoned>(9999);
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummonedOnce>(9999);
-
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummoned>(3);
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummonedOnce>(3);
-
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummoned>(2);
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummonedOnce>(2);
-
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummoned>(9999);
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummonedOnce>(9999);
-
-	std::cout << "===" << std::endl;
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummoned>(3);
-	trigger.TriggerEvent<int, EventManager::Handlers::MinionSummonedOnce>(3);
+	EventManager::CategorizedEvent<EventManager::Handlers::MinionSummoned> ev3(4, 199, "kkk", 9.64);
+	EventManager::CategorizedEvent<EventManager::Handlers::MinionSummoned> ev4(55, 199, "kkk", 123.656);
+	ev3.TriggerEvent(trigger);
+	ev4.TriggerEvent(trigger);
 
 	return 0;
 }
