@@ -48,10 +48,12 @@ namespace EventManager
 		std::tuple<Args...> args_;
 	};
 
-	template <typename CategoryType, typename EventHandlerType, typename... Args>
+	template <typename EventHandlerType, typename... Args>
 	class CategorizedEvent : public EventBase
 	{
 	public:
+		typedef int CategoryType;
+
 		explicit CategorizedEvent(const CategoryType& category, const Args&... args) :
 			category_(category), args_(args...)
 		{
