@@ -48,10 +48,10 @@
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\Trigger.h">
+    <ClInclude Include="..\include\EventManager\Event.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\Event.h">
+    <ClInclude Include="..\include\EventManager\HandlersManager.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
   </ItemGroup>
