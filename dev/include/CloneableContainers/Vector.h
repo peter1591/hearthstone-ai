@@ -29,9 +29,10 @@ namespace CloneableContainers
 			items_.reserve(default_capacity);
 		}
 
-		Identifier PushBack(ItemType&& item) {
+		template <typename T>
+		Identifier PushBack(T&& item) {
 			Identifier ret(items_.size());
-			items_.push_back(std::forward<ItemType>(item));
+			items_.push_back(std::forward<T>(item));
 			return ret;
 		}
 

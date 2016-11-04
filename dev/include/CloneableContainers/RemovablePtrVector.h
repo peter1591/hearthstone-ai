@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <memory>
 #include <type_traits>
 #include "CloneableContainers/RemovableVector.h"
@@ -20,9 +21,10 @@ namespace CloneableContainers
 	public:
 		typedef typename ContainerType::Identifier Identifier;
 
-		Identifier PushBack(ManagedItemType&& item)
+		template <typename T>
+		Identifier PushBack(T&& item)
 		{
-			return container_.PushBack(CopyableItemType(std::move(item)));
+			return container_.PushBack(CopyableItemType(std::forward<T>(item)));
 		}
 
 		const PtrItemType Get(Identifier identifier) const
