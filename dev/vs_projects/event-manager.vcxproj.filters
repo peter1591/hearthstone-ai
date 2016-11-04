@@ -33,9 +33,6 @@
     <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h">
       <Filter>Header Files\EventManager\Handlers</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Card.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h">
       <Filter>Header Files\Enchantment</Filter>
     </ClInclude>
