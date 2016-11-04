@@ -16,6 +16,9 @@
     <Filter Include="Header Files\EntitiesManager">
       <UniqueIdentifier>{45272b79-7c5c-4704-93ca-a6bbd42f36d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Manipulators">
+      <UniqueIdentifier>{590386c2-3a43-4d43-b068-8c7895395e30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h">
@@ -27,8 +30,14 @@
     <ClInclude Include="..\..\include\EntitiesManager\CardRef.h">
       <Filter>Header Files\EntitiesManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\EntitiesManager\CardManipulator.h">
-      <Filter>Header Files\EntitiesManager</Filter>
+    <ClInclude Include="..\..\include\Manipulators\BasicManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

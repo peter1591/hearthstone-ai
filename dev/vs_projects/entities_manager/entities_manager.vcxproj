@@ -116,9 +116,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EntitiesManager\Card.h" />
-    <ClInclude Include="..\..\include\EntitiesManager\CardManipulator.h" />
     <ClInclude Include="..\..\include\EntitiesManager\CardRef.h" />
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h" />
+    <ClInclude Include="..\..\include\Manipulators\BasicManipulator.h" />
+    <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
