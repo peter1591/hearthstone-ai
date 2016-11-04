@@ -2,7 +2,7 @@
 
 #include <utility>
 #include <tuple>
-#include "EventManager/Trigger.h"
+#include "EventManager/HandlersManager.h"
 
 namespace EventManager
 {
@@ -24,7 +24,7 @@ namespace EventManager
 	{
 	public:
 		virtual ~EventBase() {}
-		virtual void TriggerEvent(Trigger&) = 0;
+		virtual void TriggerEvent(HandlersManager&) = 0;
 	};
 
 	template <typename EventHandlerType>
@@ -36,16 +36,16 @@ namespace EventManager
 		template <typename... Args>
 		explicit Event(Args&&... args) : args_(args...) {}
 
-		void TriggerEvent(Trigger& trigger)
+		void TriggerEvent(HandlersManager& mgr)
 		{
 			constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
-			return TriggerEventInternal(trigger, typename impl::gens<args_count>::type());
+			return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
 		}
 
 	private:
 		template <int... I>
-		void TriggerEventInternal(Trigger& trigger, impl::seq<I...>) {
-			return trigger.GetHandlersContainer<EventHandlerType>().TriggerAll(std::get<I>(args_)...);
+		void TriggerEventInternal(HandlersManager& mgr, impl::seq<I...>) {
+			return mgr.GetHandlersContainer<EventHandlerType>().TriggerAll(std::get<I>(args_)...);
 		}
 
 	private:
@@ -65,16 +65,16 @@ namespace EventManager
 		{
 		}
 
-		void TriggerEvent(Trigger& trigger)
+		void TriggerEvent(HandlersManager& mgr)
 		{
 			constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
-			return TriggerEventInternal(trigger, typename impl::gens<args_count>::type());
+			return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
 		}
 
 	private:
 		template <int... I>
-		void TriggerEventInternal(Trigger& trigger, impl::seq<I...>) {
-			return trigger.GetHandlersContainer<CategoryType, EventHandlerType>().TriggerAll(category_, std::get<I>(args_)...);
+		void TriggerEventInternal(HandlersManager& mgr, impl::seq<I...>) {
+			return mgr.GetHandlersContainer<CategoryType, EventHandlerType>().TriggerAll(category_, std::get<I>(args_)...);
 		}
 
 	private:
