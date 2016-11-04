@@ -16,47 +16,40 @@ namespace EventManager
 		static const bool CloneableByCopySemantics = true;
 
 		template <typename EventHandlerType_>
-		void PushBack(EventHandlerType_ handler) {
+		void PushBack(EventHandlerType_&& handler) {
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
 			GetHandlersContainer<EventHandlerType>().PushBack(std::forward<EventHandlerType_>(handler));
 		}
 
-		template <typename Category, typename EventHandlerType_>
-		void PushBack(Category category, EventHandlerType_ handler) {
+		template <typename CategoryType_, typename EventHandlerType_>
+		void PushBack(CategoryType_&& category, EventHandlerType_&& handler) {
+			using CategoryType = typename std::remove_reference<CategoryType_>::type;
 			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-			GetHandlersContainer<Category, EventHandlerType>().PushBack(
-				std::forward<Category>(category), std::forward<EventHandlerType_>(handler));
+
+			GetHandlersContainer<CategoryType, EventHandlerType>().PushBack(
+				std::forward<CategoryType_>(category), std::forward<EventHandlerType_>(handler));
 		}
 
-		template <typename EventHandlerType_, typename... Args>
-		void TriggerEvent(Args... args) {
-			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-			GetHandlersContainer<EventHandlerType>().TriggerAll(std::forward<Args>(args)...);
-		}
-
-		template <typename Category, typename EventHandlerType_, typename... Args>
-		void TriggerCategorizedEvent(Category category, Args... args) {
-			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-			GetHandlersContainer<Category, EventHandlerType>().TriggerAll(std::forward<Category>(category), std::forward<Args>(args)...);
-		}
-
-	private:
+	public:
 		template<typename EventHandlerType>
 		impl::HandlersContainer<EventHandlerType> & GetHandlersContainer();
 
 		template<typename Category, typename EventHandlerType>
 		impl::CategorizedHandlersContainer<Category, EventHandlerType> & GetHandlersContainer();
 
-	private:
 #define ADD_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
+private: \
 	impl::HandlersContainer<Handlers::TYPE_NAME> MEMBER_NAME; \
+public: \
 	template <> impl::HandlersContainer<Handlers::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
 #define ADD_HANDLER(TYPE_NAME) ADD_HANDLER_INTERNAL(TYPE_NAME, handler_ ## TYPE_NAME ## _)
 
 #define ADD_CATEGORIZED_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
+private: \
 	impl::CategorizedHandlersContainer<int, Handlers::TYPE_NAME> MEMBER_NAME; \
+public: \
 	template <> impl::CategorizedHandlersContainer<int, Handlers::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}

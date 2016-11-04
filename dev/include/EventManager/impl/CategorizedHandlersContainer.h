@@ -15,13 +15,14 @@ namespace EventManager
 			//    Since the STL container and HandlersContainer are with this property
 			static const bool CloneableByCopySemantics = true;
 
-			void PushBack(const CategoryType& category, HandlerType&& handler)
+			template <typename CategoryType_, typename HandlerType_>
+			void PushBack(CategoryType_&& category, HandlerType_&& handler)
 			{
-				categories_[category].PushBack(std::forward<HandlerType>(handler));
+				categories_[category].PushBack(std::forward<HandlerType_>(handler));
 			}
 
-			template <typename... Args>
-			void TriggerAll(const CategoryType& category, Args&&... args)
+			template <typename CategoryType_, typename... Args>
+			void TriggerAll(CategoryType_&& category, Args&&... args)
 			{
 				categories_[category].TriggerAll(std::forward<Args>(args)...);
 			}

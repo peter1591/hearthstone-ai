@@ -18,7 +18,8 @@ namespace EventManager
 			//    Since the STL container and the underlying HandlerType are with this property
 			static const bool CloneableByCopySemantics = true;
 
-			void PushBack(const HandlerType & handler)
+			template <typename HandlerType_>
+			void PushBack(HandlerType_&& handler)
 			{
 				handlers_.push_back(handler);
 			}
