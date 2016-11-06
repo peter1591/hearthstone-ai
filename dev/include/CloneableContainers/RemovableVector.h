@@ -40,7 +40,7 @@ namespace CloneableContainers
 		}
 
 		const ItemType * Get(Identifier identifier) const {
-			auto & item = items_.Get(identifier);
+			auto & item = items_.Get(identifier.identifier_);
 			if (item.removed) return nullptr;
 			else return &item.item;
 		}
