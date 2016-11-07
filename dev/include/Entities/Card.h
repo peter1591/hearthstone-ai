@@ -20,6 +20,9 @@ public: // getters and setters
 		// TODO: triggers?
 	}
 
+	int GetCost() const { return data_.cost; }
+	void SetCost(int new_cost) { data_.cost = new_cost; }
+
 private:
 	RawCard data_;
 };

@@ -9,4 +9,5 @@ struct RawCard
 	CardType card_type;
 	std::string card_id;
 	CardZone zone;
+	int cost;
 };
