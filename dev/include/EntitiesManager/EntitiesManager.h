@@ -2,9 +2,8 @@
 
 #include <utility>
 #include "CloneableContainers/Vector.h"
-#include "EntitiesManager/Card.h"
+#include "Entities/Card.h"
 #include "EntitiesManager/CardRef.h"
-#include "Manipulators/BasicManipulator.h"
 #include "Manipulators/MinionManipulator.h"
 #include "Manipulators/SpellManipulator.h"
 
@@ -24,22 +23,19 @@ public:
 		return CardRef(cards_.PushBack(std::forward<T>(card)));
 	}
 
-	Manipulators::BasicManipulator GetBasicManipulator(const CardRef & id)
-	{
-		return Manipulators::BasicManipulator(cards_.Get(id.id));
-	}
-
 	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id)
 	{
 		Card& card = cards_.Get(id.id);
-		if (card.card_type != kCardTypeMinion) throw new std::exception("Card type is not minion");
+		if (card.GetCardType() != kCardTypeMinion) throw new std::exception("Card type is not minion");
+
 		return Manipulators::MinionManipulator(cards_.Get(id.id));
 	}
 
 	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id)
 	{
 		Card& card = cards_.Get(id.id);
-		if (card.card_type != kCardTypeSpell) throw new std::exception("Card type is not spell");
+		if (card.GetCardType() != kCardTypeSpell) throw new std::exception("Card type is not spell");
+
 		return Manipulators::SpellManipulator(cards_.Get(id.id));
 	}
 

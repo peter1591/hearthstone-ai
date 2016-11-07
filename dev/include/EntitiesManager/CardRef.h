@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EntitiesManager/Card.h"
+#include "Entities/Card.h"
 #include "CloneableContainers/Vector.h"
 
 class CardRef
