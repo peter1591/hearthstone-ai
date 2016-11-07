@@ -115,10 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\EntitiesManager\Card.h" />
     <ClInclude Include="..\..\include\EntitiesManager\CardRef.h" />
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h" />
-    <ClInclude Include="..\..\include\Manipulators\BasicManipulator.h" />
+    <ClInclude Include="..\..\include\Entities\Card.h" />
+    <ClInclude Include="..\..\include\Entities\CardType.h" />
+    <ClInclude Include="..\..\include\Entities\CardZone.h" />
+    <ClInclude Include="..\..\include\Entities\RawCard.h" />
+    <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
   </ItemGroup>

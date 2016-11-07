@@ -19,25 +19,40 @@
     <Filter Include="Header Files\Manipulators">
       <UniqueIdentifier>{590386c2-3a43-4d43-b068-8c7895395e30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Manipulators\Helpers">
+      <UniqueIdentifier>{5f9ed7ee-a36d-492f-9773-87b4879933ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities">
+      <UniqueIdentifier>{f9232b74-ddd1-49f1-b736-e569c7bd844f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h">
       <Filter>Header Files\EntitiesManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\EntitiesManager\Card.h">
-      <Filter>Header Files\EntitiesManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\EntitiesManager\CardRef.h">
       <Filter>Header Files\EntitiesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Manipulators\BasicManipulator.h">
-      <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Entities\Card.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Entities\CardType.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Entities\CardZone.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Entities\RawCard.h">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
