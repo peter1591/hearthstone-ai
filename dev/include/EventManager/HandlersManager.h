@@ -8,8 +8,18 @@
 
 namespace EventManager
 {
+	template <typename T> class Event;
+	template <typename T> class CategorizedEvent;
+	template <typename T> class StaticEvent;
+	template <typename T> class StaticCategorizedEvent;
+
 	class HandlersManager
 	{
+		template <typename T> friend class Event;
+		template <typename T> friend class CategorizedEvent;
+		template <typename T> friend class StaticEvent;
+		template <typename T> friend class StaticCategorizedEvent;
+
 	public:
 		// Cloneable by copy semantics
 		//    Since the underlying data structures are all with this property.
@@ -30,7 +40,7 @@ namespace EventManager
 				std::forward<CategoryType_>(category), std::forward<EventHandlerType_>(handler));
 		}
 
-	public:
+	private:
 		template<typename EventHandlerType>
 		impl::HandlersContainer<EventHandlerType> & GetHandlersContainer();
 
@@ -40,7 +50,7 @@ namespace EventManager
 #define ADD_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
 private: \
 	impl::HandlersContainer<Handlers::TYPE_NAME> MEMBER_NAME; \
-public: \
+private: \
 	template <> impl::HandlersContainer<Handlers::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
@@ -49,7 +59,7 @@ public: \
 #define ADD_CATEGORIZED_HANDLER_INTERNAL(TYPE_NAME, MEMBER_NAME) \
 private: \
 	impl::CategorizedHandlersContainer<int, Handlers::TYPE_NAME> MEMBER_NAME; \
-public: \
+private: \
 	template <> impl::CategorizedHandlersContainer<int, Handlers::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
