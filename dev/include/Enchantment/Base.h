@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "EntitiesManager/Card.h"
+#include "Entities/Card.h"
 #include "Enchantments/Tiers.h"
 
 namespace Enchantment
