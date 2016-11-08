@@ -51,6 +51,9 @@
     <ClInclude Include="..\include\EventManager\HandlersManager.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\EventManager\StaticEvent.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
