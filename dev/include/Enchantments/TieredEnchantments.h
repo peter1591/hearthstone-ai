@@ -11,13 +11,13 @@ public:
 	template <typename EnchantmentType>
 	Enchantment::Base* Get(typename ContainerType::Identifier id)
 	{
-		return GetEnchantmentByType<EnchantmentType>().Get(id);
+		return GetEnchantmentsByType<EnchantmentType>().Get(id);
 	}
 
 	template <typename EnchantmentType, typename T>
 	typename ContainerType::Identifier PushBack(T && item)
 	{
-		return GetEnchantmentByType<EnchantmentType>().PushBack(std::forward<T>(item));
+		return GetEnchantmentsByType<EnchantmentType>().PushBack(std::forward<T>(item));
 	}
 
 private:
@@ -28,13 +28,13 @@ private:
 	const AttachedEnchantments & GetEnchantmentsByTier() const;
 
 	template <typename EnchantmentType>
-	AttachedEnchantments & GetEnchantmentByType()
+	AttachedEnchantments & GetEnchantmentsByType()
 	{
 		return GetEnchantmentsByTier<EnchantmentType::tier>();
 	}
 
 	template <typename EnchantmentType>
-	AttachedEnchantments & GetEnchantmentByType() const
+	AttachedEnchantments & GetEnchantmentsByType() const
 	{
 		return GetEnchantmentsByTier<EnchantmentType::tier>();
 	}
