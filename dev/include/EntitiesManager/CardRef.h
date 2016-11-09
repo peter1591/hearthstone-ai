@@ -6,7 +6,7 @@
 class CardRef
 {
 public:
-	explicit CardRef(typename CloneableContainers::Vector<Card>::Identifier id) : id(id) {}
+	explicit CardRef(typename CloneableContainers::Vector<Entity::Card>::Identifier id) : id(id) {}
 
-	typename CloneableContainers::Vector<Card>::Identifier id;
+	typename CloneableContainers::Vector<Entity::Card>::Identifier id;
 };

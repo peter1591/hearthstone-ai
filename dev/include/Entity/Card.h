@@ -3,26 +3,29 @@
 #include <string>
 #include "Entity/RawCard.h"
 
-class Card
+namespace Entity
 {
-public:
-	explicit Card(const RawCard & data) : data_(data) {}
-
-public: // getters and setters
-	CardType GetCardType() const { return data_.card_type; }
-
-	const std::string & GetCardId() const { return data_.card_id; }
-
-	const CardZone GetZone() const { return data_.zone; }
-	void SetZone(CardZone new_zone)
+	class Card
 	{
-		data_.zone = new_zone;
-		// TODO: triggers?
-	}
+	public:
+		explicit Card(const RawCard & data) : data_(data) {}
 
-	int GetCost() const { return data_.cost; }
-	void SetCost(int new_cost) { data_.cost = new_cost; }
+	public: // getters and setters
+		CardType GetCardType() const { return data_.card_type; }
 
-private:
-	RawCard data_;
-};
+		const std::string & GetCardId() const { return data_.card_id; }
+
+		const CardZone GetZone() const { return data_.zone; }
+		void SetZone(CardZone new_zone)
+		{
+			data_.zone = new_zone;
+			// TODO: triggers?
+		}
+
+		int GetCost() const { return data_.cost; }
+		void SetCost(int new_cost) { data_.cost = new_cost; }
+
+	private:
+		RawCard data_;
+	};
+}

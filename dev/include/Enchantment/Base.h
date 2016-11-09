@@ -11,7 +11,7 @@ namespace Enchantment
 	public:
 		virtual ~Base() {}
 
-		virtual void Apply(Card & card) = 0;
+		virtual void Apply(Entity::Card & card) = 0;
 		virtual std::unique_ptr<Base> Clone() = 0;
 	};
 }

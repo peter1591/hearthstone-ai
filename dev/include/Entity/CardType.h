@@ -1,11 +1,14 @@
 #pragma once
 
-enum CardType
+namespace Entity
 {
-	kCardTypeMinion,
-	kCardTypeSpell,
-	kCardTypeWeapon,
-	kCardTypeSecret,
-	kCardTypeHeroPower,
-	kCardTypeInvalid
-};
+	enum CardType
+	{
+		kCardTypeMinion,
+		kCardTypeSpell,
+		kCardTypeWeapon,
+		kCardTypeSecret,
+		kCardTypeHeroPower,
+		kCardTypeInvalid
+	};
+}

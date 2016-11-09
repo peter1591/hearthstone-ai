@@ -1,13 +1,16 @@
 #pragma once
 
-enum CardZone
+namespace Entity
 {
-	kCardZonePlay,
-	kCardZoneDeck,
-	kCardZoneHand,
-	kCardZoneSecret,
-	kCardZoneGraveyard,
-	kCardZoneRemoved,
-	kCardZonePutASide,
-	kCardZoneInvalid
-};
+	enum CardZone
+	{
+		kCardZonePlay,
+		kCardZoneDeck,
+		kCardZoneHand,
+		kCardZoneSecret,
+		kCardZoneGraveyard,
+		kCardZoneRemoved,
+		kCardZonePutASide,
+		kCardZoneInvalid
+	};
+}

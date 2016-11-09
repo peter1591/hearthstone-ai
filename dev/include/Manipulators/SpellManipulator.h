@@ -8,9 +8,9 @@ namespace Manipulators
 	class SpellManipulator
 	{
 	public:
-		SpellManipulator(Card &card) : card_(card) {}
+		SpellManipulator(Entity::Card &card) : card_(card) {}
 
 	private:
-		Card & card_;
+		Entity::Card & card_;
 	};
 }

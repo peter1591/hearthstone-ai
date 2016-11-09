@@ -8,9 +8,9 @@ namespace Manipulators
 	class MinionManipulator
 	{
 	public:
-		MinionManipulator(Card &card) : card_(card) {}
+		MinionManipulator(Entity::Card &card) : card_(card) {}
 
-		void ChangeZone(CardZone new_zone)
+		void ChangeZone(Entity::CardZone new_zone)
 		{
 			card_.SetZone(new_zone);
 		}
@@ -21,6 +21,6 @@ namespace Manipulators
 		}
 
 	private:
-		Card & card_;
+		Entity::Card & card_;
 	};
 }

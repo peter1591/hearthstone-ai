@@ -10,9 +10,9 @@
 class EntitiesManager
 {
 public:
-	typedef CloneableContainers::Vector<Card> ContainerType;
+	typedef CloneableContainers::Vector<Entity::Card> ContainerType;
 
-	const Card & Get(const CardRef & id) const
+	const Entity::Card & Get(const CardRef & id) const
 	{
 		return cards_.Get(id.id);
 	}
@@ -25,16 +25,16 @@ public:
 
 	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id)
 	{
-		Card& card = cards_.Get(id.id);
-		if (card.GetCardType() != kCardTypeMinion) throw new std::exception("Card type is not minion");
+		Entity::Card& card = cards_.Get(id.id);
+		if (card.GetCardType() != Entity::kCardTypeMinion) throw new std::exception("Card type is not minion");
 
 		return Manipulators::MinionManipulator(cards_.Get(id.id));
 	}
 
 	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id)
 	{
-		Card& card = cards_.Get(id.id);
-		if (card.GetCardType() != kCardTypeSpell) throw new std::exception("Card type is not spell");
+		Entity::Card& card = cards_.Get(id.id);
+		if (card.GetCardType() != Entity::kCardTypeSpell) throw new std::exception("Card type is not spell");
 
 		return Manipulators::SpellManipulator(cards_.Get(id.id));
 	}

@@ -9,7 +9,7 @@ namespace Enchantment
 	public:
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 
-		void Apply(Card & card)
+		void Apply(Entity::Card & card)
 		{
 
 		}

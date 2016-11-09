@@ -4,10 +4,13 @@
 #include "Entity/CardType.h"
 #include "Entity/CardZone.h"
 
-struct RawCard
+namespace Entity
 {
-	CardType card_type;
-	std::string card_id;
-	CardZone zone;
-	int cost;
-};
+	struct RawCard
+	{
+		CardType card_type;
+		std::string card_id;
+		CardZone zone;
+		int cost;
+	};
+}
