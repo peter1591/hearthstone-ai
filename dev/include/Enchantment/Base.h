@@ -1,8 +1,12 @@
 #pragma once
 
 #include <memory>
-#include "Entity/Card.h"
 #include "Enchantments/Tiers.h"
+
+namespace Entity
+{
+	class Card;
+}
 
 namespace Enchantment
 {

@@ -15,15 +15,17 @@ namespace Entity
 
 		const std::string & GetCardId() const { return data_.card_id; }
 
-		const CardZone GetZone() const { return data_.zone; }
+		const CardZone GetZone() const { return data_.enchanted_states.zone; }
 		void SetZone(CardZone new_zone)
 		{
-			data_.zone = new_zone;
+			data_.enchanted_states.zone = new_zone;
 			// TODO: triggers?
 		}
 
-		int GetCost() const { return data_.cost; }
-		void SetCost(int new_cost) { data_.cost = new_cost; }
+		int GetCost() const { return data_.enchanted_states.cost; }
+		void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
+
+		EnchantmentAuxData & GetMutableEnchantmentAuxData() { return data_.enchantment_aux_data; }
 
 	private:
 		RawCard data_;
