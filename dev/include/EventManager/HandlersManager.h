@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include <utility>
 #include "EventManager/impl/HandlersContainer.h"
 #include "EventManager/impl/CategorizedHandlersContainer.h"
@@ -25,19 +26,15 @@ namespace EventManager
 		//    Since the underlying data structures are all with this property.
 		static const bool CloneableByCopySemantics = true;
 
-		template <typename EventHandlerType_>
-		void PushBack(EventHandlerType_&& handler) {
-			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-			GetHandlersContainer<EventHandlerType>().PushBack(std::forward<EventHandlerType_>(handler));
+		template <typename T>
+		void PushBack(T&& handler) {
+			GetHandlersContainer<std::decay_t<T>>().PushBack(std::forward<T>(handler));
 		}
 
-		template <typename CategoryType_, typename EventHandlerType_>
-		void PushBack(CategoryType_&& category, EventHandlerType_&& handler) {
-			using CategoryType = typename std::remove_reference<CategoryType_>::type;
-			using EventHandlerType = typename std::remove_reference<EventHandlerType_>::type;
-
-			GetHandlersContainer<CategoryType, EventHandlerType>().PushBack(
-				std::forward<CategoryType_>(category), std::forward<EventHandlerType_>(handler));
+		template <typename T1, typename T2>
+		void PushBack(T1&& category, T2&& handler) {
+			GetHandlersContainer<std::decay_t<T1>, std::decay_t<T2>>().PushBack(
+				std::forward<T1>(category), std::forward<T2>(handler));
 		}
 
 	private:
