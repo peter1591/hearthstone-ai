@@ -26,6 +26,7 @@ namespace CloneableContainers
 		class Identifier
 		{
 			friend class RemovableVector<ItemType>;
+			friend RemovableVector::IdentifierHasher;
 
 			typedef typename CloneableContainers::Vector<InternalItemType>::Identifier impl_identifier_type;
 
@@ -41,6 +42,12 @@ namespace CloneableContainers
 			Identifier(impl_identifier_type && identifier) : identifier_(std::move(identifier)) {}
 
 			impl_identifier_type identifier_;
+		};
+
+		class IdentifierHasher
+		{
+		public:
+			size_t operator()(const Identifier & id) const { return std::hash()(id.identifier_); }
 		};
 
 	public:

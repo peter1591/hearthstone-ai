@@ -20,6 +20,7 @@ namespace CloneableContainers
 
 	public:
 		typedef typename ContainerType::Identifier Identifier;
+		typedef typename ContainerType::IdentifierHasher IdentifierHasher;
 
 		template <typename T>
 		Identifier PushBack(T&& item)

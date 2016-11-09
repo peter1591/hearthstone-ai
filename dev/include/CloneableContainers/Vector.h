@@ -19,13 +19,21 @@ namespace CloneableContainers
 		class Identifier
 		{
 			friend Vector<ItemType>;
+			friend Vector::IdentifierHasher;
 
-			explicit Identifier(size_t idx) : idx(idx) {}
-			size_t idx;
+		private:
+			explicit Identifier(std::size_t idx) : idx(idx) {}
+			std::size_t idx;
 
 		public:
 			bool operator==(const Identifier& rhs) const { return idx == rhs.idx; }
 			bool operator!=(const Identifier& rhs) const { return idx != rhs.idx; }
+		};
+
+		class IdentifierHasher
+		{
+		public:
+			size_t operator()(const Identifier & id) const { return std::hash<std::size_t>()(id.idx); }
 		};
 
 		Vector() {}
