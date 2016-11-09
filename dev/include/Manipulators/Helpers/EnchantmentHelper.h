@@ -24,12 +24,14 @@ namespace Manipulators
 			template <typename EnchantmentType, typename T>
 			decltype(auto) Add(T&& enchantment)
 			{
+				data_.need_update = true;
 				return data_.enchantments.PushBack<EnchantmentType>(std::forward<T>(enchantment));
 			}
 
 			template <typename EnchantmentType, typename T>
 			decltype(auto) Remove(T&& id)
 			{
+				data_.need_update = true;
 				return data_.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 			}
 
