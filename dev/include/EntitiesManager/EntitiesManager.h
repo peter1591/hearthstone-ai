@@ -2,7 +2,7 @@
 
 #include <utility>
 #include "CloneableContainers/Vector.h"
-#include "Entities/Card.h"
+#include "Entity/Card.h"
 #include "EntitiesManager/CardRef.h"
 #include "Manipulators/MinionManipulator.h"
 #include "Manipulators/SpellManipulator.h"

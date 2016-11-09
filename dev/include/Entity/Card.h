@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Entities/RawCard.h"
+#include "Entity/RawCard.h"
 
 class Card
 {

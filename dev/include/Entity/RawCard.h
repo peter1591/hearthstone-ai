@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include "Entities/CardType.h"
-#include "Entities/CardZone.h"
+#include "Entity/CardType.h"
+#include "Entity/CardZone.h"
 
 struct RawCard
 {
