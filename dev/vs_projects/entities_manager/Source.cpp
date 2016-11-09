@@ -39,11 +39,14 @@ int main(void)
 	assert(mgr2.Get(r1).GetCost() == 9);
 	
 	auto manipulator = mgr.GetMinionManipulator(r1);
-	auto enchant1 = std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack());
-	manipulator.GetEnchantmentHelper().Add<Enchantment::AddAttack>(std::move(enchant1));
+	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
+	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
+	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
+	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
 
-	auto enchant2 = std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack_Aura());
-	auto enchant2_ref = manipulator.GetEnchantmentHelper().Add<Enchantment::AddAttack_Aura>(std::move(enchant2));
+	auto enchant2_ref = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
+	auto enchant3_ref = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
+	auto enchant4_ref = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
 
 	auto mgr3 = mgr;
 

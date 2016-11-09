@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <utility>
+#include "Enchantment/Base.h"
 #include "Entity/EnchantmentAuxData.h"
 
 namespace Manipulators
@@ -11,6 +13,13 @@ namespace Manipulators
 		{
 		public:
 			EnchantmentHelper(Entity::EnchantmentAuxData & data) : data_(data) {}
+
+			template <typename EnchantmentType, typename... Args>
+			decltype(auto) CreateAndAdd(Args&&... args)
+			{
+				auto instance = std::unique_ptr<Enchantment::Base>(new EnchantmentType(std::forward<Args>(args)...));
+				return this->Add<EnchantmentType>(std::move(instance));
+			}
 
 			template <typename EnchantmentType, typename T>
 			decltype(auto) Add(T&& enchantment)
