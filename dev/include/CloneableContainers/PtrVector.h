@@ -27,14 +27,16 @@ namespace CloneableContainers
 			return container_.PushBack(CopyableItemType(std::forward<T>(item)));
 		}
 
-		const PtrItemType Get(Identifier identifier) const
+		template <typename T>
+		const PtrItemType Get(T&& identifier) const
 		{
-			return container_.Get(identifier).Get().get();
+			return container_.Get(std::forward<T>(identifier)).Get().get();
 		}
 
-		PtrItemType Get(Identifier identifier)
+		template <typename T>
+		PtrItemType Get(T&& identifier)
 		{
-			return container_.Get(identifier).Get().get();
+			return container_.Get(std::forward<T>(identifier)).Get().get();
 		}
 
 	public: // iterate

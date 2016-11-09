@@ -1,5 +1,6 @@
 #pragma once
 
+#include <type_traits>
 #include <utility>
 #include "CloneableContainers/Vector.h"
 
@@ -51,19 +52,28 @@ namespace CloneableContainers
 			return items_.PushBack(InternalItemType(std::forward<T>(item)));
 		}
 
-		const ItemType * Get(Identifier identifier) const {
+		template <typename T>
+		const ItemType * Get(T&& identifier) const {
+			static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
+
 			auto & item = items_.Get(identifier.identifier_);
 			if (item.removed) return nullptr;
 			else return &item.item;
 		}
 
-		ItemType * Get(Identifier identifier) {
+		template <typename T>
+		ItemType * Get(T&& identifier) {
+			static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
+
 			auto & item = items_.Get(identifier.identifier_);
 			if (item.removed) return nullptr;
 			else return &item.item;
 		}
 
-		void Remove(Identifier identifier) {
+		template <typename T>
+		void Remove(T&& identifier) {
+			static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
+
 			items_.Get(identifier.identifier_).removed = true;
 		}
 

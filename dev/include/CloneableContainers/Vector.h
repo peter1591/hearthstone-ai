@@ -40,11 +40,17 @@ namespace CloneableContainers
 			return ret;
 		}
 
-		const ItemType & Get(Identifier identifier) const {
+		template <typename T>
+		const ItemType & Get(T&& identifier) const {
+			static_assert(std::is_same<std::decay<T>::type, Identifier>::value, "Wrong type");
+
 			return items_[identifier.idx];
 		}
 
-		ItemType & Get(Identifier identifier) {
+		template <typename T>
+		ItemType & Get(T&& identifier) {
+			static_assert(std::is_same<std::decay<T>::type, Identifier>::value, "Wrong type");
+
 			return items_[identifier.idx];
 		}
 
