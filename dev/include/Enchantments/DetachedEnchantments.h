@@ -2,18 +2,23 @@
 
 #include <list>
 #include <memory>
-#include "CloneableContainers/RemovablePtrVector.h"
 #include "Enchantment/Base.h"
+#include "Utils/CopyByCloneWrapper.h"
 
 class DetachedEnchantments
 {
+private:
+	typedef Enchantment::Base ItemType;
+	typedef std::unique_ptr<ItemType> ManagedItemType;
+	typedef Utils::CopyByPtrCloneWrapper<ManagedItemType> CopyableItemType;
+
 public:
-	typedef std::list<std::unique_ptr<Enchantment::Base>> ContainerType;
+	typedef std::list<CopyableItemType> ContainerType;
 
 	template <typename T>
 	void PushBack(T && item)
 	{
-		return enchantments_.push_back(std::forward<T>(item));
+		return enchantments_.push_back(CopyableItemType(std::forward<T>(item)));
 	}
 
 private:
