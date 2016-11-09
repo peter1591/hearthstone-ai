@@ -4,7 +4,7 @@
 #include "CloneableContainers/RemovablePtrVector.h"
 #include "Enchantment/Base.h"
 
-class Enchantments
+class AttachedEnchantments
 {
 public:
 	typedef CloneableContainers::RemovablePtrVector<Enchantment::Base*> ContainerType;

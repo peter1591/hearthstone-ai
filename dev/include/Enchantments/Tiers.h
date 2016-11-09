@@ -2,8 +2,8 @@
 
 enum EnchantmentTiers
 {
-	kEnchantmentTier1,
-	kEnchantmentTier2,
-	kEnchantmentTier3,
-	kEnchantmentAura
+	kEnchantmentTier1, // detached enchantments
+	kEnchantmentTier2, // detached enchantments
+	kEnchantmentTier3, // detached enchantments
+	kEnchantmentAura   // attached enchantments
 };

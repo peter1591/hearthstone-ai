@@ -30,13 +30,13 @@
     <ClInclude Include="..\..\include\Enchantment\Base.h">
       <Filter>Header Files\Enchantment</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Enchantments\Enchantments.h">
-      <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Enchantment\AddAttack_Tier2.h">
       <Filter>Header Files\Enchantment</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Enchantments\Tiers.h">
+      <Filter>Header Files\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Enchantments\AttachedEnchantments.h">
       <Filter>Header Files\Enchantments</Filter>
     </ClInclude>
   </ItemGroup>
