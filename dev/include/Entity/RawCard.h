@@ -5,11 +5,15 @@
 #include "Entity/CardZone.h"
 #include "Entity/EnchantableStates.h"
 #include "Entity/EnchantmentAuxData.h"
+#include "Entity/AuraAuxData.h"
 
 namespace Entity
 {
-	struct RawCard
+	class RawCard
 	{
+	public:
+		RawCard() : card_type(kCardTypeInvalid), play_order(-1), damaged(0) {}
+
 		CardType card_type;
 		std::string card_id;
 
