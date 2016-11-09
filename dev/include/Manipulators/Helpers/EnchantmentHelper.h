@@ -28,7 +28,7 @@ namespace Manipulators
 			}
 
 			template <typename EnchantmentType, typename T>
-			void Remove(T&& id)
+			decltype(auto) Remove(T&& id)
 			{
 				return data_.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 			}

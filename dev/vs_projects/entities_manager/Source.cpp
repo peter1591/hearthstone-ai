@@ -39,18 +39,18 @@ int main(void)
 	assert(mgr2.Get(r1).GetCost() == 9);
 	
 	auto manipulator = mgr.GetMinionManipulator(r1);
-	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
-	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
-	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
-	manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
+	auto ref1 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
+	auto ref2 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
+	auto ref3 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
+	auto ref4 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
 
-	auto enchant2_ref = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
-	auto enchant3_ref = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
-	auto enchant4_ref = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
+	auto ref5 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
+	auto ref6 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
+	auto ref7 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
 
 	auto mgr3 = mgr;
 
-	mgr3.GetMinionManipulator(r1).GetEnchantmentHelper().Remove<Enchantment::AddAttack_Aura>(enchant2_ref);
+	mgr3.GetMinionManipulator(r1).GetEnchantmentHelper().Remove<Enchantment::AddAttack_Aura>(ref6);
 
 	return 0;
 }

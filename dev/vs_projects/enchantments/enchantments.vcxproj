@@ -115,8 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Enchantments\AttachedEnchantments.h" />
-    <ClInclude Include="..\..\include\Enchantments\DetachedEnchantments.h" />
+    <ClInclude Include="..\..\include\Enchantments\Enchantments.h" />
     <ClInclude Include="..\..\include\Enchantments\TieredEnchantments.h" />
     <ClInclude Include="..\..\include\Enchantments\Tiers.h" />
     <ClInclude Include="..\..\include\Enchantment\AddAttack.h" />

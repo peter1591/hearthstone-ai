@@ -36,14 +36,11 @@
     <ClInclude Include="..\..\include\Enchantments\Tiers.h">
       <Filter>Header Files\Enchantments</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Enchantments\AttachedEnchantments.h">
-      <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Enchantments\DetachedEnchantments.h">
-      <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Enchantment\AddAttack_Aura.h">
       <Filter>Header Files\Enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Enchantments\Enchantments.h">
+      <Filter>Header Files\Enchantments</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
