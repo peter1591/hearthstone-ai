@@ -120,8 +120,11 @@
     <ClInclude Include="..\..\include\Entity\Card.h" />
     <ClInclude Include="..\..\include\Entity\CardType.h" />
     <ClInclude Include="..\..\include\Entity\CardZone.h" />
+    <ClInclude Include="..\..\include\Entity\EnchantableStates.h" />
+    <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h" />
     <ClInclude Include="..\..\include\Entity\RawCard.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
+    <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
   </ItemGroup>

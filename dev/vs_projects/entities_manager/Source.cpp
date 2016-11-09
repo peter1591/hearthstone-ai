@@ -1,5 +1,12 @@
+#include <cassert>
 #include <iostream>
 #include "EntitiesManager/EntitiesManager.h"
+
+#include "Manipulators/Helpers/EnchantmentHelper.h"
+
+#include "Enchantment/AddAttack.h"
+#include "Enchantment/AddAttack_Tier2.h"
+#include "Enchantment/AddAttack_Aura.h"
 
 int main(void)
 {
@@ -8,32 +15,39 @@ int main(void)
 	Entity::RawCard c1;
 	c1.card_type = Entity::kCardTypeMinion;
 	c1.card_id = "card_id_1";
-	c1.zone = Entity::kCardZoneDeck;
-	c1.cost = 5;
+	c1.enchanted_states.zone = Entity::kCardZoneDeck;
+	c1.enchanted_states.cost = 5;
 	CardRef r1 = mgr.PushBack(Entity::Card(c1));
-	std::cout << "t1: " << mgr.Get(r1).GetZone() << std::endl;
+	assert(mgr.Get(r1).GetZone() == Entity::kCardZoneDeck);
 
-	c1.zone = Entity::kCardZoneGraveyard;
-	std::cout << "t2: " << mgr.Get(r1).GetZone() << std::endl;
+	c1.enchanted_states.zone = Entity::kCardZoneGraveyard;
+	assert(mgr.Get(r1).GetZone() == Entity::kCardZoneDeck);
 
-	std::cout << "==" << std::endl;
 	mgr.GetMinionManipulator(r1).ChangeZone(Entity::kCardZoneHand);
-	std::cout << mgr.Get(r1).GetZone() << std::endl;
+	assert(mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
 
 	auto mgr2(mgr);
-	std::cout << "==" << std::endl;
-	std::cout << mgr.Get(r1).GetZone() << std::endl;
-	std::cout << mgr2.Get(r1).GetZone() << std::endl;
+	assert(mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
+	assert(mgr2.Get(r1).GetZone() == Entity::kCardZoneHand);
 
 	mgr2.GetMinionManipulator(r1).ChangeZone(Entity::kCardZonePlay);
-	std::cout << "==" << std::endl;
-	std::cout << mgr.Get(r1).GetZone() << std::endl;
-	std::cout << mgr2.Get(r1).GetZone() << std::endl;
+	assert(mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
+	assert(mgr2.Get(r1).GetZone() == Entity::kCardZonePlay);
 
-	std::cout << "==" << std::endl;
 	mgr2.GetMinionManipulator(r1).SetCost(9);
-	std::cout << mgr.Get(r1).GetCost() << std::endl;
-	std::cout << mgr2.Get(r1).GetCost() << std::endl;
+	assert(mgr.Get(r1).GetCost() == 5);
+	assert(mgr2.Get(r1).GetCost() == 9);
+	
+	auto manipulator = mgr.GetMinionManipulator(r1);
+	auto enchant1 = std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack());
+	manipulator.GetEnchantmentHelper().Add<Enchantment::AddAttack>(std::move(enchant1));
+
+	auto enchant2 = std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack_Aura());
+	auto enchant2_ref = manipulator.GetEnchantmentHelper().Add<Enchantment::AddAttack_Aura>(std::move(enchant2));
+
+	auto mgr3 = mgr;
+
+	mgr3.GetMinionManipulator(r1).GetEnchantmentHelper().Remove<Enchantment::AddAttack_Aura>(enchant2_ref);
 
 	return 0;
 }

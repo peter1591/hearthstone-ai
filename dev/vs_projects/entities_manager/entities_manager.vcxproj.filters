@@ -54,6 +54,15 @@
     <ClInclude Include="..\..\include\Entity\RawCard.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Entity\EnchantableStates.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
