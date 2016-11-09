@@ -12,22 +12,13 @@ namespace Manipulators
 		public:
 			EnchantmentHelper(Entity::EnchantmentAuxData & data) : data_(data) {}
 
-			template <typename EnchantmentType, typename T,
-				typename std::enable_if_t<IsAttachedEnchantmentType<EnchantmentType::tier>::value, nullptr_t> = nullptr >
-			typename TieredEnchantments::ContainerType::Identifier Add(T&& enchantment)
+			template <typename EnchantmentType, typename T>
+			decltype(auto) Add(T&& enchantment)
 			{
 				return data_.enchantments.PushBack<EnchantmentType>(std::forward<T>(enchantment));
 			}
 
-			template <typename EnchantmentType, typename T,
-				typename std::enable_if_t<!IsAttachedEnchantmentType<EnchantmentType::tier>::value, nullptr_t> = nullptr >
-			void Add(T&& enchantment)
-			{
-				return data_.enchantments.PushBack<EnchantmentType>(std::forward<T>(enchantment));
-			}
-
-			template <typename EnchantmentType, typename T,
-				typename std::enable_if_t<IsAttachedEnchantmentType<EnchantmentType::tier>::value, nullptr_t> = nullptr >
+			template <typename EnchantmentType, typename T>
 			void Remove(T&& id)
 			{
 				return data_.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
