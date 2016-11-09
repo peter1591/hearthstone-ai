@@ -18,7 +18,7 @@ static void test1()
 	std::cout << "token1_1 = " << vec1->Get(token1_1) << std::endl;
 	std::cout << "token1_2 = " << vec1->Get(token1_2) << std::endl;
 
-	for (auto it = vec1->GetFirst(); !vec1->ReachedEnd(it); vec1->StepNext(it)) {
+	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
 		std::cout << "Iterated vec1: " << vec1->Get(it) << std::endl;
 	}
 
@@ -30,10 +30,10 @@ static void test1()
 	std::cout << "token1_2 = " << vec1->Get(token1_2) << std::endl;
 	std::cout << "token2_1 = " << vec2.Get(token2_1) << std::endl;
 	std::cout << "token2_2 = " << vec2.Get(token2_2) << std::endl;
-	for (auto it = vec1->GetFirst(); !vec1->ReachedEnd(it); vec1->StepNext(it)) {
+	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
 		std::cout << "Iterated vec1: " << vec1->Get(it) << std::endl;
 	}
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		std::cout << "Iterated vec2: " << vec2.Get(it) << std::endl;
 	}
 
@@ -41,7 +41,7 @@ static void test1()
 	vec1.reset();
 	std::cout << "token2_1 = " << vec2.Get(token2_1) << std::endl;
 	std::cout << "token2_2 = " << vec2.Get(token2_2) << std::endl;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		std::cout << "Iterated vec2: " << vec2.Get(it) << std::endl;
 	}
 
@@ -49,7 +49,7 @@ static void test1()
 
 static void test2()
 {
-	auto vec1 = std::make_unique<CloneableContainers::RemovableVector<std::string>>();
+	auto vec1 = std::make_unique<CloneableContainers::RemovableVector<std::string>>(10);
 
 	auto token1_1 = vec1->PushBack("item1");
 	auto token1_2 = vec1->PushBack("item2");
@@ -57,8 +57,11 @@ static void test2()
 	std::cout << "==" << std::endl;
 	std::cout << "token1_1 = " << *vec1->Get(token1_1) << std::endl;
 	std::cout << "token1_2 = " << *vec1->Get(token1_2) << std::endl;
-	for (auto it = vec1->GetFirst(); !vec1->ReachedEnd(it); vec1->StepNext(it)) {
-		std::cout << "Iterated vec1: " << *vec1->Get(it) << std::endl;
+	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
+		auto item = vec1->Get(it);
+		std::cout << "Iterated vec1: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 
 	std::cout << "==" << std::endl;
@@ -69,19 +72,28 @@ static void test2()
 	std::cout << "token1_2 = " << *vec1->Get(token1_2) << std::endl;
 	std::cout << "token2_1 = " << *vec2.Get(token2_1) << std::endl;
 	std::cout << "token2_2 = " << *vec2.Get(token2_2) << std::endl;
-	for (auto it = vec1->GetFirst(); !vec1->ReachedEnd(it); vec1->StepNext(it)) {
-		std::cout << "Iterated vec1: " << *vec1->Get(it) << std::endl;
+	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
+		auto item = vec1->Get(it);
+		std::cout << "Iterated vec1: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
-		std::cout << "Iterated vec2: " << *vec2.Get(it) << std::endl;
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
+		auto item = vec2.Get(it);
+		std::cout << "Iterated vec2: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 
 	std::cout << "==" << std::endl;
 	vec1.reset();
 	std::cout << "token2_1 = " << *vec2.Get(token2_1) << std::endl;
 	std::cout << "token2_2 = " << *vec2.Get(token2_2) << std::endl;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
-		std::cout << "Iterated vec2: " << *vec2.Get(it) << std::endl;
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
+		auto item = vec2.Get(it);
+		std::cout << "Iterated vec2: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 }
 
@@ -92,14 +104,20 @@ static void test3()
 	auto token1 = vec1.PushBack("first");
 	auto token2 = vec1.PushBack("second");
 
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
-		std::cout << "Iterated vec1: " << *vec1.Get(it) << std::endl;
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
+		auto item = vec1.Get(it);
+		std::cout << "Iterated vec1: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 
 	std::cout << "==" << std::endl;
 	auto token3 = vec1.PushBack("third");
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
-		std::cout << "Iterated vec1: " << *vec1.Get(it) << std::endl;
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
+		auto item = vec1.Get(it);
+		std::cout << "Iterated vec1: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 
 	auto vec2 = vec1;
@@ -108,19 +126,32 @@ static void test3()
 	vec1.Remove(token2);
 	std::cout << "get a removed token: " << vec1.Get(token2) << std::endl;
 	std::cout << "get the token from copied container: " << *vec2.Get(token2) << std::endl;
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
-		std::cout << "Iterated vec1: " << *vec1.Get(it) << std::endl;
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
+		auto item = vec1.Get(it);
+		std::cout << "Iterated vec1: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
+	}
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
+		auto item = vec2.Get(it);
+		std::cout << "Iterated vec2: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 
 	std::cout << "==" << std::endl;
 	vec1.PushBack("forth");
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
-		std::cout << "Iterated vec1: " << *vec1.Get(it) << std::endl;
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
+		auto item = vec1.Get(it);
+		std::cout << "Iterated vec1: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
-
-	std::cout << "==" << std::endl;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
-		std::cout << "Iterated vec2: " << *vec2.Get(it) << std::endl;
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
+		auto item = vec2.Get(it);
+		std::cout << "Iterated vec2: [@" << item << "] ";
+		if (item) std::cout << *item;
+		std::cout << std::endl;
 	}
 }
 
@@ -184,7 +215,8 @@ static void PrintPointerInfo(T* item)
 template <>
 static void PrintPointerInfo(Wrap2_Base* item)
 {
-	item->PrintDebug();
+	if (!item) std::cout << "(removed)" << std::endl;
+	else item->PrintDebug();
 }
 
 static void test6()
@@ -193,28 +225,28 @@ static void test6()
 	CloneableContainers::PtrVector<Wrap2_Base*>& vec1 = *vec1_ptr;
 
 	auto token1 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(40007)));
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	auto token2 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3004005)));
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	auto vec2 = vec1;
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	delete vec1_ptr;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 }
@@ -225,58 +257,68 @@ static void test7()
 	CloneableContainers::RemovablePtrVector<Wrap2_Base*>& vec1 = *vec1_ptr;
 
 	auto token1 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(40007)));
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	auto token2 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3004005)));
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	auto vec2 = vec1;
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	vec1.Remove(token1);
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 	std::cout << "." << std::endl;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	vec2.Remove(token2);
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 	std::cout << "." << std::endl;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	vec2.Remove(token1);
-	for (auto it = vec1.GetFirst(); !vec1.ReachedEnd(it); vec1.StepNext(it)) {
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
 		PrintPointerInfo(vec1.Get(it));
 	}
 	std::cout << "." << std::endl;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
+		PrintPointerInfo(vec2.Get(it));
+	}
+
+	std::cout << "==" << std::endl;
+	vec2.Remove(token1);
+	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
+		PrintPointerInfo(vec1.Get(it));
+	}
+	std::cout << "." << std::endl;
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 
 	std::cout << "==" << std::endl;
 	delete vec1_ptr;
-	for (auto it = vec2.GetFirst(); !vec2.ReachedEnd(it); vec2.StepNext(it)) {
+	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
 		PrintPointerInfo(vec2.Get(it));
 	}
 }
@@ -286,8 +328,6 @@ int main(void)
 	//test1();
 	//test2();
 	//test3();
-	//test4();
-	//test5();
 	//test6();
 	test7();
 	return 0;

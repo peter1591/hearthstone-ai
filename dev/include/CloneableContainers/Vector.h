@@ -22,6 +22,10 @@ namespace CloneableContainers
 
 			explicit Identifier(size_t idx) : idx(idx) {}
 			size_t idx;
+
+		public:
+			bool operator==(const Identifier& rhs) const { return idx == rhs.idx; }
+			bool operator!=(const Identifier& rhs) const { return idx != rhs.idx; }
 		};
 
 		Vector() {}
@@ -45,11 +49,9 @@ namespace CloneableContainers
 		}
 
 	public: // iterate
-		Identifier GetFirst() { return Identifier(0); }
+		Identifier GetBegin() { return Identifier(0); }
 		void StepNext(Identifier & id) { ++id.idx; }
-		bool ReachedEnd(const Identifier &id) {
-			return id.idx >= items_.size();
-		}
+		Identifier GetEnd() { return Identifier(items_.size()); }
 
 	private:
 		std::vector<ItemType> items_;

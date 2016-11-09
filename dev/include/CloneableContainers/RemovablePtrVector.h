@@ -46,9 +46,9 @@ namespace CloneableContainers
 		}
 
 	public: // iterate
-		Identifier GetFirst() { return container_.GetFirst(); }
+		Identifier GetBegin() { return container_.GetBegin(); }
 		void StepNext(Identifier & id) { container_.StepNext(id); }
-		bool ReachedEnd(const Identifier & id) { return container_.ReachedEnd(id); }
+		Identifier GetEnd() { return container_.GetEnd(); }
 
 	private:
 		ContainerType container_;

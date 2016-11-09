@@ -13,7 +13,9 @@ namespace CloneableContainers
 	private:
 		struct InternalItemType
 		{
-			explicit InternalItemType(ItemType && item) : removed(false), item(std::forward<ItemType>(item)) {}
+			InternalItemType(InternalItemType const& rhs) = default;
+			InternalItemType(InternalItemType && rhs) = default;
+			explicit InternalItemType(ItemType && item) : removed(false), item(std::move(item)) {}
 
 			bool removed;
 			ItemType item;
@@ -26,13 +28,23 @@ namespace CloneableContainers
 
 			typedef typename CloneableContainers::Vector<InternalItemType>::Identifier impl_identifier_type;
 
-			Identifier(impl_identifier_type && identifier) : identifier_(std::forward<impl_identifier_type>(identifier)) {}
+		public:
+			Identifier(const Identifier & rhs) = default;
+			Identifier(Identifier && rhs) = default;
+
+			bool operator==(const Identifier& rhs) const { return identifier_ == rhs.identifier_; }
+			bool operator!=(const Identifier& rhs) const { return identifier_ != rhs.identifier_; }
+
+		private:
+			Identifier(const impl_identifier_type & identifier) : identifier_(identifier) {}
+			Identifier(impl_identifier_type && identifier) : identifier_(std::move(identifier)) {}
+
 			impl_identifier_type identifier_;
 		};
 
 	public:
 		RemovableVector() {}
-		RemovableVector(size_t defualt_capacity) : items_(default_capacity) {}
+		RemovableVector(size_t default_capacity) : items_(default_capacity) {}
 
 		template <typename T>
 		Identifier PushBack(T&& item) {
@@ -56,32 +68,9 @@ namespace CloneableContainers
 		}
 
 	public: // iterate
-		Identifier GetFirst()
-		{
-			auto id = Identifier(items_.GetFirst());
-			StepToNextExistItem(id);
-			return id;
-		}
-
-		void StepNext(Identifier & id)
-		{
-			items_.StepNext(id.identifier_);
-			StepToNextExistItem(id);
-		}
-
-		bool ReachedEnd(const Identifier &id)
-		{
-			return items_.ReachedEnd(id.identifier_);
-		}
-
-	private:
-		void StepToNextExistItem(Identifier & id)
-		{
-			while (!items_.ReachedEnd(id.identifier_)) {
-				if (!items_.Get(id.identifier_).removed) return;
-				StepNext(id);
-			}
-		}
+		Identifier GetBegin() { return Identifier(items_.GetBegin()); }
+		void StepNext(Identifier & id) { items_.StepNext(id.identifier_); }
+		Identifier GetEnd() { return Identifier(items_.GetEnd()); }
 
 	private:
 		CloneableContainers::Vector<InternalItemType> items_;
