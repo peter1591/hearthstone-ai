@@ -23,7 +23,7 @@ public:
 	}
 
 	template <typename T>
-	void Remove(T&& id) const
+	void Remove(T&& id)
 	{
 		return enchantments_.Remove(std::forward<T>(id));
 	}
