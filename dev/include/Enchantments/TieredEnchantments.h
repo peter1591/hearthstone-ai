@@ -9,12 +9,6 @@ class TieredEnchantments
 public:
 	typedef CloneableContainers::RemovablePtrVector<Enchantment::Base*> ContainerType;
 
-	template <typename EnchantmentType>
-	Enchantment::Base* Get(typename ContainerType::Identifier id)
-	{
-		return GetAttachedEnchantments<EnchantmentType::tier>().Get(id);
-	}
-
 	template <typename EnchantmentType, typename T,
 		typename std::enable_if_t<IsAttachedEnchantmentType<EnchantmentType::tier>::value, nullptr_t> = nullptr >
 	typename ContainerType::Identifier PushBack(T && item)
@@ -27,6 +21,18 @@ public:
 	void PushBack(T && item)
 	{
 		return GetDetachedEnchantments<EnchantmentType::tier>().PushBack(std::forward<T>(item));
+	}
+
+	template <typename EnchantmentType, typename T>
+	Enchantment::Base* Get(T&& id)
+	{
+		return GetAttachedEnchantments<EnchantmentType::tier>().Get(std::forward<T>(id));
+	}
+
+	template <typename EnchantmentType, typename T>
+	void Remove(T&& id)
+	{
+		return GetAttachedEnchantments<EnchantmentType::tier>().Remove(std::forward<T>(id));
 	}
 
 private:
