@@ -39,6 +39,12 @@
     <ClInclude Include="..\..\include\Enchantments\AttachedEnchantments.h">
       <Filter>Header Files\Enchantments</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Enchantments\DetachedEnchantments.h">
+      <Filter>Header Files\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Enchantment\AddAttack_Aura.h">
+      <Filter>Header Files\Enchantment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
