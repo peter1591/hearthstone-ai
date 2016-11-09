@@ -52,5 +52,7 @@ int main(void)
 
 	mgr3.GetMinionManipulator(r1).GetEnchantmentHelper().Remove<Enchantment::AddAttack_Aura>(ref6);
 
+
+
 	return 0;
 }
