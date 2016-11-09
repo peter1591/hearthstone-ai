@@ -18,5 +18,6 @@ namespace Entity
 		EnchantableStates enchanted_states;
 
 		EnchantmentAuxData enchantment_aux_data;
+		AuraAuxData aura_aux_data;
 	};
 }
