@@ -27,7 +27,7 @@ namespace State
 
 			for (auto it_end = minions_.end(); it != it_end; ++it, ++pos)
 			{
-				mgr.GetMinionManipulator(*it).SetZonePosition(pos);
+				mgr.GetMinionManipulator(*it).GetZonePositionSetter().SetZonePosition(pos);
 			}
 		}
 
