@@ -125,6 +125,7 @@
     <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h" />
     <ClInclude Include="..\..\include\Entity\RawCard.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
+    <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelpers-impl.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
@@ -132,6 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\Manipulators\MinionManipulator-impl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

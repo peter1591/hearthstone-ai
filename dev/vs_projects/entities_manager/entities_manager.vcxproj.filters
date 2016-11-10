@@ -69,10 +69,18 @@
     <ClInclude Include="..\..\include\Entity\AuraAuxData.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelpers-impl.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\Manipulators\MinionManipulator-impl.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </None>
   </ItemGroup>
 </Project>
