@@ -28,7 +28,7 @@ public:
 		Entity::Card& card = cards_.Get(id.id);
 		if (card.GetCardType() != Entity::kCardTypeMinion) throw new std::exception("Card type is not minion");
 
-		return Manipulators::MinionManipulator(*this, cards_.Get(id.id));
+		return Manipulators::MinionManipulator(*this, card);
 	}
 
 	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id)
@@ -36,7 +36,7 @@ public:
 		Entity::Card& card = cards_.Get(id.id);
 		if (card.GetCardType() != Entity::kCardTypeSpell) throw new std::exception("Card type is not spell");
 
-		return Manipulators::SpellManipulator(cards_.Get(id.id));
+		return Manipulators::SpellManipulator(card);
 	}
 
 private:
