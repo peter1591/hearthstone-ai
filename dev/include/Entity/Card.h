@@ -3,10 +3,19 @@
 #include <string>
 #include "Entity/RawCard.h"
 
+namespace Manipulators
+{
+	class MinionManipulator;
+	class SpellManipulator;
+}
+
 namespace Entity
 {
 	class Card
 	{
+		friend class Manipulators::MinionManipulator;
+		friend class Manipulators::SpellManipulator;
+
 	public:
 		explicit Card(const RawCard & data) : data_(data) {}
 
@@ -24,6 +33,7 @@ namespace Entity
 		int GetCost() const { return data_.enchanted_states.cost; }
 		void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
+	private: // only visible to friends (e.g., MinionManipulator)
 		EnchantmentAuxData & GetMutableEnchantmentAuxData() { return data_.enchantment_aux_data; }
 		AuraAuxData & GetMutableAuraAuxData() { return data_.aura_aux_data; }
 
