@@ -44,4 +44,3 @@ private:
 };
 
 #include "Manipulators/MinionManipulator-impl.h"
-#include "Manipulators/Helpers/AuraHelpers-impl.h"
