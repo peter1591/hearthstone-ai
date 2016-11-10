@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Entity">
       <UniqueIdentifier>{f9232b74-ddd1-49f1-b736-e569c7bd844f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State">
+      <UniqueIdentifier>{29c9c9f2-5d0b-4945-b1f6-cc1fdc243f13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h">
@@ -71,6 +74,21 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelpers-impl.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\State.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Players.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Player.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Minions.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\PlayerIdentifier.h">
+      <Filter>Header Files\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

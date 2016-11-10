@@ -130,6 +130,11 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
+    <ClInclude Include="..\..\include\State\Minions.h" />
+    <ClInclude Include="..\..\include\State\Player.h" />
+    <ClInclude Include="..\..\include\State\PlayerIdentifier.h" />
+    <ClInclude Include="..\..\include\State\Players.h" />
+    <ClInclude Include="..\..\include\State\State.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
