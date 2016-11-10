@@ -125,9 +125,9 @@
     <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h" />
     <ClInclude Include="..\..\include\Entity\RawCard.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelpers-impl.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
+    <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
     <ClInclude Include="..\..\include\State\Minions.h" />

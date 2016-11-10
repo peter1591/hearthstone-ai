@@ -72,9 +72,6 @@
     <ClInclude Include="..\..\include\Entity\AuraAuxData.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelpers-impl.h">
-      <Filter>Header Files\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\State.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
@@ -89,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\State\PlayerIdentifier.h">
       <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
