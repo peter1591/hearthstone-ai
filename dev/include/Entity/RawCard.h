@@ -16,8 +16,9 @@ namespace Entity
 
 		CardType card_type;
 		std::string card_id;
-
 		int play_order;
+		int zone_position;
+
 		int damaged;
 		EnchantableStates enchanted_states;
 

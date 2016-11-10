@@ -16,11 +16,10 @@ namespace Entity
 		const std::string & GetCardId() const { return data_.card_id; }
 
 		const CardZone GetZone() const { return data_.enchanted_states.zone; }
-		void SetZone(CardZone new_zone)
-		{
-			data_.enchanted_states.zone = new_zone;
-			// TODO: triggers?
-		}
+		void SetZone(CardZone new_zone) { data_.enchanted_states.zone = new_zone; }
+
+		int GetZonePosition() const { return data_.zone_position; }
+		void SetZonePosition(int pos) { data_.zone_position = pos; }
 
 		int GetCost() const { return data_.enchanted_states.cost; }
 		void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }

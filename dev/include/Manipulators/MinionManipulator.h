@@ -15,6 +15,8 @@ namespace Manipulators
 		MinionManipulator(EntitiesManager &mgr, Entity::Card &card);
 
 		void ChangeZone(Entity::CardZone new_zone) { card_.SetZone(new_zone); }
+		void SetZonePosition(int pos) { card_.SetZonePosition(pos); }
+
 		void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
 
 	public:
