@@ -26,6 +26,7 @@ namespace Entity
 		void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
 		EnchantmentAuxData & GetMutableEnchantmentAuxData() { return data_.enchantment_aux_data; }
+		AuraAuxData & GetMutableAuraAuxData() { return data_.aura_aux_data; }
 
 	private:
 		RawCard data_;

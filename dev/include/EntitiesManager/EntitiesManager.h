@@ -28,7 +28,7 @@ public:
 		Entity::Card& card = cards_.Get(id.id);
 		if (card.GetCardType() != Entity::kCardTypeMinion) throw new std::exception("Card type is not minion");
 
-		return Manipulators::MinionManipulator(cards_.Get(id.id));
+		return Manipulators::MinionManipulator(*this, cards_.Get(id.id));
 	}
 
 	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id)
@@ -42,3 +42,6 @@ public:
 private:
 	ContainerType cards_;
 };
+
+#include "Manipulators/MinionManipulator-impl.h"
+#include "Manipulators/Helpers/AuraHelpers-impl.h"

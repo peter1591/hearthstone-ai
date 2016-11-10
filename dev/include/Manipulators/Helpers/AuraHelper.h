@@ -2,6 +2,8 @@
 
 #include "Entity/AuraAuxData.h"
 
+class EntitiesManager;
+
 namespace Manipulators
 {
 	namespace Helpers
@@ -9,9 +11,13 @@ namespace Manipulators
 		class AuraHelper
 		{
 		public:
-			AuraHelper(Entity::AuraAuxData& data) : data_(data) {}
+			AuraHelper(EntitiesManager& mgr, Entity::AuraAuxData& data);
+
+			template <typename ClientAuraHelper>
+			void Update(ClientAuraHelper&& client_aura_helper);
 
 		private:
+			EntitiesManager & mgr_;
 			Entity::AuraAuxData & data_;
 		};
 	}
