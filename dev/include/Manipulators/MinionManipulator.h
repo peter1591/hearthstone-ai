@@ -20,13 +20,11 @@ namespace Manipulators
 		void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
 
 	public:
-		Helpers::EnchantmentHelper & GetEnchantmentHelper() { return enchantment_helper_; }
-		Helpers::AuraHelper & GetAuraHelper() { return aura_helper_; }
+		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_.GetMutableEnchantmentAuxData()); }
+		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_.GetMutableAuraAuxData()); }
 
 	private:
 		EntitiesManager & mgr_;
 		Entity::Card & card_;
-		Helpers::EnchantmentHelper enchantment_helper_;
-		Helpers::AuraHelper aura_helper_;
 	};
 }
