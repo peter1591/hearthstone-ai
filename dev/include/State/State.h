@@ -1,6 +1,7 @@
 #pragma once
 
 #include "State/Players.h"
+#include "EntitiesManager/EntitiesManager.h"
 
 namespace State
 {
@@ -8,5 +9,6 @@ namespace State
 	{
 	public:
 		Players players;
+		EntitiesManager mgr;
 	};
 }
