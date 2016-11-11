@@ -13,9 +13,10 @@ namespace Manipulators
 	class MinionManipulator
 	{
 	public:
-		MinionManipulator(EntitiesManager &mgr, Entity::Card &card);
-
-		void ChangeZone(Entity::CardZone new_zone) { card_.SetZone(new_zone); }
+		MinionManipulator(EntitiesManager &mgr, CardRef card_ref, Entity::Card &card) :
+			mgr_(mgr), card_ref_(card_ref), card_(card)
+		{
+		}
 
 		void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
 
@@ -26,6 +27,7 @@ namespace Manipulators
 
 	private:
 		EntitiesManager & mgr_;
+		CardRef card_ref_;
 		Entity::Card & card_;
 	};
 }

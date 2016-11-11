@@ -4,8 +4,17 @@
 #include "CloneableContainers/Vector.h"
 #include "Entity/Card.h"
 #include "EntitiesManager/CardRef.h"
-#include "Manipulators/MinionManipulator.h"
-#include "Manipulators/SpellManipulator.h"
+
+namespace Manipulators
+{
+	class MinionManipulator;
+	class SpellManipulator;
+}
+
+namespace State
+{
+	class State;
+}
 
 class EntitiesManager
 {
@@ -17,30 +26,11 @@ public:
 		return cards_.Get(id.id);
 	}
 
-	template <typename T>
-	CardRef PushBack(T&& card)
-	{
-		return CardRef(cards_.PushBack(std::forward<T>(card)));
-	}
+	template <typename T> CardRef PushBack(State::State & state, T&& card);
 
-	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id)
-	{
-		Entity::Card& card = cards_.Get(id.id);
-		if (card.GetCardType() != Entity::kCardTypeMinion) throw new std::exception("Card type is not minion");
-
-		return Manipulators::MinionManipulator(*this, card);
-	}
-
-	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id)
-	{
-		Entity::Card& card = cards_.Get(id.id);
-		if (card.GetCardType() != Entity::kCardTypeSpell) throw new std::exception("Card type is not spell");
-
-		return Manipulators::SpellManipulator(card);
-	}
+	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id);
+	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id);
 
 private:
 	ContainerType cards_;
 };
-
-#include "Manipulators/MinionManipulator-impl.h"
