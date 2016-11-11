@@ -26,7 +26,7 @@ namespace CloneableContainers
 		class Identifier
 		{
 			friend class RemovableVector<ItemType>;
-			friend RemovableVector::IdentifierHasher;
+			friend class RemovableVector::IdentifierHasher;
 
 			typedef typename CloneableContainers::Vector<InternalItemType>::Identifier impl_identifier_type;
 

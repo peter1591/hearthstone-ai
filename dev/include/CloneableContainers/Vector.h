@@ -18,8 +18,8 @@ namespace CloneableContainers
 	public:
 		class Identifier
 		{
-			friend Vector<ItemType>;
-			friend Vector::IdentifierHasher;
+			friend class Vector<ItemType>;
+			friend class Vector::IdentifierHasher;
 
 		private:
 			explicit Identifier(std::size_t idx) : idx(idx) {}
