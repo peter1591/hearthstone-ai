@@ -22,7 +22,7 @@ namespace Manipulators
 		private: // only accessible to friend classes
 			void SetZonePosition(int pos)
 			{
-				card_.SetZonePosition(pos);
+				card_.GetLocationSetter().SetZonePosition(pos);
 			}
 
 		private:
