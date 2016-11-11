@@ -11,7 +11,11 @@ namespace Manipulators
 		class AuraHelper
 		{
 		public:
-			AuraHelper(EntitiesManager& mgr, Entity::AuraAuxData& data) : mgr_(mgr), data_(data) {}
+			AuraHelper(EntitiesManager& mgr, Entity::Card & card) :
+				mgr_(mgr),
+				data_(card.GetMutableAuraAuxDataGetter().Get())
+			{
+			}
 
 			template <typename ClientAuraHelper_>
 			void Update(ClientAuraHelper_&& client_aura_helper)

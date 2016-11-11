@@ -20,8 +20,8 @@ namespace Manipulators
 		void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
 
 	public:
-		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_.GetMutableEnchantmentAuxData()); }
-		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_.GetMutableAuraAuxData()); }
+		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_); }
+		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_); }
 		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
 
 	private:

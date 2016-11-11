@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <utility>
+#include "Entity/Card.h"
 #include "Enchantment/Base.h"
 #include "Entity/EnchantmentAuxData.h"
 
@@ -12,7 +13,10 @@ namespace Manipulators
 		class EnchantmentHelper
 		{
 		public:
-			EnchantmentHelper(Entity::EnchantmentAuxData & data) : data_(data) {}
+			EnchantmentHelper(Entity::Card &card) :
+				data_(card.GetMutableEnchantmentAuxDataGetter().Get())
+			{
+			}
 
 			template <typename EnchantmentType, typename... Args>
 			decltype(auto) CreateAndAdd(Args&&... args)
