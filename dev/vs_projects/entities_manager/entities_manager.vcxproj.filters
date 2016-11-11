@@ -90,9 +90,6 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Manipulators\Helpers\MinionZoneChanger.h">
-      <Filter>Header Files\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager-impl.h">
       <Filter>Header Files\EntitiesManager</Filter>
     </ClInclude>
@@ -101,6 +98,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h">
       <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\Helpers\ZoneChanger.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

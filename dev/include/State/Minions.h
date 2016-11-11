@@ -9,7 +9,7 @@ namespace Manipulators
 {
 	namespace Helpers
 	{
-		class MinionZoneChanger;
+		template <Entity::CardType T> class ZoneChanger;
 	}
 }
 
@@ -21,7 +21,7 @@ namespace State
 		class LocationManipualtor
 		{
 			friend class Minions;
-			friend Manipulators::Helpers::MinionZoneChanger;
+			template <Entity::CardType T> friend class Manipulators::Helpers::ZoneChanger;
 
 		private:
 			explicit LocationManipualtor(std::vector<CardRef> & minions) : minions_(minions) {}

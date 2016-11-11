@@ -5,7 +5,7 @@
 #include "Manipulators/Helpers/EnchantmentHelper.h"
 #include "Manipulators/Helpers/AuraHelper.h"
 #include "Manipulators/Helpers/ZonePositionSetter.h"
-#include "Manipulators/Helpers/MinionZoneChanger.h"
+#include "Manipulators/Helpers/ZoneChanger.h"
 
 class EntitiesManager;
 
@@ -25,7 +25,7 @@ namespace Manipulators
 		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_); }
 		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_); }
 		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
-		Helpers::MinionZoneChanger GetZoneChanger() { return Helpers::MinionZoneChanger(mgr_, card_ref_, card_); }
+		Helpers::ZoneChanger<Entity::kCardTypeMinion> GetZoneChanger() { return Helpers::ZoneChanger<Entity::kCardTypeMinion>(mgr_, card_ref_, card_); }
 
 	private:
 		EntitiesManager & mgr_;

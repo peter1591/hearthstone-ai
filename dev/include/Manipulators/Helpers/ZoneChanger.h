@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity/Card.h"
+#include "Entity/CardType.h"
 #include "Entity/CardZone.h"
 #include "EntitiesManager/CardRef.h"
 #include "State/State.h"
@@ -11,10 +12,11 @@ namespace Manipulators
 {
 	namespace Helpers
 	{
-		class MinionZoneChanger
+		template <Entity::CardType ChangingCardType>
+		class ZoneChanger
 		{
 		public:
-			MinionZoneChanger(EntitiesManager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
+			ZoneChanger(EntitiesManager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
 
 			void Change(State::State & state, State::PlayerIdentifier player_identifier, Entity::CardZone zone, int pos)
 			{
@@ -38,13 +40,6 @@ namespace Manipulators
 			}
 
 		private:
-			void AddToPlayZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-
-				player.minions_.GetLocationManipulator().Insert(mgr_, card_ref_);
-			}
-
 			void Remove(State::State & state)
 			{
 				switch (card_.GetZone())
@@ -54,17 +49,29 @@ namespace Manipulators
 				}
 			}
 
-			void RemoveFromPlayZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-
-				player.minions_.GetLocationManipulator().Remove(mgr_, card_.GetZonePosition());
-			}
+			void AddToPlayZone(State::State & state);
+			void RemoveFromPlayZone(State::State & state);
 
 		private:
 			EntitiesManager & mgr_;
 			CardRef card_ref_;
 			Entity::Card & card_;
 		};
+
+		template <>
+		void ZoneChanger<Entity::kCardTypeMinion>::AddToPlayZone(State::State & state)
+		{
+			State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
+
+			player.minions_.GetLocationManipulator().Insert(mgr_, card_ref_);
+		}
+
+		template <>
+		void ZoneChanger<Entity::kCardTypeMinion>::RemoveFromPlayZone(State::State & state)
+		{
+			State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
+
+			player.minions_.GetLocationManipulator().Remove(mgr_, card_.GetZonePosition());
+		}
 	}
 }

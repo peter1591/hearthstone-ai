@@ -128,7 +128,7 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\MinionZoneChanger.h" />
+    <ClInclude Include="..\..\include\Manipulators\Helpers\ZoneChanger.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />

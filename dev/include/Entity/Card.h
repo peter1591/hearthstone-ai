@@ -9,7 +9,7 @@ namespace Manipulators
 	{
 		class EnchantmentHelper;
 		class AuraHelper;
-		class MinionZoneChanger;
+		template <Entity::CardType T> class ZoneChanger;
 		class ZonePositionSetter;
 	}
 }
@@ -43,7 +43,7 @@ namespace Entity
 
 		class LocationSetter
 		{
-			friend class Manipulators::Helpers::MinionZoneChanger;
+			template <Entity::CardType T> friend class Manipulators::Helpers::ZoneChanger;
 			friend class Manipulators::Helpers::ZonePositionSetter;
 		public:
 			LocationSetter(RawCard & data) : data_(data) {}
