@@ -83,7 +83,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EntitiesManager\CardRef.h" />
+    <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager-impl.h" />
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h" />
     <ClInclude Include="..\..\include\Entity\AuraAuxData.h" />
     <ClInclude Include="..\..\include\Entity\Card.h" />
@@ -127,9 +128,12 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
+    <ClInclude Include="..\..\include\Manipulators\Helpers\MinionZoneChanger.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h" />
+    <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
+    <ClInclude Include="..\..\include\State\Minions-impl.h" />
     <ClInclude Include="..\..\include\State\Minions.h" />
     <ClInclude Include="..\..\include\State\Player.h" />
     <ClInclude Include="..\..\include\State\PlayerIdentifier.h" />
@@ -138,9 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\include\Manipulators\MinionManipulator-impl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
