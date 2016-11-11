@@ -3,32 +3,45 @@
 #include <vector>
 #include "EntitiesManager/EntitiesManager.h"
 #include "EntitiesManager/CardRef.h"
+#include "Entity/Card.h"
+
+namespace Manipulators
+{
+	namespace Helpers
+	{
+		class MinionZoneChanger;
+	}
+}
 
 namespace State
 {
 	class Minions
 	{
 	public:
+		class LocationManipualtor
+		{
+			friend class Minions;
+			friend Manipulators::Helpers::MinionZoneChanger;
+
+		private:
+			explicit LocationManipualtor(std::vector<CardRef> & minions) : minions_(minions) {}
+
+			void Insert(EntitiesManager & mgr, CardRef card_ref);
+			void Remove(EntitiesManager & mgr, int pos);
+
+		private:
+			std::vector<CardRef> & minions_;
+		};
+
+	public:
 		Minions()
 		{
 			minions_.reserve(7);
 		}
 
-		void Insert(EntitiesManager & mgr, CardRef card_ref)
+		LocationManipualtor GetLocationManipulator()
 		{
-			int pos = mgr.Get(card_ref).GetZonePosition();
-			if (pos < 0) throw std::exception("invalid position");
-			if (pos > minions_.size()) throw std::exception("invalid position");
-
-			auto it = minions_.insert(minions_.begin() + pos, card_ref);
-
-			++it;
-			++pos;
-
-			for (auto it_end = minions_.end(); it != it_end; ++it, ++pos)
-			{
-				mgr.GetMinionManipulator(*it).GetZonePositionSetter().SetZonePosition(pos);
-			}
+			return LocationManipualtor(minions_);
 		}
 
 	private:
