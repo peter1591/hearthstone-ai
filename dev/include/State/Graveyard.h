@@ -4,8 +4,7 @@
 #include "EntitiesManager/EntitiesManager.h"
 #include "EntitiesManager/CardRef.h"
 #include "Entity/Card.h"
-
-// The zone position will not be set
+#include "State/Utils/OrderedCardsManager.h"
 
 namespace State
 {
@@ -13,20 +12,14 @@ namespace State
 	{
 	public:
 		template <Entity::CardType ManipulatingCardType>
-		void PushBack(EntitiesManager & mgr, CardRef card_ref)
+		Utils::OrderedCardsManager GetLocationManipulator()
 		{
-			GetContainer<ManipulatingCardType>().push_back(card_ref);
-		}
-
-		template <Entity::CardType ManipulatingCardType>
-		void Remove(EntitiesManager & mgr, int idx)
-		{
-			auto & container = GetContainer<ManipulatingCardType>();
-			container.erase(container.begin() + idx);
+			return Utils::OrderedCardsManager(GetContainer<ManipulatingCardType>());
 		}
 
 		size_t GetTotalMinions() const { return minions_.size(); }
 		size_t GetTotalSpells() const { return spells_.size(); }
+		size_t GetTotalOthers() const { return others_.size(); }
 
 	private:
 		template <Entity::CardType ManipulatingCardType>

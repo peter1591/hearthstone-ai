@@ -4,8 +4,7 @@
 #include "EntitiesManager/EntitiesManager.h"
 #include "EntitiesManager/CardRef.h"
 #include "Entity/Card.h"
-
-// The zone position will not be set
+#include "State/Utils/OrderedCardsManager.h"
 
 namespace State
 {
@@ -17,14 +16,9 @@ namespace State
 			cards_.reserve(40);
 		}
 
-		void PushBack(EntitiesManager & mgr, CardRef card_ref)
+		Utils::OrderedCardsManager GetLocationManipulator()
 		{
-			cards_.push_back(card_ref);
-		}
-
-		void Remove(EntitiesManager & mgr, int idx)
-		{
-			cards_.erase(cards_.begin() + idx);
+			return Utils::OrderedCardsManager(cards_);
 		}
 
 		size_t Size() const { return cards_.size(); }
