@@ -1,6 +1,7 @@
 #pragma once
 
 #include "State/Minions.h"
+#include "State/Weapon.h"
 
 namespace State
 {
@@ -8,5 +9,6 @@ namespace State
 	{
 	public:
 		Minions minions_;
+		Weapon weapon_;
 	};
 }
