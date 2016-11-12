@@ -2,8 +2,15 @@
 
 #include "EntitiesManager/EntitiesManager.h"
 
+#include "Manipulators/GeneralManipulator.h"
 #include "Manipulators/MinionManipulator.h"
 #include "Manipulators/SpellManipulator.h"
+
+Manipulators::GeneralManipulator EntitiesManager::GetGeneralManipulator(const CardRef & id)
+{
+	Entity::Card& card = cards_.Get(id.id);
+	return Manipulators::GeneralManipulator(*this, id, card);
+}
 
 Manipulators::MinionManipulator EntitiesManager::GetMinionManipulator(const CardRef & id)
 {
