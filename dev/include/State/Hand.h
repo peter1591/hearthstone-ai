@@ -21,6 +21,8 @@ namespace State
 			return Utils::OrderedCardsManager(cards_);
 		}
 
+		size_t Size() const { return cards_.size(); }
+
 	private:
 		std::vector<CardRef> cards_;
 	};

@@ -30,7 +30,7 @@ namespace State
 			auto it = container_.erase(container_.begin() + pos);
 			for (auto it_end = container_.end(); it != it_end; ++it, ++pos)
 			{
-				mgr.GetMinionManipulator(*it).GetZonePositionSetter().Set(pos);
+				mgr.GetMinionManipulator(*it).GetZonePositionSetter().Set((int)pos);
 			}
 		}
 	}
