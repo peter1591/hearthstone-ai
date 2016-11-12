@@ -6,14 +6,6 @@
 #include "Entity/CardType.h"
 #include "State/Utils/OrderedCardsManager.h"
 
-namespace Manipulators
-{
-	namespace Helpers
-	{
-		template <Entity::CardType T> class ZoneChanger;
-	}
-}
-
 namespace State
 {
 	class Hand
