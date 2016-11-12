@@ -28,6 +28,9 @@
     <Filter Include="Header Files\State">
       <UniqueIdentifier>{29c9c9f2-5d0b-4945-b1f6-cc1fdc243f13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State\Utils">
+      <UniqueIdentifier>{0a1a66f2-e569-4239-a197-b3fef3bcf335}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h">
@@ -93,14 +96,26 @@
     <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager-impl.h">
       <Filter>Header Files\EntitiesManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Minions-impl.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h">
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZoneChanger.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Weapon.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Hand.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\GeneralManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager.h">
+      <Filter>Header Files\State\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager-impl.h">
+      <Filter>Header Files\State\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

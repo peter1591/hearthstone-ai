@@ -4,6 +4,7 @@
 #include "EntitiesManager/EntitiesManager.h"
 #include "EntitiesManager/CardRef.h"
 #include "Entity/CardType.h"
+#include "State/Utils/OrderedCardsManager.h"
 
 namespace Manipulators
 {
@@ -18,30 +19,14 @@ namespace State
 	class Hand
 	{
 	public:
-		class LocationManipualtor
-		{
-			template <Entity::CardType T> friend class Manipulators::Helpers::ZoneChanger;
-
-		public:
-			explicit LocationManipualtor(std::vector<CardRef> & cards) : cards_(cards) {}
-
-		private:
-			void Insert(EntitiesManager & mgr, CardRef card_ref);
-			void Remove(EntitiesManager & mgr, int pos);
-
-		private:
-			std::vector<CardRef> & cards_;
-		};
-
-	public:
 		Hand()
 		{
 			cards_.reserve(10);
 		}
 
-		LocationManipualtor GetLocationManipulator()
+		Utils::OrderedCardsManager GetLocationManipulator()
 		{
-			return LocationManipualtor(cards_);
+			return Utils::OrderedCardsManager(cards_);
 		}
 
 	private:

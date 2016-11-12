@@ -125,6 +125,7 @@
     <ClInclude Include="..\..\include\Entity\EnchantableStates.h" />
     <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h" />
     <ClInclude Include="..\..\include\Entity\RawCard.h" />
+    <ClInclude Include="..\..\include\Manipulators\GeneralManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
@@ -133,12 +134,15 @@
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
-    <ClInclude Include="..\..\include\State\Minions-impl.h" />
+    <ClInclude Include="..\..\include\State\Hand.h" />
     <ClInclude Include="..\..\include\State\Minions.h" />
     <ClInclude Include="..\..\include\State\Player.h" />
     <ClInclude Include="..\..\include\State\PlayerIdentifier.h" />
     <ClInclude Include="..\..\include\State\Players.h" />
     <ClInclude Include="..\..\include\State\State.h" />
+    <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager-impl.h" />
+    <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager.h" />
+    <ClInclude Include="..\..\include\State\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />

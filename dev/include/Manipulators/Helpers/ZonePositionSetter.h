@@ -4,7 +4,10 @@
 
 namespace State
 {
-	class Minions;
+	namespace Utils
+	{
+		class OrderedCardsManager;
+	}
 }
 
 namespace Manipulators
@@ -14,8 +17,7 @@ namespace Manipulators
 		// we separate this to another class to impose a finer access control
 		class ZonePositionSetter
 		{
-			friend class State::Minions;
-			friend class State::Hand;
+			friend class State::Utils::OrderedCardsManager;
 
 		public:
 			ZonePositionSetter(Entity::Card & card) : card_(card) {}
