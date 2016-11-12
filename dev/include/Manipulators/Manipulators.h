@@ -2,6 +2,7 @@
 
 #include "EntitiesManager/EntitiesManager-impl.h"
 #include "State/Minions-impl.h"
+#include "State/Hand-impl.h"
 
 #include "Manipulators/GeneralManipulator.h"
 #include "Manipulators/MinionManipulator.h"

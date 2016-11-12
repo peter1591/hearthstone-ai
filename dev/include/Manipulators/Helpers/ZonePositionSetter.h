@@ -15,6 +15,7 @@ namespace Manipulators
 		class ZonePositionSetter
 		{
 			friend class State::Minions;
+			friend class State::Hand;
 
 		public:
 			ZonePositionSetter(Entity::Card & card) : card_(card) {}
