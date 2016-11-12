@@ -134,11 +134,14 @@
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
+    <ClInclude Include="..\..\include\State\Deck.h" />
+    <ClInclude Include="..\..\include\State\Graveyard.h" />
     <ClInclude Include="..\..\include\State\Hand.h" />
     <ClInclude Include="..\..\include\State\Minions.h" />
     <ClInclude Include="..\..\include\State\Player.h" />
     <ClInclude Include="..\..\include\State\PlayerIdentifier.h" />
     <ClInclude Include="..\..\include\State\Players.h" />
+    <ClInclude Include="..\..\include\State\Secrets.h" />
     <ClInclude Include="..\..\include\State\State.h" />
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager.h" />

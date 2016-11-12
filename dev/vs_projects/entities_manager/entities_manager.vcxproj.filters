@@ -117,6 +117,15 @@
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager-impl.h">
       <Filter>Header Files\State\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\State\Deck.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Graveyard.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Secrets.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
