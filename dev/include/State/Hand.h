@@ -20,12 +20,12 @@ namespace State
 	public:
 		class LocationManipualtor
 		{
-			friend class Hand;
 			template <Entity::CardType T> friend class Manipulators::Helpers::ZoneChanger;
 
-		private:
+		public:
 			explicit LocationManipualtor(std::vector<CardRef> & cards) : cards_(cards) {}
 
+		private:
 			void Insert(EntitiesManager & mgr, CardRef card_ref);
 			void Remove(EntitiesManager & mgr, int pos);
 
