@@ -1,0 +1,38 @@
+#pragma once
+
+#include <string>
+#include <unordered_map>
+#include "EntitiesManager/EntitiesManager.h"
+#include "EntitiesManager/CardRef.h"
+#include "Entity/Card.h"
+
+namespace State
+{
+	class Secrets
+	{
+	public:
+		void Add(const std::string & card_id, CardRef card)
+		{
+			if (Exists(card_id)) throw std::exception("Secret already exists");
+			secrets_.insert(std::make_pair(card_id, card));
+		}
+
+		bool Exists(const std::string & card_id) const
+		{
+			return secrets_.find(card_id) != secrets_.end();
+		}
+
+		void Remove(const std::string & card_id)
+		{
+			secrets_.erase(card_id);
+		}
+
+		void Clear()
+		{
+			secrets_.clear();
+		}
+
+	private:
+		std::unordered_map<std::string, CardRef> secrets_;
+	};
+}
