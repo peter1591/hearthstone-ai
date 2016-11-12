@@ -7,6 +7,7 @@
 #include "State/State.h"
 #include "State/PlayerIdentifier.h"
 #include "State/Player.h"
+#include "State/Utils/DefaultZonePosPolicy.h"
 
 namespace Manipulators
 {
@@ -15,26 +16,20 @@ namespace Manipulators
 		template <Entity::CardType ChangingCardType>
 		class ZoneChanger
 		{
-		private:
-			template <Entity::CardZone ChangeToZone> int GetNewlyAddedZonePosition(const State::State & state);
-			template <Entity::CardZone ChangeToZone> struct NewlyAddedHasDefaultZonePosition
-			{
-				static constexpr bool value = false;
-			};
-
 		public:
 			ZoneChanger(EntitiesManager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
 
 			template <Entity::CardZone ChangeToZone,
-				typename std::enable_if_t<NewlyAddedHasDefaultZonePosition<ChangeToZone>::value, nullptr_t> = nullptr>
+				typename std::enable_if_t<State::Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
 			void ChangeTo(State::State & state, State::PlayerIdentifier player_identifier)
 			{
-				int new_pos = GetNewlyAddedZonePosition<ChangeToZone>(state);
+				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
+				int new_pos = State::Utils::DefaultZonePosGetter<ChangeToZone, ChangingCardType>()(player);
 				return ChangeToInternal<ChangeToZone>(state, player_identifier, new_pos);
 			}
 
 			template <Entity::CardZone ChangeToZone,
-				typename std::enable_if_t<!NewlyAddedHasDefaultZonePosition<ChangeToZone>::value, nullptr_t> = nullptr>
+				typename std::enable_if_t<!State::Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
 			void ChangeTo(State::State & state, State::PlayerIdentifier player_identifier, int pos)
 			{
 				return ChangeToInternal<ChangeToZone>(state, player_identifier, pos);
@@ -56,45 +51,6 @@ namespace Manipulators
 			}
 
 		private:
-			template <>
-			struct NewlyAddedHasDefaultZonePosition<Entity::kCardZoneDeck>
-			{
-				static constexpr bool value = true;
-			};
-
-			template <>
-			int GetNewlyAddedZonePosition<Entity::kCardZoneDeck>(const State::State & state)
-			{
-				const State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				return player.deck_.Size();
-			}
-
-			template <>
-			struct NewlyAddedHasDefaultZonePosition<Entity::kCardZoneHand>
-			{
-				static constexpr bool value = true;
-			};
-
-			template <>
-			int GetNewlyAddedZonePosition<Entity::kCardZoneHand>(const State::State & state)
-			{
-				const State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				return player.hand_.Size();
-			}
-
-			template <>
-			struct NewlyAddedHasDefaultZonePosition<Entity::kCardZoneGraveyard>
-			{
-				static constexpr bool value = true;
-			};
-
-			template <>
-			int GetNewlyAddedZonePosition<Entity::kCardZoneGraveyard>(const State::State & state)
-			{
-				const State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				return player.graveyard_.GetTotalOthers();
-			}
-
 			template <Entity::CardZone ChangeToZone>
 			void ChangeToInternal(State::State & state, State::PlayerIdentifier player_identifier, int pos)
 			{
@@ -164,21 +120,6 @@ namespace Manipulators
 			CardRef card_ref_;
 			Entity::Card & card_;
 		};
-
-		template <>
-		template <>
-		int ZoneChanger<Entity::kCardTypeMinion>::GetNewlyAddedZonePosition<Entity::kCardZoneGraveyard>(const State::State & state)
-		{
-			const State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-			return player.graveyard_.GetTotalMinions();
-		}
-		template <>
-		template <>
-		int ZoneChanger<Entity::kCardTypeSpell>::GetNewlyAddedZonePosition<Entity::kCardZoneGraveyard>(const State::State & state)
-		{
-			const State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-			return player.graveyard_.GetTotalSpells();
-		}
 
 		template <>
 		void ZoneChanger<Entity::kCardTypeMinion>::AddToPlayZone(State::State & state)
