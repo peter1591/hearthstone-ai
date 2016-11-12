@@ -1,8 +1,12 @@
 #pragma once
 
 #include <type_traits>
-#include "Entity/Card.h"
 #include "CloneableContainers/Vector.h"
+
+namespace Entity
+{
+	class Card;
+}
 
 class CardRef
 {
