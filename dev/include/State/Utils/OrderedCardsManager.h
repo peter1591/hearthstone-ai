@@ -18,14 +18,11 @@ namespace State
 	{
 		class OrderedCardsManager
 		{
-			template <Entity::CardType T> friend class Manipulators::Helpers::ZoneChanger;
-
 		public:
 			typedef std::vector<CardRef> ContainerType;
 
 			explicit OrderedCardsManager(ContainerType & container) : container_(container) {}
 
-		private:
 			void Insert(EntitiesManager & mgr, CardRef card_ref);
 			void Remove(EntitiesManager & mgr, size_t pos);
 
