@@ -23,9 +23,8 @@ namespace State
 			}
 		}
 
-		void OrderedCardsManager::Remove(EntitiesManager & mgr, int pos)
+		void OrderedCardsManager::Remove(EntitiesManager & mgr, size_t pos)
 		{
-			if (pos < 0) throw std::exception("invalid position");
 			if (pos >= container_.size()) throw std::exception("invalid position");
 
 			auto it = container_.erase(container_.begin() + pos);

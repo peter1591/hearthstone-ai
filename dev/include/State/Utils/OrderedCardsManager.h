@@ -27,7 +27,7 @@ namespace State
 
 		private:
 			void Insert(EntitiesManager & mgr, CardRef card_ref);
-			void Remove(EntitiesManager & mgr, int pos);
+			void Remove(EntitiesManager & mgr, size_t pos);
 
 		private:
 			ContainerType & container_;
