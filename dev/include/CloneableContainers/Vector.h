@@ -21,19 +21,29 @@ namespace CloneableContainers
 			friend class Vector<ItemType>;
 			friend class Vector::IdentifierHasher;
 
+		public:
+			Identifier(const Identifier & rhs) = default;
+			Identifier(Identifier && rhs) = default;
+			Identifier & operator=(const Identifier & rhs) = default;
+			Identifier & operator=(Identifier && rhs) = default;
+
+			static Identifier GetInvalidIdentifier() { return Identifier(-1); }
+
 		private:
-			explicit Identifier(std::size_t idx) : idx(idx) {}
-			std::size_t idx;
+			explicit Identifier(int idx) : idx(idx) {}
+
+			int idx;
 
 		public:
 			bool operator==(const Identifier& rhs) const { return idx == rhs.idx; }
 			bool operator!=(const Identifier& rhs) const { return idx != rhs.idx; }
+			bool IsValid() const { return idx >= 0; }
 		};
 
 		class IdentifierHasher
 		{
 		public:
-			size_t operator()(const Identifier & id) const { return std::hash<std::size_t>()(id.idx); }
+			size_t operator()(const Identifier & id) const { return std::hash<decltype(id.idx)>()(id.idx); }
 		};
 
 		Vector() {}
@@ -41,9 +51,10 @@ namespace CloneableContainers
 			items_.reserve(default_capacity);
 		}
 
+	public:
 		template <typename T>
 		Identifier PushBack(T&& item) {
-			Identifier ret(items_.size());
+			Identifier ret((int)items_.size());
 			items_.push_back(std::forward<T>(item));
 			return ret;
 		}
@@ -65,7 +76,7 @@ namespace CloneableContainers
 	public: // iterate
 		Identifier GetBegin() { return Identifier(0); }
 		void StepNext(Identifier & id) { ++id.idx; }
-		Identifier GetEnd() { return Identifier(items_.size()); }
+		Identifier GetEnd() { return Identifier((int)items_.size()); }
 
 	private:
 		std::vector<ItemType> items_;

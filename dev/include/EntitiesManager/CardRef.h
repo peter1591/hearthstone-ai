@@ -7,6 +7,9 @@
 class CardRef
 {
 public:
+	typedef typename CloneableContainers::Vector<Entity::Card>::Identifier IdentifierType;
+
+	CardRef() : id(IdentifierType::GetInvalidIdentifier()) {}
 	explicit CardRef(typename CloneableContainers::Vector<Entity::Card>::Identifier id) : id(id) {}
 
 	template <typename T>
@@ -21,7 +24,10 @@ public:
 		return !(*this == rhs);
 	}
 
-	typename CloneableContainers::Vector<Entity::Card>::Identifier id;
+	bool IsValid() const { return id.IsValid(); }
+	void Invalidate() { id = IdentifierType::GetInvalidIdentifier(); }
+
+	IdentifierType id;
 };
 
 namespace std
