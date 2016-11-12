@@ -20,7 +20,7 @@ namespace Manipulators
 			ZonePositionSetter(Entity::Card & card) : card_(card) {}
 
 		private: // only accessible to friend classes
-			void SetZonePosition(int pos)
+			void Set(int pos)
 			{
 				card_.GetLocationSetter().SetZonePosition(pos);
 			}
