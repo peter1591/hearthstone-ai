@@ -11,6 +11,13 @@
 #include "Enchantment/AddAttack_Tier2.h"
 #include "Enchantment/AddAttack_Aura.h"
 
+static void CheckZoneAndPosition(const State::State & state, CardRef ref, State::PlayerIdentifier player, Entity::CardZone zone, int pos)
+{
+	auto & item = state.mgr.Get(ref);
+	assert(item.GetPlayerIdentifier() == player);
+	assert(item.GetZone() == zone);
+	assert(item.GetZonePosition() == pos);
+}
 
 static void test1()
 {
@@ -23,79 +30,72 @@ static void test1()
 	c1.enchanted_states.zone = Entity::kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
 	CardRef r1 = state.mgr.PushBack(state, Entity::Card(c1));
-	assert(state.mgr.Get(r1).GetZone() == Entity::kCardZoneDeck);
+	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZoneDeck, 0);
 
 	c1.enchanted_states.zone = Entity::kCardZoneGraveyard;
-	assert(state.mgr.Get(r1).GetZone() == Entity::kCardZoneDeck);
+	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZoneDeck, 0);
 
 	state.mgr.GetMinionManipulator(r1).GetZoneChanger().ChangeTo<Entity::kCardZoneHand>(state, State::kPlayerFirst);
-	assert(state.mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
+	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZoneHand, 0);
 
 	auto state2 = state;
-	assert(state.mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
-	assert(state2.mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
+	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZoneHand, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZoneHand, 0);
 
 	state2.mgr.GetMinionManipulator(r1).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(state2, State::kPlayerFirst, 0);
-	assert(state.mgr.Get(r1).GetZone() == Entity::kCardZoneHand);
-	assert(state2.mgr.Get(r1).GetZone() == Entity::kCardZonePlay);
+	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZoneHand, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZonePlay, 0);
 
 	state2.mgr.GetMinionManipulator(r1).SetCost(9);
 	assert(state.mgr.Get(r1).GetCost() == 5);
 	assert(state2.mgr.Get(r1).GetCost() == 9);
 
-	assert(state2.mgr.Get(r1).GetZonePosition() == 0);
-
 	CardRef r2 = state2.mgr.PushBack(state2, Entity::Card(c1));
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZoneGraveyard, 0);
 	state2.mgr.GetMinionManipulator(r2).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(state2, State::kPlayerFirst, 0);
-	assert(state2.mgr.Get(r2).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 1);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
 
 	CardRef r3 = state2.mgr.PushBack(state2, Entity::Card(c1));
 	state2.mgr.GetMinionManipulator(r3).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(state2, State::kPlayerFirst, 2);
-	assert(state2.mgr.Get(r2).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 1);
-	assert(state2.mgr.Get(r3).GetZonePosition() == 2);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
+	CheckZoneAndPosition(state2, r3, State::kPlayerFirst, Entity::kCardZonePlay, 2);
 
 	CardRef r4 = state2.mgr.PushBack(state2, Entity::Card(c1));
 	state2.mgr.GetMinionManipulator(r4).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(state2, State::kPlayerFirst, 1);
-	assert(state2.mgr.Get(r2).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r4).GetZonePosition() == 1);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 2);
-	assert(state2.mgr.Get(r3).GetZonePosition() == 3);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r4, State::kPlayerFirst, Entity::kCardZonePlay, 1);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZonePlay, 2);
+	CheckZoneAndPosition(state2, r3, State::kPlayerFirst, Entity::kCardZonePlay, 3);
 
 	// steal minion
 	state2.mgr.GetMinionManipulator(r1).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(state2, State::kPlayerSecond, 0);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 0);
-
-	assert(state2.mgr.Get(r2).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r4).GetZonePosition() == 1);
-	assert(state2.mgr.Get(r3).GetZonePosition() == 2);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r4, State::kPlayerFirst, Entity::kCardZonePlay, 1);
+	CheckZoneAndPosition(state2, r3, State::kPlayerFirst, Entity::kCardZonePlay, 2);
+	CheckZoneAndPosition(state2, r1, State::kPlayerSecond, Entity::kCardZonePlay, 0);
 
 	// steal minion
 	state2.mgr.GetMinionManipulator(r3).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(state2, State::kPlayerSecond, 0);
-	assert(state2.mgr.Get(r3).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 1);
-
-	assert(state2.mgr.Get(r2).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r4).GetZonePosition() == 1);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r4, State::kPlayerFirst, Entity::kCardZonePlay, 1);
+	CheckZoneAndPosition(state2, r3, State::kPlayerSecond, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerSecond, Entity::kCardZonePlay, 1);
 
 	// send to graveyard
 	state2.mgr.GetMinionManipulator(r1).GetZoneChanger().ChangeTo<Entity::kCardZoneGraveyard>(state2, State::kPlayerFirst);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 0);
-
-	assert(state2.mgr.Get(r3).GetZonePosition() == 0);
-
-	assert(state2.mgr.Get(r2).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r4).GetZonePosition() == 1);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r4, State::kPlayerFirst, Entity::kCardZonePlay, 1);
+	CheckZoneAndPosition(state2, r3, State::kPlayerSecond, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZoneGraveyard, 0);
 
 	// send to another player's graveyard
 	state2.mgr.GetMinionManipulator(r2).GetZoneChanger().ChangeTo<Entity::kCardZoneGraveyard>(state2, State::kPlayerFirst);
-	assert(state2.mgr.Get(r1).GetZonePosition() == 0);
-	assert(state2.mgr.Get(r2).GetZonePosition() == 1);
-
-	assert(state2.mgr.Get(r3).GetZonePosition() == 0);
-	
-	assert(state2.mgr.Get(r4).GetZonePosition() == 0);
+	CheckZoneAndPosition(state2, r4, State::kPlayerFirst, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r3, State::kPlayerSecond, Entity::kCardZonePlay, 0);
+	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZoneGraveyard, 0);
+	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZoneGraveyard, 1);
 
 	auto manipulator = state.mgr.GetMinionManipulator(r1);
 	auto ref1 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
