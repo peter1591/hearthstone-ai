@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "event-manager", "event-manager.vcxproj", "{7FEC491C-AC31-4E30-8BF3-BA93F35FB31C}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "entities_manager", "entities_manager\entities_manager.vcxproj", "{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enchantments", "enchantments\enchantments.vcxproj", "{74B3860A-4065-4783-863B-7EBFC4747684}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flow_controller", "..\flow_controller\flow_controller.vcxproj", "{D1D61963-B288-44D6-842D-C047046C9E28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,14 @@ Global
 		{74B3860A-4065-4783-863B-7EBFC4747684}.Release|x64.Build.0 = Release|x64
 		{74B3860A-4065-4783-863B-7EBFC4747684}.Release|x86.ActiveCfg = Release|Win32
 		{74B3860A-4065-4783-863B-7EBFC4747684}.Release|x86.Build.0 = Release|Win32
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Debug|x64.ActiveCfg = Debug|x64
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Debug|x64.Build.0 = Debug|x64
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Debug|x86.ActiveCfg = Debug|Win32
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Debug|x86.Build.0 = Debug|Win32
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Release|x64.ActiveCfg = Release|x64
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Release|x64.Build.0 = Release|x64
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Release|x86.ActiveCfg = Release|Win32
+		{D1D61963-B288-44D6-842D-C047046C9E28}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
