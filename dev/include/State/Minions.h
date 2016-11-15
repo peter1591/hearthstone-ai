@@ -21,6 +21,9 @@ namespace State
 			return Utils::OrderedCardsManager(minions_);
 		}
 
+		size_t Size() const { return minions_.size(); }
+		CardRef Get(size_t pos) const { return minions_[pos]; }
+
 	private:
 		std::vector<CardRef> minions_;
 	};

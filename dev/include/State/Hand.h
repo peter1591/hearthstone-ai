@@ -23,6 +23,8 @@ namespace State
 
 		size_t Size() const { return cards_.size(); }
 
+		CardRef Get(int idx) { return cards_[idx]; }
+
 	private:
 		std::vector<CardRef> cards_;
 	};
