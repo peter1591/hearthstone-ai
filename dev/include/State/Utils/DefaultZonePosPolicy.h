@@ -90,7 +90,7 @@ namespace State
 		public:
 			int operator()(Player & player) const
 			{
-				return player.graveyard_.GetTotalMinions();
+				return (int)player.graveyard_.GetTotalMinions();
 			}
 		};
 		template <>
@@ -99,7 +99,7 @@ namespace State
 		public:
 			int operator()(Player & player) const
 			{
-				return player.graveyard_.GetTotalSpells();
+				return (int)player.graveyard_.GetTotalSpells();
 			}
 		};
 		template <Entity::CardType Type>
@@ -108,7 +108,7 @@ namespace State
 		public:
 			int operator()(Player & player) const
 			{
-				return player.graveyard_.GetTotalOthers();
+				return (int)player.graveyard_.GetTotalOthers();
 			}
 		};
 
