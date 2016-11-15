@@ -1,109 +1,96 @@
 #include <iostream>
-#include <experimental/generator>
+#include <assert.h>
+#include "FlowControl/FlowController.h"
 
-class ResumableState
+class ActionParameterGetter
 {
 public:
-	template <typename T1, typename T2>
-	ResumableState(T1&& t1, T2&& t2) : functor(std::forward<T1>(t1)), functor_it(std::forward<T2>(t2)) {}
-
-	std::experimental::generator<int> functor;
-	std::experimental::generator<int>::iterator functor_it;
+	int GetMinionPutLocation(int min, int max)
+	{
+		return min;
+	}
 };
 
-class State
+class RandomGenerator
 {
 public:
-	State() = default;
-
-	State(const State & rhs) : input(rhs.input)
+	int Get(int min, int max)
 	{
-		if (rhs.resumable_state) throw std::exception("State cannot be copied during a resumable call");
+		return max;
 	}
-	State& operator=(const State & rhs)
-	{
-		if (rhs.resumable_state) throw std::exception("State cannot be copied during a resumable call");
-
-		this->input = rhs.input;
-		return *this;
-	}
-
-	State(State&& rhs) = default;
-	State & operator=(State&& rhs) = default;
-
-public:
-	int input;
-	std::unique_ptr<ResumableState> resumable_state;
 };
 
-auto foo(State & state)
+static void CheckZoneAndPosition(const State::State & state, CardRef ref, State::PlayerIdentifier player, Entity::CardZone zone, int pos)
 {
-	std::cout << "step 1" << ", input = " << state.input << std::endl;
-	yield 1;
-
-	std::cout << "step 2" << ", input = " << state.input << std::endl;
-	yield 2;
-
-	std::cout << "step 3" << ", input = " << state.input << std::endl;
-	yield 3;
+	auto & item = state.mgr.Get(ref);
+	assert(item.GetPlayerIdentifier() == player);
+	assert(item.GetZone() == zone);
+	assert(item.GetZonePosition() == pos);
 }
 
-int bar(State & state)
+static Entity::RawCard GetCard1(State::PlayerIdentifier player, int zone_pos)
 {
-	if (!state.resumable_state)
-	{
-		// new start
-		std::cout << "Creating a new instance" << std::endl;
+	Entity::RawCard c1;
+	c1.card_type = Entity::kCardTypeMinion;
+	c1.card_id = "card_id_1";
+	c1.zone_position = zone_pos;
+	c1.enchanted_states.player = player;
+	c1.enchanted_states.zone = Entity::kCardZoneDeck;
+	c1.enchanted_states.cost = 5;
+	return c1;
+}
 
-		auto foo_ret = foo(state);
-		auto foo_it = foo_ret.begin();
-		state.resumable_state.reset(new ResumableState(std::move(foo_ret), std::move(foo_it)));
+static Entity::RawCard GetCard2(State::PlayerIdentifier player, int zone_pos)
+{
+	Entity::RawCard c1;
+	c1.card_type = Entity::kCardTypeMinion;
+	c1.card_id = "card_id_2";
+	c1.zone_position = zone_pos;
+	c1.enchanted_states.player = player;
+	c1.enchanted_states.zone = Entity::kCardZoneDeck;
+	c1.enchanted_states.cost = 1;
+	return c1;
+}
 
-		std::cout << "Created a new instance" << std::endl;
-		return *state.resumable_state->functor_it;
-	}
-	else
-	{
-		std::cout << "Continuing on previous instance" << std::endl;
-	}
-	
-	++state.resumable_state->functor_it;
-	if (state.resumable_state->functor_it == state.resumable_state->functor.end())
-	{
-		std::cout << "Previous instance ended!" << std::endl;
-		state.resumable_state.reset(nullptr);
-		return -1;
-	}
-	else
-	{
-		std::cout << "Continued on previous instance" << std::endl;
-		return *state.resumable_state->functor_it;
-	}
+static void MakeDeck(State::State & state, State::PlayerIdentifier player)
+{
+	CardRef r1 = state.mgr.PushBack(state, Entity::Card(GetCard1(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+
+	CardRef r2 = state.mgr.PushBack(state, Entity::Card(GetCard1(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+
+	CardRef r3 = state.mgr.PushBack(state, Entity::Card(GetCard1(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+	CheckZoneAndPosition(state, r3, player, Entity::kCardZoneDeck, 2);
+
+	CardRef r4 = state.mgr.PushBack(state, Entity::Card(GetCard2(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+	CheckZoneAndPosition(state, r3, player, Entity::kCardZoneDeck, 2);
+	CheckZoneAndPosition(state, r4, player, Entity::kCardZoneDeck, 3);
+
+	CardRef r5 = state.mgr.PushBack(state, Entity::Card(GetCard2(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+	CheckZoneAndPosition(state, r3, player, Entity::kCardZoneDeck, 2);
+	CheckZoneAndPosition(state, r4, player, Entity::kCardZoneDeck, 3);
+	CheckZoneAndPosition(state, r5, player, Entity::kCardZoneDeck, 4);
 }
 
 int main(void)
 {
-	State state;
+	State::State state;
 
-	state.input = 1;
-	std::cout << "ret1 = " << bar(state) << std::endl;
-	state.input = 2;
-	std::cout << "ret2 = " << bar(state) << std::endl;
-	state.input = 3;
-	std::cout << "ret3 = " << bar(state) << std::endl;
-	state.input = 4;
-	std::cout << "ret4 = " << bar(state) << std::endl;
+	MakeDeck(state, State::kPlayerFirst);
+	MakeDeck(state, State::kPlayerSecond);
 
-	State state2 = state;
+	ActionParameterGetter action_parameter;
+	RandomGenerator random;
 
-	state2.input = 5;
-	std::cout << "ret1 = " << bar(state2) << std::endl;
-	state2.input = 6;
-	std::cout << "ret2 = " << bar(state2) << std::endl;
-	state2.input = 7;
-	std::cout << "ret3 = " << bar(state2) << std::endl;
-	state2.input = 8;
-	std::cout << "ret4 = " << bar(state2) << std::endl;
+	FlowControl::FlowController<ActionParameterGetter, RandomGenerator> controller(state, action_parameter, random);
 
 	return 0;
 }

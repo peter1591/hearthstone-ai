@@ -13,10 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\FlowControl">
+      <UniqueIdentifier>{b6efd889-f8b1-482c-97a2-9074d8c530a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\FlowControl\FlowController.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\ActionTypes.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\ActionHandler.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
