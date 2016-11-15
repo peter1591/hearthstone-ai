@@ -121,6 +121,21 @@
     <ClInclude Include="..\include\FlowControl\ActionHandler.h" />
     <ClInclude Include="..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
+    <ClInclude Include="..\include\FlowControl\PlayCardHelper.h" />
+    <ClInclude Include="..\include\State\Deck.h" />
+    <ClInclude Include="..\include\State\Graveyard.h" />
+    <ClInclude Include="..\include\State\Hand.h" />
+    <ClInclude Include="..\include\State\Minions.h" />
+    <ClInclude Include="..\include\State\Player.h" />
+    <ClInclude Include="..\include\State\PlayerIdentifier.h" />
+    <ClInclude Include="..\include\State\PlayerResource.h" />
+    <ClInclude Include="..\include\State\Players.h" />
+    <ClInclude Include="..\include\State\Secrets.h" />
+    <ClInclude Include="..\include\State\State.h" />
+    <ClInclude Include="..\include\State\Utils\DefaultZonePosPolicy.h" />
+    <ClInclude Include="..\include\State\Utils\OrderedCardsManager-impl.h" />
+    <ClInclude Include="..\include\State\Utils\OrderedCardsManager.h" />
+    <ClInclude Include="..\include\State\Weapon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
