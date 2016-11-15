@@ -6,6 +6,7 @@
 #include "State/Minions.h"
 #include "State/Secrets.h"
 #include "State/Weapon.h"
+#include "State/PlayerResource.h"
 
 namespace State
 {
@@ -18,5 +19,7 @@ namespace State
 		Weapon weapon_;
 		Secrets secrets_;
 		Graveyard graveyard_;
+
+		PlayerResource resource_;
 	};
 }

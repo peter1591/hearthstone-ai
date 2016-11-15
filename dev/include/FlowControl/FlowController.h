@@ -18,7 +18,6 @@ namespace FlowControl
 
 		void PlayCard()
 		{
-
 		}
 
 	public:
