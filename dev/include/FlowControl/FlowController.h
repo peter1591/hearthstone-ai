@@ -1,8 +1,8 @@
 #pragma once
 
 #include "FlowControl/ActionTypes.h"
-#include "Manipulators/Manipulators.h"
 #include "State/State.h"
+#include "FlowControl/PlayCardHelper.h"
 
 namespace FlowControl
 {
@@ -18,6 +18,8 @@ namespace FlowControl
 
 		void PlayCard()
 		{
+			PlayCardHelper<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
+			return helper.PlayCard();
 		}
 
 	public:
