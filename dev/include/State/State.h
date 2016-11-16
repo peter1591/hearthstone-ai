@@ -21,5 +21,6 @@ namespace State
 		EntitiesManager mgr;
 
 		PlayerIdentifier current_player;
+		int turn;
 	};
 }
