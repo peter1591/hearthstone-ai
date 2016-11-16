@@ -4,14 +4,6 @@
 #include "EntitiesManager/CardRef.h"
 #include "EntitiesManager/EntitiesManager.h"
 
-namespace Manipulators
-{
-	namespace Helpers
-	{
-		template <Entity::CardType T> class ZoneChanger;
-	}
-}
-
 namespace State
 {
 	namespace Utils

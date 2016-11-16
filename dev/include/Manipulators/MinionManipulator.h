@@ -25,7 +25,7 @@ namespace Manipulators
 		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_); }
 		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_); }
 		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
-		Helpers::ZoneChanger<Entity::kCardTypeMinion> GetZoneChanger() { return Helpers::ZoneChanger<Entity::kCardTypeMinion>(mgr_, card_ref_, card_); }
+		Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion> GetZoneChanger() { return Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion>(mgr_, card_ref_, card_); }
 
 	private:
 		EntitiesManager & mgr_;

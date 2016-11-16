@@ -10,7 +10,7 @@ namespace Manipulators
 {
 	namespace Helpers
 	{
-		template <Entity::CardType T> class ZoneChanger;
+		template <Entity::CardZone T1, Entity::CardType T2> class ZoneChanger;
 	}
 }
 
@@ -21,7 +21,7 @@ namespace State
 	public:
 		class LocationManipulator
 		{
-			template <Entity::CardType T> friend class Manipulators::Helpers::ZoneChanger;
+			template <Entity::CardZone T1, Entity::CardType T2> friend class Manipulators::Helpers::ZoneChanger;
 
 		public:
 			explicit LocationManipulator(Deck & deck) : deck_(deck) {}
