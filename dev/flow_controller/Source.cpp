@@ -1,6 +1,7 @@
 #include <iostream>
 #include <assert.h>
 #include "FlowControl/FlowController.h"
+#include "Manipulators/PlayerStateManipulator.h"
 
 class ActionParameterGetter
 {
@@ -132,10 +133,19 @@ int main(void)
 {
 	State::State state;
 
-	MakeDeck(state, State::kPlayerFirst);
-	MakeHand(state, State::kPlayerFirst);
-	MakeDeck(state, State::kPlayerSecond);
-	MakeHand(state, State::kPlayerSecond);
+	{
+		Manipulators::PlayerStateManipulator manipulator(state.players.Get(State::kPlayerFirst).state_, state.event_mgr);
+		manipulator.SetHP(30);
+		MakeDeck(state, State::kPlayerFirst);
+		MakeHand(state, State::kPlayerFirst);
+	}
+
+	{
+		Manipulators::PlayerStateManipulator manipulator(state.players.Get(State::kPlayerSecond).state_, state.event_mgr);
+		manipulator.SetHP(20);
+		//MakeDeck(state, State::kPlayerSecond);
+		MakeHand(state, State::kPlayerSecond);
+	}
 
 	state.current_player = State::kPlayerFirst;
 	state.players.Get(State::kPlayerFirst).resource_.SetTotal(8);

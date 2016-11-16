@@ -125,5 +125,14 @@
     <ClInclude Include="..\include\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\State\PlayerState.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\PlayerStateManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Helpers\Utils.h">
+      <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
