@@ -25,6 +25,12 @@
     <Filter Include="Header Files\FlowControl\Helpers">
       <UniqueIdentifier>{7acbed2a-45eb-441e-a973-91977117cc7c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Manipulators">
+      <UniqueIdentifier>{90399222-5ae9-45e3-add9-88951e8bf72e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Manipulators\Helpers">
+      <UniqueIdentifier>{e9bd7948-697f-4cef-87a8-f92ba5b33a20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -85,6 +91,39 @@
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Helpers\PlayCard.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Result.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\ThisTurnCounters.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\GeneralManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\Manipulators.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\MinionManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\SpellManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\Helpers\AuraHelper.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\Helpers\BasicHelper.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\Helpers\EnchantmentHelper.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\Helpers\ZoneChanger.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\Helpers\ZonePositionSetter.h">
+      <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

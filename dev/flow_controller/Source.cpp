@@ -20,6 +20,8 @@ private:
 class RandomGenerator
 {
 public:
+	int Get(int exclusive_max) { return 0; }
+
 	int Get(int min, int max)
 	{
 		return max;
@@ -58,7 +60,47 @@ static Entity::RawCard GetCard2(State::PlayerIdentifier player, int zone_pos)
 	return c1;
 }
 
+static Entity::RawCard GetCard3(State::PlayerIdentifier player, int zone_pos)
+{
+	Entity::RawCard c1;
+	c1.card_type = Entity::kCardTypeMinion;
+	c1.card_id = "card_id_3";
+	c1.zone_position = zone_pos;
+	c1.enchanted_states.player = player;
+	c1.enchanted_states.zone = Entity::kCardZoneDeck;
+	c1.enchanted_states.cost = 2;
+	return c1;
+}
+
 static void MakeDeck(State::State & state, State::PlayerIdentifier player)
+{
+	CardRef r1 = state.mgr.PushBack(state, Entity::Card(GetCard3(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+
+	CardRef r2 = state.mgr.PushBack(state, Entity::Card(GetCard3(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+
+	CardRef r3 = state.mgr.PushBack(state, Entity::Card(GetCard3(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+	CheckZoneAndPosition(state, r3, player, Entity::kCardZoneDeck, 2);
+
+	CardRef r4 = state.mgr.PushBack(state, Entity::Card(GetCard3(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+	CheckZoneAndPosition(state, r3, player, Entity::kCardZoneDeck, 2);
+	CheckZoneAndPosition(state, r4, player, Entity::kCardZoneDeck, 3);
+
+	CardRef r5 = state.mgr.PushBack(state, Entity::Card(GetCard3(player, state.players.Get(player).deck_.Size())));
+	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneDeck, 0);
+	CheckZoneAndPosition(state, r2, player, Entity::kCardZoneDeck, 1);
+	CheckZoneAndPosition(state, r3, player, Entity::kCardZoneDeck, 2);
+	CheckZoneAndPosition(state, r4, player, Entity::kCardZoneDeck, 3);
+	CheckZoneAndPosition(state, r5, player, Entity::kCardZoneDeck, 4);
+}
+
+static void MakeHand(State::State & state, State::PlayerIdentifier player)
 {
 	CardRef r1 = state.mgr.PushBack(state, Entity::Card(GetCard1(player, state.players.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, Entity::kCardZoneHand, 0);
@@ -91,9 +133,11 @@ int main(void)
 	State::State state;
 
 	MakeDeck(state, State::kPlayerFirst);
+	MakeHand(state, State::kPlayerFirst);
 	MakeDeck(state, State::kPlayerSecond);
+	MakeHand(state, State::kPlayerSecond);
 
-	state.SetCurrentPlayer(State::kPlayerFirst);
+	state.current_player = State::kPlayerFirst;
 	state.players.Get(State::kPlayerFirst).resource_.SetTotal(8);
 	state.players.Get(State::kPlayerFirst).resource_.Refill();
 
@@ -113,7 +157,7 @@ int main(void)
 	CheckZoneAndPosition(state, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
 	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
 
-
+	controller.EndTurn();
 
 	return 0;
 }

@@ -120,8 +120,18 @@
   <ItemGroup>
     <ClInclude Include="..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
+    <ClInclude Include="..\include\FlowControl\Result.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\PlayCard.h" />
+    <ClInclude Include="..\include\Manipulators\GeneralManipulator.h" />
+    <ClInclude Include="..\include\Manipulators\Helpers\AuraHelper.h" />
+    <ClInclude Include="..\include\Manipulators\Helpers\BasicHelper.h" />
+    <ClInclude Include="..\include\Manipulators\Helpers\EnchantmentHelper.h" />
+    <ClInclude Include="..\include\Manipulators\Helpers\ZoneChanger.h" />
+    <ClInclude Include="..\include\Manipulators\Helpers\ZonePositionSetter.h" />
+    <ClInclude Include="..\include\Manipulators\Manipulators.h" />
+    <ClInclude Include="..\include\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\include\Manipulators\SpellManipulator.h" />
     <ClInclude Include="..\include\State\Deck.h" />
     <ClInclude Include="..\include\State\Graveyard.h" />
     <ClInclude Include="..\include\State\Hand.h" />
@@ -132,6 +142,7 @@
     <ClInclude Include="..\include\State\Players.h" />
     <ClInclude Include="..\include\State\Secrets.h" />
     <ClInclude Include="..\include\State\State.h" />
+    <ClInclude Include="..\include\State\ThisTurnCounters.h" />
     <ClInclude Include="..\include\State\Utils\DefaultZonePosPolicy.h" />
     <ClInclude Include="..\include\State\Utils\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\include\State\Utils\OrderedCardsManager.h" />
