@@ -2,6 +2,7 @@
 
 #include "FlowControl/Result.h"
 #include "Manipulators/PlayerStateManipulator.h"
+#include "FlowControl/Helpers/Utils.h"
 
 namespace FlowControl
 {
@@ -41,16 +42,16 @@ namespace FlowControl
 
 				// TODO: check win/loss
 
-				rc = DrawCard();
-				if (rc != kResultNotDetermined) return rc;
+				DrawCard();
 
-				// TODO: check win/loss
+				rc = Utils::CheckWinLoss(state_);
+				if (rc != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}
 
 		private:
-			Result DrawCard()
+			void DrawCard()
 			{
 				if (state_.GetCurrentPlayer().deck_.Empty())
 				{
@@ -71,20 +72,14 @@ namespace FlowControl
 				}
 
 				// TODO: trigger on-draw event (parameter: card_ref)
-
-				return kResultNotDetermined;
 			}
 
-			Result Fatigue()
+			void Fatigue()
 			{
 				++state_.GetCurrentPlayer().fatigue_damage_;
 
 				Manipulators::PlayerStateManipulator manipulator(state_.GetCurrentPlayer().state_, state_.event_mgr);
 				manipulator.TakeDamage(state_.GetCurrentPlayer().fatigue_damage_);
-
-				// TODO: check win/loss
-
-				return kResultNotDetermined;
 			}
 
 		private:

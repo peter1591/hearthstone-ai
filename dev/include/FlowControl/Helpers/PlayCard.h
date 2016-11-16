@@ -3,6 +3,7 @@
 #include "Manipulators/Manipulators.h"
 #include "State/State.h"
 #include "FlowControl/Result.h"
+#include "FlowControl/Helpers/Utils.h"
 
 namespace FlowControl
 {
@@ -35,6 +36,8 @@ namespace FlowControl
 		private:
 			Result PlayMinionCard()
 			{
+				Result rc = kResultNotDetermined;
+
 				// TODO: before summon phase
 
 				state_.GetCurrentPlayer().resource_.Cost(card_->GetCost());
@@ -54,6 +57,9 @@ namespace FlowControl
 				// TODO: after play phase
 				// TODO: after summon phase
 				// TODO: check win/loss
+
+				rc = Utils::CheckWinLoss(state_);
+				if (rc != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}
