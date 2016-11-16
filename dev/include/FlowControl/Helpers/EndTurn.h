@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FlowControl/Result.h"
+#include "Manipulators/PlayerStateManipulator.h"
 
 namespace FlowControl
 {
@@ -77,7 +78,11 @@ namespace FlowControl
 			Result Fatigue()
 			{
 				++state_.GetCurrentPlayer().fatigue_damage_;
-				// TODO: take fatigue damage
+
+				Manipulators::PlayerStateManipulator manipulator(state_.GetCurrentPlayer().state_, state_.event_mgr);
+				manipulator.TakeDamage(state_.GetCurrentPlayer().fatigue_damage_);
+
+				// TODO: check win/loss
 
 				return kResultNotDetermined;
 			}

@@ -7,6 +7,7 @@
 #include "State/Secrets.h"
 #include "State/Weapon.h"
 #include "State/PlayerResource.h"
+#include "State/PlayerState.h"
 
 namespace State
 {
@@ -23,6 +24,7 @@ namespace State
 		Graveyard graveyard_;
 
 		PlayerResource resource_;
+		PlayerState state_;
 
 		int fatigue_damage_;
 	};
