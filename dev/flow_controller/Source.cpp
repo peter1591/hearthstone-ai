@@ -158,6 +158,8 @@ int main(void)
 	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
 
 	controller.EndTurn();
+	assert(state.players.Get(State::kPlayerSecond).resource_.GetTotal() == 1);
+	assert(state.players.Get(State::kPlayerSecond).resource_.GetCurrent() == 1);
 
 	return 0;
 }
