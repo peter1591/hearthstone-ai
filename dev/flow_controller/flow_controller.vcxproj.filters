@@ -22,6 +22,9 @@
     <Filter Include="Header Files\State\Utils">
       <UniqueIdentifier>{2ceb102c-82fa-4523-96ed-88b37bc45606}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\Helpers">
+      <UniqueIdentifier>{7acbed2a-45eb-441e-a973-91977117cc7c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -33,9 +36,6 @@
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\ActionTypes.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\FlowControl\ActionHandler.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\Deck.h">
@@ -80,8 +80,11 @@
     <ClInclude Include="..\include\State\PlayerResource.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\FlowControl\PlayCardHelper.h">
-      <Filter>Header Files\FlowControl</Filter>
+    <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h">
+      <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Helpers\PlayCard.h">
+      <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -113,5 +113,7 @@ int main(void)
 	CheckZoneAndPosition(state, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
 	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
 
+
+
 	return 0;
 }

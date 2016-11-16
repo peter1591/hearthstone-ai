@@ -118,10 +118,10 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\FlowControl\ActionHandler.h" />
     <ClInclude Include="..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
-    <ClInclude Include="..\include\FlowControl\PlayCardHelper.h" />
+    <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h" />
+    <ClInclude Include="..\include\FlowControl\Helpers\PlayCard.h" />
     <ClInclude Include="..\include\State\Deck.h" />
     <ClInclude Include="..\include\State\Graveyard.h" />
     <ClInclude Include="..\include\State\Hand.h" />

@@ -2,7 +2,7 @@
 
 #include "FlowControl/ActionTypes.h"
 #include "State/State.h"
-#include "FlowControl/PlayCardHelper.h"
+#include "FlowControl/Helpers/PlayCard.h"
 
 namespace FlowControl
 {
@@ -18,8 +18,13 @@ namespace FlowControl
 
 		void PlayCard()
 		{
-			PlayCardHelper<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
-			return helper.PlayCard();
+			Helpers::PlayCard<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
+			return helper.Go();
+		}
+
+		void EndTurn()
+		{
+
 		}
 
 	public:
