@@ -13,6 +13,8 @@ namespace State
 	class Player
 	{
 	public:
+		Player() : fatigue_damage_(0) {}
+
 		Deck deck_;
 		Hand hand_;
 		Minions minions_;
@@ -21,5 +23,7 @@ namespace State
 		Graveyard graveyard_;
 
 		PlayerResource resource_;
+
+		int fatigue_damage_;
 	};
 }

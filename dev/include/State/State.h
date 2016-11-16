@@ -1,7 +1,8 @@
 #pragma once
 
-#include "State/Players.h"
 #include "EntitiesManager/EntitiesManager.h"
+#include "State/Players.h"
+#include "State/ThisTurnCounters.h"
 
 namespace State
 {
@@ -22,5 +23,7 @@ namespace State
 
 		PlayerIdentifier current_player;
 		int turn;
+
+		ThisTurnCounters this_turn_counters;
 	};
 }

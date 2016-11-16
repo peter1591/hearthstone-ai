@@ -58,7 +58,10 @@ namespace State
 			return LocationManipulator(*this);
 		}
 
+		CardRef Get(int idx) const { return cards_[idx]; }
+
 		size_t Size() const { return cards_.size(); }
+		bool Empty() const { return cards_.empty(); }
 
 	private:
 		int change_id;
