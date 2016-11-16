@@ -8,7 +8,6 @@ namespace State
 	class State
 	{
 	public:
-		void SetCurrentPlayer(PlayerIdentifier player) { current_player = player; }
 		void ChangePlayer()
 		{
 			if (current_player == kPlayerFirst) current_player = kPlayerSecond;
