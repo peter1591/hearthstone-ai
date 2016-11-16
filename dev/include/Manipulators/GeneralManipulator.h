@@ -26,6 +26,13 @@ namespace Manipulators
 		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_); }
 		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
 
+		Helpers::ZoneChangerWithUnknownZoneUnknownType GetZoneChanger()
+		{
+			// TODO: Can specialize the zone changer to accelerate when moving from a non-play zone to another non-play zone
+			// For example: deck --> hand
+			return Helpers::ZoneChangerWithUnknownZoneUnknownType(mgr_, card_ref_, card_);
+		}
+
 	private:
 		EntitiesManager & mgr_;
 		CardRef card_ref_;
