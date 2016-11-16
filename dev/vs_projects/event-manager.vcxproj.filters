@@ -48,7 +48,10 @@
     <ClInclude Include="..\include\EventManager\StaticEvent.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\TriggerTypes\MinionSummoned.h">
+    <ClInclude Include="..\include\EventManager\TriggerTypes\BeforeMinionSummoned.h">
+      <Filter>Header Files\EventManager\TriggerTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionSummoned.h">
       <Filter>Header Files\EventManager\TriggerTypes</Filter>
     </ClInclude>
   </ItemGroup>
