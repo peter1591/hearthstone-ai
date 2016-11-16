@@ -3,6 +3,7 @@
 #include "FlowControl/ActionTypes.h"
 #include "State/State.h"
 #include "FlowControl/Helpers/PlayCard.h"
+#include "FlowControl/Helpers/EndTurn.h"
 #include "FlowControl/Result.h"
 
 namespace FlowControl
@@ -22,9 +23,10 @@ namespace FlowControl
 			return helper.Go();
 		}
 
-		void EndTurn()
+		Result EndTurn()
 		{
-
+			Helpers::EndTurn<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
+			return helper.Go();
 		}
 
 	public:
