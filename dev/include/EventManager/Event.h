@@ -27,11 +27,11 @@ namespace EventManager
 		virtual void TriggerEvent(HandlersManager&) = 0;
 	};
 
-	template <typename EventHandlerType>
+	template <typename EventTriggerType>
 	class Event : public EventBase
 	{
 	public:
-		using ArgsTuple = typename EventHandlerType::ArgsTuple;
+		using ArgsTuple = typename EventTriggerType::ArgsTuple;
 
 		template <typename... Args>
 		explicit Event(Args&&... args) : args_(args...) {}
@@ -45,19 +45,19 @@ namespace EventManager
 	private:
 		template <int... I>
 		void TriggerEventInternal(HandlersManager& mgr, impl::seq<I...>) {
-			return mgr.GetHandlersContainer<EventHandlerType>().TriggerAll(std::get<I>(args_)...);
+			return mgr.GetHandlersContainer<EventTriggerType>().TriggerAll(std::get<I>(args_)...);
 		}
 
 	private:
 		ArgsTuple args_;
 	};
 
-	template <typename EventHandlerType>
+	template <typename EventTriggerType>
 	class CategorizedEvent : public EventBase
 	{
 	public:
 		typedef int CategoryType;
-		using ArgsTuple = typename EventHandlerType::ArgsTuple;
+		using ArgsTuple = typename EventTriggerType::ArgsTuple;
 
 		template <typename... Args>
 		explicit CategorizedEvent(const CategoryType& category, const Args&... args) :

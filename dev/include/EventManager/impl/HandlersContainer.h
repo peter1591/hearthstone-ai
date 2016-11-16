@@ -10,8 +10,7 @@
 namespace EventManager
 {
 	namespace impl {
-		template <typename HandlerType,
-			typename std::enable_if<HandlerType::CloneableByCopySemantics, int>::type = 0>
+		template <typename TriggerType>
 		class HandlersContainer
 		{
 		public:
@@ -19,10 +18,10 @@ namespace EventManager
 			//    Since the STL container and the underlying HandlerType are with this property
 			static const bool CloneableByCopySemantics = true;
 
-			template <typename HandlerType_>
-			void PushBack(HandlerType_&& handler)
+			template <typename T>
+			void PushBack(T&& handler)
 			{
-				handlers_.push_back(handler);
+				handlers_.push_back(std::forward<T>(handler));
 			}
 
 			// Note: Do not provide remove interface to outside
@@ -64,7 +63,7 @@ namespace EventManager
 			}
 
 		private:
-			typedef std::list<HandlerType> container_type;
+			typedef std::list<TriggerType> container_type;
 			container_type handlers_;
 		};
 	}

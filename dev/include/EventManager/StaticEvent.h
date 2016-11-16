@@ -4,18 +4,18 @@
 
 namespace EventManager
 {
-	template <typename EventHandlerType>
+	template <typename EventTriggerType>
 	class StaticEvent : public EventBase
 	{
 	public:
 		template <typename... Args>
 		static void TriggerEvent(HandlersManager& mgr, Args&&... args)
 		{
-			return mgr.GetHandlersContainer<EventHandlerType>().TriggerAll(std::forward<Args>(args)...);
+			return mgr.GetHandlersContainer<EventTriggerType>().TriggerAll(std::forward<Args>(args)...);
 		}
 	};
 
-	template <typename EventHandlerType>
+	template <typename EventTriggerType>
 	class StaticCategorizedEvent : public EventBase
 	{
 	public:
@@ -24,7 +24,7 @@ namespace EventManager
 		template <typename CategoryType_, typename... Args>
 		static void TriggerEvent(HandlersManager& mgr, CategoryType_&& category, Args&&... args)
 		{
-			return mgr.GetHandlersContainer<CategoryType, EventHandlerType>()
+			return mgr.GetHandlersContainer<CategoryType, EventTriggerType>()
 				.TriggerAll(std::forward<CategoryType_>(category), std::forward<Args>(args)...);
 		}
 	};
