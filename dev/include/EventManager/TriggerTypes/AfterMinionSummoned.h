@@ -9,7 +9,7 @@ namespace EventManager
 {
 	namespace TriggerTypes
 	{
-		class MinionSummoned
+		class AfterMinionSummoned
 		{
 		public:
 			typedef std::function<void(HandlersContainerController &, int)> FunctorType;
@@ -17,9 +17,10 @@ namespace EventManager
 
 			template <typename T,
 				typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
-			explicit MinionSummoned(T&& functor) : functor_(functor) {}
+				explicit AfterMinionSummoned(T&& functor) : functor_(functor) {}
 
-			void Handle(HandlersContainerController &controller, int v) {
+			void Handle(HandlersContainerController &controller, int v)
+			{
 				functor_(controller, v);
 			}
 

@@ -74,7 +74,7 @@ namespace EventManager
 	private:
 		template <int... I>
 		void TriggerEventInternal(HandlersManager& mgr, impl::seq<I...>) {
-			return mgr.GetHandlersContainer<CategoryType, EventHandlerType>().TriggerAll(category_, std::get<I>(args_)...);
+			return mgr.GetHandlersContainer<CategoryType, EventTriggerType>().TriggerAll(category_, std::get<I>(args_)...);
 		}
 
 	private:
