@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EntitiesManager/EntitiesManager.h"
+#include "EventManager/HandlersManager.h"
 #include "State/Players.h"
 #include "State/ThisTurnCounters.h"
 
@@ -20,6 +21,7 @@ namespace State
 	public:
 		Players players;
 		EntitiesManager mgr;
+		EventManager::HandlersManager event_mgr;
 
 		PlayerIdentifier current_player;
 		int turn;
