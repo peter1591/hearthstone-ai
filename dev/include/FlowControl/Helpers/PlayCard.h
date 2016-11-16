@@ -2,6 +2,7 @@
 
 #include "Manipulators/Manipulators.h"
 #include "State/State.h"
+#include "FlowControl/Result.h"
 
 namespace FlowControl
 {
@@ -17,7 +18,7 @@ namespace FlowControl
 
 			}
 
-			void Go()
+			Result Go()
 			{
 				int hand_pos = action_parameters_.GetHandCardPosition();
 				card_ref_ = state_.GetCurrentPlayer().hand_.Get(hand_pos);
@@ -32,7 +33,7 @@ namespace FlowControl
 			}
 
 		private:
-			void PlayMinionCard()
+			Result PlayMinionCard()
 			{
 				// TODO: before summon phase
 
@@ -53,6 +54,8 @@ namespace FlowControl
 				// TODO: after play phase
 				// TODO: after summon phase
 				// TODO: check win/loss
+
+				return kResultNotDetermined;
 			}
 
 		private:

@@ -3,6 +3,7 @@
 #include "FlowControl/ActionTypes.h"
 #include "State/State.h"
 #include "FlowControl/Helpers/PlayCard.h"
+#include "FlowControl/Result.h"
 
 namespace FlowControl
 {
@@ -13,10 +14,9 @@ namespace FlowControl
 		FlowController(State::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
 			: state_(state), action_parameters_(action_parameters), random_(random)
 		{
-
 		}
 
-		void PlayCard()
+		Result PlayCard()
 		{
 			Helpers::PlayCard<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
 			return helper.Go();
