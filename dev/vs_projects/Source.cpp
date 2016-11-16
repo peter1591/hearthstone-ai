@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 
 #include "EventManager/HandlersManager.h"
 #include "EventManager/Event.h"
@@ -8,26 +9,26 @@ static void test1()
 {
 	EventManager::HandlersManager mgr;
 
-	EventManager::Handlers::MinionSummoned handler1("a");
-	EventManager::Handlers::MinionSummoned handler2("b");
-	EventManager::Handlers::MinionSummonedOnce handler3("once-c");
+	std::function<void(EventManager::HandlersContainerController &, int)> callback1 =
+		[](EventManager::HandlersContainerController & controller, int v) {
+		std::cout << "hello. v = " << v << std::endl;
+	};
 
-	mgr.PushBack(handler1);
-	mgr.PushBack(handler2);
-	mgr.PushBack(handler3);
+	mgr.PushBack(EventManager::TriggerTypes::MinionSummoned(callback1));
+	mgr.PushBack(EventManager::TriggerTypes::MinionSummoned(callback1));
+	mgr.PushBack(EventManager::TriggerTypes::MinionSummoned(callback1));
 
-	mgr.PushBack(5, handler1);
-	mgr.PushBack(5, handler2);
-	mgr.PushBack(55, handler1);
-	mgr.PushBack(55, handler2);
-	mgr.PushBack(55, handler3);
+	mgr.PushBack(5, EventManager::TriggerTypes::MinionSummoned(callback1));
+	mgr.PushBack(55, EventManager::TriggerTypes::MinionSummoned(callback1));
+	mgr.PushBack(55, EventManager::TriggerTypes::MinionSummoned(callback1));
 
 	auto mgr2 = mgr;
 
-	EventManager::Event<EventManager::Handlers::MinionSummoned> ev1(987, "h199", 3.15);
-	EventManager::Event<EventManager::Handlers::MinionSummonedOnce> ev2;
+	EventManager::Event<EventManager::TriggerTypes::MinionSummoned> ev1(987);
 	std::cout << "--" << std::endl;
 	ev1.TriggerEvent(mgr);
+
+	/*
 	std::cout << "--" << std::endl;
 	ev2.TriggerEvent(mgr);
 	std::cout << "--" << std::endl;
@@ -66,7 +67,9 @@ static void test1()
 	ev5.TriggerEvent(mgr2);
 
 	std::cout << "==" << std::endl;
+	*/
 }
+/*
 
 static void test2()
 {
@@ -131,11 +134,12 @@ static void test2()
 
 	std::cout << "==" << std::endl;
 }
+*/
 
 int main(void)
 {
-	//test1();
-	test2();
+	test1();
+	//test2();
 
 	return 0;
 }

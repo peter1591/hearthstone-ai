@@ -16,23 +16,17 @@
     <Filter Include="Header Files\EventManager">
       <UniqueIdentifier>{a31d05fd-60ed-4f92-b015-4e6e4b611771}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\EventManager\Handlers">
-      <UniqueIdentifier>{dd5dde84-e9e6-4399-a429-c921fb58e48e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Enchantment">
       <UniqueIdentifier>{1f66bb95-46c8-4e57-9fcd-932a09e3150b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\EventManager\impl">
       <UniqueIdentifier>{461a2477-e2be-4a10-9342-ca173d865c04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\EventManager\TriggerTypes">
+      <UniqueIdentifier>{dd5dde84-e9e6-4399-a429-c921fb58e48e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h">
-      <Filter>Header Files\EventManager\Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h">
-      <Filter>Header Files\EventManager\Handlers</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h">
       <Filter>Header Files\Enchantment</Filter>
     </ClInclude>
@@ -53,6 +47,9 @@
     </ClInclude>
     <ClInclude Include="..\include\EventManager\StaticEvent.h">
       <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\TriggerTypes\MinionSummoned.h">
+      <Filter>Header Files\EventManager\TriggerTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

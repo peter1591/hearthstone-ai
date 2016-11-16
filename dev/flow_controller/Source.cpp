@@ -135,14 +135,15 @@ int main(void)
 
 	{
 		Manipulators::PlayerStateManipulator manipulator(state.players.Get(State::kPlayerFirst).state_, state.event_mgr);
-		manipulator.SetHP(30);
+		manipulator.SetHP(20);
 		MakeDeck(state, State::kPlayerFirst);
 		MakeHand(state, State::kPlayerFirst);
 	}
 
 	{
 		Manipulators::PlayerStateManipulator manipulator(state.players.Get(State::kPlayerSecond).state_, state.event_mgr);
-		manipulator.SetHP(20);
+		state.players.Get(State::kPlayerSecond).fatigue_damage_ = 3;
+		manipulator.SetHP(30);
 		//MakeDeck(state, State::kPlayerSecond);
 		MakeHand(state, State::kPlayerSecond);
 	}
@@ -170,6 +171,7 @@ int main(void)
 	controller.EndTurn();
 	assert(state.players.Get(State::kPlayerSecond).resource_.GetTotal() == 1);
 	assert(state.players.Get(State::kPlayerSecond).resource_.GetCurrent() == 1);
+	assert(state.players.Get(State::kPlayerSecond).state_.GetHP() == 26);
 
 	return 0;
 }

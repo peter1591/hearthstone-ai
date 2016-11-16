@@ -118,12 +118,11 @@
     <ClInclude Include="..\include\Enchantment\EnchantmentBase.h" />
     <ClInclude Include="..\include\EventManager\Event.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h" />
     <ClInclude Include="..\include\EventManager\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\impl\HandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\HandlersManager.h" />
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h" />
     <ClInclude Include="..\include\EventManager\StaticEvent.h" />
+    <ClInclude Include="..\include\EventManager\TriggerTypes\MinionSummoned.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
