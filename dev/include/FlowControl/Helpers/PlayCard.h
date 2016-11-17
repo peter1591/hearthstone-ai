@@ -5,6 +5,7 @@
 #include "EventManager/StaticEvent.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
+#include "Cards/Minions/Dispatcher.h"
 
 namespace FlowControl
 {
@@ -54,7 +55,11 @@ namespace FlowControl
 					state_, state_.current_player, put_position);
 
 				EventManager::StaticEvent<EventManager::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);
-				// TODO: battlecry phase
+
+				Cards::Minions::Dispatcher::BattleCry(card_->GetCardId());
+
+				EventManager::StaticEvent<EventManager::TriggerTypes::AfterBattleCry>::TriggerEvent(state_.event_mgr, *card_);
+
 				// TODO: after play phase
 
 				EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionSummoned>::TriggerEvent(state_.event_mgr);

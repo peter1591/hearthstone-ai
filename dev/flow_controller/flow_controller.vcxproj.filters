@@ -161,5 +161,8 @@
     <ClInclude Include="..\include\EventManager\TriggerTypes\OnMinionPlay.h">
       <Filter>Header Files\EventManager\TriggerTypes</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\EventManager\TriggerTypes\AfterBattleCry.h">
+      <Filter>Header Files\EventManager\TriggerTypes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
