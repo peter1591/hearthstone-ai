@@ -34,8 +34,8 @@
     <Filter Include="Header Files\EventManager">
       <UniqueIdentifier>{aeb51441-df2e-48e2-80e8-b4d2daf72fa3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\EventManager\Handlers">
-      <UniqueIdentifier>{b2cc833a-fcd7-4628-a30b-4c44f7e943dd}</UniqueIdentifier>
+    <Filter Include="Header Files\EventManager\TriggerTypes">
+      <UniqueIdentifier>{e34b1bf9-75c5-4541-8c2e-6a908b504a95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,11 +152,14 @@
     <ClInclude Include="..\include\EventManager\StaticEvent.h">
       <Filter>Header Files\EventManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h">
-      <Filter>Header Files\EventManager\Handlers</Filter>
+    <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionSummoned.h">
+      <Filter>Header Files\EventManager\TriggerTypes</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h">
-      <Filter>Header Files\EventManager\Handlers</Filter>
+    <ClInclude Include="..\include\EventManager\TriggerTypes\BeforeMinionSummoned.h">
+      <Filter>Header Files\EventManager\TriggerTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\EventManager\TriggerTypes\OnMinionPlay.h">
+      <Filter>Header Files\EventManager\TriggerTypes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

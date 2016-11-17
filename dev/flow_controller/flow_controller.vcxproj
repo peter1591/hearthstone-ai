@@ -121,9 +121,10 @@
     <ClInclude Include="..\include\EventManager\Event.h" />
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
     <ClInclude Include="..\include\EventManager\HandlersManager.h" />
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummoned.h" />
-    <ClInclude Include="..\include\EventManager\Handlers\MinionSummonedOnce.h" />
     <ClInclude Include="..\include\EventManager\StaticEvent.h" />
+    <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionSummoned.h" />
+    <ClInclude Include="..\include\EventManager\TriggerTypes\BeforeMinionSummoned.h" />
+    <ClInclude Include="..\include\EventManager\TriggerTypes\OnMinionPlay.h" />
     <ClInclude Include="..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h" />

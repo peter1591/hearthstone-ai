@@ -159,12 +159,23 @@ int main(void)
 
 	CardRef r1 = state.GetCurrentPlayer().hand_.Get(2);
 	action_parameter.SetHandCardPosition(2);
+	bool triggered = false;
+	EventManager::TriggerTypes::OnMinionPlay::FunctorType on_minion_play_1 = 
+		[&triggered] (EventManager::HandlersContainerController & controller, const Entity::Card & card) {
+		triggered = true;
+		//std::cout << "OnMinionPlay event: " << card.GetCardId() << std::endl;
+	};
+	state.event_mgr.PushBack(EventManager::TriggerTypes::OnMinionPlay(on_minion_play_1));
+	triggered = false;
 	controller.PlayCard();
+	assert(triggered);
 	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZonePlay, 0);
 
 	CardRef r2 = state.GetCurrentPlayer().hand_.Get(2);
 	action_parameter.SetHandCardPosition(2);
+	triggered = false;
 	controller.PlayCard();
+	assert(triggered);
 	CheckZoneAndPosition(state, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
 	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
 
