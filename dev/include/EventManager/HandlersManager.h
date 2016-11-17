@@ -6,6 +6,7 @@
 #include "EventManager/impl/CategorizedHandlersContainer.h"
 #include "EventManager/TriggerTypes/AfterMinionSummoned.h"
 #include "EventManager/TriggerTypes/BeforeMinionSummoned.h"
+#include "EventManager/TriggerTypes/OnMinionPlay.h"
 
 namespace EventManager
 {
@@ -60,8 +61,11 @@ private: \
 
 		ADD_TRIGGER_TYPE(AfterMinionSummoned);
 		ADD_TRIGGER_TYPE(BeforeMinionSummoned);
+		ADD_TRIGGER_TYPE(OnMinionPlay);
+
 		ADD_CATEGORIZED_TRIGGER_TYPE(AfterMinionSummoned);
 		ADD_CATEGORIZED_TRIGGER_TYPE(BeforeMinionSummoned);
+		ADD_CATEGORIZED_TRIGGER_TYPE(OnMinionPlay);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL
 #undef ADD_TRIGGER_TYPE
