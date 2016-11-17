@@ -2,6 +2,7 @@
 
 #include "Manipulators/Manipulators.h"
 #include "State/State.h"
+#include "EventManager/StaticEvent.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
 
@@ -38,7 +39,7 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
-				// TODO: before summon phase
+				EventManager::StaticEvent<EventManager::TriggerTypes::BeforeMinionSummoned>::TriggerEvent(state_.event_mgr);
 
 				state_.GetCurrentPlayer().resource_.Cost(card_->GetCost());
 
@@ -52,11 +53,11 @@ namespace FlowControl
 				state_.mgr.GetMinionManipulator(card_ref_).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(
 					state_, state_.current_player, put_position);
 
-				// TODO: on play phase
+				EventManager::StaticEvent<EventManager::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);
 				// TODO: battlecry phase
 				// TODO: after play phase
-				// TODO: after summon phase
-				// TODO: check win/loss
+
+				EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionSummoned>::TriggerEvent(state_.event_mgr);
 
 				rc = Utils::CheckWinLoss(state_);
 				if (rc != kResultNotDetermined) return rc;
