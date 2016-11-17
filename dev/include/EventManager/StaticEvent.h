@@ -5,7 +5,7 @@
 namespace EventManager
 {
 	template <typename EventTriggerType>
-	class StaticEvent : public EventBase
+	class StaticEvent
 	{
 	public:
 		template <typename... Args>
@@ -16,7 +16,7 @@ namespace EventManager
 	};
 
 	template <typename EventTriggerType>
-	class StaticCategorizedEvent : public EventBase
+	class StaticCategorizedEvent
 	{
 	public:
 		typedef int CategoryType;
