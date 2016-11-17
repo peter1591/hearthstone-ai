@@ -12,8 +12,8 @@ namespace EventManager
 		class BeforeMinionSummoned
 		{
 		public:
-			typedef std::function<void(HandlersContainerController &, int)> FunctorType;
-			typedef std::tuple<int> ArgsTuple;
+			typedef std::function<void(HandlersContainerController &)> FunctorType;
+			typedef std::tuple<> ArgsTuple;
 
 			template <typename T,
 				typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
@@ -21,9 +21,9 @@ namespace EventManager
 			{
 			}
 
-			void Handle(HandlersContainerController &controller, int v)
+			void Handle(HandlersContainerController &controller)
 			{
-				functor_(controller, v);
+				functor_(controller);
 			}
 
 		private:

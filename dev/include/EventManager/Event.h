@@ -33,8 +33,13 @@ namespace EventManager
 	public:
 		using ArgsTuple = typename EventTriggerType::ArgsTuple;
 
-		template <typename... Args>
+		template <typename U=EventTriggerType, typename... Args,
+			typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value != 0, nullptr_t> = nullptr>
 		explicit Event(Args&&... args) : args_(args...) {}
+
+		template <typename U=EventTriggerType,
+			typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value == 0, nullptr_t> = nullptr>
+		Event() {}
 
 		void TriggerEvent(HandlersManager& mgr)
 		{
@@ -59,9 +64,16 @@ namespace EventManager
 		typedef int CategoryType;
 		using ArgsTuple = typename EventTriggerType::ArgsTuple;
 
-		template <typename... Args>
+		template <typename U=EventTriggerType, typename... Args,
+			typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value != 0, nullptr_t> = nullptr>
 		explicit CategorizedEvent(const CategoryType& category, const Args&... args) :
 			category_(category), args_(args...)
+		{
+		}
+
+		template <typename U=EventTriggerType,
+			typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value == 0, nullptr_t> = nullptr>
+		explicit CategorizedEvent(const CategoryType& category) : category_(category)
 		{
 		}
 
