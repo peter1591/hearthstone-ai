@@ -5,8 +5,8 @@
 
 int main(void)
 {
-	Cards::Minions::Dispatcher::BattleCry(2, "jjj");
-	Cards::Minions::Dispatcher::BattleCry(7, "jssjj");
+	Cards::Minions::Dispatcher::BattleCry(2);
+	Cards::Minions::Dispatcher::BattleCry(7);
 
 	return 0;
 }

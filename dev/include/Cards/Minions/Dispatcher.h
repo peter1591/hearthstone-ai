@@ -33,9 +33,10 @@ namespace Cards
 		public:
 			using DispatcherImpl = StaticDispatcher::Dispatcher<impl::DefaultInvoked>;
 
-			static void BattleCry(int id, const std::string& s)
+			template <typename... Args>
+			static void BattleCry(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<impl::BattleCryInvoker>(id, s);
+				return DispatcherImpl::Invoke<impl::BattleCryInvoker>(id, std::forward<Args>(args)...);
 			}
 		};
 	}

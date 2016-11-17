@@ -11,9 +11,9 @@ namespace Cards
 		public:
 			static constexpr int id = 7;
 
-			static void BattleCry(const std::string& s)
+			static void BattleCry()
 			{
-				std::cout << "Card_Test1::BattleCry() called: " << s << std::endl;
+				std::cout << "Card_Test1::BattleCry() called" << std::endl;
 			}
 		};
 	}
