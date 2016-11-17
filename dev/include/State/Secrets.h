@@ -11,18 +11,18 @@ namespace State
 	class Secrets
 	{
 	public:
-		void Add(const std::string & card_id, CardRef card)
+		void Add(int card_id, CardRef card)
 		{
 			if (Exists(card_id)) throw std::exception("Secret already exists");
 			secrets_.insert(std::make_pair(card_id, card));
 		}
 
-		bool Exists(const std::string & card_id) const
+		bool Exists(int card_id) const
 		{
 			return secrets_.find(card_id) != secrets_.end();
 		}
 
-		void Remove(const std::string & card_id)
+		void Remove(int card_id)
 		{
 			secrets_.erase(card_id);
 		}
@@ -33,6 +33,6 @@ namespace State
 		}
 
 	private:
-		std::unordered_map<std::string, CardRef> secrets_;
+		std::unordered_map<int, CardRef> secrets_;
 	};
 }

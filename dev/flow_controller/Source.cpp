@@ -41,7 +41,7 @@ static Entity::RawCard GetCard1(State::PlayerIdentifier player, int zone_pos)
 {
 	Entity::RawCard c1;
 	c1.card_type = Entity::kCardTypeMinion;
-	c1.card_id = "card_id_1";
+	c1.card_id = 1;
 	c1.zone_position = zone_pos;
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = Entity::kCardZoneHand;
@@ -53,7 +53,7 @@ static Entity::RawCard GetCard2(State::PlayerIdentifier player, int zone_pos)
 {
 	Entity::RawCard c1;
 	c1.card_type = Entity::kCardTypeMinion;
-	c1.card_id = "card_id_2";
+	c1.card_id = 2;
 	c1.zone_position = zone_pos;
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = Entity::kCardZoneHand;
@@ -65,7 +65,7 @@ static Entity::RawCard GetCard3(State::PlayerIdentifier player, int zone_pos)
 {
 	Entity::RawCard c1;
 	c1.card_type = Entity::kCardTypeMinion;
-	c1.card_id = "card_id_3";
+	c1.card_id = 3;
 	c1.zone_position = zone_pos;
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = Entity::kCardZoneDeck;

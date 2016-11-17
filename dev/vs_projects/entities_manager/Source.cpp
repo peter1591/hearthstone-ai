@@ -25,7 +25,7 @@ static void test1()
 
 	Entity::RawCard c1;
 	c1.card_type = Entity::kCardTypeMinion;
-	c1.card_id = "card_id_1";
+	c1.card_id = 1;
 	c1.enchanted_states.player = State::kPlayerFirst;
 	c1.enchanted_states.zone = Entity::kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
@@ -156,21 +156,21 @@ static void test2()
 
 	Entity::RawCard c1;
 	c1.card_type = Entity::kCardTypeMinion;
-	c1.card_id = "card_id_1";
+	c1.card_id = 1;
 	c1.enchanted_states.zone = Entity::kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
 	CardRef r1 = state.mgr.PushBack(state, Entity::Card(c1));
 
 	Entity::RawCard c2;
 	c2.card_type = Entity::kCardTypeMinion;
-	c2.card_id = "card_id_2";
+	c2.card_id = 2;
 	c2.enchanted_states.zone = Entity::kCardZoneDeck;
 	c2.enchanted_states.cost = 5;
 	CardRef r2 = state.mgr.PushBack(state, Entity::Card(c2));
 
 	Entity::RawCard c3;
 	c3.card_type = Entity::kCardTypeMinion;
-	c3.card_id = "card_id_3";
+	c3.card_id = 3;
 	c3.enchanted_states.zone = Entity::kCardZoneDeck;
 	c3.enchanted_states.cost = 9;
 	CardRef r3 = state.mgr.PushBack(state, Entity::Card(c3));

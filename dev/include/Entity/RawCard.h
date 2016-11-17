@@ -15,7 +15,7 @@ namespace Entity
 		RawCard() : card_type(kCardTypeInvalid), play_order(-1), damaged(0) {}
 
 		CardType card_type;
-		std::string card_id;
+		int card_id;
 		int play_order;
 		int zone_position;
 

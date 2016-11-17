@@ -60,7 +60,7 @@ namespace Entity
 		explicit Card(const RawCard & data) : data_(data) {}
 
 	public: // getters and setters
-		const std::string & GetCardId() const { return data_.card_id; }
+		int GetCardId() const { return data_.card_id; }
 		CardType GetCardType() const { return data_.card_type; }
 
 		const State::PlayerIdentifier GetPlayerIdentifier() const { return data_.enchanted_states.player; }
