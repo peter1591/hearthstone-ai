@@ -118,10 +118,6 @@
     <ClInclude Include="..\..\include\Enchantments\Enchantments.h" />
     <ClInclude Include="..\..\include\Enchantments\TieredEnchantments.h" />
     <ClInclude Include="..\..\include\Enchantments\Tiers.h" />
-    <ClInclude Include="..\..\include\Enchantment\AddAttack.h" />
-    <ClInclude Include="..\..\include\Enchantment\AddAttack_Aura.h" />
-    <ClInclude Include="..\..\include\Enchantment\AddAttack_Tier2.h" />
-    <ClInclude Include="..\..\include\Enchantment\Base.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />

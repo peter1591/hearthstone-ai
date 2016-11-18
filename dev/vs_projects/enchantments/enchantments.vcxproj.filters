@@ -16,28 +16,13 @@
     <Filter Include="Header Files\Enchantments">
       <UniqueIdentifier>{ee7ba5ab-1bcb-43e7-ad82-9c67fcf538f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Enchantment">
-      <UniqueIdentifier>{bb8c0537-d13e-4638-aa38-231dde85a2b2}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Enchantments\TieredEnchantments.h">
       <Filter>Header Files\Enchantments</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Enchantment\AddAttack.h">
-      <Filter>Header Files\Enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Enchantment\Base.h">
-      <Filter>Header Files\Enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Enchantment\AddAttack_Tier2.h">
-      <Filter>Header Files\Enchantment</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Enchantments\Tiers.h">
       <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Enchantment\AddAttack_Aura.h">
-      <Filter>Header Files\Enchantment</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Enchantments\Enchantments.h">
       <Filter>Header Files\Enchantments</Filter>

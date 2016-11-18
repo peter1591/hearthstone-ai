@@ -1,21 +1,74 @@
+#include <assert.h>
 #include "Enchantments/TieredEnchantments.h"
+#include "Entity/Card.h"
 
-#include "Enchantment/AddAttack.h"
-#include "Enchantment/AddAttack_Tier2.h"
-#include "Enchantment/AddAttack_Aura.h"
+struct Enchantment1
+{
+	static constexpr EnchantmentTiers tier = kEnchantmentTier2;
 
+	Enchantments::ApplyFunctor apply_functor;
+};
+
+struct Enchantment2
+{
+	static constexpr EnchantmentTiers tier = kEnchantmentTier3;
+
+	Enchantments::ApplyFunctor apply_functor;
+};
 
 int main(void)
 {
 	TieredEnchantments mgr;
 
-	mgr.PushBack<Enchantment::AddAttack>(std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack()));
-	mgr.PushBack<Enchantment::AddAttack_Tier2>(std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack_Tier2()));
-	auto t1 = mgr.PushBack<Enchantment::AddAttack_Aura>(std::unique_ptr<Enchantment::Base>(new Enchantment::AddAttack_Aura()));
+	Entity::RawCard raw_card;
+	Entity::Card card(raw_card);
+	card.SetCost(0);
+
+	Enchantment1 enchant1{ [](Entity::Card & card) {
+		card.SetCost(card.GetCost() + 1);
+	}};
+	Enchantment1 enchant2{ [](Entity::Card & card) {
+		card.SetCost(card.GetCost() * 2);
+	} };
+	Enchantment2 enchant3{ [](Entity::Card & card) {
+		card.SetCost(card.GetCost() + 3);
+	} };
+
+	auto r1 = mgr.PushBack(enchant1);
+	assert(card.GetCost() == 0);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 1);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 2);
 
 	auto mgr2 = mgr;
-	auto t2 = t1;
-	auto g1 = mgr2.Get<Enchantment::AddAttack_Aura>(t2);
+	assert(card.GetCost() == 2);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 3);
+	mgr2.ApplyAll(card);
+	assert(card.GetCost() == 4);
+
+	mgr.Remove<Enchantment1>(r1);
+	assert(card.GetCost() == 4);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 4);
+	mgr2.ApplyAll(card);
+	assert(card.GetCost() == 5);
+
+	auto r3 = mgr.PushBack(enchant3);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 8);
+
+	auto r2 = mgr.PushBack(enchant2);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 19);
+
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 41);
+
+	mgr.Remove<Enchantment1>(r2);
+	mgr.ApplyAll(card);
+	assert(card.GetCost() == 44);
 
 	return 0;
 }
