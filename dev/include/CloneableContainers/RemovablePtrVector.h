@@ -50,9 +50,14 @@ namespace CloneableContainers
 		}
 
 	public: // iterate
-		Identifier GetBegin() { return container_.GetBegin(); }
-		void StepNext(Identifier & id) { container_.StepNext(id); }
-		Identifier GetEnd() { return container_.GetEnd(); }
+		using IterateCallback = std::function<bool(PtrItemType)>; // return true to continue; false to abort
+
+		void IterateAll(const IterateCallback & callback)
+		{
+			container_.IterateAll([&callback](CopyableItemType & item) -> bool {
+				return callback(item.Get().get());
+			});
+		}
 
 	private:
 		ContainerType container_;

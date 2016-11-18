@@ -9,7 +9,8 @@
 
 namespace CloneableContainers
 {
-	template <typename ItemType>
+	template <typename ItemType,
+		typename std::enable_if_t<!std::is_pointer<typename ItemType>::value, nullptr_t> = nullptr>
 	class RemovableVector
 	{
 	private:
@@ -101,10 +102,9 @@ namespace CloneableContainers
 
 	public: // iterate
 		// Only iterate through exist items
-
 		using IterateCallback = std::function<bool(ItemType&)>; // return true to continue; false to abort
 
-		void IterateExistItems(const IterateCallback & callback)
+		void IterateAll(const IterateCallback & callback)
 		{
 			VectorIdentifier id = first_possible_exist_id_;
 			VectorIdentifier id_end = items_.GetEnd();
@@ -132,10 +132,6 @@ namespace CloneableContainers
 				id = item.next_possible_exist_id;
 			}
 		}
-
-		Identifier GetBegin() { return Identifier(items_.GetBegin()); }
-		void StepNext(Identifier & id) { items_.StepNext(id.identifier_); }
-		Identifier GetEnd() { return Identifier(items_.GetEnd()); }
 
 	private:
 		CloneableContainers::Vector<InternalItemType> items_;
