@@ -7,10 +7,6 @@
 
 #include "Manipulators/Manipulators.h"
 
-#include "Enchantment/AddAttack.h"
-#include "Enchantment/AddAttack_Tier2.h"
-#include "Enchantment/AddAttack_Aura.h"
-
 static void CheckZoneAndPosition(const State::State & state, CardRef ref, State::PlayerIdentifier player, Entity::CardZone zone, int pos)
 {
 	auto & item = state.mgr.Get(ref);
@@ -18,6 +14,19 @@ static void CheckZoneAndPosition(const State::State & state, CardRef ref, State:
 	assert(item.GetZone() == zone);
 	assert(item.GetZonePosition() == pos);
 }
+
+struct Enchantment1
+{
+	static constexpr EnchantmentTiers tier = kEnchantmentTier1;
+
+	Enchantments::ApplyFunctor apply_functor;
+};
+struct Enchantment2
+{
+	static constexpr EnchantmentTiers tier = kEnchantmentTier2;
+
+	Enchantments::ApplyFunctor apply_functor;
+};
 
 static void test1()
 {
@@ -97,26 +106,32 @@ static void test1()
 	CheckZoneAndPosition(state2, r1, State::kPlayerFirst, Entity::kCardZoneGraveyard, 0);
 	CheckZoneAndPosition(state2, r2, State::kPlayerFirst, Entity::kCardZoneGraveyard, 1);
 
-	auto manipulator = state.mgr.GetMinionManipulator(r1);
-	auto ref1 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
-	auto ref2 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
-	auto ref3 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack>();
-	auto ref4 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Tier2>();
+	Enchantment1 enchant1{ [](Entity::Card & card) {
+		card.SetCost(card.GetCost() + 1);
+	} };
+	Enchantment2 enchant2{ [](Entity::Card & card) {
+		card.SetCost(card.GetCost() * 2);
+	} };
 
-	auto ref5 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
-	auto ref6 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
-	auto ref7 = manipulator.GetEnchantmentHelper().CreateAndAdd<Enchantment::AddAttack_Aura>();
+	auto manipulator = state.mgr.GetMinionManipulator(r1);
+	auto ref1 = manipulator.GetEnchantmentHelper().Add(enchant1);
+	auto ref2 = manipulator.GetEnchantmentHelper().Add(enchant2);
+	auto ref3 = manipulator.GetEnchantmentHelper().Add(enchant1);
+	auto ref4 = manipulator.GetEnchantmentHelper().Add(enchant2);
 
 	auto state3 = state;
 
-	state3.mgr.GetMinionManipulator(r1).GetEnchantmentHelper().Remove<Enchantment::AddAttack_Aura>(ref6);
+	state3.mgr.GetMinionManipulator(r1).GetEnchantmentHelper().Remove<Enchantment2>(ref2);
 }
 
-template <typename EnchantmentType_>
 class AuraHelper
 {
 public:
-	typedef EnchantmentType_ EnchantmentType;
+	struct EnchantmentType
+	{
+		static constexpr EnchantmentTiers tier = kEnchantmentAura;
+		Enchantments::ApplyFunctor apply_functor;
+	};
 
 	AuraHelper(CardRef eligible1, CardRef eligible2) : eligible1_(eligible1), eligible2_(eligible2) {}
 
@@ -138,11 +153,13 @@ public:
 	}
 
 	template <typename T>
-	std::unique_ptr<Enchantment::Base> CreateEnchantmentFor(T&& target)
+	EnchantmentType CreateEnchantmentFor(T&& target)
 	{
 		static_assert(std::is_same<std::decay_t<T>, CardRef>::value, "Wrong type");
 
-		return std::unique_ptr<Enchantment::Base>(new EnchantmentType());
+		return EnchantmentType{ [](Entity::Card & card) {
+			card.SetCost(card.GetCost() - 1);
+		} };
 	}
 
 private:
@@ -175,7 +192,7 @@ static void test2()
 	c3.enchanted_states.cost = 9;
 	CardRef r3 = state.mgr.PushBack(state, Entity::Card(c3));
 
-	typedef AuraHelper<Enchantment::AddAttack_Aura> ClientAuraHelper;
+	typedef AuraHelper ClientAuraHelper;
 	ClientAuraHelper client_aura_helper(r1, r2);
 	state.mgr.GetMinionManipulator(r3).GetAuraHelper().Update(client_aura_helper);
 

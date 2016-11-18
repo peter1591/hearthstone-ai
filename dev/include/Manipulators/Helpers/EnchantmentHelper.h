@@ -3,7 +3,6 @@
 #include <memory>
 #include <utility>
 #include "Entity/Card.h"
-#include "Enchantment/Base.h"
 #include "Entity/EnchantmentAuxData.h"
 
 namespace Manipulators
@@ -18,18 +17,11 @@ namespace Manipulators
 			{
 			}
 
-			template <typename EnchantmentType, typename... Args>
-			decltype(auto) CreateAndAdd(Args&&... args)
-			{
-				auto instance = std::unique_ptr<Enchantment::Base>(new EnchantmentType(std::forward<Args>(args)...));
-				return this->Add<EnchantmentType>(std::move(instance));
-			}
-
-			template <typename EnchantmentType, typename T>
+			template <typename T>
 			decltype(auto) Add(T&& enchantment)
 			{
 				data_.need_update = true;
-				return data_.enchantments.PushBack<EnchantmentType>(std::forward<T>(enchantment));
+				return data_.enchantments.PushBack(std::forward<T>(enchantment));
 			}
 
 			template <typename EnchantmentType, typename T>

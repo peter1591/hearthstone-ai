@@ -39,7 +39,7 @@ namespace Manipulators
 					if (data_.applied_enchantments.find(target) != data_.applied_enchantments.end()) return; // already applied
 
 					auto enchant_identifier = mgr_.GetMinionManipulator(target).GetEnchantmentHelper()
-						.Add<EnchantmentType>(client_aura_helper.CreateEnchantmentFor(target));
+						.Add(client_aura_helper.CreateEnchantmentFor(target));
 					data_.applied_enchantments.insert(std::make_pair(target, std::move(enchant_identifier)));
 				});
 			}
