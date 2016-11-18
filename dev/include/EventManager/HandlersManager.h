@@ -4,9 +4,9 @@
 #include <utility>
 #include "EventManager/impl/HandlersContainer.h"
 #include "EventManager/impl/CategorizedHandlersContainer.h"
-#include "EventManager/TriggerTypes/AfterBattleCry.h"
 #include "EventManager/TriggerTypes/AfterMinionSummoned.h"
 #include "EventManager/TriggerTypes/BeforeMinionSummoned.h"
+#include "EventManager/TriggerTypes/AfterMinionPlayed.h"
 #include "EventManager/TriggerTypes/OnMinionPlay.h"
 
 namespace EventManager
@@ -60,13 +60,14 @@ private: \
 	}
 #define ADD_CATEGORIZED_TRIGGER_TYPE(TYPE_NAME) ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)
 
-		ADD_TRIGGER_TYPE(AfterBattleCry);
 		ADD_TRIGGER_TYPE(AfterMinionSummoned);
 		ADD_TRIGGER_TYPE(BeforeMinionSummoned);
+		ADD_TRIGGER_TYPE(AfterMinionPlayed);
 		ADD_TRIGGER_TYPE(OnMinionPlay);
 
 		ADD_CATEGORIZED_TRIGGER_TYPE(AfterMinionSummoned);
 		ADD_CATEGORIZED_TRIGGER_TYPE(BeforeMinionSummoned);
+		ADD_CATEGORIZED_TRIGGER_TYPE(AfterMinionPlayed);
 		ADD_CATEGORIZED_TRIGGER_TYPE(OnMinionPlay);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL

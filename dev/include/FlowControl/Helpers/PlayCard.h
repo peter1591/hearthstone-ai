@@ -58,9 +58,7 @@ namespace FlowControl
 
 				Cards::Minions::Dispatcher::BattleCry(card_->GetCardId());
 
-				EventManager::StaticEvent<EventManager::TriggerTypes::AfterBattleCry>::TriggerEvent(state_.event_mgr, *card_);
-
-				// TODO: after play phase
+				EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionPlayed>::TriggerEvent(state_.event_mgr, *card_);
 
 				EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionSummoned>::TriggerEvent(state_.event_mgr);
 

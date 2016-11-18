@@ -122,7 +122,7 @@
     <ClInclude Include="..\include\EventManager\HandlersContainerController.h" />
     <ClInclude Include="..\include\EventManager\HandlersManager.h" />
     <ClInclude Include="..\include\EventManager\StaticEvent.h" />
-    <ClInclude Include="..\include\EventManager\TriggerTypes\AfterBattleCry.h" />
+    <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionPlayed.h" />
     <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionSummoned.h" />
     <ClInclude Include="..\include\EventManager\TriggerTypes\BeforeMinionSummoned.h" />
     <ClInclude Include="..\include\EventManager\TriggerTypes\OnMinionPlay.h" />
