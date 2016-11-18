@@ -1,31 +1,39 @@
 #pragma once
 
+#include <functional>
 #include <utility>
 #include <memory>
-#include "CloneableContainers/RemovablePtrVector.h"
-#include "Enchantment/Base.h"
+#include "CloneableContainers/RemovableVector.h"
 
-class AttachedEnchantments
+namespace Entity
+{
+	class Card;
+}
+
+class Enchantments
 {
 public:
-	typedef CloneableContainers::RemovablePtrVector<Enchantment::Base*> ContainerType;
+	typedef std::function<void(Entity::Card &)> ApplyFunctor;
+	typedef CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
 	template <typename T>
 	typename ContainerType::Identifier PushBack(T && item)
 	{
-		return enchantments_.PushBack(std::forward<T>(item));
-	}
-
-	template <typename T>
-	Enchantment::Base* Get(T&& id) const
-	{
-		return enchantments_.Get(std::forward<T>(id));
+		return enchantments_.PushBack(item.apply_functor);
 	}
 
 	template <typename T>
 	void Remove(T&& id)
 	{
 		return enchantments_.Remove(std::forward<T>(id));
+	}
+
+	void ApplyAll(Entity::Card & card)
+	{
+		enchantments_.IterateAll([&card](ApplyFunctor& functor) -> bool {
+			functor(card);
+			return true;
+		});
 	}
 
 private:

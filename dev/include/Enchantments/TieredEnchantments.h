@@ -6,18 +6,13 @@
 class TieredEnchantments
 {
 public:
-	typedef CloneableContainers::RemovablePtrVector<Enchantment::Base*> ContainerType;
+	using ContainerType = Enchantments::ContainerType;
 
-	template <typename EnchantmentType, typename T>
+	template <typename T>
 	typename ContainerType::Identifier PushBack(T && item)
 	{
+		using EnchantmentType = std::decay_t<T>;
 		return GetEnchantments<EnchantmentType::tier>().PushBack(std::forward<T>(item));
-	}
-
-	template <typename EnchantmentType, typename T>
-	Enchantment::Base* Get(T&& id)
-	{
-		return GetEnchantments<EnchantmentType::tier>().Get(std::forward<T>(id));
 	}
 
 	template <typename EnchantmentType, typename T>
@@ -26,22 +21,30 @@ public:
 		return GetEnchantments<EnchantmentType::tier>().Remove(std::forward<T>(id));
 	}
 
-private:
-	template <int Tier> AttachedEnchantments & GetEnchantments();
-	template <int Tier> const AttachedEnchantments & GetEnchantments() const;
+	void ApplyAll(Entity::Card & card)
+	{
+		tier1_.ApplyAll(card);
+		tier2_.ApplyAll(card);
+		tier3_.ApplyAll(card);
+		aura_.ApplyAll(card);
+	}
 
 private:
-	AttachedEnchantments tier1_;
-	AttachedEnchantments tier2_;
-	AttachedEnchantments tier3_;
-	AttachedEnchantments aura_;
+	template <int Tier> Enchantments & GetEnchantments();
+	template <int Tier> const Enchantments & GetEnchantments() const;
+
+private:
+	Enchantments tier1_;
+	Enchantments tier2_;
+	Enchantments tier3_;
+	Enchantments aura_;
 };
 
-template <> AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
-template <> const AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
-template <> AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
-template <> const AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
-template <> AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
-template <> const AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
-template <> AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() { return aura_; }
-template <> const AttachedEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() const { return aura_; }
+template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
+template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
+template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
+template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
+template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
+template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
+template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() { return aura_; }
+template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() const { return aura_; }
