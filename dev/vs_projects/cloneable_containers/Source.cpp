@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <memory>
+#include <assert.h>
 
 #include "CloneableContainers/Vector.h"
 #include "CloneableContainers/PtrVector.h"
@@ -323,12 +324,137 @@ static void test7()
 	}
 }
 
+static void test8()
+{
+	CloneableContainers::RemovableVector<int> container;
+
+	auto r1 = container.PushBack(1);
+	auto r2 = container.PushBack(2);
+	auto r3 = container.PushBack(3);
+
+	int test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 1);
+			return true;
+		case 1:
+			assert(v == 2);
+			return true;
+		case 2:
+			assert(v == 3);
+			return true;
+		default:
+			assert(false);
+		}
+	});
+
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 1);
+			return true;
+		case 1:
+			assert(v == 2);
+			return false;
+		default:
+			assert(false);
+		}
+	});
+
+	container.Remove(r2);
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 1);
+			return true;
+		case 1:
+			assert(v == 3);
+			return true;
+		default:
+			assert(false);
+		}
+	});
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 1);
+			return true;
+		case 1:
+			assert(v == 3);
+			return true;
+		default:
+			assert(false);
+		}
+	});
+
+	auto r4 = container.PushBack(4);
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 1);
+			return true;
+		case 1:
+			assert(v == 3);
+			return true;
+		case 2:
+			assert(v == 4);
+			return true;
+		default:
+			assert(false);
+		}
+	});
+
+	container.Remove(r1);
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 3);
+			return true;
+		case 1:
+			assert(v == 4);
+			return true;
+		default:
+			assert(false);
+		}
+	});
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		switch (test++) {
+		case 0:
+			assert(v == 3);
+			return true;
+		case 1:
+			assert(v == 4);
+			return true;
+		default:
+			assert(false);
+		}
+	});
+
+	container.Remove(r1);
+	container.Remove(r2);
+	container.Remove(r3);
+	container.Remove(r4);
+	test = 0;
+	container.IterateExistItems([&test](int v) -> bool {
+		assert(false);
+		return true;
+	});
+}
+
 int main(void)
 {
 	//test1();
 	//test2();
 	//test3();
 	//test6();
-	test7();
+	//test7();
+	test8();
 	return 0;
 }
