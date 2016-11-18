@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <type_traits>
 #include <utility>
 #include "CloneableContainers/Vector.h"
@@ -16,10 +17,15 @@ namespace CloneableContainers
 		{
 			InternalItemType(InternalItemType const& rhs) = default;
 			InternalItemType(InternalItemType && rhs) = default;
-			explicit InternalItemType(ItemType && item) : removed(false), item(std::move(item)) {}
+			explicit InternalItemType(ItemType && item, VectorIdentifier next_possible_exist_id) :
+				removed(false), item(std::move(item)),
+				next_possible_exist_id(next_possible_exist_id)
+			{
+			}
 
 			bool removed;
 			ItemType item;
+			VectorIdentifier next_possible_exist_id;
 		};
 
 	public:
@@ -51,12 +57,21 @@ namespace CloneableContainers
 		};
 
 	public:
-		RemovableVector() {}
-		RemovableVector(size_t default_capacity) : items_(default_capacity) {}
+		RemovableVector() :
+			items_(),
+			first_possible_exist_id_(items_.GetNextPushBackItemIdentifier())
+		{
+		}
+
+		RemovableVector(size_t default_capacity) :
+			items_(default_capacity),
+			first_possible_exist_id_(items_.GetNextPushBackItemIdentifier())
+		{
+		}
 
 		template <typename T>
 		Identifier PushBack(T&& item) {
-			return items_.PushBack(InternalItemType(std::forward<T>(item)));
+			return items_.PushBack(InternalItemType(std::forward<T>(item), items_.GetNextNextPushBackItemIdentifier()));
 		}
 
 		template <typename T>
@@ -85,11 +100,45 @@ namespace CloneableContainers
 		}
 
 	public: // iterate
+		// Only iterate through exist items
+
+		using IterateCallback = std::function<bool(ItemType&)>; // return true to continue; false to abort
+
+		void IterateExistItems(const IterateCallback & callback)
+		{
+			VectorIdentifier id = first_possible_exist_id_;
+			VectorIdentifier id_end = items_.GetEnd();
+
+			if (id == id_end) return; // fast path
+
+			VectorIdentifier * prev_hint = &first_possible_exist_id_;
+			bool need_update = false; // need update prev_hint?
+
+			while (id != id_end) {
+				InternalItemType & item = items_.Get(id);
+
+				if (item.removed) {
+					need_update = true;
+					id = item.next_possible_exist_id;
+					continue;
+				}
+
+				if (need_update) *prev_hint = id;
+
+				prev_hint = &item.next_possible_exist_id;
+				need_update = false;
+
+				if (!callback(item.item)) break;
+				id = item.next_possible_exist_id;
+			}
+		}
+
 		Identifier GetBegin() { return Identifier(items_.GetBegin()); }
 		void StepNext(Identifier & id) { items_.StepNext(id.identifier_); }
 		Identifier GetEnd() { return Identifier(items_.GetEnd()); }
 
 	private:
 		CloneableContainers::Vector<InternalItemType> items_;
+		VectorIdentifier first_possible_exist_id_;
 	};
 }

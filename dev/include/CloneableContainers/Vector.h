@@ -81,6 +81,9 @@ namespace CloneableContainers
 			return items_[identifier.idx];
 		}
 
+		Identifier GetNextPushBackItemIdentifier() const { return Identifier((int)items_.size()); }
+		Identifier GetNextNextPushBackItemIdentifier() const { return Identifier((int)items_.size()+1); }
+
 	public: // iterate
 		Identifier GetBegin() { return Identifier(0); }
 		void StepNext(Identifier & id) { ++id.idx; }
