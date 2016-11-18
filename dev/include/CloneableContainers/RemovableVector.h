@@ -18,8 +18,10 @@ namespace CloneableContainers
 		{
 			InternalItemType(InternalItemType const& rhs) = default;
 			InternalItemType(InternalItemType && rhs) = default;
-			explicit InternalItemType(ItemType && item, VectorIdentifier next_possible_exist_id) :
-				removed(false), item(std::move(item)),
+
+			template <typename T>
+			explicit InternalItemType(T&& item, VectorIdentifier next_possible_exist_id) :
+				removed(false), item(std::forward<T>(item)),
 				next_possible_exist_id(next_possible_exist_id)
 			{
 			}
