@@ -8,154 +8,6 @@
 #include "CloneableContainers/RemovableVector.h"
 #include "CloneableContainers/RemovablePtrVector.h"
 
-static void test1()
-{
-	auto vec1 = std::make_unique<CloneableContainers::Vector<std::string>>();
-
-	auto token1_1 = vec1->PushBack("item1");
-	auto token1_2 = vec1->PushBack("item2");
-
-	std::cout << "==" << std::endl;
-	std::cout << "token1_1 = " << vec1->Get(token1_1) << std::endl;
-	std::cout << "token1_2 = " << vec1->Get(token1_2) << std::endl;
-
-	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
-		std::cout << "Iterated vec1: " << vec1->Get(it) << std::endl;
-	}
-
-	std::cout << "==" << std::endl;
-	auto vec2 = *vec1;
-	auto token2_1 = token1_1;
-	auto token2_2 = token1_2;
-	std::cout << "token1_1 = " << vec1->Get(token1_1) << std::endl;
-	std::cout << "token1_2 = " << vec1->Get(token1_2) << std::endl;
-	std::cout << "token2_1 = " << vec2.Get(token2_1) << std::endl;
-	std::cout << "token2_2 = " << vec2.Get(token2_2) << std::endl;
-	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
-		std::cout << "Iterated vec1: " << vec1->Get(it) << std::endl;
-	}
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		std::cout << "Iterated vec2: " << vec2.Get(it) << std::endl;
-	}
-
-	std::cout << "==" << std::endl;
-	vec1.reset();
-	std::cout << "token2_1 = " << vec2.Get(token2_1) << std::endl;
-	std::cout << "token2_2 = " << vec2.Get(token2_2) << std::endl;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		std::cout << "Iterated vec2: " << vec2.Get(it) << std::endl;
-	}
-
-}
-
-static void test2()
-{
-	auto vec1 = std::make_unique<CloneableContainers::RemovableVector<std::string>>(10);
-
-	auto token1_1 = vec1->PushBack("item1");
-	auto token1_2 = vec1->PushBack("item2");
-
-	std::cout << "==" << std::endl;
-	std::cout << "token1_1 = " << *vec1->Get(token1_1) << std::endl;
-	std::cout << "token1_2 = " << *vec1->Get(token1_2) << std::endl;
-	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
-		auto item = vec1->Get(it);
-		std::cout << "Iterated vec1: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-
-	std::cout << "==" << std::endl;
-	auto vec2 = *vec1;
-	auto token2_1 = token1_1;
-	auto token2_2 = token1_2;
-	std::cout << "token1_1 = " << *vec1->Get(token1_1) << std::endl;
-	std::cout << "token1_2 = " << *vec1->Get(token1_2) << std::endl;
-	std::cout << "token2_1 = " << *vec2.Get(token2_1) << std::endl;
-	std::cout << "token2_2 = " << *vec2.Get(token2_2) << std::endl;
-	for (auto it = vec1->GetBegin(), it2 = vec1->GetEnd(); it != it2; vec1->StepNext(it)) {
-		auto item = vec1->Get(it);
-		std::cout << "Iterated vec1: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		auto item = vec2.Get(it);
-		std::cout << "Iterated vec2: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-
-	std::cout << "==" << std::endl;
-	vec1.reset();
-	std::cout << "token2_1 = " << *vec2.Get(token2_1) << std::endl;
-	std::cout << "token2_2 = " << *vec2.Get(token2_2) << std::endl;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		auto item = vec2.Get(it);
-		std::cout << "Iterated vec2: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-}
-
-static void test3()
-{
-	CloneableContainers::RemovableVector<std::string> vec1;
-
-	auto token1 = vec1.PushBack("first");
-	auto token2 = vec1.PushBack("second");
-
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		auto item = vec1.Get(it);
-		std::cout << "Iterated vec1: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-
-	std::cout << "==" << std::endl;
-	auto token3 = vec1.PushBack("third");
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		auto item = vec1.Get(it);
-		std::cout << "Iterated vec1: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-
-	auto vec2 = vec1;
-
-	std::cout << "==" << std::endl;
-	vec1.Remove(token2);
-	std::cout << "get a removed token: " << vec1.Get(token2) << std::endl;
-	std::cout << "get the token from copied container: " << *vec2.Get(token2) << std::endl;
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		auto item = vec1.Get(it);
-		std::cout << "Iterated vec1: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		auto item = vec2.Get(it);
-		std::cout << "Iterated vec2: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-
-	std::cout << "==" << std::endl;
-	vec1.PushBack("forth");
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		auto item = vec1.Get(it);
-		std::cout << "Iterated vec1: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		auto item = vec2.Get(it);
-		std::cout << "Iterated vec2: [@" << item << "] ";
-		if (item) std::cout << *item;
-		std::cout << std::endl;
-	}
-}
-
 class Wrap1
 {
 public:
@@ -183,6 +35,7 @@ public:
 	virtual std::unique_ptr<Wrap2_Base> Clone() const = 0;
 
 	virtual void PrintDebug() const = 0;
+	virtual int GetValue() const = 0;
 };
 
 class Wrap2 : public Wrap2_Base
@@ -201,148 +54,31 @@ public:
 		std::cout << "[@" << this << "]: " << v_ << std::endl;
 	}
 
+	int GetValue() const { return v_; }
+
 private:
 	int v_;
 };
 
-template <typename T>
-static void PrintPointerInfo(T* item)
+static void test9()
 {
-	std::cout << "[@" << item << "]";
-	if (item) std::cout << ": " << *item;
-	std::cout << std::endl;
-}
+	CloneableContainers::RemovablePtrVector<Wrap2_Base*> container;
 
-template <>
-static void PrintPointerInfo(Wrap2_Base* item)
-{
-	if (!item) std::cout << "(removed)" << std::endl;
-	else item->PrintDebug();
-}
-
-static void test6()
-{
-	auto vec1_ptr = new CloneableContainers::PtrVector<Wrap2_Base*>();
-	CloneableContainers::PtrVector<Wrap2_Base*>& vec1 = *vec1_ptr;
-
-	auto token1 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(40007)));
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	auto token2 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3004005)));
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	auto vec2 = vec1;
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	delete vec1_ptr;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-}
-
-static void test7()
-{
-	auto vec1_ptr = new CloneableContainers::RemovablePtrVector<Wrap2_Base*>();
-	CloneableContainers::RemovablePtrVector<Wrap2_Base*>& vec1 = *vec1_ptr;
-
-	auto token1 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(40007)));
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	auto token2 = vec1.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3004005)));
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	auto vec2 = vec1;
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	vec1.Remove(token1);
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-	std::cout << "." << std::endl;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	vec2.Remove(token2);
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-	std::cout << "." << std::endl;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	vec2.Remove(token1);
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-	std::cout << "." << std::endl;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	vec2.Remove(token1);
-	for (auto it = vec1.GetBegin(), it2 = vec1.GetEnd(); it != it2; vec1.StepNext(it)) {
-		PrintPointerInfo(vec1.Get(it));
-	}
-	std::cout << "." << std::endl;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-
-	std::cout << "==" << std::endl;
-	delete vec1_ptr;
-	for (auto it = vec2.GetBegin(), it2 = vec2.GetEnd(); it != it2; vec2.StepNext(it)) {
-		PrintPointerInfo(vec2.Get(it));
-	}
-}
-
-static void test8()
-{
-	CloneableContainers::RemovableVector<int> container;
-
-	auto r1 = container.PushBack(1);
-	auto r2 = container.PushBack(2);
-	auto r3 = container.PushBack(3);
+	auto r1 = container.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(1)));
+	auto r2 = container.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(2)));
+	auto r3 = container.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(3)));
 
 	int test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 1);
+			assert(item->GetValue() == 1);
 			return true;
 		case 1:
-			assert(v == 2);
+			assert(item->GetValue() == 2);
 			return true;
 		case 2:
-			assert(v == 3);
+			assert(item->GetValue() == 3);
 			return true;
 		default:
 			assert(false);
@@ -350,13 +86,13 @@ static void test8()
 	});
 
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 1);
+			assert(item->GetValue() == 1);
 			return true;
 		case 1:
-			assert(v == 2);
+			assert(item->GetValue() == 2);
 			return false;
 		default:
 			assert(false);
@@ -365,44 +101,44 @@ static void test8()
 
 	container.Remove(r2);
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 1);
+			assert(item->GetValue() == 1);
 			return true;
 		case 1:
-			assert(v == 3);
+			assert(item->GetValue() == 3);
 			return true;
 		default:
 			assert(false);
 		}
 	});
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 1);
+			assert(item->GetValue() == 1);
 			return true;
 		case 1:
-			assert(v == 3);
+			assert(item->GetValue() == 3);
 			return true;
 		default:
 			assert(false);
 		}
 	});
 
-	auto r4 = container.PushBack(4);
+	auto r4 = container.PushBack(std::unique_ptr<Wrap2_Base>(new Wrap2(4)));
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 1);
+			assert(item->GetValue() == 1);
 			return true;
 		case 1:
-			assert(v == 3);
+			assert(item->GetValue() == 3);
 			return true;
 		case 2:
-			assert(v == 4);
+			assert(item->GetValue() == 4);
 			return true;
 		default:
 			assert(false);
@@ -411,26 +147,26 @@ static void test8()
 
 	container.Remove(r1);
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 3);
+			assert(item->GetValue() == 3);
 			return true;
 		case 1:
-			assert(v == 4);
+			assert(item->GetValue() == 4);
 			return true;
 		default:
 			assert(false);
 		}
 	});
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		switch (test++) {
 		case 0:
-			assert(v == 3);
+			assert(item->GetValue() == 3);
 			return true;
 		case 1:
-			assert(v == 4);
+			assert(item->GetValue() == 4);
 			return true;
 		default:
 			assert(false);
@@ -442,19 +178,14 @@ static void test8()
 	container.Remove(r3);
 	container.Remove(r4);
 	test = 0;
-	container.IterateExistItems([&test](int v) -> bool {
+	container.IterateAll([&test](Wrap2_Base* item) -> bool {
 		assert(false);
-		return true;
+		return false;
 	});
 }
 
 int main(void)
 {
-	//test1();
-	//test2();
-	//test3();
-	//test6();
-	//test7();
-	test8();
+	test9();
 	return 0;
 }
