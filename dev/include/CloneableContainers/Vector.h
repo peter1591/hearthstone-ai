@@ -11,43 +11,51 @@
 
 namespace CloneableContainers
 {
-	template <class ItemType,
-			  typename std::enable_if<!std::is_pointer<ItemType>::value, int>::type = 0> // pointer is not cloneable
+	template <typename ItemType> class Vector;
+	class VectorIdentifierHasher;
+
+	class VectorIdentifier
+	{
+		template <typename ItemType> friend class Vector;
+		friend class VectorIdentifierHasher;
+
+	public:
+		VectorIdentifier(const VectorIdentifier & rhs) = default;
+		VectorIdentifier(VectorIdentifier && rhs) = default;
+		VectorIdentifier & operator=(const VectorIdentifier & rhs) = default;
+		VectorIdentifier & operator=(VectorIdentifier && rhs) = default;
+
+		static VectorIdentifier GetInvalidIdentifier() { return VectorIdentifier(-1); }
+
+	private:
+		explicit VectorIdentifier(int idx) : idx(idx) {}
+
+		int idx;
+
+	public:
+		bool operator==(const VectorIdentifier& rhs) const { return idx == rhs.idx; }
+		bool operator!=(const VectorIdentifier& rhs) const { return idx != rhs.idx; }
+		bool IsValid() const { return idx >= 0; }
+	};
+
+	class VectorIdentifierHasher
+	{
+	public:
+		size_t operator()(const VectorIdentifier & id) const { return std::hash<decltype(id.idx)>()(id.idx); }
+	};
+
+	template <class ItemType> // pointer is not cloneable
 	class Vector
 	{
 	public:
-		class Identifier
+		typedef VectorIdentifier Identifier;
+
+		Vector()
 		{
-			friend class Vector<ItemType>;
-			friend class Vector::IdentifierHasher;
-
-		public:
-			Identifier(const Identifier & rhs) = default;
-			Identifier(Identifier && rhs) = default;
-			Identifier & operator=(const Identifier & rhs) = default;
-			Identifier & operator=(Identifier && rhs) = default;
-
-			static Identifier GetInvalidIdentifier() { return Identifier(-1); }
-
-		private:
-			explicit Identifier(int idx) : idx(idx) {}
-
-			int idx;
-
-		public:
-			bool operator==(const Identifier& rhs) const { return idx == rhs.idx; }
-			bool operator!=(const Identifier& rhs) const { return idx != rhs.idx; }
-			bool IsValid() const { return idx >= 0; }
-		};
-
-		class IdentifierHasher
-		{
-		public:
-			size_t operator()(const Identifier & id) const { return std::hash<decltype(id.idx)>()(id.idx); }
-		};
-
-		Vector() {}
+			static_assert(!std::is_pointer<ItemType>::value, "Use PtrVector instead to store pointers.");
+		}
 		Vector(size_t default_capacity) {
+			static_assert(!std::is_pointer<ItemType>::value, "Use PtrVector instead to store pointers.");
 			items_.reserve(default_capacity);
 		}
 
@@ -81,5 +89,4 @@ namespace CloneableContainers
 	private:
 		std::vector<ItemType> items_;
 	};
-
 }

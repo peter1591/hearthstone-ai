@@ -41,7 +41,7 @@ namespace std
 	{
 		std::size_t operator()(const CardRef& key) const
 		{
-			return CloneableContainers::Vector<Entity::Card>::IdentifierHasher()(key.id);
+			return CloneableContainers::VectorIdentifierHasher()(key.id);
 		}
 	};
 }
