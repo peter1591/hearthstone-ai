@@ -9,7 +9,7 @@ namespace StaticDispatcher
 	class Dispatcher
 	{
 	public:
-		template <int Id> struct DispatcherMap
+		template <int Id> struct DispatchMap
 		{
 			using type = DefaultInvoked;
 		};
@@ -19,7 +19,7 @@ namespace StaticDispatcher
 		{
 
 #define INVOKE_CASE(n) \
-			&InvokerType<DispatcherMap<n>::type>::Invoke,
+			&InvokerType<DispatchMap<n>::type>::Invoke,
 
 #define LOOP_X1(n) INVOKE_CASE(n)
 #define LOOP_X2(n) LOOP_X1(n) LOOP_X1(n+1)

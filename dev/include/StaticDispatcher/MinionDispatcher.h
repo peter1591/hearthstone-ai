@@ -40,11 +40,7 @@ namespace Cards
 	}
 }
 
-#define REGISTER_CARD_CLASS(ClassName) \
+#define REGISTER_MINION_CARD_CLASS(ClassName) \
 		template <> template <> \
-		struct Cards::Minions::Dispatcher::DispatcherImpl::DispatcherMap<ClassName ::id> \
+		struct Cards::Minions::Dispatcher::DispatcherImpl::DispatchMap<ClassName ::id> \
 		{ typedef ClassName type; };
-
-REGISTER_CARD_CLASS(Cards::Minions::Card_Test1)
-
-#undef REGISTER_CARD_CLASS
