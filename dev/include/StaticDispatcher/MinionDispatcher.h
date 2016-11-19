@@ -2,8 +2,6 @@
 
 #include "StaticDispatcher/Dispatcher.h"
 
-#include "Cards/Minions/Card_Test1.h"
-
 namespace Cards
 {
 	namespace Minions
