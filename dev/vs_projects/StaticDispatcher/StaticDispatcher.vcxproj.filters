@@ -16,12 +16,6 @@
     <Filter Include="Header Files\StaticDispatcher">
       <UniqueIdentifier>{2bab3c7d-22f6-4627-9a8e-b8651b30948d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Cards">
-      <UniqueIdentifier>{89dd3c50-30c3-4e3d-9a03-a707f7b2fb13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Cards\Minions">
-      <UniqueIdentifier>{3c44086d-2165-4a51-af12-29b94d857e27}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -32,11 +26,8 @@
     <ClInclude Include="..\..\include\StaticDispatcher\Dispatcher.h">
       <Filter>Header Files\StaticDispatcher</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Minions\Dispatcher.h">
-      <Filter>Header Files\Cards\Minions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Minions\Card_Test1.h">
-      <Filter>Header Files\Cards\Minions</Filter>
+    <ClInclude Include="..\..\include\StaticDispatcher\MinionDispatcher.h">
+      <Filter>Header Files\StaticDispatcher</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

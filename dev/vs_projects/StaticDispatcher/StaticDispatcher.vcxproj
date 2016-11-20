@@ -115,9 +115,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Cards\Minions\Card_Test1.h" />
-    <ClInclude Include="..\..\include\Cards\Minions\Dispatcher.h" />
     <ClInclude Include="..\..\include\StaticDispatcher\Dispatcher.h" />
+    <ClInclude Include="..\..\include\StaticDispatcher\MinionDispatcher.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
