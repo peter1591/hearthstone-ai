@@ -127,6 +127,7 @@
     <ClInclude Include="..\include\EventManager\TriggerTypes\BeforeMinionSummoned.h" />
     <ClInclude Include="..\include\EventManager\TriggerTypes\OnMinionPlay.h" />
     <ClInclude Include="..\include\FlowControl\ActionTypes.h" />
+    <ClInclude Include="..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h" />
     <ClInclude Include="..\include\FlowControl\Result.h" />

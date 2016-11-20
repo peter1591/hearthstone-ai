@@ -37,6 +37,9 @@
     <Filter Include="Header Files\EventManager\TriggerTypes">
       <UniqueIdentifier>{e34b1bf9-75c5-4541-8c2e-6a908b504a95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\Context">
+      <UniqueIdentifier>{ff308333-4b2b-4d8a-bc70-bdf6c0b6c3df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionPlayed.h">
       <Filter>Header Files\EventManager\TriggerTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Context\BattleCry.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

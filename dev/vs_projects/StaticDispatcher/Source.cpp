@@ -34,7 +34,7 @@ namespace Cards
 		class Card_Test3
 		{
 		public:
-			static constexpr int id = 58;
+			static constexpr int id = 57;
 		};
 	}
 }
