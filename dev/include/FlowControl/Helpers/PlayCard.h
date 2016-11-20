@@ -58,7 +58,9 @@ namespace FlowControl
 				EventManager::StaticEvent<EventManager::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);
 
 				Cards::Minions::Dispatcher::BattleCry(card_->GetCardId(),
-					Context::BattleCry(state_, card_ref_, *card_));
+					Context::BattleCry(state_, card_ref_, *card_, [this]() {
+					return this->GetBattelcryTarget();
+				}));
 
 				EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionPlayed>::TriggerEvent(state_.event_mgr, *card_);
 
@@ -70,6 +72,12 @@ namespace FlowControl
 				return kResultNotDetermined;
 			}
 
+			CardRef GetBattelcryTarget()
+			{
+				if (battlecry_target_.IsValid()) return battlecry_target_;
+				throw std::exception("not implemented");
+			}
+
 		private:
 			State::State & state_;
 			ActionParameterGetter & action_parameters_;
@@ -77,6 +85,7 @@ namespace FlowControl
 
 			CardRef card_ref_;
 			const Entity::Card * card_;
+			CardRef battlecry_target_;
 		};
 	}
 }
