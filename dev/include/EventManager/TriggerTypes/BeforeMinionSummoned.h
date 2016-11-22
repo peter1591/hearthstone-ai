@@ -5,6 +5,8 @@
 #include <iostream>
 #include <functional>
 
+#include "FlowControl/Context/BeforeMinionSummoned.h"
+
 namespace EventManager
 {
 	namespace TriggerTypes
@@ -12,8 +14,9 @@ namespace EventManager
 		class BeforeMinionSummoned
 		{
 		public:
-			typedef std::function<void(HandlersContainerController &)> FunctorType;
-			typedef std::tuple<> ArgsTuple;
+			typedef FlowControl::Context::BeforeMinionSummoned & Parameter1;
+			typedef std::function<void(HandlersContainerController &controller, Parameter1)> FunctorType;
+			typedef std::tuple<Parameter1> ArgsTuple;
 
 			template <typename T,
 				typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
@@ -21,9 +24,9 @@ namespace EventManager
 			{
 			}
 
-			void Handle(HandlersContainerController &controller)
+			void Handle(HandlersContainerController &controller, Parameter1 context)
 			{
-				functor_(controller);
+				functor_(controller, context);
 			}
 
 		private:

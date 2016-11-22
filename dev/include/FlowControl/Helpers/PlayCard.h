@@ -7,6 +7,7 @@
 #include "FlowControl/Helpers/Utils.h"
 #include "StaticDispatcher/MinionDispatcher.h"
 #include "FlowControl/Context/BattleCry.h"
+#include "FlowControl/Context/BeforeMinionSummoned.h"
 
 namespace FlowControl
 {
@@ -41,7 +42,8 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
-				EventManager::StaticEvent<EventManager::TriggerTypes::BeforeMinionSummoned>::TriggerEvent(state_.event_mgr);
+				EventManager::StaticEvent<EventManager::TriggerTypes::BeforeMinionSummoned>::TriggerEvent(state_.event_mgr,
+					Context::BeforeMinionSummoned(state_, card_ref_, *card_));
 
 				state_.GetCurrentPlayer().resource_.Cost(card_->GetCost());
 
