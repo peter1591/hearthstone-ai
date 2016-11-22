@@ -170,5 +170,8 @@
     <ClInclude Include="..\include\FlowControl\Context\BattleCry.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Context\BeforeMinionSummoned.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
