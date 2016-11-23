@@ -3,6 +3,7 @@
 #include "State/State.h"
 #include "State/PlayerIdentifier.h"
 #include "Manipulators/CharacterManipulator.h"
+#include "Manipulators/CardManipulator.h"
 
 namespace Manipulators
 {
@@ -23,6 +24,11 @@ namespace Manipulators
 		{
 			CardRef ref = state_.players.Get(player).hero_ref_;
 			return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
+		}
+
+		CardManipulator Card(CardRef ref)
+		{
+			return CardManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
 
 	private:

@@ -6,6 +6,8 @@
 
 namespace State
 {
+	class State;
+
 	namespace Utils
 	{
 		class OrderedCardsManager
@@ -15,8 +17,8 @@ namespace State
 
 			explicit OrderedCardsManager(ContainerType & container) : container_(container) {}
 
-			void Insert(EntitiesManager & mgr, CardRef card_ref);
-			void Remove(EntitiesManager & mgr, size_t pos);
+			void Insert(::State::State & state, CardRef card_ref);
+			void Remove(::State::State & state, size_t pos);
 
 		private:
 			ContainerType & container_;

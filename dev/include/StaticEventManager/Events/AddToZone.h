@@ -45,13 +45,13 @@ namespace StaticEventManager
 					static void AddToDeckZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
 						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
-						player.deck_.GetLocationManipulator().Insert(state.mgr, card_ref);
+						player.deck_.GetLocationManipulator().Insert(state, card_ref);
 					}
 
 					static void AddToHandZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
 						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
-						player.hand_.GetLocationManipulator().Insert(state.mgr, card_ref);
+						player.hand_.GetLocationManipulator().Insert(state, card_ref);
 					}
 
 					static void AddToPlayZone(State::State & state, CardRef card_ref, Entity::Card & card)
@@ -65,7 +65,7 @@ namespace StaticEventManager
 							player.hero_ref_ = card_ref;
 							return;
 						case Entity::kCardTypeMinion:
-							return player.minions_.GetLocationManipulator().Insert(state.mgr, card_ref);
+							return player.minions_.GetLocationManipulator().Insert(state, card_ref);
 						case Entity::kCardTypeWeapon:
 							return player.weapon_.Equip(card_ref);
 						case Entity::kCardTypeSecret:
@@ -76,7 +76,7 @@ namespace StaticEventManager
 					static void AddToGraveyardZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
 						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
-						player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state.mgr, card_ref);
+						player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
 					}
 				};
 			}

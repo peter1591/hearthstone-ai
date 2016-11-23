@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Manipulators/GeneralManipulator.h"
+#include "Manipulators/StateManipulator.h"
+#include "State/State.h"
 
 namespace State
 {
 	namespace Utils
 	{
-		void OrderedCardsManager::Insert(EntitiesManager & mgr, CardRef card_ref)
+		void OrderedCardsManager::Insert(State & state, CardRef card_ref)
 		{
-			int pos = mgr.Get(card_ref).GetZonePosition();
+			int pos = state.mgr.Get(card_ref).GetZonePosition();
 			if (pos < 0) throw std::exception("invalid position");
 			if (pos > container_.size()) throw std::exception("invalid position");
 
@@ -19,18 +20,18 @@ namespace State
 
 			for (auto it_end = container_.end(); it != it_end; ++it, ++pos)
 			{
-				mgr.GetGeneralManipulator(*it).GetZonePositionSetter().Set(pos);
+				Manipulators::StateManipulator(state).Card(*it).GetZonePositionSetter().Set(pos);
 			}
 		}
 
-		void OrderedCardsManager::Remove(EntitiesManager & mgr, size_t pos)
+		void OrderedCardsManager::Remove(State & state, size_t pos)
 		{
 			if (pos >= container_.size()) throw std::exception("invalid position");
 
 			auto it = container_.erase(container_.begin() + pos);
 			for (auto it_end = container_.end(); it != it_end; ++it, ++pos)
 			{
-				mgr.GetMinionManipulator(*it).GetZonePositionSetter().Set((int)pos);
+				Manipulators::StateManipulator(state).Card(*it).GetZonePositionSetter().Set(pos);
 			}
 		}
 	}

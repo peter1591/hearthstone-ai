@@ -2,18 +2,12 @@
 
 #include "EntitiesManager/EntitiesManager.h"
 
-#include "Manipulators/GeneralManipulator.h"
+#include "Manipulators/StateManipulator.h"
 #include "Manipulators/CharacterManipulator.h"
 #include "Manipulators/MinionManipulator.h"
 #include "Manipulators/SpellManipulator.h"
 
 namespace State { class State; }
-
-Manipulators::GeneralManipulator EntitiesManager::GetGeneralManipulator(const CardRef & id)
-{
-	Entity::Card& card = cards_.Get(id.id);
-	return Manipulators::GeneralManipulator(*this, id, card);
-}
 
 Manipulators::MinionManipulator EntitiesManager::GetMinionManipulator(const CardRef & id)
 {
@@ -35,6 +29,6 @@ template <typename T>
 CardRef EntitiesManager::PushBack(State::State & state, T&& card)
 {
 	CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
-	this->GetGeneralManipulator(ref).GetZoneChanger().Add(state);
+	Manipulators::StateManipulator(state).Card(ref).GetZoneChanger().Add(state);
 	return ref;
 }

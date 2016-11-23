@@ -51,18 +51,18 @@ namespace State
 
 		private:
 			template <typename T1, typename T2>
-			void Insert(T1&& mgr, T2&& card_ref)
+			void Insert(T1&& state, T2&& card_ref)
 			{
 				++deck_.change_id;
 				auto instance = Utils::OrderedCardsManager(deck_.cards_);
-				return instance.Insert(std::forward<T1>(mgr), std::forward<T2>(card_ref));
+				return instance.Insert(std::forward<T1>(state), std::forward<T2>(card_ref));
 			}
 			template <typename T1, typename T2>
-			void Remove(T1&& mgr, T2&& pos)
+			void Remove(T1&& state, T2&& pos)
 			{
 				++deck_.change_id;
 				auto instance = Utils::OrderedCardsManager(deck_.cards_);
-				return instance.Remove(std::forward<T1>(mgr), std::forward<T2>(pos));
+				return instance.Remove(std::forward<T1>(state), std::forward<T2>(pos));
 			}
 
 		private:

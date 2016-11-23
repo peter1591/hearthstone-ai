@@ -35,7 +35,6 @@ public:
 
 	template <typename T> CardRef PushBack(State::State & state, T&& card);
 
-	Manipulators::GeneralManipulator GetGeneralManipulator(const CardRef & id);
 	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id);
 	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id);
 
