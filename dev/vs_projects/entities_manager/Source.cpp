@@ -7,6 +7,17 @@
 
 #include "Manipulators/Manipulators.h"
 
+static Entity::RawCard GetHero(State::PlayerIdentifier player)
+{
+	Entity::RawCard raw_card;
+	raw_card.card_id = 8;
+	raw_card.card_type = Entity::kCardTypeHero;
+	raw_card.enchanted_states.zone = Entity::kCardZonePlay;
+	raw_card.enchanted_states.max_hp = 30;
+	raw_card.enchanted_states.player = player;
+	return raw_card;
+}
+
 static void CheckZoneAndPosition(const State::State & state, CardRef ref, State::PlayerIdentifier player, Entity::CardZone zone, int pos)
 {
 	auto & item = state.mgr.Get(ref);
@@ -204,10 +215,23 @@ static void test2()
 	state2.mgr.GetMinionManipulator(r3).GetAuraHelper().Update(client_aura_helper2);
 }
 
+static void test3()
+{
+	Entity::Card hero1(GetHero(State::kPlayerFirst));
+	Entity::Card hero2(GetHero(State::kPlayerSecond));
+
+	EntitiesManager mgr;
+	State::State state;
+	
+	CardRef r1 = mgr.PushBack(state, hero1);
+	CardRef r2 = mgr.PushBack(state, hero2);
+}
+
 int main()
 {
 	test1();
-	//test2();
+	test2();
+	test3();
 
 	return 0;
 }

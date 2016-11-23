@@ -129,6 +129,12 @@
     <ClInclude Include="..\..\include\State\Utils\DefaultZonePosPolicy.h">
       <Filter>Header Files\State\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\State\PlayerResource.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\ThisTurnCounters.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">

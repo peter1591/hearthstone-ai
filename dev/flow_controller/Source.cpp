@@ -1,7 +1,8 @@
+#pragma warning( disable : 4267)  
+
 #include <iostream>
 #include <assert.h>
 #include "FlowControl/FlowController.h"
-#include "Manipulators/PlayerStateManipulator.h"
 
 class ActionParameterGetter
 {
@@ -129,21 +130,30 @@ static void MakeHand(State::State & state, State::PlayerIdentifier player)
 	CheckZoneAndPosition(state, r5, player, Entity::kCardZoneHand, 4);
 }
 
+static Entity::RawCard GetHero(State::PlayerIdentifier player)
+{
+	Entity::RawCard raw_card;
+	raw_card.card_id = 8;
+	raw_card.card_type = Entity::kCardTypeHero;
+	raw_card.enchanted_states.zone = Entity::kCardZonePlay;
+	raw_card.enchanted_states.max_hp = 30;
+	raw_card.enchanted_states.player = player;
+	return raw_card;
+}
+
 int main(void)
 {
 	State::State state;
 
 	{
-		Manipulators::PlayerStateManipulator manipulator(state.players.Get(State::kPlayerFirst).state_, state.event_mgr);
-		manipulator.SetHP(20);
+		state.mgr.PushBack(state, Entity::Card(GetHero(State::kPlayerFirst)));
 		MakeDeck(state, State::kPlayerFirst);
 		MakeHand(state, State::kPlayerFirst);
 	}
 
 	{
-		Manipulators::PlayerStateManipulator manipulator(state.players.Get(State::kPlayerSecond).state_, state.event_mgr);
+		state.mgr.PushBack(state, Entity::Card(GetHero(State::kPlayerSecond)));
 		state.players.Get(State::kPlayerSecond).fatigue_damage_ = 3;
-		manipulator.SetHP(30);
 		//MakeDeck(state, State::kPlayerSecond);
 		MakeHand(state, State::kPlayerSecond);
 	}
@@ -179,10 +189,11 @@ int main(void)
 	CheckZoneAndPosition(state, r2, State::kPlayerFirst, Entity::kCardZonePlay, 0);
 	CheckZoneAndPosition(state, r1, State::kPlayerFirst, Entity::kCardZonePlay, 1);
 
+	assert(state.mgr.Get(state.players.Get(State::kPlayerSecond).hero_ref_).GetHP() == 30);
 	controller.EndTurn();
 	assert(state.players.Get(State::kPlayerSecond).resource_.GetTotal() == 1);
 	assert(state.players.Get(State::kPlayerSecond).resource_.GetCurrent() == 1);
-	assert(state.players.Get(State::kPlayerSecond).state_.GetHP() == 26);
+	assert(state.mgr.Get(state.players.Get(State::kPlayerSecond).hero_ref_).GetHP() == 26);
 
 	return 0;
 }

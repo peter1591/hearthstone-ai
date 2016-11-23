@@ -143,9 +143,6 @@
     <ClInclude Include="..\include\State\PlayerState.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Manipulators\PlayerStateManipulator.h">
-      <Filter>Header Files\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
@@ -190,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="..\include\StaticEventManager\Events\AddToZone.h">
       <Filter>Header Files\StaticEventManager\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\CharacterManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\StateManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
