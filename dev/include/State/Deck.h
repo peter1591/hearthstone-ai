@@ -14,6 +14,27 @@ namespace Manipulators
 	}
 }
 
+namespace StaticEventManager
+{
+	namespace Events
+	{
+		namespace impl
+		{
+			namespace RemovedFromZone
+			{
+				template <Entity::CardType RemovingCardType, Entity::CardZone RemovingCardZone>
+				class RemoveFromPlayerDatStructure;
+			}
+
+			namespace AddToZone
+			{
+				template <Entity::CardType TargetCardType, Entity::CardZone TargetCardZone>
+				class AddToPlayerDatStructure;
+			}
+		}
+	}
+}
+
 namespace State
 {
 	class Deck
@@ -22,6 +43,8 @@ namespace State
 		class LocationManipulator
 		{
 			template <Entity::CardZone T1, Entity::CardType T2> friend class Manipulators::Helpers::ZoneChanger;
+			template <Entity::CardType T1, Entity::CardZone T2> friend class StaticEventManager::Events::impl::RemovedFromZone::RemoveFromPlayerDatStructure;
+			template <Entity::CardType T1, Entity::CardZone T2> friend class StaticEventManager::Events::impl::AddToZone::AddToPlayerDatStructure;
 
 		public:
 			explicit LocationManipulator(Deck & deck) : deck_(deck) {}

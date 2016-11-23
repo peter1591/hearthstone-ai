@@ -1,0 +1,86 @@
+#pragma once
+
+#include <iostream>
+
+#include "StaticEventManager/Triggerer.h"
+#include "State/State.h"
+#include "EntitiesManager/CardRef.h"
+#include "Entity/Card.h"
+#include "Entity/CardType.h"
+#include "Entity/CardZone.h"
+
+namespace StaticEventManager
+{
+	namespace Events
+	{
+		namespace impl
+		{
+			namespace AddToZone
+			{
+				template <Entity::CardType TargetCardType, Entity::CardZone TargetCardZone>
+				class AddToPlayerDatStructure
+				{
+				public:
+					static void Trigger(State::State & state, CardRef card_ref, Entity::Card & card)
+					{
+						std::cout << "Adding to zone called. "
+							<< "Type = " << TargetCardType
+							<< ", Zone = " << TargetCardZone
+							<< std::endl;
+
+						switch (card.GetZone())
+						{
+						case Entity::kCardZoneDeck:
+							return AddToDeckZone(state, card_ref, card);
+						case Entity::kCardZoneHand:
+							return AddToHandZone(state, card_ref, card);
+						case Entity::kCardZonePlay:
+							return AddToPlayZone(state, card_ref, card);
+						case Entity::kCardZoneGraveyard:
+							return AddToGraveyardZone(state, card_ref, card);
+						}
+					}
+
+				private:
+					static void AddToDeckZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					{
+						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						player.deck_.GetLocationManipulator().Insert(state.mgr, card_ref);
+					}
+
+					static void AddToHandZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					{
+						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						player.hand_.GetLocationManipulator().Insert(state.mgr, card_ref);
+					}
+
+					static void AddToPlayZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					{
+						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+
+						switch (TargetCardType)
+						{
+						case Entity::kCardTypeMinion:
+							return player.minions_.GetLocationManipulator().Insert(state.mgr, card_ref);
+						case Entity::kCardTypeWeapon:
+							return player.weapon_.Equip(card_ref);
+						case Entity::kCardTypeSecret:
+							return player.secrets_.Add(card.GetCardId(), card_ref);
+						}
+					}
+
+					static void AddToGraveyardZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					{
+						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state.mgr, card_ref);
+					}
+				};
+			}
+		}
+
+		template <Entity::CardType TargetCardType, Entity::CardZone TargetCardZone>
+		using AddToZoneEvent = Triggerer <
+			impl::AddToZone::AddToPlayerDatStructure<TargetCardType, TargetCardZone>
+			>;
+	}
+}

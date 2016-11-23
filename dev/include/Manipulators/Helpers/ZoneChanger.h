@@ -8,6 +8,8 @@
 #include "State/PlayerIdentifier.h"
 #include "State/Player.h"
 #include "State/Utils/DefaultZonePosPolicy.h"
+#include "StaticEventManager/Events/RemovedFromZone.h"
+#include "StaticEventManager/Events/AddToZone.h"
 
 namespace Manipulators
 {
@@ -37,108 +39,24 @@ namespace Manipulators
 
 			void Add(State::State & state)
 			{
-				switch (card_.GetZone())
-				{
-				case Entity::kCardZoneDeck:
-					return AddToDeckZone(state);
-				case Entity::kCardZoneHand:
-					return AddToHandZone(state);
-				case Entity::kCardZonePlay:
-					return AddToPlayZone(state);
-				case Entity::kCardZoneGraveyard:
-					return AddToGraveyardZone(state);
-				}
+				StaticEventManager::Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>
+					::Trigger(state, card_ref_, card_);
 			}
 
 		private:
 			template <Entity::CardZone ChangeToZone>
 			void ChangeToInternal(State::State & state, State::PlayerIdentifier player_identifier, int pos)
 			{
-				Remove(state);
+				StaticEventManager::Events::RemovedFromZoneEvent<ChangingCardType, ChangingCardZone>
+					::Trigger(state, card_ref_, card_);
 
 				auto location_setter = card_.GetLocationSetter();
 				location_setter.SetPlayerIdentifier(player_identifier);
 				location_setter.SetZone(ChangeToZone);
 				location_setter.SetZonePosition(pos);
 
-				Add(state);
-			}
-
-			void Remove(State::State & state)
-			{
-				switch (ChangingCardZone)
-				{
-				case Entity::kCardZoneDeck:
-					return RemoveFromDeckZone(state);
-				case Entity::kCardZoneHand:
-					return RemoveFromHandZone(state);
-				case Entity::kCardZonePlay:
-					return RemoveFromPlayZone(state);
-				case Entity::kCardZoneGraveyard:
-					return RemoveFromGraveyardZone(state);
-				}
-			}
-
-			void AddToDeckZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				player.deck_.GetLocationManipulator().Insert(mgr_, card_ref_);
-			}
-			void RemoveFromDeckZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				player.deck_.GetLocationManipulator().Remove(mgr_, card_.GetZonePosition());
-			}
-
-			void AddToHandZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				player.hand_.GetLocationManipulator().Insert(mgr_, card_ref_);
-			}
-			void RemoveFromHandZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				player.hand_.GetLocationManipulator().Remove(mgr_, card_.GetZonePosition());
-			}
-
-			void AddToPlayZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-
-				switch (ChangingCardType)
-				{
-				case Entity::kCardTypeMinion:
-					return player.minions_.GetLocationManipulator().Insert(mgr_, card_ref_);
-				case Entity::kCardTypeWeapon:
-					return player.weapon_.Equip(card_ref_);
-				case Entity::kCardTypeSecret:
-					return player.secrets_.Add(card_.GetCardId(), card_ref_);
-				}
-			}
-			void RemoveFromPlayZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-
-				switch (ChangingCardType)
-				{
-				case Entity::kCardTypeMinion:
-					return player.minions_.GetLocationManipulator().Remove(mgr_, card_.GetZonePosition());
-				case Entity::kCardTypeWeapon:
-					return player.weapon_.Destroy();
-				case Entity::kCardTypeSecret:
-					return player.secrets_.Remove(card_.GetCardId());
-				}
-			}
-
-			void AddToGraveyardZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				player.graveyard_.GetLocationManipulator<ChangingCardType>().Insert(mgr_, card_ref_);
-			}
-			void RemoveFromGraveyardZone(State::State & state)
-			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
-				player.graveyard_.GetLocationManipulator<ChangingCardType>().Remove(mgr_, card_.GetZonePosition());
+				StaticEventManager::Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>
+					::Trigger(state, card_ref_, card_);
 			}
 
 		private:
