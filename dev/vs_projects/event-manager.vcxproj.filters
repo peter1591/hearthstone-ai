@@ -54,6 +54,9 @@
     <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionSummoned.h">
       <Filter>Header Files\EventManager\TriggerTypes</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\EventManager\StaticEvents.h">
+      <Filter>Header Files\EventManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
