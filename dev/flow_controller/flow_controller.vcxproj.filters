@@ -113,9 +113,6 @@
     <ClInclude Include="..\include\State\ThisTurnCounters.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Manipulators\GeneralManipulator.h">
-      <Filter>Header Files\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Manipulators\Manipulators.h">
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
@@ -192,6 +189,9 @@
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Manipulators\StateManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Manipulators\CardManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
   </ItemGroup>

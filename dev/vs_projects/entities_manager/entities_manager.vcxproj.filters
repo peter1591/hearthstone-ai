@@ -42,9 +42,6 @@
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h">
-      <Filter>Header Files\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
@@ -108,9 +105,6 @@
     <ClInclude Include="..\..\include\State\Hand.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Manipulators\GeneralManipulator.h">
-      <Filter>Header Files\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager.h">
       <Filter>Header Files\State\Utils</Filter>
     </ClInclude>
@@ -134,6 +128,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\State\ThisTurnCounters.h">
       <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\CardManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\CharacterManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Manipulators\StateManipulator.h">
+      <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -136,7 +136,7 @@
     <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\PlayCard.h" />
     <ClInclude Include="..\include\Manipulators\CharacterManipulator.h" />
-    <ClInclude Include="..\include\Manipulators\GeneralManipulator.h" />
+    <ClInclude Include="..\include\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\include\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\include\Manipulators\Helpers\EnchantmentHelper.h" />

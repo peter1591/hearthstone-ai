@@ -86,6 +86,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,7 +126,8 @@
     <ClInclude Include="..\..\include\Entity\EnchantableStates.h" />
     <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h" />
     <ClInclude Include="..\..\include\Entity\RawCard.h" />
-    <ClInclude Include="..\..\include\Manipulators\GeneralManipulator.h" />
+    <ClInclude Include="..\..\include\Manipulators\CardManipulator.h" />
+    <ClInclude Include="..\..\include\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
@@ -133,7 +135,7 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
-    <ClInclude Include="..\..\include\Manipulators\SpellManipulator.h" />
+    <ClInclude Include="..\..\include\Manipulators\StateManipulator.h" />
     <ClInclude Include="..\..\include\State\Deck.h" />
     <ClInclude Include="..\..\include\State\Graveyard.h" />
     <ClInclude Include="..\..\include\State\Hand.h" />
