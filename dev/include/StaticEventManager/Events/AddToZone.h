@@ -60,6 +60,10 @@ namespace StaticEventManager
 
 						switch (TargetCardType)
 						{
+						case Entity::kCardTypeHero:
+							if (player.hero_ref_.IsValid()) throw std::exception("hero should be removed first");
+							player.hero_ref_ = card_ref;
+							return;
 						case Entity::kCardTypeMinion:
 							return player.minions_.GetLocationManipulator().Insert(state.mgr, card_ref);
 						case Entity::kCardTypeWeapon:

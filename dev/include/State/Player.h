@@ -7,7 +7,6 @@
 #include "State/Secrets.h"
 #include "State/Weapon.h"
 #include "State/PlayerResource.h"
-#include "State/PlayerState.h"
 
 namespace State
 {
@@ -15,6 +14,8 @@ namespace State
 	{
 	public:
 		Player() : fatigue_damage_(0) {}
+
+		CardRef hero_ref_;
 
 		Deck deck_;
 		Hand hand_;
@@ -24,8 +25,6 @@ namespace State
 		Graveyard graveyard_;
 
 		PlayerResource resource_;
-		PlayerState state_;
-
 		int fatigue_damage_;
 	};
 }

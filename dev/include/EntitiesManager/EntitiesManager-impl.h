@@ -32,6 +32,6 @@ template <typename T>
 CardRef EntitiesManager::PushBack(State::State & state, T&& card)
 {
 	CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
-	this->GetMinionManipulator(ref).GetZoneChanger().Add(state);
+	this->GetGeneralManipulator(ref).GetZoneChanger().Add(state);
 	return ref;
 }

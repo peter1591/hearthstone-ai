@@ -178,6 +178,8 @@ namespace Manipulators
 			{
 				switch (card_.GetCardType())
 				{
+				case Entity::kCardTypeHero:
+					return ZoneChangerWithUnknownZone<Entity::kCardTypeHero>(mgr_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
 				case Entity::kCardTypeMinion:
 					return ZoneChangerWithUnknownZone<Entity::kCardTypeMinion>(mgr_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
 				case Entity::kCardTypeHeroPower:
@@ -197,6 +199,8 @@ namespace Manipulators
 			{
 				switch (card_.GetCardType())
 				{
+				case Entity::kCardTypeHero:
+					return ZoneChangerWithUnknownZone<Entity::kCardTypeHero>(mgr_, card_ref_, card_).Add(state);
 				case Entity::kCardTypeMinion:
 					return ZoneChangerWithUnknownZone<Entity::kCardTypeMinion>(mgr_, card_ref_, card_).Add(state);
 				case Entity::kCardTypeHeroPower:

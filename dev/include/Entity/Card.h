@@ -70,6 +70,8 @@ namespace Entity
 		int GetCost() const { return data_.enchanted_states.cost; }
 		void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
+		int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
+
 		MutableEnchantmentAuxDataGetter GetMutableEnchantmentAuxDataGetter()
 		{
 			return MutableEnchantmentAuxDataGetter(data_);
