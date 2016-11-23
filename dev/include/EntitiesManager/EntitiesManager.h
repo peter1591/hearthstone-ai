@@ -12,6 +12,8 @@ namespace Manipulators
 	class GeneralManipulator;
 	class MinionManipulator;
 	class SpellManipulator;
+
+	class StateManipulator;
 }
 
 namespace State
@@ -21,6 +23,8 @@ namespace State
 
 class EntitiesManager
 {
+	friend class Manipulators::StateManipulator;
+
 public:
 	typedef CloneableContainers::Vector<Entity::Card> ContainerType;
 
@@ -35,7 +39,11 @@ public:
 	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id);
 	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id);
 
-	Manipulators::CharacterManipulator GetCharacterManipulator(State::State & state, const CardRef & id);
+private:
+	Entity::Card & GetMutable(const CardRef & id)
+	{
+		return cards_.Get(id.id);
+	}
 
 private:
 	ContainerType cards_;

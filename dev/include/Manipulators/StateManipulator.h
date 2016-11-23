@@ -21,7 +21,8 @@ namespace Manipulators
 
 		CharacterManipulator Hero(State::PlayerIdentifier player)
 		{
-			return state_.mgr.GetCharacterManipulator(state_, state_.players.Get(player).hero_ref_);
+			CardRef ref = state_.players.Get(player).hero_ref_;
+			return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
 
 	private:

@@ -31,12 +31,6 @@ Manipulators::SpellManipulator EntitiesManager::GetSpellManipulator(const CardRe
 	return Manipulators::SpellManipulator(card);
 }
 
-Manipulators::CharacterManipulator EntitiesManager::GetCharacterManipulator(State::State & state, const CardRef & id)
-{
-	Entity::Card & card = cards_.Get(id.id);
-	return Manipulators::CharacterManipulator(state, id, card);
-}
-
 template <typename T>
 CardRef EntitiesManager::PushBack(State::State & state, T&& card)
 {
