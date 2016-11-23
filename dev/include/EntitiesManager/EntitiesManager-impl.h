@@ -5,8 +5,7 @@
 #include "Manipulators/StateManipulator.h"
 #include "Manipulators/CharacterManipulator.h"
 #include "Manipulators/MinionManipulator.h"
-
-namespace State { class State; }
+#include "State/State.h"
 
 template <typename T>
 CardRef EntitiesManager::PushBack(State::State & state, T&& card)

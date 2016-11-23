@@ -127,14 +127,14 @@ static void test1()
 	} };
 
 	auto manipulator = Manipulators::StateManipulator(state).Minion(r1);
-	auto ref1 = manipulator.GetEnchantmentHelper().Add(enchant1);
-	auto ref2 = manipulator.GetEnchantmentHelper().Add(enchant2);
-	auto ref3 = manipulator.GetEnchantmentHelper().Add(enchant1);
-	auto ref4 = manipulator.GetEnchantmentHelper().Add(enchant2);
+	auto ref1 = manipulator.Enchant().Add(enchant1);
+	auto ref2 = manipulator.Enchant().Add(enchant2);
+	auto ref3 = manipulator.Enchant().Add(enchant1);
+	auto ref4 = manipulator.Enchant().Add(enchant2);
 
 	auto state3 = state;
 
-	Manipulators::StateManipulator(state3).Minion(r1).GetEnchantmentHelper().Remove<Enchantment2>(ref2);
+	Manipulators::StateManipulator(state3).Minion(r1).Enchant().Remove<Enchantment2>(ref2);
 }
 
 class AuraHelper
@@ -207,14 +207,14 @@ static void test2()
 
 	typedef AuraHelper ClientAuraHelper;
 	ClientAuraHelper client_aura_helper(r1, r2);
-	Manipulators::StateManipulator(state).Minion(r3).GetAuraHelper().Update(client_aura_helper);
+	Manipulators::StateManipulator(state).Minion(r3).Aura().Update(client_aura_helper);
 
-	Manipulators::StateManipulator(state).Minion(r3).GetAuraHelper().Update(client_aura_helper);
+	Manipulators::StateManipulator(state).Minion(r3).Aura().Update(client_aura_helper);
 
 	auto state2 = state;
 
 	ClientAuraHelper client_aura_helper2(r1, r3);
-	Manipulators::StateManipulator(state2).Minion(r3).GetAuraHelper().Update(client_aura_helper2);
+	Manipulators::StateManipulator(state2).Minion(r3).Aura().Update(client_aura_helper2);
 }
 
 static void test3()

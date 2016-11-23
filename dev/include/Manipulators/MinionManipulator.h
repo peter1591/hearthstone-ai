@@ -23,9 +23,9 @@ namespace Manipulators
 		void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
 
 	public:
-		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_); }
-		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(state_, card_); }
-		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
+		Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
+		Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
+		Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
 		Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion> GetZoneChanger() {
 			return Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion>(state_.mgr, card_ref_, card_);
 		}
