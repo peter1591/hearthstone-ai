@@ -3,8 +3,11 @@
 #include "EntitiesManager/EntitiesManager.h"
 
 #include "Manipulators/GeneralManipulator.h"
+#include "Manipulators/CharacterManipulator.h"
 #include "Manipulators/MinionManipulator.h"
 #include "Manipulators/SpellManipulator.h"
+
+namespace State { class State; }
 
 Manipulators::GeneralManipulator EntitiesManager::GetGeneralManipulator(const CardRef & id)
 {
@@ -26,6 +29,12 @@ Manipulators::SpellManipulator EntitiesManager::GetSpellManipulator(const CardRe
 	if (card.GetCardType() != Entity::kCardTypeSpell) throw new std::exception("Card type is not spell");
 
 	return Manipulators::SpellManipulator(card);
+}
+
+Manipulators::CharacterManipulator EntitiesManager::GetCharacterManipulator(State::State & state, const CardRef & id)
+{
+	Entity::Card & card = cards_.Get(id.id);
+	return Manipulators::CharacterManipulator(state, id, card);
 }
 
 template <typename T>

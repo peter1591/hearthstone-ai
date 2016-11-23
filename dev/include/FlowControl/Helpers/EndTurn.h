@@ -1,8 +1,9 @@
 #pragma once
 
 #include "FlowControl/Result.h"
-#include "Manipulators/PlayerStateManipulator.h"
 #include "FlowControl/Helpers/Utils.h"
+
+#include "Manipulators/StateManipulator.h"
 
 namespace FlowControl
 {
@@ -76,10 +77,9 @@ namespace FlowControl
 
 			void Fatigue()
 			{
-				++state_.GetCurrentPlayer().fatigue_damage_;
+				int damage = ++state_.GetCurrentPlayer().fatigue_damage_;
 
-				Manipulators::PlayerStateManipulator manipulator(state_.GetCurrentPlayer().state_, state_.event_mgr);
-				manipulator.TakeDamage(state_.GetCurrentPlayer().fatigue_damage_);
+				Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
 			}
 
 		private:
