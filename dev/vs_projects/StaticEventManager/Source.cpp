@@ -1,8 +1,8 @@
-#include "StaticEventManager/Manager.h"
+#include "StaticEventManager/Events/GameStart.h"
 
 int main(void)
 {
-	typedef StaticEventManager::Manager::GameStartEvent GameStartEventType;
+	typedef StaticEventManager::Events::GameStartEvent GameStartEventType;
 
 	GameStartEventType::Trigger();
 

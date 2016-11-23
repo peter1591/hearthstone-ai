@@ -163,7 +163,6 @@
     <ClInclude Include="..\include\StaticEventManager\Events\AddToZone.h" />
     <ClInclude Include="..\include\StaticEventManager\Events\GameStart.h" />
     <ClInclude Include="..\include\StaticEventManager\Events\RemovedFromZone.h" />
-    <ClInclude Include="..\include\StaticEventManager\Manager.h" />
     <ClInclude Include="..\include\StaticEventManager\Triggerer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

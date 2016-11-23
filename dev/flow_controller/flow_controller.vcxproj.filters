@@ -179,9 +179,6 @@
     <ClInclude Include="..\include\FlowControl\Context\BeforeMinionSummoned.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\StaticEventManager\Manager.h">
-      <Filter>Header Files\StaticEventManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\StaticEventManager\Triggerer.h">
       <Filter>Header Files\StaticEventManager</Filter>
     </ClInclude>
