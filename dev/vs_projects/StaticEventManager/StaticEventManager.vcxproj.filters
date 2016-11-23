@@ -35,5 +35,8 @@
     <ClInclude Include="..\..\include\StaticEventManager\Events\GameStart.h">
       <Filter>Header Files\StaticEventManager\Events</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\StaticEventManager\Events\RemovedFromZone.h">
+      <Filter>Header Files\StaticEventManager\Events</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

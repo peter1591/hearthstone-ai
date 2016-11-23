@@ -40,6 +40,12 @@
     <Filter Include="Header Files\FlowControl\Context">
       <UniqueIdentifier>{ff308333-4b2b-4d8a-bc70-bdf6c0b6c3df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\StaticEventManager">
+      <UniqueIdentifier>{cd65c2cd-760a-42ff-a5da-2454570b01d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\StaticEventManager\Events">
+      <UniqueIdentifier>{99797d79-1421-4793-be30-da43a1f44f8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -172,6 +178,21 @@
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Context\BeforeMinionSummoned.h">
       <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StaticEventManager\Manager.h">
+      <Filter>Header Files\StaticEventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StaticEventManager\Triggerer.h">
+      <Filter>Header Files\StaticEventManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StaticEventManager\Events\GameStart.h">
+      <Filter>Header Files\StaticEventManager\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StaticEventManager\Events\RemovedFromZone.h">
+      <Filter>Header Files\StaticEventManager\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StaticEventManager\Events\AddToZone.h">
+      <Filter>Header Files\StaticEventManager\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

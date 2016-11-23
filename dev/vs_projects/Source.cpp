@@ -167,6 +167,7 @@ static void test2()
 	FlowControl::Context::BeforeMinionSummoned context1(state, card_ref, card);
 
 	EventManager::StaticEvents<EV1, EV2> static_events;
+	std::cout << "=====" << std::endl;
 	static_events.Trigger(mgr, context1);
 }
 
