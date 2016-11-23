@@ -24,7 +24,7 @@ namespace Manipulators
 
 	public:
 		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_); }
-		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(state_.mgr, card_); }
+		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(state_, card_); }
 		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
 
 		Helpers::ZoneChangerWithUnknownZoneUnknownType GetZoneChanger()

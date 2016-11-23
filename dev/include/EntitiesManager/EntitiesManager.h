@@ -8,11 +8,6 @@
 
 namespace Manipulators
 {
-	class CharacterManipulator;
-	class GeneralManipulator;
-	class MinionManipulator;
-	class SpellManipulator;
-
 	class StateManipulator;
 }
 
@@ -34,9 +29,6 @@ public:
 	}
 
 	template <typename T> CardRef PushBack(State::State & state, T&& card);
-
-	Manipulators::MinionManipulator GetMinionManipulator(const CardRef & id);
-	Manipulators::SpellManipulator GetSpellManipulator(const CardRef & id);
 
 private:
 	Entity::Card & GetMutable(const CardRef & id)

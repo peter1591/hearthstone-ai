@@ -4,6 +4,7 @@
 #include "State/PlayerIdentifier.h"
 #include "Manipulators/CharacterManipulator.h"
 #include "Manipulators/CardManipulator.h"
+#include "Manipulators/MinionManipulator.h"
 
 namespace Manipulators
 {
@@ -29,6 +30,11 @@ namespace Manipulators
 		CardManipulator Card(CardRef ref)
 		{
 			return CardManipulator(state_, ref, state_.mgr.GetMutable(ref));
+		}
+
+		MinionManipulator Minion(CardRef ref)
+		{
+			return MinionManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
 
 	private:

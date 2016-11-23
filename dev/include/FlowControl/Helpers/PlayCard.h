@@ -54,7 +54,7 @@ namespace FlowControl
 					put_position = action_parameters_.GetMinionPutLocation(0, total_minions);
 				}
 
-				state_.mgr.GetMinionManipulator(card_ref_).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(
+				Manipulators::StateManipulator(state_).Minion(card_ref_).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(
 					state_, state_.current_player, put_position);
 
 				EventManager::StaticEvent<EventManager::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);

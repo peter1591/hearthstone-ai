@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Entity/AuraAuxData.h"
-
-class EntitiesManager;
+#include "State/State.h"
 
 namespace Manipulators
 {
@@ -11,8 +10,8 @@ namespace Manipulators
 		class AuraHelper
 		{
 		public:
-			AuraHelper(EntitiesManager& mgr, Entity::Card & card) :
-				mgr_(mgr),
+			AuraHelper(State::State & state, Entity::Card & card) :
+				state_(state),
 				data_(card.GetMutableAuraAuxDataGetter().Get())
 			{
 			}
@@ -29,7 +28,7 @@ namespace Manipulators
 						++it;
 					}
 					else {
-						mgr_.GetMinionManipulator(it->first).GetEnchantmentHelper()
+						StateManipulator(state_).Minion(it->first).GetEnchantmentHelper()
 							.Remove<EnchantmentType>(it->second);
 						it = data_.applied_enchantments.erase(it);
 					}
@@ -38,14 +37,14 @@ namespace Manipulators
 				client_aura_helper.IterateEligibles([this, &client_aura_helper](CardRef target) {
 					if (data_.applied_enchantments.find(target) != data_.applied_enchantments.end()) return; // already applied
 
-					auto enchant_identifier = mgr_.GetMinionManipulator(target).GetEnchantmentHelper()
+					auto enchant_identifier = StateManipulator(state_).Minion(target).GetEnchantmentHelper()
 						.Add(client_aura_helper.CreateEnchantmentFor(target));
 					data_.applied_enchantments.insert(std::make_pair(target, std::move(enchant_identifier)));
 				});
 			}
 
 		private:
-			EntitiesManager & mgr_;
+			State::State & state_;
 			Entity::AuraAuxData & data_;
 		};
 	}

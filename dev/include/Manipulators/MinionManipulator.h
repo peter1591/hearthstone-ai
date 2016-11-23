@@ -6,6 +6,7 @@
 #include "Manipulators/Helpers/AuraHelper.h"
 #include "Manipulators/Helpers/ZonePositionSetter.h"
 #include "Manipulators/Helpers/ZoneChanger.h"
+#include "State/State.h"
 
 class EntitiesManager;
 
@@ -14,8 +15,8 @@ namespace Manipulators
 	class MinionManipulator
 	{
 	public:
-		MinionManipulator(EntitiesManager &mgr, CardRef card_ref, Entity::Card &card) :
-			mgr_(mgr), card_ref_(card_ref), card_(card)
+		MinionManipulator(State::State & state, CardRef card_ref, Entity::Card &card) :
+			state_(state), card_ref_(card_ref), card_(card)
 		{
 		}
 
@@ -23,12 +24,14 @@ namespace Manipulators
 
 	public:
 		Helpers::EnchantmentHelper GetEnchantmentHelper() { return Helpers::EnchantmentHelper(card_); }
-		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(mgr_, card_); }
+		Helpers::AuraHelper GetAuraHelper() { return Helpers::AuraHelper(state_, card_); }
 		Helpers::ZonePositionSetter GetZonePositionSetter() { return Helpers::ZonePositionSetter(card_); }
-		Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion> GetZoneChanger() { return Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion>(mgr_, card_ref_, card_); }
+		Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion> GetZoneChanger() {
+			return Helpers::ZoneChangerWithUnknownZone<Entity::kCardTypeMinion>(state_.mgr, card_ref_, card_);
+		}
 
 	private:
-		EntitiesManager & mgr_;
+		State::State & state_;
 		CardRef card_ref_;
 		Entity::Card & card_;
 	};
