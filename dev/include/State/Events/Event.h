@@ -2,11 +2,11 @@
 
 #include <utility>
 #include <tuple>
-#include "State/EventManager/HandlersManager.h"
+#include "State/Events/HandlersManager.h"
 
 namespace State
 {
-	namespace EventManager
+	namespace Events
 	{
 		namespace impl
 		{

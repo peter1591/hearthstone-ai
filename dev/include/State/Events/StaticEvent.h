@@ -4,7 +4,7 @@
 
 namespace State
 {
-	namespace EventManager
+	namespace Events
 	{
 		template <typename EventTriggerType>
 		class StaticEvent

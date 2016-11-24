@@ -2,7 +2,7 @@
 
 namespace State
 {
-	namespace EventManager
+	namespace Events
 	{
 		class HandlersContainerController
 		{

@@ -12,7 +12,7 @@ namespace State
 		class Card;
 	}
 
-	namespace EventManager
+	namespace Events
 	{
 		namespace TriggerTypes
 		{

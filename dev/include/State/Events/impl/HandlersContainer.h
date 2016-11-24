@@ -5,11 +5,11 @@
 #include <type_traits>
 #include <utility>
 
-#include "State/EventManager/HandlersContainerController.h"
+#include "State/Events/HandlersContainerController.h"
 
 namespace State
 {
-	namespace EventManager
+	namespace Events
 	{
 		namespace impl {
 			template <typename TriggerType>

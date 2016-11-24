@@ -2,16 +2,16 @@
 
 #include <type_traits>
 #include <utility>
-#include "State/EventManager/impl/HandlersContainer.h"
-#include "State/EventManager/impl/CategorizedHandlersContainer.h"
-#include "State/EventManager/TriggerTypes/AfterMinionSummoned.h"
-#include "State/EventManager/TriggerTypes/BeforeMinionSummoned.h"
-#include "State/EventManager/TriggerTypes/AfterMinionPlayed.h"
-#include "State/EventManager/TriggerTypes/OnMinionPlay.h"
+#include "State/Events/impl/HandlersContainer.h"
+#include "State/Events/impl/CategorizedHandlersContainer.h"
+#include "State/Events/TriggerTypes/AfterMinionSummoned.h"
+#include "State/Events/TriggerTypes/BeforeMinionSummoned.h"
+#include "State/Events/TriggerTypes/AfterMinionPlayed.h"
+#include "State/Events/TriggerTypes/OnMinionPlay.h"
 
 namespace State
 {
-	namespace EventManager
+	namespace Events
 	{
 		template <typename T> class Event;
 		template <typename T> class CategorizedEvent;

@@ -2,11 +2,11 @@
 
 #include <utility>
 #include <unordered_map>
-#include "State/EventManager/impl/HandlersContainer.h"
+#include "State/Events/impl/HandlersContainer.h"
 
 namespace State
 {
-	namespace EventManager
+	namespace Events
 	{
 		namespace impl {
 			template <typename CategoryType, typename HandlerType>

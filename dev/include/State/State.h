@@ -2,7 +2,7 @@
 
 #include "State/Cards/Manager.h"
 #include "State/Board/Board.h"
-#include "State/EventManager/HandlersManager.h"
+#include "State/Events/HandlersManager.h"
 #include "State/ThisTurnCounters.h"
 
 namespace State
@@ -21,7 +21,7 @@ namespace State
 	public:
 		Board board;
 		Cards::Manager mgr;
-		EventManager::HandlersManager event_mgr;
+		Events::HandlersManager event_mgr;
 
 		PlayerIdentifier current_player;
 		int turn;
