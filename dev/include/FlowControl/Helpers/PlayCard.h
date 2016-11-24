@@ -2,7 +2,7 @@
 
 #include "Manipulators/Manipulators.h"
 #include "State/State.h"
-#include "EventManager/StaticEvent.h"
+#include "State/EventManager/StaticEvent.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
 #include "StaticDispatcher/MinionDispatcher.h"

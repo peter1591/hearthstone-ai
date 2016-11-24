@@ -1,8 +1,8 @@
 #pragma once
 
 #include "EntitiesManager/EntitiesManager.h"
-#include "EventManager/HandlersManager.h"
 #include "State/Board/Board.h"
+#include "State/EventManager/HandlersManager.h"
 #include "State/ThisTurnCounters.h"
 
 namespace State

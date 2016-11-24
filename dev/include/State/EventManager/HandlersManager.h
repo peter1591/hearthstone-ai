@@ -2,12 +2,12 @@
 
 #include <type_traits>
 #include <utility>
-#include "EventManager/impl/HandlersContainer.h"
-#include "EventManager/impl/CategorizedHandlersContainer.h"
-#include "EventManager/TriggerTypes/AfterMinionSummoned.h"
-#include "EventManager/TriggerTypes/BeforeMinionSummoned.h"
-#include "EventManager/TriggerTypes/AfterMinionPlayed.h"
-#include "EventManager/TriggerTypes/OnMinionPlay.h"
+#include "State/EventManager/impl/HandlersContainer.h"
+#include "State/EventManager/impl/CategorizedHandlersContainer.h"
+#include "State/EventManager/TriggerTypes/AfterMinionSummoned.h"
+#include "State/EventManager/TriggerTypes/BeforeMinionSummoned.h"
+#include "State/EventManager/TriggerTypes/AfterMinionPlayed.h"
+#include "State/EventManager/TriggerTypes/OnMinionPlay.h"
 
 namespace EventManager
 {
