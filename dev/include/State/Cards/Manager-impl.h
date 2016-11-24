@@ -13,7 +13,7 @@ namespace State
 	CardRef Cards::Manager::PushBack(State & state, T&& card)
 	{
 		CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
-		Manipulators::StateManipulator(state).Card(ref).GetZoneChanger().Add(state);
+		Manipulators::StateManipulator(state).Card(ref).Zone().Add(state);
 		return ref;
 	}
 }

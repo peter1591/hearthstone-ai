@@ -34,9 +34,6 @@
     <Filter Include="Header Files\StaticEventManager\Events">
       <UniqueIdentifier>{99797d79-1421-4793-be30-da43a1f44f8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\State\Board">
-      <UniqueIdentifier>{05fd6712-3f7e-4a10-8e22-d961deff8412}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\State\Cards">
       <UniqueIdentifier>{24898c9b-f21f-4a56-8b5a-64a82c7ccedc}</UniqueIdentifier>
     </Filter>
@@ -118,36 +115,6 @@
     </ClInclude>
     <ClInclude Include="..\include\StaticEventManager\Events\AddToZone.h">
       <Filter>Header Files\StaticEventManager\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Board.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Deck.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Graveyard.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Hand.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Minions.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Player.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\PlayerResource.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Players.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Secrets.h">
-      <Filter>Header Files\State\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Board\Weapon.h">
-      <Filter>Header Files\State\Board</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\Cards\Manager.h">
       <Filter>Header Files\State\Cards</Filter>
@@ -244,6 +211,36 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Manipulators\Events\RemovedFromZone.h">
       <Filter>Header Files\State\Manipulators\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Board.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Deck.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Graveyard.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Hand.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Minions.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Player.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\PlayerResource.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Players.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Secrets.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Weapon.h">
+      <Filter>Header Files\State</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

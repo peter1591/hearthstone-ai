@@ -27,7 +27,7 @@ namespace State
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
 			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
 
-			Helpers::ZoneChangerWithUnknownZoneUnknownType GetZoneChanger()
+			Helpers::ZoneChangerWithUnknownZoneUnknownType Zone()
 			{
 				// TODO: Can specialize the zone changer to accelerate when moving from a non-play zone to another non-play zone
 				// For example: deck --> hand

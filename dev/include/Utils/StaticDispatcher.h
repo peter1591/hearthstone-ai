@@ -17,7 +17,6 @@ namespace Utils
 		template <template <typename> class InvokerType, typename... Args>
 		static void Invoke(int id, Args&&... args)
 		{
-
 #define INVOKE_CASE(n) \
 			&InvokerType<DispatchMap<n>::type>::Invoke,
 
