@@ -1,6 +1,8 @@
 #include <assert.h>
-#include "Enchantments/TieredEnchantments.h"
-#include "Entity/Card.h"
+#include "State/Cards/Enchantments/TieredEnchantments.h"
+#include "State/Cards/Card.h"
+
+using namespace State::Cards;
 
 struct Enchantment1
 {
@@ -20,17 +22,17 @@ int main(void)
 {
 	TieredEnchantments mgr;
 
-	Entity::RawCard raw_card;
-	Entity::Card card(raw_card);
+	State::Cards::RawCard raw_card;
+	State::Cards::Card card(raw_card);
 	card.SetCost(0);
 
-	Enchantment1 enchant1{ [](Entity::Card & card) {
+	Enchantment1 enchant1{ [](State::Cards::Card & card) {
 		card.SetCost(card.GetCost() + 1);
 	}};
-	Enchantment1 enchant2{ [](Entity::Card & card) {
+	Enchantment1 enchant2{ [](State::Cards::Card & card) {
 		card.SetCost(card.GetCost() * 2);
 	} };
-	Enchantment2 enchant3{ [](Entity::Card & card) {
+	Enchantment2 enchant3{ [](State::Cards::Card & card) {
 		card.SetCost(card.GetCost() + 3);
 	} };
 

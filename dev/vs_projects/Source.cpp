@@ -1,73 +1,75 @@
 #include <iostream>
 #include <functional>
 
-#include "EventManager/HandlersManager.h"
-#include "EventManager/Event.h"
-#include "EventManager/StaticEvent.h"
-#include "EventManager/StaticEvents.h"
+#include "State/Events/HandlersManager.h"
+#include "State/Events/Event.h"
+#include "State/Events/StaticEvent.h"
+#include "State/Events/StaticEvents.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 #include "State/State.h"
-#include "Entity/Card.h"
+#include "State/Cards/Card.h"
+
+using namespace State;
 
 static void test1()
 {
-	EventManager::HandlersManager mgr;
+	Events::HandlersManager mgr;
 
-	std::function<void(EventManager::HandlersContainerController &)> callback1 =
-		[](EventManager::HandlersContainerController & controller) {
+	std::function<void(Events::HandlersContainerController &)> callback1 =
+		[](Events::HandlersContainerController & controller) {
 		std::cout << "callback1" << std::endl;
 	};
-	std::function<void(EventManager::HandlersContainerController &)> callback2 =
-		[](EventManager::HandlersContainerController & controller) {
+	std::function<void(Events::HandlersContainerController &)> callback2 =
+		[](Events::HandlersContainerController & controller) {
 		std::cout << "callback2" << std::endl;
 	};
-	std::function<void(EventManager::HandlersContainerController &)> callback3 =
-		[](EventManager::HandlersContainerController & controller) {
+	std::function<void(Events::HandlersContainerController &)> callback3 =
+		[](Events::HandlersContainerController & controller) {
 		std::cout << "callback3" << std::endl;
 		controller.Remove();
 	};
-	EventManager::TriggerTypes::BeforeMinionSummoned::FunctorType callback1_2 =
-		[](EventManager::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
+	Events::TriggerTypes::BeforeMinionSummoned::FunctorType callback1_2 =
+		[](Events::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
 		std::cout << "callback1" << std::endl;
 	};
-	EventManager::TriggerTypes::BeforeMinionSummoned::FunctorType callback2_2 =
-		[](EventManager::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
+	Events::TriggerTypes::BeforeMinionSummoned::FunctorType callback2_2 =
+		[](Events::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
 		std::cout << "callback2" << std::endl;
 	};
-	EventManager::TriggerTypes::BeforeMinionSummoned::FunctorType callback3_2 =
-		[](EventManager::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
+	Events::TriggerTypes::BeforeMinionSummoned::FunctorType callback3_2 =
+		[](Events::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
 		std::cout << "callback3" << std::endl;
 		controller.Remove();
 	};
 
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback3));
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback2_2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback1_2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback3_2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback2_2));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback3));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback2_2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback1_2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback3_2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback2_2));
 
-	mgr.PushBack(5, EventManager::TriggerTypes::AfterMinionSummoned(callback3));
-	mgr.PushBack(5, EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(5, EventManager::TriggerTypes::AfterMinionSummoned(callback2));
-	mgr.PushBack(55, EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(55, EventManager::TriggerTypes::AfterMinionSummoned(callback3));
-	mgr.PushBack(55, EventManager::TriggerTypes::AfterMinionSummoned(callback2));
+	mgr.PushBack(5, Events::TriggerTypes::AfterMinionSummoned(callback3));
+	mgr.PushBack(5, Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(5, Events::TriggerTypes::AfterMinionSummoned(callback2));
+	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback3));
+	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback2));
 
 	auto mgr2 = mgr;
 
-	State::State state;
+	::State::State state;
 	CardRef card_ref;
-	Entity::RawCard raw_card;
-	Entity::Card card(raw_card);
+	Cards::RawCard raw_card;
+	Cards::Card card(raw_card);
 	FlowControl::Context::BeforeMinionSummoned context1(state, card_ref, card);
 
-	EventManager::Event<EventManager::TriggerTypes::AfterMinionSummoned> ev1;
-	EventManager::Event<EventManager::TriggerTypes::BeforeMinionSummoned> ev2(context1);
-	typedef EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionSummoned> EV1;
-	typedef EventManager::StaticEvent<EventManager::TriggerTypes::BeforeMinionSummoned> EV2;
+	Events::Event<Events::TriggerTypes::AfterMinionSummoned> ev1;
+	Events::Event<Events::TriggerTypes::BeforeMinionSummoned> ev2(context1);
+	typedef Events::StaticEvent<Events::TriggerTypes::AfterMinionSummoned> EV1;
+	typedef Events::StaticEvent<Events::TriggerTypes::BeforeMinionSummoned> EV2;
 
 	std::cout << "--" << std::endl;
 	ev1.TriggerEvent(mgr);
@@ -87,9 +89,9 @@ static void test1()
 	std::cout << "--" << std::endl;
 	EV2::TriggerEvent(mgr2, context1);
 
-	EventManager::CategorizedEvent<EventManager::TriggerTypes::AfterMinionSummoned> ev3(4);
-	EventManager::CategorizedEvent<EventManager::TriggerTypes::AfterMinionSummoned> ev4(55);
-	typedef EventManager::StaticCategorizedEvent<EventManager::TriggerTypes::AfterMinionSummoned> EV3;
+	Events::CategorizedEvent<Events::TriggerTypes::AfterMinionSummoned> ev3(4);
+	Events::CategorizedEvent<Events::TriggerTypes::AfterMinionSummoned> ev4(55);
+	typedef Events::StaticCategorizedEvent<Events::TriggerTypes::AfterMinionSummoned> EV3;
 
 	std::cout << "--" << std::endl;
 	EV3::TriggerEvent(mgr, 4);
@@ -112,61 +114,61 @@ static void test1()
 
 static void test2()
 {
-	typedef EventManager::StaticEvent<EventManager::TriggerTypes::BeforeMinionSummoned> EV1;
-	typedef EventManager::StaticEvent<EventManager::TriggerTypes::BeforeMinionSummoned> EV2;
+	typedef Events::StaticEvent<Events::TriggerTypes::BeforeMinionSummoned> EV1;
+	typedef Events::StaticEvent<Events::TriggerTypes::BeforeMinionSummoned> EV2;
 
-	EventManager::HandlersManager mgr;
+	Events::HandlersManager mgr;
 
-	std::function<void(EventManager::HandlersContainerController &)> callback1 =
-		[](EventManager::HandlersContainerController & controller) {
+	std::function<void(Events::HandlersContainerController &)> callback1 =
+		[](Events::HandlersContainerController & controller) {
 		std::cout << "callback1" << std::endl;
 	};
-	std::function<void(EventManager::HandlersContainerController &)> callback2 =
-		[](EventManager::HandlersContainerController & controller) {
+	std::function<void(Events::HandlersContainerController &)> callback2 =
+		[](Events::HandlersContainerController & controller) {
 		std::cout << "callback2" << std::endl;
 	};
-	std::function<void(EventManager::HandlersContainerController &)> callback3 =
-		[](EventManager::HandlersContainerController & controller) {
+	std::function<void(Events::HandlersContainerController &)> callback3 =
+		[](Events::HandlersContainerController & controller) {
 		std::cout << "callback3" << std::endl;
 		controller.Remove();
 	};
-	EventManager::TriggerTypes::BeforeMinionSummoned::FunctorType callback1_2 =
-		[](EventManager::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
+	Events::TriggerTypes::BeforeMinionSummoned::FunctorType callback1_2 =
+		[](Events::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
 		std::cout << "callback1" << std::endl;
 	};
-	EventManager::TriggerTypes::BeforeMinionSummoned::FunctorType callback2_2 =
-		[](EventManager::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
+	Events::TriggerTypes::BeforeMinionSummoned::FunctorType callback2_2 =
+		[](Events::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
 		std::cout << "callback2" << std::endl;
 	};
-	EventManager::TriggerTypes::BeforeMinionSummoned::FunctorType callback3_2 =
-		[](EventManager::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
+	Events::TriggerTypes::BeforeMinionSummoned::FunctorType callback3_2 =
+		[](Events::HandlersContainerController & controller, FlowControl::Context::BeforeMinionSummoned & context) {
 		std::cout << "callback3" << std::endl;
 		controller.Remove();
 	};
 
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback3));
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(EventManager::TriggerTypes::AfterMinionSummoned(callback2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback2_2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback1_2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback3_2));
-	mgr.PushBack(EventManager::TriggerTypes::BeforeMinionSummoned(callback2_2));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback3));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(Events::TriggerTypes::AfterMinionSummoned(callback2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback2_2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback1_2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback3_2));
+	mgr.PushBack(Events::TriggerTypes::BeforeMinionSummoned(callback2_2));
 
-	mgr.PushBack(5, EventManager::TriggerTypes::AfterMinionSummoned(callback3));
-	mgr.PushBack(5, EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(5, EventManager::TriggerTypes::AfterMinionSummoned(callback2));
-	mgr.PushBack(55, EventManager::TriggerTypes::AfterMinionSummoned(callback1));
-	mgr.PushBack(55, EventManager::TriggerTypes::AfterMinionSummoned(callback3));
-	mgr.PushBack(55, EventManager::TriggerTypes::AfterMinionSummoned(callback2));
+	mgr.PushBack(5, Events::TriggerTypes::AfterMinionSummoned(callback3));
+	mgr.PushBack(5, Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(5, Events::TriggerTypes::AfterMinionSummoned(callback2));
+	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback1));
+	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback3));
+	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback2));
 
-	State::State state;
+	::State::State state;
 	CardRef card_ref;
-	Entity::RawCard raw_card;
-	Entity::Card card(raw_card);
+	Cards::RawCard raw_card;
+	Cards::Card card(raw_card);
 	FlowControl::Context::BeforeMinionSummoned context1(state, card_ref, card);
 
-	EventManager::StaticEvents<EV1, EV2> static_events;
+	Events::StaticEvents<EV1, EV2> static_events;
 	std::cout << "=====" << std::endl;
 	static_events.Trigger(mgr, context1);
 }

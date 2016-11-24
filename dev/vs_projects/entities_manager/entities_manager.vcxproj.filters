@@ -13,17 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\EntitiesManager">
-      <UniqueIdentifier>{45272b79-7c5c-4704-93ca-a6bbd42f36d7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Manipulators">
       <UniqueIdentifier>{590386c2-3a43-4d43-b068-8c7895395e30}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Manipulators\Helpers">
       <UniqueIdentifier>{5f9ed7ee-a36d-492f-9773-87b4879933ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Entity">
-      <UniqueIdentifier>{f9232b74-ddd1-49f1-b736-e569c7bd844f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\State">
       <UniqueIdentifier>{29c9c9f2-5d0b-4945-b1f6-cc1fdc243f13}</UniqueIdentifier>
@@ -31,37 +25,16 @@
     <Filter Include="Header Files\State\Utils">
       <UniqueIdentifier>{0a1a66f2-e569-4239-a197-b3fef3bcf335}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State\Cards">
+      <UniqueIdentifier>{45272b79-7c5c-4704-93ca-a6bbd42f36d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h">
-      <Filter>Header Files\EntitiesManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\EntitiesManager\CardRef.h">
-      <Filter>Header Files\EntitiesManager</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Entity\Card.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Entity\CardType.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Entity\CardZone.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Entity\RawCard.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Entity\EnchantableStates.h">
-      <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
@@ -69,29 +42,8 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Entity\AuraAuxData.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\State.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Players.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Player.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Minions.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\PlayerIdentifier.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager-impl.h">
-      <Filter>Header Files\EntitiesManager</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h">
       <Filter>Header Files\Manipulators</Filter>
@@ -99,35 +51,14 @@
     <ClInclude Include="..\..\include\Manipulators\Helpers\ZoneChanger.h">
       <Filter>Header Files\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Weapon.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Hand.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager.h">
       <Filter>Header Files\State\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager-impl.h">
       <Filter>Header Files\State\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Deck.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Graveyard.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Secrets.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Utils\DefaultZonePosPolicy.h">
       <Filter>Header Files\State\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\PlayerResource.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\ThisTurnCounters.h">
-      <Filter>Header Files\State</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\CardManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
@@ -137,6 +68,42 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Manipulators\StateManipulator.h">
       <Filter>Header Files\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\Manager.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\Manager-impl.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\AuraAuxData.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\Card.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\EnchantableStates.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\EnchantmentAuxData.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\RawCard.h">
+      <Filter>Header Files\State\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\CardRef.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\PlayerIdentifier.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\State.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\ThisTurnCounters.h">
+      <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Types.h">
+      <Filter>Header Files\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

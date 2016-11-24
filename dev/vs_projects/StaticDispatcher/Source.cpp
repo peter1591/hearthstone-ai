@@ -2,7 +2,7 @@
 #include <iostream>
 #include <assert.h>
 
-#include "StaticDispatcher/MinionDispatcher.h"
+#include "FlowControl/Dispatchers/Minions.h"
 
 int test;
 
@@ -47,22 +47,22 @@ int main(void)
 {
 	test = 0;
 
-	Cards::Minions::Dispatcher::BattleCry(2);
+	FlowControl::Dispatchers::Minions::BattleCry(2);
 	assert(test == 0);
 
-	Cards::Minions::Dispatcher::BattleCry(7);
+	FlowControl::Dispatchers::Minions::BattleCry(7);
 	assert(test == 1);
 
-	Cards::Minions::Dispatcher::BattleCry(7);
+	FlowControl::Dispatchers::Minions::BattleCry(7);
 	assert(test == 2);
 
-	Cards::Minions::Dispatcher::BattleCry(4);
+	FlowControl::Dispatchers::Minions::BattleCry(4);
 	assert(test == 2);
 
-	Cards::Minions::Dispatcher::BattleCry(55);
+	FlowControl::Dispatchers::Minions::BattleCry(55);
 	assert(test == 4);
 
-	Cards::Minions::Dispatcher::BattleCry(58);
+	FlowControl::Dispatchers::Minions::BattleCry(58);
 	assert(test == 4);
 
 	return 0;

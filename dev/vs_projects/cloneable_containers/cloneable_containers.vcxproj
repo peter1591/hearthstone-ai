@@ -115,10 +115,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\CloneableContainers\PtrVector.h" />
-    <ClInclude Include="..\..\include\CloneableContainers\RemovablePtrVector.h" />
-    <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h" />
-    <ClInclude Include="..\..\include\CloneableContainers\Vector.h" />
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\PtrVector.h" />
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\RemovablePtrVector.h" />
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\RemovableVector.h" />
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\Vector.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
   </ItemGroup>
   <ItemGroup>

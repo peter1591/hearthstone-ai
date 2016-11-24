@@ -3,10 +3,12 @@
 #include <memory>
 #include <assert.h>
 
-#include "CloneableContainers/Vector.h"
-#include "CloneableContainers/PtrVector.h"
-#include "CloneableContainers/RemovableVector.h"
-#include "CloneableContainers/RemovablePtrVector.h"
+#include "Utils/CloneableContainers/Vector.h"
+#include "Utils/CloneableContainers/PtrVector.h"
+#include "Utils/CloneableContainers/RemovableVector.h"
+#include "Utils/CloneableContainers/RemovablePtrVector.h"
+
+using namespace Utils;
 
 class Wrap1
 {

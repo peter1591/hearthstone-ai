@@ -16,6 +16,9 @@
     <Filter Include="Header Files\StaticDispatcher">
       <UniqueIdentifier>{2bab3c7d-22f6-4627-9a8e-b8651b30948d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{66e46193-5e37-41f6-9b9d-f2c3921332ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -23,11 +26,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\StaticDispatcher\Dispatcher.h">
-      <Filter>Header Files\StaticDispatcher</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\StaticDispatcher\MinionDispatcher.h">
       <Filter>Header Files\StaticDispatcher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

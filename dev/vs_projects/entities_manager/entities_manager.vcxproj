@@ -116,16 +116,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\EntitiesManager\CardRef.h" />
-    <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager-impl.h" />
-    <ClInclude Include="..\..\include\EntitiesManager\EntitiesManager.h" />
-    <ClInclude Include="..\..\include\Entity\AuraAuxData.h" />
-    <ClInclude Include="..\..\include\Entity\Card.h" />
-    <ClInclude Include="..\..\include\Entity\CardType.h" />
-    <ClInclude Include="..\..\include\Entity\CardZone.h" />
-    <ClInclude Include="..\..\include\Entity\EnchantableStates.h" />
-    <ClInclude Include="..\..\include\Entity\EnchantmentAuxData.h" />
-    <ClInclude Include="..\..\include\Entity\RawCard.h" />
     <ClInclude Include="..\..\include\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
@@ -136,21 +126,21 @@
     <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
     <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\Manipulators\StateManipulator.h" />
-    <ClInclude Include="..\..\include\State\Deck.h" />
-    <ClInclude Include="..\..\include\State\Graveyard.h" />
-    <ClInclude Include="..\..\include\State\Hand.h" />
-    <ClInclude Include="..\..\include\State\Minions.h" />
-    <ClInclude Include="..\..\include\State\Player.h" />
+    <ClInclude Include="..\..\include\State\CardRef.h" />
+    <ClInclude Include="..\..\include\State\Cards\AuraAuxData.h" />
+    <ClInclude Include="..\..\include\State\Cards\Card.h" />
+    <ClInclude Include="..\..\include\State\Cards\EnchantableStates.h" />
+    <ClInclude Include="..\..\include\State\Cards\EnchantmentAuxData.h" />
+    <ClInclude Include="..\..\include\State\Cards\Manager-impl.h" />
+    <ClInclude Include="..\..\include\State\Cards\Manager.h" />
+    <ClInclude Include="..\..\include\State\Cards\RawCard.h" />
     <ClInclude Include="..\..\include\State\PlayerIdentifier.h" />
-    <ClInclude Include="..\..\include\State\PlayerResource.h" />
-    <ClInclude Include="..\..\include\State\Players.h" />
-    <ClInclude Include="..\..\include\State\Secrets.h" />
     <ClInclude Include="..\..\include\State\State.h" />
     <ClInclude Include="..\..\include\State\ThisTurnCounters.h" />
+    <ClInclude Include="..\..\include\State\Types.h" />
     <ClInclude Include="..\..\include\State\Utils\DefaultZonePosPolicy.h" />
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\..\include\State\Utils\OrderedCardsManager.h" />
-    <ClInclude Include="..\..\include\State\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />

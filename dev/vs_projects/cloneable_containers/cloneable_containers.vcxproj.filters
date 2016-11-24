@@ -13,28 +13,28 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\CloneableContainers">
-      <UniqueIdentifier>{142e0bdf-8305-4871-b3d6-2484ae1eb5ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{5432f4f7-2239-4d24-99c0-4a15180c5855}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils\CloneableContainers">
+      <UniqueIdentifier>{142e0bdf-8305-4871-b3d6-2484ae1eb5ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\CloneableContainers\Vector.h">
-      <Filter>Header Files\CloneableContainers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\CloneableContainers\RemovableVector.h">
-      <Filter>Header Files\CloneableContainers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\CloneableContainers\PtrVector.h">
-      <Filter>Header Files\CloneableContainers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\CloneableContainers\RemovablePtrVector.h">
-      <Filter>Header Files\CloneableContainers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\PtrVector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\RemovablePtrVector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\RemovableVector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\Vector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

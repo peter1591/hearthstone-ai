@@ -115,8 +115,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\StaticDispatcher\Dispatcher.h" />
     <ClInclude Include="..\..\include\StaticDispatcher\MinionDispatcher.h" />
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
