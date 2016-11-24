@@ -1,5 +1,5 @@
 #include <iostream>
-#include "StaticEventManager/Triggerer.h"
+#include "Utils/StaticEventTriggerer.h"
 
 namespace impl
 {
@@ -27,7 +27,7 @@ namespace impl
 
 int main(void)
 {
-	StaticEventManager::Triggerer<
+	Utils::StaticEventTriggerer<
 		impl::GameStart::Handler1,
 		impl::GameStart::Handler2>::Trigger();
 
