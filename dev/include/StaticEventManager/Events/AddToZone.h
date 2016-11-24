@@ -39,19 +39,19 @@ namespace StaticEventManager
 				private:
 					static void AddToDeckZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.deck_.GetLocationManipulator().Insert(state, card_ref);
 					}
 
 					static void AddToHandZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.hand_.GetLocationManipulator().Insert(state, card_ref);
 					}
 
 					static void AddToPlayZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 
 						switch (TargetCardType)
 						{
@@ -70,7 +70,7 @@ namespace StaticEventManager
 
 					static void AddToGraveyardZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
 					}
 				};

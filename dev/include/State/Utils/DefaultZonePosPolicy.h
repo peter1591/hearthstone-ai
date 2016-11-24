@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Player.h"
+#include "State/Board/Player.h"
 #include "Entity/CardZone.h"
 #include "Entity/CardType.h"
 

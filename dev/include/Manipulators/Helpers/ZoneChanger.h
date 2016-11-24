@@ -6,7 +6,7 @@
 #include "EntitiesManager/CardRef.h"
 #include "State/State.h"
 #include "State/PlayerIdentifier.h"
-#include "State/Player.h"
+#include "State/Board/Player.h"
 #include "State/Utils/DefaultZonePosPolicy.h"
 #include "StaticEventManager/Events/RemovedFromZone.h"
 #include "StaticEventManager/Events/AddToZone.h"
@@ -25,7 +25,7 @@ namespace Manipulators
 				typename std::enable_if_t<State::Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
 				void ChangeTo(State::State & state, State::PlayerIdentifier player_identifier)
 			{
-				State::Player & player = state.players.Get(card_.GetPlayerIdentifier());
+				State::Player & player = state.board.players.Get(card_.GetPlayerIdentifier());
 				int new_pos = State::Utils::DefaultZonePosGetter<ChangeToZone, ChangingCardType>()(player);
 				return ChangeToInternal<ChangeToZone>(state, player_identifier, new_pos);
 			}

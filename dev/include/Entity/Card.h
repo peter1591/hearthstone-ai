@@ -45,6 +45,7 @@ namespace Entity
 		{
 			template <Entity::CardZone T1, Entity::CardType T2> friend class Manipulators::Helpers::ZoneChanger;
 			friend class Manipulators::Helpers::ZonePositionSetter;
+
 		public:
 			LocationSetter(RawCard & data) : data_(data) {}
 		private:

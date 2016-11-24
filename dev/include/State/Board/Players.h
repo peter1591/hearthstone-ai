@@ -1,7 +1,7 @@
 #pragma once
 
 #include <exception>
-#include "State/Player.h"
+#include "State/Board/Player.h"
 #include "State/PlayerIdentifier.h"
 
 namespace State

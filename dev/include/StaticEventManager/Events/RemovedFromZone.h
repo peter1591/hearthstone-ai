@@ -40,19 +40,19 @@ namespace StaticEventManager
 				private:
 					static void RemoveFromDeckZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.deck_.GetLocationManipulator().Remove(state, card.GetZonePosition());
 					}
 
 					static void RemoveFromHandZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.hand_.GetLocationManipulator().Remove(state, card.GetZonePosition());
 					}
 
 					static void RemoveFromPlayZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 
 						switch (RemovingCardType)
 						{
@@ -67,7 +67,7 @@ namespace StaticEventManager
 
 					static void RemoveFromGraveyardZone(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						State::Player & player = state.players.Get(card.GetPlayerIdentifier());
+						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.graveyard_.GetLocationManipulator<RemovingCardType>().Remove(state, card.GetZonePosition());
 					}
 				};
