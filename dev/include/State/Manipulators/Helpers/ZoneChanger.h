@@ -5,8 +5,8 @@
 #include "State/State.h"
 #include "State/Board/Player.h"
 #include "State/Utils/DefaultZonePosPolicy.h"
-#include "StaticEventManager/Events/RemovedFromZone.h"
-#include "StaticEventManager/Events/AddToZone.h"
+#include "State/Manipulators/Events/AddToZone.h"
+#include "State/Manipulators/Events/RemovedFromZone.h"
 
 namespace State
 {
@@ -38,24 +38,21 @@ namespace State
 
 				void Add(State & state)
 				{
-					StaticEventManager::Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>
-						::Trigger(state, card_ref_, card_);
+					Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>::Trigger(state, card_ref_, card_);
 				}
 
 			private:
 				template <CardZone ChangeToZone>
 				void ChangeToInternal(State & state, PlayerIdentifier player_identifier, int pos)
 				{
-					StaticEventManager::Events::RemovedFromZoneEvent<ChangingCardType, ChangingCardZone>
-						::Trigger(state, card_ref_, card_);
+					Events::RemovedFromZoneEvent<ChangingCardType, ChangingCardZone>::Trigger(state, card_ref_, card_);
 
 					card_.SetLocation()
 						.Player(player_identifier)
 						.Zone(ChangeToZone)
 						.Position(pos);
 
-					StaticEventManager::Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>
-						::Trigger(state, card_ref_, card_);
+					Events::AddToZoneEvent<ChangingCardType, ChangeToZone>::Trigger(state, card_ref_, card_);
 				}
 
 			private:
