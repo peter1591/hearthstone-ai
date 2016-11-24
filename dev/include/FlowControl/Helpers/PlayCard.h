@@ -5,7 +5,7 @@
 #include "State/Events/StaticEvent.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
-#include "StaticDispatcher/MinionDispatcher.h"
+#include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 
@@ -59,7 +59,7 @@ namespace FlowControl
 
 				State::Events::StaticEvent<State::Events::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);
 
-				Cards::Minions::Dispatcher::BattleCry(card_->GetCardId(),
+				FlowControl::Dispatchers::Minions::BattleCry(card_->GetCardId(),
 					Context::BattleCry(state_, card_ref_, *card_, [this]() {
 						return this->GetBattelcryTarget();
 				}));

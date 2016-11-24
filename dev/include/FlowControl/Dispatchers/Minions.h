@@ -2,9 +2,9 @@
 
 #include "Utils/StaticDispatcher.h"
 
-namespace Cards
+namespace FlowControl
 {
-	namespace Minions
+	namespace Dispatchers
 	{
 		namespace impl
 		{
@@ -50,7 +50,7 @@ namespace Cards
 			};
 		}
 
-		class Dispatcher
+		class Minions
 		{
 		public:
 			using DispatcherImpl = Utils::StaticDispatcher<impl::DefaultInvoked>;
@@ -66,5 +66,5 @@ namespace Cards
 
 #define REGISTER_MINION_CARD_CLASS(ClassName) \
 		template <> template <> \
-		struct Cards::Minions::Dispatcher::DispatcherImpl::DispatchMap<ClassName ::id> \
+		struct FlowControl::Dispatchers::Minions::DispatcherImpl::DispatchMap<ClassName ::id> \
 		{ typedef ClassName type; };
