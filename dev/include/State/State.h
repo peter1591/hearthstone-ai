@@ -1,7 +1,7 @@
 #pragma once
 
 #include "State/Cards/Manager.h"
-#include "State/Board/Board.h"
+#include "State/Board.h"
 #include "State/Events/HandlersManager.h"
 #include "State/ThisTurnCounters.h"
 

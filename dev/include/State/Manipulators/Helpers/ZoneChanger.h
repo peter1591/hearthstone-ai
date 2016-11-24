@@ -3,7 +3,7 @@
 #include "State/Types.h"
 #include "State/Cards/Card.h"
 #include "State/State.h"
-#include "State/Board/Player.h"
+#include "State/Player.h"
 #include "State/Utils/DefaultZonePosPolicy.h"
 #include "State/Manipulators/Events/AddToZone.h"
 #include "State/Manipulators/Events/RemovedFromZone.h"
