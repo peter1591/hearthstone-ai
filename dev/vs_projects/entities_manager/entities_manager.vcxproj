@@ -116,16 +116,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Manipulators\CardManipulator.h" />
-    <ClInclude Include="..\..\include\Manipulators\CharacterManipulator.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\AuraHelper.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\BasicHelper.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\EnchantmentHelper.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\ZoneChanger.h" />
-    <ClInclude Include="..\..\include\Manipulators\Helpers\ZonePositionSetter.h" />
-    <ClInclude Include="..\..\include\Manipulators\Manipulators.h" />
-    <ClInclude Include="..\..\include\Manipulators\MinionManipulator.h" />
-    <ClInclude Include="..\..\include\Manipulators\StateManipulator.h" />
     <ClInclude Include="..\..\include\State\CardRef.h" />
     <ClInclude Include="..\..\include\State\Cards\AuraAuxData.h" />
     <ClInclude Include="..\..\include\State\Cards\Card.h" />
@@ -134,6 +124,11 @@
     <ClInclude Include="..\..\include\State\Cards\Manager-impl.h" />
     <ClInclude Include="..\..\include\State\Cards\Manager.h" />
     <ClInclude Include="..\..\include\State\Cards\RawCard.h" />
+    <ClInclude Include="..\..\include\State\Manipulators\CardManipulator.h" />
+    <ClInclude Include="..\..\include\State\Manipulators\CharacterManipulator.h" />
+    <ClInclude Include="..\..\include\State\Manipulators\Manipulators.h" />
+    <ClInclude Include="..\..\include\State\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\..\include\State\Manipulators\StateManipulator.h" />
     <ClInclude Include="..\..\include\State\PlayerIdentifier.h" />
     <ClInclude Include="..\..\include\State\State.h" />
     <ClInclude Include="..\..\include\State\ThisTurnCounters.h" />

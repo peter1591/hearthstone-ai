@@ -15,6 +15,11 @@ public:
 		return min;
 	}
 
+	CardRef GetBattlecryTarget(State::State & state, CardRef card_ref, const State::Cards::Card & card)
+	{
+		return CardRef();
+	}
+
 private:
 	int hand_pos_;
 };

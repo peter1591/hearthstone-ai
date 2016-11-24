@@ -46,9 +46,6 @@
     <Filter Include="Header Files\State\Events\TriggerTypes">
       <UniqueIdentifier>{05dcffa4-72d6-43ba-8159-ac5df6f77b11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\DIspatchers">
-      <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\State\Manipulators">
       <UniqueIdentifier>{90399222-5ae9-45e3-add9-88951e8bf72e}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,9 @@
     </Filter>
     <Filter Include="Header Files\State\Manipulators\Events">
       <UniqueIdentifier>{0562de00-b634-47e3-95d1-14ad8efca151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FlowControl\Dispatchers">
+      <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,7 +174,7 @@
       <Filter>Header Files\State\Events\TriggerTypes</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Dispatchers\Minions.h">
-      <Filter>Header Files\FlowControl\DIspatchers</Filter>
+      <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\Manipulators\CardManipulator.h">
       <Filter>Header Files\State\Manipulators</Filter>
@@ -241,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Weapon.h">
       <Filter>Header Files\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h">
+      <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
