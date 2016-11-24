@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Entity/RawCard.h"
+#include "State/Cards/RawCard.h"
 
 namespace Manipulators
 {

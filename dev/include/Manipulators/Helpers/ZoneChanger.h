@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Entity/Card.h"
-#include "Entity/CardType.h"
-#include "Entity/CardZone.h"
-#include "State/Cards/CardRef.h"
+#include "State/Cards/Card.h"
+#include "State/Cards/CardType.h"
+#include "State/Cards/CardZone.h"
+#include "State/CardRef.h"
 #include "State/State.h"
 #include "State/PlayerIdentifier.h"
 #include "State/Board/Player.h"

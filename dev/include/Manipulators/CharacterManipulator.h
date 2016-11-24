@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Entity/Card.h"
+#include "State/Cards/Card.h"
 #include "State/Cards/Manager.h"
-#include "State/Cards/CardRef.h"
+#include "State/CardRef.h"
 #include "State/State.h"
 
 namespace Manipulators

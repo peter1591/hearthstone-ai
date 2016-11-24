@@ -4,10 +4,10 @@
 
 #include "StaticEventManager/Triggerer.h"
 #include "State/State.h"
-#include "State/Cards/CardRef.h"
-#include "Entity/Card.h"
-#include "Entity/CardType.h"
-#include "Entity/CardZone.h"
+#include "State/CardRef.h"
+#include "State/Cards/Card.h"
+#include "State/Cards/CardZone.h"
+#include "State/Cards/CardType.h"
 
 namespace StaticEventManager
 {

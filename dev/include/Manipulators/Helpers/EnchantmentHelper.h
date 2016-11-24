@@ -2,8 +2,8 @@
 
 #include <memory>
 #include <utility>
-#include "Entity/Card.h"
-#include "Entity/EnchantmentAuxData.h"
+#include "State/Cards/Card.h"
+#include "State/Cards/EnchantmentAuxData.h"
 
 namespace Manipulators
 {

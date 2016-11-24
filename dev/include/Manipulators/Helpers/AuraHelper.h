@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/AuraAuxData.h"
+#include "State/Cards/AuraAuxData.h"
 #include "State/State.h"
 
 namespace Manipulators

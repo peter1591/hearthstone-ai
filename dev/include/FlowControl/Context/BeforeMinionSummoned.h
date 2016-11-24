@@ -1,10 +1,12 @@
 #pragma once
 
 #include <functional>
-#include "State/Cards/CardRef.h"
+#include "State/CardRef.h"
 
 namespace State { class State; }
 namespace Entity { class Card; }
+
+using State::CardRef;
 
 namespace FlowControl
 {

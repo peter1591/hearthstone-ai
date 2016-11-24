@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/Card.h"
+#include "State/Cards/Card.h"
 #include "Manipulators/Helpers/BasicHelper.h"
 #include "Manipulators/Helpers/EnchantmentHelper.h"
 #include "Manipulators/Helpers/AuraHelper.h"

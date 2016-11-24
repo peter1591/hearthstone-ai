@@ -2,8 +2,8 @@
 
 #include <vector>
 #include "State/Cards/Manager.h"
-#include "State/Cards/CardRef.h"
-#include "Entity/Card.h"
+#include "State/CardRef.h"
+#include "State/Cards/Card.h"
 #include "State/Utils/OrderedCardsManager.h"
 
 namespace Manipulators

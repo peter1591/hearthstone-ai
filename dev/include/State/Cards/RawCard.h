@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include "Entity/CardType.h"
-#include "Entity/CardZone.h"
-#include "Entity/EnchantableStates.h"
-#include "Entity/EnchantmentAuxData.h"
-#include "Entity/AuraAuxData.h"
+#include "State/Cards/CardType.h"
+#include "State/Cards/CardZone.h"
+#include "State/Cards/EnchantableStates.h"
+#include "State/Cards/EnchantmentAuxData.h"
+#include "State/Cards/AuraAuxData.h"
 
 namespace Entity
 {

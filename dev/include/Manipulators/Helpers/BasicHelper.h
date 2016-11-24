@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/Card.h"
+#include "State/Cards/Card.h"
 
 namespace Manipulators
 {

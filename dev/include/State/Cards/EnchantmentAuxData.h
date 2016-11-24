@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity/EnchantableStates.h"
+#include "State/Cards/EnchantableStates.h"
 #include "Enchantments/TieredEnchantments.h"
 
 namespace Entity

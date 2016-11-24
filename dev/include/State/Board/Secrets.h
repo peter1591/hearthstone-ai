@@ -3,8 +3,8 @@
 #include <string>
 #include <unordered_map>
 #include "State/Cards/Manager.h"
-#include "State/Cards/CardRef.h"
-#include "Entity/Card.h"
+#include "State/CardRef.h"
+#include "State/Cards/Card.h"
 
 namespace State
 {

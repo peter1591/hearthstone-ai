@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "State/Cards/CardRef.h"
+#include "State/CardRef.h"
 #include "State/Cards/Manager.h"
 
 namespace State
