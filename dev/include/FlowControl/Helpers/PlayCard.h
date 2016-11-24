@@ -31,7 +31,7 @@ namespace FlowControl
 
 				switch (card_->GetCardType())
 				{
-				case Entity::kCardTypeMinion:
+				case State::kCardTypeMinion:
 					return PlayMinionCard();
 				}
 				throw std::exception("not implemented");
@@ -54,7 +54,7 @@ namespace FlowControl
 					put_position = action_parameters_.GetMinionPutLocation(0, total_minions);
 				}
 
-				Manipulators::StateManipulator(state_).Minion(card_ref_).GetZoneChanger().ChangeTo<Entity::kCardZonePlay>(
+				Manipulators::StateManipulator(state_).Minion(card_ref_).GetZoneChanger().ChangeTo<State::kCardZonePlay>(
 					state_, state_.current_player, put_position);
 
 				State::EventManager::StaticEvent<State::EventManager::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);
@@ -86,7 +86,7 @@ namespace FlowControl
 			RandomGenerator & random_;
 
 			CardRef card_ref_;
-			const Entity::Card * card_;
+			const State::Cards::Card * card_;
 			CardRef battlecry_target_;
 		};
 	}

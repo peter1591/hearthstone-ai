@@ -11,7 +11,7 @@ namespace State
 	class Graveyard
 	{
 	public:
-		template <Entity::CardType ManipulatingCardType>
+		template <CardType ManipulatingCardType>
 		Utils::OrderedCardsManager GetLocationManipulator()
 		{
 			return Utils::OrderedCardsManager(GetContainer<ManipulatingCardType>());
@@ -22,7 +22,7 @@ namespace State
 		size_t GetTotalOthers() const { return others_.size(); }
 
 	private:
-		template <Entity::CardType ManipulatingCardType>
+		template <CardType ManipulatingCardType>
 		std::vector<CardRef> & GetContainer();
 
 	private:
@@ -31,7 +31,7 @@ namespace State
 		std::vector<CardRef> others_;
 	};
 
-	template <> std::vector<CardRef> & Graveyard::GetContainer<Entity::kCardTypeMinion>() { return minions_; }
-	template <> std::vector<CardRef> & Graveyard::GetContainer<Entity::kCardTypeSpell>() { return spells_; }
-	template <Entity::CardType ManipulatingCardType> std::vector<CardRef> & Graveyard::GetContainer() { return others_; }
+	template <> std::vector<CardRef> & Graveyard::GetContainer<kCardTypeMinion>() { return minions_; }
+	template <> std::vector<CardRef> & Graveyard::GetContainer<kCardTypeSpell>() { return spells_; }
+	template <CardType ManipulatingCardType> std::vector<CardRef> & Graveyard::GetContainer() { return others_; }
 }

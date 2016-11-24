@@ -16,58 +16,58 @@ namespace StaticEventManager
 		{
 			namespace AddToZone
 			{
-				template <Entity::CardType TargetCardType, Entity::CardZone TargetCardZone>
+				template <State::CardType TargetCardType, State::CardZone TargetCardZone>
 				class AddToPlayerDatStructure
 				{
 				public:
-					static void Trigger(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void Trigger(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						switch (card.GetZone())
 						{
-						case Entity::kCardZoneDeck:
+						case State::kCardZoneDeck:
 							return AddToDeckZone(state, card_ref, card);
-						case Entity::kCardZoneHand:
+						case State::kCardZoneHand:
 							return AddToHandZone(state, card_ref, card);
-						case Entity::kCardZonePlay:
+						case State::kCardZonePlay:
 							return AddToPlayZone(state, card_ref, card);
-						case Entity::kCardZoneGraveyard:
+						case State::kCardZoneGraveyard:
 							return AddToGraveyardZone(state, card_ref, card);
 						}
 					}
 
 				private:
-					static void AddToDeckZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void AddToDeckZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.deck_.GetLocationManipulator().Insert(state, card_ref);
 					}
 
-					static void AddToHandZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void AddToHandZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.hand_.GetLocationManipulator().Insert(state, card_ref);
 					}
 
-					static void AddToPlayZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void AddToPlayZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 
 						switch (TargetCardType)
 						{
-						case Entity::kCardTypeHero:
+						case State::kCardTypeHero:
 							if (player.hero_ref_.IsValid()) throw std::exception("hero should be removed first");
 							player.hero_ref_ = card_ref;
 							return;
-						case Entity::kCardTypeMinion:
+						case State::kCardTypeMinion:
 							return player.minions_.GetLocationManipulator().Insert(state, card_ref);
-						case Entity::kCardTypeWeapon:
+						case State::kCardTypeWeapon:
 							return player.weapon_.Equip(card_ref);
-						case Entity::kCardTypeSecret:
+						case State::kCardTypeSecret:
 							return player.secrets_.Add(card.GetCardId(), card_ref);
 						}
 					}
 
-					static void AddToGraveyardZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void AddToGraveyardZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
@@ -76,7 +76,7 @@ namespace StaticEventManager
 			}
 		}
 
-		template <Entity::CardType TargetCardType, Entity::CardZone TargetCardZone>
+		template <State::CardType TargetCardType, State::CardZone TargetCardZone>
 		using AddToZoneEvent = Triggerer <
 			impl::AddToZone::AddToPlayerDatStructure<TargetCardType, TargetCardZone>
 			>;

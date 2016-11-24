@@ -21,7 +21,7 @@ public:
 		return GetEnchantments<EnchantmentType::tier>().Remove(std::forward<T>(id));
 	}
 
-	void ApplyAll(Entity::Card & card)
+	void ApplyAll(State::Cards::Card & card)
 	{
 		tier1_.ApplyAll(card);
 		tier2_.ApplyAll(card);

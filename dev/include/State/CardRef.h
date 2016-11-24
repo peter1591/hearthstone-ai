@@ -3,20 +3,20 @@
 #include <type_traits>
 #include "CloneableContainers/Vector.h"
 
-namespace Entity
-{
-	class Card;
-}
-
 namespace State
 {
+	namespace Cards
+	{
+		class Card;
+	}
+	
 	class CardRef
 	{
 	public:
-		typedef typename CloneableContainers::Vector<Entity::Card>::Identifier IdentifierType;
+		typedef typename CloneableContainers::Vector<Cards::Card>::Identifier IdentifierType;
 
 		CardRef() : id(IdentifierType::GetInvalidIdentifier()) {}
-		explicit CardRef(typename CloneableContainers::Vector<Entity::Card>::Identifier id) : id(id) {}
+		explicit CardRef(typename CloneableContainers::Vector<State::Cards::Card>::Identifier id) : id(id) {}
 
 		template <typename T>
 		bool operator==(T&& rhs) const

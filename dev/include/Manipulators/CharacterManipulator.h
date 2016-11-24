@@ -10,7 +10,7 @@ namespace Manipulators
 	class CharacterManipulator
 	{
 	public:
-		CharacterManipulator(State::State & state, CardRef card_ref, Entity::Card & card)
+		CharacterManipulator(State::State & state, CardRef card_ref, State::Cards::Card & card)
 			: state_(state), card_(card), card_ref_(card_ref)
 		{
 		}
@@ -23,7 +23,7 @@ namespace Manipulators
 
 	private:
 		State::State & state_;
-		Entity::Card & card_;
+		State::Cards::Card & card_;
 		CardRef card_ref_;
 	};
 }

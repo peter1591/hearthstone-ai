@@ -7,20 +7,20 @@ namespace State
 {
 	namespace Utils
 	{
-		template <Entity::CardZone Zone, Entity::CardType Type>
+		template <CardZone Zone, CardType Type>
 		struct ForcelyUseDefaultZonePos;
 
-		template <Entity::CardZone Zone, Entity::CardType Type>
+		template <CardZone Zone, CardType Type>
 		class DefaultZonePosGetter;
 
 		// Deck
-		template <Entity::CardType Type>
-		struct ForcelyUseDefaultZonePos<Entity::kCardZoneDeck, Type>
+		template <CardType Type>
+		struct ForcelyUseDefaultZonePos<kCardZoneDeck, Type>
 		{
 			static constexpr bool value = true;
 		};
-		template <Entity::CardType Type>
-		class DefaultZonePosGetter<Entity::kCardZoneDeck, Type>
+		template <CardType Type>
+		class DefaultZonePosGetter<kCardZoneDeck, Type>
 		{
 		public:
 			int operator()(Player & player) const
@@ -30,13 +30,13 @@ namespace State
 		};
 
 		// Hand
-		template <Entity::CardType Type>
-		struct ForcelyUseDefaultZonePos<Entity::kCardZoneHand, Type>
+		template <CardType Type>
+		struct ForcelyUseDefaultZonePos<kCardZoneHand, Type>
 		{
 			static constexpr bool value = true;
 		};
-		template <Entity::CardType Type>
-		class DefaultZonePosGetter<Entity::kCardZoneHand, Type>
+		template <CardType Type>
+		class DefaultZonePosGetter<kCardZoneHand, Type>
 		{
 		public:
 			int operator()(Player & player) const
@@ -47,12 +47,12 @@ namespace State
 
 		// Play - Weapon
 		template <>
-		struct ForcelyUseDefaultZonePos<Entity::kCardZonePlay, Entity::kCardTypeWeapon>
+		struct ForcelyUseDefaultZonePos<kCardZonePlay, kCardTypeWeapon>
 		{
 			static constexpr bool value = true;
 		};
 		template <>
-		class DefaultZonePosGetter<Entity::kCardZonePlay, Entity::kCardTypeWeapon>
+		class DefaultZonePosGetter<kCardZonePlay, kCardTypeWeapon>
 		{
 		public:
 			constexpr int operator()(Player & player) const
@@ -63,12 +63,12 @@ namespace State
 
 		// Play - Secrets
 		template <>
-		struct ForcelyUseDefaultZonePos<Entity::kCardZonePlay, Entity::kCardTypeSecret>
+		struct ForcelyUseDefaultZonePos<kCardZonePlay, kCardTypeSecret>
 		{
 			static constexpr bool value = true;
 		};
 		template <>
-		class DefaultZonePosGetter<Entity::kCardZonePlay, Entity::kCardTypeSecret>
+		class DefaultZonePosGetter<kCardZonePlay, kCardTypeSecret>
 		{
 		public:
 			constexpr int operator()(Player & player) const
@@ -78,13 +78,13 @@ namespace State
 		};
 
 		// Graveyard
-		template <Entity::CardType Type>
-		struct ForcelyUseDefaultZonePos<Entity::kCardZoneGraveyard, Type>
+		template <CardType Type>
+		struct ForcelyUseDefaultZonePos<kCardZoneGraveyard, Type>
 		{
 			static constexpr bool value = true;
 		};
 		template <>
-		class DefaultZonePosGetter<Entity::kCardZoneGraveyard, Entity::kCardTypeMinion>
+		class DefaultZonePosGetter<kCardZoneGraveyard, kCardTypeMinion>
 		{
 		public:
 			int operator()(Player & player) const
@@ -93,7 +93,7 @@ namespace State
 			}
 		};
 		template <>
-		class DefaultZonePosGetter<Entity::kCardZoneGraveyard, Entity::kCardTypeSpell>
+		class DefaultZonePosGetter<kCardZoneGraveyard, kCardTypeSpell>
 		{
 		public:
 			int operator()(Player & player) const
@@ -101,8 +101,8 @@ namespace State
 				return (int)player.graveyard_.GetTotalSpells();
 			}
 		};
-		template <Entity::CardType Type>
-		class DefaultZonePosGetter<Entity::kCardZoneGraveyard, Type>
+		template <CardType Type>
+		class DefaultZonePosGetter<kCardZoneGraveyard, Type>
 		{
 		public:
 			int operator()(Player & player) const
@@ -112,7 +112,7 @@ namespace State
 		};
 
 		// default
-		template <Entity::CardZone Zone, Entity::CardType Type>
+		template <CardZone Zone, CardType Type>
 		struct ForcelyUseDefaultZonePos
 		{
 			static constexpr bool value = false;

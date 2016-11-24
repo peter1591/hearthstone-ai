@@ -10,7 +10,7 @@ namespace Manipulators
 		class AuraHelper
 		{
 		public:
-			AuraHelper(State::State & state, Entity::Card & card) :
+			AuraHelper(State::State & state, State::Cards::Card & card) :
 				state_(state),
 				data_(card.GetMutableAuraAuxDataGetter().Get())
 			{
@@ -44,7 +44,7 @@ namespace Manipulators
 
 		private:
 			State::State & state_;
-			Entity::AuraAuxData & data_;
+			State::Cards::AuraAuxData & data_;
 		};
 	}
 }

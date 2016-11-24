@@ -16,55 +16,55 @@ namespace StaticEventManager
 		{
 			namespace RemovedFromZone
 			{
-				template <Entity::CardType RemovingCardType, Entity::CardZone RemovingCardZone>
+				template <State::CardType RemovingCardType, State::CardZone RemovingCardZone>
 				class RemoveFromPlayerDatStructure
 				{
 				public:
-					static void Trigger(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void Trigger(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						switch (RemovingCardZone)
 						{
-						case Entity::kCardZoneDeck:
+						case State::kCardZoneDeck:
 							return RemoveFromDeckZone(state, card_ref, card);
-						case Entity::kCardZoneHand:
+						case State::kCardZoneHand:
 							return RemoveFromHandZone(state, card_ref, card);
-						case Entity::kCardZonePlay:
+						case State::kCardZonePlay:
 							return RemoveFromPlayZone(state, card_ref, card);
-						case Entity::kCardZoneGraveyard:
+						case State::kCardZoneGraveyard:
 							return RemoveFromGraveyardZone(state, card_ref, card);
 							break;
 						}
 					}
 
 				private:
-					static void RemoveFromDeckZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void RemoveFromDeckZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.deck_.GetLocationManipulator().Remove(state, card.GetZonePosition());
 					}
 
-					static void RemoveFromHandZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void RemoveFromHandZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.hand_.GetLocationManipulator().Remove(state, card.GetZonePosition());
 					}
 
-					static void RemoveFromPlayZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void RemoveFromPlayZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 
 						switch (RemovingCardType)
 						{
-						case Entity::kCardTypeMinion:
+						case State::kCardTypeMinion:
 							return player.minions_.GetLocationManipulator().Remove(state, card.GetZonePosition());
-						case Entity::kCardTypeWeapon:
+						case State::kCardTypeWeapon:
 							return player.weapon_.Destroy();
-						case Entity::kCardTypeSecret:
+						case State::kCardTypeSecret:
 							return player.secrets_.Remove(card.GetCardId());
 						}
 					}
 
-					static void RemoveFromGraveyardZone(State::State & state, CardRef card_ref, Entity::Card & card)
+					static void RemoveFromGraveyardZone(State::State & state, CardRef card_ref, State::Cards::Card & card)
 					{
 						State::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 						player.graveyard_.GetLocationManipulator<RemovingCardType>().Remove(state, card.GetZonePosition());
@@ -73,7 +73,7 @@ namespace StaticEventManager
 			}
 		}
 
-		template <Entity::CardType RemovingCardType, Entity::CardZone RemovingCardZone>
+		template <State::CardType RemovingCardType, State::CardZone RemovingCardZone>
 		using RemovedFromZoneEvent = Triggerer <
 			impl::RemovedFromZone::RemoveFromPlayerDatStructure<RemovingCardType, RemovingCardZone>
 			>;

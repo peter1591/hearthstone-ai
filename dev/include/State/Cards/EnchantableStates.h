@@ -3,17 +3,20 @@
 #include "State/Types.h"
 #include "State/PlayerIdentifier.h"
 
-namespace Entity
+namespace State
 {
-	class EnchantableStates
+	namespace Cards
 	{
-	public:
-		EnchantableStates() : zone(kCardZoneInvalid), cost(-1), attack(-1), max_hp(-1) {}
+		class EnchantableStates
+		{
+		public:
+			EnchantableStates() : zone(kCardZoneInvalid), cost(-1), attack(-1), max_hp(-1) {}
 
-		State::PlayerIdentifier player;
-		CardZone zone;
-		int cost;
-		int attack;
-		int max_hp;
-	};
+			PlayerIdentifier player;
+			CardZone zone;
+			int cost;
+			int attack;
+			int max_hp;
+		};
+	}
 }

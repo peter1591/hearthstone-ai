@@ -12,7 +12,7 @@ namespace Manipulators
 		class EnchantmentHelper
 		{
 		public:
-			EnchantmentHelper(Entity::Card &card) :
+			EnchantmentHelper(State::Cards::Card &card) :
 				data_(card.GetMutableEnchantmentAuxDataGetter().Get())
 			{
 			}
@@ -32,7 +32,7 @@ namespace Manipulators
 			}
 
 		private:
-			Entity::EnchantmentAuxData & data_;
+			State::Cards::EnchantmentAuxData & data_;
 		};
 	}
 }

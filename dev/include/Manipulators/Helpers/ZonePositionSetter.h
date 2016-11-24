@@ -20,7 +20,7 @@ namespace Manipulators
 			friend class State::Utils::OrderedCardsManager;
 
 		public:
-			ZonePositionSetter(Entity::Card & card) : card_(card) {}
+			ZonePositionSetter(State::Cards::Card & card) : card_(card) {}
 
 		private: // only accessible to friend classes
 			void Set(int pos)
@@ -29,7 +29,7 @@ namespace Manipulators
 			}
 
 		private:
-			Entity::Card & card_;
+			State::Cards::Card & card_;
 		};
 	}
 }

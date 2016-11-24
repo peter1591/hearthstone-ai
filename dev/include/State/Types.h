@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Entity
+namespace State
 {
 	enum CardType
 	{

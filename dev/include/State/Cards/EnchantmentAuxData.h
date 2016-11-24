@@ -3,15 +3,18 @@
 #include "State/Cards/EnchantableStates.h"
 #include "Enchantments/TieredEnchantments.h"
 
-namespace Entity
+namespace State
 {
-	class EnchantmentAuxData
+	namespace Cards
 	{
-	public:
-		EnchantmentAuxData() : need_update(true) {}
+		class EnchantmentAuxData
+		{
+		public:
+			EnchantmentAuxData() : need_update(true) {}
 
-		TieredEnchantments enchantments;
-		EnchantableStates origin_states;
-		bool need_update;
-	};
+			TieredEnchantments enchantments;
+			EnchantableStates origin_states;
+			bool need_update;
+		};
+	}
 }

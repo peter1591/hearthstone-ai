@@ -6,22 +6,25 @@
 #include "State/Cards/EnchantmentAuxData.h"
 #include "State/Cards/AuraAuxData.h"
 
-namespace Entity
+namespace State
 {
-	class RawCard
+	namespace Cards
 	{
-	public:
-		RawCard() : card_type(kCardTypeInvalid), play_order(-1), damaged(0) {}
+		class RawCard
+		{
+		public:
+			RawCard() : card_type(kCardTypeInvalid), play_order(-1), damaged(0) {}
 
-		CardType card_type;
-		int card_id;
-		int play_order;
-		int zone_position;
+			CardType card_type;
+			int card_id;
+			int play_order;
+			int zone_position;
 
-		int damaged;
-		EnchantableStates enchanted_states;
+			int damaged;
+			EnchantableStates enchanted_states;
 
-		EnchantmentAuxData enchantment_aux_data;
-		AuraAuxData aura_aux_data;
-	};
+			EnchantmentAuxData enchantment_aux_data;
+			AuraAuxData aura_aux_data;
+		};
+	}
 }

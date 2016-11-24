@@ -4,14 +4,17 @@
 #include "State/CardRef.h"
 #include "Enchantments/TieredEnchantments.h"
 
-namespace Entity
+namespace State
 {
-	class AuraAuxData
+	namespace Cards
 	{
-	public:
-		AuraAuxData() : last_update_hint_id(0) {}
+		class AuraAuxData
+		{
+		public:
+			AuraAuxData() : last_update_hint_id(0) {}
 
-		std::unordered_map<State::CardRef, TieredEnchantments::ContainerType::Identifier> applied_enchantments;
-		int last_update_hint_id;
-	};
+			std::unordered_map<CardRef, TieredEnchantments::ContainerType::Identifier> applied_enchantments;
+			int last_update_hint_id;
+		};
+	}
 }

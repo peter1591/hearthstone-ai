@@ -14,10 +14,7 @@ namespace Manipulators
 namespace State
 {
 	class State;
-}
 
-namespace State
-{
 	namespace Cards
 	{
 		class Manager
@@ -25,9 +22,9 @@ namespace State
 			friend class Manipulators::StateManipulator;
 
 		public:
-			typedef CloneableContainers::Vector<Entity::Card> ContainerType;
+			typedef CloneableContainers::Vector<Card> ContainerType;
 
-			const Entity::Card & Get(const CardRef & id) const
+			const Card & Get(const CardRef & id) const
 			{
 				return cards_.Get(id.id);
 			}
@@ -35,7 +32,7 @@ namespace State
 			template <typename T> CardRef PushBack(State & state, T&& card);
 
 		private:
-			Entity::Card & GetMutable(const CardRef & id)
+			Card & GetMutable(const CardRef & id)
 			{
 				return cards_.Get(id.id);
 			}

@@ -5,15 +5,18 @@
 #include <memory>
 #include "CloneableContainers/RemovableVector.h"
 
-namespace Entity
+namespace State
 {
-	class Card;
+	namespace Cards
+	{
+		class Card;
+	}
 }
 
 class Enchantments
 {
 public:
-	typedef std::function<void(Entity::Card &)> ApplyFunctor;
+	typedef std::function<void(State::Cards::Card &)> ApplyFunctor;
 	typedef CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
 	template <typename T>
@@ -28,7 +31,7 @@ public:
 		return enchantments_.Remove(std::forward<T>(id));
 	}
 
-	void ApplyAll(Entity::Card & card)
+	void ApplyAll(State::Cards::Card & card)
 	{
 		enchantments_.IterateAll([&card](ApplyFunctor& functor) -> bool {
 			functor(card);
