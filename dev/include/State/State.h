@@ -20,7 +20,7 @@ namespace State
 
 	public:
 		Board board;
-		EntitiesManager mgr;
+		Cards::Manager mgr;
 		EventManager::HandlersManager event_mgr;
 
 		PlayerIdentifier current_player;

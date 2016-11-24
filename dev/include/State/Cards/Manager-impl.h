@@ -7,10 +7,13 @@
 #include "Manipulators/MinionManipulator.h"
 #include "State/State.h"
 
-template <typename T>
-CardRef EntitiesManager::PushBack(State::State & state, T&& card)
+namespace State
 {
-	CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
-	Manipulators::StateManipulator(state).Card(ref).GetZoneChanger().Add(state);
-	return ref;
+	template <typename T>
+	CardRef Cards::Manager::PushBack(State & state, T&& card)
+	{
+		CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
+		Manipulators::StateManipulator(state).Card(ref).GetZoneChanger().Add(state);
+		return ref;
+	}
 }

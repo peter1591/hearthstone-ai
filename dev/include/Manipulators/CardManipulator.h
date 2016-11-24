@@ -8,8 +8,6 @@
 #include "Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
 
-class EntitiesManager;
-
 namespace Manipulators
 {
 	class CardManipulator

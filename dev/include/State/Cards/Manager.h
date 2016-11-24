@@ -16,26 +16,32 @@ namespace State
 	class State;
 }
 
-class EntitiesManager
+namespace State
 {
-	friend class Manipulators::StateManipulator;
-
-public:
-	typedef CloneableContainers::Vector<Entity::Card> ContainerType;
-
-	const Entity::Card & Get(const CardRef & id) const
+	namespace Cards
 	{
-		return cards_.Get(id.id);
+		class Manager
+		{
+			friend class Manipulators::StateManipulator;
+
+		public:
+			typedef CloneableContainers::Vector<Entity::Card> ContainerType;
+
+			const Entity::Card & Get(const CardRef & id) const
+			{
+				return cards_.Get(id.id);
+			}
+
+			template <typename T> CardRef PushBack(State & state, T&& card);
+
+		private:
+			Entity::Card & GetMutable(const CardRef & id)
+			{
+				return cards_.Get(id.id);
+			}
+
+		private:
+			ContainerType cards_;
+		};
 	}
-
-	template <typename T> CardRef PushBack(State::State & state, T&& card);
-
-private:
-	Entity::Card & GetMutable(const CardRef & id)
-	{
-		return cards_.Get(id.id);
-	}
-
-private:
-	ContainerType cards_;
-};
+}

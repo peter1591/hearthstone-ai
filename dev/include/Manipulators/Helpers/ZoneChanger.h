@@ -19,7 +19,7 @@ namespace Manipulators
 		class ZoneChanger
 		{
 		public:
-			ZoneChanger(EntitiesManager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
+			ZoneChanger(State::Cards::Manager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
 
 			template <Entity::CardZone ChangeToZone,
 				typename std::enable_if_t<State::Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
@@ -60,7 +60,7 @@ namespace Manipulators
 			}
 
 		private:
-			EntitiesManager & mgr_;
+			State::Cards::Manager & mgr_;
 			CardRef card_ref_;
 			Entity::Card & card_;
 		};
@@ -69,7 +69,7 @@ namespace Manipulators
 		class ZoneChangerWithUnknownZone
 		{
 		public:
-			ZoneChangerWithUnknownZone(EntitiesManager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
+			ZoneChangerWithUnknownZone(State::Cards::Manager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
 
 			template <Entity::CardZone ChangeToZone>
 			void ChangeTo(State::State & state, State::PlayerIdentifier player_identifier)
@@ -143,7 +143,7 @@ namespace Manipulators
 			}
 
 		private:
-			EntitiesManager & mgr_;
+			State::Cards::Manager & mgr_;
 			CardRef card_ref_;
 			Entity::Card & card_;
 		};
@@ -151,7 +151,7 @@ namespace Manipulators
 		class ZoneChangerWithUnknownZoneUnknownType
 		{
 		public:
-			ZoneChangerWithUnknownZoneUnknownType(EntitiesManager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
+			ZoneChangerWithUnknownZoneUnknownType(State::Cards::Manager& mgr, CardRef card_ref, Entity::Card &card) : mgr_(mgr), card_ref_(card_ref), card_(card) {}
 
 			template <Entity::CardZone ChangeToZone>
 			void ChangeTo(State::State & state, State::PlayerIdentifier player_identifier)
@@ -217,7 +217,7 @@ namespace Manipulators
 			}
 
 		private:
-			EntitiesManager & mgr_;
+			State::Cards::Manager & mgr_;
 			CardRef card_ref_;
 			Entity::Card & card_;
 		};
