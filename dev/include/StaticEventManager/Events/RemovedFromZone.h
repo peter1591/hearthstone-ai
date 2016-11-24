@@ -6,8 +6,7 @@
 #include "State/State.h"
 #include "State/CardRef.h"
 #include "State/Cards/Card.h"
-#include "State/Cards/CardZone.h"
-#include "State/Cards/CardType.h"
+#include "State/Types.h"
 
 namespace StaticEventManager
 {

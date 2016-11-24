@@ -3,7 +3,7 @@
 #include <vector>
 #include "State/Cards/Manager.h"
 #include "State/CardRef.h"
-#include "State/Cards/CardType.h"
+#include "State/Types.h"
 #include "State/Utils/OrderedCardsManager.h"
 
 namespace State

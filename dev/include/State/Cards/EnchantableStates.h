@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Cards/CardZone.h"
+#include "State/Types.h"
 #include "State/PlayerIdentifier.h"
 
 namespace Entity

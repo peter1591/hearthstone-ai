@@ -1,8 +1,7 @@
 #pragma once
 
 #include "State/Board/Player.h"
-#include "State/Cards/CardZone.h"
-#include "State/Cards/CardType.h"
+#include "State/Types.h"
 
 namespace State
 {

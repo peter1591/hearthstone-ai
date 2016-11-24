@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-#include "State/Cards/CardType.h"
-#include "State/Cards/CardZone.h"
+#include "State/Types.h"
 #include "State/Cards/EnchantableStates.h"
 #include "State/Cards/EnchantmentAuxData.h"
 #include "State/Cards/AuraAuxData.h"

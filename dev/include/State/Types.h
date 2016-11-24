@@ -12,4 +12,16 @@ namespace Entity
 		kCardTypeHeroPower,
 		kCardTypeInvalid
 	};
+
+	enum CardZone
+	{
+		kCardZonePlay,
+		kCardZoneDeck,
+		kCardZoneHand,
+		kCardZoneSecret,
+		kCardZoneGraveyard,
+		kCardZoneRemoved,
+		kCardZonePutASide,
+		kCardZoneInvalid
+	};
 }
