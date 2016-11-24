@@ -3,7 +3,7 @@
 #include <functional>
 #include <utility>
 #include <memory>
-#include "CloneableContainers/RemovableVector.h"
+#include "Utils/CloneableContainers/RemovableVector.h"
 
 namespace State
 {
@@ -15,7 +15,7 @@ namespace State
 		{
 		public:
 			typedef std::function<void(Card &)> ApplyFunctor;
-			typedef CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
+			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
 			template <typename T>
 			typename ContainerType::Identifier PushBack(T && item)

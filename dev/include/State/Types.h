@@ -1,7 +1,7 @@
 #pragma once
 
 #include <type_traits>
-#include "CloneableContainers/Vector.h"
+#include "Utils/CloneableContainers/Vector.h"
 
 namespace State
 {
@@ -42,10 +42,10 @@ namespace State
 	class CardRef
 	{
 	public:
-		typedef typename CloneableContainers::Vector<Cards::Card>::Identifier IdentifierType;
+		typedef typename Utils::CloneableContainers::Vector<Cards::Card>::Identifier IdentifierType;
 
 		CardRef() : id(IdentifierType::GetInvalidIdentifier()) {}
-		explicit CardRef(typename CloneableContainers::Vector<Cards::Card>::Identifier id) : id(id) {}
+		explicit CardRef(IdentifierType id) : id(id) {}
 
 		template <typename T>
 		bool operator==(T&& rhs) const
@@ -73,7 +73,7 @@ namespace std
 	{
 		std::size_t operator()(const State::CardRef& key) const
 		{
-			return CloneableContainers::VectorIdentifierHasher()(key.id);
+			return Utils::CloneableContainers::VectorIdentifierHasher()(key.id);
 		}
 	};
 }

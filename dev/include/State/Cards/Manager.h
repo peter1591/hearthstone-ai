@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include "CloneableContainers/Vector.h"
+#include "Utils/CloneableContainers/Vector.h"
 #include "State/Cards/Card.h"
 #include "State/Types.h"
 
@@ -21,7 +21,7 @@ namespace State
 			friend class Manipulators::StateManipulator;
 
 		public:
-			typedef CloneableContainers::Vector<Card> ContainerType;
+			typedef Utils::CloneableContainers::Vector<Card> ContainerType;
 
 			const Card & Get(const CardRef & id) const
 			{
