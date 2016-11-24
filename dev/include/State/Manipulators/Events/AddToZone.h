@@ -3,7 +3,7 @@
 #include "State/Types.h"
 #include "State/State.h"
 #include "State/Cards/Card.h"
-#include "StaticEventManager/Triggerer.h"
+#include "Utils/StaticEventTriggerer.h"
 
 namespace State
 {
@@ -76,7 +76,7 @@ namespace State
 			}
 
 			template <CardType TargetCardType, CardZone TargetCardZone>
-			using AddToZoneEvent = StaticEventManager::Triggerer <
+			using AddToZoneEvent = ::Utils::StaticEventTriggerer <
 				impl::AddToZone::AddToPlayerDatStructure<TargetCardType, TargetCardZone>
 			>;
 		}

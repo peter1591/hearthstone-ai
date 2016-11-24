@@ -3,7 +3,7 @@
 #include "State/Types.h"
 #include "State/State.h"
 #include "State/Cards/Card.h"
-#include "StaticEventManager/Triggerer.h"
+#include "Utils/StaticEventTriggerer.h"
 
 namespace State
 {
@@ -73,7 +73,7 @@ namespace State
 			}
 
 			template <CardType RemovingCardType, CardZone RemovingCardZone>
-			using RemovedFromZoneEvent = StaticEventManager::Triggerer <
+			using RemovedFromZoneEvent = ::Utils::StaticEventTriggerer <
 				impl::RemovedFromZone::RemoveFromPlayerDatStructure<RemovingCardType, RemovingCardZone>
 			>;
 		}

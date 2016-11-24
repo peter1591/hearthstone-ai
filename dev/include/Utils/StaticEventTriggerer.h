@@ -2,9 +2,9 @@
 
 #include <utility>
 
-namespace StaticEventManager
+namespace Utils
 {
-	namespace impl
+	namespace StaticEventTriggererImpl
 	{
 		template <class FirstType, class... RestTypes>
 		class Invoker2
@@ -39,13 +39,13 @@ namespace StaticEventManager
 	}
 
 	template <class... Triggers>
-	class Triggerer
+	class StaticEventTriggerer
 	{
 	public:
 		template <class... Args>
 		static void Trigger(Args&&... args)
 		{
-			impl::Invoker<Triggers...>::Trigger(std::forward<Args>(args)...);
+			StaticEventTriggererImpl::Invoker<Triggers...>::Trigger(std::forward<Args>(args)...);
 		}
 	};
 }
