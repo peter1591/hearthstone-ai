@@ -5,6 +5,7 @@
 #include "State/Events/StaticEvent.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
+#include "FlowControl/Helpers/ActionParameterWrapper.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
@@ -48,11 +49,7 @@ namespace FlowControl
 				state_.GetCurrentPlayer().resource_.Cost(card_->GetCost());
 
 				int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
-
-				int put_position = 0;
-				if (total_minions > 0) {
-					put_position = action_parameters_.GetMinionPutLocation(0, total_minions);
-				}
+				int put_position = action_parameters_.GetMinionPutLocation(0, total_minions);
 
 				State::Manipulators::StateManipulator(state_).Minion(card_ref_)
 					.Zone().ChangeTo<State::kCardZonePlay>(state_.current_player, put_position);
@@ -61,7 +58,7 @@ namespace FlowControl
 
 				FlowControl::Dispatchers::Minions::BattleCry(card_->GetCardId(),
 					Context::BattleCry(state_, card_ref_, *card_, [this]() {
-						return this->GetBattelcryTarget();
+						return action_parameters_.GetBattlecryTarget(state_, card_ref_, *card_);
 				}));
 
 				State::Events::StaticEvent<State::Events::TriggerTypes::AfterMinionPlayed>::TriggerEvent(state_.event_mgr, *card_);
@@ -74,15 +71,9 @@ namespace FlowControl
 				return kResultNotDetermined;
 			}
 
-			CardRef GetBattelcryTarget()
-			{
-				if (battlecry_target_.IsValid()) return battlecry_target_;
-				throw std::exception("not implemented");
-			}
-
 		private:
 			State::State & state_;
-			ActionParameterGetter & action_parameters_;
+			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
 			RandomGenerator & random_;
 
 			CardRef card_ref_;
