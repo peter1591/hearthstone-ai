@@ -27,7 +27,7 @@ namespace State
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
 			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
 			Helpers::ZoneChangerWithUnknownZone<kCardTypeMinion> Zone() {
-				return Helpers::ZoneChangerWithUnknownZone<kCardTypeMinion>(state_.mgr, card_ref_, card_);
+				return Helpers::ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_);
 			}
 
 		private:

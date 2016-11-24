@@ -31,7 +31,7 @@ namespace State
 			{
 				// TODO: Can specialize the zone changer to accelerate when moving from a non-play zone to another non-play zone
 				// For example: deck --> hand
-				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_.mgr, card_ref_, card_);
+				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, card_ref_, card_);
 			}
 
 		private:
