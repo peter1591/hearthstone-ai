@@ -2,8 +2,8 @@
 
 #include <string>
 #include <unordered_map>
+#include "State/Types.h"
 #include "State/Cards/Manager.h"
-#include "State/CardRef.h"
 #include "State/Cards/Card.h"
 
 namespace State

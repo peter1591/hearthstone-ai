@@ -1,8 +1,8 @@
 #pragma once
 
 #include <exception>
+#include "State/Types.h"
 #include "State/Board/Player.h"
-#include "State/PlayerIdentifier.h"
 
 namespace State
 {

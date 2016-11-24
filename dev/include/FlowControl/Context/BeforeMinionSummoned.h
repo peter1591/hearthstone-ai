@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "State/CardRef.h"
+#include "State/Types.h"
 
 namespace State
 {

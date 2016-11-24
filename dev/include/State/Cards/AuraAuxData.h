@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-#include "State/CardRef.h"
+#include "State/Types.h"
 #include "Enchantments/TieredEnchantments.h"
 
 namespace State

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "State/Types.h"
-#include "State/PlayerIdentifier.h"
 
 namespace State
 {

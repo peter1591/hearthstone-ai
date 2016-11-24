@@ -1,9 +1,9 @@
 #pragma once
 
+#include "State/Types.h"
+#include "State/State.h"
 #include "State/Cards/Card.h"
 #include "State/Cards/Manager.h"
-#include "State/CardRef.h"
-#include "State/State.h"
 
 namespace Manipulators
 {

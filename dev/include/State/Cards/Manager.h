@@ -3,8 +3,7 @@
 #include <utility>
 #include "CloneableContainers/Vector.h"
 #include "State/Cards/Card.h"
-#include "State/CardRef.h"
-#include "State/PlayerIdentifier.h"
+#include "State/Types.h"
 
 namespace Manipulators
 {

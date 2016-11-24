@@ -1,7 +1,7 @@
 #pragma once
 
+#include "State/Types.h"
 #include "State/State.h"
-#include "State/PlayerIdentifier.h"
 #include "Manipulators/CharacterManipulator.h"
 #include "Manipulators/CardManipulator.h"
 #include "Manipulators/MinionManipulator.h"
