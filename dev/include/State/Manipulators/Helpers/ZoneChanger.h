@@ -22,28 +22,28 @@ namespace State
 
 				template <CardZone ChangeToZone,
 					typename std::enable_if_t<Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
-					void ChangeTo(State & state, PlayerIdentifier player_identifier)
+					void ChangeTo(PlayerIdentifier player_identifier)
 				{
-					Player & player = state.board.players.Get(card_.GetPlayerIdentifier());
+					Player & player = state_.board.players.Get(card_.GetPlayerIdentifier());
 					int new_pos = Utils::DefaultZonePosGetter<ChangeToZone, ChangingCardType>()(player);
-					return ChangeToInternal<ChangeToZone>(state_, player_identifier, new_pos);
+					return ChangeToInternal<ChangeToZone>(player_identifier, new_pos);
 				}
 
 				template <CardZone ChangeToZone,
 					typename std::enable_if_t<!Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
-					void ChangeTo(State & state, PlayerIdentifier player_identifier, int pos)
+					void ChangeTo(PlayerIdentifier player_identifier, int pos)
 				{
-					return ChangeToInternal<ChangeToZone>(state_, player_identifier, pos);
+					return ChangeToInternal<ChangeToZone>(player_identifier, pos);
 				}
 
-				void Add(State & state)
+				void Add()
 				{
 					Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>::Trigger(state_, card_ref_, card_);
 				}
 
 			private:
 				template <CardZone ChangeToZone>
-				void ChangeToInternal(State & state, PlayerIdentifier player_identifier, int pos)
+				void ChangeToInternal(PlayerIdentifier player_identifier, int pos)
 				{
 					Events::RemovedFromZoneEvent<ChangingCardType, ChangingCardZone>::Trigger(state_, card_ref_, card_);
 
@@ -68,71 +68,71 @@ namespace State
 				ZoneChangerWithUnknownZone(State & state, CardRef card_ref, Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
 
 				template <CardZone ChangeToZone>
-				void ChangeTo(State & state, PlayerIdentifier player_identifier)
+				void ChangeTo(PlayerIdentifier player_identifier)
 				{
 					switch (card_.GetZone())
 					{
 					case kCardZoneDeck:
-						return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardZoneGraveyard:
-						return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardZoneHand:
-						return ZoneChanger<kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardZonePlay:
-						return ZoneChanger<kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardZonePutASide:
-						return ZoneChanger<kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardZoneRemoved:
-						return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardZoneSecret:
-						return ZoneChanger<kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChanger<kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					default:
 						throw std::exception("Unknown card zone");
 					}
 				}
 
 				template <CardZone ChangeToZone>
-				void ChangeTo(State & state, PlayerIdentifier player_identifier, int pos)
+				void ChangeTo(PlayerIdentifier player_identifier, int pos)
 				{
 					switch (card_.GetZone())
 					{
 					case kCardZoneDeck:
-						return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardZoneGraveyard:
-						return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardZoneHand:
-						return ZoneChanger<kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardZonePlay:
-						return ZoneChanger<kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardZonePutASide:
-						return ZoneChanger<kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardZoneRemoved:
-						return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardZoneSecret:
-						return ZoneChanger<kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChanger<kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					default:
 						throw std::exception("Unknown card zone");
 					}
 				}
 
-				void Add(State & state)
+				void Add()
 				{
 					switch (card_.GetZone())
 					{
 					case kCardZoneDeck:
-						return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).Add();
 					case kCardZoneGraveyard:
-						return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).Add();
 					case kCardZoneHand:
-						return ZoneChanger<kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).Add();
 					case kCardZonePlay:
-						return ZoneChanger<kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).Add();
 					case kCardZonePutASide:
-						return ZoneChanger<kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).Add();
 					case kCardZoneRemoved:
-						return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).Add();
 					case kCardZoneSecret:
-						return ZoneChanger<kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).Add(state);
+						return ZoneChanger<kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).Add();
 					default:
 						throw std::exception("Unknown card zone");
 					}
@@ -150,63 +150,63 @@ namespace State
 				ZoneChangerWithUnknownZoneUnknownType(State& state, CardRef card_ref, Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
 
 				template <CardZone ChangeToZone>
-				void ChangeTo(State & state, PlayerIdentifier player_identifier)
+				void ChangeTo(PlayerIdentifier player_identifier)
 				{
 					switch (card_.GetCardType())
 					{
 					case kCardTypeMinion:
-						return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardTypeHeroPower:
-						return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardTypeSecret:
-						return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardTypeSpell:
-						return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case kCardTypeWeapon:
-						return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier);
+						return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					default:
 						throw std::exception("unknown card type");
 					}
 				}
 
 				template <CardZone ChangeToZone>
-				void ChangeTo(State & state, PlayerIdentifier player_identifier, int pos)
+				void ChangeTo(PlayerIdentifier player_identifier, int pos)
 				{
 					switch (card_.GetCardType())
 					{
 					case kCardTypeHero:
-						return ZoneChangerWithUnknownZone<kCardTypeHero>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChangerWithUnknownZone<kCardTypeHero>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardTypeMinion:
-						return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardTypeHeroPower:
-						return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardTypeSecret:
-						return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardTypeSpell:
-						return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case kCardTypeWeapon:
-						return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(state, player_identifier, pos);
+						return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					default:
 						throw std::exception("unknown card type");
 					}
 				}
 
-				void Add(State & state)
+				void Add()
 				{
 					switch (card_.GetCardType())
 					{
 					case kCardTypeHero:
-						return ZoneChangerWithUnknownZone<kCardTypeHero>(state_, card_ref_, card_).Add(state);
+						return ZoneChangerWithUnknownZone<kCardTypeHero>(state_, card_ref_, card_).Add();
 					case kCardTypeMinion:
-						return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_).Add(state);
+						return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_).Add();
 					case kCardTypeHeroPower:
-						return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, card_ref_, card_).Add(state);
+						return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, card_ref_, card_).Add();
 					case kCardTypeSecret:
-						return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, card_ref_, card_).Add(state);
+						return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, card_ref_, card_).Add();
 					case kCardTypeSpell:
-						return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, card_ref_, card_).Add(state);
+						return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, card_ref_, card_).Add();
 					case kCardTypeWeapon:
-						return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, card_ref_, card_).Add(state);
+						return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, card_ref_, card_).Add();
 					default:
 						throw std::exception("unknown card type");
 					}
