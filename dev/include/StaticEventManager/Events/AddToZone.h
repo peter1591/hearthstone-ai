@@ -23,11 +23,6 @@ namespace StaticEventManager
 				public:
 					static void Trigger(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						std::cout << "Adding to zone called. "
-							<< "Type = " << TargetCardType
-							<< ", Zone = " << TargetCardZone
-							<< std::endl;
-
 						switch (card.GetZone())
 						{
 						case Entity::kCardZoneDeck:

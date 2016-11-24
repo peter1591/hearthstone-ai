@@ -23,11 +23,6 @@ namespace StaticEventManager
 				public:
 					static void Trigger(State::State & state, CardRef card_ref, Entity::Card & card)
 					{
-						std::cout << "Removed from zone called. "
-							<< "Type = " << RemovingCardType
-							<< ", Zone = " << RemovingCardZone
-							<< std::endl;
-
 						switch (RemovingCardZone)
 						{
 						case Entity::kCardZoneDeck:
