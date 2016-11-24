@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StaticDispatcher/Dispatcher.h"
+#include "Utils/StaticDispatcher.h"
 
 namespace Cards
 {
@@ -53,7 +53,7 @@ namespace Cards
 		class Dispatcher
 		{
 		public:
-			using DispatcherImpl = StaticDispatcher::Dispatcher<impl::DefaultInvoked>;
+			using DispatcherImpl = Utils::StaticDispatcher<impl::DefaultInvoked>;
 
 			template <typename... Args>
 			static void BattleCry(int id, Args&&... args)

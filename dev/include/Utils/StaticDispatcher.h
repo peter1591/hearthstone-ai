@@ -3,10 +3,10 @@
 #include <string>
 #include <utility>
 
-namespace StaticDispatcher
+namespace Utils
 {
 	template <typename DefaultInvoked>
-	class Dispatcher
+	class StaticDispatcher
 	{
 	public:
 		template <int Id> struct DispatchMap
