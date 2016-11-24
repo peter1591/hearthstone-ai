@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include "EntitiesManager/CardRef.h"
+#include "State/Cards/CardRef.h"
 
 namespace State { class State; }
 namespace Entity { class Card; }

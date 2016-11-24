@@ -2,8 +2,8 @@
 
 #include <string>
 #include <unordered_map>
-#include "EntitiesManager/EntitiesManager.h"
-#include "EntitiesManager/CardRef.h"
+#include "State/Cards/Manager.h"
+#include "State/Cards/CardRef.h"
 #include "Entity/Card.h"
 
 namespace State

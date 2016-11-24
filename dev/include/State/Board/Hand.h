@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "EntitiesManager/EntitiesManager.h"
-#include "EntitiesManager/CardRef.h"
+#include "State/Cards/Manager.h"
+#include "State/Cards/CardRef.h"
 #include "Entity/CardType.h"
 #include "State/Utils/OrderedCardsManager.h"
 

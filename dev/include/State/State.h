@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EntitiesManager/EntitiesManager.h"
+#include "State/Cards/Manager.h"
 #include "State/Board/Board.h"
 #include "State/EventManager/HandlersManager.h"
 #include "State/ThisTurnCounters.h"

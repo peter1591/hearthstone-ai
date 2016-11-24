@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-#include "EntitiesManager/CardRef.h"
+#include "State/Cards/CardRef.h"
 #include "Enchantments/TieredEnchantments.h"
 
 namespace Entity

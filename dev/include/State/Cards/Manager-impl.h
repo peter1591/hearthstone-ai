@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EntitiesManager/EntitiesManager.h"
+#include "State/Cards/Manager.h"
 
 #include "Manipulators/StateManipulator.h"
 #include "Manipulators/CharacterManipulator.h"

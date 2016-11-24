@@ -3,7 +3,7 @@
 #include "Entity/Card.h"
 #include "Entity/CardType.h"
 #include "Entity/CardZone.h"
-#include "EntitiesManager/CardRef.h"
+#include "State/Cards/CardRef.h"
 #include "State/State.h"
 #include "State/PlayerIdentifier.h"
 #include "State/Board/Player.h"

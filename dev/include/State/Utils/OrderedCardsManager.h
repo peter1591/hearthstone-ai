@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "EntitiesManager/CardRef.h"
-#include "EntitiesManager/EntitiesManager.h"
+#include "State/Cards/CardRef.h"
+#include "State/Cards/Manager.h"
 
 namespace State
 {

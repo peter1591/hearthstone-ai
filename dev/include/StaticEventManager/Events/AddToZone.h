@@ -4,7 +4,7 @@
 
 #include "StaticEventManager/Triggerer.h"
 #include "State/State.h"
-#include "EntitiesManager/CardRef.h"
+#include "State/Cards/CardRef.h"
 #include "Entity/Card.h"
 #include "Entity/CardType.h"
 #include "Entity/CardZone.h"
