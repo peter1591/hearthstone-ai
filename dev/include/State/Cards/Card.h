@@ -3,19 +3,19 @@
 #include <string>
 #include "State/Cards/RawCard.h"
 
-namespace Manipulators
-{
-	namespace Helpers
-	{
-		class EnchantmentHelper;
-		class AuraHelper;
-		template <State::CardZone T1, State::CardType T2> class ZoneChanger;
-		class ZonePositionSetter;
-	}
-}
-
 namespace State
 {
+	namespace Manipulators
+	{
+		namespace Helpers
+		{
+			class EnchantmentHelper;
+			class AuraHelper;
+			template <CardZone T1, CardType T2> class ZoneChanger;
+			class ZonePositionSetter;
+		}
+	}
+
 	namespace Cards
 	{
 		class Card

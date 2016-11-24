@@ -3,7 +3,7 @@
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
 
-#include "Manipulators/StateManipulator.h"
+#include "State/Manipulators/StateManipulator.h"
 
 namespace FlowControl
 {
@@ -66,10 +66,10 @@ namespace FlowControl
 				CardRef card_ref = state_.GetCurrentPlayer().deck_.Get(deck_idx);
 
 				if (state_.GetCurrentPlayer().hand_.Full()) {
-					Manipulators::StateManipulator(state_).Card(card_ref).GetZoneChanger().ChangeTo<State::kCardZoneGraveyard>(state_, state_.current_player);
+					State::Manipulators::StateManipulator(state_).Card(card_ref).GetZoneChanger().ChangeTo<State::kCardZoneGraveyard>(state_, state_.current_player);
 				}
 				else {
-					Manipulators::StateManipulator(state_).Card(card_ref).GetZoneChanger().ChangeTo<State::kCardZoneHand>(state_, state_.current_player);
+					State::Manipulators::StateManipulator(state_).Card(card_ref).GetZoneChanger().ChangeTo<State::kCardZoneHand>(state_, state_.current_player);
 				}
 
 				// TODO: trigger on-draw event (parameter: card_ref)
@@ -79,7 +79,7 @@ namespace FlowControl
 			{
 				int damage = ++state_.GetCurrentPlayer().fatigue_damage_;
 
-				Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
+				State::Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
 			}
 
 		private:

@@ -5,14 +5,13 @@
 #include "State/Cards/Card.h"
 #include "State/Types.h"
 
-namespace Manipulators
-{
-	class StateManipulator;
-}
-
 namespace State
 {
 	class State;
+	namespace Manipulators
+	{
+		class StateManipulator;
+	}
 
 	namespace Cards
 	{

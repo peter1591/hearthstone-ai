@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Manipulators/Manipulators.h"
+#include "State/Manipulators/Manipulators.h"
 #include "State/State.h"
 #include "State/Events/StaticEvent.h"
 #include "FlowControl/Result.h"
@@ -54,7 +54,7 @@ namespace FlowControl
 					put_position = action_parameters_.GetMinionPutLocation(0, total_minions);
 				}
 
-				Manipulators::StateManipulator(state_).Minion(card_ref_).GetZoneChanger().ChangeTo<State::kCardZonePlay>(
+				State::Manipulators::StateManipulator(state_).Minion(card_ref_).GetZoneChanger().ChangeTo<State::kCardZonePlay>(
 					state_, state_.current_player, put_position);
 
 				State::Events::StaticEvent<State::Events::TriggerTypes::OnMinionPlay>::TriggerEvent(state_.event_mgr, *card_);

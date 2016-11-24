@@ -6,11 +6,14 @@
 #include "State/Cards/Card.h"
 #include "State/Utils/OrderedCardsManager.h"
 
-namespace Manipulators
+namespace State
 {
-	namespace Helpers
+	namespace Manipulators
 	{
-		template <State::CardZone T1, State::CardType T2> class ZoneChanger;
+		namespace Helpers
+		{
+			template <CardZone T1, CardType T2> class ZoneChanger;
+		}
 	}
 }
 
