@@ -48,9 +48,23 @@ namespace Entity
 		public:
 			LocationSetter(RawCard & data) : data_(data) {}
 		private:
-			void SetPlayerIdentifier(State::PlayerIdentifier player) { data_.enchanted_states.player = player; }
-			void SetZone(CardZone new_zone) { data_.enchanted_states.zone = new_zone; }
-			void SetZonePosition(int pos) { data_.zone_position = pos; }
+			LocationSetter & Player(State::PlayerIdentifier player)
+			{
+				data_.enchanted_states.player = player;
+				return *this;
+			}
+
+			LocationSetter & Zone(CardZone new_zone)
+			{
+				data_.enchanted_states.zone = new_zone;
+				return *this;
+			}
+
+			LocationSetter & Position(int pos)
+			{
+				data_.zone_position = pos;
+				return *this;
+			}
 
 		private:
 			RawCard & data_;
@@ -85,10 +99,7 @@ namespace Entity
 			return MutableAuraAuxDataGetter(data_);
 		}
 
-		LocationSetter GetLocationSetter()
-		{
-			return LocationSetter(data_);
-		}
+		LocationSetter SetLocation() { return LocationSetter(data_); }
 
 	private:
 		RawCard data_;

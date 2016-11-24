@@ -50,10 +50,10 @@ namespace Manipulators
 				StaticEventManager::Events::RemovedFromZoneEvent<ChangingCardType, ChangingCardZone>
 					::Trigger(state, card_ref_, card_);
 
-				auto location_setter = card_.GetLocationSetter();
-				location_setter.SetPlayerIdentifier(player_identifier);
-				location_setter.SetZone(ChangeToZone);
-				location_setter.SetZonePosition(pos);
+				card_.SetLocation()
+					.Player(player_identifier)
+					.Zone(ChangeToZone)
+					.Position(pos);
 
 				StaticEventManager::Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>
 					::Trigger(state, card_ref_, card_);

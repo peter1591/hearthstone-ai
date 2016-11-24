@@ -25,7 +25,7 @@ namespace Manipulators
 		private: // only accessible to friend classes
 			void Set(int pos)
 			{
-				card_.GetLocationSetter().SetZonePosition(pos);
+				card_.SetLocation().Position(pos);
 			}
 
 		private:

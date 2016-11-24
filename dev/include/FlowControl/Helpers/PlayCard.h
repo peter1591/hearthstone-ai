@@ -61,7 +61,7 @@ namespace FlowControl
 
 				Cards::Minions::Dispatcher::BattleCry(card_->GetCardId(),
 					Context::BattleCry(state_, card_ref_, *card_, [this]() {
-					return this->GetBattelcryTarget();
+						return this->GetBattelcryTarget();
 				}));
 
 				EventManager::StaticEvent<EventManager::TriggerTypes::AfterMinionPlayed>::TriggerEvent(state_.event_mgr, *card_);
