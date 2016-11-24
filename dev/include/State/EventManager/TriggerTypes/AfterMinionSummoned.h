@@ -5,27 +5,30 @@
 #include <iostream>
 #include <functional>
 
-namespace EventManager
+namespace State
 {
-	namespace TriggerTypes
+	namespace EventManager
 	{
-		class AfterMinionSummoned
+		namespace TriggerTypes
 		{
-		public:
-			typedef std::function<void(HandlersContainerController &)> FunctorType;
-			typedef std::tuple<> ArgsTuple;
-
-			template <typename T,
-				typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
-				explicit AfterMinionSummoned(T&& functor) : functor_(functor) {}
-
-			void Handle(HandlersContainerController &controller)
+			class AfterMinionSummoned
 			{
-				functor_(controller);
-			}
+			public:
+				typedef std::function<void(HandlersContainerController &)> FunctorType;
+				typedef std::tuple<> ArgsTuple;
 
-		private:
-			FunctorType functor_;
-		};
+				template <typename T,
+					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
+					explicit AfterMinionSummoned(T&& functor) : functor_(functor) {}
+
+				void Handle(HandlersContainerController &controller)
+				{
+					functor_(controller);
+				}
+
+			private:
+				FunctorType functor_;
+			};
+		}
 	}
 }

@@ -2,50 +2,53 @@
 
 #include <utility>
 
-namespace EventManager
+namespace State
 {
-	namespace impl
+	namespace EventManager
 	{
-		template <class FirstStaticEventType, class... RestStaticEventTypes>
-		class StaticEventsInvoker2
+		namespace impl
 		{
-		public:
-			template <class... Args>
-			static void Trigger(Args&&... args)
+			template <class FirstStaticEventType, class... RestStaticEventTypes>
+			class StaticEventsInvoker2
 			{
-				FirstStaticEventType::TriggerEvent(std::forward<Args>(args)...);
-				StaticEventsInvoker<RestStaticEventTypes...>::Trigger(std::forward<Args>(args)...);
-			}
-		};
+			public:
+				template <class... Args>
+				static void Trigger(Args&&... args)
+				{
+					FirstStaticEventType::TriggerEvent(std::forward<Args>(args)...);
+					StaticEventsInvoker<RestStaticEventTypes...>::Trigger(std::forward<Args>(args)...);
+				}
+			};
 
-		template <class... StaticEventTypes> class StaticEventsInvoker
-		{
-		public:
-			template <class... Args>
-			static void Trigger(Args&&... args)
+			template <class... StaticEventTypes> class StaticEventsInvoker
 			{
-				StaticEventsInvoker2<StaticEventTypes...>::Trigger(std::forward<Args>(args)...);
-			}
-		};
+			public:
+				template <class... Args>
+				static void Trigger(Args&&... args)
+				{
+					StaticEventsInvoker2<StaticEventTypes...>::Trigger(std::forward<Args>(args)...);
+				}
+			};
 
-		template <> class StaticEventsInvoker<>
+			template <> class StaticEventsInvoker<>
+			{
+			public:
+				template <class... Args>
+				static void Trigger(Args&&... args)
+				{
+				}
+			};
+		}
+
+		template <class... StaticEventTypes>
+		class StaticEvents
 		{
 		public:
 			template <class... Args>
 			static void Trigger(Args&&... args)
 			{
+				impl::StaticEventsInvoker<StaticEventTypes...>::Trigger(std::forward<Args>(args)...);
 			}
 		};
 	}
-
-	template <class... StaticEventTypes>
-	class StaticEvents
-	{
-	public:
-		template <class... Args>
-		static void Trigger(Args&&... args)
-		{
-			impl::StaticEventsInvoker<StaticEventTypes...>::Trigger(std::forward<Args>(args)...);
-		}
-	};
 }

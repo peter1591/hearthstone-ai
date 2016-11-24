@@ -7,30 +7,33 @@
 
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 
-namespace EventManager
+namespace State
 {
-	namespace TriggerTypes
+	namespace EventManager
 	{
-		class BeforeMinionSummoned
+		namespace TriggerTypes
 		{
-		public:
-			typedef FlowControl::Context::BeforeMinionSummoned & Parameter1;
-			typedef std::function<void(HandlersContainerController &controller, Parameter1)> FunctorType;
-			typedef std::tuple<Parameter1> ArgsTuple;
-
-			template <typename T,
-				typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
-			explicit BeforeMinionSummoned(T&& functor) : functor_(functor)
+			class BeforeMinionSummoned
 			{
-			}
+			public:
+				typedef FlowControl::Context::BeforeMinionSummoned & Parameter1;
+				typedef std::function<void(HandlersContainerController &controller, Parameter1)> FunctorType;
+				typedef std::tuple<Parameter1> ArgsTuple;
 
-			void Handle(HandlersContainerController &controller, Parameter1 context)
-			{
-				functor_(controller, context);
-			}
+				template <typename T,
+					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
+					explicit BeforeMinionSummoned(T&& functor) : functor_(functor)
+				{
+				}
 
-		private:
-			FunctorType functor_;
-		};
+				void Handle(HandlersContainerController &controller, Parameter1 context)
+				{
+					functor_(controller, context);
+				}
+
+			private:
+				FunctorType functor_;
+			};
+		}
 	}
 }

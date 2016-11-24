@@ -1,17 +1,20 @@
 #pragma once
 
-namespace EventManager
+namespace State
 {
-	class HandlersContainerController
+	namespace EventManager
 	{
-	public:
-		HandlersContainerController() : remove_(false) {}
+		class HandlersContainerController
+		{
+		public:
+			HandlersContainerController() : remove_(false) {}
 
-		void Remove() { remove_ = true; }
+			void Remove() { remove_ = true; }
 
-		bool IsRemoved() const { return remove_; }
+			bool IsRemoved() const { return remove_; }
 
-	private:
-		bool remove_;
-	};
+		private:
+			bool remove_;
+		};
+	}
 }
