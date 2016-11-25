@@ -12,25 +12,8 @@ namespace state
 	{
 		namespace Helpers
 		{
-			template <CardZone T1, CardType T2> class ZoneChanger;
-		}
-
-		namespace Events
-		{
-			namespace impl
-			{
-				namespace RemovedFromZone
-				{
-					template <CardType RemovingCardType, CardZone RemovingCardZone>
-					class RemoveFromPlayerDatStructure;
-				}
-
-				namespace AddToZone
-				{
-					template <CardType TargetCardType, CardZone TargetCardZone>
-					class AddToPlayerDatStructure;
-				}
-			}
+			template <CardType TargetCardType, CardZone TargetCardZone> class AddToPlayerDatStructure;
+			template <CardType TargetCardType, CardZone TargetCardZone> class RemoveFromPlayerDatStructure;
 		}
 	}
 }
@@ -42,9 +25,8 @@ namespace state
 	public:
 		class LocationManipulator
 		{
-			template <CardZone T1, CardType T2> friend class Manipulators::Helpers::ZoneChanger;
-			template <CardType T1, CardZone T2> friend class Manipulators::Events::impl::RemovedFromZone::RemoveFromPlayerDatStructure;
-			template <CardType T1, CardZone T2> friend class Manipulators::Events::impl::AddToZone::AddToPlayerDatStructure;
+			template <CardType TargetCardType, CardZone TargetCardZone> friend class state::Manipulators::Helpers::AddToPlayerDatStructure;
+			template <CardType TargetCardType, CardZone TargetCardZone> friend class state::Manipulators::Helpers::RemoveFromPlayerDatStructure;
 
 		public:
 			explicit LocationManipulator(Deck & deck) : deck_(deck) {}

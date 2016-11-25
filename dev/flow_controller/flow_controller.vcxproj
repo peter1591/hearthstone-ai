@@ -156,8 +156,6 @@
     <ClInclude Include="..\include\State\Hand.h" />
     <ClInclude Include="..\include\State\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\include\State\Manipulators\CharacterManipulator.h" />
-    <ClInclude Include="..\include\State\Manipulators\Events\AddToZone.h" />
-    <ClInclude Include="..\include\State\Manipulators\Events\RemovedFromZone.h" />
     <ClInclude Include="..\include\State\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\include\State\Manipulators\Helpers\BasicHelper.h" />
     <ClInclude Include="..\include\State\Manipulators\Helpers\EnchantmentHelper.h" />

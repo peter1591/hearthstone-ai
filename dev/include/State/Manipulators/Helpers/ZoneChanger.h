@@ -5,8 +5,6 @@
 #include "State/State.h"
 #include "State/Player.h"
 #include "State/Utils/DefaultZonePosPolicy.h"
-#include "State/Manipulators/Events/AddToZone.h"
-#include "State/Manipulators/Events/RemovedFromZone.h"
 
 namespace state
 {
@@ -14,6 +12,119 @@ namespace state
 	{
 		namespace Helpers
 		{
+			template <CardType TargetCardType, CardZone TargetCardZone>
+			class AddToPlayerDatStructure
+			{
+			public:
+				static void Add(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					switch (card.GetZone())
+					{
+					case kCardZoneDeck:
+						return AddToDeckZone(state, card_ref, card);
+					case kCardZoneHand:
+						return AddToHandZone(state, card_ref, card);
+					case kCardZonePlay:
+						return AddToPlayZone(state, card_ref, card);
+					case kCardZoneGraveyard:
+						return AddToGraveyardZone(state, card_ref, card);
+					}
+				}
+
+			private:
+				static void AddToDeckZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					player.deck_.GetLocationManipulator().Insert(state, card_ref);
+				}
+
+				static void AddToHandZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					player.hand_.GetLocationManipulator().Insert(state, card_ref);
+				}
+
+				static void AddToPlayZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+
+					switch (TargetCardType)
+					{
+					case kCardTypeHero:
+						if (player.hero_ref_.IsValid()) throw std::exception("hero should be removed first");
+						player.hero_ref_ = card_ref;
+						return;
+					case kCardTypeMinion:
+						return player.minions_.GetLocationManipulator().Insert(state, card_ref);
+					case kCardTypeWeapon:
+						return player.weapon_.Equip(card_ref);
+					case kCardTypeSecret:
+						return player.secrets_.Add(card.GetCardId(), card_ref);
+					}
+				}
+
+				static void AddToGraveyardZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
+				}
+			};
+
+			template <CardType RemovingCardType, CardZone RemovingCardZone>
+			class RemoveFromPlayerDatStructure
+			{
+			public:
+				static void Remove(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					switch (RemovingCardZone)
+					{
+					case kCardZoneDeck:
+						return RemoveFromDeckZone(state, card_ref, card);
+					case kCardZoneHand:
+						return RemoveFromHandZone(state, card_ref, card);
+					case kCardZonePlay:
+						return RemoveFromPlayZone(state, card_ref, card);
+					case kCardZoneGraveyard:
+						return RemoveFromGraveyardZone(state, card_ref, card);
+						break;
+					}
+				}
+
+			private:
+				static void RemoveFromDeckZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					player.deck_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+				}
+
+				static void RemoveFromHandZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					player.hand_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+				}
+
+				static void RemoveFromPlayZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+
+					switch (RemovingCardType)
+					{
+					case kCardTypeMinion:
+						return player.minions_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+					case kCardTypeWeapon:
+						return player.weapon_.Destroy();
+					case kCardTypeSecret:
+						return player.secrets_.Remove(card.GetCardId());
+					}
+				}
+
+				static void RemoveFromGraveyardZone(State & state, CardRef card_ref, Cards::Card & card)
+				{
+					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					player.graveyard_.GetLocationManipulator<RemovingCardType>().Remove(state, card.GetZonePosition());
+				}
+			};
+
 			template <CardZone ChangingCardZone, CardType ChangingCardType>
 			class ZoneChanger
 			{
@@ -38,21 +149,21 @@ namespace state
 
 				void Add()
 				{
-					Events::AddToZoneEvent<ChangingCardType, ChangingCardZone>::Trigger(state_, card_ref_, card_);
+					AddToPlayerDatStructure<ChangingCardType, ChangingCardZone>::Add(state_, card_ref_, card_);
 				}
 
 			private:
 				template <CardZone ChangeToZone>
 				void ChangeToInternal(PlayerIdentifier player_identifier, int pos)
 				{
-					Events::RemovedFromZoneEvent<ChangingCardType, ChangingCardZone>::Trigger(state_, card_ref_, card_);
+					RemoveFromPlayerDatStructure<ChangingCardType, ChangingCardZone>::Remove(state_, card_ref_, card_);
 
 					card_.SetLocation()
 						.Player(player_identifier)
 						.Zone(ChangeToZone)
 						.Position(pos);
 
-					Events::AddToZoneEvent<ChangingCardType, ChangeToZone>::Trigger(state_, card_ref_, card_);
+					AddToPlayerDatStructure<ChangingCardType, ChangeToZone>::Add(state_, card_ref_, card_);
 				}
 
 			private:

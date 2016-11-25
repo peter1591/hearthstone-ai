@@ -52,9 +52,6 @@
     <Filter Include="Header Files\State\Manipulators\Helpers">
       <UniqueIdentifier>{e9bd7948-697f-4cef-87a8-f92ba5b33a20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\State\Manipulators\Events">
-      <UniqueIdentifier>{0562de00-b634-47e3-95d1-14ad8efca151}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl\Dispatchers">
       <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
     </Filter>
@@ -205,12 +202,6 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\State\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Events\AddToZone.h">
-      <Filter>Header Files\State\Manipulators\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Events\RemovedFromZone.h">
-      <Filter>Header Files\State\Manipulators\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\Board.h">
       <Filter>Header Files\State</Filter>
