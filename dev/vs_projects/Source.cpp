@@ -1,7 +1,7 @@
 #include <iostream>
 #include <functional>
 
-#include "State/Events/HandlersManager.h"
+#include "State/Events/Manager.h"
 #include "State/Events/Event.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 #include "State/State.h"
@@ -11,7 +11,7 @@ using namespace state;
 
 static void test1()
 {
-	Events::HandlersManager mgr;
+	Events::Manager mgr;
 
 	std::function<void(Events::HandlersContainerController &)> callback1 =
 		[](Events::HandlersContainerController & controller) {
@@ -109,7 +109,7 @@ static void test1()
 
 static void test2()
 {
-	Events::HandlersManager mgr;
+	Events::Manager mgr;
 
 	std::function<void(Events::HandlersContainerController &)> callback1 =
 		[](Events::HandlersContainerController & controller) {

@@ -143,9 +143,6 @@
     <ClInclude Include="..\include\State\Events\HandlersContainerController.h">
       <Filter>Header Files\State\Events</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\State\Events\HandlersManager.h">
-      <Filter>Header Files\State\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\State\Events\impl\CategorizedHandlersContainer.h">
       <Filter>Header Files\State\Events\impl</Filter>
     </ClInclude>
@@ -238,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Cards\Enchantments\Tiers.h">
       <Filter>Header Files\State\Cards\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Events\Manager.h">
+      <Filter>Header Files\State\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

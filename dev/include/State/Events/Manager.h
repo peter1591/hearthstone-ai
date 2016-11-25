@@ -16,7 +16,7 @@ namespace state
 		template <typename T> class Event;
 		template <typename T> class CategorizedEvent;
 
-		class HandlersManager
+		class Manager
 		{
 			template <typename T> friend class Event;
 			template <typename T> friend class CategorizedEvent;

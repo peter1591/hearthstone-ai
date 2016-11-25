@@ -2,7 +2,7 @@
 
 #include <utility>
 #include <tuple>
-#include "State/Events/HandlersManager.h"
+#include "State/Events/Manager.h"
 
 namespace state
 {
@@ -26,7 +26,7 @@ namespace state
 		{
 		public:
 			virtual ~EventBase() {}
-			virtual void TriggerEvent(HandlersManager&) = 0;
+			virtual void TriggerEvent(Manager&) = 0;
 		};
 
 		template <typename EventTriggerType>
@@ -43,7 +43,7 @@ namespace state
 				typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value == 0, nullptr_t> = nullptr>
 				Event() {}
 
-			void TriggerEvent(HandlersManager& mgr)
+			void TriggerEvent(Manager& mgr)
 			{
 				constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
 				return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
@@ -51,7 +51,7 @@ namespace state
 
 		private:
 			template <int... I>
-			void TriggerEventInternal(HandlersManager& mgr, impl::seq<I...>) {
+			void TriggerEventInternal(Manager& mgr, impl::seq<I...>) {
 				return mgr.GetHandlersContainer<EventTriggerType>().TriggerAll(std::get<I>(args_)...);
 			}
 
@@ -79,7 +79,7 @@ namespace state
 			{
 			}
 
-			void TriggerEvent(HandlersManager& mgr)
+			void TriggerEvent(Manager& mgr)
 			{
 				constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
 				return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
@@ -87,7 +87,7 @@ namespace state
 
 		private:
 			template <int... I>
-			void TriggerEventInternal(HandlersManager& mgr, impl::seq<I...>) {
+			void TriggerEventInternal(Manager& mgr, impl::seq<I...>) {
 				return mgr.GetHandlersContainer<CategoryType, EventTriggerType>().TriggerAll(category_, std::get<I>(args_)...);
 			}
 
