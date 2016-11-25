@@ -134,6 +134,9 @@
     <ClInclude Include="..\include\State\Cards\Card.h" />
     <ClInclude Include="..\include\State\Cards\EnchantableStates.h" />
     <ClInclude Include="..\include\State\Cards\EnchantmentAuxData.h" />
+    <ClInclude Include="..\include\State\Cards\Enchantments\Enchantments.h" />
+    <ClInclude Include="..\include\State\Cards\Enchantments\TieredEnchantments.h" />
+    <ClInclude Include="..\include\State\Cards\Enchantments\Tiers.h" />
     <ClInclude Include="..\include\State\Cards\Manager-impl.h" />
     <ClInclude Include="..\include\State\Cards\Manager.h" />
     <ClInclude Include="..\include\State\Cards\RawCard.h" />

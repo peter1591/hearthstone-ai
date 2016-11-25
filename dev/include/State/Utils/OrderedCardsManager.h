@@ -17,8 +17,8 @@ namespace state
 
 			explicit OrderedCardsManager(ContainerType & container) : container_(container) {}
 
-			void Insert(::state::State & state, CardRef card_ref);
-			void Remove(::state::State & state, size_t pos);
+			void Insert(State & state, CardRef card_ref);
+			void Remove(State & state, size_t pos);
 
 		private:
 			ContainerType & container_;

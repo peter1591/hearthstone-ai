@@ -58,6 +58,9 @@
     <Filter Include="Header Files\FlowControl\Dispatchers">
       <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State\Cards\Enchantments">
+      <UniqueIdentifier>{8a42423e-507d-475e-bb7d-a5bb720258e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -244,6 +247,15 @@
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Cards\Enchantments\Enchantments.h">
+      <Filter>Header Files\State\Cards\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Cards\Enchantments\TieredEnchantments.h">
+      <Filter>Header Files\State\Cards\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Cards\Enchantments\Tiers.h">
+      <Filter>Header Files\State\Cards\Enchantments</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
