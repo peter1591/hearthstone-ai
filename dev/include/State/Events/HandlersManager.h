@@ -15,15 +15,11 @@ namespace state
 	{
 		template <typename T> class Event;
 		template <typename T> class CategorizedEvent;
-		template <typename T> class StaticEvent;
-		template <typename T> class StaticCategorizedEvent;
 
 		class HandlersManager
 		{
 			template <typename T> friend class Event;
 			template <typename T> friend class CategorizedEvent;
-			template <typename T> friend class StaticEvent;
-			template <typename T> friend class StaticCategorizedEvent;
 
 		public:
 			template <typename T>
@@ -35,6 +31,19 @@ namespace state
 			void PushBack(T1&& category, T2&& handler) {
 				GetHandlersContainer<std::decay_t<T1>, std::decay_t<T2>>().PushBack(
 					std::forward<T1>(category), std::forward<T2>(handler));
+			}
+
+			template <typename EventTriggerType, typename... Args>
+			void TriggerEvent(Args&&... args)
+			{
+				return GetHandlersContainer<EventTriggerType>().TriggerAll(std::forward<Args>(args)...);
+			}
+
+			template <typename EventTriggerType, typename CategoryType, typename... Args>
+			void TriggerCategorizedEvent(CategoryType&& category, Args&&... args)
+			{
+				return GetHandlersContainer<std::decay_t<CategoryType>, EventTriggerType>()
+					.TriggerAll(std::forward<CategoryType>(category), std::forward<Args>(args)...);
 			}
 
 		private:

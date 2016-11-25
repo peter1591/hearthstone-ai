@@ -121,8 +121,6 @@
     <ClInclude Include="..\include\EventManager\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\impl\HandlersContainer.h" />
     <ClInclude Include="..\include\EventManager\HandlersManager.h" />
-    <ClInclude Include="..\include\EventManager\StaticEvent.h" />
-    <ClInclude Include="..\include\EventManager\StaticEvents.h" />
     <ClInclude Include="..\include\EventManager\TriggerTypes\AfterMinionSummoned.h" />
     <ClInclude Include="..\include\EventManager\TriggerTypes\BeforeMinionSummoned.h" />
   </ItemGroup>

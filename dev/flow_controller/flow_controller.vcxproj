@@ -146,8 +146,6 @@
     <ClInclude Include="..\include\State\Events\HandlersManager.h" />
     <ClInclude Include="..\include\State\Events\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\include\State\Events\impl\HandlersContainer.h" />
-    <ClInclude Include="..\include\State\Events\StaticEvent.h" />
-    <ClInclude Include="..\include\State\Events\StaticEvents.h" />
     <ClInclude Include="..\include\State\Events\TriggerTypes\AfterMinionPlayed.h" />
     <ClInclude Include="..\include\State\Events\TriggerTypes\AfterMinionSummoned.h" />
     <ClInclude Include="..\include\State\Events\TriggerTypes\BeforeMinionSummoned.h" />
