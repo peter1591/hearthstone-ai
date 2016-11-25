@@ -64,6 +64,7 @@ static state::Cards::RawCard GetCard1(state::PlayerIdentifier player, int zone_p
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = state::kCardZoneHand;
 	c1.enchanted_states.cost = 5;
+	c1.enchanted_states.attack = 7;
 	return c1;
 }
 
@@ -76,6 +77,7 @@ static state::Cards::RawCard GetCard2(state::PlayerIdentifier player, int zone_p
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = state::kCardZoneHand;
 	c1.enchanted_states.cost = 1;
+	c1.enchanted_states.attack = 3;
 	return c1;
 }
 
@@ -155,6 +157,7 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 	raw_card.enchanted_states.zone = state::kCardZonePlay;
 	raw_card.enchanted_states.max_hp = 30;
 	raw_card.enchanted_states.player = player;
+	raw_card.enchanted_states.attack = 0;
 	return raw_card;
 }
 
@@ -192,6 +195,7 @@ int main(void)
 		//std::cout << "OnMinionPlay event: " << card.GetCardId() << std::endl;
 	};
 	state.event_mgr.PushBack(state::Events::EventTypes::OnMinionPlay(on_minion_play_1));
+
 	triggered = false;
 	Card1::debug1 = false;
 	controller.PlayCard(2);
@@ -211,6 +215,28 @@ int main(void)
 	assert(state.board.players.Get(state::kPlayerSecond).resource_.GetTotal() == 1);
 	assert(state.board.players.Get(state::kPlayerSecond).resource_.GetCurrent() == 1);
 	assert(state.mgr.Get(state.board.players.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);
+
+	{
+		CardRef attacker = state.board.players.Get(state::kPlayerFirst).minions_.Get(0);
+		CardRef defender = state.board.players.Get(state::kPlayerSecond).hero_ref_;
+		
+		bool debug1 = false;
+		state.event_mgr.PushBack(state::Events::EventTypes::BeforeAttack(
+			[&state, &attacker, &defender, &debug1](state::Events::HandlersContainerController & controller, state::State & in_state, CardRef & in_attacker, CardRef & in_defender) -> void {
+			assert(&state == &in_state);
+			assert(attacker == in_attacker);
+			assert(defender == in_defender);
+			debug1 = true;
+		}));
+
+		assert(!debug1);
+		assert(state.mgr.Get(attacker).GetAttack() == 3);
+		assert(state.mgr.Get(defender).GetDamage() == 4);
+		assert(state.mgr.Get(attacker).GetDamage() == 0);
+		controller.Attack(attacker, defender);
+		assert(debug1);
+		assert(state.mgr.Get(defender).GetDamage() == 7);
+	}
 
 	return 0;
 }
