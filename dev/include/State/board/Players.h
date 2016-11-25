@@ -2,7 +2,7 @@
 
 #include <exception>
 #include "State/Types.h"
-#include "State/Player.h"
+#include "State/board/Player.h"
 
 namespace state
 {

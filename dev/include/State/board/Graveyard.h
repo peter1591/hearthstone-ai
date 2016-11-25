@@ -4,7 +4,7 @@
 #include "State/Types.h"
 #include "State/Cards/Manager.h"
 #include "State/Cards/Card.h"
-#include "State/Utils/OrderedCardsManager.h"
+#include "State/board/OrderedCardsManager.h"
 
 namespace state
 {

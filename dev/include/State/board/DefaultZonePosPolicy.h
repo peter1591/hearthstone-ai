@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Player.h"
+#include "State/board/Player.h"
 #include "State/Types.h"
 
 namespace state

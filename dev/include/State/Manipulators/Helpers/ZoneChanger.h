@@ -3,8 +3,8 @@
 #include "State/Types.h"
 #include "State/Cards/Card.h"
 #include "State/State.h"
-#include "State/Player.h"
-#include "State/Utils/DefaultZonePosPolicy.h"
+#include "State/board/Player.h"
+#include "State/board/DefaultZonePosPolicy.h"
 
 namespace state
 {

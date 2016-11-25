@@ -58,6 +58,9 @@
     <Filter Include="Header Files\State\Cards\Enchantments">
       <UniqueIdentifier>{8a42423e-507d-475e-bb7d-a5bb720258e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State\board">
+      <UniqueIdentifier>{09f30fa1-0430-4ea4-a58a-be10b03688d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -194,36 +197,6 @@
     <ClInclude Include="..\include\State\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\State\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\State\Board.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Deck.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Graveyard.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Hand.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Minions.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Player.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\PlayerResource.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Players.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Secrets.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Weapon.h">
-      <Filter>Header Files\State</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
@@ -238,6 +211,36 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Events\Manager.h">
       <Filter>Header Files\State\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Board.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Deck.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Graveyard.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Hand.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Minions.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Player.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\PlayerResource.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Players.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Secrets.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Weapon.h">
+      <Filter>Header Files\State\board</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

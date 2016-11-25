@@ -1,12 +1,12 @@
 #pragma once
 
-#include "State/Deck.h"
-#include "State/Graveyard.h"
-#include "State/Hand.h"
-#include "State/Minions.h"
-#include "State/Secrets.h"
-#include "State/Weapon.h"
-#include "State/PlayerResource.h"
+#include "State/board/Deck.h"
+#include "State/board/Graveyard.h"
+#include "State/board/Hand.h"
+#include "State/board/Minions.h"
+#include "State/board/Secrets.h"
+#include "State/board/Weapon.h"
+#include "State/board/PlayerResource.h"
 
 namespace state
 {

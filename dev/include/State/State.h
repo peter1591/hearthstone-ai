@@ -1,7 +1,7 @@
 #pragma once
 
 #include "State/Cards/Manager.h"
-#include "State/Board.h"
+#include "State/board/Board.h"
 #include "State/Events/Manager.h"
 
 namespace state
