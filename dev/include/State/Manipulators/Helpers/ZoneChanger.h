@@ -34,19 +34,19 @@ namespace state
 			private:
 				static void AddToDeckZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
-					player.deck_.GetLocationManipulator().Insert(state, card_ref);
+					state.board.players.Get(card.GetPlayerIdentifier())
+						.deck_.GetLocationManipulator().Insert(state, card_ref);
 				}
 
 				static void AddToHandZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
-					player.hand_.GetLocationManipulator().Insert(state, card_ref);
+					state.board.players.Get(card.GetPlayerIdentifier())
+						.hand_.GetLocationManipulator().Insert(state, card_ref);
 				}
 
 				static void AddToPlayZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					board::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 
 					switch (TargetCardType)
 					{
@@ -65,8 +65,8 @@ namespace state
 
 				static void AddToGraveyardZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
-					player.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
+					state.board.players.Get(card.GetPlayerIdentifier())
+						.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
 				}
 			};
 
@@ -93,19 +93,19 @@ namespace state
 			private:
 				static void RemoveFromDeckZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
-					player.deck_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+					state.board.players.Get(card.GetPlayerIdentifier())
+						.deck_.GetLocationManipulator().Remove(state, card.GetZonePosition());
 				}
 
 				static void RemoveFromHandZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
-					player.hand_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+					state.board.players.Get(card.GetPlayerIdentifier())
+						.hand_.GetLocationManipulator().Remove(state, card.GetZonePosition());
 				}
 
 				static void RemoveFromPlayZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
+					board::Player & player = state.board.players.Get(card.GetPlayerIdentifier());
 
 					switch (RemovingCardType)
 					{
@@ -120,8 +120,8 @@ namespace state
 
 				static void RemoveFromGraveyardZone(State & state, CardRef card_ref, Cards::Card & card)
 				{
-					Player & player = state.board.players.Get(card.GetPlayerIdentifier());
-					player.graveyard_.GetLocationManipulator<RemovingCardType>().Remove(state, card.GetZonePosition());
+					state.board.players.Get(card.GetPlayerIdentifier())
+						.graveyard_.GetLocationManipulator<RemovingCardType>().Remove(state, card.GetZonePosition());
 				}
 			};
 
@@ -132,16 +132,16 @@ namespace state
 				ZoneChanger(State & state, CardRef card_ref, Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
 
 				template <CardZone ChangeToZone,
-					typename std::enable_if_t<Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
+					typename std::enable_if_t<board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
 					void ChangeTo(PlayerIdentifier player_identifier)
 				{
-					Player & player = state_.board.players.Get(card_.GetPlayerIdentifier());
-					int new_pos = Utils::DefaultZonePosGetter<ChangeToZone, ChangingCardType>()(player);
+					board::Player & player = state_.board.players.Get(card_.GetPlayerIdentifier());
+					int new_pos = board::DefaultZonePosGetter<ChangeToZone, ChangingCardType>()(player);
 					return ChangeToInternal<ChangeToZone>(player_identifier, new_pos);
 				}
 
 				template <CardZone ChangeToZone,
-					typename std::enable_if_t<!Utils::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
+					typename std::enable_if_t<!board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
 					void ChangeTo(PlayerIdentifier player_identifier, int pos)
 				{
 					return ChangeToInternal<ChangeToZone>(player_identifier, pos);

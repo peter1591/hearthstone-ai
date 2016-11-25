@@ -14,11 +14,11 @@ namespace state
 			if (current_player == kPlayerFirst) current_player = kPlayerSecond;
 			else current_player = kPlayerFirst;
 		}
-		Player & GetCurrentPlayer() { return board.players.Get(current_player); }
-		const Player & GetCurrentPlayer() const { return board.players.Get(current_player); }
+		board::Player & GetCurrentPlayer() { return board.players.Get(current_player); }
+		const board::Player & GetCurrentPlayer() const { return board.players.Get(current_player); }
 
 	public:
-		Board board;
+		board::Board board;
 		Cards::Manager mgr;
 		Events::Manager event_mgr;
 

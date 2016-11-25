@@ -7,27 +7,30 @@
 
 namespace state
 {
-	class Hand
+	namespace board
 	{
-	public:
-		Hand()
+		class Hand
 		{
-			cards_.reserve(max_cards_);
-		}
+		public:
+			Hand()
+			{
+				cards_.reserve(max_cards_);
+			}
 
-		Utils::OrderedCardsManager GetLocationManipulator()
-		{
-			return Utils::OrderedCardsManager(cards_);
-		}
+			OrderedCardsManager GetLocationManipulator()
+			{
+				return OrderedCardsManager(cards_);
+			}
 
-		size_t Size() const { return cards_.size(); }
-		bool Empty() const { return cards_.empty(); }
-		bool Full() const { return Size() >= max_cards_; }
+			size_t Size() const { return cards_.size(); }
+			bool Empty() const { return cards_.empty(); }
+			bool Full() const { return Size() >= max_cards_; }
 
-		CardRef Get(int idx) { return cards_[idx]; }
+			CardRef Get(int idx) { return cards_[idx]; }
 
-	private:
-		static constexpr int max_cards_ = 10;
-		std::vector<CardRef> cards_;
-	};
+		private:
+			static constexpr int max_cards_ = 10;
+			std::vector<CardRef> cards_;
+		};
+	}
 }

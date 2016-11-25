@@ -4,7 +4,7 @@
 
 namespace state
 {
-	namespace Utils
+	namespace board
 	{
 		class OrderedCardsManager;
 	}
@@ -16,7 +16,7 @@ namespace state
 			// we separate this to another class to impose a finer access control
 			class ZonePositionSetter
 			{
-				friend class Utils::OrderedCardsManager;
+				friend class board::OrderedCardsManager;
 
 			public:
 				ZonePositionSetter(Cards::Card & card) : card_(card) {}

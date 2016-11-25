@@ -5,7 +5,7 @@
 
 namespace state
 {
-	namespace Utils
+	namespace board
 	{
 		template <CardZone Zone, CardType Type>
 		struct ForcelyUseDefaultZonePos;

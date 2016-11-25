@@ -2,25 +2,28 @@
 
 namespace state
 {
-	class Weapon
+	namespace board
 	{
-	public:
-		void Equip(CardRef card_ref)
+		class Weapon
 		{
-			card_ref_ = card_ref;
-		}
+		public:
+			void Equip(CardRef card_ref)
+			{
+				card_ref_ = card_ref;
+			}
 
-		void Destroy()
-		{
-			card_ref_.Invalidate();
-		}
+			void Destroy()
+			{
+				card_ref_.Invalidate();
+			}
 
-		bool IsEquipped() const
-		{
-			return card_ref_.IsValid();
-		}
+			bool IsEquipped() const
+			{
+				return card_ref_.IsValid();
+			}
 
-	private:
-		CardRef card_ref_;
-	};
+		private:
+			CardRef card_ref_;
+		};
+	}
 }

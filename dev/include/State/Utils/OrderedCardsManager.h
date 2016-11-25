@@ -8,7 +8,7 @@ namespace state
 {
 	class State;
 
-	namespace Utils
+	namespace board
 	{
 		class OrderedCardsManager
 		{

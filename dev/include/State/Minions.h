@@ -8,23 +8,26 @@
 
 namespace state
 {
-	class Minions
+	namespace board
 	{
-	public:
-		Minions()
+		class Minions
 		{
-			minions_.reserve(7);
-		}
+		public:
+			Minions()
+			{
+				minions_.reserve(7);
+			}
 
-		Utils::OrderedCardsManager GetLocationManipulator()
-		{
-			return Utils::OrderedCardsManager(minions_);
-		}
+			OrderedCardsManager GetLocationManipulator()
+			{
+				return OrderedCardsManager(minions_);
+			}
 
-		size_t Size() const { return minions_.size(); }
-		CardRef Get(size_t pos) const { return minions_[pos]; }
+			size_t Size() const { return minions_.size(); }
+			CardRef Get(size_t pos) const { return minions_[pos]; }
 
-	private:
-		std::vector<CardRef> minions_;
-	};
+		private:
+			std::vector<CardRef> minions_;
+		};
+	}
 }

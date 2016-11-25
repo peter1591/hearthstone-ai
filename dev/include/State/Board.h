@@ -4,9 +4,12 @@
 
 namespace state
 {
-	class Board
+	namespace board
 	{
-	public:
-		Players players;
-	};
+		class Board
+		{
+		public:
+			Players players;
+		};
+	}
 }

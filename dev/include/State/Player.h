@@ -10,21 +10,24 @@
 
 namespace state
 {
-	class Player
+	namespace board
 	{
-	public:
-		Player() : fatigue_damage_(0) {}
+		class Player
+		{
+		public:
+			Player() : fatigue_damage_(0) {}
 
-		CardRef hero_ref_;
+			CardRef hero_ref_;
 
-		Deck deck_;
-		Hand hand_;
-		Minions minions_;
-		Weapon weapon_;
-		Secrets secrets_;
-		Graveyard graveyard_;
+			Deck deck_;
+			Hand hand_;
+			Minions minions_;
+			Weapon weapon_;
+			Secrets secrets_;
+			Graveyard graveyard_;
 
-		PlayerResource resource_;
-		int fatigue_damage_;
-	};
+			PlayerResource resource_;
+			int fatigue_damage_;
+		};
+	}
 }

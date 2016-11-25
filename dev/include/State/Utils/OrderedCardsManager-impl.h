@@ -5,7 +5,7 @@
 
 namespace state
 {
-	namespace Utils
+	namespace board
 	{
 		void OrderedCardsManager::Insert(State & state, CardRef card_ref)
 		{
