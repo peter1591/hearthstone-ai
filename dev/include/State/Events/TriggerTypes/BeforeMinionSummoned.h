@@ -7,7 +7,7 @@
 
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

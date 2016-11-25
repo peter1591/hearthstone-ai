@@ -6,7 +6,7 @@
 #include "State/Cards/Card.h"
 #include "State/Utils/OrderedCardsManager.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{
@@ -35,7 +35,7 @@ namespace State
 	}
 }
 
-namespace State
+namespace state
 {
 	class Deck
 	{

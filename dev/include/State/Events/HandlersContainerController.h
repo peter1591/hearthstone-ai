@@ -1,6 +1,6 @@
 #pragma once
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

@@ -7,7 +7,7 @@
 #include "State/Manipulators/MinionManipulator.h"
 #include "State/State.h"
 
-namespace State
+namespace state
 {
 	template <typename T>
 	CardRef Cards::Manager::PushBack(State & state, T&& card)

@@ -7,7 +7,7 @@
 
 #include "State/Events/HandlersContainerController.h"
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

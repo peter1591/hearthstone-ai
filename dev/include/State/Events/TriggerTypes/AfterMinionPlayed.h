@@ -5,7 +5,7 @@
 #include <iostream>
 #include <functional>
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

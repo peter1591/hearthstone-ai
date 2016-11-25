@@ -115,12 +115,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Enchantments\Enchantments.h" />
-    <ClInclude Include="..\..\include\Enchantments\TieredEnchantments.h" />
-    <ClInclude Include="..\..\include\Enchantments\Tiers.h" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClInclude Include="..\..\include\State\Cards\Enchantments\Enchantments.h" />
+    <ClInclude Include="..\..\include\State\Cards\Enchantments\TieredEnchantments.h" />
+    <ClInclude Include="..\..\include\State\Cards\Enchantments\Tiers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

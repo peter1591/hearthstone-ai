@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

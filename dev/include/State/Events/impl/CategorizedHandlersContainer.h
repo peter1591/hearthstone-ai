@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "State/Events/impl/HandlersContainer.h"
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

@@ -6,7 +6,7 @@
 #include "State/Cards/Manager.h"
 #include "State/Cards/Card.h"
 
-namespace State
+namespace state
 {
 	class Secrets
 	{

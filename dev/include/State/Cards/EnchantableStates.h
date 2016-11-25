@@ -2,7 +2,7 @@
 
 #include "State/Types.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

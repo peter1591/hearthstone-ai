@@ -3,7 +3,7 @@
 #include "State/Player.h"
 #include "State/Types.h"
 
-namespace State
+namespace state
 {
 	namespace Utils
 	{

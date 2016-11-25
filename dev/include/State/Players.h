@@ -4,7 +4,7 @@
 #include "State/Types.h"
 #include "State/Player.h"
 
-namespace State
+namespace state
 {
 	class Players
 	{

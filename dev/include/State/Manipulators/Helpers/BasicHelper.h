@@ -2,7 +2,7 @@
 
 #include "State/Cards/Card.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

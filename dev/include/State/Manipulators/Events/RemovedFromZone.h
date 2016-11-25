@@ -5,7 +5,7 @@
 #include "State/Cards/Card.h"
 #include "Utils/StaticEventTriggerer.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

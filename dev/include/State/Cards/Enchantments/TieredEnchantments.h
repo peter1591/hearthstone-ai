@@ -3,7 +3,7 @@
 #include "State/Cards/Enchantments/Enchantments.h"
 #include "State/Cards/Enchantments/Tiers.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

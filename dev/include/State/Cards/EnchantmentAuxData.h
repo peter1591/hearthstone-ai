@@ -3,7 +3,7 @@
 #include "State/Cards/EnchantableStates.h"
 #include "Enchantments/TieredEnchantments.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

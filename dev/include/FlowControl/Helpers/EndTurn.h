@@ -13,7 +13,7 @@ namespace FlowControl
 		class EndTurn
 		{
 		public:
-			EndTurn(State::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
+			EndTurn(state::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
 				: state_(state), action_parameters_(action_parameters), random_(random)
 			{
 
@@ -66,10 +66,10 @@ namespace FlowControl
 				CardRef card_ref = state_.GetCurrentPlayer().deck_.Get(deck_idx);
 
 				if (state_.GetCurrentPlayer().hand_.Full()) {
-					State::Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<State::kCardZoneGraveyard>(state_.current_player);
+					state::Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
 				}
 				else {
-					State::Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<State::kCardZoneHand>(state_.current_player);
+					state::Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
 				}
 
 				// TODO: trigger on-draw event (parameter: card_ref)
@@ -79,11 +79,11 @@ namespace FlowControl
 			{
 				int damage = ++state_.GetCurrentPlayer().fatigue_damage_;
 
-				State::Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
+				state::Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
 			}
 
 		private:
-			State::State & state_;
+			state::State & state_;
 			ActionParameterGetter & action_parameters_;
 			RandomGenerator & random_;
 		};

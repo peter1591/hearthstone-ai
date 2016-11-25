@@ -18,19 +18,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Enchantments\TieredEnchantments.h">
-      <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Enchantments\Tiers.h">
-      <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Enchantments\Enchantments.h">
-      <Filter>Header Files\Enchantments</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\State\Cards\Enchantments\Enchantments.h">
+      <Filter>Header Files\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\Enchantments\TieredEnchantments.h">
+      <Filter>Header Files\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\Enchantments\Tiers.h">
+      <Filter>Header Files\Enchantments</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

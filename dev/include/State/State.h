@@ -5,7 +5,7 @@
 #include "State/Events/HandlersManager.h"
 #include "State/ThisTurnCounters.h"
 
-namespace State
+namespace state
 {
 	class State
 	{

@@ -9,7 +9,7 @@
 #include "State/Events/TriggerTypes/AfterMinionPlayed.h"
 #include "State/Events/TriggerTypes/OnMinionPlay.h"
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

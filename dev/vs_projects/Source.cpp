@@ -9,7 +9,7 @@
 #include "State/State.h"
 #include "State/Cards/Card.h"
 
-using namespace State;
+using namespace state;
 
 static void test1()
 {
@@ -60,7 +60,7 @@ static void test1()
 
 	auto mgr2 = mgr;
 
-	::State::State state;
+	::state::State state;
 	CardRef card_ref;
 	Cards::RawCard raw_card;
 	Cards::Card card(raw_card);
@@ -162,7 +162,7 @@ static void test2()
 	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback3));
 	mgr.PushBack(55, Events::TriggerTypes::AfterMinionSummoned(callback2));
 
-	::State::State state;
+	::state::State state;
 	CardRef card_ref;
 	Cards::RawCard raw_card;
 	Cards::Card card(raw_card);

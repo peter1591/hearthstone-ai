@@ -3,7 +3,7 @@
 #include <functional>
 #include "State/Types.h"
 
-namespace State
+namespace state
 {
 	class State;
 
@@ -13,7 +13,7 @@ namespace State
 	}
 }
 
-using State::CardRef;
+using state::CardRef;
 
 namespace FlowControl
 {
@@ -24,20 +24,20 @@ namespace FlowControl
 		public:
 			typedef std::function<CardRef()> BattleCryTargetGetter;
 
-			BeforeMinionSummoned(State::State & state, CardRef card_ref, const State::Cards::Card & card)
+			BeforeMinionSummoned(state::State & state, CardRef card_ref, const state::Cards::Card & card)
 				: state_(state), card_ref_(card_ref), card_(card)
 			{
 
 			}
 
-			State::State & GetState() { return state_; }
+			state::State & GetState() { return state_; }
 			CardRef GetCardRef() { return card_ref_; }
-			const State::Cards::Card & GetCard() { return card_; }
+			const state::Cards::Card & GetCard() { return card_; }
 
 		private:
-			State::State & state_;
+			state::State & state_;
 			CardRef card_ref_;
-			const State::Cards::Card & card_;
+			const state::Cards::Card & card_;
 		};
 	}
 }

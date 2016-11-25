@@ -12,7 +12,7 @@ namespace FlowControl
 	class FlowController
 	{
 	public:
-		FlowController(State::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
+		FlowController(state::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
 			: state_(state), action_parameters_(action_parameters), random_(random)
 		{
 		}
@@ -30,7 +30,7 @@ namespace FlowControl
 		}
 
 	public:
-		State::State & state_;
+		state::State & state_;
 		ActionParameterGetter & action_parameters_;
 		RandomGenerator & random_;
 	};

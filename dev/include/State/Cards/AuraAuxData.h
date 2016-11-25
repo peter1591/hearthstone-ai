@@ -4,7 +4,7 @@
 #include "State/Types.h"
 #include "Enchantments/TieredEnchantments.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

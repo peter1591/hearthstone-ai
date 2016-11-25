@@ -3,7 +3,7 @@
 #include <string>
 #include "State/Cards/RawCard.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

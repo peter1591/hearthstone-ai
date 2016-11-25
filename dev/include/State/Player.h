@@ -8,7 +8,7 @@
 #include "State/Weapon.h"
 #include "State/PlayerResource.h"
 
-namespace State
+namespace state
 {
 	class Player
 	{

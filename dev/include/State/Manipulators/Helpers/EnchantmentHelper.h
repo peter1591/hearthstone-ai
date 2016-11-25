@@ -5,7 +5,7 @@
 #include "State/Cards/Card.h"
 #include "State/Cards/EnchantmentAuxData.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

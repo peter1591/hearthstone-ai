@@ -8,7 +8,7 @@
 #include "State/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

@@ -5,7 +5,7 @@
 #include "State/Cards/Card.h"
 #include "State/Types.h"
 
-namespace State
+namespace state
 {
 	class State;
 	namespace Manipulators

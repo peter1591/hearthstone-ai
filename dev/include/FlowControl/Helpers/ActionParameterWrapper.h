@@ -34,7 +34,7 @@ namespace FlowControl
 				return minion_put_location_;
 			}
 
-			CardRef GetBattlecryTarget(State::State & state, CardRef card_ref, const State::Cards::Card & card)
+			CardRef GetBattlecryTarget(state::State & state, CardRef card_ref, const state::Cards::Card & card)
 			{
 				if (!battlecry_target_.IsValid()) {
 					battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card);

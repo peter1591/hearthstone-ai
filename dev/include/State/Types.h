@@ -3,7 +3,7 @@
 #include <type_traits>
 #include "Utils/CloneableContainers/Vector.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{
@@ -69,9 +69,9 @@ namespace State
 namespace std
 {
 	template <>
-	struct hash<State::CardRef>
+	struct hash<state::CardRef>
 	{
-		std::size_t operator()(const State::CardRef& key) const
+		std::size_t operator()(const state::CardRef& key) const
 		{
 			return Utils::CloneableContainers::VectorIdentifierHasher()(key.id);
 		}

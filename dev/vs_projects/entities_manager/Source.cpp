@@ -8,7 +8,7 @@
 #include "State/State.h"
 #include "State/Manipulators/Manipulators.h"
 
-using namespace State;
+using namespace state;
 
 static Cards::RawCard GetHero(PlayerIdentifier player)
 {
@@ -21,7 +21,7 @@ static Cards::RawCard GetHero(PlayerIdentifier player)
 	return raw_card;
 }
 
-static void CheckZoneAndPosition(const ::State::State & state, CardRef ref, PlayerIdentifier player, CardZone zone, int pos)
+static void CheckZoneAndPosition(const ::state::State & state, CardRef ref, PlayerIdentifier player, CardZone zone, int pos)
 {
 	auto & item = state.mgr.Get(ref);
 	assert(item.GetPlayerIdentifier() == player);
@@ -44,7 +44,7 @@ struct Enchantment2
 
 static void test1()
 {
-	::State::State state;
+	::state::State state;
 
 	Cards::RawCard c1;
 	c1.card_type = kCardTypeMinion;
@@ -183,7 +183,7 @@ private:
 
 static void test2()
 {
-	::State::State state;
+	::state::State state;
 
 	Cards::RawCard c1;
 	c1.card_type = kCardTypeMinion;
@@ -223,7 +223,7 @@ static void test3()
 	Cards::Card hero1(GetHero(kPlayerFirst));
 	Cards::Card hero2(GetHero(kPlayerSecond));
 
-	::State::State state;
+	::state::State state;
 	
 	CardRef r1 = state.mgr.PushBack(state, hero1);
 	CardRef r2 = state.mgr.PushBack(state, hero2);

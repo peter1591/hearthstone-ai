@@ -6,7 +6,7 @@
 #include "State/Cards/Card.h"
 #include "State/Utils/OrderedCardsManager.h"
 
-namespace State
+namespace state
 {
 	class Minions
 	{

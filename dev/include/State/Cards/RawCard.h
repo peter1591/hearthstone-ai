@@ -6,7 +6,7 @@
 #include "State/Cards/EnchantmentAuxData.h"
 #include "State/Cards/AuraAuxData.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

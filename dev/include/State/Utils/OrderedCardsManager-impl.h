@@ -3,7 +3,7 @@
 #include "State/Manipulators/StateManipulator.h"
 #include "State/State.h"
 
-namespace State
+namespace state
 {
 	namespace Utils
 	{

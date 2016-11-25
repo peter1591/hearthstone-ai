@@ -5,7 +5,7 @@
 #include <memory>
 #include "Utils/CloneableContainers/RemovableVector.h"
 
-namespace State
+namespace state
 {
 	namespace Cards
 	{

@@ -6,7 +6,7 @@
 #include "State/Manipulators/CardManipulator.h"
 #include "State/Manipulators/MinionManipulator.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

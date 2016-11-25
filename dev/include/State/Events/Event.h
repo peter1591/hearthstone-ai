@@ -4,7 +4,7 @@
 #include <tuple>
 #include "State/Events/HandlersManager.h"
 
-namespace State
+namespace state
 {
 	namespace Events
 	{

@@ -2,7 +2,7 @@
 
 #include "State/Players.h"
 
-namespace State
+namespace state
 {
 	class Board
 	{

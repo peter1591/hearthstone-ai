@@ -8,7 +8,7 @@
 #include "State/Manipulators/Events/AddToZone.h"
 #include "State/Manipulators/Events/RemovedFromZone.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{

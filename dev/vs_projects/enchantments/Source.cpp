@@ -2,7 +2,7 @@
 #include "State/Cards/Enchantments/TieredEnchantments.h"
 #include "State/Cards/Card.h"
 
-using namespace State::Cards;
+using namespace state::Cards;
 
 struct Enchantment1
 {
@@ -22,17 +22,17 @@ int main(void)
 {
 	TieredEnchantments mgr;
 
-	State::Cards::RawCard raw_card;
-	State::Cards::Card card(raw_card);
+	state::Cards::RawCard raw_card;
+	state::Cards::Card card(raw_card);
 	card.SetCost(0);
 
-	Enchantment1 enchant1{ [](State::Cards::Card & card) {
+	Enchantment1 enchant1{ [](state::Cards::Card & card) {
 		card.SetCost(card.GetCost() + 1);
 	}};
-	Enchantment1 enchant2{ [](State::Cards::Card & card) {
+	Enchantment1 enchant2{ [](state::Cards::Card & card) {
 		card.SetCost(card.GetCost() * 2);
 	} };
-	Enchantment2 enchant3{ [](State::Cards::Card & card) {
+	Enchantment2 enchant3{ [](state::Cards::Card & card) {
 		card.SetCost(card.GetCost() + 3);
 	} };
 

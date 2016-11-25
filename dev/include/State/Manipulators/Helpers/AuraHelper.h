@@ -3,7 +3,7 @@
 #include "State/Cards/AuraAuxData.h"
 #include "State/State.h"
 
-namespace State
+namespace state
 {
 	namespace Manipulators
 	{
