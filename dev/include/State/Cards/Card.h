@@ -87,7 +87,7 @@ namespace state
 			int GetCost() const { return data_.enchanted_states.cost; }
 			void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
-			int GetDamage() const { return 0; } // return data_.damaged; }
+			int GetDamage() const { return data_.damaged; }
 			void SetDamage(int new_damage) { data_.damaged = new_damage; }
 
 			int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
