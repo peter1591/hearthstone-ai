@@ -91,6 +91,7 @@ namespace state
 			void SetDamage(int new_damage) { data_.damaged = new_damage; }
 
 			int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
+			int GetAttack() const { return data_.enchanted_states.attack; }
 
 			MutableEnchantmentAuxDataGetter GetMutableEnchantmentAuxDataGetter()
 			{
