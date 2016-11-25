@@ -3,7 +3,6 @@
 #include "State/Cards/Manager.h"
 #include "State/Board.h"
 #include "State/Events/HandlersManager.h"
-#include "State/ThisTurnCounters.h"
 
 namespace state
 {
@@ -25,7 +24,5 @@ namespace state
 
 		PlayerIdentifier current_player;
 		int turn;
-
-		ThisTurnCounters this_turn_counters;
 	};
 }

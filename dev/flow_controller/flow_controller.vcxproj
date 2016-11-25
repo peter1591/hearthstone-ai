@@ -172,7 +172,6 @@
     <ClInclude Include="..\include\State\Players.h" />
     <ClInclude Include="..\include\State\Secrets.h" />
     <ClInclude Include="..\include\State\State.h" />
-    <ClInclude Include="..\include\State\ThisTurnCounters.h" />
     <ClInclude Include="..\include\State\Types.h" />
     <ClInclude Include="..\include\State\Utils\DefaultZonePosPolicy.h" />
     <ClInclude Include="..\include\State\Utils\OrderedCardsManager-impl.h" />

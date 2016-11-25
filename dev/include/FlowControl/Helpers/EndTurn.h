@@ -31,7 +31,6 @@ namespace FlowControl
 				++state_.turn;
 
 				state_.ChangePlayer();
-				state_.this_turn_counters.Clear();
 
 				// TODO: before start turn events (ice block, bloodlust)
 
