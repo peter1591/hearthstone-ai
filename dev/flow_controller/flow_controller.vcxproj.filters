@@ -19,20 +19,11 @@
     <Filter Include="Header Files\State">
       <UniqueIdentifier>{0be2b0af-8171-4643-bd64-5f32850c5326}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\State\Utils">
-      <UniqueIdentifier>{2ceb102c-82fa-4523-96ed-88b37bc45606}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl\Helpers">
       <UniqueIdentifier>{7acbed2a-45eb-441e-a973-91977117cc7c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\FlowControl\Context">
       <UniqueIdentifier>{ff308333-4b2b-4d8a-bc70-bdf6c0b6c3df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\StaticEventManager">
-      <UniqueIdentifier>{cd65c2cd-760a-42ff-a5da-2454570b01d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\StaticEventManager\Events">
-      <UniqueIdentifier>{99797d79-1421-4793-be30-da43a1f44f8d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\State\Cards">
       <UniqueIdentifier>{24898c9b-f21f-4a56-8b5a-64a82c7ccedc}</UniqueIdentifier>
@@ -77,15 +68,6 @@
     <ClInclude Include="..\include\State\State.h">
       <Filter>Header Files\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\State\Utils\DefaultZonePosPolicy.h">
-      <Filter>Header Files\State\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Utils\OrderedCardsManager.h">
-      <Filter>Header Files\State\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Utils\OrderedCardsManager-impl.h">
-      <Filter>Header Files\State\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
@@ -103,18 +85,6 @@
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Context\BeforeMinionSummoned.h">
       <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\StaticEventManager\Triggerer.h">
-      <Filter>Header Files\StaticEventManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\StaticEventManager\Events\GameStart.h">
-      <Filter>Header Files\StaticEventManager\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\StaticEventManager\Events\RemovedFromZone.h">
-      <Filter>Header Files\StaticEventManager\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\StaticEventManager\Events\AddToZone.h">
-      <Filter>Header Files\StaticEventManager\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\Cards\Manager.h">
       <Filter>Header Files\State\Cards</Filter>

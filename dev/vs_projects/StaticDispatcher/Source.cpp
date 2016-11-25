@@ -13,8 +13,6 @@ namespace Cards
 		class Card_Test1
 		{
 		public:
-			static constexpr int id = 7;
-
 			static void BattleCry()
 			{
 				std::cout << "Card_Test1::BattleCry() called" << std::endl;
@@ -24,8 +22,6 @@ namespace Cards
 		class Card_Test2
 		{
 		public:
-			static constexpr int id = 55;
-
 			static void BattleCry()
 			{
 				test += 2;
@@ -39,9 +35,9 @@ namespace Cards
 	}
 }
 
-REGISTER_MINION_CARD_CLASS(Cards::Minions::Card_Test1)
-REGISTER_MINION_CARD_CLASS(Cards::Minions::Card_Test2)
-REGISTER_MINION_CARD_CLASS(Cards::Minions::Card_Test3)
+REGISTER_MINION_CARD_CLASS(7, Cards::Minions::Card_Test1)
+REGISTER_MINION_CARD_CLASS(55,Cards::Minions::Card_Test2)
+REGISTER_MINION_CARD_CLASS(57, Cards::Minions::Card_Test3)
 
 int main(void)
 {

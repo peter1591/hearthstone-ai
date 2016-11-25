@@ -27,13 +27,31 @@ private:
 class RandomGenerator
 {
 public:
-	int Get(int exclusive_max) { return 0; }
+	int Get(int exclusive_max)
+	{
+		return exclusive_max - 1;
+	}
 
 	int Get(int min, int max)
 	{
 		return max;
 	}
 };
+
+class Card1
+{
+public:
+	static void BattleCry(FlowControl::Context::BattleCry & context)
+	{
+		debug1 = true;
+
+		context.GetBattleCryTarget();
+	}
+
+	static bool debug1;
+};
+bool Card1::debug1 = true;
+REGISTER_MINION_CARD_CLASS(1, Card1)
 
 static void CheckZoneAndPosition(const state::State & state, CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
 {
@@ -182,8 +200,10 @@ int main(void)
 	};
 	state.event_mgr.PushBack(state::Events::TriggerTypes::OnMinionPlay(on_minion_play_1));
 	triggered = false;
+	Card1::debug1 = false;
 	controller.PlayCard();
 	assert(triggered);
+	assert(Card1::debug1);
 	CheckZoneAndPosition(state, r1, state::kPlayerFirst, state::kCardZonePlay, 0);
 
 	CardRef r2 = state.GetCurrentPlayer().hand_.Get(2);

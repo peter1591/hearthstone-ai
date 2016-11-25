@@ -64,7 +64,7 @@ namespace FlowControl
 	}
 }
 
-#define REGISTER_MINION_CARD_CLASS(ClassName) \
+#define REGISTER_MINION_CARD_CLASS(id, ClassName) \
 		template <> template <> \
-		struct FlowControl::Dispatchers::Minions::DispatcherImpl::DispatchMap<ClassName ::id> \
+		struct FlowControl::Dispatchers::Minions::DispatcherImpl::DispatchMap<(id)> \
 		{ typedef ClassName type; };
