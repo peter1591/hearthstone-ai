@@ -4,6 +4,7 @@
 #include "State/State.h"
 #include "FlowControl/Helpers/PlayCard.h"
 #include "FlowControl/Helpers/EndTurn.h"
+#include "FlowControl/Helpers/Attack.h"
 #include "FlowControl/Result.h"
 
 namespace FlowControl
@@ -26,6 +27,12 @@ namespace FlowControl
 		Result OnTurnEnd()
 		{
 			Helpers::OnTurnEnd<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
+			return helper.Go();
+		}
+
+		Result Attack(CardRef attacker, CardRef defender)
+		{
+			Helpers::Attack<ActionParameterGetter, RandomGenerator> helper(state_, attacker, defender, action_parameters_, random_);
 			return helper.Go();
 		}
 
