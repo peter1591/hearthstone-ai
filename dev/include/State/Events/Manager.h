@@ -11,6 +11,9 @@
 #include "State/Events/EventTypes/OnMinionPlay.h"
 #include "State/Events/EventTypes/OnTurnEnd.h"
 #include "State/Events/EventTypes/OnTurnStart.h"
+#include "State/Events/EventTypes/BeforeAttack.h"
+#include "State/Events/EventTypes/OnAttack.h"
+#include "State/Events/EventTypes/AfterAttack.h"
 
 namespace state
 {
@@ -80,11 +83,15 @@ private: \
 			ADD_TRIGGER_TYPE(OnMinionPlay);
 			ADD_TRIGGER_TYPE(OnTurnEnd);
 			ADD_TRIGGER_TYPE(OnTurnStart);
+			ADD_TRIGGER_TYPE(BeforeAttack);
+			ADD_TRIGGER_TYPE(OnAttack);
+			ADD_TRIGGER_TYPE(AfterAttack);
 
 			ADD_CATEGORIZED_TRIGGER_TYPE(AfterMinionSummoned);
 			ADD_CATEGORIZED_TRIGGER_TYPE(BeforeMinionSummoned);
 			ADD_CATEGORIZED_TRIGGER_TYPE(AfterMinionPlayed);
 			ADD_CATEGORIZED_TRIGGER_TYPE(OnMinionPlay);
+			ADD_CATEGORIZED_TRIGGER_TYPE(BeforeAttack);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL
 #undef ADD_TRIGGER_TYPE
