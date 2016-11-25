@@ -10,10 +10,10 @@ namespace FlowControl
 	namespace Helpers
 	{
 		template <class ActionParameterGetter, class RandomGenerator>
-		class EndTurn
+		class OnTurnEnd
 		{
 		public:
-			EndTurn(state::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
+			OnTurnEnd(state::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
 				: state_(state), action_parameters_(action_parameters), random_(random)
 			{
 
@@ -23,29 +23,23 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
-				// TODO: end turn events
-
-				// TODO: check win/loss
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
+				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
 
 				if (state_.turn == 89) return kResultDraw;
 				++state_.turn;
 
 				state_.ChangePlayer();
 
-				// TODO: before start turn events (ice block, bloodlust)
-
 				state_.GetCurrentPlayer().resource_.IncreaseTotal();
 				state_.GetCurrentPlayer().resource_.Refill();
 				// TODO: overload
 
-				// TODO: start turn events
-
-				// TODO: check win/loss
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
+				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
 
 				DrawCard();
-
-				rc = Utils::CheckWinLoss(state_);
-				if (rc != kResultNotDetermined) return rc;
+				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}

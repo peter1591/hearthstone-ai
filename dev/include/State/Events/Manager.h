@@ -4,10 +4,13 @@
 #include <utility>
 #include "State/Events/impl/HandlersContainer.h"
 #include "State/Events/impl/CategorizedHandlersContainer.h"
+
 #include "State/Events/EventTypes/AfterMinionSummoned.h"
 #include "State/Events/EventTypes/BeforeMinionSummoned.h"
 #include "State/Events/EventTypes/AfterMinionPlayed.h"
 #include "State/Events/EventTypes/OnMinionPlay.h"
+#include "State/Events/EventTypes/OnTurnEnd.h"
+#include "State/Events/EventTypes/OnTurnStart.h"
 
 namespace state
 {
@@ -75,6 +78,8 @@ private: \
 			ADD_TRIGGER_TYPE(BeforeMinionSummoned);
 			ADD_TRIGGER_TYPE(AfterMinionPlayed);
 			ADD_TRIGGER_TYPE(OnMinionPlay);
+			ADD_TRIGGER_TYPE(OnTurnEnd);
+			ADD_TRIGGER_TYPE(OnTurnStart);
 
 			ADD_CATEGORIZED_TRIGGER_TYPE(AfterMinionSummoned);
 			ADD_CATEGORIZED_TRIGGER_TYPE(BeforeMinionSummoned);

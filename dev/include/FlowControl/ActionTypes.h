@@ -8,6 +8,6 @@ namespace FlowControl
 		kActionPlayCard,
 		kActionAttack,
 		kActionHeroPower,
-		kActionEndTurn
+		kActionOnTurnEnd
 	};
 }
