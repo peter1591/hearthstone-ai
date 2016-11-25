@@ -18,6 +18,11 @@ namespace state
 
 			}
 
+			CardManipulator Card(CardRef ref)
+			{
+				return CardManipulator(state_, ref, state_.mgr.GetMutable(ref));
+			}
+
 			CharacterManipulator CurrentHero()
 			{
 				return Hero(state_.current_player);
@@ -29,14 +34,14 @@ namespace state
 				return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
 			}
 
-			CardManipulator Card(CardRef ref)
-			{
-				return CardManipulator(state_, ref, state_.mgr.GetMutable(ref));
-			}
-
 			MinionManipulator Minion(CardRef ref)
 			{
 				return MinionManipulator(state_, ref, state_.mgr.GetMutable(ref));
+			}
+
+			CharacterManipulator Character(CardRef ref)
+			{
+				return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
 			}
 
 		private:
