@@ -125,6 +125,7 @@
     <ClInclude Include="..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h" />
+    <ClInclude Include="..\include\FlowControl\Helpers\Attack.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h" />
     <ClInclude Include="..\include\FlowControl\Result.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h" />

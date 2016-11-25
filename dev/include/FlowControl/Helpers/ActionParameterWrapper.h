@@ -9,16 +9,8 @@ namespace FlowControl
 		{
 		public:
 			ActionParameterWrapper(ActionParameterGetter & getter)
-				: getter_(getter), hand_card_position_(-1), minion_put_location_(-1)
+				: getter_(getter), minion_put_location_(-1)
 			{
-			}
-
-			int GetHandCardPosition()
-			{
-				if (hand_card_position_ < 0) {
-					hand_card_position_ = getter_.GetHandCardPosition();
-				}
-				return hand_card_position_;
 			}
 
 			int GetMinionPutLocation(int min, int max)
@@ -44,7 +36,6 @@ namespace FlowControl
 
 		private:
 			ActionParameterGetter & getter_;
-			int hand_card_position_;
 			int minion_put_location_;
 			CardRef battlecry_target_;
 		};

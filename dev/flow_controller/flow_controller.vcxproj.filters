@@ -218,5 +218,8 @@
     <ClInclude Include="..\include\State\Events\EventTypes\OnTurnStart.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Helpers\Attack.h">
+      <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

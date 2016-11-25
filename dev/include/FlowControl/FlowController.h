@@ -17,9 +17,9 @@ namespace FlowControl
 		{
 		}
 
-		Result PlayCard()
+		Result PlayCard(int hand_idx)
 		{
-			Helpers::PlayCard<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
+			Helpers::PlayCard<ActionParameterGetter, RandomGenerator> helper(state_, hand_idx, action_parameters_, random_);
 			return helper.Go();
 		}
 

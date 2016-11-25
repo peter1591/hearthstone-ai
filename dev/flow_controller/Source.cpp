@@ -7,9 +7,6 @@
 class ActionParameterGetter
 {
 public:
-	void SetHandCardPosition(int pos) { hand_pos_ = pos; }
-	int GetHandCardPosition() const { return hand_pos_; }
-
 	int GetMinionPutLocation(int min, int max)
 	{
 		return min;
@@ -19,9 +16,6 @@ public:
 	{
 		return CardRef();
 	}
-
-private:
-	int hand_pos_;
 };
 
 class RandomGenerator
@@ -191,7 +185,6 @@ int main(void)
 	FlowControl::FlowController<ActionParameterGetter, RandomGenerator> controller(state, action_parameter, random);
 
 	CardRef r1 = state.GetCurrentPlayer().hand_.Get(2);
-	action_parameter.SetHandCardPosition(2);
 	bool triggered = false;
 	state::Events::EventTypes::OnMinionPlay::FunctorType on_minion_play_1 = 
 		[&triggered] (state::Events::HandlersContainerController & controller, const state::Cards::Card & card) {
@@ -201,15 +194,14 @@ int main(void)
 	state.event_mgr.PushBack(state::Events::EventTypes::OnMinionPlay(on_minion_play_1));
 	triggered = false;
 	Card1::debug1 = false;
-	controller.PlayCard();
+	controller.PlayCard(2);
 	assert(triggered);
 	assert(Card1::debug1);
 	CheckZoneAndPosition(state, r1, state::kPlayerFirst, state::kCardZonePlay, 0);
 
 	CardRef r2 = state.GetCurrentPlayer().hand_.Get(2);
-	action_parameter.SetHandCardPosition(2);
 	triggered = false;
-	controller.PlayCard();
+	controller.PlayCard(2);
 	assert(triggered);
 	CheckZoneAndPosition(state, r2, state::kPlayerFirst, state::kCardZonePlay, 0);
 	CheckZoneAndPosition(state, r1, state::kPlayerFirst, state::kCardZonePlay, 1);

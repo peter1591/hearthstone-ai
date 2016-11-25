@@ -17,16 +17,15 @@ namespace FlowControl
 		class PlayCard
 		{
 		public:
-			PlayCard(state::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
-				: state_(state), action_parameters_(action_parameters), random_(random), card_(nullptr)
+			PlayCard(state::State & state, int hand_idx, ActionParameterGetter & action_parameters, RandomGenerator & random)
+				: state_(state), hand_idx_(hand_idx), action_parameters_(action_parameters), random_(random), card_(nullptr)
 			{
 
 			}
 
 			Result Go()
 			{
-				int hand_pos = action_parameters_.GetHandCardPosition();
-				card_ref_ = state_.GetCurrentPlayer().hand_.Get(hand_pos);
+				card_ref_ = state_.GetCurrentPlayer().hand_.Get(hand_idx_);
 				card_ = &state_.mgr.Get(card_ref_);
 
 				switch (card_->GetCardType())
@@ -71,6 +70,7 @@ namespace FlowControl
 
 		private:
 			state::State & state_;
+			int hand_idx_;
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
 			RandomGenerator & random_;
 
