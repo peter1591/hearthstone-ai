@@ -9,7 +9,7 @@ namespace state
 {
 	namespace Events
 	{
-		namespace TriggerTypes
+		namespace EventTypes
 		{
 			class AfterMinionSummoned
 			{

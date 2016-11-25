@@ -34,9 +34,6 @@
     <Filter Include="Header Files\State\Events\impl">
       <UniqueIdentifier>{71ec3e2b-38b1-412f-9cf8-7866b790701a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\State\Events\TriggerTypes">
-      <UniqueIdentifier>{05dcffa4-72d6-43ba-8159-ac5df6f77b11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\State\Manipulators">
       <UniqueIdentifier>{90399222-5ae9-45e3-add9-88951e8bf72e}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="Header Files\State\board">
       <UniqueIdentifier>{09f30fa1-0430-4ea4-a58a-be10b03688d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\State\Events\EventTypes">
+      <UniqueIdentifier>{05dcffa4-72d6-43ba-8159-ac5df6f77b11}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,18 +121,6 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Events\impl\HandlersContainer.h">
       <Filter>Header Files\State\Events\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Events\TriggerTypes\AfterMinionPlayed.h">
-      <Filter>Header Files\State\Events\TriggerTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Events\TriggerTypes\AfterMinionSummoned.h">
-      <Filter>Header Files\State\Events\TriggerTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Events\TriggerTypes\BeforeMinionSummoned.h">
-      <Filter>Header Files\State\Events\TriggerTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Events\TriggerTypes\OnMinionPlay.h">
-      <Filter>Header Files\State\Events\TriggerTypes</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Dispatchers\Minions.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
@@ -211,6 +199,18 @@
     </ClInclude>
     <ClInclude Include="..\include\State\board\Weapon.h">
       <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Events\EventTypes\AfterMinionPlayed.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Events\EventTypes\AfterMinionSummoned.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Events\EventTypes\BeforeMinionSummoned.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Events\EventTypes\OnMinionPlay.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

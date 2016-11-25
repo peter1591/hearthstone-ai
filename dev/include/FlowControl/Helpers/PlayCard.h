@@ -42,7 +42,7 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
-				state_.event_mgr.TriggerEvent<state::Events::TriggerTypes::BeforeMinionSummoned>(
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 					Context::BeforeMinionSummoned(state_, card_ref_, *card_));
 
 				state_.GetCurrentPlayer().resource_.Cost(card_->GetCost());
@@ -53,16 +53,16 @@ namespace FlowControl
 				state::Manipulators::StateManipulator(state_).Minion(card_ref_)
 					.Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
-				state_.event_mgr.TriggerEvent<state::Events::TriggerTypes::OnMinionPlay>(*card_);
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(*card_);
 
 				FlowControl::Dispatchers::Minions::BattleCry(card_->GetCardId(),
 					Context::BattleCry(state_, card_ref_, *card_, [this]() {
 						return action_parameters_.GetBattlecryTarget(state_, card_ref_, *card_);
 				}));
 
-				state_.event_mgr.TriggerEvent<state::Events::TriggerTypes::AfterMinionPlayed>(*card_);
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(*card_);
 
-				state_.event_mgr.TriggerEvent<state::Events::TriggerTypes::AfterMinionSummoned>();
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 
 				rc = Utils::CheckWinLoss(state_);
 				if (rc != kResultNotDetermined) return rc;

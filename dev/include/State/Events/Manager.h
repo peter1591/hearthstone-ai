@@ -4,10 +4,10 @@
 #include <utility>
 #include "State/Events/impl/HandlersContainer.h"
 #include "State/Events/impl/CategorizedHandlersContainer.h"
-#include "State/Events/TriggerTypes/AfterMinionSummoned.h"
-#include "State/Events/TriggerTypes/BeforeMinionSummoned.h"
-#include "State/Events/TriggerTypes/AfterMinionPlayed.h"
-#include "State/Events/TriggerTypes/OnMinionPlay.h"
+#include "State/Events/EventTypes/AfterMinionSummoned.h"
+#include "State/Events/EventTypes/BeforeMinionSummoned.h"
+#include "State/Events/EventTypes/AfterMinionPlayed.h"
+#include "State/Events/EventTypes/OnMinionPlay.h"
 
 namespace state
 {
@@ -55,18 +55,18 @@ namespace state
 
 #define ADD_TRIGGER_TYPE_INTERNAL(TYPE_NAME, MEMBER_NAME) \
 private: \
-	impl::HandlersContainer<TriggerTypes::TYPE_NAME> MEMBER_NAME; \
+	impl::HandlersContainer<EventTypes::TYPE_NAME> MEMBER_NAME; \
 private: \
-	template <> impl::HandlersContainer<TriggerTypes::TYPE_NAME> & GetHandlersContainer() { \
+	template <> impl::HandlersContainer<EventTypes::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
 #define ADD_TRIGGER_TYPE(TYPE_NAME) ADD_TRIGGER_TYPE_INTERNAL(TYPE_NAME, handler_ ## TYPE_NAME ## _)
 
 #define ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL(TYPE_NAME, MEMBER_NAME) \
 private: \
-	impl::CategorizedHandlersContainer<int, TriggerTypes::TYPE_NAME> MEMBER_NAME; \
+	impl::CategorizedHandlersContainer<int, EventTypes::TYPE_NAME> MEMBER_NAME; \
 private: \
-	template <> impl::CategorizedHandlersContainer<int, TriggerTypes::TYPE_NAME> & GetHandlersContainer() { \
+	template <> impl::CategorizedHandlersContainer<int, EventTypes::TYPE_NAME> & GetHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
 #define ADD_CATEGORIZED_TRIGGER_TYPE(TYPE_NAME) ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)

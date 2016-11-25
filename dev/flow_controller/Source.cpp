@@ -193,12 +193,12 @@ int main(void)
 	CardRef r1 = state.GetCurrentPlayer().hand_.Get(2);
 	action_parameter.SetHandCardPosition(2);
 	bool triggered = false;
-	state::Events::TriggerTypes::OnMinionPlay::FunctorType on_minion_play_1 = 
+	state::Events::EventTypes::OnMinionPlay::FunctorType on_minion_play_1 = 
 		[&triggered] (state::Events::HandlersContainerController & controller, const state::Cards::Card & card) {
 		triggered = true;
 		//std::cout << "OnMinionPlay event: " << card.GetCardId() << std::endl;
 	};
-	state.event_mgr.PushBack(state::Events::TriggerTypes::OnMinionPlay(on_minion_play_1));
+	state.event_mgr.PushBack(state::Events::EventTypes::OnMinionPlay(on_minion_play_1));
 	triggered = false;
 	Card1::debug1 = false;
 	controller.PlayCard();
