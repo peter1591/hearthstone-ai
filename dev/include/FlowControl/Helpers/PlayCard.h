@@ -64,8 +64,7 @@ namespace FlowControl
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 
-				rc = Utils::CheckWinLoss(state_);
-				if (rc != kResultNotDetermined) return rc;
+				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}
