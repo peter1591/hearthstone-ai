@@ -47,9 +47,21 @@ namespace FlowControl
 					state_.mgr.Get(defender_).GetAttack());
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker_, defender_);
-				// TODO: weapon lose durability
+
+				{
+					const state::Cards::Card & attacker_card = state_.mgr.Get(attacker_);
+					if (attacker_card.GetCardType() == state::kCardTypeHero) {
+						CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
+						if (weapon_ref.IsValid()) {
+							state::Manipulators::StateManipulator(state_).Weapon(weapon_ref).ReduceDurability(1);
+						}
+					}
+				}
 
 				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
+
+				// TODO: check deaths
+				// TODO: check weapon deaths
 
 				return kResultNotDetermined;
 			}

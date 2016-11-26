@@ -13,10 +13,13 @@ namespace state
 		class RawCard
 		{
 		public:
-			RawCard() : card_type(kCardTypeInvalid), play_order(-1), damaged(0) {}
+			RawCard() :
+				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone_position(-1), damaged(0)
+			{
+			}
 
-			CardType card_type;
 			int card_id;
+			CardType card_type;
 			int play_order;
 			int zone_position;
 
@@ -25,6 +28,9 @@ namespace state
 
 			EnchantmentAuxData enchantment_aux_data;
 			AuraAuxData aura_aux_data;
+
+		public: // for hero type
+			CardRef weapon_ref;
 		};
 	}
 }

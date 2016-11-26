@@ -105,6 +105,9 @@ namespace state
 
 			LocationSetter SetLocation() { return LocationSetter(data_); }
 
+		public:
+			const RawCard & GetRawData() const { return data_; }
+
 		private:
 			RawCard data_;
 		};

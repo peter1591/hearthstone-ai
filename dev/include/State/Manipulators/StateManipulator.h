@@ -5,6 +5,7 @@
 #include "State/Manipulators/CharacterManipulator.h"
 #include "State/Manipulators/CardManipulator.h"
 #include "State/Manipulators/MinionManipulator.h"
+#include "State/Manipulators/WeaponManipulator.h"
 
 namespace state
 {
@@ -42,6 +43,11 @@ namespace state
 			CharacterManipulator Character(CardRef ref)
 			{
 				return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
+			}
+
+			WeaponManipulator Weapon(CardRef ref)
+			{
+				return WeaponManipulator(state_, ref, state_.mgr.GetMutable(ref));
 			}
 
 		private:
