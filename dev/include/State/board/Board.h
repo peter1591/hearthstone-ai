@@ -1,6 +1,8 @@
 #pragma once
 
-#include "State/board/Players.h"
+#include <exception>
+#include "State/Types.h"
+#include "State/board/Player.h"
 
 namespace state
 {
@@ -9,7 +11,32 @@ namespace state
 		class Board
 		{
 		public:
-			Players players;
+			Player & Get(PlayerIdentifier identifier)
+			{
+				if (identifier == kPlayerFirst) return first_;
+				else if (identifier == kPlayerSecond) return second_;
+				throw std::exception("invalid player identifier");
+			}
+
+			const Player & Get(PlayerIdentifier identifier) const
+			{
+				if (identifier == kPlayerFirst) return first_;
+				else if (identifier == kPlayerSecond) return second_;
+				throw std::exception("invalid player identifier");
+			}
+
+			template <int Identifier> Player & Get();
+			template <int Identifier> const Player & Get() const;
+
+		private:
+			Player first_;
+			Player second_;
 		};
+
+		template <> Player & Board::Get<kPlayerFirst>() { return first_; }
+		template <> const Player & Board::Get<kPlayerFirst>() const { return first_; }
+
+		template <> Player & Board::Get<kPlayerSecond>() { return second_; }
+		template <> const Player & Board::Get<kPlayerSecond>() const { return second_; }
 	}
 }

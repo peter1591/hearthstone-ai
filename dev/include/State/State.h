@@ -14,8 +14,8 @@ namespace state
 			if (current_player == kPlayerFirst) current_player = kPlayerSecond;
 			else current_player = kPlayerFirst;
 		}
-		board::Player & GetCurrentPlayer() { return board.players.Get(current_player); }
-		const board::Player & GetCurrentPlayer() const { return board.players.Get(current_player); }
+		board::Player & GetCurrentPlayer() { return board.Get(current_player); }
+		const board::Player & GetCurrentPlayer() const { return board.Get(current_player); }
 
 	public:
 		board::Board board;

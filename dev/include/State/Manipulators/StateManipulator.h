@@ -30,7 +30,7 @@ namespace state
 
 			CharacterManipulator Hero(PlayerIdentifier player)
 			{
-				CardRef ref = state_.board.players.Get(player).hero_ref_;
+				CardRef ref = state_.board.Get(player).hero_ref_;
 				return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
 			}
 
