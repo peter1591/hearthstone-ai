@@ -95,25 +95,25 @@ static state::Cards::RawCard GetCard3(state::PlayerIdentifier player, int zone_p
 
 static void MakeDeck(state::State & state, state::PlayerIdentifier player)
 {
-	CardRef r1 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.players.Get(player).deck_.Size())));
+	CardRef r1 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 
-	CardRef r2 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.players.Get(player).deck_.Size())));
+	CardRef r2 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 
-	CardRef r3 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.players.Get(player).deck_.Size())));
+	CardRef r3 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneDeck, 2);
 
-	CardRef r4 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.players.Get(player).deck_.Size())));
+	CardRef r4 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneDeck, 2);
 	CheckZoneAndPosition(state, r4, player, state::kCardZoneDeck, 3);
 
-	CardRef r5 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.players.Get(player).deck_.Size())));
+	CardRef r5 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneDeck, 2);
@@ -123,25 +123,25 @@ static void MakeDeck(state::State & state, state::PlayerIdentifier player)
 
 static void MakeHand(state::State & state, state::PlayerIdentifier player)
 {
-	CardRef r1 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.players.Get(player).hand_.Size())));
+	CardRef r1 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 
-	CardRef r2 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.players.Get(player).hand_.Size())));
+	CardRef r2 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 
-	CardRef r3 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.players.Get(player).hand_.Size())));
+	CardRef r3 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneHand, 2);
 
-	CardRef r4 = state.mgr.PushBack(state, state::Cards::Card(GetCard2(player, state.board.players.Get(player).hand_.Size())));
+	CardRef r4 = state.mgr.PushBack(state, state::Cards::Card(GetCard2(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneHand, 2);
 	CheckZoneAndPosition(state, r4, player, state::kCardZoneHand, 3);
 
-	CardRef r5 = state.mgr.PushBack(state, state::Cards::Card(GetCard2(player, state.board.players.Get(player).hand_.Size())));
+	CardRef r5 = state.mgr.PushBack(state, state::Cards::Card(GetCard2(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneHand, 2);
@@ -173,14 +173,14 @@ int main(void)
 
 	{
 		state.mgr.PushBack(state, state::Cards::Card(GetHero(state::kPlayerSecond)));
-		state.board.players.Get(state::kPlayerSecond).fatigue_damage_ = 3;
+		state.board.Get(state::kPlayerSecond).fatigue_damage_ = 3;
 		//MakeDeck(state, state::kPlayerSecond);
 		MakeHand(state, state::kPlayerSecond);
 	}
 
 	state.current_player = state::kPlayerFirst;
-	state.board.players.Get(state::kPlayerFirst).resource_.SetTotal(8);
-	state.board.players.Get(state::kPlayerFirst).resource_.Refill();
+	state.board.Get(state::kPlayerFirst).resource_.SetTotal(8);
+	state.board.Get(state::kPlayerFirst).resource_.Refill();
 
 	ActionParameterGetter action_parameter;
 	RandomGenerator random;
@@ -210,15 +210,15 @@ int main(void)
 	CheckZoneAndPosition(state, r2, state::kPlayerFirst, state::kCardZonePlay, 0);
 	CheckZoneAndPosition(state, r1, state::kPlayerFirst, state::kCardZonePlay, 1);
 
-	assert(state.mgr.Get(state.board.players.Get(state::kPlayerSecond).hero_ref_).GetHP() == 30);
+	assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 30);
 	controller.OnTurnEnd();
-	assert(state.board.players.Get(state::kPlayerSecond).resource_.GetTotal() == 1);
-	assert(state.board.players.Get(state::kPlayerSecond).resource_.GetCurrent() == 1);
-	assert(state.mgr.Get(state.board.players.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);
+	assert(state.board.Get(state::kPlayerSecond).resource_.GetTotal() == 1);
+	assert(state.board.Get(state::kPlayerSecond).resource_.GetCurrent() == 1);
+	assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);
 
 	{
-		CardRef attacker = state.board.players.Get(state::kPlayerFirst).minions_.Get(0);
-		CardRef defender = state.board.players.Get(state::kPlayerSecond).hero_ref_;
+		CardRef attacker = state.board.Get(state::kPlayerFirst).minions_.Get(0);
+		CardRef defender = state.board.Get(state::kPlayerSecond).hero_ref_;
 		
 		bool debug1 = false;
 		state.event_mgr.PushBack(state::Events::EventTypes::BeforeAttack(

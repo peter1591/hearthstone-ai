@@ -170,9 +170,6 @@
     <ClInclude Include="..\include\State\Events\Manager.h">
       <Filter>Header Files\State\Events</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\State\board\Board.h">
-      <Filter>Header Files\State\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\State\board\Deck.h">
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
@@ -189,9 +186,6 @@
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\board\PlayerResource.h">
-      <Filter>Header Files\State\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\board\Players.h">
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
     <ClInclude Include="..\include\State\board\Secrets.h">
@@ -229,6 +223,21 @@
     </ClInclude>
     <ClInclude Include="..\include\State\Events\EventTypes\OnAttack.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\Board.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\Manipulators\WeaponManipulator.h">
+      <Filter>Header Files\State\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\DefaultZonePosPolicy.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\OrderedCardsManager.h">
+      <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\State\board\OrderedCardsManager-impl.h">
+      <Filter>Header Files\State\board</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
