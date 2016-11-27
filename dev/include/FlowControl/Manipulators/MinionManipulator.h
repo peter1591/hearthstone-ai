@@ -20,8 +20,6 @@ namespace FlowControl
 			{
 			}
 
-			void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
-
 		public:
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
