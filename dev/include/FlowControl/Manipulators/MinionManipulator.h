@@ -1,24 +1,26 @@
 #pragma once
 
 #include "State/Cards/Card.h"
-#include "State/Manipulators/Helpers/BasicHelper.h"
-#include "State/Manipulators/Helpers/EnchantmentHelper.h"
-#include "State/Manipulators/Helpers/AuraHelper.h"
-#include "State/Manipulators/Helpers/ZonePositionSetter.h"
-#include "State/Manipulators/Helpers/ZoneChanger.h"
+#include "FlowControl/Manipulators/Helpers/BasicHelper.h"
+#include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
+#include "FlowControl/Manipulators/Helpers/AuraHelper.h"
+#include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
+#include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
 
 namespace FlowControl
 {
 	namespace Manipulators
 	{
-		class WeaponManipulator
+		class MinionManipulator
 		{
 		public:
-			WeaponManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
+			MinionManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
 				state_(state), card_ref_(card_ref), card_(card)
 			{
 			}
+
+			void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
 
 		public:
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
@@ -26,10 +28,6 @@ namespace FlowControl
 			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
 			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone() {
 				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_);
-			}
-
-			void ReduceDurability(int v) {
-				card_.SetDamage(card_.GetDamage() + v);
 			}
 
 		private:

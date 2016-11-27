@@ -3,7 +3,7 @@
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/Utils.h"
 
-#include "State/Manipulators/StateManipulator.h"
+#include "FlowControl/Manipulators/StateManipulator.h"
 
 namespace FlowControl
 {

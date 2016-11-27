@@ -127,6 +127,17 @@
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Attack.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\CardManipulator.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\CharacterManipulator.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\AuraHelper.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\BasicHelper.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Manipulators.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\StateManipulator.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\include\FlowControl\Result.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\PlayCard.h" />
@@ -166,17 +177,6 @@
     <ClInclude Include="..\include\State\Events\Manager.h" />
     <ClInclude Include="..\include\State\Events\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\include\State\Events\impl\HandlersContainer.h" />
-    <ClInclude Include="..\include\State\Manipulators\CardManipulator.h" />
-    <ClInclude Include="..\include\State\Manipulators\CharacterManipulator.h" />
-    <ClInclude Include="..\include\State\Manipulators\Helpers\AuraHelper.h" />
-    <ClInclude Include="..\include\State\Manipulators\Helpers\BasicHelper.h" />
-    <ClInclude Include="..\include\State\Manipulators\Helpers\EnchantmentHelper.h" />
-    <ClInclude Include="..\include\State\Manipulators\Helpers\ZoneChanger.h" />
-    <ClInclude Include="..\include\State\Manipulators\Helpers\ZonePositionSetter.h" />
-    <ClInclude Include="..\include\State\Manipulators\Manipulators.h" />
-    <ClInclude Include="..\include\State\Manipulators\MinionManipulator.h" />
-    <ClInclude Include="..\include\State\Manipulators\StateManipulator.h" />
-    <ClInclude Include="..\include\State\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\include\State\State.h" />
     <ClInclude Include="..\include\State\Types.h" />
   </ItemGroup>

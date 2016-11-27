@@ -2,9 +2,9 @@
 
 #include "State/Cards/Manager.h"
 
-#include "State/Manipulators/StateManipulator.h"
-#include "State/Manipulators/CharacterManipulator.h"
-#include "State/Manipulators/MinionManipulator.h"
+#include "FlowControl/Manipulators/StateManipulator.h"
+#include "FlowControl/Manipulators/CharacterManipulator.h"
+#include "FlowControl/Manipulators/MinionManipulator.h"
 #include "State/State.h"
 
 namespace state

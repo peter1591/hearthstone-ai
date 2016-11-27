@@ -1,11 +1,11 @@
 #pragma once
 
 #include "State/Cards/Card.h"
-#include "State/Manipulators/Helpers/BasicHelper.h"
-#include "State/Manipulators/Helpers/EnchantmentHelper.h"
-#include "State/Manipulators/Helpers/AuraHelper.h"
-#include "State/Manipulators/Helpers/ZonePositionSetter.h"
-#include "State/Manipulators/Helpers/ZoneChanger.h"
+#include "FlowControl/Manipulators/Helpers/BasicHelper.h"
+#include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
+#include "FlowControl/Manipulators/Helpers/AuraHelper.h"
+#include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
+#include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
 
 namespace FlowControl

@@ -2,10 +2,10 @@
 
 #include "State/Types.h"
 #include "State/State.h"
-#include "State/Manipulators/CharacterManipulator.h"
-#include "State/Manipulators/CardManipulator.h"
-#include "State/Manipulators/MinionManipulator.h"
-#include "State/Manipulators/WeaponManipulator.h"
+#include "FlowControl/Manipulators/CharacterManipulator.h"
+#include "FlowControl/Manipulators/CardManipulator.h"
+#include "FlowControl/Manipulators/MinionManipulator.h"
+#include "FlowControl/Manipulators/WeaponManipulator.h"
 
 namespace FlowControl
 {

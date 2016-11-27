@@ -34,12 +34,6 @@
     <Filter Include="Header Files\State\Events\impl">
       <UniqueIdentifier>{71ec3e2b-38b1-412f-9cf8-7866b790701a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\State\Manipulators">
-      <UniqueIdentifier>{90399222-5ae9-45e3-add9-88951e8bf72e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\State\Manipulators\Helpers">
-      <UniqueIdentifier>{e9bd7948-697f-4cef-87a8-f92ba5b33a20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl\Dispatchers">
       <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
     </Filter>
@@ -51,6 +45,12 @@
     </Filter>
     <Filter Include="Header Files\State\Events\EventTypes">
       <UniqueIdentifier>{05dcffa4-72d6-43ba-8159-ac5df6f77b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FlowControl\Manipulators">
+      <UniqueIdentifier>{89ce036c-53b3-446b-944c-7829de0e30e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FlowControl\Manipulators\Helpers">
+      <UniqueIdentifier>{2ea550ee-285d-45e7-80ad-eb758a981525}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -125,36 +125,6 @@
     <ClInclude Include="..\include\FlowControl\Dispatchers\Minions.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\CardManipulator.h">
-      <Filter>Header Files\State\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\CharacterManipulator.h">
-      <Filter>Header Files\State\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Manipulators.h">
-      <Filter>Header Files\State\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\MinionManipulator.h">
-      <Filter>Header Files\State\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\StateManipulator.h">
-      <Filter>Header Files\State\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Helpers\AuraHelper.h">
-      <Filter>Header Files\State\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Helpers\BasicHelper.h">
-      <Filter>Header Files\State\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Helpers\EnchantmentHelper.h">
-      <Filter>Header Files\State\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Helpers\ZoneChanger.h">
-      <Filter>Header Files\State\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\Helpers\ZonePositionSetter.h">
-      <Filter>Header Files\State\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
@@ -227,9 +197,6 @@
     <ClInclude Include="..\include\State\board\Board.h">
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\State\Manipulators\WeaponManipulator.h">
-      <Filter>Header Files\State\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\State\board\DefaultZonePosPolicy.h">
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
@@ -238,6 +205,39 @@
     </ClInclude>
     <ClInclude Include="..\include\State\board\OrderedCardsManager-impl.h">
       <Filter>Header Files\State\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\CardManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\CharacterManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\Manipulators.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\MinionManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\StateManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\WeaponManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\AuraHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\BasicHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
