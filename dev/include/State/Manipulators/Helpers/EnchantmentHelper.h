@@ -5,7 +5,7 @@
 #include "State/Cards/Card.h"
 #include "State/Cards/EnchantmentAuxData.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
@@ -14,7 +14,7 @@ namespace state
 			class EnchantmentHelper
 			{
 			public:
-				EnchantmentHelper(Cards::Card &card) :
+				EnchantmentHelper(state::Cards::Card &card) :
 					data_(card.GetMutableEnchantmentAuxDataGetter().Get())
 				{
 				}
@@ -34,7 +34,7 @@ namespace state
 				}
 
 			private:
-				Cards::EnchantmentAuxData & data_;
+				state::Cards::EnchantmentAuxData & data_;
 			};
 		}
 	}

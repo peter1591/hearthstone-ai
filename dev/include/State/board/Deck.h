@@ -6,17 +6,20 @@
 #include "State/Cards/Card.h"
 #include "State/board/OrderedCardsManager.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
 		namespace Helpers
 		{
-			template <CardType TargetCardType, CardZone TargetCardZone> class AddToPlayerDatStructure;
-			template <CardType TargetCardType, CardZone TargetCardZone> class RemoveFromPlayerDatStructure;
+			template <state::CardType TargetCardType, state::CardZone TargetCardZone> class AddToPlayerDatStructure;
+			template <state::CardType TargetCardType, state::CardZone TargetCardZone> class RemoveFromPlayerDatStructure;
 		}
 	}
+}
 
+namespace state
+{
 	namespace board
 	{
 		class Deck
@@ -24,8 +27,8 @@ namespace state
 		public:
 			class LocationManipulator
 			{
-				template <CardType TargetCardType, CardZone TargetCardZone> friend class state::Manipulators::Helpers::AddToPlayerDatStructure;
-				template <CardType TargetCardType, CardZone TargetCardZone> friend class state::Manipulators::Helpers::RemoveFromPlayerDatStructure;
+				template <CardType TargetCardType, CardZone TargetCardZone> friend class FlowControl::Manipulators::Helpers::AddToPlayerDatStructure;
+				template <CardType TargetCardType, CardZone TargetCardZone> friend class FlowControl::Manipulators::Helpers::RemoveFromPlayerDatStructure;
 
 			public:
 				explicit LocationManipulator(Deck & deck) : deck_(deck) {}

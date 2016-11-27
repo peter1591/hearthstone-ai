@@ -2,7 +2,7 @@
 
 #include "State/Cards/Card.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
@@ -11,7 +11,7 @@ namespace state
 			class BasicHelper
 			{
 			public:
-				static void SetCost(Cards::Card& card, int new_cost) { return card.SetCost(new_cost); }
+				static void SetCost(state::Cards::Card& card, int new_cost) { return card.SetCost(new_cost); }
 			};
 		}
 	}

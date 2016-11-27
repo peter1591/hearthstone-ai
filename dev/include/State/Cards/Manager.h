@@ -5,19 +5,23 @@
 #include "State/Cards/Card.h"
 #include "State/Types.h"
 
-namespace state
+namespace FlowControl
 {
-	class State;
 	namespace Manipulators
 	{
 		class StateManipulator;
 	}
+}
+
+namespace state
+{
+	class State;
 
 	namespace Cards
 	{
 		class Manager
 		{
-			friend class Manipulators::StateManipulator;
+			friend class FlowControl::Manipulators::StateManipulator;
 
 		public:
 			typedef Utils::CloneableContainers::Vector<Card> ContainerType;

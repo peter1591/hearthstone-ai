@@ -3,7 +3,7 @@
 #include "State/Cards/AuraAuxData.h"
 #include "State/State.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
@@ -12,7 +12,7 @@ namespace state
 			class AuraHelper
 			{
 			public:
-				AuraHelper(State & state, Cards::Card & card) :
+				AuraHelper(state::State & state, state::Cards::Card & card) :
 					state_(state),
 					data_(card.GetMutableAuraAuxDataGetter().Get())
 				{
@@ -45,8 +45,8 @@ namespace state
 				}
 
 			private:
-				State & state_;
-				Cards::AuraAuxData & data_;
+				state::State & state_;
+				state::Cards::AuraAuxData & data_;
 			};
 		}
 	}

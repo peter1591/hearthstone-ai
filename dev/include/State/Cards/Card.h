@@ -3,7 +3,7 @@
 #include <string>
 #include "State/Cards/RawCard.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
@@ -11,11 +11,14 @@ namespace state
 		{
 			class EnchantmentHelper;
 			class AuraHelper;
-			template <CardZone T1, CardType T2> class ZoneChanger;
+			template <state::CardZone T1, state::CardType T2> class ZoneChanger;
 			class ZonePositionSetter;
 		}
 	}
+}
 
+namespace state
+{
 	namespace Cards
 	{
 		class Card
@@ -23,7 +26,7 @@ namespace state
 		public:
 			class MutableEnchantmentAuxDataGetter
 			{
-				friend class Manipulators::Helpers::EnchantmentHelper;
+				friend class FlowControl::Manipulators::Helpers::EnchantmentHelper;
 			public:
 				MutableEnchantmentAuxDataGetter(RawCard & data) : data_(data) {}
 			private:
@@ -34,7 +37,7 @@ namespace state
 
 			class MutableAuraAuxDataGetter
 			{
-				friend class Manipulators::Helpers::AuraHelper;
+				friend class FlowControl::Manipulators::Helpers::AuraHelper;
 			public:
 				MutableAuraAuxDataGetter(RawCard & data) : data_(data) {}
 			private:
@@ -45,8 +48,8 @@ namespace state
 
 			class LocationSetter
 			{
-				template <CardZone T1, CardType T2> friend class Manipulators::Helpers::ZoneChanger;
-				friend class Manipulators::Helpers::ZonePositionSetter;
+				template <state::CardZone T1, state::CardType T2> friend class FlowControl::Manipulators::Helpers::ZoneChanger;
+				friend class FlowControl::Manipulators::Helpers::ZonePositionSetter;
 
 			public:
 				LocationSetter(RawCard & data) : data_(data) {}

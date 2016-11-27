@@ -8,14 +8,14 @@
 #include "State/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
 		class CardManipulator
 		{
 		public:
-			CardManipulator(State & state, CardRef card_ref, Cards::Card &card) :
+			CardManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
 				state_(state), card_ref_(card_ref), card_(card)
 			{
 			}
@@ -35,9 +35,9 @@ namespace state
 			}
 
 		private:
-			State & state_;
+			state::State & state_;
 			CardRef card_ref_;
-			Cards::Card & card_;
+			state::Cards::Card & card_;
 		};
 	}
 }

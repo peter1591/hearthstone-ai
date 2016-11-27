@@ -44,6 +44,7 @@ struct Enchantment2
 
 static void test1()
 {
+	using namespace FlowControl;
 	state::State state;
 
 	Cards::RawCard c1;
@@ -52,6 +53,7 @@ static void test1()
 	c1.enchanted_states.player = kPlayerFirst;
 	c1.enchanted_states.zone = kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
+	c1.zone_position = 0;
 	CardRef r1 = state.mgr.PushBack(state, Cards::Card(c1));
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneDeck, 0);
 
@@ -183,6 +185,8 @@ private:
 
 static void test2()
 {
+	using namespace FlowControl;
+
 	state::State state;
 
 	Cards::RawCard c1;
@@ -190,6 +194,7 @@ static void test2()
 	c1.card_id = 1;
 	c1.enchanted_states.zone = kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
+	c1.zone_position = 0;
 	CardRef r1 = state.mgr.PushBack(state, Cards::Card(c1));
 
 	Cards::RawCard c2;
@@ -197,6 +202,7 @@ static void test2()
 	c2.card_id = 2;
 	c2.enchanted_states.zone = kCardZoneDeck;
 	c2.enchanted_states.cost = 5;
+	c2.zone_position = 0;
 	CardRef r2 = state.mgr.PushBack(state, Cards::Card(c2));
 
 	Cards::RawCard c3;
@@ -204,6 +210,7 @@ static void test2()
 	c3.card_id = 3;
 	c3.enchanted_states.zone = kCardZoneDeck;
 	c3.enchanted_states.cost = 9;
+	c3.zone_position = 0;
 	CardRef r3 = state.mgr.PushBack(state, Cards::Card(c3));
 
 	typedef AuraHelper ClientAuraHelper;

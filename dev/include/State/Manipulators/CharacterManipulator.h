@@ -5,14 +5,14 @@
 #include "State/Cards/Card.h"
 #include "State/Cards/Manager.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
 		class CharacterManipulator
 		{
 		public:
-			CharacterManipulator(State & state, CardRef card_ref, Cards::Card & card)
+			CharacterManipulator(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				: state_(state), card_(card), card_ref_(card_ref)
 			{
 			}
@@ -24,8 +24,8 @@ namespace state
 			}
 
 		private:
-			State & state_;
-			Cards::Card & card_;
+			state::State & state_;
+			state::Cards::Card & card_;
 			CardRef card_ref_;
 		};
 	}

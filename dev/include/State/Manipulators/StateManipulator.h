@@ -7,14 +7,14 @@
 #include "State/Manipulators/MinionManipulator.h"
 #include "State/Manipulators/WeaponManipulator.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
 		class StateManipulator
 		{
 		public:
-			StateManipulator(State & state) : state_(state)
+			StateManipulator(state::State & state) : state_(state)
 			{
 
 			}
@@ -29,7 +29,7 @@ namespace state
 				return Hero(state_.current_player);
 			}
 
-			CharacterManipulator Hero(PlayerIdentifier player)
+			CharacterManipulator Hero(state::PlayerIdentifier player)
 			{
 				CardRef ref = state_.board.Get(player).hero_ref_;
 				return CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
@@ -51,7 +51,7 @@ namespace state
 			}
 
 		private:
-			State & state_;
+			state::State & state_;
 		};
 	}
 }

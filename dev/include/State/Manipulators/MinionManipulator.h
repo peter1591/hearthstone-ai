@@ -8,14 +8,14 @@
 #include "State/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
 
-namespace state
+namespace FlowControl
 {
 	namespace Manipulators
 	{
 		class MinionManipulator
 		{
 		public:
-			MinionManipulator(State & state, CardRef card_ref, Cards::Card &card) :
+			MinionManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
 				state_(state), card_ref_(card_ref), card_(card)
 			{
 			}
@@ -26,14 +26,14 @@ namespace state
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
 			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
-			Helpers::ZoneChangerWithUnknownZone<kCardTypeMinion> Zone() {
-				return Helpers::ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, card_ref_, card_);
+			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone() {
+				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_);
 			}
 
 		private:
-			State & state_;
+			state::State & state_;
 			CardRef card_ref_;
-			Cards::Card & card_;
+			state::Cards::Card & card_;
 		};
 	}
 }

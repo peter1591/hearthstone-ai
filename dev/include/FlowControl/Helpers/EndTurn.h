@@ -59,10 +59,10 @@ namespace FlowControl
 				CardRef card_ref = state_.GetCurrentPlayer().deck_.Get(deck_idx);
 
 				if (state_.GetCurrentPlayer().hand_.Full()) {
-					state::Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
+					Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
 				}
 				else {
-					state::Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
+					Manipulators::StateManipulator(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
 				}
 
 				// TODO: trigger on-draw event (parameter: card_ref)
@@ -72,7 +72,7 @@ namespace FlowControl
 			{
 				int damage = ++state_.GetCurrentPlayer().fatigue_damage_;
 
-				state::Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
+				Manipulators::StateManipulator(state_).CurrentHero().TakeDamage(damage);
 			}
 
 		private:
