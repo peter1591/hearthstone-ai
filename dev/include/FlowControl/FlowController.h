@@ -7,6 +7,10 @@
 #include "FlowControl/Helpers/Attack.h"
 #include "FlowControl/Result.h"
 
+// Implemention details which depends on manipulators
+#include "Manipulators/Helpers/OrderedCardsManager-impl.h"
+#include "State/Cards/Manager-impl.h"
+
 namespace FlowControl
 {
 	template <class ActionParameterGetter, class RandomGenerator>

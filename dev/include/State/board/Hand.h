@@ -3,7 +3,17 @@
 #include <vector>
 #include "State/Types.h"
 #include "State/Cards/Manager.h"
-#include "State/board/OrderedCardsManager.h"
+
+namespace FlowControl
+{
+	namespace Manipulators
+	{
+		namespace Helpers
+		{
+			class OrderedCardsManager;
+		}
+	}
+}
 
 namespace state
 {
@@ -11,15 +21,12 @@ namespace state
 	{
 		class Hand
 		{
+			friend class FlowControl::Manipulators::Helpers::OrderedCardsManager;
+
 		public:
 			Hand()
 			{
 				cards_.reserve(max_cards_);
-			}
-
-			OrderedCardsManager GetLocationManipulator()
-			{
-				return OrderedCardsManager(cards_);
 			}
 
 			size_t Size() const { return cards_.size(); }

@@ -5,6 +5,7 @@
 #include "State/State.h"
 #include "State/board/Player.h"
 #include "State/board/DefaultZonePosPolicy.h"
+#include "FlowControl/Manipulators/Helpers/OrderedCardsManager.h"
 
 namespace FlowControl
 {
@@ -34,14 +35,12 @@ namespace FlowControl
 			private:
 				static void AddToDeckZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier())
-						.deck_.GetLocationManipulator().Insert(state, card_ref);
+					OrderedCardsManager::FromDeck(state, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
 				static void AddToHandZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier())
-						.hand_.GetLocationManipulator().Insert(state, card_ref);
+					OrderedCardsManager::FromHand(state, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
 				static void AddToPlayZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
@@ -55,7 +54,7 @@ namespace FlowControl
 						player.hero_ref_ = card_ref;
 						return;
 					case state::kCardTypeMinion:
-						return player.minions_.GetLocationManipulator().Insert(state, card_ref);
+						return OrderedCardsManager::FromMinions(state, card.GetPlayerIdentifier()).Insert(card_ref);
 					case state::kCardTypeWeapon:
 						return player.weapon_.Equip(card_ref);
 					case state::kCardTypeSecret:
@@ -65,8 +64,7 @@ namespace FlowControl
 
 				static void AddToGraveyardZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier())
-						.graveyard_.GetLocationManipulator<TargetCardType>().Insert(state, card_ref);
+					OrderedCardsManager::FromGraveyard<TargetCardType>(state, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 			};
 
@@ -93,14 +91,12 @@ namespace FlowControl
 			private:
 				static void RemoveFromDeckZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier())
-						.deck_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+					OrderedCardsManager::FromDeck(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
 				static void RemoveFromHandZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier())
-						.hand_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+					OrderedCardsManager::FromHand(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
 				static void RemoveFromPlayZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
@@ -110,7 +106,7 @@ namespace FlowControl
 					switch (RemovingCardType)
 					{
 					case state::kCardTypeMinion:
-						return player.minions_.GetLocationManipulator().Remove(state, card.GetZonePosition());
+						return OrderedCardsManager::FromMinions(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 					case state::kCardTypeWeapon:
 						return player.weapon_.Destroy();
 					case state::kCardTypeSecret:
@@ -120,8 +116,7 @@ namespace FlowControl
 
 				static void RemoveFromGraveyardZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier())
-						.graveyard_.GetLocationManipulator<RemovingCardType>().Remove(state, card.GetZonePosition());
+					OrderedCardsManager::FromGraveyard<RemovingCardType>(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 			};
 

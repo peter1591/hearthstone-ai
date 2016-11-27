@@ -4,7 +4,6 @@
 #include "State/Types.h"
 #include "State/Cards/Manager.h"
 #include "State/Cards/Card.h"
-#include "State/board/OrderedCardsManager.h"
 
 namespace FlowControl
 {
@@ -14,6 +13,7 @@ namespace FlowControl
 		{
 			template <state::CardType TargetCardType, state::CardZone TargetCardZone> class AddToPlayerDatStructure;
 			template <state::CardType TargetCardType, state::CardZone TargetCardZone> class RemoveFromPlayerDatStructure;
+			class OrderedCardsManager;
 		}
 	}
 }
@@ -55,6 +55,8 @@ namespace state
 			friend class LocationManipulator;
 
 		public:
+			friend class FlowControl::Manipulators::Helpers::OrderedCardsManager;
+
 			Deck() : change_id(0)
 			{
 				cards_.reserve(40);

@@ -2,14 +2,6 @@
 
 #include "State/Cards/Card.h"
 
-namespace state
-{
-	namespace board
-	{
-		class OrderedCardsManager;
-	}
-}
-
 namespace FlowControl
 {
 	namespace Manipulators
@@ -17,9 +9,10 @@ namespace FlowControl
 		namespace Helpers
 		{
 			// we separate this to another class to impose a finer access control
+			class OrderedCardsManager;
 			class ZonePositionSetter
 			{
-				friend class state::board::OrderedCardsManager;
+				friend class OrderedCardsManager;
 
 			public:
 				ZonePositionSetter(state::Cards::Card & card) : card_(card) {}

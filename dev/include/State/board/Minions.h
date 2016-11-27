@@ -4,7 +4,17 @@
 #include "State/Types.h"
 #include "State/Cards/Manager.h"
 #include "State/Cards/Card.h"
-#include "State/board/OrderedCardsManager.h"
+
+namespace FlowControl
+{
+	namespace Manipulators
+	{
+		namespace Helpers
+		{
+			class OrderedCardsManager;
+		}
+	}
+}
 
 namespace state
 {
@@ -12,15 +22,12 @@ namespace state
 	{
 		class Minions
 		{
+			friend class FlowControl::Manipulators::Helpers::OrderedCardsManager;
+
 		public:
 			Minions()
 			{
 				minions_.reserve(7);
-			}
-
-			OrderedCardsManager GetLocationManipulator()
-			{
-				return OrderedCardsManager(minions_);
 			}
 
 			size_t Size() const { return minions_.size(); }

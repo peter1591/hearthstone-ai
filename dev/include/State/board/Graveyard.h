@@ -4,7 +4,17 @@
 #include "State/Types.h"
 #include "State/Cards/Manager.h"
 #include "State/Cards/Card.h"
-#include "State/board/OrderedCardsManager.h"
+
+namespace FlowControl
+{
+	namespace Manipulators
+	{
+		namespace Helpers
+		{
+			class OrderedCardsManager;
+		}
+	}
+}
 
 namespace state
 {
@@ -12,13 +22,9 @@ namespace state
 	{
 		class Graveyard
 		{
-		public:
-			template <CardType ManipulatingCardType>
-			OrderedCardsManager GetLocationManipulator()
-			{
-				return OrderedCardsManager(GetContainer<ManipulatingCardType>());
-			}
+			friend class FlowControl::Manipulators::Helpers::OrderedCardsManager;
 
+		public:
 			size_t GetTotalMinions() const { return minions_.size(); }
 			size_t GetTotalSpells() const { return spells_.size(); }
 			size_t GetTotalOthers() const { return others_.size(); }
@@ -32,9 +38,5 @@ namespace state
 			std::vector<CardRef> spells_;
 			std::vector<CardRef> others_;
 		};
-
-		template <> std::vector<CardRef> & Graveyard::GetContainer<kCardTypeMinion>() { return minions_; }
-		template <> std::vector<CardRef> & Graveyard::GetContainer<kCardTypeSpell>() { return spells_; }
-		template <CardType ManipulatingCardType> std::vector<CardRef> & Graveyard::GetContainer() { return others_; }
 	}
 }
