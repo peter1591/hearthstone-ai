@@ -233,5 +233,8 @@
     <ClInclude Include="..\include\FlowControl\Manipulate.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulators\HeroManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

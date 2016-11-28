@@ -136,6 +136,7 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\HeroManipulator.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\include\FlowControl\Result.h" />
