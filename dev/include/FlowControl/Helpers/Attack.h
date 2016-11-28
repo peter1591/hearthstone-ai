@@ -28,6 +28,9 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
+				if (!attacker_.IsValid()) return rc;
+				if (!defender_.IsValid()) return rc;
+
 				DoAttack();
 
 				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
@@ -39,15 +42,17 @@ namespace FlowControl
 			void DoAttack()
 			{
 				while (true) {
-					if (!attacker_.IsValid()) return;
-					if (!defender_.IsValid()) return;
-
 					CardRef origin_attacker = attacker_;
 					CardRef origin_defender = defender_;
 					state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker_, defender_);
 
-					// TODO: check if it's mortally wounded
-					// TODO: if still in play zone
+					if (!attacker_.IsValid()) return;
+					if (state_.mgr.Get(attacker_).GetHP() <= 0) return;
+					if (state_.mgr.Get(attacker_).GetZone() != state::kCardZonePlay) return;
+
+					if (!defender_.IsValid()) return;
+					if (state_.mgr.Get(defender_).GetHP() <= 0) return;
+					if (state_.mgr.Get(defender_).GetZone() != state::kCardZonePlay) return;
 
 					if (origin_attacker == attacker_ && origin_defender == defender_) break;
 				}
