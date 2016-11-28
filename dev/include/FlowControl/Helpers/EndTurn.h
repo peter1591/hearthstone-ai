@@ -14,9 +14,8 @@ namespace FlowControl
 		class OnTurnEnd
 		{
 		public:
-			OnTurnEnd(state::State & state, ActionParameterGetter & action_parameters, RandomGenerator & random)
-				: state_(state), action_parameters_(action_parameters), random_(random),
-				entity_death_handler_(state)
+			OnTurnEnd(state::State & state, FlowContext & flow_context, ActionParameterGetter & action_parameters, RandomGenerator & random)
+				: state_(state), flow_context_(flow_context), action_parameters_(action_parameters), random_(random)
 			{
 
 			}
@@ -38,10 +37,10 @@ namespace FlowControl
 				// TODO: overload
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
-				if ((rc = entity_death_handler_.ProcessDeath()) != kResultNotDetermined) return rc;
+				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				DrawCard();
-				if ((rc = entity_death_handler_.ProcessDeath()) != kResultNotDetermined) return rc;
+				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}
@@ -61,10 +60,10 @@ namespace FlowControl
 				CardRef card_ref = state_.GetCurrentPlayer().deck_.Get(deck_idx);
 
 				if (state_.GetCurrentPlayer().hand_.Full()) {
-					Manipulate(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
+					Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
 				}
 				else {
-					Manipulate(state_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
+					Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
 				}
 
 				// TODO: trigger on-draw event (parameter: card_ref)
@@ -77,13 +76,13 @@ namespace FlowControl
 			}
 
 		private:
-			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, entity_death_handler_); }
+			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, flow_context_); }
 
 		private:
 			state::State & state_;
+			FlowContext & flow_context_;
 			ActionParameterGetter & action_parameters_;
 			RandomGenerator & random_;
-			Helpers::EntityDeathHandler entity_death_handler_;
 		};
 	}
 }

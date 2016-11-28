@@ -18,10 +18,9 @@ namespace FlowControl
 		class Attack
 		{
 		public:
-			Attack(state::State & state, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, RandomGenerator & random)
-				: state_(state), attacker_(attacker), defender_(defender),
-				  action_parameters_(action_parameters), random_(random),
-				  entity_death_handler_(state)
+			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, RandomGenerator & random)
+				: state_(state), flow_context_(flow_context), attacker_(attacker), defender_(defender),
+				  action_parameters_(action_parameters), random_(random)
 			{
 
 			}
@@ -32,7 +31,7 @@ namespace FlowControl
 
 				DoAttack();
 
-				if ((rc = entity_death_handler_.ProcessDeath()) != kResultNotDetermined) return rc;
+				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return rc;
 			}
@@ -74,15 +73,15 @@ namespace FlowControl
 			}
 
 		private:
-			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, entity_death_handler_); }
+			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, flow_context_); }
 
 		private:
 			state::State & state_;
+			FlowContext & flow_context_;
 			state::CardRef attacker_;
 			state::CardRef defender_;
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
 			RandomGenerator & random_;
-			Helpers::EntityDeathHandler entity_death_handler_;
 		};
 	}
 }

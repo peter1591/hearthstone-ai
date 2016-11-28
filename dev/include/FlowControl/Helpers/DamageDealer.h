@@ -12,8 +12,8 @@ namespace FlowControl
 		class DamageDealer
 		{
 		public:
-			DamageDealer(state::State & state, Helpers::EntityDeathHandler & entity_death_handler) : 
-				state_(state), entity_death_handler_(entity_death_handler)
+			DamageDealer(state::State & state, FlowContext & flow_context) : 
+				state_(state), flow_context_(flow_context)
 			{
 			}
 
@@ -23,14 +23,14 @@ namespace FlowControl
 				Context::OnTakeDamage context(state_, target_ref, origin_damage);
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
 
-				Manipulate(state_).Character(context.card_ref_).Damage().Take(context.damage_);
+				Manipulate(state_, flow_context_).Character(context.card_ref_).Damage().Take(context.damage_);
 
-				entity_death_handler_.Add(context.card_ref_);
+				flow_context_.AddDeadEntryHint(state_, context.card_ref_);
 			}
 
 		private:
 			state::State & state_;
-			Helpers::EntityDeathHandler & entity_death_handler_;
+			FlowContext & flow_context_;
 		};
 	}
 }

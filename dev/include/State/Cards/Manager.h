@@ -7,6 +7,7 @@
 
 namespace FlowControl
 {
+	class FlowContext;
 	class Manipulate;
 }
 
@@ -28,7 +29,7 @@ namespace state
 				return cards_.Get(id.id);
 			}
 
-			template <typename T> CardRef PushBack(State & state, T&& card);
+			template <typename T> CardRef PushBack(State & state, FlowControl::FlowContext & flow_context, T&& card);
 
 		private:
 			Card & GetMutable(const CardRef & id)

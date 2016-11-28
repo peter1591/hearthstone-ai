@@ -63,9 +63,11 @@ static state::Cards::RawCard GetCard1(state::PlayerIdentifier player, int zone_p
 	c1.card_type = state::kCardTypeMinion;
 	c1.card_id = 1;
 	c1.zone_position = zone_pos;
+	c1.damaged = 0;
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = state::kCardZoneHand;
 	c1.enchanted_states.cost = 5;
+	c1.enchanted_states.max_hp = 2;
 	c1.enchanted_states.attack = 7;
 	return c1;
 }
@@ -76,10 +78,12 @@ static state::Cards::RawCard GetCard2(state::PlayerIdentifier player, int zone_p
 	c1.card_type = state::kCardTypeMinion;
 	c1.card_id = 2;
 	c1.zone_position = zone_pos;
+	c1.damaged = 0;
 	c1.enchanted_states.player = player;
 	c1.enchanted_states.zone = state::kCardZoneHand;
 	c1.enchanted_states.cost = 1;
 	c1.enchanted_states.attack = 3;
+	c1.enchanted_states.max_hp = 10;
 	return c1;
 }
 
@@ -95,27 +99,27 @@ static state::Cards::RawCard GetCard3(state::PlayerIdentifier player, int zone_p
 	return c1;
 }
 
-static void MakeDeck(state::State & state, state::PlayerIdentifier player)
+static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
-	CardRef r1 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
+	CardRef r1 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 
-	CardRef r2 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
+	CardRef r2 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 
-	CardRef r3 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
+	CardRef r3 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneDeck, 2);
 
-	CardRef r4 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
+	CardRef r4 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneDeck, 2);
 	CheckZoneAndPosition(state, r4, player, state::kCardZoneDeck, 3);
 
-	CardRef r5 = state.mgr.PushBack(state, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
+	CardRef r5 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard3(player, state.board.Get(player).deck_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneDeck, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneDeck, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneDeck, 2);
@@ -123,27 +127,27 @@ static void MakeDeck(state::State & state, state::PlayerIdentifier player)
 	CheckZoneAndPosition(state, r5, player, state::kCardZoneDeck, 4);
 }
 
-static void MakeHand(state::State & state, state::PlayerIdentifier player)
+static void MakeHand(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
-	CardRef r1 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
+	CardRef r1 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 
-	CardRef r2 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
+	CardRef r2 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 
-	CardRef r3 = state.mgr.PushBack(state, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
+	CardRef r3 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard1(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneHand, 2);
 
-	CardRef r4 = state.mgr.PushBack(state, state::Cards::Card(GetCard2(player, state.board.Get(player).hand_.Size())));
+	CardRef r4 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard2(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneHand, 2);
 	CheckZoneAndPosition(state, r4, player, state::kCardZoneHand, 3);
 
-	CardRef r5 = state.mgr.PushBack(state, state::Cards::Card(GetCard2(player, state.board.Get(player).hand_.Size())));
+	CardRef r5 = state.mgr.PushBack(state, flow_context, state::Cards::Card(GetCard2(player, state.board.Get(player).hand_.Size())));
 	CheckZoneAndPosition(state, r1, player, state::kCardZoneHand, 0);
 	CheckZoneAndPosition(state, r2, player, state::kCardZoneHand, 1);
 	CheckZoneAndPosition(state, r3, player, state::kCardZoneHand, 2);
@@ -165,29 +169,27 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 
 int main(void)
 {
+	ActionParameterGetter action_parameter;
+	RandomGenerator random;
 	state::State state;
+	FlowControl::FlowController<ActionParameterGetter, RandomGenerator> controller(state, action_parameter, random);
 
 	{
-		state.mgr.PushBack(state, state::Cards::Card(GetHero(state::kPlayerFirst)));
-		MakeDeck(state, state::kPlayerFirst);
-		MakeHand(state, state::kPlayerFirst);
+		state.mgr.PushBack(state, controller.context_, state::Cards::Card(GetHero(state::kPlayerFirst)));
+		MakeDeck(state, controller.context_, state::kPlayerFirst);
+		MakeHand(state, controller.context_, state::kPlayerFirst);
 	}
 
 	{
-		state.mgr.PushBack(state, state::Cards::Card(GetHero(state::kPlayerSecond)));
+		state.mgr.PushBack(state, controller.context_, state::Cards::Card(GetHero(state::kPlayerSecond)));
 		state.board.Get(state::kPlayerSecond).fatigue_damage_ = 3;
-		//MakeDeck(state, state::kPlayerSecond);
-		MakeHand(state, state::kPlayerSecond);
+		//MakeDeck(state, controller.context_, state::kPlayerSecond);
+		MakeHand(state, controller.context_, state::kPlayerSecond);
 	}
 
 	state.current_player = state::kPlayerFirst;
 	state.board.Get(state::kPlayerFirst).resource_.SetTotal(8);
 	state.board.Get(state::kPlayerFirst).resource_.Refill();
-
-	ActionParameterGetter action_parameter;
-	RandomGenerator random;
-
-	FlowControl::FlowController<ActionParameterGetter, RandomGenerator> controller(state, action_parameter, random);
 
 	CardRef r1 = state.GetCurrentPlayer().hand_.Get(2);
 	bool triggered = false;
@@ -218,6 +220,7 @@ int main(void)
 	assert(state.board.Get(state::kPlayerSecond).resource_.GetCurrent() == 1);
 	assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);
 
+	auto state_bak = state;
 	{
 		CardRef attacker = state.board.Get(state::kPlayerFirst).minions_.Get(0);
 		CardRef defender = state.board.Get(state::kPlayerSecond).hero_ref_;
@@ -257,6 +260,32 @@ int main(void)
 		assert(debug2);
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		assert(state.mgr.Get(defender).GetDamage() == 8);
+	}
+
+	state = state_bak;
+	{
+		assert(state.board.Get(state::kPlayerSecond).minions_.Size() == 0);
+		controller.PlayCard(0);
+		assert(state.board.Get(state::kPlayerSecond).minions_.Size() == 1);
+
+		CardRef minion1_ref = state.board.Get(state::kPlayerSecond).minions_.Get(0);
+		assert(state.mgr.Get(minion1_ref).GetCardId() == 1);
+
+		CardRef attacker = minion1_ref;
+		CardRef defender = state.board.Get(state::kPlayerFirst).minions_.Get(0);
+
+		assert(state.mgr.Get(attacker).GetAttack() == 7);
+		assert(state.mgr.Get(attacker).GetDamage() == 0);
+		assert(state.mgr.Get(defender).GetAttack() == 3);
+		assert(state.mgr.Get(defender).GetDamage() == 0);
+
+		controller.Attack(attacker, defender);
+		assert(state.mgr.Get(attacker).GetAttack() == 7);
+		assert(state.mgr.Get(attacker).GetDamage() == 3);
+		assert(state.mgr.Get(attacker).GetZone() == state::kCardZoneGraveyard);
+		assert(state.mgr.Get(defender).GetAttack() == 3);
+		assert(state.mgr.Get(defender).GetDamage() == 7);
+		assert(state.mgr.Get(defender).GetZone() == state::kCardZonePlay);
 	}
 
 	return 0;

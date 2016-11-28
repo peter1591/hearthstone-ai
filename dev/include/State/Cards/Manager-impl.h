@@ -10,10 +10,10 @@
 namespace state
 {
 	template <typename T>
-	CardRef Cards::Manager::PushBack(State & state, T&& card)
+	CardRef Cards::Manager::PushBack(State & state, FlowControl::FlowContext & flow_context, T&& card)
 	{
 		CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
-		FlowControl::Manipulate(state).Card(ref).Zone().Add();
+		FlowControl::Manipulate(state, flow_context).Card(ref).Zone().Add();
 		return ref;
 	}
 }

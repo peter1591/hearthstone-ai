@@ -17,33 +17,33 @@ namespace FlowControl
 			class AddToPlayerDatStructure
 			{
 			public:
-				static void Add(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void Add(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					switch (card.GetZone())
 					{
 					case state::kCardZoneDeck:
-						return AddToDeckZone(state, card_ref, card);
+						return AddToDeckZone(state, flow_context, card_ref, card);
 					case state::kCardZoneHand:
-						return AddToHandZone(state, card_ref, card);
+						return AddToHandZone(state, flow_context, card_ref, card);
 					case state::kCardZonePlay:
-						return AddToPlayZone(state, card_ref, card);
+						return AddToPlayZone(state, flow_context, card_ref, card);
 					case state::kCardZoneGraveyard:
-						return AddToGraveyardZone(state, card_ref, card);
+						return AddToGraveyardZone(state, flow_context, card_ref, card);
 					}
 				}
 
 			private:
-				static void AddToDeckZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToDeckZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromDeck(state, card.GetPlayerIdentifier()).Insert(card_ref);
+					OrderedCardsManager::FromDeck(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
-				static void AddToHandZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToHandZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromHand(state, card.GetPlayerIdentifier()).Insert(card_ref);
+					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
-				static void AddToPlayZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToPlayZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
@@ -54,7 +54,7 @@ namespace FlowControl
 						player.hero_ref_ = card_ref;
 						return;
 					case state::kCardTypeMinion:
-						return OrderedCardsManager::FromMinions(state, card.GetPlayerIdentifier()).Insert(card_ref);
+						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 					case state::kCardTypeWeapon:
 						return player.weapon_.Equip(card_ref);
 					case state::kCardTypeSecret:
@@ -62,9 +62,9 @@ namespace FlowControl
 					}
 				}
 
-				static void AddToGraveyardZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToGraveyardZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromGraveyard<TargetCardType>(state, card.GetPlayerIdentifier()).Insert(card_ref);
+					OrderedCardsManager::FromGraveyard<TargetCardType>(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 			};
 
@@ -72,41 +72,41 @@ namespace FlowControl
 			class RemoveFromPlayerDatStructure
 			{
 			public:
-				static void Remove(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void Remove(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					switch (RemovingCardZone)
 					{
 					case state::kCardZoneDeck:
-						return RemoveFromDeckZone(state, card_ref, card);
+						return RemoveFromDeckZone(state, flow_context, card_ref, card);
 					case state::kCardZoneHand:
-						return RemoveFromHandZone(state, card_ref, card);
+						return RemoveFromHandZone(state, flow_context, card_ref, card);
 					case state::kCardZonePlay:
-						return RemoveFromPlayZone(state, card_ref, card);
+						return RemoveFromPlayZone(state, flow_context, card_ref, card);
 					case state::kCardZoneGraveyard:
-						return RemoveFromGraveyardZone(state, card_ref, card);
+						return RemoveFromGraveyardZone(state, flow_context, card_ref, card);
 						break;
 					}
 				}
 
 			private:
-				static void RemoveFromDeckZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromDeckZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromDeck(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
+					OrderedCardsManager::FromDeck(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
-				static void RemoveFromHandZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromHandZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromHand(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
+					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
-				static void RemoveFromPlayZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromPlayZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
 					switch (RemovingCardType)
 					{
 					case state::kCardTypeMinion:
-						return OrderedCardsManager::FromMinions(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
+						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 					case state::kCardTypeWeapon:
 						return player.weapon_.Destroy();
 					case state::kCardTypeSecret:
@@ -114,9 +114,9 @@ namespace FlowControl
 					}
 				}
 
-				static void RemoveFromGraveyardZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromGraveyardZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromGraveyard<RemovingCardType>(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
+					OrderedCardsManager::FromGraveyard<RemovingCardType>(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 			};
 
@@ -124,7 +124,10 @@ namespace FlowControl
 			class ZoneChanger
 			{
 			public:
-				ZoneChanger(state::State & state, state::CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
+				ZoneChanger(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
+				{
+				}
 
 				template <state::CardZone ChangeToZone,
 					typename std::enable_if_t<state::board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
@@ -144,25 +147,26 @@ namespace FlowControl
 
 				void Add()
 				{
-					AddToPlayerDatStructure<ChangingCardType, ChangingCardZone>::Add(state_, card_ref_, card_);
+					AddToPlayerDatStructure<ChangingCardType, ChangingCardZone>::Add(state_, flow_context_, card_ref_, card_);
 				}
 
 			private:
 				template <state::CardZone ChangeToZone>
 				void ChangeToInternal(state::PlayerIdentifier player_identifier, int pos)
 				{
-					RemoveFromPlayerDatStructure<ChangingCardType, ChangingCardZone>::Remove(state_, card_ref_, card_);
+					RemoveFromPlayerDatStructure<ChangingCardType, ChangingCardZone>::Remove(state_, flow_context_, card_ref_, card_);
 
 					card_.SetLocation()
 						.Player(player_identifier)
 						.Zone(ChangeToZone)
 						.Position(pos);
 
-					AddToPlayerDatStructure<ChangingCardType, ChangeToZone>::Add(state_, card_ref_, card_);
+					AddToPlayerDatStructure<ChangingCardType, ChangeToZone>::Add(state_, flow_context_, card_ref_, card_);
 				}
 
 			private:
 				state::State & state_;
+				FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
@@ -171,7 +175,9 @@ namespace FlowControl
 			class ZoneChangerWithUnknownZone
 			{
 			public:
-				ZoneChangerWithUnknownZone(state::State & state, state::CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
+				ZoneChangerWithUnknownZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
+				{}
 
 				template <state::CardZone ChangeToZone>
 				void ChangeTo(state::PlayerIdentifier player_identifier)
@@ -179,19 +185,19 @@ namespace FlowControl
 					switch (card_.GetZone())
 					{
 					case state::kCardZoneDeck:
-						return ZoneChanger<state::kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZoneDeck, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneGraveyard:
-						return ZoneChanger<state::kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZoneGraveyard, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneHand:
-						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZonePlay:
-						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZonePutASide:
-						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneRemoved:
-						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneSecret:
-						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					default:
 						throw std::exception("Unknown card zone");
 					}
@@ -203,19 +209,19 @@ namespace FlowControl
 					switch (card_.GetZone())
 					{
 					case state::kCardZoneDeck:
-						return ZoneChanger<state::kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZoneDeck, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneGraveyard:
-						return ZoneChanger<state::kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZoneGraveyard, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneHand:
-						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZonePlay:
-						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZonePutASide:
-						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneRemoved:
-						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneSecret:
-						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					default:
 						throw std::exception("Unknown card zone");
 					}
@@ -226,19 +232,19 @@ namespace FlowControl
 					switch (card_.GetZone())
 					{
 					case state::kCardZoneDeck:
-						return ZoneChanger<state::kCardZoneDeck, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZoneDeck, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneGraveyard:
-						return ZoneChanger<state::kCardZoneGraveyard, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZoneGraveyard, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneHand:
-						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZonePlay:
-						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZonePutASide:
-						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneRemoved:
-						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneSecret:
-						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, card_ref_, card_).Add();
+						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					default:
 						throw std::exception("Unknown card zone");
 					}
@@ -246,6 +252,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
+				FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
@@ -253,7 +260,9 @@ namespace FlowControl
 			class ZoneChangerWithUnknownZoneUnknownType
 			{
 			public:
-				ZoneChangerWithUnknownZoneUnknownType(state::State& state, state::CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
+				ZoneChangerWithUnknownZoneUnknownType(state::State& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
+				{}
 
 				template <state::CardZone ChangeToZone>
 				void ChangeTo(state::PlayerIdentifier player_identifier)
@@ -261,15 +270,15 @@ namespace FlowControl
 					switch (card_.GetCardType())
 					{
 					case state::kCardTypeMinion:
-						return ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardTypeHeroPower:
-						return ZoneChangerWithUnknownZone<state::kCardTypeHeroPower>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChangerWithUnknownZone<state::kCardTypeHeroPower>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardTypeSecret:
-						return ZoneChangerWithUnknownZone<state::kCardTypeSecret>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChangerWithUnknownZone<state::kCardTypeSecret>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardTypeSpell:
-						return ZoneChangerWithUnknownZone<state::kCardTypeSpell>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChangerWithUnknownZone<state::kCardTypeSpell>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardTypeWeapon:
-						return ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+						return ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					default:
 						throw std::exception("unknown card type");
 					}
@@ -281,17 +290,17 @@ namespace FlowControl
 					switch (card_.GetCardType())
 					{
 					case state::kCardTypeHero:
-						return ZoneChangerWithUnknownZone<state::kCardTypeHero>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChangerWithUnknownZone<state::kCardTypeHero>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardTypeMinion:
-						return ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardTypeHeroPower:
-						return ZoneChangerWithUnknownZone<state::kCardTypeHeroPower>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChangerWithUnknownZone<state::kCardTypeHeroPower>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardTypeSecret:
-						return ZoneChangerWithUnknownZone<state::kCardTypeSecret>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChangerWithUnknownZone<state::kCardTypeSecret>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardTypeSpell:
-						return ZoneChangerWithUnknownZone<state::kCardTypeSpell>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChangerWithUnknownZone<state::kCardTypeSpell>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardTypeWeapon:
-						return ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+						return ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					default:
 						throw std::exception("unknown card type");
 					}
@@ -302,17 +311,17 @@ namespace FlowControl
 					switch (card_.GetCardType())
 					{
 					case state::kCardTypeHero:
-						return ZoneChangerWithUnknownZone<state::kCardTypeHero>(state_, card_ref_, card_).Add();
+						return ZoneChangerWithUnknownZone<state::kCardTypeHero>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardTypeMinion:
-						return ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_).Add();
+						return ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardTypeHeroPower:
-						return ZoneChangerWithUnknownZone<state::kCardTypeHeroPower>(state_, card_ref_, card_).Add();
+						return ZoneChangerWithUnknownZone<state::kCardTypeHeroPower>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardTypeSecret:
-						return ZoneChangerWithUnknownZone<state::kCardTypeSecret>(state_, card_ref_, card_).Add();
+						return ZoneChangerWithUnknownZone<state::kCardTypeSecret>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardTypeSpell:
-						return ZoneChangerWithUnknownZone<state::kCardTypeSpell>(state_, card_ref_, card_).Add();
+						return ZoneChangerWithUnknownZone<state::kCardTypeSpell>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardTypeWeapon:
-						return ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, card_ref_, card_).Add();
+						return ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, flow_context_, card_ref_, card_).Add();
 					default:
 						throw std::exception("unknown card type");
 					}
@@ -320,6 +329,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
+				FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};

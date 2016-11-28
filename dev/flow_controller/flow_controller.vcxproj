@@ -124,10 +124,12 @@
     <ClInclude Include="..\include\FlowControl\Context\BeforeMinionSummoned.h" />
     <ClInclude Include="..\include\FlowControl\Context\OnTakeDamage.h" />
     <ClInclude Include="..\include\FlowControl\Dispatchers\Minions.h" />
+    <ClInclude Include="..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Attack.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\DamageDealer.h" />
+    <ClInclude Include="..\include\FlowControl\Helpers\EntityDeathHandler.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h" />
     <ClInclude Include="..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\CardManipulator.h" />

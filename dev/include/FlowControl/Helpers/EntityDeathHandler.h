@@ -4,6 +4,8 @@
 #include "State/Types.h"
 #include "State/State.h"
 #include "FlowControl/Result.h"
+#include "FlowControl/Manipulate.h"
+#include "FlowControl/FlowContext.h"
 
 namespace FlowControl
 {
@@ -11,22 +13,12 @@ namespace FlowControl
 	{
 		class EntityDeathHandler
 		{
-		private:
-			typedef std::multimap<int, state::CardRef> ContainerType;
-
 		public:
-			EntityDeathHandler(state::State & state) : state_(state) {}
-
-			void Add(state::CardRef ref)
-			{
-				int play_order = state_.mgr.Get(ref).GetPlayOrder();
-
-				entities_.insert(std::make_pair(play_order, ref));
-			}
+			EntityDeathHandler(state::State & state, FlowContext & flow_context) : state_(state), flow_context_(flow_context) {}
 
 			Result ProcessDeath()
 			{
-				for (const auto& item : entities_)
+				for (const auto& item : flow_context_.dead_entity_hints_)
 				{
 					state::CardRef ref = item.second;
 					const state::Cards::Card & card = state_.mgr.Get(ref);
@@ -40,9 +32,9 @@ namespace FlowControl
 					}
 
 					// TODO: trigger deathrattle
-					Manipulate(state_).Card(ref).Zone().ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
+					Manipulate(state_, flow_context_).Card(ref).Zone().ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
-				entities_.clear();
+				flow_context_.dead_entity_hints_.clear();
 
 				return kResultNotDetermined;
 			}
@@ -50,7 +42,6 @@ namespace FlowControl
 		private:
 			Result ProcessHeroDeath(const state::Cards::Card & card, state::CardRef ref)
 			{
-				state::CardRef another_hero;
 				if (card.GetPlayerIdentifier() == state::kPlayerFirst) {
 					state::CardRef another_hero = state_.board.Get(state::kPlayerSecond).hero_ref_;
 					if (state_.mgr.Get(another_hero).GetHP() <= 0) return kResultDraw;
@@ -65,7 +56,7 @@ namespace FlowControl
 
 		private:
 			state::State & state_;
-			ContainerType entities_;
+			FlowContext & flow_context_;
 		};
 	}
 }

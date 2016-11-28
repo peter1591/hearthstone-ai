@@ -11,14 +11,14 @@ namespace FlowControl
 		class MinionManipulator : public CharacterManipulator
 		{
 		public:
-			MinionManipulator(state::State & state, state::CardRef card_ref, state::Cards::Card &card)
-				: CharacterManipulator(state, card_ref, card)
+			MinionManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+				: CharacterManipulator(state, flow_context, card_ref, card)
 			{
 			}
 
 			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone()
 			{
-				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_);
+				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_);
 			}
 		};
 	}

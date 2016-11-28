@@ -46,6 +46,7 @@ static void test1()
 {
 	using namespace FlowControl;
 	state::State state;
+	FlowContext flow_context;
 
 	Cards::RawCard c1;
 	c1.card_type = kCardTypeMinion;
@@ -54,69 +55,69 @@ static void test1()
 	c1.enchanted_states.zone = kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
 	c1.zone_position = 0;
-	CardRef r1 = state.mgr.PushBack(state, Cards::Card(c1));
+	CardRef r1 = state.mgr.PushBack(state, flow_context, Cards::Card(c1));
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneDeck, 0);
 
 	c1.enchanted_states.zone = kCardZoneGraveyard;
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneDeck, 0);
 
-	Manipulate(state).Minion(r1).Zone().ChangeTo<kCardZoneHand>(kPlayerFirst);
+	Manipulate(state, flow_context).Minion(r1).Zone().ChangeTo<kCardZoneHand>(kPlayerFirst);
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneHand, 0);
 
 	auto state2 = state;
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneHand, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZoneHand, 0);
 
-	Manipulate(state2).Minion(r1).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 0);
+	Manipulate(state2, flow_context).Minion(r1).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 0);
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneHand, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZonePlay, 0);
 
-	Manipulate(state2).Card(r1).Cost(9);
+	Manipulate(state2, flow_context).Card(r1).Cost(9);
 	assert(state.mgr.Get(r1).GetCost() == 5);
 	assert(state2.mgr.Get(r1).GetCost() == 9);
 
-	CardRef r2 = state2.mgr.PushBack(state2, Cards::Card(c1));
+	CardRef r2 = state2.mgr.PushBack(state2, flow_context, Cards::Card(c1));
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZoneGraveyard, 0);
-	Manipulate(state2).Minion(r2).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 0);
+	Manipulate(state2, flow_context).Minion(r2).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 0);
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZonePlay, 1);
 
-	CardRef r3 = state2.mgr.PushBack(state2, Cards::Card(c1));
-	Manipulate(state2).Minion(r3).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 2);
+	CardRef r3 = state2.mgr.PushBack(state2, flow_context, Cards::Card(c1));
+	Manipulate(state2, flow_context).Minion(r3).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 2);
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZonePlay, 1);
 	CheckZoneAndPosition(state2, r3, kPlayerFirst, kCardZonePlay, 2);
 
-	CardRef r4 = state2.mgr.PushBack(state2, Cards::Card(c1));
-	Manipulate(state2).Minion(r4).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 1);
+	CardRef r4 = state2.mgr.PushBack(state2, flow_context, Cards::Card(c1));
+	Manipulate(state2, flow_context).Minion(r4).Zone().ChangeTo<kCardZonePlay>(kPlayerFirst, 1);
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r4, kPlayerFirst, kCardZonePlay, 1);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZonePlay, 2);
 	CheckZoneAndPosition(state2, r3, kPlayerFirst, kCardZonePlay, 3);
 
 	// steal minion
-	Manipulate(state2).Minion(r1).Zone().ChangeTo<kCardZonePlay>(kPlayerSecond, 0);
+	Manipulate(state2, flow_context).Minion(r1).Zone().ChangeTo<kCardZonePlay>(kPlayerSecond, 0);
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r4, kPlayerFirst, kCardZonePlay, 1);
 	CheckZoneAndPosition(state2, r3, kPlayerFirst, kCardZonePlay, 2);
 	CheckZoneAndPosition(state2, r1, kPlayerSecond, kCardZonePlay, 0);
 
 	// steal minion
-	Manipulate(state2).Minion(r3).Zone().ChangeTo<kCardZonePlay>(kPlayerSecond, 0);
+	Manipulate(state2, flow_context).Minion(r3).Zone().ChangeTo<kCardZonePlay>(kPlayerSecond, 0);
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r4, kPlayerFirst, kCardZonePlay, 1);
 	CheckZoneAndPosition(state2, r3, kPlayerSecond, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerSecond, kCardZonePlay, 1);
 
 	// send to graveyard
-	Manipulate(state2).Minion(r1).Zone().ChangeTo<kCardZoneGraveyard>(kPlayerFirst);
+	Manipulate(state2, flow_context).Minion(r1).Zone().ChangeTo<kCardZoneGraveyard>(kPlayerFirst);
 	CheckZoneAndPosition(state2, r2, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r4, kPlayerFirst, kCardZonePlay, 1);
 	CheckZoneAndPosition(state2, r3, kPlayerSecond, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZoneGraveyard, 0);
 
 	// send to another player's graveyard
-	Manipulate(state2).Minion(r2).Zone().ChangeTo<kCardZoneGraveyard>(kPlayerFirst);
+	Manipulate(state2, flow_context).Minion(r2).Zone().ChangeTo<kCardZoneGraveyard>(kPlayerFirst);
 	CheckZoneAndPosition(state2, r4, kPlayerFirst, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r3, kPlayerSecond, kCardZonePlay, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZoneGraveyard, 0);
@@ -129,7 +130,7 @@ static void test1()
 		card.SetCost(card.GetCost() * 2);
 	} };
 
-	auto manipulator = Manipulate(state).Minion(r1);
+	auto manipulator = Manipulate(state, flow_context).Minion(r1);
 	auto ref1 = manipulator.Enchant().Add(enchant1);
 	auto ref2 = manipulator.Enchant().Add(enchant2);
 	auto ref3 = manipulator.Enchant().Add(enchant1);
@@ -137,7 +138,7 @@ static void test1()
 
 	auto state3 = state;
 
-	Manipulate(state3).Minion(r1).Enchant().Remove<Enchantment2>(ref2);
+	Manipulate(state3, flow_context).Minion(r1).Enchant().Remove<Enchantment2>(ref2);
 }
 
 class AuraHelper
@@ -186,6 +187,7 @@ private:
 static void test2()
 {
 	using namespace FlowControl;
+	FlowContext flow_context;
 
 	state::State state;
 
@@ -195,7 +197,7 @@ static void test2()
 	c1.enchanted_states.zone = kCardZoneDeck;
 	c1.enchanted_states.cost = 5;
 	c1.zone_position = 0;
-	CardRef r1 = state.mgr.PushBack(state, Cards::Card(c1));
+	CardRef r1 = state.mgr.PushBack(state, flow_context, Cards::Card(c1));
 
 	Cards::RawCard c2;
 	c2.card_type = kCardTypeMinion;
@@ -203,7 +205,7 @@ static void test2()
 	c2.enchanted_states.zone = kCardZoneDeck;
 	c2.enchanted_states.cost = 5;
 	c2.zone_position = 0;
-	CardRef r2 = state.mgr.PushBack(state, Cards::Card(c2));
+	CardRef r2 = state.mgr.PushBack(state, flow_context, Cards::Card(c2));
 
 	Cards::RawCard c3;
 	c3.card_type = kCardTypeMinion;
@@ -211,29 +213,31 @@ static void test2()
 	c3.enchanted_states.zone = kCardZoneDeck;
 	c3.enchanted_states.cost = 9;
 	c3.zone_position = 0;
-	CardRef r3 = state.mgr.PushBack(state, Cards::Card(c3));
+	CardRef r3 = state.mgr.PushBack(state, flow_context, Cards::Card(c3));
 
 	typedef AuraHelper ClientAuraHelper;
 	ClientAuraHelper client_aura_helper(r1, r2);
-	Manipulate(state).Minion(r3).Aura().Update(client_aura_helper);
+	Manipulate(state, flow_context).Minion(r3).Aura().Update(client_aura_helper);
 
-	Manipulate(state).Minion(r3).Aura().Update(client_aura_helper);
+	Manipulate(state, flow_context).Minion(r3).Aura().Update(client_aura_helper);
 
 	auto state2 = state;
 
 	ClientAuraHelper client_aura_helper2(r1, r3);
-	Manipulate(state2).Minion(r3).Aura().Update(client_aura_helper2);
+	Manipulate(state2, flow_context).Minion(r3).Aura().Update(client_aura_helper2);
 }
 
 static void test3()
 {
+	FlowControl::FlowContext flow_context;
+
 	Cards::Card hero1(GetHero(kPlayerFirst));
 	Cards::Card hero2(GetHero(kPlayerSecond));
 
 	state::State state;
 	
-	CardRef r1 = state.mgr.PushBack(state, hero1);
-	CardRef r2 = state.mgr.PushBack(state, hero2);
+	CardRef r1 = state.mgr.PushBack(state, flow_context, hero1);
+	CardRef r2 = state.mgr.PushBack(state, flow_context, hero2);
 }
 
 int main()

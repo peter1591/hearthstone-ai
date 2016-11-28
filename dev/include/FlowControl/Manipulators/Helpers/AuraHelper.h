@@ -12,8 +12,8 @@ namespace FlowControl
 			class AuraHelper
 			{
 			public:
-				AuraHelper(state::State & state, state::Cards::Card & card) :
-					state_(state),
+				AuraHelper(state::State & state, FlowContext & flow_context, state::Cards::Card & card) :
+					state_(state), flow_context_(flow_context),
 					data_(card.GetMutableAuraAuxDataGetter().Get())
 				{
 				}
@@ -30,7 +30,7 @@ namespace FlowControl
 							++it;
 						}
 						else {
-							Manipulate(state_).Minion(it->first).Enchant().Remove<EnchantmentType>(it->second);
+							Manipulate(state_, flow_context_).Minion(it->first).Enchant().Remove<EnchantmentType>(it->second);
 							it = data_.applied_enchantments.erase(it);
 						}
 					}
@@ -38,7 +38,7 @@ namespace FlowControl
 					client_aura_helper.IterateEligibles([this, &client_aura_helper](CardRef target) {
 						if (data_.applied_enchantments.find(target) != data_.applied_enchantments.end()) return; // already applied
 
-						auto enchant_identifier = Manipulate(state_).Minion(target).Enchant()
+						auto enchant_identifier = Manipulate(state_, flow_context_).Minion(target).Enchant()
 							.Add(client_aura_helper.CreateEnchantmentFor(target));
 						data_.applied_enchantments.insert(std::make_pair(target, std::move(enchant_identifier)));
 					});
@@ -46,6 +46,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
+				FlowContext & flow_context_;
 				state::Cards::AuraAuxData & data_;
 			};
 		}

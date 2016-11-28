@@ -9,8 +9,8 @@ namespace FlowControl
 		class HeroManipulator : public CharacterManipulator
 		{
 		public:
-			HeroManipulator(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
-				: CharacterManipulator(state, card_ref, card)
+			HeroManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				: CharacterManipulator(state, flow_context, card_ref, card)
 			{
 			}
 		};
