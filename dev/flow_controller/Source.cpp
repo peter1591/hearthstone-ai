@@ -213,7 +213,7 @@ int main(void)
 	CheckZoneAndPosition(state, r1, state::kPlayerFirst, state::kCardZonePlay, 1);
 
 	assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 30);
-	controller.OnTurnEnd();
+	controller.EndTurn();
 	assert(state.board.Get(state::kPlayerSecond).resource_.GetTotal() == 1);
 	assert(state.board.Get(state::kPlayerSecond).resource_.GetCurrent() == 1);
 	assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);

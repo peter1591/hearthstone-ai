@@ -28,7 +28,7 @@ namespace FlowControl
 			return helper.Go();
 		}
 
-		Result OnTurnEnd()
+		Result EndTurn()
 		{
 			Helpers::OnTurnEnd<ActionParameterGetter, RandomGenerator> helper(state_, action_parameters_, random_);
 			return helper.Go();
