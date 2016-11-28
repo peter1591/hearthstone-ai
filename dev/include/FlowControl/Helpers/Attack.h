@@ -28,18 +28,32 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
-				CardRef origin_attacker = attacker_;
-				CardRef origin_defender = defender_;
+				DoAttack();
 
-				do {
-					if (!attacker_.IsValid()) return kResultNotDetermined;
-					if (!defender_.IsValid()) return kResultNotDetermined;
+				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
 
+				// TODO: check deaths
+				// TODO: check weapon deaths
+
+				return rc;
+			}
+
+		private:
+			void DoAttack()
+			{
+				while (true) {
+					if (!attacker_.IsValid()) return;
+					if (!defender_.IsValid()) return;
+
+					CardRef origin_attacker = attacker_;
+					CardRef origin_defender = defender_;
 					state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker_, defender_);
 
 					// TODO: check if it's mortally wounded
 					// TODO: if still in play zone
-				} while (origin_attacker != attacker_ || origin_defender != defender_);
+
+					if (origin_attacker == attacker_ && origin_defender == defender_) break;
+				}
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(state_, attacker_, defender_);
 				// TODO: attacker lose stealth
