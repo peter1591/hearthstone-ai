@@ -2,7 +2,6 @@
 
 #include "State/State.h"
 #include "FlowControl/Result.h"
-#include "FlowControl/Helpers/Utils.h"
 #include "FlowControl/Helpers/ActionParameterWrapper.h"
 #include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/EntityDeathHandler.h"

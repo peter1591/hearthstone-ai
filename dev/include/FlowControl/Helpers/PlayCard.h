@@ -2,7 +2,6 @@
 
 #include "State/State.h"
 #include "FlowControl/Result.h"
-#include "FlowControl/Helpers/Utils.h"
 #include "FlowControl/Helpers/ActionParameterWrapper.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/BattleCry.h"
@@ -62,7 +61,7 @@ namespace FlowControl
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 
-				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
+				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}

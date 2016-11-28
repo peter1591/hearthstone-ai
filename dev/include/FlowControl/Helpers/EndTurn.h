@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FlowControl/Result.h"
-#include "FlowControl/Helpers/Utils.h"
 #include "FlowControl/Manipulate.h"
 #include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/EntityDeathHandler.h"
@@ -25,7 +24,7 @@ namespace FlowControl
 				Result rc = kResultNotDetermined;
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
-				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
+				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				if (state_.turn == 89) return kResultDraw;
 				++state_.turn;
