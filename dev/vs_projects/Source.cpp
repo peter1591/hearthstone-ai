@@ -7,6 +7,8 @@
 #include "State/State.h"
 #include "State/Cards/Card.h"
 
+#include "State/Cards/Manager-impl.h"
+
 using namespace state;
 
 static void test1()

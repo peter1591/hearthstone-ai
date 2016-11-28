@@ -40,10 +40,8 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(state_, attacker_, defender_);
 				// TODO: attacker lose stealth
 
-				Manipulators::StateManipulator(state_).Character(defender_).TakeDamage(
-					state_.mgr.Get(attacker_).GetAttack());
-				Manipulators::StateManipulator(state_).Character(attacker_).TakeDamage(
-					state_.mgr.Get(defender_).GetAttack());
+				Manipulate(state_).Character(defender_).TakeDamage(state_.mgr.Get(attacker_).GetAttack());
+				Manipulate(state_).Character(attacker_).TakeDamage(state_.mgr.Get(defender_).GetAttack());
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker_, defender_);
 
@@ -52,7 +50,7 @@ namespace FlowControl
 					if (attacker_card.GetCardType() == state::kCardTypeHero) {
 						CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 						if (weapon_ref.IsValid()) {
-							Manipulators::StateManipulator(state_).Weapon(weapon_ref).ReduceDurability(1);
+							Manipulate(state_).Weapon(weapon_ref).ReduceDurability(1);
 						}
 					}
 				}

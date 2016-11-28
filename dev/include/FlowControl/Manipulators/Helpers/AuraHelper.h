@@ -30,7 +30,7 @@ namespace FlowControl
 							++it;
 						}
 						else {
-							StateManipulator(state_).Minion(it->first).Enchant().Remove<EnchantmentType>(it->second);
+							Manipulate(state_).Minion(it->first).Enchant().Remove<EnchantmentType>(it->second);
 							it = data_.applied_enchantments.erase(it);
 						}
 					}
@@ -38,7 +38,7 @@ namespace FlowControl
 					client_aura_helper.IterateEligibles([this, &client_aura_helper](CardRef target) {
 						if (data_.applied_enchantments.find(target) != data_.applied_enchantments.end()) return; // already applied
 
-						auto enchant_identifier = StateManipulator(state_).Minion(target).Enchant()
+						auto enchant_identifier = Manipulate(state_).Minion(target).Enchant()
 							.Add(client_aura_helper.CreateEnchantmentFor(target));
 						data_.applied_enchantments.insert(std::make_pair(target, std::move(enchant_identifier)));
 					});

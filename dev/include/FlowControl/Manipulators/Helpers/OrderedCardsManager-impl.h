@@ -21,7 +21,7 @@ namespace FlowControl
 
 				for (auto it_end = container_.end(); it != it_end; ++it, ++pos)
 				{
-					FlowControl::Manipulators::StateManipulator(state_).Card(*it).ZonePosition().Set(pos);
+					Manipulate(state_).Card(*it).ZonePosition().Set(pos);
 				}
 			}
 
@@ -32,7 +32,7 @@ namespace FlowControl
 				auto it = container_.erase(container_.begin() + pos);
 				for (auto it_end = container_.end(); it != it_end; ++it, ++pos)
 				{
-					FlowControl::Manipulators::StateManipulator(state_).Card(*it).ZonePosition().Set(pos);
+					Manipulate(state_).Card(*it).ZonePosition().Set(pos);
 				}
 			}
 		}

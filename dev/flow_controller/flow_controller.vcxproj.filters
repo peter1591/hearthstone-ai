@@ -239,5 +239,8 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\FlowControl\Manipulate.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

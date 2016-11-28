@@ -7,10 +7,7 @@
 
 namespace FlowControl
 {
-	namespace Manipulators
-	{
-		class StateManipulator;
-	}
+	class Manipulate;
 }
 
 namespace state
@@ -21,7 +18,7 @@ namespace state
 	{
 		class Manager
 		{
-			friend class FlowControl::Manipulators::StateManipulator;
+			friend class FlowControl::Manipulate;
 
 		public:
 			typedef Utils::CloneableContainers::Vector<Card> ContainerType;
