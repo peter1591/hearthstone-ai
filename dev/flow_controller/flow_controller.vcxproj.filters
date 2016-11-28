@@ -209,9 +209,6 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\MinionManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\FlowControl\Manipulators\StateManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FlowControl\Manipulators\WeaponManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
@@ -226,9 +223,6 @@
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\FlowControl\Manipulators\StateManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>

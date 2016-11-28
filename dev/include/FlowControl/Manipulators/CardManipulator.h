@@ -33,7 +33,7 @@ namespace FlowControl
 				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, card_ref_, card_);
 			}
 
-		private:
+		protected:
 			state::State & state_;
 			CardRef card_ref_;
 			state::Cards::Card & card_;

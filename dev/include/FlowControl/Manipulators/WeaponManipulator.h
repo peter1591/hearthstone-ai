@@ -1,40 +1,25 @@
 #pragma once
 
 #include "State/Cards/Card.h"
-#include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
-#include "FlowControl/Manipulators/Helpers/AuraHelper.h"
-#include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
-#include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
+#include "FlowControl/Manipulators/CardManipulator.h"
 #include "State/State.h"
 
 namespace FlowControl
 {
 	namespace Manipulators
 	{
-		class WeaponManipulator
+		class WeaponManipulator : public CardManipulator
 		{
 		public:
-			WeaponManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
-				state_(state), card_ref_(card_ref), card_(card)
+			WeaponManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card)
+				: CardManipulator(state, card_ref, card)
 			{
 			}
 
 		public:
-			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
-			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
-			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
-			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone() {
-				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_);
-			}
-
 			void ReduceDurability(int v) {
 				card_.SetDamage(card_.GetDamage() + v);
 			}
-
-		private:
-			state::State & state_;
-			CardRef card_ref_;
-			state::Cards::Card & card_;
 		};
 	}
 }

@@ -137,8 +137,6 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\MinionManipulator.h" />
-    <ClInclude Include="..\include\FlowControl\Manipulators\StateManipulator-impl.h" />
-    <ClInclude Include="..\include\FlowControl\Manipulators\StateManipulator.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\include\FlowControl\Result.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\EndTurn.h" />

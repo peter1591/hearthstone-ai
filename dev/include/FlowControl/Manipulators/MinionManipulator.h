@@ -1,36 +1,25 @@
 #pragma once
 
-#include "State/Cards/Card.h"
-#include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
-#include "FlowControl/Manipulators/Helpers/AuraHelper.h"
-#include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
-#include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
+#include "State/Cards/Card.h"
+#include "FlowControl/Manipulators/CharacterManipulator.h"
 
 namespace FlowControl
 {
 	namespace Manipulators
 	{
-		class MinionManipulator
+		class MinionManipulator : public CharacterManipulator
 		{
 		public:
-			MinionManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
-				state_(state), card_ref_(card_ref), card_(card)
+			MinionManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card)
+				: CharacterManipulator(state, card_ref, card)
 			{
 			}
 
-		public:
-			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
-			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
-			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
-			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone() {
+			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone()
+			{
 				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, card_ref_, card_);
 			}
-
-		private:
-			state::State & state_;
-			CardRef card_ref_;
-			state::Cards::Card & card_;
 		};
 	}
 }

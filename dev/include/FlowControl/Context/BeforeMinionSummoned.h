@@ -13,7 +13,7 @@ namespace state
 	}
 }
 
-using state::CardRef;
+using state::CardRef; // TODO: remove this
 
 namespace FlowControl
 {
