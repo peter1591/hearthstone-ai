@@ -70,8 +70,7 @@ namespace FlowControl
 			void Fatigue()
 			{
 				int damage = ++state_.GetCurrentPlayer().fatigue_damage_;
-
-				Manipulate(state_).CurrentHero().TakeDamage(damage);
+				DamageDealer(state_).DealDamage(state_.GetCurrentPlayer().hero_ref_, damage);
 			}
 
 		private:

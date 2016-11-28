@@ -13,6 +13,7 @@ namespace FlowControl
 			class AuraHelper;
 			template <state::CardZone T1, state::CardType T2> class ZoneChanger;
 			class ZonePositionSetter;
+			class TakeDamageHelper;
 		}
 	}
 }
@@ -76,6 +77,17 @@ namespace state
 				RawCard & data_;
 			};
 
+			class DamageSetter
+			{
+				friend class FlowControl::Manipulators::Helpers::TakeDamageHelper;
+			public:
+				DamageSetter(RawCard & data) : data_(data) {}
+			private:
+				void Set(int v) { data_.damaged = v; }
+			private:
+				RawCard & data_;
+			};
+
 		public:
 			explicit Card(const RawCard & data) : data_(data) {}
 
@@ -91,7 +103,7 @@ namespace state
 			void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
 			int GetDamage() const { return data_.damaged; }
-			void SetDamage(int new_damage) { data_.damaged = new_damage; }
+			DamageSetter GetDamageSetter() { return DamageSetter(data_); }
 
 			int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
 			int GetAttack() const { return data_.enchanted_states.attack; }

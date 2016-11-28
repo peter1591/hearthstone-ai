@@ -15,11 +15,6 @@ namespace FlowControl
 				: CardManipulator(state, card_ref, card)
 			{
 			}
-
-		public:
-			void ReduceDurability(int v) {
-				card_.SetDamage(card_.GetDamage() + v);
-			}
 		};
 	}
 }

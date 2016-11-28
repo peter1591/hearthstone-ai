@@ -122,10 +122,12 @@
     <ClInclude Include="..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\include\FlowControl\Context\BeforeMinionSummoned.h" />
+    <ClInclude Include="..\include\FlowControl\Context\OnTakeDamage.h" />
     <ClInclude Include="..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\ActionParameterWrapper.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Attack.h" />
+    <ClInclude Include="..\include\FlowControl\Helpers\DamageDealer.h" />
     <ClInclude Include="..\include\FlowControl\Helpers\Utils.h" />
     <ClInclude Include="..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\CardManipulator.h" />
@@ -134,6 +136,7 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h" />
+    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\TakeDamageHelper.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\include\FlowControl\Manipulators\HeroManipulator.h" />
