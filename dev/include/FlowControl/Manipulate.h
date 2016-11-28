@@ -15,7 +15,7 @@ namespace FlowControl
 	public:
 		Manipulate(state::State & state) : state_(state) { }
 
-		Manipulators::CardManipulator Card(CardRef ref)
+		Manipulators::CardManipulator Card(state::CardRef ref)
 		{
 			return Manipulators::CardManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
@@ -27,21 +27,21 @@ namespace FlowControl
 
 		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player)
 		{
-			CardRef ref = state_.board.Get(player).hero_ref_;
+			state::CardRef ref = state_.board.Get(player).hero_ref_;
 			return Manipulators::HeroManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
 
-		Manipulators::MinionManipulator Minion(CardRef ref)
+		Manipulators::MinionManipulator Minion(state::CardRef ref)
 		{
 			return Manipulators::MinionManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
 
-		Manipulators::CharacterManipulator Character(CardRef ref)
+		Manipulators::CharacterManipulator Character(state::CardRef ref)
 		{
 			return Manipulators::CharacterManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}
 
-		Manipulators::WeaponManipulator Weapon(CardRef ref)
+		Manipulators::WeaponManipulator Weapon(state::CardRef ref)
 		{
 			return Manipulators::WeaponManipulator(state_, ref, state_.mgr.GetMutable(ref));
 		}

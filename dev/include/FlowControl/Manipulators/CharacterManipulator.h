@@ -13,7 +13,7 @@ namespace FlowControl
 		class CharacterManipulator : public CardManipulator
 		{
 		public:
-			CharacterManipulator(state::State & state, CardRef card_ref, state::Cards::Card & card)
+			CharacterManipulator(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				: CardManipulator(state, card_ref, card)
 			{
 			}

@@ -16,7 +16,7 @@ namespace FlowControl
 		class Attack
 		{
 		public:
-			Attack(state::State & state, CardRef attacker, CardRef defender, ActionParameterGetter & action_parameters, RandomGenerator & random)
+			Attack(state::State & state, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, RandomGenerator & random)
 				: state_(state), attacker_(attacker), defender_(defender),
 				  action_parameters_(action_parameters), random_(random)
 			{
@@ -35,6 +35,9 @@ namespace FlowControl
 					if (!defender_.IsValid()) return kResultNotDetermined;
 
 					state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker_, defender_);
+
+					// TODO: check if it's mortally wounded
+					// TODO: if still in play zone
 				} while (origin_attacker != attacker_ || origin_defender != defender_);
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(state_, attacker_, defender_);
@@ -65,8 +68,8 @@ namespace FlowControl
 
 		private:
 			state::State & state_;
-			CardRef attacker_;
-			CardRef defender_;
+			state::CardRef attacker_;
+			state::CardRef defender_;
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
 			RandomGenerator & random_;
 		};

@@ -17,7 +17,7 @@ namespace FlowControl
 			class AddToPlayerDatStructure
 			{
 			public:
-				static void Add(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void Add(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					switch (card.GetZone())
 					{
@@ -33,17 +33,17 @@ namespace FlowControl
 				}
 
 			private:
-				static void AddToDeckZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void AddToDeckZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromDeck(state, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
-				static void AddToHandZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void AddToHandZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromHand(state, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
-				static void AddToPlayZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void AddToPlayZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
@@ -62,7 +62,7 @@ namespace FlowControl
 					}
 				}
 
-				static void AddToGraveyardZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void AddToGraveyardZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromGraveyard<TargetCardType>(state, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
@@ -72,7 +72,7 @@ namespace FlowControl
 			class RemoveFromPlayerDatStructure
 			{
 			public:
-				static void Remove(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void Remove(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					switch (RemovingCardZone)
 					{
@@ -89,17 +89,17 @@ namespace FlowControl
 				}
 
 			private:
-				static void RemoveFromDeckZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromDeckZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromDeck(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
-				static void RemoveFromHandZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromHandZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromHand(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
-				static void RemoveFromPlayZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromPlayZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
@@ -114,7 +114,7 @@ namespace FlowControl
 					}
 				}
 
-				static void RemoveFromGraveyardZone(state::State & state, CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromGraveyardZone(state::State & state, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromGraveyard<RemovingCardType>(state, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
@@ -124,7 +124,7 @@ namespace FlowControl
 			class ZoneChanger
 			{
 			public:
-				ZoneChanger(state::State & state, CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
+				ZoneChanger(state::State & state, state::CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
 
 				template <state::CardZone ChangeToZone,
 					typename std::enable_if_t<state::board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
@@ -163,7 +163,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				CardRef card_ref_;
+				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
 
@@ -171,7 +171,7 @@ namespace FlowControl
 			class ZoneChangerWithUnknownZone
 			{
 			public:
-				ZoneChangerWithUnknownZone(state::State & state, CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
+				ZoneChangerWithUnknownZone(state::State & state, state::CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
 
 				template <state::CardZone ChangeToZone>
 				void ChangeTo(state::PlayerIdentifier player_identifier)
@@ -246,14 +246,14 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				CardRef card_ref_;
+				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
 
 			class ZoneChangerWithUnknownZoneUnknownType
 			{
 			public:
-				ZoneChangerWithUnknownZoneUnknownType(state::State& state, CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
+				ZoneChangerWithUnknownZoneUnknownType(state::State& state, state::CardRef card_ref, state::Cards::Card &card) : state_(state), card_ref_(card_ref), card_(card) {}
 
 				template <state::CardZone ChangeToZone>
 				void ChangeTo(state::PlayerIdentifier player_identifier)
@@ -320,7 +320,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				CardRef card_ref_;
+				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
 		}

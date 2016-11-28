@@ -4,6 +4,8 @@
 #include <assert.h>
 #include "FlowControl/FlowController.h"
 
+using state::CardRef;
+
 class ActionParameterGetter
 {
 public:
@@ -12,9 +14,9 @@ public:
 		return min;
 	}
 
-	CardRef GetBattlecryTarget(state::State & state, CardRef card_ref, const state::Cards::Card & card)
+	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card)
 	{
-		return CardRef();
+		return state::CardRef();
 	}
 };
 
@@ -47,7 +49,7 @@ public:
 bool Card1::debug1 = true;
 REGISTER_MINION_CARD_CLASS(1, Card1)
 
-static void CheckZoneAndPosition(const state::State & state, CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
+static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
 {
 	auto & item = state.mgr.Get(ref);
 	assert(item.GetPlayerIdentifier() == player);

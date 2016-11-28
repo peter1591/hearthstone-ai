@@ -8,7 +8,7 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline void OrderedCardsManager::Insert(CardRef card_ref)
+			inline void OrderedCardsManager::Insert(state::CardRef card_ref)
 			{
 				int pos = state_.mgr.Get(card_ref).GetZonePosition();
 				if (pos < 0) throw std::exception("invalid position");

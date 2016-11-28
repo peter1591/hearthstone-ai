@@ -14,7 +14,7 @@ namespace FlowControl
 		class CardManipulator
 		{
 		public:
-			CardManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card) :
+			CardManipulator(state::State & state, state::CardRef card_ref, state::Cards::Card &card) :
 				state_(state), card_ref_(card_ref), card_(card)
 			{
 			}
@@ -35,7 +35,7 @@ namespace FlowControl
 
 		protected:
 			state::State & state_;
-			CardRef card_ref_;
+			state::CardRef card_ref_;
 			state::Cards::Card & card_;
 		};
 	}

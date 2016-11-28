@@ -34,7 +34,7 @@ namespace FlowControl
 			return helper.Go();
 		}
 
-		Result Attack(CardRef attacker, CardRef defender)
+		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
 			Helpers::Attack<ActionParameterGetter, RandomGenerator> helper(state_, attacker, defender, action_parameters_, random_);
 			return helper.Go();

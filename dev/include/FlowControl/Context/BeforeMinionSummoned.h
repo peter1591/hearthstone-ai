@@ -13,8 +13,6 @@ namespace state
 	}
 }
 
-using state::CardRef; // TODO: remove this
-
 namespace FlowControl
 {
 	namespace Context
@@ -22,21 +20,21 @@ namespace FlowControl
 		class BeforeMinionSummoned
 		{
 		public:
-			typedef std::function<CardRef()> BattleCryTargetGetter;
+			typedef std::function<state::CardRef()> BattleCryTargetGetter;
 
-			BeforeMinionSummoned(state::State & state, CardRef card_ref, const state::Cards::Card & card)
+			BeforeMinionSummoned(state::State & state, state::CardRef card_ref, const state::Cards::Card & card)
 				: state_(state), card_ref_(card_ref), card_(card)
 			{
 
 			}
 
 			state::State & GetState() { return state_; }
-			CardRef GetCardRef() { return card_ref_; }
+			state::CardRef GetCardRef() { return card_ref_; }
 			const state::Cards::Card & GetCard() { return card_; }
 
 		private:
 			state::State & state_;
-			CardRef card_ref_;
+			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
 	}

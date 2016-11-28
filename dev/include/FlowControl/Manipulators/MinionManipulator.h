@@ -11,7 +11,7 @@ namespace FlowControl
 		class MinionManipulator : public CharacterManipulator
 		{
 		public:
-			MinionManipulator(state::State & state, CardRef card_ref, state::Cards::Card &card)
+			MinionManipulator(state::State & state, state::CardRef card_ref, state::Cards::Card &card)
 				: CharacterManipulator(state, card_ref, card)
 			{
 			}

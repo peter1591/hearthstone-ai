@@ -12,7 +12,7 @@ namespace FlowControl
 			{
 
 			public:
-				typedef std::vector<CardRef> ContainerType;
+				typedef std::vector<state::CardRef> ContainerType;
 
 				OrderedCardsManager(state::State & state, ContainerType & container) : state_(state), container_(container) {}
 
@@ -43,7 +43,7 @@ namespace FlowControl
 					return OrderedCardsManager(state, state.board.Get(player).graveyard_.spells_);
 				}
 
-				void Insert(CardRef card_ref);
+				void Insert(state::CardRef card_ref);
 				void Remove(size_t pos);
 
 			private:

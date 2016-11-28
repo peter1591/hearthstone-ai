@@ -72,9 +72,9 @@ namespace FlowControl
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
 			RandomGenerator & random_;
 
-			CardRef card_ref_;
+			state::CardRef card_ref_;
 			const state::Cards::Card * card_;
-			CardRef battlecry_target_;
+			state::CardRef battlecry_target_;
 		};
 	}
 }
