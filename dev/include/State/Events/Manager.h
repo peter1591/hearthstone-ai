@@ -14,6 +14,7 @@
 #include "State/Events/EventTypes/BeforeAttack.h"
 #include "State/Events/EventTypes/OnAttack.h"
 #include "State/Events/EventTypes/AfterAttack.h"
+#include "State/Events/EventTypes/OnTakeDamage.h"
 
 namespace state
 {
@@ -86,6 +87,7 @@ private: \
 			ADD_TRIGGER_TYPE(BeforeAttack);
 			ADD_TRIGGER_TYPE(OnAttack);
 			ADD_TRIGGER_TYPE(AfterAttack);
+			ADD_TRIGGER_TYPE(OnTakeDamage);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL
 #undef ADD_TRIGGER_TYPE

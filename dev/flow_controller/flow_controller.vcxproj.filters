@@ -245,5 +245,8 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\TakeDamageHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\State\Events\EventTypes\OnTakeDamage.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

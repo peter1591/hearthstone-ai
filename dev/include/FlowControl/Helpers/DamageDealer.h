@@ -2,6 +2,7 @@
 
 #include "State/State.h"
 #include "FlowControl/Manipulate.h"
+#include "FlowControl/Context/OnTakeDamage.h"
 
 namespace FlowControl
 {
@@ -12,11 +13,13 @@ namespace FlowControl
 		public:
 			DamageDealer(state::State & state) : state_(state) {}
 
-			void DealDamage(state::CardRef target_ref, int damage)
+			void DealDamage(state::CardRef target_ref, int origin_damage)
 			{
-				// TODO: trigger events
+				// Hooked events might change the damage amount, and/or the damage target
+				Context::OnTakeDamage context(state_, target_ref, origin_damage);
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
 
-				Manipulate(state_).Character(target_ref).Damage().Take(damage);
+				Manipulate(state_).Character(context.card_ref_).Damage().Take(context.damage_);
 			}
 
 		private:

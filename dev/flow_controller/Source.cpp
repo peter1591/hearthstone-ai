@@ -237,7 +237,26 @@ int main(void)
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		controller.Attack(attacker, defender);
 		assert(debug1);
+		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		assert(state.mgr.Get(defender).GetDamage() == 7);
+
+		bool debug2 = false;
+		state::Events::EventTypes::OnTakeDamage::FunctorType callback1 =
+			[&debug2, defender] (state::Events::HandlersContainerController & controller, FlowControl::Context::OnTakeDamage & context) {
+			if (context.card_ref_ == defender) {
+				debug2 = true;
+				context.damage_ = 1;
+			}
+		};
+
+		state.event_mgr.PushBack(state::Events::EventTypes::OnTakeDamage(callback1));
+
+		debug1 = false;
+		controller.Attack(attacker, defender);
+		assert(debug1);
+		assert(debug2);
+		assert(state.mgr.Get(attacker).GetDamage() == 0);
+		assert(state.mgr.Get(defender).GetDamage() == 8);
 	}
 
 	return 0;
