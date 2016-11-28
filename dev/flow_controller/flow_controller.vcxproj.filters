@@ -218,9 +218,6 @@
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\AuraHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\BasicHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>

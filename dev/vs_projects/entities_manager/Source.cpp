@@ -71,7 +71,7 @@ static void test1()
 	CheckZoneAndPosition(state, r1, kPlayerFirst, kCardZoneHand, 0);
 	CheckZoneAndPosition(state2, r1, kPlayerFirst, kCardZonePlay, 0);
 
-	Manipulate(state2).Card(r1).SetCost(9);
+	Manipulate(state2).Card(r1).Cost(9);
 	assert(state.mgr.Get(r1).GetCost() == 5);
 	assert(state2.mgr.Get(r1).GetCost() == 9);
 

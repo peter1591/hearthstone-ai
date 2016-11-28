@@ -1,7 +1,6 @@
 #pragma once
 
 #include "State/Cards/Card.h"
-#include "FlowControl/Manipulators/Helpers/BasicHelper.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 #include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
@@ -20,9 +19,9 @@ namespace FlowControl
 			{
 			}
 
-			void SetCost(int new_cost) { Helpers::BasicHelper::SetCost(card_, new_cost); }
-
 		public:
+			void Cost(int new_cost) { card_.SetCost(new_cost); }
+
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, card_); }
 			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
