@@ -7,7 +7,7 @@ namespace FlowControl
 		class Utils
 		{
 		public:
-			static Result CheckWinLoss(state::State & state)
+			static Result CheckWinLoss(state::State & state) // TODO: remove
 			{
 				const state::Cards::Card & first_hero = state.mgr.Get(state.board.Get(state::kPlayerFirst).hero_ref_);
 				bool first_died = first_hero.GetHP() < 0;

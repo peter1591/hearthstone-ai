@@ -5,6 +5,7 @@
 #include "FlowControl/Helpers/Utils.h"
 #include "FlowControl/Helpers/ActionParameterWrapper.h"
 #include "FlowControl/Helpers/DamageDealer.h"
+#include "FlowControl/Helpers/EntityDeathHandler.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
@@ -19,7 +20,8 @@ namespace FlowControl
 		public:
 			Attack(state::State & state, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, RandomGenerator & random)
 				: state_(state), attacker_(attacker), defender_(defender),
-				  action_parameters_(action_parameters), random_(random)
+				  action_parameters_(action_parameters), random_(random),
+				  entity_death_handler_(state)
 			{
 
 			}
@@ -30,10 +32,7 @@ namespace FlowControl
 
 				DoAttack();
 
-				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
-
-				// TODO: check deaths
-				// TODO: check weapon deaths
+				if ((rc = entity_death_handler_.ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return rc;
 			}
@@ -58,8 +57,8 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(state_, attacker_, defender_);
 				// TODO: attacker lose stealth
 
-				Helpers::DamageDealer(state_).DealDamage(defender_, state_.mgr.Get(attacker_).GetAttack());
-				Helpers::DamageDealer(state_).DealDamage(attacker_, state_.mgr.Get(defender_).GetAttack());
+				GetDamageDealer().DealDamage(defender_, state_.mgr.Get(attacker_).GetAttack());
+				GetDamageDealer().DealDamage(attacker_, state_.mgr.Get(defender_).GetAttack());
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker_, defender_);
 
@@ -68,18 +67,14 @@ namespace FlowControl
 					if (attacker_card.GetCardType() == state::kCardTypeHero) {
 						CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 						if (weapon_ref.IsValid()) {
-							DamageDealer(state_).DealDamage(weapon_ref, 1);
+							GetDamageDealer().DealDamage(weapon_ref, 1);
 						}
 					}
 				}
-
-				if ((rc = Utils::CheckWinLoss(state_)) != kResultNotDetermined) return rc;
-
-				// TODO: check deaths
-				// TODO: check weapon deaths
-
-				return kResultNotDetermined;
 			}
+
+		private:
+			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, entity_death_handler_); }
 
 		private:
 			state::State & state_;
@@ -87,6 +82,7 @@ namespace FlowControl
 			state::CardRef defender_;
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
 			RandomGenerator & random_;
+			Helpers::EntityDeathHandler entity_death_handler_;
 		};
 	}
 }

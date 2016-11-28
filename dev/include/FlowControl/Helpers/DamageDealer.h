@@ -3,6 +3,7 @@
 #include "State/State.h"
 #include "FlowControl/Manipulate.h"
 #include "FlowControl/Context/OnTakeDamage.h"
+#include "FlowControl/Helpers/EntityDeathHandler.h"
 
 namespace FlowControl
 {
@@ -11,7 +12,10 @@ namespace FlowControl
 		class DamageDealer
 		{
 		public:
-			DamageDealer(state::State & state) : state_(state) {}
+			DamageDealer(state::State & state, Helpers::EntityDeathHandler & entity_death_handler) : 
+				state_(state), entity_death_handler_(entity_death_handler)
+			{
+			}
 
 			void DealDamage(state::CardRef target_ref, int origin_damage)
 			{
@@ -20,10 +24,13 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
 
 				Manipulate(state_).Character(context.card_ref_).Damage().Take(context.damage_);
+
+				entity_death_handler_.Add(context.card_ref_);
 			}
 
 		private:
 			state::State & state_;
+			Helpers::EntityDeathHandler & entity_death_handler_;
 		};
 	}
 }

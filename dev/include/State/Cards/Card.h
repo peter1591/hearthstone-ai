@@ -94,6 +94,7 @@ namespace state
 		public: // getters and setters
 			int GetCardId() const { return data_.card_id; }
 			CardType GetCardType() const { return data_.card_type; }
+			int GetPlayOrder() const { return data_.play_order; }
 
 			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchanted_states.player; }
 			const CardZone GetZone() const { return data_.enchanted_states.zone; }
