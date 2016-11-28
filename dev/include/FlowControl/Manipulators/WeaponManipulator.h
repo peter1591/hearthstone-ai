@@ -14,6 +14,7 @@ namespace FlowControl
 			WeaponManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 				: CardManipulator(state, flow_context, card_ref, card)
 			{
+				assert(card.GetCardType() == state::kCardTypeWeapon);
 			}
 		};
 	}

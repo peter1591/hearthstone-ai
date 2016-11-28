@@ -14,6 +14,7 @@ namespace FlowControl
 			MinionManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 				: CharacterManipulator(state, flow_context, card_ref, card)
 			{
+				assert(card.GetCardType() == state::kCardTypeMinion);
 			}
 
 			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone()
