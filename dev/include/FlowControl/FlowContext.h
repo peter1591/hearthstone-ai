@@ -24,6 +24,12 @@ namespace FlowControl
 			dead_entity_hints_.insert(std::make_pair(play_order, ref));
 		}
 
+		bool Empty() const
+		{
+			if (!dead_entity_hints_.empty()) return false;
+			return true;
+		}
+
 	private:
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 	};

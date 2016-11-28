@@ -26,19 +26,25 @@ namespace FlowControl
 		Result PlayCard(int hand_idx)
 		{
 			Helpers::PlayCard<ActionParameterGetter, RandomGenerator> helper(state_, context_, hand_idx, action_parameters_, random_);
-			return helper.Go();
+			Result rc = helper.Go();
+			assert(context_.Empty());
+			return rc;
 		}
 
 		Result EndTurn()
 		{
 			Helpers::OnTurnEnd<ActionParameterGetter, RandomGenerator> helper(state_, context_, action_parameters_, random_);
-			return helper.Go();
+			Result rc = helper.Go();
+			assert(context_.Empty());
+			return rc;
 		}
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
 			Helpers::Attack<ActionParameterGetter, RandomGenerator> helper(state_, context_, attacker, defender, action_parameters_, random_);
-			return helper.Go();
+			Result rc = helper.Go();
+			assert(context_.Empty());
+			return rc;
 		}
 
 	public:
