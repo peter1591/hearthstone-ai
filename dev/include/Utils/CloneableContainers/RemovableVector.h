@@ -20,6 +20,8 @@ namespace Utils
 			{
 				InternalItemType(InternalItemType const& rhs) = default;
 				InternalItemType(InternalItemType && rhs) = default;
+				InternalItemType & operator=(InternalItemType const& rhs) = default;
+				InternalItemType & operator=(InternalItemType && rhs) = default;
 
 				template <typename T>
 				explicit InternalItemType(T&& item, VectorIdentifier next_possible_exist_id) :
