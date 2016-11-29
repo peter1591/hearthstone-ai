@@ -39,6 +39,13 @@ namespace state
 		kPlayerSecond
 	};
 
+	struct AnotherPlayer {
+		PlayerIdentifier operator()(PlayerIdentifier player) {
+			if (player == kPlayerFirst) return kPlayerSecond;
+			else return kPlayerFirst;
+		}
+	};
+
 	class CardRef
 	{
 	public:

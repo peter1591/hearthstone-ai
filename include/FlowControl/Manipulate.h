@@ -33,6 +33,12 @@ namespace FlowControl
 			return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
 		}
 
+		Manipulators::HeroManipulator AnotherHero(state::PlayerIdentifier player)
+		{
+			if (player == state::kPlayerFirst) return Hero(state::kPlayerSecond);
+			else return Hero(state::kPlayerFirst);
+		}
+
 		Manipulators::MinionManipulator Minion(state::CardRef ref)
 		{
 			return Manipulators::MinionManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));

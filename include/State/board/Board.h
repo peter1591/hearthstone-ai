@@ -25,6 +25,20 @@ namespace state
 				throw std::exception("invalid player identifier");
 			}
 
+			Player & GetAnother(PlayerIdentifier identifier)
+			{
+				if (identifier == kPlayerFirst) return second_;
+				else if (identifier == kPlayerSecond) return first_;
+				throw std::exception("invalid player identifier");
+			}
+
+			const Player & GetAnother(PlayerIdentifier identifier) const
+			{
+				if (identifier == kPlayerFirst) return second_;
+				else if (identifier == kPlayerSecond) return first_;
+				throw std::exception("invalid player identifier");
+			}
+
 			template <int Identifier> Player & Get();
 			template <int Identifier> const Player & Get() const;
 
