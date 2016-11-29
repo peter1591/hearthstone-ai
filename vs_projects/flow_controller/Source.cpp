@@ -3,6 +3,7 @@
 #include <iostream>
 #include <assert.h>
 #include "FlowControl/FlowController.h"
+#include "FlowControl/Dispatchers/MinionCardBase.h"
 
 using state::CardRef;
 
@@ -34,7 +35,7 @@ public:
 	}
 };
 
-class Card1
+class Card1 : MinionCardBase
 {
 public:
 	static void BattleCry(FlowControl::Context::BattleCry & context)
@@ -48,15 +49,9 @@ public:
 	{
 		debug2 = true;
 
-		FlowControl::Manipulate(context.state_, context.flow_context_).Minion(context.card_ref_).Deathrattles().Add(
-			[](FlowControl::Context::Deathrattle & context) {
-			FlowControl::Helpers::DamageDealer(context.state_, context.flow_context_)
-				.DealDamage(
-					context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_,
-					2
-				);
-			}
-		);
+		Deathrattles(context).Add([](auto& context) {
+			Damage(context).Opponent().Amount(2);
+		});
 	}
 
 	static bool debug1;
