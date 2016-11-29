@@ -123,6 +123,7 @@
     <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BeforeMinionSummoned.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\OnTakeDamage.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h" />

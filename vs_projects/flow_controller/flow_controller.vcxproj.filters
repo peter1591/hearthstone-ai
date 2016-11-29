@@ -257,5 +257,11 @@
     <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

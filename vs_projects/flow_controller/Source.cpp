@@ -47,6 +47,16 @@ public:
 	static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
 	{
 		debug2 = true;
+
+		FlowControl::Manipulate(context.state_, context.flow_context_).Minion(context.card_ref_).Deathrattles().Add(
+			[](FlowControl::Context::Deathrattle & context) {
+			FlowControl::Helpers::DamageDealer(context.state_, context.flow_context_)
+				.DealDamage(
+					context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_,
+					2
+				);
+			}
+		);
 	}
 
 	static bool debug1;
@@ -282,12 +292,17 @@ int main(void)
 		CardRef attacker = minion1_ref;
 		CardRef defender = state.board.Get(state::kPlayerFirst).minions_.Get(0);
 
+		assert(state.mgr.Get(state.board.Get(state::kPlayerFirst).hero_ref_).GetHP() == 30);
+		assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);
 		assert(state.mgr.Get(attacker).GetAttack() == 7);
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		assert(state.mgr.Get(defender).GetAttack() == 3);
 		assert(state.mgr.Get(defender).GetDamage() == 0);
 
 		controller.Attack(attacker, defender);
+
+		assert(state.mgr.Get(state.board.Get(state::kPlayerFirst).hero_ref_).GetHP() == 28);
+		assert(state.mgr.Get(state.board.Get(state::kPlayerSecond).hero_ref_).GetHP() == 26);
 		assert(state.mgr.Get(attacker).GetAttack() == 7);
 		assert(state.mgr.Get(attacker).GetDamage() == 3);
 		assert(state.mgr.Get(attacker).GetZone() == state::kCardZoneGraveyard);
