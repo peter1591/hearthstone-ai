@@ -2,6 +2,7 @@
 
 #include "State/Cards/AuraAuxData.h"
 #include "State/State.h"
+#include "FlowControl/Dispatchers/Minions.h"
 
 namespace FlowControl
 {
@@ -12,42 +13,18 @@ namespace FlowControl
 			class AuraHelper
 			{
 			public:
-				AuraHelper(state::State & state, FlowContext & flow_context, state::Cards::Card & card) :
-					state_(state), flow_context_(flow_context),
-					data_(card.GetMutableAuraAuxDataGetter().Get())
+				AuraHelper(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) :
+					state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{
 				}
 
-				template <typename ClientAuraHelper_>
-				void Update(ClientAuraHelper_&& client_aura_helper)
-				{
-					using ClientAuraHelper = std::decay_t<ClientAuraHelper_>;
-					using EnchantmentType = ClientAuraHelper::EnchantmentType;
-
-					for (auto it = data_.applied_enchantments.begin(), it2 = data_.applied_enchantments.end(); it != it2;)
-					{
-						if (client_aura_helper.IsEligible(it->first)) {
-							++it;
-						}
-						else {
-							Manipulate(state_, flow_context_).Minion(it->first).Enchant().Remove<EnchantmentType>(it->second);
-							it = data_.applied_enchantments.erase(it);
-						}
-					}
-
-					client_aura_helper.IterateEligibles([this, &client_aura_helper](CardRef target) {
-						if (data_.applied_enchantments.find(target) != data_.applied_enchantments.end()) return; // already applied
-
-						auto enchant_identifier = Manipulate(state_, flow_context_).Minion(target).Enchant()
-							.Add(client_aura_helper.CreateEnchantmentFor(target));
-						data_.applied_enchantments.insert(std::make_pair(target, std::move(enchant_identifier)));
-					});
-				}
+				void Update();
 
 			private:
 				state::State & state_;
 				FlowContext & flow_context_;
-				state::Cards::AuraAuxData & data_;
+				state::CardRef card_ref_;
+				state::Cards::Card & card_;
 			};
 		}
 	}

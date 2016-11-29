@@ -54,8 +54,7 @@ namespace state
 		CardRef() : id(IdentifierType::GetInvalidIdentifier()) {}
 		explicit CardRef(IdentifierType id) : id(id) {}
 
-		template <typename T>
-		bool operator==(T&& rhs) const
+		template <typename T> bool operator==(T&& rhs) const
 		{
 			static_assert(std::is_same<std::decay_t<T>, CardRef>::value, "Wrong type");
 			return this->id == rhs.id;

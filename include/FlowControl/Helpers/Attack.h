@@ -2,6 +2,7 @@
 
 #include "State/State.h"
 #include "FlowControl/Result.h"
+#include "FlowControl/Helpers/AuraUpdater.h"
 #include "FlowControl/Helpers/ActionParameterWrapper.h"
 #include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/EntityDeathHandler.h"
@@ -33,6 +34,7 @@ namespace FlowControl
 
 				DoAttack();
 
+				AuraUpdater(state_, flow_context_).Update();
 				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return rc;

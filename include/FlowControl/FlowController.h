@@ -10,6 +10,7 @@
 
 // Implemention details which depends on manipulators
 #include "Manipulators/Helpers/OrderedCardsManager-impl.h"
+#include "Manipulators/Helpers/AuraHelper-impl.h"
 #include "State/Cards/Manager-impl.h"
 
 namespace FlowControl

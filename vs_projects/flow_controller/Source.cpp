@@ -92,6 +92,23 @@ bool Card2::debug1 = false;
 bool Card2::debug2 = false;
 REGISTER_MINION_CARD_CLASS(2, Card2)
 
+class Card2_Aura
+{
+public:
+	static void GetEligibles(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::unordered_set<state::CardRef> & eligibles)
+	{
+		eligibles.insert(card_ref);
+	}
+
+	static void CreateEnchantmentFor(state::State & state, state::CardRef target, state::Cards::Enchantments::ApplyFunctor & enchant)
+	{
+		enchant = [](state::Cards::Card & card) {
+			card.SetCost(0);
+		};
+	}
+};
+REGISTER_AURA_CLASS(2, Card2_Aura)
+
 static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
 {
 	auto & item = state.mgr.Get(ref);

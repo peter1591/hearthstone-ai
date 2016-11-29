@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cloneable_containers", "cloneable_containers\cloneable_containers.vcxproj", "{70CCD065-53F7-46E4-A3F6-0821F0A67F71}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "entities_manager", "entities_manager\entities_manager.vcxproj", "{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "enchantments", "enchantments\enchantments.vcxproj", "{74B3860A-4065-4783-863B-7EBFC4747684}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StaticEventManager", "StaticEventManager\StaticEventManager.vcxproj", "{3E610196-663F-4512-9FC1-2DC1B15E1C86}"
@@ -29,14 +27,6 @@ Global
 		{70CCD065-53F7-46E4-A3F6-0821F0A67F71}.Release|x64.Build.0 = Release|x64
 		{70CCD065-53F7-46E4-A3F6-0821F0A67F71}.Release|x86.ActiveCfg = Release|Win32
 		{70CCD065-53F7-46E4-A3F6-0821F0A67F71}.Release|x86.Build.0 = Release|Win32
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Debug|x64.ActiveCfg = Debug|x64
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Debug|x64.Build.0 = Debug|x64
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Debug|x86.ActiveCfg = Debug|Win32
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Debug|x86.Build.0 = Debug|Win32
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Release|x64.ActiveCfg = Release|x64
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Release|x64.Build.0 = Release|x64
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Release|x86.ActiveCfg = Release|Win32
-		{6DBE15A1-1169-4207-AFF6-20CB5B0EABB4}.Release|x86.Build.0 = Release|Win32
 		{74B3860A-4065-4783-863B-7EBFC4747684}.Debug|x64.ActiveCfg = Debug|x64
 		{74B3860A-4065-4783-863B-7EBFC4747684}.Debug|x64.Build.0 = Debug|x64
 		{74B3860A-4065-4783-863B-7EBFC4747684}.Debug|x86.ActiveCfg = Debug|Win32

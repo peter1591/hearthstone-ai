@@ -1,5 +1,6 @@
 #pragma warning( disable : 4100 4267)
 
+#include <unordered_set>
 #include <cassert>
 #include <functional>
 #include <iostream>
@@ -144,44 +145,17 @@ static void test1()
 class AuraHelper
 {
 public:
-	struct EnchantmentType
+	static std::unordered_set<state::CardRef> GetEligibles(state::State & state, state::CardRef card_ref, const state::Cards::Card & card)
 	{
-		static constexpr EnchantmentTiers tier = kEnchantmentAura;
-		Cards:: Enchantments::ApplyFunctor apply_functor;
-	};
-
-	AuraHelper(CardRef eligible1, CardRef eligible2) : eligible1_(eligible1), eligible2_(eligible2) {}
-
-	template <typename T>
-	bool IsEligible(T&& target)
-	{
-		static_assert(std::is_same<std::decay_t<T>, CardRef>::value, "Wrong type");
-
-		if (target == eligible1_) return true;
-		if (target == eligible2_) return true;
-		return false;
+		return{ card_ref };
 	}
 
-	template <typename Functor>
-	void IterateEligibles(Functor&& op)
+	static Cards::Enchantments::ApplyFunctor CreateEnchantmentFor(state::State & state, state::CardRef target)
 	{
-		op(eligible2_);
-		op(eligible1_);
-	}
-
-	template <typename T>
-	EnchantmentType CreateEnchantmentFor(T&& target)
-	{
-		static_assert(std::is_same<std::decay_t<T>, CardRef>::value, "Wrong type");
-
-		return EnchantmentType{ [](Cards::Card & card) {
+		return [](Cards::Card & card) {
 			card.SetCost(card.GetCost() - 1);
-		} };
+		};
 	}
-
-private:
-	CardRef eligible1_;
-	CardRef eligible2_;
 };
 
 static void test2()
@@ -216,15 +190,12 @@ static void test2()
 	CardRef r3 = state.mgr.PushBack(state, flow_context, Cards::Card(c3));
 
 	typedef AuraHelper ClientAuraHelper;
-	ClientAuraHelper client_aura_helper(r1, r2);
-	Manipulate(state, flow_context).Minion(r3).Aura().Update(client_aura_helper);
-
-	Manipulate(state, flow_context).Minion(r3).Aura().Update(client_aura_helper);
+	Manipulate(state, flow_context).Minion(r3).Aura().Update<ClientAuraHelper>();
+	Manipulate(state, flow_context).Minion(r3).Aura().Update<ClientAuraHelper>();
 
 	auto state2 = state;
 
-	ClientAuraHelper client_aura_helper2(r1, r3);
-	Manipulate(state2, flow_context).Minion(r3).Aura().Update(client_aura_helper2);
+	Manipulate(state2, flow_context).Minion(r3).Aura().Update<ClientAuraHelper>();
 }
 
 static void test3()

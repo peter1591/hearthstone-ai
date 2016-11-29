@@ -24,6 +24,12 @@ namespace state
 			}
 
 			template <typename T>
+			typename ContainerType::Identifier PushBackFunctor(T && item)
+			{
+				return enchantments_.PushBack(item);
+			}
+
+			template <typename T>
 			void Remove(T&& id)
 			{
 				return enchantments_.Remove(std::forward<T>(id));

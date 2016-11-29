@@ -19,10 +19,22 @@ namespace state
 				return GetEnchantments<EnchantmentType::tier>().PushBack(std::forward<T>(item));
 			}
 
+			template <typename T>
+			typename ContainerType::Identifier PushBackAuraEnchant(T && item)
+			{
+				return GetEnchantments<kEnchantmentAura>().PushBackFunctor(std::forward<T>(item));
+			}
+
 			template <typename EnchantmentType, typename T>
 			void Remove(T&& id)
 			{
 				return GetEnchantments<EnchantmentType::tier>().Remove(std::forward<T>(id));
+			}
+
+			template <typename T>
+			void RemoveAuraEnchant(T&& id)
+			{
+				return GetEnchantments<kEnchantmentAura>().Remove(std::forward<T>(id));
 			}
 
 			void ApplyAll(Card & card)

@@ -7,7 +7,7 @@ namespace FlowControl
 {
 	namespace Dispatchers
 	{
-		namespace Minions_impl
+		namespace Auras_impl
 		{
 #define CREATE_INVOKER(METHOD_NAME) \
 			template <typename T> class METHOD_NAME ## Invoker \
@@ -39,35 +39,34 @@ namespace FlowControl
 				} \
 			};
 
-			CREATE_INVOKER(BattleCry);
-			CREATE_INVOKER(AfterSummoned);
+			CREATE_INVOKER(GetEligibles);
+			CREATE_INVOKER(CreateEnchantmentFor);
 
 #undef CREATE_INVOKER
 
 			class DefaultInvoked { };
 		}
 
-		class Minions
+		class Auras
 		{
 		public:
-			using DispatcherImpl = Utils::StaticDispatcher<Minions_impl::DefaultInvoked>;
-
+			using DispatcherImpl = Utils::StaticDispatcher<Auras_impl::DefaultInvoked>;
 			template <typename... Args>
-			static void BattleCry(int id, Args&&... args)
+			static void GetEligibles(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Minions_impl::BattleCryInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::GetEligiblesInvoker>(id, std::forward<Args>(args)...);
 			}
 
 			template <typename... Args>
-			static void AfterSummoned(int id, Args&&... args)
+			static void CreateEnchantmentFor(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Minions_impl::AfterSummonedInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::CreateEnchantmentForInvoker>(id, std::forward<Args>(args)...);
 			}
 		};
 	}
 }
 
-#define REGISTER_MINION_CARD_CLASS(id, ClassName) \
+#define REGISTER_AURA_CLASS(id, ClassName) \
 		template <> template <> \
-		struct FlowControl::Dispatchers::Minions::DispatcherImpl::DispatchMap<(id)> \
+		struct FlowControl::Dispatchers::Auras::DispatcherImpl::DispatchMap<(id)> \
 		{ typedef ClassName type; };
