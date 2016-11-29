@@ -52,7 +52,7 @@ namespace FlowControl
 				Manipulate(state_, flow_context_).Minion(card_ref_).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
 				FlowControl::Dispatchers::Minions::AfterSummoned(card_->GetCardId(),
-					Context::AfterSummoned(state_, card_ref_, *card_));
+					Context::AfterSummoned(state_, flow_context_, card_ref_, *card_));
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(*card_);
 
