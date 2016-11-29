@@ -31,7 +31,10 @@ namespace FlowControl
 						return ProcessHeroDeath(card, ref);
 					}
 
-					// TODO: trigger deathrattle
+					Manipulate(state_, flow_context_).Card(ref).Deathrattles()
+						.TriggerAll()
+						.Clear();
+
 					Manipulate(state_, flow_context_).Card(ref).Zone().ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 				flow_context_.dead_entity_hints_.clear();

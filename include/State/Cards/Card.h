@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <utility>
 #include "State/Cards/RawCard.h"
 
 namespace FlowControl
@@ -120,6 +121,13 @@ namespace state
 			}
 
 			LocationSetter SetLocation() { return LocationSetter(data_); }
+
+			template <typename T>
+			void AddDeathrattle(T&& deathrattle) {
+				data_.deathrattles.push_back(std::forward<T>(deathrattle));
+			}
+
+			RawCard::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
 		public:
 			const RawCard & GetRawData() const { return data_; }

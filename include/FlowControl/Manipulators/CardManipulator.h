@@ -2,8 +2,9 @@
 
 #include "State/Cards/Card.h"
 #include "FlowControl/FlowContext.h"
-#include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/Helpers/AuraHelper.h"
+#include "FlowControl/Manipulators/Helpers/DeathrattlesHelper.h"
+#include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
 #include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
 #include "State/State.h"
@@ -25,8 +26,9 @@ namespace FlowControl
 
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_); }
-			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
+			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 
+			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
 			Helpers::ZoneChangerWithUnknownZoneUnknownType Zone()
 			{
 				// TODO: Can specialize the zone changer to accelerate when moving from a non-play zone to another non-play zone
