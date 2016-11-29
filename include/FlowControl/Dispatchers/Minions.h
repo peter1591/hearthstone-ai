@@ -39,6 +39,7 @@ namespace FlowControl
 			};
 
 			CREATE_INVOKER(BattleCry);
+			CREATE_INVOKER(AfterSummoned);
 
 #undef CREATE_INVOKER
 
@@ -54,6 +55,12 @@ namespace FlowControl
 			static void BattleCry(int id, Args&&... args)
 			{
 				return DispatcherImpl::Invoke<impl::BattleCryInvoker>(id, std::forward<Args>(args)...);
+			}
+
+			template <typename... Args>
+			static void AfterSummoned(int id, Args&&... args)
+			{
+				return DispatcherImpl::Invoke<impl::AfterSummonedInvoker>(id, std::forward<Args>(args)...);
 			}
 		};
 	}

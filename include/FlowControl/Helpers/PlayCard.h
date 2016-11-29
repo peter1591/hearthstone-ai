@@ -4,6 +4,7 @@
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/ActionParameterWrapper.h"
 #include "FlowControl/Dispatchers/Minions.h"
+#include "FlowControl/Context/AfterSummoned.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 #include "FlowControl/FlowContext.h"
@@ -49,6 +50,9 @@ namespace FlowControl
 				int put_position = action_parameters_.GetMinionPutLocation(0, total_minions);
 
 				Manipulate(state_, flow_context_).Minion(card_ref_).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
+
+				FlowControl::Dispatchers::Minions::AfterSummoned(card_->GetCardId(),
+					Context::AfterSummoned(state_, card_ref_, *card_));
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(*card_);
 

@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BeforeMinionSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\OnTakeDamage.h" />

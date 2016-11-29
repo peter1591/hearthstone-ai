@@ -44,9 +44,16 @@ public:
 		context.GetBattleCryTarget();
 	}
 
+	static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
+	{
+		debug2 = true;
+	}
+
 	static bool debug1;
+	static bool debug2;
 };
-bool Card1::debug1 = true;
+bool Card1::debug1 = false;
+bool Card1::debug2 = false;
 REGISTER_MINION_CARD_CLASS(1, Card1)
 
 static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
@@ -205,6 +212,7 @@ int main(void)
 	controller.PlayCard(2);
 	assert(triggered);
 	assert(Card1::debug1);
+	assert(Card1::debug2);
 	CheckZoneAndPosition(state, r1, state::kPlayerFirst, state::kCardZonePlay, 0);
 
 	CardRef r2 = state.GetCurrentPlayer().hand_.Get(2);

@@ -254,5 +254,8 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
