@@ -210,7 +210,7 @@ int main(void)
 		triggered = true;
 		//std::cout << "OnMinionPlay event: " << card.GetCardId() << std::endl;
 	};
-	state.event_mgr.PushBack(state::Events::EventTypes::OnMinionPlay(on_minion_play_1));
+	state.event_mgr.PushBack<state::Events::EventTypes::OnMinionPlay>(on_minion_play_1);
 
 	triggered = false;
 	Card1::debug1 = false;
@@ -239,13 +239,13 @@ int main(void)
 		CardRef defender = state.board.Get(state::kPlayerSecond).hero_ref_;
 		
 		bool debug1 = false;
-		state.event_mgr.PushBack(state::Events::EventTypes::BeforeAttack(
+		state.event_mgr.PushBack<state::Events::EventTypes::BeforeAttack>(
 			[&state, &attacker, &defender, &debug1](state::Events::HandlersContainerController & controller, state::State & in_state, CardRef & in_attacker, CardRef & in_defender) -> void {
 			assert(&state == &in_state);
 			assert(attacker == in_attacker);
 			assert(defender == in_defender);
 			debug1 = true;
-		}));
+		});
 
 		assert(!debug1);
 		assert(state.mgr.Get(attacker).GetAttack() == 3);
@@ -265,7 +265,7 @@ int main(void)
 			}
 		};
 
-		state.event_mgr.PushBack(state::Events::EventTypes::OnTakeDamage(callback1));
+		state.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(callback1);
 
 		debug1 = false;
 		controller.Attack(attacker, defender);

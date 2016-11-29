@@ -55,7 +55,7 @@ namespace state
 						const bool exiting = (it == it_last);
 						HandlersContainerController controller;
 
-						it->Handle(controller, std::forward<Args>(args)...);
+						(*it)(controller, std::forward<Args>(args)...);
 
 						if (controller.IsRemoved()) { it = handlers_.erase(it); }
 						else { ++it; }
@@ -65,7 +65,7 @@ namespace state
 				}
 
 			private:
-				typedef std::list<TriggerType> container_type;
+				typedef std::list<typename TriggerType::FunctorType> container_type;
 				container_type handlers_;
 			};
 		}

@@ -29,14 +29,14 @@ namespace state
 			template <typename T> friend class CategorizedEvent;
 
 		public:
-			template <typename T>
+			template <typename EventType, typename T>
 			void PushBack(T&& handler) {
-				GetHandlersContainer<std::decay_t<T>>().PushBack(std::forward<T>(handler));
+				GetHandlersContainer<EventType>().PushBack(std::forward<T>(handler));
 			}
 
-			template <typename T1, typename T2>
+			template <typename EventType, typename T1, typename T2>
 			void PushBack(T1&& category, T2&& handler) {
-				GetHandlersContainer<std::decay_t<T1>, std::decay_t<T2>>().PushBack(
+				GetHandlersContainer<EventType, std::decay_t<T2>>().PushBack(
 					std::forward<T1>(category), std::forward<T2>(handler));
 			}
 
