@@ -61,6 +61,37 @@ bool Card1::debug1 = false;
 bool Card1::debug2 = false;
 REGISTER_MINION_CARD_CLASS(1, Card1)
 
+class Card2 : MinionCardBase
+{
+public:
+	static void BattleCry(FlowControl::Context::BattleCry & context)
+	{
+		debug1 = true;
+
+		context.GetBattleCryTarget();
+	}
+
+	static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
+	{
+		debug2 = true;
+		CardRef self = context.card_ref_;
+
+		context.state_.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(
+			[self](auto& controller, auto& context) {
+			if (context.card_ref_ != self) return;
+			if (context.damage_ > 0) {
+				context.damage_ = 1;
+			}
+		});
+	}
+
+	static bool debug1;
+	static bool debug2;
+};
+bool Card2::debug1 = false;
+bool Card2::debug2 = false;
+REGISTER_MINION_CARD_CLASS(2, Card2)
+
 static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
 {
 	auto & item = state.mgr.Get(ref);
@@ -302,7 +333,7 @@ int main(void)
 		assert(state.mgr.Get(attacker).GetDamage() == 3);
 		assert(state.mgr.Get(attacker).GetZone() == state::kCardZoneGraveyard);
 		assert(state.mgr.Get(defender).GetAttack() == 3);
-		assert(state.mgr.Get(defender).GetDamage() == 7);
+		assert(state.mgr.Get(defender).GetDamage() == 1);
 		assert(state.mgr.Get(defender).GetZone() == state::kCardZonePlay);
 	}
 
