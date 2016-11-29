@@ -84,6 +84,7 @@ static void test9()
 			return true;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 
@@ -98,6 +99,7 @@ static void test9()
 			return false;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 
@@ -113,6 +115,7 @@ static void test9()
 			return true;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 	test = 0;
@@ -126,6 +129,7 @@ static void test9()
 			return true;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 
@@ -144,6 +148,7 @@ static void test9()
 			return true;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 
@@ -159,6 +164,7 @@ static void test9()
 			return true;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 	test = 0;
@@ -172,6 +178,7 @@ static void test9()
 			return true;
 		default:
 			assert(false);
+			return true;
 		}
 	});
 
