@@ -8,16 +8,17 @@
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 #include "FlowControl/FlowContext.h"
+#include "FlowControl/IRandomGenerator.h"
 
 namespace FlowControl
 {
 	namespace Helpers
 	{
-		template <class ActionParameterGetter, class RandomGenerator>
+		template <class ActionParameterGetter>
 		class PlayCard
 		{
 		public:
-			PlayCard(state::State & state, FlowContext & flow_context, int hand_idx, ActionParameterGetter & action_parameters, RandomGenerator & random)
+			PlayCard(state::State & state, FlowContext & flow_context, int hand_idx, ActionParameterGetter & action_parameters, IRandomGenerator & random)
 				: state_(state), flow_context_(flow_context), hand_idx_(hand_idx), action_parameters_(action_parameters), random_(random), card_(nullptr)
 			{
 
@@ -75,7 +76,7 @@ namespace FlowControl
 			FlowContext & flow_context_;
 			int hand_idx_;
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
-			RandomGenerator & random_;
+			IRandomGenerator & random_;
 
 			state::CardRef card_ref_;
 			const state::Cards::Card * card_;

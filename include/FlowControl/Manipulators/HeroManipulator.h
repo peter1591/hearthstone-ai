@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FlowControl/Manipulators/CharacterManipulator.h"
+#include "FlowControl/IRandomGenerator.h"
 
 namespace FlowControl
 {
@@ -15,8 +16,7 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeHero);
 			}
 
-			template <typename RandomGenerator>
-			void DrawCard(RandomGenerator&& random);
+			void DrawCard(IRandomGenerator& random);
 
 		private:
 			state::PlayerIdentifier player_id_;

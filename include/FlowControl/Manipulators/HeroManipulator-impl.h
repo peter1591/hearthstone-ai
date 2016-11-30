@@ -7,8 +7,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		template <typename RandomGenerator>
-		void HeroManipulator::DrawCard(RandomGenerator&& random)
+		void HeroManipulator::DrawCard(IRandomGenerator& random)
 		{
 			state::board::Player & player = state_.board.Get(player_id_);
 

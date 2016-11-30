@@ -10,16 +10,17 @@
 #include "FlowControl/Context/OnAttack.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
+#include "FlowControl/IRandomGenerator.h"
 
 namespace FlowControl
 {
 	namespace Helpers
 	{
-		template <class ActionParameterGetter, class RandomGenerator>
+		template <class ActionParameterGetter>
 		class Attack
 		{
 		public:
-			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, RandomGenerator & random)
+			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, IRandomGenerator & random)
 				: state_(state), flow_context_(flow_context), attacker_(attacker), defender_(defender),
 				  action_parameters_(action_parameters), random_(random)
 			{
@@ -89,7 +90,7 @@ namespace FlowControl
 			state::CardRef attacker_;
 			state::CardRef defender_;
 			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
-			RandomGenerator & random_;
+			IRandomGenerator & random_;
 		};
 	}
 }
