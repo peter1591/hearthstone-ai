@@ -33,9 +33,11 @@ namespace FlowControl
 			return true;
 		}
 
-	private:
+	public:
 		IRandomGenerator & random_;
 		ActionParameterWrapper & action_parameters_;
+
+	private:
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 	};
 }

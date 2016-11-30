@@ -29,7 +29,7 @@ namespace FlowControl
 
 		Result PlayCard(int hand_idx)
 		{
-			Helpers::PlayCard helper(state_, context_, hand_idx, action_parameters_, random_);
+			Helpers::PlayCard helper(state_, context_, hand_idx);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;
@@ -37,7 +37,7 @@ namespace FlowControl
 
 		Result EndTurn()
 		{
-			Helpers::OnTurnEnd helper(state_, context_, action_parameters_, random_);
+			Helpers::OnTurnEnd helper(state_, context_);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;
@@ -45,7 +45,7 @@ namespace FlowControl
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
-			Helpers::Attack helper(state_, context_, attacker, defender, action_parameters_, random_);
+			Helpers::Attack helper(state_, context_, attacker, defender);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;

@@ -7,7 +7,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		void HeroManipulator::DrawCard(IRandomGenerator& random)
+		void HeroManipulator::DrawCard()
 		{
 			state::board::Player & player = state_.board.Get(player_id_);
 
@@ -20,7 +20,7 @@ namespace FlowControl
 
 			int deck_count = (int)player.deck_.Size();
 			int deck_idx = 0;
-			if (deck_count > 1) deck_idx = random.Get(deck_count);
+			if (deck_count > 1) deck_idx = flow_context_.random_.Get(deck_count);
 
 			state::CardRef card_ref = player.deck_.Get(deck_idx);
 

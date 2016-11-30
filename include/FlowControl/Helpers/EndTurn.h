@@ -15,8 +15,8 @@ namespace FlowControl
 		class OnTurnEnd
 		{
 		public:
-			OnTurnEnd(state::State & state, FlowContext & flow_context, ActionParameterWrapper & action_parameters, IRandomGenerator & random)
-				: state_(state), flow_context_(flow_context), action_parameters_(action_parameters), random_(random)
+			OnTurnEnd(state::State & state, FlowContext & flow_context)
+				: state_(state), flow_context_(flow_context)
 			{
 
 			}
@@ -40,7 +40,7 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
 				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
-				Manipulate(state_, flow_context_).CurrentHero().DrawCard(random_);
+				Manipulate(state_, flow_context_).CurrentHero().DrawCard();
 				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
@@ -52,8 +52,6 @@ namespace FlowControl
 		private:
 			state::State & state_;
 			FlowContext & flow_context_;
-			ActionParameterWrapper & action_parameters_;
-			IRandomGenerator & random_;
 		};
 	}
 }

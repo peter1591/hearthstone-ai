@@ -16,7 +16,7 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeHero);
 			}
 
-			void DrawCard(IRandomGenerator& random);
+			void DrawCard();
 
 		private:
 			state::PlayerIdentifier player_id_;
