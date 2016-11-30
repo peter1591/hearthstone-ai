@@ -24,7 +24,7 @@ namespace FlowControl
 		public:
 			void Cost(int new_cost) { card_.SetCost(new_cost); }
 
-			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(card_); }
+			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 

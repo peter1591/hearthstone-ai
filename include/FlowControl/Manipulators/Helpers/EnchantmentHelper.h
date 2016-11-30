@@ -14,27 +14,35 @@ namespace FlowControl
 			class EnchantmentHelper
 			{
 			public:
-				EnchantmentHelper(state::Cards::Card &card) :
-					data_(card.GetMutableEnchantmentAuxDataGetter().Get())
+				EnchantmentHelper(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) :
+					state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{
 				}
 
 				template <typename T>
 				decltype(auto) Add(T&& enchantment)
 				{
-					data_.need_update = true;
-					return data_.enchantments.PushBack(std::forward<T>(enchantment));
+					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
+
+					data.need_update = true;
+					auto ret = data.enchantments.PushBack(std::forward<T>(enchantment));
+					return ret;
 				}
 
 				template <typename EnchantmentType, typename T>
 				decltype(auto) Remove(T&& id)
 				{
-					data_.need_update = true;
-					return data_.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
+					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
+
+					data.need_update = true;
+					return data.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 				}
 
 			private:
-				state::Cards::EnchantmentAuxData & data_;
+				state::State & state_;
+				FlowContext & flow_context_;
+				state::CardRef card_ref_;
+				state::Cards::Card & card_;
 			};
 		}
 	}
