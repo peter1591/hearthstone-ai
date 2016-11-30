@@ -40,7 +40,8 @@ namespace FlowControl
 			};
 
 			CREATE_INVOKER(GetEligibles);
-			CREATE_INVOKER(CreateEnchantmentFor);
+			CREATE_INVOKER(ApplyOn);
+			CREATE_INVOKER(RemoveFrom);
 
 #undef CREATE_INVOKER
 
@@ -58,9 +59,15 @@ namespace FlowControl
 			}
 
 			template <typename... Args>
-			static void CreateEnchantmentFor(int id, Args&&... args)
+			static void ApplyOn(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Auras_impl::CreateEnchantmentForInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::ApplyOnInvoker>(id, std::forward<Args>(args)...);
+			}
+
+			template <typename... Args>
+			static void RemoveFrom(int id, Args&&... args)
+			{
+				return DispatcherImpl::Invoke<Auras_impl::RemoveFromInvoker>(id, std::forward<Args>(args)...);
 			}
 		};
 	}

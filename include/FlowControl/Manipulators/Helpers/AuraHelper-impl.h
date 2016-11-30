@@ -30,7 +30,7 @@ namespace FlowControl
 					}
 					else {
 						// enchantments should be removed
-						Manipulate(state_, flow_context_).Minion(it->first).Enchant().Remove<AuraEnchantment>(it->second);
+						Dispatchers::Auras::RemoveFrom(card_.GetAuraId(), state_, flow_context_, card_ref_, card_, it->first, it->second);
 						it = data.applied_enchantments.erase(it);
 					}
 				}
@@ -39,15 +39,9 @@ namespace FlowControl
 					// enchantments should be applied
 					assert(data.applied_enchantments.find(new_target) == data.applied_enchantments.end());
 
-					state::Cards::Enchantments::ApplyFunctor enchantment_functor;
-					AuraEnchantment enchant;
-					Dispatchers::Auras::CreateEnchantmentFor(card_.GetAuraId(), state_, new_target, enchant);
-
-					if (enchant.apply_functor) {
-						auto enchant_identifier = Manipulate(state_, flow_context_).Minion(new_target).Enchant()
-							.Add(enchant);
-						data.applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_identifier)));
-					}
+					state::Cards::Enchantments::ContainerType::Identifier enchant_id;
+					Dispatchers::Auras::ApplyOn(card_.GetAuraId(), state_, flow_context_, card_ref_, card_, new_target, enchant_id);
+					data.applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_id)));
 				}
 			}
 
