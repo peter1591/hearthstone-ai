@@ -119,6 +119,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h" />
@@ -135,7 +136,6 @@
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
-    <ClInclude Include="..\..\include\FlowControl\Helpers\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\Attack.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\AuraUpdater.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\DamageDealer.h" />

@@ -125,9 +125,6 @@
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Helpers\ActionParameterWrapper.h">
-      <Filter>Header Files\FlowControl\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Cards\Enchantments\Enchantments.h">
       <Filter>Header Files\State\Cards\Enchantments</Filter>
     </ClInclude>
@@ -306,6 +303,9 @@
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>

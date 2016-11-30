@@ -109,7 +109,22 @@ public:
 private:
 	static void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded & context)
 	{
-		std::cout << "HHHH" << std::endl;
+		state::CardRef enchant_owner = context.card_ref_;
+		auto enchant_id = context.enchant_id_;
+		context.state_.event_mgr.PushBack<state::Events::EventTypes::OnAttack>(
+			[enchant_owner, enchant_id](auto& controller, auto& context) {
+
+			if (context.attacker_ != enchant_owner) return;
+
+			if (!context.state_.mgr.Get(enchant_owner).GetEnchantmentAuxData().Exists<Card2_Enchant1>(enchant_id)) {
+				controller.Remove();
+				return;
+			}
+
+			FlowControl::Manipulate(context.state_, context.flow_context_)
+				.Hero(context.state_.mgr.Get(enchant_owner).GetPlayerIdentifier())
+				.DrawCard();
+		});
 	}
 
 public:
@@ -346,9 +361,13 @@ int main(void)
 		state.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(callback1);
 
 		debug1 = false;
+		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 3);
+		assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 5);
 		controller.Attack(attacker, defender);
 		assert(debug1);
 		assert(debug2);
+		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 4);
+		assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 5);
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		assert(state.mgr.Get(defender).GetDamage() == 8);
 	}
