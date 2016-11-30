@@ -7,7 +7,7 @@
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
 #include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
-#include "FlowControl/Manipulators/Helpers/TakeDamageHelper.h"
+#include "FlowControl/Manipulators/Helpers/DamageHelper.h"
 #include "State/State.h"
 
 namespace FlowControl
@@ -18,7 +18,7 @@ namespace FlowControl
 		{
 			class DamageSetter
 			{
-				friend class Helpers::TakeDamageHelper;
+				friend class Helpers::DamageHelper;
 			public:
 				DamageSetter(state::Cards::Card & card) : card_(card) {}
 
@@ -55,7 +55,7 @@ namespace FlowControl
 				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
 			}
 
-			Helpers::TakeDamageHelper Damage() { return Helpers::TakeDamageHelper(state_, flow_context_, card_ref_, card_); }
+			Helpers::DamageHelper Damage() { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_); }
 
 		protected:
 			state::State & state_;

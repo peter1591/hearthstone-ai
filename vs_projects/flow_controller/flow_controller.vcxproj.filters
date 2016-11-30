@@ -236,12 +236,6 @@
     <ClInclude Include="..\..\include\FlowControl\Context\OnTakeDamage.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Helpers\DamageDealer.h">
-      <Filter>Header Files\FlowControl\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\TakeDamageHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
@@ -306,6 +300,12 @@
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
   </ItemGroup>

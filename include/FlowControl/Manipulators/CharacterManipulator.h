@@ -5,7 +5,7 @@
 #include "State/Cards/Card.h"
 #include "State/Cards/Manager.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
-#include "FlowControl/Manipulators/Helpers/TakeDamageHelper.h"
+#include "FlowControl/Manipulators/Helpers/DamageHelper.h"
 
 namespace FlowControl
 {

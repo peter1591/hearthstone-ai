@@ -16,7 +16,7 @@
 #include "FlowControl/Manipulators/Helpers/AuraHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/OrderedCardsManager-impl.h"
-#include "FlowControl/Manipulators/Helpers/TakeDamageHelper-impl.h"
+#include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 #include "State/Cards/Manager-impl.h"
 
 namespace FlowControl

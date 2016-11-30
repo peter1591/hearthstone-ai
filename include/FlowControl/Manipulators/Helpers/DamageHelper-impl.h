@@ -10,7 +10,7 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline void TakeDamageHelper::Take(int origin_damage)
+			inline void DamageHelper::Take(int origin_damage)
 			{
 				Context::OnTakeDamage context(state_, card_ref_, origin_damage);
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
