@@ -133,6 +133,8 @@ namespace state
 
 			RawCard::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
+			void SetEnchantedStates(EnchantableStates const& states) { data_.enchanted_states = states; }
+
 		public:
 			const RawCard & GetRawData() const { return data_; }
 

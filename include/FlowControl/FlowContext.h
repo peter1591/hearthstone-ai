@@ -6,14 +6,14 @@ namespace FlowControl
 {
 	namespace Helpers
 	{
-		class EntityDeathHandler;
+		class Resolver;
 	}
 	class IRandomGenerator;
 	class ActionParameterWrapper;
 
 	class FlowContext
 	{
-		friend class Helpers::EntityDeathHandler;
+		friend class Helpers::Resolver;
 	public:
 		FlowContext(IRandomGenerator & random, ActionParameterWrapper & action_parameters)
 			: random_(random), action_parameters_(action_parameters)

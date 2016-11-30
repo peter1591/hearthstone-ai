@@ -3,7 +3,6 @@
 #include "State/State.h"
 #include "FlowControl/Manipulate.h"
 #include "FlowControl/Context/OnTakeDamage.h"
-#include "FlowControl/Helpers/EntityDeathHandler.h"
 
 namespace FlowControl
 {

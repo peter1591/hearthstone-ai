@@ -2,10 +2,9 @@
 
 #include "State/State.h"
 #include "FlowControl/Result.h"
-#include "FlowControl/Helpers/AuraUpdater.h"
 #include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Helpers/DamageDealer.h"
-#include "FlowControl/Helpers/EntityDeathHandler.h"
+#include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/OnAttack.h"
 #include "FlowControl/Context/BattleCry.h"
@@ -34,10 +33,7 @@ namespace FlowControl
 
 				DoAttack();
 
-				AuraUpdater(state_, flow_context_).Update();
-				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
-
-				return rc;
+				return Resolver(state_, flow_context_).Resolve();
 			}
 
 		private:

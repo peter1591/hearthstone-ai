@@ -6,6 +6,7 @@
 #include "FlowControl/Helpers/PlayCard.h"
 #include "FlowControl/Helpers/EndTurn.h"
 #include "FlowControl/Helpers/Attack.h"
+#include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
 #include "FlowControl/IActionParameterGetter.h"

@@ -33,6 +33,8 @@ namespace state
 			size_t Size() const { return minions_.size(); }
 			CardRef Get(size_t pos) const { return minions_[pos]; }
 
+			std::vector<CardRef> const& Get() const { return minions_; }
+
 		private:
 			std::vector<CardRef> minions_;
 		};

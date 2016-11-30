@@ -3,7 +3,7 @@
 #include "FlowControl/Result.h"
 #include "FlowControl/Manipulate.h"
 #include "FlowControl/Helpers/DamageDealer.h"
-#include "FlowControl/Helpers/EntityDeathHandler.h"
+#include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/IRandomGenerator.h"
 #include "FlowControl/ActionParameterWrapper.h"
@@ -26,7 +26,7 @@ namespace FlowControl
 				Result rc = kResultNotDetermined;
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
-				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
+				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 
 				if (state_.turn == 89) return kResultDraw;
 				++state_.turn;
@@ -38,10 +38,10 @@ namespace FlowControl
 				// TODO: overload
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
-				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
+				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 
 				Manipulate(state_, flow_context_).CurrentHero().DrawCard();
-				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
+				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
 			}

@@ -42,6 +42,16 @@ namespace FlowControl
 					return data.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 				}
 
+				void Update()
+				{
+					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
+
+					if (!data.need_update) return;
+
+					card_.SetEnchantedStates(data.origin_states);
+					data.enchantments.ApplyAll(card_);
+				}
+
 			private:
 				state::State & state_;
 				FlowContext & flow_context_;

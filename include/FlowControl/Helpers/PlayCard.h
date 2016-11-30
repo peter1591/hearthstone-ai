@@ -3,7 +3,7 @@
 #include "State/State.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/ActionParameterWrapper.h"
-#include "FlowControl/Helpers/EntityDeathHandler.h"
+#include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/AfterSummoned.h"
 #include "FlowControl/Context/BattleCry.h"
@@ -34,16 +34,18 @@ namespace FlowControl
 				switch (card_->GetCardType())
 				{
 				case state::kCardTypeMinion:
-					return PlayMinionCard();
+					PlayMinionCard();
+					break;
+				default:
+					throw std::exception("not implemented");
 				}
-				throw std::exception("not implemented");
+
+				return Helpers::Resolver(state_, flow_context_).Resolve();
 			}
 
 		private:
-			Result PlayMinionCard()
+			void PlayMinionCard()
 			{
-				Result rc = kResultNotDetermined;
-
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 					Context::BeforeMinionSummoned(state_, card_ref_, *card_));
 
@@ -67,10 +69,6 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(*card_);
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
-
-				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
-
-				return kResultNotDetermined;
 			}
 
 		private:

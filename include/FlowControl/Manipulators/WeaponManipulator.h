@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include "State/Cards/Card.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "State/State.h"
