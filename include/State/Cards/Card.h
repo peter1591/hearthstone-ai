@@ -117,6 +117,7 @@ namespace state
 			{
 				return MutableEnchantmentAuxDataGetter(data_);
 			}
+			EnchantmentAuxData GetEnchantmentAuxData() const { return data_.enchantment_aux_data; }
 
 			MutableAuraAuxDataGetter GetMutableAuraAuxDataGetter()
 			{

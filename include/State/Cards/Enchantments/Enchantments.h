@@ -40,6 +40,12 @@ namespace state
 				return enchantments_.Remove(std::forward<T>(id));
 			}
 
+			template <typename T>
+			bool Exists(T&& id) const
+			{
+				return enchantments_.Get(std::forward<T>(id)) != nullptr;
+			}
+
 			void ApplyAll(Card & card)
 			{
 				enchantments_.IterateAll([&card](ApplyFunctor& functor) -> bool {

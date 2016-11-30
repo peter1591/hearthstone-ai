@@ -25,6 +25,12 @@ namespace state
 				return GetEnchantments<EnchantmentType::tier>().Remove(std::forward<T>(id));
 			}
 
+			template <typename EnchantmentType, typename T>
+			bool Exists(T&& id) const
+			{
+				return GetEnchantments<EnchantmentType::tier>().Exists(std::forward<T>(id));
+			}
+
 			void ApplyAll(Card & card)
 			{
 				tier1_.ApplyAll(card);

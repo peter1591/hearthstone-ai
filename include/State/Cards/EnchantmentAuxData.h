@@ -12,6 +12,12 @@ namespace state
 		public:
 			EnchantmentAuxData() : need_update(true) {}
 
+			template <typename EnchantmentType, typename T>
+			bool Exists(T&& id) const
+			{
+				return enchantments.Exists<EnchantmentType>(std::forward<T>(id));
+			}
+
 			TieredEnchantments enchantments;
 			EnchantableStates origin_states;
 			bool need_update;
