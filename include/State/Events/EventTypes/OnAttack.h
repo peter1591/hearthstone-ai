@@ -5,6 +5,7 @@
 #include <iostream>
 #include <functional>
 #include "state/Types.h"
+#include "FlowControl/Context/OnAttack.h"
 
 namespace state
 {
@@ -20,14 +21,14 @@ namespace state
 			class OnAttack
 			{
 			public:
-				typedef std::function<void(HandlersContainerController &, State &, CardRef &, CardRef &)> FunctorType;
-				typedef std::tuple<State &, CardRef &, CardRef &> ArgsTuple;
+				typedef std::function<void(HandlersContainerController &, FlowControl::Context::OnAttack &)> FunctorType;
+				typedef std::tuple<FlowControl::Context::OnAttack &> ArgsTuple;
 
 				template <typename T> OnAttack(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller, State & state_, CardRef & attacker_, CardRef & defender_)
+				void Handle(HandlersContainerController &controller, FlowControl::Context::OnAttack & context)
 				{
-					functor_(controller, state_, attacker_, defender_);
+					functor_(controller, context);
 				}
 
 			private:

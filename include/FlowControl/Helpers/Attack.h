@@ -7,6 +7,7 @@
 #include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/EntityDeathHandler.h"
 #include "FlowControl/Dispatchers/Minions.h"
+#include "FlowControl/Context/OnAttack.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 
@@ -59,7 +60,8 @@ namespace FlowControl
 					if (origin_attacker == attacker_ && origin_defender == defender_) break;
 				}
 
-				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(state_, attacker_, defender_);
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(
+					Context::OnAttack(state_, attacker_, defender_));
 				// TODO: attacker lose stealth
 
 				GetDamageDealer().DealDamage(defender_, state_.mgr.Get(attacker_).GetAttack());
