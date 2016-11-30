@@ -7,7 +7,7 @@
 
 using state::CardRef;
 
-class ActionParameterGetter
+class ActionParameterGetter : public FlowControl::IActionParameterGetter
 {
 public:
 	int GetMinionPutLocation(int min, int max)
@@ -21,7 +21,7 @@ public:
 	}
 };
 
-class RandomGenerator
+class RandomGenerator : public FlowControl::IRandomGenerator
 {
 public:
 	int Get(int exclusive_max)
@@ -262,7 +262,7 @@ int main(void)
 	ActionParameterGetter action_parameter;
 	RandomGenerator random;
 	state::State state;
-	FlowControl::FlowController<ActionParameterGetter, RandomGenerator> controller(state, action_parameter, random);
+	FlowControl::FlowController controller(state, action_parameter, random);
 
 	{
 		state.mgr.PushBack(state, controller.context_, state::Cards::Card(GetHero(state::kPlayerFirst)));

@@ -16,11 +16,10 @@ namespace FlowControl
 {
 	namespace Helpers
 	{
-		template <class ActionParameterGetter>
 		class Attack
 		{
 		public:
-			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, ActionParameterGetter & action_parameters, IRandomGenerator & random)
+			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, IActionParameterGetter & action_parameters, IRandomGenerator & random)
 				: state_(state), flow_context_(flow_context), attacker_(attacker), defender_(defender),
 				  action_parameters_(action_parameters), random_(random)
 			{
@@ -46,8 +45,8 @@ namespace FlowControl
 			void DoAttack()
 			{
 				while (true) {
-					CardRef origin_attacker = attacker_;
-					CardRef origin_defender = defender_;
+					state::CardRef origin_attacker = attacker_;
+					state::CardRef origin_defender = defender_;
 					state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker_, defender_);
 
 					if (!attacker_.IsValid()) return;
@@ -73,7 +72,7 @@ namespace FlowControl
 				{
 					const state::Cards::Card & attacker_card = state_.mgr.Get(attacker_);
 					if (attacker_card.GetCardType() == state::kCardTypeHero) {
-						CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
+						state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 						if (weapon_ref.IsValid()) {
 							GetDamageDealer().DealDamage(weapon_ref, 1);
 						}
@@ -89,7 +88,7 @@ namespace FlowControl
 			FlowContext & flow_context_;
 			state::CardRef attacker_;
 			state::CardRef defender_;
-			ActionParameterWrapper<ActionParameterGetter> action_parameters_;
+			ActionParameterWrapper action_parameters_;
 			IRandomGenerator & random_;
 		};
 	}

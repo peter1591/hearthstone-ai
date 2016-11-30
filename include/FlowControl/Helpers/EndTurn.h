@@ -6,16 +6,16 @@
 #include "FlowControl/Helpers/EntityDeathHandler.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/IRandomGenerator.h"
+#include "FlowControl/IActionParameterGetter.h"
 
 namespace FlowControl
 {
 	namespace Helpers
 	{
-		template <class ActionParameterGetter>
 		class OnTurnEnd
 		{
 		public:
-			OnTurnEnd(state::State & state, FlowContext & flow_context, ActionParameterGetter & action_parameters, IRandomGenerator & random)
+			OnTurnEnd(state::State & state, FlowContext & flow_context, IActionParameterGetter & action_parameters, IRandomGenerator & random)
 				: state_(state), flow_context_(flow_context), action_parameters_(action_parameters), random_(random)
 			{
 
@@ -52,7 +52,7 @@ namespace FlowControl
 		private:
 			state::State & state_;
 			FlowContext & flow_context_;
-			ActionParameterGetter & action_parameters_;
+			IActionParameterGetter & action_parameters_;
 			IRandomGenerator & random_;
 		};
 	}

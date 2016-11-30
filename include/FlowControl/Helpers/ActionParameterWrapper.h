@@ -1,14 +1,15 @@
 #pragma once
 
+#include "FlowControl/IActionParameterGetter.h"
+
 namespace FlowControl
 {
 	namespace Helpers
 	{
-		template <class ActionParameterGetter>
 		class ActionParameterWrapper
 		{
 		public:
-			ActionParameterWrapper(ActionParameterGetter & getter)
+			ActionParameterWrapper(IActionParameterGetter & getter)
 				: getter_(getter), minion_put_location_(-1)
 			{
 			}
@@ -35,7 +36,7 @@ namespace FlowControl
 			}
 
 		private:
-			ActionParameterGetter & getter_;
+			IActionParameterGetter & getter_;
 			int minion_put_location_;
 			state::CardRef battlecry_target_;
 		};

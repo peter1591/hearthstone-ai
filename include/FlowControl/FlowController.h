@@ -8,6 +8,7 @@
 #include "FlowControl/Helpers/Attack.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
+#include "FlowControl/IActionParameterGetter.h"
 
 // Implemention details which depends on manipulators
 #include "FlowControl/Manipulators/HeroManipulator-impl.h"
@@ -17,18 +18,17 @@
 
 namespace FlowControl
 {
-	template <class ActionParameterGetter>
 	class FlowController
 	{
 	public:
-		FlowController(state::State & state, ActionParameterGetter & action_parameters, IRandomGenerator & random)
+		FlowController(state::State & state, IActionParameterGetter & action_parameters, IRandomGenerator & random)
 			: state_(state), action_parameters_(action_parameters), random_(random)
 		{
 		}
 
 		Result PlayCard(int hand_idx)
 		{
-			Helpers::PlayCard<ActionParameterGetter> helper(state_, context_, hand_idx, action_parameters_, random_);
+			Helpers::PlayCard helper(state_, context_, hand_idx, action_parameters_, random_);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;
@@ -36,7 +36,7 @@ namespace FlowControl
 
 		Result EndTurn()
 		{
-			Helpers::OnTurnEnd<ActionParameterGetter> helper(state_, context_, action_parameters_, random_);
+			Helpers::OnTurnEnd helper(state_, context_, action_parameters_, random_);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;
@@ -44,7 +44,7 @@ namespace FlowControl
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
-			Helpers::Attack<ActionParameterGetter> helper(state_, context_, attacker, defender, action_parameters_, random_);
+			Helpers::Attack helper(state_, context_, attacker, defender, action_parameters_, random_);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;
@@ -52,7 +52,7 @@ namespace FlowControl
 
 	public:
 		state::State & state_;
-		ActionParameterGetter & action_parameters_;
+		IActionParameterGetter & action_parameters_;
 		IRandomGenerator & random_;
 		FlowContext context_;
 	};

@@ -128,6 +128,7 @@
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BeforeMinionSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\OnAttack.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\OnTakeDamage.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Auras.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\MinionCardBase.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="..\..\include\FlowControl\Helpers\AuraUpdater.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\DamageDealer.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\EntityDeathHandler.h" />
+    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
@@ -151,9 +153,11 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\TakeDamageHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\EndTurn.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\PlayCard.h" />
