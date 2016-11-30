@@ -111,7 +111,12 @@ namespace state
 			DamageSetter GetDamageSetter() { return DamageSetter(data_); }
 
 			int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
+
 			int GetAttack() const { return data_.enchanted_states.attack; }
+			void SetAttack(int new_attack) { data_.enchanted_states.attack = new_attack; }
+
+			int GetMaxHP() const { return data_.enchanted_states.max_hp; }
+			void SetMaxHP(int max_hp) { data_.enchanted_states.max_hp = max_hp; }
 
 			MutableEnchantmentAuxDataGetter GetMutableEnchantmentAuxDataGetter()
 			{
@@ -132,8 +137,6 @@ namespace state
 			}
 
 			RawCard::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
-
-			void SetEnchantedStates(EnchantableStates const& states) { data_.enchanted_states = states; }
 
 		public:
 			const RawCard & GetRawData() const { return data_; }

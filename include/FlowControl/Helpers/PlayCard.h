@@ -51,6 +51,8 @@ namespace FlowControl
 
 				state_.GetCurrentPlayer().resource_.Cost(card_->GetCost());
 
+				if (state_.GetCurrentPlayer().minions_.Full()) throw std::exception("Minion full. Cannot play card.");
+
 				int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 				int put_position = flow_context_.action_parameters_.GetMinionPutLocation(0, total_minions);
 

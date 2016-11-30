@@ -23,7 +23,7 @@ namespace state
 		class Enchantments
 		{
 		public:
-			typedef std::function<void(Card &)> ApplyFunctor;
+			typedef std::function<void(EnchantableStates &)> ApplyFunctor;
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
 			typedef void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded &);
@@ -46,7 +46,7 @@ namespace state
 				return enchantments_.Get(std::forward<T>(id)) != nullptr;
 			}
 
-			void ApplyAll(Card & card)
+			void ApplyAll(EnchantableStates & card)
 			{
 				enchantments_.IterateAll([&card](ApplyFunctor& functor) -> bool {
 					functor(card);

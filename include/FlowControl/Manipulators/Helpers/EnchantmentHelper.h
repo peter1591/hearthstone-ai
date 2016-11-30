@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <memory>
 #include <utility>
 #include "State/Cards/Card.h"
@@ -42,15 +43,10 @@ namespace FlowControl
 					return data.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 				}
 
-				void Update()
-				{
-					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
+				void Update();
 
-					if (!data.need_update) return;
-
-					card_.SetEnchantedStates(data.origin_states);
-					data.enchantments.ApplyAll(card_);
-				}
+			private:
+				void ChangeMinionPlayer(state::PlayerIdentifier player);
 
 			private:
 				state::State & state_;

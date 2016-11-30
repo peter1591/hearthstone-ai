@@ -31,7 +31,7 @@ namespace state
 				return GetEnchantments<EnchantmentType::tier>().Exists(std::forward<T>(id));
 			}
 
-			void ApplyAll(Card & card)
+			void ApplyAll(EnchantableStates & card)
 			{
 				tier1_.ApplyAll(card);
 				tier2_.ApplyAll(card);

@@ -32,6 +32,7 @@ namespace state
 
 			size_t Size() const { return minions_.size(); }
 			CardRef Get(size_t pos) const { return minions_[pos]; }
+			bool Full() const { return Size() >= 7; }
 
 			std::vector<CardRef> const& Get() const { return minions_; }
 
