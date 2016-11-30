@@ -22,12 +22,13 @@ namespace Utils
 			friend class VectorIdentifierHasher;
 
 		public:
+			VectorIdentifier() : idx(-1) {}
 			VectorIdentifier(const VectorIdentifier & rhs) = default;
 			VectorIdentifier(VectorIdentifier && rhs) = default;
 			VectorIdentifier & operator=(const VectorIdentifier & rhs) = default;
 			VectorIdentifier & operator=(VectorIdentifier && rhs) = default;
 
-			static VectorIdentifier GetInvalidIdentifier() { return VectorIdentifier(-1); }
+			static VectorIdentifier GetInvalidIdentifier() { return VectorIdentifier(); }
 
 		private:
 			explicit VectorIdentifier(int idx) : idx(idx) {}

@@ -44,8 +44,11 @@ namespace Utils
 				typedef typename CloneableContainers::Vector<InternalItemType>::Identifier impl_identifier_type;
 
 			public:
+				Identifier() {}
 				Identifier(const Identifier & rhs) = default;
+				Identifier & operator=(const Identifier & rhs) = default;
 				Identifier(Identifier && rhs) = default;
+				Identifier & operator=(Identifier && rhs) = default;
 
 				bool operator==(const Identifier& rhs) const { return identifier_ == rhs.identifier_; }
 				bool operator!=(const Identifier& rhs) const { return identifier_ != rhs.identifier_; }
