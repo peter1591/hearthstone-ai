@@ -137,9 +137,8 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\Attack.h" />
-    <ClInclude Include="..\..\include\FlowControl\Helpers\AuraUpdater.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\DamageDealer.h" />
-    <ClInclude Include="..\..\include\FlowControl\Helpers\EntityDeathHandler.h" />
+    <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
@@ -147,6 +146,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h" />

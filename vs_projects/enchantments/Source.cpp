@@ -26,19 +26,19 @@ int main(void)
 	state::Cards::Card card(raw_card);
 	card.SetCost(0);
 
-	Enchantment1 enchant1{ [](state::Cards::Card & card) {
-		card.SetCost(card.GetCost() + 1);
+	Enchantment1 enchant1{ [](auto& states) {
+		++states.cost;
 	}};
-	Enchantment1 enchant2{ [](state::Cards::Card & card) {
-		card.SetCost(card.GetCost() * 2);
+	Enchantment1 enchant2{ [](auto& states) {
+		states.cost *= 2;
 	} };
-	Enchantment2 enchant3{ [](state::Cards::Card & card) {
-		card.SetCost(card.GetCost() + 3);
+	Enchantment2 enchant3{ [](auto& states) {
+		states.cost += 3;
 	} };
 
 	auto r1 = mgr.PushBack(enchant1);
 	assert(card.GetCost() == 0);
-	mgr.ApplyAll(card);
+	mgr.ApplyAll(card.e);
 	assert(card.GetCost() == 1);
 	mgr.ApplyAll(card);
 	assert(card.GetCost() == 2);

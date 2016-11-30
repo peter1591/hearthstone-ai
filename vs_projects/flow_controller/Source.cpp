@@ -102,7 +102,7 @@ public:
 
 	Card2_Enchant1()
 		: apply_functor([](auto& card) {
-		card.SetCost(0);
+		card.cost = 0;
 	}), after_added_callback(AfterAddedCallback)
 	{}
 
@@ -170,7 +170,7 @@ static state::Cards::RawCard GetCard1(state::PlayerIdentifier player, int zone_p
 	c1.zone_position = zone_pos;
 	c1.damaged = 0;
 	c1.enchanted_states.player = player;
-	c1.enchanted_states.zone = state::kCardZoneHand;
+	c1.zone = state::kCardZoneHand;
 	c1.enchanted_states.cost = 5;
 	c1.enchanted_states.max_hp = 2;
 	c1.enchanted_states.attack = 7;
@@ -185,7 +185,7 @@ static state::Cards::RawCard GetCard2(state::PlayerIdentifier player, int zone_p
 	c1.zone_position = zone_pos;
 	c1.damaged = 0;
 	c1.enchanted_states.player = player;
-	c1.enchanted_states.zone = state::kCardZoneHand;
+	c1.zone = state::kCardZoneHand;
 	c1.enchanted_states.cost = 1;
 	c1.enchanted_states.attack = 3;
 	c1.enchanted_states.max_hp = 10;
@@ -199,7 +199,7 @@ static state::Cards::RawCard GetCard3(state::PlayerIdentifier player, int zone_p
 	c1.card_id = 3;
 	c1.zone_position = zone_pos;
 	c1.enchanted_states.player = player;
-	c1.enchanted_states.zone = state::kCardZoneDeck;
+	c1.zone = state::kCardZoneDeck;
 	c1.enchanted_states.cost = 2;
 	return c1;
 }
@@ -265,7 +265,7 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 	state::Cards::RawCard raw_card;
 	raw_card.card_id = 8;
 	raw_card.card_type = state::kCardTypeHero;
-	raw_card.enchanted_states.zone = state::kCardZonePlay;
+	raw_card.zone = state::kCardZonePlay;
 	raw_card.enchanted_states.max_hp = 30;
 	raw_card.enchanted_states.player = player;
 	raw_card.enchanted_states.attack = 0;
@@ -341,11 +341,15 @@ int main(void)
 		});
 
 		assert(!debug1);
+		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 3);
+		assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 5);
 		assert(state.mgr.Get(attacker).GetAttack() == 3);
 		assert(state.mgr.Get(defender).GetDamage() == 4);
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		controller.Attack(attacker, defender);
 		assert(debug1);
+		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 4);
+		assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 5);
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		assert(state.mgr.Get(defender).GetDamage() == 7);
 
@@ -361,12 +365,12 @@ int main(void)
 		state.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(callback1);
 
 		debug1 = false;
-		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 3);
+		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 4);
 		assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 5);
 		controller.Attack(attacker, defender);
 		assert(debug1);
 		assert(debug2);
-		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 4);
+		assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 5);
 		assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 5);
 		assert(state.mgr.Get(attacker).GetDamage() == 0);
 		assert(state.mgr.Get(defender).GetDamage() == 8);

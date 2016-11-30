@@ -245,9 +245,6 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Helpers\EntityDeathHandler.h">
-      <Filter>Header Files\FlowControl\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
@@ -268,9 +265,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Auras.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Helpers\AuraUpdater.h">
-      <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
       <Filter>Header Files\Utils</Filter>
@@ -307,6 +301,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h">
       <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h">
+      <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
