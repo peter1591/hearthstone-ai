@@ -20,12 +20,6 @@ namespace state
 			template <typename T>
 			typename ContainerType::Identifier PushBack(T && item)
 			{
-				return enchantments_.PushBack(item.apply_functor);
-			}
-
-			template <typename T>
-			typename ContainerType::Identifier PushBackFunctor(T && item)
-			{
 				return enchantments_.PushBack(item);
 			}
 
