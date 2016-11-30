@@ -121,6 +121,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\AuraApplyOn.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\AuraGetTargets.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\AuraRemoveFrom.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BeforeMinionSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h" />

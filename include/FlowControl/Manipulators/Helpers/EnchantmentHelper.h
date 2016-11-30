@@ -4,6 +4,7 @@
 #include <utility>
 #include "State/Cards/Card.h"
 #include "State/Cards/EnchantmentAuxData.h"
+#include "FlowControl/Context/EnchantmentAfterAdded.h"
 
 namespace FlowControl
 {
@@ -27,7 +28,7 @@ namespace FlowControl
 					data.need_update = true;
 					auto ret = data.enchantments.PushBack(std::forward<T>(enchantment));
 					if (enchantment.after_added_callback) {
-						enchantment.after_added_callback(state_, flow_context_, card_ref_, ret);
+						enchantment.after_added_callback(Context::EnchantmentAfterAdded(state_, flow_context_, card_ref_, ret));
 					}
 					return ret;
 				}

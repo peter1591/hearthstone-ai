@@ -107,7 +107,7 @@ public:
 	{}
 
 private:
-	static void AfterAddedCallback(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Enchantments::ContainerType::Identifier enchant_id)
+	static void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded & context)
 	{
 		std::cout << "HHHH" << std::endl;
 	}
@@ -122,23 +122,19 @@ class Card2_Aura
 public:
 	typedef Card2_Enchant1 EnchantmentType;
 
-	static void GetTargets(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::unordered_set<state::CardRef> & targets)
+	static void GetTargets(FlowControl::Context::AuraGetTargets & context)
 	{
-		targets.insert(card_ref);
+		context.targets_.insert(context.card_ref_);
 	}
 
-	static void ApplyOn(
-		state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
-		state::CardRef target, state::Cards::Enchantments::ContainerType::Identifier & enchant_id)
+	static void ApplyOn(FlowControl::Context::AuraApplyOn & context)
 	{
-		enchant_id = FlowControl::Manipulate(state, flow_context).Card(card_ref).Enchant().Add(EnchantmentType());
+		context.enchant_id_ = FlowControl::Manipulate(context.state_, context.flow_context_).Card(context.card_ref_).Enchant().Add(EnchantmentType());
 	}
 
-	static void RemoveFrom(
-		state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
-		state::CardRef target, state::Cards::Enchantments::ContainerType::Identifier enchant_id)
+	static void RemoveFrom(FlowControl::Context::AuraRemoveFrom & context)
 	{
-		FlowControl::Manipulate(state, flow_context).Minion(target).Enchant().Remove<EnchantmentType>(enchant_id);
+		FlowControl::Manipulate(context.state_, context.flow_context_).Card(context.card_ref_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
 	}
 };
 REGISTER_AURA_CLASS(222, Card2_Aura)

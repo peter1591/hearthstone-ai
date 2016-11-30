@@ -284,5 +284,17 @@
     <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\AuraGetTargets.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\AuraApplyOn.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\AuraRemoveFrom.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
