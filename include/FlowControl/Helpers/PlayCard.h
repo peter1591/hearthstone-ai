@@ -10,7 +10,7 @@
 #include "FlowControl/Context/BeforeMinionSummoned.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
-#include "FlowControl/IActionParameterGetter.h"
+#include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Manipulate.h"
 
 namespace FlowControl
@@ -20,7 +20,7 @@ namespace FlowControl
 		class PlayCard
 		{
 		public:
-			PlayCard(state::State & state, FlowContext & flow_context, int hand_idx, IActionParameterGetter & action_parameters, IRandomGenerator & random)
+			PlayCard(state::State & state, FlowContext & flow_context, int hand_idx, ActionParameterWrapper & action_parameters, IRandomGenerator & random)
 				: state_(state), flow_context_(flow_context), hand_idx_(hand_idx), action_parameters_(action_parameters), random_(random), card_(nullptr)
 			{
 
@@ -77,7 +77,7 @@ namespace FlowControl
 			state::State & state_;
 			FlowContext & flow_context_;
 			int hand_idx_;
-			ActionParameterWrapper action_parameters_;
+			ActionParameterWrapper & action_parameters_;
 			IRandomGenerator & random_;
 
 			state::CardRef card_ref_;

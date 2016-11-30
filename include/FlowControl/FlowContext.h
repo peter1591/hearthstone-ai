@@ -8,12 +8,15 @@ namespace FlowControl
 	{
 		class EntityDeathHandler;
 	}
+	class IRandomGenerator;
+	class ActionParameterWrapper;
 
 	class FlowContext
 	{
 		friend class Helpers::EntityDeathHandler;
 	public:
-		FlowContext()
+		FlowContext(IRandomGenerator & random, ActionParameterWrapper & action_parameters)
+			: random_(random), action_parameters_(action_parameters)
 		{
 		}
 
@@ -31,6 +34,8 @@ namespace FlowControl
 		}
 
 	private:
+		IRandomGenerator & random_;
+		ActionParameterWrapper & action_parameters_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 	};
 }

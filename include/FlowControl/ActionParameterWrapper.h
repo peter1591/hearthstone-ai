@@ -12,6 +12,9 @@ namespace FlowControl
 		{
 		}
 
+		ActionParameterWrapper(ActionParameterWrapper const&) = delete;
+		ActionParameterWrapper& operator=(ActionParameterWrapper const&) = delete;
+
 		int GetMinionPutLocation(int min, int max)
 		{
 			if (minion_put_location_ < 0) {

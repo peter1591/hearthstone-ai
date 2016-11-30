@@ -19,7 +19,7 @@ namespace FlowControl
 		class Attack
 		{
 		public:
-			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, IActionParameterGetter & action_parameters, IRandomGenerator & random)
+			Attack(state::State & state, FlowContext & flow_context, state::CardRef attacker, state::CardRef defender, ActionParameterWrapper & action_parameters, IRandomGenerator & random)
 				: state_(state), flow_context_(flow_context), attacker_(attacker), defender_(defender),
 				  action_parameters_(action_parameters), random_(random)
 			{
@@ -88,7 +88,7 @@ namespace FlowControl
 			FlowContext & flow_context_;
 			state::CardRef attacker_;
 			state::CardRef defender_;
-			ActionParameterWrapper action_parameters_;
+			ActionParameterWrapper & action_parameters_;
 			IRandomGenerator & random_;
 		};
 	}

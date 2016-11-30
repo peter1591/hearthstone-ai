@@ -22,7 +22,8 @@ namespace FlowControl
 	{
 	public:
 		FlowController(state::State & state, IActionParameterGetter & action_parameters, IRandomGenerator & random)
-			: state_(state), action_parameters_(action_parameters), random_(random)
+			: state_(state), action_parameters_(action_parameters), random_(random),
+			context_(random_, action_parameters_)
 		{
 		}
 
@@ -52,7 +53,7 @@ namespace FlowControl
 
 	public:
 		state::State & state_;
-		IActionParameterGetter & action_parameters_;
+		ActionParameterWrapper action_parameters_;
 		IRandomGenerator & random_;
 		FlowContext context_;
 	};
