@@ -11,21 +11,8 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			struct AuraHelperDetail_AuraEnchantment
-			{
-				static constexpr EnchantmentTiers tier = kEnchantmentAura;
-
-				template <typename T1>
-				AuraHelperDetail_AuraEnchantment(T1&& apply_functor)
-					: apply_functor(std::forward<T1>(apply_functor))
-				{}
-				
-				state::Cards::Enchantments::ApplyFunctor apply_functor;
-			};
-
 			void AuraHelper::Update()
 			{
-
 				if (card_.GetAuraId() < 0) return; // no aura attached
 
 				state::Cards::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
@@ -43,7 +30,7 @@ namespace FlowControl
 					}
 					else {
 						// enchantments should be removed
-						Manipulate(state_, flow_context_).Minion(it->first).Enchant().Remove<AuraHelperDetail_AuraEnchantment>(it->second);
+						Manipulate(state_, flow_context_).Minion(it->first).Enchant().Remove<AuraEnchantment>(it->second);
 						it = data.applied_enchantments.erase(it);
 					}
 				}
@@ -53,11 +40,14 @@ namespace FlowControl
 					assert(data.applied_enchantments.find(new_target) == data.applied_enchantments.end());
 
 					state::Cards::Enchantments::ApplyFunctor enchantment_functor;
-					Dispatchers::Auras::CreateEnchantmentFor(card_.GetAuraId(), state_, new_target, enchantment_functor);
+					AuraEnchantment enchant;
+					Dispatchers::Auras::CreateEnchantmentFor(card_.GetAuraId(), state_, new_target, enchant);
 
-					auto enchant_identifier = Manipulate(state_, flow_context_).Minion(new_target).Enchant()
-						.Add(AuraHelperDetail_AuraEnchantment(std::move(enchantment_functor)));
-					data.applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_identifier)));
+					if (enchant.apply_functor) {
+						auto enchant_identifier = Manipulate(state_, flow_context_).Minion(new_target).Enchant()
+							.Add(enchant);
+						data.applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_identifier)));
+					}
 				}
 			}
 

@@ -5,8 +5,11 @@
 #include <memory>
 #include "Utils/CloneableContainers/RemovableVector.h"
 
+namespace FlowControl { class FlowContext; }
+
 namespace state
 {
+	class State;
 	namespace Cards
 	{
 		class Card;
@@ -16,6 +19,8 @@ namespace state
 		public:
 			typedef std::function<void(Card &)> ApplyFunctor;
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
+
+			typedef void AfterAddedCallback(State &, FlowControl::FlowContext &, CardRef, ContainerType::Identifier);
 
 			template <typename T>
 			typename ContainerType::Identifier PushBack(T && item)
