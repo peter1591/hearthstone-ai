@@ -29,7 +29,7 @@ namespace state
 		kCardZoneSecret,
 		kCardZoneGraveyard,
 		kCardZoneRemoved,
-		kCardZonePutASide,
+		kCardZoneSetASide,
 		kCardZoneInvalid
 	};
 

@@ -192,8 +192,8 @@ namespace FlowControl
 						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZonePlay:
 						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
-					case state::kCardZonePutASide:
-						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+					case state::kCardZoneSetASide:
+						return ZoneChanger<state::kCardZoneSetASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneRemoved:
 						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneSecret:
@@ -216,8 +216,8 @@ namespace FlowControl
 						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZonePlay:
 						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
-					case state::kCardZonePutASide:
-						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+					case state::kCardZoneSetASide:
+						return ZoneChanger<state::kCardZoneSetASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneRemoved:
 						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneSecret:
@@ -239,8 +239,8 @@ namespace FlowControl
 						return ZoneChanger<state::kCardZoneHand, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZonePlay:
 						return ZoneChanger<state::kCardZonePlay, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
-					case state::kCardZonePutASide:
-						return ZoneChanger<state::kCardZonePutASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
+					case state::kCardZoneSetASide:
+						return ZoneChanger<state::kCardZoneSetASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneRemoved:
 						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneSecret:
