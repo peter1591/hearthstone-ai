@@ -83,6 +83,8 @@ public:
 				context.damage_ = 1;
 			}
 		});
+
+		Manipulate(context).Card(context.card_ref_).Aura().Set(222);
 	}
 
 	static bool debug1;
@@ -107,7 +109,7 @@ public:
 		};
 	}
 };
-REGISTER_AURA_CLASS(2, Card2_Aura)
+REGISTER_AURA_CLASS(222, Card2_Aura)
 
 static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
 {

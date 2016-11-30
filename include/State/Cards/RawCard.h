@@ -22,7 +22,8 @@ namespace state
 			typedef std::list<DeathrattleCallback> Deathrattles;
 
 			RawCard() :
-				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone_position(-1), damaged(0)
+				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone_position(-1), damaged(0),
+				aura_id(-1)
 			{
 			}
 
@@ -35,6 +36,8 @@ namespace state
 			EnchantableStates enchanted_states;
 
 			EnchantmentAuxData enchantment_aux_data;
+
+			int aura_id;
 			AuraAuxData aura_aux_data;
 
 			Deathrattles deathrattles;

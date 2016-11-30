@@ -190,6 +190,9 @@
     <ClInclude Include="..\..\include\State\Events\impl\HandlersContainer.h" />
     <ClInclude Include="..\..\include\State\State.h" />
     <ClInclude Include="..\..\include\State\Types.h" />
+    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
+    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -52,6 +52,9 @@
     <Filter Include="Header Files\FlowControl\Manipulators\Helpers">
       <UniqueIdentifier>{2ea550ee-285d-45e7-80ad-eb758a981525}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{1e0e3a83-9f59-4d5f-b7a4-119c28d0a858}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -271,6 +274,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Helpers\AuraUpdater.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
