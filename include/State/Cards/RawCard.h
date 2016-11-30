@@ -22,7 +22,7 @@ namespace state
 			typedef std::list<DeathrattleCallback> Deathrattles;
 
 			RawCard() :
-				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone_position(-1), damaged(0),
+				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone(kCardZoneInvalid), zone_position(-1), damaged(0),
 				aura_id(-1)
 			{
 			}
@@ -30,6 +30,7 @@ namespace state
 			int card_id;
 			CardType card_type;
 			int play_order;
+			CardZone zone;
 			int zone_position;
 
 			int damaged;

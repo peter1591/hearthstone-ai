@@ -9,10 +9,9 @@ namespace state
 		class EnchantableStates
 		{
 		public:
-			EnchantableStates() : zone(kCardZoneInvalid), cost(-1), attack(-1), max_hp(-1) {}
+			EnchantableStates() : cost(-1), attack(-1), max_hp(-1) {}
 
 			PlayerIdentifier player;
-			CardZone zone; // TODO: cannot be altered by enchantments?
 			int cost;
 			int attack;
 			int max_hp;

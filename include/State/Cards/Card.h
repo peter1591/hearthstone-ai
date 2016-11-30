@@ -64,7 +64,7 @@ namespace state
 
 				LocationSetter & Zone(CardZone new_zone)
 				{
-					data_.enchanted_states.zone = new_zone;
+					data_.zone = new_zone;
 					return *this;
 				}
 
@@ -98,7 +98,7 @@ namespace state
 			int GetPlayOrder() const { return data_.play_order; }
 
 			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchanted_states.player; }
-			const CardZone GetZone() const { return data_.enchanted_states.zone; }
+			const CardZone GetZone() const { return data_.zone; }
 			int GetZonePosition() const { return data_.zone_position; }
 
 			int GetAuraId() const { return data_.aura_id; }

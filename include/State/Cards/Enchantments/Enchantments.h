@@ -4,6 +4,7 @@
 #include <utility>
 #include <memory>
 #include "Utils/CloneableContainers/RemovableVector.h"
+#include "State/Cards/EnchantableStates.h"
 
 namespace FlowControl
 {
