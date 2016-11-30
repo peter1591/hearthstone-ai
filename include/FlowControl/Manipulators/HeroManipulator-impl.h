@@ -25,10 +25,10 @@ namespace FlowControl
 			state::CardRef card_ref = player.deck_.Get(deck_idx);
 
 			if (player.hand_.Full()) {
-				Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
+				Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(player_id_);
 			}
 			else {
-				Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
+				Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(player_id_);
 			}
 
 			// TODO: trigger on-draw event (parameter: card_ref)
