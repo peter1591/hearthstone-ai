@@ -2,7 +2,6 @@
 
 #include "FlowControl/Result.h"
 #include "FlowControl/Manipulate.h"
-#include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/IRandomGenerator.h"
@@ -45,9 +44,6 @@ namespace FlowControl
 
 				return kResultNotDetermined;
 			}
-
-		private:
-			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, flow_context_); }
 
 		private:
 			state::State & state_;

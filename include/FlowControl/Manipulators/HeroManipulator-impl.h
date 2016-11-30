@@ -1,7 +1,6 @@
 #pragma once
 
 #include "FlowControl/Manipulators/HeroManipulator.h"
-#include "FlowControl/Helpers/DamageDealer.h"
 
 namespace FlowControl
 {
@@ -10,11 +9,12 @@ namespace FlowControl
 		void HeroManipulator::DrawCard()
 		{
 			state::board::Player & player = state_.board.Get(player_id_);
+			assert(player.hero_ref_ == card_ref_);
 
 			if (player.deck_.Empty())
 			{
 				int damage = ++player.fatigue_damage_;
-				FlowControl::Helpers::DamageDealer(state_, flow_context_).DealDamage(player.hero_ref_, damage);
+				this->Damage().Take(damage);
 				return;
 			}
 

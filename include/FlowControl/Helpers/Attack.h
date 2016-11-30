@@ -3,7 +3,6 @@
 #include "State/State.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/ActionParameterWrapper.h"
-#include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Context/OnAttack.h"
@@ -59,8 +58,8 @@ namespace FlowControl
 					Context::OnAttack(state_, flow_context_, attacker_, defender_));
 				// TODO: attacker lose stealth
 
-				GetDamageDealer().DealDamage(defender_, state_.mgr.Get(attacker_).GetAttack());
-				GetDamageDealer().DealDamage(attacker_, state_.mgr.Get(defender_).GetAttack());
+				Manipulate(state_, flow_context_).Character(defender_).Damage().Take(state_.mgr.Get(attacker_).GetAttack());
+				Manipulate(state_, flow_context_).Character(attacker_).Damage().Take(state_.mgr.Get(defender_).GetAttack());
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker_, defender_);
 
@@ -69,14 +68,11 @@ namespace FlowControl
 					if (attacker_card.GetCardType() == state::kCardTypeHero) {
 						state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 						if (weapon_ref.IsValid()) {
-							GetDamageDealer().DealDamage(weapon_ref, 1);
+							Manipulate(state_, flow_context_).Card(weapon_ref).Damage().Take(1);
 						}
 					}
 				}
 			}
-
-		private:
-			Helpers::DamageDealer GetDamageDealer() { return DamageDealer(state_, flow_context_); }
 
 		private:
 			state::State & state_;

@@ -7,12 +7,29 @@
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/Helpers/ZonePositionSetter.h"
 #include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
+#include "FlowControl/Manipulators/Helpers/TakeDamageHelper.h"
 #include "State/State.h"
 
 namespace FlowControl
 {
 	namespace Manipulators
 	{
+		namespace detail
+		{
+			class DamageSetter
+			{
+				friend class Helpers::TakeDamageHelper;
+			public:
+				DamageSetter(state::Cards::Card & card) : card_(card) {}
+
+			private:
+				void TakeDamage(int v) { card_.GetDamageSetter().Set(card_.GetDamage() + v); }
+
+			private:
+				state::Cards::Card & card_;
+			};
+		}
+
 		class CardManipulator
 		{
 		public:
@@ -37,6 +54,8 @@ namespace FlowControl
 				// For example: deck --> hand
 				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
 			}
+
+			Helpers::TakeDamageHelper Damage() { return Helpers::TakeDamageHelper(state_, flow_context_, card_ref_, card_); }
 
 		protected:
 			state::State & state_;

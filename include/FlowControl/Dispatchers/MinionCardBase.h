@@ -32,8 +32,7 @@ public:
 
 		void Amount(int amount) {
 			assert(target_.IsValid());
-			FlowControl::Helpers::DamageDealer(context_.state_, context_.flow_context_).
-				DealDamage(target_, amount);
+			FlowControl::Manipulate(context_.state_, context_.flow_context_).Character(target_).Damage().Take(amount);
 		}
 
 	private:

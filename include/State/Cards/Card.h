@@ -8,13 +8,17 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
+		namespace detail
+		{
+			class DamageSetter;
+		}
+
 		namespace Helpers
 		{
 			class EnchantmentHelper;
 			class AuraHelper;
 			template <state::CardZone T1, state::CardType T2> class ZoneChanger;
 			class ZonePositionSetter;
-			class TakeDamageHelper;
 		}
 	}
 }
@@ -80,7 +84,7 @@ namespace state
 
 			class DamageSetter
 			{
-				friend class FlowControl::Manipulators::Helpers::TakeDamageHelper;
+				friend class FlowControl::Manipulators::detail::DamageSetter;
 			public:
 				DamageSetter(RawCard & data) : data_(data) {}
 			private:
