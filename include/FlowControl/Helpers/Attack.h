@@ -3,7 +3,7 @@
 #include "State/State.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/Helpers/AuraUpdater.h"
-#include "FlowControl/Helpers/ActionParameterWrapper.h"
+#include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/EntityDeathHandler.h"
 #include "FlowControl/Dispatchers/Minions.h"
