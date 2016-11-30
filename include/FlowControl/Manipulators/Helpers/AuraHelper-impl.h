@@ -18,7 +18,7 @@ namespace FlowControl
 				state::Cards::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
 
 				std::unordered_set<state::CardRef> new_targets;
-				Dispatchers::Auras::GetEligibles(card_.GetAuraId(), state_, card_ref_, card_, new_targets);
+				Dispatchers::Auras::GetTargets(card_.GetAuraId(), state_, card_ref_, card_, new_targets);
 
 				for (auto it = data.applied_enchantments.begin(), it2 = data.applied_enchantments.end(); it != it2;)
 				{

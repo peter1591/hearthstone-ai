@@ -68,7 +68,8 @@ public:
 	{
 		debug1 = true;
 
-		context.GetBattleCryTarget();
+		state::CardRef target = context.GetBattleCryTarget();
+
 	}
 
 	static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
@@ -94,19 +95,50 @@ bool Card2::debug1 = false;
 bool Card2::debug2 = false;
 REGISTER_MINION_CARD_CLASS(2, Card2)
 
+class Card2_Enchant1
+{
+public:
+	static constexpr EnchantmentTiers tier = kEnchantmentAura;
+
+	Card2_Enchant1()
+		: apply_functor([](auto& card) {
+		card.SetCost(0);
+	}), after_added_callback(AfterAddedCallback)
+	{}
+
+private:
+	static void AfterAddedCallback(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Enchantments::ContainerType::Identifier enchant_id)
+	{
+		std::cout << "HHHH" << std::endl;
+	}
+
+public:
+	state::Cards::Enchantments::ApplyFunctor apply_functor;
+	state::Cards::Enchantments::AfterAddedCallback *after_added_callback;
+};
+
 class Card2_Aura
 {
 public:
-	static void GetEligibles(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::unordered_set<state::CardRef> & eligibles)
+	typedef Card2_Enchant1 EnchantmentType;
+
+	static void GetTargets(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::unordered_set<state::CardRef> & targets)
 	{
-		eligibles.insert(card_ref);
+		targets.insert(card_ref);
 	}
 
-	static void CreateEnchantmentFor(state::State & state, state::CardRef target, state::Cards::Enchantments::ApplyFunctor & enchant)
+	static void ApplyOn(
+		state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
+		state::CardRef target, state::Cards::Enchantments::ContainerType::Identifier & enchant_id)
 	{
-		enchant = [](state::Cards::Card & card) {
-			card.SetCost(0);
-		};
+		enchant_id = FlowControl::Manipulate(state, flow_context).Card(card_ref).Enchant().Add(EnchantmentType());
+	}
+
+	static void RemoveFrom(
+		state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
+		state::CardRef target, state::Cards::Enchantments::ContainerType::Identifier enchant_id)
+	{
+		FlowControl::Manipulate(state, flow_context).Minion(target).Enchant().Remove<EnchantmentType>(enchant_id);
 	}
 };
 REGISTER_AURA_CLASS(222, Card2_Aura)

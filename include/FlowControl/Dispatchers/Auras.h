@@ -39,7 +39,7 @@ namespace FlowControl
 				} \
 			};
 
-			CREATE_INVOKER(GetEligibles);
+			CREATE_INVOKER(GetTargets);
 			CREATE_INVOKER(ApplyOn);
 			CREATE_INVOKER(RemoveFrom);
 
@@ -53,9 +53,9 @@ namespace FlowControl
 		public:
 			using DispatcherImpl = Utils::StaticDispatcher<Auras_impl::DefaultInvoked>;
 			template <typename... Args>
-			static void GetEligibles(int id, Args&&... args)
+			static void GetTargets(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Auras_impl::GetEligiblesInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::GetTargetsInvoker>(id, std::forward<Args>(args)...);
 			}
 
 			template <typename... Args>
