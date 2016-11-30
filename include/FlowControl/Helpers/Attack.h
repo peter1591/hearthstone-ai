@@ -60,7 +60,7 @@ namespace FlowControl
 				}
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(
-					Context::OnAttack(state_, attacker_, defender_));
+					Context::OnAttack(state_, flow_context_, attacker_, defender_));
 				// TODO: attacker lose stealth
 
 				GetDamageDealer().DealDamage(defender_, state_.mgr.Get(attacker_).GetAttack());
