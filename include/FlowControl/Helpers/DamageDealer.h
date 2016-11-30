@@ -9,7 +9,7 @@ namespace FlowControl
 {
 	namespace Helpers
 	{
-		class DamageDealer
+		class DamageDealer // TODO: move to manipulators/helpers/
 		{
 		public:
 			DamageDealer(state::State & state, FlowContext & flow_context) : 

@@ -4,6 +4,7 @@
 #include "FlowControl/Manipulate.h"
 #include "FlowControl/Helpers/DamageDealer.h"
 #include "FlowControl/Helpers/EntityDeathHandler.h"
+#include "FlowControl/Manipulators/HeroManipulator.h"
 
 namespace FlowControl
 {
@@ -38,40 +39,10 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
 				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
-				DrawCard();
+				Manipulate(state_, flow_context_).CurrentHero().DrawCard(random_);
 				if ((rc = EntityDeathHandler(state_, flow_context_).ProcessDeath()) != kResultNotDetermined) return rc;
 
 				return kResultNotDetermined;
-			}
-
-		private:
-			void DrawCard()
-			{
-				if (state_.GetCurrentPlayer().deck_.Empty())
-				{
-					return Fatigue();
-				}
-
-				int deck_count = (int) state_.GetCurrentPlayer().deck_.Size();
-				int deck_idx = 0;
-				if (deck_count > 1) deck_idx = random_.Get(deck_count);
-
-				CardRef card_ref = state_.GetCurrentPlayer().deck_.Get(deck_idx);
-
-				if (state_.GetCurrentPlayer().hand_.Full()) {
-					Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(state_.current_player);
-				}
-				else {
-					Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneHand>(state_.current_player);
-				}
-
-				// TODO: trigger on-draw event (parameter: card_ref)
-			}
-
-			void Fatigue()
-			{
-				int damage = ++state_.GetCurrentPlayer().fatigue_damage_;
-				GetDamageDealer().DealDamage(state_.GetCurrentPlayer().hero_ref_, damage);
 			}
 
 		private:

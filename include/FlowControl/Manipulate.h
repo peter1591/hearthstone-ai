@@ -30,7 +30,7 @@ namespace FlowControl
 		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player)
 		{
 			state::CardRef ref = state_.board.Get(player).hero_ref_;
-			return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
+			return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref), player);
 		}
 
 		Manipulators::HeroManipulator AnotherHero(state::PlayerIdentifier player)

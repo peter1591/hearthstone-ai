@@ -9,8 +9,9 @@
 #include "FlowControl/FlowContext.h"
 
 // Implemention details which depends on manipulators
-#include "Manipulators/Helpers/OrderedCardsManager-impl.h"
-#include "Manipulators/Helpers/AuraHelper-impl.h"
+#include "FlowControl/Manipulators/HeroManipulator-impl.h"
+#include "FlowControl/Manipulators/Helpers/OrderedCardsManager-impl.h"
+#include "FlowControl/Manipulators/Helpers/AuraHelper-impl.h"
 #include "State/Cards/Manager-impl.h"
 
 namespace FlowControl
