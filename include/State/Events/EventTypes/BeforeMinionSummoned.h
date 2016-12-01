@@ -5,8 +5,6 @@
 #include <iostream>
 #include <functional>
 
-#include "FlowControl/Context/BeforeMinionSummoned.h"
-
 namespace state
 {
 	namespace Events
@@ -16,9 +14,15 @@ namespace state
 			class BeforeMinionSummoned
 			{
 			public:
-				typedef FlowControl::Context::BeforeMinionSummoned & Parameter1;
-				typedef std::function<void(HandlersContainerController &controller, Parameter1)> FunctorType;
-				typedef std::tuple<Parameter1> ArgsTuple;
+				struct Context
+				{
+					state::State & state_;
+					state::CardRef card_ref_;
+					const state::Cards::Card & card_;
+				};
+			public:
+				typedef std::function<void(HandlersContainerController &controller, Context&)> FunctorType;
+				typedef std::tuple<Context&> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
@@ -26,7 +30,7 @@ namespace state
 				{
 				}
 
-				void Handle(HandlersContainerController &controller, Parameter1 context)
+				void Handle(HandlersContainerController &controller, Context& context)
 				{
 					functor_(controller, context);
 				}

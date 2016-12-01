@@ -95,7 +95,7 @@ namespace FlowControl
 		void PlayMinionCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 		{
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
-				Context::BeforeMinionSummoned(state_, card_ref, card));
+				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
 
 			state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
 
