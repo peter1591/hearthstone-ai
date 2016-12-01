@@ -40,7 +40,7 @@ namespace FlowControl
 
 		Result EndTurn()
 		{
-			Helpers::OnTurnEnd helper(state_, context_);
+			Helpers::EndTurnHelper helper(state_, context_);
 			Result rc = helper.Go();
 			assert(context_.Empty());
 			return rc;

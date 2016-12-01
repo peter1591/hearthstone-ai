@@ -11,10 +11,10 @@ namespace FlowControl
 {
 	namespace Helpers
 	{
-		class OnTurnEnd
+		class EndTurnHelper
 		{
 		public:
-			OnTurnEnd(state::State & state, FlowContext & flow_context)
+			EndTurnHelper(state::State & state, FlowContext & flow_context)
 				: state_(state), flow_context_(flow_context)
 			{
 
@@ -24,25 +24,41 @@ namespace FlowControl
 			{
 				Result rc = kResultNotDetermined;
 
-				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
-				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-
 				if (state_.turn == 89) return kResultDraw;
 				++state_.turn;
 
+				EndTurn();
+				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+
 				state_.ChangePlayer();
 
+				StartTurn();
+				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+
+				DrawCard();
+				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+
+				return kResultNotDetermined;
+			}
+
+		private:
+			void EndTurn()
+			{
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
+			}
+
+			void StartTurn()
+			{
 				state_.GetCurrentPlayer().resource_.IncreaseTotal();
 				state_.GetCurrentPlayer().resource_.Refill();
 				// TODO: overload
 
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
-				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+			}
 
+			void DrawCard()
+			{
 				Manipulate(state_, flow_context_).CurrentHero().DrawCard();
-				if ((rc = Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-
-				return kResultNotDetermined;
 			}
 
 		private:

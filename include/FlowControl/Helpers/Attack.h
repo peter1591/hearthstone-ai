@@ -25,19 +25,16 @@ namespace FlowControl
 
 			Result Go()
 			{
-				Result rc = kResultNotDetermined;
-
-				if (!attacker_.IsValid()) return rc;
-				if (!defender_.IsValid()) return rc;
-
 				DoAttack();
-
 				return Resolver(state_, flow_context_).Resolve();
 			}
 
 		private:
 			void DoAttack()
 			{
+				if (!attacker_.IsValid()) return;
+				if (!defender_.IsValid()) return;
+
 				while (true) {
 					state::CardRef origin_attacker = attacker_;
 					state::CardRef origin_defender = defender_;
