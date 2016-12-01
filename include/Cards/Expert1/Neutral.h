@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include "Cards/id-map.h"
 #include "Cards/MinionCardBase.h"
 #include "FlowControl/Dispatchers/Minions.h"
@@ -12,7 +11,7 @@ namespace Cards
 	public:
 		static void BattleCry(FlowControl::Context::BattleCry & context)
 		{
-			std::cout << "debug" << std::endl;
+			AnotherPlayer(context).GainEmptyCrystal();
 		}
 	};
 }
