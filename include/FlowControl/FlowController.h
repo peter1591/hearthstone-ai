@@ -18,6 +18,8 @@
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 #include "State/Cards/Manager-impl.h"
 
+#include "Cards/Cards.h"
+
 namespace FlowControl
 {
 	class FlowController
