@@ -6,6 +6,29 @@
 
 namespace Cards
 {
+	template <typename Context>
+	class PlayerHelper
+	{
+	public:
+		template <typename T>
+		PlayerHelper(T&& context, state::board::Player & player) : context_(std::forward<T>(context)), player_(player) {}
+
+		void GainEmptyCrystal(int amount = 1)
+		{
+			player_.resource_.IncreaseTotal(amount);
+		}
+
+		void GainCrystal(int amount)
+		{
+			player_.resource_.IncreaseTotal(amount);
+			player_.resource_.IncreaseCurrent(amount);
+		}
+
+	private:
+		Context & context_;
+		state::board::Player & player_;
+	};
+
 	class MinionCardBase
 	{
 	public:
@@ -71,6 +94,18 @@ namespace Cards
 		static state::CardRef Opponent(Context&& context)
 		{
 			return context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_;
+		}
+
+		template <typename Context>
+		static PlayerHelper<Context> Player(Context&& context)
+		{
+			return PlayerHelper<Context>(context, context.state_.board.Get(context.card_.GetPlayerIdentifier()));
+		}
+
+		template <typename Context>
+		static PlayerHelper<Context> AnotherPlayer(Context&& context)
+		{
+			return PlayerHelper<Context>(context, context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()));
 		}
 	};
 }
