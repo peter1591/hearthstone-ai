@@ -50,13 +50,13 @@ namespace state
 			Enchantments aura_;
 		};
 
-		template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
-		template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
-		template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
-		template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
-		template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
-		template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
-		template <> Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() { return aura_; }
-		template <> const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() const { return aura_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() { return aura_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() const { return aura_; }
 	}
 }

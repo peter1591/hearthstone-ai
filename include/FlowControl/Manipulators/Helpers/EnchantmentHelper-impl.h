@@ -10,7 +10,7 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			void EnchantmentHelper::Update()
+			inline void EnchantmentHelper::Update()
 			{
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 
@@ -47,7 +47,7 @@ namespace FlowControl
 				}
 			}
 
-			void EnchantmentHelper::ChangeMinionPlayer(state::PlayerIdentifier player)
+			inline void EnchantmentHelper::ChangeMinionPlayer(state::PlayerIdentifier player)
 			{
 				assert(card_.GetZone() == state::kCardZonePlay);
 

@@ -47,10 +47,10 @@ namespace state
 			Player second_;
 		};
 
-		template <> Player & Board::Get<kPlayerFirst>() { return first_; }
-		template <> const Player & Board::Get<kPlayerFirst>() const { return first_; }
+		template <> inline Player & Board::Get<kPlayerFirst>() { return first_; }
+		template <> inline const Player & Board::Get<kPlayerFirst>() const { return first_; }
 
-		template <> Player & Board::Get<kPlayerSecond>() { return second_; }
-		template <> const Player & Board::Get<kPlayerSecond>() const { return second_; }
+		template <> inline Player & Board::Get<kPlayerSecond>() { return second_; }
+		template <> inline const Player & Board::Get<kPlayerSecond>() const { return second_; }
 	}
 }

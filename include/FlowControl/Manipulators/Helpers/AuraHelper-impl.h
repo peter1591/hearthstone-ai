@@ -14,7 +14,7 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			void AuraHelper::Update()
+			inline void AuraHelper::Update()
 			{
 				if (card_.GetAuraId() < 0) return; // no aura attached
 

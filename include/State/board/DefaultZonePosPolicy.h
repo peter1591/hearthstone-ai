@@ -41,7 +41,7 @@ namespace state
 		public:
 			int operator()(Player & player) const
 			{
-				return player.hand_.Size();
+				return (int)player.hand_.Size();
 			}
 		};
 

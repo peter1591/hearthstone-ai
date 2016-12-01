@@ -6,7 +6,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		void HeroManipulator::DrawCard()
+		inline void HeroManipulator::DrawCard()
 		{
 			state::board::Player & player = state_.board.Get(player_id_);
 			assert(player.hero_ref_ == card_ref_);
