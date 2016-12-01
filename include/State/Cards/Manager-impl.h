@@ -13,6 +13,7 @@ namespace state
 	CardRef Cards::Manager::PushBack(State & state, FlowControl::FlowContext & flow_context, T&& card)
 	{
 		CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
+
 		FlowControl::Manipulate(state, flow_context).Card(ref).Zone().Add();
 		return ref;
 	}
