@@ -45,6 +45,8 @@ namespace FlowControl
 					card_manipulator.MaxHP(states.max_hp);
 					assert(card_.GetMaxHP() == states.max_hp);
 				}
+
+				data.need_update = false;
 			}
 
 			inline void EnchantmentHelper::ChangeMinionPlayer(state::PlayerIdentifier player)
