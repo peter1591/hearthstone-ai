@@ -2,6 +2,7 @@
 
 #include "Cards/id-map.h"
 #include "Cards/MinionCardBase.h"
+#include "Cards/EnchantmentCardBase.h"
 #include "FlowControl/Dispatchers/Minions.h"
 
 namespace Cards
@@ -15,21 +16,18 @@ namespace Cards
 		}
 	};
 
-	class Card_NEW1_038_Enchant
+	class Card_NEW1_038_Enchant : public Cards::EnchantmentCardBase
 	{
 	public:
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 
 		Card_NEW1_038_Enchant()
-			: apply_functor([](auto& stats) {
-			++stats.attack;
-			++stats.max_hp;
-		}), after_added_callback(nullptr)
-		{}
-
-	public:
-		state::Cards::Enchantments::ApplyFunctor apply_functor;
-		state::Cards::Enchantments::AfterAddedCallback *after_added_callback;
+		{
+			apply_functor = [](auto& stats) {
+				++stats.attack;
+				++stats.max_hp;
+			};
+		}
 	};
 
 	class Card_NEW1_038 : MinionCardBase
