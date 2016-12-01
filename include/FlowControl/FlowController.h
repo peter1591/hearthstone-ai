@@ -3,13 +3,12 @@
 #include "FlowControl/Result.h"
 #include "FlowControl/ActionTypes.h"
 #include "State/State.h"
-#include "FlowControl/Helpers/EndTurn.h"
-#include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
-#include "FlowControl/IActionParameterGetter.h"
+#include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Context/AfterSummoned.h"
 #include "FlowControl/Context/BattleCry.h"
+#include "FlowControl/Helpers/Resolver.h"
 
 // Implemention details which depends on manipulators
 #include "FlowControl/Manipulators/HeroManipulator-impl.h"
@@ -42,10 +41,23 @@ namespace FlowControl
 
 		Result EndTurn()
 		{
-			Helpers::EndTurnHelper helper(state_, flow_context_);
-			Result rc = helper.Go();
-			assert(flow_context_.Empty());
-			return rc;
+			Result rc = kResultNotDetermined;
+
+			if (state_.turn == 89) return kResultDraw;
+			++state_.turn;
+
+			EndTurnPhase();
+			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+
+			state_.ChangePlayer();
+
+			StartTurnPhase();
+			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+
+			DrawCardPhase();
+			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
+
+			return kResultNotDetermined;
 		}
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
@@ -142,6 +154,26 @@ namespace FlowControl
 					}
 				}
 			}
+		}
+
+	private:
+		void EndTurnPhase()
+		{
+			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
+		}
+
+		void StartTurnPhase()
+		{
+			state_.GetCurrentPlayer().resource_.IncreaseTotal();
+			state_.GetCurrentPlayer().resource_.Refill();
+			// TODO: overload
+
+			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
+		}
+
+		void DrawCardPhase()
+		{
+			Manipulate(state_, flow_context_).CurrentHero().DrawCard();
 		}
 
 	public:
