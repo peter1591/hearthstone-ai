@@ -14,6 +14,8 @@ namespace state
 
 namespace FlowControl
 {
+	class FlowContext;
+
 	namespace Context
 	{
 		class AfterSummoned

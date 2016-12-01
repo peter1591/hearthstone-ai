@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
+#include "FlowControl/Context/OnTurnEnd.h"
 
 namespace state
 {
@@ -19,16 +20,16 @@ namespace state
 			class OnTurnEnd
 			{
 			public:
-				typedef std::function<void(HandlersContainerController &)> FunctorType;
-				typedef std::tuple<const Cards::Card &> ArgsTuple;
+				typedef std::function<void(HandlersContainerController &, FlowControl::Context::OnTurnEnd &)> FunctorType;
+				typedef std::tuple<FlowControl::Context::OnTurnEnd &> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
 					explicit OnTurnEnd(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller)
+				void Handle(HandlersContainerController &controller, FlowControl::Context::OnTurnEnd & context)
 				{
-					functor_(controller);
+					functor_(controller, context);
 				}
 
 			private:

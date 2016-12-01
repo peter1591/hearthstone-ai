@@ -166,7 +166,8 @@ namespace FlowControl
 	private:
 		void EndTurnPhase()
 		{
-			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>();
+			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
+				Context::OnTurnEnd(state_, flow_context_));
 		}
 
 		void StartTurnPhase()
