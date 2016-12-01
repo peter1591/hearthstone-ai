@@ -30,17 +30,17 @@ static void WriteMapHeader()
 	std::ofstream header_file("../../include/Cards/id-map.h");
 	header_file << "namespace Cards" << std::endl
 		<< "{" << std::endl
-		<< "	struct IdMap" << std::endl
+		<< "	enum CardId" << std::endl
 		<< "	{" << std::endl;
 
 	int max_id = -1;
 	for (auto const& map : Cards::Database::GetInstance().GetIdMap())
 	{
-		header_file << "		static constexpr int ID_" << map.first << " = " << map.second << ";" << std::endl;
+		header_file << "		ID_" << map.first << " = " << map.second << "," << std::endl;
 		max_id = std::max(max_id, map.second);
 	}
 
-	header_file << "		static constexpr int MAX_ID = " << max_id << ";" << std::endl;
+	header_file << "		MAX_ID = " << max_id << std::endl;
 
 	header_file << "	};" << std::endl
 		<< "}" << std::endl;
