@@ -21,9 +21,9 @@ namespace Cards
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 
 		Card_NEW1_038_Enchant()
-			: apply_functor([](auto& card) {
-			++card.attack;
-			++card.max_hp;
+			: apply_functor([](auto& stats) {
+			++stats.attack;
+			++stats.max_hp;
 		}), after_added_callback(nullptr)
 		{}
 

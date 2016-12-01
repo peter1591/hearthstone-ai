@@ -81,6 +81,11 @@ namespace FlowControl
 			return kResultNotDetermined;
 		}
 
+		Result Resolve()
+		{
+			return Helpers::Resolver(state_, flow_context_).Resolve();
+		}
+
 	private:
 		void PlayCardPhase(int hand_idx)
 		{

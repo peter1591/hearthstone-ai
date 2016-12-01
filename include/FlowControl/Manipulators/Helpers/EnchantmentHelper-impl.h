@@ -21,6 +21,8 @@ namespace FlowControl
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Card(card_ref_);
 
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 1, "enchantable fields changed");
+
 				// update states field by field
 				bool update_zone = false;
 				if (states.player != data.origin_states.player) {
