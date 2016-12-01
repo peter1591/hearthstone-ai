@@ -4,12 +4,12 @@
 #include "FlowControl/ActionTypes.h"
 #include "State/State.h"
 #include "FlowControl/Helpers/EndTurn.h"
-#include "FlowControl/Helpers/Attack.h"
 #include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
 #include "FlowControl/IActionParameterGetter.h"
 #include "FlowControl/Context/AfterSummoned.h"
+#include "FlowControl/Context/BattleCry.h"
 
 // Implemention details which depends on manipulators
 #include "FlowControl/Manipulators/HeroManipulator-impl.h"
@@ -33,6 +33,7 @@ namespace FlowControl
 		Result PlayCard(int hand_idx)
 		{
 			PlayCardPhase(hand_idx);
+
 			Result rc = Helpers::Resolver(state_, flow_context_).Resolve();
 			assert(flow_context_.Empty());
 
@@ -49,8 +50,9 @@ namespace FlowControl
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
-			Helpers::Attack helper(state_, flow_context_, attacker, defender);
-			Result rc = helper.Go();
+			AttackPhase(attacker, defender);
+
+			Result rc = Helpers::Resolver(state_, flow_context_).Resolve();
 			assert(flow_context_.Empty());
 			return rc;
 		}
@@ -98,6 +100,48 @@ namespace FlowControl
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
+		}
+
+	private:
+		void AttackPhase(state::CardRef attacker, state::CardRef defender)
+		{
+			if (!attacker.IsValid()) return;
+			if (!defender.IsValid()) return;
+
+			while (true) {
+				state::CardRef origin_attacker = attacker;
+				state::CardRef origin_defender = defender;
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker, defender);
+
+				if (!attacker.IsValid()) return;
+				if (state_.mgr.Get(attacker).GetHP() <= 0) return;
+				if (state_.mgr.Get(attacker).GetZone() != state::kCardZonePlay) return;
+
+				if (!defender.IsValid()) return;
+				if (state_.mgr.Get(defender).GetHP() <= 0) return;
+				if (state_.mgr.Get(defender).GetZone() != state::kCardZonePlay) return;
+
+				if (origin_attacker == attacker && origin_defender == defender) break;
+			}
+
+			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(
+				Context::OnAttack(state_, flow_context_, attacker, defender));
+			// TODO: attacker lose stealth
+
+			Manipulate(state_, flow_context_).Character(defender).Damage().Take(state_.mgr.Get(attacker).GetAttack());
+			Manipulate(state_, flow_context_).Character(attacker).Damage().Take(state_.mgr.Get(defender).GetAttack());
+
+			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker, defender);
+
+			{
+				const state::Cards::Card & attacker_card = state_.mgr.Get(attacker);
+				if (attacker_card.GetCardType() == state::kCardTypeHero) {
+					state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
+					if (weapon_ref.IsValid()) {
+						Manipulate(state_, flow_context_).Card(weapon_ref).Damage().Take(1);
+					}
+				}
+			}
 		}
 
 	public:
