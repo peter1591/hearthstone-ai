@@ -36,6 +36,11 @@ namespace FlowControl
 			return battlecry_target_;
 		}
 
+		void Clear()
+		{
+			minion_put_location_ = -1;
+		}
+
 	private:
 		IActionParameterGetter & getter_;
 		int minion_put_location_;

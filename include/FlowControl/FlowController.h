@@ -35,6 +35,7 @@ namespace FlowControl
 		{
 			Result rc = kResultNotDetermined;
 
+			action_parameters_.Clear();
 			PlayCardPhase(hand_idx);
 
 			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
@@ -50,14 +51,17 @@ namespace FlowControl
 			if (state_.turn == 89) return kResultDraw;
 			++state_.turn;
 
+			action_parameters_.Clear();
 			EndTurnPhase();
 			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 
 			state_.ChangePlayer();
 
+			action_parameters_.Clear();
 			StartTurnPhase();
 			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 
+			action_parameters_.Clear();
 			DrawCardPhase();
 			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 
@@ -68,6 +72,7 @@ namespace FlowControl
 		{
 			Result rc = kResultNotDetermined;
 
+			action_parameters_.Clear();
 			AttackPhase(attacker, defender);
 
 			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
