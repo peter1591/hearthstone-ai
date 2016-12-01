@@ -28,10 +28,10 @@ namespace FlowControl
 			return minion_put_location_;
 		}
 
-		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card)
+		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 		{
 			if (!battlecry_target_.IsValid()) {
-				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card);
+				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card, targets);
 			}
 			return battlecry_target_;
 		}

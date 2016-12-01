@@ -19,7 +19,7 @@ namespace FlowControl
 		class BattleCry
 		{
 		public:
-			typedef std::function<state::CardRef()> BattleCryTargetGetter;
+			typedef std::function<state::CardRef(std::vector<state::CardRef> const&)> BattleCryTargetGetter;
 
 			BattleCry(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, BattleCryTargetGetter battlecry_target_getter)
 				: state_(state), card_ref_(card_ref), card_(card), battlecry_target_getter_(battlecry_target_getter)
@@ -30,7 +30,7 @@ namespace FlowControl
 			state::State & GetState() { return state_; }
 			state::CardRef GetCardRef() { return card_ref_; }
 			const state::Cards::Card & GetCard() { return card_; }
-			state::CardRef GetBattleCryTarget() { return battlecry_target_getter_(); }
+			state::CardRef GetBattleCryTarget(std::vector<state::CardRef> const& targets) { return battlecry_target_getter_(targets); }
 
 		private:
 			state::State & state_;
