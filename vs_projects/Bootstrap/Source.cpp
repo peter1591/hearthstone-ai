@@ -28,7 +28,10 @@ static void WriteMapHeader()
 
 	// write mapping header
 	std::ofstream header_file("../../include/Cards/id-map.h");
-	header_file << "namespace Cards" << std::endl
+	header_file
+		<< "#ifndef BOOTSTRAP_CARDS_ID_MAP_H" << std::endl
+		<< "#define BOOTSTRAP_CARDS_ID_MAP_H" << std::endl
+		<< "namespace Cards" << std::endl
 		<< "{" << std::endl
 		<< "	enum CardId" << std::endl
 		<< "	{" << std::endl;
@@ -43,7 +46,8 @@ static void WriteMapHeader()
 	header_file << "		MAX_ID = " << max_id << std::endl;
 
 	header_file << "	};" << std::endl
-		<< "}" << std::endl;
+		<< "}" << std::endl
+		<< "#endif" << std::endl;
 
 	header_file.flush();
 }

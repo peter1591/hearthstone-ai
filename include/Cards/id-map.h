@@ -1,3 +1,5 @@
+#ifndef BOOTSTRAP_CARDS_ID_MAP_H
+#define BOOTSTRAP_CARDS_ID_MAP_H
 namespace Cards
 {
 	enum CardId
@@ -2171,3 +2173,4 @@ namespace Cards
 		MAX_ID = 2166
 	};
 }
+#endif
