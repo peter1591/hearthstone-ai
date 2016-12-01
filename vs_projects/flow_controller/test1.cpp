@@ -169,11 +169,11 @@ static state::Cards::RawCard GetCard1(state::PlayerIdentifier player, int zone_p
 	c1.card_id = 1;
 	c1.zone_position = zone_pos;
 	c1.damaged = 0;
-	c1.enchanted_states.player = player;
+	c1.player = player;
 	c1.zone = state::kCardZoneHand;
-	c1.enchanted_states.cost = 5;
-	c1.enchanted_states.max_hp = 2;
-	c1.enchanted_states.attack = 7;
+	c1.cost = 5;
+	c1.max_hp = 2;
+	c1.attack = 7;
 	return c1;
 }
 
@@ -184,11 +184,11 @@ static state::Cards::RawCard GetCard2(state::PlayerIdentifier player, int zone_p
 	c1.card_id = 2;
 	c1.zone_position = zone_pos;
 	c1.damaged = 0;
-	c1.enchanted_states.player = player;
+	c1.player = player;
 	c1.zone = state::kCardZoneHand;
-	c1.enchanted_states.cost = 1;
-	c1.enchanted_states.attack = 3;
-	c1.enchanted_states.max_hp = 10;
+	c1.cost = 1;
+	c1.attack = 3;
+	c1.max_hp = 10;
 	return c1;
 }
 
@@ -198,9 +198,9 @@ static state::Cards::RawCard GetCard3(state::PlayerIdentifier player, int zone_p
 	c1.card_type = state::kCardTypeMinion;
 	c1.card_id = 3;
 	c1.zone_position = zone_pos;
-	c1.enchanted_states.player = player;
+	c1.player = player;
 	c1.zone = state::kCardZoneDeck;
-	c1.enchanted_states.cost = 2;
+	c1.cost = 2;
 	return c1;
 }
 
@@ -266,9 +266,9 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 	raw_card.card_id = 8;
 	raw_card.card_type = state::kCardTypeHero;
 	raw_card.zone = state::kCardZonePlay;
-	raw_card.enchanted_states.max_hp = 30;
-	raw_card.enchanted_states.player = player;
-	raw_card.enchanted_states.attack = 0;
+	raw_card.max_hp = 30;
+	raw_card.player = player;
+	raw_card.attack = 0;
 	return raw_card;
 }
 

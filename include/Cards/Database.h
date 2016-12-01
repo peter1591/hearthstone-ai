@@ -82,6 +82,7 @@ namespace Cards
 			}
 
 			state::Cards::RawCard new_card;
+			new_card.card_id = (int)cards.size();
 
 			if (type == "MINION") {
 				this->ParseMinionCard(json, new_card);
@@ -99,8 +100,7 @@ namespace Cards
 				return; // ignored
 			}
 
-			int id = (int)cards.size();
-			origin_id_map_[origin_id] = id;
+			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);
 		}
 
