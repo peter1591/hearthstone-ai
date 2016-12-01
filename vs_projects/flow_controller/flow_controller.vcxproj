@@ -160,7 +160,6 @@
     <ClInclude Include="..\..\include\FlowControl\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\EndTurn.h" />
-    <ClInclude Include="..\..\include\FlowControl\Helpers\PlayCard.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />
     <ClInclude Include="..\..\include\State\board\DefaultZonePosPolicy.h" />
     <ClInclude Include="..\..\include\State\board\Graveyard.h" />

@@ -280,16 +280,16 @@ int main(void)
 	FlowControl::FlowController controller(state, action_parameter, random);
 
 	{
-		state.mgr.PushBack(state, controller.context_, state::Cards::Card(GetHero(state::kPlayerFirst)));
-		MakeDeck(state, controller.context_, state::kPlayerFirst);
-		MakeHand(state, controller.context_, state::kPlayerFirst);
+		state.mgr.PushBack(state, controller.flow_context_, state::Cards::Card(GetHero(state::kPlayerFirst)));
+		MakeDeck(state, controller.flow_context_, state::kPlayerFirst);
+		MakeHand(state, controller.flow_context_, state::kPlayerFirst);
 	}
 
 	{
-		state.mgr.PushBack(state, controller.context_, state::Cards::Card(GetHero(state::kPlayerSecond)));
+		state.mgr.PushBack(state, controller.flow_context_, state::Cards::Card(GetHero(state::kPlayerSecond)));
 		state.board.Get(state::kPlayerSecond).fatigue_damage_ = 3;
 		//MakeDeck(state, controller.context_, state::kPlayerSecond);
-		MakeHand(state, controller.context_, state::kPlayerSecond);
+		MakeHand(state, controller.flow_context_, state::kPlayerSecond);
 	}
 
 	state.current_player = state::kPlayerFirst;

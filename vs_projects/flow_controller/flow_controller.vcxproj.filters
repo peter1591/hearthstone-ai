@@ -74,9 +74,6 @@
     <ClInclude Include="..\..\include\FlowControl\Helpers\EndTurn.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Helpers\PlayCard.h">
-      <Filter>Header Files\FlowControl\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Result.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
