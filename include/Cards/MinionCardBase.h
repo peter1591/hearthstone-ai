@@ -107,5 +107,14 @@ namespace Cards
 		{
 			return PlayerHelper<Context>(context, context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()));
 		}
+
+		template <typename Context>
+		static bool IsAlive(Context&& context, state::CardRef target)
+		{
+			state::Cards::Card const& card = context.state_.mgr.Get(target);
+			if (card.GetZone() != state::kCardZonePlay) return false;
+			if (card.GetHP() <= 0) return false;
+			return true;
+		}
 	};
 }
