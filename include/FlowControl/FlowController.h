@@ -144,7 +144,7 @@ namespace FlowControl
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(
-				Context::OnAttack(state_, flow_context_, attacker, defender));
+				state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, attacker, defender });
 			// TODO: attacker lose stealth
 
 			Manipulate(state_, flow_context_).Character(defender).Damage().Take(state_.mgr.Get(attacker).GetAttack());

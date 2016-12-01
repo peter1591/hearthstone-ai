@@ -19,9 +19,8 @@ namespace state
 			class OnTurnEnd
 			{
 			public:
-				class Context
+				struct Context
 				{
-				public:
 					state::State & state_;
 					FlowControl::FlowContext & flow_context_;
 				};
