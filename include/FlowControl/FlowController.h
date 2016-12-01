@@ -31,12 +31,14 @@ namespace FlowControl
 
 		Result PlayCard(int hand_idx)
 		{
+			Result rc = kResultNotDetermined;
+
 			PlayCardPhase(hand_idx);
 
-			Result rc = Helpers::Resolver(state_, flow_context_).Resolve();
+			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 			assert(flow_context_.Empty());
 
-			return rc;
+			return kResultNotDetermined;
 		}
 
 		Result EndTurn()
@@ -62,11 +64,14 @@ namespace FlowControl
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
+			Result rc = kResultNotDetermined;
+
 			AttackPhase(attacker, defender);
 
-			Result rc = Helpers::Resolver(state_, flow_context_).Resolve();
+			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 			assert(flow_context_.Empty());
-			return rc;
+
+			return kResultNotDetermined;
 		}
 
 	private:
