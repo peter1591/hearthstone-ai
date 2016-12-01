@@ -30,11 +30,15 @@ namespace state
 			int card_id;
 			CardType card_type;
 			int play_order;
+
+			PlayerIdentifier player;
 			CardZone zone;
 			int zone_position;
 
+			int cost;
+			int attack;
+			int max_hp;
 			int damaged;
-			EnchantableStates enchanted_states;
 
 			EnchantmentAuxData enchantment_aux_data;
 

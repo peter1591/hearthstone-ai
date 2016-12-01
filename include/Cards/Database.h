@@ -107,9 +107,9 @@ namespace Cards
 		void ParseMinionCard(Json::Value const& json, state::Cards::RawCard & card)
 		{
 			card.card_type = state::kCardTypeMinion;
-			card.enchanted_states.cost = json["cost"].asInt();
-			card.enchanted_states.attack = json["attack"].asInt();
-			card.enchanted_states.max_hp = json["health"].asInt();
+			card.cost = json["cost"].asInt();
+			card.attack = json["attack"].asInt();
+			card.max_hp = json["health"].asInt();
 		}
 
 		void ParseSpellCard(Json::Value const& json, state::Cards::RawCard & card)
