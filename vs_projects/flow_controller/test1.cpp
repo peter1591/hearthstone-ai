@@ -15,7 +15,7 @@ public:
 		return min;
 	}
 
-	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card)
+	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 	{
 		return state::CardRef();
 	}
@@ -42,7 +42,7 @@ public:
 	{
 		debug1 = true;
 
-		context.GetBattleCryTarget();
+		context.GetBattleCryTarget({});
 	}
 
 	static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
@@ -68,7 +68,7 @@ public:
 	{
 		debug1 = true;
 
-		state::CardRef target = context.GetBattleCryTarget();
+		state::CardRef target = context.GetBattleCryTarget({});
 
 	}
 
@@ -272,7 +272,7 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 	return raw_card;
 }
 
-int main(void)
+int test1(void)
 {
 	ActionParameterGetter action_parameter;
 	RandomGenerator random;

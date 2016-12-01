@@ -116,9 +116,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\contrib\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
+    <ClCompile Include="test1.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="test2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\Cards\Database.h" />
+    <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />

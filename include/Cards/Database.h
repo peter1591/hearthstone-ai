@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <string>
 #include <fstream>
 #include <unordered_map>
@@ -33,6 +34,13 @@ namespace Cards
 		}
 
 		std::unordered_map<std::string, int> GetIdMap() const { return origin_id_map_; }
+
+		state::Cards::RawCard const& Get(int id)
+		{
+			assert(id >= 0);
+			assert(id < final_cards_size_);
+			return final_cards_[id];
+		}
 
 	private:
 		Database() { }

@@ -55,10 +55,31 @@
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{1e0e3a83-9f59-4d5f-b7a4-119c28d0a858}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cards">
+      <UniqueIdentifier>{15db4448-989f-4198-8168-b63fab326ac3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\libjson">
+      <UniqueIdentifier>{eea7b60c-a83e-4249-ab35-8691b3384fc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="test1.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\contrib\lib_json\json_value.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp">
+      <Filter>Source Files\libjson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +319,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Database.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\id-map.h">
+      <Filter>Header Files\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
