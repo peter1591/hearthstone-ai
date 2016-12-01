@@ -3,11 +3,11 @@
 #include <iostream>
 #include <assert.h>
 #include "FlowControl/FlowController.h"
-#include "FlowControl/Dispatchers/MinionCardBase.h"
+#include "Cards/MinionCardBase.h"
 
 using state::CardRef;
 
-class ActionParameterGetter : public FlowControl::IActionParameterGetter
+class Test1_ActionParameterGetter : public FlowControl::IActionParameterGetter
 {
 public:
 	int GetMinionPutLocation(int min, int max)
@@ -21,7 +21,7 @@ public:
 	}
 };
 
-class RandomGenerator : public FlowControl::IRandomGenerator
+class Test1_RandomGenerator : public FlowControl::IRandomGenerator
 {
 public:
 	int Get(int exclusive_max)
@@ -35,7 +35,7 @@ public:
 	}
 };
 
-class Card1 : MinionCardBase
+class Card1 : Cards::MinionCardBase
 {
 public:
 	static void BattleCry(FlowControl::Context::BattleCry & context)
@@ -61,7 +61,7 @@ bool Card1::debug1 = false;
 bool Card1::debug2 = false;
 REGISTER_MINION_CARD_CLASS(1, Card1)
 
-class Card2 : MinionCardBase
+class Card2 : Cards::MinionCardBase
 {
 public:
 	static void BattleCry(FlowControl::Context::BattleCry & context)
@@ -274,8 +274,8 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 
 int test1(void)
 {
-	ActionParameterGetter action_parameter;
-	RandomGenerator random;
+	Test1_ActionParameterGetter action_parameter;
+	Test1_RandomGenerator random;
 	state::State state;
 	FlowControl::FlowController controller(state, action_parameter, random);
 
@@ -355,7 +355,7 @@ int test1(void)
 
 		bool debug2 = false;
 		state::Events::EventTypes::OnTakeDamage::FunctorType callback1 =
-			[&debug2, defender] (state::Events::HandlersContainerController & controller, FlowControl::Context::OnTakeDamage & context) {
+			[&debug2, defender] (auto& controller, auto& context) {
 			if (context.card_ref_ == defender) {
 				debug2 = true;
 				context.damage_ = 1;

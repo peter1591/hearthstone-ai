@@ -61,6 +61,9 @@
     <Filter Include="Source Files\libjson">
       <UniqueIdentifier>{eea7b60c-a83e-4249-ab35-8691b3384fc5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cards\Expert1">
+      <UniqueIdentifier>{d816ca13-17b2-4093-95d4-5535247b13db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test1.cpp">
@@ -96,9 +99,6 @@
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\BeforeMinionSummoned.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\State\Cards\Manager.h">
@@ -200,9 +200,6 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\AfterAttack.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnAttack.h">
-      <Filter>Header Files\State\Events\EventTypes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\board\Board.h">
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
@@ -245,9 +242,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\OnTakeDamage.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
@@ -262,9 +256,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\MinionCardBase.h">
-      <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
@@ -291,9 +282,6 @@
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\OnAttack.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h">
@@ -324,6 +312,15 @@
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\id-map.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\MinionCardBase.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Cards.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
   </ItemGroup>

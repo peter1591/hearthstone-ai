@@ -124,8 +124,11 @@
     <ClCompile Include="test2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
+    <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />
@@ -134,12 +137,8 @@
     <ClInclude Include="..\..\include\FlowControl\Context\AuraGetTargets.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AuraRemoveFrom.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\BeforeMinionSummoned.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\OnAttack.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\OnTakeDamage.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Auras.h" />
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\MinionCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
@@ -195,7 +194,6 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnEnd.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnMinionPlay.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnStart.h" />
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnAttack.h" />
     <ClInclude Include="..\..\include\State\Events\HandlersContainerController.h" />
     <ClInclude Include="..\..\include\State\Events\Manager.h" />
     <ClInclude Include="..\..\include\State\Events\impl\CategorizedHandlersContainer.h" />

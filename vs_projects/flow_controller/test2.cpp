@@ -7,21 +7,23 @@
 #include "State/State.h"
 #include "State/Types.h"
 
-class ActionParameterGetter : public FlowControl::IActionParameterGetter
+class Test2_ActionParameterGetter : public FlowControl::IActionParameterGetter
 {
 public:
 	int GetMinionPutLocation(int min, int max)
 	{
-		return min;
+		return next_minion_put_location;
 	}
 
 	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 	{
 		return state::CardRef();
 	}
+
+	int next_minion_put_location;
 };
 
-class RandomGenerator : public FlowControl::IRandomGenerator
+class Test2_RandomGenerator : public FlowControl::IRandomGenerator
 {
 public:
 	int Get(int exclusive_max)
@@ -55,6 +57,12 @@ state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state:
 	raw_card.player = player;
 	raw_card.zone = state::kCardZoneDeck;
 	raw_card.zone_position = (int)state.board.Get(player).deck_.Size();
+
+	raw_card.enchantment_aux_data.origin_states.attack = raw_card.attack;
+	raw_card.enchantment_aux_data.origin_states.cost = raw_card.cost;
+	raw_card.enchantment_aux_data.origin_states.max_hp = raw_card.max_hp;
+	raw_card.enchantment_aux_data.origin_states.player = raw_card.player;
+
 	return state::Cards::Card(raw_card);
 }
 
@@ -89,6 +97,12 @@ state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state, state:
 	raw_card.player = player;
 	raw_card.zone = state::kCardZoneHand;
 	raw_card.zone_position = (int)state.board.Get(player).hand_.Size();
+
+	raw_card.enchantment_aux_data.origin_states.attack = raw_card.attack;
+	raw_card.enchantment_aux_data.origin_states.cost = raw_card.cost;
+	raw_card.enchantment_aux_data.origin_states.max_hp = raw_card.max_hp;
+	raw_card.enchantment_aux_data.origin_states.player = raw_card.player;
+
 	return state::Cards::Card(raw_card);
 }
 
@@ -117,7 +131,8 @@ state::CardRef AddHandCard(Cards::CardId id, FlowControl::FlowContext & flow_con
 
 static void MakeHand(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
-	AddHandCard(Cards::ID_AT_116, flow_context, state, player);
+	AddHandCard(Cards::ID_EX1_089, flow_context, state, player);
+	AddHandCard(Cards::ID_NEW1_038, flow_context, state, player);
 	AddHandCard(Cards::ID_AT_116, flow_context, state, player);
 	AddHandCard(Cards::ID_FP1_024, flow_context, state, player);
 	AddHandCard(Cards::ID_FP1_024, flow_context, state, player);
@@ -137,6 +152,41 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 	return raw_card;
 }
 
+struct MinionCheckStats
+{
+	int attack;
+	int hp;
+	int max_hp;
+};
+
+static void CheckMinion(state::State &state, state::CardRef ref, MinionCheckStats const& stats)
+{
+	assert(state.mgr.Get(ref).GetAttack() == stats.attack);
+	assert(state.mgr.Get(ref).GetMaxHP() == stats.max_hp);
+	assert(state.mgr.Get(ref).GetHP() == stats.hp);
+}
+
+static void CheckMinions(state::State & state, state::PlayerIdentifier player, std::vector<MinionCheckStats> const& checking)
+{
+	std::vector<state::CardRef> const& minions = state.board.Get(player).minions_.Get();
+
+	assert(minions.size() == checking.size());
+	for (size_t i = 0; i < minions.size(); ++i) {
+		CheckMinion(state, minions[i], checking[i]);
+	}
+}
+
+struct CrystalCheckStats
+{
+	int current;
+	int total;
+};
+static void CheckCrystals(state::State & state, state::PlayerIdentifier player, CrystalCheckStats checking)
+{
+	assert(state.board.Get(player).resource_.GetCurrent() == checking.current);
+	assert(state.board.Get(player).resource_.GetTotal() == checking.total);
+}
+
 void test2()
 {
 	std::cout << "Reading json file...";
@@ -144,8 +194,8 @@ void test2()
 	std::cout << " Done." << std::endl;
 
 	state::State state;
-	ActionParameterGetter parameter_getter;
-	RandomGenerator random;
+	Test2_ActionParameterGetter parameter_getter;
+	Test2_RandomGenerator random;
 
 	FlowControl::FlowController controller(state, parameter_getter, random);
 
@@ -161,4 +211,47 @@ void test2()
 	state.current_player = state::kPlayerFirst;
 	state.board.Get(state::kPlayerFirst).resource_.SetTotal(8);
 	state.board.Get(state::kPlayerFirst).resource_.Refill();
+	state.board.Get(state::kPlayerSecond).resource_.SetTotal(4);
+
+	CheckCrystals(state, state::kPlayerFirst, { 8,8 });
+	CheckCrystals(state, state::kPlayerSecond, { 0,4 });
+	CheckMinions(state, state::kPlayerFirst, {});
+	CheckMinions(state, state::kPlayerSecond, {});
+	controller.PlayCard(0);
+	CheckCrystals(state, state::kPlayerFirst, { 5, 8 });
+	CheckCrystals(state, state::kPlayerSecond, { 0, 5 });
+	CheckMinions(state, state::kPlayerFirst, { {4, 4, 4} });
+	CheckMinions(state, state::kPlayerSecond, {});
+
+	state.board.Get(state::kPlayerFirst).resource_.Refill();
+
+	CheckCrystals(state, state::kPlayerFirst, { 8, 8 });
+	CheckCrystals(state, state::kPlayerSecond, { 0, 5 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 } });
+	CheckMinions(state, state::kPlayerSecond, {});
+	parameter_getter.next_minion_put_location = 1;
+	random.next_rand = 0;
+	random.called = false;
+	controller.PlayCard(0);
+	assert(!random.called);
+	CheckCrystals(state, state::kPlayerFirst, { 0, 8 });
+	CheckCrystals(state, state::kPlayerSecond, { 0, 5 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 }, {7,7,7} });
+	CheckMinions(state, state::kPlayerSecond, {});
+
+	random.next_rand = 0;
+	controller.EndTurn();
+	assert(random.called);
+	CheckCrystals(state, state::kPlayerFirst, { 0, 8 });
+	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 8,8,8 } });
+	CheckMinions(state, state::kPlayerSecond, {});
+
+	random.next_rand = 0;
+	controller.EndTurn();
+	assert(random.called);
+	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
+	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 9,9,9 } });
+	CheckMinions(state, state::kPlayerSecond, {});
 }
