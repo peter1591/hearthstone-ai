@@ -5,7 +5,6 @@
 #include <iostream>
 #include <functional>
 
-#include "FlowControl/Context/OnTakeDamage.h"
 #include "State/Events/HandlersContainerController.h"
 
 namespace state
@@ -22,17 +21,23 @@ namespace state
 			class OnTakeDamage
 			{
 			public:
-				typedef FlowControl::Context::OnTakeDamage & Parameter1;
-				typedef std::function<void(HandlersContainerController &, Parameter1)> FunctorType;
-				typedef std::tuple<const Cards::Card &, Parameter1> ArgsTuple;
+				struct Context
+				{
+					state::State & state_;
+					state::CardRef card_ref_;
+					int damage_;
+				};
+			public:
+				typedef std::function<void(HandlersContainerController &, Context&)> FunctorType;
+				typedef std::tuple<const Cards::Card &, Context&> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
 					explicit OnTakeDamage(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller, Parameter1 & parameter1)
+				void Handle(HandlersContainerController &controller, Context & context)
 				{
-					functor_(controller, parameter1);
+					functor_(controller, context);
 				}
 
 			private:
