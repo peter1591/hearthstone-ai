@@ -66,9 +66,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -325,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\Mechanics.h">
+      <Filter>Header Files\State\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

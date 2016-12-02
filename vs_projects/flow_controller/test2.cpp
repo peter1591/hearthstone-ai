@@ -54,14 +54,9 @@ static void CheckZoneAndPosition(const state::State & state, state::CardRef ref,
 state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
 	state::Cards::RawCard raw_card = Cards::Database::GetInstance().Get((int)id);
-	raw_card.player = player;
+	raw_card.enchantable_states.player = player;
 	raw_card.zone = state::kCardZoneDeck;
 	raw_card.zone_position = (int)state.board.Get(player).deck_.Size();
-
-	raw_card.enchantment_aux_data.origin_states.attack = raw_card.attack;
-	raw_card.enchantment_aux_data.origin_states.cost = raw_card.cost;
-	raw_card.enchantment_aux_data.origin_states.max_hp = raw_card.max_hp;
-	raw_card.enchantment_aux_data.origin_states.player = raw_card.player;
 
 	return state::Cards::Card(raw_card);
 }
@@ -94,14 +89,9 @@ static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_conte
 state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
 	state::Cards::RawCard raw_card = Cards::Database::GetInstance().Get((int)id);
-	raw_card.player = player;
+	raw_card.enchantable_states.player = player;
 	raw_card.zone = state::kCardZoneHand;
 	raw_card.zone_position = (int)state.board.Get(player).hand_.Size();
-
-	raw_card.enchantment_aux_data.origin_states.attack = raw_card.attack;
-	raw_card.enchantment_aux_data.origin_states.cost = raw_card.cost;
-	raw_card.enchantment_aux_data.origin_states.max_hp = raw_card.max_hp;
-	raw_card.enchantment_aux_data.origin_states.player = raw_card.player;
 
 	return state::Cards::Card(raw_card);
 }
@@ -146,9 +136,9 @@ static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
 	raw_card.card_id = 8;
 	raw_card.card_type = state::kCardTypeHero;
 	raw_card.zone = state::kCardZonePlay;
-	raw_card.max_hp = 30;
-	raw_card.player = player;
-	raw_card.attack = 0;
+	raw_card.enchantable_states.max_hp = 30;
+	raw_card.enchantable_states.player = player;
+	raw_card.enchantable_states.attack = 0;
 	return raw_card;
 }
 
@@ -189,10 +179,6 @@ static void CheckCrystals(state::State & state, state::PlayerIdentifier player, 
 
 void test2()
 {
-	std::cout << "Reading json file...";
-	assert(Cards::Database::GetInstance().LoadJsonFile("../../include/Cards/cards.json"));
-	std::cout << " Done." << std::endl;
-
 	state::State state;
 	Test2_ActionParameterGetter parameter_getter;
 	Test2_RandomGenerator random;

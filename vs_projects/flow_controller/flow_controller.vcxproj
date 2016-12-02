@@ -119,7 +119,6 @@
     <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
     <ClCompile Include="..\..\contrib\lib_json\json_value.cpp" />
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
-    <ClCompile Include="test1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test2.cpp" />
   </ItemGroup>
@@ -184,6 +183,7 @@
     <ClInclude Include="..\..\include\State\Cards\Enchantments\Tiers.h" />
     <ClInclude Include="..\..\include\State\Cards\Manager-impl.h" />
     <ClInclude Include="..\..\include\State\Cards\Manager.h" />
+    <ClInclude Include="..\..\include\State\Cards\Mechanics.h" />
     <ClInclude Include="..\..\include\State\Cards\RawCard.h" />
     <ClInclude Include="..\..\include\State\Events\Event.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\AfterAttack.h" />
