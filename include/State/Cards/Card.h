@@ -62,7 +62,7 @@ namespace state
 			private:
 				LocationSetter & Player(PlayerIdentifier player)
 				{
-					data_.player = player;
+					data_.enchantable_states.player = player;
 					return *this;
 				}
 
@@ -101,26 +101,26 @@ namespace state
 			CardType GetCardType() const { return data_.card_type; }
 			int GetPlayOrder() const { return data_.play_order; }
 
-			const PlayerIdentifier GetPlayerIdentifier() const { return data_.player; }
+			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchantable_states.player; }
 			const CardZone GetZone() const { return data_.zone; }
 			int GetZonePosition() const { return data_.zone_position; }
 
 			int GetAuraId() const { return data_.aura_id; }
 			void SetAuraId(int id) { data_.aura_id = id; }
 
-			int GetCost() const { return data_.cost; }
-			void SetCost(int new_cost) { data_.cost = new_cost; }
+			int GetCost() const { return data_.enchantable_states.cost; }
+			void SetCost(int new_cost) { data_.enchantable_states.cost = new_cost; }
 
 			int GetDamage() const { return data_.damaged; }
 			DamageSetter GetDamageSetter() { return DamageSetter(data_); }
 
-			int GetHP() const { return data_.max_hp - data_.damaged; }
+			int GetHP() const { return data_.enchantable_states.max_hp - data_.damaged; }
 
-			int GetAttack() const { return data_.attack; }
-			void SetAttack(int new_attack) { data_.attack = new_attack; }
+			int GetAttack() const { return data_.enchantable_states.attack; }
+			void SetAttack(int new_attack) { data_.enchantable_states.attack = new_attack; }
 
-			int GetMaxHP() const { return data_.max_hp; }
-			void SetMaxHP(int max_hp) { data_.max_hp = max_hp; }
+			int GetMaxHP() const { return data_.enchantable_states.max_hp; }
+			void SetMaxHP(int max_hp) { data_.enchantable_states.max_hp = max_hp; }
 
 			MutableEnchantmentAuxDataGetter GetMutableEnchantmentAuxDataGetter()
 			{

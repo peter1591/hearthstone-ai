@@ -107,9 +107,9 @@ namespace Cards
 		void ParseMinionCard(Json::Value const& json, state::Cards::RawCard & card)
 		{
 			card.card_type = state::kCardTypeMinion;
-			card.cost = json["cost"].asInt();
-			card.attack = json["attack"].asInt();
-			card.max_hp = json["health"].asInt();
+			card.enchantable_states.cost = json["cost"].asInt();
+			card.enchantable_states.attack = json["attack"].asInt();
+			card.enchantable_states.max_hp = json["health"].asInt();
 		}
 
 		void ParseSpellCard(Json::Value const& json, state::Cards::RawCard & card)
@@ -132,14 +132,14 @@ namespace Cards
 
 		void ParseMechanics(Json::Value const& json, state::Cards::RawCard & card)
 		{
-			card.mechanics.taunt = false;
-			card.mechanics.charge = false;
-			card.mechanics.shield = false;
-			card.mechanics.stealth = false;
-			card.mechanics.forgetful = false;
-			card.mechanics.freeze = false;
-			card.mechanics.windfury = false;
-			card.mechanics.poisonous = false;
+			card.enchantable_states.mechanics.taunt = false;
+			card.enchantable_states.mechanics.charge = false;
+			card.enchantable_states.mechanics.shield = false;
+			card.enchantable_states.mechanics.stealth = false;
+			card.enchantable_states.mechanics.forgetful = false;
+			card.enchantable_states.mechanics.freeze = false;
+			card.enchantable_states.mechanics.windfury = false;
+			card.enchantable_states.mechanics.poisonous = false;
 
 			if (!json.isMember("mechanics")) return;
 
@@ -151,28 +151,28 @@ namespace Cards
 			{
 				std::string mechanic = json_mechanic.asString();
 				if (mechanic == "TAUNT") {
-					card.mechanics.taunt = true;
+					card.enchantable_states.mechanics.taunt = true;
 				}
 				else if (mechanic == "CHARGE") {
-					card.mechanics.charge = true;
+					card.enchantable_states.mechanics.charge = true;
 				}
 				else if (mechanic == "DIVINE_SHIELD") {
-					card.mechanics.shield = true;
+					card.enchantable_states.mechanics.shield = true;
 				}
 				else if (mechanic == "STEALTH") {
-					card.mechanics.stealth = true;
+					card.enchantable_states.mechanics.stealth = true;
 				}
 				else if (mechanic == "FORGETFUL") {
-					card.mechanics.forgetful = true;
+					card.enchantable_states.mechanics.forgetful = true;
 				}
 				else if (mechanic == "FREEZE") {
-					card.mechanics.freeze = true;
+					card.enchantable_states.mechanics.freeze = true;
 				}
 				else if (mechanic == "WINDFURY") {
-					card.mechanics.windfury = true;
+					card.enchantable_states.mechanics.windfury = true;
 				}
 				else if (mechanic == "POISONOUS") {
-					card.mechanics.poisonous = true;
+					card.enchantable_states.mechanics.poisonous = true;
 				}
 				else if (mechanic == "SPELLPOWER") { // TODO
 				}
