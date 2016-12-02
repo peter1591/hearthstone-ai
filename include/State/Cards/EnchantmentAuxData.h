@@ -19,7 +19,6 @@ namespace state
 			}
 
 			TieredEnchantments enchantments;
-			EnchantableStates origin_states;
 			bool need_update;
 		};
 	}

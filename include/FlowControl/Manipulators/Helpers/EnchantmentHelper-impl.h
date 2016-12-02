@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "FlowControl/Manipulate.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
+#include "Cards/Database.h"
 
 namespace FlowControl
 {
@@ -16,8 +17,9 @@ namespace FlowControl
 
 				if (!data.need_update) return;
 
-				state::Cards::EnchantableStates states = data.origin_states;
-				data.enchantments.ApplyAll(states);
+				state::Cards::EnchantableStates origin_states = Cards::Database::GetInstance().Get(card_.GetCardId()).enchantable_states;
+				state::Cards::EnchantableStates new_states = origin_states;
+				data.enchantments.ApplyAll(new_states);
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Card(card_ref_);
 
@@ -25,27 +27,27 @@ namespace FlowControl
 
 				// update states field by field
 				bool update_zone = false;
-				if (states.player != data.origin_states.player) {
+				if (new_states.player != origin_states.player) {
 					switch (card_.GetCardType()) {
 					case state::kCardTypeMinion:
-						ChangeMinionPlayer(states.player);
+						ChangeMinionPlayer(new_states.player);
 						break;
 					default:
 						throw std::exception("unsupported enchantment type");
 					}
 				}
 
-				if (states.cost != data.origin_states.cost) {
-					card_manipulator.Cost(states.cost);
-					assert(card_.GetCost() == states.cost);
+				if (new_states.cost != origin_states.cost) {
+					card_manipulator.Cost(new_states.cost);
+					assert(card_.GetCost() == new_states.cost);
 				}
-				if (states.attack != data.origin_states.attack) {
-					card_manipulator.Attack(states.attack);
-					assert(card_.GetAttack() == states.attack);
+				if (new_states.attack != origin_states.attack) {
+					card_manipulator.Attack(new_states.attack);
+					assert(card_.GetAttack() == new_states.attack);
 				}
-				if (states.max_hp != data.origin_states.max_hp) {
-					card_manipulator.MaxHP(states.max_hp);
-					assert(card_.GetMaxHP() == states.max_hp);
+				if (new_states.max_hp != origin_states.max_hp) {
+					card_manipulator.MaxHP(new_states.max_hp);
+					assert(card_.GetMaxHP() == new_states.max_hp);
 				}
 
 				data.need_update = false;
