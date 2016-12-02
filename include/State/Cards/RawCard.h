@@ -40,6 +40,8 @@ namespace state
 			int max_hp;
 			int damaged;
 
+			Mechanics mechanics;
+
 			EnchantmentAuxData enchantment_aux_data;
 
 			int aura_id;

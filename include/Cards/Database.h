@@ -130,6 +130,71 @@ namespace Cards
 			// TODO
 		}
 
+		void ParseMechanics(Json::Value const& json, state::Cards::RawCard & card)
+		{
+			card.mechanics.taunt = false;
+			card.mechanics.charge = false;
+			card.mechanics.shield = false;
+			card.mechanics.stealth = false;
+			card.mechanics.forgetful = false;
+			card.mechanics.freeze = false;
+			card.mechanics.windfury = false;
+			card.mechanics.poisonous = false;
+
+			if (!json.isMember("mechanics")) return;
+
+			Json::Value json_mechanics = json["mechanics"];
+
+			if (json_mechanics.isArray() == false) return;
+
+			for (auto const& json_mechanic : json_mechanics)
+			{
+				std::string mechanic = json_mechanic.asString();
+				if (mechanic == "TAUNT") {
+					card.mechanics.taunt = true;
+				}
+				else if (mechanic == "CHARGE") {
+					card.mechanics.charge = true;
+				}
+				else if (mechanic == "DIVINE_SHIELD") {
+					card.mechanics.shield = true;
+				}
+				else if (mechanic == "STEALTH") {
+					card.mechanics.stealth = true;
+				}
+				else if (mechanic == "FORGETFUL") {
+					card.mechanics.forgetful = true;
+				}
+				else if (mechanic == "FREEZE") {
+					card.mechanics.freeze = true;
+				}
+				else if (mechanic == "WINDFURY") {
+					card.mechanics.windfury = true;
+				}
+				else if (mechanic == "POISONOUS") {
+					card.mechanics.poisonous = true;
+				}
+				else if (mechanic == "SPELLPOWER") { // TODO
+				}
+				else if (mechanic == "OVERLOAD") { // TODO
+				}
+				else if (mechanic == "AURA" ||
+					mechanic == "DEATHRATTLE" ||
+					mechanic == "INSPIRE" ||
+					mechanic == "BATTLECRY" ||
+					mechanic == "COMBO" ||
+					mechanic == "ENRAGED" ||
+					mechanic == "ADJACENT_BUFF" ||
+					mechanic == "InvisibleDeathrattle" ||
+					mechanic == "ImmuneToSpellpower") {
+					// write hard-coded
+				}
+				else {
+					throw std::runtime_error("unsupported mechanic");
+				}
+			}
+		}
+
 	private:
 		state::Cards::RawCard * final_cards_; // Raw array to support lock-free access
 		int final_cards_size_;
