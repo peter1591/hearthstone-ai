@@ -23,7 +23,7 @@ namespace state
 
 			RawCard() :
 				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone(kCardZoneInvalid), zone_position(-1), damaged(0),
-				aura_id(-1)
+				just_played(false), num_attacks_this_turn(0), aura_id(-1)
 			{
 			}
 
@@ -35,6 +35,8 @@ namespace state
 			int zone_position;
 
 			int damaged;
+			bool just_played;
+			int num_attacks_this_turn;
 
 			EnchantableStates enchantable_states;
 

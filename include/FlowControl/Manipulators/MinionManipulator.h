@@ -21,6 +21,17 @@ namespace FlowControl
 			{
 				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_);
 			}
+
+			void AfterSummoned()
+			{
+				card_.SetJustPlayedFlag(true);
+			}
+
+			void TurnStart()
+			{
+				card_.SetJustPlayedFlag(false);
+				card_.ClearNumAttacksThisTurn();
+			}
 		};
 	}
 }

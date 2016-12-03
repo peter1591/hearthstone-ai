@@ -122,6 +122,11 @@ namespace state
 			int GetMaxHP() const { return data_.enchantable_states.max_hp; }
 			void SetMaxHP(int max_hp) { data_.enchantable_states.max_hp = max_hp; }
 
+			void IncreaseNumAttacksThisTurn() { ++data_.num_attacks_this_turn; }
+			void ClearNumAttacksThisTurn() { data_.num_attacks_this_turn = 0; }
+
+			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
+
 			MutableEnchantmentAuxDataGetter GetMutableEnchantmentAuxDataGetter()
 			{
 				return MutableEnchantmentAuxDataGetter(data_);

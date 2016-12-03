@@ -13,7 +13,6 @@ namespace FlowControl
 
 	namespace Manipulators
 	{
-
 		class CharacterManipulator : public CardManipulator
 		{
 		public:
@@ -23,6 +22,11 @@ namespace FlowControl
 			}
 
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
+
+			void AfterAttack()
+			{
+				card_.IncreaseNumAttacksThisTurn();
+			}
 		};
 	}
 }

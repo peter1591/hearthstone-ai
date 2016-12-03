@@ -73,7 +73,7 @@ namespace FlowControl
 			Result rc = kResultNotDetermined;
 
 			action_parameters_.Clear();
-			AttackPhase(attacker, defender);
+			if ((rc = AttackPhase(attacker, defender)) != kResultNotDetermined) return rc;
 
 			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
 			assert(flow_context_.Empty());
@@ -129,26 +129,31 @@ namespace FlowControl
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
+			Manipulate(state_, flow_context_).Minion(card_ref).AfterSummoned();
 		}
 
 	private:
-		void AttackPhase(state::CardRef attacker, state::CardRef defender)
+		Result AttackPhase(state::CardRef attacker, state::CardRef defender)
 		{
-			if (!attacker.IsValid()) return;
-			if (!defender.IsValid()) return;
+			if (!attacker.IsValid()) return kResultInvalid;
+			if (!defender.IsValid()) return kResultInvalid;
+
+			// check if attacker is attackable
+			if (!IsAttackable(attacker)) return kResultInvalid;
 
 			while (true) {
+				// TODO: attacker should not be changed
 				state::CardRef origin_attacker = attacker;
 				state::CardRef origin_defender = defender;
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker, defender);
 
-				if (!attacker.IsValid()) return;
-				if (state_.mgr.Get(attacker).GetHP() <= 0) return;
-				if (state_.mgr.Get(attacker).GetZone() != state::kCardZonePlay) return;
+				if (!attacker.IsValid()) return kResultNotDetermined;
+				if (state_.mgr.Get(attacker).GetHP() <= 0) return kResultNotDetermined;
+				if (state_.mgr.Get(attacker).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
-				if (!defender.IsValid()) return;
-				if (state_.mgr.Get(defender).GetHP() <= 0) return;
-				if (state_.mgr.Get(defender).GetZone() != state::kCardZonePlay) return;
+				if (!defender.IsValid()) return kResultNotDetermined;
+				if (state_.mgr.Get(defender).GetHP() <= 0) return kResultNotDetermined;
+				if (state_.mgr.Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
 				if (origin_attacker == attacker && origin_defender == defender) break;
 			}
@@ -159,6 +164,8 @@ namespace FlowControl
 
 			Manipulate(state_, flow_context_).Character(defender).Damage().Take(state_.mgr.Get(attacker).GetAttack());
 			Manipulate(state_, flow_context_).Character(attacker).Damage().Take(state_.mgr.Get(defender).GetAttack());
+
+			Manipulate(state_, flow_context_).Character(attacker).AfterAttack();
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker, defender);
 
@@ -171,6 +178,18 @@ namespace FlowControl
 					}
 				}
 			}
+
+			return kResultNotDetermined;
+		}
+
+		bool IsAttackable(state::CardRef attacker)
+		{
+			state::Cards::Card const& card = state_.mgr.Get(attacker);
+
+			if (card.GetRawData().just_played) return false;
+			if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc.
+
+			return true;
 		}
 
 	private:
@@ -187,6 +206,10 @@ namespace FlowControl
 			// TODO: overload
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
+
+			for (state::CardRef minion : state_.GetCurrentPlayer().minions_.Get()) {
+				Manipulate(state_, flow_context_).Minion(minion).TurnStart();
+			}
 		}
 
 		void DrawCardPhase()

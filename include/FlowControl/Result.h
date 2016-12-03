@@ -7,6 +7,7 @@ namespace FlowControl
 		kResultNotDetermined,
 		kResultFirstPlayerWin,
 		kResultSecondPlayerWin,
-		kResultDraw
+		kResultDraw,
+		kResultInvalid
 	};
 }
