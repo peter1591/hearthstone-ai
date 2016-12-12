@@ -69,7 +69,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\MyCodes\hearthstone-ai\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\mycode\hearthstone-ai\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>D:\MyCodes\hearthstone-ai\include;$(IncludePath)</IncludePath>

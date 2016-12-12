@@ -33,19 +33,28 @@ namespace FlowControl
 
 		Result PlayCard(int hand_idx)
 		{
+			action_parameters_.Clear();
 			PlayCardInternal(hand_idx);
+		
+			assert(flow_context_.Empty());
 			return flow_context_.result_;
 		}
 
 		Result EndTurn()
 		{
+			action_parameters_.Clear();
 			EndTurnInternal();
+			
+			assert(flow_context_.Empty());
 			return flow_context_.result_;
 		}
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
+			action_parameters_.Clear();
 			AttackInternal(attacker, defender);
+			
+			assert(flow_context_.Empty());
 			return flow_context_.result_;
 		}
 
@@ -58,14 +67,11 @@ namespace FlowControl
 	private:
 		void PlayCardInternal(int hand_idx)
 		{
-			action_parameters_.Clear();
-			PlayCardPhase(hand_idx);
-
+			if (!PlayCardPhase(hand_idx)) return;
 			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
-			assert(flow_context_.Empty());
 		}
 
-		void PlayCardPhase(int hand_idx)
+		bool PlayCardPhase(int hand_idx)
 		{
 			state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 			state::Cards::Card const& card = state_.mgr.Get(card_ref);
@@ -74,20 +80,22 @@ namespace FlowControl
 			{
 			case state::kCardTypeMinion:
 				return PlayMinionCardPhase(hand_idx, card_ref, card);
-				break;
 			default:
 				throw std::exception("not implemented");
 			}
 		}
 
-		void PlayMinionCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
+		bool PlayMinionCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 		{
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
 
 			state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
 
-			if (state_.GetCurrentPlayer().minions_.Full()) throw std::exception("Minion full. Cannot play card.");
+			if (state_.GetCurrentPlayer().minions_.Full()) {
+				flow_context_.result_ = kResultInvalid;
+				return false;
+			}
 
 			int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 			int put_position = flow_context_.action_parameters_.GetMinionPutLocation(0, total_minions);
@@ -108,16 +116,15 @@ namespace FlowControl
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 			Manipulate(state_, flow_context_).Minion(card_ref).AfterSummoned();
+
+			return true;
 		}
 
 	private:
 		void AttackInternal(state::CardRef attacker, state::CardRef defender)
 		{
-			action_parameters_.Clear();
 			if (!AttackPhase(attacker, defender)) return;
-
 			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
-			assert(flow_context_.Empty());
 		}
 
 		bool AttackPhase(state::CardRef attacker, state::CardRef defender)
