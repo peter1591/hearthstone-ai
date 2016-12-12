@@ -18,18 +18,18 @@ namespace FlowControl
 			{
 			}
 
-			Result Resolve()
+			bool Resolve()
 			{
-				Result rc = kResultNotDetermined;
-
 				UpdateAura();
 				UpdateEnchantments();
 
 				while (true) {
 					CreateDeaths();
-					if (deaths_.empty()) return kResultNotDetermined;
-					if ((rc = RemoveDeaths()) != kResultNotDetermined) return rc;
+					if (deaths_.empty()) break;
+					if (!RemoveDeaths()) return false;
 				}
+
+				return true;
 			}
 
 		private:
@@ -50,18 +50,17 @@ namespace FlowControl
 				flow_context_.dead_entity_hints_.clear();
 			}
 
-			Result RemoveDeaths()
+			bool RemoveDeaths()
 			{
-
 				auto first_it = deaths_.find(state_.board.Get(state::kPlayerFirst).hero_ref_);
 				bool first_dead = first_it != deaths_.end();
 
 				auto second_it = deaths_.find(state_.board.Get(state::kPlayerSecond).hero_ref_);
 				bool second_dead = second_it != deaths_.end();
 
-				if (first_dead && second_dead) return kResultDraw;
-				if (first_dead) return kResultSecondPlayerWin;
-				if (second_dead) return kResultFirstPlayerWin;
+				if (first_dead && second_dead) return SetResult(kResultDraw);
+				if (first_dead) return SetResult(kResultSecondPlayerWin);
+				if (second_dead) return SetResult(kResultFirstPlayerWin);
 
 				// process deaths by order of play
 				std::multimap<int, std::pair<state::CardRef, state::Cards::Card const&>> ordered_deaths;
@@ -84,7 +83,14 @@ namespace FlowControl
 					Manipulate(state_, flow_context_).Card(ref).Zone().ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
-				return kResultNotDetermined;
+				return true;
+			}
+
+			bool SetResult(Result result)
+			{
+				assert(result != kResultNotDetermined);
+				flow_context_.result_ = result;
+				return false;
 			}
 
 		private:

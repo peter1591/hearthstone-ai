@@ -33,60 +33,38 @@ namespace FlowControl
 
 		Result PlayCard(int hand_idx)
 		{
-			Result rc = kResultNotDetermined;
-
-			action_parameters_.Clear();
-			PlayCardPhase(hand_idx);
-
-			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-			assert(flow_context_.Empty());
-
-			return kResultNotDetermined;
+			PlayCardInternal(hand_idx);
+			return flow_context_.result_;
 		}
 
 		Result EndTurn()
 		{
-			Result rc = kResultNotDetermined;
-
-			if (state_.turn == 89) return kResultDraw;
-			++state_.turn;
-
-			action_parameters_.Clear();
-			EndTurnPhase();
-			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-
-			state_.ChangePlayer();
-
-			action_parameters_.Clear();
-			StartTurnPhase();
-			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-
-			action_parameters_.Clear();
-			DrawCardPhase();
-			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-
-			return kResultNotDetermined;
+			EndTurnInternal();
+			return flow_context_.result_;
 		}
 
 		Result Attack(state::CardRef attacker, state::CardRef defender)
 		{
-			Result rc = kResultNotDetermined;
-
-			action_parameters_.Clear();
-			if ((rc = AttackPhase(attacker, defender)) != kResultNotDetermined) return rc;
-
-			if ((rc = Helpers::Resolver(state_, flow_context_).Resolve()) != kResultNotDetermined) return rc;
-			assert(flow_context_.Empty());
-
-			return kResultNotDetermined;
+			AttackInternal(attacker, defender);
+			return flow_context_.result_;
 		}
 
 		Result Resolve()
 		{
-			return Helpers::Resolver(state_, flow_context_).Resolve();
+			Helpers::Resolver(state_, flow_context_).Resolve();
+			return flow_context_.result_;
 		}
 
 	private:
+		void PlayCardInternal(int hand_idx)
+		{
+			action_parameters_.Clear();
+			PlayCardPhase(hand_idx);
+
+			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+			assert(flow_context_.Empty());
+		}
+
 		void PlayCardPhase(int hand_idx)
 		{
 			state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
@@ -133,13 +111,22 @@ namespace FlowControl
 		}
 
 	private:
-		Result AttackPhase(state::CardRef attacker, state::CardRef defender)
+		void AttackInternal(state::CardRef attacker, state::CardRef defender)
 		{
-			if (!attacker.IsValid()) return kResultInvalid;
-			if (!defender.IsValid()) return kResultInvalid;
+			action_parameters_.Clear();
+			if (!AttackPhase(attacker, defender)) return;
+
+			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+			assert(flow_context_.Empty());
+		}
+
+		bool AttackPhase(state::CardRef attacker, state::CardRef defender)
+		{
+			if (!attacker.IsValid()) return SetResult(kResultInvalid);
+			if (!defender.IsValid()) return SetResult(kResultInvalid);
 
 			// check if attacker is attackable
-			if (!IsAttackable(attacker)) return kResultInvalid;
+			if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
 
 			while (true) {
 				// TODO: attacker should not be changed
@@ -179,7 +166,7 @@ namespace FlowControl
 				}
 			}
 
-			return kResultNotDetermined;
+			return true;
 		}
 
 		bool IsAttackable(state::CardRef attacker)
@@ -193,6 +180,28 @@ namespace FlowControl
 		}
 
 	private:
+		void EndTurnInternal()
+		{
+			if (state_.turn == 89) {
+				flow_context_.result_ = kResultDraw;
+				return;
+			}
+			++state_.turn;
+
+			action_parameters_.Clear();
+			EndTurnPhase();
+			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+
+			state_.ChangePlayer();
+
+			action_parameters_.Clear();
+			StartTurnPhase();
+			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+
+			action_parameters_.Clear();
+			DrawCardPhase();
+			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+		}
 		void EndTurnPhase()
 		{
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
@@ -215,6 +224,14 @@ namespace FlowControl
 		void DrawCardPhase()
 		{
 			Manipulate(state_, flow_context_).CurrentHero().DrawCard();
+		}
+
+	private:
+		bool SetResult(Result result)
+		{
+			assert(result != kResultNotDetermined);
+			flow_context_.result_ = result;
+			return false;
 		}
 
 	public:

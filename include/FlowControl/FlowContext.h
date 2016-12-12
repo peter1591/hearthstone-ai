@@ -18,6 +18,7 @@ namespace FlowControl
 		FlowContext(IRandomGenerator & random, ActionParameterWrapper & action_parameters)
 			: random_(random), action_parameters_(action_parameters)
 		{
+			result_ = kResultNotDetermined;
 		}
 
 		void AddDeadEntryHint(state::State & state, state::CardRef ref)
@@ -36,6 +37,7 @@ namespace FlowControl
 	public:
 		IRandomGenerator & random_;
 		ActionParameterWrapper & action_parameters_;
+		Result result_;
 
 	private:
 		std::multimap<int, state::CardRef> dead_entity_hints_;
