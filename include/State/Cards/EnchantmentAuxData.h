@@ -18,6 +18,7 @@ namespace state
 				return enchantments.Exists<EnchantmentType>(std::forward<T>(id));
 			}
 
+			EnchantableStates origin_states;
 			TieredEnchantments enchantments;
 			bool need_update;
 		};

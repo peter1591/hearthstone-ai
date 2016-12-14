@@ -326,5 +326,8 @@
     <ClInclude Include="..\..\include\State\Cards\CardData.h">
       <Filter>Header Files\State\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardData.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

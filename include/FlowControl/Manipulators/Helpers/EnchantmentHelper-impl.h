@@ -17,7 +17,7 @@ namespace FlowControl
 
 				if (!data.need_update) return;
 
-				state::Cards::EnchantableStates origin_states; // TODO: see issue = Cards::Database::GetInstance().Get(card_.GetCardId()).enchantable_states;
+				const state::Cards::EnchantableStates & origin_states = data.origin_states;
 				state::Cards::EnchantableStates new_states = origin_states;
 				data.enchantments.ApplyAll(new_states);
 
