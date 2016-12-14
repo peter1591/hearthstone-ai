@@ -7,7 +7,7 @@
 #include "json/json.h"
 
 #include "State/Types.h"
-#include "State/Cards/RawCard.h"
+#include "State/Cards/CardData.h"
 
 namespace Cards
 {

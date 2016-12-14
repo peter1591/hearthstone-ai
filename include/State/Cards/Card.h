@@ -2,7 +2,7 @@
 
 #include <string>
 #include <utility>
-#include "State/Cards/RawCard.h"
+#include "State/Cards/CardData.h"
 
 namespace FlowControl
 {
