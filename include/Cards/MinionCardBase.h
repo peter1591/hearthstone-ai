@@ -29,7 +29,7 @@ namespace Cards
 		state::board::Player & player_;
 	};
 
-	class MinionCardBase
+	class MinionCardUtils
 	{
 	public:
 		template <typename Context>

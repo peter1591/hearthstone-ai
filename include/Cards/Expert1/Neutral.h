@@ -7,7 +7,7 @@
 
 namespace Cards
 {
-	class Card_EX1_089 : MinionCardBase
+	class Card_EX1_089 : MinionCardUtils
 	{
 	public:
 		static void BattleCry(FlowControl::Context::BattleCry & context)
@@ -30,7 +30,7 @@ namespace Cards
 		}
 	};
 
-	class Card_NEW1_038 : MinionCardBase
+	class Card_NEW1_038 : MinionCardUtils
 	{
 	public:
 		static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
