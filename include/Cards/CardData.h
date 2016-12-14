@@ -13,5 +13,7 @@ namespace Cards
 		int cost;
 		int attack;
 		int max_hp;
+
+		static constexpr int kFieldChangeId = 1; // modify this if any field changed. This helps to track which codes should be modified accordingly.
 	};
 }

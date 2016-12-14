@@ -51,6 +51,8 @@ namespace state
 		public:
 			static CardData FromDatabase(const ::Cards::CardData & data)
 			{
+				static_assert(::Cards::CardData::kFieldChangeId == 1, "cards field changed");
+
 				CardData ret;
 				ret.card_id = data.card_id;
 				ret.card_type = data.card_type;
