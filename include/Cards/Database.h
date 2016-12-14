@@ -35,7 +35,7 @@ namespace Cards
 
 		std::unordered_map<std::string, int> GetIdMap() const { return origin_id_map_; }
 
-		state::Cards::RawCard const& Get(int id)
+		state::Cards::CardData const& Get(int id)
 		{
 			assert(id >= 0);
 			assert(id < final_cards_size_);
@@ -49,10 +49,10 @@ namespace Cards
 		{
 			if (cards_json.isArray() == false) return false;
 
-			std::vector<state::Cards::RawCard> cards;
+			std::vector<state::Cards::CardData> cards;
 
 			// Reserve id = 0
-			cards.push_back(state::Cards::RawCard());
+			cards.push_back(state::Cards::CardData());
 
 			origin_id_map_.clear();
 			for (auto const& card_json : cards_json) {
@@ -62,7 +62,7 @@ namespace Cards
 			if (final_cards_) { delete[] final_cards_; }
 
 			final_cards_size_ = (int)cards.size();
-			final_cards_ = new state::Cards::RawCard[final_cards_size_];
+			final_cards_ = new state::Cards::CardData[final_cards_size_];
 
 			// Copy to raw array to support lock-free access
 			for (int i = 0; i < cards.size(); ++i) {
@@ -72,7 +72,7 @@ namespace Cards
 			return true;
 		}
 
-		void AddCard(Json::Value const& json, std::vector<state::Cards::RawCard> & cards)
+		void AddCard(Json::Value const& json, std::vector<state::Cards::CardData> & cards)
 		{
 			const std::string origin_id = json["id"].asString();
 			const std::string type = json["type"].asString();
@@ -81,7 +81,7 @@ namespace Cards
 				throw std::exception("Card ID string collision.");
 			}
 
-			state::Cards::RawCard new_card;
+			state::Cards::CardData new_card;
 			new_card.card_id = (int)cards.size();
 
 			if (type == "MINION") {
@@ -104,7 +104,7 @@ namespace Cards
 			cards.push_back(new_card);
 		}
 
-		void ParseMinionCard(Json::Value const& json, state::Cards::RawCard & card)
+		void ParseMinionCard(Json::Value const& json, state::Cards::CardData & card)
 		{
 			card.card_type = state::kCardTypeMinion;
 			card.enchantable_states.cost = json["cost"].asInt();
@@ -112,25 +112,25 @@ namespace Cards
 			card.enchantable_states.max_hp = json["health"].asInt();
 		}
 
-		void ParseSpellCard(Json::Value const& json, state::Cards::RawCard & card)
+		void ParseSpellCard(Json::Value const& json, state::Cards::CardData & card)
 		{
 			card.card_type = state::kCardTypeSpell;
 			// TODO
 		}
 
-		void ParseWeaponCard(Json::Value const& json, state::Cards::RawCard & card)
+		void ParseWeaponCard(Json::Value const& json, state::Cards::CardData & card)
 		{
 			card.card_type = state::kCardTypeWeapon;
 			// TODO
 		}
 
-		void ParseHeroPowerCard(Json::Value const& json, state::Cards::RawCard & card)
+		void ParseHeroPowerCard(Json::Value const& json, state::Cards::CardData & card)
 		{
 			card.card_type = state::kCardTypeHeroPower;
 			// TODO
 		}
 
-		void ParseMechanics(Json::Value const& json, state::Cards::RawCard & card)
+		void ParseMechanics(Json::Value const& json, state::Cards::CardData & card)
 		{
 			card.enchantable_states.mechanics.taunt = false;
 			card.enchantable_states.mechanics.charge = false;
@@ -196,7 +196,7 @@ namespace Cards
 		}
 
 	private:
-		state::Cards::RawCard * final_cards_; // Raw array to support lock-free access
+		state::Cards::CardData * final_cards_; // Raw array to support lock-free access
 		int final_cards_size_;
 
 		std::unordered_map<std::string, int> origin_id_map_;

@@ -53,7 +53,7 @@ static void CheckZoneAndPosition(const state::State & state, state::CardRef ref,
 
 state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
-	state::Cards::RawCard raw_card = Cards::Database::GetInstance().Get((int)id);
+	state::Cards::CardData raw_card = Cards::Database::GetInstance().Get((int)id);
 	raw_card.enchantable_states.player = player;
 	raw_card.zone = state::kCardZoneDeck;
 	raw_card.zone_position = (int)state.board.Get(player).deck_.Size();
@@ -88,7 +88,7 @@ static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_conte
 
 state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
-	state::Cards::RawCard raw_card = Cards::Database::GetInstance().Get((int)id);
+	state::Cards::CardData raw_card = Cards::Database::GetInstance().Get((int)id);
 	raw_card.enchantable_states.player = player;
 	raw_card.zone = state::kCardZoneHand;
 	raw_card.zone_position = (int)state.board.Get(player).hand_.Size();
@@ -130,9 +130,9 @@ static void MakeHand(state::State & state, FlowControl::FlowContext & flow_conte
 	AddHandCard(Cards::ID_AT_118, flow_context, state, player);
 }
 
-static state::Cards::RawCard GetHero(state::PlayerIdentifier player)
+static state::Cards::CardData GetHero(state::PlayerIdentifier player)
 {
-	state::Cards::RawCard raw_card;
+	state::Cards::CardData raw_card;
 	raw_card.card_id = 8;
 	raw_card.card_type = state::kCardTypeHero;
 	raw_card.zone = state::kCardZonePlay;

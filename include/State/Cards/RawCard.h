@@ -15,13 +15,13 @@ namespace state
 
 	namespace Cards
 	{
-		class RawCard
+		class CardData
 		{
 		public:
 			typedef std::function<void(FlowControl::Context::Deathrattle &)> DeathrattleCallback;
 			typedef std::list<DeathrattleCallback> Deathrattles;
 
-			RawCard() :
+			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone(kCardZoneInvalid), zone_position(-1), damaged(0),
 				just_played(false), num_attacks_this_turn(0), aura_id(-1)
 			{

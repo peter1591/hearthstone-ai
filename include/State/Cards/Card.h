@@ -34,22 +34,22 @@ namespace state
 			{
 				friend class FlowControl::Manipulators::Helpers::EnchantmentHelper;
 			public:
-				MutableEnchantmentAuxDataGetter(RawCard & data) : data_(data) {}
+				MutableEnchantmentAuxDataGetter(CardData & data) : data_(data) {}
 			private:
 				EnchantmentAuxData & Get() { return data_.enchantment_aux_data; }
 			private:
-				RawCard & data_;
+				CardData & data_;
 			};
 
 			class MutableAuraAuxDataGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::AuraHelper;
 			public:
-				MutableAuraAuxDataGetter(RawCard & data) : data_(data) {}
+				MutableAuraAuxDataGetter(CardData & data) : data_(data) {}
 			private:
 				AuraAuxData & Get() { return data_.aura_aux_data; }
 			private:
-				RawCard & data_;
+				CardData & data_;
 			};
 
 			class LocationSetter
@@ -58,7 +58,7 @@ namespace state
 				friend class FlowControl::Manipulators::Helpers::ZonePositionSetter;
 
 			public:
-				LocationSetter(RawCard & data) : data_(data) {}
+				LocationSetter(CardData & data) : data_(data) {}
 			private:
 				LocationSetter & Player(PlayerIdentifier player)
 				{
@@ -79,22 +79,22 @@ namespace state
 				}
 
 			private:
-				RawCard & data_;
+				CardData & data_;
 			};
 
 			class DamageSetter
 			{
 				friend class FlowControl::Manipulators::detail::DamageSetter;
 			public:
-				DamageSetter(RawCard & data) : data_(data) {}
+				DamageSetter(CardData & data) : data_(data) {}
 			private:
 				void Set(int v) { data_.damaged = v; }
 			private:
-				RawCard & data_;
+				CardData & data_;
 			};
 
 		public:
-			explicit Card(const RawCard & data) : data_(data) {}
+			explicit Card(const CardData & data) : data_(data) {}
 
 		public: // getters and setters
 			int GetCardId() const { return data_.card_id; }
@@ -145,13 +145,13 @@ namespace state
 				data_.deathrattles.push_back(std::forward<T>(deathrattle));
 			}
 
-			RawCard::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
+			CardData::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
 		public:
-			const RawCard & GetRawData() const { return data_; }
+			const CardData & GetRawData() const { return data_; }
 
 		private:
-			RawCard data_;
+			CardData data_;
 		};
 	}
 }
