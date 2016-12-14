@@ -81,7 +81,8 @@ namespace FlowControl
 			case state::kCardTypeMinion:
 				return PlayMinionCardPhase(hand_idx, card_ref, card);
 			default:
-				throw std::exception("not implemented");
+				flow_context_.result_ = kResultInvalid;
+				return false;
 			}
 		}
 
