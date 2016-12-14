@@ -8,6 +8,7 @@
 #include "State/Cards/EnchantmentAuxData.h"
 #include "State/Cards/AuraAuxData.h"
 #include "FlowControl/Context/Deathrattle.h"
+#include "Cards/CardData.h"
 
 namespace state
 {
@@ -46,6 +47,18 @@ namespace state
 			AuraAuxData aura_aux_data;
 
 			Deathrattles deathrattles;
+
+		public:
+			static CardData FromDatabase(const ::Cards::CardData & data)
+			{
+				CardData ret;
+				ret.card_id = data.card_id;
+				ret.card_type = data.card_type;
+				ret.enchantable_states.cost = data.cost;
+				ret.enchantable_states.attack = data.attack;
+				ret.enchantable_states.max_hp = data.max_hp;
+				return ret;
+			}
 
 		public: // for hero type
 			CardRef weapon_ref;
