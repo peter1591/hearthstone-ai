@@ -52,7 +52,27 @@ namespace Cards
 			});
 		}
 	};
+
+	class Card_EX1_020 : public MinionCardBase
+	{
+	public:
+		Card_EX1_020() : MinionCardBase(Cards::ID_EX1_020, 3, 3, 1)
+		{
+			this->enchantable_states.mechanics.shield = true;
+		}
+	};
+
+	class Card_CS1_069 : public MinionCardBase
+	{
+	public:
+		Card_CS1_069() : MinionCardBase(Cards::ID_CS1_069, 5, 3, 6)
+		{
+			this->enchantable_states.mechanics.taunt = true;
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::ID_EX1_089, Cards::Card_EX1_089)
 REGISTER_MINION_CARD_CLASS(Cards::ID_NEW1_038, Cards::Card_NEW1_038)
+REGISTER_MINION_CARD_CLASS(Cards::ID_EX1_020, Cards::Card_EX1_020)
+REGISTER_MINION_CARD_CLASS(Cards::ID_CS1_069, Cards::Card_CS1_069)
