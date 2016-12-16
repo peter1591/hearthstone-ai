@@ -311,9 +311,6 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\MinionCardBase.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\Cards.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
@@ -327,6 +324,9 @@
       <Filter>Header Files\State\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\CardData.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\MinionCardUtils.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
   </ItemGroup>
