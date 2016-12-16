@@ -55,19 +55,19 @@ namespace FlowControl
 			template <typename... Args>
 			static void GetTargets(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Auras_impl::GetTargetsInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::GetTargetsInvoker, void>(id, std::forward<Args>(args)...);
 			}
 
 			template <typename... Args>
 			static void ApplyOn(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Auras_impl::ApplyOnInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::ApplyOnInvoker, void>(id, std::forward<Args>(args)...);
 			}
 
 			template <typename... Args>
 			static void RemoveFrom(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Auras_impl::RemoveFromInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Auras_impl::RemoveFromInvoker, void>(id, std::forward<Args>(args)...);
 			}
 		};
 	}

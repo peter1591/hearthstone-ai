@@ -14,8 +14,8 @@ namespace Utils
 			using type = DefaultInvoked;
 		};
 
-		template <template <typename> class InvokerType, typename... Args>
-		static void Invoke(int id, Args&&... args)
+		template <template <typename> class InvokerType, typename Ret, typename... Args>
+		static Ret Invoke(int id, Args&&... args)
 		{
 #define INVOKE_CASE(n) \
 			&InvokerType<DispatchMap<n>::type>::Invoke,
@@ -34,7 +34,7 @@ namespace Utils
 #define LOOP_X2048(n) LOOP_X1024(n) LOOP_X1024(n+1024)
 #define LOOP_X4096(n) LOOP_X2048(n) LOOP_X2048(n+2048)
 
-			using FuncPtr = void(*)(Args&&...);
+			using FuncPtr = Ret (*)(Args&&...);
 
 			static FuncPtr const jump_table[] =
 			{

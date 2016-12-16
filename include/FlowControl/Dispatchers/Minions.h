@@ -55,13 +55,13 @@ namespace FlowControl
 			template <typename... Args>
 			static void BattleCry(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Minions_impl::BattleCryInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Minions_impl::BattleCryInvoker, void>(id, std::forward<Args>(args)...);
 			}
 
 			template <typename... Args>
 			static void AfterSummoned(int id, Args&&... args)
 			{
-				return DispatcherImpl::Invoke<Minions_impl::AfterSummonedInvoker>(id, std::forward<Args>(args)...);
+				return DispatcherImpl::Invoke<Minions_impl::AfterSummonedInvoker, void>(id, std::forward<Args>(args)...);
 			}
 		};
 	}
