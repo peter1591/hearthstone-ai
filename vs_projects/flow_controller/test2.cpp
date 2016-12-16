@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <iostream>
 
-#include "Cards/Database.h"
 #include "Cards/id-map.h"
 #include "FlowControl/FlowController.h"
 #include "State/State.h"
@@ -53,7 +52,7 @@ static void CheckZoneAndPosition(const state::State & state, state::CardRef ref,
 
 state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
-	state::Cards::CardData raw_card = state::Cards::CardData::FromDatabase(Cards::Database::GetInstance().Get((int)id));
+	state::Cards::CardData raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
 	raw_card.enchantable_states.player = player;
 	raw_card.zone = state::kCardZoneDeck;
 	raw_card.zone_position = (int)state.board.Get(player).deck_.Size();
@@ -90,7 +89,7 @@ static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_conte
 
 state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
-	state::Cards::CardData raw_card = state::Cards::CardData::FromDatabase(Cards::Database::GetInstance().Get((int)id));
+	state::Cards::CardData raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
 	raw_card.enchantable_states.player = player;
 	raw_card.zone = state::kCardZoneHand;
 	raw_card.zone_position = (int)state.board.Get(player).hand_.Size();
@@ -127,11 +126,11 @@ static void MakeHand(state::State & state, FlowControl::FlowContext & flow_conte
 {
 	AddHandCard(Cards::ID_EX1_089, flow_context, state, player);
 	AddHandCard(Cards::ID_NEW1_038, flow_context, state, player);
-	AddHandCard(Cards::ID_AT_116, flow_context, state, player);
-	AddHandCard(Cards::ID_FP1_024, flow_context, state, player);
-	AddHandCard(Cards::ID_FP1_024, flow_context, state, player);
-	AddHandCard(Cards::ID_AT_118, flow_context, state, player);
-	AddHandCard(Cards::ID_AT_118, flow_context, state, player);
+	AddHandCard(Cards::ID_EX1_089, flow_context, state, player);
+	AddHandCard(Cards::ID_EX1_089, flow_context, state, player);
+	AddHandCard(Cards::ID_EX1_089, flow_context, state, player);
+	AddHandCard(Cards::ID_NEW1_038, flow_context, state, player);
+	AddHandCard(Cards::ID_NEW1_038, flow_context, state, player);
 }
 
 static state::Cards::CardData GetHero(state::PlayerIdentifier player)
