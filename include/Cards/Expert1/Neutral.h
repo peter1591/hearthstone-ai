@@ -1,15 +1,18 @@
 #pragma once
 
 #include "Cards/id-map.h"
+#include "Cards/MinionCardBase.h"
 #include "Cards/MinionCardUtils.h"
 #include "Cards/EnchantmentCardBase.h"
 #include "FlowControl/Dispatchers/Minions.h"
 
 namespace Cards
 {
-	class Card_EX1_089 : MinionCardUtils
+	class Card_EX1_089 : public MinionCardBase, MinionCardUtils
 	{
 	public:
+		Card_EX1_089() : MinionCardBase(Cards::ID_EX1_089, 3, 4, 4) {}
+
 		static void BattleCry(FlowControl::Context::BattleCry & context)
 		{
 			AnotherPlayer(context).GainEmptyCrystal();
@@ -30,9 +33,14 @@ namespace Cards
 		}
 	};
 
-	class Card_NEW1_038 : MinionCardUtils
+	class Card_NEW1_038 : public MinionCardBase, MinionCardUtils
 	{
 	public:
+		Card_NEW1_038() : MinionCardBase(Cards::ID_NEW1_038, 8, 7, 7)
+		{
+
+		}
+
 		static void AfterSummoned(FlowControl::Context::AfterSummoned & context)
 		{
 			state::CardRef self = context.card_ref_;

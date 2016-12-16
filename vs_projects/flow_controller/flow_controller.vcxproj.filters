@@ -329,5 +329,8 @@
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\MinionCardBase.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
