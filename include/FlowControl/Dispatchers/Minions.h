@@ -9,6 +9,15 @@ namespace FlowControl
 	{
 		namespace Minions_impl
 		{
+			template <typename T> class ConstructorInvoker
+			{
+			public:
+				static state::Cards::CardData Invoke()
+				{
+					return T();
+				}
+			};
+
 #define CREATE_INVOKER(METHOD_NAME) \
 			template <typename T> class METHOD_NAME ## Invoker \
 			{ \
@@ -44,13 +53,25 @@ namespace FlowControl
 
 #undef CREATE_INVOKER
 
-			class DefaultInvoked { };
+			class DefaultInvoked : public state::Cards::CardData
+			{
+			public:
+				DefaultInvoked()
+				{
+					throw std::exception("card is not implemented");
+				}
+			};
 		}
 
 		class Minions
 		{
 		public:
 			using DispatcherImpl = Utils::StaticDispatcher<Minions_impl::DefaultInvoked>;
+
+			static state::Cards::CardData CreateInstance(int id)
+			{
+				return DispatcherImpl::Invoke<Minions_impl::ConstructorInvoker, state::Cards::CardData>(id);
+			}
 
 			template <typename... Args>
 			static void BattleCry(int id, Args&&... args)
