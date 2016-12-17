@@ -39,8 +39,43 @@ namespace Cards
 
 		Card_CS2_168() {}
 	};
+
+	class Card_EX1_508_Enchant : public EnchantmentCardBase
+	{
+	public:
+		static constexpr EnchantmentTiers tier = kEnchantmentAura;
+
+		Card_EX1_508_Enchant()
+		{
+			apply_functor = [](auto& stats) {
+				++stats.attack;
+			};
+		}
+	};
+
+	class Card_EX1_508 : public MinionCardBase<Card_EX1_508>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_508;
+
+		Card_EX1_508()
+		{
+			aura_handler.get_targets = [](auto& context) {
+				if (!IsAlive(context, context.card_ref_)) return;
+				auto targetor = Targets().Owner(context).Minion().Murlocs().Exclude(context.card_ref_);
+				targetor.GetInfo().FillTargets(context.state_, context.targets_);
+			};
+			aura_handler.apply_on = [](auto& context) {
+				context.enchant_id_ = Manipulate(context).Card(context.target_).Enchant().Add(Card_EX1_508_Enchant());
+			};
+			aura_handler.remove_from = [](auto& context) {
+				Manipulate(context).Card(context.target_).Enchant().Remove<Card_EX1_508_Enchant>(context.enchant_id_);
+			};
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS1_042)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_168)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_508)

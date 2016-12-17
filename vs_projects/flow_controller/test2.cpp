@@ -356,4 +356,68 @@ void test2()
 	CheckMinions(state, state::kPlayerSecond, { {1, 1, 1} });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
 	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
+
+	AddHandCard(Cards::ID_EX1_508, controller.flow_context_, state, state::kPlayerSecond);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
+	CheckCrystals(state, state::kPlayerSecond, { 6, 7 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 10, 9, 10 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
+	assert(state.mgr.Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_EX1_508);
+
+	assert(controller.PlayCard(9) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
+	CheckCrystals(state, state::kPlayerSecond, { 5, 7 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 10, 9, 10 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 }, {1, 1, 1} });
+	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
+
+	AddHandCard(Cards::ID_CS2_168, controller.flow_context_, state, state::kPlayerSecond);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
+	CheckCrystals(state, state::kPlayerSecond, { 5, 7 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 10, 9, 10 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 }, {1, 1, 1} });
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
+	assert(state.mgr.Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_CS2_168);
+
+	parameter_getter.next_minion_put_location = 1;
+	assert(controller.PlayCard(9) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
+	CheckCrystals(state, state::kPlayerSecond, { 4, 7 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 10, 9, 10 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 }, {3, 1, 1}, { 1, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
+
+	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
+	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 8, 8 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 12, 11, 12 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 },{ 3, 1, 1 }, {1, 1, 1} });
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
+
+	assert(controller.Attack(state.GetCurrentPlayer().minions_.Get(2), state.GetOppositePlayer().minions_.Get(1)) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 8, 8 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 12, 10, 12 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 },{ 2, 1, 1 }});
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 2);
 }
