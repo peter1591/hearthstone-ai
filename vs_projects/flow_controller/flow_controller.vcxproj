@@ -125,12 +125,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\Cards\CardData.h" />
     <ClInclude Include="..\..\include\Cards\Cards.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
+    <ClInclude Include="..\..\include\Cards\TargetorUtils.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AddedToPlayZone.h" />

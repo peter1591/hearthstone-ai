@@ -4,7 +4,6 @@
 #include "Cards/MinionCardBase.h"
 #include "Cards/MinionCardUtils.h"
 #include "Cards/EnchantmentCardBase.h"
-#include "FlowControl/Dispatchers/Minions.h"
 
 namespace Cards
 {

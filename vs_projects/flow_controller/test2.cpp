@@ -16,10 +16,16 @@ public:
 
 	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 	{
-		return state::CardRef();
+		assert(targets.size() == next_battlecry_target_count);
+		
+		if (next_battlecry_target_idx < 0) return state::CardRef();
+		else return targets[next_battlecry_target_idx];
 	}
 
 	int next_minion_put_location;
+
+	int next_battlecry_target_count;
+	int next_battlecry_target_idx;
 };
 
 class Test2_RandomGenerator : public FlowControl::IRandomGenerator

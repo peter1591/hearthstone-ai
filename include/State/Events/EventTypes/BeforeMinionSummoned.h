@@ -20,6 +20,7 @@ namespace state
 					state::CardRef card_ref_;
 					const state::Cards::Card & card_;
 				};
+
 			public:
 				typedef std::function<void(HandlersContainerController &controller, Context&)> FunctorType;
 				typedef std::tuple<Context&> ArgsTuple;

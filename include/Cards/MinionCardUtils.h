@@ -3,6 +3,7 @@
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/Deathrattle.h"
 #include "State/State.h"
+#include "Cards/TargetorUtils.h"
 
 namespace Cards
 {
@@ -83,6 +84,8 @@ namespace Cards
 		{
 			return DamageHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
+
+		static TargetorHelper Targets() { return TargetorHelper(); }
 
 		template <typename Context>
 		static state::CardRef Owner(Context&& context)
