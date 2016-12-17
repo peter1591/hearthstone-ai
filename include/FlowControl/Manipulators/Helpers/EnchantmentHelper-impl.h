@@ -13,12 +13,12 @@ namespace FlowControl
 		{
 			inline void EnchantmentHelper::Update()
 			{
+				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 
 				if (!data.need_update) return;
 
-				const state::Cards::EnchantableStates & origin_states = data.origin_states;
-				state::Cards::EnchantableStates new_states = origin_states;
+				state::Cards::EnchantableStates new_states = data.origin_states;
 				data.enchantments.ApplyAll(new_states);
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Card(card_ref_);
@@ -26,8 +26,7 @@ namespace FlowControl
 				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 3, "enchantable fields changed");
 
 				// update states field by field
-				bool update_zone = false;
-				if (new_states.player != origin_states.player) {
+				if (new_states.player != current_states.player) {
 					switch (card_.GetCardType()) {
 					case state::kCardTypeMinion:
 						ChangeMinionPlayer(new_states.player);
@@ -37,25 +36,25 @@ namespace FlowControl
 					}
 				}
 
-				if (new_states.cost != origin_states.cost) {
+				if (new_states.cost != current_states.cost) {
 					card_manipulator.Cost(new_states.cost);
 					assert(card_.GetCost() == new_states.cost);
 				}
-				if (new_states.attack != origin_states.attack) {
+				if (new_states.attack != current_states.attack) {
 					card_manipulator.Attack(new_states.attack);
 					assert(card_.GetAttack() == new_states.attack);
 				}
-				if (new_states.max_hp != origin_states.max_hp) {
+				if (new_states.max_hp != current_states.max_hp) {
 					card_manipulator.MaxHP(new_states.max_hp);
 					assert(card_.GetMaxHP() == new_states.max_hp);
 				}
 
-				if (new_states.taunt != origin_states.taunt) {
+				if (new_states.taunt != current_states.taunt) {
 					card_manipulator.Taunt(new_states.taunt);
 					assert(card_.GetRawData().enchantable_states.taunt == new_states.taunt);
 				}
 
-				if (new_states.shielded != origin_states.shielded) {
+				if (new_states.shielded != current_states.shielded) {
 					card_manipulator.Shield(new_states.shielded);
 					assert(card_.GetRawData().enchantable_states.shielded == new_states.shielded);
 				}

@@ -148,6 +148,7 @@ static state::Cards::CardData GetHero(state::PlayerIdentifier player)
 	raw_card.enchantable_states.max_hp = 30;
 	raw_card.enchantable_states.player = player;
 	raw_card.enchantable_states.attack = 0;
+	raw_card.enchantment_aux_data.origin_states = raw_card.enchantable_states;
 	return raw_card;
 }
 
