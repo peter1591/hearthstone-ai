@@ -35,8 +35,9 @@ namespace state
 			typedef std::list<DeathrattleCallback> Deathrattles;
 
 			CardData() :
-				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), play_order(-1),
-				zone(kCardZoneInvalid), zone_position(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
+				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
+				zone(kCardZoneInvalid), zone_position(-1),
+				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				aura_id(-1), added_to_play_zone(nullptr), battlecry(nullptr)
 			{
 			}
@@ -44,11 +45,12 @@ namespace state
 			int card_id;
 			CardType card_type;
 			CardRace card_race;
-			int play_order;
+			CardRarity card_rarity;
 
 			CardZone zone;
 			int zone_position;
 
+			int play_order;
 			int damaged;
 			bool just_played;
 			int num_attacks_this_turn;

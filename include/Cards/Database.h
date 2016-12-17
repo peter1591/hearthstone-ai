@@ -111,6 +111,21 @@ namespace Cards
 			throw std::exception("unknown set");
 		}
 
+		state::CardRarity GetCardRarity(Json::Value const& json)
+		{
+			const std::string rarity = json["rarity"].asString();
+
+			if (rarity == "COMMON") return state::kCardRarityCommon;
+			if (rarity == "RARE") return state::kCardRarityRare;
+			if (rarity == "EPIC") return state::kCardRarityEpic;
+			if (rarity == "LEGENDARY") return state::kCardRarityLegendary;
+
+			if (rarity == "FREE") return state::kCardRarityInvalid;
+			if (rarity == "") return state::kCardRarityInvalid;
+
+			throw std::exception("unknown rarity");
+		}
+
 		void AddCard(Json::Value const& json, std::vector<CardData> & cards)
 		{
 			const std::string origin_id = json["id"].asString();
@@ -144,6 +159,7 @@ namespace Cards
 			new_card.attack = json["attack"].asInt();
 			new_card.max_hp = json["health"].asInt();
 			new_card.card_race = GetCardRace(json);
+			new_card.card_rarity = GetCardRarity(json);
 
 			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);

@@ -9,6 +9,7 @@ namespace Cards
 		int card_id;
 		state::CardType card_type;
 		state::CardRace card_race;
+		state::CardRarity card_rarity;
 
 		int cost;
 		int attack;

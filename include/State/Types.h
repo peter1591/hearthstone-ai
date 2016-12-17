@@ -61,6 +61,15 @@ namespace state
 		kCardSetInvalid
 	};
 
+	enum CardRarity
+	{
+		kCardRarityCommon,
+		kCardRarityRare,
+		kCardRarityEpic,
+		kCardRarityLegendary,
+		kCardRarityInvalid
+	};
+
 	enum PlayerIdentifier
 	{
 		kPlayerFirst,
