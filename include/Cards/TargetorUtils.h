@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <vector>
+#include <unordered_set>
 #include <State/Types.h>
 
 namespace Cards
@@ -12,36 +13,63 @@ namespace Cards
 		TargetorInfo() :
 			include_friendly(true), include_enemy(true),
 			include_hero(true), include_minion(true),
-			include_stealth(true), include_spell_immune(true)
+			minion_filter(kMinionFilterAll)
 		{
 		}
 
 		std::vector<state::CardRef> GetTargets(state::State const& state) const
 		{
 			std::vector<state::CardRef> targets;
-
-			if (include_friendly) AddPlayerTargets(state.GetCurrentPlayer(), targets);
-			if (include_enemy) AddPlayerTargets(state.GetOppositePlayer(), targets);
-
+			FillTargets(state, targets);
 			return targets;
 		}
 
-	private:
-		void AddPlayerTargets(state::board::Player const& player, std::vector<state::CardRef> & targets) const
+		template <typename Container>
+		void FillTargets(state::State const& state, Container& targets) const
 		{
-			if (include_hero) targets.push_back(player.hero_ref_);
+			if (include_friendly) AddPlayerTargets(state, state.GetCurrentPlayer(), targets);
+			if (include_enemy) AddPlayerTargets(state, state.GetOppositePlayer(), targets);
+		}
+
+	private:
+		template <typename Container> static void AddTarget(state::CardRef ref, Container & targets);
+		template <> static void AddTarget(state::CardRef ref, std::vector<state::CardRef> & targets) {
+			targets.push_back(ref);
+		}
+		template <> static void AddTarget(state::CardRef ref, std::unordered_set<state::CardRef> & targets) {
+			targets.insert(ref);
+		}
+
+		void AddPlayerTargets(state::State const& state, state::board::Player const& player, std::vector<state::CardRef> & targets) const
+		{
+			if (include_hero) AddTarget(player.hero_ref_, targets);
 			if (include_minion) {
 				for (state::CardRef minion : player.minions_.Get()) {
-					AddMinionTargets(minion, targets);
+					AddMinionTargets(state, minion, targets);
 				}
 			}
 		}
 
-		void AddMinionTargets(state::CardRef const& minion, std::vector<state::CardRef> & targets) const
+		void AddMinionTargets(state::State const& state, state::CardRef const& minion, std::vector<state::CardRef> & targets) const
 		{
-			// TODO: check stealth
-			// TODO: check spell immune
-			targets.push_back(minion);
+			auto const& card = state.mgr.Get(minion);
+
+			switch (minion_filter) {
+			case kMinionFilterAll:
+				break;
+			case kMinionFilterTargetable:
+				// TODO: check stealth
+				break;
+			case kMinionFilterTargetableBySpell:
+				// TODO: check stealh
+				// TODO: check immune spell
+				break;
+			case kMinionFilterMurloc:
+				if (card.GetRace() == state::kCardRaceMurloc) break;
+				return;
+			}
+
+			AddTarget(minion, targets);
 		}
 
 	public:
@@ -51,8 +79,13 @@ namespace Cards
 		bool include_minion;
 		bool include_hero;
 
-		bool include_stealth;
-		bool include_spell_immune;
+		enum MinionFilterType
+		{
+			kMinionFilterAll,
+			kMinionFilterTargetable,
+			kMinionFilterTargetableBySpell,
+			kMinionFilterMurloc
+		} minion_filter;
 	};
 
 	class TargetorHelper
@@ -60,15 +93,19 @@ namespace Cards
 	public: // Fluent-like API to set up
 		TargetorHelper & Targetable()
 		{
-			info.include_stealth = false;
-			assert(info.include_spell_immune);
+			info.minion_filter = TargetorInfo::kMinionFilterTargetable;
 			return *this;
 		}
 
 		TargetorHelper & SpellTargetable()
 		{
-			info.include_spell_immune = false;
-			info.include_stealth = false;
+			info.minion_filter = TargetorInfo::kMinionFilterTargetableBySpell;
+			return *this;
+		}
+
+		TargetorHelper & Murlocs()
+		{
+			info.minion_filter = TargetorInfo::kMinionFilterMurloc;
 			return *this;
 		}
 

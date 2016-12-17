@@ -99,6 +99,7 @@ namespace state
 		public: // getters and setters
 			int GetCardId() const { return data_.card_id; }
 			CardType GetCardType() const { return data_.card_type; }
+			CardRace GetRace() const { return data_.card_race; }
 			int GetPlayOrder() const { return data_.play_order; }
 
 			CardData::BattlecryCallback* GetBattlecryCallback() const { return data_.battlecry; }
