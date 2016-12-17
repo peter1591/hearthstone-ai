@@ -8,12 +8,12 @@
 
 namespace Cards
 {
-	class Card_EX1_089 : public MinionCardBase, MinionCardUtils
+	class Card_EX1_089 : public MinionCardBase<Card_EX1_089>, MinionCardUtils
 	{
 	public:
 		static constexpr int id = Cards::ID_EX1_089;
 
-		Card_EX1_089() : MinionCardBase(id)
+		Card_EX1_089()
 		{
 			battlecry = [](auto& context) {
 				AnotherPlayer(context).GainEmptyCrystal();
@@ -35,12 +35,12 @@ namespace Cards
 		}
 	};
 
-	class Card_NEW1_038 : public MinionCardBase, MinionCardUtils
+	class Card_NEW1_038 : public MinionCardBase<Card_NEW1_038>, MinionCardUtils
 	{
 	public:
 		static constexpr int id = Cards::ID_NEW1_038;
 
-		Card_NEW1_038() : MinionCardBase(id)
+		Card_NEW1_038()
 		{
 			added_to_play_zone = [](auto& context) {
 				state::CardRef self = context.card_ref_;
@@ -53,23 +53,23 @@ namespace Cards
 		}
 	};
 
-	class Card_EX1_020 : public MinionCardBase
+	class Card_EX1_020 : public MinionCardBase<Card_EX1_020>
 	{
 	public:
 		static constexpr int id = Cards::ID_EX1_020;
 
-		Card_EX1_020() : MinionCardBase(id)
+		Card_EX1_020()
 		{
 			this->enchantable_states.mechanics.shield = true;
 		}
 	};
 
-	class Card_CS1_069 : public MinionCardBase
+	class Card_CS1_069 : public MinionCardBase<Card_CS1_069>
 	{
 	public:
 		static constexpr int id = Cards::ID_CS1_069;
 
-		Card_CS1_069() : MinionCardBase(id)
+		Card_CS1_069()
 		{
 			this->enchantable_states.mechanics.taunt = true;
 		}
