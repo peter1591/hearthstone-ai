@@ -1,7 +1,6 @@
 #pragma once
 
 #include <assert.h>
-#include "FlowControl/Dispatchers/Auras.h"
 #include "FlowControl/Context/AuraGetTargets.h"
 #include "FlowControl/Context/AuraApplyOn.h"
 #include "FlowControl/Context/AuraRemoveFrom.h"
@@ -16,12 +15,16 @@ namespace FlowControl
 		{
 			inline void AuraHelper::Update()
 			{
-				if (card_.GetAuraId() < 0) return; // no aura attached
+				if (card_.GetRawData().aura_handler.get_targets == nullptr) return; // no aura attached
+
+				assert(card_.GetRawData().aura_handler.apply_on);
+				assert(card_.GetRawData().aura_handler.remove_from);
 
 				state::Cards::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
 
 				std::unordered_set<state::CardRef> new_targets;
-				Dispatchers::Auras::GetTargets(card_.GetAuraId(), Context::AuraGetTargets(state_, flow_context_, card_ref_, card_, new_targets));
+				(*card_.GetRawData().aura_handler.get_targets)(
+					Context::AuraGetTargets(state_, flow_context_, card_ref_, card_, new_targets));
 
 				for (auto it = data.applied_enchantments.begin(), it2 = data.applied_enchantments.end(); it != it2;)
 				{
@@ -33,7 +36,8 @@ namespace FlowControl
 					}
 					else {
 						// enchantments should be removed
-						Dispatchers::Auras::RemoveFrom(card_.GetAuraId(), Context::AuraRemoveFrom(state_, flow_context_, card_ref_, card_, it->first, it->second));
+						(*card_.GetRawData().aura_handler.remove_from)(
+							Context::AuraRemoveFrom(state_, flow_context_, card_ref_, card_, it->first, it->second));
 						it = data.applied_enchantments.erase(it);
 					}
 				}
@@ -43,7 +47,8 @@ namespace FlowControl
 					assert(data.applied_enchantments.find(new_target) == data.applied_enchantments.end());
 
 					state::Cards::Enchantments::ContainerType::Identifier enchant_id;
-					Dispatchers::Auras::ApplyOn(card_.GetAuraId(), Context::AuraApplyOn(state_, flow_context_, card_ref_, card_, new_target, enchant_id));
+					(*card_.GetRawData().aura_handler.apply_on)(
+						Context::AuraApplyOn(state_, flow_context_, card_ref_, card_, new_target, enchant_id));
 					data.applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_id)));
 				}
 			}

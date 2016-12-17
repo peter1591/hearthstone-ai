@@ -18,8 +18,6 @@ namespace FlowControl
 				{
 				}
 
-				void Set(int id) { card_.SetAuraId(id); }
-
 				void Update();
 
 			private:

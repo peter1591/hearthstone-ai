@@ -254,9 +254,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\Auras.h">
-      <Filter>Header Files\FlowControl\Dispatchers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -337,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\TargetorUtils.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Cards\AuraHandler.h">
+      <Filter>Header Files\State\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

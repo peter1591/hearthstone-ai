@@ -7,6 +7,7 @@
 #include "State/Cards/EnchantableStates.h"
 #include "State/Cards/EnchantmentAuxData.h"
 #include "State/Cards/AuraAuxData.h"
+#include "State/Cards/AuraHandler.h"
 #include "Cards/CardData.h"
 
 namespace FlowControl
@@ -38,7 +39,7 @@ namespace state
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				aura_id(-1), added_to_play_zone(nullptr), battlecry(nullptr)
+				added_to_play_zone(nullptr), battlecry(nullptr)
 			{
 			}
 
@@ -59,13 +60,13 @@ namespace state
 
 			EnchantmentAuxData enchantment_aux_data;
 
-			int aura_id;
 			AuraAuxData aura_aux_data;
 
 		public: // callbacks
 			AddedToPlayZoneCallback *added_to_play_zone;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;
+			AuraHandler aura_handler;
 
 		public: // for hero type
 			CardRef weapon_ref;

@@ -142,7 +142,6 @@
     <ClInclude Include="..\..\include\FlowControl\Context\AuraRemoveFrom.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h" />
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\Auras.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
@@ -179,6 +178,7 @@
     <ClInclude Include="..\..\include\State\board\Secrets.h" />
     <ClInclude Include="..\..\include\State\board\Weapon.h" />
     <ClInclude Include="..\..\include\State\Cards\AuraAuxData.h" />
+    <ClInclude Include="..\..\include\State\Cards\AuraHandler.h" />
     <ClInclude Include="..\..\include\State\Cards\Card.h" />
     <ClInclude Include="..\..\include\State\Cards\EnchantableStates.h" />
     <ClInclude Include="..\..\include\State\Cards\EnchantmentAuxData.h" />

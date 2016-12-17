@@ -108,9 +108,6 @@ namespace state
 			const CardZone GetZone() const { return data_.zone; }
 			int GetZonePosition() const { return data_.zone_position; }
 
-			int GetAuraId() const { return data_.aura_id; }
-			void SetAuraId(int id) { data_.aura_id = id; }
-
 			int GetCost() const { return data_.enchantable_states.cost; }
 			void SetCost(int new_cost) { data_.enchantable_states.cost = new_cost; }
 
