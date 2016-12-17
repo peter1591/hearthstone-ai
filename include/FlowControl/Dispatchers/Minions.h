@@ -48,7 +48,6 @@ namespace FlowControl
 				} \
 			};
 
-			CREATE_INVOKER(BattleCry);
 			CREATE_INVOKER(AfterSummoned);
 
 #undef CREATE_INVOKER
@@ -71,12 +70,6 @@ namespace FlowControl
 			static state::Cards::CardData CreateInstance(int id)
 			{
 				return DispatcherImpl::Invoke<Minions_impl::ConstructorInvoker, state::Cards::CardData>(id);
-			}
-
-			template <typename... Args>
-			static void BattleCry(int id, Args&&... args)
-			{
-				return DispatcherImpl::Invoke<Minions_impl::BattleCryInvoker, void>(id, std::forward<Args>(args)...);
 			}
 
 			template <typename... Args>
