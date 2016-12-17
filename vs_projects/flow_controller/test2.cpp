@@ -17,7 +17,7 @@ public:
 	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 	{
 		assert(targets.size() == next_battlecry_target_count);
-		
+
 		if (next_battlecry_target_idx < 0) return state::CardRef();
 		else return targets[next_battlecry_target_idx];
 	}
@@ -186,6 +186,16 @@ static void CheckCrystals(state::State & state, state::PlayerIdentifier player, 
 	assert(state.board.Get(player).resource_.GetTotal() == checking.total);
 }
 
+void CheckHero(state::State & state, state::PlayerIdentifier player, int hp, int armor, int attack)
+{
+	auto hero_ref = state.board.Get(player).hero_ref_;
+	auto const& hero = state.mgr.Get(hero_ref);
+
+	assert(hero.GetHP() == hp);
+	// TODO: armor
+	assert(hero.GetAttack() == attack);
+}
+
 void test2()
 {
 	state::State state;
@@ -208,11 +218,15 @@ void test2()
 	state.board.Get(state::kPlayerFirst).resource_.Refill();
 	state.board.Get(state::kPlayerSecond).resource_.SetTotal(4);
 
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 8,8 });
 	CheckCrystals(state, state::kPlayerSecond, { 0,4 });
 	CheckMinions(state, state::kPlayerFirst, {});
 	CheckMinions(state, state::kPlayerSecond, {});
 	assert(controller.PlayCard(0) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 5, 8 });
 	CheckCrystals(state, state::kPlayerSecond, { 0, 5 });
 	CheckMinions(state, state::kPlayerFirst, { {4, 4, 4} });
@@ -220,6 +234,8 @@ void test2()
 
 	state.board.Get(state::kPlayerFirst).resource_.Refill();
 
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 8, 8 });
 	CheckCrystals(state, state::kPlayerSecond, { 0, 5 });
 	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 } });
@@ -229,6 +245,8 @@ void test2()
 	random.called = false;
 	assert(controller.PlayCard(0) == FlowControl::kResultNotDetermined);
 	assert(!random.called);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 0, 8 });
 	CheckCrystals(state, state::kPlayerSecond, { 0, 5 });
 	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 }, {7,7,7} });
@@ -247,6 +265,8 @@ void test2()
 	random.next_rand = 0;
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
 	assert(random.called);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 0, 8 });
 	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
 	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 8,8,8 } });
@@ -265,6 +285,8 @@ void test2()
 	random.next_rand = 0;
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
 	assert(random.called);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
 	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
 	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 9,9,9 } });
@@ -274,4 +296,10 @@ void test2()
 		state.board.Get(state::kPlayerFirst).minions_.Get(1),
 		state.board.Get(state::kPlayerSecond).hero_ref_)
 		== FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 21, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
+	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 9,9,9 } });
+	CheckMinions(state, state::kPlayerSecond, {});
 }
