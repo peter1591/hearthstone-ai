@@ -271,6 +271,7 @@ void test2()
 	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
 	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 8,8,8 } });
 	CheckMinions(state, state::kPlayerSecond, {});
+	assert(state.current_player == state::kPlayerSecond);
 
 	{
 		state::State state2 = state;
@@ -285,6 +286,7 @@ void test2()
 	random.next_rand = 0;
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
 	assert(random.called);
+	assert(state.current_player == state::kPlayerFirst);
 	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
 	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
 	CheckCrystals(state, state::kPlayerFirst, { 9, 9 });
@@ -302,4 +304,7 @@ void test2()
 	CheckCrystals(state, state::kPlayerSecond, { 6, 6 });
 	CheckMinions(state, state::kPlayerFirst, { { 4, 4, 4 },{ 9,9,9 } });
 	CheckMinions(state, state::kPlayerSecond, {});
+	assert(state.current_player == state::kPlayerFirst);
+
+
 }
