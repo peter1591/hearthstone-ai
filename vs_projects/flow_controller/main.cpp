@@ -7,9 +7,9 @@ void test2();
 
 int main(void)
 {
-	//std::cout << "Reading json file...";
-	//assert(Cards::Database::GetInstance().LoadJsonFile("../../include/Cards/cards.json"));
-	//std::cout << " Done." << std::endl;
+	std::cout << "Reading json file...";
+	assert(Cards::Database::GetInstance().LoadJsonFile("../../include/Cards/cards.json"));
+	std::cout << " Done." << std::endl;
 
 	test2();
 
