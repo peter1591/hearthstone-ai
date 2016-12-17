@@ -19,7 +19,7 @@ namespace Cards
 		}
 	};
 
-	class Card_NEW1_038_Enchant : public Cards::EnchantmentCardBase
+	class Card_NEW1_038_Enchant : public EnchantmentCardBase
 	{
 	public:
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
