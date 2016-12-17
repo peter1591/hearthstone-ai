@@ -23,7 +23,7 @@ namespace FlowControl
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Card(card_ref_);
 
-				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 1, "enchantable fields changed");
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 3, "enchantable fields changed");
 
 				// update states field by field
 				bool update_zone = false;
@@ -48,6 +48,16 @@ namespace FlowControl
 				if (new_states.max_hp != origin_states.max_hp) {
 					card_manipulator.MaxHP(new_states.max_hp);
 					assert(card_.GetMaxHP() == new_states.max_hp);
+				}
+
+				if (new_states.taunt != origin_states.taunt) {
+					card_manipulator.Taunt(new_states.taunt);
+					assert(card_.GetRawData().enchantable_states.taunt == new_states.taunt);
+				}
+
+				if (new_states.shielded != origin_states.shielded) {
+					card_manipulator.Shield(new_states.shielded);
+					assert(card_.GetRawData().enchantable_states.shielded == new_states.shielded);
 				}
 
 				data.need_update = false;

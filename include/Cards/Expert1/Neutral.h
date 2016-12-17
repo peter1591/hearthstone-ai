@@ -60,7 +60,7 @@ namespace Cards
 
 		Card_EX1_020()
 		{
-			this->enchantable_states.mechanics.shield = true;
+			Shield();
 		}
 	};
 
@@ -71,7 +71,7 @@ namespace Cards
 
 		Card_CS1_069()
 		{
-			this->enchantable_states.mechanics.taunt = true;
+			Taunt();
 		}
 	};
 }

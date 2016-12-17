@@ -185,7 +185,6 @@
     <ClInclude Include="..\..\include\State\Cards\Enchantments\Tiers.h" />
     <ClInclude Include="..\..\include\State\Cards\Manager-impl.h" />
     <ClInclude Include="..\..\include\State\Cards\Manager.h" />
-    <ClInclude Include="..\..\include\State\Cards\Mechanics.h" />
     <ClInclude Include="..\..\include\State\Cards\CardData.h" />
     <ClInclude Include="..\..\include\State\Events\Event.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\AfterAttack.h" />
