@@ -11,7 +11,7 @@ namespace Cards
 	{
 	public:
 		TargetorInfo() :
-			include_friendly(true), include_enemy(true),
+			include_first(true), include_second(true),
 			include_hero(true), include_minion(true),
 			minion_filter(kMinionFilterAll)
 		{
@@ -20,8 +20,8 @@ namespace Cards
 		template <typename Container>
 		void FillTargets(state::State const& state, Container& targets) const
 		{
-			if (include_friendly) AddPlayerTargets(state, state.GetCurrentPlayer(), targets);
-			if (include_enemy) AddPlayerTargets(state, state.GetOppositePlayer(), targets);
+			if (include_first) AddPlayerTargets(state, state.board.Get(state::kPlayerFirst), targets);
+			if (include_second) AddPlayerTargets(state, state.board.Get(state::kPlayerSecond), targets);
 		}
 
 	private:
@@ -66,8 +66,8 @@ namespace Cards
 		}
 
 	public:
-		bool include_friendly;
-		bool include_enemy;
+		bool include_first;
+		bool include_second;
 
 		bool include_minion;
 		bool include_hero;
@@ -86,54 +86,72 @@ namespace Cards
 	public: // Fluent-like API to set up
 		TargetorHelper & Targetable()
 		{
-			info.minion_filter = TargetorInfo::kMinionFilterTargetable;
+			info_.minion_filter = TargetorInfo::kMinionFilterTargetable;
 			return *this;
 		}
 
 		TargetorHelper & SpellTargetable()
 		{
-			info.minion_filter = TargetorInfo::kMinionFilterTargetableBySpell;
+			info_.minion_filter = TargetorInfo::kMinionFilterTargetableBySpell;
 			return *this;
 		}
 
 		TargetorHelper & Murlocs()
 		{
-			info.minion_filter = TargetorInfo::kMinionFilterMurloc;
+			info_.minion_filter = TargetorInfo::kMinionFilterMurloc;
 			return *this;
 		}
 
-		TargetorHelper & Friendly()
+		template <typename Context>
+		TargetorHelper & Owner(Context&& context)
 		{
-			assert(info.include_friendly == true);
-			info.include_enemy = false;
-			return *this;
+			return Player(context.card_.GetPlayerIdentifier());
 		}
 
-		TargetorHelper & Enemy()
+		template <typename Context>
+		TargetorHelper & Enemy(Context&& context)
 		{
-			info.include_friendly = false;
-			assert(info.include_enemy == true);
-			return *this;
+			return AnotherPlayer(context.card_.GetPlayerIdentifier());
 		}
 
 		TargetorHelper & Minion()
 		{
-			info.include_hero = false;
-			assert(info.include_minion == true);
+			info_.include_hero = false;
+			assert(info_.include_minion == true);
 			return *this;
 		}
 
 		TargetorHelper & Hero()
 		{
-			info.include_minion = false;
-			assert(info.include_hero == true);
+			info_.include_minion = false;
+			assert(info_.include_hero == true);
 			return *this;
 		}
 
+	private:
+		TargetorHelper & Player(state::PlayerIdentifier player)
+		{
+			if (player == state::kPlayerFirst) {
+				info_.include_first = true;
+				info_.include_second = false;
+			}
+			else {
+				info_.include_first = false;
+				info_.include_second = true;
+			}
+			return *this;
+		}
+
+		TargetorHelper & AnotherPlayer(state::PlayerIdentifier player)
+		{
+			if (player == state::kPlayerFirst) return Player(state::kPlayerSecond);
+			else return Player(state::kPlayerFirst);
+		}
+
 	public:
-		TargetorInfo GetInfo() const { return info; }
+		TargetorInfo GetInfo() const { return info_; }
 
 	private:
-		TargetorInfo info;
+		TargetorInfo info_;
 	};
 }

@@ -15,7 +15,7 @@ namespace Cards
 		Card_CS2_189()
 		{
 			battlecry = [](auto& context) {
-				state::CardRef ref = context.GetBattleCryTarget(Targets().Targetable().Enemy());
+				state::CardRef ref = context.GetBattleCryTarget(Targets().Targetable().Enemy(context));
 				Damage(context).Target(ref).Amount(1);
 			};
 		}
