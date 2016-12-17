@@ -32,7 +32,9 @@ namespace FlowControl
 		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, Cards::TargetorInfo const& target_info)
 		{
 			if (!battlecry_target_.IsValid()) {
-				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card, target_info.GetTargets(state));
+				std::vector<state::CardRef> targets;
+				target_info.FillTargets(state, targets);
+				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card, targets);
 			}
 			return battlecry_target_;
 		}

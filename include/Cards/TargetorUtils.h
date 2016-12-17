@@ -17,13 +17,6 @@ namespace Cards
 		{
 		}
 
-		std::vector<state::CardRef> GetTargets(state::State const& state) const
-		{
-			std::vector<state::CardRef> targets;
-			FillTargets(state, targets);
-			return targets;
-		}
-
 		template <typename Container>
 		void FillTargets(state::State const& state, Container& targets) const
 		{
