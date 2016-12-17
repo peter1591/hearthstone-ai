@@ -20,6 +20,18 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_CS1_042 : public MinionCardBase<Card_CS1_042>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS1_042;
+
+		Card_CS1_042()
+		{
+			Taunt();
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS1_042)
