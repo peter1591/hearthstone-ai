@@ -73,6 +73,23 @@ namespace Cards
 			return true;
 		}
 
+		state::CardRace GetCardRace(Json::Value const& json)
+		{
+			const std::string race = json["race"].asString();
+
+			if (race == "BEAST") return state::kCardRaceBeast;
+			if (race == "MECHANICAL") return state::kCardRaceMech;
+			if (race == "DEMON") return state::kCardRaceDemon;
+			if (race == "DRAGON") return state::kCardRaceDragon;
+			if (race == "MURLOC") return state::kCardRaceMurloc;
+			if (race == "TOTEM") return state::kCardRaceTotem;
+			if (race == "PIRATE") return state::kCardRacePirate;
+
+			if (race == "") return state::kCardRaceInvalid;
+
+			throw std::exception("unknown race");
+		}
+
 		void AddCard(Json::Value const& json, std::vector<CardData> & cards)
 		{
 			const std::string origin_id = json["id"].asString();
@@ -87,6 +104,7 @@ namespace Cards
 
 			if (type == "MINION") {
 				new_card.card_type = state::kCardTypeMinion;
+				new_card.card_race = GetCardRace(json);
 			}
 			else if (type == "SPELL") {
 				new_card.card_type = state::kCardTypeSpell;

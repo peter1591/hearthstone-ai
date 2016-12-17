@@ -33,6 +33,18 @@ namespace state
 		kCardZoneInvalid
 	};
 
+	enum CardRace
+	{
+		kCardRaceDemon,
+		kCardRaceMech,
+		kCardRaceDragon,
+		kCardRaceBeast,
+		kCardRacePirate,
+		kCardRaceMurloc,
+		kCardRaceTotem,
+		kCardRaceInvalid
+	};
+
 	enum PlayerIdentifier
 	{
 		kPlayerFirst,

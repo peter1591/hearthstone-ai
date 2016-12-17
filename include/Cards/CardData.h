@@ -8,7 +8,7 @@ namespace Cards
 	{
 		int card_id;
 		state::CardType card_type;
-		// TODO: race
+		state::CardRace card_race;
 
 		int cost;
 		int attack;
