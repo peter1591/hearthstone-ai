@@ -101,6 +101,8 @@ namespace state
 			CardType GetCardType() const { return data_.card_type; }
 			int GetPlayOrder() const { return data_.play_order; }
 
+			CardData::BattlecryCallback* GetBattlecryCallback() const { return data_.battlecry; }
+
 			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchantable_states.player; }
 			const CardZone GetZone() const { return data_.zone; }
 			int GetZonePosition() const { return data_.zone_position; }

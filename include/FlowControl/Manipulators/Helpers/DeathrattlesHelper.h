@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FlowControl/Context/Deathrattle.h"
 #include "State/State.h"
 
 namespace FlowControl

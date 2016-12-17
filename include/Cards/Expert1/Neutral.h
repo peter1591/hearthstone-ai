@@ -11,11 +11,11 @@ namespace Cards
 	class Card_EX1_089 : public MinionCardBase, MinionCardUtils
 	{
 	public:
-		Card_EX1_089() : MinionCardBase(Cards::ID_EX1_089, 3, 4, 4) {}
-
-		static void BattleCry(FlowControl::Context::BattleCry & context)
+		Card_EX1_089() : MinionCardBase(Cards::ID_EX1_089, 3, 4, 4)
 		{
-			AnotherPlayer(context).GainEmptyCrystal();
+			battlecry = [](auto& context) {
+				AnotherPlayer(context).GainEmptyCrystal();
+			};
 		}
 	};
 

@@ -108,10 +108,12 @@ namespace FlowControl
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
-			FlowControl::Dispatchers::Minions::BattleCry(card.GetCardId(),
-				Context::BattleCry(state_, flow_context_, card_ref, card, [this, card_ref, card](std::vector<state::CardRef> const& targets) {
-				return flow_context_.action_parameters_.GetBattlecryTarget(state_, card_ref, card, targets);
-			}));
+			if (card.GetBattlecryCallback()) {
+				card.GetBattlecryCallback()(Context::BattleCry(
+					state_, flow_context_, card_ref, card, [this, card_ref, card](std::vector<state::CardRef> const& targets) {
+					return flow_context_.action_parameters_.GetBattlecryTarget(state_, card_ref, card, targets);
+				}));
+			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
 
