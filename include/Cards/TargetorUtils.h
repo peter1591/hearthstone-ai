@@ -25,11 +25,13 @@ namespace Cards
 		}
 
 	private:
-		template <typename Container> static void AddTarget(state::CardRef ref, Container & targets);
-		template <> static void AddTarget(state::CardRef ref, std::vector<state::CardRef> & targets) {
+		template <typename Container> void AddTarget(state::CardRef ref, Container & targets) const;
+		template <> void AddTarget(state::CardRef ref, std::vector<state::CardRef> & targets) const {
+			if (ref == exclude) return;
 			targets.push_back(ref);
 		}
-		template <> static void AddTarget(state::CardRef ref, std::unordered_set<state::CardRef> & targets) {
+		template <> void AddTarget(state::CardRef ref, std::unordered_set<state::CardRef> & targets) const {
+			if (ref == exclude) return;
 			targets.insert(ref);
 		}
 
@@ -81,6 +83,8 @@ namespace Cards
 			kMinionFilterTargetableBySpell,
 			kMinionFilterMurloc
 		} minion_filter;
+
+		state::CardRef exclude;
 	};
 
 	class TargetorHelper
@@ -127,6 +131,13 @@ namespace Cards
 		{
 			info_.include_minion = false;
 			assert(info_.include_hero == true);
+			return *this;
+		}
+
+		TargetorHelper & Exclude(state::CardRef ref)
+		{
+			assert(info_.exclude.IsValid() == false); // only support one exclusion
+			info_.exclude = ref;
 			return *this;
 		}
 
