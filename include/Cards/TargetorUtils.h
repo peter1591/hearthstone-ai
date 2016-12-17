@@ -21,7 +21,7 @@ namespace Cards
 			std::vector<state::CardRef> targets;
 
 			if (include_friendly) AddPlayerTargets(state.GetCurrentPlayer(), targets);
-			if (include_enemy) AddPlayerTargets(state.GetCurrentPlayer(), targets);
+			if (include_enemy) AddPlayerTargets(state.GetOppositePlayer(), targets);
 
 			return targets;
 		}
