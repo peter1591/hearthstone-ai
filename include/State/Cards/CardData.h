@@ -13,6 +13,7 @@ namespace FlowControl
 {
 	namespace Context
 	{
+		class AddedToPlayZone;
 		class BattleCry;
 		class Deathrattle;
 	}
@@ -28,6 +29,7 @@ namespace state
 		{
 		public:
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry &);
+			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone &);
 
 			typedef std::function<void(FlowControl::Context::Deathrattle &)> DeathrattleCallback;
 			typedef std::list<DeathrattleCallback> Deathrattles;
@@ -35,7 +37,7 @@ namespace state
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), play_order(-1), zone(kCardZoneInvalid),
 				zone_position(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				aura_id(-1), battlecry(nullptr)
+				aura_id(-1), added_to_play_zone(nullptr), battlecry(nullptr)
 			{
 			}
 
@@ -57,6 +59,8 @@ namespace state
 			int aura_id;
 			AuraAuxData aura_aux_data;
 
+		public: // callbacks
+			AddedToPlayZoneCallback *added_to_play_zone;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;
 

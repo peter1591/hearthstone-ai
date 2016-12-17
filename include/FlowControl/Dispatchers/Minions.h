@@ -48,8 +48,6 @@ namespace FlowControl
 				} \
 			};
 
-			CREATE_INVOKER(AfterSummoned);
-
 #undef CREATE_INVOKER
 
 			class DefaultInvoked : public state::Cards::CardData
@@ -70,12 +68,6 @@ namespace FlowControl
 			static state::Cards::CardData CreateInstance(int id)
 			{
 				return DispatcherImpl::Invoke<Minions_impl::ConstructorInvoker, state::Cards::CardData>(id);
-			}
-
-			template <typename... Args>
-			static void AfterSummoned(int id, Args&&... args)
-			{
-				return DispatcherImpl::Invoke<Minions_impl::AfterSummonedInvoker, void>(id, std::forward<Args>(args)...);
 			}
 		};
 	}

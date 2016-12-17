@@ -6,7 +6,7 @@
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
 #include "FlowControl/ActionParameterWrapper.h"
-#include "FlowControl/Context/AfterSummoned.h"
+#include "FlowControl/Context/AddedToPlayZone.h"
 #include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Helpers/Resolver.h"
 
@@ -103,8 +103,10 @@ namespace FlowControl
 
 			Manipulate(state_, flow_context_).Minion(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
-			FlowControl::Dispatchers::Minions::AfterSummoned(card.GetCardId(),
-				Context::AfterSummoned(state_, flow_context_, card_ref, card));
+			if (card.GetAddedToPlayZoneCallback()) {
+				card.GetAddedToPlayZoneCallback()(
+					Context::AddedToPlayZone(state_, flow_context_, card_ref, card));
+			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 

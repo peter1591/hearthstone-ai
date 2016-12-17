@@ -102,6 +102,7 @@ namespace state
 			int GetPlayOrder() const { return data_.play_order; }
 
 			CardData::BattlecryCallback* GetBattlecryCallback() const { return data_.battlecry; }
+			CardData::AddedToPlayZoneCallback* GetAddedToPlayZoneCallback() const { return data_.added_to_play_zone; }
 
 			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchantable_states.player; }
 			const CardZone GetZone() const { return data_.zone; }

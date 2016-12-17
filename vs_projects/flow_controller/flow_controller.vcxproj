@@ -133,7 +133,7 @@
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h" />
+    <ClInclude Include="..\..\include\FlowControl\Context\AddedToPlayZone.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AuraApplyOn.h" />
     <ClInclude Include="..\..\include\FlowControl\Context\AuraGetTargets.h" />

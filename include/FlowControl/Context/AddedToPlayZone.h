@@ -18,10 +18,10 @@ namespace FlowControl
 
 	namespace Context
 	{
-		class AfterSummoned
+		class AddedToPlayZone
 		{
 		public:
-			AfterSummoned(state::State & state, FlowContext & flow_context, state::CardRef card_ref, const state::Cards::Card & card)
+			AddedToPlayZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, const state::Cards::Card & card)
 				: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 			{
 

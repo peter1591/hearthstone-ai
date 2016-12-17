@@ -242,9 +242,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\AfterSummoned.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h">
       <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
@@ -331,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Context\AddedToPlayZone.h">
+      <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
