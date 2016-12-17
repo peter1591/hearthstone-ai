@@ -33,7 +33,8 @@ namespace Cards
 			targets.insert(ref);
 		}
 
-		void AddPlayerTargets(state::State const& state, state::board::Player const& player, std::vector<state::CardRef> & targets) const
+		template <typename Container>
+		void AddPlayerTargets(state::State const& state, state::board::Player const& player, Container & targets) const
 		{
 			if (include_hero) AddTarget(player.hero_ref_, targets);
 			if (include_minion) {
@@ -43,7 +44,8 @@ namespace Cards
 			}
 		}
 
-		void AddMinionTargets(state::State const& state, state::CardRef const& minion, std::vector<state::CardRef> & targets) const
+		template <typename Container>
+		void AddMinionTargets(state::State const& state, state::CardRef const& minion, Container& targets) const
 		{
 			auto const& card = state.mgr.Get(minion);
 
