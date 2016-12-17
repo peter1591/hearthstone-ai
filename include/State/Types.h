@@ -45,6 +45,22 @@ namespace state
 		kCardRaceInvalid
 	};
 
+	enum CardSet
+	{
+		kCardSetCore,
+		kCardSetExpert1,
+		kCardSetGVG,
+		kCardSetTGT,
+		kCardSetNaxx,
+		kCardSetBRM,
+		kCardSetLOE,
+		kCardSetOldGods,
+		kCardSetKara,
+		kCardSetGangs,
+		kCardSetTB,
+		kCardSetInvalid
+	};
+
 	enum PlayerIdentifier
 	{
 		kPlayerFirst,

@@ -90,6 +90,27 @@ namespace Cards
 			throw std::exception("unknown race");
 		}
 
+		state::CardSet GetCardSet(Json::Value const& json)
+		{
+			const std::string set = json["set"].asString();
+
+			if (set == "CORE") return state::kCardSetCore;
+			if (set == "EXPERT1") return state::kCardSetExpert1;
+			if (set == "TGT") return state::kCardSetTGT;
+			if (set == "GVG") return state::kCardSetGVG;
+			if (set == "NAXX") return state::kCardSetNaxx;
+			if (set == "LOE") return state::kCardSetLOE;
+			if (set == "OG") return state::kCardSetOldGods;
+			if (set == "KARA") return state::kCardSetKara;
+			if (set == "GANGS") return state::kCardSetGangs;
+
+			if (set == "TB") return state::kCardSetTB;
+			if (set == "CHEAT") return state::kCardSetInvalid;
+			if (set == "MISSIONS") return state::kCardSetInvalid;
+
+			throw std::exception("unknown set");
+		}
+
 		void AddCard(Json::Value const& json, std::vector<CardData> & cards)
 		{
 			const std::string origin_id = json["id"].asString();
@@ -122,6 +143,7 @@ namespace Cards
 			new_card.cost = json["cost"].asInt();
 			new_card.attack = json["attack"].asInt();
 			new_card.max_hp = json["health"].asInt();
+			new_card.card_race = GetCardRace(json);
 
 			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);
