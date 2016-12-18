@@ -32,5 +32,7 @@ namespace Cards
 		{
 			this->enchantable_states.shielded = true;
 		}
+
+
 	};
 }

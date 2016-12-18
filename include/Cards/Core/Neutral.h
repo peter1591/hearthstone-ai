@@ -60,9 +60,13 @@ namespace Cards
 
 		Card_EX1_508()
 		{
+			aura_handler.get_targetor_helper = [](auto& context, auto& targetor) {
+				targetor.Owner(context).Minion().Murlocs().Exclude(context.card_ref_);
+			};
 			aura_handler.get_targets = [](auto& context) {
 				if (!IsAlive(context, context.card_ref_)) return;
-				auto targetor = Targets().Owner(context).Minion().Murlocs().Exclude(context.card_ref_);
+				Cards::TargetorHelper targetor;
+				(*context.card_.GetRawData().aura_handler.get_targetor_helper)(context, targetor);
 				targetor.GetInfo().FillTargets(context.state_, context.targets_);
 			};
 			aura_handler.apply_on = [](auto& context) {
