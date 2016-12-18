@@ -109,7 +109,7 @@ namespace Cards
 		}
 
 		template <typename Context>
-		TargetorHelper & Owner(Context&& context)
+		TargetorHelper & Ally(Context&& context)
 		{
 			return Player(context.card_.GetPlayerIdentifier());
 		}

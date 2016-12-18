@@ -62,7 +62,7 @@ namespace Cards
 		{
 			Aura<Card_EX1_508_Enchant>().Target([](auto& context, auto& targetor) {
 				targetor
-					.Owner(context).Minion().Murlocs() // friendly murlocs only
+					.Ally(context).Minion().Murlocs() // friendly murlocs only
 					.Exclude(context.card_ref_); // only apply on other murlocs
 			});
 		}
