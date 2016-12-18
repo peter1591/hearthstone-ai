@@ -67,9 +67,21 @@ namespace Cards
 			});
 		}
 	};
+
+	class Card_CS2_171 : public MinionCardBase<Card_CS2_171>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_171;
+
+		Card_CS2_171()
+		{
+			Charge();
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS1_042)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_168)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_508)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_171)
