@@ -42,6 +42,7 @@ namespace FlowControl
 		void Clear()
 		{
 			minion_put_location_ = -1;
+			battlecry_target_.Invalidate();
 		}
 
 	private:
