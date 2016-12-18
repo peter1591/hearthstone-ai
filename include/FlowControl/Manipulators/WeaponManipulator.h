@@ -17,6 +17,8 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == state::kCardTypeWeapon);
 			}
+
+			Helpers::DamageHelper Damage() { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_); }
 		};
 	}
 }

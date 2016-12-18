@@ -173,7 +173,7 @@ namespace FlowControl
 				if (attacker_card.GetCardType() == state::kCardTypeHero) {
 					state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 					if (weapon_ref.IsValid()) {
-						Manipulate(state_, flow_context_).Card(weapon_ref).Damage().Take(1);
+						Manipulate(state_, flow_context_).Weapon(weapon_ref).Damage().Take(1);
 					}
 				}
 			}

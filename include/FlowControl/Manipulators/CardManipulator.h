@@ -51,8 +51,6 @@ namespace FlowControl
 				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
 			}
 
-			Helpers::DamageHelper Damage() { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_); }
-
 		protected:
 			state::State & state_;
 			FlowContext & flow_context_;

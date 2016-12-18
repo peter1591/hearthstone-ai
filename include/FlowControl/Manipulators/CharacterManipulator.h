@@ -31,6 +31,8 @@ namespace FlowControl
 			void Shield(bool v) { card_.SetShield(v); }
 			void Charge(bool v) { card_.SetCharge(v); }
 
+			Helpers::DamageHelper Damage() { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_); }
+
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
 
 			void AfterAttack()
