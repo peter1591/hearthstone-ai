@@ -6,6 +6,7 @@
 #include "State/Cards/Manager.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper.h"
+#include "FlowControl/Manipulators/Helpers/HealHelper.h"
 
 namespace FlowControl
 {
@@ -32,6 +33,7 @@ namespace FlowControl
 			void Charge(bool v) { card_.SetCharge(v); }
 
 			Helpers::DamageHelper Damage() { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_); }
+			Helpers::HealHelper Heal(int amount) { return Helpers::HealHelper(state_, flow_context_, card_ref_, card_, amount); }
 
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
 

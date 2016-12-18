@@ -16,6 +16,7 @@
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/OrderedCardsManager-impl.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
+#include "FlowControl/Manipulators/Helpers/HealHelper-impl.h"
 #include "State/Cards/Manager-impl.h"
 
 #include "Cards/Cards.h"

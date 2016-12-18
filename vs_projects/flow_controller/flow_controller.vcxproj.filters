@@ -341,5 +341,14 @@
     <ClInclude Include="..\..\include\Cards\AuraHelper.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\State\Events\EventTypes\OnHeal.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

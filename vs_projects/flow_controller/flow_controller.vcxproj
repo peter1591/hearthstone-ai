@@ -156,6 +156,8 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />
@@ -195,6 +197,7 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\AfterMinionSummoned.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\BeforeAttack.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\BeforeMinionSummoned.h" />
+    <ClInclude Include="..\..\include\State\Events\EventTypes\OnHeal.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnEnd.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnMinionPlay.h" />
