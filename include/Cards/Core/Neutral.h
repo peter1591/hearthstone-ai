@@ -88,7 +88,7 @@ namespace Cards
 		{
 			battlecry = [](auto& context) {
 				state::CardRef ref = context.GetBattleCryTarget(
-					Targets().Targetable().Exclude(context.card_ref_));
+					Targets().Targetable().Exclude(context.card_ref_)); // cannot heal self
 				Heal(context).Target(ref).Amount(2);
 			};
 		}

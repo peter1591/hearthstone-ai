@@ -14,7 +14,7 @@ namespace FlowControl
 			if (player.deck_.Empty())
 			{
 				int damage = ++player.fatigue_damage_;
-				this->Damage().Take(damage);
+				this->Damage(damage);
 				return;
 			}
 
