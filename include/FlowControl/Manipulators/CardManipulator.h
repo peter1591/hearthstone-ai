@@ -39,14 +39,6 @@ namespace FlowControl
 			}
 
 		public:
-			void Cost(int new_cost) { card_.SetCost(new_cost); }
-			void Attack(int new_attack) { card_.SetAttack(new_attack); }
-			void MaxHP(int new_max_hp) { card_.SetMaxHP(new_max_hp); }
-
-			void Taunt(bool v) { card_.SetTaunt(v); }
-			void Shield(bool v) { card_.SetShield(v); }
-			void Charge(bool v) { card_.SetCharge(v); }
-
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
