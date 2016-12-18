@@ -16,6 +16,7 @@ namespace FlowControl
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
 
 				// Hooked events might change the damage amount, and/or the damage target
+				// So we should refer to the info in context
 				auto const& target_card = state_.mgr.Get(context.card_ref_);
 				Manipulate(state_, flow_context_).Character(context.card_ref_).Internal_SetDamage().TakeDamage(context.damage_);
 

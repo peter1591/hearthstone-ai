@@ -19,6 +19,8 @@ namespace FlowControl
 			CharacterManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				: CardManipulator(state, flow_context, card_ref, card)
 			{
+				assert(card.GetCardType() == state::kCardTypeMinion ||
+					card.GetCardType() == state::kCardTypeHero);
 			}
 
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
