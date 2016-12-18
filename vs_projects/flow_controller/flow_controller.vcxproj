@@ -123,6 +123,7 @@
     <ClCompile Include="test2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\Cards\AuraHelper.h" />
     <ClInclude Include="..\..\include\Cards\CardData.h" />
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />

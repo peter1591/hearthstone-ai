@@ -2,6 +2,7 @@
 
 #include "Cards/Database.h"
 #include "State/Cards/Card.h"
+#include "Cards/AuraHelper.h"
 
 namespace Cards
 {
@@ -33,6 +34,10 @@ namespace Cards
 			this->enchantable_states.shielded = true;
 		}
 
-
+		template <typename EnchantmentType>
+		AuraHelper<EnchantmentType> Aura()
+		{
+			return AuraHelper<EnchantmentType>(this->aura_handler);
+		}
 	};
 }
