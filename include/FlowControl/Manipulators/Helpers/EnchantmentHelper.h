@@ -43,7 +43,26 @@ namespace FlowControl
 					return data.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 				}
 
-				void Update();
+				void Update()
+				{
+					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
+					if (!data.need_update) return;
+
+					switch (card_.GetCardType()) {
+					case state::kCardTypeHero:
+						return UpdateHero();
+					case state::kCardTypeMinion:
+						return UpdateMinion();
+					default:
+						throw std::exception("not implemented");
+					}
+				}
+
+			private:
+				void UpdateHero();
+				void UpdateMinion();
+
+				void UpdateCharacter(state::Cards::EnchantableStates const& new_states);
 
 			private:
 				void ChangeMinionPlayer(state::PlayerIdentifier player);
