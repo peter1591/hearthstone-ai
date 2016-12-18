@@ -4,8 +4,6 @@
 
 namespace FlowControl
 {
-	namespace Helpers { class DamageDealer; }
-
 	namespace Manipulators
 	{
 		namespace Helpers
