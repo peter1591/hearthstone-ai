@@ -125,6 +125,7 @@ namespace state
 
 			void SetTaunt(bool v) { data_.enchantable_states.taunt = v; }
 			void SetShield(bool v) { data_.enchantable_states.shielded = v; }
+			void SetCharge(bool v) { data_.enchantable_states.charge = v; }
 
 			void IncreaseNumAttacksThisTurn() { ++data_.num_attacks_this_turn; }
 			void ClearNumAttacksThisTurn() { data_.num_attacks_this_turn = 0; }

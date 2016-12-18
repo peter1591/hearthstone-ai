@@ -45,6 +45,7 @@ namespace FlowControl
 
 			void Taunt(bool v) { card_.SetTaunt(v); }
 			void Shield(bool v) { card_.SetShield(v); }
+			void Charge(bool v) { card_.SetCharge(v); }
 
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }

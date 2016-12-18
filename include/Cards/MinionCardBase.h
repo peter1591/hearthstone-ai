@@ -34,6 +34,11 @@ namespace Cards
 			this->enchantable_states.shielded = true;
 		}
 
+		void Charge()
+		{
+			this->enchantable_states.charge = true;
+		}
+
 		template <typename EnchantmentType>
 		AuraHelper<EnchantmentType> Aura()
 		{

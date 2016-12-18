@@ -23,7 +23,7 @@ namespace FlowControl
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Card(card_ref_);
 
-				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 3, "enchantable fields changed");
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 4, "enchantable fields changed");
 
 				// update states field by field
 				if (new_states.player != current_states.player) {
@@ -57,6 +57,11 @@ namespace FlowControl
 				if (new_states.shielded != current_states.shielded) {
 					card_manipulator.Shield(new_states.shielded);
 					assert(card_.GetRawData().enchantable_states.shielded == new_states.shielded);
+				}
+
+				if (new_states.charge != current_states.charge) {
+					card_manipulator.Charge(new_states.charge);
+					assert(card_.GetRawData().enchantable_states.charge == new_states.charge);
 				}
 
 				data.need_update = false;
