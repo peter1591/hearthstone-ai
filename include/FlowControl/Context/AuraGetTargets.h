@@ -21,8 +21,8 @@ namespace FlowControl
 		class AuraGetTargets
 		{
 		public:
-			AuraGetTargets(state::State & state, FlowContext & flow_context, state::CardRef card_ref, const state::Cards::Card & card, std::unordered_set<state::CardRef> & targets)
-				: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card), targets_(targets)
+			AuraGetTargets(state::State & state, FlowContext & flow_context, state::CardRef card_ref, const state::Cards::Card & card, state::Cards::AuraAuxData & aura_data, std::unordered_set<state::CardRef> & targets)
+				: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card), aura_data_(aura_data), targets_(targets)
 			{
 			}
 
@@ -30,6 +30,7 @@ namespace FlowControl
 			FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
+			state::Cards::AuraAuxData & aura_data_;
 			std::unordered_set<state::CardRef> & targets_;
 		};
 	}

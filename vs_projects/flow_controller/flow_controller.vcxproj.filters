@@ -350,5 +350,8 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnHeal.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\State\Events\EventTypes\UpdateAura.h">
+      <Filter>Header Files\State\Events\EventTypes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

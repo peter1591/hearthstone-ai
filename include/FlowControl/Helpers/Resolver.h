@@ -96,19 +96,9 @@ namespace FlowControl
 		private:
 			void UpdateAura()
 			{
-				// update all entities which might omit aura
-
-				for (int i = 0; i < state_.board.Get(state::kPlayerFirst).minions_.Size(); ++i) {
-					auto minion_ref = state_.board.Get(state::kPlayerFirst).minions_.Get(i);
-					Manipulate(state_, flow_context_).Minion(minion_ref).Aura().Update();
-				}
-				Manipulate(state_, flow_context_).Hero(state::kPlayerFirst).Aura().Update();
-
-				for (int i = 0; i < state_.board.Get(state::kPlayerSecond).minions_.Size(); ++i) {
-					auto minion_ref = state_.board.Get(state::kPlayerSecond).minions_.Get(i);
-					Manipulate(state_, flow_context_).Minion(minion_ref).Aura().Update();
-				}
-				Manipulate(state_, flow_context_).Hero(state::kPlayerSecond).Aura().Update();
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::UpdateAura>(
+					state::Events::EventTypes::UpdateAura::Context{state_, flow_context_}
+				);
 			}
 
 			void UpdateEnchantments()

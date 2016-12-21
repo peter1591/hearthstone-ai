@@ -202,6 +202,7 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnEnd.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnMinionPlay.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnStart.h" />
+    <ClInclude Include="..\..\include\State\Events\EventTypes\UpdateAura.h" />
     <ClInclude Include="..\..\include\State\Events\HandlersContainerController.h" />
     <ClInclude Include="..\..\include\State\Events\Manager.h" />
     <ClInclude Include="..\..\include\State\Events\impl\CategorizedHandlersContainer.h" />

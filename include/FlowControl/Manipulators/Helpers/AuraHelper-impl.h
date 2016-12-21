@@ -24,7 +24,7 @@ namespace FlowControl
 
 				std::unordered_set<state::CardRef> new_targets;
 				(*card_.GetRawData().aura_handler.get_targets)(
-					Context::AuraGetTargets(state_, flow_context_, card_ref_, card_, new_targets));
+					Context::AuraGetTargets(state_, flow_context_, card_ref_, card_, data, new_targets));
 
 				for (auto it = data.applied_enchantments.begin(), it2 = data.applied_enchantments.end(); it != it2;)
 				{

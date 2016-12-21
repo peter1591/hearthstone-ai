@@ -66,7 +66,7 @@ namespace state
 			AddedToPlayZoneCallback *added_to_play_zone;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;
-			AuraHandler aura_handler;
+			AuraHandler aura_handler; // TODO: merge into AuraAuxData
 
 		public: // for hero type
 			CardRef weapon_ref;
