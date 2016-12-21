@@ -23,10 +23,18 @@ namespace FlowControl
 				UpdateAura();
 				UpdateEnchantments();
 
+				bool any_death = false;
 				while (true) {
 					CreateDeaths();
 					if (deaths_.empty()) break;
+
+					any_death = true;
 					if (!RemoveDeaths()) return false;
+				}
+
+				if (any_death) {
+					UpdateAura();
+					UpdateEnchantments();
 				}
 
 				return true;
