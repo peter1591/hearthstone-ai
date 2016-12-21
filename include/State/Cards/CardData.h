@@ -62,11 +62,11 @@ namespace state
 
 			AuraAuxData aura_aux_data;
 
-		public: // callbacks
+		public: // callbacks, not subject to change when game flows
 			AddedToPlayZoneCallback *added_to_play_zone;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;
-			AuraHandler aura_handler; // TODO: merge into AuraAuxData
+			AuraHandler aura_handler;
 
 		public: // for hero type
 			CardRef weapon_ref;
