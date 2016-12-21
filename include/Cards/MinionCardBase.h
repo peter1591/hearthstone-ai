@@ -42,7 +42,7 @@ namespace Cards
 		template <typename EnchantmentType>
 		AuraHelper<EnchantmentType> Aura()
 		{
-			return AuraHelper<EnchantmentType>(this->aura_handler);
+			return AuraHelper<EnchantmentType>(*this);
 		}
 	};
 }
