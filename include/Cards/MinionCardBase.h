@@ -15,6 +15,8 @@ namespace Cards
 			this->card_id = T::id;
 
 			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
+			assert(data.card_type == state::kCardTypeMinion);
+
 			this->card_type = data.card_type;
 			this->card_race = data.card_race;
 			this->card_rarity = data.card_rarity;

@@ -19,6 +19,8 @@
 #include "FlowControl/Manipulators/Helpers/HealHelper-impl.h"
 #include "State/Cards/Manager-impl.h"
 
+#include "FlowControl/Dispatchers/Minions.h"
+#include "FlowControl/Dispatchers/Weapons.h"
 #include "Cards/Cards.h"
 
 namespace FlowControl

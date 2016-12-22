@@ -127,6 +127,7 @@
     <ClInclude Include="..\..\include\Cards\CardData.h" />
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
