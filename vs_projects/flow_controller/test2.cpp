@@ -465,4 +465,22 @@ void test2()
 	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 10, 12 } });
 	CheckMinions(state, state::kPlayerSecond, { {2, 1, 1}, { 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+
+	AddHandCard(Cards::ID_CS2_106, state::kCardTypeWeapon, controller.flow_context_, state, state::kPlayerSecond);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 23, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 6, 8 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 10, 12 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+
+	assert(controller.PlayCard(9) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 23, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 4, 8 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 10, 12 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 9);
 }

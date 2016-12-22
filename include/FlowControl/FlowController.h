@@ -83,6 +83,8 @@ namespace FlowControl
 			{
 			case state::kCardTypeMinion:
 				return PlayMinionCardPhase(hand_idx, card_ref, card);
+			case state::kCardTypeWeapon:
+				return PlayWeaponCardPhase(hand_idx, card_ref, card);
 			default:
 				flow_context_.result_ = kResultInvalid;
 				return false;
@@ -124,6 +126,29 @@ namespace FlowControl
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 			Manipulate(state_, flow_context_).Minion(card_ref).AfterSummoned();
+
+			return true;
+		}
+
+		bool PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
+		{
+			state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
+
+			Manipulate(state_, flow_context_).Weapon(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player);
+
+			// TODO: event OnWeaponPlay
+
+			if (card.GetAddedToPlayZoneCallback()) {
+				card.GetAddedToPlayZoneCallback()(
+					Context::AddedToPlayZone(state_, flow_context_, card_ref, card));
+			}
+
+			if (card.GetBattlecryCallback()) {
+				card.GetBattlecryCallback()(Context::BattleCry(
+					state_, flow_context_, card_ref, card, [this, card_ref, card](Cards::TargetorHelper const& targets) {
+					return flow_context_.action_parameters_.GetBattlecryTarget(state_, card_ref, card, targets.GetInfo());
+				}));
+			}
 
 			return true;
 		}
