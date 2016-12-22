@@ -16,6 +16,11 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeHero);
 			}
 
+			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeHero> Zone()
+			{
+				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeHero>(state_, flow_context_, card_ref_, card_);
+			}
+
 			void DrawCard();
 
 		private:
