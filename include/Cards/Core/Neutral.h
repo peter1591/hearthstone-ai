@@ -1,10 +1,5 @@
 #pragma once
 
-#include "Cards/id-map.h"
-#include "Cards/MinionCardBase.h"
-#include "Cards/MinionCardUtils.h"
-#include "Cards/EnchantmentCardBase.h"
-
 namespace Cards
 {
 	class Card_CS2_189 : public MinionCardBase<Card_CS2_189>, MinionCardUtils
