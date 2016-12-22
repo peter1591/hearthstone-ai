@@ -129,19 +129,23 @@ namespace FlowControl
 				{
 				}
 
-				template <state::CardZone ChangeToZone,
-					typename std::enable_if_t<state::board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
-					void ChangeTo(state::PlayerIdentifier player_identifier)
+				template <state::CardZone ChangeToZone>
+				void ChangeTo(state::PlayerIdentifier player_identifier)
 				{
+					constexpr bool valid = state::board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value;
+					assert(valid);
+
 					state::board::Player & player = state_.board.Get(card_.GetPlayerIdentifier());
 					int new_pos = state::board::DefaultZonePosGetter<ChangeToZone, ChangingCardType>()(player);
 					return ChangeToInternal<ChangeToZone>(player_identifier, new_pos);
 				}
 
-				template <state::CardZone ChangeToZone,
-					typename std::enable_if_t<!state::board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value, nullptr_t> = nullptr>
-					void ChangeTo(state::PlayerIdentifier player_identifier, int pos)
+				template <state::CardZone ChangeToZone>
+				void ChangeTo(state::PlayerIdentifier player_identifier, int pos)
 				{
+					constexpr bool valid = !state::board::ForcelyUseDefaultZonePos<ChangeToZone, ChangingCardType>::value;
+					assert(valid);
+
 					return ChangeToInternal<ChangeToZone>(player_identifier, pos);
 				}
 

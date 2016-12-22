@@ -8,10 +8,21 @@ namespace state
 	namespace board
 	{
 		template <CardZone Zone, CardType Type>
-		struct ForcelyUseDefaultZonePos;
+		struct ForcelyUseDefaultZonePos
+		{
+			static constexpr bool value = false;
+		};
 
 		template <CardZone Zone, CardType Type>
-		class DefaultZonePosGetter;
+		class DefaultZonePosGetter
+		{
+		public:
+			int operator()(Player & player) const
+			{
+				assert(false);
+				return 0;
+			}
+		};
 
 		// Deck
 		template <CardType Type>
@@ -109,13 +120,6 @@ namespace state
 			{
 				return (int)player.graveyard_.GetTotalOthers();
 			}
-		};
-
-		// default
-		template <CardZone Zone, CardType Type>
-		struct ForcelyUseDefaultZonePos
-		{
-			static constexpr bool value = false;
 		};
 	}
 }
