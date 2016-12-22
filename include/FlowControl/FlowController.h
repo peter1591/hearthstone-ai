@@ -137,6 +137,9 @@ namespace FlowControl
 			Manipulate(state_, flow_context_).Weapon(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player);
 
 			// TODO: event OnWeaponPlay
+			// TODO: destroy old weapon
+			// TODO: equip new weapon (i.e., record in state_.board)
+			// TODO: unify logic to another place? (e.g., EquipWeapon())
 
 			if (card.GetAddedToPlayZoneCallback()) {
 				card.GetAddedToPlayZoneCallback()(
