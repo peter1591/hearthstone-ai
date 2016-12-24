@@ -116,15 +116,15 @@ namespace FlowControl
 
 			Manipulate(state_, flow_context_).Minion(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
-			if (card.GetAddedToPlayZoneCallback()) {
-				card.GetAddedToPlayZoneCallback()(
+			if (card.GetRawData().added_to_play_zone) {
+				(*card.GetRawData().added_to_play_zone)(
 					Context::AddedToPlayZone(state_, flow_context_, card_ref, card));
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
-			if (card.GetBattlecryCallback()) {
-				(*card.GetBattlecryCallback())({state_, flow_context_, card_ref, card});
+			if (card.GetRawData().battlecry) {
+				(*card.GetRawData().battlecry)({state_, flow_context_, card_ref, card});
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
@@ -146,13 +146,13 @@ namespace FlowControl
 			// TODO: equip new weapon (i.e., record in state_.board)
 			// TODO: unify logic to another place? (e.g., EquipWeapon())
 
-			if (card.GetAddedToPlayZoneCallback()) {
-				card.GetAddedToPlayZoneCallback()(
+			if (card.GetRawData().added_to_play_zone) {
+				(*card.GetRawData().added_to_play_zone)(
 					Context::AddedToPlayZone(state_, flow_context_, card_ref, card));
 			}
 
-			if (card.GetBattlecryCallback()) {
-				(*card.GetBattlecryCallback())({ state_, flow_context_, card_ref, card });
+			if (card.GetRawData().battlecry) {
+				(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
 			}
 
 			return true;
