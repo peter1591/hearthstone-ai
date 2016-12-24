@@ -92,6 +92,32 @@ namespace FlowControl
 				data.need_update = false;
 			}
 
+			inline void EnchantmentHelper::UpdateWeapon()
+			{
+				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
+				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
+
+				state::Cards::EnchantableStates new_states = data.origin_states;
+				data.enchantments.ApplyAll(new_states);
+
+				auto manipulator = Manipulate(state_, flow_context_).Weapon(card_ref_);
+
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 4, "enchantable fields changed");
+
+				if (new_states.attack != current_states.attack) {
+					manipulator.Attack(new_states.attack);
+					assert(card_.GetAttack() == new_states.attack);
+				}
+				if (new_states.max_hp != current_states.max_hp) {
+					manipulator.MaxHP(new_states.max_hp);
+					assert(card_.GetMaxHP() == new_states.max_hp);
+				}
+
+				assert(card_.GetRawData().enchantable_states == new_states);
+
+				data.need_update = false;
+			}
+
 			inline void EnchantmentHelper::ChangeMinionPlayer(state::PlayerIdentifier player)
 			{
 				assert(card_.GetZone() == state::kCardZonePlay);

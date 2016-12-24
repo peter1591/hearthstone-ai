@@ -53,6 +53,8 @@ namespace FlowControl
 						return UpdateHero();
 					case state::kCardTypeMinion:
 						return UpdateMinion();
+					case state::kCardTypeWeapon:
+						return UpdateWeapon();
 					default:
 						throw std::exception("not implemented");
 					}
@@ -61,6 +63,7 @@ namespace FlowControl
 			private:
 				void UpdateHero();
 				void UpdateMinion();
+				void UpdateWeapon();
 
 				void UpdateCharacter(state::Cards::EnchantableStates const& new_states);
 
