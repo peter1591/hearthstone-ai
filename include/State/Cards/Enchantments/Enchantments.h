@@ -10,7 +10,7 @@ namespace FlowControl
 {
 	namespace Context
 	{
-		class EnchantmentAfterAdded;
+		struct EnchantmentAfterAdded;
 	}
 }
 
@@ -27,7 +27,7 @@ namespace state
 			typedef std::function<void(EnchantableStates &)> ApplyFunctor;
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
-			typedef void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded &);
+			typedef void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded);
 
 			template <typename T>
 			typename ContainerType::Identifier PushBack(T && item)

@@ -9,9 +9,9 @@ namespace FlowControl
 {
 	namespace Context
 	{
-		class AuraGetTargets;
-		class AuraApplyOn;
-		class AuraRemoveFrom;
+		struct AuraGetTargets;
+		struct AuraApplyOn;
+		struct AuraRemoveFrom;
 	}
 }
 
@@ -22,9 +22,9 @@ namespace state
 		class AuraHandler
 		{
 		public:
-			typedef void FuncGetTargets(FlowControl::Context::AuraGetTargets & context);
-			typedef void FuncApplyOn(FlowControl::Context::AuraApplyOn & context);
-			typedef void FuncRemoveFrom(FlowControl::Context::AuraRemoveFrom & context);
+			typedef void FuncGetTargets(FlowControl::Context::AuraGetTargets context);
+			typedef void FuncApplyOn(FlowControl::Context::AuraApplyOn context);
+			typedef void FuncRemoveFrom(FlowControl::Context::AuraRemoveFrom context);
 
 			AuraHandler() :
 				get_targets(nullptr), apply_on(nullptr),

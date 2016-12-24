@@ -36,7 +36,7 @@ namespace Cards
 
 		Card_NEW1_038()
 		{
-			added_to_play_zone = [](auto& context) {
+			added_to_play_zone = [](auto context) {
 				state::CardRef self = context.card_ref_;
 				context.state_.event_mgr.PushBack<state::Events::EventTypes::OnTurnEnd>(
 					[self](auto& controller, auto& context) {

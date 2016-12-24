@@ -9,17 +9,10 @@
 #include "State/Cards/AuraAuxData.h"
 #include "State/Cards/AuraHandler.h"
 #include "Cards/CardData.h"
+#include "FlowControl/Context/AddedToPlayZone.h"
+#include "FlowControl/Context/BattleCry.h"
 #include "FlowControl/Context/BattlecryTargetGetter.h"
-
-namespace FlowControl
-{
-	namespace Context
-	{
-		class AddedToPlayZone;
-		class BattleCry;
-		class Deathrattle;
-	}
-}
+#include "FlowControl/Context/Deathrattle.h"
 
 namespace state
 {
@@ -32,9 +25,9 @@ namespace state
 		public:
 			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter);
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry);
-			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone &);
+			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone);
 
-			typedef std::function<void(FlowControl::Context::Deathrattle &)> DeathrattleCallback;
+			typedef std::function<void(FlowControl::Context::Deathrattle)> DeathrattleCallback;
 			typedef std::list<DeathrattleCallback> Deathrattles;
 
 			CardData() :

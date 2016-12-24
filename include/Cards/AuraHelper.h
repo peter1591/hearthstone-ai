@@ -32,7 +32,7 @@ namespace Cards
 		void ApplyToAuraHandler()
 		{
 			card_data_.aura_handler.get_targetor_helper = targetor_getter_;
-			card_data_.aura_handler.get_targets = [](auto& context) {
+			card_data_.aura_handler.get_targets = [](auto context) {
 				if (!MinionCardUtils::IsAlive(context, context.card_ref_)) {
 					context.aura_data_.removed = true;
 					return;
@@ -41,14 +41,14 @@ namespace Cards
 				(*context.card_.GetRawData().aura_handler.get_targetor_helper)(context, targetor);
 				targetor.GetInfo().FillTargets(context.state_, context.targets_);
 			};
-			card_data_.aura_handler.apply_on = [](auto& context) {
+			card_data_.aura_handler.apply_on = [](auto context) {
 				context.enchant_id_ = MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
 			};
-			card_data_.aura_handler.remove_from = [](auto& context) {
+			card_data_.aura_handler.remove_from = [](auto context) {
 				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
 			};
 
-			card_data_.added_to_play_zone = [](auto& context) {
+			card_data_.added_to_play_zone = [](auto context) {
 				state::CardRef self = context.card_ref_;
 				context.state_.event_mgr.PushBack<state::Events::EventTypes::UpdateAura>(
 					[self](auto& controller, auto& context) {

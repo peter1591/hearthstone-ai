@@ -87,6 +87,8 @@ namespace FlowControl
 				}
 			}
 
+			state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
+
 			switch (card.GetCardType())
 			{
 			case state::kCardTypeMinion:
@@ -104,8 +106,6 @@ namespace FlowControl
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
 
-			state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
-
 			if (state_.GetCurrentPlayer().minions_.Full()) {
 				flow_context_.result_ = kResultInvalid;
 				return false;
@@ -117,8 +117,7 @@ namespace FlowControl
 			Manipulate(state_, flow_context_).Minion(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
 			if (card.GetRawData().added_to_play_zone) {
-				(*card.GetRawData().added_to_play_zone)(
-					Context::AddedToPlayZone(state_, flow_context_, card_ref, card));
+				(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
@@ -137,8 +136,6 @@ namespace FlowControl
 
 		bool PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 		{
-			state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
-
 			Manipulate(state_, flow_context_).Weapon(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player);
 
 			// TODO: event OnWeaponPlay
@@ -147,8 +144,7 @@ namespace FlowControl
 			// TODO: unify logic to another place? (e.g., EquipWeapon())
 
 			if (card.GetRawData().added_to_play_zone) {
-				(*card.GetRawData().added_to_play_zone)(
-					Context::AddedToPlayZone(state_, flow_context_, card_ref, card));
+				(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });
 			}
 
 			if (card.GetRawData().battlecry) {

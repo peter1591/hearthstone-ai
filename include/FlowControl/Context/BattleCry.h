@@ -18,9 +18,8 @@ namespace FlowControl
 
 	namespace Context
 	{
-		class BattleCry
+		struct BattleCry
 		{
-		public:
 			state::State & state_;
 			FlowContext & flow_context_;
 			state::CardRef card_ref_;
