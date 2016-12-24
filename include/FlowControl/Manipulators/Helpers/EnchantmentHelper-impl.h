@@ -24,6 +24,10 @@ namespace FlowControl
 					card_manipulator.Attack(new_states.attack);
 					assert(card_.GetAttack() == new_states.attack);
 				}
+				if (new_states.max_hp != current_states.max_hp) {
+					card_manipulator.MaxHP(new_states.max_hp);
+					assert(card_.GetMaxHP() == new_states.max_hp);
+				}
 			}
 
 			inline void EnchantmentHelper::UpdateMinion()
@@ -51,10 +55,6 @@ namespace FlowControl
 				if (new_states.cost != current_states.cost) {
 					manipulator.Cost(new_states.cost);
 					assert(card_.GetCost() == new_states.cost);
-				}
-				if (new_states.max_hp != current_states.max_hp) {
-					manipulator.MaxHP(new_states.max_hp);
-					assert(card_.GetMaxHP() == new_states.max_hp);
 				}
 
 				if (new_states.taunt != current_states.taunt) {
