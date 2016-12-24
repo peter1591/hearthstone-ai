@@ -179,5 +179,15 @@ namespace Cards
 			if (target.GetZone() == state::kCardZonePlay) return true;
 			return false;
 		}
+
+		static void SetBattlecryTarget(
+			FlowControl::Context::BattlecryTargetGetter & context,
+			TargetorHelper const& targetor)
+		{
+			context.flow_context_.battlecry_target_ =
+				context.flow_context_.action_parameters_.GetBattlecryTarget(
+					context.state_, context.card_ref_, context.card_,
+					targetor.GetInfo());
+		}
 	};
 }

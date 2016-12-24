@@ -10,10 +10,7 @@ namespace Cards
 		Card_CS2_189()
 		{
 			battlecry_target_getter = [] (auto context) {
-				context.flow_context_.battlecry_target_ =
-					context.flow_context_.action_parameters_.GetBattlecryTarget(
-						context.state_, context.card_ref_, context.card_,
-						Targets().Targetable().Enemy(context).GetInfo());
+				SetBattlecryTarget(context, Targets().Targetable().Enemy(context));
 				return true;
 			};
 			battlecry = [](auto context) {
@@ -88,10 +85,7 @@ namespace Cards
 		Card_EX1_011()
 		{
 			battlecry_target_getter = [](auto context) {
-				context.flow_context_.battlecry_target_ =
-					context.flow_context_.action_parameters_.GetBattlecryTarget(
-						context.state_, context.card_ref_, context.card_,
-						Targets().Targetable().Exclude(context.card_ref_).GetInfo()); // cannot heal self
+				SetBattlecryTarget(context, Targets().Targetable().Exclude(context.card_ref_));
 				return true;
 			};
 			battlecry = [](auto context) {
