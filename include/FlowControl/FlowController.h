@@ -6,9 +6,7 @@
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/IRandomGenerator.h"
 #include "FlowControl/ActionParameterWrapper.h"
-#include "FlowControl/Context/AddedToPlayZone.h"
-#include "FlowControl/Context/BattleCry.h"
-#include "FlowControl/Context/BattlecryTargetGetter.h"
+#include "FlowControl/Contexts.h"
 #include "FlowControl/Helpers/Resolver.h"
 
 // Implemention details which depends on manipulators

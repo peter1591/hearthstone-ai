@@ -22,9 +22,6 @@
     <Filter Include="Header Files\FlowControl\Helpers">
       <UniqueIdentifier>{7acbed2a-45eb-441e-a973-91977117cc7c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\Context">
-      <UniqueIdentifier>{ff308333-4b2b-4d8a-bc70-bdf6c0b6c3df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\State\Cards">
       <UniqueIdentifier>{24898c9b-f21f-4a56-8b5a-64a82c7ccedc}</UniqueIdentifier>
     </Filter>
@@ -97,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Result.h">
       <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\State\Cards\Manager.h">
       <Filter>Header Files\State\Cards</Filter>
@@ -245,9 +239,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
@@ -262,18 +253,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h">
       <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\AuraGetTargets.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\AuraApplyOn.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\AuraRemoveFrom.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
@@ -326,9 +305,6 @@
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\AddedToPlayZone.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
@@ -362,8 +338,8 @@
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Context\BattlecryTargetGetter.h">
-      <Filter>Header Files\FlowControl\Context</Filter>
+    <ClInclude Include="..\..\include\FlowControl\Contexts.h">
+      <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

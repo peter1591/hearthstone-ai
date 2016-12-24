@@ -138,14 +138,7 @@
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\AddedToPlayZone.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\BattlecryTargetGetter.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\EnchantmentAfterAdded.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\AuraApplyOn.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\AuraGetTargets.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\AuraRemoveFrom.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\BattleCry.h" />
-    <ClInclude Include="..\..\include\FlowControl\Context\Deathrattle.h" />
+    <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />

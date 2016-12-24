@@ -9,10 +9,7 @@
 #include "State/Cards/AuraAuxData.h"
 #include "State/Cards/AuraHandler.h"
 #include "Cards/CardData.h"
-#include "FlowControl/Context/AddedToPlayZone.h"
-#include "FlowControl/Context/BattleCry.h"
-#include "FlowControl/Context/BattlecryTargetGetter.h"
-#include "FlowControl/Context/Deathrattle.h"
+#include "FlowControl/Contexts.h"
 
 namespace state
 {

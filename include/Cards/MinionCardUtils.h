@@ -1,7 +1,6 @@
 #pragma once
 
-#include "FlowControl/Context/BattleCry.h"
-#include "FlowControl/Context/Deathrattle.h"
+#include "FlowControl/Contexts.h"
 #include "State/State.h"
 #include "Cards/TargetorUtils.h"
 

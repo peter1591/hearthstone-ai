@@ -1,9 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "FlowControl/Context/AuraGetTargets.h"
-#include "FlowControl/Context/AuraApplyOn.h"
-#include "FlowControl/Context/AuraRemoveFrom.h"
+#include "FlowControl/Contexts.h"
 #include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 #include "FlowControl/Manipulate.h"
 
