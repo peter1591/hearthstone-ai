@@ -9,9 +9,15 @@ namespace Cards
 
 		Card_CS2_189()
 		{
-			battlecry = [](auto& context) {
-				state::CardRef ref = context.GetBattleCryTarget(Targets().Targetable().Enemy(context));
-				Damage(context).Target(ref).Amount(1);
+			battlecry_target_getter = [] (auto context) {
+				context.flow_context_.battlecry_target_ =
+					context.flow_context_.action_parameters_.GetBattlecryTarget(
+						context.state_, context.card_ref_, context.card_,
+						Targets().Targetable().Enemy(context).GetInfo());
+				return true;
+			};
+			battlecry = [](auto context) {
+				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
 			};
 		}
 	};
@@ -81,10 +87,15 @@ namespace Cards
 
 		Card_EX1_011()
 		{
-			battlecry = [](auto& context) {
-				state::CardRef ref = context.GetBattleCryTarget(
-					Targets().Targetable().Exclude(context.card_ref_)); // cannot heal self
-				Heal(context).Target(ref).Amount(2);
+			battlecry_target_getter = [](auto context) {
+				context.flow_context_.battlecry_target_ =
+					context.flow_context_.action_parameters_.GetBattlecryTarget(
+						context.state_, context.card_ref_, context.card_,
+						Targets().Targetable().Exclude(context.card_ref_).GetInfo()); // cannot heal self
+				return true;
+			};
+			battlecry = [](auto context) {
+				Heal(context).Target(context.flow_context_.battlecry_target_).Amount(2);
 			};
 		}
 	};

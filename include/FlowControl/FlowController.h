@@ -8,6 +8,7 @@
 #include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Context/AddedToPlayZone.h"
 #include "FlowControl/Context/BattleCry.h"
+#include "FlowControl/Context/BattlecryTargetGetter.h"
 #include "FlowControl/Helpers/Resolver.h"
 
 // Implemention details which depends on manipulators
@@ -79,6 +80,13 @@ namespace FlowControl
 			state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 			state::Cards::Card const& card = state_.mgr.Get(card_ref);
 
+			if (card.GetRawData().battlecry_target_getter) {
+				if (!(*card.GetRawData().battlecry_target_getter)({ state_, flow_context_, card_ref, card })) {
+					flow_context_.result_ = kResultInvalid;
+					return false;
+				}
+			}
+
 			switch (card.GetCardType())
 			{
 			case state::kCardTypeMinion:
@@ -116,10 +124,7 @@ namespace FlowControl
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
 			if (card.GetBattlecryCallback()) {
-				card.GetBattlecryCallback()(Context::BattleCry(
-					state_, flow_context_, card_ref, card, [this, card_ref, card](Cards::TargetorHelper const& targets) {
-					return flow_context_.action_parameters_.GetBattlecryTarget(state_, card_ref, card, targets.GetInfo());
-				}));
+				(*card.GetBattlecryCallback())({state_, flow_context_, card_ref, card});
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
@@ -147,10 +152,7 @@ namespace FlowControl
 			}
 
 			if (card.GetBattlecryCallback()) {
-				card.GetBattlecryCallback()(Context::BattleCry(
-					state_, flow_context_, card_ref, card, [this, card_ref, card](Cards::TargetorHelper const& targets) {
-					return flow_context_.action_parameters_.GetBattlecryTarget(state_, card_ref, card, targets.GetInfo());
-				}));
+				(*card.GetBattlecryCallback())({ state_, flow_context_, card_ref, card });
 			}
 
 			return true;

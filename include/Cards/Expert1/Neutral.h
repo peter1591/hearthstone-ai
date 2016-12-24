@@ -9,7 +9,7 @@ namespace Cards
 
 		Card_EX1_089()
 		{
-			battlecry = [](auto& context) {
+			battlecry = [](auto context) {
 				AnotherPlayer(context).GainEmptyCrystal();
 			};
 		}

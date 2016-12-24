@@ -39,6 +39,8 @@ namespace FlowControl
 		ActionParameterWrapper & action_parameters_;
 		Result result_;
 
+		state::CardRef battlecry_target_;
+
 	private:
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 	};
