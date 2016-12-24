@@ -134,12 +134,7 @@ namespace FlowControl
 
 		bool PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 		{
-			Manipulate(state_, flow_context_).Weapon(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player);
-
-			// TODO: event OnWeaponPlay
-			// TODO: destroy old weapon
-			// TODO: equip new weapon (i.e., record in state_.board)
-			// TODO: unify logic to another place? (e.g., EquipWeapon())
+			Manipulate(state_, flow_context_).CurrentHero().EquipWeapon(card_ref);
 
 			if (card.GetRawData().added_to_play_zone) {
 				(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });

@@ -23,6 +23,8 @@ namespace FlowControl
 
 			void DrawCard();
 
+			void EquipWeapon(state::CardRef weapon_ref);
+
 		private:
 			state::PlayerIdentifier player_id_;
 		};

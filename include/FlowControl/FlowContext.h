@@ -40,7 +40,7 @@ namespace FlowControl
 		Result result_;
 
 		state::CardRef battlecry_target_;
-
+		state::CardRef destroyed_weapon_;
 	private:
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 	};

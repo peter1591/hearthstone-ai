@@ -33,5 +33,21 @@ namespace FlowControl
 
 			// TODO: trigger on-draw event (parameter: card_ref)
 		}
+
+		inline void HeroManipulator::EquipWeapon(state::CardRef weapon_ref)
+		{
+			if (card_.GetRawData().weapon_ref.IsValid()) {
+				if (!flow_context_.destroyed_weapon_.IsValid()) {
+					flow_context_.destroyed_weapon_ = card_.GetRawData().weapon_ref;
+				}
+			}
+
+			state::Cards::Card const& weapon = state_.mgr.Get(weapon_ref);
+
+			Manipulate(state_, flow_context_).Weapon(weapon_ref)
+				.Zone().ChangeTo<state::kCardZonePlay>(state_.current_player);
+
+			card_.SetWeapon(weapon_ref);
+		}
 	}
 }

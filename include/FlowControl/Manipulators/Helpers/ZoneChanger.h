@@ -56,7 +56,7 @@ namespace FlowControl
 					case state::kCardTypeMinion:
 						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 					case state::kCardTypeWeapon:
-						return player.weapon_.Equip(card_ref);
+						return; // do nothing
 					case state::kCardTypeSecret:
 						return player.secrets_.Add(card.GetCardId(), card_ref);
 					}
@@ -108,7 +108,7 @@ namespace FlowControl
 					case state::kCardTypeMinion:
 						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 					case state::kCardTypeWeapon:
-						return player.weapon_.Destroy();
+						return; // do nothing
 					case state::kCardTypeSecret:
 						return player.secrets_.Remove(card.GetCardId());
 					}
