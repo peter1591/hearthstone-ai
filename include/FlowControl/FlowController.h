@@ -183,8 +183,8 @@ namespace FlowControl
 				state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, attacker, defender });
 			// TODO: attacker lose stealth
 
-			Manipulate(state_, flow_context_).Character(defender).Damage(state_.mgr.Get(attacker).GetAttack());
-			Manipulate(state_, flow_context_).Character(attacker).Damage(state_.mgr.Get(defender).GetAttack());
+			Manipulate(state_, flow_context_).Character(defender).Damage(GetAttackValue(attacker));
+			Manipulate(state_, flow_context_).Character(attacker).Damage(GetAttackValue(defender));
 
 			Manipulate(state_, flow_context_).Character(attacker).AfterAttack();
 
@@ -211,6 +211,11 @@ namespace FlowControl
 			if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc.
 
 			return true;
+		}
+
+		int GetAttackValue(state::CardRef attacker)
+		{
+			return state_.mgr.Get(attacker).GetAttack();
 		}
 
 	private:
