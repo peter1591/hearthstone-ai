@@ -213,9 +213,25 @@ namespace FlowControl
 			return true;
 		}
 
-		int GetAttackValue(state::CardRef attacker)
+		int GetAttackValue(state::CardRef ref)
 		{
-			return state_.mgr.Get(attacker).GetAttack();
+			int attack = 0;
+			
+			state::Cards::Card const& card = state_.mgr.Get(ref);
+
+			int v1 = card.GetAttack();
+			if (v1 > 0) attack += v1;
+
+			state::CardRef weapon_ref = card.GetRawData().weapon_ref;
+			if (weapon_ref.IsValid()) {
+				assert(card.GetCardType() == state::kCardTypeHero);
+
+				state::Cards::Card const& weapon = state_.mgr.Get(weapon_ref);
+				int v2 = weapon.GetAttack();
+				if (v2 > 0) attack += v2;
+			}
+
+			return attack;
 		}
 
 	private:
