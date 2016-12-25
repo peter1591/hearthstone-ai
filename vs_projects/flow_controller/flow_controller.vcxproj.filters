@@ -164,9 +164,6 @@
     <ClInclude Include="..\..\include\State\board\Secrets.h">
       <Filter>Header Files\State\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Weapon.h">
-      <Filter>Header Files\State\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Events\EventTypes\AfterMinionPlayed.h">
       <Filter>Header Files\State\Events\EventTypes</Filter>
     </ClInclude>

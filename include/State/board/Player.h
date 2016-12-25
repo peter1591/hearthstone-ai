@@ -5,7 +5,6 @@
 #include "State/board/Hand.h"
 #include "State/board/Minions.h"
 #include "State/board/Secrets.h"
-#include "State/board/Weapon.h"
 #include "State/board/PlayerResource.h"
 
 namespace state
@@ -22,7 +21,6 @@ namespace state
 			Deck deck_;
 			Hand hand_;
 			Minions minions_;
-			Weapon weapon_;
 			Secrets secrets_;
 			Graveyard graveyard_;
 
