@@ -31,8 +31,6 @@ namespace FlowControl
 			Helpers::DamageHelper Damage(int amount) { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_, amount); }
 			Helpers::HealHelper Heal(int amount) { return Helpers::HealHelper(state_, flow_context_, card_ref_, card_, amount); }
 
-			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
-
 			void AfterAttack()
 			{
 				card_.IncreaseNumAttacksThisTurn();

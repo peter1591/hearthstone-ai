@@ -51,6 +51,8 @@ namespace FlowControl
 			void Attack(int new_attack) { card_.SetAttack(new_attack); }
 			void MaxHP(int new_max_hp) { card_.SetMaxHP(new_max_hp); }
 
+			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
+
 		public:
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
