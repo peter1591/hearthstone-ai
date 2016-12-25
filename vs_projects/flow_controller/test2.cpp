@@ -483,4 +483,36 @@ void test2()
 	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 10, 12 } });
 	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+
+	assert(controller.Attack(
+		state.GetCurrentPlayer().hero_ref_, state.GetOppositePlayer().minions_.Get(1))
+		== FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 11, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 4, 8 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 7, 12 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+
+	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
+	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 11, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 9, 9 });
+	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 }, { 14, 9, 14 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+
+	assert(controller.Attack(
+		state.GetCurrentPlayer().hero_ref_, state.GetOppositePlayer().minions_.Get(0))
+		== FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 7, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 10, 10 });
+	CheckCrystals(state, state::kPlayerSecond, { 9, 9 });
+	CheckMinions(state, state::kPlayerFirst, {{ 14, 9, 14 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
+	assert(state.GetCurrentPlayer().hand_.Size() == 10);
 }
