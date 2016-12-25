@@ -61,6 +61,7 @@ namespace FlowControl
 					state::Cards::Card const& card = state_.mgr.Get(flow_context_.destroyed_weapon_);
 					flow_context_.dead_entity_hints_.insert(
 						std::make_pair(card.GetPlayOrder(), flow_context_.destroyed_weapon_));
+					flow_context_.destroyed_weapon_.Invalidate();
 				}
 
 				flow_context_.dead_entity_hints_.clear();

@@ -31,6 +31,7 @@ namespace FlowControl
 		bool Empty() const
 		{
 			if (!dead_entity_hints_.empty()) return false;
+			if (destroyed_weapon_.IsValid()) return false;
 			return true;
 		}
 
