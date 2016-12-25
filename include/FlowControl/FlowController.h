@@ -163,8 +163,6 @@ namespace FlowControl
 			if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
 
 			while (true) {
-				// TODO: attacker should not be changed
-				state::CardRef origin_attacker = attacker;
 				state::CardRef origin_defender = defender;
 				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker, defender);
 
@@ -176,7 +174,7 @@ namespace FlowControl
 				if (state_.mgr.Get(defender).GetHP() <= 0) return kResultNotDetermined;
 				if (state_.mgr.Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
-				if (origin_attacker == attacker && origin_defender == defender) break;
+				if (origin_defender == defender) break;
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(

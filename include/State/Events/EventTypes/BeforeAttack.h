@@ -20,8 +20,8 @@ namespace state
 			class BeforeAttack
 			{
 			public:
-				typedef std::function<void(HandlersContainerController &, State &, CardRef &, CardRef &)> FunctorType;
-				typedef std::tuple<State &, CardRef &, CardRef &> ArgsTuple;
+				typedef std::function<void(HandlersContainerController &, State &, CardRef const&, CardRef &)> FunctorType;
+				typedef std::tuple<State &, CardRef const&, CardRef &> ArgsTuple;
 
 				template <typename T> BeforeAttack(T&& functor) : functor_(functor) {}
 
