@@ -25,6 +25,11 @@ namespace FlowControl
 
 			void EquipWeapon(state::CardRef weapon_ref);
 
+			void TurnStart()
+			{
+				card_.ClearNumAttacksThisTurn();
+			}
+
 		private:
 			state::PlayerIdentifier player_id_;
 		};

@@ -277,6 +277,7 @@ namespace FlowControl
 			for (state::CardRef minion : state_.GetCurrentPlayer().minions_.Get()) {
 				Manipulate(state_, flow_context_).Minion(minion).TurnStart();
 			}
+			Manipulate(state_, flow_context_).CurrentHero().TurnStart();
 		}
 
 		void DrawCardPhase()
