@@ -7,9 +7,19 @@ namespace state
 		class PlayerResource
 		{
 		public:
-			void SetTotal(int total) { total_ = total; }
+			void SetTotal(int total)
+			{
+				assert(total <= 10);
+				total_ = total;
+			}
+			
 			int GetTotal() const { return total_; }
-			void IncreaseTotal(int amount = 1) { total_ += amount; }
+			void IncreaseTotal(int amount = 1)
+			{
+				int new_total = total_ + amount;
+				if (new_total > 10) new_total = 10;
+				SetTotal(new_total);
+			}
 
 			void SetCurrent(int current) { current_ = current; }
 			int GetCurrent() const { return current_; }
