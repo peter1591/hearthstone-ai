@@ -207,7 +207,10 @@ namespace FlowControl
 		{
 			state::Cards::Card const& card = state_.mgr.Get(attacker);
 
-			if (card.GetRawData().enchantable_states.charge == false && card.GetRawData().just_played) return false;
+			if (card.GetCardType() == state::kCardTypeMinion) {
+				if (card.GetRawData().enchantable_states.charge == false && card.GetRawData().just_played) return false;
+			}
+
 			if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc.
 
 			return true;
