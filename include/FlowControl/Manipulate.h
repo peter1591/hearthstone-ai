@@ -27,6 +27,11 @@ namespace FlowControl
 			return Hero(state_.current_player);
 		}
 
+		Manipulators::HeroManipulator OpponentHero()
+		{
+			return AnotherHero(state_.current_player);
+		}
+
 		Manipulators::HeroManipulator Hero(state::CardRef ref)
 		{
 			state::PlayerIdentifier player = state_.mgr.Get(ref).GetPlayerIdentifier();
