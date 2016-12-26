@@ -1,5 +1,7 @@
 #pragma once
 
+// http://www.hearthpwn.com/cards?filter-set=2&filter-premium=1&filter-class=1&sort=-cost&display=1
+
 namespace Cards
 {
 	class Card_CS2_189 : public MinionCardBase<Card_CS2_189>, MinionCardUtils
@@ -93,6 +95,19 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_EX1_066 : public MinionCardBase<Card_EX1_066>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_066;
+
+		Card_EX1_066()
+		{
+			battlecry = [](auto context) {
+				Manipulate(context).OpponentHero().DestroyWeapon();
+			};
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -101,3 +116,4 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_168)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_508)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_171)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_011)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_066)
