@@ -483,6 +483,7 @@ void test2()
 	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 10, 12 } });
 	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+	assert(state.mgr.Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 
 	assert(controller.Attack(
 		state.GetCurrentPlayer().hero_ref_, state.GetOppositePlayer().minions_.Get(1))
@@ -494,6 +495,7 @@ void test2()
 	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 },{ 12, 7, 12 } });
 	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
+	assert(state.mgr.Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
@@ -504,6 +506,7 @@ void test2()
 	CheckMinions(state, state::kPlayerFirst, { { 4, 3, 4 }, { 14, 9, 14 } });
 	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+	assert(state.mgr.Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 
 	assert(controller.Attack(
 		state.GetCurrentPlayer().hero_ref_, state.GetOppositePlayer().minions_.Get(0))
@@ -515,4 +518,5 @@ void test2()
 	CheckMinions(state, state::kPlayerFirst, {{ 14, 9, 14 } });
 	CheckMinions(state, state::kPlayerSecond, { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
+	assert(!state.mgr.Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 }
