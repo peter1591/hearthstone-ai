@@ -138,15 +138,22 @@ namespace Cards
 			CardData new_card;
 			new_card.card_id = (int)cards.size();
 
+			new_card.cost = json["cost"].asInt();
+			new_card.card_rarity = GetCardRarity(json);
+
 			if (type == "MINION") {
 				new_card.card_type = state::kCardTypeMinion;
 				new_card.card_race = GetCardRace(json);
+				new_card.attack = json["attack"].asInt();
+				new_card.max_hp = json["health"].asInt();
 			}
 			else if (type == "SPELL") {
 				new_card.card_type = state::kCardTypeSpell;
 			}
 			else if (type == "WEAPON") {
 				new_card.card_type = state::kCardTypeWeapon;
+				new_card.attack = json["attack"].asInt();
+				new_card.max_hp = json["durability"].asInt();
 			}
 			else if (type == "HERO_POWER") {
 				new_card.card_type = state::kCardTypeHeroPower;
@@ -154,12 +161,6 @@ namespace Cards
 			else {
 				return; // ignored
 			}
-
-			new_card.cost = json["cost"].asInt();
-			new_card.attack = json["attack"].asInt();
-			new_card.max_hp = json["health"].asInt();
-			new_card.card_race = GetCardRace(json);
-			new_card.card_rarity = GetCardRarity(json);
 
 			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);
