@@ -27,6 +27,13 @@ namespace FlowControl
 			return Hero(state_.current_player);
 		}
 
+		Manipulators::HeroManipulator Hero(state::CardRef ref)
+		{
+			state::PlayerIdentifier player = state_.mgr.Get(ref).GetPlayerIdentifier();
+			assert(state_.board.Get(player).hero_ref_ == ref);
+			return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref), player);
+		}
+
 		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player)
 		{
 			state::CardRef ref = state_.board.Get(player).hero_ref_;
