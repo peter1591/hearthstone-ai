@@ -45,6 +45,13 @@ namespace FlowControl
 			{
 				deaths_.clear();
 
+				if (flow_context_.destroyed_weapon_.IsValid()) {
+					state::Cards::Card const& card = state_.mgr.Get(flow_context_.destroyed_weapon_);
+					flow_context_.dead_entity_hints_.insert(
+						std::make_pair(card.GetPlayOrder(), flow_context_.destroyed_weapon_));
+					flow_context_.destroyed_weapon_.Invalidate();
+				}
+
 				for (const auto& item : flow_context_.dead_entity_hints_)
 				{
 					state::CardRef ref = item.second;
@@ -55,13 +62,6 @@ namespace FlowControl
 					// TODO: check if it's pending destory
 
 					deaths_.insert(ref);
-				}
-
-				if (flow_context_.destroyed_weapon_.IsValid()) {
-					state::Cards::Card const& card = state_.mgr.Get(flow_context_.destroyed_weapon_);
-					flow_context_.dead_entity_hints_.insert(
-						std::make_pair(card.GetPlayOrder(), flow_context_.destroyed_weapon_));
-					flow_context_.destroyed_weapon_.Invalidate();
 				}
 
 				flow_context_.dead_entity_hints_.clear();
