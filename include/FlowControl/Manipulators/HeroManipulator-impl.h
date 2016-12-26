@@ -36,13 +36,7 @@ namespace FlowControl
 
 		inline void HeroManipulator::EquipWeapon(state::CardRef weapon_ref)
 		{
-			if (card_.GetRawData().weapon_ref.IsValid()) {
-				if (!flow_context_.destroyed_weapon_.IsValid()) {
-					flow_context_.destroyed_weapon_ = card_.GetRawData().weapon_ref;
-				}
-			}
-
-			state::Cards::Card const& weapon = state_.mgr.Get(weapon_ref);
+			DestroyWeapon();
 
 			card_.SetWeapon(weapon_ref);
 
