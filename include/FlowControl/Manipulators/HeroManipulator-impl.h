@@ -44,10 +44,10 @@ namespace FlowControl
 
 			state::Cards::Card const& weapon = state_.mgr.Get(weapon_ref);
 
+			card_.SetWeapon(weapon_ref);
+
 			Manipulate(state_, flow_context_).Weapon(weapon_ref)
 				.Zone().ChangeTo<state::kCardZonePlay>(state_.current_player);
-
-			card_.SetWeapon(weapon_ref);
 		}
 	}
 }

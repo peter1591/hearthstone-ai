@@ -150,6 +150,7 @@ namespace state
 			CardData::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
 			void SetWeapon(state::CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
+			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
 
 		public:
 			const CardData & GetRawData() const { return data_; }

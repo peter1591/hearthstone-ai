@@ -338,5 +338,8 @@
     <ClInclude Include="..\..\include\FlowControl\Contexts.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

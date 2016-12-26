@@ -55,10 +55,11 @@ namespace FlowControl
 						return;
 					case state::kCardTypeMinion:
 						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
-					case state::kCardTypeWeapon:
-						return; // do nothing
 					case state::kCardTypeSecret:
 						return player.secrets_.Add(card.GetCardId(), card_ref);
+					case state::kCardTypeWeapon:
+						assert(state.mgr.Get(player.hero_ref_).GetRawData().weapon_ref == card_ref);
+						return;
 					}
 				}
 
@@ -105,12 +106,16 @@ namespace FlowControl
 
 					switch (RemovingCardType)
 					{
+					case state::kCardTypeHero:
+						player.hero_ref_.Invalidate();
+						return;
 					case state::kCardTypeMinion:
 						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
-					case state::kCardTypeWeapon:
-						return; // do nothing
 					case state::kCardTypeSecret:
 						return player.secrets_.Remove(card.GetCardId());
+					case state::kCardTypeWeapon:
+						assert(!state.mgr.Get(player.hero_ref_).GetRawData().weapon_ref.IsValid());
+						return;
 					}
 				}
 

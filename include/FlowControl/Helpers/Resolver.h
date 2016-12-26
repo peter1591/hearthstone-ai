@@ -97,6 +97,11 @@ namespace FlowControl
 						.TriggerAll()
 						.Clear();
 
+					if (card.GetCardType() == state::kCardTypeWeapon) {
+						state::CardRef hero_ref = state_.board.Get(card.GetPlayerIdentifier()).hero_ref_;
+						Manipulate(state_, flow_context_).Hero(hero_ref).RemoveWeaponRef()();
+					}
+
 					Manipulate(state_, flow_context_).Card(ref).Zone().ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
