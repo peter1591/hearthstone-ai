@@ -122,7 +122,7 @@ namespace FlowControl
 
 			assert(card.GetPlayerIdentifier() == state_.current_player);
 			if (card.GetRawData().battlecry) {
-				(*card.GetRawData().battlecry)({state_, flow_context_, card_ref, card});
+				(*card.GetRawData().battlecry)({state_, flow_context_, card_ref, card, put_position});
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
@@ -143,7 +143,7 @@ namespace FlowControl
 
 			assert(card.GetPlayerIdentifier() == state_.current_player);
 			if (card.GetRawData().battlecry) {
-				(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
+				(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card, -1 });
 			}
 
 			return true;
