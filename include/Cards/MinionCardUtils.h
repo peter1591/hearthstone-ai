@@ -194,5 +194,25 @@ namespace Cards
 					context.state_, context.card_ref_, context.card_,
 					targetor.GetInfo());
 		}
+
+		template <typename Context>
+		static void Summon(Context && context, int card_id)
+		{
+			if (Player(context).IsMinionsFull()) return;
+
+			state::Cards::CardData card_data = FlowControl::Dispatchers::Minions::CreateInstance(card_id);
+
+			card_data.enchantable_states.player = context.card_.GetPlayerIdentifier();
+			card_data.zone = state::kCardZonePlay;
+			card_data.zone_position = context.minion_put_location + 1;
+
+			card_data.enchantment_aux_data.origin_states = card_data.enchantable_states;
+
+			state::CardRef ref = context.state_.mgr.PushBack(
+				context.state_, context.flow_context_, state::Cards::Card(card_data));
+
+			FlowControl::Manipulate(context.state_, context.flow_context_)
+				.Board().Summon(ref);
+		}
 	};
 }
