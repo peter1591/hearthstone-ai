@@ -24,6 +24,11 @@ namespace Cards
 			player_.resource_.IncreaseCurrent(amount);
 		}
 
+		bool IsMinionsFull() const
+		{
+			return player_.minions_.Full();
+		}
+
 	private:
 		Context & context_;
 		state::board::Player & player_;
