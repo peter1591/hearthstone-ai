@@ -12,7 +12,8 @@ namespace state
 			EnchantableStates() :
 				player(kPlayerFirst),
 				cost(-1), attack(-1), max_hp(-1),
-				taunt(false), shielded(false), charge(false)
+				taunt(false), shielded(false), charge(false),
+				spell_damage(0)
 			{
 			}
 
@@ -25,11 +26,13 @@ namespace state
 			bool shielded;
 			bool charge;
 
-			static constexpr int kFieldChangeId = 4; // Change this if any field is changed. This helps to see where you should also modify
+			int spell_damage;
+
+			static constexpr int kFieldChangeId = 5; // Change this if any field is changed. This helps to see where you should also modify
 
 			bool operator==(EnchantableStates const& rhs) const
 			{
-				static_assert(kFieldChangeId == 4, "field changed");
+				static_assert(kFieldChangeId == 5, "field changed");
 				if (player != rhs.player) return false;
 				if (cost != rhs.cost) return false;
 				if (attack != rhs.attack) return false;
@@ -37,6 +40,7 @@ namespace state
 				if (taunt != rhs.taunt) return false;
 				if (shielded != rhs.shielded) return false;
 				if (charge != rhs.charge) return false;
+				if (spell_damage != rhs.spell_damage) return false;
 				return true;
 			}
 

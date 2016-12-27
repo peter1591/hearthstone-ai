@@ -124,6 +124,9 @@ namespace state
 			void SetShield(bool v) { data_.enchantable_states.shielded = v; }
 			void SetCharge(bool v) { data_.enchantable_states.charge = v; }
 
+			int GetSpellDamage() const { return data_.enchantable_states.spell_damage; }
+			void SetSpellDamage(int v) { data_.enchantable_states.spell_damage = v; }
+
 			void IncreaseNumAttacksThisTurn() { ++data_.num_attacks_this_turn; }
 			void ClearNumAttacksThisTurn() { data_.num_attacks_this_turn = 0; }
 

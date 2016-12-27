@@ -41,6 +41,11 @@ namespace Cards
 			this->enchantable_states.charge = true;
 		}
 
+		void SpellDamage(int v)
+		{
+			this->enchantable_states.spell_damage = v;
+		}
+
 		template <typename EnchantmentType>
 		AuraHelper<EnchantmentType> Aura()
 		{

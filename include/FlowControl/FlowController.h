@@ -286,6 +286,21 @@ namespace FlowControl
 		}
 
 	private:
+		int CalculateSpellDamage(state::board::Player const& player)
+		{
+			int spell_damage = 0;
+
+			state::Cards::Card const& hero = state_.mgr.Get(player.hero_ref_);
+			spell_damage += hero.GetSpellDamage();
+			spell_damage += state_.mgr.Get(hero.GetRawData().weapon_ref).GetSpellDamage();
+
+			for (state::CardRef const& minion_ref : player.minions_.Get()) {
+				spell_damage += state_.mgr.Get(minion_ref).GetSpellDamage();
+			}
+
+			return spell_damage;
+		}
+
 		bool SetResult(Result result)
 		{
 			assert(result != kResultNotDetermined);

@@ -13,12 +13,12 @@ namespace FlowControl
 		{
 			inline void EnchantmentHelper::UpdateCharacter(state::Cards::EnchantableStates const& new_states)
 			{
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
+
 				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Character(card_ref_);
-
-				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 4, "enchantable fields changed");
 
 				if (new_states.attack != current_states.attack) {
 					card_manipulator.Attack(new_states.attack);
@@ -28,10 +28,16 @@ namespace FlowControl
 					card_manipulator.MaxHP(new_states.max_hp);
 					assert(card_.GetMaxHP() == new_states.max_hp);
 				}
+				if (new_states.spell_damage != current_states.spell_damage) {
+					card_manipulator.SpellDamage(new_states.spell_damage);
+					assert(card_.GetSpellDamage() == new_states.spell_damage);
+				}
 			}
 
 			inline void EnchantmentHelper::UpdateMinion()
 			{
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
+
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
 
@@ -79,6 +85,8 @@ namespace FlowControl
 
 			inline void EnchantmentHelper::UpdateHero()
 			{
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
+
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
 
@@ -94,6 +102,8 @@ namespace FlowControl
 
 			inline void EnchantmentHelper::UpdateWeapon()
 			{
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
+
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
 
@@ -102,8 +112,6 @@ namespace FlowControl
 
 				auto manipulator = Manipulate(state_, flow_context_).Weapon(card_ref_);
 
-				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 4, "enchantable fields changed");
-
 				if (new_states.attack != current_states.attack) {
 					manipulator.Attack(new_states.attack);
 					assert(card_.GetAttack() == new_states.attack);
@@ -111,6 +119,10 @@ namespace FlowControl
 				if (new_states.max_hp != current_states.max_hp) {
 					manipulator.MaxHP(new_states.max_hp);
 					assert(card_.GetMaxHP() == new_states.max_hp);
+				}
+				if (new_states.spell_damage != current_states.spell_damage) {
+					manipulator.SpellDamage(new_states.spell_damage);
+					assert(card_.GetSpellDamage() == new_states.spell_damage);
 				}
 
 				assert(card_.GetRawData().enchantable_states == new_states);
