@@ -147,6 +147,29 @@ namespace Cards
 			SpellDamage(1);
 		}
 	};
+
+	class Card_EX1_506 : public MinionCardBase<Card_EX1_506>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_506;
+
+		Card_EX1_506()
+		{
+			battlecry = [](auto context) {
+				Summon(context, Cards::ID_EX1_506a);
+			};
+		}
+	};
+
+	class Card_EX1_506a : public MinionCardBase<Card_EX1_506a>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_506a;
+
+		Card_EX1_506a()
+		{
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -160,3 +183,5 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_172)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_173)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_121)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_142)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506a)
