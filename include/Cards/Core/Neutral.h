@@ -108,6 +108,34 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_CS2_172 : public MinionCardBase<Card_CS2_172>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_172;
+	};
+
+	class Card_CS2_173 : public MinionCardBase<Card_CS2_173>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_173;
+
+		Card_CS2_173()
+		{
+			Charge();
+		}
+	};
+
+	class Card_CS2_121 : public MinionCardBase<Card_CS2_121>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_121;
+
+		Card_CS2_121()
+		{
+			Taunt();
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -117,3 +145,6 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_508)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_171)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_011)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_066)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_172)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_173)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_121)
