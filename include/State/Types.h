@@ -73,7 +73,8 @@ namespace state
 	enum PlayerIdentifier
 	{
 		kPlayerFirst,
-		kPlayerSecond
+		kPlayerSecond,
+		kPlayerInvalid
 	};
 
 	struct AnotherPlayer {
