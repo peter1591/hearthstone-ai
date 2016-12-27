@@ -204,7 +204,9 @@ namespace Cards
 
 			card_data.enchantable_states.player = context.card_.GetPlayerIdentifier();
 			card_data.zone = state::kCardZonePlay;
-			card_data.zone_position = context.minion_put_location + 1;
+			card_data.zone_position = context.card_.GetZonePosition() + 1;
+
+			assert(card_data.zone_position <= 6);
 
 			card_data.enchantment_aux_data.origin_states = card_data.enchantable_states;
 

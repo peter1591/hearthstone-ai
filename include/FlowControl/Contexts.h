@@ -65,7 +65,6 @@ namespace FlowControl
 			FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
-			int minion_put_location;
 		};
 
 		struct BattlecryTargetGetter
