@@ -136,6 +136,17 @@ namespace Cards
 			Taunt();
 		}
 	};
+
+	class Card_CS2_142 : public MinionCardBase<Card_CS2_142>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_142;
+
+		Card_CS2_142()
+		{
+			SpellDamage(1);
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -148,3 +159,4 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_066)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_172)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_173)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_121)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_142)
