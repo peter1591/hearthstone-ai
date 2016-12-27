@@ -7,6 +7,7 @@
 #include "FlowControl/Manipulators/MinionManipulator.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
+#include "FlowControl/Manipulators/BoardManipulator.h"
 
 namespace FlowControl
 {
@@ -64,6 +65,11 @@ namespace FlowControl
 		Manipulators::WeaponManipulator Weapon(state::CardRef ref)
 		{
 			return Manipulators::WeaponManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
+		}
+
+		Manipulators::BoardManipulator Board()
+		{
+			return Manipulators::BoardManipulator(state_, flow_context_);
 		}
 
 	private:

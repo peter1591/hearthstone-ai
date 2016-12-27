@@ -146,6 +146,8 @@
     <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper-impl.h" />

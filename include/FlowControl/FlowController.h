@@ -11,6 +11,7 @@
 
 // Implemention details which depends on manipulators
 #include "FlowControl/Manipulators/HeroManipulator-impl.h"
+#include "FlowControl/Manipulators/BoardManipulator-impl.h"
 #include "FlowControl/Manipulators/Helpers/AuraHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/OrderedCardsManager-impl.h"

@@ -341,5 +341,11 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
