@@ -9,7 +9,7 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			DamageHelper::DamageHelper(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
+			inline DamageHelper::DamageHelper(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
 			{
 				state::Events::EventTypes::OnTakeDamage::Context context{ state, card_ref, amount };
 				state.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
