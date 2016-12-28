@@ -41,12 +41,13 @@ namespace Cards
 		Card_CS2_168() {}
 	};
 
-	class Card_EX1_508_Enchant : public EnchantmentCardBase
+	class Card_EX1_508o : public EnchantmentCardBase
 	{
 	public:
 		static constexpr EnchantmentTiers tier = kEnchantmentAura;
+		static constexpr int id = Cards::ID_EX1_508o;
 
-		Card_EX1_508_Enchant()
+		Card_EX1_508o()
 		{
 			apply_functor = [](auto& stats) {
 				++stats.attack;
@@ -61,7 +62,7 @@ namespace Cards
 
 		Card_EX1_508()
 		{
-			Aura<Card_EX1_508_Enchant>().Target([](auto& context, auto& targetor) {
+			Aura<Card_EX1_508o>().Target([](auto& context, auto& targetor) {
 				targetor
 					.Ally(context).Minion().Murlocs() // friendly murlocs only
 					.Exclude(context.card_ref_); // only apply on other murlocs
