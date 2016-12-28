@@ -18,6 +18,7 @@ namespace state
 		kCardTypeWeapon,
 		kCardTypeSecret,
 		kCardTypeHeroPower,
+		kCardTypeEnchantment,
 		kCardTypeInvalid
 	};
 

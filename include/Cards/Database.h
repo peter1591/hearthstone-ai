@@ -158,6 +158,9 @@ namespace Cards
 			else if (type == "HERO_POWER") {
 				new_card.card_type = state::kCardTypeHeroPower;
 			}
+			else if (type == "ENCHANTMENT") {
+				new_card.card_type = state::kCardTypeEnchantment;
+			}
 			else {
 				return; // ignored
 			}
