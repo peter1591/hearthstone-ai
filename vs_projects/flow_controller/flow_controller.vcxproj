@@ -121,6 +121,7 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test2.cpp" />
+    <ClCompile Include="test3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Cards\AuraHelper.h" />

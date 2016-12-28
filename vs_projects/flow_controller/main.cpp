@@ -4,6 +4,7 @@
 #include "Cards/Database.h"
 
 void test2();
+void test3();
 
 int main(void)
 {
@@ -12,6 +13,7 @@ int main(void)
 	std::cout << " Done." << std::endl;
 
 	test2();
+	test3();
 
 	return 0;
 }

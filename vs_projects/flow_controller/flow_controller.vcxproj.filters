@@ -81,6 +81,9 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
+    <ClCompile Include="test3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\FlowControl\FlowController.h">

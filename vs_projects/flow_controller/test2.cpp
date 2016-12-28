@@ -56,7 +56,7 @@ static void CheckZoneAndPosition(const state::State & state, state::CardRef ref,
 	assert(item.GetZonePosition() == pos);
 }
 
-state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
+static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
 	state::Cards::CardData raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
 	raw_card.enchantable_states.player = player;
@@ -68,7 +68,7 @@ state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state:
 	return state::Cards::Card(raw_card);
 }
 
-state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.board.Get(player).deck_.Size();
 
@@ -92,7 +92,7 @@ static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_conte
 	PushBackDeckCard(Cards::ID_CS2_171, flow_context, state, player);
 }
 
-state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type, state::State & state, state::PlayerIdentifier player)
+static state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type, state::State & state, state::PlayerIdentifier player)
 {
 	state::Cards::CardData raw_card;
 
@@ -109,7 +109,7 @@ state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type, state:
 	return state::Cards::Card(raw_card);
 }
 
-state::CardRef AddHandCard(Cards::CardId id, state::CardType type, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int hand_count = (int)state.board.Get(player).hand_.Size();
 
@@ -191,7 +191,7 @@ static void CheckCrystals(state::State & state, state::PlayerIdentifier player, 
 	assert(state.board.Get(player).resource_.GetTotal() == checking.total);
 }
 
-void CheckHero(state::State & state, state::PlayerIdentifier player, int hp, int armor, int attack)
+static void CheckHero(state::State & state, state::PlayerIdentifier player, int hp, int armor, int attack)
 {
 	auto hero_ref = state.board.Get(player).hero_ref_;
 	auto const& hero = state.mgr.Get(hero_ref);
@@ -673,4 +673,5 @@ void test2()
 	assert(state.GetCurrentPlayer().hand_.Size() == 8);
 	assert(!state.mgr.Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 
+	assert(controller.EndTurn() == FlowControl::kResultFirstPlayerWin);
 }
