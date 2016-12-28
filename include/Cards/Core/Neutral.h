@@ -240,6 +240,35 @@ namespace Cards
 
 		Card_CS2_118() {}
 	};
+
+	class Card_CS2_122e : public EnchantmentCardBase
+	{
+	public:
+		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
+		static constexpr int id = Cards::ID_CS2_122e;
+
+		Card_CS2_122e()
+		{
+			apply_functor = [](auto& stats) {
+				++stats.attack;
+			};
+		}
+	};
+
+	class Card_CS2_122 : public MinionCardBase<Card_CS2_122>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_122;
+
+		Card_CS2_122()
+		{
+			Aura<Card_CS2_122e>().Target([](auto& context, auto& targetor) {
+				targetor
+					.Ally(context).Minion() // friendly minions
+					.Exclude(context.card_ref_); // only apply on other murlocs
+			});
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -261,3 +290,4 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_582)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_141)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_125)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_118)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_122)
