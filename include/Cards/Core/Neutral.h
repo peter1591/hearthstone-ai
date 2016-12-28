@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=2&filter-premium=1&filter-class=1&sort=-cost&display=1
+// shorten: https://goo.gl/lNnh63
 
 namespace Cards
 {
@@ -219,6 +220,25 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_CS2_125 : public MinionCardBase<Card_CS2_125>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_125;
+
+		Card_CS2_125()
+		{
+			Taunt();
+		}
+	};
+
+	class Card_CS2_118 : public MinionCardBase<Card_CS2_118>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_118;
+
+		Card_CS2_118() {}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -238,3 +258,5 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_015)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_120)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_582)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_141)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_125)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_118)
