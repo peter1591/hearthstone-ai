@@ -12,7 +12,7 @@ namespace Cards
 		Card_CS2_189()
 		{
 			battlecry_target_getter = [] (auto context) {
-				SetBattlecryTarget(context, Targets().Targetable().Enemy(context));
+				SetBattlecryTarget(context, Targets().Targetable());
 				return true;
 			};
 			battlecry = [](auto context) {
@@ -183,6 +183,42 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_CS2_120 : public MinionCardBase<Card_CS2_120>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_120;
+
+		Card_CS2_120() {}
+	};
+
+	class Card_EX1_582 : public MinionCardBase<Card_EX1_582>
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_582;
+
+		Card_EX1_582()
+		{
+			SpellDamage(1);
+		}
+	};
+
+	class Card_CS2_141 : public MinionCardBase<Card_CS2_141>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_141;
+
+		Card_CS2_141()
+		{
+			battlecry_target_getter = [](auto context) {
+				SetBattlecryTarget(context, Targets().Targetable());
+				return true;
+			};
+			battlecry = [](auto context) {
+				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
+			};
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -199,3 +235,6 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_142)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506a)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_015)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_120)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_582)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_141)

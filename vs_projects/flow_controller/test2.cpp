@@ -349,7 +349,7 @@ void test2()
 	assert(state.board.Get(state::kPlayerSecond).graveyard_.GetTotalMinions() == 1);
 
 	assert(state.mgr.Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_CS2_189);
-	parameter_getter.next_battlecry_target_count = 3;
+	parameter_getter.next_battlecry_target_count = 4;
 	parameter_getter.next_battlecry_target_idx = 2;
 	assert(controller.PlayCard(9) == FlowControl::kResultNotDetermined);
 	CheckHero(state, state::kPlayerFirst, 30, 0, 0);
