@@ -170,6 +170,19 @@ namespace Cards
 		{
 		}
 	};
+
+	class Card_EX1_015 : public MinionCardBase<Card_EX1_015>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_015;
+
+		Card_EX1_015()
+		{
+			battlecry = [](auto context) {
+				Manipulate(context).CurrentHero().DrawCard();
+			};
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -185,3 +198,4 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_121)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_142)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506a)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_015)
