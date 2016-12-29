@@ -341,7 +341,98 @@ namespace Cards
 
 		Card_CS2_124() { Charge(); }
 	};
+
+	class Card_CS2_182 : public MinionCardBase<Card_CS2_182>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_182;
+
+		Card_CS2_182() {}
+	};
+
+	class Card_EX1_025t : public MinionCardBase<Card_EX1_025t>
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_025t;
+
+		Card_EX1_025t() {}
+	};
+
+	class Card_EX1_025 : public MinionCardBase<Card_EX1_025>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_025;
+
+		Card_EX1_025()
+		{
+			battlecry = [](auto context) {
+				Summon(context, Cards::ID_EX1_025t);
+			};
+		}
+	};
+
+	class Card_CS2_147 : public MinionCardBase<Card_CS2_147>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_147;
+
+		Card_CS2_147()
+		{
+			battlecry = [](auto context) {
+				Manipulate(context).CurrentHero().DrawCard();
+			};
+		}
+	};
+
+	class Card_CS2_119 : public MinionCardBase<Card_CS2_119>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_119;
+
+		Card_CS2_119() {}
+	};
+
+	class Card_CS2_197 : public MinionCardBase<Card_CS2_197>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_197;
+
+		Card_CS2_197() { SpellDamage(1); }
+	};
+
+	class Card_CS2_179 : public MinionCardBase<Card_CS2_179>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_179;
+
+		Card_CS2_179() { Taunt(); }
+	};
+
+	class Card_CS2_131 : public MinionCardBase<Card_CS2_131>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_131;
+
+		Card_CS2_131() { Charge(); }
+	};
+
+	class Card_CS2_187 : public MinionCardBase<Card_CS2_187>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_187;
+
+		Card_CS2_187() { Taunt(); }
+	};
 }
+
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_187)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_131)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_179)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_197)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_119)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_147)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_025t)
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_025)
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS1_042)
@@ -368,3 +459,4 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_196)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_019)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_127)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_124)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_182)
