@@ -56,6 +56,7 @@ namespace Cards
 				break;
 			case kMinionFilterTargetable:
 				// TODO: check stealth
+				// check owning player; stealth cannot be targeted by enemy
 				break;
 			case kMinionFilterTargetableBySpell:
 				// TODO: check stealh
