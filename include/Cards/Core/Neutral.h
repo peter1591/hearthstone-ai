@@ -289,6 +289,39 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_EX1_019e : public EnchantmentCardBase
+	{
+	public:
+		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
+		static constexpr int id = Cards::ID_EX1_019e;
+
+		Card_EX1_019e()
+		{
+			apply_functor = [](auto& stats) {
+				++stats.max_hp;
+				++stats.attack;
+			};
+		}
+	};
+
+	class Card_EX1_019 : public MinionCardBase<Card_EX1_019>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_019;
+
+		Card_EX1_019()
+		{
+			battlecry_target_getter = [](auto context) {
+				SetBattlecryTarget(context, Targets().Targetable().Ally(context).Minion());
+				return true;
+			};
+			battlecry = [](auto context) {
+				Manipulate(context).Minion(context.flow_context_.battlecry_target_)
+					.Enchant().Add(Card_EX1_019e());
+			};
+		}
+	};
 }
 
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
@@ -313,4 +346,4 @@ REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_118)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_122)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_boar)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_196)
-
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_019)
