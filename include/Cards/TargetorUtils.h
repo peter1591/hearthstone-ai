@@ -9,6 +9,19 @@ namespace Cards
 {
 	class TargetorInfo
 	{
+	private:
+		template <typename Container>
+		class FunctorFillTargets
+		{
+		public:
+			FunctorFillTargets(Container& targets) : targets_(targets) {}
+
+			void operator()(state::CardRef ref) const;
+
+		private:
+			Container& targets_;
+		};
+
 	public:
 		TargetorInfo() :
 			include_first(true), include_second(true),
@@ -20,35 +33,33 @@ namespace Cards
 		template <typename Container>
 		void FillTargets(state::State const& state, Container& targets) const
 		{
-			if (include_first) AddPlayerTargets(state, state.board.Get(state::kPlayerFirst), targets);
-			if (include_second) AddPlayerTargets(state, state.board.Get(state::kPlayerSecond), targets);
+			FunctorFillTargets<Container> functor(targets);
+
+			if (include_first) AddPlayerTargets(state, state.board.Get(state::kPlayerFirst), functor);
+			if (include_second) AddPlayerTargets(state, state.board.Get(state::kPlayerSecond), functor);
 		}
 
 	private:
-		template <typename Container> void AddTarget(state::CardRef ref, Container & targets) const;
-		template <> void AddTarget(state::CardRef ref, std::vector<state::CardRef> & targets) const {
-			if (ref == exclude) return;
-			targets.push_back(ref);
-		}
-		template <> void AddTarget(state::CardRef ref, std::unordered_set<state::CardRef> & targets) const {
-			if (ref == exclude) return;
-			targets.insert(ref);
-		}
-
-		template <typename Container>
-		void AddPlayerTargets(state::State const& state, state::board::Player const& player, Container & targets) const
+		template <typename Functor>
+		void AddPlayerTargets(state::State const& state, state::board::Player const& player, Functor const& functor) const
 		{
-			if (include_hero) AddTarget(player.hero_ref_, targets);
+			if (include_hero) {
+				if (player.hero_ref_ != exclude) {
+					functor(player.hero_ref_);
+				}
+			}
 			if (include_minion) {
 				for (state::CardRef minion : player.minions_.Get()) {
-					AddMinionTargets(state, minion, targets);
+					AddMinionTargets(state, minion, functor);
 				}
 			}
 		}
 
-		template <typename Container>
-		void AddMinionTargets(state::State const& state, state::CardRef const& minion, Container& targets) const
+		template <typename Functor>
+		void AddMinionTargets(state::State const& state, state::CardRef const& minion, Functor const& functor) const
 		{
+			if (minion == exclude) return;
+
 			auto const& card = state.mgr.Get(minion);
 
 			switch (minion_filter) {
@@ -67,7 +78,7 @@ namespace Cards
 				return;
 			}
 
-			AddTarget(minion, targets);
+			functor(minion);
 		}
 
 	public:
@@ -87,6 +98,18 @@ namespace Cards
 
 		state::CardRef exclude;
 	};
+
+	template <>
+	inline void TargetorInfo::FunctorFillTargets<std::vector<state::CardRef>>::operator()(state::CardRef ref) const
+	{
+		targets_.push_back(ref);
+	}
+
+	template <>
+	inline void TargetorInfo::FunctorFillTargets<std::unordered_set<state::CardRef>>::operator()(state::CardRef ref) const
+	{
+		targets_.insert(ref);
+	}
 
 	class TargetorHelper
 	{
