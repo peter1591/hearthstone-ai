@@ -471,8 +471,43 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_EX1_399e : public EnchantmentCardBase
+	{
+	public:
+		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
+		static constexpr int id = Cards::ID_EX1_399e;
+
+		Card_EX1_399e()
+		{
+			apply_functor = [](auto& stats) {
+				stats.attack += 3;
+			};
+		}
+	};
+
+	class Card_EX1_399 : public MinionCardBase<Card_EX1_399>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_399;
+
+		Card_EX1_399()
+		{
+			added_to_play_zone = [](auto context) {
+				state::CardRef self = context.card_ref_;
+				context.state_.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(
+					[self](auto& controller, auto& context) {
+					if (context.card_ref_ != self) return;
+					if (context.damage_ <= 0) return;
+					if (!IsAlive(context, self)) return controller.Remove();
+					Manipulate(context).Card(self).Enchant().Add(Card_EX1_399e());
+				});
+			};
+		}
+	};
 }
 
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_399)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_226)
 REGISTER_MINION_CARD_CLASS(Cards::Card_DS1_055)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_187)

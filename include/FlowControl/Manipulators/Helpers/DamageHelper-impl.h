@@ -11,7 +11,7 @@ namespace FlowControl
 		{
 			inline DamageHelper::DamageHelper(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
 			{
-				state::Events::EventTypes::OnTakeDamage::Context context{ state, card_ref, amount };
+				state::Events::EventTypes::OnTakeDamage::Context context{ state, flow_context, card_ref, amount };
 				state.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(context);
 
 				// Hooked events might change the damage amount, and/or the damage target
