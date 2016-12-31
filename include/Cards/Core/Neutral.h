@@ -505,8 +505,22 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_EX1_593 : public MinionCardBase<Card_EX1_593>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_EX1_593;
+
+		Card_EX1_593()
+		{
+			battlecry = [](auto context) {
+				Damage(context).Opponent().Amount(3);
+			};
+		}
+	};
 }
 
+REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_593)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_399)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_226)
 REGISTER_MINION_CARD_CLASS(Cards::Card_DS1_055)
