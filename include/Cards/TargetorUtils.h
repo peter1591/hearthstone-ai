@@ -41,6 +41,20 @@ namespace Cards
 			Func * func_;
 		};
 
+		class FunctorCount
+		{
+		public:
+			FunctorCount(int* count) : count_(count) {}
+
+			void operator()(state::CardRef ref) const
+			{
+				++(*count_);
+			}
+
+		private:
+			int* count_;
+		};
+
 	public:
 		typedef FunctorForEach::Func FuncForEach;
 
@@ -61,6 +75,12 @@ namespace Cards
 		void ForEach(state::State & state, FlowControl::FlowContext & flow_context, FunctorForEach::Func * func) const
 		{
 			FunctorForEach functor(state, flow_context, func);
+			Process(state, functor);
+		}
+
+		void Count(state::State const& state, int * count) const
+		{
+			FunctorCount functor(count);
 			Process(state, functor);
 		}
 
