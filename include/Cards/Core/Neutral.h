@@ -518,8 +518,62 @@ namespace Cards
 			};
 		}
 	};
+
+	class Card_CS2_150 : public MinionCardBase<Card_CS2_150>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_150;
+
+		Card_CS2_150()
+		{
+			battlecry_target_getter = [](auto context) {
+				SetBattlecryTarget(context, Targets().Targetable());
+				return true;
+			};
+			battlecry = [](auto context) {
+				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(2);
+			};
+		}
+	};
+
+	class Card_CS2_155 : public MinionCardBase<Card_CS2_155>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_155;
+
+		Card_CS2_155()
+		{
+			SpellDamage(1);
+		}
+	};
+
+	class Card_CS2_200 : public MinionCardBase<Card_CS2_200>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_200;
+		Card_CS2_200() {}
+	};
+
+	class Card_CS2_162 : public MinionCardBase<Card_CS2_162>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_162;
+		Card_CS2_162() { Taunt(); }
+	};
+
+	class Card_CS2_213 : public MinionCardBase<Card_CS2_213>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_213;
+		Card_CS2_213() { Charge(); }
+	};
 }
 
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_213)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_162)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_200)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_155)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_150)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_593)
 REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_399)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_226)
