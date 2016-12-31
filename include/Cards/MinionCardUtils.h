@@ -216,5 +216,14 @@ namespace Cards
 			FlowControl::Manipulate(context.state_, context.flow_context_)
 				.Board().Summon(ref);
 		}
+
+		template <typename Context>
+		static void ForEach(
+			Context & context,
+			TargetorHelper const& targetor,
+			TargetorInfo::FuncForEach *func)
+		{
+			targetor.GetInfo().ForEach(context.state_, context.flow_context_, func);
+		}
 	};
 }

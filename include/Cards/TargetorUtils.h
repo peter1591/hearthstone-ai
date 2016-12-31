@@ -22,7 +22,28 @@ namespace Cards
 			Container& targets_;
 		};
 
+		class FunctorForEach
+		{
+		public:
+			typedef void Func(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref);
+
+			FunctorForEach(state::State & state, FlowControl::FlowContext & flow_context, Func * func)
+				: state_(state), flow_context_(flow_context), func_(func) {}
+
+			void operator()(state::CardRef ref) const
+			{
+				(*func_)(state_, flow_context_, ref);
+			}
+
+		private:
+			state::State & state_;
+			FlowControl::FlowContext & flow_context_;
+			Func * func_;
+		};
+
 	public:
+		typedef FunctorForEach::Func FuncForEach;
+
 		TargetorInfo() :
 			include_first(true), include_second(true),
 			include_hero(true), include_minion(true),
@@ -34,14 +55,25 @@ namespace Cards
 		void FillTargets(state::State const& state, Container& targets) const
 		{
 			FunctorFillTargets<Container> functor(targets);
+			Process(state, functor);
+		}
 
-			if (include_first) AddPlayerTargets(state, state.board.Get(state::kPlayerFirst), functor);
-			if (include_second) AddPlayerTargets(state, state.board.Get(state::kPlayerSecond), functor);
+		void ForEach(state::State & state, FlowControl::FlowContext & flow_context, FunctorForEach::Func * func) const
+		{
+			FunctorForEach functor(state, flow_context, func);
+			Process(state, functor);
 		}
 
 	private:
 		template <typename Functor>
-		void AddPlayerTargets(state::State const& state, state::board::Player const& player, Functor const& functor) const
+		void Process(state::State const& state, Functor const& functor) const
+		{
+			if (include_first) ProcessPlayerTargets(state, state.board.Get(state::kPlayerFirst), functor);
+			if (include_second) ProcessPlayerTargets(state, state.board.Get(state::kPlayerSecond), functor);
+		}
+
+		template <typename Functor>
+		void ProcessPlayerTargets(state::State const& state, state::board::Player const& player, Functor const& functor) const
 		{
 			if (include_hero) {
 				if (player.hero_ref_ != exclude) {
@@ -50,13 +82,13 @@ namespace Cards
 			}
 			if (include_minion) {
 				for (state::CardRef minion : player.minions_.Get()) {
-					AddMinionTargets(state, minion, functor);
+					ProcessMinionTargets(state, minion, functor);
 				}
 			}
 		}
 
 		template <typename Functor>
-		void AddMinionTargets(state::State const& state, state::CardRef const& minion, Functor const& functor) const
+		void ProcessMinionTargets(state::State const& state, state::CardRef const& minion, Functor const& functor) const
 		{
 			if (minion == exclude) return;
 
@@ -113,6 +145,9 @@ namespace Cards
 
 	class TargetorHelper
 	{
+	public:
+		typedef TargetorInfo::FuncForEach FuncForEach;
+
 	public: // Fluent-like API to set up
 		TargetorHelper & Targetable()
 		{
