@@ -460,4 +460,35 @@ void test3()
 	assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 0);
 	assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 2);
 
+	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 26, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 6, 6 });
+	CheckCrystals(state, state::kPlayerSecond, { 1, 6 });
+	CheckMinions(state, state::kPlayerFirst, { { 3, 2, 2 },{ 2, 1, 1 },{ 2, 2, 2 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 },{ 4, 4, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 1);
+	assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 2);
+
+	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 26, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 6, 6 });
+	CheckCrystals(state, state::kPlayerSecond, { 7, 7 });
+	CheckMinions(state, state::kPlayerFirst, { { 3, 2, 2 },{ 2, 1, 1 },{ 2, 2, 2 } });
+	CheckMinions(state, state::kPlayerSecond, { { 1, 1, 1 },{ 4, 4, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 1);
+	assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 3);
+
+	AddHandCard(Cards::ID_CS2_222, state::kCardTypeMinion, controller.flow_context_, state, state::kPlayerSecond);
+	parameter_getter.next_minion_put_location = 1;
+	assert(controller.PlayCard(3) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 26, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 6, 6 });
+	CheckCrystals(state, state::kPlayerSecond, { 0, 7 });
+	CheckMinions(state, state::kPlayerFirst, { { 3, 2, 2 },{ 2, 1, 1 },{ 2, 2, 2 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 2, 2 }, {6, 6, 6}, { 5, 5, 5 },{ 2, 2, 2 },{ 7, 7, 7 },{ 9, 6, 8 },{ 5, 6, 6 } });
+	assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 1);
+	assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 3);
 }

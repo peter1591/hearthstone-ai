@@ -264,7 +264,7 @@ namespace Cards
 			Aura<Card_CS2_122e>().Target([](auto& context, auto& targetor) {
 				targetor
 					.Ally(context).Minion() // friendly minions
-					.Exclude(context.card_ref_); // only apply on other murlocs
+					.Exclude(context.card_ref_); // only apply on other
 			});
 		}
 	};
@@ -567,8 +567,47 @@ namespace Cards
 		static constexpr int id = Cards::ID_CS2_213;
 		Card_CS2_213() { Charge(); }
 	};
+
+	class Card_CS2_201 : public MinionCardBase<Card_CS2_201>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_201;
+		Card_CS2_201() {}
+	};
+
+	class Card_CS2_222o : public EnchantmentCardBase
+	{
+	public:
+		static constexpr EnchantmentTiers tier = kEnchantmentAura;
+		static constexpr int id = Cards::ID_CS2_222o;
+
+		Card_CS2_222o()
+		{
+			apply_functor = [](auto& stats) {
+				++stats.attack;
+				++stats.max_hp;
+			};
+		}
+	};
+
+	class Card_CS2_222 : public MinionCardBase<Card_CS2_222>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_222;
+
+		Card_CS2_222()
+		{
+			Aura<Card_CS2_222o>().Target([](auto& context, auto& targetor) {
+				targetor
+					.Ally(context).Minion() // friendly minions
+					.Exclude(context.card_ref_); // only apply on other
+			});
+		}
+	};
 }
 
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_222)
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_201)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_213)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_162)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_200)
