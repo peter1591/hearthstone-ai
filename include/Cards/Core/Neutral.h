@@ -604,8 +604,17 @@ namespace Cards
 			});
 		}
 	};
+
+	class Card_CS2_186 : public MinionCardBase<Card_CS2_186>
+	{
+	public:
+		static constexpr int id = Cards::ID_CS2_186;
+
+		Card_CS2_186() {}
+	};
 }
 
+REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_186)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_222)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_201)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_213)
