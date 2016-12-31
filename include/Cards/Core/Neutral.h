@@ -423,8 +423,25 @@ namespace Cards
 
 		Card_CS2_187() { Taunt(); }
 	};
+
+	class Card_DS1_055 : public MinionCardBase<Card_DS1_055>, MinionCardUtils
+	{
+	public:
+		static constexpr int id = Cards::ID_DS1_055;
+
+		Card_DS1_055()
+		{
+			battlecry = [](auto context) {
+				ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
+					[](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
+					FlowControl::Manipulate(state, flow_context).Character(ref).Heal(2);
+				});
+			};
+		}
+	};
 }
 
+REGISTER_MINION_CARD_CLASS(Cards::Card_DS1_055)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_187)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_131)
 REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_179)

@@ -365,4 +365,17 @@ void test3()
 	CheckMinions(state, state::kPlayerSecond, { { 2, 2, 2 } });
 	assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 0);
 	assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 2);
+
+	state.board.Get(state::kPlayerSecond).resource_.Refill();
+	AddHandCard(Cards::ID_DS1_055, state::kCardTypeMinion, controller.flow_context_, state, state::kPlayerSecond);
+	parameter_getter.next_minion_put_location = 1;
+	assert(controller.PlayCard(2) == FlowControl::kResultNotDetermined);
+	CheckHero(state, state::kPlayerFirst, 29, 0, 0);
+	CheckHero(state, state::kPlayerSecond, 30, 0, 0);
+	CheckCrystals(state, state::kPlayerFirst, { 2, 5 });
+	CheckCrystals(state, state::kPlayerSecond, { 1, 6 });
+	CheckMinions(state, state::kPlayerFirst, { { 3, 2, 2 },{ 2, 2, 2 },{ 2, 1, 1 },{ 2, 2, 2 } });
+	CheckMinions(state, state::kPlayerSecond, { { 2, 2, 2 }, {5, 5, 5} });
+	assert(state.board.Get(state::kPlayerFirst).hand_.Size() == 0);
+	assert(state.board.Get(state::kPlayerSecond).hand_.Size() == 2);
 }
