@@ -167,7 +167,8 @@ namespace FlowControl
 
 			while (true) {
 				state::CardRef origin_defender = defender;
-				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(state_, attacker, defender);
+				state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
+				state_.event_mgr.TriggerCategorizedEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
 
 				if (!attacker.IsValid()) return kResultNotDetermined;
 				if (state_.mgr.Get(attacker).GetHP() <= 0) return kResultNotDetermined;
@@ -181,7 +182,7 @@ namespace FlowControl
 			}
 
 			state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnAttack>(
-				state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, attacker, defender });
+				attacker, state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, defender });
 			// TODO: attacker lose stealth
 
 			Manipulate(state_, flow_context_).Character(defender).Damage(GetAttackValue(attacker));
@@ -189,7 +190,8 @@ namespace FlowControl
 
 			Manipulate(state_, flow_context_).Character(attacker).AfterAttack();
 
-			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(state_, attacker, defender);
+			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
+			state_.event_mgr.TriggerCategorizedEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
 
 			{
 				const state::Cards::Card & attacker_card = state_.mgr.Get(attacker);

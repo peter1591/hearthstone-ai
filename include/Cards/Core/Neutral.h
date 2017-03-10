@@ -496,8 +496,8 @@ namespace Cards
 			added_to_play_zone = [](auto context) {
 				state::CardRef self = context.card_ref_;
 				context.state_.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(
-					[self](auto& controller, auto& context) {
-					if (context.card_ref_ != self) return;
+					self,
+					[](auto& controller, auto self, auto& context) {
 					if (context.damage_ <= 0) return;
 					if (!IsAlive(context, self)) return controller.Remove();
 					Manipulate(context).Card(self).Enchant().Add(Card_EX1_399e());

@@ -22,7 +22,7 @@ namespace state
 				};
 
 			public:
-				typedef std::function<void(HandlersContainerController &controller, Context&)> FunctorType;
+				typedef void (*FunctorType)(HandlersContainerController &controller, Context&);
 				typedef std::tuple<Context&> ArgsTuple;
 
 				template <typename T,

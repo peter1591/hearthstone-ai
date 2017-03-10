@@ -24,19 +24,18 @@ namespace state
 				{
 					state::State & state_;
 					FlowControl::FlowContext & flow_context_;
-					state::CardRef attacker_;
 					state::CardRef defender_;
 				};
 
 			public:
-				typedef std::function<void(HandlersContainerController &, Context &)> FunctorType;
-				typedef std::tuple<Context&> ArgsTuple;
+				typedef std::function<void(HandlersContainerController &, CardRef, Context)> FunctorType;
+				typedef std::tuple<CardRef, Context> ArgsTuple;
 
 				template <typename T> OnAttack(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller, Context& context)
+				void Handle(HandlersContainerController &controller, CardRef attacker, Context context)
 				{
-					functor_(controller, context);
+					functor_(controller, attacker, std::move(context));
 				}
 
 			private:

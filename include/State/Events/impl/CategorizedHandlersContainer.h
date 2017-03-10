@@ -1,15 +1,17 @@
 #pragma once
 
 #include <utility>
-#include <unordered_map>
+#include <vector>
 #include "State/Events/impl/HandlersContainer.h"
+#include "State/Types.h"
 
 namespace state
 {
 	namespace Events
 	{
-		namespace impl {
-			template <typename CategoryType, typename HandlerType>
+		namespace impl
+		{
+			template <typename HandlerType>
 			class CategorizedHandlersContainer
 			{
 			public:
@@ -17,20 +19,24 @@ namespace state
 				//    Since the STL container and HandlersContainer are with this property
 				static const bool CloneableByCopySemantics = true;
 
-				template <typename CategoryType_, typename HandlerType_>
-				void PushBack(CategoryType_&& category, HandlerType_&& handler)
+				template <typename HandlerType_>
+				void PushBack(CardRef card_ref, HandlerType_&& handler)
 				{
-					categories_[category].PushBack(std::forward<HandlerType_>(handler));
+					if (card_ref.id >= categories_.size()) {
+						categories_.resize(card_ref.id + 1);
+					}
+					categories_[card_ref.id].PushBack(std::forward<HandlerType_>(handler));
 				}
 
-				template <typename CategoryType_, typename... Args>
-				void TriggerAll(CategoryType_&& category, Args&&... args)
+				template <typename... Args>
+				void TriggerAll(CardRef card_ref, Args&&... args)
 				{
-					categories_[category].TriggerAll(std::forward<Args>(args)...);
+					if (card_ref.id >= categories_.size()) return;
+					categories_[card_ref.id].TriggerAll(card_ref, std::forward<Args>(args)...);
 				}
 
 			private:
-				std::unordered_map<CategoryType, HandlersContainer<HandlerType>> categories_;
+				std::vector<HandlersContainer<HandlerType>> categories_;
 			};
 		}
 	}

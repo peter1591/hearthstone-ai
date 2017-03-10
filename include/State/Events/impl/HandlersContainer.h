@@ -1,6 +1,5 @@
 #pragma once
 
-#include <list>
 #include <vector>
 #include <type_traits>
 #include <utility>
@@ -65,7 +64,7 @@ namespace state
 				}
 
 			private:
-				typedef std::list<typename TriggerType::FunctorType> container_type;
+				typedef std::vector<typename TriggerType::FunctorType> container_type;
 				container_type handlers_;
 			};
 		}

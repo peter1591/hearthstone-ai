@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <utility>
+#include "State/Types.h"
 #include "State/Events/impl/HandlersContainer.h"
 #include "State/Events/impl/CategorizedHandlersContainer.h"
 
@@ -36,10 +37,10 @@ namespace state
 				GetHandlersContainer<EventType>().PushBack(std::forward<T>(handler));
 			}
 
-			template <typename EventType, typename T1, typename T2>
-			void PushBack(T1&& category, T2&& handler) {
-				GetHandlersContainer<EventType, std::decay_t<T2>>().PushBack(
-					std::forward<T1>(category), std::forward<T2>(handler));
+			template <typename EventType, typename T>
+			void PushBack(CardRef card_ref, T&& handler) {
+				GetCategorizedHandlersContainer<EventType>().PushBack(
+					card_ref, std::forward<T>(handler));
 			}
 
 			template <typename EventTriggerType, typename... Args>
@@ -48,19 +49,19 @@ namespace state
 				return GetHandlersContainer<EventTriggerType>().TriggerAll(std::forward<Args>(args)...);
 			}
 
-			template <typename EventTriggerType, typename CategoryType, typename... Args>
-			void TriggerCategorizedEvent(CategoryType&& category, Args&&... args)
+			template <typename EventTriggerType, typename... Args>
+			void TriggerCategorizedEvent(CardRef card_ref, Args&&... args)
 			{
-				return GetHandlersContainer<std::decay_t<CategoryType>, EventTriggerType>()
-					.TriggerAll(std::forward<CategoryType>(category), std::forward<Args>(args)...);
+				return GetCategorizedHandlersContainer<EventTriggerType>()
+					.TriggerAll(card_ref, std::forward<Args>(args)...);
 			}
 
 		private:
 			template<typename EventHandlerType>
 			impl::HandlersContainer<EventHandlerType> & GetHandlersContainer();
 
-			template<typename Category, typename EventHandlerType>
-			impl::CategorizedHandlersContainer<Category, EventHandlerType> & GetHandlersContainer();
+			template<typename EventHandlerType>
+			impl::CategorizedHandlersContainer<EventHandlerType> & GetCategorizedHandlersContainer();
 
 #define ADD_TRIGGER_TYPE_INTERNAL(TYPE_NAME, MEMBER_NAME) \
 private: \
@@ -73,9 +74,9 @@ private: \
 
 #define ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL(TYPE_NAME, MEMBER_NAME) \
 private: \
-	impl::CategorizedHandlersContainer<int, EventTypes::TYPE_NAME> MEMBER_NAME; \
+	impl::CategorizedHandlersContainer<EventTypes::TYPE_NAME> MEMBER_NAME; \
 private: \
-	template <> impl::CategorizedHandlersContainer<int, EventTypes::TYPE_NAME> & GetHandlersContainer() { \
+	template <> impl::CategorizedHandlersContainer<EventTypes::TYPE_NAME> & GetCategorizedHandlersContainer() { \
 		return this->MEMBER_NAME; \
 	}
 #define ADD_CATEGORIZED_TRIGGER_TYPE(TYPE_NAME) ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)
@@ -86,11 +87,22 @@ private: \
 			ADD_TRIGGER_TYPE(OnMinionPlay);
 			ADD_TRIGGER_TYPE(OnTurnEnd);
 			ADD_TRIGGER_TYPE(OnTurnStart);
+
 			ADD_TRIGGER_TYPE(BeforeAttack);
+			ADD_CATEGORIZED_TRIGGER_TYPE(BeforeAttack);
+
 			ADD_TRIGGER_TYPE(OnAttack);
+			ADD_CATEGORIZED_TRIGGER_TYPE(OnAttack);
+
 			ADD_TRIGGER_TYPE(AfterAttack);
+			ADD_CATEGORIZED_TRIGGER_TYPE(AfterAttack);
+
 			ADD_TRIGGER_TYPE(OnTakeDamage);
+			ADD_CATEGORIZED_TRIGGER_TYPE(OnTakeDamage);
+
 			ADD_TRIGGER_TYPE(OnHeal);
+			ADD_CATEGORIZED_TRIGGER_TYPE(OnHeal);
+
 			ADD_TRIGGER_TYPE(UpdateAura);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL

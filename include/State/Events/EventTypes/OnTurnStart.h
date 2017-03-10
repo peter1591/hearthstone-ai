@@ -19,7 +19,7 @@ namespace state
 			class OnTurnStart
 			{
 			public:
-				typedef std::function<void(HandlersContainerController &)> FunctorType;
+				typedef void (*FunctorType)(HandlersContainerController &);
 				typedef std::tuple<const Cards::Card &> ArgsTuple;
 
 				template <typename T,

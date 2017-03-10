@@ -18,7 +18,6 @@ namespace Utils
 		class VectorIdentifier
 		{
 			template <typename ItemType> friend class Vector;
-			friend struct std::hash<VectorIdentifier>;
 
 		public:
 			VectorIdentifier() : idx(-1) {}
@@ -26,6 +25,7 @@ namespace Utils
 			VectorIdentifier(VectorIdentifier && rhs) = default;
 			VectorIdentifier & operator=(const VectorIdentifier & rhs) = default;
 			VectorIdentifier & operator=(VectorIdentifier && rhs) = default;
+			operator int() const { return idx; }
 
 			static VectorIdentifier GetInvalidIdentifier() { return VectorIdentifier(); }
 
@@ -40,7 +40,7 @@ namespace Utils
 			bool IsValid() const { return idx >= 0; }
 		};
 
-		template <class ItemType> // pointer is not cloneable
+		template <class ItemType>
 		class Vector
 		{
 		public:
@@ -98,7 +98,7 @@ namespace std
 	{
 		std::size_t operator()(const Utils::CloneableContainers::VectorIdentifier& key) const
 		{
-			return std::hash<decltype(key.idx)>()(key.idx);
+			return std::hash<int>()(key);
 		}
 	};
 }

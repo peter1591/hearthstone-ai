@@ -14,7 +14,7 @@ namespace state
 			class AfterMinionSummoned
 			{
 			public:
-				typedef std::function<void(HandlersContainerController &)> FunctorType;
+				typedef void (*FunctorType)(HandlersContainerController &);
 				typedef std::tuple<> ArgsTuple;
 
 				template <typename T,

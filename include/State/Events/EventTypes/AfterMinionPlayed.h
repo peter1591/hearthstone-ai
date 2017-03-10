@@ -19,7 +19,7 @@ namespace state
 			class AfterMinionPlayed
 			{
 			public:
-				typedef std::function<void(HandlersContainerController &, const Cards::Card &)> FunctorType;
+				typedef void (*FunctorType)(HandlersContainerController &, const Cards::Card &);
 				typedef std::tuple<const Cards::Card &> ArgsTuple;
 
 				template <typename T,
