@@ -22,15 +22,8 @@ namespace state
 			};
 		}
 
-		class EventBase
-		{
-		public:
-			virtual ~EventBase() {}
-			virtual void TriggerEvent(Manager&) = 0;
-		};
-
 		template <typename EventTriggerType>
-		class Event : public EventBase
+		class Event
 		{
 		public:
 			using ArgsTuple = typename EventTriggerType::ArgsTuple;
@@ -43,7 +36,7 @@ namespace state
 				typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value == 0, nullptr_t> = nullptr>
 				Event() {}
 
-			void TriggerEvent(Manager& mgr) final
+			void TriggerEvent(Manager& mgr)
 			{
 				constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
 				return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
@@ -60,7 +53,7 @@ namespace state
 		};
 
 		template <typename EventTriggerType>
-		class CategorizedEvent : public EventBase
+		class CategorizedEvent
 		{
 		public:
 			typedef int CategoryType;
@@ -79,7 +72,7 @@ namespace state
 			{
 			}
 
-			void TriggerEvent(Manager& mgr) final
+			void TriggerEvent(Manager& mgr)
 			{
 				constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
 				return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
