@@ -43,7 +43,7 @@ namespace state
 				typename std::enable_if_t<std::tuple_size<typename U::ArgsTuple>::value == 0, nullptr_t> = nullptr>
 				Event() {}
 
-			void TriggerEvent(Manager& mgr)
+			void TriggerEvent(Manager& mgr) final
 			{
 				constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
 				return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());
@@ -79,7 +79,7 @@ namespace state
 			{
 			}
 
-			void TriggerEvent(Manager& mgr)
+			void TriggerEvent(Manager& mgr) final
 			{
 				constexpr size_t args_count = std::tuple_size<ArgsTuple>::value;
 				return TriggerEventInternal(mgr, typename impl::gens<args_count>::type());

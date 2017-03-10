@@ -78,13 +78,6 @@ namespace state
 		kPlayerInvalid
 	};
 
-	struct AnotherPlayer {
-		PlayerIdentifier operator()(PlayerIdentifier player) {
-			if (player == kPlayerFirst) return kPlayerSecond;
-			else return kPlayerFirst;
-		}
-	};
-
 	class CardRef
 	{
 	public:
@@ -118,7 +111,7 @@ namespace std
 	{
 		std::size_t operator()(const state::CardRef& key) const
 		{
-			return Utils::CloneableContainers::VectorIdentifierHasher()(key.id);
+			return std::hash<decltype(key.id)>()(key.id);
 		}
 	};
 }

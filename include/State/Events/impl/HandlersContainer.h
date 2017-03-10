@@ -46,7 +46,7 @@ namespace state
 
 					auto it = handlers_.begin();
 
-					// Since we don't have insert method to outsiders, we can just wrtie down the last iterator to specify the temporary queue
+					// Since we don't have insert method to outsiders, we can just write down the last iterator to specify the temporary queue
 					auto it_last = handlers_.end();
 					--it_last;
 

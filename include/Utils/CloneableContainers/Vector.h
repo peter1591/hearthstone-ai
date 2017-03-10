@@ -14,12 +14,11 @@ namespace Utils
 	namespace CloneableContainers
 	{
 		template <typename ItemType> class Vector;
-		class VectorIdentifierHasher;
 
 		class VectorIdentifier
 		{
 			template <typename ItemType> friend class Vector;
-			friend class VectorIdentifierHasher;
+			friend struct std::hash<VectorIdentifier>;
 
 		public:
 			VectorIdentifier() : idx(-1) {}
@@ -39,12 +38,6 @@ namespace Utils
 			bool operator==(const VectorIdentifier& rhs) const { return idx == rhs.idx; }
 			bool operator!=(const VectorIdentifier& rhs) const { return idx != rhs.idx; }
 			bool IsValid() const { return idx >= 0; }
-		};
-
-		class VectorIdentifierHasher
-		{
-		public:
-			size_t operator()(const VectorIdentifier & id) const { return std::hash<decltype(id.idx)>()(id.idx); }
 		};
 
 		template <class ItemType> // pointer is not cloneable
@@ -96,4 +89,16 @@ namespace Utils
 			std::vector<ItemType> items_;
 		};
 	}
+}
+
+namespace std
+{
+	template <>
+	struct hash<Utils::CloneableContainers::VectorIdentifier>
+	{
+		std::size_t operator()(const Utils::CloneableContainers::VectorIdentifier& key) const
+		{
+			return std::hash<decltype(key.idx)>()(key.idx);
+		}
+	};
 }

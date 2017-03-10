@@ -8,11 +8,6 @@
 
 namespace state
 {
-	namespace Cards
-	{
-		class Card;
-	}
-
 	namespace Events
 	{
 		namespace EventTypes
