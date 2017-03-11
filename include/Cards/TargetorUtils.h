@@ -9,55 +9,7 @@ namespace Cards
 {
 	class TargetorInfo
 	{
-	private:
-		template <typename Container>
-		class FunctorFillTargets
-		{
-		public:
-			FunctorFillTargets(Container& targets) : targets_(targets) {}
-
-			void operator()(state::CardRef ref) const;
-
-		private:
-			Container& targets_;
-		};
-
-		class FunctorForEach
-		{
-		public:
-			typedef void Func(state::State & state, state::FlowContext & flow_context, state::CardRef ref);
-
-			FunctorForEach(state::State & state, state::FlowContext & flow_context, Func * func)
-				: state_(state), flow_context_(flow_context), func_(func) {}
-
-			void operator()(state::CardRef ref) const
-			{
-				(*func_)(state_, flow_context_, ref);
-			}
-
-		private:
-			state::State & state_;
-			state::FlowContext & flow_context_;
-			Func * func_;
-		};
-
-		class FunctorCount
-		{
-		public:
-			FunctorCount(int* count) : count_(count) {}
-
-			void operator()(state::CardRef ref) const
-			{
-				++(*count_);
-			}
-
-		private:
-			int* count_;
-		};
-
 	public:
-		typedef FunctorForEach::Func FuncForEach;
-
 		TargetorInfo() :
 			include_first(true), include_second(true),
 			include_hero(true), include_minion(true),
@@ -66,34 +18,48 @@ namespace Cards
 		}
 
 		template <typename Container>
-		void FillTargets(state::State const& state, Container& targets) const
+		void FillTargets(state::State const& state, Container& targets) const;
+
+		template <>
+		void FillTargets(state::State const& state, std::vector<state::CardRef>& targets) const
 		{
-			FunctorFillTargets<Container> functor(targets);
-			Process(state, functor);
+			Process(state, [&](state::CardRef ref) {
+				targets.push_back(ref);
+			});
+		}
+		template <>
+		void FillTargets(state::State const& state, std::unordered_set<state::CardRef>& targets) const
+		{
+			Process(state, [&](state::CardRef ref) {
+				targets.insert(ref);
+			});
 		}
 
-		void ForEach(state::State & state, state::FlowContext & flow_context, FunctorForEach::Func * func) const
+		template <typename Functor>
+		void ForEach(state::State & state, state::FlowContext & flow_context, Functor&& func) const
 		{
-			FunctorForEach functor(state, flow_context, func);
-			Process(state, functor);
+			Process(state, [&](state::CardRef ref) {
+				func(state, flow_context, ref);
+			});
 		}
 
 		void Count(state::State const& state, int * count) const
 		{
-			FunctorCount functor(count);
-			Process(state, functor);
+			Process(state, [count](state::CardRef ref) {
+				++(*count);
+			});
 		}
 
 	private:
 		template <typename Functor>
-		void Process(state::State const& state, Functor const& functor) const
+		void Process(state::State const& state, Functor&& functor) const
 		{
-			if (include_first) ProcessPlayerTargets(state, state.board.GetFirst(), functor);
-			if (include_second) ProcessPlayerTargets(state, state.board.GetSecond(), functor);
+			if (include_first) ProcessPlayerTargets(state, state.board.GetFirst(), std::forward<Functor>(functor));
+			if (include_second) ProcessPlayerTargets(state, state.board.GetSecond(), std::forward<Functor>(functor));
 		}
 
 		template <typename Functor>
-		void ProcessPlayerTargets(state::State const& state, state::board::Player const& player, Functor const& functor) const
+		void ProcessPlayerTargets(state::State const& state, state::board::Player const& player, Functor&& functor) const
 		{
 			if (include_hero) {
 				if (player.hero_ref_ != exclude) {
@@ -102,13 +68,13 @@ namespace Cards
 			}
 			if (include_minion) {
 				for (state::CardRef minion : player.minions_.Get()) {
-					ProcessMinionTargets(state, minion, functor);
+					ProcessMinionTargets(state, minion, std::forward<Functor>(functor));
 				}
 			}
 		}
 
 		template <typename Functor>
-		void ProcessMinionTargets(state::State const& state, state::CardRef const& minion, Functor const& functor) const
+		void ProcessMinionTargets(state::State const& state, state::CardRef const& minion, Functor&& functor) const
 		{
 			if (minion == exclude) return;
 
@@ -151,23 +117,8 @@ namespace Cards
 		state::CardRef exclude;
 	};
 
-	template <>
-	inline void TargetorInfo::FunctorFillTargets<std::vector<state::CardRef>>::operator()(state::CardRef ref) const
-	{
-		targets_.push_back(ref);
-	}
-
-	template <>
-	inline void TargetorInfo::FunctorFillTargets<std::unordered_set<state::CardRef>>::operator()(state::CardRef ref) const
-	{
-		targets_.insert(ref);
-	}
-
 	class TargetorHelper
 	{
-	public:
-		typedef TargetorInfo::FuncForEach FuncForEach;
-
 	public: // Fluent-like API to set up
 		TargetorHelper & Targetable()
 		{

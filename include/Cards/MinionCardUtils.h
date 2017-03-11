@@ -217,11 +217,11 @@ namespace Cards
 				.Board().Summon(ref);
 		}
 
-		template <typename Context>
+		template <typename Context, typename Functor>
 		static void ForEach(
-			Context & context,
+			Context&& context,
 			TargetorHelper const& targetor,
-			TargetorInfo::FuncForEach *func)
+			Functor&& func)
 		{
 			targetor.GetInfo().ForEach(context.state_, context.flow_context_, func);
 		}

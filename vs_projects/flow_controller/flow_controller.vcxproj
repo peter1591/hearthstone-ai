@@ -141,7 +141,6 @@
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
     <ClInclude Include="..\..\include\Cards\TargetorUtils.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
-    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
@@ -149,7 +148,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h" />
-    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
@@ -175,7 +173,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
-    <ClInclude Include="..\..\include\FlowControl\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
     <ClInclude Include="..\..\include\state\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />

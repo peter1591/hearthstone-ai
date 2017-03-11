@@ -257,15 +257,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\IRandomGenerator.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h">
       <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
