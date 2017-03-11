@@ -10,7 +10,6 @@
 
 namespace FlowControl
 {
-	class Manipulate;
 	class FlowContext;
 }
 
@@ -22,8 +21,6 @@ namespace state
 	{
 		class Manager
 		{
-			friend class FlowControl::Manipulate;
-
 		public:
 			typedef Utils::CloneableContainers::Vector<Card> ContainerType;
 
@@ -33,6 +30,27 @@ namespace state
 			}
 
 			template <typename T> CardRef PushBack(State & state, FlowControl::FlowContext & flow_context, T&& card);
+
+		public: // manipulators
+			FlowControl::Manipulators::CardManipulator GetCardManipulator(State& state, FlowControl::FlowContext& flow_context, CardRef ref) {
+				return FlowControl::Manipulators::CardManipulator(state, flow_context, ref, GetMutable(ref));
+			}
+
+			FlowControl::Manipulators::HeroManipulator GetHeroManipulator(State& state, FlowControl::FlowContext& flow_context, CardRef ref, PlayerIdentifier player) {
+				return FlowControl::Manipulators::HeroManipulator(state, flow_context, ref, GetMutable(ref), player);
+			}
+
+			FlowControl::Manipulators::MinionManipulator GetMinionManipulator(State& state, FlowControl::FlowContext& flow_context, CardRef ref) {
+				return FlowControl::Manipulators::MinionManipulator(state, flow_context, ref, GetMutable(ref));
+			}
+
+			FlowControl::Manipulators::CharacterManipulator GetCharacterManipulator(State& state, FlowControl::FlowContext& flow_context, CardRef ref) {
+				return FlowControl::Manipulators::CharacterManipulator(state, flow_context, ref, GetMutable(ref));
+			}
+
+			FlowControl::Manipulators::WeaponManipulator GetWeaponManipulator(State& state, FlowControl::FlowContext& flow_context, CardRef ref) {
+				return FlowControl::Manipulators::WeaponManipulator(state, flow_context, ref, GetMutable(ref));
+			}
 
 		private:
 			Card & GetMutable(const CardRef & id)

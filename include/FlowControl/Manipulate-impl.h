@@ -7,7 +7,7 @@ namespace FlowControl
 {
 	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref)
 	{
-		return Manipulators::CardManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
+		return state_.mgr.GetCardManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
@@ -17,40 +17,28 @@ namespace FlowControl
 
 	inline Manipulators::HeroManipulator Manipulate::OpponentHero()
 	{
-		return AnotherHero(state_.current_player);
-	}
-
-	inline Manipulators::HeroManipulator Manipulate::Hero(state::CardRef ref)
-	{
-		state::PlayerIdentifier player = state_.mgr.Get(ref).GetPlayerIdentifier();
-		assert(state_.board.Get(player).hero_ref_ == ref);
-		return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref), player);
+		return Hero(state_.current_player.Opposite());
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::Hero(state::PlayerIdentifier player)
 	{
 		state::CardRef ref = state_.board.Get(player).hero_ref_;
-		return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref), player);
-	}
-
-	inline Manipulators::HeroManipulator Manipulate::AnotherHero(state::PlayerIdentifier player)
-	{
-		return Hero(player.Opposite());
+		return state_.mgr.GetHeroManipulator(state_, flow_context_, ref, player);
 	}
 
 	inline Manipulators::MinionManipulator Manipulate::Minion(state::CardRef ref)
 	{
-		return Manipulators::MinionManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
+		return state_.mgr.GetMinionManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::CharacterManipulator Manipulate::Character(state::CardRef ref)
 	{
-		return Manipulators::CharacterManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
+		return state_.mgr.GetCharacterManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::WeaponManipulator Manipulate::Weapon(state::CardRef ref)
 	{
-		return Manipulators::WeaponManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
+		return state_.mgr.GetWeaponManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::BoardManipulator Manipulate::Board()
