@@ -64,6 +64,9 @@
     <Filter Include="Header Files\Cards\Core">
       <UniqueIdentifier>{532fa20c-f0cd-45be-ba73-bbe3a33c763c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\Manipulators\detail">
+      <UniqueIdentifier>{9e0d3fdf-24c4-4d76-b8cc-4a63cd2940db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h">
       <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h">
+      <Filter>Header Files\FlowControl\Manipulators\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

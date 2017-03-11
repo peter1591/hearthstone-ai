@@ -1,9 +1,10 @@
 #pragma once
+#include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 
 #include <assert.h>
 #include "FlowControl/Contexts.h"
-#include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 #include "FlowControl/Manipulate.h"
+#include "State/State.h"
 
 namespace FlowControl
 {

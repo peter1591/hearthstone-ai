@@ -1,13 +1,14 @@
 #pragma once
 
 #include "State/Types.h"
-#include "State/State.h"
+#include "FlowControl/Manipulators/BoardManipulator.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
 #include "FlowControl/Manipulators/MinionManipulator.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
-#include "FlowControl/Manipulators/BoardManipulator.h"
+
+namespace state { class State; }
 
 namespace FlowControl
 {

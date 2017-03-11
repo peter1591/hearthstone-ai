@@ -24,7 +24,7 @@ namespace state
 		class Enchantments
 		{
 		public:
-			typedef std::function<void(EnchantableStates &)> ApplyFunctor;
+			typedef std::function<void(EnchantableStates &)> ApplyFunctor; // TODO: use function pointer?
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
 			typedef void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded);

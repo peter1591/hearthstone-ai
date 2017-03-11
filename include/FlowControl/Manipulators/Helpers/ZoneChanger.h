@@ -2,7 +2,6 @@
 
 #include "State/Types.h"
 #include "State/Cards/Card.h"
-#include "State/State.h"
 #include "State/board/Player.h"
 #include "State/board/DefaultZonePosPolicy.h"
 #include "FlowControl/Manipulators/Helpers/OrderedCardsManager.h"

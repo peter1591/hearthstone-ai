@@ -1,14 +1,17 @@
 #pragma once
 
 #include <utility>
+
 #include "Utils/CloneableContainers/Vector.h"
 #include "State/Cards/Card.h"
 #include "State/Types.h"
 
+#include "FlowControl/Manipulate.h"
+
 namespace FlowControl
 {
-	class FlowContext;
 	class Manipulate;
+	class FlowContext;
 }
 
 namespace state

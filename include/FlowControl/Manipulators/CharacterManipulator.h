@@ -1,9 +1,7 @@
 #pragma once
 
 #include "State/Types.h"
-#include "State/State.h"
 #include "State/Cards/Card.h"
-#include "State/Cards/Manager.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper.h"
 #include "FlowControl/Manipulators/Helpers/HealHelper.h"

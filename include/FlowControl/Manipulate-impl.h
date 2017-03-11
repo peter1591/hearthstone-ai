@@ -1,6 +1,8 @@
 #pragma once
 #include "FlowControl/Manipulate.h"
 
+#include "State/State.h"
+
 namespace FlowControl
 {
 	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref)

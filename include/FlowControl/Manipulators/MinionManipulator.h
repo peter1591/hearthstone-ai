@@ -1,6 +1,5 @@
 #pragma once
 
-#include "State/State.h"
 #include "State/Cards/Card.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
 
