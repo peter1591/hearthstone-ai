@@ -110,9 +110,8 @@ namespace Utils
 
 		public: // iterate
 			// Only iterate through exist items
-			using IterateCallback = std::function<bool(ItemType&)>; // return true to continue; false to abort
-
-			void IterateAll(const IterateCallback & callback)
+			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort
+			void IterateAll(IterateCallback&& callback)
 			{
 				VectorIdentifier id = first_possible_exist_id_;
 				VectorIdentifier id_end = items_.GetEnd();

@@ -52,8 +52,7 @@ namespace Utils
 			}
 
 		public: // iterate
-			using IterateCallback = std::function<bool(PtrItemType)>; // return true to continue; false to abort
-
+			template <typename IterateCallback> // bool(PtrItemType), return true to continue; false to abort
 			void IterateAll(const IterateCallback & callback)
 			{
 				container_.IterateAll([&callback](CopyableItemType & item) -> bool {
