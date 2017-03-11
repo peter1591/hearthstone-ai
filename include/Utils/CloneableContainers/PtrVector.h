@@ -46,6 +46,14 @@ namespace Utils
 			void StepNext(Identifier & id) { container_.StepNext(id); }
 			Identifier GetEnd() { return container_.GetEnd(); }
 
+			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort
+			void IterateAll(IterateCallback&& callback)
+			{
+				container_.IterateAll([&](CopyableItemType const& item) {
+					return callback(item.Get().get());
+				});
+			}
+
 		private:
 			ContainerType container_;
 		};

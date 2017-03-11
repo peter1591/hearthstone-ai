@@ -81,6 +81,14 @@ namespace Utils
 			void StepNext(Identifier & id) { ++id.idx; }
 			Identifier GetEnd() { return Identifier((int)items_.size()); }
 
+			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort
+			void IterateAll(IterateCallback&& callback)
+			{
+				for (ItemType const& item : items_) {
+					if (!callback(item)) return;
+				}
+			}
+
 		private:
 			std::vector<ItemType> items_;
 		};
