@@ -12,7 +12,7 @@ namespace Cards
 		Card_CS2_189()
 		{
 			battlecry_target_getter = [] (auto context) {
-				SetBattlecryTarget(context, Targets().Targetable());
+				SetBattlecryTarget(std::move(context), Targets().Targetable());
 				return true;
 			};
 			battlecry = [](auto context) {
@@ -88,7 +88,7 @@ namespace Cards
 		Card_EX1_011()
 		{
 			battlecry_target_getter = [](auto context) {
-				SetBattlecryTarget(context, Targets().Targetable().Exclude(context.card_ref_));
+				SetBattlecryTarget(std::move(context), Targets().Targetable().Exclude(context.card_ref_));
 				return true;
 			};
 			battlecry = [](auto context) {
@@ -212,7 +212,7 @@ namespace Cards
 		Card_CS2_141()
 		{
 			battlecry_target_getter = [](auto context) {
-				SetBattlecryTarget(context, Targets().Targetable());
+				SetBattlecryTarget(std::move(context), Targets().Targetable());
 				return true;
 			};
 			battlecry = [](auto context) {
@@ -313,7 +313,7 @@ namespace Cards
 		Card_EX1_019()
 		{
 			battlecry_target_getter = [](auto context) {
-				SetBattlecryTarget(context, Targets().Targetable().Ally(context).Minion());
+				SetBattlecryTarget(std::move(context), Targets().Targetable().Ally(context).Minion());
 				return true;
 			};
 			battlecry = [](auto context) {
@@ -551,7 +551,7 @@ namespace Cards
 		Card_CS2_150()
 		{
 			battlecry_target_getter = [](auto context) {
-				SetBattlecryTarget(context, Targets().Targetable());
+				SetBattlecryTarget(std::move(context), Targets().Targetable());
 				return true;
 			};
 			battlecry = [](auto context) {

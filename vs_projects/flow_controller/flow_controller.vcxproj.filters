@@ -368,5 +368,8 @@
     <ClInclude Include="..\..\include\state\IRandomGenerator.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\TargetorInfo.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

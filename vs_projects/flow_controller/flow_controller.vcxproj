@@ -216,6 +216,7 @@
     <ClInclude Include="..\..\include\state\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\state\State.h" />
+    <ClInclude Include="..\..\include\state\TargetorInfo.h" />
     <ClInclude Include="..\..\include\state\Types.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />

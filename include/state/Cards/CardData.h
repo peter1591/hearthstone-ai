@@ -20,8 +20,8 @@ namespace state
 		class CardData
 		{
 		public:
-			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter);
-			typedef void BattlecryCallback(FlowControl::Context::BattleCry);
+			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter&&);
+			typedef void BattlecryCallback(FlowControl::Context::BattleCry&&);
 			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone);
 
 			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);

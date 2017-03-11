@@ -186,7 +186,7 @@ namespace Cards
 		}
 
 		static void SetBattlecryTarget(
-			FlowControl::Context::BattlecryTargetGetter & context,
+			FlowControl::Context::BattlecryTargetGetter&& context,
 			TargetorHelper const& targetor)
 		{
 			context.flow_context_.battlecry_target_ =

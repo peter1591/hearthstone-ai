@@ -1,6 +1,7 @@
 #pragma once
 
 #include "state/IActionParameterGetter.h"
+#include "state/TargetorInfo.h"
 #include "Cards/TargetorUtils.h"
 
 namespace state {
@@ -28,10 +29,10 @@ namespace state {
 			return minion_put_location_;
 		}
 
-		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, ::Cards::TargetorInfo const& target_info)
+		CardRef GetBattlecryTarget(State & state, CardRef card_ref, const Cards::Card & card, TargetorInfo const& target_info)
 		{
 			if (!battlecry_target_.IsValid()) {
-				std::vector<state::CardRef> targets;
+				std::vector<CardRef> targets;
 				target_info.FillTargets(state, targets);
 				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card, targets);
 			}
@@ -47,6 +48,6 @@ namespace state {
 	private:
 		IActionParameterGetter & getter_;
 		int minion_put_location_;
-		state::CardRef battlecry_target_;
+		CardRef battlecry_target_;
 	};
 }
