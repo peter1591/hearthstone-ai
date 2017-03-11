@@ -56,7 +56,7 @@ namespace Cards
 			}
 			DamageHelper & Opponent() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.board.GetAnother(context_.card_.GetPlayerIdentifier()).hero_ref_;
+				target_ = context_.state_.board.Get(context_.card_.GetPlayerIdentifier().Opposite()).hero_ref_;
 				return *this;
 			}
 
@@ -152,7 +152,7 @@ namespace Cards
 		template <typename Context>
 		static PlayerHelper<Context> AnotherPlayer(Context&& context)
 		{
-			return PlayerHelper<Context>(context, context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()));
+			return PlayerHelper<Context>(context, context.state_.board.Get(context.card_.GetPlayerIdentifier().Opposite()));
 		}
 
 		template <typename Context>

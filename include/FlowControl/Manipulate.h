@@ -18,58 +18,16 @@ namespace FlowControl
 	public:
 		Manipulate(state::State & state, FlowContext & flow_context) : state_(state), flow_context_(flow_context) { }
 
-		Manipulators::CardManipulator Card(state::CardRef ref)
-		{
-			return Manipulators::CardManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
-		}
-
-		Manipulators::HeroManipulator CurrentHero()
-		{
-			return Hero(state_.current_player);
-		}
-
-		Manipulators::HeroManipulator OpponentHero()
-		{
-			return AnotherHero(state_.current_player);
-		}
-
-		Manipulators::HeroManipulator Hero(state::CardRef ref)
-		{
-			state::PlayerIdentifier player = state_.mgr.Get(ref).GetPlayerIdentifier();
-			assert(state_.board.Get(player).hero_ref_ == ref);
-			return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref), player);
-		}
-
-		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player)
-		{
-			state::CardRef ref = state_.board.Get(player).hero_ref_;
-			return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref), player);
-		}
-
-		Manipulators::HeroManipulator AnotherHero(state::PlayerIdentifier player)
-		{
-			return Hero(player.Opposite());
-		}
-
-		Manipulators::MinionManipulator Minion(state::CardRef ref)
-		{
-			return Manipulators::MinionManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
-		}
-
-		Manipulators::CharacterManipulator Character(state::CardRef ref)
-		{
-			return Manipulators::CharacterManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
-		}
-
-		Manipulators::WeaponManipulator Weapon(state::CardRef ref)
-		{
-			return Manipulators::WeaponManipulator(state_, flow_context_, ref, state_.mgr.GetMutable(ref));
-		}
-
-		Manipulators::BoardManipulator Board()
-		{
-			return Manipulators::BoardManipulator(state_, flow_context_);
-		}
+		Manipulators::CardManipulator Card(state::CardRef ref);
+		Manipulators::HeroManipulator CurrentHero();
+		Manipulators::HeroManipulator OpponentHero();
+		Manipulators::HeroManipulator Hero(state::CardRef ref);
+		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player);
+		Manipulators::HeroManipulator AnotherHero(state::PlayerIdentifier player);
+		Manipulators::MinionManipulator Minion(state::CardRef ref);
+		Manipulators::CharacterManipulator Character(state::CardRef ref);
+		Manipulators::WeaponManipulator Weapon(state::CardRef ref);
+		Manipulators::BoardManipulator Board();
 
 	private:
 		state::State & state_;

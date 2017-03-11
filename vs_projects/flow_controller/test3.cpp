@@ -1,10 +1,8 @@
 #include <assert.h>
 #include <iostream>
 
-#include "Cards/id-map.h"
 #include "FlowControl/FlowController.h"
-#include "State/State.h"
-#include "State/Types.h"
+#include "FlowControl/FlowController-impl.h"
 
 class Test3_ActionParameterGetter : public FlowControl::IActionParameterGetter
 {

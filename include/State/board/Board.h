@@ -23,18 +23,6 @@ namespace state
 				else return second_;
 			}
 
-			Player & GetAnother(PlayerIdentifier identifier)
-			{
-				if (identifier.IsFirst()) return second_;
-				else return first_;
-			}
-
-			const Player & GetAnother(PlayerIdentifier identifier) const
-			{
-				if (identifier.IsFirst()) return second_;
-				else return first_;
-			}
-
 			Player & GetFirst() { return first_; }
 			Player const& GetFirst() const { return first_; }
 

@@ -143,9 +143,11 @@
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
+    <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h" />
