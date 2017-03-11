@@ -24,7 +24,7 @@ namespace state
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry);
 			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone);
 
-			typedef std::function<void(FlowControl::Context::Deathrattle)> DeathrattleCallback;
+			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);
 			typedef std::list<DeathrattleCallback> Deathrattles;
 
 			CardData() :

@@ -365,5 +365,8 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h">
       <Filter>Header Files\FlowControl\Manipulators\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Utils\InvokableWrapper.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
