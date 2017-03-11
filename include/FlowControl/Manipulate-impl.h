@@ -2,9 +2,15 @@
 #include "FlowControl/Manipulate.h"
 
 #include "state/State.h"
+#include "state/FlowContext.h"
 
 namespace FlowControl
 {
+	inline Manipulate::Manipulate(state::State & state, state::FlowContext & flow_context)
+		: state_(state), flow_context_(flow_context)
+	{
+	}
+
 	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref)
 	{
 		return state_.mgr.GetCardManipulator(state_, flow_context_, ref);

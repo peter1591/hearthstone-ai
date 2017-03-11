@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <vector>
 #include <unordered_set>
-#include <State/Types.h>
+#include <state/Types.h>
 
 namespace Cards
 {
@@ -25,9 +25,9 @@ namespace Cards
 		class FunctorForEach
 		{
 		public:
-			typedef void Func(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref);
+			typedef void Func(state::State & state, state::FlowContext & flow_context, state::CardRef ref);
 
-			FunctorForEach(state::State & state, FlowControl::FlowContext & flow_context, Func * func)
+			FunctorForEach(state::State & state, state::FlowContext & flow_context, Func * func)
 				: state_(state), flow_context_(flow_context), func_(func) {}
 
 			void operator()(state::CardRef ref) const
@@ -37,7 +37,7 @@ namespace Cards
 
 		private:
 			state::State & state_;
-			FlowControl::FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			Func * func_;
 		};
 
@@ -72,7 +72,7 @@ namespace Cards
 			Process(state, functor);
 		}
 
-		void ForEach(state::State & state, FlowControl::FlowContext & flow_context, FunctorForEach::Func * func) const
+		void ForEach(state::State & state, state::FlowContext & flow_context, FunctorForEach::Func * func) const
 		{
 			FunctorForEach functor(state, flow_context, func);
 			Process(state, functor);

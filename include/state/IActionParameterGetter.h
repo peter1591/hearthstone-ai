@@ -4,8 +4,7 @@
 #include "state/Types.h"
 #include "state/State.h"
 
-namespace FlowControl
-{
+namespace state {
 	class IActionParameterGetter
 	{
 	public:

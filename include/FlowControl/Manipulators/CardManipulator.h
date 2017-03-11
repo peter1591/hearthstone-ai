@@ -8,6 +8,11 @@
 #include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
 #include "FlowControl/Manipulators/detail/DamageSetter.h"
 
+namespace state {
+	class State;
+	class FlowContext;
+}
+
 namespace FlowControl
 {
 	namespace Manipulators
@@ -15,7 +20,7 @@ namespace FlowControl
 		class CardManipulator
 		{
 		public:
-			CardManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card) :
+			CardManipulator(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card) :
 				state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 			{
 			}
@@ -43,7 +48,7 @@ namespace FlowControl
 
 		protected:
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			state::Cards::Card & card_;
 		};

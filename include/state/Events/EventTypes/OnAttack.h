@@ -23,7 +23,7 @@ namespace state
 				struct Context
 				{
 					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					state::FlowContext & flow_context_;
 					state::CardRef defender_;
 				};
 

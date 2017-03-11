@@ -1,11 +1,11 @@
 #pragma once
 
 #include "state/State.h"
+#include "state/FlowContext.h"
+#include "state/IRandomGenerator.h"
+#include "state/ActionParameterWrapper.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/ActionTypes.h"
-#include "FlowControl/FlowContext.h"
-#include "FlowControl/IRandomGenerator.h"
-#include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Contexts.h"
 #include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Manipulate.h"
@@ -29,7 +29,7 @@ namespace FlowControl
 	class FlowController
 	{
 	public:
-		FlowController(state::State & state, IActionParameterGetter & action_parameters, IRandomGenerator & random)
+		FlowController(state::State & state, state::IActionParameterGetter & action_parameters, state::IRandomGenerator & random)
 			: state_(state), action_parameters_(action_parameters), random_(random),
 			flow_context_(random_, action_parameters_)
 		{
@@ -61,8 +61,8 @@ namespace FlowControl
 
 	public:
 		state::State & state_;
-		ActionParameterWrapper action_parameters_;
-		IRandomGenerator & random_;
-		FlowContext flow_context_;
+		state::ActionParameterWrapper action_parameters_;
+		state::IRandomGenerator & random_;
+		state::FlowContext flow_context_;
 	};
 }

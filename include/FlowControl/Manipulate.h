@@ -8,16 +8,17 @@
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
 
-namespace state { class State; }
+namespace state {
+	class State;
+	class FlowContext;
+}
 
 namespace FlowControl
 {
-	class FlowContext;
-
 	class Manipulate
 	{
 	public:
-		Manipulate(state::State & state, FlowContext & flow_context) : state_(state), flow_context_(flow_context) { }
+		Manipulate(state::State & state, state::FlowContext & flow_context);
 
 		Manipulators::CardManipulator Card(state::CardRef ref);
 		Manipulators::HeroManipulator CurrentHero();
@@ -30,6 +31,6 @@ namespace FlowControl
 
 	private:
 		state::State & state_;
-		FlowContext & flow_context_;
+		state::FlowContext & flow_context_;
 	};
 }

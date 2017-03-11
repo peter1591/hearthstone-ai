@@ -2,7 +2,6 @@
 
 #include "FlowControl/Manipulators/CharacterManipulator.h"
 #include "FlowControl/Manipulators/Helpers/WeaponRefRemover.h"
-#include "FlowControl/IRandomGenerator.h"
 
 namespace FlowControl
 {
@@ -11,7 +10,7 @@ namespace FlowControl
 		class HeroManipulator : public CharacterManipulator
 		{
 		public:
-			HeroManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::PlayerIdentifier player_id)
+			HeroManipulator(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::PlayerIdentifier player_id)
 				: CharacterManipulator(state, flow_context, card_ref, card), player_id_(player_id)
 			{
 				assert(card.GetCardType() == state::kCardTypeHero);

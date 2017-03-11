@@ -8,6 +8,7 @@
 namespace state
 {
 	class State;
+	class FlowContext;
 	namespace Cards
 	{
 		class Card;
@@ -17,14 +18,12 @@ namespace state
 
 namespace FlowControl
 {
-	class FlowContext;
-
 	namespace Context
 	{
 		struct AddedToPlayZone
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
@@ -32,7 +31,7 @@ namespace FlowControl
 		struct AuraApplyOn
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 			state::CardRef target_;
@@ -42,7 +41,7 @@ namespace FlowControl
 		struct AuraGetTargets
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 			state::Cards::AuraAuxData & aura_data_;
@@ -52,7 +51,7 @@ namespace FlowControl
 		struct AuraRemoveFrom
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			const state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 			const state::CardRef target_;
@@ -62,7 +61,7 @@ namespace FlowControl
 		struct BattleCry
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
@@ -70,7 +69,7 @@ namespace FlowControl
 		struct BattlecryTargetGetter
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
@@ -78,7 +77,7 @@ namespace FlowControl
 		struct Deathrattle
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
@@ -86,7 +85,7 @@ namespace FlowControl
 		struct EnchantmentAfterAdded
 		{
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			state::Cards::Enchantments::ContainerType::Identifier enchant_id_;
 		};

@@ -1,10 +1,9 @@
 #pragma once
 
-#include "FlowControl/IActionParameterGetter.h"
+#include "state/IActionParameterGetter.h"
 #include "Cards/TargetorUtils.h"
 
-namespace FlowControl
-{
+namespace state {
 	class ActionParameterWrapper
 	{
 	public:
@@ -29,7 +28,7 @@ namespace FlowControl
 			return minion_put_location_;
 		}
 
-		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, Cards::TargetorInfo const& target_info)
+		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, ::Cards::TargetorInfo const& target_info)
 		{
 			if (!battlecry_target_.IsValid()) {
 				std::vector<state::CardRef> targets;

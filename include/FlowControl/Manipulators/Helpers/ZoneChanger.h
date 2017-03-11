@@ -16,7 +16,7 @@ namespace FlowControl
 			class AddToPlayerDatStructure
 			{
 			public:
-				static void Add(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void Add(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					switch (card.GetZone())
 					{
@@ -32,17 +32,17 @@ namespace FlowControl
 				}
 
 			private:
-				static void AddToDeckZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromDeck(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
-				static void AddToHandZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
-				static void AddToPlayZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToPlayZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
@@ -62,7 +62,7 @@ namespace FlowControl
 					}
 				}
 
-				static void AddToGraveyardZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void AddToGraveyardZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromGraveyard<TargetCardType>(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
@@ -72,7 +72,7 @@ namespace FlowControl
 			class RemoveFromPlayerDatStructure
 			{
 			public:
-				static void Remove(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					switch (RemovingCardZone)
 					{
@@ -89,17 +89,17 @@ namespace FlowControl
 				}
 
 			private:
-				static void RemoveFromDeckZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromDeck(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
-				static void RemoveFromHandZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
-				static void RemoveFromPlayZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromPlayZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
@@ -118,7 +118,7 @@ namespace FlowControl
 					}
 				}
 
-				static void RemoveFromGraveyardZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				static void RemoveFromGraveyardZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
 					OrderedCardsManager::FromGraveyard<RemovingCardType>(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
@@ -128,7 +128,7 @@ namespace FlowControl
 			class ZoneChanger
 			{
 			public:
-				ZoneChanger(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+				ZoneChanger(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{
 				}
@@ -174,7 +174,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				FlowContext & flow_context_;
+				state::FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
@@ -183,7 +183,7 @@ namespace FlowControl
 			class ZoneChangerWithUnknownZone
 			{
 			public:
-				ZoneChangerWithUnknownZone(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+				ZoneChangerWithUnknownZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{}
 
@@ -260,7 +260,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				FlowContext & flow_context_;
+				state::FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};
@@ -268,7 +268,7 @@ namespace FlowControl
 			class ZoneChangerWithUnknownZoneUnknownType
 			{
 			public:
-				ZoneChangerWithUnknownZoneUnknownType(state::State& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
+				ZoneChangerWithUnknownZoneUnknownType(state::State& state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{}
 
@@ -337,7 +337,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				FlowContext & flow_context_;
+				state::FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};

@@ -1,7 +1,6 @@
 #pragma once
 
-namespace FlowControl
-{
+namespace state {
 	class IRandomGenerator
 	{
 	public:

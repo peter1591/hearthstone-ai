@@ -1,6 +1,11 @@
 #pragma once
 
-#include "FlowControl/IRandomGenerator.h"
+#include "state/IRandomGenerator.h"
+
+namespace state {
+	class State;
+	class FlowContext;
+}
 
 namespace FlowControl
 {
@@ -9,7 +14,7 @@ namespace FlowControl
 		class BoardManipulator
 		{
 		public:
-			BoardManipulator(state::State & state, FlowContext & flow_context)
+			BoardManipulator(state::State & state, state::FlowContext & flow_context)
 				: state_(state), flow_context_(flow_context)
 			{
 			}
@@ -18,7 +23,7 @@ namespace FlowControl
 
 		private:
 			state::State & state_;
-			FlowContext & flow_context_;
+			state::FlowContext & flow_context_;
 		};
 	}
 }

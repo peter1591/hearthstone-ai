@@ -15,7 +15,7 @@ namespace FlowControl
 		class CharacterManipulator : public CardManipulator
 		{
 		public:
-			CharacterManipulator(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+			CharacterManipulator(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				: CardManipulator(state, flow_context, card_ref, card)
 			{
 				assert(card.GetCardType() == state::kCardTypeMinion ||

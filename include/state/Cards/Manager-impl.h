@@ -10,7 +10,7 @@
 namespace state
 {
 	template <typename T>
-	CardRef Cards::Manager::PushBack(State & state, FlowControl::FlowContext & flow_context, T&& card)
+	CardRef Cards::Manager::PushBack(State & state, state::FlowContext & flow_context, T&& card)
 	{
 		assert(this == &state.mgr);
 

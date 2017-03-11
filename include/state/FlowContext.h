@@ -2,26 +2,32 @@
 
 #include <map>
 
-namespace FlowControl
-{
-	namespace Helpers
-	{
+#include "state/ActionParameterWrapper.h"
+#include "state/IRandomGenerator.h"
+#include "state/State.h"
+#include "state/Types.h"
+#include "FlowControl/Result.h"
+
+namespace FlowControl {
+	namespace Helpers {
 		class Resolver;
 	}
-	class IRandomGenerator;
-	class ActionParameterWrapper;
+}
 
+namespace state
+{
 	class FlowContext
 	{
-		friend class Helpers::Resolver;
+		friend class FlowControl::Helpers::Resolver;
+
 	public:
 		FlowContext(IRandomGenerator & random, ActionParameterWrapper & action_parameters)
 			: random_(random), action_parameters_(action_parameters)
 		{
-			result_ = kResultNotDetermined;
+			result_ = FlowControl::kResultNotDetermined;
 		}
 
-		void AddDeadEntryHint(state::State & state, state::CardRef ref)
+		void AddDeadEntryHint(State & state, CardRef ref)
 		{
 			int play_order = state.mgr.Get(ref).GetPlayOrder();
 
@@ -38,10 +44,11 @@ namespace FlowControl
 	public:
 		IRandomGenerator & random_;
 		ActionParameterWrapper & action_parameters_;
-		Result result_;
+		FlowControl::Result result_;
 
 		state::CardRef battlecry_target_;
 		state::CardRef destroyed_weapon_;
+
 	private:
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 	};

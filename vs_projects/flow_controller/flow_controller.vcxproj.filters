@@ -239,9 +239,6 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h">
       <Filter>Header Files\state\Events\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
@@ -367,6 +364,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\FlowContext.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\ActionParameterWrapper.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\IActionParameterGetter.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\IRandomGenerator.h">
+      <Filter>Header Files\state</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
