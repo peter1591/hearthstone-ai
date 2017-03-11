@@ -253,7 +253,7 @@ namespace FlowControl
 			EndTurnPhase();
 			if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 
-			state_.ChangePlayer();
+			state_.current_player.ChangeSide();
 
 			action_parameters_.Clear();
 			StartTurnPhase();

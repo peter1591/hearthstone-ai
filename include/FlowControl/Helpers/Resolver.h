@@ -69,10 +69,10 @@ namespace FlowControl
 
 			bool RemoveDeaths()
 			{
-				auto first_it = deaths_.find(state_.board.Get(state::kPlayerFirst).hero_ref_);
+				auto first_it = deaths_.find(state_.board.GetFirst().hero_ref_);
 				bool first_dead = first_it != deaths_.end();
 
-				auto second_it = deaths_.find(state_.board.Get(state::kPlayerSecond).hero_ref_);
+				auto second_it = deaths_.find(state_.board.GetSecond().hero_ref_);
 				bool second_dead = second_it != deaths_.end();
 
 				if (first_dead && second_dead) return SetResult(kResultDraw);
@@ -125,8 +125,8 @@ namespace FlowControl
 
 			void UpdateEnchantments()
 			{
-				UpdateEnchantments(state::kPlayerFirst);
-				UpdateEnchantments(state::kPlayerSecond);
+				UpdateEnchantments(state::PlayerIdentifier::First());
+				UpdateEnchantments(state::PlayerIdentifier::Second());
 			}
 
 			void UpdateEnchantments(state::PlayerIdentifier player)

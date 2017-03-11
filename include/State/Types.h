@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <type_traits>
 #include "Utils/CloneableContainers/Vector.h"
 
@@ -71,11 +72,66 @@ namespace state
 		kCardRarityInvalid
 	};
 
-	enum PlayerIdentifier
+	enum PlayerSide
 	{
-		kPlayerFirst,
-		kPlayerSecond,
-		kPlayerInvalid
+		kPlayerInvalid = 0,
+		kPlayerFirst = 1,
+		kPlayerSecond = 2,
+	};
+
+	class PlayerIdentifier
+	{
+	private:
+		PlayerIdentifier(PlayerSide side) : side_(side) {}
+
+	public:
+		PlayerIdentifier() : side_(kPlayerInvalid) {}
+
+		static PlayerIdentifier First() { return PlayerIdentifier(kPlayerFirst); }
+		static PlayerIdentifier Second() { return PlayerIdentifier(kPlayerSecond); }
+
+		bool operator==(PlayerIdentifier rhs) const { return side_ == rhs.side_; }
+		bool operator!=(PlayerIdentifier rhs) const { return side_ != rhs.side_; }
+
+		PlayerIdentifier Opposite() const
+		{
+			return PlayerIdentifier(OppositeSide());
+		}
+
+		void ChangeSide()
+		{
+			assert(AssertCheck());
+			side_ = OppositeSide();
+		}
+
+		void SetFirst() { side_ = kPlayerFirst; }
+		void SetSecond() { side_ = kPlayerSecond; }
+
+		bool IsFirst() const
+		{
+			assert(AssertCheck());
+			return side_ == kPlayerFirst;
+		}
+
+		bool IsSecond() const
+		{
+			assert(AssertCheck());
+			return side_ == kPlayerSecond;
+		}
+
+		bool AssertCheck() const
+		{
+			return side_ == kPlayerFirst || side_ == kPlayerSecond;
+		}
+
+	private:
+		PlayerSide OppositeSide() const
+		{
+			return (PlayerSide)(3 - side_);
+		}
+
+	private:
+		PlayerSide side_;
 	};
 
 	class CardRef

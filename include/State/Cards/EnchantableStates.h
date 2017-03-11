@@ -10,7 +10,6 @@ namespace state
 		{
 		public:
 			EnchantableStates() :
-				player(kPlayerInvalid),
 				cost(-1), attack(-1), max_hp(-1),
 				taunt(false), shielded(false), charge(false),
 				spell_damage(0)

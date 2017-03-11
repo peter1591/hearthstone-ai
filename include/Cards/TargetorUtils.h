@@ -88,8 +88,8 @@ namespace Cards
 		template <typename Functor>
 		void Process(state::State const& state, Functor const& functor) const
 		{
-			if (include_first) ProcessPlayerTargets(state, state.board.Get(state::kPlayerFirst), functor);
-			if (include_second) ProcessPlayerTargets(state, state.board.Get(state::kPlayerSecond), functor);
+			if (include_first) ProcessPlayerTargets(state, state.board.GetFirst(), functor);
+			if (include_second) ProcessPlayerTargets(state, state.board.GetSecond(), functor);
 		}
 
 		template <typename Functor>
@@ -223,7 +223,7 @@ namespace Cards
 	private:
 		TargetorHelper & Player(state::PlayerIdentifier player)
 		{
-			if (player == state::kPlayerFirst) {
+			if (player.IsFirst()) {
 				info_.include_first = true;
 				info_.include_second = false;
 			}
@@ -236,8 +236,7 @@ namespace Cards
 
 		TargetorHelper & AnotherPlayer(state::PlayerIdentifier player)
 		{
-			if (player == state::kPlayerFirst) return Player(state::kPlayerSecond);
-			else return Player(state::kPlayerFirst);
+			return Player(player.Opposite());
 		}
 
 	public:

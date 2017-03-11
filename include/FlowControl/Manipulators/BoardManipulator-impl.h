@@ -12,7 +12,7 @@ namespace FlowControl
 		{
 			state::Cards::Card const& card = state_.mgr.Get(ref);
 
-			assert(card.GetPlayerIdentifier() != state::kPlayerInvalid);
+			assert(card.GetPlayerIdentifier().AssertCheck());
 			assert(card.GetZone() == state::kCardZonePlay);
 			assert(card.GetCardType() == state::kCardTypeMinion);
 			assert(card.GetZonePosition() >= 0);

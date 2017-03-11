@@ -48,8 +48,7 @@ namespace FlowControl
 
 		Manipulators::HeroManipulator AnotherHero(state::PlayerIdentifier player)
 		{
-			if (player == state::kPlayerFirst) return Hero(state::kPlayerSecond);
-			else return Hero(state::kPlayerFirst);
+			return Hero(player.Opposite());
 		}
 
 		Manipulators::MinionManipulator Minion(state::CardRef ref)

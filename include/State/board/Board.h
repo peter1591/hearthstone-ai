@@ -13,44 +13,37 @@ namespace state
 		public:
 			Player & Get(PlayerIdentifier identifier)
 			{
-				if (identifier == kPlayerFirst) return first_;
-				else if (identifier == kPlayerSecond) return second_;
-				throw std::exception("invalid player identifier");
+				if (identifier.IsFirst()) return first_;
+				else return second_;
 			}
 
 			const Player & Get(PlayerIdentifier identifier) const
 			{
-				if (identifier == kPlayerFirst) return first_;
-				else if (identifier == kPlayerSecond) return second_;
-				throw std::exception("invalid player identifier");
+				if (identifier.IsFirst()) return first_;
+				else return second_;
 			}
 
 			Player & GetAnother(PlayerIdentifier identifier)
 			{
-				if (identifier == kPlayerFirst) return second_;
-				else if (identifier == kPlayerSecond) return first_;
-				throw std::exception("invalid player identifier");
+				if (identifier.IsFirst()) return second_;
+				else return first_;
 			}
 
 			const Player & GetAnother(PlayerIdentifier identifier) const
 			{
-				if (identifier == kPlayerFirst) return second_;
-				else if (identifier == kPlayerSecond) return first_;
-				throw std::exception("invalid player identifier");
+				if (identifier.IsFirst()) return second_;
+				else return first_;
 			}
 
-			template <int Identifier> Player & Get();
-			template <int Identifier> const Player & Get() const;
+			Player & GetFirst() { return first_; }
+			Player const& GetFirst() const { return first_; }
+
+			Player & GetSecond() { return second_; }
+			Player const& GetSecond() const { return second_; }
 
 		private:
 			Player first_;
 			Player second_;
 		};
-
-		template <> inline Player & Board::Get<kPlayerFirst>() { return first_; }
-		template <> inline const Player & Board::Get<kPlayerFirst>() const { return first_; }
-
-		template <> inline Player & Board::Get<kPlayerSecond>() { return second_; }
-		template <> inline const Player & Board::Get<kPlayerSecond>() const { return second_; }
 	}
 }
