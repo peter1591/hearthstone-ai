@@ -440,17 +440,18 @@ namespace Cards
 		}
 	};
 
+	template <int Arg1>
 	class Card_CS2_226e : public EnchantmentCardBase
 	{
 	public:
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_019e;
 
-		Card_CS2_226e(int v)
+		Card_CS2_226e()
 		{
-			apply_functor = [v](auto& stats) {
-				stats.max_hp += v;
-				stats.attack += v;
+			apply_functor = [](auto& stats) {
+				stats.max_hp += Arg1;
+				stats.attack += Arg1;
 			};
 		}
 	};
@@ -466,8 +467,31 @@ namespace Cards
 				int count = 0;
 				Targets().Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
 					.Count(context.state_, &count);
-				Manipulate(context).Minion(context.card_ref_)
-					.Enchant().Add(Card_CS2_226e(count));
+
+				switch (count) {
+				case 0:
+					break;
+				case 1:
+					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<1>());
+					break;
+				case 2:
+					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<2>());
+					break;
+				case 3:
+					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<3>());
+					break;
+				case 4:
+					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<4>());
+					break;
+				case 5:
+					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<5>());
+					break;
+				case 6:
+					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<6>());
+					break;
+				default:
+					throw std::exception("invalid minion count");
+				}
 			};
 		}
 	};

@@ -46,12 +46,8 @@ namespace Utils
 		public:
 			typedef VectorIdentifier Identifier;
 
-			Vector()
-			{
-				static_assert(!std::is_pointer<ItemType>::value, "Use PtrVector instead to store pointers.");
-			}
+			Vector() {}
 			Vector(size_t default_capacity) {
-				static_assert(!std::is_pointer<ItemType>::value, "Use PtrVector instead to store pointers.");
 				items_.reserve(default_capacity);
 			}
 

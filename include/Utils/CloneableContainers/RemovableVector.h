@@ -11,8 +11,7 @@ namespace Utils
 {
 	namespace CloneableContainers
 	{
-		template <typename ItemType,
-			typename std::enable_if_t<!std::is_pointer<typename ItemType>::value, nullptr_t> = nullptr>
+		template <typename ItemType>
 			class RemovableVector
 		{
 		private:
