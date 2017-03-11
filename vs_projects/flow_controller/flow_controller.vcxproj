@@ -197,6 +197,7 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\AfterMinionSummoned.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\BeforeAttack.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\BeforeMinionSummoned.h" />
+    <ClInclude Include="..\..\include\State\Events\EventTypes\OnAttack.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnHeal.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h" />
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnEnd.h" />
