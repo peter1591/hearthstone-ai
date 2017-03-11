@@ -1,9 +1,9 @@
 #pragma once
 
-#include "State/Types.h"
-#include "State/Cards/Card.h"
-#include "State/board/Player.h"
-#include "State/board/DefaultZonePosPolicy.h"
+#include "state/Types.h"
+#include "state/Cards/Card.h"
+#include "state/board/Player.h"
+#include "state/board/DefaultZonePosPolicy.h"
 #include "FlowControl/Manipulators/Helpers/OrderedCardsManager.h"
 
 namespace FlowControl

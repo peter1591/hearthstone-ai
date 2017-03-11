@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FlowControl/Manipulators/Helpers/DamageHelper.h"
-#include "State/State.h"
+#include "state/State.h"
 
 namespace FlowControl
 {

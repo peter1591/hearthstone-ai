@@ -4,7 +4,7 @@
 #include <assert.h>
 #include "FlowControl/Contexts.h"
 #include "FlowControl/Manipulate.h"
-#include "State/State.h"
+#include "state/State.h"
 
 namespace FlowControl
 {

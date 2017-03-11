@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/State.h"
+#include "state/State.h"
 #include "FlowControl/Manipulators/Helpers/HealHelper.h"
 #include "FlowControl/Manipulate.h"
 

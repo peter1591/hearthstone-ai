@@ -3,8 +3,8 @@
 #include <assert.h>
 #include <memory>
 #include <utility>
-#include "State/Cards/Card.h"
-#include "State/Cards/EnchantmentAuxData.h"
+#include "state/Cards/Card.h"
+#include "state/Cards/EnchantmentAuxData.h"
 #include "FlowControl/Contexts.h"
 
 namespace FlowControl

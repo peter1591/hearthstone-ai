@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Cards/Card.h"
+#include "state/Cards/Card.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
 
 namespace FlowControl

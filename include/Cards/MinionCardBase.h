@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cards/Database.h"
-#include "State/Cards/Card.h"
+#include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
 
 namespace Cards

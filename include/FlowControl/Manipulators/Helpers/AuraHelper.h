@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Cards/AuraAuxData.h"
+#include "state/Cards/AuraAuxData.h"
 #include "FlowControl/Dispatchers/Minions.h"
 
 namespace FlowControl

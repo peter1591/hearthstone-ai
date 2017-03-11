@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "State/Types.h"
-#include "State/State.h"
+#include "state/Types.h"
+#include "state/State.h"
 
 namespace FlowControl
 {

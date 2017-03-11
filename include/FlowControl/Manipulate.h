@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Types.h"
+#include "state/Types.h"
 #include "FlowControl/Manipulators/BoardManipulator.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"

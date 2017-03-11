@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "State/Cards/Card.h"
+#include "state/Cards/Card.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 
 namespace FlowControl

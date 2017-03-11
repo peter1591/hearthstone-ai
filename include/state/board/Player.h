@@ -1,0 +1,31 @@
+#pragma once
+
+#include "state/board/Deck.h"
+#include "state/board/Graveyard.h"
+#include "state/board/Hand.h"
+#include "state/board/Minions.h"
+#include "state/board/Secrets.h"
+#include "state/board/PlayerResource.h"
+
+namespace state
+{
+	namespace board
+	{
+		class Player
+		{
+		public:
+			Player() : fatigue_damage_(0) {}
+
+			CardRef hero_ref_;
+
+			Deck deck_;
+			Hand hand_;
+			Minions minions_;
+			Secrets secrets_;
+			Graveyard graveyard_;
+
+			PlayerResource resource_;
+			int fatigue_damage_;
+		};
+	}
+}

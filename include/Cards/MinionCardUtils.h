@@ -1,7 +1,7 @@
 #pragma once
 
 #include "FlowControl/Contexts.h"
-#include "State/State.h"
+#include "state/State.h"
 #include "Cards/TargetorUtils.h"
 
 namespace Cards

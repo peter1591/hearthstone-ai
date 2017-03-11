@@ -2,8 +2,8 @@
 
 #include <functional>
 #include <unordered_set>
-#include "State/Types.h"
-#include "State/Cards/Enchantments/Enchantments.h"
+#include "state/Types.h"
+#include "state/Cards/Enchantments/Enchantments.h"
 
 namespace state
 {

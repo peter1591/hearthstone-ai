@@ -7,8 +7,8 @@
 #include "json/json.h"
 
 #include "Cards/CardData.h"
-#include "State/Types.h"
-#include "State/Cards/CardData.h"
+#include "state/Types.h"
+#include "state/Cards/CardData.h"
 
 namespace Cards
 {

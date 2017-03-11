@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Types.h"
+#include "state/Types.h"
 
 namespace Cards
 {

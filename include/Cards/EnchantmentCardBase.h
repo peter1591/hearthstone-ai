@@ -1,6 +1,6 @@
 #pragma once
 
-#include "State/Cards/Enchantments/Enchantments.h"
+#include "state/Cards/Enchantments/Enchantments.h"
 
 namespace Cards
 {
