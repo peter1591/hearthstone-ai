@@ -9,11 +9,9 @@
 
 namespace state
 {
-	// TODO: remove 'state', and 'flow_context'
-	inline CardRef Cards::Manager::PushBack(State & state, state::FlowContext & flow_context, Cards::Card&& card)
+	inline CardRef Cards::Manager::PushBack(Cards::Card&& card)
 	{
-		assert(this == &state.mgr);
-		assert(card.GetZone() == kCardZoneInvalid);
+		assert(card.GetZone() == kCardZoneInvalid); // Caller use manipulators to adjust. So we don't need to maintain any internal structure consistency
 		CardRef ref = CardRef(cards_.PushBack(std::move(card)));
 		return ref;
 	}

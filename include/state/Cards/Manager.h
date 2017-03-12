@@ -29,7 +29,7 @@ namespace state
 				return cards_.Get(id.id);
 			}
 
-			CardRef PushBack(State & state, FlowContext & flow_context, Cards::Card&& card);
+			CardRef PushBack(Cards::Card&& card);
 
 		public: // manipulators
 			FlowControl::Manipulators::CardManipulator GetCardManipulator(State& state, FlowContext& flow_context, CardRef ref) {

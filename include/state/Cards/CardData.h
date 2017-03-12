@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <list>
+#include <vector>
 #include <string>
 #include "Utils/FuncPtrArray.h"
 #include "state/Types.h"
@@ -26,7 +26,7 @@ namespace state
 			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone);
 
 			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);
-			typedef std::list<DeathrattleCallback> Deathrattles;
+			typedef std::vector<DeathrattleCallback> Deathrattles;
 
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),

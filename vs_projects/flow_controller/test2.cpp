@@ -75,7 +75,7 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 	((Test2_RandomGenerator&)(flow_context.random_)).next_rand = deck_count;
 	((Test2_RandomGenerator&)(flow_context.random_)).called = false;
 
-	auto ref = state.mgr.PushBack(state, flow_context, CreateDeckCard(id, state, player));
+	auto ref = state.mgr.PushBack(CreateDeckCard(id, state, player));
 	FlowControl::Manipulate(state, flow_context).Card(ref).Zone().WithZone<state::kCardZoneInvalid>()
 		.ChangeTo<state::kCardZoneDeck>(player);
 
@@ -116,7 +116,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, state:
 {
 	int hand_count = (int)state.board.Get(player).hand_.Size();
 
-	auto ref = state.mgr.PushBack(state, flow_context, CreateHandCard(id, type, state, player));
+	auto ref = state.mgr.PushBack(CreateHandCard(id, type, state, player));
 	FlowControl::Manipulate(state, flow_context).Card(ref).Zone().WithZone<state::kCardZoneInvalid>()
 		.ChangeTo<state::kCardZoneHand>(player);
 
@@ -159,7 +159,7 @@ static void MakeHero(state::State & state, state::FlowContext & flow_context, st
 	raw_card.enchantable_states.attack = 0;
 	raw_card.enchantment_aux_data.origin_states = raw_card.enchantable_states;
 
-	state::CardRef ref = state.mgr.PushBack(state, flow_context, state::Cards::Card(raw_card));
+	state::CardRef ref = state.mgr.PushBack(state::Cards::Card(raw_card));
 
 	FlowControl::Manipulate(state, flow_context).Hero(ref).Zone().WithZone<state::kCardZoneInvalid>()
 		.ChangeTo<state::kCardZonePlay>(player);
