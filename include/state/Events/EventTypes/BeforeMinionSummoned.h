@@ -22,8 +22,8 @@ namespace state
 				};
 
 			public:
-				typedef void (*FunctorType)(HandlersContainerController &controller, Context&);
-				typedef std::tuple<Context&> ArgsTuple;
+				typedef void (*FunctorType)(HandlersContainerController &controller, Context&&);
+				typedef std::tuple<Context&&> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
@@ -31,9 +31,9 @@ namespace state
 				{
 				}
 
-				void Handle(HandlersContainerController &controller, Context& context)
+				void Handle(HandlersContainerController &controller, Context&& context)
 				{
-					functor_(controller, context);
+					functor_(controller, std::move(context));
 				}
 
 			private:

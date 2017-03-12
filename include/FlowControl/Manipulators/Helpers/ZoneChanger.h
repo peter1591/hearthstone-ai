@@ -34,7 +34,7 @@ namespace FlowControl
 			private:
 				static void AddToDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					state.board.Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](int exclusive_max) {
+					state.board.Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](auto exclusive_max) {
 						return flow_context.random_.Get(exclusive_max);
 					});
 				}

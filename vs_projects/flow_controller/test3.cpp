@@ -37,6 +37,8 @@ public:
 		return next_rand;
 	}
 
+	size_t Get(size_t exclusive_max) { return (size_t)Get((int)exclusive_max); }
+
 	int Get(int min, int max)
 	{
 		called = true;

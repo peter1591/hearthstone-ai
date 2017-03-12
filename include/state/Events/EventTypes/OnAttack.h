@@ -28,12 +28,12 @@ namespace state
 				};
 
 			public:
-				typedef std::function<void(HandlersContainerController &, CardRef, Context)> FunctorType;
-				typedef std::tuple<CardRef, Context> ArgsTuple;
+				typedef std::function<void(HandlersContainerController &, CardRef, Context&&)> FunctorType;
+				typedef std::tuple<CardRef, Context&&> ArgsTuple;
 
 				template <typename T> OnAttack(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller, CardRef attacker, Context context)
+				void Handle(HandlersContainerController &controller, CardRef attacker, Context &&context)
 				{
 					functor_(controller, attacker, std::move(context));
 				}

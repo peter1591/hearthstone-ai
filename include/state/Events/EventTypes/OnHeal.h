@@ -30,16 +30,16 @@ namespace state
 					int amount_;
 				};
 			public:
-				typedef void (*FunctorType)(HandlersContainerController &, state::CardRef, Context);
-				typedef std::tuple<const Cards::Card &, state::CardRef, Context> ArgsTuple;
+				typedef void (*FunctorType)(HandlersContainerController &, state::CardRef, Context&);
+				typedef std::tuple<const Cards::Card &, state::CardRef, Context&> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>
 					explicit OnHeal(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller, state::CardRef card_ref, Context context)
+				void Handle(HandlersContainerController &controller, state::CardRef card_ref, Context & context)
 				{
-					functor_(controller, card_ref, std::move(context));
+					functor_(controller, card_ref, context);
 				}
 
 			private:

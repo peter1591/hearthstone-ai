@@ -27,14 +27,14 @@ namespace state
 				};
 
 			public:
-				typedef std::function<void(HandlersContainerController &, Context &)> FunctorType;
-				typedef std::tuple<Context &> ArgsTuple;
+				typedef std::function<void(HandlersContainerController &, Context &&)> FunctorType;
+				typedef std::tuple<Context &&> ArgsTuple;
 
 				template <typename T> UpdateAura(T&& functor) : functor_(functor) {}
 
-				void Handle(HandlersContainerController &controller, Context & context)
+				void Handle(HandlersContainerController &controller, Context && context)
 				{
-					functor_(controller, context);
+					functor_(controller, std::move(context));
 				}
 
 			private:

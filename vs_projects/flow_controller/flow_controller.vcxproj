@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessToFile>false</PreprocessToFile>
-      <ShowIncludes>true</ShowIncludes>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -112,7 +112,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessToFile>false</PreprocessToFile>
-      <ShowIncludes>true</ShowIncludes>
+      <ShowIncludes>false</ShowIncludes>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

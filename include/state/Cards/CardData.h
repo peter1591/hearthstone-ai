@@ -41,7 +41,7 @@ namespace state
 			CardRarity card_rarity;
 
 			CardZone zone;
-			int zone_position; // only meaningful for minions in play zone
+			int zone_position; // only meaningful for minions in play zone, and for hand cards
 
 			int play_order;
 			int damaged;

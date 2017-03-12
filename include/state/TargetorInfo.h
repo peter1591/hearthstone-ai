@@ -39,7 +39,7 @@ namespace state {
 
 		void Count(state::State const& state, int * count) const
 		{
-			Process(state, [count](state::CardRef ref) {
+			Process(state, [count](state::CardRef ) {
 				++(*count);
 			});
 		}

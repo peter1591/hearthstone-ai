@@ -30,10 +30,6 @@ namespace state
 			size_t GetTotalOthers() const { return others_.size(); }
 
 		private:
-			template <CardType ManipulatingCardType>
-			std::vector<CardRef> & GetContainer();
-
-		private:
 			std::vector<CardRef> minions_;
 			std::vector<CardRef> spells_;
 			std::vector<CardRef> others_;

@@ -66,7 +66,7 @@ namespace state
 		class DefaultZonePosGetter<kCardZonePlay, kCardTypeWeapon>
 		{
 		public:
-			constexpr int operator()(Player & player) const
+			constexpr int operator()(Player &) const
 			{
 				return 0;
 			}
@@ -82,7 +82,7 @@ namespace state
 		class DefaultZonePosGetter<kCardZonePlay, kCardTypeSecret>
 		{
 		public:
-			constexpr int operator()(Player & player) const
+			constexpr int operator()(Player &) const
 			{
 				return -1; // do not specify position
 			}
