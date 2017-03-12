@@ -7,7 +7,7 @@
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/EnchantmentAuxData.h"
 #include "state/Cards/aura/AuraAuxData.h"
-#include "state/Cards/AuraHandler.h"
+#include "state/Cards/aura/AuraHandler.h"
 #include "Cards/CardData.h"
 #include "FlowControl/Contexts.h"
 
@@ -59,7 +59,7 @@ namespace state
 			BattlecryTargetGetter *battlecry_target_getter;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;
-			AuraHandler aura_handler;
+			aura::AuraHandler aura_handler;
 
 		public: // for hero type
 			CardRef weapon_ref;
