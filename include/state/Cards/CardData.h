@@ -56,7 +56,7 @@ namespace state
 			aura::AuraHandler aura_handler;
 			aura::AuraAuxData aura_aux_data;
 
-		public: // callbacks, not subject to change when game flows
+		public:
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
 			BattlecryTargetGetter *battlecry_target_getter;
 			BattlecryCallback *battlecry;
