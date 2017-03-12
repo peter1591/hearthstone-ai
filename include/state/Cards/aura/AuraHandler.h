@@ -11,7 +11,7 @@ namespace FlowControl
 }
 
 namespace state {
-	class TargetorInfoGetter;
+	namespace utils { class TargetsGenerator; }
 
 	namespace Cards {
 		namespace aura {
@@ -35,7 +35,7 @@ namespace state {
 			public: // aux fields for aura handler
 				// Note: These fields are added into aura handler to prevent the use of std::function
 				//       Thus reduce the 'get_targets' to be a pure function pointer
-				typedef void FuncGetTargetorInfoGetter(FlowControl::Context::AuraGetTargets & context, TargetorInfoGetter & targetor);
+				typedef void FuncGetTargetorInfoGetter(FlowControl::Context::AuraGetTargets & context, utils::TargetsGenerator & targetor);
 				FuncGetTargetorInfoGetter *get_targetor_helper;
 			};
 		}

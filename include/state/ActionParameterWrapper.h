@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/IActionParameterGetter.h"
-#include "state/TargetorInfo.h"
+#include "state/utils/Targets.h"
 
 namespace state {
 	class ActionParameterWrapper
@@ -28,11 +28,11 @@ namespace state {
 			return minion_put_location_;
 		}
 
-		CardRef GetBattlecryTarget(State & state, CardRef card_ref, const Cards::Card & card, TargetorInfo const& target_info)
+		CardRef GetBattlecryTarget(State & state, CardRef card_ref, const Cards::Card & card, utils::Targets const& target_info)
 		{
 			if (!battlecry_target_.IsValid()) {
 				std::vector<CardRef> targets;
-				target_info.FillTargets(state, targets);
+				target_info.Fill(state, targets);
 				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card, targets);
 			}
 			return battlecry_target_;

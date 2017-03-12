@@ -70,6 +70,9 @@
     <Filter Include="Header Files\state\Cards\aura">
       <UniqueIdentifier>{bd534890-6dde-4331-a6b3-394e8aff6166}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\state\utils">
+      <UniqueIdentifier>{2b9f1389-0ea1-4c53-8b13-2c3f02283d9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -353,9 +356,6 @@
     <ClInclude Include="..\..\include\state\IRandomGenerator.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\TargetorInfo.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
@@ -365,8 +365,11 @@
     <ClInclude Include="..\..\include\state\Cards\aura\AuraHandler.h">
       <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\TargetorInfoGetter.h">
-      <Filter>Header Files\state</Filter>
+    <ClInclude Include="..\..\include\state\utils\Targets.h">
+      <Filter>Header Files\state\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\utils\TargetsGenerator.h">
+      <Filter>Header Files\state\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

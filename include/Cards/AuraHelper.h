@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Cards/aura/AuraHandler.h"
-#include "state/TargetorInfoGetter.h"
+#include "state/utils/TargetsGenerator.h"
 #include "Cards/MinionCardUtils.h"
 
 namespace Cards
@@ -37,9 +37,9 @@ namespace Cards
 					context.aura_data_.removed = true;
 					return;
 				}
-				state::TargetorInfoGetter targetor;
-				(*context.card_.GetRawData().aura_handler.get_targetor_helper)(context, targetor);
-				targetor.GetInfo().FillTargets(context.state_, context.targets_);
+				state::utils::TargetsGenerator targets_generator;
+				(*context.card_.GetRawData().aura_handler.get_targetor_helper)(context, targets_generator);
+				targets_generator.GetInfo().Fill(context.state_, context.targets_);
 			};
 			card_data_.aura_handler.apply_on = [](auto context) {
 				context.enchant_id_ = MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());

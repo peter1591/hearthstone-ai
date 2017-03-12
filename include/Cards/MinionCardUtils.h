@@ -2,7 +2,7 @@
 
 #include "FlowControl/Contexts.h"
 #include "state/State.h"
-#include "state/TargetorInfoGetter.h"
+#include "state/utils/TargetsGenerator.h"
 
 namespace Cards
 {
@@ -127,7 +127,7 @@ namespace Cards
 			return HealHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
 
-		static state::TargetorInfoGetter Targets() { return state::TargetorInfoGetter(); }
+		static state::utils::TargetsGenerator Targets() { return state::utils::TargetsGenerator(); }
 
 		template <typename Context>
 		static state::PlayerIdentifier OwnedPlayer(Context&& context)
@@ -197,12 +197,12 @@ namespace Cards
 
 		static void SetBattlecryTarget(
 			FlowControl::Context::BattlecryTargetGetter&& context,
-			state::TargetorInfoGetter const& targetor)
+			state::utils::TargetsGenerator const& targets_generator)
 		{
 			context.flow_context_.battlecry_target_ =
 				context.flow_context_.action_parameters_.GetBattlecryTarget(
 					context.state_, context.card_ref_, context.card_,
-					targetor.GetInfo());
+					targets_generator.GetInfo());
 		}
 
 		template <typename Context>
@@ -244,10 +244,10 @@ namespace Cards
 		template <typename Context, typename Functor>
 		static void ForEach(
 			Context&& context,
-			state::TargetorInfoGetter const& targetor,
+			state::utils::TargetsGenerator const& targets_generator,
 			Functor&& func)
 		{
-			targetor.GetInfo().ForEach(context.state_, context.flow_context_, func);
+			targets_generator.GetInfo().ForEach(context.state_, context.flow_context_, func);
 		}
 	};
 }
