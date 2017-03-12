@@ -67,6 +67,9 @@
     <Filter Include="Header Files\state\board">
       <UniqueIdentifier>{09f30fa1-0430-4ea4-a58a-be10b03688d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\state\Cards\aura">
+      <UniqueIdentifier>{bd534890-6dde-4331-a6b3-394e8aff6166}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,9 +108,6 @@
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\State\Cards\Manager-impl.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\AuraAuxData.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\State\Cards\Card.h">
@@ -364,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\aura\AuraAuxData.h">
+      <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

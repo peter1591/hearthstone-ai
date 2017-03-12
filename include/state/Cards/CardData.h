@@ -6,7 +6,7 @@
 #include "state/Types.h"
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/EnchantmentAuxData.h"
-#include "state/Cards/AuraAuxData.h"
+#include "state/Cards/aura/AuraAuxData.h"
 #include "state/Cards/AuraHandler.h"
 #include "Cards/CardData.h"
 #include "FlowControl/Contexts.h"
@@ -52,7 +52,7 @@ namespace state
 
 			EnchantmentAuxData enchantment_aux_data;
 
-			AuraAuxData aura_aux_data;
+			aura::AuraAuxData aura_aux_data;
 
 		public: // callbacks, not subject to change when game flows
 			AddedToPlayZoneCallback *added_to_play_zone;

@@ -19,7 +19,7 @@ namespace FlowControl
 				assert(card_.GetRawData().aura_handler.apply_on);
 				assert(card_.GetRawData().aura_handler.remove_from);
 
-				state::Cards::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
+				state::Cards::aura::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
 
 				std::unordered_set<state::CardRef> new_targets;
 				(*card_.GetRawData().aura_handler.get_targets)

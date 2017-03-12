@@ -48,7 +48,7 @@ namespace state
 			public:
 				MutableAuraAuxDataGetter(CardData & data) : data_(data) {}
 			private:
-				AuraAuxData & Get() { return data_.aura_aux_data; }
+				aura::AuraAuxData & Get() { return data_.aura_aux_data; }
 			private:
 				CardData & data_;
 			};

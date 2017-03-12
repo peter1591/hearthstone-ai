@@ -185,8 +185,8 @@
     <ClInclude Include="..\..\include\state\board\PlayerResource.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />
     <ClInclude Include="..\..\include\state\board\Secrets.h" />
-    <ClInclude Include="..\..\include\state\Cards\AuraAuxData.h" />
     <ClInclude Include="..\..\include\state\Cards\AuraHandler.h" />
+    <ClInclude Include="..\..\include\state\Cards\aura\AuraAuxData.h" />
     <ClInclude Include="..\..\include\state\Cards\Card.h" />
     <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h" />
     <ClInclude Include="..\..\include\state\Cards\EnchantmentAuxData.h" />

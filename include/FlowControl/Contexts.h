@@ -12,7 +12,7 @@ namespace state
 	namespace Cards
 	{
 		class Card;
-		class AuraAuxData;
+		namespace aura { class AuraAuxData; }
 	}
 }
 
@@ -44,7 +44,7 @@ namespace FlowControl
 			state::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
-			state::Cards::AuraAuxData & aura_data_;
+			state::Cards::aura::AuraAuxData & aura_data_;
 			std::unordered_set<state::CardRef> & targets_;
 		};
 
