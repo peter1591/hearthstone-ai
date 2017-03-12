@@ -142,7 +142,7 @@
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
-    <ClInclude Include="..\..\include\Cards\TargetorUtils.h" />
+    <ClInclude Include="..\..\include\Cards\TargetorInfoGetter.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />

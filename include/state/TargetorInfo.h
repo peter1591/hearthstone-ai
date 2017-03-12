@@ -11,17 +11,12 @@ namespace state {
 		{
 		}
 
-		template <typename Container>
-		void FillTargets(state::State const& state, Container& targets) const;
-
-		template <>
 		void FillTargets(state::State const& state, std::vector<state::CardRef>& targets) const
 		{
 			Process(state, [&](state::CardRef ref) {
 				targets.push_back(ref);
 			});
 		}
-		template <>
 		void FillTargets(state::State const& state, std::unordered_set<state::CardRef>& targets) const
 		{
 			Process(state, [&](state::CardRef ref) {

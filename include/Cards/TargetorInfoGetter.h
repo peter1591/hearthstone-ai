@@ -8,54 +8,54 @@
 
 namespace Cards
 {
-	class TargetorHelper
+	class TargetorInfoGetter
 	{
 	public: // Fluent-like API to set up
-		TargetorHelper & Targetable()
+		TargetorInfoGetter & Targetable()
 		{
 			info_.minion_filter = state::TargetorInfo::kMinionFilterTargetable;
 			return *this;
 		}
 
-		TargetorHelper & SpellTargetable()
+		TargetorInfoGetter & SpellTargetable()
 		{
 			info_.minion_filter = state::TargetorInfo::kMinionFilterTargetableBySpell;
 			return *this;
 		}
 
-		TargetorHelper & Murlocs()
+		TargetorInfoGetter & Murlocs()
 		{
 			info_.minion_filter = state::TargetorInfo::kMinionFilterMurloc;
 			return *this;
 		}
 
 		template <typename Context>
-		TargetorHelper & Ally(Context&& context)
+		TargetorInfoGetter & Ally(Context&& context)
 		{
 			return Player(context.card_.GetPlayerIdentifier());
 		}
 
 		template <typename Context>
-		TargetorHelper & Enemy(Context&& context)
+		TargetorInfoGetter & Enemy(Context&& context)
 		{
 			return AnotherPlayer(context.card_.GetPlayerIdentifier());
 		}
 
-		TargetorHelper & Minion()
+		TargetorInfoGetter & Minion()
 		{
 			info_.include_hero = false;
 			assert(info_.include_minion == true);
 			return *this;
 		}
 
-		TargetorHelper & Hero()
+		TargetorInfoGetter & Hero()
 		{
 			info_.include_minion = false;
 			assert(info_.include_hero == true);
 			return *this;
 		}
 
-		TargetorHelper & Exclude(state::CardRef ref)
+		TargetorInfoGetter & Exclude(state::CardRef ref)
 		{
 			assert(info_.exclude.IsValid() == false); // only support one exclusion
 			info_.exclude = ref;
@@ -63,7 +63,7 @@ namespace Cards
 		}
 
 	private:
-		TargetorHelper & Player(state::PlayerIdentifier player)
+		TargetorInfoGetter & Player(state::PlayerIdentifier player)
 		{
 			if (player.IsFirst()) {
 				info_.include_first = true;
@@ -76,7 +76,7 @@ namespace Cards
 			return *this;
 		}
 
-		TargetorHelper & AnotherPlayer(state::PlayerIdentifier player)
+		TargetorInfoGetter & AnotherPlayer(state::PlayerIdentifier player)
 		{
 			return Player(player.Opposite());
 		}

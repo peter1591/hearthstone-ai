@@ -2,7 +2,7 @@
 
 #include "state/IActionParameterGetter.h"
 #include "state/TargetorInfo.h"
-#include "Cards/TargetorUtils.h"
+#include "Cards/TargetorInfoGetter.h"
 
 namespace state {
 	class ActionParameterWrapper
