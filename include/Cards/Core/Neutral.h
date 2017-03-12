@@ -157,7 +157,7 @@ namespace Cards
 		Card_EX1_506()
 		{
 			battlecry = [](auto context) {
-				Summon(context, Cards::ID_EX1_506a);
+				SummonToRight(context, Cards::ID_EX1_506a);
 			};
 		}
 	};
@@ -285,7 +285,7 @@ namespace Cards
 		Card_CS2_196()
 		{
 			battlecry = [](auto context) {
-				Summon(context, Cards::ID_CS2_boar);
+				SummonToRight(context, Cards::ID_CS2_boar);
 			};
 		}
 	};
@@ -366,7 +366,7 @@ namespace Cards
 		Card_EX1_025()
 		{
 			battlecry = [](auto context) {
-				Summon(context, Cards::ID_EX1_025t);
+				SummonToRight(context, Cards::ID_EX1_025t);
 			};
 		}
 	};

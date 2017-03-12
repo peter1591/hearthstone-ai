@@ -24,10 +24,8 @@ namespace Cards
 			player_.resource_.IncreaseCurrent(amount);
 		}
 
-		bool IsMinionsFull() const
-		{
-			return player_.minions_.Full();
-		}
+		bool IsMinionsFull() const { return player_.minions_.Full(); }
+		auto GetMinionsCount() const { return player_.minions_.Size(); }
 
 	private:
 		Context & context_;
@@ -132,6 +130,12 @@ namespace Cards
 		static TargetorHelper Targets() { return TargetorHelper(); }
 
 		template <typename Context>
+		static state::PlayerIdentifier OwnedPlayer(Context&& context)
+		{
+			return context.card_.GetPlayerIdentifier();
+		}
+
+		template <typename Context>
 		static state::CardRef Owner(Context&& context)
 		{
 			return context.state_.board.Get(context.card_.GetPlayerIdentifier()).hero_ref_;
@@ -141,6 +145,12 @@ namespace Cards
 		static state::CardRef Opponent(Context&& context)
 		{
 			return context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_;
+		}
+
+		template <typename Context>
+		static PlayerHelper<Context> Player(Context&& context, state::PlayerIdentifier player)
+		{
+			return PlayerHelper<Context>(context, context.state_.board.Get(player));
 		}
 
 		template <typename Context>
@@ -196,27 +206,41 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static void Summon(Context && context, int card_id)
+		static void SummonToRight(Context && context, int card_id)
 		{
-			if (Player(context).IsMinionsFull()) return;
-
-			state::Cards::CardData card_data = FlowControl::Dispatchers::Minions::CreateInstance(card_id);
-
-			card_data.enchantable_states.player = context.card_.GetPlayerIdentifier();
-			card_data.zone = state::kCardZonePlay;
-			card_data.zone_position = context.card_.GetZonePosition() + 1;
-
-			assert(card_data.zone_position <= 6);
-
-			card_data.enchantment_aux_data.origin_states = card_data.enchantable_states;
-
-			state::CardRef ref = context.state_.mgr.PushBack(
-				context.state_, context.flow_context_, state::Cards::Card(card_data));
-
-			FlowControl::Manipulate(context.state_, context.flow_context_)
-				.Board().Summon(ref);
+			int pos = context.card_.GetZonePosition() + 1;
+			return SummonInternal(std::forward<Context>(context), card_id, context.card_.GetPlayerIdentifier(), pos);
 		}
 
+		template <typename Context>
+		static void SummonToLeft(Context && context, int card_id)
+		{
+			int pos = context.card_.GetZonePosition();
+			return SummonInternal(std::forward<Context>(context), card_id, context.card_.GetPlayerIdentifier(), pos);
+		}
+
+		template <typename Context>
+		static void SummonToEnemy(Context && context, int card_id)
+		{
+			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier().Opposite();
+			int pos = context.state_.board.Get(player.Opposite()).minions_.Size();
+			return SummonInternal(std::forward<Context>(context), card_id, player, pos);
+		}
+
+	private:
+		template <typename Context>
+		static void SummonInternal(Context&& context, int card_id, state::PlayerIdentifier player, int pos)
+		{
+			if (context.state_.board.Get(player).minions_.Full()) return;
+
+			state::Cards::CardData card_data = FlowControl::Dispatchers::Minions::CreateInstance(card_id);
+			card_data.enchantable_states.player = player;
+
+			FlowControl::Manipulate(context.state_, context.flow_context_)
+				.Board().Summon(std::move(card_data), player, pos);
+		}
+
+	public:
 		template <typename Context, typename Functor>
 		static void ForEach(
 			Context&& context,

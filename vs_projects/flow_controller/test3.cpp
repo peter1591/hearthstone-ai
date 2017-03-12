@@ -62,9 +62,7 @@ static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state,
 {
 	state::Cards::CardData raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
 	raw_card.enchantable_states.player = player;
-	raw_card.zone = state::kCardZoneDeck;
-	raw_card.zone_position = (int)state.board.Get(player).deck_.Size();
-
+	raw_card.zone = state::kCardZoneInvalid;
 	raw_card.enchantment_aux_data.origin_states = raw_card.enchantable_states;
 
 	return state::Cards::Card(raw_card);
@@ -78,15 +76,15 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 	((Test3_RandomGenerator&)(flow_context.random_)).called = false;
 
 	auto ref = state.mgr.PushBack(state, flow_context, CreateDeckCard(id, state, player));
+	FlowControl::Manipulate(state, flow_context).Card(ref).Zone().ChangeTo<state::kCardZoneDeck>(player);
+
 	if (deck_count > 0) assert(((Test3_RandomGenerator&)(flow_context.random_)).called);
 	++deck_count;
 
 	assert(state.board.Get(player).deck_.Size() == deck_count);
-	assert(state.board.Get(player).deck_.GetLast() == ref);
 	assert(state.mgr.Get(ref).GetCardId() == id);
 	assert(state.mgr.Get(ref).GetPlayerIdentifier() == player);
 	assert(state.mgr.Get(ref).GetZone() == state::kCardZoneDeck);
-	assert(state.mgr.Get(ref).GetZonePosition() == (deck_count - 1));
 
 	return ref;
 }
@@ -107,9 +105,7 @@ static state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type,
 	else throw std::exception("unknown type");
 
 	raw_card.enchantable_states.player = player;
-	raw_card.zone = state::kCardZoneHand;
-	raw_card.zone_position = (int)state.board.Get(player).hand_.Size();
-
+	raw_card.zone = state::kCardZoneInvalid;
 	raw_card.enchantment_aux_data.origin_states = raw_card.enchantable_states;
 
 	return state::Cards::Card(raw_card);
@@ -120,6 +116,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, state:
 	int hand_count = (int)state.board.Get(player).hand_.Size();
 
 	auto ref = state.mgr.PushBack(state, flow_context, CreateHandCard(id, type, state, player));
+	FlowControl::Manipulate(state, flow_context).Card(ref).Zone().ChangeTo<state::kCardZoneHand>(player);
 
 	assert(state.mgr.Get(ref).GetCardId() == id);
 	assert(state.mgr.Get(ref).GetPlayerIdentifier() == player);
@@ -143,17 +140,20 @@ static void MakeHand(state::State & state, state::FlowContext & flow_context, st
 	AddHandCard(Cards::ID_CS2_141, state::kCardTypeMinion, flow_context, state, player);
 }
 
-static state::Cards::CardData GetHero(state::PlayerIdentifier player)
+static void MakeHero(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	state::Cards::CardData raw_card;
 	raw_card.card_id = 8;
 	raw_card.card_type = state::kCardTypeHero;
-	raw_card.zone = state::kCardZonePlay;
+	raw_card.zone = state::kCardZoneInvalid;
 	raw_card.enchantable_states.max_hp = 30;
 	raw_card.enchantable_states.player = player;
 	raw_card.enchantable_states.attack = 0;
 	raw_card.enchantment_aux_data.origin_states = raw_card.enchantable_states;
-	return raw_card;
+
+	state::CardRef ref = state.mgr.PushBack(state, flow_context, state::Cards::Card(raw_card));
+
+	FlowControl::Manipulate(state, flow_context).Hero(ref).Zone().ChangeTo<state::kCardZonePlay>(player);
 }
 
 struct MinionCheckStats
@@ -209,11 +209,11 @@ void test3()
 
 	FlowControl::FlowController controller(state, parameter_getter, random);
 
-	state.mgr.PushBack(state, controller.flow_context_, state::Cards::Card(GetHero(state::PlayerIdentifier::First())));
+	MakeHero(state, controller.flow_context_, state::PlayerIdentifier::First());
 	MakeDeck(state, controller.flow_context_, state::PlayerIdentifier::First());
 	MakeHand(state, controller.flow_context_, state::PlayerIdentifier::First());
 
-	state.mgr.PushBack(state, controller.flow_context_, state::Cards::Card(GetHero(state::PlayerIdentifier::Second())));
+	MakeHero(state, controller.flow_context_, state::PlayerIdentifier::Second());
 	MakeDeck(state, controller.flow_context_, state::PlayerIdentifier::Second());
 	MakeHand(state, controller.flow_context_, state::PlayerIdentifier::Second());
 

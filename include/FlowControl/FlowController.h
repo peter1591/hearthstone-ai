@@ -15,7 +15,6 @@
 #include "FlowControl/Manipulators/BoardManipulator-impl.h"
 #include "FlowControl/Manipulators/Helpers/AuraHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
-#include "FlowControl/Manipulators/Helpers/OrderedCardsManager-impl.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/HealHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/ZoneChanger-impl.h"

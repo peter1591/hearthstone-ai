@@ -10,8 +10,8 @@ namespace FlowControl
 		class HeroManipulator : public CharacterManipulator
 		{
 		public:
-			HeroManipulator(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::PlayerIdentifier player_id)
-				: CharacterManipulator(state, flow_context, card_ref, card), player_id_(player_id)
+			HeroManipulator(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+				: CharacterManipulator(state, flow_context, card_ref, card), player_id_(card.GetPlayerIdentifier())
 			{
 				assert(card.GetCardType() == state::kCardTypeHero);
 			}

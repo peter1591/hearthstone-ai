@@ -10,9 +10,12 @@ namespace FlowControl
 		{
 			// we separate this to another class to impose a finer access control
 			class OrderedCardsManager;
+			template <state::CardType, state::CardZone> struct PlayerDataStructureMaintainer;
+
 			class ZonePositionSetter
 			{
 				friend class OrderedCardsManager;
+				template <state::CardType, state::CardZone> friend struct PlayerDataStructureMaintainer;
 
 			public:
 				ZonePositionSetter(state::Cards::Card & card) : card_(card) {}

@@ -9,14 +9,12 @@
 
 namespace state
 {
-	template <typename T>
-	CardRef Cards::Manager::PushBack(State & state, state::FlowContext & flow_context, T&& card)
+	// TODO: remove 'state', and 'flow_context'
+	inline CardRef Cards::Manager::PushBack(State & state, state::FlowContext & flow_context, Cards::Card&& card)
 	{
 		assert(this == &state.mgr);
-
-		CardRef ref = CardRef(cards_.PushBack(std::forward<T>(card)));
-
-		FlowControl::Manipulate(state, flow_context).Card(ref).Zone().Add();
+		assert(card.GetZone() == kCardZoneInvalid);
+		CardRef ref = CardRef(cards_.PushBack(std::move(card)));
 		return ref;
 	}
 }

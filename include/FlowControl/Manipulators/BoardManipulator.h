@@ -1,6 +1,7 @@
 #pragma once
 
 #include "state/IRandomGenerator.h"
+#include "state/Cards/CardData.h"
 
 namespace state {
 	class State;
@@ -19,7 +20,7 @@ namespace FlowControl
 			{
 			}
 
-			void Summon(state::CardRef ref);
+			void Summon(state::Cards::CardData&& card_data, state::PlayerIdentifier player, int pos);
 
 		private:
 			state::State & state_;

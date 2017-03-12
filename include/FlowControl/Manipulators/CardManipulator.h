@@ -39,10 +39,16 @@ namespace FlowControl
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 
 			Helpers::ZonePositionSetter ZonePosition() { return Helpers::ZonePositionSetter(card_); }
-			Helpers::ZoneChangerWithUnknownZoneUnknownType Zone()
+
+			template <state::CardZone CurrentZone>
+			void KnownZone()
 			{
 				// TODO: Can specialize the zone changer to accelerate when moving from a non-play zone to another non-play zone
 				// For example: deck --> hand
+			}
+
+			Helpers::ZoneChangerWithUnknownZoneUnknownType Zone()
+			{
 				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
 			}
 

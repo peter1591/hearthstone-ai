@@ -29,15 +29,15 @@ namespace state
 				return cards_.Get(id.id);
 			}
 
-			template <typename T> CardRef PushBack(State & state, FlowContext & flow_context, T&& card);
+			CardRef PushBack(State & state, FlowContext & flow_context, Cards::Card&& card);
 
 		public: // manipulators
 			FlowControl::Manipulators::CardManipulator GetCardManipulator(State& state, FlowContext& flow_context, CardRef ref) {
 				return FlowControl::Manipulators::CardManipulator(state, flow_context, ref, GetMutable(ref));
 			}
 
-			FlowControl::Manipulators::HeroManipulator GetHeroManipulator(State& state, FlowContext& flow_context, CardRef ref, PlayerIdentifier player) {
-				return FlowControl::Manipulators::HeroManipulator(state, flow_context, ref, GetMutable(ref), player);
+			FlowControl::Manipulators::HeroManipulator GetHeroManipulator(State& state, FlowContext& flow_context, CardRef ref) {
+				return FlowControl::Manipulators::HeroManipulator(state, flow_context, ref, GetMutable(ref));
 			}
 
 			FlowControl::Manipulators::MinionManipulator GetMinionManipulator(State& state, FlowContext& flow_context, CardRef ref) {

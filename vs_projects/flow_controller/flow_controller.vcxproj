@@ -163,8 +163,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h" />
@@ -178,7 +176,6 @@
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
     <ClInclude Include="..\..\include\state\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />
-    <ClInclude Include="..\..\include\state\board\DefaultZonePosPolicy.h" />
     <ClInclude Include="..\..\include\state\board\Graveyard.h" />
     <ClInclude Include="..\..\include\state\board\Hand.h" />
     <ClInclude Include="..\..\include\state\board\Minions.h" />

@@ -18,6 +18,7 @@ namespace FlowControl
 			class EnchantmentHelper;
 			class AuraHelper;
 			template <state::CardZone T1, state::CardType T2> class ZoneChanger;
+			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct PlayerDataStructureMaintainer;
 			class ZonePositionSetter;
 		}
 	}
@@ -55,6 +56,7 @@ namespace state
 			class LocationSetter
 			{
 				template <state::CardZone T1, state::CardType T2> friend class FlowControl::Manipulators::Helpers::ZoneChanger;
+				template <state::CardType, state::CardZone> friend struct PlayerDataStructureMaintainer;
 				friend class FlowControl::Manipulators::Helpers::ZonePositionSetter;
 
 			public:
@@ -72,6 +74,7 @@ namespace state
 					return *this;
 				}
 
+			public:
 				LocationSetter & Position(int pos)
 				{
 					data_.zone_position = pos;
@@ -95,6 +98,7 @@ namespace state
 
 		public:
 			explicit Card(const CardData & data) : data_(data) {}
+			explicit Card(CardData&& data) : data_(std::move(data)) {}
 
 		public: // getters and setters
 			int GetCardId() const { return data_.card_id; }

@@ -197,9 +197,6 @@
     <ClInclude Include="..\..\include\State\board\Board.h">
       <Filter>Header Files\state\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\board\DefaultZonePosPolicy.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
@@ -222,12 +219,6 @@
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\OrderedCardsManager-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h">

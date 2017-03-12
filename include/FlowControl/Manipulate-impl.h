@@ -16,6 +16,12 @@ namespace FlowControl
 		return state_.mgr.GetCardManipulator(state_, flow_context_, ref);
 	}
 
+	inline Manipulators::CardManipulator Manipulate::HandCard(state::CardRef ref)
+	{
+		// TODO: do some specialization
+		return state_.mgr.GetCardManipulator(state_, flow_context_, ref);
+	}
+
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
 	{
 		return Hero(state_.current_player);
@@ -29,7 +35,13 @@ namespace FlowControl
 	inline Manipulators::HeroManipulator Manipulate::Hero(state::PlayerIdentifier player)
 	{
 		state::CardRef ref = state_.board.Get(player).hero_ref_;
-		return state_.mgr.GetHeroManipulator(state_, flow_context_, ref, player);
+		assert(state_.mgr.Get(ref).GetPlayerIdentifier() == player);
+		return state_.mgr.GetHeroManipulator(state_, flow_context_, ref);
+	}
+
+	inline Manipulators::HeroManipulator Manipulate::Hero(state::CardRef hero_ref)
+	{
+		return state_.mgr.GetHeroManipulator(state_, flow_context_, hero_ref);
 	}
 
 	inline Manipulators::MinionManipulator Manipulate::Minion(state::CardRef ref)
