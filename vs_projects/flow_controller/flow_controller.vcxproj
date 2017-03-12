@@ -221,7 +221,7 @@
     <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h" />
     <ClInclude Include="..\..\include\state\Types.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
-    <ClInclude Include="..\..\include\Utils\Invokables.h" />
+    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h" />
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />
     <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
     <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />

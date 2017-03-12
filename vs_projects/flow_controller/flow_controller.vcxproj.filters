@@ -365,9 +365,6 @@
     <ClInclude Include="..\..\include\state\Cards\aura\AuraHandler.h">
       <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Utils\Invokables.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -379,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h">
       <Filter>Header Files\state\targetor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

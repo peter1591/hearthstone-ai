@@ -6,7 +6,7 @@
 namespace Utils
 {
 	template <typename RetType, typename... Args>
-	class Invokables
+	class InvokableWrappers
 	{
 	public:
 		template <typename T>

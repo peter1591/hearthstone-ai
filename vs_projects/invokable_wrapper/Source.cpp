@@ -5,10 +5,10 @@
 #include <list>
 
 #include "Utils/InvokableWrapper.h"
-#include "Utils/Invokables.h"
+#include "Utils/InvokableWrappers.h"
 #include "Utils/UnorderedInvokables.h"
 
-using Utils::Invokables;
+using Utils::InvokableWrappers;
 using Utils::UnorderedInvokables;
 
 void func1(int* counter)
@@ -19,7 +19,7 @@ void func1(int* counter)
 class AddTest
 {
 public:
-	AddTest(Invokables<void, int*>& list1, UnorderedInvokables<void, int*>& list2, std::vector<std::function<void(int*)>>& list3)
+	AddTest(InvokableWrappers<void, int*>& list1, UnorderedInvokables<void, int*>& list2, std::vector<std::function<void(int*)>>& list3)
 		: list1_(list1), list2_(list2), list3_(list3)
 	{}
 
@@ -31,7 +31,7 @@ public:
 	}
 
 private:
-	Invokables<void, int*> & list1_;
+	InvokableWrappers<void, int*> & list1_;
 	UnorderedInvokables<void, int*> & list2_;
 	std::vector<std::function<void(int*)>> & list3_;
 };
@@ -44,7 +44,7 @@ void test()
 
 	//std::vector<Invokable<void, int*>> functor_list1;
 	//std::vector<void(*)(int*)> functor_list1;
-	Invokables<void, int*> functor_list1;
+	InvokableWrappers<void, int*> functor_list1;
 	UnorderedInvokables<void, int*> functor_list2;
 	std::vector<std::function<void(int*)>> functor_list3;
 
