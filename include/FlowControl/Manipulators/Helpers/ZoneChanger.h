@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include "state/Types.h"
 #include "state/Cards/Card.h"
 #include "state/board/Player.h"
@@ -34,6 +35,7 @@ namespace FlowControl
 			private:
 				static void AddToDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
+					assert(card.GetZone() == state::kCardZoneDeck);
 					state.board.Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](auto exclusive_max) {
 						return flow_context.random_.Get(exclusive_max);
 					});
@@ -41,11 +43,13 @@ namespace FlowControl
 
 				static void AddToHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
+					assert(card.GetZone() == state::kCardZoneHand);
 					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
 				}
 
 				static void AddToPlayZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
+					assert(card.GetZone() == state::kCardZonePlay);
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
 					switch (TargetCardType)
@@ -66,7 +70,8 @@ namespace FlowControl
 
 				static void AddToGraveyardZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromGraveyard<TargetCardType>(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
+					assert(card.GetZone() == state::kCardZoneGraveyard);
+					state.board.Get(card.GetPlayerIdentifier()).graveyard_.Add<TargetCardType>(card_ref);
 				}
 			};
 
@@ -93,16 +98,19 @@ namespace FlowControl
 			private:
 				static void RemoveFromDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
+					assert(card.GetZone() == state::kCardZoneDeck);
 					state.board.Get(card.GetPlayerIdentifier()).deck_.RemoveLast();
 				}
 
 				static void RemoveFromHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
+					assert(card.GetZone() == state::kCardZoneHand);
 					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
 				}
 
 				static void RemoveFromPlayZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
+					assert(card.GetZone() == state::kCardZonePlay);
 					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
 
 					switch (RemovingCardType)
@@ -122,7 +130,8 @@ namespace FlowControl
 
 				static void RemoveFromGraveyardZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromGraveyard<RemovingCardType>(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
+					assert(card.GetZone() == state::kCardZoneGraveyard);
+					state.board.Get(card.GetPlayerIdentifier()).graveyard_.Remove<RemovingCardType>(card_ref);
 				}
 			};
 

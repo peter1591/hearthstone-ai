@@ -20,9 +20,6 @@ namespace FlowControl
 				static OrderedCardsManager FromHand(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player);
 				static OrderedCardsManager FromMinions(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player);
 
-				template <state::CardType TargetCardType>
-				static OrderedCardsManager FromGraveyard(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player);
-
 				void Insert(state::CardRef card_ref);
 				void Remove(size_t pos);
 
