@@ -371,5 +371,8 @@
     <ClInclude Include="..\..\include\state\TargetorInfo.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

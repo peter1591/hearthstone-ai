@@ -12,8 +12,8 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			template <state::CardType TargetCardType, state::CardZone TargetCardZone> class AddToPlayerDatStructure;
-			template <state::CardType TargetCardType, state::CardZone TargetCardZone> class RemoveFromPlayerDatStructure;
+			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct AddToPlayerDatStructure;
+			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct RemoveFromPlayerDatStructure;
 			class OrderedCardsManager;
 		}
 	}

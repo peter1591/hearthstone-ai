@@ -168,6 +168,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />

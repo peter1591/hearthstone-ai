@@ -13,128 +13,6 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			template <state::CardType TargetCardType, state::CardZone TargetCardZone>
-			class AddToPlayerDatStructure
-			{
-			public:
-				static void Add(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					switch (card.GetZone())
-					{
-					case state::kCardZoneDeck:
-						return AddToDeckZone(state, flow_context, card_ref, card);
-					case state::kCardZoneHand:
-						return AddToHandZone(state, flow_context, card_ref, card);
-					case state::kCardZonePlay:
-						return AddToPlayZone(state, flow_context, card_ref, card);
-					case state::kCardZoneGraveyard:
-						return AddToGraveyardZone(state, flow_context, card_ref, card);
-					}
-				}
-
-			private:
-				static void AddToDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZoneDeck);
-					state.board.Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](auto exclusive_max) {
-						return flow_context.random_.Get(exclusive_max);
-					});
-				}
-
-				static void AddToHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZoneHand);
-					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
-				}
-
-				static void AddToPlayZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZonePlay);
-					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
-
-					switch (TargetCardType)
-					{
-					case state::kCardTypeHero:
-						if (player.hero_ref_.IsValid()) throw std::exception("hero should be removed first");
-						player.hero_ref_ = card_ref;
-						return;
-					case state::kCardTypeMinion:
-						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
-					case state::kCardTypeSecret:
-						return player.secrets_.Add(card.GetCardId(), card_ref);
-					case state::kCardTypeWeapon:
-						assert(state.mgr.Get(player.hero_ref_).GetRawData().weapon_ref == card_ref);
-						return;
-					}
-				}
-
-				static void AddToGraveyardZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZoneGraveyard);
-					state.board.Get(card.GetPlayerIdentifier()).graveyard_.Add<TargetCardType>(card_ref);
-				}
-			};
-
-			template <state::CardType RemovingCardType, state::CardZone RemovingCardZone>
-			class RemoveFromPlayerDatStructure
-			{
-			public:
-				static void Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					switch (RemovingCardZone)
-					{
-					case state::kCardZoneDeck:
-						return RemoveFromDeckZone(state, flow_context, card_ref, card);
-					case state::kCardZoneHand:
-						return RemoveFromHandZone(state, flow_context, card_ref, card);
-					case state::kCardZonePlay:
-						return RemoveFromPlayZone(state, flow_context, card_ref, card);
-					case state::kCardZoneGraveyard:
-						return RemoveFromGraveyardZone(state, flow_context, card_ref, card);
-						break;
-					}
-				}
-
-			private:
-				static void RemoveFromDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZoneDeck);
-					state.board.Get(card.GetPlayerIdentifier()).deck_.RemoveLast();
-				}
-
-				static void RemoveFromHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZoneHand);
-					OrderedCardsManager::FromHand(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
-				}
-
-				static void RemoveFromPlayZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZonePlay);
-					state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
-
-					switch (RemovingCardType)
-					{
-					case state::kCardTypeHero:
-						player.hero_ref_.Invalidate();
-						return;
-					case state::kCardTypeMinion:
-						return OrderedCardsManager::FromMinions(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
-					case state::kCardTypeSecret:
-						return player.secrets_.Remove(card.GetCardId());
-					case state::kCardTypeWeapon:
-						assert(!state.mgr.Get(player.hero_ref_).GetRawData().weapon_ref.IsValid());
-						return;
-					}
-				}
-
-				static void RemoveFromGraveyardZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				{
-					assert(card.GetZone() == state::kCardZoneGraveyard);
-					state.board.Get(card.GetPlayerIdentifier()).graveyard_.Remove<RemovingCardType>(card_ref);
-				}
-			};
-
 			template <state::CardZone ChangingCardZone, state::CardType ChangingCardType>
 			class ZoneChanger
 			{
@@ -166,21 +44,21 @@ namespace FlowControl
 
 				void Add()
 				{
-					AddToPlayerDatStructure<ChangingCardType, ChangingCardZone>::Add(state_, flow_context_, card_ref_, card_);
+					PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Add(state_, flow_context_, card_ref_, card_);
 				}
 
 			private:
 				template <state::CardZone ChangeToZone>
 				void ChangeToInternal(state::PlayerIdentifier player_identifier, int pos)
 				{
-					RemoveFromPlayerDatStructure<ChangingCardType, ChangingCardZone>::Remove(state_, flow_context_, card_ref_, card_);
+					PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(state_, flow_context_, card_ref_, card_);
 
 					card_.SetLocation()
 						.Player(player_identifier)
 						.Zone(ChangeToZone)
 						.Position(pos);
 
-					AddToPlayerDatStructure<ChangingCardType, ChangeToZone>::Add(state_, flow_context_, card_ref_, card_);
+					PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(state_, flow_context_, card_ref_, card_);
 				}
 
 			private:
@@ -215,8 +93,6 @@ namespace FlowControl
 						return ZoneChanger<state::kCardZoneSetASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					case state::kCardZoneRemoved:
 						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
-					case state::kCardZoneSecret:
-						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 					default:
 						throw std::exception("Unknown card zone");
 					}
@@ -239,8 +115,6 @@ namespace FlowControl
 						return ZoneChanger<state::kCardZoneSetASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					case state::kCardZoneRemoved:
 						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
-					case state::kCardZoneSecret:
-						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, flow_context_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 					default:
 						throw std::exception("Unknown card zone");
 					}
@@ -262,8 +136,6 @@ namespace FlowControl
 						return ZoneChanger<state::kCardZoneSetASide, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					case state::kCardZoneRemoved:
 						return ZoneChanger<state::kCardZoneRemoved, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
-					case state::kCardZoneSecret:
-						return ZoneChanger<state::kCardZoneSecret, ChangingCardType>(state_, flow_context_, card_ref_, card_).Add();
 					default:
 						throw std::exception("Unknown card zone");
 					}

@@ -28,7 +28,6 @@ namespace state
 		kCardZonePlay,
 		kCardZoneDeck,
 		kCardZoneHand,
-		kCardZoneSecret,
 		kCardZoneGraveyard,
 		kCardZoneRemoved,
 		kCardZoneSetASide,
