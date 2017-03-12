@@ -8,10 +8,6 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline OrderedCardsManager OrderedCardsManager::FromDeck(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player)
-			{
-				return OrderedCardsManager(state, flow_context, state.board.Get(player).deck_.cards_);
-			}
 			inline OrderedCardsManager OrderedCardsManager::FromHand(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player)
 			{
 				return OrderedCardsManager(state, flow_context, state.board.Get(player).hand_.cards_);

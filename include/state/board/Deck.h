@@ -26,46 +26,9 @@ namespace state
 		class Deck
 		{
 		public:
-			class LocationManipulator
-			{
-				template <CardType TargetCardType, CardZone TargetCardZone> friend class FlowControl::Manipulators::Helpers::AddToPlayerDatStructure;
-				template <CardType TargetCardType, CardZone TargetCardZone> friend class FlowControl::Manipulators::Helpers::RemoveFromPlayerDatStructure;
-
-			public:
-				explicit LocationManipulator(Deck & deck) : deck_(deck) {}
-
-			private:
-				template <typename T1, typename T2>
-				void Insert(T1&& state, T2&& card_ref)
-				{
-					++deck_.change_id;
-					auto instance = OrderedCardsManager(deck_.cards_);
-					return instance.Insert(std::forward<T1>(state), std::forward<T2>(card_ref));
-				}
-				template <typename T1, typename T2>
-				void Remove(T1&& state, T2&& pos)
-				{
-					++deck_.change_id;
-					auto instance = OrderedCardsManager(deck_.cards_);
-					return instance.Remove(std::forward<T1>(state), std::forward<T2>(pos));
-				}
-
-			private:
-				Deck & deck_;
-			};
-			friend class LocationManipulator;
-
-		public:
-			friend class FlowControl::Manipulators::Helpers::OrderedCardsManager;
-
 			Deck() : change_id(0)
 			{
 				cards_.reserve(40);
-			}
-
-			LocationManipulator GetLocationManipulator()
-			{
-				return LocationManipulator(*this);
 			}
 
 			CardRef GetLast() const { return cards_.back(); }
