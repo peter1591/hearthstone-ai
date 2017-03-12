@@ -4,10 +4,10 @@
 #include <vector>
 #include <unordered_set>
 #include "state/Types.h"
-#include "state/utils/Targets.h"
+#include "state/targetor/Targets.h"
 
 namespace state {
-	namespace utils {
+	namespace targetor {
 		class TargetsGenerator
 		{
 		public: // Fluent-like API to set up

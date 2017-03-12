@@ -217,9 +217,9 @@
     <ClInclude Include="..\..\include\state\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\state\State.h" />
+    <ClInclude Include="..\..\include\state\targetor\Targets.h" />
+    <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h" />
     <ClInclude Include="..\..\include\state\Types.h" />
-    <ClInclude Include="..\..\include\state\utils\Targets.h" />
-    <ClInclude Include="..\..\include\state\utils\TargetsGenerator.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
     <ClInclude Include="..\..\include\Utils\Invokables.h" />
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />

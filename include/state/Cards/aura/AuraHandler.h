@@ -3,7 +3,7 @@
 #include "state/Cards/aura/Contexts.h"
 
 namespace state {
-	namespace utils { class TargetsGenerator; }
+	namespace targetor { class TargetsGenerator; }
 
 	namespace Cards {
 		namespace aura {

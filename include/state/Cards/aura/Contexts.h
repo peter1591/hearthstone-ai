@@ -7,7 +7,7 @@ namespace state {
 	class FlowContext;
 	class CardRef;
 
-	namespace utils { class TargetsGenerator; }
+	namespace targetor { class TargetsGenerator; }
 
 	namespace Cards {
 		class Card;
@@ -31,7 +31,7 @@ namespace state {
 					CardRef card_ref_;
 					const Card & card_;
 					aura::AuraAuxData & aura_data_;
-					utils::TargetsGenerator & targets_generator_;
+					targetor::TargetsGenerator & targets_generator_;
 				};
 
 				struct AuraIsValid

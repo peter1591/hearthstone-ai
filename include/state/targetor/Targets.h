@@ -8,7 +8,7 @@ namespace state {
 	class State;
 	class FlowContext;
 
-	namespace utils {
+	namespace targetor {
 		class Targets
 		{
 		public:

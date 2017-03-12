@@ -3,7 +3,7 @@
 
 #include <assert.h>
 #include "state/State.h"
-#include "state/utils/TargetsGenerator.h"
+#include "state/targetor/TargetsGenerator.h"
 #include "FlowControl/Contexts.h"
 #include "FlowControl/Manipulate.h"
 
@@ -27,7 +27,7 @@ namespace FlowControl
 					data.removed = true; // aura will be removed in the next AuraUpdate event
 				}
 				else {
-					state::utils::TargetsGenerator targets_generator;
+					state::targetor::TargetsGenerator targets_generator;
 					(*card_.GetRawData().aura_handler.get_targets)
 						({ state_, flow_context_, card_ref_, card_, data, targets_generator });
 					targets_generator.GetInfo().Fill(state_, new_targets);

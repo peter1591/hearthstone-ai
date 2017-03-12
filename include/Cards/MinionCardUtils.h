@@ -2,7 +2,7 @@
 
 #include "FlowControl/Contexts.h"
 #include "state/State.h"
-#include "state/utils/TargetsGenerator.h"
+#include "state/targetor/TargetsGenerator.h"
 
 namespace Cards
 {
@@ -127,7 +127,7 @@ namespace Cards
 			return HealHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
 
-		static state::utils::TargetsGenerator Targets() { return state::utils::TargetsGenerator(); }
+		static state::targetor::TargetsGenerator Targets() { return state::targetor::TargetsGenerator(); }
 
 		template <typename Context>
 		static state::PlayerIdentifier OwnedPlayer(Context&& context)
@@ -197,7 +197,7 @@ namespace Cards
 
 		static void SetBattlecryTarget(
 			FlowControl::Context::BattlecryTargetGetter&& context,
-			state::utils::TargetsGenerator const& targets_generator)
+			state::targetor::TargetsGenerator const& targets_generator)
 		{
 			context.flow_context_.battlecry_target_ =
 				context.flow_context_.action_parameters_.GetBattlecryTarget(
@@ -244,7 +244,7 @@ namespace Cards
 		template <typename Context, typename Functor>
 		static void ForEach(
 			Context&& context,
-			state::utils::TargetsGenerator const& targets_generator,
+			state::targetor::TargetsGenerator const& targets_generator,
 			Functor&& func)
 		{
 			targets_generator.GetInfo().ForEach(context.state_, context.flow_context_, func);

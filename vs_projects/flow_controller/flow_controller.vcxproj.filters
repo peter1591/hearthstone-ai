@@ -70,7 +70,7 @@
     <Filter Include="Header Files\state\Cards\aura">
       <UniqueIdentifier>{bd534890-6dde-4331-a6b3-394e8aff6166}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\state\utils">
+    <Filter Include="Header Files\state\targetor">
       <UniqueIdentifier>{2b9f1389-0ea1-4c53-8b13-2c3f02283d9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -365,12 +365,6 @@
     <ClInclude Include="..\..\include\state\Cards\aura\AuraHandler.h">
       <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\utils\Targets.h">
-      <Filter>Header Files\state\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\utils\TargetsGenerator.h">
-      <Filter>Header Files\state\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\Invokables.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -379,6 +373,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\state\Cards\aura\Contexts.h">
       <Filter>Header Files\state\Cards\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\targetor\Targets.h">
+      <Filter>Header Files\state\targetor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h">
+      <Filter>Header Files\state\targetor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

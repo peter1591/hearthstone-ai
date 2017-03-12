@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Cards/aura/AuraHandler.h"
-#include "state/utils/TargetsGenerator.h"
+#include "state/targetor/TargetsGenerator.h"
 #include "Cards/MinionCardUtils.h"
 
 namespace Cards
