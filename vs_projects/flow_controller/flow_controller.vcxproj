@@ -220,9 +220,11 @@
     <ClInclude Include="..\..\include\state\utils\Targets.h" />
     <ClInclude Include="..\..\include\state\utils\TargetsGenerator.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
+    <ClInclude Include="..\..\include\Utils\Invokables.h" />
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />
     <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
     <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />
+    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

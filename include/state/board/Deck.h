@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <vector>
+#include <array>
 #include "state/Types.h"
 #include "state/Cards/Manager.h"
 #include "state/Cards/Card.h"
@@ -26,36 +26,38 @@ namespace state
 		class Deck
 		{
 		public:
-			Deck() : change_id(0)
-			{
-				cards_.reserve(40);
-			}
+			Deck() : change_id_(0), size_(0) {}
 
-			CardRef GetLast() const { return cards_.back(); }
+			CardRef GetLast() const { return cards_[size_-1]; }
 
-			size_t Size() const { return cards_.size(); }
-			bool Empty() const { return cards_.empty(); }
+			int Size() const { return size_; }
+			bool Empty() const { return size_ == 0; }
 
 			template <typename RandomGenerator>
 			void ShuffleAdd(CardRef card, RandomGenerator&& rand)
 			{
-				++change_id;
-				auto it_new = cards_.insert(cards_.end(), card);
+				assert(size_ < max_size);
 
-				if (cards_.size() <= 1) return;
-				auto rand_idx = rand(cards_.size());
-				std::iter_swap(cards_.begin() + rand_idx, it_new);
+				++change_id_;
+				cards_[size_] = card;
+				++size_;
+
+				if (size_ <= 1) return;
+				auto rand_idx = rand(size_);
+				std::swap(cards_[rand_idx], cards_[size_ - 1]);
 			}
 
 			void RemoveLast()
 			{
-				++change_id;
-				cards_.pop_back();
+				++change_id_;
+				--size_;
 			}
 
 		private:
-			int change_id;
-			std::vector<CardRef> cards_;
+			constexpr static int max_size = 80;
+			int change_id_;
+			int size_;
+			std::array<CardRef, max_size> cards_;
 		};
 	}
 }

@@ -371,5 +371,11 @@
     <ClInclude Include="..\..\include\state\utils\TargetsGenerator.h">
       <Filter>Header Files\state\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Utils\Invokables.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
