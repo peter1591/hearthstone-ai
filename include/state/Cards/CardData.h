@@ -49,17 +49,17 @@ namespace state
 			int num_attacks_this_turn;
 
 			EnchantableStates enchantable_states;
-
 			EnchantmentAuxData enchantment_aux_data;
 
+		public:
+			aura::AuraHandler aura_handler;
 			aura::AuraAuxData aura_aux_data;
 
 		public: // callbacks, not subject to change when game flows
-			AddedToPlayZoneCallback *added_to_play_zone;
+			AddedToPlayZoneCallback *added_to_play_zone; // TODO: support add several callbacks
 			BattlecryTargetGetter *battlecry_target_getter;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;
-			aura::AuraHandler aura_handler;
 
 		public: // for hero type
 			CardRef weapon_ref;

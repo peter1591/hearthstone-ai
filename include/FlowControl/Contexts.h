@@ -45,7 +45,15 @@ namespace FlowControl
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 			state::Cards::aura::AuraAuxData & aura_data_;
-			std::unordered_set<state::CardRef> & targets_;
+			state::utils::TargetsGenerator & targets_generator_;
+		};
+
+		struct AuraIsValid
+		{
+			state::State & state_;
+			state::FlowContext & flow_context_;
+			state::CardRef card_ref_;
+			const state::Cards::Card & card_;
 		};
 
 		struct AuraRemoveFrom
@@ -73,6 +81,15 @@ namespace FlowControl
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
+
+		/* TODO
+		struct BattleycryGenerateTargets
+		{
+			state::State & state_;
+			state::CardRef card_ref_;
+			const state::Cards::Card & card_;
+			state::utils::Targets & 
+		};*/
 
 		struct Deathrattle
 		{

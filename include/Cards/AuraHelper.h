@@ -12,35 +12,30 @@ namespace Cards
 	{
 	public:
 		AuraHelper(state::Cards::CardData & card_data)
-			: card_data_(card_data), targetor_getter_(nullptr)
+			: card_data_(card_data)
 		{
+			card_data_.aura_handler.is_valid = [](auto context) {
+				return MinionCardUtils::IsAlive(context, context.card_ref_);
+			};
 		}
 
 		~AuraHelper()
 		{
-			assert(targetor_getter_);
 			ApplyToAuraHandler();
 		}
 
-		AuraHelper & Target(state::Cards::aura::AuraHandler::FuncGetTargetorInfoGetter * targetor_getter)
+		AuraHelper & Target(state::Cards::aura::AuraHandler::FuncGetTargets* get_targets)
 		{
-			targetor_getter_ = targetor_getter;
+			assert(get_targets != nullptr);
+			card_data_.aura_handler.get_targets = get_targets;
 			return *this;
 		}
 
 	private:
 		void ApplyToAuraHandler()
 		{
-			card_data_.aura_handler.get_targetor_helper = targetor_getter_;
-			card_data_.aura_handler.get_targets = [](auto context) {
-				if (!MinionCardUtils::IsAlive(context, context.card_ref_)) {
-					context.aura_data_.removed = true;
-					return;
-				}
-				state::utils::TargetsGenerator targets_generator;
-				(*context.card_.GetRawData().aura_handler.get_targetor_helper)(context, targets_generator);
-				targets_generator.GetInfo().Fill(context.state_, context.targets_);
-			};
+			assert(card_data_.aura_handler.get_targets != nullptr);
+
 			card_data_.aura_handler.apply_on = [](auto context) {
 				context.enchant_id_ = MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
 			};
@@ -66,6 +61,5 @@ namespace Cards
 
 	private:
 		state::Cards::CardData & card_data_;
-		state::Cards::aura::AuraHandler::FuncGetTargetorInfoGetter * targetor_getter_;
 	};
 }

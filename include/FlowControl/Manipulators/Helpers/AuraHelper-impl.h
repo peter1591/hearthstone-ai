@@ -2,9 +2,10 @@
 #include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 
 #include <assert.h>
+#include "state/State.h"
+#include "state/utils/TargetsGenerator.h"
 #include "FlowControl/Contexts.h"
 #include "FlowControl/Manipulate.h"
-#include "state/State.h"
 
 namespace FlowControl
 {
@@ -14,16 +15,23 @@ namespace FlowControl
 		{
 			inline void AuraHelper::Update()
 			{
-				if (card_.GetRawData().aura_handler.get_targets == nullptr) return; // no aura attached
-
+				if (card_.GetRawData().aura_handler.is_valid == nullptr) return; // no aura attached
+				assert(card_.GetRawData().aura_handler.get_targets);
 				assert(card_.GetRawData().aura_handler.apply_on);
 				assert(card_.GetRawData().aura_handler.remove_from);
 
+				std::unordered_set<state::CardRef> new_targets;
 				state::Cards::aura::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
 
-				std::unordered_set<state::CardRef> new_targets;
-				(*card_.GetRawData().aura_handler.get_targets)
-					({ state_, flow_context_, card_ref_, card_, data, new_targets });
+				if (!(*card_.GetRawData().aura_handler.is_valid)({ state_, flow_context_, card_ref_, card_ })) {
+					data.removed = true; // aura will be removed in the next AuraUpdate event
+				}
+				else {
+					state::utils::TargetsGenerator targets_generator;
+					(*card_.GetRawData().aura_handler.get_targets)
+						({ state_, flow_context_, card_ref_, card_, data, targets_generator });
+					targets_generator.GetInfo().Fill(state_, new_targets);
+				}
 
 				for (auto it = data.applied_enchantments.begin(), it2 = data.applied_enchantments.end(); it != it2;)
 				{

@@ -61,8 +61,8 @@ namespace Cards
 
 		Card_EX1_508()
 		{
-			Aura<Card_EX1_508o>().Target([](auto& context, auto& targetor) {
-				targetor
+			Aura<Card_EX1_508o>().Target([](auto&& context) {
+				context.targets_generator_
 					.Ally(context).Minion().Murlocs() // friendly murlocs only
 					.Exclude(context.card_ref_); // only apply on other murlocs
 			});
@@ -261,8 +261,8 @@ namespace Cards
 
 		Card_CS2_122()
 		{
-			Aura<Card_CS2_122e>().Target([](auto& context, auto& targetor) {
-				targetor
+			Aura<Card_CS2_122e>().Target([](auto&& context) {
+				context.targets_generator_
 					.Ally(context).Minion() // friendly minions
 					.Exclude(context.card_ref_); // only apply on other
 			});
@@ -621,8 +621,8 @@ namespace Cards
 
 		Card_CS2_222()
 		{
-			Aura<Card_CS2_222o>().Target([](auto& context, auto& targetor) {
-				targetor
+			Aura<Card_CS2_222o>().Target([](auto&& context) {
+				context.targets_generator_
 					.Ally(context).Minion() // friendly minions
 					.Exclude(context.card_ref_); // only apply on other
 			});
