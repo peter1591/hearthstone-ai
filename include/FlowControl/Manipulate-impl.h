@@ -16,12 +16,6 @@ namespace FlowControl
 		return state_.mgr.GetCardManipulator(state_, flow_context_, ref);
 	}
 
-	inline Manipulators::CardManipulator Manipulate::HandCard(state::CardRef ref)
-	{
-		// TODO: do some specialization
-		return state_.mgr.GetCardManipulator(state_, flow_context_, ref);
-	}
-
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
 	{
 		return Hero(state_.current_player);

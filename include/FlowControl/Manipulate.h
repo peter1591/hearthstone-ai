@@ -21,7 +21,6 @@ namespace FlowControl
 		Manipulate(state::State & state, state::FlowContext & flow_context);
 
 		Manipulators::CardManipulator Card(state::CardRef ref);
-		Manipulators::CardManipulator HandCard(state::CardRef ref);
 		Manipulators::HeroManipulator CurrentHero();
 		Manipulators::HeroManipulator OpponentHero();
 		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player);

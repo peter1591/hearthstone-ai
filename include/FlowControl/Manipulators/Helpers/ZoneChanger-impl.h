@@ -112,7 +112,7 @@ namespace FlowControl
 				assert(state.board.Get(card.GetPlayerIdentifier()).hand_.Get(pos) == card_ref);
 				auto& hand = state.board.Get(card.GetPlayerIdentifier()).hand_;
 				hand.Remove(pos, [&state, &flow_context](state::CardRef ref, size_t pos) {
-					Manipulate(state, flow_context).HandCard(ref).ZonePosition().Set((int)pos);
+					Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
 				});
 			}
 
@@ -211,6 +211,20 @@ namespace FlowControl
 			inline void PlayerDataStructureMaintainer<state::kCardTypeHeroPower, state::kCardZonePlay>::
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == state::kCardTypeHeroPower);
+				assert(card.GetZone() == state::kCardZonePlay);
+				// do nothing
+			}
+
+			inline void PlayerDataStructureMaintainer<state::kCardTypeEnchantment, state::kCardZonePlay>::
+				Add(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
+			{
+				assert(card.GetCardType() == state::kCardTypeEnchantment);
+				assert(card.GetZone() == state::kCardZonePlay);
+				// do nothing
+			}
+			inline void PlayerDataStructureMaintainer<state::kCardTypeEnchantment, state::kCardZonePlay>::
+				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
+				assert(card.GetCardType() == state::kCardTypeEnchantment);
 				assert(card.GetZone() == state::kCardZonePlay);
 				// do nothing
 			}
