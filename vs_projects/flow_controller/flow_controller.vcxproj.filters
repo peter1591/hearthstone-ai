@@ -365,8 +365,8 @@
     <ClInclude Include="..\..\include\state\Cards\aura\AuraHandler.h">
       <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\TargetorInfoGetter.h">
-      <Filter>Header Files\Cards</Filter>
+    <ClInclude Include="..\..\include\state\TargetorInfoGetter.h">
+      <Filter>Header Files\state</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

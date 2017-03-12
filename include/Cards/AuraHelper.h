@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Cards/aura/AuraHandler.h"
-#include "Cards/TargetorInfoGetter.h"
+#include "state/TargetorInfoGetter.h"
 #include "Cards/MinionCardUtils.h"
 
 namespace Cards
@@ -37,7 +37,7 @@ namespace Cards
 					context.aura_data_.removed = true;
 					return;
 				}
-				Cards::TargetorInfoGetter targetor;
+				state::TargetorInfoGetter targetor;
 				(*context.card_.GetRawData().aura_handler.get_targetor_helper)(context, targetor);
 				targetor.GetInfo().FillTargets(context.state_, context.targets_);
 			};

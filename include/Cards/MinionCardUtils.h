@@ -2,7 +2,7 @@
 
 #include "FlowControl/Contexts.h"
 #include "state/State.h"
-#include "Cards/TargetorInfoGetter.h"
+#include "state/TargetorInfoGetter.h"
 
 namespace Cards
 {
@@ -127,7 +127,7 @@ namespace Cards
 			return HealHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
 
-		static TargetorInfoGetter Targets() { return TargetorInfoGetter(); }
+		static state::TargetorInfoGetter Targets() { return state::TargetorInfoGetter(); }
 
 		template <typename Context>
 		static state::PlayerIdentifier OwnedPlayer(Context&& context)
@@ -197,7 +197,7 @@ namespace Cards
 
 		static void SetBattlecryTarget(
 			FlowControl::Context::BattlecryTargetGetter&& context,
-			TargetorInfoGetter const& targetor)
+			state::TargetorInfoGetter const& targetor)
 		{
 			context.flow_context_.battlecry_target_ =
 				context.flow_context_.action_parameters_.GetBattlecryTarget(
@@ -244,7 +244,7 @@ namespace Cards
 		template <typename Context, typename Functor>
 		static void ForEach(
 			Context&& context,
-			TargetorInfoGetter const& targetor,
+			state::TargetorInfoGetter const& targetor,
 			Functor&& func)
 		{
 			targetor.GetInfo().ForEach(context.state_, context.flow_context_, func);

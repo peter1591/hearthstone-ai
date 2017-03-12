@@ -6,26 +6,26 @@
 #include "state/Types.h"
 #include "state/TargetorInfo.h"
 
-namespace Cards
+namespace state
 {
 	class TargetorInfoGetter
 	{
 	public: // Fluent-like API to set up
 		TargetorInfoGetter & Targetable()
 		{
-			info_.minion_filter = state::TargetorInfo::kMinionFilterTargetable;
+			info_.minion_filter = TargetorInfo::kMinionFilterTargetable;
 			return *this;
 		}
 
 		TargetorInfoGetter & SpellTargetable()
 		{
-			info_.minion_filter = state::TargetorInfo::kMinionFilterTargetableBySpell;
+			info_.minion_filter = TargetorInfo::kMinionFilterTargetableBySpell;
 			return *this;
 		}
 
 		TargetorInfoGetter & Murlocs()
 		{
-			info_.minion_filter = state::TargetorInfo::kMinionFilterMurloc;
+			info_.minion_filter = TargetorInfo::kMinionFilterMurloc;
 			return *this;
 		}
 
@@ -55,7 +55,7 @@ namespace Cards
 			return *this;
 		}
 
-		TargetorInfoGetter & Exclude(state::CardRef ref)
+		TargetorInfoGetter & Exclude(CardRef ref)
 		{
 			assert(info_.exclude.IsValid() == false); // only support one exclusion
 			info_.exclude = ref;
@@ -63,7 +63,7 @@ namespace Cards
 		}
 
 	private:
-		TargetorInfoGetter & Player(state::PlayerIdentifier player)
+		TargetorInfoGetter & Player(PlayerIdentifier player)
 		{
 			if (player.IsFirst()) {
 				info_.include_first = true;
@@ -76,15 +76,15 @@ namespace Cards
 			return *this;
 		}
 
-		TargetorInfoGetter & AnotherPlayer(state::PlayerIdentifier player)
+		TargetorInfoGetter & AnotherPlayer(PlayerIdentifier player)
 		{
 			return Player(player.Opposite());
 		}
 
 	public:
-		state::TargetorInfo const& GetInfo() const { return info_; }
+		TargetorInfo const& GetInfo() const { return info_; }
 
 	private:
-		state::TargetorInfo info_;
+		TargetorInfo info_;
 	};
 }

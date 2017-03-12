@@ -142,7 +142,6 @@
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
-    <ClInclude Include="..\..\include\Cards\TargetorInfoGetter.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
@@ -218,6 +217,7 @@
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\state\State.h" />
     <ClInclude Include="..\..\include\state\TargetorInfo.h" />
+    <ClInclude Include="..\..\include\state\TargetorInfoGetter.h" />
     <ClInclude Include="..\..\include\state\Types.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />
