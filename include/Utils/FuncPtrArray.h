@@ -20,7 +20,7 @@ namespace Utils
 		}
 
 		template <typename... Args>
-		void operator()(Args&&... args) {
+		void operator()(Args&&... args) const {
 			for (size_t i = 0; i < size_; ++i) {
 				(*items_[i])(std::forward<Args>(args)...);
 			}
@@ -43,7 +43,7 @@ namespace Utils
 		}
 
 		template <typename... Args>
-		void operator()(Args&&... args) {
+		void operator()(Args&&... args) const {
 			if (!item_) return;
 			(*item_)(std::forward<Args>(args)...);
 		}

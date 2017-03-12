@@ -517,7 +517,7 @@ namespace Cards
 
 		Card_EX1_399()
 		{
-			added_to_play_zone = [](auto context) {
+			added_to_play_zone += [](auto context) {
 				state::CardRef self = context.card_ref_;
 				context.state_.event_mgr.PushBack<state::Events::EventTypes::OnTakeDamage>(
 					self,

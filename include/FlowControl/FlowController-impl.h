@@ -86,9 +86,8 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).Minion(card_ref).Zone().WithZone<state::kCardZoneHand>()
 			.ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
-		if (card.GetRawData().added_to_play_zone) {
-			(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });
-		}
+		card.GetRawData().added_to_play_zone(
+		FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
 
 		state_.event_mgr.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
@@ -109,9 +108,8 @@ namespace FlowControl
 	{
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
-		if (card.GetRawData().added_to_play_zone) {
-			(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });
-		}
+		card.GetRawData().added_to_play_zone(
+			FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
 
 		assert(card.GetPlayerIdentifier() == state_.current_player);
 		if (card.GetRawData().battlecry) {

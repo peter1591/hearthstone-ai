@@ -3,6 +3,7 @@
 #include <functional>
 #include <list>
 #include <string>
+#include "Utils/FuncPtrArray.h"
 #include "state/Types.h"
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/EnchantmentAuxData.h"
@@ -31,7 +32,7 @@ namespace state
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				added_to_play_zone(nullptr), battlecry_target_getter(nullptr), battlecry(nullptr)
+				battlecry_target_getter(nullptr), battlecry(nullptr)
 			{
 			}
 
@@ -56,7 +57,7 @@ namespace state
 			aura::AuraAuxData aura_aux_data;
 
 		public: // callbacks, not subject to change when game flows
-			AddedToPlayZoneCallback *added_to_play_zone; // TODO: support add several callbacks
+			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
 			BattlecryTargetGetter *battlecry_target_getter;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;

@@ -43,7 +43,7 @@ namespace Cards
 				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
 			};
 
-			card_data_.added_to_play_zone = [](auto context) {
+			card_data_.added_to_play_zone += [](auto context) {
 				state::CardRef self = context.card_ref_;
 				context.state_.event_mgr.PushBack<state::Events::EventTypes::UpdateAura>(
 					[self](auto& controller, auto& context) {
