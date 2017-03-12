@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include <vector>
+#include <array>
 #include "state/Types.h"
 #include "state/Cards/Manager.h"
 
@@ -12,22 +12,20 @@ namespace state
 		class Hand
 		{
 		public:
-			Hand()
-			{
-				cards_.reserve(max_cards_);
-			}
+			Hand() : size_(0) {}
 
-			size_t Size() const { return cards_.size(); }
-			bool Empty() const { return cards_.empty(); }
-			bool Full() const { return Size() >= max_cards_; }
+			size_t Size() const { return size_; }
+			bool Empty() const { return size_ == 0; }
+			bool Full() const { return size_ >= max_cards_; }
 
 			CardRef Get(size_t idx) { return cards_[idx]; }
 
 			size_t PushBack(CardRef ref)
 			{
-				if (cards_.size() >= max_cards_) assert(false);
-				size_t ret = cards_.size();
-				cards_.push_back(ref);
+				assert(size_ < max_cards_);
+				size_t ret = size_;
+				cards_[size_] = ref;
+				++size_;
 				return ret;
 			}
 
@@ -36,16 +34,19 @@ namespace state
 			{
 				if (pos >= cards_.size()) throw std::exception("invalid position");
 
-				auto it = cards_.erase(cards_.begin() + pos);
-				for (auto it_end = cards_.end(); it != it_end; ++it, ++pos)
-				{
-					functor(*it, pos);
+				size_t spot = pos;
+				for (size_t i = pos + 1; i < size_; ++i) {
+					cards_[spot] = cards_[i];
+					functor(cards_[spot], spot);
+					++spot;
 				}
+				--size_;
 			}
 
 		private:
 			static constexpr int max_cards_ = 10;
-			std::vector<CardRef> cards_;
+			std::array<CardRef, max_cards_> cards_;
+			size_t size_;
 		};
 	}
 }
