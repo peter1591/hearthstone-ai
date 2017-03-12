@@ -2,8 +2,12 @@
 
 #include <vector>
 #include <unordered_set>
+#include "state/State.h"
 
 namespace state {
+	class State;
+	class FlowContext;
+
 	namespace utils {
 		class Targets
 		{

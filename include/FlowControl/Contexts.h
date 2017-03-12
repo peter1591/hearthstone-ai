@@ -28,44 +28,6 @@ namespace FlowControl
 			const state::Cards::Card & card_;
 		};
 
-		struct AuraApplyOn
-		{
-			state::State & state_;
-			state::FlowContext & flow_context_;
-			state::CardRef card_ref_;
-			const state::Cards::Card & card_;
-			state::CardRef target_;
-			state::Cards::Enchantments::ContainerType::Identifier & enchant_id_;
-		};
-
-		struct AuraGetTargets
-		{
-			state::State & state_;
-			state::FlowContext & flow_context_;
-			state::CardRef card_ref_;
-			const state::Cards::Card & card_;
-			state::Cards::aura::AuraAuxData & aura_data_;
-			state::utils::TargetsGenerator & targets_generator_;
-		};
-
-		struct AuraIsValid
-		{
-			state::State & state_;
-			state::FlowContext & flow_context_;
-			state::CardRef card_ref_;
-			const state::Cards::Card & card_;
-		};
-
-		struct AuraRemoveFrom
-		{
-			state::State & state_;
-			state::FlowContext & flow_context_;
-			const state::CardRef card_ref_;
-			const state::Cards::Card & card_;
-			const state::CardRef target_;
-			const state::Cards::Enchantments::ContainerType::Identifier enchant_id_;
-		};
-
 		struct BattleCry
 		{
 			state::State & state_;

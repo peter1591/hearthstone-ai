@@ -1,15 +1,6 @@
 #pragma once
 
-namespace FlowControl
-{
-	namespace Context
-	{
-		struct AuraIsValid;
-		struct AuraGetTargets;
-		struct AuraApplyOn;
-		struct AuraRemoveFrom;
-	}
-}
+#include "state/Cards/aura/Contexts.h"
 
 namespace state {
 	namespace utils { class TargetsGenerator; }
@@ -19,10 +10,10 @@ namespace state {
 			class AuraHandler
 			{
 			public:
-				typedef bool FuncIsValid(FlowControl::Context::AuraIsValid && context);
-				typedef void FuncGetTargets(FlowControl::Context::AuraGetTargets && context);
-				typedef void FuncApplyOn(FlowControl::Context::AuraApplyOn && context);
-				typedef void FuncRemoveFrom(FlowControl::Context::AuraRemoveFrom && context);
+				typedef bool FuncIsValid(contexts::AuraIsValid && context);
+				typedef void FuncGetTargets(contexts::AuraGetTargets && context);
+				typedef void FuncApplyOn(contexts::AuraApplyOn && context);
+				typedef void FuncRemoveFrom(contexts::AuraRemoveFrom && context);
 
 				AuraHandler() : is_valid(nullptr), get_targets(nullptr), apply_on(nullptr), remove_from(nullptr)
 				{
