@@ -29,6 +29,8 @@ public:
 class Test2_RandomGenerator : public state::IRandomGenerator
 {
 public:
+	Test2_RandomGenerator() :called(false), next_rand(0) {}
+
 	int Get(int exclusive_max)
 	{
 		called = true;
@@ -70,15 +72,18 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 {
 	int deck_count = (int)state.board.Get(player).deck_.Size();
 
+	((Test2_RandomGenerator&)(flow_context.random_)).next_rand = deck_count;
+	((Test2_RandomGenerator&)(flow_context.random_)).called = false;
+
 	auto ref = state.mgr.PushBack(state, flow_context, CreateDeckCard(id, state, player));
+
+	if (deck_count > 0) assert(((Test2_RandomGenerator&)(flow_context.random_)).called);
 	++deck_count;
 
 	assert(state.board.Get(player).deck_.Size() == deck_count);
-	assert(state.board.Get(player).deck_.Get(deck_count - 1) == ref);
 	assert(state.mgr.Get(ref).GetCardId() == id);
 	assert(state.mgr.Get(ref).GetPlayerIdentifier() == player);
 	assert(state.mgr.Get(ref).GetZone() == state::kCardZoneDeck);
-	assert(state.mgr.Get(ref).GetZonePosition() == (deck_count - 1));
 
 	return ref;
 }
@@ -265,9 +270,7 @@ void test2()
 			== FlowControl::kResultInvalid);
 	}
 
-	random.next_rand = 0;
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
-	assert(random.called);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 0, 8 });
@@ -286,9 +289,7 @@ void test2()
 			== FlowControl::kResultInvalid);
 	}
 
-	random.next_rand = 0;
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
-	assert(random.called);
 	assert(state.current_player == state::PlayerIdentifier::First());
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -333,9 +334,7 @@ void test2()
 	assert(state.board.Get(state::PlayerIdentifier::Second()).hand_.Size() == 10);
 	assert(state.board.Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
-	random.next_rand = 0;
 	assert(controller.EndTurn() == FlowControl::kResultNotDetermined);
-	assert(random.called);
 	assert(state.current_player == state::PlayerIdentifier::Second());
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
@@ -424,7 +423,7 @@ void test2()
 	assert(state.board.Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 2);
 
 	parameter_getter.next_minion_put_location = 1;
-	assert(controller.PlayCard(9) == FlowControl::kResultNotDetermined);
+	assert(controller.PlayCard(7) == FlowControl::kResultNotDetermined);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });

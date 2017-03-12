@@ -29,6 +29,8 @@ public:
 class Test3_RandomGenerator : public state::IRandomGenerator
 {
 public:
+	Test3_RandomGenerator() :called(false), next_rand(0) {}
+
 	int Get(int exclusive_max)
 	{
 		called = true;
@@ -70,11 +72,15 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 {
 	int deck_count = (int)state.board.Get(player).deck_.Size();
 
+	((Test3_RandomGenerator&)(flow_context.random_)).next_rand = deck_count;
+	((Test3_RandomGenerator&)(flow_context.random_)).called = false;
+
 	auto ref = state.mgr.PushBack(state, flow_context, CreateDeckCard(id, state, player));
+	if (deck_count > 0) assert(((Test3_RandomGenerator&)(flow_context.random_)).called);
 	++deck_count;
 
 	assert(state.board.Get(player).deck_.Size() == deck_count);
-	assert(state.board.Get(player).deck_.Get(deck_count - 1) == ref);
+	assert(state.board.Get(player).deck_.GetLast() == ref);
 	assert(state.mgr.Get(ref).GetCardId() == id);
 	assert(state.mgr.Get(ref).GetPlayerIdentifier() == player);
 	assert(state.mgr.Get(ref).GetZone() == state::kCardZoneDeck);

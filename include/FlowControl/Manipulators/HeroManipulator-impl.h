@@ -18,11 +18,7 @@ namespace FlowControl
 				return;
 			}
 
-			int deck_count = (int)player.deck_.Size();
-			int deck_idx = 0;
-			if (deck_count > 1) deck_idx = flow_context_.random_.Get(deck_count);
-
-			state::CardRef card_ref = player.deck_.Get(deck_idx);
+			state::CardRef card_ref = player.deck_.GetLast();
 
 			if (player.hand_.Full()) {
 				Manipulate(state_, flow_context_).Card(card_ref).Zone().ChangeTo<state::kCardZoneGraveyard>(player_id_);

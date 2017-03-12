@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <vector>
 #include "state/Types.h"
 #include "state/Cards/Manager.h"
@@ -67,10 +68,27 @@ namespace state
 				return LocationManipulator(*this);
 			}
 
-			CardRef Get(int idx) const { return cards_[idx]; }
+			CardRef GetLast() const { return cards_.back(); }
 
 			size_t Size() const { return cards_.size(); }
 			bool Empty() const { return cards_.empty(); }
+
+			template <typename RandomGenerator>
+			void ShuffleAdd(CardRef card, RandomGenerator&& rand)
+			{
+				++change_id;
+				auto it_new = cards_.insert(cards_.end(), card);
+
+				if (cards_.size() <= 1) return;
+				auto rand_idx = rand(cards_.size());
+				std::iter_swap(cards_.begin() + rand_idx, it_new);
+			}
+
+			void RemoveLast()
+			{
+				++change_id;
+				cards_.pop_back();
+			}
 
 		private:
 			int change_id;

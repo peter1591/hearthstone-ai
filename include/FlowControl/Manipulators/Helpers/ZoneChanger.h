@@ -34,7 +34,9 @@ namespace FlowControl
 			private:
 				static void AddToDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromDeck(state, flow_context, card.GetPlayerIdentifier()).Insert(card_ref);
+					state.board.Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](int exclusive_max) {
+						return flow_context.random_.Get(exclusive_max);
+					});
 				}
 
 				static void AddToHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
@@ -91,7 +93,7 @@ namespace FlowControl
 			private:
 				static void RemoveFromDeckZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
 				{
-					OrderedCardsManager::FromDeck(state, flow_context, card.GetPlayerIdentifier()).Remove(card.GetZonePosition());
+					state.board.Get(card.GetPlayerIdentifier()).deck_.RemoveLast();
 				}
 
 				static void RemoveFromHandZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
