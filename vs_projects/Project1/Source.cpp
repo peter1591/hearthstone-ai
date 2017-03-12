@@ -32,6 +32,8 @@ int main(void)
 	state::Cards::Card & card(*(state::Cards::Card*)(nullptr));
 	state::FlowContext flow_context(*(state::IRandomGenerator*)(nullptr), *(state::ActionParameterWrapper*)(nullptr));
 
+	assert((std::cout << "hello" << std::endl, true));
+
 	//FlowControl::Manipulators::WeaponManipulator(state, flow_context, state::CardRef(), card)
 	//	.Zone().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 

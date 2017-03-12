@@ -44,7 +44,7 @@ namespace Cards
 		}
 
 	private:
-		Database() { }
+		Database() : final_cards_(nullptr), final_cards_size_(0) { }
 
 		bool ReadFromJson(Json::Value const & cards_json)
 		{

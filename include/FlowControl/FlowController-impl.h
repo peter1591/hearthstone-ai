@@ -83,7 +83,8 @@ namespace FlowControl
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.action_parameters_.GetMinionPutLocation(0, total_minions);
 
-		Manipulate(state_, flow_context_).Minion(card_ref).Zone().ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
+		Manipulate(state_, flow_context_).Minion(card_ref).Zone().WithZone<state::kCardZoneHand>()
+			.ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
 
 		if (card.GetRawData().added_to_play_zone) {
 			(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });
