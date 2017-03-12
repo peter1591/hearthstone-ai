@@ -107,7 +107,7 @@ namespace FlowControl
 
 	inline bool FlowController::PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon(card_ref);
+		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
 		if (card.GetRawData().added_to_play_zone) {
 			(*card.GetRawData().added_to_play_zone)({ state_, flow_context_, card_ref, card });

@@ -20,7 +20,8 @@ namespace FlowControl
 			state::CardRef ref = state_.mgr.PushBack(
 				state_, flow_context_, state::Cards::Card(std::move(card_data)));
 
-			FlowControl::Manipulate(state_, flow_context_).Minion(ref).Zone().ChangeTo<state::kCardZonePlay>(player, pos);
+			FlowControl::Manipulate(state_, flow_context_).Minion(ref).Zone().WithZone<state::kCardZoneInvalid>().
+				ChangeTo<state::kCardZonePlay>(player, pos);
 
 			state::Cards::Card const& card = state_.mgr.Get(ref);
 			assert(card.GetPlayerIdentifier() == player);

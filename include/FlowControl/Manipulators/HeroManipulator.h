@@ -23,7 +23,10 @@ namespace FlowControl
 
 			void DrawCard();
 			void DestroyWeapon();
+
+			template <state::CardZone KnownZone>
 			void EquipWeapon(state::CardRef weapon_ref);
+
 			void TurnStart()
 			{
 				card_.ClearNumAttacksThisTurn();

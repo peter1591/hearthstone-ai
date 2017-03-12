@@ -108,6 +108,8 @@ namespace FlowControl
 				ZoneChanger(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{
+					assert(card.GetZone() == ChangingCardZone);
+					assert(card.GetCardType() == ChangingCardType);
 				}
 
 				template <state::CardZone ChangeToZone,
@@ -149,7 +151,9 @@ namespace FlowControl
 			public:
 				ZoneChangerWithUnknownZone(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
-				{}
+				{
+					assert(card.GetCardType() == ChangingCardType);
+				}
 
 				template <typename state::CardZone KnownZone>
 				ZoneChanger<KnownZone, ChangingCardType> WithZone() {
@@ -219,7 +223,9 @@ namespace FlowControl
 			public:
 				ZoneChangerWithUnknownType(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
 					: state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
-				{}
+				{
+					assert(card.GetZone() == ChangingCardZone);
+				}
 
 				template <typename state::CardType KnownType>
 				ZoneChanger<ChangingCardZone, KnownType> WithType() {
