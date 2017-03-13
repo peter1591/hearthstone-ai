@@ -386,5 +386,11 @@
     <ClInclude Include="..\..\include\state\ZoneChanger-impl.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

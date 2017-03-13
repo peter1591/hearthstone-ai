@@ -64,6 +64,8 @@ namespace state
 		// trigger events
 		// set card cost/attack/hp/etc.
 
+		//ZoneChangerWithUnknownZoneUnknownType ChangeZone()
+
 		// TODO: should not be public
 		void SetCardZonePos(CardRef ref, int pos)
 		{
