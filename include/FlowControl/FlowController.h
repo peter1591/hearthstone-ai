@@ -35,10 +35,13 @@ namespace FlowControl
 		{
 		}
 
+	public: // main flow
 		Result PlayCard(int hand_idx);
 		Result EndTurn();
 		Result Attack(state::CardRef attacker, state::CardRef defender);
 		Result Resolve();
+
+	public: // might be called in card client code
 
 	private:
 		void PlayCardInternal(int hand_idx);

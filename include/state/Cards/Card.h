@@ -154,6 +154,7 @@ namespace state
 				data_.deathrattles.push_back(std::forward<T>(deathrattle));
 			}
 
+			CardData::Deathrattles const& Deathrattles() const { return data_.deathrattles; }
 			CardData::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
 			void SetWeapon(state::CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }

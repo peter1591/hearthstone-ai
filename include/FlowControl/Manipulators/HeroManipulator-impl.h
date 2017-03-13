@@ -52,7 +52,7 @@ namespace FlowControl
 			card_.SetWeapon(weapon_ref);
 
 			Manipulate(state_, flow_context_).Weapon(weapon_ref).Zone().WithZone<KnownZone>()
-				.ChangeTo<state::kCardZonePlay>(state_.current_player);
+				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 		}
 	}
 }

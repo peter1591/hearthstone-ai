@@ -84,7 +84,7 @@ namespace FlowControl
 		int put_position = flow_context_.action_parameters_.GetMinionPutLocation(0, total_minions);
 
 		Manipulate(state_, flow_context_).Minion(card_ref).Zone().WithZone<state::kCardZoneHand>()
-			.ChangeTo<state::kCardZonePlay>(state_.current_player, put_position);
+			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
 		card.GetRawData().added_to_play_zone(
 		FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
@@ -220,7 +220,7 @@ namespace FlowControl
 		EndTurnPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 
-		state_.current_player.ChangeSide();
+		state_.GetMutableCurrentPlayerId().ChangeSide();
 
 		action_parameters_.Clear();
 		StartTurnPhase();

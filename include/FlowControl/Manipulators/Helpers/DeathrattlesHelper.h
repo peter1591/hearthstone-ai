@@ -23,7 +23,7 @@ namespace FlowControl
 
 				DeathrattlesHelper & TriggerAll() {
 					FlowControl::Context::Deathrattle context{ state_, flow_context_, card_ref_, card_ };
-					for (auto deathrattle : card_.MutableDeathrattles()) {
+					for (auto deathrattle : card_.Deathrattles()) {
 						deathrattle(context);
 					}
 					return *this;

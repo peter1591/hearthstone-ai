@@ -227,7 +227,7 @@ void test2()
 	MakeDeck(state, controller.flow_context_, state::PlayerIdentifier::Second());
 	MakeHand(state, controller.flow_context_, state::PlayerIdentifier::Second());
 
-	state.current_player = state::PlayerIdentifier::First();
+	state.GetMutableCurrentPlayerId().SetFirst();
 	state.board.Get(state::PlayerIdentifier::First()).resource_.SetTotal(8);
 	state.board.Get(state::PlayerIdentifier::First()).resource_.Refill();
 	state.board.Get(state::PlayerIdentifier::Second()).resource_.SetTotal(4);

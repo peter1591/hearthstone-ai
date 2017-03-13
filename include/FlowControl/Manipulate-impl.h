@@ -18,12 +18,12 @@ namespace FlowControl
 
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
 	{
-		return Hero(state_.current_player);
+		return Hero(state_.GetCurrentPlayerId());
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::OpponentHero()
 	{
-		return Hero(state_.current_player.Opposite());
+		return Hero(state_.GetCurrentPlayerId().Opposite());
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::Hero(state::PlayerIdentifier player)

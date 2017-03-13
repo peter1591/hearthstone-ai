@@ -220,7 +220,7 @@ void test3()
 	MakeDeck(state, controller.flow_context_, state::PlayerIdentifier::Second());
 	MakeHand(state, controller.flow_context_, state::PlayerIdentifier::Second());
 
-	state.current_player.SetFirst();
+	state.GetMutableCurrentPlayerId().SetFirst();
 	state.board.GetFirst().resource_.SetTotal(4);
 	state.board.GetFirst().resource_.Refill();
 	state.board.GetSecond().resource_.SetTotal(4);
