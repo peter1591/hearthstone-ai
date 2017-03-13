@@ -23,10 +23,8 @@ namespace FlowControl
 
 namespace state
 {
-	template <CardZone T1, CardType T2> class ZoneChanger;
-	namespace detail {
-		class ZonePositionSetter;
-	}
+	template <CardZone, CardType> class ZoneChanger;
+	namespace detail { class ZonePositionSetter; }
 
 	namespace Cards
 	{
@@ -57,7 +55,7 @@ namespace state
 
 			class LocationSetter
 			{
-				template <CardZone T1, CardType T2> friend class ZoneChanger;
+				template <CardZone, CardType> friend class ZoneChanger;
 				template <CardType, CardZone> friend struct PlayerDataStructureMaintainer;
 				friend class ZonePositionSetter;
 

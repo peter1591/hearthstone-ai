@@ -10,9 +10,8 @@ namespace state
 		{
 		public:
 			EnchantableStates() :
-				cost(-1), attack(-1), max_hp(-1),
-				taunt(false), shielded(false), charge(false),
-				spell_damage(0)
+				cost(-1), attack(-1), max_hp(-1), spell_damage(0),
+				taunt(false), shielded(false), charge(false)
 			{
 				static_assert(kFieldChangeId == 5, "field changed");
 			}
@@ -41,11 +40,11 @@ namespace state
 			int attack;
 			int max_hp;
 
+			int spell_damage;
+
 			bool taunt;
 			bool shielded;
 			bool charge;
-
-			int spell_damage;
 		};
 	}
 }
