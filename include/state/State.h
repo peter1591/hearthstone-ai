@@ -5,6 +5,11 @@
 #include "state/Events/Manager.h"
 #include "detail/ZonePositionSetter.h"
 
+namespace FlowControl
+{
+	class FlowContext;
+}
+
 namespace state
 {
 	class State
@@ -14,7 +19,6 @@ namespace state
 		board::Board & GetBoard() { return board_; }
 
 		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
-		Cards::Manager & GetCardsManager() { return cards_mgr_; } // TODO: do not expose all interface
 
 		Events::Manager const& GetEventsManager() const { return event_mgr_; }
 		Events::Manager & GetEventsManager() { return event_mgr_; }
@@ -29,6 +33,30 @@ namespace state
 		int GetTurn() const { return turn_; }
 		void SetTurn(int turn) { turn = turn_; }
 		void IncreaseTurn() { ++turn_; }
+
+	public: // cards manager
+		Cards::Card const& GetCard(CardRef ref) const { return cards_mgr_.Get(ref); }
+		CardRef AddCard(Cards::Card&& card) { return cards_mgr_.PushBack(std::move(card)); }
+
+		FlowControl::Manipulators::CardManipulator GetCardManipulator(State& state, FlowContext& flow_context, CardRef ref) {
+			return FlowControl::Manipulators::CardManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		FlowControl::Manipulators::HeroManipulator GetHeroManipulator(State& state, FlowContext& flow_context, CardRef ref) {
+			return FlowControl::Manipulators::HeroManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		FlowControl::Manipulators::MinionManipulator GetMinionManipulator(State& state, FlowContext& flow_context, CardRef ref) {
+			return FlowControl::Manipulators::MinionManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		FlowControl::Manipulators::CharacterManipulator GetCharacterManipulator(State& state, FlowContext& flow_context, CardRef ref) {
+			return FlowControl::Manipulators::CharacterManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		FlowControl::Manipulators::WeaponManipulator GetWeaponManipulator(State& state, FlowContext& flow_context, CardRef ref) {
+			return FlowControl::Manipulators::WeaponManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
 
 	public: // mutate functions
 		// push new card --> card_ref
