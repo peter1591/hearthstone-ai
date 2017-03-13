@@ -73,6 +73,9 @@
     <Filter Include="Header Files\state\targetor">
       <UniqueIdentifier>{2b9f1389-0ea1-4c53-8b13-2c3f02283d9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\state\detail">
+      <UniqueIdentifier>{5149d1fe-d98b-4b65-bfe5-af9b163d8f14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -219,9 +222,6 @@
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h">
@@ -382,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\FuncPtrArray.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\ZonePositionSetter.h">
+      <Filter>Header Files\state\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

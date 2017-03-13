@@ -169,7 +169,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
@@ -196,6 +195,7 @@
     <ClInclude Include="..\..\include\state\Cards\Manager-impl.h" />
     <ClInclude Include="..\..\include\state\Cards\Manager.h" />
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
+    <ClInclude Include="..\..\include\state\detail\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\state\Events\Event.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes\AfterAttack.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes\AfterMinionPlayed.h" />

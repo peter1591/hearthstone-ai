@@ -19,13 +19,14 @@ namespace FlowControl
 			class AuraHelper;
 			template <state::CardZone T1, state::CardType T2> class ZoneChanger;
 			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct PlayerDataStructureMaintainer;
-			class ZonePositionSetter;
 		}
 	}
 }
 
 namespace state
 {
+	namespace detail { class ZonePositionSetter; }
+
 	namespace Cards
 	{
 		class Card
@@ -57,7 +58,7 @@ namespace state
 			{
 				template <state::CardZone T1, state::CardType T2> friend class FlowControl::Manipulators::Helpers::ZoneChanger;
 				template <state::CardType, state::CardZone> friend struct PlayerDataStructureMaintainer;
-				friend class FlowControl::Manipulators::Helpers::ZonePositionSetter;
+				friend class state::detail::ZonePositionSetter;
 
 			public:
 				LocationSetter(CardData & data) : data_(data) {}
