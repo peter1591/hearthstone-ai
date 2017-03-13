@@ -210,11 +210,11 @@ namespace FlowControl
 
 	inline void FlowController::EndTurnInternal()
 	{
-		if (state_.turn == 89) {
+		if (state_.GetTurn() >= 89) {
 			flow_context_.result_ = kResultDraw;
 			return;
 		}
-		++state_.turn;
+		state_.IncreaseTurn();
 
 		action_parameters_.Clear();
 		EndTurnPhase();

@@ -9,15 +9,19 @@ namespace state
 	class State
 	{
 	public:
-		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player; }
-		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player; }
+		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
+		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
+
+		int GetTurn() const { return turn_; }
+		void SetTurn(int turn) { turn = turn_; }
+		void IncreaseTurn() { ++turn_; }
 
 	public:
-		board::Player & GetCurrentPlayer() { return board.Get(current_player); }
-		const board::Player & GetCurrentPlayer() const { return board.Get(current_player); }
+		board::Player & GetCurrentPlayer() { return board.Get(current_player_); }
+		const board::Player & GetCurrentPlayer() const { return board.Get(current_player_); }
 
-		board::Player & GetOppositePlayer() { return board.Get(current_player.Opposite()); }
-		const board::Player & GetOppositePlayer() const { return board.Get(current_player.Opposite()); }
+		board::Player & GetOppositePlayer() { return board.Get(current_player_.Opposite()); }
+		const board::Player & GetOppositePlayer() const { return board.Get(current_player_.Opposite()); }
 
 	public: // mutate functions
 		// push new card --> card_ref
@@ -30,9 +34,8 @@ namespace state
 		Cards::Manager mgr;
 		Events::Manager event_mgr;
 
-		int turn;
-
 	private:
-		PlayerIdentifier current_player;
+		PlayerIdentifier current_player_;
+		int turn_;
 	};
 }
