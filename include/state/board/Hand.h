@@ -32,7 +32,7 @@ namespace state
 			template <typename AdjustFunctor>
 			void Remove(size_t pos, AdjustFunctor&& functor)
 			{
-				if (pos >= cards_.size()) throw std::exception("invalid position");
+				assert(pos < size_);
 
 				size_t spot = pos;
 				for (size_t i = pos + 1; i < size_; ++i) {
