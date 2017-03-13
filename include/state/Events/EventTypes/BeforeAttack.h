@@ -6,6 +6,8 @@
 #include <functional>
 #include "state/Types.h"
 
+namespace FlowControl { class FlowContext; }
+
 namespace state
 {
 	namespace Cards

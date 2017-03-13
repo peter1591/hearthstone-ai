@@ -8,8 +8,6 @@
 
 namespace state
 {
-	class State;
-
 	namespace Cards
 	{
 		class Manager
@@ -20,7 +18,12 @@ namespace state
 			Card const& Get(CardRef id) const { return cards_.Get(id.id); }
 			Card & GetMutable(CardRef id) { return cards_.Get(id.id); }
 
-			CardRef PushBack(Cards::Card&& card);
+			CardRef PushBack(Cards::Card&& card)
+			{
+				assert(card.GetZone() == kCardZoneInvalid); // Caller use manipulators to adjust. So we don't need to maintain any internal structure consistency
+				CardRef ref = CardRef(cards_.PushBack(std::move(card)));
+				return ref;
+			}
 
 			void SetCardZonePos(CardRef ref, int pos)
 			{

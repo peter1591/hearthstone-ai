@@ -2,14 +2,11 @@
 
 #include <assert.h>
 #include "state/Types.h"
-#include "state/Cards/Card.h"
-#include "state/board/Player.h"
+#include "state/board/Board.h"
+#include "state/Cards/Manager.h"
 #include "state/detail/PlayerDataStructureMaintainer.h"
 
 namespace state {
-	namespace board { class Board; }
-	namespace Cards { class Manager; }
-
 	template <CardZone ChangingCardZone, CardType ChangingCardType>
 	class ZoneChanger
 	{

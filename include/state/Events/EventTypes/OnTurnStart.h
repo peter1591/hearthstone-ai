@@ -5,6 +5,8 @@
 #include <iostream>
 #include <functional>
 
+namespace FlowControl { class FlowContext; }
+
 namespace state
 {
 	namespace Cards

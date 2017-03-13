@@ -194,7 +194,6 @@
     <ClInclude Include="..\..\include\state\Cards\Enchantments\Enchantments.h" />
     <ClInclude Include="..\..\include\state\Cards\Enchantments\TieredEnchantments.h" />
     <ClInclude Include="..\..\include\state\Cards\Enchantments\Tiers.h" />
-    <ClInclude Include="..\..\include\state\Cards\Manager-impl.h" />
     <ClInclude Include="..\..\include\state\Cards\Manager.h" />
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />

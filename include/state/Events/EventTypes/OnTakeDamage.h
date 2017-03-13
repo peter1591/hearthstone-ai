@@ -7,6 +7,8 @@
 
 #include "state/Events/HandlersContainerController.h"
 
+namespace FlowControl { class FlowContext; }
+
 namespace state
 {
 	namespace Cards

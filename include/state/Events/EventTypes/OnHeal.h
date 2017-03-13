@@ -8,6 +8,8 @@
 #include "state/Types.h"
 #include "state/Events/HandlersContainerController.h"
 
+namespace FlowControl { class FlowContext; }
+
 namespace state
 {
 	class State;

@@ -1,8 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "state/ZoneChanger.h"
-#include "state/Cards/Manager.h"
+#include "state/State.h"
 
 namespace state {
 	namespace detail {

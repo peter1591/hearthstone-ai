@@ -113,9 +113,6 @@
     <ClInclude Include="..\..\include\State\Cards\Manager.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\Manager-impl.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\Cards\Card.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>

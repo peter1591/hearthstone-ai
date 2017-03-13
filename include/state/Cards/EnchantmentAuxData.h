@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Cards/EnchantableStates.h"
-#include "Enchantments/TieredEnchantments.h"
+#include "state/Cards/Enchantments/TieredEnchantments.h"
 
 namespace state
 {
