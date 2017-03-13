@@ -138,7 +138,7 @@ namespace state
 	public:
 		typedef typename Utils::CloneableContainers::Vector<Cards::Card>::Identifier IdentifierType;
 
-		CardRef() {}
+		CardRef() : id(IdentifierType::GetInvalidIdentifier()) {}
 		explicit CardRef(IdentifierType id) : id(id) {}
 
 		bool operator==(CardRef rhs) const

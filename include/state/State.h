@@ -15,6 +15,8 @@ namespace state
 	class State
 	{
 	public:
+		State() : turn_(0) {}
+
 		board::Board const& GetBoard() const { return board_; }
 		board::Board & GetBoard() { return board_; }
 

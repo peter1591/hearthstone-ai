@@ -7,6 +7,8 @@ namespace state
 		class PlayerResource
 		{
 		public:
+			PlayerResource() : current_(0), total_(0) {}
+
 			void SetTotal(int total)
 			{
 				assert(total <= 10);
