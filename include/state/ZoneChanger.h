@@ -26,11 +26,7 @@ namespace state {
 			void ChangeTo(PlayerIdentifier player_identifier)
 		{
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, flow_context_, card_ref_, card_);
-
-			card_.SetLocation()
-				.Player(player_identifier)
-				.Zone(ChangeToZone);
-
+			card_.SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, flow_context_, card_ref_, card_);
 		}
 
@@ -39,11 +35,7 @@ namespace state {
 			void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, flow_context_, card_ref_, card_);
-
-			card_.SetLocation()
-				.Player(player_identifier)
-				.Zone(ChangeToZone);
-
+			card_.SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, flow_context_, card_ref_, card_, pos);
 		}
 

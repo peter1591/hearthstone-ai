@@ -197,7 +197,6 @@
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h" />
-    <ClInclude Include="..\..\include\state\detail\ZonePositionSetter.h" />
     <ClInclude Include="..\..\include\state\Events\Event.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes\AfterAttack.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes\AfterMinionPlayed.h" />

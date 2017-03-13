@@ -377,9 +377,6 @@
     <ClInclude Include="..\..\include\Utils\FuncPtrArray.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\detail\ZonePositionSetter.h">
-      <Filter>Header Files\state\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\ZoneChanger.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>

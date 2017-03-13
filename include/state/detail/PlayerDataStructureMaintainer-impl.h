@@ -97,7 +97,7 @@ namespace state {
 			assert(card.GetCardType() == TargetCardType);
 			assert(card.GetZone() == kCardZoneHand);
 			int pos = (int)board.Get(card.GetPlayerIdentifier()).hand_.PushBack(card_ref);
-			card.SetLocation().Position(pos);
+			card.SetZonePos()(pos);
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneHand>::

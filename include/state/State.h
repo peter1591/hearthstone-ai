@@ -3,7 +3,6 @@
 #include "state/Cards/Manager.h"
 #include "state/board/Board.h"
 #include "state/Events/Manager.h"
-#include "detail/ZonePositionSetter.h"
 
 namespace FlowControl
 {

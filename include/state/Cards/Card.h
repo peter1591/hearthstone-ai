@@ -24,10 +24,14 @@ namespace FlowControl
 namespace state
 {
 	template <CardZone, CardType> class ZoneChanger;
-	namespace detail { class ZonePositionSetter; }
+	namespace detail {
+		class ZonePositionSetter;
+		template <CardType TargetCardType, CardZone TargetCardZone> struct PlayerDataStructureMaintainer;
+	}
 
 	namespace Cards
 	{
+		class Manager;
 		class Card
 		{
 		public:
@@ -53,34 +57,28 @@ namespace state
 				CardData & data_;
 			};
 
-			class LocationSetter
-			{
+			class ZoneSetter {
 				template <CardZone, CardType> friend class ZoneChanger;
-				template <CardType, CardZone> friend struct PlayerDataStructureMaintainer;
-				friend class ZonePositionSetter;
-
 			public:
-				LocationSetter(CardData & data) : data_(data) {}
+				ZoneSetter(CardData & data) : data_(data) {}
 			private:
-				LocationSetter & Player(PlayerIdentifier player)
-				{
+				void operator()(PlayerIdentifier player, CardZone new_zone) {
 					data_.enchantable_states.player = player;
-					return *this;
-				}
-
-				LocationSetter & Zone(CardZone new_zone)
-				{
 					data_.zone = new_zone;
-					return *this;
 				}
+			private:
+				CardData & data_;
+			};
 
+			class ZonePosSetter {
+				friend state::Cards::Manager;
+				template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 			public:
-				LocationSetter & Position(int pos)
-				{
+				ZonePosSetter(CardData & data) : data_(data) {}
+			private:
+				void operator()(int pos) {
 					data_.zone_position = pos;
-					return *this;
 				}
-
 			private:
 				CardData & data_;
 			};
@@ -147,7 +145,8 @@ namespace state
 				return MutableAuraAuxDataGetter(data_);
 			}
 
-			LocationSetter SetLocation() { return LocationSetter(data_); }
+			ZoneSetter SetZone() { return ZoneSetter(data_); }
+			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
 
 			CardData::Deathrattles const& Deathrattles() const { return data_.deathrattles; }
 			void ClearDeathrattles() { data_.deathrattles.clear(); }

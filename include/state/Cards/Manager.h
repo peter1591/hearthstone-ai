@@ -5,7 +5,6 @@
 #include "Utils/CloneableContainers/Vector.h"
 #include "state/Cards/Card.h"
 #include "state/Types.h"
-#include "state/detail/ZonePositionSetter.h"
 
 #include "FlowControl/Manipulate.h"
 
@@ -32,7 +31,7 @@ namespace state
 
 			void SetCardZonePos(CardRef ref, int pos)
 			{
-				detail::ZonePositionSetter(GetMutable(ref)).Set(pos);
+				GetMutable(ref).SetZonePos()(pos);
 			}
 
 		private:
