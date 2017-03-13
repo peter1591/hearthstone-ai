@@ -22,29 +22,29 @@ namespace state {
 		}
 
 		template <CardZone ChangeToZone,
-			typename = std::enable_if_t<PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == false>>
+			typename = std::enable_if_t<detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == false>>
 			void ChangeTo(PlayerIdentifier player_identifier)
 		{
-			PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, flow_context_, card_ref_, card_);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, flow_context_, card_ref_, card_);
 
 			card_.SetLocation()
 				.Player(player_identifier)
 				.Zone(ChangeToZone);
 
-			PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, flow_context_, card_ref_, card_);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, flow_context_, card_ref_, card_);
 		}
 
 		template <CardZone ChangeToZone,
-			typename = std::enable_if_t<PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == true>>
+			typename = std::enable_if_t<detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == true>>
 			void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
-			PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, flow_context_, card_ref_, card_);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, flow_context_, card_ref_, card_);
 
 			card_.SetLocation()
 				.Player(player_identifier)
 				.Zone(ChangeToZone);
 
-			PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, flow_context_, card_ref_, card_, pos);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, flow_context_, card_ref_, card_, pos);
 		}
 
 	private:
@@ -66,7 +66,7 @@ namespace state {
 		}
 
 		template <CardZone ChangeToZone,
-			typename = std::enable_if_t<PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == false>>
+			typename = std::enable_if_t<detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == false>>
 			void ChangeTo(PlayerIdentifier player_identifier)
 		{
 			switch (card_.GetZone())
@@ -91,7 +91,7 @@ namespace state {
 		}
 
 		template <CardZone ChangeToZone,
-			typename = std::enable_if_t<PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == true>>
+			typename = std::enable_if_t<detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == true>>
 			void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
 			switch (card_.GetZone())

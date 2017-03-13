@@ -59,8 +59,8 @@ namespace state {
 			void ProcessPlayerTargets(State const& state, board::Player const& player, Functor&& functor) const
 			{
 				if (include_hero) {
-					if (player.hero_ref_ != exclude) {
-						functor(player.hero_ref_);
+					if (player.GetHeroRef() != exclude) {
+						functor(player.GetHeroRef());
 					}
 				}
 				if (include_minion) {

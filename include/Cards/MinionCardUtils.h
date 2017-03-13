@@ -49,12 +49,12 @@ namespace Cards
 			}
 			DamageHelper & Owner() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
+				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).GetHeroRef();
 				return *this;
 			}
 			DamageHelper & Opponent() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier().Opposite()).hero_ref_;
+				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier().Opposite()).GetHeroRef();
 				return *this;
 			}
 

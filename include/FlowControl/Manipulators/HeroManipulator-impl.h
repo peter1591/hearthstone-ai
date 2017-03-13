@@ -9,7 +9,7 @@ namespace FlowControl
 		inline void HeroManipulator::DrawCard()
 		{
 			state::board::Player & player = state_.GetBoard().Get(player_id_);
-			assert(player.hero_ref_ == card_ref_);
+			assert(player.GetHeroRef() == card_ref_);
 
 			if (player.deck_.Empty())
 			{

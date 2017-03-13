@@ -9,10 +9,14 @@
 
 namespace state
 {
+	namespace detail { template <CardType TargetCardType, CardZone TargetCardZone> struct PlayerDataStructureMaintainer; }
+
 	namespace board
 	{
 		class Player
 		{
+			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
+
 		public:
 			Player() : fatigue_damage_(0) {}
 
@@ -25,9 +29,10 @@ namespace state
 
 			CardRef GetHeroRef() const { return hero_ref_; }
 
-		public:
-			CardRef hero_ref_; // TODO
+		private: // restrict access to zone changer
+			void SetHeroRef(CardRef ref) { hero_ref_ = ref; }
 
+		public:
 			Deck deck_;
 			Hand hand_;
 			Minions minions_;
@@ -35,6 +40,8 @@ namespace state
 			Graveyard graveyard_;
 
 		private:
+			CardRef hero_ref_;
+
 			PlayerResource resource_;
 			int fatigue_damage_;
 		};

@@ -260,7 +260,7 @@ namespace FlowControl
 	{
 		int spell_damage = 0;
 
-		state::Cards::Card const& hero = state_.GetCardsManager().Get(player.hero_ref_);
+		state::Cards::Card const& hero = state_.GetCardsManager().Get(player.GetHeroRef());
 		spell_damage += hero.GetSpellDamage();
 		spell_damage += state_.GetCardsManager().Get(hero.GetRawData().weapon_ref).GetSpellDamage();
 

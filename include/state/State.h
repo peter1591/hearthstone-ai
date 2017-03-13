@@ -77,7 +77,6 @@ namespace state
 		}
 
 	public: // mutate functions
-		// trigger events
 		// set card cost/attack/hp/etc.
 
 		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowContext& flow_context, CardRef ref) {
