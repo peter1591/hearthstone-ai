@@ -519,7 +519,7 @@ namespace Cards
 		{
 			added_to_play_zone += [](auto context) {
 				state::CardRef self = context.card_ref_;
-				context.state_.GetEventsManager().PushBack<state::Events::EventTypes::OnTakeDamage>(
+				context.state_.AddEvent<state::Events::EventTypes::OnTakeDamage>(
 					self,
 					[](auto& controller, auto self, auto& context) {
 					if (context.damage_ <= 0) return;

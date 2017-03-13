@@ -72,7 +72,7 @@ namespace FlowControl
 
 	inline bool FlowController::PlayMinionCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
+		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 			state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
 
 		if (state_.GetCurrentPlayer().minions_.Full()) {
@@ -89,16 +89,16 @@ namespace FlowControl
 		card.GetRawData().added_to_play_zone(
 		FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
 
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
+		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		if (card.GetRawData().battlecry) {
 			(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
 		}
 
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
+		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
 
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
+		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 		Manipulate(state_, flow_context_).Minion(card_ref).AfterSummoned();
 
 		return true;
@@ -135,8 +135,8 @@ namespace FlowControl
 
 		while (true) {
 			state::CardRef origin_defender = defender;
-			state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
-			state_.GetEventsManager().TriggerCategorizedEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
+			state_.TriggerEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
+			state_.TriggerCategorizedEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
 
 			if (!attacker.IsValid()) return kResultNotDetermined;
 			if (state_.GetCardsManager().Get(attacker).GetHP() <= 0) return kResultNotDetermined;
@@ -149,7 +149,7 @@ namespace FlowControl
 			if (origin_defender == defender) break;
 		}
 
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnAttack>(
+		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
 			attacker, state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, defender });
 		// TODO: attacker lose stealth
 
@@ -158,8 +158,8 @@ namespace FlowControl
 
 		Manipulate(state_, flow_context_).Character(attacker).AfterAttack();
 
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
-		state_.GetEventsManager().TriggerCategorizedEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
+		state_.TriggerEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
+		state_.TriggerCategorizedEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
 
 		{
 			const state::Cards::Card & attacker_card = state_.GetCardsManager().Get(attacker);
@@ -233,7 +233,7 @@ namespace FlowControl
 
 	inline void FlowController::EndTurnPhase()
 	{
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
+		state_.TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
 			state::Events::EventTypes::OnTurnEnd::Context{ state_, flow_context_ });
 	}
 
@@ -243,7 +243,7 @@ namespace FlowControl
 		state_.GetCurrentPlayer().GetResource().Refill();
 		// TODO: overload
 
-		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnTurnStart>();
+		state_.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
 
 		for (state::CardRef minion : state_.GetCurrentPlayer().minions_.Get()) {
 			Manipulate(state_, flow_context_).Minion(minion).TurnStart();

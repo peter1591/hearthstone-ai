@@ -117,7 +117,7 @@ namespace FlowControl
 		private:
 			void UpdateAura()
 			{
-				state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::UpdateAura>(
+				state_.TriggerEvent<state::Events::EventTypes::UpdateAura>(
 					state::Events::EventTypes::UpdateAura::Context{state_, flow_context_}
 				);
 			}

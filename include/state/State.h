@@ -21,7 +21,6 @@ namespace state
 		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
 
 		Events::Manager const& GetEventsManager() const { return event_mgr_; }
-		Events::Manager & GetEventsManager() { return event_mgr_; }
 
 		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
 		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
@@ -34,7 +33,7 @@ namespace state
 		void SetTurn(int turn) { turn = turn_; }
 		void IncreaseTurn() { ++turn_; }
 
-	public: // cards manager
+	public: // bridge to cards manager
 		Cards::Card const& GetCard(CardRef ref) const { return cards_mgr_.Get(ref); }
 		CardRef AddCard(Cards::Card&& card) { return cards_mgr_.PushBack(std::move(card)); }
 
@@ -58,9 +57,26 @@ namespace state
 			return FlowControl::Manipulators::WeaponManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
 		}
 
+	public: // bridge to event manager
+		template <typename EventType, typename T>
+		void AddEvent(T&& handler) {
+			return event_mgr_.PushBack<EventType, T>(std::forward<T>(handler));
+		}
+		template <typename EventType, typename T>
+		void AddEvent(CardRef card_ref, T&& handler) {
+			return event_mgr_.PushBack<EventType, T>(card_ref, std::forward<T>(handler));
+		}
+
+		template <typename EventTriggerType, typename... Args>
+		void TriggerEvent(Args&&... args) {
+			return event_mgr_.TriggerEvent<EventTriggerType, Args...>(std::forward<Args>(args)...);
+		}
+		template <typename EventTriggerType, typename... Args>
+		void TriggerCategorizedEvent(CardRef card_ref, Args&&... args) {
+			return event_mgr_.TriggerCategorizedEvent<EventTriggerType, Args...>(card_ref, std::forward<Args>(args)...);
+		}
+
 	public: // mutate functions
-		// push new card --> card_ref
-		// change card_ref zone
 		// trigger events
 		// set card cost/attack/hp/etc.
 

@@ -45,7 +45,7 @@ namespace Cards
 
 			card_data_.added_to_play_zone += [](auto context) {
 				state::CardRef self = context.card_ref_;
-				context.state_.GetEventsManager().PushBack<state::Events::EventTypes::UpdateAura>(
+				context.state_.AddEvent<state::Events::EventTypes::UpdateAura>(
 					[self](auto& controller, auto& context) {
 					state::Cards::Card const& self_card = context.state_.GetCardsManager().Get(self);
 					if (self_card.GetRawData().aura_aux_data.removed) {
