@@ -15,20 +15,20 @@ void test_compile()
 	state::State & state = *(state::State*)(nullptr);
 	state::FlowContext & flow_context = *(state::FlowContext*)(nullptr);
 
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZoneDeck>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZoneGraveyard>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZoneHand>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZoneInvalid>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZonePlay>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZoneRemoved>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
-	FlowControl::Manipulate(state, flow_context).Card(*(state::CardRef*)(nullptr))
-		.Zone().WithZone<state::kCardZoneSetASide>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZoneDeck>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZoneGraveyard>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZoneHand>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZoneInvalid>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZonePlay>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZoneRemoved>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger(flow_context, *(state::CardRef*)(nullptr))
+		.WithZone<state::kCardZoneSetASide>().ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 }
 
 int main(void)

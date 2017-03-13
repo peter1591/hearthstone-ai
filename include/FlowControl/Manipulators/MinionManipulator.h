@@ -16,11 +16,6 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeMinion);
 			}
 
-			state::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone()
-			{
-				return state::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_);
-			}
-
 			void AfterSummoned()
 			{
 				card_.SetJustPlayedFlag(true);

@@ -37,11 +37,6 @@ namespace FlowControl
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 
-			state::ZoneChangerWithUnknownZoneUnknownType Zone()
-			{
-				return state::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
-			}
-
 		protected:
 			state::State & state_;
 			state::FlowContext & flow_context_;

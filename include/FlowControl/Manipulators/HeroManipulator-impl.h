@@ -13,8 +13,8 @@ namespace FlowControl
 
 			if (player.deck_.Empty())
 			{
-				int damage = player.GetFatigueDamage();
 				player.IncreaseFatigueDamage();
+				int damage = player.GetFatigueDamage();
 				this->Damage(damage);
 				return;
 			}
@@ -22,11 +22,11 @@ namespace FlowControl
 			state::CardRef card_ref = player.deck_.GetLast();
 
 			if (player.hand_.Full()) {
-				Manipulate(state_, flow_context_).Card(card_ref).Zone().WithZone<state::kCardZoneDeck>()
+				state_.GetZoneChanger(flow_context_, card_ref).WithZone<state::kCardZoneDeck>()
 					.ChangeTo<state::kCardZoneGraveyard>(player_id_);
 			}
 			else {
-				Manipulate(state_, flow_context_).Card(card_ref).Zone().WithZone<state::kCardZoneDeck>()
+				state_.GetZoneChanger(flow_context_, card_ref).WithZone<state::kCardZoneDeck>()
 					.ChangeTo<state::kCardZoneHand>(player_id_);
 			}
 
@@ -52,7 +52,9 @@ namespace FlowControl
 
 			card_.SetWeapon(weapon_ref);
 
-			Manipulate(state_, flow_context_).Weapon(weapon_ref).Zone().WithZone<KnownZone>()
+			state_.GetZoneChanger(flow_context_, weapon_ref)
+				.WithType<state::kCardTypeWeapon>()
+				.WithZone<KnownZone>()
 				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 		}
 	}

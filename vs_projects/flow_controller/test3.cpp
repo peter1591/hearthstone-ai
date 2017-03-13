@@ -76,7 +76,7 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 	((Test3_RandomGenerator&)(flow_context.random_)).called = false;
 
 	auto ref = state.AddCard(CreateDeckCard(id, state, player));
-	FlowControl::Manipulate(state, flow_context).Card(ref).Zone().WithZone<state::kCardZoneInvalid>()
+	state.GetZoneChanger(flow_context, ref).WithZone<state::kCardZoneInvalid>()
 		.ChangeTo<state::kCardZoneDeck>(player);
 
 	if (deck_count > 0) assert(((Test3_RandomGenerator&)(flow_context.random_)).called);
@@ -117,7 +117,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, state:
 	int hand_count = (int)state.GetBoard().Get(player).hand_.Size();
 
 	auto ref = state.AddCard(CreateHandCard(id, type, state, player));
-	FlowControl::Manipulate(state, flow_context).Card(ref).Zone().WithZone<state::kCardZoneInvalid>()
+	state.GetZoneChanger(flow_context, ref).WithZone<state::kCardZoneInvalid>()
 		.ChangeTo<state::kCardZoneHand>(player);
 
 	assert(state.GetCardsManager().Get(ref).GetCardId() == id);
@@ -155,7 +155,7 @@ static void MakeHero(state::State & state, state::FlowContext & flow_context, st
 
 	state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 
-	FlowControl::Manipulate(state, flow_context).Hero(ref).Zone().WithZone<state::kCardZoneInvalid>()
+	state.GetZoneChanger(flow_context, ref).WithZone<state::kCardZoneInvalid>()
 		.ChangeTo<state::kCardZonePlay>(player);
 }
 
@@ -190,8 +190,8 @@ struct CrystalCheckStats
 };
 static void CheckCrystals(state::State & state, state::PlayerIdentifier player, CrystalCheckStats checking)
 {
-	assert(state.GetBoard().Get(player).resource_.GetCurrent() == checking.current);
-	assert(state.GetBoard().Get(player).resource_.GetTotal() == checking.total);
+	assert(state.GetBoard().Get(player).GetResource().GetCurrent() == checking.current);
+	assert(state.GetBoard().Get(player).GetResource().GetTotal() == checking.total);
 }
 
 static void CheckHero(state::State & state, state::PlayerIdentifier player, int hp, int armor, int attack)

@@ -16,11 +16,6 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeHero);
 			}
 
-			state::ZoneChangerWithUnknownZone<state::kCardTypeHero> Zone()
-			{
-				return state::ZoneChangerWithUnknownZone<state::kCardTypeHero>(state_, flow_context_, card_ref_, card_);
-			}
-
 			void DrawCard();
 			void DestroyWeapon();
 

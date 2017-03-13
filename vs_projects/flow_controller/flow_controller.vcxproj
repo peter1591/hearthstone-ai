@@ -89,7 +89,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessToFile>false</PreprocessToFile>
       <ShowIncludes>false</ShowIncludes>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,7 +115,7 @@
       <PreprocessToFile>false</PreprocessToFile>
       <ShowIncludes>false</ShowIncludes>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -154,6 +154,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Result.h" />

@@ -64,7 +64,10 @@ namespace state
 		// trigger events
 		// set card cost/attack/hp/etc.
 
-		//ZoneChangerWithUnknownZoneUnknownType ChangeZone()
+		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowContext& flow_context, CardRef ref)
+		{
+			return ZoneChangerWithUnknownZoneUnknownType(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
 
 		// TODO: should not be public
 		void SetCardZonePos(CardRef ref, int pos)

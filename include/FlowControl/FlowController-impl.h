@@ -83,7 +83,7 @@ namespace FlowControl
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.action_parameters_.GetMinionPutLocation(0, total_minions);
 
-		Manipulate(state_, flow_context_).Minion(card_ref).Zone().WithZone<state::kCardZoneHand>()
+		state_.GetZoneChanger(flow_context_, card_ref).WithZone<state::kCardZoneHand>()
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
 		card.GetRawData().added_to_play_zone(
@@ -91,7 +91,7 @@ namespace FlowControl
 
 		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
-		assert(card.GetPlayerIdentifier() == state_.current_player);
+		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		if (card.GetRawData().battlecry) {
 			(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
 		}
@@ -111,7 +111,7 @@ namespace FlowControl
 		card.GetRawData().added_to_play_zone(
 			FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
 
-		assert(card.GetPlayerIdentifier() == state_.current_player);
+		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		if (card.GetRawData().battlecry) {
 			(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
 		}
