@@ -196,7 +196,7 @@ static void CheckCrystals(state::State & state, state::PlayerIdentifier player, 
 
 static void CheckHero(state::State & state, state::PlayerIdentifier player, int hp, int armor, int attack)
 {
-	auto hero_ref = state.GetBoard().Get(player).hero_ref_;
+	auto hero_ref = state.GetBoard().Get(player).GetHeroRef();
 	auto const& hero = state.GetCardsManager().Get(hero_ref);
 
 	assert(hero.GetHP() == hp);
@@ -335,7 +335,7 @@ void test3()
 		FlowControl::FlowController controller2(state2, parameter_getter, random);
 		if (controller2.Attack(
 			state2.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(3),
-			state2.GetBoard().Get(state::PlayerIdentifier::Second()).hero_ref_
+			state2.GetBoard().Get(state::PlayerIdentifier::Second()).GetHeroRef()
 		) != FlowControl::kResultInvalid) assert(false);
 	}
 

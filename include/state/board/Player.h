@@ -23,8 +23,9 @@ namespace state
 			PlayerResource const& GetResource() const { return resource_; }
 			PlayerResource & GetResource() { return resource_; }
 
+			CardRef GetHeroRef() const { return hero_ref_; }
+
 		public:
-			CardRef hero_ref_;
 
 			Deck deck_;
 			Hand hand_;
@@ -32,10 +33,11 @@ namespace state
 			Secrets secrets_;
 			Graveyard graveyard_;
 
-
 		private:
 			PlayerResource resource_;
 			int fatigue_damage_;
+
+			CardRef hero_ref_;
 		};
 	}
 }

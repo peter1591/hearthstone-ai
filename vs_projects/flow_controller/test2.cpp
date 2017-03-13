@@ -202,7 +202,7 @@ static void CheckCrystals(state::State & state, state::PlayerIdentifier player, 
 
 static void CheckHero(state::State & state, state::PlayerIdentifier player, int hp, int armor, int attack)
 {
-	auto hero_ref = state.GetBoard().Get(player).hero_ref_;
+	auto hero_ref = state.GetBoard().Get(player).GetHeroRef();
 	auto const& hero = state.GetCardsManager().Get(hero_ref);
 
 	assert(hero.GetHP() == hp);
@@ -291,7 +291,7 @@ void test2()
 
 		if (controller2.Attack(
 			state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(0),
-			state.GetBoard().Get(state::PlayerIdentifier::Second()).hero_ref_)
+			state.GetBoard().Get(state::PlayerIdentifier::Second()).GetHeroRef())
 			!= FlowControl::kResultInvalid) assert(false);
 	}
 
@@ -306,7 +306,7 @@ void test2()
 
 	if (controller.Attack(
 		state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(1),
-		state.GetBoard().Get(state::PlayerIdentifier::Second()).hero_ref_)
+		state.GetBoard().Get(state::PlayerIdentifier::Second()).GetHeroRef())
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
@@ -488,7 +488,7 @@ void test2()
 	assert(state.GetCardsManager().Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 
 	if (controller.Attack(
-		state.GetCurrentPlayer().hero_ref_, state.GetOppositePlayer().minions_.Get(1))
+		state.GetCurrentPlayer().GetHeroRef(), state.GetOppositePlayer().minions_.Get(1))
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 11, 0, 0);
@@ -512,7 +512,7 @@ void test2()
 	assert(state.GetCardsManager().Get(state.GetCurrentPlayer().hero_ref_).GetRawData().weapon_ref.IsValid());
 
 	if (controller.Attack(
-		state.GetCurrentPlayer().hero_ref_, state.GetOppositePlayer().minions_.Get(0))
+		state.GetCurrentPlayer().GetHeroRef(), state.GetOppositePlayer().minions_.Get(0))
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 3, 0, 0);
