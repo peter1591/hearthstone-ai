@@ -214,6 +214,7 @@
     <ClInclude Include="..\..\include\state\Events\Manager.h" />
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h" />
+    <ClInclude Include="..\..\include\state\FlowContext-impl.h" />
     <ClInclude Include="..\..\include\state\FlowContext.h" />
     <ClInclude Include="..\..\include\state\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />

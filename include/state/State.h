@@ -3,8 +3,7 @@
 #include "state/Cards/Manager.h"
 #include "state/board/Board.h"
 #include "state/Events/Manager.h"
-
-namespace FlowControl { class FlowContext; }
+#include "state/FlowContext.h"
 
 namespace state
 {
@@ -89,3 +88,5 @@ namespace state
 		int turn_;
 	};
 }
+
+#include "state/FlowContext-impl.h"

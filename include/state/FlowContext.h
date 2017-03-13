@@ -22,17 +22,10 @@ namespace state
 
 	public:
 		FlowContext(IRandomGenerator & random, ActionParameterWrapper & action_parameters)
-			: random_(random), action_parameters_(action_parameters)
-		{
-			result_ = FlowControl::kResultNotDetermined;
-		}
+			: random_(random), action_parameters_(action_parameters), result_(FlowControl::kResultNotDetermined)
+		{}
 
-		void AddDeadEntryHint(State & state, CardRef ref)
-		{
-			int play_order = state.GetCardsManager().Get(ref).GetPlayOrder();
-
-			dead_entity_hints_.insert(std::make_pair(play_order, ref));
-		}
+		void AddDeadEntryHint(State & state, CardRef ref);
 
 		bool Empty() const
 		{

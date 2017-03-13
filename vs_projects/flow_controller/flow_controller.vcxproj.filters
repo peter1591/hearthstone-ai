@@ -392,5 +392,8 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\FlowContext-impl.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
