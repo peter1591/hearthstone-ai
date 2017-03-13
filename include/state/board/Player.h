@@ -26,6 +26,7 @@ namespace state
 			CardRef GetHeroRef() const { return hero_ref_; }
 
 		public:
+			CardRef hero_ref_; // TODO
 
 			Deck deck_;
 			Hand hand_;
@@ -36,8 +37,6 @@ namespace state
 		private:
 			PlayerResource resource_;
 			int fatigue_damage_;
-
-			CardRef hero_ref_;
 		};
 	}
 }

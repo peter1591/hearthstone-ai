@@ -8,13 +8,11 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			// we separate this to another class to impose a finer access control
-			class OrderedCardsManager;
 			template <state::CardType, state::CardZone> struct PlayerDataStructureMaintainer;
 
+			// we separate this to another class to impose a finer access control
 			class ZonePositionSetter
 			{
-				friend class OrderedCardsManager;
 				template <state::CardType, state::CardZone> friend struct PlayerDataStructureMaintainer;
 
 			public:
