@@ -14,20 +14,8 @@ namespace state
 				taunt(false), shielded(false), charge(false),
 				spell_damage(0)
 			{
+				static_assert(kFieldChangeId == 5, "field changed");
 			}
-
-			PlayerIdentifier player;
-			int cost;
-			int attack;
-			int max_hp;
-
-			bool taunt;
-			bool shielded;
-			bool charge;
-
-			int spell_damage;
-
-			static constexpr int kFieldChangeId = 5; // Change this if any field is changed. This helps to see where you should also modify
 
 			bool operator==(EnchantableStates const& rhs) const
 			{
@@ -43,10 +31,21 @@ namespace state
 				return true;
 			}
 
-			bool operator!=(EnchantableStates const& rhs) const
-			{
-				return !(*this == rhs);
-			}
+			bool operator!=(EnchantableStates const& rhs) const { return !(*this == rhs); }
+
+		public:
+			static constexpr int kFieldChangeId = 5; // Change this if any field is changed. This helps to see where you should also modify
+
+			PlayerIdentifier player;
+			int cost;
+			int attack;
+			int max_hp;
+
+			bool taunt;
+			bool shielded;
+			bool charge;
+
+			int spell_damage;
 		};
 	}
 }

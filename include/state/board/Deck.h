@@ -6,19 +6,6 @@
 #include "state/Cards/Manager.h"
 #include "state/Cards/Card.h"
 
-namespace FlowControl
-{
-	namespace Manipulators
-	{
-		namespace Helpers
-		{
-			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct AddToPlayerDatStructure;
-			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct RemoveFromPlayerDatStructure;
-			class OrderedCardsManager;
-		}
-	}
-}
-
 namespace state
 {
 	namespace board
