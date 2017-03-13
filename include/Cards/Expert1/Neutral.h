@@ -38,7 +38,7 @@ namespace Cards
 		{
 			added_to_play_zone += [](auto context) {
 				state::CardRef self = context.card_ref_;
-				context.state_.event_mgr.PushBack<state::Events::EventTypes::OnTurnEnd>(
+				context.state_.GetEventsManager().PushBack<state::Events::EventTypes::OnTurnEnd>(
 					[self](auto& controller, auto& context) {
 					if (!IsAlive(context, self)) return controller.Remove();
 					Manipulate(context).Card(self).Enchant().Add(Card_NEW1_038_Enchant());

@@ -12,6 +12,9 @@ namespace state
 		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
 		Cards::Manager & GetCardsManager() { return cards_mgr_; }
 
+		Events::Manager const& GetEventsManager() const { return event_mgr_; }
+		Events::Manager & GetEventsManager() { return event_mgr_; }
+
 		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
 		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
 
@@ -34,10 +37,10 @@ namespace state
 
 	public:
 		board::Board board;
-		Events::Manager event_mgr;
 
 	private:
 		Cards::Manager cards_mgr_;
+		Events::Manager event_mgr_;
 
 		PlayerIdentifier current_player_;
 		int turn_;

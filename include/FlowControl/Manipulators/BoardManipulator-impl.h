@@ -28,13 +28,13 @@ namespace FlowControl
 			assert(card.GetCardType() == state::kCardTypeMinion);
 			assert(card.GetZonePosition() == pos);
 
-			state_.event_mgr.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
+			state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, ref, card });
 
 			card.GetRawData().added_to_play_zone(
 				FlowControl::Context::AddedToPlayZone{ state_, flow_context_, ref, card });
 
-			state_.event_mgr.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
+			state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
 		}
 	}

@@ -12,8 +12,8 @@ namespace FlowControl
 			inline DamageHelper::DamageHelper(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
 			{
 				state::Events::EventTypes::OnTakeDamage::Context context{ state, flow_context, amount };
-				state.event_mgr.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(card_ref, context);
-				state.event_mgr.TriggerCategorizedEvent<state::Events::EventTypes::OnTakeDamage>(card_ref, context);
+				state.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnTakeDamage>(card_ref, context);
+				state.GetEventsManager().TriggerCategorizedEvent<state::Events::EventTypes::OnTakeDamage>(card_ref, context);
 
 				// Hooked events might change the damage amount, and/or the damage target
 				// So we should refer to the info in context

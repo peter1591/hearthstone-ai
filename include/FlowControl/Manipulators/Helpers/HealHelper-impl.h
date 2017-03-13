@@ -13,8 +13,8 @@ namespace FlowControl
 			inline HealHelper::HealHelper(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
 			{
 				state::Events::EventTypes::OnHeal::Context context{ state, card, amount };
-				state.event_mgr.TriggerEvent<state::Events::EventTypes::OnHeal>(card_ref, context);
-				state.event_mgr.TriggerCategorizedEvent<state::Events::EventTypes::OnHeal>(card_ref, context);
+				state.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnHeal>(card_ref, context);
+				state.GetEventsManager().TriggerCategorizedEvent<state::Events::EventTypes::OnHeal>(card_ref, context);
 
 				Manipulators::CharacterManipulator(state, flow_context, card_ref, card)
 					.Internal_SetDamage().Heal(amount);
