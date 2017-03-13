@@ -30,7 +30,7 @@ namespace FlowControl
 				}
 
 				DeathrattlesHelper & Clear() {
-					card_.MutableDeathrattles().clear();
+					card_.ClearDeathrattles();
 					return *this;
 				}
 

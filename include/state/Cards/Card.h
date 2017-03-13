@@ -151,13 +151,13 @@ namespace state
 
 			LocationSetter SetLocation() { return LocationSetter(data_); }
 
+			CardData::Deathrattles const& Deathrattles() const { return data_.deathrattles; }
+			void ClearDeathrattles() { data_.deathrattles.clear(); }
 			template <typename T>
 			void AddDeathrattle(T&& deathrattle) {
 				data_.deathrattles.push_back(std::forward<T>(deathrattle));
 			}
 
-			CardData::Deathrattles const& Deathrattles() const { return data_.deathrattles; }
-			CardData::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
 			void SetWeapon(CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
 			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
