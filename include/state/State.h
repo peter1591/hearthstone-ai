@@ -3,6 +3,7 @@
 #include "state/Cards/Manager.h"
 #include "state/board/Board.h"
 #include "state/Events/Manager.h"
+#include "detail/ZonePositionSetter.h"
 
 namespace state
 {
@@ -13,7 +14,7 @@ namespace state
 		board::Board & GetBoard() { return board_; }
 
 		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
-		Cards::Manager & GetCardsManager() { return cards_mgr_; }
+		Cards::Manager & GetCardsManager() { return cards_mgr_; } // TODO: do not expose all interface
 
 		Events::Manager const& GetEventsManager() const { return event_mgr_; }
 		Events::Manager & GetEventsManager() { return event_mgr_; }
@@ -34,6 +35,12 @@ namespace state
 		// change card_ref zone
 		// trigger events
 		// set card cost/attack/hp/etc.
+
+		// TODO: should not be public
+		void SetCardZonePos(CardRef ref, int pos)
+		{
+			cards_mgr_.SetCardZonePos(ref, pos);
+		}
 
 	private:
 		board::Board board_;

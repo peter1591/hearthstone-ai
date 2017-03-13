@@ -1,7 +1,6 @@
 #pragma once
 
 #include "state/Cards/Card.h"
-#include "state/detail/ZonePositionSetter.h" // TODO: remove this after build ChangeZone() on state::State
 #include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 #include "FlowControl/Manipulators/Helpers/DeathrattlesHelper.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
@@ -37,8 +36,6 @@ namespace FlowControl
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
-
-			state::detail::ZonePositionSetter ZonePosition() { return state::detail::ZonePositionSetter(card_); }
 
 			Helpers::ZoneChangerWithUnknownZoneUnknownType Zone()
 			{

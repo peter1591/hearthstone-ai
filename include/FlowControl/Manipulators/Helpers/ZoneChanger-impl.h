@@ -112,7 +112,7 @@ namespace FlowControl
 				assert(state.GetBoard().Get(card.GetPlayerIdentifier()).hand_.Get(pos) == card_ref);
 				auto& hand = state.GetBoard().Get(card.GetPlayerIdentifier()).hand_;
 				hand.Remove(pos, [&state, &flow_context](state::CardRef ref, size_t pos) {
-					Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
+					state.SetCardZonePos(ref, (int)pos);
 				});
 			}
 
@@ -140,7 +140,7 @@ namespace FlowControl
 				assert(card.GetZone() == state::kCardZonePlay);
 
 				state.GetBoard().Get(card.GetPlayerIdentifier()).minions_.Insert(card_ref, pos, [&state, &flow_context](state::CardRef ref, size_t pos) {
-					Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
+					state.SetCardZonePos(ref, (int)pos);
 				});
 			}
 			inline void PlayerDataStructureMaintainer<state::kCardTypeMinion, state::kCardZonePlay>::
@@ -151,7 +151,7 @@ namespace FlowControl
 				state.GetBoard().Get(card.GetPlayerIdentifier()).minions_.Remove(
 					card.GetZonePosition(),
 					[&state, &flow_context](state::CardRef ref, size_t pos) {
-						Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
+					state.SetCardZonePos(ref, (int)pos);
 				});
 			}
 

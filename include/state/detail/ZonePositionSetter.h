@@ -18,12 +18,9 @@ namespace state {
 		// we separate this to another class to impose a finer access control
 		class ZonePositionSetter
 		{
-			template <state::CardType, state::CardZone> friend struct FlowControl::Manipulators::Helpers::PlayerDataStructureMaintainer;
-
 		public:
 			ZonePositionSetter(state::Cards::Card & card) : card_(card) {}
 
-		private: // only accessible to friend classes
 			void Set(int pos)
 			{
 				card_.SetLocation().Position(pos);

@@ -5,6 +5,7 @@
 #include "Utils/CloneableContainers/Vector.h"
 #include "state/Cards/Card.h"
 #include "state/Types.h"
+#include "state/detail/ZonePositionSetter.h"
 
 #include "FlowControl/Manipulate.h"
 
@@ -50,6 +51,12 @@ namespace state
 
 			FlowControl::Manipulators::WeaponManipulator GetWeaponManipulator(State& state, FlowContext& flow_context, CardRef ref) {
 				return FlowControl::Manipulators::WeaponManipulator(state, flow_context, ref, GetMutable(ref));
+			}
+
+			// TODO: should not be public
+			void SetCardZonePos(CardRef ref, int pos)
+			{
+				detail::ZonePositionSetter(GetMutable(ref)).Set(pos);
 			}
 
 		private:
