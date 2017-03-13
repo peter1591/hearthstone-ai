@@ -9,6 +9,9 @@ namespace state
 	class State
 	{
 	public:
+		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
+		Cards::Manager & GetCardsManager() { return cards_mgr_; }
+
 		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
 		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
 
@@ -31,10 +34,11 @@ namespace state
 
 	public:
 		board::Board board;
-		Cards::Manager mgr;
 		Events::Manager event_mgr;
 
 	private:
+		Cards::Manager cards_mgr_;
+
 		PlayerIdentifier current_player_;
 		int turn_;
 	};

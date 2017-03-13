@@ -75,7 +75,7 @@ namespace state {
 			{
 				if (minion == exclude) return;
 
-				auto const& card = state.mgr.Get(minion);
+				auto const& card = state.GetCardsManager().Get(minion);
 
 				switch (minion_filter) {
 				case kMinionFilterAll:

@@ -177,14 +177,14 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeWeapon);
 				assert(card.GetZone() == state::kCardZonePlay);
 				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
-				assert(state.mgr.Get(player.hero_ref_).GetRawData().weapon_ref == card_ref);
+				assert(state.GetCardsManager().Get(player.hero_ref_).GetRawData().weapon_ref == card_ref);
 			}
 			inline void PlayerDataStructureMaintainer<state::kCardTypeWeapon, state::kCardZonePlay>::
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == state::kCardTypeWeapon);
 				assert(card.GetZone() == state::kCardZonePlay);
 				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
-				assert(!state.mgr.Get(player.hero_ref_).GetRawData().weapon_ref.IsValid());
+				assert(!state.GetCardsManager().Get(player.hero_ref_).GetRawData().weapon_ref.IsValid());
 			}
 
 			inline void PlayerDataStructureMaintainer<state::kCardTypeSpell, state::kCardZonePlay>::

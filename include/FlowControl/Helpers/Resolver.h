@@ -46,7 +46,7 @@ namespace FlowControl
 				deaths_.clear();
 
 				if (flow_context_.destroyed_weapon_.IsValid()) {
-					state::Cards::Card const& card = state_.mgr.Get(flow_context_.destroyed_weapon_);
+					state::Cards::Card const& card = state_.GetCardsManager().Get(flow_context_.destroyed_weapon_);
 					flow_context_.dead_entity_hints_.insert(
 						std::make_pair(card.GetPlayOrder(), flow_context_.destroyed_weapon_));
 					flow_context_.destroyed_weapon_.Invalidate();
@@ -55,7 +55,7 @@ namespace FlowControl
 				for (const auto& item : flow_context_.dead_entity_hints_)
 				{
 					state::CardRef ref = item.second;
-					const state::Cards::Card & card = state_.mgr.Get(ref);
+					const state::Cards::Card & card = state_.GetCardsManager().Get(ref);
 
 					if (card.GetZone() != state::kCardZonePlay) continue;
 					if (card.GetHP() > 0) continue;
@@ -84,7 +84,7 @@ namespace FlowControl
 
 				for (auto ref : deaths_)
 				{
-					const state::Cards::Card & card = state_.mgr.Get(ref);
+					const state::Cards::Card & card = state_.GetCardsManager().Get(ref);
 					ordered_deaths.insert(std::make_pair(card.GetPlayOrder(), std::make_pair(ref, &card)));
 				}
 
@@ -131,7 +131,7 @@ namespace FlowControl
 			void UpdateEnchantments(state::PlayerIdentifier player)
 			{
 				state::CardRef hero_ref = state_.board.Get(player).hero_ref_;
-				state::CardRef weapon_ref = state_.mgr.Get(hero_ref).GetRawData().weapon_ref;
+				state::CardRef weapon_ref = state_.GetCardsManager().Get(hero_ref).GetRawData().weapon_ref;
 
 				Manipulate(state_, flow_context_).Hero(player).Enchant().Update();
 

@@ -47,7 +47,7 @@ namespace Cards
 				state::CardRef self = context.card_ref_;
 				context.state_.event_mgr.PushBack<state::Events::EventTypes::UpdateAura>(
 					[self](auto& controller, auto& context) {
-					state::Cards::Card const& self_card = context.state_.mgr.Get(self);
+					state::Cards::Card const& self_card = context.state_.GetCardsManager().Get(self);
 					if (self_card.GetRawData().aura_aux_data.removed) {
 						assert(self_card.GetRawData().aura_aux_data.Empty());
 						controller.Remove();

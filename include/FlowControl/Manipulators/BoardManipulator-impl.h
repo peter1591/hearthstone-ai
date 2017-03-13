@@ -17,12 +17,12 @@ namespace FlowControl
 			assert(card_data.card_type == state::kCardTypeMinion);
 			card_data.enchantment_aux_data.origin_states = card_data.enchantable_states;
 
-			state::CardRef ref = state_.mgr.PushBack(state::Cards::Card(std::move(card_data)));
+			state::CardRef ref = state_.GetCardsManager().PushBack(state::Cards::Card(std::move(card_data)));
 
 			FlowControl::Manipulate(state_, flow_context_).Minion(ref).Zone().WithZone<state::kCardZoneInvalid>().
 				ChangeTo<state::kCardZonePlay>(player, pos);
 
-			state::Cards::Card const& card = state_.mgr.Get(ref);
+			state::Cards::Card const& card = state_.GetCardsManager().Get(ref);
 			assert(card.GetPlayerIdentifier() == player);
 			assert(card.GetZone() == state::kCardZonePlay);
 			assert(card.GetCardType() == state::kCardTypeMinion);

@@ -168,7 +168,7 @@ namespace Cards
 		template <typename Context>
 		static bool IsAlive(Context&& context, state::CardRef target)
 		{
-			state::Cards::Card const& card = context.state_.mgr.Get(target);
+			state::Cards::Card const& card = context.state_.GetCardsManager().Get(target);
 			return IsAlive(context, card);
 		}
 

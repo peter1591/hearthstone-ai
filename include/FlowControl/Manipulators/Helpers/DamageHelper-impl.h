@@ -17,7 +17,7 @@ namespace FlowControl
 
 				// Hooked events might change the damage amount, and/or the damage target
 				// So we should refer to the info in context
-				auto const& target_card = state.mgr.Get(card_ref);
+				auto const& target_card = state.GetCardsManager().Get(card_ref);
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(context.damage_);
 
 				flow_context.AddDeadEntryHint(state, card_ref);

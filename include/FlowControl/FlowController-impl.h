@@ -47,7 +47,7 @@ namespace FlowControl
 	inline bool FlowController::PlayCardPhase(int hand_idx)
 	{
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
-		state::Cards::Card const& card = state_.mgr.Get(card_ref);
+		state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 
 		if (card.GetRawData().battlecry_target_getter) {
 			if (!(*card.GetRawData().battlecry_target_getter)({ state_, flow_context_, card_ref, card })) {
@@ -139,12 +139,12 @@ namespace FlowControl
 			state_.event_mgr.TriggerCategorizedEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
 
 			if (!attacker.IsValid()) return kResultNotDetermined;
-			if (state_.mgr.Get(attacker).GetHP() <= 0) return kResultNotDetermined;
-			if (state_.mgr.Get(attacker).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
+			if (state_.GetCardsManager().Get(attacker).GetHP() <= 0) return kResultNotDetermined;
+			if (state_.GetCardsManager().Get(attacker).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
 			if (!defender.IsValid()) return kResultNotDetermined;
-			if (state_.mgr.Get(defender).GetHP() <= 0) return kResultNotDetermined;
-			if (state_.mgr.Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
+			if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return kResultNotDetermined;
+			if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
 			if (origin_defender == defender) break;
 		}
@@ -162,7 +162,7 @@ namespace FlowControl
 		state_.event_mgr.TriggerCategorizedEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
 
 		{
-			const state::Cards::Card & attacker_card = state_.mgr.Get(attacker);
+			const state::Cards::Card & attacker_card = state_.GetCardsManager().Get(attacker);
 			if (attacker_card.GetCardType() == state::kCardTypeHero) {
 				state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 				if (weapon_ref.IsValid()) {
@@ -176,7 +176,7 @@ namespace FlowControl
 
 	inline bool FlowController::IsAttackable(state::CardRef attacker)
 	{
-		state::Cards::Card const& card = state_.mgr.Get(attacker);
+		state::Cards::Card const& card = state_.GetCardsManager().Get(attacker);
 
 		if (card.GetCardType() == state::kCardTypeMinion) {
 			if (card.GetRawData().enchantable_states.charge == false && card.GetRawData().just_played) return false;
@@ -191,7 +191,7 @@ namespace FlowControl
 	{
 		int attack = 0;
 
-		state::Cards::Card const& card = state_.mgr.Get(ref);
+		state::Cards::Card const& card = state_.GetCardsManager().Get(ref);
 
 		int v1 = card.GetAttack();
 		if (v1 > 0) attack += v1;
@@ -200,7 +200,7 @@ namespace FlowControl
 		if (weapon_ref.IsValid()) {
 			assert(card.GetCardType() == state::kCardTypeHero);
 
-			state::Cards::Card const& weapon = state_.mgr.Get(weapon_ref);
+			state::Cards::Card const& weapon = state_.GetCardsManager().Get(weapon_ref);
 			int v2 = weapon.GetAttack();
 			if (v2 > 0) attack += v2;
 		}
@@ -260,12 +260,12 @@ namespace FlowControl
 	{
 		int spell_damage = 0;
 
-		state::Cards::Card const& hero = state_.mgr.Get(player.hero_ref_);
+		state::Cards::Card const& hero = state_.GetCardsManager().Get(player.hero_ref_);
 		spell_damage += hero.GetSpellDamage();
-		spell_damage += state_.mgr.Get(hero.GetRawData().weapon_ref).GetSpellDamage();
+		spell_damage += state_.GetCardsManager().Get(hero.GetRawData().weapon_ref).GetSpellDamage();
 
 		for (state::CardRef const& minion_ref : player.minions_.Get()) {
-			spell_damage += state_.mgr.Get(minion_ref).GetSpellDamage();
+			spell_damage += state_.GetCardsManager().Get(minion_ref).GetSpellDamage();
 		}
 
 		return spell_damage;
