@@ -155,7 +155,6 @@ namespace state
 				data_.deathrattles.push_back(std::forward<T>(deathrattle));
 			}
 
-
 			void SetWeapon(CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
 			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
 

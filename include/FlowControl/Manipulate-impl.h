@@ -13,7 +13,7 @@ namespace FlowControl
 
 	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref)
 	{
-		return state_.GetCardManipulator(state_, flow_context_, ref);
+		return Manipulators::CardManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
@@ -30,27 +30,27 @@ namespace FlowControl
 	{
 		state::CardRef ref = state_.GetBoard().Get(player).GetHeroRef();
 		assert(state_.GetCardsManager().Get(ref).GetPlayerIdentifier() == player);
-		return state_.GetHeroManipulator(state_, flow_context_, ref);
+		return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::Hero(state::CardRef hero_ref)
 	{
-		return state_.GetHeroManipulator(state_, flow_context_, hero_ref);
+		return Manipulators::HeroManipulator(state_, flow_context_, hero_ref, state_.GetMutableCard(hero_ref));
 	}
 
 	inline Manipulators::MinionManipulator Manipulate::Minion(state::CardRef ref)
 	{
-		return state_.GetMinionManipulator(state_, flow_context_, ref);
+		return Manipulators::MinionManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
 	}
 
 	inline Manipulators::CharacterManipulator Manipulate::Character(state::CardRef ref)
 	{
-		return state_.GetCharacterManipulator(state_, flow_context_, ref);
+		return Manipulators::CharacterManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
 	}
 
 	inline Manipulators::WeaponManipulator Manipulate::Weapon(state::CardRef ref)
 	{
-		return state_.GetWeaponManipulator(state_, flow_context_, ref);
+		return Manipulators::WeaponManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
 	}
 
 	inline Manipulators::BoardManipulator Manipulate::Board()

@@ -4,10 +4,7 @@
 #include "state/board/Board.h"
 #include "state/Events/Manager.h"
 
-namespace FlowControl
-{
-	class FlowContext;
-}
+namespace FlowControl { class FlowContext; }
 
 namespace state
 {
@@ -36,27 +33,8 @@ namespace state
 
 	public: // bridge to cards manager
 		Cards::Card const& GetCard(CardRef ref) const { return cards_mgr_.Get(ref); }
+		Cards::Card & GetMutableCard(CardRef ref) { return cards_mgr_.GetMutable(ref); }
 		CardRef AddCard(Cards::Card&& card) { return cards_mgr_.PushBack(std::move(card)); }
-
-		FlowControl::Manipulators::CardManipulator GetCardManipulator(State& state, FlowContext& flow_context, CardRef ref) {
-			return FlowControl::Manipulators::CardManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
-		}
-
-		FlowControl::Manipulators::HeroManipulator GetHeroManipulator(State& state, FlowContext& flow_context, CardRef ref) {
-			return FlowControl::Manipulators::HeroManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
-		}
-
-		FlowControl::Manipulators::MinionManipulator GetMinionManipulator(State& state, FlowContext& flow_context, CardRef ref) {
-			return FlowControl::Manipulators::MinionManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
-		}
-
-		FlowControl::Manipulators::CharacterManipulator GetCharacterManipulator(State& state, FlowContext& flow_context, CardRef ref) {
-			return FlowControl::Manipulators::CharacterManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
-		}
-
-		FlowControl::Manipulators::WeaponManipulator GetWeaponManipulator(State& state, FlowContext& flow_context, CardRef ref) {
-			return FlowControl::Manipulators::WeaponManipulator(state, flow_context, ref, cards_mgr_.GetMutable(ref));
-		}
 
 	public: // bridge to event manager
 		template <typename EventType, typename T>
@@ -77,9 +55,7 @@ namespace state
 			return event_mgr_.TriggerCategorizedEvent<EventTriggerType, Args...>(card_ref, std::forward<Args>(args)...);
 		}
 
-	public: // mutate functions
-		// set card cost/attack/hp/etc.
-
+	public: // zone changer
 		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowContext& flow_context, CardRef ref) {
 			return ZoneChangerWithUnknownZoneUnknownType(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
 		}
