@@ -22,11 +22,11 @@ namespace FlowControl
 			state::CardRef card_ref = player.deck_.GetLast();
 
 			if (player.hand_.Full()) {
-				state_.GetZoneChanger<state::kCardZoneDeck>(flow_context_, card_ref)
+				state_.GetZoneChanger<state::kCardZoneDeck>(flow_context_.random_, card_ref)
 					.ChangeTo<state::kCardZoneGraveyard>(player_id_);
 			}
 			else {
-				state_.GetZoneChanger<state::kCardZoneDeck>(flow_context_, card_ref)
+				state_.GetZoneChanger<state::kCardZoneDeck>(flow_context_.random_, card_ref)
 					.ChangeTo<state::kCardZoneHand>(player_id_);
 			}
 
@@ -52,7 +52,7 @@ namespace FlowControl
 
 			card_.SetWeapon(weapon_ref);
 
-			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(flow_context_, weapon_ref)
+			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(flow_context_.random_, weapon_ref)
 				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 		}
 	}

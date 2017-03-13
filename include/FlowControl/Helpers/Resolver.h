@@ -101,7 +101,7 @@ namespace FlowControl
 						Manipulate(state_, flow_context_).Hero(card.GetPlayerIdentifier()).RemoveWeaponRef()();
 					}
 
-					state_.GetZoneChanger(flow_context_, ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
+					state_.GetZoneChanger(flow_context_.random_, ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
 				return true;

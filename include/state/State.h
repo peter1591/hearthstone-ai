@@ -55,28 +55,28 @@ namespace state
 		}
 
 	public: // zone changer
-		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowContext& flow_context, CardRef ref) {
-			return ZoneChangerWithUnknownZoneUnknownType(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(IRandomGenerator& random, CardRef ref) {
+			return ZoneChangerWithUnknownZoneUnknownType(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardZone KnownZone>
-		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
-			return ZoneChangerWithUnknownType<KnownZone>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
+			return ZoneChangerWithUnknownType<KnownZone>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardType KnownType>
-		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
-			return ZoneChangerWithUnknownZone<KnownType>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
+			return ZoneChangerWithUnknownZone<KnownType>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardType KnownType, state::CardZone KnownZone>
-		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
-			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
+			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardZone KnownZone, state::CardType KnownType>
-		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
-			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
+			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 	private:
