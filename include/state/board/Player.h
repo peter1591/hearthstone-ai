@@ -16,6 +16,11 @@ namespace state
 		public:
 			Player() : fatigue_damage_(0) {}
 
+			int GetFatigueDamage() const { return fatigue_damage_; }
+			void SetFatigueDamage(int v) { fatigue_damage_ = v; }
+			void IncreaseFatigueDamage() { ++fatigue_damage_; }
+
+		public:
 			CardRef hero_ref_;
 
 			Deck deck_;
@@ -25,6 +30,8 @@ namespace state
 			Graveyard graveyard_;
 
 			PlayerResource resource_;
+
+		private:
 			int fatigue_damage_;
 		};
 	}

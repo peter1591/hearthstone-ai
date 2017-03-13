@@ -49,12 +49,12 @@ namespace Cards
 			}
 			DamageHelper & Owner() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.board.Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
+				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
 				return *this;
 			}
 			DamageHelper & Opponent() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.board.Get(context_.card_.GetPlayerIdentifier().Opposite()).hero_ref_;
+				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier().Opposite()).hero_ref_;
 				return *this;
 			}
 
@@ -82,12 +82,12 @@ namespace Cards
 			}
 			HealHelper & Owner() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.board.Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
+				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
 				return *this;
 			}
 			HealHelper & Opponent() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.board.GetAnother(context_.card_.GetPlayerIdentifier()).hero_ref_;
+				target_ = context_.state_.GetBoard().GetAnother(context_.card_.GetPlayerIdentifier()).hero_ref_;
 				return *this;
 			}
 
@@ -138,31 +138,31 @@ namespace Cards
 		template <typename Context>
 		static state::CardRef Owner(Context&& context)
 		{
-			return context.state_.board.Get(context.card_.GetPlayerIdentifier()).hero_ref_;
+			return context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier()).hero_ref_;
 		}
 
 		template <typename Context>
 		static state::CardRef Opponent(Context&& context)
 		{
-			return context.state_.board.GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_;
+			return context.state_.GetBoard().GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_;
 		}
 
 		template <typename Context>
 		static PlayerHelper<Context> Player(Context&& context, state::PlayerIdentifier player)
 		{
-			return PlayerHelper<Context>(context, context.state_.board.Get(player));
+			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(player));
 		}
 
 		template <typename Context>
 		static PlayerHelper<Context> Player(Context&& context)
 		{
-			return PlayerHelper<Context>(context, context.state_.board.Get(context.card_.GetPlayerIdentifier()));
+			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier()));
 		}
 
 		template <typename Context>
 		static PlayerHelper<Context> AnotherPlayer(Context&& context)
 		{
-			return PlayerHelper<Context>(context, context.state_.board.Get(context.card_.GetPlayerIdentifier().Opposite()));
+			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier().Opposite()));
 		}
 
 		template <typename Context>
@@ -223,7 +223,7 @@ namespace Cards
 		static void SummonToEnemy(Context && context, int card_id)
 		{
 			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier().Opposite();
-			int pos = context.state_.board.Get(player.Opposite()).minions_.Size();
+			int pos = context.state_.GetBoard().Get(player.Opposite()).minions_.Size();
 			return SummonInternal(std::forward<Context>(context), card_id, player, pos);
 		}
 
@@ -231,7 +231,7 @@ namespace Cards
 		template <typename Context>
 		static void SummonInternal(Context&& context, int card_id, state::PlayerIdentifier player, int pos)
 		{
-			if (context.state_.board.Get(player).minions_.Full()) return;
+			if (context.state_.GetBoard().Get(player).minions_.Full()) return;
 
 			state::Cards::CardData card_data = FlowControl::Dispatchers::Minions::CreateInstance(card_id);
 			card_data.enchantable_states.player = player;

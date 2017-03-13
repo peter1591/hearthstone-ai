@@ -9,6 +9,9 @@ namespace state
 	class State
 	{
 	public:
+		board::Board const& GetBoard() const { return board_; }
+		board::Board & GetBoard() { return board_; }
+
 		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
 		Cards::Manager & GetCardsManager() { return cards_mgr_; }
 
@@ -17,17 +20,14 @@ namespace state
 
 		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
 		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
+		board::Player & GetCurrentPlayer() { return board_.Get(current_player_); }
+		const board::Player & GetCurrentPlayer() const { return board_.Get(current_player_); }
+		board::Player & GetOppositePlayer() { return board_.Get(current_player_.Opposite()); }
+		const board::Player & GetOppositePlayer() const { return board_.Get(current_player_.Opposite()); }
 
 		int GetTurn() const { return turn_; }
 		void SetTurn(int turn) { turn = turn_; }
 		void IncreaseTurn() { ++turn_; }
-
-	public:
-		board::Player & GetCurrentPlayer() { return board.Get(current_player_); }
-		const board::Player & GetCurrentPlayer() const { return board.Get(current_player_); }
-
-		board::Player & GetOppositePlayer() { return board.Get(current_player_.Opposite()); }
-		const board::Player & GetOppositePlayer() const { return board.Get(current_player_.Opposite()); }
 
 	public: // mutate functions
 		// push new card --> card_ref
@@ -35,10 +35,8 @@ namespace state
 		// trigger events
 		// set card cost/attack/hp/etc.
 
-	public:
-		board::Board board;
-
 	private:
+		board::Board board_;
 		Cards::Manager cards_mgr_;
 		Events::Manager event_mgr_;
 

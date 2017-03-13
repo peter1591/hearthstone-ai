@@ -65,7 +65,7 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == TargetCardType);
 				assert(card.GetZone() == state::kCardZoneDeck);
-				state.board.Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](auto exclusive_max) {
+				state.GetBoard().Get(card.GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [flow_context](auto exclusive_max) {
 					return flow_context.random_.Get(exclusive_max);
 				});
 			}
@@ -74,7 +74,7 @@ namespace FlowControl
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == TargetCardType);
 				assert(card.GetZone() == state::kCardZoneDeck);
-				state.board.Get(card.GetPlayerIdentifier()).deck_.RemoveLast();
+				state.GetBoard().Get(card.GetPlayerIdentifier()).deck_.RemoveLast();
 			}
 
 			template <state::CardType TargetCardType>
@@ -83,14 +83,14 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == TargetCardType);
 				assert(card.GetZone() == state::kCardZoneGraveyard);
-				state.board.Get(card.GetPlayerIdentifier()).graveyard_.Add<TargetCardType>(card_ref);
+				state.GetBoard().Get(card.GetPlayerIdentifier()).graveyard_.Add<TargetCardType>(card_ref);
 			}
 			template <state::CardType TargetCardType>
 			inline void PlayerDataStructureMaintainer<TargetCardType, state::kCardZoneGraveyard>::
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == TargetCardType);
 				assert(card.GetZone() == state::kCardZoneGraveyard);
-				state.board.Get(card.GetPlayerIdentifier()).graveyard_.Remove<TargetCardType>(card_ref);
+				state.GetBoard().Get(card.GetPlayerIdentifier()).graveyard_.Remove<TargetCardType>(card_ref);
 			}
 
 			template <state::CardType TargetCardType>
@@ -99,7 +99,7 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == TargetCardType);
 				assert(card.GetZone() == state::kCardZoneHand);
-				int pos = (int)state.board.Get(card.GetPlayerIdentifier()).hand_.PushBack(card_ref);
+				int pos = (int)state.GetBoard().Get(card.GetPlayerIdentifier()).hand_.PushBack(card_ref);
 				card.SetLocation().Position(pos);
 			}
 			template <state::CardType TargetCardType>
@@ -109,8 +109,8 @@ namespace FlowControl
 				assert(card.GetZone() == state::kCardZoneHand);
 
 				int pos = card.GetZonePosition();
-				assert(state.board.Get(card.GetPlayerIdentifier()).hand_.Get(pos) == card_ref);
-				auto& hand = state.board.Get(card.GetPlayerIdentifier()).hand_;
+				assert(state.GetBoard().Get(card.GetPlayerIdentifier()).hand_.Get(pos) == card_ref);
+				auto& hand = state.GetBoard().Get(card.GetPlayerIdentifier()).hand_;
 				hand.Remove(pos, [&state, &flow_context](state::CardRef ref, size_t pos) {
 					Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
 				});
@@ -121,7 +121,7 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == state::kCardTypeHero);
 				assert(card.GetZone() == state::kCardZonePlay);
-				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
+				state::board::Player & player = state.GetBoard().Get(card.GetPlayerIdentifier());
 				if (player.hero_ref_.IsValid()) throw std::exception("hero should be removed first");
 				player.hero_ref_ = card_ref;
 			}
@@ -129,7 +129,7 @@ namespace FlowControl
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == state::kCardTypeHero);
 				assert(card.GetZone() == state::kCardZonePlay);
-				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
+				state::board::Player & player = state.GetBoard().Get(card.GetPlayerIdentifier());
 				player.hero_ref_.Invalidate();
 			}
 
@@ -139,7 +139,7 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeMinion);
 				assert(card.GetZone() == state::kCardZonePlay);
 
-				state.board.Get(card.GetPlayerIdentifier()).minions_.Insert(card_ref, pos, [&state, &flow_context](state::CardRef ref, size_t pos) {
+				state.GetBoard().Get(card.GetPlayerIdentifier()).minions_.Insert(card_ref, pos, [&state, &flow_context](state::CardRef ref, size_t pos) {
 					Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
 				});
 			}
@@ -148,7 +148,7 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeMinion);
 				assert(card.GetZone() == state::kCardZonePlay);
 
-				state.board.Get(card.GetPlayerIdentifier()).minions_.Remove(
+				state.GetBoard().Get(card.GetPlayerIdentifier()).minions_.Remove(
 					card.GetZonePosition(),
 					[&state, &flow_context](state::CardRef ref, size_t pos) {
 						Manipulate(state, flow_context).Card(ref).ZonePosition().Set((int)pos);
@@ -160,14 +160,14 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == state::kCardTypeSecret);
 				assert(card.GetZone() == state::kCardZonePlay);
-				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
+				state::board::Player & player = state.GetBoard().Get(card.GetPlayerIdentifier());
 				return player.secrets_.Add(card.GetCardId(), card_ref);
 			}
 			inline void PlayerDataStructureMaintainer<state::kCardTypeSecret, state::kCardZonePlay>::
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == state::kCardTypeSecret);
 				assert(card.GetZone() == state::kCardZonePlay);
-				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
+				state::board::Player & player = state.GetBoard().Get(card.GetPlayerIdentifier());
 				return player.secrets_.Remove(card.GetCardId());
 			}
 
@@ -176,14 +176,14 @@ namespace FlowControl
 			{
 				assert(card.GetCardType() == state::kCardTypeWeapon);
 				assert(card.GetZone() == state::kCardZonePlay);
-				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
+				state::board::Player & player = state.GetBoard().Get(card.GetPlayerIdentifier());
 				assert(state.GetCardsManager().Get(player.hero_ref_).GetRawData().weapon_ref == card_ref);
 			}
 			inline void PlayerDataStructureMaintainer<state::kCardTypeWeapon, state::kCardZonePlay>::
 				Remove(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 				assert(card.GetCardType() == state::kCardTypeWeapon);
 				assert(card.GetZone() == state::kCardZonePlay);
-				state::board::Player & player = state.board.Get(card.GetPlayerIdentifier());
+				state::board::Player & player = state.GetBoard().Get(card.GetPlayerIdentifier());
 				assert(!state.GetCardsManager().Get(player.hero_ref_).GetRawData().weapon_ref.IsValid());
 			}
 

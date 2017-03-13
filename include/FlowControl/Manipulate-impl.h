@@ -28,7 +28,7 @@ namespace FlowControl
 
 	inline Manipulators::HeroManipulator Manipulate::Hero(state::PlayerIdentifier player)
 	{
-		state::CardRef ref = state_.board.Get(player).hero_ref_;
+		state::CardRef ref = state_.GetBoard().Get(player).hero_ref_;
 		assert(state_.GetCardsManager().Get(ref).GetPlayerIdentifier() == player);
 		return state_.GetCardsManager().GetHeroManipulator(state_, flow_context_, ref);
 	}

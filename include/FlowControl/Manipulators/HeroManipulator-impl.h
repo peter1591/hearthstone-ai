@@ -8,12 +8,13 @@ namespace FlowControl
 	{
 		inline void HeroManipulator::DrawCard()
 		{
-			state::board::Player & player = state_.board.Get(player_id_);
+			state::board::Player & player = state_.GetBoard().Get(player_id_);
 			assert(player.hero_ref_ == card_ref_);
 
 			if (player.deck_.Empty())
 			{
-				int damage = ++player.fatigue_damage_;
+				int damage = player.GetFatigueDamage();
+				player.IncreaseFatigueDamage();
 				this->Damage(damage);
 				return;
 			}

@@ -69,10 +69,10 @@ namespace FlowControl
 
 			bool RemoveDeaths()
 			{
-				auto first_it = deaths_.find(state_.board.GetFirst().hero_ref_);
+				auto first_it = deaths_.find(state_.GetBoard().GetFirst().hero_ref_);
 				bool first_dead = first_it != deaths_.end();
 
-				auto second_it = deaths_.find(state_.board.GetSecond().hero_ref_);
+				auto second_it = deaths_.find(state_.GetBoard().GetSecond().hero_ref_);
 				bool second_dead = second_it != deaths_.end();
 
 				if (first_dead && second_dead) return SetResult(kResultDraw);
@@ -130,7 +130,7 @@ namespace FlowControl
 
 			void UpdateEnchantments(state::PlayerIdentifier player)
 			{
-				state::CardRef hero_ref = state_.board.Get(player).hero_ref_;
+				state::CardRef hero_ref = state_.GetBoard().Get(player).hero_ref_;
 				state::CardRef weapon_ref = state_.GetCardsManager().Get(hero_ref).GetRawData().weapon_ref;
 
 				Manipulate(state_, flow_context_).Hero(player).Enchant().Update();
@@ -139,7 +139,7 @@ namespace FlowControl
 					Manipulate(state_, flow_context_).Weapon(weapon_ref).Enchant().Update();
 				}
 
-				for (state::CardRef minion_ref : state_.board.Get(player).minions_.Get()) {
+				for (state::CardRef minion_ref : state_.GetBoard().Get(player).minions_.Get()) {
 					Manipulate(state_, flow_context_).Minion(minion_ref).Enchant().Update();
 				}
 			}

@@ -51,8 +51,8 @@ namespace state {
 			template <typename Functor>
 			void Process(State const& state, Functor&& functor) const
 			{
-				if (include_first) ProcessPlayerTargets(state, state.board.GetFirst(), std::forward<Functor>(functor));
-				if (include_second) ProcessPlayerTargets(state, state.board.GetSecond(), std::forward<Functor>(functor));
+				if (include_first) ProcessPlayerTargets(state, state.GetBoard().GetFirst(), std::forward<Functor>(functor));
+				if (include_second) ProcessPlayerTargets(state, state.GetBoard().GetSecond(), std::forward<Functor>(functor));
 			}
 
 			template <typename Functor>
