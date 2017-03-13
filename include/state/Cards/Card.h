@@ -17,15 +17,16 @@ namespace FlowControl
 		{
 			class EnchantmentHelper;
 			class AuraHelper;
-			template <state::CardZone T1, state::CardType T2> class ZoneChanger;
-			template <state::CardType TargetCardType, state::CardZone TargetCardZone> struct PlayerDataStructureMaintainer;
 		}
 	}
 }
 
 namespace state
 {
-	namespace detail { class ZonePositionSetter; }
+	template <CardZone T1, CardType T2> class ZoneChanger;
+	namespace detail {
+		class ZonePositionSetter;
+	}
 
 	namespace Cards
 	{
@@ -56,9 +57,9 @@ namespace state
 
 			class LocationSetter
 			{
-				template <state::CardZone T1, state::CardType T2> friend class FlowControl::Manipulators::Helpers::ZoneChanger;
-				template <state::CardType, state::CardZone> friend struct PlayerDataStructureMaintainer;
-				friend class state::detail::ZonePositionSetter;
+				template <CardZone T1, CardType T2> friend class ZoneChanger;
+				template <CardType, CardZone> friend struct PlayerDataStructureMaintainer;
+				friend class ZonePositionSetter;
 
 			public:
 				LocationSetter(CardData & data) : data_(data) {}
@@ -158,7 +159,7 @@ namespace state
 			CardData::Deathrattles const& Deathrattles() const { return data_.deathrattles; }
 			CardData::Deathrattles & MutableDeathrattles() { return data_.deathrattles; }
 
-			void SetWeapon(state::CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
+			void SetWeapon(CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
 			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
 
 		public:

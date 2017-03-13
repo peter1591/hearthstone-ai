@@ -1,10 +1,10 @@
 #pragma once
 
 #include "state/Cards/Card.h"
+#include "state/ZoneChanger.h"
 #include "FlowControl/Manipulators/Helpers/AuraHelper.h"
 #include "FlowControl/Manipulators/Helpers/DeathrattlesHelper.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
-#include "FlowControl/Manipulators/Helpers/ZoneChanger.h"
 #include "FlowControl/Manipulators/detail/DamageSetter.h"
 
 namespace state {
@@ -37,9 +37,9 @@ namespace FlowControl
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 
-			Helpers::ZoneChangerWithUnknownZoneUnknownType Zone()
+			state::ZoneChangerWithUnknownZoneUnknownType Zone()
 			{
-				return Helpers::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
+				return state::ZoneChangerWithUnknownZoneUnknownType(state_, flow_context_, card_ref_, card_);
 			}
 
 		protected:

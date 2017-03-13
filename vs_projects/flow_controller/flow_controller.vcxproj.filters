@@ -221,9 +221,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
@@ -356,9 +353,6 @@
     <ClInclude Include="..\..\include\state\IRandomGenerator.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\ZoneChanger-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\Cards\aura\AuraAuxData.h">
       <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
@@ -385,6 +379,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\state\detail\ZonePositionSetter.h">
       <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\ZoneChanger.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\ZoneChanger-impl.h">
+      <Filter>Header Files\state</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

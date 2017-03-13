@@ -17,9 +17,9 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeWeapon);
 			}
 
-			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeWeapon> Zone()
+			state::ZoneChangerWithUnknownZone<state::kCardTypeWeapon> Zone()
 			{
-				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, flow_context_, card_ref_, card_);
+				return state::ZoneChangerWithUnknownZone<state::kCardTypeWeapon>(state_, flow_context_, card_ref_, card_);
 			}
 
 			Helpers::DamageHelper Damage(int amount) { return Helpers::DamageHelper(state_, flow_context_, card_ref_, card_, amount); }

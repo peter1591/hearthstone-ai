@@ -16,9 +16,9 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeMinion);
 			}
 
-			Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone()
+			state::ZoneChangerWithUnknownZone<state::kCardTypeMinion> Zone()
 			{
-				return Helpers::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_);
+				return state::ZoneChangerWithUnknownZone<state::kCardTypeMinion>(state_, flow_context_, card_ref_, card_);
 			}
 
 			void AfterSummoned()
