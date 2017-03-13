@@ -4,7 +4,7 @@
 #include "FlowControl/FlowController.h"
 #include "FlowControl/FlowController-impl.h"
 
-class Test3_ActionParameterGetter : public state::IActionParameterGetter
+class Test3_ActionParameterGetter : public FlowControl::IActionParameterGetter
 {
 public:
 	int GetMinionPutLocation(int min, int max)
@@ -68,7 +68,7 @@ static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state,
 	return state::Cards::Card(raw_card);
 }
 
-static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
@@ -90,7 +90,7 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 	return ref;
 }
 
-static void MakeDeck(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player)
+static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	PushBackDeckCard(Cards::ID_EX1_020, flow_context, state, player);
 	PushBackDeckCard(Cards::ID_EX1_020, flow_context, state, player);
@@ -112,7 +112,7 @@ static state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type,
 	return state::Cards::Card(raw_card);
 }
 
-static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, state::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int hand_count = (int)state.GetBoard().Get(player).hand_.Size();
 
@@ -137,12 +137,12 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, state:
 	return ref;
 }
 
-static void MakeHand(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player)
+static void MakeHand(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	AddHandCard(Cards::ID_CS2_141, state::kCardTypeMinion, flow_context, state, player);
 }
 
-static void MakeHero(state::State & state, state::FlowContext & flow_context, state::PlayerIdentifier player)
+static void MakeHero(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	state::Cards::CardData raw_card;
 	raw_card.card_id = 8;

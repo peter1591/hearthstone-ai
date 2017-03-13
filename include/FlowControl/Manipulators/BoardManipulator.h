@@ -2,10 +2,10 @@
 
 #include "state/IRandomGenerator.h"
 #include "state/Cards/CardData.h"
+#include "FlowControl/FlowContext.h"
 
 namespace state {
 	class State;
-	class FlowContext;
 }
 
 namespace FlowControl
@@ -15,7 +15,7 @@ namespace FlowControl
 		class BoardManipulator
 		{
 		public:
-			BoardManipulator(state::State & state, state::FlowContext & flow_context)
+			BoardManipulator(state::State & state, FlowContext & flow_context)
 				: state_(state), flow_context_(flow_context)
 			{
 			}
@@ -24,7 +24,7 @@ namespace FlowControl
 
 		private:
 			state::State & state_;
-			state::FlowContext & flow_context_;
+			FlowContext & flow_context_;
 		};
 	}
 }

@@ -2,9 +2,10 @@
 
 #include "state/Cards/Enchantments/Enchantments.h"
 
+namespace FlowControl { class FlowContext; }
+
 namespace state {
 	class State;
-	class FlowContext;
 	class CardRef;
 
 	namespace targetor { class TargetsGenerator; }
@@ -17,7 +18,7 @@ namespace state {
 				struct AuraApplyOn
 				{
 					State & state_;
-					FlowContext & flow_context_;
+					FlowControl::FlowContext & flow_context_;
 					CardRef card_ref_;
 					const Card & card_;
 					CardRef target_;
@@ -27,7 +28,7 @@ namespace state {
 				struct AuraGetTargets
 				{
 					State & state_;
-					FlowContext & flow_context_;
+					FlowControl::FlowContext & flow_context_;
 					CardRef card_ref_;
 					const Card & card_;
 					aura::AuraAuxData & aura_data_;
@@ -37,7 +38,7 @@ namespace state {
 				struct AuraIsValid
 				{
 					State & state_;
-					FlowContext & flow_context_;
+					FlowControl::FlowContext & flow_context_;
 					CardRef card_ref_;
 					const Card & card_;
 				};
@@ -45,7 +46,7 @@ namespace state {
 				struct AuraRemoveFrom
 				{
 					State & state_;
-					FlowContext & flow_context_;
+					FlowControl::FlowContext & flow_context_;
 					const CardRef card_ref_;
 					const Card & card_;
 					const CardRef target_;

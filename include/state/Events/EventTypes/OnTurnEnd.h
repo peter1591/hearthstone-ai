@@ -5,6 +5,8 @@
 #include <iostream>
 #include <functional>
 
+namespace FlowControl { class FlowContext; }
+
 namespace state
 {
 	namespace Cards
@@ -22,7 +24,7 @@ namespace state
 				struct Context
 				{
 					state::State & state_;
-					state::FlowContext & flow_context_;
+					FlowControl::FlowContext & flow_context_;
 				};
 
 			public:

@@ -3,10 +3,12 @@
 #include <vector>
 #include <unordered_set>
 #include "state/State.h"
+#include "state/board/Board.h"
+
+namespace FlowControl { class FlowContext; }
 
 namespace state {
 	class State;
-	class FlowContext;
 
 	namespace targetor {
 		class Targets
@@ -33,7 +35,7 @@ namespace state {
 			}
 
 			template <typename Functor>
-			void ForEach(State & state, FlowContext & flow_context, Functor&& func) const
+			void ForEach(State & state, FlowControl::FlowContext & flow_context, Functor&& func) const
 			{
 				Process(state, [&](CardRef ref) {
 					func(state, flow_context, ref);

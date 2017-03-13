@@ -1,9 +1,9 @@
 #pragma once
 
-#include "state/IActionParameterGetter.h"
 #include "state/targetor/Targets.h"
+#include "FlowControl/IActionParameterGetter.h"
 
-namespace state {
+namespace FlowControl {
 	class ActionParameterWrapper
 	{
 	public:
@@ -28,10 +28,10 @@ namespace state {
 			return minion_put_location_;
 		}
 
-		CardRef GetBattlecryTarget(State & state, CardRef card_ref, const Cards::Card & card, targetor::Targets const& target_info)
+		state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const& target_info)
 		{
 			if (!battlecry_target_.IsValid()) {
-				std::vector<CardRef> targets;
+				std::vector<state::CardRef> targets;
 				target_info.Fill(state, targets);
 				battlecry_target_ = getter_.GetBattlecryTarget(state, card_ref, card, targets);
 			}
@@ -47,6 +47,6 @@ namespace state {
 	private:
 		IActionParameterGetter & getter_;
 		int minion_put_location_;
-		CardRef battlecry_target_;
+		state::CardRef battlecry_target_;
 	};
 }

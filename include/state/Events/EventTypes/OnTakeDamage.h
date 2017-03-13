@@ -24,7 +24,7 @@ namespace state
 				struct Context
 				{
 					state::State & state_;
-					state::FlowContext & flow_context_;
+					FlowControl::FlowContext & flow_context_;
 					int damage_;
 				};
 			public:

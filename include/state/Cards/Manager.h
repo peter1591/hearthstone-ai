@@ -6,13 +6,6 @@
 #include "state/Cards/Card.h"
 #include "state/Types.h"
 
-#include "FlowControl/Manipulate.h"
-
-namespace FlowControl
-{
-	class FlowContext;
-}
-
 namespace state
 {
 	class State;

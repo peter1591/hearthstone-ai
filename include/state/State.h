@@ -1,9 +1,11 @@
 #pragma once
 
+#include "state/Types.h"
 #include "state/Cards/Manager.h"
 #include "state/board/Board.h"
 #include "state/Events/Manager.h"
-#include "state/FlowContext.h"
+#include "state/IRandomGenerator.h"
+#include "state/ZoneChanger.h"
 
 namespace state
 {
@@ -88,5 +90,3 @@ namespace state
 		int turn_;
 	};
 }
-
-#include "state/FlowContext-impl.h"

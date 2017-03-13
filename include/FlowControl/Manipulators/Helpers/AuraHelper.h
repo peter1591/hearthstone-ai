@@ -12,7 +12,7 @@ namespace FlowControl
 			class AuraHelper
 			{
 			public:
-				AuraHelper(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) :
+				AuraHelper(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) :
 					state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 				{
 				}
@@ -21,7 +21,7 @@ namespace FlowControl
 
 			private:
 				state::State & state_;
-				state::FlowContext & flow_context_;
+				FlowControl::FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				state::Cards::Card & card_;
 			};

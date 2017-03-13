@@ -14,7 +14,7 @@ void test_compile()
 
 	state::State & state = *(state::State*)(nullptr);
 	state::IRandomGenerator & random = *(state::IRandomGenerator*)(nullptr);
-	state::FlowContext & flow_context = *(state::FlowContext*)(nullptr);
+	FlowControl::FlowContext & flow_context = *(FlowControl::FlowContext*)(nullptr);
 
 	state.GetZoneChanger<state::kCardZoneDeck>(random, *(state::CardRef*)(nullptr))
 		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());

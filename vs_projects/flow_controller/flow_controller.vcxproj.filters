@@ -341,15 +341,6 @@
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\FlowContext.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\ActionParameterWrapper.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\IActionParameterGetter.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\IRandomGenerator.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
@@ -392,8 +383,14 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\FlowContext-impl.h">
-      <Filter>Header Files\state</Filter>
+    <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

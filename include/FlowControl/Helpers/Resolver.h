@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <map>
 #include "state/State.h"
-#include "state/FlowContext.h"
+#include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulate.h"
 
 namespace FlowControl
@@ -13,7 +13,7 @@ namespace FlowControl
 		class Resolver
 		{
 		public:
-			Resolver(state::State & state, state::FlowContext & flow_context)
+			Resolver(state::State & state, FlowContext & flow_context)
 				: state_(state), flow_context_(flow_context)
 			{
 			}
@@ -146,7 +146,7 @@ namespace FlowControl
 
 		private:
 			state::State & state_;
-			state::FlowContext & flow_context_;
+			FlowContext & flow_context_;
 			std::unordered_set<state::CardRef> deaths_;
 		};
 	}

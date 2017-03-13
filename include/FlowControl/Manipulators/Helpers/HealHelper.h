@@ -9,7 +9,7 @@ namespace FlowControl
 			class HealHelper
 			{
 			public:
-				HealHelper(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount);
+				HealHelper(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount);
 			};
 		}
 	}

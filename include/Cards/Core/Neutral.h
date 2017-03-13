@@ -433,7 +433,7 @@ namespace Cards
 		{
 			battlecry = [](auto context) {
 				ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
-					[](state::State & state, state::FlowContext & flow_context, state::CardRef ref) {
+					[](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
 					FlowControl::Manipulate(state, flow_context).Character(ref).Heal(2);
 				});
 			};

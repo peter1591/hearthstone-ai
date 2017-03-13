@@ -1,6 +1,8 @@
 #pragma once
 
+#include "state/State.h"
 #include "state/Types.h"
+#include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulators/BoardManipulator.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
@@ -8,17 +10,12 @@
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
 
-namespace state {
-	class State;
-	class FlowContext;
-}
-
 namespace FlowControl
 {
 	class Manipulate
 	{
 	public:
-		Manipulate(state::State & state, state::FlowContext & flow_context);
+		Manipulate(state::State & state, FlowContext & flow_context);
 
 		Manipulators::CardManipulator Card(state::CardRef ref);
 
@@ -37,6 +34,6 @@ namespace FlowControl
 
 	private:
 		state::State & state_;
-		state::FlowContext & flow_context_;
+		FlowControl::FlowContext & flow_context_;
 	};
 }

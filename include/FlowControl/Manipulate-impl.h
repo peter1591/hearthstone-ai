@@ -2,11 +2,11 @@
 #include "FlowControl/Manipulate.h"
 
 #include "state/State.h"
-#include "state/FlowContext.h"
+#include "FlowControl/FlowContext.h"
 
 namespace FlowControl
 {
-	inline Manipulate::Manipulate(state::State & state, state::FlowContext & flow_context)
+	inline Manipulate::Manipulate(state::State & state, FlowControl::FlowContext & flow_context)
 		: state_(state), flow_context_(flow_context)
 	{
 	}

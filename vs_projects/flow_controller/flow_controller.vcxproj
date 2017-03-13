@@ -88,7 +88,7 @@
       <SDLCheck>false</SDLCheck>
       <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessToFile>false</PreprocessToFile>
-      <ShowIncludes>false</ShowIncludes>
+      <ShowIncludes>true</ShowIncludes>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
@@ -143,13 +143,16 @@
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
+    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
+    <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
     <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h" />
+    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
@@ -174,7 +177,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
-    <ClInclude Include="..\..\include\state\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />
     <ClInclude Include="..\..\include\state\board\Graveyard.h" />
     <ClInclude Include="..\..\include\state\board\Hand.h" />
@@ -214,9 +216,6 @@
     <ClInclude Include="..\..\include\state\Events\Manager.h" />
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h" />
-    <ClInclude Include="..\..\include\state\FlowContext-impl.h" />
-    <ClInclude Include="..\..\include\state\FlowContext.h" />
-    <ClInclude Include="..\..\include\state\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\state\State.h" />
     <ClInclude Include="..\..\include\state\targetor\Targets.h" />

@@ -6,10 +6,10 @@
 #include "FlowControl/Manipulators/Helpers/DeathrattlesHelper.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/detail/DamageSetter.h"
+#include "FlowControl/FlowContext.h"
 
 namespace state {
 	class State;
-	class FlowContext;
 }
 
 namespace FlowControl
@@ -19,7 +19,7 @@ namespace FlowControl
 		class CardManipulator
 		{
 		public:
-			CardManipulator(state::State & state, state::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card) :
+			CardManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card) :
 				state_(state), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 			{
 			}
@@ -39,7 +39,7 @@ namespace FlowControl
 
 		protected:
 			state::State & state_;
-			state::FlowContext & flow_context_;
+			FlowControl::FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			state::Cards::Card & card_;
 		};
