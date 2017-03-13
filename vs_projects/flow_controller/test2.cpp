@@ -76,7 +76,7 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, state::FlowContext & fl
 	((Test2_RandomGenerator&)(flow_context.random_)).called = false;
 
 	auto ref = state.AddCard(CreateDeckCard(id, state, player));
-	state.GetZoneChanger(flow_context, ref).WithZone<state::kCardZoneInvalid>()
+	state.GetZoneChanger<state::kCardZoneInvalid>(flow_context, ref)
 		.ChangeTo<state::kCardZoneDeck>(player);
 
 	if (deck_count > 0) assert(((Test2_RandomGenerator&)(flow_context.random_)).called);
@@ -117,7 +117,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, state:
 	int hand_count = (int)state.GetBoard().Get(player).hand_.Size();
 
 	auto ref = state.AddCard(CreateHandCard(id, type, state, player));
-	state.GetZoneChanger(flow_context, ref).WithZone<state::kCardZoneInvalid>()
+	state.GetZoneChanger<state::kCardZoneInvalid>(flow_context, ref)
 		.ChangeTo<state::kCardZoneHand>(player);
 
 	assert(state.GetCardsManager().Get(ref).GetCardId() == id);
@@ -161,7 +161,7 @@ static void MakeHero(state::State & state, state::FlowContext & flow_context, st
 
 	state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 
-	state.GetZoneChanger(flow_context, ref).WithZone<state::kCardZoneInvalid>()
+	state.GetZoneChanger<state::kCardZoneInvalid>(flow_context, ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 }
 

@@ -135,7 +135,7 @@ namespace FlowControl
 				assert(card_.GetZone() == state::kCardZonePlay);
 
 				if (state_.GetBoard().Get(player).minions_.Full()) {
-					state_.GetZoneChanger(flow_context_, card_ref_).WithZone<state::kCardZonePlay>()
+					state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(flow_context_, card_ref_)
 						.ChangeTo<state::kCardZoneGraveyard>(player);
 					assert(card_.GetZone() == state::kCardZoneGraveyard);
 					assert(card_.GetPlayerIdentifier() == player);
@@ -143,7 +143,7 @@ namespace FlowControl
 				else {
 					int location = (int)state_.GetBoard().Get(player).minions_.Size();
 
-					state_.GetZoneChanger(flow_context_, card_ref_).WithZone<state::kCardZonePlay>()
+					state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(flow_context_, card_ref_)
 						.ChangeTo<state::kCardZonePlay>(player, location);
 					assert(card_.GetZone() == state::kCardZonePlay);
 					assert(card_.GetPlayerIdentifier() == player);

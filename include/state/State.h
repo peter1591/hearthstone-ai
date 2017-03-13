@@ -64,15 +64,28 @@ namespace state
 		// trigger events
 		// set card cost/attack/hp/etc.
 
-		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowContext& flow_context, CardRef ref)
-		{
+		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowContext& flow_context, CardRef ref) {
 			return ZoneChangerWithUnknownZoneUnknownType(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
 		}
 
-		// TODO: should not be public
-		void SetCardZonePos(CardRef ref, int pos)
-		{
-			cards_mgr_.SetCardZonePos(ref, pos);
+		template <state::CardZone KnownZone>
+		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
+			return ZoneChangerWithUnknownType<KnownZone>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		template <state::CardType KnownType>
+		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
+			return ZoneChangerWithUnknownZone<KnownType>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		template <state::CardType KnownType, state::CardZone KnownZone>
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
+			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
+		}
+
+		template <state::CardZone KnownZone, state::CardType KnownType>
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowContext& flow_context, CardRef ref) {
+			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, flow_context, ref, cards_mgr_.GetMutable(ref));
 		}
 
 	private:

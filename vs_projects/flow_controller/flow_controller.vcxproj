@@ -222,7 +222,6 @@
     <ClInclude Include="..\..\include\state\targetor\Targets.h" />
     <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h" />
     <ClInclude Include="..\..\include\state\Types.h" />
-    <ClInclude Include="..\..\include\state\ZoneChanger-impl.h" />
     <ClInclude Include="..\..\include\state\ZoneChanger.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
     <ClInclude Include="..\..\include\Utils\FuncPtrArray.h" />

@@ -19,8 +19,8 @@ namespace FlowControl
 
 			state::CardRef ref = state_.AddCard(state::Cards::Card(std::move(card_data)));
 
-			state_.GetZoneChanger(flow_context_, ref).WithZone<state::kCardZoneInvalid>().
-				ChangeTo<state::kCardZonePlay>(player, pos);
+			state_.GetZoneChanger<state::kCardZoneInvalid, state::kCardTypeMinion>(flow_context_, ref)
+				.ChangeTo<state::kCardZonePlay>(player, pos);
 
 			state::Cards::Card const& card = state_.GetCardsManager().Get(ref);
 			assert(card.GetPlayerIdentifier() == player);

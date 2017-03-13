@@ -65,11 +65,6 @@ namespace state {
 			assert(card.GetCardType() == ChangingCardType);
 		}
 
-		template <typename CardZone KnownZone>
-		ZoneChanger<KnownZone, ChangingCardType> WithZone() {
-			return ZoneChanger<KnownZone, ChangingCardType>(board_, cards_mgr_, flow_context_, card_ref_, card_);
-		}
-
 		template <CardZone ChangeToZone,
 			typename = std::enable_if_t<PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == false>>
 			void ChangeTo(PlayerIdentifier player_identifier)
@@ -136,11 +131,6 @@ namespace state {
 			: board_(board), cards_mgr_(cards_mgr), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 		{
 			assert(card.GetZone() == ChangingCardZone);
-		}
-
-		template <typename CardType KnownType>
-		ZoneChanger<ChangingCardZone, KnownType> WithType() {
-			return ZoneChanger<ChangingCardZone, KnownType>(board_, cards_mgr_, flow_context_, card_ref_, card_);
 		}
 
 		template <CardZone ChangeToZone>
@@ -254,16 +244,6 @@ namespace state {
 		ZoneChangerWithUnknownZoneUnknownType(board::Board& board, Cards::Manager& cards_mgr, FlowContext & flow_context, CardRef card_ref, Cards::Card &card)
 			: board_(board), cards_mgr_(cards_mgr), flow_context_(flow_context), card_ref_(card_ref), card_(card)
 		{}
-
-		template <typename CardZone KnownZone>
-		ZoneChangerWithUnknownType<KnownZone> WithZone() {
-			return ZoneChangerWithUnknownType<KnownZone>(board_, cards_mgr_, flow_context_, card_ref_, card_);
-		}
-
-		template <typename CardType KnownType>
-		ZoneChangerWithUnknownZone<KnownType> WithType() {
-			return ZoneChangerWithUnknownZone<KnownType>(board_, cards_mgr_, flow_context_, card_ref_, card_);
-		}
 
 		template <CardZone ChangeToZone>
 		void ChangeTo(PlayerIdentifier player_identifier)

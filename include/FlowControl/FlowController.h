@@ -19,8 +19,8 @@
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/HealHelper-impl.h"
-#include "state/ZoneChanger-impl.h"
 #include "state/Cards/Manager-impl.h"
+#include "state/detail/PlayerDataStructureMaintainer-impl.h"
 
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Dispatchers/Weapons.h"
