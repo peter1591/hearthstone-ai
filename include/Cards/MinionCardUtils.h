@@ -195,16 +195,6 @@ namespace Cards
 			return false;
 		}
 
-		static void SetBattlecryTarget(
-			FlowControl::Context::BattlecryTargetGetter&& context,
-			state::targetor::TargetsGenerator const& targets_generator)
-		{
-			context.flow_context_.battlecry_target_ =
-				context.flow_context_.action_parameters_.GetBattlecryTarget(
-					context.state_, context.card_ref_, context.card_,
-					targets_generator.GetInfo());
-		}
-
 		template <typename Context>
 		static void SummonToRight(Context && context, int card_id)
 		{

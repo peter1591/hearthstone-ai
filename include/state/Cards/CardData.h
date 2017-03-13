@@ -21,7 +21,7 @@ namespace state
 		class CardData
 		{
 		public:
-			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter&&);
+			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter&&); // true -> OK; false -> not invalid to play
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry&&);
 			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone);
 
