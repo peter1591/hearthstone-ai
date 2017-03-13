@@ -7,10 +7,14 @@
 
 namespace state
 {
+	namespace detail { template <CardType TargetCardType, CardZone TargetCardZone> struct PlayerDataStructureMaintainer; }
+
 	namespace board
 	{
 		class Minions
 		{
+			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
+
 		public:
 			Minions()
 			{
@@ -23,6 +27,7 @@ namespace state
 
 			std::vector<CardRef> const& Get() const { return minions_; }
 
+		private:
 			template <typename AdjustFunctor>
 			void Insert(CardRef ref, size_t pos, AdjustFunctor&& functor)
 			{

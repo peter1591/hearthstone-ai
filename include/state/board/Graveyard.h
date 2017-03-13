@@ -8,21 +8,24 @@
 
 namespace state
 {
+	namespace detail { template <CardType TargetCardType, CardZone TargetCardZone> struct PlayerDataStructureMaintainer; }
+
 	namespace board
 	{
 		class Graveyard
 		{
+			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
+
 		public:
 			size_t GetTotalMinions() const { return minions_.size(); }
 			size_t GetTotalSpells() const { return spells_.size(); }
 			size_t GetTotalOthers() const { return others_.size(); }
 
-		public:
+		private:
 			template <CardType AddingType> void Add(CardRef ref) { AddInternal(ref, others_); }
 			template <> void Add<kCardTypeMinion>(CardRef ref) { AddInternal(ref, minions_); }
 			template <> void Add<kCardTypeSpell>(CardRef ref) { AddInternal(ref, spells_); }
 
-		public:
 			template <CardType RemovingType> void Remove(CardRef ref) { RemoveInternal(ref, others_); }
 			template <> void Remove<kCardTypeMinion>(CardRef ref) { RemoveInternal(ref, minions_); }
 			template <> void Remove<kCardTypeSpell>(CardRef ref) { RemoveInternal(ref, spells_); }

@@ -8,18 +8,22 @@
 
 namespace state
 {
+	namespace detail { template <CardType TargetCardType, CardZone TargetCardZone> struct PlayerDataStructureMaintainer; }
+
 	namespace board
 	{
 		class Deck
 		{
+			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
+
 		public:
 			Deck() : change_id_(0), size_(0) {}
 
-			CardRef GetLast() const { return cards_[size_-1]; }
-
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
+			CardRef GetLast() const { return cards_[size_ - 1]; }
 
+		private:
 			template <typename RandomGenerator>
 			void ShuffleAdd(CardRef card, RandomGenerator&& rand)
 			{

@@ -7,10 +7,14 @@
 
 namespace state
 {
+	namespace detail { template <CardType TargetCardType, CardZone TargetCardZone> struct PlayerDataStructureMaintainer; }
+
 	namespace board
 	{
 		class Hand
 		{
+			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
+
 		public:
 			Hand() : size_(0) {}
 
@@ -20,6 +24,7 @@ namespace state
 
 			CardRef Get(size_t idx) { return cards_[idx]; }
 
+		private:
 			size_t PushBack(CardRef ref)
 			{
 				assert(size_ < max_cards_);
