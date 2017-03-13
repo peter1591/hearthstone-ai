@@ -228,9 +228,9 @@ void test2()
 	MakeHand(state, controller.flow_context_, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
-	state.GetBoard().Get(state::PlayerIdentifier::First()).resource_.SetTotal(8);
-	state.GetBoard().Get(state::PlayerIdentifier::First()).resource_.Refill();
-	state.GetBoard().Get(state::PlayerIdentifier::Second()).resource_.SetTotal(4);
+	state.GetBoard().Get(state::PlayerIdentifier::First()).GetResource().SetTotal(8);
+	state.GetBoard().Get(state::PlayerIdentifier::First()).GetResource().Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().SetTotal(4);
 
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -246,7 +246,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { {4, 4, 4} });
 	CheckMinions(state, state::PlayerIdentifier::Second(), {});
 
-	state.GetBoard().Get(state::PlayerIdentifier::First()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::First()).GetResource().Refill();
 
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);

@@ -20,6 +20,9 @@ namespace state
 			void SetFatigueDamage(int v) { fatigue_damage_ = v; }
 			void IncreaseFatigueDamage() { ++fatigue_damage_; }
 
+			PlayerResource const& GetResource() const { return resource_; }
+			PlayerResource & GetResource() { return resource_; }
+
 		public:
 			CardRef hero_ref_;
 
@@ -29,9 +32,9 @@ namespace state
 			Secrets secrets_;
 			Graveyard graveyard_;
 
-			PlayerResource resource_;
 
 		private:
+			PlayerResource resource_;
 			int fatigue_damage_;
 		};
 	}

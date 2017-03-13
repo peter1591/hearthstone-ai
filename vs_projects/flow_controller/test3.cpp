@@ -221,9 +221,9 @@ void test3()
 	MakeHand(state, controller.flow_context_, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
-	state.GetBoard().GetFirst().resource_.SetTotal(4);
-	state.GetBoard().GetFirst().resource_.Refill();
-	state.GetBoard().GetSecond().resource_.SetTotal(4);
+	state.GetBoard().GetFirst().GetResource().SetTotal(4);
+	state.GetBoard().GetFirst().GetResource().Refill();
+	state.GetBoard().GetSecond().GetResource().SetTotal(4);
 
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -315,7 +315,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-	state.GetBoard().Get(state::PlayerIdentifier::First()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::First()).GetResource().Refill();
 	AddHandCard(Cards::ID_EX1_019, state::kCardTypeMinion, controller.flow_context_, state, state::PlayerIdentifier::First());
 	parameter_getter.next_minion_put_location = 0;
 	parameter_getter.next_battlecry_target_count = 4;
@@ -375,7 +375,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
-	state.GetBoard().Get(state::PlayerIdentifier::Second()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().Refill();
 	AddHandCard(Cards::ID_DS1_055, state::kCardTypeMinion, controller.flow_context_, state, state::PlayerIdentifier::Second());
 	parameter_getter.next_minion_put_location = 1;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
@@ -388,7 +388,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
-	state.GetBoard().Get(state::PlayerIdentifier::Second()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().Refill();
 	AddHandCard(Cards::ID_CS2_226, state::kCardTypeMinion, controller.flow_context_, state, state::PlayerIdentifier::Second());
 	parameter_getter.next_minion_put_location = 1;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
@@ -414,7 +414,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
-	state.GetBoard().Get(state::PlayerIdentifier::Second()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().Refill();
 	AddHandCard(Cards::ID_EX1_399, state::kCardTypeMinion, controller.flow_context_, state, state::PlayerIdentifier::Second());
 	parameter_getter.next_minion_put_location = 1;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
@@ -427,7 +427,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
-	state.GetBoard().Get(state::PlayerIdentifier::Second()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().Refill();
 	AddHandCard(Cards::ID_CS2_189, state::kCardTypeMinion, controller.flow_context_, state, state::PlayerIdentifier::Second());
 	parameter_getter.next_battlecry_target_count = 8;
 	parameter_getter.next_battlecry_target_idx = 6;
@@ -456,7 +456,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
-	state.GetBoard().Get(state::PlayerIdentifier::Second()).resource_.Refill();
+	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().Refill();
 	AddHandCard(Cards::ID_EX1_593, state::kCardTypeMinion, controller.flow_context_, state, state::PlayerIdentifier::Second());
 	parameter_getter.next_minion_put_location = 1;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);

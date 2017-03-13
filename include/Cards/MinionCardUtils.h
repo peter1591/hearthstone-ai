@@ -15,13 +15,13 @@ namespace Cards
 
 		void GainEmptyCrystal(int amount = 1)
 		{
-			player_.resource_.IncreaseTotal(amount);
+			player_.GetResource().IncreaseTotal(amount);
 		}
 
 		void GainCrystal(int amount)
 		{
-			player_.resource_.IncreaseTotal(amount);
-			player_.resource_.IncreaseCurrent(amount);
+			player_.GetResource().IncreaseTotal(amount);
+			player_.GetResource().IncreaseCurrent(amount);
 		}
 
 		bool IsMinionsFull() const { return player_.minions_.Full(); }

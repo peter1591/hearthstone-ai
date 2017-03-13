@@ -56,7 +56,7 @@ namespace FlowControl
 			}
 		}
 
-		state_.GetCurrentPlayer().resource_.Cost(card.GetCost());
+		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
 
 		switch (card.GetCardType())
 		{
@@ -239,8 +239,8 @@ namespace FlowControl
 
 	inline void FlowController::StartTurnPhase()
 	{
-		state_.GetCurrentPlayer().resource_.IncreaseTotal();
-		state_.GetCurrentPlayer().resource_.Refill();
+		state_.GetCurrentPlayer().GetResource().IncreaseTotal();
+		state_.GetCurrentPlayer().GetResource().Refill();
 		// TODO: overload
 
 		state_.GetEventsManager().TriggerEvent<state::Events::EventTypes::OnTurnStart>();
