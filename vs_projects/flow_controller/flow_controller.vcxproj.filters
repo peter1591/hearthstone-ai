@@ -302,9 +302,6 @@
     <ClInclude Include="..\..\include\State\Events\EventTypes\OnHeal.h">
       <Filter>Header Files\state\Events\EventTypes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\UpdateAura.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>

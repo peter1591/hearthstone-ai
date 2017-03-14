@@ -17,7 +17,6 @@
 #include "state/Events/EventTypes/AfterAttack.h"
 #include "state/Events/EventTypes/OnTakeDamage.h"
 #include "state/Events/EventTypes/OnHeal.h"
-#include "state/Events/EventTypes/UpdateAura.h"
 
 namespace state
 {
@@ -102,8 +101,6 @@ private: \
 
 			ADD_TRIGGER_TYPE(OnHeal);
 			ADD_CATEGORIZED_TRIGGER_TYPE(OnHeal);
-
-			ADD_TRIGGER_TYPE(UpdateAura);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL
 #undef ADD_TRIGGER_TYPE
