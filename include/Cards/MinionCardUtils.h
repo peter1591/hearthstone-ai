@@ -175,21 +175,19 @@ namespace Cards
 		template <typename Context>
 		static bool IsAlive(Context&& context, state::Cards::Card const& target)
 		{
-			if (!IsInPlay(context, target)) return false;
-			if (IsMortallyWounded(context, target)) return false;
+			if (!IsInPlay(target)) return false;
+			if (IsMortallyWounded(target)) return false;
 			// TODO: pending destroy
 			return true;
 		}
 
-		template <typename Context>
-		static bool IsMortallyWounded(Context&& context, state::Cards::Card const& target)
+		static bool IsMortallyWounded(state::Cards::Card const& target)
 		{
 			if (target.GetHP() <= 0) return true;
 			return false;
 		}
 
-		template <typename Context>
-		static bool IsInPlay(Context&& context, state::Cards::Card const& target)
+		static bool IsInPlay(state::Cards::Card const& target)
 		{
 			if (target.GetZone() == state::kCardZonePlay) return true;
 			return false;

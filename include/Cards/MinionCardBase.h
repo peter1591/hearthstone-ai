@@ -3,6 +3,7 @@
 #include "Cards/Database.h"
 #include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
+#include "Cards/EventRegister.h"
 
 namespace Cards
 {
@@ -47,9 +48,9 @@ namespace Cards
 		}
 
 		template <typename... Types>
-		AuraHelper<Types...> Aura()
-		{
-			return AuraHelper<Types...>(*this);
-		}
+		AuraHelper<Types...> Aura() { return AuraHelper<Types...>(*this); }
+
+		template <typename... Types>
+		auto RegisterEvent() { return EventRegister<Types...>((state::Cards::CardData&)*this); }
 	};
 }

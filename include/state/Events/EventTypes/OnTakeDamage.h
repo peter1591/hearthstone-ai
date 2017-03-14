@@ -27,6 +27,7 @@ namespace state
 				{
 					state::State & state_;
 					FlowControl::FlowContext & flow_context_;
+					state::Cards::Card const& card_;
 					int damage_;
 				};
 			public:

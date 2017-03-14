@@ -517,18 +517,16 @@ namespace Cards
 	public:
 		static constexpr int id = Cards::ID_EX1_399;
 
+		struct EventHandler {
+			template <typename Controller, typename Context>
+			static void Invoke(Controller&& controller, state::CardRef self, Context&& context) {
+				Manipulate(context).Card(self).Enchant().Add(Card_EX1_399e());
+			};
+		};
+
 		Card_EX1_399()
 		{
-			added_to_play_zone += [](auto context) {
-				state::CardRef self = context.card_ref_;
-				context.state_.AddEvent<state::Events::EventTypes::OnTakeDamage>(
-					self,
-					[](auto& controller, auto self, auto& context) {
-					if (context.damage_ <= 0) return;
-					if (!IsAlive(context, self)) return controller.Remove();
-					Manipulate(context).Card(self).Enchant().Add(Card_EX1_399e());
-				});
-			};
+			RegisterEvent<OnSelfTakeDamage, EventHandler>();
 		}
 	};
 

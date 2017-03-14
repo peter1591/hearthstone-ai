@@ -138,6 +138,7 @@
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\EventRegister.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
