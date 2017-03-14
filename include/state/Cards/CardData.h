@@ -18,21 +18,20 @@ namespace state
 
 	namespace Cards
 	{
-		namespace Context {
-			struct AddedToPlayZone
-			{
-				state::State & state_;
-				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
-			};
-		}
+		struct ZoneChangedContext {
+			state::State & state_;
+			state::CardRef card_ref_;
+			const state::Cards::Card & card_;
+		};
 
 		class CardData
 		{
 		public:
+			typedef void AddedToPlayZoneCallback(ZoneChangedContext);
+			typedef void AddedToDeckZoneCallback(ZoneChangedContext);
+
 			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter&&); // true -> OK; false -> not invalid to play
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry&&);
-			typedef void AddedToPlayZoneCallback(Context::AddedToPlayZone);
 
 			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);
 			typedef std::vector<DeathrattleCallback> Deathrattles;
@@ -60,6 +59,7 @@ namespace state
 
 		public: // callbacks managed by state::State 
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
+			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:
 			EnchantableStates enchantable_states;

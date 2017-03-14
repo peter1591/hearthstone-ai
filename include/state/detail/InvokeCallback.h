@@ -11,7 +11,7 @@ namespace state {
 		template <CardType CardType>
 		struct InvokeCallback<CardType, kCardZonePlay> {
 			static void Added(state::State & state, state::CardRef card_ref, state::Cards::Card const& card) {
-				card.GetRawData().added_to_play_zone(state::Cards::Context::AddedToPlayZone{ state, card_ref, card });
+				card.GetRawData().added_to_play_zone(state::Cards::ZoneChangedContext{ state, card_ref, card });
 			}
 			static void Removed(state::State & state, state::CardRef card_ref, state::Cards::Card const& card) {}
 		};
