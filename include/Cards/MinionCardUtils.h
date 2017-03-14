@@ -3,6 +3,8 @@
 #include "FlowControl/Contexts.h"
 #include "state/State.h"
 #include "state/targetor/TargetsGenerator.h"
+#include "Cards/id-map.h"
+
 
 namespace Cards
 {
@@ -163,22 +165,6 @@ namespace Cards
 		static PlayerHelper<Context> AnotherPlayer(Context&& context)
 		{
 			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier().Opposite()));
-		}
-
-		template <typename Context>
-		static bool IsAlive(Context&& context, state::CardRef target)
-		{
-			state::Cards::Card const& card = context.state_.GetCardsManager().Get(target);
-			return IsAlive(context, card);
-		}
-
-		template <typename Context>
-		static bool IsAlive(Context&& context, state::Cards::Card const& target)
-		{
-			if (!IsInPlay(target)) return false;
-			if (IsMortallyWounded(target)) return false;
-			// TODO: pending destroy
-			return true;
 		}
 
 		static bool IsMortallyWounded(state::Cards::Card const& target)

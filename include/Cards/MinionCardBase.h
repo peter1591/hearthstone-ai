@@ -15,7 +15,7 @@ namespace Cards
 	public:
 		MinionCardBase()
 		{
-			this->card_id = T::id;
+			this->card_id = CardClassIdMap<T>::id;
 
 			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
 			assert(data.card_type == state::kCardTypeMinion);

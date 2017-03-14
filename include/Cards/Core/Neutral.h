@@ -7,8 +7,6 @@
 namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
-		static constexpr int id = Cards::ID_CS2_189;
-
 		template <typename Context>
 		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
@@ -23,12 +21,10 @@ namespace Cards
 	};
 
 	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042> {
-		static constexpr int id = Cards::ID_CS1_042;
 		Card_CS1_042() { Taunt(); }
 	};
 
 	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {
-		static constexpr int id = Cards::ID_CS2_168;
 	};
 
 	struct Card_EX1_508o : public EnchantmentCardBase {
@@ -43,8 +39,6 @@ namespace Cards
 	};
 
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
-		static constexpr int id = Cards::ID_EX1_508;
-
 		Card_EX1_508() {
 			Aura<Card_EX1_508o, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
@@ -55,14 +49,10 @@ namespace Cards
 	};
 
 	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171> {
-		static constexpr int id = Cards::ID_CS2_171;
-
 		Card_CS2_171() { Charge(); }
 	};
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
-		static constexpr int id = Cards::ID_EX1_011;
-
 		template <typename Context>
 		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
@@ -77,8 +67,6 @@ namespace Cards
 	};
 
 	struct Card_EX1_066 : public MinionCardBase<Card_EX1_066> {
-		static constexpr int id = Cards::ID_EX1_066;
-
 		Card_EX1_066()
 		{
 			Battlecry<NoTarget>([](auto context) {
@@ -88,27 +76,21 @@ namespace Cards
 	};
 
 	struct Card_CS2_172 : public MinionCardBase<Card_CS2_172> {
-		static constexpr int id = Cards::ID_CS2_172;
 	};
 
 	struct Card_CS2_173 : public MinionCardBase<Card_CS2_173> {
-		static constexpr int id = Cards::ID_CS2_173;
 		Card_CS2_173() { Charge(); }
 	};
 
 	struct Card_CS2_121 : public MinionCardBase<Card_CS2_121>{
-		static constexpr int id = Cards::ID_CS2_121;
 		Card_CS2_121() { Taunt(); }
 	};
 
 	struct Card_CS2_142 : public MinionCardBase<Card_CS2_142> {
-		static constexpr int id = Cards::ID_CS2_142;
 		Card_CS2_142() { SpellDamage(1); }
 	};
 
 	struct Card_EX1_506 : public MinionCardBase<Card_EX1_506> {
-		static constexpr int id = Cards::ID_EX1_506;
-
 		Card_EX1_506() {
 			Battlecry<NoTarget>([](auto context) {
 				SummonToRight(context, Cards::ID_EX1_506a);
@@ -117,12 +99,9 @@ namespace Cards
 	};
 
 	struct Card_EX1_506a : public MinionCardBase<Card_EX1_506a> {
-		static constexpr int id = Cards::ID_EX1_506a;
 	};
 
 	struct Card_EX1_015 : public MinionCardBase<Card_EX1_015> {
-		static constexpr int id = Cards::ID_EX1_015;
-
 		Card_EX1_015() {
 			Battlecry<NoTarget>([](auto context) {
 				Manipulate(context).CurrentHero().DrawCard();
@@ -131,17 +110,13 @@ namespace Cards
 	};
 
 	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {
-		static constexpr int id = Cards::ID_CS2_120;
 	};
 
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582> {
-		static constexpr int id = Cards::ID_EX1_582;
 		Card_EX1_582() { SpellDamage(1); }
 	};
 
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
-		static constexpr int id = Cards::ID_CS2_141;
-
 		template <typename Context>
 		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
@@ -156,12 +131,10 @@ namespace Cards
 	};
 
 	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125> {
-		static constexpr int id = Cards::ID_CS2_125;
 		Card_CS2_125() { Taunt(); }
 	};
 
 	struct Card_CS2_118 : public MinionCardBase<Card_CS2_118> {
-		static constexpr int id = Cards::ID_CS2_118;
 	};
 
 	struct Card_CS2_122e : public EnchantmentCardBase {
@@ -176,8 +149,6 @@ namespace Cards
 	};
 
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
-		static constexpr int id = Cards::ID_CS2_122;
-
 		Card_CS2_122() {
 			Aura<Card_CS2_122e, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
@@ -188,12 +159,9 @@ namespace Cards
 	};
 
 	struct Card_CS2_boar : public MinionCardBase<Card_CS2_boar> {
-		static constexpr int id = Cards::ID_CS2_boar;
 	};
 
 	struct Card_CS2_196 : public MinionCardBase<Card_CS2_196> {
-		static constexpr int id = Cards::ID_CS2_196;
-
 		Card_CS2_196()
 		{
 			Battlecry<NoTarget>([](auto context) {
@@ -215,8 +183,6 @@ namespace Cards
 	};
 
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
-		static constexpr int id = Cards::ID_EX1_019;
-
 		template <typename Context>
 		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Ally(context).Minion().Targetable();
@@ -232,26 +198,20 @@ namespace Cards
 	};
 
 	struct Card_CS2_127 : public MinionCardBase<Card_CS2_127> {
-		static constexpr int id = Cards::ID_CS2_127;
 		Card_CS2_127() { Taunt(); }
 	};
 
 	struct Card_CS2_124 : public MinionCardBase<Card_CS2_124> {
-		static constexpr int id = Cards::ID_CS2_124;
 		Card_CS2_124() { Charge(); }
 	};
 
 	struct Card_CS2_182 : public MinionCardBase<Card_CS2_182> {
-		static constexpr int id = Cards::ID_CS2_182;
 	};
 
 	struct Card_EX1_025t : public MinionCardBase<Card_EX1_025t> {
-		static constexpr int id = Cards::ID_EX1_025t;
 	};
 
 	struct Card_EX1_025 : public MinionCardBase<Card_EX1_025> {
-		static constexpr int id = Cards::ID_EX1_025;
-
 		Card_EX1_025() {
 			Battlecry<NoTarget>([](auto context) {
 				SummonToRight(context, Cards::ID_EX1_025t);
@@ -260,8 +220,6 @@ namespace Cards
 	};
 
 	struct Card_CS2_147 : public MinionCardBase<Card_CS2_147> {
-		static constexpr int id = Cards::ID_CS2_147;
-
 		Card_CS2_147() {
 			Battlecry<NoTarget>([](auto context) {
 				Manipulate(context).CurrentHero().DrawCard();
@@ -270,32 +228,25 @@ namespace Cards
 	};
 
 	struct Card_CS2_119 : public MinionCardBase<Card_CS2_119>{
-		static constexpr int id = Cards::ID_CS2_119;
 	};
 
 	struct Card_CS2_197 : public MinionCardBase<Card_CS2_197> {
-		static constexpr int id = Cards::ID_CS2_197;
 		Card_CS2_197() { SpellDamage(1); }
 	};
 
 	struct Card_CS2_179 : public MinionCardBase<Card_CS2_179> {
-		static constexpr int id = Cards::ID_CS2_179;
 		Card_CS2_179() { Taunt(); }
 	};
 
 	struct Card_CS2_131 : public MinionCardBase<Card_CS2_131> {
-		static constexpr int id = Cards::ID_CS2_131;
 		Card_CS2_131() { Charge(); }
 	};
 
 	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187>{
-		static constexpr int id = Cards::ID_CS2_187;
 		Card_CS2_187() { Taunt(); }
 	};
 
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
-		static constexpr int id = Cards::ID_DS1_055;
-
 		Card_DS1_055() {
 			Battlecry<NoTarget>([](auto context) {
 				ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
@@ -320,8 +271,6 @@ namespace Cards
 	};
 
 	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
-		static constexpr int id = Cards::ID_CS2_226;
-
 		Card_CS2_226() {
 			Battlecry<NoTarget>([](auto context) {
 				int count = 0;
@@ -368,8 +317,6 @@ namespace Cards
 	};
 
 	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
-		static constexpr int id = Cards::ID_EX1_399;
-
 		struct EventHandler {
 			template <typename Controller, typename Context>
 			static void Invoke(Controller&& controller, state::CardRef self, Context&& context) {
@@ -383,8 +330,6 @@ namespace Cards
 	};
 
 	struct Card_EX1_593 : public MinionCardBase<Card_EX1_593> {
-		static constexpr int id = Cards::ID_EX1_593;
-
 		Card_EX1_593() {
 			Battlecry<NoTarget>([](auto context) {
 				Damage(context).Opponent().Amount(3);
@@ -393,8 +338,6 @@ namespace Cards
 	};
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
-		static constexpr int id = Cards::ID_CS2_150;
-
 		template <typename Context>
 		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
@@ -409,26 +352,21 @@ namespace Cards
 	};
 
 	struct Card_CS2_155 : public MinionCardBase<Card_CS2_155> {
-		static constexpr int id = Cards::ID_CS2_155;
 		Card_CS2_155() { SpellDamage(1); }
 	};
 
 	struct Card_CS2_200 : public MinionCardBase<Card_CS2_200> {
-		static constexpr int id = Cards::ID_CS2_200;
 	};
 
 	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162> {
-		static constexpr int id = Cards::ID_CS2_162;
 		Card_CS2_162() { Taunt(); }
 	};
 
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213> {
-		static constexpr int id = Cards::ID_CS2_213;
 		Card_CS2_213() { Charge(); }
 	};
 
 	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {
-		static constexpr int id = Cards::ID_CS2_201;
 	};
 
 	struct Card_CS2_222o : public EnchantmentCardBase {
@@ -444,8 +382,6 @@ namespace Cards
 	};
 
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
-		static constexpr int id = Cards::ID_CS2_222;
-
 		Card_CS2_222() {
 			Aura<Card_CS2_222o, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
@@ -456,54 +392,54 @@ namespace Cards
 	};
 
 	struct Card_CS2_186 : public MinionCardBase<Card_CS2_186> {
-		static constexpr int id = Cards::ID_CS2_186;
 	};
 }
 
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_186)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_222)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_201)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_213)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_162)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_200)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_155)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_150)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_593)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_399)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_226)
-REGISTER_MINION_CARD_CLASS(Cards::Card_DS1_055)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_187)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_131)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_179)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_197)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_119)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_147)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_025t)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_025)
 
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_189)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS1_042)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_168)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_508)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_171)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_011)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_066)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_172)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_173)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_121)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_142)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_506a)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_015)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_120)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_582)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_141)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_125)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_118)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_122)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_boar)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_196)
-REGISTER_MINION_CARD_CLASS(Cards::Card_EX1_019)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_127)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_124)
-REGISTER_MINION_CARD_CLASS(Cards::Card_CS2_182)
+REGISTER_MINION_CARD(CS2_186)
+REGISTER_MINION_CARD(CS2_222)
+REGISTER_MINION_CARD(CS2_201)
+REGISTER_MINION_CARD(CS2_213)
+REGISTER_MINION_CARD(CS2_162)
+REGISTER_MINION_CARD(CS2_200)
+REGISTER_MINION_CARD(CS2_155)
+REGISTER_MINION_CARD(CS2_150)
+REGISTER_MINION_CARD(EX1_593)
+REGISTER_MINION_CARD(EX1_399)
+REGISTER_MINION_CARD(CS2_226)
+REGISTER_MINION_CARD(DS1_055)
+REGISTER_MINION_CARD(CS2_187)
+REGISTER_MINION_CARD(CS2_131)
+REGISTER_MINION_CARD(CS2_179)
+REGISTER_MINION_CARD(CS2_197)
+REGISTER_MINION_CARD(CS2_119)
+REGISTER_MINION_CARD(CS2_147)
+REGISTER_MINION_CARD(EX1_025t)
+REGISTER_MINION_CARD(EX1_025)
+
+REGISTER_MINION_CARD(CS2_189)
+REGISTER_MINION_CARD(CS1_042)
+REGISTER_MINION_CARD(CS2_168)
+REGISTER_MINION_CARD(EX1_508)
+REGISTER_MINION_CARD(CS2_171)
+REGISTER_MINION_CARD(EX1_011)
+REGISTER_MINION_CARD(EX1_066)
+REGISTER_MINION_CARD(CS2_172)
+REGISTER_MINION_CARD(CS2_173)
+REGISTER_MINION_CARD(CS2_121)
+REGISTER_MINION_CARD(CS2_142)
+REGISTER_MINION_CARD(EX1_506)
+REGISTER_MINION_CARD(EX1_506a)
+REGISTER_MINION_CARD(EX1_015)
+REGISTER_MINION_CARD(CS2_120)
+REGISTER_MINION_CARD(EX1_582)
+REGISTER_MINION_CARD(CS2_141)
+REGISTER_MINION_CARD(CS2_125)
+REGISTER_MINION_CARD(CS2_118)
+REGISTER_MINION_CARD(CS2_122)
+REGISTER_MINION_CARD(CS2_boar)
+REGISTER_MINION_CARD(CS2_196)
+REGISTER_MINION_CARD(EX1_019)
+REGISTER_MINION_CARD(CS2_127)
+REGISTER_MINION_CARD(CS2_124)
+REGISTER_MINION_CARD(CS2_182)

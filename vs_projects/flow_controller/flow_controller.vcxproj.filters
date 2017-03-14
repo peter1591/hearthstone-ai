@@ -401,5 +401,11 @@
     <ClInclude Include="..\..\include\Cards\BattlecryHelper.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardBase.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardBase-cleanup.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
