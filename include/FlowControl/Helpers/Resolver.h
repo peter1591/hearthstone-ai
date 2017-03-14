@@ -117,9 +117,14 @@ namespace FlowControl
 		private:
 			void UpdateAura()
 			{
-				state_.TriggerEvent<state::Events::EventTypes::UpdateAura>(
-					state::Events::EventTypes::UpdateAura::Context{state_, flow_context_}
-				);
+				state_.GetAuraManager().ForEach([this](state::CardRef card_ref)
+				{
+					bool aura_valid = FlowControl::Manipulate(state_, flow_context_).Card(card_ref).Aura().Update();
+					if (aura_valid) return true;
+
+					assert(state_.GetCardsManager().Get(card_ref).GetRawData().aura_aux_data.Empty());
+					return false;
+				});
 			}
 
 			void UpdateEnchantments()

@@ -17,7 +17,8 @@ namespace FlowControl
 				{
 				}
 
-				void Update();
+				// return a boolean flag indicates if the aura is still valid
+				bool Update();
 
 			private:
 				state::State & state_;

@@ -76,6 +76,9 @@
     <Filter Include="Header Files\state\detail">
       <UniqueIdentifier>{5149d1fe-d98b-4b65-bfe5-af9b163d8f14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\state\aura">
+      <UniqueIdentifier>{0967eb60-8870-4534-8e60-044da60c624e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
       <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\aura\Manager.h">
+      <Filter>Header Files\state\aura</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

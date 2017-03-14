@@ -177,6 +177,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
+    <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />
     <ClInclude Include="..\..\include\state\board\Graveyard.h" />
     <ClInclude Include="..\..\include\state\board\Hand.h" />

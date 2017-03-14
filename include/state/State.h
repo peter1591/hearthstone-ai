@@ -1,8 +1,9 @@
 #pragma once
 
 #include "state/Types.h"
-#include "state/Cards/Manager.h"
+#include "state/aura/Manager.h"
 #include "state/board/Board.h"
+#include "state/Cards/Manager.h"
 #include "state/Events/Manager.h"
 #include "state/IRandomGenerator.h"
 #include "state/ZoneChanger.h"
@@ -20,6 +21,9 @@ namespace state
 		Cards::Manager const& GetCardsManager() const { return cards_mgr_; }
 
 		Events::Manager const& GetEventsManager() const { return event_mgr_; }
+
+		aura::Manager const& GetAuraManager() const { return aura_mgr_; }
+		aura::Manager & GetAuraManager() { return aura_mgr_; }
 
 		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
 		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
@@ -85,6 +89,7 @@ namespace state
 		board::Board board_;
 		Cards::Manager cards_mgr_;
 		Events::Manager event_mgr_;
+		aura::Manager aura_mgr_;
 
 		PlayerIdentifier current_player_;
 		int turn_;

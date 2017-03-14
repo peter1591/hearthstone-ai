@@ -13,9 +13,9 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline void AuraHelper::Update()
+			inline bool AuraHelper::Update()
 			{
-				if (card_.GetRawData().aura_handler.is_valid == nullptr) return; // no aura attached
+				assert(card_.GetRawData().aura_handler.is_valid != nullptr);
 				assert(card_.GetRawData().aura_handler.get_targets);
 				assert(card_.GetRawData().aura_handler.apply_on);
 				assert(card_.GetRawData().aura_handler.remove_from);
@@ -23,10 +23,8 @@ namespace FlowControl
 				std::unordered_set<state::CardRef> new_targets;
 				state::Cards::aura::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
 
-				if (!(*card_.GetRawData().aura_handler.is_valid)({ state_, flow_context_, card_ref_, card_ })) {
-					data.removed = true; // aura will be removed in the next AuraUpdate event
-				}
-				else {
+				bool aura_valid = (*card_.GetRawData().aura_handler.is_valid)({ state_, flow_context_, card_ref_, card_ });
+				if (aura_valid) {
 					state::targetor::TargetsGenerator targets_generator;
 					(*card_.GetRawData().aura_handler.get_targets)
 						({ state_, flow_context_, card_ref_, card_, data, targets_generator });
@@ -58,6 +56,8 @@ namespace FlowControl
 						({ state_, flow_context_, card_ref_, card_, new_target, enchant_id });
 					data.applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_id)));
 				}
+
+				return aura_valid;
 			}
 		}
 	}
