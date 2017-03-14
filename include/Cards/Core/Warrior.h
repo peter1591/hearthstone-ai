@@ -2,14 +2,8 @@
 
 namespace Cards
 {
-	class Card_CS2_106 : public WeaponCardBase<Card_CS2_106>
-	{
-	public:
+	struct Card_CS2_106 : public WeaponCardBase<Card_CS2_106> {
 		static constexpr int id = Cards::ID_CS2_106;
-
-		Card_CS2_106()
-		{
-		}
 	};
 }
 
