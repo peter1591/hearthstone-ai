@@ -27,8 +27,7 @@ namespace FlowControl
 					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 
 					data.need_update = true;
-					auto ret = data.enchantments.PushBack(std::forward<T>(enchantment));
-					return ret;
+					return data.enchantments.PushBack(std::forward<T>(enchantment));
 				}
 
 				template <typename EnchantmentType, typename T>

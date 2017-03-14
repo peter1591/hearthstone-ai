@@ -9,13 +9,14 @@ namespace Cards
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
 		static constexpr int id = Cards::ID_CS2_189;
 
-		static bool GetBattleTargets(state::targetor::TargetsGenerator& target) {
+		template <typename Context>
+		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
 			return true;
 		}
 
 		Card_CS2_189() {
-			Battlecry([](auto context) {
+			Battlecry<WithTargets>([](auto context) {
 				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
 			});
 		}
@@ -34,21 +35,17 @@ namespace Cards
 		static constexpr EnchantmentTiers tier = kEnchantmentAura;
 		static constexpr int id = Cards::ID_EX1_508o;
 
-		Card_EX1_508o()
-		{
+		Card_EX1_508o() {
 			apply_functor = [](auto& stats) {
 				++stats.attack;
 			};
 		}
 	};
 
-	class Card_EX1_508 : public MinionCardBase<Card_EX1_508>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
 		static constexpr int id = Cards::ID_EX1_508;
 
-		Card_EX1_508()
-		{
+		Card_EX1_508() {
 			Aura<Card_EX1_508o, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
 					.Ally(context).Minion().Murlocs() // friendly murlocs only
@@ -57,198 +54,131 @@ namespace Cards
 		}
 	};
 
-	class Card_CS2_171 : public MinionCardBase<Card_CS2_171>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171> {
 		static constexpr int id = Cards::ID_CS2_171;
 
-		Card_CS2_171()
-		{
-			Charge();
-		}
+		Card_CS2_171() { Charge(); }
 	};
 
-	class Card_EX1_011 : public MinionCardBase<Card_EX1_011>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
 		static constexpr int id = Cards::ID_EX1_011;
 
-		Card_EX1_011()
-		{
-			battlecry_target_getter = [](auto context) {
-				context.targets_generator_.Targetable().Exclude(context.card_ref_);
-				return true;
-			};
-			battlecry = [](auto context) {
+		template <typename Context>
+		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+			target.Targetable();
+			return true;
+		}
+
+		Card_EX1_011() {
+			Battlecry<WithTargets>([](auto context) {
 				Heal(context).Target(context.flow_context_.battlecry_target_).Amount(2);
-			};
+			});
 		}
 	};
 
-	class Card_EX1_066 : public MinionCardBase<Card_EX1_066>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_066 : public MinionCardBase<Card_EX1_066> {
 		static constexpr int id = Cards::ID_EX1_066;
 
 		Card_EX1_066()
 		{
-			battlecry = [](auto context) {
+			Battlecry<NoTarget>([](auto context) {
 				Manipulate(context).OpponentHero().DestroyWeapon();
-			};
+			});
 		}
 	};
 
-	class Card_CS2_172 : public MinionCardBase<Card_CS2_172>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_172 : public MinionCardBase<Card_CS2_172> {
 		static constexpr int id = Cards::ID_CS2_172;
 	};
 
-	class Card_CS2_173 : public MinionCardBase<Card_CS2_173>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_173 : public MinionCardBase<Card_CS2_173> {
 		static constexpr int id = Cards::ID_CS2_173;
-
-		Card_CS2_173()
-		{
-			Charge();
-		}
+		Card_CS2_173() { Charge(); }
 	};
 
-	class Card_CS2_121 : public MinionCardBase<Card_CS2_121>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_121 : public MinionCardBase<Card_CS2_121>{
 		static constexpr int id = Cards::ID_CS2_121;
-
-		Card_CS2_121()
-		{
-			Taunt();
-		}
+		Card_CS2_121() { Taunt(); }
 	};
 
-	class Card_CS2_142 : public MinionCardBase<Card_CS2_142>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_142 : public MinionCardBase<Card_CS2_142> {
 		static constexpr int id = Cards::ID_CS2_142;
-
-		Card_CS2_142()
-		{
-			SpellDamage(1);
-		}
+		Card_CS2_142() { SpellDamage(1); }
 	};
 
-	class Card_EX1_506 : public MinionCardBase<Card_EX1_506>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_506 : public MinionCardBase<Card_EX1_506> {
 		static constexpr int id = Cards::ID_EX1_506;
 
-		Card_EX1_506()
-		{
-			battlecry = [](auto context) {
+		Card_EX1_506() {
+			Battlecry<NoTarget>([](auto context) {
 				SummonToRight(context, Cards::ID_EX1_506a);
-			};
+			});
 		}
 	};
 
-	class Card_EX1_506a : public MinionCardBase<Card_EX1_506a>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_506a : public MinionCardBase<Card_EX1_506a> {
 		static constexpr int id = Cards::ID_EX1_506a;
-
-		Card_EX1_506a()
-		{
-		}
 	};
 
-	class Card_EX1_015 : public MinionCardBase<Card_EX1_015>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_015 : public MinionCardBase<Card_EX1_015> {
 		static constexpr int id = Cards::ID_EX1_015;
 
-		Card_EX1_015()
-		{
-			battlecry = [](auto context) {
+		Card_EX1_015() {
+			Battlecry<NoTarget>([](auto context) {
 				Manipulate(context).CurrentHero().DrawCard();
-			};
+			});
 		}
 	};
 
-	class Card_CS2_120 : public MinionCardBase<Card_CS2_120>
-	{
-	public:
+	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {
 		static constexpr int id = Cards::ID_CS2_120;
-
-		Card_CS2_120() {}
 	};
 
-	class Card_EX1_582 : public MinionCardBase<Card_EX1_582>
-	{
-	public:
+	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582> {
 		static constexpr int id = Cards::ID_EX1_582;
-
-		Card_EX1_582()
-		{
-			SpellDamage(1);
-		}
+		Card_EX1_582() { SpellDamage(1); }
 	};
 
-	class Card_CS2_141 : public MinionCardBase<Card_CS2_141>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
 		static constexpr int id = Cards::ID_CS2_141;
 
-		Card_CS2_141()
-		{
-			battlecry_target_getter = [](auto context) {
-				context.targets_generator_.Targetable();
-				return true;
-			};
-			battlecry = [](auto context) {
+		template <typename Context>
+		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+			target.Targetable();
+			return true;
+		}
+
+		Card_CS2_141() {
+			Battlecry<WithTargets>([](auto context) {
 				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
-			};
+			});
 		}
 	};
 
-	class Card_CS2_125 : public MinionCardBase<Card_CS2_125>
-	{
-	public:
+	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125> {
 		static constexpr int id = Cards::ID_CS2_125;
-
-		Card_CS2_125()
-		{
-			Taunt();
-		}
+		Card_CS2_125() { Taunt(); }
 	};
 
-	class Card_CS2_118 : public MinionCardBase<Card_CS2_118>
-	{
-	public:
+	struct Card_CS2_118 : public MinionCardBase<Card_CS2_118> {
 		static constexpr int id = Cards::ID_CS2_118;
-
-		Card_CS2_118() {}
 	};
 
-	class Card_CS2_122e : public EnchantmentCardBase
-	{
-	public:
+	struct Card_CS2_122e : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 		static constexpr int id = Cards::ID_CS2_122e;
 
-		Card_CS2_122e()
-		{
+		Card_CS2_122e() {
 			apply_functor = [](auto& stats) {
 				++stats.attack;
 			};
 		}
 	};
 
-	class Card_CS2_122 : public MinionCardBase<Card_CS2_122>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
 		static constexpr int id = Cards::ID_CS2_122;
 
-		Card_CS2_122()
-		{
+		Card_CS2_122() {
 			Aura<Card_CS2_122e, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
 					.Ally(context).Minion() // friendly minions
@@ -257,35 +187,26 @@ namespace Cards
 		}
 	};
 
-	class Card_CS2_boar : public MinionCardBase<Card_CS2_boar>
-	{
-	public:
+	struct Card_CS2_boar : public MinionCardBase<Card_CS2_boar> {
 		static constexpr int id = Cards::ID_CS2_boar;
-
-		Card_CS2_boar() {}
 	};
 
-	class Card_CS2_196 : public MinionCardBase<Card_CS2_196>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_196 : public MinionCardBase<Card_CS2_196> {
 		static constexpr int id = Cards::ID_CS2_196;
 
 		Card_CS2_196()
 		{
-			battlecry = [](auto context) {
+			Battlecry<NoTarget>([](auto context) {
 				SummonToRight(context, Cards::ID_CS2_boar);
-			};
+			});
 		}
 	};
 
-	class Card_EX1_019e : public EnchantmentCardBase
-	{
-	public:
+	struct Card_EX1_019e : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_019e;
 
-		Card_EX1_019e()
-		{
+		Card_EX1_019e() {
 			apply_functor = [](auto& stats) {
 				++stats.max_hp;
 				++stats.attack;
@@ -293,150 +214,104 @@ namespace Cards
 		}
 	};
 
-	class Card_EX1_019 : public MinionCardBase<Card_EX1_019>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
 		static constexpr int id = Cards::ID_EX1_019;
 
-		Card_EX1_019()
-		{
-			battlecry_target_getter = [](auto context) {
-				context.targets_generator_.Ally(context).Minion().Targetable();
-				return true;
-			};
-			battlecry = [](auto context) {
+		template <typename Context>
+		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+			target.Ally(context).Minion().Targetable();
+			return true;
+		}
+
+		Card_EX1_019() {
+			Battlecry<WithTargets>([](auto context) {
 				Manipulate(context).Minion(context.flow_context_.battlecry_target_)
 					.Enchant().Add(Card_EX1_019e());
-			};
+			});
 		}
 	};
 
-	class Card_CS2_127 : public MinionCardBase<Card_CS2_127>
-	{
-	public:
+	struct Card_CS2_127 : public MinionCardBase<Card_CS2_127> {
 		static constexpr int id = Cards::ID_CS2_127;
-
-		Card_CS2_127()
-		{
-			Taunt();
-		}
+		Card_CS2_127() { Taunt(); }
 	};
 
-	class Card_CS2_124 : public MinionCardBase<Card_CS2_124>
-	{
-	public:
+	struct Card_CS2_124 : public MinionCardBase<Card_CS2_124> {
 		static constexpr int id = Cards::ID_CS2_124;
-
 		Card_CS2_124() { Charge(); }
 	};
 
-	class Card_CS2_182 : public MinionCardBase<Card_CS2_182>
-	{
-	public:
+	struct Card_CS2_182 : public MinionCardBase<Card_CS2_182> {
 		static constexpr int id = Cards::ID_CS2_182;
-
-		Card_CS2_182() {}
 	};
 
-	class Card_EX1_025t : public MinionCardBase<Card_EX1_025t>
-	{
-	public:
+	struct Card_EX1_025t : public MinionCardBase<Card_EX1_025t> {
 		static constexpr int id = Cards::ID_EX1_025t;
-
-		Card_EX1_025t() {}
 	};
 
-	class Card_EX1_025 : public MinionCardBase<Card_EX1_025>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_025 : public MinionCardBase<Card_EX1_025> {
 		static constexpr int id = Cards::ID_EX1_025;
 
-		Card_EX1_025()
-		{
-			battlecry = [](auto context) {
+		Card_EX1_025() {
+			Battlecry<NoTarget>([](auto context) {
 				SummonToRight(context, Cards::ID_EX1_025t);
-			};
+			});
 		}
 	};
 
-	class Card_CS2_147 : public MinionCardBase<Card_CS2_147>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_147 : public MinionCardBase<Card_CS2_147> {
 		static constexpr int id = Cards::ID_CS2_147;
 
-		Card_CS2_147()
-		{
-			battlecry = [](auto context) {
+		Card_CS2_147() {
+			Battlecry<NoTarget>([](auto context) {
 				Manipulate(context).CurrentHero().DrawCard();
-			};
+			});
 		}
 	};
 
-	class Card_CS2_119 : public MinionCardBase<Card_CS2_119>
-	{
-	public:
+	struct Card_CS2_119 : public MinionCardBase<Card_CS2_119>{
 		static constexpr int id = Cards::ID_CS2_119;
-
-		Card_CS2_119() {}
 	};
 
-	class Card_CS2_197 : public MinionCardBase<Card_CS2_197>
-	{
-	public:
+	struct Card_CS2_197 : public MinionCardBase<Card_CS2_197> {
 		static constexpr int id = Cards::ID_CS2_197;
-
 		Card_CS2_197() { SpellDamage(1); }
 	};
 
-	class Card_CS2_179 : public MinionCardBase<Card_CS2_179>
-	{
-	public:
+	struct Card_CS2_179 : public MinionCardBase<Card_CS2_179> {
 		static constexpr int id = Cards::ID_CS2_179;
-
 		Card_CS2_179() { Taunt(); }
 	};
 
-	class Card_CS2_131 : public MinionCardBase<Card_CS2_131>
-	{
-	public:
+	struct Card_CS2_131 : public MinionCardBase<Card_CS2_131> {
 		static constexpr int id = Cards::ID_CS2_131;
-
 		Card_CS2_131() { Charge(); }
 	};
 
-	class Card_CS2_187 : public MinionCardBase<Card_CS2_187>
-	{
-	public:
+	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187>{
 		static constexpr int id = Cards::ID_CS2_187;
-
 		Card_CS2_187() { Taunt(); }
 	};
 
-	class Card_DS1_055 : public MinionCardBase<Card_DS1_055>, MinionCardUtils
-	{
-	public:
+	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		static constexpr int id = Cards::ID_DS1_055;
 
-		Card_DS1_055()
-		{
-			battlecry = [](auto context) {
+		Card_DS1_055() {
+			Battlecry<NoTarget>([](auto context) {
 				ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
 					[](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
 					FlowControl::Manipulate(state, flow_context).Character(ref).Heal(2);
 				});
-			};
+			});
 		}
 	};
 
 	template <int Arg1>
-	class Card_CS2_226e : public EnchantmentCardBase
-	{
-	public:
+	struct Card_CS2_226e : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_019e;
 
-		Card_CS2_226e()
-		{
+		Card_CS2_226e() {
 			apply_functor = [](auto& stats) {
 				stats.max_hp += Arg1;
 				stats.attack += Arg1;
@@ -444,14 +319,11 @@ namespace Cards
 		}
 	};
 
-	class Card_CS2_226 : public MinionCardBase<Card_CS2_226>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
 		static constexpr int id = Cards::ID_CS2_226;
 
-		Card_CS2_226()
-		{
-			battlecry = [](auto context) {
+		Card_CS2_226() {
+			Battlecry<NoTarget>([](auto context) {
 				int count = 0;
 				Targets().Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
 					.Count(context.state_, &count);
@@ -480,27 +352,22 @@ namespace Cards
 				default:
 					throw std::exception("invalid minion count");
 				}
-			};
+			});
 		}
 	};
 
-	class Card_EX1_399e : public EnchantmentCardBase
-	{
-	public:
+	struct Card_EX1_399e : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_399e;
 
-		Card_EX1_399e()
-		{
+		Card_EX1_399e() {
 			apply_functor = [](auto& stats) {
 				stats.attack += 3;
 			};
 		}
 	};
 
-	class Card_EX1_399 : public MinionCardBase<Card_EX1_399>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
 		static constexpr int id = Cards::ID_EX1_399;
 
 		struct EventHandler {
@@ -510,89 +377,65 @@ namespace Cards
 			};
 		};
 
-		Card_EX1_399()
-		{
+		Card_EX1_399() {
 			RegisterEvent<OnSelfTakeDamage, EventHandler>();
 		}
 	};
 
-	class Card_EX1_593 : public MinionCardBase<Card_EX1_593>, MinionCardUtils
-	{
-	public:
+	struct Card_EX1_593 : public MinionCardBase<Card_EX1_593> {
 		static constexpr int id = Cards::ID_EX1_593;
 
-		Card_EX1_593()
-		{
-			battlecry = [](auto context) {
+		Card_EX1_593() {
+			Battlecry<NoTarget>([](auto context) {
 				Damage(context).Opponent().Amount(3);
-			};
+			});
 		}
 	};
 
-	class Card_CS2_150 : public MinionCardBase<Card_CS2_150>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
 		static constexpr int id = Cards::ID_CS2_150;
 
-		Card_CS2_150()
-		{
-			battlecry_target_getter = [](auto context) {
-				context.targets_generator_.Targetable();
-				return true;
-			};
-			battlecry = [](auto context) {
+		template <typename Context>
+		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+			target.Targetable();
+			return true;
+		}
+
+		Card_CS2_150() {
+			Battlecry<WithTargets>([](auto context) {
 				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(2);
-			};
+			});
 		}
 	};
 
-	class Card_CS2_155 : public MinionCardBase<Card_CS2_155>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_155 : public MinionCardBase<Card_CS2_155> {
 		static constexpr int id = Cards::ID_CS2_155;
-
-		Card_CS2_155()
-		{
-			SpellDamage(1);
-		}
+		Card_CS2_155() { SpellDamage(1); }
 	};
 
-	class Card_CS2_200 : public MinionCardBase<Card_CS2_200>
-	{
-	public:
+	struct Card_CS2_200 : public MinionCardBase<Card_CS2_200> {
 		static constexpr int id = Cards::ID_CS2_200;
-		Card_CS2_200() {}
 	};
 
-	class Card_CS2_162 : public MinionCardBase<Card_CS2_162>
-	{
-	public:
+	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162> {
 		static constexpr int id = Cards::ID_CS2_162;
 		Card_CS2_162() { Taunt(); }
 	};
 
-	class Card_CS2_213 : public MinionCardBase<Card_CS2_213>
-	{
-	public:
+	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213> {
 		static constexpr int id = Cards::ID_CS2_213;
 		Card_CS2_213() { Charge(); }
 	};
 
-	class Card_CS2_201 : public MinionCardBase<Card_CS2_201>
-	{
-	public:
+	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {
 		static constexpr int id = Cards::ID_CS2_201;
-		Card_CS2_201() {}
 	};
 
-	class Card_CS2_222o : public EnchantmentCardBase
-	{
-	public:
+	struct Card_CS2_222o : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentAura;
 		static constexpr int id = Cards::ID_CS2_222o;
 
-		Card_CS2_222o()
-		{
+		Card_CS2_222o() {
 			apply_functor = [](auto& stats) {
 				++stats.attack;
 				++stats.max_hp;
@@ -600,13 +443,10 @@ namespace Cards
 		}
 	};
 
-	class Card_CS2_222 : public MinionCardBase<Card_CS2_222>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
 		static constexpr int id = Cards::ID_CS2_222;
 
-		Card_CS2_222()
-		{
+		Card_CS2_222() {
 			Aura<Card_CS2_222o, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
 					.Ally(context).Minion() // friendly minions
@@ -615,12 +455,8 @@ namespace Cards
 		}
 	};
 
-	class Card_CS2_186 : public MinionCardBase<Card_CS2_186>
-	{
-	public:
+	struct Card_CS2_186 : public MinionCardBase<Card_CS2_186> {
 		static constexpr int id = Cards::ID_CS2_186;
-
-		Card_CS2_186() {}
 	};
 }
 

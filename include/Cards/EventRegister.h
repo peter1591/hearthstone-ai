@@ -24,12 +24,12 @@ namespace Cards
 	namespace detail {
 		template <typename EventHandler, typename EventHandlerArg> struct EventHandlerInvoker {
 			template <typename... Args> static auto Invoke(Args&&... args) {
-				return EventHandler::Invoke<EventHandlerArg>(std::forward<Args>(args)...);
+				return EventHandler::HandleEvent<EventHandlerArg>(std::forward<Args>(args)...);
 			}
 		};
 		template <typename EventHandler> struct EventHandlerInvoker<EventHandler, void> {
 			template <typename... Args> static auto Invoke(Args&&... args) {
-				return EventHandler::Invoke(std::forward<Args>(args)...);
+				return EventHandler::HandleEvent(std::forward<Args>(args)...);
 			}
 		};
 
@@ -88,7 +88,7 @@ namespace Cards
 
 		struct EventHandler {
 			template <typename UnderlyingHandler, typename Controller, typename Context>
-			static void Invoke(Controller&& controller, state::CardRef self, Context&& context) {
+			static void HandleEvent(Controller&& controller, state::CardRef self, Context&& context) {
 				if (context.damage_ <= 0) return;
 				return UnderlyingHandler::Invoke(std::move(controller), self, std::move(context));
 			}
