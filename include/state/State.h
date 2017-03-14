@@ -62,27 +62,27 @@ namespace state
 
 	public: // zone changer
 		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(IRandomGenerator& random, CardRef ref) {
-			return ZoneChangerWithUnknownZoneUnknownType(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
+			return ZoneChangerWithUnknownZoneUnknownType(*this, board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardZone KnownZone>
 		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return ZoneChangerWithUnknownType<KnownZone>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
+			return ZoneChangerWithUnknownType<KnownZone>(*this, board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardType KnownType>
 		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return ZoneChangerWithUnknownZone<KnownType>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
+			return ZoneChangerWithUnknownZone<KnownType>(*this, board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardType KnownType, state::CardZone KnownZone>
 		ZoneChanger<KnownZone, KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
+			return ZoneChanger<KnownZone, KnownType>(*this, board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 		template <state::CardZone KnownZone, state::CardType KnownType>
 		ZoneChanger<KnownZone, KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return ZoneChanger<KnownZone, KnownType>(board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
+			return ZoneChanger<KnownZone, KnownType>(*this, board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
 		}
 
 	private:
