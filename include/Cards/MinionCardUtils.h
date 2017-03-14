@@ -234,7 +234,7 @@ namespace Cards
 		template <typename Context, typename Functor>
 		static void ForEach(
 			Context&& context,
-			state::targetor::TargetsGenerator const& targets_generator,
+			state::targetor::TargetsGenerator_Leaf const& targets_generator,
 			Functor&& func)
 		{
 			targets_generator.GetInfo().ForEach(context.state_, context.flow_context_, func);

@@ -315,7 +315,7 @@ namespace Cards
 		Card_EX1_019()
 		{
 			battlecry_target_getter = [](auto context) {
-				context.targets_generator_.Targetable().Ally(context).Minion();
+				context.targets_generator_.Ally(context).Minion().Targetable();
 				return true;
 			};
 			battlecry = [](auto context) {
