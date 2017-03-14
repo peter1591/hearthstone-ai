@@ -31,9 +31,6 @@ namespace FlowControl
 			state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, ref, card });
 
-			card.GetRawData().added_to_play_zone(
-				FlowControl::Context::AddedToPlayZone{ state_, flow_context_, ref, card });
-
 			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
 		}

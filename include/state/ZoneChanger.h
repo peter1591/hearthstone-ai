@@ -5,6 +5,7 @@
 #include "state/board/Board.h"
 #include "state/Cards/Manager.h"
 #include "state/detail/PlayerDataStructureMaintainer.h"
+#include "state/detail/InvokeCallback.h"
 
 namespace state {
 	template <CardZone ChangingCardZone, CardType ChangingCardType>
@@ -23,8 +24,10 @@ namespace state {
 			void ChangeTo(PlayerIdentifier player_identifier)
 		{
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, random_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(card_ref_, card_);
 			card_.SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, random_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(card_ref_, card_);
 		}
 
 		template <CardZone ChangeToZone,
@@ -32,8 +35,10 @@ namespace state {
 			void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, random_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(card_ref_, card_);
 			card_.SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, random_, card_ref_, card_, pos);
+			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(card_ref_, card_);
 		}
 
 	private:

@@ -18,12 +18,21 @@ namespace state
 
 	namespace Cards
 	{
+		namespace Context {
+			struct AddedToPlayZone
+			{
+				state::State & state_;
+				state::CardRef card_ref_;
+				const state::Cards::Card & card_;
+			};
+		}
+
 		class CardData
 		{
 		public:
 			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter&&); // true -> OK; false -> not invalid to play
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry&&);
-			typedef void AddedToPlayZoneCallback(FlowControl::Context::AddedToPlayZone);
+			typedef void AddedToPlayZoneCallback(Context::AddedToPlayZone);
 
 			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);
 			typedef std::vector<DeathrattleCallback> Deathrattles;
@@ -49,6 +58,10 @@ namespace state
 			bool just_played;
 			int num_attacks_this_turn;
 
+		public: // callbacks managed by state::State 
+			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
+
+		public:
 			EnchantableStates enchantable_states;
 			EnchantmentAuxData enchantment_aux_data;
 
@@ -57,7 +70,6 @@ namespace state
 			aura::AuraAuxData aura_aux_data;
 
 		public:
-			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
 			BattlecryTargetGetter *battlecry_target_getter;
 			BattlecryCallback *battlecry;
 			Deathrattles deathrattles;

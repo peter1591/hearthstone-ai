@@ -90,9 +90,6 @@ namespace FlowControl
 		state_.GetZoneChanger<state::kCardZoneHand>(flow_context_.random_, card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
-		card.GetRawData().added_to_play_zone(
-		FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
-
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
@@ -111,9 +108,6 @@ namespace FlowControl
 	inline bool FlowController::PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
-
-		card.GetRawData().added_to_play_zone(
-			FlowControl::Context::AddedToPlayZone{ state_, flow_context_, card_ref, card });
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		if (card.GetRawData().battlecry) {
