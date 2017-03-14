@@ -4,6 +4,7 @@
 #include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
 #include "Cards/EventRegister.h"
+#include "Cards/BattlecryHelper.h"
 
 namespace Cards
 {
@@ -58,6 +59,11 @@ namespace Cards
 		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler>
 		auto RegisterEvent() {
 			return EventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>((state::Cards::CardData&)*this);
+		}
+
+		template <typename TargetGetter, typename ApplyFunctor>
+		auto Battlecry(ApplyFunctor&& apply_functor) {
+			return BattlecryHelper<std::decay_t<TargetGetter>>((state::Cards::CardData&)*this, std::forward<ApplyFunctor>(apply_functor));
 		}
 	};
 }

@@ -11,15 +11,16 @@ namespace Cards
 	public:
 		static constexpr int id = Cards::ID_CS2_189;
 
+		static bool GetBattleTargets(state::targetor::TargetsGenerator& target) {
+			target.Targetable();
+			return true;
+		}
+
 		Card_CS2_189()
 		{
-			battlecry_target_getter = [] (auto context) {
-				context.targets_generator_.Targetable();
-				return true;
-			};
-			battlecry = [](auto context) {
+			Battlecry<decltype(*this)>([](auto context) {
 				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
-			};
+			});
 		}
 	};
 
