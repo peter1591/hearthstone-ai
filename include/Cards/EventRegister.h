@@ -5,55 +5,86 @@
 namespace Cards
 {
 	// event lifetime
-	struct InPlayZone {};
+	struct InPlayZone {
+		template <typename Functor>
+		static void RegisterEvent(state::Cards::CardData& card_data, Functor&& functor) {
+			card_data.added_to_play_zone += std::move(functor);
+		}
+		static bool StillValid(state::Cards::Card const& card) {
+			return card.GetZone() == state::kCardZonePlay;
+		}
+	};
 	struct InHandZone {};
 	struct InDeckZone {};
 
+	struct NonCategorized_SelfInLambdaCapture {}; // remember self on lambda capture
+	struct CateogrizedOnSelf {}; // remember self on categorized event
+
 	// helper
 	namespace detail {
-		struct EventNonCateogrizedEvent {};
-		struct EventCategorizedEventOnSelf {};
-		template <typename LifeTime, typename EventCategoryType, typename EventType, typename EventHandler, typename EventHandlerArg> struct EventRegisterHelper;
-
-		template <typename EventType, typename EventHandler, typename EventHandlerArg>
-		struct EventRegisterHelper<InPlayZone, EventNonCateogrizedEvent, EventType, EventHandler, EventHandlerArg> {
-			EventRegisterHelper(state::Cards::CardData & card_data) {
-				card_data.added_to_play_zone += [](auto context) {
-					context.state_.AddEvent<EventType>(
-						[](auto& controller, state::CardRef card_ref, auto& context) {
-						if (context.card_.GetZone() != state::kCardZonePlay) {
-							controller.Remove();
-							return;
-						}
-						EventHandler::Invoke<EventHandlerArg>(std::move(controller), card_ref, std::move(context));
-					});
-				};
+		template <typename EventHandler, typename EventHandlerArg> struct EventHandlerInvoker {
+			template <typename... Args> static auto Invoke(Args&&... args) {
+				return EventHandler::Invoke<EventHandlerArg>(std::forward<Args>(args)...);
 			}
 		};
-		template <typename EventType, typename EventHandler, typename EventHandlerArg>
-		struct EventRegisterHelper<InPlayZone, EventCategorizedEventOnSelf, EventType, EventHandler, EventHandlerArg> {
-			EventRegisterHelper(state::Cards::CardData & card_data) {
-				card_data.added_to_play_zone += [](auto context) {
-					state::CardRef self = context.card_ref_;
-					context.state_.AddEvent<EventType>(
-						self,
-						[](auto& controller, auto self, auto& context) {
-						if (context.card_.GetZone() != state::kCardZonePlay) {
-							controller.Remove();
-							return;
-						}
-						EventHandler::Invoke<EventHandlerArg>(std::move(controller), self, std::move(context));
-					});
-				};
+		template <typename EventHandler> struct EventHandlerInvoker<EventHandler, void> {
+			template <typename... Args> static auto Invoke(Args&&... args) {
+				return EventHandler::Invoke(std::forward<Args>(args)...);
+			}
+		};
+
+		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg> struct AddEventHelper;
+
+		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
+		struct AddEventHelper<LifeTime, NonCategorized_SelfInLambdaCapture, EventType, EventHandler, EventHandlerArg> {
+			template <typename Context>
+			static void AddEvent(state::CardRef self, Context&& context) {
+				context.state_.AddEvent<EventType>(
+					[self](auto& controller, auto& context) {
+					if (!LifeTime::StillValid(context.state_.GetCard(self))) return controller.Remove();
+					EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(std::move(controller), self, std::move(context));
+				});
+			}
+		};
+		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
+		struct AddEventHelper<LifeTime, CateogrizedOnSelf, EventType, EventHandler, EventHandlerArg> {
+			template <typename Context>
+			static void AddEvent(state::CardRef self, Context&& context) {
+				context.state_.AddEvent<EventType>(
+					self,
+					[](auto& controller, state::CardRef self, auto& context) {
+					if (!LifeTime::StillValid(context.state_.GetCard(self))) return controller.Remove();
+					EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(std::move(controller), self, std::move(context));
+				});
 			}
 		};
 	}
 
-	// event types
+	template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg = void>
+	struct EventRegisterHelper {
+		EventRegisterHelper(state::Cards::CardData & card_data) {
+			LifeTime::RegisterEvent(card_data, [](auto context) {
+				state::CardRef self = context.card_ref_;
+				detail::AddEventHelper<LifeTime, SelfPolicy, EventType, EventHandler, EventHandlerArg>
+					::AddEvent(self, std::move(context));
+			});
+		}
+	};
+
+	// event register: use helper for common usages
+	template <typename EventType, typename EventHandler = void>
+	using EventRegister = EventRegisterHelper<
+		typename EventType::LifeTime,
+		typename EventType::SelfPolicy,
+		typename EventType::EventType,
+		typename EventType::EventHandler,
+		EventHandler>;
+
+	// helper for common usages
 	struct OnSelfTakeDamage {
-		typedef InPlayZone LifeTime;
-		typedef detail::EventCategorizedEventOnSelf EventCategoryType;
-		typedef state::Events::EventTypes::OnTakeDamage EventType;
+		using LifeTime = InPlayZone;
+		using SelfPolicy = CateogrizedOnSelf;
+		using EventType = state::Events::EventTypes::OnTakeDamage;
 
 		struct EventHandler {
 			template <typename UnderlyingHandler, typename Controller, typename Context>
@@ -62,18 +93,5 @@ namespace Cards
 				return UnderlyingHandler::Invoke(std::move(controller), self, std::move(context));
 			}
 		};
-	};
-
-	// event register
-	template <typename EventType, typename EventHandler> class EventRegister
-		: detail::EventRegisterHelper<
-		typename EventType::LifeTime,
-		typename EventType::EventCategoryType,
-		typename EventType::EventType,
-		typename EventType::EventHandler,
-		EventHandler>
-	{
-	public:
-		EventRegister(state::Cards::CardData& card_data) : EventRegisterHelper(card_data) {}
 	};
 }

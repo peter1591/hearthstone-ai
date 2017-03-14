@@ -34,16 +34,20 @@ namespace Cards
 	public:
 		static constexpr int id = Cards::ID_NEW1_038;
 
+		struct EventHandler {
+			template <typename Controller, typename Context>
+			static void Invoke(Controller&& controller, state::CardRef self, Context&& context) {
+				Manipulate(context).Card(self).Enchant().Add(Card_NEW1_038_Enchant());
+			};
+		};
+
 		Card_NEW1_038()
 		{
-			added_to_play_zone += [](auto context) {
-				state::CardRef self = context.card_ref_;
-				context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(
-					[self](auto& controller, auto& context) {
-					if (!IsAlive(context, self)) return controller.Remove();
-					Manipulate(context).Card(self).Enchant().Add(Card_NEW1_038_Enchant());
-				});
-			};
+			RegisterEvent<
+				InPlayZone,
+				NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd,
+				EventHandler>();
 		}
 	};
 
