@@ -6,9 +6,7 @@
 
 namespace Cards
 {
-	class Card_CS2_189 : public MinionCardBase<Card_CS2_189>, MinionCardUtils
-	{
-	public:
+	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
 		static constexpr int id = Cards::ID_CS2_189;
 
 		static bool GetBattleTargets(state::targetor::TargetsGenerator& target) {
@@ -16,36 +14,23 @@ namespace Cards
 			return true;
 		}
 
-		Card_CS2_189()
-		{
-			Battlecry<decltype(*this)>([](auto context) {
+		Card_CS2_189() {
+			Battlecry([](auto context) {
 				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
 			});
 		}
 	};
 
-	class Card_CS1_042 : public MinionCardBase<Card_CS1_042>, MinionCardUtils
-	{
-	public:
+	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042> {
 		static constexpr int id = Cards::ID_CS1_042;
-
-		Card_CS1_042()
-		{
-			Taunt();
-		}
+		Card_CS1_042() { Taunt(); }
 	};
 
-	class Card_CS2_168 : public MinionCardBase<Card_CS2_168>
-	{
-	public:
+	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {
 		static constexpr int id = Cards::ID_CS2_168;
-
-		Card_CS2_168() {}
 	};
 
-	class Card_EX1_508o : public EnchantmentCardBase
-	{
-	public:
+	struct Card_EX1_508o : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentAura;
 		static constexpr int id = Cards::ID_EX1_508o;
 

@@ -27,8 +27,6 @@ namespace state
 			typedef void(*ApplyFunctor)(EnchantableStates &);
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
-			typedef void AfterAddedCallback(FlowControl::Context::EnchantmentAfterAdded);
-
 			template <typename T>
 			typename ContainerType::Identifier PushBack(T && item)
 			{

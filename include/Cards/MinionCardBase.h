@@ -5,11 +5,12 @@
 #include "Cards/AuraHelper.h"
 #include "Cards/EventRegister.h"
 #include "Cards/BattlecryHelper.h"
+#include "Cards/MinionCardUtils.h"
 
 namespace Cards
 {
 	template <typename T>
-	class MinionCardBase : public state::Cards::CardData
+	class MinionCardBase : public state::Cards::CardData, public MinionCardUtils
 	{
 	public:
 		MinionCardBase()
@@ -61,9 +62,9 @@ namespace Cards
 			return EventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>((state::Cards::CardData&)*this);
 		}
 
-		template <typename TargetGetter, typename ApplyFunctor>
+		template <typename ApplyFunctor>
 		auto Battlecry(ApplyFunctor&& apply_functor) {
-			return BattlecryHelper<std::decay_t<TargetGetter>>((state::Cards::CardData&)*this, std::forward<ApplyFunctor>(apply_functor));
+			return BattlecryHelper<T>((state::Cards::CardData&)*this, std::forward<ApplyFunctor>(apply_functor));
 		}
 	};
 }
