@@ -46,10 +46,10 @@ namespace Cards
 			this->enchantable_states.spell_damage = v;
 		}
 
-		template <typename EnchantmentType>
-		AuraHelper<EnchantmentType> Aura()
+		template <typename... Types>
+		AuraHelper<Types...> Aura()
 		{
-			return AuraHelper<EnchantmentType>(*this);
+			return AuraHelper<Types...>(*this);
 		}
 	};
 }

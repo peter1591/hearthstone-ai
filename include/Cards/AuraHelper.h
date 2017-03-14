@@ -6,16 +6,31 @@
 
 namespace Cards
 {
-	// Emit when alive
-	template <typename EnchantmentType>
+	struct EmitWhenAlive {
+		static void RegisterAura(state::Cards::CardData &card_data) {
+			card_data.added_to_play_zone += [](auto context) {
+				context.state_.GetAuraManager().Add(context.card_ref_);
+			};
+		}
+
+		template <typename Context>
+		static bool ShouldEmit(Context&& context, state::CardRef card_ref) {
+			return MinionCardUtils::IsAlive(std::move(context), card_ref);
+		}
+	};
+
+	struct EmitWhenInHand {
+		// TODO: implement
+	};
+
+	template <typename EnchantmentType, typename EmitPolicy>
 	class AuraHelper
 	{
 	public:
-		AuraHelper(state::Cards::CardData & card_data)
-			: card_data_(card_data)
+		AuraHelper(state::Cards::CardData & card_data) : card_data_(card_data)
 		{
 			card_data_.aura_handler.is_valid = [](auto context) {
-				return MinionCardUtils::IsAlive(context, context.card_ref_);
+				return EmitPolicy::ShouldEmit(std::move(context), context.card_ref_);
 			};
 		}
 
@@ -43,9 +58,7 @@ namespace Cards
 				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
 			};
 
-			card_data_.added_to_play_zone += [](auto context) {
-				context.state_.GetAuraManager().Add(context.card_ref_);
-			};
+			EmitPolicy::RegisterAura(card_data_);
 		}
 
 	private:

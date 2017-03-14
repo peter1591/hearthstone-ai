@@ -26,10 +26,10 @@ namespace Cards
 			this->enchantable_states.max_hp = data.max_hp;
 		}
 
-		template <typename EnchantmentType>
-		AuraHelper<EnchantmentType> Aura()
+		template <typename... Types>
+		AuraHelper<Types...> Aura()
 		{
-			return AuraHelper<EnchantmentType>(*this);
+			return AuraHelper<Types...>(*this);
 		}
 	};
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cards/MinionCardUtils.h"
+
 // http://www.hearthpwn.com/cards?filter-set=2&filter-premium=1&filter-class=1&sort=-cost&display=1
 
 namespace Cards
@@ -61,7 +63,7 @@ namespace Cards
 
 		Card_EX1_508()
 		{
-			Aura<Card_EX1_508o>().Target([](auto&& context) {
+			Aura<Card_EX1_508o, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
 					.Ally(context).Minion().Murlocs() // friendly murlocs only
 					.Exclude(context.card_ref_); // only apply on other murlocs
@@ -261,7 +263,7 @@ namespace Cards
 
 		Card_CS2_122()
 		{
-			Aura<Card_CS2_122e>().Target([](auto&& context) {
+			Aura<Card_CS2_122e, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
 					.Ally(context).Minion() // friendly minions
 					.Exclude(context.card_ref_); // only apply on other
@@ -621,7 +623,7 @@ namespace Cards
 
 		Card_CS2_222()
 		{
-			Aura<Card_CS2_222o>().Target([](auto&& context) {
+			Aura<Card_CS2_222o, EmitWhenAlive>().Target([](auto&& context) {
 				context.targets_generator_
 					.Ally(context).Minion() // friendly minions
 					.Exclude(context.card_ref_); // only apply on other
