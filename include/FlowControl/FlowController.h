@@ -1,10 +1,10 @@
 #pragma once
 
 #include "state/State.h"
-#include "state/detail/PlayerDataStructureMaintainer-impl.h"
 
 #include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/FlowContext.h"
+#include "FlowControl/FlowContext-impl.h"
 #include "FlowControl/Result.h"
 #include "FlowControl/ActionTypes.h"
 #include "FlowControl/Contexts.h"

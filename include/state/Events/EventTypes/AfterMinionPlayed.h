@@ -4,8 +4,7 @@
 #include <string>
 #include <iostream>
 #include <functional>
-
-namespace FlowControl { class FlowContext; }
+#include "FlowControl/FlowContext.h"
 
 namespace state
 {

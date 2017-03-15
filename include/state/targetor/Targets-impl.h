@@ -1,14 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <unordered_set>
+#include "state/targetor/Targets.h"
 #include "state/State.h"
-#include "state/board/Board.h"
 #include "FlowControl/FlowContext.h"
 
 namespace state {
-	class State;
-
 	namespace targetor {
 		inline Targets::Targets() :
 			include_first(true), include_second(true),

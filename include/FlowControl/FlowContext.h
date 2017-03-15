@@ -3,7 +3,6 @@
 #include <map>
 
 #include "state/IRandomGenerator.h"
-#include "state/State.h"
 #include "state/Types.h"
 #include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/Result.h"
@@ -18,23 +17,10 @@ namespace FlowControl {
 		friend class FlowControl::Helpers::Resolver;
 
 	public:
-		FlowContext(state::IRandomGenerator & random, ActionParameterWrapper & action_parameters)
-			: random_(random), action_parameters_(action_parameters), result_(FlowControl::kResultNotDetermined)
-		{}
+		FlowContext(state::IRandomGenerator & random, ActionParameterWrapper & action_parameters);
 
-		void AddDeadEntryHint(state::State & state, state::CardRef ref)
-		{
-			int play_order = state.GetCardsManager().Get(ref).GetPlayOrder();
-
-			dead_entity_hints_.insert(std::make_pair(play_order, ref));
-		}
-
-		bool Empty() const
-		{
-			if (!dead_entity_hints_.empty()) return false;
-			if (destroyed_weapon_.IsValid()) return false;
-			return true;
-		}
+		void AddDeadEntryHint(state::State & state, state::CardRef ref);
+		bool Empty() const;
 
 	public:
 		state::IRandomGenerator & random_;
