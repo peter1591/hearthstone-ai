@@ -51,15 +51,5 @@ namespace Cards
 		auto RegisterEvent() {
 			return EventRegisterHelper<LifeTime, SelfPolicy, EventType, T>((state::Cards::CardData&)*this);
 		}
-
-		template <typename Policy, typename ApplyFunctor>
-		auto Battlecry(ApplyFunctor&& apply_functor) {
-			return BattlecryHelper<Policy, T>((state::Cards::CardData&)*this, std::forward<ApplyFunctor>(apply_functor));
-		}
-
-		template <typename Policy, typename ApplyFunctor>
-		auto BattlecryWithoutTargets(ApplyFunctor&& apply_functor) {
-			return BattlecryHelper<Policy, T>((state::Cards::CardData&)*this, std::forward<ApplyFunctor>(apply_functor));
-		}
 	};
 }
