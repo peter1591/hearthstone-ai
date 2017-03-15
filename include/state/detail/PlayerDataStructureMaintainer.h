@@ -14,6 +14,13 @@ namespace state {
 		template <CardType TargetCardType>
 		struct PlayerDataStructureMaintainer<TargetCardType, kCardZoneInvalid> {
 			static constexpr bool SpecifyAddPosition = false;
+			static void Add(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random, CardRef card_ref, Cards::Card & card);
+			static void Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random, CardRef card_ref, Cards::Card & card);
+		};
+
+		template <CardType TargetCardType>
+		struct PlayerDataStructureMaintainer<TargetCardType, kCardZoneNewlyCreated> {
+			static constexpr bool SpecifyAddPosition = false;
 			static void Add(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card);
 			static void Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card);
 		};

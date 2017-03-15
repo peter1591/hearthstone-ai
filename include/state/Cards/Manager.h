@@ -20,7 +20,7 @@ namespace state
 
 			CardRef PushBack(Cards::Card&& card)
 			{
-				assert(card.GetZone() == kCardZoneInvalid); // Caller use manipulators to adjust. So we don't need to maintain any internal structure consistency
+				assert(card.GetZone() == kCardZoneNewlyCreated);
 				CardRef ref = CardRef(cards_.PushBack(std::move(card)));
 				return ref;
 			}

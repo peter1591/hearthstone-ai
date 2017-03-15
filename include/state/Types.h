@@ -13,41 +13,43 @@ namespace state
 
 	enum CardType
 	{
+		kCardTypeInvalid,
 		kCardTypeHero,
 		kCardTypeMinion,
 		kCardTypeSpell,
 		kCardTypeWeapon,
 		kCardTypeSecret,
 		kCardTypeHeroPower,
-		kCardTypeEnchantment,
-		kCardTypeInvalid
+		kCardTypeEnchantment
 	};
 
 	enum CardZone
 	{
+		kCardZoneInvalid,
 		kCardZonePlay,
 		kCardZoneDeck,
 		kCardZoneHand,
 		kCardZoneGraveyard,
 		kCardZoneRemoved,
 		kCardZoneSetASide,
-		kCardZoneInvalid
+		kCardZoneNewlyCreated // ready to be pushed to cards manager (only for debug assertion)
 	};
 
 	enum CardRace
 	{
+		kCardRaceInvalid,
 		kCardRaceDemon,
 		kCardRaceMech,
 		kCardRaceDragon,
 		kCardRaceBeast,
 		kCardRacePirate,
 		kCardRaceMurloc,
-		kCardRaceTotem,
-		kCardRaceInvalid
+		kCardRaceTotem
 	};
 
 	enum CardSet
 	{
+		kCardSetInvalid,
 		kCardSetCore,
 		kCardSetExpert1,
 		kCardSetGVG,
@@ -58,17 +60,16 @@ namespace state
 		kCardSetOldGods,
 		kCardSetKara,
 		kCardSetGangs,
-		kCardSetTB,
-		kCardSetInvalid
+		kCardSetTB
 	};
 
 	enum CardRarity
 	{
+		kCardRarityInvalid,
 		kCardRarityCommon,
 		kCardRarityRare,
 		kCardRarityEpic,
-		kCardRarityLegendary,
-		kCardRarityInvalid
+		kCardRarityLegendary
 	};
 
 	enum PlayerSide

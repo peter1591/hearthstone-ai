@@ -12,14 +12,32 @@ namespace state {
 			Add(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
 		{
 			assert(card.GetCardType() == TargetCardType);
-			assert(card.GetZone() == kCardZoneInvalid);
-			return; // do nothing
+			assert(card.GetZone() == kCardZoneNewlyCreated);
+			assert(false);
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneInvalid>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == TargetCardType);
-			assert(card.GetZone() == kCardZoneInvalid);
+			assert(card.GetZone() == kCardZoneNewlyCreated);
+			assert(false);
+		}
+
+		template <CardType TargetCardType>
+		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneNewlyCreated>::
+			Add(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random, CardRef card_ref, Cards::Card & card)
+		{
+			assert(card.GetCardType() == TargetCardType);
+			assert(card.GetZone() == kCardZoneNewlyCreated);
+			return; // do nothing
+		}
+		template <CardType TargetCardType>
+		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneNewlyCreated>::
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random, CardRef card_ref, Cards::Card & card)
+		{
+			assert(card.GetCardType() == TargetCardType);
+			assert(card.GetZone() == kCardZoneNewlyCreated);
 			return; // do nothing
 		}
 
@@ -33,7 +51,8 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneRemoved>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == TargetCardType);
 			assert(card.GetZone() == kCardZoneRemoved);
 			return; // do nothing
@@ -49,7 +68,8 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneSetASide>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == TargetCardType);
 			assert(card.GetZone() == kCardZoneSetASide);
 			return; // do nothing
@@ -67,7 +87,8 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneDeck>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == TargetCardType);
 			assert(card.GetZone() == kCardZoneDeck);
 			board.Get(card.GetPlayerIdentifier()).deck_.RemoveLast();
@@ -83,7 +104,8 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneGraveyard>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == TargetCardType);
 			assert(card.GetZone() == kCardZoneGraveyard);
 			board.Get(card.GetPlayerIdentifier()).graveyard_.Remove<TargetCardType>(card_ref);
@@ -100,7 +122,8 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneHand>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == TargetCardType);
 			assert(card.GetZone() == kCardZoneHand);
 
@@ -122,7 +145,8 @@ namespace state {
 			player.SetHeroRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeHero, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeHero);
 			assert(card.GetZone() == kCardZonePlay);
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
@@ -135,12 +159,14 @@ namespace state {
 			assert(card.GetCardType() == kCardTypeMinion);
 			assert(card.GetZone() == kCardZonePlay);
 
-			board.Get(card.GetPlayerIdentifier()).minions_.Insert(card_ref, pos, [&cards_mgr](CardRef ref, size_t pos) {
+			board.Get(card.GetPlayerIdentifier()).minions_.Insert(card_ref, pos, [&cards_mgr](CardRef ref, size_t pos)
+			{
 				cards_mgr.SetCardZonePos(ref, (int)pos);
 			});
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeMinion, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeMinion);
 			assert(card.GetZone() == kCardZonePlay);
 
@@ -160,7 +186,8 @@ namespace state {
 			return player.secrets_.Add(card.GetCardId(), card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeSecret, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeSecret);
 			assert(card.GetZone() == kCardZonePlay);
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
@@ -176,7 +203,8 @@ namespace state {
 			assert(cards_mgr.Get(player.GetHeroRef()).GetRawData().weapon_ref == card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeWeapon, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeWeapon);
 			assert(card.GetZone() == kCardZonePlay);
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
@@ -191,7 +219,8 @@ namespace state {
 			// do nothing
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeSpell, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeSpell);
 			assert(card.GetZone() == kCardZonePlay);
 			// do nothing
@@ -205,7 +234,8 @@ namespace state {
 			// do nothing
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeHeroPower, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeHeroPower);
 			assert(card.GetZone() == kCardZonePlay);
 			// do nothing
@@ -219,7 +249,8 @@ namespace state {
 			// do nothing
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeEnchantment, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card) {
+			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
+		{
 			assert(card.GetCardType() == kCardTypeEnchantment);
 			assert(card.GetZone() == kCardZonePlay);
 			// do nothing

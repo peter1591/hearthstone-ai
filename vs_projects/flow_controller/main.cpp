@@ -24,6 +24,8 @@ void test_compile()
 		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 	state.GetZoneChanger<state::kCardZoneInvalid>(random, *(state::CardRef*)(nullptr))
 		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(random, *(state::CardRef*)(nullptr))
+		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 	state.GetZoneChanger<state::kCardZonePlay>(random, *(state::CardRef*)(nullptr))
 		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 	state.GetZoneChanger<state::kCardZoneRemoved>(random, *(state::CardRef*)(nullptr))

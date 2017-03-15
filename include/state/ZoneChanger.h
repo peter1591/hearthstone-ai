@@ -80,6 +80,8 @@ namespace state {
 				return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, board_, cards_mgr_, random_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardZoneInvalid:
 				return ZoneChanger<kCardZoneInvalid, ChangingCardType>(state_, board_, cards_mgr_, random_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
+			case kCardZoneNewlyCreated:
+				return ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, random_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
 				throw std::exception("Unknown card zone");
 			}
@@ -105,6 +107,8 @@ namespace state {
 				return ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, board_, cards_mgr_, random_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardZoneInvalid:
 				return ZoneChanger<kCardZoneInvalid, ChangingCardType>(state_, board_, cards_mgr_, random_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
+			case kCardZoneNewlyCreated:
+				return ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, random_, card_ref_, card_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
 				throw std::exception("Unknown card zone");
 			}
