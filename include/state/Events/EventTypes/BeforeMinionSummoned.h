@@ -4,8 +4,8 @@
 #include <string>
 #include <iostream>
 #include <functional>
-
-namespace FlowControl { class FlowContext; }
+#include "state/Cards/Card.h"
+#include "FlowControl/FlowContext.h"
 
 namespace state
 {

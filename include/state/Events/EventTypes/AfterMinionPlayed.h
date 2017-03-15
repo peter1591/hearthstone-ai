@@ -5,14 +5,10 @@
 #include <iostream>
 #include <functional>
 #include "FlowControl/FlowContext.h"
+#include "state/Cards/Card.h"
 
 namespace state
 {
-	namespace Cards
-	{
-		class Card;
-	}
-
 	namespace Events
 	{
 		namespace EventTypes

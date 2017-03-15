@@ -5,8 +5,6 @@
 #include "FlowControl/ActionParameterWrapper.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/FlowContext-impl.h"
-#include "FlowControl/Result.h"
-#include "FlowControl/ActionTypes.h"
 #include "FlowControl/Contexts.h"
 #include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Manipulate.h"

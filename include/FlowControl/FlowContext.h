@@ -5,16 +5,24 @@
 #include "state/IRandomGenerator.h"
 #include "state/Types.h"
 #include "FlowControl/ActionParameterWrapper.h"
-#include "FlowControl/Result.h"
 
 namespace FlowControl {
 	namespace Helpers {
 		class Resolver;
 	}
 
+	enum Result
+	{
+		kResultNotDetermined,
+		kResultFirstPlayerWin,
+		kResultSecondPlayerWin,
+		kResultDraw,
+		kResultInvalid
+	};
+
 	class FlowContext
 	{
-		friend class FlowControl::Helpers::Resolver;
+		friend class Helpers::Resolver;
 
 	public:
 		FlowContext(state::IRandomGenerator & random, ActionParameterWrapper & action_parameters);
@@ -25,7 +33,7 @@ namespace FlowControl {
 	public:
 		state::IRandomGenerator & random_;
 		ActionParameterWrapper & action_parameters_;
-		FlowControl::Result result_;
+		Result result_;
 
 		state::CardRef battlecry_target_;
 		state::CardRef destroyed_weapon_;

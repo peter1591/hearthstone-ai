@@ -6,18 +6,12 @@
 #include <functional>
 
 #include "state/Types.h"
+#include "state/Cards/Card.h"
 #include "state/Events/HandlersContainerController.h"
-
-namespace FlowControl { class FlowContext; }
+#include "FlowControl/FlowContext.h"
 
 namespace state
 {
-	class State;
-	namespace Cards
-	{
-		class Card;
-	}
-
 	namespace Events
 	{
 		namespace EventTypes
