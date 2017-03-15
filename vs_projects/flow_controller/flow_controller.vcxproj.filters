@@ -107,100 +107,13 @@
     <ClInclude Include="..\..\include\FlowControl\ActionTypes.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\State.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Result.h">
       <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\Manager.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\Card.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\EnchantableStates.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\EnchantmentAuxData.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Types.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\Event.h">
-      <Filter>Header Files\state\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\HandlersContainerController.h">
-      <Filter>Header Files\state\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\impl\CategorizedHandlersContainer.h">
-      <Filter>Header Files\state\Events\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\impl\HandlersContainer.h">
-      <Filter>Header Files\state\Events\impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\Enchantments\Enchantments.h">
-      <Filter>Header Files\state\Cards\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\Enchantments\TieredEnchantments.h">
-      <Filter>Header Files\state\Cards\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\Enchantments\Tiers.h">
-      <Filter>Header Files\state\Cards\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\Manager.h">
-      <Filter>Header Files\state\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\board\Deck.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Graveyard.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Hand.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Minions.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Player.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\PlayerResource.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Secrets.h">
-      <Filter>Header Files\state\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\AfterMinionPlayed.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\AfterMinionSummoned.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\BeforeMinionSummoned.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnMinionPlay.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnEnd.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnTurnStart.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\BeforeAttack.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\AfterAttack.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Board.h">
       <Filter>Header Files\state\board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h">
@@ -226,9 +139,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnTakeDamage.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
@@ -275,9 +185,6 @@
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Cards\CardData.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\CardData.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
@@ -299,9 +206,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnHeal.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
@@ -322,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\State\Events\EventTypes\OnAttack.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h">
       <Filter>Header Files\FlowControl</Filter>
@@ -406,6 +307,111 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\CardBase-cleanup.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Board.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Graveyard.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Hand.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Minions.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Player.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\PlayerResource.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Secrets.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Card.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\CardData.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\EnchantmentAuxData.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Manager.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Enchantments\Enchantments.h">
+      <Filter>Header Files\state\Cards\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Enchantments\TieredEnchantments.h">
+      <Filter>Header Files\state\Cards\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Enchantments\Tiers.h">
+      <Filter>Header Files\state\Cards\Enchantments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\AfterAttack.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\AfterMinionPlayed.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\AfterMinionSummoned.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\BeforeAttack.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\BeforeMinionSummoned.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\OnAttack.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\OnHeal.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\OnMinionPlay.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\OnTakeDamage.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\OnTurnEnd.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes\OnTurnStart.h">
+      <Filter>Header Files\state\Events\EventTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h">
+      <Filter>Header Files\state\Events\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h">
+      <Filter>Header Files\state\Events\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\Event.h">
+      <Filter>Header Files\state\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\HandlersContainerController.h">
+      <Filter>Header Files\state\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\Manager.h">
+      <Filter>Header Files\state\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\State.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Types.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\targetor\Targets-impl.h">
+      <Filter>Header Files\state\targetor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
