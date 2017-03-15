@@ -15,7 +15,7 @@ namespace Cards
 		template <typename ApplyFunctor>
 		BattlecryHelper(state::Cards::CardData & card_data, ApplyFunctor&& apply_functor) {
 			card_data.battlecry_target_getter = [](auto context) {
-				TargetGetter::GetBattleTargets(context.targets_generator_, context);
+				TargetGetter::GetBattlecryTargets(context.targets_generator_, context);
 				return true;
 			};
 			card_data.battlecry = std::move(apply_functor);

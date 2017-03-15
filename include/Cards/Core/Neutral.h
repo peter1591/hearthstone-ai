@@ -7,8 +7,7 @@
 namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
-		template <typename Context>
-		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, FlowControl::Context::BattlecryTargetGetter context) {
 			target.Targetable();
 			return true;
 		}
@@ -20,10 +19,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042> {
-		Card_CS1_042() { Taunt(); }
-	};
-
+	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042, Taunt> {};
 	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {};
 
 	struct Card_EX1_508o : public EnchantmentCardBase {
@@ -50,13 +46,11 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171> {
-		Card_CS2_171() { Charge(); }
-	};
+	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171, Charge> {};
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
 		template <typename Context>
-		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
 			return true;
 		}
@@ -77,18 +71,9 @@ namespace Cards
 	};
 
 	struct Card_CS2_172 : public MinionCardBase<Card_CS2_172> {};
-
-	struct Card_CS2_173 : public MinionCardBase<Card_CS2_173> {
-		Card_CS2_173() { Charge(); }
-	};
-
-	struct Card_CS2_121 : public MinionCardBase<Card_CS2_121>{
-		Card_CS2_121() { Taunt(); }
-	};
-
-	struct Card_CS2_142 : public MinionCardBase<Card_CS2_142> {
-		Card_CS2_142() { SpellDamage(1); }
-	};
+	struct Card_CS2_173 : public MinionCardBase<Card_CS2_173, Charge> {};
+	struct Card_CS2_121 : public MinionCardBase<Card_CS2_121, Taunt> {};
+	struct Card_CS2_142 : public MinionCardBase<Card_CS2_142, SpellDamage<1>> {};
 
 	struct Card_EX1_506 : public MinionCardBase<Card_EX1_506> {
 		Card_EX1_506() {
@@ -98,9 +83,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_506a : public MinionCardBase<Card_EX1_506a> {
-	};
-
+	struct Card_EX1_506a : public MinionCardBase<Card_EX1_506a> {};
 	struct Card_EX1_015 : public MinionCardBase<Card_EX1_015> {
 		Card_EX1_015() {
 			Battlecry<NoTarget>([](auto context) {
@@ -109,16 +92,11 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {
-	};
-
-	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582> {
-		Card_EX1_582() { SpellDamage(1); }
-	};
-
+	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {};
+	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
 		template <typename Context>
-		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
 			return true;
 		}
@@ -130,13 +108,8 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125> {
-		Card_CS2_125() { Taunt(); }
-	};
-
-	struct Card_CS2_118 : public MinionCardBase<Card_CS2_118> {
-	};
-
+	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125, Taunt> {};
+	struct Card_CS2_118 : public MinionCardBase<Card_CS2_118> {};
 	struct Card_CS2_122e : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
 		static constexpr int id = Cards::ID_CS2_122e;
@@ -160,9 +133,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_boar : public MinionCardBase<Card_CS2_boar> {
-	};
-
+	struct Card_CS2_boar : public MinionCardBase<Card_CS2_boar> {};
 	struct Card_CS2_196 : public MinionCardBase<Card_CS2_196> {
 		Card_CS2_196() {
 			Battlecry<NoTarget>([](auto context) {
@@ -185,7 +156,7 @@ namespace Cards
 
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
 		template <typename Context>
-		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Ally(context).Minion().Targetable();
 			return true;
 		}
@@ -198,20 +169,10 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_127 : public MinionCardBase<Card_CS2_127> {
-		Card_CS2_127() { Taunt(); }
-	};
-
-	struct Card_CS2_124 : public MinionCardBase<Card_CS2_124> {
-		Card_CS2_124() { Charge(); }
-	};
-
-	struct Card_CS2_182 : public MinionCardBase<Card_CS2_182> {
-	};
-
-	struct Card_EX1_025t : public MinionCardBase<Card_EX1_025t> {
-	};
-
+	struct Card_CS2_127 : public MinionCardBase<Card_CS2_127, Taunt> {};
+	struct Card_CS2_124 : public MinionCardBase<Card_CS2_124, Charge> {};
+	struct Card_CS2_182 : public MinionCardBase<Card_CS2_182> {};
+	struct Card_EX1_025t : public MinionCardBase<Card_EX1_025t> {};
 	struct Card_EX1_025 : public MinionCardBase<Card_EX1_025> {
 		Card_EX1_025() {
 			Battlecry<NoTarget>([](auto context) {
@@ -228,25 +189,11 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_119 : public MinionCardBase<Card_CS2_119>{
-	};
-
-	struct Card_CS2_197 : public MinionCardBase<Card_CS2_197> {
-		Card_CS2_197() { SpellDamage(1); }
-	};
-
-	struct Card_CS2_179 : public MinionCardBase<Card_CS2_179> {
-		Card_CS2_179() { Taunt(); }
-	};
-
-	struct Card_CS2_131 : public MinionCardBase<Card_CS2_131> {
-		Card_CS2_131() { Charge(); }
-	};
-
-	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187>{
-		Card_CS2_187() { Taunt(); }
-	};
-
+	struct Card_CS2_119 : public MinionCardBase<Card_CS2_119>{};
+	struct Card_CS2_197 : public MinionCardBase<Card_CS2_197, SpellDamage<1>> {};
+	struct Card_CS2_179 : public MinionCardBase<Card_CS2_179, Taunt> {};
+	struct Card_CS2_131 : public MinionCardBase<Card_CS2_131, Charge> {};
+	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187, Taunt> {};
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		Card_DS1_055() {
 			Battlecry<NoTarget>([](auto context) {
@@ -339,7 +286,7 @@ namespace Cards
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
 		template <typename Context>
-		static bool GetBattleTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
 			target.Targetable();
 			return true;
 		}
@@ -351,24 +298,11 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_155 : public MinionCardBase<Card_CS2_155> {
-		Card_CS2_155() { SpellDamage(1); }
-	};
-
-	struct Card_CS2_200 : public MinionCardBase<Card_CS2_200> {
-	};
-
-	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162> {
-		Card_CS2_162() { Taunt(); }
-	};
-
-	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213> {
-		Card_CS2_213() { Charge(); }
-	};
-
-	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {
-	};
-
+	struct Card_CS2_155 : public MinionCardBase<Card_CS2_155, SpellDamage<1>> {};
+	struct Card_CS2_200 : public MinionCardBase<Card_CS2_200> {};
+	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162, Taunt> {};
+	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
+	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {};
 	struct Card_CS2_222o : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentAura;
 		static constexpr int id = Cards::ID_CS2_222o;
@@ -392,8 +326,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_186 : public MinionCardBase<Card_CS2_186> {
-	};
+	struct Card_CS2_186 : public MinionCardBase<Card_CS2_186> {};
 }
 
 

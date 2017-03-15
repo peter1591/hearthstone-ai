@@ -6,10 +6,11 @@
 #include "Cards/EventRegister.h"
 #include "Cards/BattlecryHelper.h"
 #include "Cards/MinionCardUtils.h"
+#include "Cards/CardAttributes.h"
 
 namespace Cards
 {
-	template <typename T>
+	template <typename T, typename SpecifiedCardAttributes = NoAttribute>
 	class MinionCardBase : public state::Cards::CardData, public MinionCardUtils
 	{
 	public:
@@ -27,26 +28,8 @@ namespace Cards
 			this->enchantable_states.cost = data.cost;
 			this->enchantable_states.attack = data.attack;
 			this->enchantable_states.max_hp = data.max_hp;
-		}
 
-		void Taunt()
-		{
-			this->enchantable_states.taunt = true;
-		}
-
-		void Shield()
-		{
-			this->enchantable_states.shielded = true;
-		}
-
-		void Charge()
-		{
-			this->enchantable_states.charge = true;
-		}
-
-		void SpellDamage(int v)
-		{
-			this->enchantable_states.spell_damage = v;
+			SpecifiedCardAttributes::Apply(*this);
 		}
 
 		template <typename... Types>

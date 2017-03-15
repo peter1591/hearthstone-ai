@@ -34,13 +34,8 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_020 : public MinionCardBase<Card_EX1_020> {
-		Card_EX1_020() { Shield(); }
-	};
-
-	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069> {
-		Card_CS1_069() { Taunt(); }
-	};
+	struct Card_EX1_020 : public MinionCardBase<Card_EX1_020, Shield> {};
+	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069, Taunt> {};
 }
 
 REGISTER_MINION_CARD(EX1_089)
