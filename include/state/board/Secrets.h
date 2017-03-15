@@ -3,8 +3,6 @@
 #include <string>
 #include <unordered_map>
 #include "state/Types.h"
-#include "state/Cards/Manager.h"
-#include "state/Cards/Card.h"
 
 namespace state
 {

@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <array>
 #include "state/Types.h"
-#include "state/Cards/Manager.h"
 
 namespace state
 {

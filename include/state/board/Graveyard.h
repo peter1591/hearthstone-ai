@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <unordered_set>
 #include "state/Types.h"
-#include "state/Cards/Manager.h"
-#include "state/Cards/Card.h"
 
 namespace state
 {

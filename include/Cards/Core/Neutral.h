@@ -24,8 +24,7 @@ namespace Cards
 		Card_CS1_042() { Taunt(); }
 	};
 
-	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {
-	};
+	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {};
 
 	struct Card_EX1_508o : public EnchantmentCardBase {
 		static constexpr EnchantmentTiers tier = kEnchantmentAura;
@@ -70,16 +69,14 @@ namespace Cards
 	};
 
 	struct Card_EX1_066 : public MinionCardBase<Card_EX1_066> {
-		Card_EX1_066()
-		{
+		Card_EX1_066() {
 			Battlecry<NoTarget>([](auto context) {
 				Manipulate(context).OpponentHero().DestroyWeapon();
 			});
 		}
 	};
 
-	struct Card_CS2_172 : public MinionCardBase<Card_CS2_172> {
-	};
+	struct Card_CS2_172 : public MinionCardBase<Card_CS2_172> {};
 
 	struct Card_CS2_173 : public MinionCardBase<Card_CS2_173> {
 		Card_CS2_173() { Charge(); }
@@ -167,8 +164,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_196 : public MinionCardBase<Card_CS2_196> {
-		Card_CS2_196()
-		{
+		Card_CS2_196() {
 			Battlecry<NoTarget>([](auto context) {
 				SummonToRight(context, Cards::ID_CS2_boar);
 			});
