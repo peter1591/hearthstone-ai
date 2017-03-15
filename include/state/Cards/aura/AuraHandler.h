@@ -8,10 +8,10 @@ namespace state {
 			class AuraHandler
 			{
 			public:
-				typedef bool FuncIsValid(contexts::AuraIsValid && context);
-				typedef void FuncGetTargets(contexts::AuraGetTargets && context);
-				typedef void FuncApplyOn(contexts::AuraApplyOn && context);
-				typedef void FuncRemoveFrom(contexts::AuraRemoveFrom && context);
+				typedef bool FuncIsValid(contexts::AuraIsValid context);
+				typedef void FuncGetTargets(contexts::AuraGetTargets context);
+				typedef void FuncApplyOn(contexts::AuraApplyOn context);
+				typedef void FuncRemoveFrom(contexts::AuraRemoveFrom context);
 
 				AuraHandler() : is_valid(nullptr), get_targets(nullptr), apply_on(nullptr), remove_from(nullptr) {}
 
