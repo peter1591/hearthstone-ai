@@ -30,7 +30,7 @@ namespace state {
 					state::CardRef card_ref_;
 					const state::Cards::Card & card_;
 				};
-				using type = bool(*)(Context&&);
+				using type = bool(*)(Context);
 			};
 			struct OnAttack {
 				struct Context {
@@ -38,7 +38,7 @@ namespace state {
 					FlowControl::FlowContext & flow_context_;
 					state::CardRef defender_;
 				};
-				using type = std::function<bool(CardRef, Context&&)>;
+				using type = std::function<bool(CardRef, Context)>;
 			};
 			struct OnHeal {
 				struct Context {
@@ -46,7 +46,7 @@ namespace state {
 					state::Cards::Card const& card_;
 					int amount_;
 				};
-				using type = bool(*)(state::CardRef, Context&);
+				using type = bool(*)(state::CardRef, Context);
 			};
 			struct OnMinionPlay {
 				using type = bool(*)(const Cards::Card &);
@@ -58,14 +58,14 @@ namespace state {
 					state::Cards::Card const& card_;
 					int damage_;
 				};
-				using type = bool(*)(state::CardRef, Context&);
+				using type = bool(*)(state::CardRef, Context);
 			};
 			struct OnTurnEnd {
 				struct Context {
 					state::State & state_;
 					FlowControl::FlowContext & flow_context_;
 				};
-				using type = std::function<bool(Context &&)>;
+				using type = std::function<bool(Context)>;
 			};
 			struct OnTurnStart {
 				using type = bool(*)();

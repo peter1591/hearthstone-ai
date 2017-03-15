@@ -53,7 +53,7 @@ namespace Cards
 			static void AddEvent(state::CardRef self, Context&& context) {
 				context.state_.AddEvent<EventType>(
 					self,
-					[](state::CardRef self, auto& context) {
+					[](state::CardRef self, auto context) {
 					if (!LifeTime::StillValid(context.state_.GetCard(self))) return false;
 					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, std::move(context));
 				});
