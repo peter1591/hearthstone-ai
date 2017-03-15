@@ -371,5 +371,14 @@
     <ClInclude Include="..\..\include\state\Events\EventTypes.h">
       <Filter>Header Files\state\Events</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardAttributes.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Contexts-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Contexts.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
