@@ -15,14 +15,14 @@ namespace state {
 
 		namespace aura {
 			namespace contexts {
-				struct AuraApplyOn
+				struct AuraIsValid
 				{
 					State & state_;
 					FlowControl::FlowContext & flow_context_;
 					CardRef card_ref_;
 					const Card & card_;
-					CardRef target_;
-					Enchantments::ContainerType::Identifier & enchant_id_;
+					AuraAuxData const& aura_data_;
+					bool & need_update_;
 				};
 
 				struct AuraGetTargets
@@ -35,12 +35,14 @@ namespace state {
 					targetor::TargetsGenerator & targets_generator_;
 				};
 
-				struct AuraIsValid
+				struct AuraApplyOn
 				{
 					State & state_;
 					FlowControl::FlowContext & flow_context_;
 					CardRef card_ref_;
 					const Card & card_;
+					CardRef target_;
+					Enchantments::ContainerType::Identifier & enchant_id_;
 				};
 
 				struct AuraRemoveFrom

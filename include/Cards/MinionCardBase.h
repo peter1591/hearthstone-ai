@@ -50,7 +50,7 @@ namespace Cards
 		}
 
 		template <typename... Types>
-		AuraHelper<Types...> Aura() { return AuraHelper<Types...>(*this); }
+		auto Aura() { return AuraHelper<T, Types...>(*this); }
 
 		template <typename EventType, typename EventHandler>
 		auto RegisterEvent() {

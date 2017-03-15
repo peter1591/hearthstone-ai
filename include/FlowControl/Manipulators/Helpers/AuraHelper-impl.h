@@ -23,8 +23,10 @@ namespace FlowControl
 				std::unordered_set<state::CardRef> new_targets;
 				state::Cards::aura::AuraAuxData & data = card_.GetMutableAuraAuxDataGetter().Get();
 
-				bool aura_valid = (*card_.GetRawData().aura_handler.is_valid)({ state_, flow_context_, card_ref_, card_ });
+				bool need_update = true;
+				bool aura_valid = (*card_.GetRawData().aura_handler.is_valid)({ state_, flow_context_, card_ref_, card_, data, need_update });
 				if (aura_valid) {
+					if (!need_update) aura_valid;
 					state::targetor::TargetsGenerator targets_generator;
 					(*card_.GetRawData().aura_handler.get_targets)
 						({ state_, flow_context_, card_ref_, card_, data, targets_generator });

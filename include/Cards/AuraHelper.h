@@ -27,33 +27,39 @@ namespace Cards
 		// TODO: implement
 	};
 
-	template <typename EnchantmentType, typename EmitPolicy>
+	// update policy
+	struct UpdateAlways {
+		static bool NeedUpdate(state::Cards::aura::contexts::AuraIsValid context) { return true; }
+		static void AfterUpdated(state::Cards::aura::contexts::AuraGetTargets context) {}
+	};
+	struct UpdateWhenMinionChanged {
+		static bool NeedUpdate(state::Cards::aura::contexts::AuraIsValid context) {
+			if (context.state_.GetBoard().GetFirst().minions_.GetChangeId() != context.aura_data_.last_updated_change_id_first_player_minions_) return true;
+			if (context.state_.GetBoard().GetSecond().minions_.GetChangeId() != context.aura_data_.last_updated_change_id_second_player_minions_) return true;
+			return false;
+		}
+		static void AfterUpdated(state::Cards::aura::contexts::AuraGetTargets context) {
+			context.aura_data_.last_updated_change_id_first_player_minions_ = context.state_.GetBoard().GetFirst().minions_.GetChangeId();
+			context.aura_data_.last_updated_change_id_second_player_minions_ = context.state_.GetBoard().GetSecond().minions_.GetChangeId();
+		}
+	};
+
+	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy = UpdateAlways>
 	class AuraHelper
 	{
 	public:
 		AuraHelper(state::Cards::CardData & card_data) : card_data_(card_data)
 		{
 			card_data_.aura_handler.is_valid = [](auto context) {
-				return EmitPolicy::ShouldEmit(std::move(context), context.card_ref_);
+				if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
+				context.need_update_ = UpdatePolicy::NeedUpdate(context);
+				return true;
 			};
-		}
 
-		~AuraHelper()
-		{
-			ApplyToAuraHandler();
-		}
-
-		AuraHelper & Target(state::Cards::aura::AuraHandler::FuncGetTargets* get_targets)
-		{
-			assert(get_targets != nullptr);
-			card_data_.aura_handler.get_targets = get_targets;
-			return *this;
-		}
-
-	private:
-		void ApplyToAuraHandler()
-		{
-			assert(card_data_.aura_handler.get_targets != nullptr);
+			card_data_.aura_handler.get_targets = [](auto context) {
+				HandleClass::GetAuraTargets(context.targets_generator_, context);
+				UpdatePolicy::AfterUpdated(context);
+			};
 
 			card_data_.aura_handler.apply_on = [](auto context) {
 				context.enchant_id_ = MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());

@@ -39,12 +39,15 @@ namespace Cards
 	};
 
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
+		template <typename Context>
+		static bool GetAuraTargets(state::targetor::TargetsGenerator& target, Context&& context) {
+			target
+				.Ally(context).Minion().Murlocs() // friendly murlocs only
+				.Exclude(context.card_ref_); // only apply on other murlocs
+			return true;
+		}
 		Card_EX1_508() {
-			Aura<Card_EX1_508o, EmitWhenAlive>().Target([](auto&& context) {
-				context.targets_generator_
-					.Ally(context).Minion().Murlocs() // friendly murlocs only
-					.Exclude(context.card_ref_); // only apply on other murlocs
-			});
+			Aura<Card_EX1_508o, EmitWhenAlive, UpdateWhenMinionChanged>();
 		}
 	};
 
@@ -149,12 +152,14 @@ namespace Cards
 	};
 
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
+		template <typename Context>
+		static void GetAuraTargets(state::targetor::TargetsGenerator& targets, Context&& context) {
+			targets
+				.Ally(context).Minion() // friendly minions
+				.Exclude(context.card_ref_); // only apply on other
+		}
 		Card_CS2_122() {
-			Aura<Card_CS2_122e, EmitWhenAlive>().Target([](auto&& context) {
-				context.targets_generator_
-					.Ally(context).Minion() // friendly minions
-					.Exclude(context.card_ref_); // only apply on other
-			});
+			Aura<Card_CS2_122e, EmitWhenAlive, UpdateWhenMinionChanged>();
 		}
 	};
 
@@ -382,12 +387,13 @@ namespace Cards
 	};
 
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
+		template <typename Context> static void GetAuraTargets(state::targetor::TargetsGenerator& targets, Context&& context) {
+			targets
+				.Ally(context).Minion() // friendly minions
+				.Exclude(context.card_ref_); // only apply on other
+		}
 		Card_CS2_222() {
-			Aura<Card_CS2_222o, EmitWhenAlive>().Target([](auto&& context) {
-				context.targets_generator_
-					.Ally(context).Minion() // friendly minions
-					.Exclude(context.card_ref_); // only apply on other
-			});
+			Aura<Card_CS2_222o, EmitWhenAlive, UpdateWhenMinionChanged>();
 		}
 	};
 
