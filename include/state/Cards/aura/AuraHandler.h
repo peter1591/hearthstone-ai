@@ -3,8 +3,6 @@
 #include "state/Cards/aura/Contexts.h"
 
 namespace state {
-	namespace targetor { class TargetsGenerator; }
-
 	namespace Cards {
 		namespace aura {
 			class AuraHandler
@@ -15,9 +13,7 @@ namespace state {
 				typedef void FuncApplyOn(contexts::AuraApplyOn && context);
 				typedef void FuncRemoveFrom(contexts::AuraRemoveFrom && context);
 
-				AuraHandler() : is_valid(nullptr), get_targets(nullptr), apply_on(nullptr), remove_from(nullptr)
-				{
-				}
+				AuraHandler() : is_valid(nullptr), get_targets(nullptr), apply_on(nullptr), remove_from(nullptr) {}
 
 				FuncIsValid * is_valid;
 				FuncGetTargets * get_targets;

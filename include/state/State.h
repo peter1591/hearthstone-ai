@@ -9,7 +9,6 @@
 #include "state/ZoneChanger.h"
 
 // implementation details
-#include "state/targetor/Targets-impl.h"
 #include "state/detail/PlayerDataStructureMaintainer-impl.h"
 
 namespace state

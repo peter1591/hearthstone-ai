@@ -4,12 +4,12 @@
 
 #include "state/IRandomGenerator.h"
 #include "state/Types.h"
-#include "FlowControl/ActionParameterWrapper.h"
 
 namespace FlowControl {
 	namespace Helpers {
 		class Resolver;
 	}
+	class ActionParameterWrapper;
 
 	enum Result
 	{
