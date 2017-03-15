@@ -101,3 +101,5 @@ namespace state
 		int turn_;
 	};
 }
+
+#include "state/targetor/Targets-impl.h"
