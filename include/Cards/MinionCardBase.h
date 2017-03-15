@@ -30,6 +30,8 @@ namespace Cards
 			this->enchantable_states.max_hp = data.max_hp;
 
 			SpecifiedCardAttributes::Apply(*this);
+
+			BattlecryProcessor<T>(*this);
 		}
 
 		template <typename... Types>

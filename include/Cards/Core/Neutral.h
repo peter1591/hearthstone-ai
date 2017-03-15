@@ -7,15 +7,12 @@
 namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
-		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, FlowControl::Context::BattlecryTargetGetter context) {
-			target.Targetable();
+		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			context.Targets().Targetable();
 			return true;
 		}
-
-		Card_CS2_189() {
-			Battlecry<WithTargets>([](auto context) {
-				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Damage(context).Target(context.GetTarget()).Amount(1);
 		}
 	};
 
@@ -49,24 +46,18 @@ namespace Cards
 	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171, Charge> {};
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
-		template <typename Context>
-		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
-			target.Targetable();
+		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			context.Targets().Targetable();
 			return true;
 		}
-
-		Card_EX1_011() {
-			Battlecry<WithTargets>([](auto context) {
-				Heal(context).Target(context.flow_context_.battlecry_target_).Amount(2);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Heal(context).Target(context.GetTarget()).Amount(2);
 		}
 	};
 
 	struct Card_EX1_066 : public MinionCardBase<Card_EX1_066> {
-		Card_EX1_066() {
-			Battlecry<NoTarget>([](auto context) {
-				Manipulate(context).OpponentHero().DestroyWeapon();
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Manipulate(context).OpponentHero().DestroyWeapon();
 		}
 	};
 
@@ -76,35 +67,27 @@ namespace Cards
 	struct Card_CS2_142 : public MinionCardBase<Card_CS2_142, SpellDamage<1>> {};
 
 	struct Card_EX1_506 : public MinionCardBase<Card_EX1_506> {
-		Card_EX1_506() {
-			Battlecry<NoTarget>([](auto context) {
-				SummonToRight(context, Cards::ID_EX1_506a);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			SummonToRight(context, Cards::ID_EX1_506a);
 		}
 	};
 
 	struct Card_EX1_506a : public MinionCardBase<Card_EX1_506a> {};
 	struct Card_EX1_015 : public MinionCardBase<Card_EX1_015> {
-		Card_EX1_015() {
-			Battlecry<NoTarget>([](auto context) {
-				Manipulate(context).CurrentHero().DrawCard();
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Manipulate(context).CurrentHero().DrawCard();
 		}
 	};
 
 	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {};
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
-		template <typename Context>
-		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
-			target.Targetable();
+		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			context.Targets().Targetable();
 			return true;
 		}
-
-		Card_CS2_141() {
-			Battlecry<WithTargets>([](auto context) {
-				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(1);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Damage(context).Target(context.GetTarget()).Amount(1);
 		}
 	};
 
@@ -135,10 +118,8 @@ namespace Cards
 
 	struct Card_CS2_boar : public MinionCardBase<Card_CS2_boar> {};
 	struct Card_CS2_196 : public MinionCardBase<Card_CS2_196> {
-		Card_CS2_196() {
-			Battlecry<NoTarget>([](auto context) {
-				SummonToRight(context, Cards::ID_CS2_boar);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			SummonToRight(context, Cards::ID_CS2_boar);
 		}
 	};
 
@@ -155,17 +136,12 @@ namespace Cards
 	};
 
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
-		template <typename Context>
-		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
-			target.Ally(context).Minion().Targetable();
+		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			context.Targets().Ally(context).Minion().Targetable();
 			return true;
 		}
-
-		Card_EX1_019() {
-			Battlecry<WithTargets>([](auto context) {
-				Manipulate(context).Minion(context.flow_context_.battlecry_target_)
-					.Enchant().Add(Card_EX1_019e());
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Manipulate(context).Minion(context.GetTarget()).Enchant().Add(Card_EX1_019e());
 		}
 	};
 
@@ -174,18 +150,14 @@ namespace Cards
 	struct Card_CS2_182 : public MinionCardBase<Card_CS2_182> {};
 	struct Card_EX1_025t : public MinionCardBase<Card_EX1_025t> {};
 	struct Card_EX1_025 : public MinionCardBase<Card_EX1_025> {
-		Card_EX1_025() {
-			Battlecry<NoTarget>([](auto context) {
-				SummonToRight(context, Cards::ID_EX1_025t);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			SummonToRight(context, Cards::ID_EX1_025t);
 		}
 	};
 
 	struct Card_CS2_147 : public MinionCardBase<Card_CS2_147> {
-		Card_CS2_147() {
-			Battlecry<NoTarget>([](auto context) {
-				Manipulate(context).CurrentHero().DrawCard();
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Manipulate(context).CurrentHero().DrawCard();
 		}
 	};
 
@@ -195,12 +167,10 @@ namespace Cards
 	struct Card_CS2_131 : public MinionCardBase<Card_CS2_131, Charge> {};
 	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187, Taunt> {};
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
-		Card_DS1_055() {
-			Battlecry<NoTarget>([](auto context) {
-				ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
-					[](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
-					FlowControl::Manipulate(state, flow_context).Character(ref).Heal(2);
-				});
+		static void Battlecry(Contexts::Battlecry context) {
+			ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
+				[](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
+				FlowControl::Manipulate(state, flow_context).Character(ref).Heal(2);
 			});
 		}
 	};
@@ -219,37 +189,35 @@ namespace Cards
 	};
 
 	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
-		Card_CS2_226() {
-			Battlecry<NoTarget>([](auto context) {
-				int count = 0;
-				Targets().Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
-					.Count(context.state_, &count);
+		static void Battlecry(Contexts::Battlecry context) {
+			int count = 0;
+			Targets().Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
+				.Count(context.state_, &count);
 
-				switch (count) {
-				case 0:
-					break;
-				case 1:
-					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<1>());
-					break;
-				case 2:
-					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<2>());
-					break;
-				case 3:
-					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<3>());
-					break;
-				case 4:
-					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<4>());
-					break;
-				case 5:
-					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<5>());
-					break;
-				case 6:
-					Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<6>());
-					break;
-				default:
-					throw std::exception("invalid minion count");
-				}
-			});
+			switch (count) {
+			case 0:
+				break;
+			case 1:
+				Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<1>());
+				break;
+			case 2:
+				Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<2>());
+				break;
+			case 3:
+				Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<3>());
+				break;
+			case 4:
+				Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<4>());
+				break;
+			case 5:
+				Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<5>());
+				break;
+			case 6:
+				Manipulate(context).Minion(context.card_ref_).Enchant().Add(Card_CS2_226e<6>());
+				break;
+			default:
+				throw std::exception("invalid minion count");
+			}
 		}
 	};
 
@@ -277,24 +245,18 @@ namespace Cards
 	};
 
 	struct Card_EX1_593 : public MinionCardBase<Card_EX1_593> {
-		Card_EX1_593() {
-			Battlecry<NoTarget>([](auto context) {
-				Damage(context).Opponent().Amount(3);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Damage(context).Opponent().Amount(3);
 		}
 	};
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
-		template <typename Context>
-		static bool GetBattlecryTargets(state::targetor::TargetsGenerator& target, Context&& context) {
-			target.Targetable();
+		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			context.Targets().Targetable();
 			return true;
 		}
-
-		Card_CS2_150() {
-			Battlecry<WithTargets>([](auto context) {
-				Damage(context).Target(context.flow_context_.battlecry_target_).Amount(2);
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			Damage(context).Target(context.GetTarget()).Amount(2);
 		}
 	};
 
@@ -328,7 +290,6 @@ namespace Cards
 
 	struct Card_CS2_186 : public MinionCardBase<Card_CS2_186> {};
 }
-
 
 REGISTER_MINION_CARD(CS2_186)
 REGISTER_MINION_CARD(CS2_222)

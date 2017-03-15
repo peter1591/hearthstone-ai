@@ -3,10 +3,8 @@
 namespace Cards
 {
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
-		Card_EX1_089() {
-			Battlecry<NoTarget>([](auto context) {
-				AnotherPlayer(context).GainEmptyCrystal();
-			});
+		static void Battlecry(Contexts::Battlecry context) {
+			AnotherPlayer(context).GainEmptyCrystal();
 		}
 	};
 

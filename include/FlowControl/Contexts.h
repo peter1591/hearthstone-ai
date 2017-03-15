@@ -28,6 +28,8 @@ namespace FlowControl
 			FlowContext & flow_context_;
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
+
+			state::CardRef GetTarget();
 		};
 
 		struct BattlecryTargetGetter
@@ -37,6 +39,8 @@ namespace FlowControl
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 			state::targetor::TargetsGenerator & targets_generator_;
+
+			state::targetor::TargetsGenerator & Targets() { return targets_generator_; }
 		};
 
 		struct Deathrattle

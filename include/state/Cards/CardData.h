@@ -20,7 +20,7 @@ namespace state
 			typedef void AddedToPlayZoneCallback(ZoneChangedContext);
 			typedef void AddedToDeckZoneCallback(ZoneChangedContext);
 
-			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter&&); // true -> OK; false -> invalid to play
+			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter); // true -> OK; false -> invalid to play
 			typedef void BattlecryCallback(FlowControl::Context::BattleCry&&);
 
 			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);

@@ -6,6 +6,7 @@
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/FlowContext-impl.h"
 #include "FlowControl/Contexts.h"
+#include "FlowControl/Contexts-impl.h"
 #include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Manipulate.h"
 

@@ -4,7 +4,7 @@
 #include "state/State.h"
 #include "state/targetor/TargetsGenerator.h"
 #include "Cards/id-map.h"
-
+#include "Cards/Contexts.h"
 
 namespace Cards
 {
