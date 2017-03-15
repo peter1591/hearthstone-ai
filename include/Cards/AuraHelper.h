@@ -44,7 +44,7 @@ namespace Cards
 		}
 	};
 
-	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy = UpdateAlways>
+	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy>
 	class AuraHelper
 	{
 	public:
