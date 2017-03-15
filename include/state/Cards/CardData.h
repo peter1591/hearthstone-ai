@@ -4,25 +4,16 @@
 #include <vector>
 #include <string>
 #include "Utils/FuncPtrArray.h"
-#include "state/Types.h"
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/EnchantmentAuxData.h"
 #include "state/Cards/aura/AuraAuxData.h"
 #include "state/Cards/aura/AuraHandler.h"
-#include "FlowControl/Contexts.h"
+#include "state/Cards/Contexts.h"
 
 namespace state
 {
-	class State;
-
 	namespace Cards
 	{
-		struct ZoneChangedContext {
-			state::State & state_;
-			state::CardRef card_ref_;
-			const state::Cards::Card & card_;
-		};
-
 		class CardData
 		{
 		public:

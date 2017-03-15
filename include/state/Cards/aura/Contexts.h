@@ -1,12 +1,12 @@
 #pragma once
 
+#include "state/Types.h"
 #include "state/Cards/Enchantments/Enchantments.h"
 
 namespace FlowControl { class FlowContext; }
 
 namespace state {
 	class State;
-	class CardRef;
 
 	namespace targetor { class TargetsGenerator; }
 

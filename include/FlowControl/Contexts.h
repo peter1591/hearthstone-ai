@@ -4,15 +4,16 @@
 #include <unordered_set>
 #include "state/Types.h"
 #include "state/Cards/Enchantments/Enchantments.h"
-#include "state/targetor/TargetsGenerator.h"
 
 namespace state
 {
 	class State;
-	namespace Cards
-	{
+	namespace Cards {
 		class Card;
 		namespace aura { class AuraAuxData; }
+	}
+	namespace targetor {
+		class TargetsGenerator;
 	}
 }
 
