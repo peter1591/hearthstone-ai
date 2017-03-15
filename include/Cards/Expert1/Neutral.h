@@ -22,9 +22,10 @@ namespace Cards
 	};
 
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
-		template <typename Controller, typename Context>
-		static void HandleEvent(Controller&& controller, state::CardRef self, Context&& context) {
+		template <typename Context>
+		static bool HandleEvent(state::CardRef self, Context&& context) {
 			Manipulate(context).Card(self).Enchant().Add(Card_NEW1_038_Enchant());
+			return true;
 		};
 
 		Card_NEW1_038() {

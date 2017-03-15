@@ -11,6 +11,7 @@ namespace Cards
 			card_data.added_to_play_zone += std::move(functor);
 		}
 		static bool StillValid(state::Cards::Card const& card) {
+			// TODO: and not silenced
 			return card.GetZone() == state::kCardZonePlay;
 		}
 	};
@@ -40,9 +41,9 @@ namespace Cards
 			template <typename Context>
 			static void AddEvent(state::CardRef self, Context&& context) {
 				context.state_.AddEvent<EventType>(
-					[self](auto& controller, auto& context) {
-					if (!LifeTime::StillValid(context.state_.GetCard(self))) return controller.Remove();
-					EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(std::move(controller), self, std::move(context));
+					[self](auto& context) {
+					if (!LifeTime::StillValid(context.state_.GetCard(self))) return false;
+					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, std::move(context));
 				});
 			}
 		};
@@ -52,9 +53,9 @@ namespace Cards
 			static void AddEvent(state::CardRef self, Context&& context) {
 				context.state_.AddEvent<EventType>(
 					self,
-					[](auto& controller, state::CardRef self, auto& context) {
-					if (!LifeTime::StillValid(context.state_.GetCard(self))) return controller.Remove();
-					EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(std::move(controller), self, std::move(context));
+					[](state::CardRef self, auto& context) {
+					if (!LifeTime::StillValid(context.state_.GetCard(self))) return false;
+					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, std::move(context));
 				});
 			}
 		};
@@ -80,17 +81,17 @@ namespace Cards
 		typename EventType::EventHandler,
 		EventHandler>;
 
-	// helper for common usages
+	// helpers for common usages
 	struct OnSelfTakeDamage {
 		using LifeTime = InPlayZone;
 		using SelfPolicy = CateogrizedOnSelf;
 		using EventType = state::Events::EventTypes::OnTakeDamage;
 
 		struct EventHandler {
-			template <typename UnderlyingHandler, typename Controller, typename Context>
-			static void HandleEvent(Controller&& controller, state::CardRef self, Context&& context) {
-				if (context.damage_ <= 0) return;
-				return UnderlyingHandler::Invoke(std::move(controller), self, std::move(context));
+			template <typename UnderlyingHandler, typename Context>
+			static bool HandleEvent(state::CardRef self, Context&& context) {
+				if (context.damage_ <= 0) return true;
+				return UnderlyingHandler::HandleEvent(self, std::move(context));
 			}
 		};
 	};

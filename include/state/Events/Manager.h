@@ -5,18 +5,7 @@
 #include "state/Types.h"
 #include "state/Events/impl/HandlersContainer.h"
 #include "state/Events/impl/CategorizedHandlersContainer.h"
-
-#include "state/Events/EventTypes/AfterMinionSummoned.h"
-#include "state/Events/EventTypes/BeforeMinionSummoned.h"
-#include "state/Events/EventTypes/AfterMinionPlayed.h"
-#include "state/Events/EventTypes/OnMinionPlay.h"
-#include "state/Events/EventTypes/OnTurnEnd.h"
-#include "state/Events/EventTypes/OnTurnStart.h"
-#include "state/Events/EventTypes/BeforeAttack.h"
-#include "state/Events/EventTypes/OnAttack.h"
-#include "state/Events/EventTypes/AfterAttack.h"
-#include "state/Events/EventTypes/OnTakeDamage.h"
-#include "state/Events/EventTypes/OnHeal.h"
+#include "state/Events/EventTypes.h"
 
 namespace state
 {

@@ -61,9 +61,6 @@
     <Filter Include="Header Files\state\Events\impl">
       <UniqueIdentifier>{71ec3e2b-38b1-412f-9cf8-7866b790701a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\state\Events\EventTypes">
-      <UniqueIdentifier>{05dcffa4-72d6-43ba-8159-ac5df6f77b11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\state\board">
       <UniqueIdentifier>{09f30fa1-0430-4ea4-a58a-be10b03688d9}</UniqueIdentifier>
     </Filter>
@@ -102,12 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\FlowControl\FlowController.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\ActionTypes.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Result.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h">
@@ -353,47 +344,11 @@
     <ClInclude Include="..\..\include\state\Cards\Enchantments\Tiers.h">
       <Filter>Header Files\state\Cards\Enchantments</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\AfterAttack.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\AfterMinionPlayed.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\AfterMinionSummoned.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\BeforeAttack.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\BeforeMinionSummoned.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\OnAttack.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\OnHeal.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\OnMinionPlay.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\OnTakeDamage.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\OnTurnEnd.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes\OnTurnStart.h">
-      <Filter>Header Files\state\Events\EventTypes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h">
       <Filter>Header Files\state\Events\impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h">
       <Filter>Header Files\state\Events\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\Event.h">
-      <Filter>Header Files\state\Events</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\Events\HandlersContainerController.h">
       <Filter>Header Files\state\Events</Filter>
@@ -407,11 +362,14 @@
     <ClInclude Include="..\..\include\state\Types.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\targetor\Targets-impl.h">
-      <Filter>Header Files\state\targetor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h">
       <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Contexts.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes.h">
+      <Filter>Header Files\state\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

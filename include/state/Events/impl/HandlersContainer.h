@@ -4,8 +4,6 @@
 #include <type_traits>
 #include <utility>
 
-#include "state/Events/HandlersContainerController.h"
-
 namespace state
 {
 	namespace Events
@@ -22,6 +20,7 @@ namespace state
 				template <typename T>
 				void PushBack(T&& handler)
 				{
+					static_assert(std::is_convertible_v<std::decay_t<T>, typename TriggerType::type>, "Wrong type");
 					handlers_.push_back(std::forward<T>(handler));
 				}
 
@@ -52,19 +51,19 @@ namespace state
 					while (true)
 					{
 						const bool exiting = (it == it_last);
-						HandlersContainerController controller;
 
-						(*it)(controller, std::forward<Args>(args)...);
+						auto ret = (*it)(std::forward<Args>(args)...);
+						static_assert(std::is_same_v<decltype(ret), bool>, "Should return a boolean flag indicating if we should remove the item.");
 
-						if (controller.IsRemoved()) { it = handlers_.erase(it); }
-						else { ++it; }
+						if (!ret) it = handlers_.erase(it);
+						else ++it;
 
 						if (exiting) break;
 					}
 				}
 
 			private:
-				typedef std::vector<typename TriggerType::FunctorType> container_type;
+				typedef std::vector<typename TriggerType::type> container_type;
 				container_type handlers_;
 			};
 		}

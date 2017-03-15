@@ -52,7 +52,7 @@ namespace Cards
 		template <typename... Types>
 		auto Aura() { return AuraHelper<T, Types...>(*this); }
 
-		template <typename EventType, typename EventHandler>
+		template <typename EventType, typename EventHandler = T>
 		auto RegisterEvent() {
 			return EventRegister<EventType, EventHandler>((state::Cards::CardData&)*this);
 		}

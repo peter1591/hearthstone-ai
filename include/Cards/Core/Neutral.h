@@ -318,15 +318,14 @@ namespace Cards
 	};
 
 	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
-		struct EventHandler {
-			template <typename Controller, typename Context>
-			static void Invoke(Controller&& controller, state::CardRef self, Context&& context) {
-				Manipulate(context).Card(self).Enchant().Add(Card_EX1_399e());
-			};
+		template <typename Context>
+		static bool HandleEvent(state::CardRef self, Context&& context) {
+			Manipulate(context).Card(self).Enchant().Add(Card_EX1_399e());
+			return true;
 		};
 
 		Card_EX1_399() {
-			RegisterEvent<OnSelfTakeDamage, EventHandler>();
+			RegisterEvent<OnSelfTakeDamage>();
 		}
 	};
 
