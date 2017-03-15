@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include "json/json.h"
 
-#include "Cards/CardData.h"
 #include "state/Types.h"
 #include "state/Cards/CardData.h"
 
@@ -15,6 +14,20 @@ namespace Cards
 	class Database
 	{
 	public:
+		struct CardData
+		{
+			int card_id;
+			state::CardType card_type;
+			state::CardRace card_race;
+			state::CardRarity card_rarity;
+
+			int cost;
+			int attack;
+			int max_hp;
+
+			static constexpr int kFieldChangeId = 1; // modify this if any field changed. This helps to track which codes should be modified accordingly.
+		};
+
 		static Database & GetInstance()
 		{
 			static Database instance;

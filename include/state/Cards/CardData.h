@@ -9,7 +9,6 @@
 #include "state/Cards/EnchantmentAuxData.h"
 #include "state/Cards/aura/AuraAuxData.h"
 #include "state/Cards/aura/AuraHandler.h"
-#include "Cards/CardData.h"
 #include "FlowControl/Contexts.h"
 
 namespace state

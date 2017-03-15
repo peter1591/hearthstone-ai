@@ -1,6 +1,5 @@
 #pragma once
 
-#include <exception>
 #include "state/Types.h"
 #include "state/board/Player.h"
 
