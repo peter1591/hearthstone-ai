@@ -12,11 +12,11 @@ namespace FlowControl
 		{
 			assert(player.AssertCheck());
 
-			card_data.zone = state::kCardZoneNewlyCreated;
 			card_data.enchantable_states.player = player;
 			assert(card_data.card_type == state::kCardTypeMinion);
 			card_data.enchantment_aux_data.origin_states = card_data.enchantable_states;
 
+			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
 			state::CardRef ref = state_.AddCard(state::Cards::Card(std::move(card_data)));
 
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(flow_context_.random_, ref)
