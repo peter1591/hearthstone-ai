@@ -79,8 +79,6 @@ namespace FlowControl
 				}
 
 				assert(card_.GetRawData().enchantable_states == new_states);
-
-				data.need_update = false;
 			}
 
 			inline void EnchantmentHelper::UpdateHero()
@@ -96,8 +94,6 @@ namespace FlowControl
 				UpdateCharacter(new_states);
 
 				assert(card_.GetRawData().enchantable_states == new_states);
-
-				data.need_update = false;
 			}
 
 			inline void EnchantmentHelper::UpdateWeapon()
@@ -126,8 +122,6 @@ namespace FlowControl
 				}
 
 				assert(card_.GetRawData().enchantable_states == new_states);
-
-				data.need_update = false;
 			}
 
 			inline void EnchantmentHelper::ChangeMinionPlayer(state::PlayerIdentifier player)

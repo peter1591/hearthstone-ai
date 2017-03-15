@@ -46,14 +46,19 @@ namespace FlowControl
 
 					switch (card_.GetCardType()) {
 					case state::kCardTypeHero:
-						return UpdateHero();
+						UpdateHero();
+						break;
 					case state::kCardTypeMinion:
-						return UpdateMinion();
+						UpdateMinion();
+						break;
 					case state::kCardTypeWeapon:
-						return UpdateWeapon();
+						UpdateWeapon();
+						break;
 					default:
 						throw std::exception("not implemented");
 					}
+
+					data.need_update = false;
 				}
 
 			private:
