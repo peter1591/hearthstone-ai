@@ -180,7 +180,7 @@ namespace FlowControl
 			if (card.GetRawData().enchantable_states.charge == false && card.GetRawData().just_played) return false;
 		}
 
-		if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc.
+		if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc. An attribute 'max_attacks'?
 
 		return true;
 	}

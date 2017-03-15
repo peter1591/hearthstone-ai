@@ -16,9 +16,9 @@ namespace Cards
 		template <typename Context>
 		static bool ShouldEmit(Context&& context, state::CardRef card_ref) {
 			state::Cards::Card const& card = context.state_.GetCardsManager().Get(card_ref);
-			if (!MinionCardUtils::IsInPlay(card)) return false;
+			if (card.GetZone() != state::kCardZonePlay) return false;
 			// TODO: if (MinionCardUtils::IsSilenced(card)) return false;
-			if (MinionCardUtils::IsMortallyWounded(card)) return false;
+			if (card.GetHP() <= 0) return false;
 			return true;
 		}
 	};
