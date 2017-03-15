@@ -16,13 +16,14 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Hand() : size_(0) {}
+			Hand() : size_(0), change_id_(0) {}
 
 			size_t Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
 			bool Full() const { return size_ >= max_cards_; }
 
 			CardRef Get(size_t idx) { return cards_[idx]; }
+			int GetChangeId() const { return change_id_; }
 
 		private:
 			size_t PushBack(CardRef ref)
@@ -31,6 +32,7 @@ namespace state
 				size_t ret = size_;
 				cards_[size_] = ref;
 				++size_;
+				++change_id_;
 				return ret;
 			}
 
@@ -39,6 +41,7 @@ namespace state
 			{
 				assert(pos < size_);
 
+				++change_id_;
 				size_t spot = pos;
 				for (size_t i = pos + 1; i < size_; ++i) {
 					cards_[spot] = cards_[i];
@@ -52,6 +55,7 @@ namespace state
 			static constexpr int max_cards_ = 10;
 			std::array<CardRef, max_cards_> cards_;
 			size_t size_;
+			int change_id_;
 		};
 	}
 }

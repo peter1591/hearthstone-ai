@@ -22,6 +22,7 @@ namespace state
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
 			CardRef GetLast() const { return cards_[size_ - 1]; }
+			int GetChangeId() const { return change_id_; }
 
 		private:
 			template <typename RandomGenerator>
