@@ -18,7 +18,6 @@ namespace state
 			{
 			public:
 				typedef void (*FunctorType)(HandlersContainerController &, CardRef, State &, CardRef);
-				typedef std::tuple<CardRef, State &, CardRef> ArgsTuple;
 
 				template <typename T> BeforeAttack(T&& functor) : functor_(functor) {}
 

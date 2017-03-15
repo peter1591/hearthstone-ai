@@ -27,7 +27,6 @@ namespace state
 				};
 			public:
 				typedef void (*FunctorType)(HandlersContainerController &, state::CardRef, Context&);
-				typedef std::tuple<const Cards::Card &, state::CardRef, Context&> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>

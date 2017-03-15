@@ -26,7 +26,6 @@ namespace state
 
 			public:
 				typedef std::function<void(HandlersContainerController &, Context &&)> FunctorType;
-				typedef std::tuple<Context &&> ArgsTuple;
 
 				template <typename T,
 					typename std::enable_if_t<std::is_same<std::decay_t<T>, FunctorType>::value, nullptr_t> = nullptr>

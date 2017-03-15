@@ -26,7 +26,6 @@ namespace state
 
 			public:
 				typedef std::function<void(HandlersContainerController &, CardRef, Context&&)> FunctorType;
-				typedef std::tuple<CardRef, Context&&> ArgsTuple;
 
 				template <typename T> OnAttack(T&& functor) : functor_(functor) {}
 
