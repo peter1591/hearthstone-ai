@@ -20,14 +20,14 @@ namespace Utils
 			template <typename ItemType> friend class Vector;
 
 		public:
-			VectorIdentifier() : idx(-1) {}
+			constexpr VectorIdentifier() : idx(-1) {}
 			VectorIdentifier(const VectorIdentifier & rhs) = default;
 			VectorIdentifier(VectorIdentifier && rhs) = default;
 			VectorIdentifier & operator=(const VectorIdentifier & rhs) = default;
 			VectorIdentifier & operator=(VectorIdentifier && rhs) = default;
 			operator int() const { return idx; }
 
-			static VectorIdentifier GetInvalidIdentifier() { return VectorIdentifier(); }
+			static constexpr VectorIdentifier GetInvalidIdentifier() { return VectorIdentifier(); }
 
 		private:
 			explicit VectorIdentifier(int idx) : idx(idx) {}
