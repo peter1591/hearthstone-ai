@@ -76,6 +76,9 @@
     <Filter Include="Header Files\FlowControl\enchantment">
       <UniqueIdentifier>{369a570d-f9e1-4e45-8898-3b7f5b4b3496}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\battlecry">
+      <UniqueIdentifier>{a931e8d4-4449-43e2-81be-3f6627e646ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -379,6 +382,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\state\targetor\Targets-impl.h">
       <Filter>Header Files\state\targetor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler.h">
+      <Filter>Header Files\FlowControl\battlecry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts.h">
+      <Filter>Header Files\FlowControl\battlecry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler-impl.h">
+      <Filter>Header Files\FlowControl\battlecry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts-impl.h">
+      <Filter>Header Files\FlowControl\battlecry</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

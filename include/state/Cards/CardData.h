@@ -7,6 +7,7 @@
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/Contexts.h"
 #include "FlowControl/aura/Handler.h"
+#include "FlowControl/battlecry/Handler.h"
 #include "FlowControl/enchantment/Handler.h"
 
 namespace state
@@ -19,8 +20,7 @@ namespace state
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
-				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				battlecry_target_getter(nullptr), battlecry(nullptr)
+				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0)
 			{
 			}
 
@@ -48,13 +48,7 @@ namespace state
 		public:
 			FlowControl::enchantment::Handler enchantment_handler;
 			FlowControl::aura::Handler aura_handler;
-
-		public:  // battlecry
-			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter); // true -> OK; false -> invalid to play
-			BattlecryTargetGetter *battlecry_target_getter;
-
-			typedef void BattlecryCallback(FlowControl::Context::BattleCry);
-			BattlecryCallback *battlecry;
+			FlowControl::battlecry::Handler battlecry_handler;
 
 		public:
 			typedef void DeathrattleCallback(FlowControl::Context::Deathrattle);

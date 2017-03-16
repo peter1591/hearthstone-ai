@@ -49,15 +49,9 @@ namespace FlowControl
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 		state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 
-		if (card.GetRawData().battlecry_target_getter)
-		{
-			state::targetor::TargetsGenerator targets_generator;
-			if (!card.GetRawData().battlecry_target_getter({ state_, flow_context_, card_ref, card, targets_generator })) {
-				flow_context_.result_ = kResultInvalid;
-				return false;
-			}
-			flow_context_.battlecry_target_ = flow_context_.action_parameters_.GetBattlecryTarget(
-				state_, card_ref, card, targets_generator.GetInfo());
+		if (!card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card)) {
+			flow_context_.result_ = kResultInvalid;
+			return false;
 		}
 
 		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
@@ -93,9 +87,7 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		if (card.GetRawData().battlecry) {
-			(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
-		}
+		card.GetRawData().battlecry_handler.DoBattlecry(state_, flow_context_, card_ref, card);
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
 
@@ -110,9 +102,7 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		if (card.GetRawData().battlecry) {
-			(*card.GetRawData().battlecry)({ state_, flow_context_, card_ref, card });
-		}
+		card.GetRawData().battlecry_handler.DoBattlecry(state_, flow_context_, card_ref, card);
 
 		return true;
 	}

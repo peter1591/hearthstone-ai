@@ -2,7 +2,7 @@
 
 namespace Cards {
 	namespace Contexts {
-		using BattlecryTargetGetter = FlowControl::Context::BattlecryTargetGetter;
-		using Battlecry = FlowControl::Context::BattleCry;
+		using BattlecryTargetGetter = FlowControl::battlecry::context::BattlecryTargetGetter;
+		using Battlecry = FlowControl::battlecry::context::BattleCry;
 	}
 }

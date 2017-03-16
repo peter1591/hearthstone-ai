@@ -153,6 +153,10 @@
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts.h" />
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />

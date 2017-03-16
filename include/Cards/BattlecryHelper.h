@@ -38,16 +38,16 @@ namespace Cards
 	};
 	template <typename T> struct BattlecryProcessor<T, true, false> {
 		BattlecryProcessor(state::Cards::CardData & card_data) {
-			card_data.battlecry = (state::Cards::CardData::BattlecryCallback*)(&T::Battlecry);
+			card_data.battlecry_handler.SetCallback_Battlecry((FlowControl::battlecry::Handler::BattlecryCallback*)(&T::Battlecry));
 		}
 	};
 	template <typename T> struct BattlecryProcessor<T, true, true> {
 		BattlecryProcessor(state::Cards::CardData & card_data) {
-			card_data.battlecry_target_getter = [](auto context) {
+			card_data.battlecry_handler.SetCallback_BattlecryTargetGetter([](auto context) {
 				T::GetBattlecryTargets(std::move(context));
 				return true;
-			};
-			card_data.battlecry = (state::Cards::CardData::BattlecryCallback*)(&T::Battlecry);
+			});
+			card_data.battlecry_handler.SetCallback_Battlecry((FlowControl::battlecry::Handler::BattlecryCallback*)(&T::Battlecry));
 		}
 	};
 }
