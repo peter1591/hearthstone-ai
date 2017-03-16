@@ -12,6 +12,9 @@ namespace FlowControl
 		public:
 			Handler() : need_update(true) {}
 
+			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
+
+		public:
 			template <typename EnchantmentType, typename T>
 			bool Exists(T&& id) const
 			{
@@ -37,7 +40,7 @@ namespace FlowControl
 
 			void UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::Cards::EnchantableStates const& new_states);
 
-		public: // TODO: encapsulate
+		private:
 			state::Cards::EnchantableStates origin_states;
 			TieredEnchantments enchantments;
 			bool need_update;
