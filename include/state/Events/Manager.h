@@ -20,6 +20,8 @@ namespace state
 			template <typename T> friend class CategorizedEvent;
 
 		public:
+			Manager() : event_trigger_recursive_count_(0) {}
+
 			template <typename EventType, typename T>
 			void PushBack(T&& handler) {
 				GetHandlersContainer<EventType>().PushBack(std::forward<T>(handler));
@@ -34,15 +36,25 @@ namespace state
 			template <typename EventTriggerType, typename... Args>
 			void TriggerEvent(Args&&... args)
 			{
-				return GetHandlersContainer<EventTriggerType>().TriggerAll(std::forward<Args>(args)...);
+				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) throw std::exception("reach maximum event trigger recursive");
+				++event_trigger_recursive_count_;
+				GetHandlersContainer<EventTriggerType>().TriggerAll(std::forward<Args>(args)...);
+				--event_trigger_recursive_count_;
 			}
 
 			template <typename EventTriggerType, typename... Args>
 			void TriggerCategorizedEvent(CardRef card_ref, Args&&... args)
 			{
-				return GetCategorizedHandlersContainer<EventTriggerType>()
+				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) throw std::exception("reach maximum event trigger recursive");
+				++event_trigger_recursive_count_;
+				GetCategorizedHandlersContainer<EventTriggerType>()
 					.TriggerAll(card_ref, std::forward<Args>(args)...);
+				--event_trigger_recursive_count_;
 			}
+
+		private:
+			constexpr static int max_event_trigger_recursive_ = 100;
+			int event_trigger_recursive_count_;
 
 		private:
 			template<typename EventHandlerType>
