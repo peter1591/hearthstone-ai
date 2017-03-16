@@ -79,6 +79,9 @@
     <Filter Include="Header Files\FlowControl\battlecry">
       <UniqueIdentifier>{a931e8d4-4449-43e2-81be-3f6627e646ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\deathrattle">
+      <UniqueIdentifier>{f1f4e342-2cbc-4a9d-8446-ccbdb68f14a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -394,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts-impl.h">
       <Filter>Header Files\FlowControl\battlecry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h">
+      <Filter>Header Files\FlowControl\deathrattle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

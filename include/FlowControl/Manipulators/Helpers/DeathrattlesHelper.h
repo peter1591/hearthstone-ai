@@ -18,19 +18,16 @@ namespace FlowControl
 
 				template <typename T>
 				void Add(T&& deathrattle) {
-					card_.AddDeathrattle(std::forward<T>(deathrattle));
+					card_.GetMutableDeathrattleHandlerGetter().Get().Add(std::forward<T>(deathrattle));
 				}
 
 				DeathrattlesHelper & TriggerAll() {
-					FlowControl::Context::Deathrattle context{ state_, flow_context_, card_ref_, card_ };
-					for (auto deathrattle : card_.Deathrattles()) {
-						deathrattle(context);
-					}
+					card_.GetMutableDeathrattleHandlerGetter().Get().TriggerAll(state_, flow_context_, card_ref_, card_);
 					return *this;
 				}
 
 				DeathrattlesHelper & Clear() {
-					card_.ClearDeathrattles();
+					card_.GetMutableDeathrattleHandlerGetter().Get().Clear();
 					return *this;
 				}
 

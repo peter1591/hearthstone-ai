@@ -8,6 +8,7 @@
 #include "state/Cards/Contexts.h"
 #include "FlowControl/aura/Handler.h"
 #include "FlowControl/battlecry/Handler.h"
+#include "FlowControl/deathrattle/Handler.h"
 #include "FlowControl/enchantment/Handler.h"
 
 namespace state
@@ -38,6 +39,9 @@ namespace state
 			int num_attacks_this_turn;
 			EnchantableStates enchanted_states;
 
+		public: // for hero type
+			CardRef weapon_ref;
+
 		public: // zone-changed callbacks invoked by state::State 
 			typedef void AddedToPlayZoneCallback(ZoneChangedContext);
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
@@ -49,14 +53,7 @@ namespace state
 			FlowControl::enchantment::Handler enchantment_handler;
 			FlowControl::aura::Handler aura_handler;
 			FlowControl::battlecry::Handler battlecry_handler;
-
-		public:
-			typedef void DeathrattleCallback(FlowControl::Context::Deathrattle);
-			typedef std::vector<DeathrattleCallback*> Deathrattles;
-			Deathrattles deathrattles;
-
-		public: // for hero type
-			CardRef weapon_ref;
+			FlowControl::deathrattle::Handler deathrattle_handler;
 		};
 	}
 }

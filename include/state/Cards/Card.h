@@ -17,6 +17,7 @@ namespace FlowControl
 		{
 			class EnchantmentHelper;
 			class AuraHelper;
+			class DeathrattlesHelper;
 		}
 	}
 }
@@ -53,6 +54,17 @@ namespace state
 				MutableAuraHandlerGetter(CardData & data) : data_(data) {}
 			private:
 				auto& Get() { return data_.aura_handler; }
+			private:
+				CardData & data_;
+			};
+
+			class MutableDeathrattleHandlerGetter
+			{
+				friend class FlowControl::Manipulators::Helpers::DeathrattlesHelper;
+			public:
+				MutableDeathrattleHandlerGetter(CardData & data) : data_(data) {}
+			private:
+				auto& Get() { return data_.deathrattle_handler; }
 			private:
 				CardData & data_;
 			};
@@ -144,15 +156,13 @@ namespace state
 				return MutableAuraHandlerGetter(data_);
 			}
 
+			MutableDeathrattleHandlerGetter GetMutableDeathrattleHandlerGetter()
+			{
+				return MutableDeathrattleHandlerGetter(data_);
+			}
+
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
-
-			CardData::Deathrattles const& Deathrattles() const { return data_.deathrattles; }
-			void ClearDeathrattles() { data_.deathrattles.clear(); }
-			template <typename T>
-			void AddDeathrattle(T&& deathrattle) {
-				data_.deathrattles.push_back(std::forward<T>(deathrattle));
-			}
 
 			void SetWeapon(CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
 			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
