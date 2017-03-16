@@ -44,8 +44,7 @@ namespace Cards
 	template <typename T> struct BattlecryProcessor<T, true, true> {
 		BattlecryProcessor(state::Cards::CardData & card_data) {
 			card_data.battlecry_handler.SetCallback_BattlecryTargetGetter([](auto context) {
-				T::GetBattlecryTargets(std::move(context));
-				return true;
+				return T::GetBattlecryTargets(std::move(context)).GetInfo();
 			});
 			card_data.battlecry_handler.SetCallback_Battlecry((FlowControl::battlecry::Handler::BattlecryCallback*)(&T::Battlecry));
 		}

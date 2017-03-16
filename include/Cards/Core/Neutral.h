@@ -7,9 +7,8 @@
 namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
-		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
-			context.Targets().Targetable();
-			return true;
+		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
 			Damage(context).Target(context.GetTarget()).Amount(1);
@@ -45,9 +44,8 @@ namespace Cards
 	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171, Charge> {};
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
-		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
-			context.Targets().Targetable();
-			return true;
+		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
 			Heal(context).Target(context.GetTarget()).Amount(2);
@@ -81,9 +79,8 @@ namespace Cards
 	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {};
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
-		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
-			context.Targets().Targetable();
-			return true;
+		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
 			Damage(context).Target(context.GetTarget()).Amount(1);
@@ -135,9 +132,8 @@ namespace Cards
 	};
 
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
-		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
-			context.Targets().Ally(context).Minion().Targetable();
-			return true;
+		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			return TargetsGenerator().Ally(context).Minion().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
 			Manipulate(context).Minion(context.GetTarget()).Enchant().Add(Card_EX1_019e());
@@ -250,9 +246,8 @@ namespace Cards
 	};
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
-		static bool GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
-			context.Targets().Targetable();
-			return true;
+		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			rseturn TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
 			Damage(context).Target(context.GetTarget()).Amount(2);

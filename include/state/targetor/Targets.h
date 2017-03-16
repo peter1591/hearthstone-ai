@@ -11,7 +11,6 @@ namespace state {
 	namespace board { class Player; }
 
 	namespace targetor {
-		// TODO: move to another namespace
 		class Targets
 		{
 		public:

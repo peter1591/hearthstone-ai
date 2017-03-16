@@ -49,9 +49,7 @@ namespace FlowControl
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 		state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 
-		if (!card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card)) {
-			return SetResult(kResultInvalid);
-		}
+		card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card);
 
 		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
 
