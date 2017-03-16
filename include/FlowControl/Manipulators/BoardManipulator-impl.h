@@ -19,7 +19,7 @@ namespace FlowControl
 			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
 			state::CardRef ref = state_.AddCard(state::Cards::Card(std::move(card_data)));
 
-			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(flow_context_.random_, ref)
+			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(flow_context_.GetRandom(), ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);
 
 			state::Cards::Card const& card = state_.GetCardsManager().Get(ref);

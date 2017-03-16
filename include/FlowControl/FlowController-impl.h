@@ -7,35 +7,35 @@ namespace FlowControl
 {
 	inline Result FlowController::PlayCard(int hand_idx)
 	{
-		flow_context_.action_parameters_.Clear();
+		flow_context_.ResetActionParameter();
 		PlayCardInternal(hand_idx);
 
 		assert(flow_context_.Empty());
-		return flow_context_.result_;
+		return flow_context_.GetResult();
 	}
 
 	inline Result FlowController::EndTurn()
 	{
-		flow_context_.action_parameters_.Clear();
+		flow_context_.ResetActionParameter();
 		EndTurnInternal();
 
 		assert(flow_context_.Empty());
-		return flow_context_.result_;
+		return flow_context_.GetResult();
 	}
 
 	inline Result FlowController::Attack(state::CardRef attacker, state::CardRef defender)
 	{
-		flow_context_.action_parameters_.Clear();
+		flow_context_.ResetActionParameter();
 		AttackInternal(attacker, defender);
 
 		assert(flow_context_.Empty());
-		return flow_context_.result_;
+		return flow_context_.GetResult();
 	}
 
 	inline Result FlowController::Resolve()
 	{
 		Helpers::Resolver(state_, flow_context_).Resolve();
-		return flow_context_.result_;
+		return flow_context_.GetResult();
 	}
 
 	inline void FlowController::PlayCardInternal(int hand_idx)
@@ -50,8 +50,7 @@ namespace FlowControl
 		state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 
 		if (!card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card)) {
-			flow_context_.result_ = kResultInvalid;
-			return false;
+			return SetResult(kResultInvalid);
 		}
 
 		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
@@ -63,8 +62,7 @@ namespace FlowControl
 		case state::kCardTypeWeapon:
 			return PlayWeaponCardPhase(hand_idx, card_ref, card);
 		default:
-			flow_context_.result_ = kResultInvalid;
-			return false;
+			return SetResult(kResultInvalid);
 		}
 	}
 
@@ -74,14 +72,13 @@ namespace FlowControl
 			state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
 
 		if (state_.GetCurrentPlayer().minions_.Full()) {
-			flow_context_.result_ = kResultInvalid;
-			return false;
+			return SetResult(kResultInvalid);
 		}
 
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
-		int put_position = flow_context_.action_parameters_.GetMinionPutLocation(0, total_minions);
+		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
 
-		state_.GetZoneChanger<state::kCardZoneHand>(flow_context_.random_, card_ref)
+		state_.GetZoneChanger<state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
@@ -199,22 +196,22 @@ namespace FlowControl
 	inline void FlowController::EndTurnInternal()
 	{
 		if (state_.GetTurn() >= 89) {
-			flow_context_.result_ = kResultDraw;
+			flow_context_.SetResult(kResultDraw);
 			return;
 		}
 		state_.IncreaseTurn();
 
-		flow_context_.action_parameters_.Clear();
+		flow_context_.ResetActionParameter();
 		EndTurnPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 
 		state_.GetMutableCurrentPlayerId().ChangeSide();
 
-		flow_context_.action_parameters_.Clear();
+		flow_context_.ResetActionParameter();
 		StartTurnPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 
-		flow_context_.action_parameters_.Clear();
+		flow_context_.ResetActionParameter();
 		DrawCardPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 	}
@@ -262,7 +259,7 @@ namespace FlowControl
 	inline bool FlowController::SetResult(Result result)
 	{
 		assert(result != kResultNotDetermined);
-		flow_context_.result_ = result;
+		flow_context_.SetResult(result);
 		return false;
 	}
 

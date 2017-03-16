@@ -45,26 +45,23 @@ namespace FlowControl
 			{
 				deaths_.clear();
 
-				if (flow_context_.destroyed_weapon_.IsValid()) {
-					state::Cards::Card const& card = state_.GetCardsManager().Get(flow_context_.destroyed_weapon_);
-					flow_context_.dead_entity_hints_.insert(
-						std::make_pair(card.GetPlayOrder(), flow_context_.destroyed_weapon_));
-					flow_context_.destroyed_weapon_.Invalidate();
+				if (flow_context_.GetDestroyedWeapon().IsValid()) {
+					flow_context_.AddDeadEntryHint(state_, flow_context_.GetDestroyedWeapon());
+					flow_context_.ClearDestroyedWeapon();
 				}
 
-				for (const auto& item : flow_context_.dead_entity_hints_)
-				{
+				flow_context_.ForEachDeadEntryHint([this](auto const& item) {
 					state::CardRef ref = item.second;
 					const state::Cards::Card & card = state_.GetCardsManager().Get(ref);
 
-					if (card.GetZone() != state::kCardZonePlay) continue;
-					if (card.GetHP() > 0) continue;
+					if (card.GetZone() != state::kCardZonePlay) return;
+					if (card.GetHP() > 0) return;
 					// TODO: check if it's pending destory
 
 					deaths_.insert(ref);
-				}
+				});
 
-				flow_context_.dead_entity_hints_.clear();
+				flow_context_.ClearDeadEntryHint();
 			}
 
 			bool RemoveDeaths()
@@ -101,7 +98,7 @@ namespace FlowControl
 						Manipulate(state_, flow_context_).Hero(card.GetPlayerIdentifier()).RemoveWeaponRef()();
 					}
 
-					state_.GetZoneChanger(flow_context_.random_, ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
+					state_.GetZoneChanger(flow_context_.GetRandom(), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
 				return true;
@@ -110,7 +107,7 @@ namespace FlowControl
 			bool SetResult(Result result)
 			{
 				assert(result != kResultNotDetermined);
-				flow_context_.result_ = result;
+				flow_context_.SetResult(result);
 				return false;
 			}
 

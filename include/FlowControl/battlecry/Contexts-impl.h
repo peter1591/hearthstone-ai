@@ -11,7 +11,7 @@ namespace FlowControl
 		namespace context
 		{
 			inline state::CardRef BattleCry::GetTarget() {
-				state::CardRef target = flow_context_.battlecry_target_;
+				state::CardRef target = flow_context_.GetBattlecryTarget();
 				assert(target.IsValid());
 				return target;
 			}

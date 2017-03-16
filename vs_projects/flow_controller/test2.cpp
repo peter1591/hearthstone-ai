@@ -72,14 +72,14 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContex
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
-	((Test2_RandomGenerator&)(flow_context.random_)).next_rand = deck_count;
-	((Test2_RandomGenerator&)(flow_context.random_)).called = false;
+	((Test2_RandomGenerator&)(flow_context.GetRandom())).next_rand = deck_count;
+	((Test2_RandomGenerator&)(flow_context.GetRandom())).called = false;
 
 	auto ref = state.AddCard(CreateDeckCard(id, state, player));
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.random_, ref)
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
 		.ChangeTo<state::kCardZoneDeck>(player);
 
-	if (deck_count > 0) assert(((Test2_RandomGenerator&)(flow_context.random_)).called);
+	if (deck_count > 0) assert(((Test2_RandomGenerator&)(flow_context.GetRandom())).called);
 	++deck_count;
 
 	assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
@@ -117,7 +117,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, FlowCo
 	int hand_count = (int)state.GetBoard().Get(player).hand_.Size();
 
 	auto ref = state.AddCard(CreateHandCard(id, type, state, player));
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.random_, ref)
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
 		.ChangeTo<state::kCardZoneHand>(player);
 
 	assert(state.GetCardsManager().Get(ref).GetCardId() == id);
@@ -161,7 +161,7 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 
 	state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.random_, ref)
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 }
 

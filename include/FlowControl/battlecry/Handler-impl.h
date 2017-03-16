@@ -19,8 +19,7 @@ namespace FlowControl
 			if (!battlecry_target_getter({ state, flow_context, card_ref, card, targets_generator })) {
 				return false;
 			}
-			flow_context.battlecry_target_ = flow_context.action_parameters_.GetBattlecryTarget(
-				state, card_ref, card, targets_generator.GetInfo());
+			flow_context.PrepareBattlecryTarget(state, card_ref, card, targets_generator.GetInfo());
 			return true;
 		}
 
