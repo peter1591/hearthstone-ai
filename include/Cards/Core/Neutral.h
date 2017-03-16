@@ -247,7 +247,7 @@ namespace Cards
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
 		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
-			rseturn TargetsGenerator().Targetable();
+			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
 			Damage(context).Target(context.GetTarget()).Amount(2);
