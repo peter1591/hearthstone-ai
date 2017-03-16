@@ -26,16 +26,16 @@ namespace FlowControl
 				return GetEnchantments<EnchantmentType::tier>().PushBack(item.apply_functor);
 			}
 
-			template <typename EnchantmentType, typename T>
-			void Remove(T&& id)
+			template <typename EnchantmentType>
+			void Remove(ContainerType::Identifier id)
 			{
-				return GetEnchantments<EnchantmentType::tier>().Remove(std::forward<T>(id));
+				return GetEnchantments<EnchantmentType::tier>().Remove(id);
 			}
 
-			template <typename EnchantmentType, typename T>
-			bool Exists(T&& id) const
+			template <typename EnchantmentType>
+			bool Exists(ContainerType::Identifier id) const
 			{
-				return GetEnchantments<EnchantmentType::tier>().Exists(std::forward<T>(id));
+				return GetEnchantments<EnchantmentType::tier>().Exists(id);
 			}
 
 			void ApplyAll(state::Cards::EnchantableStates & card)
