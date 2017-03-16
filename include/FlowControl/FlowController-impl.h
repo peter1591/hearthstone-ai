@@ -7,7 +7,7 @@ namespace FlowControl
 {
 	inline Result FlowController::PlayCard(int hand_idx)
 	{
-		action_parameters_.Clear();
+		flow_context_.action_parameters_.Clear();
 		PlayCardInternal(hand_idx);
 
 		assert(flow_context_.Empty());
@@ -16,7 +16,7 @@ namespace FlowControl
 
 	inline Result FlowController::EndTurn()
 	{
-		action_parameters_.Clear();
+		flow_context_.action_parameters_.Clear();
 		EndTurnInternal();
 
 		assert(flow_context_.Empty());
@@ -25,7 +25,7 @@ namespace FlowControl
 
 	inline Result FlowController::Attack(state::CardRef attacker, state::CardRef defender)
 	{
-		action_parameters_.Clear();
+		flow_context_.action_parameters_.Clear();
 		AttackInternal(attacker, defender);
 
 		assert(flow_context_.Empty());
@@ -204,17 +204,17 @@ namespace FlowControl
 		}
 		state_.IncreaseTurn();
 
-		action_parameters_.Clear();
+		flow_context_.action_parameters_.Clear();
 		EndTurnPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 
 		state_.GetMutableCurrentPlayerId().ChangeSide();
 
-		action_parameters_.Clear();
+		flow_context_.action_parameters_.Clear();
 		StartTurnPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 
-		action_parameters_.Clear();
+		flow_context_.action_parameters_.Clear();
 		DrawCardPhase();
 		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
 	}

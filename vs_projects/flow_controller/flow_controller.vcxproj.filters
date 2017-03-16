@@ -209,9 +209,6 @@
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h">
       <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Contexts.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
@@ -355,9 +352,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\CardAttributes.h">
       <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Contexts-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Contexts.h">
       <Filter>Header Files\Cards</Filter>

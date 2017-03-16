@@ -157,8 +157,6 @@
     <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\battlecry\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\battlecry\Handler.h" />
-    <ClInclude Include="..\..\include\FlowControl\Contexts-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
