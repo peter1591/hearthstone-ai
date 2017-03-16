@@ -36,7 +36,6 @@ namespace FlowControl
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				aura::Handler & aura_handler_;
-				state::targetor::TargetsGenerator & targets_generator_;
 			};
 
 			struct AuraApplyOn

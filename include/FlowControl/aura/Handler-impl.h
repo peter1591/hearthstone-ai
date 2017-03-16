@@ -25,9 +25,8 @@ namespace FlowControl
 			bool aura_valid = (*is_valid)({ state, flow_context, card_ref, card, *this, need_update });
 			if (aura_valid) {
 				if (!need_update) aura_valid;
-				state::targetor::TargetsGenerator targets_generator;
-				(*get_targets)({ state, flow_context, card_ref, card, *this, targets_generator });
-				targets_generator.GetInfo().Fill(state, new_targets);
+				(*get_targets)({ state, flow_context, card_ref, card, *this})
+					.Fill(state, new_targets);
 			}
 
 			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)

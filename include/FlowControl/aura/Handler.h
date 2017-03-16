@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include "state/targetor/Targets.h"
 #include "FlowControl/enchantment/TieredEnchantments.h"
 #include "FlowControl/aura/Contexts.h"
 
@@ -12,7 +13,7 @@ namespace FlowControl
 		{
 		public:
 			typedef bool FuncIsValid(contexts::AuraIsValid context);
-			typedef void FuncGetTargets(contexts::AuraGetTargets context);
+			typedef state::targetor::Targets FuncGetTargets(contexts::AuraGetTargets context);
 			typedef void FuncApplyOn(contexts::AuraApplyOn context); // TODO: return enchantment id
 			typedef void FuncRemoveFrom(contexts::AuraRemoveFrom context);
 

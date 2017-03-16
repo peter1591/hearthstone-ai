@@ -32,11 +32,10 @@ namespace Cards
 
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
 		template <typename Context>
-		static bool GetAuraTargets(state::targetor::TargetsGenerator& target, Context&& context) {
-			target
+		static auto GetAuraTargets(Context&& context) {
+			return TargetsGenerator()
 				.Ally(context).Minion().Murlocs() // friendly murlocs only
 				.Exclude(context.card_ref_); // only apply on other murlocs
-			return true;
 		}
 		Card_EX1_508() {
 			Aura<Card_EX1_508o, EmitWhenAlive, UpdateWhenMinionChanged>();
@@ -106,8 +105,8 @@ namespace Cards
 
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
 		template <typename Context>
-		static void GetAuraTargets(state::targetor::TargetsGenerator& targets, Context&& context) {
-			targets
+		static auto GetAuraTargets(Context&& context) {
+			return TargetsGenerator()
 				.Ally(context).Minion() // friendly minions
 				.Exclude(context.card_ref_); // only apply on other
 		}
@@ -278,8 +277,9 @@ namespace Cards
 	};
 
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
-		template <typename Context> static void GetAuraTargets(state::targetor::TargetsGenerator& targets, Context&& context) {
-			targets
+		template <typename Context>
+		static auto GetAuraTargets(Context&& context) {
+			return TargetsGenerator()
 				.Ally(context).Minion() // friendly minions
 				.Exclude(context.card_ref_); // only apply on other
 		}

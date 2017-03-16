@@ -2,6 +2,9 @@
 
 namespace Cards
 {
+	using TargetsGenerator = state::targetor::TargetsGenerator;
+	using Targets = state::targetor::Targets;
+
 	template <typename ClientCard> struct CardClassIdMap;
 	template <int CardId> struct CardIdClassMap;
 

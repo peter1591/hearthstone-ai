@@ -61,8 +61,8 @@ namespace Cards
 			});
 
 			card_data_.aura_handler.SetCallback_GetTargets([](auto context) {
-				HandleClass::GetAuraTargets(context.targets_generator_, context);
 				UpdatePolicy::AfterUpdated(context);
+				return HandleClass::GetAuraTargets(context).GetInfo();
 			});
 
 			card_data_.aura_handler.SetCallback_ApplyOn([](auto context) {
