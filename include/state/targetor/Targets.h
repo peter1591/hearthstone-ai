@@ -2,11 +2,16 @@
 
 #include <vector>
 #include <unordered_set>
-#include "state/State.h"
-#include "FlowControl/FlowContext.h"
+#include "state/Types.h"
+
+namespace FlowControl { class FlowContext; }
 
 namespace state {
+	class State;
+	namespace board { class Player; }
+
 	namespace targetor {
+		// TODO: move to another namespace
 		class Targets
 		{
 		public:
@@ -17,75 +22,23 @@ namespace state {
 			{
 			}
 
-			void Fill(State const& state, std::vector<CardRef>& targets) const {
-				Process(state, [&](CardRef ref) {
-					targets.push_back(ref);
-				});
-			}
-			void Fill(State const& state, std::unordered_set<CardRef>& targets) const {
-				Process(state, [&](CardRef ref) {
-					targets.insert(ref);
-				});
-			}
+			void Fill(State const& state, std::vector<CardRef>& targets) const;
+			void Fill(State const& state, std::unordered_set<CardRef>& targets) const;
 
 			template <typename Functor>
-			void ForEach(State & state, FlowControl::FlowContext & flow_context, Functor&& func) const {
-				Process(state, [&](CardRef ref) {
-					func(state, flow_context, ref);
-				});
-			}
+			void ForEach(State & state, FlowControl::FlowContext & flow_context, Functor&& func) const;
 
-			void Count(State const& state, int * count) const {
-				Process(state, [count](CardRef) {
-					++(*count);
-				});
-			}
+			void Count(State const& state, int * count) const;
 
 		private:
 			template <typename Functor>
-			void Process(State const& state, Functor&& functor) const {
-				if (include_first) ProcessPlayerTargets(state, state.GetBoard().GetFirst(), std::forward<Functor>(functor));
-				if (include_second) ProcessPlayerTargets(state, state.GetBoard().GetSecond(), std::forward<Functor>(functor));
-			}
+			void Process(State const& state, Functor&& functor) const;
 
 			template <typename Functor>
-			void ProcessPlayerTargets(State const& state, board::Player const& player, Functor&& functor) const {
-				if (include_hero) {
-					if (player.GetHeroRef() != exclude) {
-						functor(player.GetHeroRef());
-					}
-				}
-				if (include_minion) {
-					for (CardRef minion : player.minions_.Get()) {
-						ProcessMinionTargets(state, minion, std::forward<Functor>(functor));
-					}
-				}
-			}
+			void ProcessPlayerTargets(State const& state, board::Player const& player, Functor&& functor) const;
 
 			template <typename Functor>
-			void ProcessMinionTargets(State const& state, CardRef const& minion, Functor&& functor) const {
-				if (minion == exclude) return;
-
-				auto const& card = state.GetCardsManager().Get(minion);
-
-				switch (minion_filter) {
-				case kMinionFilterAll:
-					break;
-				case kMinionFilterTargetable:
-					// TODO: check stealth
-					// check owning player; stealth cannot be targeted by enemy
-					break;
-				case kMinionFilterTargetableBySpell:
-					// TODO: check stealh
-					// TODO: check immune spell
-					break;
-				case kMinionFilterMurloc:
-					if (card.GetRace() == kCardRaceMurloc) break;
-					return;
-				}
-
-				functor(minion);
-			}
+			void ProcessMinionTargets(State const& state, CardRef const& minion, Functor&& functor) const;
 
 		public:
 			bool include_first;

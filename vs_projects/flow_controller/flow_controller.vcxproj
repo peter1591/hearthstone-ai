@@ -213,6 +213,7 @@
     <ClInclude Include="..\..\include\state\Events\Manager.h" />
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
     <ClInclude Include="..\..\include\state\State.h" />
+    <ClInclude Include="..\..\include\state\targetor\Targets-impl.h" />
     <ClInclude Include="..\..\include\state\targetor\Targets.h" />
     <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h" />
     <ClInclude Include="..\..\include\state\Types.h" />

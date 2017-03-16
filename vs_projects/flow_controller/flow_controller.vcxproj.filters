@@ -377,5 +377,8 @@
     <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h">
       <Filter>Header Files\FlowControl\enchantment</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\targetor\Targets-impl.h">
+      <Filter>Header Files\state\targetor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
