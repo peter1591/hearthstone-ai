@@ -9,7 +9,7 @@ namespace Cards
 	};
 
 	struct Card_NEW1_038_Enchant : public EnchantmentCardBase {
-		static constexpr EnchantmentTiers tier = kEnchantmentTier1;
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 
 		Card_NEW1_038_Enchant() {
 			apply_functor = [](auto& stats) {

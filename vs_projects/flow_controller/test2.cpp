@@ -63,7 +63,7 @@ static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state,
 	state::Cards::CardData raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
 	raw_card.enchanted_states.player = player;
 	raw_card.zone = state::kCardZoneNewlyCreated;
-	raw_card.enchantment_aux_data.origin_states = raw_card.enchanted_states;
+	raw_card.enchantment_handler.origin_states = raw_card.enchanted_states;
 
 	return state::Cards::Card(raw_card);
 }
@@ -107,7 +107,7 @@ static state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type,
 
 	raw_card.enchanted_states.player = player;
 	raw_card.zone = state::kCardZoneNewlyCreated;
-	raw_card.enchantment_aux_data.origin_states = raw_card.enchanted_states;
+	raw_card.enchantment_handler.origin_states = raw_card.enchanted_states;
 
 	return state::Cards::Card(raw_card);
 }
@@ -157,7 +157,7 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 	raw_card.enchanted_states.max_hp = 30;
 	raw_card.enchanted_states.player = player;
 	raw_card.enchanted_states.attack = 0;
-	raw_card.enchantment_aux_data.origin_states = raw_card.enchanted_states;
+	raw_card.enchantment_handler.origin_states = raw_card.enchanted_states;
 
 	state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 

@@ -157,6 +157,10 @@
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\TieredEnchantments.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
@@ -198,10 +202,6 @@
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
     <ClInclude Include="..\..\include\state\Cards\Contexts.h" />
     <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h" />
-    <ClInclude Include="..\..\include\state\Cards\EnchantmentAuxData.h" />
-    <ClInclude Include="..\..\include\state\Cards\Enchantments\Enchantments.h" />
-    <ClInclude Include="..\..\include\state\Cards\Enchantments\TieredEnchantments.h" />
-    <ClInclude Include="..\..\include\state\Cards\Enchantments\Tiers.h" />
     <ClInclude Include="..\..\include\state\Cards\Manager.h" />
     <ClInclude Include="..\..\include\state\detail\InvokeCallback.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />

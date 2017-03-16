@@ -11,6 +11,7 @@
 #include "FlowControl/Manipulate.h"
 
 #include "FlowControl/aura/Handler-impl.h"
+#include "FlowControl/enchantment/Handler-impl.h"
 #include "FlowControl/Manipulators/HeroManipulator-impl.h"
 #include "FlowControl/Manipulators/BoardManipulator-impl.h"
 #include "FlowControl/Manipulators/CardManipulator-impl.h"

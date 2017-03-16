@@ -3,7 +3,6 @@
 #include <functional>
 #include <unordered_set>
 #include "state/Types.h"
-#include "state/Cards/Enchantments/Enchantments.h"
 
 namespace state
 {

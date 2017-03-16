@@ -9,14 +9,17 @@
 namespace state
 {
 	class State;
-	namespace Cards
-	{
-		class Card;
+	namespace Cards { class Card; }
+}
 
+namespace FlowControl
+{
+	namespace enchantment
+	{
 		class Enchantments
 		{
 		public:
-			typedef void(*ApplyFunctor)(EnchantableStates &);
+			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
 			template <typename T>
@@ -37,7 +40,7 @@ namespace state
 				return enchantments_.Get(std::forward<T>(id)) != nullptr;
 			}
 
-			void ApplyAll(EnchantableStates & card)
+			void ApplyAll(state::Cards::EnchantableStates & card)
 			{
 				enchantments_.IterateAll([&card](ApplyFunctor& functor) -> bool {
 					functor(card);

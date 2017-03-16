@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Types.h"
-#include "state/Cards/Enchantments/Enchantments.h"
+#include "FlowControl/enchantment/Enchantments.h"
 
 namespace state
 {
@@ -46,7 +46,7 @@ namespace FlowControl
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				state::CardRef target_;
-				state::Cards::Enchantments::ContainerType::Identifier & enchant_id_;
+				enchantment::Enchantments::ContainerType::Identifier & enchant_id_;
 			};
 
 			struct AuraRemoveFrom
@@ -56,7 +56,7 @@ namespace FlowControl
 				const state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				const state::CardRef target_;
-				const state::Cards::Enchantments::ContainerType::Identifier enchant_id_;
+				const enchantment::Enchantments::ContainerType::Identifier enchant_id_;
 			};
 		}
 	}

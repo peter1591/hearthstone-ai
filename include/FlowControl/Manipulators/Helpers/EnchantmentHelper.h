@@ -4,7 +4,6 @@
 #include <memory>
 #include <utility>
 #include "state/Cards/Card.h"
-#include "state/Cards/EnchantmentAuxData.h"
 #include "FlowControl/Contexts.h"
 
 namespace FlowControl
@@ -21,55 +20,17 @@ namespace FlowControl
 				{
 				}
 
-				template <typename T>
-				decltype(auto) Add(T&& enchantment)
-				{
-					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
-
-					data.need_update = true;
-					return data.enchantments.PushBack(std::forward<T>(enchantment));
+				template <typename T> auto Add(T&& enchantment) {
+					return card_.GetMutableEnchantmentHandlerGetter().Get().Add(std::forward<T>(enchantment));
 				}
 
-				template <typename EnchantmentType, typename T>
-				decltype(auto) Remove(T&& id)
-				{
-					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
-
-					data.need_update = true;
-					return data.enchantments.Remove<EnchantmentType>(std::forward<T>(id));
+				template <typename EnchantmentType, typename T> auto Remove(T&& id) {
+					return card_.GetMutableEnchantmentHandlerGetter().Get().Remove<EnchantmentType>(std::forward<T>(id));
 				}
 
-				void Update()
-				{
-					state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
-					if (!data.need_update) return;
-
-					switch (card_.GetCardType()) {
-					case state::kCardTypeHero:
-						UpdateHero();
-						break;
-					case state::kCardTypeMinion:
-						UpdateMinion();
-						break;
-					case state::kCardTypeWeapon:
-						UpdateWeapon();
-						break;
-					default:
-						throw std::exception("not implemented");
-					}
-
-					data.need_update = false;
+				void Update() {
+					return card_.GetMutableEnchantmentHandlerGetter().Get().Update(state_, flow_context_, card_ref_, card_);
 				}
-
-			private:
-				void UpdateHero();
-				void UpdateMinion();
-				void UpdateWeapon();
-
-				void UpdateCharacter(state::Cards::EnchantableStates const& new_states);
-
-			private:
-				void ChangeMinionPlayer(state::PlayerIdentifier player);
 
 			private:
 				state::State & state_;

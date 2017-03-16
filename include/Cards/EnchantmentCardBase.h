@@ -1,12 +1,14 @@
 #pragma once
 
-#include "state/Cards/Enchantments/Enchantments.h"
+#include "FlowControl/enchantment/TieredEnchantments.h"
 
 namespace Cards
 {
+	using FlowControl::enchantment::EnchantmentTiers;
+
 	class EnchantmentCardBase
 	{
 	public:
-		state::Cards::Enchantments::ApplyFunctor apply_functor;
+		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
 	};
 }

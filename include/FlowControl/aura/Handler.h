@@ -1,7 +1,7 @@
 #pragma once
 
 #include <unordered_map>
-#include "state/Cards/Enchantments/TieredEnchantments.h"
+#include "FlowControl/enchantment/TieredEnchantments.h"
 #include "FlowControl/aura/Contexts.h"
 
 namespace FlowControl
@@ -13,7 +13,7 @@ namespace FlowControl
 		public:
 			typedef bool FuncIsValid(contexts::AuraIsValid context);
 			typedef void FuncGetTargets(contexts::AuraGetTargets context);
-			typedef void FuncApplyOn(contexts::AuraApplyOn context);
+			typedef void FuncApplyOn(contexts::AuraApplyOn context); // TODO: return enchantment id
 			typedef void FuncRemoveFrom(contexts::AuraRemoveFrom context);
 
 			Handler() :
@@ -26,13 +26,13 @@ namespace FlowControl
 
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
-		public:
+		public: // TODO: encapsulate
 			FuncIsValid * is_valid;
 			FuncGetTargets * get_targets;
 			FuncApplyOn * apply_on;
 			FuncRemoveFrom * remove_from;
 
-			std::unordered_map<state::CardRef, state::Cards::TieredEnchantments::ContainerType::Identifier> applied_enchantments;
+			std::unordered_map<state::CardRef, enchantment::TieredEnchantments::ContainerType::Identifier> applied_enchantments;
 			int last_updated_change_id_first_player_minions_;
 			int last_updated_change_id_second_player_minions_;
 		};

@@ -93,7 +93,7 @@ namespace Utils
 			}
 
 			template <typename T>
-			ItemType * Get(T&& identifier) {
+			ItemType * Get(T&& identifier) { // TODO: do not pass id by reference
 				static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
 
 				auto & item = items_.Get(identifier.identifier_);

@@ -1,12 +1,19 @@
 #pragma once
 
-#include "state/Cards/Enchantments/Enchantments.h"
-#include "state/Cards/Enchantments/Tiers.h"
+#include "FlowControl/enchantment/Enchantments.h"
 
-namespace state
+namespace FlowControl
 {
-	namespace Cards
+	namespace enchantment
 	{
+		enum EnchantmentTiers
+		{
+			kEnchantmentTier1,
+			kEnchantmentTier2,
+			kEnchantmentTier3,
+			kEnchantmentAura
+		};
+
 		class TieredEnchantments
 		{
 		public:
@@ -31,7 +38,7 @@ namespace state
 				return GetEnchantments<EnchantmentType::tier>().Exists(std::forward<T>(id));
 			}
 
-			void ApplyAll(EnchantableStates & card)
+			void ApplyAll(state::Cards::EnchantableStates & card)
 			{
 				tier1_.ApplyAll(card);
 				tier2_.ApplyAll(card);

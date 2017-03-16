@@ -52,9 +52,6 @@
     <Filter Include="Header Files\state\Cards">
       <UniqueIdentifier>{24898c9b-f21f-4a56-8b5a-64a82c7ccedc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\state\Cards\Enchantments">
-      <UniqueIdentifier>{8a42423e-507d-475e-bb7d-a5bb720258e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\state\Events">
       <UniqueIdentifier>{2831a711-b309-46de-8d05-ecb3b283b194}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="Header Files\FlowControl\aura">
       <UniqueIdentifier>{0ca7bd15-8670-44bf-ba71-bce443933e0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FlowControl\enchantment">
+      <UniqueIdentifier>{369a570d-f9e1-4e45-8898-3b7f5b4b3496}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -317,20 +317,8 @@
     <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\EnchantmentAuxData.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\Cards\Manager.h">
       <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\Enchantments\Enchantments.h">
-      <Filter>Header Files\state\Cards\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\Enchantments\TieredEnchantments.h">
-      <Filter>Header Files\state\Cards\Enchantments</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\Enchantments\Tiers.h">
-      <Filter>Header Files\state\Cards\Enchantments</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h">
       <Filter>Header Files\state\Events\impl</Filter>
@@ -376,6 +364,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h">
       <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\TieredEnchantments.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

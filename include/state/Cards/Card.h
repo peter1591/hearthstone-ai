@@ -35,13 +35,13 @@ namespace state
 		class Card
 		{
 		public:
-			class MutableEnchantmentAuxDataGetter
+			class MutableEnchantmentHandlerGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::EnchantmentHelper;
 			public:
-				MutableEnchantmentAuxDataGetter(CardData & data) : data_(data) {}
+				MutableEnchantmentHandlerGetter(CardData & data) : data_(data) {}
 			private:
-				EnchantmentAuxData & Get() { return data_.enchantment_aux_data; }
+				auto& Get() { return data_.enchantment_handler; }
 			private:
 				CardData & data_;
 			};
@@ -134,11 +134,10 @@ namespace state
 
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
 
-			MutableEnchantmentAuxDataGetter GetMutableEnchantmentAuxDataGetter()
+			MutableEnchantmentHandlerGetter GetMutableEnchantmentHandlerGetter()
 			{
-				return MutableEnchantmentAuxDataGetter(data_);
+				return MutableEnchantmentHandlerGetter(data_);
 			}
-			EnchantmentAuxData GetEnchantmentAuxData() const { return data_.enchantment_aux_data; }
 
 			MutableAuraHandlerGetter GetMutableAuraHandlerGetter()
 			{

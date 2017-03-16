@@ -5,9 +5,9 @@
 #include <string>
 #include "Utils/FuncPtrArray.h"
 #include "state/Cards/EnchantableStates.h"
-#include "state/Cards/EnchantmentAuxData.h"
 #include "state/Cards/Contexts.h"
 #include "FlowControl/aura/Handler.h"
+#include "FlowControl/enchantment/Handler.h"
 
 namespace state
 {
@@ -46,9 +46,7 @@ namespace state
 			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:
-			EnchantmentAuxData enchantment_aux_data;
-
-		public:
+			FlowControl::enchantment::Handler enchantment_handler;
 			FlowControl::aura::Handler aura_handler;
 
 		public:  // battlecry
