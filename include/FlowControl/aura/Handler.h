@@ -22,19 +22,27 @@ namespace FlowControl
 				last_updated_change_id_second_player_minions_(-1)
 			{}
 
-			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
+		public:
+			void SetCallback_IsValid(FuncIsValid* callback) { is_valid = callback; }
+			void SetCallback_GetTargets(FuncGetTargets* callback) { get_targets = callback; }
+			void SetCallback_ApplyOn(FuncApplyOn* callback) { apply_on = callback; }
+			void SetCallback_RemoveFrom(FuncRemoveFrom* callback) { remove_from = callback; }
 
+		public:
+			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
-		public: // TODO: encapsulate
+		public: // field for client code
+			int last_updated_change_id_first_player_minions_;
+			int last_updated_change_id_second_player_minions_;
+
+		private:
 			FuncIsValid * is_valid;
 			FuncGetTargets * get_targets;
 			FuncApplyOn * apply_on;
 			FuncRemoveFrom * remove_from;
 
 			std::unordered_map<state::CardRef, enchantment::TieredEnchantments::ContainerType::Identifier> applied_enchantments;
-			int last_updated_change_id_first_player_minions_;
-			int last_updated_change_id_second_player_minions_;
 		};
 	}
 }

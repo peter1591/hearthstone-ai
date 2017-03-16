@@ -54,23 +54,23 @@ namespace Cards
 	public:
 		AuraHelper(state::Cards::CardData & card_data) : card_data_(card_data)
 		{
-			card_data_.aura_handler.is_valid = [](auto context) {
+			card_data_.aura_handler.SetCallback_IsValid([](auto context) {
 				if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
 				context.need_update_ = UpdatePolicy::NeedUpdate(context);
 				return true;
-			};
+			});
 
-			card_data_.aura_handler.get_targets = [](auto context) {
+			card_data_.aura_handler.SetCallback_GetTargets([](auto context) {
 				HandleClass::GetAuraTargets(context.targets_generator_, context);
 				UpdatePolicy::AfterUpdated(context);
-			};
+			});
 
-			card_data_.aura_handler.apply_on = [](auto context) {
+			card_data_.aura_handler.SetCallback_ApplyOn([](auto context) {
 				context.enchant_id_ = MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
-			};
-			card_data_.aura_handler.remove_from = [](auto context) {
+			});
+			card_data_.aura_handler.SetCallback_RemoveFrom([](auto context) {
 				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
-			};
+			});
 
 			EmitPolicy::RegisterAura(card_data_);
 		}
