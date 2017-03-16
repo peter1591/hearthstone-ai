@@ -14,7 +14,7 @@ namespace FlowControl
 		public:
 			typedef bool FuncIsValid(contexts::AuraIsValid context);
 			typedef state::targetor::Targets FuncGetTargets(contexts::AuraGetTargets context);
-			typedef void FuncApplyOn(contexts::AuraApplyOn context); // TODO: return enchantment id
+			typedef enchantment::Enchantments::ContainerType::Identifier FuncApplyOn(contexts::AuraApplyOn context);
 			typedef void FuncRemoveFrom(contexts::AuraRemoveFrom context);
 
 			Handler() :

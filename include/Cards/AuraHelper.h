@@ -66,7 +66,7 @@ namespace Cards
 			});
 
 			card_data_.aura_handler.SetCallback_ApplyOn([](auto context) {
-				context.enchant_id_ = MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
+				return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
 			});
 			card_data_.aura_handler.SetCallback_RemoveFrom([](auto context) {
 				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);

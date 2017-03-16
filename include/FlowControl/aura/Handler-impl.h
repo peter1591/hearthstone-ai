@@ -48,9 +48,9 @@ namespace FlowControl
 				// enchantments should be applied
 				assert(applied_enchantments.find(new_target) == applied_enchantments.end());
 
-				FlowControl::enchantment::Enchantments::ContainerType::Identifier enchant_id;
-				(*apply_on)({ state, flow_context, card_ref, card, new_target, enchant_id });
-				applied_enchantments.insert(std::make_pair(new_target, std::move(enchant_id)));
+				applied_enchantments.insert(std::make_pair(new_target, 
+					(*apply_on)({ state, flow_context, card_ref, card, new_target })
+					));
 			}
 
 			return aura_valid;

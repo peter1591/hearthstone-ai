@@ -1,13 +1,13 @@
 #pragma once
 
 #include "state/Types.h"
+#include "state/targetor/Targets.h"
 #include "FlowControl/enchantment/Enchantments.h"
 
 namespace state
 {
 	class State;
 	namespace Cards { class Card; }
-	namespace targetor { class TargetsGenerator; }
 }
 
 namespace FlowControl
@@ -45,7 +45,6 @@ namespace FlowControl
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				state::CardRef target_;
-				enchantment::Enchantments::ContainerType::Identifier & enchant_id_;
 			};
 
 			struct AuraRemoveFrom
