@@ -82,6 +82,9 @@
     <Filter Include="Header Files\FlowControl\deathrattle">
       <UniqueIdentifier>{f1f4e342-2cbc-4a9d-8446-ccbdb68f14a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\detail">
+      <UniqueIdentifier>{06d326ef-64ad-43fa-bca7-34ec258df322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -266,9 +269,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
@@ -394,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h">
       <Filter>Header Files\FlowControl\deathrattle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\detail\ActionParameterWrapper.h">
+      <Filter>Header Files\FlowControl\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

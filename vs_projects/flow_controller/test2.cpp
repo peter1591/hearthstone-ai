@@ -215,8 +215,7 @@ void test2()
 	Test2_ActionParameterGetter parameter_getter;
 	Test2_RandomGenerator random;
 	state::State state;
-	FlowControl::ActionParameterWrapper action_parameter(parameter_getter);
-	FlowControl::FlowContext flow_context(random, action_parameter);
+	FlowControl::FlowContext flow_context(random, parameter_getter);
 
 	FlowControl::FlowController controller(state, flow_context);
 

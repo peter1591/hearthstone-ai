@@ -5,10 +5,6 @@
 #include "state/State.h"
 
 namespace FlowControl {
-	inline FlowContext::FlowContext(state::IRandomGenerator & random, ActionParameterWrapper & action_parameters)
-		: random_(random), action_parameters_(action_parameters), result_(FlowControl::kResultNotDetermined)
-	{}
-
 	inline void FlowContext::AddDeadEntryHint(state::State & state, state::CardRef ref)
 	{
 		int play_order = state.GetCardsManager().Get(ref).GetPlayOrder();

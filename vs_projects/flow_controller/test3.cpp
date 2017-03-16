@@ -209,8 +209,7 @@ void test3()
 	Test3_ActionParameterGetter parameter_getter;
 	Test3_RandomGenerator random;
 	state::State state;
-	FlowControl::ActionParameterWrapper parameter_wrapper(parameter_getter);
-	FlowControl::FlowContext flow_context(random, parameter_wrapper);
+	FlowControl::FlowContext flow_context(random, parameter_getter);
 
 	FlowControl::FlowController controller(state, flow_context);
 

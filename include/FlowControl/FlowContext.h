@@ -4,12 +4,12 @@
 
 #include "state/IRandomGenerator.h"
 #include "state/Types.h"
+#include "FlowControl/detail/ActionParameterWrapper.h"
 
 namespace FlowControl {
 	namespace Helpers {
 		class Resolver;
 	}
-	class ActionParameterWrapper;
 
 	enum Result
 	{
@@ -25,14 +25,17 @@ namespace FlowControl {
 		friend class Helpers::Resolver;
 
 	public:
-		FlowContext(state::IRandomGenerator & random, ActionParameterWrapper & action_parameters);
+		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_getter)
+			: random_(random), action_parameters_(action_getter),
+			result_(FlowControl::kResultNotDetermined)
+		{}
 
 		void AddDeadEntryHint(state::State & state, state::CardRef ref);
 		bool Empty() const;
 
 	public:
 		state::IRandomGenerator & random_;
-		ActionParameterWrapper & action_parameters_;
+		detail::ActionParameterWrapper action_parameters_;
 		Result result_;
 
 		state::CardRef battlecry_target_;
