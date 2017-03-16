@@ -8,7 +8,7 @@
 
 namespace FlowControl
 {
-	namespace Helpers
+	namespace detail
 	{
 		class Resolver
 		{

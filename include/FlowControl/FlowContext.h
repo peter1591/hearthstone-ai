@@ -7,10 +7,6 @@
 #include "FlowControl/detail/ActionParameterWrapper.h"
 
 namespace FlowControl {
-	namespace Helpers {
-		class Resolver;
-	}
-
 	enum Result
 	{
 		kResultNotDetermined,

@@ -158,6 +158,7 @@
     <ClInclude Include="..\..\include\FlowControl\battlecry\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\ActionParameterWrapper.h" />
+    <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h" />
@@ -168,7 +169,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
-    <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />

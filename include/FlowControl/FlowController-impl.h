@@ -34,14 +34,14 @@ namespace FlowControl
 
 	inline Result FlowController::Resolve()
 	{
-		Helpers::Resolver(state_, flow_context_).Resolve();
+		detail::Resolver(state_, flow_context_).Resolve();
 		return flow_context_.GetResult();
 	}
 
 	inline void FlowController::PlayCardInternal(int hand_idx)
 	{
 		if (!PlayCardPhase(hand_idx)) return;
-		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 	}
 
 	inline bool FlowController::PlayCardPhase(int hand_idx)
@@ -107,7 +107,7 @@ namespace FlowControl
 	inline void FlowController::AttackInternal(state::CardRef attacker, state::CardRef defender)
 	{
 		if (!AttackPhase(attacker, defender)) return;
-		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 	}
 
 	inline bool FlowController::AttackPhase(state::CardRef attacker, state::CardRef defender)
@@ -203,17 +203,17 @@ namespace FlowControl
 
 		flow_context_.ResetActionParameter();
 		EndTurnPhase();
-		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 
 		state_.GetMutableCurrentPlayerId().ChangeSide();
 
 		flow_context_.ResetActionParameter();
 		StartTurnPhase();
-		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 
 		flow_context_.ResetActionParameter();
 		DrawCardPhase();
-		if (!Helpers::Resolver(state_, flow_context_).Resolve()) return;
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 	}
 
 	inline void FlowController::EndTurnPhase()

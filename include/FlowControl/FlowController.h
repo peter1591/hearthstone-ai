@@ -5,7 +5,6 @@
 
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/FlowContext-impl.h"
-#include "FlowControl/Helpers/Resolver.h"
 #include "FlowControl/Manipulate.h"
 
 #include "FlowControl/aura/Handler-impl.h"
@@ -19,6 +18,7 @@
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/HealHelper-impl.h"
 
+#include "FlowControl/detail/Resolver.h"
 #include "FlowControl/Dispatchers/Minions.h"
 #include "FlowControl/Dispatchers/Weapons.h"
 #include "Cards/Cards.h"

@@ -16,9 +16,6 @@
     <Filter Include="Header Files\FlowControl">
       <UniqueIdentifier>{b6efd889-f8b1-482c-97a2-9074d8c530a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\Helpers">
-      <UniqueIdentifier>{7acbed2a-45eb-441e-a973-91977117cc7c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl\Dispatchers">
       <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
     </Filter>
@@ -154,9 +151,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Helpers\Resolver.h">
-      <Filter>Header Files\FlowControl\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
@@ -396,6 +390,9 @@
       <Filter>Header Files\FlowControl\deathrattle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\detail\ActionParameterWrapper.h">
+      <Filter>Header Files\FlowControl\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h">
       <Filter>Header Files\FlowControl\detail</Filter>
     </ClInclude>
   </ItemGroup>

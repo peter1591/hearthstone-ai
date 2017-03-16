@@ -4,7 +4,7 @@
 
 namespace FlowControl
 {
-	namespace Helpers
+	namespace detail
 	{
 		class Resolver;
 	}
@@ -15,7 +15,7 @@ namespace FlowControl
 		{
 			class WeaponRefRemover
 			{
-				friend class FlowControl::Helpers::Resolver;
+				friend class FlowControl::detail::Resolver;
 
 			public:
 				WeaponRefRemover(state::State & state, state::Cards::Card & card) :state_(state), card_(card) {}
