@@ -6,14 +6,6 @@
 #include "Utils/CloneableContainers/RemovableVector.h"
 #include "state/Cards/EnchantableStates.h"
 
-namespace FlowControl
-{
-	namespace Context
-	{
-		struct EnchantmentAfterAdded;
-	}
-}
-
 namespace state
 {
 	class State;

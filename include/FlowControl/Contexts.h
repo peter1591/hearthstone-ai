@@ -50,13 +50,5 @@ namespace FlowControl
 			state::CardRef card_ref_;
 			const state::Cards::Card & card_;
 		};
-
-		struct EnchantmentAfterAdded
-		{
-			state::State & state_;
-			FlowContext & flow_context_;
-			state::CardRef card_ref_;
-			state::Cards::Enchantments::ContainerType::Identifier enchant_id_;
-		};
 	}
 }
