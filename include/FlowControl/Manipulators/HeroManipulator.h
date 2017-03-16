@@ -30,7 +30,7 @@ namespace FlowControl
 			// constraint access to resolver only
 			Helpers::WeaponRefRemover RemoveWeaponRef()
 			{
-				return Helpers::WeaponRefRemover(card_);
+				return Helpers::WeaponRefRemover(state_, card_);
 			}
 
 		private:
