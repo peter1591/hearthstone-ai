@@ -1,7 +1,7 @@
 #pragma once
 
-#include "state/Cards/aura/AuraHandler.h"
 #include "state/targetor/TargetsGenerator.h"
+#include "FlowControl/aura/Handler.h"
 #include "Cards/MinionCardUtils.h"
 
 namespace Cards
@@ -29,18 +29,22 @@ namespace Cards
 
 	// update policy
 	struct UpdateAlways {
-		static bool NeedUpdate(state::Cards::aura::contexts::AuraIsValid context) { return true; }
-		static void AfterUpdated(state::Cards::aura::contexts::AuraGetTargets context) {}
+		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) { return true; }
+		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {}
 	};
 	struct UpdateWhenMinionChanged {
-		static bool NeedUpdate(state::Cards::aura::contexts::AuraIsValid context) {
-			if (context.state_.GetBoard().GetFirst().minions_.GetChangeId() != context.aura_data_.last_updated_change_id_first_player_minions_) return true;
-			if (context.state_.GetBoard().GetSecond().minions_.GetChangeId() != context.aura_data_.last_updated_change_id_second_player_minions_) return true;
+		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) {
+			if (context.state_.GetBoard().GetFirst().minions_.GetChangeId() !=
+				context.aura_handler_.last_updated_change_id_first_player_minions_) return true;
+			if (context.state_.GetBoard().GetSecond().minions_.GetChangeId() !=
+				context.aura_handler_.last_updated_change_id_second_player_minions_) return true;
 			return false;
 		}
-		static void AfterUpdated(state::Cards::aura::contexts::AuraGetTargets context) {
-			context.aura_data_.last_updated_change_id_first_player_minions_ = context.state_.GetBoard().GetFirst().minions_.GetChangeId();
-			context.aura_data_.last_updated_change_id_second_player_minions_ = context.state_.GetBoard().GetSecond().minions_.GetChangeId();
+		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {
+			context.aura_handler_.last_updated_change_id_first_player_minions_ =
+				context.state_.GetBoard().GetFirst().minions_.GetChangeId();
+			context.aura_handler_.last_updated_change_id_second_player_minions_ =
+				context.state_.GetBoard().GetSecond().minions_.GetChangeId();
 		}
 	};
 

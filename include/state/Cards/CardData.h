@@ -6,9 +6,8 @@
 #include "Utils/FuncPtrArray.h"
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/EnchantmentAuxData.h"
-#include "state/Cards/aura/AuraAuxData.h"
-#include "state/Cards/aura/AuraHandler.h"
 #include "state/Cards/Contexts.h"
+#include "FlowControl/aura/Handler.h"
 
 namespace state
 {
@@ -50,8 +49,7 @@ namespace state
 			EnchantmentAuxData enchantment_aux_data;
 
 		public:
-			aura::AuraHandler aura_handler;
-			aura::AuraAuxData aura_aux_data;
+			FlowControl::aura::Handler aura_handler;
 
 		public:  // battlecry
 			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter); // true -> OK; false -> invalid to play

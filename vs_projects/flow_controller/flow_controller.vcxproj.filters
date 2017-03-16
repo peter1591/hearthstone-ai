@@ -64,9 +64,6 @@
     <Filter Include="Header Files\state\board">
       <UniqueIdentifier>{09f30fa1-0430-4ea4-a58a-be10b03688d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\state\Cards\aura">
-      <UniqueIdentifier>{bd534890-6dde-4331-a6b3-394e8aff6166}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\state\targetor">
       <UniqueIdentifier>{2b9f1389-0ea1-4c53-8b13-2c3f02283d9e}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="Header Files\state\aura">
       <UniqueIdentifier>{0967eb60-8870-4534-8e60-044da60c624e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FlowControl\aura">
+      <UniqueIdentifier>{0ca7bd15-8670-44bf-ba71-bce443933e0c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,9 +132,6 @@
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper-impl.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
@@ -233,17 +230,8 @@
     <ClInclude Include="..\..\include\state\IRandomGenerator.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\aura\AuraAuxData.h">
-      <Filter>Header Files\state\Cards\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\aura\AuraHandler.h">
-      <Filter>Header Files\state\Cards\aura</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h">
       <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\aura\Contexts.h">
-      <Filter>Header Files\state\Cards\aura</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\targetor\Targets.h">
       <Filter>Header Files\state\targetor</Filter>
@@ -379,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Contexts.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

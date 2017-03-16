@@ -122,7 +122,7 @@ namespace FlowControl
 					bool aura_valid = FlowControl::Manipulate(state_, flow_context_).Card(card_ref).Aura().Update();
 					if (aura_valid) return true;
 
-					assert(state_.GetCardsManager().Get(card_ref).GetRawData().aura_aux_data.Empty());
+					assert(state_.GetCardsManager().Get(card_ref).GetRawData().aura_handler.NoAppliedEnchantment());
 					return false;
 				});
 			}

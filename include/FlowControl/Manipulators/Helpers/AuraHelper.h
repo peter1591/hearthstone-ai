@@ -1,6 +1,5 @@
 #pragma once
 
-#include "state/Cards/aura/AuraAuxData.h"
 #include "FlowControl/Dispatchers/Minions.h"
 
 namespace FlowControl
@@ -18,7 +17,9 @@ namespace FlowControl
 				}
 
 				// return a boolean flag indicates if the aura is still valid
-				bool Update();
+				bool Update() {
+					return card_.GetMutableAuraHandlerGetter().Get().Update(state_, flow_context_, card_ref_, card_);
+				}
 
 			private:
 				state::State & state_;

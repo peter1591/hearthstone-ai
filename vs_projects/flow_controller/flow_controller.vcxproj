@@ -150,6 +150,9 @@
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\ActionParameterWrapper.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
@@ -168,7 +171,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h" />
@@ -192,9 +194,6 @@
     <ClInclude Include="..\..\include\state\board\Player.h" />
     <ClInclude Include="..\..\include\state\board\PlayerResource.h" />
     <ClInclude Include="..\..\include\state\board\Secrets.h" />
-    <ClInclude Include="..\..\include\state\Cards\aura\AuraAuxData.h" />
-    <ClInclude Include="..\..\include\state\Cards\aura\AuraHandler.h" />
-    <ClInclude Include="..\..\include\state\Cards\aura\Contexts.h" />
     <ClInclude Include="..\..\include\state\Cards\Card.h" />
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
     <ClInclude Include="..\..\include\state\Cards\Contexts.h" />

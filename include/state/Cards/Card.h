@@ -46,13 +46,13 @@ namespace state
 				CardData & data_;
 			};
 
-			class MutableAuraAuxDataGetter
+			class MutableAuraHandlerGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::AuraHelper;
 			public:
-				MutableAuraAuxDataGetter(CardData & data) : data_(data) {}
+				MutableAuraHandlerGetter(CardData & data) : data_(data) {}
 			private:
-				aura::AuraAuxData & Get() { return data_.aura_aux_data; }
+				auto& Get() { return data_.aura_handler; }
 			private:
 				CardData & data_;
 			};
@@ -140,9 +140,9 @@ namespace state
 			}
 			EnchantmentAuxData GetEnchantmentAuxData() const { return data_.enchantment_aux_data; }
 
-			MutableAuraAuxDataGetter GetMutableAuraAuxDataGetter()
+			MutableAuraHandlerGetter GetMutableAuraHandlerGetter()
 			{
-				return MutableAuraAuxDataGetter(data_);
+				return MutableAuraHandlerGetter(data_);
 			}
 
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
