@@ -59,17 +59,11 @@ namespace Utils
 				return ret;
 			}
 
-			template <typename T>
-			const ItemType & Get(T&& identifier) const {
-				static_assert(std::is_same<std::decay<T>::type, Identifier>::value, "Wrong type");
-
+			const ItemType & Get(Identifier identifier) const {
 				return items_[identifier.idx];
 			}
 
-			template <typename T>
-			ItemType & Get(T&& identifier) {
-				static_assert(std::is_same<std::decay<T>::type, Identifier>::value, "Wrong type");
-
+			ItemType & Get(Identifier identifier) {
 				return items_[identifier.idx];
 			}
 

@@ -30,25 +30,22 @@ namespace Utils
 				return container_.PushBack(CopyableItemType(std::forward<T>(item)));
 			}
 
-			template <typename T>
-			const PtrItemType Get(T&& identifier) const
+			const PtrItemType Get(Identifier identifier) const
 			{
-				auto ret = container_.Get(std::forward<T>(identifier));
+				auto ret = container_.Get(identifier);
 				if (!ret) return nullptr;
 				return ret->Get().get();
 			}
 
-			template <typename T>
-			PtrItemType Get(T&& identifier)
+			PtrItemType Get(Identifier identifier)
 			{
-				auto ret = container_.Get(std::forward<T>(identifier));
+				auto ret = container_.Get(identifier);
 				if (!ret) return nullptr;
 				return ret->Get().get();
 			}
 
-			template <typename T>
-			void Remove(T&& identifier) {
-				container_.Remove(std::forward<T>(identifier));
+			void Remove(Identifier identifier) {
+				container_.Remove(identifier);
 			}
 
 		public: // iterate

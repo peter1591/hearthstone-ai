@@ -83,28 +83,19 @@ namespace Utils
 				return items_.PushBack(InternalItemType(std::forward<T>(item), items_.GetNextNextPushBackItemIdentifier()));
 			}
 
-			template <typename T>
-			const ItemType * Get(T&& identifier) const {
-				static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
-
+			const ItemType * Get(Identifier identifier) const {
 				auto & item = items_.Get(identifier.identifier_);
 				if (item.removed) return nullptr;
 				else return &item.item;
 			}
 
-			template <typename T>
-			ItemType * Get(T&& identifier) { // TODO: do not pass id by reference
-				static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
-
+			ItemType * Get(Identifier identifier) {
 				auto & item = items_.Get(identifier.identifier_);
 				if (item.removed) return nullptr;
 				else return &item.item;
 			}
 
-			template <typename T>
-			void Remove(T&& identifier) {
-				static_assert(std::is_same<std::decay_t<T>, Identifier>::value, "Wrong type");
-
+			void Remove(Identifier identifier) {
 				items_.Get(identifier.identifier_).removed = true;
 			}
 
