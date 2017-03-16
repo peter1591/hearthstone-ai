@@ -17,15 +17,6 @@ namespace state
 		class CardData
 		{
 		public:
-			typedef void AddedToPlayZoneCallback(ZoneChangedContext);
-			typedef void AddedToDeckZoneCallback(ZoneChangedContext);
-
-			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter); // true -> OK; false -> invalid to play
-			typedef void BattlecryCallback(FlowControl::Context::BattleCry);
-
-			typedef void (*DeathrattleCallback)(FlowControl::Context::Deathrattle);
-			typedef std::vector<DeathrattleCallback> Deathrattles;
-
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
@@ -46,22 +37,32 @@ namespace state
 			int damaged;
 			bool just_played;
 			int num_attacks_this_turn;
+			EnchantableStates enchanted_states;
 
-		public: // callbacks managed by state::State 
+		public: // zone-changed callbacks invoked by state::State 
+			typedef void AddedToPlayZoneCallback(ZoneChangedContext);
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
+
+			typedef void AddedToDeckZoneCallback(ZoneChangedContext);
 			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:
-			EnchantableStates enchantable_states;
 			EnchantmentAuxData enchantment_aux_data;
 
 		public:
 			aura::AuraHandler aura_handler;
 			aura::AuraAuxData aura_aux_data;
 
-		public:
+		public:  // battlecry
+			typedef bool BattlecryTargetGetter(FlowControl::Context::BattlecryTargetGetter); // true -> OK; false -> invalid to play
 			BattlecryTargetGetter *battlecry_target_getter;
+
+			typedef void BattlecryCallback(FlowControl::Context::BattleCry);
 			BattlecryCallback *battlecry;
+
+		public:
+			typedef void DeathrattleCallback(FlowControl::Context::Deathrattle);
+			typedef std::vector<DeathrattleCallback*> Deathrattles;
 			Deathrattles deathrattles;
 
 		public: // for hero type

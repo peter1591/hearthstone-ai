@@ -15,7 +15,7 @@ namespace FlowControl
 			{
 				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
 
-				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
+				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchanted_states;
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
 
 				auto card_manipulator = Manipulate(state_, flow_context_).Character(card_ref_);
@@ -39,7 +39,7 @@ namespace FlowControl
 				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
 
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
-				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
+				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchanted_states;
 
 				state::Cards::EnchantableStates new_states = data.origin_states;
 				data.enchantments.ApplyAll(new_states);
@@ -65,20 +65,20 @@ namespace FlowControl
 
 				if (new_states.taunt != current_states.taunt) {
 					manipulator.Taunt(new_states.taunt);
-					assert(card_.GetRawData().enchantable_states.taunt == new_states.taunt);
+					assert(card_.GetRawData().enchanted_states.taunt == new_states.taunt);
 				}
 
 				if (new_states.shielded != current_states.shielded) {
 					manipulator.Shield(new_states.shielded);
-					assert(card_.GetRawData().enchantable_states.shielded == new_states.shielded);
+					assert(card_.GetRawData().enchanted_states.shielded == new_states.shielded);
 				}
 
 				if (new_states.charge != current_states.charge) {
 					manipulator.Charge(new_states.charge);
-					assert(card_.GetRawData().enchantable_states.charge == new_states.charge);
+					assert(card_.GetRawData().enchanted_states.charge == new_states.charge);
 				}
 
-				assert(card_.GetRawData().enchantable_states == new_states);
+				assert(card_.GetRawData().enchanted_states == new_states);
 			}
 
 			inline void EnchantmentHelper::UpdateHero()
@@ -86,14 +86,14 @@ namespace FlowControl
 				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
 
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
-				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
+				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchanted_states;
 
 				state::Cards::EnchantableStates new_states = data.origin_states;
 				data.enchantments.ApplyAll(new_states);
 
 				UpdateCharacter(new_states);
 
-				assert(card_.GetRawData().enchantable_states == new_states);
+				assert(card_.GetRawData().enchanted_states == new_states);
 			}
 
 			inline void EnchantmentHelper::UpdateWeapon()
@@ -101,7 +101,7 @@ namespace FlowControl
 				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 5, "enchantable fields changed");
 
 				state::Cards::EnchantmentAuxData & data = card_.GetMutableEnchantmentAuxDataGetter().Get();
-				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchantable_states;
+				state::Cards::EnchantableStates const& current_states = card_.GetRawData().enchanted_states;
 
 				state::Cards::EnchantableStates new_states = data.origin_states;
 				data.enchantments.ApplyAll(new_states);
@@ -121,7 +121,7 @@ namespace FlowControl
 					assert(card_.GetSpellDamage() == new_states.spell_damage);
 				}
 
-				assert(card_.GetRawData().enchantable_states == new_states);
+				assert(card_.GetRawData().enchanted_states == new_states);
 			}
 
 			inline void EnchantmentHelper::ChangeMinionPlayer(state::PlayerIdentifier player)

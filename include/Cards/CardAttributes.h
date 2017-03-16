@@ -8,22 +8,22 @@ namespace Cards {
 	};
 	struct Taunt {
 		static void Apply(state::Cards::CardData & card_data) {
-			card_data.enchantable_states.taunt = true;
+			card_data.enchanted_states.taunt = true;
 		}
 	};
 	struct Shield {
 		static void Apply(state::Cards::CardData & card_data) {
-			card_data.enchantable_states.shielded = true;
+			card_data.enchanted_states.shielded = true;
 		}
 	};
 	struct Charge {
 		static void Apply(state::Cards::CardData & card_data) {
-			card_data.enchantable_states.charge = true;
+			card_data.enchanted_states.charge = true;
 		}
 	};
 	template <int v> struct SpellDamage {
 		static void Apply(state::Cards::CardData & card_data) {
-			card_data.enchantable_states.spell_damage = v;
+			card_data.enchanted_states.spell_damage = v;
 		}
 	};
 }

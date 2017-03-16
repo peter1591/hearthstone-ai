@@ -63,7 +63,7 @@ namespace state
 				ZoneSetter(CardData & data) : data_(data) {}
 			private:
 				void operator()(PlayerIdentifier player, CardZone new_zone) {
-					data_.enchantable_states.player = player;
+					data_.enchanted_states.player = player;
 					data_.zone = new_zone;
 				}
 			private:
@@ -104,30 +104,30 @@ namespace state
 			CardRace GetRace() const { return data_.card_race; }
 			int GetPlayOrder() const { return data_.play_order; }
 
-			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchantable_states.player; }
+			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchanted_states.player; }
 			const CardZone GetZone() const { return data_.zone; }
 			int GetZonePosition() const { return data_.zone_position; }
 
-			int GetCost() const { return data_.enchantable_states.cost; }
-			void SetCost(int new_cost) { data_.enchantable_states.cost = new_cost; }
+			int GetCost() const { return data_.enchanted_states.cost; }
+			void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
 			int GetDamage() const { return data_.damaged; }
 			DamageSetter GetDamageSetter() { return DamageSetter(data_); }
 
-			int GetHP() const { return data_.enchantable_states.max_hp - data_.damaged; }
+			int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
 
-			int GetAttack() const { return data_.enchantable_states.attack; }
-			void SetAttack(int new_attack) { data_.enchantable_states.attack = new_attack; }
+			int GetAttack() const { return data_.enchanted_states.attack; }
+			void SetAttack(int new_attack) { data_.enchanted_states.attack = new_attack; }
 
-			int GetMaxHP() const { return data_.enchantable_states.max_hp; }
-			void SetMaxHP(int max_hp) { data_.enchantable_states.max_hp = max_hp; }
+			int GetMaxHP() const { return data_.enchanted_states.max_hp; }
+			void SetMaxHP(int max_hp) { data_.enchanted_states.max_hp = max_hp; }
 
-			void SetTaunt(bool v) { data_.enchantable_states.taunt = v; }
-			void SetShield(bool v) { data_.enchantable_states.shielded = v; }
-			void SetCharge(bool v) { data_.enchantable_states.charge = v; }
+			void SetTaunt(bool v) { data_.enchanted_states.taunt = v; }
+			void SetShield(bool v) { data_.enchanted_states.shielded = v; }
+			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
 
-			int GetSpellDamage() const { return data_.enchantable_states.spell_damage; }
-			void SetSpellDamage(int v) { data_.enchantable_states.spell_damage = v; }
+			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
+			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
 
 			void IncreaseNumAttacksThisTurn() { ++data_.num_attacks_this_turn; }
 			void ClearNumAttacksThisTurn() { data_.num_attacks_this_turn = 0; }

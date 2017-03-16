@@ -21,9 +21,9 @@ namespace Cards
 			this->card_race = data.card_race;
 			this->card_rarity = data.card_rarity;
 
-			this->enchantable_states.cost = data.cost;
-			this->enchantable_states.attack = data.attack;
-			this->enchantable_states.max_hp = data.max_hp;
+			this->enchanted_states.cost = data.cost;
+			this->enchanted_states.attack = data.attack;
+			this->enchanted_states.max_hp = data.max_hp;
 		}
 
 		template <typename... Types>
