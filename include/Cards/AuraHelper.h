@@ -6,7 +6,7 @@
 
 namespace Cards
 {
-	struct EmitWhenAlive {
+	struct EmitWhenAlive { // TODO: change name to LifeTimePolicy --> AliveWhenInPlay
 		static void RegisterAura(state::Cards::CardData &card_data) {
 			card_data.added_to_play_zone += [](auto context) {
 				context.state_.GetAuraManager().Add(context.card_ref_);
@@ -52,30 +52,61 @@ namespace Cards
 	class AuraHelper
 	{
 	public:
-		AuraHelper(state::Cards::CardData & card_data) : card_data_(card_data)
+		AuraHelper(state::Cards::CardData & card_data)
 		{
-			card_data_.aura_handler.SetCallback_IsValid([](auto context) {
+			assert(!card_data.aura_handler.IsCallbackSet_IsValid());
+			card_data.aura_handler.SetCallback_IsValid([](auto context) {
 				if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
 				context.need_update_ = UpdatePolicy::NeedUpdate(context);
 				return true;
 			});
 
-			card_data_.aura_handler.SetCallback_GetTargets([](auto context) {
+			assert(!card_data.aura_handler.IsCallbackSet_GetTargets());
+			card_data.aura_handler.SetCallback_GetTargets([](auto context) {
 				UpdatePolicy::AfterUpdated(context);
 				return HandleClass::GetAuraTargets(context).GetInfo();
 			});
 
-			card_data_.aura_handler.SetCallback_ApplyOn([](auto context) {
+			assert(!card_data.aura_handler.IsCallbackSet_ApplyOn());
+			card_data.aura_handler.SetCallback_ApplyOn([](auto context) {
 				return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
 			});
-			card_data_.aura_handler.SetCallback_RemoveFrom([](auto context) {
+			assert(!card_data.aura_handler.IsCallbackSet_RemoveFrom());
+			card_data.aura_handler.SetCallback_RemoveFrom([](auto context) {
 				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
 			});
 
-			EmitPolicy::RegisterAura(card_data_);
+			EmitPolicy::RegisterAura(card_data);
 		}
-
-	private:
-		state::Cards::CardData & card_data_;
 	};
+
+
+	// For enrage
+	template <typename HandleClass>
+	struct EnrageWrappedHandleClass {
+		template <typename Context>
+		static auto GetAuraTargets(Context&& context) {
+			if (context.card_.GetDamage() == 0) {
+				return state::targetor::TargetsGenerator::NoTarget(); // not enraged, apply to no one
+			}
+			else {
+				return HandleClass::GetEnrageTargets(std::forward<Context>(context));
+			}
+		}
+	};
+	struct UpdateWhenEnrageChanged {
+		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) {
+			if (context.aura_handler_.first_time_update_) return true;
+			bool now_undamaged = (context.card_.GetDamage() == 0);
+			return (context.aura_handler_.last_updated_undamaged_ != now_undamaged);
+		}
+		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {
+			context.aura_handler_.first_time_update_ = false;
+			bool now_undamaged = (context.card_.GetDamage() == 0);
+			context.aura_handler_.last_updated_undamaged_ = now_undamaged;
+		}
+	};
+
+	template <typename HandleClass, typename EnchantmentType>
+	using EnrageHelper = AuraHelper<EnrageWrappedHandleClass<HandleClass>, EnchantmentType, EmitWhenAlive, UpdateWhenEnrageChanged>;
 }

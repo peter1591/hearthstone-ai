@@ -19,8 +19,10 @@ namespace FlowControl
 
 			Handler() :
 				is_valid(nullptr), get_targets(nullptr), apply_on(nullptr), remove_from(nullptr),
+				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
-				last_updated_change_id_second_player_minions_(-1)
+				last_updated_change_id_second_player_minions_(-1),
+				last_updated_undamaged_(true)
 			{}
 
 		public:
@@ -28,6 +30,11 @@ namespace FlowControl
 			void SetCallback_GetTargets(FuncGetTargets* callback) { get_targets = callback; }
 			void SetCallback_ApplyOn(FuncApplyOn* callback) { apply_on = callback; }
 			void SetCallback_RemoveFrom(FuncRemoveFrom* callback) { remove_from = callback; }
+
+			bool IsCallbackSet_IsValid() const { return is_valid != nullptr; }
+			bool IsCallbackSet_GetTargets() const { return get_targets != nullptr; }
+			bool IsCallbackSet_ApplyOn() const { return apply_on != nullptr; }
+			bool IsCallbackSet_RemoveFrom() const { return remove_from != nullptr; }
 
 		public:
 			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
@@ -39,8 +46,10 @@ namespace FlowControl
 				bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets);
 
 		public: // field for client code
+			bool first_time_update_;
 			int last_updated_change_id_first_player_minions_;
 			int last_updated_change_id_second_player_minions_;
+			bool last_updated_undamaged_;
 
 		private:
 			FuncIsValid * is_valid;
