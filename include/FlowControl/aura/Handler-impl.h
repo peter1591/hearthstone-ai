@@ -63,8 +63,7 @@ namespace FlowControl
 
 			*aura_valid = (*is_valid)({ state, flow_context, card_ref, card, *this, *need_update });
 			if (*aura_valid && *need_update) {
-				(*get_targets)({ state, flow_context, card_ref, card, *this })
-					.Fill(state, *new_targets);
+				(*get_targets)({ state, flow_context, card_ref, card, *this, *new_targets });
 			}
 		}
 	}

@@ -58,7 +58,7 @@ namespace Cards
 	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
 		template <typename Context>
 		static auto GetEnrageTargets(Context&& context) {
-			return TargetsGenerator().Only(context.card_ref_);
+			context.new_targets.insert(context.card_ref_);
 		}
 		Card_EX1_390() {
 			Enrage<Card_EX1_390_Enchant>();

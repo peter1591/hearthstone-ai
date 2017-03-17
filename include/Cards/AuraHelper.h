@@ -64,7 +64,7 @@ namespace Cards
 			assert(!card_data.aura_handler.IsCallbackSet_GetTargets());
 			card_data.aura_handler.SetCallback_GetTargets([](auto context) {
 				UpdatePolicy::AfterUpdated(context);
-				return HandleClass::GetAuraTargets(context).GetInfo();
+				HandleClass::GetAuraTargets(context);
 			});
 
 			assert(!card_data.aura_handler.IsCallbackSet_ApplyOn());
@@ -87,10 +87,10 @@ namespace Cards
 		template <typename Context>
 		static auto GetAuraTargets(Context&& context) {
 			if (context.card_.GetDamage() == 0) {
-				return state::targetor::TargetsGenerator::NoTarget(); // not enraged, apply to no one
+				return; // not enraged, apply to no one
 			}
 			else {
-				return HandleClass::GetEnrageTargets(std::forward<Context>(context));
+				HandleClass::GetEnrageTargets(std::forward<Context>(context));
 			}
 		}
 	};
