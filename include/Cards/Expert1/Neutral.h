@@ -1,5 +1,7 @@
 #pragma once
 
+// http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
+
 namespace Cards
 {
 	struct Card_CS2_231 : public MinionCardBase<Card_CS2_231> {};
@@ -49,8 +51,22 @@ namespace Cards
 			return Manipulate(context).Minion(context.GetTarget()).Silence();
 		}
 	};
+
+	struct Card_EX1_390_Enchant : public Enchantment<Attack<3>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
+		template <typename Context>
+		static auto GetEnrageTargets(Context&& context) {
+			return TargetsGenerator().Only(context.card_ref_);
+		}
+		Card_EX1_390() {
+			Enrage<Card_EX1_390_Enchant>();
+		}
+	};
 }
 
+REGISTER_MINION_CARD(EX1_390)
 REGISTER_MINION_CARD(CS2_188)
 REGISTER_MINION_CARD(CS2_231)
 REGISTER_MINION_CARD(CS2_203)
