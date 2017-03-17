@@ -18,6 +18,21 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_009_Enchant : public Enchantment<Attack<5>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_009 : public MinionCardBase<Card_EX1_009, Taunt> {
+		template <typename Context>
+		static auto GetEnrageTargets(Context&& context) {
+			context.new_targets.insert(context.card_ref_);
+		}
+		Card_EX1_009() {
+			Enrage<Card_EX1_009_Enchant>();
+		}
+	};
+
+	struct Card_EX1_008 : public MinionCardBase<Card_EX1_008, Shield> {};
+
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::Battlecry context) {
 			AnotherPlayer(context).GainEmptyCrystal();
@@ -66,6 +81,8 @@ namespace Cards
 	};
 }
 
+REGISTER_MINION_CARD(EX1_008)
+REGISTER_MINION_CARD(EX1_009)
 REGISTER_MINION_CARD(EX1_390)
 REGISTER_MINION_CARD(CS2_188)
 REGISTER_MINION_CARD(CS2_231)
