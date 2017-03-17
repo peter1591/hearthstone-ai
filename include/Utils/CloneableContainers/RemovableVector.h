@@ -84,12 +84,14 @@ namespace Utils
 			}
 
 			const ItemType * Get(Identifier identifier) const {
+				if (identifier.identifier_ < first_possible_exist_id_) return nullptr;
 				auto & item = items_.Get(identifier.identifier_);
 				if (item.removed) return nullptr;
 				else return &item.item;
 			}
 
 			ItemType * Get(Identifier identifier) {
+				if (identifier.identifier_ < first_possible_exist_id_) return nullptr;
 				auto & item = items_.Get(identifier.identifier_);
 				if (item.removed) return nullptr;
 				else return &item.item;
@@ -100,6 +102,7 @@ namespace Utils
 			}
 
 			void Clear() {
+				// Note: the 'removed' flag might not be set
 				first_possible_exist_id_ = items_.GetEnd();
 			}
 
