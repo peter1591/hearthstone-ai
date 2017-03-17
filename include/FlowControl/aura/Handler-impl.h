@@ -20,14 +20,10 @@ namespace FlowControl
 			assert(remove_from);
 
 			std::unordered_set<state::CardRef> new_targets;
-
 			bool need_update = true;
-			bool aura_valid = (*is_valid)({ state, flow_context, card_ref, card, *this, need_update });
-			if (aura_valid) {
-				if (!need_update) aura_valid;
-				(*get_targets)({ state, flow_context, card_ref, card, *this})
-					.Fill(state, new_targets);
-			}
+			bool aura_valid = true;
+			GetNewTargets(state, flow_context, card_ref, card, &aura_valid, &need_update, &new_targets);
+			if (aura_valid && !need_update) return true;
 
 			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)
 			{
@@ -54,6 +50,22 @@ namespace FlowControl
 			}
 
 			return aura_valid;
+		}
+
+		inline void Handler::GetNewTargets(
+			state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
+			bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets)
+		{
+			if (card.GetRawData().silenced) {
+				*aura_valid = false;
+				return;
+			}
+
+			*aura_valid = (*is_valid)({ state, flow_context, card_ref, card, *this, *need_update });
+			if (*aura_valid && *need_update) {
+				(*get_targets)({ state, flow_context, card_ref, card, *this })
+					.Fill(state, *new_targets);
+			}
 		}
 	}
 }

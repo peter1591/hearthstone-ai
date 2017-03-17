@@ -7,5 +7,14 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
+		inline void MinionManipulator::Silence()
+		{
+			// No need to clear emitting aura. In next AuraUpdate(), the silenced flag is checked.
+
+			// Remove all enchantments, including the aura enchantments coming from other minions.
+			// Those aura enchantments will be added back in the next AuraUpdate()
+			card_.GetMutableEnchantmentHandler().Clear();
+			card_.SetSilenced();
+		}
 	}
 }

@@ -21,7 +21,8 @@ namespace state
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
-				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0)
+				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
+				silenced(false)
 			{
 			}
 
@@ -41,6 +42,9 @@ namespace state
 
 		public: // for hero type
 			CardRef weapon_ref;
+
+		public: // for minions
+			bool silenced;
 
 		public: // zone-changed callbacks invoked by state::State 
 			typedef void AddedToPlayZoneCallback(ZoneChangedContext);

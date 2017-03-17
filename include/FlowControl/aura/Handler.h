@@ -33,6 +33,11 @@ namespace FlowControl
 			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
+		private:
+			void GetNewTargets(
+				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
+				bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets);
+
 		public: // field for client code
 			int last_updated_change_id_first_player_minions_;
 			int last_updated_change_id_second_player_minions_;

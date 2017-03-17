@@ -26,6 +26,8 @@ namespace FlowControl
 				card_.SetJustPlayedFlag(false);
 				card_.ClearNumAttacksThisTurn();
 			}
+
+			void Silence();
 		};
 	}
 }
