@@ -20,12 +20,12 @@ namespace FlowControl
 				}
 
 				DeathrattlesHelper & TriggerAll() {
-					card_.GetMutableDeathrattleHandlerGetter().Get().TriggerAll(state_, flow_context_, card_ref_, card_);
+					card_.GetMutableDeathrattleHandler().TriggerAll(state_, flow_context_, card_ref_, card_);
 					return *this;
 				}
 
 				DeathrattlesHelper & Clear() {
-					card_.GetMutableDeathrattleHandlerGetter().Get().Clear();
+					card_.GetMutableDeathrattleHandler().Clear();
 					return *this;
 				}
 

@@ -111,6 +111,11 @@ namespace Cards
 		}
 
 		template <typename Context>
+		static FlowControl::Manipulators::MinionManipulator Minion(Context&& context) {
+			return FlowControl::Manipulate(context.state_, context.flow_context_).Minion(context.card_ref_);
+		}
+
+		template <typename Context>
 		static FlowControl::Manipulators::Helpers::DeathrattlesHelper Deathrattles(Context&& context)
 		{
 			return Manipulate(context).Minion(context.card_ref_).Deathrattles();

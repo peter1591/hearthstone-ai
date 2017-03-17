@@ -47,17 +47,6 @@ namespace state
 				CardData & data_;
 			};
 
-			class MutableDeathrattleHandlerGetter
-			{
-				friend class FlowControl::Manipulators::Helpers::DeathrattlesHelper;
-			public:
-				MutableDeathrattleHandlerGetter(CardData & data) : data_(data) {}
-			private:
-				auto& Get() { return data_.deathrattle_handler; }
-			private:
-				CardData & data_;
-			};
-
 			class ZoneSetter {
 				template <CardZone, CardType> friend class ZoneChanger;
 			public:
@@ -136,15 +125,11 @@ namespace state
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
 
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }
+			auto& GetMutableDeathrattleHandler() { return data_.deathrattle_handler; }
 
 			MutableAuraHandlerGetter GetMutableAuraHandlerGetter()
 			{
 				return MutableAuraHandlerGetter(data_);
-			}
-
-			MutableDeathrattleHandlerGetter GetMutableDeathrattleHandlerGetter()
-			{
-				return MutableDeathrattleHandlerGetter(data_);
 			}
 
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
