@@ -36,17 +36,6 @@ namespace state
 		class Card
 		{
 		public:
-			class MutableEnchantmentHandlerGetter
-			{
-				friend class FlowControl::Manipulators::Helpers::EnchantmentHelper;
-			public:
-				MutableEnchantmentHandlerGetter(CardData & data) : data_(data) {}
-			private:
-				auto& Get() { return data_.enchantment_handler; }
-			private:
-				CardData & data_;
-			};
-
 			class MutableAuraHandlerGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::AuraHelper;
@@ -146,10 +135,7 @@ namespace state
 
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
 
-			MutableEnchantmentHandlerGetter GetMutableEnchantmentHandlerGetter()
-			{
-				return MutableEnchantmentHandlerGetter(data_);
-			}
+			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }
 
 			MutableAuraHandlerGetter GetMutableAuraHandlerGetter()
 			{
@@ -166,6 +152,8 @@ namespace state
 
 			void SetWeapon(CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
 			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
+
+			void SetSilenced() { data_.silenced = true; }
 
 		public:
 			const CardData & GetRawData() const { return data_; }
