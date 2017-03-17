@@ -31,6 +31,7 @@ namespace FlowControl
 			}
 
 			void Clear() {
+				need_update = true;
 				enchantments.Clear();
 			}
 
