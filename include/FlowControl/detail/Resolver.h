@@ -20,16 +20,17 @@ namespace FlowControl
 
 			bool Resolve()
 			{
+				CreateDeaths();
+
 				UpdateAura();
 				UpdateEnchantments();
 
 				bool any_death = false;
-				while (true) {
-					CreateDeaths();
-					if (deaths_.empty()) break;
-
+				while (!deaths_.empty()) {
 					any_death = true;
+
 					if (!RemoveDeaths()) return false;
+					CreateDeaths();
 				}
 
 				if (any_death) {
