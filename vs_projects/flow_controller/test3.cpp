@@ -536,7 +536,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 4, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 7 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {2, 1, 1}, { 3, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 0, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 }

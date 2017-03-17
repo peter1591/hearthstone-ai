@@ -5,6 +5,7 @@
 
 namespace FlowControl
 {
+	namespace enchantment { class Handler; }
 	namespace Manipulators
 	{
 		namespace detail
@@ -13,6 +14,8 @@ namespace FlowControl
 			{
 				friend class Helpers::DamageHelper;
 				friend class Helpers::HealHelper;
+				friend class FlowControl::enchantment::Handler;
+
 			public:
 				DamageSetter(state::Cards::Card & card) : card_(card) {}
 

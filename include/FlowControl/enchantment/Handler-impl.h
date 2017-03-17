@@ -31,6 +31,15 @@ namespace FlowControl
 				throw std::exception("not implemented");
 			}
 
+			// removing enchantments should not kill a minion
+			int hp = card.GetHP();
+			if (hp <= 0) {
+				// Do not trigger healing events
+				Manipulators::MinionManipulator(state, flow_context, card_ref, card)
+					.Internal_SetDamage().Heal(-hp + 1);
+				assert(card.GetHP() == 1);
+			}
+
 			need_update = false;
 		}
 
