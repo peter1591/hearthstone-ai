@@ -2,6 +2,31 @@
 
 namespace Cards
 {
+	struct Card_CS2_231 : public MinionCardBase<Card_CS2_231> {};
+
+	struct Card_CS2_188_Enchant : public EnchantmentCardBase {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+		Card_CS2_188_Enchant() {
+			apply_functor = [](auto& stats) {
+				stats.attack += 2;
+			};
+		}
+	};
+	struct Card_CS2_188 : public MinionCardBase<Card_CS2_188> {
+		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+			return Targets().Minion().Targetable();
+		}
+		static void Battlecry(Contexts::Battlecry context) {
+			state::CardRef target = context.GetTarget();
+			auto enchant_id = Manipulate(context).Minion(target).Enchant().Add(Card_CS2_188_Enchant());
+			context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(
+				[target, enchant_id](auto context) {
+				Manipulate(context).Minion(target).Enchant().Remove<Card_CS2_188_Enchant>(enchant_id);
+				return false;
+			});
+		}
+	};
+
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::Battlecry context) {
 			AnotherPlayer(context).GainEmptyCrystal();
@@ -45,6 +70,8 @@ namespace Cards
 	};
 }
 
+REGISTER_MINION_CARD(CS2_188)
+REGISTER_MINION_CARD(CS2_231)
 REGISTER_MINION_CARD(CS2_203)
 
 REGISTER_MINION_CARD(EX1_089)
