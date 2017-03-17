@@ -18,17 +18,10 @@ namespace Cards
 	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042, Taunt> {};
 	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {};
 
-	struct Card_EX1_508o : public EnchantmentCardBase {
+	struct Card_EX1_508o : public Enchantment<Attack<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentAura;
 		static constexpr int id = Cards::ID_EX1_508o;
-
-		Card_EX1_508o() {
-			apply_functor = [](auto& stats) {
-				++stats.attack;
-			};
-		}
 	};
-
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
 		template <typename Context>
 		static auto GetAuraTargets(Context&& context) {
@@ -89,15 +82,9 @@ namespace Cards
 
 	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125, Taunt> {};
 	struct Card_CS2_118 : public MinionCardBase<Card_CS2_118> {};
-	struct Card_CS2_122e : public EnchantmentCardBase {
+	struct Card_CS2_122e : public Enchantment<Attack<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_CS2_122e;
-
-		Card_CS2_122e() {
-			apply_functor = [](auto& stats) {
-				++stats.attack;
-			};
-		}
 	};
 
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
@@ -119,16 +106,9 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_019e : public EnchantmentCardBase {
+	struct Card_EX1_019e : public Enchantment<MaxHP<1>, Attack<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_019e;
-
-		Card_EX1_019e() {
-			apply_functor = [](auto& stats) {
-				++stats.max_hp;
-				++stats.attack;
-			};
-		}
 	};
 
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
@@ -171,18 +151,10 @@ namespace Cards
 	};
 
 	template <int Arg1>
-	struct Card_CS2_226e : public EnchantmentCardBase {
+	struct Card_CS2_226e : public Enchantment<MaxHP<Arg1>,Attack<Arg1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-		static constexpr int id = Cards::ID_EX1_019e;
-
-		Card_CS2_226e() {
-			apply_functor = [](auto& stats) {
-				stats.max_hp += Arg1;
-				stats.attack += Arg1;
-			};
-		}
+		static constexpr int id = Cards::ID_CS2_226e;
 	};
-
 	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
 		static void Battlecry(Contexts::Battlecry context) {
 			int count = 0;
@@ -216,17 +188,10 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_399e : public EnchantmentCardBase {
+	struct Card_EX1_399e : public Enchantment<Attack<3>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_399e;
-
-		Card_EX1_399e() {
-			apply_functor = [](auto& stats) {
-				stats.attack += 3;
-			};
-		}
 	};
-
 	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
 		template <typename Context>
 		static bool HandleEvent(state::CardRef self, Context&& context) {
@@ -259,16 +224,9 @@ namespace Cards
 	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162, Taunt> {};
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
 	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {};
-	struct Card_CS2_222o : public EnchantmentCardBase {
+	struct Card_CS2_222o : public Enchantment<Attack<1>, MaxHP<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentAura;
 		static constexpr int id = Cards::ID_CS2_222o;
-
-		Card_CS2_222o() {
-			apply_functor = [](auto& stats) {
-				++stats.attack;
-				++stats.max_hp;
-			};
-		}
 	};
 
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {

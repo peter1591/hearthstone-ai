@@ -4,13 +4,8 @@ namespace Cards
 {
 	struct Card_CS2_231 : public MinionCardBase<Card_CS2_231> {};
 
-	struct Card_CS2_188_Enchant : public EnchantmentCardBase {
+	struct Card_CS2_188_Enchant : public Enchantment<Attack<2>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-		Card_CS2_188_Enchant() {
-			apply_functor = [](auto& stats) {
-				stats.attack += 2;
-			};
-		}
 	};
 	struct Card_CS2_188 : public MinionCardBase<Card_CS2_188> {
 		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
