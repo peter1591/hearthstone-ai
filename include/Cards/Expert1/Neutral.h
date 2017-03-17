@@ -22,17 +22,9 @@ namespace Cards
 		}
 	};
 
-	struct Card_NEW1_038_Enchant : public EnchantmentCardBase {
+	struct Card_NEW1_038_Enchant : public Enchantment<Attack<1>, MaxHP<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-
-		Card_NEW1_038_Enchant() {
-			apply_functor = [](auto& stats) {
-				++stats.attack;
-				++stats.max_hp;
-			};
-		}
 	};
-
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
 		template <typename Context>
 		static bool HandleEvent(state::CardRef self, Context&& context) {
