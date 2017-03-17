@@ -25,7 +25,6 @@ namespace state
 				}
 
 				// Note: Do not provide remove interface to outside
-
 				// Note: Do not provide insert interface to outside
 				//    Or, we need a new algo for TriggerAll()
 
@@ -43,22 +42,17 @@ namespace state
 					if (handlers_.empty()) return;
 
 					auto it = handlers_.begin();
+					size_t rest = handlers_.size();
 
-					// Since we don't have insert method to outsiders, we can just write down the last iterator to specify the temporary queue
-					auto it_last = handlers_.end();
-					--it_last;
-
-					while (true)
+					while (rest > 0)
 					{
-						const bool exiting = (it == it_last);
-
 						auto ret = (*it)(std::forward<Args>(args)...);
 						static_assert(std::is_same_v<decltype(ret), bool>, "Should return a boolean flag indicating if we should remove the item.");
 
 						if (!ret) it = handlers_.erase(it);
 						else ++it;
 
-						if (exiting) break;
+						--rest;
 					}
 				}
 
