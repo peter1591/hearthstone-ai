@@ -32,6 +32,14 @@ namespace FlowControl
 				return GetEnchantments<EnchantmentType::tier>().Remove(id);
 			}
 
+			void Clear()
+			{
+				tier1_.Clear();
+				tier2_.Clear();
+				tier3_.Clear();
+				aura_.Clear();
+			}
+
 			template <typename EnchantmentType>
 			bool Exists(ContainerType::Identifier id) const
 			{

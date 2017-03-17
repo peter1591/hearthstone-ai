@@ -48,6 +48,10 @@ namespace Utils
 				container_.Remove(identifier);
 			}
 
+			void Clear() {
+				container_.Clear();
+			}
+
 		public: // iterate
 			template <typename IterateCallback> // bool(PtrItemType), return true to continue; false to abort
 			void IterateAll(const IterateCallback & callback)

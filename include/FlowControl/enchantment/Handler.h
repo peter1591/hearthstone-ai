@@ -31,6 +31,10 @@ namespace FlowControl
 				return enchantments.Remove<EnchantmentType>(std::forward<T>(id));
 			}
 
+			void Clear() {
+				enchantments.Clear();
+			}
+
 			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card);
 
 		private:

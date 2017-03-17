@@ -99,6 +99,10 @@ namespace Utils
 				items_.Get(identifier.identifier_).removed = true;
 			}
 
+			void Clear() {
+				first_possible_exist_id_ = items_.GetEnd();
+			}
+
 		public: // iterate
 			// Only iterate through exist items
 			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort

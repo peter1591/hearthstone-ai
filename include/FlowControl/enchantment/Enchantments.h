@@ -33,6 +33,11 @@ namespace FlowControl
 				return enchantments_.Remove(id);
 			}
 
+			void Clear()
+			{
+				enchantments_.Clear();
+			}
+
 			bool Exists(ContainerType::Identifier id) const
 			{
 				return enchantments_.Get(id) != nullptr;
