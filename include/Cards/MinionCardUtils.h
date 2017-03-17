@@ -205,6 +205,17 @@ namespace Cards
 			return SummonInternal(std::forward<Context>(context), card_id, player, pos);
 		}
 
+		template <typename EnchantType>
+		static void ApplyOneTurnEnchant(Contexts::Battlecry context) {
+			state::CardRef target = context.GetTarget();
+			auto enchant_id = Manipulate(context).Minion(target).Enchant().Add(EnchantType());
+			context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(
+				[target, enchant_id](auto context) {
+				Manipulate(context).Minion(target).Enchant().Remove<EnchantType>(enchant_id);
+				return false;
+			});
+		}
+
 	private:
 		template <typename Context>
 		static void SummonInternal(Context&& context, int card_id, state::PlayerIdentifier player, int pos)

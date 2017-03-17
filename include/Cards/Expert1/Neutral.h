@@ -12,13 +12,7 @@ namespace Cards
 			return Targets().Minion().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
-			state::CardRef target = context.GetTarget();
-			auto enchant_id = Manipulate(context).Minion(target).Enchant().Add(Card_CS2_188_Enchant());
-			context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(
-				[target, enchant_id](auto context) {
-				Manipulate(context).Minion(target).Enchant().Remove<Card_CS2_188_Enchant>(enchant_id);
-				return false;
-			});
+			return ApplyOneTurnEnchant<Card_CS2_188_Enchant>(std::move(context));
 		}
 	};
 
