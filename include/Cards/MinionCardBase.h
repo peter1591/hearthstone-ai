@@ -10,7 +10,12 @@
 
 namespace Cards
 {
-	template <typename T, typename SpecifiedCardAttributes = NoAttribute>
+	template <typename T,
+		typename SpecifiedCardAttributes1 = NoAttribute,
+		typename SpecifiedCardAttributes2 = NoAttribute,
+		typename SpecifiedCardAttributes3 = NoAttribute,
+		typename SpecifiedCardAttributes4 = NoAttribute,
+		typename SpecifiedCardAttributes5 = NoAttribute>
 	class MinionCardBase : public state::Cards::CardData, public MinionCardUtils
 	{
 	public:
@@ -29,13 +34,20 @@ namespace Cards
 			this->enchanted_states.attack = data.attack;
 			this->enchanted_states.max_hp = data.max_hp;
 
-			SpecifiedCardAttributes::Apply(*this);
+			SpecifiedCardAttributes1::Apply(*this);
+			SpecifiedCardAttributes2::Apply(*this);
+			SpecifiedCardAttributes3::Apply(*this);
+			SpecifiedCardAttributes4::Apply(*this);
+			SpecifiedCardAttributes5::Apply(*this);
 
 			BattlecryProcessor<T>(*this);
 		}
 
 		template <typename... Types>
 		auto Aura() { return AuraHelper<T, Types...>(*this); }
+
+		template <typename... Types>
+		auto Enrage() { return EnrageHelper<T, Types...>(*this); }
 
 		template <typename EventType, typename EventHandler = T>
 		auto RegisterEvent() {
