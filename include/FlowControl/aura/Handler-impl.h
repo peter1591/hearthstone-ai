@@ -26,6 +26,12 @@ namespace FlowControl
 
 			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)
 			{
+				if (!state.GetCard(it->first).GetRawData().enchantment_handler.Exists(it->second)) {
+					// enchantment vanished
+					it = applied_enchantments.erase(it);
+					continue;
+				}
+
 				auto new_target_it = new_targets.find(it->first);
 				if (new_target_it != new_targets.end()) {
 					// already applied
