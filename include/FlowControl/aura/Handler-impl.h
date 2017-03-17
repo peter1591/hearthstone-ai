@@ -17,7 +17,6 @@ namespace FlowControl
 			assert(is_valid != nullptr);
 			assert(get_targets);
 			assert(apply_on);
-			assert(remove_from);
 
 			std::unordered_set<state::CardRef> new_targets;
 			bool need_update = true;
@@ -35,7 +34,7 @@ namespace FlowControl
 				}
 				else {
 					// enchantments should be removed
-					(*remove_from)({ state, flow_context, card_ref, card, it->first, it->second });
+					Manipulate(state, flow_context).Card(it->first).Enchant().Remove(it->second);
 					it = applied_enchantments.erase(it);
 				}
 			}

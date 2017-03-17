@@ -15,10 +15,9 @@ namespace FlowControl
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
 
 		public:
-			template <typename EnchantmentType, typename T>
-			bool Exists(T&& id) const
+			bool Exists(TieredEnchantments::IdentifierType id) const
 			{
-				return enchantments.Exists<EnchantmentType>(std::forward<T>(id));
+				return enchantments.Exists(id);
 			}
 
 			template <typename EnchantmentType> auto Add(EnchantmentType&& enchantment) {
@@ -26,9 +25,9 @@ namespace FlowControl
 				return enchantments.PushBack(std::forward<EnchantmentType>(enchantment));
 			}
 
-			template <typename EnchantmentType, typename T> auto Remove(T&& id) {
+			auto Remove(TieredEnchantments::IdentifierType id) {
 				need_update = true;
-				return enchantments.Remove<EnchantmentType>(std::forward<T>(id));
+				return enchantments.Remove(id);
 			}
 
 			void Clear() {

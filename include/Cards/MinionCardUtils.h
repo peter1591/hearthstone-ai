@@ -211,7 +211,7 @@ namespace Cards
 			auto enchant_id = Manipulate(context).Minion(target).Enchant().Add(EnchantType());
 			context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(
 				[target, enchant_id](auto context) {
-				Manipulate(context).Minion(target).Enchant().Remove<EnchantType>(enchant_id);
+				Manipulate(context).Minion(target).Enchant().Remove(enchant_id);
 				return false;
 			});
 		}

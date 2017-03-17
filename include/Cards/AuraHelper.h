@@ -71,10 +71,6 @@ namespace Cards
 			card_data.aura_handler.SetCallback_ApplyOn([](auto context) {
 				return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add(EnchantmentType());
 			});
-			assert(!card_data.aura_handler.IsCallbackSet_RemoveFrom());
-			card_data.aura_handler.SetCallback_RemoveFrom([](auto context) {
-				MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Remove<EnchantmentType>(context.enchant_id_);
-			});
 
 			EmitPolicy::RegisterAura(card_data);
 		}
