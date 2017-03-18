@@ -123,6 +123,14 @@ namespace FlowControl
 					assert(state_.GetCardsManager().Get(card_ref).GetRawData().aura_handler.NoAppliedEnchantment());
 					return false;
 				});
+				state_.GetFlagAuraManager().ForEach([this](state::CardRef card_ref)
+				{
+					bool aura_valid = FlowControl::Manipulate(state_, flow_context_).Card(card_ref).FlagAura().Update();
+					if (aura_valid) return true;
+
+					assert(state_.GetCardsManager().Get(card_ref).GetRawData().flag_aura_handler.NoAppliedEffect());
+					return false;
+				});
 			}
 
 			void UpdateEnchantments()

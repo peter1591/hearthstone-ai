@@ -7,6 +7,7 @@
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/Contexts.h"
 #include "FlowControl/aura/Handler.h"
+#include "FlowControl/flag_aura/Handler.h"
 #include "FlowControl/battlecry/Handler.h"
 #include "FlowControl/deathrattle/Handler.h"
 #include "FlowControl/enchantment/Handler.h"
@@ -56,6 +57,7 @@ namespace state
 		public:
 			FlowControl::enchantment::Handler enchantment_handler;
 			FlowControl::aura::Handler aura_handler;
+			FlowControl::flag_aura::Handler flag_aura_handler;
 			FlowControl::battlecry::Handler battlecry_handler;
 			FlowControl::deathrattle::Handler deathrattle_handler;
 		};

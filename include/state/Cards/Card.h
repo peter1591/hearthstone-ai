@@ -17,6 +17,7 @@ namespace FlowControl
 		{
 			class EnchantmentHelper;
 			class AuraHelper;
+			class FlagAuraHelper;
 			class DeathrattlesHelper;
 		}
 	}
@@ -43,6 +44,16 @@ namespace state
 				MutableAuraHandlerGetter(CardData & data) : data_(data) {}
 			private:
 				auto& Get() { return data_.aura_handler; }
+			private:
+				CardData & data_;
+			};
+			class MutableFlagAuraHandlerGetter
+			{
+				friend class FlowControl::Manipulators::Helpers::FlagAuraHelper;
+			public:
+				MutableFlagAuraHandlerGetter(CardData & data) : data_(data) {}
+			private:
+				auto& Get() { return data_.flag_aura_handler; }
 			private:
 				CardData & data_;
 			};
@@ -130,6 +141,10 @@ namespace state
 			MutableAuraHandlerGetter GetMutableAuraHandlerGetter()
 			{
 				return MutableAuraHandlerGetter(data_);
+			}
+			MutableFlagAuraHandlerGetter GetMutableFlagAuraHandlerGetter()
+			{
+				return MutableFlagAuraHandlerGetter(data_);
 			}
 
 			ZoneSetter SetZone() { return ZoneSetter(data_); }

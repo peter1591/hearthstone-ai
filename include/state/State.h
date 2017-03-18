@@ -28,6 +28,9 @@ namespace state
 		aura::Manager const& GetAuraManager() const { return aura_mgr_; }
 		aura::Manager & GetAuraManager() { return aura_mgr_; }
 
+		aura::Manager const& GetFlagAuraManager() const { return flag_aura_mgr_; }
+		aura::Manager & GetFlagAuraManager() { return flag_aura_mgr_; }
+
 		PlayerIdentifier const& GetCurrentPlayerId() const { return current_player_; }
 		PlayerIdentifier & GetMutableCurrentPlayerId() { return current_player_; }
 		board::Player & GetCurrentPlayer() { return board_.Get(current_player_); }
@@ -99,6 +102,7 @@ namespace state
 		Cards::Manager cards_mgr_;
 		Events::Manager event_mgr_;
 		aura::Manager aura_mgr_;
+		aura::Manager flag_aura_mgr_;
 
 		PlayerIdentifier current_player_;
 		int turn_;

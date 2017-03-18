@@ -3,6 +3,7 @@
 #include "Cards/Database.h"
 #include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
+#include "Cards/FlagAuraHelper.h"
 #include "Cards/EventRegister.h"
 #include "Cards/BattlecryHelper.h"
 #include "Cards/MinionCardUtils.h"
@@ -45,6 +46,9 @@ namespace Cards
 
 		template <typename... Types>
 		auto Aura() { return AuraHelper<T, Types...>(*this); }
+
+		template <typename... Types>
+		auto PlayerFlagAura() { return PlayerFlagAuraHelper<T, Types...>(*this); }
 
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }
