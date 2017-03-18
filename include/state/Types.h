@@ -93,6 +93,9 @@ namespace state
 		bool operator==(PlayerIdentifier rhs) const { return side_ == rhs.side_; }
 		bool operator!=(PlayerIdentifier rhs) const { return side_ != rhs.side_; }
 
+		bool IsValid() const { return side_ != kPlayerInvalid; }
+		void InValidate() { side_ = kPlayerInvalid; }
+
 		PlayerIdentifier Opposite() const
 		{
 			return PlayerIdentifier(OppositeSide());
