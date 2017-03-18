@@ -136,8 +136,8 @@ namespace FlowControl
 			attacker, state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, defender });
 		// TODO: attacker lose stealth
 
-		Manipulate(state_, flow_context_).Character(defender).Damage(GetAttackValue(attacker));
-		Manipulate(state_, flow_context_).Character(attacker).Damage(GetAttackValue(defender));
+		Manipulate(state_, flow_context_).Character(defender).Damage(defender, GetAttackValue(attacker));
+		Manipulate(state_, flow_context_).Character(attacker).Damage(attacker, GetAttackValue(defender));
 
 		Manipulate(state_, flow_context_).Character(attacker).AfterAttack();
 
@@ -149,7 +149,7 @@ namespace FlowControl
 			if (attacker_card.GetCardType() == state::kCardTypeHero) {
 				state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
 				if (weapon_ref.IsValid()) {
-					Manipulate(state_, flow_context_).Weapon(weapon_ref).Damage(1);
+					Manipulate(state_, flow_context_).Weapon(weapon_ref).Damage(attacker, attacker_card, 1);
 				}
 			}
 		}

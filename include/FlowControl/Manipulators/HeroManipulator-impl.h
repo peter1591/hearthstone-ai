@@ -15,7 +15,7 @@ namespace FlowControl
 			{
 				player.IncreaseFatigueDamage();
 				int damage = player.GetFatigueDamage();
-				this->Damage(damage);
+				this->Damage(card_ref_, card_, damage);
 				return;
 			}
 

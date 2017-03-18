@@ -9,23 +9,27 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline DamageHelper::DamageHelper(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
+			inline DamageHelper::DamageHelper(state::State & state, FlowControl::FlowContext & flow_context,
+				state::CardRef source_ref, state::Cards::Card const& source_card,
+				state::CardRef target_ref, state::Cards::Card const& target_card, int amount)
 			{
+				state::CardRef final_target = target_ref;
+				state::Cards::Card const* final_target_card = &target_card;
+				int final_amount = amount;
+				state.TriggerEvent<state::Events::EventTypes::PrepareDamage>(
+					state::Events::EventTypes::PrepareDamage::Context{ state, flow_context, source_ref, source_card, &final_target, final_target_card, &final_amount });
+
+				if (!final_target.IsValid()) return;
+				if (final_amount <= 0) return;
+
 				// TODO: consider prophet effects
 
-				// TODO: add a new event type: PreTakeDamage
-				// this might change the card_ref, and the damage amount
-				state::CardRef new_target = card_ref; // TODO
-				int new_amount = amount; // TODO
-				if (new_amount <= 0) return;
-
-				state::Cards::Card const& new_target_card = state.GetCard(new_target);
-				if (new_target_card.GetRawData().enchanted_states.shielded) {
-					Manipulate(state, flow_context).Character(new_target).Shield(false);
+				if (final_target_card->GetRawData().enchanted_states.shielded) {
+					Manipulate(state, flow_context).Character(final_target).Shield(false);
 					return;
 				}
 
-				DoDamage(state, flow_context, new_target, new_target_card, new_amount);
+				DoDamage(state, flow_context, final_target, *final_target_card, final_amount);
 			}
 
 			inline void DamageHelper::DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card, int amount)

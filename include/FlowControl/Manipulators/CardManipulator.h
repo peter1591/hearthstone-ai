@@ -34,6 +34,14 @@ namespace FlowControl
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
 
 		public:
+			Helpers::DamageHelper Damage(state::CardRef source, int amount) {
+				return Damage(source, state_.GetCard(source), amount);
+			}
+			Helpers::DamageHelper Damage(state::CardRef source, state::Cards::Card const& source_card, int amount) {
+				return Helpers::DamageHelper(state_, flow_context_,
+					source, source_card,
+					card_ref_, card_, amount);
+			}
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::FlagAuraHelper FlagAura() { return Helpers::FlagAuraHelper(state_, flow_context_, card_ref_, card_); }

@@ -61,7 +61,8 @@ namespace Cards
 
 			void Amount(int amount) {
 				assert(target_.IsValid());
-				FlowControl::Manipulate(context_.state_, context_.flow_context_).Character(target_).Damage(amount);
+				FlowControl::Manipulate(context_.state_, context_.flow_context_).Character(target_)
+					.Damage(context_.card_ref_, context_.card_, amount);
 			}
 
 		private:

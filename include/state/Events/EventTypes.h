@@ -51,6 +51,18 @@ namespace state {
 			struct OnMinionPlay {
 				using type = bool(*)(const Cards::Card &);
 			};
+			struct PrepareDamage {
+				struct Context {
+					state::State & state_;
+					FlowControl::FlowContext & flow_context_;
+					state::CardRef const source_ref_;
+					state::Cards::Card const& source_card_;
+					state::CardRef * target_ref_; // an invalid target means the damage event is cancelled
+					state::Cards::Card const* target_card_;
+					int * damage;
+				};
+				using type = std::function<bool(Context&&)>;
+			};
 			struct OnTakeDamage {
 				struct Context {
 					state::State & state_;
