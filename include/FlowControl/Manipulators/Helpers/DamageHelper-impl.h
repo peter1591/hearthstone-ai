@@ -11,6 +11,8 @@ namespace FlowControl
 		{
 			inline DamageHelper::DamageHelper(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
 			{
+				// TODO: consider prophet effects
+
 				// TODO: add a new event type: PreTakeDamage
 				// this might change the card_ref, and the damage amount
 				state::CardRef new_target = card_ref; // TODO

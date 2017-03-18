@@ -11,6 +11,7 @@
 #include "Cards/Core/Warrior.h"
 
 #include "Cards/Expert1/Neutral.h"
+#include "Cards/Expert1/Priest.h"
 
 
 #include "Cards/CardBase-cleanup.h"

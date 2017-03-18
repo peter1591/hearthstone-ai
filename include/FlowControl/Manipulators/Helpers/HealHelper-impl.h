@@ -12,6 +12,8 @@ namespace FlowControl
 		{
 			inline HealHelper::HealHelper(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, int amount)
 			{
+				// TODO: consider prophet effects
+
 				// TODO: another event to check any triggers to modify heal amount
 
 				state::Events::EventTypes::OnHeal::Context context{ state, card, amount };

@@ -82,6 +82,9 @@
     <Filter Include="Header Files\FlowControl\detail">
       <UniqueIdentifier>{06d326ef-64ad-43fa-bca7-34ec258df322}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\flag_aura">
+      <UniqueIdentifier>{7381f78b-36a1-4633-8389-44967de7dcc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -394,6 +397,24 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h">
       <Filter>Header Files\FlowControl\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\flag_aura\Contexts.h">
+      <Filter>Header Files\FlowControl\flag_aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\flag_aura\Handler.h">
+      <Filter>Header Files\FlowControl\flag_aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\flag_aura\Handler-impl.h">
+      <Filter>Header Files\FlowControl\flag_aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\FlagAuraHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Priest.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h">
+      <Filter>Header Files\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

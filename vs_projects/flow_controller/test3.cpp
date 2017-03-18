@@ -759,4 +759,41 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 }, { 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 23, 0, 0); // next fatigue: 3
+	CheckHero(state, state::PlayerIdentifier::Second(), 27, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 6, 6, 6 },{ 3, 1, 2 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	AddHandCard(Cards::ID_EX1_350, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
+	parameter_getter.next_minion_put_location = 0;
+	if (controller.PlayCard(3) != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 23, 0, 0); // next fatigue: 3
+	CheckHero(state, state::PlayerIdentifier::Second(), 27, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { {8, 8, 8}, { 6, 6, 6 },{ 3, 1, 2 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+	assert(state.GetBoard().GetFirst().GetProphetVelenEffects() == 1);
+
+	state.GetBoard().GetFirst().GetResource().Refill();
+	AddHandCard(Cards::ID_EX1_350, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
+	parameter_getter.next_minion_put_location = 0;
+	if (controller.PlayCard(3) != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 23, 0, 0); // next fatigue: 3
+	CheckHero(state, state::PlayerIdentifier::Second(), 27, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { {8, 8, 8}, { 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+	assert(state.GetBoard().GetFirst().GetProphetVelenEffects() == 2);
 }
