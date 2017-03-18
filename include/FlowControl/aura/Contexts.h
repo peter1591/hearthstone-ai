@@ -47,16 +47,6 @@ namespace FlowControl
 				const state::Cards::Card & card_;
 				state::CardRef target_;
 			};
-
-			struct AuraRemoveFrom
-			{
-				state::State & state_;
-				FlowControl::FlowContext & flow_context_;
-				const state::CardRef card_ref_;
-				const state::Cards::Card & card_;
-				const state::CardRef target_;
-				const enchantment::Enchantments::ContainerType::Identifier enchant_id_;
-			};
 		}
 	}
 }

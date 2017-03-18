@@ -15,7 +15,6 @@ namespace FlowControl
 			typedef bool FuncIsValid(contexts::AuraIsValid context);
 			typedef void FuncGetTargets(contexts::AuraGetTargets context);
 			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
-			typedef void FuncRemoveFrom(contexts::AuraRemoveFrom context);
 
 			Handler() :
 				is_valid(nullptr), get_targets(nullptr), apply_on(nullptr),
