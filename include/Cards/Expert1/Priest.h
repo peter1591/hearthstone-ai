@@ -15,6 +15,7 @@ namespace Cards
 
 		Card_EX1_350() {
 			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>();
+			// TODO: double heal power
 		}
 	};
 	
