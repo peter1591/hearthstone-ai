@@ -18,6 +18,8 @@ namespace Cards
 	struct InHandZone {};
 	struct InDeckZone {};
 
+	// self policy
+	// Note: we need to remember 'self' to check if owner is still alive (depends on lifetime policy)
 	struct NonCategorized_SelfInLambdaCapture {}; // remember self on lambda capture
 	struct CateogrizedOnSelf {}; // remember self on categorized event
 
@@ -41,7 +43,7 @@ namespace Cards
 			template <typename Context>
 			static void AddEvent(state::CardRef self, Context&& context) {
 				context.state_.AddEvent<EventType>(
-					[self](auto& context) {
+					[self](auto&& context) {
 					if (!LifeTime::StillValid(context.state_.GetCard(self))) return false;
 					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, std::move(context));
 				});

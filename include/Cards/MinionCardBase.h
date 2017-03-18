@@ -58,14 +58,9 @@ namespace Cards
 			return EventRegister<EventType, EventHandler>((state::Cards::CardData&)*this);
 		}
 
-		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler>
+		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
 		auto RegisterEvent() {
 			return EventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>((state::Cards::CardData&)*this);
-		}
-
-		template <typename LifeTime, typename SelfPolicy, typename EventType>
-		auto RegisterEvent() {
-			return EventRegisterHelper<LifeTime, SelfPolicy, EventType, T>((state::Cards::CardData&)*this);
 		}
 	};
 }
