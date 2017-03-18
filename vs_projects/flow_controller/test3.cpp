@@ -781,7 +781,6 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().GetFirst().GetProphetVelenEffects() == 1);
 
 	state.GetBoard().GetFirst().GetResource().Refill();
 	AddHandCard(Cards::ID_EX1_350, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
@@ -795,5 +794,4 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().GetFirst().GetProphetVelenEffects() == 2);
 }

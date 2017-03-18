@@ -30,10 +30,6 @@ namespace state
 			CardRef GetHeroRef() const { return hero_ref_; }
 			int GetHeroRefChangeId() const { return hero_ref_change_id_; }
 
-			int GetProphetVelenEffects() const { return prophet_velen_effects_; }
-			void IncreaseProphetVelenEffects() { ++prophet_velen_effects_; }
-			void DecreaseProphetVelenEffects() { --prophet_velen_effects_; }
-
 		private: // restrict access to zone changer
 			void SetHeroRef(CardRef ref) {
 				hero_ref_ = ref;
