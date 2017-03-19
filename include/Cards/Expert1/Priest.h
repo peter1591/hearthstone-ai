@@ -14,7 +14,10 @@ namespace Cards
 		};
 
 		Card_EX1_350() {
-			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>();
+			RegisterEvents<
+				RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>,
+				RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>
+			>();
 			// TODO: double heal power
 		}
 	};
@@ -30,6 +33,13 @@ namespace Cards
 			PlayerFlagAura<AliveWhenInPlay>();
 		}
 	};*/
+
+	/* Example to register multiple events
+	RegisterEvents<
+	RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>,
+	RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>
+	>();
+	*/
 }
 
 REGISTER_MINION_CARD(EX1_350)

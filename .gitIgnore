@@ -236,3 +236,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+/pilot_run/beautified.json
+/pilot_run/data.json
+/.gitattributes

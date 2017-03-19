@@ -60,18 +60,17 @@ namespace Cards
 				});
 			}
 		};
+
+		struct NullEventRegisterHelper {
+			struct Invoker {
+				template <typename Context> static void Invoke(Context context) {
+					return;
+				}
+			};
+			using AddedToPlayZone = Utils::StaticInvokableChain<Invoker>;
+		};
 	}
 
-	template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg = void>
-	struct NullEventRegisterHelper {
-		struct AddedToPlayZoneInvoker {
-			template <typename Context>
-			static void Invoke(Context context) {
-				return;
-			}
-		};
-		using AddedToPlayZone = Utils::StaticInvokableChain<AddedToPlayZoneInvoker>;
-	};
 	template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg = void>
 	struct OneEventRegisterHelper {
 		struct Invoker {
@@ -86,43 +85,47 @@ namespace Cards
 			template <typename Context> static void Invoke(Context context) {}
 		};
 
-		struct AddedToPlayZoneInvoker {
+		struct AddedToPlayZone {
 			template <typename Context>
 			static void Invoke(Context context) {
 				return LifeTime::AddedToPlayZone<Invoker, NullInvoker>::Invoke(std::move(context));
 			}
 		};
-		using AddedToPlayZone = Utils::StaticInvokableChain<AddedToPlayZoneInvoker>;
 	};
 
 	template <typename FirstEvent, typename SecondEvent>
 	struct CombineEvents {
-		struct AddedToPlayZoneInvoker {
+		struct AddedToPlayZone {
 			template <typename Context>
 			static void Invoke(Context context) {
 				FirstEvent::AddedToPlayZone::Invoke(std::move(context));
 				SecondEvent::AddedToPlayZone::Invoke(std::move(context));
 			}
 		};
-		using AddedToPlayZone = Utils::StaticInvokableChain<AddedToPlayZoneInvoker>;
 	};
 
-	template <typename Event1, typename Event2>
-	struct EventsRegisterHelper {
-		EventsRegisterHelper(state::Cards::CardData & card_data) {
+	template <typename... Events> struct EventsRegisterHelper;
+
+	template <typename Event1, typename Event2, typename... RestEvents>
+	struct EventsRegisterHelper<Event1, Event2, RestEvents...> {
+		static void Process(state::Cards::CardData & card_data) {
 			using CombinedEvent = CombineEvents<Event1, Event2>;
-			card_data.added_to_play_zone += (state::Cards::CardData::AddedToPlayZoneCallback*)
-				(CombinedEvent::AddedToPlayZone::Invoke);
+			return EventsRegisterHelper<CombinedEvent, RestEvents...>::Process(card_data);
 		}
 	};
 
-	template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg = void>
-	struct EventRegisterHelper {
-		EventRegisterHelper(state::Cards::CardData & card_data) {
-			using FirstEvent = OneEventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler, EventHandlerArg>;
-			using SecondEvent = NullEventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler, EventHandlerArg>;
-			using CombinedEvent = CombineEvents<FirstEvent, SecondEvent>;
+	template <typename Event1>
+	struct EventsRegisterHelper<Event1> {
+		static void Process(state::Cards::CardData & card_data) {
+			using Event2 = detail::NullEventRegisterHelper;
+			return EventsRegisterHelper<Event1, Event2>::Process(card_data);
+		}
+	};
 
+	template <typename Event1, typename Event2>
+	struct EventsRegisterHelper<Event1, Event2> {
+		static void Process(state::Cards::CardData & card_data) {
+			using CombinedEvent = CombineEvents<Event1, Event2>;
 			card_data.added_to_play_zone += (state::Cards::CardData::AddedToPlayZoneCallback*)
 				(CombinedEvent::AddedToPlayZone::Invoke);
 		}
@@ -130,7 +133,7 @@ namespace Cards
 
 	// event register: use helper for common usages
 	template <typename EventType, typename EventHandler = void>
-	using EventRegister = EventRegisterHelper<
+	using ManagedOneEventRegisterHelper = OneEventRegisterHelper<
 		typename EventType::LifeTime,
 		typename EventType::SelfPolicy,
 		typename EventType::EventType,

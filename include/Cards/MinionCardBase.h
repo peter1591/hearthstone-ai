@@ -53,14 +53,25 @@ namespace Cards
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }
 
+		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
+		using RegisteredEventType = OneEventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>;
+		
 		template <typename EventType, typename EventHandler = T>
-		auto RegisterEvent() {
-			return EventRegister<EventType, EventHandler>((state::Cards::CardData&)*this);
+		using RegisteredManagedEventType = ManagedOneEventRegisterHelper<EventType, EventHandler>;
+
+		template <typename... RegisteredEvents>
+		auto RegisterEvents() {
+			return EventsRegisterHelper<RegisteredEvents...>::Process((state::Cards::CardData&)*this);
 		}
 
 		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
 		auto RegisterEvent() {
-			return EventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>((state::Cards::CardData&)*this);
+			return RegisterEvents<RegisteredEventType<LifeTime, SelfPolicy, EventType, EventHandler>>();
+		}
+
+		template <typename EventType, typename EventHandler = T>
+		auto RegisterEvent() {
+			return RegisterEvents<RegisteredManagedEventType<EventType, EventHandler>>();
 		}
 	};
 }
