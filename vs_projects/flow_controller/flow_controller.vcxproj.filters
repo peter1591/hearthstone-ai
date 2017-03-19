@@ -416,5 +416,8 @@
     <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticInvokables.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

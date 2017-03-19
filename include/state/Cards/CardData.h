@@ -48,10 +48,10 @@ namespace state
 			bool silenced;
 
 		public: // zone-changed callbacks invoked by state::State 
-			typedef void AddedToPlayZoneCallback(ZoneChangedContext);
+			typedef void AddedToPlayZoneCallback(ZoneChangedContext&&);
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
 
-			typedef void AddedToDeckZoneCallback(ZoneChangedContext);
+			typedef void AddedToDeckZoneCallback(ZoneChangedContext&&);
 			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:

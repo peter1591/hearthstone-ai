@@ -1,11 +1,11 @@
 #pragma once
 
 namespace Utils {
-	namespace detail {
-		struct NullInvokable {
-			template <typename... Args> static void Invoke(Args&&...) {}
-		};
+	struct StaticNullInvokable {
+		template <typename... Args> static void Invoke(Args&&...) {}
+	};
 
+	namespace detail {
 		template <typename T, typename U>
 		struct CombineStaticInvokable {
 			template <typename... Args>
@@ -16,7 +16,7 @@ namespace Utils {
 		};
 	}
 
-	template <typename T = detail::NullInvokable>
+	template <typename T = StaticNullInvokable>
 	class StaticInvokableChain
 	{
 	public:

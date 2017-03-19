@@ -233,6 +233,7 @@
     <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />
     <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
     <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />
+    <ClInclude Include="..\..\include\Utils\StaticInvokables.h" />
     <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
