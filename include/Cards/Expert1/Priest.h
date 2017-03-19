@@ -8,7 +8,7 @@ namespace Cards
 			if (context.source_card_.GetPlayerIdentifier() != owner) return true; // for friendly only
 			if (context.source_card_.GetCardType() == state::kCardTypeSpell ||
 				context.source_card_.GetCardType() == state::kCardTypeHeroPower) {
-				*context.damage *= 2;
+				*context.damage *= 2; // both healing and damaging
 			}
 			return true;
 		};
