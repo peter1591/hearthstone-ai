@@ -194,12 +194,6 @@
     <ClInclude Include="..\..\include\Cards\AuraHelper.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\HealHelper-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>

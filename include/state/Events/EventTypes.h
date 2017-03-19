@@ -40,18 +40,10 @@ namespace state {
 				};
 				using type = std::function<bool(CardRef, Context)>;
 			};
-			struct OnHeal {
-				struct Context {
-					state::State & state_;
-					state::Cards::Card const& card_;
-					int amount_;
-				};
-				using type = bool(*)(state::CardRef, Context);
-			};
 			struct OnMinionPlay {
 				using type = bool(*)(const Cards::Card &);
 			};
-			struct PrepareDamage {
+			struct PrepareHealDamage {
 				struct Context {
 					state::State & state_;
 					FlowControl::FlowContext & flow_context_;
@@ -59,7 +51,7 @@ namespace state {
 					state::Cards::Card const& source_card_;
 					state::CardRef * target_ref_; // an invalid target means the damage event is cancelled
 					state::Cards::Card const* target_card_;
-					int * damage;
+					int * damage; // > 0 for damage, < 0 for heal
 				};
 				using type = std::function<bool(Context&&)>;
 			};
@@ -69,6 +61,15 @@ namespace state {
 					FlowControl::FlowContext & flow_context_;
 					state::Cards::Card const& card_;
 					int damage_;
+				};
+				using type = bool(*)(state::CardRef, Context);
+			};
+			struct OnHeal {
+				struct Context {
+					state::State & state_;
+					FlowControl::FlowContext & flow_context_;
+					state::Cards::Card const& card_;
+					int amount_;
 				};
 				using type = bool(*)(state::CardRef, Context);
 			};

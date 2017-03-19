@@ -96,7 +96,7 @@ namespace Cards
 			void Amount(int amount) {
 				assert(target_.IsValid());
 				FlowControl::Manipulate(context_.state_, context_.flow_context_)
-					.Character(target_).Heal(amount);
+					.Character(target_).Heal(context_.card_ref_, context_.card_, amount);
 			}
 
 		private:

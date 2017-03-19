@@ -3,7 +3,7 @@
 namespace Cards
 {
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareDamage::Context&& context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareHealDamage::Context&& context) {
 			state::PlayerIdentifier owner = context.state_.GetCard(self).GetPlayerIdentifier();
 			if (context.source_card_.GetPlayerIdentifier() != owner) return true; // for friendly only
 			if (context.source_card_.GetCardType() == state::kCardTypeSpell ||
@@ -14,11 +14,7 @@ namespace Cards
 		};
 
 		Card_EX1_350() {
-			RegisterEvents<
-				RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>,
-				RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>
-			>();
-			// TODO: double heal power
+			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareHealDamage>();
 		}
 	};
 	

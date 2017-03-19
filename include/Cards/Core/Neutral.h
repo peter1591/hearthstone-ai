@@ -146,8 +146,8 @@ namespace Cards
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		static void Battlecry(Contexts::Battlecry context) {
 			ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
-				[](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
-				FlowControl::Manipulate(state, flow_context).Character(ref).Heal(2);
+				[context](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
+				FlowControl::Manipulate(state, flow_context).Character(ref).Heal(context.card_ref_, context.card_, 2);
 			});
 		}
 	};

@@ -97,10 +97,9 @@ private: \
 			ADD_TRIGGER_TYPE(AfterAttack);
 			ADD_CATEGORIZED_TRIGGER_TYPE(AfterAttack);
 
-			ADD_TRIGGER_TYPE(PrepareDamage);
+			ADD_TRIGGER_TYPE(PrepareHealDamage);
 			ADD_TRIGGER_TYPE(OnTakeDamage);
 			ADD_CATEGORIZED_TRIGGER_TYPE(OnTakeDamage);
-
 			ADD_TRIGGER_TYPE(OnHeal);
 			ADD_CATEGORIZED_TRIGGER_TYPE(OnHeal);
 

@@ -15,6 +15,7 @@ namespace FlowControl
 
 			private:
 				void DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card, int amount);
+				void DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card, int amount);
 			};
 		}
 	}
