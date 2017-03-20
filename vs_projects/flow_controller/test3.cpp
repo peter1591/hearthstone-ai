@@ -29,11 +29,11 @@ public:
 class Test3_RandomGenerator : public state::IRandomGenerator
 {
 public:
-	Test3_RandomGenerator() :called(false), next_rand(0) {}
+	Test3_RandomGenerator() :called_times(0), next_rand(0) {}
 
 	int Get(int exclusive_max)
 	{
-		called = true;
+		++called_times;
 		return next_rand;
 	}
 
@@ -41,12 +41,12 @@ public:
 
 	int Get(int min, int max)
 	{
-		called = true;
+		++called_times;
 		return min + next_rand;
 	}
 
 public:
-	bool called;
+	int called_times;
 	int next_rand;
 };
 
@@ -73,13 +73,13 @@ static state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContex
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
 	((Test3_RandomGenerator&)(flow_context.GetRandom())).next_rand = deck_count;
-	((Test3_RandomGenerator&)(flow_context.GetRandom())).called = false;
+	((Test3_RandomGenerator&)(flow_context.GetRandom())).called_times = 0;
 
 	auto ref = state.AddCard(CreateDeckCard(id, state, player));
 	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
 		.ChangeTo<state::kCardZoneDeck>(player);
 
-	if (deck_count > 0) assert(((Test3_RandomGenerator&)(flow_context.GetRandom())).called);
+	if (deck_count > 0) assert(((Test3_RandomGenerator&)(flow_context.GetRandom())).called_times > 0);
 	++deck_count;
 
 	assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
@@ -830,9 +830,10 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	random.called = false;
+	random.called_times = 0;
 	random.next_rand = 0;
 	if (controller.PlayCard(3) != FlowControl::kResultNotDetermined) assert(false);
+	assert(random.called_times == 12);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0); // next fatigue: 3
 	CheckHero(state, state::PlayerIdentifier::Second(), 15, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
