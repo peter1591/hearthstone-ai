@@ -58,6 +58,9 @@ namespace FlowControl
 					card_ref_, card_, amount);
 				helper.ConductDamage(amount);
 			}
+			void ConductFinalDamage(state::CardRef source, int amount) {
+				return ConductFinalDamage(source, state_.GetCard(source), amount);
+			}
 
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
