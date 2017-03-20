@@ -41,8 +41,9 @@ namespace FlowControl
 				auto helper = Helpers::DamageHelper(state_, flow_context_,
 					source, source_card,
 					card_ref_, card_, amount);
-				helper.CalculateAmount();
-				helper.ConductDamage();
+				int final_amount = 0;
+				helper.CalculateAmount(&final_amount);
+				helper.ConductDamage(final_amount);
 			}
 			void Heal(state::CardRef source, int amount) {
 				return Heal(source, state_.GetCard(source), amount);

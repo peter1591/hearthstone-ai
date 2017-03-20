@@ -44,6 +44,18 @@ namespace state {
 				using type = bool(*)(const Cards::Card &);
 			};
 
+			struct CalculateHealDamageAmount {
+				struct Context {
+					state::State & state_;
+					FlowControl::FlowContext & flow_context_;
+					state::CardRef const source_ref_;
+					state::Cards::Card const& source_card_;
+					state::CardRef const target_ref_;
+					state::Cards::Card const& target_card_;
+					int * amount_;
+				};
+				using type = std::function<bool(Context&&)>;
+			};
 			struct PrepareHealDamageTarget {
 				struct Context {
 					state::State & state_;

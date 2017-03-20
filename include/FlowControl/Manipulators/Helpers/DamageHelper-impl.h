@@ -9,12 +9,16 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline void DamageHelper::CalculateAmount()
+			inline void DamageHelper::CalculateAmount(int * final_amount)
 			{
-				flow_context_.damage_ = amount_;
+				*final_amount = amount_;
+
+				state_.TriggerEvent<state::Events::EventTypes::CalculateHealDamageAmount>(
+					state::Events::EventTypes::CalculateHealDamageAmount::Context
+				{ state_, flow_context_, source_ref_, source_card_, target_ref_, target_card_, final_amount});
 			}
 
-			inline void DamageHelper::ConductDamage()
+			inline void DamageHelper::ConductDamage(int amount)
 			{
 				state::CardRef final_target = target_ref_;
 				state::Cards::Card const* final_target_card = &target_card_;
@@ -23,15 +27,15 @@ namespace FlowControl
 
 				if (!final_target.IsValid()) return;
 
-				if (flow_context_.damage_ > 0) {
+				if (amount > 0) {
 					if (final_target_card->GetRawData().enchanted_states.shielded) {
 						Manipulate(state_, flow_context_).Character(final_target).Shield(false);
 						return;
 					}
-					DoDamage(state_, flow_context_, final_target, *final_target_card, flow_context_.damage_);
+					DoDamage(state_, flow_context_, final_target, *final_target_card, amount);
 				}
-				else if (flow_context_.damage_ < 0) {
-					DoHeal(state_, flow_context_, final_target, *final_target_card, -flow_context_.damage_);
+				else if (amount < 0) {
+					DoHeal(state_, flow_context_, final_target, *final_target_card, -amount);
 				}
 				else { // if (final_amount == 0)
 					return;
