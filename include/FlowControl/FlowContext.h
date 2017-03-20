@@ -59,6 +59,7 @@ namespace FlowControl {
 
 			// TODO: maybe use this to indicate 'cast a spell with a random-choose target'
 			assert(false);
+			return state::CardRef();
 		}
 
 	public: // dead entry hint

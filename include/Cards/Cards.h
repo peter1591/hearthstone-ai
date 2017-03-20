@@ -6,9 +6,11 @@
 #include "Cards/WeaponCardBase.h"
 #include "Cards/MinionCardUtils.h"
 #include "Cards/EnchantmentCardBase.h"
+#include "Cards/HeroPowerCardBase.h"
 
 #include "Cards/Core/Neutral.h"
 #include "Cards/Core/Warrior.h"
+#include "Cards/Core/Priest.h"
 
 #include "Cards/Expert1/Neutral.h"
 #include "Cards/Expert1/Priest.h"

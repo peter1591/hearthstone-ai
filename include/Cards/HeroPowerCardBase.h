@@ -7,15 +7,15 @@
 namespace Cards
 {
 	template <typename T>
-	class WeaponCardBase : public state::Cards::CardData
+	class HeroPowerCardBase : public state::Cards::CardData
 	{
 	public:
-		WeaponCardBase()
+		HeroPowerCardBase()
 		{
 			this->card_id = CardClassIdMap<T>::id;
 
 			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
-			assert(data.card_type == state::kCardTypeWeapon);
+			assert(data.card_type == state::kCardTypeHeroPower);
 
 			this->card_type = data.card_type;
 			this->card_race = data.card_race;
@@ -24,12 +24,6 @@ namespace Cards
 			this->enchanted_states.cost = data.cost;
 			this->enchanted_states.attack = data.attack;
 			this->enchanted_states.max_hp = data.max_hp;
-		}
-
-		template <typename... Types>
-		AuraHelper<Types...> Aura()
-		{
-			return AuraHelper<Types...>(*this);
 		}
 	};
 }

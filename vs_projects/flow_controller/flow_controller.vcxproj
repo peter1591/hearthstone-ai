@@ -141,6 +141,7 @@
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Contexts.h" />
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Priest.h" />
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />
     <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h" />
+    <ClInclude Include="..\..\include\Cards\HeroPowerCardBase.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />

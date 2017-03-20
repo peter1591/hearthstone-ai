@@ -11,6 +11,7 @@
 #include "FlowControl/flag_aura/Handler-impl.h"
 #include "FlowControl/battlecry/Handler-impl.h"
 #include "FlowControl/enchantment/Handler-impl.h"
+#include "FlowControl/spell/Handler-impl.h"
 #include "FlowControl/Manipulators/HeroManipulator-impl.h"
 #include "FlowControl/Manipulators/BoardManipulator-impl.h"
 #include "FlowControl/Manipulators/CardManipulator-impl.h"
@@ -42,9 +43,13 @@ namespace FlowControl
 
 	private:
 		void PlayCardInternal(int hand_idx);
-		bool PlayCardPhase(int hand_idx);
-		bool PlayMinionCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card);
-		bool PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card);
+
+		template <state::CardType> bool PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
+		template <state::CardType> bool PlayCardPhaseInternal(state::CardRef card_ref, state::Cards::Card const& card);
+
+		bool PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
+		bool PlayWeaponCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
+		bool PlayHeroPowerCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
 		
 		void AttackInternal(state::CardRef attacker, state::CardRef defender);
 		bool AttackPhase(state::CardRef attacker, state::CardRef defender);

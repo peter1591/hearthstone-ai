@@ -49,31 +49,55 @@ namespace FlowControl
 
 	inline void FlowController::PlayCardInternal(int hand_idx)
 	{
-		if (!PlayCardPhase(hand_idx)) return;
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
-	}
-
-	inline bool FlowController::PlayCardPhase(int hand_idx)
-	{
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 		state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
-
-		card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card);
-
-		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
 
 		switch (card.GetCardType())
 		{
 		case state::kCardTypeMinion:
-			return PlayMinionCardPhase(hand_idx, card_ref, card);
+			PlayCardPhase<state::kCardTypeMinion>(card_ref, card);
+			break;
 		case state::kCardTypeWeapon:
-			return PlayWeaponCardPhase(hand_idx, card_ref, card);
+			PlayCardPhase<state::kCardTypeWeapon>(card_ref, card);
+			break;
 		default:
-			return SetResult(kResultInvalid);
+			assert(false);
+			return;
 		}
+
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 	}
 
-	inline bool FlowController::PlayMinionCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
+	template <state::CardType CardType>
+	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card);
+		card.GetRawData().spell_handler.PrepareTarget(state_, flow_context_, card_ref, card); // TODO: unify with battlecry
+
+		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
+
+		return PlayCardPhaseInternal<CardType>(card_ref, card);
+	}
+
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		assert(card.GetCardType() == state::kCardTypeMinion);
+		return PlayMinionCardPhase(card_ref, card);
+	}
+
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeWeapon>(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		assert(card.GetCardType() == state::kCardTypeWeapon);
+		return PlayWeaponCardPhase(card_ref, card);
+	}
+
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeHeroPower>(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		assert(card.GetCardType() == state::kCardTypeHeroPower);
+		return PlayHeroPowerCardPhase(card_ref, card);
+	}
+
+	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 			state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
@@ -101,12 +125,22 @@ namespace FlowControl
 		return true;
 	}
 
-	inline bool FlowController::PlayWeaponCardPhase(int hand_idx, state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlayWeaponCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		card.GetRawData().battlecry_handler.DoBattlecry(state_, flow_context_, card_ref, card);
+
+		return true;
+	}
+
+	inline bool FlowController::PlayHeroPowerCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		card.GetRawData().spell_handler.DoSpell(state_, flow_context_, card_ref, card);
+
+		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
+			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });
 
 		return true;
 	}
@@ -214,13 +248,7 @@ namespace FlowControl
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		assert(card.GetCardType() == state::kCardTypeHeroPower);
 
-		card.GetRawData().spell_handler.PrepareTarget(state_, flow_context_, card_ref, card);
-		card.GetRawData().spell_handler.DoSpell(state_, flow_context_, card_ref, card);
-
-		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
-			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });
-
-		return true;
+		return PlayCardPhase<state::kCardTypeHeroPower>(card_ref, card);
 	}
 
 	inline void FlowController::EndTurnInternal()

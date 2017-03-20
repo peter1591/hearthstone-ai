@@ -422,5 +422,11 @@
     <ClInclude Include="..\..\include\FlowControl\spell\Contexts-impl.h">
       <Filter>Header Files\FlowControl\spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Priest.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\HeroPowerCardBase.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

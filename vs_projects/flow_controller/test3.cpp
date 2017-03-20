@@ -154,6 +154,14 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 
 	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
 		.ChangeTo<state::kCardZonePlay>(player);
+
+
+	auto hero_power = Cards::CardDispatcher::CreateInstance(Cards::ID_CS1h_001);
+	assert(hero_power.card_type == state::kCardTypeHeroPower);
+	hero_power.zone = state::kCardZoneNewlyCreated;
+	ref = state.AddCard(state::Cards::Card(hero_power));
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
+		.ChangeTo<state::kCardZonePlay>(player);
 }
 
 struct MinionCheckStats
@@ -788,6 +796,18 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {8, 8, 8}, { 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	parameter_getter.next_battlecry_target_count = 10;
+	parameter_getter.next_battlecry_target_idx = 0;
+	if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0); // next fatigue: 3
+	CheckHero(state, state::PlayerIdentifier::Second(), 27, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
