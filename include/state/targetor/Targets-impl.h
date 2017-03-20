@@ -59,6 +59,9 @@ namespace state {
 			switch (minion_filter) {
 			case kMinionFilterAll:
 				break;
+			case kMinionFilterNotMorallyWounded:
+				if (card.GetHP() <= 0) return;
+				break;
 			case kMinionFilterTargetable:
 				// TODO: check stealth
 				// check owning player; stealth cannot be targeted by enemy

@@ -49,6 +49,7 @@ namespace state {
 			enum MinionFilterType
 			{
 				kMinionFilterAll,
+				kMinionFilterNotMorallyWounded,
 				kMinionFilterTargetable,
 				kMinionFilterTargetableBySpell,
 				kMinionFilterMurloc
