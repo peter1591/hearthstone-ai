@@ -24,7 +24,8 @@ namespace state
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				silenced(false)
+				silenced(false),
+				specified_target_getter(nullptr)
 			{
 			}
 
@@ -56,6 +57,9 @@ namespace state
 			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:
+			typedef state::targetor::Targets SpecifiedTargetGetter(GetSpecifiedTargetContext);
+			SpecifiedTargetGetter *specified_target_getter;
+
 			FlowControl::enchantment::Handler enchantment_handler;
 			FlowControl::aura::Handler aura_handler;
 			FlowControl::flag_aura::Handler flag_aura_handler;

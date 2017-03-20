@@ -26,14 +26,6 @@ namespace FlowControl
 
 				state::CardRef GetTarget();
 			};
-
-			struct BattlecryTargetGetter
-			{
-				state::State & state_;
-				FlowContext & flow_context_;
-				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
-			};
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace Cards
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 	};
 	struct Card_CS2_188 : public MinionCardBase<Card_CS2_188> {
-		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			return Targets().Minion().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {
@@ -59,7 +59,7 @@ namespace Cards
 	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069, Taunt> {};
 
 	struct Card_CS2_203 : public MinionCardBase<Card_CS2_203> {
-		static auto GetBattlecryTargets(Contexts::BattlecryTargetGetter context) {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			return Targets().Minion().Targetable();
 		}
 		static void Battlecry(Contexts::Battlecry context) {

@@ -71,8 +71,12 @@ namespace FlowControl
 	template <state::CardType CardType>
 	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		card.GetRawData().battlecry_handler.PrepareBattlecryTarget(state_, flow_context_, card_ref, card);
-		card.GetRawData().spell_handler.PrepareTarget(state_, flow_context_, card_ref, card); // TODO: unify with battlecry
+		auto* specified_target_getter = card.GetRawData().specified_target_getter;
+		if (specified_target_getter) {
+			state::targetor::Targets targets = (*specified_target_getter)(
+				state::Cards::GetSpecifiedTargetContext{ state_, flow_context_, card_ref, card });
+			flow_context_.PrepareSpecifiedTarget(state_, card_ref, card, targets);
+		}
 
 		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
 
