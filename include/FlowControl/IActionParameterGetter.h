@@ -13,7 +13,7 @@ namespace FlowControl {
 		IActionParameterGetter & operator=(IActionParameterGetter const&) = delete;
 
 		virtual int GetMinionPutLocation(int min, int max) = 0;
-		virtual state::CardRef GetBattlecryTarget( // TODO: rename to 'GetSpecifiedTarget'
+		virtual state::CardRef GetSpecifiedTarget(
 			state::State & state, state::CardRef card_ref, const state::Cards::Card & card,
 			std::vector<state::CardRef> const& targets) = 0;
 	};

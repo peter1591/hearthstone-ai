@@ -12,18 +12,18 @@ public:
 		return next_minion_put_location;
 	}
 
-	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
+	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 	{
-		assert(targets.size() == next_battlecry_target_count);
+		assert(targets.size() == next_specified_target_count);
 
-		if (next_battlecry_target_idx < 0) return state::CardRef();
-		else return targets[next_battlecry_target_idx];
+		if (next_specified_target_idx < 0) return state::CardRef();
+		else return targets[next_specified_target_idx];
 	}
 
 	int next_minion_put_location;
 
-	int next_battlecry_target_count;
-	int next_battlecry_target_idx;
+	int next_specified_target_count;
+	int next_specified_target_idx;
 };
 
 class Test3_RandomGenerator : public state::IRandomGenerator
@@ -240,8 +240,8 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-	parameter_getter.next_battlecry_target_count = 2;
-	parameter_getter.next_battlecry_target_idx = 0;
+	parameter_getter.next_specified_target_count = 2;
+	parameter_getter.next_specified_target_idx = 0;
 	if (controller.PlayCard(0) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -324,8 +324,8 @@ void test3()
 	state.GetBoard().Get(state::PlayerIdentifier::First()).GetResource().Refill();
 	AddHandCard(Cards::ID_EX1_019, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
 	parameter_getter.next_minion_put_location = 0;
-	parameter_getter.next_battlecry_target_count = 4;
-	parameter_getter.next_battlecry_target_idx = 2;
+	parameter_getter.next_specified_target_count = 4;
+	parameter_getter.next_specified_target_idx = 2;
 	if (controller.PlayCard(0) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -436,8 +436,8 @@ void test3()
 
 	state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().Refill();
 	AddHandCard(Cards::ID_CS2_189, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::Second());
-	parameter_getter.next_battlecry_target_count = 8;
-	parameter_getter.next_battlecry_target_idx = 6;
+	parameter_getter.next_specified_target_count = 8;
+	parameter_getter.next_specified_target_idx = 6;
 	parameter_getter.next_minion_put_location = 0;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
@@ -450,8 +450,8 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
 	AddHandCard(Cards::ID_CS2_189, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::Second());
-	parameter_getter.next_battlecry_target_count = 9;
-	parameter_getter.next_battlecry_target_idx = 7;
+	parameter_getter.next_specified_target_count = 9;
+	parameter_getter.next_specified_target_idx = 7;
 	parameter_getter.next_minion_put_location = 0;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
@@ -533,8 +533,8 @@ void test3()
 
 	AddHandCard(Cards::ID_CS2_203, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
 	parameter_getter.next_minion_put_location = 0;
-	parameter_getter.next_battlecry_target_count = 8;
-	parameter_getter.next_battlecry_target_idx = 2;
+	parameter_getter.next_specified_target_count = 8;
+	parameter_getter.next_specified_target_idx = 2;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -547,8 +547,8 @@ void test3()
 
 	AddHandCard(Cards::ID_CS2_188, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
 	parameter_getter.next_minion_put_location = 0;
-	parameter_getter.next_battlecry_target_count = 9;
-	parameter_getter.next_battlecry_target_idx = 1;
+	parameter_getter.next_specified_target_count = 9;
+	parameter_getter.next_specified_target_idx = 1;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -561,8 +561,8 @@ void test3()
 
 	AddHandCard(Cards::ID_CS2_188, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
 	parameter_getter.next_minion_put_location = 0;
-	parameter_getter.next_battlecry_target_count = 10;
-	parameter_getter.next_battlecry_target_idx = 2;
+	parameter_getter.next_specified_target_count = 10;
+	parameter_getter.next_specified_target_idx = 2;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -587,8 +587,8 @@ void test3()
 
 	AddHandCard(Cards::ID_CS2_188, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::First());
 	parameter_getter.next_minion_put_location = 0;
-	parameter_getter.next_battlecry_target_count = 9;
-	parameter_getter.next_battlecry_target_idx = 4;
+	parameter_getter.next_specified_target_count = 9;
+	parameter_getter.next_specified_target_idx = 4;
 	if (controller.PlayCard(2) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -752,8 +752,8 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
 	AddHandCard(Cards::ID_CS2_203, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::Second());
-	parameter_getter.next_battlecry_target_count = 5;
-	parameter_getter.next_battlecry_target_idx = 1;
+	parameter_getter.next_specified_target_count = 5;
+	parameter_getter.next_specified_target_idx = 1;
 	parameter_getter.next_minion_put_location = 0;
 	if (controller.PlayCard(4) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 25, 0, 0);
@@ -800,8 +800,8 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	parameter_getter.next_battlecry_target_count = 10;
-	parameter_getter.next_battlecry_target_idx = 0;
+	parameter_getter.next_specified_target_count = 10;
+	parameter_getter.next_specified_target_idx = 0;
 	if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0); // next fatigue: 3
 	CheckHero(state, state::PlayerIdentifier::Second(), 27, 0, 0);

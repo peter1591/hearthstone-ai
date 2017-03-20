@@ -12,18 +12,18 @@ public:
 		return next_minion_put_location;
 	}
 
-	state::CardRef GetBattlecryTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
+	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
 	{
-		assert(targets.size() == next_battlecry_target_count);
+		assert(targets.size() == next_specified_target_count);
 
-		if (next_battlecry_target_idx < 0) return state::CardRef();
-		else return targets[next_battlecry_target_idx];
+		if (next_specified_target_idx < 0) return state::CardRef();
+		else return targets[next_specified_target_idx];
 	}
 
 	int next_minion_put_location;
 
-	int next_battlecry_target_count;
-	int next_battlecry_target_idx;
+	int next_specified_target_count;
+	int next_specified_target_idx;
 };
 
 class Test2_RandomGenerator : public state::IRandomGenerator
@@ -352,8 +352,8 @@ void test2()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
 
 	assert(state.GetCardsManager().Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_CS2_189);
-	parameter_getter.next_battlecry_target_count = 4;
-	parameter_getter.next_battlecry_target_idx = 2;
+	parameter_getter.next_specified_target_count = 4;
+	parameter_getter.next_specified_target_idx = 2;
 	if (controller.PlayCard(9) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
@@ -457,8 +457,8 @@ void test2()
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
 
 	parameter_getter.next_minion_put_location = 0;
-	parameter_getter.next_battlecry_target_count = 6;
-	parameter_getter.next_battlecry_target_idx = 3;
+	parameter_getter.next_specified_target_count = 6;
+	parameter_getter.next_specified_target_idx = 3;
 	if (controller.PlayCard(9) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 23, 0, 0);
