@@ -160,7 +160,8 @@ namespace FlowControl
 		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
-		// TODO: after spell
+		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
+			state::Events::EventTypes::AfterSpell::Context{ state_, flow_context_, card_ref, card });
 
 		return true;
 	}

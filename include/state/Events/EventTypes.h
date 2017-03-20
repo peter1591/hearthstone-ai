@@ -85,6 +85,16 @@ namespace state {
 				using type = bool(*)(Context);
 			};
 
+			struct AfterSpell {
+				struct Context {
+					state::State & state_;
+					FlowControl::FlowContext & flow_context_;
+					state::CardRef const card_ref_;
+					state::Cards::Card const& card_;
+				};
+				using type = std::function<bool(Context)>;
+			};
+
 			struct OnHeal {
 				struct Context {
 					state::State & state_;

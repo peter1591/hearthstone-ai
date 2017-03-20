@@ -105,6 +105,7 @@ private: \
 			ADD_CATEGORIZED_TRIGGER_TYPE(OnHeal);
 
 			ADD_TRIGGER_TYPE(AfterHeroPower);
+			ADD_TRIGGER_TYPE(AfterSpell);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL
 #undef ADD_TRIGGER_TYPE
