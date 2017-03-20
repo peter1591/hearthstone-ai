@@ -21,7 +21,6 @@ namespace FlowControl
 						target_card.GetCardType() == state::kCardTypeWeapon);
 				}
 
-				void CalculateAmount(int * final_amount);
 				void ConductDamage(int amount);
 
 			private:

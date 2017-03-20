@@ -52,5 +52,14 @@ namespace FlowControl
 
 			return spell_damage;
 		}
+
+		inline void BoardManipulator::CalculateFinalDamageAmount(state::CardRef source, state::Cards::Card const & source_card, int amount, int * final_amount)
+		{
+			*final_amount = amount;
+
+			state_.TriggerEvent<state::Events::EventTypes::CalculateHealDamageAmount>(
+				state::Events::EventTypes::CalculateHealDamageAmount::Context
+			{ state_, flow_context_, source, source_card, final_amount });
+		}
 	}
 }

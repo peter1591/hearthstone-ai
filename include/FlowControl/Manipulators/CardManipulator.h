@@ -38,12 +38,12 @@ namespace FlowControl
 				return Damage(source, state_.GetCard(source), amount);
 			}
 			void Damage(state::CardRef source, state::Cards::Card const& source_card, int amount) {
-				auto helper = Helpers::DamageHelper(state_, flow_context_,
-					source, source_card,
-					card_ref_, card_, amount);
 				int final_amount = 0;
-				helper.CalculateAmount(&final_amount);
-				helper.ConductDamage(final_amount);
+				BoardManipulator(state_, flow_context_)
+					.CalculateFinalDamageAmount(source, source_card, amount, &final_amount);
+				Helpers::DamageHelper(state_, flow_context_,
+					source, source_card,
+					card_ref_, card_, amount).ConductDamage(final_amount);
 			}
 			void Heal(state::CardRef source, int amount) {
 				return Heal(source, state_.GetCard(source), amount);
@@ -51,6 +51,14 @@ namespace FlowControl
 			void Heal(state::CardRef source, state::Cards::Card const& source_card, int amount) {
 				return Damage(source, source_card, -amount);
 			}
+
+			void ConductFinalDamage(state::CardRef source, state::Cards::Card const& source_card, int amount) {
+				auto helper = Helpers::DamageHelper(state_, flow_context_,
+					source, source_card,
+					card_ref_, card_, amount);
+				helper.ConductDamage(amount);
+			}
+
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::FlagAuraHelper FlagAura() { return Helpers::FlagAuraHelper(state_, flow_context_, card_ref_, card_); }

@@ -9,15 +9,6 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline void DamageHelper::CalculateAmount(int * final_amount)
-			{
-				*final_amount = amount_;
-
-				state_.TriggerEvent<state::Events::EventTypes::CalculateHealDamageAmount>(
-					state::Events::EventTypes::CalculateHealDamageAmount::Context
-				{ state_, flow_context_, source_ref_, source_card_, target_ref_, target_card_, final_amount});
-			}
-
 			inline void DamageHelper::ConductDamage(int amount)
 			{
 				state::CardRef final_target = target_ref_;

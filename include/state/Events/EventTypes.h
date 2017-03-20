@@ -50,8 +50,6 @@ namespace state {
 					FlowControl::FlowContext & flow_context_;
 					state::CardRef const source_ref_;
 					state::Cards::Card const& source_card_;
-					state::CardRef const target_ref_;
-					state::Cards::Card const& target_card_;
 					int * amount_;
 				};
 				using type = std::function<bool(Context&&)>;
