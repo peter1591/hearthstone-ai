@@ -6,7 +6,7 @@
 
 namespace Cards
 {
-	struct EmitWhenAlive { // TODO: change name to LifeTimePolicy --> AliveWhenInPlay
+	struct EmitWhenAlive {
 		static void RegisterAura(state::Cards::CardData &card_data) {
 			card_data.added_to_play_zone += [](auto context) {
 				context.state_.GetAuraManager().Add(context.card_ref_);
@@ -17,7 +17,6 @@ namespace Cards
 		static bool ShouldEmit(Context&& context, state::CardRef card_ref) {
 			state::Cards::Card const& card = context.state_.GetCardsManager().Get(card_ref);
 			if (card.GetZone() != state::kCardZonePlay) return false;
-			// TODO: if (MinionCardUtils::IsSilenced(card)) return false;
 			if (card.GetHP() <= 0) return false;
 			return true;
 		}
