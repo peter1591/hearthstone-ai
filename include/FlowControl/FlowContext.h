@@ -32,14 +32,6 @@ namespace FlowControl {
 		}
 
 		template <typename... Args>
-		auto PrepareBattlecryTarget(Args&&... args) {
-			// TODO: move action parameter wrapper check here
-			battlecry_target_ = action_parameters_.GetBattlecryTarget(std::forward<Args>(args)...);
-		}
-		state::CardRef GetBattlecryTarget() const { return battlecry_target_; }
-		void SetBattlecryTarget(state::CardRef target) { battlecry_target_ = target; }
-
-		template <typename... Args>
 		auto GetMinionPutLocation(Args&&... args) {
 			return action_parameters_.GetMinionPutLocation(std::forward<Args>(args)...);
 		}
