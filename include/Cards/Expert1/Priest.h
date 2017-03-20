@@ -3,18 +3,21 @@
 namespace Cards
 {
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareHealDamage::Context&& context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareHealDamageTarget::Context&& context) {
 			state::PlayerIdentifier owner = context.state_.GetCard(self).GetPlayerIdentifier();
 			if (context.source_card_.GetPlayerIdentifier() != owner) return true; // for friendly only
 			if (context.source_card_.GetCardType() == state::kCardTypeSpell ||
-				context.source_card_.GetCardType() == state::kCardTypeHeroPower) {
-				*context.damage *= 2; // both healing and damaging
+				context.source_card_.GetCardType() == state::kCardTypeHeroPower)
+			{
+				// TOOD: should not in flow context
+				// TODO: register in another event
+				context.flow_context_.damage_ *= 2; // both healing and damaging. Positive for damaging; nagitive for healing
 			}
 			return true;
 		};
 
 		Card_EX1_350() {
-			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareHealDamage>();
+			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareHealDamageTarget>();
 		}
 	};
 	

@@ -34,21 +34,21 @@ namespace FlowControl
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(card_); }
 
 		public:
-			Helpers::DamageHelper Damage(state::CardRef source, int amount) {
+			void Damage(state::CardRef source, int amount) {
 				return Damage(source, state_.GetCard(source), amount);
 			}
-			Helpers::DamageHelper Damage(state::CardRef source, state::Cards::Card const& source_card, int amount) {
-				return Helpers::DamageHelper(state_, flow_context_,
+			void Damage(state::CardRef source, state::Cards::Card const& source_card, int amount) {
+				auto helper = Helpers::DamageHelper(state_, flow_context_,
 					source, source_card,
 					card_ref_, card_, amount);
+				helper.CalculateAmount();
+				helper.ConductDamage();
 			}
-			Helpers::DamageHelper Heal(state::CardRef source, int amount) {
+			void Heal(state::CardRef source, int amount) {
 				return Heal(source, state_.GetCard(source), amount);
 			}
-			Helpers::DamageHelper Heal(state::CardRef source, state::Cards::Card const& source_card, int amount) {
-				return Helpers::DamageHelper(state_, flow_context_,
-					source, source_card,
-					card_ref_, card_, -amount);
+			void Heal(state::CardRef source, state::Cards::Card const& source_card, int amount) {
+				return Damage(source, source_card, -amount);
 			}
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::AuraHelper Aura() { return Helpers::AuraHelper(state_, flow_context_, card_ref_, card_); }

@@ -9,27 +9,29 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
-			inline DamageHelper::DamageHelper(state::State & state, FlowControl::FlowContext & flow_context,
-				state::CardRef source_ref, state::Cards::Card const& source_card,
-				state::CardRef target_ref, state::Cards::Card const& target_card, int amount)
+			inline void DamageHelper::CalculateAmount()
 			{
-				state::CardRef final_target = target_ref;
-				state::Cards::Card const* final_target_card = &target_card;
-				int final_amount = amount;
-				state.TriggerEvent<state::Events::EventTypes::PrepareHealDamage>(
-					state::Events::EventTypes::PrepareHealDamage::Context{ state, flow_context, source_ref, source_card, &final_target, final_target_card, &final_amount });
+				flow_context_.damage_ = amount_;
+			}
+
+			inline void DamageHelper::ConductDamage()
+			{
+				state::CardRef final_target = target_ref_;
+				state::Cards::Card const* final_target_card = &target_card_;
+				state_.TriggerEvent<state::Events::EventTypes::PrepareHealDamageTarget>(
+					state::Events::EventTypes::PrepareHealDamageTarget::Context{ state_, flow_context_, source_ref_, source_card_, &final_target, final_target_card });
 
 				if (!final_target.IsValid()) return;
 
-				if (final_amount > 0) {
+				if (flow_context_.damage_ > 0) {
 					if (final_target_card->GetRawData().enchanted_states.shielded) {
-						Manipulate(state, flow_context).Character(final_target).Shield(false);
+						Manipulate(state_, flow_context_).Character(final_target).Shield(false);
 						return;
 					}
-					DoDamage(state, flow_context, final_target, *final_target_card, final_amount);
+					DoDamage(state_, flow_context_, final_target, *final_target_card, flow_context_.damage_);
 				}
-				else if (final_amount < 0) {
-					DoHeal(state, flow_context, final_target, *final_target_card, -final_amount);
+				else if (flow_context_.damage_ < 0) {
+					DoHeal(state_, flow_context_, final_target, *final_target_card, -flow_context_.damage_);
 				}
 				else { // if (final_amount == 0)
 					return;
