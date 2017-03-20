@@ -43,7 +43,7 @@ namespace FlowControl
 		assert(hero_power_ref.IsValid());
 		return Manipulators::HeroPowerManipulator(state_, flow_context_, hero_power_ref, state_.GetMutableCard(hero_power_ref));
 	}
-	
+
 	inline Manipulators::HeroPowerManipulator Manipulate::HeroPower(state::PlayerIdentifier player)
 	{
 		return HeroPower(state_.GetBoard().Get(player).GetHeroPowerRef());

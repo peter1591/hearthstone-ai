@@ -62,6 +62,7 @@ namespace FlowControl
 
 		void HeroPowerInternal();
 		bool HeroPowerPhase();
+		int GetMaxHeroPowerUseThisTurn();
 
 		int CalculateSpellDamage(state::board::Player const& player);
 		bool SetResult(Result result);

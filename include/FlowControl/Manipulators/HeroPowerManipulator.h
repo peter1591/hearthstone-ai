@@ -20,6 +20,11 @@ namespace FlowControl
 			{
 				card_.ClearUsedThisTurn();
 			}
+
+			void IncreaseUsedThisTurn()
+			{
+				card_.IncreaseUsedThisTurn();
+			}
 		};
 	}
 }

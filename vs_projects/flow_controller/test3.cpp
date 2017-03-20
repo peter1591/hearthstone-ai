@@ -811,4 +811,11 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	{
+		auto state2 = state;
+		auto flow_context2 = flow_context;
+		FlowControl::FlowController controller2(state2, flow_context2);
+		if (controller2.HeroPower() != FlowControl::kResultInvalid) assert(false);
+	}
 }
