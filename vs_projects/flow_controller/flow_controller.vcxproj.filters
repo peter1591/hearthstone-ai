@@ -428,5 +428,11 @@
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h">
       <Filter>Header Files\Cards\OG</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\OG\Shaman.h">
+      <Filter>Header Files\Cards\OG</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,4 +26,9 @@ namespace Cards {
 			card_data.enchanted_states.spell_damage = v;
 		}
 	};
+	template <int v> struct Overload {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.overload = v;
+		}
+	};
 }

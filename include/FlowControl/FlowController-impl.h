@@ -75,6 +75,9 @@ namespace FlowControl
 	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card);
+
+		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(card.GetRawData().overload);
+
 		return PlayCardPhaseInternal<CardType>(card_ref, card);
 	}
 
@@ -347,9 +350,7 @@ namespace FlowControl
 
 	inline void FlowController::StartTurnPhase()
 	{
-		state_.GetCurrentPlayer().GetResource().IncreaseTotal();
-		state_.GetCurrentPlayer().GetResource().Refill();
-		// TODO: overload
+		state_.GetCurrentPlayer().GetResource().TurnStart();
 
 		state_.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
 

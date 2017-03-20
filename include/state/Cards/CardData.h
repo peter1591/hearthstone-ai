@@ -20,7 +20,7 @@ namespace state
 		{
 		public:
 			CardData() :
-				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
+				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid), overload(0),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				used_this_turn(0), usable(false),
@@ -32,6 +32,7 @@ namespace state
 			CardType card_type;
 			CardRace card_race;
 			CardRarity card_rarity;
+			int overload; // 0: no overload; 1: overload 1 crystal
 
 			CardZone zone;
 			int zone_position; // only meaningful for minions in play zone, and for hand cards

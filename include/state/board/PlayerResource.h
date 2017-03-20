@@ -7,7 +7,7 @@ namespace state
 		class PlayerResource
 		{
 		public:
-			PlayerResource() : current_(0), total_(0) {}
+			PlayerResource() : current_(0), total_(0), overload_current_(0), overload_next_(0) {}
 
 			void SetTotal(int total)
 			{
@@ -16,26 +16,56 @@ namespace state
 			}
 			
 			int GetTotal() const { return total_; }
-			void IncreaseTotal(int amount = 1)
-			{
+
+			void GainCrystal(int amount) {
+				int new_total = total_ + amount;
+				if (new_total > 10) new_total = 10;
+				int gain = new_total - total_;
+				SetTotal(new_total);
+				current_ += gain;
+			}
+
+			void GainEmptyCrystal(int amount) {
 				int new_total = total_ + amount;
 				if (new_total > 10) new_total = 10;
 				SetTotal(new_total);
 			}
 
+			void Refill() { current_ = total_; }
 			void SetCurrent(int current) { current_ = current; }
 			int GetCurrent() const { return current_; }
-			void IncreaseCurrent(int amount = 1) { current_ += amount; }
 
-			void Refill() { current_ = total_; }
+			int GetCurrentOverloaded() const { return overload_current_; }
+			void SetCurrentOverloaded(int v) { overload_current_ = v; }
+
+			int GetNextOverload() const { return overload_next_; }
+			void IncreaseNextOverload(int v) { overload_next_ += v; }
+
+			void UnlockOverload() {
+				current_ += overload_current_;
+				overload_current_ = 0;
+				overload_next_ = 0;
+			}
+
 			void Cost(int amount) {
 				assert(GetCurrent() >= amount);
 				current_ -= amount;
 			}
 
+			void TurnStart() {
+				if (total_ < 10) {
+					++total_;
+				}
+				overload_current_ = overload_next_;
+				overload_next_ = 0;
+				current_ = total_ - overload_current_;
+			}
+
 		private:
 			int current_;
 			int total_;
+			int overload_current_;
+			int overload_next_;
 		};
 	}
 }

@@ -16,10 +16,12 @@
 
 #include "Cards/Expert1/Neutral.h"
 #include "Cards/Expert1/Priest.h"
+#include "Cards/Expert1/Shaman.h"
 
 #include "Cards/Gangs/Neutral.h"
 
 #include "Cards/OG/Warlock.h"
+#include "Cards/OG/Shaman.h"
 
 
 #include "Cards/CardBase-cleanup.h"
