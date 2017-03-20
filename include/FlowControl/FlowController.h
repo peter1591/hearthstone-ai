@@ -40,6 +40,8 @@ namespace FlowControl
 
 	private:
 		void PlayCardInternal(int hand_idx);
+		bool CostCrystal(int amount);
+		bool CostHealth(int amount);
 
 		template <state::CardType> bool PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
 		template <state::CardType> bool PlayCardPhaseInternal(state::CardRef card_ref, state::Cards::Card const& card);

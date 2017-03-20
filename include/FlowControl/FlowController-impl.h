@@ -75,33 +75,60 @@ namespace FlowControl
 	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card);
-
-		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
-
 		return PlayCardPhaseInternal<CardType>(card_ref, card);
+	}
+
+	inline bool FlowController::CostCrystal(int amount) {
+		auto& crystal = state_.GetCurrentPlayer().GetResource();
+		if (crystal.GetCurrent() < amount) {
+			return SetResult(FlowControl::kResultInvalid);
+		}
+		crystal.Cost(amount);
+		return true;
+	}
+
+	inline bool FlowController::CostHealth(int amount) {
+		state::CardRef hero_ref = state_.GetCurrentPlayer().GetHeroRef();
+		if (state_.GetCard(hero_ref).GetHP() < amount) {
+			return SetResult(FlowControl::kResultInvalid);
+		}
+		Manipulate(state_, flow_context_).Hero(hero_ref).Damage(hero_ref, amount);
+		return true;
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		assert(card.GetCardType() == state::kCardTypeMinion);
+		if (!CostCrystal(card.GetCost())) return false;
 		return PlayMinionCardPhase(card_ref, card);
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeWeapon>(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		assert(card.GetCardType() == state::kCardTypeWeapon);
+		if (!CostCrystal(card.GetCost())) return false;
 		return PlayWeaponCardPhase(card_ref, card);
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeHeroPower>(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		assert(card.GetCardType() == state::kCardTypeHeroPower);
+		if (!CostCrystal(card.GetCost())) return false;
 		return PlayHeroPowerCardPhase(card_ref, card);
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		assert(card.GetCardType() == state::kCardTypeSpell);
+
+		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
+			if (!CostHealth(card.GetCost())) return false;
+			state_.GetCurrentPlayer().SetNextSpellCostHealthThisTurn(false);
+		}
+		else {
+			if (!CostCrystal(card.GetCost())) return false;
+		}
+
 		return PlaySpellCardPhase(card_ref, card);
 	}
 
@@ -314,6 +341,8 @@ namespace FlowControl
 	{
 		state_.TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
 			state::Events::EventTypes::OnTurnEnd::Context{ state_, flow_context_ });
+		state_.GetBoard().GetFirst().EndTurn();
+		state_.GetBoard().GetSecond().EndTurn();
 	}
 
 	inline void FlowController::StartTurnPhase()

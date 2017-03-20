@@ -28,7 +28,10 @@ namespace state
 			void IncreaseCurrent(int amount = 1) { current_ += amount; }
 
 			void Refill() { current_ = total_; }
-			void Cost(int amount) { current_ -= amount; }
+			void Cost(int amount) {
+				assert(GetCurrent() >= amount);
+				current_ -= amount;
+			}
 
 		private:
 			int current_;

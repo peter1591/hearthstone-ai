@@ -19,5 +19,7 @@
 
 #include "Cards/Gangs/Neutral.h"
 
+#include "Cards/OG/Warlock.h"
+
 
 #include "Cards/CardBase-cleanup.h"

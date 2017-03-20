@@ -18,7 +18,7 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Player() : fatigue_damage_(0), hero_ref_change_id_(0) {}
+			Player() : fatigue_damage_(0), hero_ref_change_id_(0), next_spell_cost_health_this_turn_(false) {}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }
 			void SetFatigueDamage(int v) { fatigue_damage_ = v; }
@@ -32,6 +32,13 @@ namespace state
 
 			CardRef GetHeroPowerRef() const { return hero_power_ref_; }
 			CardRef GetWeaponRef() const { return weapon_ref_; }
+
+			void SetNextSpellCostHealthThisTurn(bool v = true) { next_spell_cost_health_this_turn_ = v; }
+			bool GetNextSpellCostHealthThisTurn() const { return next_spell_cost_health_this_turn_; }
+
+			void EndTurn() {
+				next_spell_cost_health_this_turn_ = false;
+			}
 
 		private: // restrict access to zone changer
 			void SetHeroRef(CardRef ref) {
@@ -61,6 +68,8 @@ namespace state
 
 			PlayerResource resource_;
 			int fatigue_damage_;
+
+			bool next_spell_cost_health_this_turn_;
 		};
 	}
 }

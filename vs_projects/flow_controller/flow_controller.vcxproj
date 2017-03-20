@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
+    <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
     <ClInclude Include="..\..\include\Cards\SpellCardBase.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />

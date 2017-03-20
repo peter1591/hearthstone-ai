@@ -85,6 +85,9 @@
     <Filter Include="Header Files\Cards\Gangs">
       <UniqueIdentifier>{99aeebe8-42e8-40f5-8365-684dfb940d33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cards\OG">
+      <UniqueIdentifier>{09a53569-3b68-47c4-a6cf-bb5913537a03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -421,6 +424,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\SpellCardBase.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\OG\Warlock.h">
+      <Filter>Header Files\Cards\OG</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
