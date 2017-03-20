@@ -2,21 +2,20 @@
 
 #include <unordered_set>
 #include "Utils/StaticDispatcher.h"
+#include "state/State.h"
 
-namespace FlowControl
+namespace Cards
 {
-	namespace Dispatchers
+	namespace detail
 	{
-		namespace Minions_impl
+		template <typename T> class ConstructorInvoker
 		{
-			template <typename T> class ConstructorInvoker
+		public:
+			static state::Cards::CardData Invoke()
 			{
-			public:
-				static state::Cards::CardData Invoke()
-				{
-					return T();
-				}
-			};
+				return T();
+			}
+		};
 
 #define CREATE_INVOKER(METHOD_NAME) \
 			template <typename T> class METHOD_NAME ## Invoker \
@@ -50,30 +49,24 @@ namespace FlowControl
 
 #undef CREATE_INVOKER
 
-			class DefaultInvoked : public state::Cards::CardData
-			{
-			public:
-				DefaultInvoked()
-				{
-					throw std::exception("card is not implemented");
-				}
-			};
-		}
-
-		class Minions
+		class DefaultInvoked : public state::Cards::CardData
 		{
 		public:
-			using DispatcherImpl = Utils::StaticDispatcher<Minions_impl::DefaultInvoked>;
-
-			static state::Cards::CardData CreateInstance(int id)
+			DefaultInvoked()
 			{
-				return DispatcherImpl::Invoke<Minions_impl::ConstructorInvoker, state::Cards::CardData>(id);
+				throw std::exception("card is not implemented");
 			}
 		};
 	}
-}
 
-#define REGISTER_MINION_CARD_CLASS(ClassName) \
-		template <> template <> \
-		struct FlowControl::Dispatchers::Minions::DispatcherImpl::DispatchMap<(ClassName::id)> \
-		{ typedef ClassName type; };
+	class CardDispatcher
+	{
+	public:
+		using DispatcherImpl = Utils::StaticDispatcher<detail::DefaultInvoked>;
+
+		static state::Cards::CardData CreateInstance(int id)
+		{
+			return DispatcherImpl::Invoke<detail::ConstructorInvoker, state::Cards::CardData>(id);
+		}
+	};
+}

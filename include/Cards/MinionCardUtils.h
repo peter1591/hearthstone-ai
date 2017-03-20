@@ -223,7 +223,7 @@ namespace Cards
 		{
 			if (context.state_.GetBoard().Get(player).minions_.Full()) return;
 
-			state::Cards::CardData card_data = FlowControl::Dispatchers::Minions::CreateInstance(card_id);
+			state::Cards::CardData card_data = Cards::CardDispatcher::CreateInstance(card_id);
 			card_data.enchanted_states.player = player;
 
 			FlowControl::Manipulate(context.state_, context.flow_context_)

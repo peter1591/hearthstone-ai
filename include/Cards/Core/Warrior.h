@@ -7,4 +7,4 @@ namespace Cards
 	};
 }
 
-REGISTER_WEAPON_CARD_CLASS(Cards::Card_CS2_106)
+REGISTER_CARD(CS2_106)

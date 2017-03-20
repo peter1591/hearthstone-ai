@@ -16,9 +16,6 @@
     <Filter Include="Header Files\FlowControl">
       <UniqueIdentifier>{b6efd889-f8b1-482c-97a2-9074d8c530a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\Dispatchers">
-      <UniqueIdentifier>{369bc012-1375-4603-9b5c-185ab9389242}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl\Manipulators">
       <UniqueIdentifier>{89ce036c-53b3-446b-944c-7829de0e30e6}</UniqueIdentifier>
     </Filter>
@@ -110,9 +107,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowController.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h">
-      <Filter>Header Files\FlowControl\Dispatchers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\State\board\Deck.h">
       <Filter>Header Files\state\board</Filter>
     </ClInclude>
@@ -199,9 +193,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h">
       <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h">
-      <Filter>Header Files\FlowControl\Dispatchers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
@@ -412,6 +403,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\StaticInvokables.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardDispatcher.h">
+      <Filter>Header Files\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

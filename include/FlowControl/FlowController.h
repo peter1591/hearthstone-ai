@@ -19,8 +19,6 @@
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 
 #include "FlowControl/detail/Resolver.h"
-#include "FlowControl/Dispatchers/Minions.h"
-#include "FlowControl/Dispatchers/Weapons.h"
 #include "Cards/Cards.h"
 
 namespace FlowControl

@@ -137,6 +137,7 @@
     <ClInclude Include="..\..\include\Cards\CardBase-cleanup.h" />
     <ClInclude Include="..\..\include\Cards\CardBase.h" />
     <ClInclude Include="..\..\include\Cards\CardData.h" />
+    <ClInclude Include="..\..\include\Cards\CardDispatcher.h" />
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Contexts.h" />
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
@@ -161,8 +162,6 @@
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\ActionParameterWrapper.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\Minions.h" />
-    <ClInclude Include="..\..\include\FlowControl\Dispatchers\Weapons.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h" />

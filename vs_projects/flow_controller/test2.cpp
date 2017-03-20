@@ -60,7 +60,7 @@ static void CheckZoneAndPosition(const state::State & state, state::CardRef ref,
 
 static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
-	state::Cards::CardData raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
+	state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(id);
 	raw_card.enchanted_states.player = player;
 	raw_card.zone = state::kCardZoneNewlyCreated;
 	raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
@@ -99,11 +99,8 @@ static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_conte
 
 static state::Cards::Card CreateHandCard(Cards::CardId id, state::CardType type, state::State & state, state::PlayerIdentifier player)
 {
-	state::Cards::CardData raw_card;
-
-	if (type == state::kCardTypeMinion) raw_card = FlowControl::Dispatchers::Minions::CreateInstance(id);
-	else if (type == state::kCardTypeWeapon) raw_card = FlowControl::Dispatchers::Weapons::CreateInstance(id);
-	else throw std::exception("unknown type");
+	state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(id);
+	assert(raw_card.card_type == type);
 
 	raw_card.enchanted_states.player = player;
 	raw_card.zone = state::kCardZoneNewlyCreated;

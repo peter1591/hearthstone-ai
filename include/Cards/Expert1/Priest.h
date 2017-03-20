@@ -38,4 +38,4 @@ namespace Cards
 	*/
 }
 
-REGISTER_MINION_CARD(EX1_350)
+REGISTER_CARD(EX1_350)

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "FlowControl/Dispatchers/Minions.h"
-
 namespace FlowControl
 {
 	namespace Manipulators
