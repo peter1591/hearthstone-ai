@@ -60,6 +60,9 @@ namespace FlowControl
 		case state::kCardTypeWeapon:
 			PlayCardPhase<state::kCardTypeWeapon>(card_ref, card);
 			break;
+		case state::kCardTypeSpell:
+			PlayCardPhase<state::kCardTypeSpell>(card_ref, card);
+			break;
 		default:
 			assert(false);
 			return;
@@ -96,6 +99,12 @@ namespace FlowControl
 		return PlayHeroPowerCardPhase(card_ref, card);
 	}
 
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		assert(card.GetCardType() == state::kCardTypeSpell);
+		return PlaySpellCardPhase(card_ref, card);
+	}
+
 	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
@@ -108,7 +117,7 @@ namespace FlowControl
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
 
-		state_.GetZoneChanger<state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
+		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
@@ -140,6 +149,18 @@ namespace FlowControl
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
 			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });
+
+		return true;
+	}
+
+	inline bool FlowController::PlaySpellCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
+
+		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
+			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
+
+		// TODO: after spell
 
 		return true;
 	}

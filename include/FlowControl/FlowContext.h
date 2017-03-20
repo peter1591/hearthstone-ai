@@ -54,6 +54,18 @@ namespace FlowControl {
 			assert(specified_target_.IsValid());
 		}
 
+		state::CardRef GetRandomTarget(state::State & state, state::targetor::Targets const& target_info)
+		{
+			std::vector<state::CardRef> targets;
+			target_info.Fill(state, targets);
+
+			size_t count = targets.size();
+			if (count == 0) return state::CardRef();
+			if (count == 1) return targets.front();
+
+			return targets[random_.Get(count)];
+		}
+
 		state::CardRef GetSpecifiedTarget()
 		{
 			if (specified_target_.IsValid()) return specified_target_;

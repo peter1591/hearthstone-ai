@@ -140,6 +140,7 @@
     <ClInclude Include="..\..\include\Cards\CardDispatcher.h" />
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Contexts.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Mage.h" />
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Core\Priest.h" />
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
@@ -149,10 +150,12 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />
     <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h" />
+    <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\HeroPowerCardBase.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardBase.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
+    <ClInclude Include="..\..\include\Cards\SpellCardBase.h" />
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
