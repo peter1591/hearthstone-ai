@@ -35,7 +35,7 @@ namespace Cards
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
-			AnotherPlayer(context).GainEmptyCrystal();
+			AnotherPlayer(context).GetResource().GainEmptyCrystal();
 		}
 	};
 

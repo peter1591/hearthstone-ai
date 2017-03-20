@@ -17,7 +17,7 @@ namespace state
 			
 			int GetTotal() const { return total_; }
 
-			void GainCrystal(int amount) {
+			void GainCrystal(int amount = 1) {
 				int new_total = total_ + amount;
 				if (new_total > 10) new_total = 10;
 				int gain = new_total - total_;
@@ -25,7 +25,7 @@ namespace state
 				current_ += gain;
 			}
 
-			void GainEmptyCrystal(int amount) {
+			void GainEmptyCrystal(int amount = 1) {
 				int new_total = total_ + amount;
 				if (new_total > 10) new_total = 10;
 				SetTotal(new_total);

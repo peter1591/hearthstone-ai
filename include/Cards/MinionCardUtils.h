@@ -7,31 +7,6 @@
 
 namespace Cards
 {
-	template <typename Context>
-	class PlayerHelper
-	{
-	public:
-		template <typename T>
-		PlayerHelper(T&& context, state::board::Player & player) : context_(std::forward<T>(context)), player_(player) {}
-
-		void GainEmptyCrystal(int amount = 1)
-		{
-			player_.GetResource().GainEmptyCrystal(amount);
-		}
-
-		void GainCrystal(int amount)
-		{
-			player_.GetResource().GainCrystal(amount);
-		}
-
-		bool IsMinionsFull() const { return player_.minions_.Full(); }
-		auto GetMinionsCount() const { return player_.minions_.Size(); }
-
-	private:
-		Context & context_;
-		state::board::Player & player_;
-	};
-
 	class MinionCardUtils
 	{
 	public:
@@ -154,21 +129,21 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static PlayerHelper<Context> Player(Context&& context, state::PlayerIdentifier player)
+		static state::board::Player& Player(Context&& context, state::PlayerIdentifier player)
 		{
-			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(player));
+			return context.state_.GetBoard().Get(player);
 		}
 
 		template <typename Context>
-		static PlayerHelper<Context> Player(Context&& context)
+		static state::board::Player& Player(Context&& context)
 		{
-			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier()));
+			return Player(std::forward<Context>(context), context.card_.GetPlayerIdentifier());
 		}
 
 		template <typename Context>
-		static PlayerHelper<Context> AnotherPlayer(Context&& context)
+		static state::board::Player& AnotherPlayer(Context&& context)
 		{
-			return PlayerHelper<Context>(context, context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier().Opposite()));
+			return Player(std::forward<Context>(context), context.card_.GetPlayerIdentifier().Opposite());
 		}
 
 		static bool IsMortallyWounded(state::Cards::Card const& target)
