@@ -70,9 +70,6 @@
     <Filter Include="Header Files\FlowControl\enchantment">
       <UniqueIdentifier>{369a570d-f9e1-4e45-8898-3b7f5b4b3496}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\battlecry">
-      <UniqueIdentifier>{a931e8d4-4449-43e2-81be-3f6627e646ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl\deathrattle">
       <UniqueIdentifier>{f1f4e342-2cbc-4a9d-8446-ccbdb68f14a6}</UniqueIdentifier>
     </Filter>
@@ -82,8 +79,8 @@
     <Filter Include="Header Files\FlowControl\flag_aura">
       <UniqueIdentifier>{7381f78b-36a1-4633-8389-44967de7dcc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\spell">
-      <UniqueIdentifier>{d63a5d8c-fecc-403b-b83e-e7e54341fc7e}</UniqueIdentifier>
+    <Filter Include="Header Files\FlowControl\onplay">
+      <UniqueIdentifier>{a931e8d4-4449-43e2-81be-3f6627e646ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -365,18 +362,6 @@
     <ClInclude Include="..\..\include\state\targetor\Targets-impl.h">
       <Filter>Header Files\state\targetor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler.h">
-      <Filter>Header Files\FlowControl\battlecry</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts.h">
-      <Filter>Header Files\FlowControl\battlecry</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler-impl.h">
-      <Filter>Header Files\FlowControl\battlecry</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts-impl.h">
-      <Filter>Header Files\FlowControl\battlecry</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h">
       <Filter>Header Files\FlowControl\deathrattle</Filter>
     </ClInclude>
@@ -407,23 +392,23 @@
     <ClInclude Include="..\..\include\Cards\CardDispatcher.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\spell\Handler.h">
-      <Filter>Header Files\FlowControl\spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\spell\Contexts.h">
-      <Filter>Header Files\FlowControl\spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\spell\Handler-impl.h">
-      <Filter>Header Files\FlowControl\spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\spell\Contexts-impl.h">
-      <Filter>Header Files\FlowControl\spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Priest.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\HeroPowerCardBase.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts-impl.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

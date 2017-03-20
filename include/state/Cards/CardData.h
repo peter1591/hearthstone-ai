@@ -8,10 +8,9 @@
 #include "state/Cards/Contexts.h"
 #include "FlowControl/aura/Handler.h"
 #include "FlowControl/flag_aura/Handler.h"
-#include "FlowControl/battlecry/Handler.h"
+#include "FlowControl/onplay/Handler.h"
 #include "FlowControl/deathrattle/Handler.h"
 #include "FlowControl/enchantment/Handler.h"
-#include "FlowControl/spell/Handler.h"
 
 namespace state
 {
@@ -24,8 +23,7 @@ namespace state
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				silenced(false),
-				specified_target_getter(nullptr)
+				silenced(false)
 			{
 			}
 
@@ -57,15 +55,11 @@ namespace state
 			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:
-			typedef state::targetor::Targets SpecifiedTargetGetter(GetSpecifiedTargetContext);
-			SpecifiedTargetGetter *specified_target_getter;
-
 			FlowControl::enchantment::Handler enchantment_handler;
 			FlowControl::aura::Handler aura_handler;
 			FlowControl::flag_aura::Handler flag_aura_handler;
-			FlowControl::battlecry::Handler battlecry_handler;
+			FlowControl::onplay::Handler onplay_handler;
 			FlowControl::deathrattle::Handler deathrattle_handler;
-			FlowControl::spell::Handler spell_handler;
 		};
 	}
 }

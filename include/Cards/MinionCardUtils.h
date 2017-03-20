@@ -207,7 +207,7 @@ namespace Cards
 		}
 
 		template <typename EnchantType>
-		static void ApplyOneTurnEnchant(Contexts::Battlecry context) {
+		static void ApplyOneTurnEnchant(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
 			auto enchant_id = Manipulate(context).Minion(target).Enchant().Add(EnchantType());
 			context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(

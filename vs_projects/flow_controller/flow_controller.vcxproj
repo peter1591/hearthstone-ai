@@ -157,10 +157,6 @@
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Contexts.h" />
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\battlecry\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h" />
@@ -196,10 +192,10 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
-    <ClInclude Include="..\..\include\FlowControl\spell\Contexts-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\spell\Contexts.h" />
-    <ClInclude Include="..\..\include\FlowControl\spell\Handler-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\spell\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />

@@ -1,16 +1,16 @@
 #pragma once
 
 #include <assert.h>
-#include "FlowControl/battlecry/Contexts.h"
+#include "FlowControl/onplay/Contexts.h"
 #include "FlowControl/FlowContext.h"
 
 namespace FlowControl
 {
-	namespace battlecry
+	namespace onplay
 	{
 		namespace context
 		{
-			inline state::CardRef BattleCry::GetTarget() {
+			inline state::CardRef OnPlay::GetTarget() {
 				state::CardRef target = flow_context_.GetSpecifiedTarget();
 				assert(target.IsValid());
 				return target;

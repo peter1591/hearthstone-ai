@@ -47,13 +47,13 @@ namespace FlowControl {
 
 		void PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const& target_info)
 		{
-			if (!specified_target_.IsValid()) {
-				std::vector<state::CardRef> targets;
-				target_info.Fill(state, targets);
-				specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
-			}
+			assert(!specified_target_.IsValid());
+			std::vector<state::CardRef> targets;
+			target_info.Fill(state, targets);
+			specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
 			assert(specified_target_.IsValid());
 		}
+
 		state::CardRef GetSpecifiedTarget()
 		{
 			if (specified_target_.IsValid()) return specified_target_;

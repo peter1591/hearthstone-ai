@@ -71,12 +71,7 @@ namespace FlowControl
 	template <state::CardType CardType>
 	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		auto* specified_target_getter = card.GetRawData().specified_target_getter;
-		if (specified_target_getter) {
-			state::targetor::Targets targets = (*specified_target_getter)(
-				state::Cards::GetSpecifiedTargetContext{ state_, flow_context_, card_ref, card });
-			flow_context_.PrepareSpecifiedTarget(state_, card_ref, card, targets);
-		}
+		card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card);
 
 		state_.GetCurrentPlayer().GetResource().Cost(card.GetCost());
 
@@ -119,7 +114,7 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		card.GetRawData().battlecry_handler.DoBattlecry(state_, flow_context_, card_ref, card);
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
 
@@ -134,14 +129,14 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		card.GetRawData().battlecry_handler.DoBattlecry(state_, flow_context_, card_ref, card);
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
 
 		return true;
 	}
 
 	inline bool FlowController::PlayHeroPowerCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		card.GetRawData().spell_handler.DoSpell(state_, flow_context_, card_ref, card);
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
 			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });

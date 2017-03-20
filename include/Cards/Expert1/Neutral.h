@@ -13,7 +13,7 @@ namespace Cards
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			return Targets().Minion().Targetable();
 		}
-		static void Battlecry(Contexts::Battlecry context) {
+		static void Battlecry(Contexts::OnPlay context) {
 			return ApplyOneTurnEnchant<Card_CS2_188_Enchant>(std::move(context));
 		}
 	};
@@ -34,7 +34,7 @@ namespace Cards
 	struct Card_EX1_008 : public MinionCardBase<Card_EX1_008, Shield> {};
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
-		static void Battlecry(Contexts::Battlecry context) {
+		static void Battlecry(Contexts::OnPlay context) {
 			AnotherPlayer(context).GainEmptyCrystal();
 		}
 	};
@@ -62,7 +62,7 @@ namespace Cards
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			return Targets().Minion().Targetable();
 		}
-		static void Battlecry(Contexts::Battlecry context) {
+		static void Battlecry(Contexts::OnPlay context) {
 			return Manipulate(context).Minion(context.GetTarget()).Silence();
 		}
 	};

@@ -13,11 +13,18 @@ namespace FlowControl
 {
 	class FlowContext;
 
-	namespace battlecry
+	namespace onplay
 	{
 		namespace context
 		{
-			struct BattleCry
+			struct GetSpecifiedTarget {
+				state::State & state_;
+				FlowContext & flow_context_;
+				state::CardRef card_ref_;
+				const state::Cards::Card & card_;
+			};
+
+			struct OnPlay
 			{
 				state::State & state_;
 				FlowContext & flow_context_;

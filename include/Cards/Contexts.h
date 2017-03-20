@@ -2,7 +2,7 @@
 
 namespace Cards {
 	namespace Contexts {
-		using SpecifiedTargetGetter = state::Cards::GetSpecifiedTargetContext;
-		using Battlecry = FlowControl::battlecry::context::BattleCry;
+		using SpecifiedTargetGetter = FlowControl::onplay::context::GetSpecifiedTarget;
+		using OnPlay = FlowControl::onplay::context::OnPlay;
 	}
 }
