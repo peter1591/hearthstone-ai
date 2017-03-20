@@ -153,9 +153,6 @@ namespace state
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
 
-			void SetWeapon(CardRef weapon_ref) { data_.weapon_ref = weapon_ref; }
-			void ClearWeapon() { data_.weapon_ref.Invalidate(); }
-
 			void SetSilenced() { data_.silenced = true; }
 
 		public:

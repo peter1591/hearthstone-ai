@@ -95,10 +95,6 @@ namespace FlowControl
 						.TriggerAll()
 						.Clear();
 
-					if (card.GetCardType() == state::kCardTypeWeapon) {
-						Manipulate(state_, flow_context_).Hero(card.GetPlayerIdentifier()).RemoveWeaponRef()();
-					}
-
 					state_.GetZoneChanger(flow_context_.GetRandom(), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
@@ -142,7 +138,7 @@ namespace FlowControl
 			void UpdateEnchantments(state::PlayerIdentifier player)
 			{
 				state::CardRef hero_ref = state_.GetBoard().Get(player).GetHeroRef();
-				state::CardRef weapon_ref = state_.GetCardsManager().Get(hero_ref).GetRawData().weapon_ref;
+				state::CardRef weapon_ref = state_.GetBoard().Get(player).GetWeaponRef();
 
 				Manipulate(state_, flow_context_).Hero(player).Enchant().Update();
 

@@ -189,7 +189,7 @@ namespace FlowControl
 		{
 			const state::Cards::Card & attacker_card = state_.GetCardsManager().Get(attacker);
 			if (attacker_card.GetCardType() == state::kCardTypeHero) {
-				state::CardRef weapon_ref = attacker_card.GetRawData().weapon_ref;
+				state::CardRef weapon_ref = state_.GetBoard().Get(attacker_card.GetPlayerIdentifier()).GetWeaponRef();
 				if (weapon_ref.IsValid()) {
 					Manipulate(state_, flow_context_).Weapon(weapon_ref).Damage(attacker, attacker_card, 1);
 				}
@@ -221,13 +221,13 @@ namespace FlowControl
 		int v1 = card.GetAttack();
 		if (v1 > 0) attack += v1;
 
-		state::CardRef weapon_ref = card.GetRawData().weapon_ref;
-		if (weapon_ref.IsValid()) {
-			assert(card.GetCardType() == state::kCardTypeHero);
-
-			state::Cards::Card const& weapon = state_.GetCardsManager().Get(weapon_ref);
-			int v2 = weapon.GetAttack();
-			if (v2 > 0) attack += v2;
+		if (card.GetCardType() == state::kCardTypeHero) {
+			state::CardRef weapon_ref = state_.GetBoard().Get(card.GetPlayerIdentifier()).GetWeaponRef();
+			if (weapon_ref.IsValid()) {
+				state::Cards::Card const& weapon = state_.GetCardsManager().Get(weapon_ref);
+				int v2 = weapon.GetAttack();
+				if (v2 > 0) attack += v2;
+			}
 		}
 
 		return attack;
@@ -318,9 +318,10 @@ namespace FlowControl
 	{
 		int spell_damage = 0;
 
-		state::Cards::Card const& hero = state_.GetCardsManager().Get(player.GetHeroRef());
-		spell_damage += hero.GetSpellDamage();
-		spell_damage += state_.GetCardsManager().Get(hero.GetRawData().weapon_ref).GetSpellDamage();
+		spell_damage += state_.GetCardsManager().Get(player.GetHeroRef()).GetSpellDamage();
+
+		auto weapon_ref = player.GetWeaponRef();
+		if (weapon_ref.IsValid()) spell_damage += state_.GetCardsManager().Get(weapon_ref).GetSpellDamage();
 
 		for (state::CardRef const& minion_ref : player.minions_.Get()) {
 			spell_damage += state_.GetCardsManager().Get(minion_ref).GetSpellDamage();

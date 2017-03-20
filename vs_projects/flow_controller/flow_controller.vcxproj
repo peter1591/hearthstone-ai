@@ -186,7 +186,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\FlagAuraHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h" />

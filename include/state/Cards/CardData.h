@@ -43,9 +43,6 @@ namespace state
 
 			int used_this_turn; // for hero power
 
-		public: // for hero type
-			CardRef weapon_ref; // TODO: consider to record only in board::Player structure
-
 		public: // for minions
 			bool silenced;
 

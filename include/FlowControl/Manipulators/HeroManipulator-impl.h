@@ -35,22 +35,23 @@ namespace FlowControl
 		
 		inline void HeroManipulator::DestroyWeapon()
 		{
-			if (!card_.GetRawData().weapon_ref.IsValid()) return;
+			state::CardRef weapon_ref = state_.GetBoard().Get(card_.GetPlayerIdentifier()).GetWeaponRef();
+			if (!weapon_ref.IsValid()) return;
 
 			if (!flow_context_.GetDestroyedWeapon().IsValid()) {
-				flow_context_.SetDestroyedWeapon(card_.GetRawData().weapon_ref);
+				flow_context_.SetDestroyedWeapon(weapon_ref);
 			}
-			card_.ClearWeapon();
 
-			assert(!card_.GetRawData().weapon_ref.IsValid());
+			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(flow_context_.GetRandom(), weapon_ref)
+				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
+
+			assert(state_.GetBoard().Get(card_.GetPlayerIdentifier()).GetWeaponRef().IsValid() == false);
 		}
 
 		template <state::CardZone KnownZone>
 		inline void HeroManipulator::EquipWeapon(state::CardRef weapon_ref)
 		{
 			DestroyWeapon();
-
-			card_.SetWeapon(weapon_ref);
 
 			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(flow_context_.GetRandom(), weapon_ref)
 				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());

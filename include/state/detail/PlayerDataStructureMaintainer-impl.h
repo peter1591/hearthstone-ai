@@ -200,7 +200,7 @@ namespace state {
 			assert(card.GetCardType() == kCardTypeWeapon);
 			assert(card.GetZone() == kCardZonePlay);
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
-			assert(cards_mgr.Get(player.GetHeroRef()).GetRawData().weapon_ref == card_ref);
+			player.SetWeaponRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeWeapon, kCardZonePlay>::
 			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
@@ -208,7 +208,7 @@ namespace state {
 			assert(card.GetCardType() == kCardTypeWeapon);
 			assert(card.GetZone() == kCardZonePlay);
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
-			assert(!cards_mgr.Get(player.GetHeroRef()).GetRawData().weapon_ref.IsValid());
+			player.InvalidateWeaponRef();
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeSpell, kCardZonePlay>::

@@ -194,9 +194,6 @@
     <ClInclude Include="..\..\include\Cards\WeaponCardBase.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
