@@ -314,22 +314,6 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).CurrentHero().DrawCard();
 	}
 
-	inline int FlowController::CalculateSpellDamage(state::board::Player const& player)
-	{
-		int spell_damage = 0;
-
-		spell_damage += state_.GetCardsManager().Get(player.GetHeroRef()).GetSpellDamage();
-
-		auto weapon_ref = player.GetWeaponRef();
-		if (weapon_ref.IsValid()) spell_damage += state_.GetCardsManager().Get(weapon_ref).GetSpellDamage();
-
-		for (state::CardRef const& minion_ref : player.minions_.Get()) {
-			spell_damage += state_.GetCardsManager().Get(minion_ref).GetSpellDamage();
-		}
-
-		return spell_damage;
-	}
-
 	inline bool FlowController::SetResult(Result result)
 	{
 		assert(result != kResultNotDetermined);

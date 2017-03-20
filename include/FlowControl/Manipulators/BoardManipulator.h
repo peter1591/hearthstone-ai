@@ -22,6 +22,8 @@ namespace FlowControl
 
 			void Summon(state::Cards::CardData&& card_data, state::PlayerIdentifier player, int pos);
 
+			int GetSpellDamage(state::PlayerIdentifier player);
+
 		private:
 			state::State & state_;
 			FlowContext & flow_context_;

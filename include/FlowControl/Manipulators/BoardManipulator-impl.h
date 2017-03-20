@@ -34,5 +34,23 @@ namespace FlowControl
 			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
 			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
 		}
+
+		inline int BoardManipulator::GetSpellDamage(state::PlayerIdentifier player_id)
+		{
+			state::board::Player const& player = state_.GetBoard().Get(player_id);
+
+			int spell_damage = 0;
+
+			spell_damage += state_.GetCardsManager().Get(player.GetHeroRef()).GetSpellDamage();
+
+			auto weapon_ref = player.GetWeaponRef();
+			if (weapon_ref.IsValid()) spell_damage += state_.GetCardsManager().Get(weapon_ref).GetSpellDamage();
+
+			for (state::CardRef const& minion_ref : player.minions_.Get()) {
+				spell_damage += state_.GetCardsManager().Get(minion_ref).GetSpellDamage();
+			}
+
+			return spell_damage;
+		}
 	}
 }
