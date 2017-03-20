@@ -23,6 +23,7 @@ namespace FlowControl
 			}
 
 			void IncreaseUsedThisTurn() { card_.IncreaseUsedThisTurn(); }
+			void SetUsable() { card_.SetUsable(true); }
 			void SetUnusable() { card_.SetUsable(false); }
 		};
 	}
