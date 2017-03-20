@@ -291,6 +291,7 @@ namespace FlowControl
 			Manipulate(state_, flow_context_).Minion(minion).TurnStart();
 		}
 		Manipulate(state_, flow_context_).CurrentHero().TurnStart();
+		Manipulate(state_, flow_context_).HeroPower(state_.GetCurrentPlayerId()).TurnStart();
 	}
 
 	inline void FlowController::DrawCardPhase()

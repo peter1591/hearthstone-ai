@@ -160,6 +160,14 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 
 	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
 		.ChangeTo<state::kCardZonePlay>(player);
+
+
+	auto hero_power = Cards::CardDispatcher::CreateInstance(Cards::ID_CS1h_001);
+	assert(hero_power.card_type == state::kCardTypeHeroPower);
+	hero_power.zone = state::kCardZoneNewlyCreated;
+	ref = state.AddCard(state::Cards::Card(hero_power));
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(flow_context.GetRandom(), ref)
+		.ChangeTo<state::kCardZonePlay>(player);
 }
 
 struct MinionCheckStats

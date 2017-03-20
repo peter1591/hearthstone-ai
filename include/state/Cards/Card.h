@@ -133,6 +133,9 @@ namespace state
 			void IncreaseNumAttacksThisTurn() { ++data_.num_attacks_this_turn; }
 			void ClearNumAttacksThisTurn() { data_.num_attacks_this_turn = 0; }
 
+			void IncreaseUsedThisTurn() { ++data_.used_this_turn; }
+			void ClearUsedThisTurn() { data_.used_this_turn = 0; }
+
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
 
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }

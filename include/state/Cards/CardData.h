@@ -22,7 +22,7 @@ namespace state
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
-				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
+				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0), used_this_turn(0),
 				silenced(false)
 			{
 			}
@@ -40,6 +40,8 @@ namespace state
 			bool just_played;
 			int num_attacks_this_turn;
 			EnchantableStates enchanted_states;
+
+			int used_this_turn; // for hero power
 
 		public: // for hero type
 			CardRef weapon_ref; // TODO: consider to record only in board::Player structure

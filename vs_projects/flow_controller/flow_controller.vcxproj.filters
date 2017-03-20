@@ -410,5 +410,8 @@
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h">
       <Filter>Header Files\FlowControl\onplay</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

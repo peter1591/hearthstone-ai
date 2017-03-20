@@ -8,6 +8,7 @@
 #include "FlowControl/Manipulators/CharacterManipulator.h"
 #include "FlowControl/Manipulators/MinionManipulator.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
+#include "FlowControl/Manipulators/HeroPowerManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
 
 namespace FlowControl
@@ -23,6 +24,9 @@ namespace FlowControl
 		Manipulators::HeroManipulator OpponentHero();
 		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player);
 		Manipulators::HeroManipulator Hero(state::CardRef hero_ref);
+
+		Manipulators::HeroPowerManipulator HeroPower(state::PlayerIdentifier player);
+		Manipulators::HeroPowerManipulator HeroPower(state::CardRef hero_power_ref);
 
 		Manipulators::MinionManipulator Minion(state::CardRef ref);
 

@@ -189,6 +189,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\WeaponRefRemover.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
