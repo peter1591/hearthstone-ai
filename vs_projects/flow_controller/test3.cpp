@@ -1108,4 +1108,19 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetCurrentOverloaded() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetNextOverload() == 0);
+
+	state.GetBoard().GetFirst().SetFatigueDamage(0);
+	state.GetBoard().GetSecond().SetFatigueDamage(0);
+	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
+	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 28, 0, 0);
+	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetCurrentOverloaded() == 0);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetNextOverload() == 0);
 }
