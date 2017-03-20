@@ -4,7 +4,7 @@
 
 #include "state/IRandomGenerator.h"
 #include "state/Types.h"
-#include "FlowControl/detail/ActionParameterWrapper.h"
+#include "FlowControl/IActionParameterGetter.h"
 
 namespace FlowControl {
 	enum Result
@@ -19,35 +19,44 @@ namespace FlowControl {
 	class FlowContext
 	{
 	public:
-		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_getter)
-			: random_(random), action_parameters_(action_getter),
-			result_(FlowControl::kResultNotDetermined)
+		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters)
+			: random_(random), action_parameters_(action_parameters),
+			result_(FlowControl::kResultNotDetermined),
+			minion_put_location_(-1)
 		{}
 
 	public: // action parameter
 		void ResetActionParameter()
 		{
-			action_parameters_.Clear();
-			battlecry_target_.Invalidate();
+			minion_put_location_ = -1;
+			specified_target_.Invalidate();
 		}
 
-		template <typename... Args>
-		auto GetMinionPutLocation(Args&&... args) {
-			return action_parameters_.GetMinionPutLocation(std::forward<Args>(args)...);
+		auto GetMinionPutLocation(int min, int max) {
+			if (minion_put_location_ < 0) {
+				if (min >= max) {
+					minion_put_location_ = min;
+				}
+				else {
+					minion_put_location_ = action_parameters_.GetMinionPutLocation(min, max);
+				}
+				assert(minion_put_location_ >= 0);
+			}
+			return minion_put_location_;
 		}
 
 		void PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const& target_info)
 		{
-			if (!battlecry_target_.IsValid()) { // TODO: rename to 'specified_target'
+			if (!specified_target_.IsValid()) {
 				std::vector<state::CardRef> targets;
 				target_info.Fill(state, targets);
-				battlecry_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
+				specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
 			}
-			assert(battlecry_target_.IsValid());
+			assert(specified_target_.IsValid());
 		}
 		state::CardRef GetSpecifiedTarget()
 		{
-			if (battlecry_target_.IsValid()) return battlecry_target_;
+			if (specified_target_.IsValid()) return specified_target_;
 
 			// TODO: maybe use this to indicate 'cast a spell with a random-choose target'
 			assert(false);
@@ -88,9 +97,10 @@ namespace FlowControl {
 	private:
 		Result result_;
 		state::IRandomGenerator & random_;
-		detail::ActionParameterWrapper action_parameters_;
+		IActionParameterGetter & action_parameters_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
-		state::CardRef battlecry_target_; // TODO: rename to 'specified_target'
+		int minion_put_location_;
+		state::CardRef specified_target_;
 		state::CardRef destroyed_weapon_;
 	};
 }
