@@ -22,7 +22,8 @@ namespace state
 			CardData() :
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				zone(kCardZoneInvalid), zone_position(-1),
-				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0), used_this_turn(0),
+				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
+				used_this_turn(0), usable(false),
 				silenced(false)
 			{
 			}
@@ -42,6 +43,7 @@ namespace state
 			EnchantableStates enchanted_states;
 
 			int used_this_turn; // for hero power
+			bool usable; // for hero power
 
 		public: // for minions
 			bool silenced;

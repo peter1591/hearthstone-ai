@@ -247,14 +247,14 @@ namespace FlowControl
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		assert(card.GetCardType() == state::kCardTypeHeroPower);
 
-		// check if hero power is useable
-		if (card.GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {
-			return SetResult(FlowControl::kResultInvalid);
-		}
+		if (!card.GetRawData().usable) return SetResult(FlowControl::kResultInvalid);
 
 		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref, card)) return false;
 
 		Manipulate(state_, flow_context_).HeroPower(card_ref).IncreaseUsedThisTurn();
+		if (card.GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {
+			Manipulate(state_, flow_context_).HeroPower(card_ref).SetUnusable();
+		}
 
 		return true;
 	}

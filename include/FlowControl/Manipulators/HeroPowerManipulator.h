@@ -19,12 +19,11 @@ namespace FlowControl
 			void TurnStart()
 			{
 				card_.ClearUsedThisTurn();
+				card_.SetUsable();
 			}
 
-			void IncreaseUsedThisTurn()
-			{
-				card_.IncreaseUsedThisTurn();
-			}
+			void IncreaseUsedThisTurn() { card_.IncreaseUsedThisTurn(); }
+			void SetUnusable() { card_.SetUsable(false); }
 		};
 	}
 }

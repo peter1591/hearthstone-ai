@@ -38,8 +38,6 @@ namespace FlowControl
 		Result HeroPower();
 		Result Resolve();
 
-	public: // might be called in card client code
-
 	private:
 		void PlayCardInternal(int hand_idx);
 

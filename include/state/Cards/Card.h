@@ -136,6 +136,8 @@ namespace state
 			void IncreaseUsedThisTurn() { ++data_.used_this_turn; }
 			void ClearUsedThisTurn() { data_.used_this_turn = 0; }
 
+			void SetUsable(bool v = true) { data_.usable = v; }
+
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
 
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }
