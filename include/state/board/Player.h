@@ -30,11 +30,16 @@ namespace state
 			CardRef GetHeroRef() const { return hero_ref_; }
 			int GetHeroRefChangeId() const { return hero_ref_change_id_; }
 
+			CardRef GetHeroPowerRef() const { return hero_power_ref_; }
+
 		private: // restrict access to zone changer
 			void SetHeroRef(CardRef ref) {
 				hero_ref_ = ref;
 				++hero_ref_change_id_;
 			}
+
+			void SetHeroPowerRef(CardRef ref) { hero_power_ref_ = ref; }
+			void InvalidateHeroPowerRef() { hero_power_ref_.Invalidate(); }
 
 		public:
 			Deck deck_;
@@ -46,6 +51,8 @@ namespace state
 		private:
 			CardRef hero_ref_;
 			int hero_ref_change_id_;
+
+			state::CardRef hero_power_ref_;
 
 			PlayerResource resource_;
 			int fatigue_damage_;

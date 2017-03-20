@@ -43,6 +43,7 @@ namespace state {
 			struct OnMinionPlay {
 				using type = bool(*)(const Cards::Card &);
 			};
+
 			struct PrepareHealDamage {
 				struct Context {
 					state::State & state_;
@@ -64,6 +65,17 @@ namespace state {
 				};
 				using type = bool(*)(state::CardRef, Context);
 			};
+
+			struct AfterHeroPower { // a.k.a. inspire
+				struct Context {
+					state::State & state_;
+					FlowControl::FlowContext & flow_context_;
+					state::CardRef const card_ref_;
+					state::Cards::Card const& card_;
+				};
+				using type = bool(*)(Context);
+			};
+
 			struct OnHeal {
 				struct Context {
 					state::State & state_;

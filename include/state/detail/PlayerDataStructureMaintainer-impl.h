@@ -231,14 +231,17 @@ namespace state {
 		{
 			assert(card.GetCardType() == kCardTypeHeroPower);
 			assert(card.GetZone() == kCardZonePlay);
-			// do nothing
+			board::Player & player = board.Get(card.GetPlayerIdentifier());
+			assert(player.hero_power_ref_.IsValid() == false);
+			player.SetHeroPowerRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeHeroPower, kCardZonePlay>::
 			Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
 		{
 			assert(card.GetCardType() == kCardTypeHeroPower);
 			assert(card.GetZone() == kCardZonePlay);
-			// do nothing
+			board::Player & player = board.Get(card.GetPlayerIdentifier());
+			player.InvalidateHeroPowerRef();
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeEnchantment, kCardZonePlay>::

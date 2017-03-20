@@ -32,6 +32,15 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
+	inline Result FlowController::HeroPower()
+	{
+		flow_context_.ResetActionParameter();
+		HeroPowerInternal();
+
+		assert(flow_context_.Empty());
+		return flow_context_.GetResult();
+	}
+
 	inline Result FlowController::Resolve()
 	{
 		detail::Resolver(state_, flow_context_).Resolve();
@@ -189,6 +198,29 @@ namespace FlowControl
 		}
 
 		return attack;
+	}
+
+	inline void FlowController::HeroPowerInternal()
+	{
+		if (!HeroPowerPhase()) return;
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+	}
+
+	inline bool FlowController::HeroPowerPhase()
+	{
+		state::CardRef card_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
+		state::Cards::Card const& card = state_.GetCard(card_ref);
+
+		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
+		assert(card.GetCardType() == state::kCardTypeHeroPower);
+
+		card.GetRawData().spell_handler.PrepareTarget(state_, flow_context_, card_ref, card);
+		card.GetRawData().spell_handler.DoSpell(state_, flow_context_, card_ref, card);
+
+		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
+			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });
+
+		return true;
 	}
 
 	inline void FlowController::EndTurnInternal()

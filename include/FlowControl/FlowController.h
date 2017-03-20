@@ -35,6 +35,7 @@ namespace FlowControl
 		Result PlayCard(int hand_idx);
 		Result EndTurn();
 		Result Attack(state::CardRef attacker, state::CardRef defender);
+		Result HeroPower();
 		Result Resolve();
 
 	public: // might be called in card client code
@@ -54,6 +55,9 @@ namespace FlowControl
 		void EndTurnPhase();
 		void StartTurnPhase();
 		void DrawCardPhase();
+
+		void HeroPowerInternal();
+		bool HeroPowerPhase();
 
 		int CalculateSpellDamage(state::board::Player const& player);
 		bool SetResult(Result result);

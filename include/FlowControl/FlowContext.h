@@ -25,10 +25,15 @@ namespace FlowControl {
 		{}
 
 	public: // action parameter
-		void ResetActionParameter() { action_parameters_.Clear(); }
+		void ResetActionParameter()
+		{
+			action_parameters_.Clear();
+			battlecry_target_.Invalidate();
+		}
 
 		template <typename... Args>
 		auto PrepareBattlecryTarget(Args&&... args) {
+			// TODO: move action parameter wrapper check here
 			battlecry_target_ = action_parameters_.GetBattlecryTarget(std::forward<Args>(args)...);
 		}
 		state::CardRef GetBattlecryTarget() const { return battlecry_target_; }
@@ -37,6 +42,23 @@ namespace FlowControl {
 		template <typename... Args>
 		auto GetMinionPutLocation(Args&&... args) {
 			return action_parameters_.GetMinionPutLocation(std::forward<Args>(args)...);
+		}
+
+		void PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const& target_info)
+		{
+			if (!battlecry_target_.IsValid()) { // TODO: rename to 'specified_target'
+				std::vector<state::CardRef> targets;
+				target_info.Fill(state, targets);
+				battlecry_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
+			}
+			assert(battlecry_target_.IsValid());
+		}
+		state::CardRef GetSpecifiedTarget()
+		{
+			if (battlecry_target_.IsValid()) return battlecry_target_;
+
+			// TODO: maybe use this to indicate 'cast a spell with a random-choose target'
+			assert(false);
 		}
 
 	public: // dead entry hint
@@ -75,7 +97,7 @@ namespace FlowControl {
 		state::IRandomGenerator & random_;
 		detail::ActionParameterWrapper action_parameters_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
-		state::CardRef battlecry_target_;
+		state::CardRef battlecry_target_; // TODO: rename to 'specified_target'
 		state::CardRef destroyed_weapon_;
 	};
 }

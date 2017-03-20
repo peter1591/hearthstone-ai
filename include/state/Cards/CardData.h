@@ -11,6 +11,7 @@
 #include "FlowControl/battlecry/Handler.h"
 #include "FlowControl/deathrattle/Handler.h"
 #include "FlowControl/enchantment/Handler.h"
+#include "FlowControl/spell/Handler.h"
 
 namespace state
 {
@@ -42,7 +43,7 @@ namespace state
 			EnchantableStates enchanted_states;
 
 		public: // for hero type
-			CardRef weapon_ref;
+			CardRef weapon_ref; // TODO: consider to record only in board::Player structure
 
 		public: // for minions
 			bool silenced;
@@ -60,6 +61,7 @@ namespace state
 			FlowControl::flag_aura::Handler flag_aura_handler;
 			FlowControl::battlecry::Handler battlecry_handler;
 			FlowControl::deathrattle::Handler deathrattle_handler;
+			FlowControl::spell::Handler spell_handler;
 		};
 	}
 }

@@ -82,6 +82,9 @@
     <Filter Include="Header Files\FlowControl\flag_aura">
       <UniqueIdentifier>{7381f78b-36a1-4633-8389-44967de7dcc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\spell">
+      <UniqueIdentifier>{d63a5d8c-fecc-403b-b83e-e7e54341fc7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -406,6 +409,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\CardDispatcher.h">
       <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\spell\Handler.h">
+      <Filter>Header Files\FlowControl\spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\spell\Contexts.h">
+      <Filter>Header Files\FlowControl\spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\spell\Handler-impl.h">
+      <Filter>Header Files\FlowControl\spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\spell\Contexts-impl.h">
+      <Filter>Header Files\FlowControl\spell</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
