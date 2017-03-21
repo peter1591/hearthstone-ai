@@ -1150,7 +1150,7 @@ void test3()
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::First());
 	random.called_times = 0;
-	random.next_rand = 2;
+	random.next_rand = 3;
 	if (controller.PlayCard(3) != FlowControl::kResultNotDetermined) assert(false);
 	assert(random.called_times == 16);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
@@ -1158,7 +1158,78 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 }, { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 }, {7, 8, 8}, { 7, 4, 7 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	{
+		auto state2 = state;
+		auto flow_context2 = flow_context;
+		FlowControl::FlowController controller2(state2, flow_context2);
+		if (controller2.Attack(
+			state.GetBoard().GetFirst().minions_.Get(1),
+			state.GetBoard().GetSecond().minions_.Get(2)
+		) != FlowControl::kResultInvalid) assert(false);
+	}
+
+	if (controller.Attack(
+		state.GetBoard().GetFirst().minions_.Get(1),
+		state.GetBoard().GetSecond().minions_.Get(1)
+	) != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
+	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 }, { 7, 7, 7 },{ 2, 1, 1 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 1, 8 },{ 7, 4, 7 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	{
+		auto state2 = state;
+		auto flow_context2 = flow_context;
+		FlowControl::FlowController controller2(state2, flow_context2);
+		if (controller2.Attack(
+			state.GetBoard().GetFirst().minions_.Get(2),
+			state.GetBoard().GetSecond().GetHeroRef()
+		) != FlowControl::kResultInvalid) assert(false);
+	}
+
+	if (controller.Attack(
+		state.GetBoard().GetFirst().minions_.Get(2),
+		state.GetBoard().GetSecond().minions_.Get(1)
+	) != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
+	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	if (controller.Attack(
+		state.GetBoard().GetFirst().minions_.Get(1),
+		state.GetBoard().GetSecond().GetHeroRef()
+	) != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
+	CheckHero(state, state::PlayerIdentifier::Second(), 14, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
+
+	parameter_getter.next_specified_target_count = 6;
+	parameter_getter.next_specified_target_idx = 3;
+	if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
+	CheckHero(state, state::PlayerIdentifier::Second(), 18, 0, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 5, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 }

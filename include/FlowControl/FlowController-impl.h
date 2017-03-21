@@ -207,8 +207,8 @@ namespace FlowControl
 		if (!attacker.IsValid()) return SetResult(kResultInvalid);
 		if (!defender.IsValid()) return SetResult(kResultInvalid);
 
-		// check if attacker is attackable
 		if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
+		if (!IsDefendable(defender)) return SetResult(kResultInvalid);
 
 		while (true) {
 			state::CardRef origin_defender = defender;
@@ -261,6 +261,25 @@ namespace FlowControl
 
 		if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc. An attribute 'max_attacks'?
 
+		return true;
+	}
+
+	inline bool FlowController::IsDefendable(state::CardRef defender)
+	{
+		state::Cards::Card const& card = state_.GetCard(defender);
+		assert(card.GetCardType() == state::kCardTypeHero ||
+			card.GetCardType() == state::kCardTypeMinion);
+		
+		bool has_taunt = false;
+		bool defender_has_taunt = false;
+		state_.GetBoard().Get(card.GetPlayerIdentifier()).minions_.ForEach([&](state::CardRef minion) {
+			if (state_.GetCard(minion).HasTaunt()) {
+				has_taunt = true;
+				if (defender == minion) defender_has_taunt = true;
+			}
+		});
+
+		if (has_taunt && !defender_has_taunt) return SetResult(FlowControl::kResultInvalid);
 		return true;
 	}
 
