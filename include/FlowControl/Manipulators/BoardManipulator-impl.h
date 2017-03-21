@@ -37,6 +37,7 @@ namespace FlowControl
 
 		inline int BoardManipulator::GetSpellDamage(state::PlayerIdentifier player_id)
 		{
+			assert(player_id.IsValid());
 			state::board::Player const& player = state_.GetBoard().Get(player_id);
 
 			int spell_damage = 0;
@@ -56,6 +57,12 @@ namespace FlowControl
 		inline void BoardManipulator::CalculateFinalDamageAmount(state::CardRef source, state::Cards::Card const & source_card, int amount, int * final_amount)
 		{
 			*final_amount = amount;
+			
+			if (source_card.GetCardType() == state::kCardTypeSpell ||
+				source_card.GetCardType() == state::kCardTypeSecret)
+			{
+				*final_amount += GetSpellDamage(source_card.GetPlayerIdentifier());
+			}
 
 			state_.TriggerEvent<state::Events::EventTypes::CalculateHealDamageAmount>(
 				state::Events::EventTypes::CalculateHealDamageAmount::Context

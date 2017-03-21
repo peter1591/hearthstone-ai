@@ -148,6 +148,7 @@
     <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h" />
     <ClInclude Include="..\..\include\Cards\EventRegister.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h" />

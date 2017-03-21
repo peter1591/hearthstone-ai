@@ -434,5 +434,8 @@
     <ClInclude Include="..\..\include\Cards\OG\Shaman.h">
       <Filter>Header Files\Cards\OG</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
