@@ -4,6 +4,11 @@
 #include "FlowControl/enchantment/TieredEnchantments.h"
 #include "FlowControl/enchantment/AuraEnchantments.h"
 
+namespace state {
+	namespace Cards {
+		class CardData;
+	};
+}
 namespace FlowControl
 {
 	namespace enchantment
@@ -27,6 +32,9 @@ namespace FlowControl
 			}
 
 			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card);
+
+		public:
+			void AfterTransformCopy(state::Cards::CardData const& final_data, state::PlayerIdentifier final_player);
 
 		private:
 			void UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::Cards::EnchantableStates const& new_states);

@@ -137,5 +137,15 @@ namespace FlowControl
 
 			assert(card.GetRawData().enchanted_states == new_states);
 		}
+
+		inline void Handler::AfterTransformCopy(state::Cards::CardData const& final_data, state::PlayerIdentifier final_player)
+		{
+			assert(state::Cards::EnchantableStates::kFieldChangeId == 6);
+			assert(this == &final_data.enchantment_handler);
+			aura_enchantments.Clear();
+			if (final_data.enchanted_states.player != final_player) {
+				origin_states.player = final_player;
+			}
+		}
 	};
 }

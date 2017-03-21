@@ -32,7 +32,7 @@ namespace state
 			CardType card_type;
 			CardRace card_race;
 			CardRarity card_rarity;
-			int overload; // 0: no overload; 1: overload 1 crystal
+			int overload; // 0: no overload; 1: overload 1 crystal; etc.
 
 			CardZone zone;
 			int zone_position; // only meaningful for minions in play zone, and for hand cards

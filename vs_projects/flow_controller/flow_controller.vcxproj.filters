@@ -443,5 +443,11 @@
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h">
       <Filter>Header Files\FlowControl\enchantment</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\TransformHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\TransformHelper-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
