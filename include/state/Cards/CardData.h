@@ -24,7 +24,7 @@ namespace state
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				used_this_turn(0), usable(false),
-				silenced(false)
+				taunt(false), shielded(false), charge(false), silenced(false)
 			{
 			}
 
@@ -47,6 +47,10 @@ namespace state
 			bool usable; // for hero power
 
 		public: // for minions
+			bool taunt;
+			bool shielded;
+			bool charge;
+
 			bool silenced;
 
 		public: // zone-changed callbacks invoked by state::State 

@@ -19,7 +19,7 @@ namespace FlowControl
 				if (!final_target.IsValid()) return;
 
 				if (amount > 0) {
-					if (final_target_card->GetRawData().enchanted_states.shielded) {
+					if (final_target_card->hasShield()) {
 						Manipulate(state_, flow_context_).Character(final_target).Shield(false);
 						return;
 					}
