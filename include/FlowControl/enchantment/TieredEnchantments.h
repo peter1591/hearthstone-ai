@@ -10,8 +10,7 @@ namespace FlowControl
 		{
 			kEnchantmentTier1,
 			kEnchantmentTier2,
-			kEnchantmentTier3,
-			kEnchantmentAura
+			kEnchantmentTier3
 		};
 
 		class TieredEnchantments
@@ -41,8 +40,6 @@ namespace FlowControl
 					return tier2_.Remove(id.second);
 				case kEnchantmentTier3:
 					return tier3_.Remove(id.second);
-				case kEnchantmentAura:
-					return aura_.Remove(id.second);
 				}
 				assert(false);
 			}
@@ -64,8 +61,6 @@ namespace FlowControl
 					return tier2_.Exists(id.second);
 				case kEnchantmentTier3:
 					return tier3_.Exists(id.second);
-				case kEnchantmentAura:
-					return aura_.Exists(id.second);
 				}
 				assert(false);
 				return false;
@@ -76,14 +71,12 @@ namespace FlowControl
 				tier1_.ApplyAll(card, state);
 				tier2_.ApplyAll(card, state);
 				tier3_.ApplyAll(card, state);
-				aura_.ApplyAll(card, state);
 			}
 
 			bool NeedUpdate() const {
 				if (tier1_.NeedUpdate()) return true;
 				if (tier2_.NeedUpdate()) return true;
 				if (tier3_.NeedUpdate()) return true;
-				if (aura_.NeedUpdate()) return true;
 				return false;
 			}
 
@@ -91,7 +84,6 @@ namespace FlowControl
 				tier1_.FinishedUpdate();
 				tier2_.FinishedUpdate();
 				tier3_.FinishedUpdate();
-				aura_.FinishedUpdate();
 			}
 
 		private:
@@ -111,7 +103,5 @@ namespace FlowControl
 		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
 		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
 		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
-		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() { return aura_; }
-		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentAura>() const { return aura_; }
 	}
 }

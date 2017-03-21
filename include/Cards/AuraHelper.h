@@ -68,7 +68,7 @@ namespace Cards
 
 			assert(!card_data.aura_handler.IsCallbackSet_ApplyOn());
 			card_data.aura_handler.SetCallback_ApplyOn([](auto context) {
-				return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Add<EnchantmentType>();
+				return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Aura().PushBack<EnchantmentType>();
 			});
 
 			EmitPolicy::RegisterAura(card_data);

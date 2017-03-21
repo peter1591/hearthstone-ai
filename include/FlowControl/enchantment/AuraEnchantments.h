@@ -21,24 +21,29 @@ namespace FlowControl
 		public:
 			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
 			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
+			using IdentifierType = ContainerType::Identifier;
 
-			template <typename T>
-			typename ContainerType::Identifier PushBack(T && item)
+			template <typename EnchantmentType>
+			typename IdentifierType PushBack()
 			{
-				return enchantments_.PushBack(item);
+				EnchantmentType item;
+				need_update_ = true;
+				return enchantments_.PushBack(item.apply_functor);
 			}
 
-			void Remove(ContainerType::Identifier id)
+			void Remove(IdentifierType id)
 			{
+				need_update_ = true;
 				return enchantments_.Remove(id);
 			}
 
 			void Clear()
 			{
+				need_update_ = true;
 				enchantments_.Clear();
 			}
 
-			bool Exists(ContainerType::Identifier id) const
+			bool Exists(IdentifierType id) const
 			{
 				return enchantments_.Get(id) != nullptr;
 			}
@@ -51,8 +56,17 @@ namespace FlowControl
 				});
 			}
 
+			bool NeedUpdate() const {
+				return need_update_;
+			}
+
+			void FinishedUpdate() {
+				need_update_ = false;
+			}
+
 		private:
 			ContainerType enchantments_;
+			bool need_update_;
 		};
 	}
 }

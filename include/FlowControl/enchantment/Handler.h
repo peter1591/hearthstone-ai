@@ -2,6 +2,7 @@
 
 #include "state/Cards/EnchantableStates.h"
 #include "FlowControl/enchantment/TieredEnchantments.h"
+#include "FlowControl/enchantment/AuraEnchantments.h"
 
 namespace FlowControl
 {
@@ -11,6 +12,10 @@ namespace FlowControl
 		{
 		public:
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
+
+		public:
+			auto& Aura() { return aura_enchantments; }
+			auto const& Aura() const { return aura_enchantments; }
 
 		public:
 			bool Exists(TieredEnchantments::IdentifierType id) const
@@ -42,6 +47,7 @@ namespace FlowControl
 		private:
 			state::Cards::EnchantableStates origin_states;
 			TieredEnchantments enchantments;
+			AuraEnchantments aura_enchantments;
 		};
 	}
 }

@@ -19,6 +19,8 @@ namespace FlowControl
 				{
 				}
 
+				auto& Aura() { return card_.GetMutableEnchantmentHandler().Aura(); }
+
 				template <typename T> auto Add() {
 					return card_.GetMutableEnchantmentHandler().Add<T>(state_);
 				}

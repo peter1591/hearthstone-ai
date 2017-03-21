@@ -19,7 +19,6 @@ namespace Cards
 	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {};
 
 	struct Card_EX1_508o : public Enchantment<Attack<1>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentAura;
 		static constexpr int id = Cards::ID_EX1_508o;
 	};
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
@@ -226,11 +225,10 @@ namespace Cards
 	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162, Taunt> {};
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
 	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {};
+
 	struct Card_CS2_222o : public Enchantment<Attack<1>, MaxHP<1>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentAura;
 		static constexpr int id = Cards::ID_CS2_222o;
 	};
-
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
 		template <typename Context>
 		static auto GetAuraTargets(Context&& context) {

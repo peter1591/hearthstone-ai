@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include "state/targetor/Targets.h"
-#include "FlowControl/enchantment/TieredEnchantments.h"
+#include "FlowControl/enchantment/AuraEnchantments.h"
 #include "FlowControl/aura/Contexts.h"
 
 namespace FlowControl
@@ -14,7 +14,7 @@ namespace FlowControl
 		public:
 			typedef bool FuncIsValid(contexts::AuraIsValid context);
 			typedef void FuncGetTargets(contexts::AuraGetTargets context);
-			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
+			typedef enchantment::AuraEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
 
 			Handler() :
 				is_valid(nullptr), get_targets(nullptr), apply_on(nullptr),
@@ -53,7 +53,7 @@ namespace FlowControl
 			FuncGetTargets * get_targets;
 			FuncApplyOn * apply_on;
 
-			std::unordered_map<state::CardRef, enchantment::TieredEnchantments::IdentifierType> applied_enchantments;
+			std::unordered_map<state::CardRef, enchantment::AuraEnchantments::IdentifierType> applied_enchantments;
 		};
 	}
 }
