@@ -26,20 +26,13 @@ namespace FlowControl
 				ApplyFunctor apply_functor;
 				int valid_until_turn; // -1 if always valid
 			};
-			typedef Utils::CloneableContainers::RemovableVector<ManagedEnchantment> ContainerType;
+			typedef Utils::CloneableContainers::RemovableVector<ManagedEnchantment> ContainerType; // TODO: use std::vector or std::list should be enough
 
-			typename ContainerType::Identifier PushBack(ApplyFunctor apply_functor, int valid_until_turn)
+			void PushBack(ApplyFunctor apply_functor, int valid_until_turn)
 			{
 				need_update_ = true;
 				if (valid_until_turn > 0) ++valid_until_turn_count_;
-				return enchantments_.PushBack(ManagedEnchantment{apply_functor, valid_until_turn});
-			}
-
-			void Remove(ContainerType::Identifier id)
-			{
-				need_update_ = true;
-				if (enchantments_.Get(id)->valid_until_turn > 0) --valid_until_turn_count_;
-				return enchantments_.Remove(id);
+				enchantments_.PushBack(ManagedEnchantment{apply_functor, valid_until_turn});
 			}
 
 			void Clear()
@@ -47,11 +40,6 @@ namespace FlowControl
 				need_update_ = true;
 				valid_until_turn_count_ = 0;
 				enchantments_.Clear();
-			}
-
-			bool Exists(ContainerType::Identifier id) const
-			{
-				return enchantments_.Get(id) != nullptr;
 			}
 
 			void ApplyAll(state::Cards::EnchantableStates & card, state::State const& state);

@@ -17,31 +17,16 @@ namespace FlowControl
 		{
 		public:
 			using ContainerType = Enchantments::ContainerType;
-			using IdentifierType = std::pair<EnchantmentTiers, ContainerType::Identifier>;
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBack(state::State const& state)
+			void PushBack(state::State const& state)
 			{
 				EnchantmentType item;
 
 				int valid_until_turn = -1;
 				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
 
-				return std::make_pair(EnchantmentType::tier,
-					GetEnchantments<EnchantmentType::tier>().PushBack(item.apply_functor, valid_until_turn));
-			}
-
-			void Remove(IdentifierType id)
-			{
-				switch (id.first) {
-				case kEnchantmentTier1:
-					return tier1_.Remove(id.second);
-				case kEnchantmentTier2:
-					return tier2_.Remove(id.second);
-				case kEnchantmentTier3:
-					return tier3_.Remove(id.second);
-				}
-				assert(false);
+				GetEnchantments<EnchantmentType::tier>().PushBack(item.apply_functor, valid_until_turn);
 			}
 
 			void Clear()
@@ -49,21 +34,6 @@ namespace FlowControl
 				tier1_.Clear();
 				tier2_.Clear();
 				tier3_.Clear();
-				aura_.Clear();
-			}
-
-			bool Exists(IdentifierType id) const
-			{
-				switch (id.first) {
-				case kEnchantmentTier1:
-					return tier1_.Exists(id.second);
-				case kEnchantmentTier2:
-					return tier2_.Exists(id.second);
-				case kEnchantmentTier3:
-					return tier3_.Exists(id.second);
-				}
-				assert(false);
-				return false;
 			}
 
 			void ApplyAll(state::Cards::EnchantableStates & card, state::State const& state)
@@ -94,7 +64,6 @@ namespace FlowControl
 			Enchantments tier1_;
 			Enchantments tier2_;
 			Enchantments tier3_;
-			Enchantments aura_;
 		};
 
 		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }

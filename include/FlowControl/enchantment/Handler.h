@@ -18,17 +18,8 @@ namespace FlowControl
 			auto const& Aura() const { return aura_enchantments; }
 
 		public:
-			bool Exists(TieredEnchantments::IdentifierType id) const
-			{
-				return enchantments.Exists(id);
-			}
-
 			template <typename EnchantmentType> auto Add(state::State const& state) {
 				return enchantments.PushBack<EnchantmentType>(state);
-			}
-
-			auto Remove(TieredEnchantments::IdentifierType id) {
-				return enchantments.Remove(id);
 			}
 
 			void Clear() {
