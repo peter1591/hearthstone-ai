@@ -20,12 +20,17 @@ namespace FlowControl
 			using ContainerType = Enchantments::ContainerType;
 			using IdentifierType = std::pair<EnchantmentTiers, ContainerType::Identifier>;
 
+			// TODO: the enchantment item is filled up in constructor, so we can accept only one templated argument, rather than a parameter value
 			template <typename T>
-			typename IdentifierType PushBack(T && item)
+			typename IdentifierType PushBack(T && item, state::State const& state)
 			{
 				using EnchantmentType = std::decay_t<T>;
+
+				int valid_until_turn = -1;
+				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
+
 				return std::make_pair(EnchantmentType::tier,
-					GetEnchantments<EnchantmentType::tier>().PushBack(item.apply_functor));
+					GetEnchantments<EnchantmentType::tier>().PushBack(item.apply_functor, valid_until_turn));
 			}
 
 			void Remove(IdentifierType id)
@@ -67,12 +72,12 @@ namespace FlowControl
 				return false;
 			}
 
-			void ApplyAll(state::Cards::EnchantableStates & card)
+			void ApplyAll(state::Cards::EnchantableStates & card, state::State const& state)
 			{
-				tier1_.ApplyAll(card);
-				tier2_.ApplyAll(card);
-				tier3_.ApplyAll(card);
-				aura_.ApplyAll(card);
+				tier1_.ApplyAll(card, state);
+				tier2_.ApplyAll(card, state);
+				tier3_.ApplyAll(card, state);
+				aura_.ApplyAll(card, state);
 			}
 
 			bool NeedUpdate() const {

@@ -20,7 +20,7 @@ namespace FlowControl
 				}
 
 				template <typename T> auto Add(T&& enchantment) {
-					return card_.GetMutableEnchantmentHandler().Add(std::forward<T>(enchantment));
+					return card_.GetMutableEnchantmentHandler().Add(std::forward<T>(enchantment), state_);
 				}
 
 				template <typename T> auto Remove(T&& id) {

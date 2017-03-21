@@ -440,5 +440,8 @@
     <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments.h">
       <Filter>Header Files\FlowControl\enchantment</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

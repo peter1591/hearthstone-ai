@@ -9,12 +9,14 @@ namespace Cards
 	class EnchantmentCardBase
 	{
 	public:
+		EnchantmentCardBase() : apply_functor(nullptr), valid_this_turn(false) {}
+
 		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
+		bool valid_this_turn;
 	};
 
 	struct NullEnchant {
-		static void Apply(state::Cards::EnchantableStates & stats) {
-		}
+		static void Apply(state::Cards::EnchantableStates & stats) {}
 	};
 	template <int v> struct Attack {
 		static void Apply(state::Cards::EnchantableStates & stats) {
@@ -44,6 +46,14 @@ namespace Cards
 				Enchant4::Apply(stats);
 				Enchant5::Apply(stats);
 			};
+		}
+	};
+
+	template <typename... Ts>
+	struct EnchantmentForThisTurn : public Enchantment<Ts...>
+	{
+		EnchantmentForThisTurn() {
+			valid_this_turn = true;
 		}
 	};
 }

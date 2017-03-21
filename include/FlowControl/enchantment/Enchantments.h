@@ -28,10 +28,9 @@ namespace FlowControl
 			};
 			typedef Utils::CloneableContainers::RemovableVector<ManagedEnchantment> ContainerType;
 
-			typename ContainerType::Identifier PushBack(ApplyFunctor apply_functor)
+			typename ContainerType::Identifier PushBack(ApplyFunctor apply_functor, int valid_until_turn)
 			{
 				need_update_ = true;
-				int valid_until_turn = -1; // TODO
 				return enchantments_.PushBack(ManagedEnchantment{apply_functor, valid_until_turn});
 			}
 
@@ -52,15 +51,10 @@ namespace FlowControl
 				return enchantments_.Get(id) != nullptr;
 			}
 
-			void ApplyAll(state::Cards::EnchantableStates & card)
-			{
-				enchantments_.IterateAll([&card](ManagedEnchantment& item) -> bool {
-					item.apply_functor(card);
-					return true;
-				});
-			}
+			void ApplyAll(state::Cards::EnchantableStates & card, state::State const& state);
 
 			bool NeedUpdate() const {
+				return true; // TODO: listen to EndTurn() trigger to optimize this
 				return need_update_;
 			}
 

@@ -6,7 +6,7 @@ namespace Cards
 {
 	struct Card_CS2_231 : public MinionCardBase<Card_CS2_231> {};
 
-	struct Card_CS2_188_Enchant : public Enchantment<Attack<2>> {
+	struct Card_CS2_188_Enchant : public EnchantmentForThisTurn<Attack<2>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 	};
 	struct Card_CS2_188 : public MinionCardBase<Card_CS2_188> {
@@ -14,7 +14,8 @@ namespace Cards
 			return Targets().Minion().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			return ApplyOneTurnEnchant<Card_CS2_188_Enchant>(std::move(context));
+			Manipulate(context).Card(context.GetTarget()).Enchant().Add(Card_CS2_188_Enchant());
+			//return ApplyOneTurnEnchant<Card_CS2_188_Enchant>(std::move(context)); // TODO: remove this
 		}
 	};
 

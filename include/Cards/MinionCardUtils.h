@@ -183,7 +183,8 @@ namespace Cards
 		template <typename EnchantType>
 		static void ApplyOneTurnEnchant(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
-			auto enchant_id = Manipulate(context).Minion(target).Enchant().Add(EnchantType());
+			auto enchant_id = Manipulate(context).Minion(target).Enchant()
+				.Add(EnchantType());
 			context.state_.AddEvent<state::Events::EventTypes::OnTurnEnd>(
 				[target, enchant_id](auto context) {
 				Manipulate(context).Minion(target).Enchant().Remove(enchant_id);

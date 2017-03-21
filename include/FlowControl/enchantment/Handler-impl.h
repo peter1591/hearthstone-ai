@@ -6,6 +6,8 @@
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulate.h"
 
+#include "FlowControl/enchantment/Enchantments-impl.h"
+
 namespace FlowControl
 {
 	namespace enchantment
@@ -13,9 +15,11 @@ namespace FlowControl
 		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
 			if (!enchantments.NeedUpdate()) return;
 
+			int origin_hp = card.GetHP();
+
 			state::Cards::EnchantableStates const& current_states = card.GetRawData().enchanted_states;
 			state::Cards::EnchantableStates new_states = origin_states;
-			enchantments.ApplyAll(new_states);
+			enchantments.ApplyAll(new_states, state);
 
 			switch (card.GetCardType()) {
 			case state::kCardTypeHero:
@@ -32,12 +36,14 @@ namespace FlowControl
 			}
 
 			// removing enchantments should not kill a minion
-			int hp = card.GetHP();
-			if (hp <= 0) {
-				// Do not trigger healing events
-				Manipulators::MinionManipulator(state, flow_context, card_ref, card)
-					.Internal_SetDamage().Heal(-hp + 1);
-				assert(card.GetHP() == 1);
+			if (origin_hp > 0) {
+				int hp = card.GetHP();
+				if (hp <= 0) {
+					// Do not trigger healing events
+					Manipulators::MinionManipulator(state, flow_context, card_ref, card)
+						.Internal_SetDamage().Heal(-hp + 1);
+					assert(card.GetHP() == 1);
+				}
 			}
 
 			enchantments.FinishedUpdate();
