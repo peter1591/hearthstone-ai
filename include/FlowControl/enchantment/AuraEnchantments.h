@@ -16,20 +16,16 @@ namespace FlowControl
 {
 	namespace enchantment
 	{
-		class Enchantments
+		class AuraEnchantments
 		{
 		public:
 			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
-			struct ManagedEnchantment {
-				ApplyFunctor apply_functor;
-				int valid_until_turn; // -1 if always valid
-			};
-			typedef Utils::CloneableContainers::RemovableVector<ManagedEnchantment> ContainerType;
+			typedef Utils::CloneableContainers::RemovableVector<ApplyFunctor> ContainerType;
 
-			typename ContainerType::Identifier PushBack(ApplyFunctor apply_functor)
+			template <typename T>
+			typename ContainerType::Identifier PushBack(T && item)
 			{
-				int valid_until_turn = -1; // TODO
-				return enchantments_.PushBack(ManagedEnchantment{apply_functor, valid_until_turn});
+				return enchantments_.PushBack(item);
 			}
 
 			void Remove(ContainerType::Identifier id)
@@ -49,8 +45,8 @@ namespace FlowControl
 
 			void ApplyAll(state::Cards::EnchantableStates & card)
 			{
-				enchantments_.IterateAll([&card](ManagedEnchantment& item) -> bool {
-					item.apply_functor(card);
+				enchantments_.IterateAll([&card](ApplyFunctor& functor) -> bool {
+					functor(card);
 					return true;
 				});
 			}

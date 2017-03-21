@@ -437,5 +437,8 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
