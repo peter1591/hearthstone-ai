@@ -8,13 +8,16 @@ namespace FlowControl
 	{
 		inline void Enchantments::ApplyAll(state::Cards::EnchantableStates & card, state::State const& state)
 		{
-			enchantments_.IterateAll([&card, &state](ManagedEnchantment& item) -> bool {
-				if (item.valid_until_turn > 0) {
-					if (state.GetTurn() > item.valid_until_turn) return false;
+			for (auto it = enchantments_.begin(); it != enchantments_.end();) {
+				if (it->valid_until_turn > 0) {
+					if (state.GetTurn() > it->valid_until_turn) {
+						it = enchantments_.erase(it);
+						continue;
+					}
 				}
-				item.apply_functor(card);
-				return true;
-			});
+				it->apply_functor(card);
+				++it;
+			}
 		}
 	}
 }

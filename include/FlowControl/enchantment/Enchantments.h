@@ -23,23 +23,27 @@ namespace FlowControl
 
 			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
 			struct ManagedEnchantment {
+				ManagedEnchantment(ApplyFunctor apply_functor, int valid_until_turn)
+					: apply_functor(apply_functor), valid_until_turn(valid_until_turn)
+				{}
+
 				ApplyFunctor apply_functor;
 				int valid_until_turn; // -1 if always valid
 			};
-			typedef Utils::CloneableContainers::RemovableVector<ManagedEnchantment> ContainerType; // TODO: use std::vector or std::list should be enough
+			typedef std::vector<ManagedEnchantment> ContainerType;
 
 			void PushBack(ApplyFunctor apply_functor, int valid_until_turn)
 			{
 				need_update_ = true;
 				if (valid_until_turn > 0) ++valid_until_turn_count_;
-				enchantments_.PushBack(ManagedEnchantment{apply_functor, valid_until_turn});
+				enchantments_.emplace_back(apply_functor, valid_until_turn);
 			}
 
 			void Clear()
 			{
 				need_update_ = true;
 				valid_until_turn_count_ = 0;
-				enchantments_.Clear();
+				enchantments_.clear();
 			}
 
 			void ApplyAll(state::Cards::EnchantableStates & card, state::State const& state);
