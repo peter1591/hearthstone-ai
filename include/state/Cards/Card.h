@@ -19,6 +19,7 @@ namespace FlowControl
 			class AuraHelper;
 			class FlagAuraHelper;
 			class DeathrattlesHelper;
+			class TransformHelper;
 		}
 	}
 }
@@ -40,6 +41,7 @@ namespace state
 			class MutableAuraHandlerGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::AuraHelper;
+				friend class FlowControl::Manipulators::Helpers::TransformHelper;
 			public:
 				MutableAuraHandlerGetter(CardData & data) : data_(data) {}
 			private:
@@ -50,6 +52,7 @@ namespace state
 			class MutableFlagAuraHandlerGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::FlagAuraHelper;
+				friend class FlowControl::Manipulators::Helpers::TransformHelper;
 			public:
 				MutableFlagAuraHandlerGetter(CardData & data) : data_(data) {}
 			private:
@@ -163,9 +166,9 @@ namespace state
 			void SetSilenced() { data_.silenced = true; }
 
 			void TransformByCopy(CardData const& new_data) {
-				assert(data_.play_order == new_data.play_order);
 				assert(data_.enchanted_states.player == new_data.enchanted_states.player);
 				assert(data_.zone == new_data.zone);
+				assert(data_.zone_position == new_data.zone_position);
 				data_ = new_data;
 			}
 

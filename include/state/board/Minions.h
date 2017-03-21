@@ -25,6 +25,7 @@ namespace state
 
 			std::vector<CardRef> const& Get() const { return minions_; }
 			int GetChangeId() const { return change_id_; }
+			void IncreaseChangeId() { ++change_id_; }
 
 			template <typename Functor>
 			void ForEach(Functor&& functor) {

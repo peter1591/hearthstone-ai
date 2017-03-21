@@ -37,6 +37,10 @@ namespace FlowControl
 			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
+			void BeforeTransform(state::State & state, FlowControl::FlowContext & flow_context) {
+				RemoveAppliedEnchantments(state, flow_context);
+				assert(NoAppliedEnchantment());
+			}
 			void AfterTransformCopy() {
 				first_time_update_ = true;
 				applied_enchantments.clear();
@@ -46,6 +50,7 @@ namespace FlowControl
 			void GetNewTargets(
 				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
 				bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets);
+			void RemoveAppliedEnchantments(state::State & state, FlowControl::FlowContext & flow_context);
 
 		public: // field for client code
 			bool first_time_update_;

@@ -12,6 +12,7 @@
 #include "Cards/Core/Neutral.h"
 #include "Cards/Core/Warrior.h"
 #include "Cards/Core/Priest.h"
+#include "Cards/Core/Shaman.h"
 #include "Cards/Core/Mage.h"
 
 #include "Cards/Expert1/Neutral.h"

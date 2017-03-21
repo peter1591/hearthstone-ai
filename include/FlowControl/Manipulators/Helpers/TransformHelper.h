@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cards/id-map.h"
+
 namespace FlowControl
 {
 	namespace Manipulators
@@ -14,7 +16,8 @@ namespace FlowControl
 				{
 				}
 
-				void Transform(state::Cards::CardData const& new_data);
+				void Transform(Cards::CardId id);
+				void BecomeCopyOf(state::Cards::CardData const& new_data);
 
 			private:
 				state::State & state_;
