@@ -26,6 +26,11 @@ namespace state
 			std::vector<CardRef> const& Get() const { return minions_; }
 			int GetChangeId() const { return change_id_; }
 
+			template <typename Functor>
+			void ForEach(Functor&& functor) {
+				std::for_each(minions_.begin(), minions_.end(), std::forward<Functor>(functor));
+			}
+
 		private:
 			template <typename AdjustFunctor>
 			void Insert(CardRef ref, size_t pos, AdjustFunctor&& functor)

@@ -124,8 +124,13 @@ namespace state
 			void SetMaxHP(int max_hp) { data_.enchanted_states.max_hp = max_hp; }
 
 			void SetTaunt(bool v) { data_.enchanted_states.taunt = v; }
+			bool HasTaunt() const { return data_.enchanted_states.taunt; }
+
 			void SetShield(bool v) { data_.enchanted_states.shielded = v; }
+			bool hasShield() const { return data_.enchanted_states.shielded; }
+
 			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
+			bool HasCharge() const { return data_.enchanted_states.charge; }
 
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
