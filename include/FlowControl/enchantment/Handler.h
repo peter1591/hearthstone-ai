@@ -18,8 +18,8 @@ namespace FlowControl
 				return enchantments.Exists(id);
 			}
 
-			template <typename EnchantmentType> auto Add(EnchantmentType&& enchantment, state::State const& state) {
-				return enchantments.PushBack(std::forward<EnchantmentType>(enchantment), state);
+			template <typename EnchantmentType> auto Add(state::State const& state) {
+				return enchantments.PushBack<EnchantmentType>(state);
 			}
 
 			auto Remove(TieredEnchantments::IdentifierType id) {

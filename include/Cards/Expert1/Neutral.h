@@ -14,7 +14,7 @@ namespace Cards
 			return Targets().Minion().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			Manipulate(context).Card(context.GetTarget()).Enchant().Add(Card_CS2_188_Enchant());
+			Manipulate(context).Card(context.GetTarget()).Enchant().Add<Card_CS2_188_Enchant>();
 			//return ApplyOneTurnEnchant<Card_CS2_188_Enchant>(std::move(context)); // TODO: remove this
 		}
 	};
@@ -46,7 +46,7 @@ namespace Cards
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
 		template <typename Context>
 		static bool HandleEvent(state::CardRef self, Context&& context) {
-			Manipulate(context).Card(self).Enchant().Add(Card_NEW1_038_Enchant());
+			Manipulate(context).Card(self).Enchant().Add<Card_NEW1_038_Enchant>();
 			return true;
 		};
 
