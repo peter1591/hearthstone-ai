@@ -31,7 +31,7 @@ namespace FlowControl
 			state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, ref, card });
 
-			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
+			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(ref, card);
 			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
 		}
 

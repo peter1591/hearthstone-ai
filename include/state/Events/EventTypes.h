@@ -16,10 +16,10 @@ namespace state {
 				using type = bool(*)(CardRef, State &, CardRef);
 			};
 			struct AfterMinionPlayed {
-				using type = bool(*)(const Cards::Card &);
+				using type = bool(*)(CardRef, const Cards::Card &);
 			};
 			struct AfterMinionSummoned {
-				using type = bool(*)();
+				using type = bool(*)(CardRef, const Cards::Card &);
 			};
 			struct BeforeAttack {
 				using type = bool(*)(CardRef, State &, CardRef);

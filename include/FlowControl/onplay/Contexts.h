@@ -30,6 +30,8 @@ namespace FlowControl
 				FlowContext & flow_context_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
+				state::CardRef * new_card_ref;
+				state::Cards::Card const* * new_card;
 
 				state::CardRef GetTarget();
 			};

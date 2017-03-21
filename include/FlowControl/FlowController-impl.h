@@ -140,9 +140,7 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 			state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
 
-		if (state_.GetCurrentPlayer().minions_.Full()) {
-			return SetResult(kResultInvalid);
-		}
+		if (state_.GetCurrentPlayer().minions_.Full()) return SetResult(kResultInvalid);
 
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
@@ -153,12 +151,27 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
+		state::CardRef new_card_ref;
+		state::Cards::Card const* new_card = nullptr;
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		if (!new_card_ref.IsValid()) {
+			// no transformation
+			new_card_ref = card_ref;
+			new_card = &card;
+		}
+		assert(new_card != nullptr);
+		assert([&]() {
+			if (card_ref == new_card_ref) return true;
+			// minion transformed
+			if (card.GetZone() == state::kCardZonePlay) return false;
+			if (new_card->GetZone() != state::kCardZonePlay) return false;
+			return true;
+		}());
 
-		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(card);
+		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(new_card_ref, *new_card);
 
-		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>();
-		Manipulate(state_, flow_context_).Minion(card_ref).AfterSummoned();
+		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(new_card_ref, *new_card);
+		Manipulate(state_, flow_context_).Minion(new_card_ref).AfterSummoned();
 
 		return true;
 	}
@@ -167,25 +180,38 @@ namespace FlowControl
 	{
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
+		state::CardRef new_card_ref;
+		state::Cards::Card const* new_card = nullptr;
+
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		assert(!new_card_ref.IsValid()); // weapon cannot transformed
 
 		return true;
 	}
 
 	inline bool FlowController::PlayHeroPowerCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
+		state::CardRef new_card_ref;
+		state::Cards::Card const* new_card = nullptr;
+
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		assert(!new_card_ref.IsValid()); // hero power cannot transformed
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
 			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });
+
 
 		return true;
 	}
 
 	inline bool FlowController::PlaySpellCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card);
+		state::CardRef new_card_ref;
+		state::Cards::Card const* new_card = nullptr;
+
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		assert(!new_card_ref.IsValid()); // spell cannot transformed
 
 		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
