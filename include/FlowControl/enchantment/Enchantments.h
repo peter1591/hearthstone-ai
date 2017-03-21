@@ -19,6 +19,8 @@ namespace FlowControl
 		class Enchantments
 		{
 		public:
+			Enchantments() : need_update_(false) {}
+
 			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
 			struct ManagedEnchantment {
 				ApplyFunctor apply_functor;
@@ -28,17 +30,20 @@ namespace FlowControl
 
 			typename ContainerType::Identifier PushBack(ApplyFunctor apply_functor)
 			{
+				need_update_ = true;
 				int valid_until_turn = -1; // TODO
 				return enchantments_.PushBack(ManagedEnchantment{apply_functor, valid_until_turn});
 			}
 
 			void Remove(ContainerType::Identifier id)
 			{
+				need_update_ = true;
 				return enchantments_.Remove(id);
 			}
 
 			void Clear()
 			{
+				need_update_ = true;
 				enchantments_.Clear();
 			}
 
@@ -55,8 +60,17 @@ namespace FlowControl
 				});
 			}
 
+			bool NeedUpdate() const {
+				return need_update_;
+			}
+
+			void FinishedUpdate() {
+				need_update_ = false;
+			}
+
 		private:
 			ContainerType enchantments_;
+			bool need_update_;
 		};
 	}
 }

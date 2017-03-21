@@ -10,8 +10,6 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			Handler() : need_update(true) {}
-
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
 
 		public:
@@ -21,17 +19,14 @@ namespace FlowControl
 			}
 
 			template <typename EnchantmentType> auto Add(EnchantmentType&& enchantment) {
-				need_update = true;
 				return enchantments.PushBack(std::forward<EnchantmentType>(enchantment));
 			}
 
 			auto Remove(TieredEnchantments::IdentifierType id) {
-				need_update = true;
 				return enchantments.Remove(id);
 			}
 
 			void Clear() {
-				need_update = true;
 				enchantments.Clear();
 			}
 
@@ -47,7 +42,6 @@ namespace FlowControl
 		private:
 			state::Cards::EnchantableStates origin_states;
 			TieredEnchantments enchantments;
-			bool need_update;
 		};
 	}
 }

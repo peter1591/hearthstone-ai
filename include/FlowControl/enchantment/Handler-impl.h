@@ -11,7 +11,7 @@ namespace FlowControl
 	namespace enchantment
 	{
 		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
-			if (!need_update) return;
+			if (!enchantments.NeedUpdate()) return;
 
 			state::Cards::EnchantableStates const& current_states = card.GetRawData().enchanted_states;
 			state::Cards::EnchantableStates new_states = origin_states;
@@ -40,7 +40,7 @@ namespace FlowControl
 				assert(card.GetHP() == 1);
 			}
 
-			need_update = false;
+			enchantments.FinishedUpdate();
 		}
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::Cards::EnchantableStates const& new_states)

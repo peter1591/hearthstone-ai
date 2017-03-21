@@ -75,6 +75,21 @@ namespace FlowControl
 				aura_.ApplyAll(card);
 			}
 
+			bool NeedUpdate() const {
+				if (tier1_.NeedUpdate()) return true;
+				if (tier2_.NeedUpdate()) return true;
+				if (tier3_.NeedUpdate()) return true;
+				if (aura_.NeedUpdate()) return true;
+				return false;
+			}
+
+			void FinishedUpdate() {
+				tier1_.FinishedUpdate();
+				tier2_.FinishedUpdate();
+				tier3_.FinishedUpdate();
+				aura_.FinishedUpdate();
+			}
+
 		private:
 			template <int Tier> Enchantments & GetEnchantments();
 			template <int Tier> const Enchantments & GetEnchantments() const;
