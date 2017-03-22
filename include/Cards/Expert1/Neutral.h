@@ -15,7 +15,6 @@ namespace Cards
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			Manipulate(context).Card(context.GetTarget()).Enchant().Add<Card_CS2_188_Enchant>();
-			//return ApplyOneTurnEnchant<Card_CS2_188_Enchant>(std::move(context)); // TODO: remove this
 		}
 	};
 
