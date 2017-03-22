@@ -240,6 +240,7 @@ namespace state {
 		{
 			assert(card.GetCardType() == kCardTypeHeroPower);
 			assert(card.GetZone() == kCardZonePlay);
+			card.SetUsable();
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
 			assert(player.hero_power_ref_.IsValid() == false);
 			player.SetHeroPowerRef(card_ref);
