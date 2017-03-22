@@ -23,7 +23,7 @@ namespace state
 				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid), overload(0),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
-				used_this_turn(0), usable(false),
+				used_this_turn(0), usable(true), armor(0),
 				taunt(false), shielded(false), charge(false), silenced(false)
 			{
 			}
@@ -45,6 +45,8 @@ namespace state
 
 			int used_this_turn; // for hero power
 			bool usable; // for hero power
+
+			int armor; // for hero
 
 		public: // for minions
 			bool taunt;

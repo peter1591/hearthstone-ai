@@ -48,6 +48,13 @@ namespace FlowControl
 			assert(state_.GetBoard().Get(card_.GetPlayerIdentifier()).GetWeaponRef().IsValid() == false);
 		}
 
+		inline void HeroManipulator::GainArmor(int amount)
+		{
+			card_.SetArmor(card_.GetArmor() + amount);
+
+			// TODO: trigger events
+		}
+
 		template <state::CardZone KnownZone>
 		inline void HeroManipulator::EquipWeapon(state::CardRef weapon_ref)
 		{

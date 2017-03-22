@@ -18,6 +18,8 @@ namespace FlowControl
 			void DrawCard();
 			void DestroyWeapon();
 
+			void GainArmor(int amount);
+
 			template <state::CardZone KnownZone>
 			void EquipWeapon(state::CardRef weapon_ref);
 

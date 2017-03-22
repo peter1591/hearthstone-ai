@@ -124,6 +124,9 @@ namespace state
 
 			int GetHP() const { return data_.enchanted_states.max_hp - data_.damaged; }
 
+			int GetArmor() const { return data_.armor; }
+			void SetArmor(int v) { data_.armor = v; }
+
 			int GetAttack() const { return data_.enchanted_states.attack; }
 			void SetAttack(int new_attack) { data_.enchanted_states.attack = new_attack; }
 
@@ -168,18 +171,6 @@ namespace state
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
 
 			void SetSilenced() { data_.silenced = true; }
-
-			void BecomeCopyOf(CardData const& new_data) {
-				auto old_player = data_.enchanted_states.player;
-				auto old_zone = data_.zone;
-				auto old_zone_position = data_.zone_position;
-				
-				data_ = new_data;
-
-				data_.enchanted_states.player = old_player;
-				data_.zone = old_zone;
-				data_.zone_position = old_zone_position;
-			}
 
 		public:
 			const CardData & GetRawData() const { return data_; }
