@@ -10,7 +10,6 @@
 
 // implementation details
 #include "state/detail/PlayerDataStructureMaintainer-impl.h"
-#include "state/detail/ReplaceHelper.h"
 
 namespace state
 {
@@ -47,9 +46,6 @@ namespace state
 		Cards::Card const& GetCard(CardRef ref) const { return cards_mgr_.Get(ref); }
 		Cards::Card & GetMutableCard(CardRef ref) { return cards_mgr_.GetMutable(ref); }
 		CardRef AddCard(Cards::Card&& card) { return cards_mgr_.PushBack(std::move(card)); }
-		CardRef ReplaceCard(CardRef ref, CardRef card) {
-			detail:
-		}
 
 	public: // bridge to event manager
 		template <typename EventType, typename T>

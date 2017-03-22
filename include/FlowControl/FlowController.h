@@ -17,7 +17,6 @@
 #include "FlowControl/Manipulators/MinionManipulator-impl.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
-#include "FlowControl/Manipulators/Helpers/TransformHelper-impl.h"
 
 #include "FlowControl/detail/Resolver.h"
 #include "Cards/Cards.h"

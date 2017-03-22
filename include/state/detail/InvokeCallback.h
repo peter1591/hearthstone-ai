@@ -15,5 +15,7 @@ namespace state {
 			}
 			static void Removed(state::State & state, state::CardRef card_ref, state::Cards::Card const& card) {}
 		};
+
+		// TODO: added to deck zone callback
 	}
 }

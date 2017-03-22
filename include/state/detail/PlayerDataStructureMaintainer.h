@@ -74,6 +74,7 @@ namespace state {
 			static constexpr bool SpecifyAddPosition = true;
 			static void Add(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card, int pos);
 			static void Remove(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card);
+			static void ReplaceBy(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref, Cards::Card & card, CardRef new_card_ref);
 		};
 		template <>
 		struct PlayerDataStructureMaintainer<kCardTypeSecret, kCardZonePlay> {

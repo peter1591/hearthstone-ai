@@ -28,17 +28,9 @@ namespace FlowControl
 			bool NoAppliedEffect() const { return !applied_player.IsValid(); }
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
-			void BeforeTransform(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card) {
-				RemoveAppliedEffect(state, flow_context, card_ref, card);
-			}
-			void AfterTransformCopy() {
-				applied_player.InValidate();
-			}
-
 		private:
 			bool IsValid(
 				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
-			void RemoveAppliedEffect(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
 		public:
 			state::PlayerIdentifier applied_player;

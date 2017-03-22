@@ -196,8 +196,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\FlagAuraHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\TransformHelper-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\TransformHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h" />
@@ -225,7 +223,6 @@
     <ClInclude Include="..\..\include\state\detail\InvokeCallback.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h" />
-    <ClInclude Include="..\..\include\state\detail\ReplaceHelper.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes.h" />
     <ClInclude Include="..\..\include\state\Events\HandlersContainerController.h" />
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h" />

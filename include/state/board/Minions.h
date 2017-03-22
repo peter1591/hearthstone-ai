@@ -21,6 +21,10 @@ namespace state
 
 			size_t Size() const { return minions_.size(); }
 			CardRef Get(size_t pos) const { return minions_[pos]; }
+			void Replace(size_t pos, CardRef new_card_ref) {
+				minions_[pos] = new_card_ref;
+				++change_id_;
+			}
 			bool Full() const { return Size() >= max_size_; }
 
 			std::vector<CardRef> const& Get() const { return minions_; }

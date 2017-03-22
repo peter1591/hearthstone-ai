@@ -2,7 +2,7 @@
 
 #include "state/Cards/Card.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
-#include "FlowControl/Manipulators/Helpers/TransformHelper.h"
+#include "Cards/id-map.h"
 
 namespace FlowControl
 {
@@ -30,9 +30,7 @@ namespace FlowControl
 
 			void Silence();
 
-			Helpers::TransformHelper Transform() {
-				return Helpers::TransformHelper(state_, flow_context_, card_ref_, card_);
-			}
+			void Transform(Cards::CardId card_id);
 		};
 	}
 }

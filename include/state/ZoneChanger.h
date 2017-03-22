@@ -41,6 +41,22 @@ namespace state {
 			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(state_, card_ref_, card_);
 		}
 
+		void ReplaceBy(CardRef new_ref)
+		{
+			Cards::Card & new_card = cards_mgr_.GetMutable(new_ref);
+			assert(new_card.GetZone() == kCardZoneNewlyCreated);
+			assert(card_.GetCardType() == new_card.GetCardType());
+
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::ReplaceBy(board_, cards_mgr_, card_ref_, card_, new_ref);
+
+			new_card.SetZone()(card_.GetPlayerIdentifier(), card_.GetZone());
+			new_card.SetZonePos()(card_.GetZonePosition());
+			card_.SetZone().Zone(kCardZoneSetASide);
+
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(state_, new_ref, new_card);
+		}
+
 	private:
 		State & state_;
 		board::Board& board_;

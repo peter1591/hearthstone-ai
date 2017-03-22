@@ -71,14 +71,5 @@ namespace FlowControl
 				(*get_targets)({ state, flow_context, card_ref, card, *this, *new_targets });
 			}
 		}
-	
-		inline void Handler::RemoveAppliedEnchantments(state::State & state, FlowControl::FlowContext & flow_context)
-		{
-			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)
-			{
-				Manipulate(state, flow_context).Card(it->first).Enchant().Aura().Remove(it->second);
-				it = applied_enchantments.erase(it);
-			}
-		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
 				FlowControl::Manipulate(context.state_, context.flow_context_)
 					.Minion(context.GetTarget())
-					.Transform().Transform(CardId::ID_hexfrog);
+					.Transform(CardId::ID_hexfrog);
 			});
 		}
 	};

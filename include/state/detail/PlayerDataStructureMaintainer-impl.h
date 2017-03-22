@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include "state/State.h"
+#include "PlayerDataStructureMaintainer.h"
 
 namespace state {
 	namespace detail {
@@ -175,6 +176,14 @@ namespace state {
 				[&cards_mgr](CardRef ref, size_t pos) {
 				cards_mgr.SetCardZonePos(ref, (int)pos);
 			});
+		}
+		inline void PlayerDataStructureMaintainer<kCardTypeMinion, kCardZonePlay>::
+			ReplaceBy(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref, Cards::Card & card, CardRef new_card_ref)
+		{
+			assert(card.GetCardType() == kCardTypeMinion);
+			assert(card.GetZone() == kCardZonePlay);
+
+			board.Get(card.GetPlayerIdentifier()).minions_.Replace(card.GetZonePosition(), new_card_ref);
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeSecret, kCardZonePlay>::

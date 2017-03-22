@@ -68,6 +68,9 @@ namespace state
 			private:
 				void operator()(PlayerIdentifier player, CardZone new_zone) {
 					data_.enchanted_states.player = player;
+					Zone(new_zone);
+				}
+				void Zone(CardZone new_zone) {
 					data_.zone = new_zone;
 				}
 			private:
@@ -76,6 +79,7 @@ namespace state
 
 			class ZonePosSetter {
 				friend state::Cards::Manager;
+				template <CardZone, CardType> friend class state::ZoneChanger;
 				template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 			public:
 				ZonePosSetter(CardData & data) : data_(data) {}
