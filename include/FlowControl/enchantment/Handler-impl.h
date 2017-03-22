@@ -12,7 +12,7 @@ namespace FlowControl
 {
 	namespace enchantment
 	{
-		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card) {
+		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, bool allow_death) {
 			if (!enchantments.NeedUpdate() && !aura_enchantments.NeedUpdate()) return;
 
 			int origin_hp = card.GetHP();
@@ -37,13 +37,19 @@ namespace FlowControl
 			}
 
 			// removing enchantments should not kill a minion
+			// TODO: refine this
 			if (origin_hp > 0) {
 				int hp = card.GetHP();
 				if (hp <= 0) {
-					// Do not trigger healing events
-					Manipulators::MinionManipulator(state, flow_context, card_ref, card)
-						.Internal_SetDamage().Heal(-hp + 1);
-					assert(card.GetHP() == 1);
+					if (!allow_death && hp <= 0) {
+						// Do not trigger healing events
+						Manipulators::MinionManipulator(state, flow_context, card_ref, card)
+							.Internal_SetDamage().Heal(-hp + 1);
+						assert(card.GetHP() == 1);
+					}
+					else {
+						flow_context.AddDeadEntryHint(state, card_ref);
+					}
 				}
 			}
 

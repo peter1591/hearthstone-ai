@@ -11,6 +11,7 @@ namespace FlowControl
 		class Handler
 		{
 		public:
+			state::Cards::EnchantableStates const& GetOriginalStates() const { return origin_states; }
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
 
 		public:
@@ -26,7 +27,7 @@ namespace FlowControl
 				enchantments.Clear();
 			}
 
-			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card);
+			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, bool allow_death);
 
 		private:
 			void UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::Cards::EnchantableStates const& new_states);
