@@ -106,6 +106,12 @@ namespace Utils
 				first_possible_exist_id_ = items_.GetEnd();
 			}
 
+			void Reset() {
+				// All iterators are invalidated
+				items_.Reset();
+				first_possible_exist_id_ = items_.GetNextPushBackItemIdentifier();
+			}
+
 		public: // iterate
 			// Only iterate through exist items
 			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort
