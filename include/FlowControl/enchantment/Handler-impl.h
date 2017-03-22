@@ -37,7 +37,6 @@ namespace FlowControl
 			}
 
 			// removing enchantments should not kill a minion
-			// TODO: refine this
 			if (origin_hp > 0) {
 				int hp = card.GetHP();
 				if (hp <= 0) {
