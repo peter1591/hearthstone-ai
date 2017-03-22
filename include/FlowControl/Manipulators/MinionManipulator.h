@@ -19,7 +19,6 @@ namespace FlowControl
 
 			void AfterSummoned()
 			{
-				card_.SetJustPlayedFlag(true);
 			}
 
 			void TurnStart()
