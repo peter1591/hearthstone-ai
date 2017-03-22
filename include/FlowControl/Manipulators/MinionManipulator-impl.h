@@ -3,6 +3,7 @@
 
 #include "state/State.h"
 #include "Cards/CardDispatcher.h"
+#include "MinionManipulator.h"
 
 namespace FlowControl
 {
@@ -24,16 +25,41 @@ namespace FlowControl
 
 		inline void MinionManipulator::Transform(Cards::CardId id)
 		{
-			state::Cards::CardData new_data = BoardManipulator(state_, flow_context_).GenerateCard(id, card_.GetPlayerIdentifier());
+			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCard(id, card_.GetPlayerIdentifier());
 
 			assert(card_.GetCardType() == state::kCardTypeMinion);
 			assert(card_.GetZone() == state::kCardZonePlay);
-			assert(new_data.card_type == state::kCardTypeMinion);
-			assert(new_data.zone == state::kCardZoneNewlyCreated);
+			assert(new_card.GetCardType() == state::kCardTypeMinion);
+			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 
-			state::CardRef new_card_ref = state_.AddCard(state::Cards::Card(std::move(new_data)));
+			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(flow_context_.GetRandom(), card_ref_)
 				.ReplaceBy(new_card_ref);
+		}
+
+		inline void MinionManipulator::BecomeCopyof(state::CardRef card_ref)
+		{
+			BecomeCopyof(state_.GetCard(card_ref));
+		}
+
+		inline void MinionManipulator::BecomeCopyof(state::Cards::Card const& card)
+		{
+			state::Cards::Card new_card = BoardManipulator(state_, flow_context_)
+				.GenerateCardByCopy(card, card_.GetPlayerIdentifier());
+
+			assert(card_.GetCardType() == state::kCardTypeMinion);
+			assert(card_.GetZone() == state::kCardZonePlay);
+			assert(new_card.GetCardType() == state::kCardTypeMinion);
+			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
+
+			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
+			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(flow_context_.GetRandom(), card_ref_)
+				.ReplaceBy(new_card_ref);
+
+			// recalculate enchantments from scratch
+			// 'allow_death' = true. <-- Lose of aura enchantments introduce death
+			FlowControl::Manipulate(state_, flow_context_).Minion(new_card_ref)
+				.Enchant().Update(true);
 		}
 	}
 }

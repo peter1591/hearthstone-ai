@@ -80,8 +80,21 @@ namespace Cards
 			Enrage<Card_EX1_390_Enchant>();
 		}
 	};
+
+	struct Card_EX1_564 : public MinionCardBase<Card_EX1_564> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets().Minion().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
+
+			Manipulate(context).Minion(context.card_ref_)
+				.BecomeCopyof(context.GetTarget());
+		}
+	};
 }
 
+REGISTER_CARD(EX1_564)
 REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)
 REGISTER_CARD(EX1_390)

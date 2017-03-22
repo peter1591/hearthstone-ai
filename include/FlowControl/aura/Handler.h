@@ -37,6 +37,11 @@ namespace FlowControl
 			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
 
+			void AfterCopied() {
+				first_time_update_ = true;
+				applied_enchantments.clear();
+			}
+
 		private:
 			void GetNewTargets(
 				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,

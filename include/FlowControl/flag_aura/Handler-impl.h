@@ -28,6 +28,11 @@ namespace FlowControl
 			}
 		}
 
+		inline void Handler::AfterCopied()
+		{
+			applied_player.InValidate();
+		}
+
 		inline bool Handler::IsValid(
 			state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card)
 		{

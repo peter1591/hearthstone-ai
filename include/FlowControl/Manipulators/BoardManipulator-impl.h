@@ -9,26 +9,48 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline state::Cards::CardData BoardManipulator::GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player)
+		inline state::Cards::Card BoardManipulator::GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player)
 		{
-			state::Cards::CardData card_data = Cards::CardDispatcher::CreateInstance(card_id);
-			card_data.enchanted_states.player = player;
-			card_data.enchantment_handler.SetOriginalStates(card_data.enchanted_states);
+			state::Cards::CardData new_data = Cards::CardDispatcher::CreateInstance(card_id);
+			new_data.enchanted_states.player = player;
+			new_data.enchantment_handler.SetOriginalStates(new_data.enchanted_states);
+			return GenerateCard(std::move(new_data), player);
+		}
+
+		inline state::Cards::Card BoardManipulator::GenerateCardByCopy(state::Cards::Card const & card, state::PlayerIdentifier player)
+		{
+			state::Cards::CardData new_data = card.GetRawData();
+
+			new_data.enchantment_handler.Aura().AfterCopied();
+			new_data.aura_handler.AfterCopied();
+			new_data.flag_aura_handler.AfterCopied();
+
+			if (new_data.enchanted_states.player != player) {
+				auto origin_states = new_data.enchantment_handler.GetOriginalStates();
+				origin_states.player = player;
+				new_data.enchantment_handler.SetOriginalStates(origin_states);
+			}
+
+			return GenerateCard(std::move(new_data), player);
+		}
+
+		inline state::Cards::Card BoardManipulator::GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player)
+		{
 			// TODO: set play order
 
 			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
 
-			return std::move(card_data);
+			return state::Cards::Card(std::move(card_data));
 		}
 
-		inline void BoardManipulator::SummonMinion(state::Cards::CardData && card_data, int pos)
+		inline void BoardManipulator::SummonMinion(state::Cards::Card origin_card, int pos)
 		{
-			state::PlayerIdentifier player = card_data.enchanted_states.player;
+			state::PlayerIdentifier player = origin_card.GetPlayerIdentifier();
 			assert(player.AssertCheck());
 
-			assert(card_data.card_type == state::kCardTypeMinion);
+			assert(origin_card.GetCardType() == state::kCardTypeMinion);
 
-			state::CardRef ref = state_.AddCard(state::Cards::Card(std::move(card_data)));
+			state::CardRef ref = state_.AddCard(std::move(origin_card));
 
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(flow_context_.GetRandom(), ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);

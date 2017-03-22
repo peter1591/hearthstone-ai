@@ -169,11 +169,16 @@ namespace state
 
 			void SetSilenced() { data_.silenced = true; }
 
-			void TransformByCopy(CardData const& new_data) {
-				assert(data_.enchanted_states.player == new_data.enchanted_states.player);
-				assert(data_.zone == new_data.zone);
-				assert(data_.zone_position == new_data.zone_position);
+			void BecomeCopyOf(CardData const& new_data) {
+				auto old_player = data_.enchanted_states.player;
+				auto old_zone = data_.zone;
+				auto old_zone_position = data_.zone_position;
+				
 				data_ = new_data;
+
+				data_.enchanted_states.player = old_player;
+				data_.zone = old_zone;
+				data_.zone_position = old_zone_position;
 			}
 
 		public:

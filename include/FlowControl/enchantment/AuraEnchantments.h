@@ -43,6 +43,13 @@ namespace FlowControl
 				enchantments_.Clear();
 			}
 
+			void AfterCopied()
+			{
+				// All identifiers are invalidated
+				need_update_ = true;
+				enchantments_.Reset();
+			}
+
 			bool Exists(IdentifierType id) const
 			{
 				return enchantments_.Get(id) != nullptr;

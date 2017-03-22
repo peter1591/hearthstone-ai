@@ -27,6 +27,7 @@ namespace FlowControl
 		public:
 			bool NoAppliedEffect() const { return !applied_player.IsValid(); }
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card);
+			void AfterCopied();
 
 		private:
 			bool IsValid(

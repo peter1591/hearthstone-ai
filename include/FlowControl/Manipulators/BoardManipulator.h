@@ -21,13 +21,17 @@ namespace FlowControl
 			{
 			}
 
-			state::Cards::CardData GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player);
+			state::Cards::Card GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player);
+			state::Cards::Card GenerateCardByCopy(state::Cards::Card const& card, state::PlayerIdentifier player);
 
-			void SummonMinion(state::Cards::CardData&& card_data, int pos);
+			void SummonMinion(state::Cards::Card card, int pos);
 
 			int GetSpellDamage(state::PlayerIdentifier player);
 
 			void CalculateFinalDamageAmount(state::CardRef source, state::Cards::Card const& source_card, int amount, int * final_amount);
+
+		private:
+			state::Cards::Card GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player);
 
 		private:
 			state::State & state_;
