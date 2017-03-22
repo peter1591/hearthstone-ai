@@ -159,21 +159,21 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static void SummonToRight(Context && context, int card_id)
+		static void SummonToRight(Context && context, Cards::CardId card_id)
 		{
 			int pos = context.card_.GetZonePosition() + 1;
 			return SummonInternal(std::forward<Context>(context), card_id, context.card_.GetPlayerIdentifier(), pos);
 		}
 
 		template <typename Context>
-		static void SummonToLeft(Context && context, int card_id)
+		static void SummonToLeft(Context && context, Cards::CardId card_id)
 		{
 			int pos = context.card_.GetZonePosition();
 			return SummonInternal(std::forward<Context>(context), card_id, context.card_.GetPlayerIdentifier(), pos);
 		}
 
 		template <typename Context>
-		static void SummonToEnemy(Context && context, int card_id)
+		static void SummonToEnemy(Context && context, Cards::CardId card_id)
 		{
 			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier().Opposite();
 			int pos = context.state_.GetBoard().Get(player.Opposite()).minions_.Size();
@@ -194,15 +194,14 @@ namespace Cards
 
 	private:
 		template <typename Context>
-		static void SummonInternal(Context&& context, int card_id, state::PlayerIdentifier player, int pos)
+		static void SummonInternal(Context&& context, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
 			if (context.state_.GetBoard().Get(player).minions_.Full()) return;
 
-			state::Cards::CardData card_data = Cards::CardDispatcher::CreateInstance(card_id);
-			card_data.enchanted_states.player = player;
-
-			FlowControl::Manipulate(context.state_, context.flow_context_)
-				.Board().Summon(std::move(card_data), player, pos);
+			auto board_manipulator = FlowControl::Manipulate(context.state_, context.flow_context_).Board();
+			board_manipulator.SummonMinion(
+				board_manipulator.GenerateCard(card_id, player),
+				pos);
 		}
 
 	public:

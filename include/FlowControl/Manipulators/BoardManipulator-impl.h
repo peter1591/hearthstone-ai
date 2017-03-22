@@ -2,19 +2,29 @@
 
 #include "state/Types.h"
 #include "state/State.h"
+#include "Cards/CardDispatcher.h"
 #include "FlowControl/Manipulators/BoardManipulator.h"
 
 namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline void BoardManipulator::Summon(state::Cards::CardData && card_data, state::PlayerIdentifier player, int pos)
+		inline state::Cards::CardData BoardManipulator::GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player)
 		{
+			state::Cards::CardData card_data = Cards::CardDispatcher::CreateInstance(card_id);
+			card_data.enchanted_states.player = player;
+			card_data.enchantment_handler.SetOriginalStates(card_data.enchanted_states);
+			// TODO: set play order
+
+			return std::move(card_data);
+		}
+
+		inline void BoardManipulator::SummonMinion(state::Cards::CardData && card_data, int pos)
+		{
+			state::PlayerIdentifier player = card_data.enchanted_states.player;
 			assert(player.AssertCheck());
 
-			card_data.enchanted_states.player = player;
 			assert(card_data.card_type == state::kCardTypeMinion);
-			card_data.enchantment_handler.SetOriginalStates(card_data.enchanted_states);
 
 			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
 			state::CardRef ref = state_.AddCard(state::Cards::Card(std::move(card_data)));

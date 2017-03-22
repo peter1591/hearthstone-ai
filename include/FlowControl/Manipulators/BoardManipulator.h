@@ -3,6 +3,7 @@
 #include "state/IRandomGenerator.h"
 #include "state/Cards/CardData.h"
 #include "FlowControl/FlowContext.h"
+#include "Cards/id-map.h"
 
 namespace state {
 	class State;
@@ -20,7 +21,9 @@ namespace FlowControl
 			{
 			}
 
-			void Summon(state::Cards::CardData&& card_data, state::PlayerIdentifier player, int pos);
+			state::Cards::CardData GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player);
+
+			void SummonMinion(state::Cards::CardData&& card_data, int pos);
 
 			int GetSpellDamage(state::PlayerIdentifier player);
 

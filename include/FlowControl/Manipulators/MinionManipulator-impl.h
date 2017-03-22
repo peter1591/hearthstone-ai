@@ -27,8 +27,9 @@ namespace FlowControl
 			state::Cards::CardData new_data = Cards::CardDispatcher::CreateInstance(id);
 
 			new_data.enchanted_states.player = card_.GetPlayerIdentifier();
-			assert(new_data.card_type == state::kCardTypeMinion);
 			new_data.enchantment_handler.SetOriginalStates(new_data.enchanted_states);
+
+			assert(new_data.card_type == state::kCardTypeMinion);
 
 			new_data.zone = state::kCardZoneNewlyCreated;
 			state::Cards::Card new_card(new_data);
