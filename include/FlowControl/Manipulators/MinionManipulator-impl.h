@@ -24,20 +24,14 @@ namespace FlowControl
 
 		inline void MinionManipulator::Transform(Cards::CardId id)
 		{
-			state::Cards::CardData new_data = Cards::CardDispatcher::CreateInstance(id);
-
-			new_data.enchanted_states.player = card_.GetPlayerIdentifier();
-			new_data.enchantment_handler.SetOriginalStates(new_data.enchanted_states);
-
-			assert(new_data.card_type == state::kCardTypeMinion);
-
-			new_data.zone = state::kCardZoneNewlyCreated;
-			state::Cards::Card new_card(new_data);
-			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
+			state::Cards::CardData new_data = BoardManipulator(state_, flow_context_).GenerateCard(id, card_.GetPlayerIdentifier());
 
 			assert(card_.GetCardType() == state::kCardTypeMinion);
 			assert(card_.GetZone() == state::kCardZonePlay);
+			assert(new_data.card_type == state::kCardTypeMinion);
+			assert(new_data.zone == state::kCardZoneNewlyCreated);
 
+			state::CardRef new_card_ref = state_.AddCard(state::Cards::Card(std::move(new_data)));
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(flow_context_.GetRandom(), card_ref_)
 				.ReplaceBy(new_card_ref);
 		}

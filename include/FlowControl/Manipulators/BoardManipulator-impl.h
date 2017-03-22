@@ -16,6 +16,8 @@ namespace FlowControl
 			card_data.enchantment_handler.SetOriginalStates(card_data.enchanted_states);
 			// TODO: set play order
 
+			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
+
 			return std::move(card_data);
 		}
 
@@ -26,7 +28,6 @@ namespace FlowControl
 
 			assert(card_data.card_type == state::kCardTypeMinion);
 
-			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
 			state::CardRef ref = state_.AddCard(state::Cards::Card(std::move(card_data)));
 
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(flow_context_.GetRandom(), ref)
