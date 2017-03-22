@@ -17,7 +17,7 @@ namespace Cards
 		typename SpecifiedCardAttributes3 = NoAttribute,
 		typename SpecifiedCardAttributes4 = NoAttribute,
 		typename SpecifiedCardAttributes5 = NoAttribute>
-	class MinionCardBase : public state::Cards::CardData, public MinionCardUtils
+		class MinionCardBase : public state::Cards::CardData, protected MinionCardUtils
 	{
 	public:
 		MinionCardBase()
@@ -55,7 +55,7 @@ namespace Cards
 
 		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
 		using RegisteredEventType = OneEventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>;
-		
+
 		template <typename EventType, typename EventHandler = T>
 		using RegisteredManagedEventType = ManagedOneEventRegisterHelper<EventType, EventHandler>;
 

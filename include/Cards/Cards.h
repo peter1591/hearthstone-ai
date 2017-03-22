@@ -2,12 +2,12 @@
 
 #include "Cards/id-map.h"
 #include "Cards/CardBase.h"
-#include "Cards/MinionCardBase.h"
-#include "Cards/WeaponCardBase.h"
+#include "Cards/framework/MinionCardBase.h"
+#include "Cards/framework/WeaponCardBase.h"
+#include "Cards/framework/EnchantmentCardBase.h"
+#include "Cards/framework/HeroPowerCardBase.h"
+#include "Cards/framework/SpellCardBase.h"
 #include "Cards/MinionCardUtils.h"
-#include "Cards/EnchantmentCardBase.h"
-#include "Cards/HeroPowerCardBase.h"
-#include "Cards/SpellCardBase.h"
 
 #include "Cards/Core/Neutral.h"
 #include "Cards/Core/Warrior.h"

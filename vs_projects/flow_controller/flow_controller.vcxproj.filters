@@ -88,6 +88,9 @@
     <Filter Include="Header Files\Cards\OG">
       <UniqueIdentifier>{09a53569-3b68-47c4-a6cf-bb5913537a03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cards\framework">
+      <UniqueIdentifier>{398c222f-ba31-4d09-9f86-958aeeefa7d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -176,16 +179,7 @@
     <ClInclude Include="..\..\include\Cards\Cards.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\EnchantmentCardBase.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\CardData.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\MinionCardBase.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h">
@@ -196,9 +190,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h">
       <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\WeaponCardBase.h">
-      <Filter>Header Files\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
@@ -398,9 +389,6 @@
     <ClInclude Include="..\..\include\Cards\Core\Priest.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\HeroPowerCardBase.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h">
       <Filter>Header Files\FlowControl\onplay</Filter>
     </ClInclude>
@@ -421,9 +409,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Mage.h">
       <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\SpellCardBase.h">
-      <Filter>Header Files\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h">
       <Filter>Header Files\Cards\OG</Filter>
@@ -448,6 +433,21 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\framework\MinionCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\framework\SpellCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
