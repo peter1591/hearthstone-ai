@@ -23,7 +23,7 @@ namespace FlowControl
 			card_.SetSilenced();
 		}
 
-		inline void MinionManipulator::Transform(Cards::CardId id)
+		inline state::CardRef MinionManipulator::Transform(Cards::CardId id)
 		{
 			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCard(id, card_.GetPlayerIdentifier());
 
@@ -35,14 +35,16 @@ namespace FlowControl
 			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(flow_context_.GetRandom(), card_ref_)
 				.ReplaceBy(new_card_ref);
+
+			return new_card_ref;
 		}
 
-		inline void MinionManipulator::BecomeCopyof(state::CardRef card_ref)
+		inline state::CardRef MinionManipulator::BecomeCopyof(state::CardRef card_ref)
 		{
-			BecomeCopyof(state_.GetCard(card_ref));
+			return BecomeCopyof(state_.GetCard(card_ref));
 		}
 
-		inline void MinionManipulator::BecomeCopyof(state::Cards::Card const& card)
+		inline state::CardRef MinionManipulator::BecomeCopyof(state::Cards::Card const& card)
 		{
 			state::Cards::Card new_card = BoardManipulator(state_, flow_context_)
 				.GenerateCardByCopy(card, card_.GetPlayerIdentifier());
@@ -60,6 +62,8 @@ namespace FlowControl
 			// 'allow_death' = true. <-- Lose of aura enchantments introduce death
 			FlowControl::Manipulate(state_, flow_context_).Minion(new_card_ref)
 				.Enchant().Update(true);
+
+			return new_card_ref;
 		}
 	}
 }

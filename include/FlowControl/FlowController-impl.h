@@ -160,13 +160,14 @@ namespace FlowControl
 			new_card = &card;
 		}
 		assert(new_card != nullptr);
-		assert([&]() {
-			if (card_ref == new_card_ref) return true;
+#ifndef NDEBUG
+		[&](){
+			if (card_ref == new_card_ref) return;
 			// minion transformed
-			if (card.GetZone() == state::kCardZonePlay) return false;
-			if (new_card->GetZone() != state::kCardZonePlay) return false;
-			return true;
-		}());
+			if (card.GetZone() == state::kCardZonePlay) assert(false);
+			if (new_card->GetZone() != state::kCardZonePlay) assert(false);
+		}();
+#endif
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(new_card_ref, *new_card);
 

@@ -29,10 +29,10 @@ namespace FlowControl
 
 			void Silence();
 
-			void Transform(Cards::CardId card_id);
+			state::CardRef Transform(Cards::CardId card_id);
 
-			void BecomeCopyof(state::CardRef card_ref);
-			void BecomeCopyof(state::Cards::Card const& card);
+			state::CardRef BecomeCopyof(state::CardRef card_ref);
+			state::CardRef BecomeCopyof(state::Cards::Card const& card);
 		};
 	}
 }

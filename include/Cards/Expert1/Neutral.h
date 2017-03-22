@@ -87,8 +87,11 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
 
-			Manipulate(context).Minion(context.card_ref_)
+			state::CardRef new_ref = Manipulate(context).Minion(context.card_ref_)
 				.BecomeCopyof(context.GetTarget());
+
+			*context.new_card_ref = new_ref;
+			*context.new_card = &context.state_.GetCard(new_ref);
 		}
 	};
 }
