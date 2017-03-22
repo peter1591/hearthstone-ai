@@ -2,7 +2,18 @@
 
 namespace Cards
 {
+	struct Card_CS2_102 : public HeroPowerCardBase<Card_CS2_102> {
+		Card_CS2_102() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
+				FlowControl::Manipulate(context.state_, context.flow_context_)
+					.Hero(context.card_.GetPlayerIdentifier())
+					.GainArmor(2);
+			});
+		}
+	};
+
 	struct Card_CS2_106 : public WeaponCardBase<Card_CS2_106> {};
 }
 
+REGISTER_CARD(CS2_102)
 REGISTER_CARD(CS2_106)

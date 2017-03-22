@@ -204,7 +204,7 @@ static void CheckHero(state::State & state, state::PlayerIdentifier player, int 
 	auto const& hero = state.GetCardsManager().Get(hero_ref);
 
 	assert(hero.GetHP() == hp);
-	// TODO: armor
+	assert(hero.GetArmor() == armor);
 	assert(hero.GetAttack() == attack);
 }
 
@@ -1487,4 +1487,18 @@ void test3()
 		assert(state2.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 		assert(state2.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	}
+
+	FlowControl::Manipulate(state, flow_context)
+		.HeroPower(state::PlayerIdentifier::Second())
+		.ReplaceHeroPower(Cards::ID_CS2_102); // warrior hero power
+
+	if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);
+	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
+	CheckHero(state, state::PlayerIdentifier::Second(), 17, 2, 0);
+	CheckCrystals(state, state::PlayerIdentifier::First(), { 5, 10 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 10 });
+	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 2, 2 },{ 3, 1, 3 },{ 4, 3, 3 },{ 6, 6, 6 },{ 1, 2, 2 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 3, 3 },{ 7, 7, 7 },{ 7, 7, 7 } });
+	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 }

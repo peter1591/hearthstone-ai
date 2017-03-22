@@ -211,7 +211,7 @@ static void CheckHero(state::State & state, state::PlayerIdentifier player, int 
 	auto const& hero = state.GetCardsManager().Get(hero_ref);
 
 	assert(hero.GetHP() == hp);
-	// TODO: armor
+	assert(hero.GetArmor() == armor);
 	assert(hero.GetAttack() == attack);
 }
 

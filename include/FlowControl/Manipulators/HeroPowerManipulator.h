@@ -2,6 +2,7 @@
 
 #include "state/Cards/Card.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
+#include "Cards/id-map.h"
 
 namespace FlowControl
 {
@@ -21,6 +22,8 @@ namespace FlowControl
 				card_.ClearUsedThisTurn();
 				card_.SetUsable();
 			}
+
+			void ReplaceHeroPower(Cards::CardId id);
 
 			void IncreaseUsedThisTurn() { card_.IncreaseUsedThisTurn(); }
 			void SetUsable() { card_.SetUsable(true); }

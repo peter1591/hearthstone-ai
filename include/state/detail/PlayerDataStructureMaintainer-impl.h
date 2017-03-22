@@ -253,6 +253,14 @@ namespace state {
 			board::Player & player = board.Get(card.GetPlayerIdentifier());
 			player.InvalidateHeroPowerRef();
 		}
+		inline void PlayerDataStructureMaintainer<kCardTypeHeroPower, kCardZonePlay>::
+			ReplaceBy(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref, Cards::Card & card, CardRef new_card_ref)
+		{
+			assert(card.GetCardType() == kCardTypeHeroPower);
+			assert(card.GetZone() == kCardZonePlay);
+
+			board.Get(card.GetPlayerIdentifier()).hero_power_ref_ = new_card_ref;
+		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeEnchantment, kCardZonePlay>::
 			Add(board::Board & board, Cards::Manager & cards_mgr, IRandomGenerator & random,CardRef card_ref, Cards::Card & card)
