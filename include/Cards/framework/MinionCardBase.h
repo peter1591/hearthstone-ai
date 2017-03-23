@@ -1,13 +1,8 @@
 #pragma once
 
+#include "Cards/framework/GeneralCardBase.h"
 #include "Cards/Database.h"
 #include "state/Cards/Card.h"
-#include "Cards/AuraHelper.h"
-#include "Cards/FlagAuraHelper.h"
-#include "Cards/EventRegister.h"
-#include "Cards/BattlecryHelper.h"
-#include "Cards/MinionCardUtils.h"
-#include "Cards/CardAttributes.h"
 
 namespace Cards
 {
@@ -17,7 +12,7 @@ namespace Cards
 		typename SpecifiedCardAttributes3 = NoAttribute,
 		typename SpecifiedCardAttributes4 = NoAttribute,
 		typename SpecifiedCardAttributes5 = NoAttribute>
-		class MinionCardBase : public state::Cards::CardData, protected MinionCardUtils
+		class MinionCardBase : public GeneralCardBase<T>, protected MinionCardUtils
 	{
 	public:
 		MinionCardBase()
@@ -42,36 +37,6 @@ namespace Cards
 			SpecifiedCardAttributes5::Apply(*this);
 
 			BattlecryProcessor<T>(*this);
-		}
-
-		template <typename... Types>
-		auto Aura() { return AuraHelper<T, Types...>(*this); }
-
-		template <typename... Types>
-		auto PlayerFlagAura() { return PlayerFlagAuraHelper<T, Types...>(*this); }
-
-		template <typename... Types>
-		auto Enrage() { return EnrageHelper<T, Types...>(*this); }
-
-		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
-		using RegisteredEventType = OneEventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>;
-
-		template <typename EventType, typename EventHandler = T>
-		using RegisteredManagedEventType = ManagedOneEventRegisterHelper<EventType, EventHandler>;
-
-		template <typename... RegisteredEvents>
-		auto RegisterEvents() {
-			return EventsRegisterHelper<RegisteredEvents...>::Process((state::Cards::CardData&)*this);
-		}
-
-		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
-		auto RegisterEvent() {
-			return RegisterEvents<RegisteredEventType<LifeTime, SelfPolicy, EventType, EventHandler>>();
-		}
-
-		template <typename EventType, typename EventHandler = T>
-		auto RegisterEvent() {
-			return RegisterEvents<RegisteredManagedEventType<EventType, EventHandler>>();
 		}
 	};
 }
