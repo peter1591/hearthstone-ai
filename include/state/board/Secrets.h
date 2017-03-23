@@ -14,6 +14,7 @@ namespace state
 		{
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
+		public:
 			bool Exists(int card_id) const
 			{
 				return secrets_.find(card_id) != secrets_.end();

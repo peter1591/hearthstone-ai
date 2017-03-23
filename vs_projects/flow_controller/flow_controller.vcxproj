@@ -152,8 +152,10 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h" />
     <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\GeneralCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\MinionCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\SecretCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\SpellCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h" />
@@ -201,6 +203,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Contexts-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h" />

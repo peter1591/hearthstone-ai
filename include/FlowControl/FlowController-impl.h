@@ -63,6 +63,9 @@ namespace FlowControl
 		case state::kCardTypeSpell:
 			PlayCardPhase<state::kCardTypeSpell>(card_ref, card);
 			break;
+		case state::kCardTypeSecret:
+			PlayCardPhase<state::kCardTypeSecret>(card_ref, card);
+			break;
 		default:
 			assert(false);
 			return;
@@ -122,6 +125,7 @@ namespace FlowControl
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref, state::Cards::Card const& card)
 	{
+		// TODO: shared with secret cards
 		assert(card.GetCardType() == state::kCardTypeSpell);
 
 		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
@@ -133,6 +137,22 @@ namespace FlowControl
 		}
 
 		return PlaySpellCardPhase(card_ref, card);
+	}
+
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSecret>(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		// TODO: shared with spell cards
+		assert(card.GetCardType() == state::kCardTypeSecret);
+
+		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
+			if (!CostHealth(card.GetCost())) return false;
+			state_.GetCurrentPlayer().SetNextSpellCostHealthThisTurn(false);
+		}
+		else {
+			if (!CostCrystal(card.GetCost())) return false;
+		}
+
+		return PlaySecretCardPhase(card_ref, card);
 	}
 
 	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
@@ -169,7 +189,8 @@ namespace FlowControl
 		}();
 #endif
 
-		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(new_card_ref, *new_card);
+		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(
+			state::Events::EventTypes::AfterMinionPlayed::Context{ state_, flow_context_, new_card_ref, *new_card });
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(new_card_ref, *new_card);
 		Manipulate(state_, flow_context_).Minion(new_card_ref).AfterSummoned();
@@ -219,6 +240,26 @@ namespace FlowControl
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
 			state::Events::EventTypes::AfterSpell::Context{ state_, flow_context_, card_ref, card });
+
+		return true;
+	}
+
+	inline bool FlowController::PlaySecretCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	{
+		state::CardRef new_card_ref;
+		state::Cards::Card const* new_card = nullptr;
+
+		if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) return SetResult(FlowControl::kResultInvalid);
+
+		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		assert(!new_card_ref.IsValid()); // secret cannot transformed
+
+		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
+			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
+
+		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
+			state::Events::EventTypes::AfterSpell::Context{ state_, flow_context_, card_ref, card });
+		// TODO: trigger event 'AfterSecret'
 
 		return true;
 	}

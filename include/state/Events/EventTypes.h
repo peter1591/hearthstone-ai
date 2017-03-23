@@ -16,7 +16,13 @@ namespace state {
 				using type = bool(*)(CardRef, State &, CardRef);
 			};
 			struct AfterMinionPlayed {
-				using type = bool(*)(CardRef, const Cards::Card &);
+				struct Context {
+					state::State & state_;
+					FlowControl::FlowContext & flow_context_;
+					CardRef card_ref_;
+					Cards::Card const& card_;
+				};
+				using type = std::function<bool(Context)>;
 			};
 			struct AfterMinionSummoned {
 				using type = bool(*)(CardRef, const Cards::Card &);
@@ -26,9 +32,9 @@ namespace state {
 			};
 			struct BeforeMinionSummoned {
 				struct Context {
-					state::State & state_;
-					state::CardRef card_ref_;
-					const state::Cards::Card & card_;
+					State & state_;
+					CardRef card_ref_;
+					const Cards::Card & card_;
 				};
 				using type = bool(*)(Context);
 			};

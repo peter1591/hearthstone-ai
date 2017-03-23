@@ -61,7 +61,7 @@ namespace FlowControl
 			DestroyWeapon();
 
 			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(flow_context_.GetRandom(), weapon_ref)
-				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
+				.ChangeTo<state::kCardZonePlay>(card_.GetPlayerIdentifier());
 		}
 	}
 }

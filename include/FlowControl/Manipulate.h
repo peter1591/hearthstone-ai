@@ -10,6 +10,7 @@
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/Manipulators/HeroPowerManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
+#include "FlowControl/Manipulators/SecretManipulator.h"
 
 namespace FlowControl
 {
@@ -33,6 +34,8 @@ namespace FlowControl
 		Manipulators::CharacterManipulator Character(state::CardRef ref);
 
 		Manipulators::WeaponManipulator Weapon(state::CardRef ref);
+
+		Manipulators::SecretManipulator Secret(state::CardRef ref);
 
 		Manipulators::BoardManipulator Board();
 

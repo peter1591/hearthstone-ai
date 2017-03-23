@@ -7,6 +7,7 @@
 #include "Cards/framework/EnchantmentCardBase.h"
 #include "Cards/framework/HeroPowerCardBase.h"
 #include "Cards/framework/SpellCardBase.h"
+#include "Cards/framework/SecretCardBase.h"
 #include "Cards/MinionCardUtils.h"
 
 #include "Cards/Core/Neutral.h"

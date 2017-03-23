@@ -64,6 +64,11 @@ namespace FlowControl
 		return Manipulators::WeaponManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
 	}
 
+	inline Manipulators::SecretManipulator Manipulate::Secret(state::CardRef ref)
+	{
+		return Manipulators::SecretManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+	}
+
 	inline Manipulators::BoardManipulator Manipulate::Board()
 	{
 		return Manipulators::BoardManipulator(state_, flow_context_);

@@ -21,6 +21,24 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_294 : SecretCardBase<Card_EX1_294> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
+			state::Cards::Card const& self_card = context.state_.GetCard(self);
+			if (context.state_.GetCurrentPlayerId() == self_card.GetPlayerIdentifier()) return true;
+			FlowControl::Manipulate(context.state_, context.flow_context_)
+				.Secret(self)
+				.Remove();
+
+			SummonToAllyByCopy(context, context.card_);
+			return true;
+		};
+
+		Card_EX1_294() {
+			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_294)
 REGISTER_CARD(EX1_277)
