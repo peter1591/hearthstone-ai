@@ -30,7 +30,7 @@ namespace Cards
 				.Secret(self)
 				.Remove();
 
-			SummonToAllyByCopy(context, context.card_);
+			SummonToPlayerByCopy(context, self_card.GetPlayerIdentifier(), context.card_);
 			return true;
 		};
 

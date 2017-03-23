@@ -29,6 +29,7 @@ namespace FlowControl
 				auto origin_states = new_data.enchantment_handler.GetOriginalStates();
 				origin_states.player = player;
 				new_data.enchantment_handler.SetOriginalStates(origin_states);
+				new_data.enchanted_states.player = player;
 			}
 
 			return GenerateCard(std::move(new_data), player);

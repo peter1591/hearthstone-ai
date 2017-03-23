@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
+// finished: Argent Squire
 
 namespace Cards
 {
@@ -32,6 +33,16 @@ namespace Cards
 	};
 
 	struct Card_EX1_008 : public MinionCardBase<Card_EX1_008, Shield> {};
+
+	struct Card_NEW1_025 : public MinionCardBase<Card_NEW1_025> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::PlayerIdentifier opponent = context.card_.GetPlayerIdentifier().Opposite();
+			state::CardRef weapon = context.state_.GetBoard().Get(opponent).GetWeaponRef();
+			if (!weapon.IsValid()) return;
+			Manipulate(context).Weapon(weapon).Damage(context.card_ref_, 1);
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -96,6 +107,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_025)
 REGISTER_CARD(EX1_564)
 REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)

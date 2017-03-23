@@ -67,9 +67,8 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static void SummonToAllyByCopy(Context&& context, state::Cards::Card const& card)
+		static void SummonToPlayerByCopy(Context&& context, state::PlayerIdentifier player, state::Cards::Card const& card)
 		{
-			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier();
 			int pos = (int)context.state_.GetBoard().Get(player).minions_.Size();
 			return SummonInternalByCopy(std::forward<Context>(context), card, player, pos);
 		}
