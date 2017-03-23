@@ -9,7 +9,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline state::Cards::Card BoardManipulator::GenerateCard(Cards::CardId card_id, state::PlayerIdentifier player)
+		inline state::Cards::Card BoardManipulator::GenerateCardById(Cards::CardId card_id, state::PlayerIdentifier player)
 		{
 			state::Cards::CardData new_data = Cards::CardDispatcher::CreateInstance(card_id);
 			new_data.enchanted_states.player = player;

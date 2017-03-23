@@ -25,7 +25,7 @@ namespace FlowControl
 
 		inline state::CardRef MinionManipulator::Transform(Cards::CardId id)
 		{
-			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCard(id, card_.GetPlayerIdentifier());
+			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCardById(id, card_.GetPlayerIdentifier());
 
 			assert(card_.GetCardType() == state::kCardTypeMinion);
 			assert(card_.GetZone() == state::kCardZonePlay);
