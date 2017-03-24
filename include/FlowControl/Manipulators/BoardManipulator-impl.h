@@ -53,7 +53,7 @@ namespace FlowControl
 
 			state::CardRef ref = state_.AddCard(std::move(origin_card));
 
-			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(flow_context_.GetRandom(), ref)
+			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(Manipulate(state_, flow_context_), ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);
 
 			state::Cards::Card const& card = state_.GetCardsManager().Get(ref);

@@ -95,7 +95,7 @@ namespace FlowControl
 						.TriggerAll()
 						.Clear();
 
-					state_.GetZoneChanger(flow_context_.GetRandom(), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
+					state_.GetZoneChanger(Manipulate(state_, flow_context_), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
 				return true;

@@ -33,7 +33,7 @@ namespace FlowControl
 			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 
 			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
-			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(flow_context_.GetRandom(), card_ref_)
+			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(Manipulate(state_, flow_context_), card_ref_)
 				.ReplaceBy(new_card_ref);
 
 			return new_card_ref;
@@ -55,7 +55,7 @@ namespace FlowControl
 			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 
 			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
-			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(flow_context_.GetRandom(), card_ref_)
+			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(Manipulate(state_, flow_context_), card_ref_)
 				.ReplaceBy(new_card_ref);
 
 			// recalculate enchantments from scratch

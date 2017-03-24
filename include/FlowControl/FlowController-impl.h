@@ -165,7 +165,7 @@ namespace FlowControl
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
 
-		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
+		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
 		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
@@ -235,7 +235,7 @@ namespace FlowControl
 		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
 		assert(!new_card_ref.IsValid()); // spell cannot transformed
 
-		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
+		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
@@ -254,7 +254,7 @@ namespace FlowControl
 		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
 		assert(!new_card_ref.IsValid()); // secret cannot transformed
 
-		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(flow_context_.GetRandom(), card_ref)
+		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(

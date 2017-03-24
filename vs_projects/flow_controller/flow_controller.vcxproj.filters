@@ -461,5 +461,8 @@
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler-impl.h">
       <Filter>Header Files\FlowControl\deathrattle</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

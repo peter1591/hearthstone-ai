@@ -17,6 +17,7 @@
 #include "FlowControl/Manipulators/BoardManipulator-impl.h"
 #include "FlowControl/Manipulators/CardManipulator-impl.h"
 #include "FlowControl/Manipulators/MinionManipulator-impl.h"
+#include "FlowControl/Manipulators/SecretManipulator-impl.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper-impl.h"
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 

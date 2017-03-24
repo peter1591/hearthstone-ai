@@ -15,12 +15,7 @@ namespace FlowControl
 				assert(card.GetCardType() == state::kCardTypeSecret);
 			}
 
-			void Remove()
-			{
-				assert(card_.GetZone() == state::kCardZonePlay);
-				state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeSecret>(flow_context_.GetRandom(), card_ref_)
-					.ChangeTo<state::kCardZoneGraveyard>(card_.GetPlayerIdentifier());
-			}
+			void Remove();
 		};
 	}
 }

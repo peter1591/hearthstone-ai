@@ -17,7 +17,7 @@ namespace FlowControl
 			assert(state_.GetCard(new_ref).GetRawData().usable == true);
 
 			state_.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZonePlay>
-				(flow_context_.GetRandom(), card_ref_)
+				(Manipulate(state_, flow_context_), card_ref_)
 				.ReplaceBy(new_ref);
 		}
 	}

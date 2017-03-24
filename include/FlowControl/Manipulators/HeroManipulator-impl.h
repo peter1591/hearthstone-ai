@@ -22,11 +22,11 @@ namespace FlowControl
 			state::CardRef card_ref = player.deck_.GetLast();
 
 			if (player.hand_.Full()) {
-				state_.GetZoneChanger<state::kCardZoneDeck>(flow_context_.GetRandom(), card_ref)
+				state_.GetZoneChanger<state::kCardZoneDeck>(Manipulate(state_, flow_context_), card_ref)
 					.ChangeTo<state::kCardZoneGraveyard>(player_id_);
 			}
 			else {
-				state_.GetZoneChanger<state::kCardZoneDeck>(flow_context_.GetRandom(), card_ref)
+				state_.GetZoneChanger<state::kCardZoneDeck>(Manipulate(state_, flow_context_), card_ref)
 					.ChangeTo<state::kCardZoneHand>(player_id_);
 			}
 
@@ -42,7 +42,7 @@ namespace FlowControl
 				flow_context_.SetDestroyedWeapon(weapon_ref);
 			}
 
-			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(flow_context_.GetRandom(), weapon_ref)
+			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(Manipulate(state_, flow_context_), weapon_ref)
 				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
 			assert(state_.GetBoard().Get(card_.GetPlayerIdentifier()).GetWeaponRef().IsValid() == false);
@@ -60,7 +60,7 @@ namespace FlowControl
 		{
 			DestroyWeapon();
 
-			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(flow_context_.GetRandom(), weapon_ref)
+			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(Manipulate(state_, flow_context_), weapon_ref)
 				.ChangeTo<state::kCardZonePlay>(card_.GetPlayerIdentifier());
 		}
 	}

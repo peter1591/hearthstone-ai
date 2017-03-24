@@ -11,6 +11,8 @@
 // implementation details
 #include "state/detail/PlayerDataStructureMaintainer-impl.h"
 
+namespace FlowControl { class Manipulate; }
+
 namespace state
 {
 	class State
@@ -67,34 +69,34 @@ namespace state
 		}
 
 	public: // zone changer
-		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(IRandomGenerator& random, CardRef ref) {
-			return GetZoneChanger<ZoneChangerWithUnknownZoneUnknownType>(random, ref);
+		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowControl::Manipulate & manipulate, CardRef ref) {
+			return GetZoneChanger<ZoneChangerWithUnknownZoneUnknownType>(manipulate, ref);
 		}
 
 		template <state::CardZone KnownZone>
-		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return GetZoneChanger<ZoneChangerWithUnknownType<KnownZone>>(random, ref);
+		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(FlowControl::Manipulate & manipulate,  CardRef ref) {
+			return GetZoneChanger<ZoneChangerWithUnknownType<KnownZone>>(manipulate, ref);
 		}
 
 		template <state::CardType KnownType>
-		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return GetZoneChanger<ZoneChangerWithUnknownZone<KnownType>>(random, ref);
+		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(FlowControl::Manipulate & manipulate,  CardRef ref) {
+			return GetZoneChanger<ZoneChangerWithUnknownZone<KnownType>>(manipulate, ref);
 		}
 
 		template <state::CardType KnownType, state::CardZone KnownZone>
-		ZoneChanger<KnownZone, KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(random, ref);
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowControl::Manipulate & manipulate,  CardRef ref) {
+			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(manipulate, ref);
 		}
 
 		template <state::CardZone KnownZone, state::CardType KnownType>
-		ZoneChanger<KnownZone, KnownType> GetZoneChanger(IRandomGenerator& random,  CardRef ref) {
-			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(random, ref);
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowControl::Manipulate & manipulate,  CardRef ref) {
+			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(manipulate, ref);
 		}
 
 	private:
 		template <typename ZoneChangerType>
-		ZoneChangerType GetZoneChanger(IRandomGenerator& random, CardRef ref) {
-			return ZoneChangerType(*this, board_, cards_mgr_, random, ref, cards_mgr_.GetMutable(ref));
+		ZoneChangerType GetZoneChanger(FlowControl::Manipulate & manipulate, CardRef ref) {
+			return ZoneChangerType(*this, board_, cards_mgr_, manipulate, ref, cards_mgr_.GetMutable(ref));
 		}
 
 	private:
