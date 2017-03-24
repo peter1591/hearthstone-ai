@@ -9,7 +9,7 @@ namespace Cards
 	struct EmitWhenAlive {
 		static void RegisterAura(state::Cards::CardData &card_data) {
 			card_data.added_to_play_zone += [](auto context) {
-				context.state_.GetAuraManager().Add(context.card_ref_);
+				context.manipulate_.Aura().Add(context.card_ref_);
 			};
 		}
 

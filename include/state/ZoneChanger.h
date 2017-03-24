@@ -24,10 +24,10 @@ namespace state {
 			void ChangeTo(PlayerIdentifier player_identifier)
 		{
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_, card_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, card_ref_, card_);
 			card_.SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_, card_);
-			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(state_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, card_ref_, card_);
 		}
 
 		template <CardZone ChangeToZone,
@@ -35,10 +35,10 @@ namespace state {
 			void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_, card_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, card_ref_, card_);
 			card_.SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_, card_, pos);
-			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(state_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, card_ref_, card_);
 		}
 
 		void ReplaceBy(CardRef new_ref)
@@ -53,8 +53,8 @@ namespace state {
 			new_card.SetZonePos()(card_.GetZonePosition());
 			card_.SetZone().Zone(kCardZoneSetASide);
 
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_, card_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(state_, new_ref, new_card);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, card_ref_, card_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(manipulate_, new_ref, new_card);
 		}
 
 	private:

@@ -2,14 +2,14 @@
 
 #include "state/Types.h"
 
+namespace FlowControl { class Manipulate; }
+
 namespace state
 {
-	class State;
-
 	namespace Cards
 	{
 		struct ZoneChangedContext {
-			State & state_;
+			FlowControl::Manipulate & manipulate_;
 			CardRef card_ref_;
 			const Cards::Card & card_;
 		};

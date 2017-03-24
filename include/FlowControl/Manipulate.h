@@ -41,7 +41,20 @@ namespace FlowControl
 
 	public: // bridge to flow context
 		state::CardRef GetSpecifiedTarget() { return flow_context_.GetSpecifiedTarget(); }
-		state::IRandomGenerator & GetRandom() { return flow_context_.GetRandom(); }
+		state::IRandomGenerator & GetRandom() { return flow_context_.GetRandom();}
+
+	public: // bridge to state::State
+		state::aura::Manager & Aura() { return state_.GetAuraManager(); }
+		state::aura::Manager & FlagAura() { return state_.GetFlagAuraManager(); }
+
+		template <typename EventType, typename T>
+		void AddEvent(T&& handler) {
+			return state_.AddEvent<EventType>(std::forward<T>(handler));
+		}
+		template <typename EventType, typename T>
+		void AddEvent(state::CardRef card_ref, T&& handler) {
+			return state_.AddEvent<EventType>(card_ref, std::forward<T>(handler));
+		}
 
 	public:
 		state::CardRef GetRandomTarget(state::targetor::Targets const& target_info);

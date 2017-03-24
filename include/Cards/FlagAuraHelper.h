@@ -9,13 +9,13 @@ namespace Cards
 	struct AliveWhenInPlay {
 		static void RegisterAura(state::Cards::CardData &card_data) {
 			card_data.added_to_play_zone += [](auto context) {
-				context.state_.GetFlagAuraManager().Add(context.card_ref_);
+				context.manipulate_.FlagAura().Add(context.card_ref_);
 			};
 		}
 
 		template <typename Context>
 		static bool IsAlive(Context&& context, state::CardRef card_ref) {
-			state::Cards::Card const& card = context.state_.GetCardsManager().Get(card_ref);
+			state::Cards::Card const& card = context.maniulate_.Board().GetCard(card_ref);
 			if (card.GetZone() != state::kCardZonePlay) return false;
 			if (card.GetHP() <= 0) return false;
 			return true;
@@ -53,13 +53,13 @@ namespace Cards
 			FlagAuraRemove(context);
 			context.handler_.applied_player = context.card_.GetPlayerIdentifier();
 			HandleClass::PlayerFlagAuraApply(
-				context.state_.GetBoard().Get(context.handler_.applied_player));
+				context.manipulate_.Board().Player(context.handler_.applied_player));
 		}
 		static void FlagAuraRemove(FlowControl::flag_aura::contexts::AuraRemove context) {
 			auto& player = context.handler_.applied_player;
 			if (!player.IsValid()) return;
 			HandleClass::PlayerFlagAuraRemove(
-				context.state_.GetBoard().Get(player));
+				context.manipulate_.Board().Player(player));
 			player.InValidate();
 		}
 	};

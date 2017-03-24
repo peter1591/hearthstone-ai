@@ -39,7 +39,8 @@ namespace Cards
 			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			Heal(context).Target(context.GetTarget()).Amount(2);
+			context.manipulate_.Character(context.GetTarget()).Heal(
+				context.card_ref_, context.card_, 2);
 		}
 	};
 

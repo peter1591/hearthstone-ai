@@ -44,35 +44,6 @@ namespace Cards
 			Context & context_;
 		};
 
-		template <typename Context>
-		class HealHelper
-		{
-		public:
-			template <typename T>
-			HealHelper(T&& context) : context_(std::forward<T>(context)) {}
-
-			HealHelper & Target(state::CardRef target) {
-				assert(!target_.IsValid());
-				target_ = target;
-				return *this;
-			}
-			HealHelper & Owner() {
-				assert(!target_.IsValid());
-				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
-				return *this;
-			}
-
-			void Amount(int amount) {
-				assert(target_.IsValid());
-				context_.manipulate_
-					.Character(target_).Heal(context_.card_ref_, context_.card_, amount);
-			}
-
-		private:
-			state::CardRef target_;
-			Context & context_;
-		};
-
 	public:
 		template <typename Context>
 		static FlowControl::Manipulate Manipulate(Context&& context)
@@ -90,12 +61,6 @@ namespace Cards
 		static DamageHelper<std::decay_t<Context>> Damage(Context&& context)
 		{
 			return DamageHelper<std::decay_t<Context>>(std::forward<Context>(context));
-		}
-
-		template <typename Context>
-		static HealHelper<std::decay_t<Context>> Heal(Context&& context)
-		{
-			return HealHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
 
 		static state::targetor::TargetsGenerator Targets() { return state::targetor::TargetsGenerator(); }
