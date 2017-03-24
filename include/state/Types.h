@@ -82,14 +82,13 @@ namespace state
 	class PlayerIdentifier
 	{
 	private:
-		PlayerIdentifier(PlayerSide side) : side_(side) {}
+		constexpr PlayerIdentifier(PlayerSide side) : side_(side) {}
 
 	public:
 		PlayerIdentifier() : side_(kPlayerInvalid) {}
 
-		// TODO: return constexpr
-		static PlayerIdentifier First() { return PlayerIdentifier(kPlayerFirst); }
-		static PlayerIdentifier Second() { return PlayerIdentifier(kPlayerSecond); }
+		constexpr static PlayerIdentifier First() { return PlayerIdentifier(kPlayerFirst); }
+		constexpr static PlayerIdentifier Second() { return PlayerIdentifier(kPlayerSecond); }
 
 		bool operator==(PlayerIdentifier rhs) const { return side_ == rhs.side_; }
 		bool operator!=(PlayerIdentifier rhs) const { return side_ != rhs.side_; }
