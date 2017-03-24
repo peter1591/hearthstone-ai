@@ -9,7 +9,7 @@ namespace Cards
 				return TargetsGenerator().Minion().SpellTargetable().GetInfo();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
-				FlowControl::Manipulate(context.state_, context.flow_context_)
+				context.manipulate_
 					.Minion(context.GetTarget())
 					.Transform(CardId::ID_hexfrog);
 			});

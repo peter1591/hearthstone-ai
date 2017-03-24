@@ -19,11 +19,11 @@ namespace FlowControl
 			bool aura_valid = IsValid(state, flow_context, card_ref, card);
 
 			if (aura_valid) {
-				(*apply)({ state, flow_context, card_ref, card, *this });
+				(*apply)({ Manipulate(state, flow_context), card_ref, card, *this });
 				return true;
 			}
 			else {
-				(*remove)({ state, flow_context, card_ref, card, *this });
+				(*remove)({ Manipulate(state, flow_context), card_ref, card, *this });
 				return false;
 			}
 		}
@@ -37,7 +37,7 @@ namespace FlowControl
 			state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card)
 		{
 			if (card.GetRawData().silenced) return false;
-			return (*is_valid)({ state, flow_context, card_ref, card, *this});
+			return (*is_valid)({ Manipulate(state, flow_context), card_ref, card, *this});
 		}
 	}
 }

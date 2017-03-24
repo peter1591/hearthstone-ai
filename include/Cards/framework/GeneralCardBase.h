@@ -62,32 +62,33 @@ namespace Cards
 		static void SummonToEnemy(Context && context, Cards::CardId card_id)
 		{
 			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier().Opposite();
-			int pos = (int)context.state_.GetBoard().Get(player).minions_.Size();
+			int pos = (int)context.manipulate_.Board().Player(player).minions_.Size();
 			return SummonInternal(std::forward<Context>(context), card_id, player, pos);
 		}
 
 		template <typename Context>
-		static void SummonToPlayerByCopy(Context&& context, state::PlayerIdentifier player, state::Cards::Card const& card)
+		static void SummonToPlayerByCopy(Context context, state::PlayerIdentifier player, state::Cards::Card const& card)
 		{
-			int pos = (int)context.state_.GetBoard().Get(player).minions_.Size();
-			return SummonInternalByCopy(std::forward<Context>(context), card, player, pos);
+			int pos = (int)context.manipulate_.Board().Player(player).minions_.Size();
+			return SummonInternalByCopy(std::move(context), card, player, pos);
 		}
 
 	private:
 		template <typename Context>
 		static void SummonInternal(Context&& context, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
-			if (context.state_.GetBoard().Get(player).minions_.Full()) return;
+			if (context.manipulate_.Board().Player(player).minions_.Full()) return;
 
-			FlowControl::Manipulate(context.state_, context.flow_context_).Board()
+			context.manipulate_.Board()
 				.SummonMinionById(card_id, player, pos);
 		}
-		template <typename Context>
-		static void SummonInternalByCopy(Context&& context, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)
-		{
-			if (context.state_.GetBoard().Get(player).minions_.Full()) return;
 
-			FlowControl::Manipulate(context.state_, context.flow_context_).Board()
+		template <typename Context>
+		static void SummonInternalByCopy(Context context, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)
+		{
+			if (context.manipulate_.Board().Player(player).minions_.Full()) return;
+
+			context.manipulate_.Board()
 				.SummonMinionByCopy(card, player, pos);
 		}
 	};

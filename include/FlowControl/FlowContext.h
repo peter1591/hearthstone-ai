@@ -45,26 +45,7 @@ namespace FlowControl {
 			return minion_put_location_;
 		}
 
-		void PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const& target_info)
-		{
-			assert(!specified_target_.IsValid());
-			std::vector<state::CardRef> targets;
-			target_info.Fill(state, targets);
-			specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
-			assert(specified_target_.IsValid());
-		}
-
-		state::CardRef GetRandomTarget(state::State & state, state::targetor::Targets const& target_info)
-		{
-			std::vector<state::CardRef> targets;
-			target_info.Fill(state, targets);
-
-			size_t count = targets.size();
-			if (count == 0) return state::CardRef();
-			if (count == 1) return targets.front();
-
-			return targets[random_.Get(count)];
-		}
+		void PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const& target_info);
 
 		state::CardRef GetSpecifiedTarget()
 		{

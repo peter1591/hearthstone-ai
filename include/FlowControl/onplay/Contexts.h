@@ -18,16 +18,14 @@ namespace FlowControl
 		namespace context
 		{
 			struct GetSpecifiedTarget {
-				state::State & state_;
-				FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 			};
 
 			struct OnPlay
 			{
-				state::State & state_;
-				FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				state::CardRef * new_card_ref;

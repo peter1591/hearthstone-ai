@@ -25,7 +25,7 @@ namespace Cards
 			TargetsGenerator()
 				.Ally(context).Minion().Murlocs() // friendly murlocs only
 				.Exclude(context.card_ref_) // only apply on other murlocs
-				.GetInfo().Fill(context.state_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_EX1_508() {
 			Aura<Card_EX1_508o, EmitWhenAlive, UpdateWhenMinionChanged>();
@@ -91,7 +91,7 @@ namespace Cards
 			return TargetsGenerator()
 				.Ally(context).Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.state_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_CS2_122() {
 			Aura<Card_CS2_122e, EmitWhenAlive, UpdateWhenMinionChanged>();
@@ -143,8 +143,8 @@ namespace Cards
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		static void Battlecry(Contexts::OnPlay context) {
 			ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
-				[context](state::State & state, FlowControl::FlowContext & flow_context, state::CardRef ref) {
-				FlowControl::Manipulate(state, flow_context).Character(ref).Heal(context.card_ref_, context.card_, 2);
+				[context](FlowControl::Manipulate manipulate, state::CardRef ref) {
+				manipulate.Character(ref).Heal(context.card_ref_, context.card_, 2);
 			});
 		}
 	};
@@ -158,7 +158,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			int count = 0;
 			Targets().Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
-				.Count(context.state_, &count);
+				.Count(context.manipulate_, &count);
 
 			switch (count) {
 			case 0:
@@ -233,7 +233,7 @@ namespace Cards
 			return TargetsGenerator()
 				.Ally(context).Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.state_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_CS2_222() {
 			Aura<Card_CS2_222o, EmitWhenAlive, UpdateWhenMinionChanged>();

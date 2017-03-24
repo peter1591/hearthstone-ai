@@ -16,7 +16,7 @@ namespace FlowControl
 			if (!specified_target_getter) return;
 
 			state::targetor::Targets targets = (*specified_target_getter)(
-				context::GetSpecifiedTarget{ state, flow_context, card_ref, card });
+				context::GetSpecifiedTarget{ Manipulate(state, flow_context), card_ref, card });
 			flow_context.PrepareSpecifiedTarget(state, card_ref, card, targets);
 		}
 
@@ -24,7 +24,7 @@ namespace FlowControl
 			state::CardRef * new_card_ref, state::Cards::Card const* * new_card) const
 		{
 			if (!onplay) return;
-			(*onplay)({ state, flow_context, card_ref, card, new_card_ref, new_card });
+			(*onplay)({ Manipulate(state, flow_context), card_ref, card, new_card_ref, new_card });
 		}
 	}
 }

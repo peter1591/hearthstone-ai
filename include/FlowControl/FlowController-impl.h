@@ -158,7 +158,7 @@ namespace FlowControl
 	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
-			state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, card_ref, card });
+			state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref, card });
 
 		if (state_.GetCurrentPlayer().minions_.Full()) return SetResult(kResultInvalid);
 
@@ -190,7 +190,7 @@ namespace FlowControl
 #endif
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(
-			state::Events::EventTypes::AfterMinionPlayed::Context{ state_, flow_context_, new_card_ref, *new_card });
+			state::Events::EventTypes::AfterMinionPlayed::Context{ Manipulate(state_, flow_context_), new_card_ref, *new_card });
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(new_card_ref, *new_card);
 		Manipulate(state_, flow_context_).Minion(new_card_ref).AfterSummoned();
@@ -221,7 +221,7 @@ namespace FlowControl
 		assert(!new_card_ref.IsValid()); // hero power cannot transformed
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
-			state::Events::EventTypes::AfterHeroPower::Context{ state_, flow_context_, card_ref, card });
+			state::Events::EventTypes::AfterHeroPower::Context{ Manipulate(state_, flow_context_), card_ref, card });
 
 
 		return true;
@@ -239,7 +239,7 @@ namespace FlowControl
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
-			state::Events::EventTypes::AfterSpell::Context{ state_, flow_context_, card_ref, card });
+			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref, card });
 
 		return true;
 	}
@@ -258,7 +258,7 @@ namespace FlowControl
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
-			state::Events::EventTypes::AfterSpell::Context{ state_, flow_context_, card_ref, card });
+			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref, card });
 		// TODO: trigger event 'AfterSecret'
 
 		return true;
@@ -295,7 +295,7 @@ namespace FlowControl
 		}
 
 		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
-			attacker, state::Events::EventTypes::OnAttack::Context{ state_, flow_context_, defender });
+			attacker, state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), defender });
 		// TODO: attacker lose stealth
 
 		Manipulate(state_, flow_context_).Character(defender).Damage(defender, GetAttackValue(attacker));
@@ -430,7 +430,7 @@ namespace FlowControl
 	inline void FlowController::EndTurnPhase()
 	{
 		state_.TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
-			state::Events::EventTypes::OnTurnEnd::Context{ state_, flow_context_ });
+			state::Events::EventTypes::OnTurnEnd::Context{ Manipulate(state_, flow_context_) });
 		state_.GetBoard().GetFirst().EndTurn();
 		state_.GetBoard().GetSecond().EndTurn();
 	}

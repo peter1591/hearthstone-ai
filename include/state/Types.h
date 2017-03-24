@@ -87,6 +87,7 @@ namespace state
 	public:
 		PlayerIdentifier() : side_(kPlayerInvalid) {}
 
+		// TODO: return constexpr
 		static PlayerIdentifier First() { return PlayerIdentifier(kPlayerFirst); }
 		static PlayerIdentifier Second() { return PlayerIdentifier(kPlayerSecond); }
 

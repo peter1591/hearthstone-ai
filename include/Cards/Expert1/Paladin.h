@@ -6,15 +6,15 @@ namespace Cards
 		Card_EX1_384() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
 				int damage = 0;
-				FlowControl::Manipulate(context.state_, context.flow_context_)
+				context.manipulate_
 					.Board()
 					.CalculateFinalDamageAmount(context.card_ref_, context.card_, 8, &damage);
 
 				Targets targets = TargetsGenerator().Enemy(context).NotMortallyWounded().GetInfo();
 				for (int i = 0; i < damage; ++i) {
-					state::CardRef target = context.flow_context_.GetRandomTarget(context.state_, targets);
+					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());
-					FlowControl::Manipulate(context.state_, context.flow_context_)
+					context.manipulate_
 						.Character(target)
 						.ConductFinalDamage(context.card_ref_, 1);
 				}

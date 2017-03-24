@@ -6,38 +6,38 @@
 
 namespace state {
 	namespace targetor {
-		inline void Targets::Fill(State const& state, std::vector<CardRef>& targets) const {
-			Process(state, [&](CardRef ref) {
+		inline void Targets::Fill(FlowControl::Manipulate & manipulate, std::vector<CardRef>& targets) const {
+			Process(manipulate, [&](CardRef ref) {
 				targets.push_back(ref);
 			});
 		}
-		inline void Targets::Fill(State const& state, std::unordered_set<CardRef>& targets) const {
-			Process(state, [&](CardRef ref) {
+		inline void Targets::Fill(FlowControl::Manipulate & manipulate, std::unordered_set<CardRef>& targets) const {
+			Process(manipulate, [&](CardRef ref) {
 				targets.insert(ref);
 			});
 		}
 
 		template <typename Functor>
-		inline void Targets::ForEach(State & state, FlowControl::FlowContext & flow_context, Functor&& func) const {
-			Process(state, [&](CardRef ref) {
-				func(state, flow_context, ref);
+		inline void Targets::ForEach(FlowControl::Manipulate & manipulate, Functor&& func) const {
+			Process(manipulate, [&](CardRef ref) {
+				func(manipulate, ref);
 			});
 		}
 
-		inline void Targets::Count(State const& state, int * count) const {
-			Process(state, [count](CardRef) {
+		inline void Targets::Count(FlowControl::Manipulate & manipulate, int * count) const {
+			Process(manipulate, [count](CardRef) {
 				++(*count);
 			});
 		}
 
 		template <typename Functor>
-		inline void Targets::Process(State const& state, Functor&& functor) const {
-			if (include_first) ProcessPlayerTargets(state, state.GetBoard().GetFirst(), std::forward<Functor>(functor));
-			if (include_second) ProcessPlayerTargets(state, state.GetBoard().GetSecond(), std::forward<Functor>(functor));
+		inline void Targets::Process(FlowControl::Manipulate & manipulate, Functor&& functor) const {
+			if (include_first) ProcessPlayerTargets(manipulate, manipulate.Board().FirstPlayer(), std::forward<Functor>(functor));
+			if (include_second) ProcessPlayerTargets(manipulate, manipulate.Board().SecondPlayer(), std::forward<Functor>(functor));
 		}
 
 		template <typename Functor>
-		inline void Targets::ProcessPlayerTargets(State const& state, board::Player const& player, Functor&& functor) const {
+		inline void Targets::ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const {
 			if (include_hero) {
 				if (player.GetHeroRef() != exclude) {
 					functor(player.GetHeroRef());
@@ -45,16 +45,16 @@ namespace state {
 			}
 			if (include_minion) {
 				for (CardRef minion : player.minions_.Get()) {
-					ProcessMinionTargets(state, minion, std::forward<Functor>(functor));
+					ProcessMinionTargets(manipulate, minion, std::forward<Functor>(functor));
 				}
 			}
 		}
 
 		template <typename Functor>
-		inline void Targets::ProcessMinionTargets(State const& state, CardRef const& minion, Functor&& functor) const {
+		inline void Targets::ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const {
 			if (minion == exclude) return;
 
-			auto const& card = state.GetCardsManager().Get(minion);
+			auto const& card = manipulate.Board().GetCard(minion);
 
 			switch (minion_filter) {
 			case kMinionFilterAll:

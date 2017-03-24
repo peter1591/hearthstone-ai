@@ -50,7 +50,7 @@ namespace FlowControl
 				assert(applied_enchantments.find(new_target) == applied_enchantments.end());
 
 				applied_enchantments.insert(std::make_pair(new_target, 
-					(*apply_on)({ state, flow_context, card_ref, card, new_target })
+					(*apply_on)({ Manipulate(state, flow_context), card_ref, card, new_target })
 					));
 			}
 
@@ -66,9 +66,9 @@ namespace FlowControl
 				return;
 			}
 
-			*aura_valid = (*is_valid)({ state, flow_context, card_ref, card, *this, *need_update });
+			*aura_valid = (*is_valid)({ Manipulate(state, flow_context), card_ref, card, *this, *need_update });
 			if (*aura_valid && *need_update) {
-				(*get_targets)({ state, flow_context, card_ref, card, *this, *new_targets });
+				(*get_targets)({ Manipulate(state, flow_context), card_ref, card, *this, *new_targets });
 			}
 		}
 	}

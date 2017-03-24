@@ -37,7 +37,7 @@ namespace Cards
 	struct Card_NEW1_025 : public MinionCardBase<Card_NEW1_025> {
 		static void Battlecry(Contexts::OnPlay context) {
 			state::PlayerIdentifier opponent = context.card_.GetPlayerIdentifier().Opposite();
-			state::CardRef weapon = context.state_.GetBoard().Get(opponent).GetWeaponRef();
+			state::CardRef weapon = context.manipulate_.Board().Player(opponent).GetWeaponRef();
 			if (!weapon.IsValid()) return;
 			Manipulate(context).Weapon(weapon).Damage(context.card_ref_, 1);
 		}
@@ -102,7 +102,7 @@ namespace Cards
 				.BecomeCopyof(context.GetTarget());
 
 			*context.new_card_ref = new_ref;
-			*context.new_card = &context.state_.GetCard(new_ref);
+			*context.new_card = &context.manipulate_.Board().GetCard(new_ref);
 		}
 	};
 }

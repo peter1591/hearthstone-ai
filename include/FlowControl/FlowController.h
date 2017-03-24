@@ -8,6 +8,7 @@
 #include "FlowControl/Manipulate.h"
 
 #include "FlowControl/aura/Handler-impl.h"
+#include "FlowControl/deathrattle/Handler-impl.h"
 #include "FlowControl/flag_aura/Handler-impl.h"
 #include "FlowControl/onplay/Handler-impl.h"
 #include "FlowControl/enchantment/Handler-impl.h"

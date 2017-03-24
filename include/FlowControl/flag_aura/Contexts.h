@@ -19,8 +19,7 @@ namespace FlowControl
 		namespace contexts {
 			struct AuraIsValid
 			{
-				state::State & state_;
-				FlowControl::FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				flag_aura::Handler const& aura_handler_;
@@ -28,8 +27,7 @@ namespace FlowControl
 
 			struct AuraApplyRemove
 			{
-				state::State & state_;
-				FlowControl::FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				flag_aura::Handler & handler_;

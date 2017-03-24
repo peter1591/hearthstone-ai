@@ -8,7 +8,7 @@ namespace Cards
 				return TargetsGenerator().SpellTargetable().GetInfo();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
-				FlowControl::Manipulate(context.state_, context.flow_context_)
+				context.manipulate_
 					.Character(context.GetTarget())
 					.Heal(context.card_ref_, context.card_, 2);
 			});

@@ -39,6 +39,12 @@ namespace FlowControl
 
 		Manipulators::BoardManipulator Board();
 
+	public: // bridge to flow context
+		state::CardRef GetSpecifiedTarget() { return flow_context_.GetSpecifiedTarget(); }
+
+	public:
+		state::CardRef GetRandomTarget(state::targetor::Targets const& target_info);
+
 	private:
 		state::State & state_;
 		FlowControl::FlowContext & flow_context_;

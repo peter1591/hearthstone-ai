@@ -4,7 +4,7 @@ namespace Cards
 {
 	struct Card_OG_121 : MinionCardBase<Card_OG_121> {
 		static void Battlecry(Contexts::OnPlay context) {
-			context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier()).SetNextSpellCostHealthThisTurn();
+			context.manipulate_.Board().Player(context.card_.GetPlayerIdentifier()).SetNextSpellCostHealthThisTurn();
 		}
 	};
 }

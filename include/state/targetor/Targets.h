@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include "state/Types.h"
 
-namespace FlowControl { class FlowContext; }
+namespace FlowControl { class Manipulate; }
 
 namespace state {
 	class State;
@@ -21,23 +21,23 @@ namespace state {
 			{
 			}
 
-			void Fill(State const& state, std::vector<CardRef>& targets) const;
-			void Fill(State const& state, std::unordered_set<CardRef>& targets) const;
+			void Fill(FlowControl::Manipulate & manipulate, std::vector<CardRef>& targets) const;
+			void Fill(FlowControl::Manipulate & manipulate, std::unordered_set<CardRef>& targets) const;
 
 			template <typename Functor>
-			void ForEach(State & state, FlowControl::FlowContext & flow_context, Functor&& func) const;
+			void ForEach(FlowControl::Manipulate & manipulate, Functor&& func) const;
 
-			void Count(State const& state, int * count) const;
+			void Count(FlowControl::Manipulate & manipulate, int * count) const;
 
 		private:
 			template <typename Functor>
-			void Process(State const& state, Functor&& functor) const;
+			void Process(FlowControl::Manipulate & manipulate, Functor&& functor) const;
 
 			template <typename Functor>
-			void ProcessPlayerTargets(State const& state, board::Player const& player, Functor&& functor) const;
+			void ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const;
 
 			template <typename Functor>
-			void ProcessMinionTargets(State const& state, CardRef const& minion, Functor&& functor) const;
+			void ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const;
 
 		public:
 			bool include_first;

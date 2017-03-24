@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments.h" />

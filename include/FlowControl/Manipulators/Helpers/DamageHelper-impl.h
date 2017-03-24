@@ -14,7 +14,7 @@ namespace FlowControl
 				state::CardRef final_target = target_ref_;
 				state::Cards::Card const* final_target_card = &target_card_;
 				state_.TriggerEvent<state::Events::EventTypes::PrepareHealDamageTarget>(
-					state::Events::EventTypes::PrepareHealDamageTarget::Context{ state_, flow_context_, source_ref_, source_card_, &final_target, final_target_card });
+					state::Events::EventTypes::PrepareHealDamageTarget::Context{ Manipulate(state_, flow_context_), source_ref_, source_card_, &final_target, final_target_card });
 
 				if (!final_target.IsValid()) return;
 
@@ -37,9 +37,9 @@ namespace FlowControl
 			{
 				assert(amount > 0);
 				state.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(card_ref,
-					state::Events::EventTypes::OnTakeDamage::Context{ state, flow_context, card, amount });
+					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), card, amount });
 				state.TriggerCategorizedEvent<state::Events::EventTypes::OnTakeDamage>(card_ref,
-					state::Events::EventTypes::OnTakeDamage::Context{ state, flow_context, card, amount });
+					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), card, amount });
 
 				int real_damage = 0;
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
@@ -52,9 +52,9 @@ namespace FlowControl
 			{
 				assert(amount > 0);
 				state.TriggerEvent<state::Events::EventTypes::OnHeal>(card_ref,
-					state::Events::EventTypes::OnHeal::Context{ state, flow_context, card, amount });
+					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card, amount });
 				state.TriggerCategorizedEvent<state::Events::EventTypes::OnHeal>(card_ref,
-					state::Events::EventTypes::OnHeal::Context{ state, flow_context, card, amount });
+					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card, amount });
 
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().Heal(amount);
 			}

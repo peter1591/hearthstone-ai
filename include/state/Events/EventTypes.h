@@ -6,7 +6,7 @@
 #include "state/Events/HandlersContainerController.h"
 #include "state/Types.h"
 
-namespace FlowControl { class FlowContext; }
+namespace FlowControl { class FlowContext; class Manipulate; }
 namespace state {
 	class State;
 
@@ -17,8 +17,7 @@ namespace state {
 			};
 			struct AfterMinionPlayed {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					CardRef card_ref_;
 					Cards::Card const& card_;
 				};
@@ -32,7 +31,7 @@ namespace state {
 			};
 			struct BeforeMinionSummoned {
 				struct Context {
-					State & state_;
+					FlowControl::Manipulate & manipulate_;
 					CardRef card_ref_;
 					const Cards::Card & card_;
 				};
@@ -40,8 +39,7 @@ namespace state {
 			};
 			struct OnAttack {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::CardRef defender_;
 				};
 				using type = std::function<bool(CardRef, Context)>;
@@ -52,8 +50,7 @@ namespace state {
 
 			struct CalculateHealDamageAmount {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::CardRef const source_ref_;
 					state::Cards::Card const& source_card_;
 					int * amount_;
@@ -62,8 +59,7 @@ namespace state {
 			};
 			struct PrepareHealDamageTarget {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::CardRef const source_ref_;
 					state::Cards::Card const& source_card_;
 					state::CardRef * target_ref_; // an invalid target means the damage event is cancelled
@@ -73,8 +69,7 @@ namespace state {
 			};
 			struct OnTakeDamage {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::Cards::Card const& card_;
 					int damage_;
 				};
@@ -83,8 +78,7 @@ namespace state {
 
 			struct AfterHeroPower { // a.k.a. inspire
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::CardRef const card_ref_;
 					state::Cards::Card const& card_;
 				};
@@ -93,8 +87,7 @@ namespace state {
 
 			struct AfterSpell {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::CardRef const card_ref_;
 					state::Cards::Card const& card_;
 				};
@@ -103,8 +96,7 @@ namespace state {
 
 			struct OnHeal {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 					state::Cards::Card const& card_;
 					int amount_;
 				};
@@ -112,8 +104,7 @@ namespace state {
 			};
 			struct OnTurnEnd {
 				struct Context {
-					state::State & state_;
-					FlowControl::FlowContext & flow_context_;
+					FlowControl::Manipulate & manipulate_;
 				};
 				using type = std::function<bool(Context)>;
 			};

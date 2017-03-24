@@ -15,7 +15,7 @@ namespace Cards
 
 		template <typename Context>
 		static bool ShouldEmit(Context&& context, state::CardRef card_ref) {
-			state::Cards::Card const& card = context.state_.GetCardsManager().Get(card_ref);
+			state::Cards::Card const& card = context.manipulate_.Board().GetCard(card_ref);
 			if (card.GetZone() != state::kCardZonePlay) return false;
 			if (card.GetHP() <= 0) return false;
 			return true;
@@ -33,17 +33,17 @@ namespace Cards
 	};
 	struct UpdateWhenMinionChanged {
 		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) {
-			if (context.state_.GetBoard().GetFirst().minions_.GetChangeId() !=
+			if (context.manipulate_.Board().FirstPlayer().minions_.GetChangeId() !=
 				context.aura_handler_.last_updated_change_id_first_player_minions_) return true;
-			if (context.state_.GetBoard().GetSecond().minions_.GetChangeId() !=
+			if (context.manipulate_.Board().SecondPlayer().minions_.GetChangeId() !=
 				context.aura_handler_.last_updated_change_id_second_player_minions_) return true;
 			return false;
 		}
 		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {
 			context.aura_handler_.last_updated_change_id_first_player_minions_ =
-				context.state_.GetBoard().GetFirst().minions_.GetChangeId();
+				context.manipulate_.Board().FirstPlayer().minions_.GetChangeId();
 			context.aura_handler_.last_updated_change_id_second_player_minions_ =
-				context.state_.GetBoard().GetSecond().minions_.GetChangeId();
+				context.manipulate_.Board().SecondPlayer().minions_.GetChangeId();
 		}
 	};
 

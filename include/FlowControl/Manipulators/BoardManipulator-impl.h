@@ -63,7 +63,7 @@ namespace FlowControl
 			assert(card.GetZonePosition() == pos);
 
 			state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
-				state::Events::EventTypes::BeforeMinionSummoned::Context{ state_, ref, card });
+				state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), ref, card });
 
 			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(ref, card);
 			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
@@ -102,7 +102,7 @@ namespace FlowControl
 
 			state_.TriggerEvent<state::Events::EventTypes::CalculateHealDamageAmount>(
 				state::Events::EventTypes::CalculateHealDamageAmount::Context
-			{ state_, flow_context_, source, source_card, final_amount });
+			{ Manipulate(state_, flow_context_), source, source_card, final_amount });
 		}
 	}
 }

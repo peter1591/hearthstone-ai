@@ -73,4 +73,15 @@ namespace FlowControl
 	{
 		return Manipulators::BoardManipulator(state_, flow_context_);
 	}
+	inline state::CardRef Manipulate::GetRandomTarget(state::targetor::Targets const & target_info)
+	{
+		std::vector<state::CardRef> targets;
+		target_info.Fill(*this, targets);
+
+		size_t count = targets.size();
+		if (count == 0) return state::CardRef();
+		if (count == 1) return targets.front();
+
+		return targets[flow_context_.GetRandom().Get(count)];
+	}
 }

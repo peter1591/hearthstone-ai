@@ -12,7 +12,7 @@ namespace state
 
 namespace FlowControl
 {
-	class FlowContext;
+	class Manipulate;
 
 	namespace aura
 	{
@@ -21,8 +21,7 @@ namespace FlowControl
 		namespace contexts {
 			struct AuraIsValid
 			{
-				state::State & state_;
-				FlowControl::FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				aura::Handler const& aura_handler_;
@@ -31,8 +30,7 @@ namespace FlowControl
 
 			struct AuraGetTargets
 			{
-				state::State & state_;
-				FlowControl::FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				aura::Handler & aura_handler_;
@@ -41,8 +39,7 @@ namespace FlowControl
 
 			struct AuraApplyOn
 			{
-				state::State & state_;
-				FlowControl::FlowContext & flow_context_;
+				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 				const state::Cards::Card & card_;
 				state::CardRef target_;

@@ -7,6 +7,8 @@
 
 namespace FlowControl
 {
+	class FlowContext;
+
 	namespace aura
 	{
 		class Handler

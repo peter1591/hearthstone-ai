@@ -4,7 +4,7 @@ namespace Cards
 {
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context&& context) {
-			state::PlayerIdentifier owner = context.state_.GetCard(self).GetPlayerIdentifier();
+			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
 			if (context.source_card_.GetPlayerIdentifier() != owner) return true; // for friendly only
 			if (context.source_card_.GetCardType() == state::kCardTypeSpell ||
 				context.source_card_.GetCardType() == state::kCardTypeHeroPower)

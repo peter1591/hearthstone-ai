@@ -24,18 +24,18 @@ namespace Cards
 			}
 			DamageHelper & Owner() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).GetHeroRef();
+				target_ = context_.manipulate_.Board().Player(context_.card_.GetPlayerIdentifier()).GetHeroRef();
 				return *this;
 			}
 			DamageHelper & Opponent() {
 				assert(!target_.IsValid());
-				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier().Opposite()).GetHeroRef();
+				target_ = context_.manipulate_.Board().Player(context_.card_.GetPlayerIdentifier().Opposite()).GetHeroRef();
 				return *this;
 			}
 
 			void Amount(int amount) {
 				assert(target_.IsValid());
-				FlowControl::Manipulate(context_.state_, context_.flow_context_).Character(target_)
+				context_.manipulate_.Character(target_)
 					.Damage(context_.card_ref_, context_.card_, amount);
 			}
 
@@ -61,15 +61,10 @@ namespace Cards
 				target_ = context_.state_.GetBoard().Get(context_.card_.GetPlayerIdentifier()).hero_ref_;
 				return *this;
 			}
-			HealHelper & Opponent() {
-				assert(!target_.IsValid());
-				target_ = context_.state_.GetBoard().GetAnother(context_.card_.GetPlayerIdentifier()).hero_ref_;
-				return *this;
-			}
 
 			void Amount(int amount) {
 				assert(target_.IsValid());
-				FlowControl::Manipulate(context_.state_, context_.flow_context_)
+				context_.manipulate_
 					.Character(target_).Heal(context_.card_ref_, context_.card_, amount);
 			}
 
@@ -82,12 +77,7 @@ namespace Cards
 		template <typename Context>
 		static FlowControl::Manipulate Manipulate(Context&& context)
 		{
-			return FlowControl::Manipulate(context.state_, context.flow_context_);
-		}
-
-		template <typename Context>
-		static FlowControl::Manipulators::MinionManipulator Minion(Context&& context) {
-			return FlowControl::Manipulate(context.state_, context.flow_context_).Minion(context.card_ref_);
+			return context.manipulate_;
 		}
 
 		template <typename Context>
@@ -123,15 +113,9 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static state::CardRef Opponent(Context&& context)
-		{
-			return context.state_.GetBoard().GetAnother(context.card_.GetPlayerIdentifier()).hero_ref_;
-		}
-
-		template <typename Context>
 		static state::board::Player& Player(Context&& context, state::PlayerIdentifier player)
 		{
-			return context.state_.GetBoard().Get(player);
+			return context.manipulate_.Board().Player(player);
 		}
 
 		template <typename Context>
@@ -165,7 +149,7 @@ namespace Cards
 			state::targetor::TargetsGenerator_Leaf const& targets_generator,
 			Functor&& func)
 		{
-			targets_generator.GetInfo().ForEach(context.state_, context.flow_context_, func);
+			targets_generator.GetInfo().ForEach(context.manipulate_, func);
 		}
 	};
 }
