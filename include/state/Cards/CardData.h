@@ -5,7 +5,7 @@
 #include <string>
 #include "Utils/FuncPtrArray.h"
 #include "state/Cards/EnchantableStates.h"
-#include "state/Cards/Contexts.h"
+#include "state/Cards/Callbacks.h"
 #include "FlowControl/aura/Handler.h"
 #include "FlowControl/flag_aura/Handler.h"
 #include "FlowControl/onplay/Handler.h"
@@ -56,10 +56,7 @@ namespace state
 			bool silenced;
 
 		public: // zone-changed callbacks invoked by state::State 
-			typedef void AddedToPlayZoneCallback(ZoneChangedContext&&);
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
-
-			typedef void AddedToDeckZoneCallback(ZoneChangedContext&&);
 			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
 
 		public:

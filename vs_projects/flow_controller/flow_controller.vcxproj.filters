@@ -320,9 +320,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\Contexts.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\Events\EventTypes.h">
       <Filter>Header Files\state\Events</Filter>
     </ClInclude>
@@ -463,6 +460,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventListener.h">
+      <Filter>Header Files\state\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Callbacks.h">
+      <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

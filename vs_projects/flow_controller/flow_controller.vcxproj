@@ -220,14 +220,15 @@
     <ClInclude Include="..\..\include\state\board\Player.h" />
     <ClInclude Include="..\..\include\state\board\PlayerResource.h" />
     <ClInclude Include="..\..\include\state\board\Secrets.h" />
+    <ClInclude Include="..\..\include\state\Cards\Callbacks.h" />
     <ClInclude Include="..\..\include\state\Cards\Card.h" />
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
-    <ClInclude Include="..\..\include\state\Cards\Contexts.h" />
     <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h" />
     <ClInclude Include="..\..\include\state\Cards\Manager.h" />
     <ClInclude Include="..\..\include\state\detail\InvokeCallback.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h" />
+    <ClInclude Include="..\..\include\state\Events\EventListener.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes.h" />
     <ClInclude Include="..\..\include\state\Events\HandlersContainerController.h" />
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h" />

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "state/Types.h"
-
 namespace FlowControl { class Manipulate; }
 
 namespace state
@@ -13,5 +11,8 @@ namespace state
 			CardRef card_ref_;
 			const Cards::Card & card_;
 		};
+
+		typedef void AddedToPlayZoneCallback(ZoneChangedContext&&);
+		typedef void AddedToDeckZoneCallback(ZoneChangedContext&&);
 	}
 }

@@ -21,6 +21,8 @@ namespace FlowControl
 		{
 			state::Cards::CardData new_data = card.GetRawData();
 
+			// TODO: remove enchantments which are listening to an event
+
 			new_data.enchantment_handler.Aura().AfterCopied();
 			new_data.aura_handler.AfterCopied();
 			new_data.flag_aura_handler.AfterCopied();

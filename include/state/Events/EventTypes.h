@@ -6,7 +6,7 @@
 #include "state/Events/HandlersContainerController.h"
 #include "state/Types.h"
 
-namespace FlowControl { class FlowContext; class Manipulate; }
+namespace FlowControl { class Manipulate; }
 namespace state {
 	class State;
 

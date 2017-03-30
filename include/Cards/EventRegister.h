@@ -126,7 +126,7 @@ namespace Cards
 	struct EventsRegisterHelper<Event1, Event2> {
 		static void Process(state::Cards::CardData & card_data) {
 			using CombinedEvent = CombineEvents<Event1, Event2>;
-			card_data.added_to_play_zone += (state::Cards::CardData::AddedToPlayZoneCallback*)
+			card_data.added_to_play_zone += (state::Cards::AddedToPlayZoneCallback*)
 				(CombinedEvent::AddedToPlayZone::Invoke);
 		}
 	};
