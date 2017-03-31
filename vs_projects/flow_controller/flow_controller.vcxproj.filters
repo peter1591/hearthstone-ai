@@ -131,9 +131,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\AuraHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h">
       <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
@@ -367,9 +364,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\flag_aura\Handler-impl.h">
       <Filter>Header Files\FlowControl\flag_aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\FlagAuraHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h">
       <Filter>Header Files\Cards\Expert1</Filter>

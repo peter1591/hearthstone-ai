@@ -8,8 +8,8 @@ namespace Cards
 {
 	struct AliveWhenInPlay {
 		static void RegisterAura(state::Cards::CardData &card_data) {
-			card_data.added_to_play_zone += [](auto context) {
-				context.manipulate_.FlagAura().Add(context.card_ref_);
+			card_data.added_to_play_zone += [](state::Cards::ZoneChangedContext&& context) {
+				context.manipulate_.FlagAura().Add(context.card_ref_, context.card_.GetRawData().aura_handler);
 			};
 		}
 

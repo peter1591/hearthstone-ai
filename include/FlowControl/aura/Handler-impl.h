@@ -13,7 +13,6 @@ namespace FlowControl
 	{
 		inline bool Handler::Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card)
 		{
-			assert(this == &card.GetRawData().aura_handler);
 			assert(is_valid != nullptr);
 			assert(get_targets);
 			assert(apply_on);

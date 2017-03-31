@@ -54,12 +54,11 @@ namespace Cards
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 	};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
-		template <typename Context>
-		static bool HandleEvent(state::CardRef self, Context&& context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			// TODO: check silence
 			Manipulate(context).Card(self).Enchant().Add<Card_NEW1_038_Enchant>();
 			return true;
 		};
-
 		Card_NEW1_038() {
 			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture,
 				state::Events::EventTypes::OnTurnEnd>();

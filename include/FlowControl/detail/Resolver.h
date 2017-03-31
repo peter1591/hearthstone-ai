@@ -111,20 +111,20 @@ namespace FlowControl
 		private:
 			void UpdateAura()
 			{
-				state_.GetAuraManager().ForEach([this](state::CardRef card_ref)
+				state_.GetAuraManager().ForEachAura([this](state::CardRef card_ref, FlowControl::aura::Handler & handler)
 				{
-					bool aura_valid = FlowControl::Manipulate(state_, flow_context_).Card(card_ref).Aura().Update();
+					bool aura_valid = handler.Update(state_, flow_context_, card_ref, state_.GetMutableCard(card_ref));
 					if (aura_valid) return true;
 
-					assert(state_.GetCardsManager().Get(card_ref).GetRawData().aura_handler.NoAppliedEnchantment());
+					assert(handler.NoAppliedEnchantment());
 					return false;
 				});
-				state_.GetFlagAuraManager().ForEach([this](state::CardRef card_ref)
+				state_.GetFlagAuraManager().ForEachFlagAura([this](state::CardRef card_ref, FlowControl::flag_aura::Handler & handler)
 				{
-					bool aura_valid = FlowControl::Manipulate(state_, flow_context_).Card(card_ref).FlagAura().Update();
+					bool aura_valid = handler.Update(state_, flow_context_, card_ref, state_.GetMutableCard(card_ref));
 					if (aura_valid) return true;
 
-					assert(state_.GetCardsManager().Get(card_ref).GetRawData().flag_aura_handler.NoAppliedEffect());
+					assert(handler.NoAppliedEffect());
 					return false;
 				});
 			}

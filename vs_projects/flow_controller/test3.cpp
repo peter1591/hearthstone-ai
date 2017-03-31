@@ -1592,4 +1592,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetCard(state.GetBoard().GetSecond().GetWeaponRef()).GetHP() == 1);
+
+	// TODO: test NEW1_038 with copy
+	// TODO: test NEW1_038 with silence
 }
