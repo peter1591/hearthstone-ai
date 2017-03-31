@@ -461,5 +461,8 @@
     <ClInclude Include="..\..\include\state\detail\InvokeCallback-impl.h">
       <Filter>Header Files\state\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

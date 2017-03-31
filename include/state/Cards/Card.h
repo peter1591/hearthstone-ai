@@ -139,6 +139,7 @@ namespace state
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
 
 			void SetSilenced() { data_.silenced = true; }
+			void SetPendingDestroy() { data_.pending_destroy = true; }
 
 		public:
 			const CardData & GetRawData() const { return data_; }

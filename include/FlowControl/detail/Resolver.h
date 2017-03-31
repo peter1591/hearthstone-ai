@@ -56,8 +56,9 @@ namespace FlowControl
 					const state::Cards::Card & card = state_.GetCardsManager().Get(ref);
 
 					if (card.GetZone() != state::kCardZonePlay) return;
-					if (card.GetHP() > 0) return;
-					// TODO: check if it's pending destory
+					if (!card.GetRawData().pending_destroy) {
+						if (card.GetHP() > 0) return;
+					}
 
 					deaths_.insert(ref);
 				});

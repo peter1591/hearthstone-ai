@@ -19,6 +19,7 @@
 #include "Cards/Expert1/Neutral.h"
 #include "Cards/Expert1/Priest.h"
 #include "Cards/Expert1/Shaman.h"
+#include "Cards/Expert1/Warlock.h"
 #include "Cards/Expert1/Paladin.h"
 
 #include "Cards/Gangs/Neutral.h"
