@@ -60,6 +60,8 @@ namespace Cards
 
 		template <typename Context>
 		static void SummonAt(Context&& context, state::PlayerIdentifier player, int pos, Cards::CardId card_id) {
+			int total_minions = (int)context.manipulate_.Board().Player(player).minions_.Size();
+			if (pos > total_minions) pos = total_minions;
 			return SummonInternal(std::forward<Context>(context), card_id, player, pos);
 		}
 
