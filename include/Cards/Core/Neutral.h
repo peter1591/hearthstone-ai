@@ -195,6 +195,7 @@ namespace Cards
 	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
 		template <typename Context>
 		static bool HandleEvent(state::CardRef self, Context&& context) {
+			// TODO: check silence
 			Manipulate(context).Card(self).Enchant().Add<Card_EX1_399e>();
 			return true;
 		};

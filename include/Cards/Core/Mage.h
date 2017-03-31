@@ -29,7 +29,7 @@ namespace Cards
 			context.manipulate_.Secret(self).Remove();
 
 			SummonToPlayerByCopy(context, self_card.GetPlayerIdentifier(), context.card_);
-			return true;
+			return false;
 		};
 
 		Card_EX1_294() {
