@@ -24,7 +24,6 @@ namespace FlowControl
 			// TODO: remove enchantments which are listening to an event
 
 			new_data.enchantment_handler.Aura().AfterCopied();
-			new_data.flag_aura_handler.AfterCopied();
 
 			if (new_data.enchanted_states.player != player) {
 				auto origin_states = new_data.enchantment_handler.GetOriginalStates();

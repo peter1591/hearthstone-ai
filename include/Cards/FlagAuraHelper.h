@@ -7,10 +7,8 @@
 namespace Cards
 {
 	struct AliveWhenInPlay {
-		static void RegisterAura(state::Cards::CardData &card_data) {
-			card_data.added_to_play_zone += [](state::Cards::ZoneChangedContext&& context) {
-				context.manipulate_.FlagAura().Add(context.card_ref_, context.card_.GetRawData().flag_aura_handler);
-			};
+		static auto& GetRegisterCallback(state::Cards::CardData &card_data) {
+			return card_data.added_to_play_zone;
 		}
 
 		template <typename Context>
@@ -28,18 +26,22 @@ namespace Cards
 	public:
 		FlagAuraHelper(state::Cards::CardData & card_data)
 		{
-			assert(!card_data.flag_aura_handler.IsCallbackSet_IsValid());
-			card_data.flag_aura_handler.SetCallback_IsValid([](auto context) {
-				if (!LifeTime::IsAlive(context, context.card_ref_)) return false;
-				return true;
-			});
+			LifeTime::GetRegisterCallback() += [](state::Cards::ZoneChangedContext&& context) {
+				FlowControl::flag_aura::Handler handler;
 
-			assert(!card_data.flag_aura_handler.IsCallbackSet_Apply());
-			card_data.flag_aura_handler.SetCallback_Apply(HandleClass::FlagAuraApply);
-			assert(!card_data.flag_aura_handler.IsCallbackSet_Remove());
-			card_data.flag_aura_handler.SetCallback_Remove(HandleClass::FlagAuraRemove);
+				assert(!handler.IsCallbackSet_IsValid());
+				handler.SetCallback_IsValid([](auto context) {
+					if (!LifeTime::IsAlive(context, context.card_ref_)) return false;
+					return true;
+				});
 
-			LifeTime::RegisterAura(card_data);
+				assert(!handler.IsCallbackSet_Apply());
+				handler.SetCallback_Apply(HandleClass::FlagAuraApply);
+				assert(!handler.IsCallbackSet_Remove());
+				handler.SetCallback_Remove(HandleClass::FlagAuraRemove);
+
+				context.manipulate_.FlagAura().Add(context.card_ref_, std::move(handler));
+			};
 		}
 	};
 

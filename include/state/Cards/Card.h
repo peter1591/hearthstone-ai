@@ -38,18 +38,6 @@ namespace state
 		class Card
 		{
 		public:
-			class MutableFlagAuraHandlerGetter
-			{
-				friend class FlowControl::Manipulators::Helpers::FlagAuraHelper;
-				friend class FlowControl::Manipulators::Helpers::TransformHelper;
-			public:
-				MutableFlagAuraHandlerGetter(CardData & data) : data_(data) {}
-			private:
-				auto& Get() { return data_.flag_aura_handler; }
-			private:
-				CardData & data_;
-			};
-
 			class ZoneSetter {
 				template <CardZone, CardType> friend class ZoneChanger;
 			public:
@@ -146,11 +134,6 @@ namespace state
 
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }
 			auto& GetMutableDeathrattleHandler() { return data_.deathrattle_handler; }
-
-			MutableFlagAuraHandlerGetter GetMutableFlagAuraHandlerGetter()
-			{
-				return MutableFlagAuraHandlerGetter(data_);
-			}
 
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
