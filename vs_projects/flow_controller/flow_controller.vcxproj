@@ -169,7 +169,6 @@
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
-    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments.h" />
@@ -194,7 +193,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h" />
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />

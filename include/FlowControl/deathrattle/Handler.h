@@ -28,7 +28,7 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			typedef void DeathrattleCallback(context::Deathrattle&&);
+			typedef void DeathrattleCallback(context::Deathrattle const&);
 
 			void Clear() { deathrattles.clear(); }
 
@@ -36,7 +36,11 @@ namespace FlowControl
 				deathrattles.push_back(deathrattle);
 			}
 
-			void TriggerAll(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card);
+			void TriggerAll(context::Deathrattle const& context) {
+				for (auto deathrattle : deathrattles) {
+					(*deathrattle)(context);
+				}
+			}
 
 			typedef std::vector<DeathrattleCallback*> Deathrattles;
 			Deathrattles deathrattles;

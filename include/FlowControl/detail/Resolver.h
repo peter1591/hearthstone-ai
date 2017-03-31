@@ -98,8 +98,8 @@ namespace FlowControl
 
 					state_.GetZoneChanger(Manipulate(state_, flow_context_), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 
-					card.GetMutableDeathrattleHandler()
-						.TriggerAll(state_, flow_context_, ref, card);
+					card.GetMutableDeathrattleHandler().TriggerAll(
+						FlowControl::deathrattle::context::Deathrattle{ FlowControl::Manipulate(state_, flow_context_), ref, card });
 				}
 
 				return true;

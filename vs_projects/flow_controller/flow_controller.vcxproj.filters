@@ -143,9 +143,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DeathrattlesHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -448,9 +445,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler-impl.h">
-      <Filter>Header Files\FlowControl\deathrattle</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
