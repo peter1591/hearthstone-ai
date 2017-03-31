@@ -5,8 +5,6 @@
 
 namespace Cards
 {
-	struct Card_CS2_231 : public MinionCardBase<Card_CS2_231> {};
-
 	struct Card_CS2_188_Enchant : public EnchantmentForThisTurn<Attack<2>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 	};
@@ -111,7 +109,6 @@ REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)
 REGISTER_CARD(EX1_390)
 REGISTER_CARD(CS2_188)
-REGISTER_CARD(CS2_231)
 REGISTER_CARD(CS2_203)
 
 REGISTER_CARD(EX1_089)

@@ -5,13 +5,13 @@
 
 namespace Utils
 {
-	template <typename DefaultInvoked>
+	template <template <int> typename DefaultInvoked>
 	class StaticDispatcher
 	{
 	public:
 		template <int Id> struct DispatchMap
 		{
-			using type = DefaultInvoked;
+			using type = DefaultInvoked<Id>;
 		};
 
 		template <template <typename> class InvokerType, typename Ret, typename... Args>

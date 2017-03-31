@@ -14,7 +14,6 @@ namespace Cards
 	};
 
 	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042, Taunt> {};
-	struct Card_CS2_168 : public MinionCardBase<Card_CS2_168> {};
 
 	struct Card_EX1_508o : public Enchantment<Attack<1>> {
 		static constexpr int id = Cards::ID_EX1_508o;
@@ -50,7 +49,6 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_172 : public MinionCardBase<Card_CS2_172> {};
 	struct Card_CS2_173 : public MinionCardBase<Card_CS2_173, Charge> {};
 	struct Card_CS2_121 : public MinionCardBase<Card_CS2_121, Taunt> {};
 	struct Card_CS2_142 : public MinionCardBase<Card_CS2_142, SpellDamage<1>> {};
@@ -68,7 +66,6 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_120 : public MinionCardBase<Card_CS2_120> {};
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
@@ -80,7 +77,6 @@ namespace Cards
 	};
 
 	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125, Taunt> {};
-	struct Card_CS2_118 : public MinionCardBase<Card_CS2_118> {};
 	struct Card_CS2_122e : public Enchantment<Attack<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_CS2_122e;
@@ -99,7 +95,6 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_boar : public MinionCardBase<Card_CS2_boar> {};
 	struct Card_CS2_196 : public MinionCardBase<Card_CS2_196> {
 		static void Battlecry(Contexts::OnPlay context) {
 			SummonToRight(context, Cards::ID_CS2_boar);
@@ -122,8 +117,6 @@ namespace Cards
 
 	struct Card_CS2_127 : public MinionCardBase<Card_CS2_127, Taunt> {};
 	struct Card_CS2_124 : public MinionCardBase<Card_CS2_124, Charge> {};
-	struct Card_CS2_182 : public MinionCardBase<Card_CS2_182> {};
-	struct Card_EX1_025t : public MinionCardBase<Card_EX1_025t> {};
 	struct Card_EX1_025 : public MinionCardBase<Card_EX1_025> {
 		static void Battlecry(Contexts::OnPlay context) {
 			SummonToRight(context, Cards::ID_EX1_025t);
@@ -136,7 +129,6 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_119 : public MinionCardBase<Card_CS2_119>{};
 	struct Card_CS2_197 : public MinionCardBase<Card_CS2_197, SpellDamage<1>> {};
 	struct Card_CS2_179 : public MinionCardBase<Card_CS2_179, Taunt> {};
 	struct Card_CS2_131 : public MinionCardBase<Card_CS2_131, Charge> {};
@@ -220,10 +212,8 @@ namespace Cards
 	};
 
 	struct Card_CS2_155 : public MinionCardBase<Card_CS2_155, SpellDamage<1>> {};
-	struct Card_CS2_200 : public MinionCardBase<Card_CS2_200> {};
 	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162, Taunt> {};
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
-	struct Card_CS2_201 : public MinionCardBase<Card_CS2_201> {};
 
 	struct Card_CS2_222o : public Enchantment<Attack<1>, MaxHP<1>> {
 		static constexpr int id = Cards::ID_CS2_222o;
@@ -240,16 +230,11 @@ namespace Cards
 			Aura<Card_CS2_222o, EmitWhenAlive, UpdateWhenMinionChanged>();
 		}
 	};
-
-	struct Card_CS2_186 : public MinionCardBase<Card_CS2_186> {};
 }
 
-REGISTER_CARD(CS2_186)
 REGISTER_CARD(CS2_222)
-REGISTER_CARD(CS2_201)
 REGISTER_CARD(CS2_213)
 REGISTER_CARD(CS2_162)
-REGISTER_CARD(CS2_200)
 REGISTER_CARD(CS2_155)
 REGISTER_CARD(CS2_150)
 REGISTER_CARD(EX1_593)
@@ -260,34 +245,26 @@ REGISTER_CARD(CS2_187)
 REGISTER_CARD(CS2_131)
 REGISTER_CARD(CS2_179)
 REGISTER_CARD(CS2_197)
-REGISTER_CARD(CS2_119)
 REGISTER_CARD(CS2_147)
-REGISTER_CARD(EX1_025t)
 REGISTER_CARD(EX1_025)
 
 REGISTER_CARD(CS2_189)
 REGISTER_CARD(CS1_042)
-REGISTER_CARD(CS2_168)
 REGISTER_CARD(EX1_508)
 REGISTER_CARD(CS2_171)
 REGISTER_CARD(EX1_011)
 REGISTER_CARD(EX1_066)
-REGISTER_CARD(CS2_172)
 REGISTER_CARD(CS2_173)
 REGISTER_CARD(CS2_121)
 REGISTER_CARD(CS2_142)
 REGISTER_CARD(EX1_506)
 REGISTER_CARD(EX1_506a)
 REGISTER_CARD(EX1_015)
-REGISTER_CARD(CS2_120)
 REGISTER_CARD(EX1_582)
 REGISTER_CARD(CS2_141)
 REGISTER_CARD(CS2_125)
-REGISTER_CARD(CS2_118)
 REGISTER_CARD(CS2_122)
-REGISTER_CARD(CS2_boar)
 REGISTER_CARD(CS2_196)
 REGISTER_CARD(EX1_019)
 REGISTER_CARD(CS2_127)
 REGISTER_CARD(CS2_124)
-REGISTER_CARD(CS2_182)
