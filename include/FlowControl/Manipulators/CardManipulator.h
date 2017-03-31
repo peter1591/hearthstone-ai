@@ -65,7 +65,7 @@ namespace FlowControl
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 
 		public:
-			void AfterAddedToPlayZone();
+			void AfterAddedToPlayZone(state::Events::Manager & event_mgr);
 
 		protected:
 			state::State & state_;

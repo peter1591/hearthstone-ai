@@ -39,9 +39,8 @@ namespace Cards
 
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
 		struct AddEventHelper<LifeTime, NonCategorized_SelfInLambdaCapture, EventType, EventHandler, EventHandlerArg> {
-			template <typename Context>
-			static void AddEvent(state::CardRef self, Context&& context) {
-				context.manipulate_.AddEvent<EventType>(
+			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext&& context) {
+				context.event_mgr_.PushBack<EventType>(
 					[self](auto&& context) {
 					if (!LifeTime::StillValid(context.manipulate_.Board().GetCard(self))) return false;
 					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, std::move(context));
@@ -50,9 +49,8 @@ namespace Cards
 		};
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
 		struct AddEventHelper<LifeTime, CateogrizedOnSelf, EventType, EventHandler, EventHandlerArg> {
-			template <typename Context>
-			static void AddEvent(state::CardRef self, Context&& context) {
-				context.manipulate_.AddEvent<EventType>(
+			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext&& context) {
+				context.event_mgr_.PushBack<EventType>(
 					self,
 					[](state::CardRef self, auto context) {
 					if (!LifeTime::StillValid(context.manipulate_.Board().GetCard(self))) return false;
