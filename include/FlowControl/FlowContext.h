@@ -49,11 +49,7 @@ namespace FlowControl {
 
 		state::CardRef GetSpecifiedTarget()
 		{
-			if (specified_target_.IsValid()) return specified_target_;
-
-			// TODO: maybe use this to indicate 'cast a spell with a random-choose target'
-			assert(false);
-			return state::CardRef();
+			return specified_target_;
 		}
 
 	public: // dead entry hint

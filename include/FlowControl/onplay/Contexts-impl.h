@@ -12,7 +12,6 @@ namespace FlowControl
 		{
 			inline state::CardRef OnPlay::GetTarget() {
 				state::CardRef target = manipulate_.GetSpecifiedTarget();
-				assert(target.IsValid());
 				return target;
 			}
 		}

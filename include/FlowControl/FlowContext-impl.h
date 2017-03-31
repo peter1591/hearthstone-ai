@@ -9,6 +9,12 @@ namespace FlowControl {
 		assert(!specified_target_.IsValid());
 		std::vector<state::CardRef> targets;
 		target_info.Fill(Manipulate(state, *this), targets);
+
+		if (targets.empty()) {
+			specified_target_.Invalidate();
+			return;
+		}
+
 		specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
 		assert(specified_target_.IsValid());
 	}

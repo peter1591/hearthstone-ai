@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Argent Squire
+// finished: Hungry Crab
 
 namespace Cards
 {
@@ -38,6 +38,22 @@ namespace Cards
 			state::CardRef weapon = context.manipulate_.Board().Player(opponent).GetWeaponRef();
 			if (!weapon.IsValid()) return;
 			Manipulate(context).Weapon(weapon).Damage(context.card_ref_, 1);
+		}
+	};
+
+	struct Card_NEW1_017e : public Enchantment<Attack<2>, MaxHP<2>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_NEW1_017 : public MinionCardBase<Card_NEW1_017> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets().Minion().Murlocs();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+
+			context.manipulate_.Minion(target).Destroy();
+			context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_017e>();
 		}
 	};
 
@@ -103,6 +119,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_017)
 REGISTER_CARD(NEW1_025)
 REGISTER_CARD(EX1_564)
 REGISTER_CARD(EX1_008)
