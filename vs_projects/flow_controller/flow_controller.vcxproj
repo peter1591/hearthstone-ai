@@ -228,7 +228,6 @@
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h" />
     <ClInclude Include="..\..\include\state\Events\EventListener.h" />
     <ClInclude Include="..\..\include\state\Events\EventTypes.h" />
-    <ClInclude Include="..\..\include\state\Events\HandlersContainerController.h" />
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h" />
     <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h" />
     <ClInclude Include="..\..\include\state\Events\Manager.h" />

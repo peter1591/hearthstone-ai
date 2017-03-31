@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <functional>
-#include "state/Events/HandlersContainerController.h"
 #include "state/Types.h"
 
 namespace FlowControl { class Manipulate; }
