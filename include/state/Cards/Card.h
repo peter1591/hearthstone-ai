@@ -87,7 +87,9 @@ namespace state
 			int GetCardId() const { return data_.card_id; }
 			CardType GetCardType() const { return data_.card_type; }
 			CardRace GetRace() const { return data_.card_race; }
+
 			int GetPlayOrder() const { return data_.play_order; }
+			void SetPlayOrder(int play_order) { data_.play_order = play_order; }
 
 			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchanted_states.player; }
 			const CardZone GetZone() const { return data_.zone; }

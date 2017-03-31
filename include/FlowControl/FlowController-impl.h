@@ -77,6 +77,9 @@ namespace FlowControl
 	template <state::CardType CardType>
 	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
 	{
+		state_.IncreasePlayOrder();
+		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
+
 		card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card);
 
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(card.GetRawData().overload);

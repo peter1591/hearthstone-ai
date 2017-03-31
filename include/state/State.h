@@ -20,7 +20,7 @@ namespace state
 		template <CardZone, CardType> friend class ZoneChanger;
 
 	public:
-		State() : turn_(0) {}
+		State() : turn_(0), play_order_(1) {}
 
 		board::Board const& GetBoard() const { return board_; }
 		board::Board & GetBoard() { return board_; }
@@ -43,6 +43,10 @@ namespace state
 		int GetTurn() const { return turn_; }
 		void SetTurn(int turn) { turn = turn_; }
 		void IncreaseTurn() { ++turn_; }
+
+		int GetPlayOrder() const { return play_order_; }
+		void SetPlayOrder(int play_order) { play_order_ = play_order; }
+		void IncreasePlayOrder() { ++play_order_; }
 
 	public: // bridge to cards manager
 		Cards::Card const& GetCard(CardRef ref) const { return cards_mgr_.Get(ref); }
@@ -99,5 +103,6 @@ namespace state
 
 		PlayerIdentifier current_player_;
 		int turn_;
+		int play_order_;
 	};
 }

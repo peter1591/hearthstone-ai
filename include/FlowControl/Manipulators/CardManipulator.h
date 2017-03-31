@@ -61,6 +61,10 @@ namespace FlowControl
 				return ConductFinalDamage(source, state_.GetCard(source), amount);
 			}
 
+			void SetPlayOrder() {
+				card_.SetPlayOrder(state_.GetPlayOrder());
+			}
+
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
 			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 

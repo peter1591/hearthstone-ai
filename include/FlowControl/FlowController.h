@@ -40,9 +40,10 @@ namespace FlowControl
 		Result EndTurn();
 		Result Attack(state::CardRef attacker, state::CardRef defender);
 		Result HeroPower();
-		Result Resolve();
 
 	private:
+		Result Resolve();
+
 		void PlayCardInternal(int hand_idx);
 		bool CostCrystal(int amount);
 		bool CostHealth(int amount);
