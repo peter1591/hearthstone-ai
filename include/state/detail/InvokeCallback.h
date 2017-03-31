@@ -12,10 +12,7 @@ namespace state {
 
 		template <CardType CardType>
 		struct InvokeCallback<CardType, kCardZonePlay> {
-			static void Added(FlowControl::Manipulate & manipulate, state::CardRef card_ref, state::Cards::Card & card) {
-				card.SetJustPlayedFlag(true);
-				card.GetRawData().added_to_play_zone(state::Cards::ZoneChangedContext{ manipulate, card_ref, card });
-			}
+			static void Added(FlowControl::Manipulate & manipulate, state::CardRef card_ref, state::Cards::Card & card);
 			static void Removed(FlowControl::Manipulate & manipulate, state::CardRef card_ref, state::Cards::Card & card) {}
 		};
 

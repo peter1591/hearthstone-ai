@@ -2,6 +2,7 @@
 
 #include "state/State.h"
 #include "state/targetor/Targets-impl.h"
+#include "state/detail/InvokeCallback-impl.h"
 
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/FlowContext-impl.h"

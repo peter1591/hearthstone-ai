@@ -223,6 +223,7 @@
     <ClInclude Include="..\..\include\state\Cards\CardData.h" />
     <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h" />
     <ClInclude Include="..\..\include\state\Cards\Manager.h" />
+    <ClInclude Include="..\..\include\state\detail\InvokeCallback-impl.h" />
     <ClInclude Include="..\..\include\state\detail\InvokeCallback.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />
     <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h" />

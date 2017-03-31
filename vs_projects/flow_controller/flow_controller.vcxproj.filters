@@ -458,5 +458,8 @@
     <ClInclude Include="..\..\include\state\Cards\Callbacks.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\InvokeCallback-impl.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

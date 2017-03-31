@@ -13,7 +13,12 @@ namespace FlowControl
 
 	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref)
 	{
-		return Manipulators::CardManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+		return Card(ref, state_.GetMutableCard(ref));
+	}
+
+	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref, state::Cards::Card & card)
+	{
+		return Manipulators::CardManipulator(state_, flow_context_, ref, card);
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
