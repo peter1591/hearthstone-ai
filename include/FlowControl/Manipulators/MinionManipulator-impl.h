@@ -20,7 +20,7 @@ namespace FlowControl
 			// Remove all deathrattles
 			card_.GetMutableDeathrattleHandler().Clear();
 
-			card_.SetSilenced();
+			card_.SetSilenced(state_.GetPlayOrder());
 		}
 
 		inline state::CardRef MinionManipulator::Transform(Cards::CardId id)

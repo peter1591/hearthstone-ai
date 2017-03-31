@@ -22,7 +22,7 @@ namespace state
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				pending_destroy(false), used_this_turn(0), usable(true), armor(0),
-				taunt(false), shielded(false), charge(false), silenced(false)
+				taunt(false), shielded(false), charge(false), silenced_at_play_order(-1)
 			{
 			}
 
@@ -53,7 +53,7 @@ namespace state
 			bool shielded;
 			bool charge;
 
-			bool silenced;
+			int silenced_at_play_order; // -1 if not silenced
 
 		public: // zone-changed callbacks invoked by state::State 
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;

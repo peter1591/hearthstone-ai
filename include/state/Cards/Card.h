@@ -140,7 +140,10 @@ namespace state
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
 
-			void SetSilenced() { data_.silenced = true; }
+			void SetSilenced(int play_order) { data_.silenced_at_play_order = play_order; }
+			int GetSilencedAtPlayOrder() { return data_.silenced_at_play_order; }
+			bool IsSilenced() const { return (data_.silenced_at_play_order >= 0); }
+
 			void SetPendingDestroy() { data_.pending_destroy = true; }
 
 		public:

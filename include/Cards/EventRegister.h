@@ -12,7 +12,7 @@ namespace Cards
 
 		static bool StillValid(state::Cards::Card const& card) {
 			if (card.GetZone() != state::kCardZonePlay) return false;
-			if (card.GetRawData().silenced) return false;
+			if (card.IsSilenced()) return false;
 			return true;
 		}
 	};
