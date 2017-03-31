@@ -12,7 +12,7 @@ namespace Cards
 		};
 
 		Card_CFM_807() {
-			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterSpell>();
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterSpell>();
 		}
 	};
 }

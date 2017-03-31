@@ -4,7 +4,6 @@ namespace Cards
 {
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context&& context) {
-			// TODO: check silence
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
 			if (context.source_card_.GetPlayerIdentifier() != owner) return true; // for friendly only
 			if (context.source_card_.GetCardType() == state::kCardTypeSpell ||
@@ -16,7 +15,7 @@ namespace Cards
 		};
 
 		Card_EX1_350() {
-			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::CalculateHealDamageAmount>();
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::CalculateHealDamageAmount>();
 		}
 	};
 	

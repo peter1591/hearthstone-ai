@@ -55,12 +55,11 @@ namespace Cards
 	};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
-			// TODO: check silence
 			Manipulate(context).Card(self).Enchant().Add<Card_NEW1_038_Enchant>();
 			return true;
 		};
 		Card_NEW1_038() {
-			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture,
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
 				state::Events::EventTypes::OnTurnEnd>();
 		}
 	};

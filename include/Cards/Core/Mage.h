@@ -33,7 +33,7 @@ namespace Cards
 		};
 
 		Card_EX1_294() {
-			RegisterEvent<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
 		}
 	};
 }

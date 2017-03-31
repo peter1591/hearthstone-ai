@@ -6,7 +6,17 @@
 namespace Cards
 {
 	// event lifetime
-	struct InPlayZone {
+	struct MinionInPlayZone {
+		template <typename YesFunctor, typename NoFunctor> using AddedToPlayZone = YesFunctor;
+		template <typename YesFunctor, typename NoFunctor> using AddedToHandZone = NoFunctor;
+
+		static bool StillValid(state::Cards::Card const& card) {
+			if (card.GetZone() != state::kCardZonePlay) return false;
+			if (card.GetRawData().silenced) return false;
+			return true;
+		}
+	};
+	struct SecretInPlayZone {
 		template <typename YesFunctor, typename NoFunctor> using AddedToPlayZone = YesFunctor;
 		template <typename YesFunctor, typename NoFunctor> using AddedToHandZone = NoFunctor;
 
@@ -140,7 +150,7 @@ namespace Cards
 
 	// helpers for common usages
 	struct OnSelfTakeDamage {
-		using LifeTime = InPlayZone;
+		using LifeTime = MinionInPlayZone;
 		using SelfPolicy = CateogrizedOnSelf;
 		using EventType = state::Events::EventTypes::OnTakeDamage;
 
