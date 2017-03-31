@@ -38,17 +38,6 @@ namespace state
 		class Card
 		{
 		public:
-			class MutableAuraHandlerGetter
-			{
-				friend class FlowControl::Manipulators::Helpers::AuraHelper;
-				friend class FlowControl::Manipulators::Helpers::TransformHelper;
-			public:
-				MutableAuraHandlerGetter(CardData & data) : data_(data) {}
-			private:
-				auto& Get() { return data_.aura_handler; }
-			private:
-				CardData & data_;
-			};
 			class MutableFlagAuraHandlerGetter
 			{
 				friend class FlowControl::Manipulators::Helpers::FlagAuraHelper;
@@ -158,10 +147,6 @@ namespace state
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }
 			auto& GetMutableDeathrattleHandler() { return data_.deathrattle_handler; }
 
-			MutableAuraHandlerGetter GetMutableAuraHandlerGetter()
-			{
-				return MutableAuraHandlerGetter(data_);
-			}
 			MutableFlagAuraHandlerGetter GetMutableFlagAuraHandlerGetter()
 			{
 				return MutableFlagAuraHandlerGetter(data_);

@@ -7,10 +7,8 @@
 namespace Cards
 {
 	struct EmitWhenAlive {
-		static void RegisterAura(state::Cards::CardData &card_data) {
-			card_data.added_to_play_zone += [](state::Cards::ZoneChangedContext&& context) {
-				context.manipulate_.Aura().Add(context.card_ref_, context.card_.GetRawData().aura_handler);
-			};
+		static auto& GetRegisterCallback(state::Cards::CardData &card_data) {
+			return card_data.added_to_play_zone;
 		}
 
 		template <typename Context>
@@ -53,25 +51,28 @@ namespace Cards
 	public:
 		AuraHelper(state::Cards::CardData & card_data)
 		{
-			assert(!card_data.aura_handler.IsCallbackSet_IsValid());
-			card_data.aura_handler.SetCallback_IsValid([](auto context) {
-				if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
-				context.need_update_ = UpdatePolicy::NeedUpdate(context);
-				return true;
-			});
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+				FlowControl::aura::Handler handler;
 
-			assert(!card_data.aura_handler.IsCallbackSet_GetTargets());
-			card_data.aura_handler.SetCallback_GetTargets([](auto context) {
-				UpdatePolicy::AfterUpdated(context);
-				HandleClass::GetAuraTargets(context);
-			});
+				assert(!handler.IsCallbackSet_IsValid());
+				handler.SetCallback_IsValid([](auto context) {
+					if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
+					context.need_update_ = UpdatePolicy::NeedUpdate(context);
+					return true;
+				});
 
-			assert(!card_data.aura_handler.IsCallbackSet_ApplyOn());
-			card_data.aura_handler.SetCallback_ApplyOn([](auto context) {
-				return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Aura().PushBack<EnchantmentType>();
-			});
+				assert(!handler.IsCallbackSet_GetTargets());
+				handler.SetCallback_GetTargets([](auto context) {
+					UpdatePolicy::AfterUpdated(context);
+					HandleClass::GetAuraTargets(context);
+				});
 
-			EmitPolicy::RegisterAura(card_data);
+				assert(!handler.IsCallbackSet_ApplyOn());
+				handler.SetCallback_ApplyOn([](auto context) {
+					return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Aura().PushBack<EnchantmentType>();
+				});
+				context.manipulate_.Aura().Add(context.card_ref_, std::move(handler));
+			};
 		}
 	};
 
