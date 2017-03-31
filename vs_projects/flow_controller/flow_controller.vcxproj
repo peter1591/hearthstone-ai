@@ -161,6 +161,7 @@
     <ClInclude Include="..\..\include\Cards\framework\SecretCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\SpellCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\Gangs\Hunter.h" />
     <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />

@@ -464,5 +464,8 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Gangs\Hunter.h">
+      <Filter>Header Files\Cards\Gangs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
