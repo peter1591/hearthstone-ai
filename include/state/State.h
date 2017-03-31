@@ -41,7 +41,7 @@ namespace state
 		const board::Player & GetOppositePlayer() const { return board_.Get(current_player_.Opposite()); }
 
 		int GetTurn() const { return turn_; }
-		void SetTurn(int turn) { turn = turn_; }
+		void SetTurn(int turn) { turn_ = turn; }
 		void IncreaseTurn() { ++turn_; }
 
 		int GetPlayOrder() const { return play_order_; }
