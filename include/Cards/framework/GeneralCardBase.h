@@ -59,6 +59,11 @@ namespace Cards
 		}
 
 		template <typename Context>
+		static void SummonAt(Context&& context, state::PlayerIdentifier player, int pos, Cards::CardId card_id) {
+			return SummonInternal(std::forward<Context>(context), card_id, player, pos);
+		}
+
+		template <typename Context>
 		static void SummonToEnemy(Context && context, Cards::CardId card_id)
 		{
 			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier().Opposite();

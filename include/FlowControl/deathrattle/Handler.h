@@ -20,8 +20,10 @@ namespace FlowControl
 			struct Deathrattle
 			{
 				Manipulate & manipulate_;
-				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
+				state::PlayerIdentifier player_;
+				state::CardZone zone_;
+				int zone_pos_;
+				int attack_;
 			};
 		}
 
@@ -36,7 +38,7 @@ namespace FlowControl
 				deathrattles.push_back(deathrattle);
 			}
 
-			void TriggerAll(context::Deathrattle const& context) {
+			void TriggerAll(context::Deathrattle const& context) const {
 				for (auto deathrattle : deathrattles) {
 					(*deathrattle)(context);
 				}

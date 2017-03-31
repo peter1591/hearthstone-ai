@@ -79,27 +79,30 @@ namespace FlowControl
 				if (second_dead) return SetResult(kResultFirstPlayerWin);
 
 				// process deaths by order of play
-				std::multimap<int, std::pair<state::CardRef, state::Cards::Card*>> ordered_deaths;
+				std::multimap<int,
+					std::pair<state::Cards::Card*,FlowControl::deathrattle::context::Deathrattle>> ordered_deaths;
 
 				for (auto ref : deaths_)
 				{
 					state::Cards::Card & card = state_.GetMutableCard(ref);
-					ordered_deaths.insert(std::make_pair(card.GetPlayOrder(), std::make_pair(ref, &card)));
-				}
-
-				for (auto death_item: ordered_deaths)
-				{
-					state::CardRef & ref = death_item.second.first;
-					state::Cards::Card & card = *death_item.second.second;
 
 					state::PlayerIdentifier player = card.GetPlayerIdentifier();
 					state::CardZone zone = card.GetZone();
 					int zone_pos = card.GetZonePosition();
+					int attack = card.GetAttack();
 
-					state_.GetZoneChanger(Manipulate(state_, flow_context_), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
+					state_.GetZoneChanger(Manipulate(state_, flow_context_), ref)
+						.ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 
-					card.GetMutableDeathrattleHandler().TriggerAll(
-						FlowControl::deathrattle::context::Deathrattle{ FlowControl::Manipulate(state_, flow_context_), ref, card });
+					ordered_deaths.insert(std::make_pair(card.GetPlayOrder(),
+						std::make_pair(&card,
+							FlowControl::deathrattle::context::Deathrattle{ FlowControl::Manipulate(state_, flow_context_), player, zone, zone_pos, attack })));
+				}
+
+				for (auto death_item: ordered_deaths)
+				{
+					state::Cards::Card & card = *death_item.second.first;
+					card.GetMutableDeathrattleHandler().TriggerAll(death_item.second.second);
 				}
 
 				return true;
