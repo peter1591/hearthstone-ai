@@ -129,6 +129,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test2.cpp" />
     <ClCompile Include="test3.cpp" />
+    <ClCompile Include="test4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Cards\AuraHelper.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EventRegister.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />

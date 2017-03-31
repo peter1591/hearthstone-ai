@@ -3,7 +3,6 @@
 #include "state/Cards/Card.h"
 #include "state/ZoneChanger.h"
 #include "FlowControl/Manipulators/BoardManipulator.h"
-#include "FlowControl/Manipulators/Helpers/DeathrattlesHelper.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
 #include "FlowControl/Manipulators/detail/DamageSetter.h"
 #include "FlowControl/FlowContext.h"
@@ -66,7 +65,6 @@ namespace FlowControl
 			}
 
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_, card_); }
-			Helpers::DeathrattlesHelper Deathrattles() { return Helpers::DeathrattlesHelper(state_, flow_context_, card_ref_, card_); }
 
 		public:
 			void AfterAddedToPlayZone(state::Events::Manager & event_mgr);

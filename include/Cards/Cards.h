@@ -21,6 +21,7 @@
 #include "Cards/Expert1/Shaman.h"
 #include "Cards/Expert1/Warlock.h"
 #include "Cards/Expert1/Paladin.h"
+#include "Cards/Expert1/Hunter.h"
 
 #include "Cards/Gangs/Neutral.h"
 

@@ -111,6 +111,9 @@
     <ClCompile Include="test3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\FlowControl\FlowController.h">
@@ -462,6 +465,9 @@
       <Filter>Header Files\state\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
   </ItemGroup>

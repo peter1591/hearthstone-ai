@@ -7,6 +7,7 @@
 
 void test2();
 void test3();
+void test4();
 
 void test_compile()
 {
@@ -43,6 +44,7 @@ int main(void)
 
 	test2();
 	test3();
+	test4();
 
 	return 0;
 }

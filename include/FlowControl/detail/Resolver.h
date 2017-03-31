@@ -79,24 +79,27 @@ namespace FlowControl
 				if (second_dead) return SetResult(kResultFirstPlayerWin);
 
 				// process deaths by order of play
-				std::multimap<int, std::pair<state::CardRef, state::Cards::Card const*>> ordered_deaths;
+				std::multimap<int, std::pair<state::CardRef, state::Cards::Card*>> ordered_deaths;
 
 				for (auto ref : deaths_)
 				{
-					const state::Cards::Card & card = state_.GetCardsManager().Get(ref);
+					state::Cards::Card & card = state_.GetMutableCard(ref);
 					ordered_deaths.insert(std::make_pair(card.GetPlayOrder(), std::make_pair(ref, &card)));
 				}
 
 				for (auto death_item: ordered_deaths)
 				{
 					state::CardRef & ref = death_item.second.first;
-					state::Cards::Card const& card = *death_item.second.second;
+					state::Cards::Card & card = *death_item.second.second;
 
-					Manipulate(state_, flow_context_).Card(ref).Deathrattles()
-						.TriggerAll()
-						.Clear();
+					state::PlayerIdentifier player = card.GetPlayerIdentifier();
+					state::CardZone zone = card.GetZone();
+					int zone_pos = card.GetZonePosition();
 
 					state_.GetZoneChanger(Manipulate(state_, flow_context_), ref).ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
+
+					card.GetMutableDeathrattleHandler()
+						.TriggerAll(state_, flow_context_, ref, card);
 				}
 
 				return true;

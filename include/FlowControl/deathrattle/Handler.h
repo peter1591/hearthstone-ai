@@ -28,7 +28,7 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			typedef void DeathrattleCallback(context::Deathrattle);
+			typedef void DeathrattleCallback(context::Deathrattle&&);
 
 			void Clear() { deathrattles.clear(); }
 
