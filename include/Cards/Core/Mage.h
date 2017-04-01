@@ -10,7 +10,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
 					.Character(context.GetTarget())
-					.Damage(context.card_ref_, context.card_, 1);
+					.Damage(context.card_ref_, 1);
 			});
 		}
 	};
@@ -21,7 +21,7 @@ namespace Cards
 				int damage = 0;
 				context.manipulate_
 					.Board()
-					.CalculateFinalDamageAmount(context.card_ref_, context.card_, 3, &damage);
+					.CalculateFinalDamageAmount(context.card_ref_, 3, &damage);
 
 				Targets targets = TargetsGenerator().Enemy(context).NotMortallyWounded().GetInfo();
 				for (int i = 0; i < damage; ++i) {
@@ -41,7 +41,8 @@ namespace Cards
 			if (context.manipulate_.Board().GetCurrentPlayerId() == self_card.GetPlayerIdentifier()) return true;
 			context.manipulate_.Secret(self).Remove();
 
-			SummonToPlayerByCopy(context, self_card.GetPlayerIdentifier(), context.card_);
+			SummonToPlayerByCopy(context, self_card.GetPlayerIdentifier(),
+				context.manipulate_.Board().GetCard(context.card_ref_));
 			return false;
 		};
 

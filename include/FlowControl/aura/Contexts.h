@@ -23,7 +23,6 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
 				aura::Handler const& aura_handler_;
 				bool & need_update_;
 			};
@@ -32,7 +31,6 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
 				aura::Handler & aura_handler_;
 				std::unordered_set<state::CardRef> & new_targets;
 			};
@@ -41,7 +39,6 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
 				state::CardRef target_;
 			};
 		}

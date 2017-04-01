@@ -8,7 +8,7 @@ namespace Cards
 				int damage = 0;
 				context.manipulate_
 					.Board()
-					.CalculateFinalDamageAmount(context.card_ref_, context.card_, 8, &damage);
+					.CalculateFinalDamageAmount(context.card_ref_, 8, &damage);
 
 				Targets targets = TargetsGenerator().Enemy(context).NotMortallyWounded().GetInfo();
 				for (int i = 0; i < damage; ++i) {

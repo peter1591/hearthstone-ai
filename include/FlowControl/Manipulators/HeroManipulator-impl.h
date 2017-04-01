@@ -15,7 +15,7 @@ namespace FlowControl
 			{
 				player.IncreaseFatigueDamage();
 				int damage = player.GetFatigueDamage();
-				this->Damage(card_ref_, card_, damage);
+				this->Damage(card_ref_, damage);
 				return;
 			}
 
@@ -35,7 +35,7 @@ namespace FlowControl
 		
 		inline void HeroManipulator::DestroyWeapon()
 		{
-			state::CardRef weapon_ref = state_.GetBoard().Get(card_.GetPlayerIdentifier()).GetWeaponRef();
+			state::CardRef weapon_ref = state_.GetBoard().Get(GetCard().GetPlayerIdentifier()).GetWeaponRef();
 			if (!weapon_ref.IsValid()) return;
 
 			if (!flow_context_.GetDestroyedWeapon().IsValid()) {
@@ -45,12 +45,12 @@ namespace FlowControl
 			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(Manipulate(state_, flow_context_), weapon_ref)
 				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
-			assert(state_.GetBoard().Get(card_.GetPlayerIdentifier()).GetWeaponRef().IsValid() == false);
+			assert(state_.GetBoard().Get(GetCard().GetPlayerIdentifier()).GetWeaponRef().IsValid() == false);
 		}
 
 		inline void HeroManipulator::GainArmor(int amount)
 		{
-			card_.SetArmor(card_.GetArmor() + amount);
+			GetCard().SetArmor(GetCard().GetArmor() + amount);
 
 			// TODO: trigger events
 		}
@@ -61,7 +61,7 @@ namespace FlowControl
 			DestroyWeapon();
 
 			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(Manipulate(state_, flow_context_), weapon_ref)
-				.ChangeTo<state::kCardZonePlay>(card_.GetPlayerIdentifier());
+				.ChangeTo<state::kCardZonePlay>(GetCard().GetPlayerIdentifier());
 		}
 	}
 }

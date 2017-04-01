@@ -91,7 +91,7 @@ namespace state
 	private:
 		template <typename ZoneChangerType>
 		ZoneChangerType GetZoneChanger(FlowControl::Manipulate & manipulate, CardRef ref) {
-			return ZoneChangerType(*this, board_, cards_mgr_, manipulate, ref, cards_mgr_.GetMutable(ref));
+			return ZoneChangerType(*this, board_, cards_mgr_, manipulate, ref);
 		}
 
 	private:

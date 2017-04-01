@@ -36,7 +36,7 @@ namespace Cards
 			void Amount(int amount) {
 				assert(target_.IsValid());
 				context_.manipulate_.Character(target_)
-					.Damage(context_.card_ref_, context_.card_, amount);
+					.Damage(context_.card_ref_, amount);
 			}
 
 		private:
@@ -58,7 +58,7 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static DamageHelper<std::decay_t<Context>> Damage(Context&& context)
+		static DamageHelper<std::decay_t<Context>> DamageA(Context&& context)
 		{
 			return DamageHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
@@ -68,13 +68,13 @@ namespace Cards
 		template <typename Context>
 		static state::PlayerIdentifier OwnedPlayer(Context&& context)
 		{
-			return context.card_.GetPlayerIdentifier();
+			return context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 		}
 
 		template <typename Context>
 		static state::CardRef Owner(Context&& context)
 		{
-			return context.state_.GetBoard().Get(context.card_.GetPlayerIdentifier()).hero_ref_;
+			return context.state_.GetBoard().Get(OwnedPlayer(context)).hero_ref_;
 		}
 
 		template <typename Context>
@@ -86,13 +86,13 @@ namespace Cards
 		template <typename Context>
 		static state::board::Player& Player(Context&& context)
 		{
-			return Player(std::forward<Context>(context), context.card_.GetPlayerIdentifier());
+			return Player(std::forward<Context>(context), OwnedPlayer(context));
 		}
 
 		template <typename Context>
 		static state::board::Player& AnotherPlayer(Context&& context)
 		{
-			return Player(std::forward<Context>(context), context.card_.GetPlayerIdentifier().Opposite());
+			return Player(std::forward<Context>(context), OwnedPlayer(context).Opposite());
 		}
 
 		static bool IsMortallyWounded(state::Cards::Card const& target)

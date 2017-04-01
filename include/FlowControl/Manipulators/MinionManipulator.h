@@ -11,10 +11,10 @@ namespace FlowControl
 		class MinionManipulator : public CharacterManipulator
 		{
 		public:
-			MinionManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
-				: CharacterManipulator(state, flow_context, card_ref, card)
+			MinionManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+				: CharacterManipulator(state, flow_context, card_ref)
 			{
-				assert(card.GetCardType() == state::kCardTypeMinion);
+				assert(GetCard().GetCardType() == state::kCardTypeMinion);
 			}
 
 			void AfterSummoned()
@@ -23,14 +23,14 @@ namespace FlowControl
 
 			void TurnStart()
 			{
-				card_.SetJustPlayedFlag(false);
-				card_.ClearNumAttacksThisTurn();
+				GetCard().SetJustPlayedFlag(false);
+				GetCard().ClearNumAttacksThisTurn();
 			}
 
 			void Silence();
 
 			void Destroy() {
-				card_.SetPendingDestroy();
+				GetCard().SetPendingDestroy();
 				flow_context_.AddDeadEntryHint(state_, card_ref_);
 			}
 

@@ -21,7 +21,6 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
 				flag_aura::Handler const& aura_handler_;
 			};
 
@@ -29,7 +28,6 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				const state::Cards::Card & card_;
 				flag_aura::Handler & handler_;
 			};
 			

@@ -46,14 +46,14 @@ namespace FlowControl
 		bool CostCrystal(int amount);
 		bool CostHealth(int amount);
 
-		template <state::CardType> bool PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
-		template <state::CardType> bool PlayCardPhaseInternal(state::CardRef card_ref, state::Cards::Card const& card);
+		template <state::CardType> bool PlayCardPhase(state::CardRef card_ref);
+		template <state::CardType> bool PlayCardPhaseInternal(state::CardRef card_ref);
 
-		bool PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
-		bool PlayWeaponCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
-		bool PlayHeroPowerCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
-		bool PlaySpellCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
-		bool PlaySecretCardPhase(state::CardRef card_ref, state::Cards::Card const& card);
+		bool PlayMinionCardPhase(state::CardRef card_ref);
+		bool PlayWeaponCardPhase(state::CardRef card_ref);
+		bool PlayHeroPowerCardPhase(state::CardRef card_ref);
+		bool PlaySpellCardPhase(state::CardRef card_ref);
+		bool PlaySecretCardPhase(state::CardRef card_ref);
 		
 		void AttackInternal(state::CardRef attacker, state::CardRef defender);
 		bool AttackPhase(state::CardRef attacker, state::CardRef defender);

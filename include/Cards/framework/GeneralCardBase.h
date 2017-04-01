@@ -47,15 +47,17 @@ namespace Cards
 		template <typename Context>
 		static void SummonToRight(Context && context, Cards::CardId card_id)
 		{
-			int pos = context.card_.GetZonePosition() + 1;
-			return SummonInternal(std::forward<Context>(context), card_id, context.card_.GetPlayerIdentifier(), pos);
+			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
+			int pos = card.GetZonePosition() + 1;
+			return SummonInternal(std::forward<Context>(context), card_id, card.GetPlayerIdentifier(), pos);
 		}
 
 		template <typename Context>
 		static void SummonToLeft(Context && context, Cards::CardId card_id)
 		{
-			int pos = context.card_.GetZonePosition();
-			return SummonInternal(std::forward<Context>(context), card_id, context.card_.GetPlayerIdentifier(), pos);
+			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
+			int pos = card.GetZonePosition();
+			return SummonInternal(std::forward<Context>(context), card_id, card.GetPlayerIdentifier(), pos);
 		}
 
 		template <typename Context>

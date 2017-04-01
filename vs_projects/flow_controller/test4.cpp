@@ -12,7 +12,7 @@ public:
 		return next_minion_put_location;
 	}
 
-	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, std::vector<state::CardRef> const& targets)
+	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, std::vector<state::CardRef> const& targets)
 	{
 		assert(targets.size() == next_specified_target_count);
 

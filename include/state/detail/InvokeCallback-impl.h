@@ -7,9 +7,9 @@ namespace state {
 	namespace detail {
 		template <CardType CardType>
 		inline void InvokeCallback<CardType, kCardZonePlay>::Added(
-			FlowControl::Manipulate & manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref, state::Cards::Card & card)
+			FlowControl::Manipulate & manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref)
 		{
-			manipulate.Card(card_ref, card).AfterAddedToPlayZone(event_mgr);
+			manipulate.Card(card_ref).AfterAddedToPlayZone(event_mgr);
 		}
 	}
 }

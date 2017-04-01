@@ -11,23 +11,23 @@ namespace FlowControl
 		class HeroPowerManipulator : public CardManipulator
 		{
 		public:
-			HeroPowerManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
-				: CardManipulator(state, flow_context, card_ref, card)
+			HeroPowerManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+				: CardManipulator(state, flow_context, card_ref)
 			{
-				assert(card.GetCardType() == state::kCardTypeHeroPower);
+				assert(GetCard().GetCardType() == state::kCardTypeHeroPower);
 			}
 
 			void TurnStart()
 			{
-				card_.ClearUsedThisTurn();
-				card_.SetUsable();
+				GetCard().ClearUsedThisTurn();
+				GetCard().SetUsable();
 			}
 
 			void ReplaceHeroPower(Cards::CardId id);
 
-			void IncreaseUsedThisTurn() { card_.IncreaseUsedThisTurn(); }
-			void SetUsable() { card_.SetUsable(true); }
-			void SetUnusable() { card_.SetUsable(false); }
+			void IncreaseUsedThisTurn() { GetCard().IncreaseUsedThisTurn(); }
+			void SetUsable() { GetCard().SetUsable(true); }
+			void SetUnusable() { GetCard().SetUsable(false); }
 		};
 	}
 }

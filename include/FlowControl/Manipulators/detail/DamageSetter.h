@@ -15,34 +15,37 @@ namespace FlowControl
 				friend class FlowControl::enchantment::Handler;
 
 			public:
-				DamageSetter(state::Cards::Card & card) : card_(card) {}
+				DamageSetter(state::State & state, state::CardRef card_ref) : state_(state), card_ref_(card_ref) {}
 
 			private:
 				void TakeDamage(int v, int* real_damage)
 				{
-					int armor = card_.GetArmor();
+					state::Cards::Card & card = state_.GetMutableCard(card_ref_);
+					int armor = card.GetArmor();
 					if (armor > 0) {
 						if (v <= armor) {
-							card_.SetArmor(armor - v);
+							card.SetArmor(armor - v);
 							*real_damage = 0;
 							return;
 						}
-						card_.SetArmor(0);
+						card.SetArmor(0);
 						v -= armor;
 					}
 					*real_damage = v;
-					card_.GetDamageSetter().Set(card_.GetDamage() + v);
+					card.GetDamageSetter().Set(card.GetDamage() + v);
 				}
 				void Heal(int v)
 				{
-					int old_damage = card_.GetDamage();
+					state::Cards::Card & card = state_.GetMutableCard(card_ref_);
+					int old_damage = card.GetDamage();
 					int new_damage = old_damage - v;
 					if (new_damage < 0) new_damage = 0;
-					card_.GetDamageSetter().Set(new_damage);
+					card.GetDamageSetter().Set(new_damage);
 				}
 
 			private:
-				state::Cards::Card & card_;
+				state::State & state_;
+				state::CardRef card_ref_;
 			};
 		}
 	}

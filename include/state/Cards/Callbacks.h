@@ -12,7 +12,6 @@ namespace state
 			FlowControl::Manipulate & manipulate_;
 			Events::Manager & event_mgr_;
 			CardRef card_ref_;
-			const Cards::Card & card_;
 		};
 
 		typedef void AddedToPlayZoneCallback(ZoneChangedContext&&);

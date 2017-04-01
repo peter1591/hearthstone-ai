@@ -10,7 +10,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
 					.Character(context.GetTarget())
-					.Heal(context.card_ref_, context.card_, 2);
+					.Heal(context.card_ref_, 2);
 			});
 		}
 	};

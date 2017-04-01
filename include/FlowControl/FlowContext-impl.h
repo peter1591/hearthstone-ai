@@ -5,7 +5,7 @@
 
 namespace FlowControl {
 	inline bool FlowContext::PrepareSpecifiedTarget(
-		state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const & target_info, bool allow_no_target)
+		state::State & state, state::CardRef card_ref, state::targetor::Targets const & target_info, bool allow_no_target)
 	{
 		assert(!specified_target_.IsValid());
 		std::vector<state::CardRef> targets;
@@ -19,7 +19,7 @@ namespace FlowControl {
 			return false;
 		}
 
-		specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
+		specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, targets);
 		assert(specified_target_.IsValid());
 		return true;
 	}

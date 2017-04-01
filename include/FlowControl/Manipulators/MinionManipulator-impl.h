@@ -15,20 +15,20 @@ namespace FlowControl
 
 			// Remove all enchantments, including the aura enchantments coming from other minions.
 			// Those aura enchantments will be added back in the next AuraUpdate()
-			card_.GetMutableEnchantmentHandler().Clear();
+			GetCard().GetMutableEnchantmentHandler().Clear();
 
 			// Remove all deathrattles
-			card_.GetMutableDeathrattleHandler().Clear();
+			GetCard().GetMutableDeathrattleHandler().Clear();
 
-			card_.SetSilenced(state_.GetPlayOrder());
+			GetCard().SetSilenced(state_.GetPlayOrder());
 		}
 
 		inline state::CardRef MinionManipulator::Transform(Cards::CardId id)
 		{
-			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCardById(id, card_.GetPlayerIdentifier());
+			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCardById(id, GetCard().GetPlayerIdentifier());
 
-			assert(card_.GetCardType() == state::kCardTypeMinion);
-			assert(card_.GetZone() == state::kCardZonePlay);
+			assert(GetCard().GetCardType() == state::kCardTypeMinion);
+			assert(GetCard().GetZone() == state::kCardZonePlay);
 			assert(new_card.GetCardType() == state::kCardTypeMinion);
 			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 
@@ -47,10 +47,10 @@ namespace FlowControl
 		inline state::CardRef MinionManipulator::BecomeCopyof(state::Cards::Card const& card)
 		{
 			state::Cards::Card new_card = BoardManipulator(state_, flow_context_)
-				.GenerateCardByCopy(card, card_.GetPlayerIdentifier());
+				.GenerateCardByCopy(card, GetCard().GetPlayerIdentifier());
 
-			assert(card_.GetCardType() == state::kCardTypeMinion);
-			assert(card_.GetZone() == state::kCardZonePlay);
+			assert(GetCard().GetCardType() == state::kCardTypeMinion);
+			assert(GetCard().GetZone() == state::kCardZonePlay);
 			assert(new_card.GetCardType() == state::kCardTypeMinion);
 			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 

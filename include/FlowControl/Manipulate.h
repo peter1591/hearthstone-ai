@@ -20,7 +20,6 @@ namespace FlowControl
 		Manipulate(state::State & state, FlowContext & flow_context);
 
 		Manipulators::CardManipulator Card(state::CardRef ref);
-		Manipulators::CardManipulator Card(state::CardRef ref, state::Cards::Card & card);
 
 		Manipulators::HeroManipulator CurrentHero();
 		Manipulators::HeroManipulator OpponentHero();
@@ -45,6 +44,7 @@ namespace FlowControl
 		state::IRandomGenerator & GetRandom() { return flow_context_.GetRandom();}
 
 	public: // bridge to state::State
+		state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
 		state::aura::Manager & Aura() { return state_.GetAuraManager(); }
 		state::aura::Manager & FlagAura() { return state_.GetFlagAuraManager(); }
 

@@ -9,10 +9,10 @@ namespace FlowControl
 		class HeroManipulator : public CharacterManipulator
 		{
 		public:
-			HeroManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				: CharacterManipulator(state, flow_context, card_ref, card), player_id_(card.GetPlayerIdentifier())
+			HeroManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+				: CharacterManipulator(state, flow_context, card_ref), player_id_(GetCard().GetPlayerIdentifier())
 			{
-				assert(card.GetCardType() == state::kCardTypeHero);
+				assert(GetCard().GetCardType() == state::kCardTypeHero);
 			}
 
 			void DrawCard();
@@ -25,7 +25,7 @@ namespace FlowControl
 
 			void TurnStart()
 			{
-				card_.ClearNumAttacksThisTurn();
+				GetCard().ClearNumAttacksThisTurn();
 			}
 
 		private:

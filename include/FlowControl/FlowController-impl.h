@@ -50,21 +50,20 @@ namespace FlowControl
 	inline void FlowController::PlayCardInternal(int hand_idx)
 	{
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
-		state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 
-		switch (card.GetCardType())
+		switch (state_.GetCardsManager().Get(card_ref).GetCardType())
 		{
 		case state::kCardTypeMinion:
-			PlayCardPhase<state::kCardTypeMinion>(card_ref, card);
+			PlayCardPhase<state::kCardTypeMinion>(card_ref);
 			break;
 		case state::kCardTypeWeapon:
-			PlayCardPhase<state::kCardTypeWeapon>(card_ref, card);
+			PlayCardPhase<state::kCardTypeWeapon>(card_ref);
 			break;
 		case state::kCardTypeSpell:
-			PlayCardPhase<state::kCardTypeSpell>(card_ref, card);
+			PlayCardPhase<state::kCardTypeSpell>(card_ref);
 			break;
 		case state::kCardTypeSecret:
-			PlayCardPhase<state::kCardTypeSecret>(card_ref, card);
+			PlayCardPhase<state::kCardTypeSecret>(card_ref);
 			break;
 		default:
 			assert(false);
@@ -75,16 +74,16 @@ namespace FlowControl
 	}
 
 	template <state::CardType CardType>
-	inline bool FlowController::PlayCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlayCardPhase(state::CardRef card_ref)
 	{
 		state_.IncreasePlayOrder();
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
-		if (!card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card)) return false;
+		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref)) return false;
 
-		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(card.GetRawData().overload);
+		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
 
-		return PlayCardPhaseInternal<CardType>(card_ref, card);
+		return PlayCardPhaseInternal<CardType>(card_ref);
 	}
 
 	inline bool FlowController::CostCrystal(int amount) {
@@ -105,63 +104,63 @@ namespace FlowControl
 		return true;
 	}
 
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref, state::Cards::Card const& card)
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref)
 	{
-		assert(card.GetCardType() == state::kCardTypeMinion);
-		if (!CostCrystal(card.GetCost())) return false;
-		return PlayMinionCardPhase(card_ref, card);
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeMinion);
+		if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+		return PlayMinionCardPhase(card_ref);
 	}
 
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeWeapon>(state::CardRef card_ref, state::Cards::Card const& card)
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeWeapon>(state::CardRef card_ref)
 	{
-		assert(card.GetCardType() == state::kCardTypeWeapon);
-		if (!CostCrystal(card.GetCost())) return false;
-		return PlayWeaponCardPhase(card_ref, card);
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeWeapon);
+		if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+		return PlayWeaponCardPhase(card_ref);
 	}
 
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeHeroPower>(state::CardRef card_ref, state::Cards::Card const& card)
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeHeroPower>(state::CardRef card_ref)
 	{
-		assert(card.GetCardType() == state::kCardTypeHeroPower);
-		if (!CostCrystal(card.GetCost())) return false;
-		return PlayHeroPowerCardPhase(card_ref, card);
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeHeroPower);
+		if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+		return PlayHeroPowerCardPhase(card_ref);
 	}
 
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref, state::Cards::Card const& card)
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref)
 	{
 		// TODO: shared with secret cards
-		assert(card.GetCardType() == state::kCardTypeSpell);
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSpell);
 
 		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
-			if (!CostHealth(card.GetCost())) return false;
+			if (!CostHealth(state_.GetCard(card_ref).GetCost())) return false;
 			state_.GetCurrentPlayer().SetNextSpellCostHealthThisTurn(false);
 		}
 		else {
-			if (!CostCrystal(card.GetCost())) return false;
+			if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
 		}
 
-		return PlaySpellCardPhase(card_ref, card);
+		return PlaySpellCardPhase(card_ref);
 	}
 
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSecret>(state::CardRef card_ref, state::Cards::Card const& card)
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSecret>(state::CardRef card_ref)
 	{
 		// TODO: shared with spell cards
-		assert(card.GetCardType() == state::kCardTypeSecret);
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSecret);
 
 		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
-			if (!CostHealth(card.GetCost())) return false;
+			if (!CostHealth(state_.GetCard(card_ref).GetCost())) return false;
 			state_.GetCurrentPlayer().SetNextSpellCostHealthThisTurn(false);
 		}
 		else {
-			if (!CostCrystal(card.GetCost())) return false;
+			if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
 		}
 
-		return PlaySecretCardPhase(card_ref, card);
+		return PlaySecretCardPhase(card_ref);
 	}
 
-	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref)
 	{
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
-			state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref, card });
+			state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref });
 
 		if (state_.GetCurrentPlayer().minions_.Full()) return SetResult(kResultInvalid);
 
@@ -171,99 +170,91 @@ namespace FlowControl
 		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
-		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card);
+		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card_ref);
 
-		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
+		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		state::CardRef new_card_ref;
-		state::Cards::Card const* new_card = nullptr;
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
 		if (!new_card_ref.IsValid()) {
 			// no transformation
 			new_card_ref = card_ref;
-			new_card = &card;
 		}
-		assert(new_card != nullptr);
 #ifndef NDEBUG
 		[&](){
 			if (card_ref == new_card_ref) return;
 			// minion transformed
-			if (card.GetZone() == state::kCardZonePlay) assert(false);
-			if (new_card->GetZone() != state::kCardZonePlay) assert(false);
+			if (state_.GetCard(card_ref).GetZone() == state::kCardZonePlay) assert(false);
+			if (state_.GetCard(new_card_ref).GetZone() != state::kCardZonePlay) assert(false);
 		}();
 #endif
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(
-			state::Events::EventTypes::AfterMinionPlayed::Context{ Manipulate(state_, flow_context_), new_card_ref, *new_card });
+			state::Events::EventTypes::AfterMinionPlayed::Context{ Manipulate(state_, flow_context_), new_card_ref });
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
-			state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), new_card_ref, *new_card });
+			state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), new_card_ref });
 
 		Manipulate(state_, flow_context_).Minion(new_card_ref).AfterSummoned();
 
 		return true;
 	}
 
-	inline bool FlowController::PlayWeaponCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlayWeaponCardPhase(state::CardRef card_ref)
 	{
 		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
 
 		state::CardRef new_card_ref;
-		state::Cards::Card const* new_card = nullptr;
 
-		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // weapon cannot transformed
 
 		return true;
 	}
 
-	inline bool FlowController::PlayHeroPowerCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlayHeroPowerCardPhase(state::CardRef card_ref)
 	{
 		state::CardRef new_card_ref;
-		state::Cards::Card const* new_card = nullptr;
 
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // hero power cannot transformed
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
-			state::Events::EventTypes::AfterHeroPower::Context{ Manipulate(state_, flow_context_), card_ref, card });
-
+			state::Events::EventTypes::AfterHeroPower::Context{ Manipulate(state_, flow_context_), card_ref });
 
 		return true;
 	}
 
-	inline bool FlowController::PlaySpellCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlaySpellCardPhase(state::CardRef card_ref)
 	{
 		state::CardRef new_card_ref;
-		state::Cards::Card const* new_card = nullptr;
 
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // spell cannot transformed
 
 		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
-			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref, card });
+			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref });
 
 		return true;
 	}
 
-	inline bool FlowController::PlaySecretCardPhase(state::CardRef card_ref, state::Cards::Card const& card)
+	inline bool FlowController::PlaySecretCardPhase(state::CardRef card_ref)
 	{
 		state::CardRef new_card_ref;
-		state::Cards::Card const* new_card = nullptr;
 
-		if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) return SetResult(FlowControl::kResultInvalid);
+		if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) return SetResult(FlowControl::kResultInvalid);
 
-		card.GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, card, &new_card_ref, &new_card);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // secret cannot transformed
 
 		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
-			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref, card });
+			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref });
 		// TODO: trigger event 'AfterSecret'
 
 		return true;
@@ -316,7 +307,7 @@ namespace FlowControl
 			if (attacker_card.GetCardType() == state::kCardTypeHero) {
 				state::CardRef weapon_ref = state_.GetBoard().Get(attacker_card.GetPlayerIdentifier()).GetWeaponRef();
 				if (weapon_ref.IsValid()) {
-					Manipulate(state_, flow_context_).Weapon(weapon_ref).Damage(attacker, attacker_card, 1);
+					Manipulate(state_, flow_context_).Weapon(weapon_ref).Damage(attacker, 1);
 				}
 			}
 		}
@@ -393,7 +384,7 @@ namespace FlowControl
 
 		if (!card.GetRawData().usable) return SetResult(FlowControl::kResultInvalid);
 
-		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref, card)) return false;
+		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return false;
 
 		Manipulate(state_, flow_context_).HeroPower(card_ref).IncreaseUsedThisTurn();
 		if (card.GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {

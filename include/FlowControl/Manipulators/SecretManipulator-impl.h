@@ -9,9 +9,9 @@ namespace FlowControl
 	{
 		inline void SecretManipulator::Remove()
 		{
-			assert(card_.GetZone() == state::kCardZonePlay);
+			assert(GetCard().GetZone() == state::kCardZonePlay);
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeSecret>(Manipulate(state_, flow_context_), card_ref_)
-				.ChangeTo<state::kCardZoneGraveyard>(card_.GetPlayerIdentifier());
+				.ChangeTo<state::kCardZoneGraveyard>(GetCard().GetPlayerIdentifier());
 		}
 	}
 }

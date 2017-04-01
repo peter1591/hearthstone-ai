@@ -82,7 +82,8 @@ namespace Cards
 	struct EnrageWrappedHandleClass {
 		template <typename Context>
 		static auto GetAuraTargets(Context&& context) {
-			if (context.card_.GetDamage() == 0) {
+			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
+			if (card.GetDamage() == 0) {
 				return; // not enraged, apply to no one
 			}
 			else {
@@ -93,12 +94,14 @@ namespace Cards
 	struct UpdateWhenEnrageChanged {
 		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) {
 			if (context.aura_handler_.first_time_update_) return true;
-			bool now_undamaged = (context.card_.GetDamage() == 0);
+			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
+			bool now_undamaged = (card.GetDamage() == 0);
 			return (context.aura_handler_.last_updated_undamaged_ != now_undamaged);
 		}
 		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {
 			context.aura_handler_.first_time_update_ = false;
-			bool now_undamaged = (context.card_.GetDamage() == 0);
+			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
+			bool now_undamaged = (card.GetDamage() == 0);
 			context.aura_handler_.last_updated_undamaged_ = now_undamaged;
 		}
 	};

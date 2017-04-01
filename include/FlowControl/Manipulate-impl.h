@@ -13,12 +13,7 @@ namespace FlowControl
 
 	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref)
 	{
-		return Card(ref, state_.GetMutableCard(ref));
-	}
-
-	inline Manipulators::CardManipulator Manipulate::Card(state::CardRef ref, state::Cards::Card & card)
-	{
-		return Manipulators::CardManipulator(state_, flow_context_, ref, card);
+		return Manipulators::CardManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::CurrentHero()
@@ -35,18 +30,18 @@ namespace FlowControl
 	{
 		state::CardRef ref = state_.GetBoard().Get(player).GetHeroRef();
 		assert(state_.GetCardsManager().Get(ref).GetPlayerIdentifier() == player);
-		return Manipulators::HeroManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+		return Manipulators::HeroManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::HeroManipulator Manipulate::Hero(state::CardRef hero_ref)
 	{
-		return Manipulators::HeroManipulator(state_, flow_context_, hero_ref, state_.GetMutableCard(hero_ref));
+		return Manipulators::HeroManipulator(state_, flow_context_, hero_ref);
 	}
 
 	inline Manipulators::HeroPowerManipulator Manipulate::HeroPower(state::CardRef hero_power_ref)
 	{
 		assert(hero_power_ref.IsValid());
-		return Manipulators::HeroPowerManipulator(state_, flow_context_, hero_power_ref, state_.GetMutableCard(hero_power_ref));
+		return Manipulators::HeroPowerManipulator(state_, flow_context_, hero_power_ref);
 	}
 
 	inline Manipulators::HeroPowerManipulator Manipulate::HeroPower(state::PlayerIdentifier player)
@@ -56,28 +51,29 @@ namespace FlowControl
 
 	inline Manipulators::MinionManipulator Manipulate::Minion(state::CardRef ref)
 	{
-		return Manipulators::MinionManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+		return Manipulators::MinionManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::CharacterManipulator Manipulate::Character(state::CardRef ref)
 	{
-		return Manipulators::CharacterManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+		return Manipulators::CharacterManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::WeaponManipulator Manipulate::Weapon(state::CardRef ref)
 	{
-		return Manipulators::WeaponManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+		return Manipulators::WeaponManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::SecretManipulator Manipulate::Secret(state::CardRef ref)
 	{
-		return Manipulators::SecretManipulator(state_, flow_context_, ref, state_.GetMutableCard(ref));
+		return Manipulators::SecretManipulator(state_, flow_context_, ref);
 	}
 
 	inline Manipulators::BoardManipulator Manipulate::Board()
 	{
 		return Manipulators::BoardManipulator(state_, flow_context_);
 	}
+
 	inline state::CardRef Manipulate::GetRandomTarget(state::targetor::Targets const & target_info)
 	{
 		std::vector<state::CardRef> targets;

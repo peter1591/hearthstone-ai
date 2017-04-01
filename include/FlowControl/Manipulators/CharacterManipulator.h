@@ -14,20 +14,20 @@ namespace FlowControl
 		class CharacterManipulator : public CardManipulator
 		{
 		public:
-			CharacterManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card)
-				: CardManipulator(state, flow_context, card_ref, card)
+			CharacterManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+				: CardManipulator(state, flow_context, card_ref)
 			{
-				assert(card.GetCardType() == state::kCardTypeMinion ||
-					card.GetCardType() == state::kCardTypeHero);
+				assert(GetCard().GetCardType() == state::kCardTypeMinion ||
+					GetCard().GetCardType() == state::kCardTypeHero);
 			}
 
-			void Taunt(bool v) { card_.SetTaunt(v); }
-			void Shield(bool v) { card_.SetShield(v); }
-			void Charge(bool v) { card_.SetCharge(v); }
+			void Taunt(bool v) { GetCard().SetTaunt(v); }
+			void Shield(bool v) { GetCard().SetShield(v); }
+			void Charge(bool v) { GetCard().SetCharge(v); }
 
 			void AfterAttack()
 			{
-				card_.IncreaseNumAttacksThisTurn();
+				GetCard().IncreaseNumAttacksThisTurn();
 			}
 		};
 	}

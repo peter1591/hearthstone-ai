@@ -9,10 +9,10 @@ namespace FlowControl
 		class SecretManipulator : public CardManipulator
 		{
 		public:
-			SecretManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card &card)
-				: CardManipulator(state, flow_context, card_ref, card)
+			SecretManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+				: CardManipulator(state, flow_context, card_ref)
 			{
-				assert(card.GetCardType() == state::kCardTypeSecret);
+				assert(GetCard().GetCardType() == state::kCardTypeSecret);
 			}
 
 			void Remove();

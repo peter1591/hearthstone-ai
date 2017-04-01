@@ -14,7 +14,7 @@ namespace FlowControl {
 
 		virtual int GetMinionPutLocation(int min, int max) = 0;
 		virtual state::CardRef GetSpecifiedTarget(
-			state::State & state, state::CardRef card_ref, const state::Cards::Card & card,
+			state::State & state, state::CardRef card_ref,
 			std::vector<state::CardRef> const& targets) = 0;
 	};
 }

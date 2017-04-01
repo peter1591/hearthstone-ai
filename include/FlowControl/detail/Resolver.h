@@ -121,7 +121,7 @@ namespace FlowControl
 			{
 				state_.GetAuraManager().ForEachAura([this](state::CardRef card_ref, FlowControl::aura::Handler & handler)
 				{
-					bool aura_valid = handler.Update(state_, flow_context_, card_ref, state_.GetMutableCard(card_ref));
+					bool aura_valid = handler.Update(state_, flow_context_, card_ref);
 					if (aura_valid) return true;
 
 					assert(handler.NoAppliedEnchantment());
@@ -129,7 +129,7 @@ namespace FlowControl
 				});
 				state_.GetFlagAuraManager().ForEachFlagAura([this](state::CardRef card_ref, FlowControl::flag_aura::Handler & handler)
 				{
-					bool aura_valid = handler.Update(state_, flow_context_, card_ref, state_.GetMutableCard(card_ref));
+					bool aura_valid = handler.Update(state_, flow_context_, card_ref);
 					if (aura_valid) return true;
 
 					assert(handler.NoAppliedEffect());

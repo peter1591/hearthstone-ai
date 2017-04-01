@@ -18,7 +18,6 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					CardRef card_ref_;
-					Cards::Card const& card_;
 				};
 				using type = std::function<bool(Context)>;
 			};
@@ -26,7 +25,6 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					CardRef card_ref_;
-					Cards::Card const& card_;
 				};
 				using type = std::function<bool(Context)>;
 			};
@@ -37,7 +35,6 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					CardRef card_ref_;
-					const Cards::Card & card_;
 				};
 				using type = bool(*)(Context);
 			};
@@ -49,14 +46,13 @@ namespace state {
 				using type = std::function<bool(CardRef, Context)>;
 			};
 			struct OnMinionPlay {
-				using type = bool(*)(const Cards::Card &);
+				using type = bool(*)(CardRef);
 			};
 
 			struct CalculateHealDamageAmount {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef const source_ref_;
-					state::Cards::Card const& source_card_;
 					int * amount_;
 				};
 				using type = std::function<bool(Context&&)>;
@@ -65,16 +61,13 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef const source_ref_;
-					state::Cards::Card const& source_card_;
 					state::CardRef * target_ref_; // an invalid target means the damage event is cancelled
-					state::Cards::Card const* target_card_;
 				};
 				using type = std::function<bool(Context&&)>;
 			};
 			struct OnTakeDamage {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
-					state::Cards::Card const& card_;
 					int damage_;
 				};
 				using type = bool(*)(state::CardRef, Context);
@@ -84,7 +77,6 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef const card_ref_;
-					state::Cards::Card const& card_;
 				};
 				using type = bool(*)(Context);
 			};
@@ -93,7 +85,6 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef const card_ref_;
-					state::Cards::Card const& card_;
 				};
 				using type = std::function<bool(Context)>;
 			};
@@ -102,7 +93,6 @@ namespace state {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef card_ref_;
-					state::Cards::Card const& card_;
 					int amount_;
 				};
 				using type = std::function<bool(Context)>;

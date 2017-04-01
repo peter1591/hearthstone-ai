@@ -12,34 +12,33 @@ namespace FlowControl
 			inline void DamageHelper::ConductDamage(int amount)
 			{
 				state::CardRef final_target = target_ref_;
-				state::Cards::Card const* final_target_card = &target_card_;
 				state_.TriggerEvent<state::Events::EventTypes::PrepareHealDamageTarget>(
-					state::Events::EventTypes::PrepareHealDamageTarget::Context{ Manipulate(state_, flow_context_), source_ref_, source_card_, &final_target, final_target_card });
+					state::Events::EventTypes::PrepareHealDamageTarget::Context{ Manipulate(state_, flow_context_), source_ref_, &final_target });
 
 				if (!final_target.IsValid()) return;
 
 				if (amount > 0) {
-					if (final_target_card->hasShield()) {
+					if (state_.GetCard(final_target).hasShield()) {
 						Manipulate(state_, flow_context_).Character(final_target).Shield(false);
 						return;
 					}
-					DoDamage(state_, flow_context_, final_target, *final_target_card, amount);
+					DoDamage(state_, flow_context_, final_target, amount);
 				}
 				else if (amount < 0) {
-					DoHeal(state_, flow_context_, final_target, *final_target_card, -amount);
+					DoHeal(state_, flow_context_, final_target, -amount);
 				}
 				else { // if (final_amount == 0)
 					return;
 				}
 			}
 
-			inline void DamageHelper::DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card, int amount)
+			inline void DamageHelper::DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount)
 			{
 				assert(amount > 0);
 				state.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(card_ref,
-					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), card, amount });
+					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), amount });
 				state.TriggerCategorizedEvent<state::Events::EventTypes::OnTakeDamage>(card_ref,
-					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), card, amount });
+					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), amount });
 
 				int real_damage = 0;
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
@@ -48,11 +47,11 @@ namespace FlowControl
 				// TODO: trigger event 'AfterTakenDamage', with real damage 'real_damage'
 			}
 
-			inline void DamageHelper::DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card, int amount)
+			inline void DamageHelper::DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount)
 			{
 				assert(amount > 0);
 				state.TriggerEvent<state::Events::EventTypes::OnHeal>(
-					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card_ref, card, amount });
+					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card_ref, amount });
 
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().Heal(amount);
 			}

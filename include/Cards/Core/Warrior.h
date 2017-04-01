@@ -6,7 +6,7 @@ namespace Cards
 		Card_CS2_102() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
-					.Hero(context.card_.GetPlayerIdentifier())
+					.Hero(context.manipulate_.Board().GetCard(context.card_ref_).GetPlayerIdentifier())
 					.GainArmor(2);
 			});
 		}

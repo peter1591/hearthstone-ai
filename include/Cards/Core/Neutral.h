@@ -9,7 +9,8 @@ namespace Cards
 			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			Damage(context).Target(context.GetTarget()).Amount(1);
+			context.manipulate_.Character(context.GetTarget())
+				.Damage(context.card_ref_, 1);
 		}
 	};
 
@@ -40,7 +41,7 @@ namespace Cards
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.Character(context.GetTarget()).Heal(
-				context.card_ref_, context.card_, 2);
+				context.card_ref_, 2);
 		}
 	};
 
@@ -73,7 +74,7 @@ namespace Cards
 			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			Damage(context).Target(context.GetTarget()).Amount(1);
+			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 1);
 		}
 	};
 
@@ -138,7 +139,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
 				[context](FlowControl::Manipulate manipulate, state::CardRef ref) {
-				manipulate.Character(ref).Heal(context.card_ref_, context.card_, 2);
+				manipulate.Character(ref).Heal(context.card_ref_, 2);
 			});
 		}
 	};
@@ -199,7 +200,8 @@ namespace Cards
 
 	struct Card_EX1_593 : public MinionCardBase<Card_EX1_593> {
 		static void Battlecry(Contexts::OnPlay context) {
-			Damage(context).Opponent().Amount(3);
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier().Opposite();
+			context.manipulate_.Hero(player).Damage(context.card_ref_, 3);
 		}
 	};
 
@@ -208,7 +210,7 @@ namespace Cards
 			return TargetsGenerator().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			Damage(context).Target(context.GetTarget()).Amount(2);
+			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 2);
 		}
 	};
 

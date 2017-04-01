@@ -34,7 +34,8 @@ namespace Cards
 
 	struct Card_NEW1_025 : public MinionCardBase<Card_NEW1_025> {
 		static void Battlecry(Contexts::OnPlay context) {
-			state::PlayerIdentifier opponent = context.card_.GetPlayerIdentifier().Opposite();
+			state::PlayerIdentifier opponent = 
+				context.manipulate_.Board().GetCard(context.card_ref_).GetPlayerIdentifier().Opposite();
 			state::CardRef weapon = context.manipulate_.Board().Player(opponent).GetWeaponRef();
 			if (!weapon.IsValid()) return;
 			Manipulate(context).Weapon(weapon).Damage(context.card_ref_, 1);
@@ -72,7 +73,7 @@ namespace Cards
 	struct Card_EX1_001 : public MinionCardBase<Card_EX1_001> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context context) {
 			if (context.amount_ < 0) return true;
-			if (context.card_.GetDamage() <= 0) return true;
+			if (context.manipulate_.GetCard(context.card_ref_).GetDamage() <= 0) return true;
 			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_001e>();
 			return true;
 		};
@@ -87,7 +88,7 @@ namespace Cards
 	};
 	struct Card_EX1_509 : public MinionCardBase<Card_EX1_509> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
-			if (context.card_.GetRace() != state::kCardRaceMurloc) return true;
+			if (context.manipulate_.GetCard(context.card_ref_).GetRace() != state::kCardRaceMurloc) return true;
 			if (context.card_ref_ == self) return true;
 			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_509e>();
 			return true;
@@ -155,7 +156,6 @@ namespace Cards
 				.BecomeCopyof(context.GetTarget());
 
 			*context.new_card_ref = new_ref;
-			*context.new_card = &context.manipulate_.Board().GetCard(new_ref);
 		}
 	};
 

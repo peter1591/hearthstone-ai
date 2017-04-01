@@ -5,9 +5,10 @@ namespace Cards
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
-			if (context.source_card_.GetPlayerIdentifier() != owner) return true; // for friendly only
-			if (context.source_card_.GetCardType() == state::kCardTypeSpell ||
-				context.source_card_.GetCardType() == state::kCardTypeHeroPower)
+			state::Cards::Card const& source_card = context.manipulate_.GetCard(context.source_ref_);
+			if (source_card.GetPlayerIdentifier() != owner) return true; // for friendly only
+			if (source_card.GetCardType() == state::kCardTypeSpell ||
+				source_card.GetCardType() == state::kCardTypeHeroPower)
 			{
 				*context.amount_ *= 2; // both healing and damaging. Positive for damaging; nagitive for healing
 			}

@@ -63,10 +63,10 @@ namespace FlowControl
 			assert(card.GetZonePosition() == pos);
 
 			state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
-				state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), ref, card });
+				state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), ref });
 
 			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
-				state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), ref, card });
+				state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), ref });
 
 			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
 		}
@@ -90,8 +90,9 @@ namespace FlowControl
 			return spell_damage;
 		}
 
-		inline void BoardManipulator::CalculateFinalDamageAmount(state::CardRef source, state::Cards::Card const & source_card, int amount, int * final_amount)
+		inline void BoardManipulator::CalculateFinalDamageAmount(state::CardRef source, int amount, int * final_amount)
 		{
+			state::Cards::Card const & source_card = state_.GetCard(source);
 			*final_amount = amount;
 			
 			if (amount > 0) { // spell damage only acts on damages, not healings
@@ -104,7 +105,7 @@ namespace FlowControl
 
 			state_.TriggerEvent<state::Events::EventTypes::CalculateHealDamageAmount>(
 				state::Events::EventTypes::CalculateHealDamageAmount::Context
-			{ Manipulate(state_, flow_context_), source, source_card, final_amount });
+			{ Manipulate(state_, flow_context_), source, final_amount });
 		}
 	}
 }

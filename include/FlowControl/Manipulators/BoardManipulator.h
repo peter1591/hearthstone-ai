@@ -46,7 +46,7 @@ namespace FlowControl
 
 			int GetSpellDamage(state::PlayerIdentifier player);
 
-			void CalculateFinalDamageAmount(state::CardRef source, state::Cards::Card const& source_card, int amount, int * final_amount);
+			void CalculateFinalDamageAmount(state::CardRef source, int amount, int * final_amount);
 
 		private:
 			state::Cards::Card GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player);
