@@ -57,6 +57,15 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_029 : public MinionCardBase<Card_EX1_029> {
+		Card_EX1_029() {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+				context.manipulate_.Hero(context.player_.Opposite())
+					.Damage(context.card_ref_, 2);
+			});
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -119,6 +128,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_029)
 REGISTER_CARD(NEW1_017)
 REGISTER_CARD(NEW1_025)
 REGISTER_CARD(EX1_564)

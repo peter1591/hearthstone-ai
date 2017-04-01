@@ -92,7 +92,7 @@ namespace FlowControl
 
 					ordered_deaths.insert(std::make_pair(card.GetPlayOrder(),
 						std::make_pair(ref,
-							FlowControl::deathrattle::context::Deathrattle{ FlowControl::Manipulate(state_, flow_context_), player, zone, zone_pos, attack })));
+							FlowControl::deathrattle::context::Deathrattle{ FlowControl::Manipulate(state_, flow_context_), ref, player, zone, zone_pos, attack })));
 				}
 
 				for (auto ref : deaths_) {
