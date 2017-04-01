@@ -10,7 +10,7 @@ namespace FlowControl
 	{
 		namespace context
 		{
-			inline state::CardRef OnPlay::GetTarget() {
+			inline state::CardRef OnPlay::GetTarget() const {
 				state::CardRef target = manipulate_.GetSpecifiedTarget();
 				return target;
 			}

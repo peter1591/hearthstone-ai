@@ -15,6 +15,7 @@
 #include "Cards/Core/Priest.h"
 #include "Cards/Core/Shaman.h"
 #include "Cards/Core/Mage.h"
+#include "Cards/Core/Paladin.h"
 
 #include "Cards/Expert1/Neutral.h"
 #include "Cards/Expert1/Priest.h"

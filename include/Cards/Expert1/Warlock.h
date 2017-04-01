@@ -4,7 +4,7 @@ namespace Cards
 {
 	struct Card_EX1_312 : SpellCardBase<Card_EX1_312> {
 		Card_EX1_312() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto functor = [&](state::CardRef ref) {
 					context.manipulate_.Minion(ref).Destroy();
 				};

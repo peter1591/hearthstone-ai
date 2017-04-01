@@ -80,7 +80,7 @@ namespace FlowControl
 		state_.IncreasePlayOrder();
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
-		card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card);
+		if (!card.GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref, card)) return false;
 
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(card.GetRawData().overload);
 

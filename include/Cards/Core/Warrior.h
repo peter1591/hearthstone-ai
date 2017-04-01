@@ -4,7 +4,7 @@ namespace Cards
 {
 	struct Card_CS2_102 : public HeroPowerCardBase<Card_CS2_102> {
 		Card_CS2_102() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
 					.Hero(context.card_.GetPlayerIdentifier())
 					.GainArmor(2);

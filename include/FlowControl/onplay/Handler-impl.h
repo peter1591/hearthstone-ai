@@ -11,13 +11,15 @@ namespace FlowControl
 {
 	namespace onplay
 	{
-		inline void Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card) const
+		inline bool Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card) const
 		{
-			if (!specified_target_getter) return;
+			if (!specified_target_getter) return true;
 
+			bool allow_no_target = true;
 			state::targetor::Targets targets = (*specified_target_getter)(
-				context::GetSpecifiedTarget{ Manipulate(state, flow_context), card_ref, card });
-			flow_context.PrepareSpecifiedTarget(state, card_ref, card, targets);
+				context::GetSpecifiedTarget{ Manipulate(state, flow_context), card_ref, card, &allow_no_target });
+
+			return flow_context.PrepareSpecifiedTarget(state, card_ref, card, targets, allow_no_target);
 		}
 
 		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,

@@ -4,7 +4,8 @@
 #include "FlowControl/Manipulate.h"
 
 namespace FlowControl {
-	inline void FlowContext::PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const & target_info)
+	inline bool FlowContext::PrepareSpecifiedTarget(
+		state::State & state, state::CardRef card_ref, const state::Cards::Card & card, state::targetor::Targets const & target_info, bool allow_no_target)
 	{
 		assert(!specified_target_.IsValid());
 		std::vector<state::CardRef> targets;
@@ -12,11 +13,15 @@ namespace FlowControl {
 
 		if (targets.empty()) {
 			specified_target_.Invalidate();
-			return;
+			if (allow_no_target) return true;
+
+			SetResult(FlowControl::kResultInvalid);
+			return false;
 		}
 
 		specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, card, targets);
 		assert(specified_target_.IsValid());
+		return true;
 	}
 
 	inline void FlowContext::AddDeadEntryHint(state::State & state, state::CardRef ref)

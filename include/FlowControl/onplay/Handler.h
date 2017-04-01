@@ -9,8 +9,8 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			typedef state::targetor::Targets SpecifiedTargetGetter(context::GetSpecifiedTarget);
-			typedef void OnPlayCallback(context::OnPlay);
+			typedef state::targetor::Targets SpecifiedTargetGetter(context::GetSpecifiedTarget const&);
+			typedef void OnPlayCallback(context::OnPlay const&);
 
 			Handler() : specified_target_getter(nullptr), onplay(nullptr) {}
 
@@ -18,7 +18,7 @@ namespace FlowControl
 			void SetSpecifyTargetCallback(SpecifiedTargetGetter* callback) { specified_target_getter = callback; }
 
 		public:
-			void PrepareTarget(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card) const;
+			bool PrepareTarget(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card) const;
 			void OnPlay(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card,
 				state::CardRef * new_card_ref, state::Cards::Card const* * new_card) const;
 

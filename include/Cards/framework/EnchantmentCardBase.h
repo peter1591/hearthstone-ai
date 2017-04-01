@@ -28,6 +28,11 @@ namespace Cards
 			stats.max_hp += v;
 		}
 	};
+	template <int v> struct SetAttack {
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.attack = v;
+		}
+	};
 
 	template <
 		typename Enchant1 = NullEnchant,

@@ -4,7 +4,7 @@ namespace Cards
 {
 	struct Card_EX1_384 : SpellCardBase<Card_EX1_384> {
 		Card_EX1_384() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int damage = 0;
 				context.manipulate_
 					.Board()
