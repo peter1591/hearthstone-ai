@@ -1,23 +1,18 @@
 #pragma once
 
 #include "FlowControl/enchantment/Enchantments.h"
+#include "state/State.h"
 
-namespace FlowControl
-{
-	namespace enchantment
-	{
-		inline void Enchantments::ApplyAll(state::Cards::EnchantableStates & card, state::State const& state)
-		{
-			for (auto it = enchantments_.begin(); it != enchantments_.end();) {
-				if (it->valid_until_turn > 0) {
-					if (state.GetTurn() > it->valid_until_turn) {
-						it = enchantments_.erase(it);
-						continue;
-					}
+namespace FlowControl {
+	namespace enchantment {
+		inline bool Enchantments::NormalEnchantment::Apply(state::State const& state, state::Cards::EnchantableStates & stats) {
+			if (valid_until_turn > 0) {
+				if (state.GetTurn() > valid_until_turn) {
+					return false;
 				}
-				it->apply_functor(card);
-				++it;
 			}
+			apply_functor(stats);
+			return true;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FlowControl/enchantment/AuraEnchantments.h"
+#include "FlowControl/enchantment/Enchantments.h"
 
 namespace FlowControl
 {
@@ -16,18 +16,18 @@ namespace FlowControl
 		class TieredEnchantments
 		{
 		public:
-			using ContainerType = AuraEnchantments::ContainerType;
+			using ContainerType = Enchantments::ContainerType;
 
 			struct IdentifierType {
 				EnchantmentTiers tier;
-				AuraEnchantments::IdentifierType id;
+				Enchantments::IdentifierType id;
 			};
 
 			template <typename EnchantmentType>
 			typename IdentifierType PushBackAuraEnchantment()
 			{
 				constexpr EnchantmentTiers tier = EnchantmentType::tier;
-				AuraEnchantments::IdentifierType id = GetEnchantments<tier>().PushBackAuraEnchantment<EnchantmentType>();
+				Enchantments::IdentifierType id = GetEnchantments<tier>().PushBackAuraEnchantment<EnchantmentType>();
 				return IdentifierType{ tier, id };
 			}
 
@@ -99,20 +99,20 @@ namespace FlowControl
 			}
 
 		private:
-			template <int Tier> AuraEnchantments & GetEnchantments();
-			template <int Tier> const AuraEnchantments & GetEnchantments() const;
+			template <int Tier> Enchantments & GetEnchantments();
+			template <int Tier> const Enchantments & GetEnchantments() const;
 
 		private:
-			AuraEnchantments tier1_;
-			AuraEnchantments tier2_;
-			AuraEnchantments tier3_;
+			Enchantments tier1_;
+			Enchantments tier2_;
+			Enchantments tier3_;
 		};
 
-		template <> inline AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
-		template <> inline const AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
-		template <> inline AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
-		template <> inline const AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
-		template <> inline AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
-		template <> inline const AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
+		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
+		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
 	}
 }

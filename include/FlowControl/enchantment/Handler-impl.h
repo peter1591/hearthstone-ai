@@ -7,7 +7,6 @@
 #include "FlowControl/Manipulate.h"
 
 #include "FlowControl/enchantment/Enchantments-impl.h"
-#include "FlowControl/enchantment/AuraEnchantments-impl.h"
 
 namespace FlowControl
 {

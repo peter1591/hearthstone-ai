@@ -725,5 +725,37 @@ void test4()
 		CheckMinions(state, state::PlayerIdentifier::Second(), {});
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+
+		FlowControl::Manipulate(state, flow_context)
+			.HeroPower(state::PlayerIdentifier::First())
+			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest hero power
+
+		parameter_getter.next_specified_target_count = 3;
+		parameter_getter.next_specified_target_idx = 1;
+		if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 3, 3 } });
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+
+		FlowControl::Manipulate(state, flow_context)
+			.HeroPower(state::PlayerIdentifier::First())
+			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
+
+		parameter_getter.next_specified_target_count = 3;
+		parameter_getter.next_specified_target_idx = 1;
+		if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 2, 3 } });
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 	}();
 }

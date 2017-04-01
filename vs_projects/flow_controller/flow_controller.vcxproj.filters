@@ -410,9 +410,6 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h">
       <Filter>Header Files\FlowControl\enchantment</Filter>
     </ClInclude>
@@ -469,9 +466,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Paladin.h">
       <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments-impl.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
