@@ -38,6 +38,17 @@ namespace FlowControl
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
 			using IdentifierType = ContainerType::Identifier;
 
+			class NormalEnchantmentUpdateDecider {
+			public:
+				NormalEnchantmentUpdateDecider() : need_update_after_turn_(-1) {}
+				void PushBack(int valid_until_turn);
+				void FinishedUpdate(state::State const& state);
+				bool NeedUpdate(state::State const& state) const;
+
+			private:
+				int need_update_after_turn_;
+			};
+
 			template <typename EnchantmentType>
 			typename IdentifierType PushBackAuraEnchantment()
 			{
@@ -55,6 +66,7 @@ namespace FlowControl
 
 				need_update_ = true;
 				enchantments_.PushBack(NormalEnchantment{ item.apply_functor, valid_until_turn });
+				normal_enchantment_update_decider_.PushBack(valid_until_turn);
 			}
 
 			void Remove(IdentifierType id)
@@ -101,18 +113,22 @@ namespace FlowControl
 				});
 			}
 
-			bool NeedUpdate() const {
-				return true; // TODO: special tricks for one-turn enchantments
-				return need_update_;
+			bool NeedUpdate(state::State const& state) const {
+				if (need_update_) return true;
+				if (normal_enchantment_update_decider_.NeedUpdate(state)) return true;
+				return false;
 			}
 
-			void FinishedUpdate() {
+			void FinishedUpdate(state::State const& state) {
 				need_update_ = false;
+				normal_enchantment_update_decider_.FinishedUpdate(state);
 			}
 
 		private:
 			ContainerType enchantments_;
 			bool need_update_;
+
+			NormalEnchantmentUpdateDecider normal_enchantment_update_decider_;
 		};
 	}
 }

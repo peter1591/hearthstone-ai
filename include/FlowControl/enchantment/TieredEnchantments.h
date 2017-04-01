@@ -85,17 +85,17 @@ namespace FlowControl
 				tier3_.ApplyAll(state, stats);
 			}
 
-			bool NeedUpdate() const {
-				if (tier1_.NeedUpdate()) return true;
-				if (tier2_.NeedUpdate()) return true;
-				if (tier3_.NeedUpdate()) return true;
+			bool NeedUpdate(state::State & state) const {
+				if (tier1_.NeedUpdate(state)) return true;
+				if (tier2_.NeedUpdate(state)) return true;
+				if (tier3_.NeedUpdate(state)) return true;
 				return false;
 			}
 
-			void FinishedUpdate() {
-				tier1_.FinishedUpdate();
-				tier2_.FinishedUpdate();
-				tier3_.FinishedUpdate();
+			void FinishedUpdate(state::State & state) {
+				tier1_.FinishedUpdate(state);
+				tier2_.FinishedUpdate(state);
+				tier3_.FinishedUpdate(state);
 			}
 
 		private:
