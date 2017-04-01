@@ -2,6 +2,19 @@
 
 namespace Cards
 {
+	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
+		Card_CS2_034() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter context) {
+				return TargetsGenerator().SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
+				context.manipulate_
+					.Character(context.GetTarget())
+					.Damage(context.card_ref_, context.card_, 1);
+			});
+		}
+	};
+
 	struct Card_EX1_277 : SpellCardBase<Card_EX1_277> {
 		Card_EX1_277() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay context) {
@@ -40,3 +53,4 @@ namespace Cards
 
 REGISTER_CARD(EX1_294)
 REGISTER_CARD(EX1_277)
+REGISTER_CARD(CS2_034)
