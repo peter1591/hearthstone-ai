@@ -195,7 +195,9 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(
 			state::Events::EventTypes::AfterMinionPlayed::Context{ Manipulate(state_, flow_context_), new_card_ref, *new_card });
 
-		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(new_card_ref, *new_card);
+		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
+			state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), new_card_ref, *new_card });
+
 		Manipulate(state_, flow_context_).Minion(new_card_ref).AfterSummoned();
 
 		return true;

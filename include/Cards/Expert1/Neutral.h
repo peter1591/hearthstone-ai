@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Leper Gnome
+// finished: Lightwarden
 
 namespace Cards
 {
@@ -82,6 +82,22 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_509e : public Enchantment<Attack<1>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_509 : public MinionCardBase<Card_EX1_509> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
+			if (context.card_.GetRace() != state::kCardRaceMurloc) return true;
+			if (context.card_ref_ == self) return true;
+			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_509e>();
+			return true;
+		}
+		Card_EX1_509() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterMinionSummoned>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -157,6 +173,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_509)
 REGISTER_CARD(EX1_001)
 REGISTER_CARD(EX1_029)
 REGISTER_CARD(NEW1_017)

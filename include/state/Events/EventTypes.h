@@ -23,7 +23,12 @@ namespace state {
 				using type = std::function<bool(Context)>;
 			};
 			struct AfterMinionSummoned {
-				using type = bool(*)(CardRef, const Cards::Card &);
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					CardRef card_ref_;
+					Cards::Card const& card_;
+				};
+				using type = std::function<bool(Context)>;
 			};
 			struct BeforeAttack {
 				using type = bool(*)(CardRef, State &, CardRef);
