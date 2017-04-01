@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FlowControl/enchantment/Enchantments.h"
+#include "FlowControl/enchantment/AuraEnchantments.h"
 
 namespace FlowControl
 {
@@ -16,17 +16,52 @@ namespace FlowControl
 		class TieredEnchantments
 		{
 		public:
-			using ContainerType = Enchantments::ContainerType;
+			using ContainerType = AuraEnchantments::ContainerType;
+
+			struct IdentifierType {
+				EnchantmentTiers tier;
+				AuraEnchantments::IdentifierType id;
+			};
 
 			template <typename EnchantmentType>
-			void PushBack(state::State const& state)
+			typename IdentifierType PushBackAuraEnchantment()
 			{
-				EnchantmentType item;
+				constexpr EnchantmentTiers tier = EnchantmentType::tier;
+				AuraEnchantments::IdentifierType id = GetEnchantments<tier>().PushBackAuraEnchantment<EnchantmentType>();
+				return IdentifierType{ tier, id };
+			}
 
-				int valid_until_turn = -1;
-				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
+			template <typename EnchantmentType>
+			void PushBackNormalEnchantment(state::State const& state)
+			{
+				GetEnchantments<EnchantmentType::tier>().PushBackNormalEnchantment<EnchantmentType>(state);
+			}
 
-				GetEnchantments<EnchantmentType::tier>().PushBack(item.apply_functor, valid_until_turn);
+			void Remove(IdentifierType id)
+			{
+				switch (id.tier) {
+				case kEnchantmentTier1:
+					return tier1_.Remove(id.id);
+				case kEnchantmentTier2:
+					return tier2_.Remove(id.id);
+				case kEnchantmentTier3:
+					return tier3_.Remove(id.id);
+				}
+				assert(false);
+			}
+
+			bool Exists(IdentifierType id) const
+			{
+				switch (id.tier) {
+				case kEnchantmentTier1:
+					return tier1_.Exists(id.id);
+				case kEnchantmentTier2:
+					return tier2_.Exists(id.id);
+				case kEnchantmentTier3:
+					return tier3_.Exists(id.id);
+				}
+				assert(false);
+				return false;
 			}
 
 			void Clear()
@@ -36,11 +71,18 @@ namespace FlowControl
 				tier3_.Clear();
 			}
 
-			void ApplyAll(state::Cards::EnchantableStates & card, state::State const& state)
+			void AfterCopied()
 			{
-				tier1_.ApplyAll(card, state);
-				tier2_.ApplyAll(card, state);
-				tier3_.ApplyAll(card, state);
+				tier1_.AfterCopied();
+				tier2_.AfterCopied();
+				tier3_.AfterCopied();
+			}
+
+			void ApplyAll(state::State const& state, state::Cards::EnchantableStates & stats)
+			{
+				tier1_.ApplyAll(state, stats);
+				tier2_.ApplyAll(state, stats);
+				tier3_.ApplyAll(state, stats);
 			}
 
 			bool NeedUpdate() const {
@@ -57,20 +99,20 @@ namespace FlowControl
 			}
 
 		private:
-			template <int Tier> Enchantments & GetEnchantments();
-			template <int Tier> const Enchantments & GetEnchantments() const;
+			template <int Tier> AuraEnchantments & GetEnchantments();
+			template <int Tier> const AuraEnchantments & GetEnchantments() const;
 
 		private:
-			Enchantments tier1_;
-			Enchantments tier2_;
-			Enchantments tier3_;
+			AuraEnchantments tier1_;
+			AuraEnchantments tier2_;
+			AuraEnchantments tier3_;
 		};
 
-		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
-		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
-		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
-		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
-		template <> inline Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
-		template <> inline const Enchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
+		template <> inline AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() { return tier1_; }
+		template <> inline const AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier1>() const { return tier1_; }
+		template <> inline AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() { return tier2_; }
+		template <> inline const AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier2>() const { return tier2_; }
+		template <> inline AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() { return tier3_; }
+		template <> inline const AuraEnchantments & TieredEnchantments::GetEnchantments<kEnchantmentTier3>() const { return tier3_; }
 	}
 }

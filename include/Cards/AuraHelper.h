@@ -69,7 +69,7 @@ namespace Cards
 
 				assert(!handler.IsCallbackSet_ApplyOn());
 				handler.SetCallback_ApplyOn([](auto context) {
-					return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().Aura().PushBack<EnchantmentType>();
+					return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().AddAuraEnchantment<EnchantmentType>();
 				});
 				context.manipulate_.Aura().Add(context.card_ref_, std::move(handler));
 			};

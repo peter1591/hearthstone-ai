@@ -2,7 +2,6 @@
 
 #include "state/Cards/EnchantableStates.h"
 #include "FlowControl/enchantment/TieredEnchantments.h"
-#include "FlowControl/enchantment/AuraEnchantments.h"
 
 namespace FlowControl
 {
@@ -15,17 +14,18 @@ namespace FlowControl
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
 
 		public:
-			auto& Aura() { return aura_enchantments; }
-			auto const& Aura() const { return aura_enchantments; }
-
-		public:
-			template <typename EnchantmentType> auto Add(state::State const& state) {
-				return enchantments.PushBack<EnchantmentType>(state);
+			template <typename EnchantmentType> auto PushBackNormalEnchantment(state::State const& state) {
+				return enchantments.PushBackNormalEnchantment<EnchantmentType>(state);
+			}
+			template <typename EnchantmentType> auto PushBackAuraEnchantment(state::State const& state) {
+				return enchantments.PushBackAuraEnchantment<EnchantmentType>();
 			}
 
-			void Clear() {
-				enchantments.Clear();
-			}
+			bool Exists(TieredEnchantments::IdentifierType id) const { return enchantments.Exists(id); }
+
+			void Clear() { enchantments.Clear(); }
+			void AfterCopied() { enchantments.AfterCopied(); }
+			void Remove(TieredEnchantments::IdentifierType id) { return enchantments.Remove(id); }
 
 			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, bool allow_death);
 
@@ -39,7 +39,6 @@ namespace FlowControl
 		private:
 			state::Cards::EnchantableStates origin_states;
 			TieredEnchantments enchantments;
-			AuraEnchantments aura_enchantments;
 		};
 	}
 }

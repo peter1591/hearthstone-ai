@@ -56,7 +56,7 @@ namespace Utils
 			template <typename IterateCallback> // bool(PtrItemType), return true to continue; false to abort
 			void IterateAll(const IterateCallback & callback)
 			{
-				container_.IterateAll([&callback](CopyableItemType & item) -> bool {
+				container_.IterateAll([&callback](Identifier id, CopyableItemType & item) -> bool {
 					return callback(item.Get().get());
 				});
 			}

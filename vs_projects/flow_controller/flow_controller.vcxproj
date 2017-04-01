@@ -91,6 +91,7 @@
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -118,6 +119,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -175,6 +177,7 @@
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\AuraEnchantments.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h" />

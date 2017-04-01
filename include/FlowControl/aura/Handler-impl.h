@@ -25,7 +25,7 @@ namespace FlowControl
 
 			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)
 			{
-				if (!state.GetCard(it->first).GetRawData().enchantment_handler.Aura().Exists(it->second)) {
+				if (!state.GetCard(it->first).GetRawData().enchantment_handler.Exists(it->second)) {
 					// enchantment vanished
 					it = applied_enchantments.erase(it);
 					continue;
@@ -39,7 +39,7 @@ namespace FlowControl
 				}
 				else {
 					// enchantments should be removed
-					Manipulate(state, flow_context).Card(it->first).Enchant().Aura().Remove(it->second);
+					Manipulate(state, flow_context).Card(it->first).Enchant().Remove(it->second);
 					it = applied_enchantments.erase(it);
 				}
 			}

@@ -7,20 +7,20 @@
 #include "FlowControl/Manipulate.h"
 
 #include "FlowControl/enchantment/Enchantments-impl.h"
+#include "FlowControl/enchantment/AuraEnchantments-impl.h"
 
 namespace FlowControl
 {
 	namespace enchantment
 	{
 		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, bool allow_death) {
-			if (!enchantments.NeedUpdate() && !aura_enchantments.NeedUpdate()) return;
+			if (!enchantments.NeedUpdate()) return;
 
 			int origin_hp = card.GetHP();
 
 			state::Cards::EnchantableStates const& current_states = card.GetRawData().enchanted_states;
 			state::Cards::EnchantableStates new_states = origin_states;
-			enchantments.ApplyAll(new_states, state);
-			aura_enchantments.ApplyAll(new_states);
+			enchantments.ApplyAll(state, new_states);
 
 			switch (card.GetCardType()) {
 			case state::kCardTypeHero:
@@ -53,7 +53,6 @@ namespace FlowControl
 			}
 
 			enchantments.FinishedUpdate();
-			aura_enchantments.FinishedUpdate();
 		}
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, state::Cards::EnchantableStates const& new_states)

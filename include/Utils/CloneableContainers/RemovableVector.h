@@ -139,7 +139,7 @@ namespace Utils
 					prev_hint = &item.next_possible_exist_id;
 					need_update = false;
 
-					if (!callback(item.item)) break;
+					if (!callback(id, item.item)) break;
 					id = item.next_possible_exist_id;
 				}
 			}

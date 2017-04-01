@@ -16,6 +16,7 @@ namespace Cards
 	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042, Taunt> {};
 
 	struct Card_EX1_508o : public Enchantment<Attack<1>> {
+		static constexpr FlowControl::enchantment::EnchantmentTiers tier = FlowControl::enchantment::kEnchantmentTier2;
 		static constexpr int id = Cards::ID_EX1_508o;
 	};
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
@@ -216,6 +217,7 @@ namespace Cards
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
 
 	struct Card_CS2_222o : public Enchantment<Attack<1>, MaxHP<1>> {
+		static constexpr FlowControl::enchantment::EnchantmentTiers tier = FlowControl::enchantment::kEnchantmentTier2;
 		static constexpr int id = Cards::ID_CS2_222o;
 	};
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
