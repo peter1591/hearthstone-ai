@@ -1055,5 +1055,17 @@ void test4()
 		CheckMinions(state, state::PlayerIdentifier::Second(), {});
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+
+		AddHandCard(Cards::ID_EX1_508, flow_context, state, state::PlayerIdentifier::First());
+		parameter_getter.next_minion_put_location = 2;
+		if (controller.PlayCard(1) != FlowControl::kResultNotDetermined) assert(false);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 5, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), { { 5,2,2 },{ 3,1,1 },{1,1,1}, { 2,1,1 },{ 6,2,2 } });
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 	}();
 }
