@@ -66,6 +66,22 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_001e : public Enchantment<Attack<2>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_001 : public MinionCardBase<Card_EX1_001> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context context) {
+			if (context.amount_ < 0) return true;
+			if (context.card_.GetDamage() <= 0) return true;
+			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_001e>();
+			return true;
+		};
+		Card_EX1_001() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnHeal>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -141,6 +157,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_001)
 REGISTER_CARD(EX1_029)
 REGISTER_CARD(NEW1_017)
 REGISTER_CARD(NEW1_025)

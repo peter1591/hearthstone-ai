@@ -51,10 +51,8 @@ namespace FlowControl
 			inline void DamageHelper::DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card const& card, int amount)
 			{
 				assert(amount > 0);
-				state.TriggerEvent<state::Events::EventTypes::OnHeal>(card_ref,
-					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card, amount });
-				state.TriggerCategorizedEvent<state::Events::EventTypes::OnHeal>(card_ref,
-					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card, amount });
+				state.TriggerEvent<state::Events::EventTypes::OnHeal>(
+					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card_ref, card, amount });
 
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().Heal(amount);
 			}

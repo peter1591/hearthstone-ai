@@ -96,10 +96,11 @@ namespace state {
 			struct OnHeal {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
+					state::CardRef card_ref_;
 					state::Cards::Card const& card_;
 					int amount_;
 				};
-				using type = bool(*)(state::CardRef, Context);
+				using type = std::function<bool(Context)>;
 			};
 			struct OnTurnEnd {
 				struct Context {
