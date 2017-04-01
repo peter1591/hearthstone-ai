@@ -540,7 +540,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 4, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 7 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {2, 1, 1}, { 3, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
@@ -554,7 +554,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 7 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {1, 1, 1}, { 2, 1, 1 },{ 5, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
@@ -568,7 +568,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 7 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {1, 1, 1}, { 1, 1, 1 },{ 2, 1, 1 },{ 7, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
@@ -580,7 +580,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 7 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
@@ -594,7 +594,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 7 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {1, 1, 1}, { 1, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
@@ -604,7 +604,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 8, 8 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 1, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -616,7 +616,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 7 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 5, 8 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 1, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { {2, 3, 3}, { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { {2, 3, 3}, { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -629,7 +629,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 8, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 5, 8 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 }, { 1, 1, 1 }, { 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 5, 2, 3 },{ 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 5, 2, 3 },{ 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -641,7 +641,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 8, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 5, 8 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 5, 1, 3 },{ 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 5, 1, 3 },{ 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -653,7 +653,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 8, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 5, 8 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -665,7 +665,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 5, 8 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -675,7 +675,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 9 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 4, 1, 4 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -687,7 +687,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 9 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 1, 1, 1 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -699,7 +699,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 8 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 9 });
 	CheckMinions(state, state::PlayerIdentifier::First(), {{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -712,7 +712,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 9 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 9 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -724,7 +724,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 9 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 9 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {6, 6, 6},  { 3, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -736,7 +736,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 9 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 9 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 6, 6, 6 },{ 3, 1, 2} });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -746,7 +746,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 9 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -760,7 +760,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 9 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 }, { 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 }, { 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -770,7 +770,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -782,7 +782,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {8, 8, 8}, { 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -795,7 +795,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {8, 8, 8}, { 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -807,7 +807,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -825,7 +825,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -838,7 +838,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -851,7 +851,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -863,7 +863,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 4, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {4, 5, 5}, { 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -886,7 +886,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 5, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -899,7 +899,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 1, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 5, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 5, 7 },{ 4, 5, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 6, 6, 6 },{ 8, 6, 7 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -923,7 +923,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 5, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 }, { 4, 4, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 }, { 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -935,7 +935,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 5, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -945,7 +945,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 5, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -957,7 +957,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 3, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 5, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{7, 7, 7} });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{7, 7, 7} });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == true);
@@ -972,7 +972,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 3, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 2, 5 },{ 8, 8, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
@@ -987,7 +987,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 2, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 7, 8 },{ 8, 8, 8 },{ 6, 6, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
@@ -1002,7 +1002,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 1, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 7, 8 },{ 8, 8, 8 },{ 6, 3, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
@@ -1017,7 +1017,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 4, 8 },{ 8, 8, 8 },{ 6, 3, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
@@ -1033,7 +1033,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 9, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 8, 1, 8 },{ 8, 8, 8 },{ 6, 3, 6 },{ 3, 1, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
@@ -1048,7 +1048,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 8, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
@@ -1061,7 +1061,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 3, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { {7, 8, 8}, { 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { {7, 8, 8}, { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetNextOverload() == 3);
@@ -1075,7 +1075,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 7, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 7, 8, 8 },{ 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetCurrentOverloaded() == 3);
@@ -1089,7 +1089,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 2, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { {7, 8, 8}, { 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { {7, 8, 8}, { 7, 8, 8 },{ 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetCurrentOverloaded() == 3);
@@ -1103,7 +1103,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 3, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { {3, 2, 2}, { 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { {3, 2, 2}, { 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetCurrentOverloaded() == 0);
@@ -1118,7 +1118,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetResource().GetCurrentOverloaded() == 0);
@@ -1132,7 +1132,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1144,7 +1144,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 8, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {2, 2, 2}, { 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 4, 5 },{ 7, 7, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 8, 8 },{ 7, 8, 8 },{ 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1158,7 +1158,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 1, 7 },{ 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 }, {7, 8, 8}, { 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 }, {7, 8, 8}, { 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1181,7 +1181,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 }, { 7, 7, 7 },{ 2, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 1, 8 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 1, 8 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1204,7 +1204,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 7, 7 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1217,7 +1217,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 7, 7 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1229,7 +1229,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 5, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{ 7, 7, 7 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1242,7 +1242,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 2, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 2, 2, 2 },{0, 1, 1} });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1255,7 +1255,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 3, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {6, 6, 6}, { 3, 3, 3 },{ 1, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1268,7 +1268,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 0, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 6, 6, 6 },{ 3, 3, 3 },{ 1, 2, 2 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
@@ -1282,7 +1282,7 @@ void test3()
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 10 });
 	CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 0, 1, 1 },{ 2, 2, 2 },{ 0, 1, 1 } });
-	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 4, 7 } });
+	CheckMinions(state, state::PlayerIdentifier::Second(), { { 3, 2, 2 },{ 7, 5, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 

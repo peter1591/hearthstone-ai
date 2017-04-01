@@ -59,7 +59,7 @@ namespace FlowControl
 				.ReplaceBy(new_card_ref);
 
 			// recalculate enchantments from scratch
-			// 'allow_death' = true. <-- Lose of aura enchantments introduce death
+			// 'allow_hp_reduce' = true. <-- special case when transforming
 			FlowControl::Manipulate(state_, flow_context_).Minion(new_card_ref)
 				.Enchant().Update(true);
 

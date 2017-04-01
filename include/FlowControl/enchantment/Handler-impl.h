@@ -12,7 +12,7 @@ namespace FlowControl
 {
 	namespace enchantment
 	{
-		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, bool allow_death) {
+		inline void Handler::Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::Card & card, bool allow_hp_reduce) {
 			if (!enchantments.NeedUpdate(state)) return;
 
 			int origin_hp = card.GetHP();
@@ -35,20 +35,21 @@ namespace FlowControl
 				throw std::exception("not implemented");
 			}
 
-			// removing enchantments should not kill a minion
-			if (origin_hp > 0) {
-				int hp = card.GetHP();
-				if (hp <= 0) {
-					if (!allow_death && hp <= 0) {
-						// Do not trigger healing events
-						Manipulators::MinionManipulator(state, flow_context, card_ref, card)
-							.Internal_SetDamage().Heal(-hp + 1);
-						assert(card.GetHP() == 1);
-					}
-					else {
-						flow_context.AddDeadEntryHint(state, card_ref);
-					}
-				}
+			int hp = card.GetHP();
+			if (!allow_hp_reduce && hp < origin_hp && hp != card.GetMaxHP()) {
+				assert(card.GetMaxHP() > 0);
+				int target_hp = std::min(card.GetMaxHP(), origin_hp);
+
+				// do not trigger healing events
+				Manipulators::MinionManipulator(state, flow_context, card_ref, card)
+					.Internal_SetDamage().Heal(target_hp - hp);
+
+				hp = card.GetHP();
+				assert(hp == target_hp);
+			}
+
+			if (origin_hp > 0 && hp <= 0) {
+				flow_context.AddDeadEntryHint(state, card_ref);
 			}
 
 			enchantments.FinishedUpdate(state);

@@ -31,8 +31,8 @@ namespace FlowControl
 					return card_.GetMutableEnchantmentHandler().Remove(std::forward<T>(id));
 				}
 
-				void Update(bool allow_death = false) {
-					return card_.GetMutableEnchantmentHandler().Update(state_, flow_context_, card_ref_, card_, allow_death);
+				void Update(bool allow_hp_reduce = false) {
+					return card_.GetMutableEnchantmentHandler().Update(state_, flow_context_, card_ref_, card_, allow_hp_reduce);
 				}
 
 			private:
