@@ -130,6 +130,7 @@
     <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
     <ClCompile Include="..\..\contrib\lib_json\json_value.cpp" />
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
+    <ClCompile Include="CardDispatcher.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="test2.cpp" />
     <ClCompile Include="test3.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\..\include\Cards\CardAttributes.h" />
     <ClInclude Include="..\..\include\Cards\CardBase-cleanup.h" />
     <ClInclude Include="..\..\include\Cards\CardBase.h" />
+    <ClInclude Include="..\..\include\Cards\CardDispatcher-impl.h" />
     <ClInclude Include="..\..\include\Cards\CardDispatcher.h" />
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Contexts.h" />

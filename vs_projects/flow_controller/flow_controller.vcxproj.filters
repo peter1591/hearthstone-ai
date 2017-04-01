@@ -114,6 +114,9 @@
     <ClCompile Include="test4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CardDispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\FlowControl\FlowController.h">
@@ -466,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Paladin.h">
       <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardDispatcher-impl.h">
+      <Filter>Header Files\Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -22,7 +22,6 @@
 #include "FlowControl/Manipulators/Helpers/DamageHelper-impl.h"
 
 #include "FlowControl/detail/Resolver.h"
-#include "Cards/Cards.h"
 
 namespace FlowControl
 {
