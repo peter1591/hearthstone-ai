@@ -145,6 +145,26 @@ namespace Cards
 
 	struct Card_EX1_010 : public MinionCardBase<Card_EX1_010, Stealth> {};
 	struct Card_CS2_169 : public MinionCardBase<Card_CS2_169, Windfury> {};
+	
+	struct Card_EX1_004e : public Enchantment<MaxHP<1>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_004 : public MinionCardBase<Card_EX1_004> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			auto player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+
+			auto targets = TargetsGenerator(player).Ally(player).Minion().Exclude(self);
+			auto target = context.manipulate_.GetRandomTarget(targets.GetInfo());
+
+			if (target.IsValid()) Manipulate(context).Card(self).Enchant().Add<Card_EX1_004e>();
+			return true;
+		};
+		Card_EX1_004() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
 
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
@@ -220,7 +240,7 @@ namespace Cards
 		}
 	};
 }
-
+REGISTER_CARD(EX1_004)
 REGISTER_CARD(CS2_169)
 REGISTER_CARD(EX1_010)
 REGISTER_CARD(CS2_146)

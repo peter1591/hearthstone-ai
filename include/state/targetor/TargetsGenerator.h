@@ -96,12 +96,14 @@ namespace state {
 			{
 				return SideOnly(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier());
 			}
+			TargetsGenerator_ChosenSide & Ally(PlayerIdentifier player) { return SideOnly(player); }
 
 			template <typename Context>
 			TargetsGenerator_ChosenSide & Enemy(Context&& context)
 			{
 				return SideOnly(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier().Opposite());
 			}
+			TargetsGenerator_ChosenSide & Enemy(PlayerIdentifier player) { return SideOnly(player.Opposite()); }
 
 		private:
 			TargetsGenerator_ChosenSide & SideOnly(PlayerIdentifier player)
