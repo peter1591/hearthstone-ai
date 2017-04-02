@@ -17,6 +17,7 @@ namespace Cards
 	};
 
 	template <
+		typename T,
 		typename Enchant1 = NullEnchant,
 		typename Enchant2 = NullEnchant,
 		typename Enchant3 = NullEnchant,

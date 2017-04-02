@@ -16,7 +16,7 @@ namespace Cards
 
 	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042, Taunt> {};
 
-	struct Card_EX1_508o : public Enchantment<Attack<1>> {
+	struct Card_EX1_508o : public Enchantment<Card_EX1_508o, Attack<1>> {
 		static constexpr FlowControl::enchantment::EnchantmentTiers tier = FlowControl::enchantment::kEnchantmentTier2;
 		static constexpr int id = Cards::ID_EX1_508o;
 	};
@@ -79,7 +79,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125, Taunt> {};
-	struct Card_CS2_122e : public Enchantment<Attack<1>> {
+	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_CS2_122e;
 	};
@@ -103,7 +103,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_019e : public Enchantment<MaxHP<1>, Attack<1>> {
+	struct Card_EX1_019e : public Enchantment<Card_EX1_019e, MaxHP<1>, Attack<1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_019e;
 	};
@@ -146,7 +146,7 @@ namespace Cards
 	};
 
 	template <int Arg1>
-	struct Card_CS2_226e : public Enchantment<MaxHP<Arg1>,Attack<Arg1>> {
+	struct Card_CS2_226e : public Enchantment<Card_CS2_226e<Arg1>, MaxHP<Arg1>,Attack<Arg1>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_CS2_226e;
 	};
@@ -183,7 +183,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_399e : public Enchantment<Attack<3>> {
+	struct Card_EX1_399e : public Enchantment<Card_EX1_399e, Attack<3>> {
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr int id = Cards::ID_EX1_399e;
 	};
@@ -219,7 +219,7 @@ namespace Cards
 	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162, Taunt> {};
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
 
-	struct Card_CS2_222o : public Enchantment<Attack<1>, MaxHP<1>> {
+	struct Card_CS2_222o : public Enchantment<Card_CS2_222o, Attack<1>, MaxHP<1>> {
 		static constexpr FlowControl::enchantment::EnchantmentTiers tier = FlowControl::enchantment::kEnchantmentTier2;
 		static constexpr int id = Cards::ID_CS2_222o;
 	};
