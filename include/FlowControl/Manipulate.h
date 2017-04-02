@@ -46,7 +46,6 @@ namespace FlowControl
 	public: // bridge to state::State
 		state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
 		state::aura::Manager & Aura() { return state_.GetAuraManager(); }
-		state::aura::Manager & FlagAura() { return state_.GetFlagAuraManager(); }
 
 	public:
 		state::CardRef GetRandomTarget(state::targetor::Targets const& target_info);

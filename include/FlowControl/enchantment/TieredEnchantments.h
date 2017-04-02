@@ -9,7 +9,7 @@ namespace FlowControl
 		enum EnchantmentTiers
 		{
 			kEnchantmentTier1,
-			kEnchantmentTier2,
+			kEnchantmentTier2, // attack/health auras
 			kEnchantmentTier3
 		};
 
