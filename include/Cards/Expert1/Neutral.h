@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Ancient Watcher
+// finished: Bloodmage Thalnos
 
 namespace Cards
 {
@@ -61,7 +61,7 @@ namespace Cards
 
 	struct Card_EX1_029 : public MinionCardBase<Card_EX1_029> {
 		Card_EX1_029() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
 				context.manipulate_.Hero(context.player_.Opposite())
 					.Damage(context.card_ref_, 2);
 			});
@@ -180,6 +180,13 @@ namespace Cards
 	};
 
 	struct Card_EX1_045 : public MinionCardBase<Card_EX1_045, CantAttack> {};
+	struct Card_EX1_012 : public MinionCardBase<Card_EX1_012, SpellDamage<1>> {
+		Card_EX1_012() {
+			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
 
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
@@ -243,6 +250,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_012)
 REGISTER_CARD(EX1_045)
 REGISTER_CARD(EX1_393)
 REGISTER_CARD(EX1_004)
