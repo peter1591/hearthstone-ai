@@ -113,6 +113,7 @@ namespace Cards
 			return TargetsGenerator(context.player_).Ally(context).Minion().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
 			Manipulate(context).Minion(context.GetTarget()).Enchant().Add<Card_EX1_019e>();
 		}
 	};

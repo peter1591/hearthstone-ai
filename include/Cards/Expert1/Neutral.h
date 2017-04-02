@@ -13,6 +13,7 @@ namespace Cards
 			return Targets(context.player_).Minion().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
 			Manipulate(context).Card(context.GetTarget()).Enchant().Add<Card_CS2_188_Enchant>();
 		}
 	};
@@ -174,6 +175,7 @@ namespace Cards
 			return Targets(context.player_).Minion().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
 			return Manipulate(context).Minion(context.GetTarget()).Silence();
 		}
 	};
@@ -219,6 +221,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_169)
 REGISTER_CARD(EX1_010)
 REGISTER_CARD(CS2_146)
 REGISTER_CARD(EX1_405)
