@@ -227,7 +227,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_162o : public Enchantment<Card_EX1_162o, Attack<1>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier2;
 	};
 	struct Card_EX1_162 : public MinionCardBase<Card_EX1_162> {
 		Card_EX1_162() {
