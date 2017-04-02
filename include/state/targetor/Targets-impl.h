@@ -30,6 +30,13 @@ namespace state {
 			});
 		}
 
+		inline bool Targets::CheckStealth(state::Cards::Card const & target) const
+		{
+			if (!target.HasStealth()) return true;
+			if (target.GetPlayerIdentifier() == targeting_side) return true; // owner can still target stealth minions
+			return false;
+		}
+
 		template <typename Functor>
 		inline void Targets::Process(FlowControl::Manipulate & manipulate, Functor&& functor) const {
 			if (include_first) ProcessPlayerTargets(manipulate, manipulate.Board().FirstPlayer(), std::forward<Functor>(functor));
@@ -63,11 +70,10 @@ namespace state {
 				if (card.GetHP() <= 0) return;
 				break;
 			case kMinionFilterTargetable:
-				// TODO: check stealth
-				// check owning player; stealth cannot be targeted by enemy
+				if (!CheckStealth(card)) return;
 				break;
 			case kMinionFilterTargetableBySpell:
-				// TODO: check stealh
+				if (!CheckStealth(card)) return;
 				// TODO: check immune spell
 				break;
 			case kMinionFilterMurloc:

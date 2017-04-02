@@ -48,7 +48,7 @@ namespace state {
 			template <typename Functor>
 			void ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const;
 
-			//bool StealthTargetable(state::Cards::Card const& target, ) // TODO
+			bool CheckStealth(state::Cards::Card const& target) const;
 
 		public:
 			state::PlayerIdentifier targeting_side; // used to determine if a stealth minion can be targeted
