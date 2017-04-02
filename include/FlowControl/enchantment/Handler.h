@@ -11,7 +11,19 @@ namespace FlowControl
 		{
 		public:
 			state::Cards::EnchantableStates const& GetOriginalStates() const { return origin_states; }
+
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
+			void Silence() {
+				// Remove all enchantments, including the aura enchantments coming from other minions.
+				// Those aura enchantments will be added back in the next AuraUpdate()
+				Clear();
+
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 9, "field changed");
+				origin_states.charge = false;
+				origin_states.stealth = false;
+				origin_states.windfury = false;
+				origin_states.spell_damage = 0;
+			}
 
 		public:
 			template <typename EnchantmentType> auto PushBackNormalEnchantment(state::State const& state) {

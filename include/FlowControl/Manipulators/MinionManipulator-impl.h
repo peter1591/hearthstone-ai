@@ -15,10 +15,13 @@ namespace FlowControl
 
 			// Remove all enchantments, including the aura enchantments coming from other minions.
 			// Those aura enchantments will be added back in the next AuraUpdate()
-			GetCard().GetMutableEnchantmentHandler().Clear();
+			GetCard().GetMutableEnchantmentHandler().Silence();
 
 			// Remove all deathrattles
 			GetCard().GetMutableDeathrattleHandler().Clear();
+
+			GetCard().SetTaunt(false);
+			GetCard().SetShield(false);
 
 			GetCard().SetSilenced(state_.GetPlayOrder());
 		}
