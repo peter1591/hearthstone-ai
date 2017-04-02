@@ -26,7 +26,7 @@ namespace Cards
 	struct Enchantment: public EnchantmentCardBase
 	{
 		Enchantment() {
-			apply_functor = [](auto& stats) {
+			apply_functor = [](state::Cards::EnchantableStates & stats) {
 				Enchant1::Apply(stats);
 				Enchant2::Apply(stats);
 				Enchant3::Apply(stats);
