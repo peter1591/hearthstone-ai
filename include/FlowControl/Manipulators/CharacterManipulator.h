@@ -25,11 +25,6 @@ namespace FlowControl
 			void Shield(bool v) { GetCard().SetShield(v); }
 			void Charge(bool v) { GetCard().SetCharge(v); }
 			void Stealth(bool v) { GetCard().SetStealth(v); }
-
-			void AfterAttack()
-			{
-				GetCard().IncreaseNumAttacksThisTurn();
-			}
 		};
 	}
 }

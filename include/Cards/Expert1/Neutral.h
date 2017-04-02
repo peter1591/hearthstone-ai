@@ -143,6 +143,7 @@ namespace Cards
 	*/
 
 	struct Card_EX1_010 : public MinionCardBase<Card_EX1_010, Stealth> {};
+	struct Card_CS2_169 : public MinionCardBase<Card_CS2_169, Windfury> {};
 
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {

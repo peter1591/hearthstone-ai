@@ -124,6 +124,9 @@ namespace state
 			void SetStealth(bool v) { data_.enchanted_states.stealth = v; }
 			bool HasStealth() const { return data_.enchanted_states.stealth; }
 
+			void SetWindfury(bool v) { data_.enchanted_states.windfury = v; }
+			bool HasWindfury() const { return data_.enchanted_states.windfury; }
+
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
 

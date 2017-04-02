@@ -298,7 +298,7 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).Character(defender).Damage(defender, GetAttackValue(attacker));
 		Manipulate(state_, flow_context_).Character(attacker).Damage(attacker, GetAttackValue(defender));
 
-		Manipulate(state_, flow_context_).Character(attacker).AfterAttack();
+		state_.GetMutableCard(attacker).IncreaseNumAttacksThisTurn();
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
 		state_.TriggerCategorizedEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
@@ -324,7 +324,11 @@ namespace FlowControl
 			if (card.HasCharge() == false && card.GetRawData().just_played) return false;
 		}
 
-		if (card.GetRawData().num_attacks_this_turn >= 1) return false; // TODO: windfury, etc. An attribute 'max_attacks'?
+		int max_attacks_this_turn = 1;
+		if (card.HasWindfury()) max_attacks_this_turn = 2;
+		// TODO: super windfury
+
+		if (card.GetRawData().num_attacks_this_turn >= max_attacks_this_turn) return false;
 
 		return true;
 	}

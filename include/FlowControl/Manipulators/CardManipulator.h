@@ -27,6 +27,8 @@ namespace FlowControl
 			void Attack(int new_attack) { GetCard().SetAttack(new_attack); }
 			void MaxHP(int new_max_hp) { GetCard().SetMaxHP(new_max_hp); }
 
+			void Windfury(bool v) { GetCard().SetWindfury(v); }
+
 			void SpellDamage(int v) { GetCard().SetSpellDamage(v); }
 
 			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(state_, card_ref_); }

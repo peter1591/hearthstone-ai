@@ -59,30 +59,34 @@ namespace FlowControl
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 8, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 9, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
-			auto card_manipulator = Manipulators::CardManipulator(state, flow_context, card_ref);
+			auto character_manipulator = Manipulators::CharacterManipulator(state, flow_context, card_ref);
 
 			if (new_states.attack != current_states.attack) {
-				card_manipulator.Attack(new_states.attack);
+				character_manipulator.Attack(new_states.attack);
 				assert(GetCard().GetAttack() == new_states.attack);
 			}
 			if (new_states.max_hp != current_states.max_hp) {
-				card_manipulator.MaxHP(new_states.max_hp);
+				character_manipulator.MaxHP(new_states.max_hp);
 				assert(GetCard().GetMaxHP() == new_states.max_hp);
 			}
 			if (new_states.spell_damage != current_states.spell_damage) {
-				card_manipulator.SpellDamage(new_states.spell_damage);
+				character_manipulator.SpellDamage(new_states.spell_damage);
 				assert(GetCard().GetSpellDamage() == new_states.spell_damage);
+			}
+			if (new_states.windfury != current_states.windfury) {
+				character_manipulator.Windfury(new_states.windfury);
+				assert(GetCard().HasWindfury() == new_states.windfury);
 			}
 		}
 
 		inline void Handler::UpdateMinion(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 8, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 9, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -127,13 +131,13 @@ namespace FlowControl
 
 		inline void Handler::UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 8, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 9, "enchantable fields changed");
 			UpdateCharacter(state, flow_context, card_ref, new_states);
 		}
 
 		inline void Handler::UpdateWeapon(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 8, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 9, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
