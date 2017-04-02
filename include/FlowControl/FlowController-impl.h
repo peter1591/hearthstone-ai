@@ -79,7 +79,7 @@ namespace FlowControl
 		state_.IncreasePlayOrder();
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, card_ref)) return false;
+		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) return false;
 
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
 
@@ -174,7 +174,7 @@ namespace FlowControl
 
 		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		state::CardRef new_card_ref;
-		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		if (!new_card_ref.IsValid()) {
 			// no transformation
 			new_card_ref = card_ref;
@@ -206,7 +206,7 @@ namespace FlowControl
 		state::CardRef new_card_ref;
 
 		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // weapon cannot transformed
 
 		return true;
@@ -216,7 +216,7 @@ namespace FlowControl
 	{
 		state::CardRef new_card_ref;
 
-		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // hero power cannot transformed
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
@@ -229,7 +229,7 @@ namespace FlowControl
 	{
 		state::CardRef new_card_ref;
 
-		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // spell cannot be transformed
 
 		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
@@ -247,7 +247,7 @@ namespace FlowControl
 
 		if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) return SetResult(FlowControl::kResultInvalid);
 
-		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // secret cannot be transformed
 
 		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
@@ -293,7 +293,7 @@ namespace FlowControl
 
 		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
 			attacker, state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), defender });
-		// TODO: attacker lose stealth
+		Manipulate(state_, flow_context_).Character(attacker).Stealth(false);
 
 		Manipulate(state_, flow_context_).Character(defender).Damage(defender, GetAttackValue(attacker));
 		Manipulate(state_, flow_context_).Character(attacker).Damage(attacker, GetAttackValue(defender));

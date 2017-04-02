@@ -21,6 +21,7 @@ namespace Cards {
 			card_data.shielded = true;
 		}
 	};
+
 	struct Charge {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.charge = true;
@@ -29,6 +30,16 @@ namespace Cards {
 			stats.charge = true;
 		}
 	};
+
+	struct Stealth {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.enchanted_states.stealth = true;
+		}
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.stealth = true;
+		}
+	};
+
 	template <int v> struct SpellDamage {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.spell_damage = v;

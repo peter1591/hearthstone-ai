@@ -14,7 +14,8 @@ namespace state {
 		class Targets
 		{
 		public:
-			Targets() :
+			Targets(state::PlayerIdentifier targeting_side) :
+				targeting_side(targeting_side),
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
 				minion_filter(kMinionFilterAll)
@@ -22,7 +23,7 @@ namespace state {
 			}
 
 			static Targets None() {
-				Targets ret;
+				Targets ret(state::PlayerIdentifier::First()); // side is not important
 				ret.include_first = false;
 				ret.include_second = false;
 				return ret;
@@ -47,7 +48,11 @@ namespace state {
 			template <typename Functor>
 			void ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const;
 
+			//bool StealthTargetable(state::Cards::Card const& target, ) // TODO
+
 		public:
+			state::PlayerIdentifier targeting_side; // used to determine if a stealth minion can be targeted
+
 			bool include_first;
 			bool include_second;
 

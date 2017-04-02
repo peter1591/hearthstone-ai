@@ -11,6 +11,8 @@ namespace state {
 		class TargetsGenerator_Leaf
 		{
 		public:
+			TargetsGenerator_Leaf(state::PlayerIdentifier targeting_player) : info_(targeting_player) {}
+
 			Targets const& GetInfo() const { return info_; }
 
 		protected:
@@ -20,6 +22,10 @@ namespace state {
 		class TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter : public TargetsGenerator_Leaf
 		{
 		public: // Fluent-like API to set up
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(state::PlayerIdentifier targeting_player) :
+				TargetsGenerator_Leaf(targeting_player)
+			{}
+
 			TargetsGenerator_Leaf & Exclude(CardRef ref)
 			{
 				assert(info_.exclude.IsValid() == false); // only support one exclusion
@@ -31,6 +37,10 @@ namespace state {
 		class TargetsGenerator_ChosenSide_ChosenHeroMinion : public TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter
 		{
 		public: // Fluent-like API to set up
+			TargetsGenerator_ChosenSide_ChosenHeroMinion(state::PlayerIdentifier targeting_player) :
+				TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(targeting_player)
+			{}
+
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Targetable()
 			{
 				info_.minion_filter = Targets::kMinionFilterTargetable;
@@ -59,6 +69,8 @@ namespace state {
 		class TargetsGenerator_ChosenSide : public TargetsGenerator_ChosenSide_ChosenHeroMinion
 		{
 		public: // Fluent-like API to set up
+			TargetsGenerator_ChosenSide(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenSide_ChosenHeroMinion(targeting_player) {}
+
 			TargetsGenerator_ChosenSide_ChosenHeroMinion & Minion()
 			{
 				assert(info_.include_minion == true);
@@ -77,6 +89,8 @@ namespace state {
 		class TargetsGenerator : public TargetsGenerator_ChosenSide
 		{
 		public: // Fluent-like API to set up
+			TargetsGenerator(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenSide(targeting_player) {}
+
 			template <typename Context>
 			TargetsGenerator_ChosenSide & Ally(Context&& context)
 			{

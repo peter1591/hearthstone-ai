@@ -63,7 +63,9 @@ namespace Cards
 			return DamageHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}
 
-		static state::targetor::TargetsGenerator Targets() { return state::targetor::TargetsGenerator(); }
+		static state::targetor::TargetsGenerator Targets(state::PlayerIdentifier targeting_player) {
+			return state::targetor::TargetsGenerator(targeting_player);
+		}
 
 		template <typename Context>
 		static state::PlayerIdentifier OwnedPlayer(Context&& context)

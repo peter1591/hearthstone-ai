@@ -11,21 +11,21 @@ namespace FlowControl
 {
 	namespace onplay
 	{
-		inline bool Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::CardRef card_ref) const
+		inline bool Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const
 		{
 			if (!specified_target_getter) return true;
 
 			bool allow_no_target = true;
 			state::targetor::Targets targets = (*specified_target_getter)(
-				context::GetSpecifiedTarget{ Manipulate(state, flow_context), card_ref, &allow_no_target });
+				context::GetSpecifiedTarget{ Manipulate(state, flow_context), player, card_ref, &allow_no_target });
 
 			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, allow_no_target);
 		}
 
-		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::CardRef * new_card_ref) const
+		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const
 		{
 			if (!onplay) return;
-			(*onplay)({ Manipulate(state, flow_context), card_ref, new_card_ref });
+			(*onplay)({ Manipulate(state, flow_context), player, card_ref, new_card_ref });
 		}
 	}
 }

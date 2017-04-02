@@ -6,7 +6,7 @@ namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator().Targetable();
+			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.Character(context.GetTarget())
@@ -21,9 +21,9 @@ namespace Cards
 		static constexpr int id = Cards::ID_EX1_508o;
 	};
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
-		template <typename Context>
-		static auto GetAuraTargets(Context&& context) {
-			TargetsGenerator()
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			TargetsGenerator(player)
 				.Ally(context).Minion().Murlocs() // friendly murlocs only
 				.Exclude(context.card_ref_) // only apply on other murlocs
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
@@ -37,7 +37,7 @@ namespace Cards
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator().Targetable();
+			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.Character(context.GetTarget()).Heal(
@@ -71,7 +71,7 @@ namespace Cards
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator().Targetable();
+			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 1);
@@ -85,9 +85,9 @@ namespace Cards
 	};
 
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
-		template <typename Context>
-		static auto GetAuraTargets(Context&& context) {
-			return TargetsGenerator()
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			TargetsGenerator(player)
 				.Ally(context).Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
@@ -110,7 +110,7 @@ namespace Cards
 
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator().Ally(context).Minion().Targetable();
+			return TargetsGenerator(context.player_).Ally(context).Minion().Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			Manipulate(context).Minion(context.GetTarget()).Enchant().Add<Card_EX1_019e>();
@@ -137,7 +137,7 @@ namespace Cards
 	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187, Taunt> {};
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		static void Battlecry(Contexts::OnPlay context) {
-			ForEach(context, Targets().Ally(context).Exclude(context.card_ref_),
+			ForEach(context, Targets(context.player_).Ally(context).Exclude(context.card_ref_),
 				[context](FlowControl::Manipulate manipulate, state::CardRef ref) {
 				manipulate.Character(ref).Heal(context.card_ref_, 2);
 			});
@@ -152,7 +152,7 @@ namespace Cards
 	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
 		static void Battlecry(Contexts::OnPlay context) {
 			int count = 0;
-			Targets().Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
+			Targets(context.player_).Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
 				.Count(context.manipulate_, &count);
 
 			switch (count) {
@@ -207,7 +207,7 @@ namespace Cards
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator().Targetable();
+			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 2);
@@ -223,9 +223,9 @@ namespace Cards
 		static constexpr int id = Cards::ID_CS2_222o;
 	};
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
-		template <typename Context>
-		static auto GetAuraTargets(Context&& context) {
-			return TargetsGenerator()
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			TargetsGenerator(player)
 				.Ally(context).Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);

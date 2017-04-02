@@ -121,6 +121,9 @@ namespace state
 			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
 			bool HasCharge() const { return data_.enchanted_states.charge; }
 
+			void SetStealth(bool v) { data_.enchanted_states.stealth = v; }
+			bool HasStealth() const { return data_.enchanted_states.stealth; }
+
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
 

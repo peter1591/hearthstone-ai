@@ -9,7 +9,7 @@ namespace Cards
 		Card_EX1_360() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
 				*context.allow_no_target = false;
-				return TargetsGenerator().Minion().GetInfo();
+				return TargetsGenerator(context.player_).Minion().GetInfo();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();

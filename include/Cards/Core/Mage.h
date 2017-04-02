@@ -5,7 +5,7 @@ namespace Cards
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				return TargetsGenerator().SpellTargetable().GetInfo();
+				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
@@ -23,7 +23,7 @@ namespace Cards
 					.Board()
 					.CalculateFinalDamageAmount(context.card_ref_, 3, &damage);
 
-				Targets targets = TargetsGenerator().Enemy(context).NotMortallyWounded().GetInfo();
+				Targets targets = TargetsGenerator(context.player_).Enemy(context).NotMortallyWounded().GetInfo();
 				for (int i = 0; i < damage; ++i) {
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());

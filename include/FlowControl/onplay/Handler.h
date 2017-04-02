@@ -18,8 +18,8 @@ namespace FlowControl
 			void SetSpecifyTargetCallback(SpecifiedTargetGetter* callback) { specified_target_getter = callback; }
 
 		public:
-			bool PrepareTarget(state::State & state, FlowContext & flow_context, state::CardRef card_ref) const;
-			void OnPlay(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::CardRef * new_card_ref) const;
+			bool PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const;
+			void OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const;
 
 		private:
 			SpecifiedTargetGetter *specified_target_getter;

@@ -19,6 +19,7 @@ namespace FlowControl
 		{
 			struct GetSpecifiedTarget {
 				Manipulate & manipulate_;
+				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 				bool * allow_no_target; // default: allow
 			};
@@ -26,6 +27,7 @@ namespace FlowControl
 			struct OnPlay
 			{
 				Manipulate & manipulate_;
+				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 				state::CardRef * new_card_ref;
 
