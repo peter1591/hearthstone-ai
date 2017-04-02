@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Southsea deckhand
+// finished: Amani Berserker
 
 namespace Cards
 {
@@ -166,6 +166,19 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_393_Enchant : public Enchantment<Attack<3>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_393 : public MinionCardBase<Card_EX1_393> {
+		template <typename Context>
+		static auto GetEnrageTargets(Context&& context) {
+			context.new_targets.insert(context.card_ref_);
+		}
+		Card_EX1_393() {
+			Enrage<Card_EX1_393_Enchant>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -226,20 +239,8 @@ namespace Cards
 			*context.new_card_ref = new_ref;
 		}
 	};
-
-	struct Card_EX1_393_Enchant : public Enchantment<Attack<3>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-	};
-	struct Card_EX1_393 : public MinionCardBase<Card_EX1_393> {
-		template <typename Context>
-		static auto GetEnrageTargets(Context&& context) {
-			context.new_targets.insert(context.card_ref_);
-		}
-		Card_EX1_393() {
-			Enrage<Card_EX1_393_Enchant>();
-		}
-	};
 }
+REGISTER_CARD(EX1_393)
 REGISTER_CARD(EX1_004)
 REGISTER_CARD(CS2_169)
 REGISTER_CARD(EX1_010)
@@ -258,7 +259,6 @@ REGISTER_CARD(EX1_390)
 REGISTER_CARD(CS2_188)
 REGISTER_CARD(CS2_203)
 
-REGISTER_CARD(EX1_393)
 REGISTER_CARD(EX1_089)
 REGISTER_CARD(NEW1_038)
 REGISTER_CARD(EX1_020)
