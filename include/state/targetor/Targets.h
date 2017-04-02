@@ -21,6 +21,14 @@ namespace state {
 			{
 			}
 
+			static Targets None() {
+				Targets ret;
+				ret.include_first = false;
+				ret.include_second = false;
+				return ret;
+			}
+
+		public:
 			void Fill(FlowControl::Manipulate & manipulate, std::vector<CardRef>& targets) const;
 			void Fill(FlowControl::Manipulate & manipulate, std::unordered_set<CardRef>& targets) const;
 

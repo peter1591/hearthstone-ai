@@ -21,14 +21,14 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				flag_aura::Handler const& aura_handler_;
+				flag_aura::Handler const& aura_handler_; // TODO: this might be invalidated if flag_aura's container got expanded. Unless we can ensure the callback will not added a new entry to flag-aura manager
 			};
 
 			struct AuraApplyRemove
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				flag_aura::Handler & handler_;
+				flag_aura::Handler & handler_; // TODO: this might be invalidated if flag_aura's container got expanded. Unless we can ensure the callback will not added a new entry to flag-aura manager
 			};
 			
 			typedef AuraApplyRemove AuraApply;

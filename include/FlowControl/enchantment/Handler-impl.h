@@ -59,7 +59,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 6, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 7, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
@@ -82,7 +82,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateMinion(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 6, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 7, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -114,18 +114,22 @@ namespace FlowControl
 				assert(GetCard().GetCost() == new_states.cost);
 			}
 
+			if (new_states.charge != current_states.charge) {
+				manipulator.Charge(new_states.charge);
+			}
+
 			assert(GetCard().GetRawData().enchanted_states == new_states);
 		}
 
 		inline void Handler::UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 6, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 7, "enchantable fields changed");
 			UpdateCharacter(state, flow_context, card_ref, new_states);
 		}
 
 		inline void Handler::UpdateWeapon(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 6, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 7, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 

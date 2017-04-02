@@ -118,8 +118,8 @@ namespace state
 			void SetShield(bool v) { data_.shielded = v; }
 			bool hasShield() const { return data_.shielded; }
 
-			void SetCharge(bool v) { data_.charge = v; }
-			bool HasCharge() const { return data_.charge; }
+			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
+			bool HasCharge() const { return data_.enchanted_states.charge; }
 
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }

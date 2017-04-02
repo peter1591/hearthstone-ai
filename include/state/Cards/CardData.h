@@ -22,7 +22,7 @@ namespace state
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				pending_destroy(false), used_this_turn(0), usable(true), armor(0),
-				taunt(false), shielded(false), charge(false), silenced_at_play_order(-1)
+				taunt(false), shielded(false), silenced_at_play_order(-1)
 			{
 			}
 
@@ -51,7 +51,6 @@ namespace state
 		public: // for minions
 			bool taunt;
 			bool shielded;
-			bool charge;
 
 			int silenced_at_play_order; // -1 if not silenced
 

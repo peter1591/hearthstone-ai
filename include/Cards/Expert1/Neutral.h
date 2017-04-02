@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Secret keeper
+// finished: Southsea deckhand
 
 namespace Cards
 {
@@ -113,6 +113,35 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_405 : public MinionCardBase<Card_EX1_405, Taunt> {};
+
+	struct Card_CS2_146o : public Enchantment<Charge> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_CS2_146 : public MinionCardBase<Card_CS2_146> {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier owner_player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			if (!context.manipulate_.Board().Player(owner_player).GetWeaponRef().IsValid()) return;
+			context.new_targets.insert(context.card_ref_);
+		}
+		Card_CS2_146() {
+			Aura<Card_CS2_146o, EmitWhenAlive, UpdateAlways>();
+		}
+	};
+
+	/* charge should be applied as an enchantment
+	struct Card_CS2_146 : public MinionCardBase<Card_CS2_146> {
+		static void FlagAuraApply(FlowControl::Manipulate & manipulate, state::CardRef target) {
+			manipulate.Minion(target).Charge(true);
+		}
+		static void FlagAuraRemove(FlowControl::Manipulate & manipulate, state::CardRef target) {
+		}
+		Card_CS2_146() {
+			OwnerCardFlagAura<AliveWhenInPlay>();
+		}
+	};
+	*/
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -187,6 +216,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_146)
+REGISTER_CARD(EX1_405)
 REGISTER_CARD(EX1_080)
 REGISTER_CARD(EX1_509)
 REGISTER_CARD(EX1_001)

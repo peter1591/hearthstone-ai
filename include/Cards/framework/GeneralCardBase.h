@@ -18,6 +18,8 @@ namespace Cards
 
 		template <typename... Types>
 		auto PlayerFlagAura() { return PlayerFlagAuraHelper<T, Types...>(*this); }
+		template <typename... Types>
+		auto OwnerCardFlagAura() { return OwnerCardFlagAuraHelper<T, Types...>(*this); }
 
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }

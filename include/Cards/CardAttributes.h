@@ -3,9 +3,14 @@
 #include "state/State.h"
 
 namespace Cards {
+
 	struct NoAttribute {
 		static void Apply(state::Cards::CardData & card_data) {}
 	};
+	struct NullEnchant {
+		static void Apply(state::Cards::EnchantableStates & stats) {}
+	};
+
 	struct Taunt {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.taunt = true;
@@ -18,7 +23,10 @@ namespace Cards {
 	};
 	struct Charge {
 		static void Apply(state::Cards::CardData & card_data) {
-			card_data.charge = true;
+			card_data.enchanted_states.charge = true;
+		}
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.charge = true;
 		}
 	};
 	template <int v> struct SpellDamage {
@@ -29,6 +37,22 @@ namespace Cards {
 	template <int v> struct Overload {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.overload = v;
+		}
+	};
+
+	template <int v> struct Attack {
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.attack += v;
+		}
+	};
+	template <int v> struct MaxHP {
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.max_hp += v;
+		}
+	};
+	template <int v> struct SetAttack {
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.attack = v;
 		}
 	};
 }

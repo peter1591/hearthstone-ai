@@ -2,6 +2,7 @@
 
 #include "state/targetor/TargetsGenerator.h"
 #include "FlowControl/aura/Handler.h"
+#include "FlowControl/Manipulate.h"
 #include "Cards/MinionCardUtils.h"
 
 namespace Cards
@@ -45,7 +46,6 @@ namespace Cards
 		}
 	};
 
-
 	// flag aura on a specific player
 	template <typename HandleClass>
 	struct OwnerPlayerFlagHandleClassWrapper {
@@ -53,14 +53,14 @@ namespace Cards
 			auto const& player = context.card_.GetPlayerIdentifier();
 			if (context.handler_.applied_player == player) return;
 			FlagAuraRemove(context);
-			context.handler_.applied_player = context.card_.GetPlayerIdentifier();
-			HandleClass::PlayerFlagAuraApply(
+			HandleClass::FlagAuraApply(
 				context.manipulate_.Board().Player(context.handler_.applied_player));
+			context.handler_.applied_player = context.card_.GetPlayerIdentifier();
 		}
 		static void FlagAuraRemove(FlowControl::flag_aura::contexts::AuraRemove context) {
 			auto& player = context.handler_.applied_player;
 			if (!player.IsValid()) return;
-			HandleClass::PlayerFlagAuraRemove(
+			HandleClass::FlagAuraRemove(
 				context.manipulate_.Board().Player(player));
 			player.InValidate();
 		}
@@ -68,4 +68,25 @@ namespace Cards
 
 	template <typename HandleClass, typename... Types>
 	using PlayerFlagAuraHelper = FlagAuraHelper<OwnerPlayerFlagHandleClassWrapper<HandleClass>, Types...>;
+
+	// flag aura on a specific card
+	template <typename HandleClass>
+	struct OwnerCardFlagHandleClassWrapper {
+		static void FlagAuraApply(FlowControl::flag_aura::contexts::AuraApply context) {
+			state::CardRef ref = context.card_ref_;
+			if (context.handler_.applied_ref == ref) return;
+			FlagAuraRemove(context);
+			HandleClass::FlagAuraApply(context.manipulate_, context.card_ref_);
+			context.handler_.applied_ref = context.card_ref_;
+		}
+		static void FlagAuraRemove(FlowControl::flag_aura::contexts::AuraRemove context) {
+			state::CardRef ref = context.handler_.applied_ref;
+			if (!ref.IsValid()) return;
+			HandleClass::FlagAuraRemove(context.manipulate_, ref);
+			context.handler_.applied_ref.Invalidate();
+		}
+	};
+
+	template <typename HandleClass, typename... Types>
+	using OwnerCardFlagAuraHelper = FlagAuraHelper<OwnerCardFlagHandleClassWrapper<HandleClass>, Types...>;
 }

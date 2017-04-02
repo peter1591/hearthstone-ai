@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FlowControl/enchantment/TieredEnchantments.h"
+#include "Cards/CardAttributes.h"
 
 namespace Cards
 {
@@ -13,25 +14,6 @@ namespace Cards
 
 		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
 		bool valid_this_turn;
-	};
-
-	struct NullEnchant {
-		static void Apply(state::Cards::EnchantableStates & stats) {}
-	};
-	template <int v> struct Attack {
-		static void Apply(state::Cards::EnchantableStates & stats) {
-			stats.attack += v;
-		}
-	};
-	template <int v> struct MaxHP {
-		static void Apply(state::Cards::EnchantableStates & stats) {
-			stats.max_hp += v;
-		}
-	};
-	template <int v> struct SetAttack {
-		static void Apply(state::Cards::EnchantableStates & stats) {
-			stats.attack = v;
-		}
 	};
 
 	template <

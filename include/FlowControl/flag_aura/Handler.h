@@ -34,6 +34,7 @@ namespace FlowControl
 
 		public:
 			state::PlayerIdentifier applied_player;
+			state::CardRef applied_ref;
 
 		private:
 			FuncIsValid * is_valid;
