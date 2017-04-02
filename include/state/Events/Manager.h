@@ -104,7 +104,8 @@ private: \
 			ADD_TRIGGER_TYPE(OnHeal);
 
 			ADD_TRIGGER_TYPE(AfterHeroPower);
-			ADD_TRIGGER_TYPE(AfterSpell);
+			ADD_TRIGGER_TYPE(AfterSpellPlayed);
+			ADD_TRIGGER_TYPE(AfterSecretPlayed);
 
 #undef ADD_TRIGGER_TYPE_INTERNAL
 #undef ADD_TRIGGER_TYPE

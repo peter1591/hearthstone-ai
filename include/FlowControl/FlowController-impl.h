@@ -230,13 +230,13 @@ namespace FlowControl
 		state::CardRef new_card_ref;
 
 		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
-		assert(!new_card_ref.IsValid()); // spell cannot transformed
+		assert(!new_card_ref.IsValid()); // spell cannot be transformed
 
 		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
-		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
-			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref });
+		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
+			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), card_ref });
 
 		return true;
 	}
@@ -248,14 +248,15 @@ namespace FlowControl
 		if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) return SetResult(FlowControl::kResultInvalid);
 
 		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, card_ref, &new_card_ref);
-		assert(!new_card_ref.IsValid()); // secret cannot transformed
+		assert(!new_card_ref.IsValid()); // secret cannot be transformed
 
 		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 
-		state_.TriggerEvent<state::Events::EventTypes::AfterSpell>(
-			state::Events::EventTypes::AfterSpell::Context{ Manipulate(state_, flow_context_), card_ref });
-		// TODO: trigger event 'AfterSecret'
+		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
+			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), card_ref });
+		state_.TriggerEvent<state::Events::EventTypes::AfterSecretPlayed>(
+			state::Events::EventTypes::AfterSecretPlayed::Context{ Manipulate(state_, flow_context_), card_ref });
 
 		return true;
 	}

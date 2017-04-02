@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Lightwarden
+// finished: Secret keeper
 
 namespace Cards
 {
@@ -99,6 +99,20 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_080o : public Enchantment<Attack<1>,MaxHP<1>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_080 : public MinionCardBase<Card_EX1_080> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSecretPlayed::Context context) {
+			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_080o>();
+			return true;
+		}
+		Card_EX1_080() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterSecretPlayed>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -173,6 +187,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_080)
 REGISTER_CARD(EX1_509)
 REGISTER_CARD(EX1_001)
 REGISTER_CARD(EX1_029)

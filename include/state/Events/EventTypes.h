@@ -81,7 +81,15 @@ namespace state {
 				using type = bool(*)(Context);
 			};
 
-			struct AfterSpell {
+			struct AfterSpellPlayed {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef const card_ref_;
+				};
+				using type = std::function<bool(Context)>;
+			};
+
+			struct AfterSecretPlayed {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef const card_ref_;
