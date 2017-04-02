@@ -76,18 +76,33 @@ namespace Cards
 		}
 	};
 
+	// for adjacent buff
+	struct AdjacentBuffHandleClass {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
+			assert(card.GetZone() == state::kCardZonePlay);
+			assert(card.GetCardType() == state::kCardTypeMinion);
+			int zone_pos = card.GetZonePosition();
+			auto & minions = context.manipulate_.Board().Player(card.GetPlayerIdentifier()).minions_;
+			assert(minions.Get(zone_pos) == context.card_ref_);
+			if (zone_pos > 0) context.new_targets.insert(minions.Get(zone_pos - 1));
+			if (zone_pos < (minions.Size() - 1)) context.new_targets.insert(minions.Get(zone_pos + 1));
+		}
+	};
+	template <typename HandleClass, typename EnchantmentType>
+	using AdjacentBuffHelper = AuraHelper<AdjacentBuffHandleClass, EnchantmentType, EmitWhenAlive, UpdateWhenMinionChanged>;
+
 
 	// For enrage
 	template <typename HandleClass>
 	struct EnrageWrappedHandleClass {
-		template <typename Context>
-		static auto GetAuraTargets(Context&& context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
 			if (card.GetDamage() == 0) {
 				return; // not enraged, apply to no one
 			}
 			else {
-				HandleClass::GetEnrageTargets(std::forward<Context>(context));
+				HandleClass::GetEnrageTargets(context);
 			}
 		}
 	};

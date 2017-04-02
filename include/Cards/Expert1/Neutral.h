@@ -226,6 +226,15 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_162o : public Enchantment<Card_EX1_162o, Attack<1>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_162 : public MinionCardBase<Card_EX1_162> {
+		Card_EX1_162() {
+			AdjacentBuffAura<Card_EX1_162o>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -288,6 +297,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_162)
 REGISTER_CARD(EX1_059)
 REGISTER_CARD(NEW1_018)
 REGISTER_CARD(EX1_012)
