@@ -121,6 +121,13 @@ namespace Cards
 		}
 	};
 
-	template <typename HandleClass, typename EnchantmentType>
-	using EnrageHelper = AuraHelper<EnrageWrappedHandleClass<HandleClass>, EnchantmentType, EmitWhenAlive, UpdateWhenEnrageChanged>;
+	template <typename OriginEnchantmentType>
+	struct EnrageWrappedEnchantmentType : public OriginEnchantmentType {
+		static constexpr FlowControl::enchantment::EnchantmentTiers aura_tier = 
+			OriginEnchantmentType::normal_tier; // priority of enrage enchantment acts as normal enchantment
+	};
+
+	template <typename HandleClass, typename OriginEnchantmentType>
+	using EnrageHelper = AuraHelper<EnrageWrappedHandleClass<HandleClass>, EnrageWrappedEnchantmentType<OriginEnchantmentType>,
+		EmitWhenAlive, UpdateWhenEnrageChanged>;
 }

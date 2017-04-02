@@ -38,5 +38,9 @@ namespace Cards
 
 			BattlecryProcessor<T>(*this);
 		}
+
+	protected:
+		template <typename... Types>
+		auto AdjacentBuffAura() { return AdjacentBuffHelper<T, Types...>(*this); }
 	};
 }

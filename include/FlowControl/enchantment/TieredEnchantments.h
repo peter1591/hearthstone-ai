@@ -26,7 +26,7 @@ namespace FlowControl
 			template <typename EnchantmentType>
 			typename IdentifierType PushBackAuraEnchantment()
 			{
-				constexpr EnchantmentTiers tier = EnchantmentType::tier;
+				constexpr EnchantmentTiers tier = EnchantmentType::aura_tier;
 				Enchantments::IdentifierType id = GetEnchantments<tier>().PushBackAuraEnchantment<EnchantmentType>();
 				return IdentifierType{ tier, id };
 			}
@@ -34,7 +34,7 @@ namespace FlowControl
 			template <typename EnchantmentType>
 			void PushBackNormalEnchantment(state::State const& state)
 			{
-				GetEnchantments<EnchantmentType::tier>().PushBackNormalEnchantment<EnchantmentType>(state);
+				GetEnchantments<EnchantmentType::normal_tier>().PushBackNormalEnchantment<EnchantmentType>(state);
 			}
 
 			void Remove(IdentifierType id)

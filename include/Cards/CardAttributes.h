@@ -4,10 +4,13 @@
 
 namespace Cards {
 
+	using FlowControl::enchantment::EnchantmentTiers;
+
 	struct NoAttribute {
 		static void Apply(state::Cards::CardData & card_data) {}
 	};
 	struct NullEnchant {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
 		static void Apply(state::Cards::EnchantableStates & stats) {}
 	};
 
@@ -26,6 +29,7 @@ namespace Cards {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.charge = true;
 		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.charge = true;
 		}
@@ -35,6 +39,7 @@ namespace Cards {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.stealth = true;
 		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.stealth = true;
 		}
@@ -44,6 +49,7 @@ namespace Cards {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.windfury = true;
 		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.windfury = true;
 		}
@@ -61,21 +67,25 @@ namespace Cards {
 	};
 
 	template <int v> struct Attack {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier2;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.attack += v;
 		}
 	};
 	template <int v> struct MaxHP {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier2;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.max_hp += v;
 		}
 	};
 	template <int v> struct SetAttack {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier2;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.attack = v;
 		}
 	};
 	template <int v> struct SetMaxHP {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier2;
 		static void Apply(state::Cards::EnchantableStates & stats) {
 			stats.max_hp = v;
 		}

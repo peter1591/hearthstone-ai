@@ -16,10 +16,7 @@ namespace Cards
 
 	struct Card_CS1_042 : public MinionCardBase<Card_CS1_042, Taunt> {};
 
-	struct Card_EX1_508o : public Enchantment<Card_EX1_508o, Attack<1>> {
-		static constexpr FlowControl::enchantment::EnchantmentTiers tier = FlowControl::enchantment::kEnchantmentTier2;
-		static constexpr int id = Cards::ID_EX1_508o;
-	};
+	struct Card_EX1_508o : public Enchantment<Card_EX1_508o, Attack<1>> {};
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
@@ -79,10 +76,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125, Taunt> {};
-	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-		static constexpr int id = Cards::ID_CS2_122e;
-	};
+	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {};
 
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
@@ -103,11 +97,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_019e : public Enchantment<Card_EX1_019e, MaxHP<1>, Attack<1>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-		static constexpr int id = Cards::ID_EX1_019e;
-	};
-
+	struct Card_EX1_019e : public Enchantment<Card_EX1_019e, MaxHP<1>, Attack<1>> {};
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			return TargetsGenerator(context.player_).Ally(context).Minion().Targetable();
@@ -146,10 +136,7 @@ namespace Cards
 	};
 
 	template <int Arg1>
-	struct Card_CS2_226e : public Enchantment<Card_CS2_226e<Arg1>, MaxHP<Arg1>,Attack<Arg1>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-		static constexpr int id = Cards::ID_CS2_226e;
-	};
+	struct Card_CS2_226e : public Enchantment<Card_CS2_226e<Arg1>, MaxHP<Arg1>,Attack<Arg1>> {};
 	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
 		static void Battlecry(Contexts::OnPlay context) {
 			int count = 0;
@@ -183,10 +170,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_399e : public Enchantment<Card_EX1_399e, Attack<3>> {
-		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
-		static constexpr int id = Cards::ID_EX1_399e;
-	};
+	struct Card_EX1_399e : public Enchantment<Card_EX1_399e, Attack<3>> {};
 	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
 		template <typename Context>
 		static bool HandleEvent(state::CardRef self, Context&& context) {
@@ -219,10 +203,7 @@ namespace Cards
 	struct Card_CS2_162 : public MinionCardBase<Card_CS2_162, Taunt> {};
 	struct Card_CS2_213 : public MinionCardBase<Card_CS2_213, Charge> {};
 
-	struct Card_CS2_222o : public Enchantment<Card_CS2_222o, Attack<1>, MaxHP<1>> {
-		static constexpr FlowControl::enchantment::EnchantmentTiers tier = FlowControl::enchantment::kEnchantmentTier2;
-		static constexpr int id = Cards::ID_CS2_222o;
-	};
+	struct Card_CS2_222o : public Enchantment<Card_CS2_222o, Attack<1>, MaxHP<1>> {};
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();

@@ -5,8 +5,6 @@
 
 namespace Cards
 {
-	using FlowControl::enchantment::EnchantmentTiers;
-
 	class EnchantmentCardBase
 	{
 	public:
@@ -26,6 +24,15 @@ namespace Cards
 	>
 		struct Enchantment : public EnchantmentCardBase
 	{
+		static constexpr EnchantmentTiers normal_tier = EnchantmentTiers::kEnchantmentTier1;
+		static constexpr EnchantmentTiers aura_tier = std::max({
+			Enchant1::required_tier,
+			Enchant2::required_tier,
+			Enchant3::required_tier,
+			Enchant4::required_tier,
+			Enchant2::required_tier
+		});
+
 		Enchantment() {
 			apply_functor = [](state::Cards::EnchantableStates & stats) {
 				Enchant1::Apply(stats);
