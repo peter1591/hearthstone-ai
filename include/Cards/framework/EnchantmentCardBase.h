@@ -23,7 +23,7 @@ namespace Cards
 		typename Enchant4 = NullEnchant,
 		typename Enchant5 = NullEnchant
 	>
-	struct Enchantment: public EnchantmentCardBase
+		struct Enchantment : public EnchantmentCardBase
 	{
 		Enchantment() {
 			apply_functor = [](state::Cards::EnchantableStates & stats) {

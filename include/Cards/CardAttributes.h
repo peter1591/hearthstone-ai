@@ -75,6 +75,11 @@ namespace Cards {
 			stats.attack = v;
 		}
 	};
+	template <int v> struct SetMaxHP {
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.max_hp = v;
+		}
+	};
 
 	struct CantAttack {
 		static void Apply(state::Cards::CardData & card_data) {

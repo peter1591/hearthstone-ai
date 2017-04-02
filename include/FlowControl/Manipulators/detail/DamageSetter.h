@@ -12,6 +12,7 @@ namespace FlowControl
 			class DamageSetter
 			{
 				friend class Helpers::DamageHelper;
+				friend class Helpers::EnchantmentHelper;
 				friend class FlowControl::enchantment::Handler;
 
 			public:
@@ -41,6 +42,11 @@ namespace FlowControl
 					int new_damage = old_damage - v;
 					if (new_damage < 0) new_damage = 0;
 					card.GetDamageSetter().Set(new_damage);
+				}
+				void SetAsUndamaged()
+				{
+					state::Cards::Card & card = state_.GetMutableCard(card_ref_);
+					card.GetDamageSetter().Set(0);
 				}
 
 			private:

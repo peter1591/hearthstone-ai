@@ -198,31 +198,31 @@ namespace Cards
 			if (!weapon_ref.IsValid()) return;
 			int weapon_atk = context.manipulate_.GetCard(weapon_ref).GetAttack();
 			if (weapon_atk <= 0) return;
-			switch (weapon_atk) {
-			case 1: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<1>>();
-			case 2: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<2>>();
-			case 3: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<3>>();
-			case 4: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<4>>();
-			case 5: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<5>>();
-			case 6: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<6>>();
-			case 7: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<7>>();
-			case 8: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<8>>();
-			case 9: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<9>>();
-			case 10: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<10>>();
-			case 11: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<11>>();
-			case 12: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<12>>();
-			case 13: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<13>>();
-			case 14: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<14>>();
-			case 15: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<15>>();
-			case 16: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<16>>();
-			case 17: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<17>>();
-			case 18: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<18>>();
-			case 19: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<19>>();
-			case 20: return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<20>>();
-			default:
-				assert(false); // we need more switch-case
-				return context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e<10>>();
-			}
+			context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e>(weapon_atk);
+		}
+	};
+
+	template <int v>
+	struct Card_EX1_059_atk : public Enchantment<SetAttack<v>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	template <int v>
+	struct Card_EX1_059_hp : public Enchantment<SetMaxHP<v>> {
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+	};
+	struct Card_EX1_059 : public MinionCardBase<Card_EX1_059> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets(context.player_).Minion().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			state::Cards::Card const& card = context.manipulate_.GetCard(target);
+			int hp = card.GetHP();
+			int atk = card.GetAttack();
+			context.manipulate_.Minion(target).Enchant().Add<Card_EX1_059_atk>(hp);
+			context.manipulate_.Minion(target).Enchant().Add<Card_EX1_059_hp>(atk);
+			context.manipulate_.Minion(target).Enchant().SetHealthToMaxHP();
 		}
 	};
 
@@ -288,6 +288,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_059)
 REGISTER_CARD(NEW1_018)
 REGISTER_CARD(EX1_012)
 REGISTER_CARD(EX1_045)

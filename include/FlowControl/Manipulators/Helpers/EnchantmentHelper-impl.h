@@ -11,6 +11,9 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
+			inline void EnchantmentHelper::SetHealthToMaxHP() {
+				FlowControl::Manipulate(state_, flow_context_).Card(card_ref_).Internal_SetDamage().SetAsUndamaged();
+			}
 		}
 	}
 }
