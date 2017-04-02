@@ -116,7 +116,9 @@ namespace state
 			bool HasTaunt() const { return data_.taunt; }
 
 			void SetShield(bool v) { data_.shielded = v; }
-			bool hasShield() const { return data_.shielded; }
+			bool HasShield() const { return data_.shielded; }
+
+			void SetCantAttack(bool v) { data_.cant_attack = v; }
 
 			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
 			bool HasCharge() const { return data_.enchanted_states.charge; }

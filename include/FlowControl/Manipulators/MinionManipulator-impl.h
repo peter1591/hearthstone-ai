@@ -22,6 +22,7 @@ namespace FlowControl
 
 			GetCard().SetTaunt(false);
 			GetCard().SetShield(false);
+			GetCard().SetCantAttack(false);
 
 			GetCard().SetSilenced(state_.GetPlayOrder());
 		}

@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Amani Berserker
+// finished: Ancient Watcher
 
 namespace Cards
 {
@@ -179,6 +179,8 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_045 : public MinionCardBase<Card_EX1_045, CantAttack> {};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -240,6 +242,8 @@ namespace Cards
 		}
 	};
 }
+
+REGISTER_CARD(EX1_045)
 REGISTER_CARD(EX1_393)
 REGISTER_CARD(EX1_004)
 REGISTER_CARD(CS2_169)

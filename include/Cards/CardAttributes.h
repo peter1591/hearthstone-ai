@@ -75,4 +75,10 @@ namespace Cards {
 			stats.attack = v;
 		}
 	};
+
+	struct CantAttack {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.cant_attack = true;
+		}
+	};
 }

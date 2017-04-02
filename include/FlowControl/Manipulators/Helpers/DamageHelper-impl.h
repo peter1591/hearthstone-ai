@@ -18,7 +18,7 @@ namespace FlowControl
 				if (!final_target.IsValid()) return;
 
 				if (amount > 0) {
-					if (state_.GetCard(final_target).hasShield()) {
+					if (state_.GetCard(final_target).HasShield()) {
 						Manipulate(state_, flow_context_).Character(final_target).Shield(false);
 						return;
 					}

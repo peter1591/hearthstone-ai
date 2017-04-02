@@ -320,6 +320,8 @@ namespace FlowControl
 	{
 		state::Cards::Card const& card = state_.GetCardsManager().Get(attacker);
 
+		if (card.GetRawData().cant_attack) return false;
+
 		if (card.GetCardType() == state::kCardTypeMinion) {
 			if (card.HasCharge() == false && card.GetRawData().just_played) return false;
 		}
