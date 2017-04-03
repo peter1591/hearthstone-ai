@@ -20,17 +20,13 @@ namespace FlowControl
 				return;
 			}
 
-			state::CardRef card_ref = player.deck_.GetLast();
+			int card_id = player.deck_.GetLast();
+			player.deck_.RemoveLast();
 
-			if (player.hand_.Full()) {
-				state_.GetZoneChanger<state::kCardZoneDeck>(Manipulate(state_, flow_context_), card_ref)
-					.ChangeTo<state::kCardZoneGraveyard>(player_id_);
-			}
-			else {
-				state_.GetZoneChanger<state::kCardZoneDeck>(Manipulate(state_, flow_context_), card_ref)
-					.ChangeTo<state::kCardZoneHand>(player_id_);
-			}
+			AddHandCard(card_id);
 
+			// Note: On-draw effects are only activated through successful card draw.
+			// Overdrawing a card with an on-draw effect (attempting to draw it when the player already has a full hand) will not activate its on-draw effect.
 			// TODO: trigger on-draw event (parameter: card_ref)
 		}
 

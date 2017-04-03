@@ -82,7 +82,9 @@ namespace state {
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneDeck);
-			board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).deck_.ShuffleAdd(card_ref, [&manipulate](auto exclusive_max) {
+			board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).deck_.ShuffleAdd(
+				cards_mgr.Get(card_ref).GetCardId(),
+				[&manipulate](auto exclusive_max) {
 				return manipulate.GetRandom().Get(exclusive_max);
 			});
 		}
@@ -92,7 +94,6 @@ namespace state {
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneDeck);
-			board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).deck_.RemoveLast();
 		}
 
 		template <CardType TargetCardType>

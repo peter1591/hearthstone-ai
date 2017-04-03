@@ -357,7 +357,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 10, 10, 10 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), {});
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	assert(state.GetCardsManager().Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_CS2_189);
 	parameter_getter.next_specified_target_count = 4;
@@ -370,7 +370,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 10, 9, 10 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { {1, 1, 1} });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	AddHandCard(Cards::ID_EX1_508, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::Second());
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -380,7 +380,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 10, 9, 10 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 	assert(state.GetCardsManager().Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_EX1_508);
 
 	if (controller.PlayCard(9) != FlowControl::kResultNotDetermined) assert(false);
@@ -391,7 +391,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 10, 9, 10 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 }, {1, 1, 1} });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	AddHandCard(Cards::ID_CS2_168, state::kCardTypeMinion, flow_context, state, state::PlayerIdentifier::Second());
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -401,7 +401,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 10, 9, 10 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 }, {1, 1, 1} });
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 	assert(state.GetCardsManager().Get(state.GetCurrentPlayer().hand_.Get(9)).GetCardId() == Cards::ID_CS2_168);
 
 	parameter_getter.next_minion_put_location = 1;
@@ -413,7 +413,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 10, 9, 10 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 }, {3, 1, 1}, { 1, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
@@ -424,7 +424,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 12, 11, 12 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 3, 1, 1 }, {1, 1, 1} });
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	if (controller.Attack(state.GetCurrentPlayer().minions_.Get(2), state.GetOppositePlayer().minions_.Get(1)) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -434,7 +434,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 },{ 12, 10, 12 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 1, 1, 1 },{ 2, 1, 1 }});
 	assert(state.GetCurrentPlayer().hand_.Size() == 10);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 2);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 1);
 
 	parameter_getter.next_minion_put_location = 1;
 	if (controller.PlayCard(7) != FlowControl::kResultNotDetermined) assert(false);
@@ -506,6 +506,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 1, 1, 1 },{ 2, 1, 1 } });
 	assert(state.GetCurrentPlayer().hand_.Size() == 9);
 	assert(state.GetCurrentPlayer().GetWeaponRef().IsValid());
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 3);
 
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);

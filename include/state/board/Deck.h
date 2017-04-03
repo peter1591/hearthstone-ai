@@ -18,17 +18,16 @@ namespace state
 
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
-			CardRef GetLast() const { return cards_[size_ - 1]; }
+			int GetLast() const { return cards_[size_ - 1]; }
 			int GetChangeId() const { return change_id_; }
 
-		private:
 			template <typename RandomGenerator>
-			void ShuffleAdd(CardRef card, RandomGenerator&& rand)
+			void ShuffleAdd(int card_id, RandomGenerator&& rand)
 			{
 				assert(size_ < max_size);
 
 				++change_id_;
-				cards_[size_] = card;
+				cards_[size_] = card_id;
 				++size_;
 
 				if (size_ <= 1) return;
@@ -46,7 +45,7 @@ namespace state
 			constexpr static int max_size = 80;
 			int change_id_;
 			int size_;
-			std::array<CardRef, max_size> cards_;
+			std::array<int, max_size> cards_; // key: card id
 		};
 	}
 }
