@@ -266,6 +266,17 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_082 : public MinionCardBase<Card_EX1_082> {
+		static void Battlecry(Contexts::OnPlay context) {
+			for (int i = 0; i < 3; ++i) {
+				state::CardRef target = context.manipulate_.GetRandomTarget(
+					TargetsGenerator(context.player_).Alive().Exclude(context.card_ref_).GetInfo()
+				);
+				context.manipulate_.Character(target).Damage(context.card_ref_, 1);
+			}
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -324,6 +335,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_082)
 REGISTER_CARD(EX1_100)
 REGISTER_CARD(EX1_096)
 REGISTER_CARD(NEW1_019)
