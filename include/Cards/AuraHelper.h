@@ -26,23 +26,13 @@ namespace Cards
 
 	// update policy
 	struct UpdateAlways {
-		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) { return true; }
-		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {}
+		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateAlways;
 	};
 	struct UpdateWhenMinionChanged {
-		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) {
-			if (context.manipulate_.Board().FirstPlayer().minions_.GetChangeId() !=
-				context.aura_handler_.last_updated_change_id_first_player_minions_) return true;
-			if (context.manipulate_.Board().SecondPlayer().minions_.GetChangeId() !=
-				context.aura_handler_.last_updated_change_id_second_player_minions_) return true;
-			return false;
-		}
-		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {
-			context.aura_handler_.last_updated_change_id_first_player_minions_ =
-				context.manipulate_.Board().FirstPlayer().minions_.GetChangeId();
-			context.aura_handler_.last_updated_change_id_second_player_minions_ =
-				context.manipulate_.Board().SecondPlayer().minions_.GetChangeId();
-		}
+		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateWhenMinionChanges;
+	};
+	struct UpdateWhenEnrageChanged {
+		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateWhenEnrageChanges;
 	};
 
 	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy>
@@ -54,16 +44,16 @@ namespace Cards
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				FlowControl::aura::Handler handler;
 
+				handler.SetUpdatePolicy(UpdatePolicy::update_policy);
+
 				assert(!handler.IsCallbackSet_IsValid());
 				handler.SetCallback_IsValid([](auto context) {
 					if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
-					context.need_update_ = UpdatePolicy::NeedUpdate(context);
 					return true;
 				});
 
 				assert(!handler.IsCallbackSet_GetTargets());
 				handler.SetCallback_GetTargets([](auto context) {
-					UpdatePolicy::AfterUpdated(context);
 					HandleClass::GetAuraTargets(context);
 				});
 
@@ -104,20 +94,6 @@ namespace Cards
 			else {
 				HandleClass::GetEnrageTargets(context);
 			}
-		}
-	};
-	struct UpdateWhenEnrageChanged {
-		static bool NeedUpdate(FlowControl::aura::contexts::AuraIsValid context) {
-			if (context.aura_handler_.first_time_update_) return true;
-			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
-			bool now_undamaged = (card.GetDamage() == 0);
-			return (context.aura_handler_.last_updated_undamaged_ != now_undamaged);
-		}
-		static void AfterUpdated(FlowControl::aura::contexts::AuraGetTargets context) {
-			context.aura_handler_.first_time_update_ = false;
-			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
-			bool now_undamaged = (card.GetDamage() == 0);
-			context.aura_handler_.last_updated_undamaged_ = now_undamaged;
 		}
 	};
 

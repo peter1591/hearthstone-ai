@@ -11,6 +11,12 @@ namespace FlowControl
 
 	namespace aura
 	{
+		enum UpdatePolicy {
+			kUpdateAlways,
+			kUpdateWhenMinionChanges,
+			kUpdateWhenEnrageChanges
+		};
+
 		class Handler
 		{
 		public:
@@ -19,6 +25,7 @@ namespace FlowControl
 			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
 
 			Handler() :
+				update_policy(kUpdateAlways),
 				is_valid(nullptr), get_targets(nullptr), apply_on(nullptr),
 				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
@@ -27,6 +34,7 @@ namespace FlowControl
 			{}
 
 		public:
+			void SetUpdatePolicy(UpdatePolicy policy) { update_policy = policy; }
 			void SetCallback_IsValid(FuncIsValid* callback) { is_valid = callback; }
 			void SetCallback_GetTargets(FuncGetTargets* callback) { get_targets = callback; }
 			void SetCallback_ApplyOn(FuncApplyOn* callback) { apply_on = callback; }
@@ -56,6 +64,7 @@ namespace FlowControl
 			bool last_updated_undamaged_;
 
 		private:
+			UpdatePolicy update_policy;
 			FuncIsValid * is_valid;
 			FuncGetTargets * get_targets;
 			FuncApplyOn * apply_on;
