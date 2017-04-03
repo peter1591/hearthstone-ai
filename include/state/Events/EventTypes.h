@@ -84,6 +84,7 @@ namespace state {
 			struct AfterSpellPlayed {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
+					state::PlayerIdentifier player_;
 					state::CardRef const card_ref_;
 				};
 				using type = std::function<bool(Context)>;
@@ -92,6 +93,7 @@ namespace state {
 			struct AfterSecretPlayed {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
+					state::PlayerIdentifier player_;
 					state::CardRef const card_ref_;
 				};
 				using type = std::function<bool(Context)>;

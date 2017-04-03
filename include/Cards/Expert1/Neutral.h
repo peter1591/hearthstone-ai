@@ -277,6 +277,20 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_055o : public EnchantmentForThisTurn<Card_EX1_055o, Attack<2>> {};
+	struct Card_EX1_055 : public MinionCardBase<Card_EX1_055> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.player_) return true;
+			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_055o>();
+			return true;
+		};
+		Card_EX1_055() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterSpellPlayed>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -335,6 +349,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_055)
 REGISTER_CARD(EX1_082)
 REGISTER_CARD(EX1_100)
 REGISTER_CARD(EX1_096)

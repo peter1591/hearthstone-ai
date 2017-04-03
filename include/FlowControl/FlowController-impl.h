@@ -236,7 +236,7 @@ namespace FlowControl
 			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
-			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), card_ref });
+			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
 
 		return true;
 	}
@@ -254,9 +254,9 @@ namespace FlowControl
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
-			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), card_ref });
+			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
 		state_.TriggerEvent<state::Events::EventTypes::AfterSecretPlayed>(
-			state::Events::EventTypes::AfterSecretPlayed::Context{ Manipulate(state_, flow_context_), card_ref });
+			state::Events::EventTypes::AfterSecretPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
 
 		return true;
 	}
