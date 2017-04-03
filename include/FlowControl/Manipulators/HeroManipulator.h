@@ -16,6 +16,7 @@ namespace FlowControl
 			}
 
 			void DrawCard();
+			void AddHandCard(int card_id);
 			void DestroyWeapon();
 
 			void GainArmor(int amount);

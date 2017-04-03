@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FlowControl/Manipulators/HeroManipulator.h"
+#include "Cards/CardDispatcher.h"
 
 namespace FlowControl
 {
@@ -31,6 +32,23 @@ namespace FlowControl
 			}
 
 			// TODO: trigger on-draw event (parameter: card_ref)
+		}
+
+		inline void HeroManipulator::AddHandCard(int card_id)
+		{
+			state::board::Player & player = state_.GetBoard().Get(player_id_);
+			assert(player.GetHeroRef() == card_ref_);
+
+			if (player.hand_.Full()) return;
+
+			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(card_id);
+			raw_card.enchanted_states.player = player_id_;
+			raw_card.zone = state::kCardZoneNewlyCreated;
+			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
+
+			auto ref = state_.AddCard(state::Cards::Card(raw_card));
+			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state_, flow_context_), ref)
+				.ChangeTo<state::kCardZoneHand>(player_id_);
 		}
 		
 		inline void HeroManipulator::DestroyWeapon()

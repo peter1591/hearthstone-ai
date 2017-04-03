@@ -253,6 +253,19 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_100 : public MinionCardBase<Card_EX1_100> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
+			int card_id = context.manipulate_.GetCard(context.card_ref_).GetCardId();
+			state::PlayerIdentifier player = context.manipulate_.Board().GetCurrentPlayerId().Opposite();
+			context.manipulate_.Hero(player).AddHandCard(card_id);
+			return true;
+		};
+		Card_EX1_100() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterSpellPlayed>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -311,6 +324,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_100)
 REGISTER_CARD(EX1_096)
 REGISTER_CARD(NEW1_019)
 REGISTER_CARD(NEW1_023)
