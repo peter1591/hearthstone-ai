@@ -13,7 +13,6 @@ namespace FlowControl
 	{
 		inline bool Handler::Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
 		{
-			assert(is_valid != nullptr);
 			assert(get_targets);
 			assert(apply_on);
 
@@ -101,18 +100,30 @@ namespace FlowControl
 				assert(false);
 			}
 		}
+		
+		inline bool Handler::IsValid(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+		{
+			if (state.GetCard(card_ref).IsSilenced()) return false;
+
+			if (emit_policy == kEmitWhenAlive) {
+				state::Cards::Card const& card = state.GetCard(card_ref);
+				if (card.GetZone() != state::kCardZonePlay) return false;
+				if (card.GetHP() <= 0) return false;
+				return true;
+			}
+			else {
+				assert(false);
+				return false;
+			}
+		}
 
 		inline void Handler::GetNewTargets(
 			state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref,
 			bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets)
 		{
-			if (state.GetCard(card_ref).IsSilenced()) {
-				*aura_valid = false;
-				return;
-			}
-
-			*aura_valid = (*is_valid)({ Manipulate(state, flow_context), card_ref, *this, *need_update });
+			*aura_valid = IsValid(state, flow_context, card_ref);
 			if (!*aura_valid) return;
+
 			*need_update = NeedUpdate(state, flow_context, card_ref);
 
 			if (*need_update) {

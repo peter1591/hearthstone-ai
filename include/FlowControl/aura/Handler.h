@@ -17,6 +17,11 @@ namespace FlowControl
 			kUpdateWhenEnrageChanges
 		};
 
+		enum EmitPolicy {
+			kEmitInvalid,
+			kEmitWhenAlive
+		};
+
 		class Handler
 		{
 		public:
@@ -25,8 +30,8 @@ namespace FlowControl
 			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
 
 			Handler() :
-				update_policy(kUpdateAlways),
-				is_valid(nullptr), get_targets(nullptr), apply_on(nullptr),
+				update_policy(kUpdateAlways), emit_policy(kEmitInvalid),
+				get_targets(nullptr), apply_on(nullptr),
 				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
 				last_updated_change_id_second_player_minions_(-1),
@@ -35,11 +40,10 @@ namespace FlowControl
 
 		public:
 			void SetUpdatePolicy(UpdatePolicy policy) { update_policy = policy; }
-			void SetCallback_IsValid(FuncIsValid* callback) { is_valid = callback; }
+			void SetEmitPolicy(EmitPolicy policy) { emit_policy = policy; }
 			void SetCallback_GetTargets(FuncGetTargets* callback) { get_targets = callback; }
 			void SetCallback_ApplyOn(FuncApplyOn* callback) { apply_on = callback; }
 
-			bool IsCallbackSet_IsValid() const { return is_valid != nullptr; }
 			bool IsCallbackSet_GetTargets() const { return get_targets != nullptr; }
 			bool IsCallbackSet_ApplyOn() const { return apply_on != nullptr; }
 
@@ -56,6 +60,8 @@ namespace FlowControl
 			bool NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
 			void AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
 
+			bool IsValid(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
+
 			void GetNewTargets(
 				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref,
 				bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets);
@@ -68,7 +74,7 @@ namespace FlowControl
 
 		private:
 			UpdatePolicy update_policy;
-			FuncIsValid * is_valid;
+			EmitPolicy emit_policy;
 			FuncGetTargets * get_targets;
 			FuncApplyOn * apply_on;
 

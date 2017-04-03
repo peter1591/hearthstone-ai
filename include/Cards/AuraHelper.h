@@ -10,14 +10,7 @@ namespace Cards
 		static auto& GetRegisterCallback(state::Cards::CardData &card_data) {
 			return card_data.added_to_play_zone;
 		}
-
-		template <typename Context>
-		static bool ShouldEmit(Context&& context, state::CardRef card_ref) {
-			state::Cards::Card const& card = context.manipulate_.Board().GetCard(card_ref);
-			if (card.GetZone() != state::kCardZonePlay) return false;
-			if (card.GetHP() <= 0) return false;
-			return true;
-		}
+		static constexpr FlowControl::aura::EmitPolicy emit_policy = FlowControl::aura::kEmitWhenAlive;
 	};
 
 	struct EmitWhenInHand {
@@ -45,12 +38,7 @@ namespace Cards
 				FlowControl::aura::Handler handler;
 
 				handler.SetUpdatePolicy(UpdatePolicy::update_policy);
-
-				assert(!handler.IsCallbackSet_IsValid());
-				handler.SetCallback_IsValid([](auto context) {
-					if (!EmitPolicy::ShouldEmit(context, context.card_ref_)) return false;
-					return true;
-				});
+				handler.SetEmitPolicy(EmitPolicy::emit_policy);
 
 				assert(!handler.IsCallbackSet_GetTargets());
 				handler.SetCallback_GetTargets([](auto context) {
