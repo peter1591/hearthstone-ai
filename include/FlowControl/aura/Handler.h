@@ -62,10 +62,6 @@ namespace FlowControl
 
 			bool IsValid(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
 
-			void GetNewTargets(
-				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref,
-				bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets);
-
 		public: // field for client code
 			bool first_time_update_;
 			int last_updated_change_id_first_player_minions_;
@@ -73,8 +69,11 @@ namespace FlowControl
 			bool last_updated_undamaged_;
 
 		private:
+			// TODO: update policy and emit policy can be shared with flag aura
+			// TODO: the rest fields are the only difference between 'aura' and 'flag-aura'
 			UpdatePolicy update_policy;
 			EmitPolicy emit_policy;
+
 			FuncGetTargets * get_targets;
 			FuncApplyOn * apply_on;
 
