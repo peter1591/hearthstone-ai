@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Dire Wolf Alpha
+// finished: Loot Hoarder
 
 namespace Cards
 {
@@ -245,6 +245,14 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_096 : public MinionCardBase<Card_EX1_096> {
+		Card_EX1_096() {
+			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -303,6 +311,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_096)
 REGISTER_CARD(NEW1_019)
 REGISTER_CARD(NEW1_023)
 REGISTER_CARD(NEW1_021)
