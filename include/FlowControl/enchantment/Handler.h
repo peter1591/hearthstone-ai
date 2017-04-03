@@ -18,11 +18,8 @@ namespace FlowControl
 				// Those aura enchantments will be added back in the next AuraUpdate()
 				Clear();
 
-				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 9, "field changed");
-				origin_states.charge = false;
-				origin_states.stealth = false;
-				origin_states.windfury = false;
-				origin_states.spell_damage = 0;
+				static_assert(state::Cards::EnchantableStates::kFieldChangeId == 10, "field changed");
+				origin_states.RestoreToSilenceDefault();
 			}
 
 		public:
