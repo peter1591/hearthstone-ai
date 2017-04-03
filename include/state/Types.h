@@ -27,7 +27,6 @@ namespace state
 	{
 		kCardZoneInvalid,
 		kCardZonePlay,
-		kCardZoneDeck,
 		kCardZoneHand,
 		kCardZoneGraveyard,
 		kCardZoneRemoved,

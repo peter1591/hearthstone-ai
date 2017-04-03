@@ -2,6 +2,7 @@
 
 #include <array>
 #include "state/Types.h"
+#include "state/IRandomGenerator.h"
 
 namespace state
 {
@@ -21,8 +22,7 @@ namespace state
 			int GetLast() const { return cards_[size_ - 1]; }
 			int GetChangeId() const { return change_id_; }
 
-			template <typename RandomGenerator>
-			void ShuffleAdd(int card_id, RandomGenerator&& rand)
+			void ShuffleAdd(int card_id, IRandomGenerator & random)
 			{
 				assert(size_ < max_size);
 
@@ -31,7 +31,7 @@ namespace state
 				++size_;
 
 				if (size_ <= 1) return;
-				auto rand_idx = rand(size_);
+				auto rand_idx = random.Get(size_);
 				std::swap(cards_[rand_idx], cards_[size_ - 1]);
 			}
 

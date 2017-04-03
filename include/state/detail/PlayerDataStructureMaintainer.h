@@ -40,14 +40,6 @@ namespace state {
 		};
 
 		template <CardType TargetCardType>
-		struct PlayerDataStructureMaintainer<TargetCardType, kCardZoneDeck>
-		{
-			static constexpr bool SpecifyAddPosition = false;
-			static void Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref);
-			static void Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref);
-		};
-
-		template <CardType TargetCardType>
 		struct PlayerDataStructureMaintainer<TargetCardType, kCardZoneGraveyard>
 		{
 			static constexpr bool SpecifyAddPosition = false;

@@ -68,26 +68,19 @@ static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state,
 	return state::Cards::Card(raw_card);
 }
 
-static state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static void PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
 	((Test2_RandomGenerator&)(flow_context.GetRandom())).next_rand = deck_count;
 	((Test2_RandomGenerator&)(flow_context.GetRandom())).called = false;
 
-	auto ref = state.AddCard(CreateDeckCard(id, state, player));
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state, flow_context), ref)
-		.ChangeTo<state::kCardZoneDeck>(player);
+	state.GetBoard().Get(player).deck_.ShuffleAdd(id, flow_context.GetRandom());
 
 	if (deck_count > 0) assert(((Test2_RandomGenerator&)(flow_context.GetRandom())).called);
 	++deck_count;
 
 	assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
-	assert(state.GetCardsManager().Get(ref).GetCardId() == id);
-	assert(state.GetCardsManager().Get(ref).GetPlayerIdentifier() == player);
-	assert(state.GetCardsManager().Get(ref).GetZone() == state::kCardZoneDeck);
-
-	return ref;
 }
 
 static void MakeDeck(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)

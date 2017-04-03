@@ -77,26 +77,6 @@ namespace state {
 		}
 
 		template <CardType TargetCardType>
-		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneDeck>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
-		{
-			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
-			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneDeck);
-			board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).deck_.ShuffleAdd(
-				cards_mgr.Get(card_ref).GetCardId(),
-				[&manipulate](auto exclusive_max) {
-				return manipulate.GetRandom().Get(exclusive_max);
-			});
-		}
-		template <CardType TargetCardType>
-		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneDeck>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
-		{
-			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
-			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneDeck);
-		}
-
-		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneGraveyard>::
 			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
 		{

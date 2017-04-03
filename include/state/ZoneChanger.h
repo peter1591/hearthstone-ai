@@ -80,8 +80,6 @@ namespace state {
 		{
 			switch (cards_mgr_.Get(card_ref_).GetZone())
 			{
-			case kCardZoneDeck:
-				return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardZoneGraveyard:
 				return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardZoneHand:
@@ -107,8 +105,6 @@ namespace state {
 		{
 			switch (cards_mgr_.Get(card_ref_).GetZone())
 			{
-			case kCardZoneDeck:
-				return ZoneChanger<kCardZoneDeck, ChangingCardType>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardZoneGraveyard:
 				return ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardZoneHand:

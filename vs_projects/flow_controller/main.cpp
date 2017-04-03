@@ -16,8 +16,6 @@ void test_compile()
 	state::State state;
 	FlowControl::Manipulate & manipulate = *(FlowControl::Manipulate*)(nullptr);
 
-	state.GetZoneChanger<state::kCardZoneDeck>(manipulate, *(state::CardRef*)(nullptr))
-		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 	state.GetZoneChanger<state::kCardZoneGraveyard>(manipulate, *(state::CardRef*)(nullptr))
 		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 	state.GetZoneChanger<state::kCardZoneHand>(manipulate, *(state::CardRef*)(nullptr))
