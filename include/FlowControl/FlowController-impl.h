@@ -438,7 +438,8 @@ namespace FlowControl
 	{
 		state_.GetCurrentPlayer().GetResource().TurnStart();
 
-		state_.TriggerEvent<state::Events::EventTypes::OnTurnStart>();
+		state_.TriggerEvent<state::Events::EventTypes::OnTurnStart>(
+			state::Events::EventTypes::OnTurnStart::Context{ Manipulate(state_, flow_context_) });
 
 		for (state::CardRef minion : state_.GetCurrentPlayer().minions_.Get()) {
 			Manipulate(state_, flow_context_).Minion(minion).TurnStart();

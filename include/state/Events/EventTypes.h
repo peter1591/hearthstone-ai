@@ -112,7 +112,10 @@ namespace state {
 				using type = std::function<bool(Context)>;
 			};
 			struct OnTurnStart {
-				using type = bool(*)();
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+				};
+				using type = std::function<bool(Context)>;
 			};
 		}
 	}
