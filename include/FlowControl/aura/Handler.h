@@ -53,6 +53,9 @@ namespace FlowControl
 			}
 
 		private:
+			bool NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
+			void AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
+
 			void GetNewTargets(
 				state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref,
 				bool* aura_valid, bool* need_update, std::unordered_set<state::CardRef>* new_targets);
