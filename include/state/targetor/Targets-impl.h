@@ -73,8 +73,8 @@ namespace state {
 				if (!CheckStealth(card)) return;
 				break;
 			case kMinionFilterTargetableBySpell:
+				if (card.IsImmuneToSpell()) return;
 				if (!CheckStealth(card)) return;
-				// TODO: check immune spell
 				break;
 			case kMinionFilterMurloc:
 				if (card.GetRace() == kCardRaceMurloc) break;

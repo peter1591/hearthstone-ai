@@ -129,6 +129,9 @@ namespace state
 			void SetMaxAttacksPerTurn(int v) { data_.enchanted_states.max_attacks_per_turn = v; }
 			int GetMaxAttacksPerTurn() const { return data_.enchanted_states.max_attacks_per_turn; }
 
+			void SetImmuneToSpell(bool v) { data_.enchanted_states.immune_to_spell = v; }
+			bool IsImmuneToSpell() const { return data_.enchanted_states.immune_to_spell; }
+
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
 

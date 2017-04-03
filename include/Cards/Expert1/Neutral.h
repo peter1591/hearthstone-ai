@@ -217,12 +217,15 @@ namespace Cards
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			return true;
 		};
 		Card_NEW1_021() {
 			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
 				state::Events::EventTypes::OnTurnStart>();
 		}
 	};
+
+	struct Card_NEW1_023 : public MinionCardBase<Card_NEW1_023, ImmuneToSpellAndHeroPower> {};
 
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
@@ -282,6 +285,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_023)
 REGISTER_CARD(NEW1_021)
 REGISTER_CARD(EX1_162)
 REGISTER_CARD(EX1_059)

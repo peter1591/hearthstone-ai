@@ -55,6 +55,16 @@ namespace Cards {
 		}
 	};
 
+	struct ImmuneToSpellAndHeroPower {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.enchanted_states.immune_to_spell = true;
+		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.immune_to_spell = true;
+		}
+	};
+
 	template <int v> struct SpellDamage {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.spell_damage = v;
