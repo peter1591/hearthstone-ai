@@ -79,8 +79,7 @@ namespace FlowControl
 				if (second_dead) return SetResult(kResultFirstPlayerWin);
 
 				// process deaths by order of play
-				std::multimap<int,
-					std::pair<state::CardRef,FlowControl::deathrattle::context::Deathrattle>> ordered_deaths;
+				std::multimap<int, std::function<void()>> ordered_deaths;
 
 				for (auto ref : deaths_) {
 					state::Cards::Card & card = state_.GetMutableCard(ref);
@@ -91,8 +90,11 @@ namespace FlowControl
 					int attack = card.GetAttack();
 
 					ordered_deaths.insert(std::make_pair(card.GetPlayOrder(),
-						std::make_pair(ref,
-							FlowControl::deathrattle::context::Deathrattle{ FlowControl::Manipulate(state_, flow_context_), ref, player, zone, zone_pos, attack })));
+						[ref, player, zone, zone_pos, attack, this]() {
+						state_.GetMutableCard(ref).GetMutableDeathrattleHandler().TriggerAll(
+							FlowControl::deathrattle::context::Deathrattle{
+							FlowControl::Manipulate(state_, flow_context_), ref, player, zone, zone_pos, attack });
+					}));
 				}
 
 				for (auto ref : deaths_) {
@@ -102,8 +104,7 @@ namespace FlowControl
 				}
 
 				for (auto death_item: ordered_deaths) {
-					state_.GetMutableCard(death_item.second.first)
-						.GetMutableDeathrattleHandler().TriggerAll(death_item.second.second);
+					death_item.second();
 				}
 
 				return true;
