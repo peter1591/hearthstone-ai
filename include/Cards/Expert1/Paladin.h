@@ -10,7 +10,7 @@ namespace Cards
 					.Board()
 					.CalculateFinalDamageAmount(context.card_ref_, 8, &damage);
 
-				Targets targets = TargetsGenerator(context.player_).Enemy(context).NotMortallyWounded().GetInfo();
+				Targets targets = TargetsGenerator(context.player_).Enemy(context).Alive().GetInfo();
 				for (int i = 0; i < damage; ++i) {
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());

@@ -23,7 +23,7 @@ namespace Cards
 					.Board()
 					.CalculateFinalDamageAmount(context.card_ref_, 3, &damage);
 
-				Targets targets = TargetsGenerator(context.player_).Enemy(context).NotMortallyWounded().GetInfo();
+				Targets targets = TargetsGenerator(context.player_).Enemy(context).Alive().GetInfo();
 				for (int i = 0; i < damage; ++i) {
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());
@@ -50,8 +50,35 @@ namespace Cards
 			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
 		}
 	};
+
+	struct Card_CS2_032 : SpellCardBase<Card_CS2_032> {
+		Card_CS2_032() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int damage = 4 + context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
+					context.manipulate_.Minion(minion).Damage(context.card_ref_, damage);
+				});
+			});
+		}
+	};
+
+	struct Card_CS2_029 : SpellCardBase<Card_CS2_029> {
+		Card_CS2_029() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.Character(target).Damage(context.card_ref_, 6 + spell_damage);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_029)
+REGISTER_CARD(CS2_032)
 REGISTER_CARD(EX1_294)
 REGISTER_CARD(EX1_277)
 REGISTER_CARD(CS2_034)

@@ -66,8 +66,9 @@ namespace state {
 			switch (minion_filter) {
 			case kMinionFilterAll:
 				break;
-			case kMinionFilterNotMorallyWounded:
+			case kMinionFilterAlive:
 				if (card.GetHP() <= 0) return;
+				if (card.GetRawData().pending_destroy) return;
 				break;
 			case kMinionFilterTargetable:
 				if (!CheckStealth(card)) return;

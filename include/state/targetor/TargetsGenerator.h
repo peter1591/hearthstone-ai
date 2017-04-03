@@ -47,9 +47,9 @@ namespace state {
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & NotMortallyWounded()
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Alive()
 			{
-				info_.minion_filter = Targets::kMinionFilterNotMorallyWounded;
+				info_.minion_filter = Targets::kMinionFilterAlive;
 				return *this;
 			}
 

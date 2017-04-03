@@ -59,10 +59,10 @@ namespace state {
 			bool include_minion;
 			bool include_hero;
 
-			enum MinionFilterType
+			enum MinionFilterType // TODO: rename to CharacterFilterType, or just FilterType. Hero with demon race can still be targeted
 			{
 				kMinionFilterAll,
-				kMinionFilterNotMorallyWounded,
+				kMinionFilterAlive, // mortally wounded, or marked as pending-destroy
 				kMinionFilterTargetable,
 				kMinionFilterTargetableBySpell,
 				kMinionFilterMurloc

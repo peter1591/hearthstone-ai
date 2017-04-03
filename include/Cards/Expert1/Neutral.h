@@ -227,6 +227,24 @@ namespace Cards
 
 	struct Card_NEW1_023 : public MinionCardBase<Card_NEW1_023, ImmuneToSpellAndHeroPower> {};
 
+	struct Card_NEW1_019 : public MinionCardBase<Card_NEW1_019> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
+			if (self == context.card_ref_) return true;
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			state::PlayerIdentifier summoning = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			if (owner != summoning) return true;
+			
+			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy(owner).Alive().GetInfo());
+			if (!target.IsValid()) return true;
+			context.manipulate_.Character(target).Damage(context.card_ref_, 1);
+			return true;
+		};
+		Card_NEW1_019() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterMinionSummoned>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -285,6 +303,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_019)
 REGISTER_CARD(NEW1_023)
 REGISTER_CARD(NEW1_021)
 REGISTER_CARD(EX1_162)
