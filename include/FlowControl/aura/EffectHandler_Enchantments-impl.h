@@ -6,6 +6,14 @@ namespace FlowControl
 {
 	namespace aura
 	{
+		template <typename EnchantmentType>
+		inline EffectHandler_Enchantments& EffectHandler_Enchantments::SetEnchantmentType() {
+			apply_on = [](contexts::AuraApplyOn context) {
+				return context.manipulate_.Card(context.target_).Enchant().AddAuraEnchantment<EnchantmentType>();
+			};
+			return *this;
+		}
+
 		inline void EffectHandler_Enchantments::Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, bool aura_valid)
 		{
 			assert(get_targets);

@@ -13,8 +13,11 @@ namespace FlowControl {
 
 			EffectHandler_Enchantments() : get_targets(nullptr), apply_on(nullptr) {}
 
-			void SetCallback_GetTargets(FuncGetTargets* callback) { get_targets = callback; }
-			void SetCallback_ApplyOn(FuncApplyOn* callback) { apply_on = callback; }
+			EffectHandler_Enchantments& SetGetTargets(FuncGetTargets* callback) { get_targets = callback; return *this; }
+
+			template <typename EnchantmentType> EffectHandler_Enchantments& SetEnchantmentType();
+
+			EffectHandler_Enchantments& SetApplyOn(FuncApplyOn* callback) { apply_on = callback; return *this; }
 
 			bool IsCallbackSet_GetTargets() const { return get_targets != nullptr; }
 			bool IsCallbackSet_ApplyOn() const { return apply_on != nullptr; }

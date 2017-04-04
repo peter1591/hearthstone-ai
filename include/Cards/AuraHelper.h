@@ -35,26 +35,15 @@ namespace Cards
 		AuraHelper(state::Cards::CardData & card_data)
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
-				FlowControl::aura::Handler handler;
-
-				handler.SetUpdatePolicy(UpdatePolicy::update_policy);
-				handler.SetEmitPolicy(EmitPolicy::emit_policy);
-
-				FlowControl::aura::EffectHandler_Enchantments aura_effect;
-
-				assert(!aura_effect.IsCallbackSet_GetTargets());
-				aura_effect.SetCallback_GetTargets([](auto context) {
-					HandleClass::GetAuraTargets(context);
-				});
-
-				assert(!aura_effect.IsCallbackSet_ApplyOn());
-				aura_effect.SetCallback_ApplyOn([](auto context) {
-					return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().AddAuraEnchantment<EnchantmentType>();
-				});
-
-				handler.SetEffect(aura_effect);
-
-				context.manipulate_.Aura().Add(context.card_ref_, std::move(handler));
+				context.manipulate_.Aura().Add(context.card_ref_,
+					FlowControl::aura::Handler()
+					.SetUpdatePolicy(UpdatePolicy::update_policy)
+					.SetEmitPolicy(EmitPolicy::emit_policy)
+					.SetEffect(
+						FlowControl::aura::EffectHandler_Enchantments()
+						.SetGetTargets(HandleClass::GetAuraTargets)
+						.SetEnchantmentType<EnchantmentType>()
+					));
 			};
 		}
 	};

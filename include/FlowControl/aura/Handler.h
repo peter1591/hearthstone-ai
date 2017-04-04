@@ -36,11 +36,11 @@ namespace FlowControl
 			{}
 
 		public:
-			void SetUpdatePolicy(UpdatePolicy policy) { update_policy_ = policy; }
-			void SetEmitPolicy(EmitPolicy policy) { emit_policy_ = policy; }
+			Handler& SetUpdatePolicy(UpdatePolicy policy) { update_policy_ = policy; return *this; }
+			Handler& SetEmitPolicy(EmitPolicy policy) { emit_policy_ = policy; return *this; }
 
 			template <typename EffectType>
-			void SetEffect(EffectType effect) { effect_ = effect; }
+			Handler& SetEffect(EffectType effect) { effect_ = effect; return *this; }
 
 		public:
 			bool NoAppliedEnchantment() const {
