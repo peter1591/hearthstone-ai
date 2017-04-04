@@ -18,10 +18,9 @@ namespace Cards
 
 	struct Card_EX1_009_Enchant : public Enchantment<Card_EX1_009_Enchant, Attack<5>> {};
 	struct Card_EX1_009 : public MinionCardBase<Card_EX1_009, Taunt> {
-		// TODO: single aura target
 		template <typename Context>
-		static auto GetEnrageTargets(Context&& context) {
-			context.new_targets.insert(context.card_ref_);
+		static auto GetEnrageTarget(Context&& context) {
+			context.new_target = context.card_ref_;
 		}
 		Card_EX1_009() {
 			Enrage<Card_EX1_009_Enchant>();
@@ -140,10 +139,9 @@ namespace Cards
 
 	struct Card_EX1_393_Enchant : public Enchantment<Card_EX1_393_Enchant, Attack<3>> {};
 	struct Card_EX1_393 : public MinionCardBase<Card_EX1_393> {
-		// TODO: single aura target
 		template <typename Context>
-		static auto GetEnrageTargets(Context&& context) {
-			context.new_targets.insert(context.card_ref_);
+		static auto GetEnrageTarget(Context&& context) {
+			context.new_target = context.card_ref_;
 		}
 		Card_EX1_393() {
 			Enrage<Card_EX1_393_Enchant>();
@@ -314,10 +312,9 @@ namespace Cards
 
 	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
 	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
-		// TODO: single aura target
 		template <typename Context>
-		static auto GetEnrageTargets(Context&& context) {
-			context.new_targets.insert(context.card_ref_);
+		static auto GetEnrageTarget(Context&& context) {
+			context.new_target = context.card_ref_;
 		}
 		Card_EX1_390() {
 			Enrage<Card_EX1_390_Enchant>();

@@ -86,13 +86,13 @@ namespace Cards
 	// For enrage
 	template <typename HandleClass>
 	struct EnrageWrappedHandleClass {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget context) {
 			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
 			if (card.GetDamage() == 0) {
 				return; // not enraged, apply to no one
 			}
 			else {
-				HandleClass::GetEnrageTargets(context);
+				HandleClass::GetEnrageTarget(context);
 			}
 		}
 	};
@@ -104,6 +104,6 @@ namespace Cards
 	};
 
 	template <typename HandleClass, typename OriginEnchantmentType>
-	using EnrageHelper = AuraHelper<EnrageWrappedHandleClass<HandleClass>, EnrageWrappedEnchantmentType<OriginEnchantmentType>,
+	using EnrageHelper = SingleEnchantmentAuraHelper<EnrageWrappedHandleClass<HandleClass>, EnrageWrappedEnchantmentType<OriginEnchantmentType>,
 		EmitWhenAlive, UpdateWhenEnrageChanged>;
 }
