@@ -117,19 +117,6 @@ namespace Cards
 		}
 	};
 
-	/* charge should be applied as an enchantment
-	struct Card_CS2_146 : public MinionCardBase<Card_CS2_146> {
-		static void FlagAuraApply(FlowControl::Manipulate & manipulate, state::CardRef target) {
-			manipulate.Minion(target).Charge(true);
-		}
-		static void FlagAuraRemove(FlowControl::Manipulate & manipulate, state::CardRef target) {
-		}
-		Card_CS2_146() {
-			OwnerCardFlagAura<AliveWhenInPlay>();
-		}
-	};
-	*/
-
 	struct Card_EX1_010 : public MinionCardBase<Card_EX1_010, Stealth> {};
 	struct Card_CS2_169 : public MinionCardBase<Card_CS2_169, Windfury> {};
 	

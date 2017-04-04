@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Cards/AuraHelper.h"
-#include "Cards/FlagAuraHelper.h"
 #include "Cards/EventRegister.h"
 #include "Cards/BattlecryHelper.h"
 #include "Cards/MinionCardUtils.h"
@@ -15,11 +14,6 @@ namespace Cards
 	public:
 		template <typename... Types>
 		auto Aura() { return AuraHelper<T, Types...>(*this); }
-
-		template <typename... Types>
-		auto PlayerFlagAura() { return PlayerFlagAuraHelper<T, Types...>(*this); }
-		template <typename... Types>
-		auto OwnerCardFlagAura() { return OwnerCardFlagAuraHelper<T, Types...>(*this); }
 
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }

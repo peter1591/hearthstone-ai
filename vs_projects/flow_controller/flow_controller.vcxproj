@@ -160,7 +160,6 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h" />
-    <ClInclude Include="..\..\include\Cards\FlagAuraHelper.h" />
     <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\GeneralCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h" />
@@ -186,9 +185,6 @@
     <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\TieredEnchantments.h" />
-    <ClInclude Include="..\..\include\FlowControl\flag_aura\Contexts.h" />
-    <ClInclude Include="..\..\include\FlowControl\flag_aura\Handler-impl.h" />
-    <ClInclude Include="..\..\include\FlowControl\flag_aura\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />

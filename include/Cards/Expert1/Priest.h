@@ -20,18 +20,6 @@ namespace Cards
 		}
 	};
 	
-	/*struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
-		static void FlagAuraApply(state::board::Player & player) {
-			player.IncreaseProphetVelenEffects();
-		}
-		static void FlagAuraRemove(state::board::Player & player) {
-			player.DecreaseProphetVelenEffects();
-		}
-		Card_EX1_350() {
-			PlayerFlagAura<AliveWhenInPlay>();
-		}
-	};*/
-
 	/* Example to register multiple events
 	RegisterEvents<
 	RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>,
