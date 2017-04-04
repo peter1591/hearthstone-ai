@@ -278,6 +278,18 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_616 : public MinionCardBase<Card_EX1_616> {
+		static void AuraApplyOn(FlowControl::aura::contexts::AuraApplyFlagOnBoard context) {
+			context.manipulate_.Board().IncreaseMinionCostExtra(1);
+		}
+		static void AuraRemoveFrom(FlowControl::aura::contexts::AuraRemoveFlagFromBoard context) {
+			context.manipulate_.Board().DecreaseMinionCostExtra(1);
+		}
+		Card_EX1_616() {
+			BoardFlagAura<EmitWhenAlive, UpdateOnlyFirstTime>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -336,6 +348,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_616)
 REGISTER_CARD(EX1_055)
 REGISTER_CARD(EX1_082)
 REGISTER_CARD(EX1_100)

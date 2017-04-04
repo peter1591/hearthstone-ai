@@ -10,6 +10,8 @@ namespace state
 		class Board
 		{
 		public:
+			Board() : minion_cost_extra_(0) {}
+
 			Player & Get(PlayerIdentifier identifier)
 			{
 				if (identifier.IsFirst()) return first_;
@@ -27,6 +29,8 @@ namespace state
 
 			Player & GetSecond() { return second_; }
 			Player const& GetSecond() const { return second_; }
+
+			int minion_cost_extra_;
 
 		private:
 			Player first_;

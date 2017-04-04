@@ -47,6 +47,17 @@ namespace FlowControl
 				state::CardRef card_ref_;
 				state::CardRef target_;
 			};
+
+			struct AuraApplyFlagOnBoard
+			{
+				Manipulate & manipulate_;
+				state::CardRef card_ref_;
+			};
+			struct AuraRemoveFlagFromBoard
+			{
+				Manipulate & manipulate_;
+				state::CardRef card_ref_;
+			};
 		}
 	}
 }

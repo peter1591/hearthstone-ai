@@ -6,6 +6,7 @@
 #include "FlowControl/aura/Contexts.h"
 #include "FlowControl/aura/EffectHandler_Enchantment.h"
 #include "FlowControl/aura/EffectHandler_Enchantments.h"
+#include "FlowControl/aura/EffectHandler_BoardFlag.h"
 
 namespace FlowControl
 {
@@ -16,7 +17,8 @@ namespace FlowControl
 		enum UpdatePolicy {
 			kUpdateAlways,
 			kUpdateWhenMinionChanges,
-			kUpdateWhenEnrageChanges
+			kUpdateWhenEnrageChanges,
+			kUpdateOnlyFirstTime
 		};
 
 		enum EmitPolicy {
@@ -76,7 +78,8 @@ namespace FlowControl
 
 			std::variant<
 				EffectHandler_Enchantment,
-				EffectHandler_Enchantments
+				EffectHandler_Enchantments,
+				EffectHandler_BoardFlag
 			> effect_;
 		};
 	}

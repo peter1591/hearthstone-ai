@@ -107,7 +107,12 @@ namespace FlowControl
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref)
 	{
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeMinion);
-		if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+
+		int cost = state_.GetCard(card_ref).GetCost();
+		cost += state_.GetBoard().minion_cost_extra_;
+
+		if (!CostCrystal(cost)) return false;
+
 		return PlayMinionCardPhase(card_ref);
 	}
 

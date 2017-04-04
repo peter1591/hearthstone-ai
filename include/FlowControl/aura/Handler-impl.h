@@ -8,6 +8,7 @@
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/aura/EffectHandler_Enchantment-impl.h"
 #include "FlowControl/aura/EffectHandler_Enchantments-impl.h"
+#include "FlowControl/aura/EffectHandler_BoardFlag-impl.h"
 
 namespace FlowControl
 {
@@ -47,6 +48,9 @@ namespace FlowControl
 				bool now_undamaged = (card.GetDamage() == 0);
 				return (last_updated_undamaged_ != now_undamaged);
 			}
+			else if (update_policy_ == kUpdateOnlyFirstTime) {
+				return first_time_update_;
+			}
 			else {
 				assert(false);
 				return true;
@@ -67,6 +71,9 @@ namespace FlowControl
 				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(card_ref);
 				bool now_undamaged = (card.GetDamage() == 0);
 				last_updated_undamaged_ = now_undamaged;
+			}
+			else if (update_policy_ == kUpdateOnlyFirstTime) {
+				first_time_update_ = false;
 			}
 			else {
 				assert(false);

@@ -27,6 +27,9 @@ namespace Cards
 	struct UpdateWhenEnrageChanged {
 		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateWhenEnrageChanges;
 	};
+	struct UpdateOnlyFirstTime {
+		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateOnlyFirstTime;
+	};
 
 	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy>
 	class AuraHelper
@@ -61,6 +64,22 @@ namespace Cards
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantment()
 						.SetGetTarget(HandleClass::GetAuraTarget)
 						.SetEnchantmentType<EnchantmentType>()
+					));
+			};
+		}
+	};
+
+	template <typename HandleClass, typename EmitPolicy, typename UpdatePolicy>
+	struct BoardFlagAuraHelper {
+		BoardFlagAuraHelper(state::Cards::CardData & card_data) {
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+				context.manipulate_.Aura().Add(context.card_ref_,
+					FlowControl::aura::Handler()
+					.SetUpdatePolicy(UpdatePolicy::update_policy)
+					.SetEmitPolicy(EmitPolicy::emit_policy)
+					.SetEffect(FlowControl::aura::EffectHandler_BoardFlag()
+						.SetApplyOn(HandleClass::AuraApplyOn)
+						.SetRemoveFrom(HandleClass::AuraRemoveFrom)
 					));
 			};
 		}
