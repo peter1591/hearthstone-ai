@@ -308,6 +308,13 @@ namespace Cards
 		}
 	};
 
+	struct Card_NEW1_029 : public MinionCardBase<Card_NEW1_029> {
+		static void Battlecry(Contexts::OnPlay context) {
+			context.manipulate_.Board().Player(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier())
+				.next_spell_cost_zero_ = true;
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -366,6 +373,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_029)
 REGISTER_CARD(NEW1_037)
 REGISTER_CARD(EX1_616)
 REGISTER_CARD(EX1_055)

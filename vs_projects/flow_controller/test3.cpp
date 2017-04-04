@@ -953,7 +953,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{7, 7, 7} });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == true);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == true);
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::Second());
 	random.called_times = 0;
@@ -968,7 +968,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == false);
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::Second());
 	random.called_times = 0;
@@ -983,7 +983,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == false);
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::Second());
 	random.called_times = 0;
@@ -998,7 +998,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == false);
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::Second());
 	random.called_times = 0;
@@ -1013,7 +1013,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == false);
 
 	state.GetBoard().GetSecond().GetResource().Refill();
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::Second());
@@ -1029,7 +1029,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == false);
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::Second());
 	random.called_times = 0;
@@ -1044,7 +1044,7 @@ void test3()
 	CheckMinions(state, state::PlayerIdentifier::Second(), { { 2, 1, 1 },{ 4, 5, 5 },{ 7, 7, 7 } });
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetNextSpellCostHealthThisTurn() == false);
+	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).next_spell_cost_health_this_turn_ == false);
 	
 	AddHandCard(Cards::ID_EX1_250, flow_context, state, state::PlayerIdentifier::Second());
 	parameter_getter.next_minion_put_location = 0;

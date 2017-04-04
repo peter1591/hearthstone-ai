@@ -135,12 +135,15 @@ namespace FlowControl
 		// TODO: shared with secret cards
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSpell);
 
-		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
-			if (!CostHealth(state_.GetCard(card_ref).GetCost())) return false;
-			state_.GetCurrentPlayer().SetNextSpellCostHealthThisTurn(false);
+		int cost = state_.GetCard(card_ref).GetCost();
+		if (state_.GetCurrentPlayer().next_spell_cost_zero_) cost = 0;
+
+		if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
+			if (!CostHealth(cost)) return false;
+			state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;
 		}
 		else {
-			if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+			if (!CostCrystal(cost)) return false;
 		}
 
 		return PlaySpellCardPhase(card_ref);
@@ -151,12 +154,15 @@ namespace FlowControl
 		// TODO: shared with spell cards
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSecret);
 
-		if (state_.GetCurrentPlayer().GetNextSpellCostHealthThisTurn()) {
-			if (!CostHealth(state_.GetCard(card_ref).GetCost())) return false;
-			state_.GetCurrentPlayer().SetNextSpellCostHealthThisTurn(false);
+		int cost = state_.GetCard(card_ref).GetCost();
+		if (state_.GetCurrentPlayer().next_spell_cost_zero_) cost = 0;
+
+		if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
+			if (!CostHealth(cost)) return false;
+			state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;
 		}
 		else {
-			if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+			if (!CostCrystal(cost)) return false;
 		}
 
 		return PlaySecretCardPhase(card_ref);
