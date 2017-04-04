@@ -58,6 +58,19 @@ namespace FlowControl
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
 			};
+
+			struct AuraApplyFlagOnOwnerPlayer
+			{
+				Manipulate & manipulate_;
+				state::CardRef card_ref_;
+				state::PlayerIdentifier player_;
+			};
+			struct AuraRemoveFlagFromOwnerPlayer
+			{
+				Manipulate & manipulate_;
+				state::CardRef card_ref_;
+				state::PlayerIdentifier player_;
+			};
 		}
 	}
 }

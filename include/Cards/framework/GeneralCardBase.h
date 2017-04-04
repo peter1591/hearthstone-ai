@@ -12,12 +12,14 @@ namespace Cards
 	class GeneralCardBase: public state::Cards::CardData
 	{
 	public:
-		template <typename... Types>
-		auto Aura() { return AuraHelper<T, Types...>(*this); }
-		template <typename... Types>
-		auto SingleEnchantmentAura() { return SingleEnchantmentAuraHelper<T, Types...>(*this); }
-		template <typename... Types>
-		auto BoardFlagAura() { return BoardFlagAuraHelper<T, Types...>(*this); }
+		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+		auto Aura() { return AuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
+		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+		auto SingleEnchantmentAura() { return SingleEnchantmentAuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
+		template <typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+		auto BoardFlagAura() { return BoardFlagAuraHelper<T, EmitPolicy, UpdatePolicy>(*this); }
+		template <typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+		auto  OwnerPlayerFlagAura() { return  OwnerPlayerFlagAuraHelper<T, EmitPolicy, UpdatePolicy>(*this); }
 
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }

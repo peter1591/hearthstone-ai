@@ -111,6 +111,12 @@ namespace FlowControl
 		int cost = state_.GetCard(card_ref).GetCost();
 		cost += state_.GetBoard().minion_cost_extra_;
 
+		if (state_.GetCurrentPlayer().played_minions_this_turn_ == 0) {
+			cost += state_.GetCurrentPlayer().first_minion_each_turn_cost_bias_;
+		}
+		
+		if (cost < 0) cost = 0;
+
 		if (!CostCrystal(cost)) return false;
 
 		return PlayMinionCardPhase(card_ref);
@@ -136,7 +142,7 @@ namespace FlowControl
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSpell);
 
 		int cost = state_.GetCard(card_ref).GetCost();
-		if (state_.GetCurrentPlayer().next_spell_cost_zero_) cost = 0;
+		if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
 
 		if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
 			if (!CostHealth(cost)) return false;
@@ -155,7 +161,7 @@ namespace FlowControl
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSecret);
 
 		int cost = state_.GetCard(card_ref).GetCost();
-		if (state_.GetCurrentPlayer().next_spell_cost_zero_) cost = 0;
+		if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
 
 		if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
 			if (!CostHealth(cost)) return false;
@@ -198,6 +204,8 @@ namespace FlowControl
 			if (state_.GetCard(new_card_ref).GetZone() != state::kCardZonePlay) assert(false);
 		}();
 #endif
+
+		++state_.GetCurrentPlayer().played_minions_this_turn_;
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionPlayed>(
 			state::Events::EventTypes::AfterMinionPlayed::Context{ Manipulate(state_, flow_context_), new_card_ref });

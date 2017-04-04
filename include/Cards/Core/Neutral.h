@@ -26,7 +26,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_EX1_508() {
-			Aura<Card_EX1_508o, EmitWhenAlive, UpdateWhenMinionChanged>();
+			Aura<Card_EX1_508o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -87,7 +87,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_CS2_122() {
-			Aura<Card_CS2_122e, EmitWhenAlive, UpdateWhenMinionChanged>();
+			Aura<Card_CS2_122e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -213,7 +213,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_CS2_222() {
-			Aura<Card_CS2_222o, EmitWhenAlive, UpdateWhenMinionChanged>();
+			Aura<Card_CS2_222o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 }

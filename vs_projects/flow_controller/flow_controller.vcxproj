@@ -180,6 +180,8 @@
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />

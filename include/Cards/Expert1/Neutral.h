@@ -112,7 +112,7 @@ namespace Cards
 			context.new_target = context.card_ref_;
 		}
 		Card_CS2_146() {
-			SingleEnchantmentAura<Card_CS2_146o, EmitWhenAlive, UpdateAlways>();
+			SingleEnchantmentAura<Card_CS2_146o, EmitWhenAlive, FlowControl::aura::kUpdateAlways>();
 		}
 	};
 
@@ -286,7 +286,7 @@ namespace Cards
 			context.manipulate_.Board().DecreaseMinionCostExtra(1);
 		}
 		Card_EX1_616() {
-			BoardFlagAura<EmitWhenAlive, UpdateOnlyFirstTime>();
+			BoardFlagAura<EmitWhenAlive, FlowControl::aura::kUpdateOnlyFirstTime>();
 		}
 	};
 
@@ -311,7 +311,7 @@ namespace Cards
 	struct Card_NEW1_029 : public MinionCardBase<Card_NEW1_029> {
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.Board().Player(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier())
-				.next_spell_cost_zero_ = true;
+				.next_spell_cost_zero_this_turn_ = true;
 		}
 	};
 
@@ -327,6 +327,18 @@ namespace Cards
 		Card_EX1_557() {
 			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
 				state::Events::EventTypes::OnTurnStart>();
+		}
+	};
+
+	struct Card_EX1_076 : public MinionCardBase<Card_EX1_076> {
+		static void AuraApplyOn(FlowControl::aura::contexts::AuraApplyFlagOnOwnerPlayer context) {
+			--context.manipulate_.Board().Player(context.player_).first_minion_each_turn_cost_bias_;
+		}
+		static void AuraRemoveFrom(FlowControl::aura::contexts::AuraRemoveFlagFromOwnerPlayer context) {
+			++context.manipulate_.Board().Player(context.player_).first_minion_each_turn_cost_bias_;
+		}
+		Card_EX1_076() {
+			OwnerPlayerFlagAura<EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -388,6 +400,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_076)
 REGISTER_CARD(EX1_557)
 REGISTER_CARD(NEW1_029)
 REGISTER_CARD(NEW1_037)

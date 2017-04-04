@@ -7,6 +7,7 @@
 #include "FlowControl/aura/EffectHandler_Enchantment.h"
 #include "FlowControl/aura/EffectHandler_Enchantments.h"
 #include "FlowControl/aura/EffectHandler_BoardFlag.h"
+#include "FlowControl/aura/EffectHandler_OwnerPlayerFlag.h"
 
 namespace FlowControl
 {
@@ -18,6 +19,7 @@ namespace FlowControl
 			kUpdateAlways,
 			kUpdateWhenMinionChanges,
 			kUpdateWhenEnrageChanges,
+			kUpdateOwnerChanges,
 			kUpdateOnlyFirstTime
 		};
 
@@ -66,11 +68,12 @@ namespace FlowControl
 
 			bool IsValid(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
 
-		public: // field for client code
+		public: // field for update policy
 			bool first_time_update_;
 			int last_updated_change_id_first_player_minions_;
 			int last_updated_change_id_second_player_minions_;
 			bool last_updated_undamaged_;
+			state::PlayerIdentifier last_updated_owner_;
 
 		private:
 			UpdatePolicy update_policy_;
@@ -79,7 +82,8 @@ namespace FlowControl
 			std::variant<
 				EffectHandler_Enchantment,
 				EffectHandler_Enchantments,
-				EffectHandler_BoardFlag
+				EffectHandler_BoardFlag,
+				EffectHandler_OwnerPlayerFlag
 			> effect_;
 		};
 	}

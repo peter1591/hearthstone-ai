@@ -17,21 +17,7 @@ namespace Cards
 		// TODO: implement
 	};
 
-	// update policy
-	struct UpdateAlways {
-		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateAlways;
-	};
-	struct UpdateWhenMinionChanged {
-		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateWhenMinionChanges;
-	};
-	struct UpdateWhenEnrageChanged {
-		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateWhenEnrageChanges;
-	};
-	struct UpdateOnlyFirstTime {
-		static constexpr FlowControl::aura::UpdatePolicy update_policy = FlowControl::aura::kUpdateOnlyFirstTime;
-	};
-
-	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy>
+	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 	class AuraHelper
 	{
 	public:
@@ -40,7 +26,7 @@ namespace Cards
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(context.card_ref_,
 					FlowControl::aura::Handler()
-					.SetUpdatePolicy(UpdatePolicy::update_policy)
+					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantments()
 						.SetGetTargets(HandleClass::GetAuraTargets)
@@ -50,7 +36,7 @@ namespace Cards
 		}
 	};
 
-	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy>
+	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 	class SingleEnchantmentAuraHelper
 	{
 	public:
@@ -59,7 +45,7 @@ namespace Cards
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(context.card_ref_,
 					FlowControl::aura::Handler()
-					.SetUpdatePolicy(UpdatePolicy::update_policy)
+					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantment()
 						.SetGetTarget(HandleClass::GetAuraTarget)
@@ -69,15 +55,31 @@ namespace Cards
 		}
 	};
 
-	template <typename HandleClass, typename EmitPolicy, typename UpdatePolicy>
+	template <typename HandleClass, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 	struct BoardFlagAuraHelper {
 		BoardFlagAuraHelper(state::Cards::CardData & card_data) {
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(context.card_ref_,
 					FlowControl::aura::Handler()
-					.SetUpdatePolicy(UpdatePolicy::update_policy)
+					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_BoardFlag()
+						.SetApplyOn(HandleClass::AuraApplyOn)
+						.SetRemoveFrom(HandleClass::AuraRemoveFrom)
+					));
+			};
+		}
+	};
+
+	template <typename HandleClass, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+	struct OwnerPlayerFlagAuraHelper {
+		OwnerPlayerFlagAuraHelper(state::Cards::CardData & card_data) {
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+				context.manipulate_.Aura().Add(context.card_ref_,
+					FlowControl::aura::Handler()
+					.SetUpdatePolicy(UpdatePolicy)
+					.SetEmitPolicy(EmitPolicy::emit_policy)
+					.SetEffect(FlowControl::aura::EffectHandler_OwnerPlayerFlag()
 						.SetApplyOn(HandleClass::AuraApplyOn)
 						.SetRemoveFrom(HandleClass::AuraRemoveFrom)
 					));
@@ -99,7 +101,7 @@ namespace Cards
 		}
 	};
 	template <typename HandleClass, typename EnchantmentType>
-	using AdjacentBuffHelper = AuraHelper<AdjacentBuffHandleClass, EnchantmentType, EmitWhenAlive, UpdateWhenMinionChanged>;
+	using AdjacentBuffHelper = AuraHelper<AdjacentBuffHandleClass, EnchantmentType, EmitWhenAlive, FlowControl::aura::UpdatePolicy::kUpdateWhenMinionChanges>;
 
 
 	// For enrage
@@ -124,5 +126,5 @@ namespace Cards
 
 	template <typename HandleClass, typename OriginEnchantmentType>
 	using EnrageHelper = SingleEnchantmentAuraHelper<EnrageWrappedHandleClass<HandleClass>, EnrageWrappedEnchantmentType<OriginEnchantmentType>,
-		EmitWhenAlive, UpdateWhenEnrageChanged>;
+		EmitWhenAlive, FlowControl::aura::UpdatePolicy::kUpdateWhenEnrageChanges>;
 }
