@@ -36,7 +36,6 @@ namespace Cards
 	namespace detail {
 		template <typename EventHandler, typename EventHandlerArg> struct EventHandlerInvoker {
 			template <typename... Args> static auto Invoke(Args&&... args) {
-				// TODO: do not ask client code to write another static function. maybe pass it by argument (as a function pointer)
 				return EventHandler::HandleEvent<EventHandlerArg>(std::forward<Args>(args)...);
 			}
 		};
