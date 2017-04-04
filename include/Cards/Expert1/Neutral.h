@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Mana Addict
+// finished: Pint-Sized Summoner
 
 namespace Cards
 {
@@ -286,7 +286,7 @@ namespace Cards
 			context.manipulate_.Board().DecreaseMinionCostExtra(1);
 		}
 		Card_EX1_616() {
-			BoardFlagAura<EmitWhenAlive, FlowControl::aura::kUpdateOnlyFirstTime>();
+			BoardFlagAura<EmitWhenAlive>();
 		}
 	};
 
@@ -338,7 +338,7 @@ namespace Cards
 			++context.manipulate_.Board().Player(context.player_).first_minion_each_turn_cost_bias_;
 		}
 		Card_EX1_076() {
-			OwnerPlayerFlagAura<EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			OwnerPlayerFlagAura<EmitWhenAlive>();
 		}
 	};
 

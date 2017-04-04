@@ -16,10 +16,10 @@ namespace Cards
 		auto Aura() { return AuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
 		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 		auto SingleEnchantmentAura() { return SingleEnchantmentAuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
-		template <typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
-		auto BoardFlagAura() { return BoardFlagAuraHelper<T, EmitPolicy, UpdatePolicy>(*this); }
-		template <typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
-		auto  OwnerPlayerFlagAura() { return  OwnerPlayerFlagAuraHelper<T, EmitPolicy, UpdatePolicy>(*this); }
+		template <typename EmitPolicy>
+		auto BoardFlagAura() { return BoardFlagAuraHelper<T, EmitPolicy, FlowControl::aura::kUpdateOnlyFirstTime>(*this); }
+		template <typename EmitPolicy>
+		auto OwnerPlayerFlagAura() { return  OwnerPlayerFlagAuraHelper<T, EmitPolicy, FlowControl::aura::kUpdateOwnerChanges>(*this); }
 
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }
