@@ -4,6 +4,7 @@
 #include "state/targetor/Targets.h"
 #include "FlowControl/enchantment/TieredEnchantments.h"
 #include "FlowControl/aura/Contexts.h"
+#include "FlowControl/aura/EffectHandler_Enchantment.h"
 #include "FlowControl/aura/EffectHandler_Enchantments.h"
 
 namespace FlowControl
@@ -73,7 +74,10 @@ namespace FlowControl
 			UpdatePolicy update_policy_;
 			EmitPolicy emit_policy_;
 
-			std::variant<EffectHandler_Enchantments> effect_;
+			std::variant<
+				EffectHandler_Enchantment,
+				EffectHandler_Enchantments
+			> effect_;
 		};
 	}
 }

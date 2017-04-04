@@ -34,6 +34,13 @@ namespace FlowControl
 				std::unordered_set<state::CardRef> & new_targets;
 			};
 
+			struct AuraGetTarget
+			{
+				Manipulate & manipulate_;
+				state::CardRef card_ref_;
+				state::CardRef & new_target;
+			};
+
 			struct AuraApplyOn
 			{
 				Manipulate & manipulate_;

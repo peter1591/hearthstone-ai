@@ -14,6 +14,8 @@ namespace Cards
 	public:
 		template <typename... Types>
 		auto Aura() { return AuraHelper<T, Types...>(*this); }
+		template <typename... Types>
+		auto SingleEnchantmentAura() { return SingleEnchantmentAuraHelper<T, Types...>(*this); }
 
 		template <typename... Types>
 		auto Enrage() { return EnrageHelper<T, Types...>(*this); }

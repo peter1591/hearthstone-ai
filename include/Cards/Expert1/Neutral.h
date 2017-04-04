@@ -107,13 +107,13 @@ namespace Cards
 
 	struct Card_CS2_146o : public Enchantment<Card_CS2_146o, Charge> {};
 	struct Card_CS2_146 : public MinionCardBase<Card_CS2_146> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget context) {
 			state::PlayerIdentifier owner_player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			if (!context.manipulate_.Board().Player(owner_player).GetWeaponRef().IsValid()) return;
-			context.new_targets.insert(context.card_ref_);
+			context.new_target = context.card_ref_;
 		}
 		Card_CS2_146() {
-			Aura<Card_CS2_146o, EmitWhenAlive, UpdateAlways>();
+			SingleEnchantmentAura<Card_CS2_146o, EmitWhenAlive, UpdateAlways>();
 		}
 	};
 

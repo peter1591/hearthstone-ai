@@ -39,9 +39,27 @@ namespace Cards
 					FlowControl::aura::Handler()
 					.SetUpdatePolicy(UpdatePolicy::update_policy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
-					.SetEffect(
-						FlowControl::aura::EffectHandler_Enchantments()
+					.SetEffect(FlowControl::aura::EffectHandler_Enchantments()
 						.SetGetTargets(HandleClass::GetAuraTargets)
+						.SetEnchantmentType<EnchantmentType>()
+					));
+			};
+		}
+	};
+
+	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, typename UpdatePolicy>
+	class SingleEnchantmentAuraHelper
+	{
+	public:
+		SingleEnchantmentAuraHelper(state::Cards::CardData & card_data)
+		{
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+				context.manipulate_.Aura().Add(context.card_ref_,
+					FlowControl::aura::Handler()
+					.SetUpdatePolicy(UpdatePolicy::update_policy)
+					.SetEmitPolicy(EmitPolicy::emit_policy)
+					.SetEffect(FlowControl::aura::EffectHandler_Enchantment()
+						.SetGetTarget(HandleClass::GetAuraTarget)
 						.SetEnchantmentType<EnchantmentType>()
 					));
 			};

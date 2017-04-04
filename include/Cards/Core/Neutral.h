@@ -205,7 +205,6 @@ namespace Cards
 
 	struct Card_CS2_222o : public Enchantment<Card_CS2_222o, Attack<1>, MaxHP<1>> {};
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
-		// TODO: single aura target
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
