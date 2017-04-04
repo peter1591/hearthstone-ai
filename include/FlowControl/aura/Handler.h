@@ -1,9 +1,10 @@
 #pragma once
 
-#include <unordered_map>
+#include <variant>
 #include "state/targetor/Targets.h"
 #include "FlowControl/enchantment/TieredEnchantments.h"
 #include "FlowControl/aura/Contexts.h"
+#include "FlowControl/aura/EffectHandler_Enchantments.h"
 
 namespace FlowControl
 {
@@ -25,13 +26,9 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			typedef bool FuncIsValid(contexts::AuraIsValid context);
-			typedef void FuncGetTargets(contexts::AuraGetTargets context);
-			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
 
 			Handler() :
-				update_policy(kUpdateAlways), emit_policy(kEmitInvalid),
-				get_targets(nullptr), apply_on(nullptr),
+				update_policy_(kUpdateAlways), emit_policy_(kEmitInvalid),
 				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
 				last_updated_change_id_second_player_minions_(-1),
@@ -39,21 +36,25 @@ namespace FlowControl
 			{}
 
 		public:
-			void SetUpdatePolicy(UpdatePolicy policy) { update_policy = policy; }
-			void SetEmitPolicy(EmitPolicy policy) { emit_policy = policy; }
-			void SetCallback_GetTargets(FuncGetTargets* callback) { get_targets = callback; }
-			void SetCallback_ApplyOn(FuncApplyOn* callback) { apply_on = callback; }
+			void SetUpdatePolicy(UpdatePolicy policy) { update_policy_ = policy; }
+			void SetEmitPolicy(EmitPolicy policy) { emit_policy_ = policy; }
 
-			bool IsCallbackSet_GetTargets() const { return get_targets != nullptr; }
-			bool IsCallbackSet_ApplyOn() const { return apply_on != nullptr; }
+			template <typename EffectType>
+			void SetEffect(EffectType effect) { effect_ = effect; }
 
 		public:
-			bool NoAppliedEnchantment() const { return applied_enchantments.empty(); }
+			bool NoAppliedEnchantment() const {
+				return std::visit([](auto& item) -> bool {
+					return item.NoAppliedEnchantment();
+				}, effect_);
+			}
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
 
 			void AfterCopied() {
 				first_time_update_ = true;
-				applied_enchantments.clear();
+				std::visit([](auto& item) {
+					item.AfterCopied();
+				}, effect_);
 			}
 
 		private:
@@ -69,15 +70,10 @@ namespace FlowControl
 			bool last_updated_undamaged_;
 
 		private:
-			// TODO: update policy and emit policy can be shared with flag aura
-			// TODO: the rest fields are the only difference between 'aura' and 'flag-aura'
-			UpdatePolicy update_policy;
-			EmitPolicy emit_policy;
+			UpdatePolicy update_policy_;
+			EmitPolicy emit_policy_;
 
-			FuncGetTargets * get_targets;
-			FuncApplyOn * apply_on;
-
-			std::unordered_map<state::CardRef, enchantment::TieredEnchantments::IdentifierType> applied_enchantments;
+			std::variant<EffectHandler_Enchantments> effect_;
 		};
 	}
 }

@@ -40,15 +40,20 @@ namespace Cards
 				handler.SetUpdatePolicy(UpdatePolicy::update_policy);
 				handler.SetEmitPolicy(EmitPolicy::emit_policy);
 
-				assert(!handler.IsCallbackSet_GetTargets());
-				handler.SetCallback_GetTargets([](auto context) {
+				FlowControl::aura::EffectHandler_Enchantments aura_effect;
+
+				assert(!aura_effect.IsCallbackSet_GetTargets());
+				aura_effect.SetCallback_GetTargets([](auto context) {
 					HandleClass::GetAuraTargets(context);
 				});
 
-				assert(!handler.IsCallbackSet_ApplyOn());
-				handler.SetCallback_ApplyOn([](auto context) {
+				assert(!aura_effect.IsCallbackSet_ApplyOn());
+				aura_effect.SetCallback_ApplyOn([](auto context) {
 					return MinionCardUtils::Manipulate(context).Card(context.target_).Enchant().AddAuraEnchantment<EnchantmentType>();
 				});
+
+				handler.SetEffect(aura_effect);
+
 				context.manipulate_.Aura().Add(context.card_ref_, std::move(handler));
 			};
 		}

@@ -6,6 +6,7 @@
 #include "state/State.h"
 #include "state/targetor/TargetsGenerator.h"
 #include "FlowControl/FlowContext.h"
+#include "FlowControl/aura/EffectHandler_Enchantments-impl.h"
 
 namespace FlowControl
 {
@@ -13,45 +14,14 @@ namespace FlowControl
 	{
 		inline bool Handler::Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
 		{
-			assert(get_targets);
-			assert(apply_on);
-
-			std::unordered_set<state::CardRef> new_targets;
 			bool aura_valid = IsValid(state, flow_context, card_ref);
 			if (aura_valid) {
 				if (!NeedUpdate(state, flow_context, card_ref)) return aura_valid;
-				(*get_targets)({ Manipulate(state, flow_context), card_ref, *this, new_targets });
 			}
 
-			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)
-			{
-				if (!state.GetCard(it->first).GetRawData().enchantment_handler.Exists(it->second)) {
-					// enchantment vanished
-					it = applied_enchantments.erase(it);
-					continue;
-				}
-
-				auto new_target_it = new_targets.find(it->first);
-				if (new_target_it != new_targets.end()) {
-					// already applied
-					new_targets.erase(new_target_it);
-					++it;
-				}
-				else {
-					// enchantments should be removed
-					Manipulate(state, flow_context).Card(it->first).Enchant().Remove(it->second);
-					it = applied_enchantments.erase(it);
-				}
-			}
-
-			for (auto new_target : new_targets) {
-				// enchantments should be applied
-				assert(applied_enchantments.find(new_target) == applied_enchantments.end());
-
-				applied_enchantments.insert(std::make_pair(new_target, 
-					(*apply_on)({ Manipulate(state, flow_context), card_ref, new_target })
-					));
-			}
+			std::visit([&](auto& item) {
+				item.Update(state, flow_context, card_ref, aura_valid);
+			}, effect_);
 
 			AfterUpdated(state, flow_context, card_ref);
 
@@ -60,17 +30,17 @@ namespace FlowControl
 
 		inline bool Handler::NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
 		{
-			if (update_policy == kUpdateAlways) {
+			if (update_policy_ == kUpdateAlways) {
 				return true;
 			}
-			else if (update_policy == kUpdateWhenMinionChanges) {
+			else if (update_policy_ == kUpdateWhenMinionChanges) {
 				if (Manipulate(state, flow_context).Board().FirstPlayer().minions_.GetChangeId() !=
 					last_updated_change_id_first_player_minions_) return true;
 				if (Manipulate(state, flow_context).Board().SecondPlayer().minions_.GetChangeId() !=
 					last_updated_change_id_second_player_minions_) return true;
 				return false;
 			}
-			else if (update_policy == kUpdateWhenEnrageChanges) {
+			else if (update_policy_ == kUpdateWhenEnrageChanges) {
 				if (first_time_update_) return true;
 				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(card_ref);
 				bool now_undamaged = (card.GetDamage() == 0);
@@ -84,14 +54,14 @@ namespace FlowControl
 
 		inline void Handler::AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
 		{
-			if (update_policy == kUpdateAlways) return;
-			else if (update_policy == kUpdateWhenMinionChanges) {
+			if (update_policy_ == kUpdateAlways) return;
+			else if (update_policy_ == kUpdateWhenMinionChanges) {
 				last_updated_change_id_first_player_minions_ =
 					Manipulate(state, flow_context).Board().FirstPlayer().minions_.GetChangeId();
 				last_updated_change_id_second_player_minions_ =
 					Manipulate(state, flow_context).Board().SecondPlayer().minions_.GetChangeId();
 			}
-			else if (update_policy == kUpdateWhenEnrageChanges) {
+			else if (update_policy_ == kUpdateWhenEnrageChanges) {
 				first_time_update_ = false;
 				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(card_ref);
 				bool now_undamaged = (card.GetDamage() == 0);
@@ -106,7 +76,7 @@ namespace FlowControl
 		{
 			if (state.GetCard(card_ref).IsSilenced()) return false;
 
-			if (emit_policy == kEmitWhenAlive) {
+			if (emit_policy_ == kEmitWhenAlive) {
 				state::Cards::Card const& card = state.GetCard(card_ref);
 				if (card.GetZone() != state::kCardZonePlay) return false;
 				if (card.GetHP() <= 0) return false;

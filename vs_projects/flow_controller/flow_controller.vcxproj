@@ -175,6 +175,8 @@
     <ClInclude Include="..\..\include\Cards\OG\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />

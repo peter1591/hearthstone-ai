@@ -31,7 +31,6 @@ namespace FlowControl
 			{
 				Manipulate & manipulate_;
 				state::CardRef card_ref_;
-				aura::Handler & aura_handler_;
 				std::unordered_set<state::CardRef> & new_targets;
 			};
 
