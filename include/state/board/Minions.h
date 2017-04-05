@@ -20,7 +20,11 @@ namespace state
 			}
 
 			size_t Size() const { return minions_.size(); }
-			CardRef Get(size_t pos) const { return minions_[pos]; }
+			CardRef Get(size_t pos) const {
+				assert(pos >= 0);
+				assert(pos <= minions_.size());
+				return minions_[pos];
+			}
 			void Replace(size_t pos, CardRef new_card_ref) {
 				minions_[pos] = new_card_ref;
 				++change_id_;
@@ -70,7 +74,7 @@ namespace state
 
 		private:
 			static constexpr int max_size_ = 7;
-			std::vector<CardRef> minions_;
+			std::vector<CardRef> minions_; // TODO: use std::array?
 			int change_id_;
 		};
 	}
