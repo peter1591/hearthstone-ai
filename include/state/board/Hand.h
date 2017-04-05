@@ -24,6 +24,13 @@ namespace state
 			CardRef Get(size_t idx) { return cards_[idx]; }
 			int GetChangeId() const { return change_id_; }
 
+			template <typename Functor>
+			void ForEach(Functor&& functor) {
+				for (int i = 0; i < size_; ++i) {
+					if (!functor(cards_[i])) return;
+				}
+			}
+
 		private:
 			size_t PushBack(CardRef ref)
 			{

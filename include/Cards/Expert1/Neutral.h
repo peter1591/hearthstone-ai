@@ -403,6 +403,29 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_006 : public MinionCardBase<Card_EX1_006> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnStart::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+
+			std::vector<state::CardRef> candidates;
+			context.manipulate_.Board().Player(player).hand_.ForEach([&](state::CardRef ref) {
+				if (context.manipulate_.GetCard(ref).GetCardType() != state::kCardTypeMinion) return true;
+				candidates.push_back(ref);
+				return true;
+			});
+
+			if (candidates.empty())) return true;
+
+			// swap minion
+			context.manipulate_.Minion(self).
+		}
+		Card_EX1_006() {
+			RegisteredEventType<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnStart>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {

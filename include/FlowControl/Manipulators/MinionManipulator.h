@@ -41,6 +41,9 @@ namespace FlowControl
 
 			template <state::CardZone Zone>
 			void MoveToHand(state::PlayerIdentifier player);
+
+			template <state::CardZone ZoneFrom, state::CardZone ZoneTo>
+			void MoveTo(state::PlayerIdentifier to_player);
 		};
 	}
 }
