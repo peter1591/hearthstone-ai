@@ -36,6 +36,7 @@ namespace state
 				}
 
 			private:
+				// TODO: do not use vector, since only few of cards will be bound with event handlers
 				std::vector<HandlersContainer<HandlerType>> categories_;
 			};
 		}

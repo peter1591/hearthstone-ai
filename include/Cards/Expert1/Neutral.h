@@ -390,6 +390,19 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_007 : public MinionCardBase<Card_EX1_007> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+			context.manipulate_.Hero(
+				context.manipulate_.GetCard(self).GetPlayerIdentifier()
+			).DrawCard();
+			return true;
+		};
+
+		Card_EX1_007() {
+			RegisterEvent<OnSelfTakeDamage>();
+		}
+	};
+
 
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
@@ -448,6 +461,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_007)
 REGISTER_CARD(EX1_049)
 REGISTER_CARD(NEW1_020)
 REGISTER_CARD(EX1_058)

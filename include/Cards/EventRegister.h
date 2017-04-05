@@ -155,10 +155,10 @@ namespace Cards
 		using EventType = state::Events::EventTypes::OnTakeDamage;
 
 		struct EventHandler {
-			template <typename UnderlyingHandler, typename Context>
-			static bool HandleEvent(state::CardRef self, Context&& context) {
-				if (context.damage_ <= 0) return true;
-				return UnderlyingHandler::HandleEvent(self, std::move(context));
+			template <typename UnderlyingHandler>
+			static bool HandleEvent(state::CardRef self, EventType::Context context) {
+				assert(context.damage_ > 0);
+				return UnderlyingHandler::HandleEvent(self, context);
 			}
 		};
 	};
