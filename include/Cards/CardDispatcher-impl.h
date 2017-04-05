@@ -2,6 +2,7 @@
 
 #include "Cards/CardDispatcher.h"
 
+#include "state/State.h"
 #include "FlowControl/FlowController.h"
 #include "FlowControl/FlowController-impl.h"
 #include "Cards/Database.h"

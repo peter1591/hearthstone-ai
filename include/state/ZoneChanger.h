@@ -43,7 +43,7 @@ namespace state {
 
 		void ReplaceBy(CardRef new_ref)
 		{
-			assert(cards_mgr_.GetMutable(new_ref).GetZone() == kCardZoneNewlyCreated);
+			assert(cards_mgr_.Get(new_ref).GetZone() == kCardZoneNewlyCreated);
 			assert(cards_mgr_.Get(card_ref_).GetCardType() == cards_mgr_.Get(new_ref).GetCardType());
 
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::ReplaceBy(board_, cards_mgr_, card_ref_, new_ref);

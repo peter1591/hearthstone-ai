@@ -1,8 +1,7 @@
 #pragma once
 
-#include <unordered_set>
 #include "Utils/StaticDispatcher.h"
-#include "state/State.h"
+#include "state/Cards/CardData.h"
 
 namespace Cards
 {

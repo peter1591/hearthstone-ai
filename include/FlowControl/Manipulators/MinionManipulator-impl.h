@@ -69,5 +69,15 @@ namespace FlowControl
 
 			return new_card_ref;
 		}
+
+		template <state::CardZone Zone>
+		inline void MinionManipulator::MoveToHand(state::PlayerIdentifier player)
+		{
+			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
+				FlowControl::Manipulate(state_, flow_context_), card_ref_
+				).ChangeTo<state::kCardZoneHand>(player);
+
+			state_.GetMutableCard(card_ref_).RestoreToDefault();
+		}
 	}
 }

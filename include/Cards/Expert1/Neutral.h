@@ -371,10 +371,22 @@ namespace Cards
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			return true;
 		}
 		Card_NEW1_020() {
 			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
 				state::Events::EventTypes::AfterSpellPlayed>();
+		}
+	};
+
+	struct Card_EX1_049 : public MinionCardBase<Card_EX1_049> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return TargetsGenerator(context.player_).Ally(context).Minion();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.Minion(target).MoveToHand<state::kCardZonePlay>(context.player_);
 		}
 	};
 
@@ -436,6 +448,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_049)
 REGISTER_CARD(NEW1_020)
 REGISTER_CARD(EX1_058)
 REGISTER_CARD(EX1_076)

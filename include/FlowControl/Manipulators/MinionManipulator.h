@@ -38,6 +38,9 @@ namespace FlowControl
 
 			state::CardRef BecomeCopyof(state::CardRef card_ref);
 			state::CardRef BecomeCopyof(state::Cards::Card const& card);
+
+			template <state::CardZone Zone>
+			void MoveToHand(state::PlayerIdentifier player);
 		};
 	}
 }

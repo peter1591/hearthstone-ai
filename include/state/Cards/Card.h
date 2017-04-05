@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include "state/Cards/CardData.h"
+#include "Cards/CardDispatcher.h"
 
 namespace FlowControl
 {
@@ -82,6 +83,16 @@ namespace state
 		public:
 			explicit Card(const CardData & data) : data_(data) {}
 			explicit Card(CardData&& data) : data_(std::move(data)) {}
+
+			void RestoreToDefault() {
+				auto data = ::Cards::CardDispatcher::CreateInstance(GetCardId());
+				data.enchanted_states.player = data_.enchanted_states.player;
+				data.zone = data_.zone;
+				data.zone_position = data_.zone_position;
+
+				data.enchantment_handler.SetOriginalStates(data.enchanted_states);
+				data_ = data;
+			}
 
 		public: // getters and setters
 			int GetCardId() const { return data_.card_id; }
