@@ -436,6 +436,25 @@ namespace Cards
 		}
 	};
 
+	template <int v>
+	struct Card_EX1_590e : public Enchantment<Attack<3*v>, MaxHP<3*v>> {};
+	struct Card_EX1_590 : public MinionCardBase<Card_EX1_590> {
+		static void Battlecry(Contexts::OnPlay context) {
+			int count = 0;
+			auto op = [&](state::CardRef ref) {
+				if (!context.manipulate_.GetCard(ref).HasShield()) return;
+
+				++count;
+				context.manipulate_.Minion(ref).Shield(false);
+			};
+
+			if (count <= 0) return;
+			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
+			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_EX1_590e>(count);
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -488,6 +507,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_590)
 REGISTER_CARD(EX1_089)
 REGISTER_CARD(EX1_006)
 REGISTER_CARD(EX1_007)
