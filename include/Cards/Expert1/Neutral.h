@@ -386,7 +386,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
-			context.manipulate_.Minion(target).MoveToHand<state::kCardZonePlay>(context.player_);
+			context.manipulate_.Minion(target).MoveTo<state::kCardZonePlay, state::kCardZoneHand>(context.player_);
 		}
 	};
 
@@ -415,13 +415,17 @@ namespace Cards
 				return true;
 			});
 
-			if (candidates.empty())) return true;
+			if (candidates.empty()) return true;
+
+			size_t rand = context.manipulate_.GetRandom().Get(candidates.size());
+			state::CardRef target = candidates[rand];
 
 			// swap minion
-			context.manipulate_.Minion(self).
+			context.manipulate_.Minion(self).SwapWith<state::kCardZonePlay, state::kCardZoneHand>(target);
+			return true;
 		}
 		Card_EX1_006() {
-			RegisteredEventType<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
 				state::Events::EventTypes::OnTurnStart>();
 		}
 	};
@@ -484,6 +488,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_006)
 REGISTER_CARD(EX1_007)
 REGISTER_CARD(EX1_049)
 REGISTER_CARD(NEW1_020)

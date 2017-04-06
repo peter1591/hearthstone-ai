@@ -71,6 +71,8 @@ namespace Cards
 			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
 			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 1);
 		}
 	};

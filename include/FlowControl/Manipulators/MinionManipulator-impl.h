@@ -70,22 +70,29 @@ namespace FlowControl
 			return new_card_ref;
 		}
 
-		template <state::CardZone Zone>
-		inline void MinionManipulator::MoveToHand(state::PlayerIdentifier player)
+		template<state::CardZone ZoneFrom, state::CardZone ZoneTo>
+		inline void MinionManipulator::MoveTo(state::PlayerIdentifier to_player)
 		{
-			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
+			state_.GetZoneChanger<state::kCardTypeMinion, ZoneFrom>(
 				FlowControl::Manipulate(state_, flow_context_), card_ref_
-				).ChangeTo<state::kCardZoneHand>(player);
+				).ChangeTo<ZoneTo>(to_player);
 
 			state_.GetMutableCard(card_ref_).RestoreToDefault();
 		}
 
-		template <state::CardZone ZoneFrom>
-		inline void MinionManipulator::MoveTo<ZoneFrom, state::kCardZoneHand>(state::PlayerIdentifier player)
-
-		template<state::CardZone ZoneFrom, state::CardZone ZoneTo>
-		inline void MinionManipulator::MoveTo(state::PlayerIdentifier to_player)
+		template<state::CardZone Zone, state::CardZone SwapWithZone>
+		inline void MinionManipulator::SwapWith(state::CardRef ref)
 		{
+			state_.GetZoneChanger<state::kCardTypeMinion, SwapWithZone>(
+				FlowControl::Manipulate(state_, flow_context_), ref
+				).ChangeTo<state::kCardZoneSetASide>(state_.GetCard(ref).GetPlayerIdentifier());
+
+			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
+				FlowControl::Manipulate(state_, flow_context_), card_ref_
+				).ReplaceBy(ref);
+
+			FlowControl::Manipulate(state_, flow_context_).Minion(card_ref_)
+				.MoveTo<state::kCardZoneSetASide, SwapWithZone>(state_.GetCard(card_ref_).GetPlayerIdentifier());
 		}
 	}
 }
