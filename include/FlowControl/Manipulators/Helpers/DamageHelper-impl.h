@@ -23,6 +23,12 @@ namespace FlowControl
 						return;
 					}
 					DoDamage(state_, flow_context_, final_target, amount);
+
+					if (state_.GetCard(source_ref_).IsPoisonous()) {
+						if (state_.GetCard(target_ref_).GetCardType() == state::kCardTypeMinion) {
+							Manipulate(state_, flow_context_).Minion(target_ref_).Destroy();
+						}
+					}
 				}
 				else if (amount < 0) {
 					DoHeal(state_, flow_context_, final_target, -amount);
@@ -42,7 +48,7 @@ namespace FlowControl
 
 				int real_damage = 0;
 				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
-				flow_context.AddDeadEntryHint(state, card_ref);
+				if (state.GetCard(card_ref).GetHP() <= 0) flow_context.AddDeadEntryHint(state, card_ref);
 
 				// TODO: trigger event 'AfterTakenDamage', with real damage 'real_damage'
 			}

@@ -143,6 +143,9 @@ namespace state
 			void SetImmuneToSpell(bool v) { data_.enchanted_states.immune_to_spell = v; }
 			bool IsImmuneToSpell() const { return data_.enchanted_states.immune_to_spell; }
 
+			void SetPoisonous(bool v) { data_.enchanted_states.poisonous = v; }
+			bool IsPoisonous() const { return data_.enchanted_states.poisonous; }
+
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
 

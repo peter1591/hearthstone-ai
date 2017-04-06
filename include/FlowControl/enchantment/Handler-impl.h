@@ -59,7 +59,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 11, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 12, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
@@ -80,15 +80,21 @@ namespace FlowControl
 			}
 			if (new_states.max_attacks_per_turn != current_states.max_attacks_per_turn) {
 				state.GetMutableCard(card_ref).SetMaxAttacksPerTurn(new_states.max_attacks_per_turn);
+				assert(GetCard().GetMaxAttacksPerTurn() == new_states.max_attacks_per_turn);
 			}
 			if (new_states.immune_to_spell != current_states.immune_to_spell) {
 				state.GetMutableCard(card_ref).SetImmuneToSpell(new_states.immune_to_spell);
+				assert(GetCard().IsImmuneToSpell() == new_states.immune_to_spell);
+			}
+			if (new_states.poisonous != current_states.poisonous) {
+				state.GetMutableCard(card_ref).SetPoisonous(new_states.poisonous);
+				assert(GetCard().IsPoisonous() == new_states.poisonous);
 			}
 		}
 
 		inline void Handler::UpdateMinion(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 11, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 12, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -133,13 +139,13 @@ namespace FlowControl
 
 		inline void Handler::UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 11, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 12, "enchantable fields changed");
 			UpdateCharacter(state, flow_context, card_ref, new_states);
 		}
 
 		inline void Handler::UpdateWeapon(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 11, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 12, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -156,6 +162,10 @@ namespace FlowControl
 			if (new_states.spell_damage != current_states.spell_damage) {
 				manipulator.SpellDamage(new_states.spell_damage);
 				assert(GetCard().GetSpellDamage() == new_states.spell_damage);
+			}
+			if (new_states.poisonous != current_states.poisonous) {
+				state.GetMutableCard(card_ref).SetPoisonous(new_states.poisonous);
+				assert(GetCard().IsPoisonous() == new_states.poisonous);
 			}
 
 			assert(GetCard().GetRawData().enchanted_states == new_states);

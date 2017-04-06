@@ -314,8 +314,8 @@ namespace FlowControl
 			attacker, state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), defender });
 		Manipulate(state_, flow_context_).Character(attacker).Stealth(false);
 
-		Manipulate(state_, flow_context_).Character(defender).Damage(defender, GetAttackValue(attacker));
-		Manipulate(state_, flow_context_).Character(attacker).Damage(attacker, GetAttackValue(defender));
+		Manipulate(state_, flow_context_).Character(defender).Damage(attacker, GetAttackValue(attacker));
+		Manipulate(state_, flow_context_).Character(attacker).Damage(defender, GetAttackValue(defender));
 
 		state_.GetMutableCard(attacker).IncreaseNumAttacksThisTurn();
 

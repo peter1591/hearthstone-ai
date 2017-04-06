@@ -106,4 +106,14 @@ namespace Cards {
 			card_data.cant_attack = true;
 		}
 	};
+
+	struct Poisonous {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.enchanted_states.poisonous = true;
+		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.poisonous = true;
+		}
+	};
 }
