@@ -430,13 +430,13 @@ namespace Cards
 		}
 	};
 
-
 	struct Card_EX1_089 : public MinionCardBase<Card_EX1_089> {
 		static void Battlecry(Contexts::OnPlay context) {
-			AnotherPlayer(context).GetResource().GainEmptyCrystal();
+			context.manipulate_.Board().Player(context.player_.Opposite()).GetResource().GainCrystal();
 		}
 	};
 
+	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
@@ -488,6 +488,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_089)
 REGISTER_CARD(EX1_006)
 REGISTER_CARD(EX1_007)
 REGISTER_CARD(EX1_049)
@@ -529,7 +530,6 @@ REGISTER_CARD(EX1_390)
 REGISTER_CARD(CS2_188)
 REGISTER_CARD(CS2_203)
 
-REGISTER_CARD(EX1_089)
 REGISTER_CARD(NEW1_038)
 REGISTER_CARD(EX1_020)
 REGISTER_CARD(CS1_069)

@@ -241,7 +241,7 @@ void test2()
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 5, 8 });
-	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 5 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 1, 5 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { {4, 4, 4} });
 	CheckMinions(state, state::PlayerIdentifier::Second(), {});
 
@@ -250,7 +250,7 @@ void test2()
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 8, 8 });
-	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 5 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 1, 5 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 } });
 	CheckMinions(state, state::PlayerIdentifier::Second(), {});
 	parameter_getter.next_minion_put_location = 1;
@@ -261,7 +261,7 @@ void test2()
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 0, 8 });
-	CheckCrystals(state, state::PlayerIdentifier::Second(), { 0, 5 });
+	CheckCrystals(state, state::PlayerIdentifier::Second(), { 1, 5 });
 	CheckMinions(state, state::PlayerIdentifier::First(), { { 4, 4, 4 }, {7,7,7} });
 	CheckMinions(state, state::PlayerIdentifier::Second(), {});
 
