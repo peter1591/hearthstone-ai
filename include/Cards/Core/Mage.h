@@ -65,12 +65,13 @@ namespace Cards
 	struct Card_CS2_029 : SpellCardBase<Card_CS2_029> {
 		Card_CS2_029() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
 				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return;
+				assert(target.IsValid());
 				context.manipulate_.Character(target).Damage(context.card_ref_, 6 + spell_damage);
 			});
 		}

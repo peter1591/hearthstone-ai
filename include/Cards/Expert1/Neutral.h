@@ -556,6 +556,25 @@ namespace Cards
 
 	struct Card_EX1_017 : public MinionCardBase<Card_EX1_017, Stealth> {};
 
+	struct Card_EX1_014te : public Enchantment<Card_EX1_014te, Attack<1>, MaxHP<1>> {};
+	struct Card_EX1_014t : public SpellCardBase<Card_EX1_014t> {
+		Card_EX1_014t() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
+				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Minion(context.GetTarget()).Enchant().Add<Card_EX1_014te>();
+			});
+		}
+	};
+	struct Card_EX1_014 : public MinionCardBase<Card_EX1_014> {
+		static void Battlecry(Contexts::OnPlay context) {
+			context.manipulate_.Hero(context.player_.Opposite()).AddHandCard(Cards::ID_EX1_014t);
+			context.manipulate_.Hero(context.player_.Opposite()).AddHandCard(Cards::ID_EX1_014t);
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -598,6 +617,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_014t)
+REGISTER_CARD(EX1_014)
 REGISTER_CARD(EX1_017)
 REGISTER_CARD(CS2_203)
 REGISTER_CARD(CS2_181)
