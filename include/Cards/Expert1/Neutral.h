@@ -538,6 +538,22 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_181 : public MinionCardBase<Card_CS2_181> {
+		static void Battlecry(Contexts::OnPlay context) {
+			context.manipulate_.Minion(context.card_ref_).Damage(context.card_ref_, 3);
+		}
+	};
+
+	struct Card_CS2_203 : public MinionCardBase<Card_CS2_203> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets(context.player_).Minion().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
+			return Manipulate(context).Minion(context.GetTarget()).Silence();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -553,16 +569,6 @@ namespace Cards
 
 	struct Card_EX1_020 : public MinionCardBase<Card_EX1_020, Shield> {};
 	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069, Taunt> {};
-
-	struct Card_CS2_203 : public MinionCardBase<Card_CS2_203> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return Targets(context.player_).Minion().Targetable();
-		}
-		static void Battlecry(Contexts::OnPlay context) {
-			if (!context.GetTarget().IsValid()) return;
-			return Manipulate(context).Minion(context.GetTarget()).Silence();
-		}
-	};
 
 	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
 	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
@@ -590,6 +596,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_203)
+REGISTER_CARD(CS2_181)
 REGISTER_CARD(EX1_597)
 REGISTER_CARD(EX1_556)
 REGISTER_CARD(tt_004)
@@ -639,7 +647,6 @@ REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)
 REGISTER_CARD(EX1_390)
 REGISTER_CARD(CS2_188)
-REGISTER_CARD(CS2_203)
 
 REGISTER_CARD(NEW1_038)
 REGISTER_CARD(EX1_020)
