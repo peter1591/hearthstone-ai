@@ -437,7 +437,7 @@ namespace Cards
 	};
 
 	template <int v>
-	struct Card_EX1_590e : public Enchantment<Attack<3*v>, MaxHP<3*v>> {};
+	struct Card_EX1_590e : public Enchantment<Card_EX1_590e<0>, Attack<3*v>, MaxHP<3*v>> {};
 	struct Card_EX1_590 : public MinionCardBase<Card_EX1_590> {
 		static void Battlecry(Contexts::OnPlay context) {
 			int count = 0;
@@ -503,6 +503,17 @@ namespace Cards
 
 	struct Card_EX1_170 : public MinionCardBase<Card_EX1_170, Poisonous> {};
 
+	struct Card_tt_004o : public Enchantment<Card_tt_004o, Attack<1>> {};
+	struct Card_tt_004 : public MinionCardBase<Card_tt_004> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionDied::Context context) {
+			context.manipulate_.Minion(self).Enchant().Add<Card_tt_004o>();
+			return true;
+		}
+		Card_tt_004() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterMinionDied>();
+		}
+	};
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -555,6 +566,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(tt_004)
 REGISTER_CARD(EX1_170)
 REGISTER_CARD(CS2_117)
 REGISTER_CARD(EX1_102)

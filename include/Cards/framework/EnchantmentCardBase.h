@@ -30,10 +30,13 @@ namespace Cards
 			Enchant2::required_tier,
 			Enchant3::required_tier,
 			Enchant4::required_tier,
-			Enchant2::required_tier
+			Enchant5::required_tier
 		});
 
 		Enchantment() {
+			// TODO: use SFINAE to make sure caller correctly pass itself as T
+			//       T::required_tier must NOT exist
+
 			apply_functor = [](state::Cards::EnchantableStates & stats) {
 				Enchant1::Apply(stats);
 				Enchant2::Apply(stats);
