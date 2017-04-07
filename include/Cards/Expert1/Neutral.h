@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Pint-Sized Summoner
+// finished: Jungle Panther
 
 namespace Cards
 {
@@ -554,6 +554,8 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_017 : public MinionCardBase<Card_EX1_017, Stealth> {};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -596,6 +598,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_017)
 REGISTER_CARD(CS2_203)
 REGISTER_CARD(CS2_181)
 REGISTER_CARD(EX1_597)
