@@ -514,6 +514,30 @@ namespace Cards
 				state::Events::EventTypes::AfterMinionDied>();
 		}
 	};
+
+	struct Card_EX1_556 : public MinionCardBase<Card_EX1_556> {
+		Card_EX1_556() {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_skele21);
+			});
+		}
+	};
+
+	struct Card_EX1_597 : public MinionCardBase<Card_EX1_597> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+
+			SummonToRight(context.manipulate_, self, Cards::ID_EX1_598);
+			context.manipulate_.Minion(self).Damage(self, 1);
+			return true;
+		}
+		Card_EX1_597() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -566,6 +590,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_597)
+REGISTER_CARD(EX1_556)
 REGISTER_CARD(tt_004)
 REGISTER_CARD(EX1_170)
 REGISTER_CARD(CS2_117)
