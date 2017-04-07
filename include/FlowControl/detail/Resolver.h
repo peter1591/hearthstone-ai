@@ -94,6 +94,10 @@ namespace FlowControl
 						state_.GetMutableCard(ref).GetMutableDeathrattleHandler().TriggerAll(
 							FlowControl::deathrattle::context::Deathrattle{
 							FlowControl::Manipulate(state_, flow_context_), ref, player, zone, zone_pos, attack });
+						state_.TriggerEvent<state::Events::EventTypes::AfterMinionDied>(
+							state::Events::EventTypes::AfterMinionDied::Context{
+							FlowControl::Manipulate(state_, flow_context_), ref
+						});
 					}));
 				}
 
@@ -103,9 +107,7 @@ namespace FlowControl
 						.ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 
-				for (auto death_item: ordered_deaths) {
-					death_item.second();
-				}
+				for (auto death_item: ordered_deaths) death_item.second();
 
 				return true;
 			}

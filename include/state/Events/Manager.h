@@ -84,6 +84,8 @@ private: \
 			ADD_TRIGGER_TYPE(AfterMinionSummoned);
 			ADD_TRIGGER_TYPE(BeforeMinionSummoned);
 			ADD_TRIGGER_TYPE(AfterMinionPlayed);
+			ADD_TRIGGER_TYPE(AfterMinionDied);
+
 			ADD_TRIGGER_TYPE(OnMinionPlay);
 			ADD_TRIGGER_TYPE(OnTurnEnd);
 			ADD_TRIGGER_TYPE(OnTurnStart);
