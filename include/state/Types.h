@@ -43,7 +43,9 @@ namespace state
 		kCardRaceBeast,
 		kCardRacePirate,
 		kCardRaceMurloc,
-		kCardRaceTotem
+		kCardRaceTotem,
+		kCardRaceElemental,
+		kCardRaceOrc
 	};
 
 	enum CardSet

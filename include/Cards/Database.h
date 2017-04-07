@@ -97,6 +97,8 @@ namespace Cards
 			if (race == "MURLOC") return state::kCardRaceMurloc;
 			if (race == "TOTEM") return state::kCardRaceTotem;
 			if (race == "PIRATE") return state::kCardRacePirate;
+			if (race == "ELEMENTAL") return state::kCardRaceElemental;
+			if (race == "ORC") return state::kCardRaceOrc;
 
 			if (race == "") return state::kCardRaceInvalid;
 
