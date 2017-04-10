@@ -15,7 +15,7 @@ namespace Cards
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());
 					context.manipulate_
-						.Character(target)
+						.OnBoardCharacter(target)
 						.ConductFinalDamage(context.card_ref_, 1);
 				}
 			});

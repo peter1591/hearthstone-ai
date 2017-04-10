@@ -19,7 +19,7 @@ namespace FlowControl
 
 				if (amount > 0) {
 					if (state_.GetCard(final_target).HasShield()) {
-						Manipulate(state_, flow_context_).Character(final_target).Shield(false);
+						Manipulate(state_, flow_context_).OnBoardCharacter(final_target).Shield(false);
 						return;
 					}
 					DoDamage(state_, flow_context_, final_target, amount);

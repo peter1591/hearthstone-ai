@@ -223,7 +223,7 @@ namespace Cards
 			
 			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy(owner).Alive().GetInfo());
 			if (!target.IsValid()) return true;
-			context.manipulate_.Character(target).Damage(context.card_ref_, 1);
+			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
 			return true;
 		};
 		Card_NEW1_019() {
@@ -259,7 +259,7 @@ namespace Cards
 				state::CardRef target = context.manipulate_.GetRandomTarget(
 					TargetsGenerator(context.player_).Alive().Exclude(context.card_ref_).GetInfo()
 				);
-				context.manipulate_.Character(target).Damage(context.card_ref_, 1);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
 			}
 		}
 	};
@@ -482,7 +482,7 @@ namespace Cards
 
 			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy(owner).GetInfo());
 			assert(target.IsValid());
-			context.manipulate_.Character(target).Damage(self, 2);
+			context.manipulate_.OnBoardCharacter(target).Damage(self, 2);
 			return true;
 		}
 		Card_EX1_102() {
@@ -496,7 +496,7 @@ namespace Cards
 			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			context.manipulate_.Character(context.GetTarget()).Heal(
+			context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(
 				context.card_ref_, 3);
 		}
 	};

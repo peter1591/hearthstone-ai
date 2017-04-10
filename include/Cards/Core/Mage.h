@@ -9,7 +9,7 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
-					.Character(context.GetTarget())
+					.OnBoardCharacter(context.GetTarget())
 					.Damage(context.card_ref_, 1);
 			});
 		}
@@ -28,7 +28,7 @@ namespace Cards
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());
 					context.manipulate_
-						.Character(target)
+						.OnBoardCharacter(target)
 						.ConductFinalDamage(context.card_ref_, 1);
 				}
 			});
@@ -72,7 +72,7 @@ namespace Cards
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
-				context.manipulate_.Character(target).Damage(context.card_ref_, 6 + spell_damage);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 6 + spell_damage);
 			});
 		}
 	};

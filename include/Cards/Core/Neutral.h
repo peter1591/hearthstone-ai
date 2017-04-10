@@ -9,7 +9,7 @@ namespace Cards
 			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			context.manipulate_.Character(context.GetTarget())
+			context.manipulate_.OnBoardCharacter(context.GetTarget())
 				.Damage(context.card_ref_, 1);
 		}
 	};
@@ -37,7 +37,7 @@ namespace Cards
 			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			context.manipulate_.Character(context.GetTarget()).Heal(
+			context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(
 				context.card_ref_, 2);
 		}
 	};
@@ -73,7 +73,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
-			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 1);
+			context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 1);
 		}
 	};
 
@@ -132,7 +132,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			ForEach(context, Targets(context.player_).Ally(context).Exclude(context.card_ref_),
 				[context](FlowControl::Manipulate manipulate, state::CardRef ref) {
-				manipulate.Character(ref).Heal(context.card_ref_, 2);
+				manipulate.OnBoardCharacter(ref).Heal(context.card_ref_, 2);
 			});
 		}
 	};
@@ -196,7 +196,7 @@ namespace Cards
 			return TargetsGenerator(context.player_).Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
-			context.manipulate_.Character(context.GetTarget()).Damage(context.card_ref_, 2);
+			context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
 		}
 	};
 

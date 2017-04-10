@@ -39,7 +39,9 @@ namespace FlowControl
 			return Manipulators::MinionManipulator<Zone>(state_, flow_context_, ref);
 		}
 
-		Manipulators::CharacterManipulator Character(state::CardRef ref);
+		Manipulators::CharacterManipulator<state::kCardZonePlay> OnBoardCharacter(state::CardRef ref) {
+			return Manipulators::CharacterManipulator<state::kCardZonePlay>(state_, flow_context_, ref);
+		}
 
 		Manipulators::WeaponManipulator Weapon(state::CardRef ref);
 

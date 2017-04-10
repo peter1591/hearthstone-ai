@@ -6,7 +6,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		class HeroManipulator : public CharacterManipulator
+		class HeroManipulator : public CharacterManipulator<state::kCardZonePlay>
 		{
 		public:
 			HeroManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)

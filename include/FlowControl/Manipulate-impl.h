@@ -49,11 +49,6 @@ namespace FlowControl
 		return HeroPower(state_.GetBoard().Get(player).GetHeroPowerRef());
 	}
 
-	inline Manipulators::CharacterManipulator Manipulate::Character(state::CardRef ref)
-	{
-		return Manipulators::CharacterManipulator(state_, flow_context_, ref);
-	}
-
 	inline Manipulators::WeaponManipulator Manipulate::Weapon(state::CardRef ref)
 	{
 		return Manipulators::WeaponManipulator(state_, flow_context_, ref);
