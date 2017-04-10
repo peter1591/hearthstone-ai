@@ -48,8 +48,8 @@ namespace Cards
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 
-			context.manipulate_.Minion(target).Destroy();
-			context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_017e>();
+			context.manipulate_.OnBoardMinion(target).Destroy();
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_NEW1_017e>();
 		}
 	};
 
@@ -67,7 +67,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context context) {
 			if (context.amount_ < 0) return true;
 			if (context.manipulate_.GetCard(context.card_ref_).GetDamage() <= 0) return true;
-			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_001e>();
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_001e>();
 			return true;
 		};
 		Card_EX1_001() {
@@ -81,7 +81,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
 			if (context.manipulate_.GetCard(context.card_ref_).GetRace() != state::kCardRaceMurloc) return true;
 			if (context.card_ref_ == self) return true;
-			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_509e>();
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_509e>();
 			return true;
 		}
 		Card_EX1_509() {
@@ -93,7 +93,7 @@ namespace Cards
 	struct Card_EX1_080o : public Enchantment<Card_EX1_080o, Attack<1>,MaxHP<1>> {};
 	struct Card_EX1_080 : public MinionCardBase<Card_EX1_080> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSecretPlayed::Context context) {
-			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_080o>();
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_080o>();
 			return true;
 		}
 		Card_EX1_080() {
@@ -165,7 +165,7 @@ namespace Cards
 			if (!weapon_ref.IsValid()) return;
 			int weapon_atk = context.manipulate_.GetCard(weapon_ref).GetAttack();
 			if (weapon_atk <= 0) return;
-			context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_NEW1_018e>(weapon_atk);
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_NEW1_018e>(weapon_atk);
 		}
 	};
 
@@ -183,9 +183,9 @@ namespace Cards
 			state::Cards::Card const& card = context.manipulate_.GetCard(target);
 			int hp = card.GetHP();
 			int atk = card.GetAttack();
-			context.manipulate_.Minion(target).Enchant().Add<Card_EX1_059_atk>(hp);
-			context.manipulate_.Minion(target).Enchant().Add<Card_EX1_059_hp>(atk);
-			context.manipulate_.Minion(target).Enchant().SetHealthToMaxHP();
+			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_059_atk>(hp);
+			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_059_hp>(atk);
+			context.manipulate_.OnBoardMinion(target).Enchant().SetHealthToMaxHP();
 		}
 	};
 
@@ -200,7 +200,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnStart::Context context) {
 			if (context.manipulate_.GetCard(self).GetPlayerIdentifier() != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 			auto op = [&](state::CardRef ref) {
-				context.manipulate_.Minion(ref).Destroy();
+				context.manipulate_.OnBoardMinion(ref).Destroy();
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -269,7 +269,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.player_) return true;
-			context.manipulate_.Minion(self).Enchant().Add<Card_EX1_055o>();
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_055o>();
 			return true;
 		};
 		Card_EX1_055() {
@@ -353,10 +353,10 @@ namespace Cards
 			int zone_pos = card.GetZonePosition();
 
 			if (zone_pos > 0) {
-				context.manipulate_.Minion(minions.Get(zone_pos - 1)).Taunt(true);
+				context.manipulate_.OnBoardMinion(minions.Get(zone_pos - 1)).Taunt(true);
 			}
 			if (zone_pos < minions.Size() - 1) {
-				context.manipulate_.Minion(minions.Get(zone_pos + 1)).Taunt(true);
+				context.manipulate_.OnBoardMinion(minions.Get(zone_pos + 1)).Taunt(true);
 			}
 		}
 	};
@@ -367,7 +367,7 @@ namespace Cards
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
 			auto op = [&](state::CardRef ref) {
-				context.manipulate_.Minion(ref).Damage(self, 1);
+				context.manipulate_.OnBoardMinion(ref).Damage(self, 1);
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -386,7 +386,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
-			context.manipulate_.Minion(target).MoveTo<state::kCardZonePlay, state::kCardZoneHand>(context.player_);
+			context.manipulate_.OnBoardMinion(target).MoveTo<state::kCardZoneHand>(context.player_);
 		}
 	};
 
@@ -421,7 +421,7 @@ namespace Cards
 			state::CardRef target = candidates[rand];
 
 			// swap minion
-			context.manipulate_.Minion(self).SwapWith<state::kCardZonePlay, state::kCardZoneHand>(target);
+			context.manipulate_.OnBoardMinion(self).SwapWith<state::kCardZoneHand>(target);
 			return true;
 		}
 		Card_EX1_006() {
@@ -445,13 +445,13 @@ namespace Cards
 				if (!context.manipulate_.GetCard(ref).HasShield()) return;
 
 				++count;
-				context.manipulate_.Minion(ref).Shield(false);
+				context.manipulate_.OnBoardMinion(ref).Shield(false);
 			};
 
 			if (count <= 0) return;
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
-			context.manipulate_.Minion(context.card_ref_).Enchant().Add<Card_EX1_590e>(count);
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_590e>(count);
 		}
 	};
 
@@ -470,7 +470,7 @@ namespace Cards
 			context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef ref) {
 				if (ref == context.card_ref_) return;
 				if (context.manipulate_.GetCard(ref).GetCardType() != state::kCardRaceMurloc) return;
-				context.manipulate_.Minion(ref).Enchant().Add<Card_EX1_103e>();
+				context.manipulate_.OnBoardMinion(ref).Enchant().Add<Card_EX1_103e>();
 			});
 		}
 	};
@@ -506,7 +506,7 @@ namespace Cards
 	struct Card_tt_004o : public Enchantment<Card_tt_004o, Attack<1>> {};
 	struct Card_tt_004 : public MinionCardBase<Card_tt_004> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionDied::Context context) {
-			context.manipulate_.Minion(self).Enchant().Add<Card_tt_004o>();
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_tt_004o>();
 			return true;
 		}
 		Card_tt_004() {
@@ -529,7 +529,7 @@ namespace Cards
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
 			SummonToRight(context.manipulate_, self, Cards::ID_EX1_598);
-			context.manipulate_.Minion(self).Damage(self, 1);
+			context.manipulate_.OnBoardMinion(self).Damage(self, 1);
 			return true;
 		}
 		Card_EX1_597() {
@@ -540,7 +540,7 @@ namespace Cards
 
 	struct Card_CS2_181 : public MinionCardBase<Card_CS2_181> {
 		static void Battlecry(Contexts::OnPlay context) {
-			context.manipulate_.Minion(context.card_ref_).Damage(context.card_ref_, 3);
+			context.manipulate_.OnBoardMinion(context.card_ref_).Damage(context.card_ref_, 3);
 		}
 	};
 
@@ -550,7 +550,7 @@ namespace Cards
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
-			return Manipulate(context).Minion(context.GetTarget()).Silence();
+			return Manipulate(context).OnBoardMinion(context.GetTarget()).Silence();
 		}
 	};
 
@@ -564,7 +564,7 @@ namespace Cards
 				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Minion(context.GetTarget()).Enchant().Add<Card_EX1_014te>();
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_014te>();
 			});
 		}
 	};
@@ -609,7 +609,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
 
-			state::CardRef new_ref = Manipulate(context).Minion(context.card_ref_)
+			state::CardRef new_ref = Manipulate(context).OnBoardMinion(context.card_ref_)
 				.BecomeCopyof(context.GetTarget());
 
 			*context.new_card_ref = new_ref;

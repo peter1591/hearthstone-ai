@@ -150,7 +150,7 @@ namespace FlowControl
 				}
 
 				for (state::CardRef minion_ref : state_.GetBoard().Get(player).minions_.Get()) {
-					Manipulate(state_, flow_context_).Minion(minion_ref).Enchant().Update();
+					Manipulate(state_, flow_context_).OnBoardMinion(minion_ref).Enchant().Update();
 				}
 			}
 

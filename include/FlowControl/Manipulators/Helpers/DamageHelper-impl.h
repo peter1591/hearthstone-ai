@@ -26,7 +26,7 @@ namespace FlowControl
 
 					if (state_.GetCard(source_ref_).IsPoisonous()) {
 						if (state_.GetCard(target_ref_).GetCardType() == state::kCardTypeMinion) {
-							Manipulate(state_, flow_context_).Minion(target_ref_).Destroy();
+							Manipulate(state_, flow_context_).OnBoardMinion(target_ref_).Destroy();
 						}
 					}
 				}

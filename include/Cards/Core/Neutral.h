@@ -106,7 +106,7 @@ namespace Cards
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
-			Manipulate(context).Minion(context.GetTarget()).Enchant().Add<Card_EX1_019e>();
+			Manipulate(context).OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_019e>();
 		}
 	};
 
@@ -149,22 +149,22 @@ namespace Cards
 			case 0:
 				break;
 			case 1:
-				Manipulate(context).Minion(context.card_ref_).Enchant().Add<Card_CS2_226e<1>>();
+				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<1>>();
 				break;
 			case 2:
-				Manipulate(context).Minion(context.card_ref_).Enchant().Add<Card_CS2_226e<2>>();
+				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<2>>();
 				break;
 			case 3:
-				Manipulate(context).Minion(context.card_ref_).Enchant().Add<Card_CS2_226e<3>>();
+				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<3>>();
 				break;
 			case 4:
-				Manipulate(context).Minion(context.card_ref_).Enchant().Add<Card_CS2_226e<4>>();
+				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<4>>();
 				break;
 			case 5:
-				Manipulate(context).Minion(context.card_ref_).Enchant().Add<Card_CS2_226e<5>>();
+				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<5>>();
 				break;
 			case 6:
-				Manipulate(context).Minion(context.card_ref_).Enchant().Add<Card_CS2_226e<6>>();
+				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<6>>();
 				break;
 			default:
 				throw std::exception("invalid minion count");

@@ -68,7 +68,7 @@ namespace FlowControl
 			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
 				state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), ref });
 
-			Manipulate(state_, flow_context_).Minion(ref).AfterSummoned();
+			Manipulate(state_, flow_context_).OnBoardMinion(ref).AfterSummoned();
 		}
 
 		inline int BoardManipulator::GetSpellDamage(state::PlayerIdentifier player_id)

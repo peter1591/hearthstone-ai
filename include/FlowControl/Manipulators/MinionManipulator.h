@@ -1,13 +1,12 @@
 #pragma once
 
-#include "state/Cards/Card.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
-#include "Cards/id-map.h"
 
 namespace FlowControl
 {
 	namespace Manipulators
 	{
+		template <state::CardZone Zone>
 		class MinionManipulator : public CharacterManipulator
 		{
 		public:
@@ -15,35 +14,14 @@ namespace FlowControl
 				: CharacterManipulator(state, flow_context, card_ref)
 			{
 				assert(GetCard().GetCardType() == state::kCardTypeMinion);
+				assert(GetCard().GetZone() == Zone);
 			}
 
-			void AfterSummoned()
-			{
-			}
-
-			void TurnStart()
-			{
-				GetCard().SetJustPlayedFlag(false);
-				GetCard().ClearNumAttacksThisTurn();
-			}
-
-			void Silence();
-
-			void Destroy() {
-				GetCard().SetPendingDestroy();
-				flow_context_.AddDeadEntryHint(state_, card_ref_);
-			}
-
-			state::CardRef Transform(Cards::CardId card_id);
-
-			state::CardRef BecomeCopyof(state::CardRef card_ref);
-			state::CardRef BecomeCopyof(state::Cards::Card const& card);
-
-			template <state::CardZone ZoneFrom, state::CardZone ZoneTo>
-			void MoveTo(state::PlayerIdentifier to_player);
-
-			template<state::CardZone Zone, state::CardZone SwapWithZone>
+			template<state::CardZone SwapWithZone>
 			void SwapWith(state::CardRef ref);
+
+			template <state::CardZone ZoneTo>
+			void MoveTo(state::PlayerIdentifier to_player);
 		};
 	}
 }

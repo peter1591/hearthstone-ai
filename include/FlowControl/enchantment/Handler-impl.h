@@ -43,7 +43,7 @@ namespace FlowControl
 				int target_hp = std::min(GetCard().GetMaxHP(), origin_hp);
 
 				// do not trigger healing events
-				Manipulate(state, flow_context).Minion(card_ref)
+				Manipulate(state, flow_context).OnBoardMinion(card_ref)
 					.Internal_SetDamage().Heal(target_hp - hp);
 
 				hp = GetCard().GetHP();
@@ -100,11 +100,10 @@ namespace FlowControl
 
 			UpdateCharacter(state, flow_context, card_ref, new_states);
 
+			assert(GetCard().GetZone() == state::kCardZonePlay);
 			assert(GetCard().GetCardType() == state::kCardTypeMinion);
-			auto manipulator = Manipulators::MinionManipulator(state, flow_context, card_ref);
+			auto manipulator = Manipulators::OnBoardMinionManipulator(state, flow_context, card_ref);
 			if (new_states.player != current_states.player) {
-				assert(GetCard().GetZone() == state::kCardZonePlay);
-
 				if (state.GetBoard().Get(new_states.player).minions_.Full()) {
 					state.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(Manipulate(state, flow_context), card_ref)
 						.ChangeTo<state::kCardZoneGraveyard>(current_states.player);

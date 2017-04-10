@@ -10,7 +10,7 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
-					.Minion(context.GetTarget())
+					.OnBoardMinion(context.GetTarget())
 					.Transform(CardId::ID_hexfrog);
 			});
 		}

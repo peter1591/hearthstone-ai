@@ -128,9 +128,6 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
@@ -234,9 +231,6 @@
       <Filter>Header Files\state\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
@@ -481,6 +475,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag-impl.h">
       <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

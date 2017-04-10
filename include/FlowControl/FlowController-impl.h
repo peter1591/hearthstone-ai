@@ -213,7 +213,7 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
 			state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), new_card_ref });
 
-		Manipulate(state_, flow_context_).Minion(new_card_ref).AfterSummoned();
+		Manipulate(state_, flow_context_).OnBoardMinion(new_card_ref).AfterSummoned();
 
 		return true;
 	}
@@ -461,7 +461,7 @@ namespace FlowControl
 			state::Events::EventTypes::OnTurnStart::Context{ Manipulate(state_, flow_context_) });
 
 		for (state::CardRef minion : state_.GetCurrentPlayer().minions_.Get()) {
-			Manipulate(state_, flow_context_).Minion(minion).TurnStart();
+			Manipulate(state_, flow_context_).OnBoardMinion(minion).TurnStart();
 		}
 		Manipulate(state_, flow_context_).CurrentHero().TurnStart();
 		Manipulate(state_, flow_context_).HeroPower(state_.GetCurrentPlayerId()).TurnStart();

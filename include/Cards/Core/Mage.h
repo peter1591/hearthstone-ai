@@ -56,7 +56,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int damage = 4 + context.manipulate_.Board().GetSpellDamage(context.player_);
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
-					context.manipulate_.Minion(minion).Damage(context.card_ref_, damage);
+					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
 				});
 			});
 		}
