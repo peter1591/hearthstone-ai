@@ -83,6 +83,9 @@ namespace FlowControl
 
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
 
+		state_.TriggerEvent<state::Events::EventTypes::OnPlay>(
+			state::Events::EventTypes::OnPlay::Context{ Manipulate(state_, flow_context_), card_ref });
+
 		return PlayCardPhaseInternal<CardType>(card_ref);
 	}
 
@@ -186,8 +189,6 @@ namespace FlowControl
 
 		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
-
-		state_.TriggerEvent<state::Events::EventTypes::OnMinionPlay>(card_ref);
 
 		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		state::CardRef new_card_ref;

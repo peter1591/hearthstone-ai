@@ -601,6 +601,20 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_044e : public Enchantment<Card_EX1_044e, Attack<1>, MaxHP<1>> {};
+	struct Card_EX1_044 : public MinionCardBase<Card_EX1_044> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnPlay::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_044e>();
+			return true;
+		}
+		Card_EX1_044() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnPlay>();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -643,6 +657,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_044)
 REGISTER_CARD(EX1_507)
 REGISTER_CARD(EX1_085)
 REGISTER_CARD(EX1_014t)
