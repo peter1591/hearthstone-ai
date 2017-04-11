@@ -710,6 +710,17 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_046e : public EnchantmentForThisTurn<Card_EX1_046e, Attack<2>> {};
+	struct Card_EX1_046 : public MinionCardBase<Card_EX1_046> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets(context.player_).Minion().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
+			Manipulate(context).Card(context.GetTarget()).Enchant().Add<Card_EX1_046e>();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -740,6 +751,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_046)
 REGISTER_CARD(EX1_595)
 REGISTER_CARD(EX1_584)
 REGISTER_CARD(EX1_057)
