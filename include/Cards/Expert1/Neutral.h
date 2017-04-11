@@ -639,6 +639,16 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
+	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+			context.new_target = context.card_ref_;
+		}
+		Card_EX1_390() {
+			Enrage<Card_EX1_390_Enchant>();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -653,16 +663,6 @@ namespace Cards
 	};
 
 	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069, Taunt> {};
-
-	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
-	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
-			context.new_target = context.card_ref_;
-		}
-		Card_EX1_390() {
-			Enrage<Card_EX1_390_Enchant>();
-		}
-	};
 
 	struct Card_EX1_564 : public MinionCardBase<Card_EX1_564> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
@@ -679,6 +679,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_390)
 REGISTER_CARD(NEW1_027)
 REGISTER_CARD(EX1_020)
 REGISTER_CARD(EX1_412)
@@ -737,7 +738,6 @@ REGISTER_CARD(NEW1_025)
 REGISTER_CARD(EX1_564)
 REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)
-REGISTER_CARD(EX1_390)
 REGISTER_CARD(CS2_188)
 
 REGISTER_CARD(NEW1_038)
