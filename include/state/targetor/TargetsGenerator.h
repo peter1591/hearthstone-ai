@@ -64,6 +64,12 @@ namespace state {
 				info_.minion_filter = Targets::kMinionFilterMurloc;
 				return *this;
 			}
+
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Pirates()
+			{
+				info_.minion_filter = Targets::kMinionFilterPirate;
+				return *this;
+			}
 		};
 
 		class TargetsGenerator_ChosenSide : public TargetsGenerator_ChosenSide_ChosenHeroMinion

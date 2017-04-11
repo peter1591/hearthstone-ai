@@ -65,7 +65,8 @@ namespace state {
 				kMinionFilterAlive, // mortally wounded, or marked as pending-destroy
 				kMinionFilterTargetable,
 				kMinionFilterTargetableBySpell,
-				kMinionFilterMurloc
+				kMinionFilterMurloc,
+				kMinionFilterPirate
 			} minion_filter;
 
 			CardRef exclude;
