@@ -651,6 +651,21 @@ namespace Cards
 
 	struct Card_EX1_021 : public MinionCardBase<Card_EX1_021, Windfury> {};
 
+	struct Card_EX1_083 : public MinionCardBase<Card_EX1_083> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.manipulate_.GetRandomTarget(
+				Targets(context.player_).Minion().Exclude(context.card_ref_).GetInfo()
+			);
+			if (!target.IsValid()) return;
+
+			Cards::CardId transform_id;
+			if (context.manipulate_.GetRandom().Get(2) == 0) transform_id = Cards::ID_EX1_tk28;
+			else transform_id = Cards::ID_EX1_tk29;
+
+			context.manipulate_.OnBoardMinion(target).Transform(transform_id);
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -681,6 +696,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_083)
 REGISTER_CARD(EX1_021)
 REGISTER_CARD(EX1_390)
 REGISTER_CARD(NEW1_027)
