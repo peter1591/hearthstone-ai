@@ -649,6 +649,8 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_021 : public MinionCardBase<Card_EX1_021, Windfury> {};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -679,6 +681,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_021)
 REGISTER_CARD(EX1_390)
 REGISTER_CARD(NEW1_027)
 REGISTER_CARD(EX1_020)
