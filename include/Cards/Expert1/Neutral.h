@@ -18,8 +18,7 @@ namespace Cards
 
 	struct Card_EX1_009_Enchant : public Enchantment<Card_EX1_009_Enchant, Attack<5>> {};
 	struct Card_EX1_009 : public MinionCardBase<Card_EX1_009, Taunt> {
-		template <typename Context>
-		static auto GetEnrageTarget(Context&& context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_009() {
@@ -139,8 +138,7 @@ namespace Cards
 
 	struct Card_EX1_393_Enchant : public Enchantment<Card_EX1_393_Enchant, Attack<3>> {};
 	struct Card_EX1_393 : public MinionCardBase<Card_EX1_393> {
-		template <typename Context>
-		static auto GetEnrageTarget(Context&& context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_393() {
@@ -615,6 +613,18 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_412e : public Enchantment<Card_EX1_412e, Windfury> {};
+	struct Card_EX1_412 : public MinionCardBase<Card_EX1_412> {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+			context.new_target = context.card_ref_;
+		}
+		Card_EX1_412() {
+			Enrage<Card_EX1_412e>();
+		}
+	};
+
+	struct Card_EX1_020 : public MinionCardBase<Card_EX1_020, Shield> {};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -633,8 +643,7 @@ namespace Cards
 
 	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
 	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
-		template <typename Context>
-		static auto GetEnrageTarget(Context&& context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_390() {
@@ -657,6 +666,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_020)
+REGISTER_CARD(EX1_412)
 REGISTER_CARD(EX1_044)
 REGISTER_CARD(EX1_507)
 REGISTER_CARD(EX1_085)
