@@ -69,6 +69,10 @@ namespace Cards {
 		static void Apply(state::Cards::CardData & card_data) {
 			card_data.enchanted_states.spell_damage = v;
 		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.spell_damage += v;
+		}
 	};
 	template <int v> struct Overload {
 		static void Apply(state::Cards::CardData & card_data) {

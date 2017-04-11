@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Jungle Panther
+// finished: Ancient Mage
 
 namespace Cards
 {
@@ -677,6 +677,26 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_584e : public Enchantment<Card_EX1_584e, SpellDamage<1>> {};
+	struct Card_EX1_584 : public MinionCardBase<Card_EX1_584> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			assert(context.manipulate_.GetCard(context.card_ref_).GetZone() == state::kCardZonePlay);
+
+			auto op = [&](state::CardRef target) {
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_584e>();
+			};
+
+			int pos = context.manipulate_.GetCard(context.card_ref_).GetZonePosition();
+			if (pos > 0) {
+				op(context.manipulate_.Board().Player(player).minions_.Get(pos - 1));
+			}
+			if (pos < (context.manipulate_.Board().Player(player).minions_.Size() - 1)) {
+				op(context.manipulate_.Board().Player(player).minions_.Get(pos + 1));
+			}
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -707,6 +727,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_584)
 REGISTER_CARD(EX1_057)
 REGISTER_CARD(EX1_083)
 REGISTER_CARD(EX1_021)
