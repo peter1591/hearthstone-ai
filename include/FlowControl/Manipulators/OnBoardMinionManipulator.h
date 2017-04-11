@@ -35,6 +35,8 @@ namespace FlowControl
 				flow_context_.AddDeadEntryHint(state_, card_ref_);
 			}
 
+			void ChangeOwner(state::PlayerIdentifier new_owner);
+
 			state::CardRef Transform(Cards::CardId card_id);
 
 			state::CardRef BecomeCopyof(state::CardRef card_ref);
