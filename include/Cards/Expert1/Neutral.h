@@ -587,6 +587,20 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_507e : public Enchantment<Card_EX1_507e, Attack<2>, MaxHP<1>> {};
+	struct Card_EX1_507 : public MinionCardBase<Card_EX1_507> {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			TargetsGenerator(player)
+				.Ally(context).Minion().Murlocs() // friendly murlocs
+				.Exclude(context.card_ref_) // only apply on other
+				.GetInfo().Fill(context.manipulate_, context.new_targets);
+		}
+		Card_EX1_507() {
+			Aura<Card_EX1_507e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -629,6 +643,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_507)
 REGISTER_CARD(EX1_085)
 REGISTER_CARD(EX1_014t)
 REGISTER_CARD(EX1_014)
