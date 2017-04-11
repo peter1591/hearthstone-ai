@@ -58,7 +58,7 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static DamageHelper<std::decay_t<Context>> DamageA(Context&& context)
+		static DamageHelper<std::decay_t<Context>> DamageA(Context&& context) // TODO
 		{
 			return DamageHelper<std::decay_t<Context>>(std::forward<Context>(context));
 		}

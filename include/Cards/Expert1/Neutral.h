@@ -680,20 +680,9 @@ namespace Cards
 	struct Card_EX1_584e : public Enchantment<Card_EX1_584e, SpellDamage<1>> {};
 	struct Card_EX1_584 : public MinionCardBase<Card_EX1_584> {
 		static void Battlecry(Contexts::OnPlay context) {
-			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
-			assert(context.manipulate_.GetCard(context.card_ref_).GetZone() == state::kCardZonePlay);
-
-			auto op = [&](state::CardRef target) {
+			ApplyToAdjacent(context.manipulate_, context.card_ref_, [&](state::CardRef target) {
 				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_584e>();
-			};
-
-			int pos = context.manipulate_.GetCard(context.card_ref_).GetZonePosition();
-			if (pos > 0) {
-				op(context.manipulate_.Board().Player(player).minions_.Get(pos - 1));
-			}
-			if (pos < (context.manipulate_.Board().Player(player).minions_.Size() - 1)) {
-				op(context.manipulate_.Board().Player(player).minions_.Get(pos + 1));
-			}
+			});
 		}
 	};
 
@@ -718,6 +707,16 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
 			Manipulate(context).Card(context.GetTarget()).Enchant().Add<Card_EX1_046e>();
+		}
+	};
+
+	struct Card_EX1_093e : public Enchantment<Card_EX1_093e, Attack<1>, MaxHP<1>> {};
+	struct Card_EX1_093 : public MinionCardBase<Card_EX1_093> {
+		static void Battlecry(Contexts::OnPlay context) {
+			ApplyToAdjacent(context.manipulate_, context.card_ref_, [&](state::CardRef target) {
+				context.manipulate_.OnBoardMinion(target).Taunt(true);
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_093e>();
+			});
 		}
 	};
 
@@ -751,6 +750,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_093)
 REGISTER_CARD(EX1_046)
 REGISTER_CARD(EX1_595)
 REGISTER_CARD(EX1_584)

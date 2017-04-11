@@ -42,5 +42,19 @@ namespace Cards
 	protected:
 		template <typename... Types>
 		auto AdjacentBuffAura() { return AdjacentBuffHelper<T, Types...>(*this); }
+
+		template <typename Functor>
+		static void ApplyToAdjacent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Functor&& functor) {
+			state::PlayerIdentifier player = manipulate.GetCard(card_ref).GetPlayerIdentifier();
+			assert(manipulate.GetCard(card_ref).GetZone() == state::kCardZonePlay);
+
+			int pos = manipulate.GetCard(card_ref).GetZonePosition();
+			if (pos > 0) {
+				functor(manipulate.Board().Player(player).minions_.Get(pos - 1));
+			}
+			if (pos < (manipulate.Board().Player(player).minions_.Size() - 1)) {
+				functor(manipulate.Board().Player(player).minions_.Get(pos + 1));
+			}
+		}
 	};
 }
