@@ -36,7 +36,7 @@ namespace FlowControl
 
 		template <state::CardZone Zone>
 		Manipulators::MinionManipulator<Zone> MinionInZone(state::CardRef ref) {
-			static_assert(Zone != state::kCardZonePlay, "Use OnBoardMinion() instaed.");
+			static_assert(Zone != state::kCardZonePlay, "Use OnBoardMinion() instead.");
 			return Manipulators::MinionManipulator<Zone>(state_, flow_context_, ref);
 		}
 
