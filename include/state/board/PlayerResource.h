@@ -49,6 +49,7 @@ namespace state
 
 			void Cost(int amount) {
 				assert(GetCurrent() >= amount);
+				if (amount < 0) return;
 				current_ -= amount;
 			}
 
