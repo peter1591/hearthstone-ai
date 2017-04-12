@@ -225,6 +225,7 @@
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />
+    <ClInclude Include="..\..\include\state\board\CostModifiers.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />
     <ClInclude Include="..\..\include\state\board\Graveyard.h" />
     <ClInclude Include="..\..\include\state\board\Hand.h" />
