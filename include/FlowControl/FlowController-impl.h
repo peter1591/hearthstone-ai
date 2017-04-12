@@ -84,6 +84,34 @@ namespace FlowControl
 		// TODO: do cost here
 		// TODO: respect cost-health-instead flag
 
+		if (CardType == state::kCardTypeMinion) {
+			int cost = state_.GetCard(card_ref).GetCost();
+			cost += state_.GetBoard().minion_cost_extra_;
+
+			if (state_.GetCurrentPlayer().played_minions_this_turn_ == 0) {
+				cost += state_.GetCurrentPlayer().first_minion_each_turn_cost_bias_;
+			}
+
+			if (cost < 0) cost = 0;
+
+			if (!CostCrystal(cost)) return false;
+		}
+		else if (CardType == state::kCardTypeWeapon || CardType == state::kCardTypeHeroPower) {
+			if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
+		}
+		else if (CardType == state::kCardTypeSpell || CardType == state::kCardTypeSecret) {
+			int cost = state_.GetCard(card_ref).GetCost();
+			if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
+
+			if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
+				if (!CostHealth(cost)) return false;
+				state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;
+			}
+			else {
+				if (!CostCrystal(cost)) return false;
+			}
+		}
+
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
 
 		state_.TriggerEvent<state::Events::EventTypes::OnPlay>(
@@ -114,69 +142,30 @@ namespace FlowControl
 	{
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeMinion);
 
-		int cost = state_.GetCard(card_ref).GetCost();
-		cost += state_.GetBoard().minion_cost_extra_;
-
-		if (state_.GetCurrentPlayer().played_minions_this_turn_ == 0) {
-			cost += state_.GetCurrentPlayer().first_minion_each_turn_cost_bias_;
-		}
-		
-		if (cost < 0) cost = 0;
-
-		if (!CostCrystal(cost)) return false;
-
 		return PlayMinionCardPhase(card_ref);
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeWeapon>(state::CardRef card_ref)
 	{
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeWeapon);
-		if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
 		return PlayWeaponCardPhase(card_ref);
+	}
+
+	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref)
+	{
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSpell);
+		return PlaySpellCardPhase(card_ref);
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeHeroPower>(state::CardRef card_ref)
 	{
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeHeroPower);
-		if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
 		return PlayHeroPowerCardPhase(card_ref);
-	}
-
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSpell>(state::CardRef card_ref)
-	{
-		// TODO: shared with secret cards
-		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSpell);
-
-		int cost = state_.GetCard(card_ref).GetCost();
-		if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
-
-		if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
-			if (!CostHealth(cost)) return false;
-			state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;
-		}
-		else {
-			if (!CostCrystal(cost)) return false;
-		}
-
-		return PlaySpellCardPhase(card_ref);
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSecret>(state::CardRef card_ref)
 	{
-		// TODO: shared with spell cards
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSecret);
-
-		int cost = state_.GetCard(card_ref).GetCost();
-		if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
-
-		if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
-			if (!CostHealth(cost)) return false;
-			state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;
-		}
-		else {
-			if (!CostCrystal(cost)) return false;
-		}
-
 		return PlaySecretCardPhase(card_ref);
 	}
 
