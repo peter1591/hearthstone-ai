@@ -81,6 +81,9 @@ namespace FlowControl
 
 		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) return false;
 
+		// TODO: do cost here
+		// TODO: respect cost-health-instead flag
+
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
 
 		state_.TriggerEvent<state::Events::EventTypes::OnPlay>(

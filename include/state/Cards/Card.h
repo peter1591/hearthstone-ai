@@ -109,6 +109,9 @@ namespace state
 			int GetCost() const { return data_.enchanted_states.cost; }
 			void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
+			bool GetCostHealthInstead() const { return data_.enchanted_states.cost_health_instead; }
+			void SetCostHealthInstaed(bool v) { data_.enchanted_states.cost_health_instead = v; }
+
 			int GetDamage() const { return data_.damaged; }
 			DamageSetter GetDamageSetter() { return DamageSetter(data_); }
 
