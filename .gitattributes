@@ -1,4 +1,4 @@
 include/Cards/cards.json linguist-vendored
-include/Cards/formatted-cards.json linguist-vendored
+include/Cards/formatted_cards.json linguist-vendored
 contrib/* linguist-vendored
 data/* linguist-vendored
