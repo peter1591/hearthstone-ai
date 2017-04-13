@@ -6,7 +6,6 @@
 #include "state/board/Minions.h"
 #include "state/board/Secrets.h"
 #include "state/board/PlayerResource.h"
-#include "state/board/CostModifiers.h"
 
 namespace state
 {

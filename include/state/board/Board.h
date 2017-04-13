@@ -2,7 +2,6 @@
 
 #include "state/Types.h"
 #include "state/board/Player.h"
-#include "state/board/CostModifiers.h"
 
 namespace state
 {
@@ -30,8 +29,6 @@ namespace state
 
 			Player & GetSecond() { return second_; }
 			Player const& GetSecond() const { return second_; }
-
-			CostModifiers cost_modifiers;
 
 			int minion_cost_extra_;
 
