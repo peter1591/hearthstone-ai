@@ -28,6 +28,7 @@ But, to be on the safe side, I will take no responsbility if your account got ba
 * There's no HearthStone simulation engine written in C++, so I need to write one.
 * Written in C++14/C++17
 * One of the design goals is **speed**.
+* Use template programming heavily.
 
 ### Game Board Recognition
 * Use the logging feature in HearthStone
