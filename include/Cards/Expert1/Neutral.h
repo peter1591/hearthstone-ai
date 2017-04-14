@@ -737,6 +737,22 @@ namespace Cards
 		}
 	};
 
+	struct Card_NEW1_022 : public MinionCardBase<Card_NEW1_022> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			if (context.card_ref_ != self) return true;
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			state::CardRef weapon_ref = context.manipulate_.Board().Player(player).GetWeaponRef();
+			if (!weapon_ref.IsValid()) return true;
+			int weapon_attack = context.manipulate_.GetCard(weapon_ref).GetAttack();
+			*context.cost_ -= weapon_attack;
+			return true;
+		}
+		Card_NEW1_022() {
+			RegisterEvent<InHandZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -767,6 +783,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_022)
 REGISTER_CARD(EX1_093)
 REGISTER_CARD(EX1_046)
 REGISTER_CARD(EX1_595)
