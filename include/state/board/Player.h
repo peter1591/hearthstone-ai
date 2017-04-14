@@ -18,8 +18,7 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Player() : fatigue_damage_(0), hero_ref_change_id_(0), next_spell_cost_health_this_turn_(false),
-				played_minions_this_turn_(0)
+			Player() : fatigue_damage_(0), hero_ref_change_id_(0), played_minions_this_turn_(0)
 			{}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }
@@ -36,7 +35,6 @@ namespace state
 			CardRef GetWeaponRef() const { return weapon_ref_; }
 
 			void EndTurn() {
-				next_spell_cost_health_this_turn_ = false;
 				played_minions_this_turn_ = 0;
 			}
 
@@ -59,7 +57,6 @@ namespace state
 			Secrets secrets_;
 			Graveyard graveyard_;
 
-			bool next_spell_cost_health_this_turn_;
 			int played_minions_this_turn_;
 
 		private:
