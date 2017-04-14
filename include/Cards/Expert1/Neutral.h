@@ -306,9 +306,14 @@ namespace Cards
 	};
 
 	struct Card_NEW1_029 : public MinionCardBase<Card_NEW1_029> {
-		static void Battlecry(Contexts::OnPlay context) {
-			context.manipulate_.Board().Player(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier())
-				.next_spell_cost_zero_this_turn_ = true;
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+			*context.cost_ = 0;
+			return false; // one-time effect
+		}
+		Card_NEW1_029() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
 		}
 	};
 

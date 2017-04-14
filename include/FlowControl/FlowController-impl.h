@@ -93,8 +93,6 @@ namespace FlowControl
 		else if (CardType == state::kCardTypeWeapon || CardType == state::kCardTypeHeroPower) {
 		}
 		else if (CardType == state::kCardTypeSpell || CardType == state::kCardTypeSecret) {
-			if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
-
 			if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
 				cost_health_instead = true;
 				state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;

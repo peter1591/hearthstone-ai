@@ -19,7 +19,7 @@ namespace state
 
 		public:
 			Player() : fatigue_damage_(0), hero_ref_change_id_(0), next_spell_cost_health_this_turn_(false),
-				next_spell_cost_zero_this_turn_(false), played_minions_this_turn_(0)
+				played_minions_this_turn_(0)
 			{}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }
@@ -37,7 +37,6 @@ namespace state
 
 			void EndTurn() {
 				next_spell_cost_health_this_turn_ = false;
-				next_spell_cost_zero_this_turn_ = false;
 				played_minions_this_turn_ = 0;
 			}
 
@@ -61,7 +60,6 @@ namespace state
 			Graveyard graveyard_;
 
 			bool next_spell_cost_health_this_turn_;
-			bool next_spell_cost_zero_this_turn_;
 			int played_minions_this_turn_;
 
 		private:
