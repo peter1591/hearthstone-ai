@@ -15,6 +15,6 @@ namespace state
 		};
 
 		typedef void AddedToPlayZoneCallback(ZoneChangedContext&&);
-		typedef void AddedToDeckZoneCallback(ZoneChangedContext&&);
+		typedef void AddedToHandZoneCallback(ZoneChangedContext&&);
 	}
 }

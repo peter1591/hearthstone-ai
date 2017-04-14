@@ -12,6 +12,9 @@ namespace FlowControl
 			GetCard().GetRawData().added_to_play_zone(state::Cards::ZoneChangedContext{ Manipulate(state_, flow_context_), event_mgr, card_ref_ });
 			// TODO: trigger callback for event-hooked enchantments
 		}
+		inline void CardManipulator::AfterAddedToHandZone(state::Events::Manager & event_mgr) {
+			GetCard().GetRawData().added_to_hand_zone(state::Cards::ZoneChangedContext{ Manipulate(state_, flow_context_), event_mgr, card_ref_ });
+		}
 		inline state::Cards::Card & CardManipulator::GetCard()
 		{
 			return state_.GetMutableCard(card_ref_);

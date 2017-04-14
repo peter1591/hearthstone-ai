@@ -58,7 +58,7 @@ namespace state
 
 		public: // zone-changed callbacks invoked by state::State 
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
-			Utils::FuncPtrArray<AddedToDeckZoneCallback*, 1> added_to_deck_zone;
+			Utils::FuncPtrArray<AddedToHandZoneCallback*, 1> added_to_hand_zone;
 
 		public:
 			FlowControl::enchantment::Handler enchantment_handler;

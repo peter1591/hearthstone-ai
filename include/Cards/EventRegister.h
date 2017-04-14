@@ -24,8 +24,15 @@ namespace Cards
 			return card.GetZone() == state::kCardZonePlay;
 		}
 	};
-	struct InHandZone {};
-	struct InDeckZone {};
+	struct InHandZone {
+		template <typename YesFunctor, typename NoFunctor> using AddedToPlayZone = NoFunctor;
+		template <typename YesFunctor, typename NoFunctor> using AddedToHandZone = YesFunctor;
+
+		static bool StillValid(state::Cards::Card const& card) {
+			if (card.GetZone() != state::kCardZoneHand) return false;
+			return true;
+		}
+	};
 
 	// self policy
 	// Note: we need to remember 'self' to check if owner is still alive (depends on lifetime policy)
@@ -76,6 +83,7 @@ namespace Cards
 				}
 			};
 			using AddedToPlayZone = Utils::StaticInvokableChain<Invoker>;
+			using AddedToHandZone = Utils::StaticInvokableChain<Invoker>;
 		};
 	}
 
@@ -99,6 +107,13 @@ namespace Cards
 				return LifeTime::AddedToPlayZone<Invoker, NullInvoker>::Invoke(std::move(context));
 			}
 		};
+
+		struct AddedToHandZone {
+			template <typename Context>
+			static void Invoke(Context context) {
+				return LifeTime::AddedToHandZone<Invoker, NullInvoker>::Invoke(std::move(context));
+			}
+		};
 	};
 
 	template <typename FirstEvent, typename SecondEvent>
@@ -108,6 +123,13 @@ namespace Cards
 			static void Invoke(Context context) {
 				FirstEvent::AddedToPlayZone::Invoke(std::move(context));
 				SecondEvent::AddedToPlayZone::Invoke(std::move(context));
+			}
+		};
+		struct AddedToHandZone {
+			template <typename Context>
+			static void Invoke(Context context) {
+				FirstEvent::AddedToHandZone::Invoke(std::move(context));
+				SecondEvent::AddedToHandZone::Invoke(std::move(context));
 			}
 		};
 	};
@@ -136,6 +158,8 @@ namespace Cards
 			using CombinedEvent = CombineEvents<Event1, Event2>;
 			card_data.added_to_play_zone += (state::Cards::AddedToPlayZoneCallback*)
 				(CombinedEvent::AddedToPlayZone::Invoke);
+			card_data.added_to_hand_zone += (state::Cards::AddedToHandZoneCallback*)
+				(CombinedEvent::AddedToHandZone::Invoke);
 		}
 	};
 

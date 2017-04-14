@@ -11,5 +11,11 @@ namespace state {
 		{
 			manipulate.Card(card_ref).AfterAddedToPlayZone(event_mgr);
 		}
+		template <CardType CardType>
+		inline void InvokeCallback<CardType, kCardZoneHand>::Added(
+			FlowControl::Manipulate & manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref)
+		{
+			manipulate.Card(card_ref).AfterAddedToHandZone(event_mgr);
+		}
 	}
 }

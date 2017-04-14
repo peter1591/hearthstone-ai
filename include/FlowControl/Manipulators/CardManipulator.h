@@ -59,6 +59,7 @@ namespace FlowControl
 
 		public:
 			void AfterAddedToPlayZone(state::Events::Manager & event_mgr);
+			void AfterAddedToHandZone(state::Events::Manager & event_mgr);
 
 		protected:
 			state::Cards::Card & GetCard();

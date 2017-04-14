@@ -16,6 +16,10 @@ namespace state {
 			static void Removed(FlowControl::Manipulate & manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref) {}
 		};
 
-		// TODO: added to deck zone callback
+		template <CardType CardType>
+		struct InvokeCallback<CardType, kCardZoneHand> {
+			static void Added(FlowControl::Manipulate & manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref);
+			static void Removed(FlowControl::Manipulate & manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref) {}
+		};
 	}
 }
