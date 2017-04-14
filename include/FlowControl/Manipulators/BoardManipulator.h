@@ -32,13 +32,6 @@ namespace FlowControl
 			state::board::Player & SecondPlayer() { return Player(state::PlayerIdentifier::Second()); }
 			state::board::Player const& SecondPlayer() const { return Player(state::PlayerIdentifier::Second()); }
 			
-			int GetMinionCostExtra() const { return state_.GetBoard().minion_cost_extra_; }
-			void IncreaseMinionCostExtra(int v) { state_.GetBoard().minion_cost_extra_ += v; }
-			void DecreaseMinionCostExtra(int v) {
-				state_.GetBoard().minion_cost_extra_-= v;
-				assert(state_.GetBoard().minion_cost_extra_ >= 0);
-			}
-
 		public:
 			state::Cards::Card GenerateCardById(Cards::CardId card_id, state::PlayerIdentifier player);
 			state::Cards::Card GenerateCardByCopy(state::Cards::Card const& card, state::PlayerIdentifier player);

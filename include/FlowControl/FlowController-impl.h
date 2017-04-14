@@ -81,9 +81,6 @@ namespace FlowControl
 
 		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) return false;
 
-		// TODO: do cost here
-		// TODO: respect cost-health-instead flag
-
 		int cost = state_.GetCard(card_ref).GetCost();
 		bool cost_health_instead = false;
 
@@ -92,8 +89,6 @@ namespace FlowControl
 		});
 
 		if (CardType == state::kCardTypeMinion) {
-			cost += state_.GetBoard().minion_cost_extra_;
-
 			if (state_.GetCurrentPlayer().played_minions_this_turn_ == 0) {
 				cost += state_.GetCurrentPlayer().first_minion_each_turn_cost_bias_;
 			}

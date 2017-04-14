@@ -277,14 +277,13 @@ namespace Cards
 	};
 
 	struct Card_EX1_616 : public MinionCardBase<Card_EX1_616> {
-		static void AuraApplyOn(FlowControl::aura::contexts::AuraApplyFlagOnBoard context) {
-			context.manipulate_.Board().IncreaseMinionCostExtra(1);
-		}
-		static void AuraRemoveFrom(FlowControl::aura::contexts::AuraRemoveFlagFromBoard context) {
-			context.manipulate_.Board().DecreaseMinionCostExtra(1);
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			++(*context.cost_);
+			return true;
 		}
 		Card_EX1_616() {
-			BoardFlagAura<EmitWhenAlive>();
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
 		}
 	};
 
