@@ -328,14 +328,15 @@ namespace Cards
 	};
 
 	struct Card_EX1_076 : public MinionCardBase<Card_EX1_076> {
-		static void AuraApplyOn(FlowControl::aura::contexts::AuraApplyFlagOnOwnerPlayer context) {
-			--context.manipulate_.Board().Player(context.player_).first_minion_each_turn_cost_bias_;
-		}
-		static void AuraRemoveFrom(FlowControl::aura::contexts::AuraRemoveFlagFromOwnerPlayer context) {
-			++context.manipulate_.Board().Player(context.player_).first_minion_each_turn_cost_bias_;
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			if (context.manipulate_.Board().Player(context.manipulate_.Board().GetCurrentPlayerId()).played_minions_this_turn_ == 0) {
+				--(*context.cost_);
+			}
+			return true;
 		}
 		Card_EX1_076() {
-			OwnerPlayerFlagAura<EmitWhenAlive>();
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
 		}
 	};
 

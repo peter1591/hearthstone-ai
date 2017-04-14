@@ -19,8 +19,7 @@ namespace state
 
 		public:
 			Player() : fatigue_damage_(0), hero_ref_change_id_(0), next_spell_cost_health_this_turn_(false),
-				next_spell_cost_zero_this_turn_(false), played_minions_this_turn_(0),
-				first_minion_each_turn_cost_bias_(0)
+				next_spell_cost_zero_this_turn_(false), played_minions_this_turn_(0)
 			{}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }
@@ -64,7 +63,6 @@ namespace state
 			bool next_spell_cost_health_this_turn_;
 			bool next_spell_cost_zero_this_turn_;
 			int played_minions_this_turn_;
-			int first_minion_each_turn_cost_bias_; // -1 to cost one less
 
 		private:
 			CardRef hero_ref_;

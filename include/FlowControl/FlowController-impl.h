@@ -89,9 +89,6 @@ namespace FlowControl
 		});
 
 		if (CardType == state::kCardTypeMinion) {
-			if (state_.GetCurrentPlayer().played_minions_this_turn_ == 0) {
-				cost += state_.GetCurrentPlayer().first_minion_each_turn_cost_bias_;
-			}
 		}
 		else if (CardType == state::kCardTypeWeapon || CardType == state::kCardTypeHeroPower) {
 		}
