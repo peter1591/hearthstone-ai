@@ -24,6 +24,7 @@ namespace FlowControl
 		public: // bridge to state::State
 			state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
 			state::PlayerIdentifier GetCurrentPlayerId() { return state_.GetCurrentPlayerId(); }
+			int GetTurn() const { return state_.GetTurn(); }
 
 			state::board::Player & Player(state::PlayerIdentifier player) { return state_.GetBoard().Get(player); }
 			state::board::Player const& Player(state::PlayerIdentifier player) const { return state_.GetBoard().Get(player); }

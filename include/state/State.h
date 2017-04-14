@@ -51,6 +51,14 @@ namespace state
 		CardRef AddCard(Cards::Card&& card) { return cards_mgr_.PushBack(std::move(card)); }
 
 	public: // bridge to event manager
+		template <typename EventType, typename T>
+		void AddEvent(T&& handler) {
+			return event_mgr_.PushBack<EventType, T>(std::forward<T>(handler));
+		}
+		template <typename EventType, typename T>
+		void AddEvent(CardRef card_ref, T&& handler) {
+			return event_mgr_.PushBack<EventType, T>(card_ref, std::forward<T>(handler));
+		}
 		template <typename EventTriggerType, typename... Args>
 		void TriggerEvent(Args&&... args) {
 			return event_mgr_.TriggerEvent<EventTriggerType, Args...>(std::forward<Args>(args)...);

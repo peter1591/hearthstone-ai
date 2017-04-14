@@ -20,6 +20,15 @@ namespace FlowControl
 	public:
 		Manipulate(state::State & state, FlowContext & flow_context);
 
+		template <typename EventType, typename T>
+		void AddEvent(T&& handler) {
+			return state_.AddEvent<EventType>(std::forward<T>(handler));
+		}
+		template <typename EventType, typename T>
+		void AddEvent(state::CardRef card_ref, T&& handler) {
+			return state_.AddEvent<EventType>(card_ref, std::forward<T>(handler));
+		}
+
 		Manipulators::CardManipulator Card(state::CardRef ref);
 
 		Manipulators::HeroManipulator CurrentHero();
