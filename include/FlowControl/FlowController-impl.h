@@ -88,13 +88,6 @@ namespace FlowControl
 			Manipulate(state_, flow_context_), card_ref, &cost, &cost_health_instead
 		});
 
-		if (CardType == state::kCardTypeMinion) {
-		}
-		else if (CardType == state::kCardTypeWeapon || CardType == state::kCardTypeHeroPower) {
-		}
-		else if (CardType == state::kCardTypeSpell || CardType == state::kCardTypeSecret) {
-		}
-
 		if (cost_health_instead) {
 			if (!CostHealth(cost)) return false;
 		}
@@ -133,7 +126,6 @@ namespace FlowControl
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref)
 	{
 		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeMinion);
-
 		return PlayMinionCardPhase(card_ref);
 	}
 
