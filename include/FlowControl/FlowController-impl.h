@@ -84,32 +84,36 @@ namespace FlowControl
 		// TODO: do cost here
 		// TODO: respect cost-health-instead flag
 
+		int cost = state_.GetCard(card_ref).GetCost();
+		bool cost_health_instead = false;
+
+		state_.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
+			Manipulate(state_, flow_context_), card_ref, &cost, &cost_health_instead
+		});
+
 		if (CardType == state::kCardTypeMinion) {
-			int cost = state_.GetCard(card_ref).GetCost();
 			cost += state_.GetBoard().minion_cost_extra_;
 
 			if (state_.GetCurrentPlayer().played_minions_this_turn_ == 0) {
 				cost += state_.GetCurrentPlayer().first_minion_each_turn_cost_bias_;
 			}
-
-			if (cost < 0) cost = 0;
-
-			if (!CostCrystal(cost)) return false;
 		}
 		else if (CardType == state::kCardTypeWeapon || CardType == state::kCardTypeHeroPower) {
-			if (!CostCrystal(state_.GetCard(card_ref).GetCost())) return false;
 		}
 		else if (CardType == state::kCardTypeSpell || CardType == state::kCardTypeSecret) {
-			int cost = state_.GetCard(card_ref).GetCost();
 			if (state_.GetCurrentPlayer().next_spell_cost_zero_this_turn_) cost = 0;
 
 			if (state_.GetCurrentPlayer().next_spell_cost_health_this_turn_) {
-				if (!CostHealth(cost)) return false;
+				cost_health_instead = true;
 				state_.GetCurrentPlayer().next_spell_cost_health_this_turn_ = false;
 			}
-			else {
-				if (!CostCrystal(cost)) return false;
-			}
+		}
+
+		if (cost_health_instead) {
+			if (!CostHealth(cost)) return false;
+		}
+		else {
+			if (!CostCrystal(cost)) return false;
 		}
 
 		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
@@ -121,6 +125,8 @@ namespace FlowControl
 	}
 
 	inline bool FlowController::CostCrystal(int amount) {
+		if (amount < 0) amount = 0;
+
 		auto& crystal = state_.GetCurrentPlayer().GetResource();
 		if (crystal.GetCurrent() < amount) {
 			return SetResult(FlowControl::kResultInvalid);

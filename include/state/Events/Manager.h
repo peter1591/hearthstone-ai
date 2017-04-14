@@ -81,6 +81,8 @@ private: \
 	}
 #define ADD_CATEGORIZED_TRIGGER_TYPE(TYPE_NAME) ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)
 
+			ADD_TRIGGER_TYPE(GetPlayCardCost);
+
 			ADD_TRIGGER_TYPE(AfterMinionSummoned);
 			ADD_TRIGGER_TYPE(BeforeMinionSummoned);
 			ADD_TRIGGER_TYPE(AfterMinionPlayed);

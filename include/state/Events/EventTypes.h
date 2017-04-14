@@ -11,6 +11,15 @@ namespace state {
 
 	namespace Events {
 		namespace EventTypes {
+			struct GetPlayCardCost {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef card_ref_;
+					int * cost_;
+					bool * cost_health_instead_;
+				};
+				using type = std::function<bool(Context)>;
+			};
 			struct AfterAttack {
 				using type = bool(*)(CardRef, State &, CardRef);
 			};
