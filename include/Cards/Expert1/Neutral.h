@@ -753,6 +753,30 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_396 : public MinionCardBase<Card_EX1_396, Taunt> {};
+	struct Card_EX1_023 : public MinionCardBase<Card_EX1_023, Shield> {};
+
+	struct Card_EX1_048 : public MinionCardBase<Card_EX1_048> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets(context.player_).Minion().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
+			return Manipulate(context).OnBoardMinion(context.GetTarget()).Silence();
+		}
+	};
+
+	template <int v>
+	struct Card_EX1_043e : public Enchantment<Card_EX1_043e<v>, MaxHP<v>> {};
+	struct Card_EX1_043 : public MinionCardBase<Card_EX1_043> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::PlayerIdentifier player = context.manipulate_.Board().GetCurrentPlayerId();
+			int hand_cards = (int)context.manipulate_.Board().Player(player).hand_.Size();
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant()
+				.Add<Card_EX1_043e>(hand_cards);
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -783,6 +807,10 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_043)
+REGISTER_CARD(EX1_048)
+REGISTER_CARD(EX1_023)
+REGISTER_CARD(EX1_396)
 REGISTER_CARD(NEW1_022)
 REGISTER_CARD(EX1_093)
 REGISTER_CARD(EX1_046)
