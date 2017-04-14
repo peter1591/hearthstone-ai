@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Twilight Drake
+// finished: Abomination
 
 namespace Cards
 {
@@ -777,6 +777,33 @@ namespace Cards
 		}
 	};
 
+	struct Card_NEW1_026 : public MinionCardBase<Card_NEW1_026> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.player_ != owner) return true;
+			SummonToRight(context.manipulate_, self, Cards::ID_NEW1_026t);
+			return true;
+		}
+		Card_NEW1_026() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterSpellPlayed>();
+		}
+	};
+
+	struct Card_EX1_097 : public MinionCardBase<Card_EX1_097, Taunt> {
+		Card_EX1_097() {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+				auto op = [&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
+				};
+				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
+				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+				context.manipulate_.Hero(state::PlayerIdentifier::First()).Damage(context.card_ref_, 2);
+				context.manipulate_.Hero(state::PlayerIdentifier::Second()).Damage(context.card_ref_, 2);
+			});
+		}
+	};
+
 	
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -807,6 +834,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_097)
+REGISTER_CARD(NEW1_026)
 REGISTER_CARD(EX1_043)
 REGISTER_CARD(EX1_048)
 REGISTER_CARD(EX1_023)
