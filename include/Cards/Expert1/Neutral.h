@@ -278,6 +278,7 @@ namespace Cards
 
 	struct Card_EX1_616 : public MinionCardBase<Card_EX1_616> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeMinion) return true;
 			++(*context.cost_);
 			return true;
 		}
@@ -336,6 +337,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() != owner) return true;
+			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeMinion) return true;
 			if (context.manipulate_.Board().Player(context.manipulate_.Board().GetCurrentPlayerId()).played_minions_this_turn_ == 0) {
 				--(*context.cost_);
 			}
