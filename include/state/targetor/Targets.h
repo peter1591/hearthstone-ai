@@ -66,8 +66,11 @@ namespace state {
 				kMinionFilterTargetable,
 				kMinionFilterTargetableBySpell,
 				kMinionFilterMurloc,
-				kMinionFilterPirate
+				kMinionFilterPirate,
+				kMinionFilterMinionAttackerGreaterOrEqualTo,
+				kMinionFilterMinionAttackerLessOrEqualTo
 			} minion_filter;
+			int minion_filter_arg1;
 
 			CardRef exclude;
 		};

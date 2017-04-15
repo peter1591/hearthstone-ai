@@ -70,6 +70,20 @@ namespace state {
 				info_.minion_filter = Targets::kMinionFilterPirate;
 				return *this;
 			}
+
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackerGreaterOrEqualTo(int v)
+			{
+				info_.minion_filter = Targets::kMinionFilterMinionAttackerGreaterOrEqualTo;
+				info_.minion_filter_arg1 = v;
+				return *this;
+			}
+
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackerLessOrEqualTo(int v)
+			{
+				info_.minion_filter = Targets::kMinionFilterMinionAttackerLessOrEqualTo;
+				info_.minion_filter_arg1 = v;
+				return *this;
+			}
 		};
 
 		class TargetsGenerator_ChosenSide : public TargetsGenerator_ChosenSide_ChosenHeroMinion
