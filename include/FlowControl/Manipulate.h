@@ -53,6 +53,7 @@ namespace FlowControl
 			return Manipulators::CharacterManipulator<state::kCardZonePlay>(state_, flow_context_, ref);
 		}
 
+		Manipulators::WeaponManipulator Weapon(state::PlayerIdentifier player);
 		Manipulators::WeaponManipulator Weapon(state::CardRef ref);
 
 		Manipulators::SecretManipulator Secret(state::CardRef ref);

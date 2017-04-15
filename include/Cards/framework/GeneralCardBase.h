@@ -80,12 +80,10 @@ namespace Cards
 			return SummonInternal(context.manipulate_, card_id, player, pos);
 		}
 
-		template <typename Context>
-		static void SummonToEnemy(Context && context, Cards::CardId card_id)
+		static void SummonToRightmost(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
 		{
-			state::PlayerIdentifier player = context.card_.GetPlayerIdentifier().Opposite();
-			int pos = (int)context.manipulate_.Board().Player(player).minions_.Size();
-			return SummonInternal(context.manipulate_, card_id, player, pos);
+			int pos = (int)manipulate.Board().Player(player).minions_.Size();
+			return SummonInternal(manipulate, card_id, player, pos);
 		}
 
 		template <typename Context>
