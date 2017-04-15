@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Abomination
+// finished: Cairne Bloodhoof
 
 namespace Cards
 {
@@ -804,20 +804,24 @@ namespace Cards
 		}
 	};
 
-	
-	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
-	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
-			Manipulate(context).Card(self).Enchant().Add<Card_NEW1_038_Enchant>();
-			return true;
-		};
-		Card_NEW1_038() {
-			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
-				state::Events::EventTypes::OnTurnEnd>();
+	struct Card_EX1_005 : public MinionCardBase<Card_EX1_005> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return Targets(context.player_).Minion().MinionAttackerGreaterOrEqualTo(7);
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
+			return Manipulate(context).OnBoardMinion(context.GetTarget()).Destroy();
 		}
 	};
-
-	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069, Taunt> {};
+	
+	struct Card_NEW1_024o : public Enchantment<Card_NEW1_024o, Attack<1>, MaxHP<1>> {};
+	struct Card_NEW1_024 : public MinionCardBase<Card_NEW1_024> {
+		static void Battlecry(Contexts::OnPlay context) {
+			if (!context.GetTarget().IsValid()) return;
+			state::PlayerIdentifier owner = context.player_;
+			context.manipulate_.Weapon(owner).Enchant().Add<Card_NEW1_024o>();
+		}
+	};
 
 	struct Card_EX1_564 : public MinionCardBase<Card_EX1_564> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
@@ -832,8 +836,108 @@ namespace Cards
 			*context.new_card_ref = new_ref;
 		}
 	};
+
+	struct Card_CS1_069 : public MinionCardBase<Card_CS1_069, Taunt> {};
+
+	struct Card_EX1_558 : public MinionCardBase<Card_EX1_558> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_.Opposite()).GetWeaponRef();
+			int draw = context.manipulate_.GetCard(weapon_ref).GetHP();
+			context.manipulate_.Hero(context.player_.Opposite()).DestroyWeapon();
+			for (int i = 0; i < draw; ++i) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+			}
+		}
+	};
+
+	struct Card_EX1_116 : public MinionCardBase<Card_EX1_116, Charge> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::PlayerIdentifier player = context.player_.Opposite();
+			SummonToRightmost(context.manipulate_, player, Cards::ID_EX1_116t);
+			SummonToRightmost(context.manipulate_, player, Cards::ID_EX1_116t);
+		}
+	};
+
+	struct Card_CS2_151 : public MinionCardBase<Card_CS2_151> {
+		static void Battlecry(Contexts::OnPlay context) {
+			SummonToRight(context.manipulate_, context.card_ref_, Cards::ID_CS2_152);
+		}
+	};
+
+	struct Card_CS2_221e : public Enchantment<Card_CS2_221e, Attack<2>> {};
+	struct Card_CS2_221 : public MinionCardBase<Card_CS2_221> {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			state::CardRef weapon_ref = context.manipulate_.Board().Player(owner).GetWeaponRef();
+			context.new_target = weapon_ref;
+		}
+		Card_CS2_221() {
+			Enrage<Card_CS2_221e>();
+		}
+	};
+
+	struct Card_NEW1_041 : public MinionCardBase<Card_NEW1_041> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(context.player_)
+				.Enemy(context.player_).Minion().MinionAttackerLessOrEqualTo(2).GetInfo());
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Destroy();
+		}
+	};
+
+	struct Card_EX1_028 : public MinionCardBase<Card_EX1_028, Stealth> {};
+
+	struct Card_CS2_227 : public MinionCardBase<Card_CS2_227> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+			*context.cost_ += 3;
+			return true;
+		}
+		Card_CS2_227() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
+		}
+	};
+
+	struct Card_EX1_067 : public MinionCardBase<Card_EX1_067, Charge, Shield> {};
+
+	struct Card_EX1_110 : public MinionCardBase<Card_EX1_110> {
+		Card_EX1_110() {
+			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_110t);
+			});
+		}
+	};
+
+
+	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
+	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			Manipulate(context).Card(self).Enchant().Add<Card_NEW1_038_Enchant>();
+			return true;
+		};
+		Card_NEW1_038() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
+
 }
 
+REGISTER_CARD(EX1_110)
+REGISTER_CARD(EX1_067)
+REGISTER_CARD(CS2_227)
+REGISTER_CARD(EX1_028)
+REGISTER_CARD(NEW1_041)
+REGISTER_CARD(CS2_221)
+REGISTER_CARD(CS2_151)
+REGISTER_CARD(EX1_116)
+REGISTER_CARD(EX1_558)
+REGISTER_CARD(CS1_069)
+REGISTER_CARD(EX1_564)
+REGISTER_CARD(NEW1_024)
+REGISTER_CARD(EX1_005)
 REGISTER_CARD(EX1_097)
 REGISTER_CARD(NEW1_026)
 REGISTER_CARD(EX1_043)
@@ -904,10 +1008,8 @@ REGISTER_CARD(EX1_001)
 REGISTER_CARD(EX1_029)
 REGISTER_CARD(NEW1_017)
 REGISTER_CARD(NEW1_025)
-REGISTER_CARD(EX1_564)
 REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)
 REGISTER_CARD(CS2_188)
 
 REGISTER_CARD(NEW1_038)
-REGISTER_CARD(CS1_069)
