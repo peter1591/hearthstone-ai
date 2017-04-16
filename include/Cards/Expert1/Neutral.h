@@ -986,6 +986,24 @@ namespace Cards
 
 	struct Card_EX1_033 : public MinionCardBase<Card_EX1_033, Windfury> {};
 
+	struct Card_EX1_249 : public MinionCardBase<Card_EX1_249> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			auto op = [&](state::CardRef card_ref) {
+				if (card_ref == self) return;
+				context.manipulate_.OnBoardMinion(card_ref).Damage(self, 2);
+			};
+			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
+			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			context.manipulate_.Hero(state::PlayerIdentifier::First()).Damage(self, 2);
+			context.manipulate_.Hero(state::PlayerIdentifier::Second()).Damage(self, 2);
+			return true;
+		};
+		Card_EX1_249() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
+
 
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -1000,6 +1018,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(EX1_249)
 REGISTER_CARD(EX1_033)
 REGISTER_CARD(EX1_002)
 REGISTER_CARD(EX1_577)
