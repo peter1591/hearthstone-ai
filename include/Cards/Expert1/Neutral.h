@@ -1030,8 +1030,22 @@ namespace Cards
 	};
 
 	struct Card_EX1_563 : public MinionCardBase<Card_EX1_563, SpellDamage<5>> {};
+
+	struct Card_EX1_562 : public MinionCardBase<Card_EX1_562> {
+		static void Battlecry(Contexts::OnPlay context) {
+			bool summon_to_left = true;
+
+			while (true) {
+				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) break;
+				if (summon_to_left) SummonToLeft(context.manipulate_, context.card_ref_, Cards::ID_ds1_whelptoken);
+				else SummonToRight(context.manipulate_, context.card_ref_, Cards::ID_ds1_whelptoken);
+				summon_to_left = !summon_to_left;
+			}
+		}
+	};
 }
 
+REGISTER_CARD(EX1_562)
 REGISTER_CARD(EX1_563)
 REGISTER_CARD(EX1_561)
 REGISTER_CARD(NEW1_038)
