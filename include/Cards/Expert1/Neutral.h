@@ -957,6 +957,12 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_583 : public MinionCardBase<Card_EX1_583> {
+		static void Battlecry(Contexts::OnPlay context) {
+			context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 4);
+		}
+	};
+
 
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -972,6 +978,7 @@ namespace Cards
 
 }
 
+REGISTER_CARD(EX1_583)
 REGISTER_CARD(EX1_614)
 REGISTER_CARD(NEW1_040t)
 REGISTER_CARD(NEW1_040)
