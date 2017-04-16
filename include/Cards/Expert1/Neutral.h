@@ -1006,7 +1006,6 @@ namespace Cards
 
 	struct Card_CS2_161 : public MinionCardBase<Card_CS2_161, Stealth> {};
 
-
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
@@ -1020,6 +1019,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(NEW1_038)
 REGISTER_CARD(CS2_161)
 REGISTER_CARD(EX1_249)
 REGISTER_CARD(EX1_033)
@@ -1118,5 +1118,3 @@ REGISTER_CARD(NEW1_025)
 REGISTER_CARD(EX1_008)
 REGISTER_CARD(EX1_009)
 REGISTER_CARD(CS2_188)
-
-REGISTER_CARD(NEW1_038)
