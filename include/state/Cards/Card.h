@@ -134,6 +134,8 @@ namespace state
 
 			void SetCantAttack(bool v) { data_.cant_attack = v; }
 
+			void SetFreezed(bool v) { data_.freezed = v; }
+
 			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
 			bool HasCharge() const { return data_.enchanted_states.charge; }
 

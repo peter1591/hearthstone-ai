@@ -317,6 +317,7 @@ namespace FlowControl
 		state::Cards::Card const& card = state_.GetCardsManager().Get(attacker);
 
 		if (card.GetRawData().cant_attack) return false;
+		if (card.GetRawData().freezed) return false;
 
 		if (card.GetCardType() == state::kCardTypeMinion) {
 			if (card.HasCharge() == false && card.GetRawData().just_played) return false;
@@ -426,6 +427,24 @@ namespace FlowControl
 	{
 		state_.TriggerEvent<state::Events::EventTypes::OnTurnEnd>(
 			state::Events::EventTypes::OnTurnEnd::Context{ Manipulate(state_, flow_context_) });
+
+		// thaw freezed characters
+		auto thaw_op = [&](state::CardRef card_ref) {
+			state::Cards::Card const& card = state_.GetCard(card_ref);
+
+			if (!card.GetRawData().freezed) return;
+			if (card.GetRawData().num_attacks_this_turn > 0) return;
+			if (card.GetCardType() == state::kCardTypeMinion) {
+				if (card.HasCharge() == false && card.GetRawData().just_played) return;
+			}
+
+			Manipulate(state_, flow_context_).OnBoardCharacter(card_ref).Freeze(false);
+		};
+		thaw_op(state_.GetBoard().GetFirst().GetHeroRef());
+		thaw_op(state_.GetBoard().GetSecond().GetHeroRef());
+		state_.GetBoard().GetFirst().minions_.ForEach(thaw_op);
+		state_.GetBoard().GetSecond().minions_.ForEach(thaw_op);
+
 		state_.GetBoard().GetFirst().EndTurn();
 		state_.GetBoard().GetSecond().EndTurn();
 	}
