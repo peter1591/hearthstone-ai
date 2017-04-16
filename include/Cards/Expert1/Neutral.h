@@ -1043,8 +1043,76 @@ namespace Cards
 			}
 		}
 	};
+
+	struct Card_DREAM_01 : public MinionCardBase<Card_DREAM_01, ImmuneToSpellAndHeroPower> {};
+	struct Card_DREAM_02 : public SpellCardBase<Card_DREAM_02> {
+		Card_DREAM_02() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				auto op = [&](state::CardRef card_ref) {
+					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return;
+					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 5 + spell_damage);
+				};
+				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
+				op(context.manipulate_.Board().SecondPlayer().GetHeroRef());
+				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
+				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			});
+		}
+	};
+	struct Card_DREAM_04 : public SpellCardBase<Card_DREAM_04> {
+		Card_DREAM_04() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
+				return TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardMinion(context.GetTarget()).MoveTo<state::kCardZoneHand>();
+			});
+		}
+	};
+	struct Card_DREAM_05e : public Enchantment<Card_DREAM_05e, Attack<5>, MaxHP<5>> {
+		// TODO: destroy at the start of the caster's turn
+	};
+	struct Card_DREAM_05 : public SpellCardBase<Card_DREAM_05> {
+		Card_DREAM_05() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
+				return TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_DREAM_05e>();
+			});
+		}
+	};
+	struct Card_EX1_572 : public MinionCardBase<Card_EX1_572> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+
+			std::array<Cards::CardId, 5> dream_cards{
+				Cards::ID_DREAM_01,
+				Cards::ID_DREAM_02,
+				Cards::ID_DREAM_03,
+				Cards::ID_DREAM_04,
+				Cards::ID_DREAM_05
+			};
+			Cards::CardId card_id = dream_cards[context.manipulate_.GetRandom().Get(5)];
+			context.manipulate_.Hero(owner).AddHandCard(card_id);
+			return true;
+		}
+		Card_EX1_572() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_572)
+REGISTER_CARD(DREAM_05)
+REGISTER_CARD(DREAM_04)
+REGISTER_CARD(DREAM_02)
+REGISTER_CARD(DREAM_01)
 REGISTER_CARD(EX1_562)
 REGISTER_CARD(EX1_563)
 REGISTER_CARD(EX1_561)
