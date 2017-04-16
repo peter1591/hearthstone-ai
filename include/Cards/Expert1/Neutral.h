@@ -921,6 +921,31 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_095 : public MinionCardBase<Card_EX1_095> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.player_) return true;
+			context.manipulate_.Hero(owner).DrawCard();
+			return true;
+		}
+		Card_EX1_095() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterSpellPlayed>();
+		}
+	};
+
+	struct Card_NEW1_040t : public MinionCardBase<Card_NEW1_040t, Taunt> {};
+	struct Card_NEW1_040 : public MinionCardBase<Card_NEW1_040> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			SummonToRight(context.manipulate_, self, Cards::ID_NEW1_040t);
+			return true;
+		};
+		Card_NEW1_040() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
+
 
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -936,6 +961,9 @@ namespace Cards
 
 }
 
+REGISTER_CARD(NEW1_040t)
+REGISTER_CARD(NEW1_040)
+REGISTER_CARD(EX1_095)
 REGISTER_CARD(EX1_283)
 REGISTER_CARD(EX1_110)
 REGISTER_CARD(EX1_067)
