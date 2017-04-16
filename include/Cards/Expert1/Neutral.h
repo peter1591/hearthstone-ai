@@ -946,6 +946,17 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_614 : public MinionCardBase<Card_EX1_614> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnPlay::Context context) {
+			SummonToRight(context.manipulate_, self, Cards::ID_EX1_614t);
+			return true;
+		}
+		Card_EX1_614() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnPlay>();
+		}
+	};
+
 
 	struct Card_NEW1_038_Enchant : public Enchantment<Card_NEW1_038_Enchant, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_038 : public MinionCardBase<Card_NEW1_038> {
@@ -961,6 +972,7 @@ namespace Cards
 
 }
 
+REGISTER_CARD(EX1_614)
 REGISTER_CARD(NEW1_040t)
 REGISTER_CARD(NEW1_040)
 REGISTER_CARD(EX1_095)
