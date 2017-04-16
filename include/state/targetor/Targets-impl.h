@@ -89,6 +89,9 @@ namespace state {
 			case kMinionFilterMinionAttackerLessOrEqualTo:
 				if (card.GetAttack() > minion_filter_arg1) return;
 				break;
+			case kMinionFilterTaunt:
+				if (!card.HasTaunt()) return;
+				break;
 			}
 
 			functor(minion);

@@ -68,7 +68,8 @@ namespace state {
 				kMinionFilterMurloc,
 				kMinionFilterPirate,
 				kMinionFilterMinionAttackerGreaterOrEqualTo,
-				kMinionFilterMinionAttackerLessOrEqualTo
+				kMinionFilterMinionAttackerLessOrEqualTo,
+				kMinionFilterTaunt
 			} minion_filter;
 			int minion_filter_arg1;
 
