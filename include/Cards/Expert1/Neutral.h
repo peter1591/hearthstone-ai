@@ -1,7 +1,7 @@
 #pragma once
 
-// http://www.hearthpwn.com/cards?filter-set=3&filter-premium=1&filter-class=1&sort=-cost&display=1
-// finished: Cairne Bloodhoof
+// http://www.hearthpwn.com/cards?display=1&filter-class=1&filter-premium=1&filter-set=3&page=2&sort=-cost
+// finished: (page 1)
 
 namespace Cards
 {
@@ -1028,8 +1028,11 @@ namespace Cards
 			context.manipulate_.Hero(target).SetHP(15);
 		}
 	};
+
+	struct Card_EX1_563 : public MinionCardBase<Card_EX1_563, SpellDamage<5>> {};
 }
 
+REGISTER_CARD(EX1_563)
 REGISTER_CARD(EX1_561)
 REGISTER_CARD(NEW1_038)
 REGISTER_CARD(CS2_161)
