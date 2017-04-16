@@ -1017,8 +1017,20 @@ namespace Cards
 				state::Events::EventTypes::OnTurnEnd>();
 		}
 	};
+
+	struct Card_EX1_561 : public MinionCardBase<Card_EX1_561> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return TargetsGenerator(context.player_).Hero();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.Hero(target).SetHP(15);
+		}
+	};
 }
 
+REGISTER_CARD(EX1_561)
 REGISTER_CARD(NEW1_038)
 REGISTER_CARD(CS2_161)
 REGISTER_CARD(EX1_249)

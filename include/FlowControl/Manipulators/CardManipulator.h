@@ -45,6 +45,19 @@ namespace FlowControl
 				return Damage(source, -amount);
 			}
 
+			void SetHP(int amount) {
+				int damage = GetCard().GetMaxHP() - amount;
+				if (damage < 0) {
+					SetMaxHP(amount);
+					damage = 0;
+				}
+				GetCard().GetDamageSetter().Set(damage);
+			}
+
+			void SetMaxHP(int amount) {
+				GetCard().SetMaxHP(amount);
+			}
+
 			void ConductFinalDamage(state::CardRef source, int amount) {
 				auto helper = Helpers::DamageHelper(state_, flow_context_,
 					source, card_ref_, amount);

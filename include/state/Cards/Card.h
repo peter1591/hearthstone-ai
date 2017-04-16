@@ -22,6 +22,8 @@ namespace FlowControl
 			class DeathrattlesHelper;
 			class TransformHelper;
 		}
+
+		class CardManipulator;
 	}
 }
 
@@ -72,6 +74,7 @@ namespace state
 			class DamageSetter
 			{
 				friend class FlowControl::Manipulators::detail::DamageSetter;
+				friend class FlowControl::Manipulators::CardManipulator;
 			public:
 				DamageSetter(CardData & data) : data_(data) {}
 			private:
