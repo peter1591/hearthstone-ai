@@ -46,6 +46,16 @@ namespace FlowControl
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state_, flow_context_), ref)
 				.ChangeTo<state::kCardZoneHand>(player_id_);
 		}
+
+		inline void HeroManipulator::DiscardHandCard(state::CardRef card_ref)
+		{
+			assert(state_.GetCard(card_ref).GetPlayerIdentifier() == GetCard().GetPlayerIdentifier());
+			assert(state_.GetCard(card_ref).GetZone() == state::kCardZoneHand);
+
+			// TODO: fire event: DiscardHandCard
+			state_.GetZoneChanger<state::kCardZoneHand>(FlowControl::Manipulate(state_, flow_context_), card_ref)
+				.ChangeTo<state::kCardZoneSetASide>(state_.GetCard(card_ref).GetPlayerIdentifier());
+		}
 		
 		inline void HeroManipulator::DestroyWeapon()
 		{

@@ -1122,8 +1122,27 @@ namespace Cards
 				state::Events::EventTypes::OnTurnEnd>();
 		}
 	};
+
+	struct Card_NEW1_030 : public MinionCardBase<Card_NEW1_030> {
+		static void Battlecry(Contexts::OnPlay context) {
+			// destroy minions
+			auto minion_op = [&](state::CardRef card_ref) {
+				if (card_ref == context.card_ref_) return;
+				context.manipulate_.OnBoardMinion(card_ref).Destroy();
+			};
+			context.manipulate_.Board().FirstPlayer().minions_.ForEach(minion_op);
+			context.manipulate_.Board().SecondPlayer().minions_.ForEach(minion_op);
+
+			// discard hand
+			auto & hand = context.manipulate_.Board().Player(context.player_).hand_;
+			while (!hand.Empty()) {
+				context.manipulate_.Hero(context.player_).DiscardHandCard(hand.Get(0));
+			}
+		}
+	};
 }
 
+REGISTER_CARD(NEW1_030)
 REGISTER_CARD(EX1_572)
 REGISTER_CARD(DREAM_05)
 REGISTER_CARD(DREAM_04)

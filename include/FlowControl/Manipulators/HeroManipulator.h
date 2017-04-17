@@ -16,7 +16,10 @@ namespace FlowControl
 			}
 
 			void DrawCard();
+			
 			void AddHandCard(int card_id);
+			void DiscardHandCard(state::CardRef card_ref);
+
 			void DestroyWeapon();
 
 			void GainArmor(int amount);
