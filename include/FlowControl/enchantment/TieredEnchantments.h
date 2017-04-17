@@ -37,6 +37,12 @@ namespace FlowControl
 				GetEnchantments<EnchantmentType::normal_tier>().PushBackNormalEnchantment<EnchantmentType>(state);
 			}
 
+			template <typename EnchantmentType>
+			void PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
+			{
+				GetEnchantments<EnchantmentType::normal_tier>().PushBackEventHookedEnchantment<EnchantmentType>(manipulate, card_ref);
+			}
+
 			void Remove(IdentifierType id)
 			{
 				switch (id.tier) {
@@ -71,11 +77,11 @@ namespace FlowControl
 				tier3_.Clear();
 			}
 
-			void AfterCopied(FlowControl::Manipulate & manipulate)
+			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
 			{
-				tier1_.AfterCopied(manipulate);
-				tier2_.AfterCopied(manipulate);
-				tier3_.AfterCopied(manipulate);
+				tier1_.AfterCopied(manipulate, card_ref);
+				tier2_.AfterCopied(manipulate, card_ref);
+				tier3_.AfterCopied(manipulate, card_ref);
 			}
 
 			void ApplyAll(state::State const& state, state::Cards::EnchantableStates & stats)

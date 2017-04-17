@@ -32,7 +32,7 @@ namespace FlowControl
 			state::CardRef card_ref = state_.AddCard(GenerateCard(std::move(new_data), player));
 
 			state_.GetMutableCard(card_ref).GetMutableEnchantmentHandler()
-				.AfterCopied(FlowControl::Manipulate(state_, flow_context_));
+				.AfterCopied(FlowControl::Manipulate(state_, flow_context_), card_ref);
 
 			return card_ref;
 		}

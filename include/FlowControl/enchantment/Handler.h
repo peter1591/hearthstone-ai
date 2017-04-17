@@ -28,11 +28,14 @@ namespace FlowControl
 			template <typename EnchantmentType> auto PushBackAuraEnchantment(state::State const& state) {
 				return enchantments.PushBackAuraEnchantment<EnchantmentType>();
 			}
+			template <typename EnchantmentType> auto PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref) {
+				return enchantments.PushBackEventHookedEnchantment<EnchantmentType>(manipulate, card_ref);
+			}
 
 			bool Exists(TieredEnchantments::IdentifierType id) const { return enchantments.Exists(id); }
 
 			void Clear() { enchantments.Clear(); }
-			void AfterCopied(FlowControl::Manipulate & manipulate) { enchantments.AfterCopied(manipulate); }
+			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref) { enchantments.AfterCopied(manipulate, card_ref); }
 			void Remove(TieredEnchantments::IdentifierType id) { return enchantments.Remove(id); }
 
 			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, bool allow_hp_reduce);
