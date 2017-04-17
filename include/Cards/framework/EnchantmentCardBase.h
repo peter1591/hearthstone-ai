@@ -50,8 +50,39 @@ namespace Cards
 	template <typename... Ts>
 	struct EnchantmentForThisTurn : public Enchantment<Ts...>
 	{
-		EnchantmentForThisTurn() {
+		EnchantmentForThisTurn() : Enchantment() {
 			valid_this_turn = true;
 		}
+	};
+
+	template <
+		typename T,
+		typename Enchant1 = NullEnchant,
+		typename Enchant2 = NullEnchant,
+		typename Enchant3 = NullEnchant,
+		typename Enchant4 = NullEnchant,
+		typename Enchant5 = NullEnchant
+	>
+		struct EventHookedEnchantment
+	{
+		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
+
+		EventHookedEnchantment() {
+			// TODO: use SFINAE to make sure caller correctly pass itself as T
+			//       T::required_tier must NOT exist
+
+			apply_functor = [](state::Cards::EnchantableStates & stats) {
+				Enchant1::Apply(stats);
+				Enchant2::Apply(stats);
+				Enchant3::Apply(stats);
+				Enchant4::Apply(stats);
+				Enchant5::Apply(stats);
+			};
+
+			register_functor = T::RegisterEvent;
+		}
+
+		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
+		FlowControl::enchantment::Enchantments::EventHookedEnchantment::RegisterEventFunctor register_functor;
 	};
 }

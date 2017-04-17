@@ -54,6 +54,12 @@ namespace FlowControl
 					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<20>());
 				}
 
+				template <typename EnchantmentType>
+				auto AddEventHooked(EnchantmentType&& enchant, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data) {
+					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackEventHookedEnchantment(
+						FlowControl::Manipulate(state_, flow_context_), card_ref_, std::forward<EnchantmentType>(enchant), aux_data);
+				}
+
 				void SetHealthToMaxHP();
 
 				template <typename T> auto AddAuraEnchantment(T&& enchantment) {

@@ -167,6 +167,7 @@ namespace state
 
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
 
+			auto const& GetEnchantmentHandler() const { return data_.enchantment_handler; }
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }
 			auto& GetMutableDeathrattleHandler() { return data_.deathrattle_handler; }
 

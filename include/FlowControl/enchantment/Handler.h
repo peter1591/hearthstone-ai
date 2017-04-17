@@ -28,8 +28,12 @@ namespace FlowControl
 			template <typename EnchantmentType> auto PushBackAuraEnchantment(state::State const& state, EnchantmentType&& enchantment) {
 				return enchantments.PushBackAuraEnchantment<EnchantmentType>(std::forward<EnchantmentType>(enchantment));
 			}
-			template <typename EnchantmentType> auto PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref) {
-				return enchantments.PushBackEventHookedEnchantment<EnchantmentType>(manipulate, card_ref);
+			template <typename EnchantmentType> auto PushBackEventHookedEnchantment(
+				FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+				EnchantmentType&& enchant, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
+			{
+				return enchantments.PushBackEventHookedEnchantment(
+					manipulate, card_ref, std::forward<EnchantmentType>(enchant), aux_data);
 			}
 
 			bool Exists(TieredEnchantments::IdentifierType id) const { return enchantments.Exists(id); }

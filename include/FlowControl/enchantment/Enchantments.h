@@ -36,19 +36,22 @@ namespace FlowControl
 				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const;
 			};
 			struct EventHookedEnchantment {
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
-				ApplyFunctor apply_functor;
-
 				struct AuxData {
 					AuxData() : valid(false) {}
 					bool valid;
-				} aux_data;
+					state::PlayerIdentifier player;
+				};
 
 				typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &, state::CardRef, IdentifierType, AuxData &);
+
+				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
 				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & aux_data) const {
 					register_functor(manipulate, card_ref, id, aux_data);
 				}
+
+				ApplyFunctor apply_functor;
 				RegisterEventFunctor register_functor;
+				AuxData aux_data;
 			};
 			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
@@ -85,15 +88,17 @@ namespace FlowControl
 			}
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
+			typename IdentifierType PushBackEventHookedEnchantment(
+				FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+				EnchantmentType&& item, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
-				EnchantmentType item;
 				need_update_ = true;
 				assert(item.apply_functor);
 				assert(item.register_functor);
-				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment{ item.apply_functor, item.register_functor });
+				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment{ item.apply_functor, item.register_functor, aux_data });
 				item.register_functor(manipulate, card_ref, id,
-					std::get<EventHookedEnchantment>(enchantments_.Get(id)).aux_data);
+					std::get<EventHookedEnchantment>(*enchantments_.Get(id)).aux_data);
+				return id;
 			}
 
 			void Remove(IdentifierType id)

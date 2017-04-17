@@ -38,9 +38,13 @@ namespace FlowControl
 			}
 
 			template <typename EnchantmentType>
-			void PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
+			typename IdentifierType PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+				EnchantmentType&& enchant, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
-				GetEnchantments<EnchantmentType::normal_tier>().PushBackEventHookedEnchantment<EnchantmentType>(manipulate, card_ref);
+				constexpr EnchantmentTiers tier = EnchantmentType::tier;
+				Enchantments::IdentifierType id = GetEnchantments<tier>()
+					.PushBackEventHookedEnchantment(manipulate, card_ref, std::forward<EnchantmentType>(enchant), aux_data);
+				return IdentifierType{ tier, id };
 			}
 
 			void Remove(IdentifierType id)
