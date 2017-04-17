@@ -23,7 +23,6 @@ namespace FlowControl
 			using IdentifierType = Utils::CloneableContainers::RemovableVectorIdentifier;
 
 			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
-			typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &, state::CardRef, IdentifierType);
 
 			struct AuraEnchantment {
 				ApplyFunctor apply_functor;
@@ -38,11 +37,17 @@ namespace FlowControl
 			};
 			struct EventHookedEnchantment {
 				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
-				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id) const {
-					register_functor(manipulate, card_ref, id);
-				}
-
 				ApplyFunctor apply_functor;
+
+				struct AuxData {
+					AuxData() : valid(false) {}
+					bool valid;
+				} aux_data;
+
+				typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &, state::CardRef, IdentifierType, AuxData &);
+				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & aux_data) const {
+					register_functor(manipulate, card_ref, id, aux_data);
+				}
 				RegisterEventFunctor register_functor;
 			};
 			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
@@ -87,7 +92,8 @@ namespace FlowControl
 				assert(item.apply_functor);
 				assert(item.register_functor);
 				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment{ item.apply_functor, item.register_functor });
-				item.register_functor(manipulate, card_ref, id);
+				item.register_functor(manipulate, card_ref, id,
+					std::get<EventHookedEnchantment>(enchantments_.Get(id)).aux_data);
 			}
 
 			void Remove(IdentifierType id)
@@ -111,15 +117,15 @@ namespace FlowControl
 							: manipulate_(manipulate), card_ref_(card_ref), enchantments_(enchantments), id_(id)
 						{}
 
-						void operator()(NormalEnchantment const& arg) {
+						void operator()(NormalEnchantment & arg) {
 							// do nothing
 						}
-						void operator()(AuraEnchantment const& arg) {
+						void operator()(AuraEnchantment & arg) {
 							// All aura enchantments are removed
 							enchantments_.Remove(id_);
 						}
-						void operator()(EventHookedEnchantment const& arg) {
-							arg.RegisterEvent(manipulate_, card_ref_, id_);
+						void operator()(EventHookedEnchantment & arg) {
+							arg.RegisterEvent(manipulate_, card_ref_, id_, arg.aux_data);
 						}
 
 						FlowControl::Manipulate & manipulate_;
