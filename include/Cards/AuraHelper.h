@@ -13,10 +13,6 @@ namespace Cards
 		static constexpr FlowControl::aura::EmitPolicy emit_policy = FlowControl::aura::kEmitWhenAlive;
 	};
 
-	struct EmitWhenInHand {
-		// TODO: implement
-	};
-
 	template <typename HandleClass, typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 	class AuraHelper
 	{
