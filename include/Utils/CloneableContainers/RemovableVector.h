@@ -11,6 +11,39 @@ namespace Utils
 {
 	namespace CloneableContainers
 	{
+		template <typename ItemType> class RemovableVector;
+		class RemovableVectorIdentifierHasher;
+
+		class RemovableVectorIdentifier
+		{
+			template <typename ItemType> friend class RemovableVector;
+			friend class RemovableVectorIdentifierHasher;
+
+			typedef typename CloneableContainers::VectorIdentifier impl_identifier_type;
+
+		public:
+			RemovableVectorIdentifier() {}
+			RemovableVectorIdentifier(const RemovableVectorIdentifier & rhs) = default;
+			RemovableVectorIdentifier & operator=(const RemovableVectorIdentifier & rhs) = default;
+			RemovableVectorIdentifier(RemovableVectorIdentifier && rhs) = default;
+			RemovableVectorIdentifier & operator=(RemovableVectorIdentifier && rhs) = default;
+
+			bool operator==(const RemovableVectorIdentifier& rhs) const { return identifier_ == rhs.identifier_; }
+			bool operator!=(const RemovableVectorIdentifier& rhs) const { return identifier_ != rhs.identifier_; }
+
+		private:
+			RemovableVectorIdentifier(const impl_identifier_type & identifier) : identifier_(identifier) {}
+			RemovableVectorIdentifier(impl_identifier_type && identifier) : identifier_(std::move(identifier)) {}
+
+			impl_identifier_type identifier_;
+		};
+
+		class RemovableVectorIdentifierHasher
+		{
+		public:
+			size_t operator()(const RemovableVectorIdentifier & id) const { return std::hash<decltype(id.identifier_)>()(id.identifier_); }
+		};
+
 		template <typename ItemType>
 			class RemovableVector
 		{
@@ -35,35 +68,8 @@ namespace Utils
 			};
 
 		public:
-			class Identifier
-			{
-				friend class RemovableVector<ItemType>;
-				friend class RemovableVector::IdentifierHasher;
-
-				typedef typename CloneableContainers::Vector<InternalItemType>::Identifier impl_identifier_type;
-
-			public:
-				Identifier() {}
-				Identifier(const Identifier & rhs) = default;
-				Identifier & operator=(const Identifier & rhs) = default;
-				Identifier(Identifier && rhs) = default;
-				Identifier & operator=(Identifier && rhs) = default;
-
-				bool operator==(const Identifier& rhs) const { return identifier_ == rhs.identifier_; }
-				bool operator!=(const Identifier& rhs) const { return identifier_ != rhs.identifier_; }
-
-			private:
-				Identifier(const impl_identifier_type & identifier) : identifier_(identifier) {}
-				Identifier(impl_identifier_type && identifier) : identifier_(std::move(identifier)) {}
-
-				impl_identifier_type identifier_;
-			};
-
-			class IdentifierHasher
-			{
-			public:
-				size_t operator()(const Identifier & id) const { return std::hash()(id.identifier_); }
-			};
+			typedef RemovableVectorIdentifier Identifier;
+			typedef RemovableVectorIdentifierHasher IdentifierHasher;
 
 		public:
 			RemovableVector() :
