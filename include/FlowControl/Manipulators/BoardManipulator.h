@@ -34,14 +34,14 @@ namespace FlowControl
 			state::board::Player const& SecondPlayer() const { return Player(state::PlayerIdentifier::Second()); }
 			
 		public:
-			state::Cards::Card GenerateCardById(Cards::CardId card_id, state::PlayerIdentifier player);
-			state::Cards::Card GenerateCardByCopy(state::Cards::Card const& card, state::PlayerIdentifier player);
+			state::CardRef AddCardById(Cards::CardId card_id, state::PlayerIdentifier player);
+			state::CardRef AddCardByCopy(state::Cards::Card const& card, state::PlayerIdentifier player);
 
-			void SummonMinionByCopy(state::Cards::Card const& card, state::PlayerIdentifier player, int pos) {
-				return SummonMinion(GenerateCardByCopy(card, player), pos);
-			}
 			void SummonMinionById(Cards::CardId card_id, state::PlayerIdentifier player, int pos) {
-				return SummonMinion(GenerateCardById(card_id, player), pos);
+				return SummonMinion(AddCardById(card_id, player), pos);
+			}
+			void SummonMinionByCopy(state::Cards::Card const& card, state::PlayerIdentifier player, int pos) {
+				return SummonMinion(AddCardByCopy(card, player), pos);
 			}
 
 			int GetSpellDamage(state::PlayerIdentifier player);
@@ -50,7 +50,8 @@ namespace FlowControl
 
 		private:
 			state::Cards::Card GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player);
-			void SummonMinion(state::Cards::Card card, int pos);
+
+			void SummonMinion(state::CardRef card_ref, int pos);
 
 		private:
 			state::State & state_;

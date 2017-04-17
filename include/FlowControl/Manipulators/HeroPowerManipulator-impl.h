@@ -11,8 +11,7 @@ namespace FlowControl
 	{
 		inline void HeroPowerManipulator::ReplaceHeroPower(Cards::CardId id)
 		{
-			state::CardRef new_ref = state_.AddCard(BoardManipulator(state_, flow_context_)
-				.GenerateCardById(id, GetCard().GetPlayerIdentifier()));
+			state::CardRef new_ref = BoardManipulator(state_, flow_context_).AddCardById(id, GetCard().GetPlayerIdentifier());
 
 			assert(state_.GetCard(new_ref).GetRawData().usable == true);
 

@@ -42,14 +42,10 @@ namespace FlowControl
 
 		inline state::CardRef OnBoardMinionManipulator::Transform(Cards::CardId id)
 		{
-			state::Cards::Card new_card = BoardManipulator(state_, flow_context_).GenerateCardById(id, GetCard().GetPlayerIdentifier());
-
 			assert(GetCard().GetCardType() == state::kCardTypeMinion);
 			assert(GetCard().GetZone() == state::kCardZonePlay);
-			assert(new_card.GetCardType() == state::kCardTypeMinion);
-			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 
-			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
+			state::CardRef new_card_ref = BoardManipulator(state_, flow_context_).AddCardById(id, GetCard().GetPlayerIdentifier());
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(Manipulate(state_, flow_context_), card_ref_)
 				.ReplaceBy(new_card_ref);
 
@@ -63,15 +59,14 @@ namespace FlowControl
 
 		inline state::CardRef OnBoardMinionManipulator::BecomeCopyof(state::Cards::Card const& card)
 		{
-			state::Cards::Card new_card = BoardManipulator(state_, flow_context_)
-				.GenerateCardByCopy(card, GetCard().GetPlayerIdentifier());
-
 			assert(GetCard().GetCardType() == state::kCardTypeMinion);
 			assert(GetCard().GetZone() == state::kCardZonePlay);
-			assert(new_card.GetCardType() == state::kCardTypeMinion);
-			assert(new_card.GetZone() == state::kCardZoneNewlyCreated);
 
-			state::CardRef new_card_ref = state_.AddCard(std::move(new_card));
+			state::CardRef new_card_ref = BoardManipulator(state_, flow_context_)
+				.AddCardByCopy(card, GetCard().GetPlayerIdentifier());
+			assert(state_.GetCard(new_card_ref).GetCardType() == state::kCardTypeMinion);
+			assert(state_.GetCard(new_card_ref).GetZone() == state::kCardZoneNewlyCreated);
+
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(Manipulate(state_, flow_context_), card_ref_)
 				.ReplaceBy(new_card_ref);
 

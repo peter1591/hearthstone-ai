@@ -9,19 +9,18 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline state::Cards::Card BoardManipulator::GenerateCardById(Cards::CardId card_id, state::PlayerIdentifier player)
+		inline state::CardRef BoardManipulator::AddCardById(Cards::CardId card_id, state::PlayerIdentifier player)
 		{
 			state::Cards::CardData new_data = Cards::CardDispatcher::CreateInstance(card_id);
 			new_data.enchanted_states.player = player;
 			new_data.enchantment_handler.SetOriginalStates(new_data.enchanted_states);
-			return GenerateCard(std::move(new_data), player);
+
+			return state_.AddCard(GenerateCard(std::move(new_data), player));
 		}
 
-		inline state::Cards::Card BoardManipulator::GenerateCardByCopy(state::Cards::Card const & card, state::PlayerIdentifier player)
+		inline state::CardRef BoardManipulator::AddCardByCopy(state::Cards::Card const & card, state::PlayerIdentifier player)
 		{
 			state::Cards::CardData new_data = card.GetRawData();
-
-			new_data.enchantment_handler.AfterCopied(FlowControl::Manipulate(state_, flow_context_));
 
 			if (new_data.enchanted_states.player != player) {
 				auto origin_states = new_data.enchantment_handler.GetOriginalStates();
@@ -30,7 +29,12 @@ namespace FlowControl
 				new_data.enchanted_states.player = player;
 			}
 
-			return GenerateCard(std::move(new_data), player);
+			state::CardRef card_ref = state_.AddCard(GenerateCard(std::move(new_data), player));
+
+			state_.GetMutableCard(card_ref).GetMutableEnchantmentHandler()
+				.AfterCopied(FlowControl::Manipulate(state_, flow_context_));
+
+			return card_ref;
 		}
 
 		inline state::Cards::Card BoardManipulator::GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player)
@@ -42,31 +46,28 @@ namespace FlowControl
 			return state::Cards::Card(std::move(card_data));
 		}
 
-		inline void BoardManipulator::SummonMinion(state::Cards::Card origin_card, int pos)
+		inline void BoardManipulator::SummonMinion(state::CardRef card_ref, int pos)
 		{
-			state::PlayerIdentifier player = origin_card.GetPlayerIdentifier();
+			state::PlayerIdentifier player = state_.GetCard(card_ref).GetPlayerIdentifier();
 			assert(player.AssertCheck());
+			assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeMinion);
 
-			assert(origin_card.GetCardType() == state::kCardTypeMinion);
-
-			state::CardRef ref = state_.AddCard(std::move(origin_card));
-
-			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(Manipulate(state_, flow_context_), ref)
+			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(Manipulate(state_, flow_context_), card_ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);
 
-			state::Cards::Card const& card = state_.GetCardsManager().Get(ref);
+			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 			assert(card.GetPlayerIdentifier() == player);
 			assert(card.GetZone() == state::kCardZonePlay);
 			assert(card.GetCardType() == state::kCardTypeMinion);
 			assert(card.GetZonePosition() == pos);
 
 			state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
-				state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), ref });
+				state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref });
 
 			state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
-				state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), ref });
+				state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref });
 
-			Manipulate(state_, flow_context_).OnBoardMinion(ref).AfterSummoned();
+			Manipulate(state_, flow_context_).OnBoardMinion(card_ref).AfterSummoned();
 		}
 
 		inline int BoardManipulator::GetSpellDamage(state::PlayerIdentifier player_id)
