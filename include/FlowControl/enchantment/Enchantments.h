@@ -86,12 +86,17 @@ namespace FlowControl
 				// All aura enchantments are removed
 				need_update_ = true;
 				enchantments_.IterateAll([this](IdentifierType id, EnchantmentType& enchantment) -> bool {
-					std::visit([&](auto&& arg) {
-						using T = std::decay_t<decltype(arg)>;
-						if (std::is_same_v<T, AuraEnchantment>) {
-							enchantments_.Remove(id);
-						}
-					}, enchantment);
+					struct OpFunctor {
+						OpFunctor(ContainerType & enchantments, IdentifierType id) : enchantments_(enchantments), id_(id) {}
+
+						void operator()(NormalEnchantment const& arg) { /* do nothing */ }
+						void operator()(AuraEnchantment const& arg) { enchantments_.Remove(id_); }
+
+						ContainerType & enchantments_;
+						IdentifierType id_;
+					};
+					
+					std::visit(OpFunctor(enchantments_, id), enchantment);
 					return true;
 				});
 			}
