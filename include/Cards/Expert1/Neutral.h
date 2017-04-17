@@ -1169,8 +1169,24 @@ namespace Cards
 				state::Events::EventTypes::GetPlayCardCost>();
 		}
 	};
+
+	struct Card_EX1_620 : public MinionCardBase<Card_EX1_620> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			if (context.card_ref_ != self) return true;
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
+			int damage = context.manipulate_.GetCard(hero_ref).GetDamage();
+			*context.cost_ -= (int)(damage);
+			return true;
+		}
+		Card_EX1_620() {
+			RegisterEvent<InHandZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_620)
 REGISTER_CARD(EX1_105)
 REGISTER_CARD(EX1_586)
 REGISTER_CARD(NEW1_030)
