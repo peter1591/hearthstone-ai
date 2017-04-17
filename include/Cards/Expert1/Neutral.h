@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?display=1&filter-class=1&filter-premium=1&filter-set=3&page=2&sort=-cost
-// finished: (page 1)
+// finished: Sea Giant
 
 namespace Cards
 {
@@ -1140,8 +1140,23 @@ namespace Cards
 			}
 		}
 	};
+
+	struct Card_EX1_586 : public MinionCardBase<Card_EX1_586> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			if (context.card_ref_ != self) return true;
+			size_t minions = context.manipulate_.Board().FirstPlayer().minions_.Size() +
+				context.manipulate_.Board().SecondPlayer().minions_.Size();
+			*context.cost_ -= (int)minions;
+			return true;
+		}
+		Card_EX1_586() {
+			RegisterEvent<InHandZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_586)
 REGISTER_CARD(NEW1_030)
 REGISTER_CARD(EX1_572)
 REGISTER_CARD(DREAM_05)
