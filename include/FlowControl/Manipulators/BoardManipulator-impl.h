@@ -21,9 +21,7 @@ namespace FlowControl
 		{
 			state::Cards::CardData new_data = card.GetRawData();
 
-			// TODO: remove enchantments which are listening to an event
-
-			new_data.enchantment_handler.AfterCopied();
+			new_data.enchantment_handler.AfterCopied(FlowControl::Manipulate(state_, flow_context_));
 
 			if (new_data.enchanted_states.player != player) {
 				auto origin_states = new_data.enchantment_handler.GetOriginalStates();

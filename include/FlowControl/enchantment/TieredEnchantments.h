@@ -71,11 +71,11 @@ namespace FlowControl
 				tier3_.Clear();
 			}
 
-			void AfterCopied()
+			void AfterCopied(FlowControl::Manipulate & manipulate)
 			{
-				tier1_.AfterCopied();
-				tier2_.AfterCopied();
-				tier3_.AfterCopied();
+				tier1_.AfterCopied(manipulate);
+				tier2_.AfterCopied(manipulate);
+				tier3_.AfterCopied(manipulate);
 			}
 
 			void ApplyAll(state::State const& state, state::Cards::EnchantableStates & stats)

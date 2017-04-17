@@ -32,7 +32,7 @@ namespace FlowControl
 			bool Exists(TieredEnchantments::IdentifierType id) const { return enchantments.Exists(id); }
 
 			void Clear() { enchantments.Clear(); }
-			void AfterCopied() { enchantments.AfterCopied(); }
+			void AfterCopied(FlowControl::Manipulate & manipulate) { enchantments.AfterCopied(manipulate); }
 			void Remove(TieredEnchantments::IdentifierType id) { return enchantments.Remove(id); }
 
 			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, bool allow_hp_reduce);

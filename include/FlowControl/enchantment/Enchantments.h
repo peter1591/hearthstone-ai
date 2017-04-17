@@ -21,19 +21,27 @@ namespace FlowControl
 		{
 		public:
 			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
+			typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &);
 
 			struct AuraEnchantment {
 				ApplyFunctor apply_functor;
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) { apply_functor(stats); return true; }
+				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
 			};
 			struct NormalEnchantment {
 				ApplyFunctor apply_functor;
 				int valid_until_turn; // -1 if always valid
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats);
+				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const;
 			};
-			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment>;
+			struct EventHookedEnchantment {
+				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
+				void RegisterEvent(FlowControl::Manipulate & manipulate) const { register_functor(manipulate); }
+
+				ApplyFunctor apply_functor;
+				RegisterEventFunctor register_functor;
+			};
+			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
 
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
 			using IdentifierType = ContainerType::Identifier;
@@ -54,6 +62,7 @@ namespace FlowControl
 			{
 				EnchantmentType item;
 				need_update_ = true;
+				assert(item.apply_functor);
 				return enchantments_.PushBack(AuraEnchantment{ item.apply_functor });
 			}
 
@@ -65,8 +74,19 @@ namespace FlowControl
 				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
 
 				need_update_ = true;
+				assert(item.apply_functor);
 				enchantments_.PushBack(NormalEnchantment{ item.apply_functor, valid_until_turn });
 				normal_enchantment_update_decider_.PushBack(valid_until_turn);
+			}
+
+			template <typename EnchantmentType>
+			typename IdentifierType PushBackEventHookedEnchantment()
+			{
+				EnchantmentType item;
+				need_update_ = true;
+				assert(item.apply_functor);
+				assert(item.register_functor);
+				return enchantments_.PushBack(EventHookedEnchantment{ item.apply_functor, item.register_functor });
 			}
 
 			void Remove(IdentifierType id)
@@ -81,22 +101,32 @@ namespace FlowControl
 				enchantments_.Clear();
 			}
 
-			void AfterCopied()
+			void AfterCopied(FlowControl::Manipulate & manipulate)
 			{
-				// All aura enchantments are removed
 				need_update_ = true;
-				enchantments_.IterateAll([this](IdentifierType id, EnchantmentType& enchantment) -> bool {
+				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
 					struct OpFunctor {
-						OpFunctor(ContainerType & enchantments, IdentifierType id) : enchantments_(enchantments), id_(id) {}
+						OpFunctor(FlowControl::Manipulate & manipulate, ContainerType & enchantments, IdentifierType id)
+							: manipulate_(manipulate), enchantments_(enchantments), id_(id)
+						{}
 
-						void operator()(NormalEnchantment const& arg) { /* do nothing */ }
-						void operator()(AuraEnchantment const& arg) { enchantments_.Remove(id_); }
+						void operator()(NormalEnchantment const& arg) {
+							// do nothing
+						}
+						void operator()(AuraEnchantment const& arg) {
+							// All aura enchantments are removed
+							enchantments_.Remove(id_);
+						}
+						void operator()(EventHookedEnchantment const& arg) {
+							arg.RegisterEvent(manipulate_);
+						}
 
+						FlowControl::Manipulate & manipulate_;
 						ContainerType & enchantments_;
 						IdentifierType id_;
 					};
 					
-					std::visit(OpFunctor(enchantments_, id), enchantment);
+					std::visit(OpFunctor(manipulate, enchantments_, id), enchantment);
 					return true;
 				});
 			}
