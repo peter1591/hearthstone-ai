@@ -86,13 +86,13 @@ namespace FlowControl
 				// All aura enchantments are removed
 				need_update_ = true;
 				enchantments_.IterateAll([this](IdentifierType id, EnchantmentType& enchantment) -> bool {
-					return std::visit([&](auto&& arg) -> bool {
+					std::visit([&](auto&& arg) {
 						using T = std::decay_t<decltype(arg)>;
 						if (std::is_same_v<T, AuraEnchantment>) {
 							enchantments_.Remove(id);
 						}
-						return true;
 					}, enchantment);
+					return true;
 				});
 			}
 
