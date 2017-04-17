@@ -9,7 +9,7 @@ namespace FlowControl
 		template <typename EnchantmentType>
 		inline EffectHandler_Enchantments& EffectHandler_Enchantments::SetEnchantmentType() {
 			apply_on = [](contexts::AuraApplyOn context) {
-				return context.manipulate_.Card(context.target_).Enchant().AddAuraEnchantment<EnchantmentType>();
+				return context.manipulate_.Card(context.target_).Enchant().AddAuraEnchantment(EnchantmentType());
 			};
 			return *this;
 		}

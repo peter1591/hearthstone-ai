@@ -19,42 +19,45 @@ namespace FlowControl
 				{
 				}
 
-				template <typename T> auto Add() {
-					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T>(state_);
+				template <typename EnchantmentType> auto Add(EnchantmentType&& enchantment) {
+					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, std::forward<EnchantmentType>(enchantment));
+				}
+				template <typename EnchantmentType> auto Add() {
+					return Add(EnchantmentType());
 				}
 				template <template <int> typename T> auto Add(int v) {
 					assert(v >= 0);
 					switch (v) {
-					case 0: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<0>>(state_);
-					case 1: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<1>>(state_);
-					case 2: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<2>>(state_);
-					case 3: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<3>>(state_);
-					case 4: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<4>>(state_);
-					case 5: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<5>>(state_);
-					case 6: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<6>>(state_);
-					case 7: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<7>>(state_);
-					case 8: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<8>>(state_);
-					case 9: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<9>>(state_);
-					case 10: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<10>>(state_);
-					case 11: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<11>>(state_);
-					case 12: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<12>>(state_);
-					case 13: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<13>>(state_);
-					case 14: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<14>>(state_);
-					case 15: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<15>>(state_);
-					case 16: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<16>>(state_);
-					case 17: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<17>>(state_);
-					case 18: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<18>>(state_);
-					case 19: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<19>>(state_);
-					case 20: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<20>>(state_);
+					case 0: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<0>());
+					case 1: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<1>());
+					case 2: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<2>());
+					case 3: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<3>());
+					case 4: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<4>());
+					case 5: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<5>());
+					case 6: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<6>());
+					case 7: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<7>());
+					case 8: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<8>());
+					case 9: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<9>());
+					case 10: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<10>());
+					case 11: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<11>());
+					case 12: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<12>());
+					case 13: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<13>());
+					case 14: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<14>());
+					case 15: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<15>());
+					case 16: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<16>());
+					case 17: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<17>());
+					case 18: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<18>());
+					case 19: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<19>());
+					case 20: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<20>());
 					}
 					assert(false); // need more switch-case
-					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment<T<20>>(state_);
+					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<20>());
 				}
 
 				void SetHealthToMaxHP();
 
-				template <typename T> auto AddAuraEnchantment() {
-					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackAuraEnchantment<T>(state_);
+				template <typename T> auto AddAuraEnchantment(T&& enchantment) {
+					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackAuraEnchantment(state_, std::forward<T>(enchantment));
 				}
 
 				template <typename T> auto Remove(T&& id) {

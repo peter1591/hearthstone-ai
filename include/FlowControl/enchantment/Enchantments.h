@@ -60,18 +60,16 @@ namespace FlowControl
 			};
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackAuraEnchantment()
+			typename IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
 			{
-				EnchantmentType item;
 				need_update_ = true;
 				assert(item.apply_functor);
 				return enchantments_.PushBack(AuraEnchantment{ item.apply_functor });
 			}
 
 			template <typename EnchantmentType>
-			void PushBackNormalEnchantment(state::State const& state)
+			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& item)
 			{
-				EnchantmentType item;
 				int valid_until_turn = -1;
 				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
 

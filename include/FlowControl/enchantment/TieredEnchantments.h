@@ -24,17 +24,17 @@ namespace FlowControl
 			};
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackAuraEnchantment()
+			typename IdentifierType PushBackAuraEnchantment(EnchantmentType&& enchantment)
 			{
 				constexpr EnchantmentTiers tier = EnchantmentType::aura_tier;
-				Enchantments::IdentifierType id = GetEnchantments<tier>().PushBackAuraEnchantment<EnchantmentType>();
+				Enchantments::IdentifierType id = GetEnchantments<tier>().PushBackAuraEnchantment(std::forward<EnchantmentType>(enchantment));
 				return IdentifierType{ tier, id };
 			}
 
 			template <typename EnchantmentType>
-			void PushBackNormalEnchantment(state::State const& state)
+			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& enchantment)
 			{
-				GetEnchantments<EnchantmentType::normal_tier>().PushBackNormalEnchantment<EnchantmentType>(state);
+				GetEnchantments<EnchantmentType::normal_tier>().PushBackNormalEnchantment<EnchantmentType>(state, std::forward<EnchantmentType>(enchantment));
 			}
 
 			template <typename EnchantmentType>

@@ -22,11 +22,11 @@ namespace FlowControl
 			}
 
 		public:
-			template <typename EnchantmentType> auto PushBackNormalEnchantment(state::State const& state) {
-				return enchantments.PushBackNormalEnchantment<EnchantmentType>(state);
+			template <typename EnchantmentType> auto PushBackNormalEnchantment(state::State const& state, EnchantmentType&& enchantment) {
+				return enchantments.PushBackNormalEnchantment<EnchantmentType>(state, std::forward<EnchantmentType>(enchantment));
 			}
-			template <typename EnchantmentType> auto PushBackAuraEnchantment(state::State const& state) {
-				return enchantments.PushBackAuraEnchantment<EnchantmentType>();
+			template <typename EnchantmentType> auto PushBackAuraEnchantment(state::State const& state, EnchantmentType&& enchantment) {
+				return enchantments.PushBackAuraEnchantment<EnchantmentType>(std::forward<EnchantmentType>(enchantment));
 			}
 			template <typename EnchantmentType> auto PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref) {
 				return enchantments.PushBackEventHookedEnchantment<EnchantmentType>(manipulate, card_ref);
