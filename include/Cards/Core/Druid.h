@@ -60,8 +60,23 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_007 : public SpellCardBase<Card_CS2_007> {
+		Card_CS2_007() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
+				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardCharacter(target).Heal(context.card_ref_, 8);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_007)
 REGISTER_CARD(CS2_013)
 REGISTER_CARD(CS2_009)
 REGISTER_CARD(CS2_005)
