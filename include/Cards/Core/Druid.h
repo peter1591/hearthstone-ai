@@ -36,8 +36,25 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_009e : public Enchantment<Card_CS2_009e, Attack<2>, MaxHP<2>> {};
+	struct Card_CS2_009 : public SpellCardBase<Card_CS2_009> {
+		Card_CS2_009() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
+				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target).Taunt(true);
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_009e>();
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_009)
 REGISTER_CARD(CS2_005)
 REGISTER_CARD(CS2_008)
 REGISTER_CARD(EX1_169)
