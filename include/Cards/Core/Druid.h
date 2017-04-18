@@ -52,8 +52,17 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_013 : public SpellCardBase<Card_CS2_013> {
+		Card_CS2_013() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Board().Player(context.player_).GetResource().GainEmptyCrystal(1);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_013)
 REGISTER_CARD(CS2_009)
 REGISTER_CARD(CS2_005)
 REGISTER_CARD(CS2_008)
