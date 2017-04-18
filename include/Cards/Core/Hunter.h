@@ -16,6 +16,8 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_084e : public 
 }
 
 REGISTER_CARD(DS1_185)
