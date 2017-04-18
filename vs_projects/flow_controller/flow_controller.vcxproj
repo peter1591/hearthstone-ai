@@ -147,6 +147,7 @@
     <ClInclude Include="..\..\include\Cards\Cards.h" />
     <ClInclude Include="..\..\include\Cards\Contexts.h" />
     <ClInclude Include="..\..\include\Cards\Core\Druid.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Hunter.h" />
     <ClInclude Include="..\..\include\Cards\Core\Mage.h" />
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Core\Paladin.h" />

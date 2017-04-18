@@ -491,5 +491,8 @@
     <ClInclude Include="..\..\include\Cards\Core\Druid.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Hunter.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
