@@ -86,8 +86,31 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_012 : public SpellCardBase<Card_CS2_012> {
+		Card_CS2_012() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target = false;
+				return TargetsGenerator(context.player_).Enemy(context.player_).SpellTargetable().GetInfo();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				state::CardRef target = context.GetTarget();
+				state::PlayerIdentifier player = context.manipulate_.GetCard(target).GetPlayerIdentifier();
+				if (target.IsValid()) context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, spell_damage + 4);
+
+				auto op = [&](state::CardRef card_ref) {
+					if (card_ref == target) return;
+					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, spell_damage + 1);
+				};
+				op(context.manipulate_.Board().Player(player).GetHeroRef());
+				context.manipulate_.Board().Player(player).minions_.ForEach(op);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_012)
 REGISTER_CARD(CS2_011)
 REGISTER_CARD(CS2_007)
 REGISTER_CARD(CS2_013)
