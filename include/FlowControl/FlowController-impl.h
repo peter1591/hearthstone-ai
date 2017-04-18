@@ -325,6 +325,8 @@ namespace FlowControl
 
 		if (card.GetRawData().num_attacks_this_turn >= card.GetMaxAttacksPerTurn()) return false;
 
+		if (GetAttackValue(attacker) <= 0) return false;
+
 		return true;
 	}
 

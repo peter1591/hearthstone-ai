@@ -4700,4 +4700,25 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 	}();
+
+	[state, flow_context, &parameter_getter, &random]() mutable {
+		FlowControl::FlowController controller(state, flow_context);
+
+		parameter_getter.next_minion_put_location = 0;
+		parameter_getter.next_specified_target_count = 0;
+		parameter_getter.next_specified_target_idx = 0;
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), { });
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+
+		if (controller.Attack(
+			state.GetBoard().GetFirst().GetHeroRef(),
+			state.GetBoard().GetSecond().GetHeroRef()
+		) != FlowControl::kResultInvalid) assert(false);
+	}();
 }
