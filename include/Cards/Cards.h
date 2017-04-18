@@ -11,6 +11,7 @@
 #include "Cards/MinionCardUtils.h"
 
 #include "Cards/Core/Neutral.h"
+#include "Cards/Core/Druid.h"
 #include "Cards/Core/Warrior.h"
 #include "Cards/Core/Priest.h"
 #include "Cards/Core/Shaman.h"

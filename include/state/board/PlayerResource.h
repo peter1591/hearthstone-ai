@@ -32,7 +32,10 @@ namespace state
 			}
 
 			void Refill() { current_ = total_; }
-			void SetCurrent(int current) { current_ = current; }
+			void SetCurrent(int current) { 
+				if (current > 10) current = 10;
+				current_ = current;
+			}
 			int GetCurrent() const { return current_; }
 
 			int GetCurrentOverloaded() const { return overload_current_; }
