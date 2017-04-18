@@ -74,8 +74,21 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_011o : public EnchantmentForThisTurn<Card_CS2_011o, Attack<2>> {};
+	struct Card_CS2_011 : public SpellCardBase<Card_CS2_011> {
+		Card_CS2_011() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).Enchant().Add<Card_CS2_011o>();
+				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_011o>();
+				});
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_011)
 REGISTER_CARD(CS2_007)
 REGISTER_CARD(CS2_013)
 REGISTER_CARD(CS2_009)
