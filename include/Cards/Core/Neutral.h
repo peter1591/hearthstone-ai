@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=2&filter-premium=1&filter-class=1&sort=-cost&display=1
+// All finished
 
 namespace Cards
 {
@@ -44,7 +45,7 @@ namespace Cards
 
 	struct Card_EX1_066 : public MinionCardBase<Card_EX1_066> {
 		static void Battlecry(Contexts::OnPlay context) {
-			Manipulate(context).OpponentHero().DestroyWeapon();
+			context.manipulate_.Hero(context.player_.Opposite()).DestroyWeapon();
 		}
 	};
 
@@ -54,14 +55,13 @@ namespace Cards
 
 	struct Card_EX1_506 : public MinionCardBase<Card_EX1_506> {
 		static void Battlecry(Contexts::OnPlay context) {
-			SummonToRight(context, Cards::ID_EX1_506a);
+			SummonToRight(context.manipulate_, context.card_ref_, Cards::ID_EX1_506a);
 		}
 	};
 
-	struct Card_EX1_506a : public MinionCardBase<Card_EX1_506a> {};
 	struct Card_EX1_015 : public MinionCardBase<Card_EX1_015> {
 		static void Battlecry(Contexts::OnPlay context) {
-			Manipulate(context).CurrentHero().DrawCard();
+			context.manipulate_.Hero(context.player_).DrawCard();
 		}
 	};
 
@@ -78,8 +78,8 @@ namespace Cards
 	};
 
 	struct Card_CS2_125 : public MinionCardBase<Card_CS2_125, Taunt> {};
-	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {};
 
+	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {};
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
@@ -102,7 +102,7 @@ namespace Cards
 	struct Card_EX1_019e : public Enchantment<Card_EX1_019e, MaxHP<1>, Attack<1>> {};
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Ally(context).Minion().Targetable();
+			return TargetsGenerator(context.player_).Ally(context).Minion().Targetable().Exclude(context.card_ref_);
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
@@ -120,7 +120,7 @@ namespace Cards
 
 	struct Card_CS2_147 : public MinionCardBase<Card_CS2_147> {
 		static void Battlecry(Contexts::OnPlay context) {
-			Manipulate(context).CurrentHero().DrawCard();
+			context.manipulate_.Hero(context.player_).DrawCard();
 		}
 	};
 
@@ -186,8 +186,7 @@ namespace Cards
 
 	struct Card_EX1_593 : public MinionCardBase<Card_EX1_593> {
 		static void Battlecry(Contexts::OnPlay context) {
-			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier().Opposite();
-			context.manipulate_.Hero(player).Damage(context.card_ref_, 3);
+			context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 3);
 		}
 	};
 
@@ -245,7 +244,6 @@ REGISTER_CARD(CS2_173)
 REGISTER_CARD(CS2_121)
 REGISTER_CARD(CS2_142)
 REGISTER_CARD(EX1_506)
-REGISTER_CARD(EX1_506a)
 REGISTER_CARD(EX1_015)
 REGISTER_CARD(EX1_582)
 REGISTER_CARD(CS2_141)
