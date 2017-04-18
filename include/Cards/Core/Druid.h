@@ -1,5 +1,8 @@
 #pragma once
 
+// http://www.hearthpwn.com/cards?filter-premium=1&filter-set=2&filter-class=4&sort=-cost&display=1
+// DONE
+
 namespace Cards
 {
 	struct Card_EX1_169 : public SpellCardBase<Card_EX1_169> {
@@ -124,8 +127,11 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_232 : public MinionCardBase<Card_CS2_232, Taunt> {};
 }
 
+REGISTER_CARD(CS2_232)
 REGISTER_CARD(EX1_173)
 REGISTER_CARD(CS2_012)
 REGISTER_CARD(CS2_011)
