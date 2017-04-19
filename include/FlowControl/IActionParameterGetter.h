@@ -3,6 +3,7 @@
 #include <vector>
 #include "state/Types.h"
 #include "state/State.h"
+#include "Cards/id-map.h"
 
 namespace FlowControl {
 	class IActionParameterGetter
@@ -16,5 +17,7 @@ namespace FlowControl {
 		virtual state::CardRef GetSpecifiedTarget(
 			state::State & state, state::CardRef card_ref,
 			std::vector<state::CardRef> const& targets) = 0;
+
+		virtual size_t ChooseOne(std::vector<Cards::CardId> const& cards) = 0;
 	};
 }

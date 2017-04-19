@@ -20,10 +20,20 @@ public:
 		else return targets[next_specified_target_idx];
 	}
 
+	size_t ChooseOne(std::vector<Cards::CardId> const& cards) {
+		choose_one_called = true;
+		assert(next_choose_one_count == cards.size());
+		return next_choose_one_idx;
+	}
+
 	int next_minion_put_location;
 
 	int next_specified_target_count;
 	int next_specified_target_idx;
+
+	bool choose_one_called;
+	int next_choose_one_count;
+	int next_choose_one_idx;
 };
 
 class Test4_RandomGenerator : public state::IRandomGenerator
@@ -61,17 +71,7 @@ static void CheckZoneAndPosition(const state::State & state, state::CardRef ref,
 	assert(item.GetZonePosition() == pos);
 }
 
-static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
-{
-	state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(id);
-	raw_card.enchanted_states.player = player;
-	raw_card.zone = state::kCardZoneNewlyCreated;
-	raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
-
-	return state::Cards::Card(raw_card);
-}
-
-static state::CardRef PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static void PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
@@ -4761,5 +4761,118 @@ void test4()
 		CheckMinions(state, state::PlayerIdentifier::Second(), {});
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+	}();
+
+	[state, flow_context, &parameter_getter, &random]() mutable {
+		FlowControl::FlowController controller(state, flow_context);
+
+		AddHandCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		parameter_getter.choose_one_called = false;
+		if (controller.PlayCard(1) != FlowControl::kResultNotDetermined) assert(false);
+		assert(parameter_getter.choose_one_called == false);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), {});
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+		assert(state.GetBoard().GetFirst().deck_.Size() == 0);
+	}();
+
+	[state, flow_context, &parameter_getter, &random]() mutable {
+		FlowControl::FlowController controller(state, flow_context);
+
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+
+		AddHandCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		parameter_getter.choose_one_called = false;
+		parameter_getter.next_choose_one_count = 1;
+		parameter_getter.next_choose_one_idx = 0;
+		if (controller.PlayCard(1) != FlowControl::kResultNotDetermined) assert(false);
+		assert(parameter_getter.choose_one_called == true);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), {});
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+		assert(state.GetBoard().GetFirst().deck_.Size() == 0);
+	}();
+
+	[state, flow_context, &parameter_getter, &random]() mutable {
+		FlowControl::FlowController controller(state, flow_context);
+
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+
+		AddHandCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		parameter_getter.choose_one_called = false;
+		parameter_getter.next_choose_one_count = 2;
+		parameter_getter.next_choose_one_idx = 0;
+		if (controller.PlayCard(1) != FlowControl::kResultNotDetermined) assert(false);
+		assert(parameter_getter.choose_one_called == true);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), {});
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+		assert(state.GetBoard().GetFirst().deck_.Size() == 0);
+	}();
+
+	[state, flow_context, &parameter_getter, &random]() mutable {
+		FlowControl::FlowController controller(state, flow_context);
+
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+
+		AddHandCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		parameter_getter.choose_one_called = false;
+		parameter_getter.next_choose_one_count = 3;
+		parameter_getter.next_choose_one_idx = 0;
+		if (controller.PlayCard(1) != FlowControl::kResultNotDetermined) assert(false);
+		assert(parameter_getter.choose_one_called == true);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), {});
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+		assert(state.GetBoard().GetFirst().deck_.Size() == 0);
+	}();
+
+	[state, flow_context, &parameter_getter, &random]() mutable {
+		FlowControl::FlowController controller(state, flow_context);
+
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+
+		AddHandCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
+		parameter_getter.choose_one_called = false;
+		parameter_getter.next_choose_one_count = 3;
+		parameter_getter.next_choose_one_idx = 0;
+		if (controller.PlayCard(1) != FlowControl::kResultNotDetermined) assert(false);
+		assert(parameter_getter.choose_one_called == true);
+		CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
+		CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
+		CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 10 });
+		CheckCrystals(state, state::PlayerIdentifier::Second(), { 10, 10 });
+		CheckMinions(state, state::PlayerIdentifier::First(), {});
+		CheckMinions(state, state::PlayerIdentifier::Second(), {});
+		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
+		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
+		assert(state.GetBoard().GetFirst().deck_.Size() == 2);
 	}();
 }

@@ -52,6 +52,10 @@ namespace FlowControl {
 			return specified_target_;
 		}
 
+		size_t GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) {
+			return action_parameters_.ChooseOne(cards);
+		}
+
 	public: // dead entry hint
 		void AddDeadEntryHint(state::State & state, state::CardRef ref);
 

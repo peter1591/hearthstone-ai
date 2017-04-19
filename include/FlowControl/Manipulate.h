@@ -62,6 +62,7 @@ namespace FlowControl
 
 	public: // bridge to flow context
 		state::CardRef GetSpecifiedTarget() const { return flow_context_.GetSpecifiedTarget(); }
+		size_t GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) const { return flow_context_.GetChooseOneUserAction(cards); }
 		state::IRandomGenerator & GetRandom() { return flow_context_.GetRandom();}
 
 	public: // bridge to state::State

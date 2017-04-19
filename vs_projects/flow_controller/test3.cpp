@@ -20,6 +20,11 @@ public:
 		else return targets[next_specified_target_idx];
 	}
 
+	size_t ChooseOne(std::vector<Cards::CardId> const& cards) {
+		assert(false);
+		return 0;
+	}
+
 	int next_minion_put_location;
 
 	int next_specified_target_count;
