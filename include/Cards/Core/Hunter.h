@@ -34,7 +34,25 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_DS1_184 : public SpellCardBase<Card_DS1_184> {
+		Card_DS1_184() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				auto & deck = context.manipulate_.Board().Player(context.player_).deck_;
+				std::vector<Cards::CardId> cards;
+				for (int i = 0; i < 3; ++i) {
+					if (deck.Empty()) break;
+					cards.push_back((Cards::CardId)deck.GetLast());
+					deck.RemoveLast();
+				}
+				if (cards.empty()) return;
+				size_t choice = context.manipulate_.GetChooseOneUserAction(cards);
+				context.manipulate_.Hero(context.player_).AddHandCard(cards[choice]);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(DS1_184)
 REGISTER_CARD(CS2_084)
 REGISTER_CARD(DS1_185)
