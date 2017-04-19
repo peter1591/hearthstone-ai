@@ -22,10 +22,10 @@ namespace FlowControl
 			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, allow_no_target);
 		}
 
-		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const
+		inline bool Handler::OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const
 		{
-			if (!onplay) return;
-			(*onplay)({ Manipulate(state, flow_context), player, card_ref, new_card_ref });
+			if (!onplay) return true;
+			return (*onplay)({ Manipulate(state, flow_context), player, card_ref, new_card_ref });
 		}
 	}
 }

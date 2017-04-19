@@ -11,6 +11,7 @@ namespace Cards
 				context.manipulate_
 					.OnBoardCharacter(context.GetTarget())
 					.Damage(context.card_ref_, 1);
+				return true;
 			});
 		}
 	};
@@ -31,6 +32,7 @@ namespace Cards
 						.OnBoardCharacter(target)
 						.ConductFinalDamage(context.card_ref_, 1);
 				}
+				return true;
 			});
 		}
 	};
@@ -58,6 +60,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
 					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
 				});
+				return true;
 			});
 		}
 	};
@@ -73,6 +76,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 6 + spell_damage);
+				return true;
 			});
 		}
 	};

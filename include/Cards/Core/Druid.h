@@ -10,6 +10,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int old_current = context.manipulate_.Board().Player(context.player_).GetResource().GetCurrent();
 				context.manipulate_.Board().Player(context.player_).GetResource().SetCurrent(old_current + 2);
+				return true;
 			});
 		}
 	};
@@ -23,8 +24,9 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return;
+				if (!target.IsValid()) return true;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1 + spell_damage);
+				return true;
 			});
 		}
 	};
@@ -36,6 +38,7 @@ namespace Cards
 				state::CardRef hero_ref = context.manipulate_.Board().Player(context.player_).GetHeroRef();
 				context.manipulate_.Hero(hero_ref).Enchant().Add<Card_CS2_005o>();
 				context.manipulate_.Hero(hero_ref).GainArmor(2);
+				return true;
 			});
 		}
 	};
@@ -49,9 +52,10 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return;
+				if (!target.IsValid()) return true;
 				context.manipulate_.OnBoardMinion(target).Taunt(true);
 				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_009e>();
+				return true;
 			});
 		}
 	};
@@ -60,6 +64,7 @@ namespace Cards
 		Card_CS2_013() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_).GetResource().GainEmptyCrystal(1);
+				return true;
 			});
 		}
 	};
@@ -72,8 +77,9 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return;
+				if (!target.IsValid()) return true;
 				context.manipulate_.OnBoardCharacter(target).Heal(context.card_ref_, 8);
+				return true;
 			});
 		}
 	};
@@ -86,6 +92,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_011o>();
 				});
+				return true;
 			});
 		}
 	};
@@ -108,6 +115,7 @@ namespace Cards
 				};
 				op(context.manipulate_.Board().Player(player).GetHeroRef());
 				context.manipulate_.Board().Player(player).minions_.ForEach(op);
+				return true;
 			});
 		}
 	};
@@ -121,9 +129,10 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return;
+				if (!target.IsValid()) return true;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, spell_damage + 5);
 				context.manipulate_.Hero(context.player_).DrawCard();
+				return true;
 			});
 		}
 	};

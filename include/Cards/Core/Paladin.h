@@ -13,6 +13,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_360e>();
+				return true;
 			});
 		}
 	};

@@ -10,6 +10,7 @@ namespace Cards
 				};
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(functor);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(functor);
+				return true;
 			});
 		}
 	};
