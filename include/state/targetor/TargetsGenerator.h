@@ -65,6 +65,12 @@ namespace state {
 				return *this;
 			}
 
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Beasts()
+			{
+				info_.minion_filter = Targets::kMinionFilterBeast;
+				return *this;
+			}
+
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Pirates()
 			{
 				info_.minion_filter = Targets::kMinionFilterPirate;

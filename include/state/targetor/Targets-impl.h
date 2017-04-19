@@ -80,6 +80,9 @@ namespace state {
 			case kMinionFilterMurloc:
 				if (card.GetRace() == kCardRaceMurloc) break;
 				return;
+			case kMinionFilterBeast:
+				if (card.GetRace() == kCardRaceBeast) break;
+				return;
 			case kMinionFilterPirate:
 				if (card.GetRace() == kCardRacePirate) break;
 				return;

@@ -66,6 +66,7 @@ namespace state {
 				kMinionFilterTargetable,
 				kMinionFilterTargetableBySpell,
 				kMinionFilterMurloc,
+				kMinionFilterBeast,
 				kMinionFilterPirate,
 				kMinionFilterMinionAttackerGreaterOrEqualTo,
 				kMinionFilterMinionAttackerLessOrEqualTo,

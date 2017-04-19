@@ -51,8 +51,23 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_DS1_175o : public Enchantment<Card_DS1_175o, Attack<1>> {};
+	struct Card_DS1_175 : public MinionCardBase<Card_DS1_175> {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			TargetsGenerator(player)
+				.Ally(context).Minion().Beasts() // friendly beasts
+				.Exclude(context.card_ref_) // only apply on other
+				.GetInfo().Fill(context.manipulate_, context.new_targets);
+		}
+		Card_DS1_175() {
+			Aura<Card_DS1_175o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+		}
+	};
 }
 
+REGISTER_CARD(DS1_175)
 REGISTER_CARD(DS1_184)
 REGISTER_CARD(CS2_084)
 REGISTER_CARD(DS1_185)
