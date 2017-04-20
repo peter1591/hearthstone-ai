@@ -29,6 +29,9 @@ namespace FlowControl
 							Manipulate(state_, flow_context_).OnBoardMinion(target_ref_).Destroy();
 						}
 					}
+					if (state_.GetCard(source_ref_).IsFreezeAttack()) {
+						Manipulate(state_, flow_context_).OnBoardCharacter(target_ref_).Freeze(true);
+					}
 				}
 				else if (amount < 0) {
 					DoHeal(state_, flow_context_, final_target, -amount);

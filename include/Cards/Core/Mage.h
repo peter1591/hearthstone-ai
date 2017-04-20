@@ -116,8 +116,10 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_033 : public MinionCardBase<Card_CS2_033, FreezeAttack> {};
 
-	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
+
+	struct Card_CS2_034 : public HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
@@ -131,7 +133,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_294 : SecretCardBase<Card_EX1_294> {
+	struct Card_EX1_294 : public SecretCardBase<Card_EX1_294> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
 			state::Cards::Card const& self_card = context.manipulate_.Board().GetCard(self);
 			if (context.manipulate_.Board().GetCurrentPlayerId() == self_card.GetPlayerIdentifier()) return true;
@@ -147,7 +149,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_032 : SpellCardBase<Card_CS2_032> {
+	struct Card_CS2_032 : public SpellCardBase<Card_CS2_032> {
 		Card_CS2_032() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int damage = 4 + context.manipulate_.Board().GetSpellDamage(context.player_);
@@ -159,6 +161,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_033)
 REGISTER_CARD(CS2_022)
 REGISTER_CARD(CS2_029)
 REGISTER_CARD(CS2_026)

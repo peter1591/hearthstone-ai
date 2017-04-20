@@ -120,4 +120,14 @@ namespace Cards {
 			stats.poisonous = true;
 		}
 	};
+
+	struct FreezeAttack {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.enchanted_states.freeze_attack = true;
+		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.freeze_attack = true;
+		}
+	};
 }

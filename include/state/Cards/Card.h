@@ -112,6 +112,7 @@ namespace state
 			int GetCost() const { return data_.enchanted_states.cost; }
 			void SetCost(int new_cost) { data_.enchanted_states.cost = new_cost; }
 
+			// TODO: remove these?
 			bool GetCostHealthInstead() const { return data_.enchanted_states.cost_health_instead; }
 			void SetCostHealthInstaed(bool v) { data_.enchanted_states.cost_health_instead = v; }
 
@@ -153,6 +154,9 @@ namespace state
 
 			void SetPoisonous(bool v) { data_.enchanted_states.poisonous = v; }
 			bool IsPoisonous() const { return data_.enchanted_states.poisonous; }
+
+			void SetFreezeAttack(bool v) { data_.enchanted_states.freeze_attack = v; }
+			bool IsFreezeAttack() const { return data_.enchanted_states.freeze_attack; }
 
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
