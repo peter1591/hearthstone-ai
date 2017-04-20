@@ -109,8 +109,36 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_539 : public SpellCardBase<Card_EX1_539> {
+		Card_EX1_539() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				int damage = 3;
+				
+				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+					if (context.manipulate_.GetCard(card_ref).GetRace() == state::kCardRaceBeast) {
+						damage = 5;
+						return false;
+					}
+					return true;
+				});
+
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, spell_damage + damage);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_539)
 REGISTER_CARD(NEW1_031)
 REGISTER_CARD(NEW1_032)
 REGISTER_CARD(NEW1_033)
