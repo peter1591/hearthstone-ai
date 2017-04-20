@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-premium=1&filter-set=2&filter-class=8&sort=-cost&display=1
-// Last-finished card: Hunter's Mark
+// DONE
 
 namespace Cards
 {
@@ -191,8 +191,22 @@ namespace Cards
 				state::Events::EventTypes::AfterMinionSummoned>();
 		}
 	};
+
+	struct Card_DS1_178e : public Enchantment<Card_DS1_178, Charge> {};
+	struct Card_DS1_178 : public MinionCardBase<Card_DS1_178> {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			TargetsGenerator(player)
+				.Ally(context).Minion().Beasts() // friendly beasts
+				.GetInfo().Fill(context.manipulate_, context.new_targets);
+		}
+		Card_DS1_178() {
+			Aura<Card_DS1_178e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+		}
+	};
 }
 
+REGISTER_CARD(DS1_178)
 REGISTER_CARD(CS2_237)
 REGISTER_CARD(DS1_070)
 REGISTER_CARD(DS1_183)
