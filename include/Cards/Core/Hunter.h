@@ -14,9 +14,8 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return true;
+				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 2 + spell_damage);
-				return true;
 			});
 		}
 	};
@@ -30,9 +29,8 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return true;
+				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_084e>();
-				return true;
 			});
 		}
 	};
@@ -47,10 +45,9 @@ namespace Cards
 					cards.push_back((Cards::CardId)deck.GetLast());
 					deck.RemoveLast();
 				}
-				if (cards.empty()) return true;
+				if (cards.empty()) return;
 				size_t choice = context.manipulate_.GetChooseOneUserAction(cards);
 				context.manipulate_.Hero(context.player_).AddHandCard(cards[choice]);
-				return true;
 			});
 		}
 	};
@@ -90,8 +87,7 @@ namespace Cards
 	struct Card_NEW1_031 : public SpellCardBase<Card_NEW1_031> {
 		Card_NEW1_031() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
-
+				// TODO: if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 				int pos = (int)context.manipulate_.Board().Player(context.player_).minions_.Size();
 
 				std::array<Cards::CardId, 3> cards{
@@ -103,7 +99,6 @@ namespace Cards
 				Cards::CardId card_id = cards[rand];
 
 				context.manipulate_.Board().SummonMinionById(card_id, context.player_, pos);
-				return true;
 			});
 		}
 	};
