@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-premium=1&filter-set=2&filter-class=16&sort=-cost&display=1
+// Finished: Arcane Explosion
 
 namespace Cards
 {
@@ -34,6 +35,17 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_mirror);
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_mirror);
+			});
+		}
+	};
+
+	struct Card_CS2_025 : public SpellCardBase<Card_CS2_025> {
+		Card_CS2_025() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1 + spell_damage);
+				});
 			});
 		}
 	};
@@ -97,6 +109,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_025)
 REGISTER_CARD(CS2_027)
 REGISTER_CARD(CS2_mirror)
 REGISTER_CARD(CS2_029)
