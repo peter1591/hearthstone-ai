@@ -5,6 +5,14 @@
 
 namespace Cards
 {
+	struct Card_DS1h_292 : public HeroPowerCardBase<Card_DS1h_292> {
+		Card_DS1h_292() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 2);
+			});
+		}
+	};
+
 	struct Card_DS1_185 : public SpellCardBase<Card_DS1_185> {
 		Card_DS1_185() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
@@ -219,3 +227,4 @@ REGISTER_CARD(DS1_175)
 REGISTER_CARD(DS1_184)
 REGISTER_CARD(CS2_084)
 REGISTER_CARD(DS1_185)
+REGISTER_CARD(DS1h_292)

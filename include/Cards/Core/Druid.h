@@ -5,6 +5,16 @@
 
 namespace Cards
 {
+	struct Card_CS2_017o : public EnchantmentForThisTurn<Card_CS2_017o, Attack<1>> {};
+	struct Card_CS2_017 : public HeroPowerCardBase<Card_CS2_017> {
+		Card_CS2_017() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).Enchant().Add<Card_CS2_017o>();
+				context.manipulate_.Hero(context.player_).GainArmor(1);
+			});
+		}
+	};
+
 	struct Card_EX1_169 : public SpellCardBase<Card_EX1_169> {
 		Card_EX1_169() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -58,9 +68,20 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_013t : public SpellCardBase<Card_CS2_013t>{
+		Card_CS2_013t() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
 	struct Card_CS2_013 : public SpellCardBase<Card_CS2_013> {
 		Card_CS2_013() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				if (context.manipulate_.Board().Player(context.player_).GetResource().GetTotal() == 10) {
+					context.manipulate_.Hero(context.player_).AddHandCard(Cards::ID_CS2_013t);
+					return;
+				}
 				context.manipulate_.Board().Player(context.player_).GetResource().GainEmptyCrystal(1);
 			});
 		}
@@ -141,8 +162,10 @@ REGISTER_CARD(EX1_173)
 REGISTER_CARD(CS2_012)
 REGISTER_CARD(CS2_011)
 REGISTER_CARD(CS2_007)
+REGISTER_CARD(CS2_013t)
 REGISTER_CARD(CS2_013)
 REGISTER_CARD(CS2_009)
 REGISTER_CARD(CS2_005)
 REGISTER_CARD(CS2_008)
 REGISTER_CARD(EX1_169)
+REGISTER_CARD(CS2_017)
