@@ -75,6 +75,16 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_026 : public SpellCardBase<Card_CS2_026> {
+		Card_CS2_026() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Freeze(true);
+				});
+			});
+		}
+	};
+
 
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
@@ -134,6 +144,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_026)
 REGISTER_CARD(CS2_023)
 REGISTER_CARD(CS2_024)
 REGISTER_CARD(CS2_025)
