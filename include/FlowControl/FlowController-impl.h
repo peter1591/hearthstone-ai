@@ -79,7 +79,9 @@ namespace FlowControl
 		state_.IncreasePlayOrder();
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) return false;
+		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
+			return false;
+		}
 
 		int cost = state_.GetCard(card_ref).GetCost();
 		bool cost_health_instead = false;

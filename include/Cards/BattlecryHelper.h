@@ -43,8 +43,9 @@ namespace Cards
 	};
 	template <typename T> struct BattlecryProcessor<T, true, true> {
 		BattlecryProcessor(state::Cards::CardData & card_data) {
-			card_data.onplay_handler.SetSpecifyTargetCallback([](auto context) {
-				return T::GetSpecifiedTargets(std::move(context)).GetInfo();
+			card_data.onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = T::GetSpecifiedTargets(std::move(context)).GetInfo();
+				return true;
 			});
 			card_data.onplay_handler.SetOnPlayCallback((FlowControl::onplay::Handler::OnPlayCallback*)(&T::Battlecry));
 		}

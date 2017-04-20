@@ -22,6 +22,12 @@ namespace state {
 			{
 			}
 
+			Targets() :
+				include_first(true), include_second(true),
+				include_hero(true), include_minion(true),
+				minion_filter(kMinionFilterAll)
+			{}
+
 			static Targets None() {
 				Targets ret(state::PlayerIdentifier::First()); // side is not important
 				ret.include_first = false;

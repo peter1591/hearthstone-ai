@@ -9,7 +9,7 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			typedef state::targetor::Targets SpecifiedTargetGetter(context::GetSpecifiedTarget const&);
+			typedef bool SpecifiedTargetGetter(context::GetSpecifiedTarget const&);
 			typedef void OnPlayCallback(context::OnPlay const&);
 
 			Handler() : specified_target_getter(nullptr), onplay(nullptr) {}

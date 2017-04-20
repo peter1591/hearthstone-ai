@@ -21,7 +21,9 @@ namespace FlowControl
 				Manipulate & manipulate_;
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
-				bool * allow_no_target; // default: allow
+
+				state::targetor::Targets * targets_;
+				bool * allow_no_target_; // default: allow
 			};
 
 			struct OnPlay

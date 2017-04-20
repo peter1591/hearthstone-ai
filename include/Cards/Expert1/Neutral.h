@@ -575,8 +575,9 @@ namespace Cards
 	struct Card_EX1_014t : public SpellCardBase<Card_EX1_014t> {
 		Card_EX1_014t() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target = false;
-				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_014te>();
@@ -1063,8 +1064,9 @@ namespace Cards
 	struct Card_DREAM_04 : public SpellCardBase<Card_DREAM_04> {
 		Card_DREAM_04() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target = false;
-				return TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).MoveTo<state::kCardZoneHand>();
@@ -1090,8 +1092,9 @@ namespace Cards
 	struct Card_DREAM_05 : public SpellCardBase<Card_DREAM_05> {
 		Card_DREAM_05() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target = false;
-				return TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;

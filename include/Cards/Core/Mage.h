@@ -5,7 +5,8 @@ namespace Cards
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
@@ -65,8 +66,9 @@ namespace Cards
 	struct Card_CS2_029 : SpellCardBase<Card_CS2_029> {
 		Card_CS2_029() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target = false;
-				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);

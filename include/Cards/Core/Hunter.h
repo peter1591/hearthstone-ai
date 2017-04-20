@@ -8,8 +8,9 @@ namespace Cards
 	struct Card_DS1_185 : public SpellCardBase<Card_DS1_185> {
 		Card_DS1_185() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target = false;
-				return TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
@@ -24,8 +25,9 @@ namespace Cards
 	struct Card_CS2_084 : public SpellCardBase<Card_CS2_084> {
 		Card_CS2_084() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target = false;
-				return TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -86,8 +88,13 @@ namespace Cards
 
 	struct Card_NEW1_031 : public SpellCardBase<Card_NEW1_031> {
 		Card_NEW1_031() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) {
+					return false;
+				}
+				return true;
+			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				// TODO: if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 				int pos = (int)context.manipulate_.Board().Player(context.player_).minions_.Size();
 
 				std::array<Cards::CardId, 3> cards{
