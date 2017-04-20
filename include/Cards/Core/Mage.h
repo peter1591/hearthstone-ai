@@ -24,6 +24,21 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_mirror : MinionCardBase<Card_CS2_mirror, Taunt> {};
+	struct Card_CS2_027 : SpellCardBase<Card_CS2_027> {
+		Card_CS2_027() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_mirror);
+				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_mirror);
+			});
+		}
+	};
+
+
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
@@ -82,6 +97,8 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_027)
+REGISTER_CARD(CS2_mirror)
 REGISTER_CARD(CS2_029)
 REGISTER_CARD(CS2_032)
 REGISTER_CARD(EX1_294)
