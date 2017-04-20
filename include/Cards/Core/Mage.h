@@ -50,7 +50,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_CS2_024 : SpellCardBase<Card_CS2_024> {
+	struct Card_CS2_024 : public SpellCardBase<Card_CS2_024> {
 		Card_CS2_024() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
@@ -62,6 +62,15 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3 + spell_damage);
 				context.manipulate_.OnBoardCharacter(target).Freeze(true);
+			});
+		}
+	};
+
+	struct Card_CS2_023 : public SpellCardBase<Card_CS2_023> {
+		Card_CS2_023() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Hero(context.player_).DrawCard();
 			});
 		}
 	};
@@ -125,6 +134,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_023)
 REGISTER_CARD(CS2_024)
 REGISTER_CARD(CS2_025)
 REGISTER_CARD(CS2_027)
