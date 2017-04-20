@@ -8,7 +8,6 @@ namespace Cards
 				context.manipulate_
 					.Hero(context.manipulate_.Board().GetCard(context.card_ref_).GetPlayerIdentifier())
 					.GainArmor(2);
-				return true;
 			});
 		}
 	};

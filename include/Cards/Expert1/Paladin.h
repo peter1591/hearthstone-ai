@@ -18,7 +18,6 @@ namespace Cards
 						.OnBoardCharacter(target)
 						.ConductFinalDamage(context.card_ref_, 1);
 				}
-				return true;
 			});
 		}
 	};

@@ -11,7 +11,6 @@ namespace Cards
 				context.manipulate_
 					.OnBoardCharacter(context.GetTarget())
 					.Heal(context.card_ref_, 2);
-				return true;
 			});
 		}
 	};

@@ -202,9 +202,7 @@ namespace FlowControl
 		state::CardRef new_card_ref;
 
 		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref)) {
-			return SetResult(kResultInvalid);
-		}
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // weapon cannot transformed
 
 		return true;
@@ -214,9 +212,7 @@ namespace FlowControl
 	{
 		state::CardRef new_card_ref;
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref)) {
-			return SetResult(kResultInvalid);
-		}
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // hero power cannot transformed
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterHeroPower>(
@@ -229,9 +225,7 @@ namespace FlowControl
 	{
 		state::CardRef new_card_ref;
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref)) {
-			return SetResult(kResultInvalid);
-		}
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // spell cannot be transformed
 
 		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
@@ -249,9 +243,7 @@ namespace FlowControl
 
 		if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) return SetResult(FlowControl::kResultInvalid);
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref)) {
-			return SetResult(kResultInvalid);
-		}
+		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // secret cannot be transformed
 
 		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)

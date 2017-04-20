@@ -10,7 +10,7 @@ namespace FlowControl
 		{
 		public:
 			typedef state::targetor::Targets SpecifiedTargetGetter(context::GetSpecifiedTarget const&);
-			typedef bool OnPlayCallback(context::OnPlay const&); // return false if card cannot be played
+			typedef void OnPlayCallback(context::OnPlay const&);
 
 			Handler() : specified_target_getter(nullptr), onplay(nullptr) {}
 
@@ -19,7 +19,7 @@ namespace FlowControl
 
 		public:
 			bool PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const;
-			bool OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const;
+			void OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const;
 
 		private:
 			SpecifiedTargetGetter *specified_target_getter;

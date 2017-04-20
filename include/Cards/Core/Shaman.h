@@ -12,7 +12,6 @@ namespace Cards
 				context.manipulate_
 					.OnBoardMinion(context.GetTarget())
 					.Transform(CardId::ID_hexfrog);
-				return true;
 			});
 		}
 	};

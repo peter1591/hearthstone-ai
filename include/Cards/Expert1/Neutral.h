@@ -580,7 +580,6 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_014te>();
-				return true;
 			});
 		}
 	};
@@ -1051,14 +1050,13 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				auto op = [&](state::CardRef card_ref) {
-					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return true;
+					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return;
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 5 + spell_damage);
 				};
 				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 				op(context.manipulate_.Board().SecondPlayer().GetHeroRef());
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
-				return true;
 			});
 		}
 	};
@@ -1070,7 +1068,6 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).MoveTo<state::kCardZoneHand>();
-				return true;
 			});
 		}
 	};
@@ -1101,7 +1098,6 @@ namespace Cards
 				aux_data.player = context.player_;
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().AddEventHooked(
 					Card_DREAM_05e(), aux_data);
-				return true;
 			});
 		}
 	};
