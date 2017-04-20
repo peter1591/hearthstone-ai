@@ -85,6 +85,22 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_029 : SpellCardBase<Card_CS2_029> {
+		Card_CS2_029() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 6 + spell_damage);
+			});
+		}
+	};
+
 
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
@@ -126,31 +142,15 @@ namespace Cards
 			});
 		}
 	};
-
-	struct Card_CS2_029 : SpellCardBase<Card_CS2_029> {
-		Card_CS2_029() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
-				return true;
-			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
-				state::CardRef target = context.GetTarget();
-				assert(target.IsValid());
-				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 6 + spell_damage);
-			});
-		}
-	};
 }
 
+REGISTER_CARD(CS2_029)
 REGISTER_CARD(CS2_026)
 REGISTER_CARD(CS2_023)
 REGISTER_CARD(CS2_024)
 REGISTER_CARD(CS2_025)
 REGISTER_CARD(CS2_027)
 REGISTER_CARD(CS2_mirror)
-REGISTER_CARD(CS2_029)
 REGISTER_CARD(CS2_032)
 REGISTER_CARD(EX1_294)
 REGISTER_CARD(CS2_034)
