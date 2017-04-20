@@ -50,6 +50,22 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_024 : SpellCardBase<Card_CS2_024> {
+		Card_CS2_024() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				state::CardRef target = context.GetTarget();
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3 + spell_damage);
+				context.manipulate_.OnBoardCharacter(target).Freeze(true);
+			});
+		}
+	};
+
 
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
@@ -109,6 +125,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_024)
 REGISTER_CARD(CS2_025)
 REGISTER_CARD(CS2_027)
 REGISTER_CARD(CS2_mirror)
