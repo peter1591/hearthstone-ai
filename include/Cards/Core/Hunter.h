@@ -192,7 +192,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_DS1_178e : public Enchantment<Card_DS1_178, Charge> {};
+	struct Card_DS1_178e : public Enchantment<Card_DS1_178e, Charge> {};
 	struct Card_DS1_178 : public MinionCardBase<Card_DS1_178> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
