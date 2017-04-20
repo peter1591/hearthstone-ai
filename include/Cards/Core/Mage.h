@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-premium=1&filter-set=2&filter-class=16&sort=-cost&display=1
-// Finished: Arcane Explosion
+// Finished: Polymorph
 
 namespace Cards
 {
@@ -101,6 +101,21 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_022 : public SpellCardBase<Card_CS2_022> {
+		Card_CS2_022() {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_
+					.OnBoardMinion(context.GetTarget())
+					.Transform(CardId::ID_CS2_tk1);
+			});
+		}
+	};
+
 
 	struct Card_CS2_034 : HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
@@ -144,6 +159,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(CS2_022)
 REGISTER_CARD(CS2_029)
 REGISTER_CARD(CS2_026)
 REGISTER_CARD(CS2_023)

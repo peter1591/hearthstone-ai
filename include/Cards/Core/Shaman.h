@@ -6,6 +6,7 @@ namespace Cards
 	struct Card_EX1_246 : public SpellCardBase<Card_EX1_246> {
 		Card_EX1_246() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+				*context.allow_no_target_ = false;
 				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
