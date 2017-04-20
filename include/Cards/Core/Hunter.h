@@ -134,8 +134,37 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_DS1_183 : public SpellCardBase<Card_DS1_183> {
+		Card_DS1_183() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() < 2) return false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				auto & minions = context.manipulate_.Board().Player(context.player_.Opposite()).minions_;
+
+				auto op = [&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, spell_damage + 3);
+				};
+
+				if (minions.Size() == 0) return;
+
+				if (minions.Size() == 1) {
+					op(minions.Get(0));
+					return;
+				}
+
+				std::pair<int, int> targets = GetRandomTwoNumbers(context.manipulate_, minions.Size());
+				op(minions.Get(targets.first));
+				op(minions.Get(targets.second));
+			});
+		}
+	};
 }
 
+REGISTER_CARD(DS1_183)
 REGISTER_CARD(EX1_539)
 REGISTER_CARD(NEW1_031)
 REGISTER_CARD(NEW1_032)

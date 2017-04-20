@@ -93,6 +93,14 @@ namespace Cards
 			return SummonInternalByCopy(context.manipulate_, card, player, pos);
 		}
 
+		static std::pair<int, int> GetRandomTwoNumbers(FlowControl::Manipulate & manipulate, int size) {
+			assert(size >= 2);
+			int v1 = manipulate.GetRandom().Get(size);
+			int v2 = manipulate.GetRandom().Get(size - 1);
+			if (v2 >= v1) ++v2;
+			return std::make_pair(v1, v2);
+		}
+
 	private:
 		static void SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
