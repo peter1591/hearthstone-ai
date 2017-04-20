@@ -156,14 +156,28 @@ namespace Cards
 					return;
 				}
 
-				std::pair<int, int> targets = GetRandomTwoNumbers(context.manipulate_, minions.Size());
+				std::pair<int, int> targets = GetRandomTwoNumbers(context.manipulate_, (int)minions.Size());
 				op(minions.Get(targets.first));
 				op(minions.Get(targets.second));
 			});
 		}
 	};
+
+	struct Card_DS1_070o : public Enchantment<Card_DS1_070o, Attack<2>, MaxHP<2>> {};
+	struct Card_DS1_070 : public MinionCardBase<Card_DS1_070> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			*context.allow_no_target_ = true;
+			return TargetsGenerator(context.player_).Ally(context.player_).Minion().Beasts().Exclude(context.card_ref_);
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_DS1_070o>();
+		}
+	};
 }
 
+REGISTER_CARD(DS1_070)
 REGISTER_CARD(DS1_183)
 REGISTER_CARD(EX1_539)
 REGISTER_CARD(NEW1_031)
