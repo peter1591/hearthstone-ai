@@ -118,6 +118,16 @@ namespace Cards
 
 	struct Card_CS2_033 : public MinionCardBase<Card_CS2_033, FreezeAttack> {};
 
+	struct Card_CS2_032 : public SpellCardBase<Card_CS2_032> {
+		Card_CS2_032() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int damage = 4 + context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
+					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
+				});
+			});
+		}
+	};
 
 	struct Card_CS2_034 : public HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
@@ -132,35 +142,10 @@ namespace Cards
 			});
 		}
 	};
-
-	struct Card_EX1_294 : public SecretCardBase<Card_EX1_294> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
-			state::Cards::Card const& self_card = context.manipulate_.Board().GetCard(self);
-			if (context.manipulate_.Board().GetCurrentPlayerId() == self_card.GetPlayerIdentifier()) return true;
-			context.manipulate_.Secret(self).Remove();
-
-			SummonToPlayerByCopy(context, self_card.GetPlayerIdentifier(),
-				context.manipulate_.Board().GetCard(context.card_ref_));
-			return false;
-		};
-
-		Card_EX1_294() {
-			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
-		}
-	};
-
-	struct Card_CS2_032 : public SpellCardBase<Card_CS2_032> {
-		Card_CS2_032() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int damage = 4 + context.manipulate_.Board().GetSpellDamage(context.player_);
-				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
-					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
-				});
-			});
-		}
-	};
 }
 
+REGISTER_CARD(CS2_034)
+REGISTER_CARD(CS2_032)
 REGISTER_CARD(CS2_033)
 REGISTER_CARD(CS2_022)
 REGISTER_CARD(CS2_029)
@@ -170,7 +155,4 @@ REGISTER_CARD(CS2_024)
 REGISTER_CARD(CS2_025)
 REGISTER_CARD(CS2_027)
 REGISTER_CARD(CS2_mirror)
-REGISTER_CARD(CS2_032)
-REGISTER_CARD(EX1_294)
-REGISTER_CARD(CS2_034)
 REGISTER_CARD(EX1_277)

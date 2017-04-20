@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EventRegister.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Mage.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />
