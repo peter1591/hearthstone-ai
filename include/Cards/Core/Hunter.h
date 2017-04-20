@@ -175,8 +175,25 @@ namespace Cards
 			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_DS1_070o>();
 		}
 	};
+
+	struct Card_CS2_237 : public MinionCardBase<Card_CS2_237> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			state::PlayerIdentifier summon_player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			if (owner != summon_player) return true;
+
+			if (context.manipulate_.GetCard(context.card_ref_).GetRace() != state::kCardRaceBeast) return true;
+			context.manipulate_.Hero(owner).DrawCard();
+			return true;
+		}
+		Card_CS2_237() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterMinionSummoned>();
+		}
+	};
 }
 
+REGISTER_CARD(CS2_237)
 REGISTER_CARD(DS1_070)
 REGISTER_CARD(DS1_183)
 REGISTER_CARD(EX1_539)
