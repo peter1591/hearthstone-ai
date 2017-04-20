@@ -1,5 +1,7 @@
 #pragma once
 
+// http://www.hearthpwn.com/cards?filter-set=2&filter-class=32&sort=-cost&display=1
+
 namespace Cards
 {
 	struct Card_EX1_360e : Enchantment<Card_EX1_360e, SetAttack<1>> {}; // TODO: why it works without public inherit?
