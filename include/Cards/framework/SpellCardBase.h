@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cards/framework/GeneralCardBase.h"
 #include "Cards/Database.h"
 #include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
@@ -7,7 +8,7 @@
 namespace Cards
 {
 	template <typename T>
-	class SpellCardBase : public state::Cards::CardData
+	class SpellCardBase : public GeneralCardBase<T>
 	{
 	public:
 		SpellCardBase()

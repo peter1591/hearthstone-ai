@@ -95,8 +95,6 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int pos = (int)context.manipulate_.Board().Player(context.player_).minions_.Size();
-
 				std::array<Cards::CardId, 3> cards{
 					Cards::ID_NEW1_032,
 					Cards::ID_NEW1_033,
@@ -105,7 +103,7 @@ namespace Cards
 				int rand = context.manipulate_.GetRandom().Get(3);
 				Cards::CardId card_id = cards[rand];
 
-				context.manipulate_.Board().SummonMinionById(card_id, context.player_, pos);
+				SummonToRightmost(context.manipulate_, context.player_, card_id);
 			});
 		}
 	};
