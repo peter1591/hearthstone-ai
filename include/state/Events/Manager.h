@@ -92,14 +92,7 @@ private: \
 			ADD_TRIGGER_TYPE(OnTurnEnd);
 			ADD_TRIGGER_TYPE(OnTurnStart);
 
-			ADD_TRIGGER_TYPE(BeforeAttack);
-			ADD_CATEGORIZED_TRIGGER_TYPE(BeforeAttack);
-
 			ADD_TRIGGER_TYPE(OnAttack);
-			ADD_CATEGORIZED_TRIGGER_TYPE(OnAttack);
-
-			ADD_TRIGGER_TYPE(AfterAttack);
-			ADD_CATEGORIZED_TRIGGER_TYPE(AfterAttack);
 
 			ADD_TRIGGER_TYPE(CalculateHealDamageAmount);
 			ADD_TRIGGER_TYPE(PrepareHealDamageTarget);

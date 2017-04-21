@@ -275,8 +275,8 @@ namespace FlowControl
 
 		while (true) {
 			state::CardRef origin_defender = defender;
-			state_.TriggerEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
-			state_.TriggerCategorizedEvent<state::Events::EventTypes::BeforeAttack>(attacker, state_, defender);
+
+			// TODO: prepare defender (use a new event trigger)
 
 			if (!attacker.IsValid()) return kResultNotDetermined;
 			if (state_.GetCardsManager().Get(attacker).GetHP() <= 0) return kResultNotDetermined;
@@ -290,16 +290,13 @@ namespace FlowControl
 		}
 
 		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
-			attacker, state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), defender });
+			state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 
 		Manipulate(state_, flow_context_).OnBoardCharacter(defender).Damage(attacker, GetAttackValue(attacker));
-		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Damage(defender, GetAttackValue(defender));
+		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Damage(defender, GetCounterAttackValue(defender));
 
 		state_.GetMutableCard(attacker).IncreaseNumAttacksThisTurn();
-
-		state_.TriggerEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
-		state_.TriggerCategorizedEvent<state::Events::EventTypes::AfterAttack>(attacker, state_, defender);
 
 		{
 			const state::Cards::Card & attacker_card = state_.GetCardsManager().Get(attacker);
@@ -370,6 +367,11 @@ namespace FlowControl
 		}
 
 		return attack;
+	}
+
+	inline int FlowController::GetCounterAttackValue(state::CardRef ref)
+	{
+		return state_.GetCardsManager().Get(ref).GetAttack();
 	}
 
 	inline void FlowController::HeroPowerInternal()

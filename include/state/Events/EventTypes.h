@@ -20,9 +20,6 @@ namespace state {
 				};
 				using type = std::function<bool(Context)>;
 			};
-			struct AfterAttack {
-				using type = bool(*)(CardRef, State &, CardRef);
-			};
 			struct AfterMinionPlayed {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
@@ -44,9 +41,6 @@ namespace state {
 				};
 				using type = std::function<bool(Context)>;
 			};
-			struct BeforeAttack {
-				using type = bool(*)(CardRef, State &, CardRef);
-			};
 			struct BeforeMinionSummoned {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
@@ -57,9 +51,10 @@ namespace state {
 			struct OnAttack {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
+					state::CardRef attacker_;
 					state::CardRef defender_;
 				};
-				using type = std::function<bool(CardRef, Context)>;
+				using type = std::function<bool(Context)>;
 			};
 			struct OnPlay {
 				struct Context {
