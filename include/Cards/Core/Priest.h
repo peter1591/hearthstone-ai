@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=2&filter-class=64&sort=-cost&display=1
+// Finished: Lesser Heal
 
 namespace Cards
 {
@@ -32,7 +33,52 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_003 : public SpellCardBase<Card_CS2_003> {
+		Card_CS2_003() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				auto& hand_from = context.manipulate_.Board().Player(context.player_.Opposite()).hand_;
+				if (hand_from.Empty()) return;
+
+				size_t rand = context.manipulate_.GetRandom().Get(hand_from.Size());
+				Cards::CardId card_id = (Cards::CardId)context.manipulate_.GetCard(hand_from.Get(rand)).GetCardId();
+				context.manipulate_.Hero(context.player_).AddHandCard(card_id);
+			});
+		}
+	};
+
+	struct Card_CS2_004e : public Enchantment<Card_CS2_004e, MaxHP<2>> {};
+	struct Card_CS2_004 : public SpellCardBase<Card_CS2_004> {
+		Card_CS2_004() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_004e>();
+			});
+		}
+	};
+
+	struct Card_CS2_235 : public MinionCardBase<Card_CS2_235> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context context) {
+			assert(context.amount_ > 0);
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			context.manipulate_.Hero(owner).DrawCard();
+			return true;
+		}
+		Card_CS2_235() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnHeal>();
+		}
+	};
 }
 
+REGISTER_CARD(CS2_235)
+REGISTER_CARD(CS2_004)
+REGISTER_CARD(CS2_003)
 REGISTER_CARD(CS1_130)
 REGISTER_CARD(CS1h_001)

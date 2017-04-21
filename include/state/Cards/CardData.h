@@ -27,7 +27,7 @@ namespace state
 			{
 			}
 
-			int card_id;
+			int card_id; // TODO: use Cards::CardId
 			CardType card_type;
 			CardRace card_race;
 			CardRarity card_rarity;
