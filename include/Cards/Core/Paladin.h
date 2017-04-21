@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=2&filter-class=32&sort=-cost&display=1
+// DONE
 
 namespace Cards
 {
@@ -91,8 +92,62 @@ namespace Cards
 				state::Events::EventTypes::OnAttack>();
 		}
 	};
+
+	struct Card_CS2_092e : public Enchantment<Card_CS2_092e, Attack<4>, MaxHP<4>> {};
+	struct Card_CS2_092 : public SpellCardBase<Card_CS2_092> {
+		Card_CS2_092() {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_092e>();
+			});
+		}
+	};
+
+	struct Card_CS2_093 : public SpellCardBase<Card_CS2_093> {
+		Card_CS2_093() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int damage = 2 + context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
+					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
+				});
+			});
+		}
+	};
+
+	struct Card_CS2_094 : public SpellCardBase<Card_CS2_094> {
+		Card_CS2_094() {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3 + spell_damage);
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
+
+	struct Card_CS2_088 : public MinionCardBase<Card_CS2_088> {
+		static void Battlecry(Contexts::OnPlay context) {
+			context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 6);
+		}
+	};
 }
 
+REGISTER_CARD(CS2_088)
+REGISTER_CARD(CS2_094)
+REGISTER_CARD(CS2_093)
+REGISTER_CARD(CS2_092)
 REGISTER_CARD(CS2_097)
 REGISTER_CARD(CS2_089)
 REGISTER_CARD(EX1_360)
