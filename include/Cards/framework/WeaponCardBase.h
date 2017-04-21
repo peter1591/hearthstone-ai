@@ -3,11 +3,12 @@
 #include "Cards/Database.h"
 #include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
+#include "Cards/framework/GeneralCardBase.h"
 
 namespace Cards
 {
 	template <typename T>
-	class WeaponCardBase : public state::Cards::CardData
+	class WeaponCardBase : public GeneralCardBase<T>
 	{
 	public:
 		WeaponCardBase()
@@ -24,12 +25,6 @@ namespace Cards
 			this->enchanted_states.cost = data.cost;
 			this->enchanted_states.attack = data.attack;
 			this->enchanted_states.max_hp = data.max_hp;
-		}
-
-		template <typename... Types>
-		AuraHelper<Types...> Aura()
-		{
-			return AuraHelper<Types...>(*this);
 		}
 	};
 }

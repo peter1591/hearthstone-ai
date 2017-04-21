@@ -3,11 +3,12 @@
 #include "Cards/Database.h"
 #include "state/Cards/Card.h"
 #include "Cards/AuraHelper.h"
+#include "Cards/framework/GeneralCardBase.h"
 
 namespace Cards
 {
 	template <typename T>
-	class HeroPowerCardBase : public state::Cards::CardData
+	class HeroPowerCardBase : public GeneralCardBase<T>
 	{
 	public:
 		HeroPowerCardBase()

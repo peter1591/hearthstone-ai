@@ -24,6 +24,14 @@ namespace Cards
 			return card.GetZone() == state::kCardZonePlay;
 		}
 	};
+	struct WeaponInPlayZone {
+		template <typename YesFunctor, typename NoFunctor> using AddedToPlayZone = YesFunctor;
+		template <typename YesFunctor, typename NoFunctor> using AddedToHandZone = NoFunctor;
+
+		static bool StillValid(state::Cards::Card const& card) {
+			return card.GetZone() == state::kCardZonePlay;
+		}
+	};
 	struct InHandZone {
 		template <typename YesFunctor, typename NoFunctor> using AddedToPlayZone = NoFunctor;
 		template <typename YesFunctor, typename NoFunctor> using AddedToHandZone = YesFunctor;
