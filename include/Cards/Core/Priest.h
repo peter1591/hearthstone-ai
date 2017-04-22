@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=2&filter-class=64&sort=-cost&display=1
-// Finished: Lesser Heal
+// Done.
 
 namespace Cards
 {
@@ -102,8 +102,80 @@ namespace Cards
 
 		}
 	};
+
+	struct Card_CS2_234 : public SpellCardBase<Card_CS2_234> {
+		Card_CS2_234() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_)
+					.Enemy(context.player_)
+					.Minion().MinionAttackerLessOrEqualTo(3) // TODO: only spell targetable
+					.GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target).Destroy();
+			});
+		}
+	};
+
+	struct Card_EX1_622 : public SpellCardBase<Card_EX1_622> {
+		Card_EX1_622() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_)
+					.Enemy(context.player_)
+					.Minion().MinionAttackerGreaterOrEqualTo(5) // TODO: only spell targetable
+					.GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target).Destroy();
+			});
+		}
+	};
+
+	struct Card_CS1_112 : public SpellCardBase<Card_CS1_112> {
+		Card_CS1_112() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 2);
+				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Heal(context.card_ref_, 2);
+				});
+
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 2 + spell_damage);
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2 + spell_damage);
+				});
+			});
+		}
+	};
+
+	struct Card_CS1_113 : public SpellCardBase<Card_CS1_113> {
+		Card_CS1_113() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_)
+					.Enemy(context.player_)
+					.Minion().SpellTargetable()
+					.GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target).ChangeOwner(context.player_);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS1_113)
+REGISTER_CARD(CS1_112)
+REGISTER_CARD(EX1_622)
+REGISTER_CARD(CS2_234)
 REGISTER_CARD(DS1_233)
 REGISTER_CARD(CS2_236)
 REGISTER_CARD(CS2_235)

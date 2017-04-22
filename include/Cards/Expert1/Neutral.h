@@ -593,13 +593,14 @@ namespace Cards
 
 	struct Card_EX1_085 : public MinionCardBase<Card_EX1_085> {
 		static void Battlecry(Contexts::OnPlay context) {
-			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier().Opposite();
-			auto & board_player = context.manipulate_.Board().Player(player);
-			size_t count = board_player.minions_.Size();
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			state::PlayerIdentifier opponent = player.Opposite();
+			auto & board_opponent = context.manipulate_.Board().Player(opponent);
+			size_t count = board_opponent.minions_.Size();
 			if (count < 4) return;
 			size_t pos = context.manipulate_.GetRandom().Get(count);
-			state::CardRef target = board_player.minions_.Get(pos);
-			context.manipulate_.OnBoardMinion(target).ChangeOwner(player.Opposite());
+			state::CardRef target = board_opponent.minions_.Get(pos);
+			context.manipulate_.OnBoardMinion(target).ChangeOwner(player);
 		}
 	};
 
