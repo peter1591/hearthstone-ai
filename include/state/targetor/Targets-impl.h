@@ -109,6 +109,9 @@ namespace state {
 			case kMinionFilterTaunt:
 				if (!card.HasTaunt()) return;
 				break;
+			case kMinionFilterUnDamaged:
+				if (card.GetDamage() > 0) return;
+				break;
 			}
 
 			functor(minion);

@@ -497,5 +497,8 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Mage.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Rogue.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -110,6 +110,12 @@ namespace state {
 				info_.minion_filter = Targets::kMinionFilterTaunt;
 				return *this;
 			}
+
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & UnDamaged()
+			{
+				info_.minion_filter = Targets::kMinionFilterUnDamaged;
+				return *this;
+			}
 		};
 
 		class TargetsGenerator_ChosenSide : public TargetsGenerator_ChosenSide_ChosenHeroMinion

@@ -80,7 +80,8 @@ namespace state {
 				kMinionFilterMinionAttackLessOrEqualTo,
 				kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo,
 				kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo,
-				kMinionFilterTaunt
+				kMinionFilterTaunt,
+				kMinionFilterUnDamaged
 			} minion_filter;
 			int minion_filter_arg1;
 
