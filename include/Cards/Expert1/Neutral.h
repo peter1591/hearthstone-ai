@@ -452,7 +452,7 @@ namespace Cards
 	};
 
 	template <int v>
-	struct Card_EX1_590e : public Enchantment<Card_EX1_590e<0>, Attack<3*v>, MaxHP<3*v>> {};
+	struct Card_EX1_590e : public Enchantment<Card_EX1_590e<v>, Attack<3*v>, MaxHP<3*v>> {};
 	struct Card_EX1_590 : public MinionCardBase<Card_EX1_590> {
 		static void Battlecry(Contexts::OnPlay context) {
 			int count = 0;

@@ -75,8 +75,37 @@ namespace Cards
 				state::Events::EventTypes::OnHeal>();
 		}
 	};
+
+	template <int v>
+	struct Card_CS2_236e : public Enchantment<Card_CS2_236e<v>, MaxHP<v>> {};
+	struct Card_CS2_236 : public SpellCardBase<Card_CS2_236> {
+		Card_CS2_236() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				int v = context.manipulate_.GetCard(target).GetHP();
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_236e>(v);
+			});
+		}
+	};
+
+	struct Card_DS1_233 : public SpellCardBase<Card_DS1_233> {
+		Card_DS1_233() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 5 + spell_damage);
+			});
+
+		}
+	};
 }
 
+REGISTER_CARD(DS1_233)
+REGISTER_CARD(CS2_236)
 REGISTER_CARD(CS2_235)
 REGISTER_CARD(CS2_004)
 REGISTER_CARD(CS2_003)
