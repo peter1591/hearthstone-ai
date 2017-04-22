@@ -108,7 +108,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.targets_ = TargetsGenerator(context.player_)
 					.Enemy(context.player_)
-					.Minion().MinionAttackLessOrEqualTo(3) // TODO: only spell targetable
+					.Minion().MinionSpellTargetableAndAttackLessOrEqualTo(3)
 					.GetInfo();
 				return true;
 			});
@@ -125,7 +125,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.targets_ = TargetsGenerator(context.player_)
 					.Enemy(context.player_)
-					.Minion().MinionAttackGreaterOrEqualTo(5) // TODO: only spell targetable
+					.Minion().MinionSpellTargetableAndAttackGreaterOrEqualTo(5)
 					.GetInfo();
 				return true;
 			});

@@ -56,6 +56,8 @@ namespace state {
 
 			bool CheckStealth(state::Cards::Card const& target) const;
 
+			bool CheckSpellTargetable(state::Cards::Card const& card) const;
+
 		public:
 			state::PlayerIdentifier targeting_side; // used to determine if a stealth minion can be targeted
 
@@ -76,6 +78,8 @@ namespace state {
 				kMinionFilterPirate,
 				kMinionFilterMinionAttackGreaterOrEqualTo,
 				kMinionFilterMinionAttackLessOrEqualTo,
+				kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo,
+				kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo,
 				kMinionFilterTaunt
 			} minion_filter;
 			int minion_filter_arg1;

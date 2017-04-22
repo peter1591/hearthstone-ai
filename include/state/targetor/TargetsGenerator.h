@@ -91,6 +91,20 @@ namespace state {
 				return *this;
 			}
 
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionSpellTargetableAndAttackGreaterOrEqualTo(int v)
+			{
+				info_.minion_filter = Targets::kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo;
+				info_.minion_filter_arg1 = v;
+				return *this;
+			}
+
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionSpellTargetableAndAttackLessOrEqualTo(int v)
+			{
+				info_.minion_filter = Targets::kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo;
+				info_.minion_filter_arg1 = v;
+				return *this;
+			}
+
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & HasTaunt()
 			{
 				info_.minion_filter = Targets::kMinionFilterTaunt;

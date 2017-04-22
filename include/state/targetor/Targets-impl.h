@@ -30,13 +30,6 @@ namespace state {
 			});
 		}
 
-		inline bool Targets::CheckStealth(state::Cards::Card const & target) const
-		{
-			if (!target.HasStealth()) return true;
-			if (target.GetPlayerIdentifier() == targeting_side) return true; // owner can still target stealth minions
-			return false;
-		}
-
 		template <typename Functor>
 		inline void Targets::Process(FlowControl::Manipulate & manipulate, Functor&& functor) const {
 			if (include_first) ProcessPlayerTargets(manipulate, manipulate.Board().FirstPlayer(), std::forward<Functor>(functor));
@@ -57,6 +50,20 @@ namespace state {
 			}
 		}
 
+		inline bool Targets::CheckStealth(state::Cards::Card const & target) const
+		{
+			if (!target.HasStealth()) return true;
+			if (target.GetPlayerIdentifier() == targeting_side) return true; // owner can still target stealth minions
+			return false;
+		}
+
+		inline bool Targets::CheckSpellTargetable(state::Cards::Card const & card) const
+		{
+			if (card.IsImmuneToSpell()) return false;
+			if (!CheckStealth(card)) return false;
+			return true;
+		}
+
 		template <typename Functor>
 		inline void Targets::ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const {
 			if (minion == exclude) return;
@@ -74,8 +81,7 @@ namespace state {
 				if (!CheckStealth(card)) return;
 				break;
 			case kMinionFilterTargetableBySpell:
-				if (card.IsImmuneToSpell()) return;
-				if (!CheckStealth(card)) return;
+				if (!CheckSpellTargetable(card)) return;
 				break;
 			case kMinionFilterMurloc:
 				if (card.GetRace() == kCardRaceMurloc) break;
@@ -90,6 +96,14 @@ namespace state {
 				if (card.GetAttack() < minion_filter_arg1) return;
 				break;
 			case kMinionFilterMinionAttackLessOrEqualTo:
+				if (card.GetAttack() > minion_filter_arg1) return;
+				break;
+			case kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo:
+				if (!CheckSpellTargetable(card)) return;
+				if (card.GetAttack() < minion_filter_arg1) return;
+				break;
+			case kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo:
+				if (!CheckSpellTargetable(card)) return;
 				if (card.GetAttack() > minion_filter_arg1) return;
 				break;
 			case kMinionFilterTaunt:
