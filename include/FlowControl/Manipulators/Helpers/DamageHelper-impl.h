@@ -59,6 +59,13 @@ namespace FlowControl
 			inline void DamageHelper::DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount)
 			{
 				assert(amount > 0);
+
+				int current_damage = state.GetCard(card_ref).GetDamage();
+				assert(current_damage >= 0);
+				if (current_damage == 0) return;
+
+				if (amount > current_damage) amount = current_damage;
+
 				state.TriggerEvent<state::Events::EventTypes::OnHeal>(
 					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card_ref, amount });
 
