@@ -86,10 +86,10 @@ namespace state {
 			case kMinionFilterPirate:
 				if (card.GetRace() == kCardRacePirate) break;
 				return;
-			case kMinionFilterMinionAttackerGreaterOrEqualTo:
+			case kMinionFilterMinionAttackGreaterOrEqualTo:
 				if (card.GetAttack() < minion_filter_arg1) return;
 				break;
-			case kMinionFilterMinionAttackerLessOrEqualTo:
+			case kMinionFilterMinionAttackLessOrEqualTo:
 				if (card.GetAttack() > minion_filter_arg1) return;
 				break;
 			case kMinionFilterTaunt:

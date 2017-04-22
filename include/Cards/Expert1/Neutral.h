@@ -808,7 +808,7 @@ namespace Cards
 
 	struct Card_EX1_005 : public MinionCardBase<Card_EX1_005> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return Targets(context.player_).Minion().MinionAttackerGreaterOrEqualTo(7);
+			return Targets(context.player_).Minion().MinionAttackGreaterOrEqualTo(7);
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
@@ -881,7 +881,7 @@ namespace Cards
 	struct Card_NEW1_041 : public MinionCardBase<Card_NEW1_041> {
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(context.player_)
-				.Enemy(context.player_).Minion().MinionAttackerLessOrEqualTo(2).GetInfo());
+				.Enemy(context.player_).Minion().MinionAttackLessOrEqualTo(2).GetInfo());
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardMinion(target).Destroy();
 		}

@@ -77,16 +77,16 @@ namespace state {
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackerGreaterOrEqualTo(int v)
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackGreaterOrEqualTo(int v)
 			{
-				info_.minion_filter = Targets::kMinionFilterMinionAttackerGreaterOrEqualTo;
+				info_.minion_filter = Targets::kMinionFilterMinionAttackGreaterOrEqualTo;
 				info_.minion_filter_arg1 = v;
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackerLessOrEqualTo(int v)
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackLessOrEqualTo(int v)
 			{
-				info_.minion_filter = Targets::kMinionFilterMinionAttackerLessOrEqualTo;
+				info_.minion_filter = Targets::kMinionFilterMinionAttackLessOrEqualTo;
 				info_.minion_filter_arg1 = v;
 				return *this;
 			}
