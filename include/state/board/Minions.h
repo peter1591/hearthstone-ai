@@ -36,7 +36,7 @@ namespace state
 			void IncreaseChangeId() { ++change_id_; }
 
 			template <typename Functor>
-			void ForEach(Functor&& functor) {
+			void ForEach(Functor&& functor) const {
 				std::for_each(minions_.begin(), minions_.end(), std::forward<Functor>(functor));
 			}
 

@@ -39,17 +39,13 @@ namespace state {
 
 		template <typename Functor>
 		inline void Targets::ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const {
-			if (include_hero) {
-				if (player.GetHeroRef() != exclude) {
-					functor(player.GetHeroRef());
-				}
-			}
-			if (include_minion) {
-				for (CardRef minion : player.minions_.Get()) {
-					if (minion == exclude) continue;
-					if (CheckFilter(manipulate, minion)) functor(minion);
-				}
-			}
+			auto op = [&](state::CardRef card_ref) {
+				if (card_ref == exclude) return;
+				if (CheckFilter(manipulate, card_ref)) functor(card_ref);
+			};
+
+			if (include_hero) op(player.GetHeroRef());
+			if (include_minion) player.minions_.ForEach(op);
 		}
 
 		inline bool Targets::CheckStealth(state::Cards::Card const & target) const
