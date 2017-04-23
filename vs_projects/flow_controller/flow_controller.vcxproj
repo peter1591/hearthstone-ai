@@ -154,6 +154,7 @@
     <ClInclude Include="..\..\include\Cards\Core\Priest.h" />
     <ClInclude Include="..\..\include\Cards\Core\Rogue.h" />
     <ClInclude Include="..\..\include\Cards\Core\Shaman.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Warlock.h" />
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\Database.h" />
     <ClInclude Include="..\..\include\Cards\EventRegister.h" />

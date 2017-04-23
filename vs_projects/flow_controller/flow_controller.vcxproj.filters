@@ -500,5 +500,8 @@
     <ClInclude Include="..\..\include\Cards\Core\Rogue.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Warlock.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
