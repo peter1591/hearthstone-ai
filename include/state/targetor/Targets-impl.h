@@ -86,6 +86,9 @@ namespace state {
 				return (card.GetRace() == kCardRacePirate);
 			case kFilterDemon:
 				return (card.GetRace() == kCardRaceDemon);
+			case kFilterTargetableBySpellAndDemon:
+				if (!CheckSpellTargetable(card)) return false;
+				return (card.GetRace() == kCardRaceDemon);
 			case kFilterAttackGreaterOrEqualTo:
 				return (card.GetAttack() >= filter_arg1);
 			case kFilterAttackLessOrEqualTo:

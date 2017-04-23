@@ -83,6 +83,12 @@ namespace state {
 				return *this;
 			}
 
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetableDemons()
+			{
+				info_.filter_type = Targets::kFilterTargetableBySpellAndDemon;
+				return *this;
+			}
+
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & AttackGreaterOrEqualTo(int v)
 			{
 				info_.filter_type = Targets::kFilterAttackGreaterOrEqualTo;
