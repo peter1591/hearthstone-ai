@@ -77,6 +77,7 @@ namespace state {
 				kFilterMurloc,
 				kFilterBeast,
 				kFilterPirate,
+				kFilterDemon,
 				kFilterAttackGreaterOrEqualTo,
 				kFilterAttackLessOrEqualTo,
 				kFilterTargetableBySpellAndAttackGreaterOrEqualTo,
