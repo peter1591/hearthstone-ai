@@ -22,7 +22,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion().Murlocs() // friendly murlocs only
+				.Ally().Minion().Murlocs() // friendly murlocs only
 				.Exclude(context.card_ref_) // only apply on other murlocs
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
@@ -84,7 +84,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion() // friendly minions
+				.Ally().Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
@@ -102,7 +102,7 @@ namespace Cards
 	struct Card_EX1_019e : public Enchantment<Card_EX1_019e, MaxHP<1>, Attack<1>> {};
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Ally(context).Minion().Targetable().Exclude(context.card_ref_);
+			return TargetsGenerator(context.player_).Ally().Minion().Targetable().Exclude(context.card_ref_);
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			if (!context.GetTarget().IsValid()) return;
@@ -130,7 +130,7 @@ namespace Cards
 	struct Card_CS2_187 : public MinionCardBase<Card_CS2_187, Taunt> {};
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		static void Battlecry(Contexts::OnPlay context) {
-			ForEach(context, Targets(context.player_).Ally(context).Exclude(context.card_ref_),
+			ForEach(context, Targets(context.player_).Ally().Exclude(context.card_ref_),
 				[context](FlowControl::Manipulate manipulate, state::CardRef ref) {
 				manipulate.OnBoardCharacter(ref).Heal(context.card_ref_, 2);
 			});
@@ -142,7 +142,7 @@ namespace Cards
 	struct Card_CS2_226 : public MinionCardBase<Card_CS2_226> {
 		static void Battlecry(Contexts::OnPlay context) {
 			int count = 0;
-			Targets(context.player_).Ally(context).Minion().Exclude(context.card_ref_).GetInfo()
+			Targets(context.player_).Ally().Minion().Exclude(context.card_ref_).GetInfo()
 				.Count(context.manipulate_, &count);
 
 			switch (count) {
@@ -208,7 +208,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion() // friendly minions
+				.Ally().Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}

@@ -143,19 +143,12 @@ namespace state {
 		public: // Fluent-like API to set up
 			TargetsGenerator(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenSide(targeting_player) {}
 
-			template <typename Context>
-			TargetsGenerator_ChosenSide & Ally(Context&& context) // TODO: should have no parameter, use targeting_player_
-			{
-				return SideOnly(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier());
+			TargetsGenerator_ChosenSide & Ally() {
+				return SideOnly(info_.GetTargetingSide());
 			}
-			TargetsGenerator_ChosenSide & Ally(PlayerIdentifier player) { return SideOnly(player); }
-
-			template <typename Context>
-			TargetsGenerator_ChosenSide & Enemy(Context&& context) // TODO: should have no parameter, use targeting_player_
-			{
-				return SideOnly(context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier().Opposite());
+			TargetsGenerator_ChosenSide & Enemy() {
+				return SideOnly(info_.GetTargetingSide().Opposite());
 			}
-			TargetsGenerator_ChosenSide & Enemy(PlayerIdentifier player) { return SideOnly(player.Opposite()); }
 
 		private:
 			TargetsGenerator_ChosenSide & SideOnly(PlayerIdentifier player)

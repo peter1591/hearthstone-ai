@@ -127,7 +127,7 @@ namespace Cards
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			*context.allow_no_target_ = true;
 			return TargetsGenerator(context.player_)
-				.Ally(context.player_)
+				.Ally()
 				.Minion()
 				.Targetable();
 		}

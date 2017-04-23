@@ -35,6 +35,8 @@ namespace state {
 				return ret;
 			}
 
+			state::PlayerIdentifier GetTargetingSide() const { return targeting_side; }
+
 		public:
 			void Fill(FlowControl::Manipulate & manipulate, std::vector<CardRef>& targets) const;
 			void Fill(FlowControl::Manipulate & manipulate, std::unordered_set<CardRef>& targets) const;

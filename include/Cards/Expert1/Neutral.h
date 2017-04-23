@@ -124,7 +124,7 @@ namespace Cards
 			auto player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
 
-			auto targets = TargetsGenerator(player).Ally(player).Minion().Exclude(self);
+			auto targets = TargetsGenerator(player).Ally().Minion().Exclude(self);
 			auto target = context.manipulate_.GetRandomTarget(targets.GetInfo());
 
 			if (target.IsValid()) Manipulate(context).Card(self).Enchant().Add<Card_EX1_004e>();
@@ -219,7 +219,7 @@ namespace Cards
 			state::PlayerIdentifier summoning = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			if (owner != summoning) return true;
 			
-			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy(owner).Alive().GetInfo());
+			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy().Alive().GetInfo());
 			if (!target.IsValid()) return true;
 			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
 			return true;
@@ -294,7 +294,7 @@ namespace Cards
 			auto player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
 
-			auto targets = TargetsGenerator(player).Ally(player).Minion().Exclude(self);
+			auto targets = TargetsGenerator(player).Ally().Minion().Exclude(self);
 			auto target = context.manipulate_.GetRandomTarget(targets.GetInfo());
 
 			if (target.IsValid()) Manipulate(context).Card(self).Enchant().Add<Card_NEW1_037e>();
@@ -396,7 +396,7 @@ namespace Cards
 
 	struct Card_EX1_049 : public MinionCardBase<Card_EX1_049> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Ally(context).Minion();
+			return TargetsGenerator(context.player_).Ally().Minion();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
@@ -495,7 +495,7 @@ namespace Cards
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
-			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy(owner).GetInfo());
+			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy().GetInfo());
 			assert(target.IsValid());
 			context.manipulate_.OnBoardCharacter(target).Damage(self, 2);
 			return true;
@@ -609,7 +609,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion().Murlocs() // friendly murlocs
+				.Ally().Minion().Murlocs() // friendly murlocs
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
@@ -649,7 +649,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion().Pirates() // friendly murlocs
+				.Ally().Minion().Pirates() // friendly murlocs
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
@@ -687,7 +687,7 @@ namespace Cards
 
 	struct Card_EX1_057 : public MinionCardBase<Card_EX1_057> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Ally(context).Minion();
+			return TargetsGenerator(context.player_).Ally().Minion();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
@@ -881,7 +881,7 @@ namespace Cards
 	struct Card_NEW1_041 : public MinionCardBase<Card_NEW1_041> {
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(context.player_)
-				.Enemy(context.player_).Minion().MinionAttackLessOrEqualTo(2).GetInfo());
+				.Enemy().Minion().MinionAttackLessOrEqualTo(2).GetInfo());
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardMinion(target).Destroy();
 		}

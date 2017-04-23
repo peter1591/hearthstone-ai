@@ -67,7 +67,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion().Beasts() // friendly beasts
+				.Ally().Minion().Beasts() // friendly beasts
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
@@ -83,7 +83,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion() // friendly minions
+				.Ally().Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
@@ -175,7 +175,7 @@ namespace Cards
 	struct Card_DS1_070 : public MinionCardBase<Card_DS1_070> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			*context.allow_no_target_ = true;
-			return TargetsGenerator(context.player_).Ally(context.player_).Minion().Beasts().Exclude(context.card_ref_);
+			return TargetsGenerator(context.player_).Ally().Minion().Beasts().Exclude(context.card_ref_);
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
@@ -205,7 +205,7 @@ namespace Cards
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
-				.Ally(context).Minion().Beasts() // friendly beasts
+				.Ally().Minion().Beasts() // friendly beasts
 				.GetInfo().Fill(context.manipulate_, context.new_targets);
 		}
 		Card_DS1_178() {
