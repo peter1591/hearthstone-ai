@@ -10,6 +10,8 @@ namespace FlowControl
 	{
 		inline void OnBoardMinionManipulator::Silence()
 		{
+			if (GetCard().GetZone() != state::kCardZonePlay) return;
+
 			// No need to clear emitting aura. In next AuraUpdate(), the silenced flag is checked.
 
 			// Remove all enchantments, including the aura enchantments coming from other minions.
@@ -29,6 +31,8 @@ namespace FlowControl
 
 		inline void OnBoardMinionManipulator::ChangeOwner(state::PlayerIdentifier new_owner)
 		{
+			if (GetCard().GetZone() != state::kCardZonePlay) return;
+
 			assert(GetCard().GetPlayerIdentifier().Opposite() == new_owner);
 
 			if (state_.GetBoard().Get(new_owner).minions_.Full()) return Destroy();
@@ -42,6 +46,8 @@ namespace FlowControl
 
 		inline state::CardRef OnBoardMinionManipulator::Transform(Cards::CardId id)
 		{
+			if (GetCard().GetZone() != state::kCardZonePlay) return state::CardRef();
+
 			assert(GetCard().GetCardType() == state::kCardTypeMinion);
 			assert(GetCard().GetZone() == state::kCardZonePlay);
 
@@ -59,6 +65,8 @@ namespace FlowControl
 
 		inline state::CardRef OnBoardMinionManipulator::BecomeCopyof(state::Cards::Card const& card)
 		{
+			if (GetCard().GetZone() != state::kCardZonePlay) return state::CardRef();
+
 			assert(GetCard().GetCardType() == state::kCardTypeMinion);
 			assert(GetCard().GetZone() == state::kCardZonePlay);
 

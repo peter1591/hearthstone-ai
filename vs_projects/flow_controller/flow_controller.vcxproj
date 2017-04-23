@@ -219,6 +219,7 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardCharacterManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h" />

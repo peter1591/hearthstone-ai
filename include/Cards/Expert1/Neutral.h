@@ -834,6 +834,7 @@ namespace Cards
 
 			state::CardRef new_ref = Manipulate(context).OnBoardMinion(context.card_ref_)
 				.BecomeCopyof(context.GetTarget());
+			if (!new_ref.IsValid()) return;
 
 			*context.new_card_ref = new_ref;
 		}

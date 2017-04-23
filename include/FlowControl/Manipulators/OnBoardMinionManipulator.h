@@ -8,14 +8,15 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		class OnBoardMinionManipulator : public MinionManipulator<state::kCardZonePlay>
+		// The minion is expected to be on the play zone
+		// If it's not, all operations will be no-ops.
+		class OnBoardMinionManipulator : public CharacterManipulator
 		{
 		public:
 			OnBoardMinionManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
-				: MinionManipulator(state, flow_context, card_ref)
+				: CharacterManipulator(state, flow_context, card_ref)
 			{
 				assert(GetCard().GetCardType() == state::kCardTypeMinion);
-				assert(GetCard().GetZone() == state::kCardZonePlay);
 			}
 
 			void AfterSummoned()
@@ -24,6 +25,7 @@ namespace FlowControl
 
 			void TurnStart()
 			{
+				if (GetCard().GetZone() != state::kCardZonePlay) return;
 				GetCard().SetJustPlayedFlag(false);
 				GetCard().ClearNumAttacksThisTurn();
 			}
@@ -31,6 +33,7 @@ namespace FlowControl
 			void Silence();
 
 			void Destroy() {
+				if (GetCard().GetZone() != state::kCardZonePlay) return;
 				GetCard().SetPendingDestroy();
 				flow_context_.AddDeadEntryHint(state_, card_ref_);
 			}
@@ -41,6 +44,22 @@ namespace FlowControl
 
 			state::CardRef BecomeCopyof(state::CardRef card_ref);
 			state::CardRef BecomeCopyof(state::Cards::Card const& card);
+
+		public: // bridge to MinionManipulator<state::kCardZonePlay>
+			template<state::CardZone SwapWithZone> void SwapWith(state::CardRef ref) {
+				if (GetCard().GetZone() != state::kCardZonePlay) return;
+				return MinionManipulator<state::kCardZonePlay>(state_, flow_context_, card_ref_).SwapWith<SwapWithZone>(ref);
+			}
+
+			template <state::CardZone ZoneTo> void MoveTo(state::PlayerIdentifier to_player) {
+				if (GetCard().GetZone() != state::kCardZonePlay) return;
+				return MinionManipulator<state::kCardZonePlay>(state_, flow_context_, card_ref_)
+					.MoveTo<ZoneTo>(to_player);
+			}
+
+			template <state::CardZone ZoneTo> void MoveTo() {
+				return MoveTo<ZoneTo>(GetCard().GetPlayerIdentifier());
+			}
 		};
 	}
 }

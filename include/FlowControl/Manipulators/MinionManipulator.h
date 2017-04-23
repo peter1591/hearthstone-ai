@@ -7,7 +7,7 @@ namespace FlowControl
 	namespace Manipulators
 	{
 		template <state::CardZone Zone>
-		class MinionManipulator : public CharacterManipulator<Zone>
+		class MinionManipulator : public CharacterManipulator
 		{
 		public:
 			MinionManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)

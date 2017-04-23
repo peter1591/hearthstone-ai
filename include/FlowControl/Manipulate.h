@@ -6,6 +6,7 @@
 #include "FlowControl/Manipulators/BoardManipulator.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
+#include "FlowControl/Manipulators/OnBoardCharacterManipulator.h"
 #include "FlowControl/Manipulators/OnBoardMinionManipulator.h"
 #include "FlowControl/Manipulators/MinionManipulator.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
@@ -49,8 +50,8 @@ namespace FlowControl
 			return Manipulators::MinionManipulator<Zone>(state_, flow_context_, ref);
 		}
 
-		Manipulators::CharacterManipulator<state::kCardZonePlay> OnBoardCharacter(state::CardRef ref) {
-			return Manipulators::CharacterManipulator<state::kCardZonePlay>(state_, flow_context_, ref);
+		Manipulators::OnBoardCharacterManipulator OnBoardCharacter(state::CardRef ref) {
+			return Manipulators::OnBoardCharacterManipulator(state_, flow_context_, ref);
 		}
 
 		Manipulators::WeaponManipulator Weapon(state::PlayerIdentifier player);

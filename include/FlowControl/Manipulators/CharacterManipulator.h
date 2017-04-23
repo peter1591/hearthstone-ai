@@ -11,14 +11,12 @@ namespace FlowControl
 
 	namespace Manipulators
 	{
-		template <state::CardZone Zone>
 		class CharacterManipulator : public CardManipulator
 		{
 		public:
 			CharacterManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
 				: CardManipulator(state, flow_context, card_ref)
 			{
-				assert(GetCard().GetZone() == Zone);
 				assert(GetCard().GetCardType() == state::kCardTypeMinion ||
 					GetCard().GetCardType() == state::kCardTypeHero);
 			}

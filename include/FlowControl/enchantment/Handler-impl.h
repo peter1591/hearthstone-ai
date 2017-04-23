@@ -87,7 +87,7 @@ namespace FlowControl
 
 			UpdateCard(state, flow_context, card_ref, new_states);
 
-			auto character_manipulator = Manipulators::CharacterManipulator<state::kCardZonePlay>(state, flow_context, card_ref);
+			auto character_manipulator = Manipulators::CharacterManipulator(state, flow_context, card_ref);
 
 			if (new_states.attack != current_states.attack) {
 				character_manipulator.Attack(new_states.attack);
