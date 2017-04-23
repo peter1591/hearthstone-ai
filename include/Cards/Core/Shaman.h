@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=2&filter-class=256&sort=-cost&display=1
-// Last finished card: Totemic Call
+// Done.
 
 namespace Cards
 {
@@ -69,6 +69,43 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_045e : public EnchantmentForThisTurn<Card_CS2_045e, Attack<3>> {};
+	struct Card_CS2_045 : public SpellCardBase<Card_CS2_045> {
+		Card_CS2_045() {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Enchant().Add<Card_CS2_045e>();
+			});
+		}
+	};
+
+	struct Card_CS2_039e : public Enchantment<Card_CS2_039e, Windfury> {};
+	struct Card_CS2_039 : public SpellCardBase<Card_CS2_039> {
+		Card_CS2_039() {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_)
+					.Minion()
+					.SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Enchant().Add<Card_CS2_039e>();
+			});
+		}
+	};
+
+	struct Card_EX1_565o : public Enchantment<Card_EX1_565o, Attack<2>> {};
+	struct Card_EX1_565 : public MinionCardBase<Card_EX1_565> {
+		Card_EX1_565() {
+			AdjacentBuffAura<Card_EX1_565o>();
+		}
+	};
+
 	struct Card_hexfrog : public MinionCardBase<Card_hexfrog, Taunt> {};
 	struct Card_EX1_246 : public SpellCardBase<Card_EX1_246> {
 		Card_EX1_246() {
@@ -84,10 +121,56 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_587e : public Enchantment<Card_EX1_587e, Windfury> {};
+	struct Card_EX1_587 : public MinionCardBase<Card_EX1_587> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			*context.allow_no_target_ = true;
+			return TargetsGenerator(context.player_)
+				.Ally(context.player_)
+				.Minion()
+				.Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_587e>();
+		}
+	};
+
+	struct Card_CS2_046e : public EnchantmentForThisTurn<Card_CS2_046e, Attack<3>> {};
+	struct Card_CS2_046 : public SpellCardBase<Card_CS2_046> {
+		Card_CS2_046() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_046e>();
+				});
+			});
+		}
+	};
+
+	struct Card_CS2_042 : public MinionCardBase<Card_CS2_042> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			*context.allow_no_target_ = true;
+			return TargetsGenerator(context.player_)
+				.Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3);
+		}
+	};
 }
 
+REGISTER_CARD(CS2_042)
+REGISTER_CARD(CS2_046)
+REGISTER_CARD(EX1_587)
 REGISTER_CARD(hexfrog)
 REGISTER_CARD(EX1_246)
+REGISTER_CARD(EX1_565)
+REGISTER_CARD(CS2_039)
+REGISTER_CARD(CS2_045)
 REGISTER_CARD(CS2_049)
 REGISTER_CARD(CS2_051)
 REGISTER_CARD(NEW1_009)
