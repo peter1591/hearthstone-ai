@@ -3,6 +3,7 @@
 #include "state/targetor/Targets.h"
 #include "state/State.h"
 #include "FlowControl/FlowContext.h"
+#include "FlowControl/Manipulate.h"
 
 namespace state {
 	namespace targetor {
@@ -45,7 +46,8 @@ namespace state {
 			}
 			if (include_minion) {
 				for (CardRef minion : player.minions_.Get()) {
-					ProcessMinionTargets(manipulate, minion, std::forward<Functor>(functor));
+					if (minion == exclude) continue;
+					if (CheckFilter(manipulate, minion)) functor(minion);
 				}
 			}
 		}
@@ -64,57 +66,46 @@ namespace state {
 			return true;
 		}
 
-		template <typename Functor>
-		inline void Targets::ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const {
-			if (minion == exclude) return;
-
+		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const {
 			auto const& card = manipulate.Board().GetCard(minion);
 
 			switch (minion_filter) {
 			case kMinionFilterAll:
-				break;
+				return true;
 			case kMinionFilterAlive:
-				if (card.GetHP() <= 0) return;
-				if (card.GetRawData().pending_destroy) return;
-				break;
+				if (card.GetHP() <= 0) return false;
+				if (card.GetRawData().pending_destroy) return false;
+				return true;
 			case kMinionFilterTargetable:
-				if (!CheckStealth(card)) return;
-				break;
+				if (!CheckStealth(card)) return false;
+				return true;
 			case kMinionFilterTargetableBySpell:
-				if (!CheckSpellTargetable(card)) return;
-				break;
+				if (!CheckSpellTargetable(card)) return false;
+				return true;
 			case kMinionFilterMurloc:
-				if (card.GetRace() == kCardRaceMurloc) break;
-				return;
+				return (card.GetRace() == kCardRaceMurloc);
 			case kMinionFilterBeast:
-				if (card.GetRace() == kCardRaceBeast) break;
-				return;
+				return (card.GetRace() == kCardRaceBeast);
 			case kMinionFilterPirate:
-				if (card.GetRace() == kCardRacePirate) break;
-				return;
+				return (card.GetRace() == kCardRacePirate);
 			case kMinionFilterMinionAttackGreaterOrEqualTo:
-				if (card.GetAttack() < minion_filter_arg1) return;
-				break;
+				return (card.GetAttack() >= minion_filter_arg1);
 			case kMinionFilterMinionAttackLessOrEqualTo:
-				if (card.GetAttack() > minion_filter_arg1) return;
-				break;
+				return (card.GetAttack() <= minion_filter_arg1);
 			case kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo:
-				if (!CheckSpellTargetable(card)) return;
-				if (card.GetAttack() < minion_filter_arg1) return;
-				break;
+				if (!CheckSpellTargetable(card)) return false;
+				return (card.GetAttack() >= minion_filter_arg1);
 			case kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo:
-				if (!CheckSpellTargetable(card)) return;
-				if (card.GetAttack() > minion_filter_arg1) return;
-				break;
+				if (!CheckSpellTargetable(card)) return false;
+				return (card.GetAttack() <= minion_filter_arg1);
 			case kMinionFilterTaunt:
-				if (!card.HasTaunt()) return;
-				break;
+				return card.HasTaunt();
 			case kMinionFilterUnDamaged:
-				if (card.GetDamage() > 0) return;
-				break;
+				return (card.GetDamage() <= 0);
 			}
 
-			functor(minion);
+			assert(false);
+			return false; // fallback
 		}
 	}
 }

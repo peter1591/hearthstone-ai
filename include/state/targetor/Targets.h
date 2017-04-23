@@ -53,8 +53,7 @@ namespace state {
 			template <typename Functor>
 			void ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const;
 
-			template <typename Functor>
-			void ProcessMinionTargets(FlowControl::Manipulate & manipulate, CardRef minion, Functor&& functor) const;
+			bool CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const;
 
 			bool CheckStealth(state::Cards::Card const& target) const;
 
