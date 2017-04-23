@@ -18,7 +18,7 @@ namespace Cards
 		Card_CS2_072() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.targets_ = TargetsGenerator(context.player_)
-					.Minion().MinionSpellTargetableAndAttackLessOrEqualTo(3)
+					.Minion().SpellTargetableAndAttackLessOrEqualTo(3)
 					.GetInfo();
 				return true;
 			});

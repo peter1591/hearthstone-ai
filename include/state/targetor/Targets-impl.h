@@ -65,38 +65,38 @@ namespace state {
 		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const {
 			auto const& card = manipulate.Board().GetCard(minion);
 
-			switch (minion_filter) {
-			case kMinionFilterAll:
+			switch (filter_type) {
+			case kFilterAll:
 				return true;
-			case kMinionFilterAlive:
+			case kFilterAlive:
 				if (card.GetHP() <= 0) return false;
 				if (card.GetRawData().pending_destroy) return false;
 				return true;
-			case kMinionFilterTargetable:
+			case kFilterTargetable:
 				if (!CheckStealth(card)) return false;
 				return true;
-			case kMinionFilterTargetableBySpell:
+			case kFilterTargetableBySpell:
 				if (!CheckSpellTargetable(card)) return false;
 				return true;
-			case kMinionFilterMurloc:
+			case kFilterMurloc:
 				return (card.GetRace() == kCardRaceMurloc);
-			case kMinionFilterBeast:
+			case kFilterBeast:
 				return (card.GetRace() == kCardRaceBeast);
-			case kMinionFilterPirate:
+			case kFilterPirate:
 				return (card.GetRace() == kCardRacePirate);
-			case kMinionFilterMinionAttackGreaterOrEqualTo:
-				return (card.GetAttack() >= minion_filter_arg1);
-			case kMinionFilterMinionAttackLessOrEqualTo:
-				return (card.GetAttack() <= minion_filter_arg1);
-			case kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo:
+			case kFilterAttackGreaterOrEqualTo:
+				return (card.GetAttack() >= filter_arg1);
+			case kFilterAttackLessOrEqualTo:
+				return (card.GetAttack() <= filter_arg1);
+			case kFilterTargetableBySpellAndAttackGreaterOrEqualTo:
 				if (!CheckSpellTargetable(card)) return false;
-				return (card.GetAttack() >= minion_filter_arg1);
-			case kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo:
+				return (card.GetAttack() >= filter_arg1);
+			case kFilterTargetableBySpellAndAttackLessOrEqualTo:
 				if (!CheckSpellTargetable(card)) return false;
-				return (card.GetAttack() <= minion_filter_arg1);
-			case kMinionFilterTaunt:
+				return (card.GetAttack() <= filter_arg1);
+			case kFilterTaunt:
 				return card.HasTaunt();
-			case kMinionFilterUnDamaged:
+			case kFilterUnDamaged:
 				return (card.GetDamage() <= 0);
 			}
 

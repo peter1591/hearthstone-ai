@@ -18,14 +18,14 @@ namespace state {
 				targeting_side(targeting_side),
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
-				minion_filter(kMinionFilterAll)
+				filter_type(kFilterAll)
 			{
 			}
 
 			Targets() :
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
-				minion_filter(kMinionFilterAll)
+				filter_type(kFilterAll)
 			{}
 
 			static Targets None() {
@@ -68,23 +68,23 @@ namespace state {
 			bool include_minion;
 			bool include_hero;
 
-			enum MinionFilterType // TODO: rename to CharacterFilterType, or just FilterType. Hero with demon race can still be targeted
+			enum FilterType
 			{
-				kMinionFilterAll,
-				kMinionFilterAlive, // mortally wounded, or marked as pending-destroy
-				kMinionFilterTargetable,
-				kMinionFilterTargetableBySpell,
-				kMinionFilterMurloc,
-				kMinionFilterBeast,
-				kMinionFilterPirate,
-				kMinionFilterMinionAttackGreaterOrEqualTo,
-				kMinionFilterMinionAttackLessOrEqualTo,
-				kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo,
-				kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo,
-				kMinionFilterTaunt,
-				kMinionFilterUnDamaged
-			} minion_filter;
-			int minion_filter_arg1;
+				kFilterAll,
+				kFilterAlive, // mortally wounded, or marked as pending-destroy
+				kFilterTargetable,
+				kFilterTargetableBySpell,
+				kFilterMurloc,
+				kFilterBeast,
+				kFilterPirate,
+				kFilterAttackGreaterOrEqualTo,
+				kFilterAttackLessOrEqualTo,
+				kFilterTargetableBySpellAndAttackGreaterOrEqualTo,
+				kFilterTargetableBySpellAndAttackLessOrEqualTo,
+				kFilterTaunt,
+				kFilterUnDamaged
+			} filter_type;
+			int filter_arg1;
 
 			CardRef exclude;
 		};

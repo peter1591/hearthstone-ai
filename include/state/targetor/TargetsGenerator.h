@@ -43,77 +43,77 @@ namespace state {
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Targetable()
 			{
-				info_.minion_filter = Targets::kMinionFilterTargetable;
+				info_.filter_type = Targets::kFilterTargetable;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Alive()
 			{
-				info_.minion_filter = Targets::kMinionFilterAlive;
+				info_.filter_type = Targets::kFilterAlive;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetable()
 			{
-				info_.minion_filter = Targets::kMinionFilterTargetableBySpell;
+				info_.filter_type = Targets::kFilterTargetableBySpell;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Murlocs()
 			{
-				info_.minion_filter = Targets::kMinionFilterMurloc;
+				info_.filter_type = Targets::kFilterMurloc;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Beasts()
 			{
-				info_.minion_filter = Targets::kMinionFilterBeast;
+				info_.filter_type = Targets::kFilterBeast;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Pirates()
 			{
-				info_.minion_filter = Targets::kMinionFilterPirate;
+				info_.filter_type = Targets::kFilterPirate;
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackGreaterOrEqualTo(int v)
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & AttackGreaterOrEqualTo(int v)
 			{
-				info_.minion_filter = Targets::kMinionFilterMinionAttackGreaterOrEqualTo;
-				info_.minion_filter_arg1 = v;
+				info_.filter_type = Targets::kFilterAttackGreaterOrEqualTo;
+				info_.filter_arg1 = v;
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionAttackLessOrEqualTo(int v)
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & AttackLessOrEqualTo(int v)
 			{
-				info_.minion_filter = Targets::kMinionFilterMinionAttackLessOrEqualTo;
-				info_.minion_filter_arg1 = v;
+				info_.filter_type = Targets::kFilterAttackLessOrEqualTo;
+				info_.filter_arg1 = v;
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionSpellTargetableAndAttackGreaterOrEqualTo(int v)
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetableAndAttackGreaterOrEqualTo(int v)
 			{
-				info_.minion_filter = Targets::kMinionFilterTargetableBySpellAndMinionAttackGreaterOrEqualTo;
-				info_.minion_filter_arg1 = v;
+				info_.filter_type = Targets::kFilterTargetableBySpellAndAttackGreaterOrEqualTo;
+				info_.filter_arg1 = v;
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & MinionSpellTargetableAndAttackLessOrEqualTo(int v)
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetableAndAttackLessOrEqualTo(int v)
 			{
-				info_.minion_filter = Targets::kMinionFilterTargetableBySpellAndMinionAttackLessOrEqualTo;
-				info_.minion_filter_arg1 = v;
+				info_.filter_type = Targets::kFilterTargetableBySpellAndAttackLessOrEqualTo;
+				info_.filter_arg1 = v;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & HasTaunt()
 			{
-				info_.minion_filter = Targets::kMinionFilterTaunt;
+				info_.filter_type = Targets::kFilterTaunt;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & UnDamaged()
 			{
-				info_.minion_filter = Targets::kMinionFilterUnDamaged;
+				info_.filter_type = Targets::kFilterUnDamaged;
 				return *this;
 			}
 		};
