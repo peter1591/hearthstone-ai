@@ -58,7 +58,7 @@ namespace FlowControl
 		return Manipulators::WeaponManipulator(state_, flow_context_, ref);
 	}
 
-	inline Manipulators::SecretManipulator Manipulate::Secret(state::CardRef ref)
+	inline Manipulators::SecretManipulator Manipulate::OnBoardSecret(state::CardRef ref)
 	{
 		return Manipulators::SecretManipulator(state_, flow_context_, ref);
 	}

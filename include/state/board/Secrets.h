@@ -20,6 +20,13 @@ namespace state
 				return secrets_.find(card_id) != secrets_.end();
 			}
 
+			template <typename Functor>
+			void ForEach(Functor&& functor) const {
+				for (auto const& kv : secrets_) {
+					functor(kv.second);
+				}
+			}
+
 		private:
 			void Add(int card_id, CardRef card)
 			{

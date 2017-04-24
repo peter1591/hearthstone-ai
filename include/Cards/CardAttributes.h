@@ -140,4 +140,11 @@ namespace Cards {
 			stats.cant_attack_hero = true;
 		}
 	};
+
+	template <int v> struct Cost {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.cost += v;
+		}
+	};
 }

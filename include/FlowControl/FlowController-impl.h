@@ -303,8 +303,8 @@ namespace FlowControl
 
 		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
 			state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
-		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 
+		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 		Manipulate(state_, flow_context_).OnBoardCharacter(defender).Damage(attacker, GetAttackValue(attacker));
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Damage(defender, GetCounterAttackValue(defender));
 

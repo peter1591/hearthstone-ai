@@ -57,7 +57,7 @@ namespace FlowControl
 		Manipulators::WeaponManipulator Weapon(state::PlayerIdentifier player);
 		Manipulators::WeaponManipulator Weapon(state::CardRef ref);
 
-		Manipulators::SecretManipulator Secret(state::CardRef ref);
+		Manipulators::SecretManipulator OnBoardSecret(state::CardRef ref);
 
 		Manipulators::BoardManipulator Board();
 
