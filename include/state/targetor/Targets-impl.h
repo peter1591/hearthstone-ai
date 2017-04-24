@@ -55,10 +55,18 @@ namespace state {
 			return false;
 		}
 
+		inline bool Targets::CheckImmune(state::Cards::Card const & target) const
+		{
+			if (!target.GetImmune()) return true;
+			if (target.GetPlayerIdentifier() == targeting_side) return true; // owner can still target immune characters
+			return false;
+		}
+
 		inline bool Targets::CheckSpellTargetable(state::Cards::Card const & card) const
 		{
 			if (card.IsImmuneToSpell()) return false;
 			if (!CheckStealth(card)) return false;
+			if (!CheckImmune(card)) return false;
 			return true;
 		}
 

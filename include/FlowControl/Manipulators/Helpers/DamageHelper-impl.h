@@ -22,6 +22,10 @@ namespace FlowControl
 						Manipulate(state_, flow_context_).OnBoardCharacter(final_target).Shield(false);
 						return;
 					}
+					if (state_.GetCard(final_target).GetImmune()) {
+						return;
+					}
+
 					DoDamage(state_, flow_context_, final_target, amount);
 
 					if (state_.GetCard(source_ref_).IsPoisonous()) {
