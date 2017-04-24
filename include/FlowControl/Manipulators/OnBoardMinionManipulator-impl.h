@@ -26,7 +26,7 @@ namespace FlowControl
 			GetCard().SetCantAttack(false);
 			GetCard().SetFreezed(false);
 
-			GetCard().SetSilenced(state_.GetPlayOrder());
+			GetCard().SetSilenced();
 		}
 
 		inline void OnBoardMinionManipulator::ChangeOwner(state::PlayerIdentifier new_owner)

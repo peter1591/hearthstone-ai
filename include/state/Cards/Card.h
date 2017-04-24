@@ -178,9 +178,8 @@ namespace state
 			ZoneSetter SetZone() { return ZoneSetter(data_); }
 			ZonePosSetter SetZonePos() { return ZonePosSetter(data_); }
 
-			void SetSilenced(int play_order) { data_.silenced_at_play_order = play_order; }
-			int GetSilencedAtPlayOrder() { return data_.silenced_at_play_order; }
-			bool IsSilenced() const { return (data_.silenced_at_play_order >= 0); }
+			void SetSilenced() { data_.silenced = true;; }
+			bool IsSilenced() const { return data_.silenced; }
 
 			void SetPendingDestroy() { data_.pending_destroy = true; }
 			bool GetPendingDestroy() const { return data_.pending_destroy; }

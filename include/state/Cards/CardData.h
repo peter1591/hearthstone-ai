@@ -23,7 +23,7 @@ namespace state
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				pending_destroy(false), used_this_turn(0), usable(true), armor(0),
 				taunt(false), shielded(false), cant_attack(false), freezed(false),
-				silenced_at_play_order(-1)
+				silenced(false)
 			{
 			}
 
@@ -55,7 +55,7 @@ namespace state
 			bool cant_attack;
 			bool freezed;
 
-			int silenced_at_play_order; // -1 if not silenced
+			bool silenced;
 
 		public: // zone-changed callbacks invoked by state::State 
 			Utils::FuncPtrArray<AddedToPlayZoneCallback*, 1> added_to_play_zone;
