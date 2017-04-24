@@ -55,9 +55,7 @@ namespace state {
 
 			bool CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const;
 
-			bool CheckStealth(state::Cards::Card const& target) const;
-			bool CheckImmune(state::Cards::Card const& target) const;
-
+			bool CheckTargetable(state::Cards::Card const& card) const;
 			bool CheckSpellTargetable(state::Cards::Card const& card) const;
 
 		public:

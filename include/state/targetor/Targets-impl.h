@@ -48,26 +48,19 @@ namespace state {
 			if (include_minion) player.minions_.ForEach(op);
 		}
 
-		inline bool Targets::CheckStealth(state::Cards::Card const & target) const
+		inline bool Targets::CheckTargetable(state::Cards::Card const & card) const
 		{
-			if (!target.HasStealth()) return true;
-			if (target.GetPlayerIdentifier() == targeting_side) return true; // owner can still target stealth minions
-			return false;
-		}
-
-		inline bool Targets::CheckImmune(state::Cards::Card const & target) const
-		{
-			if (!target.GetImmune()) return true;
-			if (target.GetPlayerIdentifier() == targeting_side) return true; // owner can still target immune characters
-			return false;
+			if (card.GetPlayerIdentifier() != targeting_side) {
+				if (card.HasStealth()) return false;
+				if (card.GetImmune()) return false;
+			}
+			return true;
 		}
 
 		inline bool Targets::CheckSpellTargetable(state::Cards::Card const & card) const
 		{
 			if (card.IsImmuneToSpell()) return false;
-			if (!CheckStealth(card)) return false;
-			if (!CheckImmune(card)) return false;
-			return true;
+			return CheckTargetable(card);
 		}
 
 		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const {
@@ -81,7 +74,7 @@ namespace state {
 				if (card.GetRawData().pending_destroy) return false;
 				return true;
 			case kFilterTargetable:
-				if (!CheckStealth(card)) return false;
+				if (!CheckTargetable(card)) return false;
 				return true;
 			case kFilterTargetableBySpell:
 				if (!CheckSpellTargetable(card)) return false;
