@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=4&sort=-cost&display=1
-// Last finished card: Force of Nature
+// Last finished card: Ancient of Lore
 
 namespace Cards
 {
@@ -165,8 +165,122 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_164 : public SpellCardBase<Card_EX1_164> {
+		Card_EX1_164() {
+			static std::vector<Cards::CardId> choices{
+				Cards::ID_EX1_164a,
+				Cards::ID_EX1_164b
+			};
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+				if (choice == 0) {
+					context.manipulate_.Board().Player(context.player_).GetResource().GainCrystal(2);
+				}
+				else {
+					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Hero(context.player_).DrawCard();
+				}
+			});
+		}
+	};
+
+	struct Card_NEW1_007 : public SpellCardBase<Card_NEW1_007> {
+		Card_NEW1_007() {
+			static std::vector<Cards::CardId> choices{
+				Cards::ID_NEW1_007a,
+				Cards::ID_NEW1_007b,
+			};
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+				if (choice == 0) {
+					return true;
+				}
+				else {
+					*context.allow_no_target_ = true;
+					*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+					return true;
+				}
+				context.manipulate_.SaveUserChoice(choice);
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				if (context.manipulate_.GetSavedUserChoice() == 0) {
+					context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+						context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2 + spell_damage);
+					});
+				}
+				else {
+					state::CardRef target = context.GetTarget();
+					if (!target.IsValid()) return;
+					context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 5 + spell_damage);
+				}
+			});
+		}
+	};
+
+	struct Card_EX1_165t1 : public MinionCardBase<Card_EX1_165t1, Charge> {};
+	struct Card_EX1_165t2 : public MinionCardBase<Card_EX1_165t2, Taunt> {};
+	struct Card_EX1_165 : public MinionCardBase<Card_EX1_165> {
+		static void Battlecry(Contexts::OnPlay context) {
+			static std::vector<Cards::CardId> choices{
+				Cards::ID_EX1_165a,
+				Cards::ID_EX1_165b
+			};
+			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+			state::CardRef new_ref;
+			if (choice == 0) {
+				new_ref = Manipulate(context).OnBoardMinion(context.card_ref_).Transform(Cards::ID_EX1_165t1);
+			}
+			else {
+				new_ref = Manipulate(context).OnBoardMinion(context.card_ref_).Transform(Cards::ID_EX1_165t2);
+			}
+			if (!new_ref.IsValid()) return;
+			*context.new_card_ref = new_ref;
+		}
+	};
+
+	struct Card_NEW1_008 : public MinionCardBase<Card_NEW1_008> {
+		Card_NEW1_008() {
+			static std::vector<Cards::CardId> choices{
+				Cards::ID_NEW1_008a,
+				Cards::ID_NEW1_008b
+			};
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+				context.manipulate_.SaveUserChoice(choice);
+
+				if (choice == 0) {
+					*context.allow_no_target_ = true;
+					*context.need_to_prepare_target_ = false;
+				}
+				else {
+					*context.allow_no_target_ = true;
+					*context.targets_ = TargetsGenerator(context.player_).Targetable().GetInfo();
+				}
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				if (context.manipulate_.GetSavedUserChoice() == 0) {
+					context.manipulate_.Hero(context.player_).DrawCard();
+				}
+				else {
+					state::CardRef target = context.GetTarget();
+					if (!target.IsValid()) return;
+					context.manipulate_.OnBoardCharacter(target).Heal(context.card_ref_, 5);
+				}
+			});
+		}
+	};
 }
 
+REGISTER_CARD(NEW1_008)
+REGISTER_CARD(EX1_165t2)
+REGISTER_CARD(EX1_165t1)
+REGISTER_CARD(EX1_165)
+REGISTER_CARD(NEW1_007)
+REGISTER_CARD(EX1_164)
 REGISTER_CARD(EX1_571)
 REGISTER_CARD(EX1_166)
 REGISTER_CARD(EX1_158)

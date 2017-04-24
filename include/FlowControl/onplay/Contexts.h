@@ -24,6 +24,7 @@ namespace FlowControl
 
 				state::targetor::Targets * targets_;
 				bool * allow_no_target_; // default: allow
+				bool * need_to_prepare_target_; // default: need
 			};
 
 			struct OnPlay

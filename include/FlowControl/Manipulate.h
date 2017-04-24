@@ -66,6 +66,9 @@ namespace FlowControl
 		size_t GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) const { return flow_context_.GetChooseOneUserAction(cards); }
 		state::IRandomGenerator & GetRandom() { return flow_context_.GetRandom();}
 
+		void SaveUserChoice(size_t choice) { flow_context_.SaveUserChoice(choice); }
+		size_t GetSavedUserChoice() const { return flow_context_.GetSavedUserChoice(); }
+
 	public: // bridge to state::State
 		state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
 		state::aura::Manager & Aura() { return state_.GetAuraManager(); }

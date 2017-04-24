@@ -20,10 +20,11 @@ namespace FlowControl
 			state::targetor::Targets targets;
 			
 			if (!(*specified_target_getter)(
-				context::GetSpecifiedTarget{ Manipulate(state, flow_context), player, card_ref, &targets, &allow_no_target }))
+				context::GetSpecifiedTarget{ Manipulate(state, flow_context), player, card_ref, &targets, &allow_no_target, &need_to_prepare_target }))
 			{
 				return false;
 			}
+			if (!need_to_prepare_target) return true;
 
 			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, allow_no_target);
 		}
