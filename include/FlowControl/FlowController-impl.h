@@ -346,17 +346,20 @@ namespace FlowControl
 		state::Cards::Card const& card = state_.GetCard(defender);
 		assert(card.GetCardType() == state::kCardTypeHero ||
 			card.GetCardType() == state::kCardTypeMinion);
-		
-		bool has_taunt = false;
-		bool defender_has_taunt = false;
-		state_.GetBoard().Get(card.GetPlayerIdentifier()).minions_.ForEach([&](state::CardRef minion) {
-			if (state_.GetCard(minion).HasTaunt()) {
-				has_taunt = true;
-				if (defender == minion) defender_has_taunt = true;
-			}
-		});
 
-		if (has_taunt && !defender_has_taunt) return SetResult(FlowControl::kResultInvalid);
+		auto HasTaunt = [&](state::CardRef card_ref) {
+			state::Cards::Card const& card = state_.GetCard(card_ref);
+			if (!card.HasTaunt()) return false;
+			if (card.HasStealth()) return false; // stealth overrides taunt
+			if (card.GetImmune()) return false; // immune overrides taunt
+			return true;
+		};
+
+		if (HasTaunt(defender)) return true;
+		
+		for (state::CardRef minion : state_.GetBoard().Get(card.GetPlayerIdentifier()).minions_.Get()) {
+			if (HasTaunt(minion)) return SetResult(FlowControl::kResultInvalid);
+		}
 		return true;
 	}
 
