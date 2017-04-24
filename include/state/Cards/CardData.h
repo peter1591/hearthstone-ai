@@ -27,6 +27,8 @@ namespace state
 			{
 			}
 
+			static constexpr int kFieldChangeId = 2;
+
 			int card_id; // TODO: use Cards::CardId
 			CardType card_type;
 			CardRace card_race;

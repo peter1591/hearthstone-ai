@@ -21,10 +21,12 @@ namespace FlowControl
 			// Remove all deathrattles
 			GetCard().GetMutableDeathrattleHandler().Clear();
 
+			static_assert(state::Cards::CardData::kFieldChangeId == 2);
 			GetCard().SetTaunt(false);
 			GetCard().SetShield(false);
 			GetCard().SetCantAttack(false);
 			GetCard().SetFreezed(false);
+			GetCard().SetCantAttackHero(false);
 
 			GetCard().SetSilenced();
 		}

@@ -273,6 +273,18 @@ namespace FlowControl
 		if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
 		if (!IsDefendable(defender)) return SetResult(kResultInvalid);
 
+		bool cant_attack_hero = state_.GetCard(attacker).IsCantAttackHero();
+		if (state_.GetCard(attacker).GetCardType() == state::kCardTypeHero) {
+			state::PlayerIdentifier player = state_.GetCard(attacker).GetPlayerIdentifier();
+			state::CardRef weapon_ref = state_.GetBoard().Get(player).GetWeaponRef();
+			if (weapon_ref.IsValid()) {
+				if (state_.GetCard(weapon_ref).IsCantAttackHero()) cant_attack_hero = true;
+			}
+		}
+		if (cant_attack_hero) {
+			if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) return SetResult(kResultInvalid);
+		}
+
 		while (true) {
 			state::CardRef origin_defender = defender;
 

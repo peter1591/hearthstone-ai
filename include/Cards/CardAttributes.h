@@ -130,4 +130,14 @@ namespace Cards {
 			stats.freeze_attack = true;
 		}
 	};
+
+	struct CantAttackHero {
+		static void Apply(state::Cards::CardData & card_data) {
+			card_data.enchanted_states.cant_attack_hero = true;
+		}
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.cant_attack_hero = true;
+		}
+	};
 }

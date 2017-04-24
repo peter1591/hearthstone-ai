@@ -123,9 +123,21 @@ namespace state {
 				return *this;
 			}
 
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & HasCharge()
+			{
+				info_.filter_type = Targets::kFilterCharge;
+				return *this;
+			}
+
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & UnDamaged()
 			{
 				info_.filter_type = Targets::kFilterUnDamaged;
+				return *this;
+			}
+
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Damaged()
+			{
+				info_.filter_type = Targets::kFilterDamaged;
 				return *this;
 			}
 		};

@@ -84,7 +84,9 @@ namespace state {
 				kFilterTargetableBySpellAndAttackGreaterOrEqualTo,
 				kFilterTargetableBySpellAndAttackLessOrEqualTo,
 				kFilterTaunt,
-				kFilterUnDamaged
+				kFilterCharge,
+				kFilterUnDamaged,
+				kFilterDamaged
 			} filter_type;
 			int filter_arg1;
 

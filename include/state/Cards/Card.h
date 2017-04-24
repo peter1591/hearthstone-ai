@@ -158,6 +158,9 @@ namespace state
 			void SetFreezeAttack(bool v) { data_.enchanted_states.freeze_attack = v; }
 			bool IsFreezeAttack() const { return data_.enchanted_states.freeze_attack; }
 
+			void SetCantAttackHero(bool v) { data_.enchanted_states.cant_attack_hero = v; }
+			bool IsCantAttackHero() const { return data_.enchanted_states.cant_attack_hero; }
+
 			int GetSpellDamage() const { return data_.enchanted_states.spell_damage; }
 			void SetSpellDamage(int v) { data_.enchanted_states.spell_damage = v; }
 

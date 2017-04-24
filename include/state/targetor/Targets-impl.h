@@ -101,8 +101,12 @@ namespace state {
 				return (card.GetAttack() <= filter_arg1);
 			case kFilterTaunt:
 				return card.HasTaunt();
+			case kFilterCharge:
+				return card.HasCharge();
 			case kFilterUnDamaged:
 				return (card.GetDamage() <= 0);
+			case kFilterDamaged:
+				return (card.GetDamage() > 0);
 			}
 
 			assert(false);
