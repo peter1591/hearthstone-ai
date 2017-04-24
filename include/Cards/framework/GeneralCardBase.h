@@ -101,6 +101,15 @@ namespace Cards
 			return std::make_pair(v1, v2);
 		}
 
+		static void DiscardOneRandomHandCard(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player) {
+			auto & hand = manipulate.Board().Player(player).hand_;
+			size_t hand_cards = hand.Size();
+			if (hand_cards < 1) return;
+
+			size_t rand = manipulate.GetRandom().Get(hand_cards);
+			manipulate.Hero(player).DiscardHandCard(hand.Get(rand));
+		}
+
 	private:
 		static void SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{

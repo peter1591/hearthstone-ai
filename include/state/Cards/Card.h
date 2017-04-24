@@ -183,6 +183,7 @@ namespace state
 			bool IsSilenced() const { return (data_.silenced_at_play_order >= 0); }
 
 			void SetPendingDestroy() { data_.pending_destroy = true; }
+			bool GetPendingDestroy() const { return data_.pending_destroy; }
 
 		public:
 			const CardData & GetRawData() const { return data_; }

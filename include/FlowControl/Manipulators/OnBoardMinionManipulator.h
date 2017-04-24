@@ -45,6 +45,13 @@ namespace FlowControl
 			state::CardRef BecomeCopyof(state::CardRef card_ref);
 			state::CardRef BecomeCopyof(state::Cards::Card const& card);
 
+			bool Alive() {
+				if (GetCard().GetZone() != state::kCardZonePlay) return false;
+				if (GetCard().GetPendingDestroy()) return false;
+				if (GetCard().GetHP() <= 0) return false;
+				return true;
+			}
+
 		public: // bridge to MinionManipulator<state::kCardZonePlay>
 			template<state::CardZone SwapWithZone> void SwapWith(state::CardRef ref) {
 				if (GetCard().GetZone() != state::kCardZonePlay) return;
