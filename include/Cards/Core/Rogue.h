@@ -18,7 +18,9 @@ namespace Cards
 		Card_CS2_072() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.targets_ = TargetsGenerator(context.player_)
-					.Minion().SpellTargetableAndAttackLessOrEqualTo(3)
+					.Minion()
+					.ExcludeImmune()
+					.SpellTargetableAndAttackLessOrEqualTo(3) // TODO: fix bug. TODO: SpellTargetable implement as a bool flag
 					.GetInfo();
 				return true;
 			});
@@ -77,6 +79,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
 				*context.targets_ = TargetsGenerator(context.player_)
+					.ExcludeImmune()
 					.SpellTargetable()
 					.GetInfo();
 				return true;

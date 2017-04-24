@@ -8,7 +8,9 @@ namespace Cards
 	struct Card_CS2_034 : public HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_)
+					.ExcludeImmune()
+					.SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -27,7 +29,9 @@ namespace Cards
 					.Board()
 					.CalculateFinalDamageAmount(context.card_ref_, 3, &damage);
 
-				Targets targets = TargetsGenerator(context.player_).Enemy().Alive().GetInfo();
+				Targets targets = TargetsGenerator(context.player_).Enemy()
+					.ExcludeImmune()
+					.Alive().GetInfo();
 				for (int i = 0; i < damage; ++i) {
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
 					assert(target.IsValid());
@@ -68,7 +72,9 @@ namespace Cards
 		Card_CS2_024() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_)
+					.ExcludeImmune()
+					.SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -103,7 +109,9 @@ namespace Cards
 		Card_CS2_029() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_)
+					.ExcludeImmune()
+					.SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

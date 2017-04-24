@@ -65,6 +65,10 @@ namespace state {
 		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const {
 			auto const& card = manipulate.Board().GetCard(minion);
 
+			if (!include_immune) {
+				if (card.GetImmune()) return false;
+			}
+
 			switch (filter_type) {
 			case kFilterAll:
 				return true;

@@ -7,7 +7,9 @@ namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+			return TargetsGenerator(context.player_)
+				.ExcludeImmune()
+				.Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.OnBoardCharacter(context.GetTarget())
@@ -68,7 +70,9 @@ namespace Cards
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+			return TargetsGenerator(context.player_)
+				.ExcludeImmune()
+				.Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
@@ -192,7 +196,9 @@ namespace Cards
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+			return TargetsGenerator(context.player_)
+				.ExcludeImmune()
+				.Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);

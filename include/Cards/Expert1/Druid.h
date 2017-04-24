@@ -24,7 +24,9 @@ namespace Cards
 		Card_EX1_578() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).Minion()
+					.ExcludeImmune()
+					.SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -68,7 +70,9 @@ namespace Cards
 			};
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).Minion()
+					.ExcludeImmune()
+					.SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -136,7 +140,9 @@ namespace Cards
 	struct Card_EX1_166 : public MinionCardBase<Card_EX1_166> {
 		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
 			*context.allow_no_target_ = true;
-			return TargetsGenerator(context.player_).Minion().Targetable();
+			return TargetsGenerator(context.player_).Minion()
+				.ExcludeImmune()
+				.Targetable();
 		}
 		static void Battlecry(Contexts::OnPlay context) {
 			state::CardRef target = context.GetTarget();
@@ -199,7 +205,9 @@ namespace Cards
 				}
 				else {
 					*context.allow_no_target_ = true;
-					*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+					*context.targets_ = TargetsGenerator(context.player_).Minion()
+						.ExcludeImmune()
+						.SpellTargetable().GetInfo();
 					return true;
 				}
 				context.manipulate_.SaveUserChoice(choice);

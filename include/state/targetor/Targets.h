@@ -18,14 +18,14 @@ namespace state {
 				targeting_side(targeting_side),
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
-				filter_type(kFilterAll)
+				include_immune(true), filter_type(kFilterAll)
 			{
 			}
 
 			Targets() :
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
-				filter_type(kFilterAll)
+				include_immune(true), filter_type(kFilterAll)
 			{}
 
 			static Targets None() {
@@ -67,6 +67,8 @@ namespace state {
 
 			bool include_minion;
 			bool include_hero;
+
+			bool include_immune;
 
 			enum FilterType
 			{
