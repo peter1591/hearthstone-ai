@@ -187,6 +187,9 @@ namespace state
 			void SetPendingDestroy() { data_.pending_destroy = true; }
 			bool GetPendingDestroy() const { return data_.pending_destroy; }
 
+			void SetImmune(bool v) { data_.enchanted_states.immune = v; }
+			bool GetImmune() const { return data_.enchanted_states.immune; }
+
 		public:
 			const CardData & GetRawData() const { return data_; }
 

@@ -60,7 +60,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateCard(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const & new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 15, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
@@ -80,7 +80,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 15, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
@@ -121,11 +121,15 @@ namespace FlowControl
 				state.GetMutableCard(card_ref).SetCantAttackHero(new_states.cant_attack_hero);
 				assert(GetCard().IsCantAttackHero() == new_states.cant_attack_hero);
 			}
+			if (new_states.immune != current_states.immune) {
+				state.GetMutableCard(card_ref).SetImmune(new_states.immune);
+				assert(GetCard().GetImmune() == new_states.immune);
+			}
 		}
 
 		inline void Handler::UpdateMinion(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 15, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -162,13 +166,13 @@ namespace FlowControl
 
 		inline void Handler::UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 15, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
 			UpdateCharacter(state, flow_context, card_ref, new_states);
 		}
 
 		inline void Handler::UpdateWeapon(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 15, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -199,6 +203,10 @@ namespace FlowControl
 			if (new_states.cant_attack_hero != current_states.cant_attack_hero) {
 				state.GetMutableCard(card_ref).SetCantAttackHero(new_states.cant_attack_hero);
 				assert(GetCard().IsCantAttackHero() == new_states.cant_attack_hero);
+			}
+			if (new_states.immune != current_states.immune) {
+				state.GetMutableCard(card_ref).SetImmune(new_states.immune);
+				assert(GetCard().GetImmune() == new_states.immune);
 			}
 		}
 	};
