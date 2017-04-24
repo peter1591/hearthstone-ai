@@ -219,9 +219,7 @@ namespace Cards
 			state::PlayerIdentifier summoning = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			if (owner != summoning) return true;
 			
-			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy()
-				.ExcludeImmune()
-				.Alive().GetInfo());
+			state::CardRef target = context.manipulate_.GetRandomTarget(TargetsGenerator(owner).Enemy().Alive().GetInfo());
 			if (!target.IsValid()) return true;
 			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
 			return true;
@@ -257,10 +255,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay context) {
 			for (int i = 0; i < 3; ++i) {
 				state::CardRef target = context.manipulate_.GetRandomTarget(
-					TargetsGenerator(context.player_)
-					.ExcludeImmune()
-					.Alive()
-					.Exclude(context.card_ref_).GetInfo()
+					TargetsGenerator(context.player_).Alive().Exclude(context.card_ref_).GetInfo()
 				);
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
 			}

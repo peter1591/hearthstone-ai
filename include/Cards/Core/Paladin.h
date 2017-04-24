@@ -124,9 +124,7 @@ namespace Cards
 		Card_CS2_094() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_)
-					.ExcludeImmune()
-					.SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

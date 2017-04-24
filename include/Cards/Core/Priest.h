@@ -22,9 +22,7 @@ namespace Cards
 	struct Card_CS1_130 : public SpellCardBase<Card_CS1_130> {
 		Card_CS1_130() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_)
-					.ExcludeImmune()
-					.SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

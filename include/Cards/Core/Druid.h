@@ -28,9 +28,7 @@ namespace Cards
 		Card_CS2_008() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_)
-					.ExcludeImmune()
-					.SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -120,9 +118,7 @@ namespace Cards
 		Card_CS2_012() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Enemy()
-					.ExcludeImmune()
-					.SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).Enemy().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -145,9 +141,7 @@ namespace Cards
 		Card_EX1_173() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_)
-					.ExcludeImmune()
-					.SpellTargetable().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

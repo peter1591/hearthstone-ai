@@ -41,11 +41,6 @@ namespace state {
 				TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(targeting_player)
 			{}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion & ExcludeImmune() {
-				info_.include_immune = false;
-				return *this;
-			}
-
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Targetable()
 			{
 				info_.filter_type = Targets::kFilterTargetable;
