@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=4&sort=-cost&display=1
-// Last finished card: Ancient of Lore
+// Done.
 
 namespace Cards
 {
@@ -273,8 +273,52 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_178ae : public Enchantment<Card_EX1_178ae, MaxHP<5>> {};
+	struct Card_EX1_178be : public Enchantment<Card_EX1_178be, Attack<5>> {};
+	struct Card_EX1_178 : public MinionCardBase<Card_EX1_178> {
+		static void Battlecry(Contexts::OnPlay context) {
+			static std::vector<Cards::CardId> choices{
+				Cards::ID_EX1_178a,
+				Cards::ID_EX1_178b
+			};
+			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+			if (choice == 0) {
+				context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_178ae>();
+				context.manipulate_.OnBoardMinion(context.card_ref_).Taunt(true);
+			}
+			else {
+				context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_178be>();
+			}
+		}
+	};
+
+	struct Card_EX1_573ae : public Enchantment<Card_EX1_573ae, MaxHP<2>, Attack<2>> {};
+	struct Card_EX1_573t : public MinionCardBase<Card_EX1_573t, Taunt> {};
+	struct Card_EX1_573 : public MinionCardBase<Card_EX1_573> {
+		static void Battlecry(Contexts::OnPlay context) {
+			static std::vector<Cards::CardId> choices{
+				Cards::ID_EX1_573a,
+				Cards::ID_EX1_573b
+			};
+			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+			if (choice == 0) {
+				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+					if (card_ref == context.card_ref_) return;
+					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_573ae>();
+				});
+			}
+			else {
+				SummonToLeft(context.manipulate_, context.card_ref_, Cards::ID_EX1_573t);
+				SummonToRight(context.manipulate_, context.card_ref_, Cards::ID_EX1_573t);
+			}
+		}
+	};
 }
 
+REGISTER_CARD(EX1_573)
+REGISTER_CARD(EX1_573t)
+REGISTER_CARD(EX1_178)
 REGISTER_CARD(NEW1_008)
 REGISTER_CARD(EX1_165t2)
 REGISTER_CARD(EX1_165t1)
