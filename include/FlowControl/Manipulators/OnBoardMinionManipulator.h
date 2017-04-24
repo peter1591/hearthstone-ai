@@ -52,6 +52,11 @@ namespace FlowControl
 				return true;
 			}
 
+			void AddDeathrattle(FlowControl::deathrattle::Handler::DeathrattleCallback* deathrattle) {
+				if (GetCard().GetZone() != state::kCardZonePlay) return;
+				state_.GetMutableCard(card_ref_).GetMutableDeathrattleHandler().Add(deathrattle);
+			}
+
 		public: // bridge to MinionManipulator<state::kCardZonePlay>
 			template<state::CardZone SwapWithZone> void SwapWith(state::CardRef ref) {
 				if (GetCard().GetZone() != state::kCardZonePlay) return;

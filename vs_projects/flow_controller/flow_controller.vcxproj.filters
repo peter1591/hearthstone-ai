@@ -506,5 +506,8 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardCharacterManipulator.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Druid.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

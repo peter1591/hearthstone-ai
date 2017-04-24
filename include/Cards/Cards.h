@@ -22,6 +22,7 @@
 #include "Cards/Core/Warrior.h"
 
 #include "Cards/Expert1/Neutral.h"
+#include "Cards/Expert1/Druid.h"
 #include "Cards/Expert1/Hunter.h"
 #include "Cards/Expert1/Mage.h"
 #include "Cards/Expert1/Priest.h"
