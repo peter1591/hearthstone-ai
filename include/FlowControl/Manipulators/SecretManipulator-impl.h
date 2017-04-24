@@ -13,5 +13,10 @@ namespace FlowControl
 			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeSecret>(Manipulate(state_, flow_context_), card_ref_)
 				.ChangeTo<state::kCardZoneGraveyard>(GetCard().GetPlayerIdentifier());
 		}
+		inline void SecretManipulator::Reveal()
+		{
+			Remove();
+			// TODO: trigger event
+		}
 	}
 }

@@ -94,10 +94,12 @@ namespace FlowControl
 						state_.GetMutableCard(ref).GetMutableDeathrattleHandler().TriggerAll(
 							FlowControl::deathrattle::context::Deathrattle{
 							FlowControl::Manipulate(state_, flow_context_), ref, player, zone, zone_pos, attack });
-						state_.TriggerEvent<state::Events::EventTypes::AfterMinionDied>(
-							state::Events::EventTypes::AfterMinionDied::Context{
-							FlowControl::Manipulate(state_, flow_context_), ref
-						});
+
+						if (state_.GetCard(ref).GetCardType() == state::kCardTypeMinion) {
+							state_.TriggerEvent<state::Events::EventTypes::AfterMinionDied>(state::Events::EventTypes::AfterMinionDied::Context{
+								FlowControl::Manipulate(state_, flow_context_), ref, player
+							});
+						}
 					}));
 				}
 

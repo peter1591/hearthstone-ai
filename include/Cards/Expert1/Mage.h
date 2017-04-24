@@ -7,10 +7,10 @@ namespace Cards
 			state::Cards::Card const& self_card = context.manipulate_.Board().GetCard(self);
 
 			if (context.manipulate_.Board().GetCurrentPlayerId() == self_card.GetPlayerIdentifier()) return true;
-			context.manipulate_.OnBoardSecret(self).Remove();
 
 			SummonToPlayerByCopy(context, self_card.GetPlayerIdentifier(),
 				context.manipulate_.Board().GetCard(context.card_ref_));
+			context.manipulate_.OnBoardSecret(self).Reveal();
 			return false;
 		};
 

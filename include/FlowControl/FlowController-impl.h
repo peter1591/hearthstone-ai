@@ -270,6 +270,9 @@ namespace FlowControl
 		if (!attacker.IsValid()) return SetResult(kResultInvalid);
 		if (!defender.IsValid()) return SetResult(kResultInvalid);
 
+		assert(state_.GetCardsManager().Get(attacker).GetHP() > 0);
+		assert(state_.GetCardsManager().Get(attacker).GetZone() == state::kCardZonePlay);
+
 		if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
 		if (!IsDefendable(defender)) return SetResult(kResultInvalid);
 
@@ -285,21 +288,12 @@ namespace FlowControl
 			if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) return SetResult(kResultInvalid);
 		}
 
-		while (true) {
-			state::CardRef origin_defender = defender;
-
-			// TODO: prepare defender (use a new event trigger)
-
-			if (!attacker.IsValid()) return kResultNotDetermined;
-			if (state_.GetCardsManager().Get(attacker).GetHP() <= 0) return kResultNotDetermined;
-			if (state_.GetCardsManager().Get(attacker).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
-
-			if (!defender.IsValid()) return kResultNotDetermined;
-			if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return kResultNotDetermined;
-			if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
-
-			if (origin_defender == defender) break;
-		}
+		state_.TriggerEvent<state::Events::EventTypes::PrepareAttackTarget>(
+			state::Events::EventTypes::PrepareAttackTarget::Context{
+			Manipulate(state_, flow_context_), attacker, &defender });
+		if (!defender.IsValid()) return kResultNotDetermined;
+		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return kResultNotDetermined;
+		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
 		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
 			state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });

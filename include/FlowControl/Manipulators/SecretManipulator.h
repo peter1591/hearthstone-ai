@@ -16,6 +16,8 @@ namespace FlowControl
 			}
 
 			void Remove();
+
+			void Reveal();
 		};
 	}
 }

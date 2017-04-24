@@ -2,7 +2,7 @@
 
 namespace Cards
 {
-	struct Card_EX1_610 : SecretCardBase<Card_EX1_610> {
+	struct Card_EX1_610 : public SecretCardBase<Card_EX1_610> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnAttack::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
@@ -12,6 +12,7 @@ namespace Cards
 			context.manipulate_.Board().Player(player).minions_.ForEach([&](state::CardRef card_ref) {
 				context.manipulate_.OnBoardMinion(card_ref).Damage(self, 2 + spell_damage);
 			});
+			context.manipulate_.OnBoardSecret(self).Reveal();
 			return false;
 		};
 		Card_EX1_610() {
@@ -44,6 +45,7 @@ namespace Cards
 
 			context.manipulate_.OnBoardMinion(context.attacker_).MoveTo<state::kCardZoneHand>();
 			context.manipulate_.Card(context.attacker_).Enchant().Add<Card_EX1_611e>();
+			context.manipulate_.OnBoardSecret(self).Reveal();
 			return false;
 		};
 		Card_EX1_611() {
@@ -51,20 +53,94 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_531 : MinionCardBase<Card_EX1_531> {};
+	struct Card_EX1_533 : public SecretCardBase<Card_EX1_533> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareAttackTarget::Context context) {
+			if (!context.defender_->IsValid()) return true;
+
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+
+			state::Cards::Card const& attacker_card = context.manipulate_.GetCard(context.attacker_);
+			state::PlayerIdentifier attacker_player = attacker_card.GetPlayerIdentifier();
+
+			if (player == attacker_player) return true;
+
+			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
+			if (*context.defender_ != hero_ref) return true;
+
+			state::CardRef new_defender = context.manipulate_.GetRandomTarget(
+				TargetsGenerator(player).Alive().Exclude(hero_ref).GetInfo()
+			);
+			if (!new_defender.IsValid()) return true;
+
+			*context.defender_ = new_defender;
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_EX1_533() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareAttackTarget>();
+		}
+	};
+
+	struct Card_EX1_554 : public SecretCardBase<Card_EX1_554> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnAttack::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.GetCard(context.defender_).GetPlayerIdentifier() == player) return true;
+			if (context.manipulate_.GetCard(context.defender_).GetCardType() != state::kCardTypeMinion) return true;
+			SummonToRightmost(context.manipulate_, player, Cards::ID_EX1_554t);
+			SummonToRightmost(context.manipulate_, player, Cards::ID_EX1_554t);
+			SummonToRightmost(context.manipulate_, player, Cards::ID_EX1_554t);
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_EX1_554() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::OnAttack>();
+		}
+	};
+
+	struct Card_EX1_609 : public SecretCardBase<Card_EX1_609> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier() == player) return true;
+			int spell_damage = context.manipulate_.Board().GetSpellDamage(player);
+			context.manipulate_.OnBoardMinion(context.card_ref_).Damage(self, 4 + spell_damage);
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_EX1_609() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
+		}
+	};
+
+	struct Card_EX1_531e : public Enchantment<Card_EX1_531e, Attack<2>, MaxHP<1>> {};
+	struct Card_EX1_531 : public MinionCardBase<Card_EX1_531> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionDied::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (player != context.died_minion_owner_) return true;
+			if (context.manipulate_.GetCard(context.card_ref_).GetRace() != state::kCardRaceBeast) return true;
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_531e>();
+			return true;
+		}
+		Card_EX1_531() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionDied>();
+		}
+	};
+
 	struct Card_EX1_534 : MinionCardBase<Card_EX1_534> {
 		Card_EX1_534() {
 			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
-				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_531);
-				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_531);
+				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_534t);
+				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_534t);
 			});
 		}
 	};
 }
 
-REGISTER_CARD(EX1_531)
 REGISTER_CARD(EX1_534)
 
+REGISTER_CARD(EX1_531)
+REGISTER_CARD(EX1_609)
+REGISTER_CARD(EX1_554)
+REGISTER_CARD(EX1_533)
 REGISTER_CARD(EX1_611)
 REGISTER_CARD(EX1_544)
 REGISTER_CARD(EX1_610)
