@@ -1,5 +1,8 @@
 #pragma once
 
+// http://www.hearthpwn.com/cards?filter-set=3&filter-class=8&sort=-cost&display=1
+// Last finished card: Savannah Highmane
+
 namespace Cards
 {
 	struct Card_EX1_610 : public SecretCardBase<Card_EX1_610> {
@@ -125,6 +128,82 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_536e : public Enchantment<Card_EX1_536e, MaxHP<1>> {};
+	struct Card_EX1_536 : public WeaponCardBase<Card_EX1_536> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeSecretReveal::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier() != owner) return true;
+			context.manipulate_.Weapon(self).Enchant().Add<Card_EX1_536e>();
+			return true;
+		}
+		Card_EX1_536() {
+			RegisterEvent<WeaponInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::BeforeSecretReveal>();
+		}
+	};
+
+	struct Card_EX1_617 : public SpellCardBase<Card_EX1_617> {
+		Card_EX1_617() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() == 0) return false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.manipulate_.GetRandomTarget(
+					TargetsGenerator(context.player_).Enemy().Minion().GetInfo()
+				);
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target).Destroy();
+			});
+		}
+	};
+
+	struct Card_EX1_538t : public MinionCardBase<Card_EX1_538t, Charge> {};
+	struct Card_EX1_538 : public SpellCardBase<Card_EX1_538> {
+		Card_EX1_538() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() == 0) return false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				size_t count = context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size();
+				for (size_t i = 0; i < count; ++i) {
+					SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_538t);
+				}
+			});
+		}
+	};
+
+	struct Card_EX1_537 : public SpellCardBase<Card_EX1_537> {
+		Card_EX1_537() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target_ref = context.GetTarget();
+				auto const& target_card = context.manipulate_.GetCard(target_ref);
+				if (target_card.GetZone() != state::kCardZonePlay) return;
+				
+				state::PlayerIdentifier player = target_card.GetPlayerIdentifier();
+				int zone_pos = target_card.GetZonePosition();
+
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.OnBoardMinion(target_ref).Damage(context.card_ref_, 5 + spell_damage);
+				auto op = [&](state::PlayerIdentifier player, int zone_pos) {
+					if (zone_pos < 0) return;
+					auto const& minions = context.manipulate_.Board().Player(player).minions_;
+					if (zone_pos >= minions.Size()) return;
+					state::CardRef minion_ref = minions.Get(zone_pos);
+					context.manipulate_.OnBoardMinion(minion_ref).Damage(context.card_ref_, 2 + spell_damage);
+				};
+				op(player, zone_pos - 1);
+				op(player, zone_pos + 1);
+			});
+		}
+	};
+
 	struct Card_EX1_534 : MinionCardBase<Card_EX1_534> {
 		Card_EX1_534() {
 			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
@@ -136,7 +215,11 @@ namespace Cards
 }
 
 REGISTER_CARD(EX1_534)
-
+REGISTER_CARD(EX1_537)
+REGISTER_CARD(EX1_538t)
+REGISTER_CARD(EX1_538)
+REGISTER_CARD(EX1_617)
+REGISTER_CARD(EX1_536)
 REGISTER_CARD(EX1_531)
 REGISTER_CARD(EX1_609)
 REGISTER_CARD(EX1_554)

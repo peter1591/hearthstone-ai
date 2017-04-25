@@ -92,6 +92,8 @@ private: \
 			ADD_TRIGGER_TYPE(OnTurnEnd);
 			ADD_TRIGGER_TYPE(OnTurnStart);
 
+			ADD_TRIGGER_TYPE(BeforeSecretReveal);
+
 			ADD_TRIGGER_TYPE(PrepareAttackTarget);
 			ADD_TRIGGER_TYPE(OnAttack);
 

@@ -145,6 +145,14 @@ namespace state {
 				};
 				using type = std::function<bool(Context)>;
 			};
+
+			struct BeforeSecretReveal {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef card_ref_;
+				};
+				using type = std::function<bool(Context)>;
+			};
 		}
 	}
 }

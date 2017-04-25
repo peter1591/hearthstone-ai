@@ -15,8 +15,10 @@ namespace FlowControl
 		}
 		inline void SecretManipulator::Reveal()
 		{
+			state_.TriggerEvent<state::Events::EventTypes::BeforeSecretReveal>(state::Events::EventTypes::BeforeSecretReveal::Context{
+				FlowControl::Manipulate(state_, flow_context_), card_ref_
+			});
 			Remove();
-			// TODO: trigger event
 		}
 	}
 }
