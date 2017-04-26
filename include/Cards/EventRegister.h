@@ -184,7 +184,7 @@ namespace Cards
 	struct OnSelfTakeDamage {
 		using LifeTime = MinionInPlayZone;
 		using SelfPolicy = CateogrizedOnSelf;
-		using EventType = state::Events::EventTypes::OnTakeDamage;
+		using EventType = state::Events::EventTypes::CategorizedOnTakeDamage;
 
 		struct EventHandler {
 			template <typename UnderlyingHandler>

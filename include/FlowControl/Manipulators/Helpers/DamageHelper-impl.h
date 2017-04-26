@@ -48,16 +48,18 @@ namespace FlowControl
 			inline void DamageHelper::DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount)
 			{
 				assert(amount > 0);
-				state.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(card_ref,
-					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), amount });
-				state.TriggerCategorizedEvent<state::Events::EventTypes::OnTakeDamage>(card_ref,
-					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), amount });
+				state.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(
+					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), card_ref, &amount });
+				state.TriggerCategorizedEvent<state::Events::EventTypes::CategorizedOnTakeDamage>(card_ref,
+					state::Events::EventTypes::CategorizedOnTakeDamage::Context{ Manipulate(state_, flow_context_), &amount });
 
-				int real_damage = 0;
-				Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
-				if (state.GetCard(card_ref).GetHP() <= 0) flow_context.AddDeadEntryHint(state, card_ref);
+				if (amount > 0) {
+					int real_damage = 0;
+					Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
+					if (state.GetCard(card_ref).GetHP() <= 0) flow_context.AddDeadEntryHint(state, card_ref);
 
-				// TODO: trigger event 'AfterTakenDamage', with real damage 'real_damage'
+					// TODO: trigger event 'AfterTakenDamage', with real damage 'real_damage'
+				}
 			}
 
 			inline void DamageHelper::DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount)

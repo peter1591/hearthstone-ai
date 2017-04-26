@@ -174,7 +174,7 @@ namespace Cards
 
 	struct Card_EX1_399e : public Enchantment<Card_EX1_399e, Attack<3>> {};
 	struct Card_EX1_399 : public MinionCardBase<Card_EX1_399> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CategorizedOnTakeDamage::Context context) {
 			Manipulate(context).Card(self).Enchant().Add<Card_EX1_399e>();
 			return true;
 		};

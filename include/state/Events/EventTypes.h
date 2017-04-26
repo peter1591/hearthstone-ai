@@ -82,6 +82,14 @@ namespace state {
 				};
 				using type = std::function<bool(Context)>;
 			};
+			struct CheckPlayCardCountered {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef card_ref_;
+					bool * countered_;
+				};
+				using type = std::function<bool(Context)>;
+			};
 
 			struct CalculateHealDamageAmount {
 				struct Context {
@@ -102,7 +110,15 @@ namespace state {
 			struct OnTakeDamage {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
-					int damage_;
+					state::CardRef card_ref_;
+					int * damage_;
+				};
+				using type = std::function<bool(Context&&)>;
+			};
+			struct CategorizedOnTakeDamage {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					int * damage_;
 				};
 				using type = bool(*)(state::CardRef, Context);
 			};

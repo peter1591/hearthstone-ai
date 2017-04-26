@@ -89,6 +89,8 @@ private: \
 			ADD_TRIGGER_TYPE(AfterMinionDied);
 
 			ADD_TRIGGER_TYPE(OnPlay);
+			ADD_TRIGGER_TYPE(CheckPlayCardCountered)
+
 			ADD_TRIGGER_TYPE(OnTurnEnd);
 			ADD_TRIGGER_TYPE(OnTurnStart);
 
@@ -101,7 +103,7 @@ private: \
 			ADD_TRIGGER_TYPE(CalculateHealDamageAmount);
 			ADD_TRIGGER_TYPE(PrepareHealDamageTarget);
 			ADD_TRIGGER_TYPE(OnTakeDamage);
-			ADD_CATEGORIZED_TRIGGER_TYPE(OnTakeDamage);
+			ADD_CATEGORIZED_TRIGGER_TYPE(CategorizedOnTakeDamage);
 			ADD_TRIGGER_TYPE(OnHeal);
 
 			ADD_TRIGGER_TYPE(AfterHeroPower);

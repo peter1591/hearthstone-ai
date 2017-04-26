@@ -97,10 +97,19 @@ namespace FlowControl
 			if (!CostCrystal(cost)) return false;
 		}
 
-		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
-
 		state_.TriggerEvent<state::Events::EventTypes::OnPlay>(
 			state::Events::EventTypes::OnPlay::Context{ Manipulate(state_, flow_context_), card_ref });
+
+		bool countered = false;
+		state_.TriggerEvent<state::Events::EventTypes::CheckPlayCardCountered>(
+			state::Events::EventTypes::CheckPlayCardCountered::Context{ Manipulate(state_, flow_context_), card_ref, &countered });
+		if (countered) {
+			state_.GetZoneChanger<state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
+			return true;
+		}
+
+		state_.GetCurrentPlayer().GetResource().IncreaseNextOverload(state_.GetCard(card_ref).GetRawData().overload);
 
 		return PlayCardPhaseInternal<CardType>(card_ref);
 	}

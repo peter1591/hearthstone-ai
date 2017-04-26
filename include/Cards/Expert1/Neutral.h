@@ -406,7 +406,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_007 : public MinionCardBase<Card_EX1_007> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CategorizedOnTakeDamage::Context context) {
 			context.manipulate_.Hero(
 				context.manipulate_.GetCard(self).GetPlayerIdentifier()
 			).DrawCard();

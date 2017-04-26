@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=8&sort=-cost&display=1
-// Last finished card: Savannah Highmane
+// Done.
 
 namespace Cards
 {
@@ -235,8 +235,11 @@ namespace Cards
 				state::Events::EventTypes::PrepareAttackTarget>();
 		}
 	};
+
+	struct Card_EX1_543 : public MinionCardBase<Card_EX1_543, Charge> {};
 }
 
+REGISTER_CARD(EX1_543)
 REGISTER_CARD(DS1_188)
 REGISTER_CARD(EX1_534)
 REGISTER_CARD(EX1_537)
