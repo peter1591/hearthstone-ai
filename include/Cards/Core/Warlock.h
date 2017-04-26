@@ -30,18 +30,10 @@ namespace Cards
 	};
 
 	struct Card_CS2_063e : public EventHookedEnchantment<Card_CS2_063e> {
-		static void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref,
-			FlowControl::enchantment::Enchantments::IdentifierType id,
-			FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
-		{
-			manipulate.AddEvent<state::Events::EventTypes::OnTurnStart>([card_ref, id, aux_data](state::Events::EventTypes::OnTurnStart::Context context) {
-				if (!context.manipulate_.GetCard(card_ref).GetEnchantmentHandler().Exists(
-					FlowControl::enchantment::TieredEnchantments::IdentifierType{ Card_CS2_063e::tier, id })) return false;
-
-				if (context.manipulate_.Board().GetCurrentPlayerId() != aux_data.player) return true;
-				context.manipulate_.OnBoardMinion(card_ref).Destroy();
-				return true;
-			});
+		using EventType = state::Events::EventTypes::OnTurnEnd;
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_CS2_063e> & handler) {
+			if (handler.context.manipulate_.Board().GetCurrentPlayerId() != handler.aux_data.player) return;
+			handler.context.manipulate_.OnBoardMinion(handler.card_ref).Destroy();
 		}
 	};
 	struct Card_CS2_063 : public SpellCardBase<Card_CS2_063> {

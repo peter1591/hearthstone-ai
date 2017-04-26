@@ -55,6 +55,24 @@ namespace Cards
 		}
 	};
 
+	template <typename T>
+	struct EventHookedEnchantmentHandler {
+		using EventType = typename T::EventType;
+		using ContextType = typename EventType::Context;
+
+		EventHookedEnchantmentHandler(
+			state::CardRef card_ref,
+			ContextType const& context,
+			FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
+			: card_ref(card_ref), context(context), aux_data(aux_data)
+		{
+		}
+
+		state::CardRef const card_ref;
+		ContextType const& context;
+		FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data;
+	};
+
 	template <
 		typename T,
 		typename Enchant1 = NullEnchant,
@@ -79,7 +97,19 @@ namespace Cards
 				Enchant5::Apply(stats);
 			};
 
-			register_functor = T::RegisterEvent;
+			register_functor = [](FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+					FlowControl::enchantment::Enchantments::IdentifierType id,
+					FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
+			{
+				using EventType = typename T::EventType;
+				manipulate.AddEvent<EventType>([card_ref, id, aux_data](typename EventType::Context context) mutable {
+					if (!context.manipulate_.GetCard(card_ref).GetEnchantmentHandler().Exists(
+						FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, id })) return false;
+
+					T::HandleEvent(EventHookedEnchantmentHandler<T>(card_ref, context, aux_data));
+					return true;
+				});
+			};
 		}
 
 		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
