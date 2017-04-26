@@ -6,20 +6,24 @@
 namespace Cards
 {
 	struct Card_EX1_610 : public SecretCardBase<Card_EX1_610> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnAttack::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
 			if (context.defender_ != hero_ref) return true;
 
 			int spell_damage = context.manipulate_.Board().GetSpellDamage(player);
-			context.manipulate_.Board().Player(player).minions_.ForEach([&](state::CardRef card_ref) {
-				context.manipulate_.OnBoardMinion(card_ref).Damage(self, 2 + spell_damage);
+			
+			auto op = ([&](state::CardRef card_ref) {
+				context.manipulate_.OnBoardCharacter(card_ref).Damage(self, 2 + spell_damage);
 			});
+			op(context.manipulate_.Board().Player(player.Opposite()).GetHeroRef());
+			context.manipulate_.Board().Player(player.Opposite()).minions_.ForEach(op);
+
 			context.manipulate_.OnBoardSecret(self).Reveal();
 			return false;
 		};
 		Card_EX1_610() {
-			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::OnAttack>();
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::BeforeAttack>();
 		}
 	};
 
@@ -36,7 +40,7 @@ namespace Cards
 
 	struct Card_EX1_611e : public Enchantment<Card_EX1_611e, Cost<2>> {};
 	struct Card_EX1_611 : public SecretCardBase<Card_EX1_611> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnAttack::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::Cards::Card const& attacker_card = context.manipulate_.GetCard(context.attacker_);
 			state::PlayerIdentifier attacker_player = attacker_card.GetPlayerIdentifier();
@@ -52,7 +56,7 @@ namespace Cards
 			return false;
 		};
 		Card_EX1_611() {
-			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::OnAttack>();
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::BeforeAttack>();
 		}
 	};
 
@@ -85,7 +89,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_554 : public SecretCardBase<Card_EX1_554> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnAttack::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.GetCard(context.defender_).GetPlayerIdentifier() == player) return true;
 			if (context.manipulate_.GetCard(context.defender_).GetCardType() != state::kCardTypeMinion) return true;
@@ -96,7 +100,7 @@ namespace Cards
 			return false;
 		}
 		Card_EX1_554() {
-			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::OnAttack>();
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::BeforeAttack>();
 		}
 	};
 
@@ -212,8 +216,28 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_DS1_188e : public EventHookedEnchantment<Card_DS1_188e, Immune> {
+		using EventType = state::Events::EventTypes::AfterAttack;
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_DS1_188e> & handler) {
+			handler.RemoveEnchantment();
+		}
+	};
+	struct Card_DS1_188 : public WeaponCardBase<Card_DS1_188> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareAttackTarget::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.attacker_ != context.manipulate_.Board().Player(owner).GetHeroRef()) return true;
+			context.manipulate_.Hero(owner).Enchant().AddEventHooked(Card_DS1_188e());
+			return true;
+		}
+		Card_DS1_188() {
+			RegisterEvent<WeaponInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::PrepareAttackTarget>();
+		}
+	};
 }
 
+REGISTER_CARD(DS1_188)
 REGISTER_CARD(EX1_534)
 REGISTER_CARD(EX1_537)
 REGISTER_CARD(EX1_538t)

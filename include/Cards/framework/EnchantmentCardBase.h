@@ -62,13 +62,21 @@ namespace Cards
 
 		EventHookedEnchantmentHandler(
 			state::CardRef card_ref,
+			FlowControl::enchantment::Enchantments::IdentifierType enchant_id,
 			ContextType const& context,
 			FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
-			: card_ref(card_ref), context(context), aux_data(aux_data)
+			: card_ref(card_ref), enchant_id(enchant_id), context(context), aux_data(aux_data)
 		{
 		}
 
+		void RemoveEnchantment() {
+			FlowControl::Manipulate & manipulate = context.manipulate_;
+			manipulate.Card(card_ref).Enchant().Remove(
+				FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, enchant_id });
+		}
+
 		state::CardRef const card_ref;
+		FlowControl::enchantment::Enchantments::IdentifierType enchant_id;
 		ContextType const& context;
 		FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data;
 	};
@@ -103,10 +111,10 @@ namespace Cards
 			{
 				using EventType = typename T::EventType;
 				manipulate.AddEvent<EventType>([card_ref, id, aux_data](typename EventType::Context context) mutable {
-					if (!context.manipulate_.GetCard(card_ref).GetEnchantmentHandler().Exists(
+					if (!context.manipulate_.Card(card_ref).Enchant().Exists(
 						FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, id })) return false;
 
-					T::HandleEvent(EventHookedEnchantmentHandler<T>(card_ref, context, aux_data));
+					T::HandleEvent(EventHookedEnchantmentHandler<T>(card_ref, id, context, aux_data));
 					return true;
 				});
 			};

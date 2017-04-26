@@ -291,12 +291,16 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::PrepareAttackTarget>(
 			state::Events::EventTypes::PrepareAttackTarget::Context{
 			Manipulate(state_, flow_context_), attacker, &defender });
-		if (!defender.IsValid()) return kResultNotDetermined;
-		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return kResultNotDetermined;
-		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return kResultNotDetermined;
 
-		state_.TriggerEvent<state::Events::EventTypes::OnAttack>(
-			state::Events::EventTypes::OnAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
+		// do resolve here since some enchantments might be added in 'PrepareAttackTarget' event
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
+
+		if (!defender.IsValid()) return kResultNotDetermined;
+		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return SetResult(kResultNotDetermined);
+		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
+
+		state_.TriggerEvent<state::Events::EventTypes::BeforeAttack>(
+			state::Events::EventTypes::BeforeAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 		Manipulate(state_, flow_context_).OnBoardCharacter(defender).Damage(attacker, GetAttackValue(attacker));
@@ -313,6 +317,9 @@ namespace FlowControl
 				}
 			}
 		}
+
+		state_.TriggerEvent<state::Events::EventTypes::AfterAttack>(
+			state::Events::EventTypes::AfterAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 
 		return true;
 	}

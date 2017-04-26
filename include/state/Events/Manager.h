@@ -95,7 +95,8 @@ private: \
 			ADD_TRIGGER_TYPE(BeforeSecretReveal);
 
 			ADD_TRIGGER_TYPE(PrepareAttackTarget);
-			ADD_TRIGGER_TYPE(OnAttack);
+			ADD_TRIGGER_TYPE(BeforeAttack);
+			ADD_TRIGGER_TYPE(AfterAttack);
 
 			ADD_TRIGGER_TYPE(CalculateHealDamageAmount);
 			ADD_TRIGGER_TYPE(PrepareHealDamageTarget);

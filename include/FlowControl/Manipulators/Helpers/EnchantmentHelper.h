@@ -84,6 +84,10 @@ namespace FlowControl
 				}
 
 				template <typename EnchantmentType>
+				auto AddEventHooked(EnchantmentType&& enchant) {
+					return AddEventHooked(std::forward<EnchantmentType>(enchant), enchantment::Enchantments::EventHookedEnchantment::AuxData());
+				}
+				template <typename EnchantmentType>
 				auto AddEventHooked(EnchantmentType&& enchant, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data) {
 					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackEventHookedEnchantment(
 						FlowControl::Manipulate(state_, flow_context_), card_ref_, std::forward<EnchantmentType>(enchant), aux_data);
@@ -93,6 +97,10 @@ namespace FlowControl
 
 				template <typename T> auto AddAuraEnchantment(T&& enchantment) {
 					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackAuraEnchantment(state_, std::forward<T>(enchantment));
+				}
+
+				template <typename T> auto Exists(T&& id) {
+					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().Exists(std::forward<T>(id));
 				}
 
 				template <typename T> auto Remove(T&& id) {

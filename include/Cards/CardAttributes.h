@@ -147,4 +147,11 @@ namespace Cards {
 			stats.cost += v;
 		}
 	};
+
+	struct Immune {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.immune = true;
+		}
+	};
 }

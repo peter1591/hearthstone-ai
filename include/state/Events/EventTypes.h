@@ -58,7 +58,15 @@ namespace state {
 				};
 				using type = std::function<bool(Context)>;
 			};
-			struct OnAttack {
+			struct BeforeAttack {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef attacker_;
+					state::CardRef defender_;
+				};
+				using type = std::function<bool(Context)>;
+			};
+			struct AfterAttack {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
 					state::CardRef attacker_;
