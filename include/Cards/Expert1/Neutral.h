@@ -1081,7 +1081,6 @@ namespace Cards
 			FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
 		{
 			manipulate.AddEvent<state::Events::EventTypes::OnTurnStart>([card_ref, id, aux_data](state::Events::EventTypes::OnTurnStart::Context context) {
-				if (context.manipulate_.GetCard(card_ref).GetZone() != state::kCardZonePlay) return false;
 				if (!context.manipulate_.GetCard(card_ref).GetEnchantmentHandler().Exists(
 					FlowControl::enchantment::TieredEnchantments::IdentifierType{ Card_DREAM_05e::tier, id })) return false;
 				
