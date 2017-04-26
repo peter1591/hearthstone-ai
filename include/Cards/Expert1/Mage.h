@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=16&sort=-cost&display=1
-// Last finished card: Ice Block
+// Last finished card: Mirror Entity
 
 namespace Cards
 {
@@ -100,7 +100,6 @@ namespace Cards
 }
 
 REGISTER_CARD(EX1_294)
-
 REGISTER_CARD(EX1_295)
 REGISTER_CARD(EX1_289)
 REGISTER_CARD(EX1_287)
