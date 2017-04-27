@@ -82,6 +82,14 @@ namespace FlowControl
 		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
 			return false;
 		}
+		state::CardRef onplay_target = flow_context_.GetSpecifiedTarget();
+		if (onplay_target.IsValid()) {
+			state_.TriggerEvent<state::Events::EventTypes::PreparePlayCardTarget>(state::Events::EventTypes::PreparePlayCardTarget::Context{
+				Manipulate(state_, flow_context_), &onplay_target
+			});
+			assert(onplay_target.IsValid());
+			flow_context_.ChangeSpecifiedTarget(onplay_target);
+		}
 
 		int cost = state_.GetCard(card_ref).GetCost();
 		bool cost_health_instead = false;

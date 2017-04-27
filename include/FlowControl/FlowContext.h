@@ -46,11 +46,8 @@ namespace FlowControl {
 		}
 
 		bool PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, state::targetor::Targets const& target_info, bool allow_no_target);
-
-		state::CardRef GetSpecifiedTarget() const
-		{
-			return specified_target_;
-		}
+		void ChangeSpecifiedTarget(state::CardRef target) { specified_target_ = target; }
+		state::CardRef GetSpecifiedTarget() const { return specified_target_; }
 
 		size_t GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) {
 			return action_parameters_.ChooseOne(cards);

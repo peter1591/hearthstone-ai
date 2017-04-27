@@ -88,6 +88,7 @@ private: \
 			ADD_TRIGGER_TYPE(AfterMinionPlayed);
 			ADD_TRIGGER_TYPE(AfterMinionDied);
 
+			ADD_TRIGGER_TYPE(PreparePlayCardTarget)
 			ADD_TRIGGER_TYPE(OnPlay);
 			ADD_TRIGGER_TYPE(CheckPlayCardCountered)
 

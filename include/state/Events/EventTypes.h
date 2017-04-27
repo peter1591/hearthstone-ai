@@ -75,6 +75,13 @@ namespace state {
 				using type = std::function<bool(Context)>;
 			};
 			
+			struct PreparePlayCardTarget {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef * card_ref_;
+				};
+				using type = std::function<bool(Context)>;
+			};
 			struct OnPlay {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
