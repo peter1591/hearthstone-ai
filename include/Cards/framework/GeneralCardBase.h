@@ -110,6 +110,20 @@ namespace Cards
 			manipulate.Hero(player).DiscardHandCard(hand.Get(rand));
 		}
 
+		template <typename Functor>
+		static void ApplyToAdjacent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Functor&& functor) {
+			state::PlayerIdentifier player = manipulate.GetCard(card_ref).GetPlayerIdentifier();
+			assert(manipulate.GetCard(card_ref).GetZone() == state::kCardZonePlay);
+
+			int pos = manipulate.GetCard(card_ref).GetZonePosition();
+			if (pos > 0) {
+				functor(manipulate.Board().Player(player).minions_.Get(pos - 1));
+			}
+			if (pos < (manipulate.Board().Player(player).minions_.Size() - 1)) {
+				functor(manipulate.Board().Player(player).minions_.Get(pos + 1));
+			}
+		}
+
 	private:
 		static state::CardRef SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{

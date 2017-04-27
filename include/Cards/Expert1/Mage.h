@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=16&sort=-cost&display=1
-// Last finished card: Vaporize
+// Done.
 
 namespace Cards
 {
@@ -134,8 +134,117 @@ namespace Cards
 			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::BeforeAttack>();
 		}
 	};
+
+	struct Card_EX1_612 : public MinionCardBase<Card_EX1_612> {
+		static void Battlecry(Contexts::OnPlay context) {
+			state::PlayerIdentifier player = context.player_;
+			int turn = context.manipulate_.Board().GetTurn();
+			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
+				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context context)
+			{
+				if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+
+				int turn_now = context.manipulate_.Board().GetTurn();
+				if (turn_now > turn) return false;
+				if (turn_now < turn) return true;
+
+				if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSecret) return true;
+				*context.cost_ = 0;
+				return false;
+			});
+		}
+	};
+
+	struct Card_EX1_275 : public SpellCardBase<Card_EX1_275> {
+		Card_EX1_275() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				ApplyToAdjacent(context.manipulate_, context.GetTarget(), [&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Freeze(true);
+				});
+
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				ApplyToAdjacent(context.manipulate_, context.GetTarget(), [&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1 + spell_damage);
+				});
+			});
+		}
+	};
+
+	struct Card_EX1_274e : public Enchantment<Card_EX1_274e, Attack<2>, MaxHP<2>> {};
+	struct Card_EX1_274 : public MinionCardBase<Card_EX1_274> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+			if (context.manipulate_.Board().Player(owner).secrets_.Empty()) return true;
+
+			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_274e>();
+			return true;
+		}
+		Card_EX1_274() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnEnd>();
+		}
+	};
+
+	struct Card_CS2_028 : public SpellCardBase<Card_CS2_028> {
+		Card_CS2_028() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int damage = 2 + context.manipulate_.Board().GetSpellDamage(context.player_);
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
+					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
+					context.manipulate_.OnBoardMinion(minion).Freeze(true);
+				});
+			});
+		}
+	};
+
+	struct Card_EX1_559 : public MinionCardBase<Card_EX1_559> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnPlay::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+
+			auto card_type = context.manipulate_.GetCard(context.card_ref_).GetCardType();
+			if (card_type == state::kCardTypeSpell ||
+				card_type == state::kCardTypeSecret)
+			{
+				context.manipulate_.Hero(owner).AddHandCard(Cards::ID_CS2_029);
+			}
+			return true;
+		}
+		Card_EX1_559() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnPlay>();
+		}
+	};
+
+	struct Card_EX1_279 : SpellCardBase<Card_EX1_279> {
+		Card_EX1_279() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 10 + spell_damage);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_279)
+REGISTER_CARD(EX1_559)
+REGISTER_CARD(CS2_028)
+REGISTER_CARD(EX1_274)
+REGISTER_CARD(EX1_275)
+REGISTER_CARD(EX1_612)
 REGISTER_CARD(EX1_594)
 REGISTER_CARD(tt_010)
 REGISTER_CARD(EX1_294)
