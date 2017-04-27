@@ -22,7 +22,7 @@ namespace Cards
 		Card_CS2_087() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -37,7 +37,7 @@ namespace Cards
 		Card_EX1_371() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -53,7 +53,7 @@ namespace Cards
 		Card_EX1_360() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().GetInfo();
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
