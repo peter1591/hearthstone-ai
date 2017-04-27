@@ -318,6 +318,11 @@ namespace FlowControl
 
 		state_.TriggerEvent<state::Events::EventTypes::BeforeAttack>(
 			state::Events::EventTypes::BeforeAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
+		
+		// a minion might be destroyed during BeforeAttack event
+		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
+		if (state_.GetCard(attacker).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
+		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
 
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 		Manipulate(state_, flow_context_).OnBoardCharacter(defender).Damage(attacker, GetAttackValue(attacker));

@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=16&sort=-cost&display=1
-// Last finished card: Mirror Entity
+// Last finished card: Vaporize
 
 namespace Cards
 {
@@ -118,8 +118,25 @@ namespace Cards
 			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PreparePlayCardTarget>();
 		}
 	};
+
+	struct Card_EX1_594 : public SecretCardBase<Card_EX1_594> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
+			if (context.defender_ != hero_ref) return true;
+			if (context.manipulate_.GetCard(context.attacker_).GetCardType() != state::kCardTypeMinion) return true;
+
+			context.manipulate_.OnBoardMinion(context.attacker_).Destroy();
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		};
+		Card_EX1_594() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::BeforeAttack>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_594)
 REGISTER_CARD(tt_010)
 REGISTER_CARD(EX1_294)
 REGISTER_CARD(EX1_295)
