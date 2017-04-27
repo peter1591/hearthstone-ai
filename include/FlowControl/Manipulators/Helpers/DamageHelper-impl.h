@@ -58,7 +58,8 @@ namespace FlowControl
 					Manipulate(state, flow_context).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
 					if (state.GetCard(card_ref).GetHP() <= 0) flow_context.AddDeadEntryHint(state, card_ref);
 
-					// TODO: trigger event 'AfterTakenDamage', with real damage 'real_damage'
+					state.TriggerEvent<state::Events::EventTypes::AfterTakenDamage>(
+						state::Events::EventTypes::AfterTakenDamage::Context{ Manipulate(state_, flow_context), card_ref, amount, real_damage });
 				}
 			}
 

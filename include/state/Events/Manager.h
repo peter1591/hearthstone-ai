@@ -106,6 +106,7 @@ private: \
 			ADD_TRIGGER_TYPE(OnTakeDamage);
 			ADD_CATEGORIZED_TRIGGER_TYPE(CategorizedOnTakeDamage);
 			ADD_TRIGGER_TYPE(OnHeal);
+			ADD_TRIGGER_TYPE(AfterTakenDamage)
 
 			ADD_TRIGGER_TYPE(AfterHeroPower);
 			ADD_TRIGGER_TYPE(AfterSpellPlayed);

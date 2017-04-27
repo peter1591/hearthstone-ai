@@ -115,6 +115,7 @@ namespace state {
 				};
 				using type = std::function<bool(Context&&)>;
 			};
+
 			struct OnTakeDamage {
 				struct Context {
 					FlowControl::Manipulate & manipulate_;
@@ -129,6 +130,15 @@ namespace state {
 					int * damage_;
 				};
 				using type = bool(*)(state::CardRef, Context);
+			};
+			struct AfterTakenDamage {
+				struct Context {
+					FlowControl::Manipulate & manipulate_;
+					state::CardRef card_ref_;
+					int damage_;
+					int damage_after_armor_absorbed_;
+				};
+				using type = std::function<bool(Context&&)>;
 			};
 
 			struct AfterHeroPower { // a.k.a. inspire
