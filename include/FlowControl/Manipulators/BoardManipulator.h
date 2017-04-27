@@ -37,10 +37,10 @@ namespace FlowControl
 			state::CardRef AddCardById(Cards::CardId card_id, state::PlayerIdentifier player);
 			state::CardRef AddCardByCopy(state::Cards::Card const& card, state::PlayerIdentifier player);
 
-			void SummonMinionById(Cards::CardId card_id, state::PlayerIdentifier player, int pos) {
+			state::CardRef SummonMinionById(Cards::CardId card_id, state::PlayerIdentifier player, int pos) {
 				return SummonMinion(AddCardById(card_id, player), pos);
 			}
-			void SummonMinionByCopy(state::Cards::Card const& card, state::PlayerIdentifier player, int pos) {
+			state::CardRef SummonMinionByCopy(state::Cards::Card const& card, state::PlayerIdentifier player, int pos) {
 				return SummonMinion(AddCardByCopy(card, player), pos);
 			}
 
@@ -51,7 +51,7 @@ namespace FlowControl
 		private:
 			state::Cards::Card GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player);
 
-			void SummonMinion(state::CardRef card_ref, int pos);
+			state::CardRef SummonMinion(state::CardRef card_ref, int pos);
 
 		private:
 			state::State & state_;

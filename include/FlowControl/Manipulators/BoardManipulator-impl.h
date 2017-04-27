@@ -46,7 +46,7 @@ namespace FlowControl
 			return state::Cards::Card(std::move(card_data));
 		}
 
-		inline void BoardManipulator::SummonMinion(state::CardRef card_ref, int pos)
+		inline state::CardRef BoardManipulator::SummonMinion(state::CardRef card_ref, int pos)
 		{
 			state::PlayerIdentifier player = state_.GetCard(card_ref).GetPlayerIdentifier();
 			assert(player.AssertCheck());
@@ -68,6 +68,8 @@ namespace FlowControl
 				state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref });
 
 			Manipulate(state_, flow_context_).OnBoardMinion(card_ref).AfterSummoned();
+
+			return card_ref;
 		}
 
 		inline int BoardManipulator::GetSpellDamage(state::PlayerIdentifier player_id)

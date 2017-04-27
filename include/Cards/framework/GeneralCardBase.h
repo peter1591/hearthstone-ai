@@ -46,13 +46,13 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static void SummonToRight(Context && context, Cards::CardId card_id)
+		static state::CardRef SummonToRight(Context && context, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
 			int pos = card.GetZonePosition() + 1;
 			return SummonInternal(context.manipulate_, card_id, card.GetPlayerIdentifier(), pos);
 		}
-		static void SummonToRight(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Cards::CardId card_id)
+		static state::CardRef SummonToRight(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = manipulate.GetCard(card_ref);
 			int pos = card.GetZonePosition() + 1;
@@ -60,13 +60,13 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static void SummonToLeft(Context && context, Cards::CardId card_id)
+		static state::CardRef SummonToLeft(Context && context, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
 			int pos = card.GetZonePosition();
 			return SummonInternal(context.manipulate_, card_id, card.GetPlayerIdentifier(), pos);
 		}
-		static void SummonToLeft(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Cards::CardId card_id)
+		static state::CardRef SummonToLeft(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = manipulate.GetCard(card_ref);
 			int pos = card.GetZonePosition();
@@ -74,13 +74,13 @@ namespace Cards
 		}
 
 		template <typename Context>
-		static void SummonAt(Context&& context, state::PlayerIdentifier player, int pos, Cards::CardId card_id) {
+		static state::CardRef SummonAt(Context&& context, state::PlayerIdentifier player, int pos, Cards::CardId card_id) {
 			int total_minions = (int)context.manipulate_.Board().Player(player).minions_.Size();
 			if (pos > total_minions) pos = total_minions;
 			return SummonInternal(context.manipulate_, card_id, player, pos);
 		}
 
-		static void SummonToRightmost(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
+		static state::CardRef SummonToRightmost(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
 		{
 			int pos = (int)manipulate.Board().Player(player).minions_.Size();
 			return SummonInternal(manipulate, card_id, player, pos);
@@ -111,12 +111,11 @@ namespace Cards
 		}
 
 	private:
-		static void SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
+		static state::CardRef SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
-			if (manipulate.Board().Player(player).minions_.Full()) return;
+			if (manipulate.Board().Player(player).minions_.Full()) return state::CardRef();
 
-			manipulate.Board()
-				.SummonMinionById(card_id, player, pos);
+			return manipulate.Board().SummonMinionById(card_id, player, pos);
 		}
 
 		static void SummonInternalByCopy(FlowControl::Manipulate & manipulate, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)

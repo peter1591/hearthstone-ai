@@ -97,8 +97,30 @@ namespace Cards
 			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
 		}
 	};
+
+	struct Card_tt_010 : public SecretCardBase<Card_tt_010> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PreparePlayCardTarget::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.Board().GetCurrentPlayerId() == player) return true;
+			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+
+			if (!context.target_ref_->IsValid()) return true;
+			if (context.manipulate_.GetCard(*context.target_ref_).GetCardType() != state::kCardTypeMinion) return true;
+
+			state::CardRef new_target = SummonToRightmost(context.manipulate_, player, Cards::ID_tt_010a);
+			if (!new_target.IsValid()) return true;
+
+			*context.target_ref_ = new_target;
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_tt_010() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PreparePlayCardTarget>();
+		}
+	};
 }
 
+REGISTER_CARD(tt_010)
 REGISTER_CARD(EX1_294)
 REGISTER_CARD(EX1_295)
 REGISTER_CARD(EX1_289)

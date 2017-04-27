@@ -85,7 +85,7 @@ namespace FlowControl
 		state::CardRef onplay_target = flow_context_.GetSpecifiedTarget();
 		if (onplay_target.IsValid()) {
 			state_.TriggerEvent<state::Events::EventTypes::PreparePlayCardTarget>(state::Events::EventTypes::PreparePlayCardTarget::Context{
-				Manipulate(state_, flow_context_), &onplay_target
+				Manipulate(state_, flow_context_), card_ref, &onplay_target
 			});
 			assert(onplay_target.IsValid());
 			flow_context_.ChangeSpecifiedTarget(onplay_target);
