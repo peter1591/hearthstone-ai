@@ -1,6 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=32&sort=-cost&display=1
+// Last finished card: Defender
 
 namespace Cards
 {
@@ -37,6 +38,55 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_130 : public SecretCardBase<Card_EX1_130> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareAttackTarget::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.GetCard(context.attacker_).GetPlayerIdentifier() == player) return true;
+			state::CardRef new_target = SummonToRightmost(context.manipulate_, player, Cards::ID_EX1_130a);
+			if (!new_target.IsValid()) return true;
+			*context.defender_ = new_target;
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_EX1_130() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareAttackTarget>();
+		}
+	};
+
+	struct Card_EX1_136e : public Enchantment<Card_EX1_136e, SetMaxHP<1>> {};
+	struct Card_EX1_136 : public SecretCardBase<Card_EX1_136> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionDied::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.Board().GetCurrentPlayerId() == player) return true;
+			if (context.died_minion_owner_ != player) return true;
+
+			Cards::CardId card_id = (Cards::CardId)context.manipulate_.GetCard(context.card_ref_).GetCardId();
+			state::CardRef new_minion = SummonToRightmost(context.manipulate_, player, card_id);
+			if (!new_minion.IsValid()) return true;
+
+			context.manipulate_.OnBoardMinion(new_minion).Enchant().Add<Card_EX1_136e>();
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_EX1_136() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionDied>();
+		}
+	};
+
+	struct Card_EX1_379e : public Enchantment<Card_EX1_379e, SetMaxHP<1>> {};
+	struct Card_EX1_379 : public SecretCardBase<Card_EX1_379> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (context.manipulate_.Board().GetCurrentPlayerId() == player) return true;
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_379e>();
+			context.manipulate_.OnBoardSecret(self).Reveal();
+			return false;
+		}
+		Card_EX1_379() {
+			RegisterEvent<SecretInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::AfterMinionPlayed>();
+		}
+	};
+
 	struct Card_EX1_384 : SpellCardBase<Card_EX1_384> {
 		Card_EX1_384() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -60,5 +110,8 @@ namespace Cards
 
 REGISTER_CARD(EX1_384)
 
+REGISTER_CARD(EX1_379)
+REGISTER_CARD(EX1_136)
+REGISTER_CARD(EX1_130)
 REGISTER_CARD(EX1_132)
 REGISTER_CARD(EX1_363)
