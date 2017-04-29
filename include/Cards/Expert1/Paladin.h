@@ -87,6 +87,111 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_619e : public Enchantment<Card_EX1_619e, MaxHP<1>> {};
+	struct Card_EX1_619 : public SpellCardBase<Card_EX1_619> {
+		Card_EX1_619() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				auto op = [&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_619e>();
+				};
+				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
+				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			});
+		}
+	};
+
+	struct Card_EX1_362 : public MinionCardBase<Card_EX1_362> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			*context.allow_no_target_ = true;
+			return TargetsGenerator(context.player_).Ally().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Shield(true);
+		}
+	};
+
+	struct Card_EX1_366e : public Enchantment<Card_EX1_366e, Attack<1>, MaxHP<1>> {};
+	struct Card_EX1_366 : public WeaponCardBase<Card_EX1_366> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
+			if (context.manipulate_.GetCard(self).GetHP() < 0) return false;
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			state::PlayerIdentifier minion_owner = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			if (owner != minion_owner) return true;
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_366e>();
+			context.manipulate_.Weapon(self).Damage(self, 1);
+			return true;
+		}
+		Card_EX1_366() {
+			RegisterEvent<WeaponInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::AfterMinionSummoned>();
+		}
+	};
+
+	struct Card_EX1_349 : public SpellCardBase<Card_EX1_349> {
+		Card_EX1_349() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int owner_hand = (int)context.manipulate_.Board().Player(context.player_).hand_.Size();
+				int opponent_hand = (int)context.manipulate_.Board().Player(context.player_.Opposite()).hand_.Size();
+				if (opponent_hand >= owner_hand) return;
+				int draws = owner_hand - opponent_hand;
+				for (int i = 0; i < draws; ++i) {
+					context.manipulate_.Hero(context.player_).DrawCard();
+				}
+			});
+		}
+	};
+
+	struct Card_EX1_382e : public Enchantment<Card_EX1_382e, SetAttack<1>> {};
+	struct Card_EX1_382 : public MinionCardBase<Card_EX1_382> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			*context.allow_no_target_ = true;
+			return TargetsGenerator(context.player_).Ally().Targetable();
+		}
+		static void Battlecry(Contexts::OnPlay context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_382e>();
+		}
+	};
+
+	template <int v>
+	struct Card_EX1_355e : public Enchantment<Card_EX1_355e<v>, Attack<v>> {};
+	struct Card_EX1_355 : public SpellCardBase<Card_EX1_355> {
+		Card_EX1_355() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				int attack = context.manipulate_.GetCard(target).GetAttack();
+				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_355e>(attack);
+			});
+		}
+	};
+
+	struct Card_EX1_365 : public SpellCardBase<Card_EX1_365> {
+		Card_EX1_365() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				Cards::CardId drawn_card_id = context.manipulate_.Hero(context.player_).DrawCard();
+				if (drawn_card_id < 0) return;
+				state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(drawn_card_id);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, raw_card.enchanted_states.cost);
+			});
+		}
+	};
+
 	struct Card_EX1_384 : SpellCardBase<Card_EX1_384> {
 		Card_EX1_384() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -110,6 +215,13 @@ namespace Cards
 
 REGISTER_CARD(EX1_384)
 
+REGISTER_CARD(EX1_365)
+REGISTER_CARD(EX1_355)
+REGISTER_CARD(EX1_382)
+REGISTER_CARD(EX1_349)
+REGISTER_CARD(EX1_366)
+REGISTER_CARD(EX1_362)
+REGISTER_CARD(EX1_619)
 REGISTER_CARD(EX1_379)
 REGISTER_CARD(EX1_136)
 REGISTER_CARD(EX1_130)

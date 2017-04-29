@@ -7,7 +7,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline void HeroManipulator::DrawCard()
+		inline Cards::CardId HeroManipulator::DrawCard()
 		{
 			state::board::Player & player = state_.GetBoard().Get(player_id_);
 			assert(player.GetHeroRef() == card_ref_);
@@ -17,7 +17,7 @@ namespace FlowControl
 				player.IncreaseFatigueDamage();
 				int damage = player.GetFatigueDamage();
 				this->Damage(card_ref_, damage);
-				return;
+				return (Cards::CardId)-1;
 			}
 
 			int card_id = player.deck_.GetLast();
@@ -25,17 +25,19 @@ namespace FlowControl
 
 			AddHandCard(card_id);
 
+			return (Cards::CardId)card_id;
+
 			// Note: On-draw effects are only activated through successful card draw.
 			// Overdrawing a card with an on-draw effect (attempting to draw it when the player already has a full hand) will not activate its on-draw effect.
 			// TODO: trigger on-draw event (parameter: card_ref)
 		}
 
-		inline void HeroManipulator::AddHandCard(int card_id)
+		inline state::CardRef HeroManipulator::AddHandCard(int card_id)
 		{
 			state::board::Player & player = state_.GetBoard().Get(player_id_);
 			assert(player.GetHeroRef() == card_ref_);
 
-			if (player.hand_.Full()) return;
+			if (player.hand_.Full()) return state::CardRef();
 
 			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(card_id);
 			raw_card.enchanted_states.player = player_id_;
@@ -45,6 +47,7 @@ namespace FlowControl
 			auto ref = state_.AddCard(state::Cards::Card(raw_card));
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state_, flow_context_), ref)
 				.ChangeTo<state::kCardZoneHand>(player_id_);
+			return ref;
 		}
 
 		inline void HeroManipulator::DiscardHandCard(state::CardRef card_ref)

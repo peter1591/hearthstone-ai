@@ -17,9 +17,9 @@ namespace FlowControl
 				assert(GetCard().GetCardType() == state::kCardTypeHero);
 			}
 
-			void DrawCard();
+			Cards::CardId DrawCard();
 			
-			void AddHandCard(int card_id);
+			state::CardRef AddHandCard(int card_id);
 			void DiscardHandCard(state::CardRef card_ref);
 
 			void DestroyWeapon();
