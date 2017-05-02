@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=32&sort=-cost&display=1
-// Last finished card: Defender
+// Done.
 
 namespace Cards
 {
@@ -211,10 +211,36 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_354 : public SpellCardBase<Card_EX1_354> {
+		Card_EX1_354() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(context.card_ref_, 8);
+				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
+
+	struct Card_EX1_383 : public MinionCardBase<Card_EX1_383, Taunt, Shield> {
+		Card_EX1_383() {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+				state::CardRef weapon_ref = context.manipulate_.Board().AddCardById(Cards::ID_EX1_383t, context.player_);
+				context.manipulate_.Hero(context.player_).EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_383)
+REGISTER_CARD(EX1_354)
 REGISTER_CARD(EX1_384)
-
 REGISTER_CARD(EX1_365)
 REGISTER_CARD(EX1_355)
 REGISTER_CARD(EX1_382)
