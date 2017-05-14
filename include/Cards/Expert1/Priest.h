@@ -1,7 +1,11 @@
 #pragma once
 
+// http://www.hearthpwn.com/cards?filter-set=3&filter-class=64&sort=-cost&display=1
+
 namespace Cards
 {
+
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
