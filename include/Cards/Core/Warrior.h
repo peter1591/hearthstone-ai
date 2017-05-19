@@ -34,9 +34,8 @@ namespace Cards
 	struct Card_EX1_400 : public SpellCardBase<Card_EX1_400> {
 		Card_EX1_400() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				auto op = [&](state::CardRef card_ref) {
-					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 1 + spell_damage);
+					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 1);
 				};
 				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
@@ -53,11 +52,10 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				auto & minions = context.manipulate_.Board().Player(context.player_.Opposite()).minions_;
 
 				auto op = [&](state::CardRef card_ref) {
-					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, spell_damage + 2);
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
 				};
 
 				if (minions.Size() == 0) return;

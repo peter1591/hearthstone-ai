@@ -56,9 +56,8 @@ namespace Cards
 	struct Card_CS2_025 : public SpellCardBase<Card_CS2_025> {
 		Card_CS2_025() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef card_ref) {
-					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1 + spell_damage);
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1);
 				});
 			});
 		}
@@ -72,9 +71,8 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
-				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3 + spell_damage);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3);
 				context.manipulate_.OnBoardCharacter(target).Freeze(true);
 			});
 		}
@@ -107,10 +105,9 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
-				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 6 + spell_damage);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 6);
 			});
 		}
 	};
@@ -135,9 +132,8 @@ namespace Cards
 	struct Card_CS2_032 : public SpellCardBase<Card_CS2_032> {
 		Card_CS2_032() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int damage = 4 + context.manipulate_.Board().GetSpellDamage(context.player_);
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
-					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
+					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, 4);
 				});
 			});
 		}

@@ -167,9 +167,8 @@ namespace Cards
 					context.manipulate_.OnBoardMinion(card_ref).Freeze(true);
 				});
 
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				ApplyToAdjacent(context.manipulate_, context.GetTarget(), [&](state::CardRef card_ref) {
-					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1 + spell_damage);
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1);
 				});
 			});
 		}
@@ -194,9 +193,8 @@ namespace Cards
 	struct Card_CS2_028 : public SpellCardBase<Card_CS2_028> {
 		Card_CS2_028() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int damage = 2 + context.manipulate_.Board().GetSpellDamage(context.player_);
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
-					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, damage);
+					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, 2);
 					context.manipulate_.OnBoardMinion(minion).Freeze(true);
 				});
 			});
@@ -230,10 +228,9 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
-				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 10 + spell_damage);
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 10);
 			});
 		}
 	};

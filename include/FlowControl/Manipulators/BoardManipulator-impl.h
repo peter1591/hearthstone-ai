@@ -74,6 +74,7 @@ namespace FlowControl
 
 		inline int BoardManipulator::GetSpellDamage(state::PlayerIdentifier player_id)
 		{
+			// TODO: add a cached value, and only update when board update
 			assert(player_id.IsValid());
 			state::board::Player const& player = state_.GetBoard().Get(player_id);
 

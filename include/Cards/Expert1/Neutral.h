@@ -1051,10 +1051,9 @@ namespace Cards
 	struct Card_DREAM_02 : public SpellCardBase<Card_DREAM_02> {
 		Card_DREAM_02() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				auto op = [&](state::CardRef card_ref) {
 					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return;
-					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 5 + spell_damage);
+					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 5);
 				};
 				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 				op(context.manipulate_.Board().SecondPlayer().GetHeroRef());

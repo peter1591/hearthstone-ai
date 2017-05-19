@@ -60,8 +60,7 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
-				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1 + spell_damage);
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
 
 				if (context.manipulate_.OnBoardMinion(context.GetTarget()).Alive()) return;
 				context.manipulate_.Hero(context.player_).DrawCard();
@@ -77,8 +76,7 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
-				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4 + spell_damage);
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4);
 				DiscardOneRandomHandCard(context.manipulate_, context.player_);
 			});
 		}
@@ -100,8 +98,7 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
-				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2 + spell_damage);
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
 				context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 2);
 			});
 		}
@@ -115,8 +112,7 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
-				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4 + spell_damage);
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4);
 			});
 		}
 	};

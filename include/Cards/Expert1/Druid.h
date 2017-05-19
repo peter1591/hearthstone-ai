@@ -72,13 +72,12 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
 				if (choice == 0) {
-					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 3 + spell_damage);
+					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 3);
 				}
 				else {
-					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1 + spell_damage);
+					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
 					context.manipulate_.Hero(context.player_).DrawCard();
 				}
 			});
@@ -205,16 +204,15 @@ namespace Cards
 				context.manipulate_.SaveUserChoice(choice);
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				if (context.manipulate_.GetSavedUserChoice() == 0) {
 					context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
-						context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2 + spell_damage);
+						context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
 					});
 				}
 				else {
 					state::CardRef target = context.GetTarget();
 					if (!target.IsValid()) return;
-					context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 5 + spell_damage);
+					context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 5);
 				}
 			});
 		}

@@ -11,10 +11,8 @@ namespace Cards
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
 			if (context.defender_ != hero_ref) return true;
 
-			int spell_damage = context.manipulate_.Board().GetSpellDamage(player);
-			
 			auto op = ([&](state::CardRef card_ref) {
-				context.manipulate_.OnBoardCharacter(card_ref).Damage(self, 2 + spell_damage);
+				context.manipulate_.OnBoardCharacter(card_ref).Damage(self, 2);
 			});
 			op(context.manipulate_.Board().Player(player.Opposite()).GetHeroRef());
 			context.manipulate_.Board().Player(player.Opposite()).minions_.ForEach(op);
@@ -108,8 +106,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier() == player) return true;
-			int spell_damage = context.manipulate_.Board().GetSpellDamage(player);
-			context.manipulate_.OnBoardMinion(context.card_ref_).Damage(self, 4 + spell_damage);
+			context.manipulate_.OnBoardMinion(context.card_ref_).Damage(self, 4);
 			context.manipulate_.OnBoardSecret(self).Reveal();
 			return false;
 		}
@@ -193,14 +190,13 @@ namespace Cards
 				state::PlayerIdentifier player = target_card.GetPlayerIdentifier();
 				int zone_pos = target_card.GetZonePosition();
 
-				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
-				context.manipulate_.OnBoardMinion(target_ref).Damage(context.card_ref_, 5 + spell_damage);
+				context.manipulate_.OnBoardMinion(target_ref).Damage(context.card_ref_, 5);
 				auto op = [&](state::PlayerIdentifier player, int zone_pos) {
 					if (zone_pos < 0) return;
 					auto const& minions = context.manipulate_.Board().Player(player).minions_;
 					if (zone_pos >= minions.Size()) return;
 					state::CardRef minion_ref = minions.Get(zone_pos);
-					context.manipulate_.OnBoardMinion(minion_ref).Damage(context.card_ref_, 2 + spell_damage);
+					context.manipulate_.OnBoardMinion(minion_ref).Damage(context.card_ref_, 2);
 				};
 				op(player, zone_pos - 1);
 				op(player, zone_pos + 1);
