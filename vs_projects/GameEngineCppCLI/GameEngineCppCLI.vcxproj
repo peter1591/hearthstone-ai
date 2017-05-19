@@ -82,7 +82,7 @@
     </ClCompile>
     <Link>
       <DelayLoadDLLs>GameEngineCppWrapper.dll</DelayLoadDLLs>
-      <AdditionalDependencies>C:\mycode\hearthstone-ai\vs_projects\x64\Debug\GameEngineCppWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\x64\Debug\GameEngineCppWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
