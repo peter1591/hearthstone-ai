@@ -30,7 +30,7 @@ namespace Cards
 		}
 	};
 
-	template <int v> struct Card_CS1_129e : EnchantmentCardBase<Card_CS1_129e, SetAttack<v>> {};
+	template <int v> struct Card_CS1_129e : Enchantment<Card_CS1_129e<v>, SetAttack<v>> {};
 	struct Card_CS1_129 : SpellCardBase<Card_CS1_129> {
 		Card_CS1_129() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
@@ -42,6 +42,64 @@ namespace Cards
 				int hp = context.manipulate_.GetCard(context.GetTarget()).GetHP();
 				context.manipulate_.OnBoardMinion(context.GetTarget())
 					.Enchant().Add<Card_CS1_129e>(hp);
+			});
+		}
+	};
+
+	struct Card_EX1_341 : MinionCardBase<Card_EX1_341> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnStart::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+
+			auto targets = TargetsGenerator(owner).Ally().Damaged();
+			auto target_ref = context.manipulate_.GetRandomTarget(targets.GetInfo());
+			if (!target_ref.IsValid()) return true;
+			context.manipulate_.OnBoardCharacter(target_ref).Heal(self, 3);
+			return true;
+		}
+		Card_EX1_341() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTurnStart>();
+		}
+	};
+
+	struct Card_EX1_625t : public HeroPowerCardBase<Card_EX1_625t> {
+		Card_EX1_625t() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardCharacter(context.GetTarget())
+					.Damage(context.card_ref_, 2);
+			});
+		}
+	};
+	struct Card_EX1_625t2 : public HeroPowerCardBase<Card_EX1_625t2> {
+		Card_EX1_625t2() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardCharacter(context.GetTarget())
+					.Damage(context.card_ref_, 3);
+			});
+		}
+	};
+	struct Card_EX1_625 : SpellCardBase<Card_EX1_625> {
+		Card_EX1_625() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::PlayerIdentifier owner = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+				
+				state::CardRef exist_heropower_ref = context.manipulate_.Board().Player(owner).GetHeroPowerRef();
+				int exist_heropower_id = context.manipulate_.GetCard(exist_heropower_ref).GetCardId();
+				if (exist_heropower_id == (int)Cards::ID_EX1_625t) {
+					context.manipulate_.HeroPower(owner).ReplaceHeroPower(Cards::ID_EX1_625t2);
+				}
+				else {
+					context.manipulate_.HeroPower(owner).ReplaceHeroPower(Cards::ID_EX1_625t);
+				}
 			});
 		}
 	};
@@ -74,6 +132,10 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
-REGISTER_CARD(EX1_129)
+REGISTER_CARD(EX1_625)
+REGISTER_CARD(EX1_625t)
+REGISTER_CARD(EX1_625t2)
+REGISTER_CARD(EX1_341)
+REGISTER_CARD(CS1_129)
 REGISTER_CARD(EX1_332)
 REGISTER_CARD(EX1_621)
