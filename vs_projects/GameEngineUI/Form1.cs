@@ -23,7 +23,7 @@ namespace GameEngineUI
             {
                 CheckFileExists = true,
                 Filter = "Native Library|GameEngineCppWrapper.dll",
-                InitialDirectory = Environment.CurrentDirectory + "..\\..\\"
+                InitialDirectory = Environment.CurrentDirectory
             };
 
             var result = ofd.ShowDialog(this);
