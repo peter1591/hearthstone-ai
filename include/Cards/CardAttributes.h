@@ -154,4 +154,12 @@ namespace Cards {
 			stats.immune = true;
 		}
 	};
+
+	template <state::PlayerSide player>
+	struct SetPlayer {
+		static constexpr EnchantmentTiers required_tier = EnchantmentTiers::kEnchantmentTier1;
+		static void Apply(state::Cards::EnchantableStates & stats) {
+			stats.player.SetSide(player);
+		}
+	};
 }

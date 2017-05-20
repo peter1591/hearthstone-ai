@@ -135,6 +135,51 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_345 : SpellCardBase<Card_EX1_345> {
+		Card_EX1_345() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+				*context.allow_no_target_ = true;
+				*context.need_to_prepare_target_ = false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				std::vector<Cards::CardId> possibles;
+				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](int card_id) {
+					if (Cards::CardDispatcher::CreateInstance(card_id).card_type == state::kCardTypeMinion) {
+						possibles.push_back((Cards::CardId)card_id);
+					}
+					return true;
+				});
+
+				Cards::CardId summon_id;
+				if (possibles.empty()) summon_id = Cards::ID_EX1_345t;
+				else {
+					summon_id = possibles[context.manipulate_.GetRandom().Get(possibles.size())];
+				}
+				SummonToRightmost(context.manipulate_, context.player_, summon_id);
+			});
+		}
+	};
+
+	template <state::PlayerSide player>
+	struct Card_EX1_334e : EnchantmentForThisTurn<Card_EX1_334e<player>, SetPlayer<player>, Charge> {};
+
+	struct Card_EX1_334 : SpellCardBase<Card_EX1_334> {
+		Card_EX1_334() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Enemy().Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target_ref = context.GetTarget();
+				if (!target_ref.IsValid()) return;
+				context.manipulate_.OnBoardMinion(target_ref).Enchant().Add<Card_EX1_334e>(context.player_);
+			});
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -163,6 +208,8 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
+REGISTER_CARD(EX1_334)
+REGISTER_CARD(EX1_345)
 REGISTER_CARD(EX1_626)
 REGISTER_CARD(EX1_339)
 REGISTER_CARD(EX1_625)

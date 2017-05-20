@@ -28,7 +28,7 @@ namespace FlowControl
 				template <template <int> typename T> auto Add(int v) {
 					assert(v >= 0);
 					switch (v) {
-					case 0: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<0>());
+					case 0: return Add<T<0>>(); // TODO: replace followings
 					case 1: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<1>());
 					case 2: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<2>());
 					case 3: return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<3>());
@@ -81,6 +81,15 @@ namespace FlowControl
 					}
 					assert(false); // need more switch-case
 					return state_.GetMutableCard(card_ref_).GetMutableEnchantmentHandler().PushBackNormalEnchantment(state_, T<50>());
+				}
+				template <template <state::PlayerSide> typename T> auto Add(state::PlayerIdentifier player) {
+					if (player.IsFirst()) {
+						return Add<T<state::kPlayerFirst>>();
+					}
+					else {
+						assert(player.IsSecond());
+						return Add<T<state::kPlayerSecond>>();
+					}
 				}
 
 				template <typename EnchantmentType>

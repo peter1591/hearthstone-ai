@@ -63,6 +63,13 @@ namespace state
 					cards_[v2]);
 			}
 
+			template <typename Functor>
+			void ForEach(Functor const& functor) {
+				for (int i = size_ - 1; i >= 0; --i) {
+					if (!functor(cards_[i])) return;
+				}
+			}
+
 		private:
 			constexpr static int max_size = 80;
 			int change_id_;

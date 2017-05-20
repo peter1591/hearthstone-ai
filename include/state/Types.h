@@ -108,6 +108,8 @@ namespace state
 			side_ = OppositeSide();
 		}
 
+		void SetSide(PlayerSide side) { side_ = side; }
+
 		void SetFirst() { side_ = kPlayerFirst; }
 		void SetSecond() { side_ = kPlayerSecond; }
 
