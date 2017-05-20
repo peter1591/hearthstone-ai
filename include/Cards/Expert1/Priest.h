@@ -124,6 +124,17 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_626 : SpellCardBase<Card_EX1_626> {
+		Card_EX1_626() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Silence();
+				});
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -152,6 +163,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
+REGISTER_CARD(EX1_626)
 REGISTER_CARD(EX1_339)
 REGISTER_CARD(EX1_625)
 REGISTER_CARD(EX1_625t)
