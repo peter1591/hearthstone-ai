@@ -23,22 +23,26 @@ namespace state {
 			typename = std::enable_if_t<detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == false>>
 			void ChangeTo(PlayerIdentifier player_identifier)
 		{
+			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
+
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_);
-			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
 		}
 
 		template <CardZone ChangeToZone,
 			typename = std::enable_if_t<detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::SpecifyAddPosition == true>>
 			void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
+			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
+
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_, pos);
-			detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
 		}
 
 		void ReplaceBy(CardRef new_ref)
