@@ -20,6 +20,10 @@ namespace state
 			size_t Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
 			bool Full() const { return size_ >= max_cards_; }
+			size_t LeftSpaces() const {
+				assert(size_ <= max_cards_);
+				return max_cards_ - size_;
+			}
 
 			CardRef Get(size_t idx) { return cards_[idx]; }
 			int GetChangeId() const { return change_id_; }

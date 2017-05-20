@@ -104,6 +104,26 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_339 : SpellCardBase<Card_EX1_339> {
+		Card_EX1_339() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int max_steal_cards = (int)context.manipulate_.Board().Player(context.player_).hand_.LeftSpaces();
+
+				if (max_steal_cards == 0) return;
+				else if (max_steal_cards == 1) {
+					context.manipulate_.Hero(context.player_).AddHandCard(
+						context.manipulate_.Board().Player(context.player_).deck_.GetOneRandomCard(context.manipulate_.GetRandom())
+					);
+				}
+				else {
+					std::pair<int, int> steal_cards_id = context.manipulate_.Board().Player(context.player_).deck_.GetTwoRandomCards(context.manipulate_.GetRandom());
+					context.manipulate_.Hero(context.player_).AddHandCard(steal_cards_id.first);
+					context.manipulate_.Hero(context.player_).AddHandCard(steal_cards_id.second);
+				}
+			});
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -132,6 +152,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
+REGISTER_CARD(EX1_339)
 REGISTER_CARD(EX1_625)
 REGISTER_CARD(EX1_625t)
 REGISTER_CARD(EX1_625t2)
