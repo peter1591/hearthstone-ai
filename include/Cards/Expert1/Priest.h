@@ -164,6 +164,11 @@ namespace Cards
 
 	template <state::PlayerSide player>
 	struct Card_EX1_334e : EnchantmentForThisTurn<Card_EX1_334e<player>, SetPlayer<player>, Charge> {};
+	// Note: Temporary grant charge this turn
+	// The temporary enchantment from this card allows stolen minions to attack immediately, by granting them Charge.
+	// Example: You cast Shadow Madness on an enemy Warsong Commander.
+	// Its ongoing effect grants itself + 1 Attack for the rest of the turn.
+	// Reference: http://hearthstone.gamepedia.com/Shadow_Madness
 
 	struct Card_EX1_334 : SpellCardBase<Card_EX1_334> {
 		Card_EX1_334() {
