@@ -22,20 +22,33 @@ namespace FlowControl
 			{
 				CreateDeaths();
 
-				UpdateAura();
-				UpdateEnchantments();
+				while (true) {
+					bool done = true;
 
-				bool any_death = false;
-				while (!deaths_.empty()) {
-					any_death = true;
+					auto first_minions_change_id = state_.GetBoard().GetFirst().minions_.GetChangeId();
+					auto second_minions_change_id = state_.GetBoard().GetSecond().minions_.GetChangeId();
 
-					if (!RemoveDeaths()) return false;
-					CreateDeaths();
-				}
-
-				if (any_death) {
-					UpdateAura();
+					UpdateAura(); // update aura first, since aura will add/remove enchantments on others
 					UpdateEnchantments();
+
+					// If any entity dies, re-resolve again
+					while (!deaths_.empty()) {
+						done = false;
+						if (!RemoveDeaths()) return false;
+						CreateDeaths();
+					}
+					if (!done) continue;
+
+					// If any minions change side (due to enchantment), re-resolve again
+					auto new_first_minions_change_id = state_.GetBoard().GetFirst().minions_.GetChangeId();
+					auto new_second_minions_change_id = state_.GetBoard().GetSecond().minions_.GetChangeId();
+					if (new_first_minions_change_id != first_minions_change_id ||
+						new_second_minions_change_id != second_minions_change_id) {
+						done = false;
+					}
+					if (!done) continue;
+
+					break;
 				}
 
 				return true;
@@ -151,7 +164,9 @@ namespace FlowControl
 					Manipulate(state_, flow_context_).Weapon(weapon_ref).Enchant().Update();
 				}
 
-				for (state::CardRef minion_ref : state_.GetBoard().Get(player).minions_.Get()) {
+				std::vector<state::CardRef> minions_refs; // need to cache first, since minion might be removed from the container
+				minions_refs = state_.GetBoard().Get(player).minions_.GetAll();
+				for (state::CardRef minion_ref : minions_refs) {
 					Manipulate(state_, flow_context_).OnBoardMinion(minion_ref).Enchant().Update();
 				}
 			}

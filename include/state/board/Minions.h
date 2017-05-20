@@ -25,6 +25,7 @@ namespace state
 				assert(pos <= minions_.size());
 				return minions_[pos];
 			}
+			std::vector<CardRef> const& GetAll() const { return minions_; }
 			void Replace(size_t pos, CardRef new_card_ref) {
 				minions_[pos] = new_card_ref;
 				++change_id_;
