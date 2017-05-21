@@ -202,6 +202,24 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_335o : EnchantmentCardBase {
+		static constexpr EnchantmentTiers aura_tier = EnchantmentTiers::kEnchantmentTier3; // always apply at the last stage
+		Card_EX1_335o() {
+			apply_functor = [](state::Cards::EnchantableStates & stats) {
+				stats.attack = stats.max_hp; // TODO: should be current hp
+			};
+		}
+	};
+	struct Card_EX1_335 : MinionCardBase<Card_EX1_335> {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
+			context.new_targets.insert(context.card_ref_);
+		}
+		Card_EX1_335() {
+			Aura<Card_EX1_335o, EmitWhenAlive, FlowControl::aura::kUpdateOnlyFirstTime>();
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -230,6 +248,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
+REGISTER_CARD(EX1_335)
 REGISTER_CARD(EX1_591)
 REGISTER_CARD(EX1_334)
 REGISTER_CARD(EX1_345)

@@ -10,7 +10,7 @@ namespace FlowControl
 		{
 			kEnchantmentTier1,
 			kEnchantmentTier2, // attack/health auras
-			kEnchantmentTier3
+			kEnchantmentTier3 // enchantment ALWAYS applied last (e.g., Lightspawn)
 		};
 
 		class TieredEnchantments
