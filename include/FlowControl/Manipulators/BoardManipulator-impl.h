@@ -97,7 +97,7 @@ namespace FlowControl
 			state::Cards::Card const & source_card = state_.GetCard(source);
 			*final_amount = amount;
 			
-			if (amount > 0) { // spell damage only acts on damages, not healings
+			if (amount >= 0) { // spell damage only acts on damages, not healings
 				if (source_card.GetCardType() == state::kCardTypeSpell ||
 					source_card.GetCardType() == state::kCardTypeSecret)
 				{
