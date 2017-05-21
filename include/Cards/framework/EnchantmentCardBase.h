@@ -37,12 +37,12 @@ namespace Cards
 			// TODO: use SFINAE to make sure caller correctly pass itself as T
 			//       T::tier_if_aura must NOT exist
 
-			apply_functor = [](state::Cards::EnchantableStates & stats) {
-				Enchant1::Apply(stats);
-				Enchant2::Apply(stats);
-				Enchant3::Apply(stats);
-				Enchant4::Apply(stats);
-				Enchant5::Apply(stats);
+			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+				Enchant1::Apply(*context.stats_);
+				Enchant2::Apply(*context.stats_);
+				Enchant3::Apply(*context.stats_);
+				Enchant4::Apply(*context.stats_);
+				Enchant5::Apply(*context.stats_);
 			};
 		}
 	};
@@ -97,12 +97,12 @@ namespace Cards
 			// TODO: use SFINAE to make sure caller correctly pass itself as T
 			//       T::tier_if_aura must NOT exist
 
-			apply_functor = [](state::Cards::EnchantableStates & stats) {
-				Enchant1::Apply(stats);
-				Enchant2::Apply(stats);
-				Enchant3::Apply(stats);
-				Enchant4::Apply(stats);
-				Enchant5::Apply(stats);
+			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+				Enchant1::Apply(*context.stats_);
+				Enchant2::Apply(*context.stats_);
+				Enchant3::Apply(*context.stats_);
+				Enchant4::Apply(*context.stats_);
+				Enchant5::Apply(*context.stats_);
 			};
 
 			register_functor = [](FlowControl::Manipulate & manipulate, state::CardRef card_ref,

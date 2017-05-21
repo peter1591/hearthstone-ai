@@ -22,12 +22,18 @@ namespace FlowControl
 		public:
 			using IdentifierType = Utils::CloneableContainers::RemovableVectorIdentifier;
 
-			typedef void(*ApplyFunctor)(state::Cards::EnchantableStates &);
+			struct ApplyFunctorContext {
+				state::Cards::EnchantableStates * stats_;
+			};
+			typedef void(*ApplyFunctor)(ApplyFunctorContext const&);
 
 			struct AuraEnchantment {
 				ApplyFunctor apply_functor;
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
+				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const {
+					apply_functor(ApplyFunctorContext{ &stats });
+					return true;
+				}
 			};
 			struct NormalEnchantment {
 				ApplyFunctor apply_functor;
@@ -44,7 +50,10 @@ namespace FlowControl
 
 				typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &, state::CardRef, IdentifierType, AuxData &);
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const { apply_functor(stats); return true; }
+				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const {
+					apply_functor(ApplyFunctorContext{ &stats });
+					return true;
+				}
 				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & aux_data) const {
 					register_functor(manipulate, card_ref, id, aux_data);
 				}

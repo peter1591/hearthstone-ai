@@ -11,7 +11,7 @@ namespace FlowControl {
 					return false;
 				}
 			}
-			apply_functor(stats);
+			apply_functor(ApplyFunctorContext{ &stats });
 			return true;
 		}
 

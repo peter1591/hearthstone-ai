@@ -205,8 +205,8 @@ namespace Cards
 	struct Card_EX1_335o : EnchantmentCardBase {
 		static constexpr EnchantmentTiers aura_tier = EnchantmentTiers::kEnchantmentTier3; // always apply at the last stage
 		Card_EX1_335o() {
-			apply_functor = [](state::Cards::EnchantableStates & stats) {
-				stats.attack = stats.max_hp; // TODO: should be current hp
+			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+				context.stats_->attack = context.stats_->max_hp; // TODO: should be current hp
 			};
 		}
 	};
