@@ -26,16 +26,16 @@ namespace Cards
 	{
 		static constexpr EnchantmentTiers normal_tier = EnchantmentTiers::kEnchantmentTier1;
 		static constexpr EnchantmentTiers aura_tier = std::max({
-			Enchant1::required_tier,
-			Enchant2::required_tier,
-			Enchant3::required_tier,
-			Enchant4::required_tier,
-			Enchant5::required_tier
+			Enchant1::tier_if_aura,
+			Enchant2::tier_if_aura,
+			Enchant3::tier_if_aura,
+			Enchant4::tier_if_aura,
+			Enchant5::tier_if_aura
 		});
 
 		Enchantment() {
 			// TODO: use SFINAE to make sure caller correctly pass itself as T
-			//       T::required_tier must NOT exist
+			//       T::tier_if_aura must NOT exist
 
 			apply_functor = [](state::Cards::EnchantableStates & stats) {
 				Enchant1::Apply(stats);
@@ -95,7 +95,7 @@ namespace Cards
 
 		EventHookedEnchantment() {
 			// TODO: use SFINAE to make sure caller correctly pass itself as T
-			//       T::required_tier must NOT exist
+			//       T::tier_if_aura must NOT exist
 
 			apply_functor = [](state::Cards::EnchantableStates & stats) {
 				Enchant1::Apply(stats);
