@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=64&sort=-cost&display=1
-// Last finished card: Inner Fire
+// Last finished card: Auchenai Soulpriest
 
 namespace Cards
 {
@@ -185,6 +185,23 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_591 : MinionCardBase<Card_EX1_591> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
+			if (*context.amount_ >= 0) return true;
+
+			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
+			state::Cards::Card const& source_card = context.manipulate_.GetCard(context.source_ref_);
+			if (source_card.GetPlayerIdentifier() != owner) return true; // for friendly only
+			assert(*context.amount_ < 0);
+			*context.amount_ = -*context.amount_; // change healing to damaging
+			return true;
+		};
+
+		Card_EX1_591() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::CalculateHealDamageAmount>();
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -213,6 +230,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
+REGISTER_CARD(EX1_591)
 REGISTER_CARD(EX1_334)
 REGISTER_CARD(EX1_345)
 REGISTER_CARD(EX1_626)
