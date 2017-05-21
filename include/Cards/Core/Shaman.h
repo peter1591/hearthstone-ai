@@ -131,7 +131,7 @@ namespace Cards
 				.Minion()
 				.Targetable();
 		}
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_587e>();
@@ -155,7 +155,7 @@ namespace Cards
 			return TargetsGenerator(context.player_)
 				.Targetable();
 		}
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3);

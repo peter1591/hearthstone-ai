@@ -136,7 +136,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_612 : public MinionCardBase<Card_EX1_612> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::PlayerIdentifier player = context.player_;
 			int turn = context.manipulate_.Board().GetTurn();
 			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(

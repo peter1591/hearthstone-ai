@@ -3,7 +3,7 @@
 namespace Cards
 {
 	struct Card_OG_121 : MinionCardBase<Card_OG_121> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			int turn = context.manipulate_.Board().GetTurn();
 			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(

@@ -85,7 +85,7 @@ namespace Cards
 	struct Card_CS2_065 : public MinionCardBase<Card_CS2_065, Taunt> {};
 
 	struct Card_EX1_306 : public MinionCardBase<Card_EX1_306> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			DiscardOneRandomHandCard(context.manipulate_, context.player_);
 		}
 	};
@@ -133,7 +133,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_064 : public MinionCardBase<Card_CS2_064> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			auto op = [&](state::CardRef card_ref) {
 				context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 1);
 			};

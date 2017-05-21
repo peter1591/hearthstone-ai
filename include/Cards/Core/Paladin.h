@@ -136,7 +136,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_088 : public MinionCardBase<Card_CS2_088> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 6);
 		}
 	};

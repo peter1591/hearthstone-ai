@@ -105,7 +105,7 @@ namespace Cards
 			*context.allow_no_target_ = true;
 			return TargetsGenerator(context.player_).Ally().Targetable();
 		}
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardMinion(target).Shield(true);
@@ -149,7 +149,7 @@ namespace Cards
 			*context.allow_no_target_ = true;
 			return TargetsGenerator(context.player_).Ally().Targetable();
 		}
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_382e>();

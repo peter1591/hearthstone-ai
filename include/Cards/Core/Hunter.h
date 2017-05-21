@@ -174,7 +174,7 @@ namespace Cards
 			*context.allow_no_target_ = true;
 			return TargetsGenerator(context.player_).Ally().Minion().Beasts().Exclude(context.card_ref_);
 		}
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_DS1_070o>();

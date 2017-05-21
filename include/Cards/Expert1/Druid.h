@@ -137,7 +137,7 @@ namespace Cards
 			*context.allow_no_target_ = true;
 			return TargetsGenerator(context.player_).Minion().Targetable();
 		}
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
 
@@ -221,7 +221,7 @@ namespace Cards
 	struct Card_EX1_165t1 : public MinionCardBase<Card_EX1_165t1, Charge> {};
 	struct Card_EX1_165t2 : public MinionCardBase<Card_EX1_165t2, Taunt> {};
 	struct Card_EX1_165 : public MinionCardBase<Card_EX1_165> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			static std::vector<Cards::CardId> choices{
 				Cards::ID_EX1_165a,
 				Cards::ID_EX1_165b
@@ -275,7 +275,7 @@ namespace Cards
 	struct Card_EX1_178ae : public Enchantment<Card_EX1_178ae, MaxHP<5>> {};
 	struct Card_EX1_178be : public Enchantment<Card_EX1_178be, Attack<5>> {};
 	struct Card_EX1_178 : public MinionCardBase<Card_EX1_178> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			static std::vector<Cards::CardId> choices{
 				Cards::ID_EX1_178a,
 				Cards::ID_EX1_178b
@@ -294,7 +294,7 @@ namespace Cards
 	struct Card_EX1_573ae : public Enchantment<Card_EX1_573ae, MaxHP<2>, Attack<2>> {};
 	struct Card_EX1_573t : public MinionCardBase<Card_EX1_573t, Taunt> {};
 	struct Card_EX1_573 : public MinionCardBase<Card_EX1_573> {
-		static void Battlecry(Contexts::OnPlay context) {
+		static void Battlecry(Contexts::OnPlay const& context) {
 			static std::vector<Cards::CardId> choices{
 				Cards::ID_EX1_573a,
 				Cards::ID_EX1_573b
