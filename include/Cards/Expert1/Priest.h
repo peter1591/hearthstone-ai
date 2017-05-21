@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=64&sort=-cost&display=1
-// Last finished card: Auchenai Soulpriest
+// Last finished card: Lightspawn
 
 namespace Cards
 {
