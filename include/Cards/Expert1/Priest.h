@@ -208,6 +208,7 @@ namespace Cards
 			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
 				context.stats_->attack = context.state_.GetCard(context.card_ref_).GetHP();
 			};
+			force_update_every_time = true;
 		}
 	};
 	struct Card_EX1_335 : MinionCardBase<Card_EX1_335> {

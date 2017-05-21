@@ -37,6 +37,7 @@ namespace FlowControl
 
 			struct AuraEnchantment {
 				ApplyFunctor apply_functor;
+				bool force_update_every_time;
 
 				bool Apply(ApplyFunctorContext const& context) const {
 					apply_functor(context);
@@ -46,6 +47,7 @@ namespace FlowControl
 			struct NormalEnchantment {
 				ApplyFunctor apply_functor;
 				int valid_until_turn; // -1 if always valid
+				bool force_update_every_time;
 
 				bool Apply(ApplyFunctorContext const& context) const;
 			};
@@ -73,35 +75,50 @@ namespace FlowControl
 			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
 
-			class NormalEnchantmentUpdateDecider {
+			class UpdateDecider {
 			public:
-				NormalEnchantmentUpdateDecider() : need_update_after_turn_(-1) {}
-				void PushBack(int valid_until_turn);
+				UpdateDecider() : item_changed_(false), need_update_after_turn_(-1), force_update_items_(0) {}
+
+				void AddItem() { item_changed_ = true; }
+				void RemoveItem() { item_changed_ = true; }
+				void AddValidUntilTurn(int valid_until_turn);
+				void AddForceUpdateItem() { ++force_update_items_; }
+				void RemoveForceUpdateItem() { --force_update_items_; assert(force_update_items_ >= 0); }
+				
 				void FinishedUpdate(state::State const& state);
 				bool NeedUpdate(state::State const& state) const;
 
 			private:
+				bool item_changed_;
 				int need_update_after_turn_;
+				int force_update_items_;
 			};
 
 			template <typename EnchantmentType>
 			typename IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
 			{
-				need_update_ = true;
 				assert(item.apply_functor);
-				return enchantments_.PushBack(AuraEnchantment{ item.apply_functor });
+
+				update_decider_.AddItem();
+				assert(item.valid_this_turn == false);
+
+				if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
+
+				return enchantments_.PushBack(AuraEnchantment{ item.apply_functor, item.force_update_every_time });
 			}
 
 			template <typename EnchantmentType>
 			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& item)
 			{
+				update_decider_.AddItem();
 				int valid_until_turn = -1;
 				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
+				update_decider_.AddValidUntilTurn(valid_until_turn);
 
-				need_update_ = true;
+				if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
+
 				assert(item.apply_functor);
-				enchantments_.PushBack(NormalEnchantment{ item.apply_functor, valid_until_turn });
-				normal_enchantment_update_decider_.PushBack(valid_until_turn);
+				enchantments_.PushBack(NormalEnchantment{ item.apply_functor, valid_until_turn, item.force_update_every_time });
 			}
 
 			template <typename EnchantmentType>
@@ -109,30 +126,53 @@ namespace FlowControl
 				FlowControl::Manipulate & manipulate, state::CardRef card_ref,
 				EnchantmentType&& item, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
-				need_update_ = true;
 				assert(item.apply_functor);
 				assert(item.register_functor);
 				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment{ item.apply_functor, item.register_functor, aux_data });
 				item.register_functor(manipulate, card_ref, id,
 					std::get<EventHookedEnchantment>(*enchantments_.Get(id)).aux_data);
+
+				update_decider_.AddItem();
+
 				return id;
 			}
 
 			void Remove(IdentifierType id)
 			{
-				need_update_ = true;
+				update_decider_.RemoveItem();
+
+				struct OpFunctor {
+					OpFunctor(UpdateDecider & updater_decider)
+						: updater_decider_(updater_decider)
+					{}
+
+					void operator()(NormalEnchantment & arg) {
+						if (arg.force_update_every_time) updater_decider_.RemoveForceUpdateItem();
+					}
+					void operator()(AuraEnchantment & arg) {
+						if (arg.force_update_every_time) updater_decider_.RemoveForceUpdateItem();
+					}
+					void operator()(EventHookedEnchantment & arg) {
+					}
+
+					UpdateDecider & updater_decider_;
+				};
+
+				auto remove_item = enchantments_.Get(id);
+				if (remove_item == nullptr) return;
+				std::visit(OpFunctor(update_decider_), *remove_item);
 				return enchantments_.Remove(id);
 			}
 
 			void Clear()
 			{
-				need_update_ = true;
+				update_decider_.RemoveItem();
 				enchantments_.Clear();
 			}
 
 			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
 			{
-				need_update_ = true;
+				update_decider_.RemoveItem();
 				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
 					struct OpFunctor {
 						OpFunctor(FlowControl::Manipulate & manipulate, state::CardRef card_ref, ContainerType & enchantments, IdentifierType id)
@@ -179,21 +219,17 @@ namespace FlowControl
 			}
 
 			bool NeedUpdate(state::State const& state) const {
-				if (need_update_) return true;
-				if (normal_enchantment_update_decider_.NeedUpdate(state)) return true;
+				if (update_decider_.NeedUpdate(state)) return true;
 				return false;
 			}
 
 			void FinishedUpdate(state::State const& state) {
-				need_update_ = false;
-				normal_enchantment_update_decider_.FinishedUpdate(state);
+				update_decider_.FinishedUpdate(state);
 			}
 
 		private:
 			ContainerType enchantments_;
-			bool need_update_;
-
-			NormalEnchantmentUpdateDecider normal_enchantment_update_decider_;
+			UpdateDecider update_decider_;
 		};
 	}
 }

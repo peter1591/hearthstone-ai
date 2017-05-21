@@ -8,10 +8,11 @@ namespace Cards
 	class EnchantmentCardBase
 	{
 	public:
-		EnchantmentCardBase() : apply_functor(nullptr), valid_this_turn(false) {}
+		EnchantmentCardBase() : apply_functor(nullptr), valid_this_turn(false), force_update_every_time(false) {}
 
 		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
 		bool valid_this_turn;
+		bool force_update_every_time;
 	};
 
 	template <
