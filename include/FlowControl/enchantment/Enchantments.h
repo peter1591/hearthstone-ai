@@ -15,6 +15,11 @@ namespace state
 
 namespace FlowControl
 {
+	class FlowContext;
+}
+
+namespace FlowControl
+{
 	namespace enchantment
 	{
 		class Enchantments
@@ -23,6 +28,9 @@ namespace FlowControl
 			using IdentifierType = Utils::CloneableContainers::RemovableVectorIdentifier;
 
 			struct ApplyFunctorContext {
+				state::State const& state_;
+				FlowContext & flow_context_;
+				state::CardRef card_ref_;
 				state::Cards::EnchantableStates * stats_;
 			};
 			typedef void(*ApplyFunctor)(ApplyFunctorContext const&);
@@ -30,8 +38,8 @@ namespace FlowControl
 			struct AuraEnchantment {
 				ApplyFunctor apply_functor;
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const {
-					apply_functor(ApplyFunctorContext{ &stats });
+				bool Apply(ApplyFunctorContext const& context) const {
+					apply_functor(context);
 					return true;
 				}
 			};
@@ -39,7 +47,7 @@ namespace FlowControl
 				ApplyFunctor apply_functor;
 				int valid_until_turn; // -1 if always valid
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const;
+				bool Apply(ApplyFunctorContext const& context) const;
 			};
 			struct EventHookedEnchantment {
 				struct AuxData {
@@ -50,8 +58,8 @@ namespace FlowControl
 
 				typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &, state::CardRef, IdentifierType, AuxData &);
 
-				bool Apply(state::State const& state, state::Cards::EnchantableStates & stats) const {
-					apply_functor(ApplyFunctorContext{ &stats });
+				bool Apply(ApplyFunctorContext const& context) const {
+					apply_functor(context);
 					return true;
 				}
 				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & aux_data) const {
@@ -158,11 +166,11 @@ namespace FlowControl
 				return enchantments_.Get(id) != nullptr;
 			}
 
-			void ApplyAll(state::State const& state, state::Cards::EnchantableStates & stats)
+			void ApplyAll(state::State const& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates & stats)
 			{
 				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
 					std::visit([&](auto&& arg) {
-						if (!arg.Apply(state, stats)) {
+						if (!arg.Apply(ApplyFunctorContext{ state, flow_context, card_ref, &stats })) {
 							enchantments_.Remove(id);
 						}
 					}, enchantment);

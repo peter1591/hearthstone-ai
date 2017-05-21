@@ -21,7 +21,7 @@ namespace FlowControl
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 			state::Cards::EnchantableStates new_states = origin_states;
-			enchantments.ApplyAll(state, new_states);
+			enchantments.ApplyAll(state, flow_context, card_ref, new_states);
 
 			switch (GetCard().GetCardType()) {
 			case state::kCardTypeHero:

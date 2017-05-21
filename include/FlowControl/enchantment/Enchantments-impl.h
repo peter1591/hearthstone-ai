@@ -5,13 +5,13 @@
 
 namespace FlowControl {
 	namespace enchantment {
-		inline bool Enchantments::NormalEnchantment::Apply(state::State const& state, state::Cards::EnchantableStates & stats) const {
+		inline bool Enchantments::NormalEnchantment::Apply(ApplyFunctorContext const& context) const {
 			if (valid_until_turn > 0) {
-				if (state.GetTurn() > valid_until_turn) {
+				if (context.state_.GetTurn() > valid_until_turn) {
 					return false;
 				}
 			}
-			apply_functor(ApplyFunctorContext{ &stats });
+			apply_functor(context);
 			return true;
 		}
 

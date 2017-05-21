@@ -88,11 +88,11 @@ namespace FlowControl
 				tier3_.AfterCopied(manipulate, card_ref);
 			}
 
-			void ApplyAll(state::State const& state, state::Cards::EnchantableStates & stats)
+			void ApplyAll(state::State const& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates & stats)
 			{
-				tier1_.ApplyAll(state, stats);
-				tier2_.ApplyAll(state, stats);
-				tier3_.ApplyAll(state, stats);
+				tier1_.ApplyAll(state, flow_context, card_ref, stats);
+				tier2_.ApplyAll(state, flow_context, card_ref, stats);
+				tier3_.ApplyAll(state, flow_context, card_ref, stats);
 			}
 
 			bool NeedUpdate(state::State & state) const {
