@@ -40,6 +40,10 @@ namespace FlowControl
 				ApplyFunctor apply_functor;
 				bool force_update_every_time;
 
+				AuraEnchantment(ApplyFunctor apply_functor, bool force_update_every_time)
+					: apply_functor(apply_functor), force_update_every_time(force_update_every_time)
+				{}
+
 				bool Apply(ApplyFunctorContext const& context) const {
 					apply_functor(context);
 					return true;
@@ -49,6 +53,10 @@ namespace FlowControl
 				ApplyFunctor apply_functor;
 				int valid_until_turn; // -1 if always valid
 				bool force_update_every_time;
+
+				NormalEnchantment(ApplyFunctor apply_functor, int valid_until_turn, bool force_update_every_time)
+					: apply_functor(apply_functor), valid_until_turn(valid_until_turn), force_update_every_time(force_update_every_time)
+				{}
 
 				bool Apply(ApplyFunctorContext const& context) const;
 			};
@@ -69,6 +77,10 @@ namespace FlowControl
 					register_functor(manipulate, card_ref, id, aux_data);
 				}
 
+				EventHookedEnchantment(ApplyFunctor apply_functor, RegisterEventFunctor register_functor, AuxData const& aux_data)
+					: apply_functor(apply_functor), register_functor(register_functor), aux_data(aux_data)
+				{}
+
 				ApplyFunctor apply_functor;
 				RegisterEventFunctor register_functor;
 				AuxData aux_data;
@@ -86,7 +98,7 @@ namespace FlowControl
 
 				if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
 
-				return enchantments_.PushBack(AuraEnchantment{ item.apply_functor, item.force_update_every_time });
+				return enchantments_.PushBack(AuraEnchantment(item.apply_functor, item.force_update_every_time));
 			}
 
 			template <typename EnchantmentType>
@@ -100,7 +112,7 @@ namespace FlowControl
 				if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
 
 				assert(item.apply_functor);
-				enchantments_.PushBack(NormalEnchantment{ item.apply_functor, valid_until_turn, item.force_update_every_time });
+				enchantments_.PushBack(NormalEnchantment(item.apply_functor, valid_until_turn, item.force_update_every_time));
 			}
 
 			template <typename EnchantmentType>
@@ -110,7 +122,7 @@ namespace FlowControl
 			{
 				assert(item.apply_functor);
 				assert(item.register_functor);
-				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment{ item.apply_functor, item.register_functor, aux_data });
+				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment(item.apply_functor, item.register_functor, aux_data));
 				item.register_functor(manipulate, card_ref, id,
 					std::get<EventHookedEnchantment>(*enchantments_.Get(id)).aux_data);
 
