@@ -88,6 +88,9 @@
     <Filter Include="Header Files\Cards\framework">
       <UniqueIdentifier>{398c222f-ba31-4d09-9f86-958aeeefa7d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\enchantment\detail">
+      <UniqueIdentifier>{86abe2fa-05e6-47c5-a813-65ee298294f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -508,6 +511,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Expert1\Druid.h">
       <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider.h">
+      <Filter>Header Files\FlowControl\enchantment\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider-impl.h">
+      <Filter>Header Files\FlowControl\enchantment\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

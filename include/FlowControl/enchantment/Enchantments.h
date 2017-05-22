@@ -6,6 +6,7 @@
 #include <variant>
 #include "Utils/CloneableContainers/RemovableVector.h"
 #include "state/Cards/EnchantableStates.h"
+#include "FlowControl/enchantment/detail/UpdateDecider.h"
 
 namespace state
 {
@@ -75,25 +76,6 @@ namespace FlowControl
 			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
 
-			class UpdateDecider {
-			public:
-				UpdateDecider() : item_changed_(false), need_update_after_turn_(-1), force_update_items_(0) {}
-
-				void AddItem() { item_changed_ = true; }
-				void RemoveItem() { item_changed_ = true; }
-				void AddValidUntilTurn(int valid_until_turn);
-				void AddForceUpdateItem() { ++force_update_items_; }
-				void RemoveForceUpdateItem() { --force_update_items_; assert(force_update_items_ >= 0); }
-				
-				void FinishedUpdate(state::State const& state);
-				bool NeedUpdate(state::State const& state) const;
-
-			private:
-				bool item_changed_;
-				int need_update_after_turn_;
-				int force_update_items_;
-			};
-
 			template <typename EnchantmentType>
 			typename IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
 			{
@@ -142,7 +124,7 @@ namespace FlowControl
 				update_decider_.RemoveItem();
 
 				struct OpFunctor {
-					OpFunctor(UpdateDecider & updater_decider)
+					OpFunctor(detail::UpdateDecider & updater_decider)
 						: updater_decider_(updater_decider)
 					{}
 
@@ -155,7 +137,7 @@ namespace FlowControl
 					void operator()(EventHookedEnchantment & arg) {
 					}
 
-					UpdateDecider & updater_decider_;
+					detail::UpdateDecider & updater_decider_;
 				};
 
 				auto remove_item = enchantments_.Get(id);
@@ -229,7 +211,7 @@ namespace FlowControl
 
 		private:
 			ContainerType enchantments_;
-			UpdateDecider update_decider_;
+			detail::UpdateDecider update_decider_;
 		};
 	}
 }
