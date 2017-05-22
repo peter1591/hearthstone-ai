@@ -221,6 +221,24 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_624 : SpellCardBase<Card_EX1_624> {
+		Card_EX1_624() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 5);
+				context.manipulate_.OnBoardCharacter(
+					context.manipulate_.Board().Player(context.player_).GetHeroRef()
+				).Heal(context.card_ref_, 5);
+			});
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -249,6 +267,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_350)
 
+REGISTER_CARD(EX1_624)
 REGISTER_CARD(EX1_335)
 REGISTER_CARD(EX1_591)
 REGISTER_CARD(EX1_334)
