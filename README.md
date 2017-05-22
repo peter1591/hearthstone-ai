@@ -1,5 +1,7 @@
 ## Synopsis
 
+UNDER DEVELOPMENT!!!!
+
 This is a game bot for HearthStone.
 
 Your account shall be banned if you use this game bot to play it automatically.
