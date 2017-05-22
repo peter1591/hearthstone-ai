@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=64&sort=-cost&display=1
-// Last finished card: Lightspawn
+// Done
 
 namespace Cards
 {
@@ -239,6 +239,27 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_091 : MinionCardBase<Card_EX1_091> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			state::CardRef target = context.manipulate_.GetRandomTarget(
+				TargetsGenerator(context.player_).Enemy().Minion().AttackLessOrEqualTo(2).GetInfo());
+			if (!target.IsValid()) return;
+
+			context.manipulate_.OnBoardMinion(target).ChangeOwner(context.player_);
+		}
+	};
+
+	struct Card_EX1_623e : Enchantment<Card_EX1_623e, MaxHP<3>> {};
+	struct Card_EX1_623 : MinionCardBase<Card_EX1_623> {
+		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+			return TargetsGenerator(context.player_).Ally().Minion().Targetable().Exclude(context.card_ref_);
+		}
+		static void Battlecry(Contexts::OnPlay const& context) {
+			if (!context.GetTarget().IsValid()) return;
+			Manipulate(context).OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_623e>();
+		}
+	};
+
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -256,17 +277,11 @@ namespace Cards
 			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::CalculateHealDamageAmount>();
 		}
 	};
-	
-	/* Example to register multiple events
-	RegisterEvents<
-	RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>,
-	RegisteredEventType<InPlayZone, NonCategorized_SelfInLambdaCapture, state::Events::EventTypes::PrepareDamage>
-	>();
-	*/
 }
 
 REGISTER_CARD(EX1_350)
-
+REGISTER_CARD(EX1_623)
+REGISTER_CARD(EX1_091)
 REGISTER_CARD(EX1_624)
 REGISTER_CARD(EX1_335)
 REGISTER_CARD(EX1_591)
