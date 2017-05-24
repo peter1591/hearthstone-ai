@@ -13,7 +13,7 @@ namespace FlowControl
 				: CardManipulator(state, flow_context, card_ref)
 			{
 				assert(GetCard().GetCardType() == state::kCardTypeSpell);
-				assert(GetCard().IsSpellCard());
+				assert(GetCard().IsSecretCard());
 			}
 
 			void Remove();
