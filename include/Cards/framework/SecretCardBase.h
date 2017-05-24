@@ -20,6 +20,7 @@ namespace Cards
 
 			this->card_type = state::kCardTypeSecret;
 			this->card_rarity = data.card_rarity;
+			this->is_secret_card = true;
 
 			this->enchanted_states.cost = data.cost;
 		}

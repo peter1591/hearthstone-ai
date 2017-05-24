@@ -60,10 +60,13 @@ namespace FlowControl
 			PlayCardPhase<state::kCardTypeWeapon>(card_ref);
 			break;
 		case state::kCardTypeSpell:
-			PlayCardPhase<state::kCardTypeSpell>(card_ref);
-			break;
 		case state::kCardTypeSecret:
-			PlayCardPhase<state::kCardTypeSecret>(card_ref);
+			if (state_.GetCard(card_ref).IsSecretCard()) {
+				PlayCardPhase<state::kCardTypeSecret>(card_ref);
+			}
+			else {
+				PlayCardPhase<state::kCardTypeSpell>(card_ref);
+			}
 			break;
 		default:
 			assert(false);
@@ -267,6 +270,7 @@ namespace FlowControl
 
 		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
+		state_.GetCurrentPlayer().secrets_.Add(state_.GetCard(card_ref).GetCardId(), card_ref);
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
 			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });

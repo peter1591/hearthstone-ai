@@ -18,7 +18,8 @@ namespace state
 		{
 		public:
 			CardData() :
-				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid), overload(0),
+				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
+				is_secret_card(false), overload(0),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
 				pending_destroy(false), used_this_turn(0), usable(true), armor(0),
@@ -33,6 +34,7 @@ namespace state
 			CardType card_type;
 			CardRace card_race;
 			CardRarity card_rarity;
+			bool is_secret_card;
 			int overload; // 0: no overload; 1: overload 1 crystal; etc.
 
 			CardZone zone;

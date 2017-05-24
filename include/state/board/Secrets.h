@@ -12,8 +12,6 @@ namespace state
 	{
 		class Secrets
 		{
-			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
-
 		public:
 			bool Exists(int card_id) const
 			{
@@ -29,7 +27,6 @@ namespace state
 
 			bool Empty() const { return secrets_.empty(); }
 
-		private:
 			void Add(int card_id, CardRef card)
 			{
 				if (Exists(card_id)) throw std::exception("Secret already exists");

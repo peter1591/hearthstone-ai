@@ -172,16 +172,12 @@ namespace state {
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeSecret);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
-			board::Player & player = board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier());
-			return player.secrets_.Add(cards_mgr.Get(card_ref).GetCardId(), card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeSecret, kCardZonePlay>::
 			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeSecret);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
-			board::Player & player = board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier());
-			return player.secrets_.Remove(cards_mgr.Get(card_ref).GetCardId());
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeWeapon, kCardZonePlay>::

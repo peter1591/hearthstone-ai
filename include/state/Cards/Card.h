@@ -106,6 +106,7 @@ namespace state
 				if (card_type == kCardTypeSecret) return true;
 				return false;
 			}
+			bool IsSecretCard() const { return data_.is_secret_card; }
 			CardRace GetRace() const { return data_.card_race; }
 
 			int GetPlayOrder() const { return data_.play_order; }

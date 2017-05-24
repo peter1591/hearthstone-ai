@@ -148,7 +148,7 @@ namespace Cards
 				if (turn_now > turn) return false;
 				if (turn_now < turn) return true;
 
-				if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSecret) return true;
+				if (context.manipulate_.GetCard(context.card_ref_).IsSpellCard()) return true;
 				*context.cost_ = 0;
 				return false;
 			});

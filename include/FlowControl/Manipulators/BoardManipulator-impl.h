@@ -98,9 +98,7 @@ namespace FlowControl
 			*final_amount = amount;
 			
 			if (amount >= 0) { // spell damage only acts on damages, not healings
-				if (source_card.GetCardType() == state::kCardTypeSpell ||
-					source_card.GetCardType() == state::kCardTypeSecret)
-				{
+				if (source_card.IsSpellCard()) {
 					*final_amount += GetSpellDamage(source_card.GetPlayerIdentifier());
 				}
 			}
