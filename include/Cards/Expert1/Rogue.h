@@ -14,7 +14,7 @@ namespace Cards
 				{
 					if (context.manipulate_.Board().GetTurn() != turn) return false;
 
-					if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+					if (!context.manipulate_.GetCard(context.card_ref_).IsSpellCard()) return true;
 					*context.cost_ -= 3;
 					return false;
 				});

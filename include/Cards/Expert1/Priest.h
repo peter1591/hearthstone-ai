@@ -265,7 +265,7 @@ namespace Cards
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
 			state::Cards::Card const& source_card = context.manipulate_.GetCard(context.source_ref_);
 			if (source_card.GetPlayerIdentifier() != owner) return true; // for friendly only
-			if (source_card.GetCardType() == state::kCardTypeSpell ||
+			if (source_card.IsSpellCard() ||
 				source_card.GetCardType() == state::kCardTypeHeroPower)
 			{
 				*context.amount_ *= 2; // both healing and damaging. Positive for damaging; nagitive for healing

@@ -24,7 +24,7 @@ namespace Cards
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			auto const& card = context.manipulate_.GetCard(context.card_ref_);
 			if (card.GetPlayerIdentifier() != owner) return true;
-			if (card.GetCardType() != state::kCardTypeSpell) return true;
+			if (!card.IsSpellCard()) return true;
 			*context.cost_ -= 1;
 			return true;
 		}
@@ -38,7 +38,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CheckPlayCardCountered::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() != player.Opposite()) return true;
-			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+			if (!context.manipulate_.GetCard(context.card_ref_).IsSpellCard()) return true;
 			*context.countered_ = true;
 			context.manipulate_.OnBoardSecret(self).Reveal();
 			return false;
@@ -102,7 +102,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PreparePlayCardTarget::Context context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() == player) return true;
-			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+			if (!context.manipulate_.GetCard(context.card_ref_).IsSpellCard()) return true;
 
 			if (!context.target_ref_->IsValid()) return true;
 			if (context.manipulate_.GetCard(*context.target_ref_).GetCardType() != state::kCardTypeMinion) return true;
@@ -206,10 +206,7 @@ namespace Cards
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
-			auto card_type = context.manipulate_.GetCard(context.card_ref_).GetCardType();
-			if (card_type == state::kCardTypeSpell ||
-				card_type == state::kCardTypeSecret)
-			{
+			if (context.manipulate_.GetCard(context.card_ref_).IsSpellCard()) {
 				context.manipulate_.Hero(owner).AddHandCard(Cards::ID_CS2_029);
 			}
 			return true;

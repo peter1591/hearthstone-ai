@@ -100,6 +100,12 @@ namespace state
 		public: // getters and setters
 			int GetCardId() const { return data_.card_id; }
 			CardType GetCardType() const { return data_.card_type; }
+			bool IsSpellCard() const {
+				auto card_type = GetCardType();
+				if (card_type == kCardTypeSpell) return true;
+				if (card_type == kCardTypeSecret) return true;
+				return false;
+			}
 			CardRace GetRace() const { return data_.card_race; }
 
 			int GetPlayOrder() const { return data_.play_order; }
