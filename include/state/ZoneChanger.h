@@ -159,8 +159,6 @@ namespace state {
 				return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeMinion:
 				return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeSecret:
-				return ZoneChanger<ChangingCardZone, kCardTypeSecret>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeSpell:
 				return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeWeapon:
@@ -183,8 +181,6 @@ namespace state {
 				return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardTypeMinion:
 				return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeSecret:
-				return ZoneChanger<ChangingCardZone, kCardTypeSecret>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardTypeSpell:
 				return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardTypeWeapon:
@@ -208,8 +204,6 @@ namespace state {
 				return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeMinion:
 				assert(false); // should specify position
-			case kCardTypeSecret:
-				return ZoneChanger<ChangingCardZone, kCardTypeSecret>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeSpell:
 				return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeWeapon:
@@ -232,8 +226,6 @@ namespace state {
 				assert(false); // should not specify position
 			case kCardTypeMinion:
 				return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeSecret:
-				assert(false); // should not specify position
 			case kCardTypeSpell:
 				assert(false); // should not specify position
 			case kCardTypeWeapon:
@@ -269,8 +261,6 @@ namespace state {
 				return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeHeroPower:
 				return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeSecret:
-				return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeSpell:
 				return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			case kCardTypeWeapon:
@@ -291,8 +281,6 @@ namespace state {
 				return ZoneChangerWithUnknownZone<kCardTypeMinion>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardTypeHeroPower:
 				return ZoneChangerWithUnknownZone<kCardTypeHeroPower>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeSecret:
-				return ZoneChangerWithUnknownZone<kCardTypeSecret>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardTypeSpell:
 				return ZoneChangerWithUnknownZone<kCardTypeSpell>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			case kCardTypeWeapon:

@@ -69,12 +69,6 @@ namespace state {
 			static void ReplaceBy(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref, CardRef new_card_ref);
 		};
 		template <>
-		struct PlayerDataStructureMaintainer<kCardTypeSecret, kCardZonePlay> {
-			static constexpr bool SpecifyAddPosition = false;
-			static void Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref);
-			static void Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref);
-		};
-		template <>
 		struct PlayerDataStructureMaintainer<kCardTypeWeapon, kCardZonePlay> {
 			static constexpr bool SpecifyAddPosition = false;
 			static void Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref);

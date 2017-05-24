@@ -12,7 +12,7 @@ namespace FlowControl
 			SecretManipulator(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
 				: CardManipulator(state, flow_context, card_ref)
 			{
-				assert(GetCard().GetCardType() == state::kCardTypeSecret);
+				assert(GetCard().GetCardType() == state::kCardTypeSpell);
 				assert(GetCard().IsSpellCard());
 			}
 

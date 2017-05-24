@@ -18,7 +18,6 @@ namespace state
 		kCardTypeMinion,
 		kCardTypeSpell,
 		kCardTypeWeapon,
-		kCardTypeSecret,
 		kCardTypeHeroPower,
 		kCardTypeEnchantment
 	};

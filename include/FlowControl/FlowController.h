@@ -53,7 +53,6 @@ namespace FlowControl
 		bool PlayWeaponCardPhase(state::CardRef card_ref);
 		bool PlayHeroPowerCardPhase(state::CardRef card_ref);
 		bool PlaySpellCardPhase(state::CardRef card_ref);
-		bool PlaySecretCardPhase(state::CardRef card_ref);
 		
 		void AttackInternal(state::CardRef attacker, state::CardRef defender);
 		bool AttackPhase(state::CardRef attacker, state::CardRef defender);

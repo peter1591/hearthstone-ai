@@ -60,13 +60,7 @@ namespace FlowControl
 			PlayCardPhase<state::kCardTypeWeapon>(card_ref);
 			break;
 		case state::kCardTypeSpell:
-		case state::kCardTypeSecret:
-			if (state_.GetCard(card_ref).IsSecretCard()) {
-				PlayCardPhase<state::kCardTypeSecret>(card_ref);
-			}
-			else {
-				PlayCardPhase<state::kCardTypeSpell>(card_ref);
-			}
+			PlayCardPhase<state::kCardTypeSpell>(card_ref);
 			break;
 		default:
 			assert(false);
@@ -169,12 +163,6 @@ namespace FlowControl
 		return PlayHeroPowerCardPhase(card_ref);
 	}
 
-	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeSecret>(state::CardRef card_ref)
-	{
-		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeSecret);
-		return PlaySecretCardPhase(card_ref);
-	}
-
 	inline bool FlowController::PlayMinionCardPhase(state::CardRef card_ref)
 	{
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
@@ -246,37 +234,32 @@ namespace FlowControl
 	inline bool FlowController::PlaySpellCardPhase(state::CardRef card_ref)
 	{
 		state::CardRef new_card_ref;
+		bool is_secret = state_.GetCard(card_ref).IsSecretCard();
+
+		if (is_secret) {
+			if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId()))
+				return SetResult(FlowControl::kResultInvalid);
+		}
 
 		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
 		assert(!new_card_ref.IsValid()); // spell cannot be transformed
 
-		state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
-			.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
+		if (is_secret) {
+			state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
+			state_.GetCurrentPlayer().secrets_.Add(state_.GetCard(card_ref).GetCardId(), card_ref);
+		}
+		else {
+			state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
+		}
 
 		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
 			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
-
-		return true;
-	}
-
-	inline bool FlowController::PlaySecretCardPhase(state::CardRef card_ref)
-	{
-		state::CardRef new_card_ref;
-
-		if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) return SetResult(FlowControl::kResultInvalid);
-
-		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
-		assert(!new_card_ref.IsValid()); // secret cannot be transformed
-
-		state_.GetZoneChanger<state::kCardTypeSecret, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
-			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
-		state_.GetCurrentPlayer().secrets_.Add(state_.GetCard(card_ref).GetCardId(), card_ref);
-
-		state_.TriggerEvent<state::Events::EventTypes::AfterSpellPlayed>(
-			state::Events::EventTypes::AfterSpellPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
-		state_.TriggerEvent<state::Events::EventTypes::AfterSecretPlayed>(
-			state::Events::EventTypes::AfterSecretPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
-
+		if (is_secret) {
+			state_.TriggerEvent<state::Events::EventTypes::AfterSecretPlayed>(
+				state::Events::EventTypes::AfterSecretPlayed::Context{ Manipulate(state_, flow_context_), state_.GetCurrentPlayerId(), card_ref });
+		}
 		return true;
 	}
 
