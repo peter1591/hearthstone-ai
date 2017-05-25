@@ -26,6 +26,9 @@ namespace FlowControl
 		template <state::CardZone ZoneTo>
 		inline void MinionManipulator<Zone>::MoveTo(state::PlayerIdentifier to_player)
 		{
+			static_assert(Zone != ZoneTo, "Zone should actually changed. If in the same zone, call ChangeOwner() instead.");
+
+			// TODO: if ZoneTo = hand, and it's full, go to graveyard
 			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
 				FlowControl::Manipulate(state_, flow_context_), card_ref_
 				).ChangeTo<ZoneTo>(to_player);
