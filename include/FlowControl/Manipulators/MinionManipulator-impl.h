@@ -24,27 +24,49 @@ namespace FlowControl
 
 		template <state::CardZone Zone>
 		template <state::CardZone ZoneTo>
-		inline void MinionManipulator<Zone>::MoveTo(state::PlayerIdentifier to_player)
+		inline bool MinionManipulator<Zone>::PreMoveTo(state::PlayerIdentifier to_player)
 		{
-			static_assert(Zone != ZoneTo, "Zone should actually changed. If in the same zone, call ChangeOwner() instead.");
-
 			if (ZoneTo == state::kCardZoneHand) { // TODO: use if-constexpr when compiler supports
 				if (state_.GetBoard().Get(to_player).hand_.Full()) {
-					return Destroy();
+					Destroy();
+					return false;
 				}
 			}
 
 			if (ZoneTo == state::kCardZonePlay) { // TODO: use if-constexpr when compiler supports
 				if (state_.GetBoard().Get(to_player).minions_.Full()) {
-					return Destroy();
+					Destroy();
+					return false;
 				}
 			}
+
+			if (Zone != ZoneTo) { // TODO: use if-constexpr
+				state_.GetMutableCard(card_ref_).RestoreToDefault();
+			}
+
+			return true;
+		}
+
+		template <state::CardZone Zone>
+		template <state::CardZone ZoneTo>
+		inline void MinionManipulator<Zone>::MoveTo(state::PlayerIdentifier to_player)
+		{
+			if (!PreMoveTo<ZoneTo>(to_player)) return;
 
 			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
 				FlowControl::Manipulate(state_, flow_context_), card_ref_
 				).ChangeTo<ZoneTo>(to_player);
+		}
 
-			state_.GetMutableCard(card_ref_).RestoreToDefault();
+		template <state::CardZone Zone>
+		template <state::CardZone ZoneTo>
+		inline void MinionManipulator<Zone>::MoveTo(state::PlayerIdentifier to_player, int pos)
+		{
+			if (!PreMoveTo<ZoneTo>(to_player)) return;
+
+			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
+				FlowControl::Manipulate(state_, flow_context_), card_ref_
+				).ChangeTo<ZoneTo>(to_player, pos);
 		}
 	}
 }

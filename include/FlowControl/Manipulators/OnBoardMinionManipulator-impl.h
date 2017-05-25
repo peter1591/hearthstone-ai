@@ -34,16 +34,11 @@ namespace FlowControl
 		inline void OnBoardMinionManipulator::ChangeOwner(state::PlayerIdentifier new_owner)
 		{
 			if (GetCard().GetZone() != state::kCardZonePlay) return;
-
 			assert(GetCard().GetPlayerIdentifier().Opposite() == new_owner);
 
-			if (state_.GetBoard().Get(new_owner).minions_.Full()) return Destroy();
-
 			int new_pos = (int)state_.GetBoard().Get(new_owner).minions_.Size();
-
-			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeMinion>(
-				Manipulate(state_, flow_context_), card_ref_)
-				.ChangeTo<state::kCardZonePlay>(new_owner, new_pos);
+			return MinionManipulator<state::kCardZonePlay>(state_, flow_context_, card_ref_)
+				.MoveTo<state::kCardZonePlay>(new_owner, new_pos);
 		}
 
 		inline state::CardRef OnBoardMinionManipulator::Transform(Cards::CardId id)

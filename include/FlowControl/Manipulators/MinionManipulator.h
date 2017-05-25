@@ -28,10 +28,15 @@ namespace FlowControl
 			void SwapWith(state::CardRef ref);
 
 			template <state::CardZone ZoneTo> void MoveTo(state::PlayerIdentifier to_player);
+			template <state::CardZone ZoneTo> void MoveTo(state::PlayerIdentifier to_player, int pos);
 
 			template <state::CardZone ZoneTo> void MoveTo() {
 				return MoveTo<ZoneTo>(GetCard().GetPlayerIdentifier());
 			}
+
+		private:
+			template <state::CardZone ZoneTo>
+			bool PreMoveTo(state::PlayerIdentifier to_player);
 		};
 	}
 }
