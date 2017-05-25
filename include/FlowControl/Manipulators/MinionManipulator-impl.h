@@ -28,7 +28,18 @@ namespace FlowControl
 		{
 			static_assert(Zone != ZoneTo, "Zone should actually changed. If in the same zone, call ChangeOwner() instead.");
 
-			// TODO: if ZoneTo = hand, and it's full, go to graveyard
+			if (ZoneTo == state::kCardZoneHand) { // TODO: use if-constexpr when compiler supports
+				if (state_.GetBoard().Get(to_player).hand_.Full()) {
+					return Destroy();
+				}
+			}
+
+			if (ZoneTo == state::kCardZonePlay) { // TODO: use if-constexpr when compiler supports
+				if (state_.GetBoard().Get(to_player).minions_.Full()) {
+					return Destroy();
+				}
+			}
+
 			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(
 				FlowControl::Manipulate(state_, flow_context_), card_ref_
 				).ChangeTo<ZoneTo>(to_player);

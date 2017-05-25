@@ -17,6 +17,13 @@ namespace FlowControl
 				assert(GetCard().GetZone() == Zone);
 			}
 
+			void Destroy() {
+				if (Zone == state::kCardZonePlay) { // TODO: if-constexpr
+					GetCard().SetPendingDestroy();
+					flow_context_.AddDeadEntryHint(state_, card_ref_);
+				}
+			}
+
 			template<state::CardZone SwapWithZone>
 			void SwapWith(state::CardRef ref);
 

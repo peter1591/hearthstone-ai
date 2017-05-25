@@ -31,11 +31,10 @@ namespace FlowControl
 			}
 
 			void Silence();
-
 			void Destroy() {
-				if (GetCard().GetZone() != state::kCardZonePlay) return;
-				GetCard().SetPendingDestroy();
-				flow_context_.AddDeadEntryHint(state_, card_ref_);
+				if(GetCard().GetZone() != state::kCardZonePlay) return;
+				return MinionManipulator<state::kCardZonePlay>(state_, flow_context_, card_ref_)
+					.Destroy();
 			}
 
 			void ChangeOwner(state::PlayerIdentifier new_owner);
