@@ -21,6 +21,24 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_144e : Enchantment<Card_EX1_144e, Cost<-2>> {};
+	struct Card_EX1_144 : SpellCardBase<Card_EX1_144> {
+		Card_EX1_144() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Ally().Minion().SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				context.manipulate_.OnBoardMinion(target).MoveTo<state::kCardZoneHand>();
+				if (context.manipulate_.GetCard(target).GetZone() != state::kCardZoneHand) return;
+				context.manipulate_.Card(target).Enchant().Add<Card_EX1_144e>();
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_144)
 REGISTER_CARD(EX1_145)
