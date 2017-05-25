@@ -18,7 +18,8 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Player() : fatigue_damage_(0), hero_ref_change_id_(0), played_minions_this_turn_(0)
+			Player() : fatigue_damage_(0), hero_ref_change_id_(0), played_minions_this_turn_(0),
+				played_cards_this_turn_(0)
 			{}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }
@@ -36,6 +37,7 @@ namespace state
 
 			void EndTurn() {
 				played_minions_this_turn_ = 0;
+				played_cards_this_turn_ = 0;
 			}
 
 		private: // restrict access to zone changer
@@ -58,6 +60,7 @@ namespace state
 			Graveyard graveyard_;
 
 			int played_minions_this_turn_;
+			int played_cards_this_turn_;
 
 		private:
 			CardRef hero_ref_;

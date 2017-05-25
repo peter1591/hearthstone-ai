@@ -68,6 +68,8 @@ namespace FlowControl
 		}
 
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+
+		++state_.GetCurrentPlayer().played_cards_this_turn_;
 	}
 
 	template <state::CardType CardType>
