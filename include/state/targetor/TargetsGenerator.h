@@ -16,11 +16,20 @@ namespace state {
 			Targets const& GetInfo() const { return info_; }
 
 		protected:
+			TargetsGenerator_Leaf() {}
+			void Initialize(state::PlayerIdentifier targeting_player) {
+				info_.Initialize(targeting_player);
+			}
+
+		protected:
 			Targets info_;
 		};
 
 		class TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter : public TargetsGenerator_Leaf
 		{
+		protected:
+			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter() {}
+
 		public: // Fluent-like API to set up
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(state::PlayerIdentifier targeting_player) :
 				TargetsGenerator_Leaf(targeting_player)
@@ -36,6 +45,9 @@ namespace state {
 
 		class TargetsGenerator_ChosenSide_ChosenHeroMinion : public TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter
 		{
+		protected:
+			TargetsGenerator_ChosenSide_ChosenHeroMinion() {}
+
 		public: // Fluent-like API to set up
 			TargetsGenerator_ChosenSide_ChosenHeroMinion(state::PlayerIdentifier targeting_player) :
 				TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(targeting_player)
@@ -144,6 +156,9 @@ namespace state {
 
 		class TargetsGenerator_ChosenSide : public TargetsGenerator_ChosenSide_ChosenHeroMinion
 		{
+		protected:
+			TargetsGenerator_ChosenSide() {}
+
 		public: // Fluent-like API to set up
 			TargetsGenerator_ChosenSide(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenSide_ChosenHeroMinion(targeting_player) {}
 
@@ -165,6 +180,9 @@ namespace state {
 		class TargetsGenerator : public TargetsGenerator_ChosenSide
 		{
 		public: // Fluent-like API to set up
+			TargetsGenerator() {}
+			using TargetsGenerator_Leaf::Initialize;
+
 			TargetsGenerator(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenSide(targeting_player) {}
 
 			TargetsGenerator_ChosenSide & Ally() {

@@ -15,11 +15,9 @@ namespace state {
 		{
 		public:
 			Targets(state::PlayerIdentifier targeting_side) :
-				targeting_side(targeting_side),
-				include_first(true), include_second(true),
-				include_hero(true), include_minion(true),
-				filter_type(kFilterAll)
+				Targets()
 			{
+				Initialize(targeting_side);
 			}
 
 			Targets() :
@@ -27,6 +25,10 @@ namespace state {
 				include_hero(true), include_minion(true),
 				filter_type(kFilterAll)
 			{}
+
+			void Initialize(state::PlayerIdentifier targeting_side) {
+				this->targeting_side = targeting_side;
+			}
 
 			static Targets None() {
 				Targets ret(state::PlayerIdentifier::First()); // side is not important

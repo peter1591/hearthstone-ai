@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_CS2_101 : public HeroPowerCardBase<Card_CS2_101> {
 		Card_CS2_101() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 				return true;
 			});
@@ -20,9 +20,9 @@ namespace Cards
 	struct Card_CS2_087e : public Enchantment<Card_CS2_087e, Attack<3>> {};
 	struct Card_CS2_087 : public SpellCardBase<Card_CS2_087> {
 		Card_CS2_087() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -35,9 +35,9 @@ namespace Cards
 
 	struct Card_EX1_371 : public SpellCardBase<Card_EX1_371> {
 		Card_EX1_371() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -51,9 +51,9 @@ namespace Cards
 	struct Card_EX1_360e : Enchantment<Card_EX1_360e, SetAttack<1>> {}; // TODO: why it works without public inherit?
 	struct Card_EX1_360 : SpellCardBase<Card_EX1_360> {
 		Card_EX1_360() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -66,9 +66,9 @@ namespace Cards
 
 	struct Card_CS2_089 : public SpellCardBase<Card_CS2_089> {
 		Card_CS2_089() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -96,9 +96,9 @@ namespace Cards
 	struct Card_CS2_092e : public Enchantment<Card_CS2_092e, Attack<4>, MaxHP<4>> {};
 	struct Card_CS2_092 : public SpellCardBase<Card_CS2_092> {
 		Card_CS2_092() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -121,9 +121,9 @@ namespace Cards
 
 	struct Card_CS2_094 : public SpellCardBase<Card_CS2_094> {
 		Card_CS2_094() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

@@ -157,9 +157,9 @@ namespace Cards
 
 	struct Card_EX1_275 : public SpellCardBase<Card_EX1_275> {
 		Card_EX1_275() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -221,9 +221,9 @@ namespace Cards
 
 	struct Card_EX1_279 : SpellCardBase<Card_EX1_279> {
 		Card_EX1_279() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

@@ -17,13 +17,17 @@ namespace FlowControl
 
 			bool need_to_prepare_target = true;
 			bool allow_no_target = true;
-			state::targetor::Targets targets;
+			;
 			
-			if (!(*specified_target_getter)(
-				context::GetSpecifiedTarget{ Manipulate(state, flow_context), player, card_ref, &targets, &allow_no_target, &need_to_prepare_target }))
+			context::GetSpecifiedTarget context(
+				Manipulate(state, flow_context), player, card_ref,
+				&allow_no_target, &need_to_prepare_target);
+			if (!(*specified_target_getter)(context))
 			{
 				return false;
 			}
+			state::targetor::Targets targets = context.GetTargets();
+
 			if (!need_to_prepare_target) return true;
 
 			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, allow_no_target);

@@ -7,9 +7,9 @@ namespace Cards
 {
 	struct Card_EX1_161 : public SpellCardBase<Card_EX1_161> {
 		Card_EX1_161() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -22,9 +22,9 @@ namespace Cards
 
 	struct Card_EX1_578 : public SpellCardBase<Card_EX1_578> {
 		Card_EX1_578() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -66,9 +66,9 @@ namespace Cards
 				Cards::ID_EX1_154a,
 				Cards::ID_EX1_154b
 			};
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -92,9 +92,9 @@ namespace Cards
 				Cards::ID_EX1_155a,
 				Cards::ID_EX1_155b
 			};
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -133,9 +133,10 @@ namespace Cards
 	};
 
 	struct Card_EX1_166 : public MinionCardBase<Card_EX1_166> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			*context.allow_no_target_ = true;
-			return TargetsGenerator(context.player_).Minion().Targetable();
+			context.SetTargets(context.player_).Minion().Targetable();
+			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
@@ -191,7 +192,7 @@ namespace Cards
 				Cards::ID_NEW1_007a,
 				Cards::ID_NEW1_007b,
 			};
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
 				if (choice == 0) {
 					*context.need_to_prepare_target_ = false;
@@ -199,7 +200,7 @@ namespace Cards
 				}
 				else {
 					*context.allow_no_target_ = true;
-					*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+					context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 					return true;
 				}
 				context.manipulate_.SaveUserChoice(choice);
@@ -246,7 +247,7 @@ namespace Cards
 				Cards::ID_NEW1_008a,
 				Cards::ID_NEW1_008b
 			};
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
 				context.manipulate_.SaveUserChoice(choice);
 
@@ -256,7 +257,7 @@ namespace Cards
 				}
 				else {
 					*context.allow_no_target_ = true;
-					*context.targets_ = TargetsGenerator(context.player_).Targetable().GetInfo();
+					context.SetTargets(context.player_).Targetable().GetInfo();
 				}
 				return true;
 			});

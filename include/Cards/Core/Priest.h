@@ -7,8 +7,8 @@ namespace Cards
 {
 	struct Card_CS1h_001 : public HeroPowerCardBase<Card_CS1h_001> {
 		Card_CS1h_001() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -21,8 +21,8 @@ namespace Cards
 
 	struct Card_CS1_130 : public SpellCardBase<Card_CS1_130> {
 		Card_CS1_130() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -49,8 +49,8 @@ namespace Cards
 	struct Card_CS2_004e : public Enchantment<Card_CS2_004e, MaxHP<2>> {};
 	struct Card_CS2_004 : public SpellCardBase<Card_CS2_004> {
 		Card_CS2_004() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -79,8 +79,8 @@ namespace Cards
 	struct Card_CS2_236e : public Enchantment<Card_CS2_236e<v>, MaxHP<v>> {};
 	struct Card_CS2_236 : public SpellCardBase<Card_CS2_236> {
 		Card_CS2_236() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_).Minion().SpellTargetable().GetInfo();
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -103,8 +103,8 @@ namespace Cards
 
 	struct Card_CS2_234 : public SpellCardBase<Card_CS2_234> {
 		Card_CS2_234() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_)
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_)
 					.Enemy()
 					.Minion().SpellTargetableAndAttackLessOrEqualTo(3)
 					.GetInfo();
@@ -120,8 +120,8 @@ namespace Cards
 
 	struct Card_EX1_622 : public SpellCardBase<Card_EX1_622> {
 		Card_EX1_622() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_)
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_)
 					.Enemy()
 					.Minion().SpellTargetableAndAttackGreaterOrEqualTo(5)
 					.GetInfo();
@@ -154,8 +154,8 @@ namespace Cards
 
 	struct Card_CS1_113 : public SpellCardBase<Card_CS1_113> {
 		Card_CS1_113() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_)
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_)
 					.Enemy()
 					.Minion().SpellTargetable()
 					.GetInfo();

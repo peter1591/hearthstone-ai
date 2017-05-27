@@ -6,8 +6,9 @@
 namespace Cards
 {
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetTargets(context.player_).Targetable();
+			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.OnBoardCharacter(context.GetTarget())
@@ -34,8 +35,9 @@ namespace Cards
 	struct Card_CS2_171 : public MinionCardBase<Card_CS2_171, Charge> {};
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetTargets(context.player_).Targetable();
+			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(
@@ -67,8 +69,9 @@ namespace Cards
 
 	struct Card_EX1_582 : public MinionCardBase<Card_EX1_582, SpellDamage<1>> {};
 	struct Card_CS2_141 : public MinionCardBase<Card_CS2_141> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetTargets(context.player_).Targetable();
+			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
@@ -101,8 +104,9 @@ namespace Cards
 
 	struct Card_EX1_019e : public Enchantment<Card_EX1_019e, MaxHP<1>, Attack<1>> {};
 	struct Card_EX1_019 : public MinionCardBase<Card_EX1_019> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Ally().Minion().Targetable().Exclude(context.card_ref_);
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetTargets(context.player_).Ally().Minion().Targetable().Exclude(context.card_ref_);
+			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			if (!context.GetTarget().IsValid()) return;
@@ -191,8 +195,9 @@ namespace Cards
 	};
 
 	struct Card_CS2_150 : public MinionCardBase<Card_CS2_150> {
-		static auto GetSpecifiedTargets(Contexts::SpecifiedTargetGetter context) {
-			return TargetsGenerator(context.player_).Targetable();
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetTargets(context.player_).Targetable();
+			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);

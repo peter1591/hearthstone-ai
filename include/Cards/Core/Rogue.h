@@ -16,8 +16,8 @@ namespace Cards
 
 	struct Card_CS2_072 : public SpellCardBase<Card_CS2_072> {
 		Card_CS2_072() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
-				*context.targets_ = TargetsGenerator(context.player_)
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetTargets(context.player_)
 					.Minion().SpellTargetableAndAttackLessOrEqualTo(3)
 					.GetInfo();
 				return true;
@@ -33,7 +33,7 @@ namespace Cards
 	struct Card_CS2_074e : public Enchantment<Card_CS2_074e, Attack<2>> {};
 	struct Card_CS2_074 : public SpellCardBase<Card_CS2_074> {
 		Card_CS2_074() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
 				return true;
 			});
@@ -55,9 +55,9 @@ namespace Cards
 
 	struct Card_EX1_581 : public SpellCardBase<Card_EX1_581> {
 		Card_EX1_581() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_)
+				context.SetTargets(context.player_)
 					.Minion().SpellTargetable()
 					.GetInfo();
 				return true;
@@ -72,9 +72,9 @@ namespace Cards
 
 	struct Card_EX1_278 : public SpellCardBase<Card_EX1_278> {
 		Card_EX1_278() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_)
+				context.SetTargets(context.player_)
 					.SpellTargetable()
 					.GetInfo();
 				return true;
@@ -101,9 +101,9 @@ namespace Cards
 
 	struct Card_CS2_076 : public SpellCardBase<Card_CS2_076> {
 		Card_CS2_076() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				*context.allow_no_target_ = false;
-				*context.targets_ = TargetsGenerator(context.player_)
+				context.SetTargets(context.player_)
 					.Enemy()
 					.Minion().SpellTargetable()
 					.GetInfo();
