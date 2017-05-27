@@ -8,8 +8,7 @@ namespace Cards
 	struct Card_EX1_161 : public SpellCardBase<Card_EX1_161> {
 		Card_EX1_161() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -23,8 +22,7 @@ namespace Cards
 	struct Card_EX1_578 : public SpellCardBase<Card_EX1_578> {
 		Card_EX1_578() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -67,8 +65,7 @@ namespace Cards
 				Cards::ID_EX1_154b
 			};
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -93,8 +90,7 @@ namespace Cards
 				Cards::ID_EX1_155b
 			};
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -134,8 +130,7 @@ namespace Cards
 
 	struct Card_EX1_166 : public MinionCardBase<Card_EX1_166> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			*context.allow_no_target_ = true;
-			context.SetTargets(context.player_).Minion().Targetable();
+			context.SetOptionalTargets(context.player_).Minion().Targetable();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -199,8 +194,7 @@ namespace Cards
 					return true;
 				}
 				else {
-					*context.allow_no_target_ = true;
-					context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+					context.SetOptionalTargets(context.player_).Minion().SpellTargetable().GetInfo();
 					return true;
 				}
 				context.manipulate_.SaveUserChoice(choice);
@@ -252,12 +246,10 @@ namespace Cards
 				context.manipulate_.SaveUserChoice(choice);
 
 				if (choice == 0) {
-					*context.allow_no_target_ = true;
 					*context.need_to_prepare_target_ = false;
 				}
 				else {
-					*context.allow_no_target_ = true;
-					context.SetTargets(context.player_).Targetable().GetInfo();
+					context.SetOptionalTargets(context.player_).Targetable().GetInfo();
 				}
 				return true;
 			});

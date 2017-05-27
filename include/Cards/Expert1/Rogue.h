@@ -26,8 +26,7 @@ namespace Cards
 	struct Card_EX1_144 : SpellCardBase<Card_EX1_144> {
 		Card_EX1_144() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Ally().Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Ally().Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -44,8 +43,7 @@ namespace Cards
 	struct Card_CS2_073 : SpellCardBase<Card_CS2_073> {
 		Card_CS2_073() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -64,8 +62,7 @@ namespace Cards
 	struct Card_EX1_126 : SpellCardBase<Card_EX1_126> {
 		Card_EX1_126() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Enemy().Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Enemy().Minion().SpellTargetable().GetInfo();
 				return true; // return false if card cannot be played
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -83,8 +80,7 @@ namespace Cards
 	struct Card_EX1_124 : SpellCardBase<Card_EX1_124> {
 		Card_EX1_124() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -109,8 +105,7 @@ namespace Cards
 	struct Card_EX1_133 : WeaponCardBase<Card_EX1_133> {
 		Card_EX1_133() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Targetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Targetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -156,8 +151,7 @@ namespace Cards
 					*context.need_to_prepare_target_ = false;
 					return true;
 				}
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Targetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Targetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

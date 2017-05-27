@@ -178,8 +178,7 @@ namespace Cards
 	struct Card_EX1_537 : public SpellCardBase<Card_EX1_537> {
 		Card_EX1_537() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

@@ -27,8 +27,7 @@ namespace Cards
 	struct Card_CS2_008 : public SpellCardBase<Card_CS2_008> {
 		Card_CS2_008() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -54,8 +53,7 @@ namespace Cards
 	struct Card_CS2_009 : public SpellCardBase<Card_CS2_009> {
 		Card_CS2_009() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -89,8 +87,7 @@ namespace Cards
 	struct Card_CS2_007 : public SpellCardBase<Card_CS2_007> {
 		Card_CS2_007() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -116,8 +113,7 @@ namespace Cards
 	struct Card_CS2_012 : public SpellCardBase<Card_CS2_012> {
 		Card_CS2_012() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Enemy().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Enemy().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -138,8 +134,7 @@ namespace Cards
 	struct Card_EX1_173 : public SpellCardBase<Card_EX1_173> {
 		Card_EX1_173() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

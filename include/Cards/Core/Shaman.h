@@ -73,8 +73,7 @@ namespace Cards
 	struct Card_CS2_045 : public SpellCardBase<Card_CS2_045> {
 		Card_CS2_045() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -87,8 +86,7 @@ namespace Cards
 	struct Card_CS2_039 : public SpellCardBase<Card_CS2_039> {
 		Card_CS2_039() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_)
+				context.SetRequiredTargets(context.player_)
 					.Minion()
 					.SpellTargetable().GetInfo();
 				return true;
@@ -110,8 +108,7 @@ namespace Cards
 	struct Card_EX1_246 : public SpellCardBase<Card_EX1_246> {
 		Card_EX1_246() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -125,8 +122,7 @@ namespace Cards
 	struct Card_EX1_587e : public Enchantment<Card_EX1_587e, Windfury> {};
 	struct Card_EX1_587 : public MinionCardBase<Card_EX1_587> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			*context.allow_no_target_ = true;
-			context.SetTargets(context.player_)
+			context.SetOptionalTargets(context.player_)
 				.Ally()
 				.Minion()
 				.Targetable();
@@ -152,9 +148,7 @@ namespace Cards
 
 	struct Card_CS2_042 : public MinionCardBase<Card_CS2_042> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			*context.allow_no_target_ = true;
-			context.SetTargets(context.player_)
-				.Targetable();
+			context.SetOptionalTargets(context.player_).Targetable();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {

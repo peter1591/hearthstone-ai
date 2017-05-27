@@ -17,7 +17,7 @@ namespace Cards
 	struct Card_CS2_072 : public SpellCardBase<Card_CS2_072> {
 		Card_CS2_072() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetTargets(context.player_)
+				context.SetOptionalTargets(context.player_)
 					.Minion().SpellTargetableAndAttackLessOrEqualTo(3)
 					.GetInfo();
 				return true;
@@ -56,8 +56,7 @@ namespace Cards
 	struct Card_EX1_581 : public SpellCardBase<Card_EX1_581> {
 		Card_EX1_581() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_)
+				context.SetRequiredTargets(context.player_)
 					.Minion().SpellTargetable()
 					.GetInfo();
 				return true;
@@ -73,8 +72,7 @@ namespace Cards
 	struct Card_EX1_278 : public SpellCardBase<Card_EX1_278> {
 		Card_EX1_278() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_)
+				context.SetRequiredTargets(context.player_)
 					.SpellTargetable()
 					.GetInfo();
 				return true;
@@ -102,8 +100,7 @@ namespace Cards
 	struct Card_CS2_076 : public SpellCardBase<Card_CS2_076> {
 		Card_CS2_076() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_)
+				context.SetRequiredTargets(context.player_)
 					.Enemy()
 					.Minion().SpellTargetable()
 					.GetInfo();

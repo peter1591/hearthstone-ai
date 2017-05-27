@@ -8,7 +8,7 @@ namespace Cards
 	struct Card_CS2_034 : public HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetOptionalTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -66,8 +66,7 @@ namespace Cards
 	struct Card_CS2_024 : public SpellCardBase<Card_CS2_024> {
 		Card_CS2_024() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -100,8 +99,7 @@ namespace Cards
 	struct Card_CS2_029 : SpellCardBase<Card_CS2_029> {
 		Card_CS2_029() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -115,8 +113,7 @@ namespace Cards
 	struct Card_CS2_022 : public SpellCardBase<Card_CS2_022> {
 		Card_CS2_022() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

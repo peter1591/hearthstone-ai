@@ -20,8 +20,7 @@ namespace Cards
 	struct Card_CS2_103 : public SpellCardBase<Card_CS2_103> {
 		Card_CS2_103() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -75,8 +74,7 @@ namespace Cards
 	struct Card_CS2_108 : public SpellCardBase<Card_CS2_108> {
 		Card_CS2_108() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().Damaged().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().Damaged().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

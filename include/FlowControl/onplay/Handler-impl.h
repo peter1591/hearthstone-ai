@@ -16,12 +16,10 @@ namespace FlowControl
 			if (!specified_target_getter) return true;
 
 			bool need_to_prepare_target = true;
-			bool allow_no_target = true;
-			;
 			
 			context::GetSpecifiedTarget context(
 				Manipulate(state, flow_context), player, card_ref,
-				&allow_no_target, &need_to_prepare_target);
+				&need_to_prepare_target);
 			if (!(*specified_target_getter)(context))
 			{
 				return false;
@@ -30,7 +28,7 @@ namespace FlowControl
 
 			if (!need_to_prepare_target) return true;
 
-			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, allow_no_target);
+			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, context.IsAllowedNoTarget());
 		}
 
 		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const

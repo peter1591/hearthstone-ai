@@ -16,8 +16,7 @@ namespace Cards
 	struct Card_DS1_185 : public SpellCardBase<Card_DS1_185> {
 		Card_DS1_185() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -32,8 +31,7 @@ namespace Cards
 	struct Card_CS2_084 : public SpellCardBase<Card_CS2_084> {
 		Card_CS2_084() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -118,8 +116,7 @@ namespace Cards
 	struct Card_EX1_539 : public SpellCardBase<Card_EX1_539> {
 		Card_EX1_539() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				*context.allow_no_target_ = false;
-				context.SetTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -171,8 +168,7 @@ namespace Cards
 	struct Card_DS1_070o : public Enchantment<Card_DS1_070o, Attack<2>, MaxHP<2>> {};
 	struct Card_DS1_070 : public MinionCardBase<Card_DS1_070> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			*context.allow_no_target_ = true;
-			context.SetTargets(context.player_).Ally().Minion().Beasts().Exclude(context.card_ref_);
+			context.SetOptionalTargets(context.player_).Ally().Minion().Beasts().Exclude(context.card_ref_);
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
