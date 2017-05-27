@@ -194,6 +194,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
 				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
 				if (choice == 0) {
+					*context.need_to_prepare_target_ = false;
 					return true;
 				}
 				else {
