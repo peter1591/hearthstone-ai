@@ -22,6 +22,8 @@ namespace FlowControl
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 
+				// TODO: add helper functions to set jup targets_, allow_no_target, and need_to_prepare_target_
+
 				state::targetor::Targets * targets_;
 				bool * allow_no_target_; // default: allow
 				bool * need_to_prepare_target_; // default: need // TODO: need this one? what's this for?
