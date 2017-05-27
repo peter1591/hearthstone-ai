@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=128&sort=-cost&display=1
-// Last finished card: Defias Bandit
+// Last finished card: Perdition's Blade
 
 namespace Cards
 {
@@ -61,6 +61,40 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_126 : SpellCardBase<Card_EX1_126> {
+		Card_EX1_126() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Enemy().Minion().SpellTargetable().GetInfo();
+				return true; // return false if card cannot be played
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				assert(target.IsValid());
+				if (context.manipulate_.GetCard(target).GetZone() != state::kCardZonePlay) return;
+				int attack = context.manipulate_.GetCard(target).GetAttack();
+				ApplyToAdjacent(context.manipulate_, target, [&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(target, attack);
+				});
+			});
+		}
+	};
+
+	struct Card_EX1_124 : SpellCardBase<Card_EX1_124> {
+		Card_EX1_124() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).SpellTargetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(
+					context.card_ref_, combo ? 4 : 2);
+			});
+		}
+	};
+
 	struct Card_EX1_131 : MinionCardBase<Card_EX1_131> {
 		static void Battlecry(Contexts::OnPlay const& context) {
 			bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
@@ -69,9 +103,49 @@ namespace Cards
 			}
 		}
 	};
+
+	struct Card_EX1_522 : MinionCardBase<Card_EX1_522, Stealth, Poisonous> {};
+
+	struct Card_EX1_133 : WeaponCardBase<Card_EX1_133> {
+		Card_EX1_133() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Targetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(
+					context.card_ref_, combo ? 2 : 1);
+			});
+		}
+	};
+
+	struct Card_EX1_137 : SpellCardBase<Card_EX1_137> {
+		Card_EX1_137() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 2);
+				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+				if (!combo) return;
+
+				state::PlayerIdentifier player = context.player_;
+				context.manipulate_.AddEvent<state::Events::EventTypes::OnTurnStart>(
+					[player](state::Events::EventTypes::OnTurnStart::Context context) {
+					if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+					context.manipulate_.Hero(player).AddHandCard(Cards::ID_EX1_137);
+					return false;
+				});
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_137)
+REGISTER_CARD(EX1_133)
+REGISTER_CARD(EX1_522)
 REGISTER_CARD(EX1_131)
+REGISTER_CARD(EX1_124)
+REGISTER_CARD(EX1_126)
 REGISTER_CARD(CS2_073)
 REGISTER_CARD(EX1_144)
 REGISTER_CARD(EX1_145)
