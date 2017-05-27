@@ -11,7 +11,9 @@ namespace Cards
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.OnBoardCharacter(context.GetTarget())
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardCharacter(target)
 				.Damage(context.card_ref_, 1);
 		}
 	};
@@ -36,11 +38,13 @@ namespace Cards
 
 	struct Card_EX1_011 : public MinionCardBase<Card_EX1_011> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Targetable();
+			context.SetRequiredTargets(context.player_).Targetable();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardCharacter(target).Heal(
 				context.card_ref_, 2);
 		}
 	};
@@ -76,7 +80,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
 			if (!target.IsValid()) return;
-			context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 1);
+			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
 		}
 	};
 
@@ -109,8 +113,9 @@ namespace Cards
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
-			if (!context.GetTarget().IsValid()) return;
-			Manipulate(context).OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_019e>();
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			Manipulate(context).OnBoardMinion(target).Enchant().Add<Card_EX1_019e>();
 		}
 	};
 
@@ -200,7 +205,9 @@ namespace Cards
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 2);
 		}
 	};
 

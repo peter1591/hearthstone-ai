@@ -8,7 +8,7 @@ namespace Cards
 	struct Card_CS1h_001 : public HeroPowerCardBase<Card_CS1h_001> {
 		Card_CS1h_001() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetOptionalTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -22,13 +22,11 @@ namespace Cards
 	struct Card_CS1_130 : public SpellCardBase<Card_CS1_130> {
 		Card_CS1_130() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetOptionalTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				state::CardRef target = context.GetTarget();
-				if (!target.IsValid()) return;
-				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 2);
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
 			});
 		}
 	};

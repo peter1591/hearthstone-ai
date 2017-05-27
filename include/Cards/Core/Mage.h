@@ -8,7 +8,7 @@ namespace Cards
 	struct Card_CS2_034 : public HeroPowerCardBase<Card_CS2_034> {
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetOptionalTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

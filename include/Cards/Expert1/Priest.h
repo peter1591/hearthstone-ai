@@ -64,7 +64,7 @@ namespace Cards
 	struct Card_EX1_625t : public HeroPowerCardBase<Card_EX1_625t> {
 		Card_EX1_625t() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetOptionalTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -76,7 +76,7 @@ namespace Cards
 	struct Card_EX1_625t2 : public HeroPowerCardBase<Card_EX1_625t2> {
 		Card_EX1_625t2() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetOptionalTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

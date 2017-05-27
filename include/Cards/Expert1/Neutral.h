@@ -516,7 +516,9 @@ namespace Cards
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardCharacter(target).Heal(
 				context.card_ref_, 3);
 		}
 	};
@@ -827,7 +829,6 @@ namespace Cards
 	struct Card_NEW1_024o : public Enchantment<Card_NEW1_024o, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_024 : public MinionCardBase<Card_NEW1_024> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			if (!context.GetTarget().IsValid()) return;
 			state::PlayerIdentifier owner = context.player_;
 			context.manipulate_.Weapon(owner).Enchant().Add<Card_NEW1_024o>();
 		}
