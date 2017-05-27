@@ -138,8 +138,39 @@ namespace Cards
 			});
 		}
 	};
+
+	template <int v> struct Card_EX1_613e : Enchantment<Card_EX1_613e<v>, Attack<v * 2>, MaxHP<v * 2>> {};
+	struct Card_EX1_613 : MinionCardBase<Card_EX1_613> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			int played_cards = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_;
+			context.manipulate_.OnBoardMinion(context.card_ref_)
+				.Enchant().Add<Card_EX1_613e>(played_cards);
+		}
+	};
+
+	struct Card_EX1_134 : MinionCardBase<Card_EX1_134> {
+		Card_EX1_134() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter const& context) {
+				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+				if (!combo) {
+					*context.need_to_prepare_target_ = false;
+					return true;
+				}
+				*context.allow_no_target_ = false;
+				*context.targets_ = TargetsGenerator(context.player_).Targetable().GetInfo();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef target = context.GetTarget();
+				if (!target.IsValid()) return;
+				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 2);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_134)
+REGISTER_CARD(EX1_613)
 REGISTER_CARD(EX1_137)
 REGISTER_CARD(EX1_133)
 REGISTER_CARD(EX1_522)
