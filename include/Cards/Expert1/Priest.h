@@ -137,7 +137,6 @@ namespace Cards
 		Card_EX1_345() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
-				*context.need_to_prepare_target_ = false;
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

@@ -190,7 +190,6 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
 				if (choice == 0) {
-					*context.need_to_prepare_target_ = false;
 					return true;
 				}
 				else {
@@ -246,7 +245,6 @@ namespace Cards
 				context.manipulate_.SaveUserChoice(choice);
 
 				if (choice == 0) {
-					*context.need_to_prepare_target_ = false;
 				}
 				else {
 					context.SetOptionalTargets(context.player_).Targetable().GetInfo();

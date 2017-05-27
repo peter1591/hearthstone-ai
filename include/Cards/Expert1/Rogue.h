@@ -148,7 +148,6 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
 				if (!combo) {
-					*context.need_to_prepare_target_ = false;
 					return true;
 				}
 				context.SetRequiredTargets(context.player_).Targetable().GetInfo();

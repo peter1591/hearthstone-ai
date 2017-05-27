@@ -22,12 +22,11 @@ namespace FlowControl
 				GetSpecifiedTarget(
 					Manipulate & manipulate,
 					state::PlayerIdentifier player,
-					state::CardRef card_ref,
-					bool * need_to_prepare_target) :
+					state::CardRef card_ref) :
 					manipulate_(manipulate),
 					player_(player),
 					card_ref_(card_ref),
-					need_to_prepare_target_(need_to_prepare_target),
+					need_to_prepare_target_(false),
 					allow_no_target_(false)
 				{
 				}
@@ -37,16 +36,16 @@ namespace FlowControl
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 
-				// TODO: add helper functions to set jup targets_, allow_no_target, and need_to_prepare_target_
-
 				template <typename... Args>
 				state::targetor::TargetsGenerator & SetRequiredTargets(Args&&... args) {
+					need_to_prepare_target_ = true;
 					allow_no_target_ = false;
 					targets_generator_.Initialize(std::forward<Args>(args)...);
 					return targets_generator_;
 				}
 				template <typename... Args>
 				state::targetor::TargetsGenerator & SetOptionalTargets(Args&&... args) {
+					need_to_prepare_target_ = true;
 					allow_no_target_ = true;
 					targets_generator_.Initialize(std::forward<Args>(args)...);
 					return targets_generator_;
@@ -55,12 +54,13 @@ namespace FlowControl
 				state::targetor::Targets GetTargets() {
 					return targets_generator_.GetInfo();
 				}
-				bool IsAllowedNoTarget() { return allow_no_target_; }
 
-				bool * need_to_prepare_target_; // default: need // TODO: need this one? what's this for?
+				bool NeedToPrepareTarget() { return need_to_prepare_target_; }
+				bool IsAllowedNoTarget() { return allow_no_target_; }
 
 			private:
 				state::targetor::TargetsGenerator targets_generator_;
+				bool need_to_prepare_target_;
 				bool allow_no_target_;
 			};
 

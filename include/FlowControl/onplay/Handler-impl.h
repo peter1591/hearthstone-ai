@@ -15,19 +15,14 @@ namespace FlowControl
 		{
 			if (!specified_target_getter) return true;
 
-			bool need_to_prepare_target = true;
-			
-			context::GetSpecifiedTarget context(
-				Manipulate(state, flow_context), player, card_ref,
-				&need_to_prepare_target);
-			if (!(*specified_target_getter)(context))
-			{
+			context::GetSpecifiedTarget context(Manipulate(state, flow_context), player, card_ref);
+			if (!(*specified_target_getter)(context)) {
 				return false;
 			}
+
+			if (!context.NeedToPrepareTarget()) return true;
+			
 			state::targetor::Targets targets = context.GetTargets();
-
-			if (!need_to_prepare_target) return true;
-
 			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, context.IsAllowedNoTarget());
 		}
 
