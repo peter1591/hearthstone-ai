@@ -282,16 +282,11 @@ namespace FlowControl
 		if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
 		if (!IsDefendable(defender)) return SetResult(kResultInvalid);
 
-		bool cant_attack_hero = state_.GetCard(attacker).IsCantAttackHero();
-		if (state_.GetCard(attacker).GetCardType() == state::kCardTypeHero) {
-			state::PlayerIdentifier player = state_.GetCard(attacker).GetPlayerIdentifier();
-			state::CardRef weapon_ref = state_.GetBoard().Get(player).GetWeaponRef();
-			if (weapon_ref.IsValid()) {
-				if (state_.GetCard(weapon_ref).IsCantAttackHero()) cant_attack_hero = true;
-			}
-		}
-		if (cant_attack_hero) {
-			if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) return SetResult(kResultInvalid);
+		if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) {
+			bool cant_attack_hero = state_.GetCardBoolAttributeConsiderWeapon(attacker, [](state::Cards::Card const& card) {
+				return card.IsCantAttackHero();
+			});
+			if (cant_attack_hero) return SetResult(kResultInvalid);
 		}
 
 		state_.TriggerEvent<state::Events::EventTypes::PrepareAttackTarget>(
@@ -314,8 +309,10 @@ namespace FlowControl
 		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
 
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
-		Manipulate(state_, flow_context_).OnBoardCharacter(defender).Damage(attacker, GetAttackValue(attacker));
-		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Damage(defender, GetCounterAttackValue(defender));
+		Manipulate(state_, flow_context_).OnBoardCharacter(defender)
+			.Damage(attacker, state_.GetCardAttackConsiderWeapon(attacker));
+		Manipulate(state_, flow_context_).OnBoardCharacter(attacker)
+			.Damage(defender, state_.GetCard(defender).GetAttack());
 
 		state_.GetMutableCard(attacker).IncreaseNumAttacksThisTurn();
 
@@ -348,7 +345,7 @@ namespace FlowControl
 
 		if (card.GetRawData().num_attacks_this_turn >= card.GetMaxAttacksPerTurn()) return false;
 
-		if (GetAttackValue(attacker) <= 0) return false;
+		if (state_.GetCardAttackConsiderWeapon(attacker) <= 0) return false;
 
 		return true;
 	}
@@ -373,32 +370,6 @@ namespace FlowControl
 			if (HasTaunt(minion)) return SetResult(FlowControl::kResultInvalid);
 		}
 		return true;
-	}
-
-	inline int FlowController::GetAttackValue(state::CardRef ref)
-	{
-		int attack = 0;
-
-		state::Cards::Card const& card = state_.GetCardsManager().Get(ref);
-
-		int v1 = card.GetAttack();
-		if (v1 > 0) attack += v1;
-
-		if (card.GetCardType() == state::kCardTypeHero) {
-			state::CardRef weapon_ref = state_.GetBoard().Get(card.GetPlayerIdentifier()).GetWeaponRef();
-			if (weapon_ref.IsValid()) {
-				state::Cards::Card const& weapon = state_.GetCardsManager().Get(weapon_ref);
-				int v2 = weapon.GetAttack();
-				if (v2 > 0) attack += v2;
-			}
-		}
-
-		return attack;
-	}
-
-	inline int FlowController::GetCounterAttackValue(state::CardRef ref)
-	{
-		return state_.GetCardsManager().Get(ref).GetAttack();
 	}
 
 	inline void FlowController::HeroPowerInternal()

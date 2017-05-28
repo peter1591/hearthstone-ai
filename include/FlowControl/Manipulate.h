@@ -71,6 +71,7 @@ namespace FlowControl
 
 	public: // bridge to state::State
 		state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
+		int GetCardAttackConsiderWeapon(state::CardRef ref) { return state_.GetCardAttackConsiderWeapon(ref); }
 		state::aura::Manager & Aura() { return state_.GetAuraManager(); }
 
 	public:

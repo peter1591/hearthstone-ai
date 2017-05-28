@@ -27,12 +27,9 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto & hero = context.manipulate_.Board().Player(context.player_);
-				int attack = context.manipulate_.GetCard(hero.GetHeroRef()).GetAttack();
-				state::CardRef weapon_ref = hero.GetWeaponRef();
-				if (weapon_ref.IsValid()) {
-					attack += context.manipulate_.GetCard(weapon_ref).GetAttack();
-				}
-				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, attack);
+				state::CardRef hero_ref = hero.GetHeroRef();
+				context.manipulate_.OnBoardMinion(context.GetTarget())
+					.Damage(context.card_ref_, context.manipulate_.GetCardAttackConsiderWeapon(hero_ref));
 			});
 		}
 	};

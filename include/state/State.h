@@ -50,6 +50,38 @@ namespace state
 		Cards::Card & GetMutableCard(CardRef ref) { return cards_mgr_.GetMutable(ref); }
 		CardRef AddCard(Cards::Card&& card) { return cards_mgr_.PushBack(std::move(card)); }
 
+		// Accumulator: bool(T& val, state::Cards::Card const& card)
+		//    @return: true to continue; false to stop and return val
+		template <typename T, typename Accumulator>
+		T GetCardAttributeConsiderWeapon(state::CardRef card_ref, T val, Accumulator accumulator) {
+			auto const& card = GetCard(card_ref);
+
+			if (!accumulator(val, card)) return val;
+
+			if (card.GetCardType() != kCardTypeHero) return val;
+			state::CardRef weapon_ref = board_.Get(card.GetPlayerIdentifier()).GetWeaponRef();
+			if (!weapon_ref.IsValid()) return val;
+
+			auto const& weapon_card = GetCard(weapon_ref);
+			accumulator(val, weapon_card);
+			return val;
+		}
+		template <typename Functor>
+		bool GetCardBoolAttributeConsiderWeapon(state::CardRef card_ref, Functor functor) {
+			return GetCardAttributeConsiderWeapon(card_ref, false, [&](bool& val, state::Cards::Card const& card) {
+				assert(val == false); // if val is true; then it should be short-circuited in the last call
+				val = functor(card);
+				return !val; // if val is true, then we can short-circuit now
+			});
+		}
+
+		int GetCardAttackConsiderWeapon(state::CardRef card_ref) {
+			return GetCardAttributeConsiderWeapon(card_ref, 0, [](int& val, state::Cards::Card const& card) {
+				val += card.GetAttack();
+				return true;
+			});
+		}
+
 	public: // bridge to event manager
 		template <typename EventType, typename T>
 		void AddEvent(T&& handler) {
