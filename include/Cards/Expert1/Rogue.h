@@ -160,8 +160,28 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_CS2_233 : SpellCardBase<Card_CS2_233> {
+		Card_CS2_233() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();
+				if (!weapon_ref.IsValid()) return;
+				int attack = context.manipulate_.GetCard(weapon_ref).GetAttack();
+				context.manipulate_.Hero(context.player_).DestroyWeapon();
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach(
+					[&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, attack);
+				});
+			});
+		}
+	};
 }
 
+REGISTER_CARD(CS2_233)
 REGISTER_CARD(EX1_134)
 REGISTER_CARD(EX1_613)
 REGISTER_CARD(EX1_137)
