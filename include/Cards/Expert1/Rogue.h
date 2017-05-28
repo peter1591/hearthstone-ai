@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=128&sort=-cost&display=1
-// Last finished card: Perdition's Blade
+// Done
 
 namespace Cards
 {
@@ -179,8 +179,47 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_NEW1_014 : MinionCardBase<Card_NEW1_014> {
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetOptionalTargets(context.player_).Ally().Minion();
+			return true;
+		}
+		static void Battlecry(Contexts::OnPlay const& context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Stealth(true);
+
+			state::CardRef card_ref = context.card_ref_;
+			context.manipulate_.AddEvent<state::Events::EventTypes::OnTurnStart>(
+				[card_ref](state::Events::EventTypes::OnTurnStart::Context context) {
+				state::PlayerIdentifier player = context.manipulate_.GetCard(card_ref).GetPlayerIdentifier();
+				if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+				if (context.manipulate_.GetCard(card_ref).GetZone() != state::kCardZonePlay) return false;
+				context.manipulate_.OnBoardMinion(card_ref).Stealth(false);
+				return false;
+			});
+		}
+	};
+
+	struct Card_NEW1_005 : MinionCardBase<Card_NEW1_005> {
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+			if (!combo) return true;
+			context.SetOptionalTargets(context.player_).Minion();
+			return true;
+		}
+		static void Battlecry(Contexts::OnPlay const& context) {
+			bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+			if (!combo) return;
+			if (!context.GetTarget().IsValid()) return;
+			context.manipulate_.OnBoardMinion(context.GetTarget()).MoveTo<state::kCardZoneHand>();
+		}
+	};
 }
 
+REGISTER_CARD(NEW1_005)
+REGISTER_CARD(NEW1_014)
 REGISTER_CARD(CS2_233)
 REGISTER_CARD(EX1_134)
 REGISTER_CARD(EX1_613)

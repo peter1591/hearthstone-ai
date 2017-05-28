@@ -64,7 +64,6 @@ namespace FlowControl
 
 			template <state::CardZone ZoneTo> void MoveTo(state::PlayerIdentifier to_player) {
 				if (GetCard().GetZone() != state::kCardZonePlay) return;
-				static_assert(state::kCardZonePlay != ZoneTo, "Zone should actually changed. If in the same zone, call ChangeOwner() instead.");
 				return MinionManipulator<state::kCardZonePlay>(state_, flow_context_, card_ref_)
 					.MoveTo<ZoneTo>(to_player);
 			}
