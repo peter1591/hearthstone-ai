@@ -6,13 +6,8 @@
 
 namespace Cards
 {
-	template <typename T,
-		typename SpecifiedCardAttributes1 = NoAttribute,
-		typename SpecifiedCardAttributes2 = NoAttribute,
-		typename SpecifiedCardAttributes3 = NoAttribute,
-		typename SpecifiedCardAttributes4 = NoAttribute,
-		typename SpecifiedCardAttributes5 = NoAttribute>
-		class MinionCardBase : public GeneralCardBase<T>, protected MinionCardUtils
+	template <typename T, typename... Ts>
+		class MinionCardBase : public GeneralCardBase<T, Ts...>, protected MinionCardUtils
 	{
 	public:
 		MinionCardBase()
@@ -29,12 +24,6 @@ namespace Cards
 			this->enchanted_states.cost = data.cost;
 			this->enchanted_states.attack = data.attack;
 			this->enchanted_states.max_hp = data.max_hp;
-
-			SpecifiedCardAttributes1::Apply(*this);
-			SpecifiedCardAttributes2::Apply(*this);
-			SpecifiedCardAttributes3::Apply(*this);
-			SpecifiedCardAttributes4::Apply(*this);
-			SpecifiedCardAttributes5::Apply(*this);
 
 			BattlecryProcessor<T>(*this);
 		}

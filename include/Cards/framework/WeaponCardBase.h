@@ -7,8 +7,8 @@
 
 namespace Cards
 {
-	template <typename T>
-	class WeaponCardBase : public GeneralCardBase<T>
+	template <typename T, typename... Ts>
+	class WeaponCardBase : public GeneralCardBase<T, Ts...>
 	{
 	public:
 		WeaponCardBase()

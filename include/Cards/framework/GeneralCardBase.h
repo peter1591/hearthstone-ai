@@ -8,10 +8,23 @@
 
 namespace Cards
 {
-	template <typename T>
+	template <typename T,
+		typename SpecifiedCardAttributes1 = NoAttribute,
+		typename SpecifiedCardAttributes2 = NoAttribute,
+		typename SpecifiedCardAttributes3 = NoAttribute,
+		typename SpecifiedCardAttributes4 = NoAttribute,
+		typename SpecifiedCardAttributes5 = NoAttribute>
 	class GeneralCardBase: public state::Cards::CardData
 	{
 	public:
+		GeneralCardBase() {
+			SpecifiedCardAttributes1::Apply(*this);
+			SpecifiedCardAttributes2::Apply(*this);
+			SpecifiedCardAttributes3::Apply(*this);
+			SpecifiedCardAttributes4::Apply(*this);
+			SpecifiedCardAttributes5::Apply(*this);
+		}
+
 		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 		auto Aura() { return AuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
 		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>

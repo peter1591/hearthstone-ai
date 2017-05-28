@@ -7,8 +7,8 @@
 
 namespace Cards
 {
-	template <typename T>
-	class SpellCardBase : public GeneralCardBase<T>
+	template <typename T, typename... Ts>
+	class SpellCardBase : public GeneralCardBase<T, Ts...>
 	{
 	public:
 		SpellCardBase()
