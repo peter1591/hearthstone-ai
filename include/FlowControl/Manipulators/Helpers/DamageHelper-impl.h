@@ -28,12 +28,19 @@ namespace FlowControl
 
 					DoDamage(state_, flow_context_, final_target, amount);
 
-					if (state_.GetCard(source_ref_).IsPoisonous()) {
+					bool is_poisonous = state_.GetCardBoolAttributeConsiderWeapon(source_ref_, [](state::Cards::Card const& card) {
+						return card.IsPoisonous();
+					});
+					if (is_poisonous) {
 						if (state_.GetCard(target_ref_).GetCardType() == state::kCardTypeMinion) {
 							Manipulate(state_, flow_context_).OnBoardMinion(target_ref_).Destroy();
 						}
 					}
-					if (state_.GetCard(source_ref_).IsFreezeAttack()) {
+
+					bool is_freeze_attack = state_.GetCardBoolAttributeConsiderWeapon(source_ref_, [](state::Cards::Card const& card) {
+						return card.IsFreezeAttack();
+					});
+					if (is_freeze_attack) {
 						Manipulate(state_, flow_context_).OnBoardCharacter(target_ref_).Freeze(true);
 					}
 				}
@@ -47,6 +54,8 @@ namespace FlowControl
 
 			inline void DamageHelper::DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount)
 			{
+				// TODO: parameter why pass state, flow_context? use members
+
 				assert(amount > 0);
 				state.TriggerEvent<state::Events::EventTypes::OnTakeDamage>(
 					state::Events::EventTypes::OnTakeDamage::Context{ Manipulate(state_, flow_context_), card_ref, &amount });
