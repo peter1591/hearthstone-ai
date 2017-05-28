@@ -7,7 +7,7 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline Cards::CardId HeroManipulator::DrawCard()
+		inline state::CardRef HeroManipulator::DrawCard(Cards::CardId * drawn_card_id)
 		{
 			state::board::Player & player = state_.GetBoard().Get(player_id_);
 			assert(player.GetHeroRef() == card_ref_);
@@ -17,15 +17,16 @@ namespace FlowControl
 				player.IncreaseFatigueDamage();
 				int damage = player.GetFatigueDamage();
 				this->Damage(card_ref_, damage);
-				return (Cards::CardId)-1;
+				if (drawn_card_id) *drawn_card_id = (Cards::CardId)-1;
+				return state::CardRef();
 			}
 
 			int card_id = player.deck_.GetLast();
+			if (drawn_card_id) *drawn_card_id = (Cards::CardId)card_id;
+
 			player.deck_.RemoveLast();
 
-			AddHandCard(card_id);
-
-			return (Cards::CardId)card_id;
+			return AddHandCard(card_id);
 
 			// Note: On-draw effects are only activated through successful card draw.
 			// Overdrawing a card with an on-draw effect (attempting to draw it when the player already has a full hand) will not activate its on-draw effect.

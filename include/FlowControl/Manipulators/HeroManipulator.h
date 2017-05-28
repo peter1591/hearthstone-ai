@@ -16,7 +16,7 @@ namespace FlowControl
 				assert(GetCard().GetZone() == state::kCardZonePlay);
 				assert(GetCard().GetCardType() == state::kCardTypeHero);
 			}
-			Cards::CardId DrawCard();
+			state::CardRef HeroManipulator::DrawCard(Cards::CardId * drawn_card_id = nullptr);
 			
 			state::CardRef AddHandCard(int card_id);
 			void DiscardHandCard(state::CardRef card_ref);
