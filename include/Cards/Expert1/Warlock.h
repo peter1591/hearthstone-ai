@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=512&sort=-cost&display=1
-// Last Finished Card: Felguard
+// Last Finished Card: ummoning Portal
 
 namespace Cards
 {
@@ -102,6 +102,71 @@ namespace Cards
 		}
 	};
 
+	template <int v> struct Card_EX1_304e1 : Enchantment<Card_EX1_304e1<v>, Attack<v>> {};
+	template <int v> struct Card_EX1_304e2 : Enchantment<Card_EX1_304e2<v>, MaxHP<v>> {};
+	struct Card_EX1_304 : MinionCardBase<Card_EX1_304> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			int attack = 0;
+			int hp = 0;
+			ApplyToAdjacent(context.manipulate_, context.card_ref_, [&](state::CardRef card_ref) {
+				attack += context.manipulate_.GetCard(card_ref).GetAttack();
+				hp += context.manipulate_.GetCard(card_ref).GetHP();
+			});
+			ApplyToAdjacent(context.manipulate_, context.card_ref_, [&](state::CardRef card_ref) {
+				context.manipulate_.OnBoardMinion(card_ref).Destroy();
+			});
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_304e1>(attack);
+			context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_304e2>(hp);
+		}
+	};
+
+	struct Card_EX1_303 : SpellCardBase<Card_EX1_303> {
+		Card_EX1_303() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetRequiredTargets(context.player_).Ally().Minion();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int attack = context.manipulate_.GetCard(context.GetTarget()).GetAttack();
+				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach(
+					[&](state::CardRef card_ref) {
+					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, attack);
+				});
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
+			});
+		}
+	};
+
+	struct Card_EX1_313 : MinionCardBase<Card_EX1_313> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			context.manipulate_.Hero(context.player_).Damage(context.card_ref_, 5);
+		}
+	};
+
+	struct Card_EX1_315o : Enchantment<Card_EX1_315o> {
+		static constexpr EnchantmentTiers aura_tier = EnchantmentTiers::kEnchantmentTier3; // always apply at the last stage
+		Card_EX1_315o() {
+			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+				context.stats_->cost -= 2;
+				if (context.stats_->cost <= 0) context.stats_->cost = 1;
+			};
+		}
+	};
+	struct Card_EX1_315 : MinionCardBase<Card_EX1_315> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			auto const& card = context.manipulate_.GetCard(context.card_ref_);
+			if (card.GetPlayerIdentifier() != owner) return true;
+			*context.cost_ -= 2;
+			if (*context.cost_ <= 0) *context.cost_ = 1;
+			return true;
+		}
+		Card_EX1_315() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::GetPlayCardCost>();
+		}
+	};
+
 	struct Card_EX1_312 : SpellCardBase<Card_EX1_312> {
 		Card_EX1_312() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -117,6 +182,10 @@ namespace Cards
 
 REGISTER_CARD(EX1_312)
 
+REGISTER_CARD(EX1_315)
+REGISTER_CARD(EX1_313)
+REGISTER_CARD(EX1_303)
+REGISTER_CARD(EX1_304)
 REGISTER_CARD(EX1_301)
 REGISTER_CARD(EX1_317)
 REGISTER_CARD(EX1_596)
