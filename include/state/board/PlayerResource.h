@@ -17,6 +17,14 @@ namespace state
 			
 			int GetTotal() const { return total_; }
 
+			void DestroyOneCrystal() {
+				int empty_counts = GetTotal() - GetCurrent();
+				SetTotal(GetTotal() - 1);
+				if (empty_counts <= 0) {
+					SetCurrent(GetCurrent() - 1);
+				}
+			}
+
 			void GainCrystal(int amount = 1) {
 				int new_total = total_ + amount;
 				if (new_total > 10) new_total = 10;

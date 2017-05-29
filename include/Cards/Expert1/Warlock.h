@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=512&sort=-cost&display=1
-// Last Finished Card: (none)
+// Last Finished Card: Felguard
 
 namespace Cards
 {
@@ -96,6 +96,12 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_301 : MinionCardBase<Card_EX1_301, Taunt> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			context.manipulate_.Board().Player(context.player_).GetResource().DestroyOneCrystal();
+		}
+	};
+
 	struct Card_EX1_312 : SpellCardBase<Card_EX1_312> {
 		Card_EX1_312() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -111,6 +117,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_312)
 
+REGISTER_CARD(EX1_301)
 REGISTER_CARD(EX1_317)
 REGISTER_CARD(EX1_596)
 REGISTER_CARD(EX1_319)
