@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cards/id-map.h"
 #include "FlowControl/Manipulators/CharacterManipulator.h"
 
 namespace FlowControl
@@ -18,7 +19,7 @@ namespace FlowControl
 			}
 			state::CardRef HeroManipulator::DrawCard(Cards::CardId * drawn_card_id = nullptr);
 			
-			state::CardRef AddHandCard(int card_id);
+			state::CardRef AddHandCard(Cards::CardId card_id);
 			void DiscardHandCard(state::CardRef card_ref);
 
 			void DestroyWeapon();

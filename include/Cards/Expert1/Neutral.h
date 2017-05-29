@@ -243,7 +243,7 @@ namespace Cards
 
 	struct Card_EX1_100 : public MinionCardBase<Card_EX1_100> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
-			int card_id = context.manipulate_.GetCard(context.card_ref_).GetCardId();
+			Cards::CardId card_id = context.manipulate_.GetCard(context.card_ref_).GetCardId();
 			state::PlayerIdentifier player = context.manipulate_.Board().GetCurrentPlayerId().Opposite();
 			context.manipulate_.Hero(player).AddHandCard(card_id);
 			return true;

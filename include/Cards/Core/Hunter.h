@@ -49,7 +49,7 @@ namespace Cards
 				std::vector<Cards::CardId> cards;
 				for (int i = 0; i < 3; ++i) {
 					if (deck.Empty()) break;
-					cards.push_back((Cards::CardId)deck.GetLast());
+					cards.push_back(deck.GetLast());
 					deck.RemoveLast();
 				}
 				if (cards.empty()) return;

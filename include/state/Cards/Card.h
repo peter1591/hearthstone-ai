@@ -2,8 +2,9 @@
 
 #include <string>
 #include <utility>
-#include "state/Cards/CardData.h"
 #include "Cards/CardDispatcher.h"
+#include "Cards/id-map.h"
+#include "state/Cards/CardData.h"
 
 namespace FlowControl
 {
@@ -98,7 +99,7 @@ namespace state
 			}
 
 		public: // getters and setters
-			int GetCardId() const { return data_.card_id; }
+			::Cards::CardId GetCardId() const { return (::Cards::CardId)data_.card_id; } // TODO: card id
 			CardType GetCardType() const { return data_.card_type; }
 			bool IsSecretCard() const { return data_.is_secret_card; }
 			CardRace GetRace() const { return data_.card_race; }

@@ -91,8 +91,8 @@ namespace Cards
 				state::PlayerIdentifier owner = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 				
 				state::CardRef exist_heropower_ref = context.manipulate_.Board().Player(owner).GetHeroPowerRef();
-				int exist_heropower_id = context.manipulate_.GetCard(exist_heropower_ref).GetCardId();
-				if (exist_heropower_id == (int)Cards::ID_EX1_625t) {
+				Cards::CardId exist_heropower_id = context.manipulate_.GetCard(exist_heropower_ref).GetCardId();
+				if (exist_heropower_id == Cards::ID_EX1_625t) {
 					context.manipulate_.HeroPower(owner).ReplaceHeroPower(Cards::ID_EX1_625t2);
 				}
 				else {
@@ -114,7 +114,7 @@ namespace Cards
 					);
 				}
 				else {
-					std::pair<int, int> steal_cards_id = context.manipulate_.Board().Player(context.player_).deck_.GetTwoRandomCards(context.manipulate_.GetRandom());
+					std::pair<Cards::CardId, Cards::CardId> steal_cards_id = context.manipulate_.Board().Player(context.player_).deck_.GetTwoRandomCards(context.manipulate_.GetRandom());
 					context.manipulate_.Hero(context.player_).AddHandCard(steal_cards_id.first);
 					context.manipulate_.Hero(context.player_).AddHandCard(steal_cards_id.second);
 				}
@@ -141,9 +141,9 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
-				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](int card_id) {
+				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId card_id) {
 					if (Cards::CardDispatcher::CreateInstance(card_id).card_type == state::kCardTypeMinion) {
-						possibles.push_back((Cards::CardId)card_id);
+						possibles.push_back(card_id);
 					}
 					return true;
 				});

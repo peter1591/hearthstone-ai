@@ -2,6 +2,7 @@
 
 #include "Utils/StaticDispatcher.h"
 #include "state/Cards/CardData.h"
+#include "Cards/id-map.h"
 
 namespace Cards
 {
@@ -14,6 +15,6 @@ namespace Cards
 	{
 	public:
 		using DispatcherImpl = Utils::StaticDispatcher<detail::DefaultInvoked>;
-		static state::Cards::CardData CreateInstance(int id);
+		static state::Cards::CardData CreateInstance(CardId id);
 	};
 }

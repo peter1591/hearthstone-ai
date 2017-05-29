@@ -13,7 +13,7 @@ namespace state
 		class Secrets
 		{
 		public:
-			bool Exists(int card_id) const
+			bool Exists(int card_id) const // TODO: card id
 			{
 				return secrets_.find(card_id) != secrets_.end();
 			}
@@ -33,7 +33,7 @@ namespace state
 				secrets_.insert(std::make_pair(card_id, card));
 			}
 
-			void Remove(int card_id)
+			void Remove(int card_id) // TODO: cartd id
 			{
 				secrets_.erase(card_id);
 			}

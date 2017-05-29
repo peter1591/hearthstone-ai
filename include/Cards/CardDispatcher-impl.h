@@ -81,8 +81,8 @@ namespace Cards
 		};
 	}
 
-	state::Cards::CardData CardDispatcher::CreateInstance(int id)
+	state::Cards::CardData CardDispatcher::CreateInstance(CardId id)
 	{
-		return DispatcherImpl::Invoke<detail::ConstructorInvoker, state::Cards::CardData>(id);
+		return DispatcherImpl::Invoke<detail::ConstructorInvoker, state::Cards::CardData>((int)id);
 	}
 }

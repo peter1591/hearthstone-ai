@@ -2,6 +2,8 @@
 
 #include <array>
 #include <utility>
+
+#include "Cards/id-map.h"
 #include "state/Types.h"
 #include "state/IRandomGenerator.h"
 
@@ -20,10 +22,10 @@ namespace state
 
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
-			int GetLast() const { return cards_[size_ - 1]; }
+			::Cards::CardId GetLast() const { return cards_[size_ - 1]; }
 			int GetChangeId() const { return change_id_; }
 
-			void ShuffleAdd(int card_id, IRandomGenerator & random)
+			void ShuffleAdd(::Cards::CardId card_id, IRandomGenerator & random)
 			{
 				assert(size_ < max_size);
 
@@ -44,16 +46,16 @@ namespace state
 
 			// @note This differs from GetLast() since you cannot remove this random card.
 			// @return -1 if no card left; otherwise, the card id of the chosen random card
-			int GetOneRandomCard(IRandomGenerator & random) {
-				if (size_ <= 0) return -1;
+			::Cards::CardId GetOneRandomCard(IRandomGenerator & random) {
+				if (size_ <= 0) return (::Cards::CardId)-1;
 
 				int rand_idx = 0;
 				if (size_ > 1) rand_idx = random.Get(size_);
 				return cards_[rand_idx];
 			}
 
-			std::pair<int, int> GetTwoRandomCards(IRandomGenerator & random) {
-				if (size_ < 2) return std::make_pair(GetOneRandomCard(random), -1);
+			std::pair<::Cards::CardId, ::Cards::CardId> GetTwoRandomCards(IRandomGenerator & random) {
+				if (size_ < 2) return std::make_pair(GetOneRandomCard(random), (::Cards::CardId)-1);
 
 				int v1 = random.Get(size_);
 				int v2 = random.Get(size_ - 1);
@@ -71,7 +73,7 @@ namespace state
 			}
 
 			// @return  True if card found; false if card is not found
-			bool SwapCardIdToLast(int card_id) {
+			bool SwapCardIdToLast(::Cards::CardId card_id) {
 				for (int i = 0; i < size_; ++i) {
 					if (cards_[i] == card_id) {
 						std::swap(cards_[size_ - 1], cards_[i]);
@@ -85,7 +87,7 @@ namespace state
 			constexpr static int max_size = 80;
 			int change_id_;
 			int size_;
-			std::array<int, max_size> cards_; // key: card id. TODO: change type to Cards::CardId
+			std::array<::Cards::CardId, max_size> cards_; // key: card id. TODO: change type to Cards::CardId
 		};
 	}
 }

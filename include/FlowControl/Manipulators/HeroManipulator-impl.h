@@ -21,7 +21,7 @@ namespace FlowControl
 				return state::CardRef();
 			}
 
-			int card_id = player.deck_.GetLast();
+			Cards::CardId card_id = player.deck_.GetLast();
 			if (drawn_card_id) *drawn_card_id = (Cards::CardId)card_id;
 
 			player.deck_.RemoveLast();
@@ -33,7 +33,7 @@ namespace FlowControl
 			// TODO: trigger on-draw event (parameter: card_ref)
 		}
 
-		inline state::CardRef HeroManipulator::AddHandCard(int card_id)
+		inline state::CardRef HeroManipulator::AddHandCard(Cards::CardId card_id)
 		{
 			state::board::Player & player = state_.GetBoard().Get(player_id_);
 			assert(player.GetHeroRef() == card_ref_);

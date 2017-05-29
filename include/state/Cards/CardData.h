@@ -30,7 +30,7 @@ namespace state
 
 			static constexpr int kFieldChangeId = 2;
 
-			int card_id; // TODO: use Cards::CardId
+			int card_id; // TODO: card id
 			CardType card_type;
 			CardRace card_race;
 			CardRarity card_rarity;

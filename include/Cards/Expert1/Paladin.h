@@ -59,7 +59,7 @@ namespace Cards
 			if (context.manipulate_.Board().GetCurrentPlayerId() == player) return true;
 			if (context.died_minion_owner_ != player) return true;
 
-			Cards::CardId card_id = (Cards::CardId)context.manipulate_.GetCard(context.card_ref_).GetCardId();
+			Cards::CardId card_id = context.manipulate_.GetCard(context.card_ref_).GetCardId();
 			state::CardRef new_minion = SummonToRightmost(context.manipulate_, player, card_id);
 			if (!new_minion.IsValid()) return true;
 

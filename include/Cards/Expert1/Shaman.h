@@ -71,7 +71,7 @@ namespace Cards
 				context.manipulate_.OnBoardMinion(context.GetTarget()).AddDeathrattle(
 					[](FlowControl::deathrattle::context::Deathrattle context) {
 					SummonAt(context, context.player_, context.zone_pos_, 
-						(Cards::CardId)context.manipulate_.GetCard(context.card_ref_).GetCardId());
+						context.manipulate_.GetCard(context.card_ref_).GetCardId());
 				});
 			});
 		}

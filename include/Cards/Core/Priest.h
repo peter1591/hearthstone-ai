@@ -38,7 +38,7 @@ namespace Cards
 				if (hand_from.Empty()) return;
 
 				size_t rand = context.manipulate_.GetRandom().Get(hand_from.Size());
-				Cards::CardId card_id = (Cards::CardId)context.manipulate_.GetCard(hand_from.Get(rand)).GetCardId();
+				Cards::CardId card_id = context.manipulate_.GetCard(hand_from.Get(rand)).GetCardId();
 				context.manipulate_.Hero(context.player_).AddHandCard(card_id);
 			});
 		}

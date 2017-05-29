@@ -65,14 +65,14 @@ namespace Cards
 		Card_EX1_317() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
-				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](int card_id) {
+				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId card_id) {
 					if (Cards::CardDispatcher::CreateInstance(card_id).card_race == state::kCardRaceDemon) {
-						possibles.push_back((Cards::CardId)card_id);
+						possibles.push_back(card_id);
 					}
 					return true;
 				});
 
-				auto draw_from_deck = [&](int card_id) {
+				auto draw_from_deck = [&](Cards::CardId card_id) {
 					context.manipulate_.Board().Player(context.player_).deck_.SwapCardIdToLast(card_id);
 					context.manipulate_.Hero(context.player_).DrawCard();
 				};
@@ -83,7 +83,7 @@ namespace Cards
 						draw_from_deck(card_id);
 					}
 					for (int i = 0; i < rest; ++i) {
-						context.manipulate_.Hero(context.player_).AddHandCard((int)Cards::ID_EX1_317t);
+						context.manipulate_.Hero(context.player_).AddHandCard(Cards::ID_EX1_317t);
 					}
 					return;
 				}
@@ -91,7 +91,6 @@ namespace Cards
 				auto rand_two = GetRandomTwoNumbers(context.manipulate_, (int)possibles.size());
 				draw_from_deck(possibles[rand_two.first]);
 				draw_from_deck(possibles[rand_two.second]);
-				return;
 			});
 		}
 	};
