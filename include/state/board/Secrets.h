@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "state/Types.h"
+#include "Cards/id-map.h"
 
 namespace state
 {
@@ -13,9 +14,9 @@ namespace state
 		class Secrets
 		{
 		public:
-			bool Exists(int card_id) const // TODO: card id
+			bool Exists(::Cards::CardId card_id) const
 			{
-				return secrets_.find(card_id) != secrets_.end();
+				return secrets_.find((int)card_id) != secrets_.end();
 			}
 
 			template <typename Functor>
@@ -27,13 +28,13 @@ namespace state
 
 			bool Empty() const { return secrets_.empty(); }
 
-			void Add(int card_id, CardRef card)
+			void Add(::Cards::CardId card_id, CardRef card)
 			{
 				if (Exists(card_id)) throw std::exception("Secret already exists");
-				secrets_.insert(std::make_pair(card_id, card));
+				secrets_.insert(std::make_pair((int)card_id, card));
 			}
 
-			void Remove(int card_id) // TODO: cartd id
+			void Remove(::Cards::CardId card_id)
 			{
 				secrets_.erase(card_id);
 			}

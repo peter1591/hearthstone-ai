@@ -87,7 +87,7 @@ namespace state
 			constexpr static int max_size = 80;
 			int change_id_;
 			int size_;
-			std::array<::Cards::CardId, max_size> cards_; // key: card id. TODO: change type to Cards::CardId
+			std::array<::Cards::CardId, max_size> cards_;
 		};
 	}
 }
