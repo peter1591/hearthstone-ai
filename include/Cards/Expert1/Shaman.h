@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=256&sort=-cost&display=1
-// Last finished card: Mana Tide Totem
+// Done.
 
 namespace Cards
 {
@@ -88,6 +88,7 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_tk11 : MinionCardBase<Card_EX1_tk11, Taunt> {};
 	struct Card_EX1_248 : SpellCardBase<Card_EX1_248, Overload<2>> {
 		Card_EX1_248() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -122,7 +123,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_575 : MinionCardBase<Card_EX1_575> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnStart::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
@@ -135,15 +136,38 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_258e : Enchantment<Card_EX1_258e, Attack<1>, MaxHP<1>> {};
+	struct Card_EX1_258 : MinionCardBase<Card_EX1_258> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnPlay::Context context) {
+			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
+			if (context.manipulate_.GetCard(context.card_ref_).GetRawData().overload > 0) {
+				context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_EX1_258e>();
+			}
+			return true;
+		}
+		Card_EX1_258() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnPlay>();
+		}
+	};
+
+	struct Card_EX1_567 : WeaponCardBase<Card_EX1_567, Windfury, Overload<2>> {};
+
 	struct Card_EX1_250 : MinionCardBase<Card_EX1_250, Overload<3>, Taunt> {};
+
+	struct Card_NEW1_010 : MinionCardBase<Card_NEW1_010, Charge, Shield, Taunt, Windfury> {};
 }
 
+REGISTER_CARD(NEW1_010)
 REGISTER_CARD(EX1_250)
-
+REGISTER_CARD(EX1_567)
+REGISTER_CARD(EX1_258)
 REGISTER_CARD(EX1_575)
 REGISTER_CARD(EX1_259)
 REGISTER_CARD(EX1_241)
 REGISTER_CARD(EX1_248)
+REGISTER_CARD(EX1_tk11)
 REGISTER_CARD(CS2_053)
 REGISTER_CARD(CS2_038)
 REGISTER_CARD(EX1_247)
