@@ -182,7 +182,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				Cards::CardId drawn_card_id = (Cards::CardId)(-1);
-				context.manipulate_.Hero(context.player_).DrawCard(&drawn	);
+				context.manipulate_.Hero(context.player_).DrawCard(&drawn_card_id);
 				if (drawn_card_id < 0) return;
 				state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(drawn_card_id);
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, raw_card.enchanted_states.cost);
