@@ -23,6 +23,7 @@ namespace Cards
 
 			state::CardRef pick_ref = context.manipulate_.Board().Player(owner).minions_.Get(pick_pos);
 			context.manipulate_.OnBoardMinion(pick_ref).Enchant().Add<Card_CS2_059o>();
+			return true;
 		}
 		Card_CS2_059() {
 			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
@@ -60,6 +61,41 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_317 : SpellCardBase<Card_EX1_317> {
+		Card_EX1_317() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				std::vector<Cards::CardId> possibles;
+				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](int card_id) {
+					if (Cards::CardDispatcher::CreateInstance(card_id).card_race == state::kCardRaceDemon) {
+						possibles.push_back((Cards::CardId)card_id);
+					}
+					return true;
+				});
+
+				auto draw_from_deck = [&](int card_id) {
+					context.manipulate_.Board().Player(context.player_).deck_.SwapCardIdToLast(card_id);
+					context.manipulate_.Hero(context.player_).DrawCard();
+				};
+
+				if (possibles.size() <= 2) {
+					int rest = 2 - (int)possibles.size();
+					for (Cards::CardId card_id : possibles) {
+						draw_from_deck(card_id);
+					}
+					for (int i = 0; i < rest; ++i) {
+						context.manipulate_.Hero(context.player_).AddHandCard((int)Cards::ID_EX1_317t);
+					}
+					return;
+				}
+
+				auto rand_two = GetRandomTwoNumbers(context.manipulate_, (int)possibles.size());
+				draw_from_deck(possibles[rand_two.first]);
+				draw_from_deck(possibles[rand_two.second]);
+				return;
+			});
+		}
+	};
+
 	struct Card_EX1_312 : SpellCardBase<Card_EX1_312> {
 		Card_EX1_312() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -75,6 +111,7 @@ namespace Cards
 
 REGISTER_CARD(EX1_312)
 
+REGISTER_CARD(EX1_317)
 REGISTER_CARD(EX1_596)
 REGISTER_CARD(EX1_319)
 REGISTER_CARD(CS2_059)

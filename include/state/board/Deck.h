@@ -70,6 +70,17 @@ namespace state
 				}
 			}
 
+			// @return  True if card found; false if card is not found
+			bool SwapCardIdToLast(int card_id) {
+				for (int i = 0; i < size_; ++i) {
+					if (cards_[i] == card_id) {
+						std::swap(cards_[size_ - 1], cards_[i]);
+						return true;
+					}
+				}
+				return false;
+			}
+
 		private:
 			constexpr static int max_size = 80;
 			int change_id_;
