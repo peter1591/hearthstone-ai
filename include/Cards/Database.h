@@ -225,6 +225,9 @@ namespace Cards
 				new_card.attack = json["attack"].asInt();
 				new_card.max_hp = json["durability"].asInt();
 			}
+			else if (type == "HERO") {
+				new_card.card_type = state::kCardTypeHero;
+			}
 			else if (type == "HERO_POWER") {
 				new_card.card_type = state::kCardTypeHeroPower;
 			}
