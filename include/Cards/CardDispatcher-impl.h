@@ -73,6 +73,7 @@ namespace Cards
 				switch (data.card_type) {
 				case state::kCardTypeMinion:
 				case state::kCardTypeWeapon:
+				case state::kCardTypeHero:
 					return; // allow default invoke
 				default:
 					throw std::exception("card is not implemented");

@@ -134,6 +134,14 @@ namespace state {
 			board::Player & player = board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier());
 			player.GetHeroRef().Invalidate();
 		}
+		inline void PlayerDataStructureMaintainer<kCardTypeHero, kCardZonePlay>::
+			ReplaceBy(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref, CardRef new_card_ref)
+		{
+			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeHero);
+			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
+
+			board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).SetHeroRef(new_card_ref);
+		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeMinion, kCardZonePlay>::
 			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref, int pos)

@@ -191,6 +191,7 @@ namespace FlowControl
 			// minion transformed
 			if (state_.GetCard(card_ref).GetZone() == state::kCardZonePlay) assert(false);
 			if (state_.GetCard(new_card_ref).GetZone() != state::kCardZonePlay) assert(false);
+			// might transform to hero type (e.g., Lord Jaraxxus)
 		}();
 #endif
 
@@ -202,7 +203,9 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::AfterMinionSummoned>(
 			state::Events::EventTypes::AfterMinionSummoned::Context{ Manipulate(state_, flow_context_), new_card_ref });
 
-		Manipulate(state_, flow_context_).OnBoardMinion(new_card_ref).AfterSummoned();
+		if (state_.GetCard(new_card_ref).GetCardType() == state::kCardTypeMinion) {
+			Manipulate(state_, flow_context_).OnBoardMinion(new_card_ref).AfterSummoned();
+		}
 
 		return true;
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?display=1&filter-class=1&filter-premium=1&filter-set=3&page=2&sort=-cost
-// All finished
+// Done
 
 namespace Cards
 {

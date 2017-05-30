@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=512&sort=-cost&display=1
-// Last Finished Card: ummoning Portal
+// Done
 
 namespace Cards
 {
@@ -216,8 +216,36 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_tk33 : HeroPowerCardBase<Card_EX1_tk33> {
+		Card_EX1_tk33() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_tk34);
+			});
+		}
+	};
+
+	struct Card_EX1_323 : MinionCardBase<Card_EX1_323> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			state::CardRef hero_ref = context.manipulate_.Hero(context.player_).Transform(Cards::ID_EX1_323h);
+			*context.new_card_ref = hero_ref;
+
+			state::CardRef weapon_ref = context.manipulate_.Board().AddCardById(Cards::ID_EX1_323w, context.player_);
+			context.manipulate_.Hero(hero_ref).EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
+
+			context.manipulate_.HeroPower(context.player_).ReplaceHeroPower(Cards::ID_EX1_tk33);
+
+			context.manipulate_.OnBoardMinion(context.card_ref_).MoveTo<state::kCardZoneSetASide>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_tk33)
+REGISTER_CARD(EX1_323)
 REGISTER_CARD(EX1_312)
 REGISTER_CARD(EX1_309)
 REGISTER_CARD(EX1_310)

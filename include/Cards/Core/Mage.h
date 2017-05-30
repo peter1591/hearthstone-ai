@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-premium=1&filter-set=2&filter-class=16&sort=-cost&display=1
-// Finished: Polymorph
+// Done
 
 namespace Cards
 {

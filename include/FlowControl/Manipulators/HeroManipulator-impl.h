@@ -91,5 +91,17 @@ namespace FlowControl
 			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(Manipulate(state_, flow_context_), weapon_ref)
 				.ChangeTo<state::kCardZonePlay>(GetCard().GetPlayerIdentifier());
 		}
+
+		inline state::CardRef HeroManipulator::Transform(Cards::CardId id)
+		{
+			assert(GetCard().GetCardType() == state::kCardTypeHero);
+			assert(GetCard().GetZone() == state::kCardZonePlay);
+
+			state::CardRef new_card_ref = BoardManipulator(state_, flow_context_).AddCardById(id, GetCard().GetPlayerIdentifier());
+			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeHero>(Manipulate(state_, flow_context_), card_ref_)
+				.ReplaceBy(new_card_ref);
+
+			return new_card_ref;
+		}
 	}
 }

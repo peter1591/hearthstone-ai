@@ -195,6 +195,7 @@ namespace Cards
 			}
 
 			CardData new_card;
+			static_assert(CardData::kFieldChangeId == 2); // fill all the fields
 			new_card.card_id = (int)cards.size();
 
 			new_card.cost = json["cost"].asInt();
@@ -227,6 +228,9 @@ namespace Cards
 			}
 			else if (type == "HERO") {
 				new_card.card_type = state::kCardTypeHero;
+				new_card.card_race = GetCardRace(json);
+				new_card.max_hp = json["health"].asInt();
+				new_card.attack = 0;
 			}
 			else if (type == "HERO_POWER") {
 				new_card.card_type = state::kCardTypeHeroPower;
