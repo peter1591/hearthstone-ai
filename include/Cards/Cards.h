@@ -25,11 +25,12 @@
 #include "Cards/Expert1/Druid.h"
 #include "Cards/Expert1/Hunter.h"
 #include "Cards/Expert1/Mage.h"
+#include "Cards/Expert1/Paladin.h"
 #include "Cards/Expert1/Priest.h"
 #include "Cards/Expert1/Rogue.h"
 #include "Cards/Expert1/Shaman.h"
 #include "Cards/Expert1/Warlock.h"
-#include "Cards/Expert1/Paladin.h"
+#include "Cards/Expert1/Warrior.h"
 
 #include "Cards/Gangs/Neutral.h"
 #include "Cards/Gangs/Hunter.h"

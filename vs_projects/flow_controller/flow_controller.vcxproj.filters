@@ -521,5 +521,8 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Rogue.h">
       <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Expert1\Warrior.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

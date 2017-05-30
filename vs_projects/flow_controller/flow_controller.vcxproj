@@ -177,6 +177,7 @@
     <ClInclude Include="..\..\include\Cards\Expert1\Rogue.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\GeneralCardBase.h" />
     <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h" />
