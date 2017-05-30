@@ -36,6 +36,18 @@ namespace Cards
 		}
 
 	public:
+		static std::unordered_set<state::CardSet> const& GetAllCardSets() {
+			static std::unordered_set<state::CardSet> card_sets = {
+				state::kCardSetCore,
+				state::kCardSetExpert1,
+				state::kCardSetOldGods,
+				state::kCardSetKara,
+				state::kCardSetGangs,
+				state::kCardSetUngoro
+			};
+			return card_sets;
+		}
+
 		bool LoadJsonFile(std::string const& path)
 		{
 			Json::Reader reader;
@@ -168,6 +180,10 @@ namespace Cards
 
 			if (json.isMember("set") == false) throw std::exception("set field not exists");
 			new_card.card_set = GetCardSet(json);
+
+			if (GetAllCardSets().find(new_card.card_set) == GetAllCardSets().end()) {
+				return;
+			}
 
 			if (type == "MINION") {
 				new_card.card_type = state::kCardTypeMinion;
