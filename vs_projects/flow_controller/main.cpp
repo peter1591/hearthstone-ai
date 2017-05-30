@@ -35,7 +35,7 @@ void test_compile()
 int main(void)
 {
 	std::cout << "Reading json file...";
-	if (!Cards::Database::GetInstance().LoadJsonFile("../../include/Cards/cards.json")) assert(false);
+	if (!Cards::Database::GetInstance().Initialize("../../include/Cards/cards.json")) assert(false);
 	std::cout << " Done." << std::endl;
 
 	test_compile();

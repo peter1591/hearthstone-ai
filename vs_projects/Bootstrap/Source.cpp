@@ -24,7 +24,10 @@ static void WriteMapHeader()
 {
 	std::cout << "Generating map header" << std::endl;
 
-	Cards::Database::GetInstance().LoadJsonFile("../../include/Cards/cards.json");
+	if (!Cards::Database::GetInstance().Initialize("../../include/Cards/cards.json")) {
+		std::cout << "Failed to initialize card database." << std::endl;
+		return;
+	}
 
 	// write mapping header
 	std::ofstream header_file("../../include/Cards/id-map.h");

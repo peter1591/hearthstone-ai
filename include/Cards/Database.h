@@ -48,16 +48,8 @@ namespace Cards
 			return card_sets;
 		}
 
-		bool LoadJsonFile(std::string const& path)
-		{
-			Json::Reader reader;
-			Json::Value cards_json;
-
-			std::ifstream cards_file(path);
-
-			if (reader.parse(cards_file, cards_json, false) == false) return false;
-
-			return this->ReadFromJson(cards_json);
+		bool Initialize(std::string const& path) {
+			return LoadJsonFile(path);
 		}
 
 		std::unordered_map<std::string, int> GetIdMap() const { return origin_id_map_; }
@@ -71,6 +63,18 @@ namespace Cards
 
 	private:
 		Database() : final_cards_(nullptr), final_cards_size_(0) { }
+
+		bool LoadJsonFile(std::string const& path)
+		{
+			Json::Reader reader;
+			Json::Value cards_json;
+
+			std::ifstream cards_file(path);
+
+			if (reader.parse(cards_file, cards_json, false) == false) return false;
+
+			return this->ReadFromJson(cards_json);
+		}
 
 		bool ReadFromJson(Json::Value const & cards_json)
 		{
