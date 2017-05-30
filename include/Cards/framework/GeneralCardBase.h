@@ -137,6 +137,14 @@ namespace Cards
 			}
 		}
 
+	public:
+		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate & manipulate, Cards::Database::CachedCardsTypes type) {
+			std::vector<int> const& container = Cards::Database::GetInstance().GetCachedCards(type);
+			if (container.empty()) return (Cards::CardId) - 1;
+			size_t idx = manipulate.GetRandom().Get(container.size());
+			return (Cards::CardId)container[idx];
+		}
+
 	private:
 		static state::CardRef SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{

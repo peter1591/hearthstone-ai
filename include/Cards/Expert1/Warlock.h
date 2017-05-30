@@ -166,6 +166,45 @@ namespace Cards
 		}
 	};
 
+	struct Card_EX1_320 : SpellCardBase<Card_EX1_320> {
+		Card_EX1_320() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetRequiredTargets(context.player_).SpellTargetable();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
+				if (context.manipulate_.GetCard(context.GetTarget()).GetZone() == state::kCardZonePlay) {
+					if (context.manipulate_.GetCard(context.GetTarget()).GetHP() > 0) {
+						return;
+					}
+				}
+				Cards::CardId card_id = GetRandomCardFromDatabase(context.manipulate_, Cards::Database::kDemons);
+				SummonToRightmost(context.manipulate_, context.player_, card_id);
+			});
+		}
+	};
+
+	struct Card_EX1_310 : MinionCardBase<Card_EX1_310, Charge> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			DiscardOneRandomHandCard(context.manipulate_, context.player_);
+			DiscardOneRandomHandCard(context.manipulate_, context.player_);
+		}
+	};
+
+	struct Card_EX1_309 : SpellCardBase<Card_EX1_309> {
+		Card_EX1_309() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
+				context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 3);
+			});
+		}
+	};
+
 	struct Card_EX1_312 : SpellCardBase<Card_EX1_312> {
 		Card_EX1_312() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -180,7 +219,9 @@ namespace Cards
 }
 
 REGISTER_CARD(EX1_312)
-
+REGISTER_CARD(EX1_309)
+REGISTER_CARD(EX1_310)
+REGISTER_CARD(EX1_320)
 REGISTER_CARD(EX1_315)
 REGISTER_CARD(EX1_313)
 REGISTER_CARD(EX1_303)

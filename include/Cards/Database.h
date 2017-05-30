@@ -71,7 +71,8 @@ namespace Cards
 
 	public:
 		enum CachedCardsTypes {
-			kCollectibleCards,
+			kCollectibles,
+			kDemons,
 			kCachedCardsTypesCount
 		};
 		std::vector<int> const& GetCachedCards(CachedCardsTypes cached_cards_type) {
@@ -242,7 +243,11 @@ namespace Cards
 
 		void ProcessCachedCardsTypes(CardData const& new_card) {
 			if (new_card.collectible) {
-				cached_cards[kCollectibleCards].push_back(new_card.card_id);
+				cached_cards[kCollectibles].push_back(new_card.card_id);
+			}
+
+			if (new_card.card_race == state::kCardRaceDemon) {
+				cached_cards[kDemons].push_back(new_card.card_id);
 			}
 		}
 
