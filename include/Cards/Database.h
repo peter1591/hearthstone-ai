@@ -16,6 +16,12 @@ namespace Cards
 	public:
 		struct CardData
 		{
+			CardData() :
+				card_id(-1), card_type(state::kCardTypeInvalid), card_race(state::kCardRaceInvalid),
+				card_rarity(state::kCardRarityInvalid), card_set(state::kCardSetInvalid),
+				cost(-1), attack(-1), max_hp(-1), collectible(false)
+			{}
+
 			int card_id;
 			state::CardType card_type;
 			state::CardRace card_race;
@@ -26,7 +32,9 @@ namespace Cards
 			int attack;
 			int max_hp;
 
-			static constexpr int kFieldChangeId = 1; // modify this if any field changed. This helps to track which codes should be modified accordingly.
+			bool collectible;
+
+			static constexpr int kFieldChangeId = 2; // modify this if any field changed. This helps to track which codes should be modified accordingly.
 		};
 
 		static Database & GetInstance()
@@ -59,6 +67,15 @@ namespace Cards
 			assert(id >= 0);
 			assert(id < final_cards_size_);
 			return final_cards_[id];
+		}
+
+	public:
+		enum CachedCardsTypes {
+			kCollectibleCards,
+			kCachedCardsTypesCount
+		};
+		std::vector<int> const& GetCachedCards(CachedCardsTypes cached_cards_type) {
+			return cached_cards[cached_cards_type];
 		}
 
 	private:
@@ -189,6 +206,10 @@ namespace Cards
 				return;
 			}
 
+			if (json.isMember("collectible")) {
+				new_card.collectible = json["collectible"].asBool();
+			}
+
 			if (type == "MINION") {
 				new_card.card_type = state::kCardTypeMinion;
 				new_card.card_race = GetCardRace(json);
@@ -215,6 +236,14 @@ namespace Cards
 
 			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);
+
+			ProcessCachedCardsTypes(new_card);
+		}
+
+		void ProcessCachedCardsTypes(CardData const& new_card) {
+			if (new_card.collectible) {
+				cached_cards[kCollectibleCards].push_back(new_card.card_id);
+			}
 		}
 
 	private:
@@ -222,5 +251,7 @@ namespace Cards
 		int final_cards_size_;
 
 		std::unordered_map<std::string, int> origin_id_map_;
+
+		std::array<std::vector<int>, kCachedCardsTypesCount> cached_cards;
 	};
 }
