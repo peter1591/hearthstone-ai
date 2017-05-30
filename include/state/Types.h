@@ -60,6 +60,8 @@ namespace state
 		kCardSetOldGods,
 		kCardSetKara,
 		kCardSetGangs,
+		kCardSetUngoro,
+		kCardSetHOF, // hero of fame
 		kCardSetTB
 	};
 

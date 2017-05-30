@@ -20,6 +20,7 @@ namespace Cards
 			state::CardType card_type;
 			state::CardRace card_race;
 			state::CardRarity card_rarity;
+			state::CardSet card_set;
 
 			int cost;
 			int attack;
@@ -111,18 +112,25 @@ namespace Cards
 
 			if (set == "CORE") return state::kCardSetCore;
 			if (set == "EXPERT1") return state::kCardSetExpert1;
+			if (set == "HOF") return state::kCardSetHOF;
+
+			if (set == "BRM") return state::kCardSetBRM;
 			if (set == "TGT") return state::kCardSetTGT;
 			if (set == "GVG") return state::kCardSetGVG;
 			if (set == "NAXX") return state::kCardSetNaxx;
 			if (set == "LOE") return state::kCardSetLOE;
+
 			if (set == "OG") return state::kCardSetOldGods;
 			if (set == "KARA") return state::kCardSetKara;
 			if (set == "GANGS") return state::kCardSetGangs;
+			if (set == "UNGORO") return state::kCardSetUngoro;
 
 			if (set == "TB") return state::kCardSetTB;
+
 			if (set == "CHEAT") return state::kCardSetInvalid;
 			if (set == "MISSIONS") return state::kCardSetInvalid;
-
+			if (set == "CREDITS") return state::kCardSetInvalid;
+			if (set == "HERO_SKINS") return state::kCardSetInvalid;
 			throw std::exception("unknown set");
 		}
 
@@ -146,6 +154,8 @@ namespace Cards
 			const std::string origin_id = json["id"].asString();
 			const std::string type = json["type"].asString();
 
+			if (origin_id == "PlaceholderCard") return;
+
 			if (origin_id_map_.find(origin_id) != origin_id_map_.end()) {
 				throw std::exception("Card ID string collision.");
 			}
@@ -155,6 +165,9 @@ namespace Cards
 
 			new_card.cost = json["cost"].asInt();
 			new_card.card_rarity = GetCardRarity(json);
+
+			if (json.isMember("set") == false) throw std::exception("set field not exists");
+			new_card.card_set = GetCardSet(json);
 
 			if (type == "MINION") {
 				new_card.card_type = state::kCardTypeMinion;
