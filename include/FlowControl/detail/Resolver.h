@@ -21,22 +21,18 @@ namespace FlowControl
 			bool Resolve()
 			{
 				while (true) {
-					bool done = true;
-
 					auto first_minions_change_id = state_.GetBoard().GetFirst().minions_.GetChangeId();
 					auto second_minions_change_id = state_.GetBoard().GetSecond().minions_.GetChangeId();
 
 					UpdateAura(); // update aura first, since aura will add/remove enchantments on others
 					UpdateEnchantments();
-					CreateDeaths();
 
-					// If any entity dies, re-resolve again
-					while (!deaths_.empty()) {
-						done = false;
-						if (!RemoveDeaths()) return false;
+					do {
 						CreateDeaths();
-					}
-					if (!done) continue;
+						if (!RemoveDeaths()) return false;
+					} while (!deaths_.empty());
+
+					bool done = true;
 
 					// If any minions change side (due to enchantment), re-resolve again
 					auto new_first_minions_change_id = state_.GetBoard().GetFirst().minions_.GetChangeId();
