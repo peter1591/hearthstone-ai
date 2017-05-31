@@ -234,8 +234,7 @@ namespace Cards
 			state::CardRef hero_ref = context.manipulate_.Hero(context.player_).Transform(Cards::ID_EX1_323h);
 			*context.new_card_ref = hero_ref;
 
-			state::CardRef weapon_ref = context.manipulate_.Board().AddCardById(Cards::ID_EX1_323w, context.player_);
-			context.manipulate_.Hero(hero_ref).EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
+			context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_323w);
 
 			context.manipulate_.HeroPower(context.player_).ReplaceHeroPower(Cards::ID_EX1_tk33);
 

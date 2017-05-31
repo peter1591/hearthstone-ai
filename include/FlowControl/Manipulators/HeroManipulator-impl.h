@@ -83,6 +83,12 @@ namespace FlowControl
 			// TODO: trigger events
 		}
 
+		inline void HeroManipulator::EquipWeapon(Cards::CardId card_id)
+		{
+			state::CardRef weapon_ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_id_);
+			return EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
+		}
+
 		template <state::CardZone KnownZone>
 		inline void HeroManipulator::EquipWeapon(state::CardRef weapon_ref)
 		{

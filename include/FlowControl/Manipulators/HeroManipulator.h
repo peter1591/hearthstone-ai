@@ -29,6 +29,8 @@ namespace FlowControl
 			template <state::CardZone KnownZone>
 			void EquipWeapon(state::CardRef weapon_ref);
 
+			void EquipWeapon(Cards::CardId card_id);
+
 			void TurnStart()
 			{
 				GetCard().ClearNumAttacksThisTurn();

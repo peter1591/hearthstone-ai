@@ -39,8 +39,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();
 				if (!weapon_ref.IsValid()) {
-					weapon_ref = context.manipulate_.Board().AddCardById(Cards::ID_EX1_409t, context.player_);
-					context.manipulate_.Hero(context.player_).EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
+					context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_409t);
 					return;
 				}
 				context.manipulate_.Weapon(weapon_ref).Enchant().Add<Card_EX1_409e>();
