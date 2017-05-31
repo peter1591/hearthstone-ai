@@ -25,22 +25,22 @@ namespace FlowControl
 
 		enum EmitPolicy {
 			kEmitInvalid,
-			kEmitWhenAlive // and it's not silenced
+			kEmitWhenAlive // Need SetOwner(), and it's not silenced
 		};
 
 		class Handler
 		{
 		public:
-			Handler(state::CardRef owner_ref) :
+			Handler() :
 				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
 				last_updated_change_id_second_player_minions_(-1),
 				last_updated_undamaged_(true),
-				owner_ref_(owner_ref),
 				update_policy_(kUpdateAlways), emit_policy_(kEmitInvalid)
 			{}
 
 		public:
+			Handler& SetOwner(state::CardRef owner_ref) { owner_ref_ = owner_ref; return *this; }
 			Handler& SetUpdatePolicy(UpdatePolicy policy) { update_policy_ = policy; return *this; }
 			Handler& SetEmitPolicy(EmitPolicy policy) { emit_policy_ = policy; return *this; }
 

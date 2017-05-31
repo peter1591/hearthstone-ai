@@ -21,7 +21,8 @@ namespace Cards
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(
-					FlowControl::aura::Handler(context.card_ref_)
+					FlowControl::aura::Handler()
+					.SetOwner(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantments()
@@ -40,7 +41,8 @@ namespace Cards
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(
-					FlowControl::aura::Handler(context.card_ref_)
+					FlowControl::aura::Handler()
+					.SetOwner(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantment()
@@ -56,7 +58,8 @@ namespace Cards
 		BoardFlagAuraHelper(state::Cards::CardData & card_data) {
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(
-					FlowControl::aura::Handler(context.card_ref_)
+					FlowControl::aura::Handler()
+					.SetOwner(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_BoardFlag()
@@ -72,7 +75,8 @@ namespace Cards
 		OwnerPlayerFlagAuraHelper(state::Cards::CardData & card_data) {
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
 				context.manipulate_.Aura().Add(
-					FlowControl::aura::Handler(context.card_ref_)
+					FlowControl::aura::Handler()
+					.SetOwner(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_OwnerPlayerFlag()
