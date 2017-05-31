@@ -110,8 +110,10 @@ namespace Cards
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 
 		EventHookedEnchantment() {
-			// TODO: use SFINAE to make sure caller correctly pass itself as T
-			//       T::tier_if_aura must NOT exist
+			// The first template parameter 'T' should be the client card class itself
+			// And the rest of the template parameters are with the Enchant concept
+			// Since, the Enchant concept has the 'tier_if_aura' field, we use it to detect misuse
+			static_assert(detail::HasTierIfAura<T>::value == false);
 
 			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
 				Enchant1::Apply(*context.stats_);
