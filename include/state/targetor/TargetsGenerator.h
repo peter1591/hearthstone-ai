@@ -53,15 +53,6 @@ namespace state {
 				TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(targeting_player)
 			{}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion & SpellTargetable() {
-				info_.targetable_type = Targets::kTargetableTypeOnlySpellTargetable;
-				return *this;
-			}
-			TargetsGenerator_ChosenSide_ChosenHeroMinion & Targetable() {
-				info_.targetable_type = Targets::kTargetableTypeOnlyTargetable;
-				return *this;
-			}
-
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Alive()
 			{
 				info_.filter_type = Targets::kFilterAlive;
@@ -154,14 +145,15 @@ namespace state {
 			}
 		};
 
-		class TargetsGenerator : public TargetsGenerator_ChosenSide
+		class TargetsGenerator_ChosenTargetableFilter : public TargetsGenerator_ChosenSide
 		{
-		public: // Fluent-like API to set up
-			TargetsGenerator() {}
-			using TargetsGenerator_Leaf::Initialize;
+		protected:
+			TargetsGenerator_ChosenTargetableFilter() {}
 
-			TargetsGenerator(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenSide(targeting_player) {}
-
+		public:
+			TargetsGenerator_ChosenTargetableFilter(state::PlayerIdentifier targeting_player)
+				: TargetsGenerator_ChosenSide(targeting_player) {}
+			
 			TargetsGenerator_ChosenSide & Ally() {
 				return SideOnly(info_.GetTargetingSide());
 			}
@@ -182,6 +174,24 @@ namespace state {
 					info_.include_first = false;
 					info_.include_second = true;
 				}
+				return *this;
+			}
+		};
+
+		class TargetsGenerator : public TargetsGenerator_ChosenTargetableFilter
+		{
+		public: // Fluent-like API to set up
+			TargetsGenerator() {}
+			using TargetsGenerator_Leaf::Initialize;
+
+			TargetsGenerator(state::PlayerIdentifier targeting_player) : TargetsGenerator_ChosenTargetableFilter(targeting_player) {}
+
+			TargetsGenerator_ChosenTargetableFilter & SpellTargetable() {
+				info_.targetable_type = Targets::kTargetableTypeOnlySpellTargetable;
+				return *this;
+			}
+			TargetsGenerator_ChosenTargetableFilter & Targetable() {
+				info_.targetable_type = Targets::kTargetableTypeOnlyTargetable;
 				return *this;
 			}
 		};

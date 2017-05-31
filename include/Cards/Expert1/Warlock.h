@@ -41,7 +41,7 @@ namespace Cards
 	struct Card_EX1_596 : SpellCardBase<Card_EX1_596> {
 		Card_EX1_596() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).Minion();
+				context.SetRequiredSpellTargets(context.player_).Minion();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -122,7 +122,7 @@ namespace Cards
 	struct Card_EX1_303 : SpellCardBase<Card_EX1_303> {
 		Card_EX1_303() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).Ally().Minion();
+				context.SetRequiredSpellTargets(context.player_).Ally().Minion();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -169,7 +169,7 @@ namespace Cards
 	struct Card_EX1_320 : SpellCardBase<Card_EX1_320> {
 		Card_EX1_320() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).SpellTargetable();
+				context.SetRequiredSpellTargets(context.player_);
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -195,7 +195,7 @@ namespace Cards
 	struct Card_EX1_309 : SpellCardBase<Card_EX1_309> {
 		Card_EX1_309() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).Minion().SpellTargetable();
+				context.SetRequiredSpellTargets(context.player_).Minion();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

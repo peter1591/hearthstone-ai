@@ -8,7 +8,7 @@ namespace Cards
 	struct Card_CS2_188_Enchant : public EnchantmentForThisTurn<Card_CS2_188_Enchant, Attack<2>> {};
 	struct Card_CS2_188 : public MinionCardBase<Card_CS2_188> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			context.SetOptionalBattlecryTargets(context.player_).Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -42,7 +42,7 @@ namespace Cards
 	struct Card_NEW1_017e : public Enchantment<Card_NEW1_017e, Attack<2>, MaxHP<2>> {};
 	struct Card_NEW1_017 : public MinionCardBase<Card_NEW1_017> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Murlocs();
+			context.SetOptionalBattlecryTargets(context.player_).Minion().Murlocs();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -175,7 +175,7 @@ namespace Cards
 	struct Card_EX1_059_hp : public Enchantment<Card_EX1_059_hp<v>, SetMaxHP<v>> {};
 	struct Card_EX1_059 : public MinionCardBase<Card_EX1_059> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			context.SetOptionalBattlecryTargets(context.player_).Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -399,7 +399,7 @@ namespace Cards
 
 	struct Card_EX1_049 : public MinionCardBase<Card_EX1_049> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Ally().Minion();
+			context.SetOptionalBattlecryTargets(context.player_).Ally().Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -512,7 +512,7 @@ namespace Cards
 
 	struct Card_CS2_117 : public MinionCardBase<Card_CS2_117> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Targetable();
+			context.SetOptionalBattlecryTargets(context.player_);
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -568,7 +568,7 @@ namespace Cards
 
 	struct Card_CS2_203 : public MinionCardBase<Card_CS2_203> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			context.SetOptionalBattlecryTargets(context.player_).Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -583,7 +583,7 @@ namespace Cards
 	struct Card_EX1_014t : public SpellCardBase<Card_EX1_014t> {
 		Card_EX1_014t() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).SpellTargetable().GetInfo();
+				context.SetRequiredSpellTargets(context.player_).GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -693,7 +693,7 @@ namespace Cards
 
 	struct Card_EX1_057 : public MinionCardBase<Card_EX1_057> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Ally().Minion();
+			context.SetOptionalBattlecryTargets(context.player_).Ally().Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -728,7 +728,7 @@ namespace Cards
 	struct Card_EX1_046e : public EnchantmentForThisTurn<Card_EX1_046e, Attack<2>> {};
 	struct Card_EX1_046 : public MinionCardBase<Card_EX1_046> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			context.SetOptionalBattlecryTargets(context.player_).Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -768,7 +768,7 @@ namespace Cards
 
 	struct Card_EX1_048 : public MinionCardBase<Card_EX1_048> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			context.SetOptionalBattlecryTargets(context.player_).Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -817,7 +817,7 @@ namespace Cards
 
 	struct Card_EX1_005 : public MinionCardBase<Card_EX1_005> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().AttackGreaterOrEqualTo(7);
+			context.SetOptionalBattlecryTargets(context.player_).Minion().AttackGreaterOrEqualTo(7);
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -836,7 +836,7 @@ namespace Cards
 
 	struct Card_EX1_564 : public MinionCardBase<Card_EX1_564> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			context.SetOptionalBattlecryTargets(context.player_).Minion();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -925,7 +925,7 @@ namespace Cards
 
 	struct Card_EX1_283 : public MinionCardBase<Card_EX1_283> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Targetable();
+			context.SetOptionalBattlecryTargets(context.player_);
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -989,7 +989,7 @@ namespace Cards
 
 	struct Card_EX1_002 : public MinionCardBase<Card_EX1_002> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Minion().HasTaunt().Exclude(context.card_ref_);
+			context.SetOptionalBattlecryTargets(context.player_).Minion().HasTaunt().Exclude(context.card_ref_);
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -1035,7 +1035,7 @@ namespace Cards
 
 	struct Card_EX1_561 : public MinionCardBase<Card_EX1_561> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			context.SetOptionalTargets(context.player_).Hero();
+			context.SetOptionalBattlecryTargets(context.player_).Hero();
 			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
@@ -1078,7 +1078,7 @@ namespace Cards
 	struct Card_DREAM_04 : public SpellCardBase<Card_DREAM_04> {
 		Card_DREAM_04() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredSpellTargets(context.player_).Minion().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -1096,7 +1096,7 @@ namespace Cards
 	struct Card_DREAM_05 : public SpellCardBase<Card_DREAM_05> {
 		Card_DREAM_05() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().GetInfo();
+				context.SetRequiredSpellTargets(context.player_).Minion().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

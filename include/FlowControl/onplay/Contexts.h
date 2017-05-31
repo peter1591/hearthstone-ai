@@ -37,6 +37,32 @@ namespace FlowControl
 				state::CardRef card_ref_;
 
 				template <typename... Args>
+				auto & SetRequiredBattlecryTargets(Args&&... args) {
+					return SetRequiredTargets(std::forward<Args>(args)...).Targetable();
+				}
+				template <typename... Args>
+				auto & SetOptionalBattlecryTargets(Args&&... args) {
+					return SetOptionalTargets(std::forward<Args>(args)...).Targetable();
+				}
+
+				template <typename... Args>
+				auto & SetRequiredSpellTargets(Args&&... args) {
+					return SetRequiredTargets(std::forward<Args>(args)...).SpellTargetable();
+				}
+				template <typename... Args>
+				auto & SetOptionalSpellTargets(Args&&... args) {
+					return SetOptionalTargets(std::forward<Args>(args)...).SpellTargetable();
+				}
+
+				state::targetor::Targets GetTargets() {
+					return targets_generator_.GetInfo();
+				}
+
+				bool NeedToPrepareTarget() { return need_to_prepare_target_; }
+				bool IsAllowedNoTarget() { return allow_no_target_; }
+
+			private:
+				template <typename... Args>
 				state::targetor::TargetsGenerator & SetRequiredTargets(Args&&... args) {
 					need_to_prepare_target_ = true;
 					allow_no_target_ = false;
@@ -50,13 +76,6 @@ namespace FlowControl
 					targets_generator_.Initialize(std::forward<Args>(args)...);
 					return targets_generator_;
 				}
-
-				state::targetor::Targets GetTargets() {
-					return targets_generator_.GetInfo();
-				}
-
-				bool NeedToPrepareTarget() { return need_to_prepare_target_; }
-				bool IsAllowedNoTarget() { return allow_no_target_; }
 
 			private:
 				state::targetor::TargetsGenerator targets_generator_;
