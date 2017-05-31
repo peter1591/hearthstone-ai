@@ -1,7 +1,7 @@
 #pragma once
 
 // http://www.hearthpwn.com/cards?filter-set=3&filter-class=1024&sort=-cost&display=1
-// Last finished: Battle Rage
+// Done
 
 namespace Cards
 {
@@ -186,19 +186,19 @@ namespace Cards
 	struct Card_EX1_407 : SpellCardBase<Card_EX1_407> {
 		Card_EX1_407() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				int minions =
+				size_t minions =
 					context.manipulate_.Board().FirstPlayer().minions_.Size() +
 					context.manipulate_.Board().SecondPlayer().minions_.Size();
 				return minions >= 2;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				int first_minions = context.manipulate_.Board().FirstPlayer().minions_.Size();
-				int second_minions = context.manipulate_.Board().SecondPlayer().minions_.Size();
+				size_t first_minions = context.manipulate_.Board().FirstPlayer().minions_.Size();
+				size_t second_minions = context.manipulate_.Board().SecondPlayer().minions_.Size();
 
-				int minions = first_minions + second_minions;
+				size_t minions = first_minions + second_minions;
 				if (minions < 2) return;
 
-				int minion_idx = context.manipulate_.GetRandom().Get(minions);
+				size_t minion_idx = context.manipulate_.GetRandom().Get(minions);
 				bool first_player = true;
 
 				if (minion_idx >= first_minions) {
@@ -220,8 +220,44 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_411e2 : public Enchantment<Card_EX1_411e2, Attack<-1>> {};
+	struct Card_EX1_411e : public EventHookedEnchantment<Card_EX1_411e, Immune> {
+		using EventType = state::Events::EventTypes::AfterAttack;
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_411e> & handler) {
+			handler.context.manipulate_.Weapon(handler.card_ref).Enchant().Add<Card_EX1_411e2>();
+			handler.RemoveEnchantment();
+		}
+	};
+	struct Card_EX1_411 : WeaponCardBase<Card_EX1_411> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareAttackTarget::Context context) {
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
+			if (context.attacker_ != hero_ref) return true;
+			if (context.manipulate_.GetCard(*context.defender_).GetCardType() != state::kCardTypeMinion) return true;
+
+			context.manipulate_.Weapon(self).Enchant().AddEventHooked(Card_EX1_411e());
+			return true;
+		}
+		Card_EX1_411() {
+			RegisterEvent<WeaponInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::PrepareAttackTarget>();
+		}
+	};
+
+	struct Card_EX1_414e : public Enchantment<Card_EX1_414e, Attack<6>> {};
+	struct Card_EX1_414 : public MinionCardBase<Card_EX1_414, Charge> {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+			context.new_target = context.card_ref_;
+		}
+		Card_EX1_414() {
+			Enrage<Card_EX1_414e>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_414)
+REGISTER_CARD(EX1_411)
 REGISTER_CARD(EX1_407)
 REGISTER_CARD(EX1_398)
 REGISTER_CARD(EX1_408)
