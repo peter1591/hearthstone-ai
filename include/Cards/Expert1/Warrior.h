@@ -171,8 +171,15 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_398 : MinionCardBase<Card_EX1_398> {
+		static void Battlecry(Contexts::OnPlay const& context) {
+			context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_398t);
+		}
+	};
 }
 
+REGISTER_CARD(EX1_398)
 REGISTER_CARD(EX1_408)
 REGISTER_CARD(EX1_604)
 REGISTER_CARD(EX1_603)
