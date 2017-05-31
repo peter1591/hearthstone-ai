@@ -60,7 +60,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateCard(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const & new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 17, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
@@ -71,16 +71,11 @@ namespace FlowControl
 				card_manipulator.Cost(new_states.cost);
 				assert(GetCard().GetCost() == new_states.cost);
 			}
-
-			if (new_states.cost_health_instead != current_states.cost_health_instead) {
-				card_manipulator.CostHealthInstead(new_states.cost_health_instead);
-				assert(GetCard().GetCostHealthInstead() == new_states.cost_health_instead);
-			}
 		}
 
 		inline void Handler::UpdateCharacter(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 17, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
@@ -129,7 +124,7 @@ namespace FlowControl
 
 		inline void Handler::UpdateMinion(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 17, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
@@ -166,13 +161,13 @@ namespace FlowControl
 
 		inline void Handler::UpdateHero(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 17, "enchantable fields changed");
 			UpdateCharacter(state, flow_context, card_ref, new_states);
 		}
 
 		inline void Handler::UpdateWeapon(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states)
 		{
-			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 16, "enchantable fields changed");
+			static_assert(state::Cards::EnchantableStates::kFieldChangeId == 17, "enchantable fields changed");
 			auto GetCard = [&]() { return state.GetCard(card_ref); };
 			state::Cards::EnchantableStates const& current_states = GetCard().GetRawData().enchanted_states;
 
