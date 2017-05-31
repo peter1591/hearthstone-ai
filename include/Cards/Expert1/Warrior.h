@@ -69,9 +69,14 @@ namespace Cards
 	struct Card_NEW1_036 : SpellCardBase<Card_NEW1_036> {
 		Card_NEW1_036() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.Hero(context.player_).DrawCard();
+
 				state::PlayerIdentifier player = context.player_;
+				int turn = context.manipulate_.Board().GetTurn();
 				context.manipulate_.AddEvent<state::Events::EventTypes::OnTakeDamage>(
 					[&](state::Events::EventTypes::OnTakeDamage::Context context) {
+					if (context.manipulate_.Board().GetTurn() != turn) return false;
+
 					auto const& card = context.manipulate_.GetCard(context.card_ref_);
 					if (card.GetCardType() != state::kCardTypeMinion) return true;
 					if (card.GetPlayerIdentifier() != player) return true;
