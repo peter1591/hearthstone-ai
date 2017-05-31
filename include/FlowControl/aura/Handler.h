@@ -25,7 +25,7 @@ namespace FlowControl
 
 		enum EmitPolicy {
 			kEmitInvalid,
-			kEmitWhenAlive
+			kEmitWhenAlive // and it's not silenced
 		};
 
 		class Handler

@@ -90,18 +90,16 @@ namespace FlowControl
 		
 		inline bool Handler::IsValid(state::State & state, FlowControl::FlowContext & flow_context)
 		{
-			if (state.GetCard(owner_ref_).IsSilenced()) return false;
-
 			if (emit_policy_ == kEmitWhenAlive) {
 				state::Cards::Card const& card = state.GetCard(owner_ref_);
+				if (card.IsSilenced()) return false;
 				if (card.GetZone() != state::kCardZonePlay) return false;
 				if (card.GetHP() <= 0) return false;
 				return true;
 			}
-			else {
-				assert(false);
-				return false;
-			}
+
+			assert(false);
+			return false;
 		}
 	}
 }
