@@ -9,14 +9,14 @@ namespace state {
 		class Manager
 		{
 		public:
-			void Add(CardRef ref, FlowControl::aura::Handler handler) {
-				auras_.push_back(std::make_pair(ref, std::move(handler)));
+			void Add(FlowControl::aura::Handler handler) {
+				auras_.push_back(std::move(handler));
 			}
 
-			template <typename Functor> // Functor = bool(CardRef, FlowControl::aura::Handler &). returns false to remove it from container
+			template <typename Functor> // Functor = bool(FlowControl::aura::Handler &). returns false to remove it from container
 			void ForEachAura(Functor&& functor) {
 				for (auto it = auras_.begin(); it != auras_.end();) {
-					if (!functor(it->first, it->second)) {
+					if (!functor(*it)) {
 						it = auras_.erase(it);
 					}
 					else {
@@ -26,7 +26,7 @@ namespace state {
 			}
 
 		private:
-			std::vector<std::pair<CardRef, FlowControl::aura::Handler>> auras_;
+			std::vector<FlowControl::aura::Handler> auras_;
 		};
 	}
 }

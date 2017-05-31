@@ -20,8 +20,8 @@ namespace Cards
 		AuraHelper(state::Cards::CardData & card_data)
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
-				context.manipulate_.Aura().Add(context.card_ref_,
-					FlowControl::aura::Handler()
+				context.manipulate_.Aura().Add(
+					FlowControl::aura::Handler(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantments()
@@ -39,8 +39,8 @@ namespace Cards
 		SingleEnchantmentAuraHelper(state::Cards::CardData & card_data)
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
-				context.manipulate_.Aura().Add(context.card_ref_,
-					FlowControl::aura::Handler()
+				context.manipulate_.Aura().Add(
+					FlowControl::aura::Handler(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_Enchantment()
@@ -55,8 +55,8 @@ namespace Cards
 	struct BoardFlagAuraHelper {
 		BoardFlagAuraHelper(state::Cards::CardData & card_data) {
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
-				context.manipulate_.Aura().Add(context.card_ref_,
-					FlowControl::aura::Handler()
+				context.manipulate_.Aura().Add(
+					FlowControl::aura::Handler(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_BoardFlag()
@@ -71,8 +71,8 @@ namespace Cards
 	struct OwnerPlayerFlagAuraHelper {
 		OwnerPlayerFlagAuraHelper(state::Cards::CardData & card_data) {
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
-				context.manipulate_.Aura().Add(context.card_ref_,
-					FlowControl::aura::Handler()
+				context.manipulate_.Aura().Add(
+					FlowControl::aura::Handler(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
 					.SetEmitPolicy(EmitPolicy::emit_policy)
 					.SetEffect(FlowControl::aura::EffectHandler_OwnerPlayerFlag()

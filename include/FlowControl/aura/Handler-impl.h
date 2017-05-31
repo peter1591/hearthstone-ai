@@ -15,23 +15,23 @@ namespace FlowControl
 {
 	namespace aura
 	{
-		inline bool Handler::Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+		inline bool Handler::Update(state::State & state, FlowControl::FlowContext & flow_context)
 		{
-			bool aura_valid = IsValid(state, flow_context, card_ref);
+			bool aura_valid = IsValid(state, flow_context);
 			if (aura_valid) {
-				if (!NeedUpdate(state, flow_context, card_ref)) return aura_valid;
+				if (!NeedUpdate(state, flow_context)) return aura_valid;
 			}
 
 			std::visit([&](auto& item) {
-				item.Update(state, flow_context, card_ref, aura_valid);
+				item.Update(state, flow_context, owner_ref_, aura_valid);
 			}, effect_);
 
-			AfterUpdated(state, flow_context, card_ref);
+			AfterUpdated(state, flow_context);
 
 			return aura_valid;
 		}
 
-		inline bool Handler::NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+		inline bool Handler::NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context)
 		{
 			if (update_policy_ == kUpdateAlways) {
 				return true;
@@ -45,13 +45,13 @@ namespace FlowControl
 			}
 			else if (update_policy_ == kUpdateWhenEnrageChanges) {
 				if (first_time_update_) return true;
-				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(card_ref);
+				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(owner_ref_);
 				bool now_undamaged = (card.GetDamage() == 0);
 				return (last_updated_undamaged_ != now_undamaged);
 			}
 			else if (update_policy_ == kUpdateOwnerChanges) {
 				if (!last_updated_owner_.IsValid()) return true;
-				return state.GetCard(card_ref).GetPlayerIdentifier() != last_updated_owner_;
+				return state.GetCard(owner_ref_).GetPlayerIdentifier() != last_updated_owner_;
 			}
 			else if (update_policy_ == kUpdateOnlyFirstTime) {
 				return first_time_update_;
@@ -62,7 +62,7 @@ namespace FlowControl
 			}
 		}
 
-		inline void Handler::AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+		inline void Handler::AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context)
 		{
 			if (update_policy_ == kUpdateAlways) return;
 			else if (update_policy_ == kUpdateWhenMinionChanges) {
@@ -73,12 +73,12 @@ namespace FlowControl
 			}
 			else if (update_policy_ == kUpdateWhenEnrageChanges) {
 				first_time_update_ = false;
-				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(card_ref);
+				state::Cards::Card const& card = Manipulate(state, flow_context).GetCard(owner_ref_);
 				bool now_undamaged = (card.GetDamage() == 0);
 				last_updated_undamaged_ = now_undamaged;
 			}
 			else if (update_policy_ == kUpdateOwnerChanges) {
-				last_updated_owner_ = state.GetCard(card_ref).GetPlayerIdentifier();
+				last_updated_owner_ = state.GetCard(owner_ref_).GetPlayerIdentifier();
 			}
 			else if (update_policy_ == kUpdateOnlyFirstTime) {
 				first_time_update_ = false;
@@ -88,12 +88,12 @@ namespace FlowControl
 			}
 		}
 		
-		inline bool Handler::IsValid(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref)
+		inline bool Handler::IsValid(state::State & state, FlowControl::FlowContext & flow_context)
 		{
-			if (state.GetCard(card_ref).IsSilenced()) return false;
+			if (state.GetCard(owner_ref_).IsSilenced()) return false;
 
 			if (emit_policy_ == kEmitWhenAlive) {
-				state::Cards::Card const& card = state.GetCard(card_ref);
+				state::Cards::Card const& card = state.GetCard(owner_ref_);
 				if (card.GetZone() != state::kCardZonePlay) return false;
 				if (card.GetHP() <= 0) return false;
 				return true;

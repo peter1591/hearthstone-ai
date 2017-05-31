@@ -31,13 +31,13 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-
-			Handler() :
-				update_policy_(kUpdateAlways), emit_policy_(kEmitInvalid),
+			Handler(state::CardRef owner_ref) :
 				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
 				last_updated_change_id_second_player_minions_(-1),
-				last_updated_undamaged_(true)
+				last_updated_undamaged_(true),
+				owner_ref_(owner_ref),
+				update_policy_(kUpdateAlways), emit_policy_(kEmitInvalid)
 			{}
 
 		public:
@@ -53,7 +53,7 @@ namespace FlowControl
 					return item.NoAppliedEnchantment();
 				}, effect_);
 			}
-			bool Update(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
+			bool Update(state::State & state, FlowControl::FlowContext & flow_context);
 
 			void AfterCopied() {
 				first_time_update_ = true;
@@ -63,10 +63,10 @@ namespace FlowControl
 			}
 
 		private:
-			bool NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
-			void AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
+			bool NeedUpdate(state::State & state, FlowControl::FlowContext & flow_context);
+			void AfterUpdated(state::State & state, FlowControl::FlowContext & flow_context);
 
-			bool IsValid(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref);
+			bool IsValid(state::State & state, FlowControl::FlowContext & flow_context);
 
 		public: // field for update policy
 			bool first_time_update_;
@@ -76,6 +76,7 @@ namespace FlowControl
 			state::PlayerIdentifier last_updated_owner_;
 
 		private:
+			state::CardRef owner_ref_;
 			UpdatePolicy update_policy_;
 			EmitPolicy emit_policy_;
 
