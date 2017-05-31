@@ -9,7 +9,7 @@ namespace FlowControl {
 			typedef void FuncApplyOn(contexts::AuraApplyFlagOnBoard context);
 			typedef void FuncRemoveFrom(contexts::AuraRemoveFlagFromBoard context);
 
-			EffectHandler_BoardFlag() : applied(false) {}
+			EffectHandler_BoardFlag() : apply_on(nullptr), remove_from(nullptr), applied(false) {}
 
 			EffectHandler_BoardFlag& SetApplyOn(FuncApplyOn* callback) { apply_on = callback; return *this; }
 			EffectHandler_BoardFlag& SetRemoveFrom(FuncRemoveFrom* callback) { remove_from = callback; return *this; }
