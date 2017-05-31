@@ -17,7 +17,7 @@ namespace Cards
 	struct Card_NEW1_003 : public SpellCardBase<Card_NEW1_003> {
 		Card_NEW1_003() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				context.SetRequiredTargets(context.player_).SpellTargetableDemons().GetInfo();
+				context.SetRequiredTargets(context.player_).SpellTargetable().Demons().GetInfo();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {

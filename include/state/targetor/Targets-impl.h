@@ -41,7 +41,10 @@ namespace state {
 		inline void Targets::ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const {
 			auto op = [&](state::CardRef card_ref) {
 				if (card_ref == exclude) return;
-				if (CheckFilter(manipulate, card_ref)) functor(card_ref);
+				auto const& card = manipulate.Board().GetCard(card_ref);
+				if (!CheckTargetableFilter(manipulate, card)) return;
+				if (!CheckFilter(manipulate, card)) return;
+				functor(card_ref);
 			};
 
 			if (include_hero) op(player.GetHeroRef());
@@ -57,15 +60,22 @@ namespace state {
 			return true;
 		}
 
-		inline bool Targets::CheckSpellTargetable(state::Cards::Card const & card) const
-		{
-			if (card.IsImmuneToSpell()) return false;
-			return CheckTargetable(card);
+		inline bool Targets::CheckTargetableFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const {
+			switch (targetable_type) {
+			case kTargetableTypeAll:
+				return true;
+			case kTargetableTypeOnlyTargetable:
+				return CheckTargetable(card);
+			case kTargetableTypeOnlySpellTargetable:
+				if (card.IsImmuneToSpell()) return false;
+				return CheckTargetable(card);
+			}
+
+			assert(false);
+			return false;
 		}
-
-		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const {
-			auto const& card = manipulate.Board().GetCard(minion);
-
+		
+		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const {
 			switch (filter_type) {
 			case kFilterAll:
 				return true;
@@ -76,9 +86,6 @@ namespace state {
 			case kFilterTargetable:
 				if (!CheckTargetable(card)) return false;
 				return true;
-			case kFilterTargetableBySpell:
-				if (!CheckSpellTargetable(card)) return false;
-				return true;
 			case kFilterMurloc:
 				return (card.GetRace() == kCardRaceMurloc);
 			case kFilterBeast:
@@ -87,18 +94,9 @@ namespace state {
 				return (card.GetRace() == kCardRacePirate);
 			case kFilterDemon:
 				return (card.GetRace() == kCardRaceDemon);
-			case kFilterTargetableBySpellAndDemon:
-				if (!CheckSpellTargetable(card)) return false;
-				return (card.GetRace() == kCardRaceDemon);
 			case kFilterAttackGreaterOrEqualTo:
 				return (card.GetAttack() >= filter_arg1);
 			case kFilterAttackLessOrEqualTo:
-				return (card.GetAttack() <= filter_arg1);
-			case kFilterTargetableBySpellAndAttackGreaterOrEqualTo:
-				if (!CheckSpellTargetable(card)) return false;
-				return (card.GetAttack() >= filter_arg1);
-			case kFilterTargetableBySpellAndAttackLessOrEqualTo:
-				if (!CheckSpellTargetable(card)) return false;
 				return (card.GetAttack() <= filter_arg1);
 			case kFilterTaunt:
 				return card.HasTaunt();

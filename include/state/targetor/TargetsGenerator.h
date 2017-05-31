@@ -53,21 +53,18 @@ namespace state {
 				TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter(targeting_player)
 			{}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Targetable()
-			{
-				info_.filter_type = Targets::kFilterTargetable;
+			TargetsGenerator_ChosenSide_ChosenHeroMinion & SpellTargetable() {
+				info_.targetable_type = Targets::kTargetableTypeOnlySpellTargetable;
+				return *this;
+			}
+			TargetsGenerator_ChosenSide_ChosenHeroMinion & Targetable() {
+				info_.targetable_type = Targets::kTargetableTypeOnlyTargetable;
 				return *this;
 			}
 
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & Alive()
 			{
 				info_.filter_type = Targets::kFilterAlive;
-				return *this;
-			}
-
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetable()
-			{
-				info_.filter_type = Targets::kFilterTargetableBySpell;
 				return *this;
 			}
 
@@ -95,12 +92,6 @@ namespace state {
 				return *this;
 			}
 
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetableDemons()
-			{
-				info_.filter_type = Targets::kFilterTargetableBySpellAndDemon;
-				return *this;
-			}
-
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & AttackGreaterOrEqualTo(int v)
 			{
 				info_.filter_type = Targets::kFilterAttackGreaterOrEqualTo;
@@ -111,20 +102,6 @@ namespace state {
 			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & AttackLessOrEqualTo(int v)
 			{
 				info_.filter_type = Targets::kFilterAttackLessOrEqualTo;
-				info_.filter_arg1 = v;
-				return *this;
-			}
-
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetableAndAttackGreaterOrEqualTo(int v)
-			{
-				info_.filter_type = Targets::kFilterTargetableBySpellAndAttackGreaterOrEqualTo;
-				info_.filter_arg1 = v;
-				return *this;
-			}
-
-			TargetsGenerator_ChosenSide_ChosenHeroMinion_ChosenMinionFilter & SpellTargetableAndAttackLessOrEqualTo(int v)
-			{
-				info_.filter_type = Targets::kFilterTargetableBySpellAndAttackLessOrEqualTo;
 				info_.filter_arg1 = v;
 				return *this;
 			}

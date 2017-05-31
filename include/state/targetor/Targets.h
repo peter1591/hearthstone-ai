@@ -23,6 +23,7 @@ namespace state {
 			Targets() :
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
+				targetable_type(kTargetableTypeAll),
 				filter_type(kFilterAll)
 			{}
 
@@ -55,10 +56,10 @@ namespace state {
 			template <typename Functor>
 			void ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const;
 
-			bool CheckFilter(FlowControl::Manipulate & manipulate, CardRef minion) const;
+			bool CheckTargetableFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const;
+			bool CheckFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const;
 
 			bool CheckTargetable(state::Cards::Card const& card) const;
-			bool CheckSpellTargetable(state::Cards::Card const& card) const;
 
 		public:
 			state::PlayerIdentifier targeting_side; // used to determine if a stealth minion can be targeted
@@ -69,21 +70,25 @@ namespace state {
 			bool include_minion;
 			bool include_hero;
 
+			enum TargetableType
+			{
+				kTargetableTypeAll,
+				kTargetableTypeOnlyTargetable,
+				kTargetableTypeOnlySpellTargetable
+			};
+			TargetableType targetable_type;
+
 			enum FilterType
 			{
 				kFilterAll,
 				kFilterAlive, // mortally wounded, or marked as pending-destroy
 				kFilterTargetable,
-				kFilterTargetableBySpell,
 				kFilterMurloc,
 				kFilterBeast,
 				kFilterPirate,
 				kFilterDemon,
-				kFilterTargetableBySpellAndDemon,
 				kFilterAttackGreaterOrEqualTo,
 				kFilterAttackLessOrEqualTo,
-				kFilterTargetableBySpellAndAttackGreaterOrEqualTo,
-				kFilterTargetableBySpellAndAttackLessOrEqualTo,
 				kFilterTaunt,
 				kFilterCharge,
 				kFilterUnDamaged,
