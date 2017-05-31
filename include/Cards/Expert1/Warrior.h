@@ -88,7 +88,7 @@ namespace Cards
 	struct Card_CS2_104 : SpellCardBase<Card_CS2_104> {
 		Card_CS2_104() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredTargets(context.player_).Minion().Damaged(); // TODO: only spell targetable
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable().Damaged();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -96,8 +96,55 @@ namespace Cards
 			});
 		}
 	};
+
+	struct Card_EX1_391 : SpellCardBase<Card_EX1_391> {
+		Card_EX1_391() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetRequiredTargets(context.player_).Minion().SpellTargetable();
+				return true;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 2);
+				if (context.manipulate_.GetCard(context.GetTarget()).GetHP() <= 0) return;
+				context.manipulate_.Hero(context.player_).DrawCard();
+			});
+		}
+	};
+
+	struct Card_EX1_402 : MinionCardBase<Card_EX1_402> {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+			if (*context.damage_ <= 0) return true;
+			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
+			auto const& card = context.manipulate_.GetCard(self);
+			if (card.GetPlayerIdentifier() != player) return true;
+			if (card.GetCardType() != state::kCardTypeMinion) return true;
+
+			context.manipulate_.Hero(player).GainArmor(1);
+		}
+		Card_EX1_402() {
+			RegisterEvent<MinionInPlayZone, NonCategorized_SelfInLambdaCapture,
+				state::Events::EventTypes::OnTakeDamage>();
+		}
+	};
+
+	struct Card_EX1_603e : Enchantment<Card_EX1_603e, Attack<2>> {};
+	struct Card_EX1_603 : MinionCardBase<Card_EX1_603> {
+		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+			context.SetOptionalTargets(context.player_).Minion().Targetable();
+			return true;
+		}
+		static void Battlecry(Contexts::OnPlay const& context) {
+			state::CardRef target = context.GetTarget();
+			if (!target.IsValid()) return;
+			context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 1);
+			context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_EX1_603e>();
+		}
+	};
 }
 
+REGISTER_CARD(EX1_603)
+REGISTER_CARD(EX1_402)
+REGISTER_CARD(EX1_391)
 REGISTER_CARD(CS2_104)
 REGISTER_CARD(NEW1_036)
 REGISTER_CARD(EX1_392)
