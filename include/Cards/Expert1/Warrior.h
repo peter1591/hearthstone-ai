@@ -182,8 +182,47 @@ namespace Cards
 			context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_398t);
 		}
 	};
+
+	struct Card_EX1_407 : SpellCardBase<Card_EX1_407> {
+		Card_EX1_407() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				int minions =
+					context.manipulate_.Board().FirstPlayer().minions_.Size() +
+					context.manipulate_.Board().SecondPlayer().minions_.Size();
+				return minions >= 2;
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int first_minions = context.manipulate_.Board().FirstPlayer().minions_.Size();
+				int second_minions = context.manipulate_.Board().SecondPlayer().minions_.Size();
+
+				int minions = first_minions + second_minions;
+				if (minions < 2) return;
+
+				int minion_idx = context.manipulate_.GetRandom().Get(minions);
+				bool first_player = true;
+
+				if (minion_idx >= first_minions) {
+					first_player = false;
+					minion_idx -= first_minions;
+					assert(minion_idx < second_minions);
+				}
+
+				state::CardRef winner_ref;
+				if (first_player) winner_ref = context.manipulate_.Board().FirstPlayer().minions_.Get(minion_idx);
+				else winner_ref = context.manipulate_.Board().SecondPlayer().minions_.Get(minion_idx);
+
+				auto op = [&](state::CardRef card_ref) {
+					if (card_ref == winner_ref) return;
+					context.manipulate_.OnBoardMinion(card_ref).Destroy();
+				};
+				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
+				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
+			});
+		}
+	};
 }
 
+REGISTER_CARD(EX1_407)
 REGISTER_CARD(EX1_398)
 REGISTER_CARD(EX1_408)
 REGISTER_CARD(EX1_604)
