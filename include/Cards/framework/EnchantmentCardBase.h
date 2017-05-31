@@ -5,6 +5,19 @@
 
 namespace Cards
 {
+	namespace detail {
+		template <typename T> class HasTierIfAura {
+			typedef char One;
+			typedef long Two;
+
+			template <typename C> static One test(decltype(&C::tier_if_aura));
+			template <typename C> static Two test(...);
+
+		public:
+			enum { value = sizeof(test<T>(0)) == sizeof(One) };
+		};
+	}
+
 	class EnchantmentCardBase
 	{
 	public:
@@ -35,8 +48,10 @@ namespace Cards
 		});
 
 		Enchantment() {
-			// TODO: use SFINAE to make sure caller correctly pass itself as T
-			//       T::tier_if_aura must NOT exist
+			// The first template parameter 'T' should be the client card class itself
+			// And the rest of the template parameters are with the Enchant concept
+			// Since, the Enchant concept has the 'tier_if_aura' field, we use it to detect misuse
+			static_assert(detail::HasTierIfAura<T>::value == false);
 
 			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
 				Enchant1::Apply(*context.stats_);

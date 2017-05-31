@@ -25,7 +25,6 @@ namespace Cards
 		public:
 			enum { value = sizeof(test<T>(0)) == sizeof(One) };
 		};
-
 	}
 
 	template <typename T,

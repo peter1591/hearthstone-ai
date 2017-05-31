@@ -483,7 +483,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_103e : public Enchantment<MaxHP<2>> {};
+	struct Card_EX1_103e : public Enchantment<Card_EX1_103e, MaxHP<2>> {};
 	struct Card_EX1_103 : public MinionCardBase<Card_EX1_103> {
 		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef ref) {

@@ -46,7 +46,7 @@ namespace Cards
 		}
 	};
 
-	struct Card_EX1_360e : Enchantment<Card_EX1_360e, SetAttack<1>> {}; // TODO: why it works without public inherit?
+	struct Card_EX1_360e : Enchantment<Card_EX1_360e, SetAttack<1>> {};
 	struct Card_EX1_360 : SpellCardBase<Card_EX1_360> {
 		Card_EX1_360() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
