@@ -57,12 +57,6 @@ namespace Cards
 			return Manipulate(context).Minion(context.card_ref_).Deathrattles();
 		}
 
-		template <typename Context>
-		static DamageHelper<std::decay_t<Context>> DamageA(Context&& context) // TODO
-		{
-			return DamageHelper<std::decay_t<Context>>(std::forward<Context>(context));
-		}
-
 		static state::targetor::TargetsGenerator Targets(state::PlayerIdentifier targeting_player) {
 			return state::targetor::TargetsGenerator(targeting_player);
 		}

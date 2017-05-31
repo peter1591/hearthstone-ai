@@ -22,8 +22,8 @@ namespace FlowControl
 				void ConductDamage(int amount);
 
 			private:
-				void DoDamage(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount);
-				void DoHeal(state::State & state, FlowControl::FlowContext & flow_context, state::CardRef card_ref, int amount);
+				void DoDamage(state::CardRef card_ref, int amount);
+				void DoHeal(state::CardRef card_ref, int amount);
 
 			private:
 				state::State & state_;
