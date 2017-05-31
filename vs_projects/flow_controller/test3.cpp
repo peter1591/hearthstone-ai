@@ -1459,26 +1459,6 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	{
-		auto state2 = state;
-		auto flow_context2 = flow_context;
-		FlowControl::FlowController controller2(state2, flow_context2);
-		state2.GetBoard().GetSecond().GetResource().Refill();
-		AddHandCard(Cards::ID_EX1_564, flow_context2, state2, state::PlayerIdentifier::Second());
-		parameter_getter.next_specified_target_count = 8;
-		parameter_getter.next_specified_target_idx = 1;
-		parameter_getter.next_minion_put_location = 1;
-		if (controller2.PlayCard(4) != FlowControl::kResultNotDetermined) assert(false);
-		CheckHero(state2, state::PlayerIdentifier::First(), 27, 0, 0);
-		CheckHero(state2, state::PlayerIdentifier::Second(), 17, 0, 0);
-		CheckCrystals(state2, state::PlayerIdentifier::First(), { 5, 10 });
-		CheckCrystals(state2, state::PlayerIdentifier::Second(), { 5, 10 });
-		CheckMinions(state2, state::PlayerIdentifier::First(), { { 1, 2, 2 },{ 3, 1, 3 },{ 4, 3, 3 },{ 6, 6, 6 },{ 1, 2, 2 } });
-		CheckMinions(state2, state::PlayerIdentifier::Second(), { { 2, 3, 3 },{ 7, 7, 7 },{ 7, 7, 7 } });
-		assert(state2.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
-		assert(state2.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
-	}
-
 	FlowControl::Manipulate(state, flow_context)
 		.HeroPower(state::PlayerIdentifier::Second())
 		.ReplaceHeroPower(Cards::ID_CS2_102); // warrior hero power

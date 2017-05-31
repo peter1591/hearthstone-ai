@@ -20,8 +20,6 @@ namespace FlowControl
 
 			bool Resolve()
 			{
-				CreateDeaths();
-
 				while (true) {
 					bool done = true;
 
@@ -30,6 +28,7 @@ namespace FlowControl
 
 					UpdateAura(); // update aura first, since aura will add/remove enchantments on others
 					UpdateEnchantments();
+					CreateDeaths();
 
 					// If any entity dies, re-resolve again
 					while (!deaths_.empty()) {
