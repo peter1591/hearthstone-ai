@@ -54,6 +54,7 @@ namespace FlowControl
 				.ChangeTo<state::kCardZonePlay>(player, pos);
 
 			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
+			(void)card;
 			assert(card.GetPlayerIdentifier() == player);
 			assert(card.GetZone() == state::kCardZonePlay);
 			assert(card.GetCardType() == state::kCardTypeMinion);

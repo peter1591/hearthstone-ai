@@ -32,12 +32,14 @@ namespace state
 			void AddInternal(CardRef ref, std::unordered_set<CardRef>& container)
 			{
 				auto success = container.insert(ref).second;
+				(void)success;
 				assert(success);
 			}
 
 			void RemoveInternal(CardRef ref, std::unordered_set<CardRef>& container)
 			{
 				auto ret = container.erase(ref);
+				(void)ret;
 				assert(ret == 1);
 			}
 

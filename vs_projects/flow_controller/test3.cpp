@@ -182,6 +182,7 @@ static void CheckHero(state::State & state, state::PlayerIdentifier player, int 
 {
 	auto hero_ref = state.GetBoard().Get(player).GetHeroRef();
 	auto const& hero = state.GetCardsManager().Get(hero_ref);
+	(void)hero;
 
 	assert(hero.GetHP() == hp);
 	assert(hero.GetArmor() == armor);
