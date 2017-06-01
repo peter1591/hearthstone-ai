@@ -18,6 +18,8 @@ namespace Cards
 	{
 	public:
 		GeneralCardBase() {
+			this->card_id = (Cards::CardId)CardClassIdMap<T>::id;
+
 			SpecifiedCardAttributes1::Apply(*this);
 			SpecifiedCardAttributes2::Apply(*this);
 			SpecifiedCardAttributes3::Apply(*this);

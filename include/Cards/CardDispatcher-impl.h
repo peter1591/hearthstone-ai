@@ -59,7 +59,8 @@ namespace Cards
 		public:
 			DefaultInvoked()
 			{
-				this->card_id = id;
+				// TODO: should unify with Cards/framework/xxxxCardBase.h
+				this->card_id = (Cards::CardId)id;
 				auto const& data = Cards::Database::GetInstance().Get(this->card_id);
 
 				this->card_type = data.card_type;

@@ -130,7 +130,7 @@ static void MakeHand(state::State & state, FlowControl::FlowContext & flow_conte
 static void MakeHero(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	state::Cards::CardData raw_card;
-	raw_card.card_id = 8;
+	raw_card.card_id = (Cards::CardId)8;
 	raw_card.card_type = state::kCardTypeHero;
 	raw_card.zone = state::kCardZoneNewlyCreated;
 	raw_card.enchanted_states.max_hp = 30;

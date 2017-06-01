@@ -99,7 +99,7 @@ namespace state
 			}
 
 		public: // getters and setters
-			::Cards::CardId GetCardId() const { return (::Cards::CardId)data_.card_id; } // TODO: card id
+			::Cards::CardId GetCardId() const { return data_.card_id; }
 			CardType GetCardType() const { return data_.card_type; }
 			bool IsSecretCard() const { return data_.is_secret_card; }
 			CardRace GetRace() const { return data_.card_race; }

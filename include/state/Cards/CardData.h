@@ -3,6 +3,7 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include "Cards/id-map.h"
 #include "Utils/FuncPtrArray.h"
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/Callbacks.h"
@@ -18,7 +19,8 @@ namespace state
 		{
 		public:
 			CardData() :
-				card_id(-1), card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
+				card_id((::Cards::CardId)-1),
+				card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				is_secret_card(false), overload(0),
 				zone(kCardZoneInvalid), zone_position(-1),
 				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
@@ -30,7 +32,7 @@ namespace state
 
 			static constexpr int kFieldChangeId = 2;
 
-			int card_id; // TODO: card id
+			::Cards::CardId card_id;
 			CardType card_type;
 			CardRace card_race;
 			CardRarity card_rarity;

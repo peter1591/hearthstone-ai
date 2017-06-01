@@ -3,11 +3,13 @@
 #include <assert.h>
 #include <string>
 #include <fstream>
+#include <vector>
+#include <array>
+#include <unordered_set>
 #include <unordered_map>
 #include "json/json.h"
 
 #include "state/Types.h"
-#include "state/Cards/CardData.h"
 
 namespace Cards
 {

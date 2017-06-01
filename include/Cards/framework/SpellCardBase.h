@@ -13,8 +13,6 @@ namespace Cards
 	public:
 		SpellCardBase()
 		{
-			this->card_id = CardClassIdMap<T>::id;
-
 			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
 			assert(data.card_type == state::kCardTypeSpell);
 
