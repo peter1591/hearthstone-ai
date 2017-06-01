@@ -39,6 +39,7 @@ namespace FlowControl
 			bool Exists(TieredEnchantments::IdentifierType id) const { return enchantments.Exists(id); }
 
 			void Clear() { enchantments.Clear(); }
+			bool Empty() { return enchantments.Empty(); }
 			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref) { enchantments.AfterCopied(manipulate, card_ref); }
 			void Remove(TieredEnchantments::IdentifierType id) { return enchantments.Remove(id); }
 

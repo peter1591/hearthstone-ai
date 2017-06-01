@@ -81,6 +81,13 @@ namespace FlowControl
 				tier3_.Clear();
 			}
 
+			bool Empty() {
+				if (!tier1_.Empty()) return false;
+				if (!tier2_.Empty()) return false;
+				if (!tier3_.Empty()) return false;
+				return true;
+			}
+
 			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
 			{
 				tier1_.AfterCopied(manipulate, card_ref);

@@ -164,6 +164,15 @@ namespace FlowControl
 				enchantments_.Clear();
 			}
 
+			bool Empty() {
+				bool empty = true;
+				enchantments_.IterateAll([&](...) {
+					empty = false;
+					return false;
+				});
+				return empty;
+			}
+
 			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
 			{
 				update_decider_.RemoveItem();
