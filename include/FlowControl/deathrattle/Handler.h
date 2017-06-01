@@ -19,7 +19,7 @@ namespace FlowControl
 		{
 			struct Deathrattle
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				state::PlayerIdentifier player_;
 				state::CardZone zone_;

@@ -67,7 +67,7 @@ namespace Cards
 			int pos = card.GetZonePosition() + 1;
 			return SummonInternal(context.manipulate_, card_id, card.GetPlayerIdentifier(), pos);
 		}
-		static state::CardRef SummonToRight(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Cards::CardId card_id)
+		static state::CardRef SummonToRight(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = manipulate.GetCard(card_ref);
 			int pos = card.GetZonePosition() + 1;
@@ -81,7 +81,7 @@ namespace Cards
 			int pos = card.GetZonePosition();
 			return SummonInternal(context.manipulate_, card_id, card.GetPlayerIdentifier(), pos);
 		}
-		static state::CardRef SummonToLeft(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Cards::CardId card_id)
+		static state::CardRef SummonToLeft(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = manipulate.GetCard(card_ref);
 			int pos = card.GetZonePosition();
@@ -95,7 +95,7 @@ namespace Cards
 			return SummonInternal(context.manipulate_, card_id, player, pos);
 		}
 
-		static state::CardRef SummonToRightmost(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
+		static state::CardRef SummonToRightmost(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
 		{
 			int pos = (int)manipulate.Board().Player(player).minions_.Size();
 			return SummonInternal(manipulate, card_id, player, pos);
@@ -108,7 +108,7 @@ namespace Cards
 			return SummonInternalByCopy(context.manipulate_, card, player, pos);
 		}
 
-		static std::pair<int, int> GetRandomTwoNumbers(FlowControl::Manipulate & manipulate, int size) {
+		static std::pair<int, int> GetRandomTwoNumbers(FlowControl::Manipulate const& manipulate, int size) {
 			assert(size >= 2);
 			int v1 = manipulate.GetRandom().Get(size);
 			int v2 = manipulate.GetRandom().Get(size - 1);
@@ -116,7 +116,7 @@ namespace Cards
 			return std::make_pair(v1, v2);
 		}
 
-		static void DiscardOneRandomHandCard(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player) {
+		static void DiscardOneRandomHandCard(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
 			auto & hand = manipulate.Board().Player(player).hand_;
 			size_t hand_cards = hand.Size();
 			if (hand_cards < 1) return;
@@ -126,7 +126,7 @@ namespace Cards
 		}
 
 		template <typename Functor>
-		static void ApplyToAdjacent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, Functor&& functor) {
+		static void ApplyToAdjacent(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Functor&& functor) {
 			state::PlayerIdentifier player = manipulate.GetCard(card_ref).GetPlayerIdentifier();
 			assert(manipulate.GetCard(card_ref).GetZone() == state::kCardZonePlay);
 
@@ -140,7 +140,7 @@ namespace Cards
 		}
 
 	public:
-		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate & manipulate, Cards::Database::CachedCardsTypes type) {
+		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate const& manipulate, Cards::Database::CachedCardsTypes type) {
 			std::vector<int> const& container = Cards::Database::GetInstance().GetCachedCards(type);
 			if (container.empty()) return (Cards::CardId) - 1;
 			size_t idx = manipulate.GetRandom().Get(container.size());
@@ -148,14 +148,14 @@ namespace Cards
 		}
 
 	private:
-		static state::CardRef SummonInternal(FlowControl::Manipulate & manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
+		static state::CardRef SummonInternal(FlowControl::Manipulate const& manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
 			if (manipulate.Board().Player(player).minions_.Full()) return state::CardRef();
 
 			return manipulate.Board().SummonMinionById(card_id, player, pos);
 		}
 
-		static void SummonInternalByCopy(FlowControl::Manipulate & manipulate, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)
+		static void SummonInternalByCopy(FlowControl::Manipulate const& manipulate, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)
 		{
 			if (manipulate.Board().Player(player).minions_.Full()) return;
 

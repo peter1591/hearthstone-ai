@@ -20,7 +20,7 @@ namespace FlowControl
 			struct GetSpecifiedTarget {
 			public:
 				GetSpecifiedTarget(
-					Manipulate & manipulate,
+					Manipulate const& manipulate,
 					state::PlayerIdentifier player,
 					state::CardRef card_ref) :
 					manipulate_(manipulate),
@@ -32,7 +32,7 @@ namespace FlowControl
 				}
 
 			public:
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 
@@ -85,7 +85,7 @@ namespace FlowControl
 
 			struct OnPlay
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 				state::CardRef * new_card_ref;

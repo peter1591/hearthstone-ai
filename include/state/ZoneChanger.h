@@ -12,7 +12,7 @@ namespace state {
 	class ZoneChanger
 	{
 	public:
-		ZoneChanger(State & state, board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
+		ZoneChanger(State & state, board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
 			: state_(state), board_(board), cards_mgr_(cards_mgr), manipulate_(manipulate), card_ref_(card_ref)
 		{
 			assert(cards_mgr_.Get(card_ref_).GetZone() == ChangingCardZone);
@@ -66,7 +66,7 @@ namespace state {
 		State & state_;
 		board::Board& board_;
 		Cards::Manager& cards_mgr_;
-		FlowControl::Manipulate & manipulate_;
+		FlowControl::Manipulate const& manipulate_;
 		CardRef card_ref_;
 	};
 
@@ -74,7 +74,7 @@ namespace state {
 	class ZoneChangerWithUnknownZone
 	{
 	public:
-		ZoneChangerWithUnknownZone(State & state, board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
+		ZoneChangerWithUnknownZone(State & state, board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
 			: state_(state), board_(board), cards_mgr_(cards_mgr), manipulate_(manipulate), card_ref_(card_ref)
 		{
 			assert(cards_mgr.Get(card_ref_).GetCardType() == ChangingCardType);
@@ -134,7 +134,7 @@ namespace state {
 		State & state_;
 		board::Board& board_;
 		Cards::Manager& cards_mgr_;
-		FlowControl::Manipulate & manipulate_;
+		FlowControl::Manipulate const& manipulate_;
 		CardRef card_ref_;
 	};
 
@@ -142,7 +142,7 @@ namespace state {
 	class ZoneChangerWithUnknownType
 	{
 	public:
-		ZoneChangerWithUnknownType(State & state, board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
+		ZoneChangerWithUnknownType(State & state, board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
 			: state_(state), board_(board), cards_mgr_(cards_mgr), manipulate_(manipulate), card_ref_(card_ref)
 		{
 			assert(cards_mgr.Get(card_ref_).GetZone() == ChangingCardZone);
@@ -241,14 +241,14 @@ namespace state {
 		State & state_;
 		board::Board& board_;
 		Cards::Manager& cards_mgr_;
-		FlowControl::Manipulate & manipulate_;
+		FlowControl::Manipulate const& manipulate_;
 		CardRef card_ref_;
 	};
 
 	class ZoneChangerWithUnknownZoneUnknownType
 	{
 	public:
-		ZoneChangerWithUnknownZoneUnknownType(State & state, board::Board & board, Cards::Manager& cards_mgr, FlowControl::Manipulate & manipulate,CardRef card_ref)
+		ZoneChangerWithUnknownZoneUnknownType(State & state, board::Board & board, Cards::Manager& cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
 			: state_(state), board_(board), cards_mgr_(cards_mgr), manipulate_(manipulate), card_ref_(card_ref)
 		{}
 
@@ -294,7 +294,7 @@ namespace state {
 		State & state_;
 		board::Board& board_;
 		Cards::Manager& cards_mgr_;
-		FlowControl::Manipulate & manipulate_;
+		FlowControl::Manipulate const& manipulate_;
 		CardRef card_ref_;
 	};
 }

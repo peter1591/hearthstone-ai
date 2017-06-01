@@ -13,7 +13,7 @@ namespace state {
 		namespace EventTypes {
 			struct GetPlayCardCost {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 					int * cost_;
 					bool * cost_health_instead_;
@@ -22,21 +22,21 @@ namespace state {
 			};
 			struct AfterMinionPlayed {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					CardRef card_ref_;
 				};
 				using type = std::function<bool(Context)>;
 			};
 			struct AfterMinionSummoned {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					CardRef card_ref_;
 				};
 				using type = std::function<bool(Context)>;
 			};
 			struct AfterMinionDied {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					CardRef card_ref_;
 					state::PlayerIdentifier died_minion_owner_;
 				};
@@ -44,7 +44,7 @@ namespace state {
 			};
 			struct BeforeMinionSummoned {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					CardRef card_ref_;
 				};
 				using type = bool(*)(Context);
@@ -52,7 +52,7 @@ namespace state {
 
 			struct PrepareAttackTarget {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef attacker_;
 					state::CardRef * defender_;
 				};
@@ -60,7 +60,7 @@ namespace state {
 			};
 			struct BeforeAttack {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef attacker_;
 					state::CardRef defender_;
 				};
@@ -68,7 +68,7 @@ namespace state {
 			};
 			struct AfterAttack {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef attacker_;
 					state::CardRef defender_;
 				};
@@ -77,7 +77,7 @@ namespace state {
 			
 			struct PreparePlayCardTarget {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 					state::CardRef * target_ref_;
 				};
@@ -85,14 +85,14 @@ namespace state {
 			};
 			struct OnPlay {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 				};
 				using type = std::function<bool(Context)>;
 			};
 			struct CheckPlayCardCountered {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 					bool * countered_;
 				};
@@ -101,7 +101,7 @@ namespace state {
 
 			struct CalculateHealDamageAmount {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef const source_ref_;
 					int * amount_;
 				};
@@ -109,7 +109,7 @@ namespace state {
 			};
 			struct PrepareHealDamageTarget {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef const source_ref_;
 					state::CardRef * target_ref_; // an invalid target means the damage event is cancelled
 				};
@@ -118,7 +118,7 @@ namespace state {
 
 			struct OnTakeDamage {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 					int * damage_;
 				};
@@ -126,14 +126,14 @@ namespace state {
 			};
 			struct CategorizedOnTakeDamage {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					int * damage_;
 				};
 				using type = bool(*)(state::CardRef, Context);
 			};
 			struct AfterTakenDamage {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 					int damage_;
 					int damage_after_armor_absorbed_;
@@ -143,7 +143,7 @@ namespace state {
 
 			struct AfterHeroPower { // a.k.a. inspire
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef const card_ref_;
 				};
 				using type = bool(*)(Context);
@@ -151,7 +151,7 @@ namespace state {
 
 			struct AfterSpellPlayed {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::PlayerIdentifier player_;
 					state::CardRef const card_ref_;
 				};
@@ -160,7 +160,7 @@ namespace state {
 
 			struct AfterSecretPlayed {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::PlayerIdentifier player_;
 					state::CardRef const card_ref_;
 				};
@@ -169,7 +169,7 @@ namespace state {
 
 			struct OnHeal {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 					int amount_;
 				};
@@ -177,20 +177,20 @@ namespace state {
 			};
 			struct OnTurnEnd {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 				};
 				using type = std::function<bool(Context)>;
 			};
 			struct OnTurnStart {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 				};
 				using type = std::function<bool(Context)>;
 			};
 
 			struct BeforeSecretReveal {
 				struct Context {
-					FlowControl::Manipulate & manipulate_;
+					FlowControl::Manipulate const& manipulate_;
 					state::CardRef card_ref_;
 				};
 				using type = std::function<bool(Context)>;

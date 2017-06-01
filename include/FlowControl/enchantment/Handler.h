@@ -29,7 +29,7 @@ namespace FlowControl
 				return enchantments.PushBackAuraEnchantment<EnchantmentType>(std::forward<EnchantmentType>(enchantment));
 			}
 			template <typename EnchantmentType> auto PushBackEventHookedEnchantment(
-				FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+				FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
 				EnchantmentType&& enchant, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
 				return enchantments.PushBackEventHookedEnchantment(
@@ -40,7 +40,7 @@ namespace FlowControl
 
 			void Clear() { enchantments.Clear(); }
 			bool Empty() { return enchantments.Empty(); }
-			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref) { enchantments.AfterCopied(manipulate, card_ref); }
+			void AfterCopied(FlowControl::Manipulate const& manipulate, state::CardRef card_ref) { enchantments.AfterCopied(manipulate, card_ref); }
 			void Remove(TieredEnchantments::IdentifierType id) { return enchantments.Remove(id); }
 
 			void Update(state::State & state, FlowContext & flow_context, state::CardRef card_ref, bool allow_hp_reduce);

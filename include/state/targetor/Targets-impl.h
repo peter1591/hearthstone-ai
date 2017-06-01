@@ -7,38 +7,38 @@
 
 namespace state {
 	namespace targetor {
-		inline void Targets::Fill(FlowControl::Manipulate & manipulate, std::vector<CardRef>& targets) const {
+		inline void Targets::Fill(FlowControl::Manipulate const& manipulate, std::vector<CardRef>& targets) const {
 			Process(manipulate, [&](CardRef ref) {
 				targets.push_back(ref);
 			});
 		}
-		inline void Targets::Fill(FlowControl::Manipulate & manipulate, std::unordered_set<CardRef>& targets) const {
+		inline void Targets::Fill(FlowControl::Manipulate const& manipulate, std::unordered_set<CardRef>& targets) const {
 			Process(manipulate, [&](CardRef ref) {
 				targets.insert(ref);
 			});
 		}
 
 		template <typename Functor>
-		inline void Targets::ForEach(FlowControl::Manipulate & manipulate, Functor&& func) const {
+		inline void Targets::ForEach(FlowControl::Manipulate const& manipulate, Functor&& func) const {
 			Process(manipulate, [&](CardRef ref) {
 				func(manipulate, ref);
 			});
 		}
 
-		inline void Targets::Count(FlowControl::Manipulate & manipulate, int * count) const {
+		inline void Targets::Count(FlowControl::Manipulate const& manipulate, int * count) const {
 			Process(manipulate, [count](CardRef) {
 				++(*count);
 			});
 		}
 
 		template <typename Functor>
-		inline void Targets::Process(FlowControl::Manipulate & manipulate, Functor&& functor) const {
+		inline void Targets::Process(FlowControl::Manipulate const& manipulate, Functor&& functor) const {
 			if (include_first) ProcessPlayerTargets(manipulate, manipulate.Board().FirstPlayer(), std::forward<Functor>(functor));
 			if (include_second) ProcessPlayerTargets(manipulate, manipulate.Board().SecondPlayer(), std::forward<Functor>(functor));
 		}
 
 		template <typename Functor>
-		inline void Targets::ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const {
+		inline void Targets::ProcessPlayerTargets(FlowControl::Manipulate const& manipulate, board::Player const& player, Functor&& functor) const {
 			auto op = [&](state::CardRef card_ref) {
 				if (card_ref == exclude) return;
 				auto const& card = manipulate.Board().GetCard(card_ref);
@@ -60,7 +60,7 @@ namespace state {
 			return true;
 		}
 
-		inline bool Targets::CheckTargetableFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const {
+		inline bool Targets::CheckTargetableFilter(FlowControl::Manipulate const& manipulate, state::Cards::Card const& card) const {
 			switch (targetable_type) {
 			case kTargetableTypeAll:
 				return true;
@@ -75,7 +75,7 @@ namespace state {
 			return false;
 		}
 		
-		inline bool Targets::CheckFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const {
+		inline bool Targets::CheckFilter(FlowControl::Manipulate const& manipulate, state::Cards::Card const& card) const {
 			switch (filter_type) {
 			case kFilterAll:
 				return true;

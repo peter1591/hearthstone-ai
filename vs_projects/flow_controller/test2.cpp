@@ -55,24 +55,6 @@ public:
 	int next_rand;
 };
 
-static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
-{
-	auto & item = state.GetCardsManager().Get(ref);
-	assert(item.GetPlayerIdentifier() == player);
-	assert(item.GetZone() == zone);
-	assert(item.GetZonePosition() == pos);
-}
-
-static state::Cards::Card CreateDeckCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
-{
-	state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(id);
-	raw_card.enchanted_states.player = player;
-	raw_card.zone = state::kCardZoneNewlyCreated;
-	raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
-
-	return state::Cards::Card(raw_card);
-}
-
 static void PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();

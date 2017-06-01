@@ -32,7 +32,7 @@ namespace Cards
 			Cards::ID_CS2_051,
 			Cards::ID_CS2_052,
 			Cards::ID_NEW1_009 };
-		static std::array<bool, 4> GetTotemExists(FlowControl::Manipulate & manipulate, state::PlayerIdentifier player) {
+		static std::array<bool, 4> GetTotemExists(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
 			std::array<bool, 4> totems_exists{ false, false, false, false };
 
 			manipulate.Board().Player(player).minions_.ForEach([&](state::CardRef card_ref) {

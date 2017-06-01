@@ -21,7 +21,7 @@ namespace FlowControl
 		namespace contexts {
 			struct AuraIsValid
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				aura::Handler const& aura_handler_;
 				bool & need_update_;
@@ -29,45 +29,45 @@ namespace FlowControl
 
 			struct AuraGetTargets
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				std::unordered_set<state::CardRef> & new_targets;
 			};
 
 			struct AuraGetTarget
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				state::CardRef & new_target;
 			};
 
 			struct AuraApplyOn
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				state::CardRef target_;
 			};
 
 			struct AuraApplyFlagOnBoard
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 			};
 			struct AuraRemoveFlagFromBoard
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 			};
 
 			struct AuraApplyFlagOnOwnerPlayer
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				state::PlayerIdentifier player_;
 			};
 			struct AuraRemoveFlagFromOwnerPlayer
 			{
-				Manipulate & manipulate_;
+				Manipulate const& manipulate_;
 				state::CardRef card_ref_;
 				state::PlayerIdentifier player_;
 			};

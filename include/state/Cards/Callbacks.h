@@ -9,7 +9,7 @@ namespace state
 	namespace Cards
 	{
 		struct ZoneChangedContext {
-			FlowControl::Manipulate & manipulate_;
+			FlowControl::Manipulate const& manipulate_;
 			Events::Manager & event_mgr_;
 			CardRef card_ref_;
 		};

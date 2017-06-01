@@ -5,10 +5,6 @@
 #include "FlowControl/FlowContext.h"
 #include "Cards/id-map.h"
 
-namespace state {
-	class State;
-}
-
 namespace FlowControl
 {
 	namespace Manipulators

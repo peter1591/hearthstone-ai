@@ -41,23 +41,23 @@ namespace state {
 			state::PlayerIdentifier GetTargetingSide() const { return targeting_side; }
 
 		public:
-			void Fill(FlowControl::Manipulate & manipulate, std::vector<CardRef>& targets) const;
-			void Fill(FlowControl::Manipulate & manipulate, std::unordered_set<CardRef>& targets) const;
+			void Fill(FlowControl::Manipulate const& manipulate, std::vector<CardRef>& targets) const;
+			void Fill(FlowControl::Manipulate const& manipulate, std::unordered_set<CardRef>& targets) const;
 
 			template <typename Functor>
-			void ForEach(FlowControl::Manipulate & manipulate, Functor&& func) const;
+			void ForEach(FlowControl::Manipulate const& manipulate, Functor&& func) const;
 
-			void Count(FlowControl::Manipulate & manipulate, int * count) const;
+			void Count(FlowControl::Manipulate const& manipulate, int * count) const;
 
 		private:
 			template <typename Functor>
-			void Process(FlowControl::Manipulate & manipulate, Functor&& functor) const;
+			void Process(FlowControl::Manipulate const& manipulate, Functor&& functor) const;
 
 			template <typename Functor>
-			void ProcessPlayerTargets(FlowControl::Manipulate & manipulate, board::Player const& player, Functor&& functor) const;
+			void ProcessPlayerTargets(FlowControl::Manipulate const& manipulate, board::Player const& player, Functor&& functor) const;
 
-			bool CheckTargetableFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const;
-			bool CheckFilter(FlowControl::Manipulate & manipulate, state::Cards::Card const& card) const;
+			bool CheckTargetableFilter(FlowControl::Manipulate const& manipulate, state::Cards::Card const& card) const;
+			bool CheckFilter(FlowControl::Manipulate const& manipulate, state::Cards::Card const& card) const;
 
 			bool CheckTargetable(state::Cards::Card const& card) const;
 

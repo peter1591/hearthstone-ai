@@ -22,60 +22,60 @@ namespace FlowControl
 		Manipulate(state::State & state, FlowContext & flow_context);
 
 		template <typename EventType, typename T>
-		void AddEvent(T&& handler) {
+		void AddEvent(T&& handler) const {
 			return state_.AddEvent<EventType>(std::forward<T>(handler));
 		}
 		template <typename EventType, typename T>
-		void AddEvent(state::CardRef card_ref, T&& handler) {
+		void AddEvent(state::CardRef card_ref, T&& handler) const {
 			return state_.AddEvent<EventType>(card_ref, std::forward<T>(handler));
 		}
 
-		Manipulators::CardManipulator Card(state::CardRef ref);
+		Manipulators::CardManipulator Card(state::CardRef ref) const;
 
-		Manipulators::HeroManipulator CurrentHero();
-		Manipulators::HeroManipulator OpponentHero();
-		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player);
-		Manipulators::HeroManipulator Hero(state::CardRef hero_ref);
+		Manipulators::HeroManipulator CurrentHero() const;
+		Manipulators::HeroManipulator OpponentHero() const;
+		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player) const;
+		Manipulators::HeroManipulator Hero(state::CardRef hero_ref) const;
 
-		Manipulators::HeroPowerManipulator HeroPower(state::PlayerIdentifier player);
-		Manipulators::HeroPowerManipulator HeroPower(state::CardRef hero_power_ref);
+		Manipulators::HeroPowerManipulator HeroPower(state::PlayerIdentifier player) const;
+		Manipulators::HeroPowerManipulator HeroPower(state::CardRef hero_power_ref) const;
 
-		Manipulators::OnBoardMinionManipulator OnBoardMinion(state::CardRef ref) {
+		Manipulators::OnBoardMinionManipulator OnBoardMinion(state::CardRef ref) const {
 			return Manipulators::OnBoardMinionManipulator(state_, flow_context_, ref);
 		}
 
 		template <state::CardZone Zone>
-		Manipulators::MinionManipulator<Zone> MinionInZone(state::CardRef ref) {
+		Manipulators::MinionManipulator<Zone> MinionInZone(state::CardRef ref) const {
 			static_assert(Zone != state::kCardZonePlay, "Use OnBoardMinion() instead.");
 			return Manipulators::MinionManipulator<Zone>(state_, flow_context_, ref);
 		}
 
-		Manipulators::OnBoardCharacterManipulator OnBoardCharacter(state::CardRef ref) {
+		Manipulators::OnBoardCharacterManipulator OnBoardCharacter(state::CardRef ref) const {
 			return Manipulators::OnBoardCharacterManipulator(state_, flow_context_, ref);
 		}
 
-		Manipulators::WeaponManipulator Weapon(state::PlayerIdentifier player);
-		Manipulators::WeaponManipulator Weapon(state::CardRef ref);
+		Manipulators::WeaponManipulator Weapon(state::PlayerIdentifier player) const;
+		Manipulators::WeaponManipulator Weapon(state::CardRef ref) const;
 
-		Manipulators::SecretManipulator OnBoardSecret(state::CardRef ref);
+		Manipulators::SecretManipulator OnBoardSecret(state::CardRef ref) const;
 
-		Manipulators::BoardManipulator Board();
+		Manipulators::BoardManipulator Board() const;
 
 	public: // bridge to flow context
 		state::CardRef GetSpecifiedTarget() const { return flow_context_.GetSpecifiedTarget(); }
 		size_t GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) const { return flow_context_.GetChooseOneUserAction(cards); }
-		state::IRandomGenerator & GetRandom() { return flow_context_.GetRandom();}
+		state::IRandomGenerator & GetRandom() const { return flow_context_.GetRandom();}
 
-		void SaveUserChoice(size_t choice) { flow_context_.SaveUserChoice(choice); }
+		void SaveUserChoice(size_t choice) const { flow_context_.SaveUserChoice(choice); }
 		size_t GetSavedUserChoice() const { return flow_context_.GetSavedUserChoice(); }
 
 	public: // bridge to state::State
-		state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
-		int GetCardAttackConsiderWeapon(state::CardRef ref) { return state_.GetCardAttackConsiderWeapon(ref); }
-		state::aura::Manager & Aura() { return state_.GetAuraManager(); }
+		state::Cards::Card const& GetCard(state::CardRef ref) const { return state_.GetCard(ref); }
+		int GetCardAttackConsiderWeapon(state::CardRef ref) const { return state_.GetCardAttackConsiderWeapon(ref); }
+		state::aura::Manager & Aura() const { return state_.GetAuraManager(); }
 
 	public:
-		state::CardRef GetRandomTarget(state::targetor::Targets const& target_info);
+		state::CardRef GetRandomTarget(state::targetor::Targets const& target_info) const;
 
 	private:
 		state::State & state_;

@@ -86,8 +86,7 @@ namespace Cards
 		}
 
 		void RemoveEnchantment() {
-			FlowControl::Manipulate & manipulate = context.manipulate_;
-			manipulate.Card(card_ref).Enchant().Remove(
+			context.manipulate_.Card(card_ref).Enchant().Remove(
 				FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, enchant_id });
 		}
 
@@ -123,7 +122,7 @@ namespace Cards
 				Enchant5::Apply(*context.stats_);
 			};
 
-			register_functor = [](FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+			register_functor = [](FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
 					FlowControl::enchantment::Enchantments::IdentifierType id,
 					FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
 			{

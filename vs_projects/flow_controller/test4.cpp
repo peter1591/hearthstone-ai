@@ -63,14 +63,6 @@ public:
 	int next_rand;
 };
 
-static void CheckZoneAndPosition(const state::State & state, state::CardRef ref, state::PlayerIdentifier player, state::CardZone zone, int pos)
-{
-	auto & item = state.GetCardsManager().Get(ref);
-	assert(item.GetPlayerIdentifier() == player);
-	assert(item.GetZone() == zone);
-	assert(item.GetZonePosition() == pos);
-}
-
 static void PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();

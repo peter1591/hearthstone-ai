@@ -38,7 +38,7 @@ namespace FlowControl
 			}
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackEventHookedEnchantment(FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+			typename IdentifierType PushBackEventHookedEnchantment(FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
 				EnchantmentType&& enchant, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
 				constexpr EnchantmentTiers tier = EnchantmentType::tier;
@@ -88,7 +88,7 @@ namespace FlowControl
 				return true;
 			}
 
-			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
+			void AfterCopied(FlowControl::Manipulate const& manipulate, state::CardRef card_ref)
 			{
 				tier1_.AfterCopied(manipulate, card_ref);
 				tier2_.AfterCopied(manipulate, card_ref);

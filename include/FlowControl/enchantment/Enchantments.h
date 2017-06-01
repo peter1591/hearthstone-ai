@@ -67,13 +67,13 @@ namespace FlowControl
 					state::PlayerIdentifier player;
 				};
 
-				typedef void(*RegisterEventFunctor)(FlowControl::Manipulate &, state::CardRef, IdentifierType, AuxData &);
+				typedef void(*RegisterEventFunctor)(FlowControl::Manipulate const&, state::CardRef, IdentifierType, AuxData &);
 
 				bool Apply(ApplyFunctorContext const& context) const {
 					apply_functor(context);
 					return true;
 				}
-				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & in_aux_data) const {
+				void RegisterEvent(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, IdentifierType id, AuxData & in_aux_data) const {
 					register_functor(manipulate, card_ref, id, in_aux_data);
 				}
 
@@ -117,7 +117,7 @@ namespace FlowControl
 
 			template <typename EnchantmentType>
 			typename IdentifierType PushBackEventHookedEnchantment(
-				FlowControl::Manipulate & manipulate, state::CardRef card_ref,
+				FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
 				EnchantmentType&& item, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
 				assert(item.apply_functor);
@@ -173,12 +173,12 @@ namespace FlowControl
 				return empty;
 			}
 
-			void AfterCopied(FlowControl::Manipulate & manipulate, state::CardRef card_ref)
+			void AfterCopied(FlowControl::Manipulate const& manipulate, state::CardRef card_ref)
 			{
 				update_decider_.RemoveItem();
 				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
 					struct OpFunctor {
-						OpFunctor(FlowControl::Manipulate & manipulate, state::CardRef card_ref, ContainerType & enchantments, IdentifierType id)
+						OpFunctor(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, ContainerType & enchantments, IdentifierType id)
 							: manipulate_(manipulate), card_ref_(card_ref), enchantments_(enchantments), id_(id)
 						{}
 
@@ -193,7 +193,7 @@ namespace FlowControl
 							arg.RegisterEvent(manipulate_, card_ref_, id_, arg.aux_data);
 						}
 
-						FlowControl::Manipulate & manipulate_;
+						FlowControl::Manipulate const& manipulate_;
 						state::CardRef card_ref_;
 						ContainerType & enchantments_;
 						IdentifierType id_;
