@@ -40,12 +40,7 @@ namespace FlowControl
 
 			if (player.hand_.Full()) return state::CardRef();
 
-			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(card_id);
-			raw_card.enchanted_states.player = player_id_;
-			raw_card.zone = state::kCardZoneNewlyCreated;
-			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
-
-			auto ref = state_.AddCard(state::Cards::Card(raw_card));
+			auto ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_id_);
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state_, flow_context_), ref)
 				.ChangeTo<state::kCardZoneHand>(player_id_);
 			return ref;
