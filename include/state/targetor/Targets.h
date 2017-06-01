@@ -27,8 +27,8 @@ namespace state {
 				filter_type(kFilterAll)
 			{}
 
-			void Initialize(state::PlayerIdentifier targeting_side) {
-				this->targeting_side = targeting_side;
+			void Initialize(state::PlayerIdentifier in_targeting_side) {
+				this->targeting_side = in_targeting_side;
 			}
 
 			static Targets None() {

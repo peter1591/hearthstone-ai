@@ -73,8 +73,8 @@ namespace FlowControl
 					apply_functor(context);
 					return true;
 				}
-				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & aux_data) const {
-					register_functor(manipulate, card_ref, id, aux_data);
+				void RegisterEvent(FlowControl::Manipulate & manipulate, state::CardRef card_ref, IdentifierType id, AuxData & in_aux_data) const {
+					register_functor(manipulate, card_ref, id, in_aux_data);
 				}
 
 				EventHookedEnchantment(ApplyFunctor apply_functor, RegisterEventFunctor register_functor, AuxData const& aux_data)
@@ -146,7 +146,7 @@ namespace FlowControl
 					void operator()(AuraEnchantment & arg) {
 						if (arg.force_update_every_time) updater_decider_.RemoveForceUpdateItem();
 					}
-					void operator()(EventHookedEnchantment & arg) {
+					void operator()(EventHookedEnchantment &) {
 					}
 
 					detail::UpdateDecider & updater_decider_;
@@ -182,10 +182,10 @@ namespace FlowControl
 							: manipulate_(manipulate), card_ref_(card_ref), enchantments_(enchantments), id_(id)
 						{}
 
-						void operator()(NormalEnchantment & arg) {
+						void operator()(NormalEnchantment &) {
 							// do nothing
 						}
-						void operator()(AuraEnchantment & arg) {
+						void operator()(AuraEnchantment &) {
 							// All aura enchantments are removed
 							enchantments_.Remove(id_);
 						}
