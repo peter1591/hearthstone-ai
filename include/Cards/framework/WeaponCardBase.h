@@ -13,16 +13,10 @@ namespace Cards
 	public:
 		WeaponCardBase()
 		{
-			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
+			auto const& data = Cards::Database::GetInstance().Get(
+				(Cards::CardId)CardClassIdMap<T>::id);
+			GeneralCardBase::Init(data);
 			assert(data.card_type == state::kCardTypeWeapon);
-
-			this->card_type = data.card_type;
-			this->card_race = data.card_race;
-			this->card_rarity = data.card_rarity;
-
-			this->enchanted_states.cost = data.cost;
-			this->enchanted_states.attack = data.attack;
-			this->enchanted_states.max_hp = data.max_hp;
 		}
 	};
 }

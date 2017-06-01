@@ -17,14 +17,22 @@ namespace Cards
 	class GeneralCardBase: public state::Cards::CardData
 	{
 	public:
-		GeneralCardBase() {
-			this->card_id = (Cards::CardId)CardClassIdMap<T>::id;
+		void Init(Database::CardData const& data) {
+			this->card_id = (Cards::CardId)data.card_id;
 
 			SpecifiedCardAttributes1::Apply(*this);
 			SpecifiedCardAttributes2::Apply(*this);
 			SpecifiedCardAttributes3::Apply(*this);
 			SpecifiedCardAttributes4::Apply(*this);
 			SpecifiedCardAttributes5::Apply(*this);
+
+			this->card_type = data.card_type;
+			this->card_race = data.card_race;
+			this->card_rarity = data.card_rarity;
+
+			this->enchanted_states.cost = data.cost;
+			this->enchanted_states.attack = data.attack;
+			this->enchanted_states.max_hp = data.max_hp;
 		}
 
 		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>

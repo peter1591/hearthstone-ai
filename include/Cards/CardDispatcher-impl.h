@@ -54,31 +54,21 @@ namespace Cards
 #undef CREATE_INVOKER
 
 		template <int id>
-		class DefaultInvoked : public state::Cards::CardData
+		class DefaultInvoked : public Cards::GeneralCardBase<void>
 		{
 		public:
 			DefaultInvoked()
 			{
-				// TODO: should unify with Cards/framework/xxxxCardBase.h
-				this->card_id = (Cards::CardId)id;
-				auto const& data = Cards::Database::GetInstance().Get(this->card_id);
-
-				this->card_type = data.card_type;
-				this->card_race = data.card_race;
-				this->card_rarity = data.card_rarity;
-
-				this->enchanted_states.cost = data.cost;
-				this->enchanted_states.attack = data.attack;
-				this->enchanted_states.max_hp = data.max_hp;
+				auto const& data = Cards::Database::GetInstance().Get((Cards::CardId)id);
 
 				switch (data.card_type) {
 				case state::kCardTypeMinion:
 				case state::kCardTypeWeapon:
 				case state::kCardTypeHero:
-					return; // allow default invoke
-				default:
-					throw std::exception("card is not implemented");
+					GeneralCardBase::Init(data);
+					return;
 				}
+				throw std::exception("card is not implemented");
 			}
 		};
 	}

@@ -13,11 +13,11 @@ namespace Cards
 	public:
 		HeroPowerCardBase()
 		{
-			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
-			assert(data.card_type == state::kCardTypeHeroPower);
+			auto const& data = Cards::Database::GetInstance().Get(
+				(Cards::CardId)CardClassIdMap<T>::id);
+			GeneralCardBase::Init(data);
 
-			this->card_type = data.card_type;
-			this->card_rarity = data.card_rarity;
+			assert(data.card_type == state::kCardTypeHeroPower);
 
 			this->enchanted_states.cost = data.cost;
 		}

@@ -33,15 +33,15 @@ namespace Cards
 		struct BattlecryProcessor;
 
 	template <typename T> struct BattlecryProcessor<T, false, false> {
-		BattlecryProcessor(state::Cards::CardData & card_data) {}
+		static void Process(state::Cards::CardData & card_data) {}
 	};
 	template <typename T> struct BattlecryProcessor<T, true, false> {
-		BattlecryProcessor(state::Cards::CardData & card_data) {
+		static void Process(state::Cards::CardData & card_data) {
 			card_data.onplay_handler.SetOnPlayCallback(&T::Battlecry);
 		}
 	};
 	template <typename T> struct BattlecryProcessor<T, true, true> {
-		BattlecryProcessor(state::Cards::CardData & card_data) {
+		static void Process(state::Cards::CardData & card_data) {
 			card_data.onplay_handler.SetSpecifyTargetCallback(&T::GetSpecifiedTargets);
 			card_data.onplay_handler.SetOnPlayCallback(&T::Battlecry);
 		}

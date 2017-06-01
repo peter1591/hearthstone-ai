@@ -10,20 +10,21 @@ namespace Cards
 		class MinionCardBase : public GeneralCardBase<T, Ts...>, protected MinionCardUtils
 	{
 	public:
-		MinionCardBase()
-		{
-			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
+		MinionCardBase() {
+			Init(Cards::Database::GetInstance().Get(
+				(Cards::CardId)CardClassIdMap<T>::id));
+		}
+		MinionCardBase(Database::CardData const& data) {
+			Init(data);
+		}
+
+	private:
+		void Init(Database::CardData const& data) {
+			GeneralCardBase::Init(data);
+
 			assert(data.card_type == state::kCardTypeMinion);
 
-			this->card_type = data.card_type;
-			this->card_race = data.card_race;
-			this->card_rarity = data.card_rarity;
-
-			this->enchanted_states.cost = data.cost;
-			this->enchanted_states.attack = data.attack;
-			this->enchanted_states.max_hp = data.max_hp;
-
-			BattlecryProcessor<T>(*this);
+			BattlecryProcessor<T>::Process(*this);
 		}
 
 	protected:

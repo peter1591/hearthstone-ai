@@ -13,14 +13,12 @@ namespace Cards
 	public:
 		SecretCardBase()
 		{
-			auto const& data = Cards::Database::GetInstance().Get(this->card_id);
+			auto const& data = Cards::Database::GetInstance().Get(
+				(Cards::CardId)CardClassIdMap<T>::id);
+			GeneralCardBase::Init(data);
 			assert(data.card_type == state::kCardTypeSpell);
 
-			this->card_type = state::kCardTypeSpell;
-			this->card_rarity = data.card_rarity;
 			this->is_secret_card = true;
-
-			this->enchanted_states.cost = data.cost;
 		}
 	};
 }
