@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_EX1_363e : public EventHookedEnchantment<Card_EX1_363e> {
 		using EventType = state::Events::EventTypes::BeforeAttack;
-		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_363e> & handler) {
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_363e> const& handler) {
 			if (handler.context.attacker_ != handler.card_ref) return;
 			handler.context.manipulate_.Hero(handler.aux_data.player).DrawCard();
 		}

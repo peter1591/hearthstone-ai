@@ -141,9 +141,9 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
-				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId card_id) {
-					if (Cards::CardDispatcher::CreateInstance(card_id).card_type == state::kCardTypeMinion) {
-						possibles.push_back(card_id);
+				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId in_card_id) {
+					if (Cards::CardDispatcher::CreateInstance(in_card_id).card_type == state::kCardTypeMinion) {
+						possibles.push_back(in_card_id);
 					}
 					return true;
 				});

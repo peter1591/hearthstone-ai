@@ -186,6 +186,7 @@ namespace Cards
 			};
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+				context.manipulate_.SaveUserChoice(choice);
 				if (choice == 0) {
 					return true;
 				}
@@ -194,7 +195,6 @@ namespace Cards
 					context.SetOptionalSpellTargets(context.player_).Minion().GetInfo();
 					return true;
 				}
-				context.manipulate_.SaveUserChoice(choice);
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.GetSavedUserChoice() == 0) {

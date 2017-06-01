@@ -65,15 +65,15 @@ namespace Cards
 		Card_EX1_317() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
-				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId card_id) {
-					if (Cards::CardDispatcher::CreateInstance(card_id).card_race == state::kCardRaceDemon) {
-						possibles.push_back(card_id);
+				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId in_card_id) {
+					if (Cards::CardDispatcher::CreateInstance(in_card_id).card_race == state::kCardRaceDemon) {
+						possibles.push_back(in_card_id);
 					}
 					return true;
 				});
 
-				auto draw_from_deck = [&](Cards::CardId card_id) {
-					context.manipulate_.Board().Player(context.player_).deck_.SwapCardIdToLast(card_id);
+				auto draw_from_deck = [&](Cards::CardId in_card_id) {
+					context.manipulate_.Board().Player(context.player_).deck_.SwapCardIdToLast(in_card_id);
 					context.manipulate_.Hero(context.player_).DrawCard();
 				};
 

@@ -224,7 +224,7 @@ namespace Cards
 	struct Card_EX1_411e2 : public Enchantment<Card_EX1_411e2, Attack<-1>> {};
 	struct Card_EX1_411e : public EventHookedEnchantment<Card_EX1_411e, Immune> {
 		using EventType = state::Events::EventTypes::AfterAttack;
-		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_411e> & handler) {
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_411e> const& handler) {
 			handler.context.manipulate_.Weapon(handler.card_ref).Enchant().Add<Card_EX1_411e2>();
 			handler.RemoveEnchantment();
 		}

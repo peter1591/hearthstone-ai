@@ -214,7 +214,7 @@ namespace Cards
 
 	struct Card_DS1_188e : public EventHookedEnchantment<Card_DS1_188e, Immune> {
 		using EventType = state::Events::EventTypes::AfterAttack;
-		static void HandleEvent(EventHookedEnchantmentHandler<Card_DS1_188e> & handler) {
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_DS1_188e> const& handler) {
 			handler.RemoveEnchantment();
 		}
 	};

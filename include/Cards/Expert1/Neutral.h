@@ -1088,7 +1088,7 @@ namespace Cards
 	};
 	struct Card_DREAM_05e : public EventHookedEnchantment<Card_DREAM_05e, Attack<5>, MaxHP<5>> {
 		using EventType = state::Events::EventTypes::OnTurnStart;
-		static void HandleEvent(EventHookedEnchantmentHandler<Card_DREAM_05e> & handler) {
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_DREAM_05e> const& handler) {
 			if (handler.context.manipulate_.Board().GetCurrentPlayerId() != handler.aux_data.player) return;
 			handler.context.manipulate_.OnBoardMinion(handler.card_ref).Destroy();
 		}

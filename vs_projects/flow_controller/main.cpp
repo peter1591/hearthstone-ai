@@ -9,6 +9,8 @@ void test2();
 void test3();
 void test4();
 
+#pragma warning( push )
+#pragma warning( disable: 4702 )
 void test_compile()
 {
 	return;
@@ -31,6 +33,7 @@ void test_compile()
 	state.GetZoneChanger<state::kCardZoneSetASide>(manipulate, *(state::CardRef*)(nullptr))
 		.ChangeTo<state::kCardZonePlay>(state::PlayerIdentifier::First());
 }
+#pragma warning( pop )
 
 int main(void)
 {

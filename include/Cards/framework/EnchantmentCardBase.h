@@ -85,7 +85,7 @@ namespace Cards
 		{
 		}
 
-		void RemoveEnchantment() {
+		void RemoveEnchantment() const {
 			context.manipulate_.Card(card_ref).Enchant().Remove(
 				FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, enchant_id });
 		}

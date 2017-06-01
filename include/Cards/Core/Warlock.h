@@ -30,7 +30,7 @@ namespace Cards
 
 	struct Card_CS2_063e : public EventHookedEnchantment<Card_CS2_063e> {
 		using EventType = state::Events::EventTypes::OnTurnEnd;
-		static void HandleEvent(EventHookedEnchantmentHandler<Card_CS2_063e> & handler) {
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_CS2_063e> const& handler) {
 			if (handler.context.manipulate_.Board().GetCurrentPlayerId() != handler.aux_data.player) return;
 			handler.context.manipulate_.OnBoardMinion(handler.card_ref).Destroy();
 		}
