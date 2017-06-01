@@ -19,7 +19,7 @@ namespace Cards
 	public:
 		AuraHelper(state::Cards::CardData & card_data)
 		{
-			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext const& context) {
 				context.manipulate_.Aura().Add(
 					FlowControl::aura::Handler()
 					.SetOwner(context.card_ref_)
@@ -39,7 +39,7 @@ namespace Cards
 	public:
 		SingleEnchantmentAuraHelper(state::Cards::CardData & card_data)
 		{
-			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext const& context) {
 				context.manipulate_.Aura().Add(
 					FlowControl::aura::Handler()
 					.SetOwner(context.card_ref_)
@@ -56,7 +56,7 @@ namespace Cards
 	template <typename HandleClass, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 	struct BoardFlagAuraHelper {
 		BoardFlagAuraHelper(state::Cards::CardData & card_data) {
-			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext const& context) {
 				context.manipulate_.Aura().Add(
 					FlowControl::aura::Handler()
 					.SetOwner(context.card_ref_)
@@ -73,7 +73,7 @@ namespace Cards
 	template <typename HandleClass, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
 	struct OwnerPlayerFlagAuraHelper {
 		OwnerPlayerFlagAuraHelper(state::Cards::CardData & card_data) {
-			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext&& context) {
+			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext const& context) {
 				context.manipulate_.Aura().Add(
 					FlowControl::aura::Handler()
 					.SetOwner(context.card_ref_)

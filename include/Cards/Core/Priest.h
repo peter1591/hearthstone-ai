@@ -61,7 +61,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_235 : public MinionCardBase<Card_CS2_235> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context const& context) {
 			assert(context.amount_ > 0);
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			context.manipulate_.Hero(owner).DrawCard();

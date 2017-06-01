@@ -14,7 +14,7 @@ namespace state
 			CardRef card_ref_;
 		};
 
-		typedef void AddedToPlayZoneCallback(ZoneChangedContext&&);
-		typedef void AddedToHandZoneCallback(ZoneChangedContext&&);
+		typedef void AddedToPlayZoneCallback(ZoneChangedContext const&);
+		typedef void AddedToHandZoneCallback(ZoneChangedContext const&);
 	}
 }

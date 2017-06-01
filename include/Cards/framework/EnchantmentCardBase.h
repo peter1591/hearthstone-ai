@@ -127,7 +127,7 @@ namespace Cards
 					FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
 			{
 				using EventType = typename T::EventType;
-				manipulate.AddEvent<EventType>([card_ref, id, aux_data](typename EventType::Context context) mutable {
+				manipulate.AddEvent<EventType>([card_ref, id, aux_data](typename EventType::Context const& context) mutable {
 					if (!context.manipulate_.Card(card_ref).Enchant().Exists(
 						FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, id })) return false;
 

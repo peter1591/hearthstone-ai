@@ -64,7 +64,7 @@ namespace Cards
 
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
 		struct AddEventHelper<LifeTime, NonCategorized_SelfInLambdaCapture, EventType, EventHandler, EventHandlerArg> {
-			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext&& context) {
+			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext const& context) {
 				context.event_mgr_.PushBack<EventType>(
 					[self](auto context) {
 					if (!LifeTime::StillValid(context.manipulate_.Board().GetCard(self))) return false;
@@ -74,7 +74,7 @@ namespace Cards
 		};
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
 		struct AddEventHelper<LifeTime, CateogrizedOnSelf, EventType, EventHandler, EventHandlerArg> {
-			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext&& context) {
+			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext const& context) {
 				context.event_mgr_.PushBack<EventType>(
 					self,
 					[](state::CardRef self, auto context) {
@@ -112,14 +112,14 @@ namespace Cards
 		struct AddedToPlayZone {
 			template <typename Context>
 			static void Invoke(Context context) {
-				return LifeTime::AddedToPlayZone<Invoker, NullInvoker>::Invoke(std::move(context));
+				return LifeTime::AddedToPlayZone<Invoker, NullInvoker>::Invoke(std::forward<Context>(context));
 			}
 		};
 
 		struct AddedToHandZone {
 			template <typename Context>
 			static void Invoke(Context context) {
-				return LifeTime::AddedToHandZone<Invoker, NullInvoker>::Invoke(std::move(context));
+				return LifeTime::AddedToHandZone<Invoker, NullInvoker>::Invoke(std::forward<Context>(context));
 			}
 		};
 	};
@@ -129,15 +129,15 @@ namespace Cards
 		struct AddedToPlayZone {
 			template <typename Context>
 			static void Invoke(Context context) {
-				FirstEvent::AddedToPlayZone::Invoke(std::move(context));
-				SecondEvent::AddedToPlayZone::Invoke(std::move(context));
+				FirstEvent::AddedToPlayZone::Invoke(std::forward<Context>(context));
+				SecondEvent::AddedToPlayZone::Invoke(std::forward<Context>(context));
 			}
 		};
 		struct AddedToHandZone {
 			template <typename Context>
 			static void Invoke(Context context) {
-				FirstEvent::AddedToHandZone::Invoke(std::move(context));
-				SecondEvent::AddedToHandZone::Invoke(std::move(context));
+				FirstEvent::AddedToHandZone::Invoke(std::forward<Context>(context));
+				SecondEvent::AddedToHandZone::Invoke(std::forward<Context>(context));
 			}
 		};
 	};
@@ -188,7 +188,7 @@ namespace Cards
 
 		struct EventHandler {
 			template <typename UnderlyingHandler>
-			static bool HandleEvent(state::CardRef self, EventType::Context context) {
+			static bool HandleEvent(state::CardRef self, EventType::Context const& context) {
 				assert(context.damage_ > 0);
 				return UnderlyingHandler::HandleEvent(self, context);
 			}

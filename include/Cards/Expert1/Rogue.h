@@ -10,7 +10,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int turn = context.manipulate_.Board().GetTurn();
 				context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
-					[turn](state::Events::EventTypes::GetPlayCardCost::Context context) mutable
+					[turn](state::Events::EventTypes::GetPlayCardCost::Context const& context) mutable
 				{
 					if (context.manipulate_.Board().GetTurn() != turn) return false;
 
@@ -125,7 +125,7 @@ namespace Cards
 
 				state::PlayerIdentifier player = context.player_;
 				context.manipulate_.AddEvent<state::Events::EventTypes::OnTurnStart>(
-					[player](state::Events::EventTypes::OnTurnStart::Context context) {
+					[player](state::Events::EventTypes::OnTurnStart::Context const& context) {
 					if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
 					context.manipulate_.Hero(player).AddHandCard(Cards::ID_EX1_137);
 					return false;
@@ -192,7 +192,7 @@ namespace Cards
 
 			state::CardRef card_ref = context.card_ref_;
 			context.manipulate_.AddEvent<state::Events::EventTypes::OnTurnStart>(
-				[card_ref](state::Events::EventTypes::OnTurnStart::Context context) {
+				[card_ref](state::Events::EventTypes::OnTurnStart::Context const& context) {
 				state::PlayerIdentifier player = context.manipulate_.GetCard(card_ref).GetPlayerIdentifier();
 				if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
 				if (context.manipulate_.GetCard(card_ref).GetZone() != state::kCardZonePlay) return false;

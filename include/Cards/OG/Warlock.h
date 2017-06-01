@@ -7,7 +7,7 @@ namespace Cards
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			int turn = context.manipulate_.Board().GetTurn();
 			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
-				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context context)
+				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context const& context)
 			{
 				int turn_now = context.manipulate_.Board().GetTurn();
 				if (turn_now > turn) return false;

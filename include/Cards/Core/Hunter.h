@@ -179,7 +179,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_237 : public MinionCardBase<Card_CS2_237> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionSummoned::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::PlayerIdentifier summon_player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			if (owner != summon_player) return true;

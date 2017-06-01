@@ -76,7 +76,7 @@ namespace Cards
 	};
 
 	struct Card_CS2_097 : public WeaponCardBase<Card_CS2_097> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(owner).GetHeroRef();
 			if (context.attacker_ != hero_ref) return true;

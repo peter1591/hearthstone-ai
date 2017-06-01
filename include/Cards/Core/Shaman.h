@@ -6,7 +6,7 @@
 namespace Cards
 {
 	struct Card_NEW1_009 : public MinionCardBase<Card_NEW1_009> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 

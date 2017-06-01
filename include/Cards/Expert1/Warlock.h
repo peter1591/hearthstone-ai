@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_CS2_059o : Enchantment<Card_CS2_059o, MaxHP<1>> {};
 	struct Card_CS2_059 : MinionCardBase<Card_CS2_059, Stealth> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
@@ -152,7 +152,7 @@ namespace Cards
 		}
 	};
 	struct Card_EX1_315 : MinionCardBase<Card_EX1_315> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			auto const& card = context.manipulate_.GetCard(context.card_ref_);
 			if (card.GetPlayerIdentifier() != owner) return true;

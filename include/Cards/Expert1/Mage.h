@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_NEW1_012o : public Enchantment<Card_NEW1_012o, Attack<1>> {};
 	struct Card_NEW1_012 : public MinionCardBase<Card_NEW1_012> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 			context.manipulate_.OnBoardMinion(self).Enchant().Add<Card_NEW1_012o>();
@@ -20,7 +20,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_608 : public MinionCardBase<Card_EX1_608> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			auto const& card = context.manipulate_.GetCard(context.card_ref_);
 			if (card.GetPlayerIdentifier() != owner) return true;
@@ -35,7 +35,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_287 : public SecretCardBase<Card_EX1_287> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CheckPlayCardCountered::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CheckPlayCardCountered::Context const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() != player.Opposite()) return true;
 			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
@@ -49,7 +49,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_289 : public SecretCardBase<Card_EX1_289> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
 			if (context.defender_ != hero_ref) return true;
@@ -64,7 +64,7 @@ namespace Cards
 
 	struct Card_EX1_295o : public EnchantmentForThisTurn<Card_EX1_295o, Immune> {};
 	struct Card_EX1_295 : public SecretCardBase<Card_EX1_295> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
 			if (context.card_ref_ != hero_ref) return true;
@@ -82,7 +82,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_294 : public SecretCardBase<Card_EX1_294> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionPlayed::Context const& context) {
 			state::Cards::Card const& self_card = context.manipulate_.Board().GetCard(self);
 
 			if (context.manipulate_.Board().GetCurrentPlayerId() == self_card.GetPlayerIdentifier()) return true;
@@ -99,7 +99,7 @@ namespace Cards
 	};
 
 	struct Card_tt_010 : public SecretCardBase<Card_tt_010> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PreparePlayCardTarget::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PreparePlayCardTarget::Context const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.Board().GetCurrentPlayerId() == player) return true;
 			if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
@@ -120,7 +120,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_594 : public SecretCardBase<Card_EX1_594> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::BeforeAttack::Context const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
 			if (context.defender_ != hero_ref) return true;
@@ -140,7 +140,7 @@ namespace Cards
 			state::PlayerIdentifier player = context.player_;
 			int turn = context.manipulate_.Board().GetTurn();
 			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
-				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context context)
+				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context const& context)
 			{
 				if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
 
@@ -175,7 +175,7 @@ namespace Cards
 
 	struct Card_EX1_274e : public Enchantment<Card_EX1_274e, Attack<2>, MaxHP<2>> {};
 	struct Card_EX1_274 : public MinionCardBase<Card_EX1_274> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 			if (context.manipulate_.Board().Player(owner).secrets_.Empty()) return true;
@@ -201,7 +201,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_559 : public MinionCardBase<Card_EX1_559> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnPlay::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnPlay::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 

@@ -74,7 +74,7 @@ namespace Cards
 				state::PlayerIdentifier player = context.player_;
 				int turn = context.manipulate_.Board().GetTurn();
 				context.manipulate_.AddEvent<state::Events::EventTypes::OnTakeDamage>(
-					[&](state::Events::EventTypes::OnTakeDamage::Context context) {
+					[&](state::Events::EventTypes::OnTakeDamage::Context const& context) {
 					if (context.manipulate_.Board().GetTurn() != turn) return false;
 
 					auto const& card = context.manipulate_.GetCard(context.card_ref_);
@@ -116,7 +116,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_402 : MinionCardBase<Card_EX1_402> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context const& context) {
 			if (*context.damage_ <= 0) return true;
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			auto const& card = context.manipulate_.GetCard(self);
@@ -148,7 +148,7 @@ namespace Cards
 
 	struct Card_EX1_604e : Enchantment<Card_EX1_604e, Attack<1>> {};
 	struct Card_EX1_604 : MinionCardBase<Card_EX1_604> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTakeDamage::Context const& context) {
 			if (*context.damage_ <= 0) return true;
 			auto const& card = context.manipulate_.GetCard(self);
 			if (card.GetCardType() != state::kCardTypeMinion) return true;
@@ -230,7 +230,7 @@ namespace Cards
 		}
 	};
 	struct Card_EX1_411 : WeaponCardBase<Card_EX1_411> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareAttackTarget::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::PrepareAttackTarget::Context const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			state::CardRef hero_ref = context.manipulate_.Board().Player(player).GetHeroRef();
 			if (context.attacker_ != hero_ref) return true;

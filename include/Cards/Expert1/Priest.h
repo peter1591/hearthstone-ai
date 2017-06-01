@@ -45,7 +45,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_341 : MinionCardBase<Card_EX1_341> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnStart::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnStart::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
@@ -181,7 +181,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_591 : MinionCardBase<Card_EX1_591> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context const& context) {
 			if (*context.amount_ >= 0) return true;
 
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
@@ -256,7 +256,7 @@ namespace Cards
 	};
 
 	struct Card_EX1_350 : MinionCardBase<Card_EX1_350> {
-		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context context) {
+		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CalculateHealDamageAmount::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.Board().GetCard(self).GetPlayerIdentifier();
 			state::Cards::Card const& source_card = context.manipulate_.GetCard(context.source_ref_);
 			if (source_card.GetPlayerIdentifier() != owner) return true; // for friendly only
