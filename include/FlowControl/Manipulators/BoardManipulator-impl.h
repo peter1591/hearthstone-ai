@@ -39,10 +39,8 @@ namespace FlowControl
 
 		inline state::Cards::Card BoardManipulator::GenerateCard(state::Cards::CardData card_data, state::PlayerIdentifier player)
 		{
-			// TODO: set play order
-
 			assert(((card_data.zone = state::kCardZoneNewlyCreated), true)); // assign it just for debug assertion
-
+			card_data.play_order = state_.GetPlayOrder();
 			return state::Cards::Card(std::move(card_data));
 		}
 
