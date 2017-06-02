@@ -9,7 +9,7 @@ namespace Cards
 		using EventType = state::Events::EventTypes::BeforeAttack;
 		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_363e> const& handler) {
 			if (handler.context.attacker_ != handler.card_ref) return;
-			handler.context.manipulate_.Hero(handler.aux_data.player).DrawCard();
+			handler.context.manipulate_.Player(handler.aux_data.player).DrawCard();
 		}
 	};
 	struct Card_EX1_363 : public SpellCardBase<Card_EX1_363> {
@@ -136,7 +136,7 @@ namespace Cards
 				if (opponent_hand >= owner_hand) return;
 				int draws = owner_hand - opponent_hand;
 				for (int i = 0; i < draws; ++i) {
-					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
 				}
 			});
 		}
@@ -182,7 +182,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				Cards::CardId drawn_card_id = (Cards::CardId)(-1);
-				context.manipulate_.Hero(context.player_).DrawCard(&drawn_card_id);
+				context.manipulate_.Player(context.player_).DrawCard(&drawn_card_id);
 				if (drawn_card_id < 0) return;
 				state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(drawn_card_id);
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, raw_card.enchanted_states.cost);
@@ -218,9 +218,9 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(context.card_ref_, 8);
-				context.manipulate_.Hero(context.player_).DrawCard();
-				context.manipulate_.Hero(context.player_).DrawCard();
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};

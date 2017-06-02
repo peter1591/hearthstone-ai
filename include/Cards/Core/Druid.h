@@ -68,7 +68,7 @@ namespace Cards
 	struct Card_CS2_013t : public SpellCardBase<Card_CS2_013t>{
 		Card_CS2_013t() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
@@ -76,7 +76,7 @@ namespace Cards
 		Card_CS2_013() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.Board().Player(context.player_).GetResource().GetTotal() == 10) {
-					context.manipulate_.Hero(context.player_).AddHandCard(Cards::ID_CS2_013t);
+					context.manipulate_.Player(context.player_).AddHandCard(Cards::ID_CS2_013t);
 					return;
 				}
 				context.manipulate_.Board().Player(context.player_).GetResource().GainEmptyCrystal(1);
@@ -141,7 +141,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 5);
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};

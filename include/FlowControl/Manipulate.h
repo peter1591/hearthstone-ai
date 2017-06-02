@@ -37,6 +37,9 @@ namespace FlowControl
 		Manipulators::HeroManipulator Hero(state::PlayerIdentifier player) const;
 		Manipulators::HeroManipulator Hero(state::CardRef hero_ref) const;
 
+		Manipulators::PlayerManipulator Player(state::PlayerIdentifier player) const;
+		Manipulators::PlayerManipulator CurrentPlayer() const;
+
 		Manipulators::HeroPowerManipulator HeroPower(state::PlayerIdentifier player) const;
 		Manipulators::HeroPowerManipulator HeroPower(state::CardRef hero_power_ref) const;
 

@@ -124,7 +124,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 3);
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};

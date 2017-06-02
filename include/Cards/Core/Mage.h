@@ -80,8 +80,8 @@ namespace Cards
 	struct Card_CS2_023 : public SpellCardBase<Card_CS2_023> {
 		Card_CS2_023() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};

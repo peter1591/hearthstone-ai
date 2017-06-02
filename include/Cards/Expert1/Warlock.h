@@ -74,7 +74,7 @@ namespace Cards
 
 				auto draw_from_deck = [&](Cards::CardId in_card_id) {
 					context.manipulate_.Board().Player(context.player_).deck_.SwapCardIdToLast(in_card_id);
-					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
 				};
 
 				if (possibles.size() <= 2) {
@@ -83,7 +83,7 @@ namespace Cards
 						draw_from_deck(card_id);
 					}
 					for (int i = 0; i < rest; ++i) {
-						context.manipulate_.Hero(context.player_).AddHandCard(Cards::ID_EX1_317t);
+						context.manipulate_.Player(context.player_).AddHandCard(Cards::ID_EX1_317t);
 					}
 					return;
 				}

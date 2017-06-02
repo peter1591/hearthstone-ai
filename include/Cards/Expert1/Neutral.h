@@ -152,7 +152,7 @@ namespace Cards
 	struct Card_EX1_012 : public MinionCardBase<Card_EX1_012, SpellDamage<1>> {
 		Card_EX1_012() {
 			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
@@ -236,7 +236,7 @@ namespace Cards
 	struct Card_EX1_096 : public MinionCardBase<Card_EX1_096> {
 		Card_EX1_096() {
 			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
@@ -245,7 +245,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context const& context) {
 			Cards::CardId card_id = context.manipulate_.GetCard(context.card_ref_).GetCardId();
 			state::PlayerIdentifier player = context.manipulate_.Board().GetCurrentPlayerId().Opposite();
-			context.manipulate_.Hero(player).AddHandCard(card_id);
+			context.manipulate_.Player(player).AddHandCard(card_id);
 			return true;
 		};
 		Card_EX1_100() {
@@ -335,7 +335,7 @@ namespace Cards
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
 			if (context.manipulate_.GetRandom().Get(2) == 0) return true;
-			context.manipulate_.Hero(owner).DrawCard();
+			context.manipulate_.Player(owner).DrawCard();
 			return true;
 		}
 		Card_EX1_557() {
@@ -411,7 +411,7 @@ namespace Cards
 
 	struct Card_EX1_007 : public MinionCardBase<Card_EX1_007> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::CategorizedOnTakeDamage::Context const& context) {
-			context.manipulate_.Hero(
+			context.manipulate_.Player(
 				context.manipulate_.GetCard(self).GetPlayerIdentifier()
 			).DrawCard();
 			return true;
@@ -476,10 +476,10 @@ namespace Cards
 
 	struct Card_EX1_050 : public MinionCardBase<Card_EX1_050> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.Hero(state::PlayerIdentifier::First()).DrawCard();
-			context.manipulate_.Hero(state::PlayerIdentifier::First()).DrawCard();
-			context.manipulate_.Hero(state::PlayerIdentifier::Second()).DrawCard();
-			context.manipulate_.Hero(state::PlayerIdentifier::Second()).DrawCard();
+			context.manipulate_.Player(state::PlayerIdentifier::First()).DrawCard();
+			context.manipulate_.Player(state::PlayerIdentifier::First()).DrawCard();
+			context.manipulate_.Player(state::PlayerIdentifier::Second()).DrawCard();
+			context.manipulate_.Player(state::PlayerIdentifier::Second()).DrawCard();
 		}
 	};
 
@@ -593,8 +593,8 @@ namespace Cards
 	};
 	struct Card_EX1_014 : public MinionCardBase<Card_EX1_014> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.Hero(context.player_.Opposite()).AddHandCard(Cards::ID_EX1_014t);
-			context.manipulate_.Hero(context.player_.Opposite()).AddHandCard(Cards::ID_EX1_014t);
+			context.manipulate_.Player(context.player_.Opposite()).AddHandCard(Cards::ID_EX1_014t);
+			context.manipulate_.Player(context.player_.Opposite()).AddHandCard(Cards::ID_EX1_014t);
 		}
 	};
 
@@ -716,7 +716,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterMinionDied::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier() != owner) return true;
-			context.manipulate_.Hero(owner).DrawCard();
+			context.manipulate_.Player(owner).DrawCard();
 			return true;
 		}
 		Card_EX1_595() {
@@ -858,7 +858,7 @@ namespace Cards
 			int draw = context.manipulate_.GetCard(weapon_ref).GetHP();
 			context.manipulate_.Hero(context.player_.Opposite()).DestroyWeapon();
 			for (int i = 0; i < draw; ++i) {
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			}
 		}
 	};
@@ -939,7 +939,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::AfterSpellPlayed::Context const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.player_) return true;
-			context.manipulate_.Hero(owner).DrawCard();
+			context.manipulate_.Player(owner).DrawCard();
 			return true;
 		}
 		Card_EX1_095() {
@@ -1120,7 +1120,7 @@ namespace Cards
 				Cards::ID_DREAM_05
 			};
 			Cards::CardId card_id = dream_cards[context.manipulate_.GetRandom().Get(5)];
-			context.manipulate_.Hero(owner).AddHandCard(card_id);
+			context.manipulate_.Player(owner).AddHandCard(card_id);
 			return true;
 		}
 		Card_EX1_572() {

@@ -39,7 +39,7 @@ namespace Cards
 
 				size_t rand = context.manipulate_.GetRandom().Get(hand_from.Size());
 				Cards::CardId card_id = context.manipulate_.GetCard(hand_from.Get(rand)).GetCardId();
-				context.manipulate_.Hero(context.player_).AddHandCard(card_id);
+				context.manipulate_.Player(context.player_).AddHandCard(card_id);
 			});
 		}
 	};
@@ -52,7 +52,7 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_004e>();
@@ -64,7 +64,7 @@ namespace Cards
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnHeal::Context const& context) {
 			assert(context.amount_ > 0);
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
-			context.manipulate_.Hero(owner).DrawCard();
+			context.manipulate_.Player(owner).DrawCard();
 			return true;
 		}
 		Card_CS2_235() {

@@ -13,8 +13,8 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
-				context.manipulate_.Hero(context.player_.Opposite()).DrawCard();
-				context.manipulate_.Hero(context.player_.Opposite()).DrawCard();
+				context.manipulate_.Player(context.player_.Opposite()).DrawCard();
+				context.manipulate_.Player(context.player_.Opposite()).DrawCard();
 			});
 		}
 	};
@@ -72,7 +72,7 @@ namespace Cards
 				}
 				else {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
-					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
 				}
 			});
 		}
@@ -170,9 +170,9 @@ namespace Cards
 					context.manipulate_.Board().Player(context.player_).GetResource().GainCrystal(2);
 				}
 				else {
-					context.manipulate_.Hero(context.player_).DrawCard();
-					context.manipulate_.Hero(context.player_).DrawCard();
-					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
 				}
 			});
 		}
@@ -251,7 +251,7 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.GetSavedUserChoice() == 0) {
-					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
 				}
 				else {
 					state::CardRef target = context.GetTarget();

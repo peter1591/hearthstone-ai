@@ -81,7 +81,7 @@ namespace Cards
 	struct Card_CS2_053 : SpellCardBase<Card_CS2_053> {
 		Card_CS2_053() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				state::CardRef card_ref = context.manipulate_.Hero(context.player_).DrawCard();
+				state::CardRef card_ref = context.manipulate_.Player(context.player_).DrawCard();
 				if (!card_ref.IsValid()) return;
 				context.manipulate_.Card(card_ref).Enchant().Add<Card_CS2_053e>();
 			});
@@ -127,7 +127,7 @@ namespace Cards
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
 			if (owner != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 
-			context.manipulate_.Hero(self).DrawCard();
+			context.manipulate_.Player(owner).DrawCard();
 			return true;
 		}
 		Card_EX1_575() {

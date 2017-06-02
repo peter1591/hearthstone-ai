@@ -472,7 +472,7 @@ namespace FlowControl
 
 	inline void FlowController::DrawCardPhase()
 	{
-		Manipulate(state_, flow_context_).CurrentHero().DrawCard();
+		Manipulate(state_, flow_context_).CurrentPlayer().DrawCard();
 	}
 
 	inline bool FlowController::SetResult(Result result)

@@ -60,7 +60,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach(op);
 
 				for (int i = 0; i < draw_count; ++i) {
-					context.manipulate_.Hero(context.player_).DrawCard();
+					context.manipulate_.Player(context.player_).DrawCard();
 				}
 			});
 		}
@@ -69,7 +69,7 @@ namespace Cards
 	struct Card_NEW1_036 : SpellCardBase<Card_NEW1_036> {
 		Card_NEW1_036() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 
 				state::PlayerIdentifier player = context.player_;
 				int turn = context.manipulate_.Board().GetTurn();
@@ -110,7 +110,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 2);
 				if (context.manipulate_.GetCard(context.GetTarget()).GetHP() <= 0) return;
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};

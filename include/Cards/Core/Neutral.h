@@ -67,7 +67,7 @@ namespace Cards
 
 	struct Card_EX1_015 : public MinionCardBase<Card_EX1_015> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.Hero(context.player_).DrawCard();
+			context.manipulate_.Player(context.player_).DrawCard();
 		}
 	};
 
@@ -129,7 +129,7 @@ namespace Cards
 
 	struct Card_CS2_147 : public MinionCardBase<Card_CS2_147> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.Hero(context.player_).DrawCard();
+			context.manipulate_.Player(context.player_).DrawCard();
 		}
 	};
 

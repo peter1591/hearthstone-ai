@@ -7,16 +7,16 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
-		inline state::CardRef HeroManipulator::DrawCard(Cards::CardId * drawn_card_id)
+		inline state::CardRef PlayerManipulator::DrawCard(Cards::CardId * drawn_card_id)
 		{
-			state::board::Player & player = state_.GetBoard().Get(player_id_);
-			assert(player.GetHeroRef() == card_ref_);
+			state::board::Player & player = state_.GetBoard().Get(player_);
 
 			if (player.deck_.Empty())
 			{
+				state::CardRef hero_ref = state_.GetBoard().Get(player_).GetHeroRef();
 				player.IncreaseFatigueDamage();
 				int damage = player.GetFatigueDamage();
-				this->Damage(card_ref_, damage);
+				HeroManipulator(state_, flow_context_, hero_ref).Damage(hero_ref, damage);
 				if (drawn_card_id) *drawn_card_id = (Cards::CardId)-1;
 				return state::CardRef();
 			}
@@ -33,16 +33,15 @@ namespace FlowControl
 			// TODO: trigger on-draw event (parameter: card_ref)
 		}
 
-		inline state::CardRef HeroManipulator::AddHandCard(Cards::CardId card_id)
+		inline state::CardRef PlayerManipulator::AddHandCard(Cards::CardId card_id)
 		{
-			state::board::Player & player = state_.GetBoard().Get(player_id_);
-			assert(player.GetHeroRef() == card_ref_);
+			state::board::Player & player = state_.GetBoard().Get(player_);
 
 			if (player.hand_.Full()) return state::CardRef();
 
-			auto ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_id_);
+			auto ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_);
 			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state_, flow_context_), ref)
-				.ChangeTo<state::kCardZoneHand>(player_id_);
+				.ChangeTo<state::kCardZoneHand>(player_);
 			return ref;
 		}
 

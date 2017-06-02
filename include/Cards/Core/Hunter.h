@@ -54,7 +54,7 @@ namespace Cards
 				}
 				if (cards.empty()) return;
 				size_t choice = context.manipulate_.GetChooseOneUserAction(cards);
-				context.manipulate_.Hero(context.player_).AddHandCard(cards[choice]);
+				context.manipulate_.Player(context.player_).AddHandCard(cards[choice]);
 			});
 		}
 	};
@@ -185,7 +185,7 @@ namespace Cards
 			if (owner != summon_player) return true;
 
 			if (context.manipulate_.GetCard(context.card_ref_).GetRace() != state::kCardRaceBeast) return true;
-			context.manipulate_.Hero(owner).DrawCard();
+			context.manipulate_.Player(owner).DrawCard();
 			return true;
 		}
 		Card_CS2_237() {

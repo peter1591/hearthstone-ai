@@ -208,7 +208,7 @@ namespace Cards
 			auto card_type = context.manipulate_.GetCard(context.card_ref_).GetCardType();
 			if (card_type == state::kCardTypeSpell)
 			{
-				context.manipulate_.Hero(owner).AddHandCard(Cards::ID_CS2_029);
+				context.manipulate_.Player(owner).AddHandCard(Cards::ID_CS2_029);
 			}
 			return true;
 		}

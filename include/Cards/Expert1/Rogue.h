@@ -127,7 +127,7 @@ namespace Cards
 				context.manipulate_.AddEvent<state::Events::EventTypes::OnTurnStart>(
 					[player](state::Events::EventTypes::OnTurnStart::Context const& context) {
 					if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
-					context.manipulate_.Hero(player).AddHandCard(Cards::ID_EX1_137);
+					context.manipulate_.Player(player).AddHandCard(Cards::ID_EX1_137);
 					return false;
 				});
 			});

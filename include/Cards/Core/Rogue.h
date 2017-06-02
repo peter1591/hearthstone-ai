@@ -79,7 +79,7 @@ namespace Cards
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
@@ -90,7 +90,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 1);
 				});
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
@@ -128,10 +128,10 @@ namespace Cards
 	struct Card_CS2_077 : public SpellCardBase<Card_CS2_077> {
 		Card_CS2_077() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Hero(context.player_).DrawCard();
-				context.manipulate_.Hero(context.player_).DrawCard();
-				context.manipulate_.Hero(context.player_).DrawCard();
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};

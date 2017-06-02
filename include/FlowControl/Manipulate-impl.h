@@ -21,6 +21,16 @@ namespace FlowControl
 		return Hero(state_.GetCurrentPlayerId());
 	}
 
+	inline Manipulators::PlayerManipulator Manipulate::CurrentPlayer() const
+	{
+		return Player(state_.GetCurrentPlayerId());
+	}
+	
+	inline Manipulators::PlayerManipulator Manipulate::Player(state::PlayerIdentifier player) const
+	{
+		return Manipulators::PlayerManipulator(state_, flow_context_, player);
+	}
+
 	inline Manipulators::HeroManipulator Manipulate::OpponentHero() const
 	{
 		return Hero(state_.GetCurrentPlayerId().Opposite());

@@ -31,7 +31,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_.Opposite()).secrets_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardSecret(card_ref).Remove();
 				});
-				context.manipulate_.Hero(context.player_).DrawCard();
+				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
