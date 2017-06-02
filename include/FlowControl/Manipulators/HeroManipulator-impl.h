@@ -45,14 +45,14 @@ namespace FlowControl
 			return ref;
 		}
 
-		inline void HeroManipulator::DiscardHandCard(state::CardRef card_ref)
+		inline void PlayerManipulator::DiscardHandCard(state::CardRef card_ref)
 		{
-			assert(state_.GetCard(card_ref).GetPlayerIdentifier() == GetCard().GetPlayerIdentifier());
+			assert(state_.GetCard(card_ref).GetPlayerIdentifier() == player_);
 			assert(state_.GetCard(card_ref).GetZone() == state::kCardZoneHand);
 
 			// TODO: fire event: DiscardHandCard
 			state_.GetZoneChanger<state::kCardZoneHand>(FlowControl::Manipulate(state_, flow_context_), card_ref)
-				.ChangeTo<state::kCardZoneSetASide>(state_.GetCard(card_ref).GetPlayerIdentifier());
+				.ChangeTo<state::kCardZoneSetASide>(player_);
 		}
 
 		inline void PlayerManipulator::EquipWeapon(Cards::CardId card_id)

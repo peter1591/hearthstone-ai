@@ -1142,7 +1142,7 @@ namespace Cards
 			// discard hand
 			auto & hand = context.manipulate_.Board().Player(context.player_).hand_;
 			while (!hand.Empty()) {
-				context.manipulate_.Hero(context.player_).DiscardHandCard(hand.Get(0));
+				context.manipulate_.Player(context.player_).DiscardHandCard(hand.Get(0));
 			}
 		}
 	};

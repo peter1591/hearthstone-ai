@@ -130,7 +130,7 @@ namespace Cards
 			if (hand_cards < 1) return;
 
 			size_t rand = manipulate.GetRandom().Get(hand_cards);
-			manipulate.Hero(player).DiscardHandCard(hand.Get(rand));
+			manipulate.Player(player).DiscardHandCard(hand.Get(rand));
 		}
 
 		template <typename Functor>

@@ -8,8 +8,6 @@ namespace FlowControl
 	namespace Manipulators
 	{
 		// TODO: rename to OnBoardHeroManipulator
-		// TODO: separate out a PlayerManipulator
-		//     Rule of thumb: will the interface be influenced if the hero is changed (e.g., by Jaxx), 
 		class HeroManipulator : public CharacterManipulator
 		{
 		public:
@@ -19,8 +17,6 @@ namespace FlowControl
 				assert(GetCard().GetZone() == state::kCardZonePlay);
 				assert(GetCard().GetCardType() == state::kCardTypeHero);
 			}
-			
-			void DiscardHandCard(state::CardRef card_ref);
 
 			void GainArmor(int amount);
 
@@ -41,6 +37,8 @@ namespace FlowControl
 			PlayerManipulator(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player)
 				: state_(state), flow_context_(flow_context), player_(player)
 			{}
+
+			void DiscardHandCard(state::CardRef card_ref);
 
 			template <state::CardZone KnownZone>
 			void EquipWeapon(state::CardRef weapon_ref);
