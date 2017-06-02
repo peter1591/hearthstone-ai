@@ -10,6 +10,7 @@
 #include "FlowControl/Manipulators/OnBoardMinionManipulator.h"
 #include "FlowControl/Manipulators/MinionManipulator.h"
 #include "FlowControl/Manipulators/HeroManipulator.h"
+#include "FlowControl/Manipulators/PlayerManipulator.h"
 #include "FlowControl/Manipulators/HeroPowerManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
 #include "FlowControl/Manipulators/SecretManipulator.h"
