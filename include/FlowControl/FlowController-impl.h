@@ -212,7 +212,7 @@ namespace FlowControl
 
 	inline bool FlowController::PlayWeaponCardPhase(state::CardRef card_ref)
 	{
-		Manipulate(state_, flow_context_).CurrentHero().EquipWeapon<state::kCardZoneHand>(card_ref);
+		Manipulate(state_, flow_context_).CurrentPlayer().EquipWeapon<state::kCardZoneHand>(card_ref);
 
 		state::CardRef new_card_ref;
 

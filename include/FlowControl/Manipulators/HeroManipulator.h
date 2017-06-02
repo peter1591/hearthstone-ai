@@ -22,14 +22,7 @@ namespace FlowControl
 			
 			void DiscardHandCard(state::CardRef card_ref);
 
-			void DestroyWeapon();
-
 			void GainArmor(int amount);
-
-			template <state::CardZone KnownZone>
-			void EquipWeapon(state::CardRef weapon_ref);
-
-			void EquipWeapon(Cards::CardId card_id);
 
 			void TurnStart()
 			{
@@ -48,6 +41,13 @@ namespace FlowControl
 			PlayerManipulator(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player)
 				: state_(state), flow_context_(flow_context), player_(player)
 			{}
+
+			template <state::CardZone KnownZone>
+			void EquipWeapon(state::CardRef weapon_ref);
+
+			void EquipWeapon(Cards::CardId card_id);
+
+			void DestroyWeapon();
 
 			state::CardRef AddHandCard(Cards::CardId card_id);
 			state::CardRef DrawCard(Cards::CardId * drawn_card_id = nullptr);

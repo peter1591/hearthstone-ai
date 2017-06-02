@@ -8,7 +8,7 @@ namespace Cards
 	struct Card_CS2_083b : public HeroPowerCardBase<Card_CS2_083b> {
 		Card_CS2_083b() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_CS2_082);
+				context.manipulate_.Player(context.player_).EquipWeapon(Cards::ID_CS2_082);
 			});
 		}
 	};

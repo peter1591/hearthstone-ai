@@ -39,7 +39,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();
 				if (!weapon_ref.IsValid()) {
-					context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_409t);
+					context.manipulate_.Player(context.player_).EquipWeapon(Cards::ID_EX1_409t);
 					return;
 				}
 				context.manipulate_.Weapon(weapon_ref).Enchant().Add<Card_EX1_409e>();
@@ -179,7 +179,7 @@ namespace Cards
 
 	struct Card_EX1_398 : MinionCardBase<Card_EX1_398> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_398t);
+			context.manipulate_.Player(context.player_).EquipWeapon(Cards::ID_EX1_398t);
 		}
 	};
 

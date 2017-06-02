@@ -228,7 +228,7 @@ namespace Cards
 	struct Card_EX1_383 : public MinionCardBase<Card_EX1_383, Taunt, Shield> {
 		Card_EX1_383() {
 			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
-				context.manipulate_.Hero(context.player_).EquipWeapon(Cards::ID_EX1_383t);
+				context.manipulate_.Player(context.player_).EquipWeapon(Cards::ID_EX1_383t);
 			});
 		}
 	};

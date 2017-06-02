@@ -856,7 +856,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_.Opposite()).GetWeaponRef();
 			int draw = context.manipulate_.GetCard(weapon_ref).GetHP();
-			context.manipulate_.Hero(context.player_.Opposite()).DestroyWeapon();
+			context.manipulate_.Player(context.player_.Opposite()).DestroyWeapon();
 			for (int i = 0; i < draw; ++i) {
 				context.manipulate_.Player(context.player_).DrawCard();
 			}

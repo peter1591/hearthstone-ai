@@ -54,10 +54,25 @@ namespace FlowControl
 			state_.GetZoneChanger<state::kCardZoneHand>(FlowControl::Manipulate(state_, flow_context_), card_ref)
 				.ChangeTo<state::kCardZoneSetASide>(state_.GetCard(card_ref).GetPlayerIdentifier());
 		}
-		
-		inline void HeroManipulator::DestroyWeapon()
+
+		inline void PlayerManipulator::EquipWeapon(Cards::CardId card_id)
 		{
-			state::CardRef weapon_ref = state_.GetBoard().Get(GetCard().GetPlayerIdentifier()).GetWeaponRef();
+			state::CardRef weapon_ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_);
+			return EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
+		}
+
+		template <state::CardZone KnownZone>
+		inline void PlayerManipulator::EquipWeapon(state::CardRef weapon_ref)
+		{
+			DestroyWeapon();
+
+			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(Manipulate(state_, flow_context_), weapon_ref)
+				.ChangeTo<state::kCardZonePlay>(player_);
+		}
+		
+		inline void PlayerManipulator::DestroyWeapon()
+		{
+			state::CardRef weapon_ref = state_.GetBoard().Get(player_).GetWeaponRef();
 			if (!weapon_ref.IsValid()) return;
 
 			if (!flow_context_.GetDestroyedWeapon().IsValid()) {
@@ -67,7 +82,7 @@ namespace FlowControl
 			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(Manipulate(state_, flow_context_), weapon_ref)
 				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
-			assert(state_.GetBoard().Get(GetCard().GetPlayerIdentifier()).GetWeaponRef().IsValid() == false);
+			assert(state_.GetBoard().Get(player_).GetWeaponRef().IsValid() == false);
 		}
 
 		inline void HeroManipulator::GainArmor(int amount)
@@ -75,21 +90,6 @@ namespace FlowControl
 			GetCard().SetArmor(GetCard().GetArmor() + amount);
 
 			// TODO: trigger events
-		}
-
-		inline void HeroManipulator::EquipWeapon(Cards::CardId card_id)
-		{
-			state::CardRef weapon_ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_id_);
-			return EquipWeapon<state::kCardZoneNewlyCreated>(weapon_ref);
-		}
-
-		template <state::CardZone KnownZone>
-		inline void HeroManipulator::EquipWeapon(state::CardRef weapon_ref)
-		{
-			DestroyWeapon();
-
-			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(Manipulate(state_, flow_context_), weapon_ref)
-				.ChangeTo<state::kCardZonePlay>(GetCard().GetPlayerIdentifier());
 		}
 
 		inline state::CardRef HeroManipulator::Transform(Cards::CardId id)

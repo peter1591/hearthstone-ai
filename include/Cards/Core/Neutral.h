@@ -51,7 +51,7 @@ namespace Cards
 
 	struct Card_EX1_066 : public MinionCardBase<Card_EX1_066> {
 		static void Battlecry(Contexts::OnPlay const& context) {
-			context.manipulate_.Hero(context.player_.Opposite()).DestroyWeapon();
+			context.manipulate_.Player(context.player_.Opposite()).DestroyWeapon();
 		}
 	};
 
