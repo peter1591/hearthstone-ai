@@ -66,8 +66,8 @@ namespace Cards
 	template <typename... Ts>
 	struct EnchantmentForThisTurn : public Enchantment<Ts...>
 	{
-		EnchantmentForThisTurn() : Enchantment() {
-			valid_this_turn = true;
+		EnchantmentForThisTurn() : Enchantment<Ts...>() {
+			this->valid_this_turn = true;
 		}
 	};
 

@@ -54,7 +54,7 @@ namespace state
 				return cards_[rand_idx];
 			}
 
-			std::pair<::Cards::CardId, ::Cards::CardId> GetTwoRandomCards(IRandomGenerator & random) {
+			std::pair< ::Cards::CardId, ::Cards::CardId> GetTwoRandomCards(IRandomGenerator & random) {
 				if (size_ < 2) return std::make_pair(GetOneRandomCard(random), (::Cards::CardId)-1);
 
 				int v1 = random.Get(size_);
@@ -87,7 +87,7 @@ namespace state
 			constexpr static int max_size = 80;
 			int change_id_;
 			int size_;
-			std::array<::Cards::CardId, max_size> cards_;
+			std::array< ::Cards::CardId, max_size> cards_;
 		};
 	}
 }
