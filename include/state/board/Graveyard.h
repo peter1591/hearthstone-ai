@@ -21,12 +21,8 @@ namespace state
 
 		private:
 			template <CardType AddingType> void Add(CardRef ref) { AddInternal(ref, others_); }
-			template <> void Add<kCardTypeMinion>(CardRef ref) { AddInternal(ref, minions_); }
-			template <> void Add<kCardTypeSpell>(CardRef ref) { AddInternal(ref, spells_); }
 
 			template <CardType RemovingType> void Remove(CardRef ref) { RemoveInternal(ref, others_); }
-			template <> void Remove<kCardTypeMinion>(CardRef ref) { RemoveInternal(ref, minions_); }
-			template <> void Remove<kCardTypeSpell>(CardRef ref) { RemoveInternal(ref, spells_); }
 
 		private:
 			void AddInternal(CardRef ref, std::unordered_set<CardRef>& container)
@@ -48,5 +44,9 @@ namespace state
 			std::unordered_set<CardRef> spells_;
 			std::unordered_set<CardRef> others_;
 		};
+                template <> inline void Graveyard::Add<kCardTypeMinion>(CardRef ref) { AddInternal(ref, minions_); }
+                template <> inline void Graveyard::Add<kCardTypeSpell>(CardRef ref) { AddInternal(ref, spells_); }
+                template <> inline void Graveyard::Remove<kCardTypeMinion>(CardRef ref) { RemoveInternal(ref, minions_); }
+                template <> inline void Graveyard::Remove<kCardTypeSpell>(CardRef ref) { RemoveInternal(ref, spells_); }
 	}
 }

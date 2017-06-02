@@ -26,10 +26,10 @@ namespace state {
 			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
 
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_, card_ref_);
 		}
 
 		template <CardZone ChangeToZone,
@@ -39,10 +39,10 @@ namespace state {
 			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
 
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_, pos);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_, card_ref_);
 		}
 
 		void ReplaceBy(CardRef new_ref)
@@ -58,8 +58,8 @@ namespace state {
 			cards_mgr_.GetMutable(new_ref).SetZonePos()(cards_mgr_.Get(card_ref_).GetZonePosition());
 			cards_mgr_.GetMutable(card_ref_).SetZone().Zone(kCardZoneSetASide);
 
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(manipulate_, state_.event_mgr_, new_ref);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_, card_ref_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(manipulate_, state_, new_ref);
 		}
 
 	private:
@@ -101,7 +101,7 @@ namespace state {
 			case kCardZoneNewlyCreated:
 				return ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("Unknown card zone");
+				throw std::runtime_error("Unknown card zone");
 			}
 		}
 
@@ -126,7 +126,7 @@ namespace state {
 			case kCardZoneNewlyCreated:
 				return ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
-				throw std::exception("Unknown card zone");
+				throw std::runtime_error("Unknown card zone");
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -188,7 +188,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -211,7 +211,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 		template <>
@@ -233,7 +233,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				assert(false); // should not specify position
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -266,7 +266,7 @@ namespace state {
 			case kCardTypeWeapon:
 				return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -286,7 +286,7 @@ namespace state {
 			case kCardTypeWeapon:
 				return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, board_, cards_mgr_, manipulate_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 

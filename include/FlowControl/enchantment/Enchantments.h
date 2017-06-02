@@ -3,7 +3,7 @@
 #include <functional>
 #include <utility>
 #include <memory>
-#include <variant>
+#include "bootstrap/variant"
 #include "Utils/CloneableContainers/RemovableVector.h"
 #include "state/Cards/EnchantableStates.h"
 #include "FlowControl/enchantment/detail/UpdateDecider.h"
@@ -85,11 +85,11 @@ namespace FlowControl
 				RegisterEventFunctor register_functor;
 				AuxData aux_data;
 			};
-			using EnchantmentType = std::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
+			using EnchantmentType = bootstrap::variant<NormalEnchantment, AuraEnchantment, EventHookedEnchantment>;
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
+			IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
 			{
 				assert(item.apply_functor);
 
@@ -102,21 +102,10 @@ namespace FlowControl
 			}
 
 			template <typename EnchantmentType>
-			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& item)
-			{
-				update_decider_.AddItem();
-				int valid_until_turn = -1;
-				if (item.valid_this_turn) valid_until_turn = state.GetTurn();
-				update_decider_.AddValidUntilTurn(valid_until_turn);
-
-				if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
-
-				assert(item.apply_functor);
-				enchantments_.PushBack(NormalEnchantment(item.apply_functor, valid_until_turn, item.force_update_every_time));
-			}
+			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& item);
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackEventHookedEnchantment(
+			IdentifierType PushBackEventHookedEnchantment(
 				FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
 				EnchantmentType&& item, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data)
 			{
@@ -124,7 +113,7 @@ namespace FlowControl
 				assert(item.register_functor);
 				IdentifierType id = enchantments_.PushBack(EventHookedEnchantment(item.apply_functor, item.register_functor, aux_data));
 				item.register_functor(manipulate, card_ref, id,
-					std::get<EventHookedEnchantment>(*enchantments_.Get(id)).aux_data);
+					bootstrap::get<EventHookedEnchantment>(*enchantments_.Get(id)).aux_data);
 
 				update_decider_.AddItem();
 
@@ -135,7 +124,7 @@ namespace FlowControl
 			{
 				update_decider_.RemoveItem();
 
-				struct OpFunctor {
+				struct OpFunctor : boost::static_visitor<void> {
 					OpFunctor(detail::UpdateDecider & updater_decider)
 						: updater_decider_(updater_decider)
 					{}
@@ -154,7 +143,7 @@ namespace FlowControl
 
 				auto remove_item = enchantments_.Get(id);
 				if (remove_item == nullptr) return;
-				std::visit(OpFunctor(update_decider_), *remove_item);
+				boost::apply_visitor(OpFunctor(update_decider_), *remove_item);
 				return enchantments_.Remove(id);
 			}
 
@@ -177,7 +166,7 @@ namespace FlowControl
 			{
 				update_decider_.RemoveItem();
 				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
-					struct OpFunctor {
+					struct OpFunctor : boost::static_visitor<void> {
 						OpFunctor(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, ContainerType & enchantments, IdentifierType id)
 							: manipulate_(manipulate), card_ref_(card_ref), enchantments_(enchantments), id_(id)
 						{}
@@ -199,7 +188,7 @@ namespace FlowControl
 						IdentifierType id_;
 					};
 					
-					std::visit(OpFunctor(manipulate, card_ref, enchantments_, id), enchantment);
+                                        boost::apply_visitor(OpFunctor(manipulate, card_ref, enchantments_, id), enchantment);
 					return true;
 				});
 			}
@@ -209,15 +198,30 @@ namespace FlowControl
 				return enchantments_.Get(id) != nullptr;
 			}
 
+                        struct ApplyAllFunctor : boost::static_visitor<void> {
+                              ApplyAllFunctor(state::State const& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates & stats, ContainerType & enchantments, IdentifierType id)
+                                : state_(state), flow_context_(flow_context), card_ref_(card_ref), stats_(stats), enchantments_(enchantments), id_(id) {}
+
+                          template <typename T>
+                              void operator()(T&& arg) {
+                                if (!arg.Apply(ApplyFunctorContext{ state_, flow_context_, card_ref_, &stats_ })) {
+                                  enchantments_.Remove(id_);
+                                }
+                              }
+
+                         private:
+                              state::State const& state_;
+                              FlowContext & flow_context_;
+                              state::CardRef card_ref_;
+                              state::Cards::EnchantableStates & stats_;
+                              ContainerType & enchantments_;
+                              IdentifierType id_;
+                        };
 			void ApplyAll(state::State const& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates & stats)
 			{
 				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
-					std::visit([&](auto&& arg) {
-						if (!arg.Apply(ApplyFunctorContext{ state, flow_context, card_ref, &stats })) {
-							enchantments_.Remove(id);
-						}
-					}, enchantment);
-					return true;
+                                  boost::apply_visitor(ApplyAllFunctor(state, flow_context, card_ref, stats, enchantments_, id), enchantment);
+                                  return true;
 				});
 			}
 

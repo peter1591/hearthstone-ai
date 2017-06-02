@@ -20,7 +20,7 @@ namespace state
 				template <typename T>
 				void PushBack(T&& handler)
 				{
-					static_assert(std::is_convertible_v<std::decay_t<T>, typename TriggerType::type>, "Wrong type");
+					static_assert(std::is_convertible<std::decay_t<T>, typename TriggerType::type>::value, "Wrong type");
 					handlers_.push_back(std::forward<T>(handler));
 				}
 
@@ -47,7 +47,7 @@ namespace state
 					while (rest > 0)
 					{
 						auto ret = (*it)(std::forward<Args>(args)...);
-						static_assert(std::is_same_v<decltype(ret), bool>, "Should return a boolean flag indicating if we should remove the item.");
+						static_assert(std::is_same<decltype(ret), bool>::value, "Should return a boolean flag indicating if we should remove the item.");
 
 						if (!ret) it = handlers_.erase(it);
 						else ++it;

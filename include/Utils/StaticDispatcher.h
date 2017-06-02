@@ -5,7 +5,7 @@
 
 namespace Utils
 {
-	template <template <int> typename DefaultInvoked>
+	template <template <int> class DefaultInvoked>
 	class StaticDispatcher
 	{
 	public:
@@ -18,7 +18,7 @@ namespace Utils
 		static Ret Invoke(int id, Args&&... args)
 		{
 #define INVOKE_CASE(n) \
-			&InvokerType<DispatchMap<n>::type>::Invoke,
+			&InvokerType<typename DispatchMap<n>::type>::Invoke,
 
 #define LOOP_X1(n) INVOKE_CASE(n)
 #define LOOP_X2(n) LOOP_X1(n) LOOP_X1(n+1)
@@ -41,9 +41,9 @@ namespace Utils
 				LOOP_X4096(0)
 			};
 
-			if (id < 0) throw std::exception("Invalid id");
+			if (id < 0) throw std::runtime_error("Invalid id");
 			constexpr auto jump_table_size = sizeof(jump_table) / sizeof(*jump_table);
-			if (id >= jump_table_size) throw std::exception("Need a larger jump table");
+			if (id >= jump_table_size) throw std::runtime_error("Need a larger jump table");
 
 			return (*jump_table[id])(std::forward<Args>(args)...);
 

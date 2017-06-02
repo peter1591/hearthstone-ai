@@ -1,6 +1,6 @@
 #pragma once
 
-#include <variant>
+#include "bootstrap/variant"
 #include "state/targetor/Targets.h"
 #include "FlowControl/enchantment/TieredEnchantments.h"
 #include "FlowControl/aura/Contexts.h"
@@ -47,19 +47,30 @@ namespace FlowControl
 			template <typename EffectType>
 			Handler& SetEffect(EffectType effect) { effect_ = effect; return *this; }
 
+                private:
+                        struct NoAppliedEnchantmentVisitor : boost::static_visitor<bool> {
+                          template <typename T>
+                              bool operator()(T& item) {
+                                return item.NoAppliedEnchantment();
+                              }
+                        };
 		public:
 			bool NoAppliedEnchantment() const {
-				return std::visit([](auto& item) -> bool {
-					return item.NoAppliedEnchantment();
-				}, effect_);
+                          return boost::apply_visitor(NoAppliedEnchantmentVisitor(), effect_);
 			}
 			bool Update(state::State & state, FlowControl::FlowContext & flow_context);
 
+                private:
+                        struct AfterCopiedVisitor : boost::static_visitor<void> {
+                          template <typename T>
+                              void operator()(T& item) {
+                                item.AfterCopied();
+                              }
+                        };
+                public:
 			void AfterCopied() {
 				first_time_update_ = true;
-				std::visit([](auto& item) {
-					item.AfterCopied();
-				}, effect_);
+                                boost::apply_visitor(AfterCopiedVisitor(), effect_);
 			}
 
 		private:
@@ -80,7 +91,7 @@ namespace FlowControl
 			UpdatePolicy update_policy_;
 			EmitPolicy emit_policy_;
 
-			std::variant<
+			bootstrap::variant<
 				EffectHandler_Enchantment,
 				EffectHandler_Enchantments,
 				EffectHandler_BoardFlag,
