@@ -49,6 +49,8 @@ namespace FlowControl
 
 			void DestroyWeapon();
 
+			void ReplaceHeroPower(Cards::CardId id);
+
 			state::CardRef AddHandCard(Cards::CardId card_id);
 			state::CardRef DrawCard(Cards::CardId * drawn_card_id = nullptr);
 

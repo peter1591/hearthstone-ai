@@ -1443,7 +1443,7 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
 	FlowControl::Manipulate(state, flow_context)
-		.HeroPower(state::PlayerIdentifier::Second())
+		.Player(state::PlayerIdentifier::Second())
 		.ReplaceHeroPower(Cards::ID_CS2_102); // warrior hero power
 
 	if (controller.HeroPower() != FlowControl::kResultNotDetermined) assert(false);

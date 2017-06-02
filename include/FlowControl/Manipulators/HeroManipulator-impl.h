@@ -103,5 +103,20 @@ namespace FlowControl
 
 			return new_card_ref;
 		}
+
+		inline void PlayerManipulator::ReplaceHeroPower(Cards::CardId id)
+		{
+			// This interface is not located in HeroManipulator because:
+			//    The hero-power-ref is recorded in Board, and its automatically maintained by state_.GetZoneChanger()
+
+			state::CardRef old_ref = state_.GetBoard().Get(player_).GetHeroPowerRef();
+			state::CardRef new_ref = BoardManipulator(state_, flow_context_).AddCardById(id, player_);
+
+			assert(state_.GetCard(new_ref).GetRawData().usable == true);
+
+			state_.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZonePlay>
+				(Manipulate(state_, flow_context_), old_ref)
+				.ReplaceBy(new_ref);
+		}
 	}
 }

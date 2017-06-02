@@ -547,7 +547,7 @@ void test4()
 		FlowControl::FlowController controller(state, flow_context);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		state.GetBoard().GetFirst().GetResource().Refill();
@@ -687,7 +687,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -716,7 +716,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -732,7 +732,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -808,7 +808,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -824,7 +824,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 
 		parameter_getter.next_specified_target_count = 3;
@@ -870,7 +870,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -886,7 +886,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 
 		parameter_getter.next_specified_target_count = 3;
@@ -902,7 +902,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -918,7 +918,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 
 		state.GetBoard().GetFirst().GetResource().Refill();
@@ -949,7 +949,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 		parameter_getter.next_specified_target_count = 4;
 		parameter_getter.next_specified_target_idx = 2;
@@ -965,7 +965,7 @@ void test4()
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 		parameter_getter.next_specified_target_count = 4;
 		parameter_getter.next_specified_target_idx = 2;
@@ -1938,7 +1938,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 3;
@@ -1984,7 +1984,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::Second())
+			.Player(state::PlayerIdentifier::Second())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 		parameter_getter.next_specified_target_count = 2;
 		parameter_getter.next_specified_target_idx = 1;
@@ -2539,7 +2539,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		state.GetBoard().GetFirst().GetResource().Refill();
@@ -2609,7 +2609,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		state.GetBoard().GetFirst().GetResource().Refill();
@@ -2747,7 +2747,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::First())
+			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
 		parameter_getter.next_specified_target_count = 2;
@@ -2848,7 +2848,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		FlowControl::Manipulate(state, flow_context)
-			.HeroPower(state::PlayerIdentifier::Second())
+			.Player(state::PlayerIdentifier::Second())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 		parameter_getter.next_specified_target_count = 8;
 		parameter_getter.next_specified_target_idx = 3;

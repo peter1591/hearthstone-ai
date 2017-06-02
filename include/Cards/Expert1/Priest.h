@@ -93,10 +93,10 @@ namespace Cards
 				state::CardRef exist_heropower_ref = context.manipulate_.Board().Player(owner).GetHeroPowerRef();
 				Cards::CardId exist_heropower_id = context.manipulate_.GetCard(exist_heropower_ref).GetCardId();
 				if (exist_heropower_id == Cards::ID_EX1_625t) {
-					context.manipulate_.HeroPower(owner).ReplaceHeroPower(Cards::ID_EX1_625t2);
+					context.manipulate_.Player(owner).ReplaceHeroPower(Cards::ID_EX1_625t2);
 				}
 				else {
-					context.manipulate_.HeroPower(owner).ReplaceHeroPower(Cards::ID_EX1_625t);
+					context.manipulate_.Player(owner).ReplaceHeroPower(Cards::ID_EX1_625t);
 				}
 			});
 		}

@@ -23,8 +23,6 @@ namespace FlowControl
 				GetCard().SetUsable();
 			}
 
-			void ReplaceHeroPower(Cards::CardId id);
-
 			void IncreaseUsedThisTurn() { GetCard().IncreaseUsedThisTurn(); }
 			void SetUsable() { GetCard().SetUsable(true); }
 			void SetUnusable() { GetCard().SetUsable(false); }
