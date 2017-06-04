@@ -20,7 +20,7 @@ namespace Cards
 		AuraHelper(state::Cards::CardData & card_data)
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext const& context) {
-				context.manipulate_.Aura().Add(
+				context.state_.GetAuraManager().Add(
 					FlowControl::aura::Handler()
 					.SetOwner(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)
@@ -40,7 +40,7 @@ namespace Cards
 		SingleEnchantmentAuraHelper(state::Cards::CardData & card_data)
 		{
 			EmitPolicy::GetRegisterCallback(card_data) += [](state::Cards::ZoneChangedContext const& context) {
-				context.manipulate_.Aura().Add(
+				context.state_.GetAuraManager().Add(
 					FlowControl::aura::Handler()
 					.SetOwner(context.card_ref_)
 					.SetUpdatePolicy(UpdatePolicy)

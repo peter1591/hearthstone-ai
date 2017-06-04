@@ -10,10 +10,10 @@ namespace FlowControl
 		inline void CardManipulator::AfterAddedToPlayZone(state::Events::Manager & event_mgr) {
 			GetCard().SetJustPlayedFlag(true);
 			GetCard().GetRawData().added_to_play_zone(state::Cards::ZoneChangedContext
-				{ Manipulate(state_, flow_context_), event_mgr, card_ref_ });
+				{ state_, card_ref_ });
 		}
 		inline void CardManipulator::AfterAddedToHandZone(state::Events::Manager & event_mgr) {
-			GetCard().GetRawData().added_to_hand_zone(state::Cards::ZoneChangedContext{ Manipulate(state_, flow_context_), event_mgr, card_ref_ });
+			GetCard().GetRawData().added_to_hand_zone(state::Cards::ZoneChangedContext{ state_, card_ref_ });
 		}
 		inline state::Cards::Card & CardManipulator::GetCard()
 		{

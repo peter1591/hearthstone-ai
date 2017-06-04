@@ -4,13 +4,12 @@ namespace FlowControl { class Manipulate; }
 
 namespace state
 {
-	namespace Events { class Manager; }
+	class State;
 
 	namespace Cards
 	{
 		struct ZoneChangedContext {
-			FlowControl::Manipulate const& manipulate_;
-			Events::Manager & event_mgr_;
+			state::State & state_;
 			CardRef card_ref_;
 		};
 

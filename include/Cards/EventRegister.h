@@ -65,7 +65,7 @@ namespace Cards
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
 		struct AddEventHelper<LifeTime, NonCategorized_SelfInLambdaCapture, EventType, EventHandler, EventHandlerArg> {
 			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext const& context) {
-				context.event_mgr_.PushBack<EventType>(
+				context.state_.AddEvent<EventType>(
 					[self](auto context) {
 					if (!LifeTime::StillValid(context.manipulate_.Board().GetCard(self))) return false;
 					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, context);
@@ -75,7 +75,7 @@ namespace Cards
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
 		struct AddEventHelper<LifeTime, CateogrizedOnSelf, EventType, EventHandler, EventHandlerArg> {
 			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext const& context) {
-				context.event_mgr_.PushBack<EventType>(
+				context.state_.AddEvent<EventType>(
 					self,
 					[](state::CardRef self, auto context) {
 					if (!LifeTime::StillValid(context.manipulate_.Board().GetCard(self))) return false;
@@ -99,10 +99,10 @@ namespace Cards
 	struct OneEventRegisterHelper {
 		struct Invoker {
 			template <typename Context>
-			static void Invoke(Context context) {
+			static void Invoke(Context&& context) {
 				state::CardRef self = context.card_ref_;
 				detail::AddEventHelper<LifeTime, SelfPolicy, EventType, EventHandler, EventHandlerArg>
-					::AddEvent(self, std::move(context));
+					::AddEvent(self, std::forward<Context>(context));
 			}
 		};
 		struct NullInvoker {
@@ -128,14 +128,14 @@ namespace Cards
 	struct CombineEvents {
 		struct AddedToPlayZone {
 			template <typename Context>
-			static void Invoke(Context context) {
+			static void Invoke(Context&& context) {
 				FirstEvent::AddedToPlayZone::Invoke(std::forward<Context>(context));
 				SecondEvent::AddedToPlayZone::Invoke(std::forward<Context>(context));
 			}
 		};
 		struct AddedToHandZone {
 			template <typename Context>
-			static void Invoke(Context context) {
+			static void Invoke(Context&& context) {
 				FirstEvent::AddedToHandZone::Invoke(std::forward<Context>(context));
 				SecondEvent::AddedToHandZone::Invoke(std::forward<Context>(context));
 			}
@@ -164,10 +164,8 @@ namespace Cards
 	struct EventsRegisterHelper<Event1, Event2> {
 		static void Process(state::Cards::CardData & card_data) {
 			using CombinedEvent = CombineEvents<Event1, Event2>;
-			card_data.added_to_play_zone += (state::Cards::AddedToPlayZoneCallback*)
-				(CombinedEvent::AddedToPlayZone::Invoke);
-			card_data.added_to_hand_zone += (state::Cards::AddedToHandZoneCallback*)
-				(CombinedEvent::AddedToHandZone::Invoke);
+			card_data.added_to_play_zone += (CombinedEvent::AddedToPlayZone::Invoke);
+			card_data.added_to_hand_zone += (CombinedEvent::AddedToHandZone::Invoke);
 		}
 	};
 
