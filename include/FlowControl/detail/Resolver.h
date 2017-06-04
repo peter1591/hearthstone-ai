@@ -113,7 +113,7 @@ namespace FlowControl
 
 				for (auto ref : deaths_) {
 					state::Cards::Card & card = state_.GetMutableCard(ref);
-					state_.GetZoneChanger(Manipulate(state_, flow_context_), ref)
+					state_.GetZoneChanger(ref)
 						.ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 				}
 

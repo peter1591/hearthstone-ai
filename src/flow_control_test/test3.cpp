@@ -93,7 +93,7 @@ static state::CardRef AddHandCard(Cards::CardId id, FlowControl::FlowContext & f
 	int hand_count = (int)state.GetBoard().Get(player).hand_.Size();
 
 	auto ref = state.AddCard(CreateHandCard(id, state, player));
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state, flow_context), ref)
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZoneHand>(player);
 
 	assert(state.GetCardsManager().Get(ref).GetCardId() == id);
@@ -131,7 +131,7 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 
 	state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state, flow_context), ref)
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 
 
@@ -139,7 +139,7 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 	assert(hero_power.card_type == state::kCardTypeHeroPower);
 	hero_power.zone = state::kCardZoneNewlyCreated;
 	ref = state.AddCard(state::Cards::Card(hero_power));
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state, flow_context), ref)
+	state.GetZoneChanger<state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 }
 

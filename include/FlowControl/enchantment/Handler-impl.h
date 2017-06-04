@@ -134,7 +134,7 @@ namespace FlowControl
 			auto manipulator = Manipulators::OnBoardMinionManipulator(state, flow_context, card_ref);
 			if (new_states.player != current_states.player) {
 				if (state.GetBoard().Get(new_states.player).minions_.Full()) {
-					state.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(Manipulate(state, flow_context), card_ref)
+					state.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(card_ref)
 						.ChangeTo<state::kCardZoneGraveyard>(current_states.player);
 					assert(GetCard().GetZone() == state::kCardZoneGraveyard);
 					assert(GetCard().GetPlayerIdentifier() == current_states.player);
@@ -142,7 +142,7 @@ namespace FlowControl
 				else {
 					int location = (int)state.GetBoard().Get(new_states.player).minions_.Size();
 
-					state.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(Manipulate(state, flow_context), card_ref)
+					state.GetZoneChanger<state::kCardTypeMinion, state::kCardZonePlay>(card_ref)
 						.ChangeTo<state::kCardZonePlay>(new_states.player, location);
 					assert(GetCard().GetZone() == state::kCardZonePlay);
 					assert(GetCard().GetPlayerIdentifier() == new_states.player);

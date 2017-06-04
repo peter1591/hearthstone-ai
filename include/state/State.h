@@ -101,34 +101,34 @@ namespace state
 		}
 
 	public: // zone changer
-		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(FlowControl::Manipulate const& manipulate, CardRef ref) {
-			return GetZoneChanger<ZoneChangerWithUnknownZoneUnknownType>(manipulate, ref);
+		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(CardRef ref) {
+			return GetZoneChanger<ZoneChangerWithUnknownZoneUnknownType>(ref);
 		}
 
 		template <state::CardZone KnownZone>
-		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(FlowControl::Manipulate const& manipulate,  CardRef ref) {
-			return GetZoneChanger<ZoneChangerWithUnknownType<KnownZone>>(manipulate, ref);
+		ZoneChangerWithUnknownType<KnownZone> GetZoneChanger(CardRef ref) {
+			return GetZoneChanger<ZoneChangerWithUnknownType<KnownZone>>(ref);
 		}
 
 		template <state::CardType KnownType>
-		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(FlowControl::Manipulate const& manipulate,  CardRef ref) {
-			return GetZoneChanger<ZoneChangerWithUnknownZone<KnownType>>(manipulate, ref);
+		ZoneChangerWithUnknownZone<KnownType> GetZoneChanger(CardRef ref) {
+			return GetZoneChanger<ZoneChangerWithUnknownZone<KnownType>>(ref);
 		}
 
 		template <state::CardType KnownType, state::CardZone KnownZone>
-		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowControl::Manipulate const& manipulate,  CardRef ref) {
-			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(manipulate, ref);
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(CardRef ref) {
+			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(ref);
 		}
 
 		template <state::CardZone KnownZone, state::CardType KnownType>
-		ZoneChanger<KnownZone, KnownType> GetZoneChanger(FlowControl::Manipulate const& manipulate,  CardRef ref) {
-			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(manipulate, ref);
+		ZoneChanger<KnownZone, KnownType> GetZoneChanger(CardRef ref) {
+			return GetZoneChanger<ZoneChanger<KnownZone, KnownType>>(ref);
 		}
 
 	private:
 		template <typename ZoneChangerType>
-		ZoneChangerType GetZoneChanger(FlowControl::Manipulate const& manipulate, CardRef ref) {
-			return ZoneChangerType(*this, board_, cards_mgr_, manipulate, ref);
+		ZoneChangerType GetZoneChanger(CardRef ref) {
+			return ZoneChangerType(*this, board_, cards_mgr_, ref);
 		}
 
 	private:

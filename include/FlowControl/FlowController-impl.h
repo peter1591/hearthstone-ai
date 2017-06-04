@@ -111,7 +111,7 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::CheckPlayCardCountered>(
 			state::Events::EventTypes::CheckPlayCardCountered::Context{ Manipulate(state_, flow_context_), card_ref, &countered });
 		if (countered) {
-			state_.GetZoneChanger<state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+			state_.GetZoneChanger<state::kCardZoneHand>(card_ref)
 				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 			return true;
 		}
@@ -175,7 +175,7 @@ namespace FlowControl
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
 
-		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
 
 		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
@@ -250,12 +250,12 @@ namespace FlowControl
 		assert(!new_card_ref.IsValid()); // spell cannot be transformed
 
 		if (is_secret) {
-			state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+			state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(card_ref)
 				.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId());
 			state_.GetCurrentPlayer().secrets_.Add(state_.GetCard(card_ref).GetCardId(), card_ref);
 		}
 		else {
-			state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(Manipulate(state_, flow_context_), card_ref)
+			state_.GetZoneChanger<state::kCardTypeSpell, state::kCardZoneHand>(card_ref)
 				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 		}
 

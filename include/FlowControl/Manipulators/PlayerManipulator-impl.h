@@ -41,7 +41,7 @@ namespace FlowControl
 			if (player.hand_.Full()) return state::CardRef();
 
 			auto ref = BoardManipulator(state_, flow_context_).AddCardById(card_id, player_);
-			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(FlowControl::Manipulate(state_, flow_context_), ref)
+			state_.GetZoneChanger<state::kCardZoneNewlyCreated>(ref)
 				.ChangeTo<state::kCardZoneHand>(player_);
 			return ref;
 		}
@@ -52,7 +52,7 @@ namespace FlowControl
 			assert(state_.GetCard(card_ref).GetZone() == state::kCardZoneHand);
 
 			// TODO: fire event: DiscardHandCard
-			state_.GetZoneChanger<state::kCardZoneHand>(FlowControl::Manipulate(state_, flow_context_), card_ref)
+			state_.GetZoneChanger<state::kCardZoneHand>(card_ref)
 				.ChangeTo<state::kCardZoneSetASide>(player_);
 		}
 
@@ -67,7 +67,7 @@ namespace FlowControl
 		{
 			DestroyWeapon();
 
-			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(Manipulate(state_, flow_context_), weapon_ref)
+			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(weapon_ref)
 				.ChangeTo<state::kCardZonePlay>(player_);
 		}
 
@@ -80,7 +80,7 @@ namespace FlowControl
 				flow_context_.SetDestroyedWeapon(weapon_ref);
 			}
 
-			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(Manipulate(state_, flow_context_), weapon_ref)
+			state_.GetZoneChanger<state::kCardTypeWeapon, state::kCardZonePlay>(weapon_ref)
 				.ChangeTo<state::kCardZoneGraveyard>(state_.GetCurrentPlayerId());
 
 			assert(state_.GetBoard().Get(player_).GetWeaponRef().IsValid() == false);
@@ -96,8 +96,7 @@ namespace FlowControl
 
 			assert(state_.GetCard(new_ref).GetRawData().usable == true);
 
-			state_.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZonePlay>
-				(Manipulate(state_, flow_context_), old_ref)
+			state_.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZonePlay>(old_ref)
 				.ReplaceBy(new_ref);
 		}
 	}

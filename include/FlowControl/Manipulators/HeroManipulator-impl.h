@@ -20,7 +20,7 @@ namespace FlowControl
 			assert(GetCard().GetZone() == state::kCardZonePlay);
 
 			state::CardRef new_card_ref = BoardManipulator(state_, flow_context_).AddCardById(id, GetCard().GetPlayerIdentifier());
-			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeHero>(Manipulate(state_, flow_context_), card_ref_)
+			state_.GetZoneChanger<state::kCardZonePlay, state::kCardTypeHero>(card_ref_)
 				.ReplaceBy(new_card_ref);
 
 			return new_card_ref;

@@ -50,7 +50,7 @@ namespace FlowControl
 			assert(player.AssertCheck());
 			assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeMinion);
 
-			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(Manipulate(state_, flow_context_), card_ref)
+			state_.GetZoneChanger<state::kCardZoneNewlyCreated, state::kCardTypeMinion>(card_ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);
 
 			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
