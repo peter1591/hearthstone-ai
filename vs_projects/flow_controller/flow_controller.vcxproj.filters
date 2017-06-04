@@ -93,12 +93,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="test2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
@@ -108,13 +102,19 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
-    <ClCompile Include="test3.cpp">
+    <ClCompile Include="..\..\src\flow_control_test\CardDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test4.cpp">
+    <ClCompile Include="..\..\src\flow_control_test\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CardDispatcher.cpp">
+    <ClCompile Include="..\..\src\flow_control_test\test2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flow_control_test\test3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\flow_control_test\test4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

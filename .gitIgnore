@@ -238,3 +238,4 @@ _Pvt_Extensions
 .fake/
 /pilot_run/beautified.json
 /pilot_run/data.json
+/vs_projects/flow_controller/cards.json

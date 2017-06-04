@@ -1,3 +1,5 @@
+SET(OUTPUT_DIR "" CACHE STRING "output directory")
+
 project (hello-cmake)
 
 cmake_minimum_required(VERSION 3.7)
@@ -14,7 +16,7 @@ include_directories(
 
 configure_file(
 	../../include/Cards/cards.json
-	cards.json
+	./${OUTPUT_DIR}/cards.json
 	COPYONLY
 )
 
