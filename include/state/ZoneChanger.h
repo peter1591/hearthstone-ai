@@ -26,10 +26,10 @@ namespace state {
 			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
 
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, card_ref_);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, card_ref_);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(state_, card_ref_);
 		}
 
 		template <CardZone ChangeToZone,
@@ -39,10 +39,10 @@ namespace state {
 			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
 
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, card_ref_);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
 			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, card_ref_, pos);
-			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
+			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(state_, card_ref_);
 		}
 
 		void ReplaceBy(CardRef new_ref)
@@ -58,8 +58,8 @@ namespace state {
 			cards_mgr_.GetMutable(new_ref).SetZonePos()(cards_mgr_.Get(card_ref_).GetZonePosition());
 			cards_mgr_.GetMutable(card_ref_).SetZone().Zone(kCardZoneSetASide);
 
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
-			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(manipulate_, state_.event_mgr_, new_ref);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(state_, card_ref_);
+			detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Added(state_, new_ref);
 		}
 
 	private:

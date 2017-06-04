@@ -1,5 +1,6 @@
 #pragma once
 
+#include "state/State.h"
 #include "state/detail/InvokeCallback.h"
 #include "FlowControl/Manipulators/CardManipulator.h"
 
@@ -7,15 +8,20 @@ namespace state {
 	namespace detail {
 		template <CardType CardType>
 		inline void InvokeCallback<CardType, kCardZonePlay>::Added(
-			FlowControl::Manipulate const& manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref)
+			state::State & state, state::CardRef card_ref)
 		{
-			manipulate.Card(card_ref).AfterAddedToPlayZone(event_mgr);
+			state.GetMutableCard(card_ref).SetJustPlayedFlag(true);
+			state.GetMutableCard(card_ref).GetRawData()
+				.added_to_play_zone(state::Cards::ZoneChangedContext
+				{ state, card_ref});
 		}
+
 		template <CardType CardType>
 		inline void InvokeCallback<CardType, kCardZoneHand>::Added(
-			FlowControl::Manipulate const& manipulate, state::Events::Manager & event_mgr, state::CardRef card_ref)
+			state::State & state, state::CardRef card_ref)
 		{
-			manipulate.Card(card_ref).AfterAddedToHandZone(event_mgr);
+			state.GetMutableCard(card_ref).GetRawData()
+				.added_to_hand_zone(state::Cards::ZoneChangedContext{state, card_ref});
 		}
 	}
 }

@@ -69,10 +69,6 @@ namespace FlowControl
 
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_); }
 
-		public:
-			void AfterAddedToPlayZone(state::Events::Manager & event_mgr);
-			void AfterAddedToHandZone(state::Events::Manager & event_mgr);
-
 		protected:
 			state::Cards::Card & GetCard();
 
