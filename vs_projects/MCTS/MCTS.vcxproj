@@ -155,10 +155,12 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp" />
     <ClCompile Include="..\..\src\MCTS\test.cpp" />
+    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\MCTS\Board.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />
+    <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

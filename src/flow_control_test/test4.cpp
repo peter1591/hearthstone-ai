@@ -132,7 +132,7 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 
 	state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(ref)
+	state.GetZoneChanger<state::kCardTypeHero, state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 
 
@@ -140,7 +140,7 @@ static void MakeHero(state::State & state, FlowControl::FlowContext & flow_conte
 	assert(hero_power.card_type == state::kCardTypeHeroPower);
 	hero_power.zone = state::kCardZoneNewlyCreated;
 	ref = state.AddCard(state::Cards::Card(hero_power));
-	state.GetZoneChanger<state::kCardZoneNewlyCreated>(ref)
+	state.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 }
 

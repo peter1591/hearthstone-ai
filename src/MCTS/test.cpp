@@ -1,5 +1,6 @@
 #include "FlowControl/FlowController-impl.h"
 
+#include "TestStateBuilder.h"
 #include "MCTS/Board.h"
 
 class ActionParameterGetter : public FlowControl::IActionParameterGetter
@@ -70,12 +71,12 @@ void Initialize()
 
 int main(void)
 {
-	state::State state;
 	ActionParameterGetter action_parameter;
 	RandomGenerator random;
 
 	Initialize();
 
+	state::State state = TestStateBuilder().GetState();
 	mcts::Board board(state, random, action_parameter);
 
 	board.EndTurn();

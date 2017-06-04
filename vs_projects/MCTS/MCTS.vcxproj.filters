@@ -33,6 +33,9 @@
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\MCTS\Board.h">
@@ -40,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\MCTS.h">
       <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
