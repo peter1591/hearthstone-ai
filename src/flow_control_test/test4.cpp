@@ -197,8 +197,6 @@ void test4()
 	state::State state;
 	FlowControl::FlowContext flow_context(random, parameter_getter);
 
-	FlowControl::FlowController controller(state, flow_context);
-
 	MakeHero(state, flow_context, state::PlayerIdentifier::First());
 	MakeHand(state, flow_context, state::PlayerIdentifier::First());
 
