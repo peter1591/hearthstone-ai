@@ -25,10 +25,10 @@ namespace state {
 		{
 			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
 
-			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, card_ref_);
 			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
-			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, card_ref_);
 			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
 		}
 
@@ -38,10 +38,10 @@ namespace state {
 		{
 			constexpr bool zone_changed = (ChangingCardZone != ChangeToZone);
 
-			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, manipulate_, card_ref_);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangingCardZone>::Remove(board_, cards_mgr_, card_ref_);
 			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangingCardZone>::Removed(manipulate_, state_.event_mgr_, card_ref_);
 			cards_mgr_.GetMutable(card_ref_).SetZone()(player_identifier, ChangeToZone);
-			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, manipulate_, card_ref_, pos);
+			detail::PlayerDataStructureMaintainer<ChangingCardType, ChangeToZone>::Add(board_, cards_mgr_, card_ref_, pos);
 			if (zone_changed) detail::InvokeCallback<ChangingCardType, ChangeToZone>::Added(manipulate_, state_.event_mgr_, card_ref_);
 		}
 

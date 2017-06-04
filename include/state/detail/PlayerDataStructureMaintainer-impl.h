@@ -10,7 +10,7 @@ namespace state {
 
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneInvalid>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneNewlyCreated);
@@ -18,7 +18,7 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneInvalid>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneNewlyCreated);
@@ -27,7 +27,7 @@ namespace state {
 
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneNewlyCreated>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate, CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneNewlyCreated);
@@ -35,7 +35,7 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneNewlyCreated>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate, CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr, CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneNewlyCreated);
@@ -44,7 +44,7 @@ namespace state {
 
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneRemoved>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneRemoved);
@@ -52,7 +52,7 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneRemoved>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneRemoved);
@@ -61,7 +61,7 @@ namespace state {
 
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneSetASide>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneSetASide);
@@ -69,7 +69,7 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneSetASide>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneSetASide);
@@ -78,7 +78,7 @@ namespace state {
 
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneGraveyard>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneGraveyard);
@@ -86,7 +86,7 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneGraveyard>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneGraveyard);
@@ -95,7 +95,7 @@ namespace state {
 
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneHand>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneHand);
@@ -104,7 +104,7 @@ namespace state {
 		}
 		template <CardType TargetCardType>
 		inline void PlayerDataStructureMaintainer<TargetCardType, kCardZoneHand>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneHand);
@@ -118,7 +118,7 @@ namespace state {
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeHero, kCardZonePlay>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeHero);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -127,7 +127,7 @@ namespace state {
 			player.SetHeroRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeHero, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeHero);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -144,7 +144,7 @@ namespace state {
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeMinion, kCardZonePlay>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref, int pos)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref, int pos)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeMinion);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -155,7 +155,7 @@ namespace state {
 			});
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeMinion, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeMinion);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -176,7 +176,7 @@ namespace state {
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeWeapon, kCardZonePlay>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeWeapon);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -184,7 +184,7 @@ namespace state {
 			player.SetWeaponRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeWeapon, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeWeapon);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -193,14 +193,14 @@ namespace state {
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeSpell, kCardZonePlay>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeSpell);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
 			// do nothing
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeSpell, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeSpell);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -208,7 +208,7 @@ namespace state {
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeHeroPower, kCardZonePlay>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeHeroPower);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -218,7 +218,7 @@ namespace state {
 			player.SetHeroPowerRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeHeroPower, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeHeroPower);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
@@ -235,14 +235,14 @@ namespace state {
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeEnchantment, kCardZonePlay>::
-			Add(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Add(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeEnchantment);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
 			// do nothing
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeEnchantment, kCardZonePlay>::
-			Remove(board::Board & board, Cards::Manager & cards_mgr, FlowControl::Manipulate const& manipulate,CardRef card_ref)
+			Remove(board::Board & board, Cards::Manager & cards_mgr,CardRef card_ref)
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeEnchantment);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
