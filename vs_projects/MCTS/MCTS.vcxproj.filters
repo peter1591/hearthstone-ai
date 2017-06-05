@@ -16,6 +16,9 @@
     <Filter Include="Header Files\MCTS">
       <UniqueIdentifier>{05520c9c-440b-4fb9-9b33-55a880279bdf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MCTS\detail">
+      <UniqueIdentifier>{b98b6334-272c-4321-8d82-8a745c6d816a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
@@ -46,6 +49,27 @@
     </ClInclude>
     <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\ActionParameterGetter.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\RandomGenerator.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\MCTS-impl.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\BoardCloner.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\Tree.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\Board-impl.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h">
+      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

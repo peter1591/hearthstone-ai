@@ -158,8 +158,15 @@
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\MCTS\ActionParameterGetter.h" />
+    <ClInclude Include="..\..\include\MCTS\Board-impl.h" />
     <ClInclude Include="..\..\include\MCTS\Board.h" />
+    <ClInclude Include="..\..\include\MCTS\BoardCloner.h" />
+    <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h" />
+    <ClInclude Include="..\..\include\MCTS\MCTS-impl.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />
+    <ClInclude Include="..\..\include\MCTS\RandomGenerator.h" />
+    <ClInclude Include="..\..\include\MCTS\Tree.h" />
     <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "MCTS/Board.h"
+#include "MCTS/Tree.h"
+
+#include "MCTS/detail/EpisodeState.h"
 
 namespace mcts
 {
@@ -8,35 +10,22 @@ namespace mcts
 	{
 	public:
 		template <typename StartBoardGetter>
-		void Iterate(StartBoardGetter&& start_board_getter) {
-			StartEpisode(std::forward<StartBoardGetter>(start_board_getter));
-			Select();
-			Expand();
-			Simulate();
-			BackPropagate();
-		}
+		void Iterate(StartBoardGetter&& start_board_getter);
+
+		int UserChooseAction(int exclusive_max);
+		int RandomChooseAction(int exclusive_max);
 
 	private:
-		template <typename StartBoardGetter>
-		void StartEpisode(StartBoardGetter start_board_getter) {
-			board_ = start_board_getter.GetBoard();
-		}
+		int ActionCallback(int choices, bool random);
 
-		void Select() {
+		int SelectAction(int choices, bool random);
+		int SelectActionByRandom(int choices);
+		int SelectActionByChoice(int choices);
 
-		}
-
-		void Expand() {
-
-		}
-
-		void Simluate() {
-
-		}
-
-		void BackPropagate();
+		int Simulate(int choices, bool random);
 
 	private:
-		Board board_;
+		Tree tree_;
+		detail::EpisodeState episode_state_;
 	};
 }
