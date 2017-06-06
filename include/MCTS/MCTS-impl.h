@@ -54,8 +54,14 @@ namespace mcts
 					episode_state_ = resume_state;
 					choice_white_list_.ReportInvalidChoice();
 					choice_white_list_.Restart();
+					statistic_.ApplyActionFailed();
 					continue;
 				}
+
+				if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
+					statistic_.ApplyActionSucceeded();
+				}
+
 				break;
 			}
 
@@ -72,6 +78,8 @@ namespace mcts
 		{
 			traversed_node->ReportResult(win);
 		});
+
+		statistic_.FinishedOneEpisode();
 	}
 
 	// TODO: add action type for simulation

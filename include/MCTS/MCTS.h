@@ -4,6 +4,7 @@
 
 #include "MCTS/detail/EpisodeState.h"
 #include "MCTS/detail/ChoiceWhiteList.h"
+#include "MCTS/detail/Statistic.h"
 
 namespace mcts
 {
@@ -15,6 +16,10 @@ namespace mcts
 
 		int UserChooseAction(int exclusive_max);
 		int RandomChooseAction(int exclusive_max);
+
+		void PrintStatistic() {
+			statistic_.PrintMessage();
+		}
 
 	private:
 		int ActionCallback(int choices, bool random);
@@ -35,6 +40,7 @@ namespace mcts
 		Tree tree_;
 		detail::EpisodeState episode_state_;
 		detail::ChoiceWhiteList choice_white_list_;
+		detail::Statistic statistic_;
 
 		bool flag_switch_to_simulation_;
 

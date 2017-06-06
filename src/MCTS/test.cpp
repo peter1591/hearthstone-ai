@@ -86,8 +86,8 @@ int main(void)
 	};
 
 	for (int i = 0; i < 100000000; ++i) {
-		if (i % 1 == 0) {
-			std::cout << "Doing " << i << "th iteration." << std::endl;
+		if (i % 1000 == 0) {
+			mcts1.PrintStatistic();
 		}
 		mcts1.Iterate(start_board_getter);
 	}
