@@ -24,7 +24,10 @@ namespace mcts
 			actions_[idx++] = &Board::Attack;
 		}
 		
-		actions_[idx++] = &Board::HeroPower;
+		if (valid_action_getter.HeroPowerUsable()) {
+			actions_[idx++] = &Board::HeroPower;
+		}
+
 		actions_[idx++] = &Board::EndTurn;
 
 		return idx;

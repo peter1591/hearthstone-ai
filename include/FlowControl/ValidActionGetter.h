@@ -53,6 +53,13 @@ namespace FlowControl
 
 			return defenders;
 		}
+
+		bool HeroPowerUsable() {
+			state::CardRef hero_power_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
+			if (!hero_power_ref.IsValid()) return false;
+			if (!state_.GetCard(hero_power_ref).GetRawData().usable) return false;
+			return true;
+		}
 		
 	private:
 		state::State const& state_;
