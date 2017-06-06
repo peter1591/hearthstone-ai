@@ -13,6 +13,7 @@ namespace mcts
 
 		if (action == kActionPlayCard) {
 			int hand_count = (int)state_.GetCurrentPlayer().hand_.Size();
+			if (hand_count == 0) return Result::kResultInvalid;
 			int hand_idx = action_parameters.GetNumber(hand_count);
 			return FlowControl::FlowController(state_, flow_context).PlayCard(hand_idx);
 		}

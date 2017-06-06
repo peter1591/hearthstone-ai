@@ -1,5 +1,7 @@
 #include "FlowControl/FlowController-impl.h"
 
+#include <iostream>
+
 #include "TestStateBuilder.h"
 #include "MCTS/MCTS.h"
 #include "MCTS/MCTS-impl.h"
@@ -83,7 +85,12 @@ int main(void)
 		return TestStateBuilder().GetState();
 	};
 
-	mcts1.Iterate(start_board_getter);
+	for (int i = 0; i < 100000000; ++i) {
+		if (i % 1000 == 0) {
+			std::cout << "Doing " << i << "th iteration." << std::endl;
+		}
+		mcts1.Iterate(start_board_getter);
+	}
 
 	return 0;
 }

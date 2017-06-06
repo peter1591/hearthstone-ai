@@ -24,8 +24,40 @@ namespace mcts
 
 		int Simulate(int choices, bool random);
 
+		void SwitchToSimulationMode() {
+			// We use a flag here, since we cannot switch to simulation mode
+			// in sub-actions.
+			flag_switch_to_simulation_ = true;
+		}
+
 	private:
 		Tree tree_;
 		detail::EpisodeState episode_state_;
+
+		bool flag_switch_to_simulation_;
+
+		class LastNodeInfo {
+		public:
+			LastNodeInfo() : parent_(nullptr), action_(0), child_(nullptr) {}
+			void Set(TreeNode* parent, TreeNode* child, int action) {
+				parent_ = parent;
+				child_ = child;
+				action_ = action;
+			}
+
+			TreeNode* GetParent() const { return parent_; }
+			TreeNode* GetChild() const { return child_; }
+			int GetAction() const { return action_; }
+
+			void RemoveNode() {
+				assert(parent_->GetChild(action_) == child_);
+				parent_->RemoveChild(action_);
+			}
+
+		private:
+			TreeNode* parent_;
+			int action_;
+			TreeNode* child_;
+		} last_node_;
 	};
 }
