@@ -26,6 +26,34 @@ namespace FlowControl
 			return playable_cards;
 		}
 
+		std::vector<state::CardRef> GetAttackers() {
+			std::vector<state::CardRef> attackers;
+			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId());
+
+			state::CardRef hero_ref = player.GetHeroRef();
+			if (state_.GetCard(hero_ref).GetAttack() > 0) attackers.push_back(hero_ref);
+
+			player.minions_.ForEach([&](state::CardRef card_ref) {
+				if (state_.GetCard(card_ref).GetAttack() > 0) attackers.push_back(card_ref);
+			});
+			
+			return attackers;
+		}
+
+		std::vector<state::CardRef> GetDefenders() {
+			std::vector<state::CardRef> defenders;
+			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
+
+			state::CardRef hero_ref = player.GetHeroRef();
+			defenders.push_back(hero_ref);
+
+			player.minions_.ForEach([&](state::CardRef card_ref) {
+				defenders.push_back(card_ref);
+			});
+
+			return defenders;
+		}
+		
 	private:
 		state::State const& state_;
 	};

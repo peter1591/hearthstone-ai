@@ -17,8 +17,13 @@ namespace mcts
 		if (!playable_cards_.empty()) {
 			actions_[idx++] = &Board::PlayCard;
 		}
+
+		attackers_ = valid_action_getter.GetAttackers();
+		defenders_ = valid_action_getter.GetDefenders();
+		if (!attackers_.empty() && !defenders_.empty()) {
+			actions_[idx++] = &Board::Attack;
+		}
 		
-		actions_[idx++] = &Board::Attack;
 		actions_[idx++] = &Board::HeroPower;
 		actions_[idx++] = &Board::EndTurn;
 
@@ -41,11 +46,12 @@ namespace mcts
 	inline Result Board::Attack(RandomGenerator & random, ActionParameterGetter & action_parameters)
 	{
 		FlowControl::FlowContext flow_context(random, action_parameters);
-		// TODO: only find attackable characters
-		state::CardRef attacker = UserChooseSideCharacter(state_.GetCurrentPlayerId(), action_parameters);
+		int idx = action_parameters.GetNumber((int)attackers_.size());
+		state::CardRef attacker = attackers_[idx];
 
-		// TODO: only find defendable characters
-		state::CardRef defender = UserChooseSideCharacter(state_.GetCurrentPlayerId().Opposite(), action_parameters);
+		idx = action_parameters.GetNumber((int)defenders_.size());
+		state::CardRef defender = defenders_[idx];
+		
 		return FlowControl::FlowController(state_, flow_context).Attack(attacker, defender);
 	}
 
