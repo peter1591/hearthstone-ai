@@ -31,6 +31,11 @@ namespace mcts
 		state::State const& GetState() const { return state_; }
 
 	private:
+		Result PlayCard(RandomGenerator & random, ActionParameterGetter & action_parameters);
+		Result Attack(RandomGenerator & random, ActionParameterGetter & action_parameters);
+		Result HeroPower(RandomGenerator & random, ActionParameterGetter & action_parameters);
+		Result EndTurn(RandomGenerator & random, ActionParameterGetter & action_parameters);
+
 		state::CardRef UserChooseSideCharacter(state::PlayerIdentifier player_id, ActionParameterGetter & action_parameters);
 
 	private:
