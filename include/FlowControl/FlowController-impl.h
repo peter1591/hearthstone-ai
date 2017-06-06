@@ -41,6 +41,20 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
+	inline std::vector<int> FlowController::GetPlayableCards()
+	{
+		std::vector<int> playable_cards;
+		int resource = state_.GetCurrentPlayer().GetResource().GetCurrent();
+		auto const& hand = state_.GetCurrentPlayer().hand_;
+		for (int i = 0; i < state::board::Hand::max_cards_; ++i) {
+			state::CardRef card_ref = hand.Get(i);
+			if (state_.GetCard(card_ref).GetCost() > resource) continue;
+
+			playable_cards.push_back(i);
+		}
+		return playable_cards;
+	}
+
 	inline Result FlowController::Resolve()
 	{
 		detail::Resolver(state_, flow_context_).Resolve();

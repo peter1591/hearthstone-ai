@@ -26,11 +26,12 @@ namespace mcts
 		Board() {}
 		Board(state::State const& state) : state_(state) {}
 
-		int GetActionsCount() const { return kActionMax; }
+		int GetActionsCount();
 		Result ApplyAction(int action, RandomGenerator & random, ActionParameterGetter & action_parameters);
 		state::State const& GetState() const { return state_; }
 
 	private:
+		typedef Result (Board::*CallbackFunc)(RandomGenerator & random, ActionParameterGetter & action_parameters);
 		Result PlayCard(RandomGenerator & random, ActionParameterGetter & action_parameters);
 		Result Attack(RandomGenerator & random, ActionParameterGetter & action_parameters);
 		Result HeroPower(RandomGenerator & random, ActionParameterGetter & action_parameters);
@@ -40,5 +41,7 @@ namespace mcts
 
 	private:
 		state::State state_;
+		
+		std::array<CallbackFunc, kActionMax> actions_;
 	};
 }

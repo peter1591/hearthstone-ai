@@ -91,9 +91,9 @@ state::State TestStateBuilder::GetState()
 	MakeHand(state, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
-	state.GetBoard().GetFirst().GetResource().SetTotal(10);
+	state.GetBoard().GetFirst().GetResource().SetTotal(1);
 	state.GetBoard().GetFirst().GetResource().Refill();
-	state.GetBoard().GetSecond().GetResource().SetTotal(10);
+	state.GetBoard().GetSecond().GetResource().SetTotal(1);
 	state.GetBoard().GetSecond().GetResource().Refill();
 
 	return state;

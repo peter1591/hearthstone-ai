@@ -6,16 +6,19 @@
 
 namespace mcts
 {
+	inline int Board::GetActionsCount()
+	{
+		int idx = 0;
+		actions_[idx++] = &Board::PlayCard;
+		actions_[idx++] = &Board::Attack;
+		actions_[idx++] = &Board::HeroPower;
+		actions_[idx++] = &Board::EndTurn;
+
+		return idx;
+	}
+
 	inline Result Board::ApplyAction(int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
-		assert(action < GetActionsCount());
-
-		if (action == kActionPlayCard) return PlayCard(random, action_parameters);
-		if (action == kActionAttack) return Attack(random, action_parameters);
-		if (action == kActionHeroPower) return HeroPower(random, action_parameters);
-		if (action == kActionEndTurn) return EndTurn(random, action_parameters);
-
-		assert(false);
-		return FlowControl::kResultInvalid;
+		return (this->*(actions_[action]))(random, action_parameters);
 	}
 
 	inline Result Board::PlayCard(RandomGenerator & random, ActionParameterGetter & action_parameters)

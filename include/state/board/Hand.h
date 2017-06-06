@@ -15,6 +15,7 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
+			static constexpr size_t max_cards_ = 10;
 			Hand() : size_(0), change_id_(0) {}
 
 			size_t Size() const { return size_; }
@@ -25,7 +26,7 @@ namespace state
 				return max_cards_ - size_;
 			}
 
-			CardRef Get(size_t idx) { return cards_[idx]; }
+			CardRef Get(size_t idx) const { return cards_[idx]; }
 			int GetChangeId() const { return change_id_; }
 
 			template <typename Functor>
@@ -62,7 +63,6 @@ namespace state
 			}
 
 		private:
-			static constexpr int max_cards_ = 10;
 			std::array<CardRef, max_cards_> cards_;
 			size_t size_;
 			int change_id_;
