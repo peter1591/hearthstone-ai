@@ -40,11 +40,6 @@ namespace FlowControl
 		Result HeroPower();
 		Result EndTurn();
 
-	public: // check valid actions
-		// These functions MUST return valid for all actually available actions
-		// These functions can return valid for ones actually are not valid actions
-		std::vector<int> GetPlayableCards();
-
 	private:
 		Result Resolve();
 

@@ -266,6 +266,7 @@
     <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />
     <ClInclude Include="..\..\include\State\board\Deck.h" />

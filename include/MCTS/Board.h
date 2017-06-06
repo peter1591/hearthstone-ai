@@ -41,6 +41,8 @@ namespace mcts
 
 	private:
 		state::State state_;
+
+		std::vector<int> playable_cards_;
 		
 		std::array<CallbackFunc, kActionMax> actions_;
 	};

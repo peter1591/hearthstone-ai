@@ -3,13 +3,21 @@
 #include "MCTS/Board.h"
 #include "MCTS/ActionParameterGetter.h"
 #include "MCTS/RandomGenerator.h"
+#include "FlowControl/ValidActionGetter.h"
 
 namespace mcts
 {
 	inline int Board::GetActionsCount()
 	{
+		FlowControl::ValidActionGetter valid_action_getter(state_);
+
 		int idx = 0;
-		actions_[idx++] = &Board::PlayCard;
+
+		playable_cards_ = valid_action_getter.GetPlayableCards();
+		if (!playable_cards_.empty()) {
+			actions_[idx++] = &Board::PlayCard;
+		}
+		
 		actions_[idx++] = &Board::Attack;
 		actions_[idx++] = &Board::HeroPower;
 		actions_[idx++] = &Board::EndTurn;
@@ -24,9 +32,9 @@ namespace mcts
 	inline Result Board::PlayCard(RandomGenerator & random, ActionParameterGetter & action_parameters)
 	{
 		FlowControl::FlowContext flow_context(random, action_parameters);
-		int hand_count = (int)state_.GetCurrentPlayer().hand_.Size();
-		if (hand_count == 0) return Result::kResultInvalid;
-		int hand_idx = action_parameters.GetNumber(hand_count);
+		assert(!playable_cards_.empty());
+		int idx = action_parameters.GetNumber((int)playable_cards_.size());
+		int hand_idx = playable_cards_[idx];
 		return FlowControl::FlowController(state_, flow_context).PlayCard(hand_idx);
 	}
 

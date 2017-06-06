@@ -530,5 +530,8 @@
     <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator-impl.h">
       <Filter>Header Files\FlowControl\Manipulators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
