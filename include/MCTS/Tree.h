@@ -8,7 +8,9 @@ namespace mcts
 	class TreeNode
 	{
 	public:
-		TreeNode() : action_count_(0), is_random_(false), next_unexpanded_action_(-1) {}
+		TreeNode() : action_count_(0), is_random_(false), next_unexpanded_action_(-1),
+			wins(0), total(0)
+		{}
 
 		bool NeedFillActions() const { return action_count_ <= 0; }
 		void FillActions(int action_count, bool random) {
@@ -49,11 +51,19 @@ namespace mcts
 			children_.erase(action);
 		}
 
+		void ReportResult(bool win) {
+			if (win) ++wins;
+			++total;
+		}
+
 	private:
 		size_t action_count_;
 		bool is_random_;
 		int next_unexpanded_action_;
 		std::unordered_map<int, std::unique_ptr<TreeNode>> children_;
+
+		int wins;
+		int total;
 	};
 
 	class Tree

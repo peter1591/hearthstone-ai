@@ -162,6 +162,7 @@
     <ClInclude Include="..\..\include\MCTS\Board-impl.h" />
     <ClInclude Include="..\..\include\MCTS\Board.h" />
     <ClInclude Include="..\..\include\MCTS\BoardCloner.h" />
+    <ClInclude Include="..\..\include\MCTS\detail\ChoiceWhiteList.h" />
     <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS-impl.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />

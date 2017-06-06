@@ -19,6 +19,7 @@ namespace mcts
 		RandomGenerator random_generator(*this);
 
 		Result result = Result::kResultInvalid;
+
 		while (true)
 		{
 			if (flag_switch_to_simulation_) {
@@ -26,23 +27,51 @@ namespace mcts
 				flag_switch_to_simulation_ = false;
 			}
 
-			int choices = episode_state_.GetBoard().GetActionsCount();
-			int choice = this->UserChooseAction(choices);
+			detail::EpisodeState resume_state;
 
-			result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
+			if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
+				choice_white_list_.Clear();
+				resume_state = episode_state_;
+			}
 
-			if (result == Result::kResultInvalid) {
-				if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
-					assert(episode_state_.GetTreeNode() == last_node_.GetChild());
-					last_node_.RemoveNode();
+			while (true)
+			{
+				int choices = episode_state_.GetBoard().GetActionsCount();
+				int choice = this->UserChooseAction(choices);
+
+				result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
+
+				if (result == Result::kResultInvalid) {
+					if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
+						// We modify the tree structure, so next time this invalid node will not be chosen
+						assert(episode_state_.GetTreeNode() == last_node_.GetChild());
+						last_node_.RemoveNode();
+						return;
+					}
+
+					assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
+					// Use a white-list-tree to record all viable (sub-)actions
+					episode_state_ = resume_state;
+					choice_white_list_.ReportInvalidChoice();
+					choice_white_list_.Restart();
+					continue;
 				}
-				return;
+				break;
 			}
 
 			if (result != Result::kResultNotDetermined) break;
 		}
 
-		// TODO: do back propagation
+		assert(result != Result::kResultInvalid);
+		bool win = (result == Result::kResultFirstPlayerWin);
+
+		std::for_each(
+			episode_state_.GetTraversedPath().begin(),
+			episode_state_.GetTraversedPath().end(),
+			[&](TreeNode* traversed_node)
+		{
+			traversed_node->ReportResult(win);
+		});
 	}
 
 	// TODO: add action type for simulation
@@ -74,7 +103,10 @@ namespace mcts
 		}
 
 		if (stage == detail::EpisodeState::kStageSimulation) {
-			return Simulate(choices, random);
+			choice_white_list_.FillChoices(choices);
+			int choice = Simulate(choices, random);
+			choice_white_list_.ApplyChoice(choice);
+			return choice;
 		}
 
 		assert(false);
@@ -121,7 +153,14 @@ namespace mcts
 
 	inline int MCTS::Simulate(int choices, bool random)
 	{
+		assert(choice_white_list_.GetWhiteListCount() > 0);
+		int final_choice = 0;
+		choice_white_list_.ForEachWhiteListItem([&](int choice) {
+			final_choice = choice;
+			return false; // early stop
+		});
+		return final_choice;
 		// TODO: use value network to enhance simulation
-		return std::rand() % choices;
+		//return std::rand() % choices;
 	}
 }

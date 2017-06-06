@@ -3,6 +3,7 @@
 #include "MCTS/Tree.h"
 
 #include "MCTS/detail/EpisodeState.h"
+#include "MCTS/detail/ChoiceWhiteList.h"
 
 namespace mcts
 {
@@ -33,6 +34,7 @@ namespace mcts
 	private:
 		Tree tree_;
 		detail::EpisodeState episode_state_;
+		detail::ChoiceWhiteList choice_white_list_;
 
 		bool flag_switch_to_simulation_;
 
