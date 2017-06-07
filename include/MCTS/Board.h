@@ -45,7 +45,6 @@ namespace mcts
 		std::vector<int> playable_cards_;
 
 		std::vector<state::CardRef> attackers_;
-		std::vector<state::CardRef> defenders_;
 		
 		std::array<CallbackFunc, kActionMax> actions_;
 	};

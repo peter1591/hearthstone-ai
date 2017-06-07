@@ -19,8 +19,7 @@ namespace mcts
 		}
 
 		attackers_ = valid_action_getter.GetAttackers();
-		defenders_ = valid_action_getter.GetDefenders();
-		if (!attackers_.empty() && !defenders_.empty()) {
+		if (!attackers_.empty()) {
 			actions_[idx++] = &Board::Attack;
 		}
 		
@@ -52,10 +51,7 @@ namespace mcts
 		int idx = action_parameters.GetNumber((int)attackers_.size());
 		state::CardRef attacker = attackers_[idx];
 
-		idx = action_parameters.GetNumber((int)defenders_.size());
-		state::CardRef defender = defenders_[idx];
-		
-		return FlowControl::FlowController(state_, flow_context).Attack(attacker, defender);
+		return FlowControl::FlowController(state_, flow_context).Attack(attacker);
 	}
 
 	inline Result Board::HeroPower(RandomGenerator & random, ActionParameterGetter & action_parameters)

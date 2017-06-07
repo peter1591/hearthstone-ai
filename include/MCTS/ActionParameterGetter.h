@@ -11,6 +11,13 @@ namespace mcts
 	{
 	public:
 		ActionParameterGetter(MCTS & mcts) : mcts_(mcts) {}
+	
+		state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
+		{
+			assert(!targets.empty());
+			size_t size = targets.size();
+			return targets[GetNumber((int)size)];
+		}
 
 		// Inclusive min & max
 		int GetMinionPutLocation(int min, int max) final
