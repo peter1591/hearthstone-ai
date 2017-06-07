@@ -57,7 +57,7 @@ namespace mcts
 			};
 
 		public:
-			ChoiceWhiteList() : root_(nullptr, -1), node_(&root_)
+			ChoiceWhiteList() : root_(nullptr, -1), node_(&root_), last_choice_(-1)
 			{}
 
 			void Clear() {
@@ -67,17 +67,35 @@ namespace mcts
 
 			void Restart() {
 				node_ = &root_;
+				last_choice_ = -1;
 				pending_actions_.clear();
 			}
 
 			void FillChoices(int choices) {
 				assert(node_);
-				if (pending_actions_.empty()) {
-					assert(choices > 0);
+
+				if (last_choice_ < 0) {
 					node_->SetChoices(choices);
+					return;
+				}
+
+				if (pending_actions_.empty()) {
+					auto it = node_->GetWhiteList().find(last_choice_);
+					assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
+					if (!it->second) {
+						// No tree node exists -> change to pending-action mode
+						first_choice_before_pending_actions_ = last_choice_;
+						pending_actions_.push_back({ choices, -1 });
+					}
+					else {
+						node_ = it->second.get();
+						node_->SetChoices(choices);
+					}
 				}
 				else {
-					pending_actions_.back().choices = choices;
+					assert(pending_actions_.back().choices > 0);
+					pending_actions_.back().choice = last_choice_;
+					pending_actions_.push_back({ choices, -1 });
 				}
 			}
 
@@ -111,23 +129,7 @@ namespace mcts
 
 			void ApplyChoice(int choice) {
 				assert(choice >= 0);
-				if (pending_actions_.empty()) {
-					auto it = node_->GetWhiteList().find(choice);
-					assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
-					if (!it->second) {
-						// No tree node exists -> change to pending-action mode
-						pending_actions_first_choice_ = choice;
-						pending_actions_.push_back({ -1,-1 });
-					}
-					else {
-						node_ = it->second.get();
-					}
-				}
-				else {
-					assert(pending_actions_.back().choices > 0);
-					pending_actions_.back().choice = choice;
-					pending_actions_.push_back({ -1,-1 });
-				}
+				last_choice_ = choice;
 			}
 
 			void ReportInvalidChoice() {
@@ -135,16 +137,16 @@ namespace mcts
 				int blame_action = 0;
 
 				if (pending_actions_.empty()) {
-					blame_node = node_->GetParent();
-					blame_action = node_->GetParentChildEdge();
+					blame_node = node_;
+					blame_action = last_choice_;
 				}
 				else {
 					auto it_end = pending_actions_.end() - 1; // the last one is considered processed
-					blame_action = it_end->choice;
+					blame_action = last_choice_;
 					assert(node_);
 
 					TreeNode* parent = node_;
-					int parent_child_edge = pending_actions_first_choice_;
+					int parent_child_edge = first_choice_before_pending_actions_;
 
 					for (auto it = pending_actions_.begin(); it != it_end; ++it) {
 						auto & node_container = parent->GetWhiteList()[parent_child_edge];
@@ -157,6 +159,8 @@ namespace mcts
 						parent = node_container.get();
 						parent_child_edge = it->choice;
 					}
+
+					blame_node = parent;
 				}
 
 				assert(blame_node);
@@ -181,7 +185,9 @@ namespace mcts
 			TreeNode root_;
 
 			TreeNode* node_;
-			int pending_actions_first_choice_;
+			int last_choice_;
+
+			int first_choice_before_pending_actions_;
 			std::vector<PendingAction> pending_actions_;
 		};
 	}
