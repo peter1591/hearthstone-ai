@@ -176,7 +176,7 @@ namespace mcts
 
 			void AdvanceNode(TreeNode* node)
 			{
-				assert(!node);
+				assert(node);
 				assert(CheckParentChildRelationship(node_, node));
 
 				traversed_nodes_.push_back(node_);

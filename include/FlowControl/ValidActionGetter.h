@@ -16,15 +16,10 @@ namespace FlowControl
 
 		std::vector<int> GetPlayableCards()
 		{
-			// TODO: need to consider the cost_health_instead flag
-
 			std::vector<int> playable_cards;
-			int resource = state_.GetCurrentPlayer().GetResource().GetCurrent();
 			auto const& hand = state_.GetCurrentPlayer().hand_;
 			for (int i = 0; i < hand.Size(); ++i) {
 				state::CardRef card_ref = hand.Get(i);
-				if (state_.GetCard(card_ref).GetCost() > resource) continue;
-
 				playable_cards.push_back(i);
 			}
 			return playable_cards;

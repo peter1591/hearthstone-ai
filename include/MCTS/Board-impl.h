@@ -23,7 +23,7 @@ namespace mcts
 			actions_[idx++] = &Board::Attack;
 		}
 		
-		if (true) { //if (valid_action_getter.HeroPowerUsable()) {
+		if (valid_action_getter.HeroPowerUsable()) {
 			actions_[idx++] = &Board::HeroPower;
 		}
 
