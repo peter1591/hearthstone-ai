@@ -15,6 +15,7 @@ namespace mcts
 		private:
 			class TreeNode {
 			public:
+				// TODO: no need parent if we record the traverse path
 				TreeNode(TreeNode* parent, int parent_child_edge)
 					: parent_(parent), parent_child_edge_(parent_child_edge), choices_(0)
 				{}
@@ -50,9 +51,13 @@ namespace mcts
 				std::unordered_map<int, std::unique_ptr<TreeNode>> white_list_;
 			};
 
+			struct PendingAction {
+				int choices;
+				int choice;
+			};
+
 		public:
-			ChoiceWhiteList() : root_(nullptr, -1), node_(&root_),
-				blame_node_(nullptr), blame_action_(0)
+			ChoiceWhiteList() : root_(nullptr, -1), node_(&root_)
 			{}
 
 			void Clear() {
@@ -62,46 +67,104 @@ namespace mcts
 
 			void Restart() {
 				node_ = &root_;
-				blame_node_ = nullptr;
+				pending_actions_.clear();
 			}
 
 			void FillChoices(int choices) {
 				assert(node_);
-				assert(choices > 0);
-				node_->SetChoices(choices);
+				if (pending_actions_.empty()) {
+					assert(choices > 0);
+					node_->SetChoices(choices);
+				}
+				else {
+					pending_actions_.back().choices = choices;
+				}
 			}
 
 			size_t GetWhiteListCount() const {
 				assert(node_);
-				assert(node_->GetWhiteList().size() > 0);
-				return node_->GetWhiteList().size();
+				if (pending_actions_.empty()) {
+					assert(node_->GetWhiteList().size() > 0);
+					return node_->GetWhiteList().size();
+				}
+				else {
+					return pending_actions_.back().choices;
+				}
 			}
 			template <typename Functor>
 			void ForEachWhiteListItem(Functor&& functor) {
 				assert(node_);
-				for (auto it = node_->GetWhiteList().begin();
-					it != node_->GetWhiteList().end();
-					++it)
-				{
-					if (!functor(it->first)) return;
+				if (pending_actions_.empty()) {
+					for (auto it = node_->GetWhiteList().begin();
+						it != node_->GetWhiteList().end();
+						++it)
+					{
+						if (!functor(it->first)) return;
+					}
+				}
+				else {
+					for (int i = 0; i < pending_actions_.back().choices; ++i) {
+						if (!functor(i)) return;
+					}
 				}
 			}
 
 			void ApplyChoice(int choice) {
 				assert(choice >= 0);
-				blame_node_ = node_;
-				blame_action_ = choice;
-
-				StepNext(choice);
+				if (pending_actions_.empty()) {
+					auto it = node_->GetWhiteList().find(choice);
+					assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
+					if (!it->second) {
+						// No tree node exists -> change to pending-action mode
+						pending_actions_first_choice_ = choice;
+						pending_actions_.push_back({ -1,-1 });
+					}
+					else {
+						node_ = it->second.get();
+					}
+				}
+				else {
+					assert(pending_actions_.back().choices > 0);
+					pending_actions_.back().choice = choice;
+					pending_actions_.push_back({ -1,-1 });
+				}
 			}
 
 			void ReportInvalidChoice() {
-				assert(blame_node_);
-				auto it = blame_node_->GetWhiteList().find(blame_action_);
-				assert(it != blame_node_->GetWhiteList().end()); // one should not choose a black-listed action
-				blame_node_->GetWhiteList().erase(it);
+				TreeNode* blame_node = nullptr;
+				int blame_action = 0;
 
-				TreeNode* check_no_child_node = blame_node_;
+				if (pending_actions_.empty()) {
+					blame_node = node_->GetParent();
+					blame_action = node_->GetParentChildEdge();
+				}
+				else {
+					auto it_end = pending_actions_.end() - 1; // the last one is considered processed
+					blame_action = it_end->choice;
+					assert(node_);
+
+					TreeNode* parent = node_;
+					int parent_child_edge = pending_actions_first_choice_;
+
+					for (auto it = pending_actions_.begin(); it != it_end; ++it) {
+						auto & node_container = parent->GetWhiteList()[parent_child_edge];
+						if (!node_container.get()) {
+							TreeNode* new_node = new TreeNode(parent, parent_child_edge);
+							new_node->SetChoices(it->choices);
+							node_container.reset(new_node);
+						}
+
+						parent = node_container.get();
+						parent_child_edge = it->choice;
+					}
+				}
+
+				assert(blame_node);
+				auto it = blame_node->GetWhiteList().find(blame_action);
+				assert(it != blame_node->GetWhiteList().end()); // one should not choose a black-listed action
+				blame_node->GetWhiteList().erase(it);
+
+				TreeNode* check_no_child_node = blame_node;
 				while (check_no_child_node->GetWhiteList().size() == 0) {
 					TreeNode* parent = check_no_child_node->GetParent();
 					if (!parent) break;
@@ -115,19 +178,11 @@ namespace mcts
 			}
 
 		private:
-			void StepNext(int choice) {
-				assert(choice >= 0);
-				auto it = node_->GetWhiteList().find(choice);
-				assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
-				if (!it->second) it->second.reset(new TreeNode(node_, choice));
-				node_ = it->second.get();
-			}
-
-		private:
 			TreeNode root_;
+
 			TreeNode* node_;
-			TreeNode* blame_node_;
-			int blame_action_;
+			int pending_actions_first_choice_;
+			std::vector<PendingAction> pending_actions_;
 		};
 	}
 }

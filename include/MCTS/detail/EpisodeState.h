@@ -16,7 +16,7 @@ namespace mcts
 			};
 
 		public:
-			EpisodeState() : stage_(kStageSelection), tree_node_(nullptr) {}
+			EpisodeState() : stage_(kStageSelection), tree_node_(nullptr), is_valid_(true) {}
 
 			void Start(Board const& board, TreeNode* tree_node)
 			{
@@ -45,11 +45,15 @@ namespace mcts
 
 			std::vector<TreeNode*> const& GetTraversedPath() const { return path_; }
 
+			void SetInvalid() { is_valid_ = false; }
+			bool IsValid() const { return is_valid_; }
+
 		private:
 			Board board_;
 			Stage stage_;
 			TreeNode* tree_node_;
 			std::vector<TreeNode*> path_;
+			bool is_valid_;
 		};
 	}
 }

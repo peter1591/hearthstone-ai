@@ -40,6 +40,7 @@ namespace mcts
 				int choice = this->UserChooseAction(choices);
 
 				result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
+				if (!episode_state_.IsValid()) result = Result::kResultInvalid;
 
 				if (result == Result::kResultInvalid) {
 					if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
@@ -96,6 +97,8 @@ namespace mcts
 
 	inline int MCTS::ActionCallback(int choices, bool random)
 	{
+		assert(choices > 0);
+
 		auto stage = episode_state_.GetStage();
 
 		if (stage == detail::EpisodeState::kStageSelection) {
@@ -142,6 +145,8 @@ namespace mcts
 			// --> remove it from parent
 			assert(last_node_.GetChild() == episode_state_.GetTreeNode());
 			last_node_.RemoveNode();
+			episode_state_.SetInvalid();
+			return -1;
 		}
 		
 		if (random) return SelectActionByRandom(choices);

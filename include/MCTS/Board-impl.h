@@ -23,7 +23,7 @@ namespace mcts
 			actions_[idx++] = &Board::Attack;
 		}
 		
-		if (valid_action_getter.HeroPowerUsable()) {
+		if (true) { //if (valid_action_getter.HeroPowerUsable()) {
 			actions_[idx++] = &Board::HeroPower;
 		}
 
@@ -48,6 +48,7 @@ namespace mcts
 	inline Result Board::Attack(RandomGenerator & random, ActionParameterGetter & action_parameters)
 	{
 		FlowControl::FlowContext flow_context(random, action_parameters);
+		assert(!attackers_.empty());
 		int idx = action_parameters.GetNumber((int)attackers_.size());
 		state::CardRef attacker = attackers_[idx];
 
