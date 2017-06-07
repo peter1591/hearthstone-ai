@@ -15,9 +15,8 @@ namespace mcts
 		private:
 			class TreeNode {
 			public:
-				// TODO: no need parent if we record the traverse path
-				TreeNode(TreeNode* parent, int parent_child_edge)
-					: parent_(parent), parent_child_edge_(parent_child_edge), choices_(0)
+				TreeNode(int parent_child_edge)
+					: parent_child_edge_(parent_child_edge), choices_(0)
 				{}
 
 				void SetChoices(int choices) {
@@ -35,7 +34,6 @@ namespace mcts
 				auto const& GetWhiteList() const { return white_list_; }
 				auto & GetWhiteList() { return white_list_; }
 
-				TreeNode* GetParent() const { return parent_; }
 				int GetParentChildEdge() const { return parent_child_edge_; }
 
 				void Clear() {
@@ -44,7 +42,6 @@ namespace mcts
 				}
 
 			private:
-				TreeNode* parent_;
 				int parent_child_edge_;
 
 				int choices_; // 0: not set
@@ -57,7 +54,7 @@ namespace mcts
 			};
 
 		public:
-			ChoiceWhiteList() : root_(nullptr, -1), node_(&root_), last_choice_(-1)
+			ChoiceWhiteList() : root_(-1), node_(&root_), last_choice_(-1)
 			{}
 
 			void Clear() {
@@ -141,7 +138,7 @@ namespace mcts
 					for (auto it = pending_actions_.begin(); it != it_end; ++it) {
 						auto & node_container = node_->GetWhiteList()[next_edge];
 						if (!node_container.get()) {
-							TreeNode* new_node = new TreeNode(node_, next_edge);
+							TreeNode* new_node = new TreeNode(next_edge);
 							new_node->SetChoices(it->choices);
 							node_container.reset(new_node);
 						}
@@ -158,8 +155,10 @@ namespace mcts
 
 				TreeNode* check_no_child_node = node_;
 				while (check_no_child_node->GetWhiteList().size() == 0) {
-					TreeNode* parent = check_no_child_node->GetParent();
-					if (!parent) break;
+					if (traversed_nodes_.empty()) break;
+					
+					TreeNode* parent = traversed_nodes_.back();
+					traversed_nodes_.pop_back();
 
 					it = parent->GetWhiteList().find(check_no_child_node->GetParentChildEdge());
 					assert(it != parent->GetWhiteList().end());
@@ -181,7 +180,7 @@ namespace mcts
 					}
 					return false;
 				}());
-				assert(node->GetParent() == node_);
+				traversed_nodes_.push_back(node_);
 				node_ = node;;
 			}
 
@@ -190,6 +189,7 @@ namespace mcts
 
 			TreeNode* node_;
 			int last_choice_;
+			std::vector<TreeNode*> traversed_nodes_;
 
 			int first_choice_before_pending_actions_;
 			std::vector<PendingAction> pending_actions_;
