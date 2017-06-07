@@ -26,15 +26,33 @@ namespace FlowControl
 			return playable_cards;
 		}
 
+		bool IsAttackable(state::CardRef card_ref) {
+			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
+
+			if (card.GetRawData().cant_attack) return false;
+			if (card.GetRawData().freezed) return false;
+
+			if (card.GetCardType() == state::kCardTypeMinion) {
+				if (card.HasCharge() == false && card.GetRawData().just_played) return false;
+			}
+
+			if (card.GetRawData().num_attacks_this_turn >= card.GetMaxAttacksPerTurn()) return false;
+
+			if (state_.GetCardAttackConsiderWeapon(card_ref) <= 0) return false;
+
+			return true;
+		}
+
 		std::vector<state::CardRef> GetAttackers() {
 			std::vector<state::CardRef> attackers;
 			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId());
+			auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
 			state::CardRef hero_ref = player.GetHeroRef();
-			if (state_.GetCard(hero_ref).GetAttack() > 0) attackers.push_back(hero_ref);
+			if (op(hero_ref)) attackers.push_back(hero_ref);
 
 			player.minions_.ForEach([&](state::CardRef card_ref) {
-				if (state_.GetCard(card_ref).GetAttack() > 0) attackers.push_back(card_ref);
+				if (op(card_ref)) attackers.push_back(card_ref);
 			});
 			
 			return attackers;

@@ -12,7 +12,6 @@ static void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random,
 
 	assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
 }
-#pragma warning( pop )
 
 static state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state, state::PlayerIdentifier player)
 {
@@ -53,6 +52,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::State & state, state:
 static void MakeHand(state::State & state, state::PlayerIdentifier player)
 {
 	AddHandCard(Cards::ID_CS2_141, state, player);
+	assert(true);
 }
 
 static void MakeHero(state::State & state, state::PlayerIdentifier player)
@@ -79,6 +79,7 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 	state.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 }
+#pragma warning( pop )
 
 state::State TestStateBuilder::GetState()
 {

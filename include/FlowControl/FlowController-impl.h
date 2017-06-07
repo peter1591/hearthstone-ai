@@ -1,6 +1,8 @@
 #pragma once
+
 #include "FlowControl/FlowController.h"
 
+#include "FlowControl/ValidActionGetter.h"
 #include "FlowControl/Manipulate-impl.h"
 
 namespace FlowControl
@@ -337,20 +339,7 @@ namespace FlowControl
 
 	inline bool FlowController::IsAttackable(state::CardRef attacker)
 	{
-		state::Cards::Card const& card = state_.GetCardsManager().Get(attacker);
-
-		if (card.GetRawData().cant_attack) return false;
-		if (card.GetRawData().freezed) return false;
-
-		if (card.GetCardType() == state::kCardTypeMinion) {
-			if (card.HasCharge() == false && card.GetRawData().just_played) return false;
-		}
-
-		if (card.GetRawData().num_attacks_this_turn >= card.GetMaxAttacksPerTurn()) return false;
-
-		if (state_.GetCardAttackConsiderWeapon(attacker) <= 0) return false;
-
-		return true;
+		return ValidActionGetter(state_).IsAttackable(attacker);
 	}
 
 	inline bool FlowController::IsDefendable(state::CardRef defender)
