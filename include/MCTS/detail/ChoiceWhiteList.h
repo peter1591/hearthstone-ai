@@ -10,6 +10,12 @@ namespace mcts
 {
 	namespace detail
 	{
+		// Some (sub-)action results in an invalid game state
+		// Ideally, we should prevent this situation as much as possible
+		// However, for performance consideration and code simplicity,
+		//    sometimes a (sub-)action might still yields an invalid game state
+		// In this case, we want to record the path of (sub-)actions yielding an invalid state
+		//    and prevent this path for a following re-trial
 		class ChoiceWhiteList
 		{
 		private:
@@ -72,6 +78,7 @@ namespace mcts
 				assert(node_);
 
 				if (last_choice_ < 0) {
+					// special case for the very first call
 					node_->SetChoices(choices);
 					return;
 				}
@@ -153,35 +160,44 @@ namespace mcts
 				assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
 				node_->GetWhiteList().erase(it);
 
-				TreeNode* check_no_child_node = node_;
-				while (check_no_child_node->GetWhiteList().size() == 0) {
-					if (traversed_nodes_.empty()) break;
-					
-					TreeNode* parent = traversed_nodes_.back();
-					traversed_nodes_.pop_back();
-
-					it = parent->GetWhiteList().find(check_no_child_node->GetParentChildEdge());
-					assert(it != parent->GetWhiteList().end());
-					parent->GetWhiteList().erase(it);
-
-					check_no_child_node = parent;
-				}
+				CascadeRemoveParentNodesWithNoChild();
 			}
 
 		private:
+			bool CheckParentChildRelationship(TreeNode* parent, TreeNode* child)
+			{
+				for (auto const& item : parent->GetWhiteList()) {
+					if (item.second.get() == child) {
+						return true;
+					}
+				}
+				return false;
+			}
+
 			void AdvanceNode(TreeNode* node)
 			{
 				assert(!node);
-				assert([&]() {
-					for (auto const& item : node_->GetWhiteList()) {
-						if (item.second.get() == node) {
-							return true;
-						}
-					}
-					return false;
-				}());
+				assert(CheckParentChildRelationship(node_, node));
+
 				traversed_nodes_.push_back(node_);
 				node_ = node;;
+			}
+
+			void CascadeRemoveParentNodesWithNoChild() {
+				TreeNode* processing = node_;
+				while (processing->GetWhiteList().size() == 0) {
+					if (traversed_nodes_.empty()) break;
+
+					TreeNode* parent = traversed_nodes_.back();
+					assert(CheckParentChildRelationship(parent, processing));
+					traversed_nodes_.pop_back();
+
+					auto it = parent->GetWhiteList().find(processing->GetParentChildEdge());
+					assert(it != parent->GetWhiteList().end());
+					parent->GetWhiteList().erase(it);
+
+					processing = parent;
+				}
 			}
 
 		private:
@@ -191,6 +207,10 @@ namespace mcts
 			int last_choice_;
 			std::vector<TreeNode*> traversed_nodes_;
 
+			// The case for an invalid game state is rare
+			// So we want to delay the creation of the TreeNode as late as possible
+			// These fields remembers the pending, which is used to create the necessary
+			//    TreeNodes when necessary.
 			int first_choice_before_pending_actions_;
 			std::vector<PendingAction> pending_actions_;
 		};
