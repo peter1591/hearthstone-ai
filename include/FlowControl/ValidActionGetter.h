@@ -13,7 +13,11 @@ namespace FlowControl
 	public: // check valid actions
 			// These functions MUST return valid for all actually available actions
 			// These functions can return valid for ones actually are not valid actions
-		std::vector<int> GetPlayableCards() {
+
+		std::vector<int> GetPlayableCards()
+		{
+			// TODO: need to consider the cost_health_instead flag
+
 			std::vector<int> playable_cards;
 			int resource = state_.GetCurrentPlayer().GetResource().GetCurrent();
 			auto const& hand = state_.GetCurrentPlayer().hand_;
@@ -76,6 +80,11 @@ namespace FlowControl
 			state::CardRef hero_power_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
 			if (!hero_power_ref.IsValid()) return false;
 			if (!state_.GetCard(hero_power_ref).GetRawData().usable) return false;
+
+			// TODO: need to consider the cost_health_instead flag
+			int resource = state_.GetCurrentPlayer().GetResource().GetCurrent();
+			if (state_.GetCard(hero_power_ref).GetCost() > resource) return false;
+			
 			return true;
 		}
 		
