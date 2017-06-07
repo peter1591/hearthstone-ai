@@ -88,8 +88,7 @@ namespace mcts
 						pending_actions_.push_back({ choices, -1 });
 					}
 					else {
-						node_ = it->second.get();
-						node_->SetChoices(choices);
+						AdvanceNode(it->second.get());
 					}
 				}
 				else {
@@ -133,42 +132,31 @@ namespace mcts
 			}
 
 			void ReportInvalidChoice() {
-				TreeNode* blame_node = nullptr;
-				int blame_action = 0;
-
-				if (pending_actions_.empty()) {
-					blame_node = node_;
-					blame_action = last_choice_;
-				}
-				else {
+				if (!pending_actions_.empty()) {
 					auto it_end = pending_actions_.end() - 1; // the last one is considered processed
-					blame_action = last_choice_;
 					assert(node_);
 
-					TreeNode* parent = node_;
-					int parent_child_edge = first_choice_before_pending_actions_;
+					int next_edge = first_choice_before_pending_actions_;
 
 					for (auto it = pending_actions_.begin(); it != it_end; ++it) {
-						auto & node_container = parent->GetWhiteList()[parent_child_edge];
+						auto & node_container = node_->GetWhiteList()[next_edge];
 						if (!node_container.get()) {
-							TreeNode* new_node = new TreeNode(parent, parent_child_edge);
+							TreeNode* new_node = new TreeNode(node_, next_edge);
 							new_node->SetChoices(it->choices);
 							node_container.reset(new_node);
 						}
 
-						parent = node_container.get();
-						parent_child_edge = it->choice;
+						AdvanceNode(node_container.get());
+						next_edge = it->choice;
 					}
-
-					blame_node = parent;
 				}
 
-				assert(blame_node);
-				auto it = blame_node->GetWhiteList().find(blame_action);
-				assert(it != blame_node->GetWhiteList().end()); // one should not choose a black-listed action
-				blame_node->GetWhiteList().erase(it);
+				assert(node_);
+				auto it = node_->GetWhiteList().find(last_choice_);
+				assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
+				node_->GetWhiteList().erase(it);
 
-				TreeNode* check_no_child_node = blame_node;
+				TreeNode* check_no_child_node = node_;
 				while (check_no_child_node->GetWhiteList().size() == 0) {
 					TreeNode* parent = check_no_child_node->GetParent();
 					if (!parent) break;
@@ -179,6 +167,13 @@ namespace mcts
 
 					check_no_child_node = parent;
 				}
+			}
+
+		private:
+			void AdvanceNode(TreeNode* node)
+			{
+				assert(node->GetParent() == node_);
+				node_ = node;;
 			}
 
 		private:
