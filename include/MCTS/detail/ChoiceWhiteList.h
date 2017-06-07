@@ -172,6 +172,15 @@ namespace mcts
 		private:
 			void AdvanceNode(TreeNode* node)
 			{
+				assert(!node);
+				assert([&]() {
+					for (auto const& item : node_->GetWhiteList()) {
+						if (item.second.get() == node) {
+							return true;
+						}
+					}
+					return false;
+				}());
 				assert(node->GetParent() == node_);
 				node_ = node;;
 			}
