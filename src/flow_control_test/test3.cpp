@@ -7,6 +7,14 @@
 class Test3_ActionParameterGetter : public FlowControl::IActionParameterGetter
 {
 public:
+	state::CardRef GetDefender(std::vector<state::CardRef> const& targets)
+	{
+		if (next_defender_count >= 0) assert(next_defender_count == targets.size());
+		assert(next_defender_idx >= 0);
+		assert(next_defender_idx < targets.size());
+		return targets[next_defender_idx];
+	}
+
 	int GetMinionPutLocation(int min, int max)
 	{
 		return next_minion_put_location;
@@ -24,6 +32,9 @@ public:
 		assert(false);
 		return 0;
 	}
+
+	int next_defender_count;
+	int next_defender_idx;
 
 	int next_minion_put_location;
 
@@ -320,9 +331,10 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
+		parameter_getter.next_defender_count = 2;
+		parameter_getter.next_defender_idx = 0;
 		if (controller2.Attack(
-			state2.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(3),
-			state2.GetBoard().Get(state::PlayerIdentifier::Second()).GetHeroRef()
+			state2.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(3)
 		) != FlowControl::kResultInvalid) assert(false);
 	}
 
@@ -349,9 +361,11 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 5;
 	if (controller.Attack(
-		state.GetBoard().Get(state::PlayerIdentifier::Second()).minions_.Get(1),
-		state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(4)
+		state.GetBoard().Get(state::PlayerIdentifier::Second()).minions_.Get(1)/*,
+		state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(4)*/
 	) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -388,9 +402,11 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 2);
 
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 2;
 	if (controller.Attack(
-		state.GetBoard().Get(state::PlayerIdentifier::Second()).minions_.Get(0),
-		state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(1))
+		state.GetBoard().Get(state::PlayerIdentifier::Second()).minions_.Get(0)/*,
+		state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(1)*/)
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -498,10 +514,15 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(1),
-		state.GetBoard().GetSecond().minions_.Get(2)) != FlowControl::kResultNotDetermined) assert(false);
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(1),
-		state.GetBoard().GetSecond().minions_.Get(2)) != FlowControl::kResultNotDetermined) assert(false);
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 3;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(1)/*,
+		state.GetBoard().GetSecond().minions_.Get(2)*/) != FlowControl::kResultNotDetermined) assert(false);
+
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 3;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(1)/*,
+		state.GetBoard().GetSecond().minions_.Get(2)*/) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 7, 7 });
@@ -553,8 +574,10 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 3);
 
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(3),
-		state.GetBoard().GetSecond().minions_.Get(1))
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 2;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(3)/*,
+		state.GetBoard().GetSecond().minions_.Get(1)*/)
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -602,8 +625,10 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0),
-		state.GetBoard().GetSecond().minions_.Get(0))
+
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 0;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0))
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -614,8 +639,10 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0),
-		state.GetBoard().GetSecond().minions_.Get(0))
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 0;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0)/*,
+		state.GetBoard().GetSecond().minions_.Get(0)*/)
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -626,8 +653,10 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0),
-		state.GetBoard().GetSecond().minions_.Get(0))
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 0;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0)/*,
+		state.GetBoard().GetSecond().minions_.Get(0)*/)
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -660,8 +689,9 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	if (controller.Attack(state.GetBoard().GetSecond().minions_.Get(1),
-		state.GetBoard().GetFirst().minions_.Get(0))
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 1;
+	if (controller.Attack(state.GetBoard().GetSecond().minions_.Get(1))
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 29, 0, 0);
@@ -672,8 +702,9 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	if (controller.Attack(state.GetBoard().GetSecond().minions_.Get(1),
-		state.GetBoard().GetFirst().minions_.Get(0))
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 1;
+	if (controller.Attack(state.GetBoard().GetSecond().minions_.Get(1))
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 26, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 29, 0, 0);
@@ -709,8 +740,9 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
-	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(1),
-		state.GetBoard().GetSecond().minions_.Get(0))
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 1;
+	if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(1))
 		!= FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 25, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 29, 0, 0);
@@ -1140,15 +1172,19 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
-		if (controller2.Attack(
-			state.GetBoard().GetFirst().minions_.Get(1),
-			state.GetBoard().GetSecond().minions_.Get(2)
-		) != FlowControl::kResultInvalid) assert(false);
+		parameter_getter.next_defender_count = 1;
+		parameter_getter.next_defender_idx = 0;
+		controller2.Attack(
+			state.GetBoard().GetFirst().minions_.Get(1)/*,
+			state.GetBoard().GetSecond().minions_.Get(2)*/
+		);
 	}
 
+	parameter_getter.next_defender_count = 1;
+	parameter_getter.next_defender_idx = 0;
 	if (controller.Attack(
-		state.GetBoard().GetFirst().minions_.Get(1),
-		state.GetBoard().GetSecond().minions_.Get(1)
+		state.GetBoard().GetFirst().minions_.Get(1)/*,
+		state.GetBoard().GetSecond().minions_.Get(1)*/
 	) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
@@ -1163,15 +1199,18 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
-		if (controller2.Attack(
-			state.GetBoard().GetFirst().minions_.Get(2),
-			state.GetBoard().GetSecond().GetHeroRef()
-		) != FlowControl::kResultInvalid) assert(false);
+		parameter_getter.next_defender_count = 1;
+		parameter_getter.next_defender_idx = 0;
+		controller2.Attack(
+			state.GetBoard().GetFirst().minions_.Get(2)
+		);
 	}
 
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 0;
 	if (controller.Attack(
-		state.GetBoard().GetFirst().minions_.Get(2),
-		state.GetBoard().GetSecond().minions_.Get(1)
+		state.GetBoard().GetFirst().minions_.Get(2)/*,
+		state.GetBoard().GetSecond().minions_.Get(1)*/
 	) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
@@ -1182,9 +1221,10 @@ void test3()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 3);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 4);
 
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 0;
 	if (controller.Attack(
-		state.GetBoard().GetFirst().minions_.Get(1),
-		state.GetBoard().GetSecond().GetHeroRef()
+		state.GetBoard().GetFirst().minions_.Get(1)
 	) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 14, 0, 0);
@@ -1292,9 +1332,11 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
+
+		parameter_getter.next_defender_count = 1;
+		parameter_getter.next_defender_idx = 0;
 		if (controller2.Attack(
-			state.GetBoard().GetFirst().minions_.Get(2),
-			state.GetBoard().GetSecond().GetHeroRef()
+			state.GetBoard().GetFirst().minions_.Get(2)
 		) != FlowControl::kResultInvalid) assert(false);
 	}
 
@@ -1302,10 +1344,12 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
-		if (controller2.Attack(
-			state.GetBoard().GetFirst().minions_.Get(1),
-			state.GetBoard().GetSecond().minions_.Get(0)
-		) != FlowControl::kResultInvalid) assert(false);
+
+		parameter_getter.next_defender_count = 1;
+		parameter_getter.next_defender_idx = 0;
+		controller2.Attack(
+			state.GetBoard().GetFirst().minions_.Get(1)
+		);
 	}
 
 	state.GetBoard().GetFirst().GetResource().Refill();
@@ -1352,15 +1396,20 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
-		if (controller2.Attack(
-			state.GetBoard().GetSecond().minions_.Get(0),
-			state.GetBoard().GetFirst().minions_.Get(2)
-		) != FlowControl::kResultInvalid) assert(false);
+
+		parameter_getter.next_defender_count = 2;
+		parameter_getter.next_defender_idx = 0;
+		controller2.Attack(
+			state.GetBoard().GetSecond().minions_.Get(0)/*,
+			state.GetBoard().GetFirst().minions_.Get(2)*/
+		);
 	}
 
+	parameter_getter.next_defender_count = -1;
+	parameter_getter.next_defender_idx = 0;
 	if (controller.Attack(
-		state.GetBoard().GetSecond().minions_.Get(0),
-		state.GetBoard().GetFirst().minions_.Get(1)
+		state.GetBoard().GetSecond().minions_.Get(0)/*,
+		state.GetBoard().GetFirst().minions_.Get(1)*/
 	) != FlowControl::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 17, 0, 0);

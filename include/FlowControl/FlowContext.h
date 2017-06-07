@@ -32,6 +32,11 @@ namespace FlowControl {
 			specified_target_.Invalidate();
 		}
 
+		state::CardRef GetDefender(std::vector<state::CardRef> const& defenders) {
+			assert(!defenders.empty());
+			return action_parameters_.GetDefender(defenders);
+		}
+
 		auto GetMinionPutLocation(int min, int max) {
 			if (minion_put_location_ < 0) {
 				if (min >= max) {

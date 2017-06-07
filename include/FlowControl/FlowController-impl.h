@@ -25,10 +25,10 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
-	inline Result FlowController::Attack(state::CardRef attacker, state::CardRef defender)
+	inline Result FlowController::Attack(state::CardRef attacker)
 	{
 		flow_context_.ResetActionParameter();
-		AttackInternal(attacker, defender);
+		AttackInternal(attacker);
 
 		assert(flow_context_.Empty());
 		return flow_context_.GetResult();
@@ -270,22 +270,23 @@ namespace FlowControl
 		return true;
 	}
 
-	inline void FlowController::AttackInternal(state::CardRef attacker, state::CardRef defender)
+	inline void FlowController::AttackInternal(state::CardRef attacker)
 	{
-		if (!AttackPhase(attacker, defender)) return;
+		if (!AttackPhase(attacker)) return;
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 	}
 
-	inline bool FlowController::AttackPhase(state::CardRef attacker, state::CardRef defender)
+	inline bool FlowController::AttackPhase(state::CardRef attacker)
 	{
 		if (!attacker.IsValid()) return SetResult(kResultInvalid);
+
+		state::CardRef defender = GetDefender();
 		if (!defender.IsValid()) return SetResult(kResultInvalid);
 
 		assert(state_.GetCardsManager().Get(attacker).GetHP() > 0);
 		assert(state_.GetCardsManager().Get(attacker).GetZone() == state::kCardZonePlay);
 
 		if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
-		if (!IsDefendable(defender)) return SetResult(kResultInvalid);
 
 		if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) {
 			bool cant_attack_hero = state_.GetCardBoolAttributeConsiderWeapon(attacker, [](state::Cards::Card const& card) {
@@ -342,11 +343,9 @@ namespace FlowControl
 		return ValidActionGetter(state_).IsAttackable(attacker);
 	}
 
-	inline bool FlowController::IsDefendable(state::CardRef defender)
+	inline state::CardRef FlowController::GetDefender()
 	{
-		state::Cards::Card const& card = state_.GetCard(defender);
-		assert(card.GetCardType() == state::kCardTypeHero ||
-			card.GetCardType() == state::kCardTypeMinion);
+		std::vector<state::CardRef> defenders;
 
 		auto HasTaunt = [&](state::CardRef card_ref) {
 			state::Cards::Card const& card = state_.GetCard(card_ref);
@@ -356,12 +355,24 @@ namespace FlowControl
 			return true;
 		};
 
-		if (HasTaunt(defender)) return true;
-		
-		for (state::CardRef minion : state_.GetBoard().Get(card.GetPlayerIdentifier()).minions_.Get()) {
-			if (HasTaunt(minion)) return SetResult(FlowControl::kResultInvalid);
+		// TODO: hero does not have taunt unless in tavern brawl. so we skip the check here
+		auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
+		player.minions_.ForEach(
+			[&](state::CardRef card_ref)
+		{
+			if (HasTaunt(card_ref)) defenders.push_back(card_ref);
+		});
+
+		if (defenders.empty()) {
+			// no taunt, all characters can be the target
+			defenders.push_back(player.GetHeroRef());
+			player.minions_.ForEach([&](state::CardRef card_ref) {
+				defenders.push_back(card_ref);
+			});
 		}
-		return true;
+
+		if (defenders.empty()) state::CardRef();
+		return flow_context_.GetDefender(defenders);
 	}
 
 	inline void FlowController::HeroPowerInternal()

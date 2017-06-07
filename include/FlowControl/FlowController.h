@@ -36,9 +36,12 @@ namespace FlowControl
 
 	public: // main flow
 		Result PlayCard(int hand_idx);
-		Result Attack(state::CardRef attacker, state::CardRef defender);
+		Result Attack(state::CardRef attacker);
 		Result HeroPower();
 		Result EndTurn();
+
+	private:
+		state::CardRef GetDefender();
 
 	private:
 		Result Resolve();
@@ -55,10 +58,9 @@ namespace FlowControl
 		bool PlayHeroPowerCardPhase(state::CardRef card_ref);
 		bool PlaySpellCardPhase(state::CardRef card_ref);
 		
-		void AttackInternal(state::CardRef attacker, state::CardRef defender);
-		bool AttackPhase(state::CardRef attacker, state::CardRef defender);
+		void AttackInternal(state::CardRef attacker);
+		bool AttackPhase(state::CardRef attacker);
 		bool IsAttackable(state::CardRef attacker);
-		bool IsDefendable(state::CardRef defender);
 
 		void EndTurnInternal();
 		void EndTurnPhase();
