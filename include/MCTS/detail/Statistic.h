@@ -2,12 +2,22 @@
 
 #include <iostream>
 
+#include "MCTS/Config.h"
+
 namespace mcts
 {
 	namespace detail
 	{
-		// TODO: no runtime overhead in release builds
-		class Statistic
+		template <bool enabled = mcts::StaticConfigs::enable_statistic>
+		class Statistic {
+		public:
+			void ApplyActionSucceeded() {}
+			void ApplyActionFailed() {}
+			void FinishedOneEpisode() {}
+			void PrintMessage() {}
+		};
+
+		template <> class Statistic<true>
 		{
 		public:
 			Statistic() :

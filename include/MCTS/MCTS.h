@@ -40,7 +40,7 @@ namespace mcts
 		Tree tree_;
 		detail::EpisodeState episode_state_;
 		detail::ChoiceWhiteList choice_white_list_;
-		detail::Statistic statistic_;
+		detail::Statistic<> statistic_;
 
 		bool flag_switch_to_simulation_;
 

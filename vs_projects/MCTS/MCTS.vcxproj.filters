@@ -77,5 +77,8 @@
     <ClInclude Include="..\..\include\MCTS\detail\Statistic.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\Config.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
