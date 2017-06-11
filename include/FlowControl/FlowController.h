@@ -72,6 +72,7 @@ namespace FlowControl
 		int GetMaxHeroPowerUseThisTurn();
 
 		bool SetResult(Result result);
+		bool SetInvalid() { return SetResult(Result::kResultInvalid); }
 
 	private:
 		state::State & state_;

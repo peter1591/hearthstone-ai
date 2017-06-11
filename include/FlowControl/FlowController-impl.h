@@ -56,13 +56,13 @@ namespace FlowControl
 		switch (state_.GetCardsManager().Get(card_ref).GetCardType())
 		{
 		case state::kCardTypeMinion:
-			PlayCardPhase<state::kCardTypeMinion>(card_ref);
+			if (!PlayCardPhase<state::kCardTypeMinion>(card_ref)) return;
 			break;
 		case state::kCardTypeWeapon:
-			PlayCardPhase<state::kCardTypeWeapon>(card_ref);
+			if (!PlayCardPhase<state::kCardTypeWeapon>(card_ref)) return;
 			break;
 		case state::kCardTypeSpell:
-			PlayCardPhase<state::kCardTypeSpell>(card_ref);
+			if (!PlayCardPhase<state::kCardTypeSpell>(card_ref)) return;
 			break;
 		default:
 			assert(false);
@@ -81,7 +81,7 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
 		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
-			return false;
+			return SetInvalid();
 		}
 		state::CardRef onplay_target = flow_context_.GetSpecifiedTarget();
 		if (onplay_target.IsValid()) {
@@ -100,10 +100,10 @@ namespace FlowControl
 		});
 
 		if (cost_health_instead) {
-			if (!CostHealth(cost)) return false;
+			if (!CostHealth(cost)) return SetInvalid();
 		}
 		else {
-			if (!CostCrystal(cost)) return false;
+			if (!CostCrystal(cost)) return SetInvalid();
 		}
 
 		state_.TriggerEvent<state::Events::EventTypes::OnPlay>(
@@ -128,7 +128,7 @@ namespace FlowControl
 
 		auto& crystal = state_.GetCurrentPlayer().GetResource();
 		if (crystal.GetCurrent() < amount) {
-			return SetResult(FlowControl::kResultInvalid);
+			return SetInvalid();
 		}
 		crystal.Cost(amount);
 		return true;
@@ -137,7 +137,7 @@ namespace FlowControl
 	inline bool FlowController::CostHealth(int amount) {
 		state::CardRef hero_ref = state_.GetCurrentPlayer().GetHeroRef();
 		if (state_.GetCard(hero_ref).GetHP() < amount) {
-			return SetResult(FlowControl::kResultInvalid);
+			return SetInvalid();
 		}
 		Manipulate(state_, flow_context_).Hero(hero_ref).Damage(hero_ref, amount);
 		return true;
@@ -172,7 +172,7 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 			state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref });
 
-		if (state_.GetCurrentPlayer().minions_.Full()) return SetResult(kResultInvalid);
+		if (state_.GetCurrentPlayer().minions_.Full()) return SetInvalid();
 
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
@@ -245,7 +245,7 @@ namespace FlowControl
 
 		if (is_secret) {
 			if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId()))
-				return SetResult(FlowControl::kResultInvalid);
+				return SetInvalid();
 		}
 
 		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
@@ -278,21 +278,21 @@ namespace FlowControl
 
 	inline bool FlowController::AttackPhase(state::CardRef attacker)
 	{
-		if (!attacker.IsValid()) return SetResult(kResultInvalid);
+		if (!attacker.IsValid()) return SetInvalid();
 
 		state::CardRef defender = GetDefender();
-		if (!defender.IsValid()) return SetResult(kResultInvalid);
+		if (!defender.IsValid()) return SetInvalid();
 
 		assert(state_.GetCardsManager().Get(attacker).GetHP() > 0);
 		assert(state_.GetCardsManager().Get(attacker).GetZone() == state::kCardZonePlay);
 
-		if (!IsAttackable(attacker)) return SetResult(kResultInvalid);
+		if (!IsAttackable(attacker)) return SetInvalid();
 
 		if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) {
 			bool cant_attack_hero = state_.GetCardBoolAttributeConsiderWeapon(attacker, [](state::Cards::Card const& card) {
 				return card.IsCantAttackHero();
 			});
-			if (cant_attack_hero) return SetResult(kResultInvalid);
+			if (cant_attack_hero) return SetInvalid();
 		}
 
 		state_.TriggerEvent<state::Events::EventTypes::PrepareAttackTarget>(
@@ -303,16 +303,16 @@ namespace FlowControl
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
 
 		if (!defender.IsValid()) return kResultNotDetermined;
-		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return SetResult(kResultNotDetermined);
-		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
+		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return SetInvalid();
+		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return SetInvalid();
 
 		state_.TriggerEvent<state::Events::EventTypes::BeforeAttack>(
 			state::Events::EventTypes::BeforeAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 		
 		// a minion might be destroyed during BeforeAttack event
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
-		if (state_.GetCard(attacker).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
-		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return SetResult(kResultNotDetermined);
+		if (state_.GetCard(attacker).GetZone() != state::kCardZonePlay) return SetInvalid();
+		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return SetInvalid();
 
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 		Manipulate(state_, flow_context_).OnBoardCharacter(defender)
@@ -389,9 +389,9 @@ namespace FlowControl
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		assert(card.GetCardType() == state::kCardTypeHeroPower);
 
-		if (!card.GetRawData().usable) return SetResult(FlowControl::kResultInvalid);
+		if (!card.GetRawData().usable) return SetInvalid();
 
-		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return false;
+		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return SetInvalid();
 
 		Manipulate(state_, flow_context_).HeroPower(card_ref).IncreaseUsedThisTurn();
 		if (card.GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {
