@@ -62,9 +62,6 @@
     <ClInclude Include="..\..\include\MCTS\MCTS-impl.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\BoardCloner.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Tree.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
