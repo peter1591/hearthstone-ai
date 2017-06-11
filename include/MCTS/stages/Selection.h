@@ -15,31 +15,6 @@ namespace mcts
 				TreeNode* node;
 			};
 
-		private:
-			class LastNodeInfo {
-			public:
-				LastNodeInfo() : parent_(nullptr), action_(0), child_(nullptr) {}
-				void Set(TreeNode* parent, TreeNode* child, int action) {
-					parent_ = parent;
-					child_ = child;
-					action_ = action;
-				}
-
-				TreeNode* GetParent() const { return parent_; }
-				TreeNode* GetChild() const { return child_; }
-				int GetAction() const { return action_; }
-
-				void RemoveNode() {
-					assert(parent_->GetChild(action_) == child_);
-					parent_->RemoveChild(action_);
-				}
-
-			private:
-				TreeNode* parent_;
-				int action_;
-				TreeNode* child_;
-			};
-
 		public:
 			Selection() : tree_node_(nullptr) {}
 
@@ -66,17 +41,13 @@ namespace mcts
 				TreeNode* next_node = parent_node->GetOrCreateChild(choice);
 
 				StepNext(choice, next_node);
-				last_node_.Set(parent_node, next_node, choice);
 
 				return choice;
 			}
 
 			void ReportInvalidAction() {
-				assert(last_node_.GetChild());
-				
-				assert(tree_node_ == last_node_.GetChild());
 				assert(!path_.empty());
-				assert(path_.back().node == last_node_.GetChild());
+				assert(path_.back().node == tree_node_);
 				
 				bool node_removed = false;
 				auto op = [node_removed](TreeNode* parent, int edge, TreeNode* child) mutable {
@@ -170,8 +141,6 @@ namespace mcts
 		private:
 			Tree tree_;
 			TreeNode* tree_node_; // TODO: remove this, just use path_.back().node
-
-			LastNodeInfo last_node_;
 
 			std::vector<TraversedNodeInfo> path_;
 		};
