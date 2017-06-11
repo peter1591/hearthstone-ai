@@ -44,7 +44,7 @@ namespace mcts
 		template <typename Functor>
 		void ForEachChild(Functor&& functor) const {
 			for (int i = 0; i < children_.size(); ++i) {
-				if (!children_[i]) continue;
+				if (!children_[i]) continue; // removed
 				functor(i, children_[i].get());
 			}
 		}
@@ -52,21 +52,17 @@ namespace mcts
 		TreeNode* GetChild(int action) {
 			assert(action >= 0);
 			assert(action < children_.size());
-			// TODO: return nullptr for a removed child. is this right?
-			return children_[action].get();
+			TreeNode* child = children_[action].get();
+			assert(child); // child should not be a nullptr (i.e., a removed child)
+			return child;
 		}
 
-		TreeNode* GetOrCreateChild(int action)
-		{
-			assert(action >= 0);
-			assert(action < GetActionCount());
-
-			if (action >= children_.size()) {
-				assert(action == (int)children_.size()); // only possible to expand the next action
-				children_.push_back(std::make_unique<TreeNode>());
-				++valid_children_count_;
-			}
-			return children_[action].get();
+		TreeNode* CreateChild(int action) {
+			assert(action == (int)children_.size()); // only possible to expand the next action
+			TreeNode* new_node = new TreeNode();
+			children_.push_back(std::unique_ptr<TreeNode>(new_node));
+			++valid_children_count_;
+			return new_node;
 		}
 
 		void RemoveChild(int action) {

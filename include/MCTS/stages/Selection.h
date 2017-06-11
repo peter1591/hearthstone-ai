@@ -26,21 +26,18 @@ namespace mcts
 			int GetAction(ActionType action_type, int choices, bool * created_new_node)
 			{
 				ReportActionInfo(action_type, choices);
-				int choice = SelectAction(action_type, choices, created_new_node);
-				if (choice < 0) {
-					// if a (parent) node is with no valid child node
-					// we should have deleted the (parent) node when the child node
-					// got removed.
-					assert(false);
-					return -1;
-				}
+				
+				auto next_info = SelectAction(action_type, choices, created_new_node);
+				
+				int next_choice = next_info.first;
+				TreeNode* next_node = next_info.second;
 
-				TreeNode* parent_node = GetCurrentNode();
-				TreeNode* next_node = parent_node->GetOrCreateChild(choice);
+				assert(next_choice >= 0);
+				assert(next_node);
 
-				StepNext(choice, next_node);
+				StepNext(next_choice, next_node);
 
-				return choice;
+				return next_choice;
 			}
 
 			void ReportInvalidAction() {
@@ -92,22 +89,28 @@ namespace mcts
 				GetCurrentNode()->FillActions(action_type, choices);
 			}
 
-			int SelectAction(ActionType action_type, int choices, bool * new_node) {
+			std::pair<int, TreeNode*> SelectAction(ActionType action_type, int choices, bool * new_node) {
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
 				if (GetCurrentNode()->HasUnExpandedAction()) {
 					*new_node = true;
-					return GetCurrentNode()->GetNextActionToExpand();
+					int next_action = GetCurrentNode()->GetNextActionToExpand();
+					return { next_action, GetCurrentNode()->CreateChild(next_action) };
 				}
 				*new_node = false;
 
 				if (!GetCurrentNode()->HasAnyChild()) {
-					// no valid action from this node (all actions are removed since they yields an invalid state)
-					return -1;
+					// no valid action from this node (all actions are removed 
+					//    since they yields an invalid state)
+					// However, if a (parent) node is with no valid child node
+					// we should have deleted the (parent) node when the child node
+					// got removed.
+					assert(false);
+					return { -1, nullptr };
 				}
 
-				if (action_type.IsChosenRandomly()) return SelectActionByRandom(choices);
-				else return SelectActionByChoice(choices);
+				if (action_type.IsChosenRandomly()) return SelectActionByRandom();
+				else return SelectActionByChoice();
 			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
@@ -115,21 +118,26 @@ namespace mcts
 				path_.push_back({ leading_choice, next_node });
 			}
 
-			int SelectActionByRandom(int choices)
+			std::pair<int, TreeNode*> SelectActionByRandom()
 			{
-				// TODO: we should only enumerate over valid choices
 				// TODO: a quicker way random access the tree_node_->GetChildren()
-				return std::rand() % choices; // TODO: use more stronger random generator?
+				assert(GetCurrentNode()->HasAnyChild());
+				std::vector<std::pair<int, TreeNode*>> valid_choices;
+				GetCurrentNode()->ForEachChild([&](int action, TreeNode* child) {
+					valid_choices.push_back({ action, child });
+				});
+				int idx = std::rand() % valid_choices.size(); // TODO: use more stronger random generator?
+				return valid_choices[idx];
 			}
 
-			int SelectActionByChoice(int choices)
+			std::pair<int, TreeNode*> SelectActionByChoice()
 			{
 				assert(GetCurrentNode()->HasAnyChild());
-				std::vector<int> valid_choices;
+				std::vector<std::pair<int, TreeNode*>> valid_choices;
 				GetCurrentNode()->ForEachChild([&](int action, TreeNode* child) {
-					valid_choices.push_back(action);
+					valid_choices.push_back({ action, child });
 				});
-				int idx = std::rand() % valid_choices.size();
+				int idx = std::rand() % valid_choices.size(); // TODO: use more stronger random generator?
 				return valid_choices[idx];
 			}
 
