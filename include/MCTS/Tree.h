@@ -14,18 +14,20 @@ namespace mcts
 			wins(0), total(0)
 		{}
 
-		bool NeedFillActions() const { return action_count_ <= 0; }
 		void FillActions(ActionType action_type, int action_count) {
 			assert(action_count >= 0);
+
+			if (action_count_ > 0) {
+				// already filled, check if info is consistency
+				assert(action_type_ == action_type);
+				assert(action_count_ == action_count);
+				return;
+			}
+
 			assert(children_.empty());
 			action_count_ = (size_t)action_count;
 			action_type_ = action_type;
 			next_unexpanded_action_ = 0;
-		}
-		bool CheckFilledActions(ActionType action_type, int action_count) {
-			if (action_type_ != action_type) return false;
-			if (action_count_ != action_count) return false;
-			return true;
 		}
 
 		bool HasUnExpandedAction() const { return next_unexpanded_action_ < action_count_; }

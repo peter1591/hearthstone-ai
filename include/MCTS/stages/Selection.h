@@ -89,10 +89,7 @@ namespace mcts
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
 
 			void ReportActionInfo(ActionType action_type, int choices) {
-				if (GetCurrentNode()->NeedFillActions()) {
-					GetCurrentNode()->FillActions(action_type, choices);
-				}
-				assert(GetCurrentNode()->CheckFilledActions(action_type, choices));
+				GetCurrentNode()->FillActions(action_type, choices);
 			}
 
 			int SelectAction(ActionType action_type, int choices, bool * new_node) {
@@ -120,7 +117,7 @@ namespace mcts
 
 			int SelectActionByRandom(int choices)
 			{
-				// TODO: we should only enumerate over valid choice
+				// TODO: we should only enumerate over valid choices
 				// TODO: a quicker way random access the tree_node_->GetChildren()
 				return std::rand() % choices; // TODO: use more stronger random generator?
 			}
