@@ -22,6 +22,7 @@ namespace mcts
 			{
 				stage_ = kStageSelection;
 				board_ = board;
+				is_valid_ = true;
 			}
 
 			Stage GetStage() const { return stage_; }
