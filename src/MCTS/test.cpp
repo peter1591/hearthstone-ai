@@ -26,6 +26,12 @@ int main(void)
 	for (int i = 0; i < 100000000; ++i) {
 		if (i % 10 == 0) {
 			mcts1.PrintStatistic();
+
+			if (i % 1000 == 0) {
+				std::cout << "continue?";
+				std::string dummy;
+				std::getline(std::cin, dummy);
+			}
 		}
 		mcts1.Iterate(start_board_getter);
 	}

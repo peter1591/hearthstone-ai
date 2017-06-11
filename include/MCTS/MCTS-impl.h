@@ -79,14 +79,10 @@ namespace mcts
 		assert(result != Result::kResultInvalid);
 		bool win = (result == Result::kResultFirstPlayerWin);
 
-		std::for_each(
-			selection_stage_.GetTraversedPath().begin(),
-			selection_stage_.GetTraversedPath().end(),
-			[&](TreeNode* traversed_node)
-		{
-			traversed_node->ReportResult(win);
+		selection_stage_.ForEachTraversedPath([&](int leading_choice, TreeNode* node) {
+			node->ReportResult(win);
 		});
-
+		
 		statistic_.FinishedOneEpisode();
 	}
 
@@ -112,7 +108,8 @@ namespace mcts
 			choice = simulation_stage_.GetAction(action_type, choices);
 		}
 
-		if (choice < 0) episode_state_.SetInvalid();
+		if (choice < 0)
+			episode_state_.SetInvalid();
 		return choice;
 	}
 }

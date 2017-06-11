@@ -1,5 +1,32 @@
 #include "TestStateBuilder.h"
 
+class MyRandomGenerator : public state::IRandomGenerator
+{
+public:
+	MyRandomGenerator() :called_times(0), next_rand(0) {}
+
+	int Get(int exclusive_max)
+	{
+		++called_times;
+		assert(next_rand < exclusive_max);
+		return next_rand;
+	}
+
+	size_t Get(size_t exclusive_max) { return (size_t)Get((int)exclusive_max); }
+
+	int Get(int min, int max)
+	{
+		++called_times;
+		assert(next_rand >= min);
+		assert(next_rand <= max);
+		return min + next_rand;
+	}
+
+public:
+	int called_times;
+	int next_rand;
+};
+
 #pragma warning( push )
 #pragma warning( disable: 4505 )
 static void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
@@ -51,8 +78,8 @@ static state::CardRef AddHandCard(Cards::CardId id, state::State & state, state:
 
 static void MakeHand(state::State & state, state::PlayerIdentifier player)
 {
-	AddHandCard(Cards::ID_CS2_141, state, player);
-	assert(true);
+	//AddHandCard(Cards::ID_CS2_141, state, player);
+	AddHandCard(Cards::ID_NEW1_007, state, player);
 }
 
 static void MakeHero(state::State & state, state::PlayerIdentifier player)
@@ -84,17 +111,20 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 state::State TestStateBuilder::GetState()
 {
 	state::State state;
+	MyRandomGenerator my_random;
 
 	MakeHero(state, state::PlayerIdentifier::First());
 	MakeHand(state, state::PlayerIdentifier::First());
+	PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
 	MakeHand(state, state::PlayerIdentifier::Second());
+	PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
-	state.GetBoard().GetFirst().GetResource().SetTotal(1);
+	state.GetBoard().GetFirst().GetResource().SetTotal(10);
 	state.GetBoard().GetFirst().GetResource().Refill();
-	state.GetBoard().GetSecond().GetResource().SetTotal(1);
+	state.GetBoard().GetSecond().GetResource().SetTotal(10);
 	state.GetBoard().GetSecond().GetResource().Refill();
 
 	return state;

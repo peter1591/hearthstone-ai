@@ -9,6 +9,12 @@ namespace mcts
 	{
 		class Selection
 		{
+		public:
+			struct TraversedNodeInfo {
+				int leading_choice; // choice to lead to this node
+				TreeNode* node;
+			};
+
 		private:
 			class LastNodeInfo {
 			public:
@@ -40,7 +46,7 @@ namespace mcts
 			void StartEpisode()
 			{
 				path_.clear();
-				StepNext(tree_.GetRootNode());
+				StepNext(-1, tree_.GetRootNode());
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
@@ -49,27 +55,66 @@ namespace mcts
 				ReportActionInfo(action_type, choices);
 				int choice = SelectAction(action_type, choices, created_new_node);
 				if (choice < 0) {
-					last_node_.Set(nullptr, nullptr, -1);
+					// if a (parent) node is with no valid child node
+					// we should have deleted the (parent) node when the child node
+					// got removed.
+					assert(false);
 					return -1;
 				}
 
 				TreeNode* parent_node = tree_node_;
 				TreeNode* next_node = parent_node->GetOrCreateChild(choice);
-				
-				StepNext(next_node);
+
+				StepNext(choice, next_node);
 				last_node_.Set(parent_node, next_node, choice);
 
 				return choice;
 			}
 
 			void ReportInvalidAction() {
-				// We modify the tree structure, so next time this invalid node will not be chosen
-				if (!last_node_.GetChild()) return;
+				assert(last_node_.GetChild());
+				
 				assert(tree_node_ == last_node_.GetChild());
-				last_node_.RemoveNode();
+				assert(!path_.empty());
+				assert(path_.back().node == last_node_.GetChild());
+				
+				bool node_removed = false;
+				auto op = [node_removed](TreeNode* parent, int edge, TreeNode* child) mutable {
+					assert(parent->GetChild(edge) == child);
+
+					bool do_remove = false;
+					if (!node_removed) do_remove = true;
+					else {
+						if (child->HasUnExpandedAction()) {}
+						else if (!child->GetChildren().empty()) {}
+						else 
+							do_remove = true;
+					}
+
+					if (!do_remove) return;
+
+					parent->RemoveChild(edge);
+					if (!node_removed) node_removed = true;
+				};
+
+				auto it_prev = path_.rbegin();
+				auto it = it_prev;
+				++it;
+				while (it != path_.rend()) {
+					op(it->node, it_prev->leading_choice, it_prev->node);
+					++it;
+					++it_prev;
+				}
 			}
 
-			std::vector<TreeNode*> const& GetTraversedPath() const { return path_; }
+			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
+
+			template <typename Functor>
+			void ForEachTraversedPath(Functor&& functor) {
+				for (auto const& item : path_) {
+					functor(item.leading_choice, item.node);
+				}
+			}
 
 		private:
 			void ReportActionInfo(ActionType action_type, int choices) {
@@ -97,11 +142,11 @@ namespace mcts
 				else return SelectActionByChoice(choices);
 			}
 
-			void StepNext(TreeNode* next_node)
+			void StepNext(int leading_choice, TreeNode* next_node)
 			{
 				tree_node_ = next_node;
 				assert(tree_node_);
-				path_.push_back(tree_node_);
+				path_.push_back({ leading_choice, tree_node_ });
 			}
 
 			int SelectActionByRandom(int choices)
@@ -117,10 +162,11 @@ namespace mcts
 
 		private:
 			Tree tree_;
-			TreeNode* tree_node_;
+			TreeNode* tree_node_; // TODO: remove this, just use path_.back().node
 
 			LastNodeInfo last_node_;
-			std::vector<TreeNode*> path_;
+
+			std::vector<TraversedNodeInfo> path_;
 		};
 	}
 }
