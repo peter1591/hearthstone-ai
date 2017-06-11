@@ -20,6 +20,7 @@ namespace mcts
 
 			void Start(Board const& board)
 			{
+				stage_ = kStageSelection;
 				board_ = board;
 			}
 
