@@ -39,7 +39,7 @@ namespace mcts
 		{
 			assert(!cards.empty());
 			size_t size = cards.size();
-			return (size_t)GetNumber(ActionType::kChooseTarget, (int)size);
+			return (size_t)GetNumber(ActionType::kChooseOne, (int)size);
 		}
 
 		int GetNumber(ActionType::Types action_type, int exclusive_max)
