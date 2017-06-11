@@ -16,8 +16,6 @@ namespace mcts
 			};
 
 		public:
-			Selection() : tree_node_(nullptr) {}
-
 			void StartEpisode()
 			{
 				path_.clear();
@@ -37,7 +35,7 @@ namespace mcts
 					return -1;
 				}
 
-				TreeNode* parent_node = tree_node_;
+				TreeNode* parent_node = GetCurrentNode();
 				TreeNode* next_node = parent_node->GetOrCreateChild(choice);
 
 				StepNext(choice, next_node);
@@ -47,7 +45,7 @@ namespace mcts
 
 			void ReportInvalidAction() {
 				assert(!path_.empty());
-				assert(path_.back().node == tree_node_);
+				assert(path_.back().node == GetCurrentNode());
 				
 				bool node_removed = false;
 				auto op = [node_removed](TreeNode* parent, int edge, TreeNode* child) mutable {
@@ -88,23 +86,25 @@ namespace mcts
 			}
 
 		private:
+			TreeNode* GetCurrentNode() const { return path_.back().node; }
+
 			void ReportActionInfo(ActionType action_type, int choices) {
-				if (tree_node_->NeedFillActions()) {
-					tree_node_->FillActions(action_type, choices);
+				if (GetCurrentNode()->NeedFillActions()) {
+					GetCurrentNode()->FillActions(action_type, choices);
 				}
-				assert(tree_node_->CheckFilledActions(action_type, choices));
+				assert(GetCurrentNode()->CheckFilledActions(action_type, choices));
 			}
 
 			int SelectAction(ActionType action_type, int choices, bool * new_node) {
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
-				if (tree_node_->HasUnExpandedAction()) {
+				if (GetCurrentNode()->HasUnExpandedAction()) {
 					*new_node = true;
-					return tree_node_->ExpandAction();
+					return GetCurrentNode()->ExpandAction();
 				}
 				*new_node = false;
 
-				if (tree_node_->GetChildren().empty()) {
+				if (GetCurrentNode()->GetChildren().empty()) {
 					// no valid action from this node (all actions are removed since they yields an invalid state)
 					return -1;
 				}
@@ -115,9 +115,7 @@ namespace mcts
 
 			void StepNext(int leading_choice, TreeNode* next_node)
 			{
-				tree_node_ = next_node;
-				assert(tree_node_);
-				path_.push_back({ leading_choice, tree_node_ });
+				path_.push_back({ leading_choice, next_node });
 			}
 
 			int SelectActionByRandom(int choices)
@@ -129,9 +127,9 @@ namespace mcts
 
 			int SelectActionByChoice(int choices)
 			{
-				assert(!tree_node_->GetChildren().empty());
+				assert(!GetCurrentNode()->GetChildren().empty());
 				std::vector<int> valid_choices;
-				for (auto const& valid_child : tree_node_->GetChildren()) {
+				for (auto const& valid_child : GetCurrentNode()->GetChildren()) {
 					valid_choices.push_back(valid_child.first);
 				}
 				int idx = std::rand() % valid_choices.size();
@@ -140,7 +138,6 @@ namespace mcts
 
 		private:
 			Tree tree_;
-			TreeNode* tree_node_; // TODO: remove this, just use path_.back().node
 
 			std::vector<TraversedNodeInfo> path_;
 		};
