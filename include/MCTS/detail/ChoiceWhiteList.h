@@ -142,16 +142,16 @@ namespace mcts
 
 					int next_edge = first_choice_before_pending_actions_;
 
-					for (auto it = pending_actions_.begin(); it != it_end; ++it) {
+					for (auto const& pending_action : pending_actions_) {
 						auto & node_container = node_->GetWhiteList()[next_edge];
 						if (!node_container.get()) {
 							TreeNode* new_node = new TreeNode(next_edge);
-							new_node->SetChoices(it->choices);
+							new_node->SetChoices(pending_action.choices);
 							node_container.reset(new_node);
 						}
 
 						AdvanceNode(node_container.get());
-						next_edge = it->choice;
+						next_edge = pending_action.choice;
 					}
 				}
 
