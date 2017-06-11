@@ -31,7 +31,7 @@ namespace mcts
 
 			if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
 				// main actions are supposed to be always-valid
-				// otherwise, we need to remeber choice-white-list across main-actions
+				// otherwise, we need to remember choice-white-list across main-actions
 				assert(episode_state_.IsValid());
 				simulation_stage_.StartNewAction(episode_state_.GetBoard());
 			}

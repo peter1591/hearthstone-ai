@@ -122,12 +122,10 @@ namespace mcts
 			{
 				// TODO: a quicker way random access the tree_node_->GetChildren()
 				assert(GetCurrentNode()->HasAnyChild());
-				std::vector<std::pair<int, TreeNode*>> valid_choices;
-				GetCurrentNode()->ForEachChild([&](int action, TreeNode* child) {
-					valid_choices.push_back({ action, child });
-				});
-				int idx = std::rand() % valid_choices.size(); // TODO: use more stronger random generator?
-				return valid_choices[idx];
+
+				size_t count = GetCurrentNode()->GetChildrenCount();
+				int idx = std::rand() % (int)count; // TODO: stronger random generator?
+				return GetCurrentNode()->GetNthChild((size_t)idx);
 			}
 
 			std::pair<int, TreeNode*> SelectActionByChoice()
