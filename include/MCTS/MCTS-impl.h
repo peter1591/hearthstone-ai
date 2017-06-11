@@ -101,21 +101,19 @@ namespace mcts
 		assert(choices > 0);
 
 		auto stage = episode_state_.GetStage();
+		int choice = -1;
 
 		if (stage == detail::EpisodeState::kStageSelection) {
 			// if a new node is created, we switch to simulation
 			bool & created_new_node = flag_switch_to_simulation_;
-
-			int choice = selection_stage_.GetAction(choices, random, &created_new_node);
-			if (choice < 0) episode_state_.SetInvalid();
-			return choice;
+			choice = selection_stage_.GetAction(choices, random, &created_new_node);
+		}
+		else {
+			assert(stage == detail::EpisodeState::kStageSimulation);
+			choice = simulation_stage_.GetAction(choices, random);
 		}
 
-		if (stage == detail::EpisodeState::kStageSimulation) {
-			return simulation_stage_.GetAction(choices, random);
-		}
-
-		assert(false);
-		return 0;
+		if (choice < 0) episode_state_.SetInvalid();
+		return choice;
 	}
 }

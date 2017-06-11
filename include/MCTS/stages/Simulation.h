@@ -38,7 +38,8 @@ namespace mcts
 		private:
 			int Simulate(int choices, bool random)
 			{
-				assert(choice_white_list_.GetWhiteListCount() > 0);
+				if (choice_white_list_.GetWhiteListCount() <= 0) return -1;
+
 				int final_choice = 0;
 				choice_white_list_.ForEachWhiteListItem([&](int choice) {
 					final_choice = choice;
