@@ -40,12 +40,19 @@ namespace mcts
 			{
 				if (choice_white_list_.GetWhiteListCount() <= 0) return -1;
 
-				int final_choice = 0;
+				std::vector<int> valid_choices;
 				choice_white_list_.ForEachWhiteListItem([&](int choice) {
-					final_choice = choice;
+					valid_choices.push_back(choice);
 					return false; // early stop
 				});
-				return final_choice;
+
+				if (action_type.GetType() == ActionType::kChooseOne) {
+					int rnd = rand() % valid_choices.size();
+					return valid_choices[rnd];
+				}
+
+				int rnd = rand() % valid_choices.size();
+				return valid_choices[rnd];
 				// TODO: use value network to enhance simulation
 				//return std::rand() % choices;
 			}
