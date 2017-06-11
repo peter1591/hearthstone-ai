@@ -92,7 +92,7 @@ namespace mcts
 					}
 
 					if (!do_remove) return;
-
+					
 					parent->RemoveChild(edge);
 					if (!node_removed) node_removed = true;
 				};
@@ -151,13 +151,20 @@ namespace mcts
 
 			int SelectActionByRandom(int choices)
 			{
+				// TODO: we should only enumerate over valid choice
+				// TODO: a quicker way random access the tree_node_->GetChildren()
 				return std::rand() % choices; // TODO: use more stronger random generator?
 			}
 
 			int SelectActionByChoice(int choices)
 			{
 				assert(!tree_node_->GetChildren().empty());
-				return tree_node_->GetChildren().begin()->first;
+				std::vector<int> valid_choices;
+				for (auto const& valid_child : tree_node_->GetChildren()) {
+					valid_choices.push_back(valid_child.first);
+				}
+				int idx = std::rand() % valid_choices.size();
+				return valid_choices[idx];
 			}
 
 		private:

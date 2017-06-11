@@ -31,6 +31,7 @@ namespace mcts
 		bool HasUnExpandedAction() const { return next_unexpanded_action_ < action_count_; }
 		int ExpandAction() { return next_unexpanded_action_++; }
 
+		ActionType GetActionType() const { return action_type_; }
 		int GetActionCount() const { return (int)action_count_; }
 
 		auto const& GetChildren() const { return children_; }
