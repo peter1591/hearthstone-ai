@@ -26,6 +26,7 @@ namespace mcts
 			Stage GetStage() const { return stage_; }
 			void SetToSimulationStage() { stage_ = kStageSimulation; }
 
+			void SetBoard(Board const& board) { board_ = board; }
 			Board const& GetBoard() const { return board_; }
 			Board & GetBoard() { return board_; }
 

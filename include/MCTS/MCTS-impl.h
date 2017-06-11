@@ -15,6 +15,7 @@ namespace mcts
 		flag_switch_to_simulation_ = false;
 		episode_state_.Start(start_board_getter());
 		selection_stage_.StartEpisode();
+		simulation_stage_.StartEpisode();
 
 		ActionParameterGetter action_parameter_getter(*this);
 		RandomGenerator random_generator(*this);
@@ -28,11 +29,8 @@ namespace mcts
 				flag_switch_to_simulation_ = false;
 			}
 
-			detail::EpisodeState resume_state;
-
 			if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
-				choice_white_list_.Clear();
-				resume_state = episode_state_;
+				simulation_stage_.StartNewAction(episode_state_.GetBoard());
 			}
 
 			while (true)
@@ -54,10 +52,10 @@ namespace mcts
 					}
 
 					assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
-					// Use a white-list-tree to record all viable (sub-)actions
-					episode_state_ = resume_state;
-					choice_white_list_.ReportInvalidChoice();
-					choice_white_list_.Restart();
+
+					simulation_stage_.ReportInvalidAction();
+					Board const& saved_board = simulation_stage_.RestartAction();
+					episode_state_.SetBoard(saved_board);
 					statistic_.ApplyActionFailed();
 					continue;
 				}
@@ -114,26 +112,10 @@ namespace mcts
 		}
 
 		if (stage == detail::EpisodeState::kStageSimulation) {
-			choice_white_list_.FillChoices(choices);
-			int choice = Simulate(choices, random);
-			choice_white_list_.ApplyChoice(choice);
-			return choice;
+			return simulation_stage_.GetAction(choices, random);
 		}
 
 		assert(false);
 		return 0;
-	}
-
-	inline int MCTS::Simulate(int choices, bool random)
-	{
-		assert(choice_white_list_.GetWhiteListCount() > 0);
-		int final_choice = 0;
-		choice_white_list_.ForEachWhiteListItem([&](int choice) {
-			final_choice = choice;
-			return false; // early stop
-		});
-		return final_choice;
-		// TODO: use value network to enhance simulation
-		//return std::rand() % choices;
 	}
 }

@@ -3,8 +3,8 @@
 #include "MCTS/Tree.h"
 
 #include "MCTS/stages/Selection.h"
+#include "MCTS/stages/Simulation.h"
 #include "MCTS/detail/EpisodeState.h"
-#include "MCTS/detail/ChoiceWhiteList.h"
 #include "MCTS/detail/Statistic.h"
 
 namespace mcts
@@ -39,10 +39,10 @@ namespace mcts
 
 	private:
 		detail::EpisodeState episode_state_;
-		detail::ChoiceWhiteList choice_white_list_;
 		detail::Statistic<> statistic_;
 
 		stages::Selection selection_stage_;
+		stages::Simulation simulation_stage_;
 
 		bool flag_switch_to_simulation_;
 	};
