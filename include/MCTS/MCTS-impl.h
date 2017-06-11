@@ -13,7 +13,8 @@ namespace mcts
 	template <typename StartBoardGetter>
 	inline void MCTS::Iterate(StartBoardGetter&& start_board_getter) {
 		flag_switch_to_simulation_ = false;
-		episode_state_.Start(start_board_getter(), tree_.GetRootNode());
+		episode_state_.Start(start_board_getter());
+		selection_stage_.StartEpisode();
 
 		ActionParameterGetter action_parameter_getter(*this);
 		RandomGenerator random_generator(*this);
@@ -39,14 +40,16 @@ namespace mcts
 				int choices = episode_state_.GetBoard().GetActionsCount();
 				int choice = this->UserChooseAction(choices);
 
-				result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
-				if (!episode_state_.IsValid()) result = Result::kResultInvalid;
+				if (episode_state_.IsValid()) {
+					result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
+				}
+				else {
+					result = Result::kResultInvalid;
+				}
 
 				if (result == Result::kResultInvalid) {
 					if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
-						// We modify the tree structure, so next time this invalid node will not be chosen
-						assert(episode_state_.GetTreeNode() == last_node_.GetChild());
-						last_node_.RemoveNode();
+						selection_stage_.ReportInvalidAction();
 						return;
 					}
 
@@ -73,8 +76,8 @@ namespace mcts
 		bool win = (result == Result::kResultFirstPlayerWin);
 
 		std::for_each(
-			episode_state_.GetTraversedPath().begin(),
-			episode_state_.GetTraversedPath().end(),
+			selection_stage_.GetTraversedPath().begin(),
+			selection_stage_.GetTraversedPath().end(),
 			[&](TreeNode* traversed_node)
 		{
 			traversed_node->ReportResult(win);
@@ -102,14 +105,11 @@ namespace mcts
 		auto stage = episode_state_.GetStage();
 
 		if (stage == detail::EpisodeState::kStageSelection) {
-			int choice = SelectAction(choices, random);
+			// if a new node is created, we switch to simulation
+			bool & created_new_node = flag_switch_to_simulation_;
 
-			TreeNode* parent_node = episode_state_.GetTreeNode();
-			TreeNode* next_node = parent_node->GetOrCreateChild(choice);
-			episode_state_.StepNext(choice, next_node);
-
-			last_node_.Set(parent_node, next_node, choice);
-
+			int choice = selection_stage_.GetAction(choices, random, &created_new_node);
+			if (choice < 0) episode_state_.SetInvalid();
 			return choice;
 		}
 
@@ -121,46 +121,6 @@ namespace mcts
 		}
 
 		assert(false);
-		return 0;
-	}
-
-	inline int MCTS::SelectAction(int choices, bool random) {
-		if (episode_state_.GetTreeNode()->NeedFillActions()) {
-			episode_state_.GetTreeNode()->FillActions(choices, random);
-		}
-
-		assert(episode_state_.GetTreeNode()->GetActionCount() == choices);
-		assert(episode_state_.GetTreeNode()->GetActionIsRandom() == random);
-
-		// Check if current tree node has un-expanded action
-		//   If yes, choose that action
-		if (episode_state_.GetTreeNode()->HasUnExpandedAction()) {
-			SwitchToSimulationMode();
-			return episode_state_.GetTreeNode()->ExpandAction();
-		}
-
-		if (episode_state_.GetTreeNode()->GetChildren().empty()) {
-			// no valid action from this node
-			// so this node must be an invalid action
-			// --> remove it from parent
-			assert(last_node_.GetChild() == episode_state_.GetTreeNode());
-			last_node_.RemoveNode();
-			episode_state_.SetInvalid();
-			return -1;
-		}
-		
-		if (random) return SelectActionByRandom(choices);
-		else return SelectActionByChoice(choices);
-	}
-
-	inline int MCTS::SelectActionByRandom(int choices)
-	{
-		return std::rand() % choices; // TODO: use more stronger random generator?
-	}
-
-	inline int MCTS::SelectActionByChoice(int choices)
-	{
-		// TODO: balance between exploitation and exploration
 		return 0;
 	}
 

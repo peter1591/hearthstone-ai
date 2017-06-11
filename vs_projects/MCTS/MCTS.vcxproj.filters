@@ -19,6 +19,9 @@
     <Filter Include="Header Files\MCTS\detail">
       <UniqueIdentifier>{b98b6334-272c-4321-8d82-8a745c6d816a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MCTS\stages">
+      <UniqueIdentifier>{f31208c2-4a5f-4433-9aa5-88592a2dc1b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
@@ -79,6 +82,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Config.h">
       <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\stages\Simulation.h">
+      <Filter>Header Files\MCTS\stages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\stages\Selection.h">
+      <Filter>Header Files\MCTS\stages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

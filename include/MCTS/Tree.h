@@ -20,6 +20,11 @@ namespace mcts
 			is_random_ = random;
 			next_unexpanded_action_ = 0;
 		}
+		bool CheckFilledActions(int action_count, bool is_random) {
+			if (action_count_ != action_count) return false;
+			if (is_random_ != is_random) return false;
+			return true;
+		}
 
 		bool HasUnExpandedAction() const { return next_unexpanded_action_ < action_count_; }
 		int ExpandAction() { return next_unexpanded_action_++; }
