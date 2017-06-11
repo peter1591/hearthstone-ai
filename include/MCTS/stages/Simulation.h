@@ -17,9 +17,9 @@ namespace mcts
 				choice_white_list_.Clear();
 			}
 
-			int GetAction(int choices, bool random) {
+			int GetAction(ActionType action_type, int choices) {
 				choice_white_list_.FillChoices(choices);
-				int choice = Simulate(choices, random);
+				int choice = Simulate(action_type, choices);
 				choice_white_list_.ApplyChoice(choice);
 				return choice;
 			}
@@ -36,7 +36,7 @@ namespace mcts
 			}
 
 		private:
-			int Simulate(int choices, bool random)
+			int Simulate(ActionType action_type, int choices)
 			{
 				if (choice_white_list_.GetWhiteListCount() <= 0) return -1;
 

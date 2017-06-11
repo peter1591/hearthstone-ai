@@ -12,12 +12,12 @@ namespace mcts
 
 		int Get(int exclusive_max) final
 		{
-			return mcts_.RandomChooseAction(exclusive_max);
+			return mcts_.ChooseAction(ActionType(ActionType::kRandom), exclusive_max);
 		}
 		
 		size_t Get(size_t exclusive_max) final
 		{
-			return (size_t)mcts_.RandomChooseAction((int)exclusive_max);
+			return (size_t)mcts_.ChooseAction(ActionType(ActionType::kRandom), (int)exclusive_max);
 		}
 
 		// @param min Inclusive minimum

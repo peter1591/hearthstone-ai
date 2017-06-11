@@ -44,9 +44,9 @@ namespace mcts
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
-			int GetAction(int choices, bool random, bool * created_new_node)
+			int GetAction(ActionType action_type, int choices, bool * created_new_node)
 			{
-				int choice = SelectAction(choices, random, created_new_node);
+				int choice = SelectAction(action_type, choices, created_new_node);
 				if (choice < 0) return -1;
 
 				TreeNode* parent_node = tree_node_;
@@ -67,9 +67,9 @@ namespace mcts
 			std::vector<TreeNode*> const& GetTraversedPath() const { return path_; }
 
 		private:
-			inline int SelectAction(int choices, bool random, bool * new_node) {
-				if (tree_node_->NeedFillActions()) tree_node_->FillActions(choices, random);
-				assert(tree_node_->CheckFilledActions(choices, random));
+			inline int SelectAction(ActionType action_type, int choices, bool * new_node) {
+				if (tree_node_->NeedFillActions()) tree_node_->FillActions(action_type, choices);
+				assert(tree_node_->CheckFilledActions(action_type, choices));
 
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
@@ -84,7 +84,7 @@ namespace mcts
 					return -1;
 				}
 
-				if (random) return SelectActionByRandom(choices);
+				if (action_type.IsChosenRandomly()) return SelectActionByRandom(choices);
 				else return SelectActionByChoice(choices);
 			}
 

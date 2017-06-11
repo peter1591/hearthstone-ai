@@ -89,5 +89,8 @@
     <ClInclude Include="..\..\include\MCTS\stages\Selection.h">
       <Filter>Header Files\MCTS\stages</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\ActionType.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

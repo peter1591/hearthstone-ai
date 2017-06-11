@@ -6,6 +6,7 @@
 #include "MCTS/stages/Simulation.h"
 #include "MCTS/detail/EpisodeState.h"
 #include "MCTS/detail/Statistic.h"
+#include "MCTS/ActionType.h"
 
 namespace mcts
 {
@@ -15,15 +16,14 @@ namespace mcts
 		template <typename StartBoardGetter>
 		void Iterate(StartBoardGetter&& start_board_getter);
 
-		int UserChooseAction(int exclusive_max);
-		int RandomChooseAction(int exclusive_max);
+		int ChooseAction(ActionType action_type, int choices);
 
 		void PrintStatistic() {
 			statistic_.PrintMessage();
 		}
 
 	private:
-		int ActionCallback(int choices, bool random);
+		int ActionCallback(ActionType action_type, int choices);
 
 		void SwitchToSimulationMode() {
 			// We use a flag here, since we cannot switch to simulation mode

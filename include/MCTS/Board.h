@@ -37,8 +37,6 @@ namespace mcts
 		Result HeroPower(RandomGenerator & random, ActionParameterGetter & action_parameters);
 		Result EndTurn(RandomGenerator & random, ActionParameterGetter & action_parameters);
 
-		state::CardRef UserChooseSideCharacter(state::PlayerIdentifier player_id, ActionParameterGetter & action_parameters);
-
 	private:
 		state::State state_;
 

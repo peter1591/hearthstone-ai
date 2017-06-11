@@ -40,7 +40,7 @@ namespace mcts
 	{
 		FlowControl::FlowContext flow_context(random, action_parameters);
 		assert(!playable_cards_.empty());
-		int idx = action_parameters.GetNumber((int)playable_cards_.size());
+		int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, (int)playable_cards_.size());
 		int hand_idx = playable_cards_[idx];
 		return FlowControl::FlowController(state_, flow_context).PlayCard(hand_idx);
 	}
@@ -49,7 +49,7 @@ namespace mcts
 	{
 		FlowControl::FlowContext flow_context(random, action_parameters);
 		assert(!attackers_.empty());
-		int idx = action_parameters.GetNumber((int)attackers_.size());
+		int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
 		state::CardRef attacker = attackers_[idx];
 
 		return FlowControl::FlowController(state_, flow_context).Attack(attacker);
@@ -65,16 +65,5 @@ namespace mcts
 	{
 		FlowControl::FlowContext flow_context(random, action_parameters);
 		return FlowControl::FlowController(state_, flow_context).EndTurn();
-	}
-
-	inline state::CardRef Board::UserChooseSideCharacter(state::PlayerIdentifier player_id, ActionParameterGetter & action_parameters)
-	{
-		int attacker_count = (int)state_.GetBoard().Get(player_id).minions_.Size() + 1;
-		int attacker_idx = action_parameters.GetNumber(attacker_count);
-
-		if (attacker_idx == 0) return state_.GetBoard().Get(player_id).GetHeroRef();
-
-		attacker_idx--;
-		return state_.GetBoard().Get(player_id).minions_.Get(attacker_idx);
 	}
 }

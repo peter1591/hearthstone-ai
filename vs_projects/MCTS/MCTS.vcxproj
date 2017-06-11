@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\MCTS\ActionParameterGetter.h" />
+    <ClInclude Include="..\..\include\MCTS\ActionType.h" />
     <ClInclude Include="..\..\include\MCTS\Board-impl.h" />
     <ClInclude Include="..\..\include\MCTS\Board.h" />
     <ClInclude Include="..\..\include\MCTS\BoardCloner.h" />

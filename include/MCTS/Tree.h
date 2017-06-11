@@ -3,26 +3,28 @@
 #include <unordered_map>
 #include <memory>
 
+#include "MCTS/ActionType.h"
+
 namespace mcts
 {
 	class TreeNode
 	{
 	public:
-		TreeNode() : action_count_(0), is_random_(false), next_unexpanded_action_(-1),
+		TreeNode() : action_count_(0), action_type_(ActionType::kInvalid), next_unexpanded_action_(-1),
 			wins(0), total(0)
 		{}
 
 		bool NeedFillActions() const { return action_count_ <= 0; }
-		void FillActions(int action_count, bool random) {
+		void FillActions(ActionType action_type, int action_count) {
 			assert(action_count >= 0);
 			assert(children_.empty());
 			action_count_ = (size_t)action_count;
-			is_random_ = random;
+			action_type_ = action_type;
 			next_unexpanded_action_ = 0;
 		}
-		bool CheckFilledActions(int action_count, bool is_random) {
+		bool CheckFilledActions(ActionType action_type, int action_count) {
+			if (action_type_ != action_type) return false;
 			if (action_count_ != action_count) return false;
-			if (is_random_ != is_random) return false;
 			return true;
 		}
 
@@ -30,7 +32,6 @@ namespace mcts
 		int ExpandAction() { return next_unexpanded_action_++; }
 
 		int GetActionCount() const { return (int)action_count_; }
-		bool GetActionIsRandom() const { return is_random_; }
 
 		auto const& GetChildren() const { return children_; }
 
@@ -62,8 +63,8 @@ namespace mcts
 		}
 
 	private:
+		ActionType action_type_; // TODO: actually this is debug only to check consistency of game engine
 		size_t action_count_;
-		bool is_random_;
 		int next_unexpanded_action_;
 		std::unordered_map<int, std::unique_ptr<TreeNode>> children_;
 

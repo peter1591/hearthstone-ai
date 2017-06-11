@@ -39,7 +39,7 @@ namespace mcts
 			while (true)
 			{
 				int choices = episode_state_.GetBoard().GetActionsCount();
-				int choice = this->UserChooseAction(choices);
+				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
 
 				if (episode_state_.IsValid()) {
 					result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
@@ -90,19 +90,12 @@ namespace mcts
 		statistic_.FinishedOneEpisode();
 	}
 
-	// TODO: add action type for simulation
-	inline int MCTS::UserChooseAction(int exclusive_max)
+	inline int MCTS::ChooseAction(ActionType action_type, int choices)
 	{
-		return ActionCallback(exclusive_max, false);
+		return ActionCallback(action_type, choices);
 	}
 
-	// TODO: unify with UserChooseAction(), distinguishing by action type
-	inline int MCTS::RandomChooseAction(int exclusive_max)
-	{
-		return ActionCallback(exclusive_max, true);
-	}
-
-	inline int MCTS::ActionCallback(int choices, bool random)
+	inline int MCTS::ActionCallback(ActionType action_type, int choices)
 	{
 		assert(choices > 0);
 
@@ -112,11 +105,11 @@ namespace mcts
 		if (stage == detail::EpisodeState::kStageSelection) {
 			// if a new node is created, we switch to simulation
 			bool & created_new_node = flag_switch_to_simulation_;
-			choice = selection_stage_.GetAction(choices, random, &created_new_node);
+			choice = selection_stage_.GetAction(action_type, choices, &created_new_node);
 		}
 		else {
 			assert(stage == detail::EpisodeState::kStageSimulation);
-			choice = simulation_stage_.GetAction(choices, random);
+			choice = simulation_stage_.GetAction(action_type, choices);
 		}
 
 		if (choice < 0) episode_state_.SetInvalid();
