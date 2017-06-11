@@ -36,7 +36,14 @@ namespace mcts
 		ActionType GetActionType() const { return action_type_; }
 		int GetActionCount() const { return (int)action_count_; }
 
-		auto const& GetChildren() const { return children_; }
+		bool HasAnyChild() const { return children_.empty(); }
+
+		template <typename Functor>
+		void ForEachChild(Functor&& functor) const {
+			for (auto const& child : children_) {
+				functor(child.first, child.second.get());
+			}
+		}
 
 		TreeNode* GetChild(int action) {
 			assert(action >= 0);

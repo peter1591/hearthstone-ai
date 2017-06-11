@@ -55,7 +55,7 @@ namespace mcts
 					if (!node_removed) do_remove = true;
 					else {
 						if (child->HasUnExpandedAction()) {}
-						else if (!child->GetChildren().empty()) {}
+						else if (!child->HasAnyChild()) {}
 						else 
 							do_remove = true;
 					}
@@ -101,7 +101,7 @@ namespace mcts
 				}
 				*new_node = false;
 
-				if (GetCurrentNode()->GetChildren().empty()) {
+				if (GetCurrentNode()->HasAnyChild()) {
 					// no valid action from this node (all actions are removed since they yields an invalid state)
 					return -1;
 				}
@@ -124,11 +124,11 @@ namespace mcts
 
 			int SelectActionByChoice(int choices)
 			{
-				assert(!GetCurrentNode()->GetChildren().empty());
+				assert(!GetCurrentNode()->HasAnyChild());
 				std::vector<int> valid_choices;
-				for (auto const& valid_child : GetCurrentNode()->GetChildren()) {
-					valid_choices.push_back(valid_child.first);
-				}
+				GetCurrentNode()->ForEachChild([&](int action, TreeNode* child) {
+					valid_choices.push_back(action);
+				});
 				int idx = std::rand() % valid_choices.size();
 				return valid_choices[idx];
 			}
