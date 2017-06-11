@@ -25,12 +25,6 @@ namespace mcts
 	private:
 		int ActionCallback(int choices, bool random);
 
-		int SelectAction(int choices, bool random);
-		int SelectActionByRandom(int choices);
-		int SelectActionByChoice(int choices);
-
-		int Simulate(int choices, bool random);
-
 		void SwitchToSimulationMode() {
 			// We use a flag here, since we cannot switch to simulation mode
 			// in sub-actions.
