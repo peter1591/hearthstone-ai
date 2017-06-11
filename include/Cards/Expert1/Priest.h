@@ -33,7 +33,7 @@ namespace Cards
 	struct Card_CS1_129 : SpellCardBase<Card_CS1_129> {
 		Card_CS1_129() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredSpellTargets(context.player_).Minion().GetInfo();
+				context.SetRequiredSpellTargets(context.player_).Minion();
 				return true; // return false if card cannot be played
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -64,7 +64,7 @@ namespace Cards
 	struct Card_EX1_625t : public HeroPowerCardBase<Card_EX1_625t> {
 		Card_EX1_625t() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredSpellTargets(context.player_).GetInfo();
+				context.SetRequiredSpellTargets(context.player_);
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -76,7 +76,7 @@ namespace Cards
 	struct Card_EX1_625t2 : public HeroPowerCardBase<Card_EX1_625t2> {
 		Card_EX1_625t2() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredSpellTargets(context.player_).GetInfo();
+				context.SetRequiredSpellTargets(context.player_);
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -169,7 +169,7 @@ namespace Cards
 	struct Card_EX1_334 : SpellCardBase<Card_EX1_334> {
 		Card_EX1_334() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredSpellTargets(context.player_).Enemy().Minion().GetInfo();
+				context.SetRequiredSpellTargets(context.player_).Enemy().Minion();
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -219,7 +219,7 @@ namespace Cards
 	struct Card_EX1_624 : SpellCardBase<Card_EX1_624> {
 		Card_EX1_624() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				context.SetRequiredSpellTargets(context.player_).GetInfo();
+				context.SetRequiredSpellTargets(context.player_);
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
