@@ -30,6 +30,7 @@ namespace mcts
 			Board const& GetBoard() const { return board_; }
 			Board & GetBoard() { return board_; }
 
+			void SetValid() { is_valid_ = true; }
 			void SetInvalid() { is_valid_ = false; }
 			bool IsValid() const { return is_valid_; }
 

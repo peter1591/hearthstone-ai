@@ -30,6 +30,9 @@ namespace mcts
 			}
 
 			if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
+				// main actions are supposed to be always-valid
+				// otherwise, we need to remeber choice-white-list across main-actions
+				assert(episode_state_.IsValid());
 				simulation_stage_.StartNewAction(episode_state_.GetBoard());
 			}
 
@@ -54,8 +57,11 @@ namespace mcts
 					assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
 
 					simulation_stage_.ReportInvalidAction();
+					
 					Board const& saved_board = simulation_stage_.RestartAction();
 					episode_state_.SetBoard(saved_board);
+					episode_state_.SetValid();
+
 					statistic_.ApplyActionFailed();
 					continue;
 				}
