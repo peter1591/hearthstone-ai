@@ -94,6 +94,11 @@ namespace mcts
 				}());
 			}
 
+			void Clear() {
+				children_.clear();
+				valid_children_idx_map_.clear();
+			}
+
 		private:
 			std::vector<std::unique_ptr<TreeNode>> children_;
 

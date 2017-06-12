@@ -40,7 +40,7 @@ namespace mcts
 			int parent_child_edge_;
 
 			int choices_; // 0: not set
-			std::unordered_map<int, std::unique_ptr<TreeNode>> white_list_;
+			std::unordered_map<int, std::unique_ptr<TreeNode>> white_list_; // TODO: don't use hash table
 		};
 	}
 }

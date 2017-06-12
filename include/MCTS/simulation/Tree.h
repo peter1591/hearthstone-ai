@@ -16,6 +16,9 @@ namespace mcts
 		//    sometimes a (sub-)action might still yields an invalid game state
 		// In this case, we want to record the path of (sub-)actions yielding an invalid state
 		//    and prevent this path for a following re-trial
+		// Optimization: The case we yield an invalid game state is rarely happened
+		// Idea:
+		//   Delay the allocation of tree node when an invalid state is found
 		class Tree
 		{
 		private:
@@ -154,7 +157,7 @@ namespace mcts
 
 					TreeNode* parent = traversed_nodes_.back();
 					assert(CheckParentChildRelationship(parent, processing));
-					traversed_nodes_.pop_back();
+					traversed_nodes_.pop_back(); // TODO: don't use pop_back
 
 					auto it = parent->GetWhiteList().find(processing->GetParentChildEdge());
 					assert(it != parent->GetWhiteList().end());
