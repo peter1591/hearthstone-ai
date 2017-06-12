@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "MCTS/selection/Tree.h"
+#include "MCTS/selection/TreeNode.h"
 
 namespace mcts
 {
@@ -19,7 +19,7 @@ namespace mcts
 			void StartEpisode()
 			{
 				path_.clear();
-				StepNext(-1, tree_.GetRootNode());
+				StepNext(-1, &root_);
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
@@ -139,7 +139,7 @@ namespace mcts
 			}
 
 		private:
-			Tree tree_;
+			TreeNode root_;
 
 			std::vector<TraversedNodeInfo> path_;
 		};

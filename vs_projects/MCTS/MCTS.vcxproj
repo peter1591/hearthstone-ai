@@ -170,9 +170,10 @@
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />
     <ClInclude Include="..\..\include\MCTS\RandomGenerator.h" />
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\Tree.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Tree.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
+    <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h" />
     <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

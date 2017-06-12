@@ -81,14 +81,5 @@ namespace mcts
 			int wins;
 			int total;
 		};
-
-		class Tree
-		{
-		public:
-			TreeNode* GetRootNode() { return &root_; }
-
-		private:
-			TreeNode root_;
-		};
 	}
 }

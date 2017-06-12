@@ -83,9 +83,6 @@
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\selection\Tree.h">
-      <Filter>Header Files\MCTS\selection</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h">
       <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
@@ -94,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h">
       <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
