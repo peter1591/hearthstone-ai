@@ -49,11 +49,16 @@ namespace mcts
 			bool HasValidChild() const { return !valid_children_idx_map_.empty(); }
 			size_t GetValidChildrenCount() const { return valid_children_idx_map_.size(); }
 
-			TreeNode* PushBackOneNewChild() {
+			TreeNode* PushBackValidChild() {
 				TreeNode* new_node = new TreeNode();
 				valid_children_idx_map_.push_back(children_.size());
 				children_.push_back(std::unique_ptr<TreeNode>(new_node));
 				return new_node;
+			}
+
+			void PushBackInvalidChild(int count = 1) {
+				size_t new_size = children_.size() + (size_t)count;
+				children_.resize(new_size);
 			}
 
 			void MarkInvalid(size_t idx) {

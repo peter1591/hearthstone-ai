@@ -61,7 +61,7 @@ namespace mcts
 
 			TreeNode* CreateChild(int action) {
 				assert(action == (int)TreeNodeBase::GetChildrenCount()); // only possible to expand the next action
-				return TreeNodeBase::PushBackOneNewChild();
+				return TreeNodeBase::PushBackValidChild();
 			}
 
 			void RemoveChild(int action) {

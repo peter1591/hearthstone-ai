@@ -26,6 +26,10 @@ namespace mcts
 				int choices;
 				int choice;
 			};
+			struct TraversedInfo {
+				TreeNode* node;
+				int choice;
+			};
 
 		public:
 			Tree() : root_(-1), node_(&root_), last_choice_(-1)
@@ -60,7 +64,7 @@ namespace mcts
 						pending_actions_.push_back({ choices, -1 });
 					}
 					else {
-						AdvanceNode(it->second.get());
+						AdvanceNode(last_choice_, it->second.get());
 					}
 				}
 				else {
@@ -117,7 +121,7 @@ namespace mcts
 							node_container.reset(new_node);
 						}
 
-						AdvanceNode(node_container.get());
+						AdvanceNode(next_edge, node_container.get());
 						next_edge = pending_action.choice;
 					}
 				}
@@ -141,29 +145,27 @@ namespace mcts
 				return false;
 			}
 
-			void AdvanceNode(TreeNode* node)
+			void AdvanceNode(int choice, TreeNode* next_node)
 			{
-				assert(node);
-				assert(CheckParentChildRelationship(node_, node));
+				assert(next_node);
+				assert(CheckParentChildRelationship(node_, next_node));
+				assert(node_->GetWhiteList()[choice].get() == next_node);
 
-				traversed_nodes_.push_back(node_);
-				node_ = node;;
+				traversed_nodes_.push_back({ node_, choice });
+				node_ = next_node;
 			}
 
 			void CascadeRemoveParentNodesWithNoChild() {
-				TreeNode* processing = node_;
-				while (processing->GetWhiteList().size() == 0) {
-					if (traversed_nodes_.empty()) break;
+				if (!node_->GetWhiteList().empty()) return;
 
-					TreeNode* parent = traversed_nodes_.back();
-					assert(CheckParentChildRelationship(parent, processing));
-					traversed_nodes_.pop_back(); // TODO: don't use pop_back
+				for (auto it = traversed_nodes_.rbegin(); it != traversed_nodes_.rend(); ++it) {
+					TreeNode* parent = it->node;
+					int choice = it->choice;
 
-					auto it = parent->GetWhiteList().find(processing->GetParentChildEdge());
-					assert(it != parent->GetWhiteList().end());
-					parent->GetWhiteList().erase(it);
-
-					processing = parent;
+					auto it_child = parent->GetWhiteList().find(choice);
+					assert(it_child != parent->GetWhiteList().end());
+					parent->GetWhiteList().erase(it_child);
+					if (!parent->GetWhiteList().empty()) break;
 				}
 			}
 
@@ -172,7 +174,8 @@ namespace mcts
 
 			TreeNode* node_;
 			int last_choice_;
-			std::vector<TreeNode*> traversed_nodes_;
+
+			std::vector<TraversedInfo> traversed_nodes_;
 
 			// The case for an invalid game state is rare
 			// So we want to delay the creation of the TreeNode as late as possible
