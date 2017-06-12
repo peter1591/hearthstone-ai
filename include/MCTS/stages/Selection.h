@@ -120,7 +120,6 @@ namespace mcts
 
 			std::pair<int, TreeNode*> SelectActionByRandom()
 			{
-				// TODO: a quicker way random access the tree_node_->GetChildren()
 				assert(GetCurrentNode()->HasAnyChild());
 
 				size_t count = GetCurrentNode()->GetChildrenCount();

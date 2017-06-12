@@ -46,7 +46,7 @@ namespace mcts
 					return false; // early stop
 				});
 
-				if (action_type.GetType() == ActionType::kChooseOne) {
+				if (action_type.IsChosenRandomly()) {
 					int rnd = rand() % valid_choices.size();
 					return valid_choices[rnd];
 				}
