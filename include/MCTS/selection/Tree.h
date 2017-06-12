@@ -4,17 +4,21 @@
 #include <memory>
 
 #include "MCTS/ActionType.h"
+#include "MCTS/detail/TreeNodeBase.h"
 
 namespace mcts
 {
 	namespace selection
 	{
-		class TreeNode
+		// Action: Use the index of all children
+		// Remove a child: Just mark the children as invalid
+		class TreeNode : private detail::TreeNodeBase<TreeNode>
 		{
 		public:
-			TreeNode() : action_count_(0), action_type_(ActionType::kInvalid),
-				wins(0), total(0)
-			{}
+			TreeNode() : action_count_(0), action_type_(ActionType::kInvalid), wins(0), total(0) {}
+
+			ActionType GetActionType() const { return action_type_; }
+			int GetActionCount() const { return (int)action_count_; }
 
 			void FillActions(ActionType action_type, int action_count) {
 				assert(action_count >= 0);
@@ -26,95 +30,44 @@ namespace mcts
 					return;
 				}
 
-				assert(children_.empty());
-				assert(valid_children_idx_map_.empty());
+				assert(!TreeNodeBase::HasChild());
+				assert(!TreeNodeBase::HasValidChild());
 				action_count_ = (size_t)action_count;
 				action_type_ = action_type;
 			}
 
-			bool HasUnExpandedAction() const { return children_.size() < action_count_; }
+			bool HasUnExpandedAction() const {
+				return TreeNodeBase::GetChildrenCount() < action_count_;
+			}
 			int GetNextActionToExpand() const {
 				assert(HasUnExpandedAction());
-				return (int)children_.size();
+				return (int)TreeNodeBase::GetChildrenCount();
 			}
 
-			ActionType GetActionType() const { return action_type_; }
-			int GetActionCount() const { return (int)action_count_; }
-
-			bool HasAnyChild() const { return !valid_children_idx_map_.empty(); }
-			size_t GetChildrenCount() const { return valid_children_idx_map_.size(); }
+			bool HasAnyChild() const { return TreeNodeBase::HasValidChild(); }
+			size_t GetChildrenCount() const { return TreeNodeBase::GetValidChildrenCount(); }
 
 			template <typename Functor>
 			void ForEachChild(Functor&& functor) const {
-				for (size_t child_idx : valid_children_idx_map_) {
-					assert(children_[child_idx]);
-					functor((int)child_idx, children_[child_idx].get());
-				}
+				return TreeNodeBase::ForEachValidChild(std::forward<Functor>(functor));
 			}
 
 			std::pair<int, TreeNode*> GetNthChild(size_t idx) const {
-				assert(idx < valid_children_idx_map_.size());
-				size_t child_idx = valid_children_idx_map_[idx];
-				assert(child_idx < children_.size());
-				assert(children_[child_idx]); // child should be valid (not removed)
-				return { (int)child_idx, children_[child_idx].get() };
+				auto ret = TreeNodeBase::GetValidChild(idx);
+				return { (int)ret.first, ret.second };
 			}
 
-			TreeNode* GetChild(int action) {
-				assert(action >= 0);
-				assert(action < children_.size());
-				TreeNode* child = children_[action].get();
-				assert(child); // child should not be a nullptr (i.e., a removed child)
-				return child;
-			}
+			TreeNode* GetChild(int action) { return TreeNodeBase::GetChild((size_t)action); }
 
 			TreeNode* CreateChild(int action) {
-				assert(action == (int)children_.size()); // only possible to expand the next action
-				TreeNode* new_node = new TreeNode();
-				valid_children_idx_map_.push_back(children_.size());
-				children_.push_back(std::unique_ptr<TreeNode>(new_node));
-				return new_node;
+				assert(action == (int)TreeNodeBase::GetChildrenCount()); // only possible to expand the next action
+				return TreeNodeBase::PushBackOneNewChild();
 			}
 
 			void RemoveChild(int action) {
 				assert(action >= 0);
-				assert(action < GetActionCount());
-				assert(action < children_.size());
-				assert(children_[action]);
-
-				assert([&]() {
-					bool found = false;
-					for (auto it = valid_children_idx_map_.begin(); it != valid_children_idx_map_.end(); ++it)
-					{
-						if (*it == action) {
-							found = true;
-							break;
-						}
-					}
-					assert(found);
-					return true;
-				}());
-
-				children_[action].release();
-
-				// A O(N) algorithm for removal, but the good side is
-				// we can have a O(1) for selection (which should be most of the cases)
-				for (auto it = valid_children_idx_map_.begin(); it != valid_children_idx_map_.end();)
-				{
-					if (*it == action) {
-						it = valid_children_idx_map_.erase(it);
-						break;
-					}
-					++it;
-				}
-
-				// debug check
-				assert([&]() {
-					for (auto idx : valid_children_idx_map_) {
-						assert(children_[idx]);
-					}
-					return true;
-				}());
+				assert((size_t)action < TreeNodeBase::GetChildrenCount());
+				return TreeNodeBase::MarkInvalid((size_t)action);
 			}
 
 			void ReportResult(bool win) {
@@ -125,11 +78,6 @@ namespace mcts
 		private:
 			ActionType action_type_; // TODO: actually this is debug only to check consistency of game engine
 			size_t action_count_;
-			std::vector<std::unique_ptr<TreeNode>> children_;
-
-			// map the 'index to valid children' to the 'index to all children'
-			std::vector<size_t> valid_children_idx_map_;
-
 			int wins;
 			int total;
 		};
