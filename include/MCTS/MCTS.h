@@ -1,9 +1,7 @@
 #pragma once
 
-#include "MCTS/Tree.h"
-
-#include "MCTS/stages/Selection.h"
-#include "MCTS/stages/Simulation.h"
+#include "MCTS/selection/Selection.h"
+#include "MCTS/simulation/Simulation.h"
 #include "MCTS/detail/EpisodeState.h"
 #include "MCTS/detail/Statistic.h"
 #include "MCTS/ActionType.h"
@@ -35,8 +33,8 @@ namespace mcts
 		detail::EpisodeState episode_state_;
 		detail::Statistic<> statistic_;
 
-		stages::Selection selection_stage_;
-		stages::Simulation simulation_stage_;
+		selection::Selection selection_stage_;
+		simulation::Simulation simulation_stage_;
 
 		bool flag_switch_to_simulation_;
 	};

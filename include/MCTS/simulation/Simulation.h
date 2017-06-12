@@ -1,11 +1,11 @@
 #pragma once
 
 #include "MCTS/Board.h"
-#include "MCTS/detail/ChoiceWhiteList.h"
+#include "MCTS/simulation/Tree.h"
 
 namespace mcts
 {
-	namespace stages
+	namespace simulation
 	{
 		class Simulation
 		{
@@ -59,7 +59,7 @@ namespace mcts
 
 		private:
 			Board saved_board_;
-			detail::ChoiceWhiteList choice_white_list_;
+			Tree choice_white_list_;
 		};
 	}
 }

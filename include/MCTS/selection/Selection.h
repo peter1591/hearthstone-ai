@@ -1,11 +1,11 @@
 #pragma once
 
 #include <assert.h>
-#include "MCTS/Tree.h"
+#include "MCTS/selection/Tree.h"
 
 namespace mcts
 {
-	namespace stages
+	namespace selection
 	{
 		class Selection
 		{
@@ -75,10 +75,10 @@ namespace mcts
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
-			template <typename Functor>
-			void ForEachTraversedPath(Functor&& functor) {
+			void ReportResult(bool win)
+			{
 				for (auto const& item : path_) {
-					functor(item.leading_choice, item.node);
+					item.node->ReportResult(win);
 				}
 			}
 

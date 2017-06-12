@@ -19,8 +19,11 @@
     <Filter Include="Header Files\MCTS\detail">
       <UniqueIdentifier>{b98b6334-272c-4321-8d82-8a745c6d816a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MCTS\stages">
-      <UniqueIdentifier>{f31208c2-4a5f-4433-9aa5-88592a2dc1b6}</UniqueIdentifier>
+    <Filter Include="Header Files\MCTS\selection">
+      <UniqueIdentifier>{756b656e-dca2-4912-9875-8237db3a81b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MCTS\simulation">
+      <UniqueIdentifier>{ef59716c-5103-4379-875b-fe9dfbcf9b9a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,16 +65,10 @@
     <ClInclude Include="..\..\include\MCTS\MCTS-impl.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\Tree.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Board-impl.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\ChoiceWhiteList.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\Statistic.h">
@@ -80,14 +77,20 @@
     <ClInclude Include="..\..\include\MCTS\Config.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\stages\Simulation.h">
-      <Filter>Header Files\MCTS\stages</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\stages\Selection.h">
-      <Filter>Header Files\MCTS\stages</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\ActionType.h">
       <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\Selection.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\Tree.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\Tree.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

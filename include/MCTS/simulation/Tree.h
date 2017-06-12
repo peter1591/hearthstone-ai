@@ -8,7 +8,7 @@
 
 namespace mcts
 {
-	namespace detail
+	namespace simulation
 	{
 		// Some (sub-)action results in an invalid game state
 		// Ideally, we should prevent this situation as much as possible
@@ -16,7 +16,7 @@ namespace mcts
 		//    sometimes a (sub-)action might still yields an invalid game state
 		// In this case, we want to record the path of (sub-)actions yielding an invalid state
 		//    and prevent this path for a following re-trial
-		class ChoiceWhiteList
+		class Tree
 		{
 		private:
 			class TreeNode {
@@ -60,7 +60,7 @@ namespace mcts
 			};
 
 		public:
-			ChoiceWhiteList() : root_(-1), node_(&root_), last_choice_(-1)
+			Tree() : root_(-1), node_(&root_), last_choice_(-1)
 			{}
 
 			void Clear() {
@@ -137,7 +137,6 @@ namespace mcts
 
 			void ReportInvalidChoice() {
 				if (!pending_actions_.empty()) {
-					auto it_end = pending_actions_.end() - 1; // the last one is considered processed
 					assert(node_);
 
 					int next_edge = first_choice_before_pending_actions_;

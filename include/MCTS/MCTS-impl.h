@@ -79,9 +79,7 @@ namespace mcts
 		assert(result != Result::kResultInvalid);
 		bool win = (result == Result::kResultFirstPlayerWin);
 
-		selection_stage_.ForEachTraversedPath([&](int leading_choice, TreeNode* node) {
-			node->ReportResult(win);
-		});
+		selection_stage_.ReportResult(win);
 		
 		statistic_.FinishedOneEpisode();
 	}
