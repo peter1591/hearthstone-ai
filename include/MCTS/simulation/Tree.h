@@ -35,7 +35,7 @@ namespace mcts
 			Tree() : node_(&root_), last_choice_(-1) {}
 
 			void Clear() {
-				root_.Clear();
+				root_.Reset();
 				Restart();
 			}
 
@@ -50,7 +50,8 @@ namespace mcts
 
 				if (last_choice_ < 0) {
 					// special case for the very first call
-					node_->SetChoices(choices);
+					assert(node_ == &root_);
+					node_->Initialize(choices);
 					return;
 				}
 
@@ -111,10 +112,10 @@ namespace mcts
 					for (auto const& pending_action : pending_actions_) {
 						TreeNode* next_node = node_->GetChoice(next_edge);
 						if (!next_node) {
-							next_node = node_->AddChoice(next_edge);
-							next_node->SetChoices(pending_action.choices);
+							next_node = node_->AllocateChoiceNode(next_edge);
+							next_node->Initialize(pending_action.choices);
 						}
-
+						
 						AdvanceNode(next_edge, next_node);
 						next_edge = pending_action.choice;
 					}
