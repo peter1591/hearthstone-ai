@@ -98,5 +98,8 @@
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h">
       <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h">
+      <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

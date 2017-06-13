@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "MCTS/detail/NodeIndexMap.h"
+
 namespace mcts
 {
 	namespace detail
@@ -32,8 +34,7 @@ namespace mcts
 			// @parameter idx  The index among valid children
 			// @rerturn  The original index when added, and a pointer to that node
 			std::pair<size_t, TreeNode*> GetValidChild(size_t idx) const {
-				assert(idx < valid_children_idx_map_.size());
-				size_t child_idx = valid_children_idx_map_[idx];
+				size_t child_idx = valid_idx_map_.Get(idx);
 
 				assert(child_idx < children_.size());
 				assert(children_[child_idx]); // child should be valid (not removed before)
@@ -41,17 +42,18 @@ namespace mcts
 			}
 			template <typename Functor>
 			void ForEachValidChild(Functor&& functor) const {
-				for (size_t child_idx : valid_children_idx_map_) {
+				valid_idx_map_.ForEach([&](size_t child_idx) {
 					assert(children_[child_idx]);
 					functor((int)child_idx, children_[child_idx].get());
-				}
+					return true;
+				});
 			}
-			bool HasValidChild() const { return !valid_children_idx_map_.empty(); }
-			size_t GetValidChildrenCount() const { return valid_children_idx_map_.size(); }
+			bool HasValidChild() const { return !valid_idx_map_.Empty(); }
+			size_t GetValidChildrenCount() const { return valid_idx_map_.Size(); }
 
 			TreeNode* PushBackValidChild() {
 				TreeNode* new_node = new TreeNode();
-				valid_children_idx_map_.push_back(children_.size());
+				valid_idx_map_.PushBack(children_.size());
 				children_.push_back(std::unique_ptr<TreeNode>(new_node));
 				return new_node;
 			}
@@ -67,13 +69,13 @@ namespace mcts
 
 				assert([&]() {
 					bool found = false;
-					for (auto it = valid_children_idx_map_.begin(); it != valid_children_idx_map_.end(); ++it)
-					{
-						if (*it == idx) {
+					valid_idx_map_.ForEach([&](size_t idx2) {
+						if (idx == idx2) {
 							found = true;
-							break;
+							return false;
 						}
-					}
+						return true;
+					});
 					assert(found);
 					return true;
 				}());
@@ -82,33 +84,26 @@ namespace mcts
 
 				// A O(N) algorithm for removal (which is rare), but the good side is
 				// we can have a O(1) for selection (which should be most of the cases)
-				for (auto it = valid_children_idx_map_.begin(); it != valid_children_idx_map_.end(); ++it)
-				{
-					if (*it == idx) {
-						it = valid_children_idx_map_.erase(it);
-						break;
-					}
-				}
+				valid_idx_map_.Erase(idx);
 
-				// debug check
+				// check all valid indeics are actually valid
 				assert([&]() {
-					for (auto valid_idx : valid_children_idx_map_) {
-						assert(children_[valid_idx]);
-					}
+					valid_idx_map_.ForEach([&](size_t idx) {
+						assert(children_[idx]);
+						return true;
+					});
 					return true;
 				}());
 			}
 
 			void Clear() {
 				children_.clear();
-				valid_children_idx_map_.clear();
+				valid_idx_map_.Clear();
 			}
 
 		private:
 			std::vector<std::unique_ptr<TreeNode>> children_;
-
-			// map the 'index to valid children' to the 'index to all (including removed) children'
-			std::vector<size_t> valid_children_idx_map_;
+			NodeIndexMap valid_idx_map_;
 		};
 	}
 }

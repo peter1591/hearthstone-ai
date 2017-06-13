@@ -166,6 +166,7 @@
     <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h" />
     <ClInclude Include="..\..\include\MCTS\detail\Statistic.h" />
     <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h" />
+    <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS-impl.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />
     <ClInclude Include="..\..\include\MCTS\RandomGenerator.h" />
