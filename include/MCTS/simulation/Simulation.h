@@ -14,34 +14,34 @@ namespace mcts
 
 			void StartNewAction(Board const& board) {
 				saved_board_ = board;
-				choice_white_list_.Clear();
+				tree_.Clear();
 			}
 
 			int GetAction(ActionType action_type, int choices) {
-				choice_white_list_.FillChoices(choices);
+				tree_.FillChoices(choices);
 				int choice = Simulate(action_type, choices);
-				choice_white_list_.ApplyChoice(choice);
+				tree_.ApplyChoice(choice);
 				return choice;
 			}
 
 			void ReportInvalidAction() {
-				choice_white_list_.ReportInvalidChoice();
+				tree_.ReportInvalidChoice();
 			}
 
 			// @return saved board
 			Board const& RestartAction() {
 				// Use a white-list-tree to record all viable (sub-)actions
-				choice_white_list_.Restart();
+				tree_.Restart();
 				return saved_board_;
 			}
 
 		private:
 			int Simulate(ActionType action_type, int choices)
 			{
-				if (choice_white_list_.GetWhiteListCount() <= 0) return -1;
+				if (tree_.GetWhiteListCount() <= 0) return -1;
 
 				std::vector<int> valid_choices;
-				choice_white_list_.ForEachWhiteListItem([&](int choice) {
+				tree_.ForEachWhiteListItem([&](int choice) {
 					valid_choices.push_back(choice);
 					return false; // early stop
 				});
@@ -59,7 +59,7 @@ namespace mcts
 
 		private:
 			Board saved_board_;
-			Tree choice_white_list_;
+			Tree tree_;
 		};
 	}
 }

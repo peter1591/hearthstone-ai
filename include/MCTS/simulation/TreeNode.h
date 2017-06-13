@@ -4,6 +4,8 @@
 #include <utility>
 #include <unordered_map>
 
+#include "MCTS/detail/NodeIndexMap.h"
+
 namespace mcts
 {
 	namespace simulation
@@ -23,20 +25,21 @@ namespace mcts
 					return;
 				}
 				choices_ = choices;
-				assert(white_list_.empty());
-				for (int i = 0; i < choices; ++i) {
-					white_list_.insert(std::make_pair(i, nullptr));
+				children_.resize(choices_);
+				for (size_t i = 0; i < children_.size(); ++i) {
+					// even though they are not allocated yet, they are valid nodes
+					valid_idx_map_.PushBack(i);
 				}
 			}
 
-			bool HasAnyChoice() const { return !white_list_.empty(); }
-			size_t GetChoiceCount() const { return white_list_.size(); }
+			bool HasAnyChoice() const { return !valid_idx_map_.Empty(); }
+			size_t GetChoiceCount() const { return valid_idx_map_.Size(); }
 
-			// return nullptr if node is not yet allocated
+			// return nullptr if node is not yet allocated, or node is removed
 			TreeNode* GetChoice(int choice) {
 				assert(choices_ > 0); // initialized
 				assert(choice >= 0 && choice < choices_);
-				return white_list_[choice].get();
+				return children_[choice].get();
 			}
 
 			TreeNode* AllocateChoiceNode(int choice) {
@@ -44,34 +47,35 @@ namespace mcts
 				assert(choice >= 0 && choice < choices_);
 				assert(GetChoice(choice) == nullptr); // not allocated yet
 				TreeNode* ptr = new TreeNode();
-				white_list_[choice].reset(ptr);
+				children_[choice].reset(ptr);
 				return ptr;
 			}
 
 			void RemoveChoice(int choice) {
 				assert(choices_ > 0); // initialized
 				assert(choice >= 0 && choice < choices_);
-				white_list_.erase(choice);
+				children_[choice].release();
+				valid_idx_map_.Erase(choice);
 			}
 
 			template <typename Functor>
 			void ForEachWhiteListChoice(Functor&& functor) {
 				assert(choices_ > 0); // initialized
-				for (auto const& kv : white_list_) {
-					int choice = kv.first;
-					TreeNode* node = kv.second.get();
-					if (!functor(choice, node)) return;
-				}
+				valid_idx_map_.ForEach([&](size_t valid_idx) {
+					return functor((int)valid_idx, children_[valid_idx].get());
+				});
 			}
 
 			void Reset() {
 				choices_ = 0;
-				white_list_.clear();
+				children_.clear();
+				valid_idx_map_.Clear();
 			}
 
 		private:
 			int choices_; // 0: not set
-			std::unordered_map<int, std::unique_ptr<TreeNode>> white_list_; // TODO: don't use hash table
+			std::vector<std::unique_ptr<TreeNode>> children_;
+			detail::NodeIndexMap valid_idx_map_;
 		};
 	}
 }
