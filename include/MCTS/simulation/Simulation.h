@@ -40,21 +40,20 @@ namespace mcts
 			{
 				if (tree_.GetWhiteListCount() <= 0) return -1;
 
+				if (action_type.IsChosenRandomly()) {
+					int rnd = rand() % tree_.GetWhiteListCount();
+					return (int)tree_.GetWhiteListItem((size_t)rnd);
+				}
+
+				// TODO: use value network to enhance simulation
+				//return std::rand() % choices;
 				std::vector<int> valid_choices;
 				tree_.ForEachWhiteListItem([&](int choice) {
 					valid_choices.push_back(choice);
-					return false; // early stop
+					return true;
 				});
-
-				if (action_type.IsChosenRandomly()) {
-					int rnd = rand() % valid_choices.size();
-					return valid_choices[rnd];
-				}
-
 				int rnd = rand() % valid_choices.size();
 				return valid_choices[rnd];
-				// TODO: use value network to enhance simulation
-				//return std::rand() % choices;
 			}
 
 		private:

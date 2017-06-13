@@ -83,6 +83,14 @@ namespace mcts
 					return pending_actions_.back().choices;
 				}
 			}
+			size_t GetWhiteListItem(size_t idx) const {
+				if (pending_actions_.empty()) {
+					return node_->GetWhiteListChoice(idx);
+				}
+				else {
+					return idx;
+				}
+			}
 			template <typename Functor>
 			void ForEachWhiteListItem(Functor&& functor) {
 				assert(node_);

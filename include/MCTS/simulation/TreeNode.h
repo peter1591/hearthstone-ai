@@ -51,11 +51,17 @@ namespace mcts
 				return ptr;
 			}
 
+			// Mark the choice as black-listed
 			void RemoveChoice(int choice) {
 				assert(choices_ > 0); // initialized
 				assert(choice >= 0 && choice < choices_);
 				children_[choice].release();
 				valid_idx_map_.Erase(choice);
+			}
+
+			size_t GetWhiteListChoice(size_t idx) const {
+				assert(idx < valid_idx_map_.Size());
+				return valid_idx_map_.Get(idx);
 			}
 
 			template <typename Functor>
