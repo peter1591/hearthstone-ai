@@ -32,8 +32,7 @@ namespace mcts
 			};
 
 		public:
-			Tree() : root_(-1), node_(&root_), last_choice_(-1)
-			{}
+			Tree() : node_(&root_), last_choice_(-1) {}
 
 			void Clear() {
 				root_.Clear();
@@ -56,15 +55,14 @@ namespace mcts
 				}
 
 				if (pending_actions_.empty()) {
-					auto it = node_->GetWhiteList().find(last_choice_);
-					assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
-					if (!it->second) {
+					TreeNode* next_node = node_->GetChoice(last_choice_);
+					if (!next_node) {
 						// No tree node exists -> change to pending-action mode
 						first_choice_before_pending_actions_ = last_choice_;
 						pending_actions_.push_back({ choices, -1 });
 					}
 					else {
-						AdvanceNode(last_choice_, it->second.get());
+						AdvanceNode(last_choice_, next_node);
 					}
 				}
 				else {
@@ -77,8 +75,8 @@ namespace mcts
 			size_t GetWhiteListCount() const {
 				assert(node_);
 				if (pending_actions_.empty()) {
-					assert(node_->GetWhiteList().size() > 0);
-					return node_->GetWhiteList().size();
+					assert(node_->HasAnyChoice());
+					return node_->GetChoiceCount();
 				}
 				else {
 					return pending_actions_.back().choices;
@@ -88,12 +86,9 @@ namespace mcts
 			void ForEachWhiteListItem(Functor&& functor) {
 				assert(node_);
 				if (pending_actions_.empty()) {
-					for (auto it = node_->GetWhiteList().begin();
-						it != node_->GetWhiteList().end();
-						++it)
-					{
-						if (!functor(it->first)) return;
-					}
+					node_->ForEachWhiteListChoice([&](int choice, TreeNode* node) {
+						return functor(choice);
+					});
 				}
 				else {
 					for (int i = 0; i < pending_actions_.back().choices; ++i) {
@@ -114,58 +109,42 @@ namespace mcts
 					int next_edge = first_choice_before_pending_actions_;
 
 					for (auto const& pending_action : pending_actions_) {
-						auto & node_container = node_->GetWhiteList()[next_edge];
-						if (!node_container.get()) {
-							TreeNode* new_node = new TreeNode(next_edge);
-							new_node->SetChoices(pending_action.choices);
-							node_container.reset(new_node);
+						TreeNode* next_node = node_->GetChoice(next_edge);
+						if (!next_node) {
+							next_node = node_->AddChoice(next_edge);
+							next_node->SetChoices(pending_action.choices);
 						}
 
-						AdvanceNode(next_edge, node_container.get());
+						AdvanceNode(next_edge, next_node);
 						next_edge = pending_action.choice;
 					}
 				}
 
 				assert(node_);
-				auto it = node_->GetWhiteList().find(last_choice_);
-				assert(it != node_->GetWhiteList().end()); // one should not choose a black-listed action
-				node_->GetWhiteList().erase(it);
+				node_->RemoveChoice(last_choice_);
 
 				CascadeRemoveParentNodesWithNoChild();
 			}
 
 		private:
-			bool CheckParentChildRelationship(TreeNode* parent, TreeNode* child)
-			{
-				for (auto const& item : parent->GetWhiteList()) {
-					if (item.second.get() == child) {
-						return true;
-					}
-				}
-				return false;
-			}
-
 			void AdvanceNode(int choice, TreeNode* next_node)
 			{
 				assert(next_node);
-				assert(CheckParentChildRelationship(node_, next_node));
-				assert(node_->GetWhiteList()[choice].get() == next_node);
+				assert(node_->GetChoice(choice) == next_node);
 
 				traversed_nodes_.push_back({ node_, choice });
 				node_ = next_node;
 			}
 
 			void CascadeRemoveParentNodesWithNoChild() {
-				if (!node_->GetWhiteList().empty()) return;
+				if (node_->HasAnyChoice()) return;
 
 				for (auto it = traversed_nodes_.rbegin(); it != traversed_nodes_.rend(); ++it) {
 					TreeNode* parent = it->node;
 					int choice = it->choice;
 
-					auto it_child = parent->GetWhiteList().find(choice);
-					assert(it_child != parent->GetWhiteList().end());
-					parent->GetWhiteList().erase(it_child);
-					if (!parent->GetWhiteList().empty()) break;
+					parent->RemoveChoice(choice);
+					if (parent->HasAnyChoice()) break;
 				}
 			}
 
