@@ -3,8 +3,8 @@
 #include "state/Cards/Card.h"
 #include "state/ZoneChanger.h"
 #include "FlowControl/Manipulators/BoardManipulator.h"
+#include "FlowControl/Manipulators/Helpers/DamageHelper.h"
 #include "FlowControl/Manipulators/Helpers/EnchantmentHelper.h"
-#include "FlowControl/Manipulators/detail/DamageSetter.h"
 #include "FlowControl/FlowContext.h"
 
 namespace state {
@@ -29,8 +29,6 @@ namespace FlowControl
 
 			// TODO: only accessible by enchantment helper?
 			void SpellDamage(int v) { GetCard().SetSpellDamage(v); }
-
-			detail::DamageSetter Internal_SetDamage() { return detail::DamageSetter(state_, card_ref_); }
 
 		public:
 			void Damage(state::CardRef source, int amount) {
@@ -63,9 +61,7 @@ namespace FlowControl
 				helper.ConductDamage(amount);
 			}
 
-			void SetPlayOrder() {
-				GetCard().SetPlayOrder(state_.GetPlayOrder());
-			}
+			void SetPlayOrder();
 
 			Helpers::EnchantmentHelper Enchant() { return Helpers::EnchantmentHelper(state_, flow_context_, card_ref_); }
 

@@ -5,6 +5,11 @@
 #include "FlowControl/FlowContext.h"
 #include "Cards/id-map.h"
 
+namespace state
+{
+	class State;
+}
+
 namespace FlowControl
 {
 	namespace Manipulators
@@ -18,12 +23,12 @@ namespace FlowControl
 			}
 
 		public: // bridge to state::State
-			state::Cards::Card const& GetCard(state::CardRef ref) { return state_.GetCard(ref); }
-			state::PlayerIdentifier GetCurrentPlayerId() { return state_.GetCurrentPlayerId(); }
-			int GetTurn() const { return state_.GetTurn(); }
+			state::Cards::Card const& GetCard(state::CardRef ref);
+			state::PlayerIdentifier GetCurrentPlayerId();
+			int GetTurn() const;
 
-			state::board::Player & Player(state::PlayerIdentifier player) { return state_.GetBoard().Get(player); }
-			state::board::Player const& Player(state::PlayerIdentifier player) const { return state_.GetBoard().Get(player); }
+			state::board::Player & Player(state::PlayerIdentifier player);
+			state::board::Player const& Player(state::PlayerIdentifier player) const;
 			state::board::Player & FirstPlayer() { return Player(state::PlayerIdentifier::First()); }
 			state::board::Player const& FirstPlayer() const { return Player(state::PlayerIdentifier::First()); }
 			state::board::Player & SecondPlayer() { return Player(state::PlayerIdentifier::Second()); }

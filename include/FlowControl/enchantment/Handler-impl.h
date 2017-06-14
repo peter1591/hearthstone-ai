@@ -5,6 +5,7 @@
 #include "state/State.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulate.h"
+#include "FlowControl/Manipulators/detail/DamageSetter.h"
 
 #include "FlowControl/enchantment/Enchantments-impl.h"
 
@@ -43,8 +44,8 @@ namespace FlowControl
 				int target_hp = std::min(GetCard().GetMaxHP(), origin_hp);
 
 				// do not trigger healing events
-				Manipulate(state, flow_context).OnBoardMinion(card_ref)
-					.Internal_SetDamage().Heal(target_hp - hp);
+				FlowControl::Manipulators::detail::DamageSetter(state, card_ref)
+					.Heal(target_hp - hp);
 
 				hp = GetCard().GetHP();
 				assert(hp == target_hp);

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "state/State.h"
 #include "state/Types.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulators/BoardManipulator.h"
@@ -14,6 +13,12 @@
 #include "FlowControl/Manipulators/HeroPowerManipulator.h"
 #include "FlowControl/Manipulators/WeaponManipulator.h"
 #include "FlowControl/Manipulators/SecretManipulator.h"
+
+namespace state {
+	namespace aura {
+		class Manager;
+	}
+}
 
 namespace FlowControl
 {
@@ -74,9 +79,9 @@ namespace FlowControl
 		size_t GetSavedUserChoice() const { return flow_context_.GetSavedUserChoice(); }
 
 	public: // bridge to state::State
-		state::Cards::Card const& GetCard(state::CardRef ref) const { return state_.GetCard(ref); }
-		int GetCardAttackConsiderWeapon(state::CardRef ref) const { return state_.GetCardAttackConsiderWeapon(ref); }
-		state::aura::Manager & Aura() const { return state_.GetAuraManager(); }
+		state::Cards::Card const& GetCard(state::CardRef ref) const;
+		int GetCardAttackConsiderWeapon(state::CardRef ref) const;
+		state::aura::Manager & Aura() const;
 
 	public:
 		state::CardRef GetRandomTarget(state::targetor::Targets const& target_info) const;

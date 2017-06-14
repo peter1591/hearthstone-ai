@@ -90,4 +90,19 @@ namespace FlowControl
 
 		return targets[flow_context_.GetRandom().Get(count)];
 	}
+
+	inline state::Cards::Card const& Manipulate::GetCard(state::CardRef ref) const
+	{
+		return state_.GetCard(ref);
+	}
+	
+	inline int Manipulate::GetCardAttackConsiderWeapon(state::CardRef ref) const
+	{
+		return state_.GetCardAttackConsiderWeapon(ref);
+	}
+	
+	inline state::aura::Manager & Manipulate::Aura() const
+	{
+		return state_.GetAuraManager();
+	}
 }

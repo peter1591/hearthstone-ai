@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FlowControl/Manipulators/Helpers/DamageHelper.h"
+#include "FlowControl/Manipulators/detail/DamageSetter.h"
 #include "state/State.h"
 
 namespace FlowControl
@@ -9,6 +10,16 @@ namespace FlowControl
 	{
 		namespace Helpers
 		{
+			inline DamageHelper::DamageHelper(state::State & state, FlowControl::FlowContext & flow_context,
+				state::CardRef source_ref, state::CardRef target_ref, int amount)
+				: state_(state), flow_context_(flow_context),
+				source_ref_(source_ref), target_ref_(target_ref), amount_(amount)
+			{
+				assert(state.GetCard(target_ref_).GetCardType() == state::kCardTypeMinion ||
+					state.GetCard(target_ref_).GetCardType() == state::kCardTypeHero ||
+					state.GetCard(target_ref_).GetCardType() == state::kCardTypeWeapon);
+			}
+
 			inline void DamageHelper::ConductDamage(int amount)
 			{
 				state::CardRef final_target = target_ref_;
@@ -62,7 +73,7 @@ namespace FlowControl
 
 				if (amount > 0) {
 					int real_damage = 0;
-					Manipulate(state_, flow_context_).Card(card_ref).Internal_SetDamage().TakeDamage(amount, &real_damage);
+					detail::DamageSetter(state_, card_ref).TakeDamage(amount, &real_damage);
 					if (state_.GetCard(card_ref).GetHP() <= 0) flow_context_.AddDeadEntryHint(state_, card_ref);
 
 					state_.TriggerEvent<state::Events::EventTypes::AfterTakenDamage>(
@@ -83,7 +94,7 @@ namespace FlowControl
 				state_.TriggerEvent<state::Events::EventTypes::OnHeal>(
 					state::Events::EventTypes::OnHeal::Context{ Manipulate(state_, flow_context_), card_ref, amount });
 
-				Manipulate(state_, flow_context_).Card(card_ref).Internal_SetDamage().Heal(amount);
+				detail::DamageSetter(state_, card_ref).Heal(amount);
 			}
 		}
 	}

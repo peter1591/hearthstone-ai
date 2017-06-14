@@ -9,6 +9,13 @@ namespace FlowControl
 {
 	namespace Manipulators
 	{
+		inline state::Cards::Card const& BoardManipulator::GetCard(state::CardRef ref) { return state_.GetCard(ref); }
+		inline state::PlayerIdentifier BoardManipulator::GetCurrentPlayerId() { return state_.GetCurrentPlayerId(); }
+		inline int BoardManipulator::GetTurn() const { return state_.GetTurn(); }
+		inline state::board::Player & BoardManipulator::Player(state::PlayerIdentifier player) { return state_.GetBoard().Get(player); }
+		inline state::board::Player const& BoardManipulator::Player(state::PlayerIdentifier player) const { return state_.GetBoard().Get(player); }
+
+
 		inline state::CardRef BoardManipulator::AddCardById(Cards::CardId card_id, state::PlayerIdentifier player)
 		{
 			state::Cards::CardData new_data = Cards::CardDispatcher::CreateInstance(card_id);

@@ -82,5 +82,11 @@ namespace FlowControl
 
 			return new_card_ref;
 		}
+
+		inline void OnBoardMinionManipulator::AddDeathrattle(FlowControl::deathrattle::Handler::DeathrattleCallback * deathrattle)
+		{
+			if (GetCard().GetZone() != state::kCardZonePlay) return;
+			state_.GetMutableCard(card_ref_).GetMutableDeathrattleHandler().Add(deathrattle);
+		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "state/Types.h"
 #include "state/targetor/Targets.h"
+#include "FlowControl/Manipulate.h"
 #include "FlowControl/enchantment/Enchantments.h"
 
 namespace state
@@ -12,8 +13,6 @@ namespace state
 
 namespace FlowControl
 {
-	class Manipulate;
-
 	namespace aura
 	{
 		class Handler;
@@ -21,7 +20,7 @@ namespace FlowControl
 		namespace contexts {
 			struct AuraIsValid
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 				aura::Handler const& aura_handler_;
 				bool & need_update_;
@@ -29,45 +28,45 @@ namespace FlowControl
 
 			struct AuraGetTargets
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 				std::unordered_set<state::CardRef> & new_targets;
 			};
 
 			struct AuraGetTarget
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 				state::CardRef & new_target;
 			};
 
 			struct AuraApplyOn
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 				state::CardRef target_;
 			};
 
 			struct AuraApplyFlagOnBoard
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 			};
 			struct AuraRemoveFlagFromBoard
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 			};
 
 			struct AuraApplyFlagOnOwnerPlayer
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 				state::PlayerIdentifier player_;
 			};
 			struct AuraRemoveFlagFromOwnerPlayer
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::CardRef card_ref_;
 				state::PlayerIdentifier player_;
 			};
