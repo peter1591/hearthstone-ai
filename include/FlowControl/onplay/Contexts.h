@@ -2,6 +2,7 @@
 
 #include "state/Types.h"
 #include "state/targetor/TargetsGenerator.h"
+#include "FlowControl/Manipulate.h"
 
 namespace state
 {
@@ -20,10 +21,11 @@ namespace FlowControl
 			struct GetSpecifiedTarget {
 			public:
 				GetSpecifiedTarget(
-					Manipulate const& manipulate,
+					state::State & state,
+					FlowContext & flow_context,
 					state::PlayerIdentifier player,
 					state::CardRef card_ref) :
-					manipulate_(manipulate),
+					manipulate_(state, flow_context),
 					player_(player),
 					card_ref_(card_ref),
 					need_to_prepare_target_(false),
@@ -32,7 +34,7 @@ namespace FlowControl
 				}
 
 			public:
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 

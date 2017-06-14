@@ -1,15 +1,21 @@
 #pragma once
 
-#include "FlowControl/onplay/Contexts.h"
+#include "FlowControl/FlowContext.h"
 
 namespace FlowControl
 {
 	namespace onplay
 	{
+		namespace context
+		{
+			struct GetSpecifiedTarget;
+			struct OnPlay;
+		}
+
 		class Handler
 		{
 		public:
-			typedef bool SpecifiedTargetGetter(context::GetSpecifiedTarget &);
+			typedef bool SpecifiedTargetGetter(context::GetSpecifiedTarget const&);
 			typedef void OnPlayCallback(context::OnPlay const&);
 
 			Handler() : specified_target_getter(nullptr), onplay(nullptr) {}

@@ -2,8 +2,12 @@
 
 #include <vector>
 #include "state/Types.h"
-#include "state/State.h"
+#include "state/targetor/Targets.h"
 #include "Cards/id-map.h"
+
+namespace state {
+	class State;
+}
 
 namespace FlowControl {
 	class IActionParameterGetter

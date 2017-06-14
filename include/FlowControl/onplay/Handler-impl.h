@@ -2,6 +2,7 @@
 
 #include "FlowControl/onplay/Handler.h"
 
+#include "FlowControl/onplay/Contexts.h"
 #include "FlowControl/onplay/Contexts-impl.h"
 
 #include "state/State.h"
@@ -15,7 +16,7 @@ namespace FlowControl
 		{
 			if (!specified_target_getter) return true;
 
-			context::GetSpecifiedTarget context(Manipulate(state, flow_context), player, card_ref);
+			context::GetSpecifiedTarget context(state, flow_context, player, card_ref);
 			if (!(*specified_target_getter)(context)) {
 				return false;
 			}
