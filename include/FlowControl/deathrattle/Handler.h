@@ -11,27 +11,17 @@ namespace state
 
 namespace FlowControl
 {
-	class Manipulate;
-
 	namespace deathrattle
 	{
 		namespace context
 		{
-			struct Deathrattle
-			{
-				Manipulate const& manipulate_;
-				state::CardRef card_ref_;
-				state::PlayerIdentifier player_;
-				state::CardZone zone_;
-				int zone_pos_;
-				int attack_;
-			};
+			struct Deathrattle;
 		}
 
 		class Handler
 		{
 		public:
-			typedef void DeathrattleCallback(context::Deathrattle);
+			typedef void DeathrattleCallback(context::Deathrattle const&);
 
 			void Clear() { deathrattles.clear(); }
 

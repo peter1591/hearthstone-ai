@@ -5,6 +5,7 @@
 #include "state/State.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulate.h"
+#include "FlowControl/deathrattle/Context.h"
 
 namespace FlowControl
 {

@@ -69,7 +69,7 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).AddDeathrattle(
-					[](FlowControl::deathrattle::context::Deathrattle context) {
+					[](FlowControl::deathrattle::context::Deathrattle const& context) {
 					SummonAt(context, context.player_, context.zone_pos_, 
 						context.manipulate_.GetCard(context.card_ref_).GetCardId());
 				});

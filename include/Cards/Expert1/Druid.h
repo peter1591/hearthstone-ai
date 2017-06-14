@@ -117,7 +117,7 @@ namespace Cards
 		Card_EX1_158() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
-					context.manipulate_.OnBoardMinion(card_ref).AddDeathrattle([](FlowControl::deathrattle::context::Deathrattle context) {
+					context.manipulate_.OnBoardMinion(card_ref).AddDeathrattle([](FlowControl::deathrattle::context::Deathrattle const& context) {
 						SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_158t);
 					});
 				});

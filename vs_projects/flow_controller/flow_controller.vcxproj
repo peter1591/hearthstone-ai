@@ -222,6 +222,7 @@
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Context.h" />
     <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
     <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider-impl.h" />

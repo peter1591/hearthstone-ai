@@ -533,5 +533,8 @@
     <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Context.h">
+      <Filter>Header Files\FlowControl\deathrattle</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

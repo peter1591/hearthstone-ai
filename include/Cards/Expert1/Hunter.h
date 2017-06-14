@@ -205,7 +205,7 @@ namespace Cards
 
 	struct Card_EX1_534 : MinionCardBase<Card_EX1_534> {
 		Card_EX1_534() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_534t);
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_534t);
 			});

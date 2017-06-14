@@ -56,7 +56,7 @@ namespace Cards
 
 	struct Card_EX1_029 : public MinionCardBase<Card_EX1_029> {
 		Card_EX1_029() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Hero(context.player_.Opposite())
 					.Damage(context.card_ref_, 2);
 			});
@@ -151,7 +151,7 @@ namespace Cards
 	struct Card_EX1_045 : public MinionCardBase<Card_EX1_045, CantAttack> {};
 	struct Card_EX1_012 : public MinionCardBase<Card_EX1_012, SpellDamage<1>> {
 		Card_EX1_012() {
-			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
@@ -235,7 +235,7 @@ namespace Cards
 
 	struct Card_EX1_096 : public MinionCardBase<Card_EX1_096> {
 		Card_EX1_096() {
-			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
@@ -539,7 +539,7 @@ namespace Cards
 
 	struct Card_EX1_556 : public MinionCardBase<Card_EX1_556> {
 		Card_EX1_556() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_skele21);
 			});
 		}
@@ -803,7 +803,7 @@ namespace Cards
 
 	struct Card_EX1_097 : public MinionCardBase<Card_EX1_097, Taunt> {
 		Card_EX1_097() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
 				};
@@ -917,7 +917,7 @@ namespace Cards
 
 	struct Card_EX1_110 : public MinionCardBase<Card_EX1_110> {
 		Card_EX1_110() {
-			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_110t);
 			});
 		}
@@ -981,7 +981,7 @@ namespace Cards
 
 	struct Card_EX1_577 : public MinionCardBase<Card_EX1_577> {
 		Card_EX1_577() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle context) {
+			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonToRightmost(context.manipulate_, context.player_.Opposite(), Cards::ID_EX1_finkle);
 			});
 		}
