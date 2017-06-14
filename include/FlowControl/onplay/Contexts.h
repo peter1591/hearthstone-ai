@@ -87,7 +87,7 @@ namespace FlowControl
 
 			struct OnPlay
 			{
-				Manipulate const& manipulate_;
+				Manipulate manipulate_;
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
 				state::CardRef * new_card_ref;

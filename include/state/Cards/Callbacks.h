@@ -1,7 +1,5 @@
 #pragma once
 
-namespace FlowControl { class Manipulate; }
-
 namespace state
 {
 	class State;
