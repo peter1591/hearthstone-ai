@@ -25,6 +25,15 @@
     <Filter Include="Header Files\MCTS\simulation">
       <UniqueIdentifier>{ef59716c-5103-4379-875b-fe9dfbcf9b9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MCTS\randoms">
+      <UniqueIdentifier>{25d6d7f6-5000-4f1f-a1c0-76112cbf601b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MCTS\simulation\policy">
+      <UniqueIdentifier>{666ed022-bcdc-4f62-ae62-4d77bee1de78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MCTS\selection\policy">
+      <UniqueIdentifier>{a57b40cd-cbf4-4cd4-bd30-050c0853c317}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
@@ -100,6 +109,21 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h">
       <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\randoms\RandomByRand.h">
+      <Filter>Header Files\MCTS\randoms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\policy\RandomPolicy.h">
+      <Filter>Header Files\MCTS\simulation\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\policy\PolicyBase.h">
+      <Filter>Header Files\MCTS\simulation\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\policy\PolicyBase.h">
+      <Filter>Header Files\MCTS\selection\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\policy\RandomPolicy.h">
+      <Filter>Header Files\MCTS\selection\policy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

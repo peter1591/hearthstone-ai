@@ -170,8 +170,13 @@
     <ClInclude Include="..\..\include\MCTS\MCTS-impl.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />
     <ClInclude Include="..\..\include\MCTS\RandomGenerator.h" />
+    <ClInclude Include="..\..\include\MCTS\randoms\RandomByRand.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\policy\PolicyBase.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\policy\RandomPolicy.h" />
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
+    <ClInclude Include="..\..\include\MCTS\simulation\policy\PolicyBase.h" />
+    <ClInclude Include="..\..\include\MCTS\simulation\policy\RandomPolicy.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Tree.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include "MCTS/Config.h"
 #include "MCTS/selection/TreeNode.h"
 
 namespace mcts
@@ -23,11 +24,11 @@ namespace mcts
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
-			int GetAction(ActionType action_type, int choices, bool * created_new_node)
+			int GetAction(Board const& board, ActionType action_type, int choices, bool * created_new_node)
 			{
 				ReportActionInfo(action_type, choices);
 				
-				auto next_info = SelectAction(action_type, choices, created_new_node);
+				auto next_info = SelectAction(board, action_type, choices, created_new_node);
 				
 				int next_choice = next_info.first;
 				TreeNode* next_node = next_info.second;
@@ -89,7 +90,7 @@ namespace mcts
 				GetCurrentNode()->FillActions(action_type, choices);
 			}
 
-			std::pair<int, TreeNode*> SelectAction(ActionType action_type, int choices, bool * new_node) {
+			std::pair<int, TreeNode*> SelectAction(Board const& board, ActionType action_type, int choices, bool * new_node) {
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
 				if (GetCurrentNode()->HasUnExpandedAction()) {
@@ -110,7 +111,7 @@ namespace mcts
 				}
 
 				if (action_type.IsChosenRandomly()) return SelectActionByRandom();
-				else return SelectActionByChoice();
+				else return SelectActionByChoice(board);
 			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
@@ -123,19 +124,15 @@ namespace mcts
 				assert(GetCurrentNode()->HasAnyChild());
 
 				size_t count = GetCurrentNode()->GetChildrenCount();
-				int idx = std::rand() % (int)count; // TODO: stronger random generator?
+				int idx = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom((int)count);
 				return GetCurrentNode()->GetNthChild((size_t)idx);
 			}
 
-			std::pair<int, TreeNode*> SelectActionByChoice()
+			std::pair<int, TreeNode*> SelectActionByChoice(Board const& board)
 			{
 				assert(GetCurrentNode()->HasAnyChild());
-				std::vector<std::pair<int, TreeNode*>> valid_choices;
-				GetCurrentNode()->ForEachChild([&](int action, TreeNode* child) {
-					valid_choices.push_back({ action, child });
-				});
-				int idx = std::rand() % valid_choices.size(); // TODO: use more stronger random generator?
-				return valid_choices[idx];
+				return StaticConfigs::SelectionPhaseSelectActionPolicy::GetChoice(
+					policy::PolicyBase::ChoiceGetter(*GetCurrentNode()), board);
 			}
 
 		private:

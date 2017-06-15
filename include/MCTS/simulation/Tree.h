@@ -92,7 +92,7 @@ namespace mcts
 				}
 			}
 			template <typename Functor>
-			void ForEachWhiteListItem(Functor&& functor) {
+			void ForEachWhiteListItem(Functor&& functor) const {
 				assert(node_);
 				if (pending_actions_.empty()) {
 					node_->ForEachWhiteListChoice([&](int choice, TreeNode* node) {

@@ -99,11 +99,11 @@ namespace mcts
 		if (stage == detail::EpisodeState::kStageSelection) {
 			// if a new node is created, we switch to simulation
 			bool & created_new_node = flag_switch_to_simulation_;
-			choice = selection_stage_.GetAction(action_type, choices, &created_new_node);
+			choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices, &created_new_node);
 		}
 		else {
 			assert(stage == detail::EpisodeState::kStageSimulation);
-			choice = simulation_stage_.GetAction(action_type, choices);
+			choice = simulation_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
 		}
 
 		if (choice < 0)

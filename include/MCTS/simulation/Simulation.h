@@ -1,7 +1,9 @@
 #pragma once
 
 #include "MCTS/Board.h"
+#include "MCTS/Config.h"
 #include "MCTS/simulation/Tree.h"
+#include "MCTS/simulation/policy/PolicyBase.h"
 
 namespace mcts
 {
@@ -17,9 +19,9 @@ namespace mcts
 				tree_.Clear();
 			}
 
-			int GetAction(ActionType action_type, int choices) {
+			int GetAction(Board const& board, ActionType action_type, int choices) {
 				tree_.FillChoices(choices);
-				int choice = Simulate(action_type, choices);
+				int choice = Simulate(board, action_type, choices);
 				tree_.ApplyChoice(choice);
 				return choice;
 			}
@@ -36,24 +38,20 @@ namespace mcts
 			}
 
 		private:
-			int Simulate(ActionType action_type, int choices)
+			int Simulate(Board const& board, ActionType action_type, int choices) const
 			{
 				if (tree_.GetWhiteListCount() <= 0) return -1;
 
 				if (action_type.IsChosenRandomly()) {
-					int rnd = rand() % tree_.GetWhiteListCount();
+					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom((int)tree_.GetWhiteListCount());
 					return (int)tree_.GetWhiteListItem((size_t)rnd);
 				}
 
-				// TODO: use value network to enhance simulation
-				//return std::rand() % choices;
-				std::vector<int> valid_choices;
-				tree_.ForEachWhiteListItem([&](int choice) {
-					valid_choices.push_back(choice);
-					return true;
-				});
-				int rnd = rand() % valid_choices.size();
-				return valid_choices[rnd];
+				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
+					policy::PolicyBase::ChoiceGetter(tree_), board
+				);
+
+				return choice;
 			}
 
 		private:
