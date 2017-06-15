@@ -5,13 +5,12 @@
 
 namespace mcts
 {
-	class ActionParameterGetter;
-	class RandomGenerator;
-
 	using Result = FlowControl::Result;
 
 	namespace board
 	{
+		class ActionParameterGetter;
+		class RandomGenerator;
 
 		class Board
 		{

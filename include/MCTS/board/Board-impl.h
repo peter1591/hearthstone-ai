@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MCTS/board/Board.h"
-#include "MCTS/ActionParameterGetter.h"
-#include "MCTS/RandomGenerator.h"
+#include "MCTS/board/ActionParameterGetter.h"
+#include "MCTS/board/RandomGenerator.h"
 #include "FlowControl/ValidActionGetter.h"
 
 namespace mcts

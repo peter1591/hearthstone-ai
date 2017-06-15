@@ -4,8 +4,7 @@
 
 #include "MCTS/MCTS.h"
 #include "MCTS/board/Board-impl.h"
-
-#include "MCTS/ActionParameterGetter.h"
+#include "MCTS/board/ActionParameterGetter.h"
 
 namespace mcts
 {
@@ -16,8 +15,8 @@ namespace mcts
 		selection_stage_.StartEpisode();
 		simulation_stage_.StartEpisode();
 
-		ActionParameterGetter action_parameter_getter(*this);
-		RandomGenerator random_generator(*this);
+		board::ActionParameterGetter action_parameter_getter(*this);
+		board::RandomGenerator random_generator(*this);
 
 		Result result = Result::kResultInvalid;
 

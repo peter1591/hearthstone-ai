@@ -158,10 +158,11 @@
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\MCTS\ActionParameterGetter.h" />
     <ClInclude Include="..\..\include\MCTS\ActionType.h" />
+    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />
     <ClInclude Include="..\..\include\MCTS\board\Board-impl.h" />
     <ClInclude Include="..\..\include\MCTS\board\Board.h" />
+    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
     <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h" />
     <ClInclude Include="..\..\include\MCTS\detail\Statistic.h" />
@@ -169,7 +170,6 @@
     <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS-impl.h" />
     <ClInclude Include="..\..\include\MCTS\MCTS.h" />
-    <ClInclude Include="..\..\include\MCTS\RandomGenerator.h" />
     <ClInclude Include="..\..\include\MCTS\randoms\RandomByRand.h" />
     <ClInclude Include="..\..\include\MCTS\selection\policy\PolicyBase.h" />
     <ClInclude Include="..\..\include\MCTS\selection\policy\RandomPolicy.h" />
