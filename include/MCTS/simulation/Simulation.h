@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MCTS/Board.h"
+#include "MCTS/board/Board.h"
 #include "MCTS/Config.h"
 #include "MCTS/simulation/Tree.h"
 #include "MCTS/simulation/policy/PolicyBase.h"
@@ -14,12 +14,12 @@ namespace mcts
 		public:
 			void StartEpisode() {}
 
-			void StartNewAction(Board const& board) {
+			void StartNewAction(board::Board const& board) {
 				saved_board_ = board;
 				tree_.Clear();
 			}
 
-			int GetAction(Board const& board, ActionType action_type, int choices) {
+			int GetAction(board::Board const& board, ActionType action_type, int choices) {
 				tree_.FillChoices(choices);
 				int choice = Simulate(board, action_type, choices);
 				tree_.ApplyChoice(choice);
@@ -31,14 +31,14 @@ namespace mcts
 			}
 
 			// @return saved board
-			Board const& RestartAction() {
+			board::Board const& RestartAction() {
 				// Use a white-list-tree to record all viable (sub-)actions
 				tree_.Restart();
 				return saved_board_;
 			}
 
 		private:
-			int Simulate(Board const& board, ActionType action_type, int choices) const
+			int Simulate(board::Board const& board, ActionType action_type, int choices) const
 			{
 				if (tree_.GetWhiteListCount() <= 0) return -1;
 
@@ -55,7 +55,7 @@ namespace mcts
 			}
 
 		private:
-			Board saved_board_;
+			board::Board saved_board_;
 			Tree tree_;
 		};
 	}

@@ -160,8 +160,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\MCTS\ActionParameterGetter.h" />
     <ClInclude Include="..\..\include\MCTS\ActionType.h" />
-    <ClInclude Include="..\..\include\MCTS\Board-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\Board.h" />
+    <ClInclude Include="..\..\include\MCTS\board\Board-impl.h" />
+    <ClInclude Include="..\..\include\MCTS\board\Board.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
     <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h" />
     <ClInclude Include="..\..\include\MCTS\detail\Statistic.h" />

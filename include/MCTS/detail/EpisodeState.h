@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "MCTS/Board.h"
+#include "MCTS/board/Board.h"
 
 namespace mcts
 {
@@ -18,7 +18,7 @@ namespace mcts
 		public:
 			EpisodeState() : stage_(kStageSelection), is_valid_(true) {}
 
-			void Start(Board const& board)
+			void Start(board::Board const& board)
 			{
 				stage_ = kStageSelection;
 				board_ = board;
@@ -28,16 +28,16 @@ namespace mcts
 			Stage GetStage() const { return stage_; }
 			void SetToSimulationStage() { stage_ = kStageSimulation; }
 
-			void SetBoard(Board const& board) { board_ = board; }
-			Board const& GetBoard() const { return board_; }
-			Board & GetBoard() { return board_; }
+			void SetBoard(board::Board const& board) { board_ = board; }
+			board::Board const& GetBoard() const { return board_; }
+			board::Board & GetBoard() { return board_; }
 
 			void SetValid() { is_valid_ = true; }
 			void SetInvalid() { is_valid_ = false; }
 			bool IsValid() const { return is_valid_; }
 
 		private:
-			Board board_;
+			board::Board board_;
 			Stage stage_;
 			bool is_valid_;
 		};

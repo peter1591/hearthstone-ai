@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "MCTS/Board.h"
+#include "MCTS/board/Board.h"
 #include "MCTS/selection/policy/PolicyBase.h"
 
 namespace mcts
@@ -14,7 +14,7 @@ namespace mcts
 			{
 			public:
 				static std::pair<int, TreeNode*>
-					GetChoice(PolicyBase::ChoiceGetter const& choice_getter, Board const& board)
+					GetChoice(PolicyBase::ChoiceGetter const& choice_getter, board::Board const& board)
 				{
 					size_t count = choice_getter.Size();
 					size_t idx = 0;

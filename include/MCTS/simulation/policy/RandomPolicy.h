@@ -11,7 +11,7 @@ namespace mcts
 			class RandomPolicy
 			{
 			public:
-				static int GetChoice(PolicyBase::ChoiceGetter const& choice_getter, Board const& board)
+				static int GetChoice(PolicyBase::ChoiceGetter const& choice_getter, board::Board const& board)
 				{
 					// TODO: use value network to enhance simulation
 					//return std::rand() % choices;

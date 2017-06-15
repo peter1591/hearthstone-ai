@@ -3,9 +3,8 @@
 #include <cstdlib>
 
 #include "MCTS/MCTS.h"
-#include "MCTS/Board-impl.h"
+#include "MCTS/board/Board-impl.h"
 
-#include "MCTS/ActionParameterGetter.h"
 #include "MCTS/ActionParameterGetter.h"
 
 namespace mcts
@@ -58,7 +57,7 @@ namespace mcts
 
 					simulation_stage_.ReportInvalidAction();
 					
-					Board const& saved_board = simulation_stage_.RestartAction();
+					board::Board const& saved_board = simulation_stage_.RestartAction();
 					episode_state_.SetBoard(saved_board);
 					episode_state_.SetValid();
 
