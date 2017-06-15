@@ -5,6 +5,7 @@
 #include "MCTS/detail/EpisodeState.h"
 #include "MCTS/detail/Statistic.h"
 #include "MCTS/ActionType.h"
+#include "MCTS/board/BoardView.h"
 
 namespace mcts
 {

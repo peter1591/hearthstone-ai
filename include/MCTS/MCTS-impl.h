@@ -4,6 +4,7 @@
 
 #include "MCTS/MCTS.h"
 #include "MCTS/board/Board-impl.h"
+#include "MCTS/board/BoardView-impl.h"
 #include "MCTS/board/ActionParameterGetter.h"
 
 namespace mcts

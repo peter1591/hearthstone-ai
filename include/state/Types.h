@@ -83,11 +83,9 @@ namespace state
 
 	class PlayerIdentifier
 	{
-	private:
-		constexpr PlayerIdentifier(PlayerSide side) : side_(side) {}
-
 	public:
 		PlayerIdentifier() : side_(kPlayerInvalid) {}
+		constexpr PlayerIdentifier(PlayerSide side) : side_(side) {}
 
 		constexpr static PlayerIdentifier First() { return PlayerIdentifier(kPlayerFirst); }
 		constexpr static PlayerIdentifier Second() { return PlayerIdentifier(kPlayerSecond); }

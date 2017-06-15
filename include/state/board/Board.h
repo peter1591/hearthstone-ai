@@ -10,6 +10,9 @@ namespace state
 		class Board
 		{
 		public:
+			Player & Get(PlayerSide side) { return Get(PlayerIdentifier(side)); }
+			Player const& Get(PlayerSide side) const { return Get(PlayerIdentifier(side)); }
+
 			Player & Get(PlayerIdentifier identifier)
 			{
 				if (identifier.IsFirst()) return first_;

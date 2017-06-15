@@ -128,5 +128,14 @@
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\BoardView.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\BoardView-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\BoardViewTypes.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
