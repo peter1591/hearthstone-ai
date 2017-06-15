@@ -13,8 +13,7 @@ namespace FlowControl
 {
 	namespace deathrattle
 	{
-		namespace context
-		{
+		namespace context {
 			struct Deathrattle;
 		}
 

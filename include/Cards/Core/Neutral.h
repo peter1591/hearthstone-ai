@@ -22,7 +22,7 @@ namespace Cards
 
 	struct Card_EX1_508o : public Enchantment<Card_EX1_508o, Attack<1>> {};
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Murlocs() // friendly murlocs only
@@ -88,7 +88,7 @@ namespace Cards
 
 	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {};
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
@@ -217,7 +217,7 @@ namespace Cards
 
 	struct Card_CS2_222o : public Enchantment<Card_CS2_222o, Attack<1>, MaxHP<1>> {};
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions

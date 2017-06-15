@@ -4,10 +4,15 @@ namespace FlowControl {
 	class FlowContext;
 
 	namespace aura {
+		namespace contexts {
+			struct AuraGetTarget;
+			struct AuraApplyOn;
+		}
+
 		class EffectHandler_Enchantment {
 		public:
-			typedef void FuncGetTarget(contexts::AuraGetTarget context);
-			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn context);
+			typedef void FuncGetTarget(contexts::AuraGetTarget const& context);
+			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn const& context);
 
 			EffectHandler_Enchantment() : get_target(nullptr), apply_on(nullptr) {}
 

@@ -6,6 +6,7 @@
 #include "state/State.h"
 #include "state/targetor/TargetsGenerator.h"
 #include "FlowControl/FlowContext.h"
+#include "FlowControl/aura/Contexts.h"
 #include "FlowControl/aura/EffectHandler_Enchantment-impl.h"
 #include "FlowControl/aura/EffectHandler_Enchantments-impl.h"
 #include "FlowControl/aura/EffectHandler_BoardFlag-impl.h"

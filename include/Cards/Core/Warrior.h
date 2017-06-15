@@ -103,7 +103,7 @@ namespace Cards
 
 	struct Card_EX1_084e : public Enchantment<Card_EX1_084e, Attack<1>> {};
 	struct Card_EX1_084 : public MinionCardBase<Card_EX1_084> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().HasCharge() // friendly charge minions

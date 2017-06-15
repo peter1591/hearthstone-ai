@@ -4,10 +4,15 @@ namespace FlowControl {
 	class FlowContext;
 
 	namespace aura {
+		namespace contexts {
+			struct AuraApplyFlagOnBoard;
+			struct AuraRemoveFlagFromBoard;
+		}
+
 		class EffectHandler_BoardFlag {
 		public:
-			typedef void FuncApplyOn(contexts::AuraApplyFlagOnBoard context);
-			typedef void FuncRemoveFrom(contexts::AuraRemoveFlagFromBoard context);
+			typedef void FuncApplyOn(contexts::AuraApplyFlagOnBoard const& context);
+			typedef void FuncRemoveFrom(contexts::AuraRemoveFlagFromBoard const& context);
 
 			EffectHandler_BoardFlag() : apply_on(nullptr), remove_from(nullptr), applied(false) {}
 

@@ -89,7 +89,7 @@ namespace Cards
 
 	// for adjacent buff
 	struct AdjacentBuffHandleClass {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
 			assert(card.GetZone() == state::kCardZonePlay);
 			assert(card.GetCardType() == state::kCardTypeMinion);
@@ -107,7 +107,7 @@ namespace Cards
 	// For enrage
 	template <typename HandleClass>
 	struct EnrageWrappedHandleClass {
-		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			state::Cards::Card const& card = context.manipulate_.GetCard(context.card_ref_);
 			if (card.GetDamage() == 0) {
 				return; // not enraged, apply to no one

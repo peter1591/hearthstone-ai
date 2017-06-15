@@ -19,7 +19,7 @@ namespace Cards
 
 	struct Card_EX1_009_Enchant : public Enchantment<Card_EX1_009_Enchant, Attack<5>> {};
 	struct Card_EX1_009 : public MinionCardBase<Card_EX1_009, Taunt> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_009() {
@@ -107,7 +107,7 @@ namespace Cards
 
 	struct Card_CS2_146o : public Enchantment<Card_CS2_146o, Charge> {};
 	struct Card_CS2_146 : public MinionCardBase<Card_CS2_146> {
-		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			state::PlayerIdentifier owner_player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			if (!context.manipulate_.Board().Player(owner_player).GetWeaponRef().IsValid()) return;
 			context.new_target = context.card_ref_;
@@ -140,7 +140,7 @@ namespace Cards
 
 	struct Card_EX1_393_Enchant : public Enchantment<Card_EX1_393_Enchant, Attack<3>> {};
 	struct Card_EX1_393 : public MinionCardBase<Card_EX1_393> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_393() {
@@ -612,7 +612,7 @@ namespace Cards
 
 	struct Card_EX1_507e : public Enchantment<Card_EX1_507e, Attack<2>, MaxHP<1>> {};
 	struct Card_EX1_507 : public MinionCardBase<Card_EX1_507> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Murlocs() // friendly murlocs
@@ -640,7 +640,7 @@ namespace Cards
 
 	struct Card_EX1_412e : public Enchantment<Card_EX1_412e, Windfury> {};
 	struct Card_EX1_412 : public MinionCardBase<Card_EX1_412> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_412() {
@@ -652,7 +652,7 @@ namespace Cards
 
 	struct Card_NEW1_027e : public Enchantment<Card_NEW1_027e, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_027 : public MinionCardBase<Card_NEW1_027> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Pirates() // friendly murlocs
@@ -666,7 +666,7 @@ namespace Cards
 
 	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
 	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_390() {
@@ -879,7 +879,7 @@ namespace Cards
 
 	struct Card_CS2_221e : public Enchantment<Card_CS2_221e, Attack<2>> {};
 	struct Card_CS2_221 : public MinionCardBase<Card_CS2_221> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			state::CardRef weapon_ref = context.manipulate_.Board().Player(owner).GetWeaponRef();
 			context.new_target = weapon_ref;

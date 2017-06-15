@@ -4,10 +4,15 @@ namespace FlowControl {
 	class FlowContext;
 
 	namespace aura {
+		namespace contexts {
+			struct AuraApplyFlagOnOwnerPlayer;
+			struct AuraRemoveFlagFromOwnerPlayer;
+		}
+
 		class EffectHandler_OwnerPlayerFlag {
 		public:
-			typedef void FuncApplyOn(contexts::AuraApplyFlagOnOwnerPlayer context);
-			typedef void FuncRemoveFrom(contexts::AuraRemoveFlagFromOwnerPlayer context);
+			typedef void FuncApplyOn(contexts::AuraApplyFlagOnOwnerPlayer const& context);
+			typedef void FuncRemoveFrom(contexts::AuraRemoveFlagFromOwnerPlayer const& context);
 
 			EffectHandler_OwnerPlayerFlag() : apply_on(nullptr), remove_from(nullptr) {}
 

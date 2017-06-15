@@ -61,7 +61,7 @@ namespace Cards
 
 	struct Card_DS1_175o : public Enchantment<Card_DS1_175o, Attack<1>> {};
 	struct Card_DS1_175 : public MinionCardBase<Card_DS1_175> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Beasts() // friendly beasts
@@ -77,7 +77,7 @@ namespace Cards
 
 	struct Card_NEW1_033o : public Enchantment<Card_NEW1_033o, Attack<1>> {};
 	struct Card_NEW1_033 : public MinionCardBase<Card_NEW1_033> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
@@ -196,7 +196,7 @@ namespace Cards
 
 	struct Card_DS1_178e : public Enchantment<Card_DS1_178e, Charge> {};
 	struct Card_DS1_178 : public MinionCardBase<Card_DS1_178> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets context) {
+		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Beasts() // friendly beasts

@@ -247,7 +247,7 @@ namespace Cards
 
 	struct Card_EX1_414e : public Enchantment<Card_EX1_414e, Attack<6>> {};
 	struct Card_EX1_414 : public MinionCardBase<Card_EX1_414, Charge> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget context) {
+		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_414() {
