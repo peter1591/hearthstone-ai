@@ -16,12 +16,21 @@ namespace mcts
 				static std::pair<int, TreeNode*>
 					GetChoice(PolicyBase::ChoiceGetter const& choice_getter, Board const& board)
 				{
-					std::vector<std::pair<int, TreeNode*>> valid_choices;
-					choice_getter.ForEachChoice([&](int action, TreeNode* child) {
-						valid_choices.push_back({ action, child });
+					size_t count = choice_getter.Size();
+					size_t idx = 0;
+					size_t rand_idx = (size_t)(std::rand() % count);
+					std::pair<int, TreeNode*> result;
+					choice_getter.ForEach([&](int action, TreeNode* child) mutable {
+						if (idx == rand_idx) {
+							result = std::make_pair(action, child);
+							return false;
+						}
+						++idx;
+						return true;
 					});
-					int idx = std::rand() % valid_choices.size();
-					return valid_choices[idx];
+					std::pair<int, TreeNode*> result2 = choice_getter.Get(rand_idx);
+					assert(result == result2);
+					return result;
 				}
 			};
 		}

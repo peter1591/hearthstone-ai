@@ -16,8 +16,14 @@ namespace mcts
 				public:
 					ChoiceGetter(TreeNode const& node) : node_(node) {}
 
+					size_t Size() const { return node_.GetChildrenCount(); }
+
+					std::pair<int, TreeNode*> Get(size_t idx) const {
+						return node_.GetNthChild(idx);
+					}
+
 					template <typename Functor>
-					void ForEachChoice(Functor&& functor) const
+					void ForEach(Functor&& functor) const
 					{
 						return node_.ForEachChild(std::forward<Functor>(functor));
 					}

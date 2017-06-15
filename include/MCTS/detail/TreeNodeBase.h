@@ -44,8 +44,7 @@ namespace mcts
 			void ForEachValidChild(Functor&& functor) const {
 				valid_idx_map_.ForEach([&](size_t child_idx) {
 					assert(children_[child_idx]);
-					functor((int)child_idx, children_[child_idx].get());
-					return true;
+					return functor((int)child_idx, children_[child_idx].get());
 				});
 			}
 			bool HasValidChild() const { return !valid_idx_map_.Empty(); }
