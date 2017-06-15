@@ -22,7 +22,6 @@ namespace mcts
 
 		Types GetType() const { return type_; }
 
-		// TODO: why no default comparison?
 		bool operator==(ActionType const& rhs) const {
 			return type_ == rhs.type_;
 		}
