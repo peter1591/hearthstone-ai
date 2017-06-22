@@ -107,6 +107,7 @@ namespace state
 			side_ = OppositeSide();
 		}
 
+		PlayerSide GetSide() const { return side_; }
 		void SetSide(PlayerSide side) { side_ = side; }
 
 		void SetFirst() { side_ = kPlayerFirst; }
