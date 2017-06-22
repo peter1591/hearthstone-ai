@@ -10,20 +10,16 @@
 
 namespace mcts
 {
-	inline void MCTS::Start(TreeNode * root, Stage stage) {
-		episode_state_.Start(stage);
-		assert(episode_state_.GetStage() == stage);
+	// Never returns kResultInvalid
+	//    Will automatically retry if an invalid action is applied
+	inline MCTS::PerformResult MCTS::PerformOneAction(TreeNode * root, Stage stage, board::Board & board, MCTSUpdater & updater) {
+		episode_state_.Start(stage, board);
 
+		assert(episode_state_.GetStage() == stage);
 		if (stage == kStageSelection) {
 			new_node_created_ = false;
 			selection_stage_.StartEpisode(root);
 		}
-	}
-
-	// Never returns kResultInvalid
-	//    Will automatically retry if an invalid action is applied
-	inline MCTS::PerformResult MCTS::PerformOneAction(board::Board & board, MCTSUpdater & updater) {
-		episode_state_.StartAction(board);
 
 		// TODO [PROFILING]:
 		// We save the board every time here. This is just for the case an invalid action is applied

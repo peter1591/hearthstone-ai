@@ -46,8 +46,7 @@ int main(void)
 		updater.Clear();
 		while (true)
 		{
-			mcts1.Start(node, stage);
-			mcts::MCTS::PerformResult result = mcts1.PerformOneAction(board, updater);
+			mcts::MCTS::PerformResult result = mcts1.PerformOneAction(node, stage, board, updater);
 			assert(result.result != mcts::Result::kResultInvalid);
 
 			if (result.result != mcts::Result::kResultNotDetermined) {

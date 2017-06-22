@@ -25,15 +25,13 @@ namespace mcts
 		{
 		}
 
-		void Start(TreeNode * root, Stage stage);
-
 		struct PerformResult
 		{
 			bool new_node_created; // only valid if started in selection stage
 			Result result;
 			TreeNode * node;
 		};
-		PerformResult PerformOneAction(board::Board & board, MCTSUpdater & updater);
+		PerformResult PerformOneAction(TreeNode * root, Stage stage, board::Board & board, MCTSUpdater & updater);
 
 	public: // for callbacks: action-parameter-getter and random-generator
 		int ChooseAction(ActionType action_type, int choices);

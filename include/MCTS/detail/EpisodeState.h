@@ -13,14 +13,10 @@ namespace mcts
 		public:
 			EpisodeState() : stage_(kStageSelection), is_valid_(true), board_(nullptr) {}
 
-			void Start(Stage stage)
+			void Start(Stage stage, board::Board & board)
 			{
 				stage_ = stage;
 				is_valid_ = true;
-			}
-
-			void StartAction(board::Board & board)
-			{
 				board_ = &board;
 			}
 
