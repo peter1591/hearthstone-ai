@@ -12,8 +12,7 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			void StartNewAction(board::Board const& board) {
-				saved_board_ = board;
+			void StartNewAction() {
 				tree_.Clear();
 			}
 
@@ -32,10 +31,9 @@ namespace mcts
 			}
 
 			// @return saved board
-			board::Board const& RestartAction() {
+			void RestartAction() {
 				// Use a white-list-tree to record all viable (sub-)actions
 				tree_.Restart();
-				return saved_board_;
 			}
 
 		private:
@@ -57,7 +55,6 @@ namespace mcts
 			}
 
 		private:
-			board::Board saved_board_;
 			Tree tree_;
 		};
 	}

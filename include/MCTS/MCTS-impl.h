@@ -29,11 +29,18 @@ namespace mcts
 			flag_switch_to_simulation_ = false;
 		}
 
+		// TODO:
+		// we save the board every time just in case an invalid action is applied
+		// ideally, invalid actions should be rarely happened.
+		// Need to decide if this is benefitial.
+
+		board::Board const saved_board = episode_state_.GetBoard();
+
 		if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
 			// main actions are supposed to be always-valid
 			// otherwise, we need to remember choice-white-list across main-actions
 			assert(episode_state_.IsValid());
-			simulation_stage_.StartNewAction(episode_state_.GetBoard());
+			simulation_stage_.StartNewAction();
 		}
 
 		// sometimes an action might in fact an INVALID action
@@ -60,7 +67,7 @@ namespace mcts
 
 				simulation_stage_.ReportInvalidAction();
 
-				board::Board const& saved_board = simulation_stage_.RestartAction();
+				simulation_stage_.RestartAction();
 				episode_state_.SetBoard(saved_board);
 				episode_state_.SetValid();
 
