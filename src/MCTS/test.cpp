@@ -36,11 +36,12 @@ int main(void)
 			std::getline(std::cin, dummy);
 		}
 
-		mcts1.StartEpisode(start_board_getter);
+		mcts::board::Board board = start_board_getter();
+		mcts1.StartEpisode();
 
 		while (true)
 		{
-			mcts::Result result = mcts1.PerformOneAction();
+			mcts::Result result = mcts1.PerformOneAction(board);
 			assert(result != mcts::Result::kResultInvalid);
 
 			if (result != mcts::Result::kResultNotDetermined) {

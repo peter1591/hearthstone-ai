@@ -10,16 +10,16 @@
 
 namespace mcts
 {
-	template <typename StartBoardGetter>
-	inline void MCTS::StartEpisode(StartBoardGetter && start_board_getter) {
+	inline void MCTS::StartEpisode() {
 		flag_switch_to_simulation_ = false;
-		episode_state_.Start(start_board_getter());
+		episode_state_.Start();
 		selection_stage_.StartEpisode();
 	}
 
 	// Never returns kResultInvalid
 	//    Will automatically retry if an invalid action is applied
-	inline Result MCTS::PerformOneAction() {
+	inline Result MCTS::PerformOneAction(board::Board & board) {
+		episode_state_.StartAction(board);
 		if (flag_switch_to_simulation_) {
 			episode_state_.SetToSimulationStage();
 			flag_switch_to_simulation_ = false;
@@ -63,7 +63,7 @@ namespace mcts
 					simulation_stage_.RestartAction();
 				}
 
-				episode_state_.SetBoard(saved_board);
+				episode_state_.GetBoard() = saved_board;
 				episode_state_.SetValid();
 
 				statistic_.ApplyActionFailed();

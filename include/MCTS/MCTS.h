@@ -16,10 +16,9 @@ namespace mcts
 	public:
 		MCTS() : action_parameter_getter_(*this), random_generator_(*this) {}
 
-		template <typename StartBoardGetter>
-		void StartEpisode(StartBoardGetter && start_board_getter);
+		void StartEpisode();
 
-		Result PerformOneAction();
+		Result PerformOneAction(board::Board & board);
 
 		void EpisodeFinished(Result result);
 
