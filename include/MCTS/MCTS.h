@@ -6,12 +6,16 @@
 #include "MCTS/detail/Statistic.h"
 #include "MCTS/ActionType.h"
 #include "MCTS/board/BoardView.h"
+#include "MCTS/board/ActionParameterGetter.h"
+#include "MCTS/board/RandomGenerator.h"
 
 namespace mcts
 {
 	class MCTS
 	{
 	public:
+		MCTS() : action_parameter_getter_(*this), random_generator_(*this) {}
+
 		template <typename StartBoardGetter>
 		void StartEpisode(StartBoardGetter && start_board_getter);
 
@@ -33,6 +37,9 @@ namespace mcts
 		}
 
 	private:
+		board::ActionParameterGetter action_parameter_getter_;
+		board::RandomGenerator random_generator_;
+
 		detail::EpisodeState episode_state_;
 		detail::Statistic<> statistic_;
 

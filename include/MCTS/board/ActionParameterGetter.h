@@ -1,14 +1,13 @@
 #pragma once
 
 #include "FlowControl/IActionParameterGetter.h"
-#include "MCTS/MCTS.h"
 
 namespace mcts
 {
+	class MCTS;
+
 	namespace board
 	{
-		// Concept 'ActionChooser':
-		//    static int Get(int exclusive_max);
 		class ActionParameterGetter : public FlowControl::IActionParameterGetter
 		{
 		public:
@@ -44,10 +43,7 @@ namespace mcts
 				return (size_t)GetNumber(ActionType::kChooseOne, (int)size);
 			}
 
-			int GetNumber(ActionType::Types action_type, int exclusive_max)
-			{
-				return mcts_.ChooseAction(ActionType(action_type), exclusive_max);
-			}
+			int GetNumber(ActionType::Types action_type, int exclusive_max);
 
 		private:
 			MCTS & mcts_;

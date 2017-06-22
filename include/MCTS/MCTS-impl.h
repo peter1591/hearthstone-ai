@@ -5,7 +5,8 @@
 #include "MCTS/MCTS.h"
 #include "MCTS/board/Board-impl.h"
 #include "MCTS/board/BoardView-impl.h"
-#include "MCTS/board/ActionParameterGetter.h"
+#include "MCTS/board/ActionParameterGetter-impl.h"
+#include "MCTS/board/RandomGenerator-impl.h"
 
 namespace mcts
 {
@@ -18,9 +19,6 @@ namespace mcts
 	}
 
 	inline void MCTS::Iterate() {
-		board::ActionParameterGetter action_parameter_getter(*this);
-		board::RandomGenerator random_generator(*this);
-
 		Result result = Result::kResultInvalid;
 
 		while (true)
@@ -43,7 +41,7 @@ namespace mcts
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
 
 				if (episode_state_.IsValid()) {
-					result = episode_state_.GetBoard().ApplyAction(choice, random_generator, action_parameter_getter);
+					result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
 				}
 				else {
 					result = Result::kResultInvalid;

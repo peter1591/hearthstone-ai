@@ -1,10 +1,11 @@
 #pragma once
 
 #include "state/IRandomGenerator.h"
-#include "MCTS/MCTS.h"
 
 namespace mcts
 {
+	class MCTS;
+
 	namespace board
 	{
 		class RandomGenerator : public state::IRandomGenerator
@@ -12,14 +13,9 @@ namespace mcts
 		public:
 			RandomGenerator(MCTS & mcts) : mcts_(mcts) {}
 
-			int Get(int exclusive_max) final
-			{
-				return mcts_.ChooseAction(ActionType(ActionType::kRandom), exclusive_max);
-			}
-
 			size_t Get(size_t exclusive_max) final
 			{
-				return (size_t)mcts_.ChooseAction(ActionType(ActionType::kRandom), (int)exclusive_max);
+				return (size_t)Get((int)exclusive_max);
 			}
 
 			// @param min Inclusive minimum
@@ -29,6 +25,8 @@ namespace mcts
 				assert(max >= min);
 				return min + Get(max - min + 1);
 			}
+
+			int Get(int exclusive_max) final;
 
 		private:
 			MCTS & mcts_;
