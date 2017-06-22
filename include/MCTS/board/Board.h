@@ -30,6 +30,9 @@ namespace mcts
 
 			int GetActionsCount();
 			Result ApplyAction(int action, RandomGenerator & random, ActionParameterGetter & action_parameters);
+
+			void Reset(state::State const& state) { state_ = state; }
+
 			state::State const& GetState() const { return state_; }
 
 		private:
