@@ -81,23 +81,10 @@ namespace mcts
 		}
 	}
 
-	inline void MCTS::Iterate() {
-		Result result = Result::kResultInvalid;
-
-		while (true)
-		{
-			result = PerformOneAction();
-			assert(result != Result::kResultInvalid);
-
-			if (result != Result::kResultNotDetermined) break;
-		}
-
+	inline void MCTS::EpisodeFinished(Result result) {
 		assert(result != Result::kResultInvalid);
 		bool win = (result == Result::kResultFirstPlayerWin);
-
 		selection_stage_.ReportResult(win);
-		
-		statistic_.FinishedOneEpisode();
 	}
 
 	inline int MCTS::ChooseAction(ActionType action_type, int choices)

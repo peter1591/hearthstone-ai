@@ -25,6 +25,8 @@ int main(void)
 
 	for (int i = 0; i < 100000000; ++i) {
 		if (i % 10 == 0) {
+			std::cout << "====== Statistics =====" << std::endl;
+			std::cout << "Episodes: " << i << std::endl;
 			mcts1.PrintStatistic();
 		}
 
@@ -35,7 +37,17 @@ int main(void)
 		}
 
 		mcts1.StartEpisode(start_board_getter);
-		mcts1.Iterate();
+
+		while (true)
+		{
+			mcts::Result result = mcts1.PerformOneAction();
+			assert(result != mcts::Result::kResultInvalid);
+
+			if (result != mcts::Result::kResultNotDetermined) {
+				mcts1.EpisodeFinished(result);
+				break;
+			}
+		}
 	}
 
 	return 0;

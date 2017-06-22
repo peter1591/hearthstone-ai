@@ -21,13 +21,13 @@ namespace mcts
 
 		Result PerformOneAction();
 
-		void Iterate();
+		void EpisodeFinished(Result result);
 
+	public: // for callbacks: action-parameter-getter and random-generator
 		int ChooseAction(ActionType action_type, int choices);
 
-		void PrintStatistic() {
-			statistic_.PrintMessage();
-		}
+	public: // debug
+		void PrintStatistic() { statistic_.PrintMessage(); }
 
 	private:
 		int ActionCallback(ActionType action_type, int choices);
