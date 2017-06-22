@@ -3,10 +3,12 @@
 #include <cstdlib>
 
 #include "MCTS/builder/TreeBuilder.h"
-#include "MCTS/board/Board-impl.h"
 #include "MCTS/board/BoardView-impl.h"
 #include "MCTS/board/ActionParameterGetter-impl.h"
 #include "MCTS/board/RandomGenerator-impl.h"
+
+#include "MCTS/board/BoardActionAnalyzer.h"
+#include "MCTS/board/BoardActionAnalyzer-impl.h"
 
 namespace mcts
 {
@@ -47,11 +49,12 @@ namespace mcts
 
 			while (true)
 			{
-				int choices = episode_state_.GetBoard().GetActionsCount();
+				board::BoardActionAnalyzer action_analyzer;
+				int choices = action_analyzer.GetActionsCount(episode_state_.GetBoard());
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
 
 				if (episode_state_.IsValid()) {
-					result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
+					result = action_analyzer.ApplyAction(episode_state_.GetBoard(), choice, random_generator_, action_parameter_getter_);
 					if (result != Result::kResultInvalid) break;
 				}
 
