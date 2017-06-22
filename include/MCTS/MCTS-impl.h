@@ -17,12 +17,9 @@ namespace mcts
 		selection_stage_.StartEpisode();
 	}
 
-
 	// Never returns kResultInvalid
 	//    Will automatically retry if an invalid action is applied
 	inline Result MCTS::PerformOneAction() {
-		Result result = Result::kResultInvalid;
-
 		if (flag_switch_to_simulation_) {
 			episode_state_.SetToSimulationStage();
 			flag_switch_to_simulation_ = false;
@@ -50,11 +47,9 @@ namespace mcts
 			int choices = episode_state_.GetBoard().GetActionsCount();
 			int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
 
+			Result result = Result::kResultInvalid;
 			if (episode_state_.IsValid()) {
 				result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
-			}
-			else {
-				result = Result::kResultInvalid;
 			}
 
 			if (result == Result::kResultInvalid) {
