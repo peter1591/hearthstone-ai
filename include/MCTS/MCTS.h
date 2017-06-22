@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
 #include "MCTS/detail/EpisodeState.h"
@@ -21,9 +22,9 @@ namespace mcts
 		{
 		}
 
-		void StartEpisode();
+		void StartEpisode(Stage stage = kStageSelection);
 
-		Result PerformOneAction(board::Board & board);
+		std::pair<Stage, Result> PerformOneAction(board::Board & board);
 
 		void EpisodeFinished(bool credit);
 

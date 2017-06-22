@@ -10,15 +10,20 @@
 
 namespace mcts
 {
-	inline void MCTS::StartEpisode() {
+	inline void MCTS::StartEpisode(Stage stage) {
 		flag_switch_to_simulation_ = false;
-		episode_state_.Start();
-		selection_stage_.StartEpisode();
+
+		episode_state_.Start(stage);
+		assert(episode_state_.GetStage() == stage);
+
+		if (stage == kStageSelection) {
+			selection_stage_.StartEpisode();
+		}
 	}
 
 	// Never returns kResultInvalid
 	//    Will automatically retry if an invalid action is applied
-	inline Result MCTS::PerformOneAction(board::Board & board) {
+	inline std::pair<Stage, Result> MCTS::PerformOneAction(board::Board & board) {
 		episode_state_.StartAction(board);
 		if (flag_switch_to_simulation_) {
 			episode_state_.SetToSimulationStage();
@@ -32,11 +37,11 @@ namespace mcts
 		assert(episode_state_.IsValid());
 		board::Board const saved_board = episode_state_.GetBoard();
 
-		if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
+		if (episode_state_.GetStage() == kStageSelection) {
 			selection_stage_.StartNewAction();
 		}
 		else {
-			assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
+			assert(episode_state_.GetStage() == kStageSimulation);
 			simulation_stage_.StartNewAction();
 		}
 
@@ -53,12 +58,12 @@ namespace mcts
 			}
 
 			if (result == Result::kResultInvalid) {
-				if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
+				if (episode_state_.GetStage() == kStageSelection) {
 					selection_stage_.ReportInvalidAction();
 					selection_stage_.RestartAction();
 				}
 				else {
-					assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
+					assert(episode_state_.GetStage() == kStageSimulation);
 					simulation_stage_.ReportInvalidAction();
 					simulation_stage_.RestartAction();
 				}
@@ -70,9 +75,10 @@ namespace mcts
 				continue;
 			}
 
+			// action applied successfully
+			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
-
-			return result; // action applied successfully
+			return { episode_state_.GetStage(), result };
 		}
 	}
 
@@ -92,13 +98,13 @@ namespace mcts
 		auto stage = episode_state_.GetStage();
 		int choice = -1;
 
-		if (stage == detail::EpisodeState::kStageSelection) {
+		if (stage == kStageSelection) {
 			// if a new node is created, we switch to simulation
 			bool & created_new_node = flag_switch_to_simulation_;
 			choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices, &created_new_node);
 		}
 		else {
-			assert(stage == detail::EpisodeState::kStageSimulation);
+			assert(stage == kStageSimulation);
 			choice = simulation_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
 		}
 

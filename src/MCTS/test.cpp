@@ -44,7 +44,7 @@ int main(void)
 
 		while (true)
 		{
-			mcts::Result result = mcts1.PerformOneAction(board);
+			mcts::Result result = mcts1.PerformOneAction(board).second;
 			assert(result != mcts::Result::kResultInvalid);
 
 			if (result != mcts::Result::kResultNotDetermined) {

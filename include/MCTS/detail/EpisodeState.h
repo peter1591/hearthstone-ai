@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "MCTS/board/Board.h"
+#include "MCTS/Stage.h"
 
 namespace mcts
 {
@@ -10,17 +11,11 @@ namespace mcts
 		class EpisodeState
 		{
 		public:
-			enum Stage {
-				kStageSelection,
-				kStageSimulation
-			};
-
-		public:
 			EpisodeState() : stage_(kStageSelection), is_valid_(true), board_(nullptr) {}
 
-			void Start()
+			void Start(Stage stage)
 			{
-				stage_ = kStageSelection;
+				stage_ = stage;
 				is_valid_ = true;
 			}
 
