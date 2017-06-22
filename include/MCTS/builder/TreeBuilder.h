@@ -33,6 +33,11 @@ namespace mcts
 				TreeNode * node; // only valid if started in selection stage
 			};
 
+			// TODO: the select action can ONLY be performed without hidden information
+			// Maybe pass a BoardView, which can
+			//   1. Extract board view for a specific side
+			//   2. Apply action to underlying board
+			//   3. Forbid to see the underlying board (with hidden information)
 			PerformResult PerformSelect(TreeNode * node, board::Board & board, MCTSUpdater * updater) {
 				return PerformOneAction(node, kStageSelection, board, updater);
 			}
