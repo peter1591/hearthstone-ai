@@ -13,7 +13,9 @@ namespace mcts
 	{
 	public:
 		template <typename StartBoardGetter>
-		void Iterate(StartBoardGetter&& start_board_getter);
+		void StartEpisode(StartBoardGetter && start_board_getter);
+
+		void Iterate();
 
 		int ChooseAction(ActionType action_type, int choices);
 

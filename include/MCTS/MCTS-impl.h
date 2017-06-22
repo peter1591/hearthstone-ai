@@ -10,12 +10,14 @@
 namespace mcts
 {
 	template <typename StartBoardGetter>
-	inline void MCTS::Iterate(StartBoardGetter&& start_board_getter) {
+	inline void MCTS::StartEpisode(StartBoardGetter && start_board_getter) {
 		flag_switch_to_simulation_ = false;
 		episode_state_.Start(start_board_getter());
 		selection_stage_.StartEpisode();
 		simulation_stage_.StartEpisode();
+	}
 
+	inline void MCTS::Iterate() {
 		board::ActionParameterGetter action_parameter_getter(*this);
 		board::RandomGenerator random_generator(*this);
 

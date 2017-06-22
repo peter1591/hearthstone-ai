@@ -34,7 +34,8 @@ int main(void)
 			std::getline(std::cin, dummy);
 		}
 
-		mcts1.Iterate(start_board_getter);
+		mcts1.StartEpisode(start_board_getter);
+		mcts1.Iterate();
 	}
 
 	return 0;
