@@ -13,17 +13,18 @@
 
 namespace mcts
 {
+	// Traverse and build a game tree in a monte-carlo fashion
 	class MCTS
 	{
 	public:
 		typedef selection::TreeNode TreeNode;
 
-		MCTS(TreeNode & root, Statistic<> & statistic) : action_parameter_getter_(*this), random_generator_(*this),
-			statistic_(statistic), selection_stage_(root)
+		MCTS(Statistic<> & statistic) : action_parameter_getter_(*this), random_generator_(*this),
+			statistic_(statistic)
 		{
 		}
 
-		void Start(Stage stage = kStageSelection);
+		void Start(TreeNode & root, Stage stage = kStageSelection);
 
 		std::pair<Stage, Result> PerformOneAction(board::Board & board, MCTSUpdater & updater);
 

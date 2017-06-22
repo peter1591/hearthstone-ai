@@ -20,7 +20,7 @@ int main(void)
 
 	mcts::MCTS::TreeNode root_node;
 	mcts::Statistic<> statistic;
-	mcts::MCTS mcts1(root_node, statistic);
+	mcts::MCTS mcts1(statistic);
 	mcts::MCTSUpdater updater;
 
 	auto start_board_getter = [&]() {
@@ -41,7 +41,7 @@ int main(void)
 		}
 
 		mcts::board::Board board = start_board_getter();
-		mcts1.Start();
+		mcts1.Start(root_node);
 		updater.Clear();
 		while (true)
 		{

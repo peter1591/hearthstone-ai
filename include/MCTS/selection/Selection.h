@@ -12,15 +12,13 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection(TreeNode & root) : root_(root) {}
-
 			void StartNewAction() { saved_path_ = path_; }
 			void RestartAction() { path_ = saved_path_; }
 
-			void StartEpisode()
+			void StartEpisode(TreeNode & root)
 			{
 				path_.clear();
-				StepNext(-1, &root_);
+				StepNext(-1, &root);
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
@@ -129,8 +127,6 @@ namespace mcts
 			}
 
 		private:
-			TreeNode & root_;
-
 			std::vector<TraversedNodeInfo> path_;
 
 			std::vector<TraversedNodeInfo> saved_path_;

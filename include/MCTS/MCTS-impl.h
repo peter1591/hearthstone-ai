@@ -10,14 +10,14 @@
 
 namespace mcts
 {
-	inline void MCTS::Start(Stage stage) {
+	inline void MCTS::Start(TreeNode & root, Stage stage) {
 		flag_switch_to_simulation_ = false;
 
 		episode_state_.Start(stage);
 		assert(episode_state_.GetStage() == stage);
 
 		if (stage == kStageSelection) {
-			selection_stage_.StartEpisode();
+			selection_stage_.StartEpisode(root);
 		}
 	}
 
