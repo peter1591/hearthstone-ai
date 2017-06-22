@@ -12,8 +12,6 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			void StartEpisode() {}
-
 			void StartNewAction(board::Board const& board) {
 				saved_board_ = board;
 				tree_.Clear();
@@ -21,7 +19,10 @@ namespace mcts
 
 			int GetAction(board::Board const& board, ActionType action_type, int choices) {
 				tree_.FillChoices(choices);
+
 				int choice = Simulate(board, action_type, choices);
+				if (choice < 0) return -1;
+
 				tree_.ApplyChoice(choice);
 				return choice;
 			}
@@ -40,10 +41,11 @@ namespace mcts
 		private:
 			int Simulate(board::Board const& board, ActionType action_type, int choices) const
 			{
-				if (tree_.GetWhiteListCount() <= 0) return -1;
+				size_t valid_choices = tree_.GetWhiteListCount();
+				if (valid_choices <= 0) return -1;
 
 				if (action_type.IsChosenRandomly()) {
-					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom((int)tree_.GetWhiteListCount());
+					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom((int)valid_choices);
 					return (int)tree_.GetWhiteListItem((size_t)rnd);
 				}
 

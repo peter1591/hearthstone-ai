@@ -15,7 +15,6 @@ namespace mcts
 		flag_switch_to_simulation_ = false;
 		episode_state_.Start(start_board_getter());
 		selection_stage_.StartEpisode();
-		simulation_stage_.StartEpisode();
 	}
 
 	// In selection stage:
