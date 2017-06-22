@@ -3,7 +3,7 @@
 #include <utility>
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
-#include "MCTS/detail/EpisodeState.h"
+#include "MCTS/builder/EpisodeState.h"
 #include "MCTS/Statistic.h"
 #include "MCTS/ActionType.h"
 #include "MCTS/MCTSUpdater.h"
@@ -44,7 +44,7 @@ namespace mcts
 			board::ActionParameterGetter action_parameter_getter_;
 			board::RandomGenerator random_generator_;
 
-			detail::EpisodeState episode_state_;
+			EpisodeState episode_state_;
 			Statistic<> & statistic_;
 
 			selection::Selection selection_stage_;

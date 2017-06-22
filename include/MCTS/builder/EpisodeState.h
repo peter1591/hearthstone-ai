@@ -6,7 +6,7 @@
 
 namespace mcts
 {
-	namespace detail
+	namespace builder
 	{
 		class EpisodeState
 		{
