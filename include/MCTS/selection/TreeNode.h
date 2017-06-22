@@ -5,6 +5,7 @@
 
 #include "MCTS/ActionType.h"
 #include "MCTS/detail/TreeNodeBase.h"
+#include "MCTS/selection/TreeNodeAddon.h"
 
 namespace mcts
 {
@@ -75,11 +76,17 @@ namespace mcts
 				++total;
 			}
 
+		public:
+			TreeNodeAddon const& GetAddon() const { return addon_; }
+			TreeNodeAddon & GetAddon() { return addon_; }
+
 		private:
 			ActionType action_type_; // TODO: actually this is debug only to check consistency of game engine
 			size_t action_count_;
-			int wins;
+			int wins; // TODO: rename to wins_ and total_
 			int total;
+
+			TreeNodeAddon addon_;
 		};
 	}
 }
