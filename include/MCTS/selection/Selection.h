@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "MCTS/Config.h"
 #include "MCTS/selection/TreeNode.h"
+#include "MCTS/selection/TraversedNodeInfo.h"
 
 namespace mcts
 {
@@ -10,12 +11,6 @@ namespace mcts
 	{
 		class Selection
 		{
-		public:
-			struct TraversedNodeInfo {
-				int leading_choice; // choice to lead to this node
-				TreeNode* node;
-			};
-
 		public:
 			Selection(TreeNode & root) : root_(root) {}
 
