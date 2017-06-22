@@ -17,6 +17,9 @@ namespace mcts
 			};
 
 		public:
+			void StartNewAction() { saved_path_ = path_; }
+			void RestartAction() { path_ = saved_path_; }
+
 			void StartEpisode()
 			{
 				path_.clear();
@@ -139,6 +142,8 @@ namespace mcts
 			TreeNode root_;
 
 			std::vector<TraversedNodeInfo> path_;
+
+			std::vector<TraversedNodeInfo> saved_path_;
 		};
 	}
 }

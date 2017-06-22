@@ -30,7 +30,6 @@ namespace mcts
 				tree_.ReportInvalidChoice();
 			}
 
-			// @return saved board
 			void RestartAction() {
 				// Use a white-list-tree to record all viable (sub-)actions
 				tree_.Restart();

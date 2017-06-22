@@ -17,9 +17,8 @@ namespace mcts
 		selection_stage_.StartEpisode();
 	}
 
-	// In selection stage:
-	//    Might return InvalidResult when an invalid action is applied
-	// In simulation stage:
+
+	// Never returns kResultInvalid
 	//    Will automatically retry if an invalid action is applied
 	inline Result MCTS::PerformOneAction() {
 		Result result = Result::kResultInvalid;
@@ -29,17 +28,18 @@ namespace mcts
 			flag_switch_to_simulation_ = false;
 		}
 
-		// TODO:
+		// TODO [PROFILING]:
 		// we save the board every time just in case an invalid action is applied
 		// ideally, invalid actions should be rarely happened.
 		// Need to decide if this is benefitial.
-
+		assert(episode_state_.IsValid());
 		board::Board const saved_board = episode_state_.GetBoard();
 
-		if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
-			// main actions are supposed to be always-valid
-			// otherwise, we need to remember choice-white-list across main-actions
-			assert(episode_state_.IsValid());
+		if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
+			selection_stage_.StartNewAction();
+		}
+		else {
+			assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
 			simulation_stage_.StartNewAction();
 		}
 
@@ -60,14 +60,14 @@ namespace mcts
 			if (result == Result::kResultInvalid) {
 				if (episode_state_.GetStage() == detail::EpisodeState::kStageSelection) {
 					selection_stage_.ReportInvalidAction();
-					return Result::kResultInvalid;
+					selection_stage_.RestartAction();
+				}
+				else {
+					assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
+					simulation_stage_.ReportInvalidAction();
+					simulation_stage_.RestartAction();
 				}
 
-				assert(episode_state_.GetStage() == detail::EpisodeState::kStageSimulation);
-
-				simulation_stage_.ReportInvalidAction();
-
-				simulation_stage_.RestartAction();
 				episode_state_.SetBoard(saved_board);
 				episode_state_.SetValid();
 
@@ -75,22 +75,19 @@ namespace mcts
 				continue;
 			}
 
-			if (episode_state_.GetStage() == detail::EpisodeState::kStageSimulation) {
-				statistic_.ApplyActionSucceeded();
-			}
+			statistic_.ApplyActionSucceeded();
 
 			return result; // action applied successfully
 		}
 	}
 
-	// Might return kResultInvalid.
 	inline void MCTS::Iterate() {
 		Result result = Result::kResultInvalid;
 
 		while (true)
 		{
 			result = PerformOneAction();
-			if (result == Result::kResultInvalid) return;
+			assert(result != Result::kResultInvalid);
 
 			if (result != Result::kResultNotDetermined) break;
 		}
