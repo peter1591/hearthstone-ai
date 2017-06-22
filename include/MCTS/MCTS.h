@@ -6,6 +6,7 @@
 #include "MCTS/detail/EpisodeState.h"
 #include "MCTS/Statistic.h"
 #include "MCTS/ActionType.h"
+#include "MCTS/MCTSUpdater.h"
 #include "MCTS/board/BoardView.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
@@ -24,9 +25,7 @@ namespace mcts
 
 		void StartEpisode(Stage stage = kStageSelection);
 
-		std::pair<Stage, Result> PerformOneAction(board::Board & board);
-
-		void EpisodeFinished(bool credit);
+		std::pair<Stage, Result> PerformOneAction(board::Board & board, MCTSUpdater & updater);
 
 	public: // for callbacks: action-parameter-getter and random-generator
 		int ChooseAction(ActionType action_type, int choices);

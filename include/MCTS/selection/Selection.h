@@ -76,13 +76,6 @@ namespace mcts
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
-			void ReportResult(bool win)
-			{
-				for (auto const& item : path_) {
-					item.node->ReportResult(win);
-				}
-			}
-
 		private:
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
 

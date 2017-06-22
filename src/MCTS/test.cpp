@@ -21,6 +21,7 @@ int main(void)
 	mcts::MCTS::TreeNode root_node;
 	mcts::Statistic<> statistic;
 	mcts::MCTS mcts1(root_node, statistic);
+	mcts::MCTSUpdater updater;
 
 	auto start_board_getter = [&]() {
 		return TestStateBuilder().GetState();
@@ -41,15 +42,15 @@ int main(void)
 
 		mcts::board::Board board = start_board_getter();
 		mcts1.StartEpisode();
-
+		updater.Clear();
 		while (true)
 		{
-			mcts::Result result = mcts1.PerformOneAction(board).second;
+			mcts::Result result = mcts1.PerformOneAction(board, updater).second;
 			assert(result != mcts::Result::kResultInvalid);
 
 			if (result != mcts::Result::kResultNotDetermined) {
 				bool credit = mcts::CreditPolicy::GetCredit(state::kPlayerFirst, result); // suppose AI is helping the first player
-				mcts1.EpisodeFinished(credit);
+				updater.Update(credit);
 				break;
 			}
 		}

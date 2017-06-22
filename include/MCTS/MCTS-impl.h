@@ -23,7 +23,7 @@ namespace mcts
 
 	// Never returns kResultInvalid
 	//    Will automatically retry if an invalid action is applied
-	inline std::pair<Stage, Result> MCTS::PerformOneAction(board::Board & board) {
+	inline std::pair<Stage, Result> MCTS::PerformOneAction(board::Board & board, MCTSUpdater & updater) {
 		episode_state_.StartAction(board);
 		if (flag_switch_to_simulation_) {
 			episode_state_.SetToSimulationStage();
@@ -78,12 +78,9 @@ namespace mcts
 			// action applied successfully
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
+			updater.PushBackNodes(selection_stage_.GetTraversedPath());
 			return { episode_state_.GetStage(), result };
 		}
-	}
-
-	inline void MCTS::EpisodeFinished(bool credit) {
-		selection_stage_.ReportResult(credit);
 	}
 
 	inline int MCTS::ChooseAction(ActionType action_type, int choices)
