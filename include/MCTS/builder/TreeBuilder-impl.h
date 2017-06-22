@@ -14,13 +14,16 @@ namespace mcts
 	{
 		// Never returns kResultInvalid
 		//    Will automatically retry if an invalid action is applied
-		inline TreeBuilder::PerformResult TreeBuilder::PerformOneAction(TreeNode * root, Stage stage, board::Board & board, MCTSUpdater & updater) {
+		// Note: 'node' is used only in selection stage (i.e., stage = kStageSelection)
+		inline TreeBuilder::PerformResult TreeBuilder::PerformOneAction(
+			TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater)
+		{
 			episode_state_.Start(stage, board);
 
 			assert(episode_state_.GetStage() == stage);
 			if (stage == kStageSelection) {
 				new_node_created_ = false;
-				selection_stage_.StartEpisode(root);
+				selection_stage_.StartEpisode(node);
 			}
 
 			// TODO [PROFILING]:
@@ -71,12 +74,15 @@ namespace mcts
 			// action applied successfully
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
-			updater.PushBackNodes(selection_stage_.GetTraversedPath());
 
 			TreeBuilder::PerformResult perform_result;
-			perform_result.new_node_created = new_node_created_;
 			perform_result.result = result;
-			perform_result.node = selection_stage_.GetCurrentNode();
+			if (stage == kStageSelection) {
+				assert(updater);
+				updater->PushBackNodes(selection_stage_.GetTraversedPath());
+				perform_result.new_node_created = new_node_created_;
+				perform_result.node = selection_stage_.GetCurrentNode();
+			}
 			return perform_result;
 		}
 

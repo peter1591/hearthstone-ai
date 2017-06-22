@@ -28,11 +28,22 @@ namespace mcts
 
 			struct PerformResult
 			{
-				bool new_node_created; // only valid if started in selection stage
 				Result result;
-				TreeNode * node;
+				bool new_node_created; // only valid if started in selection stage
+				TreeNode * node; // only valid if started in selection stage
 			};
-			PerformResult PerformOneAction(TreeNode * root, Stage stage, board::Board & board, MCTSUpdater & updater);
+
+			PerformResult PerformSelect(TreeNode * node, board::Board & board, MCTSUpdater * updater) {
+				return PerformOneAction(node, kStageSelection, board, updater);
+			}
+
+			PerformResult PerformSimulate(board::Board & board) {
+				return PerformOneAction(nullptr, kStageSimulation, board, nullptr);
+			}
+
+		private:
+			PerformResult PerformOneAction(
+				TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater);
 
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseAction(ActionType action_type, int choices);

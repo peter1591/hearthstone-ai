@@ -46,7 +46,14 @@ int main(void)
 		updater.Clear();
 		while (true)
 		{
-			mcts::builder::TreeBuilder::PerformResult result = mcts1.PerformOneAction(node, stage, board, updater);
+			mcts::builder::TreeBuilder::PerformResult result;
+
+			if (stage == mcts::kStageSelection) result = mcts1.PerformSelect(node, board, &updater);
+			else {
+				assert(stage == mcts::kStageSimulation);
+				result = mcts1.PerformSimulate(board);
+			}
+
 			assert(result.result != mcts::Result::kResultInvalid);
 
 			if (result.result != mcts::Result::kResultNotDetermined) {
