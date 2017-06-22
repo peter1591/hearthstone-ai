@@ -17,7 +17,8 @@ int main(void)
 {
 	Initialize();
 
-	mcts::MCTS mcts1;
+	mcts::MCTS::TreeNode root_node;
+	mcts::MCTS mcts1(root_node);
 
 	auto start_board_getter = [&]() {
 		return TestStateBuilder().GetState();

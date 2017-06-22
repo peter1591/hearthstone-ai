@@ -14,7 +14,12 @@ namespace mcts
 	class MCTS
 	{
 	public:
-		MCTS() : action_parameter_getter_(*this), random_generator_(*this) {}
+		typedef selection::TreeNode TreeNode;
+
+		MCTS(TreeNode & root) : action_parameter_getter_(*this), random_generator_(*this),
+			selection_stage_(root)
+		{
+		}
 
 		void StartEpisode();
 

@@ -17,6 +17,8 @@ namespace mcts
 			};
 
 		public:
+			Selection(TreeNode & root) : root_(root) {}
+
 			void StartNewAction() { saved_path_ = path_; }
 			void RestartAction() { path_ = saved_path_; }
 
@@ -139,7 +141,7 @@ namespace mcts
 			}
 
 		private:
-			TreeNode root_;
+			TreeNode & root_;
 
 			std::vector<TraversedNodeInfo> path_;
 
