@@ -19,6 +19,8 @@ namespace mcts
 		template <typename StartBoardGetter>
 		void StartEpisode(StartBoardGetter && start_board_getter);
 
+		Result PerformOneAction();
+
 		void Iterate();
 
 		int ChooseAction(ActionType action_type, int choices);
