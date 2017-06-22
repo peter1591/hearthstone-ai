@@ -16,7 +16,7 @@ namespace mcts
 		class TreeNode : private detail::TreeNodeBase<TreeNode>
 		{
 		public:
-			TreeNode() : action_count_(0), action_type_(ActionType::kInvalid), wins(0), total(0) {}
+			TreeNode() : action_count_(0), action_type_(ActionType::kInvalid), wins_(0), total_(0) {}
 
 			ActionType GetActionType() const { return action_type_; }
 			int GetActionCount() const { return (int)action_count_; }
@@ -72,8 +72,8 @@ namespace mcts
 			}
 
 			void ReportResult(bool win) {
-				if (win) ++wins;
-				++total;
+				if (win) ++wins_;
+				++total_;
 			}
 
 		public:
@@ -83,8 +83,8 @@ namespace mcts
 		private:
 			ActionType action_type_; // TODO: actually this is debug only to check consistency of game engine
 			size_t action_count_;
-			int wins; // TODO: rename to wins_ and total_
-			int total;
+			int wins_;
+			int total_;
 
 			TreeNodeAddon addon_;
 		};
