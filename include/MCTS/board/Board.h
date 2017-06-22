@@ -2,11 +2,10 @@
 
 #include "state/State.h"
 #include "FlowControl/FlowController.h"
+#include "MCTS/Result.h"
 
 namespace mcts
 {
-	using Result = FlowControl::Result;
-
 	namespace board
 	{
 		class ActionParameterGetter;
