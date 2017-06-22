@@ -15,10 +15,10 @@ namespace mcts
 			void StartNewAction() { saved_path_ = path_; }
 			void RestartAction() { path_ = saved_path_; }
 
-			void StartEpisode(TreeNode & root)
+			void StartEpisode(TreeNode * root)
 			{
 				path_.clear();
-				StepNext(-1, &root);
+				StepNext(-1, root);
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
@@ -74,9 +74,9 @@ namespace mcts
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
-		private:
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
 
+		private:
 			void ReportActionInfo(ActionType action_type, int choices) {
 				GetCurrentNode()->FillActions(action_type, choices);
 			}

@@ -10,25 +10,20 @@
 
 namespace mcts
 {
-	inline void MCTS::Start(TreeNode & root, Stage stage) {
-		flag_switch_to_simulation_ = false;
-
+	inline void MCTS::Start(TreeNode * root, Stage stage) {
 		episode_state_.Start(stage);
 		assert(episode_state_.GetStage() == stage);
 
 		if (stage == kStageSelection) {
+			new_node_created_ = false;
 			selection_stage_.StartEpisode(root);
 		}
 	}
 
 	// Never returns kResultInvalid
 	//    Will automatically retry if an invalid action is applied
-	inline std::pair<Stage, Result> MCTS::PerformOneAction(board::Board & board, MCTSUpdater & updater) {
+	inline MCTS::PerformResult MCTS::PerformOneAction(board::Board & board, MCTSUpdater & updater) {
 		episode_state_.StartAction(board);
-		if (flag_switch_to_simulation_) {
-			episode_state_.SetToSimulationStage();
-			flag_switch_to_simulation_ = false;
-		}
 
 		// TODO [PROFILING]:
 		// We save the board every time here. This is just for the case an invalid action is applied
@@ -79,7 +74,12 @@ namespace mcts
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
 			updater.PushBackNodes(selection_stage_.GetTraversedPath());
-			return { episode_state_.GetStage(), result };
+
+			MCTS::PerformResult perform_result;
+			perform_result.new_node_created = new_node_created_;
+			perform_result.result = result;
+			perform_result.node = selection_stage_.GetCurrentNode();
+			return perform_result;
 		}
 	}
 
@@ -94,12 +94,7 @@ namespace mcts
 
 		int choice = -1;
 		if (episode_state_.GetStage() == kStageSelection) {
-			bool created_new_node = false;
-			choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices, &created_new_node);
-			if (created_new_node) {
-				// if a new node is created, we switch to simulation
-				SwitchToSimulationModeInNextMainAction();
-			}
+			choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices, &new_node_created_);
 		}
 		else {
 			assert(episode_state_.GetStage() == kStageSimulation);

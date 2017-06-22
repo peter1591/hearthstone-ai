@@ -40,19 +40,27 @@ int main(void)
 			std::getline(std::cin, dummy);
 		}
 
+		mcts::Stage stage = mcts::kStageSelection;
+		mcts::MCTS::TreeNode * node = &root_node;
 		mcts::board::Board board = start_board_getter();
-		mcts1.Start(root_node);
 		updater.Clear();
 		while (true)
 		{
-			mcts::Result result = mcts1.PerformOneAction(board, updater).second;
-			assert(result != mcts::Result::kResultInvalid);
+			mcts1.Start(node, stage);
+			mcts::MCTS::PerformResult result = mcts1.PerformOneAction(board, updater);
+			assert(result.result != mcts::Result::kResultInvalid);
 
-			if (result != mcts::Result::kResultNotDetermined) {
-				bool credit = mcts::CreditPolicy::GetCredit(state::kPlayerFirst, result); // suppose AI is helping the first player
+			if (result.result != mcts::Result::kResultNotDetermined) {
+				bool credit = mcts::CreditPolicy::GetCredit(state::kPlayerFirst, result.result); // suppose AI is helping the first player
 				updater.Update(credit);
 				break;
 			}
+
+			// We use a flag here, since we cannot switch to simulation mode in sub-actions.
+			if (stage == mcts::kStageSelection && result.new_node_created) {
+				stage = mcts::kStageSimulation;
+			}
+			node = result.node;
 		}
 	}
 
