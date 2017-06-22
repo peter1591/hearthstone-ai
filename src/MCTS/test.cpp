@@ -3,8 +3,8 @@
 #include <iostream>
 
 #include "TestStateBuilder.h"
-#include "MCTS/MCTS.h"
-#include "MCTS/MCTS-impl.h"
+#include "MCTS/builder/TreeBuilder.h"
+#include "MCTS/builder/TreeBuilder-impl.h"
 #include "MCTS/CreditPolicy.h"
 
 void Initialize()
@@ -18,9 +18,9 @@ int main(void)
 {
 	Initialize();
 
-	mcts::MCTS::TreeNode root_node;
 	mcts::Statistic<> statistic;
-	mcts::MCTS mcts1(statistic);
+	mcts::builder::TreeBuilder::TreeNode root_node;
+	mcts::builder::TreeBuilder mcts1(statistic);
 	mcts::MCTSUpdater updater;
 
 	auto start_board_getter = [&]() {
@@ -41,12 +41,12 @@ int main(void)
 		}
 
 		mcts::Stage stage = mcts::kStageSelection;
-		mcts::MCTS::TreeNode * node = &root_node;
+		mcts::builder::TreeBuilder::TreeNode * node = &root_node;
 		mcts::board::Board board = start_board_getter();
 		updater.Clear();
 		while (true)
 		{
-			mcts::MCTS::PerformResult result = mcts1.PerformOneAction(node, stage, board, updater);
+			mcts::builder::TreeBuilder::PerformResult result = mcts1.PerformOneAction(node, stage, board, updater);
 			assert(result.result != mcts::Result::kResultInvalid);
 
 			if (result.result != mcts::Result::kResultNotDetermined) {

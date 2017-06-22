@@ -4,14 +4,14 @@
 
 namespace mcts
 {
-	class MCTS;
+	namespace builder { class TreeBuilder; }
 
 	namespace board
 	{
 		class ActionParameterGetter : public FlowControl::IActionParameterGetter
 		{
 		public:
-			ActionParameterGetter(MCTS & mcts) : mcts_(mcts) {}
+			ActionParameterGetter(builder::TreeBuilder & builder) : builder_(builder) {}
 
 			state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
 			{
@@ -46,7 +46,7 @@ namespace mcts
 			int GetNumber(ActionType::Types action_type, int exclusive_max);
 
 		private:
-			MCTS & mcts_;
+			builder::TreeBuilder & builder_;
 		};
 	}
 }

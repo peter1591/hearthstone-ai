@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MCTS/MCTS.h"
+#include "MCTS/builder/TreeBuilder.h"
 
 namespace mcts
 {
@@ -8,7 +8,7 @@ namespace mcts
 	{
 		inline int RandomGenerator::Get(int exclusive_max)
 		{
-			return mcts_.ChooseAction(ActionType(ActionType::kRandom), exclusive_max);
+			return builder_.ChooseAction(ActionType(ActionType::kRandom), exclusive_max);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MCTS/board/ActionParameterGetter.h"
-#include "MCTS/MCTS.h"
+#include "MCTS/builder/TreeBuilder.h"
 
 namespace mcts
 {
@@ -9,7 +9,7 @@ namespace mcts
 	{
 		inline int ActionParameterGetter::GetNumber(ActionType::Types action_type, int exclusive_max)
 		{
-			return mcts_.ChooseAction(ActionType(action_type), exclusive_max);
+			return builder_.ChooseAction(ActionType(action_type), exclusive_max);
 		}
 	}
 }

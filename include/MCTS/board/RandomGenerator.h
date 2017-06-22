@@ -4,14 +4,14 @@
 
 namespace mcts
 {
-	class MCTS;
+	namespace builder { class TreeBuilder; }
 
 	namespace board
 	{
 		class RandomGenerator : public state::IRandomGenerator
 		{
 		public:
-			RandomGenerator(MCTS & mcts) : mcts_(mcts) {}
+			RandomGenerator(builder::TreeBuilder & builder) : builder_(builder) {}
 
 			size_t Get(size_t exclusive_max) final
 			{
@@ -29,7 +29,7 @@ namespace mcts
 			int Get(int exclusive_max) final;
 
 		private:
-			MCTS & mcts_;
+			builder::TreeBuilder & builder_;
 		};
 	}
 }
