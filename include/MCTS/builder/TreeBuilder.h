@@ -7,7 +7,7 @@
 #include "MCTS/Statistic.h"
 #include "MCTS/ActionType.h"
 #include "MCTS/MCTSUpdater.h"
-#include "MCTS/board/BoardView.h"
+#include "MCTS/board/BoardOnlineViewer.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 
@@ -33,22 +33,17 @@ namespace mcts
 				TreeNode * node; // only valid if started in selection stage
 			};
 
-			// TODO: the select action can ONLY be performed without hidden information
-			// Maybe pass a BoardView, which can
-			//   1. Extract board view for a specific side
-			//   2. Apply action to underlying board
-			//   3. Forbid to see the underlying board (with hidden information)
-			PerformResult PerformSelect(TreeNode * node, board::Board & board, MCTSUpdater * updater) {
+			PerformResult PerformSelect(TreeNode * node, board::BoardOnlineViewer & board, MCTSUpdater * updater) {
 				return PerformOneAction(node, kStageSelection, board, updater);
 			}
 
-			PerformResult PerformSimulate(board::Board & board) {
+			PerformResult PerformSimulate(board::BoardOnlineViewer & board) {
 				return PerformOneAction(nullptr, kStageSimulation, board, nullptr);
 			}
 
 		private:
 			PerformResult PerformOneAction(
-				TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater);
+				TreeNode * const node, Stage const stage, board::BoardOnlineViewer & board, MCTSUpdater * const updater);
 
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseAction(ActionType action_type, int choices);

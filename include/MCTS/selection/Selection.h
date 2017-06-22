@@ -22,7 +22,7 @@ namespace mcts
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
-			int GetAction(board::Board const& board, ActionType action_type, int choices, bool * created_new_node)
+			int GetAction(board::BoardOnlineViewer const& board, ActionType action_type, int choices, bool * created_new_node)
 			{
 				ReportActionInfo(action_type, choices);
 				
@@ -81,7 +81,7 @@ namespace mcts
 				GetCurrentNode()->FillActions(action_type, choices);
 			}
 
-			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, int choices, bool * new_node) {
+			std::pair<int, TreeNode*> SelectAction(board::BoardOnlineViewer const& board, ActionType action_type, int choices, bool * new_node) {
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
 				if (GetCurrentNode()->HasUnExpandedAction()) {
@@ -119,7 +119,7 @@ namespace mcts
 				return GetCurrentNode()->GetNthChild((size_t)idx);
 			}
 
-			std::pair<int, TreeNode*> SelectActionByChoice(board::Board const& board)
+			std::pair<int, TreeNode*> SelectActionByChoice(board::BoardOnlineViewer const& board)
 			{
 				assert(GetCurrentNode()->HasAnyChild());
 				return StaticConfigs::SelectionPhaseSelectActionPolicy::GetChoice(

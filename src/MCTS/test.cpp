@@ -47,11 +47,13 @@ int main(void)
 		while (true)
 		{
 			mcts::builder::TreeBuilder::PerformResult result;
+			state::PlayerSide side = board.GetCurrentPlayerId().GetSide();
+			mcts::board::BoardOnlineViewer board_viewer(board, side);
 
-			if (stage == mcts::kStageSelection) result = mcts1.PerformSelect(node, board, &updater);
+			if (stage == mcts::kStageSelection) result = mcts1.PerformSelect(node, board_viewer, &updater);
 			else {
 				assert(stage == mcts::kStageSimulation);
-				result = mcts1.PerformSimulate(board);
+				result = mcts1.PerformSimulate(board_viewer);
 			}
 
 			assert(result.result != mcts::Result::kResultInvalid);

@@ -18,7 +18,7 @@ namespace mcts
 		//    Will automatically retry if an invalid action is applied
 		// Note: 'node' is used only in selection stage (i.e., stage = kStageSelection)
 		inline TreeBuilder::PerformResult TreeBuilder::PerformOneAction(
-			TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater)
+			TreeNode * const node, Stage const stage, board::BoardOnlineViewer & board, MCTSUpdater * const updater)
 		{
 			episode_state_.Start(stage, board);
 
@@ -33,7 +33,7 @@ namespace mcts
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			assert(episode_state_.IsValid());
-			board::Board const saved_board = episode_state_.GetBoard();
+			episode_state_.GetBoard().SaveState();
 
 			if (episode_state_.GetStage() == kStageSelection) {
 				selection_stage_.StartNewAction();
@@ -50,11 +50,11 @@ namespace mcts
 			while (true)
 			{
 				board::BoardActionAnalyzer action_analyzer;
-				int choices = action_analyzer.GetActionsCount(episode_state_.GetBoard());
+				int choices = episode_state_.GetBoard().GetActionsCount();
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
 
 				if (episode_state_.IsValid()) {
-					result = action_analyzer.ApplyAction(episode_state_.GetBoard(), choice, random_generator_, action_parameter_getter_);
+					result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
 					if (result != Result::kResultInvalid) break;
 				}
 
@@ -68,7 +68,7 @@ namespace mcts
 					simulation_stage_.RestartAction();
 				}
 
-				episode_state_.GetBoard() = saved_board;
+				episode_state_.GetBoard().RestoreState();
 				episode_state_.SetValid();
 
 				statistic_.ApplyActionFailed();

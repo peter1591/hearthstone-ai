@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MCTS/ActionType.h"
 #include "FlowControl/IActionParameterGetter.h"
 
 namespace mcts
