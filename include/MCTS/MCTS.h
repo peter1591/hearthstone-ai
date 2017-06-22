@@ -3,7 +3,7 @@
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
 #include "MCTS/detail/EpisodeState.h"
-#include "MCTS/detail/Statistic.h"
+#include "MCTS/Statistic.h"
 #include "MCTS/ActionType.h"
 #include "MCTS/board/BoardView.h"
 #include "MCTS/board/ActionParameterGetter.h"
@@ -16,8 +16,8 @@ namespace mcts
 	public:
 		typedef selection::TreeNode TreeNode;
 
-		MCTS(TreeNode & root) : action_parameter_getter_(*this), random_generator_(*this),
-			selection_stage_(root)
+		MCTS(TreeNode & root, Statistic<> & statistic) : action_parameter_getter_(*this), random_generator_(*this),
+			statistic_(statistic), selection_stage_(root)
 		{
 		}
 
@@ -29,9 +29,6 @@ namespace mcts
 
 	public: // for callbacks: action-parameter-getter and random-generator
 		int ChooseAction(ActionType action_type, int choices);
-
-	public: // debug
-		void PrintStatistic() { statistic_.PrintMessage(); }
 
 	private:
 		int ActionCallback(ActionType action_type, int choices);
@@ -47,7 +44,7 @@ namespace mcts
 		board::RandomGenerator random_generator_;
 
 		detail::EpisodeState episode_state_;
-		detail::Statistic<> statistic_;
+		Statistic<> & statistic_;
 
 		selection::Selection selection_stage_;
 		simulation::Simulation simulation_stage_;

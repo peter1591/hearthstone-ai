@@ -19,7 +19,8 @@ int main(void)
 	Initialize();
 
 	mcts::MCTS::TreeNode root_node;
-	mcts::MCTS mcts1(root_node);
+	mcts::Statistic<> statistic;
+	mcts::MCTS mcts1(root_node, statistic);
 
 	auto start_board_getter = [&]() {
 		return TestStateBuilder().GetState();
@@ -29,7 +30,7 @@ int main(void)
 		if (i % 10 == 0) {
 			std::cout << "====== Statistics =====" << std::endl;
 			std::cout << "Episodes: " << i << std::endl;
-			mcts1.PrintStatistic();
+			statistic.PrintMessage();
 		}
 
 		if (i % 1000 == 999) {
