@@ -23,7 +23,7 @@ namespace mcts
 		{
 		}
 
-		void StartEpisode(Stage stage = kStageSelection);
+		void Start(Stage stage = kStageSelection);
 
 		std::pair<Stage, Result> PerformOneAction(board::Board & board, MCTSUpdater & updater);
 
@@ -33,9 +33,8 @@ namespace mcts
 	private:
 		int ActionCallback(ActionType action_type, int choices);
 
-		void SwitchToSimulationMode() {
-			// We use a flag here, since we cannot switch to simulation mode
-			// in sub-actions.
+		void SwitchToSimulationModeInNextMainAction() {
+			// We use a flag here, since we cannot switch to simulation mode in sub-actions.
 			flag_switch_to_simulation_ = true;
 		}
 

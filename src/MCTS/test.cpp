@@ -41,7 +41,7 @@ int main(void)
 		}
 
 		mcts::board::Board board = start_board_getter();
-		mcts1.StartEpisode();
+		mcts1.Start();
 		updater.Clear();
 		while (true)
 		{

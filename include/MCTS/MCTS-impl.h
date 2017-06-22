@@ -10,7 +10,7 @@
 
 namespace mcts
 {
-	inline void MCTS::StartEpisode(Stage stage) {
+	inline void MCTS::Start(Stage stage) {
 		flag_switch_to_simulation_ = false;
 
 		episode_state_.Start(stage);
@@ -31,9 +31,9 @@ namespace mcts
 		}
 
 		// TODO [PROFILING]:
-		// we save the board every time just in case an invalid action is applied
-		// ideally, invalid actions should be rarely happened.
-		// Need to decide if this is benefitial.
+		// We save the board every time here. This is just for the case an invalid action is applied
+		// Ideally, invalid actions should be rarely happened.
+		// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 		assert(episode_state_.IsValid());
 		board::Board const saved_board = episode_state_.GetBoard();
 
@@ -92,21 +92,21 @@ namespace mcts
 	{
 		assert(choices > 0);
 
-		auto stage = episode_state_.GetStage();
 		int choice = -1;
-
-		if (stage == kStageSelection) {
-			// if a new node is created, we switch to simulation
-			bool & created_new_node = flag_switch_to_simulation_;
+		if (episode_state_.GetStage() == kStageSelection) {
+			bool created_new_node = false;
 			choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices, &created_new_node);
+			if (created_new_node) {
+				// if a new node is created, we switch to simulation
+				SwitchToSimulationModeInNextMainAction();
+			}
 		}
 		else {
-			assert(stage == kStageSimulation);
+			assert(episode_state_.GetStage() == kStageSimulation);
 			choice = simulation_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
 		}
 
-		if (choice < 0)
-			episode_state_.SetInvalid();
+		if (choice < 0) episode_state_.SetInvalid();
 		return choice;
 	}
 }
