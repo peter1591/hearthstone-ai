@@ -25,7 +25,7 @@ namespace mcts
 
 		Result PerformOneAction(board::Board & board);
 
-		void EpisodeFinished(Result result);
+		void EpisodeFinished(bool credit);
 
 	public: // for callbacks: action-parameter-getter and random-generator
 		int ChooseAction(ActionType action_type, int choices);

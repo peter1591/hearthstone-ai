@@ -76,10 +76,8 @@ namespace mcts
 		}
 	}
 
-	inline void MCTS::EpisodeFinished(Result result) {
-		assert(result != Result::kResultInvalid);
-		bool win = (result == Result::kResultFirstPlayerWin);
-		selection_stage_.ReportResult(win);
+	inline void MCTS::EpisodeFinished(bool credit) {
+		selection_stage_.ReportResult(credit);
 	}
 
 	inline int MCTS::ChooseAction(ActionType action_type, int choices)

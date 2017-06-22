@@ -5,6 +5,7 @@
 #include "TestStateBuilder.h"
 #include "MCTS/MCTS.h"
 #include "MCTS/MCTS-impl.h"
+#include "MCTS/CreditPolicy.h"
 
 void Initialize()
 {
@@ -46,7 +47,8 @@ int main(void)
 			assert(result != mcts::Result::kResultInvalid);
 
 			if (result != mcts::Result::kResultNotDetermined) {
-				mcts1.EpisodeFinished(result);
+				bool credit = mcts::CreditPolicy::GetCredit(state::kPlayerFirst, result); // suppose AI is helping the first player
+				mcts1.EpisodeFinished(credit);
 				break;
 			}
 		}
