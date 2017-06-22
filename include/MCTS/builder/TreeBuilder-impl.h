@@ -14,11 +14,8 @@ namespace mcts
 {
 	namespace builder
 	{
-		// Never returns kResultInvalid
-		//    Will automatically retry if an invalid action is applied
-		// Note: 'node' is used only in selection stage (i.e., stage = kStageSelection)
 		inline TreeBuilder::PerformResult TreeBuilder::PerformOneAction(
-			TreeNode * const node, Stage const stage, board::BoardOnlineViewer & board, MCTSUpdater * const updater)
+			TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater)
 		{
 			episode_state_.Start(stage, board);
 

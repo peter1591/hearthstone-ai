@@ -7,7 +7,7 @@
 #include "MCTS/Statistic.h"
 #include "MCTS/ActionType.h"
 #include "MCTS/MCTSUpdater.h"
-#include "MCTS/board/BoardOnlineViewer.h"
+#include "MCTS/board/Board.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 
@@ -33,17 +33,24 @@ namespace mcts
 				TreeNode * node; // only valid if started in selection stage
 			};
 
-			PerformResult PerformSelect(TreeNode * node, board::BoardOnlineViewer & board, MCTSUpdater * updater) {
+			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
+			// Note: can only be called when current player is the viewer of 'board'
+			PerformResult PerformSelect(TreeNode * node, board::Board & board, MCTSUpdater * updater) {
 				return PerformOneAction(node, kStageSelection, board, updater);
 			}
 
-			PerformResult PerformSimulate(board::BoardOnlineViewer & board) {
+			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
+			// Note: can only be called when current player is the viewer of 'board'
+			PerformResult PerformSimulate(board::Board & board) {
 				return PerformOneAction(nullptr, kStageSimulation, board, nullptr);
 			}
 
 		private:
+			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
+			// Note: 'node' is used only in selection stage (i.e., stage = kStageSelection)
+			// Note: can only be called when current player is the viewer of 'board'
 			PerformResult PerformOneAction(
-				TreeNode * const node, Stage const stage, board::BoardOnlineViewer & board, MCTSUpdater * const updater);
+				TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater);
 
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseAction(ActionType action_type, int choices);

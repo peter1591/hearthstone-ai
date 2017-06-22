@@ -1,7 +1,6 @@
 #pragma once
 
 #include "state/Types.h"
-#include "MCTS/board/Board.h"
 #include "MCTS/board/BoardViewTypes.h"
 
 namespace mcts
@@ -12,7 +11,7 @@ namespace mcts
 		class BoardView
 		{
 		public:
-			BoardView(Board const& board);
+			BoardView(state::State const& board);
 			BoardView(BoardView const&) = default;
 			BoardView(BoardView &&) = default;
 

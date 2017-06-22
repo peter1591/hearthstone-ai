@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MCTS/board/Board.h"
 #include "MCTS/board/BoardView.h"
 
 namespace mcts
@@ -8,7 +7,7 @@ namespace mcts
 	namespace board
 	{
 		template <state::PlayerSide Side>
-		inline BoardView<Side>::BoardView(Board const& board)
+		inline BoardView<Side>::BoardView(state::State const& board)
 		{
 			state::State const& state = board.GetState();
 			

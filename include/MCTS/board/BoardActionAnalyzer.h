@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MCTS/board/Board.h"
+#include "MCTS/Result.h"
 
 namespace mcts
 {
@@ -22,15 +22,15 @@ namespace mcts
 			};
 
 		public:
-			int GetActionsCount(Board const& board);
-			Result ApplyAction(Board & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			int GetActionsCount(state::State const& board);
+			Result ApplyAction(state::State & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters);
 
 		private:
-			typedef Result(BoardActionAnalyzer::*CallbackFunc)(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result PlayCard(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result Attack(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result HeroPower(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result EndTurn(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			typedef Result(BoardActionAnalyzer::*CallbackFunc)(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 
 		private:
 			std::vector<int> playable_cards_;

@@ -42,13 +42,13 @@ int main(void)
 
 		mcts::Stage stage = mcts::kStageSelection;
 		mcts::builder::TreeBuilder::TreeNode * node = &root_node;
-		mcts::board::Board board = start_board_getter();
+		state::State board = start_board_getter();
 		updater.Clear();
 		while (true)
 		{
 			mcts::builder::TreeBuilder::PerformResult result;
 			state::PlayerSide side = board.GetCurrentPlayerId().GetSide();
-			mcts::board::BoardOnlineViewer board_viewer(board, side);
+			mcts::board::Board board_viewer(board, side);
 
 			if (stage == mcts::kStageSelection) result = mcts1.PerformSelect(node, board_viewer, &updater);
 			else {

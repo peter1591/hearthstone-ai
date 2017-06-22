@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MCTS/board/Board.h"
 #include "MCTS/Config.h"
 #include "MCTS/simulation/Tree.h"
 #include "MCTS/simulation/policy/PolicyBase.h"
@@ -16,7 +15,7 @@ namespace mcts
 				tree_.Clear();
 			}
 
-			int GetAction(board::BoardOnlineViewer const& board, ActionType action_type, int choices) {
+			int GetAction(board::Board const& board, ActionType action_type, int choices) {
 				tree_.FillChoices(choices);
 
 				int choice = Simulate(board, action_type, choices);
@@ -36,7 +35,7 @@ namespace mcts
 			}
 
 		private:
-			int Simulate(board::BoardOnlineViewer const& board, ActionType action_type, int choices) const
+			int Simulate(board::Board const& board, ActionType action_type, int choices) const
 			{
 				size_t valid_choices = tree_.GetWhiteListCount();
 				if (valid_choices <= 0) return -1;

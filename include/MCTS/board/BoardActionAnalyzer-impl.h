@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MCTS/board/Board.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 #include "FlowControl/ValidActionGetter.h"
@@ -9,7 +8,7 @@ namespace mcts
 {
 	namespace board
 	{
-		inline int BoardActionAnalyzer::GetActionsCount(Board const& board)
+		inline int BoardActionAnalyzer::GetActionsCount(state::State const& board)
 		{
 			FlowControl::ValidActionGetter valid_action_getter(board);
 
@@ -34,11 +33,11 @@ namespace mcts
 			return idx;
 		}
 
-		inline Result BoardActionAnalyzer::ApplyAction(Board & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
+		inline Result BoardActionAnalyzer::ApplyAction(state::State & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
 			return (this->*(actions_[action]))(board, random, action_parameters);
 		}
 
-		inline Result BoardActionAnalyzer::PlayCard(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!playable_cards_.empty());
@@ -47,7 +46,7 @@ namespace mcts
 			return FlowControl::FlowController(board, flow_context).PlayCard(hand_idx);
 		}
 
-		inline Result BoardActionAnalyzer::Attack(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!attackers_.empty());
@@ -57,13 +56,13 @@ namespace mcts
 			return FlowControl::FlowController(board, flow_context).Attack(attacker);
 		}
 
-		inline Result BoardActionAnalyzer::HeroPower(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			return FlowControl::FlowController(board, flow_context).HeroPower();
 		}
 
-		inline Result BoardActionAnalyzer::EndTurn(Board & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			return FlowControl::FlowController(board, flow_context).EndTurn();

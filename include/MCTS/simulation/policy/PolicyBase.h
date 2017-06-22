@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MCTS/board/Board.h"
 #include "MCTS/simulation/Tree.h"
 
 namespace mcts
