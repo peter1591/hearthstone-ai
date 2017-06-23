@@ -95,7 +95,7 @@ namespace std {
 		{
 			static_assert(mcts::board::BoardView::change_id == 1);
 
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.turn_);
 
 			Utils::HashCombine::hash_combine(result, v.self_hero_);
@@ -111,6 +111,8 @@ namespace std {
 			Utils::HashCombine::hash_combine(result, v.opponent_weapon_);
 			Utils::HashCombine::hash_combine(result, v.opponent_hand_);
 			Utils::HashCombine::hash_combine(result, v.opponent_deck_);
+
+			return result;
 		}
 	};
 }

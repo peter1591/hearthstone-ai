@@ -31,6 +31,12 @@ namespace mcts
 				Result result;
 				bool new_node_created; // only valid if started in selection stage
 				TreeNode * node; // only valid if started in selection stage
+
+				PerformResult() :
+					result(Result::kResultInvalid),
+					new_node_created(false),
+					node(nullptr)
+				{}
 			};
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied

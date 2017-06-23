@@ -267,7 +267,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::Hero const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.attack);
 			Utils::HashCombine::hash_combine(result, v.hp);
 			Utils::HashCombine::hash_combine(result, v.max_hp);
@@ -281,7 +281,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::Crystal const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.current);
 			Utils::HashCombine::hash_combine(result, v.total);
 			Utils::HashCombine::hash_combine(result, v.overload);
@@ -295,7 +295,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::HeroPower const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.card_id);
 			Utils::HashCombine::hash_combine(result, v.usable);
 			return result;
@@ -307,7 +307,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::Weapon const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.equipped);
 			Utils::HashCombine::hash_combine(result, v.card_id);
 			Utils::HashCombine::hash_combine(result, v.attack);
@@ -321,7 +321,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::Minion const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.card_id);
 			Utils::HashCombine::hash_combine(result, v.attack);
 			Utils::HashCombine::hash_combine(result, v.hp);
@@ -335,7 +335,7 @@ namespace std {
 	struct hash<mcts::board::boardview::Minions> {
 		std::size_t operator()(mcts::board::boardview::Minions const& v) const
 		{
-			std::size_t result;
+			std::size_t result = 0;
 			for (auto const& minion : v) {
 				Utils::HashCombine::hash_combine(result, minion);
 			}
@@ -348,7 +348,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::SelfHandCard const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.card_id);
 			Utils::HashCombine::hash_combine(result, v.cost);
 			Utils::HashCombine::hash_combine(result, v.attack);
@@ -362,7 +362,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::OpponentHandCard const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			return result;
 		}
 	};
@@ -371,7 +371,7 @@ namespace std {
 	struct hash<mcts::board::boardview::SelfHand> {
 		std::size_t operator()(mcts::board::boardview::SelfHand const& v) const
 		{
-			std::size_t result;
+			std::size_t result = 0;
 			for (auto const& item : v) {
 				Utils::HashCombine::hash_combine(result, item);
 			}
@@ -383,7 +383,7 @@ namespace std {
 	struct hash<mcts::board::boardview::OpponentHand> {
 		std::size_t operator()(mcts::board::boardview::OpponentHand const& v) const
 		{
-			std::size_t result;
+			std::size_t result = 0;
 			for (auto const& item : v) {
 				Utils::HashCombine::hash_combine(result, item);
 			}
@@ -396,7 +396,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::SelfDeck const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.count);
 			return result;
 		}
@@ -407,7 +407,7 @@ namespace std {
 		std::size_t operator()(mcts::board::boardview::OpponentDeck const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result;
+			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.count);
 			return result;
 		}
