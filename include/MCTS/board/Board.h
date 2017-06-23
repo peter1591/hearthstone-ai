@@ -2,6 +2,7 @@
 
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/BoardActionAnalyzer-impl.h"
+#include "MCTS/board/BoardView.h"
 
 namespace mcts
 {
@@ -16,6 +17,10 @@ namespace mcts
 		public:
 			state::PlayerIdentifier GetCurrentPlayer() const {
 				return board_.GetCurrentPlayerId();
+			}
+
+			BoardView CreateView() const {
+				return BoardView(side_, board_);
 			}
 
 		public: // bridge to action analyzer

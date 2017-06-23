@@ -6,15 +6,12 @@ namespace mcts
 {
 	namespace board
 	{
-		template <state::PlayerSide Side>
-		inline BoardView<Side>::BoardView(state::State const& board)
+		inline BoardView::BoardView(state::PlayerSide side, state::State const& state)
 		{
-			state::State const& state = board.GetState();
-			
 			turn_ = state.GetTurn();
 
 			{
-				state::board::Player const& self_player = state.GetBoard().Get(Side);
+				state::board::Player const& self_player = state.GetBoard().Get(side);
 
 				state::CardRef hero_ref = self_player.GetHeroRef();
 				assert(hero_ref.IsValid());
@@ -31,23 +28,24 @@ namespace mcts
 				else self_weapon_.Invalidate();
 
 				self_player.hand_.ForEach([&](state::CardRef card_ref) {
-					SelfHandCard item;
+					boardview::SelfHandCard item;
 					item.Fill(state.GetCard(card_ref));
 					self_hand_.push_back(std::move(item));
+					return true;
 				});
 
 				self_deck_.Fill(self_player.deck_);
 			}
 
 			{
-				state::PlayerIdentifier opponent_side = state::PlayerIdentifier(Side).Opposite();
+				state::PlayerIdentifier opponent_side = state::PlayerIdentifier(side).Opposite();
 				state::board::Player const& opponent_player = state.GetBoard().Get(opponent_side);
 
 				state::CardRef hero_ref = opponent_player.GetHeroRef();
 				assert(hero_ref.IsValid());
 				opponent_hero_.Fill(state.GetCard(hero_ref));
 
-				opponent_crystal_.Fill(self_player);
+				opponent_crystal_.Fill(opponent_player);
 
 				state::CardRef hero_power_ref = opponent_player.GetHeroPowerRef();
 				assert(hero_power_ref.IsValid());
@@ -58,9 +56,10 @@ namespace mcts
 				else opponent_weapon_.Invalidate();
 
 				opponent_player.hand_.ForEach([&](state::CardRef card_ref) {
-					SelfHandCard item;
+					boardview::SelfHandCard item;
 					item.Fill(state.GetCard(card_ref));
 					self_hand_.push_back(std::move(item));
+					return true;
 				});
 
 				opponent_deck_.Fill(opponent_player.deck_);

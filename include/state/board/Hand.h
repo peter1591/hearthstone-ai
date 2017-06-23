@@ -30,7 +30,7 @@ namespace state
 			int GetChangeId() const { return change_id_; }
 
 			template <typename Functor>
-			void ForEach(Functor&& functor) {
+			void ForEach(Functor&& functor) const {
 				for (int i = 0; i < size_; ++i) {
 					if (!functor(cards_[i])) return;
 				}

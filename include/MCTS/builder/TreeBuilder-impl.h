@@ -6,6 +6,7 @@
 #include "MCTS/board/BoardView-impl.h"
 #include "MCTS/board/ActionParameterGetter-impl.h"
 #include "MCTS/board/RandomGenerator-impl.h"
+#include "MCTS/detail/SOMCTS_TreeNodeAddon-impl.h"
 
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/BoardActionAnalyzer-impl.h"

@@ -25,17 +25,17 @@
     <Filter Include="Header Files\MCTS\simulation">
       <UniqueIdentifier>{ef59716c-5103-4379-875b-fe9dfbcf9b9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MCTS\randoms">
-      <UniqueIdentifier>{25d6d7f6-5000-4f1f-a1c0-76112cbf601b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\MCTS\simulation\policy">
-      <UniqueIdentifier>{666ed022-bcdc-4f62-ae62-4d77bee1de78}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\MCTS\selection\policy">
-      <UniqueIdentifier>{a57b40cd-cbf4-4cd4-bd30-050c0853c317}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\MCTS\board">
       <UniqueIdentifier>{63f31f86-6ea9-44ae-9213-278747326062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MCTS\builder">
+      <UniqueIdentifier>{bcaac893-2244-43af-8bef-0c3780f183d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MCTS\policy">
+      <UniqueIdentifier>{4151e70f-0c2f-479a-892e-8eaf0c63d78a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{d0409f9f-1c0d-4d92-a517-36024e4e720d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,25 +59,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\MCTS\MCTS.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\MCTS-impl.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\EpisodeState.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\Statistic.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Config.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\ActionType.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h">
@@ -101,27 +86,6 @@
     <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\randoms\RandomByRand.h">
-      <Filter>Header Files\MCTS\randoms</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\policy\RandomPolicy.h">
-      <Filter>Header Files\MCTS\simulation\policy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\policy\PolicyBase.h">
-      <Filter>Header Files\MCTS\simulation\policy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\selection\policy\PolicyBase.h">
-      <Filter>Header Files\MCTS\selection\policy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\selection\policy\RandomPolicy.h">
-      <Filter>Header Files\MCTS\selection\policy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\Board-impl.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\Board.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
@@ -136,6 +100,96 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\BoardViewTypes.h">
       <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\MOMCTS.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\SOMCTS.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\Statistic.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\SOMCTS_TreeNodeAddon.h">
+      <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h">
+      <Filter>Header Files\MCTS\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h">
+      <Filter>Header Files\MCTS\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\builder\EpisodeState.h">
+      <Filter>Header Files\MCTS\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\Board.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h">
+      <Filter>Header Files\MCTS\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\Types.h">
+      <Filter>Header Files\MCTS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h">
+      <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\policy\RandomByRand.h">
+      <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\policy\Selection.h">
+      <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\policy\Simulation.h">
+      <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\SOMCTS_TreeNodeAddon-impl.h">
+      <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\FuncPtrArray.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\InvokableWrapper.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticInvokables.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\HashCombine.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
