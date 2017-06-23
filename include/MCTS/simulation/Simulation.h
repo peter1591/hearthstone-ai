@@ -2,7 +2,7 @@
 
 #include "MCTS/Config.h"
 #include "MCTS/simulation/Tree.h"
-#include "MCTS/simulation/policy/PolicyBase.h"
+#include "MCTS/policy/Simulation.h"
 
 namespace mcts
 {
@@ -46,7 +46,7 @@ namespace mcts
 				}
 
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
-					policy::PolicyBase::ChoiceGetter(tree_), board
+					policy::simulation::ChoiceGetter(tree_), board
 				);
 
 				return choice;

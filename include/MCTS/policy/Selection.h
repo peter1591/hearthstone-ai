@@ -1,20 +1,42 @@
 #pragma once
 
-#include <vector>
+#include "MCTS/selection/TreeNode.h"
 #include "MCTS/board/Board.h"
-#include "MCTS/selection/policy/PolicyBase.h"
 
 namespace mcts
 {
-	namespace selection
+	namespace policy
 	{
-		namespace policy
+		namespace selection
 		{
+			using TreeNode = mcts::selection::TreeNode;
+
+			class ChoiceGetter
+			{
+			public:
+				ChoiceGetter(TreeNode const& node) : node_(node) {}
+
+				size_t Size() const { return node_.GetChildrenCount(); }
+
+				std::pair<int, TreeNode*> Get(size_t idx) const {
+					return node_.GetNthChild(idx);
+				}
+
+				template <typename Functor>
+				void ForEach(Functor&& functor) const
+				{
+					return node_.ForEachChild(std::forward<Functor>(functor));
+				}
+
+			private:
+				TreeNode const& node_;
+			};
+
 			class RandomPolicy
 			{
 			public:
 				static std::pair<int, TreeNode*>
-					GetChoice(PolicyBase::ChoiceGetter const& choice_getter, board::Board const& board)
+					GetChoice(ChoiceGetter const& choice_getter, board::Board const& board)
 				{
 					size_t count = choice_getter.Size();
 					size_t idx = 0;
@@ -33,6 +55,6 @@ namespace mcts
 					return result;
 				}
 			};
-		}
+		};
 	}
 }

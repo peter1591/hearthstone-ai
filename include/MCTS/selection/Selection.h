@@ -123,7 +123,7 @@ namespace mcts
 			{
 				assert(GetCurrentNode()->HasAnyChild());
 				return StaticConfigs::SelectionPhaseSelectActionPolicy::GetChoice(
-					policy::PolicyBase::ChoiceGetter(*GetCurrentNode()), board);
+					policy::selection::ChoiceGetter(*GetCurrentNode()), board);
 			}
 
 		private:
