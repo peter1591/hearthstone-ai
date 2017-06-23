@@ -15,7 +15,7 @@ namespace mcts
 	namespace builder
 	{
 		inline TreeBuilder::PerformResult TreeBuilder::PerformOneAction(
-			TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater)
+			TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater)
 		{
 			episode_state_.Start(stage, board);
 

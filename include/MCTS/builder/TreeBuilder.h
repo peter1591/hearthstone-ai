@@ -6,7 +6,7 @@
 #include "MCTS/builder/EpisodeState.h"
 #include "MCTS/Statistic.h"
 #include "MCTS/ActionType.h"
-#include "MCTS/MCTSUpdater.h"
+#include "MCTS/builder/TreeUpdater.h"
 #include "MCTS/board/Board.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
@@ -35,7 +35,7 @@ namespace mcts
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
-			PerformResult PerformSelect(TreeNode * node, board::Board & board, MCTSUpdater * updater) {
+			PerformResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater) {
 				return PerformOneAction(node, kStageSelection, board, updater);
 			}
 
@@ -50,7 +50,7 @@ namespace mcts
 			// Note: 'node' is used only in selection stage (i.e., stage = kStageSelection)
 			// Note: can only be called when current player is the viewer of 'board'
 			PerformResult PerformOneAction(
-				TreeNode * const node, Stage const stage, board::Board & board, MCTSUpdater * const updater);
+				TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater);
 
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseAction(ActionType action_type, int choices);

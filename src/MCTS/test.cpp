@@ -21,7 +21,7 @@ int main(void)
 	mcts::Statistic<> statistic;
 	mcts::builder::TreeBuilder::TreeNode root_node;
 	mcts::builder::TreeBuilder mcts1(statistic);
-	mcts::MCTSUpdater updater;
+	mcts::builder::TreeUpdater updater;
 
 	auto start_board_getter = [&]() {
 		return TestStateBuilder().GetState();
