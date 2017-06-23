@@ -4,7 +4,7 @@
 
 namespace mcts
 {
-	namespace randoms
+	namespace policy
 	{
 		class RandomByRand
 		{

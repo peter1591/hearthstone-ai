@@ -5,7 +5,6 @@
 #include "TestStateBuilder.h"
 #include "MCTS/builder/TreeBuilder.h"
 #include "MCTS/builder/TreeBuilder-impl.h"
-#include "MCTS/CreditPolicy.h"
 
 void Initialize()
 {
@@ -59,7 +58,7 @@ int main(void)
 			assert(result.result != mcts::Result::kResultInvalid);
 
 			if (result.result != mcts::Result::kResultNotDetermined) {
-				bool credit = mcts::CreditPolicy::GetCredit(state::kPlayerFirst, result.result); // suppose AI is helping the first player
+				bool credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state::kPlayerFirst, result.result); // suppose AI is helping the first player
 				updater.Update(credit);
 				break;
 			}

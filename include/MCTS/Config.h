@@ -1,6 +1,7 @@
 #pragma once
 
-#include "MCTS/randoms/RandomByRand.h"
+#include "MCTS/policy/CreditPolicy.h"
+#include "MCTS/policy/RandomByRand.h"
 #include "MCTS/selection/policy/RandomPolicy.h"
 #include "MCTS/simulation/policy/RandomPolicy.h"
 
@@ -10,10 +11,12 @@ namespace mcts
 	{
 		static constexpr bool enable_statistic = true; // TODO: disable for release builds
 
-		using SelectionPhaseRandomActionPolicy = randoms::RandomByRand;
+		using SelectionPhaseRandomActionPolicy = policy::RandomByRand;
 		using SelectionPhaseSelectActionPolicy = selection::policy::RandomPolicy; // TODO: use a strong policy
 
-		using SimulationPhaseRandomActionPolicy = randoms::RandomByRand;
+		using SimulationPhaseRandomActionPolicy = policy::RandomByRand;
 		using SimulationPhaseSelectActionPolicy = simulation::policy::RandomPolicy; // TODO: use a strong policy
+
+		using CreditPolicy = policy::CreditPolicy;
 	};
 }
