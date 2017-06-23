@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MCTS/Result.h"
+#include "MCTS/Types.h"
 
 namespace mcts
 {

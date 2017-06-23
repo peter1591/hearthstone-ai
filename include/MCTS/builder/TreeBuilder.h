@@ -5,7 +5,7 @@
 #include "MCTS/simulation/Simulation.h"
 #include "MCTS/builder/EpisodeState.h"
 #include "MCTS/Statistic.h"
-#include "MCTS/ActionType.h"
+#include "MCTS/Types.h"
 #include "MCTS/builder/TreeUpdater.h"
 #include "MCTS/board/Board.h"
 #include "MCTS/board/ActionParameterGetter.h"

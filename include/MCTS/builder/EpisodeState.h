@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "MCTS/board/Board.h"
-#include "MCTS/Stage.h"
+#include "MCTS/Types.h"
 
 namespace mcts
 {

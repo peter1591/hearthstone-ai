@@ -1,5 +1,7 @@
 #pragma once
 
+#include "FlowControl/FlowContext.h"
+
 namespace mcts
 {
 	class ActionType
@@ -32,5 +34,12 @@ namespace mcts
 
 	private:
 		Types type_;
+	};
+
+	using Result = FlowControl::Result;
+
+	enum Stage {
+		kStageSelection,
+		kStageSimulation
 	};
 }

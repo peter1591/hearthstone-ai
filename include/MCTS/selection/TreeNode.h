@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "MCTS/ActionType.h"
+#include "MCTS/Types.h"
 #include "MCTS/detail/TreeNodeBase.h"
 #include "MCTS/selection/TreeNodeAddon.h"
 
