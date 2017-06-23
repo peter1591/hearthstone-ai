@@ -13,6 +13,11 @@ namespace mcts
 		public:
 			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side) {}
 
+		public:
+			state::PlayerIdentifier GetCurrentPlayer() const {
+				return board_.GetCurrentPlayerId();
+			}
+
 		public: // bridge to action analyzer
 			int GetActionsCount()
 			{
