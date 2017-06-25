@@ -179,7 +179,7 @@ namespace Cards
 						return;
 					}
 				}
-				Cards::CardId card_id = GetRandomCardFromDatabase(context.manipulate_, Cards::Database::kDemons);
+				Cards::CardId card_id = GetRandomCardFromDatabase(context.manipulate_, Cards::Database::kMinionDemons);
 				SummonToRightmost(context.manipulate_, context.player_, card_id);
 			});
 		}
