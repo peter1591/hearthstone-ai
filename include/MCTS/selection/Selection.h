@@ -45,20 +45,20 @@ namespace mcts
 				
 				bool node_removed = false;
 				auto op = [node_removed](TreeNode* parent, int edge, TreeNode* child) mutable {
-					assert(parent->GetChild(edge) == child);
+					assert(parent->GetAction(edge) == child);
 
 					bool do_remove = false;
 					if (!node_removed) do_remove = true;
 					else {
-						if (child->HasUnExpandedAction()) {}
-						else if (child->HasAnyChild()) {}
+						if (!child->ExpandDone()) {}
+						else if (child->HasAnyValidAction()) {}
 						else 
 							do_remove = true;
 					}
 
-					if (!do_remove) return;
+					if (!do_remove) return; // TODO: should early stop? no need to do traverse anymore
 					
-					parent->RemoveChild(edge);
+					parent->MarkInvalidAction(edge);
 					if (!node_removed) node_removed = true;
 				};
 
@@ -84,14 +84,14 @@ namespace mcts
 			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, int choices, bool * new_node) {
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
-				if (GetCurrentNode()->HasUnExpandedAction()) {
+				int next_action = GetCurrentNode()->GetNextActionToExpand();
+				if (next_action >= 0) {
 					*new_node = true;
-					int next_action = GetCurrentNode()->GetNextActionToExpand();
-					return { next_action, GetCurrentNode()->CreateChild(next_action) };
+					return { next_action, GetCurrentNode()->CreateAction(next_action) };
 				}
 				*new_node = false;
 
-				if (!GetCurrentNode()->HasAnyChild()) {
+				if (!GetCurrentNode()->HasAnyValidAction()) {
 					// no valid action from this node (all actions are removed 
 					//    since they yields an invalid state)
 					// However, if a (parent) node is with no valid child node
@@ -114,14 +114,14 @@ namespace mcts
 			{
 				assert(GetCurrentNode()->HasAnyChild());
 
-				size_t count = GetCurrentNode()->GetChildrenCount();
+				size_t count = GetCurrentNode()->GetValidActionsCount();
 				int idx = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom((int)count);
-				return GetCurrentNode()->GetNthChild((size_t)idx);
+				return GetCurrentNode()->GetNthValidAction((size_t)idx);
 			}
 
 			std::pair<int, TreeNode*> SelectActionByChoice(board::Board const& board)
 			{
-				assert(GetCurrentNode()->HasAnyChild());
+				assert(GetCurrentNode()->HasAnyValidAction());
 				return StaticConfigs::SelectionPhaseSelectActionPolicy::GetChoice(
 					policy::selection::ChoiceGetter(*GetCurrentNode()), board);
 			}

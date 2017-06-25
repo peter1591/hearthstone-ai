@@ -64,7 +64,8 @@ namespace mcts
 
 			void MarkInvalid(size_t idx) {
 				assert(idx < children_.size());
-				assert(children_[idx]); // not marked as invalid before
+
+				if (!children_[idx]) return; // marked as invalid before
 
 				assert([&]() {
 					bool found = false;

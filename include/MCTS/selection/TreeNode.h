@@ -11,8 +11,10 @@ namespace mcts
 {
 	namespace selection
 	{
-		// Action: Use the index of all children
-		// Remove a child: Just mark the children as invalid
+		// Maintain two groups of actions
+		//   1. Unexpanded actions
+		//   2. Valid actions
+		// Note: FillActions() should always be the first call
 		class TreeNode : private detail::TreeNodeBase<TreeNode>
 		{
 		public:
@@ -37,36 +39,40 @@ namespace mcts
 				action_type_ = action_type;
 			}
 
-			bool HasUnExpandedAction() const {
-				return TreeNodeBase::GetChildrenCount() < action_count_;
+			bool ExpandDone() const {
+				return TreeNodeBase::GetChildrenCount() >= action_count_;
 			}
 			int GetNextActionToExpand() const {
-				assert(HasUnExpandedAction());
-				return (int)TreeNodeBase::GetChildrenCount();
+				int idx = (int)TreeNodeBase::GetChildrenCount();
+				while (idx < action_count_) {
+					// TODO: check if this action is marked as invalid before
+					return idx;
+				}
+				return -1;
 			}
 
-			bool HasAnyChild() const { return TreeNodeBase::HasValidChild(); }
-			size_t GetChildrenCount() const { return TreeNodeBase::GetValidChildrenCount(); }
+			bool HasAnyValidAction() const { return TreeNodeBase::HasValidChild(); }
+			size_t GetValidActionsCount() const { return TreeNodeBase::GetValidChildrenCount(); }
 
 			template <typename Functor>
-			void ForEachChild(Functor&& functor) const {
+			void ForEachValidAction(Functor&& functor) const {
 				return TreeNodeBase::ForEachValidChild(std::forward<Functor>(functor));
 			}
 
-			std::pair<int, TreeNode*> GetNthChild(size_t idx) const {
+			std::pair<int, TreeNode*> GetNthValidAction(size_t idx) const {
 				auto ret = TreeNodeBase::GetValidChild(idx);
 				return { (int)ret.first, ret.second };
 			}
 
-			TreeNode* GetChild(int action) { return TreeNodeBase::GetChild((size_t)action); }
-
-			TreeNode* CreateChild(int action) {
+			TreeNode* CreateAction(int action) {
 				assert(action == (int)TreeNodeBase::GetChildrenCount()); // only possible to expand the next action
 				return TreeNodeBase::PushBackValidChild();
 			}
+			TreeNode* GetAction(int action) { return TreeNodeBase::GetChild((size_t)action); }
 
-			void RemoveChild(int action) {
+			void MarkInvalidAction(int action) {
 				assert(action >= 0);
+				// TODO: mark invalid for unexpanded actyions
 				assert((size_t)action < TreeNodeBase::GetChildrenCount());
 				return TreeNodeBase::MarkInvalid((size_t)action);
 			}
