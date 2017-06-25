@@ -12,7 +12,9 @@ namespace mcts
 			void Update(bool credit)
 			{
 				for (auto const& item : nodes_) {
-					item.node->ReportResult(credit);
+					auto & statistic = item.node->GetAddon().statistic;
+					if (credit) ++statistic.credit;
+					++statistic.total;
 				}
 			}
 
