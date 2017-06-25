@@ -5,7 +5,6 @@
 #include "TestStateBuilder.h"
 #include "MCTS/builder/TreeBuilder.h"
 #include "MCTS/builder/TreeBuilder-impl.h"
-#include "MCTS/MOMCTS.h"
 
 void Initialize()
 {
@@ -19,7 +18,9 @@ int main(void)
 	Initialize();
 
 	mcts::Statistic<> statistic;
-	mcts::MOMCTS mcts2(statistic);
+	mcts::builder::TreeBuilder::TreeNode root_node;
+	mcts::builder::TreeBuilder mcts1(statistic);
+	mcts::builder::TreeUpdater updater;
 
 	auto start_board_getter = [&]() {
 		return TestStateBuilder().GetState();
@@ -38,7 +39,36 @@ int main(void)
 			std::getline(std::cin, dummy);
 		}
 
-		mcts2.Iterate(start_board_getter);
+		mcts::Stage stage = mcts::kStageSelection;
+		mcts::builder::TreeBuilder::TreeNode * node = &root_node;
+		state::State board = start_board_getter();
+		updater.Clear();
+		while (true)
+		{
+			mcts::builder::TreeBuilder::PerformResult result;
+			state::PlayerSide side = board.GetCurrentPlayerId().GetSide();
+			mcts::board::Board board_viewer(board, side);
+
+			if (stage == mcts::kStageSelection) result = mcts1.PerformSelect(node, board_viewer, &updater);
+			else {
+				assert(stage == mcts::kStageSimulation);
+				result = mcts1.PerformSimulate(board_viewer);
+			}
+
+			assert(result.result != mcts::Result::kResultInvalid);
+
+			if (result.result != mcts::Result::kResultNotDetermined) {
+				bool credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state::kPlayerFirst, result.result); // suppose AI is helping the first player
+				updater.Update(credit);
+				break;
+			}
+
+			// We use a flag here, since we cannot switch to simulation mode in sub-actions.
+			if (stage == mcts::kStageSelection && result.new_node_created) {
+				stage = mcts::kStageSimulation;
+			}
+			node = result.node;
+		}
 	}
 
 	return 0;
