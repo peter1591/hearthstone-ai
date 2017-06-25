@@ -56,17 +56,20 @@ namespace mcts
 							do_remove = true;
 					}
 
-					if (!do_remove) return; // TODO: should early stop? no need to do traverse anymore
+					if (!do_remove) return false;
 					
 					parent->MarkInvalidAction(edge);
 					if (!node_removed) node_removed = true;
+					return true;
 				};
 
 				auto it_prev = path_.rbegin();
 				auto it = it_prev;
 				++it;
 				while (it != path_.rend()) {
-					op(it->node, it_prev->leading_choice, it_prev->node);
+					if (!op(it->node, it_prev->leading_choice, it_prev->node)) {
+						break; // no node is removed, no need to do more traverse
+					}
 					++it;
 					++it_prev;
 				}
