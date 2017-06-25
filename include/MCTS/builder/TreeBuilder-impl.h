@@ -47,7 +47,6 @@ namespace mcts
 
 			while (true)
 			{
-				board::BoardActionAnalyzer action_analyzer;
 				int choices = episode_state_.GetBoard().GetActionsCount();
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
 

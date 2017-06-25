@@ -40,6 +40,10 @@ namespace mcts
 			}
 
 			void ReportInvalidAction() {
+				// TODO: check random actions should not report invalid actions
+				// TODO: if random action is invalid, it means the last non-random action is invalid
+				//    or, simply, a random action should not be an invalid action
+
 				assert(!path_.empty());
 				assert(path_.back().node == GetCurrentNode());
 				
@@ -84,7 +88,8 @@ namespace mcts
 				GetCurrentNode()->FillActions(action_type, choices);
 			}
 
-			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, int choices, bool * new_node) {
+			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, int choices, bool * new_node)
+			{
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
 				int next_action = GetCurrentNode()->GetNextActionToExpand();
@@ -115,7 +120,9 @@ namespace mcts
 
 			std::pair<int, TreeNode*> SelectActionByRandom()
 			{
-				assert(GetCurrentNode()->HasAnyChild());
+				// TODO: random action need to explore from the first index
+				//   a better way is to explore by randomness at the very beginning
+				assert(GetCurrentNode()->HasAnyValidAction());
 
 				size_t count = GetCurrentNode()->GetValidActionsCount();
 				int idx = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom((int)count);
