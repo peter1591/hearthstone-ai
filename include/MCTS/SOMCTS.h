@@ -49,8 +49,6 @@ namespace mcts
 					assert(result.result != Result::kResultInvalid);
 					if (result.result != Result::kResultNotDetermined) return result.result;
 
-					node_ = result.node;
-
 					if (result.new_node_created) {
 						stage_ = kStageSimulation;
 						node_ = nullptr;
