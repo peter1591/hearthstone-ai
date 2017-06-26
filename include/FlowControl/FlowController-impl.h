@@ -80,18 +80,6 @@ namespace FlowControl
 		state_.IncreasePlayOrder();
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
-			return SetInvalid();
-		}
-		state::CardRef onplay_target = flow_context_.GetSpecifiedTarget();
-		if (onplay_target.IsValid()) {
-			state_.TriggerEvent<state::Events::EventTypes::PreparePlayCardTarget>(state::Events::EventTypes::PreparePlayCardTarget::Context{
-				Manipulate(state_, flow_context_), card_ref, &onplay_target
-			});
-			assert(onplay_target.IsValid());
-			flow_context_.ChangeSpecifiedTarget(onplay_target);
-		}
-
 		int cost = state_.GetCard(card_ref).GetCost();
 		bool cost_health_instead = false;
 
@@ -104,6 +92,18 @@ namespace FlowControl
 		}
 		else {
 			if (!CostCrystal(cost)) return SetInvalid();
+		}
+
+		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
+			return SetInvalid();
+		}
+		state::CardRef onplay_target = flow_context_.GetSpecifiedTarget();
+		if (onplay_target.IsValid()) {
+			state_.TriggerEvent<state::Events::EventTypes::PreparePlayCardTarget>(state::Events::EventTypes::PreparePlayCardTarget::Context{
+				Manipulate(state_, flow_context_), card_ref, &onplay_target
+			});
+			assert(onplay_target.IsValid());
+			flow_context_.ChangeSpecifiedTarget(onplay_target);
 		}
 
 		state_.TriggerEvent<state::Events::EventTypes::OnPlay>(
@@ -175,7 +175,7 @@ namespace FlowControl
 		if (state_.GetCurrentPlayer().minions_.Full()) return SetInvalid();
 
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
-		int put_position = flow_context_.GetMinionPutLocation(0, total_minions);
+		int put_position = flow_context_.GetMinionPutLocation(0, total_minions); // TODO: modify interface to only specify max
 
 		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);
@@ -367,11 +367,12 @@ namespace FlowControl
 			// no taunt, all characters can be the target
 			defenders.push_back(player.GetHeroRef());
 			player.minions_.ForEach([&](state::CardRef card_ref) {
+				// TODO: immune character cannot be attacked/targeted
 				defenders.push_back(card_ref);
 			});
 		}
 
-		if (defenders.empty()) state::CardRef();
+		if (defenders.empty()) return state::CardRef();
 		return flow_context_.GetDefender(defenders);
 	}
 
