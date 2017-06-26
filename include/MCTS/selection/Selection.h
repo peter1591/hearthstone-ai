@@ -22,7 +22,7 @@ namespace mcts
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
-			int GetAction(board::Board const& board, ActionType action_type, int choices, bool * created_new_node)
+			int GetAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * created_new_node)
 			{
 				ReportActionInfo(action_type, choices);
 				
@@ -40,7 +40,6 @@ namespace mcts
 			}
 
 			void ReportInvalidAction() {
-				// TODO: check random actions should not report invalid actions
 				// TODO: if random action is invalid, it means the last non-random action is invalid
 				//    or, simply, a random action should not be an invalid action
 
@@ -84,12 +83,14 @@ namespace mcts
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
 
 		private:
-			void ReportActionInfo(ActionType action_type, int choices) {
+			void ReportActionInfo(ActionType action_type, board::ActionChoices const& choices) {
 				GetCurrentNode()->FillActions(action_type, choices);
 			}
 
-			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, int choices, bool * new_node)
+			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * new_node)
 			{
+				// TODO: support different types of action choices
+
 				// Check if current tree node has un-expanded action
 				//   If yes, choose that action
 				int next_action = GetCurrentNode()->GetNextActionToExpand();

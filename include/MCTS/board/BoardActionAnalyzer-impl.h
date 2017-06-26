@@ -19,10 +19,9 @@ namespace mcts
 				actions_[idx++] = &BoardActionAnalyzer::PlayCard;
 			}
 
-			attackers_ = valid_action_getter.GetAttackers();
-			if (!attackers_.empty()) {
+			//if (!attackers_.empty()) {
 				actions_[idx++] = &BoardActionAnalyzer::Attack;
-			}
+			//}
 
 			if (valid_action_getter.HeroPowerUsable()) {
 				actions_[idx++] = &BoardActionAnalyzer::HeroPower;
@@ -48,6 +47,11 @@ namespace mcts
 
 		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
+			FlowControl::ValidActionGetter valid_action_getter(board);
+			attackers_ = valid_action_getter.GetAttackers();
+
+			if (attackers_.empty()) return Result::kResultInvalid;
+
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!attackers_.empty());
 			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());

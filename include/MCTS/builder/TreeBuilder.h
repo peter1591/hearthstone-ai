@@ -10,12 +10,15 @@
 #include "MCTS/board/Board.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
+#include "MCTS/board/ActionChoices.h"
 
 namespace mcts
 {
 	namespace builder
 	{
 		// Traverse and build a game tree in a monte-carlo fashion
+		// To support share-node and eliminate random-nodes, we actually build
+		// a flatten structure using hash table
 		class TreeBuilder
 		{
 		public:
@@ -59,10 +62,10 @@ namespace mcts
 				TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater);
 
 		public: // for callbacks: action-parameter-getter and random-generator
-			int ChooseAction(ActionType action_type, int choices);
+			int ChooseAction(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
-			int ActionCallback(ActionType action_type, int choices);
+			int ActionCallback(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
 			board::ActionParameterGetter action_parameter_getter_;

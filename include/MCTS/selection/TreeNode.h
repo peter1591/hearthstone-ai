@@ -6,6 +6,7 @@
 #include "MCTS/Types.h"
 #include "MCTS/detail/TreeNodeBase.h"
 #include "MCTS/selection/TreeNodeAddon.h"
+#include "MCTS/board/ActionChoices.h"
 
 namespace mcts
 {
@@ -25,7 +26,9 @@ namespace mcts
 
 			// TODO: this might also be called for random actions
 			// so 'action_count' might be large to choose a random from a wide range
-			void FillActions(ActionType action_type, int action_count) {
+			void FillActions(ActionType action_type, board::ActionChoices const& choices) {
+				// TODO: support different type of ActionChoices
+				int action_count = choices.Size();
 				assert(action_count >= 0);
 
 				if (action_count_ > 0) {

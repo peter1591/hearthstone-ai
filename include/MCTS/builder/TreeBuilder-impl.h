@@ -48,7 +48,7 @@ namespace mcts
 			while (true)
 			{
 				int choices = episode_state_.GetBoard().GetActionsCount();
-				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), choices);
+				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
 
 				if (episode_state_.IsValid()) {
 					result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
@@ -86,14 +86,14 @@ namespace mcts
 			return perform_result;
 		}
 
-		inline int TreeBuilder::ChooseAction(ActionType action_type, int choices)
+		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoices const& choices)
 		{
 			return ActionCallback(action_type, choices);
 		}
 
-		inline int TreeBuilder::ActionCallback(ActionType action_type, int choices)
+		inline int TreeBuilder::ActionCallback(ActionType action_type, board::ActionChoices const& choices)
 		{
-			assert(choices > 0);
+			assert(!choices.Empty());
 
 			int choice = -1;
 			if (episode_state_.GetStage() == kStageSelection) {
