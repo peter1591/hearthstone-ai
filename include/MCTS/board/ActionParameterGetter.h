@@ -18,14 +18,18 @@ namespace mcts
 			{
 				assert(!targets.empty());
 				size_t size = targets.size();
-				return targets[GetNumber(ActionType::kChooseDefender, (int)size)];
+				int idx = GetNumber(ActionType::kChooseDefender, (int)size);
+				assert(idx >= 0 && idx < size);
+				return targets[idx];
 			}
 
 			// Inclusive min & max
 			int GetMinionPutLocation(int min, int max) final
 			{
 				assert(max >= min);
-				return min + GetNumber(ActionType::kChooseMinionPutLocation, max - min + 1);
+				int v = min + GetNumber(ActionType::kChooseMinionPutLocation, max - min + 1);
+				assert(v >= min && v <= max);
+				return v;
 			}
 
 			state::CardRef GetSpecifiedTarget(
@@ -34,14 +38,18 @@ namespace mcts
 			{
 				if (targets.empty()) return state::CardRef();
 				size_t size = targets.size();
-				return targets[GetNumber(ActionType::kChooseTarget, (int)size)];
+				int idx = GetNumber(ActionType::kChooseTarget, (int)size);
+				assert(idx >= 0 && idx < size);
+				return targets[idx];
 			}
 
 			size_t ChooseOne(std::vector<Cards::CardId> const& cards) final
 			{
 				assert(!cards.empty());
 				size_t size = cards.size();
-				return (size_t)GetNumber(ActionType::kChooseOne, (int)size);
+				int idx = GetNumber(ActionType::kChooseOne, (int)size);
+				assert(idx >= 0 && idx < size);
+				return (size_t)idx;
 			}
 
 			int GetNumber(ActionType::Types action_type, int exclusive_max);

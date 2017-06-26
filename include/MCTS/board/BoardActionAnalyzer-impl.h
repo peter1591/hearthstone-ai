@@ -41,6 +41,7 @@ namespace mcts
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!playable_cards_.empty());
 			int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, (int)playable_cards_.size());
+			if (idx < 0) return Result::kResultInvalid; // all cards are not playable
 			int hand_idx = playable_cards_[idx];
 			return FlowControl::FlowController(board, flow_context).PlayCard(hand_idx);
 		}
