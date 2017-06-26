@@ -24,11 +24,11 @@ namespace mcts
 			}
 
 			// Inclusive min & max
-			int GetMinionPutLocation(int min, int max) final
+			int GetMinionPutLocation(int minions) final
 			{
-				assert(max >= min);
-				int v = min + GetNumber(ActionType::kChooseMinionPutLocation, max - min + 1);
-				assert(v >= min && v <= max);
+				assert(minions >= 0);
+				int v = GetNumber(ActionType::kChooseMinionPutLocation, minions + 1);
+				assert(v >= 0 && v <= minions);
 				return v;
 			}
 

@@ -37,15 +37,16 @@ namespace FlowControl {
 			return action_parameters_.GetDefender(defenders);
 		}
 
-		auto GetMinionPutLocation(int min, int max) {
+		auto GetMinionPutLocation(int minions) {
 			if (minion_put_location_ < 0) {
-				if (min >= max) {
-					minion_put_location_ = min;
+				if (minions == 0) {
+					minion_put_location_ = 0;
 				}
 				else {
-					minion_put_location_ = action_parameters_.GetMinionPutLocation(min, max);
+					minion_put_location_ = action_parameters_.GetMinionPutLocation(minions);
 				}
 				assert(minion_put_location_ >= 0);
+				assert(minion_put_location_ <= minions);
 			}
 			return minion_put_location_;
 		}

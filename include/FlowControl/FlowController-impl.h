@@ -175,7 +175,7 @@ namespace FlowControl
 		if (state_.GetCurrentPlayer().minions_.Full()) return SetInvalid();
 
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
-		int put_position = flow_context_.GetMinionPutLocation(0, total_minions); // TODO: modify interface to only specify max
+		int put_position = flow_context_.GetMinionPutLocation(total_minions);
 
 		state_.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneHand>(card_ref)
 			.ChangeTo<state::kCardZonePlay>(state_.GetCurrentPlayerId(), put_position);

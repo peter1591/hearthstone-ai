@@ -15,7 +15,7 @@ public:
 		return targets[next_defender_idx];
 	}
 
-	int GetMinionPutLocation(int min, int max)
+	int GetMinionPutLocation(int minions)
 	{
 		return next_minion_put_location;
 	}
