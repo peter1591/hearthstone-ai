@@ -10,8 +10,9 @@ namespace mcts
 	{
 		class ActionChoices
 		{
-		private:
+		public:
 			enum Type {
+				kInvalid,
 				kChooseFromZeroToExclusiveMax,
 				kChooseFromCardIds
 			};
@@ -26,6 +27,8 @@ namespace mcts
 				type_(kChooseFromCardIds),
 				card_ids_(cards)
 			{}
+
+			Type GetType() const { return type_; }
 
 		public: // iterate
 			bool Empty() const {

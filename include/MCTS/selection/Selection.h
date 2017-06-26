@@ -24,18 +24,17 @@ namespace mcts
 			// @return >= 0 for the chosen action; < 0 if no valid action
 			int GetAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * created_new_node)
 			{
-				ReportActionInfo(action_type, choices);
-				
 				auto next_info = SelectAction(board, action_type, choices, created_new_node);
 				
 				int next_choice = next_info.first;
 				TreeNode* next_node = next_info.second;
 
-				assert(next_choice >= 0);
-				assert(next_node);
+				if (!next_node) {
+					// all of the choices are invalid actions
+					return -1;
+				}
 
 				StepNext(next_choice, next_node);
-
 				return next_choice;
 			}
 
@@ -43,39 +42,19 @@ namespace mcts
 				// TODO: if random action is invalid, it means the last non-random action is invalid
 				//    or, simply, a random action should not be an invalid action
 
-				assert(!path_.empty());
-				assert(path_.back().node == GetCurrentNode());
+				// a choose-from-card-ids should not be an invalid action, too.
+
+				auto it = path_.rbegin();
 				
-				bool node_removed = false;
-				auto op = [node_removed](TreeNode* parent, int edge, TreeNode* child) mutable {
-					assert(parent->GetAction(edge) == child);
+				assert(it != path_.rend());
+				TreeNode* child = it->node;
+				int edge = it->leading_choice;
 
-					bool do_remove = false;
-					if (!node_removed) do_remove = true;
-					else {
-						if (!child->ExpandDone()) {}
-						else if (child->HasAnyValidAction()) {}
-						else 
-							do_remove = true;
-					}
-
-					if (!do_remove) return false;
-					
-					parent->MarkInvalidAction(edge);
-					if (!node_removed) node_removed = true;
-					return true;
-				};
-
-				auto it_prev = path_.rbegin();
-				auto it = it_prev;
 				++it;
-				while (it != path_.rend()) {
-					if (!op(it->node, it_prev->leading_choice, it_prev->node)) {
-						break; // no node is removed, no need to do more traverse
-					}
-					++it;
-					++it_prev;
-				}
+				assert(it != path_.rend()); // the main action itself should always be valid
+				TreeNode* parent = it->node;
+
+				parent->MarkChildInvalid(edge, child);
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
@@ -83,35 +62,12 @@ namespace mcts
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
 
 		private:
-			void ReportActionInfo(ActionType action_type, board::ActionChoices const& choices) {
-				GetCurrentNode()->FillActions(action_type, choices);
-			}
-
 			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * new_node)
 			{
-				// TODO: support different types of action choices
-
-				// Check if current tree node has un-expanded action
-				//   If yes, choose that action
-				int next_action = GetCurrentNode()->GetNextActionToExpand();
-				if (next_action >= 0) {
-					*new_node = true;
-					return { next_action, GetCurrentNode()->CreateAction(next_action) };
-				}
-				*new_node = false;
-
-				if (!GetCurrentNode()->HasAnyValidAction()) {
-					// no valid action from this node (all actions are removed 
-					//    since they yields an invalid state)
-					// However, if a (parent) node is with no valid child node
-					// we should have deleted the (parent) node when the child node
-					// got removed.
-					assert(false);
-					return { -1, nullptr };
-				}
-
-				if (action_type.IsChosenRandomly()) return SelectActionByRandom();
-				else return SelectActionByChoice(board);
+				// TODO: use a addon to check ActionType
+				
+				if (action_type.IsChosenRandomly()) return SelectActionByRandom(choices);
+				else return SelectActionByChoice(board, choices);
 			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
@@ -119,22 +75,42 @@ namespace mcts
 				path_.push_back({ leading_choice, next_node });
 			}
 
-			std::pair<int, TreeNode*> SelectActionByRandom()
-			{
-				// TODO: random action need to explore from the first index
-				//   a better way is to explore by randomness at the very beginning
-				assert(GetCurrentNode()->HasAnyValidAction());
+		private:
+			class SelectRandomlyHelper {
+			public:
+				SelectRandomlyHelper() : idx_(0), target_idx_(0), result_{ 0, nullptr } {}
 
-				size_t count = GetCurrentNode()->GetValidActionsCount();
-				int idx = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom((int)count);
-				return GetCurrentNode()->GetNthValidAction((size_t)idx);
+				void ReportChoicesCount(int count) {
+					target_idx_ = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(count);
+					idx_ = 0;
+				}
+				void AddChoice(int choice, TreeNode* node) {
+					// if an action was reported as invalid before, a nullptr is passed to 'node'
+					assert(node); // random actions should be an invalid action
+					if (idx_ == target_idx_) result_ = { choice, node };
+					++idx_;
+				}
+				std::pair<int, TreeNode*> SelectChoice() {
+					assert(result_.second);
+					return result_;
+				}
+
+			private:
+				int idx_;
+				int target_idx_;
+				std::pair<int, TreeNode*> result_;
+			};
+
+			std::pair<int, TreeNode*> SelectActionByRandom(board::ActionChoices const& choices)
+			{
+				return GetCurrentNode()->Select(choices, SelectRandomlyHelper());
 			}
 
-			std::pair<int, TreeNode*> SelectActionByChoice(board::Board const& board)
+		private:
+			std::pair<int, TreeNode*> SelectActionByChoice(board::Board const& board, board::ActionChoices const& choices)
 			{
-				assert(GetCurrentNode()->HasAnyValidAction());
-				return StaticConfigs::SelectionPhaseSelectActionPolicy::GetChoice(
-					policy::selection::ChoiceGetter(*GetCurrentNode()), board);
+				using PolicyHelper = StaticConfigs::SelectionPhaseSelectActionPolicy;
+				return GetCurrentNode()->Select(choices, PolicyHelper());
 			}
 
 		private:

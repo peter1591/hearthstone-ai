@@ -11,49 +11,25 @@ namespace mcts
 		{
 			using TreeNode = mcts::selection::TreeNode;
 
-			class ChoiceGetter
-			{
+			class RandomPolicy {
 			public:
-				ChoiceGetter(TreeNode const& node) : node_(node) {}
-
-				size_t Size() const { return node_.GetValidActionsCount(); }
-
-				std::pair<int, TreeNode*> Get(size_t idx) const {
-					return node_.GetNthValidAction(idx);
+				void ReportChoicesCount(int count) {
+					// the count here contains the invalid actions
+					// cannot use directly
 				}
-
-				template <typename Functor>
-				void ForEach(Functor&& functor) const
-				{
-					return node_.ForEachValidAction(std::forward<Functor>(functor));
+				void AddChoice(int choice, TreeNode* node) {
+					if (!node) return;
+					choices_.push_back({ choice, node });
+				}
+				std::pair<int, TreeNode*> SelectChoice() {
+					if (choices_.empty()) return { -1, nullptr };
+					int target = rand() % choices_.size();
+					return choices_[target];
 				}
 
 			private:
-				TreeNode const& node_;
-			};
-
-			class RandomPolicy
-			{
-			public:
-				static std::pair<int, TreeNode*>
-					GetChoice(ChoiceGetter const& choice_getter, board::Board const& board)
-				{
-					size_t count = choice_getter.Size();
-					size_t idx = 0;
-					size_t rand_idx = (size_t)(std::rand() % count);
-					std::pair<int, TreeNode*> result;
-					choice_getter.ForEach([&](int action, TreeNode* child) mutable {
-						if (idx == rand_idx) {
-							result = std::make_pair(action, child);
-							return false;
-						}
-						++idx;
-						return true;
-					});
-					std::pair<int, TreeNode*> result2 = choice_getter.Get(rand_idx);
-					assert(result == result2);
-					return result;
-				}
+				typedef std::pair<int, TreeNode*> Result;
+				std::vector<Result> choices_;
 			};
 		};
 	}

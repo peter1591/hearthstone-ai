@@ -12,74 +12,60 @@ namespace mcts
 {
 	namespace selection
 	{
-		// Maintain two groups of actions
-		//   1. Unexpanded actions
-		//   2. Valid actions
-		// Note: FillActions() should always be the first call
-		class TreeNode : private detail::TreeNodeBase<TreeNode>
+		class TreeNode
 		{
 		public:
-			TreeNode() : action_count_(0), action_type_(ActionType::kInvalid) {}
+			using Edge = int;
 
-			ActionType GetActionType() const { return action_type_; }
-			int GetActionCount() const { return (int)action_count_; }
+			TreeNode() : choices_type_(board::ActionChoices::kInvalid) {}
 
-			// TODO: this might also be called for random actions
-			// so 'action_count' might be large to choose a random from a wide range
-			void FillActions(ActionType action_type, board::ActionChoices const& choices) {
-				// TODO: support different type of ActionChoices
-				int action_count = choices.Size();
-				assert(action_count >= 0);
-
-				if (action_count_ > 0) {
-					// already filled, check if info is consistency
-					assert(action_type_ == action_type);
-					assert(action_count_ == action_count);
-					return;
+			// select among specific choices
+			// if any of the choices does not exist, return the edge to expand it
+			//    A new node will be allocated
+			// if all of the specific exist, use select_callback to select one of them
+			//    Call select_callback.ReportChoicesCount(int count)
+			//    Call select_callback.AddChoice(int choice, TreeNode* node) for each choices
+			//        If an action is marked invalid before, a nullptr is passed to the 'node' parameter
+			//    Call select_callback.SelectChoice() -> std::pair<Edge,TreeNode*> to get result
+			// Return { -1, nullptr } if all choices are invalid.
+			template <typename SelectCallback>
+			std::pair<Edge,TreeNode*>
+			Select(board::ActionChoices choices, SelectCallback && select_callback)
+			{
+				if (choices_type_ == board::ActionChoices::kInvalid) {
+					choices_type_ = choices.GetType();
+				}
+				else {
+					assert(choices_type_ == choices.GetType());
 				}
 
-				assert(!TreeNodeBase::HasChild());
-				assert(!TreeNodeBase::HasValidChild());
-				action_count_ = (size_t)action_count;
-				action_type_ = action_type;
-			}
+				select_callback.ReportChoicesCount(choices.Size());
 
-			bool ExpandDone() const {
-				return TreeNodeBase::GetChildrenCount() >= action_count_;
-			}
-			int GetNextActionToExpand() const {
-				int idx = (int)TreeNodeBase::GetChildrenCount();
-				while (idx < action_count_) {
-					// TODO: check if this action is marked as invalid before
-					return idx;
+				choices.Begin();
+				while (!choices.IsEnd()) {
+					Edge choice = choices.Get();
+
+					auto it = children_.find(choice);
+					if (it == children_.end()) {
+						TreeNode* new_node = new TreeNode();
+						children_.insert({ choice, std::unique_ptr<TreeNode>(new_node) });
+						return { choice, new_node };
+					}
+
+					select_callback.AddChoice(choice, it->second.get());
+					choices.StepNext();
 				}
-				return -1;
+
+				return select_callback.SelectChoice();
 			}
 
-			bool HasAnyValidAction() const { return TreeNodeBase::HasValidChild(); }
-			size_t GetValidActionsCount() const { return TreeNodeBase::GetValidChildrenCount(); }
-
-			template <typename Functor>
-			void ForEachValidAction(Functor&& functor) const {
-				return TreeNodeBase::ForEachValidChild(std::forward<Functor>(functor));
-			}
-
-			std::pair<int, TreeNode*> GetNthValidAction(size_t idx) const {
-				auto ret = TreeNodeBase::GetValidChild(idx);
-				return { (int)ret.first, ret.second };
-			}
-
-			TreeNode* CreateAction(int action) {
-				assert(action == (int)TreeNodeBase::GetChildrenCount()); // only possible to expand the next action
-				return TreeNodeBase::PushBackValidChild();
-			}
-			TreeNode* GetAction(int action) { return TreeNodeBase::GetChild((size_t)action); }
-
-			void MarkInvalidAction(int action) {
-				assert(action >= 0);
-				// TODO: mark invalid for unexpanded actyions
-				assert((size_t)action < TreeNodeBase::GetChildrenCount());
-				return TreeNodeBase::MarkInvalid((size_t)action);
+			void MarkChildInvalid(Edge edge, TreeNode* child)
+			{
+				auto it = children_.find(edge);
+				assert(it != children_.end());
+				if (!it->second) return;
+				assert(it->second.get() == child);
+				it->second.release();
 			}
 
 		public:
@@ -87,8 +73,8 @@ namespace mcts
 			TreeNodeAddon & GetAddon() { return addon_; }
 
 		private:
-			ActionType action_type_; // TODO: actually this is debug only to check consistency of game engine
-			size_t action_count_;
+			std::unordered_map<Edge, std::unique_ptr<TreeNode>> children_;
+			board::ActionChoices::Type choices_type_;
 			TreeNodeAddon addon_;
 		};
 	}

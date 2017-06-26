@@ -104,7 +104,9 @@ namespace mcts
 				choice = simulation_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
 			}
 
-			if (choice < 0) episode_state_.SetInvalid();
+			if (choice < 0) {
+				episode_state_.SetInvalid();
+			}
 			return choice;
 		}
 	}
