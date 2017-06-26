@@ -39,20 +39,28 @@ namespace mcts
 			}
 
 			void ReportInvalidAction() {
-				// TODO: if random action is invalid, it means the last non-random action is invalid
-				//    or, simply, a random action should not be an invalid action
-
-				// a choose-from-card-ids should not be an invalid action, too.
-
 				auto it = path_.rbegin();
 				
 				assert(it != path_.rend());
 				TreeNode* child = it->node;
+				TreeNode* parent = nullptr;
 				int edge = it->leading_choice;
 
-				++it;
-				assert(it != path_.rend()); // the main action itself should always be valid
-				TreeNode* parent = it->node;
+				while (true) {
+					++it;
+					assert(it != path_.rend()); // we should be able to find a blame node along the path
+					parent = it->node;
+
+					// if a sub-action failed, it means the main action failed.
+					//    More precisely, it means the calling to FlowController is failed
+					//    not only the callback like 'GetTarget()' or 'ChooseOne()' is failed
+					//    so we find the node to blame, and remove it from its parent
+					if (parent->GetActionType().IsInvalidStateBlameNode()) break;
+
+					// look up further to find the blame node
+					child = it->node;
+					edge = it->leading_choice;
+				}
 
 				parent->MarkChildInvalid(edge, child);
 			}
@@ -66,8 +74,8 @@ namespace mcts
 			{
 				// TODO: use a addon to check ActionType
 				
-				if (action_type.IsChosenRandomly()) return SelectActionByRandom(choices);
-				else return SelectActionByChoice(board, choices);
+				if (action_type.IsChosenRandomly()) return SelectActionByRandom(action_type, choices);
+				else return SelectActionByChoice(action_type, board, choices);
 			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
@@ -101,16 +109,16 @@ namespace mcts
 				std::pair<int, TreeNode*> result_;
 			};
 
-			std::pair<int, TreeNode*> SelectActionByRandom(board::ActionChoices const& choices)
+			std::pair<int, TreeNode*> SelectActionByRandom(ActionType action_type, board::ActionChoices const& choices)
 			{
-				return GetCurrentNode()->Select(choices, SelectRandomlyHelper());
+				return GetCurrentNode()->Select(action_type, choices, SelectRandomlyHelper());
 			}
 
 		private:
-			std::pair<int, TreeNode*> SelectActionByChoice(board::Board const& board, board::ActionChoices const& choices)
+			std::pair<int, TreeNode*> SelectActionByChoice(ActionType action_type, board::Board const& board, board::ActionChoices const& choices)
 			{
 				using PolicyHelper = StaticConfigs::SelectionPhaseSelectActionPolicy;
-				return GetCurrentNode()->Select(choices, PolicyHelper());
+				return GetCurrentNode()->Select(action_type, choices, PolicyHelper());
 			}
 
 		private:

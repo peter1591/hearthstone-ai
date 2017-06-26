@@ -17,7 +17,9 @@ namespace mcts
 		public:
 			using Edge = int;
 
-			TreeNode() : choices_type_(board::ActionChoices::kInvalid) {}
+			TreeNode() : action_type_(ActionType::kInvalid),
+				choices_type_(board::ActionChoices::kInvalid)
+			{}
 
 			// select among specific choices
 			// if any of the choices does not exist, return the edge to expand it
@@ -30,13 +32,20 @@ namespace mcts
 			// Return { -1, nullptr } if all choices are invalid.
 			template <typename SelectCallback>
 			std::pair<Edge,TreeNode*>
-			Select(board::ActionChoices choices, SelectCallback && select_callback)
+			Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback)
 			{
 				if (choices_type_ == board::ActionChoices::kInvalid) {
 					choices_type_ = choices.GetType();
 				}
 				else {
 					assert(choices_type_ == choices.GetType());
+				}
+
+				if (action_type_.IsValid()) {
+					assert(action_type_ == action_type);
+				}
+				else {
+					action_type_ = action_type;
 				}
 
 				select_callback.ReportChoicesCount(choices.Size());
@@ -65,16 +74,20 @@ namespace mcts
 				assert(it != children_.end());
 				if (!it->second) return;
 				assert(it->second.get() == child);
-				it->second.release();
+				it->second.reset();
 			}
+
+		public:
+			ActionType GetActionType() const { return action_type_; }
 
 		public:
 			TreeNodeAddon const& GetAddon() const { return addon_; }
 			TreeNodeAddon & GetAddon() { return addon_; }
 
 		private:
-			std::unordered_map<Edge, std::unique_ptr<TreeNode>> children_;
+			ActionType action_type_;
 			board::ActionChoices::Type choices_type_;
+			std::unordered_map<Edge, std::unique_ptr<TreeNode>> children_;
 			TreeNodeAddon addon_;
 		};
 	}

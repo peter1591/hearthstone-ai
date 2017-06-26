@@ -20,6 +20,7 @@ namespace mcts
 		};
 
 	public:
+		ActionType() : type_(kInvalid) {}
 		ActionType(Types type) : type_(type) {}
 
 		Types GetType() const { return type_; }
@@ -29,8 +30,33 @@ namespace mcts
 		}
 		bool operator!=(ActionType const& rhs) const { return !(*this == rhs); }
 
+		bool IsValid() const { return type_ != kInvalid; }
+
 		bool IsChosenRandomly() const { return type_ == kRandom; }
 		bool IsChosenManually() const { return !IsChosenRandomly(); }
+
+		bool IsInvalidStateBlameNode() const {
+			// if a sub-action results in an invalid state, which sub-action should be blamed?
+			switch (GetType()) {
+			case ActionType::kMainAction:
+				return true; // maybe no valid attacker
+
+			case ActionType::kChooseHandCard:
+				return true; // map to FlowController.PlayCard
+
+			case ActionType::kChooseAttacker:
+				return true; // map to FlowController.Attack
+
+			case ActionType::kRandom:
+			case ActionType::kChooseDefender:
+			case ActionType::kChooseMinionPutLocation:
+			case ActionType::kChooseTarget:
+			case ActionType::kChooseOne:
+				return false; // a callback sub-action
+			}
+			assert(false);
+			return false;
+		}
 
 	private:
 		Types type_;

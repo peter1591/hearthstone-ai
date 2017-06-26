@@ -80,7 +80,7 @@ namespace mcts
 					return true;
 				}());
 
-				children_[idx].release();
+				children_[idx].reset();
 
 				// A O(N) algorithm for removal (which is rare), but the good side is
 				// we can have a O(1) for selection (which should be most of the cases)

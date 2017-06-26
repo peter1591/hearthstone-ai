@@ -55,7 +55,7 @@ namespace mcts
 			void RemoveChoice(int choice) {
 				assert(choices_ > 0); // initialized
 				assert(choice >= 0 && choice < choices_);
-				children_[choice].release();
+				children_[choice].reset();
 				valid_idx_map_.Erase(choice);
 			}
 
