@@ -17,7 +17,7 @@ namespace mcts
 			using MapType = std::unordered_map<board::BoardView, std::unique_ptr<TreeNode>>;
 
 		public:
-			TreeNode* GetOrCreateNode(board::Board const& board);
+			TreeNode* GetOrCreateNode(board::Board const& board, bool * new_node_created = nullptr);
 
 		private:
 			MapType & GetMap()

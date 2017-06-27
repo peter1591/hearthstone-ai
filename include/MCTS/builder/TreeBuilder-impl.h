@@ -71,14 +71,14 @@ namespace mcts
 			}
 
 			// action applied successfully
-			TreeBuilder::PerformResult perform_result;
-			selection_stage_.FinishMainAction(&perform_result.new_node_created);
-
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
 
+			TreeBuilder::PerformResult perform_result;
 			perform_result.result = result;
 			if (stage == kStageSelection) {
+				selection_stage_.FinishMainAction(node, episode_state_.GetBoard(), &perform_result.new_node_created);
+
 				assert(updater);
 				updater->PushBackNodes(selection_stage_.GetTraversedPath());
 				perform_result.node = selection_stage_.GetCurrentNode();

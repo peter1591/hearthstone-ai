@@ -30,27 +30,24 @@ namespace mcts
 			{
 				std::pair<int, TreeNode*> next_info;
 				if (action_type.IsChosenRandomly()) {
-					next_info = SelectActionByRandom(action_type, choices); // TODO: do not create node
-					int next_choice = next_info.first;
-					assert(next_choice >= 0);
+					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);
+					int rnd_choice = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(choices.Size());
 					if (GetCurrentNode() != nullptr) {
 						// postpone the find of TreeNode on next non-random (sub)-action
-						StepNext(next_choice, nullptr);
+						StepNext(-1, nullptr);
 					}
-					// TODO: we don't know if we 'created_new_node' here
-					// so the caller cannot change to simulation mode
-					return next_choice;
+					return rnd_choice;
 				}
 
 				assert(action_type.IsChosenManually());
 				if (GetCurrentNode() == nullptr) {
 					if (action_type.GetType() == ActionType::kMainAction) {
-						// TODO: use hash table to find mapped node
-
-						// TODO: if a new node is created, it means we should already switched to simulation stage
+						assert(false); // main action should with a valid node
+						return -1;
 					}
 					else {
 						// TODO: we can swap the random actions to be done first
+						// TODO: only choose-from-card can be after random?
 						assert(false);
 					}
 				}
@@ -60,15 +57,22 @@ namespace mcts
 				TreeNode* next_node = next_info.second;
 
 				if (!next_node) {
-					// all of the choices are invalid actions
-					return -1;
+					return -1; // all of the choices are invalid actions
 				}
 
 				StepNext(next_choice, next_node);
 				return next_choice;
 			}
 
-			void FinishMainAction(bool * created_new_node) {
+			void FinishMainAction(TreeNode* starting_node, board::Board const& board, bool * created_new_node) {
+				if (GetCurrentNode() == nullptr) {
+					// last actions are random nodes, so no tree node are created
+					// use hash table to find which node should be our next node
+					// this way, we can share tree node for identical states
+					TreeNode* next_node = starting_node->GetAddon().board_node_map.GetOrCreateNode(board, &new_node_created_);
+					SetCurrentNode(next_node);
+				}
+
 				*created_new_node = new_node_created_;
 			}
 
@@ -102,41 +106,14 @@ namespace mcts
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
+			void SetCurrentNode(TreeNode* node) {
+				assert(!path_.back().node);
+				path_.back().node = node;
+			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
 			{
 				path_.push_back({ leading_choice, next_node });
-			}
-
-		private:
-			class SelectRandomlyHelper {
-			public:
-				SelectRandomlyHelper() : idx_(0), target_idx_(0), result_{ 0, nullptr } {}
-
-				void ReportChoicesCount(int count) {
-					target_idx_ = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(count);
-					idx_ = 0;
-				}
-				void AddChoice(int choice, TreeNode* node) {
-					// if an action was reported as invalid before, a nullptr is passed to 'node'
-					assert(node); // random actions should be an invalid action
-					if (idx_ == target_idx_) result_ = { choice, node };
-					++idx_;
-				}
-				std::pair<int, TreeNode*> SelectChoice() {
-					assert(result_.second);
-					return result_;
-				}
-
-			private:
-				int idx_;
-				int target_idx_;
-				std::pair<int, TreeNode*> result_;
-			};
-
-			std::pair<int, TreeNode*> SelectActionByRandom(ActionType action_type, board::ActionChoices const& choices)
-			{
-				return GetCurrentNode()->Select(action_type, choices, SelectRandomlyHelper(), &new_node_created_);
 			}
 
 		private:
