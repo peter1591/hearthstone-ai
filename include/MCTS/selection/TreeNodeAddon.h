@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MCTS/detail/SOMCTS_TreeNodeAddon.h"
+#include "MCTS/detail/BoardNodeMap.h"
 
 namespace mcts
 {
@@ -19,7 +19,7 @@ namespace mcts
 		struct TreeNodeAddon
 		{
 			TreeNodeStatistic statistic;
-			detail::SOMCTS_TreeNodeAddon somcts;
+			detail::BoardNodeMap board_node_map;
 		};
 	}
 }

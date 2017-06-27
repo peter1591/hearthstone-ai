@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MCTS/selection/TreeNode.h"
-#include "MCTS/detail/SOMCTS_TreeNodeAddon.h"
+#include "MCTS/detail/BoardNodeMap.h"
 
 namespace mcts
 {
@@ -9,7 +9,7 @@ namespace mcts
 
 	namespace detail
 	{
-		inline SOMCTS_TreeNodeAddon::TreeNode* SOMCTS_TreeNodeAddon::GetOrCreateNode(board::Board const& board)
+		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(board::Board const& board)
 		{
 			auto & item = GetMap()[board.CreateView()];
 			if (!item) item.reset(new TreeNode());

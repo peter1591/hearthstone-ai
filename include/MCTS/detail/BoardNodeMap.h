@@ -10,7 +10,7 @@ namespace mcts
 
 	namespace detail
 	{
-		class SOMCTS_TreeNodeAddon
+		class BoardNodeMap
 		{
 		private:
 			using TreeNode = mcts::selection::TreeNode;

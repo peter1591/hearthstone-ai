@@ -5,7 +5,7 @@
 
 #include "board/Board.h"
 #include "builder/TreeBuilder.h"
-#include "MCTS/detail/SOMCTS_TreeNodeAddon.h"
+#include "MCTS/detail/BoardNodeMap.h"
 
 namespace mcts
 {
@@ -71,7 +71,7 @@ namespace mcts
 			assert(stage_ == kStageSelection);
 			assert(node_);
 
-			node_ = node_->GetAddon().somcts.GetOrCreateNode(board);
+			node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 		}
 
 		void EpisodeFinished(Result result)
