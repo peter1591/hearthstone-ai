@@ -10,6 +10,8 @@ namespace mcts
 		{
 			int credit;
 			int total;
+
+			TreeNodeStatistic() : credit(0), total(0) {}
 		};
 
 		// Add abilities to tree node to use in SO-MCTS

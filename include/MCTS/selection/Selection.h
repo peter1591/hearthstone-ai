@@ -72,8 +72,6 @@ namespace mcts
 		private:
 			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * new_node)
 			{
-				// TODO: use a addon to check ActionType
-				
 				if (action_type.IsChosenRandomly()) return SelectActionByRandom(action_type, choices);
 				else return SelectActionByChoice(action_type, board, choices);
 			}
