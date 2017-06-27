@@ -15,22 +15,22 @@ namespace mcts
 			void StartNewAction() { saved_path_ = path_; }
 			void RestartAction() { path_ = saved_path_; }
 
-			void StartEpisode(TreeNode * root)
+			void StartMainAction(TreeNode * root)
 			{
 				path_.clear();
 				StepNext(-1, root);
+				new_node_created_ = false;
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
 			int GetAction(
 				board::Board const& board,
 				ActionType action_type,
-				board::ActionChoices const& choices,
-				bool * created_new_node)
+				board::ActionChoices const& choices)
 			{
 				std::pair<int, TreeNode*> next_info;
 				if (action_type.IsChosenRandomly()) {
-					next_info = SelectActionByRandom(action_type, choices, created_new_node); // TODO: do not create node
+					next_info = SelectActionByRandom(action_type, choices); // TODO: do not create node
 					int next_choice = next_info.first;
 					assert(next_choice >= 0);
 					if (GetCurrentNode() != nullptr) {
@@ -54,7 +54,7 @@ namespace mcts
 						assert(false);
 					}
 				}
-				next_info = SelectActionByChoice(action_type, board, choices, created_new_node);
+				next_info = SelectActionByChoice(action_type, board, choices);
 				
 				int next_choice = next_info.first;
 				TreeNode* next_node = next_info.second;
@@ -66,6 +66,10 @@ namespace mcts
 
 				StepNext(next_choice, next_node);
 				return next_choice;
+			}
+
+			void FinishMainAction(bool * created_new_node) {
+				*created_new_node = new_node_created_;
 			}
 
 			void ReportInvalidAction() {
@@ -130,25 +134,25 @@ namespace mcts
 				std::pair<int, TreeNode*> result_;
 			};
 
-			std::pair<int, TreeNode*> SelectActionByRandom(ActionType action_type, board::ActionChoices const& choices,
-				bool * new_node_created)
+			std::pair<int, TreeNode*> SelectActionByRandom(ActionType action_type, board::ActionChoices const& choices)
 			{
-				return GetCurrentNode()->Select(action_type, choices, SelectRandomlyHelper(), new_node_created);
+				return GetCurrentNode()->Select(action_type, choices, SelectRandomlyHelper(), &new_node_created_);
 			}
 
 		private:
 			std::pair<int, TreeNode*> SelectActionByChoice(
-				ActionType action_type, board::Board const& board, board::ActionChoices const& choices,
-				bool * new_node_created)
+				ActionType action_type, board::Board const& board, board::ActionChoices const& choices)
 			{
 				using PolicyHelper = StaticConfigs::SelectionPhaseSelectActionPolicy;
-				return GetCurrentNode()->Select(action_type, choices, PolicyHelper(), new_node_created);
+				return GetCurrentNode()->Select(action_type, choices, PolicyHelper(), &new_node_created_);
 			}
 
 		private:
 			std::vector<TraversedNodeInfo> path_;
 
 			std::vector<TraversedNodeInfo> saved_path_;
+
+			bool new_node_created_;
 		};
 	}
 }

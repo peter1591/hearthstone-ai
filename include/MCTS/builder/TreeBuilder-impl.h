@@ -6,7 +6,7 @@
 #include "MCTS/board/BoardView-impl.h"
 #include "MCTS/board/ActionParameterGetter-impl.h"
 #include "MCTS/board/RandomGenerator-impl.h"
-#include "MCTS/detail/SOMCTS_TreeNodeAddon-impl.h"
+#include "MCTS/detail/BoardNodeMap-impl.h"
 
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/BoardActionAnalyzer-impl.h"
@@ -22,8 +22,7 @@ namespace mcts
 
 			assert(episode_state_.GetStage() == stage);
 			if (stage == kStageSelection) {
-				new_node_created_ = false;
-				selection_stage_.StartEpisode(node);
+				selection_stage_.StartMainAction(node);
 			}
 
 			// TODO [PROFILING]:
@@ -72,15 +71,16 @@ namespace mcts
 			}
 
 			// action applied successfully
+			TreeBuilder::PerformResult perform_result;
+			selection_stage_.FinishMainAction(&perform_result.new_node_created);
+
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
 
-			TreeBuilder::PerformResult perform_result;
 			perform_result.result = result;
 			if (stage == kStageSelection) {
 				assert(updater);
 				updater->PushBackNodes(selection_stage_.GetTraversedPath());
-				perform_result.new_node_created = new_node_created_;
 				perform_result.node = selection_stage_.GetCurrentNode();
 			}
 			return perform_result;
@@ -97,7 +97,7 @@ namespace mcts
 
 			int choice = -1;
 			if (episode_state_.GetStage() == kStageSelection) {
-				choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices, &new_node_created_);
+				choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);

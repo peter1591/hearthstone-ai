@@ -25,7 +25,7 @@ namespace mcts
 			typedef selection::TreeNode TreeNode;
 
 			TreeBuilder(Statistic<> & statistic) : action_parameter_getter_(*this), random_generator_(*this),
-				statistic_(statistic), new_node_created_(false)
+				statistic_(statistic)
 			{
 			}
 
@@ -76,8 +76,6 @@ namespace mcts
 
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;
-
-			bool new_node_created_;
 		};
 	}
 }
