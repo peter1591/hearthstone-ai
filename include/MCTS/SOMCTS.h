@@ -32,6 +32,11 @@ namespace mcts
 		Result PerformOwnTurnActions(board::Board & board)
 		{
 			assert(board.GetCurrentPlayer().GetSide() == side_);
+			assert([](builder::TreeBuilder::TreeNode* node) {
+				if (!node) return true;
+				if (!node->GetActionType().IsValid()) return true;
+				return node->GetActionType().GetType() == ActionType::kMainAction;
+			}(node_));
 
 			builder::TreeBuilder builder(statistic_);
 			builder::TreeBuilder::PerformResult result;
@@ -45,8 +50,16 @@ namespace mcts
 				else {
 					// Selection stage
 					assert(stage_ == kStageSelection);
+					assert([](builder::TreeBuilder::TreeNode* node) {
+						if (!node->GetActionType().IsValid()) return true;
+						return node->GetActionType().GetType() == ActionType::kMainAction;
+					}(node_));
 					result = builder.PerformSelect(node_, board, &updater_);
 					assert(result.result != Result::kResultInvalid);
+					assert([](builder::TreeBuilder::TreeNode* node) {
+						if (!node->GetActionType().IsValid()) return true;
+						return node->GetActionType().GetType() == ActionType::kMainAction;
+					}(result.node));
 					if (result.result != Result::kResultNotDetermined) return result.result;
 
 					if (result.new_node_created) {

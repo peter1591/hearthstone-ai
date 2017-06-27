@@ -23,6 +23,9 @@ namespace mcts
 			assert(episode_state_.GetStage() == stage);
 			if (stage == kStageSelection) {
 				selection_stage_.StartMainAction(node);
+
+				// TODO: debug only
+				node->GetAddon().board_view_checker.Check(board.CreateView());
 			}
 
 			// TODO [PROFILING]:
@@ -82,6 +85,11 @@ namespace mcts
 				assert(updater);
 				updater->PushBackNodes(selection_stage_.GetTraversedPath());
 				perform_result.node = selection_stage_.GetCurrentNode();
+
+				assert([](builder::TreeBuilder::TreeNode* node) {
+					if (!node->GetActionType().IsValid()) return true;
+					return node->GetActionType().GetType() == ActionType::kMainAction;
+				}(perform_result.node));
 			}
 			return perform_result;
 		}
