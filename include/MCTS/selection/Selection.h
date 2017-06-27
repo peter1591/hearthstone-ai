@@ -22,9 +22,39 @@ namespace mcts
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
-			int GetAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * created_new_node)
+			int GetAction(
+				board::Board const& board,
+				ActionType action_type,
+				board::ActionChoices const& choices,
+				bool * created_new_node)
 			{
-				auto next_info = SelectAction(board, action_type, choices, created_new_node);
+				std::pair<int, TreeNode*> next_info;
+				if (action_type.IsChosenRandomly()) {
+					next_info = SelectActionByRandom(action_type, choices, created_new_node); // TODO: do not create node
+					int next_choice = next_info.first;
+					assert(next_choice >= 0);
+					if (GetCurrentNode() != nullptr) {
+						// postpone the find of TreeNode on next non-random (sub)-action
+						StepNext(next_choice, nullptr);
+					}
+					// TODO: we don't know if we 'created_new_node' here
+					// so the caller cannot change to simulation mode
+					return next_choice;
+				}
+
+				assert(action_type.IsChosenManually());
+				if (GetCurrentNode() == nullptr) {
+					if (action_type.GetType() == ActionType::kMainAction) {
+						// TODO: use hash table to find mapped node
+
+						// TODO: if a new node is created, it means we should already switched to simulation stage
+					}
+					else {
+						// TODO: we can swap the random actions to be done first
+						assert(false);
+					}
+				}
+				next_info = SelectActionByChoice(action_type, board, choices, created_new_node);
 				
 				int next_choice = next_info.first;
 				TreeNode* next_node = next_info.second;
@@ -69,13 +99,6 @@ namespace mcts
 
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
 
-		private:
-			std::pair<int, TreeNode*> SelectAction(board::Board const& board, ActionType action_type, board::ActionChoices const& choices, bool * new_node)
-			{
-				if (action_type.IsChosenRandomly()) return SelectActionByRandom(action_type, choices);
-				else return SelectActionByChoice(action_type, board, choices);
-			}
-
 			void StepNext(int leading_choice, TreeNode* next_node)
 			{
 				path_.push_back({ leading_choice, next_node });
@@ -107,16 +130,19 @@ namespace mcts
 				std::pair<int, TreeNode*> result_;
 			};
 
-			std::pair<int, TreeNode*> SelectActionByRandom(ActionType action_type, board::ActionChoices const& choices)
+			std::pair<int, TreeNode*> SelectActionByRandom(ActionType action_type, board::ActionChoices const& choices,
+				bool * new_node_created)
 			{
-				return GetCurrentNode()->Select(action_type, choices, SelectRandomlyHelper());
+				return GetCurrentNode()->Select(action_type, choices, SelectRandomlyHelper(), new_node_created);
 			}
 
 		private:
-			std::pair<int, TreeNode*> SelectActionByChoice(ActionType action_type, board::Board const& board, board::ActionChoices const& choices)
+			std::pair<int, TreeNode*> SelectActionByChoice(
+				ActionType action_type, board::Board const& board, board::ActionChoices const& choices,
+				bool * new_node_created)
 			{
 				using PolicyHelper = StaticConfigs::SelectionPhaseSelectActionPolicy;
-				return GetCurrentNode()->Select(action_type, choices, PolicyHelper());
+				return GetCurrentNode()->Select(action_type, choices, PolicyHelper(), new_node_created);
 			}
 
 		private:

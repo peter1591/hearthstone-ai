@@ -32,7 +32,7 @@ namespace mcts
 			// Return { -1, nullptr } if all choices are invalid.
 			template <typename SelectCallback>
 			std::pair<Edge,TreeNode*>
-			Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback)
+			Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback, bool * new_node_created)
 			{
 				if (choices_type_ == board::ActionChoices::kInvalid) {
 					choices_type_ = choices.GetType();
@@ -58,6 +58,7 @@ namespace mcts
 					if (it == children_.end()) {
 						TreeNode* new_node = new TreeNode();
 						children_.insert({ choice, std::unique_ptr<TreeNode>(new_node) });
+						*new_node_created = true;
 						return { choice, new_node };
 					}
 
