@@ -41,9 +41,12 @@ namespace mcts
 					if (action_type.GetType() == ActionType::kMainAction) {
 						assert(false); // main action should with a valid node
 					}
-					else {
-						// TODO: we can swap the random actions to be done first
+					else if (action_type.GetType() == ActionType::kChooseOne) {
 						// TODO: only choose-from-card can be after random?
+						assert(false);
+					}
+					else {
+						// Not allow random actions to be conducted first before any sub-action
 						assert(false);
 					}
 					return -1;
@@ -66,6 +69,7 @@ namespace mcts
 					// last actions are random nodes, so no tree node are created
 					// use hash table to find which node should be our next node
 					// this way, we can share tree node for identical states
+					assert(starting_node->GetActionType().GetType() == ActionType::kMainAction);
 					TreeNode* next_node = starting_node->GetAddon().board_node_map.GetOrCreateNode(board, &new_node_created_);
 					StepNext(-1, next_node); // -1 indicates a random move
 				}
