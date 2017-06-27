@@ -20,6 +20,7 @@ namespace mcts
 				path_.clear();
 				StepNext(-1, root);
 				new_node_created_ = false;
+				pending_randoms_ = false;
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
@@ -31,25 +32,21 @@ namespace mcts
 				std::pair<int, TreeNode*> next_info;
 				if (action_type.IsChosenRandomly()) {
 					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);
-					int rnd_choice = StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(choices.Size());
-					if (GetCurrentNode() != nullptr) {
-						// postpone the find of TreeNode on next non-random (sub)-action
-						StepNext(-1, nullptr);
-					}
-					return rnd_choice;
+					pending_randoms_ = true;
+					return StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(choices.Size());
 				}
 
 				assert(action_type.IsChosenManually());
-				if (GetCurrentNode() == nullptr) {
+				if (pending_randoms_) {
 					if (action_type.GetType() == ActionType::kMainAction) {
 						assert(false); // main action should with a valid node
-						return -1;
 					}
 					else {
 						// TODO: we can swap the random actions to be done first
 						// TODO: only choose-from-card can be after random?
 						assert(false);
 					}
+					return -1;
 				}
 				next_info = SelectActionByChoice(action_type, board, choices);
 				
@@ -65,12 +62,12 @@ namespace mcts
 			}
 
 			void FinishMainAction(TreeNode* starting_node, board::Board const& board, bool * created_new_node) {
-				if (GetCurrentNode() == nullptr) {
+				if (pending_randoms_) {
 					// last actions are random nodes, so no tree node are created
 					// use hash table to find which node should be our next node
 					// this way, we can share tree node for identical states
 					TreeNode* next_node = starting_node->GetAddon().board_node_map.GetOrCreateNode(board, &new_node_created_);
-					SetCurrentNode(next_node);
+					StepNext(-1, next_node); // -1 indicates a random move
 				}
 
 				*created_new_node = new_node_created_;
@@ -106,10 +103,6 @@ namespace mcts
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
 			TreeNode* GetCurrentNode() const { return path_.back().node; }
-			void SetCurrentNode(TreeNode* node) {
-				assert(!path_.back().node);
-				path_.back().node = node;
-			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
 			{
@@ -130,6 +123,7 @@ namespace mcts
 			std::vector<TraversedNodeInfo> saved_path_;
 
 			bool new_node_created_;
+			bool pending_randoms_;
 		};
 	}
 }
