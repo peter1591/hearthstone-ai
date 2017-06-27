@@ -27,6 +27,13 @@ namespace mcts
 				if (weapon_ref.IsValid()) self_weapon_.Fill(state.GetCard(self_player.GetWeaponRef()));
 				else self_weapon_.Invalidate();
 
+				self_player.minions_.ForEach([&](state::CardRef card_ref) {
+					boardview::Minion item;
+					item.Fill(state.GetCard(card_ref));
+					self_minions_.push_back(std::move(item));
+					return true;
+				});
+
 				self_player.hand_.ForEach([&](state::CardRef card_ref) {
 					boardview::SelfHandCard item;
 					item.Fill(state.GetCard(card_ref));
@@ -54,6 +61,13 @@ namespace mcts
 				state::CardRef weapon_ref = opponent_player.GetWeaponRef();
 				if (weapon_ref.IsValid()) opponent_weapon_.Fill(state.GetCard(opponent_player.GetWeaponRef()));
 				else opponent_weapon_.Invalidate();
+
+				opponent_player.minions_.ForEach([&](state::CardRef card_ref) {
+					boardview::Minion item;
+					item.Fill(state.GetCard(card_ref));
+					opponent_minions_.push_back(std::move(item));
+					return true;
+				});
 
 				opponent_player.hand_.ForEach([&](state::CardRef card_ref) {
 					boardview::SelfHandCard item;
