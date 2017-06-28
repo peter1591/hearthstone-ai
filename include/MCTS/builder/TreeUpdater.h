@@ -15,6 +15,10 @@ namespace mcts
 					auto & statistic = item.node->GetAddon().statistic;
 					if (credit) ++statistic.credit;
 					++statistic.total;
+
+					if (item.edge_addon) {
+						++item.edge_addon->chosen_times;
+					}
 				}
 			}
 

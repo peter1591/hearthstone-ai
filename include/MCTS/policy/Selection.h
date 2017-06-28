@@ -20,17 +20,22 @@ namespace mcts
 				}
 				void AddChoice(int choice, mcts::selection::EdgeAddon const& addon, TreeNode* node) {
 					if (!node) return;
-					choices_.push_back({ choice, node });
+					assert(addon.chosen_times > 0);
+					choices_.push_back(Item{ choice, addon.chosen_times, node });
 				}
 				int SelectChoice() {
 					if (choices_.empty()) return -1;
 					int target = rand() % choices_.size();
-					return choices_[target].first;
+					return choices_[target].choice;
 				}
 
 			private:
-				typedef std::pair<int, TreeNode*> Result;
-				std::vector<Result> choices_;
+				struct Item {
+					int choice;
+					int chosen_times;
+					TreeNode* node;
+				};
+				std::vector<Item> choices_;
 			};
 		};
 	}

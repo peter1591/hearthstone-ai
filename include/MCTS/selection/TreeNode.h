@@ -52,8 +52,7 @@ namespace mcts
 
 				select_callback.ReportChoicesCount(choices.Size());
 
-				choices.Begin();
-				while (!choices.IsEnd()) {
+				for (choices.Begin(); !choices.IsEnd(); choices.StepNext()) {
 					int choice = choices.Get();
 
 					auto it = children_.find(choice);
@@ -62,8 +61,9 @@ namespace mcts
 					auto const& edge_addon = it->second.first;
 					auto const& child_node = it->second.second;
 
+					if (!child_node) continue; // invalid choice
+					if (edge_addon.chosen_times <= 0) return choice; // not yet chosen
 					select_callback.AddChoice(choice, edge_addon, child_node.get());
-					choices.StepNext();
 				}
 
 				return select_callback.SelectChoice();
@@ -85,7 +85,11 @@ namespace mcts
 				if (!child) {
 					// the child node is not yet created
 					// since we delay the node creation as late as possible
-					assert(children_.find(edge) == children_.end());
+					auto it = children_.find(edge);
+					if (it != children_.end()) {
+						assert(!it->second.second);
+						return;
+					}
 					children_.insert({ edge, std::make_pair(EdgeAddon(), nullptr)});
 					return;
 				}
