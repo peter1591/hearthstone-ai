@@ -135,6 +135,7 @@ namespace mcts
 
 			void StepNext(int leading_choice, EdgeAddon* leading_edge_addon, TreeNode* next_node)
 			{
+				if (!path_.empty()) GetCurrentNode(); // ensure the delay-create node is actually created
 				path_.push_back({ leading_choice, leading_edge_addon, next_node });
 			}
 

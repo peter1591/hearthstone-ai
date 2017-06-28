@@ -30,7 +30,7 @@ namespace mcts
 						if (!item.node) return false;
 
 						// edge_addon should be there unless it's the first one
-						if (!first) {
+						if (item.leading_choice >= 0) { // not a randomly-choose action
 							if (!item.edge_addon) return false;
 						}
 						first = false;

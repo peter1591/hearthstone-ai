@@ -29,6 +29,7 @@ namespace mcts
 			//    A new node will be allocated
 			// if all of the specific exist, use select_callback to select one of them
 			//    Call select_callback.ReportChoicesCount(int count)
+			//        Include invalid choices
 			//    Call select_callback.AddChoice(int choice, EdgeAddon, TreeNode* node) for each choices
 			//        If an action is marked invalid before, a nullptr is passed to the 'node' parameter
 			//    Call select_callback.SelectChoice() -> TreeNode to get result

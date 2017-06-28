@@ -12,7 +12,7 @@ namespace mcts
 		static constexpr bool enable_statistic = true; // TODO: disable for release builds
 
 		using SelectionPhaseRandomActionPolicy = policy::RandomByRand;
-		using SelectionPhaseSelectActionPolicy = policy::selection::RandomPolicy; // TODO: use a strong policy
+		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByRand;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPolicy; // TODO: use a strong policy
