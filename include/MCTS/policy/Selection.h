@@ -2,6 +2,7 @@
 
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/board/Board.h"
+#include "MCTS/selection/EdgeAddon.h"
 
 namespace mcts
 {
@@ -17,7 +18,7 @@ namespace mcts
 					// the count here contains the invalid actions
 					// cannot use directly
 				}
-				void AddChoice(int choice, TreeNode* node) {
+				void AddChoice(int choice, mcts::selection::EdgeAddon const& addon, TreeNode* node) {
 					if (!node) return;
 					choices_.push_back({ choice, node });
 				}
