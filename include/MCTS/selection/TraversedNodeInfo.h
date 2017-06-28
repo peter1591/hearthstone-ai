@@ -8,6 +8,7 @@ namespace mcts
 	{
 		struct TraversedNodeInfo {
 			int leading_choice; // choice to lead to this node
+			EdgeAddon * edge_addon;
 			TreeNode* node;
 		};
 	}

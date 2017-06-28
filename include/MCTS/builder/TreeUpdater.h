@@ -21,8 +21,15 @@ namespace mcts
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> const& nodes)
 			{
 				assert([&]() {
+					bool first = true;
 					for (auto const& item : nodes) {
 						if (!item.node) return false;
+
+						// edge_addon should be there unless it's the first one
+						if (!first) {
+							if (!item.edge_addon) return false;
+						}
+						first = false;
 					}
 					return true;
 				}());

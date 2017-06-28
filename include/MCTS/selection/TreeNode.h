@@ -16,6 +16,10 @@ namespace mcts
 		class TreeNode
 		{
 		public:
+			using ChildType = std::pair<EdgeAddon, std::unique_ptr<TreeNode>>;
+			using ChildMapType = std::unordered_map<int, ChildType>;
+
+		public:
 			TreeNode() : action_type_(ActionType::kInvalid),
 				choices_type_(board::ActionChoices::kInvalid)
 			{}
@@ -65,17 +69,15 @@ namespace mcts
 				return select_callback.SelectChoice().first;
 			}
 
-			// @return (Node, node_created)
-			std::pair<TreeNode*, bool> GetOrCreateChild(int choice)
+			std::pair<ChildMapType::iterator, bool> GetOrCreateChild(int choice)
 			{
 				auto it = children_.find(choice);
-				if (it != children_.end()) return { it->second.second.get(), false };
+				if (it != children_.end()) return { it, false };
 				
 				TreeNode* new_node = new TreeNode();
-				children_.insert({ choice,
+				return children_.insert({ choice,
 					std::make_pair(EdgeAddon(), std::unique_ptr<TreeNode>(new_node))
 				});
-				return { new_node, true };
 			}
 
 			void MarkChildInvalid(int edge, TreeNode* child)
@@ -106,8 +108,7 @@ namespace mcts
 			ActionType action_type_;
 			board::ActionChoices::Type choices_type_;
 
-			std::unordered_map<int,
-				std::pair<EdgeAddon, std::unique_ptr<TreeNode>>> children_;
+			ChildMapType children_;
 			TreeNodeAddon addon_;
 		};
 	}

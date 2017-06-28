@@ -18,7 +18,7 @@ namespace mcts
 			void StartMainAction(TreeNode * root)
 			{
 				path_.clear();
-				StepNext(-1, root);
+				StepNext(-1, nullptr, root);
 				new_node_created_ = false;
 				pending_randoms_ = false;
 			}
@@ -39,23 +39,25 @@ namespace mcts
 				if (pending_randoms_) {
 					if (action_type.GetType() == ActionType::kMainAction) {
 						assert(false); // main action should with a valid node
+						return -1;
 					}
 					else if (action_type.GetType() == ActionType::kChooseOne) {
-						// TODO: only choose-from-card can be after random?
+						// TODO: allow choose-from-card after random
 						assert(false);
+						return -1;
 					}
 					else {
 						// Not allow random actions to be conducted first before any sub-action
 						assert(false);
+						return -1;
 					}
-					return -1;
 				}
 
 				int next_choice = GetCurrentNode()->Select(action_type, choices,
 					StaticConfigs::SelectionPhaseSelectActionPolicy());
 				if (next_choice < 0) return -1; // all of the choices are invalid actions
 
-				StepNext(next_choice, nullptr); // pass nullptr to delay the node-creation as much as possible
+				StepNext(next_choice, nullptr, nullptr); // pass nullptr to delay the node-creation as much as possible
 												// since the node of the last action doesn't need to be created
 				return next_choice;
 			}
@@ -73,7 +75,9 @@ namespace mcts
 					// this way, we can share tree node for identical states
 					assert(starting_node->GetActionType().GetType() == ActionType::kMainAction);
 					TreeNode* next_node = starting_node->GetAddon().board_node_map.GetOrCreateNode(board, &new_node_created_);
-					StepNext(-1, next_node); // -1 indicates a random move
+					StepNext(-1, // -1 indicates a random move
+						nullptr, // random action has no edge
+						next_node);
 				}
 
 				*created_new_node = new_node_created_;
@@ -120,16 +124,18 @@ namespace mcts
 
 					auto result = it_parent->node->GetOrCreateChild(it->leading_choice);
 					new_node_created_ = result.second;
-					it->node = result.first;
+					TreeNode::ChildType & child = result.first->second;
+					it->edge_addon = &child.first;
+					it->node = child.second.get();
 				}
 
 				assert(it->node);
 				return it->node;
 			}
 
-			void StepNext(int leading_choice, TreeNode* next_node)
+			void StepNext(int leading_choice, EdgeAddon* leading_edge_addon, TreeNode* next_node)
 			{
-				path_.push_back({ leading_choice, next_node });
+				path_.push_back({ leading_choice, leading_edge_addon, next_node });
 			}
 
 		private:
