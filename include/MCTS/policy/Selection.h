@@ -22,10 +22,10 @@ namespace mcts
 					if (!node) return;
 					choices_.push_back({ choice, node });
 				}
-				std::pair<int, TreeNode*> SelectChoice() {
-					if (choices_.empty()) return { -1, nullptr };
+				int SelectChoice() {
+					if (choices_.empty()) return -1;
 					int target = rand() % choices_.size();
-					return choices_[target];
+					return choices_[target].first;
 				}
 
 			private:

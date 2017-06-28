@@ -31,8 +31,8 @@ namespace mcts
 			//    Call select_callback.ReportChoicesCount(int count)
 			//    Call select_callback.AddChoice(int choice, EdgeAddon, TreeNode* node) for each choices
 			//        If an action is marked invalid before, a nullptr is passed to the 'node' parameter
-			//    Call select_callback.SelectChoice() -> std::pair<Edge,TreeNode*> to get result
-			// Return { -1, nullptr } if all choices are invalid.
+			//    Call select_callback.SelectChoice() -> TreeNode to get result
+			// Return -1 if all choices are invalid.
 			template <typename SelectCallback>
 			int Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback)
 			{
@@ -66,7 +66,7 @@ namespace mcts
 					choices.StepNext();
 				}
 
-				return select_callback.SelectChoice().first;
+				return select_callback.SelectChoice();
 			}
 
 			std::pair<ChildMapType::iterator, bool> GetOrCreateChild(int choice)
