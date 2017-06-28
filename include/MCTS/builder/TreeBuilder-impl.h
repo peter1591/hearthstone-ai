@@ -83,8 +83,8 @@ namespace mcts
 				selection_stage_.FinishMainAction(node, episode_state_.GetBoard(), &perform_result.new_node_created);
 
 				assert(updater);
-				updater->PushBackNodes(selection_stage_.GetTraversedPath());
 				perform_result.node = selection_stage_.GetCurrentNode();
+				updater->PushBackNodes(selection_stage_.GetTraversedPath());
 
 				assert([](builder::TreeBuilder::TreeNode* node) {
 					if (!node->GetActionType().IsValid()) return true;

@@ -29,7 +29,6 @@ namespace mcts
 				ActionType action_type,
 				board::ActionChoices const& choices)
 			{
-				std::pair<int, TreeNode*> next_info;
 				if (action_type.IsChosenRandomly()) {
 					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);
 					pending_randoms_ = true;
@@ -51,20 +50,23 @@ namespace mcts
 					}
 					return -1;
 				}
-				next_info = SelectActionByChoice(action_type, board, choices);
-				
-				int next_choice = next_info.first;
-				TreeNode* next_node = next_info.second;
 
-				if (!next_node) {
-					return -1; // all of the choices are invalid actions
-				}
+				int next_choice = GetCurrentNode()->Select(action_type, choices,
+					StaticConfigs::SelectionPhaseSelectActionPolicy());
+				if (next_choice < 0) return -1; // all of the choices are invalid actions
 
-				StepNext(next_choice, next_node);
+				StepNext(next_choice, nullptr); // pass nullptr to delay the node-creation as much as possible
+												// since the node of the last action doesn't need to be created
 				return next_choice;
 			}
 
 			void FinishMainAction(TreeNode* starting_node, board::Board const& board, bool * created_new_node) {
+				assert([&]() {
+					// the last node of a main action is not necessary to be created
+					// since we're about to use the hash table to find the correct node
+					return path_.back().node == nullptr;
+				}());
+
 				if (pending_randoms_) {
 					// last actions are random nodes, so no tree node are created
 					// use hash table to find which node should be our next node
@@ -106,19 +108,28 @@ namespace mcts
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
-			TreeNode* GetCurrentNode() const { return path_.back().node; }
+			TreeNode* GetCurrentNode() {
+				assert(!path_.empty());
+				auto it = path_.rbegin();
+
+				if (!it->node) {
+					// delay node creation to here (as late as possible)
+					auto it_parent = it;
+					++it_parent;
+					assert(it_parent != path_.rend());
+
+					auto result = it_parent->node->GetOrCreateChild(it->leading_choice);
+					new_node_created_ = result.second;
+					it->node = result.first;
+				}
+
+				assert(it->node);
+				return it->node;
+			}
 
 			void StepNext(int leading_choice, TreeNode* next_node)
 			{
 				path_.push_back({ leading_choice, next_node });
-			}
-
-		private:
-			std::pair<int, TreeNode*> SelectActionByChoice(
-				ActionType action_type, board::Board const& board, board::ActionChoices const& choices)
-			{
-				using PolicyHelper = StaticConfigs::SelectionPhaseSelectActionPolicy;
-				return GetCurrentNode()->Select(action_type, choices, PolicyHelper(), &new_node_created_);
 			}
 
 		private:

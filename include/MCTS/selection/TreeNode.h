@@ -31,8 +31,7 @@ namespace mcts
 			//    Call select_callback.SelectChoice() -> std::pair<Edge,TreeNode*> to get result
 			// Return { -1, nullptr } if all choices are invalid.
 			template <typename SelectCallback>
-			std::pair<Edge,TreeNode*>
-			Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback, bool * new_node_created)
+			Edge Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback)
 			{
 				if (choices_type_ == board::ActionChoices::kInvalid) {
 					choices_type_ = choices.GetType();
@@ -55,22 +54,36 @@ namespace mcts
 					Edge choice = choices.Get();
 
 					auto it = children_.find(choice);
-					if (it == children_.end()) {
-						TreeNode* new_node = new TreeNode();
-						children_.insert({ choice, std::unique_ptr<TreeNode>(new_node) });
-						*new_node_created = true;
-						return { choice, new_node };
-					}
+					if (it == children_.end()) return choice;
 
 					select_callback.AddChoice(choice, it->second.get());
 					choices.StepNext();
 				}
 
-				return select_callback.SelectChoice();
+				return select_callback.SelectChoice().first;
+			}
+
+			// @return (Node, node_created)
+			std::pair<TreeNode*, bool> GetOrCreateChild(Edge choice)
+			{
+				auto it = children_.find(choice);
+				if (it != children_.end()) return { it->second.get(), false };
+				
+				TreeNode* new_node = new TreeNode();
+				children_.insert({ choice, std::unique_ptr<TreeNode>(new_node) });
+				return { new_node, true };
 			}
 
 			void MarkChildInvalid(Edge edge, TreeNode* child)
 			{
+				if (!child) {
+					// the child node is not yet created
+					// since we delay the node creation as late as possible
+					assert(children_.find(edge) == children_.end());
+					children_.insert({ edge, nullptr });
+					return;
+				}
+
 				auto it = children_.find(edge);
 				assert(it != children_.end());
 				if (!it->second) return;

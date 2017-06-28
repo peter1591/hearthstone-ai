@@ -20,6 +20,12 @@ namespace mcts
 
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> const& nodes)
 			{
+				assert([&]() {
+					for (auto const& item : nodes) {
+						if (!item.node) return false;
+					}
+					return true;
+				}());
 				nodes_.insert(nodes_.end(), nodes.begin(), nodes.end());
 			}
 
