@@ -22,10 +22,8 @@ namespace mcts
 
 			assert(episode_state_.GetStage() == stage);
 			if (stage == kStageSelection) {
+				assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 				selection_stage_.StartMainAction(node);
-
-				// TODO: debug only
-				node->GetAddon().board_view_checker.Check(board.CreateView());
 			}
 
 			// TODO [PROFILING]:

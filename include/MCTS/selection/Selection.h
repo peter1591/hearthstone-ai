@@ -36,24 +36,45 @@ namespace mcts
 				}
 
 				assert(action_type.IsChosenManually());
+
+				TreeNode* current_node = GetCurrentNode();
+
 				if (pending_randoms_) {
-					if (action_type.GetType() == ActionType::kMainAction) {
-						assert(false); // main action should with a valid node
-						return -1;
-					}
-					else if (action_type.GetType() == ActionType::kChooseOne) {
-						// TODO: allow choose-from-card after random
-						assert(false);
-						return -1;
-					}
-					else {
+					switch (action_type.GetType()) {
+					case ActionType::kChooseOne:
+						// choose-one card might be triggered after random
+						break;
+
+					default:
 						// Not allow random actions to be conducted first before any sub-action
+						// That is, the player
+						//    1. Choose the hand card
+						//    2. Choose minion put location
+						// Then, random gets started
+						// Similar to other sub-actions
 						assert(false);
 						return -1;
 					}
+
+					// Check if the board-view and sub-action-type are consistency
+					// Currently, we have an assumption that
+					//    * A random action can be swapped to the end of a sub-action sequence
+					//      without any distinguishable difference
+					// But, it may not be this case if...
+					//    1. You have a 50% chance to choose a card
+					//    2. Summon a random minion, then choose a card
+					// In both cases, a random node should be added before the sub-action 'choose-a-card'
+					// From a game-play view, that is to say
+					//    The random outcome *influences* the player's decision
+					// So, if this assertion failed
+					//    It means a random node is necessary before this node
+					assert(current_node->GetAddon().consistency_checker.Check(board, action_type, choices));
+				}
+				else {
+					assert(current_node->GetAddon().consistency_checker.Check(board, action_type, choices));
 				}
 
-				int next_choice = GetCurrentNode()->Select(action_type, choices,
+				int next_choice = current_node->Select(action_type, choices,
 					StaticConfigs::SelectionPhaseSelectActionPolicy());
 				if (next_choice < 0) return -1; // all of the choices are invalid actions
 
