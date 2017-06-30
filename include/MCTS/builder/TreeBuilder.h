@@ -33,7 +33,7 @@ namespace mcts
 
 			struct SelectResult
 			{
-				Result result;
+				Result result; // Never returns kResultInvalid (automatically retry)
 				bool new_node_created; // only valid if started in selection stage
 				TreeNode * node; // only valid if started in selection stage
 
@@ -43,8 +43,7 @@ namespace mcts
 					node(nullptr)
 				{}
 			};
-
-			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
+			
 			// Note: can only be called when current player is the viewer of 'board'
 			SelectResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater);
 

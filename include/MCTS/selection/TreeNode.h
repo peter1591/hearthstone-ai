@@ -85,26 +85,18 @@ namespace mcts
 				return { just_expanded, child->edge_addon, *child_node };
 			}
 
-			void MarkChoiceInvalid(int choice, TreeNode* child_node)
+			EdgeAddon& MarkChoiceInvalid(int choice)
 			{
-				if (!child_node) {
-					// the child node is not yet created
-					// since we delay the node creation as late as possible
-					auto child = children_.Get(choice);
-					if (child) {
-						assert(!child->node);
-						return;
-					}
-					children_.Create(choice);
-					return;
+				// the child node is not yet created
+				// since we delay the node creation as late as possible
+				ChildType* child = children_.Get(choice);
+				if (child) {
+					child->node.reset(); // mark invalid
 				}
-
-				auto child = children_.Get(choice);
-				assert(child);
-				if (!child->node) return;
-				
-				assert(child->node.get() == child_node);
-				child->node.reset();
+				else {
+					child = children_.Create(choice); // create an invalid child node
+				}
+				return child->edge_addon;
 			}
 
 		public:

@@ -12,28 +12,21 @@ namespace mcts
 			void Update(bool credit)
 			{
 				for (auto const& item : nodes_) {
-					auto & statistic = item.node->GetAddon().statistic;
+					auto & statistic = item.GetNode()->GetAddon().statistic;
 					if (credit) ++statistic.credit;
 					++statistic.total;
 
-					if (item.edge_addon) {
-						++item.edge_addon->chosen_times;
-					}
+					assert(item.GetEdgeAddon());
+					item.GetEdgeAddon()->chosen_times++;
 				}
 			}
 
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> const& nodes)
 			{
 				assert([&]() {
-					bool first = true;
 					for (auto const& item : nodes) {
-						if (!item.node) return false;
-
-						// edge_addon should be there unless it's the first one
-						if (item.leading_choice >= 0) { // not a randomly-choose action
-							if (!item.edge_addon) return false;
-						}
-						first = false;
+						if (!item.GetNode()) return false;
+						if (!item.GetEdgeAddon()) return false;
 					}
 					return true;
 				}());

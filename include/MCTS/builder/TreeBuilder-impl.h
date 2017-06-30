@@ -31,7 +31,7 @@ namespace mcts
 			episode_state_.GetBoard().SaveState();
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
-			selection_stage_.StartNewAction(node);
+			selection_stage_.StartNewMainAction(node);
 
 			TreeBuilder::SelectResult perform_result(ApplyAction(selection_stage_));
 
@@ -40,13 +40,12 @@ namespace mcts
 
 			assert(turn_start_node_);
 			assert(turn_start_node_->GetActionType().GetType() == ActionType::kMainAction);
-			selection_stage_.FinishMainAction(
+			perform_result.node = selection_stage_.FinishMainAction(
 				turn_start_node_->GetAddon().board_node_map,
 				episode_state_.GetBoard(),
 				&perform_result.new_node_created);
 
 			assert(updater);
-			perform_result.node = selection_stage_.GetCurrentNode();
 			updater->PushBackNodes(selection_stage_.GetTraversedPath());
 
 			assert([](builder::TreeBuilder::TreeNode* node) {
@@ -115,11 +114,11 @@ namespace mcts
 
 			int choice = -1;
 			if (episode_state_.GetStage() == kStageSelection) {
-				choice = selection_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
+				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);
-				choice = simulation_stage_.GetAction(episode_state_.GetBoard(), action_type, choices);
+				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 			}
 
 			if (choice < 0) {

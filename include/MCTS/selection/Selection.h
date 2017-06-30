@@ -12,17 +12,22 @@ namespace mcts
 		class Selection
 		{
 		public:
-			void StartNewAction(TreeNode * root) {
+			Selection() : root_(nullptr) {}
+
+			void StartNewMainAction(TreeNode * root) {
+				root_ = root;
+
 				path_.clear();
-				StepNext(-1, nullptr, root);
+				path_.emplace_back(root_);
 				new_node_created_ = false;
 				pending_randoms_ = false;
-				saved_path_ = path_;
 			}
-			void RestartAction() { path_ = saved_path_; }
+			void RestartAction() {
+				StartNewMainAction(root_);
+			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
-			int GetAction(
+			int ChooseAction(
 				board::Board const& board,
 				ActionType action_type,
 				board::ActionChoices const& choices)
@@ -34,8 +39,14 @@ namespace mcts
 				}
 
 				assert(action_type.IsChosenManually());
+				assert(!path_.empty());
+				if (path_.back().HasMadeChoice()) {
+					TreeNode* new_node = path_.back().ConstructNextNode(&new_node_created_);
+					path_.emplace_back(new_node);
+				}
 
-				TreeNode* current_node = GetCurrentNode();
+				assert(!path_.back().HasMadeChoice());
+				TreeNode* current_node = path_.back().GetNode();
 
 				if (pending_randoms_) {
 					switch (action_type.GetType()) {
@@ -74,96 +85,46 @@ namespace mcts
 
 				int next_choice = current_node->Select(action_type, choices,
 					StaticConfigs::SelectionPhaseSelectActionPolicy());
-				if (next_choice < 0) return -1; // all of the choices are invalid actions
+				if (next_choice < 0) {
+					return -1; // all of the choices are invalid actions
+				}
 
-				StepNext(next_choice, nullptr, nullptr); // pass nullptr to delay the node-creation as much as possible
-												// since the node of the last action doesn't need to be created
+				path_.back().MakeChoice(next_choice);
+
 				return next_choice;
 			}
 
-			void FinishMainAction(
+			TreeNode* FinishMainAction(
 				detail::BoardNodeMap & last_node_lookup,
 				board::Board const& board,
 				bool * created_new_node)
 			{
-				// the last node of a main action is not necessary to be created
-				// in fact, we enforced that the last node should not be created
-				// since we're about to use the hash table to find the correct node
-				assert(!path_.back().node);
+				TreeNode* final_node = last_node_lookup.GetOrCreateNode(board, created_new_node);
+				if (new_node_created_) *created_new_node = true;
 
-				if (pending_randoms_) {
-					// last actions are random nodes, so no tree node are created
-					// use hash table to find which node should be our next node
-					// this way, we can share tree node if two actions can be swapped
-					TreeNode* next_node = last_node_lookup.GetOrCreateNode(board, &new_node_created_);
-					StepNext(-1, // -1 indicates a random move
-						nullptr, // random action has no edge
-						next_node);
-				}
+				path_.back().ConstructRedirectNode();
 
-				*created_new_node = new_node_created_;
+				return final_node;
 			}
 
 			void ReportInvalidAction() {
-				auto it = path_.rbegin();
-				
-				assert(it != path_.rend());
-				TreeNode* child = it->node;
-				TreeNode* parent = nullptr;
-				int edge = it->leading_choice;
-
-				while (true) {
-					++it;
-					assert(it != path_.rend()); // we should be able to find a blame node along the path
-					parent = it->node;
-
-					// if a sub-action failed, it means the main action failed.
-					//    More precisely, it means the calling to FlowController is failed
-					//    not only the callback like 'GetTarget()' or 'ChooseOne()' is failed
-					//    so we find the node to blame, and remove it from its parent
-					if (parent->GetActionType().IsInvalidStateBlameNode()) break;
-
-					// look up further to find the blame node
-					child = it->node;
-					edge = it->leading_choice;
+				for (auto it = path_.rbegin(); it != path_.rend(); ++it) {
+					if (it->GetNode()->GetActionType().IsInvalidStateBlameNode()) {
+						if (it->GetChoice() < 0) {
+							continue; // TODO: possible?
+						}
+						it->GetNode()->MarkChoiceInvalid(it->GetChoice());
+						return;
+					}
 				}
-
-				parent->MarkChoiceInvalid(edge, child);
+				assert(false);
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 
-			TreeNode* GetCurrentNode() {
-				assert(!path_.empty());
-				auto it = path_.rbegin();
-
-				if (!it->node) {
-					// delay node creation to here (as late as possible)
-					auto it_parent = it;
-					++it_parent;
-					assert(it_parent != path_.rend());
-
-					auto result = it_parent->node->FollowChoice(it->leading_choice);
-					
-					new_node_created_ = result.just_expanded;
-					it->edge_addon = &result.edge_addon;
-					it->node = &result.node;
-				}
-
-				assert(it->node);
-				return it->node;
-			}
-
-			void StepNext(int leading_choice, EdgeAddon* leading_edge_addon, TreeNode* next_node)
-			{
-				if (!path_.empty()) GetCurrentNode(); // ensure the delay-create node is actually created
-				path_.push_back({ leading_choice, leading_edge_addon, next_node });
-			}
-
 		private:
+			TreeNode* root_;
 			std::vector<TraversedNodeInfo> path_;
-
-			std::vector<TraversedNodeInfo> saved_path_;
 
 			bool new_node_created_;
 			bool pending_randoms_;
