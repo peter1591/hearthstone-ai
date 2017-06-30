@@ -15,12 +15,14 @@ namespace mcts
 {
 	namespace builder
 	{
-		inline TreeBuilder::PerformResult TreeBuilder::PerformOneAction(
-			TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater)
+		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
+		// Note: can only be called when current player is the viewer of 'board'
+		inline TreeBuilder::PerformResult TreeBuilder::PerformSelect(
+			TreeNode * node, board::Board & board, TreeUpdater * updater)
 		{
-			episode_state_.Start(stage, board);
+			episode_state_.Start(kStageSelection, board);
 			assert(episode_state_.IsValid());
-			assert(episode_state_.GetStage() == stage);
+			assert(episode_state_.GetStage() == kStageSelection);
 
 			// TODO [PROFILING]:
 			// We save the board every time here. This is just for the case an invalid action is applied
@@ -28,40 +30,58 @@ namespace mcts
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			episode_state_.GetBoard().SaveState();
 
-			if (episode_state_.GetStage() == kStageSelection) {
-				assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
-				selection_stage_.StartNewAction(node);
-			}
-			else {
-				assert(episode_state_.GetStage() == kStageSimulation);
-				simulation_stage_.StartNewAction();
-			}
+			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
+			selection_stage_.StartNewAction(node);
 
-			// sometimes an action might in fact an INVALID action
-			// here use a loop to retry on those cases
-			TreeBuilder::PerformResult perform_result(ApplyAction());
+			TreeBuilder::PerformResult perform_result(ApplyAction(selection_stage_));
 
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
 
-			if (stage == kStageSelection) {
-				selection_stage_.FinishMainAction(node, episode_state_.GetBoard(), &perform_result.new_node_created);
+			selection_stage_.FinishMainAction(node, episode_state_.GetBoard(), &perform_result.new_node_created);
 
-				assert(updater);
-				perform_result.node = selection_stage_.GetCurrentNode();
-				updater->PushBackNodes(selection_stage_.GetTraversedPath());
+			assert(updater);
+			perform_result.node = selection_stage_.GetCurrentNode();
+			updater->PushBackNodes(selection_stage_.GetTraversedPath());
 
-				assert([](builder::TreeBuilder::TreeNode* node) {
-					if (!node->GetActionType().IsValid()) return true;
-					return node->GetActionType().GetType() == ActionType::kMainAction;
-				}(perform_result.node));
-			}
+			assert([](builder::TreeBuilder::TreeNode* node) {
+				if (!node->GetActionType().IsValid()) return true;
+				return node->GetActionType().GetType() == ActionType::kMainAction;
+			}(perform_result.node));
+
 			return perform_result;
+		}
+		
+		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
+		// Note: can only be called when current player is the viewer of 'board'
+		inline Result TreeBuilder::PerformSimulate(board::Board & board)
+		{
+			episode_state_.Start(kStageSimulation, board);
+			assert(episode_state_.IsValid());
+			assert(episode_state_.GetStage() == kStageSimulation);
+
+			// TODO [PROFILING]:
+			// We save the board every time here. This is just for the case an invalid action is applied
+			// Ideally, invalid actions should be rarely happened.
+			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
+			episode_state_.GetBoard().SaveState();
+
+			assert(episode_state_.GetStage() == kStageSimulation);
+			simulation_stage_.StartNewAction();
+
+			Result result = ApplyAction(simulation_stage_);
+
+			assert(episode_state_.IsValid());
+			statistic_.ApplyActionSucceeded();
+
+			return result;
 		}
 
 		template <typename StageHandler>
 		inline Result TreeBuilder::ApplyAction(StageHandler&& stage_handler)
 		{
+			// sometimes an action might in fact an INVALID action
+			// here use a loop to retry on those cases
 			while (true) {
 				int choices = episode_state_.GetBoard().GetActionsCount();
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));

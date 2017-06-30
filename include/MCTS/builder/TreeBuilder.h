@@ -44,33 +44,13 @@ namespace mcts
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
-			PerformResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater) {
-				return PerformOneAction(node, kStageSelection, board, updater);
-			}
+			PerformResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater);
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
-			PerformResult PerformSimulate(board::Board & board) {
-				return PerformOneAction(nullptr, kStageSimulation, board, nullptr);
-			}
+			Result PerformSimulate(board::Board & board);
 
 		private:
-			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
-			// Note: 'node' is used only in selection stage (i.e., stage = kStageSelection)
-			// Note: can only be called when current player is the viewer of 'board'
-			PerformResult PerformOneAction(
-				TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater);
-
-			Result ApplyAction() {
-				if (episode_state_.GetStage() == kStageSelection) {
-					return ApplyAction(selection_stage_);
-				}
-				else {
-					assert(episode_state_.GetStage() == kStageSimulation);
-					return ApplyAction(simulation_stage_);
-				}
-			}
-
 			template <typename StageHandler>
 			Result ApplyAction(StageHandler&& stage_handler);
 
