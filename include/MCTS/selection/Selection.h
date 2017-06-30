@@ -143,9 +143,9 @@ namespace mcts
 
 					auto result = it_parent->node->GetOrCreateChild(it->leading_choice);
 					new_node_created_ = result.second;
-					TreeNode::ChildType & child = result.first->second;
-					it->edge_addon = &child.first;
-					it->node = child.second.get();
+					ChildType & child = *result.first;
+					it->edge_addon = &child.edge_addon;
+					it->node = child.node.get();
 				}
 
 				assert(it->node);

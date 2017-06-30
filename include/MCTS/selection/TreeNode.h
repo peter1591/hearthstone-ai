@@ -8,6 +8,7 @@
 #include "MCTS/selection/TreeNodeAddon.h"
 #include "MCTS/board/ActionChoices.h"
 #include "MCTS/selection/EdgeAddon.h"
+#include "MCTS/selection/ChildNodeMap.h"
 
 namespace mcts
 {
@@ -15,10 +16,6 @@ namespace mcts
 	{
 		class TreeNode
 		{
-		public:
-			using ChildType = std::pair<EdgeAddon, std::unique_ptr<TreeNode>>;
-			using ChildMapType = std::unordered_map<int, ChildType>;
-
 		public:
 			TreeNode() : action_type_(ActionType::kInvalid),
 				choices_type_(board::ActionChoices::kInvalid)
@@ -56,50 +53,48 @@ namespace mcts
 				for (choices.Begin(); !choices.IsEnd(); choices.StepNext()) {
 					int choice = choices.Get();
 
-					auto it = children_.find(choice);
-					if (it == children_.end()) return choice;
+					auto child = children_.Get(choice);
+					if (!child) return choice;
 
-					auto const& edge_addon = it->second.first;
-					auto const& child_node = it->second.second;
-
-					if (!child_node) continue; // invalid choice
-					if (edge_addon.chosen_times <= 0) return choice; // not yet chosen
-					select_callback.AddChoice(choice, edge_addon, child_node.get());
+					if (!child->node) continue; // invalid choice
+					if (child->edge_addon.chosen_times <= 0) return choice; // not yet chosen
+					select_callback.AddChoice(choice, child->edge_addon, child->node.get());
 				}
 
 				return select_callback.SelectChoice();
 			}
 
-			std::pair<ChildMapType::iterator, bool> GetOrCreateChild(int choice)
+			// @return  (pointer to child, is_just_created)
+			std::pair<ChildType*, bool> GetOrCreateChild(int choice)
 			{
-				auto it = children_.find(choice);
-				if (it != children_.end()) return { it, false };
-				
-				TreeNode* new_node = new TreeNode();
-				return children_.insert({ choice,
-					std::make_pair(EdgeAddon(), std::unique_ptr<TreeNode>(new_node))
-				});
+				ChildType* child = children_.Get(choice);
+				if (child) return { child, false };
+
+				child = children_.Create(choice);
+				child->node.reset(new TreeNode());
+				return { child, true };
 			}
 
-			void MarkChildInvalid(int edge, TreeNode* child)
+			void MarkChildInvalid(int edge, TreeNode* child_node)
 			{
-				if (!child) {
+				if (!child_node) {
 					// the child node is not yet created
 					// since we delay the node creation as late as possible
-					auto it = children_.find(edge);
-					if (it != children_.end()) {
-						assert(!it->second.second);
+					auto child = children_.Get(edge);
+					if (child) {
+						assert(!child->node);
 						return;
 					}
-					children_.insert({ edge, std::make_pair(EdgeAddon(), nullptr)});
+					children_.Create(edge);
 					return;
 				}
 
-				auto it = children_.find(edge);
-				assert(it != children_.end());
-				if (!it->second.second) return;
-				assert(it->second.second.get() == child);
-				it->second.second.reset();
+				auto child = children_.Get(edge);
+				assert(child);
+				if (!child->node) return;
+				
+				assert(child->node.get() == child_node);
+				child->node.reset();
 			}
 
 		public:
@@ -113,7 +108,7 @@ namespace mcts
 			ActionType action_type_;
 			board::ActionChoices::Type choices_type_;
 
-			ChildMapType children_;
+			ChildNodeMap children_;
 			TreeNodeAddon addon_;
 		};
 	}
