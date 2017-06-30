@@ -35,8 +35,8 @@ namespace mcts
 				bool new_node_created; // only valid if started in selection stage
 				TreeNode * node; // only valid if started in selection stage
 
-				PerformResult() :
-					result(Result::kResultInvalid),
+				PerformResult(Result new_result) :
+					result(new_result),
 					new_node_created(false),
 					node(nullptr)
 				{}
@@ -61,11 +61,21 @@ namespace mcts
 			PerformResult PerformOneAction(
 				TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater);
 
+			Result ApplyAction() {
+				if (episode_state_.GetStage() == kStageSelection) {
+					return ApplyAction(selection_stage_);
+				}
+				else {
+					assert(episode_state_.GetStage() == kStageSimulation);
+					return ApplyAction(simulation_stage_);
+				}
+			}
+
+			template <typename StageHandler>
+			Result ApplyAction(StageHandler&& stage_handler);
+
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseAction(ActionType action_type, board::ActionChoices const& choices);
-
-		private:
-			int ActionCallback(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
 			board::ActionParameterGetter action_parameter_getter_;

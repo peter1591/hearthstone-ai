@@ -39,13 +39,13 @@ namespace mcts
 			}(node_));
 
 			builder::TreeBuilder builder(statistic_);
-			builder::TreeBuilder::PerformResult result;
+			Result result = Result::kResultInvalid;
 
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
-					result = builder.PerformSimulate(board);
-					assert(result.result != Result::kResultInvalid);
-					if (result.result != Result::kResultNotDetermined) return result.result;
+					result = builder.PerformSimulate(board).result; // TODO: only return .result
+					assert(result != Result::kResultInvalid);
+					if (result != Result::kResultNotDetermined) return result;
 				}
 				else {
 					// Selection stage
@@ -54,25 +54,27 @@ namespace mcts
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
-					result = builder.PerformSelect(node_, board, &updater_);
-					assert(result.result != Result::kResultInvalid);
+					auto perform_result = builder.PerformSelect(node_, board, &updater_);
+					assert(perform_result.result != Result::kResultInvalid);
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
-					}(result.node));
-					if (result.result != Result::kResultNotDetermined) return result.result;
+					}(perform_result.node));
 
-					if (result.new_node_created) {
+					result = perform_result.result;
+					if (result != Result::kResultNotDetermined) return result;
+
+					if (perform_result.new_node_created) {
 						stage_ = kStageSimulation;
 						node_ = nullptr;
 					}
 					else {
-						node_ = result.node;
+						node_ = perform_result.node;
 					}
 				}
 			}
-			assert(result.result == Result::kResultNotDetermined);
-			return result.result;
+			assert(result == Result::kResultNotDetermined);
+			return result;
 		}
 
 		// Another player finished his actions

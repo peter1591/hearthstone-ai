@@ -12,16 +12,14 @@ namespace mcts
 		class Selection
 		{
 		public:
-			void StartNewAction() { saved_path_ = path_; }
-			void RestartAction() { path_ = saved_path_; }
-
-			void StartMainAction(TreeNode * root)
-			{
+			void StartNewAction(TreeNode * root) {
 				path_.clear();
 				StepNext(-1, nullptr, root);
 				new_node_created_ = false;
 				pending_randoms_ = false;
+				saved_path_ = path_;
 			}
+			void RestartAction() { path_ = saved_path_; }
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
 			int GetAction(

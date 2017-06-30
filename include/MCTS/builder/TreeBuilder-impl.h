@@ -19,22 +19,18 @@ namespace mcts
 			TreeNode * const node, Stage const stage, board::Board & board, TreeUpdater * const updater)
 		{
 			episode_state_.Start(stage, board);
-
+			assert(episode_state_.IsValid());
 			assert(episode_state_.GetStage() == stage);
-			if (stage == kStageSelection) {
-				assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
-				selection_stage_.StartMainAction(node);
-			}
 
 			// TODO [PROFILING]:
 			// We save the board every time here. This is just for the case an invalid action is applied
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
-			assert(episode_state_.IsValid());
 			episode_state_.GetBoard().SaveState();
 
 			if (episode_state_.GetStage() == kStageSelection) {
-				selection_stage_.StartNewAction();
+				assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
+				selection_stage_.StartNewAction(node);
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);
@@ -43,41 +39,11 @@ namespace mcts
 
 			// sometimes an action might in fact an INVALID action
 			// here use a loop to retry on those cases
-			Result result = Result::kResultInvalid;
+			TreeBuilder::PerformResult perform_result(ApplyAction());
 
-			while (true)
-			{
-				int choices = episode_state_.GetBoard().GetActionsCount();
-				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
-
-				result = Result::kResultInvalid;
-				if (episode_state_.IsValid()) {
-					result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
-					if (result != Result::kResultInvalid) break;
-				}
-
-				if (episode_state_.GetStage() == kStageSelection) {
-					selection_stage_.ReportInvalidAction();
-					selection_stage_.RestartAction();
-				}
-				else {
-					assert(episode_state_.GetStage() == kStageSimulation);
-					simulation_stage_.ReportInvalidAction();
-					simulation_stage_.RestartAction();
-				}
-
-				episode_state_.GetBoard().RestoreState();
-				episode_state_.SetValid();
-
-				statistic_.ApplyActionFailed();
-			}
-
-			// action applied successfully
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
 
-			TreeBuilder::PerformResult perform_result;
-			perform_result.result = result;
 			if (stage == kStageSelection) {
 				selection_stage_.FinishMainAction(node, episode_state_.GetBoard(), &perform_result.new_node_created);
 
@@ -93,12 +59,32 @@ namespace mcts
 			return perform_result;
 		}
 
-		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoices const& choices)
+		template <typename StageHandler>
+		inline Result TreeBuilder::ApplyAction(StageHandler&& stage_handler)
 		{
-			return ActionCallback(action_type, choices);
+			while (true) {
+				int choices = episode_state_.GetBoard().GetActionsCount();
+				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+
+				if (episode_state_.IsValid()) {
+					Result result = episode_state_.GetBoard().ApplyAction(
+						choice, random_generator_, action_parameter_getter_);
+					if (result != Result::kResultInvalid) return result;
+				}
+
+				stage_handler.ReportInvalidAction();
+				stage_handler.RestartAction();
+
+				episode_state_.GetBoard().RestoreState();
+				episode_state_.SetValid();
+
+				statistic_.ApplyActionFailed();
+			}
+			assert(false); // not reach here
+			return Result::kResultSecondPlayerWin;
 		}
 
-		inline int TreeBuilder::ActionCallback(ActionType action_type, board::ActionChoices const& choices)
+		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoices const& choices)
 		{
 			assert(!choices.Empty());
 
