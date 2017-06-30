@@ -25,17 +25,19 @@ namespace mcts
 			typedef selection::TreeNode TreeNode;
 
 			TreeBuilder(Statistic<> & statistic) : action_parameter_getter_(*this), random_generator_(*this),
-				statistic_(statistic)
+				turn_start_node_(nullptr), statistic_(statistic)
 			{
 			}
 
-			struct PerformResult
+			void TurnStart(TreeNode* node) { turn_start_node_ = node; }
+
+			struct SelectResult
 			{
 				Result result;
 				bool new_node_created; // only valid if started in selection stage
 				TreeNode * node; // only valid if started in selection stage
 
-				PerformResult(Result new_result) :
+				SelectResult(Result new_result) :
 					result(new_result),
 					new_node_created(false),
 					node(nullptr)
@@ -44,7 +46,7 @@ namespace mcts
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
-			PerformResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater);
+			SelectResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater);
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
@@ -61,6 +63,7 @@ namespace mcts
 			board::ActionParameterGetter action_parameter_getter_;
 			board::RandomGenerator random_generator_;
 
+			TreeNode* turn_start_node_;
 			EpisodeState episode_state_;
 			Statistic<> & statistic_;
 

@@ -81,19 +81,21 @@ namespace mcts
 				return next_choice;
 			}
 
-			void FinishMainAction(TreeNode* starting_node, board::Board const& board, bool * created_new_node) {
-				assert([&]() {
-					// the last node of a main action is not necessary to be created
-					// since we're about to use the hash table to find the correct node
-					return path_.back().node == nullptr;
-				}());
+			void FinishMainAction(
+				detail::BoardNodeMap & last_node_lookup,
+				board::Board const& board,
+				bool * created_new_node)
+			{
+				// the last node of a main action is not necessary to be created
+				// in fact, we enforced that the last node should not be created
+				// since we're about to use the hash table to find the correct node
+				assert(!path_.back().node);
 
 				if (pending_randoms_) {
 					// last actions are random nodes, so no tree node are created
 					// use hash table to find which node should be our next node
-					// this way, we can share tree node for identical states
-					assert(starting_node->GetActionType().GetType() == ActionType::kMainAction);
-					TreeNode* next_node = starting_node->GetAddon().board_node_map.GetOrCreateNode(board, &new_node_created_);
+					// this way, we can share tree node if two actions can be swapped
+					TreeNode* next_node = last_node_lookup.GetOrCreateNode(board, &new_node_created_);
 					StepNext(-1, // -1 indicates a random move
 						nullptr, // random action has no edge
 						next_node);

@@ -17,7 +17,7 @@ namespace mcts
 	{
 		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 		// Note: can only be called when current player is the viewer of 'board'
-		inline TreeBuilder::PerformResult TreeBuilder::PerformSelect(
+		inline TreeBuilder::SelectResult TreeBuilder::PerformSelect(
 			TreeNode * node, board::Board & board, TreeUpdater * updater)
 		{
 			episode_state_.Start(kStageSelection, board);
@@ -33,12 +33,17 @@ namespace mcts
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewAction(node);
 
-			TreeBuilder::PerformResult perform_result(ApplyAction(selection_stage_));
+			TreeBuilder::SelectResult perform_result(ApplyAction(selection_stage_));
 
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
 
-			selection_stage_.FinishMainAction(node, episode_state_.GetBoard(), &perform_result.new_node_created);
+			assert(turn_start_node_);
+			assert(turn_start_node_->GetActionType().GetType() == ActionType::kMainAction);
+			selection_stage_.FinishMainAction(
+				turn_start_node_->GetAddon().board_node_map,
+				episode_state_.GetBoard(),
+				&perform_result.new_node_created);
 
 			assert(updater);
 			perform_result.node = selection_stage_.GetCurrentNode();

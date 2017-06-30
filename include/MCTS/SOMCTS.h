@@ -41,6 +41,8 @@ namespace mcts
 			builder::TreeBuilder builder(statistic_);
 			Result result = Result::kResultInvalid;
 
+			builder.TurnStart(node_);
+
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
 					result = builder.PerformSimulate(board);
@@ -51,6 +53,7 @@ namespace mcts
 					// Selection stage
 					assert(stage_ == kStageSelection);
 					assert([](builder::TreeBuilder::TreeNode* node) {
+						if (!node) return false;
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
