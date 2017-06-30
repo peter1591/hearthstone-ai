@@ -65,14 +65,17 @@ namespace mcts
 						return exploit_score + explore_weight * explore_score;
 					};
 
-					int max_choice = -1;
-					double max_score = 0.0;
+					auto it = choices_.begin();
 
-					for (auto const& item : choices_) {
-						double score = get_score(item);
+					int max_choice = it->choice;
+					double max_score = get_score(*it);
+					++it;
+					
+					for (; it != choices_.end(); ++it) {
+						double score = get_score(*it);
 						if (score > max_score) {
 							max_score = score;
-							max_choice = item.choice;
+							max_choice = it->choice;
 						}
 					}
 					assert(max_choice >= 0);
