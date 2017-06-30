@@ -64,15 +64,25 @@ namespace mcts
 				return select_callback.SelectChoice();
 			}
 
-			// @return  (pointer to child, is_just_created)
-			std::pair<ChildType*, bool> GetOrCreateChild(int choice)
+			// @return  (pointer to child, is_just_expanded)
+			struct FollowStatus {
+				bool just_expanded;
+				EdgeAddon & edge_addon;
+				TreeNode & node;
+			};
+			FollowStatus FollowChoice(int choice)
 			{
 				ChildType* child = children_.Get(choice);
-				if (child) return { child, false };
+				bool just_expanded = false;
+				if (!child) {
+					child = children_.Create(choice);
+					child->node.reset(new TreeNode());
+					just_expanded = true;
+				}
 
-				child = children_.Create(choice);
-				child->node.reset(new TreeNode());
-				return { child, true };
+				TreeNode* child_node = child->node.get();
+				assert(child_node); // should only follow valid choices
+				return { just_expanded, child->edge_addon, *child_node };
 			}
 
 			void MarkChildInvalid(int edge, TreeNode* child_node)

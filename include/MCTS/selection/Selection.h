@@ -141,11 +141,11 @@ namespace mcts
 					++it_parent;
 					assert(it_parent != path_.rend());
 
-					auto result = it_parent->node->GetOrCreateChild(it->leading_choice);
-					new_node_created_ = result.second;
-					ChildType & child = *result.first;
-					it->edge_addon = &child.edge_addon;
-					it->node = child.node.get();
+					auto result = it_parent->node->FollowChoice(it->leading_choice);
+					
+					new_node_created_ = result.just_expanded;
+					it->edge_addon = &result.edge_addon;
+					it->node = &result.node;
 				}
 
 				assert(it->node);
