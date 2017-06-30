@@ -50,6 +50,7 @@ namespace mcts
 				int choices = episode_state_.GetBoard().GetActionsCount();
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
 
+				result = Result::kResultInvalid;
 				if (episode_state_.IsValid()) {
 					result = episode_state_.GetBoard().ApplyAction(choice, random_generator_, action_parameter_getter_);
 					if (result != Result::kResultInvalid) break;
