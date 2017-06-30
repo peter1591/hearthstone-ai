@@ -126,7 +126,7 @@ namespace mcts
 					edge = it->leading_choice;
 				}
 
-				parent->MarkChildInvalid(edge, child);
+				parent->MarkChoiceInvalid(edge, child);
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }

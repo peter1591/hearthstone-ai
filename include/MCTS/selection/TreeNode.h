@@ -85,21 +85,21 @@ namespace mcts
 				return { just_expanded, child->edge_addon, *child_node };
 			}
 
-			void MarkChildInvalid(int edge, TreeNode* child_node)
+			void MarkChoiceInvalid(int choice, TreeNode* child_node)
 			{
 				if (!child_node) {
 					// the child node is not yet created
 					// since we delay the node creation as late as possible
-					auto child = children_.Get(edge);
+					auto child = children_.Get(choice);
 					if (child) {
 						assert(!child->node);
 						return;
 					}
-					children_.Create(edge);
+					children_.Create(choice);
 					return;
 				}
 
-				auto child = children_.Get(edge);
+				auto child = children_.Get(choice);
 				assert(child);
 				if (!child->node) return;
 				
@@ -116,7 +116,7 @@ namespace mcts
 
 		private:
 			ActionType action_type_;
-			board::ActionChoices::Type choices_type_;
+			board::ActionChoices::Type choices_type_; // TODO: debug only
 
 			ChildNodeMap children_;
 			TreeNodeAddon addon_;
