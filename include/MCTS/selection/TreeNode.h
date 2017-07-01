@@ -99,6 +99,17 @@ namespace mcts
 				return child->GetEdgeAddon();
 			}
 
+			EdgeAddon& MarkChoiceRedirect(int choice, TreeNode* node)
+			{
+				// the child node is not yet created
+				// since we delay the node creation as late as possible
+				ChildType* child = children_.Get(choice);
+				if (!child) child = children_.Create(choice);
+				assert(child);
+				child->SetAsRedirectNode(node);
+				return child->GetEdgeAddon();
+			}
+
 		public:
 			ActionType GetActionType() const { return action_type_; }
 

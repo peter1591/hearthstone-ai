@@ -5,6 +5,8 @@
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/selection/TraversedNodeInfo.h"
 
+#include "MCTS/selection/ChildNodeMap-impl.h"
+
 namespace mcts
 {
 	namespace selection
@@ -102,7 +104,7 @@ namespace mcts
 				TreeNode* final_node = last_node_lookup.GetOrCreateNode(board, created_new_node);
 				if (new_node_created_) *created_new_node = true;
 
-				path_.back().ConstructRedirectNode();
+				path_.back().ConstructRedirectNode(final_node);
 
 				return final_node;
 			}

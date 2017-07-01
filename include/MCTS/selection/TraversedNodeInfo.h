@@ -33,13 +33,10 @@ namespace mcts
 				return &result.node;
 			}
 
-			void ConstructRedirectNode()
+			void ConstructRedirectNode(TreeNode* redirect_node)
 			{
-				// TODO: need to distinguish redirect node from invalid node
-				bool dummy;
-				ConstructNextNode(&dummy);
-				// assert(choice_ >= 0);
-				// sedge_addon_ = &node_->MarkChoiceInvalid(choice_);
+				assert(choice_ >= 0);
+				edge_addon_ = &node_->MarkChoiceRedirect(choice_, redirect_node);
 			}
 
 		private:
