@@ -32,7 +32,7 @@ namespace mcts
 		void PrintMessage() {
 			double apply_action_success_rate = 0.0;
 			if (apply_action_total_ > 0) {
-				apply_action_success_rate = (int)(apply_action_success_ * 100 / apply_action_total_);
+				apply_action_success_rate = (int)((double)apply_action_success_ * 100 / apply_action_total_);
 			}
 
 			std::cout << "Apply action success rate: "
