@@ -110,9 +110,7 @@ namespace mcts
 			void ReportInvalidAction() {
 				for (auto it = path_.rbegin(); it != path_.rend(); ++it) {
 					if (it->GetNode()->GetActionType().IsInvalidStateBlameNode()) {
-						if (it->GetChoice() < 0) {
-							continue; // TODO: possible?
-						}
+						if (it->GetChoice() < 0) continue;
 						it->GetNode()->MarkChoiceInvalid(it->GetChoice());
 						return;
 					}

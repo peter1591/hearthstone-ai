@@ -56,9 +56,9 @@ namespace mcts
 					auto child = children_.Get(choice);
 					if (!child) return choice;
 
-					if (!child->node) continue; // invalid choice
-					if (child->edge_addon.chosen_times <= 0) return choice; // not yet chosen
-					select_callback.AddChoice(choice, child->edge_addon, child->node.get());
+					if (!child->GetNode()) continue; // invalid choice
+					if (child->GetEdgeAddon().chosen_times <= 0) return choice; // not yet chosen
+					select_callback.AddChoice(choice, child->GetEdgeAddon(), child->GetNode());
 				}
 
 				return select_callback.SelectChoice();
@@ -76,13 +76,13 @@ namespace mcts
 				bool just_expanded = false;
 				if (!child) {
 					child = children_.Create(choice);
-					child->node.reset(new TreeNode());
+					child->SetNode(new TreeNode());
 					just_expanded = true;
 				}
 
-				TreeNode* child_node = child->node.get();
+				TreeNode* child_node = child->GetNode();
 				assert(child_node); // should only follow valid choices
-				return { just_expanded, child->edge_addon, *child_node };
+				return { just_expanded, child->GetEdgeAddon(), *child_node };
 			}
 
 			EdgeAddon& MarkChoiceInvalid(int choice)
@@ -91,12 +91,12 @@ namespace mcts
 				// since we delay the node creation as late as possible
 				ChildType* child = children_.Get(choice);
 				if (child) {
-					child->node.reset(); // mark invalid
+					child->SetNode(nullptr); // mark invalid
 				}
 				else {
 					child = children_.Create(choice); // create an invalid child node
 				}
-				return child->edge_addon;
+				return child->GetEdgeAddon();
 			}
 
 		public:

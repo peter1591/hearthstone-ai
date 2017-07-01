@@ -10,10 +10,19 @@ namespace mcts
 	{
 		class TreeNode;
 
-		struct ChildType
+		class ChildType
 		{
-			EdgeAddon edge_addon;
-			std::unique_ptr<TreeNode> node;
+		public:
+			EdgeAddon & GetEdgeAddon() { return edge_addon_; }
+			
+			void SetNode(TreeNode * node) {
+				node_.reset(node);
+			}
+			TreeNode * GetNode() const { return node_.get(); }
+
+		private:
+			EdgeAddon edge_addon_;
+			std::unique_ptr<TreeNode> node_;
 		};
 
 		class ChildNodeMap
