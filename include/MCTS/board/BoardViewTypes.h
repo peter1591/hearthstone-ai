@@ -115,9 +115,13 @@ namespace mcts
 				bool operator==(Weapon const& v) const {
 					static_assert(change_id == 1);
 					if (equipped != v.equipped) return false;
-					if (card_id != v.card_id) return false;
-					if (attack != v.attack) return false;
-					if (durability != v.durability) return false;
+
+					if (equipped) {
+						if (card_id != v.card_id) return false;
+						if (attack != v.attack) return false;
+						if (durability != v.durability) return false;
+					}
+
 					return true;
 				}
 
@@ -309,9 +313,11 @@ namespace std {
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.equipped);
-			Utils::HashCombine::hash_combine(result, v.card_id);
-			Utils::HashCombine::hash_combine(result, v.attack);
-			Utils::HashCombine::hash_combine(result, v.durability);
+			if (v.equipped) {
+				Utils::HashCombine::hash_combine(result, v.card_id);
+				Utils::HashCombine::hash_combine(result, v.attack);
+				Utils::HashCombine::hash_combine(result, v.durability);
+			}
 			return result;
 		}
 	};
