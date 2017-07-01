@@ -158,6 +158,7 @@
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />
     <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer-impl.h" />
@@ -173,8 +174,8 @@
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\SOMCTS_TreeNodeAddon-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\SOMCTS_TreeNodeAddon.h" />
+    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h" />
+    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h" />
     <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h" />
     <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h" />
     <ClInclude Include="..\..\include\MCTS\MOMCTS.h" />
@@ -182,6 +183,9 @@
     <ClInclude Include="..\..\include\MCTS\policy\RandomByRand.h" />
     <ClInclude Include="..\..\include\MCTS\policy\Selection.h" />
     <ClInclude Include="..\..\include\MCTS\policy\Simulation.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />

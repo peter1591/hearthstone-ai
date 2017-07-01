@@ -122,9 +122,6 @@
     <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\SOMCTS_TreeNodeAddon.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
@@ -161,9 +158,6 @@
     <ClInclude Include="..\..\include\MCTS\policy\Simulation.h">
       <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\SOMCTS_TreeNodeAddon-impl.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
@@ -190,6 +184,24 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\HashCombine.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h">
+      <Filter>Header Files\MCTS\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h">
+      <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h">
+      <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
