@@ -1,6 +1,7 @@
 #include "FlowControl/FlowController-impl.h"
 
 #include <iostream>
+#include <chrono>
 
 #include "TestStateBuilder.h"
 #include "MCTS/MOMCTS.h"
@@ -25,14 +26,24 @@ int main(void)
 		return TestStateBuilder().GetState();
 	};
 
+	int start_i = 0;
+	auto start = std::chrono::steady_clock::now();
 	for (int i = 0; i < 100000000; ++i) {
-		if (i % 10 == 0) {
+		if (i % 1000 == 0) {
 			std::cout << "====== Statistics =====" << std::endl;
 			std::cout << "Episodes: " << i << std::endl;
 			statistic.PrintMessage();
+			
+			auto now = std::chrono::steady_clock::now();
+			auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+			auto speed = (double)(i-start_i) / ms * 1000;
+			std::cout << "Iterations per second: " << speed << std::endl;
+
+			start_i = i + 1;
+			start = std::chrono::steady_clock::now();
 		}
 
-		if (i % 1000 == 999) {
+		if (i % 1000000 == 999999) {
 			std::cout << "continue?";
 			std::string dummy;
 			std::getline(std::cin, dummy);
