@@ -35,7 +35,7 @@ namespace mcts
 				board::ActionChoicesGetter const& choices_getter)
 			{
 				board::ActionChoices choices = choices_getter();
-				assert(!choices.Empty());
+				if (choices.Empty()) return -1;
 
 				if (action_type.IsChosenRandomly()) {
 					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);

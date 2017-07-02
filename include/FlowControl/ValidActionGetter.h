@@ -14,17 +14,6 @@ namespace FlowControl
 			// These functions MUST return valid for all actually available actions
 			// These functions can return valid for ones actually are not valid actions
 
-		std::vector<int> GetPlayableCards()
-		{
-			std::vector<int> playable_cards;
-			auto const& hand = state_.GetCurrentPlayer().hand_;
-			for (int i = 0; i < hand.Size(); ++i) {
-				state::CardRef card_ref = hand.Get(i);
-				playable_cards.push_back(i);
-			}
-			return playable_cards;
-		}
-
 		bool IsAttackable(state::CardRef card_ref) {
 			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 

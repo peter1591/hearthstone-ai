@@ -29,15 +29,13 @@ namespace mcts
 
 		inline Result BoardActionAnalyzer::PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const
 		{
-			FlowControl::ValidActionGetter valid_action_getter(board);
-			std::vector<int> playable_cards_ = valid_action_getter.GetPlayableCards();
-			if (playable_cards_.empty()) return Result::kResultInvalid;
-
-			FlowControl::FlowContext flow_context(random, action_parameters);
-			int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, (int)playable_cards_.size());
+			int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, [&board]() {
+				auto const& hand = board.GetCurrentPlayer().hand_;
+				return ActionChoices((int)hand.Size());
+			});
 			if (idx < 0) return Result::kResultInvalid; // all cards are not playable
-			int hand_idx = playable_cards_[idx];
-			return FlowControl::FlowController(board, flow_context).PlayCard(hand_idx);
+			FlowControl::FlowContext flow_context(random, action_parameters);
+			return FlowControl::FlowController(board, flow_context).PlayCard(idx);
 		}
 
 		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const

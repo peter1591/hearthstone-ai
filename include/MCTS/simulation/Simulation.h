@@ -18,7 +18,7 @@ namespace mcts
 			int ChooseAction(board::Board const& board, ActionType action_type, board::ActionChoicesGetter const& action_choices_getter) {
 				// TODO: support different types of action choices
 				board::ActionChoices action_choices = action_choices_getter();
-				assert(!action_choices.Empty());
+				if (action_choices.Empty()) return -1;
 				int choices = action_choices.Size();
 
 				tree_.FillChoices(choices);
