@@ -1,7 +1,8 @@
 #pragma once
 
-#include "MCTS/Types.h"
 #include "FlowControl/IActionParameterGetter.h"
+#include "MCTS/Types.h"
+#include "MCTS/board/ActionChoices.h"
 
 namespace mcts
 {
@@ -53,6 +54,8 @@ namespace mcts
 			}
 
 			int GetNumber(ActionType::Types action_type, int exclusive_max);
+
+			int GetNumber(ActionType::Types action_type, ActionChoicesGetter const& action_choices_getter);
 
 		private:
 			builder::TreeBuilder & builder_;

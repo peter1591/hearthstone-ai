@@ -87,8 +87,12 @@ namespace mcts
 			// sometimes an action might in fact an INVALID action
 			// here use a loop to retry on those cases
 			while (true) {
+				// TODO: record the valid actions when the node is expanded at the first time
+				// then, we can use it for the next iterations
 				int choices = episode_state_.GetBoard().GetActionsCount();
-				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), [choices]() {
+					return board::ActionChoices(choices);
+				});
 
 				if (episode_state_.IsValid()) {
 					Result result = episode_state_.GetBoard().ApplyAction(
@@ -108,17 +112,15 @@ namespace mcts
 			return Result::kResultSecondPlayerWin;
 		}
 
-		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoices const& choices)
+		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoicesGetter const& choices_getter)
 		{
-			assert(!choices.Empty());
-
 			int choice = -1;
 			if (episode_state_.GetStage() == kStageSelection) {
-				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter);
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);
-				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter);
 			}
 
 			if (choice < 0) {

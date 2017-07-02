@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <vector>
+#include <functional>
 #include "Cards/id-map.h"
 
 namespace mcts
@@ -102,5 +103,7 @@ namespace mcts
 			int range_it_;
 			std::vector<Cards::CardId>::iterator card_ids_it_;
 		};
+
+		typedef std::function<ActionChoices()> ActionChoicesGetter;
 	}
 }

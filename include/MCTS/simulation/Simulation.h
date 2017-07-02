@@ -15,8 +15,10 @@ namespace mcts
 				tree_.Clear();
 			}
 
-			int ChooseAction(board::Board const& board, ActionType action_type, board::ActionChoices const& action_choices) {
+			int ChooseAction(board::Board const& board, ActionType action_type, board::ActionChoicesGetter const& action_choices_getter) {
 				// TODO: support different types of action choices
+				board::ActionChoices action_choices = action_choices_getter();
+				assert(!action_choices.Empty());
 				int choices = action_choices.Size();
 
 				tree_.FillChoices(choices);
