@@ -24,7 +24,7 @@ namespace mcts
 			}
 
 		public: // bridge to action analyzer
-			int GetActionsCount()
+			int GetActionsCount() const
 			{
 				// board action analyzer will not access hidden information
 				//   as long as the current-player is the viewer
