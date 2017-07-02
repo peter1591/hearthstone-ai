@@ -42,8 +42,8 @@ namespace Cards
 				Cards::ID_EX1_160b
 			};
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-				if (choice == 0) {
+				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				if (choice == choices[0]) {
 					SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_160t);
 				}
 				else {
@@ -66,8 +66,8 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-				if (choice == 0) {
+				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				if (choice == choices[0]) {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 3);
 				}
 				else {
@@ -91,8 +91,8 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-				if (choice == 0) {
+				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				if (choice == choices[0]) {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_155ae>();
 				}
 				else {
@@ -138,8 +138,8 @@ namespace Cards
 				Cards::ID_EX1_166a,
 				Cards::ID_EX1_166b
 			};
-			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-			if (choice == 0) {
+			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			if (choice == choices[0]) {
 				context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 2);
 			}
 			else {
@@ -165,8 +165,8 @@ namespace Cards
 				Cards::ID_EX1_164b
 			};
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-				if (choice == 0) {
+				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				if (choice == choices[0]) {
 					context.manipulate_.Board().Player(context.player_).GetResource().GainCrystal(2);
 				}
 				else {
@@ -185,24 +185,26 @@ namespace Cards
 				Cards::ID_NEW1_007b,
 			};
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
 				context.manipulate_.SaveUserChoice(choice);
-				if (choice == 0) {
+				return false;
+				/*if (choice == choices[0]) {
 					return true;
 				}
 				else {
 					// TODO: playable when no minion?
 					context.SetOptionalSpellTargets(context.player_).Minion();
 					return true;
-				}
+				}*/
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				if (context.manipulate_.GetSavedUserChoice() == 0) {
+				if (context.manipulate_.GetSavedUserChoice() == choices[0]) {
 					context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 						context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
 					});
 				}
 				else {
+					assert(context.manipulate_.GetSavedUserChoice() == choices[1]);
 					state::CardRef target = context.GetTarget();
 					if (!target.IsValid()) return;
 					context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 5);
@@ -219,9 +221,9 @@ namespace Cards
 				Cards::ID_EX1_165a,
 				Cards::ID_EX1_165b
 			};
-			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
 			state::CardRef new_ref;
-			if (choice == 0) {
+			if (choice == choices[0]) {
 				new_ref = Manipulate(context).OnBoardMinion(context.card_ref_).Transform(Cards::ID_EX1_165t1);
 			}
 			else {
@@ -239,10 +241,10 @@ namespace Cards
 				Cards::ID_NEW1_008b
 			};
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
+				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
 				context.manipulate_.SaveUserChoice(choice);
 
-				if (choice == 0) {
+				if (choice == choices[0]) {
 				}
 				else {
 					context.SetOptionalBattlecryTargets(context.player_);
@@ -250,10 +252,11 @@ namespace Cards
 				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				if (context.manipulate_.GetSavedUserChoice() == 0) {
+				if (context.manipulate_.GetSavedUserChoice() == choices[0]) {
 					context.manipulate_.Player(context.player_).DrawCard();
 				}
 				else {
+					assert(context.manipulate_.GetSavedUserChoice() == choices[1]);
 					state::CardRef target = context.GetTarget();
 					if (!target.IsValid()) return;
 					context.manipulate_.OnBoardCharacter(target).Heal(context.card_ref_, 5);
@@ -270,8 +273,8 @@ namespace Cards
 				Cards::ID_EX1_178a,
 				Cards::ID_EX1_178b
 			};
-			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-			if (choice == 0) {
+			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			if (choice == choices[0]) {
 				context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_178ae>();
 				context.manipulate_.OnBoardMinion(context.card_ref_).Taunt(true);
 			}
@@ -289,8 +292,8 @@ namespace Cards
 				Cards::ID_EX1_573a,
 				Cards::ID_EX1_573b
 			};
-			size_t choice = context.manipulate_.GetChooseOneUserAction(choices);
-			if (choice == 0) {
+			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			if (choice == choices[0]) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					if (card_ref == context.card_ref_) return;
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_573ae>();

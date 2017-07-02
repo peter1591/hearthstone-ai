@@ -28,10 +28,10 @@ public:
 		else return targets[next_specified_target_idx];
 	}
 
-	size_t ChooseOne(std::vector<Cards::CardId> const& cards) {
+	Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) {
 		choose_one_called = true;
 		assert(next_choose_one_count == cards.size());
-		return next_choose_one_idx;
+		return cards[next_choose_one_idx];
 	}
 
 	int next_defender_count;

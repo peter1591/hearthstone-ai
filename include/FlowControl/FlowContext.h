@@ -22,7 +22,7 @@ namespace FlowControl {
 		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters)
 			: random_(random), action_parameters_(action_parameters),
 			result_(FlowControl::kResultNotDetermined),
-			minion_put_location_(-1), user_choice_(0)
+			minion_put_location_(-1), user_choice_((Cards::CardId)-1)
 		{}
 
 	public: // action parameter
@@ -55,12 +55,12 @@ namespace FlowControl {
 		void ChangeSpecifiedTarget(state::CardRef target) { specified_target_ = target; }
 		state::CardRef GetSpecifiedTarget() const { return specified_target_; }
 
-		size_t GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) {
+		Cards::CardId GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) {
 			return action_parameters_.ChooseOne(cards);
 		}
 
-		size_t GetSavedUserChoice() const { return user_choice_; }
-		void SaveUserChoice(size_t choice) { user_choice_ = choice; }
+		Cards::CardId GetSavedUserChoice() const { return user_choice_; }
+		void SaveUserChoice(Cards::CardId choice) { user_choice_ = choice; }
 
 	public: // dead entry hint
 		void AddDeadEntryHint(state::State & state, state::CardRef ref);
@@ -101,6 +101,6 @@ namespace FlowControl {
 		int minion_put_location_;
 		state::CardRef specified_target_;
 		state::CardRef destroyed_weapon_;
-		size_t user_choice_;
+		Cards::CardId user_choice_;
 	};
 }

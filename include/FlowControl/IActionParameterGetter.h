@@ -26,6 +26,6 @@ namespace FlowControl {
 			state::State & state, state::CardRef card_ref,
 			std::vector<state::CardRef> const& targets) = 0;
 
-		virtual size_t ChooseOne(std::vector<Cards::CardId> const& cards) = 0;
+		virtual Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) = 0;
 	};
 }

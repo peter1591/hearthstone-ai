@@ -44,13 +44,12 @@ namespace mcts
 				return targets[idx];
 			}
 
-			size_t ChooseOne(std::vector<Cards::CardId> const& cards) final
+			Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) final
 			{
 				assert(!cards.empty());
-				size_t size = cards.size();
-				int idx = GetNumber(ActionType::kChooseOne, (int)size);
-				assert(idx >= 0 && idx < size);
-				return (size_t)idx;
+				return (Cards::CardId)GetNumber(ActionType::kChooseOne, [cards]() {
+					return ActionChoices(cards);
+				});
 			}
 
 			int GetNumber(ActionType::Types action_type, int exclusive_max);
