@@ -20,6 +20,8 @@ namespace mcts
 		inline TreeBuilder::SelectResult TreeBuilder::PerformSelect(
 			TreeNode * node, board::Board & board, TreeUpdater * updater)
 		{
+			assert(node);
+
 			episode_state_.Start(kStageSelection, board);
 			assert(episode_state_.IsValid());
 			assert(episode_state_.GetStage() == kStageSelection);
@@ -33,7 +35,8 @@ namespace mcts
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
 
-			TreeBuilder::SelectResult perform_result(ApplyAction(selection_stage_));
+			TreeBuilder::SelectResult perform_result(ApplyAction(
+				node->GetAddon().action_analyzer, selection_stage_));
 
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
@@ -73,7 +76,9 @@ namespace mcts
 			assert(episode_state_.GetStage() == kStageSimulation);
 			simulation_stage_.StartNewAction();
 
-			Result result = ApplyAction(simulation_stage_);
+			board::BoardActionAnalyzer action_analyzer;
+
+			Result result = ApplyAction(action_analyzer, simulation_stage_);
 
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded();
@@ -82,21 +87,23 @@ namespace mcts
 		}
 
 		template <typename StageHandler>
-		inline Result TreeBuilder::ApplyAction(StageHandler&& stage_handler)
+		inline Result TreeBuilder::ApplyAction(
+			board::BoardActionAnalyzer & action_analyzer,
+			StageHandler&& stage_handler)
 		{
 			// sometimes an action might in fact an INVALID action
 			// here use a loop to retry on those cases
 			while (true) {
 				// TODO: record the valid actions when the node is expanded at the first time
 				// then, we can use it for the next iterations
-				int choices = episode_state_.GetBoard().GetActionsCount();
+				int choices = episode_state_.GetBoard().GetActionsCount(action_analyzer);
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), [choices]() {
 					return board::ActionChoices(choices);
 				});
 
 				if (episode_state_.IsValid()) {
 					Result result = episode_state_.GetBoard().ApplyAction(
-						choice, random_generator_, action_parameter_getter_);
+						choice, action_analyzer, random_generator_, action_parameter_getter_);
 					if (result != Result::kResultInvalid) return result;
 				}
 

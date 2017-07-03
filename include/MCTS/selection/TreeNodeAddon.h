@@ -56,6 +56,7 @@ namespace mcts
 		// Note: this will lived in *every* tree node, so careful about memory footprints
 		struct TreeNodeAddon
 		{
+			board::BoardActionAnalyzer action_analyzer;
 			TreeNodeStatistic statistic;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			detail::BoardNodeMap board_node_map;

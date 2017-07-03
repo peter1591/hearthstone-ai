@@ -24,18 +24,20 @@ namespace mcts
 			}
 
 		public: // bridge to action analyzer
-			int GetActionsCount() const
+			int GetActionsCount(BoardActionAnalyzer & action_analyzer) const
 			{
 				// board action analyzer will not access hidden information
 				//   as long as the current-player is the viewer
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer_.GetActionsCount(board_);
+				return action_analyzer.GetActionsCount(board_);
 			}
 
-			Result ApplyAction(int action, RandomGenerator & random, ActionParameterGetter & action_parameters)
+			Result ApplyAction(int action,
+				BoardActionAnalyzer & action_analyzer,
+				RandomGenerator & random, ActionParameterGetter & action_parameters)
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer_.ApplyAction(board_, action, random, action_parameters);
+				return action_analyzer.ApplyAction(board_, action, random, action_parameters);
 			}
 
 		public:
@@ -45,9 +47,6 @@ namespace mcts
 		private:
 			state::State & board_;
 			state::PlayerSide side_;
-
-			BoardActionAnalyzer action_analyzer_;
-
 			state::State saved_board_;
 		};
 	}
