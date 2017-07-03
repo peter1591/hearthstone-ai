@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include "MCTS/Types.h"
 
 namespace mcts
@@ -22,18 +23,21 @@ namespace mcts
 			};
 
 		public:
-			int GetActionsCount(state::State const& board) const;
+			int GetActionsCount(state::State const& board);
 			Result ApplyAction(
 				state::State & board,
 				int action,
 				RandomGenerator & random,
-				ActionParameterGetter & action_parameters) const;
+				ActionParameterGetter & action_parameters);
 
 		private:
 			Result PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
-			Result Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
+			Result Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
 			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
+
+		private:
+			std::optional<std::vector<state::CardRef>> attackers_;
 		};
 	}
 }
