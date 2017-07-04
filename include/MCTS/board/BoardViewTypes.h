@@ -42,6 +42,29 @@ namespace mcts
 				static int constexpr change_id = 1;
 			};
 
+			struct SelfHero : public Hero
+			{
+				bool attackable;
+
+				void Fill(state::Cards::Card const& hero, bool now_attackable) {
+					Hero::Fill(hero);
+					attackable = now_attackable;
+				}
+
+				bool operator==(SelfHero const& v) const {
+					static_assert(change_id == 1);
+					if (Hero::operator!=(v)) return false;
+					if (attackable != v.attackable) return false;
+					return true;
+				}
+
+				bool operator!=(SelfHero const& v) const {
+					return !(*this == v);
+				}
+
+				static int constexpr change_id = 1;
+			};
+
 			struct Crystal
 			{
 				int current;
@@ -140,6 +163,8 @@ namespace mcts
 				int max_hp;
 
 				bool silenced;
+				// TODO: more flags
+				//   charge, cant_attack, cant_attack_hero, has enchant?, has deathrattle?
 
 				void Fill(state::Cards::Card const& card) {
 					card_id = card.GetCardId();
@@ -165,7 +190,31 @@ namespace mcts
 				static int constexpr change_id = 1;
 			};
 
+			struct SelfMinion : public Minion
+			{
+				bool attackable;
+
+				void Fill(state::Cards::Card const& card, bool now_attackable) {
+					Minion::Fill(card);
+					attackable = now_attackable;
+				};
+
+				bool operator==(SelfMinion const& v) const {
+					static_assert(change_id == 1);
+					if (Minion::operator!=(v)) return false;
+					if (attackable != v.attackable) return false;
+					return true;
+				}
+
+				bool operator!=(SelfMinion const& v) const {
+					return !(*this == v);
+				}
+
+				static int constexpr change_id = 1;
+			};
+
 			using Minions = std::vector<Minion>;
+			using SelfMinions = std::vector<SelfMinion>;
 
 			struct SelfHandCard
 			{
@@ -281,6 +330,17 @@ namespace std {
 	};
 
 	template <>
+	struct hash<mcts::board::boardview::SelfHero> {
+		std::size_t operator()(mcts::board::boardview::SelfHero const& v) const
+		{
+			static_assert(std::decay_t<decltype(v)>::change_id == 1);
+			std::size_t result = std::hash<mcts::board::boardview::Hero>()(v);
+			Utils::HashCombine::hash_combine(result, v.attackable);
+			return result;
+		}
+	};
+
+	template <>
 	struct hash<mcts::board::boardview::Crystal> {
 		std::size_t operator()(mcts::board::boardview::Crystal const& v) const
 		{
@@ -338,8 +398,31 @@ namespace std {
 	};
 
 	template <>
+	struct hash<mcts::board::boardview::SelfMinion> {
+		std::size_t operator()(mcts::board::boardview::SelfMinion const& v) const
+		{
+			static_assert(std::decay_t<decltype(v)>::change_id == 1);
+			std::size_t result = std::hash<mcts::board::boardview::Minion>()(v);
+			Utils::HashCombine::hash_combine(result, v.attackable);
+			return result;
+		}
+	};
+
+	template <>
 	struct hash<mcts::board::boardview::Minions> {
 		std::size_t operator()(mcts::board::boardview::Minions const& v) const
+		{
+			std::size_t result = 0;
+			for (auto const& minion : v) {
+				Utils::HashCombine::hash_combine(result, minion);
+			}
+			return result;
+		}
+	};
+
+	template <>
+	struct hash<mcts::board::boardview::SelfMinions> {
+		std::size_t operator()(mcts::board::boardview::SelfMinions const& v) const
 		{
 			std::size_t result = 0;
 			for (auto const& minion : v) {

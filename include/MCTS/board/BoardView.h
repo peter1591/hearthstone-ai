@@ -54,11 +54,11 @@ namespace mcts
 		public:
 			int GetTurn() const { return turn_; }
 			
-			boardview::Hero const& GetSelfHero() const { return self_hero_; }
+			boardview::SelfHero const& GetSelfHero() const { return self_hero_; }
 			boardview::Crystal const& GetSelfCrystal() const { return self_crystal_; }
 			boardview::HeroPower const& GetHeroPower() const { return self_hero_power_; }
 			boardview::Weapon const& GetSelfWeapon() const { return self_weapon_; }
-			boardview::Minions const& GetSelfMinions() const { return self_minions_; }
+			boardview::SelfMinions const& GetSelfMinions() const { return self_minions_; }
 			boardview::SelfHand const& GetSelfHand() const { return self_hand_; }
 			boardview::SelfDeck const& GetSelfDeck() const { return self_deck_; }
 
@@ -75,11 +75,11 @@ namespace mcts
 
 			int turn_;
 
-			boardview::Hero self_hero_;
+			boardview::SelfHero self_hero_;
 			boardview::Crystal self_crystal_;
 			boardview::HeroPower self_hero_power_;
 			boardview::Weapon self_weapon_;
-			boardview::Minions self_minions_;
+			boardview::SelfMinions self_minions_;
 			boardview::SelfHand self_hand_;
 			boardview::SelfDeck self_deck_;
 

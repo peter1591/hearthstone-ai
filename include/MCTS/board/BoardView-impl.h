@@ -12,10 +12,12 @@ namespace mcts
 
 			{
 				state::board::Player const& self_player = state.GetBoard().Get(side);
+				FlowControl::ValidActionGetter valid_action_getter(state);
 
 				state::CardRef hero_ref = self_player.GetHeroRef();
 				assert(hero_ref.IsValid());
-				self_hero_.Fill(state.GetCard(hero_ref));
+				self_hero_.Fill(state.GetCard(hero_ref),
+					valid_action_getter.IsAttackable(hero_ref));
 
 				self_crystal_.Fill(self_player);
 
@@ -28,8 +30,9 @@ namespace mcts
 				else self_weapon_.Invalidate();
 
 				self_player.minions_.ForEach([&](state::CardRef card_ref) {
-					boardview::Minion item;
-					item.Fill(state.GetCard(card_ref));
+					boardview::SelfMinion item;
+					item.Fill(state.GetCard(card_ref),
+						valid_action_getter.IsAttackable(card_ref));
 					self_minions_.push_back(std::move(item));
 					return true;
 				});
