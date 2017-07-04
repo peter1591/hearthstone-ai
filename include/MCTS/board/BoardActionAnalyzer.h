@@ -37,7 +37,7 @@ namespace mcts
 			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
 
 		private:
-			std::optional<std::vector<state::CardRef>> attackers_;
+			std::optional<std::vector<int>> attackers_;
 		};
 	}
 }

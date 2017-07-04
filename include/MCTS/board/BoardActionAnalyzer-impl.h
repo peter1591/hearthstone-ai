@@ -42,16 +42,14 @@ namespace mcts
 		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			if (!attackers_.has_value()) {
-				// TODO: to record attacker, we should record its index
-				//    0: the hero
-				//    1~7: the minion index (started from 1)
-				// Rather than recording the state::CardRef
 				attackers_ = FlowControl::ValidActionGetter(board).GetAttackers();
 			}
 			else {
 				assert([&]() {
 					auto attackers = FlowControl::ValidActionGetter(board).GetAttackers();
-					return attackers == *attackers_;
+					return attackers == *attackers_; // in fact, we don't care the ordering
+													 // but, the logic of 'GetAttackers()' returns
+													 // the same ordering for identical board views
 				}());
 			}
 
@@ -61,7 +59,17 @@ namespace mcts
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!attackers_->empty());
 			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_->size());
-			state::CardRef attacker = (*attackers_)[idx];
+
+			int attacker_idx = (*attackers_)[idx];
+			state::CardRef attacker;
+			if (attacker_idx == 7) {
+				attacker = board.GetCurrentPlayer().GetHeroRef();
+			}
+			else {
+				assert(attacker_idx >= 0);
+				assert(attacker_idx < 7);
+				attacker = board.GetCurrentPlayer().minions_.Get((size_t)(attacker_idx));
+			}
 
 			return FlowControl::FlowController(board, flow_context).Attack(attacker);
 		}

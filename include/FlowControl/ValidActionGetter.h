@@ -31,17 +31,23 @@ namespace FlowControl
 			return true;
 		}
 
-		std::vector<state::CardRef> GetAttackers() {
-			std::vector<state::CardRef> attackers;
+		// return list of encoded indices
+		// encoded index:
+		//   0 ~ 6: minion index from left to right
+		//   7: hero
+		std::vector<int> GetAttackers() {
+			std::vector<int> attackers;
 			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId());
 			auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
-			state::CardRef hero_ref = player.GetHeroRef();
-			if (op(hero_ref)) attackers.push_back(hero_ref);
-
+			int minion_idx = 0;
 			player.minions_.ForEach([&](state::CardRef card_ref) {
-				if (op(card_ref)) attackers.push_back(card_ref);
+				if (op(card_ref)) attackers.push_back(minion_idx);
+				++minion_idx;
 			});
+
+			state::CardRef hero_ref = player.GetHeroRef();
+			if (op(hero_ref)) attackers.push_back(7);
 			
 			return attackers;
 		}
