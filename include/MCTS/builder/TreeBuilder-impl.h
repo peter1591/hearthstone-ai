@@ -94,8 +94,6 @@ namespace mcts
 			// sometimes an action might in fact an INVALID action
 			// here use a loop to retry on those cases
 			while (true) {
-				// TODO: record the valid actions when the node is expanded at the first time
-				// then, we can use it for the next iterations
 				int choices = episode_state_.GetBoard().GetActionsCount(action_analyzer);
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), [choices]() {
 					return board::ActionChoices(choices);

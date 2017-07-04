@@ -31,12 +31,14 @@ namespace mcts
 				ActionParameterGetter & action_parameters);
 
 		private:
-			Result PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
+			typedef Result (BoardActionAnalyzer::*OpFunc)(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
-			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const;
+			Result HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 
 		private:
+			std::vector<OpFunc> op_map_;
 			std::optional<std::vector<int>> attackers_;
 		};
 	}

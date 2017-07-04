@@ -9,26 +9,33 @@ namespace mcts
 	{
 		inline int BoardActionAnalyzer::GetActionsCount(state::State const& board)
 		{
-			// TODO: remove play-card if hand's empty
-			return 4;
+			if (op_map_.empty()) {
+				auto const& hand = board.GetCurrentPlayer().hand_;
+				if (!hand.Empty()) {
+					op_map_.push_back(&BoardActionAnalyzer::PlayCard);
+				}
+
+				attackers_ = FlowControl::ValidActionGetter(board).GetAttackers();
+				assert(attackers_.has_value());
+				if (!attackers_->empty()) {
+					op_map_.push_back(&BoardActionAnalyzer::Attack);
+				}
+
+				op_map_.push_back(&BoardActionAnalyzer::HeroPower);
+				op_map_.push_back(&BoardActionAnalyzer::EndTurn);
+			}
+
+			return (int)op_map_.size();
 		}
 
 		inline Result BoardActionAnalyzer::ApplyAction(state::State & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
-			switch (action) {
-			case 0:
-				return PlayCard(board, random, action_parameters);
-			case 1:
-				return Attack(board, random, action_parameters);
-			case 2:
-				return HeroPower(board, random, action_parameters);
-			case 3:
-				return EndTurn(board, random, action_parameters);
-			}
-			assert(false);
-			return Result::kResultInvalid;
+			assert(!op_map_.empty());
+			assert(action >= 0);
+			assert(action < op_map_.size());
+			return (this->*op_map_[action])(board, random, action_parameters);
 		}
 
-		inline Result BoardActionAnalyzer::PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const
+		inline Result BoardActionAnalyzer::PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, [&board]() {
 				auto const& hand = board.GetCurrentPlayer().hand_;
@@ -41,19 +48,14 @@ namespace mcts
 
 		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
-			if (!attackers_.has_value()) {
-				attackers_ = FlowControl::ValidActionGetter(board).GetAttackers();
-			}
-			else {
-				assert([&]() {
-					auto attackers = FlowControl::ValidActionGetter(board).GetAttackers();
-					return attackers == *attackers_; // in fact, we don't care the ordering
-													 // but, the logic of 'GetAttackers()' returns
-													 // the same ordering for identical board views
-				}());
-			}
-
 			assert(attackers_.has_value());
+			assert([&]() {
+				auto attackers = FlowControl::ValidActionGetter(board).GetAttackers();
+				return attackers == *attackers_; // in fact, we don't care the ordering
+													// but, the logic of 'GetAttackers()' returns
+													// the same ordering for identical board views
+			}());
+
 			if (attackers_->empty()) return Result::kResultInvalid;
 
 			FlowControl::FlowContext flow_context(random, action_parameters);
@@ -74,13 +76,13 @@ namespace mcts
 			return FlowControl::FlowController(board, flow_context).Attack(attacker);
 		}
 
-		inline Result BoardActionAnalyzer::HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const
+		inline Result BoardActionAnalyzer::HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			return FlowControl::FlowController(board, flow_context).HeroPower();
 		}
 
-		inline Result BoardActionAnalyzer::EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters) const
+		inline Result BoardActionAnalyzer::EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			return FlowControl::FlowController(board, flow_context).EndTurn();
