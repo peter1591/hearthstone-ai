@@ -34,7 +34,7 @@ namespace FlowControl
 				UpdateWeapon(state, flow_context, card_ref, new_states);
 				break;
 			default:
-				throw std::exception("not implemented");
+				throw std::runtime_error("not implemented");
 			}
 			assert(GetCard().GetRawData().enchanted_states == new_states);
 

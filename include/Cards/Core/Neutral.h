@@ -176,7 +176,7 @@ namespace Cards
 				Manipulate(context).OnBoardMinion(context.card_ref_).Enchant().Add<Card_CS2_226e<6>>();
 				break;
 			default:
-				throw std::exception("invalid minion count");
+				throw std::runtime_error("invalid minion count");
 			}
 		}
 	};

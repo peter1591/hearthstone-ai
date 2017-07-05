@@ -30,7 +30,7 @@ namespace state
 
 			void Add(::Cards::CardId card_id, CardRef card)
 			{
-				if (Exists(card_id)) throw std::exception("Secret already exists");
+				if (Exists(card_id)) throw std::runtime_error("Secret already exists");
 				secrets_.insert(std::make_pair((int)card_id, card));
 			}
 

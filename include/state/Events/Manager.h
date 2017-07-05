@@ -36,7 +36,7 @@ namespace state
 			template <typename EventTriggerType, typename... Args>
 			void TriggerEvent(Args&&... args)
 			{
-				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) throw std::exception("reach maximum event trigger recursive");
+				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) throw std::runtime_error("reach maximum event trigger recursive");
 				++event_trigger_recursive_count_;
 				GetHandlersContainer<EventTriggerType>().TriggerAll(std::forward<Args>(args)...);
 				--event_trigger_recursive_count_;
@@ -45,7 +45,7 @@ namespace state
 			template <typename EventTriggerType, typename... Args>
 			void TriggerCategorizedEvent(CardRef card_ref, Args&&... args)
 			{
-				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) throw std::exception("reach maximum event trigger recursive");
+				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) throw std::runtime_error("reach maximum event trigger recursive");
 				++event_trigger_recursive_count_;
 				GetCategorizedHandlersContainer<EventTriggerType>()
 					.TriggerAll(card_ref, std::forward<Args>(args)...);

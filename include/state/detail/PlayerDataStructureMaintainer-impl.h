@@ -123,7 +123,7 @@ namespace state {
 			assert(cards_mgr.Get(card_ref).GetCardType() == kCardTypeHero);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZonePlay);
 			board::Player & player = board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier());
-			if (player.GetHeroRef().IsValid()) throw std::exception("hero should be removed first");
+			if (player.GetHeroRef().IsValid()) throw std::runtime_error("hero should be removed first");
 			player.SetHeroRef(card_ref);
 		}
 		inline void PlayerDataStructureMaintainer<kCardTypeHero, kCardZonePlay>::

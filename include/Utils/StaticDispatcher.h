@@ -41,9 +41,9 @@ namespace Utils
 				LOOP_X4096(0)
 			};
 
-			if (id < 0) throw std::exception("Invalid id");
+			if (id < 0) throw std::runtime_error("Invalid id");
 			constexpr auto jump_table_size = sizeof(jump_table) / sizeof(*jump_table);
-			if (id >= jump_table_size) throw std::exception("Need a larger jump table");
+			if (id >= jump_table_size) throw std::runtime_error("Need a larger jump table");
 
 			return (*jump_table[id])(std::forward<Args>(args)...);
 

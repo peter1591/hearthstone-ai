@@ -100,7 +100,7 @@ namespace state {
 			case kCardZoneNewlyCreated:
 				return ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("Unknown card zone");
+				throw std::runtime_error("Unknown card zone");
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace state {
 			case kCardZoneNewlyCreated:
 				return ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
-				throw std::exception("Unknown card zone");
+				throw std::runtime_error("Unknown card zone");
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -186,7 +186,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -209,7 +209,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 		template <>
@@ -231,7 +231,7 @@ namespace state {
 			case kCardTypeEnchantment:
 				assert(false); // should not specify position
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -263,7 +263,7 @@ namespace state {
 			case kCardTypeWeapon:
 				return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 
@@ -283,7 +283,7 @@ namespace state {
 			case kCardTypeWeapon:
 				return ZoneChangerWithUnknownZone<kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
 			default:
-				throw std::exception("unknown card type");
+				throw std::runtime_error("unknown card type");
 			}
 		}
 

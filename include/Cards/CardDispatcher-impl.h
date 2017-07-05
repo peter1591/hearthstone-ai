@@ -68,7 +68,7 @@ namespace Cards
 					GeneralCardBase::Init(data);
 					return;
 				}
-				throw std::exception("card is not implemented");
+				throw std::runtime_error("card is not implemented");
 			}
 		};
 	}

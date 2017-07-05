@@ -139,7 +139,7 @@ namespace Cards
 
 			if (race == "") return state::kCardRaceInvalid;
 
-			throw std::exception("unknown race");
+			throw std::runtime_error("unknown race");
 		}
 
 		state::CardSet GetCardSet(Json::Value const& json)
@@ -167,7 +167,7 @@ namespace Cards
 			if (set == "MISSIONS") return state::kCardSetInvalid;
 			if (set == "CREDITS") return state::kCardSetInvalid;
 			if (set == "HERO_SKINS") return state::kCardSetInvalid;
-			throw std::exception("unknown set");
+			throw std::runtime_error("unknown set");
 		}
 
 		state::CardRarity GetCardRarity(Json::Value const& json)
@@ -182,7 +182,7 @@ namespace Cards
 			if (rarity == "FREE") return state::kCardRarityInvalid;
 			if (rarity == "") return state::kCardRarityInvalid;
 
-			throw std::exception("unknown rarity");
+			throw std::runtime_error("unknown rarity");
 		}
 
 		void AddCard(Json::Value const& json, std::vector<CardData> & cards)
@@ -193,7 +193,7 @@ namespace Cards
 			if (origin_id == "PlaceholderCard") return;
 
 			if (origin_id_map_.find(origin_id) != origin_id_map_.end()) {
-				throw std::exception("Card ID string collision.");
+				throw std::runtime_error("Card ID string collision.");
 			}
 
 			CardData new_card;
@@ -203,7 +203,7 @@ namespace Cards
 			new_card.cost = json["cost"].asInt();
 			new_card.card_rarity = GetCardRarity(json);
 
-			if (json.isMember("set") == false) throw std::exception("set field not exists");
+			if (json.isMember("set") == false) throw std::runtime_error("set field not exists");
 			new_card.card_set = GetCardSet(json);
 
 			if (GetAllCardSets().find(new_card.card_set) == GetAllCardSets().end()) {
