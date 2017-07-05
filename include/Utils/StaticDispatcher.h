@@ -18,7 +18,7 @@ namespace Utils
 		static Ret Invoke(int id, Args&&... args)
 		{
 #define INVOKE_CASE(n) \
-			&InvokerType<DispatchMap<n>::type>::Invoke,
+			&InvokerType<typename DispatchMap<n>::type>::Invoke,
 
 #define LOOP_X1(n) INVOKE_CASE(n)
 #define LOOP_X2(n) LOOP_X1(n) LOOP_X1(n+1)
