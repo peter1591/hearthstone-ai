@@ -89,7 +89,7 @@ namespace FlowControl
 			typedef Utils::CloneableContainers::RemovableVector<EnchantmentType> ContainerType;
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
+			IdentifierType PushBackAuraEnchantment(EnchantmentType&& item)
 			{
 				assert(item.apply_functor);
 
@@ -105,7 +105,7 @@ namespace FlowControl
 			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& item);
 
 			template <typename EnchantmentType>
-			typename IdentifierType PushBackEventHookedEnchantment(
+			IdentifierType PushBackEventHookedEnchantment(
 				FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
 				EnchantmentType&& item, enchantment::Enchantments::EventHookedEnchantment::AuxData const& aux_data);
 
