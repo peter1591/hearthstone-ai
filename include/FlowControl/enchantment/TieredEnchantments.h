@@ -34,7 +34,7 @@ namespace FlowControl
 			template <typename EnchantmentType>
 			void PushBackNormalEnchantment(state::State const& state, EnchantmentType&& enchantment)
 			{
-				GetEnchantments<EnchantmentType::normal_tier>().PushBackNormalEnchantment<EnchantmentType>(state, std::forward<EnchantmentType>(enchantment));
+				GetEnchantments<EnchantmentType::normal_tier>().PushBackNormalEnchantment(state, std::forward<EnchantmentType>(enchantment));
 			}
 
 			template <typename EnchantmentType>
