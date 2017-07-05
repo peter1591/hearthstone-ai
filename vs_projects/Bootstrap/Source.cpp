@@ -12,7 +12,7 @@ static void WriteFormattedJson(std::string const& from, std::string const& to)
 	std::ifstream input(from);
 
 	std::cout << "--> Reading file" << std::endl;
-	if (reader.parse(input, json, false) == false) throw std::exception("parse failed");
+	if (reader.parse(input, json, false) == false) throw std::runtime_error("parse failed");
 
 	Json::StyledStreamWriter writer;
 	std::ofstream output(to);
