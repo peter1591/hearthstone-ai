@@ -43,10 +43,8 @@ namespace state
 		{
 		public:
 			class ZoneSetter {
-				template <CardZone, CardType> friend class ZoneChanger;
 			public:
 				ZoneSetter(CardData & data) : data_(data) {}
-			private:
 				void operator()(PlayerIdentifier player, CardZone new_zone) {
 					data_.enchanted_states.player = player;
 					Zone(new_zone);

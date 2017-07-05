@@ -25,7 +25,7 @@ namespace FlowControl
 				GetCard().ClearNumAttacksThisTurn();
 			}
 
-			state::CardRef HeroManipulator::Transform(Cards::CardId id);
+			state::CardRef Transform(Cards::CardId id);
 
 		private:
 			state::PlayerIdentifier player_id_;

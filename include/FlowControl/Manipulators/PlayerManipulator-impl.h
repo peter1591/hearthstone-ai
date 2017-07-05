@@ -3,6 +3,7 @@
 #include "FlowControl/Manipulators/HeroManipulator.h"
 #include "FlowControl/Manipulators/PlayerManipulator.h"
 #include "Cards/CardDispatcher.h"
+#include "state/Types.h"
 
 namespace FlowControl
 {
