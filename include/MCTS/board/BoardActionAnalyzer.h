@@ -23,6 +23,8 @@ namespace mcts
 			};
 
 		public:
+			BoardActionAnalyzer() : op_map_size_(0) {}
+
 			int GetActionsCount(state::State const& board);
 			Result ApplyAction(
 				state::State & board,
@@ -38,7 +40,8 @@ namespace mcts
 			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 
 		private:
-			std::vector<OpFunc> op_map_;
+			std::array<OpFunc, kActionMax> op_map_;
+			size_t op_map_size_;
 			std::optional<std::vector<int>> attackers_;
 		};
 	}

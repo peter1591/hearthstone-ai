@@ -9,29 +9,36 @@ namespace mcts
 	{
 		inline int BoardActionAnalyzer::GetActionsCount(state::State const& board)
 		{
-			if (op_map_.empty()) {
+			if (op_map_size_ == 0) {
+				op_map_size_ = 0;
+
 				auto const& hand = board.GetCurrentPlayer().hand_;
 				if (!hand.Empty()) {
-					op_map_.push_back(&BoardActionAnalyzer::PlayCard);
+					op_map_[op_map_size_] = &BoardActionAnalyzer::PlayCard;
+					++op_map_size_;
 				}
 
 				attackers_ = FlowControl::ValidActionGetter(board).GetAttackers();
 				assert(attackers_.has_value());
 				if (!attackers_->empty()) {
-					op_map_.push_back(&BoardActionAnalyzer::Attack);
+					op_map_[op_map_size_] = &BoardActionAnalyzer::Attack;
+					++op_map_size_;
 				}
 
-				op_map_.push_back(&BoardActionAnalyzer::HeroPower);
-				op_map_.push_back(&BoardActionAnalyzer::EndTurn);
+				op_map_[op_map_size_] = &BoardActionAnalyzer::HeroPower;
+				++op_map_size_;
+
+				op_map_[op_map_size_] = &BoardActionAnalyzer::EndTurn;
+				++op_map_size_;
 			}
 
-			return (int)op_map_.size();
+			return (int)op_map_size_;
 		}
 
 		inline Result BoardActionAnalyzer::ApplyAction(state::State & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
-			assert(!op_map_.empty());
+			assert(op_map_size_ > 0);
 			assert(action >= 0);
-			assert(action < op_map_.size());
+			assert(action < op_map_size_);
 			return (this->*op_map_[action])(board, random, action_parameters);
 		}
 
