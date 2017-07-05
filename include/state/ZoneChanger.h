@@ -136,6 +136,104 @@ namespace state {
 		CardRef card_ref_;
 	};
 
+	namespace detail {
+		template <CardZone ChangingCardZone, CardZone ChangeToZone>
+		struct ZoneChangerWithUnknownType {
+			static void ChangeTo(State & state_, board::Board & board_, Cards::Manager & cards_mgr_, CardRef card_ref_,
+				PlayerIdentifier player_identifier)
+			{
+				switch (cards_mgr_.Get(card_ref_).GetCardType())
+				{
+				case kCardTypeHero:
+					return ZoneChanger<ChangingCardZone, kCardTypeHero>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeHeroPower:
+					return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeMinion:
+					return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeSpell:
+					return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeWeapon:
+					return ZoneChanger<ChangingCardZone, kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeEnchantment:
+					return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				default:
+					throw std::runtime_error("unknown card type");
+				}
+			}
+
+			static void ChangeTo(State & state_, board::Board & board_, Cards::Manager & cards_mgr_, CardRef card_ref_,
+				PlayerIdentifier player_identifier, int pos)
+			{
+				switch (cards_mgr_.Get(card_ref_).GetCardType())
+				{
+				case kCardTypeHero:
+					return ZoneChanger<ChangingCardZone, kCardTypeHero>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				case kCardTypeHeroPower:
+					return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				case kCardTypeMinion:
+					return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				case kCardTypeSpell:
+					return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				case kCardTypeWeapon:
+					return ZoneChanger<ChangingCardZone, kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				case kCardTypeEnchantment:
+					return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				default:
+					throw std::runtime_error("unknown card type");
+				}
+			}
+		};
+
+		template <CardZone ChangingCardZone>
+		struct ZoneChangerWithUnknownType<ChangingCardZone, kCardZonePlay> {
+			static void ChangeTo(State & state_, board::Board & board_, Cards::Manager & cards_mgr_, CardRef card_ref_,
+				PlayerIdentifier player_identifier)
+			{
+				static constexpr CardZone ChangeToZone = kCardZonePlay;
+				switch (cards_mgr_.Get(card_ref_).GetCardType())
+				{
+				case kCardTypeHero:
+					return ZoneChanger<ChangingCardZone, kCardTypeHero>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeHeroPower:
+					return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeSpell:
+					return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeWeapon:
+					return ZoneChanger<ChangingCardZone, kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeEnchantment:
+					return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				case kCardTypeMinion:
+					assert(false); // should specify position
+				default:
+					throw std::runtime_error("unknown card type");
+				}
+			}
+
+			static void ChangeTo(State & state_, board::Board & board_, Cards::Manager & cards_mgr_, CardRef card_ref_,
+				PlayerIdentifier player_identifier, int pos)
+			{
+				static constexpr CardZone ChangeToZone = kCardZonePlay;
+				switch (cards_mgr_.Get(card_ref_).GetCardType())
+				{
+				case kCardTypeHero:
+					assert(false); // should not specify position
+				case kCardTypeHeroPower:
+					assert(false); // should not specify position
+				case kCardTypeMinion:
+					return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				case kCardTypeSpell:
+					assert(false); // should not specify position
+				case kCardTypeWeapon:
+					assert(false); // should not specify position
+				case kCardTypeEnchantment:
+					assert(false); // should not specify position
+				default:
+					throw std::runtime_error("unknown card type");
+				}
+			}
+		};
+	}
+
 	template <CardZone ChangingCardZone>
 	class ZoneChangerWithUnknownType
 	{
@@ -149,90 +247,15 @@ namespace state {
 		template <CardZone ChangeToZone>
 		void ChangeTo(PlayerIdentifier player_identifier)
 		{
-			switch (cards_mgr_.Get(card_ref_).GetCardType())
-			{
-			case kCardTypeHero:
-				return ZoneChanger<ChangingCardZone, kCardTypeHero>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeHeroPower:
-				return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeMinion:
-				return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeSpell:
-				return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeWeapon:
-				return ZoneChanger<ChangingCardZone, kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeEnchantment:
-				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			default:
-				throw std::runtime_error("unknown card type");
-			}
+			return detail::ZoneChangerWithUnknownType<ChangingCardZone, ChangeToZone>::ChangeTo(
+				state_, board_, cards_mgr_, card_ref_, player_identifier);
 		}
 
 		template <CardZone ChangeToZone>
 		void ChangeTo(PlayerIdentifier player_identifier, int pos)
 		{
-			switch (cards_mgr_.Get(card_ref_).GetCardType())
-			{
-			case kCardTypeHero:
-				return ZoneChanger<ChangingCardZone, kCardTypeHero>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeHeroPower:
-				return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeMinion:
-				return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeSpell:
-				return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeWeapon:
-				return ZoneChanger<ChangingCardZone, kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeEnchantment:
-				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			default:
-				throw std::runtime_error("unknown card type");
-			}
-		}
-
-		template <>
-		void ChangeTo<kCardZonePlay>(PlayerIdentifier player_identifier)
-		{
-			static constexpr CardZone ChangeToZone = kCardZonePlay;
-			switch (cards_mgr_.Get(card_ref_).GetCardType())
-			{
-			case kCardTypeHero:
-				return ZoneChanger<ChangingCardZone, kCardTypeHero>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeHeroPower:
-				return ZoneChanger<ChangingCardZone, kCardTypeHeroPower>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeMinion:
-				assert(false); // should specify position
-			case kCardTypeSpell:
-				return ZoneChanger<ChangingCardZone, kCardTypeSpell>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeWeapon:
-				return ZoneChanger<ChangingCardZone, kCardTypeWeapon>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			case kCardTypeEnchantment:
-				return ZoneChanger<ChangingCardZone, kCardTypeEnchantment>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
-			default:
-				throw std::runtime_error("unknown card type");
-			}
-		}
-		template <>
-		void ChangeTo<kCardZonePlay>(PlayerIdentifier player_identifier, int pos)
-		{
-			static constexpr CardZone ChangeToZone = kCardZonePlay;
-			switch (cards_mgr_.Get(card_ref_).GetCardType())
-			{
-			case kCardTypeHero:
-				assert(false); // should not specify position
-			case kCardTypeHeroPower:
-				assert(false); // should not specify position
-			case kCardTypeMinion:
-				return ZoneChanger<ChangingCardZone, kCardTypeMinion>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
-			case kCardTypeSpell:
-				assert(false); // should not specify position
-			case kCardTypeWeapon:
-				assert(false); // should not specify position
-			case kCardTypeEnchantment:
-				assert(false); // should not specify position
-			default:
-				throw std::runtime_error("unknown card type");
-			}
+			return detail::ZoneChangerWithUnknownType<ChangingCardZone, ChangeToZone>::ChangeTo(
+				state_, board_, cards_mgr_, card_ref_, player_identifier, pos);
 		}
 
 	private:
