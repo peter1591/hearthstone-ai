@@ -22,7 +22,6 @@ namespace state
 
 			size_t Size() const { return minions_.size(); }
 			CardRef Get(size_t pos) const {
-				assert(pos >= 0);
 				assert(pos <= minions_.size());
 				return minions_[pos];
 			}

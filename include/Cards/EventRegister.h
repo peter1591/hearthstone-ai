@@ -189,7 +189,7 @@ namespace Cards
 		struct EventHandler {
 			template <typename UnderlyingHandler>
 			static bool HandleEvent(state::CardRef self, EventType::Context const& context) {
-				assert(context.damage_ > 0);
+				assert(*context.damage_ > 0);
 				return UnderlyingHandler::HandleEvent(self, context);
 			}
 		};

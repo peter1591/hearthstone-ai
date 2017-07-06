@@ -106,7 +106,7 @@ namespace state
 			void SetPlayOrder(int play_order) { data_.play_order = play_order; }
 
 			const PlayerIdentifier GetPlayerIdentifier() const { return data_.enchanted_states.player; }
-			const CardZone GetZone() const { return data_.zone; }
+			CardZone GetZone() const { return data_.zone; }
 			int GetZonePosition() const { return data_.zone_position; }
 
 			int GetCost() const { return data_.enchanted_states.cost; }

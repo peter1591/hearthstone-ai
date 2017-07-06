@@ -1,6 +1,8 @@
 CXX=g++-7
 CFLAGS=-std=c++17
-CFLAGS += -Wall -Werror
+CFLAGS += -Wall -Wextra -Werror \
+					-Wno-implicit-fallthrough \
+					-Wno-unused-parameter
 
 #CXX=clang-5.0
 #CFLAGS=-std=c++1z
