@@ -51,7 +51,7 @@ namespace Cards
 	namespace detail {
 		template <typename EventHandler, typename EventHandlerArg> struct EventHandlerInvoker {
 			template <typename... Args> static auto Invoke(Args&&... args) {
-				return EventHandler::HandleEvent<EventHandlerArg>(std::forward<Args>(args)...);
+				return EventHandler::template HandleEvent<EventHandlerArg>(std::forward<Args>(args)...);
 			}
 		};
 		template <typename EventHandler> struct EventHandlerInvoker<EventHandler, void> {
@@ -112,14 +112,16 @@ namespace Cards
 		struct AddedToPlayZone {
 			template <typename Context>
 			static void Invoke(Context context) {
-				return LifeTime::AddedToPlayZone<Invoker, NullInvoker>::Invoke(std::forward<Context>(context));
+				return LifeTime::template AddedToPlayZone<Invoker, NullInvoker>
+					::Invoke(std::forward<Context>(context));
 			}
 		};
 
 		struct AddedToHandZone {
 			template <typename Context>
 			static void Invoke(Context context) {
-				return LifeTime::AddedToHandZone<Invoker, NullInvoker>::Invoke(std::forward<Context>(context));
+				return LifeTime::template AddedToHandZone<Invoker, NullInvoker>
+					::Invoke(std::forward<Context>(context));
 			}
 		};
 	};

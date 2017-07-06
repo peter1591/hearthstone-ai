@@ -11,13 +11,13 @@ namespace FlowControl
 		inline void MinionManipulator<Zone>::SwapWith(state::CardRef ref)
 		{
 			state_.GetZoneChanger<state::kCardTypeMinion, SwapWithZone>(ref)
-				.ChangeTo<state::kCardZoneSetASide>(state_.GetCard(ref).GetPlayerIdentifier());
+				.template ChangeTo<state::kCardZoneSetASide>(state_.GetCard(ref).GetPlayerIdentifier());
 
 			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(card_ref_)
 				.ReplaceBy(ref);
 
 			FlowControl::Manipulate(state_, flow_context_).MinionInZone<state::kCardZoneSetASide>(card_ref_)
-				.MoveTo<SwapWithZone>(state_.GetCard(card_ref_).GetPlayerIdentifier());
+				.template MoveTo<SwapWithZone>(state_.GetCard(card_ref_).GetPlayerIdentifier());
 		}
 
 		template <state::CardZone Zone>
@@ -52,7 +52,7 @@ namespace FlowControl
 			if (!PreMoveTo<ZoneTo>(to_player)) return;
 
 			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(card_ref_)
-				.ChangeTo<ZoneTo>(to_player);
+				.template ChangeTo<ZoneTo>(to_player);
 		}
 
 		template <state::CardZone Zone>
@@ -62,7 +62,7 @@ namespace FlowControl
 			if (!PreMoveTo<ZoneTo>(to_player)) return;
 
 			state_.GetZoneChanger<state::kCardTypeMinion, Zone>(card_ref_)
-				.ChangeTo<ZoneTo>(to_player, pos);
+				.template ChangeTo<ZoneTo>(to_player, pos);
 		}
 	}
 }

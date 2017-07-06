@@ -69,7 +69,7 @@ namespace FlowControl
 			DestroyWeapon();
 
 			state_.GetZoneChanger<state::kCardTypeWeapon, KnownZone>(weapon_ref)
-				.ChangeTo<state::kCardZonePlay>(player_);
+				.template ChangeTo<state::kCardZonePlay>(player_);
 		}
 
 		inline void PlayerManipulator::DestroyWeapon()

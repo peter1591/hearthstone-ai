@@ -2,6 +2,7 @@
 
 #include "state/State.h"
 #include "state/targetor/TargetsGenerator.h"
+#include "FlowControl/Manipulate.h"
 #include "Cards/id-map.h"
 #include "Cards/Contexts.h"
 
@@ -49,12 +50,6 @@ namespace Cards
 		static FlowControl::Manipulate Manipulate(Context&& context)
 		{
 			return context.manipulate_;
-		}
-
-		template <typename Context>
-		static FlowControl::Manipulators::Helpers::DeathrattlesHelper Deathrattles(Context&& context)
-		{
-			return Manipulate(context).Minion(context.card_ref_).Deathrattles();
 		}
 
 		static state::targetor::TargetsGenerator Targets(state::PlayerIdentifier targeting_player) {

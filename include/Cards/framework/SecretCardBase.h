@@ -15,7 +15,7 @@ namespace Cards
 		{
 			auto const& data = Cards::Database::GetInstance().Get(
 				(Cards::CardId)CardClassIdMap<T>::id);
-			GeneralCardBase::Init(data);
+			GeneralCardBase<T, Ts...>::Init(data);
 			assert(data.card_type == state::kCardTypeSpell);
 
 			this->is_secret_card = true;

@@ -20,7 +20,7 @@ namespace Cards
 
 	private:
 		void Init(Database::CardData const& data) {
-			GeneralCardBase::Init(data);
+			GeneralCardBase<T, Ts...>::Init(data);
 
 			assert(data.card_type == state::kCardTypeMinion);
 
@@ -28,7 +28,7 @@ namespace Cards
 		}
 
 	protected:
-		template <typename... Types>
-		auto AdjacentBuffAura() { return AdjacentBuffHelper<T, Types...>(*this); }
+		template <typename Types>
+		auto AdjacentBuffAura() { return AdjacentBuffHelper<T, Types>(*this); }
 	};
 }

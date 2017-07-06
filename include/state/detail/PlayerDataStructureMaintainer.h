@@ -2,7 +2,6 @@
 
 #include <assert.h>
 #include "state/Types.h"
-#include "state/Cards/Card.h"
 
 namespace state {
 	namespace board { class Board; }

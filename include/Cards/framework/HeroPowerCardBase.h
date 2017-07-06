@@ -15,7 +15,7 @@ namespace Cards
 		{
 			auto const& data = Cards::Database::GetInstance().Get(
 				(Cards::CardId)CardClassIdMap<T>::id);
-			GeneralCardBase::Init(data);
+			GeneralCardBase<T>::Init(data);
 
 			assert(data.card_type == state::kCardTypeHeroPower);
 

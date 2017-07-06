@@ -44,8 +44,8 @@ namespace Cards
 		template <typename EmitPolicy>
 		auto OwnerPlayerFlagAura() { return  OwnerPlayerFlagAuraHelper<T, EmitPolicy, FlowControl::aura::kUpdateOwnerChanges>(*this); }
 
-		template <typename... Types>
-		auto Enrage() { return EnrageHelper<T, Types...>(*this); }
+		template <typename Types>
+		auto Enrage() { return EnrageHelper<T, Types>(*this); }
 
 		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler = T>
 		using RegisteredEventType = OneEventRegisterHelper<LifeTime, SelfPolicy, EventType, EventHandler>;

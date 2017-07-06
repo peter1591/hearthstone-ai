@@ -488,7 +488,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef ref) {
 				if (ref == context.card_ref_) return;
-				if (context.manipulate_.GetCard(ref).GetCardType() != state::kCardRaceMurloc) return;
+				if (context.manipulate_.GetCard(ref).GetRace() != state::kCardRaceMurloc) return;
 				context.manipulate_.OnBoardMinion(ref).Enchant().Add<Card_EX1_103e>();
 			});
 		}
