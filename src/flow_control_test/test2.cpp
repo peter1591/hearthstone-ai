@@ -9,9 +9,9 @@ class Test2_ActionParameterGetter : public FlowControl::IActionParameterGetter
 public:
 	state::CardRef GetDefender(std::vector<state::CardRef> const& targets)
 	{
-		assert(next_defender_count == targets.size());
+		assert(next_defender_count == (int)targets.size());
 		assert(next_defender_idx >= 0);
-		assert(next_defender_idx < targets.size());
+		assert(next_defender_idx < (int)targets.size());
 		return targets[next_defender_idx];
 	}
 
@@ -22,7 +22,7 @@ public:
 
 	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, std::vector<state::CardRef> const& targets)
 	{
-		assert(targets.size() == next_specified_target_count);
+		assert((int)targets.size() == next_specified_target_count);
 
 		if (next_specified_target_idx < 0) return state::CardRef();
 		else return targets[next_specified_target_idx];
@@ -116,7 +116,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::CardType type, FlowCo
 	}
 	else {
 		++hand_count;
-		assert(state.GetBoard().Get(player).hand_.Size() == hand_count);
+		assert((int)state.GetBoard().Get(player).hand_.Size() == hand_count);
 		assert(state.GetBoard().Get(player).hand_.Get(hand_count - 1) == ref);
 		assert(state.GetCardsManager().Get(ref).GetZone() == state::kCardZoneHand);
 		assert(state.GetCardsManager().Get(ref).GetZonePosition() == (hand_count - 1));

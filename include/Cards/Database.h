@@ -116,7 +116,7 @@ namespace Cards
 			final_cards_ = new CardData[final_cards_size_];
 
 			// Copy to raw array to support lock-free access
-			for (int i = 0; i < cards.size(); ++i) {
+			for (size_t i = 0; i < cards.size(); ++i) {
 				final_cards_[i] = cards[i];
 			}
 

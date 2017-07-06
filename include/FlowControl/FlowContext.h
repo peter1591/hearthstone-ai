@@ -19,9 +19,9 @@ namespace FlowControl {
 	class FlowContext
 	{
 	public:
-		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters)
-			: random_(random), action_parameters_(action_parameters),
+		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
 			result_(FlowControl::kResultNotDetermined),
+			action_parameters_(action_parameters), random_(random),
 			minion_put_location_(-1), user_choice_((Cards::CardId)-1)
 		{}
 
@@ -95,8 +95,8 @@ namespace FlowControl {
 
 	private:
 		Result result_;
-		state::IRandomGenerator & random_;
 		IActionParameterGetter & action_parameters_;
+		state::IRandomGenerator & random_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 		int minion_put_location_;
 		state::CardRef specified_target_;

@@ -36,7 +36,7 @@ namespace Cards
 			std::array<bool, 4> totems_exists{ false, false, false, false };
 
 			manipulate.Board().Player(player).minions_.ForEach([&](state::CardRef card_ref) {
-				for (int i = 0; i<basic_totems_.size(); ++i) {
+				for (size_t i = 0; i<basic_totems_.size(); ++i) {
 					if (manipulate.GetCard(card_ref).GetCardId() == basic_totems_[i]) {
 						totems_exists[i] = true;
 					}

@@ -193,7 +193,7 @@ namespace Cards
 				auto op = [&](state::PlayerIdentifier player, int zone_pos) {
 					if (zone_pos < 0) return;
 					auto const& minions = context.manipulate_.Board().Player(player).minions_;
-					if (zone_pos >= minions.Size()) return;
+					if (zone_pos >= (int)minions.Size()) return;
 					state::CardRef minion_ref = minions.Get(zone_pos);
 					context.manipulate_.OnBoardMinion(minion_ref).Damage(context.card_ref_, 2);
 				};

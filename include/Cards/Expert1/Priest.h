@@ -208,7 +208,6 @@ namespace Cards
 	};
 	struct Card_EX1_335 : MinionCardBase<Card_EX1_335> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
-			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			context.new_targets.insert(context.card_ref_);
 		}
 		Card_EX1_335() {

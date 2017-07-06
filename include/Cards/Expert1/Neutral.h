@@ -373,7 +373,7 @@ namespace Cards
 			if (zone_pos > 0) {
 				context.manipulate_.OnBoardMinion(minions.Get(zone_pos - 1)).Taunt(true);
 			}
-			if (zone_pos < minions.Size() - 1) {
+			if (zone_pos < (int)minions.Size() - 1) {
 				context.manipulate_.OnBoardMinion(minions.Get(zone_pos + 1)).Taunt(true);
 			}
 		}

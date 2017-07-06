@@ -67,8 +67,9 @@ namespace Cards
 				case state::kCardTypeHero:
 					GeneralCardBase::Init(data);
 					return;
+				default:
+					throw std::runtime_error("card is not implemented");
 				}
-				throw std::runtime_error("card is not implemented");
 			}
 		};
 	}

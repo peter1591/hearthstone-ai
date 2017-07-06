@@ -142,7 +142,7 @@ namespace Cards
 			if (pos > 0) {
 				functor(manipulate.Board().Player(player).minions_.Get(pos - 1));
 			}
-			if (pos < (manipulate.Board().Player(player).minions_.Size() - 1)) {
+			if (pos < ((int)manipulate.Board().Player(player).minions_.Size() - 1)) {
 				functor(manipulate.Board().Player(player).minions_.Get(pos + 1));
 			}
 		}

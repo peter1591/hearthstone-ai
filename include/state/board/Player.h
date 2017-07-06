@@ -18,8 +18,11 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Player() : fatigue_damage_(0), hero_ref_change_id_(0), played_minions_this_turn_(0),
-				played_cards_this_turn_(0)
+			Player() :
+				played_minions_this_turn_(0),
+				played_cards_this_turn_(0),
+				hero_ref_change_id_(0),
+				fatigue_damage_(0)
 			{}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }

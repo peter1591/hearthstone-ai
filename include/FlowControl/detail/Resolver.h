@@ -151,7 +151,6 @@ namespace FlowControl
 
 			void UpdateEnchantments(state::PlayerIdentifier player)
 			{
-				state::CardRef hero_ref = state_.GetBoard().Get(player).GetHeroRef();
 				state::CardRef weapon_ref = state_.GetBoard().Get(player).GetWeaponRef();
 
 				Manipulate(state_, flow_context_).Hero(player).Enchant().Update();

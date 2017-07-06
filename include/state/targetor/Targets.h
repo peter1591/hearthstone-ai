@@ -67,8 +67,8 @@ namespace state {
 			bool include_first;
 			bool include_second;
 
-			bool include_minion;
 			bool include_hero;
+			bool include_minion;
 
 			enum TargetableType
 			{

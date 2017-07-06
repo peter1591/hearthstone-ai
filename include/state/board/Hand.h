@@ -31,7 +31,7 @@ namespace state
 
 			template <typename Functor>
 			void ForEach(Functor&& functor) const {
-				for (int i = 0; i < size_; ++i) {
+				for (size_t i = 0; i < size_; ++i) {
 					if (!functor(cards_[i])) return;
 				}
 			}
