@@ -204,5 +204,5 @@ namespace FlowControl
 				assert(GetCard().GetImmune() == new_states.immune);
 			}
 		}
-	};
+	}
 }
