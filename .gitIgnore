@@ -239,3 +239,8 @@ _Pvt_Extensions
 /pilot_run/beautified.json
 /pilot_run/data.json
 /vs_projects/flow_controller/cards.json
+
+# g++
+*.o
+a.out
+/gcc-7/flow_control/cards.json
