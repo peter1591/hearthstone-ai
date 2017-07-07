@@ -187,15 +187,14 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
 				context.manipulate_.SaveUserChoice(choice);
-				return false;
-				/*if (choice == choices[0]) {
+				if (choice == choices[0]) {
 					return true;
 				}
 				else {
 					// TODO: playable when no minion?
 					context.SetOptionalSpellTargets(context.player_).Minion();
 					return true;
-				}*/
+				}
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.GetSavedUserChoice() == choices[0]) {
