@@ -8,10 +8,6 @@ namespace mcts
 {
 	namespace board
 	{
-		class BoardView;
-
-		template <> class std::hash<BoardView>;
-
 		class BoardView
 		{
 			friend std::hash<BoardView>;

@@ -19,7 +19,13 @@ namespace mcts
 	class SOMCTS
 	{		
 	public:
-		SOMCTS(state::PlayerSide side, Statistic<> & statistic) : side_(side), statistic_(statistic) {}
+		SOMCTS(state::PlayerSide side, Statistic<> & statistic) :
+			side_(side), root_(), statistic_(statistic),
+			node_(nullptr), stage_(Stage::kStageSelection), updater_()
+		{}
+
+		SOMCTS(SOMCTS const&) = delete;
+		SOMCTS & operator=(SOMCTS const&) = delete;
 
 		void StartEpisode()
 		{

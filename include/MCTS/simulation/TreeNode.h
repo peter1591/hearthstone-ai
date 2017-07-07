@@ -14,7 +14,7 @@ namespace mcts
 		// If it's nullptr, it's a valid (child) node, but not yet being allocated
 		class TreeNode {
 		public:
-			TreeNode() : choices_(0) {}
+			TreeNode() : choices_(0), children_(), valid_idx_map_() {}
 
  			// The newly-created choices are delayed-mallocated
 			// So a following GetChoice() returns a nullptr

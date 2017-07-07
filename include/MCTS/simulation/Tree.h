@@ -32,7 +32,12 @@ namespace mcts
 			};
 
 		public:
-			Tree() : node_(&root_), last_choice_(-1) {}
+			Tree() : root_(), node_(&root_), last_choice_(-1), traversed_nodes_(),
+				first_choice_before_pending_actions_(), pending_actions_()
+			{}
+
+			Tree(Tree const&) = delete;
+			Tree & operator=(Tree const&) = delete;
 
 			void Clear() {
 				root_.Reset();

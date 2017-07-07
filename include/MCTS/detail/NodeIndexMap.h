@@ -9,6 +9,8 @@ namespace mcts
 		class NodeIndexMap
 		{
 		public:
+			NodeIndexMap() : idx_map_() {}
+
 			void PushBack(size_t idx) {
 				idx_map_.push_back(idx);
 			}
@@ -17,7 +19,6 @@ namespace mcts
 			size_t Size() const { return idx_map_.size(); }
 
 			size_t Get(size_t idx) const {
-				assert(idx >= 0);
 				assert(idx < idx_map_.size());
 				return idx_map_[idx];
 			}

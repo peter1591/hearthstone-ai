@@ -11,7 +11,7 @@ namespace mcts
 		class EpisodeState
 		{
 		public:
-			EpisodeState() : stage_(kStageSelection), is_valid_(true), board_(nullptr) {}
+			EpisodeState() : board_(nullptr), stage_(kStageSelection), is_valid_(true) {}
 
 			void Start(Stage stage, board::Board & board)
 			{

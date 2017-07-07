@@ -35,11 +35,11 @@ namespace mcts
 				static int GetChoice(ChoiceGetter const& choice_getter, board::Board const& board)
 				{
 					// TODO: use value network to enhance simulation
-					//return std::rand() % choices;
 					size_t count = choice_getter.Size();
+					assert(count > 0);
 					size_t idx = 0;
-					size_t rand_idx = (size_t)(rand() % count);
-					int result;
+					size_t rand_idx = (size_t)(std::rand() % count);
+					int result = -1;
 					choice_getter.ForEachChoice([&](int choice) {
 						if (idx == rand_idx) {
 							result = choice;
@@ -53,6 +53,6 @@ namespace mcts
 					return result;
 				}
 			};
-		};
+		}
 	}
 }

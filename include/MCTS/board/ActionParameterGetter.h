@@ -18,8 +18,8 @@ namespace mcts
 			state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
 			{
 				assert(!targets.empty());
-				size_t size = targets.size();
-				int idx = GetNumber(ActionType::kChooseDefender, (int)size);
+				int size = (int)targets.size();
+				int idx = GetNumber(ActionType::kChooseDefender, size);
 				assert(idx >= 0 && idx < size);
 				return targets[idx];
 			}
@@ -38,8 +38,8 @@ namespace mcts
 				std::vector<state::CardRef> const& targets) final
 			{
 				if (targets.empty()) return state::CardRef();
-				size_t size = targets.size();
-				int idx = GetNumber(ActionType::kChooseTarget, (int)size);
+				int size = (int)targets.size();
+				int idx = GetNumber(ActionType::kChooseTarget, size);
 				assert(idx >= 0 && idx < size);
 				return targets[idx];
 			}

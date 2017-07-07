@@ -19,6 +19,8 @@ namespace mcts
 		class TreeNodeConsistencyCheckAddons
 		{
 		public:
+			TreeNodeConsistencyCheckAddons() : board_view_(), action_type_() {}
+
 			bool Check(
 				board::Board const& board,
 				ActionType action_type,
@@ -56,6 +58,13 @@ namespace mcts
 		// Note: this will lived in *every* tree node, so careful about memory footprints
 		struct TreeNodeAddon
 		{
+			TreeNodeAddon() :
+				action_analyzer(),
+				statistic(),
+				consistency_checker(),
+				board_node_map()
+			{}
+
 			board::BoardActionAnalyzer action_analyzer;
 			TreeNodeStatistic statistic;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only

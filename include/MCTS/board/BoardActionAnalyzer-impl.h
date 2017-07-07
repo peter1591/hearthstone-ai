@@ -38,7 +38,7 @@ namespace mcts
 		inline Result BoardActionAnalyzer::ApplyAction(state::State & board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
 			assert(op_map_size_ > 0);
 			assert(action >= 0);
-			assert(action < op_map_size_);
+			assert(action < (int)op_map_size_);
 			return (this->*op_map_[action])(board, random, action_parameters);
 		}
 

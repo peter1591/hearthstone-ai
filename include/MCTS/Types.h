@@ -53,9 +53,11 @@ namespace mcts
 			case ActionType::kChooseTarget:
 			case ActionType::kChooseOne:
 				return false; // a callback sub-action
+
+			default:
+				assert(false);
+				return false;
 			}
-			assert(false);
-			return false;
 		}
 
 	private:

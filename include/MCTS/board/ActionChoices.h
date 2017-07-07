@@ -21,12 +21,14 @@ namespace mcts
 		public:
 			explicit ActionChoices(int exclusive_max) :
 				type_(kChooseFromZeroToExclusiveMax),
-				exclusive_max_(exclusive_max)
+				exclusive_max_(exclusive_max), card_ids_(),
+				range_it_(0), card_ids_it_()
 			{}
 
 			explicit ActionChoices(std::vector<Cards::CardId> const& cards) :
 				type_(kChooseFromCardIds),
-				card_ids_(cards)
+				exclusive_max_(0), card_ids_(cards),
+				range_it_(0), card_ids_it_()
 			{}
 
 			Type GetType() const { return type_; }

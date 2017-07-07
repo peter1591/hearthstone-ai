@@ -14,7 +14,10 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection() : root_(nullptr) {}
+			Selection() : root_(nullptr), path_(), new_node_created_(false), pending_randoms_(false) {}
+
+			Selection(Selection const&) = delete;
+			Selection & operator=(Selection const&) = delete;
 
 			void StartNewMainAction(TreeNode * root) {
 				root_ = root;

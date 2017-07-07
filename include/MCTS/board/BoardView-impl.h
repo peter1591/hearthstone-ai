@@ -6,10 +6,13 @@ namespace mcts
 {
 	namespace board
 	{
-		inline BoardView::BoardView(state::PlayerSide side, state::State const& state)
+		inline BoardView::BoardView(state::PlayerSide side, state::State const& state) :
+			turn_(state.GetTurn()),
+			self_hero_(), self_crystal_(), self_hero_power_(), self_weapon_(),
+			self_minions_(), self_hand_(), self_deck_(),
+			opponent_hero_(), opponent_crystal_(), opponent_hero_power_(),
+			opponent_weapon_(), opponent_minions_(), opponent_hand_(), opponent_deck_()
 		{
-			turn_ = state.GetTurn();
-
 			{
 				state::board::Player const& self_player = state.GetBoard().Get(side);
 				FlowControl::ValidActionGetter valid_action_getter(state);

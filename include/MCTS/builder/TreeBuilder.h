@@ -24,10 +24,15 @@ namespace mcts
 		public:
 			typedef selection::TreeNode TreeNode;
 
-			TreeBuilder(Statistic<> & statistic) : action_parameter_getter_(*this), random_generator_(*this),
-				turn_start_node_(nullptr), statistic_(statistic)
+			TreeBuilder(Statistic<> & statistic) :
+				action_parameter_getter_(*this), random_generator_(*this),
+				turn_start_node_(nullptr), episode_state_(), statistic_(statistic),
+				selection_stage_(), simulation_stage_()
 			{
 			}
+
+			TreeBuilder(TreeBuilder const&) = delete;
+			TreeBuilder & operator=(TreeBuilder const&) = delete;
 
 			void TurnStart(TreeNode* node) { turn_start_node_ = node; }
 

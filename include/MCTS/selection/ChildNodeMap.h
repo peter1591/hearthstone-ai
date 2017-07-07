@@ -13,7 +13,7 @@ namespace mcts
 		class ChildType
 		{
 		public:
-			ChildType() : is_redirect_node_(false), node_(nullptr) {}
+			ChildType() : edge_addon_(), is_redirect_node_(false), node_(nullptr) {}
 			ChildType(ChildType const&) = delete;
 			ChildType & operator=(ChildType const&) = delete;
 
@@ -50,6 +50,8 @@ namespace mcts
 			//   1. we don't know the total choices in advance
 			//   2. the key is 'choice', which might be card id for choose-one action
 			using ChildMapType = std::unordered_map<int, ChildType>;
+
+			ChildNodeMap() : map_() {}
 
 			ChildType* Get(int choice) {
 				auto it = map_.find(choice);

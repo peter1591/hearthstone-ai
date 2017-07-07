@@ -11,6 +11,8 @@ namespace mcts
 		class Simulation
 		{
 		public:
+			Simulation() : tree_() {}
+
 			void StartNewAction() {
 				tree_.Clear();
 			}

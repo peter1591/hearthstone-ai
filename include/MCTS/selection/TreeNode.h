@@ -17,8 +17,10 @@ namespace mcts
 		class TreeNode
 		{
 		public:
-			TreeNode() : action_type_(ActionType::kInvalid),
-				choices_type_(board::ActionChoices::kInvalid)
+			TreeNode() : 
+				action_type_(ActionType::kInvalid),
+				choices_type_(board::ActionChoices::kInvalid),
+				children_(), addon_()
 			{}
 
 			// select among specific choices

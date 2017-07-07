@@ -1,5 +1,7 @@
 #include "TestStateBuilder.h"
 
+#include "FlowControl/FlowController-impl.h"
+
 class MyRandomGenerator : public state::IRandomGenerator
 {
 public:
@@ -27,8 +29,10 @@ public:
 	int next_rand;
 };
 
+#if defined(_MSC_VER)
 #pragma warning( push )
 #pragma warning( disable: 4505 )
+#endif
 static void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
@@ -67,7 +71,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::State & state, state:
 	}
 	else {
 		++hand_count;
-		assert(state.GetBoard().Get(player).hand_.Size() == hand_count);
+		assert((int)state.GetBoard().Get(player).hand_.Size() == hand_count);
 		assert(state.GetBoard().Get(player).hand_.Get(hand_count - 1) == ref);
 		assert(state.GetCardsManager().Get(ref).GetZone() == state::kCardZoneHand);
 		assert(state.GetCardsManager().Get(ref).GetZonePosition() == (hand_count - 1));
@@ -108,7 +112,9 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 	state.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZoneNewlyCreated>(ref)
 		.ChangeTo<state::kCardZonePlay>(player);
 }
+#ifdef _MSC_VER
 #pragma warning( pop )
+#endif
 
 state::State TestStateBuilder::GetState()
 {

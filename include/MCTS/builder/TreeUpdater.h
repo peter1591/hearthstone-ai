@@ -9,6 +9,8 @@ namespace mcts
 		class TreeUpdater
 		{
 		public:
+			TreeUpdater() : nodes_() {}
+
 			void Update(bool credit)
 			{
 				for (auto const& item : nodes_) {

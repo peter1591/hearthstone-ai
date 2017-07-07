@@ -40,6 +40,8 @@ namespace mcts
 
 			class UCBPolicy {
 			public:
+				UCBPolicy() : choices_(), total_chosen_times(0) {}
+
 				void ReportChoicesCount(int count) {
 					// the count here contains the invalid actions
 					// cannot use directly
@@ -91,6 +93,6 @@ namespace mcts
 				std::vector<Item> choices_;
 				int total_chosen_times;
 			};
-		};
+		}
 	}
 }

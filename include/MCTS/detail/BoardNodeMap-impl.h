@@ -11,7 +11,7 @@ namespace mcts
 	{
 		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(board::Board const& board, bool * new_node_created)
 		{
-			if (new_node_created) new_node_created = false;
+			if (new_node_created) *new_node_created = false;
 
 			auto & item = GetMap()[board.CreateView()];
 			if (!item) {
