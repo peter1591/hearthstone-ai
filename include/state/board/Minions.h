@@ -15,7 +15,7 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Minions() : change_id_(0)
+			Minions() : minions_(), change_id_(0)
 			{
 				minions_.reserve(max_size_);
 			}

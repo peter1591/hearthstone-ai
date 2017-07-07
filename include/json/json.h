@@ -6,10 +6,19 @@
 #ifndef JSON_JSON_H_INCLUDED
 #define JSON_JSON_H_INCLUDED
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#endif
+
 #include "autolink.h"
 #include "value.h"
 #include "reader.h"
 #include "writer.h"
 #include "features.h"
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #endif // JSON_JSON_H_INCLUDED

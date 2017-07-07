@@ -14,6 +14,7 @@ namespace FlowControl {
 	{
 	public:
 		IActionParameterGetter() {}
+		virtual ~IActionParameterGetter() {}
 		IActionParameterGetter(IActionParameterGetter const&) = delete;
 		IActionParameterGetter & operator=(IActionParameterGetter const&) = delete;
 

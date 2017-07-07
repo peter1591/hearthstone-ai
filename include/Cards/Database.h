@@ -78,11 +78,14 @@ namespace Cards
 			kCachedCardsTypesCount
 		};
 		std::vector<int> const& GetCachedCards(CachedCardsTypes cached_cards_type) {
-			return cached_cards[cached_cards_type];
+			return cached_cards_[cached_cards_type];
 		}
 
 	private:
-		Database() : final_cards_(nullptr), final_cards_size_(0) { }
+		Database() : final_cards_(nullptr), final_cards_size_(0), origin_id_map_(), cached_cards_() { }
+
+		Database(Database const&) = delete;
+		Database & operator=(Database const&) = delete;
 
 		bool LoadJsonFile(std::string const& path)
 		{
@@ -252,13 +255,13 @@ namespace Cards
 
 		void ProcessCachedCardsTypes(CardData const& new_card) {
 			if (new_card.collectible) {
-				cached_cards[kCollectibles].push_back(new_card.card_id);
+				cached_cards_[kCollectibles].push_back(new_card.card_id);
 			}
 
 			if (new_card.card_race == state::kCardRaceDemon &&
 				new_card.card_type == state::kCardTypeMinion)
 			{
-				cached_cards[kMinionDemons].push_back(new_card.card_id);
+				cached_cards_[kMinionDemons].push_back(new_card.card_id);
 			}
 		}
 
@@ -268,6 +271,6 @@ namespace Cards
 
 		std::unordered_map<std::string, int> origin_id_map_;
 
-		std::array<std::vector<int>, kCachedCardsTypesCount> cached_cards;
+		std::array<std::vector<int>, kCachedCardsTypesCount> cached_cards_;
 	};
 }

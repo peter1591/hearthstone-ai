@@ -15,7 +15,7 @@ namespace FlowControl
 		{
 		public:
 			Resolver(state::State & state, FlowContext & flow_context)
-				: state_(state), flow_context_(flow_context)
+				: state_(state), flow_context_(flow_context), deaths_()
 			{
 			}
 

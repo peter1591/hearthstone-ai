@@ -10,6 +10,8 @@ namespace state
 		class Board
 		{
 		public:
+			Board() : first_(), second_() {}
+
 			Player & Get(PlayerSide side) { return Get(PlayerIdentifier(side)); }
 			Player const& Get(PlayerSide side) const { return Get(PlayerIdentifier(side)); }
 

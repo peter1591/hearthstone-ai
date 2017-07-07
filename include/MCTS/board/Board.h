@@ -12,7 +12,7 @@ namespace mcts
 		class Board
 		{
 		public:
-			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side) {}
+			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side), saved_board_() {}
 
 		public:
 			state::PlayerIdentifier GetCurrentPlayer() const {

@@ -15,6 +15,8 @@ namespace state
 		public:
 			typedef Utils::CloneableContainers::Vector<Card> ContainerType;
 
+			Manager() : cards_() {}
+
 			Card const& Get(CardRef id) const { return cards_.Get(id.id); }
 			Card & GetMutable(CardRef id) { return cards_.Get(id.id); }
 

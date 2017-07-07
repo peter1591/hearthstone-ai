@@ -28,6 +28,8 @@ namespace FlowControl
 		public:
 			using IdentifierType = Utils::CloneableContainers::RemovableVectorIdentifier;
 
+			Enchantments() : enchantments_(), update_decider_() {}
+
 			struct ApplyFunctorContext {
 				state::State const& state_;
 				FlowContext & flow_context_;
@@ -62,7 +64,7 @@ namespace FlowControl
 			};
 			struct EventHookedEnchantment {
 				struct AuxData {
-					AuxData() : valid(false) {}
+					AuxData() : valid(false), player() {}
 					bool valid;
 					state::PlayerIdentifier player;
 				};

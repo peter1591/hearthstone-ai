@@ -22,7 +22,10 @@ namespace FlowControl {
 		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
 			result_(FlowControl::kResultNotDetermined),
 			action_parameters_(action_parameters), random_(random),
-			minion_put_location_(-1), user_choice_((Cards::CardId)-1)
+			dead_entity_hints_(),
+			minion_put_location_(-1),
+			specified_target_(), destroyed_weapon_(),
+			user_choice_((Cards::CardId)-1)
 		{}
 
 	public: // action parameter

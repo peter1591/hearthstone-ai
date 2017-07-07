@@ -20,7 +20,10 @@ namespace state
 		template <CardZone, CardType> friend class ZoneChanger;
 
 	public:
-		State() : turn_(0), play_order_(1) {}
+		State() :
+			board_(), cards_mgr_(), event_mgr_(), aura_mgr_(),
+			current_player_(), turn_(0), play_order_(1)
+		{}
 
 		board::Board const& GetBoard() const { return board_; }
 		board::Board & GetBoard() { return board_; }

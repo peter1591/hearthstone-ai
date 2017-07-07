@@ -9,6 +9,8 @@ namespace state {
 		class Manager
 		{
 		public:
+			Manager() : auras_() {}
+
 			void Add(FlowControl::aura::Handler handler) {
 				auras_.push_back(std::move(handler));
 			}

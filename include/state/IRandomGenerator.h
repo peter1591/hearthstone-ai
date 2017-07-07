@@ -5,6 +5,8 @@ namespace state {
 	{
 	public:
 		IRandomGenerator() {}
+		virtual ~IRandomGenerator() {}
+
 		IRandomGenerator(IRandomGenerator const&) = delete;
 		IRandomGenerator & operator=(IRandomGenerator const&) = delete;
 

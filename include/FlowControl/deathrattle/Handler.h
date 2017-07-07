@@ -22,20 +22,23 @@ namespace FlowControl
 		public:
 			typedef void DeathrattleCallback(context::Deathrattle const&);
 
-			void Clear() { deathrattles.clear(); }
+			Handler() : deathrattles_() {}
+
+			void Clear() { deathrattles_.clear(); }
 
 			void Add(DeathrattleCallback* deathrattle) {
-				deathrattles.push_back(deathrattle);
+				deathrattles_.push_back(deathrattle);
 			}
 
 			void TriggerAll(context::Deathrattle const& context) const {
-				for (auto deathrattle : deathrattles) {
+				for (auto deathrattle : deathrattles_) {
 					(*deathrattle)(context);
 				}
 			}
 
+		private:
 			typedef std::vector<DeathrattleCallback*> Deathrattles;
-			Deathrattles deathrattles;
+			Deathrattles deathrattles_;
 		};
 	}
 }

@@ -34,8 +34,10 @@ namespace FlowControl
 				first_time_update_(true),
 				last_updated_change_id_first_player_minions_(-1), // ensure this is not the initial value of the actual change id
 				last_updated_change_id_second_player_minions_(-1),
-				last_updated_undamaged_(true),
-				update_policy_(kUpdateAlways), emit_policy_(kEmitInvalid)
+				last_updated_undamaged_(true), last_updated_owner_(),
+				owner_ref_(),
+				update_policy_(kUpdateAlways), emit_policy_(kEmitInvalid),
+				effect_()
 			{}
 
 		public:

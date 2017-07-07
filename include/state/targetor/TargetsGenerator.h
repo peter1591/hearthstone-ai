@@ -16,7 +16,8 @@ namespace state {
 			Targets const& GetInfo() const { return info_; }
 
 		protected:
-			TargetsGenerator_Leaf() {}
+			TargetsGenerator_Leaf() : info_() {}
+
 			void Initialize(state::PlayerIdentifier targeting_player) {
 				info_.Initialize(targeting_player);
 			}

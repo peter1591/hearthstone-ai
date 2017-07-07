@@ -46,8 +46,8 @@ namespace Utils
 		public:
 			typedef VectorIdentifier Identifier;
 
-			Vector() {}
-			Vector(size_t default_capacity) {
+			Vector() : items_() {}
+			Vector(size_t default_capacity) : Vector() {
 				items_.reserve(default_capacity);
 			}
 

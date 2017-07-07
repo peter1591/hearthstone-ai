@@ -16,7 +16,7 @@ namespace state
 
 		public:
 			static constexpr size_t max_cards_ = 10;
-			Hand() : size_(0), change_id_(0) {}
+			Hand() : cards_(), size_(0), change_id_(0) {}
 
 			size_t Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }

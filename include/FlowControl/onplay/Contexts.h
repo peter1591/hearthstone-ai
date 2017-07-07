@@ -28,6 +28,7 @@ namespace FlowControl
 					manipulate_(state, flow_context),
 					player_(player),
 					card_ref_(card_ref),
+					targets_generator_(),
 					need_to_prepare_target_(false),
 					allow_no_target_(false)
 				{

@@ -14,7 +14,7 @@ namespace FlowControl {
 			typedef void FuncApplyOn(contexts::AuraApplyFlagOnOwnerPlayer const& context);
 			typedef void FuncRemoveFrom(contexts::AuraRemoveFlagFromOwnerPlayer const& context);
 
-			EffectHandler_OwnerPlayerFlag() : apply_on(nullptr), remove_from(nullptr) {}
+			EffectHandler_OwnerPlayerFlag() : apply_on(nullptr), remove_from(nullptr), applied_player() {}
 
 			EffectHandler_OwnerPlayerFlag& SetApplyOn(FuncApplyOn* callback) { apply_on = callback; return *this; }
 			EffectHandler_OwnerPlayerFlag& SetRemoveFrom(FuncRemoveFrom* callback) { remove_from = callback; return *this; }

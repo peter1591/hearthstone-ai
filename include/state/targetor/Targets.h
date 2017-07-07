@@ -21,10 +21,12 @@ namespace state {
 			}
 
 			Targets() :
+				targeting_side(),
 				include_first(true), include_second(true),
 				include_hero(true), include_minion(true),
 				targetable_type(kTargetableTypeAll),
-				filter_type(kFilterAll)
+				filter_type(kFilterAll), filter_arg1(0),
+				exclude()
 			{}
 
 			void Initialize(state::PlayerIdentifier in_targeting_side) {

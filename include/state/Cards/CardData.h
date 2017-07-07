@@ -23,10 +23,12 @@ namespace state
 				card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				is_secret_card(false), overload(0),
 				zone(kCardZoneInvalid), zone_position(-1),
-				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0),
+				play_order(-1), damaged(0), just_played(false), num_attacks_this_turn(0), enchanted_states(),
 				pending_destroy(false), used_this_turn(0), usable(true), armor(0),
 				taunt(false), shielded(false), cant_attack(false), freezed(false),
-				silenced(false)
+				silenced(false),
+				added_to_play_zone(), added_to_hand_zone(),
+				enchantment_handler(), onplay_handler(), deathrattle_handler()
 			{
 			}
 

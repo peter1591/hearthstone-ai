@@ -21,7 +21,12 @@ namespace FlowControl
 			struct IdentifierType {
 				EnchantmentTiers tier;
 				Enchantments::IdentifierType id;
+
+				IdentifierType() : tier(), id() {}
+				IdentifierType(EnchantmentTiers tier_, Enchantments::IdentifierType id_) : tier(tier_), id(id_) {}
 			};
+
+			TieredEnchantments() : tier1_(), tier2_(), tier3_() {}
 
 			template <typename EnchantmentType>
 			IdentifierType PushBackAuraEnchantment(EnchantmentType&& enchantment)

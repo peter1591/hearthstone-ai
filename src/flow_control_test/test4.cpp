@@ -7,6 +7,17 @@
 class Test4_ActionParameterGetter : public FlowControl::IActionParameterGetter
 {
 public:
+	Test4_ActionParameterGetter() :
+		next_defender_count(0),
+		next_defender_idx(0),
+		next_minion_put_location(0),
+		next_specified_target_count(0),
+		next_specified_target_idx(0),
+		choose_one_called(false),
+		next_choose_one_count(0),
+		next_choose_one_idx(0)
+	{}
+
 	state::CardRef GetDefender(std::vector<state::CardRef> const& targets)
 	{
 		if (next_defender_count >= 0) assert(next_defender_count == (int)targets.size());

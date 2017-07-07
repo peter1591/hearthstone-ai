@@ -13,6 +13,8 @@ namespace state
 			class HandlersContainer
 			{
 			public:
+				HandlersContainer() : handlers_() {}
+
 				// Cloneable by copy semantics
 				//    Since the STL container and the underlying HandlerType are with this property
 				static const bool CloneableByCopySemantics = true;

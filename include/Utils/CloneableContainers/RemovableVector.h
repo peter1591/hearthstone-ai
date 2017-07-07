@@ -22,7 +22,7 @@ namespace Utils
 			typedef typename CloneableContainers::VectorIdentifier impl_identifier_type;
 
 		public:
-			RemovableVectorIdentifier() {}
+			RemovableVectorIdentifier() : identifier_() {}
 			RemovableVectorIdentifier(const RemovableVectorIdentifier & rhs) = default;
 			RemovableVectorIdentifier & operator=(const RemovableVectorIdentifier & rhs) = default;
 			RemovableVectorIdentifier(RemovableVectorIdentifier && rhs) = default;

@@ -18,7 +18,7 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		public:
-			Deck() : change_id_(0), size_(0) {}
+			Deck() : change_id_(0), size_(0), cards_() {}
 
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }

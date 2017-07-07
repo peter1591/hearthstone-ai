@@ -108,7 +108,9 @@ namespace Cards
 	{
 		static constexpr EnchantmentTiers tier = EnchantmentTiers::kEnchantmentTier1;
 
-		EventHookedEnchantment() {
+		EventHookedEnchantment()
+			: apply_functor(), register_functor()
+		{
 			// The first template parameter 'T' should be the client card class itself
 			// And the rest of the template parameters are with the Enchant concept
 			// Since, the Enchant concept has the 'tier_if_aura' field, we use it to detect misuse

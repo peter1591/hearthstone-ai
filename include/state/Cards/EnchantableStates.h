@@ -10,7 +10,7 @@ namespace state
 		{
 		public:
 			EnchantableStates() :
-				cost(-1), attack(-1), max_hp(-1), charge(false), stealth(false), max_attacks_per_turn(1),
+				player(), cost(-1), attack(-1), max_hp(-1), charge(false), stealth(false), max_attacks_per_turn(1),
 				immune_to_spell(false), poisonous(false), freeze_attack(false), cant_attack_hero(false), immune(false),
 				spell_damage(0)
 			{

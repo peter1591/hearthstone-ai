@@ -20,8 +20,14 @@ namespace state
 			template <typename T> friend class CategorizedEvent;
 
 		public:
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Weffc++"
+#endif
 			Manager() : event_trigger_recursive_count_(0) {}
-
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 			template <typename EventType, typename T>
 			void PushBack(T&& handler) {
 				GetHandlersContainer<EventType>().PushBack(std::forward<T>(handler));

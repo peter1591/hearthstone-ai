@@ -19,10 +19,12 @@ namespace state
 
 		public:
 			Player() :
+				deck_(), hand_(), minions_(), secrets_(), graveyard_(),
 				played_minions_this_turn_(0),
 				played_cards_this_turn_(0),
-				hero_ref_change_id_(0),
-				fatigue_damage_(0)
+				hero_ref_(), hero_ref_change_id_(0),
+				hero_power_ref_(), weapon_ref_(),
+				resource_(), fatigue_damage_(0)
 			{}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }

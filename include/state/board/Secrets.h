@@ -14,6 +14,8 @@ namespace state
 		class Secrets
 		{
 		public:
+			Secrets() : secrets_() {}
+
 			bool Exists(::Cards::CardId card_id) const
 			{
 				return secrets_.find((int)card_id) != secrets_.end();

@@ -10,6 +10,8 @@ namespace FlowControl
 		class Handler
 		{
 		public:
+			Handler() : origin_states(), enchantments() {}
+
 			state::Cards::EnchantableStates const& GetOriginalStates() const { return origin_states; }
 
 			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }

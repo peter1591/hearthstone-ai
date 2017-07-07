@@ -14,7 +14,7 @@ namespace FlowControl {
 			typedef void FuncGetTarget(contexts::AuraGetTarget const& context);
 			typedef enchantment::TieredEnchantments::IdentifierType FuncApplyOn(contexts::AuraApplyOn const& context);
 
-			EffectHandler_Enchantment() : get_target(nullptr), apply_on(nullptr) {}
+			EffectHandler_Enchantment() : get_target(nullptr), apply_on(nullptr), applied_enchantment() {}
 
 			EffectHandler_Enchantment& SetGetTarget(FuncGetTarget* callback) { get_target = callback; return *this; }
 
