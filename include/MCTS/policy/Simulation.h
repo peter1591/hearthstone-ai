@@ -48,8 +48,10 @@ namespace mcts
 						++idx;
 						return true;
 					});
-					int result2 = choice_getter.Get(rand_idx);
-					assert(result == result2);
+					assert([&]() {
+						int result2 = choice_getter.Get(rand_idx);
+						return result == result2;
+					}());
 					return result;
 				}
 			};
