@@ -242,5 +242,6 @@ _Pvt_Extensions
 
 # g++
 *.o
+*.gcda
 a.out
 /gcc-7/flow_control/cards.json

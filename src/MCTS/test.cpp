@@ -8,6 +8,12 @@
 #include "MCTS/builder/TreeBuilder.h"
 #include "MCTS/builder/TreeBuilder-impl.h"
 
+#ifdef PROFILING
+extern "C" {
+extern void __gcov_flush();
+}
+#endif
+
 void Initialize()
 {
 	std::cout << "Reading json file...";
@@ -28,7 +34,7 @@ int main(void)
 
 	int start_i = 0;
 	auto start = std::chrono::steady_clock::now();
-	for (int i = 0; i < 100000000; ++i) {
+	for (int i = 0; i < 10000000; ++i) {
 		if (i % 1000 == 0) {
 			std::cout << "====== Statistics =====" << std::endl;
 			std::cout << "Episodes: " << i << std::endl;
@@ -41,6 +47,12 @@ int main(void)
 
 			start_i = i + 1;
 			start = std::chrono::steady_clock::now();
+
+#ifdef PROFILING
+			std::cout << "Flushing gconv profiling data...";
+			__gcov_flush();
+			std::cout << "done!" << std::endl;
+#endif
 		}
 
 		if (i % 1000000 == 999999) {

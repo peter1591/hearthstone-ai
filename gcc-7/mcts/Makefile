@@ -14,20 +14,29 @@ TOP_SOURCE=../../
 CFLAGS+=-I$(TOP_SOURCE)include
 
 # release build
-CFLAGS+=-O3 -DNDEBUG
+CFLAGS+=-O3 -DNDEBUG -march=native
 LDFLAGS=-O3
 
 CFLAGS+=-flto -fuse-linker-plugin
 LDFLAGS+=-flto -fuse-linker-plugin
+
+# profiling
+ifeq ($(PROFILING), 1)
+CFLAGS+=-DPROFILING -fprofile-generate
+LDFLAGS+=-fprofile-generate
+else
+CFLAGS += -fprofile-use
+LDFLAGS+= -fprofile-use
+endif
 
 THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
 								 ${TOP_SOURCE}contrib/lib_json/json_reader.cpp \
 								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp
 THIRD_PARTY_OBJS=$(THIRD_PARTY_SRCS:.cpp=.o)
 
-SRCS=${TOP_SOURCE}/src/MCTS/CardDispatcher.cpp \
-		${TOP_SOURCE}/src/MCTS/TestStateBuilder.cpp \
-     ${TOP_SOURCE}/src/MCTS/test.cpp
+SRCS=${TOP_SOURCE}src/MCTS/CardDispatcher.cpp \
+     ${TOP_SOURCE}src/MCTS/TestStateBuilder.cpp \
+     ${TOP_SOURCE}src/MCTS/test.cpp
 OBJS=$(SRCS:.cpp=.o)
 
 CARDS_JSON="cards.json"
