@@ -43,7 +43,16 @@ namespace mcts
 				template <typename ChoiceIterator>
 				int SelectChoice(ChoiceIterator && choice_iterator)
 				{
-					// Phase 1: get total chosen times
+					struct Item {
+						int choice;
+						int chosen_times;
+						TreeNode* node;
+					};
+					constexpr size_t kMaxChoices = 10; // max #-of-choices: choose hand card
+					std::array<Item, kMaxChoices> choices;
+					size_t choices_size = 0;
+
+					// Phase 1: get total chosen times, and record to 'choices'
 					int total_chosen_times = 0;
 					for (choice_iterator.Begin();
 						!choice_iterator.IsEnd();
@@ -62,13 +71,20 @@ namespace mcts
 						int chosen_times = choice_iterator.GetAddon().chosen_times;
 						if (chosen_times == 0) return choice; // force select
 
-						if (choice_iterator.GetNode()->GetAddon().statistic.total <= 0) {
+						TreeNode* node = choice_iterator.GetNode();
+						assert(node);
+
+						if (node->GetAddon().statistic.total <= 0) {
 							// shoult not happen?
 							// assert(false); // TODO
 						}
 
 						assert(chosen_times > 0); // == 0
 						total_chosen_times += chosen_times;
+
+						assert(choices_size < kMaxChoices);
+						choices[choices_size] = Item{ choice, chosen_times, node };
+						++choices_size;
 					}
 
 					if (total_chosen_times == 0) {
@@ -76,47 +92,33 @@ namespace mcts
 					}
 
 					// Phase 2: use UCB to make a choice
-					int best_choice = -1;
-					double best_score = 0.0;
-					auto get_score = [total_chosen_times](int choice, mcts::selection::EdgeAddon const& addon, TreeNode* node) {
-						int wins = node->GetAddon().statistic.credit;
-						int total = node->GetAddon().statistic.total;
+					auto get_score = [total_chosen_times](Item const& item) {
+						int wins = item.node->GetAddon().statistic.credit;
+						int total = item.node->GetAddon().statistic.total;
 						double exploit_score = ((double)wins) / total;
 
 						constexpr double explore_weight = 0.8;
-						double explore_score = ((double)addon.chosen_times) / total_chosen_times;
+						double explore_score = ((double)item.chosen_times) / total_chosen_times;
 
 						return exploit_score + explore_weight * explore_score;
 					};
 
-					for (choice_iterator.Begin();
-						!choice_iterator.IsEnd();
-						choice_iterator.StepNext())
-					{
-						typename ChoiceIterator::CheckResult check_result = choice_iterator.Check();
-						if (check_result == ChoiceIterator::CheckResult::kInvalidChoice) {
-							continue;
-						}
+					assert(choices_size > 0);
+					size_t idx = 0;
 
-						int choice = choice_iterator.GetChoice();
-						if (check_result == ChoiceIterator::CheckResult::kForceSelectChoice) {
-							assert(false); // should be taken care in the previous loop
-							return choice;
-						}
+					size_t best_choice = idx;
+					double best_score = get_score(choices[idx]);
+					++idx;
 
-						assert(check_result == ChoiceIterator::CheckResult::kNormalChoice);
-						double score = get_score(
-							choice,
-							choice_iterator.GetAddon(),
-							choice_iterator.GetNode());
-						if (best_choice < 0 || score > best_score) {
-							best_choice = choice;
+					for (; idx < choices_size; ++idx) {
+						double score = get_score(choices[idx]);
+						if (score > best_score) {
+							best_choice = idx;
 							best_score = score;
 						}
 					}
 
-					assert(best_choice >= 0);
-					return best_choice;
+					return (int)choices[best_choice].choice;
 				}
 			};
 		}
