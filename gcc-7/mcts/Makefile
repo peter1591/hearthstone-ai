@@ -11,8 +11,14 @@ CFLAGS_OWN_SRC += -Weffc++
 
 TOP_SOURCE=../../
 
-CFLAGS+=-O2
 CFLAGS+=-I$(TOP_SOURCE)include
+
+# release build
+CFLAGS+=-O3 -DNDEBUG
+LDFLAGS=-O3
+
+CFLAGS+=-flto -fuse-linker-plugin
+LDFLAGS+=-flto -fuse-linker-plugin
 
 THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
 								 ${TOP_SOURCE}contrib/lib_json/json_reader.cpp \
