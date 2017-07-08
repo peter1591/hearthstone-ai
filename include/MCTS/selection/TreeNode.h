@@ -17,6 +17,56 @@ namespace mcts
 		class TreeNode
 		{
 		public:
+			class ChoiceIterator {
+			public:
+				ChoiceIterator(board::ActionChoices & choices, ChildNodeMap & children) :
+					choices_(choices), children_(children),
+					current_choice_(0), current_child_(nullptr)
+				{}
+
+				void Begin() { choices_.Begin(); }
+				void StepNext() { choices_.StepNext(); }
+				bool IsEnd() { return choices_.IsEnd(); }
+
+				enum CheckResult {
+					kForceSelectChoice,
+					kNormalChoice,
+					kInvalidChoice
+				};
+				CheckResult Check() {
+					current_choice_ = choices_.Get();
+					assert(current_choice_ >= 0);
+
+					current_child_ = children_.Get(current_choice_);
+
+					if (!current_child_) {
+						return kForceSelectChoice; // not expanded before
+					}
+
+					if (!current_child_->GetNode()) {
+						// Marked as invalid choice before
+						return kInvalidChoice;
+					}
+
+					return kNormalChoice;
+				}
+
+				int GetChoice() const { return current_choice_; }
+				mcts::selection::EdgeAddon const& GetAddon() const {
+					return current_child_->GetEdgeAddon();
+				}
+				TreeNode* GetNode() const {
+					return current_child_->GetNode();
+				}
+
+			private:
+				board::ActionChoices & choices_;
+				ChildNodeMap & children_;
+
+				int current_choice_;
+				ChildType * current_child_;
+			};
+
 			TreeNode() : 
 				action_type_(ActionType::kInvalid),
 				choices_type_(board::ActionChoices::kInvalid),
@@ -50,20 +100,10 @@ namespace mcts
 					action_type_ = action_type;
 				}
 
-				select_callback.ReportChoicesCount(choices.Size());
-
-				for (choices.Begin(); !choices.IsEnd(); choices.StepNext()) {
-					int choice = choices.Get();
-
-					auto child = children_.Get(choice);
-					if (!child) return choice;
-
-					if (!child->GetNode()) continue; // invalid choice
-					if (child->GetEdgeAddon().chosen_times <= 0) return choice; // not yet chosen
-					select_callback.AddChoice(choice, child->GetEdgeAddon(), child->GetNode());
-				}
-
-				return select_callback.SelectChoice();
+				ChoiceIterator choice_iterator(choices, children_);
+				return select_callback.SelectChoice(
+					ChoiceIterator(choices, children_)
+				);
 			}
 
 			// @return  (pointer to child, is_just_expanded)
