@@ -24,21 +24,23 @@ namespace FlowControl
 		template <state::CardZone ZoneTo>
 		inline bool MinionManipulator<Zone>::PreMoveTo(state::PlayerIdentifier to_player)
 		{
-			if (ZoneTo == state::kCardZoneHand) { // TODO: use if-constexpr when compiler supports
+			(void)to_player; // only used in some template specialization
+
+			if constexpr (ZoneTo == state::kCardZoneHand) {
 				if (state_.GetBoard().Get(to_player).hand_.Full()) {
 					Destroy();
 					return false;
 				}
 			}
 
-			if (ZoneTo == state::kCardZonePlay) { // TODO: use if-constexpr when compiler supports
+			if constexpr (ZoneTo == state::kCardZonePlay) {
 				if (state_.GetBoard().Get(to_player).minions_.Full()) {
 					Destroy();
 					return false;
 				}
 			}
 
-			if (Zone != ZoneTo) { // TODO: use if-constexpr
+			if constexpr (Zone != ZoneTo) {
 				state_.GetMutableCard(card_ref_).RestoreToDefault();
 			}
 

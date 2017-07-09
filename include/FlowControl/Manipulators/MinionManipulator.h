@@ -18,7 +18,7 @@ namespace FlowControl
 			}
 
 			void Destroy() {
-				if (Zone == state::kCardZonePlay) { // TODO: if-constexpr
+				if constexpr (Zone == state::kCardZonePlay) {
 					GetCard().SetPendingDestroy();
 					flow_context_.AddDeadEntryHint(state_, card_ref_);
 				}

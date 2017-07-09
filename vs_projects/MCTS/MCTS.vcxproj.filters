@@ -203,5 +203,8 @@
     <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

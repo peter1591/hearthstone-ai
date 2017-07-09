@@ -105,7 +105,7 @@
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <PreBuildEvent>
@@ -145,7 +145,7 @@
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <Link>

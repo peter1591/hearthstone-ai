@@ -89,7 +89,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
       <Command>copy /y ..\..\include\Cards\cards.json .</Command>
@@ -120,6 +120,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -139,7 +140,8 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -193,6 +195,7 @@
     <ClInclude Include="..\..\include\MCTS\simulation\Tree.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h" />
+    <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />
     <ClInclude Include="..\..\include\MCTS\Types.h" />
