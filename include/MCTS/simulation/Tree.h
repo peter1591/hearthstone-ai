@@ -13,18 +13,18 @@ namespace mcts
 		// Some (sub-)action results in an invalid game state
 		// Ideally, we should prevent this situation as much as possible
 		// However, for performance consideration and code simplicity,
+		//    we don't want to do so many pre-checking, so
 		//    sometimes a (sub-)action might still yields an invalid game state
 		// In this case, we want to record the path of (sub-)actions yielding an invalid state
 		//    and prevent this path for a following re-trial
 		// Optimization: The case we yield an invalid game state is rarely happened
-		// Idea:
-		//   Delay the allocation of tree node when an invalid state is found
+		//   so we delay the allocation of a tree node as late as possible
 		class Tree
 		{
 		private:
 			struct PendingAction {
-				int choices;
-				int choice;
+				int prev_choice;
+				int current_choices;
 			};
 			struct TraversedInfo {
 				TreeNode* node;
@@ -33,7 +33,7 @@ namespace mcts
 
 		public:
 			Tree() : root_(), node_(&root_), last_choice_(-1), traversed_nodes_(),
-				first_choice_before_pending_actions_(), pending_actions_()
+				pending_actions_()
 			{}
 
 			Tree(Tree const&) = delete;
@@ -64,17 +64,15 @@ namespace mcts
 					TreeNode* next_node = node_->GetChoice(last_choice_);
 					if (!next_node) {
 						// No tree node exists -> change to pending-action mode
-						first_choice_before_pending_actions_ = last_choice_;
-						pending_actions_.push_back({ choices, -1 });
+						pending_actions_.push_back({ last_choice_, choices});
 					}
 					else {
 						AdvanceNode(last_choice_, next_node);
 					}
 				}
 				else {
-					assert(pending_actions_.back().choices > 0);
-					pending_actions_.back().choice = last_choice_;
-					pending_actions_.push_back({ choices, -1 });
+					assert(pending_actions_.back().current_choices > 0);
+					pending_actions_.push_back({ last_choice_, choices});
 				}
 			}
 
@@ -85,7 +83,7 @@ namespace mcts
 					return node_->GetChoiceCount();
 				}
 				else {
-					return pending_actions_.back().choices;
+					return pending_actions_.back().current_choices;
 				}
 			}
 			int GetWhiteListItem(size_t idx) const {
@@ -105,7 +103,7 @@ namespace mcts
 					});
 				}
 				else {
-					for (int i = 0; i < pending_actions_.back().choices; ++i) {
+					for (int i = 0; i < pending_actions_.back().current_choices; ++i) {
 						if (!functor(i)) return;
 					}
 				}
@@ -120,17 +118,15 @@ namespace mcts
 				if (!pending_actions_.empty()) {
 					assert(node_);
 
-					int next_edge = first_choice_before_pending_actions_;
-
 					for (auto const& pending_action : pending_actions_) {
+						int next_edge = pending_action.prev_choice;
 						TreeNode* next_node = node_->GetChoice(next_edge);
-						if (!next_node) {
-							next_node = node_->AllocateChoiceNode(next_edge);
-							next_node->Initialize(pending_action.choices);
-						}
+
+						assert(!next_node); // if node is allocated, it should be stepped when traversal
+						next_node = node_->AllocateChoiceNode(next_edge);
+						next_node->Initialize(pending_action.current_choices);
 						
 						AdvanceNode(next_edge, next_node);
-						next_edge = pending_action.choice;
 					}
 				}
 
@@ -174,7 +170,6 @@ namespace mcts
 			// So we want to delay the creation of the TreeNode as late as possible
 			// These fields remembers the pending, which is used to create the necessary
 			//    TreeNodes when necessary.
-			int first_choice_before_pending_actions_;
 			std::vector<PendingAction> pending_actions_;
 		};
 	}
