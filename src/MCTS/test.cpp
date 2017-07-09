@@ -8,12 +8,6 @@
 #include "MCTS/builder/TreeBuilder.h"
 #include "MCTS/builder/TreeBuilder-impl.h"
 
-#ifdef PROFILING
-extern "C" {
-extern void __gcov_flush();
-}
-#endif
-
 void Initialize()
 {
 	std::cout << "Reading json file...";
@@ -48,21 +42,19 @@ int main(void)
 			start_i = i + 1;
 			start = std::chrono::steady_clock::now();
 
-#ifdef PROFILING
-			std::cout << "Flushing gconv profiling data...";
-			__gcov_flush();
-			std::cout << "done!" << std::endl;
-#endif
 		}
 
-		if (i % 1000000 == 999999) {
-			std::cout << "continue?";
+		if (i % 10000 == 9999) {
+			std::cout << "continue? ('q' to quit)";
 			std::string dummy;
 			std::getline(std::cin, dummy);
+			if (dummy == "q") break;
 		}
 
 		mcts.Iterate(start_board_getter);
 	}
+
+	std::cout << "DONE." << std::endl;
 
 	return 0;
 }

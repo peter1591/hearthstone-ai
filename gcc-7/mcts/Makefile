@@ -22,7 +22,7 @@ LDFLAGS+=-flto -fuse-linker-plugin
 
 # profiling
 ifeq ($(PROFILING), 1)
-CFLAGS+=-DPROFILING -fprofile-generate
+CFLAGS+=-fprofile-generate
 LDFLAGS+=-fprofile-generate
 else
 CFLAGS += -fprofile-use
