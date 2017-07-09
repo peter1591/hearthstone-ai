@@ -18,17 +18,25 @@ namespace mcts
 					if (credit) ++statistic.credit;
 					++statistic.total;
 
-					assert(item.GetEdgeAddon());
-					item.GetEdgeAddon()->chosen_times++;
+					if (item.GetEdgeAddon()) {
+						item.GetEdgeAddon()->chosen_times++;
+					}
 				}
 			}
 
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> const& nodes)
 			{
 				assert([&]() {
-					for (auto const& item : nodes) {
+					for (size_t i = 0; i < nodes.size(); ++i) {
+						auto const& item = nodes[i];
+						
 						if (!item.GetNode()) return false;
-						if (!item.GetEdgeAddon()) return false;
+
+						// every node should have an edge to the next node,
+						// except for the last node
+						if (i < nodes.size() - 1) {
+							if (!item.GetEdgeAddon()) return false;
+						}
 					}
 					return true;
 				}());

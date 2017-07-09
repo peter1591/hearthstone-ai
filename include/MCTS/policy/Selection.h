@@ -75,8 +75,9 @@ namespace mcts
 						assert(node);
 
 						if (node->GetAddon().statistic.total <= 0) {
-							// shoult not happen?
-							// assert(false); // TODO
+							// the leading edge is already chosen (i.e., chosen_times > 0)
+							// so, this node should at least been traversed once
+							assert(false);
 						}
 
 						assert(chosen_times > 0); // == 0
@@ -95,6 +96,7 @@ namespace mcts
 					auto get_score = [total_chosen_times](Item const& item) {
 						int wins = item.node->GetAddon().statistic.credit;
 						int total = item.node->GetAddon().statistic.total;
+						assert(total > 0);
 						double exploit_score = ((double)wins) / total;
 
 						constexpr double explore_weight = 0.8;

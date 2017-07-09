@@ -112,6 +112,8 @@ namespace mcts
 
 				path_.back().ConstructRedirectNode(final_node);
 
+				path_.emplace_back(final_node);
+
 				return final_node;
 			}
 
