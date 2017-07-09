@@ -18,9 +18,14 @@ namespace mcts
 			}
 
 			int ChooseAction(board::Board const& board, ActionType action_type, board::ActionChoicesGetter const& action_choices_getter) {
-				// TODO: support different types of action choices
 				board::ActionChoices action_choices = action_choices_getter();
 				if (action_choices.Empty()) return -1;
+
+				// TODO: support different types of action choices
+				// should support natively in tree?
+				// currently, this function return a zero-based choice
+				//assert(action_choices.GetType() != board::ActionChoices::kChooseFromCardIds);
+
 				int choices = action_choices.Size();
 
 				tree_.FillChoices(choices);

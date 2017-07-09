@@ -30,6 +30,7 @@ namespace mcts
 			// We save the board every time here. This is just for the case an invalid action is applied
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
+			// Alternatively, we can just mark the choice as invalid, and restart the whole episode again.
 			episode_state_.GetBoard().SaveState();
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
@@ -71,6 +72,7 @@ namespace mcts
 			// We save the board every time here. This is just for the case an invalid action is applied
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
+			// Alternatively, we can just restart the episode, and hope this will not happen frequently
 			episode_state_.GetBoard().SaveState();
 
 			assert(episode_state_.GetStage() == kStageSimulation);
