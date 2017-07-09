@@ -21,10 +21,19 @@ namespace mcts
 				board::ActionChoices action_choices = action_choices_getter();
 				if (action_choices.Empty()) return -1;
 
-				// TODO: support different types of action choices
-				// should support natively in tree?
-				// currently, this function return a zero-based choice
-				//assert(action_choices.GetType() != board::ActionChoices::kChooseFromCardIds);
+				// The underlying tree treat all choices as continuous numbers from zero
+				// However, the action_choices might be with two types:
+				//   1. Choose a number from zero to a exclusive-max value
+				//   2. Choose a card id from a few options
+				// The first type is easy to handle. Since the underlying tree already treat all
+				//    choices as numbers from zero
+				// To handle the second type, we first noticed that,
+				//    The choices of the card ids are THE SAME for a particular tree node
+				//    The choices of the card ids might be chosen randomly, but since the random
+				//    number is effectively FIXED to this node (a parent node represents the random
+				//    outcome, and a different random number leads to a different child node)
+				//    So, the choices of the card ids should be identical.
+				// Thus, we can just use the zero-based index of the card id choices
 
 				int choices = action_choices.Size();
 
@@ -40,7 +49,7 @@ namespace mcts
 				if (choice < 0) return -1;
 
 				tree_.ApplyChoice(choice);
-				return choice;
+				return action_choices.Get(choice);
 			}
 
 			void ReportInvalidAction() {

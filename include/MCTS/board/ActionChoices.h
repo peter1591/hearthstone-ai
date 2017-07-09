@@ -46,6 +46,18 @@ namespace mcts
 				return true;
 			}
 
+			int Get(size_t idx) {
+				if (type_ == kChooseFromCardIds) {
+					assert(idx < card_ids_.size());
+					return (int)card_ids_[idx];
+				}
+				else {
+					assert(type_ == kChooseFromZeroToExclusiveMax);
+					assert(idx < exclusive_max_);
+					return (int)idx;
+				}
+			}
+
 		public: // iterate
 			bool Empty() const {
 				if (type_ == kChooseFromCardIds) {
