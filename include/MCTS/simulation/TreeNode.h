@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "MCTS/detail/NodeIndexMap.h"
+#include "MCTS/simulation/TreeNodeAddon.h"
 
 namespace mcts
 {
@@ -14,7 +15,7 @@ namespace mcts
 		// If it's nullptr, it's a valid (child) node, but not yet being allocated
 		class TreeNode {
 		public:
-			TreeNode() : choices_(0), children_(), valid_idx_map_() {}
+			TreeNode() : choices_(0), children_(), valid_idx_map_(), addon_() {}
 
  			// The newly-created choices are delayed-mallocated
 			// So a following GetChoice() returns a nullptr
@@ -76,12 +77,17 @@ namespace mcts
 				choices_ = 0;
 				children_.clear();
 				valid_idx_map_.Clear();
+				addon_.Clear();
 			}
+
+			TreeNodeAddon & GetAddon() { return addon_; }
 
 		private:
 			int choices_; // 0: not set
 			std::vector<std::unique_ptr<TreeNode>> children_;
 			detail::NodeIndexMap valid_idx_map_;
+
+			TreeNodeAddon addon_;
 		};
 	}
 }

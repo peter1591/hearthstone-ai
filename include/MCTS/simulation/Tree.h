@@ -50,6 +50,16 @@ namespace mcts
 				pending_actions_.clear();
 			}
 
+			// @return nullptr, if current node is not allocated yet (delay-allocate)
+			//         pointer to the addon, if current node exists
+			TreeNodeAddon * GetCurrentNodeAddon() {
+				if (pending_actions_.empty()) {
+					assert(node_);
+					return &node_->GetAddon();
+				}
+				return nullptr;
+			}
+
 			void FillChoices(int choices) {
 				assert(node_);
 

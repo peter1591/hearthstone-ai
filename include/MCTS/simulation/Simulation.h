@@ -30,6 +30,12 @@ namespace mcts
 
 				tree_.FillChoices(choices);
 
+				assert([&]() {
+					auto addon = tree_.GetCurrentNodeAddon();
+					if (!addon) return true;
+					return addon->action_choice_checker.Check(action_type, action_choices);
+				}());
+
 				int choice = Simulate(board, action_type, choices);
 				if (choice < 0) return -1;
 

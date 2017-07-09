@@ -33,6 +33,19 @@ namespace mcts
 
 			Type GetType() const { return type_; }
 
+			static bool HasSameChoices(ActionChoices const& lhs, ActionChoices const& rhs) {
+				if (lhs.type_ != rhs.type_) return false;
+				
+				if (lhs.type_ == kChooseFromZeroToExclusiveMax) {
+					if (lhs.exclusive_max_ != rhs.exclusive_max_) return false;
+				}
+				else if (lhs.type_ == kChooseFromCardIds) {
+					if (lhs.card_ids_ != rhs.card_ids_) return false;
+				}
+
+				return true;
+			}
+
 		public: // iterate
 			bool Empty() const {
 				if (type_ == kChooseFromCardIds) {
