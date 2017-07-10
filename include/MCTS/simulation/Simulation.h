@@ -11,10 +11,11 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation() : tree_() {}
+			Simulation() : root_(), progress_(&root_) {}
 
 			void StartNewAction() {
-				tree_.Clear();
+				root_.Reset();
+				progress_.Reset(&root_);
 			}
 
 			int ChooseAction(board::Board const& board, ActionType action_type, board::ActionChoicesGetter const& action_choices_getter) {
@@ -37,10 +38,10 @@ namespace mcts
 
 				int choices = action_choices.Size();
 
-				tree_.FillChoices(choices);
+				progress_.FillChoices(choices);
 
 				assert([&]() {
-					auto addon = tree_.GetCurrentNodeAddon();
+					auto addon = progress_.GetCurrentNodeAddon();
 					if (!addon) return true;
 					return addon->action_choice_checker.Check(action_type, action_choices);
 				}());
@@ -48,39 +49,40 @@ namespace mcts
 				int choice = Simulate(board, action_type, choices);
 				if (choice < 0) return -1;
 
-				tree_.ApplyChoice(choice);
+				progress_.ApplyChoice(choice);
 				return action_choices.Get(choice);
 			}
 
 			void ReportInvalidAction() {
-				tree_.ReportInvalidChoice();
+				progress_.ReportInvalidChoice();
 			}
 
 			void RestartAction() {
 				// Use a white-list-tree to record all viable (sub-)actions
-				tree_.Restart();
+				progress_.Reset(&root_);
 			}
 
 		private:
 			int Simulate(board::Board const& board, ActionType action_type, int choices) const
 			{
-				size_t valid_choices = tree_.GetWhiteListCount();
+				size_t valid_choices = progress_.GetWhiteListCount();
 				if (valid_choices <= 0) return -1;
 
 				if (action_type.IsChosenRandomly()) {
 					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom((int)valid_choices);
-					return (int)tree_.GetWhiteListItem((size_t)rnd);
+					return (int)progress_.GetWhiteListItem((size_t)rnd);
 				}
 
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
-					policy::simulation::ChoiceGetter(tree_), board
+					policy::simulation::ChoiceGetter(progress_), board
 				);
 
 				return choice;
 			}
 
 		private:
-			Tree tree_;
+			TreeNode root_;
+			TreeTraverseProgress progress_;
 		};
 	}
 }

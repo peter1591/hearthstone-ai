@@ -19,7 +19,7 @@ namespace mcts
 		//    and prevent this path for a following re-trial
 		// Optimization: The case we yield an invalid game state is rarely happened
 		//   so we delay the allocation of a tree node as late as possible
-		class Tree
+		class TreeTraverseProgress
 		{
 		private:
 			struct PendingAction {
@@ -32,21 +32,18 @@ namespace mcts
 			};
 
 		public:
-			Tree() : root_(), node_(&root_), last_choice_(-1), traversed_nodes_(),
+			TreeTraverseProgress(TreeNode* node) :
+				node_(node), last_choice_(-1), traversed_nodes_(),
 				pending_actions_()
 			{}
 
-			Tree(Tree const&) = delete;
-			Tree & operator=(Tree const&) = delete;
+			TreeTraverseProgress(TreeTraverseProgress const&) = delete;
+			TreeTraverseProgress & operator=(TreeTraverseProgress const&) = delete;
 
-			void Clear() {
-				root_.Reset();
-				Restart();
-			}
-
-			void Restart() {
-				node_ = &root_;
+			void Reset(TreeNode* node) {
+				node_ = node;
 				last_choice_ = -1;
+				traversed_nodes_.clear();
 				pending_actions_.clear();
 			}
 
@@ -65,7 +62,6 @@ namespace mcts
 
 				if (last_choice_ < 0) {
 					// special case for the very first call
-					assert(node_ == &root_);
 					node_->Initialize(choices);
 					return;
 				}
@@ -74,7 +70,7 @@ namespace mcts
 					TreeNode* next_node = node_->GetChoice(last_choice_);
 					if (!next_node) {
 						// No tree node exists -> change to pending-action mode
-						pending_actions_.push_back({ last_choice_, choices});
+						pending_actions_.push_back({ last_choice_, choices });
 					}
 					else {
 						AdvanceNode(last_choice_, next_node);
@@ -82,7 +78,7 @@ namespace mcts
 				}
 				else {
 					assert(pending_actions_.back().current_choices > 0);
-					pending_actions_.push_back({ last_choice_, choices});
+					pending_actions_.push_back({ last_choice_, choices });
 				}
 			}
 
@@ -135,7 +131,7 @@ namespace mcts
 						assert(!next_node); // if node is allocated, it should be stepped when traversal
 						next_node = node_->AllocateChoiceNode(next_edge);
 						next_node->Initialize(pending_action.current_choices);
-						
+
 						AdvanceNode(next_edge, next_node);
 					}
 				}
@@ -169,8 +165,6 @@ namespace mcts
 			}
 
 		private:
-			TreeNode root_;
-
 			TreeNode* node_;
 			int last_choice_;
 

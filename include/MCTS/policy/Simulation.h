@@ -9,24 +9,24 @@ namespace mcts
 	{
 		namespace simulation
 		{
-			using Tree = mcts::simulation::Tree;
+			using TreeProgress = mcts::simulation::TreeTraverseProgress;
 
 			class ChoiceGetter
 			{
 			public:
-				ChoiceGetter(Tree const& tree) : tree_(tree) {}
+				ChoiceGetter(TreeProgress const& progress) : progress_(progress) {}
 
-				size_t Size() const { return tree_.GetWhiteListCount(); }
+				size_t Size() const { return progress_.GetWhiteListCount(); }
 
-				int Get(size_t idx) const { return tree_.GetWhiteListItem(idx); }
+				int Get(size_t idx) const { return progress_.GetWhiteListItem(idx); }
 
 				template <typename Functor>
 				void ForEachChoice(Functor&& functor) const {
-					tree_.ForEachWhiteListItem(std::forward<Functor>(functor));
+					progress_.ForEachWhiteListItem(std::forward<Functor>(functor));
 				}
 
 			private:
-				Tree const& tree_;
+				TreeProgress const& progress_;
 			};
 
 			class RandomPolicy
