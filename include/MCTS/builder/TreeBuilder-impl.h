@@ -93,8 +93,15 @@ namespace mcts
 			board::BoardActionAnalyzer & action_analyzer,
 			StageHandler&& stage_handler)
 		{
+			assert(action_replayer_.Empty());
+
+			constexpr bool is_simulation = std::is_same_v<
+				std::decay_t<StageHandler>,
+				simulation::Simulation>;
+
 			// sometimes an action might in fact an INVALID action
 			// here use a loop to retry on those cases
+			Result result = Result::kResultInvalid;
 			while (true) {
 				int choices = episode_state_.GetBoard().GetActionsCount(action_analyzer);
 				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), [choices]() {
@@ -102,35 +109,73 @@ namespace mcts
 				});
 
 				if (episode_state_.IsValid()) {
-					Result result = episode_state_.GetBoard().ApplyAction(
+					result = episode_state_.GetBoard().ApplyAction(
 						choice, action_analyzer, random_generator_, action_parameter_getter_);
-					if (result != Result::kResultInvalid) return result;
+					if (result != Result::kResultInvalid) break;
 				}
 
-				constexpr bool is_simulation = std::is_same_v<
-					std::decay_t<StageHandler>,
-					simulation::Simulation>;
+				statistic_.ApplyActionFailed();
+
+				// If it's replay failure, it means the stage handler already
+				// knows that action is invalid, and the progress is not stepped
+				// The only thing we need to do, is to remove the last step
+				// in the replay recording, which is done later.
+				if (!action_replayer_.IsReplayFailed()) {
+					if constexpr (is_simulation) {
+						stage_handler.ReportInvalidAction(simulation_progress_);
+					}
+					else {
+						stage_handler.ReportInvalidAction();
+					}
+				}
+
 				if constexpr (is_simulation) {
-					stage_handler.ReportInvalidAction(simulation_progress_);
 					stage_handler.RestartAction(simulation_progress_);
 				}
 				else {
-					stage_handler.ReportInvalidAction();
 					stage_handler.RestartAction();
 				}
 
 				episode_state_.GetBoard().RestoreState();
 				episode_state_.SetValid();
-
-				statistic_.ApplyActionFailed();
+				action_replayer_.RemoveLast();
+				action_replayer_.Restart();
 			}
-			assert(false); // not reach here
-			return Result::kResultSecondPlayerWin;
+
+			action_replayer_.Clear();
+			assert(result != Result::kResultInvalid);
+			return result;
 		}
 
 		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoicesGetter const& choices_getter)
 		{
 			int choice = -1;
+			
+			if (!action_replayer_.IsEnd()) {
+				choice = action_replayer_.GetChoice(action_type);
+
+				if (episode_state_.GetStage() == kStageSelection) {
+					if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter, choice) < 0) {
+						// invalid action during replay
+						action_replayer_.MarkReplayFailed();
+						episode_state_.SetInvalid();
+						return -1;
+					}
+				}
+				else {
+					assert(episode_state_.GetStage() == kStageSimulation);
+					if (!simulation_stage_.ApplyChoice(action_type, choice, choices_getter, simulation_progress_)) {
+						// invalid action during replay
+						action_replayer_.MarkReplayFailed();
+						episode_state_.SetInvalid();
+						return -1;
+					}
+				}
+
+				action_replayer_.StepNext();
+				return choice;
+			}
+
 			if (episode_state_.GetStage() == kStageSelection) {
 				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter);
 			}
@@ -140,9 +185,14 @@ namespace mcts
 					simulation_progress_);
 			}
 
-			if (choice < 0) {
+			if (choice >= 0) {
+				action_replayer_.RecordChoice(action_type, choice);
+				action_replayer_.StepNext();
+			}
+			else {
 				episode_state_.SetInvalid();
 			}
+
 			return choice;
 		}
 	}

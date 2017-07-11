@@ -38,12 +38,14 @@ namespace mcts
 					assert(current_choice_ >= 0);
 
 					current_child_ = children_.Get(current_choice_);
-
-					if (!current_child_) {
+					return CheckChild(current_child_);
+				}
+				static CheckResult CheckChild(ChildType* child) {
+					if (!child) {
 						return kForceSelectChoice; // not expanded before
 					}
 
-					if (!current_child_->GetNode()) {
+					if (!child->GetNode()) {
 						// Marked as invalid choice before
 						return kInvalidChoice;
 					}
@@ -83,8 +85,9 @@ namespace mcts
 			//        If an action is marked invalid before, a nullptr is passed to the 'node' parameter
 			//    Call select_callback.SelectChoice() -> TreeNode to get result
 			// Return -1 if all choices are invalid.
+			//    (or, the force_choice is invalid)
 			template <typename SelectCallback>
-			int Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback)
+			int Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback, int force_choice = -1)
 			{
 				if (choices_type_ == board::ActionChoices::kInvalid) {
 					choices_type_ = choices.GetType();
@@ -101,9 +104,20 @@ namespace mcts
 				}
 
 				ChoiceIterator choice_iterator(choices, children_);
-				return select_callback.SelectChoice(
-					ChoiceIterator(choices, children_)
-				);
+
+				if (force_choice < 0) {
+					return select_callback.SelectChoice(
+						ChoiceIterator(choices, children_)
+					);
+				}
+				else {
+					auto child = children_.Get(force_choice);
+					auto check_result = ChoiceIterator::CheckChild(child);
+					if (check_result == ChoiceIterator::kInvalidChoice) {
+						return -1;
+					}
+					return force_choice;
+				}
 			}
 
 			// @return  (pointer to child, is_just_expanded)

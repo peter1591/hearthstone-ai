@@ -57,6 +57,35 @@ namespace mcts
 				return action_choices.Get(choice);
 			}
 
+			bool ApplyChoice(ActionType action_type, int choice,
+				board::ActionChoicesGetter const& action_choices_getter,
+				TreeTraverseProgress & progress) const
+			{
+				board::ActionChoices action_choices = action_choices_getter();
+				assert(!action_choices.Empty());
+				int choices = action_choices.Size();
+				progress.FillChoices(choices);
+
+				assert([&]() {
+					auto addon = progress.GetCurrentNodeAddon();
+					if (!addon) return true;
+					return addon->action_choice_checker.Check(action_type, action_choices);
+				}());
+
+				bool is_valid = false;
+				progress.ForEachWhiteListItem([&](int valid_choice) {
+					if (choice == valid_choice) {
+						is_valid = true;
+						return false; // early stop
+					}
+					return true;
+				});
+				if (!is_valid) return false;
+
+				progress.ApplyChoice(choice);
+				return true;
+			}
+
 			void ReportInvalidAction(TreeTraverseProgress & progress) {
 				progress.ReportInvalidChoice();
 			}

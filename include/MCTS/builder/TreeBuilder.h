@@ -11,6 +11,7 @@
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 #include "MCTS/board/ActionChoices.h"
+#include "MCTS/builder/ActionReplayer.h"
 
 namespace mcts
 {
@@ -27,7 +28,8 @@ namespace mcts
 			TreeBuilder(Statistic<> & statistic) :
 				action_parameter_getter_(*this), random_generator_(*this),
 				turn_start_node_(nullptr), episode_state_(), statistic_(statistic),
-				selection_stage_(), simulation_stage_(), simulation_progress_(nullptr)
+				selection_stage_(), simulation_stage_(), simulation_progress_(nullptr),
+				action_replayer_()
 			{
 			}
 
@@ -77,6 +79,8 @@ namespace mcts
 			simulation::Simulation simulation_stage_;
 
 			simulation::TreeTraverseProgress simulation_progress_;
+
+			ActionReplayer action_replayer_;
 		};
 	}
 }
