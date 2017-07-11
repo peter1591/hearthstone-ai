@@ -76,7 +76,7 @@ namespace mcts
 			episode_state_.GetBoard().SaveState();
 
 			assert(episode_state_.GetStage() == kStageSimulation);
-			simulation_stage_.StartNewAction();
+			simulation_stage_.StartNewAction(simulation_progress_);
 
 			board::BoardActionAnalyzer action_analyzer;
 
@@ -107,8 +107,17 @@ namespace mcts
 					if (result != Result::kResultInvalid) return result;
 				}
 
-				stage_handler.ReportInvalidAction();
-				stage_handler.RestartAction();
+				constexpr bool is_simulation = std::is_same_v<
+					std::decay_t<StageHandler>,
+					simulation::Simulation>;
+				if constexpr (is_simulation) {
+					stage_handler.ReportInvalidAction(simulation_progress_);
+					stage_handler.RestartAction(simulation_progress_);
+				}
+				else {
+					stage_handler.ReportInvalidAction();
+					stage_handler.RestartAction();
+				}
 
 				episode_state_.GetBoard().RestoreState();
 				episode_state_.SetValid();
@@ -127,7 +136,8 @@ namespace mcts
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);
-				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter);
+				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter,
+					simulation_progress_);
 			}
 
 			if (choice < 0) {

@@ -11,14 +11,18 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation() : root_(), progress_(&root_) {}
+			Simulation() : root_() {}
 
-			void StartNewAction() {
+			void StartNewAction(TreeTraverseProgress & progress) {
 				root_.Reset();
-				progress_.Reset(&root_);
+				progress.Reset(&root_);
 			}
 
-			int ChooseAction(board::Board const& board, ActionType action_type, board::ActionChoicesGetter const& action_choices_getter) {
+			int ChooseAction(board::Board const& board,
+				ActionType action_type,
+				board::ActionChoicesGetter const& action_choices_getter,
+				TreeTraverseProgress & progress)
+			{
 				board::ActionChoices action_choices = action_choices_getter();
 				if (action_choices.Empty()) return -1;
 
@@ -38,43 +42,44 @@ namespace mcts
 
 				int choices = action_choices.Size();
 
-				progress_.FillChoices(choices);
+				progress.FillChoices(choices);
 
 				assert([&]() {
-					auto addon = progress_.GetCurrentNodeAddon();
+					auto addon = progress.GetCurrentNodeAddon();
 					if (!addon) return true;
 					return addon->action_choice_checker.Check(action_type, action_choices);
 				}());
 
-				int choice = Simulate(board, action_type, choices);
+				int choice = Simulate(board, action_type, choices, progress);
 				if (choice < 0) return -1;
 
-				progress_.ApplyChoice(choice);
+				progress.ApplyChoice(choice);
 				return action_choices.Get(choice);
 			}
 
-			void ReportInvalidAction() {
-				progress_.ReportInvalidChoice();
+			void ReportInvalidAction(TreeTraverseProgress & progress) {
+				progress.ReportInvalidChoice();
 			}
 
-			void RestartAction() {
+			void RestartAction(TreeTraverseProgress & progress) {
 				// Use a white-list-tree to record all viable (sub-)actions
-				progress_.Reset(&root_);
+				progress.Reset(&root_);
 			}
 
 		private:
-			int Simulate(board::Board const& board, ActionType action_type, int choices) const
+			int Simulate(board::Board const& board, ActionType action_type, int choices,
+				TreeTraverseProgress & progress) const
 			{
-				size_t valid_choices = progress_.GetWhiteListCount();
+				size_t valid_choices = progress.GetWhiteListCount();
 				if (valid_choices <= 0) return -1;
 
 				if (action_type.IsChosenRandomly()) {
 					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom((int)valid_choices);
-					return (int)progress_.GetWhiteListItem((size_t)rnd);
+					return (int)progress.GetWhiteListItem((size_t)rnd);
 				}
 
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
-					policy::simulation::ChoiceGetter(progress_), board
+					policy::simulation::ChoiceGetter(progress), board
 				);
 
 				return choice;
@@ -82,7 +87,6 @@ namespace mcts
 
 		private:
 			TreeNode root_;
-			TreeTraverseProgress progress_;
 		};
 	}
 }
