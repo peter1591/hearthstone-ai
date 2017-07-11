@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MCTS/simulation/Tree.h"
+#include "MCTS/simulation/ChoiceBlacklist.h"
 #include "MCTS/board/Board.h"
 
 namespace mcts
@@ -9,7 +9,7 @@ namespace mcts
 	{
 		namespace simulation
 		{
-			using TreeProgress = mcts::simulation::TreeTraverseProgress;
+			using TreeProgress = mcts::simulation::ChoiceBlacklist;
 
 			class ChoiceGetter
 			{

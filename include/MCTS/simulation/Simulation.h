@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MCTS/Config.h"
-#include "MCTS/simulation/Tree.h"
+#include "MCTS/simulation/ChoiceBlacklist.h"
 #include "MCTS/policy/Simulation.h"
 
 namespace mcts
@@ -11,17 +11,14 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation() : root_() {}
-
-			void StartNewAction(TreeTraverseProgress & progress) {
-				root_.Reset();
-				progress.Reset(&root_);
+			void StartNewAction(ChoiceBlacklist & progress) {
+				progress.Reset();
 			}
 
 			int ChooseAction(board::Board const& board,
 				ActionType action_type,
 				board::ActionChoicesGetter const& action_choices_getter,
-				TreeTraverseProgress & progress)
+				ChoiceBlacklist & progress)
 			{
 				board::ActionChoices action_choices = action_choices_getter();
 				if (action_choices.Empty()) return -1;
@@ -45,9 +42,8 @@ namespace mcts
 				progress.FillChoices(choices);
 
 				assert([&]() {
-					auto addon = progress.GetCurrentNodeAddon();
-					if (!addon) return true;
-					return addon->action_choice_checker.Check(action_type, action_choices);
+					auto & addon = progress.GetCurrentNodeAddon();
+					return addon.action_choice_checker.Check(action_type, action_choices);
 				}());
 
 				int choice = Simulate(board, action_type, choices, progress);
@@ -59,7 +55,7 @@ namespace mcts
 
 			bool ApplyChoice(ActionType action_type, int choice,
 				board::ActionChoicesGetter const& action_choices_getter,
-				TreeTraverseProgress & progress) const
+				ChoiceBlacklist & progress) const
 			{
 				board::ActionChoices action_choices = action_choices_getter();
 				assert(!action_choices.Empty());
@@ -67,37 +63,28 @@ namespace mcts
 				progress.FillChoices(choices);
 
 				assert([&]() {
-					auto addon = progress.GetCurrentNodeAddon();
-					if (!addon) return true;
-					return addon->action_choice_checker.Check(action_type, action_choices);
+					auto & addon = progress.GetCurrentNodeAddon();
+					return addon.action_choice_checker.Check(action_type, action_choices);
 				}());
 
-				bool is_valid = false;
-				progress.ForEachWhiteListItem([&](int valid_choice) {
-					if (choice == valid_choice) {
-						is_valid = true;
-						return false; // early stop
-					}
-					return true;
-				});
-				if (!is_valid) return false;
+				if (!progress.IsValid(choice)) return false;
 
 				progress.ApplyChoice(choice);
 				return true;
 			}
 
-			void ReportInvalidAction(TreeTraverseProgress & progress) {
+			void ReportInvalidAction(ChoiceBlacklist & progress) {
 				progress.ReportInvalidChoice();
 			}
 
-			void RestartAction(TreeTraverseProgress & progress) {
+			void RestartAction(ChoiceBlacklist & progress) {
 				// Use a white-list-tree to record all viable (sub-)actions
-				progress.Reset(&root_);
+				progress.Restart();
 			}
 
 		private:
 			int Simulate(board::Board const& board, ActionType action_type, int choices,
-				TreeTraverseProgress & progress) const
+				ChoiceBlacklist & progress) const
 			{
 				size_t valid_choices = progress.GetWhiteListCount();
 				if (valid_choices <= 0) return -1;
@@ -113,9 +100,6 @@ namespace mcts
 
 				return choice;
 			}
-
-		private:
-			TreeNode root_;
 		};
 	}
 }
