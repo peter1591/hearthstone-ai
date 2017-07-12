@@ -24,20 +24,23 @@ namespace mcts
 		//    all sub-actions except THE LAST ONE will be chosen, we can use a linear
 		//    data structure to record the black list choices, rather than using a tree.
 		// TODO
-		//    1. Maybe most of the case leads to valid case. Can we write
+		//    1. Maybe most of the case leads to a valid state. Can we write
 		//       to the vector only when an invalid state is detected?
-		//    2. Consider to record the black-listed choices, rather than
-		//       valid options. But still need to support random access to
-		//       valid options. This speeds up the IsValid() operation.
 		class ChoiceBlacklist
 		{
 		private:
 			struct Item {
+				// Blacklist only cares about manually-chosen actions
+				// From which, the maximum chosen set is to choose a target,
+				// which is with at most 16 choices
+				static constexpr size_t kMaxChoices = 16;
+
 				TreeNodeAddon addon_;
 				detail::NodeIndexMap valid_indics_;
+				std::array<bool, kMaxChoices> choices_isvalid_; // TODO: is this really benefitial?
 				int choice_;
 
-				Item() : addon_(), valid_indics_(), choice_(-1) {}
+				Item() : addon_(), valid_indics_(), choices_isvalid_(), choice_(-1) {}
 			};
 
 		public:
@@ -56,20 +59,14 @@ namespace mcts
 
 				auto& item = items_.emplace_back();
 				for (size_t i = 0; i < (size_t)choices; ++i) {
+					item.choices_isvalid_[i] = true;
 					item.valid_indics_.PushBack(i);
 				}
 			}
 
 			bool IsValid(int choice) const {
-				bool is_valid = false;
-				ForEachWhiteListItem([&](int valid_choice) {
-					if (choice == valid_choice) {
-						is_valid = true;
-						return false; // early stop
-					}
-					return true;
-				});
-				return is_valid;
+				assert(idx_ < items_.size());
+				return items_[idx_].choices_isvalid_[choice];
 			}
 
 			TreeNodeAddon & GetCurrentNodeAddon() {
@@ -109,7 +106,13 @@ namespace mcts
 					(void)erased;
 					assert(erased);
 
-					if (!items_.back().valid_indics_.Empty()) break;
+					assert(items_.back().choices_isvalid_[choice]);
+					items_.back().choices_isvalid_[choice] = false;
+
+					if (!items_.back().valid_indics_.Empty()) {
+						// still has other valid choices, leave it alone
+						break;
+					}
 
 					// cascade mark parent choice as invalid if no valid choice left
 					items_.pop_back();

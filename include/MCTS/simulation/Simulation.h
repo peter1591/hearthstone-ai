@@ -23,6 +23,14 @@ namespace mcts
 				board::ActionChoices action_choices = action_choices_getter();
 				if (action_choices.Empty()) return -1;
 
+				int choices = action_choices.Size();
+
+				if (action_type.IsChosenRandomly()) {
+					// ChoiceBlacklist do not care about random actions
+					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom(choices);
+					return action_choices.Get(rnd);
+				}
+
 				// The underlying tree treat all choices as continuous numbers from zero
 				// However, the action_choices might be with two types:
 				//   1. Choose a number from zero to a exclusive-max value
@@ -36,8 +44,6 @@ namespace mcts
 				//    outcome, and a different random number leads to a different child node)
 				//    So, the choices of the card ids should be identical.
 				// Thus, we can just use the zero-based index of the card id choices
-
-				int choices = action_choices.Size();
 
 				progress.FillChoices(choices);
 
@@ -57,6 +63,11 @@ namespace mcts
 				board::ActionChoicesGetter const& action_choices_getter,
 				ChoiceBlacklist & progress) const
 			{
+				if (action_type.IsChosenRandomly()) {
+					// ChoiceBlacklist do not care about random actions
+					return true;
+				}
+
 				board::ActionChoices action_choices = action_choices_getter();
 				assert(!action_choices.Empty());
 				int choices = action_choices.Size();
@@ -78,7 +89,6 @@ namespace mcts
 			}
 
 			void RestartAction(ChoiceBlacklist & progress) {
-				// Use a white-list-tree to record all viable (sub-)actions
 				progress.Restart();
 			}
 
@@ -89,10 +99,7 @@ namespace mcts
 				size_t valid_choices = progress.GetWhiteListCount();
 				if (valid_choices <= 0) return -1;
 
-				if (action_type.IsChosenRandomly()) {
-					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom((int)valid_choices);
-					return (int)progress.GetWhiteListItem((size_t)rnd);
-				}
+				assert(action_type.IsChosenManually());
 
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
 					policy::simulation::ChoiceGetter(progress), board
