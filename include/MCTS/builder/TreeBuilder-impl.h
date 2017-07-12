@@ -40,7 +40,7 @@ namespace mcts
 				node->GetAddon().action_analyzer, selection_stage_));
 
 			assert(episode_state_.IsValid());
-			statistic_.ApplyActionSucceeded();
+			statistic_.ApplyActionSucceeded(false);
 
 			assert(turn_start_node_);
 			assert(turn_start_node_->GetActionType().GetType() == ActionType::kMainAction);
@@ -83,7 +83,7 @@ namespace mcts
 			Result result = ApplyAction(action_analyzer, simulation_stage_);
 
 			assert(episode_state_.IsValid());
-			statistic_.ApplyActionSucceeded();
+			statistic_.ApplyActionSucceeded(true);
 
 			return result;
 		}
@@ -114,8 +114,7 @@ namespace mcts
 					if (result != Result::kResultInvalid) break;
 				}
 
-				// TODO: separate out selection/simulation success rate
-				statistic_.ApplyActionFailed();
+				statistic_.ApplyActionFailed(is_simulation);
 
 				// If it's replay failure, it means the stage handler already
 				// knows that action is invalid, and the progress is not stepped
