@@ -23,9 +23,9 @@ namespace mcts
 		//    However, since we guarantee that when we retrying an invalid choice,
 		//    all sub-actions except THE LAST ONE will be chosen, we can use a linear
 		//    data structure to record the black list choices, rather than using a tree.
-		// TODO
-		//    1. Maybe most of the case leads to a valid state. Can we write
-		//       to the vector only when an invalid state is detected?
+		//    Since most of the time, it should reach a valid state,
+		//    we try to do allocations as late as possible until we
+		//    met an invalid state.
 		class ChoiceBlacklist
 		{
 		private:
@@ -39,32 +39,43 @@ namespace mcts
 				detail::NodeIndexMap valid_indics_;
 				int choice_;
 
-				Item() : addon_(), valid_indics_(), choice_(-1) {}
+				Item(int choices) : addon_(), valid_indics_(), choice_(-1) {
+					for (size_t i = 0; i < (size_t)choices; ++i) {
+						valid_indics_.PushBack(i);
+					}
+				}
 			};
 
 		public:
-			ChoiceBlacklist() : items_(), idx_(0) {}
+			ChoiceBlacklist() : items_(), idx_(0), pending_last_choices_(0), pending_last_choice_(0)
+			{}
 
 			void Reset() {
 				items_.clear();
 				idx_ = 0;
+				pending_last_choices_ = 0;
+				pending_last_choice_ = 0;
 			}
 
 			void FillChoices(int choices) {
 				assert(choices >= 0);
 				if (idx_ < items_.size()) {
+					if (!items_[idx_].has_value()) {
+						items_[idx_] = Item(choices);
+					}
 					return;
 				}
 
-				auto& item = items_.emplace_back();
-				for (size_t i = 0; i < (size_t)choices; ++i) {
-					item.valid_indics_.PushBack(i);
-				}
+				// delay allocation, just step idx next
+				++idx_;
+				pending_last_choices_ = choices;
 			}
 
 			bool IsValid(int choice) const {
+				assert(!HasPending());
+
 				bool is_valid = false;
-				ForEachWhiteListItem([&](int valid_choice) {
+				ForEachWhiteListItem(choice, [&](int valid_choice) {
 					if (choice == valid_choice) {
 						is_valid = true;
 						return false; // early stop
@@ -74,44 +85,84 @@ namespace mcts
 				return is_valid;
 			}
 
-			TreeNodeAddon & GetCurrentNodeAddon() {
+			TreeNodeAddon * GetCurrentNodeAddon() {
+				if (HasPending()) return nullptr;
+
 				assert(idx_ < items_.size());
-				return items_[idx_].addon_;
+				assert(items_[idx_].has_value());
+				return &items_[idx_]->addon_;
 			}
 
-			size_t GetWhiteListCount() const {
+			size_t GetWhiteListCount(int choices) const {
+				if (HasPending()) {
+					// pending mode, all choices are still valid
+					return choices;
+				}
+
 				assert(idx_ < items_.size());
-				return items_[idx_].valid_indics_.Size();
+				assert(items_[idx_].has_value());
+				return items_[idx_]->valid_indics_.Size();
 			}
 			int GetWhiteListItem(size_t idx) const {
+				if (HasPending()) {
+					// pending mode, all choices are still valid
+					return (int)idx;
+				}
+
 				assert(idx_ < items_.size());
-				return (int)items_[idx_].valid_indics_.Get(idx);
+				assert(items_[idx_].has_value());
+				return (int)items_[idx_]->valid_indics_.Get(idx);
 			}
 			template <typename Functor>
-			void ForEachWhiteListItem(Functor&& functor) const {
+			void ForEachWhiteListItem(int choices, Functor&& functor) const {
+				if (HasPending()) {
+					// pending mode, all choices are still valid
+					for (int i = 0; i < choices; ++i) {
+						if (!functor(i)) break;
+					}
+					return;
+				}
+
 				assert(idx_ < items_.size());
-				return items_[idx_].valid_indics_.ForEach([&](size_t idx) {
+				assert(items_[idx_].has_value());
+				return items_[idx_]->valid_indics_.ForEach([&](size_t idx) {
 					return functor((int)idx);
 				});
 			}
 
 			void ApplyChoice(int choice) {
+				if (HasPending()) {
+					pending_last_choice_ = choice;
+					return;
+				}
+
 				assert(idx_ < items_.size());
-				items_[idx_].choice_ = choice;
+				assert(items_[idx_].has_value());
+				items_[idx_]->choice_ = choice;
 				++idx_;
 			}
 
 			void ReportInvalidChoice() {
+				if (idx_ > items_.size()) {
+					do {
+						items_.emplace_back();
+					} while (idx_ > items_.size());
+					items_.back() = Item(pending_last_choices_);
+					items_.back()->choice_ = pending_last_choice_;
+				}
+
 				assert(!items_.empty());
 				assert(idx_ == items_.size());
 
 				while (true) {
-					int choice = items_.back().choice_;
-					bool erased = items_.back().valid_indics_.Erase(choice);
+					assert(items_.back().has_value());
+					Item & last_item = *items_.back();
+					int choice = last_item.choice_;
+					bool erased = last_item.valid_indics_.Erase(choice);
 					(void)erased;
 					assert(erased);
 
-					if (!items_.back().valid_indics_.Empty()) {
+					if (!last_item.valid_indics_.Empty()) {
 						// still has other valid choices, leave it alone
 						break;
 					}
@@ -127,8 +178,16 @@ namespace mcts
 			}
 
 		private:
-			std::vector<Item> items_;
+			bool HasPending() const {
+				return idx_ >= items_.size();
+			}
+
+		private:
+			std::vector<std::optional<Item>> items_;
 			size_t idx_;
+
+			int pending_last_choices_;
+			int pending_last_choice_;
 		};
 	}
 }

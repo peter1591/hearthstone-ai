@@ -48,8 +48,9 @@ namespace mcts
 				progress.FillChoices(choices);
 
 				assert([&]() {
-					auto & addon = progress.GetCurrentNodeAddon();
-					return addon.action_choice_checker.Check(action_type, action_choices);
+					auto * addon = progress.GetCurrentNodeAddon();
+					if (!addon) return true;
+					return addon->action_choice_checker.Check(action_type, action_choices);
 				}());
 
 				int choice = Simulate(board, action_type, choices, progress);
@@ -74,8 +75,9 @@ namespace mcts
 				progress.FillChoices(choices);
 
 				assert([&]() {
-					auto & addon = progress.GetCurrentNodeAddon();
-					return addon.action_choice_checker.Check(action_type, action_choices);
+					auto * addon = progress.GetCurrentNodeAddon();
+					if (!addon) return true;
+					return addon->action_choice_checker.Check(action_type, action_choices);
 				}());
 
 				if (!progress.IsValid(choice)) return false;
@@ -96,13 +98,13 @@ namespace mcts
 			int Simulate(board::Board const& board, ActionType action_type, int choices,
 				ChoiceBlacklist & progress) const
 			{
-				size_t valid_choices = progress.GetWhiteListCount();
+				size_t valid_choices = progress.GetWhiteListCount(choices);
 				if (valid_choices <= 0) return -1;
 
 				assert(action_type.IsChosenManually());
 
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
-					policy::simulation::ChoiceGetter(progress), board
+					policy::simulation::ChoiceGetter(choices, progress), board
 				);
 
 				return choice;

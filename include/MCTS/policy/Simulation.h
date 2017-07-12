@@ -14,18 +14,20 @@ namespace mcts
 			class ChoiceGetter
 			{
 			public:
-				ChoiceGetter(TreeProgress const& progress) : progress_(progress) {}
+				ChoiceGetter(int choices, TreeProgress const& progress) :
+					choices_(choices), progress_(progress) {}
 
-				size_t Size() const { return progress_.GetWhiteListCount(); }
+				size_t Size() const { return progress_.GetWhiteListCount(choices_); }
 
 				int Get(size_t idx) const { return progress_.GetWhiteListItem(idx); }
 
 				template <typename Functor>
 				void ForEachChoice(Functor&& functor) const {
-					progress_.ForEachWhiteListItem(std::forward<Functor>(functor));
+					progress_.ForEachWhiteListItem(choices_, std::forward<Functor>(functor));
 				}
 
 			private:
+				int choices_;
 				TreeProgress const& progress_;
 			};
 
