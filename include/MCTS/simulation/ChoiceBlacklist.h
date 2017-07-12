@@ -37,10 +37,9 @@ namespace mcts
 
 				TreeNodeAddon addon_;
 				detail::NodeIndexMap valid_indics_;
-				std::array<bool, kMaxChoices> choices_isvalid_; // TODO: is this really benefitial?
 				int choice_;
 
-				Item() : addon_(), valid_indics_(), choices_isvalid_(), choice_(-1) {}
+				Item() : addon_(), valid_indics_(), choice_(-1) {}
 			};
 
 		public:
@@ -59,14 +58,20 @@ namespace mcts
 
 				auto& item = items_.emplace_back();
 				for (size_t i = 0; i < (size_t)choices; ++i) {
-					item.choices_isvalid_[i] = true;
 					item.valid_indics_.PushBack(i);
 				}
 			}
 
 			bool IsValid(int choice) const {
-				assert(idx_ < items_.size());
-				return items_[idx_].choices_isvalid_[choice];
+				bool is_valid = false;
+				ForEachWhiteListItem([&](int valid_choice) {
+					if (choice == valid_choice) {
+						is_valid = true;
+						return false; // early stop
+					}
+					return true;
+				});
+				return is_valid;
 			}
 
 			TreeNodeAddon & GetCurrentNodeAddon() {
@@ -105,9 +110,6 @@ namespace mcts
 					bool erased = items_.back().valid_indics_.Erase(choice);
 					(void)erased;
 					assert(erased);
-
-					assert(items_.back().choices_isvalid_[choice]);
-					items_.back().choices_isvalid_[choice] = false;
 
 					if (!items_.back().valid_indics_.Empty()) {
 						// still has other valid choices, leave it alone

@@ -114,6 +114,7 @@ namespace mcts
 					if (result != Result::kResultInvalid) break;
 				}
 
+				// TODO: separate out selection/simulation success rate
 				statistic_.ApplyActionFailed();
 
 				// If it's replay failure, it means the stage handler already
