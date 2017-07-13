@@ -142,7 +142,14 @@ namespace mcts
 				++idx_;
 			}
 
-			void ReportInvalidChoice() {
+			// @return #-of-steps needed to be ruled-out in next trial.
+			//         Normally, this number is one, meaning that
+			//         only the last step should be ruled-out, and
+			//         all the previous steps should be re-played.
+			//         However, if the step before the last step has no
+			//         other valid choices, this number will be two.
+			//         Meaning that the last two steps should be ruled-out.
+			int ReportInvalidChoice() {
 				if (idx_ > items_.size()) {
 					do {
 						items_.emplace_back();
@@ -154,7 +161,9 @@ namespace mcts
 				assert(!items_.empty());
 				assert(idx_ == items_.size());
 
+				int invalid_steps = 0;
 				while (true) {
+					++invalid_steps;
 					assert(items_.back().has_value());
 					Item & last_item = *items_.back();
 					int choice = last_item.choice_;
@@ -171,6 +180,9 @@ namespace mcts
 					items_.pop_back();
 					assert(!items_.empty()); // at least one valid action in main action
 				}
+
+				assert(invalid_steps > 0);
+				return invalid_steps;
 			}
 
 			void Restart() {

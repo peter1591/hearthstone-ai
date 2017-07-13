@@ -122,7 +122,9 @@ namespace mcts
 				// in the replay recording, which is done later.
 				if (!action_replayer_.IsReplayFailed()) {
 					if constexpr (is_simulation) {
-						stage_handler.ReportInvalidAction(simulation_progress_);
+						int rollbacks = stage_handler.ReportInvalidAction(simulation_progress_);
+						action_replayer_.RemoveLast(rollbacks);
+						stage_handler.RestartAction(simulation_progress_);
 					}
 					else {
 						stage_handler.ReportInvalidAction();
@@ -130,15 +132,15 @@ namespace mcts
 				}
 
 				if constexpr (is_simulation) {
-					stage_handler.RestartAction(simulation_progress_);
+					assert(!action_replayer_.IsReplayFailed()); // should not happen, since we rollback correctly
 				}
 				else {
+					action_replayer_.RemoveLast();
 					stage_handler.RestartAction();
 				}
 
 				episode_state_.GetBoard().RestoreState();
 				episode_state_.SetValid();
-				action_replayer_.RemoveLast();
 				action_replayer_.Restart();
 			}
 
@@ -166,6 +168,7 @@ namespace mcts
 					assert(episode_state_.GetStage() == kStageSimulation);
 					if (!simulation_stage_.ApplyChoice(action_type, choice, choices_getter, simulation_progress_)) {
 						// invalid action during replay
+						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
 						action_replayer_.MarkReplayFailed();
 						episode_state_.SetInvalid();
 						return -1;

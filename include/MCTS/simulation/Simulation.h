@@ -86,8 +86,9 @@ namespace mcts
 				return true;
 			}
 
-			void ReportInvalidAction(ChoiceBlacklist & progress) {
-				progress.ReportInvalidChoice();
+			// @return #-of-invalid-steps in this trial
+			int ReportInvalidAction(ChoiceBlacklist & progress) {
+				return progress.ReportInvalidChoice();
 			}
 
 			void RestartAction(ChoiceBlacklist & progress) {

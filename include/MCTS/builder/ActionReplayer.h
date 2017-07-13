@@ -11,6 +11,7 @@ namespace mcts
 				ActionType action_type_; // TODO: debug only
 				int choice_;
 
+				Item() : action_type_(), choice_(-1) {}
 				Item(ActionType action_type, int choice) :
 					action_type_(action_type), choice_(choice)
 				{}
@@ -53,8 +54,10 @@ namespace mcts
 				return true;
 			}
 
-			void RemoveLast() {
-				choices_.pop_back();
+			void RemoveLast(int count = 1) {
+				assert(count >= 1);
+				assert(choices_.size() >= (size_t)count);
+				choices_.resize(choices_.size() - (size_t)count);
 			}
 
 		public:
