@@ -122,15 +122,26 @@ namespace mcts
 				return final_node;
 			}
 
-			void ReportInvalidAction() {
-				for (auto it = path_.rbegin(); it != path_.rend(); ++it) {
+			int ReportInvalidAction() {
+				int invalid_steps = 0;
+
+				auto it = path_.rbegin();
+
+				// skip the last choice which yields an invalid state due to no valid child
+				for (; it != path_.rend(); ++it) {
+					if (it->GetChoice() >= 0) break;
+				}
+
+				for (; it != path_.rend(); ++it) {
+					assert(it->GetChoice() >= 0);
+					++invalid_steps;
 					if (it->GetNode()->GetActionType().IsInvalidStateBlameNode()) {
-						if (it->GetChoice() < 0) continue;
 						it->GetNode()->MarkChoiceInvalid(it->GetChoice());
-						return;
+						break;
 					}
 				}
-				assert(false);
+				assert(invalid_steps > 0);
+				return invalid_steps;
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }

@@ -127,7 +127,9 @@ namespace mcts
 						stage_handler.RestartAction(simulation_progress_);
 					}
 					else {
-						stage_handler.ReportInvalidAction();
+						int rollbacks = stage_handler.ReportInvalidAction();
+						action_replayer_.RemoveLast(rollbacks);
+						stage_handler.RestartAction();
 					}
 				}
 
@@ -135,8 +137,7 @@ namespace mcts
 					assert(!action_replayer_.IsReplayFailed()); // should not happen, since we rollback correctly
 				}
 				else {
-					action_replayer_.RemoveLast();
-					stage_handler.RestartAction();
+					assert(!action_replayer_.IsReplayFailed()); // should not happen, since we rollback correctly
 				}
 
 				episode_state_.GetBoard().RestoreState();
@@ -159,6 +160,7 @@ namespace mcts
 				if (episode_state_.GetStage() == kStageSelection) {
 					if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter, choice) < 0) {
 						// invalid action during replay
+						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
 						action_replayer_.MarkReplayFailed();
 						episode_state_.SetInvalid();
 						return -1;
