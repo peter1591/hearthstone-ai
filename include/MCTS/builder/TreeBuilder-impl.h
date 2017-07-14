@@ -21,6 +21,8 @@ namespace mcts
 			TreeNode * node, board::Board & board, 
 			detail::BoardNodeMap & last_node_map, TreeUpdater * updater)
 		{
+			action_replayer_.Clear();
+
 			assert(node);
 
 			episode_state_.Start(kStageSelection, board);
@@ -63,6 +65,8 @@ namespace mcts
 		// Note: can only be called when current player is the viewer of 'board'
 		inline Result TreeBuilder::PerformSimulate(board::Board & board)
 		{
+			action_replayer_.Clear();
+
 			episode_state_.Start(kStageSimulation, board);
 			assert(episode_state_.IsValid());
 			assert(episode_state_.GetStage() == kStageSimulation);
@@ -74,7 +78,6 @@ namespace mcts
 			// Alternatively, we can just restart the episode, and hope this will not happen frequently
 			episode_state_.GetBoard().SaveState();
 
-			assert(episode_state_.GetStage() == kStageSimulation);
 			simulation_stage_.StartNewAction();
 
 			board::BoardActionAnalyzer action_analyzer;
@@ -103,7 +106,14 @@ namespace mcts
 			Result result = Result::kResultInvalid;
 			while (true) {
 				int choices = episode_state_.GetBoard().GetActionsCount(action_analyzer);
-				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+
+				int choice = -1;
+				if constexpr (is_simulation) {
+					choice = this->ChooseSimulateAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+				}
+				else {
+					choice = this->ChooseSelectAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+				}
 
 				if (episode_state_.IsValid()) {
 					result = episode_state_.GetBoard().ApplyAction(
@@ -122,45 +132,62 @@ namespace mcts
 				action_replayer_.Restart();
 			}
 
-			action_replayer_.Clear();
 			assert(result != Result::kResultInvalid);
 			return result;
 		}
 
-		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoices const& choices)
+		inline int TreeBuilder::ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices)
 		{
 			int choice = -1;
 			
 			if (!action_replayer_.IsEnd()) {
 				choice = action_replayer_.GetChoice(action_type);
 
-				if (episode_state_.GetStage() == kStageSelection) {
-					if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices, choice) < 0) {
-						// invalid action during replay
-						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
-						return -1;
-					}
-				}
-				else {
-					assert(episode_state_.GetStage() == kStageSimulation);
-					if (!simulation_stage_.ApplyChoice(action_type, choice, choices)) {
-						// invalid action during replay
-						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
-						return -1;
-					}
+				assert(episode_state_.GetStage() == kStageSelection);
+				if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices, choice) < 0) {
+					// invalid action during replay
+					assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
+					return -1;
 				}
 
 				action_replayer_.StepNext();
 				return choice;
 			}
 
-			if (episode_state_.GetStage() == kStageSelection) {
-				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+			assert(episode_state_.GetStage() == kStageSelection);
+			choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+
+			if (choice >= 0) {
+				action_replayer_.RecordChoice(action_type, choice);
+				action_replayer_.StepNext();
 			}
 			else {
-				assert(episode_state_.GetStage() == kStageSimulation);
-				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+				episode_state_.SetInvalid();
 			}
+
+			return choice;
+		}
+
+		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)
+		{
+			int choice = -1;
+
+			if (!action_replayer_.IsEnd()) {
+				choice = action_replayer_.GetChoice(action_type);
+
+				assert(episode_state_.GetStage() == kStageSimulation);
+				if (!simulation_stage_.ApplyChoice(action_type, choice, choices)) {
+					// invalid action during replay
+					assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
+					return -1;
+				}
+
+				action_replayer_.StepNext();
+				return choice;
+			}
+
+			assert(episode_state_.GetStage() == kStageSimulation);
+			choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 
 			if (choice >= 0) {
 				action_replayer_.RecordChoice(action_type, choice);

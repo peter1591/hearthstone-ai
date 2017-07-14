@@ -15,6 +15,8 @@
 
 namespace mcts
 {
+	class SOMCTS;
+
 	namespace builder
 	{
 		// Traverse and build a game tree in a monte-carlo fashion
@@ -25,9 +27,11 @@ namespace mcts
 		public:
 			typedef selection::TreeNode TreeNode;
 
-			TreeBuilder(Statistic<> & statistic) :
-				action_parameter_getter_(*this), random_generator_(*this),
-				episode_state_(), statistic_(statistic),
+			TreeBuilder(SOMCTS & caller, Statistic<> & statistic) :
+				action_parameter_getter_(caller),
+				random_generator_(caller),
+				episode_state_(),
+				statistic_(statistic), // TODO: remove this, use caller.GetStatistic()
 				selection_stage_(), simulation_stage_(),
 				action_replayer_()
 			{
@@ -64,7 +68,8 @@ namespace mcts
 				StageHandler&& stage_handler);
 
 		public: // for callbacks: action-parameter-getter and random-generator
-			int ChooseAction(ActionType action_type, board::ActionChoices const& choices);
+			int ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices);
+			int ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
 			board::ActionParameterGetter action_parameter_getter_;

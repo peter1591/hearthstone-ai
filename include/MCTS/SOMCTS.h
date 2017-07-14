@@ -21,6 +21,7 @@ namespace mcts
 	public:
 		SOMCTS(state::PlayerSide side, Statistic<> & statistic) :
 			side_(side), root_(), statistic_(statistic),
+			builder_(*this, statistic_),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
 
@@ -39,14 +40,13 @@ namespace mcts
 		{
 			assert(board.GetCurrentPlayer().GetSide() == side_);
 
-			builder::TreeBuilder builder(statistic_);
 			Result result = Result::kResultInvalid;
 
 			builder::TreeBuilder::TreeNode* turn_start_node = node_;
 
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
-					result = builder.PerformSimulate(board);
+					result = builder_.PerformSimulate(board);
 					assert(result != Result::kResultInvalid);
 					if (result != Result::kResultNotDetermined) return result;
 				}
@@ -66,7 +66,7 @@ namespace mcts
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
-					auto perform_result = builder.PerformSelect(node_, board, turn_node_map, &updater_);
+					auto perform_result = builder_.PerformSelect(node_, board, turn_node_map, &updater_);
 					assert(perform_result.result != Result::kResultInvalid);
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
@@ -107,6 +107,16 @@ namespace mcts
 			bool credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state::kPlayerFirst, result);
 			updater_.Update(credit);
 		}
+		
+		int ChooseAction(ActionType action_type, board::ActionChoices const& choices) {
+			if (stage_ == kStageSelection) {
+				return builder_.ChooseSelectAction(action_type, choices);
+			}
+			else {
+				assert(stage_ == kStageSimulation);
+				return builder_.ChooseSimulateAction(action_type, choices);
+			}
+		}
 
 	private:
 		state::PlayerSide side_;
@@ -114,6 +124,7 @@ namespace mcts
 		Statistic<> & statistic_;
 
 	private: // traversal progress
+		builder::TreeBuilder builder_;
 		builder::TreeBuilder::TreeNode* node_;
 		Stage stage_;
 		builder::TreeUpdater updater_;

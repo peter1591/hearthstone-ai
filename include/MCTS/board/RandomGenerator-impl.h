@@ -8,7 +8,7 @@ namespace mcts
 	{
 		inline int RandomGenerator::Get(int exclusive_max)
 		{
-			return builder_.ChooseAction(ActionType(ActionType::kRandom), ActionChoices(exclusive_max));
+			return callback_.ChooseAction(ActionType(ActionType::kRandom), ActionChoices(exclusive_max));
 		}
 	}
 }
