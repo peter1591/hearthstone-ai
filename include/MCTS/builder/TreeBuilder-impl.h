@@ -25,9 +25,8 @@ namespace mcts
 
 			assert(node);
 
-			episode_state_.Start(kStageSelection, board);
+			episode_state_.Start(board);
 			assert(episode_state_.IsValid());
-			assert(episode_state_.GetStage() == kStageSelection);
 
 			// TODO [PROFILING]:
 			// We save the board every time here. This is just for the case an invalid action is applied
@@ -67,9 +66,8 @@ namespace mcts
 		{
 			action_replayer_.Clear();
 
-			episode_state_.Start(kStageSimulation, board);
+			episode_state_.Start(board);
 			assert(episode_state_.IsValid());
-			assert(episode_state_.GetStage() == kStageSimulation);
 
 			// TODO [PROFILING]:
 			// We save the board every time here. This is just for the case an invalid action is applied
@@ -143,7 +141,6 @@ namespace mcts
 			if (!action_replayer_.IsEnd()) {
 				choice = action_replayer_.GetChoice(action_type);
 
-				assert(episode_state_.GetStage() == kStageSelection);
 				if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices, choice) < 0) {
 					// invalid action during replay
 					assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
@@ -154,7 +151,6 @@ namespace mcts
 				return choice;
 			}
 
-			assert(episode_state_.GetStage() == kStageSelection);
 			choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 
 			if (choice >= 0) {
@@ -175,7 +171,6 @@ namespace mcts
 			if (!action_replayer_.IsEnd()) {
 				choice = action_replayer_.GetChoice(action_type);
 
-				assert(episode_state_.GetStage() == kStageSimulation);
 				if (!simulation_stage_.ApplyChoice(action_type, choice, choices)) {
 					// invalid action during replay
 					assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
@@ -186,7 +181,6 @@ namespace mcts
 				return choice;
 			}
 
-			assert(episode_state_.GetStage() == kStageSimulation);
 			choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 
 			if (choice >= 0) {

@@ -11,17 +11,13 @@ namespace mcts
 		class EpisodeState
 		{
 		public:
-			EpisodeState() : board_(nullptr), stage_(kStageSelection), is_valid_(true) {}
+			EpisodeState() : board_(nullptr), is_valid_(true) {}
 
-			void Start(Stage stage, board::Board & board)
+			void Start(board::Board & board)
 			{
-				stage_ = stage;
 				is_valid_ = true;
 				board_ = &board;
 			}
-
-			Stage GetStage() const { return stage_; }
-			void SetToSimulationStage() { stage_ = kStageSimulation; }
 
 			board::Board const& GetBoard() const { return *board_; }
 			board::Board & GetBoard() { return *board_; }
@@ -32,7 +28,6 @@ namespace mcts
 
 		private:
 			board::Board * board_;
-			Stage stage_;
 			bool is_valid_;
 		};
 	}
