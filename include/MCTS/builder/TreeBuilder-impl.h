@@ -44,13 +44,20 @@ namespace mcts
 			assert(apply_state_.IsValid());
 			statistic_.ApplyActionSucceeded(false);
 
-			perform_result.node = selection_stage_.FinishMainAction(
-				last_node_map,
-				apply_state_.GetBoard(),
-				&perform_result.new_node_created);
+			// we use mutable here, since we will throw it away after all
+			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
+
+			// construct a redirect node for the last action
+			perform_result.new_node_created = false;
+			perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
+			traversed_path.back().ConstructRedirectNode(perform_result.node);
+			traversed_path.emplace_back(perform_result.node);
+			if (!perform_result.new_node_created) {
+				perform_result.new_node_created = selection_stage_.HasNewNodeCreated();
+			}
 
 			assert(updater);
-			updater->PushBackNodes(selection_stage_.GetTraversedPath());
+			updater->PushBackNodes(traversed_path);
 
 			assert([](builder::TreeBuilder::TreeNode* node) {
 				if (!node->GetActionType().IsValid()) return true;

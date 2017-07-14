@@ -13,7 +13,10 @@ namespace mcts
 		class ActionApplyState
 		{
 		public:
-			ActionApplyState() : board_(nullptr), is_valid_(true) {}
+			ActionApplyState() : board_(nullptr), is_valid_(true), saved_board_() {}
+
+			ActionApplyState(ActionApplyState const&) = delete;
+			ActionApplyState & operator=(ActionApplyState const&) = delete;
 
 			void Start(board::Board & board)
 			{

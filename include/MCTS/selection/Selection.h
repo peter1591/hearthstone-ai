@@ -106,21 +106,6 @@ namespace mcts
 				return next_choice;
 			}
 
-			TreeNode* FinishMainAction(
-				detail::BoardNodeMap & last_node_lookup,
-				board::Board const& board,
-				bool * created_new_node)
-			{
-				TreeNode* final_node = last_node_lookup.GetOrCreateNode(board, created_new_node);
-				if (new_node_created_) *created_new_node = true;
-
-				path_.back().ConstructRedirectNode(final_node);
-
-				path_.emplace_back(final_node);
-
-				return final_node;
-			}
-
 			int ReportInvalidAction() {
 				int invalid_steps = 0;
 
@@ -144,6 +129,9 @@ namespace mcts
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
+			std::vector<TraversedNodeInfo> & GetMutableTraversedPath() { return path_; }
+
+			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
 			TreeNode* root_;
