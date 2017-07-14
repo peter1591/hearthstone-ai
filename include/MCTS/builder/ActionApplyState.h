@@ -6,6 +6,8 @@
 
 namespace mcts
 {
+	class SOMCTS;
+
 	namespace builder
 	{
 		// TODO: expand this class into tree builder?
@@ -13,7 +15,10 @@ namespace mcts
 		class ActionApplyState
 		{
 		public:
-			ActionApplyState() : board_(nullptr), is_valid_(true), saved_board_() {}
+			ActionApplyState(SOMCTS & caller) :
+				action_parameter_getter_(caller), random_generator_(caller),
+				board_(nullptr), is_valid_(true), saved_board_()
+			{}
 
 			ActionApplyState(ActionApplyState const&) = delete;
 			ActionApplyState & operator=(ActionApplyState const&) = delete;
@@ -25,7 +30,11 @@ namespace mcts
 			}
 
 			board::Board const& GetBoard() const { return *board_; }
-			board::Board & GetBoard() { return *board_; }
+
+			Result ApplyAction(int action, board::BoardActionAnalyzer & action_analyzer)
+			{
+				return board_->ApplyAction(action, action_analyzer, random_generator_, action_parameter_getter_);
+			}
 
 			void SaveBoard() {
 				assert(board_);
@@ -42,6 +51,9 @@ namespace mcts
 			bool IsValid() const { return is_valid_; }
 
 		private:
+			board::ActionParameterGetter action_parameter_getter_;
+			board::RandomGenerator random_generator_;
+
 			board::Board * board_;
 			bool is_valid_;
 			state::State saved_board_;

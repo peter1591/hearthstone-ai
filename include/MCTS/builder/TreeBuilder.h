@@ -15,8 +15,6 @@
 
 namespace mcts
 {
-	class SOMCTS;
-
 	namespace builder
 	{
 		// TODO: separate Simulate to another class
@@ -32,10 +30,8 @@ namespace mcts
 			typedef selection::TreeNode TreeNode;
 
 			TreeBuilder(SOMCTS & caller, Statistic<> & statistic) :
-				action_parameter_getter_(caller),
-				random_generator_(caller),
 				statistic_(statistic),
-				apply_state_(),
+				apply_state_(caller),
 				selection_stage_(), simulation_stage_(),
 				action_replayer_()
 			{
@@ -76,8 +72,6 @@ namespace mcts
 			int ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
-			board::ActionParameterGetter action_parameter_getter_;
-			board::RandomGenerator random_generator_;
 			Statistic<> & statistic_;
 
 			ActionApplyState apply_state_;

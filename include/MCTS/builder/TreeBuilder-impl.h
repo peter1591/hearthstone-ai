@@ -121,8 +121,7 @@ namespace mcts
 				}
 
 				if (apply_state_.IsValid()) {
-					result = apply_state_.GetBoard().ApplyAction(
-						choice, action_analyzer, random_generator_, action_parameter_getter_);
+					result = apply_state_.ApplyAction(choice, action_analyzer);
 					if (result != Result::kResultInvalid) break;
 				}
 
