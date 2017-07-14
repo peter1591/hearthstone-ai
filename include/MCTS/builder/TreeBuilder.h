@@ -28,7 +28,7 @@ namespace mcts
 			TreeBuilder(Statistic<> & statistic) :
 				action_parameter_getter_(*this), random_generator_(*this),
 				turn_start_node_(nullptr), episode_state_(), statistic_(statistic),
-				selection_stage_(), simulation_stage_(), simulation_progress_(),
+				selection_stage_(), simulation_stage_(),
 				action_replayer_()
 			{
 			}
@@ -77,8 +77,6 @@ namespace mcts
 
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;
-
-			simulation::ChoiceBlacklist simulation_progress_;
 
 			ActionReplayer action_replayer_;
 		};

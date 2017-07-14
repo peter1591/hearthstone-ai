@@ -11,14 +11,15 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			void StartNewAction(ChoiceBlacklist & progress) {
-				progress.Reset();
+			Simulation() : blacklist_() {}
+
+			void StartNewAction() {
+				blacklist_.Reset();
 			}
 
 			int ChooseAction(board::Board const& board,
 				ActionType action_type,
-				board::ActionChoices const& action_choices,
-				ChoiceBlacklist & progress)
+				board::ActionChoices const& action_choices)
 			{
 				if (action_choices.Empty()) return -1;
 
@@ -44,24 +45,23 @@ namespace mcts
 				//    So, the choices of the card ids should be identical.
 				// Thus, we can just use the zero-based index of the card id choices
 
-				progress.FillChoices(choices);
+				blacklist_.FillChoices(choices);
 
 				assert([&]() {
-					auto * addon = progress.GetCurrentNodeAddon();
+					auto * addon = blacklist_.GetCurrentNodeAddon();
 					if (!addon) return true;
 					return addon->action_choice_checker.Check(action_type, action_choices);
 				}());
 
-				int choice = Simulate(board, action_type, choices, progress);
+				int choice = Simulate(board, action_type, choices);
 				if (choice < 0) return -1;
 
-				progress.ApplyChoice(choice);
+				blacklist_.ApplyChoice(choice);
 				return action_choices.Get(choice);
 			}
 
 			bool ApplyChoice(ActionType action_type, int choice,
-				board::ActionChoices const& action_choices, // TODO: can pass 'choices' only
-				ChoiceBlacklist & progress) const
+				board::ActionChoices const& action_choices)
 			{
 				if (action_type.IsChosenRandomly()) {
 					// ChoiceBlacklist do not care about random actions
@@ -70,44 +70,46 @@ namespace mcts
 
 				assert(!action_choices.Empty());
 				int choices = action_choices.Size();
-				progress.FillChoices(choices);
+				blacklist_.FillChoices(choices);
 
 				assert([&]() {
-					auto * addon = progress.GetCurrentNodeAddon();
+					auto * addon = blacklist_.GetCurrentNodeAddon();
 					if (!addon) return true;
 					return addon->action_choice_checker.Check(action_type, action_choices);
 				}());
 
-				if (!progress.IsValid(choice)) return false;
+				if (!blacklist_.IsValid(choice)) return false;
 
-				progress.ApplyChoice(choice);
+				blacklist_.ApplyChoice(choice);
 				return true;
 			}
 
 			// @return #-of-invalid-steps in this trial
-			int ReportInvalidAction(ChoiceBlacklist & progress) {
-				return progress.ReportInvalidChoice();
+			int ReportInvalidAction() {
+				return blacklist_.ReportInvalidChoice();
 			}
 
-			void RestartAction(ChoiceBlacklist & progress) {
-				progress.Restart();
+			void RestartAction() {
+				blacklist_.Restart();
 			}
 
 		private:
-			int Simulate(board::Board const& board, ActionType action_type, int choices,
-				ChoiceBlacklist & progress) const
+			int Simulate(board::Board const& board, ActionType action_type, int choices) const
 			{
-				size_t valid_choices = progress.GetWhiteListCount(choices);
+				size_t valid_choices = blacklist_.GetWhiteListCount(choices);
 				if (valid_choices <= 0) return -1;
 
 				assert(action_type.IsChosenManually());
 
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
-					policy::simulation::ChoiceGetter(choices, progress), board
+					policy::simulation::ChoiceGetter(choices, blacklist_), board
 				);
 
 				return choice;
 			}
+
+		private:
+			ChoiceBlacklist blacklist_;
 		};
 	}
 }

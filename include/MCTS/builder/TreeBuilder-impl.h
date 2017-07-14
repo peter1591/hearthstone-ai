@@ -76,7 +76,7 @@ namespace mcts
 			episode_state_.GetBoard().SaveState();
 
 			assert(episode_state_.GetStage() == kStageSimulation);
-			simulation_stage_.StartNewAction(simulation_progress_);
+			simulation_stage_.StartNewAction();
 
 			board::BoardActionAnalyzer action_analyzer;
 
@@ -114,16 +114,9 @@ namespace mcts
 
 				statistic_.ApplyActionFailed(is_simulation);
 
-				if constexpr (is_simulation) {
-					int rollbacks = stage_handler.ReportInvalidAction(simulation_progress_);
-					action_replayer_.RemoveLast(rollbacks);
-					stage_handler.RestartAction(simulation_progress_);
-				}
-				else {
-					int rollbacks = stage_handler.ReportInvalidAction();
-					action_replayer_.RemoveLast(rollbacks);
-					stage_handler.RestartAction();
-				}
+				int rollbacks = stage_handler.ReportInvalidAction();
+				action_replayer_.RemoveLast(rollbacks);
+				stage_handler.RestartAction();
 
 				episode_state_.GetBoard().RestoreState();
 				episode_state_.SetValid();
@@ -151,7 +144,7 @@ namespace mcts
 				}
 				else {
 					assert(episode_state_.GetStage() == kStageSimulation);
-					if (!simulation_stage_.ApplyChoice(action_type, choice, choices, simulation_progress_)) {
+					if (!simulation_stage_.ApplyChoice(action_type, choice, choices)) {
 						// invalid action during replay
 						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
 						return -1;
@@ -167,8 +160,7 @@ namespace mcts
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);
-				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices,
-					simulation_progress_);
+				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 			}
 
 			if (choice >= 0) {
