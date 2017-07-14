@@ -38,16 +38,11 @@ namespace mcts
 		Result PerformOwnTurnActions(board::Board & board)
 		{
 			assert(board.GetCurrentPlayer().GetSide() == side_);
-			assert([](builder::TreeBuilder::TreeNode* node) {
-				if (!node) return true;
-				if (!node->GetActionType().IsValid()) return true;
-				return node->GetActionType().GetType() == ActionType::kMainAction;
-			}(node_));
 
 			builder::TreeBuilder builder(statistic_);
 			Result result = Result::kResultInvalid;
 
-			builder.TurnStart(node_);
+			builder::TreeBuilder::TreeNode* turn_start_node = node_;
 
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
@@ -57,13 +52,21 @@ namespace mcts
 				}
 				else {
 					// Selection stage
+					assert(turn_start_node);
+					assert([](builder::TreeBuilder::TreeNode* node) {
+						if (!node) return false;
+						if (!node->GetActionType().IsValid()) return true;
+						return node->GetActionType().GetType() == ActionType::kMainAction;
+					}(turn_start_node));
+					auto & turn_node_map = turn_start_node->GetAddon().board_node_map;
+
 					assert(stage_ == kStageSelection);
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node) return false;
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
-					auto perform_result = builder.PerformSelect(node_, board, &updater_);
+					auto perform_result = builder.PerformSelect(node_, board, turn_node_map, &updater_);
 					assert(perform_result.result != Result::kResultInvalid);
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;

@@ -27,7 +27,7 @@ namespace mcts
 
 			TreeBuilder(Statistic<> & statistic) :
 				action_parameter_getter_(*this), random_generator_(*this),
-				turn_start_node_(nullptr), episode_state_(), statistic_(statistic),
+				episode_state_(), statistic_(statistic),
 				selection_stage_(), simulation_stage_(),
 				action_replayer_()
 			{
@@ -35,8 +35,6 @@ namespace mcts
 
 			TreeBuilder(TreeBuilder const&) = delete;
 			TreeBuilder & operator=(TreeBuilder const&) = delete;
-
-			void TurnStart(TreeNode* node) { turn_start_node_ = node; }
 
 			struct SelectResult
 			{
@@ -52,7 +50,8 @@ namespace mcts
 			};
 			
 			// Note: can only be called when current player is the viewer of 'board'
-			SelectResult PerformSelect(TreeNode * node, board::Board & board, TreeUpdater * updater);
+			SelectResult PerformSelect(TreeNode * node, board::Board & board,
+				detail::BoardNodeMap & last_node_map, TreeUpdater * updater);
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
@@ -71,7 +70,6 @@ namespace mcts
 			board::ActionParameterGetter action_parameter_getter_;
 			board::RandomGenerator random_generator_;
 
-			TreeNode* turn_start_node_;
 			EpisodeState episode_state_;
 			Statistic<> & statistic_;
 

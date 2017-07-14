@@ -18,7 +18,8 @@ namespace mcts
 		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 		// Note: can only be called when current player is the viewer of 'board'
 		inline TreeBuilder::SelectResult TreeBuilder::PerformSelect(
-			TreeNode * node, board::Board & board, TreeUpdater * updater)
+			TreeNode * node, board::Board & board, 
+			detail::BoardNodeMap & last_node_map, TreeUpdater * updater)
 		{
 			assert(node);
 
@@ -42,10 +43,8 @@ namespace mcts
 			assert(episode_state_.IsValid());
 			statistic_.ApplyActionSucceeded(false);
 
-			assert(turn_start_node_);
-			assert(turn_start_node_->GetActionType().GetType() == ActionType::kMainAction);
 			perform_result.node = selection_stage_.FinishMainAction(
-				turn_start_node_->GetAddon().board_node_map,
+				last_node_map,
 				episode_state_.GetBoard(),
 				&perform_result.new_node_created);
 
