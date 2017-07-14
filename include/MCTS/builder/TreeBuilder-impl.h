@@ -25,15 +25,15 @@ namespace mcts
 
 			assert(node);
 
-			episode_state_.Start(board);
-			assert(episode_state_.IsValid());
+			apply_state_.Start(board);
+			assert(apply_state_.IsValid());
 
 			// TODO [PROFILING]:
 			// We save the board every time here. This is just for the case an invalid action is applied
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just mark the choice as invalid, and restart the whole episode again.
-			episode_state_.GetBoard().SaveState();
+			apply_state_.GetBoard().SaveState();
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
@@ -41,12 +41,12 @@ namespace mcts
 			TreeBuilder::SelectResult perform_result(ApplyAction(
 				node->GetAddon().action_analyzer, selection_stage_));
 
-			assert(episode_state_.IsValid());
+			assert(apply_state_.IsValid());
 			statistic_.ApplyActionSucceeded(false);
 
 			perform_result.node = selection_stage_.FinishMainAction(
 				last_node_map,
-				episode_state_.GetBoard(),
+				apply_state_.GetBoard(),
 				&perform_result.new_node_created);
 
 			assert(updater);
@@ -66,15 +66,15 @@ namespace mcts
 		{
 			action_replayer_.Clear();
 
-			episode_state_.Start(board);
-			assert(episode_state_.IsValid());
+			apply_state_.Start(board);
+			assert(apply_state_.IsValid());
 
 			// TODO [PROFILING]:
 			// We save the board every time here. This is just for the case an invalid action is applied
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just restart the episode, and hope this will not happen frequently
-			episode_state_.GetBoard().SaveState();
+			apply_state_.GetBoard().SaveState();
 
 			simulation_stage_.StartNewAction();
 
@@ -82,7 +82,7 @@ namespace mcts
 
 			Result result = ApplyAction(action_analyzer, simulation_stage_);
 
-			assert(episode_state_.IsValid());
+			assert(apply_state_.IsValid());
 			statistic_.ApplyActionSucceeded(true);
 
 			return result;
@@ -103,7 +103,7 @@ namespace mcts
 			// here use a loop to retry on those cases
 			Result result = Result::kResultInvalid;
 			while (true) {
-				int choices = episode_state_.GetBoard().GetActionsCount(action_analyzer);
+				int choices = apply_state_.GetBoard().GetActionsCount(action_analyzer);
 
 				int choice = -1;
 				if constexpr (is_simulation) {
@@ -113,8 +113,8 @@ namespace mcts
 					choice = this->ChooseSelectAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
 				}
 
-				if (episode_state_.IsValid()) {
-					result = episode_state_.GetBoard().ApplyAction(
+				if (apply_state_.IsValid()) {
+					result = apply_state_.GetBoard().ApplyAction(
 						choice, action_analyzer, random_generator_, action_parameter_getter_);
 					if (result != Result::kResultInvalid) break;
 				}
@@ -125,8 +125,8 @@ namespace mcts
 				action_replayer_.RemoveLast(rollbacks);
 				stage_handler.RestartAction();
 
-				episode_state_.GetBoard().RestoreState();
-				episode_state_.SetValid();
+				apply_state_.GetBoard().RestoreState();
+				apply_state_.SetValid();
 				action_replayer_.Restart();
 			}
 
@@ -141,7 +141,7 @@ namespace mcts
 			if (!action_replayer_.IsEnd()) {
 				choice = action_replayer_.GetChoice(action_type);
 
-				if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices, choice) < 0) {
+				if (selection_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices, choice) < 0) {
 					// invalid action during replay
 					assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
 					return -1;
@@ -151,14 +151,14 @@ namespace mcts
 				return choice;
 			}
 
-			choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+			choice = selection_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
 
 			if (choice >= 0) {
 				action_replayer_.RecordChoice(action_type, choice);
 				action_replayer_.StepNext();
 			}
 			else {
-				episode_state_.SetInvalid();
+				apply_state_.SetInvalid();
 			}
 
 			return choice;
@@ -181,14 +181,14 @@ namespace mcts
 				return choice;
 			}
 
-			choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
+			choice = simulation_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
 
 			if (choice >= 0) {
 				action_replayer_.RecordChoice(action_type, choice);
 				action_replayer_.StepNext();
 			}
 			else {
-				episode_state_.SetInvalid();
+				apply_state_.SetInvalid();
 			}
 
 			return choice;

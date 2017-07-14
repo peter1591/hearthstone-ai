@@ -3,7 +3,7 @@
 #include <utility>
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
-#include "MCTS/builder/EpisodeState.h"
+#include "MCTS/builder/ActionApplyState.h"
 #include "MCTS/Statistic.h"
 #include "MCTS/Types.h"
 #include "MCTS/builder/TreeUpdater.h"
@@ -19,6 +19,10 @@ namespace mcts
 
 	namespace builder
 	{
+		// TODO: separate Simulate to another class
+		// we don't build tree in simulate, right?
+		// or, rename to ActionApplyHelper
+
 		// Traverse and build a game tree in a monte-carlo fashion
 		// To support share-node and eliminate random-nodes, we actually build
 		// a flatten structure using hash table
@@ -30,8 +34,8 @@ namespace mcts
 			TreeBuilder(SOMCTS & caller, Statistic<> & statistic) :
 				action_parameter_getter_(caller),
 				random_generator_(caller),
-				episode_state_(),
-				statistic_(statistic), // TODO: remove this, use caller.GetStatistic()
+				apply_state_(),
+				statistic_(statistic),
 				selection_stage_(), simulation_stage_(),
 				action_replayer_()
 			{
@@ -75,7 +79,7 @@ namespace mcts
 			board::ActionParameterGetter action_parameter_getter_;
 			board::RandomGenerator random_generator_;
 
-			EpisodeState episode_state_;
+			ActionApplyState apply_state_;
 			Statistic<> & statistic_;
 
 			selection::Selection selection_stage_;

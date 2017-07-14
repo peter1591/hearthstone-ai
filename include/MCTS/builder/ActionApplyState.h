@@ -8,10 +8,12 @@ namespace mcts
 {
 	namespace builder
 	{
-		class EpisodeState
+		// TODO: expand this class into tree builder?
+		// it's now only have two fields, and has no any flow control
+		class ActionApplyState
 		{
 		public:
-			EpisodeState() : board_(nullptr), is_valid_(true) {}
+			ActionApplyState() : board_(nullptr), is_valid_(true) {}
 
 			void Start(board::Board & board)
 			{
