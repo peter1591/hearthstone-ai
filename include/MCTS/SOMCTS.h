@@ -67,7 +67,7 @@ namespace mcts
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
 					auto perform_result = builder_.PerformSelect(node_, board, turn_node_map, &updater_);
-					assert(perform_result.result != Result::kResultInvalid);
+					if (perform_result.result == Result::kResultInvalid) return Result::kResultInvalid;
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;

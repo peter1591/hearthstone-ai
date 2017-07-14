@@ -15,7 +15,7 @@ namespace mcts
 		{}
 
 		template <typename StartBoardGetter>
-		void Iterate(StartBoardGetter&& start_board_getter)
+		bool Iterate(StartBoardGetter&& start_board_getter)
 		{
 			state::State state = start_board_getter();
 
@@ -28,6 +28,7 @@ namespace mcts
 				
 				board::Board board(state, side.GetSide());
 				Result result = GetSOMCTS(side).PerformOwnTurnActions(board);
+				if (result == Result::kResultInvalid) return false;
 				
 				assert(result != Result::kResultInvalid);
 				if (result != Result::kResultNotDetermined) {
@@ -40,6 +41,8 @@ namespace mcts
 
 				GetSOMCTS(side.Opposite()).ApplyOthersActions(board);
 			}
+
+			return true;
 		}
 
 	private:

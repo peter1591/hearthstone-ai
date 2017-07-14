@@ -18,9 +18,18 @@ namespace mcts
 	{
 	public:
 		Statistic() :
+			iterate_success_(0), iterate_total_(0),
 			apply_selection_action_success_(0), apply_selection_action_total_(0),
 			apply_simulation_action_success_(0), apply_simulation_action_total_(0)
 		{}
+
+		void IterateSucceeded() {
+			iterate_success_++;
+			iterate_total_++;
+		}
+		void IterateFailed() {
+			iterate_total_++;
+		}
 
 		void ApplyActionSucceeded(bool is_simulation) {
 			if (is_simulation) return ApplySimulationActionSucceeded();
@@ -48,30 +57,31 @@ namespace mcts
 		}
 
 		void PrintMessage() {
-			double apply_selection_action_success_rate = 0.0;
-			if (apply_selection_action_total_ > 0) {
-				apply_selection_action_success_rate =
-					(int)((double)apply_selection_action_success_ * 100 / apply_selection_action_total_);
-			}
+			std::cout << "Apply selection action success rate: ";
+			PrintRate(apply_selection_action_success_, apply_selection_action_total_);
+			std::cout << std::endl;
 
-			std::cout << "Apply selection action success rate: "
-				<< apply_selection_action_success_ << " / " << apply_selection_action_total_
-				<< " (" << apply_selection_action_success_rate << "%) "
-				<< std::endl;
+			std::cout << "Apply simulation action success rate: ";
+			PrintRate(apply_simulation_action_success_, apply_simulation_action_total_);
+			std::cout << std::endl;
 
-			double apply_simulation_action_success_rate = 0.0;
-			if (apply_simulation_action_total_ > 0) {
-				apply_simulation_action_success_rate =
-					(int)((double)apply_simulation_action_success_ * 100 / apply_simulation_action_total_);
-			}
-
-			std::cout << "Apply simulation action success rate: "
-				<< apply_simulation_action_success_ << " / " << apply_simulation_action_total_
-				<< " (" << apply_simulation_action_success_rate << "%) "
-				<< std::endl;
+			std::cout << "Iterate success rate: ";
+			PrintRate(iterate_success_, iterate_total_);
+			std::cout << std::endl;
 		}
 
 	private:
+		void PrintRate(int success, int total) {
+			double rate = 0.0;
+			if (total > 0) {
+				rate = (int)((double)success * 100 / total);
+			}
+			std::cout << success << " / " << total << " (" << rate << "%)";
+		}
+
+	private:
+		int iterate_success_;
+		int iterate_total_;
 		int apply_selection_action_success_;
 		int apply_selection_action_total_;
 		int apply_simulation_action_success_;
