@@ -12,7 +12,7 @@ namespace mcts
 		class Board
 		{
 		public:
-			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side), saved_board_() {}
+			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side) {}
 
 		public:
 			state::PlayerIdentifier GetCurrentPlayer() const {
@@ -41,13 +41,12 @@ namespace mcts
 			}
 
 		public:
-			void SaveState() { saved_board_ = board_; }
-			void RestoreState() { board_ = saved_board_; }
+			state::State const& GetState() const { return board_; }
+			void SetState(state::State const& state) { board_ = state; }
 
 		private:
 			state::State & board_;
 			state::PlayerSide side_;
-			state::State saved_board_;
 		};
 	}
 }

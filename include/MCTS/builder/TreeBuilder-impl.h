@@ -33,7 +33,7 @@ namespace mcts
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just mark the choice as invalid, and restart the whole episode again.
-			apply_state_.GetBoard().SaveState();
+			apply_state_.SaveBoard();
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
@@ -74,7 +74,7 @@ namespace mcts
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just restart the episode, and hope this will not happen frequently
-			apply_state_.GetBoard().SaveState();
+			apply_state_.SaveBoard();
 
 			simulation_stage_.StartNewAction();
 
@@ -125,7 +125,7 @@ namespace mcts
 				action_replayer_.RemoveLast(rollbacks);
 				stage_handler.RestartAction();
 
-				apply_state_.GetBoard().RestoreState();
+				apply_state_.RestoreBoard();
 				apply_state_.SetValid();
 				action_replayer_.Restart();
 			}

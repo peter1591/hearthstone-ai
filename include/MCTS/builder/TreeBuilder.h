@@ -34,8 +34,8 @@ namespace mcts
 			TreeBuilder(SOMCTS & caller, Statistic<> & statistic) :
 				action_parameter_getter_(caller),
 				random_generator_(caller),
-				apply_state_(),
 				statistic_(statistic),
+				apply_state_(),
 				selection_stage_(), simulation_stage_(),
 				action_replayer_()
 			{
@@ -78,9 +78,9 @@ namespace mcts
 		private:
 			board::ActionParameterGetter action_parameter_getter_;
 			board::RandomGenerator random_generator_;
+			Statistic<> & statistic_;
 
 			ActionApplyState apply_state_;
-			Statistic<> & statistic_;
 
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;
