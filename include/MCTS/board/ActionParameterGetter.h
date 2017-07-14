@@ -47,14 +47,12 @@ namespace mcts
 			Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) final
 			{
 				assert(!cards.empty());
-				return (Cards::CardId)GetNumber(ActionType::kChooseOne, [cards]() {
-					return ActionChoices(cards);
-				});
+				return (Cards::CardId)GetNumber(ActionType::kChooseOne, ActionChoices(cards));
 			}
 
 			int GetNumber(ActionType::Types action_type, int exclusive_max);
 
-			int GetNumber(ActionType::Types action_type, ActionChoicesGetter const& action_choices_getter);
+			int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices);
 
 		private:
 			builder::TreeBuilder & builder_;

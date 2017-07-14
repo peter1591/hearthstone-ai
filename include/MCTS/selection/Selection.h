@@ -35,10 +35,9 @@ namespace mcts
 			int ChooseAction(
 				board::Board const& board,
 				ActionType action_type,
-				board::ActionChoicesGetter const& choices_getter,
+				board::ActionChoices const& choices,
 				int force_choice = -1)
 			{
-				board::ActionChoices choices = choices_getter();
 				if (choices.Empty()) return -1;
 
 				if (action_type.IsChosenRandomly()) {

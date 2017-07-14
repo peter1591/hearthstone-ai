@@ -17,10 +17,9 @@ namespace mcts
 
 			int ChooseAction(board::Board const& board,
 				ActionType action_type,
-				board::ActionChoicesGetter const& action_choices_getter,
+				board::ActionChoices const& action_choices,
 				ChoiceBlacklist & progress)
 			{
-				board::ActionChoices action_choices = action_choices_getter();
 				if (action_choices.Empty()) return -1;
 
 				int choices = action_choices.Size();
@@ -61,7 +60,7 @@ namespace mcts
 			}
 
 			bool ApplyChoice(ActionType action_type, int choice,
-				board::ActionChoicesGetter const& action_choices_getter,
+				board::ActionChoices const& action_choices, // TODO: can pass 'choices' only
 				ChoiceBlacklist & progress) const
 			{
 				if (action_type.IsChosenRandomly()) {
@@ -69,7 +68,6 @@ namespace mcts
 					return true;
 				}
 
-				board::ActionChoices action_choices = action_choices_getter();
 				assert(!action_choices.Empty());
 				int choices = action_choices.Size();
 				progress.FillChoices(choices);

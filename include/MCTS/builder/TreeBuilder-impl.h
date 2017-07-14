@@ -104,9 +104,7 @@ namespace mcts
 			Result result = Result::kResultInvalid;
 			while (true) {
 				int choices = episode_state_.GetBoard().GetActionsCount(action_analyzer);
-				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), [choices]() {
-					return board::ActionChoices(choices);
-				});
+				int choice = this->ChooseAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
 
 				if (episode_state_.IsValid()) {
 					result = episode_state_.GetBoard().ApplyAction(
@@ -116,28 +114,15 @@ namespace mcts
 
 				statistic_.ApplyActionFailed(is_simulation);
 
-				// If it's replay failure, it means the stage handler already
-				// knows that action is invalid, and the progress is not stepped
-				// The only thing we need to do, is to remove the last step
-				// in the replay recording, which is done later.
-				if (!action_replayer_.IsReplayFailed()) {
-					if constexpr (is_simulation) {
-						int rollbacks = stage_handler.ReportInvalidAction(simulation_progress_);
-						action_replayer_.RemoveLast(rollbacks);
-						stage_handler.RestartAction(simulation_progress_);
-					}
-					else {
-						int rollbacks = stage_handler.ReportInvalidAction();
-						action_replayer_.RemoveLast(rollbacks);
-						stage_handler.RestartAction();
-					}
-				}
-
 				if constexpr (is_simulation) {
-					assert(!action_replayer_.IsReplayFailed()); // should not happen, since we rollback correctly
+					int rollbacks = stage_handler.ReportInvalidAction(simulation_progress_);
+					action_replayer_.RemoveLast(rollbacks);
+					stage_handler.RestartAction(simulation_progress_);
 				}
 				else {
-					assert(!action_replayer_.IsReplayFailed()); // should not happen, since we rollback correctly
+					int rollbacks = stage_handler.ReportInvalidAction();
+					action_replayer_.RemoveLast(rollbacks);
+					stage_handler.RestartAction();
 				}
 
 				episode_state_.GetBoard().RestoreState();
@@ -150,7 +135,7 @@ namespace mcts
 			return result;
 		}
 
-		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoicesGetter const& choices_getter)
+		inline int TreeBuilder::ChooseAction(ActionType action_type, board::ActionChoices const& choices)
 		{
 			int choice = -1;
 			
@@ -158,21 +143,17 @@ namespace mcts
 				choice = action_replayer_.GetChoice(action_type);
 
 				if (episode_state_.GetStage() == kStageSelection) {
-					if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter, choice) < 0) {
+					if (selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices, choice) < 0) {
 						// invalid action during replay
 						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
-						action_replayer_.MarkReplayFailed();
-						episode_state_.SetInvalid();
 						return -1;
 					}
 				}
 				else {
 					assert(episode_state_.GetStage() == kStageSimulation);
-					if (!simulation_stage_.ApplyChoice(action_type, choice, choices_getter, simulation_progress_)) {
+					if (!simulation_stage_.ApplyChoice(action_type, choice, choices, simulation_progress_)) {
 						// invalid action during replay
 						assert(false); // should not happen. we've already rollback #-of-invalid-actions as reported
-						action_replayer_.MarkReplayFailed();
-						episode_state_.SetInvalid();
 						return -1;
 					}
 				}
@@ -182,11 +163,11 @@ namespace mcts
 			}
 
 			if (episode_state_.GetStage() == kStageSelection) {
-				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter);
+				choice = selection_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices);
 			}
 			else {
 				assert(episode_state_.GetStage() == kStageSimulation);
-				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices_getter,
+				choice = simulation_stage_.ChooseAction(episode_state_.GetBoard(), action_type, choices,
 					simulation_progress_);
 			}
 

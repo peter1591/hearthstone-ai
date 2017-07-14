@@ -65,7 +65,7 @@ namespace mcts
 				StageHandler&& stage_handler);
 
 		public: // for callbacks: action-parameter-getter and random-generator
-			int ChooseAction(ActionType action_type, board::ActionChoicesGetter const& choices_getter);
+			int ChooseAction(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
 			board::ActionParameterGetter action_parameter_getter_;

@@ -46,7 +46,7 @@ namespace mcts
 				return true;
 			}
 
-			int Get(size_t idx) {
+			int Get(size_t idx) const {
 				if (type_ == kChooseFromCardIds) {
 					assert(idx < card_ids_.size());
 					return (int)card_ids_[idx];
@@ -130,7 +130,5 @@ namespace mcts
 			int range_it_;
 			std::vector<Cards::CardId>::iterator card_ids_it_;
 		};
-
-		typedef std::function<ActionChoices()> ActionChoicesGetter;
 	}
 }

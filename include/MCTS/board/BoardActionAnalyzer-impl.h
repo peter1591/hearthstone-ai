@@ -44,10 +44,8 @@ namespace mcts
 
 		inline Result BoardActionAnalyzer::PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
-			int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, [&board]() {
-				auto const& hand = board.GetCurrentPlayer().hand_;
-				return ActionChoices((int)hand.Size());
-			});
+			auto const& hand = board.GetCurrentPlayer().hand_;
+			int idx = action_parameters.GetNumber(ActionType::kChooseHandCard, ActionChoices((int)hand.Size()));
 			if (idx < 0) return Result::kResultInvalid; // all cards are not playable
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			return FlowControl::FlowController(board, flow_context).PlayCard(idx);

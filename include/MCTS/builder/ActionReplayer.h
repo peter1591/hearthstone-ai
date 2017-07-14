@@ -18,7 +18,7 @@ namespace mcts
 			};
 
 		public:
-			ActionReplayer() : choices_(), idx_(0), replay_failed_(false) {}
+			ActionReplayer() : choices_(), idx_(0) {}
 
 			int GetChoice(ActionType action_type) const {
 				assert(action_type == choices_[idx_].action_type_);
@@ -39,13 +39,11 @@ namespace mcts
 
 			void Restart() {
 				idx_ = 0;
-				replay_failed_ = false;
 			}
 
 			void Clear() {
 				choices_.clear();
 				idx_ = 0;
-				replay_failed_ = false;
 			}
 
 			bool Empty() const {
@@ -60,16 +58,10 @@ namespace mcts
 				choices_.resize(choices_.size() - (size_t)count);
 			}
 
-		public:
-			void MarkReplayFailed() { replay_failed_ = true; }
-			bool IsReplayFailed() const { return replay_failed_; }
-
 		private:
 			using Container = std::vector<Item>;
 			Container choices_;
 			size_t idx_;
-
-			bool replay_failed_;
 		};
 	}
 }
