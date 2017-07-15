@@ -25,6 +25,11 @@ namespace mcts
 
 				int choices = action_choices.Size();
 
+				// if there's only one choice, do not pass to black-list. It doesn't support this.
+				if (choices == 1) {
+					return 0;
+				}
+
 				if (action_type.IsChosenRandomly()) {
 					// ChoiceBlacklist do not care about random actions
 					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom(choices);
@@ -63,13 +68,22 @@ namespace mcts
 			bool ApplyChoice(ActionType action_type, int choice,
 				board::ActionChoices const& action_choices)
 			{
+				if (action_choices.Empty()) return false;
+
+				int choices = action_choices.Size();
+
+				// if there's only one choice, do not pass to black-list. It doesn't support this.
+				if (choices == 1) {
+					assert(choice == 0);
+					return true;
+				}
+
 				if (action_type.IsChosenRandomly()) {
 					// ChoiceBlacklist do not care about random actions
 					return true;
 				}
 
 				assert(!action_choices.Empty());
-				int choices = action_choices.Size();
 				blacklist_.FillChoices(choices);
 
 				assert([&]() {

@@ -58,7 +58,7 @@ namespace mcts
 			}
 
 			void FillChoices(int choices) {
-				assert(choices >= 0);
+				assert(choices >= 2); // if there's only one choice, don't callback 
 				if (idx_ < items_.size()) {
 					if (!items_[idx_].has_value()) {
 						items_[idx_] = Item(choices);
@@ -163,6 +163,7 @@ namespace mcts
 
 				int invalid_steps = 0;
 				while (true) {
+					// TODO: use IsInvalidStateBlameNode() to find blame node
 					++invalid_steps;
 					assert(items_.back().has_value());
 					Item & last_item = *items_.back();
