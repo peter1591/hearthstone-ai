@@ -16,6 +16,20 @@ namespace mcts
 			TreeNodeStatistic() : credit(0), total(0) {}
 		};
 
+		class TreeNodeLastApplyStatus
+		{
+		public:
+			TreeNodeLastApplyStatus() : success_(true) {}
+
+			void MarkSucceeded() { success_ = true; }
+			void MarkFailed() { success_ = false; }
+
+			bool IsMarkSucceeded() const { return success_; }
+
+		private:
+			bool success_;
+		};
+
 		class TreeNodeConsistencyCheckAddons
 		{
 		public:
@@ -62,13 +76,15 @@ namespace mcts
 				action_analyzer(),
 				statistic(),
 				consistency_checker(),
-				board_node_map()
+				board_node_map(),
+				last_apply_status()
 			{}
 
 			board::BoardActionAnalyzer action_analyzer;
 			TreeNodeStatistic statistic;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			detail::BoardNodeMap board_node_map;
+			TreeNodeLastApplyStatus last_apply_status;
 		};
 	}
 }

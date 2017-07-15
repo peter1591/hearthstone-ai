@@ -32,8 +32,11 @@ namespace mcts
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just mark the choice as invalid, and restart the whole episode again.
-			// TODO: Use other mechanism to decide if we should save board or not
-			// apply_state_.SaveBoard();
+
+			if (!node->GetAddon().last_apply_status.IsMarkSucceeded()) {
+				// never apply succeeded --> save board to quickly re-try for invalid states
+				apply_state_.SaveBoard();
+			}
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
@@ -41,8 +44,10 @@ namespace mcts
 			TreeBuilder::SelectResult perform_result(ApplyAction(
 				node->GetAddon().action_analyzer, selection_stage_));
 			if (perform_result.result == Result::kResultInvalid) {
+				node->GetAddon().last_apply_status.MarkFailed();
 				return Result::kResultInvalid;
 			}
+			node->GetAddon().last_apply_status.MarkSucceeded();
 
 			assert(apply_state_.IsValid());
 			statistic_.ApplyActionSucceeded(false);
