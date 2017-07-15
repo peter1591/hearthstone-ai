@@ -71,17 +71,11 @@
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h">
       <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\Tree.h">
-      <Filter>Header Files\MCTS\simulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h">
       <Filter>Header Files\MCTS\selection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h">
-      <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h">
       <Filter>Header Files\MCTS\detail</Filter>
@@ -126,9 +120,6 @@
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h">
-      <Filter>Header Files\MCTS\builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\builder\EpisodeState.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer.h">
@@ -205,6 +196,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h">
       <Filter>Header Files\MCTS\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
+      <Filter>Header Files\MCTS\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\simulation\ChoiceBlacklist.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\builder\ActionApplyState.h">
+      <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -171,7 +171,8 @@
     <ClInclude Include="..\..\include\MCTS\board\BoardViewTypes.h" />
     <ClInclude Include="..\..\include\MCTS\board\RandomGenerator-impl.h" />
     <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\EpisodeState.h" />
+    <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
+    <ClInclude Include="..\..\include\MCTS\builder\ActionApplyState.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h" />
@@ -192,9 +193,8 @@
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h" />
-    <ClInclude Include="..\..\include\MCTS\simulation\Tree.h" />
+    <ClInclude Include="..\..\include\MCTS\simulation\ChoiceBlacklist.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
-    <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />

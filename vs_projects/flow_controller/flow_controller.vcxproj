@@ -211,6 +211,7 @@
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
     <ClInclude Include="..\..\include\Cards\OG\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
+    <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag.h" />
