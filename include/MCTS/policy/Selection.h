@@ -45,8 +45,7 @@ namespace mcts
 				{
 					struct Item {
 						int choice;
-						int chosen_times;
-						TreeNode* node;
+						mcts::selection::EdgeAddon const* edge_addon;
 					};
 					constexpr size_t kMaxChoices = 10; // max #-of-choices: choose hand card
 					std::array<Item, kMaxChoices> choices;
@@ -68,23 +67,15 @@ namespace mcts
 							return choice;
 						}
 
-						int chosen_times = choice_iterator.GetAddon().chosen_times;
+						auto const& edge_addon = choice_iterator.GetAddon();
+						int chosen_times = edge_addon.chosen_times;
 						if (chosen_times == 0) return choice; // force select
-
-						TreeNode* node = choice_iterator.GetNode();
-						assert(node);
-
-						if (node->GetAddon().statistic.total <= 0) {
-							// the leading edge is already chosen (i.e., chosen_times > 0)
-							// so, this node should at least been traversed once
-							assert(false);
-						}
 
 						assert(chosen_times > 0); // == 0
 						total_chosen_times += chosen_times;
 
 						assert(choices_size < kMaxChoices);
-						choices[choices_size] = Item{ choice, chosen_times, node };
+						choices[choices_size] = Item{ choice, &edge_addon };
 						++choices_size;
 					}
 
@@ -94,13 +85,13 @@ namespace mcts
 
 					// Phase 2: use UCB to make a choice
 					auto get_score = [total_chosen_times](Item const& item) {
-						int wins = item.node->GetAddon().statistic.credit;
-						int total = item.node->GetAddon().statistic.total;
+						int wins = item.edge_addon->credit;
+						int total = item.edge_addon->total;
 						assert(total > 0);
 						double exploit_score = ((double)wins) / total;
 
 						constexpr double explore_weight = 0.8;
-						double explore_score = ((double)item.chosen_times) / total_chosen_times;
+						double explore_score = ((double)item.edge_addon->chosen_times) / total_chosen_times;
 
 						return exploit_score + explore_weight * explore_score;
 					};

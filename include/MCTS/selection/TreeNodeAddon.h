@@ -8,14 +8,6 @@ namespace mcts
 {
 	namespace selection
 	{
-		struct TreeNodeStatistic
-		{
-			int credit;
-			int total;
-
-			TreeNodeStatistic() : credit(0), total(0) {}
-		};
-
 		class TreeNodeLastApplyStatus
 		{
 		public:
@@ -74,14 +66,12 @@ namespace mcts
 		{
 			TreeNodeAddon() :
 				action_analyzer(),
-				statistic(),
 				consistency_checker(),
 				board_node_map(),
 				last_apply_status()
 			{}
 
 			board::BoardActionAnalyzer action_analyzer;
-			TreeNodeStatistic statistic;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			detail::BoardNodeMap board_node_map;
 			TreeNodeLastApplyStatus last_apply_status;

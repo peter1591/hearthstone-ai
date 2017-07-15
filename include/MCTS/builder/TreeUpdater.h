@@ -14,12 +14,13 @@ namespace mcts
 			void Update(bool credit)
 			{
 				for (auto const& item : nodes_) {
-					auto & statistic = item.GetNode()->GetAddon().statistic;
-					if (credit) ++statistic.credit;
-					++statistic.total;
-
 					if (item.GetEdgeAddon()) {
-						item.GetEdgeAddon()->chosen_times++;
+						auto & edge_addon = *item.GetEdgeAddon();
+						edge_addon.chosen_times++;
+
+						// to calculate win-rate
+						if (credit) ++edge_addon.credit;
+						++edge_addon.total;
 					}
 				}
 			}
