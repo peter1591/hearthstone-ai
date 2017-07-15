@@ -39,6 +39,12 @@ namespace mcts
 				edge_addon_ = &node_->MarkChoiceRedirect(choice_, redirect_node);
 			}
 
+			TreeNode* GetNextNode() {
+				assert(choice_ >= 0);
+				assert(node_);
+				return node_->GetChildNode(choice_);
+			}
+
 		private:
 			TreeNode* node_;
 			int choice_; // choice lead to next node

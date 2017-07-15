@@ -57,6 +57,7 @@ namespace mcts
 			// construct a redirect node for the last action
 			perform_result.new_node_created = false;
 			perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
+
 			traversed_path.back().ConstructRedirectNode(perform_result.node);
 			traversed_path.emplace_back(perform_result.node);
 			if (!perform_result.new_node_created) {

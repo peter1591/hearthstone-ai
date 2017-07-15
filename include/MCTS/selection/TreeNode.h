@@ -173,6 +173,13 @@ namespace mcts
 			TreeNodeAddon const& GetAddon() const { return addon_; }
 			TreeNodeAddon & GetAddon() { return addon_; }
 
+		public:
+			TreeNode* GetChildNode(int choice) {
+				auto item = children_.Get(choice);
+				if (!item) return nullptr;
+				return item->GetNode();
+			}
+
 		private:
 			ActionType action_type_;
 			board::ActionChoices::Type choices_type_; // TODO: debug only

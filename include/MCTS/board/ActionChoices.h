@@ -53,7 +53,7 @@ namespace mcts
 				}
 				else {
 					assert(type_ == kChooseFromZeroToExclusiveMax);
-					assert(idx < exclusive_max_);
+					assert((int)idx < exclusive_max_);
 					return (int)idx;
 				}
 			}

@@ -37,6 +37,11 @@ namespace mcts
 						if (i < nodes.size() - 1) {
 							if (!item.GetEdgeAddon()) return false;
 						}
+
+						if (i > 0) {
+							if (nodes[i - 1].GetNode()->GetChildNode(nodes[i - 1].GetChoice())
+								!= nodes[i].GetNode()) return false;
+						}
 					}
 					return true;
 				}());

@@ -23,7 +23,7 @@ namespace mcts
 			};
 
 		public:
-			BoardActionAnalyzer() : op_map_(), op_map_size_(0), attackers_() {}
+			BoardActionAnalyzer() : op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
 
 			int GetActionsCount(state::State const& board);
 			Result ApplyAction(
