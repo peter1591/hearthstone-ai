@@ -50,7 +50,6 @@ namespace mcts
 			node->GetAddon().last_apply_status.MarkSucceeded();
 
 			assert(apply_state_.IsValid());
-			statistic_.ApplyActionSucceeded(false);
 
 			// we use mutable here, since we will throw it away after all
 			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
@@ -98,7 +97,6 @@ namespace mcts
 			Result result = ApplyAction(action_analyzer, simulation_stage_);
 
 			assert(apply_state_.IsValid());
-			statistic_.ApplyActionSucceeded(true);
 
 			return result;
 		}
@@ -119,6 +117,7 @@ namespace mcts
 			Result result = Result::kResultInvalid;
 			while (true) {
 				int choices = apply_state_.GetBoard().GetActionsCount(action_analyzer);
+				assert(choices > 0); // at least end-turn should be valid
 
 				int choice = -1;
 				if constexpr (is_simulation) {
@@ -147,6 +146,7 @@ namespace mcts
 				action_replayer_.Restart();
 			}
 
+			statistic_.ApplyActionSucceeded(is_simulation);
 			return result;
 		}
 
