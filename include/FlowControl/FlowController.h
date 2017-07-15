@@ -35,7 +35,8 @@ namespace FlowControl
 		}
 
 	public: // main flow
-		Result PlayCard(int hand_idx);
+		Result PlayCard(int hand_idx); // TODO: remove this. this is only for flow controller test code
+		Result PlayCard(state::CardRef card_ref);
 		Result Attack(state::CardRef attacker);
 		Result HeroPower();
 		Result EndTurn();
@@ -46,9 +47,9 @@ namespace FlowControl
 	private:
 		Result Resolve();
 
-		void PlayCardInternal(int hand_idx);
-		bool CostCrystal(int amount);
-		bool CostHealth(int amount);
+		void PlayCardInternal(state::CardRef card_ref);
+		void CostCrystal(int amount);
+		void CostHealth(int amount);
 
 		template <state::CardType> bool PlayCardPhase(state::CardRef card_ref);
 		template <state::CardType> bool PlayCardPhaseInternal(state::CardRef card_ref);

@@ -9,8 +9,14 @@ namespace FlowControl
 {
 	inline Result FlowController::PlayCard(int hand_idx)
 	{
+		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
+		return PlayCard(card_ref);
+	}
+
+	inline Result FlowController::PlayCard(state::CardRef card_ref)
+	{
 		flow_context_.ResetActionParameter();
-		PlayCardInternal(hand_idx);
+		PlayCardInternal(card_ref);
 
 		assert(flow_context_.Empty());
 		return flow_context_.GetResult();
@@ -51,10 +57,8 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
-	inline void FlowController::PlayCardInternal(int hand_idx)
+	inline void FlowController::PlayCardInternal(state::CardRef card_ref)
 	{
-		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
-
 		switch (state_.GetCardsManager().Get(card_ref).GetCardType())
 		{
 		case state::kCardTypeMinion:
@@ -79,22 +83,17 @@ namespace FlowControl
 	template <state::CardType CardType>
 	inline bool FlowController::PlayCardPhase(state::CardRef card_ref)
 	{
-		state_.IncreasePlayOrder();
-		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
-
 		int cost = state_.GetCard(card_ref).GetCost();
 		bool cost_health_instead = false;
-
 		state_.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
 			Manipulate(state_, flow_context_), card_ref, &cost, &cost_health_instead
 		});
 
-		if (cost_health_instead) {
-			if (!CostHealth(cost)) return SetInvalid();
-		}
-		else {
-			if (!CostCrystal(cost)) return SetInvalid();
-		}
+		if (cost_health_instead) CostHealth(cost);
+		else CostCrystal(cost);
+
+		state_.IncreasePlayOrder();
+		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
 		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
 			return SetInvalid();
@@ -125,24 +124,24 @@ namespace FlowControl
 		return PlayCardPhaseInternal<CardType>(card_ref);
 	}
 
-	inline bool FlowController::CostCrystal(int amount) {
-		if (amount < 0) amount = 0;
+	inline void FlowController::CostCrystal(int amount) {
+		if (amount <= 0) return;
 
 		auto& crystal = state_.GetCurrentPlayer().GetResource();
 		if (crystal.GetCurrent() < amount) {
-			return SetInvalid();
+			assert(false); // should only pass playable card
 		}
 		crystal.Cost(amount);
-		return true;
 	}
 
-	inline bool FlowController::CostHealth(int amount) {
+	inline void FlowController::CostHealth(int amount) {
+		if (amount <= 0) return;
+
 		state::CardRef hero_ref = state_.GetCurrentPlayer().GetHeroRef();
 		if (state_.GetCard(hero_ref).GetHP() < amount) {
-			return SetInvalid();
+			assert(false); // should only pass playable card
 		}
 		Manipulate(state_, flow_context_).Hero(hero_ref).Damage(hero_ref, amount);
-		return true;
 	}
 
 	template <> inline bool FlowController::PlayCardPhaseInternal<state::kCardTypeMinion>(state::CardRef card_ref)
@@ -382,8 +381,8 @@ namespace FlowControl
 
 		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
 		assert(card.GetCardType() == state::kCardTypeHeroPower);
-
-		if (!card.GetRawData().usable) return SetInvalid();
+		
+		assert(card.GetRawData().usable);
 
 		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return SetInvalid();
 
