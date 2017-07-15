@@ -41,7 +41,7 @@ namespace FlowControl
 		Result EndTurn();
 
 	private:
-		state::CardRef GetDefender();
+		state::CardRef GetDefender(state::CardRef attacker);
 
 	private:
 		Result Resolve();

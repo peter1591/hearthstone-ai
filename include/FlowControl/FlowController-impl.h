@@ -283,15 +283,8 @@ namespace FlowControl
 		assert(attacker.IsValid());
 		assert(ValidActionGetter(state_).IsAttackable(attacker));
 
-		state::CardRef defender = GetDefender();
+		state::CardRef defender = GetDefender(attacker);
 		if (!defender.IsValid()) return SetInvalid();
-
-		if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) {
-			bool cant_attack_hero = state_.GetCardBoolAttributeConsiderWeapon(attacker, [](state::Cards::Card const& card) {
-				return card.IsCantAttackHero();
-			});
-			if (cant_attack_hero) return SetInvalid();
-		}
 
 		state_.TriggerEvent<state::Events::EventTypes::PrepareAttackTarget>(
 			state::Events::EventTypes::PrepareAttackTarget::Context{
@@ -336,7 +329,7 @@ namespace FlowControl
 		return true;
 	}
 
-	inline state::CardRef FlowController::GetDefender()
+	inline state::CardRef FlowController::GetDefender(state::CardRef attacker)
 	{
 		std::vector<state::CardRef> defenders;
 
@@ -348,17 +341,24 @@ namespace FlowControl
 			return true;
 		};
 
-		// TODO: hero does not have taunt unless in tavern brawl. so we skip the check here
 		auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
-		player.minions_.ForEach(
-			[&](state::CardRef card_ref)
-		{
+		player.minions_.ForEach([&](state::CardRef card_ref) {
 			if (HasTaunt(card_ref)) defenders.push_back(card_ref);
 		});
 
+		// TODO: hero does not have taunt unless in tavern brawl. so we skip the check here
+		assert(!HasTaunt(player.GetHeroRef()));
+
 		if (defenders.empty()) {
 			// no taunt, all characters can be the target
-			defenders.push_back(player.GetHeroRef());
+
+			bool cant_attack_hero = state_.GetCardBoolAttributeConsiderWeapon(attacker, [](state::Cards::Card const& card) {
+				return card.IsCantAttackHero();
+			});
+
+			if (!cant_attack_hero) {
+				defenders.push_back(player.GetHeroRef());
+			}
 			player.minions_.ForEach([&](state::CardRef card_ref) {
 				// TODO: immune character cannot be attacked/targeted
 				defenders.push_back(card_ref);
