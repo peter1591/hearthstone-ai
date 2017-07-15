@@ -38,5 +38,7 @@
 #include "Cards/OG/Warlock.h"
 #include "Cards/OG/Shaman.h"
 
+#include "Cards/Ungoro/Neutral.h"
+
 
 #include "Cards/CardBase-cleanup.h"
