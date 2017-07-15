@@ -15,7 +15,6 @@ namespace mcts
 {
 	namespace builder
 	{
-		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 		// Note: can only be called when current player is the viewer of 'board'
 		inline TreeBuilder::SelectResult TreeBuilder::PerformSelect(
 			TreeNode * node, board::Board & board, 
@@ -33,13 +32,17 @@ namespace mcts
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just mark the choice as invalid, and restart the whole episode again.
-			apply_state_.SaveBoard();
+			// TODO: Use other mechanism to decide if we should save board or not
+			// apply_state_.SaveBoard();
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
 
 			TreeBuilder::SelectResult perform_result(ApplyAction(
 				node->GetAddon().action_analyzer, selection_stage_));
+			if (perform_result.result == Result::kResultInvalid) {
+				return Result::kResultInvalid;
+			}
 
 			assert(apply_state_.IsValid());
 			statistic_.ApplyActionSucceeded(false);
@@ -128,6 +131,9 @@ namespace mcts
 				statistic_.ApplyActionFailed(is_simulation);
 
 				int rollbacks = stage_handler.ReportInvalidAction();
+
+				if (!apply_state_.HasSavedBoard()) break;
+
 				action_replayer_.RemoveLast(rollbacks);
 				stage_handler.RestartAction();
 
@@ -136,7 +142,6 @@ namespace mcts
 				action_replayer_.Restart();
 			}
 
-			assert(result != Result::kResultInvalid);
 			return result;
 		}
 
