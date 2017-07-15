@@ -29,7 +29,14 @@ int main(void)
 	int start_i = 0;
 	auto start = std::chrono::steady_clock::now();
 	for (int i = 0; i < 10000000; ++i) {
-		if (i % 1000 == 0) {
+
+#ifdef NDEBUG
+		constexpr int kPrintInterval = 100;
+#else
+		constexpr int kPrintInterval = 1;
+#endif
+
+		if (i % kPrintInterval == 0) {
 			std::cout << "====== Statistics =====" << std::endl;
 			std::cout << "Episodes: " << i << std::endl;
 			statistic.PrintMessage();
@@ -51,7 +58,13 @@ int main(void)
 			if (dummy == "q") break;
 		}
 
-		mcts.Iterate(start_board_getter);
+		while (true) {
+			if (mcts.Iterate(start_board_getter)) {
+				statistic.IterateSucceeded();
+				break;
+			}
+			statistic.IterateFailed();
+		}
 	}
 
 	std::cout << "DONE." << std::endl;
