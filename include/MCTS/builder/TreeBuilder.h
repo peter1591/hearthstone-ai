@@ -17,10 +17,6 @@ namespace mcts
 {
 	namespace builder
 	{
-		// TODO: separate Simulate to another class
-		// we don't build tree in simulate, right?
-		// or, rename to ActionApplyHelper
-
 		// Traverse and build a game tree in a monte-carlo fashion
 		// To support share-node and eliminate random-nodes, we actually build
 		// a flatten structure using hash table
