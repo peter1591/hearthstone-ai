@@ -50,7 +50,11 @@ namespace mcts
 				return (Cards::CardId)GetNumber(ActionType::kChooseOne, ActionChoices(cards));
 			}
 
-			int GetNumber(ActionType::Types action_type, int exclusive_max);
+			int GetNumber(ActionType::Types action_type, int exclusive_max) {
+				if (exclusive_max <= 0) return -1;
+				if (exclusive_max == 1) return 0;
+				return GetNumber(action_type, ActionChoices(exclusive_max));
+			}
 
 			int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices);
 
