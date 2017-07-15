@@ -279,9 +279,9 @@ void test2()
 
 		parameter_getter.next_defender_count = 1;
 		parameter_getter.next_defender_idx = 0;
-		assert(controller2.Attack(
-			state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(0))
-			== FlowControl::kResultInvalid);
+		assert(!FlowControl::ValidActionGetter(state2).IsAttackable(
+			state2.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(0)
+		));
 	}
 
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
@@ -300,9 +300,9 @@ void test2()
 
 		parameter_getter.next_defender_count = 3;
 		parameter_getter.next_defender_idx = 0;
-		if (controller2.Attack(
-			state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(0))
-			!= FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state2).IsAttackable(
+			state2.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(0)
+		));
 	}
 
 	if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);

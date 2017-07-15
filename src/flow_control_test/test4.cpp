@@ -1232,8 +1232,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(state.GetBoard().GetFirst().minions_.Get(0))
-			!= FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -1286,10 +1287,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(0)/*,
-			state.GetBoard().GetSecond().GetHeroRef()*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -1607,10 +1607,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(0)/*,
-			state.GetBoard().GetSecond().GetHeroRef()*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -1851,10 +1850,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(1)/*,
-			state.GetBoard().GetSecond().GetHeroRef()*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(1)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -2092,10 +2090,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(0)/*,
-			state.GetBoard().GetSecond().GetHeroRef()*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -2160,10 +2157,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(0)/*,
-			state.GetBoard().GetSecond().GetHeroRef()*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -2227,10 +2223,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(0)/*,
-			state.GetBoard().GetSecond().GetHeroRef()*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -2293,9 +2288,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -2454,9 +2449,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -2517,9 +2512,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -4427,9 +4422,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -4549,9 +4544,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -4811,9 +4806,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().GetHeroRef()
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -5043,10 +5038,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetSecond().minions_.Get(0)/*,
-			state.GetBoard().GetFirst().minions_.Get(0)*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetSecond().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -5131,10 +5125,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
-			state.GetBoard().GetFirst().minions_.Get(0)/*,
-			state.GetBoard().GetSecond().minions_.Get(0)*/
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+			state.GetBoard().GetFirst().minions_.Get(0)
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -6169,9 +6162,9 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().GetHeroRef()
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -6277,8 +6270,8 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller.Attack(
+		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetSecond().GetHeroRef()
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}();
 }

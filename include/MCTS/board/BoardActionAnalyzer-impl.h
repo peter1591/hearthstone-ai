@@ -78,6 +78,7 @@ namespace mcts
 				attacker = board.GetCurrentPlayer().minions_.Get((size_t)(attacker_idx));
 			}
 
+			assert(attacker.IsValid());
 			return FlowControl::FlowController(board, flow_context).Attack(attacker);
 		}
 

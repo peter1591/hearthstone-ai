@@ -60,7 +60,6 @@ namespace FlowControl
 		
 		void AttackInternal(state::CardRef attacker);
 		bool AttackPhase(state::CardRef attacker);
-		bool IsAttackable(state::CardRef attacker);
 
 		void EndTurnInternal();
 		void EndTurnPhase();

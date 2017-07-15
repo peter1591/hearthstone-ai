@@ -15,6 +15,9 @@ namespace FlowControl
 			// These functions can return valid for ones actually are not valid actions
 
 		bool IsAttackable(state::CardRef card_ref) {
+			assert(state_.GetCardsManager().Get(card_ref).GetHP() > 0);
+			assert(state_.GetCardsManager().Get(card_ref).GetZone() == state::kCardZonePlay);
+
 			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
 
 			if (card.GetRawData().cant_attack) return false;

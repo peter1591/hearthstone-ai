@@ -341,9 +341,9 @@ void test3()
 		FlowControl::FlowController controller2(state2, flow_context2);
 		parameter_getter.next_defender_count = 2;
 		parameter_getter.next_defender_idx = 0;
-		if (controller2.Attack(
+		assert(!FlowControl::ValidActionGetter(state2).IsAttackable(
 			state2.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(3)
-		) != FlowControl::kResultInvalid) assert(false);
+		));
 	}
 
 	random.next_rand = 0;
@@ -1343,9 +1343,9 @@ void test3()
 
 		parameter_getter.next_defender_count = 1;
 		parameter_getter.next_defender_idx = 0;
-		if (controller2.Attack(
-			state.GetBoard().GetFirst().minions_.Get(2)
-		) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state2).IsAttackable(
+			state2.GetBoard().GetFirst().minions_.Get(2)
+		));
 	}
 
 	{
@@ -1355,9 +1355,9 @@ void test3()
 
 		parameter_getter.next_defender_count = 1;
 		parameter_getter.next_defender_idx = 0;
-		controller2.Attack(
-			state.GetBoard().GetFirst().minions_.Get(1)
-		);
+		assert(!FlowControl::ValidActionGetter(state2).IsAttackable(
+			state2.GetBoard().GetFirst().minions_.Get(1)
+		));
 	}
 
 	state.GetBoard().GetFirst().GetResource().Refill();

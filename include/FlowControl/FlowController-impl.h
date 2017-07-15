@@ -27,6 +27,8 @@ namespace FlowControl
 
 	inline Result FlowController::Attack(state::CardRef attacker)
 	{
+		assert(attacker.IsValid());
+
 		flow_context_.ResetActionParameter();
 		AttackInternal(attacker);
 
@@ -278,15 +280,11 @@ namespace FlowControl
 
 	inline bool FlowController::AttackPhase(state::CardRef attacker)
 	{
-		if (!attacker.IsValid()) return SetInvalid();
+		assert(attacker.IsValid());
+		assert(ValidActionGetter(state_).IsAttackable(attacker));
 
 		state::CardRef defender = GetDefender();
 		if (!defender.IsValid()) return SetInvalid();
-
-		assert(state_.GetCardsManager().Get(attacker).GetHP() > 0);
-		assert(state_.GetCardsManager().Get(attacker).GetZone() == state::kCardZonePlay);
-
-		if (!IsAttackable(attacker)) return SetInvalid();
 
 		if (state_.GetCard(defender).GetCardType() == state::kCardTypeHero) {
 			bool cant_attack_hero = state_.GetCardBoolAttributeConsiderWeapon(attacker, [](state::Cards::Card const& card) {
@@ -336,11 +334,6 @@ namespace FlowControl
 			state::Events::EventTypes::AfterAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 
 		return true;
-	}
-
-	inline bool FlowController::IsAttackable(state::CardRef attacker)
-	{
-		return ValidActionGetter(state_).IsAttackable(attacker);
 	}
 
 	inline state::CardRef FlowController::GetDefender()
