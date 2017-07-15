@@ -57,8 +57,7 @@ namespace mcts
 			int idx = 0;
 			if (playable_cards_.size() >= 2) {
 				idx = action_parameters.GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards_.size()));
-				assert(idx >= 0);
-				assert(idx < (int)playable_cards_.size());
+				if (idx < 0) return Result::kResultInvalid;
 			}
 			state::CardRef card_ref = playable_cards_[idx];
 
