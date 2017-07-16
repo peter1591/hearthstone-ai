@@ -59,13 +59,12 @@ namespace mcts
 			perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
 
 			traversed_path.back().ConstructRedirectNode(perform_result.node);
-			traversed_path.emplace_back(perform_result.node);
 			if (!perform_result.new_node_created) {
 				perform_result.new_node_created = selection_stage_.HasNewNodeCreated();
 			}
 
 			assert(updater);
-			updater->PushBackNodes(traversed_path);
+			updater->PushBackNodes(traversed_path, perform_result.node);
 
 			assert([](builder::TreeBuilder::TreeNode* node) {
 				if (!node->GetActionType().IsValid()) return true;

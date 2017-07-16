@@ -3,6 +3,40 @@
 #include "MCTS/detail/BoardNodeMap.h"
 #include "MCTS/board/BoardView.h"
 #include "MCTS/board/ActionChoices.h"
+#include "Utils/HashCombine.h"
+
+namespace mcts
+{
+	namespace selection
+	{
+		struct TreeNodeLeadingNodesItem {
+			TreeNode * node;
+			int choice;
+
+			bool operator==(TreeNodeLeadingNodesItem const& v) const {
+				if (node != v.node) return false;
+				if (choice != v.choice) return false;
+				return true;
+			}
+
+			bool operator!=(TreeNodeLeadingNodesItem const& v) const {
+				return !(*this == v);
+			}
+		};
+	}
+}
+
+namespace std {
+	template <>
+	struct hash<mcts::selection::TreeNodeLeadingNodesItem> {
+		inline std::size_t operator()(mcts::selection::TreeNodeLeadingNodesItem const& v) const
+		{
+			std::size_t result = std::hash<mcts::selection::TreeNode*>()(v.node);
+			Utils::HashCombine::hash_combine(result, v.choice);
+			return result;
+		}
+	};
+}
 
 namespace mcts
 {
@@ -60,6 +94,31 @@ namespace mcts
 			ActionType action_type_;
 		};
 
+		class TreeNodeLeadingNodes
+		{
+		public:
+			TreeNodeLeadingNodes() : items_() {}
+
+			void AddLeadingNodes(TreeNode * node, int choice) {
+				assert(node);
+				assert(choice >= 0);
+				items_.insert(TreeNodeLeadingNodesItem{ node, choice });
+			}
+
+			template <class Functor>
+			void ForEachLeadingNode(Functor&& op) {
+				for (auto const& item : items_) {
+					if (!op(item.node, item.choice)) break;
+				}
+			}
+
+		private:
+			// TODO: both node and choice are in the key field,
+			// since different choices might need to an identical node
+			// need to check why this happens? is this expected?
+			std::unordered_set<TreeNodeLeadingNodesItem> items_;
+		};
+
 		// Add abilities to tree node to use in SO-MCTS
 		// Note: this will lived in *every* tree node, so careful about memory footprints
 		struct TreeNodeAddon
@@ -68,13 +127,15 @@ namespace mcts
 				action_analyzer(),
 				consistency_checker(),
 				board_node_map(),
-				last_apply_status()
+				last_apply_status(),
+				leading_nodes()
 			{}
 
 			board::BoardActionAnalyzer action_analyzer;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			detail::BoardNodeMap board_node_map;
 			TreeNodeLastApplyStatus last_apply_status;
+			TreeNodeLeadingNodes leading_nodes;
 		};
 	}
 }
