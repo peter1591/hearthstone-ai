@@ -16,8 +16,8 @@ namespace mcts
 				auto valid_action_getter = FlowControl::ValidActionGetter(board);
 
 				assert(playable_cards_.empty());
-				valid_action_getter.ForEachPlayableCard([&](state::CardRef card_ref) {
-					playable_cards_.push_back(card_ref);
+				valid_action_getter.ForEachPlayableCard([&](size_t idx) {
+					playable_cards_.push_back(idx);
 					return true;
 				});
 				if (!playable_cards_.empty()) {
@@ -59,10 +59,10 @@ namespace mcts
 				idx = action_parameters.GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards_.size()));
 				if (idx < 0) return Result::kResultInvalid;
 			}
-			state::CardRef card_ref = playable_cards_[idx];
+			size_t hand_idx = playable_cards_[idx];
 
 			FlowControl::FlowContext flow_context(random, action_parameters);
-			return FlowControl::FlowController(board, flow_context).PlayCard(card_ref);
+			return FlowControl::FlowController(board, flow_context).PlayCard((int)hand_idx);
 		}
 
 		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
@@ -80,6 +80,7 @@ namespace mcts
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!attackers_->empty());
 			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_->size());
+			if (idx < 0) return Result::kResultInvalid;
 
 			int attacker_idx = (*attackers_)[idx];
 			state::CardRef attacker;

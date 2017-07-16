@@ -35,7 +35,7 @@ namespace FlowControl
 		}
 
 	public: // main flow
-		Result PlayCard(int hand_idx); // TODO: remove this. this is only for flow controller test code
+		Result PlayCard(int hand_idx);
 		Result PlayCard(state::CardRef card_ref);
 		Result Attack(state::CardRef attacker);
 		Result HeroPower();

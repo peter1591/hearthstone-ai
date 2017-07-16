@@ -43,7 +43,7 @@ namespace mcts
 			std::array<OpFunc, kActionMax> op_map_;
 			size_t op_map_size_;
 			std::optional<std::vector<int>> attackers_; // TODO: don't need optional, always set after GetActionCount()
-			std::vector<state::CardRef> playable_cards_;
+			std::vector<size_t> playable_cards_;
 		};
 	}
 }

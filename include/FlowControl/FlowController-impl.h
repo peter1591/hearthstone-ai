@@ -9,13 +9,9 @@ namespace FlowControl
 {
 	inline Result FlowController::PlayCard(int hand_idx)
 	{
-		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
-		return PlayCard(card_ref);
-	}
-
-	inline Result FlowController::PlayCard(state::CardRef card_ref)
-	{
 		flow_context_.ResetActionParameter();
+
+		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 		PlayCardInternal(card_ref);
 
 		assert(flow_context_.Empty());

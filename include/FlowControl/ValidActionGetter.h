@@ -27,11 +27,12 @@ namespace FlowControl
 			state::State & mutable_state = const_cast<state::State &>(state_);
 
 			auto const& hand = state_.GetCurrentPlayer().hand_;
-			hand.ForEach([&](state::CardRef card_ref) {
-				bool ret = CheckCost(card_ref, mutable_state);
-				if (!ret) return true; // continue
-				return op(card_ref);
-			});
+			for (size_t idx = 0; idx < hand.Size(); ++idx) {
+				state::CardRef card_ref = hand.Get(idx);
+				if (CheckCost(card_ref, mutable_state)) {
+					op(idx);
+				}
+			}
 
 #ifndef NDEBUG
 			// TODO: implement comparison operator
