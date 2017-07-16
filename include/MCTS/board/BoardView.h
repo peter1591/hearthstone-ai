@@ -13,7 +13,7 @@ namespace mcts
 			friend std::hash<BoardView>;
 
 		public:
-			BoardView(state::PlayerSide Side, state::State const& board);
+			BoardView(state::PlayerSide side, state::State const& board);
 			BoardView(BoardView const&) = default;
 			BoardView(BoardView &&) = default;
 

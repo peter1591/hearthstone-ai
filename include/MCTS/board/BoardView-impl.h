@@ -76,9 +76,9 @@ namespace mcts
 				});
 
 				opponent_player.hand_.ForEach([&](state::CardRef card_ref) {
-					boardview::SelfHandCard item;
+					boardview::OpponentHandCard item;
 					item.Fill(state.GetCard(card_ref));
-					self_hand_.push_back(std::move(item));
+					opponent_hand_.push_back(std::move(item));
 					return true;
 				});
 
