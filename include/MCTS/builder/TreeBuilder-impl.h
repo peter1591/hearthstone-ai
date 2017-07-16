@@ -55,10 +55,15 @@ namespace mcts
 			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
 
 			// construct a redirect node for the last action
-			perform_result.new_node_created = false;
-			perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
-
+			assert(perform_result.new_node_created == false);
+			if (perform_result.result == Result::kResultNotDetermined) {
+				perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
+			}
+			else {
+				assert(perform_result.node == nullptr);
+			}
 			traversed_path.back().ConstructRedirectNode(perform_result.node);
+
 			if (!perform_result.new_node_created) {
 				perform_result.new_node_created = selection_stage_.HasNewNodeCreated();
 			}
@@ -66,7 +71,8 @@ namespace mcts
 			assert(updater);
 			updater->PushBackNodes(traversed_path, perform_result.node);
 
-			assert([](builder::TreeBuilder::TreeNode* node) {
+			assert([&](builder::TreeBuilder::TreeNode* node) {
+				if (perform_result.result != Result::kResultNotDetermined) return true;
 				if (!node->GetActionType().IsValid()) return true;
 				return node->GetActionType().GetType() == ActionType::kMainAction;
 			}(perform_result.node));

@@ -68,13 +68,14 @@ namespace mcts
 					}(node_));
 					auto perform_result = builder_.PerformSelect(node_, board, turn_node_map, &updater_);
 					if (perform_result.result == Result::kResultInvalid) return Result::kResultInvalid;
+					
+					result = perform_result.result;
+					if (result != Result::kResultNotDetermined) return result;
+
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(perform_result.node));
-
-					result = perform_result.result;
-					if (result != Result::kResultNotDetermined) return result;
 
 					if (perform_result.new_node_created) {
 						stage_ = kStageSimulation;

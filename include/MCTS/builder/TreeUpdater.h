@@ -61,18 +61,19 @@ namespace mcts
 				for (size_t i = 0; i < nodes_.size(); ++i) {
 					auto const& item = nodes_[i];
 
-					selection::TreeNodeAddon * next_node_addon = nullptr;
-					if ((i + 1) < nodes_.size()) {
-						next_node_addon = &nodes_[i + 1].GetNode()->GetAddon();
-					}
-					else {
-						assert(last_node_);
-						next_node_addon = &last_node_->GetAddon();
-					}
-
 					if (item.GetChoice() >= 0) {
-						next_node_addon->leading_nodes.AddLeadingNodes(
-							item.GetNode(), item.GetChoice());
+						selection::TreeNodeAddon * next_node_addon = nullptr;
+						if ((i + 1) < nodes_.size()) {
+							next_node_addon = &nodes_[i + 1].GetNode()->GetAddon();
+						}
+						else {
+							if (last_node_) next_node_addon = &last_node_->GetAddon();
+						}
+
+						if (next_node_addon) {
+							next_node_addon->leading_nodes.AddLeadingNodes(
+								item.GetNode(), item.GetChoice());
+						}
 					}
 
 					if (item.GetEdgeAddon()) {
