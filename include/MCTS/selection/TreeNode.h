@@ -77,8 +77,8 @@ namespace mcts
 			{}
 
 			// it is assumed we will never create a node at these special addresses
-			static constexpr TreeNode* GetFirstWinNode() { return (TreeNode *)(0x1); }
-			static constexpr TreeNode* GetSecondWinNode() { return (TreeNode *)(0x2); }
+			static TreeNode* GetFirstWinNode() { return reinterpret_cast<TreeNode *>(0x1); }
+			static TreeNode* GetSecondWinNode() { return reinterpret_cast<TreeNode *>((uint64_t)0x2); }
 
 			bool IsFirstWinNode() const { return this == GetFirstWinNode(); }
 			bool IsSecondWinNode() const { return this == GetSecondWinNode(); }
