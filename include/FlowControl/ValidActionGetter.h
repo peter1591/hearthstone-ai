@@ -29,9 +29,23 @@ namespace FlowControl
 			auto const& hand = state_.GetCurrentPlayer().hand_;
 			for (size_t idx = 0; idx < hand.Size(); ++idx) {
 				state::CardRef card_ref = hand.Get(idx);
-				if (CheckCost(card_ref, mutable_state)) {
-					op(idx);
+				auto const& card = state_.GetCard(card_ref);
+
+				bool playable = true;
+
+				if (playable && card.GetCardType() == state::kCardTypeMinion) {
+					if (state_.GetCurrentPlayer().minions_.Full()) playable = false;
 				}
+
+				if (playable && card.IsSecretCard()) {
+					if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) playable = false;
+				}
+
+				if (playable && !CheckCost(card_ref, card, mutable_state)) {
+					playable = false;
+				}
+
+				if (playable) op(idx);
 			}
 
 #ifndef NDEBUG
@@ -56,7 +70,7 @@ namespace FlowControl
 
 			bool ret = false;
 			if (card.GetRawData().usable) {
-				ret = CheckCost(card_ref, mutable_state);
+				ret = CheckCost(card_ref, card, mutable_state);
 			}
 
 #ifndef NDEBUG
@@ -67,9 +81,9 @@ namespace FlowControl
 		}
 
 	private:
-		bool CheckCost(state::CardRef card_ref, state::State & mutable_state)
+		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card, state::State & mutable_state)
 		{
-			int cost = state_.GetCard(card_ref).GetCost();
+			int cost = card.GetCost();
 			bool cost_health_instead = false;
 
 			FlowContext & fake_flow_context = *((FlowContext *)nullptr);
