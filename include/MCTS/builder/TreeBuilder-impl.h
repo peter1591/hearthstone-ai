@@ -61,6 +61,15 @@ namespace mcts
 			}
 			else {
 				assert(perform_result.node == nullptr);
+
+				if (perform_result.result == Result::kResultFirstPlayerWin) {
+					perform_result.node = mcts::selection::TreeNode::GetFirstWinNode();
+				}
+				else {
+					assert(perform_result.result == Result::kResultSecondPlayerWin);
+					perform_result.node = mcts::selection::TreeNode::GetSecondWinNode();
+				}
+				assert(perform_result.node != nullptr);
 			}
 			traversed_path.back().ConstructRedirectNode(perform_result.node);
 

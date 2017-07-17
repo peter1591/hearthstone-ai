@@ -20,6 +20,8 @@ namespace mcts
 				UpdateWinRate(credit);
 			}
 
+			// Note: should never touch the last_node, since it might be a sink node (win or lose)
+			// sink node is at address 0x1 or 0x2
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
 			{
 				assert([&]() {
@@ -39,7 +41,8 @@ namespace mcts
 					return true;
 				}());
 
-				if (last_node_) {
+				last_node_ = last_node;
+				if (HasLastNode()) {
 					if (nodes.front().GetNode() != last_node_) {
 						nodes_.emplace_back(last_node_);
 					}
@@ -47,7 +50,6 @@ namespace mcts
 
 				std::move(nodes.begin(), nodes.end(), std::back_inserter(nodes_));
 				nodes.clear();
-				last_node_ = last_node;
 			}
 
 			void Clear()
@@ -57,6 +59,12 @@ namespace mcts
 			}
 
 		private:
+			bool HasLastNode() const {
+				if (!last_node_) return false;
+				if (last_node_->IsWinNode()) return false;
+				return true;
+			}
+
 			void UpdateChosenTimes() {
 				for (size_t i = 0; i < nodes_.size(); ++i) {
 					auto const& item = nodes_[i];
@@ -67,7 +75,9 @@ namespace mcts
 							next_node_addon = &nodes_[i + 1].GetNode()->GetAddon();
 						}
 						else {
-							if (last_node_) next_node_addon = &last_node_->GetAddon();
+							if (HasLastNode()) {
+								next_node_addon = &last_node_->GetAddon();
+							}
 						}
 
 						if (next_node_addon) {

@@ -69,11 +69,20 @@ namespace mcts
 				ChildType * current_child_;
 			};
 
+		public:
 			TreeNode() : 
 				action_type_(ActionType::kInvalid),
 				choices_type_(board::ActionChoices::kInvalid),
 				children_(), addon_()
 			{}
+
+			// it is assumed we will never create a node at these special addresses
+			static constexpr TreeNode* GetFirstWinNode() { return (TreeNode *)(0x1); }
+			static constexpr TreeNode* GetSecondWinNode() { return (TreeNode *)(0x2); }
+
+			bool IsFirstWinNode() const { return this == GetFirstWinNode(); }
+			bool IsSecondWinNode() const { return this == GetSecondWinNode(); }
+			bool IsWinNode() const { return IsFirstWinNode() || IsSecondWinNode(); }
 
 			// select among specific choices
 			// if any of the choices does not exist, return the edge to expand it
@@ -157,6 +166,9 @@ namespace mcts
 
 			EdgeAddon& MarkChoiceRedirect(int choice, TreeNode* node)
 			{
+				// node should not be a nullptr, we use it for invalid nodes
+				assert(node);
+
 				// the child node is not yet created
 				// since we delay the node creation as late as possible
 				ChildType* child = children_.Get(choice);
