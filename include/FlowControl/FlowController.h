@@ -36,7 +36,6 @@ namespace FlowControl
 
 	public: // main flow
 		Result PlayCard(int hand_idx);
-		Result PlayCard(state::CardRef card_ref);
 		Result Attack(state::CardRef attacker);
 		Result HeroPower();
 		Result EndTurn();
