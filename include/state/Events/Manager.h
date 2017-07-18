@@ -22,7 +22,7 @@ namespace state
 			template <typename T> friend class CategorizedEvent;
 
 		public:
-			Manager() : event_trigger_recursive_count_(0) {}
+			Manager() : event_trigger_recursive_count_(0), event_tuple_(), categorized_event_tuple_() {}
 
 			template <typename EventType, typename T>
 			void PushBack(T&& handler) {
