@@ -58,12 +58,18 @@ namespace FlowControl
 		switch (state_.GetCardsManager().Get(card_ref).GetCardType())
 		{
 		case state::kCardTypeMinion:
+			assert(!state_.GetCurrentPlayer().minions_.Full());
 			if (!PlayCardPhase<state::kCardTypeMinion>(card_ref)) return;
 			break;
 		case state::kCardTypeWeapon:
 			if (!PlayCardPhase<state::kCardTypeWeapon>(card_ref)) return;
 			break;
 		case state::kCardTypeSpell:
+			assert([&]() {
+				if (!state_.GetCard(card_ref).IsSecretCard()) return true;
+				if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) return false;
+				return true;
+			}());
 			if (!PlayCardPhase<state::kCardTypeSpell>(card_ref)) return;
 			break;
 		default:
@@ -169,7 +175,13 @@ namespace FlowControl
 		state_.TriggerEvent<state::Events::EventTypes::BeforeMinionSummoned>(
 			state::Events::EventTypes::BeforeMinionSummoned::Context{ Manipulate(state_, flow_context_), card_ref });
 
-		if (state_.GetCurrentPlayer().minions_.Full()) return SetInvalid();
+		if (state_.GetCurrentPlayer().minions_.Full()) {
+			// before playing this minion card, the board is not full (we've ensured this in an assertion)
+			// but, the board is full before we actually put the minion on the board
+			// this might due to some pre-summon triggers
+			// we should consider this as an valid action, since the player can actually play the minion card
+			return true;
+		}
 
 		int total_minions = (int)state_.GetCurrentPlayer().minions_.Size();
 		int put_position = flow_context_.GetMinionPutLocation(total_minions);
@@ -241,8 +253,13 @@ namespace FlowControl
 		bool is_secret = state_.GetCard(card_ref).IsSecretCard();
 
 		if (is_secret) {
-			if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId()))
-				return SetInvalid();
+			if (state_.GetCurrentPlayer().secrets_.Exists(state_.GetCard(card_ref).GetCardId())) {
+				// before playing this secret card, we've ensured (by an assert) that there's no such secret
+				// but now, there's a same secret now
+				// this might due to some pre-triggers
+				// However, this should be considered as a valid game action.
+				return true;
+			}
 		}
 
 		state_.GetCard(card_ref).GetRawData().onplay_handler.OnPlay(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref, &new_card_ref);
@@ -289,16 +306,16 @@ namespace FlowControl
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
 
 		if (!defender.IsValid()) return kResultNotDetermined;
-		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return SetInvalid();
-		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return SetInvalid();
+		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return true;
+		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return true;
 
 		state_.TriggerEvent<state::Events::EventTypes::BeforeAttack>(
 			state::Events::EventTypes::BeforeAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 		
 		// a minion might be destroyed during BeforeAttack event
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
-		if (state_.GetCard(attacker).GetZone() != state::kCardZonePlay) return SetInvalid();
-		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return SetInvalid();
+		if (state_.GetCard(attacker).GetZone() != state::kCardZonePlay) return true;
+		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return true;
 
 		Manipulate(state_, flow_context_).OnBoardCharacter(attacker).Stealth(false);
 		Manipulate(state_, flow_context_).OnBoardCharacter(defender)
@@ -380,7 +397,7 @@ namespace FlowControl
 		
 		assert(card.GetRawData().usable);
 
-		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return SetInvalid();
+		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return false;
 
 		Manipulate(state_, flow_context_).HeroPower(card_ref).IncreaseUsedThisTurn();
 		if (card.GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {
