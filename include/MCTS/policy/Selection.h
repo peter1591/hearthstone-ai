@@ -47,7 +47,7 @@ namespace mcts
 						int choice;
 						mcts::selection::EdgeAddon const* edge_addon;
 					};
-					constexpr size_t kMaxChoices = 10; // max #-of-choices: choose hand card
+					constexpr size_t kMaxChoices = FlowControl::IActionParameterGetter::kMaxChoices;
 					std::array<Item, kMaxChoices> choices;
 					size_t choices_size = 0;
 

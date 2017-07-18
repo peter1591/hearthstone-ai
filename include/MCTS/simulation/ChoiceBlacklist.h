@@ -31,9 +31,8 @@ namespace mcts
 		private:
 			struct Item {
 				// Blacklist only cares about manually-chosen actions
-				// From which, the maximum chosen set is to choose a target,
-				// which is with at most 16 choices
-				static constexpr size_t kMaxChoices = 16;
+				// so the max choices is the one of action getter
+				static constexpr size_t kMaxChoices = FlowControl::IActionParameterGetter::kMaxChoices;
 
 				TreeNodeAddon addon_;
 				detail::NodeIndexMap valid_indics_;

@@ -18,6 +18,8 @@ namespace FlowControl {
 		IActionParameterGetter(IActionParameterGetter const&) = delete;
 		IActionParameterGetter & operator=(IActionParameterGetter const&) = delete;
 
+		static constexpr size_t kMaxChoices = 16; // max #-of-choices: choose target
+
 		virtual int GetMinionPutLocation(int minions) = 0;
 
 		virtual state::CardRef GetDefender(std::vector<state::CardRef> const& targets) = 0;
