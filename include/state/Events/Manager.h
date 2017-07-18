@@ -2,6 +2,8 @@
 
 #include <type_traits>
 #include <utility>
+#include <tuple>
+
 #include "state/Types.h"
 #include "state/Events/impl/HandlersContainer.h"
 #include "state/Events/impl/CategorizedHandlersContainer.h"
@@ -20,14 +22,8 @@ namespace state
 			template <typename T> friend class CategorizedEvent;
 
 		public:
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Weffc++"
-#endif
 			Manager() : event_trigger_recursive_count_(0) {}
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
+
 			template <typename EventType, typename T>
 			void PushBack(T&& handler) {
 				GetHandlersContainer<EventType>().PushBack(std::forward<T>(handler));
@@ -63,102 +59,46 @@ namespace state
 			int event_trigger_recursive_count_;
 
 		private:
-			template<typename EventHandlerType>
-			impl::HandlersContainer<EventHandlerType> & GetHandlersContainer();
+			using EvnetTypesTuple = std::tuple<
+				impl::HandlersContainer<EventTypes::GetPlayCardCost>,
+				impl::HandlersContainer<EventTypes::AfterMinionSummoned>,
+				impl::HandlersContainer<EventTypes::BeforeMinionSummoned>,
+				impl::HandlersContainer<EventTypes::AfterMinionPlayed>,
+				impl::HandlersContainer<EventTypes::AfterMinionDied>,
+				impl::HandlersContainer<EventTypes::PreparePlayCardTarget>,
+				impl::HandlersContainer<EventTypes::OnPlay>,
+				impl::HandlersContainer<EventTypes::CheckPlayCardCountered>,
+				impl::HandlersContainer<EventTypes::OnTurnEnd>,
+				impl::HandlersContainer<EventTypes::OnTurnStart>,
+				impl::HandlersContainer<EventTypes::BeforeSecretReveal>,
+				impl::HandlersContainer<EventTypes::PrepareAttackTarget>,
+				impl::HandlersContainer<EventTypes::BeforeAttack>,
+				impl::HandlersContainer<EventTypes::AfterAttack>,
+				impl::HandlersContainer<EventTypes::CalculateHealDamageAmount>,
+				impl::HandlersContainer<EventTypes::PrepareHealDamageTarget>,
+				impl::HandlersContainer<EventTypes::OnTakeDamage>,
+				impl::HandlersContainer<EventTypes::OnHeal>,
+				impl::HandlersContainer<EventTypes::AfterTakenDamage>,
+				impl::HandlersContainer<EventTypes::AfterHeroPower>,
+				impl::HandlersContainer<EventTypes::AfterSpellPlayed>,
+				impl::HandlersContainer<EventTypes::AfterSecretPlayed>
+			>;
+			EvnetTypesTuple event_tuple_;
 
-			template<typename EventHandlerType>
-			impl::CategorizedHandlersContainer<EventHandlerType> & GetCategorizedHandlersContainer();
+			using CategorizedEventTypesTuple = std::tuple<
+				impl::CategorizedHandlersContainer<EventTypes::CategorizedOnTakeDamage>
+			>;
+			CategorizedEventTypesTuple categorized_event_tuple_;
 
-#define ADD_TRIGGER_TYPE_INTERNAL_INCLASS(TYPE_NAME, MEMBER_NAME) \
-private: \
-	impl::HandlersContainer<EventTypes::TYPE_NAME> MEMBER_NAME;
-#define ADD_TRIGGER_TYPE_INTERNAL_OUTCLASS(TYPE_NAME, MEMBER_NAME) \
-	template <> inline impl::HandlersContainer<EventTypes::TYPE_NAME> & Manager::GetHandlersContainer() { \
-		return this->MEMBER_NAME; \
-	}
-#define ADD_TRIGGER_TYPE_INCLASS(TYPE_NAME) ADD_TRIGGER_TYPE_INTERNAL_INCLASS(TYPE_NAME, handler_ ## TYPE_NAME ## _)
-#define ADD_TRIGGER_TYPE_OUTCLASS(TYPE_NAME) ADD_TRIGGER_TYPE_INTERNAL_OUTCLASS(TYPE_NAME, handler_ ## TYPE_NAME ## _)
+			template <typename EventType>
+			impl::HandlersContainer<EventType> & GetHandlersContainer() {
+				return std::get<impl::HandlersContainer<EventType>>(event_tuple_);
+			}
 
-#define ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL_INCLASS(TYPE_NAME, MEMBER_NAME) \
-private: \
-	impl::CategorizedHandlersContainer<EventTypes::TYPE_NAME> MEMBER_NAME;
-#define ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL_OUTCLASS(TYPE_NAME, MEMBER_NAME) \
-	template <> inline impl::CategorizedHandlersContainer<EventTypes::TYPE_NAME> & Manager::GetCategorizedHandlersContainer() { \
-		return this->MEMBER_NAME; \
-	}
-#define ADD_CATEGORIZED_TRIGGER_TYPE_INCLASS(TYPE_NAME) ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL_INCLASS(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)
-#define ADD_CATEGORIZED_TRIGGER_TYPE_OUTCLASS(TYPE_NAME) ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL_OUTCLASS(TYPE_NAME, categorized_handler_ ## TYPE_NAME ## _)
-
-			ADD_TRIGGER_TYPE_INCLASS(GetPlayCardCost)
-
-			ADD_TRIGGER_TYPE_INCLASS(AfterMinionSummoned)
-			ADD_TRIGGER_TYPE_INCLASS(BeforeMinionSummoned)
-			ADD_TRIGGER_TYPE_INCLASS(AfterMinionPlayed)
-			ADD_TRIGGER_TYPE_INCLASS(AfterMinionDied)
-
-			ADD_TRIGGER_TYPE_INCLASS(PreparePlayCardTarget)
-			ADD_TRIGGER_TYPE_INCLASS(OnPlay)
-			ADD_TRIGGER_TYPE_INCLASS(CheckPlayCardCountered)
-
-			ADD_TRIGGER_TYPE_INCLASS(OnTurnEnd)
-			ADD_TRIGGER_TYPE_INCLASS(OnTurnStart)
-
-			ADD_TRIGGER_TYPE_INCLASS(BeforeSecretReveal)
-
-			ADD_TRIGGER_TYPE_INCLASS(PrepareAttackTarget)
-			ADD_TRIGGER_TYPE_INCLASS(BeforeAttack)
-			ADD_TRIGGER_TYPE_INCLASS(AfterAttack)
-
-			ADD_TRIGGER_TYPE_INCLASS(CalculateHealDamageAmount)
-			ADD_TRIGGER_TYPE_INCLASS(PrepareHealDamageTarget)
-			ADD_TRIGGER_TYPE_INCLASS(OnTakeDamage)
-			ADD_CATEGORIZED_TRIGGER_TYPE_INCLASS(CategorizedOnTakeDamage)
-			ADD_TRIGGER_TYPE_INCLASS(OnHeal)
-			ADD_TRIGGER_TYPE_INCLASS(AfterTakenDamage)
-
-			ADD_TRIGGER_TYPE_INCLASS(AfterHeroPower)
-			ADD_TRIGGER_TYPE_INCLASS(AfterSpellPlayed)
-			ADD_TRIGGER_TYPE_INCLASS(AfterSecretPlayed)
-
+			template<typename EventType>
+			impl::CategorizedHandlersContainer<EventType> & GetCategorizedHandlersContainer() {
+				return std::get<impl::CategorizedHandlersContainer<EventType>>(categorized_event_tuple_);
+			}
 		};
-			ADD_TRIGGER_TYPE_OUTCLASS(GetPlayCardCost)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterMinionSummoned)
-			ADD_TRIGGER_TYPE_OUTCLASS(BeforeMinionSummoned)
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterMinionPlayed)
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterMinionDied)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(PreparePlayCardTarget)
-			ADD_TRIGGER_TYPE_OUTCLASS(OnPlay)
-			ADD_TRIGGER_TYPE_OUTCLASS(CheckPlayCardCountered)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(OnTurnEnd)
-			ADD_TRIGGER_TYPE_OUTCLASS(OnTurnStart)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(BeforeSecretReveal)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(PrepareAttackTarget)
-			ADD_TRIGGER_TYPE_OUTCLASS(BeforeAttack)
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterAttack)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(CalculateHealDamageAmount)
-			ADD_TRIGGER_TYPE_OUTCLASS(PrepareHealDamageTarget)
-			ADD_TRIGGER_TYPE_OUTCLASS(OnTakeDamage)
-			ADD_CATEGORIZED_TRIGGER_TYPE_OUTCLASS(CategorizedOnTakeDamage)
-			ADD_TRIGGER_TYPE_OUTCLASS(OnHeal)
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterTakenDamage)
-
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterHeroPower)
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterSpellPlayed)
-			ADD_TRIGGER_TYPE_OUTCLASS(AfterSecretPlayed)
-
-#undef ADD_TRIGGER_TYPE_INTERNAL_INCLASS
-#undef ADD_TRIGGER_TYPE_INTERNAL_OUTCLASS
-#undef ADD_TRIGGER_TYPE_INCLASS
-#undef ADD_TRIGGER_TYPE_OUTCLASS
-#undef ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL_INCLASS
-#undef ADD_CATEGORIZED_TRIGGER_TYPE_INTERNAL_OUTCLASS
-#undef ADD_CATEGORIZED_TRIGGER_TYPE_INCLASS
-#undef ADD_CATEGORIZED_TRIGGER_TYPE_OUTCLASS
 	}
 }
