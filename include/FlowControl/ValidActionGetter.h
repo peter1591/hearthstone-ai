@@ -13,13 +13,29 @@ namespace FlowControl
 	public: // check valid actions
 			// These functions MUST return valid for all actually available actions
 			// These functions can return valid for ones actually are not valid actions
+
 		template <class Functor>
 		void ForEachPlayableCard(Functor && op)
 		{
+			auto const& hand = state_.GetCurrentPlayer().hand_;
+			for (size_t idx = 0; idx < hand.Size(); ++idx) {
 #ifndef NDEBUG
-			// TODO: added it back after implemented the comparison operator
-			// state::State origin_state = state_;
+				// TODO: added it back after implemented the comparison operator
+				// state::State origin_state = state_;
 #endif
+
+				if (!IsPlayable(idx)) continue;
+				if (!op(idx)) return;
+
+#ifndef NDEBUG
+				// TODO: implement comparison operator
+				//assert(origin_state == state_);
+#endif
+			}
+		}
+
+		bool IsPlayable(size_t hand_idx)
+		{
 			// we use mutable state here to invoke the event
 			// but the event handlers should NOT modify state
 			// 'origin_state' helps to detect logic error in debug builds
@@ -27,31 +43,22 @@ namespace FlowControl
 			state::State & mutable_state = const_cast<state::State &>(state_);
 
 			auto const& hand = state_.GetCurrentPlayer().hand_;
-			for (size_t idx = 0; idx < hand.Size(); ++idx) {
-				state::CardRef card_ref = hand.Get(idx);
-				auto const& card = state_.GetCard(card_ref);
+			state::CardRef card_ref = hand.Get(hand_idx);
+			auto const& card = state_.GetCard(card_ref);
 
-				bool playable = true;
-
-				if (playable && card.GetCardType() == state::kCardTypeMinion) {
-					if (state_.GetCurrentPlayer().minions_.Full()) playable = false;
-				}
-
-				if (playable && card.IsSecretCard()) {
-					if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) playable = false;
-				}
-
-				if (playable && !CheckCost(card_ref, card, mutable_state)) {
-					playable = false;
-				}
-
-				if (playable) op(idx);
+			if (card.GetCardType() == state::kCardTypeMinion) {
+				if (state_.GetCurrentPlayer().minions_.Full()) return false;
 			}
 
-#ifndef NDEBUG
-			// TODO: implement comparison operator
-			//assert(origin_state == state_);
-#endif
+			if (card.IsSecretCard()) {
+				if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) return false;
+			}
+
+			if (!CheckCost(card_ref, card, mutable_state)) {
+				return false;
+			}
+
+			return true;
 		}
 
 		bool CanUseHeroPower() {

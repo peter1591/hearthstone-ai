@@ -836,7 +836,7 @@ void test3()
 		auto state2 = state;
 		auto flow_context2 = flow_context;
 		FlowControl::FlowController controller2(state2, flow_context2);
-		if (controller2.HeroPower() != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state2).HeroPowerUsable());
 	}
 
 	state.GetBoard().GetFirst().GetResource().Refill();
@@ -894,7 +894,7 @@ void test3()
 		FlowControl::FlowController controller2(state2, flow_context2);
 		parameter_getter.next_specified_target_count = 11;
 		parameter_getter.next_specified_target_idx = 0;
-		if (controller2.HeroPower() != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state2).HeroPowerUsable());
 	}
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::First());
@@ -931,7 +931,7 @@ void test3()
 		FlowControl::FlowController controller2(state2, flow_context2);
 		parameter_getter.next_specified_target_count = 11;
 		parameter_getter.next_specified_target_idx = 0;
-		if (controller2.HeroPower() != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state2).HeroPowerUsable());
 	}
 
 	AddHandCard(Cards::ID_EX1_277, flow_context, state, state::PlayerIdentifier::First());
@@ -1532,7 +1532,7 @@ void test3()
 		FlowControl::FlowController controller2(state2, flow_context2);
 		state2.GetBoard().GetSecond().GetResource().Refill();
 		AddHandCard(Cards::ID_EX1_294, flow_context2, state2, state::PlayerIdentifier::Second());
-		if (controller2.PlayCard(4) != FlowControl::kResultInvalid) assert(false);
+		assert(!FlowControl::ValidActionGetter(state2).IsPlayable(4));
 	}
 
 	AddHandCard(Cards::ID_NEW1_025, flow_context, state, state::PlayerIdentifier::Second());
