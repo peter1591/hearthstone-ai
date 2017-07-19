@@ -26,8 +26,7 @@ namespace mcts
 				}
 
 				attackers_ = valid_action_getter.GetAttackers();
-				assert(attackers_.has_value());
-				if (!attackers_->empty()) {
+				if (!attackers_.empty()) {
 					op_map_[op_map_size_] = &BoardActionAnalyzer::Attack;
 					++op_map_size_;
 				}
@@ -67,7 +66,6 @@ namespace mcts
 
 		inline Result BoardActionAnalyzer::Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters)
 		{
-			assert(attackers_.has_value());
 			assert([&]() {
 				auto attackers = FlowControl::ValidActionGetter(board).GetAttackers();
 				return attackers == *attackers_; // in fact, we don't care the ordering
@@ -75,14 +73,14 @@ namespace mcts
 													// the same ordering for identical board views
 			}());
 
-			if (attackers_->empty()) return Result::kResultInvalid;
+			if (attackers_.empty()) return Result::kResultInvalid;
 
 			FlowControl::FlowContext flow_context(random, action_parameters);
 			assert(!attackers_->empty());
-			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_->size());
+			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
 			if (idx < 0) return Result::kResultInvalid;
 
-			int attacker_idx = (*attackers_)[idx];
+			int attacker_idx = attackers_[idx];
 			state::CardRef attacker;
 			if (attacker_idx == 7) {
 				attacker = board.GetCurrentPlayer().GetHeroRef();
