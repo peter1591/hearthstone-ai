@@ -113,9 +113,10 @@ namespace mcts
 			}
 
 		private:
-			// TODO: both node and choice are in the key field,
+			// both node and choice are in the key field,
 			// since different choices might need to an identical node
-			// need to check why this happens? is this expected?
+			// these might happened when trying to heal two different targets,
+			// but both targets are already fully-healed
 			std::unordered_set<TreeNodeLeadingNodesItem> items_;
 		};
 
