@@ -178,6 +178,12 @@ namespace mcts
 				return child->GetEdgeAddon();
 			}
 
+			EdgeAddon * GetEdgeAddon(int choice) {
+				ChildType * child = children_.Get(choice);
+				if (!child) return nullptr;
+				return &child->GetEdgeAddon();
+			}
+
 		public:
 			ActionType GetActionType() const { return action_type_; }
 

@@ -20,8 +20,6 @@ namespace mcts
 				UpdateWinRate(credit);
 			}
 
-			// Note: should never touch the last_node, since it might be a sink node (win or lose)
-			// sink node is at address 0x1 or 0x2
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
 			{
 				assert([&]() {
@@ -59,6 +57,8 @@ namespace mcts
 			}
 
 		private:
+			// Note: should never touch the last_node, since it might be a sink node (win or lose)
+			// sink node is at address 0x1 or 0x2
 			bool HasLastNode() const {
 				if (!last_node_) return false;
 				if (last_node_->IsWinNode()) return false;
@@ -94,17 +94,68 @@ namespace mcts
 			}
 
 			void UpdateWinRate(bool credit) {
-				for (auto const& item : nodes_) {
-					if (item.GetEdgeAddon()) {
-						auto & edge_addon = *item.GetEdgeAddon();
-						if (credit) ++edge_addon.credit;
-						++edge_addon.total;
+				if (nodes_.empty()) return;
+
+				assert([&](){
+					should_visits_.clear();
+					for (auto const& item : nodes_) {
+						if (item.GetEdgeAddon()) {
+							should_visits_.insert(item.GetEdgeAddon());
+						}
 					}
+					return true;
+				}());
+
+				auto it = nodes_.rbegin();
+				while (it != nodes_.rend()) {
+					TreeLikeUpdateWinRate(
+						it->GetNode(),
+						it->GetChoice(),
+						credit);
+
+					// skip to next redirect node
+					// all intermediate nodes are already updated
+					++it;
+					while (it != nodes_.rend()) {
+						if (it->GetChoice() < 0) break;
+						++it;
+					}
+
+					assert(it->GetEdgeAddon() == nullptr);
+					++it;
 				}
+
+				assert(should_visits_.empty());
 			}
+
+			void TreeLikeUpdateWinRate(selection::TreeNode * node, int choice, bool credit)
+			{
+				assert(node);
+
+				auto * edge_addon = node->GetEdgeAddon(choice);
+				assert(edge_addon);
+				assert([&]() {
+					should_visits_.erase(edge_addon);
+					return true;
+				}());
+				if (credit) ++edge_addon->credit;
+				++edge_addon->total;
+
+				node->GetAddon().leading_nodes.ForEachLeadingNode(
+					[&](selection::TreeNode * leading_node, int leading_choice)
+				{
+					TreeLikeUpdateWinRate(leading_node, leading_choice, credit);
+					return true;
+				});
+			}
+
 		private:
 			selection::TreeNode * last_node_;
 			std::vector<selection::TraversedNodeInfo> nodes_;
+
+#ifndef NDEBUG
+			std::unordered_set<selection::EdgeAddon*> should_visits_;
+#endif
 		};
 	}
 }
