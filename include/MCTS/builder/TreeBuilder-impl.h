@@ -103,15 +103,14 @@ namespace mcts
 			// Ideally, invalid actions should be rarely happened.
 			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
 			// Alternatively, we can just restart the episode, and hope this will not happen frequently
-			apply_state_.SaveBoard();
+			// Note: If this is completely disabled, we can optimize many things out to replay the actions
+			// apply_state_.SaveBoard();
 
 			simulation_stage_.StartNewAction();
 
 			board::BoardActionAnalyzer action_analyzer;
 
 			Result result = ApplyAction(action_analyzer, simulation_stage_);
-
-			assert(apply_state_.IsValid());
 
 			return result;
 		}

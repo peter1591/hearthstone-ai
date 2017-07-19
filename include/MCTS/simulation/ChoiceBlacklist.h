@@ -26,6 +26,9 @@ namespace mcts
 		//    Since most of the time, it should reach a valid state,
 		//    we try to do allocations as late as possible until we
 		//    met an invalid state.
+		// TODO:
+		//    If the chance of an invalid state is really low, we can drop the black-list
+		//    completely.
 		class ChoiceBlacklist
 		{
 		private:
