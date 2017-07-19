@@ -32,7 +32,7 @@ namespace mcts
 			private:
 				struct Item {
 					int choice;
-					int chosen_times;
+					std::uint64_t chosen_times;
 					TreeNode* node;
 				};
 				std::vector<Item> choices_;
@@ -52,7 +52,7 @@ namespace mcts
 					size_t choices_size = 0;
 
 					// Phase 1: get total chosen times, and record to 'choices'
-					int total_chosen_times = 0;
+					std::uint64_t total_chosen_times = 0;
 					for (choice_iterator.Begin();
 						!choice_iterator.IsEnd();
 						choice_iterator.StepNext())
@@ -68,7 +68,7 @@ namespace mcts
 						}
 
 						auto const& edge_addon = choice_iterator.GetAddon();
-						int chosen_times = edge_addon.chosen_times;
+						auto chosen_times = edge_addon.chosen_times;
 						if (chosen_times == 0) return choice; // force select
 
 						assert(chosen_times > 0); // == 0
@@ -85,8 +85,8 @@ namespace mcts
 
 					// Phase 2: use UCB to make a choice
 					auto get_score = [total_chosen_times](Item const& item) {
-						int wins = item.edge_addon->credit;
-						int total = item.edge_addon->total;
+						auto wins = item.edge_addon->credit;
+						auto total = item.edge_addon->total;
 						assert(total > 0);
 						double exploit_score = ((double)wins) / total;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 namespace mcts
 {
 	namespace selection
@@ -9,11 +11,11 @@ namespace mcts
 		public:
 			EdgeAddon() : chosen_times(0), credit(0), total(0) {}
 
-			int chosen_times;
+			std::uint64_t chosen_times;
 
 			// for win-rate
-			int credit;
-			int total;
+			std::uint64_t credit;
+			std::uint64_t total;
 		};
 	}
 }
