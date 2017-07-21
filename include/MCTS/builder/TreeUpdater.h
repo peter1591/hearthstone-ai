@@ -9,7 +9,11 @@ namespace mcts
 		class TreeUpdater
 		{
 		public:
-			TreeUpdater() : last_node_(nullptr), nodes_() {}
+			TreeUpdater() : last_node_(nullptr), nodes_()
+#ifndef NDEBUG
+				,should_visits_()
+#endif
+			{}
 
 			TreeUpdater(TreeUpdater const&) = delete;
 			TreeUpdater & operator=(TreeUpdater const&) = delete;
