@@ -26,8 +26,8 @@ namespace mcts
 			{
 				state::PlayerIdentifier side = state.GetCurrentPlayerId();
 				
-				board::Board board(state, side.GetSide());
-				Result result = GetSOMCTS(side).PerformOwnTurnActions(board);
+				Result result = GetSOMCTS(side).PerformOwnTurnActions(
+					board::Board(state, side.GetSide()));
 				if (result == Result::kResultInvalid) return false;
 				
 				assert(result != Result::kResultInvalid);
@@ -39,7 +39,8 @@ namespace mcts
 
 				assert(state.GetCurrentPlayerId() == side.Opposite());
 
-				GetSOMCTS(side.Opposite()).ApplyOthersActions(board);
+				GetSOMCTS(side.Opposite()).ApplyOthersActions(
+					board::Board(state, side.Opposite().GetSide()));
 			}
 
 			return true;

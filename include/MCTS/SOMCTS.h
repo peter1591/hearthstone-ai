@@ -36,8 +36,9 @@ namespace mcts
 		}
 
 		// Include to perform the end-turn action at last to switch side
-		Result PerformOwnTurnActions(board::Board & board)
+		Result PerformOwnTurnActions(board::Board const& board)
 		{
+			assert(side_ == board.GetViewSide()); // prevent information leak
 			assert(board.GetCurrentPlayer().GetSide() == side_);
 
 			Result result = Result::kResultInvalid;
@@ -95,6 +96,8 @@ namespace mcts
 		// Just jump to the node present the new state
 		void ApplyOthersActions(board::Board const& board)
 		{
+			assert(side_ == board.GetViewSide()); // prevent information leak
+
 			if (stage_ == kStageSimulation) return;
 
 			assert(stage_ == kStageSelection);

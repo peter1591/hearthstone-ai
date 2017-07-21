@@ -50,12 +50,12 @@ namespace mcts
 			};
 			
 			// Note: can only be called when current player is the viewer of 'board'
-			SelectResult PerformSelect(TreeNode * node, board::Board & board,
+			SelectResult PerformSelect(TreeNode * node, board::Board const& board,
 				detail::BoardNodeMap & last_node_map, TreeUpdater * updater);
 
 			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
-			Result PerformSimulate(board::Board & board);
+			Result PerformSimulate(board::Board const& board);
 
 		private:
 			template <typename StageHandler>

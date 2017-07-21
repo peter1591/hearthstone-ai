@@ -24,7 +24,7 @@ namespace mcts
 			ActionApplyState(ActionApplyState const&) = delete;
 			ActionApplyState & operator=(ActionApplyState const&) = delete;
 
-			void Start(board::Board & board)
+			void Start(board::Board const& board)
 			{
 				is_valid_ = true;
 				board_ = &board;
@@ -60,7 +60,7 @@ namespace mcts
 			board::ActionParameterGetter action_parameter_getter_;
 			board::RandomGenerator random_generator_;
 
-			board::Board * board_;
+			board::Board const* board_;
 			bool is_valid_;
 
 			bool has_saved_board_;

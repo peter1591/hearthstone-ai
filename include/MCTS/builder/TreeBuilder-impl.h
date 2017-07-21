@@ -17,7 +17,7 @@ namespace mcts
 	{
 		// Note: can only be called when current player is the viewer of 'board'
 		inline TreeBuilder::SelectResult TreeBuilder::PerformSelect(
-			TreeNode * node, board::Board & board, 
+			TreeNode * node, board::Board const& board, 
 			detail::BoardNodeMap & last_node_map, TreeUpdater * updater)
 		{
 			action_replayer_.Clear();
@@ -91,7 +91,7 @@ namespace mcts
 		
 		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 		// Note: can only be called when current player is the viewer of 'board'
-		inline Result TreeBuilder::PerformSimulate(board::Board & board)
+		inline Result TreeBuilder::PerformSimulate(board::Board const& board)
 		{
 			action_replayer_.Clear();
 

@@ -34,6 +34,8 @@ namespace mcts
 				return board_.GetCurrentPlayerId();
 			}
 
+			state::PlayerSide GetViewSide() const { return side_; }
+
 			BoardView CreateView() const {
 				return BoardView(side_, board_);
 			}
@@ -50,7 +52,7 @@ namespace mcts
 
 			Result ApplyAction(int action,
 				BoardActionAnalyzer & action_analyzer,
-				RandomGenerator & random, ActionParameterGetter & action_parameters)
+				RandomGenerator & random, ActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				return action_analyzer.ApplyAction(
@@ -63,7 +65,7 @@ namespace mcts
 				save.state_ = board_;
 			}
 
-			void Restore(SavedBoard const& save) {
+			void Restore(SavedBoard const& save) const {
 				board_ = save.state_;
 			}
 
