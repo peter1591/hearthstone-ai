@@ -114,21 +114,23 @@ namespace FlowControl
 		// encoded index:
 		//   0 ~ 6: minion index from left to right
 		//   7: hero
-		std::vector<int> GetAttackers() {
-			std::vector<int> attackers;
+		template <typename Functor>
+		void ForEachAttacker(Functor&& functor) {
 			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId());
 			auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
 			int minion_idx = 0;
 			player.minions_.ForEach([&](state::CardRef card_ref) {
-				if (op(card_ref)) attackers.push_back(minion_idx);
+				if (op(card_ref)) {
+					if (!functor(minion_idx)) return;
+				}
 				++minion_idx;
 			});
 
 			state::CardRef hero_ref = player.GetHeroRef();
-			if (op(hero_ref)) attackers.push_back(7);
-			
-			return attackers;
+			if (op(hero_ref)) {
+				if (!functor(7)) return;
+			}
 		}
 
 		std::vector<state::CardRef> GetDefenders() {

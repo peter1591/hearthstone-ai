@@ -29,7 +29,8 @@ namespace mcts
 				// board action analyzer will not access hidden information
 				//   as long as the current-player is the viewer
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer.GetActionsCount(board_);
+				return action_analyzer.GetActionsCount(
+					FlowControl::CurrentPlayerStateView(board_));
 			}
 
 			Result ApplyAction(int action,
@@ -37,7 +38,9 @@ namespace mcts
 				RandomGenerator & random, ActionParameterGetter & action_parameters)
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer.ApplyAction(board_, action, random, action_parameters);
+				return action_analyzer.ApplyAction(
+					FlowControl::CurrentPlayerStateView(board_),
+					action, random, action_parameters);
 			}
 
 		public:

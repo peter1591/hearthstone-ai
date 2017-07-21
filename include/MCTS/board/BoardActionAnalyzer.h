@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MCTS/Types.h"
+#include "FlowControl/PlayerStateView.h"
 
 namespace mcts
 {
@@ -24,19 +25,20 @@ namespace mcts
 		public:
 			BoardActionAnalyzer() : op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
 
-			int GetActionsCount(state::State const& board);
+			int GetActionsCount(FlowControl::CurrentPlayerStateView const& board);
+
 			Result ApplyAction(
-				state::State & board,
+				FlowControl::CurrentPlayerStateView board,
 				int action,
 				RandomGenerator & random,
 				ActionParameterGetter & action_parameters);
 
 		private:
-			typedef Result (BoardActionAnalyzer::*OpFunc)(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result PlayCard(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result Attack(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result HeroPower(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result EndTurn(state::State & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result PlayCard(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result Attack(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result HeroPower(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			Result EndTurn(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 
 		private:
 			std::array<OpFunc, kActionMax> op_map_;
