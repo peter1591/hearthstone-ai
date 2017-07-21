@@ -68,7 +68,7 @@ namespace mcts
 		{
 			assert([&]() {
 				auto attackers = FlowControl::ValidActionGetter(board).GetAttackers();
-				return attackers == *attackers_; // in fact, we don't care the ordering
+				return attackers == attackers_; // in fact, we don't care the ordering
 													// but, the logic of 'GetAttackers()' returns
 													// the same ordering for identical board views
 			}());
@@ -76,7 +76,7 @@ namespace mcts
 			if (attackers_.empty()) return Result::kResultInvalid;
 
 			FlowControl::FlowContext flow_context(random, action_parameters);
-			assert(!attackers_->empty());
+			assert(!attackers_.empty());
 			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
 			if (idx < 0) return Result::kResultInvalid;
 
