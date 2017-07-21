@@ -1,6 +1,7 @@
 #pragma once
 
 #include "state/Types.h"
+#include "FlowControl/PlayerStateView.h"
 #include "MCTS/board/BoardViewTypes.h"
 #include "Utils/HashCombine.h"
 
@@ -8,12 +9,16 @@ namespace mcts
 {
 	namespace board
 	{
+		// Need to ensure only information from 'side' is accessed
+		// TODO: maybe use FlowControl::PlayerStateView to ensure this
 		class BoardView
 		{
 			friend std::hash<BoardView>;
 
 		public:
-			BoardView(state::PlayerSide side, state::State const& board);
+			template <state::PlayerSide Side>
+			BoardView(FlowControl::PlayerStateView<Side> const& board);
+
 			BoardView(BoardView const&) = default;
 			BoardView(BoardView &&) = default;
 

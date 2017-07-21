@@ -14,10 +14,25 @@ namespace FlowControl
 	public:
 		PlayerStateView(state::State & state) : state_(state) {}
 
+		int GetTurn() const { return state_.GetTurn(); }
+
+	public: // hero
+		state::Cards::Card const& GetSelfHero() const {
+			auto ref = GetPlayer(Side).GetHeroRef();
+			assert(ref.IsValid());
+			return state_.GetCard(ref);
+		}
+
+		state::Cards::Card const& GetOpponentHero() const {
+			auto ref = GetOpponentPlayer(Side).GetHeroRef();
+			assert(ref.IsValid());
+			return state_.GetCard(ref);
+		}
+
 	public: // hand cards
 		// Functor parameters: state::Cards::Card const&
 		template <typename Functor>
-		void ForEachSelfHandCard(Functor && functor) {
+		void ForEachSelfHandCard(Functor && functor) const {
 			GetPlayer(Side).hand_.ForEach([&](state::CardRef card_ref) {
 				return functor(state_.GetCard(card_ref));
 			});
@@ -27,7 +42,7 @@ namespace FlowControl
 		//    (TODO) [int] hold_from_turn
 		//    (TODO) [bool] enchanted
 		template <typename Functor>
-		void ForEachOpponentHandCard(Functor && functor) {
+		void ForEachOpponentHandCard(Functor && functor) const {
 			GetOpponentPlayer(Side).hand_.ForEach([&](state::CardRef card_ref) {
 				state::Cards::Card const& card = state_.GetCard(card_ref);
 				
@@ -38,7 +53,7 @@ namespace FlowControl
 			});
 		}
 
-		size_t GetOpponentHandCardCount() {
+		size_t GetOpponentHandCardCount() const {
 			return GetOpponentPlayer().hand_.Size();
 		}
 
@@ -46,58 +61,53 @@ namespace FlowControl
 		// Functor parameters:
 		//    Cards::Card const&
 		//    [bool] is_attackable
-		template <typename Functor, state::PlayerSide CheckingSide>
-		void ForEachMinion(Functor && functor) {
-			GetPlayer(CheckingSide).minions_.ForEach([&](state::CardRef card_ref) {
+		template <typename Functor>
+		void ForEachMinion(state::PlayerSide view_side, Functor && functor) const {
+			GetPlayer(view_side).minions_.ForEach([&](state::CardRef card_ref) {
 				auto const& card = state_.GetCard(card_ref);
 				bool attackable = ValidActionGetter(state_).IsAttackable(card);
 				return functor(card, attackable);
 			});
 		}
 
-		template <state::PlayerSide CheckingSide>
-		state::board::PlayerResource const& GetPlayerResource() {
-			return GetPlayer(CheckingSide).GetResource();
+		state::board::PlayerResource const& GetPlayerResource(state::PlayerSide view_side) const {
+			return GetPlayer(view_side).GetResource();
 		}
 
-		template <typename Functor, state::PlayerSide CheckingSide>
-		void GetDeckCardCount(Functor && functor) {
-			return GetPlayer(CheckingSide).deck_.Size();
+		int GetDeckCardCount(state::PlayerSide view_side) const {
+			return GetPlayer(view_side).deck_.Size();
 		}
 
-		template <state::PlayerSide CheckingSide>
-		state::Cards::Card const& GetHeroPower() {
+		state::Cards::Card const& GetHeroPower(state::PlayerSide view_side) const {
 			return state_.GetCard(
-				GetPlayer(CheckingSide).GetHeroPowerRef());
+				GetPlayer(view_side).GetHeroPowerRef());
 		}
 
 		// call Functor only when a weapon is equipped
-		template <state::PlayerSide CheckingSide, typename Functor>
-		void GetWeapon(Functor && functor) {
-			auto ref = GetPlayer(CheckingSide).GetWeaponRef();
+		template <typename Functor>
+		void GetWeapon(state::PlayerSide view_side, Functor && functor) const {
+			auto ref = GetPlayer(view_side).GetWeaponRef();
 			if (ref.IsValid()) functor(state_.GetCard(ref));
 		}
 
-		template <state::PlayerSide ViewSide>
-		bool IsHeroAttackable() {
+		bool IsHeroAttackable(state::PlayerSide view_side) const {
 			return ValidActionGetter(state_).IsAttackable(
-				GetPlayer(ViewSide).GetHeroRef());
+				GetPlayer(view_side).GetHeroRef());
 		}
 
-		template <state::PlayerSide ViewSide>
-		bool IsMinionAttackable(size_t idx) {
+		bool IsMinionAttackable(state::PlayerSide view_side, size_t idx) const {
 			return ValidActionGetter(state_).IsAttackable(
-				GetPlayer(ViewSide).minions_.Get(idx));
+				GetPlayer(view_side).minions_.Get(idx));
 		}
 
 	private:
-		state::board::Player & GetPlayer(state::PlayerIdentifier player) {
+		state::board::Player & GetPlayer(state::PlayerIdentifier player) const {
 			return state_.GetBoard().Get(player);
 		}
-		state::board::Player & GetPlayer(state::PlayerSide checking_side) {
+		state::board::Player & GetPlayer(state::PlayerSide checking_side) const {
 			return GetPlayer(state::PlayerIdentifier(checking_side));
 		}
-		state::board::Player & GetOpponentPlayer(state::PlayerSide checking_side) {
+		state::board::Player & GetOpponentPlayer(state::PlayerSide checking_side) const {
 			return GetPlayer(state::PlayerIdentifier(checking_side).Opposite());
 		}
 

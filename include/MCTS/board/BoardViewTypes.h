@@ -72,11 +72,11 @@ namespace mcts
 				int overload;
 				int overload_next_turn;
 
-				void Fill(state::board::Player const& player) {
-					current = player.GetResource().GetCurrent();
-					total = player.GetResource().GetTotal();
-					overload = player.GetResource().GetCurrentOverloaded();
-					overload_next_turn = player.GetResource().GetNextOverload();
+				void Fill(state::board::PlayerResource const& resource) {
+					current = resource.GetCurrent();
+					total = resource.GetTotal();
+					overload = resource.GetCurrentOverloaded();
+					overload_next_turn = resource.GetNextOverload();
 				}
 
 				bool operator==(Crystal const& v) const {
@@ -102,7 +102,7 @@ namespace mcts
 
 				void Fill(state::Cards::Card const& card) {
 					card_id = card.GetCardId();
-					usable = card.GetRawData().usable;
+					usable = card.GetRawData().usable; // TOOD: is this accurate?
 				}
 
 				bool operator==(HeroPower const& v) const {
@@ -166,6 +166,10 @@ namespace mcts
 				// TODO: more flags
 				//   charge, cant_attack, cant_attack_hero, has enchant?, has deathrattle?
 
+				Minion(state::Cards::Card const& card) {
+					Fill(card);
+				}
+
 				void Fill(state::Cards::Card const& card) {
 					card_id = card.GetCardId();
 					attack = card.GetAttack();
@@ -194,10 +198,11 @@ namespace mcts
 			{
 				bool attackable;
 
-				void Fill(state::Cards::Card const& card, bool now_attackable) {
-					Minion::Fill(card);
+				SelfMinion(state::Cards::Card const& card, bool now_attackable)
+					: Minion(card)
+				{
 					attackable = now_attackable;
-				};
+				}
 
 				bool operator==(SelfMinion const& v) const {
 					static_assert(change_id == 1);
@@ -222,6 +227,10 @@ namespace mcts
 				int cost;
 				int attack;
 				int hp;
+
+				SelfHandCard(state::Cards::Card const& card) {
+					Fill(card);
+				}
 
 				void Fill(state::Cards::Card const& card) {
 					card_id = card.GetCardId();
@@ -250,7 +259,9 @@ namespace mcts
 				// int hold_from_turn; // TODO
 				// bool enchanted; // TODO
 
-				void Fill(state::Cards::Card const& card) {
+				OpponentHandCard() { Fill(); }
+
+				void Fill() {
 				}
 
 				bool operator==(OpponentHandCard const& v) const {
@@ -273,8 +284,8 @@ namespace mcts
 				//std::unordered_set<Cards::CardId> cards; // TODO: do we really need this in board view?
 				int count;
 
-				void Fill(state::board::Deck const& deck) {
-					count = deck.Size();
+				void Fill(int in_count) {
+					count = in_count;
 				}
 
 				bool operator==(SelfDeck const& v) const {
@@ -294,8 +305,8 @@ namespace mcts
 			{
 				size_t count;
 
-				void Fill(state::board::Deck const& deck) {
-					count = deck.Size();
+				void Fill(int in_count) {
+					count = in_count;
 				}
 
 				bool operator==(OpponentDeck const& v) const {

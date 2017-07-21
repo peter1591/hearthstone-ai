@@ -6,83 +6,65 @@ namespace mcts
 {
 	namespace board
 	{
-		inline BoardView::BoardView(state::PlayerSide side, state::State const& state) :
-			turn_(state.GetTurn()),
+		template <state::PlayerSide Side>
+		inline BoardView::BoardView(FlowControl::PlayerStateView<Side> const& board) :
+			turn_(board.GetTurn()),
 			self_hero_(), self_crystal_(), self_hero_power_(), self_weapon_(),
 			self_minions_(), self_hand_(), self_deck_(),
 			opponent_hero_(), opponent_crystal_(), opponent_hero_power_(),
 			opponent_weapon_(), opponent_minions_(), opponent_hand_(), opponent_deck_()
 		{
 			{
-				state::board::Player const& self_player = state.GetBoard().Get(side);
-				FlowControl::ValidActionGetter valid_action_getter(state);
+				self_hero_.Fill(board.GetSelfHero(), board.IsHeroAttackable(Side));
 
-				state::CardRef hero_ref = self_player.GetHeroRef();
-				assert(hero_ref.IsValid());
-				self_hero_.Fill(state.GetCard(hero_ref),
-					valid_action_getter.IsAttackable(hero_ref));
+				self_crystal_.Fill(board.GetPlayerResource(Side));
 
-				self_crystal_.Fill(self_player);
+				self_hero_power_.Fill(board.GetHeroPower(Side));
 
-				state::CardRef hero_power_ref = self_player.GetHeroPowerRef();
-				assert(hero_power_ref.IsValid());
-				self_hero_power_.Fill(state.GetCard(hero_power_ref));
+				self_weapon_.Invalidate();
+				board.GetWeapon(Side, [&](state::Cards::Card const& card) {
+					self_weapon_.Fill(card);
+				});
 
-				state::CardRef weapon_ref = self_player.GetWeaponRef();
-				if (weapon_ref.IsValid()) self_weapon_.Fill(state.GetCard(self_player.GetWeaponRef()));
-				else self_weapon_.Invalidate();
-
-				self_player.minions_.ForEach([&](state::CardRef card_ref) {
-					boardview::SelfMinion item;
-					item.Fill(state.GetCard(card_ref),
-						valid_action_getter.IsAttackable(card_ref));
-					self_minions_.push_back(std::move(item));
+				board.ForEachMinion(Side, [&](state::Cards::Card const& card, bool attackable) {
+					self_minions_.emplace_back(card, attackable);
 					return true;
 				});
 
-				self_player.hand_.ForEach([&](state::CardRef card_ref) {
-					boardview::SelfHandCard item;
-					item.Fill(state.GetCard(card_ref));
-					self_hand_.push_back(std::move(item));
+				board.ForEachSelfHandCard([&](state::Cards::Card const& card) {
+					self_hand_.emplace_back(card);
 					return true;
 				});
 
-				self_deck_.Fill(self_player.deck_);
+				self_deck_.Fill(board.GetDeckCardCount(Side));
 			}
 
 			{
-				state::PlayerIdentifier opponent_side = state::PlayerIdentifier(side).Opposite();
-				state::board::Player const& opponent_player = state.GetBoard().Get(opponent_side);
+				state::PlayerSide opponent_side = state::PlayerIdentifier(Side).Opposite().GetSide();
 
-				state::CardRef hero_ref = opponent_player.GetHeroRef();
-				assert(hero_ref.IsValid());
-				opponent_hero_.Fill(state.GetCard(hero_ref));
+				opponent_hero_.Fill(board.GetOpponentHero());
 
-				opponent_crystal_.Fill(opponent_player);
+				opponent_crystal_.Fill(board.GetPlayerResource(opponent_side));
 
-				state::CardRef hero_power_ref = opponent_player.GetHeroPowerRef();
-				assert(hero_power_ref.IsValid());
-				opponent_hero_power_.Fill(state.GetCard(hero_power_ref));
+				opponent_hero_power_.Fill(board.GetHeroPower(opponent_side));
 
-				state::CardRef weapon_ref = opponent_player.GetWeaponRef();
-				if (weapon_ref.IsValid()) opponent_weapon_.Fill(state.GetCard(opponent_player.GetWeaponRef()));
-				else opponent_weapon_.Invalidate();
+				opponent_weapon_.Invalidate();
+				board.GetWeapon(opponent_side, [&](state::Cards::Card const& card) {
+					opponent_weapon_.Fill(card);
+				});
 
-				opponent_player.minions_.ForEach([&](state::CardRef card_ref) {
-					boardview::Minion item;
-					item.Fill(state.GetCard(card_ref));
-					opponent_minions_.push_back(std::move(item));
+				board.ForEachMinion(opponent_side, [&](state::Cards::Card const& card, bool attackable) {
+					(void)attackable;
+					opponent_minions_.emplace_back(card);
 					return true;
 				});
 
-				opponent_player.hand_.ForEach([&](state::CardRef card_ref) {
-					boardview::OpponentHandCard item;
-					item.Fill(state.GetCard(card_ref));
-					opponent_hand_.push_back(std::move(item));
+				board.ForEachOpponentHandCard([&]() {
+					opponent_hand_.emplace_back();
 					return true;
 				});
 
-				opponent_deck_.Fill(opponent_player.deck_);
+				opponent_deck_.Fill(board.GetDeckCardCount(opponent_side));
 			}
 		}
 	}

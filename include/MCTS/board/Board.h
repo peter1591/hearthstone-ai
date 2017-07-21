@@ -37,7 +37,13 @@ namespace mcts
 			state::PlayerSide GetViewSide() const { return side_; }
 
 			BoardView CreateView() const {
-				return BoardView(side_, board_);
+				if (side_ == state::kPlayerFirst) {
+					return BoardView(FlowControl::PlayerStateView<state::kPlayerFirst>(board_));
+				}
+				else {
+					assert(side_ == state::kPlayerSecond);
+					return BoardView(FlowControl::PlayerStateView<state::kPlayerSecond>(board_));
+				}
 			}
 
 		public: // bridge to action analyzer
