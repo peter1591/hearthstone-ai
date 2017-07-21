@@ -8,6 +8,21 @@ namespace mcts
 {
 	namespace board
 	{
+		class Board;
+		class SavedBoard {
+			friend class Board;
+
+		public:
+			SavedBoard() : state_() {}
+			SavedBoard(SavedBoard const&) = delete;
+			SavedBoard & operator=(SavedBoard const&) = delete;
+
+		private:
+			SavedBoard(state::State const& state) : state_(state) {}
+
+			state::State state_;
+		};
+
 		// Make sure no hidden information is accessed by a player
 		class Board
 		{
@@ -44,8 +59,13 @@ namespace mcts
 			}
 
 		public:
-			state::State const& GetState() const { return board_; }
-			void SetState(state::State const& state) { board_ = state; }
+			void Save(SavedBoard & save) const {
+				save.state_ = board_;
+			}
+
+			void Restore(SavedBoard const& save) {
+				board_ = save.state_;
+			}
 
 		private:
 			state::State & board_;

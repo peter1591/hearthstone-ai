@@ -40,14 +40,14 @@ namespace mcts
 
 			void SaveBoard() {
 				assert(board_);
-				saved_board_ = board_->GetState();
+				board_->Save(saved_board_);
 				has_saved_board_ = true;
 			}
 
 			void RestoreBoard() {
 				assert(board_);
 				assert(has_saved_board_);
-				board_->SetState(saved_board_);
+				board_->Restore(saved_board_);
 			}
 
 			bool HasSavedBoard() const { return has_saved_board_; }
@@ -64,7 +64,7 @@ namespace mcts
 			bool is_valid_;
 
 			bool has_saved_board_;
-			state::State saved_board_;
+			board::SavedBoard saved_board_;
 		};
 	}
 }
