@@ -133,6 +133,7 @@ namespace state
 	private:
 		PlayerSide OppositeSide() const
 		{
+			assert(side_ == kPlayerFirst || side_ == kPlayerSecond);
 			return (PlayerSide)(3 - side_);
 		}
 

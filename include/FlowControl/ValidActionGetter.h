@@ -87,37 +87,14 @@ namespace FlowControl
 			return ret;
 		}
 
-	private:
-		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card, state::State & mutable_state)
-		{
-			int cost = card.GetCost();
-			bool cost_health_instead = false;
-
-			FlowContext & fake_flow_context = *((FlowContext *)nullptr);
-			mutable_state.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
-				Manipulate(mutable_state, fake_flow_context), card_ref, &cost, &cost_health_instead
-			});
-
-			if (cost <= 0) return true;
-
-			if (cost_health_instead) {
-				state::CardRef hero_ref = state_.GetCurrentPlayer().GetHeroRef();
-				if (state_.GetCard(hero_ref).GetHP() < cost) return false;
-			}
-			else {
-				auto& crystal = state_.GetCurrentPlayer().GetResource();
-				if (crystal.GetCurrent() < cost) return false;
-			}
-
-			return true;
-		}
-
 	public:
 		bool IsAttackable(state::CardRef card_ref) {
-			assert(state_.GetCardsManager().Get(card_ref).GetHP() > 0);
-			assert(state_.GetCardsManager().Get(card_ref).GetZone() == state::kCardZonePlay);
+			return IsAttackable(state_.GetCardsManager().Get(card_ref));
+		}
 
-			state::Cards::Card const& card = state_.GetCardsManager().Get(card_ref);
+		bool IsAttackable(state::Cards::Card const& card) {
+			assert(card.GetHP() > 0);
+			assert(card.GetZone() == state::kCardZonePlay);
 
 			if (card.GetRawData().cant_attack) return false;
 			if (card.GetRawData().freezed) return false;
@@ -128,7 +105,7 @@ namespace FlowControl
 
 			if (card.GetRawData().num_attacks_this_turn >= card.GetMaxAttacksPerTurn()) return false;
 
-			if (state_.GetCardAttackConsiderWeapon(card_ref) <= 0) return false;
+			if (state_.GetCardAttackConsiderWeapon(card) <= 0) return false;
 
 			return true;
 		}
@@ -177,6 +154,31 @@ namespace FlowControl
 			int resource = state_.GetCurrentPlayer().GetResource().GetCurrent();
 			if (state_.GetCard(hero_power_ref).GetCost() > resource) return false;
 			
+			return true;
+		}
+
+	private:
+		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card, state::State & mutable_state)
+		{
+			int cost = card.GetCost();
+			bool cost_health_instead = false;
+
+			FlowContext & fake_flow_context = *((FlowContext *)nullptr);
+			mutable_state.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
+				Manipulate(mutable_state, fake_flow_context), card_ref, &cost, &cost_health_instead
+			});
+
+			if (cost <= 0) return true;
+
+			if (cost_health_instead) {
+				state::CardRef hero_ref = state_.GetCurrentPlayer().GetHeroRef();
+				if (state_.GetCard(hero_ref).GetHP() < cost) return false;
+			}
+			else {
+				auto& crystal = state_.GetCurrentPlayer().GetResource();
+				if (crystal.GetCurrent() < cost) return false;
+			}
+
 			return true;
 		}
 		

@@ -56,10 +56,8 @@ namespace state
 		// Accumulator: bool(T& val, state::Cards::Card const& card)
 		//    @return: true to continue; false to stop and return val
 		template <typename T, typename Accumulator>
-		T GetCardAttributeConsiderWeapon(state::CardRef card_ref, T val, Accumulator accumulator) const
+		T GetCardAttributeConsiderWeapon(state::Cards::Card const& card, T val, Accumulator accumulator) const
 		{
-			auto const& card = GetCard(card_ref);
-
 			if (!accumulator(val, card)) return val;
 
 			if (card.GetCardType() != kCardTypeHero) return val;
@@ -71,8 +69,12 @@ namespace state
 			return val;
 		}
 		template <typename Functor>
-		bool GetCardBoolAttributeConsiderWeapon(state::CardRef card_ref, Functor functor) const {
-			return GetCardAttributeConsiderWeapon(card_ref, false, [&](bool& val, state::Cards::Card const& card) {
+		bool GetCardBoolAttributeConsiderWeapon(state::CardRef card_ref, Functor && functor) const {
+			return GetCardBoolAttributeConsiderWeapon(GetCard(card_ref), std::forward<Functor>(functor));
+		}
+		template <typename Functor>
+		bool GetCardBoolAttributeConsiderWeapon(state::Cards::Card const& card, Functor && functor) const {
+			return GetCardAttributeConsiderWeapon(card, false, [&](bool& val, state::Cards::Card const& card) {
 				assert(val == false); // if val is true; then it should be short-circuited in the last call
 				val = functor(card);
 				return !val; // if val is true, then we can short-circuit now
@@ -80,7 +82,10 @@ namespace state
 		}
 
 		int GetCardAttackConsiderWeapon(state::CardRef card_ref) const {
-			return GetCardAttributeConsiderWeapon(card_ref, 0, [](int& val, state::Cards::Card const& card) {
+			return GetCardAttackConsiderWeapon(GetCard(card_ref));
+		}
+		int GetCardAttackConsiderWeapon(state::Cards::Card const& card) const {
+			return GetCardAttributeConsiderWeapon(card, 0, [](int& val, state::Cards::Card const& card) {
 				val += card.GetAttack();
 				return true;
 			});
