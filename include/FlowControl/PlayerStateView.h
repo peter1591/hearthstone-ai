@@ -6,21 +6,9 @@
 
 namespace FlowControl
 {
-	namespace detail {
-		template <state::PlayerSide Side> struct ValidSide {
-			static constexpr bool valid = false;
-		};
-
-		template <> struct ValidSide<state::kPlayerFirst> {
-			static constexpr bool valid = true;
-		};
-		template <> struct ValidSide<state::kPlayerSecond> {
-			static constexpr bool valid = true;
-		};
-	}
-
+	// Constraint access to the information visible to 'Side' player
 	template <state::PlayerSide Side,
-		typename = std::enable_if_t<detail::ValidSide<Side>>>
+		typename = std::enable_if_t<state::ValidPlayerSide<Side>::valid>>
 	class PlayerStateView
 	{
 	public:
@@ -30,7 +18,7 @@ namespace FlowControl
 		// Functor parameters: state::Cards::Card const&
 		template <typename Functor>
 		void ForEachSelfHandCard(Functor && functor) {
-			GetPlayer(Side).hand_.ForEach([&](CardRef card_ref) {
+			GetPlayer(Side).hand_.ForEach([&](state::CardRef card_ref) {
 				return functor(state_.GetCard(card_ref));
 			});
 		}
@@ -40,7 +28,7 @@ namespace FlowControl
 		//    (TODO) [bool] enchanted
 		template <typename Functor>
 		void ForEachOpponentHandCard(Functor && functor) {
-			GetOpponentPlayer(Side).hand_.ForEach([&](CardRef card_ref) {
+			GetOpponentPlayer(Side).hand_.ForEach([&](state::CardRef card_ref) {
 				state::Cards::Card const& card = state_.GetCard(card_ref);
 				
 				// TODO: implement
@@ -104,19 +92,20 @@ namespace FlowControl
 
 	private:
 		state::board::Player & GetPlayer(state::PlayerIdentifier player) {
-			return state_.GetBoard().Get(player)
+			return state_.GetBoard().Get(player);
 		}
 		state::board::Player & GetPlayer(state::PlayerSide checking_side) {
-			return GetPlayer(state::PlayerIdentifier(checking_side))
+			return GetPlayer(state::PlayerIdentifier(checking_side));
 		}
 		state::board::Player & GetOpponentPlayer(state::PlayerSide checking_side) {
-			return GetPlayer(state::PlayerIdentifier(checking_side).Opposite())
+			return GetPlayer(state::PlayerIdentifier(checking_side).Opposite());
 		}
 
 	private:
 		state::State & state_;
 	};
 
+	// Constraint access to the information visible to current player
 	class CurrentPlayerStateView
 	{
 	public:

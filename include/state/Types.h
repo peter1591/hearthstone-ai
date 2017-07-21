@@ -81,6 +81,18 @@ namespace state
 		kPlayerSecond = 2,
 	};
 
+	template <PlayerSide Side> struct ValidPlayerSide {
+		static constexpr bool valid = false;
+	};
+
+	template <> struct ValidPlayerSide<kPlayerFirst> {
+		static constexpr bool valid = true;
+	};
+	template <> struct ValidPlayerSide<kPlayerSecond> {
+		static constexpr bool valid = true;
+	};
+
+
 	class PlayerIdentifier
 	{
 	public:
