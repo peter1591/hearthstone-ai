@@ -166,16 +166,13 @@ namespace mcts
 				// TODO: more flags
 				//   charge, cant_attack, cant_attack_hero, has enchant?, has deathrattle?
 
-				Minion(state::Cards::Card const& card) {
-					Fill(card);
-				}
-
-				void Fill(state::Cards::Card const& card) {
-					card_id = card.GetCardId();
-					attack = card.GetAttack();
-					hp = card.GetHP();
-					max_hp = card.GetMaxHP();
-					silenced = card.IsSilenced();
+				Minion(state::Cards::Card const& card) :
+					card_id(card.GetCardId()),
+					attack(card.GetAttack()),
+					hp(card.GetHP()),
+					max_hp(card.GetMaxHP()),
+					silenced(card.IsSilenced())
+				{
 				}
 
 				bool operator==(Minion const& v) const {
@@ -199,9 +196,8 @@ namespace mcts
 				bool attackable;
 
 				SelfMinion(state::Cards::Card const& card, bool now_attackable)
-					: Minion(card)
+					: Minion(card), attackable(now_attackable)
 				{
-					attackable = now_attackable;
 				}
 
 				bool operator==(SelfMinion const& v) const {
@@ -228,15 +224,12 @@ namespace mcts
 				int attack;
 				int hp;
 
-				SelfHandCard(state::Cards::Card const& card) {
-					Fill(card);
-				}
-
-				void Fill(state::Cards::Card const& card) {
-					card_id = card.GetCardId();
-					cost = card.GetCost();
-					attack = card.GetAttack();
-					hp = card.GetHP();
+				SelfHandCard(state::Cards::Card const& card) :
+					card_id(card.GetCardId()),
+					cost(card.GetCost()),
+					attack(card.GetAttack()),
+					hp(card.GetHP())
+				{
 				}
 
 				bool operator==(SelfHandCard const& v) const {
