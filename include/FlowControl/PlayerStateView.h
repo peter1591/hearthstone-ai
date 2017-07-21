@@ -158,17 +158,7 @@ namespace FlowControl
 		}
 
 		auto Attack(FlowControl::FlowContext & context, int attacker_idx) {
-			// TODO: move to ValidActionGetter
-			state::CardRef attacker;
-			if (attacker_idx == 7) {
-				attacker = state_.GetCurrentPlayer().GetHeroRef();
-			}
-			else {
-				assert(attacker_idx >= 0);
-				assert(attacker_idx < 7);
-				attacker = state_.GetCurrentPlayer().minions_.Get((size_t)(attacker_idx));
-			}
-
+			state::CardRef attacker = ValidActionGetter(state_).GetFromAttackerIndex(attacker_idx);
 			assert(attacker.IsValid());
 			return FlowControl::FlowController(state_, context).Attack(attacker);
 		}

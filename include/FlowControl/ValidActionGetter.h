@@ -133,6 +133,17 @@ namespace FlowControl
 			}
 		}
 
+		// Decode attacker index. See @ForEachAttacker
+		state::CardRef GetFromAttackerIndex(int attacker_idx) {
+			if (attacker_idx == 7) {
+				return state_.GetCurrentPlayer().GetHeroRef();
+			}
+
+			assert(attacker_idx >= 0);
+			assert(attacker_idx < 7);
+			return state_.GetCurrentPlayer().minions_.Get((size_t)(attacker_idx));
+		}
+
 		std::vector<state::CardRef> GetDefenders() {
 			std::vector<state::CardRef> defenders;
 			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
