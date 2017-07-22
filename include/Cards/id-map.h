@@ -1514,7 +1514,7 @@ namespace Cards
 		MAX_ID = 1507
 	};
 	constexpr static CardId kInvalidCardId = (CardId)(-1);
-	static bool IsValidCardId(CardId card_id) {
+	static inline bool IsValidCardId(CardId card_id) {
 		return (int)card_id >= 0;
 	}
 }
