@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/board/Board.h"
 #include "MCTS/selection/EdgeAddon.h"
@@ -91,7 +93,7 @@ namespace mcts
 						double exploit_score = ((double)wins) / total;
 
 						constexpr double explore_weight = 0.8;
-						double explore_score = ((double)item.edge_addon->chosen_times) / total_chosen_times;
+						double explore_score = std::log((double)total_chosen_times) / item.edge_addon->chosen_times;
 
 						return exploit_score + explore_weight * explore_score;
 					};
