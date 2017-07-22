@@ -75,7 +75,8 @@ namespace Cards
 		enum CachedCardsTypes {
 			kCollectibles,
 			kMinionDemons,
-			kCachedCardsTypesCount
+			kMinionTaunt,
+			kCachedCardsTypesCount // should be at last
 		};
 		std::vector<int> const& GetCachedCards(CachedCardsTypes cached_cards_type) {
 			return cached_cards_[cached_cards_type];
@@ -262,6 +263,11 @@ namespace Cards
 				new_card.card_type == state::kCardTypeMinion)
 			{
 				cached_cards_[kMinionDemons].push_back(new_card.card_id);
+			}
+
+			if (new_card.card_type == state::kCardTypeMinion) // TODO: with taunt
+			{
+				cached_cards_[kMinionTaunt].push_back(new_card.card_id);
 			}
 		}
 

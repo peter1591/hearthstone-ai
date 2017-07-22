@@ -34,6 +34,7 @@
 
 #include "Cards/Gangs/Neutral.h"
 #include "Cards/Gangs/Hunter.h"
+#include "Cards/Gangs/Warrior.h"
 
 #include "Cards/OG/Warlock.h"
 #include "Cards/OG/Shaman.h"

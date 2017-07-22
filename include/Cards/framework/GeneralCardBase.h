@@ -124,6 +124,32 @@ namespace Cards
 			return std::make_pair(v1, v2);
 		}
 
+		static std::array<int, 3> GetRandomThreeNumbers(FlowControl::Manipulate const& manipulate, int size) {
+			assert(size >= 3);
+			
+			// pick number in order: v1 -> v2 -> v3
+			std::array<int, 3> result;
+			result[0] = manipulate.GetRandom().Get(size);
+			result[1] = manipulate.GetRandom().Get(size - 1);
+			result[2] = manipulate.GetRandom().Get(size - 2);
+
+			// first number is already be picked
+			if (result[1] >= result[0]) ++result[1];
+			if (result[2] >= result[0]) ++result[2];
+
+			// second number is already be picked
+			if (result[2] >= result[1]) ++result[2];
+
+			return result;
+		}
+
+		static std::array<int, 3> GetAtMostRandomThreeNumbers(FlowControl::Manipulate const& manipulate, int size) {
+			if (size == 0) return std::array<int, 3>{};
+			if (size == 1) return std::array<int, 3>{0};
+			if (size == 2) return std::array<int, 3>{0, 1};
+			return GetRandomThreeNumbers(manipulate, size);
+		}
+
 		static void DiscardOneRandomHandCard(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
 			auto & hand = manipulate.Board().Player(player).hand_;
 			size_t hand_cards = hand.Size();
@@ -153,6 +179,22 @@ namespace Cards
 			if (container.empty()) return kInvalidCardId;
 			size_t idx = manipulate.GetRandom().Get(container.size());
 			return (Cards::CardId)container[idx];
+		}
+
+		static Cards::CardId DiscoverFromDatabase(FlowControl::Manipulate const& manipulate, Cards::Database::CachedCardsTypes type) {
+			std::vector<int> const& container = Cards::Database::GetInstance().GetCachedCards(type);
+			assert(!container.empty());
+			
+			std::array<int, 3> choice_indics = GetAtMostRandomThreeNumbers(manipulate, (int)container.size());
+			size_t choice_indics_size = std::min(container.size(), (size_t)3);
+
+			std::vector<Cards::CardId> choices;
+			for (size_t i = 0; i < choice_indics_size; ++i) {
+				choices.push_back((Cards::CardId)container[i]);
+			}
+
+			assert(!choices.empty());
+			return manipulate.GetChooseOneUserAction(choices);
 		}
 
 	private:
