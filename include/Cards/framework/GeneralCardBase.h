@@ -191,7 +191,7 @@ namespace Cards
 
 			std::vector<Cards::CardId> choices;
 			for (size_t i = 0; i < choice_indics_size; ++i) {
-				choices.push_back((Cards::CardId)container[i]);
+				choices.push_back((Cards::CardId)container[choice_indics[i]]);
 			}
 
 			assert(!choices.empty());
