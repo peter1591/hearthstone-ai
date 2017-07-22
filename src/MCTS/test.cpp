@@ -3,6 +3,7 @@
 #include <iostream>
 #include <chrono>
 
+#include "Cards/PreIndexedCards.h"
 #include "TestStateBuilder.h"
 #include "MCTS/MOMCTS.h"
 #include "MCTS/builder/TreeBuilder.h"
@@ -12,6 +13,7 @@ void Initialize()
 {
 	std::cout << "Reading json file...";
 	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
+	Cards::PreIndexedCards::GetInstance().Initialize();
 	std::cout << " Done." << std::endl;
 }
 
@@ -33,7 +35,7 @@ int main(void)
 #ifdef NDEBUG
 		constexpr int kPrintInterval = 100;
 #else
-		constexpr int kPrintInterval = 1;
+		constexpr int kPrintInterval = 100;
 #endif
 
 		if (i % kPrintInterval == 0) {
@@ -51,7 +53,7 @@ int main(void)
 
 		}
 
-		if (i % 10000 == 9999) {
+		if (i % 100000 == 99999) {
 			std::cout << "continue? ('q' to quit)";
 			std::string dummy;
 			std::getline(std::cin, dummy);

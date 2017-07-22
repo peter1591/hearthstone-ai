@@ -3,6 +3,7 @@
 #include "FlowControl/FlowController.h"
 #include "FlowControl/FlowController-impl.h"
 
+#include "Cards/PreIndexedCards.h"
 #include "Cards/Database.h"
 
 void test2();
@@ -42,6 +43,7 @@ int main(void)
 {
 	std::cout << "Reading json file...";
 	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
+	Cards::PreIndexedCards::GetInstance().Initialize();
 	std::cout << " Done." << std::endl;
 
 	test_compile();

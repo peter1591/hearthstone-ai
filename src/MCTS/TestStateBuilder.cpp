@@ -127,6 +127,7 @@ state::State TestStateBuilder::GetState()
 		PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::First());
+		PushBackDeckCard(Cards::ID_CFM_940, my_random, state, state::PlayerIdentifier::First());
 	}
 
 	MakeHero(state, state::PlayerIdentifier::Second());
@@ -135,6 +136,7 @@ state::State TestStateBuilder::GetState()
 		PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::Second());
 		PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::Second());
 		PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::Second());
+		PushBackDeckCard(Cards::ID_CFM_940, my_random, state, state::PlayerIdentifier::Second());
 	}
 
 	state.GetMutableCurrentPlayerId().SetFirst();
