@@ -207,10 +207,12 @@
     <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h" />
     <ClInclude Include="..\..\include\Cards\Gangs\Hunter.h" />
     <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Gangs\Warrior.h" />
     <ClInclude Include="..\..\include\Cards\id-map.h" />
     <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
     <ClInclude Include="..\..\include\Cards\OG\Shaman.h" />
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
+    <ClInclude Include="..\..\include\Cards\PreIndexedCards.h" />
     <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />
@@ -268,6 +270,7 @@
     <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h" />
     <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />
@@ -293,6 +296,7 @@
     <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h" />
     <ClInclude Include="..\..\include\state\Events\Manager.h" />
     <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
+    <ClInclude Include="..\..\include\state\PlayerStateView.h" />
     <ClInclude Include="..\..\include\state\State.h" />
     <ClInclude Include="..\..\include\state\targetor\Targets-impl.h" />
     <ClInclude Include="..\..\include\state\targetor\Targets.h" />

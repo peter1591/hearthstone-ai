@@ -82,10 +82,11 @@ static state::CardRef AddHandCard(Cards::CardId id, state::State & state, state:
 
 static void MakeHand(state::State & state, state::PlayerIdentifier player)
 {
-	AddHandCard(Cards::ID_CS2_141, state, player);
-	AddHandCard(Cards::ID_EX1_320, state, player);
-	AddHandCard(Cards::ID_EX1_009, state, player);
-	AddHandCard(Cards::ID_NEW1_007, state, player);
+	//AddHandCard(Cards::ID_CS2_141, state, player);
+	//AddHandCard(Cards::ID_EX1_320, state, player);
+	//AddHandCard(Cards::ID_EX1_009, state, player);
+	//AddHandCard(Cards::ID_NEW1_007, state, player);
+	AddHandCard(Cards::ID_CFM_940, state, player);
 }
 
 static void MakeHero(state::State & state, state::PlayerIdentifier player)
@@ -124,18 +125,18 @@ state::State TestStateBuilder::GetState()
 	MakeHero(state, state::PlayerIdentifier::First());
 	MakeHand(state, state::PlayerIdentifier::First());
 	for (int i = 0; i < 10; ++i) {
-		PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::First());
-		PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::First());
-		PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::First());
+		//PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::First());
+		//PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::First());
+		//PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_CFM_940, my_random, state, state::PlayerIdentifier::First());
 	}
 
 	MakeHero(state, state::PlayerIdentifier::Second());
 	MakeHand(state, state::PlayerIdentifier::Second());
 	for (int i = 0; i < 10; ++i) {
-		PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::Second());
-		PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::Second());
-		PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::Second());
+		//PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::Second());
+		//PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::Second());
+		//PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::Second());
 		PushBackDeckCard(Cards::ID_CFM_940, my_random, state, state::PlayerIdentifier::Second());
 	}
 
