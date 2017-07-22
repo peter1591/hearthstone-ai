@@ -48,7 +48,12 @@ static void WriteMapHeader()
 
 	header_file << "		MAX_ID = " << max_id << std::endl;
 
-	header_file << "	};" << std::endl
+	header_file
+		<< "	};" << std::endl
+		<< "	constexpr static CardId kInvalidCardId = (CardId)(-1);" << std::endl
+		<< "	static bool IsValidCardId(CardId card_id) {" << std::endl
+		<< "		return (int)card_id >= 0;" << std::endl
+		<< "	}" << std::endl
 		<< "}" << std::endl
 		<< "#endif" << std::endl;
 
