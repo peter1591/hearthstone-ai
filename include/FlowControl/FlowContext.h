@@ -25,7 +25,7 @@ namespace FlowControl {
 			dead_entity_hints_(),
 			minion_put_location_(-1),
 			specified_target_(), destroyed_weapon_(),
-			user_choice_((Cards::CardId)-1)
+			user_choice_(Cards::kInvalidCardId)
 		{}
 
 	public: // action parameter

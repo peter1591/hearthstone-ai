@@ -19,7 +19,7 @@ namespace FlowControl
 				player.IncreaseFatigueDamage();
 				int damage = player.GetFatigueDamage();
 				HeroManipulator(state_, flow_context_, hero_ref).Damage(hero_ref, damage);
-				if (drawn_card_id) *drawn_card_id = (Cards::CardId) - 1;
+				if (drawn_card_id) *drawn_card_id = Cards::kInvalidCardId;
 				return state::CardRef();
 			}
 

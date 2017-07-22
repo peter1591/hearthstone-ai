@@ -150,7 +150,7 @@ namespace Cards
 	public:
 		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate const& manipulate, Cards::Database::CachedCardsTypes type) {
 			std::vector<int> const& container = Cards::Database::GetInstance().GetCachedCards(type);
-			if (container.empty()) return (Cards::CardId) - 1;
+			if (container.empty()) return kInvalidCardId;
 			size_t idx = manipulate.GetRandom().Get(container.size());
 			return (Cards::CardId)container[idx];
 		}
@@ -158,6 +158,8 @@ namespace Cards
 	private:
 		static state::CardRef SummonInternal(FlowControl::Manipulate const& manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
+			assert(IsValidCardId(card_id));
+
 			if (manipulate.Board().Player(player).minions_.Full()) return state::CardRef();
 
 			return manipulate.Board().SummonMinionById(card_id, player, pos);

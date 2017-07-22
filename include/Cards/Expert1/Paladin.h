@@ -181,9 +181,9 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
-				Cards::CardId drawn_card_id = (Cards::CardId)(-1);
+				Cards::CardId drawn_card_id = kInvalidCardId;
 				context.manipulate_.Player(context.player_).DrawCard(&drawn_card_id);
-				if (drawn_card_id < 0) return;
+				if (!IsValidCardId(drawn_card_id)) return;
 				state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(drawn_card_id);
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, raw_card.enchanted_states.cost);
 			});
