@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Cards/PreIndexedCards.h"
 #include "Cards/AuraHelper.h"
 #include "Cards/EventRegister.h"
 #include "Cards/BattlecryHelper.h"
@@ -174,15 +175,15 @@ namespace Cards
 		}
 
 	public:
-		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate const& manipulate, Cards::Database::CachedCardsTypes type) {
-			std::vector<int> const& container = Cards::Database::GetInstance().GetCachedCards(type);
+		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate const& manipulate, PreIndexedCards::IndexedType type) {
+			std::vector<int> const& container = PreIndexedCards::GetInstance().GetIndexedCards(type);
 			if (container.empty()) return kInvalidCardId;
 			size_t idx = manipulate.GetRandom().Get(container.size());
 			return (Cards::CardId)container[idx];
 		}
 
-		static Cards::CardId DiscoverFromDatabase(FlowControl::Manipulate const& manipulate, Cards::Database::CachedCardsTypes type) {
-			std::vector<int> const& container = Cards::Database::GetInstance().GetCachedCards(type);
+		static Cards::CardId DiscoverFromDatabase(FlowControl::Manipulate const& manipulate, PreIndexedCards::IndexedType type) {
+			std::vector<int> const& container = PreIndexedCards::GetInstance().GetIndexedCards(type);
 			assert(!container.empty());
 			
 			std::array<int, 3> choice_indics = GetAtMostRandomThreeNumbers(manipulate, (int)container.size());

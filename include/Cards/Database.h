@@ -62,7 +62,7 @@ namespace Cards
 			return LoadJsonFile(path);
 		}
 
-		std::unordered_map<std::string, int> GetIdMap() const { return origin_id_map_; }
+		std::unordered_map<std::string, int> const& GetIdMap() const { return origin_id_map_; }
 
 		CardData const& Get(int id)
 		{
@@ -71,19 +71,15 @@ namespace Cards
 			return final_cards_[id];
 		}
 
-	public:
-		enum CachedCardsTypes {
-			kCollectibles,
-			kMinionDemons,
-			kMinionTaunt,
-			kCachedCardsTypesCount // should be at last
-		};
-		std::vector<int> const& GetCachedCards(CachedCardsTypes cached_cards_type) {
-			return cached_cards_[cached_cards_type];
+		template <typename Functor>
+		void ForEachCard(Functor&& functor) {
+			for (int i = 1; i < final_cards_size_; ++i) {
+				if (!functor(final_cards_[i])) return;
+			}
 		}
 
 	private:
-		Database() : final_cards_(nullptr), final_cards_size_(0), origin_id_map_(), cached_cards_() { }
+		Database() : final_cards_(nullptr), final_cards_size_(0), origin_id_map_() { }
 
 		Database(Database const&) = delete;
 		Database & operator=(Database const&) = delete;
@@ -250,25 +246,6 @@ namespace Cards
 
 			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);
-
-			ProcessCachedCardsTypes(new_card);
-		}
-
-		void ProcessCachedCardsTypes(CardData const& new_card) {
-			if (new_card.collectible) {
-				cached_cards_[kCollectibles].push_back(new_card.card_id);
-			}
-
-			if (new_card.card_race == state::kCardRaceDemon &&
-				new_card.card_type == state::kCardTypeMinion)
-			{
-				cached_cards_[kMinionDemons].push_back(new_card.card_id);
-			}
-
-			if (new_card.card_type == state::kCardTypeMinion) // TODO: with taunt
-			{
-				cached_cards_[kMinionTaunt].push_back(new_card.card_id);
-			}
 		}
 
 	private:
@@ -276,7 +253,5 @@ namespace Cards
 		int final_cards_size_;
 
 		std::unordered_map<std::string, int> origin_id_map_;
-
-		std::array<std::vector<int>, kCachedCardsTypesCount> cached_cards_;
 	};
 }
