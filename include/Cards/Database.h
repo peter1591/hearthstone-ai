@@ -64,6 +64,12 @@ namespace Cards
 
 		std::unordered_map<std::string, int> const& GetIdMap() const { return origin_id_map_; }
 
+		CardId GetIdByCardName(std::string const& name) const {
+			auto it = name_id_map_.find(name);
+			if (it == name_id_map_.end()) return kInvalidCardId;
+			return (CardId)it->second;
+		}
+
 		CardData const& Get(int id)
 		{
 			assert(id >= 0);
@@ -79,7 +85,9 @@ namespace Cards
 		}
 
 	private:
-		Database() : final_cards_(nullptr), final_cards_size_(0), origin_id_map_() { }
+		Database() : final_cards_(nullptr), final_cards_size_(0), origin_id_map_(),
+			name_id_map_()
+		{ }
 
 		Database(Database const&) = delete;
 		Database & operator=(Database const&) = delete;
@@ -106,6 +114,7 @@ namespace Cards
 			cards.push_back(CardData());
 
 			origin_id_map_.clear();
+			name_id_map_.clear();
 			for (auto const& card_json : cards_json) {
 				this->AddCard(card_json, cards);
 			}
@@ -188,13 +197,10 @@ namespace Cards
 		void AddCard(Json::Value const& json, std::vector<CardData> & cards)
 		{
 			const std::string origin_id = json["id"].asString();
+			const std::string name = json["name"].asString();
 			const std::string type = json["type"].asString();
 
 			if (origin_id == "PlaceholderCard") return;
-
-			if (origin_id_map_.find(origin_id) != origin_id_map_.end()) {
-				throw std::runtime_error("Card ID string collision.");
-			}
 
 			CardData new_card;
 			static_assert(CardData::kFieldChangeId == 2); // fill all the fields
@@ -243,9 +249,19 @@ namespace Cards
 			else {
 				return; // ignored
 			}
-
-			origin_id_map_[origin_id] = new_card.card_id;
 			cards.push_back(new_card);
+
+			if (origin_id_map_.find(origin_id) != origin_id_map_.end()) {
+				throw std::runtime_error("Card ID string collision.");
+			}
+			origin_id_map_[origin_id] = new_card.card_id;
+
+			if (new_card.collectible) {
+				if (name_id_map_.find(name) != name_id_map_.end()) {
+					throw std::runtime_error("Card ID string collision.");
+				}
+				name_id_map_[name] = new_card.card_id;
+			}
 		}
 
 	private:
@@ -253,5 +269,6 @@ namespace Cards
 		int final_cards_size_;
 
 		std::unordered_map<std::string, int> origin_id_map_;
+		std::unordered_map<std::string, int> name_id_map_;
 	};
 }
