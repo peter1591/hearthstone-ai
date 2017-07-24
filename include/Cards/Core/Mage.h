@@ -30,7 +30,7 @@ namespace Cards
 				Targets targets = TargetsGenerator(context.player_).Enemy().Alive().GetInfo();
 				for (int i = 0; i < damage; ++i) {
 					state::CardRef target = context.manipulate_.GetRandomTarget(targets);
-					assert(target.IsValid());
+					if (!target.IsValid()) break;
 					context.manipulate_
 						.OnBoardCharacter(target)
 						.ConductFinalDamage(context.card_ref_, 1);
