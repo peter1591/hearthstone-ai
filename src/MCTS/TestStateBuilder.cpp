@@ -1,6 +1,7 @@
 #include "TestStateBuilder.h"
 
 #include "FlowControl/FlowController-impl.h"
+#include "UI/Decks.h"
 
 class MyRandomGenerator : public state::IRandomGenerator
 {
@@ -85,8 +86,8 @@ static void MakeHand(state::State & state, state::PlayerIdentifier player)
 	//AddHandCard(Cards::ID_CS2_141, state, player);
 	//AddHandCard(Cards::ID_EX1_320, state, player);
 	//AddHandCard(Cards::ID_EX1_009, state, player);
-	//AddHandCard(Cards::ID_NEW1_007, state, player);
-	AddHandCard(Cards::ID_CFM_940, state, player);
+	AddHandCard(Cards::ID_NEW1_007, state, player);
+	//AddHandCard(Cards::ID_CFM_940, state, player);
 }
 
 static void MakeHero(state::State & state, state::PlayerIdentifier player)
@@ -117,28 +118,37 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 #pragma warning( pop )
 #endif
 
+void PrepareDeck(std::unordered_multiset<std::string> const& cards, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
+{
+	for (auto const& card_name : cards) {
+		Cards::CardId card_id = Cards::Database::GetInstance().GetIdByCardName(card_name);
+		PushBackDeckCard(card_id, random, state, player);
+	}
+}
+
+void MoveFromDeckToHand(std::unordered_multiset<std::string> & cards, std::string const& card_name, state::State & state, state::PlayerIdentifier player)
+{
+	auto it = cards.find(card_name);
+	if (it == cards.end()) throw std::runtime_error("card not exists in deck");
+	cards.erase(it);
+	Cards::CardId card_id = Cards::Database::GetInstance().GetIdByCardName(card_name);
+	AddHandCard(card_id, state, player);
+}
+
 state::State TestStateBuilder::GetState()
 {
 	state::State state;
 	MyRandomGenerator my_random;
 
 	MakeHero(state, state::PlayerIdentifier::First());
-	MakeHand(state, state::PlayerIdentifier::First());
-	for (int i = 0; i < 10; ++i) {
-		//PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::First());
-		//PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::First());
-		//PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::First());
-		PushBackDeckCard(Cards::ID_CFM_940, my_random, state, state::PlayerIdentifier::First());
-	}
+	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	MoveFromDeckToHand(deck1, "Arcane Explosion", state, state::PlayerIdentifier::First());
+	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
-	MakeHand(state, state::PlayerIdentifier::Second());
-	for (int i = 0; i < 10; ++i) {
-		//PushBackDeckCard(Cards::ID_EX1_320, my_random, state, state::PlayerIdentifier::Second());
-		//PushBackDeckCard(Cards::ID_EX1_009, my_random, state, state::PlayerIdentifier::Second());
-		//PushBackDeckCard(Cards::ID_NEW1_007, my_random, state, state::PlayerIdentifier::Second());
-		PushBackDeckCard(Cards::ID_CFM_940, my_random, state, state::PlayerIdentifier::Second());
-	}
+	auto deck2 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	MoveFromDeckToHand(deck2, "Murloc Raider", state, state::PlayerIdentifier::Second());
+	PrepareDeck(deck2, my_random, state, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
 	state.GetBoard().GetFirst().GetResource().SetTotal(1);
