@@ -33,12 +33,38 @@ namespace mcts
 				RandomGenerator & random,
 				ActionParameterGetter & action_parameters);
 
+			enum OpType {
+				kInvalid,
+				kPlayCard,
+				kAttack,
+				kHeroPower,
+				kEndTurn
+			};
+
+			template <class Functor>
+			void ForEach(Functor && functor) const {
+				for (size_t i = 0; i < op_map_size_; ++i) {
+					if (!functor(i, GetOpType(op_map_[i]))) return;
+				}
+			}
+			OpType GetOpType(size_t choice) const {
+				return GetOpType(op_map_[choice]);
+			}
+
 		private:
 			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result PlayCard(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result Attack(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result HeroPower(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result EndTurn(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+
+			OpType GetOpType(OpFunc func) const {
+				if (func == &BoardActionAnalyzer::PlayCard) return kPlayCard;
+				if (func == &BoardActionAnalyzer::Attack) return kAttack;
+				if (func == &BoardActionAnalyzer::HeroPower) return kHeroPower;
+				if (func == &BoardActionAnalyzer::EndTurn) return kEndTurn;
+				return kInvalid;
+			}
 
 		private:
 			std::array<OpFunc, kActionMax> op_map_;
