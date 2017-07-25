@@ -2,6 +2,7 @@
 
 #include "board/Board.h"
 #include "MCTS/SOMCTS.h"
+#include "MCTS/builder/TreeBuilder-impl.h"
 
 namespace mcts
 {

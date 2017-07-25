@@ -30,6 +30,7 @@ namespace mcts
 		void IterateFailed() {
 			iterate_total_++;
 		}
+		auto GetSuccededIterates() const { return iterate_success_; }
 
 		void ApplyActionSucceeded(bool is_simulation) {
 			if (is_simulation) return ApplySimulationActionSucceeded();
@@ -56,7 +57,7 @@ namespace mcts
 			apply_simulation_action_total_++;
 		}
 
-		void PrintMessage() {
+		void PrintMessage() const {
 			std::cout << "Apply selection action success rate: ";
 			PrintRate(apply_selection_action_success_, apply_selection_action_total_);
 			std::cout << std::endl;
@@ -71,7 +72,7 @@ namespace mcts
 		}
 
 	private:
-		void PrintRate(int success, int total) {
+		void PrintRate(int success, int total) const {
 			double rate = 0.0;
 			if (total > 0) {
 				rate = (int)((double)success * 100 / total);

@@ -5,9 +5,7 @@
 
 #include "Cards/PreIndexedCards.h"
 #include "TestStateBuilder.h"
-#include "MCTS/MOMCTS.h"
-#include "MCTS/builder/TreeBuilder.h"
-#include "MCTS/builder/TreeBuilder-impl.h"
+#include "UI/AIController.h"
 
 void Initialize()
 {
@@ -21,55 +19,47 @@ int main(void)
 {
 	Initialize();
 
-	mcts::Statistic<> statistic;
-	mcts::MOMCTS mcts(statistic);
-
-	auto start_board_getter = [&]() {
+	auto start_board_getter = []() -> state::State {
 		return TestStateBuilder().GetState();
 	};
 
-	int start_i = 0;
-	auto start = std::chrono::steady_clock::now();
-	for (int i = 0; i < 10000000; ++i) {
+	ui::AIController controller;
+	while (true) {
+		std::string cmd;
+		std::cout << "Command: ";
+		std::cin >> cmd;
 
-#ifdef NDEBUG
-		constexpr int kPrintInterval = 100;
-#else
-		constexpr int kPrintInterval = 100;
-#endif
+		if (cmd == "h" || cmd == "help") {
+			std::cout << "Commands: " << std::endl
+				<< "h or help: show this message" << std::endl
+				<< "start (secs): to run for a specified seconds" << std::endl
+				<< "q or quit: quit" << std::endl;
+		}
+		else if (cmd == "start") {
+			int secs = 0;
+			std::cin >> secs;
 
-		if (i % kPrintInterval == 0) {
+			auto start = std::chrono::steady_clock::now();
+			auto start_i = controller.GetStatistic().GetSuccededIterates();
+			controller.Run(secs, start_board_getter);
+			auto end_i = controller.GetStatistic().GetSuccededIterates();
+
+			std::cout << std::endl;
+			std::cout << "Done iterations: " << (end_i - start_i) << std::endl;
 			std::cout << "====== Statistics =====" << std::endl;
-			std::cout << "Episodes: " << i << std::endl;
-			statistic.PrintMessage();
-			
+			controller.GetStatistic().PrintMessage();
+
 			auto now = std::chrono::steady_clock::now();
 			auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
-			auto speed = (double)(i-start_i) / ms * 1000;
+			auto speed = (double)(end_i - start_i) / ms * 1000;
 			std::cout << "Iterations per second: " << speed << std::endl;
-
-			start_i = i + 1;
-			start = std::chrono::steady_clock::now();
-
+			std::cout << std::endl;
 		}
-
-		if (i % 100000 == 99999) {
-			std::cout << "continue? ('q' to quit)";
-			std::string dummy;
-			std::getline(std::cin, dummy);
-			if (dummy == "q") break;
-		}
-
-		while (true) {
-			if (mcts.Iterate(start_board_getter)) {
-				statistic.IterateSucceeded();
-				break;
-			}
-			statistic.IterateFailed();
+		else if (cmd == "q" || cmd == "quit") {
+			std::cout << "Good bye!" << std::endl;
+			break;
 		}
 	}
-
-	std::cout << "DONE." << std::endl;
 
 	return 0;
 }
