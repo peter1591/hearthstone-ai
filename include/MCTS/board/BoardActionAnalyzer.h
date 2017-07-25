@@ -42,13 +42,13 @@ namespace mcts
 			};
 
 			template <class Functor>
-			void ForEach(Functor && functor) const {
+			void ForEachMainOp(Functor && functor) const {
 				for (size_t i = 0; i < op_map_size_; ++i) {
 					if (!functor(i, GetOpType(op_map_[i]))) return;
 				}
 			}
-			OpType GetOpType(size_t choice) const {
-				return GetOpType(op_map_[choice]);
+			OpType GetMainOpType(size_t choice) const {
+				return GetMainOpType(op_map_[choice]);
 			}
 
 		private:
@@ -58,7 +58,7 @@ namespace mcts
 			Result HeroPower(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 			Result EndTurn(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
 
-			OpType GetOpType(OpFunc func) const {
+			OpType GetMainOpType(OpFunc func) const {
 				if (func == &BoardActionAnalyzer::PlayCard) return kPlayCard;
 				if (func == &BoardActionAnalyzer::Attack) return kAttack;
 				if (func == &BoardActionAnalyzer::HeroPower) return kHeroPower;
