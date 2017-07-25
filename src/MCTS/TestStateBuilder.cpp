@@ -81,6 +81,7 @@ static state::CardRef AddHandCard(Cards::CardId id, state::State & state, state:
 	return ref;
 }
 
+[[maybe_unused]]
 static void MakeHand(state::State & state, state::PlayerIdentifier player)
 {
 	//AddHandCard(Cards::ID_CS2_141, state, player);
