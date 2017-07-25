@@ -124,6 +124,8 @@ namespace mcts
 			}
 		}
 
+		auto GetRootNode() const { return &root_; }
+
 	private:
 		state::PlayerSide side_;
 		builder::TreeBuilder::TreeNode root_;

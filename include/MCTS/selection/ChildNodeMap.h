@@ -18,6 +18,7 @@ namespace mcts
 			ChildType & operator=(ChildType const&) = delete;
 
 			EdgeAddon & GetEdgeAddon() { return edge_addon_; }
+			EdgeAddon const& GetEdgeAddon() const { return edge_addon_; }
 			
 			void SetNode(TreeNode * node) {
 				ClearNode();
@@ -53,7 +54,13 @@ namespace mcts
 
 			ChildNodeMap() : map_() {}
 
-			ChildType* Get(int choice) {
+			ChildType * Get(int choice) {
+				auto it = map_.find(choice);
+				if (it == map_.end()) return nullptr;
+				return &(it->second);
+			}
+
+			ChildType const* Get(int choice) const {
 				auto it = map_.find(choice);
 				if (it == map_.end()) return nullptr;
 				return &(it->second);
@@ -62,6 +69,13 @@ namespace mcts
 			ChildType* Create(int choice) {
 				assert(map_.find(choice) == map_.end());
 				return &map_[choice];
+			}
+
+			template <typename Functor>
+			void ForEach(Functor&& functor) const {
+				for (auto const& kv : map_) {
+					if (!functor(kv.first, kv.second)) return;
+				}
 			}
 
 		private:

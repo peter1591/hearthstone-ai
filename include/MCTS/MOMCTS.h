@@ -47,8 +47,20 @@ namespace mcts
 			return true;
 		}
 
+		auto GetRootNode(state::PlayerIdentifier side) const {
+			return GetSOMCTS(side).GetRootNode();
+		}
+
 	private:
 		SOMCTS & GetSOMCTS(state::PlayerIdentifier side) {
+			if (side.IsFirst()) return first_;
+			else {
+				assert(side.IsSecond());
+				return second_;
+			}
+		}
+
+		SOMCTS const& GetSOMCTS(state::PlayerIdentifier side) const {
 			if (side.IsFirst()) return first_;
 			else {
 				assert(side.IsSecond());

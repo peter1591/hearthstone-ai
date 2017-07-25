@@ -184,6 +184,17 @@ namespace mcts
 				return &child->GetEdgeAddon();
 			}
 
+			EdgeAddon const* GetEdgeAddon(int choice) const {
+				ChildType const* child = children_.Get(choice);
+				if (!child) return nullptr;
+				return &child->GetEdgeAddon();
+			}
+
+			template <typename Functor>
+			void ForEachChild(Functor&& functor) const {
+				children_.ForEach(std::forward<Functor>(functor));
+			}
+
 		public:
 			ActionType GetActionType() const { return action_type_; }
 

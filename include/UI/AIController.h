@@ -35,6 +35,10 @@ namespace ui
 
 		auto const& GetStatistic() const { return statistic_; }
 
+		auto GetRootNode(state::PlayerIdentifier side) const {
+			return mcts_.GetRootNode(side);
+		}
+
 	private:
 		mcts::Statistic<> statistic_;
 		mcts::MOMCTS mcts_;

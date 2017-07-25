@@ -21,6 +21,14 @@ namespace mcts
 
 			TreeNode* GetOrCreateNode(board::Board const& board, bool * new_node_created = nullptr);
 
+			template <typename Functor>
+			void ForEach(Functor&& functor) const {
+				if (!map_) return;
+				for (auto const& kv : *map_) {
+					if (!functor(kv.first, kv.second.get())) return;
+				}
+			}
+
 		private:
 			MapType & GetMap()
 			{
