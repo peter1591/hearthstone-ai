@@ -37,6 +37,9 @@
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{d0409f9f-1c0d-4d92-a517-36024e4e720d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{739252a5-d8b8-41fe-9e87-3ca9a3d4e59e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
@@ -205,6 +208,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\ActionApplyState.h">
       <Filter>Header Files\MCTS\builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\Decks.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\AIController.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

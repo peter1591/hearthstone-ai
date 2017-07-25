@@ -118,6 +118,12 @@ private:
 			std::cout << "  " << choice << ": "
 				<< GetChildNodeType(child) << " "
 				<< child.GetNode() << std::endl;
+
+			if (node_->GetActionType() == mcts::ActionType::kMainAction) {
+				auto op = node_->GetAddon().action_analyzer.GetMainOpType(choice);
+				std::cout << "    Main Action Op: " << GetOpType(op) << std::endl;
+			}
+
 			if (edge_addon) {
 				std::cout << "    Chosen time: " << edge_addon->chosen_times << std::endl;
 				std::cout << "    Credit: " << edge_addon->credit << " / " << edge_addon->total << std::endl;
@@ -148,6 +154,18 @@ private:
 		case ActionType::kChooseMinionPutLocation: return "kChooseMinionPutLocation";
 		case ActionType::kChooseTarget: return "kChooseTarget";
 		case ActionType::kChooseOne: return "kChooseOne";
+		default: return "Unknown!!!";
+		}
+	}
+
+	std::string GetOpType(mcts::board::BoardActionAnalyzer::OpType op) {
+		using mcts::board::BoardActionAnalyzer;
+		switch (op) {
+		case BoardActionAnalyzer::kInvalid: return "kInvalid";
+		case BoardActionAnalyzer::kPlayCard: return "kPlayCard";
+		case BoardActionAnalyzer::kAttack: return "kAttack";
+		case BoardActionAnalyzer::kHeroPower: return "kHeroPower";
+		case BoardActionAnalyzer::kEndTurn: return "kEndTurn";
 		default: return "Unknown!!!";
 		}
 	}
