@@ -12,9 +12,11 @@ CFLAGS_OWN_SRC += -Weffc++
 TOP_SOURCE=../../
 
 CFLAGS+=-I$(TOP_SOURCE)include
+CFLAGS+=-ggdb
 
 # release build
-CFLAGS+=-O3 -DNDEBUG -march=native
+CFLAGS+=-O3 -march=native
+CFLAGS+=-DNDEBUG
 LDFLAGS=-O3
 
 CFLAGS+=-flto -fuse-linker-plugin
@@ -25,8 +27,8 @@ ifeq ($(PROFILING), 1)
 CFLAGS+=-fprofile-generate
 LDFLAGS+=-fprofile-generate
 else
-CFLAGS += -fprofile-use
-LDFLAGS+= -fprofile-use
+#CFLAGS += -fprofile-use
+#LDFLAGS+= -fprofile-use
 endif
 
 THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
