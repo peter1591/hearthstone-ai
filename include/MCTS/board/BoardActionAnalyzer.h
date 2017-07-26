@@ -44,7 +44,7 @@ namespace mcts
 			template <class Functor>
 			void ForEachMainOp(Functor && functor) const {
 				for (size_t i = 0; i < op_map_size_; ++i) {
-					if (!functor(i, GetOpType(op_map_[i]))) return;
+					if (!functor(i, GetMainOpType(op_map_[i]))) return;
 				}
 			}
 			OpType GetMainOpType(size_t choice) const {
