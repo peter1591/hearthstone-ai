@@ -23,7 +23,18 @@ namespace ui
 				std::chrono::steady_clock::now() +
 				std::chrono::seconds(duration_sec);
 
-			while (std::chrono::steady_clock::now() < end) {
+			long long last_show_rest_sec = -1;
+
+			while (true) {
+				auto now = std::chrono::steady_clock::now();
+				if (now > end) break;
+				
+				auto rest_sec = std::chrono::duration_cast<std::chrono::seconds>(end - now).count();
+				if (rest_sec != last_show_rest_sec) {
+					std::cout << "Rest seconds: " << rest_sec << std::endl;
+					last_show_rest_sec = rest_sec;
+				}
+
 				bool ret = mcts_.Iterate([&]() {
 					return (*state_getter)();
 				});
