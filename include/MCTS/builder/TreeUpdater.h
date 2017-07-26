@@ -21,7 +21,8 @@ namespace mcts
 			void Update(bool credit)
 			{
 				UpdateChosenTimes();
-				UpdateWinRate(credit);
+				TreeLikeUpdateWinRate(credit);
+				//LinearlyUpdateWinRate(credit);
 			}
 
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
@@ -97,7 +98,17 @@ namespace mcts
 				}
 			}
 
-			void UpdateWinRate(bool credit) {
+			void LinearlyUpdateWinRate(bool credit) {
+				for (auto const& item : nodes_) {
+					auto * edge_addon = item.GetEdgeAddon();
+					if (!edge_addon) continue;
+
+					if (credit) ++edge_addon->credit;
+					++edge_addon->total;
+				}
+			}
+
+			void TreeLikeUpdateWinRate(bool credit) {
 				if (nodes_.empty()) return;
 
 				assert([&](){
