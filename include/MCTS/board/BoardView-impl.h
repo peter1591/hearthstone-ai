@@ -8,7 +8,7 @@ namespace mcts
 	{
 		template <state::PlayerSide Side>
 		inline BoardView::BoardView(FlowControl::PlayerStateView<Side> const& board) :
-			turn_(board.GetTurn()),
+			turn_(board.GetTurn()), side_(Side),
 			self_hero_(), self_crystal_(), self_hero_power_(), self_weapon_(),
 			self_minions_(), self_hand_(), self_deck_(),
 			opponent_hero_(), opponent_crystal_(), opponent_hero_power_(),

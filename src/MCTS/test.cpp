@@ -126,13 +126,24 @@ private:
 
 			if (edge_addon) {
 				std::cout << "    Chosen time: " << edge_addon->chosen_times << std::endl;
-				std::cout << "    Credit: " << edge_addon->credit << " / " << edge_addon->total << std::endl;
+
+				double credit_percentage = (double)edge_addon->credit / edge_addon->total * 100;
+				std::cout << "    Credit: " << edge_addon->credit << " / " << edge_addon->total
+					<< " (" << credit_percentage << "%)"
+					<< std::endl;
 			}
 			return true;
 		});
 		std::cout << "BoardNodeMap:" << std::endl;
 		node_->GetAddon().board_node_map.ForEach([&](mcts::board::BoardView board_view, mcts::builder::TreeBuilder::TreeNode* node) {
-			std::cout << "  " << node << std::endl;
+			uint64_t total_chosen_time = 0;
+			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				total_chosen_time += child.GetEdgeAddon().chosen_times;
+				return true;
+			});
+			std::cout << "  " << node << " Chosen time: " << total_chosen_time
+				<< std::endl;
+			PrintBoardView(board_view, "    ");
 			return true;
 		});
 	}
@@ -168,6 +179,40 @@ private:
 		case BoardActionAnalyzer::kEndTurn: return "kEndTurn";
 		default: return "Unknown!!!";
 		}
+	}
+
+	void PrintBoardView(mcts::board::BoardView const& view, std::string const& line_prefix) {
+		std::cout << line_prefix << "Side: " << GetSideStr(view.GetSide())
+			<< std::endl;
+
+		std::cout << line_prefix << "Self Hero: "
+			<< view.GetSelfHero().hp << " / " << view.GetSelfHero().max_hp
+			<< " armor: " << view.GetSelfHero().armor
+			<< std::endl;
+
+		std::cout << line_prefix << "Self Minions: ";
+		for (auto const& minion : view.GetSelfMinions()) {
+			std::cout << minion.hp << "/" << minion.max_hp << " ";
+		}
+		std::cout << std::endl;
+
+		std::cout << line_prefix << "Opponent Hero: "
+			<< view.GetOpponentHero().hp << " / " << view.GetOpponentHero().max_hp
+			<< " armor: " << view.GetOpponentHero().armor
+			<< std::endl;
+
+		std::cout << line_prefix << "Opponent Minions: ";
+		for (auto const& minion : view.GetOpponentMinions()) {
+			std::cout << minion.hp << "/" << minion.max_hp << " ";
+		}
+		std::cout << std::endl;
+	}
+
+	std::string GetSideStr(state::PlayerSide side) {
+		if (side == state::kPlayerFirst) return "kPlayerFirst";
+		if (side == state::kPlayerSecond) return "kPlayerSecond";
+		if (side == state::kPlayerInvalid) return "kPlayerInvalid";
+		return "Unknown!!!";
 	}
 
 private:

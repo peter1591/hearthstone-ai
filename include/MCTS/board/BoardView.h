@@ -26,8 +26,9 @@ namespace mcts
 			BoardView & operator=(BoardView &&) = default;
 
 			bool operator==(BoardView const& rhs) const {
-				static_assert(change_id == 2);
+				static_assert(change_id == 3);
 				if (turn_ != rhs.turn_) return false;
+				if (side_ != rhs.side_) return false;
 
 				if (self_hero_ != rhs.self_hero_) return false;
 				if (self_crystal_ != rhs.self_crystal_) return false;
@@ -54,6 +55,7 @@ namespace mcts
 
 		public:
 			int GetTurn() const { return turn_; }
+			state::PlayerSide GetSide() const { return side_; }
 			
 			boardview::SelfHero const& GetSelfHero() const { return self_hero_; }
 			boardview::Crystal const& GetSelfCrystal() const { return self_crystal_; }
@@ -72,9 +74,10 @@ namespace mcts
 			boardview::OpponentDeck const& GetOpponentDeck() const { return opponent_deck_; }
 
 		private:
-			static int constexpr change_id = 2;
+			static int constexpr change_id = 3;
 
 			int turn_;
+			state::PlayerSide side_;
 
 			boardview::SelfHero self_hero_;
 			boardview::Crystal self_crystal_;
@@ -100,10 +103,11 @@ namespace std {
 	struct hash<mcts::board::BoardView> {
 		std::size_t operator()(mcts::board::BoardView const& v) const
 		{
-			static_assert(mcts::board::BoardView::change_id == 2);
+			static_assert(mcts::board::BoardView::change_id == 3);
 
 			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.turn_);
+			Utils::HashCombine::hash_combine(result, (int)v.side_);
 
 			Utils::HashCombine::hash_combine(result, v.self_hero_);
 			Utils::HashCombine::hash_combine(result, v.self_crystal_);
