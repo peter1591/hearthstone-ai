@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mcts/selection/TraversedNodeInfo.h"
+#include "MCTS/selection/TraversedNodeInfo.h"
 
 namespace mcts
 {
