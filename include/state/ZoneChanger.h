@@ -86,25 +86,32 @@ namespace state {
 			switch (cards_mgr_.Get(card_ref_).GetZone())
 			{
 			case kCardZoneGraveyard:
-				ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			case kCardZoneHand:
-				ZoneChanger<kCardZoneHand, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZoneHand, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			case kCardZonePlay:
-				ZoneChanger<kCardZonePlay, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZonePlay, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			case kCardZoneSetASide:
-				ZoneChanger<kCardZoneSetASide, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZoneSetASide, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			case kCardZoneRemoved:
-				ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			case kCardZoneInvalid:
-				ZoneChanger<kCardZoneInvalid, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZoneInvalid, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			case kCardZoneNewlyCreated:
-				ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier);
+				ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier);
 				return;
 			default:
 				throw std::runtime_error("Unknown card zone");
@@ -118,25 +125,32 @@ namespace state {
 			switch (cards_mgr_.Get(card_ref_).GetZone())
 			{
 			case kCardZoneGraveyard:
-				ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZoneGraveyard, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			case kCardZoneHand:
-				ZoneChanger<kCardZoneHand, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZoneHand, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			case kCardZonePlay:
-				ZoneChanger<kCardZonePlay, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZonePlay, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			case kCardZoneSetASide:
-				ZoneChanger<kCardZoneSetASide, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZoneSetASide, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			case kCardZoneRemoved:
-				ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZoneRemoved, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			case kCardZoneInvalid:
-				ZoneChanger<kCardZoneInvalid, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZoneInvalid, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			case kCardZoneNewlyCreated:
-				ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, card_ref_).ChangeTo<ChangeToZone>(player_identifier, pos);
+				ZoneChanger<kCardZoneNewlyCreated, ChangingCardType>(state_, board_, cards_mgr_, card_ref_)
+					.template ChangeTo<ChangeToZone>(player_identifier, pos);
 				return;
 			default:
 				throw std::runtime_error("Unknown card zone");
