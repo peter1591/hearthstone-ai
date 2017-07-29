@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MCTS/simulation/ChoiceBlacklist.h"
 #include "MCTS/board/Board.h"
 
 namespace mcts
@@ -9,26 +8,24 @@ namespace mcts
 	{
 		namespace simulation
 		{
-			using TreeProgress = mcts::simulation::ChoiceBlacklist;
-
 			class ChoiceGetter
 			{
 			public:
-				ChoiceGetter(int choices, TreeProgress const& progress) :
-					choices_(choices), progress_(progress) {}
+				ChoiceGetter(int choices) : choices_(choices) {}
 
-				size_t Size() const { return progress_.GetWhiteListCount(choices_); }
+				size_t Size() const { return (size_t)choices_; }
 
-				int Get(size_t idx) const { return progress_.GetWhiteListItem(idx); }
+				int Get(size_t idx) const { return (int)idx; }
 
 				template <typename Functor>
 				void ForEachChoice(Functor&& functor) const {
-					progress_.ForEachWhiteListItem(choices_, std::forward<Functor>(functor));
+					for (int i = 0; i < choices_; ++i) {
+						if (!functor(i)) return;
+					}
 				}
 
 			private:
 				int choices_;
-				TreeProgress const& progress_;
 			};
 
 			class RandomPolicy

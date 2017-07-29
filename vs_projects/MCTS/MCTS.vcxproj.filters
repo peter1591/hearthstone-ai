@@ -203,9 +203,6 @@
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\ChoiceBlacklist.h">
-      <Filter>Header Files\MCTS\simulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\ActionApplyState.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>

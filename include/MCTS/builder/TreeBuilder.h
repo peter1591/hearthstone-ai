@@ -28,8 +28,7 @@ namespace mcts
 			TreeBuilder(SOMCTS & caller, Statistic<> & statistic) :
 				statistic_(statistic),
 				apply_state_(caller),
-				selection_stage_(), simulation_stage_(),
-				action_replayer_()
+				selection_stage_(), simulation_stage_()
 			{
 			}
 
@@ -74,8 +73,6 @@ namespace mcts
 
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;
-
-			ActionReplayer action_replayer_;
 		};
 	}
 }

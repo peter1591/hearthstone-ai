@@ -14,21 +14,16 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection() : root_(nullptr), path_(), new_node_created_(false), pending_randoms_(false) {}
+			Selection() : path_(), new_node_created_(false), pending_randoms_(false) {}
 
 			Selection(Selection const&) = delete;
 			Selection & operator=(Selection const&) = delete;
 
 			void StartNewMainAction(TreeNode * root) {
-				root_ = root;
-
 				path_.clear();
-				path_.emplace_back(root_);
+				path_.emplace_back(root);
 				new_node_created_ = false;
 				pending_randoms_ = false;
-			}
-			void RestartAction() {
-				StartNewMainAction(root_);
 			}
 
 			// @return >= 0 for the chosen action; < 0 if no valid action
@@ -106,9 +101,7 @@ namespace mcts
 				return next_choice;
 			}
 
-			int ReportInvalidAction() {
-				int invalid_steps = 0;
-
+			void ReportInvalidAction() {
 				auto it = path_.rbegin();
 
 				// skip the last choice which yields an invalid state due to no valid child
@@ -118,14 +111,11 @@ namespace mcts
 
 				for (; it != path_.rend(); ++it) {
 					assert(it->GetChoice() >= 0);
-					++invalid_steps;
 					if (it->GetNode()->GetActionType().IsInvalidStateBlameNode()) {
 						it->GetNode()->MarkChoiceInvalid(it->GetChoice());
 						break;
 					}
 				}
-				assert(invalid_steps > 0);
-				return invalid_steps;
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
@@ -134,7 +124,6 @@ namespace mcts
 			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
-			TreeNode* root_;
 			std::vector<TraversedNodeInfo> path_;
 
 			bool new_node_created_;

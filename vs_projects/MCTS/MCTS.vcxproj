@@ -193,7 +193,6 @@
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h" />
-    <ClInclude Include="..\..\include\MCTS\simulation\ChoiceBlacklist.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
