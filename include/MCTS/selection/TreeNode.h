@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <unordered_map>
 #include <memory>
 
@@ -17,6 +18,7 @@ namespace mcts
 		class TreeNode
 		{
 		public:
+			// Note: only calls children's Get(), so a caller can acquire a read-lock only
 			class ChoiceIterator {
 			public:
 				ChoiceIterator(board::ActionChoices & choices, ChildNodeMap & children) :
@@ -105,11 +107,12 @@ namespace mcts
 					assert(choices_type_ == choices.GetType());
 				}
 
-				if (action_type_.IsValid()) {
-					assert(action_type_ == action_type);
+				auto action_type_loaded = action_type_.load();
+				if (action_type_loaded == ActionType::kInvalid) {
+					action_type_loaded = action_type_.exchange(action_type.GetType());
 				}
-				else {
-					action_type_ = action_type;
+				if (action_type_loaded != ActionType::kInvalid) {
+					assert(action_type_loaded == action_type.GetType());
 				}
 
 				ChoiceIterator choice_iterator(choices, children_);
@@ -196,7 +199,9 @@ namespace mcts
 			}
 
 		public:
-			ActionType GetActionType() const { return action_type_; }
+			ActionType GetActionType() const {
+				return ActionType(action_type_.load());
+			}
 
 		public:
 			TreeNodeAddon const& GetAddon() const { return addon_; }
@@ -210,7 +215,7 @@ namespace mcts
 			}
 
 		private:
-			ActionType action_type_;
+			std::atomic<ActionType::Types> action_type_;
 			board::ActionChoices::Type choices_type_; // TODO: debug only
 
 			ChildNodeMap children_;
