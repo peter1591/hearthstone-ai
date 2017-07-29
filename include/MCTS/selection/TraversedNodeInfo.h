@@ -33,10 +33,20 @@ namespace mcts
 				return &result.node;
 			}
 
-			void ConstructRedirectNode(TreeNode* redirect_node)
+			void ConstructRedirectNode()
 			{
 				assert(choice_ >= 0);
-				edge_addon_ = &node_->MarkChoiceRedirect(choice_, redirect_node);
+
+				// The reason we need to construct a redirect node is:
+				// we need edge addon to record the win-rate and so on...
+				// Note that, from a specific node, it may leads to DIFFERENT redirect nodes
+				// this happens, for example, when a spell hit a random target,
+				// and since we intended to not construct a random node,
+				// these different outcomes maps to different redirect nodes,
+				// and these nodes are leads from a same node
+				// In this sense, we do not need to know which redirect node it redirects to
+				// only mark it as a redirect node, and use its edge addon
+				edge_addon_ = &node_->MarkChoiceRedirect(choice_);
 			}
 
 			TreeNode* GetNextNode() {

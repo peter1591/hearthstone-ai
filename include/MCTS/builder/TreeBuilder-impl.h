@@ -56,7 +56,7 @@ namespace mcts
 				}
 				assert(perform_result.node != nullptr);
 			}
-			traversed_path.back().ConstructRedirectNode(perform_result.node);
+			traversed_path.back().ConstructRedirectNode();
 
 			if (!perform_result.new_node_created) {
 				perform_result.new_node_created = selection_stage_.HasNewNodeCreated();

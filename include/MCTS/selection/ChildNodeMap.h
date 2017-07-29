@@ -13,37 +13,40 @@ namespace mcts
 		class ChildType
 		{
 		public:
-			ChildType() : edge_addon_(), is_redirect_node_(false), node_(nullptr) {}
+			ChildType() : edge_addon_(), is_redirect_node_(false), node_() {}
+
 			ChildType(ChildType const&) = delete;
 			ChildType & operator=(ChildType const&) = delete;
 
 			EdgeAddon & GetEdgeAddon() { return edge_addon_; }
 			EdgeAddon const& GetEdgeAddon() const { return edge_addon_; }
 			
-			void SetNode(TreeNode * node) {
-				ClearNode();
-				is_redirect_node_ = false;
-				node_ = node;
+			void SetNode(std::unique_ptr<TreeNode> node) {
+				assert(!node_);
+				assert(!is_redirect_node_);
+				node_ = std::move(node);
 			}
 
-			void SetAsRedirectNode(TreeNode * node) {
-				ClearNode();
+			void SetAsRedirectNode() {
+				assert(!node_);
 				is_redirect_node_ = true;
-				node_ = node;
 			}
 
 			bool IsRedirectNode() const { return is_redirect_node_; }
-			TreeNode * GetNode() const { return node_; }
-
-		private:
-			void ClearNode();
+			TreeNode * GetNode() const {
+				assert(!is_redirect_node_);
+				return node_.get();
+			}
 
 		private:
 			EdgeAddon edge_addon_;
 			bool is_redirect_node_;
-			TreeNode * node_;
+			std::unique_ptr<TreeNode> node_;
 		};
 
+		// Thread safety:
+		//    Multiple threads can call Get() concurrently.
+		//    Other methods are not thread-safe.
 		class ChildNodeMap
 		{
 		public:
