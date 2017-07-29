@@ -100,11 +100,12 @@ namespace mcts
 			template <typename SelectCallback>
 			int Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback, int force_choice = -1)
 			{
-				if (choices_type_ == board::ActionChoices::kInvalid) {
-					choices_type_ = choices.GetType();
+				auto choices_type_loaded = choices_type_.load();
+				if (choices_type_loaded == board::ActionChoices::kInvalid) {
+					choices_type_loaded = choices_type_.exchange(choices.GetType());
 				}
-				else {
-					assert(choices_type_ == choices.GetType());
+				if (choices_type_loaded != board::ActionChoices::kInvalid) {
+					assert(choices_type_loaded == choices.GetType());
 				}
 
 				auto action_type_loaded = action_type_.load();
@@ -216,7 +217,7 @@ namespace mcts
 
 		private:
 			std::atomic<ActionType::Types> action_type_;
-			board::ActionChoices::Type choices_type_; // TODO: debug only
+			std::atomic<board::ActionChoices::Type> choices_type_; // TODO: debug only
 
 			ChildNodeMap children_;
 			TreeNodeAddon addon_;
