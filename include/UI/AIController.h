@@ -14,8 +14,8 @@ namespace ui
 
 	public:
 		AIController() :
-			statistic_(),
-			mcts_(statistic_)
+			first_tree_(), second_tree_(), statistic_(),
+			mcts_(first_tree_, second_tree_, statistic_)
 		{}
 
 		void Run(int duration_sec, StartingStateGetter* state_getter) {
@@ -51,6 +51,8 @@ namespace ui
 		}
 
 	private:
+		mcts::builder::TreeBuilder::TreeNode first_tree_;
+		mcts::builder::TreeBuilder::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;
 		mcts::MOMCTS mcts_;
 	};

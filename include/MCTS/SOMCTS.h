@@ -19,8 +19,8 @@ namespace mcts
 	class SOMCTS
 	{		
 	public:
-		SOMCTS(state::PlayerSide side, Statistic<> & statistic) :
-			side_(side), root_(), statistic_(statistic),
+		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic) :
+			side_(side), root_(root), statistic_(statistic),
 			builder_(*this, statistic_),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
@@ -127,8 +127,8 @@ namespace mcts
 		auto GetRootNode() const { return &root_; }
 
 	private:
-		state::PlayerSide side_;
-		builder::TreeBuilder::TreeNode root_;
+		const state::PlayerSide side_;
+		builder::TreeBuilder::TreeNode & root_;
 		Statistic<> & statistic_;
 
 	private: // traversal progress

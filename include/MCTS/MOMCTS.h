@@ -10,9 +10,12 @@ namespace mcts
 	class MOMCTS
 	{
 	public:
-		MOMCTS(Statistic<> & statistic) :
-			first_(state::kPlayerFirst, statistic),
-			second_(state::kPlayerSecond, statistic)
+		MOMCTS(builder::TreeBuilder::TreeNode & first_tree,
+			builder::TreeBuilder::TreeNode & second_tree,
+			Statistic<> & statistic
+		) :
+			first_(state::kPlayerFirst, first_tree, statistic),
+			second_(state::kPlayerSecond, second_tree, statistic)
 		{}
 
 		template <typename StartBoardGetter>
