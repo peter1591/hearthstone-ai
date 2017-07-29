@@ -39,7 +39,9 @@ namespace mcts
 			// we use mutable here, since we will throw it away after all
 			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
 
-			// construct a redirect node for the last action
+			// mark the last action as a redirect node
+			traversed_path.back().ConstructRedirectNode();
+
 			assert(perform_result.new_node_created == false);
 			if (perform_result.result == Result::kResultNotDetermined) {
 				perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
@@ -56,7 +58,6 @@ namespace mcts
 				}
 				assert(perform_result.node != nullptr);
 			}
-			traversed_path.back().ConstructRedirectNode();
 
 			if (!perform_result.new_node_created) {
 				perform_result.new_node_created = selection_stage_.HasNewNodeCreated();
