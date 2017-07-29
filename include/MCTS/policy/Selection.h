@@ -22,8 +22,8 @@ namespace mcts
 				}
 				void AddChoice(int choice, mcts::selection::EdgeAddon const& addon, TreeNode* node) {
 					assert(node);
-					assert(addon.chosen_times > 0);
-					choices_.push_back(Item{ choice, addon.chosen_times, node });
+					assert(addon.GetChosenTimes() > 0);
+					choices_.push_back(Item{ choice, addon.GetChosenTimes(), node });
 				}
 				int SelectChoice() {
 					if (choices_.empty()) return -1;
@@ -70,7 +70,7 @@ namespace mcts
 						}
 
 						auto const& edge_addon = choice_iterator.GetAddon();
-						auto chosen_times = edge_addon.chosen_times;
+						auto chosen_times = edge_addon.GetChosenTimes();
 						if (chosen_times == 0) return choice; // force select
 
 						assert(chosen_times > 0); // == 0
@@ -87,13 +87,16 @@ namespace mcts
 
 					// Phase 2: use UCB to make a choice
 					auto get_score = [total_chosen_times](Item const& item) {
-						auto wins = item.edge_addon->credit;
-						auto total = item.edge_addon->total;
+						auto total = item.edge_addon->GetTotal();
+						auto wins = item.edge_addon->GetCredit();
 						assert(total > 0);
 						double exploit_score = ((double)wins) / total;
 
 						constexpr double explore_weight = 0.8;
-						double explore_score = std::log((double)total_chosen_times) / item.edge_addon->chosen_times;
+						auto chosen_times = item.edge_addon->GetChosenTimes();
+						// in case another thread visited it
+						if (chosen_times > total_chosen_times) chosen_times = total_chosen_times;
+						double explore_score = std::log((double)total_chosen_times) /chosen_times;
 
 						return exploit_score + explore_weight * explore_score;
 					};

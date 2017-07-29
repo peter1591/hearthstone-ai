@@ -10,10 +10,22 @@ namespace mcts
 	{
 		class TreeNode;
 
+		// Note: after a new node is created, the node should not be deleted
+		// Since another thread might investigating that node (or its children)
+		// Thread safety:
+		//    Can be read from several threads concurrently
+		//    Can only be write from one thread
 		class ChildType
 		{
+		private:
+			enum Type {
+				kNormal,
+				kRedirect,
+				kInvalid
+			};
+
 		public:
-			ChildType() : edge_addon_(), is_redirect_node_(false), node_() {}
+			ChildType() : edge_addon_(), type_(kNormal), node_() {}
 
 			ChildType(ChildType const&) = delete;
 			ChildType & operator=(ChildType const&) = delete;
@@ -23,30 +35,43 @@ namespace mcts
 			
 			void SetNode(std::unique_ptr<TreeNode> node) {
 				assert(!node_);
-				assert(!is_redirect_node_);
+				assert(type_ == kNormal);
+
+				assert(node);
 				node_ = std::move(node);
 			}
 
 			void SetAsRedirectNode() {
 				assert(!node_);
-				is_redirect_node_ = true;
+				assert(type_ == kNormal || type_ == kRedirect);
+
+				type_ = kRedirect;
 			}
 
-			bool IsRedirectNode() const { return is_redirect_node_; }
+			void SetAsInvalidNode() {
+				assert(!node_);
+				assert(type_ == kNormal || type_ == kInvalid);
+
+				type_ = kInvalid;
+			}
+
+			bool IsRedirectNode() const { return type_ == kRedirect; }
+			bool IsInvalidNode() const { return type_ == kInvalid; }
+
 			TreeNode * GetNode() const {
-				assert(!is_redirect_node_);
+				assert(type_ == kNormal);
 				return node_.get();
 			}
 
 		private:
 			EdgeAddon edge_addon_;
-			bool is_redirect_node_;
+			Type type_;
 			std::unique_ptr<TreeNode> node_;
 		};
 
 		// Thread safety:
-		//    Multiple threads can call Get() concurrently.
-		//    Other methods are not thread-safe.
+		//    Multiple threads can read (including both Get()) concurrently.
+		//    Should be modified by only one thread
 		class ChildNodeMap
 		{
 		public:
@@ -69,6 +94,8 @@ namespace mcts
 				return &(it->second);
 			}
 
+			// Once a child is created, it should not be destroyed
+			// Since it might still be used in another thread
 			ChildType* Create(int choice) {
 				assert(map_.find(choice) == map_.end());
 				return &map_[choice];

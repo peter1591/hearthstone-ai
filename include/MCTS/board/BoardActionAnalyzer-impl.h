@@ -13,42 +13,47 @@ namespace mcts
 	{
 		inline int BoardActionAnalyzer::GetActionsCount(FlowControl::CurrentPlayerStateView const& board)
 		{
-			if (op_map_size_ == 0) {
-				op_map_size_ = 0;
+			{
+				std::shared_lock<std::shared_mutex> lock(mutex_);
+				if (op_map_size_ > 0) return (int)op_map_size_;
+			}
 
-				assert(playable_cards_.empty());
-				board.ForEachPlayableCard([&](size_t idx) {
-					playable_cards_.push_back(idx);
-					return true;
-				});
-				if (!playable_cards_.empty()) {
-					op_map_[op_map_size_] = &BoardActionAnalyzer::PlayCard;
-					++op_map_size_;
-				}
+			std::lock_guard<std::shared_mutex> write_lock(mutex_);
+			if (op_map_size_ > 0) return (int)op_map_size_;
 
-				assert(attackers_.empty());
-				board.ForEachAttacker([&](int idx) { 
-					attackers_.push_back(idx);
-					return true;
-				});
-				if (!attackers_.empty()) {
-					op_map_[op_map_size_] = &BoardActionAnalyzer::Attack;
-					++op_map_size_;
-				}
-
-				if (board.CanUseHeroPower()) {
-					op_map_[op_map_size_] = &BoardActionAnalyzer::HeroPower;
-					++op_map_size_;
-				}
-
-				op_map_[op_map_size_] = &BoardActionAnalyzer::EndTurn;
+			assert(playable_cards_.empty());
+			board.ForEachPlayableCard([&](size_t idx) {
+				playable_cards_.push_back(idx);
+				return true;
+			});
+			if (!playable_cards_.empty()) {
+				op_map_[op_map_size_] = &BoardActionAnalyzer::PlayCard;
 				++op_map_size_;
 			}
 
+			assert(attackers_.empty());
+			board.ForEachAttacker([&](int idx) { 
+				attackers_.push_back(idx);
+				return true;
+			});
+			if (!attackers_.empty()) {
+				op_map_[op_map_size_] = &BoardActionAnalyzer::Attack;
+				++op_map_size_;
+			}
+
+			if (board.CanUseHeroPower()) {
+				op_map_[op_map_size_] = &BoardActionAnalyzer::HeroPower;
+				++op_map_size_;
+			}
+
+			op_map_[op_map_size_] = &BoardActionAnalyzer::EndTurn;
+			++op_map_size_;
 			return (int)op_map_size_;
 		}
 
 		inline Result BoardActionAnalyzer::ApplyAction(FlowControl::CurrentPlayerStateView board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
+			std::shared_lock<std::shared_mutex> lock(mutex_);
+
 			assert(op_map_size_ > 0);
 			assert(action >= 0);
 			assert(action < (int)op_map_size_);

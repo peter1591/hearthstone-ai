@@ -93,7 +93,7 @@ namespace mcts
 
 					if (item.GetEdgeAddon()) {
 						auto & edge_addon = *item.GetEdgeAddon();
-						edge_addon.chosen_times++;
+						edge_addon.AddChosenTimes(1);
 					}
 				}
 			}
@@ -103,8 +103,8 @@ namespace mcts
 					auto * edge_addon = item.GetEdgeAddon();
 					if (!edge_addon) continue;
 
-					if (credit) ++edge_addon->credit;
-					++edge_addon->total;
+					edge_addon->AddTotal(1);
+					if (credit) edge_addon->AddCredit(1);
 				}
 			}
 
@@ -153,8 +153,8 @@ namespace mcts
 					should_visits_.erase(edge_addon);
 					return true;
 				}());
-				if (credit) ++edge_addon->credit;
-				++edge_addon->total;
+				edge_addon->AddTotal(1);
+				if (credit) edge_addon->AddCredit(1);
 
 				node->GetAddon().leading_nodes.ForEachLeadingNode(
 					[&](selection::TreeNode * leading_node, int leading_choice)

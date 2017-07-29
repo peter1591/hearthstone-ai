@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <shared_mutex>
 #include <unordered_map>
 #include <memory>
 
@@ -43,24 +44,14 @@ namespace mcts
 					return CheckChild(current_child_);
 				}
 				static CheckResult CheckChild(ChildType* child) {
-					if (!child) {
-						return kForceSelectChoice; // not expanded before
-					}
-
-					if (!child->GetNode()) {
-						// Marked as invalid choice before
-						return kInvalidChoice;
-					}
-
+					if (!child) return kForceSelectChoice; // not expanded before
+					if (child->IsInvalidNode()) return kInvalidChoice;
 					return kNormalChoice;
 				}
 
 				int GetChoice() const { return current_choice_; }
 				mcts::selection::EdgeAddon const& GetAddon() const {
 					return current_child_->GetEdgeAddon();
-				}
-				TreeNode* GetNode() const {
-					return current_child_->GetNode();
 				}
 
 			private:
@@ -72,10 +63,19 @@ namespace mcts
 			};
 
 		public:
+			// Thread safety:
+			//   the ChildNodeMap is not thread-safe
+			//   the element ChildType within ChildNodeMap is also not thread-safe
+			//   we use a read-write lock on ChildNodeMap
+			//      if calling only Get(), we can acquire read lock only
+			//      otherwise, need write lock
+			//   Also, the element ChildType in ChildNodeMap will never be removed
+			//   And thus, the EdgeAddon of ChildType will never be removed
+
 			TreeNode() : 
 				action_type_(ActionType::kInvalid),
 				choices_type_(board::ActionChoices::kInvalid),
-				children_(), addon_()
+				children_mutex_(), children_(), addon_()
 			{}
 
 			// it is assumed we will never create a node at these special addresses
@@ -98,7 +98,7 @@ namespace mcts
 			// Return -1 if all choices are invalid.
 			//    (or, the force_choice is invalid)
 			template <typename SelectCallback>
-			int Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback, int force_choice = -1)
+			int Select(ActionType action_type, board::ActionChoices choices, SelectCallback && select_callback)
 			{
 				auto choices_type_loaded = choices_type_.load();
 				if (choices_type_loaded == board::ActionChoices::kInvalid) {
@@ -116,21 +116,12 @@ namespace mcts
 					assert(action_type_loaded == action_type.GetType());
 				}
 
-				ChoiceIterator choice_iterator(choices, children_);
-
-				if (force_choice < 0) {
-					return select_callback.SelectChoice(
-						ChoiceIterator(choices, children_)
-					);
-				}
-				else {
-					auto child = children_.Get(force_choice);
-					auto check_result = ChoiceIterator::CheckChild(child);
-					if (check_result == ChoiceIterator::kInvalidChoice) {
-						return -1;
-					}
-					return force_choice;
-				}
+				// We can only acquire a shared lock,
+				// since ChoiceIterator only calls children_.Get()
+				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+				return select_callback.SelectChoice(
+					ChoiceIterator(choices, children_)
+				);
 			}
 
 			// @return  (pointer to child, is_just_expanded)
@@ -141,14 +132,31 @@ namespace mcts
 			};
 			FollowStatus FollowChoice(int choice)
 			{
+				// Optimize to only acquire a read lock if no need to create a new node
+
+				std::shared_lock<std::shared_mutex> lock(children_mutex_);
 				ChildType* child = children_.Get(choice);
+
 				bool just_expanded = false;
 				if (!child) {
-					child = children_.Create(choice);
-					child->SetNode(new TreeNode());
-					just_expanded = true;
+					lock.unlock();
+
+					{
+						std::lock_guard<std::shared_mutex> write_lock(children_mutex_);
+						child = children_.Get(choice);
+						if (!child) {
+							child = children_.Create(choice);
+							child->SetNode(std::make_unique<TreeNode>());
+							just_expanded = true;
+						}
+					}
+
+					lock.lock();
+					assert(children_.Get(choice));
 				}
 
+				assert(!child->IsRedirectNode());
+				assert(!child->IsInvalidNode());
 				TreeNode* child_node = child->GetNode();
 				assert(child_node); // should only follow valid choices
 				return { just_expanded, child->GetEdgeAddon(), *child_node };
@@ -156,11 +164,15 @@ namespace mcts
 
 			EdgeAddon& MarkChoiceInvalid(int choice)
 			{
+				// Need a write lock since we modify child state
+				std::lock_guard<std::shared_mutex> lock(children_mutex_);
+
 				// the child node is not yet created
 				// since we delay the node creation as late as possible
 				ChildType* child = children_.Get(choice);
+
 				if (child) {
-					child->SetNode(nullptr); // mark invalid
+					child->SetAsInvalidNode(); // mark invalid
 				}
 				else {
 					child = children_.Create(choice); // create an invalid child node
@@ -168,27 +180,31 @@ namespace mcts
 				return child->GetEdgeAddon();
 			}
 
-			EdgeAddon& MarkChoiceRedirect(int choice, TreeNode* node)
+			EdgeAddon& MarkChoiceRedirect(int choice)
 			{
-				// node should not be a nullptr, we use it for invalid nodes
-				assert(node);
+				// Need a write lock since we modify child state
+				std::lock_guard<std::shared_mutex> lock(children_mutex_);
 
 				// the child node is not yet created
 				// since we delay the node creation as late as possible
 				ChildType* child = children_.Get(choice);
 				if (!child) child = children_.Create(choice);
 				assert(child);
-				child->SetAsRedirectNode(node);
+				child->SetAsRedirectNode();
 				return child->GetEdgeAddon();
 			}
 
 			EdgeAddon * GetEdgeAddon(int choice) {
+				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+
 				ChildType * child = children_.Get(choice);
 				if (!child) return nullptr;
 				return &child->GetEdgeAddon();
 			}
 
 			EdgeAddon const* GetEdgeAddon(int choice) const {
+				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+
 				ChildType const* child = children_.Get(choice);
 				if (!child) return nullptr;
 				return &child->GetEdgeAddon();
@@ -196,6 +212,8 @@ namespace mcts
 
 			template <typename Functor>
 			void ForEachChild(Functor&& functor) const {
+				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+
 				children_.ForEach(std::forward<Functor>(functor));
 			}
 
@@ -209,9 +227,12 @@ namespace mcts
 			TreeNodeAddon & GetAddon() { return addon_; }
 
 		public:
+			// return nullptr if child is a redirect node
 			TreeNode* GetChildNode(int choice) {
 				auto item = children_.Get(choice);
 				if (!item) return nullptr;
+				if (item->IsRedirectNode()) return nullptr;
+				if (item->IsInvalidNode()) return nullptr;
 				return item->GetNode();
 			}
 
@@ -219,7 +240,9 @@ namespace mcts
 			std::atomic<ActionType::Types> action_type_;
 			std::atomic<board::ActionChoices::Type> choices_type_; // TODO: debug only
 
+			mutable std::shared_mutex children_mutex_;
 			ChildNodeMap children_;
+
 			TreeNodeAddon addon_;
 		};
 	}
