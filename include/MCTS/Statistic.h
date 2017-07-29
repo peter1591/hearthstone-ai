@@ -14,78 +14,89 @@ namespace mcts
 		void PrintMessage() {}
 	};
 
+	namespace detail {
+		class SuccessRateRecorder {
+		public:
+			SuccessRateRecorder() : success_(0), total_(0) {}
+
+			void ReportSuccess() {
+				++success_;
+				++total_;
+			}
+			void ReportFailed() {
+				++total_;
+			}
+
+			int GetSuccessCount() const { return success_; }
+			int GetTotalCount() const { return total_; }
+
+			double GetSuccessRate() const {
+				if (total_ == 0) return 0.0;
+				return (double)success_ / total_;
+			}
+
+		private:
+			int success_;
+			int total_;
+		};
+	}
+
 	template <> class Statistic<true>
 	{
 	public:
-		Statistic() :
-			iterate_success_(0), iterate_total_(0),
-			apply_selection_action_success_(0), apply_selection_action_total_(0),
-			apply_simulation_action_success_(0), apply_simulation_action_total_(0)
-		{}
+		Statistic() : iterate_(), selection_(), simulation_() {}
 
-		void IterateSucceeded() {
-			iterate_success_++;
-			iterate_total_++;
-		}
-		void IterateFailed() {
-			iterate_total_++;
-		}
-		auto GetSuccededIterates() const { return iterate_success_; }
+		void IterateSucceeded() { iterate_.ReportSuccess(); }
+		void IterateFailed() { iterate_.ReportFailed(); }
+		auto GetSuccededIterates() const { return iterate_.GetSuccessCount(); }
 
 		void ApplyActionSucceeded(bool is_simulation) {
-			if (is_simulation) return ApplySimulationActionSucceeded();
-			else return ApplySelectionActionSucceeded();
+			if (is_simulation) return simulation_.ReportSuccess();
+			else return selection_.ReportSuccess();
 		}
 		void ApplyActionFailed(bool is_simulation) {
-			if (is_simulation) return ApplySimulationActionFailed();
-			else return ApplySelectionActionFailed();
+			if (is_simulation) return simulation_.ReportFailed();
+			else return selection_.ReportFailed();
 		}
 
 		void ApplySelectionActionSucceeded() {
-			apply_selection_action_success_++;
-			apply_selection_action_total_++;
+			selection_.ReportSuccess();
 		}
 		void ApplySelectionActionFailed() {
-			apply_selection_action_total_++;
+			selection_.ReportFailed();
 		}
 
 		void ApplySimulationActionSucceeded() {
-			apply_simulation_action_success_++;
-			apply_simulation_action_total_++;
+			simulation_.ReportSuccess();
 		}
 		void ApplySimulationActionFailed() {
-			apply_simulation_action_total_++;
+			simulation_.ReportFailed();
 		}
 
 		void PrintMessage() const {
 			std::cout << "Apply selection action success rate: ";
-			PrintRate(apply_selection_action_success_, apply_selection_action_total_);
+			PrintRate(selection_);
 			std::cout << std::endl;
 
 			std::cout << "Apply simulation action success rate: ";
-			PrintRate(apply_simulation_action_success_, apply_simulation_action_total_);
+			PrintRate(simulation_);
 			std::cout << std::endl;
 
 			std::cout << "Iterate success rate: ";
-			PrintRate(iterate_success_, iterate_total_);
+			PrintRate(iterate_);
 			std::cout << std::endl;
 		}
 
 	private:
-		void PrintRate(int success, int total) const {
-			double rate = 0.0;
-			if (total > 0) {
-				rate = (int)((double)success * 100 / total);
-			}
-			std::cout << success << " / " << total << " (" << rate << "%)";
+		void PrintRate(detail::SuccessRateRecorder const& rate) const {
+			std::cout << rate.GetSuccessCount()
+				<< " / " << rate.GetTotalCount()
+				<< " (" << 100.0 * rate.GetSuccessRate() << "%)";
 		}
 
 	private:
-		int iterate_success_;
-		int iterate_total_;
-		int apply_selection_action_success_;
-		int apply_selection_action_total_;
-		int apply_simulation_action_success_;
-		int apply_simulation_action_total_;
+		detail::SuccessRateRecorder iterate_;
+		detail::SuccessRateRecorder selection_;
+		detail::SuccessRateRecorder simulation_;
 	};
 }
