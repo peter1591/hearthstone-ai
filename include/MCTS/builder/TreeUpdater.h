@@ -1,5 +1,6 @@
 #pragma once
 
+#include <queue>
 #include "mcts/selection/TraversedNodeInfo.h"
 
 namespace mcts
@@ -9,7 +10,7 @@ namespace mcts
 		class TreeUpdater
 		{
 		public:
-			TreeUpdater() : last_node_(nullptr), nodes_()
+			TreeUpdater() : last_node_(nullptr), nodes_(), bfs_()
 #ifndef NDEBUG
 				,should_visits_()
 #endif
@@ -143,30 +144,46 @@ namespace mcts
 				assert(should_visits_.empty());
 			}
 
-			void TreeLikeUpdateWinRate(selection::TreeNode * node, int choice, bool credit)
+			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, int start_choice, bool credit)
 			{
-				assert(node);
+				assert(start_node);
+				
+				assert(bfs_.empty());
+				bfs_.push({ start_node, start_choice });
 
-				auto * edge_addon = node->GetEdgeAddon(choice);
-				assert(edge_addon);
-				assert([&]() {
-					should_visits_.erase(edge_addon);
-					return true;
-				}());
-				edge_addon->AddTotal(1);
-				if (credit) edge_addon->AddCredit(1);
+				while (!bfs_.empty()) {
+					auto node = bfs_.front().node;
+					int choice = bfs_.front().choice;
+					auto * edge_addon = node->GetEdgeAddon(choice);
+					bfs_.pop();
 
-				node->GetAddon().leading_nodes.ForEachLeadingNode(
-					[&](selection::TreeNode * leading_node, int leading_choice)
-				{
-					TreeLikeUpdateWinRate(leading_node, leading_choice, credit);
-					return true;
-				});
+					assert(edge_addon);
+					assert([&]() {
+						should_visits_.erase(edge_addon);
+						return true;
+					}());
+					edge_addon->AddTotal(1);
+					if (credit) edge_addon->AddCredit(1);
+
+					// use BFS to reduce the lock time
+					node->GetAddon().leading_nodes.ForEachLeadingNode(
+						[&](selection::TreeNode * leading_node, int leading_choice)
+					{
+						bfs_.push({ leading_node, leading_choice });
+						return true;
+					});
+				}
 			}
 
 		private:
 			selection::TreeNode * last_node_;
 			std::vector<selection::TraversedNodeInfo> nodes_;
+
+			struct Item {
+				selection::TreeNode * node;
+				int choice;
+			};
+			std::queue<Item> bfs_;
 
 #ifndef NDEBUG
 			std::unordered_set<selection::EdgeAddon*> should_visits_;
