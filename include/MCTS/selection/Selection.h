@@ -30,8 +30,7 @@ namespace mcts
 			int ChooseAction(
 				board::Board const& board,
 				ActionType action_type,
-				board::ActionChoices const& choices,
-				int force_choice = -1)
+				board::ActionChoices const& choices)
 			{
 				if (choices.Empty()) return -1;
 
@@ -39,7 +38,6 @@ namespace mcts
 					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);
 					pending_randoms_ = true;
 
-					if (force_choice >= 0) return force_choice;
 					return StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(choices.Size());
 				}
 
@@ -89,11 +87,9 @@ namespace mcts
 				}
 
 				int next_choice = current_node->Select(action_type, choices,
-					StaticConfigs::SelectionPhaseSelectActionPolicy(),
-					force_choice);
+					StaticConfigs::SelectionPhaseSelectActionPolicy());
 				if (next_choice < 0) {
 					return -1; // all of the choices are invalid actions
-							   // or, the force_choice is invalid
 				}
 
 				path_.back().MakeChoice(next_choice);

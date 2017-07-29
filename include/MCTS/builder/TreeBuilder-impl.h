@@ -25,12 +25,6 @@ namespace mcts
 			apply_state_.Start(board);
 			assert(apply_state_.IsValid());
 
-			// TODO [PROFILING]:
-			// We save the board every time here. This is just for the case an invalid action is applied
-			// Ideally, invalid actions should be rarely happened.
-			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
-			// Alternatively, we can just mark the choice as invalid, and restart the whole episode again.
-
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
 
@@ -146,9 +140,7 @@ namespace mcts
 
 		inline int TreeBuilder::ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices)
 		{
-			int choice = -1;
-			
-			choice = selection_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
+			int choice = selection_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
 
 			if (choice < 0) {
 				apply_state_.SetInvalid();
@@ -159,9 +151,7 @@ namespace mcts
 
 		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)
 		{
-			int choice = -1;
-
-			choice = simulation_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
+			int choice = simulation_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
 
 			if (choice < 0) {
 				apply_state_.SetInvalid();
