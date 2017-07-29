@@ -42,20 +42,6 @@ namespace mcts
 {
 	namespace selection
 	{
-		class TreeNodeLastApplyStatus
-		{
-		public:
-			TreeNodeLastApplyStatus() : success_(true) {}
-
-			void MarkSucceeded() { success_ = true; }
-			void MarkFailed() { success_ = false; }
-
-			bool IsMarkSucceeded() const { return success_; }
-
-		private:
-			bool success_;
-		};
-
 		class TreeNodeConsistencyCheckAddons
 		{
 		public:
@@ -128,14 +114,12 @@ namespace mcts
 				action_analyzer(),
 				consistency_checker(),
 				board_node_map(),
-				last_apply_status(),
 				leading_nodes()
 			{}
 
 			board::BoardActionAnalyzer action_analyzer;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			detail::BoardNodeMap board_node_map;
-			TreeNodeLastApplyStatus last_apply_status;
 			TreeNodeLeadingNodes leading_nodes;
 		};
 	}
