@@ -1,11 +1,13 @@
 #pragma once
 
+#include <atomic>
 #include <iostream>
 
 #include "MCTS/Config.h"
 
 namespace mcts
 {
+	// Thread safety: Yes
 	template <bool enabled = mcts::StaticConfigs::enable_statistic>
 	class Statistic {
 	public:
@@ -36,11 +38,12 @@ namespace mcts
 			}
 
 		private:
-			int success_;
-			int total_;
+			std::atomic<int> success_;
+			std::atomic<int> total_;
 		};
 	}
 
+	// Thread safety: Yes
 	template <> class Statistic<true>
 	{
 	public:
