@@ -47,7 +47,7 @@ namespace mcts
 		class ChildNodeMap
 		{
 		public:
-			// Hash table is not used here, since
+			// Hash table is used here, since
 			//   1. we don't know the total choices in advance
 			//   2. the key is 'choice', which might be card id for choose-one action
 			using ChildMapType = std::unordered_map<int, ChildType>;
