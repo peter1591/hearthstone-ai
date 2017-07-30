@@ -18,8 +18,6 @@ namespace mcts
 	namespace builder
 	{
 		// Traverse and build a game tree in a monte-carlo fashion
-		// To support share-node and eliminate random-nodes, we actually build
-		// a flatten structure using hash table
 		class TreeBuilder
 		{
 		public:
@@ -52,7 +50,6 @@ namespace mcts
 			SelectResult PerformSelect(TreeNode * node, board::Board const& board,
 				detail::BoardNodeMap & last_node_map, TreeUpdater * updater);
 
-			// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 			// Note: can only be called when current player is the viewer of 'board'
 			Result PerformSimulate(board::Board const& board);
 

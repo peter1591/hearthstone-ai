@@ -74,6 +74,12 @@ namespace mcts
 						if (chosen_times == 0) {
 							return choice; // force select
 						}
+						if (edge_addon.GetTotal() == 0) {
+							// a node is created (from another thread),
+							// but is not yet updated from that thread
+							// in this case, we just force select that choice
+							return choice;
+						}
 
 						assert(chosen_times > 0); // == 0
 						total_chosen_times += chosen_times;
