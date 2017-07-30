@@ -1,7 +1,7 @@
 #pragma once
 
 #include <queue>
-#include "mcts/selection/TraversedNodeInfo.h"
+#include "MCTS/selection/TraversedNodeInfo.h"
 
 namespace mcts
 {
