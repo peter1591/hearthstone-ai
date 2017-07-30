@@ -44,7 +44,15 @@ namespace mcts
 				assert(action_type.IsChosenManually());
 				assert(!path_.empty());
 				if (path_.back().HasMadeChoice()) {
+					// Note: Under a multi-threaded environment, a choice might be chosen to expand
+					// from several threads at the same time. One of the threads might be faster, and
+					// mark the choice as invalid/redirect first.
+					// From another thread's view, the ConstructNextNode() will return a node with nullptr
 					TreeNode* new_node = path_.back().ConstructNextNode(&new_node_created_);
+					if (!new_node) {
+						// TODO: remove this if no invalid node is possible
+						return -1; // marked as invalid from another thread
+					}
 					path_.emplace_back(new_node);
 				}
 

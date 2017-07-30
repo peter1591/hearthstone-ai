@@ -71,7 +71,9 @@ namespace mcts
 
 						auto const& edge_addon = choice_iterator.GetAddon();
 						auto chosen_times = edge_addon.GetChosenTimes();
-						if (chosen_times == 0) return choice; // force select
+						if (chosen_times == 0) {
+							return choice; // force select
+						}
 
 						assert(chosen_times > 0); // == 0
 						total_chosen_times += chosen_times;

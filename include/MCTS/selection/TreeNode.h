@@ -124,12 +124,13 @@ namespace mcts
 				);
 			}
 
-			// @return  (pointer to child, is_just_expanded)
 			struct FollowStatus {
 				bool just_expanded;
 				EdgeAddon & edge_addon;
-				TreeNode & node;
+				TreeNode * node; // nullptr for an invalid choice
 			};
+			// Note: the choice should not be marked as redirect
+			// If it's a redirect node, we should follow it by board view, not by choice
 			FollowStatus FollowChoice(int choice)
 			{
 				// Optimize to only acquire a read lock if no need to create a new node
@@ -152,14 +153,15 @@ namespace mcts
 					}
 
 					lock.lock();
-					assert(children_.Get(choice));
+					assert(children_.Get(choice)); // a child should never be removed by any thread
 				}
 
+				// Since a redirect node should only appear at the end of a main-action-sequence,
+				// it should not be followed.
 				assert(!child->IsRedirectNode());
-				assert(!child->IsInvalidNode());
+
 				TreeNode* child_node = child->GetNode();
-				assert(child_node); // should only follow valid choices
-				return { just_expanded, child->GetEdgeAddon(), *child_node };
+				return { just_expanded, child->GetEdgeAddon(), child_node };
 			}
 
 			EdgeAddon& MarkChoiceInvalid(int choice)
@@ -227,12 +229,10 @@ namespace mcts
 			TreeNodeAddon & GetAddon() { return addon_; }
 
 		public:
-			// return nullptr if child is a redirect node
+			// return nullptr if child does not exists, or its an invalid/redirect node
 			TreeNode* GetChildNode(int choice) {
 				auto item = children_.Get(choice);
 				if (!item) return nullptr;
-				if (item->IsRedirectNode()) return nullptr;
-				if (item->IsInvalidNode()) return nullptr;
 				return item->GetNode();
 			}
 

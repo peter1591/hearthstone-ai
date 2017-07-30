@@ -30,7 +30,7 @@ namespace mcts
 				auto result = node_->FollowChoice(choice_);
 				edge_addon_ = &result.edge_addon;
 				*new_node_created = result.just_expanded;
-				return &result.node;
+				return result.node;
 			}
 
 			void ConstructRedirectNode()

@@ -58,9 +58,10 @@ namespace mcts
 			bool IsRedirectNode() const { return type_ == kRedirect; }
 			bool IsInvalidNode() const { return type_ == kInvalid; }
 
+			// return nullptr for redirect/invalid nodes
 			TreeNode * GetNode() const {
-				assert(type_ == kNormal);
-				return node_.get();
+				if (type_ == kNormal) return node_.get();
+				else return nullptr;
 			}
 
 		private:
