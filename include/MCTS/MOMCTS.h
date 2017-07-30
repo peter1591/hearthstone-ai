@@ -12,10 +12,11 @@ namespace mcts
 	public:
 		MOMCTS(builder::TreeBuilder::TreeNode & first_tree,
 			builder::TreeBuilder::TreeNode & second_tree,
-			Statistic<> & statistic
+			Statistic<> & statistic,
+			int first_rand_seed, int second_rand_seed
 		) :
-			first_(state::kPlayerFirst, first_tree, statistic),
-			second_(state::kPlayerSecond, second_tree, statistic)
+			first_(state::kPlayerFirst, first_tree, statistic, first_rand_seed),
+			second_(state::kPlayerSecond, second_tree, statistic, second_rand_seed)
 		{}
 
 		template <typename StartBoardGetter>

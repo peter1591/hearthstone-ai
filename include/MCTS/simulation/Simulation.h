@@ -10,6 +10,8 @@ namespace mcts
 		class Simulation
 		{
 		public:
+			Simulation(int rand_seed) : random_(rand_seed) {}
+
 			void StartNewAction() {
 			}
 
@@ -27,7 +29,7 @@ namespace mcts
 				}
 
 				if (action_type.IsChosenRandomly()) {
-					int rnd = StaticConfigs::SimulationPhaseRandomActionPolicy::GetRandom(choices);
+					int rnd = random_.GetRandom(choices);
 					return action_choices.Get(rnd);
 				}
 
@@ -44,6 +46,9 @@ namespace mcts
 
 			void ReportInvalidAction() {
 			}
+
+		private:
+			StaticConfigs::SimulationPhaseRandomActionPolicy random_;
 		};
 	}
 }

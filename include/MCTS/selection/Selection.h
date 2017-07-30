@@ -14,7 +14,7 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection() : path_(), new_node_created_(false), pending_randoms_(false) {}
+			Selection(int rand_seed) : path_(), random_(rand_seed), new_node_created_(false), pending_randoms_(false) {}
 
 			Selection(Selection const&) = delete;
 			Selection & operator=(Selection const&) = delete;
@@ -37,8 +37,7 @@ namespace mcts
 				if (action_type.IsChosenRandomly()) {
 					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);
 					pending_randoms_ = true;
-
-					return StaticConfigs::SelectionPhaseRandomActionPolicy::GetRandom(choices.Size());
+					return random_.GetRandom(choices.Size());
 				}
 
 				assert(action_type.IsChosenManually());
@@ -129,7 +128,7 @@ namespace mcts
 
 		private:
 			std::vector<TraversedNodeInfo> path_;
-
+			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			bool new_node_created_;
 			bool pending_randoms_;
 		};

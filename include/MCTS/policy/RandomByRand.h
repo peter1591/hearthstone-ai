@@ -1,18 +1,23 @@
 #pragma once
 
 #include <cstdlib>
+#include <random>
 
 namespace mcts
 {
 	namespace policy
 	{
-		class RandomByRand
+		class RandomByMt19937
 		{
 		public:
-			static int GetRandom(int exclusive_max)
-			{
-				return std::rand() % exclusive_max;
+			RandomByMt19937(int seed) : inst_(seed) {}
+
+			int GetRandom(int exclusive_max) {
+				return inst_() % exclusive_max;
 			}
+
+		private:
+			std::mt19937 inst_;
 		};
 	}
 }

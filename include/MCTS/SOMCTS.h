@@ -19,9 +19,9 @@ namespace mcts
 	class SOMCTS
 	{		
 	public:
-		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic) :
+		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic, int rand_seed) :
 			side_(side), root_(root), statistic_(statistic),
-			builder_(*this, statistic_),
+			builder_(*this, statistic_, rand_seed),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
 

@@ -66,6 +66,11 @@ namespace mcts
 				return LockedCheckBoard(new_view);
 			}
 
+			auto GetBoard() const {
+				std::lock_guard<std::mutex> lock(mutex_);
+				return board_view_.get();
+			}
+
 		private:
 			bool LockedCheckBoard(board::BoardView const& new_view) {
 				if (!board_view_) {
@@ -84,7 +89,7 @@ namespace mcts
 			}
 
 		private:
-			std::mutex mutex_;
+			mutable std::mutex mutex_;
 			std::unique_ptr<board::BoardView> board_view_;
 			ActionType action_type_;
 		};

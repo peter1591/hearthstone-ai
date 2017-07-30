@@ -11,11 +11,11 @@ namespace mcts
 	{
 		static constexpr bool enable_statistic = true; // TODO: disable for release builds
 
-		using SelectionPhaseRandomActionPolicy = policy::RandomByRand;
+		using SelectionPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;
 		static constexpr int kVirtualLoss = 3;
 
-		using SimulationPhaseRandomActionPolicy = policy::RandomByRand;
+		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPolicy; // TODO: use a strong policy
 
 		using CreditPolicy = policy::CreditPolicy;
