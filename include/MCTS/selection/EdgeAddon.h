@@ -22,11 +22,12 @@ namespace mcts
 			auto GetCredit() const { return credit.load(); }
 
 		private:
-			std::atomic<std::uint64_t> chosen_times;
+			std::atomic<std::int64_t> chosen_times;
 
 			// for win-rate
-			std::atomic<std::uint64_t> credit;
-			std::atomic<std::uint64_t> total;
+			std::atomic<std::int64_t> credit;
+			std::atomic<std::int64_t> total;
+
 		};
 	}
 }

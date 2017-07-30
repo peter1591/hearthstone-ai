@@ -13,6 +13,7 @@ namespace mcts
 
 		using SelectionPhaseRandomActionPolicy = policy::RandomByRand;
 		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;
+		static constexpr int kVirtualLoss = 3;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByRand;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPolicy; // TODO: use a strong policy

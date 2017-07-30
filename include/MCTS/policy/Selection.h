@@ -34,7 +34,7 @@ namespace mcts
 			private:
 				struct Item {
 					int choice;
-					std::uint64_t chosen_times;
+					std::int64_t chosen_times;
 					TreeNode* node;
 				};
 				std::vector<Item> choices_;
@@ -54,7 +54,7 @@ namespace mcts
 					size_t choices_size = 0;
 
 					// Phase 1: get total chosen times, and record to 'choices'
-					std::uint64_t total_chosen_times = 0;
+					std::int64_t total_chosen_times = 0;
 					for (choice_iterator.Begin();
 						!choice_iterator.IsEnd();
 						choice_iterator.StepNext())

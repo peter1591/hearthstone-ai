@@ -45,14 +45,20 @@ namespace mcts
 					return true;
 				}());
 
-				last_node_ = last_node;
 				if (HasLastNode()) {
 					if (nodes.front().GetNode() != last_node_) {
 						nodes_.emplace_back(last_node_);
 					}
 				}
+				last_node_ = last_node;
 
-				std::move(nodes.begin(), nodes.end(), std::back_inserter(nodes_));
+				for (auto & new_node : nodes) {
+					auto * edge_addon = new_node.GetEdgeAddon();
+					if (edge_addon) {
+						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
+					}
+					nodes_.emplace_back(std::move(new_node));
+				}
 				nodes.clear();
 			}
 
@@ -95,6 +101,9 @@ namespace mcts
 					if (item.GetEdgeAddon()) {
 						auto & edge_addon = *item.GetEdgeAddon();
 						edge_addon.AddChosenTimes(1);
+
+						edge_addon.AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
+						assert(edge_addon.GetTotal() >= 0);
 					}
 				}
 			}
@@ -136,6 +145,7 @@ namespace mcts
 						if (it->GetChoice() < 0) break;
 						++it;
 					}
+					if (it == nodes_.rend()) break;
 
 					assert(it->GetEdgeAddon() == nullptr);
 					++it;
