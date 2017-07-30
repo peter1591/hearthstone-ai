@@ -98,7 +98,8 @@ namespace mcts
 						auto chosen_times = item.edge_addon->GetChosenTimes();
 						// in case another thread visited it
 						if (chosen_times > total_chosen_times) chosen_times = total_chosen_times;
-						double explore_score = std::log((double)total_chosen_times) /chosen_times;
+						double explore_score = std::sqrt(
+							std::log((double)total_chosen_times) / chosen_times);
 
 						return exploit_score + explore_weight * explore_score;
 					};
