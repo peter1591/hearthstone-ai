@@ -31,6 +31,7 @@ public:
 			return TestStateBuilder().GetState();
 		};
 
+		int threads = 1;
 		while (std::cin) {
 			std::string cmd;
 			std::cout << "Command: ";
@@ -39,19 +40,26 @@ public:
 			if (cmd == "h" || cmd == "help") {
 				std::cout << "Commands: " << std::endl
 					<< "h or help: show this message" << std::endl
+					<< "threads: set number of threads" << std::endl
 					<< "s or start (secs): to run for a specified seconds" << std::endl
 					<< "root (1 or 2): set node to root node of player 1 or 2" << std::endl
 					<< "info: show info for selected node" << std::endl
 					<< "node (addr): set node to specified address." << std::endl
 					<< "q or quit: quit" << std::endl;
 			}
+			else if (cmd == "threads") {
+				std::cin >> threads;
+				std::cout << "Set thread count to " << threads << std::endl;
+			}
 			else if (cmd == "s" || cmd == "start") {
 				int secs = 0;
 				std::cin >> secs;
 
+				std::cout << "Running for " << secs << " seconds with " << threads << " threads." << std::endl;
+
 				auto start = std::chrono::steady_clock::now();
 				auto start_i = controller_.GetStatistic().GetSuccededIterates();
-				controller_.Run(secs, start_board_getter);
+				controller_.Run(secs, threads, start_board_getter);
 				auto end_i = controller_.GetStatistic().GetSuccededIterates();
 
 				std::cout << std::endl;
@@ -112,12 +120,34 @@ private:
 		}
 
 		std::cout << "Action type: " << GetActionType(node_->GetActionType()) << std::endl;
+
+		if (node_->GetActionType() == mcts::ActionType::kMainAction) {
+			std::cout << "Playable hand cards:";
+			auto * board_view = node_->GetAddon().consistency_checker.GetBoard();
+			node_->GetAddon().action_analyzer.ForEachPlayableCard([&](size_t idx) {
+				std::cout << " [" << idx << "] ";
+				if (board_view) {
+					std::cout << board_view->GetSelfHand()[idx].card_id;
+				}
+				return true;
+			});
+			std::cout << std::endl;
+		}
+
 		std::cout << "Children:" << std::endl;
 		node_->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
 			auto const* edge_addon = node_->GetEdgeAddon(choice);
-			std::cout << "  " << choice << ": "
-				<< GetChildNodeType(child) << " "
-				<< child.GetNode() << std::endl;
+
+			if (child.IsRedirectNode()) {
+				std::cout << "  " << choice << ": [REDIRECT]" << std::endl;
+			}
+			else if (child.IsInvalidNode()) {
+				std::cout << "  " << choice << ": [INVALID]" << std::endl;
+			}
+			else {
+				std::cout << "  " << choice << ": [NORMAL] "
+					<< child.GetNode() << std::endl;
+			}
 
 			if (node_->GetActionType() == mcts::ActionType::kMainAction) {
 				auto op = node_->GetAddon().action_analyzer.GetMainOpType(choice);
@@ -125,10 +155,10 @@ private:
 			}
 
 			if (edge_addon) {
-				std::cout << "    Chosen time: " << edge_addon->chosen_times << std::endl;
+				std::cout << "    Chosen time: " << edge_addon->GetChosenTimes() << std::endl;
 
-				double credit_percentage = (double)edge_addon->credit / edge_addon->total * 100;
-				std::cout << "    Credit: " << edge_addon->credit << " / " << edge_addon->total
+				double credit_percentage = (double)edge_addon->GetCredit() / edge_addon->GetTotal() * 100;
+				std::cout << "    Credit: " << edge_addon->GetCredit() << " / " << edge_addon->GetTotal()
 					<< " (" << credit_percentage << "%)"
 					<< std::endl;
 			}
@@ -138,7 +168,7 @@ private:
 		node_->GetAddon().board_node_map.ForEach([&](mcts::board::BoardView board_view, mcts::builder::TreeBuilder::TreeNode* node) {
 			uint64_t total_chosen_time = 0;
 			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
-				total_chosen_time += child.GetEdgeAddon().chosen_times;
+				total_chosen_time += child.GetEdgeAddon().GetChosenTimes();
 				return true;
 			});
 			std::cout << "  " << node << " Chosen time: " << total_chosen_time
@@ -146,11 +176,6 @@ private:
 			PrintBoardView(board_view, "    ");
 			return true;
 		});
-	}
-
-	std::string GetChildNodeType(mcts::selection::ChildType const& child) {
-		if (child.IsRedirectNode()) return "[REDIRECT]";
-		else return "[NORMAL]";
 	}
 
 	std::string GetActionType(mcts::ActionType type) {
@@ -185,16 +210,30 @@ private:
 		std::cout << line_prefix << "Side: " << GetSideStr(view.GetSide())
 			<< std::endl;
 
+		std::cout << line_prefix << "Self resource: "
+			<< view.GetSelfCrystal().current << " / " << view.GetSelfCrystal().total
+			<< std::endl;
+
 		std::cout << line_prefix << "Self Hero: "
 			<< view.GetSelfHero().hp << " / " << view.GetSelfHero().max_hp
 			<< " armor: " << view.GetSelfHero().armor
 			<< std::endl;
+
+		std::cout << line_prefix << "Self hand cards: ";
+		for (auto const& card : view.GetSelfHand()) {
+			std::cout << card.card_id << " ";
+		}
+		std::cout << std::endl;
 
 		std::cout << line_prefix << "Self Minions: ";
 		for (auto const& minion : view.GetSelfMinions()) {
 			std::cout << minion.hp << "/" << minion.max_hp << " ";
 		}
 		std::cout << std::endl;
+
+		std::cout << line_prefix << "Opponent resource: "
+			<< view.GetOpponentCrystal().current << " / " << view.GetOpponentCrystal().total
+			<< std::endl;
 
 		std::cout << line_prefix << "Opponent Hero: "
 			<< view.GetOpponentHero().hp << " / " << view.GetOpponentHero().max_hp
@@ -222,7 +261,11 @@ private:
 
 int main(void)
 {
-	Handler handler;
-	handler.Start();
+	while (true) {
+		srand(0);
+
+		Handler handler;
+		handler.Start();
+	}
 	return 0;
 }

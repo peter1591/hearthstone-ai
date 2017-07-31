@@ -18,17 +18,17 @@ namespace ui
 			first_tree_(), second_tree_(), statistic_()
 		{}
 
-		void Run(int duration_sec, StartingStateGetter* state_getter) {
+		void Run(int duration_sec, int thread_count, StartingStateGetter* state_getter) {
 			std::chrono::steady_clock::time_point end = 
 				std::chrono::steady_clock::now() +
 				std::chrono::seconds(duration_sec);
 
-			constexpr static int thread_count = 4;
-
-			std::array<std::thread, thread_count> threads;
+			std::vector<std::thread> threads;
 			for (int i = 0; i < thread_count; ++i) {
-				threads[i] = std::thread([&]() {
-					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_);
+				threads.emplace_back([&]() {
+					int first_seed = std::rand();
+					int second_seed = std::rand();
+					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, first_seed, second_seed);
 					while (true) {
 						if (std::chrono::steady_clock::now() > end) break;
 
@@ -55,8 +55,8 @@ namespace ui
 				std::this_thread::sleep_for(std::chrono::seconds(1));
 			}
 
-			for (int i = 0; i < thread_count; ++i) {
-				threads[i].join();
+			for (auto & thread : threads) {
+				thread.join();
 			}
 		}
 

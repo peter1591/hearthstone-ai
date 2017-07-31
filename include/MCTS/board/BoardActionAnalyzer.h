@@ -53,6 +53,13 @@ namespace mcts
 				std::shared_lock<std::shared_mutex> lock(mutex_);
 				return GetMainOpType(op_map_[choice]);
 			}
+			template <class Functor>
+			void ForEachPlayableCard(Functor && functor) const {
+				std::shared_lock<std::shared_mutex> lock(mutex_);
+				for (auto hand_idx : playable_cards_) {
+					if (!functor(hand_idx)) break;
+				}
+			}
 
 		private:
 			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
