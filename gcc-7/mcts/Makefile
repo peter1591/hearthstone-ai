@@ -13,11 +13,12 @@ TOP_SOURCE=../../
 
 CFLAGS+=-I$(TOP_SOURCE)include
 CFLAGS+=-ggdb
+LDFLAGS=-lpthread
 
 # release build
 CFLAGS+=-O3 -march=native
 CFLAGS+=-DNDEBUG
-LDFLAGS=-O3
+LDFLAGS+=-O3
 
 CFLAGS+=-flto -fuse-linker-plugin
 LDFLAGS+=-flto -fuse-linker-plugin
