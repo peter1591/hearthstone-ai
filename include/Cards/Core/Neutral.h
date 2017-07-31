@@ -5,6 +5,15 @@
 
 namespace Cards
 {
+	struct Card_GAME_005 : public SpellCardBase<Card_GAME_005> {
+		Card_GAME_005() {
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				int old_current = context.manipulate_.Board().Player(context.player_).GetResource().GetCurrent();
+				context.manipulate_.Board().Player(context.player_).GetResource().SetCurrent(old_current + 1);
+			});
+		}
+	};
+
 	struct Card_CS2_189 : public MinionCardBase<Card_CS2_189> {
 		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			context.SetOptionalBattlecryTargets(context.player_);
@@ -230,6 +239,7 @@ namespace Cards
 	};
 }
 
+REGISTER_CARD(GAME_005)
 REGISTER_CARD(CS2_222)
 REGISTER_CARD(CS2_213)
 REGISTER_CARD(CS2_162)
