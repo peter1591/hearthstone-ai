@@ -11,7 +11,7 @@ namespace ui
 	class AIController
 	{
 	private:
-		typedef state::State StartingStateGetter();
+		typedef state::State StartingStateGetter(int seed);
 
 	public:
 		AIController() :
@@ -26,6 +26,7 @@ namespace ui
 			std::vector<std::thread> threads;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
+					int start_seed = std::rand();
 					int first_seed = std::rand();
 					int second_seed = std::rand();
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, first_seed, second_seed);
@@ -33,7 +34,7 @@ namespace ui
 						if (std::chrono::steady_clock::now() > end) break;
 
 						bool ret = mcts.Iterate([&]() {
-							return (*state_getter)();
+							return (*state_getter)(start_seed);
 						});
 
 						if (ret) statistic_.IterateSucceeded();

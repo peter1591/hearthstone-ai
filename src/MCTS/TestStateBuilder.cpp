@@ -1,3 +1,5 @@
+#include <random>
+
 #include "TestStateBuilder.h"
 
 #include "FlowControl/FlowController-impl.h"
@@ -6,28 +8,22 @@
 class MyRandomGenerator : public state::IRandomGenerator
 {
 public:
-	MyRandomGenerator() : called_times(0), next_rand(0) {}
+	MyRandomGenerator(int seed) : random_(seed) {}
 
 	int Get(int exclusive_max)
 	{
-		++called_times;
-		assert(next_rand < exclusive_max);
-		return next_rand;
+		return random_() % exclusive_max;
 	}
 
 	size_t Get(size_t exclusive_max) { return (size_t)Get((int)exclusive_max); }
 
 	int Get(int min, int max)
 	{
-		++called_times;
-		assert(next_rand >= min);
-		assert(next_rand <= max);
-		return min + next_rand;
+		return min + Get(max - min + 1);
 	}
 
 public:
-	int called_times;
-	int next_rand;
+	std::mt19937 random_;
 };
 
 #if defined(_MSC_VER)
@@ -136,10 +132,10 @@ void MoveFromDeckToHand(std::unordered_multiset<std::string> & cards, std::strin
 	AddHandCard(card_id, state, player);
 }
 
-state::State TestStateBuilder::GetState()
+state::State TestStateBuilder::GetState(int seed)
 {
 	state::State state;
-	MyRandomGenerator my_random;
+	MyRandomGenerator my_random(seed);
 
 	MakeHero(state, state::PlayerIdentifier::First());
 	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");

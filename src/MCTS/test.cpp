@@ -27,8 +27,8 @@ public:
 	{
 		Initialize();
 
-		auto start_board_getter = []() -> state::State {
-			return TestStateBuilder().GetState();
+		auto start_board_getter = [](int seed) -> state::State {
+			return TestStateBuilder().GetState(seed);
 		};
 
 		int threads = 1;

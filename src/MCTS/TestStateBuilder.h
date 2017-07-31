@@ -5,5 +5,5 @@
 class TestStateBuilder
 {
 public:
-	state::State GetState();
+	state::State GetState(int seed);
 };
