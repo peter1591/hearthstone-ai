@@ -6,7 +6,7 @@
 class MyRandomGenerator : public state::IRandomGenerator
 {
 public:
-	MyRandomGenerator() :called_times(0), next_rand(0) {}
+	MyRandomGenerator() : called_times(0), next_rand(0) {}
 
 	int Get(int exclusive_max)
 	{
@@ -144,11 +144,17 @@ state::State TestStateBuilder::GetState()
 	MakeHero(state, state::PlayerIdentifier::First());
 	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");
 	MoveFromDeckToHand(deck1, "Arcane Missiles", state, state::PlayerIdentifier::First());
+	MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
+	MoveFromDeckToHand(deck1, "Wolfrider", state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
 	auto deck2 = ui::Decks::GetDeck("InnKeeperBasicMage");
-	MoveFromDeckToHand(deck2, "Murloc Raider", state, state::PlayerIdentifier::Second());
+	MoveFromDeckToHand(deck2, "Arcane Missiles", state, state::PlayerIdentifier::Second());
+	MoveFromDeckToHand(deck2, "Bloodfen Raptor", state, state::PlayerIdentifier::Second());
+	MoveFromDeckToHand(deck2, "River Crocolisk", state, state::PlayerIdentifier::Second());
+	MoveFromDeckToHand(deck2, "Wolfrider", state, state::PlayerIdentifier::Second());
+	AddHandCard(Cards::ID_GAME_005, state, state::PlayerIdentifier::Second());
 	PrepareDeck(deck2, my_random, state, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
