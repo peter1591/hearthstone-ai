@@ -5,6 +5,7 @@
 #include "MCTS/board/BoardView.h"
 #include "MCTS/board/ActionChoices.h"
 #include "Utils/HashCombine.h"
+#include "Utils/SpinLocks.h"
 
 namespace mcts
 {
@@ -53,7 +54,7 @@ namespace mcts
 				ActionType action_type,
 				board::ActionChoices const& choices)
 			{
-				std::lock_guard<std::mutex> lock(mutex_);
+				std::lock_guard<Utils::SpinLock> lock(mutex_);
 
 				assert(action_type.IsValid());
 				if (!CheckActionType(action_type)) return false;
@@ -62,12 +63,12 @@ namespace mcts
 			}
 
 			bool CheckBoard(board::BoardView const& new_view) {
-				std::lock_guard<std::mutex> lock(mutex_);
+				std::lock_guard<Utils::SpinLock> lock(mutex_);
 				return LockedCheckBoard(new_view);
 			}
 
 			auto GetBoard() const {
-				std::lock_guard<std::mutex> lock(mutex_);
+				std::lock_guard<Utils::SpinLock> lock(mutex_);
 				return board_view_.get();
 			}
 
@@ -89,7 +90,7 @@ namespace mcts
 			}
 
 		private:
-			mutable std::mutex mutex_;
+			mutable Utils::SpinLock mutex_;
 			std::unique_ptr<board::BoardView> board_view_;
 			ActionType action_type_;
 		};
@@ -100,7 +101,7 @@ namespace mcts
 			TreeNodeLeadingNodes() : mutex_(), items_() {}
 
 			void AddLeadingNodes(TreeNode * node, int choice) {
-				std::lock_guard<std::shared_mutex> lock(mutex_);
+				std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 				assert(node);
 				assert(choice >= 0);
 				items_.insert(TreeNodeLeadingNodesItem{ node, choice });
@@ -108,14 +109,14 @@ namespace mcts
 
 			template <class Functor>
 			void ForEachLeadingNode(Functor&& op) {
-				std::shared_lock<std::shared_mutex> lock(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				for (auto const& item : items_) {
 					if (!op(item.node, item.choice)) break;
 				}
 			}
 
 		private:
-			mutable std::shared_mutex mutex_;
+			mutable Utils::SharedSpinLock mutex_;
 
 			// both node and choice are in the key field,
 			// since different choices might need to an identical node

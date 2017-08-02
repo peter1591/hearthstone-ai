@@ -14,11 +14,11 @@ namespace mcts
 		inline int BoardActionAnalyzer::GetActionsCount(FlowControl::CurrentPlayerStateView const& board)
 		{
 			{
-				std::shared_lock<std::shared_mutex> lock(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				if (op_map_size_ > 0) return (int)op_map_size_;
 			}
 
-			std::lock_guard<std::shared_mutex> write_lock(mutex_);
+			std::lock_guard<Utils::SharedSpinLock> write_lock(mutex_);
 			if (op_map_size_ > 0) return (int)op_map_size_;
 
 			assert(playable_cards_.empty());
@@ -52,7 +52,7 @@ namespace mcts
 		}
 
 		inline Result BoardActionAnalyzer::ApplyAction(FlowControl::CurrentPlayerStateView board, int action, RandomGenerator & random, ActionParameterGetter & action_parameters) {
-			std::shared_lock<std::shared_mutex> lock(mutex_);
+			std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 
 			assert(op_map_size_ > 0);
 			assert(action >= 0);

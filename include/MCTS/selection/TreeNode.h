@@ -1,7 +1,6 @@
 #pragma once
 
 #include <atomic>
-#include <shared_mutex>
 #include <unordered_map>
 #include <memory>
 
@@ -11,6 +10,7 @@
 #include "MCTS/board/ActionChoices.h"
 #include "MCTS/selection/EdgeAddon.h"
 #include "MCTS/selection/ChildNodeMap.h"
+#include "Utils/SpinLocks.h"
 
 namespace mcts
 {
@@ -118,7 +118,7 @@ namespace mcts
 
 				// We can only acquire a shared lock,
 				// since ChoiceIterator only calls children_.Get()
-				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 				return select_callback.SelectChoice(
 					ChoiceIterator(choices, children_)
 				);
@@ -135,7 +135,7 @@ namespace mcts
 			{
 				// Optimize to only acquire a read lock if no need to create a new node
 
-				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 				ChildType* child = children_.Get(choice);
 
 				bool just_expanded = false;
@@ -143,7 +143,7 @@ namespace mcts
 					lock.unlock();
 
 					{
-						std::lock_guard<std::shared_mutex> write_lock(children_mutex_);
+						std::lock_guard<Utils::SharedSpinLock> write_lock(children_mutex_);
 						child = children_.Get(choice);
 						if (!child) {
 							child = children_.Create(choice);
@@ -167,7 +167,7 @@ namespace mcts
 			EdgeAddon& MarkChoiceInvalid(int choice)
 			{
 				// Need a write lock since we modify child state
-				std::lock_guard<std::shared_mutex> lock(children_mutex_);
+				std::lock_guard<Utils::SharedSpinLock> lock(children_mutex_);
 
 				// the child node is not yet created
 				// since we delay the node creation as late as possible
@@ -185,7 +185,7 @@ namespace mcts
 			EdgeAddon& MarkChoiceRedirect(int choice)
 			{
 				// Need a write lock since we modify child state
-				std::lock_guard<std::shared_mutex> lock(children_mutex_);
+				std::lock_guard<Utils::SharedSpinLock> lock(children_mutex_);
 
 				// the child node is not yet created
 				// since we delay the node creation as late as possible
@@ -197,7 +197,7 @@ namespace mcts
 			}
 
 			EdgeAddon * GetEdgeAddon(int choice) {
-				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 
 				ChildType * child = children_.Get(choice);
 				if (!child) return nullptr;
@@ -205,7 +205,7 @@ namespace mcts
 			}
 
 			EdgeAddon const* GetEdgeAddon(int choice) const {
-				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 
 				ChildType const* child = children_.Get(choice);
 				if (!child) return nullptr;
@@ -214,7 +214,7 @@ namespace mcts
 
 			template <typename Functor>
 			void ForEachChild(Functor&& functor) const {
-				std::shared_lock<std::shared_mutex> lock(children_mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 
 				children_.ForEach(std::forward<Functor>(functor));
 			}
@@ -240,7 +240,7 @@ namespace mcts
 			std::atomic<ActionType::Types> action_type_;
 			std::atomic<board::ActionChoices::Type> choices_type_; // TODO: debug only
 
-			mutable std::shared_mutex children_mutex_;
+			mutable Utils::SharedSpinLock children_mutex_;
 			ChildNodeMap children_;
 
 			TreeNodeAddon addon_;

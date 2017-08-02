@@ -11,7 +11,7 @@ namespace mcts
 	{
 		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(board::Board const& board, bool * new_node_created)
 		{
-			std::lock_guard<std::shared_mutex> lock(mutex_);
+			std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 
 			if (new_node_created) *new_node_created = false;
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <shared_mutex>
 #include <memory>
 #include <unordered_map>
 #include "MCTS/board/Board.h"
+#include "Utils/SpinLocks.h"
 
 namespace mcts
 {
@@ -24,7 +24,7 @@ namespace mcts
 
 			template <typename Functor>
 			void ForEach(Functor&& functor) const {
-				std::shared_lock<std::shared_mutex> lock_(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock_(mutex_);
 
 				if (!map_) return;
 				for (auto const& kv : *map_) {
@@ -40,7 +40,7 @@ namespace mcts
 			}
 
 		private:
-			mutable std::shared_mutex mutex_;
+			mutable Utils::SharedSpinLock mutex_;
 			std::unique_ptr<MapType> map_;
 		};
 	}

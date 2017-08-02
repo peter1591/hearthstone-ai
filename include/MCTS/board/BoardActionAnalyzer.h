@@ -3,6 +3,7 @@
 #include <shared_mutex>
 #include "MCTS/Types.h"
 #include "FlowControl/PlayerStateView.h"
+#include "Utils/SpinLocks.h"
 
 namespace mcts
 {
@@ -44,18 +45,18 @@ namespace mcts
 
 			template <class Functor>
 			void ForEachMainOp(Functor && functor) const {
-				std::shared_lock<std::shared_mutex> lock(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				for (size_t i = 0; i < op_map_size_; ++i) {
 					if (!functor(i, GetMainOpType(op_map_[i]))) return;
 				}
 			}
 			OpType GetMainOpType(size_t choice) const {
-				std::shared_lock<std::shared_mutex> lock(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				return GetMainOpType(op_map_[choice]);
 			}
 			template <class Functor>
 			void ForEachPlayableCard(Functor && functor) const {
-				std::shared_lock<std::shared_mutex> lock(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				for (auto hand_idx : playable_cards_) {
 					if (!functor(hand_idx)) break;
 				}
@@ -77,7 +78,7 @@ namespace mcts
 			}
 
 		private:
-			mutable std::shared_mutex mutex_;
+			mutable Utils::SharedSpinLock mutex_;
 			std::array<OpFunc, kActionMax> op_map_;
 			size_t op_map_size_;
 			std::vector<int> attackers_;
