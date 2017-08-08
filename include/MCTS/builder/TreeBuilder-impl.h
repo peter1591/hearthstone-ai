@@ -108,6 +108,8 @@ namespace mcts
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
 
+			apply_state_.SetBoardActionAnalyzer(action_analyzer);
+
 			// sometimes an action might in fact an INVALID action
 			// here use a loop to retry on those cases
 			Result result = Result::kResultInvalid;
@@ -117,10 +119,14 @@ namespace mcts
 
 				int choice = -1;
 				if constexpr (is_simulation) {
-					choice = this->ChooseSimulateAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+					choice = this->ChooseSimulateAction(
+						ActionType(ActionType::kMainAction),
+						board::ActionChoices(choices));
 				}
 				else {
-					choice = this->ChooseSelectAction(ActionType(ActionType::kMainAction), board::ActionChoices(choices));
+					choice = this->ChooseSelectAction(
+						ActionType(ActionType::kMainAction),
+						board::ActionChoices(choices));
 				}
 
 				if (apply_state_.IsValid()) {
@@ -152,7 +158,10 @@ namespace mcts
 
 		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)
 		{
-			int choice = simulation_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
+			int choice = simulation_stage_.ChooseAction(
+				apply_state_.GetBoard(),
+				*apply_state_.GetBoardActionAnalyzer(),
+				action_type, choices);
 
 			if (choice < 0) {
 				apply_state_.SetInvalid();

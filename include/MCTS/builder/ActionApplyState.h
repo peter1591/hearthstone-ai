@@ -17,7 +17,7 @@ namespace mcts
 		public:
 			ActionApplyState(SOMCTS & caller) :
 				action_parameter_getter_(caller), random_generator_(caller),
-				board_(nullptr), is_valid_(true)
+				board_(nullptr), action_analyzer_(nullptr), is_valid_(true)
 			{}
 
 			ActionApplyState(ActionApplyState const&) = delete;
@@ -30,6 +30,14 @@ namespace mcts
 			}
 
 			board::Board const& GetBoard() const { return *board_; }
+
+			void SetBoardActionAnalyzer(board::BoardActionAnalyzer const& analyzer) {
+				action_analyzer_ = &analyzer;
+			}
+
+			board::BoardActionAnalyzer const* GetBoardActionAnalyzer() const {
+				return action_analyzer_;
+			}
 
 			Result ApplyAction(int action, board::BoardActionAnalyzer & action_analyzer)
 			{
@@ -45,6 +53,7 @@ namespace mcts
 			board::RandomGenerator random_generator_;
 
 			board::Board const* board_;
+			board::BoardActionAnalyzer const* action_analyzer_;
 			bool is_valid_;
 		};
 	}

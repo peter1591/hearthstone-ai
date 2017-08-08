@@ -17,6 +17,7 @@ namespace mcts
 
 			int ChooseAction(
 				board::Board const& board,
+				board::BoardActionAnalyzer const& action_analyzer,
 				ActionType action_type,
 				board::ActionChoices const& action_choices)
 			{
@@ -35,9 +36,9 @@ namespace mcts
 
 				assert(action_type.IsChosenManually());
 
-				// The underlying policy treat all choices as continuous numbers from zero
 				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
-					policy::simulation::ChoiceGetter(choices), board
+					board, action_analyzer, action_type,
+					policy::simulation::ChoiceGetter(choices)
 				);
 				if (choice < 0) return -1;
 
