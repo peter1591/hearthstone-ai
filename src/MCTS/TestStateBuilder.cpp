@@ -140,7 +140,8 @@ state::State TestStateBuilder::GetState(int seed)
 	MakeHero(state, state::PlayerIdentifier::First());
 	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");
 	MoveFromDeckToHand(deck1, "Arcane Missiles", state, state::PlayerIdentifier::First());
-	MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
+	//MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
+	MoveFromDeckToHand(deck1, "Bloodfen Raptor", state, state::PlayerIdentifier::First());
 	MoveFromDeckToHand(deck1, "Wolfrider", state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
