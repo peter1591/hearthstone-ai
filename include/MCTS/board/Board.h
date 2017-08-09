@@ -46,6 +46,11 @@ namespace mcts
 				}
 			}
 
+			Board Copy() const {
+				state::State copy_board = board_; // copy
+				return Board(copy_board, side_);
+			}
+
 		public: // bridge to action analyzer
 			int GetActionsCount(BoardActionAnalyzer & action_analyzer) const
 			{
