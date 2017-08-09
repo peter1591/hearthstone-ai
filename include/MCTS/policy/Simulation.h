@@ -1,5 +1,6 @@
 #pragma once
 
+#include <random>
 #include "MCTS/board/Board.h"
 
 namespace mcts
@@ -55,10 +56,18 @@ namespace mcts
 				}
 			};
 
+			class StateValueFunction
+			{
+			public:
+				double static GetStateValue(board::Board const& board) {
+					return 0.0; // TODO
+				}
+			};
+
 			class HeuristicPolicy
 			{
 			public:
-				HeuristicPolicy() {
+				HeuristicPolicy(std::mt19937 & rand) : rand_(rand) {
 
 				}
 
@@ -138,6 +147,9 @@ namespace mcts
 					size_t rand_idx = (size_t)(std::rand() % count);
 					return choice_getter.Get(rand_idx);
 				}
+
+			private:
+				std::mt19937 rand_;
 			};
 		}
 	}

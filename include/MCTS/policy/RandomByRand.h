@@ -10,14 +10,14 @@ namespace mcts
 		class RandomByMt19937
 		{
 		public:
-			RandomByMt19937(int seed) : inst_(seed) {}
+			RandomByMt19937(std::mt19937 & rand) : inst_(rand) {}
 
 			int GetRandom(int exclusive_max) {
 				return inst_() % exclusive_max;
 			}
 
 		private:
-			std::mt19937 inst_;
+			std::mt19937 & inst_;
 		};
 	}
 }

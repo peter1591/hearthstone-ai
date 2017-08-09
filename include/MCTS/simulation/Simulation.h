@@ -10,7 +10,7 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation(int rand_seed) : random_(rand_seed), select_() {}
+			Simulation(std::mt19937 & rand) : random_(rand), select_(rand) {}
 
 			void StartNewAction() {
 				select_.StartNewAction();

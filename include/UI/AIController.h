@@ -26,15 +26,13 @@ namespace ui
 			std::vector<std::thread> threads;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
-					int start_seed = std::rand();
-					int first_seed = std::rand();
-					int second_seed = std::rand();
-					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, first_seed, second_seed);
+					std::mt19937 rand;
+					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, rand);
 					while (true) {
 						if (std::chrono::steady_clock::now() > end) break;
 
 						bool ret = mcts.Iterate([&]() {
-							return (*state_getter)(start_seed);
+							return (*state_getter)(rand());
 						});
 
 						if (ret) statistic_.IterateSucceeded();

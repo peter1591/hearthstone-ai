@@ -23,10 +23,10 @@ namespace mcts
 		public:
 			typedef selection::TreeNode TreeNode;
 
-			TreeBuilder(SOMCTS & caller, Statistic<> & statistic, int rand_seed) :
+			TreeBuilder(SOMCTS & caller, Statistic<> & statistic, std::mt19937 & rand) :
 				statistic_(statistic),
 				apply_state_(caller),
-				selection_stage_(rand_seed), simulation_stage_(rand_seed)
+				selection_stage_(rand), simulation_stage_(rand)
 			{
 			}
 
