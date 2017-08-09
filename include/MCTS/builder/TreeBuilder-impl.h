@@ -110,38 +110,35 @@ namespace mcts
 
 			apply_state_.SetBoardActionAnalyzer(action_analyzer);
 
-			// sometimes an action might in fact an INVALID action
-			// here use a loop to retry on those cases
-			Result result = Result::kResultInvalid;
-			while (true) {
-				int choices = apply_state_.GetBoard().GetActionsCount(action_analyzer);
-				assert(choices > 0); // at least end-turn should be valid
+			int choices = apply_state_.GetBoard().GetActionsCount(action_analyzer);
+			assert(choices > 0); // at least end-turn should be valid
 
-				int choice = -1;
-				if constexpr (is_simulation) {
-					choice = this->ChooseSimulateAction(
-						ActionType(ActionType::kMainAction),
-						board::ActionChoices(choices));
-				}
-				else {
-					choice = this->ChooseSelectAction(
-						ActionType(ActionType::kMainAction),
-						board::ActionChoices(choices));
-				}
-
-				if (apply_state_.IsValid()) {
-					result = apply_state_.ApplyAction(choice, action_analyzer);
-					if (result != Result::kResultInvalid) {
-						statistic_.ApplyActionSucceeded(is_simulation);
-						break;
-					}
-				}
-
-				stage_handler.ReportInvalidAction();
-				statistic_.ApplyActionFailed(is_simulation);
-				break;
+			int choice = -1;
+			if constexpr (is_simulation) {
+				choice = this->ChooseSimulateAction(
+					ActionType(ActionType::kMainAction),
+					board::ActionChoices(choices));
+			}
+			else {
+				choice = this->ChooseSelectAction(
+					ActionType(ActionType::kMainAction),
+					board::ActionChoices(choices));
 			}
 
+			if (!apply_state_.IsValid()) {
+				stage_handler.ReportInvalidAction();
+				statistic_.ApplyActionFailed(is_simulation);
+				return Result::kResultInvalid;
+			}
+
+			Result result = apply_state_.ApplyAction(choice, action_analyzer);
+			if (result == Result::kResultInvalid) {
+				stage_handler.ReportInvalidAction();
+				statistic_.ApplyActionFailed(is_simulation);
+				return Result::kResultInvalid;
+			}
+
+			statistic_.ApplyActionSucceeded(is_simulation);
 			return result;
 		}
 
