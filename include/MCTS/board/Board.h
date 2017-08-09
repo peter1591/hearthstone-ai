@@ -58,7 +58,7 @@ namespace mcts
 
 			Result ApplyAction(int action,
 				BoardActionAnalyzer & action_analyzer,
-				RandomGenerator & random, ActionParameterGetter & action_parameters) const
+				IRandomGenerator & random, IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				return action_analyzer.ApplyAction(

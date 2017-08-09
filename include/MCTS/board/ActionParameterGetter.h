@@ -10,11 +10,9 @@ namespace mcts
 
 	namespace board
 	{
-		class ActionParameterGetter : public FlowControl::IActionParameterGetter
+		class IActionParameterGetter : public FlowControl::IActionParameterGetter
 		{
 		public:
-			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
-
 			state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
 			{
 				assert(!targets.empty());
@@ -56,7 +54,15 @@ namespace mcts
 				return GetNumber(action_type, ActionChoices(exclusive_max));
 			}
 
-			int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices);
+			virtual int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) = 0;
+		};
+
+		class ActionParameterGetter : public IActionParameterGetter
+		{
+		public:
+			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
+
+			int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) final;
 
 		private:
 			SOMCTS & callback_;

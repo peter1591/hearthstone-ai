@@ -9,8 +9,8 @@ namespace mcts
 {
 	namespace board
 	{
-		class ActionParameterGetter;
-		class RandomGenerator;
+		class IActionParameterGetter;
+		class IRandomGenerator;
 
 		class BoardActionAnalyzer
 		{
@@ -32,8 +32,8 @@ namespace mcts
 			Result ApplyAction(
 				FlowControl::CurrentPlayerStateView board,
 				int action,
-				RandomGenerator & random,
-				ActionParameterGetter & action_parameters);
+				IRandomGenerator & random,
+				IActionParameterGetter & action_parameters);
 
 			enum OpType {
 				kInvalid,
@@ -63,11 +63,11 @@ namespace mcts
 			}
 
 		private:
-			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result PlayCard(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result Attack(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result HeroPower(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
-			Result EndTurn(FlowControl::CurrentPlayerStateView & board, RandomGenerator & random, ActionParameterGetter & action_parameters);
+			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result PlayCard(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result Attack(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result HeroPower(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result EndTurn(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
 
 			OpType GetMainOpType(OpFunc func) const {
 				if (func == &BoardActionAnalyzer::PlayCard) return kPlayCard;
