@@ -81,7 +81,7 @@ public:
 			}
 			else if (cmd == "node") {
 				uint64_t v = 0;
-				std::cin >> std::hex >> v;
+				std::cin >> std::hex >> v >> std::dec;
 				node_ = (mcts::builder::TreeBuilder::TreeNode *)(v);
 				std::cout << "Node set to: " << node_ << std::endl;
 			}
