@@ -58,7 +58,15 @@ namespace mcts
 			class HeuristicPolicy
 			{
 			public:
-				static int GetChoice(
+				HeuristicPolicy() {
+
+				}
+
+				void StartNewAction() {
+
+				}
+
+				int GetChoice(
 					board::Board const& board,
 					board::BoardActionAnalyzer const& action_analyzer,
 					ActionType action_type,
@@ -91,29 +99,42 @@ namespace mcts
 				}
 
 			private:
-				static int GetChoiceForMainAction(
+				int GetChoiceForMainAction(
 					board::Board const& board,
 					board::BoardActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
 					int choice = -1;
 
-					// attack if it's a viable option
+					// play card if it's a viable option
 					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType op) {
-						if (op == board::BoardActionAnalyzer::kAttack) {
+						if (op == board::BoardActionAnalyzer::kPlayCard) {
 							choice = (int)idx;
 							return false;
 						}
 						return true;
 					});
 
-					if (choice >= 0) return choice;
+					if (choice >= 0) {
+						assert(action_analyzer.GetMainOpType((size_t)choice) == board::BoardActionAnalyzer::kPlayCard);
+						return choice;
+					}
 
-					// TODO: choose end-turn only when it is the only option
-
-					// otherwise, choose randomly
+					// choose end-turn only when it is the only option
 					size_t count = choice_getter.Size();
 					assert(count > 0);
+					if (count == 1) {
+						// should be end-turn
+						assert(action_analyzer.GetMainOpType((size_t)0) == board::BoardActionAnalyzer::kEndTurn);
+						return 0;
+					}
+
+					// rule out the end-turn action
+					assert(action_analyzer.GetMainOpType(count - 1) == board::BoardActionAnalyzer::kEndTurn);
+					--count;
+					assert(count > 0);
+
+					// otherwise, choose randomly
 					size_t rand_idx = (size_t)(std::rand() % count);
 					return choice_getter.Get(rand_idx);
 				}

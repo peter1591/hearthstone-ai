@@ -10,9 +10,10 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation(int rand_seed) : random_(rand_seed) {}
+			Simulation(int rand_seed) : random_(rand_seed), select_() {}
 
 			void StartNewAction() {
+				select_.StartNewAction();
 			}
 
 			int ChooseAction(
@@ -36,7 +37,7 @@ namespace mcts
 
 				assert(action_type.IsChosenManually());
 
-				int choice = StaticConfigs::SimulationPhaseSelectActionPolicy::GetChoice(
+				int choice = select_.GetChoice(
 					board, action_analyzer, action_type,
 					policy::simulation::ChoiceGetter(choices)
 				);
@@ -50,6 +51,7 @@ namespace mcts
 
 		private:
 			StaticConfigs::SimulationPhaseRandomActionPolicy random_;
+			StaticConfigs::SimulationPhaseSelectActionPolicy select_;
 		};
 	}
 }
