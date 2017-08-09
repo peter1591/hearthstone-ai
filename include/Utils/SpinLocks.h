@@ -24,12 +24,10 @@ namespace Utils
 		std::atomic_flag flag_;
 	};
 
-	using SharedSpinLock = std::shared_mutex;
-
-	class SharedSpinLockA
+	class SharedSpinLock
 	{
 	public:
-		SharedSpinLockA() : lock_(), writer_(false), readers_(0) {}
+		SharedSpinLock() : lock_(), writer_(false), readers_(0) {}
 
 		void lock() {
 			while (true) {
