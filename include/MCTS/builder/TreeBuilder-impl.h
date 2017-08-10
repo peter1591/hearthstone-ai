@@ -90,13 +90,9 @@ namespace mcts
 			// Note: If this is completely disabled, we can optimize many things out to replay the actions
 			// apply_state_.SaveBoard();
 
-			simulation_stage_.StartNewAction();
-
 			board::BoardActionAnalyzer action_analyzer;
 
-			Result result = ApplyAction(action_analyzer, simulation_stage_);
-
-			return result;
+			return ApplyAction(action_analyzer, simulation_stage_);
 		}
 
 		template <typename StageHandler>
