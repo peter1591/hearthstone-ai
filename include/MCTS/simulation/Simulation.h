@@ -13,12 +13,11 @@ namespace mcts
 			Simulation(std::mt19937 & rand) : random_(rand), select_(rand) {}
 
 			void StartNewAction() {
-				select_.StartNewAction();
 			}
 
 			int ChooseAction(
 				board::Board const& board,
-				board::BoardActionAnalyzer const& action_analyzer,
+				board::BoardActionAnalyzer & action_analyzer,
 				ActionType action_type,
 				board::ActionChoices const& action_choices)
 			{

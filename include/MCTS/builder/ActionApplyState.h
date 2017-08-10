@@ -31,11 +31,11 @@ namespace mcts
 
 			board::Board const& GetBoard() const { return *board_; }
 
-			void SetBoardActionAnalyzer(board::BoardActionAnalyzer const& analyzer) {
+			void SetBoardActionAnalyzer(board::BoardActionAnalyzer & analyzer) {
 				action_analyzer_ = &analyzer;
 			}
 
-			board::BoardActionAnalyzer const* GetBoardActionAnalyzer() const {
+			board::BoardActionAnalyzer * GetBoardActionAnalyzer() const {
 				return action_analyzer_;
 			}
 
@@ -53,7 +53,7 @@ namespace mcts
 			board::RandomGenerator random_generator_;
 
 			board::Board const* board_;
-			board::BoardActionAnalyzer const* action_analyzer_;
+			board::BoardActionAnalyzer * action_analyzer_;
 			bool is_valid_;
 		};
 	}

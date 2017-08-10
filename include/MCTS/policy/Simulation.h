@@ -59,7 +59,7 @@ namespace mcts
 			class StateValueFunction
 			{
 			public:
-				double static GetStateValue(board::Board const& board) {
+				double GetStateValue(board::Board const& board) {
 					return 0.0; // TODO
 				}
 			};
@@ -67,21 +67,19 @@ namespace mcts
 			class HeuristicPolicy
 			{
 			public:
-				HeuristicPolicy(std::mt19937 & rand) : rand_(rand) {
-
-				}
-
-				void StartNewAction() {
-
+				HeuristicPolicy(std::mt19937 & rand) : rand_(rand), decision_(), state_value_func_()
+				{
 				}
 
 				int GetChoice(
 					board::Board const& board,
-					board::BoardActionAnalyzer const& action_analyzer,
+					board::BoardActionAnalyzer & action_analyzer,
 					ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
 					if (action_type == ActionType::kMainAction) {
+						StartNewAction(board, action_analyzer);
+
 						return GetChoiceForMainAction(
 							board, action_analyzer, choice_getter);
 					}
@@ -108,26 +106,119 @@ namespace mcts
 				}
 
 			private:
+				void StartNewAction(
+					board::Board const& board,
+					board::BoardActionAnalyzer & action_analyzer)
+				{
+					DFSBestStateValue(board, action_analyzer);
+					assert(!decision_.empty());
+				}
+
+				void DFSBestStateValue(
+					board::Board const& board,
+					board::BoardActionAnalyzer & action_analyzer)
+				{
+					class RandomPolicy : public mcts::board::IRandomGenerator {
+					public:
+						RandomPolicy(std::mt19937 & rand) : rand_(rand) {}
+						int Get(int exclusive_max) final { return rand_() % exclusive_max; }
+
+					private:
+						std::mt19937 rand_;
+					};
+
+					struct DFSItem {
+						size_t choice_;
+						size_t total_;
+
+						DFSItem(size_t choice, size_t total) : choice_(choice), total_(total) {}
+					};
+
+					class UserChoicePolicy : public mcts::board::IActionParameterGetter {
+					public:
+						UserChoicePolicy(std::vector<DFSItem> & dfs,
+							std::vector<DFSItem>::iterator & dfs_it) :
+							dfs_(dfs), dfs_it_(dfs_it)
+						{}
+
+						int GetNumber(ActionType::Types action_type, board::ActionChoices const& action_choices) {
+							int total = action_choices.Size();
+
+							if (dfs_it_ == dfs_.end()) {
+								assert(total >= 1);
+								dfs_.emplace_back(0, (size_t)total);
+								dfs_it_ = dfs_.end();
+								return action_choices.Get(0);
+							}
+							
+							assert(dfs_it_->total_ == (size_t)total);
+							size_t idx = dfs_it_->choice_;
+							assert(idx < total);
+							++dfs_it_;
+							return action_choices.Get(idx);
+						}
+
+					private:
+						std::vector<DFSItem> & dfs_;
+						std::vector<DFSItem>::iterator & dfs_it_;
+					};
+
+					std::vector<DFSItem> dfs;
+					std::vector<DFSItem>::iterator dfs_it = dfs.begin();
+
+					auto step_next_dfs = [&]() {
+						while (!dfs.empty()) {
+							if ((dfs.back().choice_ + 1) < dfs.back().total_) {
+								break;
+							}
+							dfs.pop_back();
+						}
+
+						if (dfs.empty()) return false; // all done
+
+						++dfs.back().choice_;
+						return true;
+					};
+
+					RandomPolicy cb_random(rand_);
+					UserChoicePolicy cb_user_choice(dfs, dfs_it);
+
+					double best_value = -std::numeric_limits<double>::infinity();
+					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
+						while (true) {
+							board::CopiedBoard copy_board(board);
+
+							dfs_it = dfs.begin();
+							copy_board.GetBoard().ApplyAction(
+								(int)idx,
+								action_analyzer,
+								cb_random,
+								cb_user_choice);
+
+							double value = state_value_func_.GetStateValue(copy_board.GetBoard());
+							if (value > best_value) {
+								best_value = value;
+
+								decision_.clear();
+								decision_.push_back((int)idx);
+								for (auto const& item : dfs) {
+									decision_.push_back((int)item.choice_);
+								}
+							}
+
+							if (!step_next_dfs()) break; // all done
+						}
+						return true;
+					});
+				}
+
 				int GetChoiceForMainAction(
 					board::Board const& board,
 					board::BoardActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
-					int choice = -1;
-
-					// play card if it's a viable option
-					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType op) {
-						if (op == board::BoardActionAnalyzer::kPlayCard) {
-							choice = (int)idx;
-							return false;
-						}
-						return true;
-					});
-
-					if (choice >= 0) {
-						assert(action_analyzer.GetMainOpType((size_t)choice) == board::BoardActionAnalyzer::kPlayCard);
-						return choice;
-					}
+					// TODO: maybe we don't need to rule out end-turn manually
+					// it will be naturally ruled out, since its state-value should be lower
 
 					// choose end-turn only when it is the only option
 					size_t count = choice_getter.Size();
@@ -149,7 +240,10 @@ namespace mcts
 				}
 
 			private:
-				std::mt19937 rand_;
+				std::mt19937 & rand_;
+
+				std::vector<int> decision_;
+				StateValueFunction state_value_func_;
 			};
 		}
 	}
