@@ -60,7 +60,32 @@ namespace mcts
 			{
 			public:
 				double GetStateValue(board::Board const& board) {
-					return 0.0; // TODO
+					board::BoardView view = board.CreateView(); // TODO: can we save this creation, just peak the board?
+
+					double v = 0.0;
+
+					for (auto const& minion : view.GetSelfMinions()) {
+						v += 10.0 * GetMinionValue(minion.attack, minion.hp);
+					}
+
+					for (auto const& minion : view.GetOpponentMinions()) {
+						v += -10.0 * GetMinionValue(minion.attack, minion.hp);
+					}
+
+					v += 3.0 * GetHeroValue(view.GetSelfHero().hp, view.GetSelfHero().armor);
+
+					return v;
+				}
+
+			private:
+				double GetMinionValue(int attack, int hp) {
+					return 1.0 * attack + 1.5 * hp;
+				}
+
+				double GetHeroValue(int hp, int armor) {
+					double v = hp + armor;
+					if (v >= 15) v = 15;
+					return v;
 				}
 			};
 
@@ -180,8 +205,15 @@ namespace mcts
 						return true;
 					};
 
+					// Need to fix a random sequence for a particular run
+					// Since, some callbacks might depend on a random
+					// For example, choose one card from randomly-chosen three cards
+					std::mt19937 rand(rand_());
+
 					RandomPolicy cb_random(rand_);
 					UserChoicePolicy cb_user_choice(dfs, dfs_it);
+
+					// TODO: Always play a card if available
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
@@ -189,20 +221,33 @@ namespace mcts
 							board::CopiedBoard copy_board(board);
 
 							dfs_it = dfs.begin();
-							copy_board.GetBoard().ApplyAction(
+							auto result = copy_board.GetBoard().ApplyAction(
 								(int)idx,
 								action_analyzer,
 								cb_random,
 								cb_user_choice);
 
-							double value = state_value_func_.GetStateValue(copy_board.GetBoard());
-							if (value > best_value) {
-								best_value = value;
+							if (result != Result::kResultInvalid) {
+								double value = -std::numeric_limits<double>::infinity();
+								int self_win = copy_board.GetBoard().IsSelfWin(result);
+								if (self_win == 1) {
+									value = std::numeric_limits<double>::infinity();
+								}
+								else if (self_win == -1) {
+									value = -std::numeric_limits<double>::infinity();
+								}
+								else {
+									state_value_func_.GetStateValue(copy_board.GetBoard());
+								}
 
-								decision_.clear();
-								decision_.push_back((int)idx);
-								for (auto const& item : dfs) {
-									decision_.push_back((int)item.choice_);
+								if (decision_.empty() || value > best_value) {
+									best_value = value;
+
+									decision_.clear();
+									decision_.push_back((int)idx);
+									for (auto const& item : dfs) {
+										decision_.push_back((int)item.choice_);
+									}
 								}
 							}
 
