@@ -73,6 +73,7 @@ namespace mcts
 					}
 
 					v += 3.0 * GetHeroValue(view.GetSelfHero().hp, view.GetSelfHero().armor);
+					v += -3.0 * GetHeroValue(view.GetOpponentHero().hp, view.GetOpponentHero().armor);
 
 					return v;
 				}
@@ -162,12 +163,22 @@ namespace mcts
 					class UserChoicePolicy : public mcts::board::IActionParameterGetter {
 					public:
 						UserChoicePolicy(std::vector<DFSItem> & dfs,
-							std::vector<DFSItem>::iterator & dfs_it) :
-							dfs_(dfs), dfs_it_(dfs_it)
+							std::vector<DFSItem>::iterator & dfs_it,
+							std::mt19937 & rand) :
+							dfs_(dfs), dfs_it_(dfs_it), rand_(rand)
 						{}
 
 						int GetNumber(ActionType::Types action_type, board::ActionChoices const& action_choices) {
+
 							int total = action_choices.Size();
+
+							assert(action_type != ActionType::kRandom);
+							
+							if (action_type == ActionType::kChooseMinionPutLocation) {
+								assert(total >= 1);
+								int idx = rand_() % total;
+								return action_choices.Get(idx);
+							}
 
 							if (dfs_it_ == dfs_.end()) {
 								assert(total >= 1);
@@ -178,7 +189,7 @@ namespace mcts
 							
 							assert(dfs_it_->total_ == (size_t)total);
 							size_t idx = dfs_it_->choice_;
-							assert(idx < total);
+							assert((int)idx < total);
 							++dfs_it_;
 							return action_choices.Get(idx);
 						}
@@ -186,6 +197,7 @@ namespace mcts
 					private:
 						std::vector<DFSItem> & dfs_;
 						std::vector<DFSItem>::iterator & dfs_it_;
+						std::mt19937 & rand_;
 					};
 
 					std::vector<DFSItem> dfs;
@@ -208,12 +220,11 @@ namespace mcts
 					// Need to fix a random sequence for a particular run
 					// Since, some callbacks might depend on a random
 					// For example, choose one card from randomly-chosen three cards
-					std::mt19937 rand(rand_());
+					std::mt19937 rand1(rand_());
+					RandomPolicy cb_random(rand1);
 
-					RandomPolicy cb_random(rand_);
-					UserChoicePolicy cb_user_choice(dfs, dfs_it);
-
-					// TODO: Always play a card if available
+					std::mt19937 rand2(rand_());
+					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand2);
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
