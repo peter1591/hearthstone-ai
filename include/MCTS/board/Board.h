@@ -23,9 +23,13 @@ namespace mcts
 			state::State state_;
 		};
 
+		class CopiedBoard;
+
 		// Make sure no hidden information is accessed by a player
 		class Board
 		{
+			friend CopiedBoard;
+
 		public:
 			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side) {}
 
@@ -44,11 +48,6 @@ namespace mcts
 					assert(side_ == state::kPlayerSecond);
 					return BoardView(FlowControl::PlayerStateView<state::kPlayerSecond>(board_));
 				}
-			}
-
-			Board Copy() const {
-				state::State copy_board = board_; // copy
-				return Board(copy_board, side_);
 			}
 
 		public: // bridge to action analyzer
@@ -83,6 +82,20 @@ namespace mcts
 		private:
 			state::State & board_;
 			state::PlayerSide side_;
+		};
+
+		class CopiedBoard {
+		public:
+			CopiedBoard(Board const& board) :
+				state_(board.board_), // copy
+				board_(state_, board.side_)
+			{}
+
+			Board & GetBoard() { return board_; }
+
+		private:
+			state::State state_;
+			Board board_;
 		};
 	}
 }
