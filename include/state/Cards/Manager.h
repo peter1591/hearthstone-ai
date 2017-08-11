@@ -1,5 +1,6 @@
 #pragma once
 
+#include <optional>
 #include <utility>
 
 #include "Utils/CloneableContainers/Vector.h"
@@ -13,18 +14,49 @@ namespace state
 		class Manager
 		{
 		public:
-			typedef Utils::CloneableContainers::Vector<Card> ContainerType;
+			typedef Utils::CloneableContainers::Vector<std::optional<Card>> ContainerType;
 
-			Manager() : cards_() {}
+			Manager() : base_(nullptr), cards_() {}
 
-			Card const& Get(CardRef id) const { return cards_.Get(id.id); }
-			Card & GetMutable(CardRef id) { return cards_.Get(id.id); }
+			Manager(Manager const& rhs) :
+				base_(rhs.base_), cards_(rhs.cards_)
+			{}
 
-			CardRef PushBack(Cards::Card&& card)
+			Manager & operator=(Manager const& rhs) {
+				base_ = rhs.base_;
+				cards_ = rhs.cards_;
+				return *this;
+			}
+
+			static Manager ConstructWithBase(Manager const& base) {
+				Manager ret;
+				ret.base_ = &base;
+				ret.cards_.Resize(ret.base_->cards_.Size());
+				return ret;
+			}
+
+		public:
+			Card const& Get(CardRef id) const {
+				auto const& item = cards_.Get(id.id);
+				if (item.has_value()) return *item;
+
+				assert(base_);
+				return *base_->cards_.Get(id.id);
+			}
+
+			Card & GetMutable(CardRef id) {
+				auto & item = cards_.Get(id.id);
+				if (item.has_value()) return *item;
+
+				assert(base_);
+				item = base_->cards_.Get(id.id); // copy-on-write
+				return *item;
+			}
+
+			CardRef PushBack(Cards::Card && card)
 			{
 				assert(card.GetZone() == kCardZoneNewlyCreated);
-				CardRef ref = CardRef(cards_.PushBack(std::move(card)));
-				return ref;
+				return CardRef(cards_.PushBack(std::move(card)));
 			}
 
 			void SetCardZonePos(CardRef ref, int pos)
@@ -33,6 +65,7 @@ namespace state
 			}
 
 		private:
+			Manager const* base_;
 			ContainerType cards_;
 		};
 	}

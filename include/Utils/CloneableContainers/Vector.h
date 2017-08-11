@@ -72,6 +72,11 @@ namespace Utils
 				items_.clear();
 			}
 
+			size_t Size() const { return items_.size(); }
+			void Resize(size_t size) {
+				items_.resize(size);
+			}
+
 			Identifier GetNextPushBackItemIdentifier() const { return Identifier((int)items_.size()); }
 			Identifier GetNextNextPushBackItemIdentifier() const { return Identifier((int)items_.size() + 1); }
 
