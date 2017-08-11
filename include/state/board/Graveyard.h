@@ -14,6 +14,9 @@ namespace state
 		{
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
+		private:
+			using ContainerType = std::vector<CardRef>;
+
 		public:
 			Graveyard() : minions_(), spells_(), others_() {}
 
@@ -26,24 +29,26 @@ namespace state
 			template <CardType RemovingType> void Remove(CardRef ref);
 
 		private:
-			void AddInternal(CardRef ref, std::unordered_set<CardRef>& container)
+			void AddInternal(CardRef ref, ContainerType & container)
 			{
-				auto success = container.insert(ref).second;
-				(void)success;
-				assert(success);
+				container.push_back(ref);
 			}
 
-			void RemoveInternal(CardRef ref, std::unordered_set<CardRef>& container)
+			void RemoveInternal(CardRef ref, ContainerType & container)
 			{
-				auto ret = container.erase(ref);
-				(void)ret;
-				assert(ret == 1);
+				for (auto it = container.begin(); it != container.end(); ) {
+					if (*it == ref) {
+						it = container.erase(it);
+						break; // should only have one
+					}
+					else ++it;
+				}
 			}
 
 		private:
-			std::unordered_set<CardRef> minions_;
-			std::unordered_set<CardRef> spells_;
-			std::unordered_set<CardRef> others_;
+			ContainerType minions_;
+			ContainerType spells_;
+			ContainerType others_;
 		};
 
 		template<CardType AddingType>
