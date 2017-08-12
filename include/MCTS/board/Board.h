@@ -106,10 +106,9 @@ namespace mcts
 		class CopiedBoard {
 		public:
 			CopiedBoard(Board const& board) :
-				state_(),
+				state_(&board.board_),
 				board_(state_, board.side_)
 			{
-				state_ = state::State::ConstructWithBaseState(board.board_);
 			}
 
 			Board & GetBoard() { return board_; }
