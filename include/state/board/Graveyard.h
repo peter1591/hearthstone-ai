@@ -20,6 +20,12 @@ namespace state
 		public:
 			Graveyard() : minions_(), spells_(), others_() {}
 
+			Graveyard(Graveyard const* base) :
+				minions_(base->minions_), // TODO: copy-on-write
+				spells_(base->spells_), // TODO: copy-on-write
+				others_(base->others_) // TODO: copy-on-write
+			{}
+
 			size_t GetTotalMinions() const { return minions_.size(); }
 			size_t GetTotalSpells() const { return spells_.size(); }
 			size_t GetTotalOthers() const { return others_.size(); }

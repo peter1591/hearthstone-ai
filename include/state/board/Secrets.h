@@ -16,6 +16,10 @@ namespace state
 		public:
 			Secrets() : secrets_() {}
 
+			Secrets(Secrets const* base) :
+				secrets_(base->secrets_) // TODO: copy on write
+			{}
+
 			bool Exists(::Cards::CardId card_id) const
 			{
 				return secrets_.find((int)card_id) != secrets_.end();

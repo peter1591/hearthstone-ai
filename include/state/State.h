@@ -25,16 +25,18 @@ namespace state
 			current_player_(), turn_(0), play_order_(1)
 		{}
 
-		static State ConstructWithBaseState(State const& base) {
-			State ret;
-			ret.board_ = base.board_;
-			ret.cards_mgr_ = Cards::Manager::ConstructWithBase(base.cards_mgr_);
-			ret.event_mgr_ = base.event_mgr_;
-			ret.aura_mgr_ = base.aura_mgr_;
-			ret.current_player_ = base.current_player_;
-			ret.turn_ = base.turn_;
-			ret.play_order_ = base.play_order_;
-			return ret;
+		// ConstructWithBaseState
+		State(State const* base) :
+			board_(),
+			cards_mgr_(&base->cards_mgr_), event_mgr_(), aura_mgr_(),
+			current_player_(), turn_(0), play_order_(1)
+		{
+			board_ = base->board_;
+			event_mgr_ = base->event_mgr_;
+			aura_mgr_ = base->aura_mgr_;
+			current_player_ = base->current_player_;
+			turn_ = base->turn_;
+			play_order_ = base->play_order_;
 		}
 
 	public:

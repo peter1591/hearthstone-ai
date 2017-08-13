@@ -22,17 +22,15 @@ namespace state
 				base_(rhs.base_), cards_(rhs.cards_)
 			{}
 
+			// ConstructWithBase
+			Manager(Manager const* base) :
+				base_(base), cards_(base->cards_.Size())
+			{}
+
 			Manager & operator=(Manager const& rhs) {
 				base_ = rhs.base_;
 				cards_ = rhs.cards_;
 				return *this;
-			}
-
-			static Manager ConstructWithBase(Manager const& base) {
-				Manager ret;
-				ret.base_ = &base;
-				ret.cards_.Resize(ret.base_->cards_.Size());
-				return ret;
 			}
 
 		public:

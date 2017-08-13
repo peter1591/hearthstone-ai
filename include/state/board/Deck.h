@@ -20,6 +20,13 @@ namespace state
 		public:
 			Deck() : change_id_(0), size_(0), cards_() {}
 
+			Deck(Deck const* base) :
+				change_id_(base->change_id_),
+				size_(base->size_),
+				cards_(base->cards_) // TODO: use copy
+			{}
+
+
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
 			::Cards::CardId GetLast() const { return cards_[size_ - 1]; }
@@ -45,9 +52,9 @@ namespace state
 			}
 
 			// @note This differs from GetLast() since you cannot remove this random card.
-			// @return -1 if no card left; otherwise, the card id of the chosen random card
+			// @return kInvalidCardId if no card left; otherwise, the card id of the chosen random card
 			::Cards::CardId GetOneRandomCard(IRandomGenerator & random) {
-				if (size_ <= 0) return (::Cards::CardId)-1;
+				if (size_ <= 0) return ::Cards::kInvalidCardId;
 
 				int rand_idx = 0;
 				if (size_ > 1) rand_idx = random.Get(size_);

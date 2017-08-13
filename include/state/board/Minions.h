@@ -20,6 +20,11 @@ namespace state
 				minions_.reserve(max_size_);
 			}
 
+			Minions(Minions const* base) :
+				minions_(base->minions_), // TODO: copy on write
+				change_id_(base->change_id_)
+			{}
+
 			size_t Size() const { return minions_.size(); }
 			CardRef Get(size_t pos) const {
 				assert(pos <= minions_.size());
