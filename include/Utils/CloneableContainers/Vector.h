@@ -86,9 +86,14 @@ namespace Utils
 			Identifier GetEnd() { return Identifier((int)items_.size()); }
 
 			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort
-			void IterateAll(IterateCallback&& callback)
-			{
-				for (ItemType const& item : items_) {
+			void IterateAll(IterateCallback&& callback) {
+				for (ItemType & item : items_) {
+					if (!callback(item)) return;
+				}
+			}
+			template <typename IterateCallback> // bool(ItemType const&), return true to continue; false to abort
+			void IterateAll(IterateCallback&& callback) const{
+				for (ItemType & item : items_) {
 					if (!callback(item)) return;
 				}
 			}
