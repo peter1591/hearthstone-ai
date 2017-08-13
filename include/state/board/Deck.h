@@ -16,14 +16,26 @@ namespace state
 		class Deck
 		{
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
+			
+		private:
+			constexpr static int max_size = 80;
+			using CardsContainer = std::array< ::Cards::CardId, max_size>;
 
 		public:
-			Deck() : change_id_(0), size_(0), cards_() {}
+			Deck() : change_id_(0), size_(0), base_cards_(nullptr), cards_() {}
+
+			Deck(Deck const& rhs) :
+				change_id_(rhs.change_id_),
+				size_(rhs.size_),
+				base_cards_(rhs.base_cards_),
+				cards_(rhs.cards_)
+			{}
 
 			Deck(Deck const* base) :
 				change_id_(base->change_id_),
 				size_(base->size_),
-				cards_(base->cards_) // TODO: use copy
+				base_cards_(&base->cards_),
+				cards_()
 			{}
 
 
@@ -34,6 +46,8 @@ namespace state
 
 			void ShuffleAdd(::Cards::CardId card_id, IRandomGenerator & random)
 			{
+				PrepareForWrite();
+
 				assert(size_ < max_size);
 
 				++change_id_;
@@ -58,29 +72,32 @@ namespace state
 
 				int rand_idx = 0;
 				if (size_ > 1) rand_idx = random.Get(size_);
-				return cards_[rand_idx];
+				return GetCard(rand_idx);
 			}
 
 			std::pair< ::Cards::CardId, ::Cards::CardId> GetTwoRandomCards(IRandomGenerator & random) {
-				if (size_ < 2) return std::make_pair(GetOneRandomCard(random), (::Cards::CardId)-1);
+				if (size_ < 2) return std::make_pair(GetOneRandomCard(random), ::Cards::kInvalidCardId);
 
 				int v1 = random.Get(size_);
 				int v2 = random.Get(size_ - 1);
 				if (v2 >= v1) ++v2;
 				return std::make_pair(
-					cards_[v1],
-					cards_[v2]);
+					GetCard(v1),
+					GetCard(v2));
 			}
 
 			template <typename Functor>
 			void ForEach(Functor const& functor) {
+				auto const& container = GetCards();
 				for (int i = size_ - 1; i >= 0; --i) {
-					if (!functor(cards_[i])) return;
+					if (!functor(container[i])) return;
 				}
 			}
 
 			// @return  True if card found; false if card is not found
 			bool SwapCardIdToLast(::Cards::CardId card_id) {
+				PrepareForWrite();
+
 				for (int i = 0; i < size_; ++i) {
 					if (cards_[i] == card_id) {
 						std::swap(cards_[size_ - 1], cards_[i]);
@@ -91,10 +108,31 @@ namespace state
 			}
 
 		private:
-			constexpr static int max_size = 80;
+			::Cards::CardId GetCard(size_t idx) const {
+				return GetCards()[idx];
+			}
+
+			CardsContainer const& GetCards() const {
+				if (base_cards_) return *base_cards_;
+				else return cards_;
+			}
+
+			void PrepareForWrite() {
+				if (base_cards_) {
+					cards_ = *base_cards_;
+					base_cards_ = nullptr;
+				}
+			}
+
+		private:
 			int change_id_;
 			int size_;
-			std::array< ::Cards::CardId, max_size> cards_;
+
+			// Copy-On-Write:
+			// If base_cards_ is nullptr, use cards_
+			// If base_cards_ is not a nullptr, use base_cards_ for copy-on-write
+			CardsContainer const* base_cards_;
+			CardsContainer cards_;
 		};
 	}
 }
