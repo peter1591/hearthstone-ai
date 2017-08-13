@@ -12,10 +12,11 @@ namespace state
 		public:
 			Board() : first_(), second_() {}
 
-			Board(Board const* base) : 
-				first_(&base->first_),
-				second_(&base->second_)
-			{}
+			void FillWithBase(Board const& base)
+			{
+				first_.FillWithBase(base.first_);
+				second_.FillWithBase(base.second_);
+			}
 
 			Player & Get(PlayerSide side) { return Get(PlayerIdentifier(side)); }
 			Player const& Get(PlayerSide side) const { return Get(PlayerIdentifier(side)); }

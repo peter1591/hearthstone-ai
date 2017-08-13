@@ -16,9 +16,9 @@ namespace state
 		public:
 			Secrets() : secrets_() {}
 
-			Secrets(Secrets const* base) :
-				secrets_(base->secrets_) // TODO: copy on write
-			{}
+			void FillWithBase(Secrets const& base) {
+				secrets_ = base.secrets_; // TODO: copy on write
+			}
 
 			bool Exists(::Cards::CardId card_id) const
 			{

@@ -228,8 +228,10 @@ namespace mcts
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
+						board::CopiedBoard copy_board(board.GetViewSide());
+
 						while (true) {
-							board::CopiedBoard copy_board(board);
+							copy_board = board;
 
 							dfs_it = dfs.begin();
 							auto result = copy_board.GetBoard().ApplyAction(

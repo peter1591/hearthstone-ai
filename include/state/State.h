@@ -26,17 +26,16 @@ namespace state
 		{}
 
 		// ConstructWithBaseState
-		State(State const* base) :
-			board_(),
-			cards_mgr_(&base->cards_mgr_), event_mgr_(), aura_mgr_(),
-			current_player_(), turn_(0), play_order_(1)
+		void FillWithBase(State const& base)
 		{
-			board_ = base->board_;
-			event_mgr_ = base->event_mgr_;
-			aura_mgr_ = base->aura_mgr_;
-			current_player_ = base->current_player_;
-			turn_ = base->turn_;
-			play_order_ = base->play_order_;
+			board_.FillWithBase(base.board_);
+			board_ = base.board_;
+			cards_mgr_.FillWithBase(base.cards_mgr_);
+			event_mgr_ = base.event_mgr_;
+			aura_mgr_ = base.aura_mgr_;
+			current_player_ = base.current_player_;
+			turn_ = base.turn_;
+			play_order_ = base.play_order_;
 		}
 
 	public:

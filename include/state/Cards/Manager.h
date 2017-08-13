@@ -22,10 +22,17 @@ namespace state
 				base_(rhs.base_), cards_(rhs.cards_)
 			{}
 
-			// ConstructWithBase
-			Manager(Manager const* base) :
-				base_(base), cards_(base->cards_.Size())
-			{}
+			void FillWithBase(Manager const& base) {
+				assert(base.base_ == nullptr);
+				base_ = &base;
+				cards_.IterateAll([&](std::optional<Card> & item) {
+					item.reset();
+					return true;
+				});
+				if (base.cards_.Size() > cards_.Size()) {
+					cards_.Resize(base.cards_.Size());
+				}
+			}
 
 			Manager & operator=(Manager const& rhs) {
 				base_ = rhs.base_;
@@ -39,7 +46,7 @@ namespace state
 				if (item.has_value()) return *item;
 
 				assert(base_);
-				return *base_->cards_.Get(id.id);
+				return base_->Get(id);
 			}
 
 			Card & GetMutable(CardRef id) {
@@ -47,7 +54,7 @@ namespace state
 				if (item.has_value()) return *item;
 
 				assert(base_);
-				item = base_->cards_.Get(id.id); // copy-on-write
+				item = base_->Get(id); // copy-on-write
 				return *item;
 			}
 

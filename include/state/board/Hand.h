@@ -18,11 +18,11 @@ namespace state
 			static constexpr size_t max_cards_ = 10;
 			Hand() : cards_(), size_(0), change_id_(0) {}
 
-			Hand(Hand const* base) :
-				cards_(base->cards_), // TODO: Copy on write?
-				size_(base->size_),
-				change_id_(base->change_id_)
-			{}
+			void FillWithBase(Hand const& base) {
+				cards_ = base.cards_; // TODO: copy on write?
+				size_ = base.size_;
+				change_id_ = base.change_id_;
+			}
 
 			size_t Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }

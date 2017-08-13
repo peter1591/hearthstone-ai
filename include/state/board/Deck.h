@@ -31,13 +31,13 @@ namespace state
 				cards_(rhs.cards_)
 			{}
 
-			Deck(Deck const* base) :
-				change_id_(base->change_id_),
-				size_(base->size_),
-				base_cards_(&base->cards_),
-				cards_()
-			{}
+			void FillWithBase(Deck const& base) {
+				assert(base.base_cards_ == nullptr);
 
+				change_id_ = base.change_id_;
+				size_ = base.size_;
+				base_cards_ = &base.cards_;
+			}
 
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }

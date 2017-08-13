@@ -27,22 +27,22 @@ namespace state
 				resource_(), fatigue_damage_(0)
 			{}
 
-			Player(Player const* base) :
-				deck_(&base->deck_),
-				hand_(&base->hand_),
-				minions_(&base->minions_),
-				secrets_(&base->secrets_),
-				graveyard_(&base->graveyard_),
-				played_minions_this_turn_(base->played_minions_this_turn_),
-				played_cards_this_turn_(base->played_cards_this_turn_),
-				hero_ref_(base->hero_ref_),
-				hero_ref_change_id_(base->hero_ref_change_id_),
-				hero_power_ref_(base->hero_power_ref_),
-				weapon_ref_(base->weapon_ref_),
-				resource_(base->resource_),
-				fatigue_damage_(base->fatigue_damage_)
-			{}
-
+			void FillWithBase(Player const& base)
+			{
+				deck_.FillWithBase(base.deck_);
+				hand_.FillWithBase(base.hand_);
+				minions_.FillWithBase(base.minions_);
+				secrets_.FillWithBase(base.secrets_);
+				graveyard_.FillWithBase(base.graveyard_);
+				played_minions_this_turn_ = base.played_minions_this_turn_;
+				played_cards_this_turn_ = base.played_cards_this_turn_;
+				hero_ref_ = base.hero_ref_;
+				hero_ref_change_id_ = base.hero_ref_change_id_;
+				hero_power_ref_ = base.hero_power_ref_;
+				weapon_ref_ = base.weapon_ref_;
+				resource_ = base.resource_;
+				fatigue_damage_ = base.fatigue_damage_;
+			}
 
 			int GetFatigueDamage() const { return fatigue_damage_; }
 			void SetFatigueDamage(int v) { fatigue_damage_ = v; }

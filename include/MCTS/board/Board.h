@@ -105,10 +105,11 @@ namespace mcts
 
 		class CopiedBoard {
 		public:
-			CopiedBoard(Board const& board) :
-				state_(&board.board_),
-				board_(state_, board.side_)
-			{
+			CopiedBoard(state::PlayerSide side) : state_(), board_(state_, side) {}
+
+			CopiedBoard & operator=(Board const& board) {
+				state_.FillWithBase(board.board_);
+				return *this;
 			}
 
 			Board & GetBoard() { return board_; }
