@@ -140,7 +140,7 @@ namespace FlowControl
 		}
 
 		template <typename Functor>
-		static void ApplyWithPlayerStateView(state::State const& state, Functor && functor) {
+		static void ApplyWithCurrentPlayerStateView(state::State const& state, Functor && functor) {
 			state::PlayerSide side = state.GetCurrentPlayerId().GetSide();
 			if (side == state::kPlayerFirst) {
 				functor(PlayerStateView<state::kPlayerFirst>(state));
