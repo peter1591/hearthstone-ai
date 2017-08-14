@@ -13,7 +13,23 @@ namespace state
 			class HandlersContainer
 			{
 			public:
-				HandlersContainer() : handlers_() {}
+				HandlersContainer() : base_(nullptr), handlers_() {}
+
+				HandlersContainer(HandlersContainer const& rhs) :
+					base_(rhs.base_),
+					handlers_(rhs.handlers_)
+				{}
+
+				HandlersContainer & operator=(HandlersContainer const& rhs) {
+					base_ = rhs.base_;
+					handlers_ = rhs.handlers_;
+					return *this;
+				}
+
+				void FillWithBase(HandlersContainer<TriggerType> const& base) {
+					assert(base.base_ == nullptr);
+					base_ = &base.handlers_;
+				}
 
 				// Cloneable by copy semantics
 				//    Since the STL container and the underlying HandlerType are with this property
@@ -23,7 +39,7 @@ namespace state
 				void PushBack(T&& handler)
 				{
 					static_assert(std::is_convertible_v<std::decay_t<T>, typename TriggerType::type>, "Wrong type");
-					handlers_.push_back(std::forward<T>(handler));
+					GetContainerForWrite().push_back(std::forward<T>(handler));
 				}
 
 				// Note: Do not provide remove interface to outside
@@ -41,25 +57,42 @@ namespace state
 					//    If you play a spell, Troggzor the Earthinator summons a Burly Rockjaw Trogg.
 					//    The Burly Rockjaw Trogg does not trigger from the same spell because the consequences of playing the spell have already begun resolving.
 
-					if (handlers_.empty()) return;
+					if (GetContainerForRead().empty()) return;
 
-					auto it = handlers_.begin();
-					size_t rest = handlers_.size();
+					size_t origin_size = GetContainerForRead().size();
+					for (size_t idx = 0; idx < GetContainerForRead().size();) {
+						if (idx >= origin_size) break; // do not trigger newly-added handlers
 
-					while (rest > 0)
-					{
-						auto ret = (*it)(std::forward<Args>(args)...);
+						auto ret = GetContainerForRead()[idx](std::forward<Args>(args)...);
 						static_assert(std::is_same_v<decltype(ret), bool>, "Should return a boolean flag indicating if we should remove the item.");
 
-						if (!ret) it = handlers_.erase(it);
-						else ++it;
-
-						--rest;
+						if (!ret) {
+							GetContainerForWrite().erase(GetContainerForWrite().begin() + idx);
+						}
+						else {
+							++idx;
+						}
 					}
 				}
 
 			private:
 				typedef std::vector<typename TriggerType::type> container_type;
+
+				container_type const& GetContainerForRead() {
+					if (base_) return *base_;
+					return handlers_;
+				}
+
+				container_type & GetContainerForWrite() {
+					if (base_) {
+						handlers_ = *base_; // copy-on-write
+						base_ = nullptr;
+					}
+					return handlers_;
+				}
+
+			private:
+				container_type const* base_;
 				container_type handlers_;
 			};
 		}
