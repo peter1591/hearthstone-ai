@@ -41,7 +41,7 @@ namespace state
 
 			int Size() const { return size_; }
 			bool Empty() const { return size_ == 0; }
-			::Cards::CardId GetLast() const { return cards_[size_ - 1]; }
+			::Cards::CardId GetLast() const { return GetCard(size_ - 1); }
 			int GetChangeId() const { return change_id_; }
 
 			void ShuffleAdd(::Cards::CardId card_id, IRandomGenerator & random)

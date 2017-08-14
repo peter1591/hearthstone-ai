@@ -25,11 +25,9 @@ namespace state
 			current_player_(), turn_(0), play_order_(1)
 		{}
 
-		// ConstructWithBaseState
 		void FillWithBase(State const& base)
 		{
 			board_.FillWithBase(base.board_);
-			board_ = base.board_;
 			cards_mgr_.FillWithBase(base.cards_mgr_);
 			event_mgr_ = base.event_mgr_;
 			aura_mgr_ = base.aura_mgr_;
