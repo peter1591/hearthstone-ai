@@ -50,6 +50,17 @@ namespace mcts
 				}
 			}
 
+			template <class Functor>
+			auto ApplyWithPlayerStateView(Functor && functor) const {
+				if (side_ == state::kPlayerFirst) {
+					return functor(FlowControl::PlayerStateView<state::kPlayerFirst>(board_));
+				}
+				else {
+					assert(side_ == state::kPlayerSecond);
+					return functor(FlowControl::PlayerStateView<state::kPlayerSecond>(board_));
+				}
+			}
+
 		public: // bridge to action analyzer
 			int GetActionsCount(BoardActionAnalyzer & action_analyzer) const
 			{

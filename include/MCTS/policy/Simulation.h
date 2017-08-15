@@ -60,31 +60,37 @@ namespace mcts
 			{
 			public:
 				double GetStateValue(board::Board const& board) {
-					board::BoardView view = board.CreateView(); // TODO: can we save this creation, just peak the board?
+					return board.ApplyWithPlayerStateView([&](auto const& view) {
+						return GetStateValueForSide(board.GetViewSide(), view);
+					});
+				}
 
+				template <state::PlayerSide Side>
+				double GetStateValueForSide(state::PlayerSide self_side, FlowControl::PlayerStateView<Side> view) {
+					state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
+					
 					double v = 0.0;
 
-					for (auto const& minion : view.GetSelfMinions()) {
-						v += 10.0 * GetMinionValue(minion.attack, minion.hp);
-					}
+					view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
+						v += 10.0 * GetMinionValue(card);
+					});
+					view.ForEachMinion(opponent_side, [&](state::Cards::Card const& card, bool attackable) {
+						v += -10.0 * GetMinionValue(card);
+					});
 
-					for (auto const& minion : view.GetOpponentMinions()) {
-						v += -10.0 * GetMinionValue(minion.attack, minion.hp);
-					}
-
-					v += 3.0 * GetHeroValue(view.GetSelfHero().hp, view.GetSelfHero().armor);
-					v += -3.0 * GetHeroValue(view.GetOpponentHero().hp, view.GetOpponentHero().armor);
+					v += 3.0 * GetHeroValue(view.GetSelfHero());
+					v += -3.0 * GetHeroValue(view.GetOpponentHero());
 
 					return v;
 				}
 
 			private:
-				double GetMinionValue(int attack, int hp) {
-					return 1.0 * attack + 1.5 * hp;
+				double GetMinionValue(state::Cards::Card const& card) {
+					return 1.0 * card.GetAttack() + 1.5 * card.GetHP();
 				}
 
-				double GetHeroValue(int hp, int armor) {
-					double v = hp + armor;
+				double GetHeroValue(state::Cards::Card const& card) {
+					double v = card.GetHP() + card.GetArmor();
 					if (v >= 15) v = 15;
 					return v;
 				}
