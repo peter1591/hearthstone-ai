@@ -25,13 +25,12 @@ namespace state
 			void FillWithBase(Manager const& base) {
 				assert(base.base_ == nullptr);
 				base_ = &base;
-				cards_.IterateAll([&](std::optional<Card> & item) {
-					item.reset();
-					return true;
-				});
-				if (base.cards_.Size() > cards_.Size()) {
-					cards_.Resize(base.cards_.Size());
-				}
+
+				// TODO: it becomes much slow if we invalidate all existing options,
+				// rather than doing Reset(). Find out the real reason.
+				cards_.Reset();
+
+				cards_.Resize(base.cards_.Size());
 			}
 
 			Manager & operator=(Manager const& rhs) {
