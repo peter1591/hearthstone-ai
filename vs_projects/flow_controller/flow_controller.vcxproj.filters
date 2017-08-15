@@ -542,9 +542,6 @@
     <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h">
       <Filter>Header Files\Cards\Ungoro</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\PlayerStateView.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
