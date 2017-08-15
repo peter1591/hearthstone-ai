@@ -13,11 +13,11 @@ namespace Utils
 {
 	namespace CloneableContainers
 	{
-		template <typename ItemType> class Vector;
+		template <typename ItemType, class Container> class Vector;
 
 		class VectorIdentifier
 		{
-			template <typename ItemType> friend class Vector;
+			template <class ItemType, class Container> friend class Vector;
 
 		public:
 			constexpr VectorIdentifier() : idx(-1) {}
@@ -40,7 +40,8 @@ namespace Utils
 			bool IsValid() const { return idx >= 0; }
 		};
 
-		template <class ItemType>
+		template <class ItemType,
+			class Container = std::vector<ItemType>>
 		class Vector
 		{
 		public:
@@ -99,7 +100,7 @@ namespace Utils
 			}
 
 		private:
-			std::vector<ItemType> items_;
+			Container items_;
 		};
 	}
 }
