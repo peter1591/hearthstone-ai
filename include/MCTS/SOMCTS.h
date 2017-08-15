@@ -21,7 +21,7 @@ namespace mcts
 	public:
 		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic, std::mt19937 & rand) :
 			side_(side), root_(root), statistic_(statistic),
-			builder_(*this, statistic_, rand),
+			builder_(side, *this, statistic_, rand),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
 

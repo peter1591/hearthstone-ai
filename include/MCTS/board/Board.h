@@ -107,9 +107,8 @@ namespace mcts
 		public:
 			CopiedBoard(state::PlayerSide side) : state_(), board_(state_, side) {}
 
-			CopiedBoard & operator=(Board const& board) {
+			void FillWithBase(Board const& board) {
 				state_.FillWithBase(board.board_);
-				return *this;
 			}
 
 			Board & GetBoard() { return board_; }

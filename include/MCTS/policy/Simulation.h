@@ -93,7 +93,11 @@ namespace mcts
 			class HeuristicPolicy
 			{
 			public:
-				HeuristicPolicy(std::mt19937 & rand) : rand_(rand), decision_(), state_value_func_()
+				HeuristicPolicy(state::PlayerSide side, std::mt19937 & rand) :
+					rand_(rand),
+					decision_(),
+					state_value_func_(),
+					copy_board_(side)
 				{
 				}
 
@@ -228,13 +232,13 @@ namespace mcts
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
-						board::CopiedBoard copy_board(board.GetViewSide());
+						assert(board.GetViewSide() == copy_board_.GetBoard().GetViewSide());
 
 						while (true) {
-							copy_board = board;
+							copy_board_.FillWithBase(board);
 
 							dfs_it = dfs.begin();
-							auto result = copy_board.GetBoard().ApplyAction(
+							auto result = copy_board_.GetBoard().ApplyAction(
 								(int)idx,
 								action_analyzer,
 								cb_random,
@@ -242,7 +246,7 @@ namespace mcts
 
 							if (result != Result::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();
-								int self_win = copy_board.GetBoard().IsSelfWin(result);
+								int self_win = copy_board_.GetBoard().IsSelfWin(result);
 								if (self_win == 1) {
 									value = std::numeric_limits<double>::infinity();
 								}
@@ -250,7 +254,7 @@ namespace mcts
 									value = -std::numeric_limits<double>::infinity();
 								}
 								else {
-									state_value_func_.GetStateValue(copy_board.GetBoard());
+									state_value_func_.GetStateValue(copy_board_.GetBoard());
 								}
 
 								if (decision_.empty() || value > best_value) {
@@ -302,6 +306,7 @@ namespace mcts
 
 				std::vector<int> decision_;
 				StateValueFunction state_value_func_;
+				board::CopiedBoard copy_board_;
 			};
 		}
 	}
