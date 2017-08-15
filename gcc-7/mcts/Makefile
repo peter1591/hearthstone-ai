@@ -25,11 +25,17 @@ LDFLAGS+=-flto -fuse-linker-plugin
 
 # profiling
 ifeq ($(PROFILING), 1)
-CFLAGS+=-fprofile-generate
-LDFLAGS+=-fprofile-generate
+	CFLAGS+=-fprofile-generate
+	LDFLAGS+=-fprofile-generate
 else
-#CFLAGS += -fprofile-use
-#LDFLAGS+= -fprofile-use
+	ifeq ($(PROFILING), 2)
+		CFLAGS += -fprofile-arcs -ftest-coverage
+		LDFLAGS+= -lgcov
+		# Use gcov -p xxx.o to generate results
+	else
+		#CFLAGS += -fprofile-use
+		#LDFLAGS+= -fprofile-use
+	endif
 endif
 
 THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
