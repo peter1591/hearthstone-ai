@@ -261,11 +261,10 @@ private:
 
 int main(void)
 {
-	while (true) {
-		srand(0);
+  srand(0);
 
-		Handler handler;
-		handler.Start();
-	}
+  Handler handler;
+  handler.Start();
+
 	return 0;
 }
