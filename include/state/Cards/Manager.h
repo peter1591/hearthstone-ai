@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "Utils/CloneableContainers/Vector.h"
+#include "Utils/NeverShrinkVector.h"
 #include "state/Cards/Card.h"
 #include "state/Types.h"
 
@@ -14,7 +15,10 @@ namespace state
 		class Manager
 		{
 		public:
-			typedef Utils::CloneableContainers::Vector<std::optional<Card>> ContainerType;
+			using ItemType = std::optional<Card>;
+
+			// A customized vector is used to ensure the underlying buffer only grows, never shrinks
+			typedef Utils::CloneableContainers::Vector<ItemType, Utils::NeverShrinkVector<ItemType>> ContainerType;
 
 			Manager() : base_(nullptr), cards_() {}
 
@@ -25,11 +29,6 @@ namespace state
 			void FillWithBase(Manager const& base) {
 				assert(base.base_ == nullptr);
 				base_ = &base;
-
-				// TODO: it becomes much slow if we invalidate all existing options,
-				// rather than doing Reset(). Find out the real reason.
-				cards_.Reset();
-
 				cards_.Resize(base.cards_.Size());
 			}
 
