@@ -15,16 +15,72 @@ namespace state
 			template <CardType TargetCardType, CardZone TargetCardZone> friend struct state::detail::PlayerDataStructureMaintainer;
 
 		private:
-			using ContainerType = std::vector<CardRef>;
+			class ContainerType
+			{
+			public:
+				ContainerType() : base_(nullptr), items_() {}
+				ContainerType(ContainerType const& rhs) : base_(rhs.base_), items_(rhs.items_) {}
+				ContainerType & operator=(ContainerType const& rhs) {
+					base_ = rhs.base_;
+					items_ = rhs.items_;
+					return *this;
+				}
+
+				void FillWithBase(ContainerType const& base) {
+					assert(base.base_ == nullptr);
+					base_ = &base.items_;
+				}
+
+				template <class... Args>
+				auto push_back(Args&&... args) {
+					GetContainerForWrite().push_back(std::forward<Args>(args)...);
+				}
+
+				auto begin() {
+					return GetContainerForWrite().begin();
+				}
+
+				auto end() {
+					return GetContainerForWrite().end();
+				}
+
+				template <class Arg>
+				auto erase(Arg&& arg) {
+					return GetContainerForWrite().erase(std::forward<Arg>(arg));
+				}
+
+				auto size() const {
+					return GetContainerForRead().size();
+				}
+
+			private:
+				using InternalContainerType = std::vector<CardRef>;
+
+				InternalContainerType const& GetContainerForRead() const {
+					if (base_) return *base_;
+					else return items_;
+				}
+
+				InternalContainerType & GetContainerForWrite() {
+					if (base_) {
+						items_ = *base_; // copy on write
+						base_ = nullptr;
+					}
+					return items_;
+				}
+
+			private:
+				InternalContainerType const* base_;
+				InternalContainerType items_;
+			};
 
 		public:
 			Graveyard() : minions_(), spells_(), others_() {}
 
 			void FillWithBase(Graveyard const& base) {
-				// TODO: copy on write?
-				minions_ = base.minions_;
-				spells_ = base.spells_;
-				others_ = base.others_;
+				minions_.FillWithBase(base.minions_);
+				spells_.FillWithBase(base.spells_);
+				others_.FillWithBase(base.others_);
 			}
 
 			size_t GetTotalMinions() const { return minions_.size(); }
