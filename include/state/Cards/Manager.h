@@ -29,6 +29,8 @@ namespace state
 			void FillWithBase(Manager const& base) {
 				assert(base.base_ == nullptr);
 				base_ = &base;
+
+				cards_.Reset();
 				cards_.Resize(base.cards_.Size());
 			}
 

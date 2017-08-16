@@ -31,7 +31,7 @@ namespace Utils
 
 		void resize(size_t size) {
 			size_t fill_to = std::min(size, container_.size());
-			for (size_t idx = 0; idx < fill_to; ++idx) {
+			for (size_t idx = size_; idx < fill_to; ++idx) {
 				container_[idx] = ItemType();
 			}
 
