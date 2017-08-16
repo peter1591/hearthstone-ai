@@ -161,7 +161,7 @@ namespace mcts
 						int Get(int exclusive_max) final { return rand_.GetRandom(exclusive_max); }
 
 					private:
-						RandomByRand rand_;
+						FastRandom rand_;
 					};
 
 					struct DFSItem {
@@ -208,7 +208,7 @@ namespace mcts
 					private:
 						std::vector<DFSItem> & dfs_;
 						std::vector<DFSItem>::iterator & dfs_it_;
-						RandomByRand rand_;
+						FastRandom rand_;
 					};
 
 					std::vector<DFSItem> dfs;

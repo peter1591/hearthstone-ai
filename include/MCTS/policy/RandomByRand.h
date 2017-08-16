@@ -21,17 +21,30 @@ namespace mcts
 			std::mt19937 & inst_;
 		};
 
-		class RandomByRand
+		class RandomByXorShift
 		{
 		public:
-			RandomByRand(int seed) : state_((unsigned int)seed) {}
+			RandomByXorShift(uint32_t seed) : state_(seed) {
+				// state should be filled with an non-zero
+				if (state_ == 0) state_ = 1; // TODO: a better workaround?
+			}
 
 			int GetRandom(int exclusive_max) {
-				return rand_r(&state_) % exclusive_max;
+				uint32_t x = state_;
+				x ^= x << 13;
+				x ^= x >> 17;
+				x ^= x << 5;
+				state_ = x;
+
+				// The random number is [1, 2^64-1]. Minus 1 to make it zero-based.
+				--x;
+				return (x - 1) % exclusive_max;
 			}
 
 		private:
-			unsigned int state_;
+			uint32_t state_;
 		};
+
+		using FastRandom = RandomByXorShift;
 	}
 }
