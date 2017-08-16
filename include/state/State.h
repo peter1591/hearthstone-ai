@@ -29,7 +29,7 @@ namespace state
 		{
 			board_.FillWithBase(base.board_);
 			cards_mgr_.FillWithBase(base.cards_mgr_);
-			event_mgr.FillWithBase(base.event_mgr_);
+			event_mgr_.FillWithBase(base.event_mgr_);
 			aura_mgr_ = base.aura_mgr_;
 			current_player_ = base.current_player_;
 			turn_ = base.turn_;
