@@ -8,6 +8,7 @@ namespace Utils
 	class NeverShrinkVector {
 	public:
 		NeverShrinkVector() : size_(), container_() {}
+		NeverShrinkVector(size_t size) : size_(size), container_(size) {}
 
 		auto begin() {
 			return container_.begin();

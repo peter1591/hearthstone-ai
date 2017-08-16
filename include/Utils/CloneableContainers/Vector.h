@@ -3,6 +3,7 @@
 #include <utility>
 #include <vector>
 #include <type_traits>
+#include "Utils/NeverShrinkVector.h"
 
 // This is a cloneable container, since the identifier is defined to be the index
 // On the contrary, if we use raw pointer as the identifier, those identifiers should be
@@ -40,8 +41,10 @@ namespace Utils
 			bool IsValid() const { return idx >= 0; }
 		};
 
+		// The items in the container is not going to be removed often. So use
+		// a vector container which never shrinks by default.
 		template <class ItemType,
-			class Container = std::vector<ItemType>>
+			class Container = NeverShrinkVector<ItemType>>
 		class Vector
 		{
 		public:
