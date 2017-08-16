@@ -4,6 +4,54 @@
 
 namespace Utils
 {
+	// Differs with std::optional. The ctor/dtor will not be invoked
+	// during an set/unset operation.
+	template <class ItemType>
+	class PersistentOptionalItem {
+	public:
+		PersistentOptionalItem() : exist_(false), item_() {}
+
+		PersistentOptionalItem(ItemType const& rhs) :
+			exist_(true), item_(rhs)
+		{}
+
+		PersistentOptionalItem(ItemType && rhs) :
+			exist_(true), item_(std::move(rhs))
+		{}
+
+		template <class ItemType_>
+		void Set(ItemType_&& item) {
+			exist_ = true;
+			item_ = item;
+		}
+
+		void UnSet() {
+			exist_ = false;
+		}
+
+		bool HasSet() const { return exist_; }
+
+		ItemType & Get() {
+			assert(exist_);
+			return item_;
+		}
+
+		ItemType const& Get() const {
+			assert(exist_);
+			return item_;
+		}
+
+	private:
+		bool exist_;
+		ItemType item_;
+	};
+
+	template <class TestType>
+	struct IsPersistentOptionalItem : std::false_type {};
+
+	template <class ItemType>
+	struct IsPersistentOptionalItem<PersistentOptionalItem<ItemType>> : std::true_type {};
+
 	template <class ItemType>
 	class NeverShrinkVector {
 	public:
@@ -32,7 +80,12 @@ namespace Utils
 		void resize(size_t size) {
 			size_t fill_to = std::min(size, container_.size());
 			for (size_t idx = size_; idx < fill_to; ++idx) {
-				container_[idx] = ItemType();
+				if constexpr (IsPersistentOptionalItem<ItemType>::value) {
+					container_[idx].UnSet();
+				}
+				else {
+					container_[idx] = ItemType();
+				}
 			}
 
 			if (size > fill_to) {
@@ -44,7 +97,12 @@ namespace Utils
 		template <class Arg>
 		void push_back(Arg&& arg) {
 			if (size_ < container_.size()) {
-				container_[size_] = arg;
+				if constexpr (IsPersistentOptionalItem<ItemType>::value) {
+					container_[size_].Set(std::forward<Arg>(arg));
+				}
+				else {
+					container_[size_] = arg;
+				}
 				++size_;
 			}
 			else {
