@@ -160,7 +160,7 @@ namespace mcts
 						int Get(int exclusive_max) final { return rand_() % exclusive_max; }
 
 					private:
-						std::mt19937 rand_;
+						std::mt19937 & rand_;
 					};
 
 					struct DFSItem {
