@@ -23,27 +23,21 @@ namespace state
 
 		private:
 			struct CopyOnWriteHelper {
-				template <std::size_t I = 0, typename Functor, typename... Tp>
-				static typename std::enable_if<I == sizeof...(Tp), void>::type
-					for_index(size_t, std::tuple<Tp...> &, std::tuple<Tp...> const&, Functor)
-				{}
-
-				template <std::size_t I = 0, typename Functor, typename... Tp>
-				static typename std::enable_if<I < sizeof...(Tp), void>::type
-					for_index(size_t index, std::tuple<Tp...> & t1, std::tuple<Tp...> const& t2, Functor f)
-				{
-					if (index == 0) f(std::get<I>(t1), std::get<I>(t2));
-					for_index<I + 1, Functor, Tp...>(index-1, t1, t2, f);
-				}
-
+				template <int N>
+				struct ForEachUnroll {
+					template <class Tuple>
+					static void Do(Tuple & tuple, Tuple const& base) {
+						if constexpr (N >= 0) {
+							std::get<N>(tuple).FillWithBase(std::get<N>(base));
+							ForEachUnroll<N - 1>::Do(tuple, base);
+						}
+					}
+				};
+				
 				template <typename Tuple>
 				static void CopyOnWrite(Tuple & tuple, Tuple const& base) {
-					constexpr size_t tuple_size = std::tuple_size<Tuple>::value;
-					for (size_t idx = 0; idx < tuple_size; ++idx) {
-						for_index(idx, tuple, base, [](auto & item, auto const& base) {
-							item.FillWithBase(base);
-						});
-					}
+					constexpr int tuple_size = std::tuple_size<Tuple>::value;
+					ForEachUnroll<tuple_size-1>::Do(tuple, base);
 				}
 			};
 
