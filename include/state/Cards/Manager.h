@@ -15,7 +15,7 @@ namespace state
 		class Manager
 		{
 		public:
-			using ItemType = std::optional<Card>;
+			using ItemType = Utils::PersistentOptionalItem<Card>;
 
 			// A customized vector is used to ensure the underlying buffer only grows, never shrinks
 			typedef Utils::CloneableContainers::Vector<ItemType, Utils::NeverShrinkVector<ItemType>> ContainerType;
@@ -43,7 +43,7 @@ namespace state
 		public:
 			Card const& Get(CardRef id) const {
 				auto const& item = cards_.Get(id.id);
-				if (item.has_value()) return *item;
+				if (item.HasSet()) return item.Get();
 
 				assert(base_);
 				return base_->Get(id);
@@ -51,11 +51,11 @@ namespace state
 
 			Card & GetMutable(CardRef id) {
 				auto & item = cards_.Get(id.id);
-				if (item.has_value()) return *item;
+				if (item.HasSet()) return item.Get();
 
 				assert(base_);
-				item = base_->Get(id); // copy-on-write
-				return *item;
+				item.Set(base_->Get(id)); // copy-on-write
+				return item.Get();
 			}
 
 			CardRef PushBack(Cards::Card && card)

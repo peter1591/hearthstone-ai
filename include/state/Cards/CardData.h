@@ -19,7 +19,7 @@ namespace state
 		{
 		public:
 			CardData() :
-				card_id((::Cards::CardId)-1),
+				card_id(::Cards::kInvalidCardId),
 				card_type(kCardTypeInvalid), card_race(kCardRaceInvalid), card_rarity(kCardRarityInvalid),
 				is_secret_card(false), overload(0),
 				zone(kCardZoneInvalid), zone_position(-1),

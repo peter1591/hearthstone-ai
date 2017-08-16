@@ -83,6 +83,7 @@ namespace state
 			};
 
 		public:
+			Card() : data_() {}
 			explicit Card(const CardData & data) : data_(data) {}
 			explicit Card(CardData&& data) : data_(std::move(data)) {}
 
