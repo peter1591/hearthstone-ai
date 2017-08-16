@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdlib.h>
 #include <cstdlib>
 #include <random>
 
@@ -18,6 +19,19 @@ namespace mcts
 
 		private:
 			std::mt19937 & inst_;
+		};
+
+		class RandomByRand
+		{
+		public:
+			RandomByRand(int seed) : state_((unsigned int)seed) {}
+
+			int GetRandom(int exclusive_max) {
+				return rand_r(&state_) % exclusive_max;
+			}
+
+		private:
+			unsigned int state_;
 		};
 	}
 }

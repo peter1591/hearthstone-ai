@@ -2,6 +2,7 @@
 
 #include <random>
 #include "MCTS/board/Board.h"
+#include "MCTS/policy/RandomByRand.h"
 
 namespace mcts
 {
@@ -156,11 +157,11 @@ namespace mcts
 				{
 					class RandomPolicy : public mcts::board::IRandomGenerator {
 					public:
-						RandomPolicy(std::mt19937 & rand) : rand_(rand) {}
-						int Get(int exclusive_max) final { return rand_() % exclusive_max; }
+						RandomPolicy(int seed) : rand_(seed) {}
+						int Get(int exclusive_max) final { return rand_.GetRandom(exclusive_max); }
 
 					private:
-						std::mt19937 & rand_;
+						RandomByRand rand_;
 					};
 
 					struct DFSItem {
@@ -174,8 +175,8 @@ namespace mcts
 					public:
 						UserChoicePolicy(std::vector<DFSItem> & dfs,
 							std::vector<DFSItem>::iterator & dfs_it,
-							std::mt19937 & rand) :
-							dfs_(dfs), dfs_it_(dfs_it), rand_(rand)
+							int seed) :
+							dfs_(dfs), dfs_it_(dfs_it), rand_(seed)
 						{}
 
 						int GetNumber(ActionType::Types action_type, board::ActionChoices const& action_choices) {
@@ -186,7 +187,7 @@ namespace mcts
 							
 							if (action_type == ActionType::kChooseMinionPutLocation) {
 								assert(total >= 1);
-								int idx = rand_() % total;
+								int idx = rand_.GetRandom(total);
 								return action_choices.Get(idx);
 							}
 
@@ -207,7 +208,7 @@ namespace mcts
 					private:
 						std::vector<DFSItem> & dfs_;
 						std::vector<DFSItem>::iterator & dfs_it_;
-						std::mt19937 & rand_;
+						RandomByRand rand_;
 					};
 
 					std::vector<DFSItem> dfs;
@@ -230,11 +231,8 @@ namespace mcts
 					// Need to fix a random sequence for a particular run
 					// Since, some callbacks might depend on a random
 					// For example, choose one card from randomly-chosen three cards
-					std::mt19937 rand1(rand_());
-					RandomPolicy cb_random(rand1);
-
-					std::mt19937 rand2(rand_());
-					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand2);
+					RandomPolicy cb_random(rand_());
+					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
