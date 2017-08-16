@@ -20,8 +20,11 @@ CFLAGS+=-O3 -march=native
 CFLAGS+=-DNDEBUG
 LDFLAGS+=-O3
 
+ifneq ($(PROFILING), 2)
+# Preserve the symbols for PROFILING=2
 CFLAGS+=-flto -fuse-linker-plugin
 LDFLAGS+=-flto -fuse-linker-plugin
+endif
 
 # profiling
 ifeq ($(PROFILING), 1)
@@ -29,12 +32,10 @@ ifeq ($(PROFILING), 1)
 	LDFLAGS+=-fprofile-generate
 else
 	ifeq ($(PROFILING), 2)
-		CFLAGS += -fprofile-arcs -ftest-coverage
-		LDFLAGS+= -lgcov
-		# Use gcov -p xxx.o to generate results
+		# Use gperftools
 	else
-		#CFLAGS += -fprofile-use
-		#LDFLAGS+= -fprofile-use
+		CFLAGS += -fprofile-use
+		LDFLAGS+= -fprofile-use
 	endif
 endif
 
@@ -72,3 +73,11 @@ $(EXE): $(THIRD_PARTY_OBJS) $(OBJS)
 
 clean:
 	rm -f ${CARDS_JSON} ${THIRD_PARTY_OBJS} $(OBJS) $(EXE)
+
+cpu:
+	rm -f ./prof.result
+	LD_PRELOAD=/usr/lib/libtcmalloc_and_profiler.so.4 CPUPROFILE=./prof.result ./$(EXE)
+	google-pprof ./$(EXE) ./prof.result
+
+tcmalloc:
+	LD_PRELOAD=/usr/lib/libtcmalloc.so.4 ./$(EXE)
