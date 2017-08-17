@@ -19,10 +19,9 @@ namespace Utils
 			exist_(true), item_(std::move(rhs))
 		{}
 
-		template <class ItemType_>
-		void Set(ItemType_&& item) {
+		void Set(ItemType const& item) {
 			exist_ = true;
-			item_ = item;
+			item_.FillWithBase(item);
 		}
 
 		void UnSet() {

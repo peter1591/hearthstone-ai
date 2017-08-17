@@ -30,6 +30,39 @@ namespace state
 				added_to_play_zone(), added_to_hand_zone(),
 				enchantment_handler(), onplay_handler(), deathrattle_handler()
 			{
+				static_assert(kFieldChangeId == 2);
+			}
+
+			void FillWithBase(CardData const& base) {
+				static_assert(kFieldChangeId == 2);
+
+				card_id = base.card_id;
+				card_type = base.card_type;
+				card_race = base.card_race;
+				card_rarity = base.card_rarity;
+				is_secret_card = base.is_secret_card;
+				overload = base.overload;
+				zone = base.zone;
+				zone_position = base.zone_position;
+				play_order = base.play_order;
+				damaged = base.damaged;
+				just_played = base.just_played;
+				num_attacks_this_turn = base.num_attacks_this_turn;
+				enchanted_states = base.enchanted_states;
+				pending_destroy = base.pending_destroy;;
+				used_this_turn = base.used_this_turn;
+				usable = base.usable;
+				armor = base.armor;
+				taunt = base.taunt;
+				shielded = base.shielded;
+				cant_attack = base.cant_attack;
+				freezed = base.freezed;
+				silenced = base.silenced;
+				added_to_play_zone = base.added_to_play_zone;
+				added_to_hand_zone = base.added_to_hand_zone;
+				enchantment_handler = base.enchantment_handler; // TODO: CoW
+				onplay_handler = base.onplay_handler; // TODO: cow
+				deathrattle_handler = base.deathrattle_handler; // TODO: cow
 			}
 
 			static constexpr int kFieldChangeId = 2;
