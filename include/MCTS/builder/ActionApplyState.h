@@ -31,14 +31,6 @@ namespace mcts
 
 			board::Board const& GetBoard() const { return *board_; }
 
-			void SetBoardActionAnalyzer(board::BoardActionAnalyzer & analyzer) {
-				action_analyzer_ = &analyzer;
-			}
-
-			board::BoardActionAnalyzer * GetBoardActionAnalyzer() const {
-				return action_analyzer_;
-			}
-
 			Result ApplyAction(int action, board::BoardActionAnalyzer & action_analyzer)
 			{
 				return board_->ApplyAction(action, action_analyzer, random_generator_, action_parameter_getter_);

@@ -21,7 +21,7 @@ namespace mcts
 			std::lock_guard<Utils::SharedSpinLock> write_lock(mutex_);
 			if (op_map_size_ > 0) return (int)op_map_size_;
 
-			assert(playable_cards_.empty());
+			playable_cards_.clear();
 			board.ForEachPlayableCard([&](size_t idx) {
 				playable_cards_.push_back(idx);
 				return true;
@@ -31,7 +31,7 @@ namespace mcts
 				++op_map_size_;
 			}
 
-			assert(attackers_.empty());
+			attackers_.clear();
 			board.ForEachAttacker([&](int idx) { 
 				attackers_.push_back(idx);
 				return true;

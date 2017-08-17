@@ -82,17 +82,9 @@ namespace mcts
 			apply_state_.Start(board);
 			assert(apply_state_.IsValid());
 
-			// TODO [PROFILING]:
-			// We save the board every time here. This is just for the case an invalid action is applied
-			// Ideally, invalid actions should be rarely happened.
-			// So if copy a board is comparatively expensive, we need to decide if this is benefitial.
-			// Alternatively, we can just restart the episode, and hope this will not happen frequently
-			// Note: If this is completely disabled, we can optimize many things out to replay the actions
-			// apply_state_.SaveBoard();
+			simulation_stage_.GetActionAnalyzer().Reset();
 
-			board::BoardActionAnalyzer action_analyzer;
-
-			return ApplyAction(action_analyzer, simulation_stage_);
+			return ApplyAction(simulation_stage_.GetActionAnalyzer(), simulation_stage_);
 		}
 
 		template <typename StageHandler>
@@ -103,8 +95,6 @@ namespace mcts
 			constexpr bool is_simulation = std::is_same_v<
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
-
-			apply_state_.SetBoardActionAnalyzer(action_analyzer);
 
 			int choices = apply_state_.GetBoard().GetActionsCount(action_analyzer);
 			assert(choices > 0); // at least end-turn should be valid
@@ -153,7 +143,6 @@ namespace mcts
 		{
 			int choice = simulation_stage_.ChooseAction(
 				apply_state_.GetBoard(),
-				*apply_state_.GetBoardActionAnalyzer(),
 				action_type, choices);
 
 			if (choice < 0) {

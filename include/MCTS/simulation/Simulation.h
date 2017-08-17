@@ -17,7 +17,6 @@ namespace mcts
 
 			int ChooseAction(
 				board::Board const& board,
-				board::BoardActionAnalyzer & action_analyzer,
 				ActionType action_type,
 				board::ActionChoices const& action_choices)
 			{
@@ -37,7 +36,7 @@ namespace mcts
 				assert(action_type.IsChosenManually());
 
 				int choice = select_.GetChoice(
-					board, action_analyzer, action_type,
+					board, action_analyzer_, action_type,
 					policy::simulation::ChoiceGetter(choices)
 				);
 				if (choice < 0) return -1;
@@ -48,9 +47,13 @@ namespace mcts
 			void ReportInvalidAction() {
 			}
 
+		public:
+			auto & GetActionAnalyzer() { return action_analyzer_; }
+
 		private:
 			StaticConfigs::SimulationPhaseRandomActionPolicy random_;
 			StaticConfigs::SimulationPhaseSelectActionPolicy select_;
+			board::BoardActionAnalyzer action_analyzer_;
 		};
 	}
 }
