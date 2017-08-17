@@ -25,7 +25,7 @@ namespace mcts
 			};
 
 		public:
-			BoardActionAnalyzer() : mutex_(), op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
+			BoardActionAnalyzer() : mutex_(), op_map_(), op_map_size_(0), attackers_(), playable_cards_(), flow_context_() {}
 
 			void Reset() { op_map_size_ = 0; }
 
