@@ -19,25 +19,46 @@ namespace FlowControl {
 	class FlowContext
 	{
 	public:
-		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
+		FlowContext() :
 			result_(FlowControl::kResultNotDetermined),
-			action_parameters_(action_parameters), random_(random),
+			action_parameters_(nullptr), random_(nullptr),
 			dead_entity_hints_(),
 			minion_put_location_(-1),
 			specified_target_(), destroyed_weapon_(),
 			user_choice_(Cards::kInvalidCardId)
 		{}
 
-	public: // action parameter
-		void ResetActionParameter()
-		{
-			minion_put_location_ = -1;
-			specified_target_.Invalidate();
+		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
+			result_(FlowControl::kResultNotDetermined),
+			action_parameters_(&action_parameters), random_(&random),
+			dead_entity_hints_(),
+			minion_put_location_(-1),
+			specified_target_(), destroyed_weapon_(),
+			user_choice_(Cards::kInvalidCardId)
+		{}
+
+		FlowContext(FlowContext const&) = delete;
+		FlowContext & operator=(FlowContext const&) = delete;
+
+		void SetCallback(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) {
+			random_ = &random;
+			action_parameters_ = &action_parameters;
 		}
 
+		void Reset()
+		{
+			result_ = FlowControl::kResultNotDetermined;
+			ClearDeadEntryHint();
+			minion_put_location_ = -1;
+			specified_target_.Invalidate();
+			ClearDestroyedWeapon();
+			user_choice_ = Cards::kInvalidCardId;
+		}
+
+	public: // action parameter
 		state::CardRef GetDefender(std::vector<state::CardRef> const& defenders) {
 			assert(!defenders.empty());
-			return action_parameters_.GetDefender(defenders);
+			return action_parameters_->GetDefender(defenders);
 		}
 
 		auto GetMinionPutLocation(int minions) {
@@ -46,7 +67,7 @@ namespace FlowControl {
 					minion_put_location_ = 0;
 				}
 				else {
-					minion_put_location_ = action_parameters_.GetMinionPutLocation(minions);
+					minion_put_location_ = action_parameters_->GetMinionPutLocation(minions);
 				}
 				assert(minion_put_location_ >= 0);
 				assert(minion_put_location_ <= minions);
@@ -59,7 +80,7 @@ namespace FlowControl {
 		state::CardRef GetSpecifiedTarget() const { return specified_target_; }
 
 		Cards::CardId GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) {
-			return action_parameters_.ChooseOne(cards);
+			return action_parameters_->ChooseOne(cards);
 		}
 
 		Cards::CardId GetSavedUserChoice() const { return user_choice_; }
@@ -80,7 +101,7 @@ namespace FlowControl {
 		bool Empty() const;
 
 	public:
-		state::IRandomGenerator & GetRandom() { return random_; }
+		state::IRandomGenerator & GetRandom() { return *random_; }
 
 	public:
 		void SetResult(Result v) { result_ = v; }
@@ -98,8 +119,8 @@ namespace FlowControl {
 
 	private:
 		Result result_;
-		IActionParameterGetter & action_parameters_;
-		state::IRandomGenerator & random_;
+		IActionParameterGetter * action_parameters_;
+		state::IRandomGenerator * random_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 		int minion_put_location_;
 		state::CardRef specified_target_;

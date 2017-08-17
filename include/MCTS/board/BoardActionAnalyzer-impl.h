@@ -70,8 +70,8 @@ namespace mcts
 			}
 			size_t hand_idx = playable_cards_[idx];
 
-			FlowControl::FlowContext flow_context(random, action_parameters);
-			return board.PlayCard(flow_context, (int)hand_idx);
+			flow_context_.SetCallback(random, action_parameters);
+			return board.PlayCard(flow_context_, (int)hand_idx);
 		}
 
 		inline Result BoardActionAnalyzer::Attack(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
@@ -93,20 +93,20 @@ namespace mcts
 			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
 			if (idx < 0) return Result::kResultInvalid;
 
-			FlowControl::FlowContext flow_context(random, action_parameters);
-			return board.Attack(flow_context, attackers_[idx]);
+			flow_context_.SetCallback(random, action_parameters);
+			return board.Attack(flow_context_, attackers_[idx]);
 		}
 
 		inline Result BoardActionAnalyzer::HeroPower(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
 		{
-			FlowControl::FlowContext flow_context(random, action_parameters);
-			return board.HeroPower(flow_context);
+			flow_context_.SetCallback(random, action_parameters);
+			return board.HeroPower(flow_context_);
 		}
 
 		inline Result BoardActionAnalyzer::EndTurn(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
 		{
-			FlowControl::FlowContext flow_context(random, action_parameters);
-			return board.EndTurn(flow_context);
+			flow_context_.SetCallback(random, action_parameters);
+			return board.EndTurn(flow_context_);
 		}
 	}
 }

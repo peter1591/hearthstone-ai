@@ -85,6 +85,7 @@ namespace mcts
 			size_t op_map_size_;
 			std::vector<int> attackers_;
 			std::vector<size_t> playable_cards_;
+			FlowControl::FlowContext flow_context_;
 		};
 	}
 }

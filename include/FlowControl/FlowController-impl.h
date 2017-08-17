@@ -9,7 +9,7 @@ namespace FlowControl
 {
 	inline Result FlowController::PlayCard(int hand_idx)
 	{
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
 		PlayCardInternal(card_ref);
@@ -20,7 +20,7 @@ namespace FlowControl
 
 	inline Result FlowController::EndTurn()
 	{
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 		EndTurnInternal();
 
 		assert(flow_context_.Empty());
@@ -31,7 +31,7 @@ namespace FlowControl
 	{
 		assert(attacker.IsValid());
 
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 		AttackInternal(attacker);
 
 		assert(flow_context_.Empty());
@@ -40,7 +40,7 @@ namespace FlowControl
 
 	inline Result FlowController::HeroPower()
 	{
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 		HeroPowerInternal();
 
 		assert(flow_context_.Empty());
@@ -421,17 +421,17 @@ namespace FlowControl
 		}
 		state_.IncreaseTurn();
 
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 		EndTurnPhase();
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 
 		state_.GetMutableCurrentPlayerId().ChangeSide();
 
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 		StartTurnPhase();
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 
-		flow_context_.ResetActionParameter();
+		flow_context_.Reset();
 		DrawCardPhase();
 		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
 	}

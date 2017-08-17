@@ -19,7 +19,7 @@ namespace FlowControl {
 			return false;
 		}
 
-		specified_target_ = action_parameters_.GetSpecifiedTarget(state, card_ref, targets);
+		specified_target_ = action_parameters_->GetSpecifiedTarget(state, card_ref, targets);
 		assert(specified_target_.IsValid());
 		return true;
 	}
