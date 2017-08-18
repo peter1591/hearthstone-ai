@@ -10,17 +10,50 @@ namespace FlowControl
 		class Handler
 		{
 		public:
-			Handler() : origin_states(), enchantments() {}
+			Handler() : base_origin_states(nullptr), origin_states(), enchantments() {}
 
-			state::Cards::EnchantableStates const& GetOriginalStates() const { return origin_states; }
+			Handler(Handler const& rhs) :
+				base_origin_states(rhs.base_origin_states),
+				origin_states(rhs.origin_states),
+				enchantments(rhs.enchantments)
+			{}
+			Handler & operator=(Handler const& rhs) {
+				base_origin_states = rhs.base_origin_states;
+				origin_states = rhs.origin_states;
+				enchantments = rhs.enchantments;
+				return *this;
+			}
 
-			void SetOriginalStates(state::Cards::EnchantableStates states) { origin_states = states; }
+			void FillWithBase(Handler const& base) {
+				assert(base.base_origin_states == nullptr);
+				base_origin_states = &base.origin_states;
+				enchantments.FillWithBase(base.enchantments);
+			}
+
+			state::Cards::EnchantableStates const& GetOriginalStates() const {
+				if (base_origin_states) return *base_origin_states;
+				else return origin_states;
+			}
+
+			state::Cards::EnchantableStates & GetMutableOriginalStates() {
+				if (base_origin_states) {
+					origin_states = *base_origin_states; // copy on write
+					base_origin_states = nullptr;
+				}
+				return origin_states;
+			}
+
+			void SetOriginalStates(state::Cards::EnchantableStates states) {
+				if (base_origin_states) base_origin_states = nullptr;
+				origin_states = states;
+			}
+
 			void Silence() {
 				// Remove all enchantments, including the aura enchantments coming from other minions.
 				// Those aura enchantments will be added back in the next AuraUpdate()
 				Clear();
 
-				origin_states.RestoreToSilenceDefault();
+				GetMutableOriginalStates().RestoreToSilenceDefault();
 			}
 
 		public:
@@ -56,7 +89,9 @@ namespace FlowControl
 			void UpdateCard(state::State & state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates const& new_states);
 
 		private:
+			state::Cards::EnchantableStates const* base_origin_states;
 			state::Cards::EnchantableStates origin_states;
+
 			TieredEnchantments enchantments;
 		};
 	}

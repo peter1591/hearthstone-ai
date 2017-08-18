@@ -30,6 +30,12 @@ namespace FlowControl
 
 			Enchantments() : enchantments_(), update_decider_() {}
 
+			void FillWithBase(Enchantments const& base) {
+				// TODO: copy on write
+				enchantments_ = base.enchantments_;
+				update_decider_ = base.update_decider_;
+			}
+
 			struct ApplyFunctorContext {
 				state::State const& state_;
 				FlowContext & flow_context_;

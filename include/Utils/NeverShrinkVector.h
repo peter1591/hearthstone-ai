@@ -24,6 +24,11 @@ namespace Utils
 			item_ = item;
 		}
 
+		void SetWithBase(ItemType const& item) {
+			exist_ = true;
+			item_.FillWithBase(item);
+		}
+
 		void UnSet() {
 			exist_ = false;
 		}

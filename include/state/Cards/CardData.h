@@ -60,7 +60,7 @@ namespace state
 				silenced = base.silenced;
 				added_to_play_zone = base.added_to_play_zone;
 				added_to_hand_zone = base.added_to_hand_zone;
-				enchantment_handler = base.enchantment_handler; // TODO: CoW
+				enchantment_handler.FillWithBase(base.enchantment_handler);
 				onplay_handler = base.onplay_handler; // TODO: cow
 				deathrattle_handler = base.deathrattle_handler; // TODO: cow
 			}

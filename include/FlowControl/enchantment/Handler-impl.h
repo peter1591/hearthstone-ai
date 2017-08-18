@@ -20,7 +20,7 @@ namespace FlowControl
 
 			int origin_hp = GetCard().GetHP();
 
-			state::Cards::EnchantableStates new_states = origin_states;
+			state::Cards::EnchantableStates new_states = GetOriginalStates();
 			enchantments.ApplyAll(state, flow_context, card_ref, new_states);
 
 			switch (GetCard().GetCardType()) {
