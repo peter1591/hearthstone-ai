@@ -1,5 +1,6 @@
 #pragma once
 
+#include "FlowControl/detail/Resolver-impl.h"
 #include "FlowControl/FlowContext.h"
 #include "FlowControl/Manipulate.h"
 

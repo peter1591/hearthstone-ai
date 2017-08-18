@@ -4,18 +4,11 @@
 
 #include "state/IRandomGenerator.h"
 #include "state/Types.h"
+#include "FlowControl/Result.h"
 #include "FlowControl/IActionParameterGetter.h"
+#include "FlowControl/detail/Resolver.h"
 
 namespace FlowControl {
-	enum Result
-	{
-		kResultNotDetermined,
-		kResultFirstPlayerWin,
-		kResultSecondPlayerWin,
-		kResultDraw,
-		kResultInvalid
-	};
-
 	class FlowContext
 	{
 	public:
@@ -25,7 +18,8 @@ namespace FlowControl {
 			dead_entity_hints_(),
 			minion_put_location_(-1),
 			specified_target_(), destroyed_weapon_(),
-			user_choice_(Cards::kInvalidCardId)
+			user_choice_(Cards::kInvalidCardId),
+			resolver_()
 		{}
 
 		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
@@ -34,7 +28,8 @@ namespace FlowControl {
 			dead_entity_hints_(),
 			minion_put_location_(-1),
 			specified_target_(), destroyed_weapon_(),
-			user_choice_(Cards::kInvalidCardId)
+			user_choice_(Cards::kInvalidCardId),
+			resolver_()
 		{}
 
 		FlowContext(FlowContext const&) = delete;
@@ -117,6 +112,9 @@ namespace FlowControl {
 		state::CardRef GetDestroyedWeapon() const { return destroyed_weapon_; }
 		void ClearDestroyedWeapon() { destroyed_weapon_.Invalidate(); }
 
+	public:
+		auto & GetResolver() { return resolver_; }
+
 	private:
 		Result result_;
 		IActionParameterGetter * action_parameters_;
@@ -126,5 +124,6 @@ namespace FlowControl {
 		state::CardRef specified_target_;
 		state::CardRef destroyed_weapon_;
 		Cards::CardId user_choice_;
+		detail::Resolver resolver_;
 	};
 }
