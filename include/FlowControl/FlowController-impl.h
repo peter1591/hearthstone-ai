@@ -49,7 +49,7 @@ namespace FlowControl
 
 	inline Result FlowController::Resolve()
 	{
-		detail::Resolver(state_, flow_context_).Resolve();
+		flow_context_.GetResolver().Resolve(state_, flow_context_);
 		return flow_context_.GetResult();
 	}
 
@@ -77,7 +77,7 @@ namespace FlowControl
 			return;
 		}
 
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return;
 
 		++state_.GetCurrentPlayer().played_cards_this_turn_;
 	}
@@ -287,7 +287,7 @@ namespace FlowControl
 	inline void FlowController::AttackInternal(state::CardRef attacker)
 	{
 		if (!AttackPhase(attacker)) return;
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return;
 	}
 
 	inline bool FlowController::AttackPhase(state::CardRef attacker)
@@ -303,7 +303,7 @@ namespace FlowControl
 			Manipulate(state_, flow_context_), attacker, &defender });
 
 		// do resolve here since some enchantments might be added in 'PrepareAttackTarget' event
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return false;
 
 		if (!defender.IsValid()) return kResultNotDetermined;
 		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return true;
@@ -313,7 +313,7 @@ namespace FlowControl
 			state::Events::EventTypes::BeforeAttack::Context{ Manipulate(state_, flow_context_), attacker, defender });
 		
 		// a minion might be destroyed during BeforeAttack event
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return false;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return false;
 		if (state_.GetCard(attacker).GetZone() != state::kCardZonePlay) return true;
 		if (state_.GetCard(defender).GetZone() != state::kCardZonePlay) return true;
 
@@ -384,7 +384,7 @@ namespace FlowControl
 	inline void FlowController::HeroPowerInternal()
 	{
 		if (!HeroPowerPhase()) return;
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return;
 	}
 
 	inline bool FlowController::HeroPowerPhase()
@@ -423,17 +423,17 @@ namespace FlowControl
 
 		flow_context_.Reset();
 		EndTurnPhase();
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return;
 
 		state_.GetMutableCurrentPlayerId().ChangeSide();
 
 		flow_context_.Reset();
 		StartTurnPhase();
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return;
 
 		flow_context_.Reset();
 		DrawCardPhase();
-		if (!detail::Resolver(state_, flow_context_).Resolve()) return;
+		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return;
 	}
 
 	inline void FlowController::EndTurnPhase()
