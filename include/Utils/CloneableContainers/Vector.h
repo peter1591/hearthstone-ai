@@ -85,9 +85,9 @@ namespace Utils
 			Identifier GetNextNextPushBackItemIdentifier() const { return Identifier((int)items_.size() + 1); }
 
 		public: // iterate
-			Identifier GetBegin() { return Identifier(0); }
-			void StepNext(Identifier & id) { ++id.idx; }
-			Identifier GetEnd() { return Identifier((int)items_.size()); }
+			Identifier GetBegin() const { return Identifier(0); }
+			void StepNext(Identifier & id) const { ++id.idx; }
+			Identifier GetEnd() const { return Identifier((int)items_.size()); }
 
 			template <typename IterateCallback> // bool(ItemType&), return true to continue; false to abort
 			void IterateAll(IterateCallback&& callback) {

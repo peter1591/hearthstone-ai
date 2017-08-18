@@ -150,6 +150,27 @@ namespace Utils
 				}
 			}
 
+			template <typename IterateCallback> // bool(ItemType const& ), return true to continue; false to abort
+			void IterateAll(IterateCallback&& callback) const
+			{
+				VectorIdentifier id = first_possible_exist_id_;
+				VectorIdentifier id_end = items_.GetEnd();
+
+				if (id == id_end) return; // fast path
+
+				while (id != id_end) {
+					InternalItemType const& item = items_.Get(id);
+
+					if (item.removed) {
+						id = item.next_possible_exist_id;
+						continue;
+					}
+
+					if (!callback(id, item.item)) break;
+					id = item.next_possible_exist_id;
+				}
+			}
+
 		private:
 			CloneableContainers::Vector<InternalItemType> items_;
 			VectorIdentifier first_possible_exist_id_;
