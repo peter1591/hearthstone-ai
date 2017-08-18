@@ -28,7 +28,7 @@ namespace FlowControl {
 			if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
 
 			assert(item.apply_functor);
-			enchantments_.PushBack(NormalEnchantment(item.apply_functor, valid_until_turn, item.force_update_every_time));
+			GetEnchantmentsForWrite().PushBack(NormalEnchantment(item.apply_functor, valid_until_turn, item.force_update_every_time));
 		}
 
 		template<typename EnchantmentType_>
@@ -40,9 +40,9 @@ namespace FlowControl {
 		{
 			assert(item.apply_functor);
 			assert(item.register_functor);
-			IdentifierType id = enchantments_.PushBack(EventHookedEnchantment(item.apply_functor, item.register_functor, aux_data));
+			IdentifierType id = GetEnchantmentsForWrite().PushBack(EventHookedEnchantment(item.apply_functor, item.register_functor, aux_data));
 			item.register_functor(manipulate, card_ref, id,
-				std::get<EventHookedEnchantment>(*enchantments_.Get(id)).aux_data);
+				std::get<EventHookedEnchantment>(*GetEnchantmentsForWrite().Get(id)).aux_data);
 
 			update_decider_.AddItem();
 

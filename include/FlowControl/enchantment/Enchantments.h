@@ -28,11 +28,24 @@ namespace FlowControl
 		public:
 			using IdentifierType = Utils::CloneableContainers::RemovableVectorIdentifier;
 
-			Enchantments() : enchantments_(), update_decider_() {}
+			Enchantments() : base_enchantments_(nullptr), enchantments_(), update_decider_() {}
+
+			Enchantments(Enchantments const& rhs) :
+				base_enchantments_(rhs.base_enchantments_),
+				enchantments_(rhs.enchantments_),
+				update_decider_(rhs.update_decider_)
+			{}
+
+			Enchantments & operator=(Enchantments const& rhs) {
+				base_enchantments_ = rhs.base_enchantments_;
+				enchantments_ = rhs.enchantments_;
+				update_decider_ = rhs.update_decider_;
+				return *this;
+			}
 
 			void FillWithBase(Enchantments const& base) {
-				// TODO: copy on write
-				enchantments_ = base.enchantments_;
+				assert(base.base_enchantments_ == nullptr);
+				base_enchantments_ = &base.enchantments_;
 				update_decider_ = base.update_decider_;
 			}
 
@@ -106,7 +119,7 @@ namespace FlowControl
 
 				if (item.force_update_every_time) update_decider_.AddForceUpdateItem();
 
-				return enchantments_.PushBack(AuraEnchantment(item.apply_functor, item.force_update_every_time));
+				return GetEnchantmentsForWrite().PushBack(AuraEnchantment(item.apply_functor, item.force_update_every_time));
 			}
 
 			template <typename EnchantmentType>
@@ -138,21 +151,21 @@ namespace FlowControl
 					detail::UpdateDecider & updater_decider_;
 				};
 
-				auto remove_item = enchantments_.Get(id);
+				auto remove_item = GetEnchantmentsForWrite().Get(id);
 				if (remove_item == nullptr) return;
 				std::visit(OpFunctor(update_decider_), *remove_item);
-				return enchantments_.Remove(id);
+				return GetEnchantmentsForWrite().Remove(id);
 			}
 
 			void Clear()
 			{
 				update_decider_.RemoveItem();
-				enchantments_.Clear();
+				GetEnchantmentsForWrite().Clear();
 			}
 
 			bool Empty() {
 				bool empty = true;
-				enchantments_.IterateAll([&](...) {
+				GetEnchantmentsForRead().IterateAll([&](...) {
 					empty = false;
 					return false;
 				});
@@ -162,7 +175,7 @@ namespace FlowControl
 			void AfterCopied(FlowControl::Manipulate const& manipulate, state::CardRef card_ref)
 			{
 				update_decider_.RemoveItem();
-				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
+				GetEnchantmentsForWrite().IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
 					struct OpFunctor {
 						OpFunctor(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, ContainerType & enchantments, IdentifierType id)
 							: manipulate_(manipulate), card_ref_(card_ref), enchantments_(enchantments), id_(id)
@@ -185,22 +198,36 @@ namespace FlowControl
 						IdentifierType id_;
 					};
 
-					std::visit(OpFunctor(manipulate, card_ref, enchantments_, id), enchantment);
+					std::visit(OpFunctor(manipulate, card_ref, GetEnchantmentsForWrite(), id), enchantment);
 					return true;
 				});
 			}
 
 			bool Exists(IdentifierType id) const
 			{
-				return enchantments_.Get(id) != nullptr;
+				return GetEnchantmentsForRead().Get(id) != nullptr;
 			}
 
 			void ApplyAll(state::State const& state, FlowContext & flow_context, state::CardRef card_ref, state::Cards::EnchantableStates & stats)
 			{
-				enchantments_.IterateAll([&](IdentifierType id, EnchantmentType& enchantment) -> bool {
+				// try read-only version first. if failed, try mutable one.
+				bool success = true;
+				GetEnchantmentsForRead().IterateAll([&](IdentifierType id, EnchantmentType const& enchantment) -> bool {
 					std::visit([&](auto&& arg) {
 						if (!arg.Apply(ApplyFunctorContext{ state, flow_context, card_ref, &stats })) {
-							enchantments_.Remove(id);
+							success = false;
+						}
+					}, enchantment);
+					return success; // continue if success
+				});
+
+				if (success) return;
+				
+				// Some enchantment should be removed. Retry with mutable one.
+				GetEnchantmentsForWrite().IterateAll([&](IdentifierType id, EnchantmentType const& enchantment) -> bool {
+					std::visit([&](auto&& arg) {
+						if (!arg.Apply(ApplyFunctorContext{ state, flow_context, card_ref, &stats })) {
+							GetEnchantmentsForWrite().Remove(id);
 						}
 					}, enchantment);
 					return true;
@@ -217,6 +244,21 @@ namespace FlowControl
 			}
 
 		private:
+			ContainerType const& GetEnchantmentsForRead() const {
+				if (base_enchantments_) return *base_enchantments_;
+				else return enchantments_;
+			}
+
+			ContainerType & GetEnchantmentsForWrite() {
+				if (base_enchantments_) {
+					enchantments_ = *base_enchantments_; // copy on write
+					base_enchantments_ = nullptr;
+				}
+				return enchantments_;
+			}
+
+		private:
+			ContainerType const* base_enchantments_;
 			ContainerType enchantments_;
 			detail::UpdateDecider update_decider_;
 		};
