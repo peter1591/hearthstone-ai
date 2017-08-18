@@ -61,8 +61,8 @@ namespace state
 				added_to_play_zone = base.added_to_play_zone;
 				added_to_hand_zone = base.added_to_hand_zone;
 				enchantment_handler.FillWithBase(base.enchantment_handler);
-				onplay_handler = base.onplay_handler; // TODO: cow
-				deathrattle_handler = base.deathrattle_handler; // TODO: cow
+				onplay_handler = base.onplay_handler;
+				deathrattle_handler.FillWithBase(base.deathrattle_handler);
 			}
 
 			static constexpr int kFieldChangeId = 2;
