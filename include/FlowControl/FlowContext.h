@@ -19,6 +19,7 @@ namespace FlowControl {
 			minion_put_location_(-1),
 			specified_target_(), destroyed_weapon_(),
 			user_choice_(Cards::kInvalidCardId),
+			targets_(),
 			resolver_()
 		{}
 
@@ -29,11 +30,12 @@ namespace FlowControl {
 			minion_put_location_(-1),
 			specified_target_(), destroyed_weapon_(),
 			user_choice_(Cards::kInvalidCardId),
+			targets_(),
 			resolver_()
 		{}
 
-		FlowContext(FlowContext const&) = delete;
-		FlowContext & operator=(FlowContext const&) = delete;
+		FlowContext(FlowContext const&) = default;
+		FlowContext & operator=(FlowContext const&) = default;
 
 		void SetCallback(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) {
 			random_ = &random;
@@ -124,6 +126,7 @@ namespace FlowControl {
 		state::CardRef specified_target_;
 		state::CardRef destroyed_weapon_;
 		Cards::CardId user_choice_;
+		std::vector<state::CardRef> targets_;
 		detail::Resolver resolver_;
 	};
 }

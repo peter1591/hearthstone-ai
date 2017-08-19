@@ -9,10 +9,10 @@ namespace FlowControl {
 		state::State & state, state::CardRef card_ref, state::targetor::Targets const & target_info, bool allow_no_target)
 	{
 		assert(!specified_target_.IsValid());
-		std::vector<state::CardRef> targets;
-		target_info.Fill(Manipulate(state, *this), targets);
+		targets_.clear();
+		target_info.Fill(Manipulate(state, *this), targets_);
 
-		if (targets.empty()) {
+		if (targets_.empty()) {
 			specified_target_.Invalidate();
 			if (allow_no_target) return true;
 
@@ -20,7 +20,7 @@ namespace FlowControl {
 			return false;
 		}
 
-		specified_target_ = action_parameters_->GetSpecifiedTarget(state, card_ref, targets);
+		specified_target_ = action_parameters_->GetSpecifiedTarget(state, card_ref, targets_);
 		assert(specified_target_.IsValid());
 		return true;
 	}
