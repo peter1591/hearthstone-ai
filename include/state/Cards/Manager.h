@@ -54,7 +54,7 @@ namespace state
 				if (item.HasSet()) return item.Get();
 
 				assert(base_);
-				assert(id.id < base_->cards_.Size());
+				assert(id.id < (int)base_->cards_.Size());
 				item.SetWithBase(base_->Get(id)); // copy-on-write
 				return item.Get();
 			}
