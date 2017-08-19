@@ -17,7 +17,7 @@ namespace FlowControl
 		class Resolver
 		{
 		public:
-			Resolver() : deaths_() {}
+			Resolver() : deaths_(), ordered_deaths_(), minions_refs_() {}
 
 			bool Resolve(state::State & state, FlowContext & flow_context);
 
@@ -33,6 +33,8 @@ namespace FlowControl
 
 		private:
 			std::unordered_set<state::CardRef> deaths_;
+			std::multimap<int, std::function<void()>> ordered_deaths_;
+			std::vector<state::CardRef> minions_refs_; // a cache for process
 		};
 	}
 }

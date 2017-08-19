@@ -78,8 +78,7 @@ namespace FlowControl
 			if (second_dead) return SetResult(flow_context, kResultFirstPlayerWin);
 
 			// process deaths by order of play
-			std::multimap<int, std::function<void()>> ordered_deaths;
-
+			ordered_deaths_.clear();
 			for (auto ref : deaths_) {
 				state::Cards::Card & card = state.GetMutableCard(ref);
 
@@ -88,7 +87,7 @@ namespace FlowControl
 				int zone_pos = card.GetZonePosition();
 				int attack = card.GetAttack();
 
-				ordered_deaths.insert(std::make_pair(card.GetPlayOrder(),
+				ordered_deaths_.insert(std::make_pair(card.GetPlayOrder(),
 					[ref, player, zone, zone_pos, attack, &state, &flow_context]() {
 					state.GetMutableCard(ref).GetMutableDeathrattleHandler().TriggerAll(
 						FlowControl::deathrattle::context::Deathrattle{
@@ -108,7 +107,7 @@ namespace FlowControl
 					.ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 			}
 
-			for (auto death_item : ordered_deaths) death_item.second();
+			for (auto death_item : ordered_deaths_) death_item.second();
 
 			return true;
 		}
@@ -148,9 +147,9 @@ namespace FlowControl
 				Manipulate(state, flow_context).Weapon(weapon_ref).Enchant().Update();
 			}
 
-			std::vector<state::CardRef> minions_refs; // need to cache first, since minion might be removed from the container
-			minions_refs = state.GetBoard().Get(player).minions_.GetAll();
-			for (state::CardRef minion_ref : minions_refs) {
+			// need to cache first, since minion might be removed from the container
+			minions_refs_ = state.GetBoard().Get(player).minions_.GetAll();
+			for (state::CardRef minion_ref : minions_refs_) {
 				Manipulate(state, flow_context).OnBoardMinion(minion_ref).Enchant().Update();
 			}
 		}
