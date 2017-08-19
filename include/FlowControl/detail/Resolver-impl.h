@@ -20,7 +20,7 @@ namespace FlowControl
 				UpdateEnchantments(state, flow_context);
 
 				do {
-					CreateDeaths(state, flow_context);
+					if (!CreateDeaths(state, flow_context)) return false;
 					if (!RemoveDeaths(state, flow_context)) return false;
 				} while (!deaths_.empty());
 
@@ -41,8 +41,13 @@ namespace FlowControl
 			return true;
 		}
 
-		inline void Resolver::CreateDeaths(state::State & state, FlowContext & flow_context)
+		inline bool Resolver::CreateDeaths(state::State & state, FlowContext & flow_context)
 		{
+			auto first_hero_ref = state.GetBoard().GetFirst().GetHeroRef();
+			bool first_dead = false;
+			auto second_hero_ref = state.GetBoard().GetSecond().GetHeroRef();
+			bool second_dead = false;
+
 			deaths_.clear();
 
 			if (flow_context.GetDestroyedWeapon().IsValid()) {
@@ -50,7 +55,7 @@ namespace FlowControl
 				flow_context.ClearDestroyedWeapon();
 			}
 
-			flow_context.ForEachDeadEntryHint([&state, this](auto const& item) {
+			flow_context.ForEachDeadEntryHint([&, this](auto const& item) {
 				state::CardRef ref = item.second;
 				const state::Cards::Card & card = state.GetCardsManager().Get(ref);
 
@@ -59,24 +64,22 @@ namespace FlowControl
 					if (card.GetHP() > 0) return;
 				}
 
-				deaths_.insert(ref);
+				if (ref == first_hero_ref) first_dead = true;
+				else if (ref == second_hero_ref) second_dead = true;
+				else deaths_.push_back(ref);
 			});
 
 			flow_context.ClearDeadEntryHint();
-		}
-
-		inline bool Resolver::RemoveDeaths(state::State & state, FlowContext & flow_context)
-		{
-			auto first_it = deaths_.find(state.GetBoard().GetFirst().GetHeroRef());
-			bool first_dead = first_it != deaths_.end();
-
-			auto second_it = deaths_.find(state.GetBoard().GetSecond().GetHeroRef());
-			bool second_dead = second_it != deaths_.end();
 
 			if (first_dead && second_dead) return SetResult(flow_context, kResultDraw);
 			if (first_dead) return SetResult(flow_context, kResultSecondPlayerWin);
 			if (second_dead) return SetResult(flow_context, kResultFirstPlayerWin);
 
+			return true;
+		}
+
+		inline bool Resolver::RemoveDeaths(state::State & state, FlowContext & flow_context)
+		{
 			// process deaths by order of play
 			ordered_deaths_.clear();
 			for (auto ref : deaths_) {
