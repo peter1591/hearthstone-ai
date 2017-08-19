@@ -96,8 +96,8 @@ namespace Cards
 			int zone_pos = card.GetZonePosition();
 			auto & minions = context.manipulate_.Board().Player(card.GetPlayerIdentifier()).minions_;
 			assert(minions.Get(zone_pos) == context.card_ref_);
-			if (zone_pos > 0) context.new_targets.insert(minions.Get(zone_pos - 1));
-			if (zone_pos < ((int)minions.Size() - 1)) context.new_targets.insert(minions.Get(zone_pos + 1));
+			if (zone_pos > 0) context.new_targets.push_back(minions.Get(zone_pos - 1));
+			if (zone_pos < ((int)minions.Size() - 1)) context.new_targets.push_back(minions.Get(zone_pos + 1));
 		}
 	};
 	template <typename HandleClass, typename EnchantmentType>

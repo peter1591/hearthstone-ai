@@ -19,7 +19,7 @@ namespace FlowControl
 			assert(get_targets);
 			assert(apply_on);
 
-			std::unordered_set<state::CardRef> new_targets;
+			std::vector<state::CardRef> new_targets;
 			if (aura_valid) (*get_targets)({ Manipulate(state, flow_context), card_ref, new_targets });
 
 			for (auto it = applied_enchantments.begin(), it2 = applied_enchantments.end(); it != it2;)
@@ -30,7 +30,7 @@ namespace FlowControl
 					continue;
 				}
 
-				auto new_target_it = new_targets.find(it->first);
+				auto new_target_it = std::find(new_targets.begin(), new_targets.end(), it->first);
 				if (new_target_it != new_targets.end()) {
 					// already applied
 					new_targets.erase(new_target_it);

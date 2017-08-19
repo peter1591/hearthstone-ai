@@ -208,7 +208,7 @@ namespace Cards
 	};
 	struct Card_EX1_335 : MinionCardBase<Card_EX1_335> {
 		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
-			context.new_targets.insert(context.card_ref_);
+			context.new_targets.push_back(context.card_ref_);
 		}
 		Card_EX1_335() {
 			Aura<Card_EX1_335o, EmitWhenAlive, FlowControl::aura::kUpdateOnlyFirstTime>();
