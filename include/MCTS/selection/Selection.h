@@ -14,7 +14,9 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection(std::mt19937 & rand) : path_(), random_(rand), new_node_created_(false), pending_randoms_(false) {}
+			Selection(std::mt19937 & rand) :
+				path_(), random_(rand), new_node_created_(false), pending_randoms_(false)
+			{}
 
 			Selection(Selection const&) = delete;
 			Selection & operator=(Selection const&) = delete;

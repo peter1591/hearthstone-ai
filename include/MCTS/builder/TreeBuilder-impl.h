@@ -28,9 +28,8 @@ namespace mcts
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
 
-			FlowControl::FlowContext flow_context; // TODO: persistent in selection stage handler?
 			TreeBuilder::SelectResult perform_result(ApplyAction(
-				flow_context, node->GetAddon().action_analyzer, selection_stage_));
+				flow_context_, node->GetAddon().action_analyzer, selection_stage_));
 			if (perform_result.result == Result::kResultInvalid) {
 				return Result::kResultInvalid;
 			}
@@ -86,7 +85,7 @@ namespace mcts
 			simulation_stage_.GetActionAnalyzer().Reset();
 
 			return ApplyAction(
-				simulation_stage_.GetFlowContext(),
+				flow_context_,
 				simulation_stage_.GetActionAnalyzer(), simulation_stage_);
 		}
 

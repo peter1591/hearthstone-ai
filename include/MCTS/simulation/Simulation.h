@@ -10,7 +10,9 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation(state::PlayerSide side, std::mt19937 & rand) : random_(rand), select_(side, rand), flow_context_(), action_analyzer_() {}
+			Simulation(state::PlayerSide side, std::mt19937 & rand, FlowControl::FlowContext & flow_context) :
+				random_(rand), select_(side, rand), flow_context_(flow_context), action_analyzer_()
+			{}
 
 			void StartNewAction() {
 			}
@@ -54,7 +56,7 @@ namespace mcts
 		private:
 			StaticConfigs::SimulationPhaseRandomActionPolicy random_;
 			StaticConfigs::SimulationPhaseSelectActionPolicy select_;
-			FlowControl::FlowContext flow_context_; // TODO: Can be shared with selection stage handler
+			FlowControl::FlowContext & flow_context_;
 			board::BoardActionAnalyzer action_analyzer_;
 		};
 	}

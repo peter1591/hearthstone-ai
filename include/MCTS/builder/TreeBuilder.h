@@ -26,7 +26,8 @@ namespace mcts
 			TreeBuilder(state::PlayerSide side, SOMCTS & caller, Statistic<> & statistic, std::mt19937 & rand) :
 				statistic_(statistic),
 				apply_state_(caller),
-				selection_stage_(rand), simulation_stage_(side, rand)
+				flow_context_(),
+				selection_stage_(rand), simulation_stage_(side, rand, flow_context_)
 			{
 			}
 
@@ -69,6 +70,7 @@ namespace mcts
 
 			ActionApplyState apply_state_;
 
+			FlowControl::FlowContext flow_context_;
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;
 		};
