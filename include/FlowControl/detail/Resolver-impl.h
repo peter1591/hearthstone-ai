@@ -78,6 +78,19 @@ namespace FlowControl
 			return true;
 		}
 
+		inline void FlowControl::detail::Resolver::DeathProcessor::operator()(state::State & state, FlowContext & flow_context)
+		{
+			state.GetMutableCard(ref_).GetMutableDeathrattleHandler().TriggerAll(
+				FlowControl::deathrattle::context::Deathrattle{
+				FlowControl::Manipulate(state, flow_context), ref_, player_, zone_, zone_pos_, attack_ });
+
+			if (state.GetCard(ref_).GetCardType() == state::kCardTypeMinion) {
+				state.TriggerEvent<state::Events::EventTypes::AfterMinionDied>(state::Events::EventTypes::AfterMinionDied::Context{
+					FlowControl::Manipulate(state, flow_context), ref_, player_
+				});
+			}
+		}
+
 		inline bool Resolver::RemoveDeaths(state::State & state, FlowContext & flow_context)
 		{
 			// process deaths by order of play
@@ -91,17 +104,7 @@ namespace FlowControl
 				int attack = card.GetAttack();
 
 				ordered_deaths_.insert(std::make_pair(card.GetPlayOrder(),
-					[ref, player, zone, zone_pos, attack, &state, &flow_context]() {
-					state.GetMutableCard(ref).GetMutableDeathrattleHandler().TriggerAll(
-						FlowControl::deathrattle::context::Deathrattle{
-						FlowControl::Manipulate(state, flow_context), ref, player, zone, zone_pos, attack });
-
-					if (state.GetCard(ref).GetCardType() == state::kCardTypeMinion) {
-						state.TriggerEvent<state::Events::EventTypes::AfterMinionDied>(state::Events::EventTypes::AfterMinionDied::Context{
-							FlowControl::Manipulate(state, flow_context), ref, player
-						});
-					}
-				}));
+					DeathProcessor(ref, player, zone, zone_pos, attack)));
 			}
 
 			for (auto ref : deaths_) {
@@ -110,7 +113,7 @@ namespace FlowControl
 					.ChangeTo<state::kCardZoneGraveyard>(card.GetPlayerIdentifier());
 			}
 
-			for (auto death_item : ordered_deaths_) death_item.second();
+			for (auto death_item : ordered_deaths_) death_item.second(state, flow_context);
 
 			return true;
 		}
