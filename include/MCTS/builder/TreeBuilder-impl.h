@@ -28,8 +28,9 @@ namespace mcts
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
 
+			FlowControl::FlowContext flow_context; // TODO: persistent in selection stage handler?
 			TreeBuilder::SelectResult perform_result(ApplyAction(
-				node->GetAddon().action_analyzer, selection_stage_));
+				flow_context, node->GetAddon().action_analyzer, selection_stage_));
 			if (perform_result.result == Result::kResultInvalid) {
 				return Result::kResultInvalid;
 			}
@@ -84,11 +85,14 @@ namespace mcts
 
 			simulation_stage_.GetActionAnalyzer().Reset();
 
-			return ApplyAction(simulation_stage_.GetActionAnalyzer(), simulation_stage_);
+			return ApplyAction(
+				simulation_stage_.GetFlowContext(),
+				simulation_stage_.GetActionAnalyzer(), simulation_stage_);
 		}
 
 		template <typename StageHandler>
 		inline Result TreeBuilder::ApplyAction(
+			FlowControl::FlowContext & flow_context,
 			board::BoardActionAnalyzer & action_analyzer,
 			StageHandler&& stage_handler)
 		{
@@ -117,7 +121,7 @@ namespace mcts
 				return Result::kResultInvalid;
 			}
 
-			Result result = apply_state_.ApplyAction(choice, action_analyzer);
+			Result result = apply_state_.ApplyAction(choice, flow_context, action_analyzer);
 			if (result == Result::kResultInvalid) {
 				stage_handler.ReportInvalidAction();
 				statistic_.ApplyActionFailed(is_simulation);

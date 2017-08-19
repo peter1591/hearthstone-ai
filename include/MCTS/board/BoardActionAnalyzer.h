@@ -25,13 +25,14 @@ namespace mcts
 			};
 
 		public:
-			BoardActionAnalyzer() : mutex_(), op_map_(), op_map_size_(0), attackers_(), playable_cards_(), flow_context_() {}
+			BoardActionAnalyzer() : mutex_(), op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
 
 			void Reset() { op_map_size_ = 0; }
 
 			int GetActionsCount(FlowControl::CurrentPlayerStateView const& board);
 
 			Result ApplyAction(
+				FlowControl::FlowContext & flow_context,
 				FlowControl::CurrentPlayerStateView board,
 				int action,
 				IRandomGenerator & random,
@@ -65,11 +66,11 @@ namespace mcts
 			}
 
 		private:
-			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
-			Result PlayCard(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
-			Result Attack(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
-			Result HeroPower(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
-			Result EndTurn(FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
+			Result EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
 
 			OpType GetMainOpType(OpFunc func) const {
 				if (func == &BoardActionAnalyzer::PlayCard) return kPlayCard;
@@ -85,7 +86,6 @@ namespace mcts
 			size_t op_map_size_;
 			std::vector<int> attackers_;
 			std::vector<size_t> playable_cards_;
-			FlowControl::FlowContext flow_context_;
 		};
 	}
 }

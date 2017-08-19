@@ -31,9 +31,9 @@ namespace mcts
 
 			board::Board const& GetBoard() const { return *board_; }
 
-			Result ApplyAction(int action, board::BoardActionAnalyzer & action_analyzer)
+			Result ApplyAction(int action, FlowControl::FlowContext & flow_context, board::BoardActionAnalyzer & action_analyzer)
 			{
-				return board_->ApplyAction(action, action_analyzer, random_generator_, action_parameter_getter_);
+				return board_->ApplyAction(action, action_analyzer, flow_context, random_generator_, action_parameter_getter_);
 			}
 
 			void SetValid() { is_valid_ = true; }

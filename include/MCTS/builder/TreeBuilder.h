@@ -56,6 +56,7 @@ namespace mcts
 		private:
 			template <typename StageHandler>
 			Result ApplyAction(
+				FlowControl::FlowContext & flow_context,
 				board::BoardActionAnalyzer & action_analyzer,
 				StageHandler&& stage_handler);
 

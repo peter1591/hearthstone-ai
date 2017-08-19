@@ -36,7 +36,7 @@ namespace mcts
 				assert(action_type.IsChosenManually());
 
 				int choice = select_.GetChoice(
-					board, action_analyzer_, action_type,
+					board, flow_context_, action_analyzer_, action_type,
 					policy::simulation::ChoiceGetter(choices)
 				);
 				if (choice < 0) return -1;
@@ -48,11 +48,13 @@ namespace mcts
 			}
 
 		public:
+			auto & GetFlowContext() { return flow_context_; }
 			auto & GetActionAnalyzer() { return action_analyzer_; }
 
 		private:
 			StaticConfigs::SimulationPhaseRandomActionPolicy random_;
 			StaticConfigs::SimulationPhaseSelectActionPolicy select_;
+			FlowControl::FlowContext flow_context_; // TODO: Can be shared with selection stage handler
 			board::BoardActionAnalyzer action_analyzer_;
 		};
 	}

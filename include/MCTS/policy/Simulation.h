@@ -110,12 +110,13 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
+					FlowControl::FlowContext & flow_context,
 					board::BoardActionAnalyzer & action_analyzer,
 					ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
 					if (action_type == ActionType::kMainAction) {
-						StartNewAction(board, action_analyzer);
+						StartNewAction(board, flow_context, action_analyzer);
 
 						return GetChoiceForMainAction(
 							board, action_analyzer, choice_getter);
@@ -145,14 +146,16 @@ namespace mcts
 			private:
 				void StartNewAction(
 					board::Board const& board,
+					FlowControl::FlowContext & flow_context,
 					board::BoardActionAnalyzer & action_analyzer)
 				{
-					DFSBestStateValue(board, action_analyzer);
+					DFSBestStateValue(board, flow_context, action_analyzer);
 					assert(!decision_.empty());
 				}
 
 				void DFSBestStateValue(
 					board::Board const& board,
+					FlowControl::FlowContext & flow_context,
 					board::BoardActionAnalyzer & action_analyzer)
 				{
 					class RandomPolicy : public mcts::board::IRandomGenerator {
@@ -244,7 +247,7 @@ namespace mcts
 							dfs_it = dfs.begin();
 							auto result = copy_board_.GetBoard().ApplyAction(
 								(int)idx,
-								action_analyzer,
+								action_analyzer, flow_context,
 								cb_random,
 								cb_user_choice);
 

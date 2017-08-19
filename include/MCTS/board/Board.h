@@ -73,10 +73,12 @@ namespace mcts
 
 			Result ApplyAction(int action,
 				BoardActionAnalyzer & action_analyzer,
+				FlowControl::FlowContext & flow_context,
 				IRandomGenerator & random, IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				return action_analyzer.ApplyAction(
+					flow_context,
 					FlowControl::CurrentPlayerStateView(board_),
 					action, random, action_parameters);
 			}
