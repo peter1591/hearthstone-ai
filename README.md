@@ -17,7 +17,7 @@ The goal for this project is to design a game bot for HearthStone.
   * Need gcc 7.0+ or Visual Studio 2017 Preview 2.1+ to compile.
   * Heavily use template programming.
 * The most important goal is **speed**.
-* So glad to be used in https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022
+* So glad to be used in AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)
 
 ### AI Engine
 * Monte Carlo tree search
