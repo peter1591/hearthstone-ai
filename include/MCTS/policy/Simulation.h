@@ -35,28 +35,45 @@ namespace mcts
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				static int GetChoice(ChoiceGetter const& choice_getter, board::Board const& board)
+				RandomPolicy(state::PlayerSide side, std::mt19937 & rand) :
+					rand_(rand)
 				{
-					// TODO: use value network to enhance simulation
+				}
+
+				Result GetCutoffResult(board::Board const& board) {
+					assert(false);
+					return Result::kResultNotDetermined;
+				}
+
+				int GetChoice(
+					board::Board const& board,
+					FlowControl::FlowContext & flow_context,
+					board::BoardActionAnalyzer & action_analyzer,
+					ActionType action_type,
+					ChoiceGetter const& choice_getter)
+				{
 					size_t count = choice_getter.Size();
 					assert(count > 0);
-					size_t idx = 0;
-					size_t rand_idx = (size_t)(std::rand() % count);
-					int result = -1;
-					choice_getter.ForEachChoice([&](int choice) {
-						if (idx == rand_idx) {
-							result = choice;
-							return false;
-						}
-						++idx;
-						return true;
-					});
+					size_t rand_idx = (size_t)(rand_() % count);
+					int result = choice_getter.Get(rand_idx);
 					assert([&]() {
-						int result2 = choice_getter.Get(rand_idx);
+						int result2 = -1;
+						size_t idx = 0;
+						choice_getter.ForEachChoice([&](int choice) {
+							if (idx == rand_idx) {
+								result2 = choice;
+								return false;
+							}
+							++idx;
+							return true;
+						});
 						return result == result2;
 					}());
 					return result;
 				}
+
+			private:
+				std::mt19937 & rand_;
 			};
 
 			class StateValueFunction
@@ -116,7 +133,7 @@ namespace mcts
 				//    The expected number of simulation runs is 1/p.
 				//    So, if the expected number of runs is N, the probability p = 1.0 / N
 				static constexpr bool kEnableCutoff = true;
-				static constexpr double kCutoffExpectedRuns = 10;
+				static constexpr double kCutoffExpectedRuns = 20;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
 				Result GetCutoffResult(board::Board const& board) {
