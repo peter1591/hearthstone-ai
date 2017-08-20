@@ -17,6 +17,18 @@ namespace mcts
 			void StartNewAction() {
 			}
 
+			Result CutoffCheck(board::Board const& board)
+			{
+				using Policy = std::decay_t<decltype(select_)>;
+
+				if constexpr (Policy::kEnableCutoff) {
+					return select_.GetCutoffResult(board);
+				}
+				else {
+					return Result::kResultNotDetermined;
+				}
+			}
+
 			int ChooseAction(
 				board::Board const& board,
 				ActionType action_type,

@@ -103,7 +103,12 @@ namespace mcts
 			assert(choices > 0); // at least end-turn should be valid
 
 			int choice = -1;
+			Result result = Result::kResultInvalid;
 			if constexpr (is_simulation) {
+				result = this->SimulationCutoffCheck();
+				assert(result != Result::kResultInvalid);
+				if (result != Result::kResultNotDetermined) return result;
+
 				choice = this->ChooseSimulateAction(
 					ActionType(ActionType::kMainAction),
 					board::ActionChoices(choices));
@@ -120,7 +125,7 @@ namespace mcts
 				return Result::kResultInvalid;
 			}
 
-			Result result = apply_state_.ApplyAction(choice, flow_context, action_analyzer);
+			result = apply_state_.ApplyAction(choice, flow_context, action_analyzer);
 			if (result == Result::kResultInvalid) {
 				stage_handler.ReportInvalidAction();
 				statistic_.ApplyActionFailed(is_simulation);
@@ -140,6 +145,11 @@ namespace mcts
 			}
 
 			return choice;
+		}
+
+		inline Result TreeBuilder::SimulationCutoffCheck()
+		{
+			return simulation_stage_.CutoffCheck(apply_state_.GetBoard());
 		}
 
 		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)

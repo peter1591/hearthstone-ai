@@ -33,6 +33,8 @@ namespace mcts
 			class RandomPolicy
 			{
 			public:
+				static constexpr bool kEnableCutoff = false;
+
 				static int GetChoice(ChoiceGetter const& choice_getter, board::Board const& board)
 				{
 					// TODO: use value network to enhance simulation
@@ -66,8 +68,15 @@ namespace mcts
 					});
 				}
 
+				bool GuessWillWin(board::Board const& board) {
+					double v = GetStateValue(board);
+					static constexpr double draw_v = 0.0;
+					return (v > draw_v);
+				}
+
 				template <state::PlayerSide Side>
 				double GetStateValueForSide(state::PlayerSide self_side, FlowControl::PlayerStateView<Side> view) {
+					assert(self_side == Side);
 					state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
 					
 					double v = 0.0;
@@ -99,6 +108,35 @@ namespace mcts
 
 			class HeuristicPolicy
 			{
+			public:
+				// Simulation cutoff:
+				// For each simulation choice, a small probability is defined so the simulation ends here,
+				//    and the game result is defined by a heuristic state-value function.
+				// Assume the cutoff probability is p,
+				//    The expected number of simulation runs is 1/p.
+				//    So, if the expected number of runs is N, the probability p = 1.0 / N
+				static constexpr bool kEnableCutoff = true;
+				static constexpr double kCutoffExpectedRuns = 10;
+				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
+
+				Result GetCutoffResult(board::Board const& board) {
+					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
+					double v = rand_gen(rand_);
+					if (v >= kCutoffProbability) {
+						return Result::kResultNotDetermined;
+					}
+
+					bool self_win = state_value_func_.GuessWillWin(board);
+					if (self_win) {
+						if (board.GetViewSide() == state::kPlayerFirst) return Result::kResultFirstPlayerWin;
+						else return Result::kResultSecondPlayerWin;
+					}
+					else {
+						if (board.GetViewSide() == state::kPlayerSecond) return Result::kResultSecondPlayerWin;
+						else return Result::kResultFirstPlayerWin;
+					}
+				}
+
 			public:
 				HeuristicPolicy(state::PlayerSide side, std::mt19937 & rand) :
 					rand_(rand),

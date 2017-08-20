@@ -63,6 +63,9 @@ namespace mcts
 
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices);
+
+			// Cutoff check will be done for each main action
+			Result SimulationCutoffCheck();
 			int ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices);
 
 		private:
