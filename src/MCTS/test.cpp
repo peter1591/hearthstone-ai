@@ -6,6 +6,7 @@
 #include "Cards/PreIndexedCards.h"
 #include "TestStateBuilder.h"
 #include "UI/AIController.h"
+#include "UI/CompetitionGuide.h"
 
 void Initialize()
 {
@@ -259,12 +260,20 @@ private:
 	mcts::builder::TreeBuilder::TreeNode const* node_;
 };
 
+void TestAI()
+{
+	srand(0);
+
+	Handler handler;
+	handler.Start();
+}
+
+void SelfPlay()
+{
+}
+
 int main(void)
 {
-  srand(0);
-
-  Handler handler;
-  handler.Start();
-
+	TestAI();
 	return 0;
 }

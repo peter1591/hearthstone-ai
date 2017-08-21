@@ -218,5 +218,8 @@
     <ClInclude Include="..\..\include\Utils\NeverShrinkVector.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\UI\CompetitionGuide.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

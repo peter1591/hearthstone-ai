@@ -11,14 +11,14 @@ namespace ui
 	class AIController
 	{
 	private:
-		typedef state::State StartingStateGetter(int seed);
+		using StartingStateGetter = std::function<state::State(int)>;
 
 	public:
 		AIController() :
 			first_tree_(), second_tree_(), statistic_()
 		{}
 
-		void Run(int duration_sec, int thread_count, StartingStateGetter* state_getter) {
+		void Run(int duration_sec, int thread_count, StartingStateGetter state_getter) {
 			std::chrono::steady_clock::time_point end = 
 				std::chrono::steady_clock::now() +
 				std::chrono::seconds(duration_sec);
@@ -32,7 +32,7 @@ namespace ui
 						if (std::chrono::steady_clock::now() > end) break;
 
 						bool ret = mcts.Iterate([&]() {
-							return (*state_getter)(rand());
+							return state_getter(rand());
 						});
 
 						if (ret) statistic_.IterateSucceeded();
