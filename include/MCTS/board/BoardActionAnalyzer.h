@@ -14,18 +14,24 @@ namespace mcts
 
 		class BoardActionAnalyzer
 		{
-		private:
-			enum MainActions
-			{
-				kActionPlayCard,
-				kActionAttack,
-				kActionHeroPower,
-				kActionEndTurn,
-				kActionMax // Should be at last
-			};
-
 		public:
 			BoardActionAnalyzer() : mutex_(), op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
+
+			BoardActionAnalyzer(BoardActionAnalyzer const& rhs) :
+				mutex_(),
+				op_map_(rhs.op_map_),
+				op_map_size_(rhs.op_map_size_),
+				attackers_(rhs.attackers_),
+				playable_cards_(rhs.playable_cards_)
+			{}
+
+			BoardActionAnalyzer & operator=(BoardActionAnalyzer const& rhs) {
+				op_map_ = rhs.op_map_;
+				op_map_size_ = rhs.op_map_size_;
+				attackers_ = rhs.attackers_;
+				playable_cards_ = rhs.playable_cards_;
+				return *this;
+			}
 
 			void Reset() { op_map_size_ = 0; }
 
@@ -39,11 +45,11 @@ namespace mcts
 				IActionParameterGetter & action_parameters);
 
 			enum OpType {
-				kInvalid,
 				kPlayCard,
 				kAttack,
 				kHeroPower,
-				kEndTurn
+				kEndTurn,
+				kInvalid, kMaxOpType = kInvalid
 			};
 
 			template <class Functor>
@@ -82,7 +88,7 @@ namespace mcts
 
 		private:
 			mutable Utils::SharedSpinLock mutex_;
-			std::array<OpFunc, kActionMax> op_map_;
+			std::array<OpFunc, kMaxOpType> op_map_;
 			size_t op_map_size_;
 			std::vector<int> attackers_;
 			std::vector<size_t> playable_cards_;
