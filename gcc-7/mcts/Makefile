@@ -20,23 +20,29 @@ CFLAGS+=-O3 -march=native
 CFLAGS+=-DNDEBUG
 LDFLAGS+=-O3
 
-ifneq ($(PROFILING), 2)
-# Preserve the symbols for PROFILING=2
-CFLAGS+=-flto -fuse-linker-plugin
-LDFLAGS+=-flto -fuse-linker-plugin
-endif
+# Profiling options:
+# 0 -> No linker optimization, so google-pprof can see debug symbols
+# 1 -> Generate profile for optimization
+# 2 -> Use profile to optimize
+
+LINKER_OPTIMIZATION := 0
 
 # profiling
 ifeq ($(PROFILING), 1)
-	CFLAGS+=-fprofile-generate
-	LDFLAGS+=-fprofile-generate
-else
-	ifeq ($(PROFILING), 2)
-		# Use gperftools
-	else
-		CFLAGS += -fprofile-use
-		LDFLAGS+= -fprofile-use
-	endif
+LINKER_OPTIMIZATION := 1
+CFLAGS+=-fprofile-generate
+LDFLAGS+=-fprofile-generate
+endif
+
+ifeq ($(PROFILING), 2)
+LINKER_OPTIMIZATION := 1
+CFLAGS += -fprofile-use
+LDFLAGS+= -fprofile-use
+endif
+
+ifeq ($(LINKER_OPTIMIZATION), 1)
+CFLAGS+=-flto -fuse-linker-plugin
+LDFLAGS+=-flto -fuse-linker-plugin
 endif
 
 THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
