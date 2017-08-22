@@ -31,7 +31,7 @@ namespace ui
 
 		// TODO: The underlying truth state is passed. It means the competitor can acquire
 		// hidden information (e.g., opponents hand cards).
-		virtual void Think(state::State const& state, int think_time) = 0;
+		virtual void Think(state::State const& state, int threads, int think_time) = 0;
 
 		virtual int GetMainAction() = 0;
 
@@ -95,7 +95,11 @@ namespace ui
 			time(&now);
 
 			struct tm timeinfo;
+#ifdef _MSC_VER
 			localtime_s(&timeinfo, &now);
+#else
+			localtime_r(&now, &timeinfo);
+#endif
 
 			char buffer[80];
 			strftime(buffer, 80, "%Y%m%d-%H%M%S", &timeinfo);
@@ -216,7 +220,7 @@ namespace ui
 		void SetFirstCompetitor(ICompetitor * first) { first_ = first; }
 		void SetSecondCompetitor(ICompetitor * second) { second_ = second; }
 
-		void Start(StartingStateGetter state_getter, int think_time) {
+		void Start(StartingStateGetter state_getter, int threads, int think_time) {
 			state::State current_state = state_getter();
 			assert(first_);
 			assert(second_);
@@ -234,7 +238,7 @@ namespace ui
 					next_competitor = second_;
 				}
 
-				next_competitor->Think(current_state, think_time);
+				next_competitor->Think(current_state, threads, think_time);
 
 				FlowControl::FlowContext flow_context;
 
@@ -253,6 +257,7 @@ namespace ui
 				if (result != mcts::Result::kResultNotDetermined) {
 					break;
 				}
+				break; // DEBUG
 			}
 
 			recorder_.End(result);

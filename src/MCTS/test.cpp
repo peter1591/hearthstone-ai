@@ -272,8 +272,8 @@ void Compete(std::mt19937 & rand)
 	constexpr static int think_time = 3;
 	ui::CompetitionGuide guide(rand);
 	
-	ui::AICompetitor first(threads);
-	ui::AICompetitor second(threads);
+	ui::AICompetitor first;
+	ui::AICompetitor second;
 
 	TestStateBuilder().GetState(rand());
 
@@ -284,7 +284,7 @@ void Compete(std::mt19937 & rand)
 	guide.SetFirstCompetitor(&first);
 	guide.SetSecondCompetitor(&second);
 
-	guide.Start(start_board_getter, think_time);
+	guide.Start(start_board_getter, threads, think_time);
 }
 
 int main(void)

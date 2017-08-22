@@ -76,11 +76,14 @@ namespace ui
 
 	class AICompetitor : public ICompetitor {
 	public:
-		AICompetitor(int threads) : threads_(threads) {}
+		AICompetitor() : root_node_(nullptr), node_(nullptr), controller_() {}
 
-		void Think(state::State const& state, int think_time) {
+		AICompetitor(AICompetitor const&) = delete;
+		AICompetitor & operator=(AICompetitor const&) = delete;
+
+		void Think(state::State const& state, int threads, int think_time) {
 			controller_.reset(new AIController());
-			controller_->Run(think_time, threads_, [&](int seed) {
+			controller_->Run(think_time, threads, [&](int seed) {
 				(void)seed;
 				return state;
 			});
@@ -157,6 +160,5 @@ namespace ui
 		mcts::builder::TreeBuilder::TreeNode const* root_node_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		std::unique_ptr<AIController> controller_;
-		int threads_;
 	};
 }
