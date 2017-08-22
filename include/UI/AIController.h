@@ -75,7 +75,6 @@ namespace ui
 		AICompetitor & operator=(AICompetitor const&) = delete;
 
 		void Think(state::State const& state, int threads, uint64_t total_iterations) {
-			auto start = std::chrono::steady_clock::now();
 			std::chrono::steady_clock::time_point run_until = std::chrono::steady_clock::time_point::max();
 
 			auto last_show = std::chrono::steady_clock::now();
