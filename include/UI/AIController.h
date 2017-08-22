@@ -5,6 +5,7 @@
 
 #include "state/State.h"
 #include "MCTS/MOMCTS.h"
+#include "UI/CompetitionGuide.h"
 
 namespace ui
 {
@@ -71,5 +72,91 @@ namespace ui
 		mcts::builder::TreeBuilder::TreeNode first_tree_;
 		mcts::builder::TreeBuilder::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;
+	};
+
+	class AICompetitor : public ICompetitor {
+	public:
+		AICompetitor(int threads) : threads_(threads) {}
+
+		void Think(state::State const& state, int think_time) {
+			controller_.reset(new AIController());
+			controller_->Run(think_time, threads_, [&](int seed) {
+				(void)seed;
+				return state;
+			});
+			node_ = controller_->GetRootNode(state.GetCurrentPlayerId());
+			root_node_ = node_;
+		}
+
+		int GetMainAction() final {
+			assert(root_node_ == node_);
+			assert(node_);
+			assert(node_->GetActionType().GetType() == mcts::ActionType::kMainAction);
+
+			int best_choice = -1;
+			double best_chosen_times = -std::numeric_limits<double>::infinity();
+			mcts::builder::TreeBuilder::TreeNode const* best_node = nullptr;
+			root_node_->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				double chosen_times = (double)child.GetEdgeAddon().GetChosenTimes();
+				if (chosen_times > best_chosen_times) {
+					best_chosen_times = chosen_times;
+					best_choice = choice;
+					best_node = child.GetNode();
+				}
+				return true;
+			});
+
+			node_ = best_node;
+
+			return best_choice;
+		}
+
+		mcts::board::BoardActionAnalyzer GetActionApplier() final {
+			return root_node_->GetAddon().action_analyzer;
+		}
+
+		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) final {
+			assert(node_);
+
+			if (node_->GetActionType() != action_type) {
+				assert(false);
+				throw std::runtime_error("Action type not match");
+			}
+
+			auto CanBeChosen = [&](int choice) {
+				for (action_choices.Begin(); !action_choices.IsEnd(); action_choices.StepNext()) {
+					if (action_choices.Get() == choice) return true;
+				}
+				return false;
+			};
+
+			int best_choice = -1;
+			double best_chosen_times = -std::numeric_limits<double>::infinity();
+			mcts::builder::TreeBuilder::TreeNode const* best_node = nullptr;
+			node_->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				if (!CanBeChosen(choice)) return true;
+
+				double chosen_times = (double)child.GetEdgeAddon().GetChosenTimes();
+				if (chosen_times > best_chosen_times) {
+					best_chosen_times = chosen_times;
+					best_choice = choice;
+					best_node = child.GetNode();
+				}
+				return true;
+			});
+
+			if (best_choice < 0) {
+				throw std::runtime_error("No any choice is evaluated.");
+			}
+
+			node_ = best_node;
+			return best_choice;
+		}
+
+	private:
+		mcts::builder::TreeBuilder::TreeNode const* root_node_;
+		mcts::builder::TreeBuilder::TreeNode const* node_;
+		std::unique_ptr<AIController> controller_;
+		int threads_;
 	};
 }

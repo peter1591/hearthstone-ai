@@ -8,7 +8,7 @@
 #include "UI/AIController.h"
 #include "UI/CompetitionGuide.h"
 
-void Initialize()
+static void Initialize()
 {
 	std::cout << "Reading json file...";
 	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
@@ -26,8 +26,6 @@ public:
 
 	void Start()
 	{
-		Initialize();
-
 		auto start_board_getter = [](int seed) -> state::State {
 			return TestStateBuilder().GetState(seed);
 		};
@@ -268,12 +266,34 @@ void TestAI()
 	handler.Start();
 }
 
-void SelfPlay()
+void Compete(std::mt19937 & rand)
 {
+	constexpr static int threads = 4;
+	constexpr static int think_time = 3;
+	ui::CompetitionGuide guide(rand);
+	
+	ui::AICompetitor first(threads);
+	ui::AICompetitor second(threads);
+
+	TestStateBuilder().GetState(rand());
+
+	auto start_board_getter = [&]() -> state::State {
+		return TestStateBuilder().GetState(rand());
+	};
+
+	guide.SetFirstCompetitor(&first);
+	guide.SetSecondCompetitor(&second);
+
+	guide.Start(start_board_getter, think_time);
 }
 
 int main(void)
 {
-	TestAI();
+	Initialize();
+
+	std::mt19937 rand;
+
+	//TestAI();
+	Compete(rand);
 	return 0;
 }
