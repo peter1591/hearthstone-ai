@@ -44,7 +44,7 @@ namespace ui
 
 			while (true) {
 				if (!continue_checker()) break;
-				std::this_thread::sleep_for(std::chrono::seconds(1));
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
 
 			stop_flag = true;
@@ -78,18 +78,19 @@ namespace ui
 			auto start = std::chrono::steady_clock::now();
 			std::chrono::steady_clock::time_point run_until = std::chrono::steady_clock::time_point::max();
 
-			long long last_show_rest_sec = -1;
+			auto last_show = std::chrono::steady_clock::now();
 			auto continue_checker = [&]() {
 				auto now = std::chrono::steady_clock::now();
 				if (now > run_until) return false;
 
-				auto rest_sec = std::chrono::duration_cast<std::chrono::seconds>(run_until - now).count();
-				if (rest_sec != last_show_rest_sec) {
-					uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
+				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
+				if (iterations >= total_iterations) return false;
+
+				auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_show).count();
+				if (after_last_shown > 5) {
 					double percent = (double)iterations / total_iterations;
 					std::cout << "Iterations: " << iterations << " (" << percent * 100.0 << "%)" << std::endl;
-					if (iterations >= total_iterations) return false;
-					last_show_rest_sec = rest_sec;
+					last_show = now;
 				}
 				return true;
 			};
@@ -99,6 +100,7 @@ namespace ui
 				(void)seed;
 				return state;
 			});
+			std::cout << "Total iterations: " << controller_->GetStatistic().GetSuccededIterates() << std::endl;
 			node_ = controller_->GetRootNode(state.GetCurrentPlayerId());
 			root_node_ = node_;
 		}
