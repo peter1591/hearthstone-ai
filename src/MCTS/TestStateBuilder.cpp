@@ -132,6 +132,50 @@ void MoveFromDeckToHand(std::unordered_multiset<std::string> & cards, std::strin
 	AddHandCard(card_id, state, player);
 }
 
+void RandomlyMoveFromDeckToHand(
+	std::mt19937 & rand,
+	std::unordered_multiset<std::string> & cards, state::State & state, state::PlayerIdentifier player)
+{
+	size_t idx = rand() % cards.size();
+	auto it = std::next(cards.begin(), idx);
+	std::string card_name = *it;
+
+	cards.erase(it);
+	Cards::CardId card_id = Cards::Database::GetInstance().GetIdByCardName(card_name);
+	AddHandCard(card_id, state, player);
+}
+
+state::State TestStateBuilder::GetStateWithRandomStartCard(int seed)
+{
+	std::mt19937 rand(seed);
+	state::State state;
+	MyRandomGenerator my_random(rand());
+
+	MakeHero(state, state::PlayerIdentifier::First());
+	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
+	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
+	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
+	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
+
+	MakeHero(state, state::PlayerIdentifier::Second());
+	auto deck2 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
+	AddHandCard(Cards::ID_GAME_005, state, state::PlayerIdentifier::Second());
+	PrepareDeck(deck2, my_random, state, state::PlayerIdentifier::Second());
+
+	state.GetMutableCurrentPlayerId().SetFirst();
+	state.GetBoard().GetFirst().GetResource().SetTotal(1);
+	state.GetBoard().GetFirst().GetResource().Refill();
+	state.GetBoard().GetSecond().GetResource().SetTotal(0);
+	state.GetBoard().GetSecond().GetResource().Refill();
+
+	return state;
+}
+
 state::State TestStateBuilder::GetState(int seed)
 {
 	state::State state;

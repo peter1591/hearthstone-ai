@@ -284,7 +284,7 @@ void TestAI()
 	handler.Start();
 }
 
-void Compete(int argc, char *argv[], std::mt19937 & rand)
+void Compete(int argc, char *argv[])
 {
 	if (argc != 3) {
 		std::cout << "Usage: "
@@ -298,6 +298,9 @@ void Compete(int argc, char *argv[], std::mt19937 & rand)
 	int threads = 1;
 	uint64_t iterations = 1000;
 
+	auto seed = std::random_device()();
+	std::mt19937 rand(seed);
+
 	{
 		std::istringstream ss(argv[1]);
 		ss >> threads;
@@ -310,6 +313,7 @@ void Compete(int argc, char *argv[], std::mt19937 & rand)
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\tThreads: " << threads << std::endl;
 	std::cout << "\tIterations: " << iterations << std::endl;
+	std::cout << "\tSeed: " << seed << std::endl;
 
 	ui::CompetitionGuide guide(rand);
 	
@@ -319,7 +323,7 @@ void Compete(int argc, char *argv[], std::mt19937 & rand)
 	TestStateBuilder().GetState(rand());
 
 	auto start_board_getter = [&]() -> state::State {
-		return TestStateBuilder().GetState(rand());
+		return TestStateBuilder().GetStateWithRandomStartCard(rand());
 	};
 
 	guide.SetFirstCompetitor(&first);
@@ -332,9 +336,7 @@ int main(int argc, char *argv[])
 {
 	Initialize();
 
-	std::mt19937 rand;
-
 	//TestAI();
-	Compete(argc, argv, rand);
+	Compete(argc, argv);
 	return 0;
 }
