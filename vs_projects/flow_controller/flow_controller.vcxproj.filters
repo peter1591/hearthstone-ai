@@ -551,5 +551,8 @@
     <ClInclude Include="..\..\include\Cards\PreIndexedCards.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\JsonSerializer.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

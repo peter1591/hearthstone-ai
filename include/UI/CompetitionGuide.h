@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "state/State.h"
+#include "state/JsonSerializer.h"
 #include "FlowControl/FlowController.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/BoardActionAnalyzer.h"
@@ -53,7 +54,7 @@ namespace ui
 		{
 			Json::Value obj;
 			obj["type"] = "kMainAction";
-			obj["board"] = GetJson(state);
+			obj["board"] = state::JsonSerializer::Serialize(state);
 
 			auto op = analyzer.GetMainOpType(action);
 			obj["choice"] = GetMainOpString(op);
@@ -111,12 +112,6 @@ namespace ui
 		}
 
 	private:
-		Json::Value GetJson(state::State const& state) {
-			Json::Value obj;
-			// TODO
-			return obj;
-		}
-
 		std::string GetMainOpString(mcts::board::BoardActionAnalyzer::OpType op) {
 			using mcts::board::BoardActionAnalyzer;
 			switch (op) {
