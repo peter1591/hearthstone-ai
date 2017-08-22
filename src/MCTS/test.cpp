@@ -57,8 +57,25 @@ public:
 				std::cout << "Running for " << secs << " seconds with " << threads << " threads." << std::endl;
 
 				auto start = std::chrono::steady_clock::now();
+				std::chrono::steady_clock::time_point run_until =
+					std::chrono::steady_clock::now() +
+					std::chrono::seconds(secs);
+
+				long long last_show_rest_sec = -1;
+				auto continue_checker = [&]() {
+					auto now = std::chrono::steady_clock::now();
+					if (now > run_until) return false;
+
+					auto rest_sec = std::chrono::duration_cast<std::chrono::seconds>(run_until - now).count();
+					if (rest_sec != last_show_rest_sec) {
+						std::cout << "Rest seconds: " << rest_sec << std::endl;
+						last_show_rest_sec = rest_sec;
+					}
+					return true;
+				};
+
 				auto start_i = controller_.GetStatistic().GetSuccededIterates();
-				controller_.Run(secs, threads, start_board_getter);
+				controller_.Run(continue_checker, threads, start_board_getter);
 				auto end_i = controller_.GetStatistic().GetSuccededIterates();
 
 				std::cout << std::endl;
@@ -269,7 +286,7 @@ void TestAI()
 void Compete(std::mt19937 & rand)
 {
 	constexpr static int threads = 4;
-	constexpr static int think_time = 3;
+	constexpr static uint64_t iterations = 1000;
 	ui::CompetitionGuide guide(rand);
 	
 	ui::AICompetitor first;
@@ -284,7 +301,7 @@ void Compete(std::mt19937 & rand)
 	guide.SetFirstCompetitor(&first);
 	guide.SetSecondCompetitor(&second);
 
-	guide.Start(start_board_getter, threads, think_time);
+	guide.Start(start_board_getter, threads, iterations);
 }
 
 int main(void)

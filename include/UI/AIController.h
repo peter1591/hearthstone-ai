@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <chrono>
 #include <thread>
 
@@ -19,18 +20,17 @@ namespace ui
 			first_tree_(), second_tree_(), statistic_()
 		{}
 
-		void Run(int duration_sec, int thread_count, StartingStateGetter state_getter) {
-			std::chrono::steady_clock::time_point end = 
-				std::chrono::steady_clock::now() +
-				std::chrono::seconds(duration_sec);
-
+		template <class ContinueChecker>
+		void Run(ContinueChecker continue_checker, int thread_count, StartingStateGetter state_getter)
+		{
 			std::vector<std::thread> threads;
+			std::atomic_bool stop_flag = false;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
 					std::mt19937 rand;
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, rand);
 					while (true) {
-						if (std::chrono::steady_clock::now() > end) break;
+						if (stop_flag == true) break;
 
 						bool ret = mcts.Iterate([&]() {
 							return state_getter(rand());
@@ -42,19 +42,12 @@ namespace ui
 				});
 			}
 
-			long long last_show_rest_sec = -1;
 			while (true) {
-				auto now = std::chrono::steady_clock::now();
-				if (now > end) break;
-				
-				auto rest_sec = std::chrono::duration_cast<std::chrono::seconds>(end - now).count();
-				if (rest_sec != last_show_rest_sec) {
-					std::cout << "Rest seconds: " << rest_sec << std::endl;
-					last_show_rest_sec = rest_sec;
-				}
+				if (!continue_checker()) break;
 				std::this_thread::sleep_for(std::chrono::seconds(1));
 			}
 
+			stop_flag = true;
 			for (auto & thread : threads) {
 				thread.join();
 			}
@@ -81,9 +74,28 @@ namespace ui
 		AICompetitor(AICompetitor const&) = delete;
 		AICompetitor & operator=(AICompetitor const&) = delete;
 
-		void Think(state::State const& state, int threads, int think_time) {
+		void Think(state::State const& state, int threads, uint64_t total_iterations) {
+			auto start = std::chrono::steady_clock::now();
+			std::chrono::steady_clock::time_point run_until = std::chrono::steady_clock::time_point::max();
+
+			long long last_show_rest_sec = -1;
+			auto continue_checker = [&]() {
+				auto now = std::chrono::steady_clock::now();
+				if (now > run_until) return false;
+
+				auto rest_sec = std::chrono::duration_cast<std::chrono::seconds>(run_until - now).count();
+				if (rest_sec != last_show_rest_sec) {
+					uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
+					double percent = (double)iterations / total_iterations;
+					std::cout << "Iterations: " << iterations << " (" << percent * 100.0 << "%)" << std::endl;
+					if (iterations >= total_iterations) return false;
+					last_show_rest_sec = rest_sec;
+				}
+				return true;
+			};
+
 			controller_.reset(new AIController());
-			controller_->Run(think_time, threads, [&](int seed) {
+			controller_->Run(continue_checker, threads, [&](int seed) {
 				(void)seed;
 				return state;
 			});
