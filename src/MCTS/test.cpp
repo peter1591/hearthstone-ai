@@ -1,7 +1,8 @@
 #include "FlowControl/FlowController-impl.h"
 
-#include <iostream>
 #include <chrono>
+#include <iostream>
+#include <sstream>
 
 #include "Cards/PreIndexedCards.h"
 #include "TestStateBuilder.h"
@@ -283,10 +284,33 @@ void TestAI()
 	handler.Start();
 }
 
-void Compete(std::mt19937 & rand)
+void Compete(int argc, char *argv[], std::mt19937 & rand)
 {
-	constexpr static int threads = 4;
-	constexpr static uint64_t iterations = 1000;
+	if (argc != 3) {
+		std::cout << "Usage: "
+			<< argv[0]
+			<< " (threads)"
+			<< " (iterations)"
+			<< std::endl;
+		return;
+	}
+
+	int threads = 1;
+	uint64_t iterations = 1000;
+
+	{
+		std::istringstream ss(argv[1]);
+		ss >> threads;
+	}
+	{
+		std::istringstream ss(argv[2]);
+		ss >> iterations;
+	}
+
+	std::cout << "Parameters: " << std::endl;
+	std::cout << "\tThreads: " << threads << std::endl;
+	std::cout << "\tIterations: " << iterations << std::endl;
+
 	ui::CompetitionGuide guide(rand);
 	
 	ui::AICompetitor first;
@@ -304,13 +328,13 @@ void Compete(std::mt19937 & rand)
 	guide.Start(start_board_getter, threads, iterations);
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	Initialize();
 
 	std::mt19937 rand;
 
 	//TestAI();
-	Compete(rand);
+	Compete(argc, argv, rand);
 	return 0;
 }
