@@ -49,8 +49,9 @@ namespace mcts
 			}
 
 			void SetAsInvalidNode() {
-				assert(!node_);
 				assert(type_ == kNormal || type_ == kInvalid);
+
+				// Note: Should not delete node here. Since other threads might reading it.
 
 				type_ = kInvalid;
 			}
@@ -66,8 +67,8 @@ namespace mcts
 
 		private:
 			EdgeAddon edge_addon_;
-			Type type_;
-			std::unique_ptr<TreeNode> node_;
+			Type type_; // TODO: atomic?
+			std::unique_ptr<TreeNode> node_; // TODO: atomic?
 		};
 
 		// Thread safety:
