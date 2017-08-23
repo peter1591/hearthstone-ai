@@ -88,6 +88,13 @@ namespace ui
 		}
 
 		void End(mcts::Result result) {
+			{
+				Json::Value obj;
+				obj["type"] = "kEnd";
+				obj["result"] = GetResultString(result);
+				json_.append(obj);
+			}
+
 			assert(result != mcts::Result::kResultInvalid);
 			assert(result != mcts::Result::kResultNotDetermined);
 
@@ -159,6 +166,20 @@ namespace ui
 				return "kChooseFromCardIds";
 			case mcts::board::ActionChoices::kChooseFromZeroToExclusiveMax:
 				return "kChooseFromZeroToExclusiveMax";
+			default:
+				assert(false);
+				return "Invalid";
+			}
+		}
+
+		std::string GetResultString(mcts::Result result) {
+			switch (result) {
+			case mcts::Result::kResultFirstPlayerWin:
+				return "kResultFirstPlayerWin";
+			case mcts::Result::kResultSecondPlayerWin:
+				return "kResultSecondPlayerWin";
+			case mcts::Result::kResultDraw:
+				return "kResultDraw";
 			default:
 				assert(false);
 				return "Invalid";
