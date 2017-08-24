@@ -20,7 +20,7 @@ runner()
   local filename="$2"
   echo "Starting a process '${exe_path}' to file '${filename}'"
   while true; do
-    "$1" 1 100000 > "${filename}" 2>&1
+    "$1" 1 100000 >> "${filename}" 2>&1
     sleep 1
   done
 }
