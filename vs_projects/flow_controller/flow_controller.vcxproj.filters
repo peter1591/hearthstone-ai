@@ -554,5 +554,8 @@
     <ClInclude Include="..\..\include\state\JsonSerializer.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\JsonSerializer.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

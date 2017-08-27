@@ -138,7 +138,7 @@ namespace state
 			return obj;
 		}
 
-	private:
+	public:
 		static std::string GetPlayerString(state::PlayerIdentifier player) {
 			if (player.IsFirst()) return "kFirstPlayer";
 			if (player.IsSecond()) return "kSecondPlayer";

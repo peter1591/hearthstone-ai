@@ -7,8 +7,8 @@
 #include <sstream>
 
 #include "state/State.h"
-#include "state/JsonSerializer.h"
 #include "FlowControl/FlowController.h"
+#include "FlowControl/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/RandomGenerator.h"
@@ -54,7 +54,7 @@ namespace ui
 		{
 			Json::Value obj;
 			obj["type"] = "kMainAction";
-			obj["board"] = state::JsonSerializer::Serialize(state);
+			obj["board"] = FlowControl::JsonSerializer::Serialize(state);
 
 			auto op = analyzer.GetMainOpType(action);
 			obj["choice"] = GetMainOpString(op);
