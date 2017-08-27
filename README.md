@@ -13,6 +13,7 @@ The goal for this project is to design a game bot for HearthStone.
 
 ### Simulation Engine
 * There's no HearthStone simulation engine written in C++, so I decided to write one.
+* Header-only implementation. No need to compile anything!
 * Written in C++14/C++17.
   * Need gcc 7.0+ or Visual Studio 2017 Preview 2.1+ to compile.
   * Heavily use template programming.
@@ -42,7 +43,7 @@ The goal for this project is to design a game bot for HearthStone.
 
 ## Contributors
 
-Just me.
+Just me. Any idea/help is always welcomed.
 
 ## License
 
