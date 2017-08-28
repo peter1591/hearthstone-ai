@@ -104,7 +104,7 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 		.ChangeTo<state::kCardZonePlay>(player);
 
 
-	auto hero_power = Cards::CardDispatcher::CreateInstance(Cards::ID_CS1h_001);
+	auto hero_power = Cards::CardDispatcher::CreateInstance(Cards::ID_CS2_034);
 	assert(hero_power.card_type == state::kCardTypeHeroPower);
 	hero_power.zone = state::kCardZoneNewlyCreated;
 	ref = state.AddCard(state::Cards::Card(hero_power));

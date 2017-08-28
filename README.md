@@ -2,7 +2,7 @@
 
 UNDER DEVELOPMENT!!!!
 
-The goal for this project is to design a game bot for HearthStone.
+The is a game bot for HearthStone.
 
 ## Motivation
 * AlphaGo successfully combines MCTS and deep neural networks to beat human on Go.
@@ -13,13 +13,13 @@ The goal for this project is to design a game bot for HearthStone.
 
 ### Simulation Engine
 * There's no HearthStone simulation engine written in C++, so I decided to write one.
-* Header-only implementation. No need to compile anything!
+* Header-only implementation. No dependency. No need to compile anything!
+* The most important goal is **speed**.
 * Written in C++14/C++17.
   * Need gcc 7.0+ or Visual Studio 2017 Preview 2.1+ to compile.
   * Heavily use template programming.
-* The most important goal is **speed**.
-* Profile-guided optimization is integrated in build script.
-* So glad to be used in AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)
+* Profile-guided optimization is integrated in the build script.
+* Used in AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)
 
 ### AI Engine
 * Monte Carlo tree search
@@ -49,3 +49,5 @@ Just me. Any idea/help is always welcomed.
 ## License
 
 The newest GPL license is applied to this project.
+
+Some third party libraries are used, please also obey to their licenses.
