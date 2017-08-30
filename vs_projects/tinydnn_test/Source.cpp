@@ -19,7 +19,7 @@ int main(void)
 
 	size_t batch_size = 1;
 	size_t epoch = 100000;
-	tiny_dnn::adagrad opt;
+	tiny_dnn::gradient_descent opt;
 
 	net.fit<tiny_dnn::mse>(opt, input_data, desired_out, batch_size, epoch);
 
