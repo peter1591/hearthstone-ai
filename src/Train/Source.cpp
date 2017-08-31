@@ -3,10 +3,13 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <sstream>
 #include <vector>
 
 #pragma warning (push)
 #pragma warning (disable: 4083 4244 4267)
+#define CNN_SINGLE_THREAD
+#include <chrono> // workaround tiny_dnn issue #872
 #include "tiny_dnn/tiny_dnn.h"
 #pragma warning (pop)
 
@@ -108,23 +111,35 @@ public:
 		tiny_dnn::construct_graph(net, { &in_heroes, &in_minions, &in_standalone }, { &fc3 });
 
 		size_t batch_size = 32;
-		size_t epoch = 10;
+		size_t epoch = 1;
 		size_t total_epoch = 0;
 		tiny_dnn::adam opt;
 
 		while (true) {
-			net.fit<tiny_dnn::mse>(opt, input_, output_, batch_size, epoch);
+			int batch_op_counter = 0;
+			auto batch_op = [batch_op_counter]() mutable {
+				++batch_op_counter;
+				if (batch_op_counter % 100 == 0) {
+					std::cout << "completed batches: " << batch_op_counter << std::endl;
+				}
+			};
 
-			total_epoch += epoch;
+			auto epoch_op = [&total_epoch]() mutable {
+				++total_epoch;
+				std::cout << "completed epoch: " << total_epoch << std::endl;
+			};
+			net.fit<tiny_dnn::mse>(opt, input_, output_, batch_size, epoch, batch_op, epoch_op);
 
-			std::cout << "total epoch: " << total_epoch << std::endl;
+			std::stringstream ss;
+			ss << "net_result_epoch_" << total_epoch;
+			net.save(ss.str());
 
 			size_t correct = 0;
 
 			for (size_t idx = 0; idx < input_.size(); ++idx) {
 				auto result = net.predict(input_[idx]);
 				bool predict_win = (result[0][0] > 0.0);
-				bool actual_win = (output_[idx][0][0] > 0.0);
+				bool actual_win = (output_[idx][0] > 0.0);
 				if (predict_win == actual_win) ++correct;
 			}
 			double rate = ((double)correct) / input_.size();
@@ -136,7 +151,7 @@ public:
 			for (size_t idx = 0; idx < validate_input_.size(); ++idx) {
 				auto result = net.predict(validate_input_[idx]);
 				bool predict_win = (result[0][0] > 0.0);
-				bool actual_win = (validate_output_[idx][0][0] > 0.0);
+				bool actual_win = (validate_output_[idx][0] > 0.0);
 				if (predict_win == actual_win) ++correct;
 			}
 			rate = ((double)correct) / validate_input_.size();
@@ -194,11 +209,11 @@ private:
 
 		if (for_validate) {
 			validate_input_.push_back(input);
-			validate_output_.push_back({ { (float)label } });
+			validate_output_.push_back({ (float)label });
 		}
 		else {
 			input_.push_back(input);
-			output_.push_back({ { (float)label } });
+			output_.push_back({ (float)label });
 		}
 	}
 
@@ -303,9 +318,9 @@ private:
 
 private:
 	std::vector<tiny_dnn::tensor_t> input_;
-	std::vector<tiny_dnn::tensor_t> output_;
+	std::vector<tiny_dnn::vec_t> output_;
 	std::vector<tiny_dnn::tensor_t> validate_input_;
-	std::vector<tiny_dnn::tensor_t> validate_output_;
+	std::vector<tiny_dnn::vec_t> validate_output_;
 };
 
 int main(void)

@@ -86,4 +86,4 @@ cpu:
 	google-pprof ./$(EXE) ./prof.result
 
 tcmalloc:
-	LD_PRELOAD=/usr/lib/libtcmalloc.so.4 ./$(EXE)
+	LD_LIBRARY_PATH=/usr/local/gcc-7.1/lib64 LD_PRELOAD=/usr/lib/libtcmalloc.so.4 ./$(EXE)
