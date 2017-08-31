@@ -76,7 +76,7 @@ namespace mcts
 				std::mt19937 & rand_;
 			};
 
-			class StateValueFunction
+			class WeakHeuristicStateValueFunction
 			{
 			public:
 				double GetStateValue(board::Board const& board) {
@@ -367,7 +367,7 @@ namespace mcts
 				std::mt19937 & rand_;
 
 				std::vector<int> decision_;
-				StateValueFunction state_value_func_;
+				WeakHeuristicStateValueFunction state_value_func_;
 				board::CopiedBoard copy_board_;
 			};
 		}
