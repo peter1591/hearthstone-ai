@@ -328,7 +328,14 @@ int main(void)
 
 		std::uniform_real_distribution<double> unif(0.0, 1.0);
 		bool for_validate = unif(rand) < validation_case_rate;
-		trainer.AddJsonFile(dirname + "/" + filename, for_validate);
+
+		try {
+			trainer.AddJsonFile(dirname + "/" + filename, for_validate);
+		}
+		catch (...) {
+			std::cout << "Failed when loading file " << filename << std::endl;
+			throw;
+		}
 
 		++loaded_files;
 		if (loaded_files % 100 == 0) {
