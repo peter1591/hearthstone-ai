@@ -9,6 +9,12 @@
 #pragma warning (push)
 #pragma warning (disable: 4083 4244 4267)
 #define CNN_SINGLE_THREAD
+
+#ifdef _MSC_VER
+#define CNN_USE_SSE
+#include <intrin.h> // workaround tiny_dnn issue
+#endif
+
 #include <chrono> // workaround tiny_dnn issue #872
 #include "tiny_dnn/tiny_dnn.h"
 #pragma warning (pop)
