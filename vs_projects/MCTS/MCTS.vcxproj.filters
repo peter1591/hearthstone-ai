@@ -60,6 +60,9 @@
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\NeuralNetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\UI\CompetitionGuide.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\NeuralNetwork.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

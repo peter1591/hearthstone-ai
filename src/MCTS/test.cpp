@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
 {
 	Initialize();
 
-	//TestAI();
-	Compete(argc, argv);
+	TestAI();
+	//Compete(argc, argv);
 	return 0;
 }

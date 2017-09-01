@@ -1,5 +1,3 @@
-#include "NeuralNetwork.h"
-
 #pragma warning (push)
 #pragma warning (disable: 4083 4244 4267)
 #define CNN_SINGLE_THREAD
@@ -12,6 +10,8 @@
 #include <chrono> // workaround tiny_dnn issue #872
 #include "tiny_dnn/tiny_dnn.h"
 #pragma warning (pop)
+
+#include "NeuralNetwork.h"
 
 namespace impl {
 	class NeuralNetworkWrapperImpl
@@ -121,12 +121,12 @@ namespace impl {
 
 				std::stringstream ss;
 				ss << "net_result_epoch_" << total_epoch;
-				net.save(ss.str());
+				net_.save(ss.str());
 
 				size_t correct = 0;
 
 				for (size_t idx = 0; idx < input_.size(); ++idx) {
-					auto result = net.predict(input_[idx]);
+					auto result = net_.predict(input_[idx]);
 					bool predict_win = (result[0][0] > 0.0);
 					bool actual_win = (output_[idx][0] > 0.0);
 					if (predict_win == actual_win) ++correct;
@@ -138,7 +138,7 @@ namespace impl {
 
 				correct = 0;
 				for (size_t idx = 0; idx < validate_input_.size(); ++idx) {
-					auto result = net.predict(validate_input_[idx]);
+					auto result = net_.predict(validate_input_[idx]);
 					bool predict_win = (result[0][0] > 0.0);
 					bool actual_win = (validate_output_[idx][0] > 0.0);
 					if (predict_win == actual_win) ++correct;
@@ -157,7 +157,7 @@ namespace impl {
 		double Predict(NeuralNetworkWrapper::IInputGetter * getter) {
 			tiny_dnn::tensor_t input;
 			GetInputData(getter, input);
-
+			return net_.predict(input)[0][0];
 		}
 
 	private:

@@ -16,7 +16,7 @@ namespace mcts
 		static constexpr int kVirtualLoss = 3;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
-		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPolicy;
+		using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPolicy;
 
 		using CreditPolicy = policy::CreditPolicy;
 	};
