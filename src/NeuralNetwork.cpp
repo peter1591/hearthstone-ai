@@ -49,33 +49,35 @@ namespace impl {
 			static constexpr int standalone_in_dim = 17;
 
 			tiny_dnn::layers::input in_heroes(tiny_dnn::shape3d(
-				hero_in_dim, 1,
-				2)); // current hero, opponent hero
+				hero_in_dim,
+				2,  // current hero, opponent hero
+				1));
 			tiny_dnn::layers::conv hero_conv1(
+				hero_in_dim, 2,
 				hero_in_dim, 1,
-				hero_in_dim, 1,
-				2, 2 * hero_out_dim);
-			in_heroes << hero_conv1; // @out: 1 * 1 * (2*hero_out_dim)
+				1, hero_out_dim);
+			in_heroes << hero_conv1; // @out: 1 * 2 * hero_out_dim
 			auto hero_conv1a = tiny_dnn::activation::leaky_relu();
-			hero_conv1 << hero_conv1a; // @out: 1 * 1 * (2 * hero_out_dim)
+			hero_conv1 << hero_conv1a; // @out: 1 * 2 * hero_out_dim
 
 			tiny_dnn::layers::input in_minions(tiny_dnn::shape3d(
-				minion_in_dim, 1,
-				minion_count * 2)); // current minions, opponent minions
+				minion_in_dim,
+				minion_count * 2, // current minions, opponent minions
+				1));
 			tiny_dnn::layers::conv minion_conv1(
+				minion_in_dim, minion_count * 2,
 				minion_in_dim, 1,
-				minion_in_dim, 1,
-				minion_count * 2, minion_count * 2 * minion_out_dim);
-			in_minions << minion_conv1; // @out: 1 * 1 * (minion_count * 2 * minion_out_dim)
+				1, 1 * minion_out_dim);
+			in_minions << minion_conv1; // @out: 1 * (minion_count * 2) * minion_out_dim)
 			auto minion_conv1a = tiny_dnn::activation::leaky_relu();
-			minion_conv1 << minion_conv1a; // @out: 1 * 1 * (minion_count * 2 * minion_out_dim)
+			minion_conv1 << minion_conv1a; // @out: 1 * (minion_count * 2) * minion_out_dim)
 
 			tiny_dnn::layers::input in_standalone(tiny_dnn::shape3d(
 				1, 1, standalone_in_dim));
 
 			auto concat = tiny_dnn::layers::concat({
-				hero_conv1a.out_shape()[0],
-				tiny_dnn::shape3d(1,1,minion_count * 2 * minion_out_dim),
+				tiny_dnn::shape3d(1,1,2 * hero_out_dim), // reshape to 1x1
+				tiny_dnn::shape3d(1,1,minion_count * 2 * minion_out_dim), // reshape to 1x1
 				in_standalone.out_shape()[0] });
 			(hero_conv1a, minion_conv1a, in_standalone) << concat;
 
