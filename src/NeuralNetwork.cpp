@@ -42,7 +42,6 @@ namespace impl {
 			static constexpr int hero_out_dim = 1;
 
 			static constexpr int minion_in_dim = 7;
-			static constexpr int minion_middle_dim = 4;
 			static constexpr int minion_out_dim = 3;
 
 			static constexpr int minion_count = 7;
@@ -66,16 +65,10 @@ namespace impl {
 			tiny_dnn::layers::conv minion_conv1(
 				minion_in_dim, 1,
 				minion_in_dim, 1,
-				minion_count * 2, minion_count * 2 * minion_middle_dim);
-			in_minions << minion_conv1; // @out: 1 * 1 * (minion_count * 2 * minion_middle_dim)
+				minion_count * 2, minion_count * 2 * minion_out_dim);
+			in_minions << minion_conv1; // @out: 1 * 1 * (minion_count * 2 * minion_out_dim)
 			auto minion_conv1a = tiny_dnn::activation::leaky_relu();
-			minion_conv1 << minion_conv1a; // @out: 1 * 1 * (minion_count * 2 * minion_middle_dim)
-
-			tiny_dnn::fully_connected_layer minion_fc1(
-				minion_count * 2 * minion_middle_dim,
-				minion_count * 2 * minion_out_dim);
-			auto minion_conv2a = tiny_dnn::activation::leaky_relu();
-			minion_conv1a << minion_fc1 << minion_conv2a;
+			minion_conv1 << minion_conv1a; // @out: 1 * 1 * (minion_count * 2 * minion_out_dim)
 
 			tiny_dnn::layers::input in_standalone(tiny_dnn::shape3d(
 				1, 1, standalone_in_dim));
@@ -84,20 +77,18 @@ namespace impl {
 				hero_conv1a.out_shape()[0],
 				tiny_dnn::shape3d(1,1,minion_count * 2 * minion_out_dim),
 				in_standalone.out_shape()[0] });
-			(hero_conv1a, minion_conv2a, in_standalone) << concat;
+			(hero_conv1a, minion_conv1a, in_standalone) << concat;
 
 			auto fc1 = tiny_dnn::fully_connected_layer(
 				2 * hero_out_dim + 2 * minion_count * minion_out_dim + standalone_in_dim,
-				20);
+				10);
 			concat << fc1;
 
 			auto fc1a = tiny_dnn::activation::leaky_relu();
-			auto fc2 = tiny_dnn::fully_connected_layer(20, 20);
-			auto fc2a = tiny_dnn::activation::leaky_relu();
-			auto fc3 = tiny_dnn::fully_connected_layer(20, 1);
-			fc1 << fc1a << fc2 << fc2a << fc3;
+			auto fc2 = tiny_dnn::fully_connected_layer(10, 1);
+			fc1 << fc1a << fc2;
 
-			tiny_dnn::construct_graph(net_, { &in_heroes, &in_minions, &in_standalone }, { &fc3 });
+			tiny_dnn::construct_graph(net_, { &in_heroes, &in_minions, &in_standalone }, { &fc2 });
 
 			size_t batch_size = 32;
 			int epoch = 1;
