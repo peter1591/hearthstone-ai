@@ -1,5 +1,8 @@
+#ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable: 4083 4244 4267)
+#endif
+
 #define CNN_SINGLE_THREAD
 
 #ifdef _MSC_VER
@@ -9,7 +12,10 @@
 
 #include <chrono> // workaround tiny_dnn issue #872
 #include "tiny_dnn/tiny_dnn.h"
+
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 
 #include "NeuralNetwork.h"
 
