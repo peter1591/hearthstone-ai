@@ -111,6 +111,14 @@ namespace mcts
 				board_ = save.state_;
 			}
 
+		public:
+			state::State const& RevealHiddenInformationForSimulation() const {
+				// For simulation, it needs state information to estimate who's going to win
+				// Hidden information is sometimes a big boost to make a better predict.
+				// NOTE: THIS SHOULD ONLY BE USED FOR SIMULATION STATE-VALUE ESTIMATION
+				return board_;
+			}
+
 		private:
 			state::State & board_;
 			state::PlayerSide side_;
