@@ -128,7 +128,9 @@ namespace mcts
 			class NeuralNetworkStateValueFunction
 			{
 			public:
-				NeuralNetworkStateValueFunction() {
+				NeuralNetworkStateValueFunction()
+					: filename_(), net_(), current_player_viewer_()
+				{
 					filename_ = "simulation_net";
 					LoadNetwork();
 				}
@@ -151,7 +153,12 @@ namespace mcts
 				class StateDataBridge : public NeuralNetworkWrapper::IInputGetter
 				{
 				public:
-					StateDataBridge() : state_(nullptr) {}
+					StateDataBridge() : state_(nullptr), attackable_indics_(),
+						playable_cards_(), hero_power_playable_()
+					{}
+
+					StateDataBridge(StateDataBridge const&) = delete;
+					StateDataBridge & operator=(StateDataBridge const&) = delete;
 
 					void Reset(state::State const& state) {
 						state_ = &state;
@@ -355,7 +362,7 @@ namespace mcts
 				//    The expected number of simulation runs is 1/p.
 				//    So, if the expected number of runs is N, the probability p = 1.0 / N
 				static constexpr bool kEnableCutoff = true;
-				static constexpr double kCutoffExpectedRuns = 20;
+				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
 				Result GetCutoffResult(board::Board const& board) {
