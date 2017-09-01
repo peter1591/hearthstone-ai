@@ -33,7 +33,7 @@ public:
 		kHandCount,
 		kHandPlayable,
 		kHandCost,
-		kHeroPowerUsable,
+		kHeroPowerPlayable,
 		kInvalidType
 	};
 

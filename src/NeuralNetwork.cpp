@@ -269,7 +269,7 @@ namespace impl {
 			data.push_back(NormalizeFromUniformDist(opn_hand_count, 0, 10));
 
 			data.push_back(NormalizeBool(
-				getter->GetField(NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kHeroPowerUsable)));
+				getter->GetField(NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kHeroPowerPlayable)));
 		}
 
 		tiny_dnn::float_t NormalizeFromUniformDist(double v, double min, double max) {

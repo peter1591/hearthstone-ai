@@ -59,7 +59,7 @@ private:
 		case NeuralNetworkWrapper::kHandCost:
 			return GetHandField(field_type, arg1, side["hand"]);
 
-		case NeuralNetworkWrapper::kHeroPowerUsable:
+		case NeuralNetworkWrapper::kHeroPowerPlayable:
 			return GetHeroPowerField(field_type, arg1, side["hero_power"]);
 
 		default:
@@ -123,7 +123,7 @@ private:
 		case NeuralNetworkWrapper::kHandPlayable:
 			return hand[hand_idx]["playable"].asBool();
 		case NeuralNetworkWrapper::kHandCost:
-			return hand[hand_idx]["cost"].asBool();
+			return hand[hand_idx]["cost"].asInt();
 		default:
 			throw std::runtime_error("unknown field type");
 		}
@@ -131,8 +131,8 @@ private:
 
 	double GetHeroPowerField(NeuralNetworkWrapper::FieldType field_type, int arg1, Json::Value const& hero_power) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kHeroPowerUsable:
-			return hero_power["usable"].asBool();
+		case NeuralNetworkWrapper::kHeroPowerPlayable:
+			return hero_power["playable"].asBool();
 		default:
 			throw std::runtime_error("unknown field type");
 		}

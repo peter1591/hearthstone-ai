@@ -91,11 +91,12 @@ namespace mcts
 					return (v > draw_v);
 				}
 
+			private:
 				template <state::PlayerSide Side>
 				double GetStateValueForSide(state::PlayerSide self_side, FlowControl::PlayerStateView<Side> view) {
 					assert(self_side == Side);
 					state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
-					
+
 					double v = 0.0;
 
 					view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
@@ -111,7 +112,6 @@ namespace mcts
 					return v;
 				}
 
-			private:
 				double GetMinionValue(state::Cards::Card const& card) {
 					return 1.0 * card.GetAttack() + 1.5 * card.GetHP();
 				}
