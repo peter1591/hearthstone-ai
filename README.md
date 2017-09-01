@@ -25,6 +25,10 @@ The is a game bot for HearthStone.
 * Monte Carlo tree search
 * Use Multiple-Observer MCTS to handle hidden information
 * Share tree nodes for identical boards
+* Use neural network to *greatly* boost default policy strength
+  * An example: AI should *NOT* play *arcane missiles* in first turn.
+  * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
+  * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
 
 ### Game Board Recognition
 * Use the logging feature in HearthStone
