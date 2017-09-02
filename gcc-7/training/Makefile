@@ -1,5 +1,5 @@
-#CXX=g++-7
-CXX=/usr/local/gcc-7.1/bin/g++-7.1
+CXX=g++-7
+#CXX=/usr/local/gcc-7.1/bin/g++-7.1
 
 CFLAGS=-std=c++17
 
@@ -20,7 +20,8 @@ THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
 								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp
 THIRD_PARTY_OBJS=$(THIRD_PARTY_SRCS:.cpp=.o)
 
-SRCS=${TOP_SOURCE}src/Train/Source.cpp
+SRCS=${TOP_SOURCE}src/Train/Source.cpp \
+     ${TOP_SOURCE}src/NeuralNetwork.cpp
 OBJS=$(SRCS:.cpp=.o)
 
 EXE=train
