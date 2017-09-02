@@ -99,7 +99,7 @@ namespace impl {
 			tiny_dnn::construct_graph(net_, { &in_heroes, &in_minions, &in_standalone }, { &fc2 });
 
 			size_t batch_size = 32;
-			int epoch = 1;
+			int epoch = 10;
 			size_t total_epoch = 0;
 			tiny_dnn::adam opt;
 
@@ -107,7 +107,7 @@ namespace impl {
 				int batch_op_counter = 0;
 				auto batch_op = [batch_op_counter]() mutable {
 					++batch_op_counter;
-					if (batch_op_counter % 100 == 0) {
+					if (batch_op_counter % 10000 == 0) {
 						std::cout << "completed batches: " << batch_op_counter << std::endl;
 					}
 				};
