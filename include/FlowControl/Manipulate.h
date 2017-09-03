@@ -79,6 +79,7 @@ namespace FlowControl
 		size_t GetSavedUserChoice() const { return flow_context_.GetSavedUserChoice(); }
 
 	public: // bridge to state::State
+		state::State const& GetState() const { return state_; }
 		state::Cards::Card const& GetCard(state::CardRef ref) const;
 		int GetCardAttackConsiderWeapon(state::CardRef ref) const;
 		state::aura::Manager & Aura() const;

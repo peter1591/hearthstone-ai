@@ -82,7 +82,7 @@ namespace FlowControl
 	inline state::CardRef Manipulate::GetRandomTarget(state::targetor::Targets const & target_info) const
 	{
 		std::vector<state::CardRef> targets;
-		target_info.Fill(*this, targets);
+		target_info.Fill(state_, targets);
 
 		size_t count = targets.size();
 		if (count == 0) return state::CardRef();

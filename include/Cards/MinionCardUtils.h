@@ -105,7 +105,7 @@ namespace Cards
 			state::targetor::TargetsGenerator_Leaf const& targets_generator,
 			Functor&& func)
 		{
-			targets_generator.GetInfo().ForEach(context.manipulate_, func);
+			targets_generator.GetInfo().ForEach(context.manipulate_.GetState(), func);
 		}
 	};
 }

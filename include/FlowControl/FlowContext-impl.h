@@ -10,7 +10,7 @@ namespace FlowControl {
 	{
 		assert(!specified_target_.IsValid());
 		targets_.clear();
-		target_info.Fill(Manipulate(state, *this), targets_);
+		target_info.Fill(state, targets_);
 
 		if (targets_.empty()) {
 			specified_target_.Invalidate();

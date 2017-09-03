@@ -35,7 +35,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion().Murlocs() // friendly murlocs only
 				.Exclude(context.card_ref_) // only apply on other murlocs
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_EX1_508() {
 			Aura<Card_EX1_508o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
@@ -99,7 +99,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_CS2_122() {
 			Aura<Card_CS2_122e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
@@ -145,8 +145,8 @@ namespace Cards
 	struct Card_DS1_055 : public MinionCardBase<Card_DS1_055> {
 		static void Battlecry(Contexts::OnPlay const& context) {
 			ForEach(context, Targets(context.player_).Ally().Exclude(context.card_ref_),
-				[context](FlowControl::Manipulate manipulate, state::CardRef ref) {
-				manipulate.OnBoardCharacter(ref).Heal(context.card_ref_, 2);
+				[context](state::CardRef ref) {
+				context.manipulate_.OnBoardCharacter(ref).Heal(context.card_ref_, 2);
 			});
 		}
 	};
@@ -157,7 +157,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			int count = 0;
 			Targets(context.player_).Ally().Minion().Exclude(context.card_ref_).GetInfo()
-				.Count(context.manipulate_, &count);
+				.Count(context.manipulate_.GetState(), &count);
 
 			switch (count) {
 			case 0:
@@ -226,7 +226,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_CS2_222() {
 			Aura<Card_CS2_222o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();

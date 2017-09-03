@@ -64,7 +64,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion().Beasts() // friendly beasts
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_DS1_175() {
 			Aura<Card_DS1_175o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
@@ -80,7 +80,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_NEW1_033() {
 			Aura<Card_NEW1_033o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
@@ -196,7 +196,7 @@ namespace Cards
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Beasts() // friendly beasts
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_DS1_178() {
 			Aura<Card_DS1_178e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();

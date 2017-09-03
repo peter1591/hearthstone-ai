@@ -610,7 +610,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion().Murlocs() // friendly murlocs
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_EX1_507() {
 			Aura<Card_EX1_507e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
@@ -650,7 +650,7 @@ namespace Cards
 			TargetsGenerator(player)
 				.Ally().Minion().Pirates() // friendly murlocs
 				.Exclude(context.card_ref_) // only apply on other
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_NEW1_027() {
 			Aura<Card_NEW1_027e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();

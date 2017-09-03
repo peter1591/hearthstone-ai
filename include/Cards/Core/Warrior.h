@@ -105,7 +105,7 @@ namespace Cards
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().HasCharge() // friendly charge minions
-				.GetInfo().Fill(context.manipulate_, context.new_targets);
+				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_EX1_084() {
 			Aura<Card_EX1_084e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
