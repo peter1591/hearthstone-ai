@@ -177,10 +177,11 @@ namespace FlowControl
 			int cost = card.GetCost();
 			bool cost_health_instead = false;
 
-			FlowContext & fake_flow_context = *((FlowContext *)nullptr);
-			mutable_state.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
-				Manipulate(mutable_state, fake_flow_context), card_ref, &cost, &cost_health_instead
-			});
+			// TODO: trigger event on const state
+			//FlowContext & fake_flow_context = *((FlowContext *)nullptr);
+			//mutable_state.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
+			//	Manipulate(mutable_state, fake_flow_context), card_ref, &cost, &cost_health_instead
+			//});
 
 			if (cost <= 0) return true;
 
