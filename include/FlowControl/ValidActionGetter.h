@@ -36,12 +36,6 @@ namespace FlowControl
 
 		bool IsPlayable(size_t hand_idx)
 		{
-			// we use mutable state here to invoke the event
-			// but the event handlers should NOT modify state
-			// 'origin_state' helps to detect logic error in debug builds
-			// TODO: re-write GetPlayCardCost() event handlers to get rid of this
-			state::State & mutable_state = const_cast<state::State &>(state_);
-
 			auto const& hand = state_.GetCurrentPlayer().hand_;
 			state::CardRef card_ref = hand.Get(hand_idx);
 			auto const& card = state_.GetCard(card_ref);
@@ -54,6 +48,13 @@ namespace FlowControl
 				if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) return false;
 			}
 
+			if (!card.GetRawData().onplay_handler.CheckPlayable(state_, state_.GetCurrentPlayerId())) {
+				return false;
+			}
+
+			// we use mutable state here to invoke the event
+			// TODO: re-write GetPlayCardCost() event handlers to get rid of this
+			state::State & mutable_state = const_cast<state::State &>(state_);
 			if (!CheckCost(card_ref, card, mutable_state)) {
 				return false;
 			}
