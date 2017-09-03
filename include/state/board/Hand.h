@@ -19,7 +19,7 @@ namespace state
 			Hand() : cards_(), size_(0), change_id_(0) {}
 
 			void FillWithBase(Hand const& base) {
-				cards_ = base.cards_; // TODO: copy on write?
+				cards_ = base.cards_;
 				size_ = base.size_;
 				change_id_ = base.change_id_;
 			}

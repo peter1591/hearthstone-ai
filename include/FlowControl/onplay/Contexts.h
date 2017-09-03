@@ -75,7 +75,6 @@ namespace FlowControl
 
 				template <typename... Args>
 				auto & SetRequiredSpellTargets(Args&&... args) {
-					// TODO: should check in CheckPlayable callback
 					return SetRequiredTargets(std::forward<Args>(args)...).SpellTargetable();
 				}
 				template <typename... Args>

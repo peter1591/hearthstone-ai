@@ -10,8 +10,6 @@ namespace FlowControl
 		inline void HeroManipulator::GainArmor(int amount)
 		{
 			GetCard().SetArmor(GetCard().GetArmor() + amount);
-
-			// TODO: trigger events
 		}
 
 		inline state::CardRef HeroManipulator::Transform(Cards::CardId id)

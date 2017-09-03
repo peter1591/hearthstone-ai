@@ -21,7 +21,7 @@ namespace state
 			}
 
 			void FillWithBase(Minions const& base) {
-				minions_ = base.minions_; // TODO: copy on write?
+				minions_ = base.minions_;
 				change_id_ = base.change_id_;
 			}
 
