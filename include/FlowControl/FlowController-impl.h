@@ -91,7 +91,7 @@ namespace FlowControl
 		int cost = state_.GetCard(card_ref).GetCost();
 		bool cost_health_instead = false;
 		state_.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
-			Manipulate(state_, flow_context_), card_ref, &cost, &cost_health_instead
+			state_, card_ref, &cost, &cost_health_instead
 		});
 
 		if (cost_health_instead) CostHealth(cost);

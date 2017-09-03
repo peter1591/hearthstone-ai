@@ -60,6 +60,18 @@ namespace Cards
 			}
 		};
 
+		struct ContextCardGetter {
+			template <class Context>
+			static auto const& Get(Context const& context, state::CardRef ref) { return context.manipulate_.Board().GetCard(ref); }
+
+			// Note: if more than one event types need special care,
+			// use SFINAE to let compiler do the job.
+			template <>
+			static auto const& Get(state::Events::EventTypes::GetPlayCardCost::Context const& context, state::CardRef ref) {
+				return context.state_.GetCard(ref);
+			}
+		};
+
 		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg> struct AddEventHelper;
 
 		template <typename LifeTime, typename EventType, typename EventHandler, typename EventHandlerArg>
@@ -67,7 +79,7 @@ namespace Cards
 			static void AddEvent(state::CardRef self, state::Cards::ZoneChangedContext const& context) {
 				context.state_.AddEvent<EventType>(
 					[self](auto context) {
-					if (!LifeTime::StillValid(context.manipulate_.Board().GetCard(self))) return false;
+					if (!LifeTime::StillValid(ContextCardGetter::Get(context, self))) return false;
 					return EventHandlerInvoker<EventHandler, EventHandlerArg>::Invoke(self, context);
 				});
 			}

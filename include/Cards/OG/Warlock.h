@@ -9,12 +9,12 @@ namespace Cards
 			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
 				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context const& context)
 			{
-				int turn_now = context.manipulate_.Board().GetTurn();
+				int turn_now = context.state_.GetTurn();
 				if (turn_now > turn) return false;
 				assert(turn_now == turn);
-				assert(context.manipulate_.Board().GetCurrentPlayerId() == player);
+				assert(context.state_.GetCurrentPlayerId() == player);
 
-				if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+				if (context.state_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
 				*context.cost_health_instead_ = true;
 				return false; // one-time effect
 			});

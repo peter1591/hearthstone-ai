@@ -21,8 +21,8 @@ namespace Cards
 
 	struct Card_EX1_608 : public MinionCardBase<Card_EX1_608> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context const& context) {
-			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
-			auto const& card = context.manipulate_.GetCard(context.card_ref_);
+			state::PlayerIdentifier owner = context.state_.GetCard(self).GetPlayerIdentifier();
+			auto const& card = context.state_.GetCard(context.card_ref_);
 			if (card.GetPlayerIdentifier() != owner) return true;
 			if (card.GetCardType() != state::kCardTypeSpell) return true;
 			*context.cost_ -= 1;
@@ -142,13 +142,13 @@ namespace Cards
 			context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
 				[turn, player](state::Events::EventTypes::GetPlayCardCost::Context const& context)
 			{
-				if (context.manipulate_.Board().GetCurrentPlayerId() != player) return true;
+				if (context.state_.GetCurrentPlayerId() != player) return true;
 
-				int turn_now = context.manipulate_.Board().GetTurn();
+				int turn_now = context.state_.GetTurn();
 				if (turn_now > turn) return false;
 				if (turn_now < turn) return true;
 
-				if (context.manipulate_.GetCard(context.card_ref_).GetCardType() == state::kCardTypeSpell) return true;
+				if (context.state_.GetCard(context.card_ref_).GetCardType() == state::kCardTypeSpell) return true;
 				*context.cost_ = 0;
 				return false;
 			});

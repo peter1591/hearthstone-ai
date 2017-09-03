@@ -13,7 +13,7 @@ namespace state {
 		namespace EventTypes {
 			struct GetPlayCardCost {
 				struct Context {
-					FlowControl::Manipulate const& manipulate_;
+					state::State const& state_;
 					state::CardRef card_ref_;
 					int * cost_;
 					bool * cost_health_instead_;

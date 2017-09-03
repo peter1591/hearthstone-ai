@@ -12,9 +12,9 @@ namespace Cards
 				context.manipulate_.AddEvent<state::Events::EventTypes::GetPlayCardCost>(
 					[turn](state::Events::EventTypes::GetPlayCardCost::Context const& context) mutable
 				{
-					if (context.manipulate_.Board().GetTurn() != turn) return false;
+					if (context.state_.GetTurn() != turn) return false;
 
-					if (context.manipulate_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
+					if (context.state_.GetCard(context.card_ref_).GetCardType() != state::kCardTypeSpell) return true;
 					*context.cost_ -= 3;
 					return false;
 				});

@@ -151,8 +151,8 @@ namespace Cards
 	};
 	struct Card_EX1_315 : MinionCardBase<Card_EX1_315> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::GetPlayCardCost::Context const& context) {
-			state::PlayerIdentifier owner = context.manipulate_.GetCard(self).GetPlayerIdentifier();
-			auto const& card = context.manipulate_.GetCard(context.card_ref_);
+			state::PlayerIdentifier owner = context.state_.GetCard(self).GetPlayerIdentifier();
+			auto const& card = context.state_.GetCard(context.card_ref_);
 			if (card.GetPlayerIdentifier() != owner) return true;
 			*context.cost_ -= 2;
 			if (*context.cost_ <= 0) *context.cost_ = 1;
