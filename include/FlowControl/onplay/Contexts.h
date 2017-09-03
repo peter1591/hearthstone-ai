@@ -44,23 +44,25 @@ namespace FlowControl
 			struct GetSpecifiedTarget {
 			public:
 				GetSpecifiedTarget(
-					state::State & state,
-					FlowContext & flow_context,
+					state::State const& state,
 					state::PlayerIdentifier player,
 					state::CardRef card_ref) :
-					manipulate_(state, flow_context),
+					state_(state),
 					player_(player),
 					card_ref_(card_ref),
 					targets_generator_(),
 					need_to_prepare_target_(false),
-					allow_no_target_(false)
+					allow_no_target_(false),
+					choose_one_(Cards::kInvalidCardId)
 				{
 				}
 
 			public:
-				Manipulate manipulate_;
+				state::State const& state_;
 				state::PlayerIdentifier player_;
 				state::CardRef card_ref_;
+
+				state::State const& GetState() const { return state_; }
 
 				template <typename... Args>
 				auto & SetRequiredBattlecryTargets(Args&&... args) {
@@ -88,6 +90,10 @@ namespace FlowControl
 				bool NeedToPrepareTarget() { return need_to_prepare_target_; }
 				bool IsAllowedNoTarget() { return allow_no_target_; }
 
+			public:
+				void SetChooseOneChoice(Cards::CardId card_id) { choose_one_ = card_id; }
+				Cards::CardId GetChooseOneChoice() const { return choose_one_; }
+
 			private:
 				template <typename... Args>
 				state::targetor::TargetsGenerator & SetRequiredTargets(Args&&... args) {
@@ -108,6 +114,7 @@ namespace FlowControl
 				state::targetor::TargetsGenerator targets_generator_;
 				bool need_to_prepare_target_;
 				bool allow_no_target_;
+				Cards::CardId choose_one_;
 			};
 
 			struct OnPlay

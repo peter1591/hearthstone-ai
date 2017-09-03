@@ -141,7 +141,7 @@ namespace Cards
 	struct Card_EX1_134 : MinionCardBase<Card_EX1_134> {
 		Card_EX1_134() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+				bool combo = context.GetState().GetBoard().Get(context.player_).played_cards_this_turn_ > 0;
 				if (!combo) return;
 				context.SetRequiredBattlecryTargets(context.player_);
 			});
@@ -195,7 +195,7 @@ namespace Cards
 
 	struct Card_NEW1_005 : MinionCardBase<Card_NEW1_005> {
 		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
-			bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
+			bool combo = context.GetState().GetBoard().Get(context.player_).played_cards_this_turn_ > 0;
 			if (!combo) return;
 			context.SetOptionalBattlecryTargets(context.player_).Minion();
 		}

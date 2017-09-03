@@ -21,10 +21,11 @@ namespace FlowControl
 
 		inline void Handler::PrepareChooseOne(state::State & state, FlowContext & flow_context) const
 		{
-			if (!choose_one) return;
-
-			context::GetChooseOneOptions context(state, flow_context);
-			Cards::CardId choice = choose_one(context);
+			Cards::CardId choice = Cards::kInvalidCardId;
+			if (choose_one) {
+				context::GetChooseOneOptions context(state, flow_context);
+				choice = choose_one(context);
+			}
 			Manipulate(state, flow_context).SaveUserChoice(choice);
 		}
 
@@ -33,7 +34,8 @@ namespace FlowControl
 			PrepareChooseOne(state, flow_context);
 
 			if (specified_target_getter) {
-				context::GetSpecifiedTarget context(state, flow_context, player, card_ref);
+				context::GetSpecifiedTarget context(state, player, card_ref);
+				context.SetChooseOneChoice(flow_context.GetSavedUserChoice());
 				(*specified_target_getter)(context);
 
 				if (context.NeedToPrepareTarget()) {
