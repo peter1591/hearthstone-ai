@@ -18,6 +18,19 @@ namespace FlowControl
 	{
 		namespace context
 		{
+			struct CheckPlayable {
+				CheckPlayable(
+					state::State const& state,
+					state::PlayerIdentifier player
+				) :
+					state_(state),
+					player_(player)
+				{}
+
+				state::State const& state_;
+				state::PlayerIdentifier player_;
+			};
+
 			struct GetSpecifiedTarget {
 			public:
 				GetSpecifiedTarget(

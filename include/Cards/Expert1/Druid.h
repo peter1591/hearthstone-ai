@@ -186,7 +186,6 @@ namespace Cards
 				}
 				else {
 					// TODO: playable when no minion?
-					// TODO: should check before
 					context.SetOptionalSpellTargets(context.player_).Minion();
 				}
 			});

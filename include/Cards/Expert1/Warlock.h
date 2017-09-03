@@ -216,9 +216,9 @@ namespace Cards
 
 	struct Card_EX1_tk33 : HeroPowerCardBase<Card_EX1_tk33> {
 		Card_EX1_tk33() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				//if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_).minions_.Full()) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_tk34);

@@ -7,9 +7,9 @@ namespace Cards
 {
 	struct Card_CS2_101 : public HeroPowerCardBase<Card_CS2_101> {
 		Card_CS2_101() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				// TODO: should check before
-				//if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+			onplay_handler.SetCheckPlayableCallback([](FlowControl::onplay::context::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_).minions_.Full()) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_101t);

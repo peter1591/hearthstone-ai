@@ -12,6 +12,13 @@ namespace FlowControl
 {
 	namespace onplay
 	{
+		inline bool Handler::CheckPlayable(state::State const & state, state::PlayerIdentifier player) const
+		{
+			if (!check_playable) return true;
+			context::CheckPlayable context(state, player);
+			return (*check_playable)(context);
+		}
+
 		inline bool Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const
 		{
 			if (!specified_target_getter) return true;

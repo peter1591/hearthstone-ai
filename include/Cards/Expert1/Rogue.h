@@ -155,9 +155,9 @@ namespace Cards
 
 	struct Card_CS2_233 : SpellCardBase<Card_CS2_233> {
 		Card_CS2_233() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				//if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (!context.state_.GetBoard().Get(context.player_).GetWeaponRef().IsValid()) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();

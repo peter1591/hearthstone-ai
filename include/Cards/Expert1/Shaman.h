@@ -19,9 +19,9 @@ namespace Cards
 
 	struct Card_EX1_251 : SpellCardBase<Card_EX1_251, Overload<2>> {
 		Card_EX1_251() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				//if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() < 2) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_.Opposite()).minions_.Size() < 2) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto & minions = context.manipulate_.Board().Player(context.player_.Opposite()).minions_;

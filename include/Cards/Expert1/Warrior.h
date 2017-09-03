@@ -179,12 +179,11 @@ namespace Cards
 
 	struct Card_EX1_407 : SpellCardBase<Card_EX1_407> {
 		Card_EX1_407() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				/*size_t minions =
-					context.manipulate_.Board().FirstPlayer().minions_.Size() +
-					context.manipulate_.Board().SecondPlayer().minions_.Size();
-				return minions >= 2;*/
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				size_t minions =
+					context.state_.GetBoard().GetFirst().minions_.Size() +
+					context.state_.GetBoard().GetSecond().minions_.Size();
+				return minions >= 2;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				size_t first_minions = context.manipulate_.Board().FirstPlayer().minions_.Size();

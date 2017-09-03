@@ -145,9 +145,9 @@ namespace Cards
 
 	struct Card_EX1_617 : public SpellCardBase<Card_EX1_617> {
 		Card_EX1_617() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				//if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() == 0) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_.Opposite()).minions_.Size() == 0) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.manipulate_.GetRandomTarget(
@@ -162,9 +162,9 @@ namespace Cards
 	struct Card_EX1_538t : public MinionCardBase<Card_EX1_538t, Charge> {};
 	struct Card_EX1_538 : public SpellCardBase<Card_EX1_538> {
 		Card_EX1_538() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				//if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() == 0) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_.Opposite()).minions_.Size() == 0) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				size_t count = context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size();

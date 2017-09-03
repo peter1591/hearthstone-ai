@@ -41,9 +41,9 @@ namespace Cards
 	struct Card_CS2_mirror : MinionCardBase<Card_CS2_mirror, Taunt> {};
 	struct Card_CS2_027 : SpellCardBase<Card_CS2_027> {
 		Card_CS2_027() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				// if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_).minions_.Full()) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_mirror);

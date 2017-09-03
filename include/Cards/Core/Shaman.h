@@ -33,11 +33,23 @@ namespace Cards
 			Cards::ID_CS2_052,
 			Cards::ID_NEW1_009 };
 		static std::array<bool, 4> GetTotemExists(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
+			return GetTotemExists(manipulate.Board().Player(player), [&](state::CardRef ref) {
+				return manipulate.GetCard(ref);
+			});
+		}
+		static std::array<bool, 4> GetTotemExists(state::State const& state, state::PlayerIdentifier player) {
+			return GetTotemExists(state.GetBoard().Get(player), [&](state::CardRef ref) {
+				return state.GetCard(ref);
+			});
+		}
+
+		template <class CardGetter>
+		static std::array<bool, 4> GetTotemExists(state::board::Player const& player, CardGetter card_getter) {
 			std::array<bool, 4> totems_exists{ false, false, false, false };
 
-			manipulate.Board().Player(player).minions_.ForEach([&](state::CardRef card_ref) {
+			player.minions_.ForEach([&](state::CardRef card_ref) {
 				for (size_t i = 0; i<basic_totems_.size(); ++i) {
-					if (manipulate.GetCard(card_ref).GetCardId() == basic_totems_[i]) {
+					if (card_getter(card_ref).GetCardId() == basic_totems_[i]) {
 						totems_exists[i] = true;
 					}
 				}
@@ -45,15 +57,15 @@ namespace Cards
 
 			return totems_exists;
 		}
+
 	public:
 		Card_CS2_049() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				/*std::array<bool, 4> totems_exists = GetTotemExists(context.manipulate_, context.player_);
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				std::array<bool, 4> totems_exists = GetTotemExists(context.state_, context.player_);
 				for (auto exist : totems_exists) {
 					if (!exist) return true;
 				}
-				return false;*/
+				return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::array<bool, 4> totems_exists = GetTotemExists(context.manipulate_, context.player_);

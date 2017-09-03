@@ -12,6 +12,10 @@ namespace FlowControl
 		flow_context_.Reset();
 
 		state::CardRef card_ref = state_.GetCurrentPlayer().hand_.Get(hand_idx);
+		assert([&]() {
+			return state_.GetCard(card_ref).GetRawData().onplay_handler.CheckPlayable(state_, state_.GetCurrentPlayerId());
+		}());
+
 		PlayCardInternal(card_ref);
 
 		assert(flow_context_.Empty());

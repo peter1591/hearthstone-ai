@@ -131,9 +131,9 @@ namespace Cards
 
 	struct Card_EX1_345 : SpellCardBase<Card_EX1_345> {
 		Card_EX1_345() {
-			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				// TODO: should check before
-				//if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
+			onplay_handler.SetCheckPlayableCallback([](Contexts::CheckPlayable & context) {
+				if (context.state_.GetBoard().Get(context.player_).minions_.Full()) return false;
+				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
