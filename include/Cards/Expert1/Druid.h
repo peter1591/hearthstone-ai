@@ -179,9 +179,11 @@ namespace Cards
 				Cards::ID_NEW1_007a,
 				Cards::ID_NEW1_007b,
 			};
+			onplay_handler.SetChooseOneOptionsCallback([](Contexts::GetChooseOneOptions & context) {
+				return context.manipulate_.GetChooseOneUserAction(choices);
+			});
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
-				context.manipulate_.SaveUserChoice(choice);
+				Cards::CardId choice = context.manipulate_.GetSavedUserChoice();
 				if (choice == choices[0]) {
 				}
 				else {
@@ -232,10 +234,11 @@ namespace Cards
 				Cards::ID_NEW1_008a,
 				Cards::ID_NEW1_008b
 			};
+			onplay_handler.SetChooseOneOptionsCallback([](Contexts::GetChooseOneOptions & context) {
+				return context.manipulate_.GetChooseOneUserAction(choices);
+			});
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
-				context.manipulate_.SaveUserChoice(choice);
-
+				Cards::CardId choice = context.manipulate_.GetSavedUserChoice();
 				if (choice == choices[0]) {
 				}
 				else {

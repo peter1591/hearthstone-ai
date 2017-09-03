@@ -31,6 +31,16 @@ namespace FlowControl
 				state::PlayerIdentifier player_;
 			};
 
+			struct GetChooseOneOptions {
+				GetChooseOneOptions(
+					state::State & state,
+					FlowContext & flow_context) :
+					manipulate_(state, flow_context)
+				{}
+
+				Manipulate manipulate_;
+			};
+
 			struct GetSpecifiedTarget {
 			public:
 				GetSpecifiedTarget(

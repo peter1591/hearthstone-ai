@@ -19,17 +19,32 @@ namespace FlowControl
 			return (*check_playable)(context);
 		}
 
+		inline void Handler::PrepareChooseOne(state::State & state, FlowContext & flow_context) const
+		{
+			if (!choose_one) return;
+
+			context::GetChooseOneOptions context(state, flow_context);
+			Cards::CardId choice = choose_one(context);
+			Manipulate(state, flow_context).SaveUserChoice(choice);
+		}
+
 		inline bool Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const
 		{
-			if (!specified_target_getter) return true;
+			PrepareChooseOne(state, flow_context);
 
-			context::GetSpecifiedTarget context(state, flow_context, player, card_ref);
-			(*specified_target_getter)(context);
+			if (specified_target_getter) {
+				context::GetSpecifiedTarget context(state, flow_context, player, card_ref);
+				(*specified_target_getter)(context);
 
-			if (!context.NeedToPrepareTarget()) return true;
-			
-			state::targetor::Targets targets = context.GetTargets();
-			return flow_context.PrepareSpecifiedTarget(state, card_ref, targets, context.IsAllowedNoTarget());
+				if (context.NeedToPrepareTarget()) {
+					state::targetor::Targets targets = context.GetTargets();
+					if (!flow_context.PrepareSpecifiedTarget(state, card_ref, targets, context.IsAllowedNoTarget())) {
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const
