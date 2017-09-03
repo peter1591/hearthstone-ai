@@ -8,8 +8,8 @@ namespace Cards
 	struct Card_CS2_101 : public HeroPowerCardBase<Card_CS2_101> {
 		Card_CS2_101() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
-				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
-				return true;
+				// TODO: should check before
+				//if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_101t);
@@ -22,7 +22,6 @@ namespace Cards
 		Card_CS2_087() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -36,7 +35,6 @@ namespace Cards
 		Card_EX1_371() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -51,7 +49,6 @@ namespace Cards
 		Card_EX1_360() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -65,7 +62,6 @@ namespace Cards
 		Card_CS2_089() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -94,7 +90,6 @@ namespace Cards
 		Card_CS2_092() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -118,7 +113,6 @@ namespace Cards
 		Card_CS2_094() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();

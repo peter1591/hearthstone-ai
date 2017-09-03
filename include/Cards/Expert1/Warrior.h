@@ -10,7 +10,6 @@ namespace Cards
 		Card_EX1_607() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
@@ -23,7 +22,6 @@ namespace Cards
 		Card_EX1_410() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef hero_ref = context.manipulate_.Board().Player(context.player_).GetHeroRef();
@@ -93,7 +91,6 @@ namespace Cards
 		Card_CS2_104() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion().Damaged();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_CS2_104e>();
@@ -105,7 +102,6 @@ namespace Cards
 		Card_EX1_391() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 2);
@@ -134,9 +130,8 @@ namespace Cards
 
 	struct Card_EX1_603e : Enchantment<Card_EX1_603e, Attack<2>> {};
 	struct Card_EX1_603 : MinionCardBase<Card_EX1_603> {
-		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			context.SetOptionalBattlecryTargets(context.player_).Minion();
-			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
@@ -165,7 +160,6 @@ namespace Cards
 		Card_EX1_408() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef hero_ref = context.manipulate_.Board().Player(context.player_).GetHeroRef();
@@ -186,10 +180,11 @@ namespace Cards
 	struct Card_EX1_407 : SpellCardBase<Card_EX1_407> {
 		Card_EX1_407() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				size_t minions =
+				// TODO: should check before
+				/*size_t minions =
 					context.manipulate_.Board().FirstPlayer().minions_.Size() +
 					context.manipulate_.Board().SecondPlayer().minions_.Size();
-				return minions >= 2;
+				return minions >= 2;*/
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				size_t first_minions = context.manipulate_.Board().FirstPlayer().minions_.Size();

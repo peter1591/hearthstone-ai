@@ -21,7 +21,6 @@ namespace Cards
 		Card_CS2_103() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_CS2_103e>();
@@ -47,8 +46,8 @@ namespace Cards
 	struct Card_CS2_114 : public SpellCardBase<Card_CS2_114> {
 		Card_CS2_114() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() < 2) return false;
-				return true;
+				// TODO: should check before
+				// if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() < 2) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto & minions = context.manipulate_.Board().Player(context.player_.Opposite()).minions_;
@@ -75,7 +74,6 @@ namespace Cards
 		Card_CS2_108() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion().Damaged();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();

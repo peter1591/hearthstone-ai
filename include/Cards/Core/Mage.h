@@ -9,7 +9,6 @@ namespace Cards
 		Card_CS2_034() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
@@ -43,8 +42,8 @@ namespace Cards
 	struct Card_CS2_027 : SpellCardBase<Card_CS2_027> {
 		Card_CS2_027() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
-				return true;
+				// TODO: should check before
+				// if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_CS2_mirror);
@@ -67,7 +66,6 @@ namespace Cards
 		Card_CS2_024() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -100,7 +98,6 @@ namespace Cards
 		Card_CS2_029() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -114,7 +111,6 @@ namespace Cards
 		Card_CS2_022() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_

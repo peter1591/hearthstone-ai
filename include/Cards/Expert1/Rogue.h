@@ -27,7 +27,6 @@ namespace Cards
 		Card_EX1_144() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Ally().Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -44,7 +43,6 @@ namespace Cards
 		Card_CS2_073() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -63,7 +61,6 @@ namespace Cards
 		Card_EX1_126() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Enemy().Minion();
-				return true; // return false if card cannot be played
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -81,7 +78,6 @@ namespace Cards
 		Card_EX1_124() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
@@ -106,7 +102,6 @@ namespace Cards
 		Card_EX1_133() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredBattlecryTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
@@ -147,11 +142,8 @@ namespace Cards
 		Card_EX1_134() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
-				if (!combo) {
-					return true;
-				}
+				if (!combo) return;
 				context.SetRequiredBattlecryTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -164,8 +156,8 @@ namespace Cards
 	struct Card_CS2_233 : SpellCardBase<Card_CS2_233> {
 		Card_CS2_233() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
-				return true;
+				// TODO: should check before
+				//if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();
@@ -181,9 +173,8 @@ namespace Cards
 	};
 
 	struct Card_NEW1_014 : MinionCardBase<Card_NEW1_014> {
-		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			context.SetOptionalBattlecryTargets(context.player_).Ally().Minion();
-			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
@@ -203,11 +194,10 @@ namespace Cards
 	};
 
 	struct Card_NEW1_005 : MinionCardBase<Card_NEW1_005> {
-		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;
-			if (!combo) return true;
+			if (!combo) return;
 			context.SetOptionalBattlecryTargets(context.player_).Minion();
-			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			bool combo = context.manipulate_.Board().Player(context.player_).played_cards_this_turn_ > 0;

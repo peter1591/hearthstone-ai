@@ -48,11 +48,12 @@ namespace Cards
 	public:
 		Card_CS2_049() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				std::array<bool, 4> totems_exists = GetTotemExists(context.manipulate_, context.player_);
+				// TODO: should check before
+				/*std::array<bool, 4> totems_exists = GetTotemExists(context.manipulate_, context.player_);
 				for (auto exist : totems_exists) {
 					if (!exist) return true;
 				}
-				return false;
+				return false;*/
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::array<bool, 4> totems_exists = GetTotemExists(context.manipulate_, context.player_);
@@ -74,7 +75,6 @@ namespace Cards
 		Card_CS2_045() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Enchant().Add<Card_CS2_045e>();
@@ -87,7 +87,6 @@ namespace Cards
 		Card_CS2_039() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Enchant().Add<Card_CS2_039e>();
@@ -107,7 +106,6 @@ namespace Cards
 		Card_EX1_246() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
@@ -119,11 +117,10 @@ namespace Cards
 
 	struct Card_EX1_587e : public Enchantment<Card_EX1_587e, Windfury> {};
 	struct Card_EX1_587 : public MinionCardBase<Card_EX1_587> {
-		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			context.SetOptionalBattlecryTargets(context.player_)
 				.Ally()
 				.Minion();
-			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();
@@ -144,9 +141,8 @@ namespace Cards
 	};
 
 	struct Card_CS2_042 : public MinionCardBase<Card_CS2_042> {
-		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			context.SetOptionalBattlecryTargets(context.player_);
-			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			state::CardRef target = context.GetTarget();

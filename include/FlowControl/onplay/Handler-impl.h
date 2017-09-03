@@ -17,9 +17,7 @@ namespace FlowControl
 			if (!specified_target_getter) return true;
 
 			context::GetSpecifiedTarget context(state, flow_context, player, card_ref);
-			if (!(*specified_target_getter)(context)) {
-				return false;
-			}
+			(*specified_target_getter)(context);
 
 			if (!context.NeedToPrepareTarget()) return true;
 			

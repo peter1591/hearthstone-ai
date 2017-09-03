@@ -9,7 +9,6 @@ namespace Cards
 		Card_EX1_245() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Silence();
@@ -21,8 +20,8 @@ namespace Cards
 	struct Card_EX1_251 : SpellCardBase<Card_EX1_251, Overload<2>> {
 		Card_EX1_251() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() < 2) return false;
-				return true;
+				// TODO: should check before
+				//if (context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size() < 2) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto & minions = context.manipulate_.Board().Player(context.player_.Opposite()).minions_;
@@ -49,7 +48,6 @@ namespace Cards
 		Card_EX1_238() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 1);
@@ -65,7 +63,6 @@ namespace Cards
 		Card_CS2_038() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).AddDeathrattle(
@@ -102,7 +99,6 @@ namespace Cards
 		Card_EX1_241() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 5);

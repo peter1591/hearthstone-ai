@@ -42,7 +42,6 @@ namespace Cards
 		Card_EX1_596() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				bool friendly_demon = false;
@@ -123,7 +122,6 @@ namespace Cards
 		Card_EX1_303() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Ally().Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int attack = context.manipulate_.GetCard(context.GetTarget()).GetAttack();
@@ -170,7 +168,6 @@ namespace Cards
 		Card_EX1_320() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
@@ -197,7 +194,6 @@ namespace Cards
 		Card_EX1_309() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
@@ -221,8 +217,8 @@ namespace Cards
 	struct Card_EX1_tk33 : HeroPowerCardBase<Card_EX1_tk33> {
 		Card_EX1_tk33() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
-				return true;
+				// TODO: should check before
+				//if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_tk34);

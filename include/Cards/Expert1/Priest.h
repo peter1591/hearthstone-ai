@@ -21,7 +21,6 @@ namespace Cards
 		Card_EX1_332() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion().GetInfo();
-				return true; // return false if card cannot be played
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Silence();
@@ -34,7 +33,6 @@ namespace Cards
 		Card_CS1_129() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true; // return false if card cannot be played
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				int hp = context.manipulate_.GetCard(context.GetTarget()).GetHP();
@@ -65,7 +63,6 @@ namespace Cards
 		Card_EX1_625t() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget())
@@ -77,7 +74,6 @@ namespace Cards
 		Card_EX1_625t2() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget())
@@ -136,8 +132,8 @@ namespace Cards
 	struct Card_EX1_345 : SpellCardBase<Card_EX1_345> {
 		Card_EX1_345() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
-				return true;
+				// TODO: should check before
+				//if (context.manipulate_.Board().Player(context.player_).minions_.Full()) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
@@ -170,7 +166,6 @@ namespace Cards
 		Card_EX1_334() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Enemy().Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target_ref = context.GetTarget();
@@ -219,7 +214,6 @@ namespace Cards
 		Card_EX1_624() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -244,9 +238,8 @@ namespace Cards
 
 	struct Card_EX1_623e : Enchantment<Card_EX1_623e, MaxHP<3>> {};
 	struct Card_EX1_623 : MinionCardBase<Card_EX1_623> {
-		static bool GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
+		static void GetSpecifiedTargets(Contexts::SpecifiedTargetGetter & context) {
 			context.SetOptionalBattlecryTargets(context.player_).Ally().Minion().Exclude(context.card_ref_);
-			return true;
 		}
 		static void Battlecry(Contexts::OnPlay const& context) {
 			if (!context.GetTarget().IsValid()) return;

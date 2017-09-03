@@ -18,7 +18,6 @@ namespace Cards
 		Card_NEW1_003() {
 			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Demons();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
@@ -39,7 +38,6 @@ namespace Cards
 		Card_CS2_063() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;
@@ -54,7 +52,6 @@ namespace Cards
 		Card_EX1_302() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
@@ -69,7 +66,6 @@ namespace Cards
 		Card_EX1_308() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4);
@@ -90,7 +86,6 @@ namespace Cards
 		Card_CS2_061() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
@@ -103,7 +98,6 @@ namespace Cards
 		Card_CS2_057() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4);

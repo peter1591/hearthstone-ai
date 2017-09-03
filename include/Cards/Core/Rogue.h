@@ -18,7 +18,6 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_)
 					.Minion().AttackLessOrEqualTo(3);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -32,8 +31,8 @@ namespace Cards
 	struct Card_CS2_074 : public SpellCardBase<Card_CS2_074> {
 		Card_CS2_074() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
-				if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
-				return true;
+				// TODO: should check before
+				//if (!context.manipulate_.Board().Player(context.player_).GetWeaponRef().IsValid()) return false;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();
@@ -55,7 +54,6 @@ namespace Cards
 		Card_EX1_581() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -69,7 +67,6 @@ namespace Cards
 		Card_EX1_278() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
@@ -95,7 +92,6 @@ namespace Cards
 		Card_CS2_076() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Enemy().Minion();
-				return true;
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
