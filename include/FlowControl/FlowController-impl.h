@@ -100,9 +100,8 @@ namespace FlowControl
 		state_.IncreasePlayOrder();
 		Manipulate(state_, flow_context_).Card(card_ref).SetPlayOrder();
 
-		if (!state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref)) {
-			return SetInvalid();
-		}
+		state_.GetCard(card_ref).GetRawData().onplay_handler.PrepareTarget(state_, flow_context_, state_.GetCurrentPlayerId(), card_ref);
+
 		state::CardRef onplay_target = flow_context_.GetSpecifiedTarget();
 		if (onplay_target.IsValid()) {
 			state_.TriggerEvent<state::Events::EventTypes::PreparePlayCardTarget>(state::Events::EventTypes::PreparePlayCardTarget::Context{

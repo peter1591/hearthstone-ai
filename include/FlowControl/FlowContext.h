@@ -72,7 +72,7 @@ namespace FlowControl {
 			return minion_put_location_;
 		}
 
-		bool PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, state::targetor::Targets const& target_info, bool allow_no_target);
+		void PrepareSpecifiedTarget(state::State & state, state::CardRef card_ref, state::targetor::Targets const& target_info);
 		void ChangeSpecifiedTarget(state::CardRef target) { specified_target_ = target; }
 		state::CardRef GetSpecifiedTarget() const { return specified_target_; }
 

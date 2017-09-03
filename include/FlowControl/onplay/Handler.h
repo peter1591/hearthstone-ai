@@ -31,7 +31,7 @@ namespace FlowControl
 
 		public:
 			bool CheckPlayable(state::State const& state, state::PlayerIdentifier player, state::CardRef card_ref) const;
-			bool PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const;
+			void PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const;
 			void OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const;
 
 		private:

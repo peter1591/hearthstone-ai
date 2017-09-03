@@ -51,7 +51,7 @@ namespace FlowControl
 			Manipulate(state, flow_context).SaveUserChoice(choice);
 		}
 
-		inline bool Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const
+		inline void Handler::PrepareTarget(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref) const
 		{
 			PrepareChooseOne(state, flow_context);
 
@@ -61,14 +61,14 @@ namespace FlowControl
 				(*specified_target_getter)(context);
 
 				if (context.NeedToPrepareTarget()) {
+					// Note: do not check context.IsAllowedNoTarget() here
+					// That should already be checked when checking playable or not
+					// And, it's possible that, there's a valid target when checking playable,
+					// but the target vanished when actually play that
 					state::targetor::Targets targets = context.GetTargets();
-					if (!flow_context.PrepareSpecifiedTarget(state, card_ref, targets, context.IsAllowedNoTarget())) {
-						return false;
-					}
+					flow_context.PrepareSpecifiedTarget(state, card_ref, targets);
 				}
 			}
-
-			return true;
 		}
 
 		inline void Handler::OnPlay(state::State & state, FlowContext & flow_context, state::PlayerIdentifier player, state::CardRef card_ref, state::CardRef * new_card_ref) const
