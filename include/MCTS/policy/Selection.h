@@ -60,9 +60,6 @@ namespace mcts
 						choice_iterator.StepNext())
 					{
 						typename ChoiceIterator::CheckResult check_result = choice_iterator.Check();
-						if (check_result == ChoiceIterator::CheckResult::kInvalidChoice) {
-							continue;
-						}
 
 						int choice = choice_iterator.GetChoice();
 						if (check_result == ChoiceIterator::CheckResult::kForceSelectChoice) {
@@ -89,9 +86,7 @@ namespace mcts
 						++choices_size;
 					}
 
-					if (total_chosen_times == 0) {
-						return -1; // no valid choice
-					}
+					assert(total_chosen_times > 0);
 
 					// Phase 2: use UCB to make a choice
 					auto get_score = [total_chosen_times](Item const& item) {

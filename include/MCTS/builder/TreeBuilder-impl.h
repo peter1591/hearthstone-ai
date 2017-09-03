@@ -23,7 +23,6 @@ namespace mcts
 			assert(node);
 
 			apply_state_.Start(board);
-			assert(apply_state_.IsValid());
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
@@ -33,8 +32,6 @@ namespace mcts
 			if (perform_result.result == Result::kResultInvalid) {
 				return Result::kResultInvalid;
 			}
-
-			assert(apply_state_.IsValid());
 
 			// we use mutable here, since we will throw it away after all
 			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
@@ -80,7 +77,6 @@ namespace mcts
 		inline Result TreeBuilder::PerformSimulate(board::Board const& board)
 		{
 			apply_state_.Start(board);
-			assert(apply_state_.IsValid());
 
 			simulation_stage_.GetActionAnalyzer().Reset();
 
@@ -119,18 +115,8 @@ namespace mcts
 					board::ActionChoices(choices));
 			}
 
-			if (!apply_state_.IsValid()) {
-				stage_handler.ReportInvalidAction();
-				statistic_.ApplyActionFailed(is_simulation);
-				return Result::kResultInvalid;
-			}
-
 			result = apply_state_.ApplyAction(choice, flow_context, action_analyzer);
-			if (result == Result::kResultInvalid) {
-				stage_handler.ReportInvalidAction();
-				statistic_.ApplyActionFailed(is_simulation);
-				return Result::kResultInvalid;
-			}
+			assert(result != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);
 			return result;
@@ -138,12 +124,9 @@ namespace mcts
 
 		inline int TreeBuilder::ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices)
 		{
+			assert(!choices.Empty());
 			int choice = selection_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
-
-			if (choice < 0) {
-				apply_state_.SetInvalid();
-			}
-
+			assert(choice >= 0); // always return a valid choice
 			return choice;
 		}
 
@@ -157,11 +140,7 @@ namespace mcts
 			int choice = simulation_stage_.ChooseAction(
 				apply_state_.GetBoard(),
 				action_type, choices);
-
-			if (choice < 0) {
-				apply_state_.SetInvalid();
-			}
-
+			assert(choice >= 0);
 			return choice;
 		}
 	}

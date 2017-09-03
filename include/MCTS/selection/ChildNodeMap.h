@@ -20,8 +20,7 @@ namespace mcts
 		private:
 			enum Type {
 				kNormal,
-				kRedirect,
-				kInvalid
+				kRedirect
 			};
 
 		public:
@@ -48,16 +47,7 @@ namespace mcts
 				type_ = kRedirect;
 			}
 
-			void SetAsInvalidNode() {
-				assert(type_ == kNormal || type_ == kInvalid);
-
-				// Note: Should not delete node here. Since other threads might reading it.
-
-				type_ = kInvalid;
-			}
-
 			bool IsRedirectNode() const { return type_ == kRedirect; }
-			bool IsInvalidNode() const { return type_ == kInvalid; }
 
 			// return nullptr for redirect/invalid nodes
 			TreeNode * GetNode() const {
@@ -98,9 +88,18 @@ namespace mcts
 
 			// Once a child is created, it should not be destroyed
 			// Since it might still be used in another thread
-			ChildType* Create(int choice) {
+			ChildType* CreateNewNode(int choice, std::unique_ptr<TreeNode> node) {
 				assert(map_.find(choice) == map_.end());
-				return &map_[choice];
+				ChildType & child = map_[choice];
+				child.SetNode(std::move(node));
+				return &child;
+			}
+
+			ChildType* CreateRedirectNode(int choice) {
+				assert(map_.find(choice) == map_.end());
+				ChildType & child = map_[choice];
+				child.SetAsRedirectNode();
+				return &child;
 			}
 
 			template <typename Functor>

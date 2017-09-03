@@ -33,8 +33,7 @@ namespace mcts
 
 				enum CheckResult {
 					kForceSelectChoice,
-					kNormalChoice,
-					kInvalidChoice
+					kNormalChoice
 				};
 				CheckResult Check() {
 					current_choice_ = choices_.Get();
@@ -45,7 +44,6 @@ namespace mcts
 				}
 				static CheckResult CheckChild(ChildType* child) {
 					if (!child) return kForceSelectChoice; // not expanded before
-					if (child->IsInvalidNode()) return kInvalidChoice;
 					return kNormalChoice;
 				}
 
@@ -127,7 +125,7 @@ namespace mcts
 			struct FollowStatus {
 				bool just_expanded;
 				EdgeAddon & edge_addon;
-				TreeNode * node; // nullptr for an invalid choice
+				TreeNode * node; // will be a non-nullptr
 			};
 			// Note: the choice should not be marked as redirect
 			// If it's a redirect node, we should follow it by board view, not by choice
@@ -146,8 +144,7 @@ namespace mcts
 						std::lock_guard<Utils::SharedSpinLock> write_lock(children_mutex_);
 						child = children_.Get(choice);
 						if (!child) {
-							child = children_.Create(choice);
-							child->SetNode(std::make_unique<TreeNode>());
+							child = children_.CreateNewNode(choice, std::make_unique<TreeNode>());
 							just_expanded = true;
 						}
 					}
@@ -161,25 +158,8 @@ namespace mcts
 				assert(!child->IsRedirectNode());
 
 				TreeNode* child_node = child->GetNode();
+				assert(child_node);
 				return { just_expanded, child->GetEdgeAddon(), child_node };
-			}
-
-			EdgeAddon& MarkChoiceInvalid(int choice)
-			{
-				// Need a write lock since we modify child state
-				std::lock_guard<Utils::SharedSpinLock> lock(children_mutex_);
-
-				// the child node is not yet created
-				// since we delay the node creation as late as possible
-				ChildType* child = children_.Get(choice);
-
-				if (child) {
-					child->SetAsInvalidNode(); // mark invalid
-				}
-				else {
-					child = children_.Create(choice); // create an invalid child node
-				}
-				return child->GetEdgeAddon();
 			}
 
 			EdgeAddon& MarkChoiceRedirect(int choice)
@@ -190,9 +170,8 @@ namespace mcts
 				// the child node is not yet created
 				// since we delay the node creation as late as possible
 				ChildType* child = children_.Get(choice);
-				if (!child) child = children_.Create(choice);
+				if (!child) child = children_.CreateRedirectNode(choice);
 				assert(child);
-				child->SetAsRedirectNode();
 				return child->GetEdgeAddon();
 			}
 

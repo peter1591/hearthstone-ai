@@ -158,9 +158,6 @@ private:
 			if (child.IsRedirectNode()) {
 				std::cout << "  " << choice << ": [REDIRECT]" << std::endl;
 			}
-			else if (child.IsInvalidNode()) {
-				std::cout << "  " << choice << ": [INVALID]" << std::endl;
-			}
 			else {
 				std::cout << "  " << choice << ": [NORMAL] "
 					<< child.GetNode() << std::endl;

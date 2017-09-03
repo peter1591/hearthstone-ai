@@ -28,13 +28,13 @@ namespace mcts
 				pending_randoms_ = false;
 			}
 
-			// @return >= 0 for the chosen action; < 0 if no valid action
+			// @return >= 0 for the chosen action
 			int ChooseAction(
 				board::Board const& board,
 				ActionType action_type,
 				board::ActionChoices const& choices)
 			{
-				if (choices.Empty()) return -1;
+				assert(!choices.Empty());
 
 				if (action_type.IsChosenRandomly()) {
 					assert(choices.GetType() == board::ActionChoices::kChooseFromZeroToExclusiveMax);
@@ -45,15 +45,8 @@ namespace mcts
 				assert(action_type.IsChosenManually());
 				assert(!path_.empty());
 				if (path_.back().HasMadeChoice()) {
-					// Note: Under a multi-threaded environment, a choice might be chosen to expand
-					// from several threads at the same time. One of the threads might be faster, and
-					// mark the choice as invalid/redirect first.
-					// From another thread's view, the ConstructNextNode() will return a node with nullptr
 					TreeNode* new_node = path_.back().ConstructNextNode(&new_node_created_);
-					if (!new_node) {
-						// TODO: remove this if no invalid node is possible
-						return -1; // marked as invalid from another thread
-					}
+					assert(new_node);
 					path_.emplace_back(new_node);
 				}
 
@@ -74,7 +67,7 @@ namespace mcts
 						// Then, random gets started
 						// Similar to other sub-actions
 						assert(false);
-						return -1;
+						throw std::runtime_error("not allow random to be conducted before any sub-action.");
 					}
 
 					// Check if the board-view and sub-action-type are consistency
@@ -96,31 +89,12 @@ namespace mcts
 				}
 
 				int next_choice = current_node->Select(action_type, choices,
-					StaticConfigs::SelectionPhaseSelectActionPolicy());
-				if (next_choice < 0) {
-					return -1; // all of the choices are invalid actions
-				}
+					StaticConfigs::SelectionPhaseSelectActionPolicy()); // TODO: do we need to construct a policy object everytime?
+				assert(next_choice >= 0); // should report a valid action
 
 				path_.back().MakeChoice(next_choice);
 
 				return next_choice;
-			}
-
-			void ReportInvalidAction() {
-				auto it = path_.rbegin();
-
-				// skip the last choice which yields an invalid state due to no valid child
-				for (; it != path_.rend(); ++it) {
-					if (it->GetChoice() >= 0) break;
-				}
-
-				for (; it != path_.rend(); ++it) {
-					assert(it->GetChoice() >= 0);
-					if (it->GetNode()->GetActionType().IsInvalidStateBlameNode()) {
-						it->GetNode()->MarkChoiceInvalid(it->GetChoice());
-						break;
-					}
-				}
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }

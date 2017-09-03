@@ -34,7 +34,7 @@ namespace mcts
 				ActionType action_type,
 				board::ActionChoices const& action_choices)
 			{
-				if (action_choices.Empty()) return -1;
+				assert(!action_choices.Empty());
 
 				int choices = action_choices.Size();
 
@@ -53,12 +53,9 @@ namespace mcts
 					board, flow_context_, action_analyzer_, action_type,
 					policy::simulation::ChoiceGetter(choices)
 				);
-				if (choice < 0) return -1;
+				assert(choice >= 0); // always return a valid choice
 
 				return action_choices.Get(choice);
-			}
-
-			void ReportInvalidAction() {
 			}
 
 		public:
