@@ -604,7 +604,7 @@ void test4()
 		state.GetBoard().GetSecond().GetResource().Refill();
 		AddHandCard(Cards::ID_EX1_360, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
-		if (controller.PlayCard(1) != FlowControl::kResultInvalid) assert(false);
+		if (FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -5378,7 +5378,7 @@ void test4()
 		FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_334, flow_context, state, state::PlayerIdentifier::First());
-		if (controller.PlayCard(1) != FlowControl::kResultInvalid) assert(false);
+		if (FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
@@ -5409,7 +5409,7 @@ void test4()
 		if (controller.EndTurn() != FlowControl::kResultNotDetermined) assert(false);
 
 		AddHandCard(Cards::ID_EX1_334, flow_context, state, state::PlayerIdentifier::Second());
-		if (controller.PlayCard(1) != FlowControl::kResultInvalid) assert(false);
+		if (FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {

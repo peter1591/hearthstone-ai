@@ -48,7 +48,7 @@ namespace FlowControl
 				if (state_.GetCurrentPlayer().secrets_.Exists(card.GetCardId())) return false;
 			}
 
-			if (!card.GetRawData().onplay_handler.CheckPlayable(state_, state_.GetCurrentPlayerId())) {
+			if (!card.GetRawData().onplay_handler.CheckPlayable(state_, state_.GetCurrentPlayerId(), card_ref)) {
 				return false;
 			}
 
