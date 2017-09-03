@@ -80,9 +80,28 @@ namespace state
 				--event_trigger_recursive_count_;
 			}
 
+			template <typename EventTriggerType, typename... Args>
+			void TriggerEventWithoutRemove(Args&&... args) const
+			{
+				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) return;
+				++event_trigger_recursive_count_;
+				GetHandlersContainer<EventTriggerType>().TriggerAllWithoutRemove(std::forward<Args>(args)...);
+				--event_trigger_recursive_count_;
+			}
+
+			template <typename EventTriggerType, typename... Args>
+			void TriggerCategorizedEventWithoutRemove(CardRef card_ref, Args&&... args) const
+			{
+				if (event_trigger_recursive_count_ >= max_event_trigger_recursive_) return;
+				++event_trigger_recursive_count_;
+				GetCategorizedHandlersContainer<EventTriggerType>()
+					.TriggerAllWithoutRemove(card_ref, std::forward<Args>(args)...);
+				--event_trigger_recursive_count_;
+			}
+
 		private:
 			constexpr static int max_event_trigger_recursive_ = 100;
-			int event_trigger_recursive_count_;
+			mutable int event_trigger_recursive_count_; // obey logical const meanings
 
 		private:
 			using EvnetTypesTuple = std::tuple<
@@ -120,9 +139,17 @@ namespace state
 			impl::HandlersContainer<EventType> & GetHandlersContainer() {
 				return std::get<impl::HandlersContainer<EventType>>(event_tuple_);
 			}
+			template <typename EventType>
+			impl::HandlersContainer<EventType> const& GetHandlersContainer() const {
+				return std::get<impl::HandlersContainer<EventType>>(event_tuple_);
+			}
 
 			template<typename EventType>
 			impl::CategorizedHandlersContainer<EventType> & GetCategorizedHandlersContainer() {
+				return std::get<impl::CategorizedHandlersContainer<EventType>>(categorized_event_tuple_);
+			}
+			template<typename EventType>
+			impl::CategorizedHandlersContainer<EventType> const& GetCategorizedHandlersContainer() const {
 				return std::get<impl::CategorizedHandlersContainer<EventType>>(categorized_event_tuple_);
 			}
 		};

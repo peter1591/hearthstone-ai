@@ -120,6 +120,14 @@ namespace state
 		void TriggerCategorizedEvent(CardRef card_ref, Args&&... args) {
 			return event_mgr_.TriggerCategorizedEvent<EventTriggerType, Args...>(card_ref, std::forward<Args>(args)...);
 		}
+		template <typename EventTriggerType, typename... Args>
+		void TriggerEventWithoutRemove(Args&&... args) const {
+			return event_mgr_.TriggerEventWithoutRemove<EventTriggerType, Args...>(std::forward<Args>(args)...);
+		}
+		template <typename EventTriggerType, typename... Args>
+		void TriggerCategorizedEventWithoutRemove(CardRef card_ref, Args&&... args) const {
+			return event_mgr_.TriggerCategorizedEventWithoutRemove<EventTriggerType, Args...>(card_ref, std::forward<Args>(args)...);
+		}
 
 	public: // zone changer
 		ZoneChangerWithUnknownZoneUnknownType GetZoneChanger(CardRef ref) {

@@ -75,10 +75,31 @@ namespace state
 					}
 				}
 
+				template <typename... Args>
+				void TriggerAllWithoutRemove(Args&&... args) const
+				{
+					// We store all the triggers to a temporary queue, and this queue is immutable during resolve.
+					// Reference: http://hearthstone.gamepedia.com/Advanced_rulebook
+					//   "Rule 2c: A Queue becomes immutable once Hearthstone starts to resolve the first entry in it. No new entries can be added to the Queue after this point."
+
+					// Example:
+					//    If you play a spell, Troggzor the Earthinator summons a Burly Rockjaw Trogg.
+					//    The Burly Rockjaw Trogg does not trigger from the same spell because the consequences of playing the spell have already begun resolving.
+
+					if (GetContainerForRead().empty()) return;
+
+					size_t origin_size = GetContainerForRead().size();
+					for (size_t idx = 0; idx < GetContainerForRead().size();++idx) {
+						if (idx >= origin_size) break; // do not trigger newly-added handlers
+
+						GetContainerForRead()[idx](std::forward<Args>(args)...);
+					}
+				}
+
 			private:
 				typedef std::vector<typename TriggerType::type> container_type;
 
-				container_type const& GetContainerForRead() {
+				container_type const& GetContainerForRead() const {
 					if (base_) return *base_;
 					return handlers_;
 				}

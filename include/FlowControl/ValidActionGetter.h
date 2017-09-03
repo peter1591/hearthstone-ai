@@ -19,18 +19,8 @@ namespace FlowControl
 		{
 			auto const& hand = state_.GetCurrentPlayer().hand_;
 			for (size_t idx = 0; idx < hand.Size(); ++idx) {
-#ifndef NDEBUG
-				// TODO: added it back after implemented the comparison operator
-				// state::State origin_state = state_;
-#endif
-
 				if (!IsPlayable(idx)) continue;
 				if (!op(idx)) return;
-
-#ifndef NDEBUG
-				// TODO: implement comparison operator
-				//assert(origin_state == state_);
-#endif
 			}
 		}
 
@@ -52,39 +42,20 @@ namespace FlowControl
 				return false;
 			}
 
-			// we use mutable state here to invoke the event
-			// TODO: re-write GetPlayCardCost() event handlers to get rid of this
-			state::State & mutable_state = const_cast<state::State &>(state_);
-			if (!CheckCost(card_ref, card, mutable_state)) {
-				return false;
-			}
+			if (!CheckCost(card_ref, card)) return false;
 
 			return true;
 		}
 
 		bool CanUseHeroPower() {
-#ifndef NDEBUG
-			// TODO: added it back after implemented the comparison operator
-			// state::State origin_state = state_;
-#endif
-			// we use mutable state here to invoke the event
-			// but the event handlers should NOT modify state
-			// 'origin_state' helps to detect logic error in debug builds
-			// TODO: re-write GetPlayCardCost() event handlers to get rid of this
-			state::State & mutable_state = const_cast<state::State &>(state_);
-
 			state::CardRef card_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
 			state::Cards::Card const& card = state_.GetCard(card_ref);
 
 			bool ret = false;
 			if (card.GetRawData().usable) {
-				ret = CheckCost(card_ref, card, mutable_state);
+				ret = CheckCost(card_ref, card);
 			}
 
-#ifndef NDEBUG
-			// TODO: implement comparison operator
-			//assert(origin_state == state_);
-#endif
 			return ret;
 		}
 
@@ -172,16 +143,14 @@ namespace FlowControl
 		}
 
 	private:
-		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card, state::State & mutable_state)
+		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card)
 		{
 			int cost = card.GetCost();
 			bool cost_health_instead = false;
 
-			// TODO: trigger event on const state
-			//FlowContext & fake_flow_context = *((FlowContext *)nullptr);
-			//mutable_state.TriggerEvent<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
-			//	Manipulate(mutable_state, fake_flow_context), card_ref, &cost, &cost_health_instead
-			//});
+			state_.TriggerEventWithoutRemove<state::Events::EventTypes::GetPlayCardCost>(state::Events::EventTypes::GetPlayCardCost::Context{
+				state_, card_ref, &cost, &cost_health_instead
+			});
 
 			if (cost <= 0) return true;
 
