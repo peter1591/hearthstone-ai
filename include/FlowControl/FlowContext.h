@@ -76,7 +76,7 @@ namespace FlowControl {
 		void ChangeSpecifiedTarget(state::CardRef target) { specified_target_ = target; }
 		state::CardRef GetSpecifiedTarget() const { return specified_target_; }
 
-		Cards::CardId GetChooseOneUserAction(std::vector<Cards::CardId> const& cards) {
+		Cards::CardId UserChooseOne(std::vector<Cards::CardId> const& cards) {
 			return action_parameters_->ChooseOne(cards);
 		}
 

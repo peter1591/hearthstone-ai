@@ -40,7 +40,7 @@ namespace Cards
 				Cards::ID_EX1_160b
 			};
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_160t);
 				}
@@ -63,7 +63,7 @@ namespace Cards
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 3);
 				}
@@ -87,7 +87,7 @@ namespace Cards
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_155ae>();
 				}
@@ -133,7 +133,7 @@ namespace Cards
 				Cards::ID_EX1_166a,
 				Cards::ID_EX1_166b
 			};
-			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 			if (choice == choices[0]) {
 				context.manipulate_.OnBoardMinion(target).Damage(context.card_ref_, 2);
 			}
@@ -160,7 +160,7 @@ namespace Cards
 				Cards::ID_EX1_164b
 			};
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					context.manipulate_.Board().Player(context.player_).GetResource().GainCrystal(2);
 				}
@@ -180,7 +180,7 @@ namespace Cards
 				Cards::ID_NEW1_007b,
 			};
 			onplay_handler.SetChooseOneOptionsCallback([](Contexts::GetChooseOneOptions & context) {
-				return context.manipulate_.GetChooseOneUserAction(choices);
+				return context.manipulate_.UserChooseOne(choices);
 			});
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				Cards::CardId choice = context.manipulate_.GetSavedUserChoice();
@@ -215,7 +215,7 @@ namespace Cards
 				Cards::ID_EX1_165a,
 				Cards::ID_EX1_165b
 			};
-			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 			state::CardRef new_ref;
 			if (choice == choices[0]) {
 				new_ref = Manipulate(context).OnBoardMinion(context.card_ref_).Transform(Cards::ID_EX1_165t1);
@@ -235,7 +235,7 @@ namespace Cards
 				Cards::ID_NEW1_008b
 			};
 			onplay_handler.SetChooseOneOptionsCallback([](Contexts::GetChooseOneOptions & context) {
-				return context.manipulate_.GetChooseOneUserAction(choices);
+				return context.manipulate_.UserChooseOne(choices);
 			});
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				Cards::CardId choice = context.manipulate_.GetSavedUserChoice();
@@ -267,7 +267,7 @@ namespace Cards
 				Cards::ID_EX1_178a,
 				Cards::ID_EX1_178b
 			};
-			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 			if (choice == choices[0]) {
 				context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_178ae>();
 				context.manipulate_.OnBoardMinion(context.card_ref_).Taunt(true);
@@ -286,7 +286,7 @@ namespace Cards
 				Cards::ID_EX1_573a,
 				Cards::ID_EX1_573b
 			};
-			Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(choices);
+			Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 			if (choice == choices[0]) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					if (card_ref == context.card_ref_) return;

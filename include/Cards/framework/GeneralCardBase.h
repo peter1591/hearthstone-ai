@@ -195,7 +195,7 @@ namespace Cards
 			}
 
 			assert(!choices.empty());
-			return manipulate.GetChooseOneUserAction(choices);
+			return manipulate.UserChooseOne(choices);
 		}
 
 	private:

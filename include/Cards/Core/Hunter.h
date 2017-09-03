@@ -51,7 +51,7 @@ namespace Cards
 					deck.RemoveLast();
 				}
 				if (cards.empty()) return;
-				Cards::CardId choice = context.manipulate_.GetChooseOneUserAction(cards);
+				Cards::CardId choice = context.manipulate_.UserChooseOne(cards);
 				context.manipulate_.Player(context.player_).AddHandCard(choice);
 			});
 		}
