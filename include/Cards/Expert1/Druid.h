@@ -184,9 +184,13 @@ namespace Cards
 			});
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				Cards::CardId choice = context.GetChooseOneChoice();
-				if (choice == choices[0]) {
+				if (choice == Cards::kInvalidCardId) {
+					// get default playable condition do check if this card is playable
+				}
+				else if (choice == choices[0]) {
 				}
 				else {
+					assert(choice == choices[1]);
 					// TODO: playable when no minion?
 					context.SetOptionalSpellTargets(context.player_).Minion();
 				}
@@ -239,9 +243,13 @@ namespace Cards
 			});
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				Cards::CardId choice = context.GetChooseOneChoice();
-				if (choice == choices[0]) {
+				if (choice == Cards::kInvalidCardId) {
+					// get default target rule to check card is playable or not
+				}
+				else if (choice == choices[0]) {
 				}
 				else {
+					assert(choice == choices[1]);
 					context.SetOptionalBattlecryTargets(context.player_);
 				}
 			});
