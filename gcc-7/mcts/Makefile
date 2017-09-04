@@ -1,23 +1,22 @@
 CXX=g++-7
 CFLAGS=-std=c++17
-CFLAGS += -Wall -Wextra -Wpedantic \
-					-Wno-implicit-fallthrough \
-					-Wno-unused-parameter \
-					-Werror
-CFLAGS_OWN_SRC += -Weffc++
+CFLAGS_OWN_SRC += -Wall -Wextra -Wpedantic \
+		  -Wno-implicit-fallthrough \
+		  -Wno-unused-parameter \
+		  -Werror -Weffc++
 
 #CXX=clang-5.0
 #CFLAGS=-std=c++1z
 
 TOP_SOURCE=../../
 
-CFLAGS+=-I$(TOP_SOURCE)include
+CFLAGS+=-I$(TOP_SOURCE)include -I${TOP_SOURCE}contrib/tiny-dnn
 CFLAGS+=-ggdb
 LDFLAGS=-lpthread
 
 # release build
 CFLAGS+=-O3 -march=native
-CFLAGS+=-DNDEBUG
+#CFLAGS+=-DNDEBUG
 LDFLAGS+=-O3
 
 # Profiling options:
@@ -47,7 +46,8 @@ endif
 
 THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
 								 ${TOP_SOURCE}contrib/lib_json/json_reader.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp
+								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp \
+								 ${TOP_SOURCE}src/NeuralNetwork.cpp
 THIRD_PARTY_OBJS=$(THIRD_PARTY_SRCS:.cpp=.o)
 
 SRCS=${TOP_SOURCE}src/MCTS/CardDispatcher.cpp \
