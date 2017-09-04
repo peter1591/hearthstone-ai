@@ -199,6 +199,7 @@
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />
+    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
     <ClInclude Include="..\..\include\MCTS\Types.h" />
     <ClInclude Include="..\..\include\NeuralNetwork.h" />
     <ClInclude Include="..\..\include\UI\AIController.h" />
@@ -215,7 +216,6 @@
     <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />
     <ClInclude Include="..\..\include\Utils\StaticInvokables.h" />
     <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h" />
-    <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

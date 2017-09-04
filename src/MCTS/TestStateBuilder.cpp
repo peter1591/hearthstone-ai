@@ -1,6 +1,6 @@
 #include <random>
 
-#include "TestStateBuilder.h"
+#include "MCTS/TestStateBuilder.h"
 
 #include "FlowControl/FlowController-impl.h"
 #include "UI/Decks.h"

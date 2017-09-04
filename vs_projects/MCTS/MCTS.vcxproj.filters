@@ -40,6 +40,9 @@
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{739252a5-d8b8-41fe-9e87-3ca9a3d4e59e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MCTS">
+      <UniqueIdentifier>{2de484c4-2d05-4afa-b831-0d382a7b7cfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
@@ -57,17 +60,14 @@
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\NeuralNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
+      <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\MCTS\TestStateBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Config.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
@@ -226,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\NeuralNetwork.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

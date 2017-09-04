@@ -1,5 +1,18 @@
 #!/bin/sh
 
+EXE_PATH="../generate_train_data"
+PROCESSES=2
+THREADS=1
+ITERATIONS=100000
+
+pid_file="pid.file"
+
+die()
+{
+  echo "Die: $1"
+  exit 1
+}
+
 get_filename()
 {
   for idx in $(seq 1 1000000)
@@ -20,23 +33,20 @@ runner()
   local filename="$2"
   echo "Starting a process '${exe_path}' to file '${filename}'"
   while true; do
-    "$1" 1 100000 >> "${filename}" 2>&1
+    "$1" "$THREADS" "$ITERATIONS" >> "${filename}" 2>&1
     sleep 1
   done
 }
 
-pid_file="pid.file"
-
 main()
 {
+  local filename
+
   cp ../cards.json .
 
-  local exe_path="$1"
-  local processes=2
-  local filename
-  for idx in $(seq 1 $processes); do
+  for idx in $(seq 1 $PROCESSES); do
     filename="$(get_filename)"
-    runner "${exe_path}" "${filename}" &
+    runner "${EXE_PATH}" "${filename}" &
     child_pid="$!"
     echo "Started a process ${child_pid}"
     echo "${child_pid}" >> "${pid_file}"
@@ -53,7 +63,8 @@ finish()
 {
   for pid in `cat ${pid_file}`; do
     echo "Killing child process ${pid}"
-    kill -9 ${pid}
+    pkill -P "${pid}"
+    kill "${pid}"
   done
   rm -f ${pid_file}
   exit 0

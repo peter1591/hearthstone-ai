@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "Cards/PreIndexedCards.h"
-#include "TestStateBuilder.h"
+#include "MCTS/TestStateBuilder.h"
 #include "UI/AIController.h"
 #include "UI/CompetitionGuide.h"
 
@@ -281,67 +281,9 @@ void TestAI()
 	handler.Start();
 }
 
-void Compete(int argc, char *argv[])
-{
-	if (argc != 3) {
-		std::cout << "Usage: "
-			<< argv[0]
-			<< " (threads)"
-			<< " (iterations)"
-			<< std::endl;
-		return;
-	}
-
-	int threads = 1;
-	uint64_t iterations = 1000;
-
-	auto seed = std::random_device()();
-	std::mt19937 rand(seed);
-
-	{
-		std::istringstream ss(argv[1]);
-		ss >> threads;
-	}
-	{
-		std::istringstream ss(argv[2]);
-		ss >> iterations;
-	}
-
-	if (std::is_same_v<mcts::StaticConfigs::SimulationPhaseSelectActionPolicy, mcts::policy::simulation::RandomPlayouts>) {
-		std::cout << "Simulation select policy: RandomPlayouts" << std::endl;
-	}
-	else {
-		std::cout << "Simulation select policy should be 'RandomPlayouts' to generate train data." << std::endl;
-		exit(-1);
-	}
-
-	std::cout << "Parameters: " << std::endl;
-	std::cout << "\tThreads: " << threads << std::endl;
-	std::cout << "\tIterations: " << iterations << std::endl;
-	std::cout << "\tSeed: " << seed << std::endl;
-
-	ui::CompetitionGuide guide(rand);
-	
-	ui::AICompetitor first;
-	ui::AICompetitor second;
-
-	TestStateBuilder().GetState(rand());
-
-	auto start_board_getter = [&]() -> state::State {
-		return TestStateBuilder().GetStateWithRandomStartCard(rand());
-	};
-
-	guide.SetFirstCompetitor(&first);
-	guide.SetSecondCompetitor(&second);
-
-	guide.Start(start_board_getter, threads, iterations);
-}
-
 int main(int argc, char *argv[])
 {
 	Initialize();
-
-	//TestAI();
-	Compete(argc, argv);
+	TestAI();
 	return 0;
 }
