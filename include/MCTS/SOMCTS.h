@@ -57,6 +57,7 @@ namespace mcts
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
 					result = builder_.PerformSimulate(board);
+					// TODO: never invalid?
 					if (result == Result::kResultInvalid) return Result::kResultInvalid;
 					assert(result != Result::kResultInvalid);
 					if (result != Result::kResultNotDetermined) return result;
@@ -70,17 +71,18 @@ namespace mcts
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
 					auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map, &updater_);
-					if (perform_result.result == Result::kResultInvalid) return Result::kResultInvalid;
+					assert(perform_result.result != Result::kResultInvalid);
 					
 					result = perform_result.result;
 					if (result != Result::kResultNotDetermined) return result;
 
 					assert([](builder::TreeBuilder::TreeNode* node) {
+						if (!node) return false;
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(perform_result.node));
 
-					if (perform_result.new_node_created) {
+					if (perform_result.change_to_simulation) {
 						stage_ = kStageSimulation;
 						node_ = nullptr;
 					}

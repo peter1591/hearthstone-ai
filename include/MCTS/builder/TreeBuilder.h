@@ -36,13 +36,13 @@ namespace mcts
 
 			struct SelectResult
 			{
-				Result result; // Never returns kResultInvalid (automatically retry)
-				bool new_node_created; // only valid if started in selection stage
-				TreeNode * node; // only valid if started in selection stage
+				Result result; // Never returns kResultInvalid
+				bool change_to_simulation;
+				TreeNode * node;
 
 				SelectResult(Result new_result) :
 					result(new_result),
-					new_node_created(false),
+					change_to_simulation(false),
 					node(nullptr)
 				{}
 			};

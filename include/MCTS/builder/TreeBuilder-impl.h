@@ -29,9 +29,7 @@ namespace mcts
 
 			TreeBuilder::SelectResult perform_result(ApplyAction(
 				flow_context_, node->GetAddon().action_analyzer, selection_stage_));
-			if (perform_result.result == Result::kResultInvalid) {
-				return Result::kResultInvalid;
-			}
+			assert(perform_result.result != Result::kResultInvalid);
 
 			// we use mutable here, since we will throw it away after all
 			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
@@ -39,9 +37,10 @@ namespace mcts
 			// mark the last action as a redirect node
 			traversed_path.back().ConstructRedirectNode();
 
-			assert(perform_result.new_node_created == false);
+			bool new_node_created = false;
 			if (perform_result.result == Result::kResultNotDetermined) {
-				perform_result.node = last_node_map.GetOrCreateNode(board, &perform_result.new_node_created);
+				perform_result.node = last_node_map.GetOrCreateNode(board, &new_node_created);
+				assert(perform_result.node);
 			}
 			else {
 				assert(perform_result.node == nullptr);
@@ -56,8 +55,15 @@ namespace mcts
 				assert(perform_result.node != nullptr);
 			}
 
-			if (!perform_result.new_node_created) {
-				perform_result.new_node_created = selection_stage_.HasNewNodeCreated();
+			if (!new_node_created) {
+				new_node_created = selection_stage_.HasNewNodeCreated();
+			}
+
+			assert(perform_result.change_to_simulation == false); // default value
+			if (new_node_created) {
+				// TODO: only expand a node when traversed a few times
+				// traversed_path.back().GetEdgeAddon()->GetChosenTimes()
+				perform_result.change_to_simulation = true;
 			}
 
 			assert(updater);
