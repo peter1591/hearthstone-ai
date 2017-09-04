@@ -14,7 +14,10 @@ namespace mcts
 		using SelectionPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;
 		static constexpr int kVirtualLoss = 3;
-		static constexpr int kSwitchToSimulationUnderChosenTimes = 100; // switch to simulation mode if node is chosen too few times
+
+		// Switch to simulation mode if node is chosen too few times
+		// This can lower down the rate we allocate new nodes
+		static constexpr int kSwitchToSimulationUnderChosenTimes = 10;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPolicy;
