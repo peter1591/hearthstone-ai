@@ -9,8 +9,6 @@ namespace mcts
 {
 	namespace board
 	{
-		// Need to ensure only information from 'side' is accessed
-		// TODO: maybe use FlowControl::PlayerStateView to ensure this
 		class BoardView
 		{
 			friend std::hash<BoardView>;
