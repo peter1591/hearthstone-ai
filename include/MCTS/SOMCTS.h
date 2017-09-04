@@ -111,7 +111,6 @@ namespace mcts
 
 		void EpisodeFinished(Result result)
 		{
-			// suppose AI is helping the first player
 			bool credit = mcts::StaticConfigs::CreditPolicy::GetCredit(side_, result);
 			updater_.Update(credit);
 		}

@@ -10,16 +10,11 @@ namespace mcts
 		{
 		public:
 			static bool GetCredit(state::PlayerSide side, Result result) {
-				assert(result != Result::kResultInvalid);
-				assert(result != Result::kResultNotDetermined);
-				if (side == state::kPlayerFirst) {
-					// only get credit for wins; no credit for draws
-					if (result == Result::kResultFirstPlayerWin) return true;
-					else return false;
-				}
+				assert(result == Result::kResultWin || result == Result::kResultLoss);
+				if (side == state::kPlayerFirst) return (result == Result::kResultWin);
 				else {
 					assert(side == state::kPlayerSecond);
-					return !GetCredit(state::kPlayerFirst, result);
+					return (result == Result::kResultLoss);
 				}
 			}
 		};

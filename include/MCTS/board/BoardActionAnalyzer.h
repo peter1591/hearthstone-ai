@@ -72,6 +72,25 @@ namespace mcts
 			}
 
 		private:
+			Result ConvertResult(FlowControl::Result flow_result) {
+				// The player AI is helping is defined to be the first player
+				switch (flow_result) {
+				case FlowControl::Result::kResultFirstPlayerWin:
+					return Result::kResultWin;
+
+				case FlowControl::Result::kResultSecondPlayerWin:
+				case FlowControl::Result::kResultDraw:
+					return Result::kResultLoss;
+
+				case FlowControl::Result::kResultNotDetermined:
+					return Result::kResultNotDetermined;
+
+				case FlowControl::Result::kResultInvalid:
+				default:
+					return Result::kResultInvalid;
+				}
+			}
+
 			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
 			Result PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);
 			Result Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters);

@@ -174,15 +174,13 @@ namespace ui
 
 		std::string GetResultString(mcts::Result result) {
 			switch (result) {
-			case mcts::Result::kResultFirstPlayerWin:
-				return "kResultFirstPlayerWin";
-			case mcts::Result::kResultSecondPlayerWin:
-				return "kResultSecondPlayerWin";
-			case mcts::Result::kResultDraw:
-				return "kResultDraw";
+			case mcts::Result::kResultWin:
+				return "kResultWin";
+			case mcts::Result::kResultLoss:
+				return "kResultLoss";
 			default:
 				assert(false);
-				return "Invalid";
+				return "kResultInvalid";
 			}
 		}
 

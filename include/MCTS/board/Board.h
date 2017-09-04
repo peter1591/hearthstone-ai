@@ -83,25 +83,6 @@ namespace mcts
 					action, random, action_parameters);
 			}
 
-			// 1 -> self win
-			// 0 -> not determined
-			// -1 -> opponent win
-			int IsSelfWin(Result result) const {
-				// TODO: Maybe we should modify the return of ApplyAction()
-				// So it reflects the self-win or oppoennt-win
-				// rather than first-win or second-win
-
-				if (result == Result::kResultFirstPlayerWin) {
-					if (side_ == state::kPlayerFirst) return 1;
-					else return -1;
-				}
-				if (result == Result::kResultSecondPlayerWin) {
-					if (side_ == state::kPlayerSecond) return 1;
-					else return -1;
-				}
-				return 0;
-			}
-
 		public:
 			void Save(SavedBoard & save) const {
 				save.state_ = board_;

@@ -7,6 +7,7 @@
 namespace mcts
 {
 	// multiple-observer MCTS
+	// The first player is defined to be the player AI is helping
 	class MOMCTS
 	{
 	public:

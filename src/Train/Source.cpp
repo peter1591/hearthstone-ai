@@ -155,7 +155,7 @@ public:
 		std::ifstream fs(filename);
 		reader.parse(fs, obj);
 
-		std::string winning_player = GetWinPlayer(obj);
+		std::string result = GetResult(obj);
 		int seq = 1;
 		for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
 			if (obj[idx]["type"].asString() == "kMainAction") {
@@ -164,7 +164,7 @@ public:
 				if (board["turn"].asInt() <= 4) continue;
 
 				JsonDataParser board_parser(board);
-				int label = IsCurrentPlayerWin(board, winning_player) ? 1 : -1;
+				int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
 				
 				net_.AddTrainData(&board_parser, label, for_validate);
 				++seq;
@@ -178,7 +178,7 @@ public:
 	}
 
 private:
-	std::string GetWinPlayer(Json::Value const& obj) {
+	std::string GetResult(Json::Value const& obj) {
 		for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
 			if (obj[idx]["type"].asString() == "kEnd") {
 				return obj[idx]["result"].asString();
@@ -187,13 +187,13 @@ private:
 		throw std::runtime_error("Cannot find win player");
 	}
 
-	bool WinPlayerIsFirstPlayer(std::string const& win_player) {
-		if (win_player == "kResultFirstPlayerWin") return true;
-		if (win_player == "kResultSecondPlayerWin") return false;
+	bool IsResultWin(std::string const& win_player) {
+		if (win_player == "kResultWin") return true;
+		if (win_player == "kResultLoss") return false;
 		throw std::runtime_error("Failed to parse winning player");
 	}
 
-	bool IsCurrentPlayerWin(Json::Value const& board, std::string const& win_player) {
+	bool IsCurrentPlayerWin(Json::Value const& board, std::string const& result) {
 		std::string current_player = board["current_player_id"].asString();
 		
 		bool current_player_is_first = false;
@@ -201,7 +201,8 @@ private:
 		else if (current_player == "kSecondPlayer") current_player_is_first = false;
 		else throw std::runtime_error("Failed to parse current player");
 
-		bool win_player_is_first = WinPlayerIsFirstPlayer(win_player);
+		// Note: AI is always helping first player
+		bool win_player_is_first = IsResultWin(result);
 
 		return current_player_is_first == win_player_is_first;
 	}

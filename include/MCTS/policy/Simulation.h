@@ -375,14 +375,8 @@ namespace mcts
 					}
 
 					bool self_win = state_value_func_.GuessWillWin(board);
-					if (self_win) {
-						if (board.GetViewSide() == state::kPlayerFirst) return Result::kResultFirstPlayerWin;
-						else return Result::kResultSecondPlayerWin;
-					}
-					else {
-						if (board.GetViewSide() == state::kPlayerSecond) return Result::kResultSecondPlayerWin;
-						else return Result::kResultFirstPlayerWin;
-					}
+					if (self_win) return Result::kResultWin;
+					else return Result::kResultLoss;
 				}
 
 			public:
@@ -431,14 +425,8 @@ namespace mcts
 					}
 
 					bool self_win = state_value_func_.GuessWillWin(board);
-					if (self_win) {
-						if (board.GetViewSide() == state::kPlayerFirst) return Result::kResultFirstPlayerWin;
-						else return Result::kResultSecondPlayerWin;
-					}
-					else {
-						if (board.GetViewSide() == state::kPlayerSecond) return Result::kResultSecondPlayerWin;
-						else return Result::kResultFirstPlayerWin;
-					}
+					if (self_win) return Result::kResultWin;
+					else return Result::kResultLoss;
 				}
 
 			public:
@@ -595,14 +583,14 @@ namespace mcts
 
 							if (result != Result::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();
-								int self_win = copy_board_.GetBoard().IsSelfWin(result);
-								if (self_win == 1) {
+								if (result == Result::kResultWin) {
 									value = std::numeric_limits<double>::infinity();
 								}
-								else if (self_win == -1) {
+								else if (result == Result::kResultLoss) {
 									value = -std::numeric_limits<double>::infinity();
 								}
 								else {
+									assert(result == Result::kResultNotDetermined);
 									state_value_func_.GetStateValue(copy_board_.GetBoard());
 								}
 

@@ -73,7 +73,7 @@ namespace mcts
 			// sink node is at address 0x1 or 0x2
 			bool HasLastNode() const {
 				if (!last_node_) return false;
-				if (last_node_->IsWinNode()) return false;
+				if (last_node_->IsWinLossNode()) return false;
 				return true;
 			}
 

@@ -77,12 +77,12 @@ namespace mcts
 			{}
 
 			// it is assumed we will never create a node at these special addresses
-			static TreeNode* GetFirstWinNode() { return reinterpret_cast<TreeNode *>(0x1); }
-			static TreeNode* GetSecondWinNode() { return reinterpret_cast<TreeNode *>((uint64_t)0x2); }
+			static TreeNode* GetWinNode() { return reinterpret_cast<TreeNode *>(0x1); }
+			static TreeNode* GetLossNode() { return reinterpret_cast<TreeNode *>((uint64_t)0x2); }
 
-			bool IsFirstWinNode() const { return this == GetFirstWinNode(); }
-			bool IsSecondWinNode() const { return this == GetSecondWinNode(); }
-			bool IsWinNode() const { return IsFirstWinNode() || IsSecondWinNode(); }
+			bool IsWinNode() const { return this == GetWinNode(); }
+			bool IsLossNode() const { return this == GetLossNode(); }
+			bool IsWinLossNode() const { return IsWinNode() || IsLossNode(); }
 
 			// select among specific choices
 			// if any of the choices does not exist, return the edge to expand it

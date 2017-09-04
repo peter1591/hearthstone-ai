@@ -64,7 +64,12 @@ namespace mcts
 		Types type_;
 	};
 
-	using Result = FlowControl::Result;
+	enum Result {
+		kResultInvalid,
+		kResultWin,
+		kResultLoss, // including draw
+		kResultNotDetermined
+	};
 
 	enum Stage {
 		kStageSelection,
