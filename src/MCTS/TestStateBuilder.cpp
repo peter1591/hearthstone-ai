@@ -187,6 +187,7 @@ state::State TestStateBuilder::GetState(int seed)
 	//MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
 	MoveFromDeckToHand(deck1, "Bloodfen Raptor", state, state::PlayerIdentifier::First());
 	MoveFromDeckToHand(deck1, "Wolfrider", state, state::PlayerIdentifier::First());
+	AddHandCard(Cards::ID_NEW1_007, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
