@@ -194,6 +194,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
 					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, 2);
 					context.manipulate_.OnBoardMinion(minion).Freeze(true);
+					return true;
 				});
 			});
 		}

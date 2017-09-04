@@ -102,6 +102,7 @@ namespace Cards
 				context.manipulate_.Hero(context.player_).Enchant().Add<Card_CS2_011o>();
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_011o>();
+					return true;
 				});
 			});
 		}
@@ -118,8 +119,9 @@ namespace Cards
 				if (target.IsValid()) context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 4);
 
 				auto op = [&](state::CardRef card_ref) {
-					if (card_ref == target) return;
+					if (card_ref == target) return true;
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 1);
+					return true;
 				};
 				op(context.manipulate_.Board().Player(player).GetHeroRef());
 				context.manipulate_.Board().Player(player).minions_.ForEach(op);

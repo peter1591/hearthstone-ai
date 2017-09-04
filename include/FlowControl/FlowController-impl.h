@@ -358,6 +358,7 @@ namespace FlowControl
 		auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
 		player.minions_.ForEach([&](state::CardRef card_ref) {
 			if (HasTaunt(card_ref)) defenders.push_back(card_ref);
+			return true;
 		});
 
 		// TODO: hero does not have taunt unless in tavern brawl. so we skip the check here
@@ -376,6 +377,7 @@ namespace FlowControl
 			player.minions_.ForEach([&](state::CardRef card_ref) {
 				// TODO: immune character cannot be attacked/targeted
 				defenders.push_back(card_ref);
+				return true;
 			});
 		}
 
@@ -447,13 +449,14 @@ namespace FlowControl
 		auto thaw_op = [&](state::CardRef card_ref) {
 			state::Cards::Card const& card = state_.GetCard(card_ref);
 
-			if (!card.GetRawData().freezed) return;
-			if (card.GetRawData().num_attacks_this_turn > 0) return;
+			if (!card.GetRawData().freezed) return true;
+			if (card.GetRawData().num_attacks_this_turn > 0) return true;
 			if (card.GetCardType() == state::kCardTypeMinion) {
-				if (card.HasCharge() == false && card.GetRawData().just_played) return;
+				if (card.HasCharge() == false && card.GetRawData().just_played) return true;
 			}
 
 			Manipulate(state_, flow_context_).OnBoardCharacter(card_ref).Freeze(false);
+			return true;
 		};
 		thaw_op(state_.GetBoard().GetFirst().GetHeroRef());
 		thaw_op(state_.GetBoard().GetSecond().GetHeroRef());

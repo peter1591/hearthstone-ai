@@ -42,8 +42,11 @@ namespace state
 			void IncreaseChangeId() { ++change_id_; }
 
 			template <typename Functor>
-			void ForEach(Functor&& functor) const {
-				std::for_each(minions_.begin(), minions_.end(), std::forward<Functor>(functor));
+			bool ForEach(Functor&& functor) const {
+				for (auto const& item : minions_) {
+					if (!functor(item)) return false;
+				}
+				return true;
 			}
 
 		private:

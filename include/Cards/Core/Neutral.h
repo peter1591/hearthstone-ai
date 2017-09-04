@@ -147,6 +147,7 @@ namespace Cards
 			ForEach(context, Targets(context.player_).Ally().Exclude(context.card_ref_),
 				[context](state::CardRef ref) {
 				context.manipulate_.OnBoardCharacter(ref).Heal(context.card_ref_, 2);
+				return true;
 			});
 		}
 	};

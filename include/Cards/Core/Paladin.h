@@ -104,6 +104,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
 					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, 2);
+					return true;
 				});
 			});
 		}

@@ -128,6 +128,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach(
 					[&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, attack);
+					return true;
 				});
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
 			});
@@ -207,6 +208,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto functor = [&](state::CardRef ref) {
 					context.manipulate_.OnBoardMinion(ref).Destroy();
+					return true;
 				};
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(functor);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(functor);

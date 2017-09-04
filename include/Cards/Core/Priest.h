@@ -130,12 +130,14 @@ namespace Cards
 				context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 2);
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Heal(context.card_ref_, 2);
+					return true;
 				});
 
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 2 + spell_damage);
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2 + spell_damage);
+					return true;
 				});
 			});
 		}

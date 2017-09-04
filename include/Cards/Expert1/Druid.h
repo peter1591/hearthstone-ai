@@ -47,6 +47,7 @@ namespace Cards
 				else {
 					context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 						context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_160be>();
+						return true;
 					});
 				}
 			});
@@ -116,6 +117,7 @@ namespace Cards
 					context.manipulate_.OnBoardMinion(card_ref).AddDeathrattle([](FlowControl::deathrattle::context::Deathrattle const& context) {
 						SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_158t);
 					});
+					return true;
 				});
 			});
 		}
@@ -191,7 +193,6 @@ namespace Cards
 				}
 				else {
 					assert(choice == choices[1]);
-					// TODO: playable when no minion?
 					context.SetOptionalSpellTargets(context.player_).Minion();
 				}
 			});
@@ -199,6 +200,7 @@ namespace Cards
 				if (context.manipulate_.GetSavedUserChoice() == choices[0]) {
 					context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 						context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
+						return true;
 					});
 				}
 				else {
@@ -297,8 +299,9 @@ namespace Cards
 			Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 			if (choice == choices[0]) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
-					if (card_ref == context.card_ref_) return;
+					if (card_ref == context.card_ref_) return true;
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_573ae>();
+					return true;
 				});
 			}
 			else {

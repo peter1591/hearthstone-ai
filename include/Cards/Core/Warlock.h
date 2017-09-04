@@ -111,6 +111,7 @@ namespace Cards
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 3 + spell_damage);
+					return true;
 				};
 				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
@@ -124,6 +125,7 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			auto op = [&](state::CardRef card_ref) {
 				context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 1);
+				return true;
 			};
 			op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);

@@ -92,12 +92,13 @@ namespace FlowControl
 			auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
 			int minion_idx = 0;
-			player.minions_.ForEach([&](state::CardRef card_ref) {
+			if (!player.minions_.ForEach([&](state::CardRef card_ref) {
 				if (op(card_ref)) {
-					if (!functor(minion_idx)) return;
+					if (!functor(minion_idx)) return false;
 				}
 				++minion_idx;
-			});
+				return true;
+			})) return;
 
 			state::CardRef hero_ref = player.GetHeroRef();
 			if (op(hero_ref)) {
@@ -125,6 +126,7 @@ namespace FlowControl
 
 			player.minions_.ForEach([&](state::CardRef card_ref) {
 				defenders.push_back(card_ref);
+				return true;
 			});
 
 			return defenders;

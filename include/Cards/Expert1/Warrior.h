@@ -52,6 +52,7 @@ namespace Cards
 				
 				auto op = [&](state::CardRef card_ref) {
 					if (context.manipulate_.GetCard(card_ref).GetDamage() > 0) ++draw_count;
+					return true;
 				};
 
 				op(context.manipulate_.Board().Player(context.player_).GetHeroRef());
@@ -206,8 +207,9 @@ namespace Cards
 				else winner_ref = context.manipulate_.Board().SecondPlayer().minions_.Get(minion_idx);
 
 				auto op = [&](state::CardRef card_ref) {
-					if (card_ref == winner_ref) return;
+					if (card_ref == winner_ref) return true;
 					context.manipulate_.OnBoardMinion(card_ref).Destroy();
+					return true;
 				};
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);

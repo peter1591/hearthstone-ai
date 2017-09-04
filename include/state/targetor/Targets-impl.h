@@ -10,45 +10,57 @@ namespace state {
 		inline void Targets::Fill(state::State const& state, std::vector<CardRef>& targets) const {
 			Process(state, [&](CardRef ref) {
 				targets.push_back(ref);
+				return true;
 			});
 		}
 		inline void Targets::Fill(state::State const& state, std::unordered_set<CardRef>& targets) const {
 			Process(state, [&](CardRef ref) {
 				targets.insert(ref);
+				return true;
 			});
 		}
 
 		template <typename Functor>
 		inline void Targets::ForEach(state::State const& state, Functor&& func) const {
 			Process(state, [&](CardRef ref) {
-				func(ref);
+				return func(ref);
 			});
 		}
 
 		inline void Targets::Count(state::State const& state, int * count) const {
 			Process(state, [count](CardRef) {
 				++(*count);
+				return true;
 			});
 		}
 
 		template <typename Functor>
 		inline void Targets::Process(state::State const& state, Functor&& functor) const {
-			if (include_first) ProcessPlayerTargets(state, state.GetBoard().GetFirst(), std::forward<Functor>(functor));
-			if (include_second) ProcessPlayerTargets(state, state.GetBoard().GetSecond(), std::forward<Functor>(functor));
+			if (include_first) {
+				if (!ProcessPlayerTargets(state, state.GetBoard().GetFirst(), std::forward<Functor>(functor))) return;
+			}
+			if (include_second) {
+				if (!ProcessPlayerTargets(state, state.GetBoard().GetSecond(), std::forward<Functor>(functor))) return;
+			}
 		}
 
 		template <typename Functor>
-		inline void Targets::ProcessPlayerTargets(state::State const& state, board::Player const& player, Functor&& functor) const {
+		inline bool Targets::ProcessPlayerTargets(state::State const& state, board::Player const& player, Functor&& functor) const {
 			auto op = [&](state::CardRef card_ref) {
-				if (card_ref == exclude) return;
+				if (card_ref == exclude) return true;
 				auto const& card = state.GetCard(card_ref);
-				if (!CheckTargetableFilter(state, card)) return;
-				if (!CheckFilter(state, card)) return;
-				functor(card_ref);
+				if (!CheckTargetableFilter(state, card)) return true;
+				if (!CheckFilter(state, card)) return true;
+				return functor(card_ref);
 			};
 
-			if (include_hero) op(player.GetHeroRef());
-			if (include_minion) player.minions_.ForEach(op);
+			if (include_hero) {
+				if (!op(player.GetHeroRef())) return false;
+			}
+			if (include_minion) {
+				if (!player.minions_.ForEach(op)) return false;
+			}
+			return true;
 		}
 
 		inline bool Targets::CheckTargetable(state::Cards::Card const & card) const

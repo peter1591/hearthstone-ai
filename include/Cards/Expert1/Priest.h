@@ -10,6 +10,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto op = [&](state::CardRef target) {
 					context.manipulate_.OnBoardMinion(target).Heal(context.card_ref_, 4);
+					return true;
 				};
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -123,6 +124,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Silence();
+					return true;
 				});
 				context.manipulate_.Player(context.player_).DrawCard();
 			});

@@ -113,6 +113,7 @@ namespace Cards
 					[&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_,
 						context.manipulate_.GetRandom().Get(2, 3));
+					return true;
 				});
 			});
 		}

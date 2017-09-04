@@ -199,6 +199,7 @@ namespace Cards
 			if (context.manipulate_.GetCard(self).GetPlayerIdentifier() != context.manipulate_.Board().GetCurrentPlayerId()) return true;
 			auto op = [&](state::CardRef ref) {
 				context.manipulate_.OnBoardMinion(ref).Destroy();
+				return true;
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -383,6 +384,7 @@ namespace Cards
 
 			auto op = [&](state::CardRef ref) {
 				context.manipulate_.OnBoardMinion(ref).Damage(self, 1);
+				return true;
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -457,10 +459,11 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			int count = 0;
 			auto op = [&](state::CardRef ref) {
-				if (!context.manipulate_.GetCard(ref).HasShield()) return;
-
-				++count;
-				context.manipulate_.OnBoardMinion(ref).Shield(false);
+				if (context.manipulate_.GetCard(ref).HasShield()) {
+					++count;
+					context.manipulate_.OnBoardMinion(ref).Shield(false);
+				}
+				return true;
 			};
 
 			if (count <= 0) return;
@@ -483,9 +486,11 @@ namespace Cards
 	struct Card_EX1_103 : public MinionCardBase<Card_EX1_103> {
 		static void Battlecry(Contexts::OnPlay const& context) {
 			context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef ref) {
-				if (ref == context.card_ref_) return;
-				if (context.manipulate_.GetCard(ref).GetRace() != state::kCardRaceMurloc) return;
-				context.manipulate_.OnBoardMinion(ref).Enchant().Add<Card_EX1_103e>();
+				if (ref == context.card_ref_) return true;
+				if (context.manipulate_.GetCard(ref).GetRace() == state::kCardRaceMurloc) {
+					context.manipulate_.OnBoardMinion(ref).Enchant().Add<Card_EX1_103e>();
+				}
+				return true;
 			});
 		}
 	};
@@ -796,6 +801,7 @@ namespace Cards
 			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
+					return true;
 				};
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -990,8 +996,9 @@ namespace Cards
 	struct Card_EX1_249 : public MinionCardBase<Card_EX1_249> {
 		static bool HandleEvent(state::CardRef self, state::Events::EventTypes::OnTurnEnd::Context const& context) {
 			auto op = [&](state::CardRef card_ref) {
-				if (card_ref == self) return;
+				if (card_ref == self) return true;
 				context.manipulate_.OnBoardMinion(card_ref).Damage(self, 2);
+				return true;
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);
@@ -1050,8 +1057,9 @@ namespace Cards
 		Card_DREAM_02() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto op = [&](state::CardRef card_ref) {
-					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return;
+					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return true;
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 5);
+					return true;
 				};
 				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 				op(context.manipulate_.Board().SecondPlayer().GetHeroRef());
@@ -1116,8 +1124,9 @@ namespace Cards
 		static void Battlecry(Contexts::OnPlay const& context) {
 			// destroy minions
 			auto minion_op = [&](state::CardRef card_ref) {
-				if (card_ref == context.card_ref_) return;
+				if (card_ref == context.card_ref_) return true;
 				context.manipulate_.OnBoardMinion(card_ref).Destroy();
+				return true;
 			};
 			context.manipulate_.Board().FirstPlayer().minions_.ForEach(minion_op);
 			context.manipulate_.Board().SecondPlayer().minions_.ForEach(minion_op);

@@ -91,6 +91,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_619e>();
+					return true;
 				};
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
 				context.manipulate_.Board().SecondPlayer().minions_.ForEach(op);

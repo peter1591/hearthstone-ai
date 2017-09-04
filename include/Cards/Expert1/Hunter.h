@@ -13,6 +13,7 @@ namespace Cards
 
 			auto op = ([&](state::CardRef card_ref) {
 				context.manipulate_.OnBoardCharacter(card_ref).Damage(self, 2);
+				return true;
 			});
 			op(context.manipulate_.Board().Player(player.Opposite()).GetHeroRef());
 			context.manipulate_.Board().Player(player.Opposite()).minions_.ForEach(op);

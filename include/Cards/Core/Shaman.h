@@ -12,6 +12,7 @@ namespace Cards
 
 			context.manipulate_.Board().Player(owner).minions_.ForEach([&](state::CardRef card_ref) {
 				context.manipulate_.OnBoardMinion(card_ref).Heal(self, 1);
+				return true;
 			});
 			return true;
 		}
@@ -53,6 +54,7 @@ namespace Cards
 						totems_exists[i] = true;
 					}
 				}
+				return true;
 			});
 
 			return totems_exists;
@@ -147,6 +149,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_046e>();
+					return true;
 				});
 			});
 		}

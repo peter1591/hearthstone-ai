@@ -167,6 +167,7 @@ namespace Cards
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach(
 					[&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, attack);
+					return true;
 				});
 			});
 		}

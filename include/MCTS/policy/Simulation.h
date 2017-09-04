@@ -102,9 +102,11 @@ namespace mcts
 
 					view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
 						v += 10.0 * GetMinionValue(card);
+						return true;
 					});
 					view.ForEachMinion(opponent_side, [&](state::Cards::Card const& card, bool attackable) {
 						v += -10.0 * GetMinionValue(card);
+						return true;
 					});
 
 					v += 3.0 * GetHeroValue(view.GetSelfHero());

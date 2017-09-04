@@ -32,7 +32,7 @@ namespace FlowControl
 					bool targets_empty = true;
 					targets_rule.ForEach(state, [&](...) {
 						targets_empty = false;
-						// return false; // TODO: early stop
+						return false;
 					});
 					if (targets_empty) return false;
 				}

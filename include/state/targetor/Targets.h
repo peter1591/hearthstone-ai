@@ -56,7 +56,7 @@ namespace state {
 			void Process(state::State const& state, Functor&& functor) const;
 
 			template <typename Functor>
-			void ProcessPlayerTargets(state::State const& state, board::Player const& player, Functor&& functor) const;
+			bool ProcessPlayerTargets(state::State const& state, board::Player const& player, Functor&& functor) const;
 
 			bool CheckTargetableFilter(state::State const& state, state::Cards::Card const& card) const;
 			bool CheckFilter(state::State const& state, state::Cards::Card const& card) const;

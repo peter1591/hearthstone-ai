@@ -34,6 +34,7 @@ namespace Cards
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 1);
+					return true;
 				};
 				op(context.manipulate_.Board().FirstPlayer().GetHeroRef());
 				context.manipulate_.Board().FirstPlayer().minions_.ForEach(op);
