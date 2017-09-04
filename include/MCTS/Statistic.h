@@ -12,7 +12,6 @@ namespace mcts
 	class Statistic {
 	public:
 		void ApplyActionSucceeded(bool is_simulation) {}
-		void ApplyActionFailed(bool is_simulation) {} // TODO: should never called
 		void PrintMessage() {}
 	};
 
@@ -57,23 +56,13 @@ namespace mcts
 			if (is_simulation) return simulation_.ReportSuccess();
 			else return selection_.ReportSuccess();
 		}
-		void ApplyActionFailed(bool is_simulation) { // TODO: should never called
-			if (is_simulation) return simulation_.ReportFailed();
-			else return selection_.ReportFailed();
-		}
 
 		void ApplySelectionActionSucceeded() {
 			selection_.ReportSuccess();
 		}
-		void ApplySelectionActionFailed() {
-			selection_.ReportFailed();
-		}
 
 		void ApplySimulationActionSucceeded() {
 			simulation_.ReportSuccess();
-		}
-		void ApplySimulationActionFailed() {
-			simulation_.ReportFailed();
 		}
 
 		void PrintMessage() const {
