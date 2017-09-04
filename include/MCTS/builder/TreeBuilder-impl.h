@@ -61,8 +61,9 @@ namespace mcts
 
 			assert(perform_result.change_to_simulation == false); // default value
 			if (new_node_created) {
-				// TODO: only expand a node when traversed a few times
-				// traversed_path.back().GetEdgeAddon()->GetChosenTimes()
+				perform_result.change_to_simulation = true;
+			}
+			else if (traversed_path.back().GetEdgeAddon()->GetChosenTimes() < StaticConfigs::kSwitchToSimulationUnderChosenTimes) {
 				perform_result.change_to_simulation = true;
 			}
 
