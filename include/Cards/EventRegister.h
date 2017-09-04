@@ -63,14 +63,14 @@ namespace Cards
 		struct ContextCardGetter {
 			template <class Context>
 			static auto const& Get(Context const& context, state::CardRef ref) { return context.manipulate_.Board().GetCard(ref); }
-
-			// Note: if more than one event types need special care,
-			// use SFINAE to let compiler do the job.
-			template <>
-			static auto const& Get(state::Events::EventTypes::GetPlayCardCost::Context const& context, state::CardRef ref) {
-				return context.state_.GetCard(ref);
-			}
 		};
+
+		// Note: if more than one event types need special care,
+		// use SFINAE to let compiler do the job.
+		template <>
+		auto const& ContextCardGetter::Get(state::Events::EventTypes::GetPlayCardCost::Context const& context, state::CardRef ref) {
+			return context.state_.GetCard(ref);
+		}
 
 		template <typename LifeTime, typename SelfPolicy, typename EventType, typename EventHandler, typename EventHandlerArg> struct AddEventHelper;
 
