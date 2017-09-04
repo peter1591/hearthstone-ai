@@ -31,12 +31,12 @@ namespace mcts
 				int choices_;
 			};
 
-			class RandomPolicy
+			class RandomPlayouts
 			{
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				RandomPolicy(state::PlayerSide side, std::mt19937 & rand) :
+				RandomPlayouts(state::PlayerSide side, std::mt19937 & rand) :
 					rand_(rand)
 				{
 				}

@@ -307,6 +307,14 @@ void Compete(int argc, char *argv[])
 		ss >> iterations;
 	}
 
+	if (std::is_same_v<mcts::StaticConfigs::SimulationPhaseSelectActionPolicy, mcts::policy::simulation::RandomPlayouts>) {
+		std::cout << "Simulation select policy: RandomPlayouts" << std::endl;
+	}
+	else {
+		std::cout << "Simulation select policy should be 'RandomPlayouts' to generate train data." << std::endl;
+		exit(-1);
+	}
+
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\tThreads: " << threads << std::endl;
 	std::cout << "\tIterations: " << iterations << std::endl;
@@ -333,7 +341,7 @@ int main(int argc, char *argv[])
 {
 	Initialize();
 
-	TestAI();
-	//Compete(argc, argv);
+	//TestAI();
+	Compete(argc, argv);
 	return 0;
 }
