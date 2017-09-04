@@ -352,7 +352,7 @@ namespace mcts
 				StateDataBridge current_player_viewer_;
 			};
 
-			class HeuristicPolicy
+			class RandomPlayoutWithHeuristicEarlyCutoffPolicy
 			{
 			public:
 				// Simulation cutoff:
@@ -384,7 +384,63 @@ namespace mcts
 				}
 
 			public:
-				HeuristicPolicy(state::PlayerSide side, std::mt19937 & rand) :
+				RandomPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
+					rand_(rand),
+					state_value_func_()
+				{
+				}
+
+				int GetChoice(
+					board::Board const& board,
+					FlowControl::FlowContext & flow_context,
+					board::BoardActionAnalyzer & action_analyzer,
+					ActionType action_type,
+					ChoiceGetter const& choice_getter)
+				{
+					size_t count = choice_getter.Size();
+					assert(count > 0);
+					size_t rand_idx = (size_t)(std::rand() % count);
+					return choice_getter.Get(rand_idx);
+				}
+
+			private:
+				std::mt19937 & rand_;
+				NeuralNetworkStateValueFunction state_value_func_;
+			};
+
+			class HeuristicPlayoutWithHeuristicEarlyCutoffPolicy
+			{
+			public:
+				// Simulation cutoff:
+				// For each simulation choice, a small probability is defined so the simulation ends here,
+				//    and the game result is defined by a heuristic state-value function.
+				// Assume the cutoff probability is p,
+				//    The expected number of simulation runs is 1/p.
+				//    So, if the expected number of runs is N, the probability p = 1.0 / N
+				static constexpr bool kEnableCutoff = true;
+				static constexpr double kCutoffExpectedRuns = 10;
+				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
+
+				Result GetCutoffResult(board::Board const& board) {
+					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
+					double v = rand_gen(rand_);
+					if (v >= kCutoffProbability) {
+						return Result::kResultNotDetermined;
+					}
+
+					bool self_win = state_value_func_.GuessWillWin(board);
+					if (self_win) {
+						if (board.GetViewSide() == state::kPlayerFirst) return Result::kResultFirstPlayerWin;
+						else return Result::kResultSecondPlayerWin;
+					}
+					else {
+						if (board.GetViewSide() == state::kPlayerSecond) return Result::kResultSecondPlayerWin;
+						else return Result::kResultFirstPlayerWin;
+					}
+				}
+
+			public:
+				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
 					rand_(rand),
 					decision_(),
 					state_value_func_(),
@@ -471,7 +527,7 @@ namespace mcts
 							int total = action_choices.Size();
 
 							assert(action_type != ActionType::kRandom);
-							
+
 							if (action_type == ActionType::kChooseMinionPutLocation) {
 								assert(total >= 1);
 								int idx = rand_.GetRandom(total);
@@ -484,7 +540,7 @@ namespace mcts
 								dfs_it_ = dfs_.end();
 								return action_choices.Get(0);
 							}
-							
+
 							assert(dfs_it_->total_ == (size_t)total);
 							size_t idx = dfs_it_->choice_;
 							assert((int)idx < total);
@@ -570,6 +626,8 @@ namespace mcts
 					board::BoardActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
+					// TODO: should follow decision_
+
 					// TODO: maybe we don't need to rule out end-turn manually
 					// it will be naturally ruled out, since its state-value should be lower
 
