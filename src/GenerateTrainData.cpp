@@ -68,7 +68,9 @@ int main(int argc, char *argv[])
 	guide.SetFirstCompetitor(&first);
 	guide.SetSecondCompetitor(&second);
 
-	guide.Start(start_board_getter, threads, iterations);
+	guide.Start(start_board_getter, threads, iterations, [&](state::State const& state) {
+		std::cout << "Turn: " << state.GetTurn() << std::endl;
+	});
 
 	return 0;
 }

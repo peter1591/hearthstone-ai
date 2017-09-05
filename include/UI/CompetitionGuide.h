@@ -239,7 +239,8 @@ namespace ui
 		void SetFirstCompetitor(ICompetitor * first) { first_ = first; }
 		void SetSecondCompetitor(ICompetitor * second) { second_ = second; }
 
-		void Start(StartingStateGetter state_getter, int threads, uint64_t iterations) {
+		template <class ProgressCallback>
+		void Start(StartingStateGetter state_getter, int threads, uint64_t iterations, ProgressCallback && cb) {
 			state::State current_state = state_getter();
 			assert(first_);
 			assert(second_);
@@ -249,7 +250,7 @@ namespace ui
 			mcts::Result result = mcts::Result::kResultInvalid;
 			ICompetitor * next_competitor = nullptr;
 			while (true) {
-				std::cout << "Turn: " << current_state.GetTurn() << std::endl;
+				cb(current_state);
 
 				if (current_state.GetCurrentPlayerId().IsFirst()) {
 					next_competitor = first_;
