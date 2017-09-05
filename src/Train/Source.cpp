@@ -66,7 +66,7 @@ private:
 			throw std::runtime_error("unknown field type");
 		}
 	}
-	
+
 	double GetResourceField(NeuralNetworkWrapper::FieldType field_type, int arg1, Json::Value const& resource) {
 		switch (field_type) {
 		case NeuralNetworkWrapper::kResourceCurrent:
@@ -160,12 +160,12 @@ public:
 		for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
 			if (obj[idx]["type"].asString() == "kMainAction") {
 				Json::Value const& board = obj[idx]["board"];
-				
+
 				if (board["turn"].asInt() <= 4) continue;
 
 				JsonDataParser board_parser(board);
 				int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
-				
+
 				net_.AddTrainData(&board_parser, label, for_validate);
 				++seq;
 			}
@@ -195,7 +195,7 @@ private:
 
 	bool IsCurrentPlayerWin(Json::Value const& board, std::string const& result) {
 		std::string current_player = board["current_player_id"].asString();
-		
+
 		bool current_player_is_first = false;
 		if (current_player == "kFirstPlayer") current_player_is_first = true;
 		else if (current_player == "kSecondPlayer") current_player_is_first = false;
@@ -211,12 +211,22 @@ private:
 	NeuralNetworkWrapper net_;
 };
 
-int main(void)
+int main(int argc, char **argv)
 {
+	if (argc != 2) {
+		std::cout << "Usage: (program) (dirname)" << std::endl;
+		return -1;
+	}
+
 	Trainer trainer;
 
-	std::string dirname = "test4";
-	std::ifstream filelist(dirname + "/" + "filelist");
+	std::string dirname = argv[1];
+	std::string filelist_path = dirname + "/filelist";
+
+	std::cout << "Reading from dir: " << dirname << std::endl;
+	std::cout << "Filelist file: " << filelist_path << std::endl;
+
+	std::ifstream filelist(filelist_path);
 
 	int loaded_files = 0;
 	std::random_device rand_dev;
