@@ -3,7 +3,6 @@
 #include <utility>
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
-#include "MCTS/builder/ActionApplyState.h"
 #include "MCTS/Statistic.h"
 #include "MCTS/Types.h"
 #include "MCTS/builder/TreeUpdater.h"
@@ -25,7 +24,8 @@ namespace mcts
 
 			TreeBuilder(state::PlayerSide side, SOMCTS & caller, Statistic<> & statistic, std::mt19937 & rand) :
 				statistic_(statistic),
-				apply_state_(caller),
+				action_parameter_getter_(caller), random_generator_(caller),
+				board_(nullptr),
 				flow_context_(),
 				selection_stage_(rand), simulation_stage_(side, rand, flow_context_)
 			{
@@ -71,7 +71,9 @@ namespace mcts
 		private:
 			Statistic<> & statistic_;
 
-			ActionApplyState apply_state_;
+			board::ActionParameterGetter action_parameter_getter_;
+			board::RandomGenerator random_generator_;
+			board::Board const* board_;
 
 			FlowControl::FlowContext flow_context_;
 			selection::Selection selection_stage_;

@@ -22,7 +22,7 @@ namespace mcts
 		{
 			assert(node);
 
-			apply_state_.Start(board);
+			board_ = &board;
 
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
@@ -83,7 +83,7 @@ namespace mcts
 		// Note: can only be called when current player is the viewer of 'board'
 		inline Result TreeBuilder::PerformSimulate(board::Board const& board)
 		{
-			apply_state_.Start(board);
+			board_ = &board;
 
 			simulation_stage_.GetActionAnalyzer().Reset();
 
@@ -102,7 +102,7 @@ namespace mcts
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
 
-			int choices = apply_state_.GetBoard().GetActionsCount(action_analyzer);
+			int choices = board_->GetActionsCount(action_analyzer);
 			assert(choices > 0); // at least end-turn should be valid
 
 			int choice = -1;
@@ -122,7 +122,7 @@ namespace mcts
 					board::ActionChoices(choices));
 			}
 
-			result = apply_state_.ApplyAction(choice, flow_context, action_analyzer);
+			result = board_->ApplyAction(choice, action_analyzer, flow_context, random_generator_, action_parameter_getter_);
 			assert(result != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);
@@ -132,21 +132,19 @@ namespace mcts
 		inline int TreeBuilder::ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices)
 		{
 			assert(!choices.Empty());
-			int choice = selection_stage_.ChooseAction(apply_state_.GetBoard(), action_type, choices);
+			int choice = selection_stage_.ChooseAction(*board_, action_type, choices);
 			assert(choice >= 0); // always return a valid choice
 			return choice;
 		}
 
 		inline Result TreeBuilder::SimulationCutoffCheck()
 		{
-			return simulation_stage_.CutoffCheck(apply_state_.GetBoard());
+			return simulation_stage_.CutoffCheck(*board_);
 		}
 
 		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)
 		{
-			int choice = simulation_stage_.ChooseAction(
-				apply_state_.GetBoard(),
-				action_type, choices);
+			int choice = simulation_stage_.ChooseAction(*board_, action_type, choices);
 			assert(choice >= 0);
 			return choice;
 		}
