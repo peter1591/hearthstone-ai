@@ -34,6 +34,9 @@ namespace GameEngineUI
             GameEngineCppWrapper.CLI.GameEngine engine = new GameEngineCppWrapper.CLI.GameEngine();
             int v = engine.Get();
             MessageBox.Show(v.ToString());
+
+            engine.Initialize();
+            engine.Run(60, 4);
         }
     }
 }

@@ -135,4 +135,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy /y ..\..\..\include\Cards\cards.json .</PreBuildEvent>
+  </PropertyGroup>
 </Project>

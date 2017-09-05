@@ -13,6 +13,11 @@ namespace GameEngineCppWrapper
 			LoadLibrary(native_path.c_str());
 		}
 
+		void GameEngine::Initialize()
+		{
+			return impl_->Initialize();
+		}
+
 		GameEngine::GameEngine() : impl_(new GameEngineCppWrapper::GameEngine()) {}
 
 		GameEngine::~GameEngine() { Destroy(); }
@@ -27,6 +32,10 @@ namespace GameEngineCppWrapper
 		int GameEngine::Get()
 		{
 			return impl_->Get();
+		}
+		void GameEngine::Run(int seconds, int threads)
+		{
+			return impl_->Run(seconds, threads);
 		}
 	}
 }

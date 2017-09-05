@@ -2,14 +2,20 @@
 
 namespace GameEngineCppWrapper
 {
+	class GameEngineImpl;
+
 	class __declspec(dllexport) GameEngine
 	{
 	public:
-		GameEngine() : v_(427549) { }
+		GameEngine();
 
-		int Get() const;
+		void Initialize() const;
+
+		int Get() const { return 1234; }
+
+		void Run(int seconds, int threads);
 
 	private:
-		int v_;
+		GameEngineImpl * impl_;
 	};
 }
