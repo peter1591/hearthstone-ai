@@ -12,39 +12,16 @@ namespace GameEngineUI
 {
     public partial class Form1 : Form
     {
-        GameEngineCppWrapper.CLI.GameEngine engine_;
+        private GameEngine engine_;
 
         public Form1()
         {
             InitializeComponent();
-
-            var ofd = new OpenFileDialog
-            {
-                CheckFileExists = true,
-                Filter = "Native Library|GameEngineCppWrapper.dll",
-                InitialDirectory = Environment.CurrentDirectory
-            };
-
-            //var result = ofd.ShowDialog(this);
-            //if (result != DialogResult.OK) return;
-            //
-            //GameEngineCppWrapper.CLI.GameEngine.InitializeLibrary(ofd.FileName);
-
-            engine_ = new GameEngineCppWrapper.CLI.GameEngine();
-            engine_.Initialize();
-        }
-
-        ~Form1()
-        {
-            if (engine_ != null)
-            {
-                engine_.Destroy();
-            }
         }
 
         private void RunAI()
         {
-            engine_.Run(60, 4);
+            MessageBox.Show(engine_.Run(10, 4).ToString());
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -55,7 +32,12 @@ namespace GameEngineUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            engine_ = new GameEngine();
+        }
 
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            engine_.Destroy();
         }
     }
 }

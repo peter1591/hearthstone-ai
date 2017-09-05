@@ -18,6 +18,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineCppWrapper", "GameEngineCppWrapper\GameEngineCppWrapper.vcxproj", "{99A32839-8456-467D-AB8E-1788CBB42094}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineCppCLI", "GameEngineCppCLI\GameEngineCppCLI.vcxproj", "{91345FA5-5810-4103-B058-655A536B3E44}"
+	ProjectSection(ProjectDependencies) = postProject
+		{99A32839-8456-467D-AB8E-1788CBB42094} = {99A32839-8456-467D-AB8E-1788CBB42094}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngineUI", "GameEngineUI\GameEngineUI.csproj", "{EFB5DBFF-2482-4604-8F2F-C950AFDD33D7}"
 	ProjectSection(ProjectDependencies) = postProject
