@@ -81,7 +81,8 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <DelayLoadDLLs>GameEngineCppWrapper.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
       <AdditionalDependencies>..\x64\Debug\GameEngineCppWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

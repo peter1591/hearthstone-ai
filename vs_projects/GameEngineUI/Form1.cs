@@ -25,10 +25,10 @@ namespace GameEngineUI
                 InitialDirectory = Environment.CurrentDirectory
             };
 
-            var result = ofd.ShowDialog(this);
-            if (result != DialogResult.OK) return;
-
-            GameEngineCppWrapper.CLI.GameEngine.InitializeLibrary(ofd.FileName);
+            //var result = ofd.ShowDialog(this);
+            //if (result != DialogResult.OK) return;
+            //
+            //GameEngineCppWrapper.CLI.GameEngine.InitializeLibrary(ofd.FileName);
 
             engine_ = new GameEngineCppWrapper.CLI.GameEngine();
             engine_.Initialize();
@@ -51,6 +51,11 @@ namespace GameEngineUI
         {
             System.Threading.Thread new_thread = new System.Threading.Thread(this.RunAI);
             new_thread.Start();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -13,8 +13,6 @@ namespace GameEngineCppWrapper
 			~GameEngine();
 			!GameEngine();
 
-			static void InitializeLibrary(System::String^ path);
-
 			int Initialize();
 
 			int Run(int seconds, int threads);
