@@ -15,11 +15,9 @@ namespace GameEngineCppWrapper
 
 			static void InitializeLibrary(System::String^ path);
 
-			void Initialize();
+			int Initialize();
 
-			int Get();
-
-			void Run(int seconds, int threads);
+			int Run(int seconds, int threads);
 
 			void Destroy();
 

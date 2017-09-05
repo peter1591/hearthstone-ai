@@ -13,7 +13,7 @@ namespace GameEngineCppWrapper
 			LoadLibrary(native_path.c_str());
 		}
 
-		void GameEngine::Initialize()
+		int GameEngine::Initialize()
 		{
 			return impl_->Initialize();
 		}
@@ -29,11 +29,7 @@ namespace GameEngineCppWrapper
 			impl_ = nullptr;
 		}
 
-		int GameEngine::Get()
-		{
-			return impl_->Get();
-		}
-		void GameEngine::Run(int seconds, int threads)
+		int GameEngine::Run(int seconds, int threads)
 		{
 			return impl_->Run(seconds, threads);
 		}

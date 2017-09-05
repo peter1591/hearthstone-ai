@@ -13,12 +13,19 @@ namespace GameEngineCppWrapper
 	public:
 		GameEngineImpl() : controller_() {}
 
-		void Initialize() {
-			if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
-			Cards::PreIndexedCards::GetInstance().Initialize();
+		int Initialize() {
+			try {
+				if (!Cards::Database::GetInstance().Initialize("cards.json")) return -1;
+				Cards::PreIndexedCards::GetInstance().Initialize();
+			}
+			catch (...) {
+				return -1;
+			}
+
+			return 0;
 		}
 		
-		void Run(int seconds, int threads) {
+		int Run(int seconds, int threads) {
 			auto run_until = std::chrono::steady_clock::now() +
 				std::chrono::seconds(seconds);
 
@@ -30,7 +37,14 @@ namespace GameEngineCppWrapper
 				return TestStateBuilder().GetState(seed);
 			};
 
-			controller_.Run(continue_checker, threads, start_board_getter);
+			try {
+				controller_.Run(continue_checker, threads, start_board_getter);
+			}
+			catch (...) {
+				return -1;
+			}
+
+			return 0;
 		}
 
 	private:
@@ -41,10 +55,10 @@ namespace GameEngineCppWrapper
 		impl_ = new GameEngineImpl();
 	}
 
-	void GameEngine::Initialize() const
+	int GameEngine::Initialize() const
 	{
 		return impl_->Initialize();
 	}
 
-	void GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
+	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
 }
