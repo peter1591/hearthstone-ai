@@ -1,9 +1,9 @@
-#include "FlowControl/FlowController-impl.h"
 
 #include <chrono>
 #include <iostream>
 #include <sstream>
 
+#include "FlowControl/FlowController-impl.h"
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
 #include "UI/AIController.h"
@@ -82,7 +82,7 @@ public:
 				std::cout << std::endl;
 				std::cout << "Done iterations: " << (end_i - start_i) << std::endl;
 				std::cout << "====== Statistics =====" << std::endl;
-				controller_.GetStatistic().PrintMessage();
+				controller_.GetStatistic().GetDebugMessage();
 
 				auto now = std::chrono::steady_clock::now();
 				auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();

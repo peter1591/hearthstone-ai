@@ -74,24 +74,10 @@ namespace ui
 		AICompetitor(AICompetitor const&) = delete;
 		AICompetitor & operator=(AICompetitor const&) = delete;
 
-		void Think(state::State const& state, int threads, uint64_t total_iterations) {
-			std::chrono::steady_clock::time_point run_until = std::chrono::steady_clock::time_point::max();
-
-			auto last_show = std::chrono::steady_clock::now();
+		void Think(state::State const& state, int threads, std::function<bool(uint64_t)> cb) {
 			auto continue_checker = [&]() {
-				auto now = std::chrono::steady_clock::now();
-				if (now > run_until) return false;
-
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				if (iterations >= total_iterations) return false;
-
-				auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_show).count();
-				if (after_last_shown > 5) {
-					double percent = (double)iterations / total_iterations;
-					std::cout << "Iterations: " << iterations << " (" << percent * 100.0 << "%)" << std::endl;
-					last_show = now;
-				}
-				return true;
+				return cb(iterations);
 			};
 
 			controller_.reset(new AIController());
@@ -99,7 +85,6 @@ namespace ui
 				(void)seed;
 				return state;
 			});
-			std::cout << "Total iterations: " << controller_->GetStatistic().GetSuccededIterates() << std::endl;
 			node_ = controller_->GetRootNode(state.GetCurrentPlayerId());
 			root_node_ = node_;
 		}

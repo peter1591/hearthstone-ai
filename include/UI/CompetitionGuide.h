@@ -31,7 +31,7 @@ namespace ui
 
 		// TODO: The underlying truth state is passed. It means the competitor can acquire
 		// hidden information (e.g., opponents hand cards).
-		virtual void Think(state::State const& state, int threads, uint64_t iterations) = 0;
+		virtual void Think(state::State const& state, int threads, std::function<bool(uint64_t)> cb) = 0;
 
 		virtual int GetMainAction() = 0;
 
@@ -239,8 +239,10 @@ namespace ui
 		void SetFirstCompetitor(ICompetitor * first) { first_ = first; }
 		void SetSecondCompetitor(ICompetitor * second) { second_ = second; }
 
-		template <class ProgressCallback>
-		void Start(StartingStateGetter state_getter, int threads, uint64_t iterations, ProgressCallback && cb) {
+		template <class ProgressCallback, class IterationProgressCallback>
+		void Start(StartingStateGetter state_getter, int threads,
+			ProgressCallback && cb, IterationProgressCallback && iteration_cb)
+		{
 			state::State current_state = state_getter();
 			assert(first_);
 			assert(second_);
@@ -260,7 +262,7 @@ namespace ui
 					next_competitor = second_;
 				}
 
-				next_competitor->Think(current_state, threads, iterations);
+				next_competitor->Think(current_state, threads, iteration_cb);
 
 				FlowControl::FlowContext flow_context;
 

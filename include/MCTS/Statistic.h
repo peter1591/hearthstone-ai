@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <sstream>
 
 #include "MCTS/Config.h"
 
@@ -11,7 +12,7 @@ namespace mcts
 	class Statistic {
 	public:
 		void ApplyActionSucceeded(bool is_simulation) {}
-		void PrintMessage() {}
+		void GetDebugMessage() {}
 	};
 
 	namespace detail {
@@ -64,23 +65,27 @@ namespace mcts
 			simulation_.ReportSuccess();
 		}
 
-		void PrintMessage() const {
-			std::cout << "Apply selection action success rate: ";
-			PrintRate(selection_);
-			std::cout << std::endl;
+		std::string GetDebugMessage() const {
+			std::stringstream ss;
 
-			std::cout << "Apply simulation action success rate: ";
-			PrintRate(simulation_);
-			std::cout << std::endl;
+			ss << "Apply selection action success rate: ";
+			PrintRate(ss, selection_);
+			ss << std::endl;
 
-			std::cout << "Iterate success rate: ";
-			PrintRate(iterate_);
-			std::cout << std::endl;
+			ss << "Apply simulation action success rate: ";
+			PrintRate(ss, simulation_);
+			ss << std::endl;
+
+			ss << "Iterate success rate: ";
+			PrintRate(ss, iterate_);
+			ss << std::endl;
+
+			return ss.str();
 		}
 
 	private:
-		void PrintRate(detail::SuccessRateRecorder const& rate) const {
-			std::cout << rate.GetSuccessCount()
+		void PrintRate(std::stringstream & ss, detail::SuccessRateRecorder const& rate) const {
+			ss << rate.GetSuccessCount()
 				<< " / " << rate.GetTotalCount()
 				<< " (" << 100.0 * rate.GetSuccessRate() << "%)";
 		}

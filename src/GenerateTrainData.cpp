@@ -68,8 +68,23 @@ int main(int argc, char *argv[])
 	guide.SetFirstCompetitor(&first);
 	guide.SetSecondCompetitor(&second);
 
-	guide.Start(start_board_getter, threads, iterations, [&](state::State const& state) {
+	auto last_show = std::chrono::steady_clock::now();
+	guide.Start(start_board_getter, threads, [&](state::State const& state) {
 		std::cout << "Turn: " << state.GetTurn() << std::endl;
+	}, [iterations, last_show](uint64_t	now_iterations) mutable {
+		if (now_iterations >= iterations) {
+			std::cout << "Total iterations: " << now_iterations << std::endl;
+			return false;
+		}
+
+		auto now = std::chrono::steady_clock::now();
+		auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_show).count();
+		if (after_last_shown > 5) {
+			double percent = (double)now_iterations / iterations;
+			std::cout << "Iterations: " << now_iterations << " (" << percent * 100.0 << "%)" << std::endl;
+			last_show = now;
+		}
+		return true;
 	});
 
 	return 0;
