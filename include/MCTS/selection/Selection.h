@@ -15,7 +15,7 @@ namespace mcts
 		{
 		public:
 			Selection(std::mt19937 & rand) :
-				path_(), random_(rand), new_node_created_(false), pending_randoms_(false)
+				path_(), random_(rand), policy_(), new_node_created_(false), pending_randoms_(false)
 			{}
 
 			Selection(Selection const&) = delete;
@@ -88,8 +88,7 @@ namespace mcts
 					assert(current_node->GetAddon().consistency_checker.Check(board, action_type, choices));
 				}
 
-				int next_choice = current_node->Select(action_type, choices,
-					StaticConfigs::SelectionPhaseSelectActionPolicy()); // TODO: do we need to construct a policy object everytime?
+				int next_choice = current_node->Select(action_type, choices, policy_);
 				assert(next_choice >= 0); // should report a valid action
 
 				path_.back().MakeChoice(next_choice);
@@ -105,6 +104,7 @@ namespace mcts
 		private:
 			std::vector<TraversedNodeInfo> path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
+			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
 			bool new_node_created_;
 			bool pending_randoms_;
 		};
