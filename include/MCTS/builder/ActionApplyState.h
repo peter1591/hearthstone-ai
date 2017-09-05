@@ -16,8 +16,7 @@ namespace mcts
 		{
 		public:
 			ActionApplyState(SOMCTS & caller) :
-				action_parameter_getter_(caller), random_generator_(caller),
-				board_(nullptr), action_analyzer_(nullptr)
+				action_parameter_getter_(caller), random_generator_(caller), board_(nullptr)
 			{}
 
 			ActionApplyState(ActionApplyState const&) = delete;
@@ -40,7 +39,6 @@ namespace mcts
 			board::RandomGenerator random_generator_;
 
 			board::Board const* board_;
-			board::BoardActionAnalyzer * action_analyzer_;
 		};
 	}
 }
