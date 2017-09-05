@@ -12,13 +12,12 @@ namespace GameEngineUI
 {
     public partial class Form1 : Form
     {
+        GameEngineCppWrapper.CLI.GameEngine engine_;
+
         public Form1()
         {
             InitializeComponent();
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
             var ofd = new OpenFileDialog
             {
                 CheckFileExists = true,
@@ -31,12 +30,27 @@ namespace GameEngineUI
 
             GameEngineCppWrapper.CLI.GameEngine.InitializeLibrary(ofd.FileName);
 
-            GameEngineCppWrapper.CLI.GameEngine engine = new GameEngineCppWrapper.CLI.GameEngine();
-            int v = engine.Get();
-            MessageBox.Show(v.ToString());
+            engine_ = new GameEngineCppWrapper.CLI.GameEngine();
+            engine_.Initialize();
+        }
 
-            engine.Initialize();
-            engine.Run(60, 4);
+        ~Form1()
+        {
+            if (engine_ != null)
+            {
+                engine_.Destroy();
+            }
+        }
+
+        private void RunAI()
+        {
+            engine_.Run(60, 4);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            System.Threading.Thread new_thread = new System.Threading.Thread(this.RunAI);
+            new_thread.Start();
         }
     }
 }
