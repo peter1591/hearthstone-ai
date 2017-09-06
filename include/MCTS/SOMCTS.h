@@ -57,8 +57,6 @@ namespace mcts
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
 					result = builder_.PerformSimulate(board);
-					// TODO: never invalid?
-					if (result == Result::kResultInvalid) return Result::kResultInvalid;
 					assert(result != Result::kResultInvalid);
 					if (result != Result::kResultNotDetermined) return result;
 				}

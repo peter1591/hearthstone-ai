@@ -21,7 +21,7 @@ namespace mcts
 		{}
 
 		template <typename StartBoardGetter>
-		bool Iterate(StartBoardGetter&& start_board_getter)
+		void Iterate(StartBoardGetter&& start_board_getter)
 		{
 			state::State state = start_board_getter();
 
@@ -34,9 +34,8 @@ namespace mcts
 				
 				Result result = GetSOMCTS(side).PerformOwnTurnActions(
 					board::Board(state, side.GetSide()));
-				if (result == Result::kResultInvalid) return false;
-				
 				assert(result != Result::kResultInvalid);
+				
 				if (result != Result::kResultNotDetermined) {
 					first_.EpisodeFinished(result);
 					second_.EpisodeFinished(result);
@@ -48,8 +47,6 @@ namespace mcts
 				GetSOMCTS(side.Opposite()).ApplyOthersActions(
 					board::Board(state, side.Opposite().GetSide()));
 			}
-
-			return true;
 		}
 
 		auto GetRootNode(state::PlayerIdentifier side) const {

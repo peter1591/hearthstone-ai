@@ -27,17 +27,17 @@ namespace ui
 			std::atomic_bool stop_flag = false;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
-					std::mt19937 rand;
+					auto seed = std::random_device()();
+					std::mt19937 rand(seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, rand);
 					while (true) {
 						if (stop_flag == true) break;
 
-						bool ret = mcts.Iterate([&]() {
+						mcts.Iterate([&]() {
 							return state_getter(rand());
 						});
 
-						if (ret) statistic_.IterateSucceeded();
-						else statistic_.IterateFailed();
+						statistic_.IterateSucceeded();
 					}
 				});
 			}
