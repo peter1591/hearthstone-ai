@@ -234,9 +234,9 @@ namespace HearthstoneAI.Parsers
         // break if error and the line is not consumed
         private IEnumerable<bool> ParseShowEntities()
         {
-            if (!ShowEntityRegex.IsMatch(this.parsing_log)) yield break;
-
             var match = ShowEntityRegex.Match(this.parsing_log);
+            if (!match.Success) yield break;
+
             var cardId = match.Groups["cardId"].Value;
             int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
 

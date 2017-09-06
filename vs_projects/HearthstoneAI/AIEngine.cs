@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GameEngineUI
+namespace HearthstoneAI
 {
-    class GameEngine
+    class AIEngine
     {
         public Logger logger_;
 
@@ -24,7 +24,7 @@ namespace GameEngineUI
             }
         }
 
-        public GameEngine(Logger logger)
+        public AIEngine(Logger logger)
         {
             engine_ = new GameEngineCppWrapper.CLI.GameEngine();
             logger_ = logger;

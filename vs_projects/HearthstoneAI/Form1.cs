@@ -15,7 +15,9 @@ namespace HearthstoneAI
     public partial class frmMain : Form
     {
         LogReader log_reader;
-        Communicator.AICommunicator ai_communicator;
+
+        private AIEngine ai_engine_;
+        private Logger ai_logger_;
 
         public string HearthstoneInstallationPath
         {
@@ -26,7 +28,8 @@ namespace HearthstoneAI
         {
             InitializeComponent();
 
-            this.ai_communicator = new Communicator.AICommunicator(this);
+            ai_logger_ = new Logger(ref txtAIEngine);
+            ai_engine_ = new AIEngine(ai_logger_);
         }
 
         private void btnChangeHearthstoneInstallationPath_Click(object sender, EventArgs e)
@@ -41,8 +44,6 @@ namespace HearthstoneAI
         {
             this.btnStart.Enabled = false;
 
-            //this.ai_communicator.Start();
-
             this.log_reader = new LogReader(this);
             this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             this.log_reader.ActionStart += Log_reader_ActionStart;
@@ -50,16 +51,19 @@ namespace HearthstoneAI
             this.log_reader.CreateGameEvent += Log_reader_CreateGameEvent;
 
             timerMainLoop.Enabled = true;
+
+            ai_engine_.output_message_cb += (System.String msg) =>
+            {
+                ai_logger_.Info("[Engine] " + msg);
+            };
+
+            ai_logger_.Info("Initializing engine...");
+            ai_engine_.Initialize();
         }
 
         private void Log_reader_CreateGameEvent(object sender, Parsers.PowerLogParser.CreateGameEventArgs e)
         {
-            // Reset
-            //this.ai_communicator.Stop();
-
             this.AddLog("====== New Game Starts ======");
-
-            //this.ai_communicator.Start();
         }
 
         private void TriggerAIHandleBoardAction(GameState game)
@@ -163,9 +167,7 @@ namespace HearthstoneAI
 
             if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
             {
-                AddLog("Calling UpdateBoard()");
-                //this.ai_communicator.UpdateBoard(board);
-
+                ai_logger_.Info("Make choice!");
                 // TODO: this is a trigger point for automatic playing
                 // this.ai_communicator.HandleGameBoard(board);
             }
@@ -181,8 +183,6 @@ namespace HearthstoneAI
             this.log_reader.Process();
 
             this.UpdateBoardIfNecessary();
-
-            this.ai_communicator.Process();
 
             if (this.log_added)
             {

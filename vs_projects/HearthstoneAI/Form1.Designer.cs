@@ -65,10 +65,13 @@
             this.txtGameEntity = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -76,9 +79,10 @@
             this.tabControl1.Controls.Add(this.tabPageSettings);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(6);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1745, 1458);
@@ -91,9 +95,9 @@
             this.tabPageSettings.Controls.Add(this.txtHearthstoneInstallationPath);
             this.tabPageSettings.Controls.Add(this.label2);
             this.tabPageSettings.Location = new System.Drawing.Point(4, 33);
-            this.tabPageSettings.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabPageSettings.Margin = new System.Windows.Forms.Padding(6);
             this.tabPageSettings.Name = "tabPageSettings";
-            this.tabPageSettings.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabPageSettings.Padding = new System.Windows.Forms.Padding(6);
             this.tabPageSettings.Size = new System.Drawing.Size(1737, 1421);
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
@@ -102,7 +106,7 @@
             // btnStart
             // 
             this.btnStart.Location = new System.Drawing.Point(15, 212);
-            this.btnStart.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnStart.Margin = new System.Windows.Forms.Padding(6);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(138, 42);
             this.btnStart.TabIndex = 3;
@@ -114,7 +118,7 @@
             // 
             this.btnChangeHearthstoneInstallationPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnChangeHearthstoneInstallationPath.Location = new System.Drawing.Point(1914, 15);
-            this.btnChangeHearthstoneInstallationPath.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnChangeHearthstoneInstallationPath.Margin = new System.Windows.Forms.Padding(6);
             this.btnChangeHearthstoneInstallationPath.Name = "btnChangeHearthstoneInstallationPath";
             this.btnChangeHearthstoneInstallationPath.Size = new System.Drawing.Size(138, 42);
             this.btnChangeHearthstoneInstallationPath.TabIndex = 2;
@@ -127,7 +131,7 @@
             this.txtHearthstoneInstallationPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHearthstoneInstallationPath.Location = new System.Drawing.Point(290, 18);
-            this.txtHearthstoneInstallationPath.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtHearthstoneInstallationPath.Margin = new System.Windows.Forms.Padding(6);
             this.txtHearthstoneInstallationPath.Name = "txtHearthstoneInstallationPath";
             this.txtHearthstoneInstallationPath.Size = new System.Drawing.Size(1610, 29);
             this.txtHearthstoneInstallationPath.TabIndex = 1;
@@ -148,9 +152,9 @@
             this.tabPage2.Controls.Add(this.listBoxProcessedLogs);
             this.tabPage2.Controls.Add(this.label1);
             this.tabPage2.Location = new System.Drawing.Point(4, 33);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(6);
             this.tabPage2.Size = new System.Drawing.Size(1737, 1421);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Log";
@@ -165,7 +169,7 @@
             this.listBoxProcessedLogs.HorizontalScrollbar = true;
             this.listBoxProcessedLogs.ItemHeight = 24;
             this.listBoxProcessedLogs.Location = new System.Drawing.Point(20, 52);
-            this.listBoxProcessedLogs.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.listBoxProcessedLogs.Margin = new System.Windows.Forms.Padding(6);
             this.listBoxProcessedLogs.Name = "listBoxProcessedLogs";
             this.listBoxProcessedLogs.Size = new System.Drawing.Size(1693, 1348);
             this.listBoxProcessedLogs.TabIndex = 1;
@@ -207,9 +211,9 @@
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.txtGameEntity);
             this.tabPage1.Location = new System.Drawing.Point(4, 33);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(6);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(6);
             this.tabPage1.Size = new System.Drawing.Size(1737, 1421);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Board";
@@ -228,7 +232,7 @@
             // txtChoices
             // 
             this.txtChoices.Location = new System.Drawing.Point(15, 504);
-            this.txtChoices.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtChoices.Margin = new System.Windows.Forms.Padding(6);
             this.txtChoices.Multiline = true;
             this.txtChoices.Name = "txtChoices";
             this.txtChoices.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -249,7 +253,7 @@
             // txtOpponentMinions
             // 
             this.txtOpponentMinions.Location = new System.Drawing.Point(1038, 55);
-            this.txtOpponentMinions.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtOpponentMinions.Margin = new System.Windows.Forms.Padding(6);
             this.txtOpponentMinions.Multiline = true;
             this.txtOpponentMinions.Name = "txtOpponentMinions";
             this.txtOpponentMinions.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -270,7 +274,7 @@
             // txtOpponentSecrets
             // 
             this.txtOpponentSecrets.Location = new System.Drawing.Point(1377, 449);
-            this.txtOpponentSecrets.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtOpponentSecrets.Margin = new System.Windows.Forms.Padding(6);
             this.txtOpponentSecrets.Multiline = true;
             this.txtOpponentSecrets.Name = "txtOpponentSecrets";
             this.txtOpponentSecrets.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -291,7 +295,7 @@
             // txtPlayerSecrets
             // 
             this.txtPlayerSecrets.Location = new System.Drawing.Point(359, 445);
-            this.txtPlayerSecrets.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtPlayerSecrets.Margin = new System.Windows.Forms.Padding(6);
             this.txtPlayerSecrets.Multiline = true;
             this.txtPlayerSecrets.Name = "txtPlayerSecrets";
             this.txtPlayerSecrets.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -312,7 +316,7 @@
             // txtPlayerMinions
             // 
             this.txtPlayerMinions.Location = new System.Drawing.Point(699, 55);
-            this.txtPlayerMinions.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtPlayerMinions.Margin = new System.Windows.Forms.Padding(6);
             this.txtPlayerMinions.Multiline = true;
             this.txtPlayerMinions.Name = "txtPlayerMinions";
             this.txtPlayerMinions.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -333,7 +337,7 @@
             // txtOpponentDeck
             // 
             this.txtOpponentDeck.Location = new System.Drawing.Point(1377, 1121);
-            this.txtOpponentDeck.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtOpponentDeck.Margin = new System.Windows.Forms.Padding(6);
             this.txtOpponentDeck.Multiline = true;
             this.txtOpponentDeck.Name = "txtOpponentDeck";
             this.txtOpponentDeck.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -354,7 +358,7 @@
             // txtPlayerDeck
             // 
             this.txtPlayerDeck.Location = new System.Drawing.Point(354, 1117);
-            this.txtPlayerDeck.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtPlayerDeck.Margin = new System.Windows.Forms.Padding(6);
             this.txtPlayerDeck.Multiline = true;
             this.txtPlayerDeck.Name = "txtPlayerDeck";
             this.txtPlayerDeck.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -375,7 +379,7 @@
             // txtOpponentHand
             // 
             this.txtOpponentHand.Location = new System.Drawing.Point(1382, 775);
-            this.txtOpponentHand.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtOpponentHand.Margin = new System.Windows.Forms.Padding(6);
             this.txtOpponentHand.Multiline = true;
             this.txtOpponentHand.Name = "txtOpponentHand";
             this.txtOpponentHand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -396,7 +400,7 @@
             // txtPlayerHand
             // 
             this.txtPlayerHand.Location = new System.Drawing.Point(354, 772);
-            this.txtPlayerHand.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtPlayerHand.Margin = new System.Windows.Forms.Padding(6);
             this.txtPlayerHand.Multiline = true;
             this.txtPlayerHand.Name = "txtPlayerHand";
             this.txtPlayerHand.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -417,7 +421,7 @@
             // txtOpponentHero
             // 
             this.txtOpponentHero.Location = new System.Drawing.Point(1377, 59);
-            this.txtOpponentHero.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtOpponentHero.Margin = new System.Windows.Forms.Padding(6);
             this.txtOpponentHero.Multiline = true;
             this.txtOpponentHero.Name = "txtOpponentHero";
             this.txtOpponentHero.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -438,7 +442,7 @@
             // txtPlayerHero
             // 
             this.txtPlayerHero.Location = new System.Drawing.Point(354, 55);
-            this.txtPlayerHero.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtPlayerHero.Margin = new System.Windows.Forms.Padding(6);
             this.txtPlayerHero.Multiline = true;
             this.txtPlayerHero.Name = "txtPlayerHero";
             this.txtPlayerHero.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -459,7 +463,7 @@
             // txtGameEntity
             // 
             this.txtGameEntity.Location = new System.Drawing.Point(15, 55);
-            this.txtGameEntity.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.txtGameEntity.Margin = new System.Windows.Forms.Padding(6);
             this.txtGameEntity.Multiline = true;
             this.txtGameEntity.Name = "txtGameEntity";
             this.txtGameEntity.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -471,13 +475,33 @@
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.txtAIEngine);
+            this.tabPage3.Location = new System.Drawing.Point(4, 33);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1737, 1421);
+            this.tabPage3.TabIndex = 3;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // txtAIEngine
+            // 
+            this.txtAIEngine.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAIEngine.Location = new System.Drawing.Point(3, 3);
+            this.txtAIEngine.Multiline = true;
+            this.txtAIEngine.Name = "txtAIEngine";
+            this.txtAIEngine.Size = new System.Drawing.Size(1731, 1415);
+            this.txtAIEngine.TabIndex = 0;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1745, 1458);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "frmMain";
             this.Text = "Hearthstone AI";
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -488,6 +512,8 @@
             this.tabPage2.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -530,6 +556,8 @@
         private System.Windows.Forms.TextBox txtOpponentMinions;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox txtChoices;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TextBox txtAIEngine;
     }
 }
 

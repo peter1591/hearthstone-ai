@@ -15,7 +15,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -64,20 +64,16 @@
     <Compile Include="Board\Secrets.cs" />
     <Compile Include="Board\Status.cs" />
     <Compile Include="Board\Weapon.cs" />
-    <Compile Include="Communicator\ActionBase.cs" />
-    <Compile Include="Communicator\ActionBoardActionStart.cs" />
-    <Compile Include="Communicator\ActionCancel.cs" />
-    <Compile Include="Communicator\ActionGetBestMove.cs" />
-    <Compile Include="Communicator\ActionGetCurrentBestMove.cs" />
-    <Compile Include="Communicator\AICommunicator.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="AIEngine.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GameTag.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="LogItem.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="LogReader.cs" />
@@ -113,6 +109,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameEngineCppCLI\GameEngineCppCLI.vcxproj">
+      <Project>{91345fa5-5810-4103-b058-655a536b3e44}</Project>
+      <Name>GameEngineCppCLI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
