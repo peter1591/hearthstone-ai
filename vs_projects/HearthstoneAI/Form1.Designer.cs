@@ -63,10 +63,11 @@
             this.txtPlayerHero = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtGameEntity = new System.Windows.Forms.TextBox();
-            this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.txtAIEngine = new System.Windows.Forms.TextBox();
+            this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -90,6 +91,7 @@
             // 
             // tabPageSettings
             // 
+            this.tabPageSettings.Controls.Add(this.button1);
             this.tabPageSettings.Controls.Add(this.btnStart);
             this.tabPageSettings.Controls.Add(this.btnChangeHearthstoneInstallationPath);
             this.tabPageSettings.Controls.Add(this.txtHearthstoneInstallationPath);
@@ -471,10 +473,6 @@
             this.txtGameEntity.TabIndex = 0;
             this.txtGameEntity.WordWrap = false;
             // 
-            // timerMainLoop
-            // 
-            this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.txtAIEngine);
@@ -494,6 +492,20 @@
             this.txtAIEngine.Name = "txtAIEngine";
             this.txtAIEngine.Size = new System.Drawing.Size(1731, 1415);
             this.txtAIEngine.TabIndex = 0;
+            // 
+            // timerMainLoop
+            // 
+            this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(43, 354);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(127, 40);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmMain
             // 
@@ -558,6 +570,7 @@
         private System.Windows.Forms.TextBox txtChoices;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TextBox txtAIEngine;
+        private System.Windows.Forms.Button button1;
     }
 }
 

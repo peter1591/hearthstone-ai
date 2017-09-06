@@ -8,7 +8,7 @@ namespace HearthstoneAI
 {
     class AIEngine
     {
-        public Logger logger_;
+        public AILogger logger_;
 
         private GameEngineCppWrapper.CLI.GameEngine.OutputMessageCallback _output_message_cb;
         public GameEngineCppWrapper.CLI.GameEngine.OutputMessageCallback output_message_cb
@@ -24,7 +24,7 @@ namespace HearthstoneAI
             }
         }
 
-        public AIEngine(Logger logger)
+        public AIEngine(AILogger logger)
         {
             engine_ = new GameEngineCppWrapper.CLI.GameEngine();
             logger_ = logger;
@@ -35,7 +35,11 @@ namespace HearthstoneAI
         {
             new System.Threading.Thread(() =>
             {
-                engine_.Initialize();
+                if (engine_.Initialize() != 0)
+                {
+                    logger_.Info("Failed to initialize.");
+                    return;
+                }
                 initialized_ = true;
                 logger_.Info("Engine initialized.");
             }).Start();
@@ -46,11 +50,19 @@ namespace HearthstoneAI
 
         public int Run(int seconds, int threads)
         {
-            if (!IsInitialized()) return -1;
+            if (!IsInitialized())
+            {
+                logger_.Info("Logger is not initialized.");
+                return -1;
+            }
 
             if (runner_ != null)
             {
-                if (runner_.IsAlive) return -1;
+                if (runner_.IsAlive)
+                {
+                    logger_.Info("Another runner thread is still running.");
+                    return -1;
+                }
             }
 
             runner_ = new System.Threading.Thread(() =>

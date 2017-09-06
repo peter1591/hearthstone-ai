@@ -17,7 +17,7 @@ namespace HearthstoneAI
         LogReader log_reader;
 
         private AIEngine ai_engine_;
-        private Logger ai_logger_;
+        private AILogger ai_logger_;
 
         public string HearthstoneInstallationPath
         {
@@ -28,7 +28,7 @@ namespace HearthstoneAI
         {
             InitializeComponent();
 
-            ai_logger_ = new Logger(ref txtAIEngine);
+            ai_logger_ = new AILogger(ref txtAIEngine);
             ai_engine_ = new AIEngine(ai_logger_);
         }
 
@@ -569,6 +569,11 @@ namespace HearthstoneAI
 
             this.listBoxProcessedLogs.Items.Add(prefix + " " + log);
             this.log_added = true;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ai_engine_.Run(10, 4);
         }
     }
 }

@@ -16,7 +16,10 @@ namespace GameEngineCppWrapper
 
 		int Initialize() {
 			try {
-				if (!Cards::Database::GetInstance().Initialize("cards.json")) return -1;
+				if (!Cards::Database::GetInstance().Initialize("cards.json")) {
+					Log("Failed to load cards.json.");
+					return -1;
+				}
 				Cards::PreIndexedCards::GetInstance().Initialize();
 			}
 			catch (...) {

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace HearthstoneAI
 {
-    class Logger
+    class AILogger
     {
         private System.Windows.Forms.TextBox textbox_;
-        public Logger(ref System.Windows.Forms.TextBox textbox)
+        public AILogger(ref System.Windows.Forms.TextBox textbox)
         {
             textbox_ = textbox;
         }
