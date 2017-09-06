@@ -11,7 +11,7 @@ namespace GameEngineCppWrapper
 {
 	class GameEngineImpl {
 	public:
-		GameEngineImpl() : controller_() {}
+		GameEngineImpl() : controller_(), output_message_callback_(nullptr) {}
 
 		int Initialize() {
 			try {
@@ -19,9 +19,11 @@ namespace GameEngineCppWrapper
 				Cards::PreIndexedCards::GetInstance().Initialize();
 			}
 			catch (...) {
+				Log("Failed to load cards.json.");
 				return -1;
 			}
-
+			
+			Log("Successfully load cards.json.");
 			return 0;
 		}
 		
@@ -47,8 +49,22 @@ namespace GameEngineCppWrapper
 			return 0;
 		}
 
+		void SetOutputMessageCallback(OutputMessageCallback cb)
+		{
+			output_message_callback_ = cb;
+		}
+
+	private:
+		void Log(std::string const& msg)
+		{
+			if (output_message_callback_) {
+				output_message_callback_(msg);
+			}
+		}
+
 	private:
 		ui::AIController controller_;
+		OutputMessageCallback output_message_callback_;
 	};
 
 	GameEngine::GameEngine() : impl_(nullptr) {
@@ -58,6 +74,11 @@ namespace GameEngineCppWrapper
 	int GameEngine::Initialize() const
 	{
 		return impl_->Initialize();
+	}
+
+	void GameEngine::SetOutputMessageCallback(OutputMessageCallback cb)
+	{
+		return impl_->SetOutputMessageCallback(cb);
 	}
 
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }

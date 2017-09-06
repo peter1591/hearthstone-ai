@@ -19,25 +19,29 @@ namespace GameEngineUI
             InitializeComponent();
         }
 
-        private void RunAI()
-        {
-            MessageBox.Show(engine_.Run(10, 4).ToString());
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            System.Threading.Thread new_thread = new System.Threading.Thread(this.RunAI);
-            new_thread.Start();
+            MessageBox.Show(engine_.Run(10, 4).ToString());
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             engine_ = new GameEngine();
+            engine_.output_message_cb += (System.String msg) =>
+            {
+                textBox1.Text += msg;
+            };
+            engine_.Initialize();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             engine_.Destroy();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

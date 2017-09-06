@@ -8,9 +8,27 @@ namespace GameEngineUI
 {
     class GameEngine
     {
+        private GameEngineCppWrapper.CLI.GameEngine.OutputMessageCallback _output_message_cb;
+        public GameEngineCppWrapper.CLI.GameEngine.OutputMessageCallback output_message_cb
+        {
+            get
+            {
+                return _output_message_cb;
+            }
+            set
+            {
+                _output_message_cb += value;
+                engine_.SetOutputMessageCallback(_output_message_cb);
+            }
+        }
+
         public GameEngine()
         {
             engine_ = new GameEngineCppWrapper.CLI.GameEngine();
+        }
+
+        public void Initialize()
+        {
             engine_.Initialize();
         }
 
