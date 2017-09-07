@@ -45,7 +45,6 @@ namespace HearthstoneAI.LogWatcher
             };
         }
 
-        private frmMain frmMain;
         private SubParsers.PowerLogParser power_log_parser;
         private SubParsers.SendChoicesParser send_choices_parser;
         private SubParsers.EntityChoicesParser entity_choices_parser;
@@ -114,7 +113,7 @@ namespace HearthstoneAI.LogWatcher
             }
             else
             {
-                //this.frmMain.AddLog("Failed when parsing: " + log_line);
+                // continue
             }
         }
     }

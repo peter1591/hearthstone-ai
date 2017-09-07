@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnChangeHearthstoneInstallationPath = new System.Windows.Forms.Button();
             this.txtHearthstoneInstallationPath = new System.Windows.Forms.TextBox();
@@ -67,7 +68,6 @@
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -105,9 +105,19 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(183, 81);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(127, 40);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(15, 212);
+            this.btnStart.Location = new System.Drawing.Point(16, 81);
             this.btnStart.Margin = new System.Windows.Forms.Padding(6);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(138, 42);
@@ -481,7 +491,7 @@
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage3.Size = new System.Drawing.Size(1737, 1421);
             this.tabPage3.TabIndex = 3;
-            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.Text = "AI";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // txtAIEngine
@@ -496,16 +506,6 @@
             // timerMainLoop
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(43, 354);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(127, 40);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // frmMain
             // 

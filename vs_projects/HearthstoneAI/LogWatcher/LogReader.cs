@@ -103,6 +103,7 @@ namespace HearthstoneAI.LogWatcher
             foreach (var new_log_line in new_log_lines)
             {
                 this.log_parser.Process(new_log_line);
+                System.Windows.Forms.Application.DoEvents();
             }
 
             this.change_id++;

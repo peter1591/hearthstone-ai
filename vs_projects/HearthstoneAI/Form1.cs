@@ -14,19 +14,37 @@ namespace HearthstoneAI
 {
     public partial class frmMain : Form
     {
-        LogWatcher.LogReader log_reader;
+        LogWatcher.LogWatcher log_watcher;
 
         private AI.AIEngine ai_engine_;
         private AI.AILogger ai_logger_;
 
-        public string HearthstoneInstallationPath
-        {
-            get { return this.txtHearthstoneInstallationPath.Text; }
-        }
-
         public frmMain()
         {
             InitializeComponent();
+
+            log_watcher = new LogWatcher.LogWatcher();
+            log_watcher.update_board = (GameState game_state, Board.Game board, string err_msg) =>
+            {
+                if (board == null)
+                {
+                    txtGameEntity.Text = err_msg;
+                    return;
+                }
+
+                var game_stage = this.GetGameStage(game_state);
+
+                txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
+
+                if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
+                {
+                    // TODO: this is a trigger point for automatic playing
+                    ai_logger_.Info("Make choice!");
+                }
+
+                this.UpdateBoard(game_state, board);
+            };
+            log_watcher.log_msg = (string msg) => AddLog(msg);
 
             ai_logger_ = new AI.AILogger(ref txtAIEngine);
             ai_engine_ = new AI.AIEngine(ai_logger_);
@@ -44,12 +62,7 @@ namespace HearthstoneAI
         {
             this.btnStart.Enabled = false;
 
-            this.log_reader = new LogWatcher.LogReader(this.txtHearthstoneInstallationPath.Text);
-            this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
-            this.log_reader.ActionStart += Log_reader_ActionStart;
-            this.log_reader.EndTurnEvent += Log_reader_EndTurnEvent;
-            this.log_reader.CreateGameEvent += Log_reader_CreateGameEvent;
-            this.log_reader.log_msg = (string msg) => AddLog(msg);
+            log_watcher.Reset(txtHearthstoneInstallationPath.Text);
 
             timerMainLoop.Enabled = true;
 
@@ -104,91 +117,9 @@ namespace HearthstoneAI
         {
         }
 
-        private int last_invoke_log_change_id = -1;
-        private int last_stable_change_id = -1;
-        private DateTime last_stable_time = DateTime.Now;
-        private TimeSpan stable_time_to_invoke_AI = new TimeSpan(0, 0, 0, 0, 100);
-        private Board.Game last_invoke_board = new Board.Game();
-        private void UpdateBoardIfNecessary()
-        {
-            int current_change_id = this.log_reader.GetChangeId();
-
-            if (current_change_id != last_stable_change_id)
-            {
-                this.last_stable_change_id = current_change_id;
-                this.last_stable_time = DateTime.Now;
-                return;
-            }
-
-            if ((DateTime.Now - this.last_stable_time) < this.stable_time_to_invoke_AI)
-            {
-                // not stable enough
-                return;
-            }
-
-            // now the log is stable enough
-            // --> invoke AI if we didn't do it yet
-            if (this.last_invoke_log_change_id == current_change_id)
-            {
-                // we've already invoked the AI for this stable log
-                return;
-            }
-
-            this.last_invoke_log_change_id = current_change_id;
-
-            Board.Game board = new Board.Game();
-            bool parse_success = board.Parse(this.log_reader.GetGameState());
-
-            if (parse_success == false)
-            {
-                this.txtGameEntity.Text = "parse failed";
-                return;
-            }
-            
-            if (board.Equals(this.last_invoke_board))
-            {
-                //this.AddLog("Log changed, but board are the same as the last-invoked one -> skipping");
-                return;
-            }
-            this.last_invoke_board = board;
-
-            var game = this.log_reader.GetGameState();
-
-            GameState.Entity game_entity;
-            if (!game.TryGetGameEntity(out game_entity))
-            {
-                this.txtGameEntity.Text = "Parse failed: game entity not exists";
-                return;
-            }
-
-            var game_stage = this.GetGameStage(game);
-
-            txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
-
-            if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
-            {
-                ai_logger_.Info("Make choice!");
-                // TODO: this is a trigger point for automatic playing
-                // this.ai_communicator.HandleGameBoard(board);
-            }
-
-            this.UpdateBoard(board);
-        }
-
         private void timerMainLoop_Tick(object sender, EventArgs e)
         {
-            this.log_added = false;
-
-            int change_id = this.log_reader.GetChangeId();
-            this.log_reader.Process();
-
-            this.UpdateBoardIfNecessary();
-
-            if (this.log_added)
-            {
-                this.listBoxProcessedLogs.SelectedIndex = this.listBoxProcessedLogs.Items.Count - 1;
-                this.listBoxProcessedLogs.TopIndex = this.listBoxProcessedLogs.Items.Count - 1;
-            }
+            log_watcher.Tick();
         }
 
         enum GameStage
@@ -538,12 +469,10 @@ namespace HearthstoneAI
             return result;
         }
 
-        private void UpdateBoard(Board.Game game)
+        private void UpdateBoard(GameState game_state, Board.Game game)
         {
-            var raw_game = this.log_reader.GetGameState();
-
-            this.txtGameEntity.Text += this.GetGameEntityText(raw_game);
-            this.txtChoices.Text = this.GetChoicesText(raw_game);
+            this.txtGameEntity.Text += this.GetGameEntityText(game_state);
+            this.txtChoices.Text = this.GetChoicesText(game_state);
 
             this.txtPlayerHero.Text = GetPlayerEntityText(game.player);
             this.txtOpponentHero.Text = GetPlayerEntityText(game.opponent);
@@ -562,13 +491,13 @@ namespace HearthstoneAI
 
         }
 
-        private bool log_added;
         public void AddLog(string log)
         {
             string prefix = DateTime.Now.ToString("HH:mm:ss.FFFFFF");
 
             this.listBoxProcessedLogs.Items.Add(prefix + " " + log);
-            this.log_added = true;
+            this.listBoxProcessedLogs.SelectedIndex = this.listBoxProcessedLogs.Items.Count - 1;
+            this.listBoxProcessedLogs.TopIndex = this.listBoxProcessedLogs.Items.Count - 1;
         }
 
         private void button1_Click(object sender, EventArgs e)

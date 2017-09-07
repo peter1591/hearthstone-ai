@@ -77,6 +77,7 @@
     <Compile Include="LogWatcher\LogItem.cs" />
     <Compile Include="LogWatcher\LogParser.cs" />
     <Compile Include="LogWatcher\LogReader.cs" />
+    <Compile Include="LogWatcher\LogWatcher.cs" />
     <Compile Include="LogWatcher\SubParsers\DebugPrintPowerParser.cs" />
     <Compile Include="LogWatcher\SubParsers\EntityChoicesParser.cs" />
     <Compile Include="LogWatcher\SubParsers\ParserUtilities.cs" />

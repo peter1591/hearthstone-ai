@@ -23,25 +23,25 @@ namespace HearthstoneAI.Board
         {
             bool ret = true;
 
+            GameState.Entity game_entity;
+            if (!game.TryGetGameEntity(out game_entity)) ret = false;
+            else
+            {
+                this.turn = game_entity.GetTagOrDefault(GameTag.TURN, 0);
+            }
+
             GameState.Entity player_entity;
-            if (game.TryGetPlayerEntity(out player_entity) == false) ret = false;
+            if (!game.TryGetPlayerEntity(out player_entity)) ret = false;
             else
             {
                 ret = this.player.Parse(game, player_entity) && ret;
             }
 
             GameState.Entity opponent_entity;
-            if (game.TryGetOpponentEntity(out opponent_entity) == false) ret = false;
+            if (!game.TryGetOpponentEntity(out opponent_entity)) ret = false;
             else
             {
                 ret = this.opponent.Parse(game, opponent_entity) && ret;
-            }
-
-            GameState.Entity game_entity;
-            if (!game.TryGetGameEntity(out game_entity)) ret = false;
-            else
-            {
-                this.turn = game_entity.GetTagOrDefault(GameTag.TURN, 0);
             }
 
             return ret;
