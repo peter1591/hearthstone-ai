@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <sstream>
+#include <memory>
 
 #include "UI/AIController.h"
 #include "FlowControl/FlowController-impl.h"
@@ -28,7 +29,14 @@ namespace GameEngineCppWrapper
 			}
 			
 			Log("Successfully load cards.json.");
+
+			Reset();
+
 			return 0;
+		}
+
+		void Reset() {
+			controller_.reset(new ui::AIController());
 		}
 		
 		int Run(int seconds, int threads) {
@@ -50,7 +58,7 @@ namespace GameEngineCppWrapper
 
 					{
 						std::stringstream ss;
-						auto iterations = controller_.GetStatistic().GetSuccededIterates();
+						auto iterations = controller_->GetStatistic().GetSuccededIterates();
 						ss << "Iterations: " << iterations;
 						Log(ss.str());
 					}
@@ -65,7 +73,7 @@ namespace GameEngineCppWrapper
 			};
 
 			try {
-				controller_.Run(continue_checker, threads, start_board_getter);
+				controller_->Run(continue_checker, threads, start_board_getter);
 			}
 			catch (...) {
 				return -1;
@@ -88,7 +96,7 @@ namespace GameEngineCppWrapper
 		}
 
 	private:
-		ui::AIController controller_;
+		std::unique_ptr<ui::AIController> controller_;
 		OutputMessageCallback output_message_callback_;
 	};
 
@@ -106,5 +114,6 @@ namespace GameEngineCppWrapper
 		return impl_->SetOutputMessageCallback(cb);
 	}
 
+	void GameEngine::Reset() { return impl_->Reset(); }
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
 }

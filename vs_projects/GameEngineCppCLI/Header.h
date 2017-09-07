@@ -20,6 +20,7 @@ namespace GameEngineCppWrapper
 
 			void SetOutputMessageCallback(OutputMessageCallback^ cb);
 
+			void Reset();
 			int Run(int seconds, int threads);
 
 			void Destroy();

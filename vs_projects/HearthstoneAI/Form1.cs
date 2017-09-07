@@ -24,6 +24,10 @@ namespace HearthstoneAI
             InitializeComponent();
 
             log_watcher = new LogWatcher.LogWatcher();
+            log_watcher.ActionStart += Log_reader_ActionStart;
+            log_watcher.CreateGameEvent += Log_reader_CreateGameEvent;
+            log_watcher.EndTurnEvent += Log_reader_EndTurnEvent;
+            log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             log_watcher.update_board = (GameState game_state, Board.Game board, string err_msg) =>
             {
                 if (board == null)

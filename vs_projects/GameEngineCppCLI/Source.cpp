@@ -47,6 +47,11 @@ namespace GameEngineCppWrapper
 			impl_ = nullptr;
 		}
 
+		void GameEngine::Reset()
+		{
+			return impl_->Reset();
+		}
+
 		int GameEngine::Run(int seconds, int threads)
 		{
 			return impl_->Run(seconds, threads);
