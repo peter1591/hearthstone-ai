@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,8 +94,18 @@ namespace HearthstoneAI.AI
 
         public int MakeChoice(Board.Game board)
         {
+            System.Runtime.Serialization.Json.DataContractJsonSerializer ser =
+                new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(Board.Game));
+            MemoryStream ms = new MemoryStream();
+
+            ser.WriteObject(ms, board);
+            ms.Position = 0;
+
+            StreamReader sr = new StreamReader(ms);
+            string json = sr.ReadToEnd();
+
             // TODO: implement
-            logger_.Info("Make choice!");
+            logger_.Info("Make choice! " + json);
             return -1;
         }
 
