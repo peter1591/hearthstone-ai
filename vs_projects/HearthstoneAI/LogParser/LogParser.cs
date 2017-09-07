@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace HearthstoneAI
+namespace HearthstoneAI.LogParser
 {
     class LogParser
     {
@@ -20,10 +20,10 @@ namespace HearthstoneAI
             this.frmMain = frm;
             this.GameState = new GameState();
 
-            this.power_log_parser = new Parsers.PowerLogParser(this.frmMain, this.GameState);
-            this.entity_choices_parser = new Parsers.EntityChoicesParser(this.frmMain, this.GameState);
-            this.send_choices_parser = new Parsers.SendChoicesParser(this.frmMain, this.GameState);
-            this.debug_print_power_parser = new Parsers.DebugPrintPowerParser(this.frmMain, this.GameState);
+            this.power_log_parser = new SubParsers.PowerLogParser(this.frmMain, this.GameState);
+            this.entity_choices_parser = new SubParsers.EntityChoicesParser(this.frmMain, this.GameState);
+            this.send_choices_parser = new SubParsers.SendChoicesParser(this.frmMain, this.GameState);
+            this.debug_print_power_parser = new SubParsers.DebugPrintPowerParser(this.frmMain, this.GameState);
 
             this.power_log_parser.ActionStart += (sender, e) =>
             {
@@ -40,16 +40,16 @@ namespace HearthstoneAI
         }
 
         private frmMain frmMain;
-        private Parsers.PowerLogParser power_log_parser;
-        private Parsers.SendChoicesParser send_choices_parser;
-        private Parsers.EntityChoicesParser entity_choices_parser;
-        private Parsers.DebugPrintPowerParser debug_print_power_parser;
+        private SubParsers.PowerLogParser power_log_parser;
+        private SubParsers.SendChoicesParser send_choices_parser;
+        private SubParsers.EntityChoicesParser entity_choices_parser;
+        private SubParsers.DebugPrintPowerParser debug_print_power_parser;
 
         public GameState GameState { get; }
 
-        public class ActionStartEventArgs : Parsers.PowerLogParser.ActionStartEventArgs
+        public class ActionStartEventArgs : SubParsers.PowerLogParser.ActionStartEventArgs
         {
-            public ActionStartEventArgs(Parsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
+            public ActionStartEventArgs(SubParsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
             {
                 this.game = game;
             }
@@ -69,7 +69,7 @@ namespace HearthstoneAI
         };
         public event EventHandler<EndTurnEventArgs> EndTurnEvent;
 
-        public event EventHandler<Parsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
+        public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public void Process(string log_line)
         {

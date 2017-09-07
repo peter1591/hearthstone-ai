@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace HearthstoneAI.Parsers
+namespace HearthstoneAI.LogParser.SubParsers
 {
     class DebugPrintPowerParser
     {
@@ -55,7 +55,7 @@ namespace HearthstoneAI.Parsers
 
 
             var entity_raw = match.Groups["entity"].Value;
-            int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
+            int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
 
             var tag = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
 

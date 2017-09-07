@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace HearthstoneAI.Parsers
+namespace HearthstoneAI.LogParser.SubParsers
 {
     class PowerLogParser
     {
@@ -191,7 +191,7 @@ namespace HearthstoneAI.Parsers
 
             var match = TagChangeRegex.Match(this.parsing_log);
             var entity_raw = match.Groups["entity"].Value;
-            int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
+            int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
 
             if (entityId >= 0)
             {
@@ -238,7 +238,7 @@ namespace HearthstoneAI.Parsers
             if (!match.Success) yield break;
 
             var cardId = match.Groups["cardId"].Value;
-            int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
+            int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
 
             if (entityId < 0)
             {
@@ -290,7 +290,7 @@ namespace HearthstoneAI.Parsers
             if (HideEntityRegex.IsMatch(this.parsing_log))
             {
                 var match = HideEntityRegex.Match(this.parsing_log);
-                int entityId = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
+                int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
                 this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                 yield return true;
             }
@@ -319,10 +319,10 @@ namespace HearthstoneAI.Parsers
             var block_type = match.Groups["block_type"].Value.Trim();
             var target_raw = match.Groups["target"].Value.Trim();
 
-            var entity_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
+            var entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
             if (entity_id < 0) this.frm_main.AddLog(String.Format("[INFO] Cannot get entity id '{0}'.", entity_raw));
 
-            var target_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, target_raw);
+            var target_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, target_raw);
 
             if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(entity_id, block_type));
 

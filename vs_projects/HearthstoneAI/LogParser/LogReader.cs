@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HearthstoneAI
+namespace HearthstoneAI.LogParser
 {
     class LogReader
     {
-        public frmMain frmMain { get; set; }
+        private frmMain frmMain;
 
         private long power_log_offset;
         private LogParser log_parser;
@@ -19,7 +19,7 @@ namespace HearthstoneAI
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
         public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
         public event EventHandler<LogParser.EndTurnEventArgs> EndTurnEvent;
-        public event EventHandler<Parsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
+        public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public LogReader(frmMain frm)
         {

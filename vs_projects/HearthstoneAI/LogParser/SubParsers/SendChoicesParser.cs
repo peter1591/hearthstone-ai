@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
-namespace HearthstoneAI.Parsers
+namespace HearthstoneAI.LogParser.SubParsers
 {
     class SendChoicesParser
     {
@@ -64,7 +64,7 @@ namespace HearthstoneAI.Parsers
                 {
                     var match_chosen_entities = SendChoicesEntities.Match(this.parsing_log);
                     var chosen_entity = match_chosen_entities.Groups["entity"].Value.Trim();
-                    var chosen_entity_id = Parsers.ParserUtilities.GetEntityIdFromRawString(this.game_state, chosen_entity);
+                    var chosen_entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, chosen_entity);
                     if (chosen_entity_id < 0)
                     {
                         this.frm_main.AddLog("[ERROR] Failed to get entity id for a choice: " + this.parsing_log + " (ignoring)");

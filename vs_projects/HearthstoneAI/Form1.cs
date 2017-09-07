@@ -14,7 +14,7 @@ namespace HearthstoneAI
 {
     public partial class frmMain : Form
     {
-        LogReader log_reader;
+        LogParser.LogReader log_reader;
 
         private AIEngine ai_engine_;
         private AILogger ai_logger_;
@@ -44,7 +44,7 @@ namespace HearthstoneAI
         {
             this.btnStart.Enabled = false;
 
-            this.log_reader = new LogReader(this);
+            this.log_reader = new LogParser.LogReader(this);
             this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             this.log_reader.ActionStart += Log_reader_ActionStart;
             this.log_reader.EndTurnEvent += Log_reader_EndTurnEvent;
@@ -61,7 +61,7 @@ namespace HearthstoneAI
             ai_engine_.Initialize();
         }
 
-        private void Log_reader_CreateGameEvent(object sender, Parsers.PowerLogParser.CreateGameEventArgs e)
+        private void Log_reader_CreateGameEvent(object sender, LogParser.SubParsers.PowerLogParser.CreateGameEventArgs e)
         {
             this.AddLog("====== New Game Starts ======");
         }
@@ -78,12 +78,12 @@ namespace HearthstoneAI
             //this.ai_communicator.UpdateBoard(board);
         }
 
-        private void Log_reader_EndTurnEvent(object sender, LogParser.EndTurnEventArgs e)
+        private void Log_reader_EndTurnEvent(object sender, LogParser.LogParser.EndTurnEventArgs e)
         {
             this.TriggerAIHandleBoardAction(e.game);
         }
 
-        private void Log_reader_ActionStart(object sender, LogParser.ActionStartEventArgs e)
+        private void Log_reader_ActionStart(object sender, LogParser.LogParser.ActionStartEventArgs e)
         {
             if (e.block_type == "TRIGGER") return;
             if (e.block_type == "POWER") return;
@@ -101,7 +101,7 @@ namespace HearthstoneAI
 
         private void Log_reader_StartWaitingMainAction(object sender, GameState.StartWaitingMainActionEventArgs e)
         {
-            //this.AddLog("StartWaitingMainAction called");
+            this.AddLog("StartWaitingMainAction called");
         }
 
         private int last_invoke_log_change_id = -1;
