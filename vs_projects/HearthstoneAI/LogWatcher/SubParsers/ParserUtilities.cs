@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace HearthstoneAI.LogParser.SubParsers
+namespace HearthstoneAI.LogWatcher.SubParsers
 {
     class ParserUtilities
     {

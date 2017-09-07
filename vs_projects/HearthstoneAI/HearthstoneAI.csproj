@@ -70,18 +70,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="AIEngine.cs" />
+    <Compile Include="AI\AIEngine.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GameTag.cs" />
-    <Compile Include="AILogger.cs" />
-    <Compile Include="LogParser\LogItem.cs" />
-    <Compile Include="LogParser\LogParser.cs" />
-    <Compile Include="LogParser\LogReader.cs" />
-    <Compile Include="LogParser\SubParsers\DebugPrintPowerParser.cs" />
-    <Compile Include="LogParser\SubParsers\EntityChoicesParser.cs" />
-    <Compile Include="LogParser\SubParsers\ParserUtilities.cs" />
-    <Compile Include="LogParser\SubParsers\PowerLogParser.cs" />
-    <Compile Include="LogParser\SubParsers\SendChoicesParser.cs" />
+    <Compile Include="AI\AILogger.cs" />
+    <Compile Include="LogWatcher\LogItem.cs" />
+    <Compile Include="LogWatcher\LogParser.cs" />
+    <Compile Include="LogWatcher\LogReader.cs" />
+    <Compile Include="LogWatcher\SubParsers\DebugPrintPowerParser.cs" />
+    <Compile Include="LogWatcher\SubParsers\EntityChoicesParser.cs" />
+    <Compile Include="LogWatcher\SubParsers\ParserUtilities.cs" />
+    <Compile Include="LogWatcher\SubParsers\PowerLogParser.cs" />
+    <Compile Include="LogWatcher\SubParsers\SendChoicesParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

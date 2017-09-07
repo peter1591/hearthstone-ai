@@ -14,10 +14,10 @@ namespace HearthstoneAI
 {
     public partial class frmMain : Form
     {
-        LogParser.LogReader log_reader;
+        LogWatcher.LogReader log_reader;
 
-        private AIEngine ai_engine_;
-        private AILogger ai_logger_;
+        private AI.AIEngine ai_engine_;
+        private AI.AILogger ai_logger_;
 
         public string HearthstoneInstallationPath
         {
@@ -28,8 +28,8 @@ namespace HearthstoneAI
         {
             InitializeComponent();
 
-            ai_logger_ = new AILogger(ref txtAIEngine);
-            ai_engine_ = new AIEngine(ai_logger_);
+            ai_logger_ = new AI.AILogger(ref txtAIEngine);
+            ai_engine_ = new AI.AIEngine(ai_logger_);
         }
 
         private void btnChangeHearthstoneInstallationPath_Click(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace HearthstoneAI
         {
             this.btnStart.Enabled = false;
 
-            this.log_reader = new LogParser.LogReader(this);
+            this.log_reader = new LogWatcher.LogReader(this);
             this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             this.log_reader.ActionStart += Log_reader_ActionStart;
             this.log_reader.EndTurnEvent += Log_reader_EndTurnEvent;
@@ -61,7 +61,7 @@ namespace HearthstoneAI
             ai_engine_.Initialize();
         }
 
-        private void Log_reader_CreateGameEvent(object sender, LogParser.SubParsers.PowerLogParser.CreateGameEventArgs e)
+        private void Log_reader_CreateGameEvent(object sender, LogWatcher.SubParsers.PowerLogParser.CreateGameEventArgs e)
         {
             this.AddLog("====== New Game Starts ======");
         }
@@ -78,12 +78,12 @@ namespace HearthstoneAI
             //this.ai_communicator.UpdateBoard(board);
         }
 
-        private void Log_reader_EndTurnEvent(object sender, LogParser.LogParser.EndTurnEventArgs e)
+        private void Log_reader_EndTurnEvent(object sender, LogWatcher.LogParser.EndTurnEventArgs e)
         {
             this.TriggerAIHandleBoardAction(e.game);
         }
 
-        private void Log_reader_ActionStart(object sender, LogParser.LogParser.ActionStartEventArgs e)
+        private void Log_reader_ActionStart(object sender, LogWatcher.LogParser.ActionStartEventArgs e)
         {
             if (e.block_type == "TRIGGER") return;
             if (e.block_type == "POWER") return;
