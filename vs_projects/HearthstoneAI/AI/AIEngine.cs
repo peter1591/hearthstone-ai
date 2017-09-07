@@ -77,6 +77,27 @@ namespace HearthstoneAI.AI
             return 0;
         }
 
+        public int Reset()
+        {
+            // TODO: implement
+            logger_.Info("Reset game");
+            return -1;
+        }
+
+        public int UpdateBoard(Board.Game board)
+        {
+            // TODO: implement
+            logger_.Info("Update board");
+            return -1;
+        }
+
+        public int MakeChoice(Board.Game board)
+        {
+            // TODO: implement
+            logger_.Info("Make choice!");
+            return -1;
+        }
+
         public void Destroy()
         {
             if (runner_ != null && runner_.IsAlive)

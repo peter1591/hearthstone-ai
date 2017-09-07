@@ -36,13 +36,12 @@ namespace HearthstoneAI
 
                 txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
 
+                this.UpdateBoard(game_state, board);
+
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
-                    // TODO: this is a trigger point for automatic playing
-                    ai_logger_.Info("Make choice!");
+                    ai_engine_.MakeChoice(board);
                 }
-
-                this.UpdateBoard(game_state, board);
             };
             log_watcher.log_msg = (string msg) => AddLog(msg);
 
@@ -78,6 +77,7 @@ namespace HearthstoneAI
         private void Log_reader_CreateGameEvent(object sender, LogWatcher.SubParsers.PowerLogParser.CreateGameEventArgs e)
         {
             this.AddLog("====== New Game Starts ======");
+            ai_engine_.Reset();
         }
 
         private void TriggerAIHandleBoardAction(GameState game)
@@ -89,7 +89,7 @@ namespace HearthstoneAI
                 this.AddLog("!!!!!!!!!!!!!!!!!!!! Failed to parse board in action start callback!!!!!!!!!!!!!!!");
                 return;
             }
-            //this.ai_communicator.UpdateBoard(board);
+            ai_engine_.UpdateBoard(board);
         }
 
         private void Log_reader_EndTurnEvent(object sender, LogWatcher.LogParser.EndTurnEventArgs e)
