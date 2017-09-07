@@ -9,18 +9,19 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 {
     class DebugPrintPowerParser
     {
+        public delegate void LogMsgDelegate(String msg);
+        public LogMsgDelegate log_msg;
+
         private static readonly Regex TagChangeRegex =
             new Regex(@"^[\s]*TAG_CHANGE\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
-        public DebugPrintPowerParser(frmMain frm, GameState game_state)
+        public DebugPrintPowerParser(GameState game_state)
         {
-            this.frm_main = frm;
             this.game_state = game_state;
             this.enumerator = this.Process().GetEnumerator();
         }
 
         private string parsing_log;
-        private frmMain frm_main;
         private GameState game_state;
         private IEnumerator<bool> enumerator;
 
@@ -85,7 +86,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     }
                 }
 
-                frm_main.AddLog("Failed to patch player name.");
+                log_msg("Failed to patch player name.");
             }
         }
     }

@@ -302,5 +302,21 @@ namespace HearthstoneAI
             var v2 = rhs.GetTagOrDefault(GameTag.ZONE_POSITION, -1);
             return v1.CompareTo(v2);
         }
+
+        public int GetCurrentPlayerEntityId()
+        {
+            if (Entities[PlayerEntityId].GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1)
+            {
+                return PlayerEntityId;
+            }
+            else if (Entities[OpponentEntityId].GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1)
+            {
+                return OpponentEntityId;
+            }
+            else
+            {
+                return -1;
+            }
+        }
     }
 }

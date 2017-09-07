@@ -9,6 +9,9 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 {
     class EntityChoicesParser
     {
+        public delegate void LogMsgDelegate(String msg);
+        public LogMsgDelegate log_msg;
+
         private static readonly Regex EntityChoicesCreate =
             new Regex(@"^[\s]*id=(?<id>(.*))\ Player=(?<player_entity>.*)\ TaskList=(.*)\ ChoiceType=(?<choice_type>.*)\ CountMin=(.*)\ CountMax=(.*)");
         private static readonly Regex EntityChoicesSource =
@@ -16,16 +19,13 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex EntityChoicesEntities =
             new Regex(@"^[\s]*Entities\[(?<idx>.*)\]=(?<entity>(.+))$");
 
-        public EntityChoicesParser(frmMain frm, GameState game_state)
+        public EntityChoicesParser(GameState game_state)
         {
-            this.frm_main = frm;
             this.game_state = game_state;
-
             this.enumerator = this.Process().GetEnumerator();
         }
 
         private string parsing_log;
-        private frmMain frm_main;
         private GameState game_state;
         private IEnumerator<bool> enumerator;
 
@@ -48,7 +48,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 }
                 if (rule_matched) continue;
 
-                this.frm_main.AddLog("[ERROR] Unhandled entity chocies log: " + this.parsing_log);
+                log_msg("[ERROR] Unhandled entity chocies log: " + this.parsing_log);
                 yield return true;
             }
         }
@@ -61,7 +61,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             int entity_choice_id = -1;
             if (int.TryParse(match.Groups["id"].Value.Trim(), out entity_choice_id) == false)
             {
-                this.frm_main.AddLog("[INFO] Cannot get entity choice id (ignoring): " + this.parsing_log);
+                log_msg("[INFO] Cannot get entity choice id (ignoring): " + this.parsing_log);
             }
 
             var player_entity_raw = match.Groups["player_entity"].Value.Trim();
@@ -71,7 +71,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (this.game_state.EntityChoices.ContainsKey(entity_choice_id))
             {
-                this.frm_main.AddLog("[ERROR] Entity choice index overlapped (overwritting)");
+                log_msg("[ERROR] Entity choice index overlapped (overwritting)");
                 this.game_state.EntityChoices.Remove(entity_choice_id);
             }
 
@@ -112,14 +112,14 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (this.game_state.EntityChoices.ContainsKey(entity_choice_id) == false)
             {
-                this.frm_main.AddLog("[ERROR] missing current entity choice id");
+                log_msg("[ERROR] missing current entity choice id");
                 return false;
             }
 
             int idx;
             if (int.TryParse(match.Groups["idx"].Value.Trim(), out idx) == false)
             {
-                this.frm_main.AddLog("[ERROR] Parse failed: " + this.parsing_log);
+                log_msg("[ERROR] Parse failed: " + this.parsing_log);
                 return false;
             }
 
@@ -127,7 +127,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             int entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
             if (entity_id < 0)
             {
-                this.frm_main.AddLog("[ERROR] Failed to get entity id: " + this.parsing_log);
+                log_msg("[ERROR] Failed to get entity id: " + this.parsing_log);
                 return false;
             }
 

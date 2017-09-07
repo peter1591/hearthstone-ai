@@ -44,11 +44,12 @@ namespace HearthstoneAI
         {
             this.btnStart.Enabled = false;
 
-            this.log_reader = new LogWatcher.LogReader(this);
+            this.log_reader = new LogWatcher.LogReader(this.txtHearthstoneInstallationPath.Text);
             this.log_reader.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             this.log_reader.ActionStart += Log_reader_ActionStart;
             this.log_reader.EndTurnEvent += Log_reader_EndTurnEvent;
             this.log_reader.CreateGameEvent += Log_reader_CreateGameEvent;
+            this.log_reader.log_msg = (string msg) => AddLog(msg);
 
             timerMainLoop.Enabled = true;
 
@@ -101,7 +102,6 @@ namespace HearthstoneAI
 
         private void Log_reader_StartWaitingMainAction(object sender, GameState.StartWaitingMainActionEventArgs e)
         {
-            this.AddLog("StartWaitingMainAction called");
         }
 
         private int last_invoke_log_change_id = -1;

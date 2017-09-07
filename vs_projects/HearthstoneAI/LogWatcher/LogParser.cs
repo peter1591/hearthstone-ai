@@ -15,15 +15,21 @@ namespace HearthstoneAI.LogWatcher
         private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
         private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
 
-        public LogParser(frmMain frm)
+        public LogParser()
         {
-            this.frmMain = frm;
             this.GameState = new GameState();
 
-            this.power_log_parser = new SubParsers.PowerLogParser(this.frmMain, this.GameState);
-            this.entity_choices_parser = new SubParsers.EntityChoicesParser(this.frmMain, this.GameState);
-            this.send_choices_parser = new SubParsers.SendChoicesParser(this.frmMain, this.GameState);
-            this.debug_print_power_parser = new SubParsers.DebugPrintPowerParser(this.frmMain, this.GameState);
+            this.power_log_parser = new SubParsers.PowerLogParser(this.GameState);
+            this.power_log_parser.log_msg = (string msg) => log_msg(msg);
+
+            this.entity_choices_parser = new SubParsers.EntityChoicesParser(this.GameState);
+            this.entity_choices_parser.log_msg = (string msg) => log_msg(msg);
+
+            this.send_choices_parser = new SubParsers.SendChoicesParser(this.GameState);
+            this.send_choices_parser.log_msg = (string msg) => log_msg(msg);
+
+            this.debug_print_power_parser = new SubParsers.DebugPrintPowerParser(this.GameState);
+            this.debug_print_power_parser.log_msg = (string msg) => log_msg(msg);
 
             this.power_log_parser.ActionStart += (sender, e) =>
             {
@@ -44,6 +50,9 @@ namespace HearthstoneAI.LogWatcher
         private SubParsers.SendChoicesParser send_choices_parser;
         private SubParsers.EntityChoicesParser entity_choices_parser;
         private SubParsers.DebugPrintPowerParser debug_print_power_parser;
+
+        public delegate void LogMsgDelegate(String msg);
+        public LogMsgDelegate log_msg;
 
         public GameState GameState { get; }
 
@@ -80,7 +89,7 @@ namespace HearthstoneAI.LogWatcher
             try { log_item = LogItem.Parse(log_line); }
             catch (Exception)
             {
-                this.frmMain.AddLog("Failed when parsing: " + log_line);
+                log_msg("Failed when parsing: " + log_line);
                 return;
             }
 

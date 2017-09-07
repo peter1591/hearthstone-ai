@@ -9,20 +9,21 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 {
     class SendChoicesParser
     {
+        public delegate void LogMsgDelegate(String msg);
+        public LogMsgDelegate log_msg;
+
         private static readonly Regex SendChoices =
             new Regex(@"^[\s]*id=(?<id>(.*))\ ChoiceType=(?<choice_type>.*)");
         private static readonly Regex SendChoicesEntities =
             new Regex(@"^[\s]*m_chosenEntities\[(?<idx>.*)\]=(?<entity>(.+))$");
 
-        public SendChoicesParser(frmMain frm, GameState game_state)
+        public SendChoicesParser(GameState game_state)
         {
-            this.frm_main = frm;
             this.game_state = game_state;
             this.enumerator = this.Process().GetEnumerator();
         }
 
         private string parsing_log;
-        private frmMain frm_main;
         private GameState game_state;
         private IEnumerator<bool> enumerator;
 
@@ -47,7 +48,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 if (!SendChoices.IsMatch(this.parsing_log))
                 {
-                    this.frm_main.AddLog("[INFO] Waiting for send-choice log, but got " + this.parsing_log + " (ignoring)");
+                    log_msg("[INFO] Waiting for send-choice log, but got " + this.parsing_log + " (ignoring)");
                     continue;
                 }
                 var match = SendChoices.Match(this.parsing_log);
@@ -67,7 +68,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     var chosen_entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, chosen_entity);
                     if (chosen_entity_id < 0)
                     {
-                        this.frm_main.AddLog("[ERROR] Failed to get entity id for a choice: " + this.parsing_log + " (ignoring)");
+                        log_msg("[ERROR] Failed to get entity id for a choice: " + this.parsing_log + " (ignoring)");
                         yield return true;
                         continue;
                     }

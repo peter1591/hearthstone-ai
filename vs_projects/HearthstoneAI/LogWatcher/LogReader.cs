@@ -9,7 +9,7 @@ namespace HearthstoneAI.LogWatcher
 {
     class LogReader
     {
-        private frmMain frmMain;
+        private string hearthstone_path;
 
         private long power_log_offset;
         private LogParser log_parser;
@@ -21,10 +21,13 @@ namespace HearthstoneAI.LogWatcher
         public event EventHandler<LogParser.EndTurnEventArgs> EndTurnEvent;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
-        public LogReader(frmMain frm)
+        public delegate void LogMsgDelegate(String msg);
+        public LogMsgDelegate log_msg;
+
+        public LogReader(string hearthstone_path)
         {
+            this.hearthstone_path = hearthstone_path;
             this.change_id = 1;
-            this.frmMain = frm;
             this.Reset();
         }
 
@@ -39,7 +42,7 @@ namespace HearthstoneAI.LogWatcher
 
         private void CreateLogParser()
         {
-            this.log_parser = new LogParser(this.frmMain);
+            this.log_parser = new LogParser();
             this.log_parser.GameState.StartWaitingMainAction += (sender, e) =>
             {
                 if (this.StartWaitingMainAction != null) this.StartWaitingMainAction(this, e);
@@ -58,12 +61,13 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.EndTurnEvent != null) this.EndTurnEvent(this, e);
             };
+
+            this.log_parser.log_msg += (string msg) => log_msg(msg);
         }
 
         private string GetPowerLogPath()
         {
-            string installation_path = this.frmMain.HearthstoneInstallationPath;
-            return Path.Combine(installation_path, "Logs\\Power.log");
+            return Path.Combine(this.hearthstone_path, "Logs\\Power.log");
         }
 
         public void Process()
