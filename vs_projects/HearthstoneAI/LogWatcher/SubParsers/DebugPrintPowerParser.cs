@@ -54,9 +54,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var match = TagChangeRegex.Match(this.parsing_log);
             if (!match.Success) yield break;
 
-
             var entity_raw = match.Groups["entity"].Value;
-            int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
 
             var tag = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
 
@@ -71,6 +69,12 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 // the player's name can only be known from debug print power logs
                 // so we parse the name out, and write back to our entity object
+
+                if (ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_id) >= 0)
+                {
+                    return; // already has id
+                }
+
                 foreach (var entity in this.game_state.Entities)
                 {
                     foreach (var entity_tag in entity.Value.Tags)
