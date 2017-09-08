@@ -25,25 +25,22 @@ namespace HearthstoneAI.AI
             }
         }
 
-        public AIEngine(AILogger logger)
+        public AIEngine(AILogger logger, int seconds, int threads)
         {
             engine_ = new GameEngineCppWrapper.CLI.GameEngine();
             logger_ = logger;
+            seconds_ = seconds;
+            threads_ = threads;
         }
 
         private bool initialized_ = false;
-        public void Initialize()
+        public int Initialize()
         {
-            new System.Threading.Thread(() =>
-            {
-                if (engine_.Initialize() != 0)
-                {
-                    logger_.Info("Failed to initialize.");
-                    return;
-                }
-                initialized_ = true;
-                logger_.Info("Engine initialized.");
-            }).Start();
+            if (engine_.Initialize() != 0) return -1;
+
+            initialized_ = true;
+            logger_.Info("Engine is now initialized.");
+            return 0;
         }
         public bool IsInitialized() { return initialized_; }
 
@@ -51,37 +48,6 @@ namespace HearthstoneAI.AI
             if (!IsInitialized()) return false;
             if (runner_ != null) return false;
             return runner_.IsAlive;
-        }
-
-        public int Run(int seconds, int threads)
-        {
-            if (!IsInitialized())
-            {
-                logger_.Info("Logger is not initialized.");
-                return -1;
-            }
-
-            if (runner_ != null)
-            {
-                if (runner_.IsAlive)
-                {
-                    logger_.Info("Another runner thread is still running.");
-                    return -1;
-                }
-                logger_.Info("Recycling previous runner thread...");
-                runner_.Join();
-            }
-
-            runner_ = new System.Threading.Thread(() =>
-            {
-                logger_.Info(String.Format("Start run for {0} seconds with {1} threads.",
-                    seconds, threads));
-                engine_.Run(seconds, threads);
-                logger_.Info("Finish run.");
-            });
-            runner_.Start();
-
-            return 0;
         }
 
         public int Reset()
@@ -93,13 +59,12 @@ namespace HearthstoneAI.AI
 
         public int UpdateBoard(Board.Game board)
         {
-            // TODO: implement
-            logger_.Info("Update board");
-            return -1;
-        }
+            if (!IsInitialized())
+            {
+                logger_.Info("Engine is not initialized.");
+                return -1;
+            }
 
-        public int MakeChoice(Board.Game board)
-        {
             System.Runtime.Serialization.Json.DataContractJsonSerializer ser =
                 new System.Runtime.Serialization.Json.DataContractJsonSerializer(typeof(Board.Game));
             MemoryStream ms = new MemoryStream();
@@ -110,12 +75,39 @@ namespace HearthstoneAI.AI
             StreamReader sr = new StreamReader(ms);
             string json = sr.ReadToEnd();
 
-            // TODO: implement
-            logger_.Info("Make choice! " + json);
-            return -1;
+            return engine_.UpdateBoard(json);
+        }
+
+        private int seconds_;
+        private int threads_;
+        public int Run()
+        {
+            if (!IsInitialized())
+            {
+                logger_.Info("Engine is not initialized.");
+                return -1;
+            }
+
+            AbortRunner();
+
+            runner_ = new System.Threading.Thread(() =>
+            {
+                logger_.Info(String.Format("Start run for {0} seconds with {1} threads.", seconds_, threads_));
+                engine_.Run(seconds_, threads_);
+                logger_.Info("Finish run.");
+            });
+            runner_.Start();
+
+            return 0;
         }
 
         public void Destroy()
+        {
+            AbortRunner();
+            engine_ = null;
+        }
+
+        public void AbortRunner()
         {
             if (runner_ != null)
             {
@@ -127,8 +119,6 @@ namespace HearthstoneAI.AI
                 runner_.Join();
                 runner_ = null;
             }
-
-            engine_ = null;
         }
 
         private GameEngineCppWrapper.CLI.GameEngine engine_;

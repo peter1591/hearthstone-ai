@@ -16,7 +16,9 @@ namespace GameEngineCppWrapper
 		int Initialize() const;
 		void SetOutputMessageCallback(OutputMessageCallback cb);
 
-		void Reset();
+		int ResetBoard();
+		int UpdateBoard(std::string const& board);
+
 		int Run(int seconds, int threads);
 		void Stop();
 

@@ -44,13 +44,18 @@ namespace HearthstoneAI
 
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
-                    ai_engine_.MakeChoice(board);
+                    ai_engine_.UpdateBoard(board);
+                    ai_engine_.Run();
                 }
             };
             log_watcher.log_msg = (string msg) => AddLog(msg);
 
             ai_logger_ = new AI.AILogger(ref txtAIEngine);
-            ai_engine_ = new AI.AIEngine(ai_logger_);
+            ai_engine_ = new AI.AIEngine(ai_logger_, 90, 4); // TODO: configurable settings
+            ai_engine_.output_message_cb += (System.String msg) =>
+            {
+                ai_logger_.Info("[Engine] " + msg);
+            };
         }
 
         private void btnChangeHearthstoneInstallationPath_Click(object sender, EventArgs e)
@@ -65,17 +70,21 @@ namespace HearthstoneAI
         {
             this.btnStart.Enabled = false;
 
+            var engine_initializer = new System.Threading.Thread(() =>
+            {
+                if (ai_engine_.Initialize() != 0)
+                {
+                    AddLog("Failed to initialize ai engine.");
+                    return;
+                }
+            });
+            engine_initializer.Start();
+            while (engine_initializer.IsAlive) Application.DoEvents();
+            engine_initializer.Join();
+
             log_watcher.Reset(txtHearthstoneInstallationPath.Text);
 
             timerMainLoop.Enabled = true;
-
-            ai_engine_.output_message_cb += (System.String msg) =>
-            {
-                ai_logger_.Info("[Engine] " + msg);
-            };
-
-            ai_logger_.Info("Initializing engine...");
-            ai_engine_.Initialize();
         }
 
         private void Log_reader_CreateGameEvent(object sender, LogWatcher.SubParsers.PowerLogParser.CreateGameEventArgs e)
@@ -504,14 +513,9 @@ namespace HearthstoneAI
             this.listBoxProcessedLogs.TopIndex = this.listBoxProcessedLogs.Items.Count - 1;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ai_engine_.Run(10, 4);
-        }
-
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ai_engine_.Destroy();
+            ai_engine_.AbortRunner();
         }
     }
 }

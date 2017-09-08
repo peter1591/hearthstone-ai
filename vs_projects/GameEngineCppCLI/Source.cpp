@@ -42,9 +42,14 @@ namespace GameEngineCppWrapper
 			impl_ = nullptr;
 		}
 
-		void GameEngine::Reset()
+		int GameEngine::ResetBoard()
 		{
-			return impl_->Reset();
+			return impl_->ResetBoard();
+		}
+
+		int GameEngine::UpdateBoard(System::String^ board)
+		{
+			return impl_->UpdateBoard(msclr::interop::marshal_as<std::string>(board));
 		}
 
 		int GameEngine::Run(int seconds, int threads)

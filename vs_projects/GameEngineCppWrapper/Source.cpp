@@ -30,13 +30,21 @@ namespace GameEngineCppWrapper
 			
 			Log("Successfully load cards.json.");
 
-			Reset();
+			ResetBoard();
 
 			return 0;
 		}
 
-		void Reset() {
+		int ResetBoard() {
 			controller_.reset(new ui::AIController());
+			return 0;
+		}
+
+		int UpdateBoard(std::string const& board)
+		{
+			// TODO: implement
+			Log("Update board: " + board);
+			return -1;
 		}
 		
 		int Run(int seconds, int threads) {
@@ -119,7 +127,8 @@ namespace GameEngineCppWrapper
 		return impl_->SetOutputMessageCallback(cb);
 	}
 
-	void GameEngine::Reset() { return impl_->Reset(); }
+	int GameEngine::ResetBoard() { return impl_->ResetBoard(); }
+	int GameEngine::UpdateBoard(std::string const& board) { return impl_->UpdateBoard(board); }
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
 	void GameEngine::Stop() { return impl_->Stop(); }
 }

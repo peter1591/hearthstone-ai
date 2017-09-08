@@ -20,7 +20,9 @@ namespace GameEngineCppWrapper
 
 			void SetOutputMessageCallback(OutputMessageCallback^ cb);
 
-			void Reset();
+			int ResetBoard();
+			int UpdateBoard(System::String^ board);
+
 			int Run(int seconds, int threads);
 			void Stop();
 
