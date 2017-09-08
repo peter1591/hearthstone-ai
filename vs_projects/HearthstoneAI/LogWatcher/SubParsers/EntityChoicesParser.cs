@@ -79,6 +79,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             this.game_state.EntityChoices[entity_choice_id].id = entity_choice_id;
             this.game_state.EntityChoices[entity_choice_id].choice_type = choice_type;
             this.game_state.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
+            this.game_state.EntityChoices[entity_choice_id].player_entity_raw = player_entity_raw;
             this.game_state.EntityChoices[entity_choice_id].choices_has_sent = false;
 
             yield return true;
@@ -154,6 +155,31 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (mulligan.choices.Count == 0) return;
             var choice = mulligan.choices[0];
+
+            // patch player entity id
+            if (mulligan.player_entity_id < 0)
+            {
+                // heuristic: find the first entity with PLAYSTATE=PLAYING
+                int patch_entity_id = -1;
+                foreach (var entity in game_state.Entities)
+                {
+                    foreach (var tag in entity.Value.Tags)
+                    {
+                        if (tag.Key == GameTag.PLAYSTATE && tag.Value == (int)TAG_PLAYSTATE.PLAYING)
+                        {
+                            patch_entity_id = entity.Key;
+                        }
+                    }
+                }
+
+                if (patch_entity_id > 0)
+                {
+                    game_state.Entities[patch_entity_id].Name = mulligan.player_entity_raw;
+                    mulligan.player_entity_id = patch_entity_id;
+                    log_msg(String.Format("Patch player name {0} with entity id {1}.",
+                        mulligan.player_entity_raw, patch_entity_id));
+                }
+            }
 
             if (this.game_state.PlayerEntityId < 0 && this.game_state.Entities[choice].CardId != "")
             {
