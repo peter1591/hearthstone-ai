@@ -49,6 +49,10 @@ namespace GameEngineCppWrapper
 		int Run(int seconds, int threads) {
 			Log("Start run with board: " + board_);
 
+			// TODO: re-use MCTS tree
+			Stop();
+			ResetBoard();
+
 			auto run_until = std::chrono::steady_clock::now() +
 				std::chrono::seconds(seconds);
 
