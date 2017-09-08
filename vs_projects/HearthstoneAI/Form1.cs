@@ -45,9 +45,13 @@ namespace HearthstoneAI
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
                     ai_engine_.UpdateBoard(board);
-                    int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
-                    int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
-                    ai_engine_.Run(seconds, threads);
+
+                    if (game_state.GetCurrentPlayerEntityId() == game_state.PlayerEntityId)
+                    {
+                        int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
+                        int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
+                        ai_engine_.Run(seconds, threads);
+                    }
                 }
             };
             log_watcher.log_msg = (string msg) => AddLog(msg);
