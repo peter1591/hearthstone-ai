@@ -52,9 +52,8 @@ namespace HearthstoneAI.AI
 
         public int Reset()
         {
-            // TODO: implement
             logger_.Info("Reset game");
-            return -1;
+            return engine_.ResetBoard();
         }
 
         public int UpdateBoard(Board.Game board)

@@ -42,12 +42,13 @@ namespace GameEngineCppWrapper
 
 		int UpdateBoard(std::string const& board)
 		{
-			// TODO: implement
-			Log("Update board: " + board);
-			return -1;
+			board_ = board;
+			return 0;
 		}
 		
 		int Run(int seconds, int threads) {
+			Log("Start run with board: " + board_);
+
 			auto run_until = std::chrono::steady_clock::now() +
 				std::chrono::seconds(seconds);
 
@@ -111,6 +112,7 @@ namespace GameEngineCppWrapper
 	private:
 		std::unique_ptr<ui::AIController> controller_;
 		OutputMessageCallback output_message_callback_;
+		std::string board_;
 	};
 
 	GameEngine::GameEngine() : impl_(nullptr) {

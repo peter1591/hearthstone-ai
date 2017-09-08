@@ -51,7 +51,7 @@ namespace HearthstoneAI
             log_watcher.log_msg = (string msg) => AddLog(msg);
 
             ai_logger_ = new AI.AILogger(ref txtAIEngine);
-            ai_engine_ = new AI.AIEngine(ai_logger_, 90, 4); // TODO: configurable settings
+            ai_engine_ = new AI.AIEngine(ai_logger_, 90, 2); // TODO: configurable settings
             ai_engine_.output_message_cb += (System.String msg) =>
             {
                 ai_logger_.Info("[Engine] " + msg);
