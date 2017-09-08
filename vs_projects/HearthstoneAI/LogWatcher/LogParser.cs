@@ -15,33 +15,30 @@ namespace HearthstoneAI.LogWatcher
         private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
         private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
 
-        public LogParser()
+        private GameState game_state_;
+        public LogParser(GameState game_state)
         {
-            this.GameState = new GameState();
+            game_state_ = game_state;
 
-            this.power_log_parser = new SubParsers.PowerLogParser(this.GameState);
+            this.power_log_parser = new SubParsers.PowerLogParser(game_state_);
             this.power_log_parser.log_msg = (string msg) => log_msg(msg);
 
-            this.entity_choices_parser = new SubParsers.EntityChoicesParser(this.GameState);
+            this.entity_choices_parser = new SubParsers.EntityChoicesParser(game_state_);
             this.entity_choices_parser.log_msg = (string msg) => log_msg(msg);
 
-            this.send_choices_parser = new SubParsers.SendChoicesParser(this.GameState);
+            this.send_choices_parser = new SubParsers.SendChoicesParser(game_state_);
             this.send_choices_parser.log_msg = (string msg) => log_msg(msg);
 
-            this.debug_print_power_parser = new SubParsers.DebugPrintPowerParser(this.GameState);
+            this.debug_print_power_parser = new SubParsers.DebugPrintPowerParser(game_state_);
             this.debug_print_power_parser.log_msg = (string msg) => log_msg(msg);
 
             this.power_log_parser.ActionStart += (sender, e) =>
             {
-                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, this.GameState));
+                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, game_state_));
             };
             this.power_log_parser.CreateGameEvent += (sender, e) =>
             {
                 if (this.CreateGameEvent != null) this.CreateGameEvent(this, e);
-            };
-            this.GameState.EndTurnEvent += (sender, e) =>
-            {
-                if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs(e, this.GameState));
             };
         }
 
@@ -53,8 +50,6 @@ namespace HearthstoneAI.LogWatcher
         public delegate void LogMsgDelegate(String msg);
         public LogMsgDelegate log_msg;
 
-        public GameState GameState { get; }
-
         public class ActionStartEventArgs : SubParsers.PowerLogParser.ActionStartEventArgs
         {
             public ActionStartEventArgs(SubParsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
@@ -65,17 +60,6 @@ namespace HearthstoneAI.LogWatcher
             public GameState game;
         };
         public event EventHandler<ActionStartEventArgs> ActionStart;
-
-        public class EndTurnEventArgs : GameState.EndTurnEventArgs
-        {
-            public EndTurnEventArgs(GameState.EndTurnEventArgs e, GameState game) : base(e)
-            {
-                this.game = game;
-            }
-
-            public GameState game;
-        };
-        public event EventHandler<EndTurnEventArgs> EndTurnEvent;
 
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 

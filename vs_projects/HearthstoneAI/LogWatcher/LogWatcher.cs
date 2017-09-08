@@ -10,10 +10,22 @@ namespace HearthstoneAI.LogWatcher
     {
         private LogReader log_reader;
         private StableDecider stable_decider_;
+        private GameState game_state_;
 
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
         public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
-        public event EventHandler<LogParser.EndTurnEventArgs> EndTurnEvent;
+
+        public class EndTurnEventArgs : GameState.EndTurnEventArgs
+        {
+            public EndTurnEventArgs(GameState.EndTurnEventArgs e, GameState game) : base(e)
+            {
+                this.game = game;
+            }
+
+            public GameState game;
+        };
+        public event EventHandler<EndTurnEventArgs> EndTurnEvent;
+
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public delegate void LogMsgDelegate(String msg);
@@ -24,17 +36,22 @@ namespace HearthstoneAI.LogWatcher
 
         public void Reset(string hearthstone_path)
         {
+            game_state_ = new GameState();
             this.stable_decider_ = new StableDecider(1000); // 1000 ms
 
-            this.log_reader = new LogReader(hearthstone_path);
-            this.log_reader.StartWaitingMainAction += StartWaitingMainAction;
+            this.log_reader = new LogReader(hearthstone_path, game_state_);
+            game_state_.StartWaitingMainAction += StartWaitingMainAction;
             this.log_reader.ActionStart += ActionStart;
-            this.log_reader.EndTurnEvent += EndTurnEvent;
             this.log_reader.CreateGameEvent += CreateGameEvent;
             this.log_reader.log_msg = (string msg) => log_msg(msg);
             this.log_reader.log_changed = () =>
             {
                 stable_decider_.Changed();
+            };
+
+            game_state_.EndTurnEvent += (sender, e) =>
+            {
+                if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs(e, game_state_));
             };
         }
 
@@ -49,14 +66,12 @@ namespace HearthstoneAI.LogWatcher
         {
             if (!stable_decider_.IsStable()) return;
 
-            var game = this.log_reader.GetGameState(); // TODO: allocate game state in member
-
             Board.Game board = new Board.Game();
-            bool parse_success = board.Parse(this.log_reader.GetGameState());
+            bool parse_success = board.Parse(game_state_);
 
             if (parse_success == false)
             {
-                board_changed(log_reader.GetGameState(), null, "parse failed");
+                board_changed(game_state_, null, "parse failed");
                 return;
             }
 
@@ -66,7 +81,7 @@ namespace HearthstoneAI.LogWatcher
             }
             this.last_invoke_board = board;
 
-            board_changed(log_reader.GetGameState(), board);
+            board_changed(game_state_, board);
         }
     }
 }

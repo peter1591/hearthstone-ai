@@ -13,10 +13,9 @@ namespace HearthstoneAI.LogWatcher
 
         private long power_log_offset;
         private LogParser log_parser;
+        private GameState game_state_;
 
-        public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
         public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
-        public event EventHandler<LogParser.EndTurnEventArgs> EndTurnEvent;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public delegate void LogMsgDelegate(String msg);
@@ -25,9 +24,10 @@ namespace HearthstoneAI.LogWatcher
         public delegate void LogChanged();
         public LogChanged log_changed;
 
-        public LogReader(string hearthstone_path)
+        public LogReader(string hearthstone_path, GameState game_state)
         {
             this.hearthstone_path = hearthstone_path;
+            this.game_state_ = game_state;
             this.Reset();
         }
 
@@ -40,11 +40,7 @@ namespace HearthstoneAI.LogWatcher
 
         private void CreateLogParser()
         {
-            this.log_parser = new LogParser();
-            this.log_parser.GameState.StartWaitingMainAction += (sender, e) =>
-            {
-                if (this.StartWaitingMainAction != null) this.StartWaitingMainAction(this, e);
-            };
+            this.log_parser = new LogParser(game_state_);
 
             this.log_parser.ActionStart += (sender, e) =>
             {
@@ -53,11 +49,6 @@ namespace HearthstoneAI.LogWatcher
             this.log_parser.CreateGameEvent += (sender, e) =>
             {
                 if (this.CreateGameEvent != null) this.CreateGameEvent(this, e);
-            };
-
-            this.log_parser.EndTurnEvent += (sender, e) =>
-            {
-                if (this.EndTurnEvent != null) this.EndTurnEvent(this, e);
             };
 
             this.log_parser.log_msg += (string msg) => log_msg(msg);
@@ -105,11 +96,6 @@ namespace HearthstoneAI.LogWatcher
             }
 
             log_changed();
-        }
-
-        public GameState GetGameState()
-        {
-            return this.log_parser.GameState;
         }
     }
 }

@@ -96,7 +96,7 @@ namespace HearthstoneAI
             ai_engine_.UpdateBoard(board);
         }
 
-        private void Log_reader_EndTurnEvent(object sender, LogWatcher.LogParser.EndTurnEventArgs e)
+        private void Log_reader_EndTurnEvent(object sender, LogWatcher.LogWatcher.EndTurnEventArgs e)
         {
             this.TriggerAIHandleBoardAction(e.game);
         }
