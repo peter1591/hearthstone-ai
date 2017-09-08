@@ -14,8 +14,6 @@ namespace HearthstoneAI.LogWatcher
         private long power_log_offset;
         private LogParser log_parser;
 
-        private int change_id;
-
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
         public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
         public event EventHandler<LogParser.EndTurnEventArgs> EndTurnEvent;
@@ -24,20 +22,20 @@ namespace HearthstoneAI.LogWatcher
         public delegate void LogMsgDelegate(String msg);
         public LogMsgDelegate log_msg;
 
+        public delegate void LogChanged();
+        public LogChanged log_changed;
+
         public LogReader(string hearthstone_path)
         {
             this.hearthstone_path = hearthstone_path;
-            this.change_id = 1;
             this.Reset();
         }
-
-        public int GetChangeId() { return this.change_id; }
 
         private void Reset()
         {
             this.power_log_offset = 0;
             this.CreateLogParser();
-            this.change_id++;
+            if (log_changed != null) log_changed();
         }
 
         private void CreateLogParser()
@@ -106,7 +104,7 @@ namespace HearthstoneAI.LogWatcher
                 System.Windows.Forms.Application.DoEvents();
             }
 
-            this.change_id++;
+            log_changed();
         }
 
         public GameState GetGameState()
