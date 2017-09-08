@@ -45,13 +45,15 @@ namespace HearthstoneAI
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
                     ai_engine_.UpdateBoard(board);
-                    ai_engine_.Run();
+                    int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
+                    int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
+                    ai_engine_.Run(seconds, threads);
                 }
             };
             log_watcher.log_msg = (string msg) => AddLog(msg);
 
             ai_logger_ = new AI.AILogger(ref txtAIEngine);
-            ai_engine_ = new AI.AIEngine(ai_logger_, 90, 2); // TODO: configurable settings
+            ai_engine_ = new AI.AIEngine(ai_logger_);
             ai_engine_.output_message_cb += (System.String msg) =>
             {
                 ai_logger_.Info("[Engine] " + msg);

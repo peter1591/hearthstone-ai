@@ -25,12 +25,10 @@ namespace HearthstoneAI.AI
             }
         }
 
-        public AIEngine(AILogger logger, int seconds, int threads)
+        public AIEngine(AILogger logger)
         {
             engine_ = new GameEngineCppWrapper.CLI.GameEngine();
             logger_ = logger;
-            seconds_ = seconds;
-            threads_ = threads;
         }
 
         private bool initialized_ = false;
@@ -77,9 +75,7 @@ namespace HearthstoneAI.AI
             return engine_.UpdateBoard(json);
         }
 
-        private int seconds_;
-        private int threads_;
-        public int Run()
+        public int Run(int seconds, int threads)
         {
             if (!IsInitialized())
             {
@@ -91,8 +87,8 @@ namespace HearthstoneAI.AI
 
             runner_ = new System.Threading.Thread(() =>
             {
-                logger_.Info(String.Format("Start run for {0} seconds with {1} threads.", seconds_, threads_));
-                engine_.Run(seconds_, threads_);
+                logger_.Info(String.Format("Start run for {0} seconds with {1} threads.", seconds, threads));
+                engine_.Run(seconds, threads);
                 logger_.Info("Finish run.");
             });
             runner_.Start();
