@@ -13,7 +13,17 @@ namespace HearthstoneAI.LogWatcher
         private GameState game_state_;
 
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
-        public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
+
+        public class ActionStartEventArgs : SubParsers.PowerLogParser.ActionStartEventArgs
+        {
+            public ActionStartEventArgs(SubParsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
+            {
+                this.game = game;
+            }
+
+            public GameState game;
+        };
+        public event EventHandler<ActionStartEventArgs> ActionStart;
 
         public class EndTurnEventArgs : GameState.EndTurnEventArgs
         {
@@ -37,11 +47,14 @@ namespace HearthstoneAI.LogWatcher
         public void Reset(string hearthstone_path)
         {
             game_state_ = new GameState();
-            this.stable_decider_ = new StableDecider(1000); // 1000 ms
+            this.stable_decider_ = new StableDecider(100); // 100 ms
 
             this.log_reader = new LogReader(hearthstone_path, game_state_);
             game_state_.StartWaitingMainAction += StartWaitingMainAction;
-            this.log_reader.ActionStart += ActionStart;
+            this.log_reader.ActionStart += (sender, e) =>
+            {
+                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, game_state_));
+            };
             this.log_reader.CreateGameEvent += CreateGameEvent;
             this.log_reader.log_msg = (string msg) => log_msg(msg);
             this.log_reader.log_changed = () =>
@@ -55,16 +68,22 @@ namespace HearthstoneAI.LogWatcher
             };
         }
 
+        private bool tick_processing_ = false;
         public void Tick()
         {
+            if (tick_processing_) return;
+
+            tick_processing_ = true;
             this.log_reader.Process();
             this.UpdateBoardIfNecessary();
+            tick_processing_ = false;
         }
 
         private Board.Game last_invoke_board = new Board.Game();
         private void UpdateBoardIfNecessary()
         {
             if (!stable_decider_.IsStable()) return;
+            stable_decider_.Changed();
 
             Board.Game board = new Board.Game();
             bool parse_success = board.Parse(game_state_);
@@ -75,10 +94,7 @@ namespace HearthstoneAI.LogWatcher
                 return;
             }
 
-            if (board.Equals(this.last_invoke_board))
-            {
-                return;
-            }
+            if (board.Equals(this.last_invoke_board)) return;
             this.last_invoke_board = board;
 
             board_changed(game_state_, board);

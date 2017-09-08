@@ -34,7 +34,7 @@ namespace HearthstoneAI.LogWatcher
 
             this.power_log_parser.ActionStart += (sender, e) =>
             {
-                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, game_state_));
+                if (this.ActionStart != null) this.ActionStart(this, e);
             };
             this.power_log_parser.CreateGameEvent += (sender, e) =>
             {
@@ -50,17 +50,7 @@ namespace HearthstoneAI.LogWatcher
         public delegate void LogMsgDelegate(String msg);
         public LogMsgDelegate log_msg;
 
-        public class ActionStartEventArgs : SubParsers.PowerLogParser.ActionStartEventArgs
-        {
-            public ActionStartEventArgs(SubParsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
-            {
-                this.game = game;
-            }
-
-            public GameState game;
-        };
-        public event EventHandler<ActionStartEventArgs> ActionStart;
-
+        public event EventHandler<SubParsers.PowerLogParser.ActionStartEventArgs> ActionStart;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public void Process(string log_line)

@@ -360,10 +360,10 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (block_type == "PLAY")
             {
-                log_msg("[INFO] Got a play action. entity = " + entity_id.ToString() +
-                    " eneity card id = " + this.game_state.Entities[entity_id].CardId.ToString() +
-                    " block type = " + block_type +
-                    " target = " + target_id.ToString());
+                //log_msg("[INFO] Got a play action. entity = " + entity_id.ToString() +
+                //    " eneity card id = " + this.game_state.Entities[entity_id].CardId.ToString() +
+                //    " block type = " + block_type +
+                //    " target = " + target_id.ToString());
                 this.AnalyzePlayHandCardAction(entity_id);
             }
 

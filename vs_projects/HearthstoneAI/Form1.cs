@@ -101,7 +101,7 @@ namespace HearthstoneAI
             this.TriggerAIHandleBoardAction(e.game);
         }
 
-        private void Log_reader_ActionStart(object sender, LogWatcher.LogParser.ActionStartEventArgs e)
+        private void Log_reader_ActionStart(object sender, LogWatcher.LogWatcher.ActionStartEventArgs e)
         {
             if (e.block_type == "TRIGGER") return;
             if (e.block_type == "POWER") return;

@@ -15,7 +15,7 @@ namespace HearthstoneAI.LogWatcher
         private LogParser log_parser;
         private GameState game_state_;
 
-        public event EventHandler<LogParser.ActionStartEventArgs> ActionStart;
+        public event EventHandler<SubParsers.PowerLogParser.ActionStartEventArgs> ActionStart;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         public delegate void LogMsgDelegate(String msg);
