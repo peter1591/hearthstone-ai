@@ -17,21 +17,21 @@ namespace ui
 
 	public:
 		AIController() :
-			first_tree_(), second_tree_(), statistic_()
+			first_tree_(), second_tree_(), statistic_(), stop_flag_(false)
 		{}
 
 		template <class ContinueChecker>
 		void Run(ContinueChecker continue_checker, int thread_count, StartingStateGetter state_getter)
 		{
 			std::vector<std::thread> threads;
-			std::atomic_bool stop_flag = false;
+			stop_flag_ = false;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
 					auto seed = std::random_device()();
 					std::mt19937 rand(seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, rand);
 					while (true) {
-						if (stop_flag == true) break;
+						if (stop_flag_ == true) break; // TODO: use compare_exchange_weak
 
 						mcts.Iterate([&]() {
 							return state_getter(rand());
@@ -43,14 +43,19 @@ namespace ui
 			}
 
 			while (true) {
+				if (stop_flag_ == true) break; // TODO: use compare_exchange_weak
 				if (!continue_checker()) break;
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
 
-			stop_flag = true;
+			stop_flag_ = true;
 			for (auto & thread : threads) {
 				thread.join();
 			}
+		}
+
+		void Stop() {
+			stop_flag_ = true;
 		}
 
 		auto const& GetStatistic() const { return statistic_; }
@@ -65,6 +70,7 @@ namespace ui
 		mcts::builder::TreeBuilder::TreeNode first_tree_;
 		mcts::builder::TreeBuilder::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;
+		std::atomic_bool stop_flag_;
 	};
 
 	class AICompetitor : public ICompetitor {

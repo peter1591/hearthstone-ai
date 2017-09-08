@@ -516,6 +516,7 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "frmMain";
             this.Text = "Hearthstone AI";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);

@@ -82,6 +82,11 @@ namespace GameEngineCppWrapper
 			return 0;
 		}
 
+		void Stop()
+		{
+			controller_->Stop();
+		}
+
 		void SetOutputMessageCallback(OutputMessageCallback cb)
 		{
 			output_message_callback_ = cb;
@@ -116,4 +121,5 @@ namespace GameEngineCppWrapper
 
 	void GameEngine::Reset() { return impl_->Reset(); }
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
+	void GameEngine::Stop() { return impl_->Stop(); }
 }

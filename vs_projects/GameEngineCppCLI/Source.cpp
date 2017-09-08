@@ -5,11 +5,6 @@
 
 #include <Windows.h>
 
-static void CppOutputMessageCallback(std::string const& msg)
-{
-
-}
-
 namespace GameEngineCppWrapper
 {
 	namespace CLI
@@ -55,6 +50,11 @@ namespace GameEngineCppWrapper
 		int GameEngine::Run(int seconds, int threads)
 		{
 			return impl_->Run(seconds, threads);
+		}
+
+		void GameEngine::Stop()
+		{
+			return impl_->Stop();
 		}
 	}
 }

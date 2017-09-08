@@ -18,6 +18,7 @@ namespace GameEngineCppWrapper
 
 		void Reset();
 		int Run(int seconds, int threads);
+		void Stop();
 
 	private:
 		GameEngineImpl * impl_;

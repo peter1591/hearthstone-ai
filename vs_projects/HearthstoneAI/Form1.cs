@@ -508,5 +508,10 @@ namespace HearthstoneAI
         {
             ai_engine_.Run(10, 4);
         }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ai_engine_.Destroy();
+        }
     }
 }

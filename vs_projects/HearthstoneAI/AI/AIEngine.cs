@@ -47,7 +47,11 @@ namespace HearthstoneAI.AI
         }
         public bool IsInitialized() { return initialized_; }
 
-        public bool IsRunning() { return (runner_ != null); }
+        public bool IsRunning() {
+            if (!IsInitialized()) return false;
+            if (runner_ != null) return false;
+            return runner_.IsAlive;
+        }
 
         public int Run(int seconds, int threads)
         {
@@ -64,6 +68,8 @@ namespace HearthstoneAI.AI
                     logger_.Info("Another runner thread is still running.");
                     return -1;
                 }
+                logger_.Info("Recycling previous runner thread...");
+                runner_.Join();
             }
 
             runner_ = new System.Threading.Thread(() =>
@@ -111,10 +117,15 @@ namespace HearthstoneAI.AI
 
         public void Destroy()
         {
-            if (runner_ != null && runner_.IsAlive)
+            if (runner_ != null)
             {
-                // TODO: notify engine_ to early-stop
+                engine_.Stop(); // request to early-stop
+                while (IsRunning())
+                {
+                    System.Windows.Forms.Application.DoEvents();
+                }
                 runner_.Join();
+                runner_ = null;
             }
 
             engine_ = null;
