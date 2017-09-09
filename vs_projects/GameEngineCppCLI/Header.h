@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\GameEngineCppWrapper\Header.h"
+#include "..\GameEngineCppWrapper\GameEngine.h"
 
 namespace GameEngineCppWrapper
 {

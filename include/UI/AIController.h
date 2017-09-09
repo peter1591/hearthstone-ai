@@ -54,8 +54,9 @@ namespace ui
 			}
 		}
 
-		void Stop() {
+		int NotifyStop() {
 			stop_flag_ = true;
+			return 0;
 		}
 
 		auto const& GetStatistic() const { return statistic_; }
