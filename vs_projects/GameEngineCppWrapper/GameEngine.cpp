@@ -15,8 +15,9 @@ namespace GameEngineCppWrapper
 	class GameEngineImpl {
 	public:
 		GameEngineImpl() :
+			logger_(),
 			running_(false),
-			controller_(), output_message_callback_(nullptr)
+			controller_()
 		{}
 
 		int Initialize() {
@@ -66,15 +67,13 @@ namespace GameEngineCppWrapper
 
 		void SetOutputMessageCallback(OutputMessageCallback cb)
 		{
-			output_message_callback_ = cb;
+			logger_.SetOutputMessageCallback(cb);
 		}
 
 	private:
 		void Log(std::string const& msg)
 		{
-			if (output_message_callback_) {
-				output_message_callback_(msg);
-			}
+			logger_.Log(msg);
 		}
 
 		int InternalRun(int seconds, int threads)
@@ -141,9 +140,9 @@ namespace GameEngineCppWrapper
 		}
 
 	private:
+		GameEngineLogger logger_;
 		std::atomic<bool> running_;
 		std::unique_ptr<ui::AIController> controller_;
-		OutputMessageCallback output_message_callback_;
 		ui::BoardGetter board_getter_;
 	};
 

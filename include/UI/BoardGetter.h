@@ -12,17 +12,21 @@ namespace ui
 	class BoardGetter
 	{
 	public:
-		BoardGetter() : board_() {}
+		BoardGetter() : board_raw_(), board_() {}
 
 		int ResetBoard()
 		{
+			board_raw_.clear();
 			need_restart_ai_ = true;
 			return 0;
 		}
 
 		int UpdateBoard(std::string const& board)
 		{
+			if (board_raw_ == board) return 0;
+
 			Json::Reader reader;
+			board_raw_ = board;
 			std::stringstream ss(board);
 			reader.parse(ss, board_);
 
@@ -52,6 +56,7 @@ namespace ui
 
 	private:
 		bool need_restart_ai_;
+		std::string board_raw_;
 		Json::Value board_;
 	};
 }
