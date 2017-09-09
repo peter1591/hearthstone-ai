@@ -20,7 +20,7 @@ namespace GameEngineCppWrapper
 		int UpdateBoard(std::string const& board);
 
 		int Run(int seconds, int threads);
-		void Stop();
+		int NotifyStop();
 
 	private:
 		GameEngineImpl * impl_;

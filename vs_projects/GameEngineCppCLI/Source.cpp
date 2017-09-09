@@ -57,9 +57,9 @@ namespace GameEngineCppWrapper
 			return impl_->Run(seconds, threads);
 		}
 
-		void GameEngine::Stop()
+		int GameEngine::NotifyStop()
 		{
-			return impl_->Stop();
+			return impl_->NotifyStop();
 		}
 	}
 }

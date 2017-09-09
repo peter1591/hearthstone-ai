@@ -138,6 +138,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
     <ClInclude Include="..\..\include\UI\AIController.h" />
+    <ClInclude Include="..\..\include\UI\BoardGetter.h" />
     <ClInclude Include="Header.h" />
   </ItemGroup>
   <ItemGroup>

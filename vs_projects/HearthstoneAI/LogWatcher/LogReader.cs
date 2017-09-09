@@ -34,6 +34,7 @@ namespace HearthstoneAI.LogWatcher
         private void Reset()
         {
             this.power_log_offset = 0;
+            this.game_state_.Reset();
             this.CreateLogParser();
             if (log_changed != null) log_changed();
         }

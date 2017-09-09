@@ -50,8 +50,9 @@ namespace HearthstoneAI.AI
 
         public int Reset()
         {
-            logger_.Info("Reset game");
-            return engine_.ResetBoard();
+            AbortRunner();
+            if (engine_.ResetBoard() < 0) return -1;
+            return 0;
         }
 
         public int UpdateBoard(Board.Game board)
@@ -106,7 +107,7 @@ namespace HearthstoneAI.AI
         {
             if (runner_ != null)
             {
-                engine_.Stop(); // request to early-stop
+                engine_.NotifyStop(); // request to early-stop
                 while (IsRunning())
                 {
                     System.Windows.Forms.Application.DoEvents();

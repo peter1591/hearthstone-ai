@@ -1,19 +1,23 @@
 #include "Header.h"
 
+#include <atomic>
 #include <chrono>
 #include <sstream>
 #include <memory>
 
 #include "UI/AIController.h"
+#include "UI/BoardGetter.h"
 #include "FlowControl/FlowController-impl.h"
-#include "MCTS/TestStateBuilder.h"
 #include "Cards/PreIndexedCards.h"
 
 namespace GameEngineCppWrapper
 {
 	class GameEngineImpl {
 	public:
-		GameEngineImpl() : controller_(), output_message_callback_(nullptr) {}
+		GameEngineImpl() :
+			running_(false),
+			controller_(), output_message_callback_(nullptr)
+		{}
 
 		int Initialize() {
 			try {
@@ -30,28 +34,69 @@ namespace GameEngineCppWrapper
 			
 			Log("Successfully load cards.json.");
 
-			ResetBoard();
+			if (ResetBoard() < 0) return -1;
 
 			return 0;
 		}
 
 		int ResetBoard() {
-			controller_.reset(new ui::AIController());
-			return 0;
+			return board_getter_.ResetBoard();
 		}
 
-		int UpdateBoard(std::string const& board)
-		{
-			board_ = board;
-			return 0;
+		int UpdateBoard(std::string const& board) {
+			return board_getter_.UpdateBoard(board);
 		}
 		
 		int Run(int seconds, int threads) {
-			Log("Start run with board: " + board_);
+			if (running_) {
+				Log("Still running.");
+				return -1;
+			}
 
-			// TODO: re-use MCTS tree
-			Stop();
-			ResetBoard();
+			running_ = true;
+			int rc = InternalRun(seconds, threads);
+			running_ = false;
+			return rc;
+		}
+
+		int NotifyStop()
+		{
+			return controller_->NotifyStop();
+		}
+
+		void SetOutputMessageCallback(OutputMessageCallback cb)
+		{
+			output_message_callback_ = cb;
+		}
+
+	private:
+		void Log(std::string const& msg)
+		{
+			if (output_message_callback_) {
+				output_message_callback_(msg);
+			}
+		}
+
+		int InternalRun(int seconds, int threads)
+		{
+			Log("Start to run.");
+
+			if (!controller_) {
+				controller_.reset(new ui::AIController());
+			}
+
+			bool restart_ai = false;
+			if (board_getter_.PrepareToRun(controller_.get(), &restart_ai) < 0) {
+				Log("Failed at board_getter_.PrepareToRun().");
+				return -1;
+			}
+			if (restart_ai) {
+				controller_.reset(new ui::AIController());
+			}
+			else {
+				// TODO: re-use MCTS tree
+				return -1;
+			}
 
 			auto run_until = std::chrono::steady_clock::now() +
 				std::chrono::seconds(seconds);
@@ -81,8 +126,8 @@ namespace GameEngineCppWrapper
 				return true;
 			};
 
-			auto start_board_getter = [](int seed) -> state::State {
-				return TestStateBuilder().GetState(seed);
+			auto start_board_getter = [this](int seed) -> state::State {
+				return board_getter_.GetStartBoard(seed);
 			};
 
 			try {
@@ -95,28 +140,11 @@ namespace GameEngineCppWrapper
 			return 0;
 		}
 
-		void Stop()
-		{
-			controller_->Stop();
-		}
-
-		void SetOutputMessageCallback(OutputMessageCallback cb)
-		{
-			output_message_callback_ = cb;
-		}
-
 	private:
-		void Log(std::string const& msg)
-		{
-			if (output_message_callback_) {
-				output_message_callback_(msg);
-			}
-		}
-
-	private:
+		std::atomic<bool> running_;
 		std::unique_ptr<ui::AIController> controller_;
 		OutputMessageCallback output_message_callback_;
-		std::string board_;
+		ui::BoardGetter board_getter_;
 	};
 
 	GameEngine::GameEngine() : impl_(nullptr) {
@@ -136,5 +164,5 @@ namespace GameEngineCppWrapper
 	int GameEngine::ResetBoard() { return impl_->ResetBoard(); }
 	int GameEngine::UpdateBoard(std::string const& board) { return impl_->UpdateBoard(board); }
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
-	void GameEngine::Stop() { return impl_->Stop(); }
+	int GameEngine::NotifyStop() { return impl_->NotifyStop(); }
 }

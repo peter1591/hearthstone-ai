@@ -24,7 +24,7 @@ namespace GameEngineCppWrapper
 			int UpdateBoard(System::String^ board);
 
 			int Run(int seconds, int threads);
-			void Stop();
+			int NotifyStop();
 
 			void Destroy();
 
