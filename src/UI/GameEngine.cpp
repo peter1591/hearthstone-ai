@@ -17,7 +17,8 @@ namespace ui
 		GameEngineImpl() :
 			logger_(),
 			running_(false),
-			controller_()
+			controller_(),
+			board_getter_(logger_)
 		{}
 
 		int Initialize() {

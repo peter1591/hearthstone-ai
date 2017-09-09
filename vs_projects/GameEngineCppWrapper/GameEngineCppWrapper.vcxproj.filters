@@ -24,13 +24,13 @@
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\BoardGetter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\UI\GameEngine.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\UI\GameEngineLogger.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\BoardGetter.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,7 @@
 
 #include <json/json.h>
 
+#include "ui/GameEngineLogger.h"
 #include "MCTS/TestStateBuilder.h"
 
 namespace ui
@@ -12,7 +13,9 @@ namespace ui
 	class BoardGetter
 	{
 	public:
-		BoardGetter() : board_raw_(), board_() {}
+		BoardGetter(GameEngineLogger & logger) :
+			logger_(logger), board_raw_(), board_()
+		{}
 
 		int ResetBoard()
 		{
@@ -24,6 +27,8 @@ namespace ui
 		int UpdateBoard(std::string const& board)
 		{
 			if (board_raw_ == board) return 0;
+
+			logger_.Log("Updating board.");
 
 			Json::Reader reader;
 			board_raw_ = board;
@@ -55,6 +60,7 @@ namespace ui
 		}
 
 	private:
+		GameEngineLogger & logger_;
 		bool need_restart_ai_;
 		std::string board_raw_;
 		Json::Value board_;
