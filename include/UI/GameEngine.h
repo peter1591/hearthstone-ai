@@ -2,15 +2,15 @@
 
 #include <string>
 
-namespace GameEngineCppWrapper
+namespace ui
 {
-	typedef void (__stdcall *OutputMessageCallback)(std::string const&);
-
 	class GameEngineImpl;
 
 	class GameEngineLogger
 	{
 	public:
+		typedef void(__stdcall *OutputMessageCallback)(std::string const&);
+
 		GameEngineLogger() : output_message_callback_(nullptr) {}
 
 		void SetOutputMessageCallback(OutputMessageCallback cb)
@@ -32,6 +32,8 @@ namespace GameEngineCppWrapper
 	class __declspec(dllexport) GameEngine
 	{
 	public:
+		using OutputMessageCallback = GameEngineLogger::OutputMessageCallback;
+
 		GameEngine();
 
 		int Initialize() const;

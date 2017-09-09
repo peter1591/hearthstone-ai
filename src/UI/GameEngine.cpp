@@ -1,4 +1,3 @@
-#include "GameEngine.h"
 
 #include <atomic>
 #include <chrono>
@@ -7,10 +6,11 @@
 
 #include "UI/AIController.h"
 #include "UI/BoardGetter.h"
+#include "UI/GameEngine.h"
 #include "FlowControl/FlowController-impl.h"
 #include "Cards/PreIndexedCards.h"
 
-namespace GameEngineCppWrapper
+namespace ui
 {
 	class GameEngineImpl {
 	public:
@@ -65,7 +65,7 @@ namespace GameEngineCppWrapper
 			return controller_->NotifyStop();
 		}
 
-		void SetOutputMessageCallback(OutputMessageCallback cb)
+		void SetOutputMessageCallback(GameEngine::OutputMessageCallback cb)
 		{
 			logger_.SetOutputMessageCallback(cb);
 		}

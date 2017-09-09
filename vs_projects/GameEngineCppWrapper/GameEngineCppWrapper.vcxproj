@@ -139,7 +139,7 @@
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
     <ClInclude Include="..\..\include\UI\AIController.h" />
     <ClInclude Include="..\..\include\UI\BoardGetter.h" />
-    <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="..\..\include\UI\GameEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
@@ -147,7 +147,7 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp" />
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
-    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="..\..\src\UI\GameEngine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

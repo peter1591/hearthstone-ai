@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\GameEngineCppWrapper\GameEngine.h"
+#include "UI/GameEngine.h"
 
 namespace GameEngineCppWrapper
 {
@@ -31,7 +31,7 @@ namespace GameEngineCppWrapper
 			void UnmanagedOutputMessageCallback(std::string const& msg);
 
 		private:
-			::GameEngineCppWrapper::GameEngine* impl_;
+			ui::GameEngine* impl_;
 			OutputMessageCallback^ output_message_cb_;
 			OutputMessageCallbackCpp^ output_message_cb_cpp_;
 		};

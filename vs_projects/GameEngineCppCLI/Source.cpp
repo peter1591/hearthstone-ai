@@ -16,7 +16,7 @@ namespace GameEngineCppWrapper
 			System::IntPtr cb_ptr =
 				System::Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(output_message_cb_cpp_);
 			impl_->SetOutputMessageCallback(
-				static_cast<GameEngineCppWrapper::OutputMessageCallback>(cb_ptr.ToPointer()));
+				static_cast<ui::GameEngine::OutputMessageCallback>(cb_ptr.ToPointer()));
 
 			return impl_->Initialize();
 		}
@@ -31,7 +31,7 @@ namespace GameEngineCppWrapper
 			output_message_cb_(msclr::interop::marshal_as<System::String^>(msg));
 		}
 
-		GameEngine::GameEngine() : impl_(new GameEngineCppWrapper::GameEngine()) {}
+		GameEngine::GameEngine() : impl_(new ui::GameEngine()) {}
 
 		GameEngine::~GameEngine() { Destroy(); }
 		GameEngine::!GameEngine() { Destroy(); }
