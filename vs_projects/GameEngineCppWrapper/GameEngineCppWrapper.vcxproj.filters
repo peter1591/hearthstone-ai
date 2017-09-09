@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\include\UI\GameEngine.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\UI\GameEngineLogger.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">

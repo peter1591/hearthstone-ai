@@ -140,6 +140,7 @@
     <ClInclude Include="..\..\include\UI\AIController.h" />
     <ClInclude Include="..\..\include\UI\BoardGetter.h" />
     <ClInclude Include="..\..\include\UI\GameEngine.h" />
+    <ClInclude Include="..\..\include\UI\GameEngineLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
