@@ -53,6 +53,10 @@ namespace HearthstoneAI
                         ai_engine_.Run(seconds, threads);
                     }
                 }
+                else
+                {
+                    ai_engine_.AbortRunner();
+                }
             };
             log_watcher.log_msg = (string msg) => AddLog(msg);
 

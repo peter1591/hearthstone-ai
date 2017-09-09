@@ -77,7 +77,6 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         }
 
         private string parsing_log;
-        private frmMain frm_main;
         private GameState game_state;
         private IEnumerator<bool> enumerator;
 
@@ -351,11 +350,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     yield return ret;
                 }
 
-                if (!matched)
-                {
-                    log_msg("[ERROR] Parse failed within action (ignoring): " + this.parsing_log);
-                    yield return true;
-                }
+                if (!matched) yield break;
             }
 
             if (block_type == "PLAY")
