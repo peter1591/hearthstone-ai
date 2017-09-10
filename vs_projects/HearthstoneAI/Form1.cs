@@ -19,6 +19,8 @@ namespace HearthstoneAI
         private AI.AIEngine ai_engine_;
         private AI.AILogger ai_logger_;
 
+        private Board.Game last_run_board_ = new Board.Game();
+
         public frmMain()
         {
             InitializeComponent();
@@ -28,29 +30,36 @@ namespace HearthstoneAI
             log_watcher.CreateGameEvent += Log_reader_CreateGameEvent;
             log_watcher.EndTurnEvent += Log_reader_EndTurnEvent;
             log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
-            log_watcher.board_changed += (GameState game_state, Board.Game board, string err_msg) =>
+            log_watcher.game_state_changed += (GameState game_state) =>
             {
-                if (board == null)
+                var game_stage = this.GetGameStage(game_state);
+                txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
+
+                Board.Game board = new Board.Game();
+                bool parse_success = board.Parse(game_state);
+
+                if (parse_success == false)
                 {
-                    txtGameEntity.Text = err_msg;
+                    txtGameEntity.Text = "Failed to parse game state to board.";
                     return;
                 }
-
-                var game_stage = this.GetGameStage(game_state);
-
-                txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
 
                 this.UpdateBoard(game_state, board);
 
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
-                    ai_engine_.UpdateBoard(board);
-
-                    if (game_state.GetCurrentPlayerEntityId() == game_state.PlayerEntityId)
+                    if (!last_run_board_.Equals(board))
                     {
-                        int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
-                        int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
-                        ai_engine_.Run(seconds, threads);
+                        ai_engine_.UpdateBoard(board);
+
+                        if (game_state.GetCurrentPlayerEntityId() == game_state.PlayerEntityId)
+                        {
+                            int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
+                            int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
+                            ai_engine_.Run(seconds, threads);
+                        }
+
+                        last_run_board_ = board;
                     }
                 }
                 else

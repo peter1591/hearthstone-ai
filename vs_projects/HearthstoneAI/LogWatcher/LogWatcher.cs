@@ -41,9 +41,6 @@ namespace HearthstoneAI.LogWatcher
         public delegate void LogMsgDelegate(String msg);
         public LogMsgDelegate log_msg;
 
-        public delegate void BoardChangeDelegate(GameState game_state, Board.Game board, String err_msg = "");
-        public BoardChangeDelegate board_changed;
-
         public void Reset(string hearthstone_path)
         {
             game_state_ = new GameState();
@@ -69,35 +66,21 @@ namespace HearthstoneAI.LogWatcher
         }
 
         private bool tick_processing_ = false;
+        public delegate void GameStateChangeDelegate(GameState game_state);
+        public GameStateChangeDelegate game_state_changed;
         public void Tick()
         {
             if (tick_processing_) return;
-
             tick_processing_ = true;
+
             this.log_reader.Process();
-            this.UpdateBoardIfNecessary();
-            tick_processing_ = false;
-        }
 
-        private Board.Game last_invoke_board = new Board.Game();
-        private void UpdateBoardIfNecessary()
-        {
-            if (!stable_decider_.IsStable()) return;
-            stable_decider_.Changed();
-
-            Board.Game board = new Board.Game();
-            bool parse_success = board.Parse(game_state_);
-
-            if (parse_success == false)
+            if (stable_decider_.IsStable())
             {
-                board_changed(game_state_, null, "parse failed");
-                return;
+                game_state_changed(game_state_);
             }
 
-            if (board.Equals(this.last_invoke_board)) return;
-            this.last_invoke_board = board;
-
-            board_changed(game_state_, board);
+            tick_processing_ = false;
         }
     }
 }
