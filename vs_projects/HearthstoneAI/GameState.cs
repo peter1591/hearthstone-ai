@@ -291,6 +291,31 @@ namespace HearthstoneAI
             this.ChangeTag(entity_id, tag_value.Item1, tag_value.Item2);
         }
 
+        private List<GameState.Entity> tmp_entities = new List<GameState.Entity>();
+        public void ChangeTag(string entity_str, string raw_tag, string raw_value)
+        {
+            // failed to get entity id
+            // save the information to tmp_entities; insert to game state when the entity id is parsed
+            var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_str);
+            if (tmpEntity == null)
+            {
+                tmpEntity = new GameState.Entity(this.tmp_entities.Count + 1) { Name = entity_str };
+                this.tmp_entities.Add(tmpEntity);
+            }
+
+            var tag_value = GameState.Entity.ParseTag(raw_tag, raw_value);
+            tmpEntity.SetTag(tag_value.Item1, tag_value.Item2);
+
+            if (tmpEntity.HasTag(GameTag.ENTITY_ID))
+            {
+                var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
+                Entities[id].Name = tmpEntity.Name;
+                foreach (var t in tmpEntity.Tags)
+                    ChangeTag(id, t.Key, t.Value);
+                this.tmp_entities.Remove(tmpEntity);
+            }
+        }
+
         private void MulliganStateChanged(int entity_id, GameTag tag, bool has_prev, int prev_value, int value)
         {
             // set player when mulligan

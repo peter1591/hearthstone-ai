@@ -37,8 +37,6 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex MetadataRegex = new Regex(@"^[\s]*META_DATA\ -\ ");
         private static readonly Regex MetadataInfoRegex = new Regex(@"^[\s]*Info\[\d+\]");
 
-        private List<GameState.Entity> tmp_entities = new List<GameState.Entity>();
-
         public class ActionStartEventArgs : EventArgs
         {
             public ActionStartEventArgs(ActionStartEventArgs e)
@@ -177,44 +175,15 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         {
             var match = TagChangeRegex.Match(this.parsing_log);
             if (!match.Success) yield break;
+
             var entity_raw = match.Groups["entity"].Value;
-            int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
+            string entity_str;
+            int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw, out entity_str);
 
-            if (entityId >= 0)
-            {
-                this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
-            }
-            else
-            {
-                // failed to get entity id
-                // save the information to tmp_entities; insert to game state when the entity id is parsed
-                var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_raw);
-                if (tmpEntity == null)
-                {
-                    tmpEntity = new GameState.Entity(this.tmp_entities.Count + 1) { Name = entity_raw };
-                    this.tmp_entities.Add(tmpEntity);
-                }
-
-                var tag_value = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
-                tmpEntity.SetTag(tag_value.Item1, tag_value.Item2);
-                if (tmpEntity.HasTag(GameTag.ENTITY_ID))
-                {
-                    var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
-                    if (!this.game_state.Entities.ContainsKey(id))
-                    {
-                        logger_.Info("[ERROR] The temporary entity (" + entity_raw + ") now has entity_id, but it is missing from the entities set.");
-                    }
-                    else {
-                        this.game_state.Entities[id].Name = tmpEntity.Name;
-                        foreach (var t in tmpEntity.Tags)
-                            this.game_state.ChangeTag(id, t.Key, t.Value);
-                        this.tmp_entities.Remove(tmpEntity);
-                    }
-                }
-            }
+            if (entityId >= 0) this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+            else game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
 
             yield return true;
-            yield break;
         }
 
         // return for each consumed line
@@ -278,6 +247,10 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 var match = HideEntityRegex.Match(this.parsing_log);
                 int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
+                if (entityId < 0)
+                {
+                    logger_.Info("Failed to parse entity: " + this.parsing_log);
+                }
                 this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                 yield return true;
             }
@@ -307,9 +280,16 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var target_raw = match.Groups["target"].Value.Trim();
 
             var entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
-            if (entity_id < 0) logger_.Info(String.Format("[INFO] Cannot get entity id '{0}'.", entity_raw));
+            if (entity_id < 0)
+            {
+                logger_.Info(String.Format("[INFO] Cannot get entity id '{0}'.", entity_raw));
+            }
 
             var target_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, target_raw);
+            if (target_id < 0)
+            {
+                logger_.Info(String.Format("[INFO] Cannot get target id '{0}'.", target_raw));
+            }
 
             if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(entity_id, block_type));
 
