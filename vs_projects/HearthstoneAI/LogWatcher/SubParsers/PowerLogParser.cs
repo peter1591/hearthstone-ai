@@ -246,12 +246,10 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             if (HideEntityRegex.IsMatch(this.parsing_log))
             {
                 var match = HideEntityRegex.Match(this.parsing_log);
-                int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value);
-                if (entityId < 0)
-                {
-                    logger_.Info("Failed to parse entity: " + this.parsing_log);
-                }
-                this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+                string entity_str;
+                int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value, out entity_str);
+                if (entityId < 0) game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
+                else game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                 yield return true;
             }
         }
