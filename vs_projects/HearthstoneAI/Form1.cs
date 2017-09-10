@@ -30,7 +30,7 @@ namespace HearthstoneAI
                 (string msg) => AddLog(msg));
 
             log_watcher = new LogWatcher.LogWatcher(log_watcher_logger);
-            log_watcher.ActionStart += Log_reader_ActionStart;
+            log_watcher.BlockStart += Log_reader_ActionStart;
             log_watcher.CreateGameEvent += Log_reader_CreateGameEvent;
             log_watcher.EndTurnEvent += Log_reader_EndTurnEvent;
             log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
@@ -132,7 +132,7 @@ namespace HearthstoneAI
             this.TriggerAIHandleBoardAction(e.game);
         }
 
-        private void Log_reader_ActionStart(object sender, LogWatcher.LogWatcher.ActionStartEventArgs e)
+        private void Log_reader_ActionStart(object sender, LogWatcher.LogWatcher.BlockStartEventArgs e)
         {
             if (e.block_type == "TRIGGER") return;
             if (e.block_type == "POWER") return;

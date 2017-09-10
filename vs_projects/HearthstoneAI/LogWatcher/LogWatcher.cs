@@ -20,16 +20,27 @@ namespace HearthstoneAI.LogWatcher
 
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
 
-        public class ActionStartEventArgs : SubParsers.PowerLogParser.ActionStartEventArgs
+        public class BlockStartEventArgs : SubParsers.PowerLogParser.BlockStartEventArgs
         {
-            public ActionStartEventArgs(SubParsers.PowerLogParser.ActionStartEventArgs e, GameState game) : base(e)
+            public BlockStartEventArgs(SubParsers.PowerLogParser.BlockStartEventArgs e, GameState game) : base(e)
             {
                 this.game = game;
             }
 
             public GameState game;
         };
-        public event EventHandler<ActionStartEventArgs> ActionStart;
+        public event EventHandler<BlockStartEventArgs> BlockStart;
+
+        public class BlockEndEventArgs : SubParsers.PowerLogParser.BlockEndEventArgs
+        {
+            public BlockEndEventArgs(SubParsers.PowerLogParser.BlockEndEventArgs e, GameState game) : base(e)
+            {
+                this.game = game;
+            }
+
+            public GameState game;
+        };
+        public event EventHandler<BlockEndEventArgs> BlockEnd;
 
         public class EndTurnEventArgs : GameState.EndTurnEventArgs
         {
@@ -51,9 +62,18 @@ namespace HearthstoneAI.LogWatcher
 
             this.log_reader = new LogReader(hearthstone_path, game_state_, logger_);
             game_state_.StartWaitingMainAction += StartWaitingMainAction;
-            this.log_reader.ActionStart += (sender, e) =>
+            this.log_reader.BlockStart += (sender, e) =>
             {
-                if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, game_state_));
+                if (this.BlockStart != null) this.BlockStart(this, new BlockStartEventArgs(e, game_state_));
+            };
+            this.log_reader.BlockEnd += (sender, e) =>
+            {
+                if (e.block_type == "PLAY")
+                {
+                    AnalyzePlayHandCardAction(e.entity_id);
+                }
+
+                if (this.BlockEnd != null) this.BlockEnd(this, new BlockEndEventArgs(e, game_state_));
             };
             this.log_reader.CreateGameEvent += (sender, e) =>
             {
@@ -100,6 +120,64 @@ namespace HearthstoneAI.LogWatcher
             }
 
             tick_processing_ = false;
+        }
+
+        private void AnalyzePlayHandCardAction(int entity_id)
+        {
+            // get current player
+            int playing_entity = this.GetPlayingPlayerEntityID();
+            if (playing_entity < 0) return;
+
+            string playing_card = game_state_.Entities[entity_id].CardId.ToString();
+
+            if (playing_entity == game_state_.PlayerEntityId)
+            {
+                game_state_.player_played_hand_cards.Add(playing_card);
+            }
+            else if (playing_entity == game_state_.OpponentEntityId)
+            {
+                game_state_.opponent_played_hand_cards.Add(playing_card);
+            }
+            else return;
+        }
+
+        private int GetPlayingPlayerEntityID()
+        {
+            GameState.Entity game_entity;
+            if (!game_state_.TryGetGameEntity(out game_entity)) return -1;
+
+            GameState.Entity player_entity;
+            if (!game_state_.TryGetPlayerEntity(out player_entity)) return -1;
+
+            GameState.Entity opponent_entity;
+            if (!game_state_.TryGetOpponentEntity(out opponent_entity)) return -1;
+
+            if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
+            {
+                return -1;
+            }
+
+            if (opponent_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
+            {
+                return -1;
+            }
+
+            if (!game_entity.HasTag(GameTag.STEP)) return -1;
+
+            TAG_STEP game_entity_step = (TAG_STEP)game_entity.GetTag(GameTag.STEP);
+            if (game_entity_step != TAG_STEP.MAIN_ACTION) return -1;
+
+            bool player_first = false;
+            if (player_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
+            else if (opponent_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
+            else throw new Exception("parse failed");
+
+            int turn = game_entity.GetTagOrDefault(GameTag.TURN, -1);
+            if (turn < 0) return -1;
+
+            if (player_first && (turn % 2 == 1)) return player_entity.Id;
+            else if (!player_first && (turn % 2 == 0)) return player_entity.Id;
+            else return opponent_entity.Id;
         }
     }
 }

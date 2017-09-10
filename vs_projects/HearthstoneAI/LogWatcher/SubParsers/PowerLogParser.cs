@@ -37,15 +37,15 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex MetadataRegex = new Regex(@"^[\s]*META_DATA\ -\ ");
         private static readonly Regex MetadataInfoRegex = new Regex(@"^[\s]*Info\[\d+\]");
 
-        public class ActionStartEventArgs : EventArgs
+        public class BlockStartEventArgs : EventArgs
         {
-            public ActionStartEventArgs(ActionStartEventArgs e)
+            public BlockStartEventArgs(BlockStartEventArgs e)
             {
                 this.entity_id = e.entity_id;
                 this.block_type = e.block_type;
             }
 
-            public ActionStartEventArgs(int entity_id, string block_type)
+            public BlockStartEventArgs(int entity_id, string block_type)
             {
                 this.entity_id = entity_id;
                 this.block_type = block_type;
@@ -54,7 +54,26 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             public int entity_id;
             public string block_type;
         }
-        public event EventHandler<ActionStartEventArgs> ActionStart;
+        public event EventHandler<BlockStartEventArgs> BlockStart;
+
+        public class BlockEndEventArgs : EventArgs
+        {
+            public BlockEndEventArgs(BlockEndEventArgs e)
+            {
+                this.entity_id = e.entity_id;
+                this.block_type = e.block_type;
+            }
+
+            public BlockEndEventArgs(int entity_id, string block_type)
+            {
+                this.entity_id = entity_id;
+                this.block_type = block_type;
+            }
+
+            public int entity_id;
+            public string block_type;
+        }
+        public event EventHandler<BlockEndEventArgs> BlockEnd;
 
         public class CreateGameEventArgs : EventArgs { }
         public event EventHandler<CreateGameEventArgs> CreateGameEvent;
@@ -289,7 +308,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 logger_.Info(String.Format("[INFO] Cannot get target id '{0}'.", target_raw));
             }
 
-            if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(entity_id, block_type));
+            if (this.BlockStart != null) this.BlockStart(this, new BlockStartEventArgs(entity_id, block_type));
 
             yield return true;
 
@@ -318,74 +337,9 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 if (!matched) yield break;
             }
 
-            if (block_type == "PLAY")
-            {
-                //logger_.Info("[INFO] Got a play action. entity = " + entity_id.ToString() +
-                //    " eneity card id = " + this.game_state.Entities[entity_id].CardId.ToString() +
-                //    " block type = " + block_type +
-                //    " target = " + target_id.ToString());
-                this.AnalyzePlayHandCardAction(entity_id);
-            }
+            if (this.BlockEnd != null) this.BlockEnd(this, new BlockEndEventArgs(entity_id, block_type));
 
             yield return true;
-        }
-
-        private void AnalyzePlayHandCardAction(int entity_id)
-        {
-            // get current player
-            int playing_entity = this.GetPlayingPlayerEntityID();
-            if (playing_entity < 0) return;
-
-            string playing_card = this.game_state.Entities[entity_id].CardId.ToString();
-
-            if (playing_entity == this.game_state.PlayerEntityId)
-            {
-                this.game_state.player_played_hand_cards.Add(playing_card);
-            }
-            else if (playing_entity == this.game_state.OpponentEntityId)
-            {
-                this.game_state.opponent_played_hand_cards.Add(playing_card);
-            }
-            else return;
-        }
-
-        private int GetPlayingPlayerEntityID()
-        {
-            GameState.Entity game_entity;
-            if (!this.game_state.TryGetGameEntity(out game_entity)) return -1;
-
-            GameState.Entity player_entity;
-            if (!this.game_state.TryGetPlayerEntity(out player_entity)) return -1;
-
-            GameState.Entity opponent_entity;
-            if (!this.game_state.TryGetOpponentEntity(out opponent_entity)) return -1;
-
-            if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
-            {
-                return -1;
-            }
-
-            if (opponent_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
-            {
-                return -1;
-            }
-
-            if (!game_entity.HasTag(GameTag.STEP)) return -1;
-
-            TAG_STEP game_entity_step = (TAG_STEP)game_entity.GetTag(GameTag.STEP);
-            if (game_entity_step != TAG_STEP.MAIN_ACTION) return -1;
-
-            bool player_first = false;
-            if (player_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
-            else if (opponent_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
-            else throw new Exception("parse failed");
-
-            int turn = game_entity.GetTagOrDefault(GameTag.TURN, -1);
-            if (turn < 0) return -1;
-
-            if (player_first && (turn % 2 == 1)) return player_entity.Id;
-            else if (!player_first && (turn % 2 == 0)) return player_entity.Id;
-            else return opponent_entity.Id;
         }
     }
 }
