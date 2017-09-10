@@ -139,7 +139,7 @@ namespace HearthstoneAI
             public int id;
             public string choice_type;
             public int player_entity_id;
-            public string player_entity_raw;
+            public string player_entity_str;
             public string source;
             public Dictionary<int, int> choices;
 

@@ -14,8 +14,15 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
         static public int GetEntityIdFromRawString(GameState game_state, string entity_raw)
         {
+            string entity_str;
+            return GetEntityIdFromRawString(game_state, entity_raw, out entity_str);
+        }
+
+        static public int GetEntityIdFromRawString(GameState game_state, string entity_raw, out string entity_str)
+        {
             entity_raw = entity_raw.Replace("UNKNOWN ENTITY ", "");
             int entityId = -1;
+            entity_str = "";
 
             // Get entity id - Method 1
             if (entity_raw.StartsWith("[") && EntityRegex.IsMatch(entity_raw))
@@ -37,6 +44,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 if (entity.Value != null)
                 {
                     entityId = entity.Key;
+                    entity_str = entity_str_try;
                 }
                 else
                 {
@@ -45,10 +53,14 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     if (entity.Value != null)
                     {
                         entityId = entity.Key;
+                        entity_str = entity_str_try;
                         entity.Value.Name = entity_str_try;
                     }
+                    else
+                    {
+                        entity_str = entity_raw;
+                    }
                 }
-
             }
 
             return entityId;

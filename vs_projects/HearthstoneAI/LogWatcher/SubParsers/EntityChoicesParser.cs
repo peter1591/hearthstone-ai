@@ -63,7 +63,8 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
 
             var player_entity_raw = match.Groups["player_entity"].Value.Trim();
-            int player_entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, player_entity_raw);
+            string player_entity_str;
+            int player_entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, player_entity_raw, out player_entity_str);
 
             var choice_type = match.Groups["choice_type"].Value.Trim();
 
@@ -77,7 +78,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             this.game_state.EntityChoices[entity_choice_id].id = entity_choice_id;
             this.game_state.EntityChoices[entity_choice_id].choice_type = choice_type;
             this.game_state.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
-            this.game_state.EntityChoices[entity_choice_id].player_entity_raw = player_entity_raw;
+            this.game_state.EntityChoices[entity_choice_id].player_entity_str = player_entity_str;
             this.game_state.EntityChoices[entity_choice_id].choices_has_sent = false;
 
             yield return true;
@@ -172,10 +173,10 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
                 if (patch_entity_id > 0)
                 {
-                    game_state.Entities[patch_entity_id].Name = mulligan.player_entity_raw;
+                    game_state.Entities[patch_entity_id].Name = mulligan.player_entity_str;
                     mulligan.player_entity_id = patch_entity_id;
                     logger_.Info(String.Format("Patch player name {0} with entity id {1}.",
-                        mulligan.player_entity_raw, patch_entity_id));
+                        mulligan.player_entity_str, patch_entity_id));
                 }
             }
 
