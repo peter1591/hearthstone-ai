@@ -25,7 +25,11 @@ namespace HearthstoneAI
         {
             InitializeComponent();
 
-            log_watcher = new LogWatcher.LogWatcher();
+            LogWatcher.Logger log_watcher_logger = new LogWatcher.Logger();
+            log_watcher_logger.RegisterInfoCallback(
+                (string msg) => AddLog(msg));
+
+            log_watcher = new LogWatcher.LogWatcher(log_watcher_logger);
             log_watcher.ActionStart += Log_reader_ActionStart;
             log_watcher.CreateGameEvent += Log_reader_CreateGameEvent;
             log_watcher.EndTurnEvent += Log_reader_EndTurnEvent;
@@ -67,7 +71,6 @@ namespace HearthstoneAI
                     ai_engine_.AbortRunner();
                 }
             };
-            log_watcher.log_msg = (string msg) => AddLog(msg);
 
             ai_logger_ = new AI.AILogger(ref txtAIEngine);
             ai_engine_ = new AI.AIEngine(ai_logger_);

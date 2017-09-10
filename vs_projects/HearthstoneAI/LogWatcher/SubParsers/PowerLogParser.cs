@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace HearthstoneAI.LogWatcher.SubParsers
 {
-    class PowerLogParser
+    class PowerLogParser : BaseParser
     {
-        public delegate void LogMsgDelegate(String msg);
-        public LogMsgDelegate log_msg;
-
         private static readonly Regex CreateGameRegex = new Regex(@"^[\s]*CREATE_GAME");
 
         private static readonly Regex GameEntityRegex = new Regex(@"^[\s]*GameEntity\ EntityID=(?<id>(\d+))");
@@ -64,7 +61,8 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         public class CreateGameEventArgs : EventArgs { }
         public event EventHandler<CreateGameEventArgs> CreateGameEvent;
 
-        public PowerLogParser(GameState game_state)
+        public PowerLogParser(GameState game_state, Logger logger)
+            : base(logger)
         {
             this.game_state = game_state;
             this.enumerator = this.Process().GetEnumerator();
@@ -93,7 +91,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 }
                 if (rule_matched) continue;
 
-                log_msg("[ERROR] Parse power log failed: " + this.parsing_log);
+                logger_.Info("[ERROR] Parse power log failed: " + this.parsing_log);
                 yield return true;
             }
         }
@@ -121,7 +119,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (!GameEntityRegex.IsMatch(this.parsing_log))
             {
-                log_msg("[ERROR] Expecting the game entity log.");
+                logger_.Info("[ERROR] Expecting the game entity log.");
                 yield break;
             }
 
@@ -140,7 +138,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 if (!PlayerEntityRegex.IsMatch(this.parsing_log))
                 {
-                    log_msg("[ERROR] Expecting the player entity log.");
+                    logger_.Info("[ERROR] Expecting the player entity log.");
                     yield break;
                 }
 
@@ -215,7 +213,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
                     if (!this.game_state.Entities.ContainsKey(id))
                     {
-                        log_msg("[ERROR] The temporary entity (" + entity_raw + ") now has entity_id, but it is missing from the entities set.");
+                        logger_.Info("[ERROR] The temporary entity (" + entity_raw + ") now has entity_id, but it is missing from the entities set.");
                     }
                     else {
                         this.game_state.Entities[id].Name = tmpEntity.Name;
@@ -242,7 +240,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (entityId < 0)
             {
-                log_msg("[ERROR] Parse error: cannot find entity id. '" + this.parsing_log + "'");
+                logger_.Info("[ERROR] Parse error: cannot find entity id. '" + this.parsing_log + "'");
                 yield return false;
             }
 
@@ -320,7 +318,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var target_raw = match.Groups["target"].Value.Trim();
 
             var entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
-            if (entity_id < 0) log_msg(String.Format("[INFO] Cannot get entity id '{0}'.", entity_raw));
+            if (entity_id < 0) logger_.Info(String.Format("[INFO] Cannot get entity id '{0}'.", entity_raw));
 
             var target_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, target_raw);
 
@@ -355,7 +353,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (block_type == "PLAY")
             {
-                //log_msg("[INFO] Got a play action. entity = " + entity_id.ToString() +
+                //logger_.Info("[INFO] Got a play action. entity = " + entity_id.ToString() +
                 //    " eneity card id = " + this.game_state.Entities[entity_id].CardId.ToString() +
                 //    " block type = " + block_type +
                 //    " target = " + target_id.ToString());

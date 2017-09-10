@@ -7,15 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace HearthstoneAI.LogWatcher.SubParsers
 {
-    class DebugPrintPowerParser
+    class DebugPrintPowerParser : BaseParser
     {
-        public delegate void LogMsgDelegate(String msg);
-        public LogMsgDelegate log_msg;
-
         private static readonly Regex TagChangeRegex =
             new Regex(@"^[\s]*TAG_CHANGE\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
-        public DebugPrintPowerParser(GameState game_state)
+        public DebugPrintPowerParser(GameState game_state, Logger logger)
+            : base(logger)
         {
             this.game_state = game_state;
             this.enumerator = this.Process().GetEnumerator();
@@ -90,7 +88,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     }
                 }
 
-                log_msg("Failed to patch player name.");
+                logger_.Info("Failed to patch player name.");
             }
         }
     }

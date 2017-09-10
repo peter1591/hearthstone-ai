@@ -7,17 +7,15 @@ using System.Text.RegularExpressions;
 
 namespace HearthstoneAI.LogWatcher.SubParsers
 {
-    class SendChoicesParser
+    class SendChoicesParser : BaseParser
     {
-        public delegate void LogMsgDelegate(String msg);
-        public LogMsgDelegate log_msg;
-
         private static readonly Regex SendChoices =
             new Regex(@"^[\s]*id=(?<id>(.*))\ ChoiceType=(?<choice_type>.*)");
         private static readonly Regex SendChoicesEntities =
             new Regex(@"^[\s]*m_chosenEntities\[(?<idx>.*)\]=(?<entity>(.+))$");
 
-        public SendChoicesParser(GameState game_state)
+        public SendChoicesParser(GameState game_state, Logger logger)
+            : base(logger)
         {
             this.game_state = game_state;
             this.enumerator = this.Process().GetEnumerator();
@@ -48,7 +46,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 if (!SendChoices.IsMatch(this.parsing_log))
                 {
-                    log_msg("[INFO] Waiting for send-choice log, but got " + this.parsing_log + " (ignoring)");
+                    logger_.Info("[INFO] Waiting for send-choice log, but got " + this.parsing_log + " (ignoring)");
                     continue;
                 }
                 var match = SendChoices.Match(this.parsing_log);
@@ -68,7 +66,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     var chosen_entity_id = ParserUtilities.GetEntityIdFromRawString(this.game_state, chosen_entity);
                     if (chosen_entity_id < 0)
                     {
-                        log_msg("[ERROR] Failed to get entity id for a choice: " + this.parsing_log + " (ignoring)");
+                        logger_.Info("[ERROR] Failed to get entity id for a choice: " + this.parsing_log + " (ignoring)");
                         yield return true;
                         continue;
                     }

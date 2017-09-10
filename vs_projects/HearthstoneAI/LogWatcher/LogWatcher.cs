@@ -11,6 +11,12 @@ namespace HearthstoneAI.LogWatcher
         private LogReader log_reader;
         private StableDecider stable_decider_;
         private GameState game_state_;
+        private Logger logger_;
+
+        public LogWatcher(Logger logger)
+        {
+            logger_ = logger;
+        }
 
         public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
 
@@ -38,22 +44,18 @@ namespace HearthstoneAI.LogWatcher
 
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
-        public delegate void LogMsgDelegate(String msg);
-        public LogMsgDelegate log_msg;
-
         public void Reset(string hearthstone_path)
         {
             game_state_ = new GameState();
             this.stable_decider_ = new StableDecider(100); // 100 ms
 
-            this.log_reader = new LogReader(hearthstone_path, game_state_);
+            this.log_reader = new LogReader(hearthstone_path, game_state_, logger_);
             game_state_.StartWaitingMainAction += StartWaitingMainAction;
             this.log_reader.ActionStart += (sender, e) =>
             {
                 if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, game_state_));
             };
             this.log_reader.CreateGameEvent += CreateGameEvent;
-            this.log_reader.log_msg = (string msg) => log_msg(msg);
             this.log_reader.log_changed = () =>
             {
                 stable_decider_.Changed();

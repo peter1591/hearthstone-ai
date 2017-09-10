@@ -18,14 +18,14 @@ namespace HearthstoneAI.LogWatcher
         public event EventHandler<SubParsers.PowerLogParser.ActionStartEventArgs> ActionStart;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
-        public delegate void LogMsgDelegate(String msg);
-        public LogMsgDelegate log_msg;
+        private Logger logger_;
 
         public delegate void LogChanged();
         public LogChanged log_changed;
 
-        public LogReader(string hearthstone_path, GameState game_state)
+        public LogReader(string hearthstone_path, GameState game_state, Logger logger)
         {
+            logger_ = logger;
             this.hearthstone_path = hearthstone_path;
             this.game_state_ = game_state;
             this.Reset();
@@ -41,7 +41,7 @@ namespace HearthstoneAI.LogWatcher
 
         private void CreateLogParser()
         {
-            this.log_parser = new LogParser(game_state_);
+            this.log_parser = new LogParser(game_state_, logger_);
 
             this.log_parser.ActionStart += (sender, e) =>
             {
@@ -51,8 +51,6 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.CreateGameEvent != null) this.CreateGameEvent(this, e);
             };
-
-            this.log_parser.log_msg += (string msg) => log_msg(msg);
         }
 
         private string GetPowerLogPath()
