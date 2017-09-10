@@ -55,7 +55,24 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.ActionStart != null) this.ActionStart(this, new ActionStartEventArgs(e, game_state_));
             };
-            this.log_reader.CreateGameEvent += CreateGameEvent;
+            this.log_reader.CreateGameEvent += (sender, e) =>
+            {
+                // a CREATE_GAME will present for every 30 minutes
+                // or maybe when you re-connected to the game?
+                // So here we don't reset the game unless the Game State is COMPLETE
+                if (game_state_.GameEntityId > 0)
+                {
+                    var game_entity = game_state_.Entities[game_state_.GameEntityId];
+                    if (game_entity.GetTagOrDefault(GameTag.STATE, (int)TAG_STATE.RUNNING) != (int)TAG_STATE.COMPLETE)
+                    {
+                        return;
+                    }
+                }
+
+                game_state_.Reset();
+
+                CreateGameEvent(sender, e);
+            };
             this.log_reader.log_changed = () =>
             {
                 stable_decider_.Changed();

@@ -104,19 +104,6 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             yield return true;
 
-            // a CREATE_GAME will present for every 30 minutes
-            // or maybe when you re-connected to the game?
-            // So here we don't reset the game unless the Game State is COMPLETE
-            if (this.game_state.GameEntityId > 0)
-            {
-                var game_entity = this.game_state.Entities[this.game_state.GameEntityId];
-                if (game_entity.GetTagOrDefault(GameTag.STATE, (int)TAG_STATE.RUNNING) == (int)TAG_STATE.COMPLETE)
-                {
-                    this.game_state.Reset();
-                }
-            }
-            //this.game_state.Reset();
-
             if (!GameEntityRegex.IsMatch(this.parsing_log))
             {
                 logger_.Info("[ERROR] Expecting the game entity log.");
@@ -144,8 +131,12 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
                 var match = PlayerEntityRegex.Match(this.parsing_log);
                 var id = int.Parse(match.Groups["id"].Value);
-                if (!this.game_state.Entities.ContainsKey(id))
-                    this.game_state.Entities.Add(id, new GameState.Entity(id));
+                if (this.game_state.Entities.ContainsKey(id))
+                {
+                    logger_.Info("[ERROR] entity already exists.");
+                    yield break;
+                }
+                this.game_state.Entities.Add(id, new GameState.Entity(id));
                 yield return true;
 
                 while (true)
@@ -176,18 +167,16 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
         private bool ParseCreatingTag(int entity_id)
         {
-            if (!CreationTagRegex.IsMatch(this.parsing_log)) return false;
-
             var match = CreationTagRegex.Match(this.parsing_log);
+            if (!match.Success) return false;
             this.game_state.ChangeTag(entity_id, match.Groups["tag"].Value, match.Groups["value"].Value);
             return true;
         }
 
         private IEnumerable<bool> ParseTagChange()
         {
-            if (!TagChangeRegex.IsMatch(this.parsing_log)) yield break;
-
             var match = TagChangeRegex.Match(this.parsing_log);
+            if (!match.Success) yield break;
             var entity_raw = match.Groups["entity"].Value;
             int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw);
 
