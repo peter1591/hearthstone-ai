@@ -32,7 +32,7 @@ namespace HearthstoneAI
             log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             log_watcher.game_state_changed += (GameState game_state) =>
             {
-                var game_stage = this.GetGameStage(game_state);
+                var game_stage = GameStageHelper.GetGameStage(game_state);
                 txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
 
                 Board.Game board = new Board.Game();
@@ -135,7 +135,7 @@ namespace HearthstoneAI
             if (e.block_type == "POWER") return;
             if (e.block_type == "DEATHS") return;
 
-            var game_stage = this.GetGameStage(e.game);
+            var game_stage = GameStageHelper.GetGameStage(e.game);
             if (game_stage != GameStage.STAGE_PLAYER_CHOICE && game_stage != GameStage.STAGE_OPPONENT_CHOICE)
             {
                 this.AddLog("!!!!!!!!!!!!!!!!!!!!!! Game stage is not a choice stage in action start callback !!!!!!!!!!!!!!");
@@ -152,55 +152,6 @@ namespace HearthstoneAI
         private void timerMainLoop_Tick(object sender, EventArgs e)
         {
             log_watcher.Tick();
-        }
-
-        enum GameStage
-        {
-            STAGE_UNKNOWN,
-            STAGE_GAME_FLOW,
-            STAGE_PLAYER_MULLIGAN,
-            STAGE_OPPONENT_MULLIGAN,
-            STAGE_PLAYER_CHOICE,
-            STAGE_OPPONENT_CHOICE
-        }
-
-        private GameStage GetGameStage(GameState game)
-        {
-            GameState.Entity game_entity;
-            if (!game.TryGetGameEntity(out game_entity)) return GameStage.STAGE_UNKNOWN;
-
-            GameState.Entity player_entity;
-            if (!game.TryGetPlayerEntity(out player_entity)) return GameStage.STAGE_UNKNOWN;
-
-            GameState.Entity opponent_entity;
-            if (!game.TryGetOpponentEntity(out opponent_entity)) return GameStage.STAGE_UNKNOWN;
-
-            if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
-            {
-                return GameStage.STAGE_PLAYER_MULLIGAN;
-            }
-
-            if (opponent_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
-            {
-                return GameStage.STAGE_OPPONENT_MULLIGAN;
-            }
-
-            if (!game_entity.HasTag(GameTag.STEP)) return GameStage.STAGE_UNKNOWN;
-
-            TAG_STEP game_entity_step = (TAG_STEP)game_entity.GetTag(GameTag.STEP);
-            if (game_entity_step != TAG_STEP.MAIN_ACTION) return GameStage.STAGE_GAME_FLOW;
-
-            bool player_first = false;
-            if (player_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
-            else if (opponent_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
-            else throw new Exception("parse failed");
-
-            int turn = game_entity.GetTagOrDefault(GameTag.TURN, -1);
-            if (turn < 0) return GameStage.STAGE_UNKNOWN;
-
-            if (player_first && (turn % 2 == 1)) return GameStage.STAGE_PLAYER_CHOICE;
-            else if (!player_first && (turn % 2 == 0)) return GameStage.STAGE_PLAYER_CHOICE;
-            else return GameStage.STAGE_OPPONENT_CHOICE;
         }
 
         private string GetGameEntityText(GameState game)

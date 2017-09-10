@@ -71,6 +71,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="AI\AIEngine.cs" />
+    <Compile Include="GameStage.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GameTag.cs" />
     <Compile Include="AI\AILogger.cs" />
