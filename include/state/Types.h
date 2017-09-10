@@ -62,6 +62,7 @@ namespace state
 		kCardSetGangs,
 		kCardSetUngoro,
 		kCardSetHOF, // hero of fame
+		kCardSetIceCrown,
 		kCardSetTB
 	};
 

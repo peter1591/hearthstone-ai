@@ -53,7 +53,8 @@ namespace Cards
 				state::kCardSetOldGods,
 				state::kCardSetKara,
 				state::kCardSetGangs,
-				state::kCardSetUngoro
+				state::kCardSetUngoro,
+				state::kCardSetIceCrown
 			};
 			return card_sets;
 		}
@@ -64,10 +65,11 @@ namespace Cards
 
 		std::unordered_map<std::string, int> const& GetIdMap() const { return origin_id_map_; }
 
-		CardId GetIdByCardName(std::string const& name) const {
+		int GetIdByCardName(std::string const& name) const
+		{
 			auto it = name_id_map_.find(name);
-			if (it == name_id_map_.end()) return kInvalidCardId;
-			return (CardId)it->second;
+			if (it == name_id_map_.end()) return -1;
+			return it->second;
 		}
 
 		CardData const& Get(int id)
@@ -169,6 +171,7 @@ namespace Cards
 			if (set == "KARA") return state::kCardSetKara;
 			if (set == "GANGS") return state::kCardSetGangs;
 			if (set == "UNGORO") return state::kCardSetUngoro;
+			if (set == "ICECROWN") return state::kCardSetIceCrown;
 
 			if (set == "TB") return state::kCardSetTB;
 
