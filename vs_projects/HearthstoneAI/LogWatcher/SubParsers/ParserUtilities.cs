@@ -32,17 +32,23 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             // Get entity id - Method 3
             if (entityId < 0)
             {
-                var entity = game_state.Entities.FirstOrDefault(x => x.Value.Name == entity_raw);
-
-                if (entity.Value == null)
+                string entity_str_try = entity_raw; 
+                var entity = game_state.Entities.FirstOrDefault(x => x.Value.Name == entity_str_try);
+                if (entity.Value != null)
                 {
-                    // TODO: check when this happens?
-                    entity = game_state.Entities.FirstOrDefault(x => x.Value.Name == "UNKNOWN HUMAN PLAYER");
-                    if (entity.Value != null) entity.Value.Name = entity_raw;
+                    entityId = entity.Key;
+                }
+                else
+                {
+                    entity_str_try = "UNKNOWN HUMAN PLAYER";
+                    entity = game_state.Entities.FirstOrDefault(x => x.Value.Name == entity_str_try);
+                    if (entity.Value != null)
+                    {
+                        entityId = entity.Key;
+                        entity.Value.Name = entity_str_try;
+                    }
                 }
 
-                if (entity.Value != null) entityId = entity.Key;
-                else entityId = -1;
             }
 
             return entityId;
