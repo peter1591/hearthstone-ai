@@ -31,7 +31,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             new Regex(@"^[\s]*HIDE_ENTITY\ -\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
         private static readonly Regex BlockStartRegex =
-            new Regex(@"^(?<indent>[\s]*)BLOCK_START[\s]+BlockType=(?<block_type>.*)[\s+]Entity=(?<entity>(.*))[\s]+EffectCardId=(?<effect_card_id>.*)[\s]+EffectIndex=(?<effect_index>.*)[\s]+Target=(?<target>.*)");
+            new Regex(@"^(?<indent>[\s]*)BLOCK_START[\s]+BlockType=(?<block_type>.*)[\s+]Entity=(?<entity>(.*))[\s]+EffectCardId=(?<effect_card_id>.*)[\s]+EffectIndex=(?<effect_index>.*)[\s]+Target=(?<target>[\w]*)");
         private static readonly Regex BlockEndRegex = new Regex(@"^[\s]*BLOCK_END");
 
         private static readonly Regex MetadataRegex = new Regex(@"^[\s]*META_DATA\ -\ ");
