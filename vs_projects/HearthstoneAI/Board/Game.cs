@@ -53,12 +53,13 @@ namespace HearthstoneAI.Board
             if (rhs == null) return false;
             if (!this.player.Equals(rhs.player)) return false;
             if (!this.opponent.Equals(rhs.opponent)) return false;
+            if (!this.turn.Equals(rhs.turn)) return false;
             return true;
         }
 
         public override int GetHashCode()
         {
-            return new { this.player, this.opponent }.GetHashCode();
+            return new { this.player, this.opponent, this.turn }.GetHashCode();
         }
     }
 }

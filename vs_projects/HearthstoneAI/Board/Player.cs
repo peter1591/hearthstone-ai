@@ -81,6 +81,7 @@ namespace HearthstoneAI.Board
             if (rhs == null) return false;
             if (!this.crystal.Equals(rhs.crystal)) return false;
             if (!this.fatigue.Equals(rhs.fatigue)) return false;
+            if (!this.first_player.Equals(rhs.first_player)) return false;
             if (!this.enchantments.Equals(rhs.enchantments)) return false;
             if (!this.hero.Equals(rhs.hero)) return false;
             if (!this.weapon.Equals(rhs.weapon)) return false;
@@ -98,6 +99,7 @@ namespace HearthstoneAI.Board
             {
                 this.crystal,
                 this.fatigue,
+                this.first_player,
                 this.enchantments,
                 this.hero,
                 this.weapon,

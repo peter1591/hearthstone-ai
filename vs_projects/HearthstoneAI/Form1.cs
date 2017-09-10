@@ -32,9 +32,6 @@ namespace HearthstoneAI
             log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             log_watcher.game_state_changed += (GameState game_state) =>
             {
-                var game_stage = GameStageHelper.GetGameStage(game_state);
-                txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
-
                 Board.Game board = new Board.Game();
                 bool parse_success = board.Parse(game_state);
 
@@ -45,6 +42,9 @@ namespace HearthstoneAI
                 }
 
                 this.UpdateBoard(game_state, board);
+
+                var game_stage = GameStageHelper.GetGameStage(game_state);
+                txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
 
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
