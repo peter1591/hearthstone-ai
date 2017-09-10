@@ -72,6 +72,7 @@ namespace HearthstoneAI.Board
             if (!this.total_cards.Equals(rhs.total_cards)) return false;
             if (!this.known_cards.SequenceEqual(rhs.known_cards)) return false;
             if (!this.joust_cards.SequenceEqual(rhs.joust_cards)) return false;
+            if (!this.played_cards.SequenceEqual(rhs.played_cards)) return false;
             return true;
         }
 
@@ -82,6 +83,8 @@ namespace HearthstoneAI.Board
             foreach (var obj in this.known_cards)
                HashHelper.Update(ref hash, obj);
             foreach (var obj in this.joust_cards)
+                HashHelper.Update(ref hash, obj);
+            foreach (var obj in this.played_cards)
                 HashHelper.Update(ref hash, obj);
             return hash;
         }

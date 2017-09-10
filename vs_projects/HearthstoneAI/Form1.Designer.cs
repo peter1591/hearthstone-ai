@@ -31,6 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.nudThreads = new System.Windows.Forms.NumericUpDown();
+            this.nudSeconds = new System.Windows.Forms.NumericUpDown();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnChangeHearthstoneInstallationPath = new System.Windows.Forms.Button();
             this.txtHearthstoneInstallationPath = new System.Windows.Forms.TextBox();
@@ -67,17 +71,13 @@
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.nudSeconds = new System.Windows.Forms.NumericUpDown();
-            this.label15 = new System.Windows.Forms.Label();
-            this.nudThreads = new System.Windows.Forms.NumericUpDown();
-            this.label16 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -112,6 +112,64 @@
             this.tabPageSettings.TabIndex = 0;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
+            this.tabPageSettings.Click += new System.EventHandler(this.tabPageSettings_Click);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(11, 131);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(91, 25);
+            this.label16.TabIndex = 5;
+            this.label16.Text = "Threads:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(11, 96);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(96, 25);
+            this.label15.TabIndex = 5;
+            this.label15.Text = "Seconds:";
+            // 
+            // nudThreads
+            // 
+            this.nudThreads.Location = new System.Drawing.Point(113, 129);
+            this.nudThreads.Maximum = new decimal(new int[] {
+            32,
+            0,
+            0,
+            0});
+            this.nudThreads.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudThreads.Name = "nudThreads";
+            this.nudThreads.Size = new System.Drawing.Size(120, 29);
+            this.nudThreads.TabIndex = 4;
+            this.nudThreads.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            // 
+            // nudSeconds
+            // 
+            this.nudSeconds.Location = new System.Drawing.Point(113, 94);
+            this.nudSeconds.Maximum = new decimal(new int[] {
+            999,
+            0,
+            0,
+            0});
+            this.nudSeconds.Name = "nudSeconds";
+            this.nudSeconds.Size = new System.Drawing.Size(120, 29);
+            this.nudSeconds.TabIndex = 4;
+            this.nudSeconds.Value = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
             // 
             // btnStart
             // 
@@ -505,63 +563,6 @@
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
             // 
-            // nudSeconds
-            // 
-            this.nudSeconds.Location = new System.Drawing.Point(113, 94);
-            this.nudSeconds.Maximum = new decimal(new int[] {
-            999,
-            0,
-            0,
-            0});
-            this.nudSeconds.Name = "nudSeconds";
-            this.nudSeconds.Size = new System.Drawing.Size(120, 29);
-            this.nudSeconds.TabIndex = 4;
-            this.nudSeconds.Value = new decimal(new int[] {
-            90,
-            0,
-            0,
-            0});
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(11, 96);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(96, 25);
-            this.label15.TabIndex = 5;
-            this.label15.Text = "Seconds:";
-            // 
-            // nudThreads
-            // 
-            this.nudThreads.Location = new System.Drawing.Point(113, 129);
-            this.nudThreads.Maximum = new decimal(new int[] {
-            32,
-            0,
-            0,
-            0});
-            this.nudThreads.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudThreads.Name = "nudThreads";
-            this.nudThreads.Size = new System.Drawing.Size(120, 29);
-            this.nudThreads.TabIndex = 4;
-            this.nudThreads.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(11, 131);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(91, 25);
-            this.label16.TabIndex = 5;
-            this.label16.Text = "Threads:";
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -576,14 +577,14 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
             this.tabPageSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).EndInit();
             this.ResumeLayout(false);
 
         }

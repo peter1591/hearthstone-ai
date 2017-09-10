@@ -46,8 +46,8 @@ static state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state,
 	state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(id);
 
 	raw_card.enchanted_states.player = player;
-	raw_card.zone = state::kCardZoneNewlyCreated;
 	raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
+	raw_card.zone = state::kCardZoneNewlyCreated;
 
 	return state::Cards::Card(raw_card);
 }
@@ -118,7 +118,7 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 void PrepareDeck(std::unordered_multiset<std::string> const& cards, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
 {
 	for (auto const& card_name : cards) {
-		Cards::CardId card_id = Cards::Database::GetInstance().GetIdByCardName(card_name);
+		Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 		PushBackDeckCard(card_id, random, state, player);
 	}
 }
@@ -128,7 +128,7 @@ void MoveFromDeckToHand(std::unordered_multiset<std::string> & cards, std::strin
 	auto it = cards.find(card_name);
 	if (it == cards.end()) throw std::runtime_error("card not exists in deck");
 	cards.erase(it);
-	Cards::CardId card_id = Cards::Database::GetInstance().GetIdByCardName(card_name);
+	Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 	AddHandCard(card_id, state, player);
 }
 
@@ -141,7 +141,7 @@ void RandomlyMoveFromDeckToHand(
 	std::string card_name = *it;
 
 	cards.erase(it);
-	Cards::CardId card_id = Cards::Database::GetInstance().GetIdByCardName(card_name);
+	Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 	AddHandCard(card_id, state, player);
 }
 

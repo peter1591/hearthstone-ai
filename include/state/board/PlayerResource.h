@@ -51,6 +51,7 @@ namespace state
 
 			int GetNextOverload() const { return overload_next_; }
 			void IncreaseNextOverload(int v) { overload_next_ += v; }
+			void SetNextOverload(int v) { overload_next_ = v; }
 
 			void UnlockOverload() {
 				current_ += overload_current_;

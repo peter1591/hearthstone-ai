@@ -78,7 +78,9 @@ namespace HearthstoneAI.Board
             if (!this.attacks_this_turn.Equals(rhs.attacks_this_turn)) return false;
             if (!this.exhausted.Equals(rhs.exhausted)) return false;
             if (!this.silenced.Equals(rhs.silenced)) return false;
+            if (!this.spellpower.Equals(rhs.spellpower)) return false;
             if (!this.status.Equals(rhs.status)) return false;
+            if (!this.summoned_this_turn.Equals(rhs.summoned_this_turn)) return false;
             if (!this.enchantments.Equals(rhs.enchantments)) return false;
             return true;
         }
@@ -95,7 +97,9 @@ namespace HearthstoneAI.Board
                 this.attacks_this_turn,
                 this.exhausted,
                 this.silenced,
+                this.spellpower,
                 this.status,
+                this.summoned_this_turn,
                 this.enchantments
             }.GetHashCode();
         }

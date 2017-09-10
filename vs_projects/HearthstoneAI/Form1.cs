@@ -487,5 +487,10 @@ namespace HearthstoneAI
         {
             ai_engine_.AbortRunner();
         }
+
+        private void tabPageSettings_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

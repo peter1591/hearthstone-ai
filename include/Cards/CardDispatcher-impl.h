@@ -60,16 +60,7 @@ namespace Cards
 			DefaultInvoked()
 			{
 				auto const& data = Cards::Database::GetInstance().Get((Cards::CardId)id);
-
-				switch (data.card_type) {
-				case state::kCardTypeMinion:
-				case state::kCardTypeWeapon:
-				case state::kCardTypeHero:
-					GeneralCardBase::Init(data);
-					return;
-				default:
-					throw std::runtime_error("card is not implemented");
-				}
+				GeneralCardBase::Init(data);
 			}
 		};
 	}
