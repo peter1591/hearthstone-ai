@@ -9,19 +9,19 @@ namespace HearthstoneAI.Board
 {
     class Secrets : List<Secret>
     {
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity player)
+        public bool Parse(State.Game game, State.Game.Entity player)
         {
             bool ret = true;
 
-            int controller = player.GetTagOrDefault(GameTag.CONTROLLER, -1);
+            int controller = player.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
             if (controller < 0) return false;
 
             foreach (var entity in game.Entities)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
+                if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)TAG_ZONE.SECRET) continue;
+                if (!entity.Value.HasTag(State.GameTag.ZONE)) continue;
+                if (entity.Value.GetTag(State.GameTag.ZONE) != (int)State.TAG_ZONE.SECRET) continue;
 
                 Secret secret = new Secret();
                 ret = secret.Parse(game, entity.Value) && ret;

@@ -46,19 +46,19 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Enchantments enchantments = new Enchantments();
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
+        public bool Parse(State.Game game, State.Game.Entity entity)
         {
             this.entity_id = entity.Id;
             this.card_id = entity.CardId;
 
-            this.max_hp = entity.GetTagOrDefault(GameTag.HEALTH, -1);
-            this.damage = entity.GetTagOrDefault(GameTag.DAMAGE, 0);
-            this.attack = entity.GetTagOrDefault(GameTag.ATK, 0);
-            this.attacks_this_turn = entity.GetTagOrDefault(GameTag.NUM_ATTACKS_THIS_TURN, 0);
-            this.exhausted = (entity.GetTagOrDefault(GameTag.EXHAUSTED, 0) != 0);
-            this.silenced = (entity.GetTagOrDefault(GameTag.SILENCED, 0) != 0);
-            this.spellpower = entity.GetTagOrDefault(GameTag.SPELLPOWER, 0);
-            this.summoned_this_turn = entity.GetTagOrDefault(GameTag.JUST_PLAYED, 0) != 0;
+            this.max_hp = entity.GetTagOrDefault(State.GameTag.HEALTH, -1);
+            this.damage = entity.GetTagOrDefault(State.GameTag.DAMAGE, 0);
+            this.attack = entity.GetTagOrDefault(State.GameTag.ATK, 0);
+            this.attacks_this_turn = entity.GetTagOrDefault(State.GameTag.NUM_ATTACKS_THIS_TURN, 0);
+            this.exhausted = (entity.GetTagOrDefault(State.GameTag.EXHAUSTED, 0) != 0);
+            this.silenced = (entity.GetTagOrDefault(State.GameTag.SILENCED, 0) != 0);
+            this.spellpower = entity.GetTagOrDefault(State.GameTag.SPELLPOWER, 0);
+            this.summoned_this_turn = entity.GetTagOrDefault(State.GameTag.JUST_PLAYED, 0) != 0;
 
             this.status.Parse(game, entity);
             this.enchantments.Parse(game, entity);

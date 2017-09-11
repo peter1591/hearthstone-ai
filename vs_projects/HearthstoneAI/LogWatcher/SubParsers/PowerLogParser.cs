@@ -78,7 +78,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         public class CreateGameEventArgs : EventArgs { }
         public event EventHandler<CreateGameEventArgs> CreateGameEvent;
 
-        public PowerLogParser(Game game_state, Logger logger)
+        public PowerLogParser(State.Game game_state, Logger logger)
             : base(logger)
         {
             this.game_state = game_state;
@@ -92,7 +92,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         }
 
         private string parsing_log;
-        private Game game_state;
+        private State.Game game_state;
         private IEnumerator<bool> enumerator;
 
         private IEnumerable<bool> Process()
@@ -153,7 +153,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     logger_.Info("[ERROR] entity already exists.");
                     yield break;
                 }
-                this.game_state.Entities.Add(id, new Game.Entity(id));
+                this.game_state.Entities.Add(id, new State.Game.Entity(id));
                 yield return true;
 
                 while (true)
@@ -222,7 +222,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
 
             if (!this.game_state.Entities.ContainsKey(entityId))
-                this.game_state.Entities.Add(entityId, new Game.Entity(entityId));
+                this.game_state.Entities.Add(entityId, new State.Game.Entity(entityId));
             this.game_state.Entities[entityId].CardId = cardId;
             yield return true;
 
@@ -242,7 +242,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var cardId = match.Groups["cardId"].Value;
             if (!this.game_state.Entities.ContainsKey(id))
             {
-                this.game_state.Entities.Add(id, new Game.Entity(id) { CardId = cardId });
+                this.game_state.Entities.Add(id, new State.Game.Entity(id) { CardId = cardId });
             }
 
             // triggers

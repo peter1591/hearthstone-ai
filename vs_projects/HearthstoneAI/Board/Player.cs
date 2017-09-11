@@ -40,22 +40,22 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Deck deck = new Deck();
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
+        public bool Parse(State.Game game, State.Game.Entity entity)
         {
             bool ret = true;
 
             ret = this.crystal.Parse(game, entity) && ret;
 
-            this.fatigue = entity.GetTagOrDefault(GameTag.FATIGUE, 0);
+            this.fatigue = entity.GetTagOrDefault(State.GameTag.FATIGUE, 0);
 
-            this.first_player = (entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) != 0);
+            this.first_player = (entity.GetTagOrDefault(State.GameTag.FIRST_PLAYER, 0) != 0);
 
             ret = this.enchantments.Parse(game, entity) && ret;
 
-            if (entity.HasTag(GameTag.HERO_ENTITY) == false) ret = false;
+            if (entity.HasTag(State.GameTag.HERO_ENTITY) == false) ret = false;
             else
             {
-                int hero_entity_id = entity.GetTag(GameTag.HERO_ENTITY);
+                int hero_entity_id = entity.GetTag(State.GameTag.HERO_ENTITY);
                 if (game.Entities.ContainsKey(hero_entity_id) == false) ret = false;
                 else {
                     ret = this.hero.Parse(game, game.Entities[hero_entity_id]) && ret;

@@ -37,22 +37,22 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Enchantments enchantments = new Enchantments();
         
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
+        public bool Parse(State.Game game, State.Game.Entity entity)
         {
             bool ret = true;
 
             this.card_id = entity.CardId;
 
-            this.max_hp = entity.GetTagOrDefault(GameTag.HEALTH, -1);
-            this.damage = entity.GetTagOrDefault(GameTag.DAMAGE, 0);
-            this.armor = entity.GetTagOrDefault(GameTag.ARMOR, 0);
+            this.max_hp = entity.GetTagOrDefault(State.GameTag.HEALTH, -1);
+            this.damage = entity.GetTagOrDefault(State.GameTag.DAMAGE, 0);
+            this.armor = entity.GetTagOrDefault(State.GameTag.ARMOR, 0);
 
-            this.attack = entity.GetTagOrDefault(GameTag.ATK, 0);
-            this.attacks_this_turn = entity.GetTagOrDefault(GameTag.NUM_ATTACKS_THIS_TURN, 0);
+            this.attack = entity.GetTagOrDefault(State.GameTag.ATK, 0);
+            this.attacks_this_turn = entity.GetTagOrDefault(State.GameTag.NUM_ATTACKS_THIS_TURN, 0);
 
             ret = this.status.Parse(game, entity) && ret;
 
-            HearthstoneAI.Game.Entity hero_power;
+            State.Game.Entity hero_power;
             if (game.TryGetPlayerHeroPowerEntity(entity.Id, out hero_power))
             {
                 this.hero_power.Parse(game, hero_power);

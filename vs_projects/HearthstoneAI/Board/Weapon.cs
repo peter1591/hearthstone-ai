@@ -28,26 +28,26 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Enchantments enchantments = new Enchantments();
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity player)
+        public bool Parse(State.Game game, State.Game.Entity player)
         {
             bool ret = true;
 
             this.equipped = false;
 
-            int controller = player.GetTagOrDefault(GameTag.CONTROLLER, -1);
+            int controller = player.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
             if (controller < 0) return false;
 
             foreach (var entity in game.Entities)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
+                if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)TAG_ZONE.PLAY) continue;
+                if (!entity.Value.HasTag(State.GameTag.ZONE)) continue;
+                if (entity.Value.GetTag(State.GameTag.ZONE) != (int)State.TAG_ZONE.PLAY) continue;
 
-                if (!entity.Value.HasTag(GameTag.CARDTYPE)) continue;
-                var card_type = (TAG_CARDTYPE)entity.Value.GetTag(GameTag.CARDTYPE);
+                if (!entity.Value.HasTag(State.GameTag.CARDTYPE)) continue;
+                var card_type = (State.TAG_CARDTYPE)entity.Value.GetTag(State.GameTag.CARDTYPE);
 
-                if (card_type != TAG_CARDTYPE.WEAPON) continue;
+                if (card_type != State.TAG_CARDTYPE.WEAPON) continue;
 
                 if (this.equipped)
                 {
@@ -56,9 +56,9 @@ namespace HearthstoneAI.Board
                 }
 
                 this.card_id = entity.Value.CardId;
-                this.attack = entity.Value.GetTagOrDefault(GameTag.ATK, 0);
-                this.durability = entity.Value.GetTagOrDefault(GameTag.DURABILITY, 0);
-                this.damage = entity.Value.GetTagOrDefault(GameTag.DAMAGE, 0);
+                this.attack = entity.Value.GetTagOrDefault(State.GameTag.ATK, 0);
+                this.durability = entity.Value.GetTagOrDefault(State.GameTag.DURABILITY, 0);
+                this.damage = entity.Value.GetTagOrDefault(State.GameTag.DAMAGE, 0);
                 ret = this.enchantments.Parse(game, entity.Value) && ret;
 
                 this.equipped = true;

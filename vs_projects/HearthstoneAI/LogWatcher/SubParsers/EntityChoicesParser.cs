@@ -16,7 +16,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex EntityChoicesEntities =
             new Regex(@"^[\s]*Entities\[(?<idx>.*)\]=(?<entity>(.+))$");
 
-        public EntityChoicesParser(Game game_state, Logger logger)
+        public EntityChoicesParser(State.Game game_state, Logger logger)
             : base(logger)
         {
             this.game_state = game_state;
@@ -24,7 +24,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         }
 
         private string parsing_log;
-        private Game game_state;
+        private State.Game game_state;
         private IEnumerator<bool> enumerator;
 
         public void Process(string log)
@@ -74,7 +74,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 this.game_state.EntityChoices.Remove(entity_choice_id);
             }
 
-            this.game_state.EntityChoices[entity_choice_id] = new Game.EntityChoice();
+            this.game_state.EntityChoices[entity_choice_id] = new State.Game.EntityChoice();
             this.game_state.EntityChoices[entity_choice_id].id = entity_choice_id;
             this.game_state.EntityChoices[entity_choice_id].choice_type = choice_type;
             this.game_state.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
@@ -147,7 +147,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
         }
 
-        private void DeterminePlayerAndOpponent(Game.EntityChoice mulligan)
+        private void DeterminePlayerAndOpponent(State.Game.EntityChoice mulligan)
         {
             // if mulligan choice have card id, then it's the player
             // otherwise, it's the opponent
@@ -164,7 +164,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 {
                     foreach (var tag in entity.Value.Tags)
                     {
-                        if (tag.Key == GameTag.PLAYSTATE && tag.Value == (int)TAG_PLAYSTATE.PLAYING)
+                        if (tag.Key == State.GameTag.PLAYSTATE && tag.Value == (int)State.TAG_PLAYSTATE.PLAYING)
                         {
                             patch_entity_id = entity.Key;
                         }

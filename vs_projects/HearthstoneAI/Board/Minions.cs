@@ -9,28 +9,28 @@ namespace HearthstoneAI.Board
 {
     class Minions : List<Minion>
     {
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity player)
+        public bool Parse(State.Game game, State.Game.Entity player)
         {
             bool ret = true;
 
-            int controller = player.GetTagOrDefault(GameTag.CONTROLLER, -1);
+            int controller = player.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
             if (controller < 0) return false;
 
             SortedDictionary<int, Minion> sorted_minions = new SortedDictionary<int, Minion>();
 
             foreach (var entity in game.Entities)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
+                if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)TAG_ZONE.PLAY) continue;
+                if (!entity.Value.HasTag(State.GameTag.ZONE)) continue;
+                if (entity.Value.GetTag(State.GameTag.ZONE) != (int)State.TAG_ZONE.PLAY) continue;
 
-                if (!entity.Value.HasTag(GameTag.CARDTYPE)) continue;
-                var card_type = (TAG_CARDTYPE)entity.Value.GetTag(GameTag.CARDTYPE);
+                if (!entity.Value.HasTag(State.GameTag.CARDTYPE)) continue;
+                var card_type = (State.TAG_CARDTYPE)entity.Value.GetTag(State.GameTag.CARDTYPE);
 
-                if (card_type != TAG_CARDTYPE.MINION) continue;
+                if (card_type != State.TAG_CARDTYPE.MINION) continue;
 
-                var zone_pos = entity.Value.GetTagOrDefault(GameTag.ZONE_POSITION, -1);
+                var zone_pos = entity.Value.GetTagOrDefault(State.GameTag.ZONE_POSITION, -1);
                 if (zone_pos < 0) ret = false;
 
                 Minion minion = new Minion();

@@ -16,10 +16,10 @@ namespace HearthstoneAI.Board
         [DataMember]
         public int creator_entity_id;
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity enchant)
+        public bool Parse(State.Game game, State.Game.Entity enchant)
         {
             this.card_id = enchant.CardId;
-            this.creator_entity_id = enchant.GetTagOrDefault(GameTag.CREATOR, -1);
+            this.creator_entity_id = enchant.GetTagOrDefault(State.GameTag.CREATOR, -1);
 
             return true;
         }

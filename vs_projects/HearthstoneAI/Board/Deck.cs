@@ -22,21 +22,21 @@ namespace HearthstoneAI.Board
         [DataMember]
         public List<string> played_cards = new List<string>();
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity player)
+        public bool Parse(State.Game game, State.Game.Entity player)
         {
             bool ret = true;
 
-            int controller = player.GetTagOrDefault(GameTag.CONTROLLER, -1);
+            int controller = player.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
             if (controller < 0) return false;
 
             this.total_cards = 0;
 
             foreach (var entity in game.Entities)
             {
-                if (entity.Value.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
+                if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 
-                if (!entity.Value.HasTag(GameTag.ZONE)) continue;
-                if (entity.Value.GetTag(GameTag.ZONE) != (int)TAG_ZONE.DECK) continue;
+                if (!entity.Value.HasTag(State.GameTag.ZONE)) continue;
+                if (entity.Value.GetTag(State.GameTag.ZONE) != (int)State.TAG_ZONE.DECK) continue;
 
                 this.total_cards++;
                 if (entity.Value.CardId != "") this.known_cards.Add(entity.Value.CardId);
@@ -45,7 +45,7 @@ namespace HearthstoneAI.Board
             foreach (var joust_entity_id in game.joust_information.entities)
             {
                 var joust_card = game.Entities[joust_entity_id];
-                if (joust_card.GetTagOrDefault(GameTag.CONTROLLER, controller - 1) != controller) continue;
+                if (joust_card.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
                 this.joust_cards.Add(joust_card.CardId);
             }
 

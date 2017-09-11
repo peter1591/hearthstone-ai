@@ -9,18 +9,18 @@ namespace HearthstoneAI.Board
 {
     class Enchantments : List<Enchantment>
     {
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity target)
+        public bool Parse(State.Game game, State.Game.Entity target)
         {
             bool ret = true;
 
             foreach (var entity in game.Entities)
             {
-                if (!entity.Value.HasTag(GameTag.CARDTYPE)) continue;
-                var card_type = (TAG_CARDTYPE)entity.Value.GetTag(GameTag.CARDTYPE);
+                if (!entity.Value.HasTag(State.GameTag.CARDTYPE)) continue;
+                var card_type = (State.TAG_CARDTYPE)entity.Value.GetTag(State.GameTag.CARDTYPE);
 
-                if (card_type != TAG_CARDTYPE.ENCHANTMENT) continue;
+                if (card_type != State.TAG_CARDTYPE.ENCHANTMENT) continue;
 
-                if (entity.Value.GetTagOrDefault(GameTag.ATTACHED, target.Id - 1) != target.Id) continue;
+                if (entity.Value.GetTagOrDefault(State.GameTag.ATTACHED, target.Id - 1) != target.Id) continue;
 
                 var enchant = new Enchantment();
                 ret = enchant.Parse(game, entity.Value) && ret;

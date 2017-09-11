@@ -14,7 +14,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex SendChoicesEntities =
             new Regex(@"^[\s]*m_chosenEntities\[(?<idx>.*)\]=(?<entity>(.+))$");
 
-        public SendChoicesParser(Game game_state, Logger logger)
+        public SendChoicesParser(State.Game game_state, Logger logger)
             : base(logger)
         {
             this.game_state = game_state;
@@ -22,7 +22,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         }
 
         private string parsing_log;
-        private Game game_state;
+        private State.Game game_state;
         private IEnumerator<bool> enumerator;
 
         public void Process(string log)

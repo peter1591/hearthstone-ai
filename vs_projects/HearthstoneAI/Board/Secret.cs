@@ -16,18 +16,18 @@ namespace HearthstoneAI.Board
         [DataMember]
         public string @class;
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
+        public bool Parse(State.Game game, State.Game.Entity entity)
         {
             bool ret = true;
 
             this.card_id = entity.CardId;
-            if (entity.HasTag(GameTag.CLASS) == false)
+            if (entity.HasTag(State.GameTag.CLASS) == false)
             {
                 this.@class = "";
             }
             else
             {
-                this.@class = ((TAG_CLASS)entity.GetTag(GameTag.CLASS)).ToString();
+                this.@class = ((State.TAG_CLASS)entity.GetTag(State.GameTag.CLASS)).ToString();
             }
 
             return ret;

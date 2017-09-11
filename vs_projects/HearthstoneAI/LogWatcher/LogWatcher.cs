@@ -10,7 +10,7 @@ namespace HearthstoneAI.LogWatcher
     {
         private LogReader log_reader;
         private StableDecider stable_decider_;
-        private Game game_state_;
+        private State.Game game_state_;
         private Logger logger_;
 
         public LogWatcher(Logger logger)
@@ -18,38 +18,38 @@ namespace HearthstoneAI.LogWatcher
             logger_ = logger;
         }
 
-        public event EventHandler<Game.StartWaitingMainActionEventArgs> StartWaitingMainAction;
+        public event EventHandler<State.Game.StartWaitingMainActionEventArgs> StartWaitingMainAction;
 
         public class BlockStartEventArgs : SubParsers.PowerLogParser.BlockStartEventArgs
         {
-            public BlockStartEventArgs(SubParsers.PowerLogParser.BlockStartEventArgs e, Game game) : base(e)
+            public BlockStartEventArgs(SubParsers.PowerLogParser.BlockStartEventArgs e, State.Game game) : base(e)
             {
                 this.game = game;
             }
 
-            public Game game;
+            public State.Game game;
         };
         public event EventHandler<BlockStartEventArgs> BlockStart;
 
         public class BlockEndEventArgs : SubParsers.PowerLogParser.BlockEndEventArgs
         {
-            public BlockEndEventArgs(SubParsers.PowerLogParser.BlockEndEventArgs e, Game game) : base(e)
+            public BlockEndEventArgs(SubParsers.PowerLogParser.BlockEndEventArgs e, State.Game game) : base(e)
             {
                 this.game = game;
             }
 
-            public Game game;
+            public State.Game game;
         };
         public event EventHandler<BlockEndEventArgs> BlockEnd;
 
-        public class EndTurnEventArgs : Game.EndTurnEventArgs
+        public class EndTurnEventArgs : State.Game.EndTurnEventArgs
         {
-            public EndTurnEventArgs(Game.EndTurnEventArgs e, Game game) : base(e)
+            public EndTurnEventArgs(State.Game.EndTurnEventArgs e, State.Game game) : base(e)
             {
                 this.game = game;
             }
 
-            public Game game;
+            public State.Game game;
         };
         public event EventHandler<EndTurnEventArgs> EndTurnEvent;
 
@@ -57,7 +57,7 @@ namespace HearthstoneAI.LogWatcher
 
         public void Reset(string hearthstone_path)
         {
-            game_state_ = new Game();
+            game_state_ = new State.Game();
             this.stable_decider_ = new StableDecider(100); // 100 ms
 
             this.log_reader = new LogReader(hearthstone_path, game_state_, logger_);
@@ -83,7 +83,7 @@ namespace HearthstoneAI.LogWatcher
                 if (game_state_.GameEntityId > 0)
                 {
                     var game_entity = game_state_.Entities[game_state_.GameEntityId];
-                    if (game_entity.GetTagOrDefault(GameTag.STATE, (int)TAG_STATE.RUNNING) != (int)TAG_STATE.COMPLETE)
+                    if (game_entity.GetTagOrDefault(State.GameTag.STATE, (int)State.TAG_STATE.RUNNING) != (int)State.TAG_STATE.COMPLETE)
                     {
                         return;
                     }
@@ -105,7 +105,7 @@ namespace HearthstoneAI.LogWatcher
         }
 
         private bool tick_processing_ = false;
-        public delegate void GameStateChangeDelegate(Game game_state);
+        public delegate void GameStateChangeDelegate(State.Game game_state);
         public GameStateChangeDelegate game_state_changed;
         public void Tick()
         {
@@ -143,36 +143,36 @@ namespace HearthstoneAI.LogWatcher
 
         private int GetPlayingPlayerEntityID()
         {
-            Game.Entity game_entity;
+            State.Game.Entity game_entity;
             if (!game_state_.TryGetGameEntity(out game_entity)) return -1;
 
-            Game.Entity player_entity;
+            State.Game.Entity player_entity;
             if (!game_state_.TryGetPlayerEntity(out player_entity)) return -1;
 
-            Game.Entity opponent_entity;
+            State.Game.Entity opponent_entity;
             if (!game_state_.TryGetOpponentEntity(out opponent_entity)) return -1;
 
-            if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
+            if (player_entity.GetTagOrDefault(State.GameTag.MULLIGAN_STATE, (int)State.TAG_MULLIGAN.INVALID) == (int)State.TAG_MULLIGAN.INPUT)
             {
                 return -1;
             }
 
-            if (opponent_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)
+            if (opponent_entity.GetTagOrDefault(State.GameTag.MULLIGAN_STATE, (int)State.TAG_MULLIGAN.INVALID) == (int)State.TAG_MULLIGAN.INPUT)
             {
                 return -1;
             }
 
-            if (!game_entity.HasTag(GameTag.STEP)) return -1;
+            if (!game_entity.HasTag(State.GameTag.STEP)) return -1;
 
-            TAG_STEP game_entity_step = (TAG_STEP)game_entity.GetTag(GameTag.STEP);
-            if (game_entity_step != TAG_STEP.MAIN_ACTION) return -1;
+            State.TAG_STEP game_entity_step = (State.TAG_STEP)game_entity.GetTag(State.GameTag.STEP);
+            if (game_entity_step != State.TAG_STEP.MAIN_ACTION) return -1;
 
             bool player_first = false;
-            if (player_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
-            else if (opponent_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
+            if (player_entity.GetTagOrDefault(State.GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
+            else if (opponent_entity.GetTagOrDefault(State.GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
             else throw new Exception("parse failed");
 
-            int turn = game_entity.GetTagOrDefault(GameTag.TURN, -1);
+            int turn = game_entity.GetTagOrDefault(State.GameTag.TURN, -1);
             if (turn < 0) return -1;
 
             if (player_first && (turn % 2 == 1)) return player_entity.Id;

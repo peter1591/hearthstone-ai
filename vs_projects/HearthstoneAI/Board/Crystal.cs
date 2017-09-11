@@ -25,14 +25,14 @@ namespace HearthstoneAI.Board
         [DataMember]
         public int overload_next_turn;
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
+        public bool Parse(State.Game game, State.Game.Entity entity)
         {
-            this.total = entity.GetTagOrDefault(GameTag.RESOURCES, 0);
-            this.this_turn = entity.GetTagOrDefault(GameTag.TEMP_RESOURCES, 0);
-            this.used = entity.GetTagOrDefault(GameTag.RESOURCES_USED, 0);
+            this.total = entity.GetTagOrDefault(State.GameTag.RESOURCES, 0);
+            this.this_turn = entity.GetTagOrDefault(State.GameTag.TEMP_RESOURCES, 0);
+            this.used = entity.GetTagOrDefault(State.GameTag.RESOURCES_USED, 0);
 
-            this.overload = entity.GetTagOrDefault(GameTag.OVERLOAD_LOCKED, 0);
-            this.overload_next_turn = entity.GetTagOrDefault(GameTag.OVERLOAD_OWED, 0);
+            this.overload = entity.GetTagOrDefault(State.GameTag.OVERLOAD_LOCKED, 0);
+            this.overload_next_turn = entity.GetTagOrDefault(State.GameTag.OVERLOAD_OWED, 0);
 
             return true;
         }

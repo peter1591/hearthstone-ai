@@ -37,23 +37,23 @@ namespace HearthstoneAI.Board
         [DataMember]
         public int windfury;
 
-        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
+        public bool Parse(State.Game game, State.Game.Entity entity)
         {
             bool ret = true;
-            ret = this.ParseOneStatus(entity, GameTag.CHARGE, out this.charge) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.TAUNT, out this.taunt) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.DIVINE_SHIELD, out this.divine_shield) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.STEALTH, out this.stealth) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.FORGETFUL, out this.forgetful) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.FREEZE, out this.freeze) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.FROZEN, out this.frozen) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.POISONOUS, out this.poisonous) && ret;
-            ret = this.ParseOneStatus(entity, GameTag.WINDFURY, out this.windfury) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.CHARGE, out this.charge) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.TAUNT, out this.taunt) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.DIVINE_SHIELD, out this.divine_shield) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.STEALTH, out this.stealth) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.FORGETFUL, out this.forgetful) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.FREEZE, out this.freeze) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.FROZEN, out this.frozen) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.POISONOUS, out this.poisonous) && ret;
+            ret = this.ParseOneStatus(entity, State.GameTag.WINDFURY, out this.windfury) && ret;
 
             return ret;
         }
 
-        private bool ParseOneStatus(HearthstoneAI.Game.Entity entity, GameTag tag, out int value)
+        private bool ParseOneStatus(State.Game.Entity entity, State.GameTag tag, out int value)
         {
             value = entity.GetTagOrDefault(tag, 0);
 

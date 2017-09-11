@@ -12,13 +12,13 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         public static readonly Regex EntityRegex =
             new Regex(@"(?=id=(?<id>(\d+)))(?=name=(?<name>(\w+)))?(?=zone=(?<zone>(\w+)))?(?=zonePos=(?<zonePos>(\d+)))?(?=cardId=(?<cardId>(\w+)))?(?=player=(?<player>(\d+)))?(?=type=(?<type>(\w+)))?");
 
-        static public int GetEntityIdFromRawString(Game game_state, string entity_raw)
+        static public int GetEntityIdFromRawString(State.Game game_state, string entity_raw)
         {
             string entity_str;
             return GetEntityIdFromRawString(game_state, entity_raw, out entity_str);
         }
 
-        static public int GetEntityIdFromRawString(Game game_state, string entity_raw, out string entity_str)
+        static public int GetEntityIdFromRawString(State.Game game_state, string entity_raw, out string entity_str)
         {
             entity_raw = entity_raw.Replace("UNKNOWN ENTITY ", "");
             int entityId = -1;

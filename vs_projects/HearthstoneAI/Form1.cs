@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.Serialization.Json;
+using HearthstoneAI.State;
 
 namespace HearthstoneAI
 {
