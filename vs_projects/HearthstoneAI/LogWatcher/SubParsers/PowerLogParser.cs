@@ -275,15 +275,10 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
         private IEnumerable<bool> ParseMetadata()
         {
-            if (MetadataRegex.IsMatch(this.parsing_log))
-            {
-                yield return true; // ignore
+            if (!MetadataRegex.IsMatch(this.parsing_log)) yield break;
+            yield return true;
 
-                while (MetadataInfoRegex.IsMatch(this.parsing_log))
-                {
-                    yield return true;
-                }
-            }
+            while (MetadataInfoRegex.IsMatch(this.parsing_log)) yield return true;
         }
 
         private IEnumerable<bool> ParseBlock()
@@ -314,10 +309,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             while (true)
             {
-                if (BlockEndRegex.IsMatch(this.parsing_log))
-                {
-                    break;
-                }
+                if (BlockEndRegex.IsMatch(this.parsing_log)) break;
 
                 bool matched = false;
                 foreach (var ret in ParserUtilities.TrySubParsers(new List<Func<IEnumerable<bool>>>

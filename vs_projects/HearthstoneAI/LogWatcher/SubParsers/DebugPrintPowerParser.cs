@@ -61,14 +61,15 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             yield return true;
         }
 
-        private void PatchPlayerName(String entity_id, GameTag tag, int tag_value)
+        private void PatchPlayerName(String entity_raw, GameTag tag, int tag_value)
         {
             if (tag == GameTag.PLAYSTATE && tag_value == (int)TAG_PLAYSTATE.PLAYING)
             {
                 // the player's name can only be known from debug print power logs
                 // so we parse the name out, and write back to our entity object
 
-                if (ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_id) >= 0)
+                string entity_str;
+                if (ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw, out entity_str) >= 0)
                 {
                     return; // already has id
                 }
@@ -81,7 +82,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                         {
                             if (entity.Value.Name == String.Empty)
                             {
-                                entity.Value.Name = entity_id;
+                                entity.Value.Name = entity_str;
                                 return;
                             }
                         }
