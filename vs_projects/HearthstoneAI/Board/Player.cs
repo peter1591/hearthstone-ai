@@ -40,7 +40,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Deck deck = new Deck();
 
-        public bool Parse(State.Game game, State.Entity entity)
+        public bool Parse(State.Game game, State.ReadOnlyEntity entity)
         {
             bool ret = true;
 

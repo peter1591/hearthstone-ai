@@ -71,7 +71,7 @@ namespace HearthstoneAI.State
             this.GameEntityId = id;
         }
 
-        public bool TryGetGameEntity(out Entity entity)
+        public bool TryGetGameEntity(out ReadOnlyEntity entity)
         {
             entity = new Entity(-1);
 
@@ -81,7 +81,7 @@ namespace HearthstoneAI.State
             return true;
         }
 
-        public bool TryGetPlayerEntity(out Entity entity)
+        public bool TryGetPlayerEntity(out ReadOnlyEntity entity)
         {
             entity = new Entity(-1);
             if (!this.entities_.Items.ContainsKey(this.PlayerEntityId)) return false;
@@ -89,7 +89,7 @@ namespace HearthstoneAI.State
             return true;
         }
 
-        public bool TryGetOpponentEntity(out Entity entity)
+        public bool TryGetOpponentEntity(out ReadOnlyEntity entity)
         {
             entity = new Entity(-1);
             if (!this.entities_.Items.ContainsKey(this.OpponentEntityId)) return false;
@@ -97,7 +97,7 @@ namespace HearthstoneAI.State
             return true;
         }
 
-        public bool TryGetPlayerHeroPowerEntity(int hero_entity_id, out Entity out_entity)
+        public bool TryGetPlayerHeroPowerEntity(int hero_entity_id, out ReadOnlyEntity out_entity)
         {
             foreach (var entity in this.entities_.Items)
             {
@@ -126,7 +126,7 @@ namespace HearthstoneAI.State
             bool has_prev_value = this.entities_.Items[entity_id].HasTag(tag);
             if (has_prev_value) prev_value = this.entities_.Items[entity_id].GetTag(tag);
 
-            this.entities_.Items[entity_id].SetTag(tag, tag_value);
+            this.entities_.ChangeTag(entity_id, tag, tag_value);
 
             switch (tag)
             {
@@ -172,7 +172,7 @@ namespace HearthstoneAI.State
             if (tmpEntity.HasTag(GameTag.ENTITY_ID))
             {
                 var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
-                entities_.Items[id].SetName(tmpEntity.Name);
+                entities_.ChangeName(id, tmpEntity.Name);
                 foreach (var t in tmpEntity.Tags)
                     ChangeTag(id, t.Key, t.Value);
                 this.tmp_entities.Remove(tmpEntity);

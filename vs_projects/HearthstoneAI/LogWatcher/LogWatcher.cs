@@ -143,13 +143,13 @@ namespace HearthstoneAI.LogWatcher
 
         private int GetPlayingPlayerEntityID()
         {
-            State.Entity game_entity;
+            State.ReadOnlyEntity game_entity;
             if (!game_state_.TryGetGameEntity(out game_entity)) return -1;
 
-            State.Entity player_entity;
+            State.ReadOnlyEntity player_entity;
             if (!game_state_.TryGetPlayerEntity(out player_entity)) return -1;
 
-            State.Entity opponent_entity;
+            State.ReadOnlyEntity opponent_entity;
             if (!game_state_.TryGetOpponentEntity(out opponent_entity)) return -1;
 
             if (player_entity.GetTagOrDefault(State.GameTag.MULLIGAN_STATE, (int)State.TAG_MULLIGAN.INVALID) == (int)State.TAG_MULLIGAN.INPUT)

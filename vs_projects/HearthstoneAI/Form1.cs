@@ -162,7 +162,7 @@ namespace HearthstoneAI
         {
             string result = "";
 
-            Entity game_entity;
+            ReadOnlyEntity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) return "";
 
             if (game_entity.HasTag(GameTag.STEP))
@@ -391,7 +391,7 @@ namespace HearthstoneAI
             return result;
         }
 
-        private string GetMulliganText(Game game, Entity player)
+        private string GetMulliganText(Game game, ReadOnlyEntity player)
         {
             string result = "";
 
@@ -422,10 +422,10 @@ namespace HearthstoneAI
 
         private string GetChoicesText(Game game)
         {
-            Entity player;
+            ReadOnlyEntity player;
             if (!game.TryGetPlayerEntity(out player)) return "";
 
-            Entity opponent;
+            ReadOnlyEntity opponent;
             if (!game.TryGetOpponentEntity(out opponent)) return "";
 
             string result = "[Player Mulligan]" + Environment.NewLine;

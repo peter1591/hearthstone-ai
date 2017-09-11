@@ -52,7 +52,7 @@ namespace HearthstoneAI.Board
 
             ret = this.status.Parse(game, entity) && ret;
 
-            State.Entity hero_power;
+            State.ReadOnlyEntity hero_power;
             if (game.TryGetPlayerHeroPowerEntity(entity.Id, out hero_power))
             {
                 this.hero_power.Parse(game, hero_power);
