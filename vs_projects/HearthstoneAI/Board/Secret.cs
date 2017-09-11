@@ -16,7 +16,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public string @class;
 
-        public bool Parse(GameState game, GameState.Entity entity)
+        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
         {
             bool ret = true;
 

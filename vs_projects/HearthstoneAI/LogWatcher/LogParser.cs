@@ -15,8 +15,8 @@ namespace HearthstoneAI.LogWatcher
         private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
         private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
 
-        private GameState game_state_;
-        public LogParser(GameState game_state, Logger logger)
+        private Game game_state_;
+        public LogParser(Game game_state, Logger logger)
         {
             logger_ = logger;
             game_state_ = game_state;

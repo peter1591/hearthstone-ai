@@ -13,7 +13,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public List<string> cards = new List<string>();
 
-        public bool Parse(GameState game, GameState.Entity player)
+        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity player)
         {
             bool ret = true;
 

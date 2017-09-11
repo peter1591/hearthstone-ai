@@ -16,7 +16,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex EntityChoicesEntities =
             new Regex(@"^[\s]*Entities\[(?<idx>.*)\]=(?<entity>(.+))$");
 
-        public EntityChoicesParser(GameState game_state, Logger logger)
+        public EntityChoicesParser(Game game_state, Logger logger)
             : base(logger)
         {
             this.game_state = game_state;
@@ -24,7 +24,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         }
 
         private string parsing_log;
-        private GameState game_state;
+        private Game game_state;
         private IEnumerator<bool> enumerator;
 
         public void Process(string log)
@@ -74,7 +74,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 this.game_state.EntityChoices.Remove(entity_choice_id);
             }
 
-            this.game_state.EntityChoices[entity_choice_id] = new GameState.EntityChoice();
+            this.game_state.EntityChoices[entity_choice_id] = new Game.EntityChoice();
             this.game_state.EntityChoices[entity_choice_id].id = entity_choice_id;
             this.game_state.EntityChoices[entity_choice_id].choice_type = choice_type;
             this.game_state.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
@@ -147,7 +147,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
         }
 
-        private void DeterminePlayerAndOpponent(GameState.EntityChoice mulligan)
+        private void DeterminePlayerAndOpponent(Game.EntityChoice mulligan)
         {
             // if mulligan choice have card id, then it's the player
             // otherwise, it's the opponent

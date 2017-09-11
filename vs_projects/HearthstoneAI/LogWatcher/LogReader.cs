@@ -13,7 +13,7 @@ namespace HearthstoneAI.LogWatcher
 
         private long power_log_offset;
         private LogParser log_parser;
-        private GameState game_state_;
+        private Game game_state_;
 
         public event EventHandler<SubParsers.PowerLogParser.BlockStartEventArgs> BlockStart;
         public event EventHandler<SubParsers.PowerLogParser.BlockEndEventArgs> BlockEnd;
@@ -24,7 +24,7 @@ namespace HearthstoneAI.LogWatcher
         public delegate void LogChanged();
         public LogChanged log_changed;
 
-        public LogReader(string hearthstone_path, GameState game_state, Logger logger)
+        public LogReader(string hearthstone_path, Game game_state, Logger logger)
         {
             logger_ = logger;
             this.hearthstone_path = hearthstone_path;

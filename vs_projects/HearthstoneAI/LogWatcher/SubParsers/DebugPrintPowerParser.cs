@@ -12,7 +12,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         private static readonly Regex TagChangeRegex =
             new Regex(@"^[\s]*TAG_CHANGE\ Entity=(?<entity>(.+))\ tag=(?<tag>(\w+))\ value=(?<value>(\w+))");
 
-        public DebugPrintPowerParser(GameState game_state, Logger logger)
+        public DebugPrintPowerParser(Game game_state, Logger logger)
             : base(logger)
         {
             this.game_state = game_state;
@@ -20,7 +20,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         }
 
         private string parsing_log;
-        private GameState game_state;
+        private Game game_state;
         private IEnumerator<bool> enumerator;
 
         public void Process(string log)
@@ -54,7 +54,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             var entity_raw = match.Groups["entity"].Value;
 
-            var tag = GameState.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
+            var tag = Game.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
 
             PatchPlayerName(entity_raw, tag.Item1, tag.Item2);
 

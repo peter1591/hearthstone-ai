@@ -46,7 +46,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Enchantments enchantments = new Enchantments();
 
-        public bool Parse(GameState game, GameState.Entity entity)
+        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity entity)
         {
             this.entity_id = entity.Id;
             this.card_id = entity.CardId;

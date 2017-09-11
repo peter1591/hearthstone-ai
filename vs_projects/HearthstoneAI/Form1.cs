@@ -34,7 +34,7 @@ namespace HearthstoneAI
             log_watcher.CreateGameEvent += Log_reader_CreateGameEvent;
             log_watcher.EndTurnEvent += Log_reader_EndTurnEvent;
             log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
-            log_watcher.game_state_changed += (GameState game_state) =>
+            log_watcher.game_state_changed += (Game game_state) =>
             {
                 Board.Game board = new Board.Game();
                 bool parse_success = board.Parse(game_state);
@@ -115,7 +115,7 @@ namespace HearthstoneAI
             ai_engine_.Reset();
         }
 
-        private void TriggerAIHandleBoardAction(GameState game)
+        private void TriggerAIHandleBoardAction(Game game)
         {
             Board.Game board = new Board.Game();
             bool parse_success = board.Parse(game);
@@ -148,7 +148,7 @@ namespace HearthstoneAI
             this.TriggerAIHandleBoardAction(e.game);
         }
 
-        private void Log_reader_StartWaitingMainAction(object sender, GameState.StartWaitingMainActionEventArgs e)
+        private void Log_reader_StartWaitingMainAction(object sender, Game.StartWaitingMainActionEventArgs e)
         {
         }
 
@@ -157,11 +157,11 @@ namespace HearthstoneAI
             log_watcher.Tick();
         }
 
-        private string GetGameEntityText(GameState game)
+        private string GetGameEntityText(Game game)
         {
             string result = "";
 
-            GameState.Entity game_entity;
+            Game.Entity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) return "";
 
             if (game_entity.HasTag(GameTag.STEP))
@@ -390,7 +390,7 @@ namespace HearthstoneAI
             return result;
         }
 
-        private string GetMulliganText(GameState game, GameState.Entity player)
+        private string GetMulliganText(Game game, Game.Entity player)
         {
             string result = "";
 
@@ -419,12 +419,12 @@ namespace HearthstoneAI
             return result;
         }
 
-        private string GetChoicesText(GameState game)
+        private string GetChoicesText(Game game)
         {
-            GameState.Entity player;
+            Game.Entity player;
             if (!game.TryGetPlayerEntity(out player)) return "";
 
-            GameState.Entity opponent;
+            Game.Entity opponent;
             if (!game.TryGetOpponentEntity(out opponent)) return "";
 
             string result = "[Player Mulligan]" + Environment.NewLine;
@@ -455,7 +455,7 @@ namespace HearthstoneAI
             return result;
         }
 
-        private void UpdateBoard(GameState game_state, Board.Game game)
+        private void UpdateBoard(Game game_state, Board.Game game)
         {
             this.txtGameEntity.Text += this.GetGameEntityText(game_state);
             this.txtChoices.Text = this.GetChoicesText(game_state);

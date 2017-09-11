@@ -10,7 +10,7 @@ namespace HearthstoneAI.LogWatcher
     {
         private LogReader log_reader;
         private StableDecider stable_decider_;
-        private GameState game_state_;
+        private Game game_state_;
         private Logger logger_;
 
         public LogWatcher(Logger logger)
@@ -18,38 +18,38 @@ namespace HearthstoneAI.LogWatcher
             logger_ = logger;
         }
 
-        public event EventHandler<GameState.StartWaitingMainActionEventArgs> StartWaitingMainAction;
+        public event EventHandler<Game.StartWaitingMainActionEventArgs> StartWaitingMainAction;
 
         public class BlockStartEventArgs : SubParsers.PowerLogParser.BlockStartEventArgs
         {
-            public BlockStartEventArgs(SubParsers.PowerLogParser.BlockStartEventArgs e, GameState game) : base(e)
+            public BlockStartEventArgs(SubParsers.PowerLogParser.BlockStartEventArgs e, Game game) : base(e)
             {
                 this.game = game;
             }
 
-            public GameState game;
+            public Game game;
         };
         public event EventHandler<BlockStartEventArgs> BlockStart;
 
         public class BlockEndEventArgs : SubParsers.PowerLogParser.BlockEndEventArgs
         {
-            public BlockEndEventArgs(SubParsers.PowerLogParser.BlockEndEventArgs e, GameState game) : base(e)
+            public BlockEndEventArgs(SubParsers.PowerLogParser.BlockEndEventArgs e, Game game) : base(e)
             {
                 this.game = game;
             }
 
-            public GameState game;
+            public Game game;
         };
         public event EventHandler<BlockEndEventArgs> BlockEnd;
 
-        public class EndTurnEventArgs : GameState.EndTurnEventArgs
+        public class EndTurnEventArgs : Game.EndTurnEventArgs
         {
-            public EndTurnEventArgs(GameState.EndTurnEventArgs e, GameState game) : base(e)
+            public EndTurnEventArgs(Game.EndTurnEventArgs e, Game game) : base(e)
             {
                 this.game = game;
             }
 
-            public GameState game;
+            public Game game;
         };
         public event EventHandler<EndTurnEventArgs> EndTurnEvent;
 
@@ -57,7 +57,7 @@ namespace HearthstoneAI.LogWatcher
 
         public void Reset(string hearthstone_path)
         {
-            game_state_ = new GameState();
+            game_state_ = new Game();
             this.stable_decider_ = new StableDecider(100); // 100 ms
 
             this.log_reader = new LogReader(hearthstone_path, game_state_, logger_);
@@ -105,7 +105,7 @@ namespace HearthstoneAI.LogWatcher
         }
 
         private bool tick_processing_ = false;
-        public delegate void GameStateChangeDelegate(GameState game_state);
+        public delegate void GameStateChangeDelegate(Game game_state);
         public GameStateChangeDelegate game_state_changed;
         public void Tick()
         {
@@ -143,13 +143,13 @@ namespace HearthstoneAI.LogWatcher
 
         private int GetPlayingPlayerEntityID()
         {
-            GameState.Entity game_entity;
+            Game.Entity game_entity;
             if (!game_state_.TryGetGameEntity(out game_entity)) return -1;
 
-            GameState.Entity player_entity;
+            Game.Entity player_entity;
             if (!game_state_.TryGetPlayerEntity(out player_entity)) return -1;
 
-            GameState.Entity opponent_entity;
+            Game.Entity opponent_entity;
             if (!game_state_.TryGetOpponentEntity(out opponent_entity)) return -1;
 
             if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)

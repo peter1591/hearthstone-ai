@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HearthstoneAI
 {
-    class GameState
+    class Game
     {
         public class Entity
         {
@@ -161,7 +161,7 @@ namespace HearthstoneAI
             public readonly List<int> entities;
         }
 
-        public GameState()
+        public Game()
         {
             this.Reset();
         }
@@ -173,7 +173,7 @@ namespace HearthstoneAI
             this.OpponentEntityId = -1;
             this.Entities = new Dictionary<int, Entity>();
             this.EntityChoices = new Dictionary<int, EntityChoice>();
-            this.joust_information = new GameState.JoustInformation();
+            this.joust_information = new Game.JoustInformation();
             this.player_played_hand_cards.Clear();
             this.opponent_played_hand_cards.Clear();
         }
@@ -204,7 +204,7 @@ namespace HearthstoneAI
         {
             if (!Entities.ContainsKey(id))
             {
-                Entities.Add(id, new GameState.Entity(id) { Name = "GameEntity" });
+                Entities.Add(id, new Game.Entity(id) { Name = "GameEntity" });
             }
             this.GameEntityId = id;
         }
@@ -291,7 +291,7 @@ namespace HearthstoneAI
             this.ChangeTag(entity_id, tag_value.Item1, tag_value.Item2);
         }
 
-        private List<GameState.Entity> tmp_entities = new List<GameState.Entity>();
+        private List<Game.Entity> tmp_entities = new List<Game.Entity>();
         public void ChangeTag(string entity_str, string raw_tag, string raw_value)
         {
             // failed to get entity id
@@ -299,11 +299,11 @@ namespace HearthstoneAI
             var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_str);
             if (tmpEntity == null)
             {
-                tmpEntity = new GameState.Entity(this.tmp_entities.Count + 1) { Name = entity_str };
+                tmpEntity = new Game.Entity(this.tmp_entities.Count + 1) { Name = entity_str };
                 this.tmp_entities.Add(tmpEntity);
             }
 
-            var tag_value = GameState.Entity.ParseTag(raw_tag, raw_value);
+            var tag_value = Game.Entity.ParseTag(raw_tag, raw_value);
             tmpEntity.SetTag(tag_value.Item1, tag_value.Item2);
 
             if (tmpEntity.HasTag(GameTag.ENTITY_ID))

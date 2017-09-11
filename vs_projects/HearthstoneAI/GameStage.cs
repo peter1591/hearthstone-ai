@@ -18,15 +18,15 @@ namespace HearthstoneAI
 
     class GameStageHelper
     {
-        static public GameStage GetGameStage(GameState game)
+        static public GameStage GetGameStage(Game game)
         {
-            GameState.Entity game_entity;
+            Game.Entity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) return GameStage.STAGE_UNKNOWN;
 
-            GameState.Entity player_entity;
+            Game.Entity player_entity;
             if (!game.TryGetPlayerEntity(out player_entity)) return GameStage.STAGE_UNKNOWN;
 
-            GameState.Entity opponent_entity;
+            Game.Entity opponent_entity;
             if (!game.TryGetOpponentEntity(out opponent_entity)) return GameStage.STAGE_UNKNOWN;
 
             if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)

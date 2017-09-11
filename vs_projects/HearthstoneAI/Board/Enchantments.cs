@@ -9,7 +9,7 @@ namespace HearthstoneAI.Board
 {
     class Enchantments : List<Enchantment>
     {
-        public bool Parse(GameState game, GameState.Entity target)
+        public bool Parse(HearthstoneAI.Game game, HearthstoneAI.Game.Entity target)
         {
             bool ret = true;
 

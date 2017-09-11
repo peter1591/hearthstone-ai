@@ -19,25 +19,25 @@ namespace HearthstoneAI.Board
         [DataMember]
         public int turn;
 
-        public bool Parse(GameState game)
+        public bool Parse(HearthstoneAI.Game game)
         {
             bool ret = true;
 
-            GameState.Entity game_entity;
+            HearthstoneAI.Game.Entity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) ret = false;
             else
             {
                 this.turn = game_entity.GetTagOrDefault(GameTag.TURN, 0);
             }
 
-            GameState.Entity player_entity;
+            HearthstoneAI.Game.Entity player_entity;
             if (!game.TryGetPlayerEntity(out player_entity)) ret = false;
             else
             {
                 ret = this.player.Parse(game, player_entity) && ret;
             }
 
-            GameState.Entity opponent_entity;
+            HearthstoneAI.Game.Entity opponent_entity;
             if (!game.TryGetOpponentEntity(out opponent_entity)) ret = false;
             else
             {
