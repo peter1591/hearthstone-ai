@@ -71,6 +71,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="AI\AIEngine.cs" />
+    <Compile Include="State\Entities.cs" />
     <Compile Include="State\Entity.cs" />
     <Compile Include="State\EntityChoice.cs" />
     <Compile Include="State\GameStage.cs" />

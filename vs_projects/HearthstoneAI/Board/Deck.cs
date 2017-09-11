@@ -31,7 +31,7 @@ namespace HearthstoneAI.Board
 
             this.total_cards = 0;
 
-            foreach (var entity in game.Entities)
+            foreach (var entity in game.Entities.Items)
             {
                 if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 
@@ -44,7 +44,7 @@ namespace HearthstoneAI.Board
 
             foreach (var joust_entity_id in game.joust_information.entities)
             {
-                var joust_card = game.Entities[joust_entity_id];
+                var joust_card = game.Entities.Items[joust_entity_id];
                 if (joust_card.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
                 this.joust_cards.Add(joust_card.CardId);
             }

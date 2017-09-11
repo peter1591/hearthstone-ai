@@ -148,7 +148,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
                 var match = PlayerEntityRegex.Match(this.parsing_log);
                 var id = int.Parse(match.Groups["id"].Value);
-                if (this.game_state.Entities.ContainsKey(id))
+                if (this.game_state.Entities.Items.ContainsKey(id))
                 {
                     logger_.Info("[ERROR] entity already exists.");
                     yield break;
@@ -221,7 +221,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 yield return false;
             }
 
-            if (!this.game_state.Entities.ContainsKey(entityId))
+            if (!this.game_state.Entities.Items.ContainsKey(entityId))
                 this.game_state.AddEntity(entityId, new State.Entity(entityId));
             this.game_state.ChangeEntityCardId(entityId, cardId);
             yield return true;
@@ -240,7 +240,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var match = FullEntityRegex.Match(this.parsing_log);
             var id = int.Parse(match.Groups["id"].Value);
             var cardId = match.Groups["cardId"].Value;
-            if (!this.game_state.Entities.ContainsKey(id))
+            if (!this.game_state.Entities.Items.ContainsKey(id))
             {
                 var v = new State.Entity(id);
                 v.SetCardId(cardId);

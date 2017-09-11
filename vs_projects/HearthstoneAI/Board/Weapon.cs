@@ -37,7 +37,7 @@ namespace HearthstoneAI.Board
             int controller = player.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
             if (controller < 0) return false;
 
-            foreach (var entity in game.Entities)
+            foreach (var entity in game.Entities.Items)
             {
                 if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 

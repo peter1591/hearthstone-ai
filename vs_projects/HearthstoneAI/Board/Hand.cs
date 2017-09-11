@@ -22,7 +22,7 @@ namespace HearthstoneAI.Board
 
             SortedDictionary<int, string> sorted_cards = new SortedDictionary<int, string>();
 
-            foreach (var entity in game.Entities)
+            foreach (var entity in game.Entities.Items)
             {
                 if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, controller - 1) != controller) continue;
 

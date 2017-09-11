@@ -13,7 +13,7 @@ namespace HearthstoneAI.Board
         {
             bool ret = true;
 
-            foreach (var entity in game.Entities)
+            foreach (var entity in game.Entities.Items)
             {
                 if (!entity.Value.HasTag(State.GameTag.CARDTYPE)) continue;
                 var card_type = (State.TAG_CARDTYPE)entity.Value.GetTag(State.GameTag.CARDTYPE);

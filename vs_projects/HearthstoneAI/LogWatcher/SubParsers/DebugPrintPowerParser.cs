@@ -74,7 +74,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     return; // already has id
                 }
 
-                foreach (var entity in this.game_state.Entities)
+                foreach (var entity in this.game_state.Entities.Items)
                 {
                     foreach (var entity_tag in entity.Value.Tags)
                     {

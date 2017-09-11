@@ -160,7 +160,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 // heuristic: find the first entity with PLAYSTATE=PLAYING
                 int patch_entity_id = -1;
-                foreach (var entity in game_state.Entities)
+                foreach (var entity in game_state.Entities.Items)
                 {
                     foreach (var tag in entity.Value.Tags)
                     {
@@ -180,12 +180,12 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 }
             }
 
-            if (this.game_state.PlayerEntityId < 0 && this.game_state.Entities[choice].CardId != "")
+            if (this.game_state.PlayerEntityId < 0 && this.game_state.Entities.Items[choice].CardId != "")
             {
                 this.game_state.PlayerEntityId = mulligan.player_entity_id;
             }
 
-            if (this.game_state.OpponentEntityId < 0 && this.game_state.Entities[choice].CardId == "")
+            if (this.game_state.OpponentEntityId < 0 && this.game_state.Entities.Items[choice].CardId == "")
             {
                 this.game_state.OpponentEntityId = mulligan.player_entity_id;
             }

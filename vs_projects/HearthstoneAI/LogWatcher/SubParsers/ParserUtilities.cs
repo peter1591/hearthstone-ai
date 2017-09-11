@@ -40,7 +40,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             if (entityId < 0)
             {
                 string entity_str_try = entity_raw; 
-                var entity = game_state.Entities.FirstOrDefault(x => x.Value.Name == entity_str_try);
+                var entity = game_state.Entities.Items.FirstOrDefault(x => x.Value.Name == entity_str_try);
                 if (entity.Value != null)
                 {
                     entityId = entity.Key;
@@ -49,7 +49,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 else
                 {
                     entity_str_try = "UNKNOWN HUMAN PLAYER";
-                    entity = game_state.Entities.FirstOrDefault(x => x.Value.Name == entity_str_try);
+                    entity = game_state.Entities.Items.FirstOrDefault(x => x.Value.Name == entity_str_try);
                     if (entity.Value != null)
                     {
                         entityId = entity.Key;

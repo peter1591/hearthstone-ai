@@ -82,7 +82,7 @@ namespace HearthstoneAI.LogWatcher
                 // So here we don't reset the game unless the Game State is COMPLETE
                 if (game_state_.GameEntityId > 0)
                 {
-                    var game_entity = game_state_.Entities[game_state_.GameEntityId];
+                    var game_entity = game_state_.Entities.Items[game_state_.GameEntityId];
                     if (game_entity.GetTagOrDefault(State.GameTag.STATE, (int)State.TAG_STATE.RUNNING) != (int)State.TAG_STATE.COMPLETE)
                     {
                         return;
@@ -128,7 +128,7 @@ namespace HearthstoneAI.LogWatcher
             int playing_entity = this.GetPlayingPlayerEntityID();
             if (playing_entity < 0) return;
 
-            string playing_card = game_state_.Entities[entity_id].CardId.ToString();
+            string playing_card = game_state_.Entities.Items[entity_id].CardId.ToString();
 
             if (playing_entity == game_state_.PlayerEntityId)
             {

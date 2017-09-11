@@ -56,9 +56,9 @@ namespace HearthstoneAI.Board
             else
             {
                 int hero_entity_id = entity.GetTag(State.GameTag.HERO_ENTITY);
-                if (game.Entities.ContainsKey(hero_entity_id) == false) ret = false;
+                if (game.Entities.Items.ContainsKey(hero_entity_id) == false) ret = false;
                 else {
-                    ret = this.hero.Parse(game, game.Entities[hero_entity_id]) && ret;
+                    ret = this.hero.Parse(game, game.Entities.Items[hero_entity_id]) && ret;
                 }
             }
 

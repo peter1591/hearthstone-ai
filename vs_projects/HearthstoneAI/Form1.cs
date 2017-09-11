@@ -411,7 +411,7 @@ namespace HearthstoneAI
                     foreach (var choice in choices.Value.choices)
                     {
                         var choice_entity_id = choice.Value;
-                        var choice_entity = game.Entities[choice_entity_id];
+                        var choice_entity = game.Entities.Items[choice_entity_id];
                         result += "  Card: " + choice_entity.CardId + Environment.NewLine;
                     }
                 }
@@ -446,7 +446,7 @@ namespace HearthstoneAI
                     result += "[Player Choices]" + Environment.NewLine;
                     foreach (var choice in last_choice.choices)
                     {
-                        string card_id = game.Entities[choice.Value].CardId;
+                        string card_id = game.Entities.Items[choice.Value].CardId;
 
                         result += "   [EntityId:" + choice.Value + "] " + card_id + Environment.NewLine;
                     }
