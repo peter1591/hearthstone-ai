@@ -25,7 +25,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public int overload_next_turn;
 
-        public bool Parse(State.Game game, State.Entity entity)
+        public bool Parse(State.Game game, State.ReadOnlyEntity entity)
         {
             this.total = entity.GetTagOrDefault(State.GameTag.RESOURCES, 0);
             this.this_turn = entity.GetTagOrDefault(State.GameTag.TEMP_RESOURCES, 0);

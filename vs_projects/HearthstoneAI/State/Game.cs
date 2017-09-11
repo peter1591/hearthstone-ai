@@ -18,14 +18,39 @@ namespace HearthstoneAI.State
             this.GameEntityId = -1;
             this.PlayerEntityId = -1;
             this.OpponentEntityId = -1;
-            this.Entities = new Dictionary<int, Entity>();
+            this.entities_ = new Dictionary<int, Entity>();
             this.EntityChoices = new Dictionary<int, EntityChoice>();
             this.joust_information = new JoustInformation();
             this.player_played_hand_cards.Clear();
             this.opponent_played_hand_cards.Clear();
         }
 
-        public Dictionary<int, Entity> Entities { get; set; }
+        private Dictionary<int, Entity> entities_;
+        public IReadOnlyDictionary<int, ReadOnlyEntity> Entities
+        {
+            get
+            {
+                var d = new Dictionary<int, ReadOnlyEntity>();
+                foreach (var kv in entities_)
+                {
+                    d.Add(kv.Key, kv.Value);
+                }
+                return d;
+            }
+        }
+        public void AddEntity(int id, Entity data)
+        {
+            entities_.Add(id, data);
+        }
+        public void ChangeEntityCardId(int id, string card_id)
+        {
+            entities_[id].SetCardId(card_id);
+        }
+        public void ChangeEntityName(int id, string name)
+        {
+            entities_[id].SetName(name);
+        }
+
         public Dictionary<int, EntityChoice> EntityChoices { get; set; }
         public int GameEntityId { get; set; }
         public int PlayerEntityId { get; set; }
@@ -46,12 +71,13 @@ namespace HearthstoneAI.State
         }
         public event EventHandler<EndTurnEventArgs> EndTurnEvent;
 
-
         public void CreateGameEntity(int id)
         {
-            if (!Entities.ContainsKey(id))
+            if (!entities_.ContainsKey(id))
             {
-                Entities.Add(id, new Entity(id) { Name = "GameEntity" });
+                var v = new Entity(id);
+                v.SetName("GameEntity");
+                AddEntity(id, v);
             }
             this.GameEntityId = id;
         }
@@ -62,29 +88,29 @@ namespace HearthstoneAI.State
 
             if (this.GameEntityId < 0) return false;
 
-            entity = Entities[this.GameEntityId];
+            entity = entities_[this.GameEntityId];
             return true;
         }
 
         public bool TryGetPlayerEntity(out Entity entity)
         {
             entity = new Entity(-1);
-            if (!this.Entities.ContainsKey(this.PlayerEntityId)) return false;
-            entity = this.Entities[this.PlayerEntityId];
+            if (!this.entities_.ContainsKey(this.PlayerEntityId)) return false;
+            entity = this.entities_[this.PlayerEntityId];
             return true;
         }
 
         public bool TryGetOpponentEntity(out Entity entity)
         {
             entity = new Entity(-1);
-            if (!this.Entities.ContainsKey(this.OpponentEntityId)) return false;
-            entity = this.Entities[this.OpponentEntityId];
+            if (!this.entities_.ContainsKey(this.OpponentEntityId)) return false;
+            entity = this.entities_[this.OpponentEntityId];
             return true;
         }
 
         public bool TryGetPlayerHeroPowerEntity(int hero_entity_id, out Entity out_entity)
         {
-            foreach (var entity in this.Entities)
+            foreach (var entity in this.entities_)
             {
                 if (!entity.Value.HasTag(GameTag.CREATOR)) continue;
                 if (entity.Value.GetTag(GameTag.CREATOR) != hero_entity_id) continue;
@@ -102,16 +128,16 @@ namespace HearthstoneAI.State
 
         public void ChangeTag(int entity_id, GameTag tag, int tag_value)
         {
-            if (!this.Entities.ContainsKey(entity_id))
+            if (!this.entities_.ContainsKey(entity_id))
             {
-                this.Entities.Add(entity_id, new Entity(entity_id));
+                AddEntity(entity_id, new Entity(entity_id));
             }
 
             int prev_value = -1;
-            bool has_prev_value = this.Entities[entity_id].HasTag(tag);
-            if (has_prev_value) prev_value = this.Entities[entity_id].GetTag(tag);
+            bool has_prev_value = this.entities_[entity_id].HasTag(tag);
+            if (has_prev_value) prev_value = this.entities_[entity_id].GetTag(tag);
 
-            this.Entities[entity_id].SetTag(tag, tag_value);
+            this.entities_[entity_id].SetTag(tag, tag_value);
 
             switch (tag)
             {
@@ -146,7 +172,8 @@ namespace HearthstoneAI.State
             var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_str);
             if (tmpEntity == null)
             {
-                tmpEntity = new Entity(this.tmp_entities.Count + 1) { Name = entity_str };
+                tmpEntity = new Entity(this.tmp_entities.Count + 1);
+                tmpEntity.SetName(entity_str);
                 this.tmp_entities.Add(tmpEntity);
             }
 
@@ -156,7 +183,7 @@ namespace HearthstoneAI.State
             if (tmpEntity.HasTag(GameTag.ENTITY_ID))
             {
                 var id = tmpEntity.GetTag(GameTag.ENTITY_ID);
-                Entities[id].Name = tmpEntity.Name;
+                entities_[id].SetName(tmpEntity.Name);
                 foreach (var t in tmpEntity.Tags)
                     ChangeTag(id, t.Key, t.Value);
                 this.tmp_entities.Remove(tmpEntity);
@@ -178,11 +205,11 @@ namespace HearthstoneAI.State
 
         public int GetCurrentPlayerEntityId()
         {
-            if (Entities[PlayerEntityId].GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1)
+            if (entities_[PlayerEntityId].GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1)
             {
                 return PlayerEntityId;
             }
-            else if (Entities[OpponentEntityId].GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1)
+            else if (entities_[OpponentEntityId].GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1)
             {
                 return OpponentEntityId;
             }

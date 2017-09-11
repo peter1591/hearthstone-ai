@@ -173,7 +173,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
                 if (patch_entity_id > 0)
                 {
-                    game_state.Entities[patch_entity_id].Name = mulligan.player_entity_str;
+                    game_state.ChangeEntityName(patch_entity_id, mulligan.player_entity_str);
                     mulligan.player_entity_id = patch_entity_id;
                     logger_.Info(String.Format("Patch player name {0} with entity id {1}.",
                         mulligan.player_entity_str, patch_entity_id));

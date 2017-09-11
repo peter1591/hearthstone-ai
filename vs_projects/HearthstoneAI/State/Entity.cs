@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace HearthstoneAI.State
 {
-    public class Entity
+    public class ReadOnlyEntity
     {
-        public Entity(int id)
+        protected ReadOnlyEntity(int id)
         {
             Id = id;
             Tags = new Dictionary<GameTag, int>();
@@ -18,8 +18,8 @@ namespace HearthstoneAI.State
 
         public int Id { get; }
         public Dictionary<GameTag, int> Tags { get; }
-        public string Name { get; set; }
-        public string CardId { get; set; }
+        public string Name { get; protected set; }
+        public string CardId { get; protected set; }
 
         public bool HasTag(GameTag tag)
         {
@@ -41,6 +41,16 @@ namespace HearthstoneAI.State
             }
             return value;
         }
+    }
+
+    public class Entity : ReadOnlyEntity
+    {
+        public Entity(int id) : base(id)
+        {
+        }
+
+        public void SetName(string s) { Name = s; }
+        public void SetCardId(string s) { CardId = s; }
 
         public void SetTag(GameTag tag, int value)
         {

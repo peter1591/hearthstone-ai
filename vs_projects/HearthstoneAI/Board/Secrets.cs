@@ -9,7 +9,7 @@ namespace HearthstoneAI.Board
 {
     class Secrets : List<Secret>
     {
-        public bool Parse(State.Game game, State.Entity player)
+        public bool Parse(State.Game game, State.ReadOnlyEntity player)
         {
             bool ret = true;
 

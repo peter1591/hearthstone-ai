@@ -82,7 +82,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                         {
                             if (entity.Value.Name == String.Empty)
                             {
-                                entity.Value.Name = entity_str;
+                                game_state.ChangeEntityName(entity.Key, entity_str);
                                 return;
                             }
                         }

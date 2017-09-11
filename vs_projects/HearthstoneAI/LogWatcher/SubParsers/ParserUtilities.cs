@@ -54,7 +54,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     {
                         entityId = entity.Key;
                         entity_str = entity_str_try;
-                        entity.Value.Name = entity_str_try;
+                        game_state.ChangeEntityName(entityId, entity_str_try);
                     }
                     else
                     {
