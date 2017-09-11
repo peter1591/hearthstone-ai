@@ -8,159 +8,6 @@ namespace HearthstoneAI.State
 {
     class Game
     {
-        public class Entity
-        {
-            public Entity(int id)
-            {
-                Id = id;
-                Tags = new Dictionary<GameTag, int>();
-                Name = "";
-                CardId = "";
-            }
-
-            public int Id { get; }
-            public Dictionary<GameTag, int> Tags { get; }
-            public string Name { get; set; }
-            public string CardId { get; set; }
-
-            public bool HasTag(GameTag tag)
-            {
-                return Tags.ContainsKey(tag);
-            }
-
-            public int GetTagOrDefault(GameTag tag, int default_val)
-            {
-                if (!HasTag(tag)) return default_val;
-                return GetTag(tag);
-            }
-
-            public int GetTag(GameTag tag)
-            {
-                int value;
-                if (Tags.TryGetValue(tag, out value) == false)
-                {
-                    throw new Exception("tag not found");
-                }
-                return value;
-            }
-
-            public void SetTag(GameTag tag, int value)
-            {
-                if (!Tags.ContainsKey(tag))
-                    Tags.Add(tag, value);
-                else
-                    Tags[tag] = value;
-            }
-
-            public static Tuple<GameTag, int> ParseTag(string raw_tag, string raw_value)
-            {
-                GameTag tag;
-                if (!Enum.TryParse(raw_tag, out tag))
-                {
-                    int raw_tag_int;
-                    if (!int.TryParse(raw_tag, out raw_tag_int))
-                    {
-                        return new Tuple<GameTag, int>(GameTag.INVALID, -1);
-                    }
-
-                    if (Enum.IsDefined(typeof(GameTag), raw_tag_int))
-                    {
-                        tag = (GameTag)raw_tag_int;
-                    }
-                }
-
-                var value = ParseTagValue(tag, raw_value);
-
-                return new Tuple<GameTag, int>(tag, value);
-            }
-
-            private static int ParseTagValue(GameTag tag, string raw_value)
-            {
-                switch (tag)
-                {
-                    case GameTag.STEP:
-                        TAG_STEP step;
-                        if (Enum.TryParse(raw_value, out step)) return (int)step;
-                        break;
-
-                    case GameTag.ZONE:
-                        TAG_ZONE zone;
-                        if (Enum.TryParse(raw_value, out zone)) return (int)zone;
-                        break;
-
-                    case GameTag.MULLIGAN_STATE:
-                        {
-                            TAG_MULLIGAN state;
-                            if (Enum.TryParse(raw_value, out state)) return (int)state;
-                        }
-                        break;
-                    case GameTag.PLAYSTATE:
-                        {
-                            TAG_PLAYSTATE state;
-                            if (Enum.TryParse(raw_value, out state)) return (int)state;
-                        }
-                        break;
-                    case GameTag.CARDTYPE:
-                        TAG_CARDTYPE type;
-                        if (Enum.TryParse(raw_value, out type)) return (int)type;
-                        break;
-
-                    case GameTag.CLASS:
-                        TAG_CLASS @class;
-                        if (Enum.TryParse(raw_value, out @class)) return (int)@class;
-                        break;
-
-                    case GameTag.STATE:
-                        {
-                            TAG_STATE state;
-                            if (Enum.TryParse(raw_value, out state)) return (int)state;
-                        }
-                        break;
-
-                    default:
-                        int value;
-                        if (int.TryParse(raw_value, out value)) return value;
-                        break;
-                }
-
-                return -1;
-            }
-        }
-
-        public class EntityChoice
-        {
-            public EntityChoice()
-            {
-                choices = new Dictionary<int, int>();
-                choices_has_sent = false;
-                sent_choices = new List<int>();
-            }
-
-            public int id;
-            public string choice_type;
-            public int player_entity_id;
-            public string player_entity_str;
-            public string source;
-            public Dictionary<int, int> choices;
-
-            public bool choices_has_sent;
-            public List<int> sent_choices;
-        }
-
-        public class JoustInformation
-        {
-            public JoustInformation() { this.entities = new List<int>(); }
-
-            public int AddEntityId(int entity_id)
-            {
-                if (this.entities.Contains(entity_id)) return 0;
-                this.entities.Add(entity_id);
-                return 1;
-            }
-
-            public readonly List<int> entities;
-        }
-
         public Game()
         {
             this.Reset();
@@ -173,7 +20,7 @@ namespace HearthstoneAI.State
             this.OpponentEntityId = -1;
             this.Entities = new Dictionary<int, Entity>();
             this.EntityChoices = new Dictionary<int, EntityChoice>();
-            this.joust_information = new Game.JoustInformation();
+            this.joust_information = new JoustInformation();
             this.player_played_hand_cards.Clear();
             this.opponent_played_hand_cards.Clear();
         }
@@ -204,7 +51,7 @@ namespace HearthstoneAI.State
         {
             if (!Entities.ContainsKey(id))
             {
-                Entities.Add(id, new Game.Entity(id) { Name = "GameEntity" });
+                Entities.Add(id, new Entity(id) { Name = "GameEntity" });
             }
             this.GameEntityId = id;
         }
@@ -291,7 +138,7 @@ namespace HearthstoneAI.State
             this.ChangeTag(entity_id, tag_value.Item1, tag_value.Item2);
         }
 
-        private List<Game.Entity> tmp_entities = new List<Game.Entity>();
+        private List<Entity> tmp_entities = new List<Entity>();
         public void ChangeTag(string entity_str, string raw_tag, string raw_value)
         {
             // failed to get entity id
@@ -299,11 +146,11 @@ namespace HearthstoneAI.State
             var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_str);
             if (tmpEntity == null)
             {
-                tmpEntity = new Game.Entity(this.tmp_entities.Count + 1) { Name = entity_str };
+                tmpEntity = new Entity(this.tmp_entities.Count + 1) { Name = entity_str };
                 this.tmp_entities.Add(tmpEntity);
             }
 
-            var tag_value = Game.Entity.ParseTag(raw_tag, raw_value);
+            var tag_value = Entity.ParseTag(raw_tag, raw_value);
             tmpEntity.SetTag(tag_value.Item1, tag_value.Item2);
 
             if (tmpEntity.HasTag(GameTag.ENTITY_ID))

@@ -74,7 +74,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 this.game_state.EntityChoices.Remove(entity_choice_id);
             }
 
-            this.game_state.EntityChoices[entity_choice_id] = new State.Game.EntityChoice();
+            this.game_state.EntityChoices[entity_choice_id] = new State.EntityChoice();
             this.game_state.EntityChoices[entity_choice_id].id = entity_choice_id;
             this.game_state.EntityChoices[entity_choice_id].choice_type = choice_type;
             this.game_state.EntityChoices[entity_choice_id].player_entity_id = player_entity_id;
@@ -147,7 +147,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
         }
 
-        private void DeterminePlayerAndOpponent(State.Game.EntityChoice mulligan)
+        private void DeterminePlayerAndOpponent(State.EntityChoice mulligan)
         {
             // if mulligan choice have card id, then it's the player
             // otherwise, it's the opponent

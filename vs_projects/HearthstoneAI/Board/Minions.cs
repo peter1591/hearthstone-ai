@@ -9,7 +9,7 @@ namespace HearthstoneAI.Board
 {
     class Minions : List<Minion>
     {
-        public bool Parse(State.Game game, State.Game.Entity player)
+        public bool Parse(State.Game game, State.Entity player)
         {
             bool ret = true;
 

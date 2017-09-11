@@ -20,13 +20,13 @@ namespace HearthstoneAI.State
     {
         static public GameStage GetGameStage(Game game)
         {
-            Game.Entity game_entity;
+            Entity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) return GameStage.STAGE_UNKNOWN;
 
-            Game.Entity player_entity;
+            Entity player_entity;
             if (!game.TryGetPlayerEntity(out player_entity)) return GameStage.STAGE_UNKNOWN;
 
-            Game.Entity opponent_entity;
+            Entity opponent_entity;
             if (!game.TryGetOpponentEntity(out opponent_entity)) return GameStage.STAGE_UNKNOWN;
 
             if (player_entity.GetTagOrDefault(GameTag.MULLIGAN_STATE, (int)TAG_MULLIGAN.INVALID) == (int)TAG_MULLIGAN.INPUT)

@@ -37,7 +37,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public Enchantments enchantments = new Enchantments();
         
-        public bool Parse(State.Game game, State.Game.Entity entity)
+        public bool Parse(State.Game game, State.Entity entity)
         {
             bool ret = true;
 
@@ -52,7 +52,7 @@ namespace HearthstoneAI.Board
 
             ret = this.status.Parse(game, entity) && ret;
 
-            State.Game.Entity hero_power;
+            State.Entity hero_power;
             if (game.TryGetPlayerHeroPowerEntity(entity.Id, out hero_power))
             {
                 this.hero_power.Parse(game, hero_power);

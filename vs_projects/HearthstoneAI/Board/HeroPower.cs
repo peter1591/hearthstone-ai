@@ -16,7 +16,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public bool used;
 
-        public bool Parse(State.Game game, State.Game.Entity entity)
+        public bool Parse(State.Game game, State.Entity entity)
         {
             this.card_id = entity.CardId;
             this.used = (entity.GetTagOrDefault(State.GameTag.EXHAUSTED, 0) != 0);

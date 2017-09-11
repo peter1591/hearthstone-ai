@@ -37,7 +37,7 @@ namespace HearthstoneAI.Board
         [DataMember]
         public int windfury;
 
-        public bool Parse(State.Game game, State.Game.Entity entity)
+        public bool Parse(State.Game game, State.Entity entity)
         {
             bool ret = true;
             ret = this.ParseOneStatus(entity, State.GameTag.CHARGE, out this.charge) && ret;
@@ -53,7 +53,7 @@ namespace HearthstoneAI.Board
             return ret;
         }
 
-        private bool ParseOneStatus(State.Game.Entity entity, State.GameTag tag, out int value)
+        private bool ParseOneStatus(State.Entity entity, State.GameTag tag, out int value)
         {
             value = entity.GetTagOrDefault(tag, 0);
 

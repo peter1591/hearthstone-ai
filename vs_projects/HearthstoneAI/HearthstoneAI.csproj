@@ -71,6 +71,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="AI\AIEngine.cs" />
+    <Compile Include="State\Entity.cs" />
+    <Compile Include="State\EntityChoice.cs" />
     <Compile Include="State\GameStage.cs" />
     <Compile Include="State\Game.cs" />
     <Compile Include="State\GameTag.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="LogWatcher\SubParsers\SendChoicesParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="State\JoustInformation.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

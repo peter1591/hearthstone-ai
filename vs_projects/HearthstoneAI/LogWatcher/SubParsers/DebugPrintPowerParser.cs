@@ -54,7 +54,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             var entity_raw = match.Groups["entity"].Value;
 
-            var tag = State.Game.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
+            var tag = State.Entity.ParseTag(match.Groups["tag"].Value, match.Groups["value"].Value);
 
             PatchPlayerName(entity_raw, tag.Item1, tag.Item2);
 
