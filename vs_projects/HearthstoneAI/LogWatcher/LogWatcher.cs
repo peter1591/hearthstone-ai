@@ -58,6 +58,8 @@ namespace HearthstoneAI.LogWatcher
         public void Reset(string hearthstone_path)
         {
             game_state_ = new State.Game();
+            game_state_.ZoneChanged += EntityZoneChanged;
+
             this.stable_decider_ = new StableDecider(100); // 100 ms
 
             this.log_reader = new LogReader(hearthstone_path, game_state_, logger_);
@@ -77,18 +79,6 @@ namespace HearthstoneAI.LogWatcher
             };
             this.log_reader.CreateGameEvent += (sender, e) =>
             {
-                // a CREATE_GAME will present for every 30 minutes
-                // or maybe when you re-connected to the game?
-                // So here we don't reset the game unless the Game State is COMPLETE
-                if (game_state_.GameEntityId > 0)
-                {
-                    var game_entity = game_state_.Entities.Items[game_state_.GameEntityId];
-                    if (game_entity.GetTagOrDefault(State.GameTag.STATE, (int)State.TAG_STATE.RUNNING) != (int)State.TAG_STATE.COMPLETE)
-                    {
-                        return;
-                    }
-                }
-
                 game_state_.Reset();
 
                 CreateGameEvent(sender, e);
@@ -102,6 +92,22 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs(e, game_state_));
             };
+        }
+
+        private void EntityZoneChanged(object sender, State.Entities.ZoneChangedArgs e)
+        {
+            if (e.prev_zone == State.TAG_ZONE.INVALID && e.current_zone == State.TAG_ZONE.DECK)
+            {
+                logger_.Info(String.Format("Entity {0} moved to deck.", e.entity_id));
+            }
+
+            if (e.prev_zone == State.TAG_ZONE.DECK && e.current_zone != State.TAG_ZONE.DECK)
+            {
+                logger_.Info(string.Format(
+                    "Zone changed! Entity {0} moved from deck to {1}.",
+                    e.entity_id.ToString(),
+                    e.current_zone.ToString()));
+            }
         }
 
         private bool tick_processing_ = false;
