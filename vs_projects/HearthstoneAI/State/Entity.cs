@@ -16,6 +16,16 @@ namespace HearthstoneAI.State
             CardId = "";
         }
 
+        public ReadOnlyEntity(ReadOnlyEntity rhs)
+        {
+            Id = rhs.Id;
+            Tags = new Dictionary<GameTag, int>(rhs.Tags);
+            Name = rhs.Name;
+            CardId = rhs.CardId;
+        }
+
+        public ReadOnlyEntity Clone() { return new ReadOnlyEntity(this); }
+
         public int Id { get; }
         public Dictionary<GameTag, int> Tags { get; }
         public string Name { get; protected set; }

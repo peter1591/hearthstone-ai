@@ -89,7 +89,7 @@ namespace HearthstoneAI.LogWatcher
             };
             this.log_reader.EntityTagChanged += (sender, e) =>
             {
-                game_state_.NotifyEntityTagChanged(e.prev, e.current);
+                game_state_.NotifyEntityTagChanged(e.current.Id, e.prev, logger_);
             };
 
             game_state_.EndTurnEvent += (sender, e) =>

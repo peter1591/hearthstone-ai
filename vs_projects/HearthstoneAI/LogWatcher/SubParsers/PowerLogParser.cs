@@ -249,7 +249,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (entityId >= 0)
             {
-                State.ReadOnlyEntity prev_entity = game_state.Entities.Items[entityId];
+                State.ReadOnlyEntity prev_entity = game_state.Entities.Items[entityId].Clone();
                 this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
                 EntityTagChanged(this, new EntityTagChangedEventArgs()
                 {
@@ -258,7 +258,6 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 });
             }
             else game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
-
 
             yield return true;
         }
@@ -283,7 +282,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             {
                 this.game_state.AddEntity(entityId, new State.Entity(entityId));
             }
-            var prev_entity = game_state.Entities.Items[entityId];
+            var prev_entity = game_state.Entities.Items[entityId].Clone();
             this.game_state.ChangeEntityCardId(entityId, cardId);
             yield return true;
 
@@ -314,6 +313,8 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 this.game_state.AddEntity(id, v);
             }
 
+            var prev_entity = game_state.Entities.Items[id].Clone();
+
             // triggers
             if (action_block_type == "JOUST")
             {
@@ -327,6 +328,12 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 if (this.ParseCreatingTag(id)) yield return true;
                 else break;
             }
+
+            EntityTagChanged(this, new EntityTagChangedEventArgs()
+            {
+                prev = prev_entity,
+                current = game_state.Entities.Items[id]
+            });
         }
 
         private IEnumerable<bool> ParseHideEntity()
@@ -338,7 +345,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value, out entity_str);
                 if (entityId < 0)
                 {
-                    var prev_entity = game_state.Entities.Items[entityId];
+                    var prev_entity = game_state.Entities.Items[entityId].Clone();
 
                     game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
 
@@ -349,7 +356,6 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                     });
                 }
                 else game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
-
                 yield return true;
             }
         }

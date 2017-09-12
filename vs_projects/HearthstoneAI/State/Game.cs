@@ -212,9 +212,56 @@ namespace HearthstoneAI.State
             }
         }
 
-        public void NotifyEntityTagChanged(State.ReadOnlyEntity prev, State.ReadOnlyEntity current)
+        public void NotifyEntityTagChanged(int id, State.ReadOnlyEntity prev, LogWatcher.Logger logger)
         {
+            State.ReadOnlyEntity current = entities_.Items[id];
+            int current_controller = current.GetTagOrDefault(GameTag.CONTROLLER, -1);
+            TAG_ZONE current_zone = (TAG_ZONE)current.GetTagOrDefault(GameTag.ZONE, (int)TAG_ZONE.INVALID);
+            if (current_controller < 0) return;
+            if (current_zone == TAG_ZONE.INVALID) return;
 
+            if (prev != null)
+            {
+                if (prev.Id != id)
+                {
+                    logger.Info("entity id should not be changed.");
+                    return;
+                }
+                int prev_controller = prev.GetTagOrDefault(GameTag.CONTROLLER, -1);
+                TAG_ZONE prev_zone = (TAG_ZONE)prev.GetTagOrDefault(GameTag.ZONE, (int)TAG_ZONE.INVALID);
+
+                if (prev_controller >= 0 && prev_zone != TAG_ZONE.INVALID)
+                {
+                    if (prev_controller == current_controller && prev_zone == current_zone) return;
+                    EntityZoneChanged(id, prev_zone, prev_controller, current_zone, current_controller, logger);
+                }
+            }
+
+            EntityAdded(id, current_zone, current_controller, logger);
+        }
+
+        private void EntityAdded(int id, TAG_ZONE zone, int controller, LogWatcher.Logger logger)
+        {
+            if (zone == TAG_ZONE.DECK)
+            {
+                logger.Info(String.Format(
+                    "New Entity {0} to controller {1}'s deck.",
+                    id, controller.ToString()));
+            }
+        }
+
+        private void EntityZoneChanged(
+            int id,
+            TAG_ZONE prev_zone, int prev_controller,
+            TAG_ZONE current_zone, int current_controller,
+            LogWatcher.Logger logger)
+        {
+            if (prev_zone == TAG_ZONE.DECK)
+            {
+                logger.Info(string.Format(
+                    "Entity {0} moved from controller {1}'s deck",
+                    id.ToString(), prev_controller.ToString()));
+            }
         }
     }
 }
