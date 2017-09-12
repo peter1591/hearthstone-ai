@@ -17,6 +17,7 @@ namespace HearthstoneAI.LogWatcher
 
         public event EventHandler<SubParsers.PowerLogParser.BlockStartEventArgs> BlockStart;
         public event EventHandler<SubParsers.PowerLogParser.BlockEndEventArgs> BlockEnd;
+        public event EventHandler<SubParsers.PowerLogParser.EntityTagChangedEventArgs> EntityTagChanged;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
         private Logger logger_;
@@ -48,6 +49,8 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.BlockStart != null) this.BlockStart(this, e);
             };
+            this.log_parser.BlockEnd += (sender, e) => this.BlockEnd(sender, e);
+            this.log_parser.EntityTagChanged += (sender, e) => this.EntityTagChanged(sender, e);
             this.log_parser.CreateGameEvent += (sender, e) =>
             {
                 if (this.CreateGameEvent != null) this.CreateGameEvent(this, e);

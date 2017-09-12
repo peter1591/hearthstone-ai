@@ -78,6 +78,13 @@ namespace HearthstoneAI.LogWatcher.SubParsers
         public class CreateGameEventArgs : EventArgs { }
         public event EventHandler<CreateGameEventArgs> CreateGameEvent;
 
+        public class EntityTagChangedEventArgs : EventArgs
+        {
+            public State.ReadOnlyEntity prev;
+            public State.ReadOnlyEntity current;
+        }
+        public event EventHandler<EntityTagChangedEventArgs> EntityTagChanged;
+
         public PowerLogParser(State.Game game_state, Logger logger)
             : base(logger)
         {
@@ -123,14 +130,25 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             var game_entity_match = GameEntityRegex.Match(this.parsing_log);
             var game_entity_id = int.Parse(game_entity_match.Groups["id"].Value);
-            this.game_state.CreateGameEntity(game_entity_id);
+            if (game_state.Entities.Items.ContainsKey(game_entity_id))
+            {
+                logger_.Info("[ERROR] entity already exists.");
+                yield break;
+            }
             yield return true;
 
+            this.game_state.CreateGameEntity(game_entity_id);
             while (true)
             {
                 if (this.ParseCreatingTag(game_entity_id)) yield return true;
                 else break;
             }
+
+            EntityTagChanged(this, new EntityTagChangedEventArgs()
+            {
+                prev = null,
+                current = game_state.Entities.Items[game_entity_id]
+            });
         }
 
         private IEnumerable<bool> ParsePlayerEntityCreation()
@@ -156,6 +174,12 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 if (this.ParseCreatingTag(id)) yield return true;
                 else break;
             }
+
+            EntityTagChanged(this, new EntityTagChangedEventArgs()
+            {
+                prev = null,
+                current = game_state.Entities.Items[id]
+            });
         }
 
         private IEnumerable<bool> ParseCreateGame()
@@ -192,8 +216,8 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 bool matched = false;
                 foreach (var ret in ParserUtilities.TrySubParsers(new List<Func<IEnumerable<bool>>>{
                     () => { return this.ParseFullEntity(); },
-                    () => { return this.ParseTagChange(); },
                     () => { return this.ParseShowEntities(); },
+                    () => { return this.ParseTagChange(); },
                     () => { return this.ParseHideEntity(); },
                     () => { return this.ParseBlock(); }
                 }))
@@ -223,8 +247,18 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             string entity_str;
             int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, entity_raw, out entity_str);
 
-            if (entityId >= 0) this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+            if (entityId >= 0)
+            {
+                State.ReadOnlyEntity prev_entity = game_state.Entities.Items[entityId];
+                this.game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+                EntityTagChanged(this, new EntityTagChangedEventArgs()
+                {
+                    prev = prev_entity,
+                    current = game_state.Entities.Items[entityId]
+                });
+            }
             else game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
+
 
             yield return true;
         }
@@ -246,7 +280,10 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
 
             if (!this.game_state.Entities.Items.ContainsKey(entityId))
+            {
                 this.game_state.AddEntity(entityId, new State.Entity(entityId));
+            }
+            var prev_entity = game_state.Entities.Items[entityId];
             this.game_state.ChangeEntityCardId(entityId, cardId);
             yield return true;
 
@@ -255,6 +292,12 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 if (this.ParseCreatingTag(entityId)) yield return true;
                 else break;
             }
+
+            EntityTagChanged(this, new EntityTagChangedEventArgs()
+            {
+                prev = prev_entity,
+                current = game_state.Entities.Items[entityId]
+            });
         }
 
         private IEnumerable<bool> ParseFullEntity(string action_block_type = "")
@@ -293,8 +336,20 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 var match = HideEntityRegex.Match(this.parsing_log);
                 string entity_str;
                 int entityId = ParserUtilities.GetEntityIdFromRawString(this.game_state, match.Groups["entity"].Value, out entity_str);
-                if (entityId < 0) game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
+                if (entityId < 0)
+                {
+                    var prev_entity = game_state.Entities.Items[entityId];
+
+                    game_state.ChangeTag(entity_str, match.Groups["tag"].Value, match.Groups["value"].Value);
+
+                    EntityTagChanged(this, new EntityTagChangedEventArgs()
+                    {
+                        prev = prev_entity,
+                        current = game_state.Entities.Items[entityId]
+                    });
+                }
                 else game_state.ChangeTag(entityId, match.Groups["tag"].Value, match.Groups["value"].Value);
+
                 yield return true;
             }
         }

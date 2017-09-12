@@ -73,6 +73,7 @@ namespace HearthstoneAI.State
             }
         }
 
+        // TODO: remove this
         public class ZoneChangedArgs
         {
             public int entity_id;

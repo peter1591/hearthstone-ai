@@ -211,5 +211,10 @@ namespace HearthstoneAI.State
                 return -1;
             }
         }
+
+        public void NotifyEntityTagChanged(State.ReadOnlyEntity prev, State.ReadOnlyEntity current)
+        {
+
+        }
     }
 }
