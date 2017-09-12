@@ -47,6 +47,22 @@ namespace state
 		kCardRaceOrc
 	};
 
+	enum PlayerClass
+	{
+		kPlayerClassDruid,
+		kPlayerClassHunter,
+		kPlayerClassMage,
+		kPlayerClassNeutral,
+		kPlayerClassPaladin,
+		kPlayerClassPriest,
+		kPlayerClassRogue,
+		kPlayerClassShaman,
+		kPlayerClassWarlock,
+		kPlayerClassWarrior,
+		kPlayerClassDeathKnight,
+		kPlayerClassInvalid
+	};
+
 	enum CardSet
 	{
 		kCardSetInvalid,

@@ -19,12 +19,15 @@ namespace Cards
 		struct CardData
 		{
 			CardData() :
-				card_id(-1), card_type(state::kCardTypeInvalid), card_race(state::kCardRaceInvalid),
+				card_id(-1),
+				player_class(state::kPlayerClassInvalid),
+				card_type(state::kCardTypeInvalid), card_race(state::kCardRaceInvalid),
 				card_rarity(state::kCardRarityInvalid), card_set(state::kCardSetInvalid),
 				cost(-1), attack(-1), max_hp(-1), collectible(false)
 			{}
 
 			int card_id;
+			state::PlayerClass player_class;
 			state::CardType card_type;
 			state::CardRace card_race;
 			state::CardRarity card_rarity;
@@ -135,6 +138,25 @@ namespace Cards
 			return true;
 		}
 
+		state::PlayerClass GetPlayerClass(Json::Value const& json)
+		{
+			const std::string player_class = json["playerClass"].asString();
+
+			if (player_class == "DRUID") return state::PlayerClass::kPlayerClassDruid;
+			if (player_class == "HUNTER") return state::PlayerClass::kPlayerClassHunter;
+			if (player_class == "MAGE") return state::PlayerClass::kPlayerClassMage;
+			if (player_class == "NEUTRAL") return state::PlayerClass::kPlayerClassNeutral;
+			if (player_class == "PALADIN") return state::PlayerClass::kPlayerClassPaladin;
+			if (player_class == "PRIEST") return state::PlayerClass::kPlayerClassPriest;
+			if (player_class == "ROGUE") return state::PlayerClass::kPlayerClassRogue;
+			if (player_class == "SHAMAN") return state::PlayerClass::kPlayerClassShaman;
+			if (player_class == "WARLOCK") return state::PlayerClass::kPlayerClassWarlock;
+			if (player_class == "WARRIOR") return state::PlayerClass::kPlayerClassWarrior;
+			if (player_class == "DEATHKNIGHT") return state::PlayerClass::kPlayerClassDeathKnight;
+
+			throw std::runtime_error("unknown player class.");
+		}
+
 		state::CardRace GetCardRace(Json::Value const& json)
 		{
 			const std::string race = json["race"].asString();
@@ -241,6 +263,7 @@ namespace Cards
 			else if (type == "HERO") {
 				new_card.card_type = state::kCardTypeHero;
 				new_card.card_race = GetCardRace(json);
+				new_card.player_class = GetPlayerClass(json);
 				new_card.max_hp = json["health"].asInt();
 				new_card.attack = 0;
 			}
