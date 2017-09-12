@@ -107,7 +107,9 @@ namespace ui
 		{
 			auto const& container = Cards::Database::GetInstance().GetIdMap();
 			auto it = container.find(card_id);
-			if (it == container.end()) return Cards::kInvalidCardId;
+			if (it == container.end()) {
+				return Cards::kInvalidCardId;
+			}
 			return (Cards::CardId)it->second;
 		}
 
@@ -212,8 +214,9 @@ namespace ui
 
 		void MakeHeroPower(state::PlayerIdentifier player, state::State & state, Json::Value const& json)
 		{
+			std::string card_id = json["card_id"].asString();
 			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(
-				GetCardId(json["card_id"].asString()));
+				GetCardId(card_id));
 			assert(raw_card.card_type == state::kCardTypeHeroPower);
 			raw_card.used_this_turn = json["used"].asBool();
 
