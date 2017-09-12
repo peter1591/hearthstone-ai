@@ -188,19 +188,18 @@ namespace ui
 
 		void MakeHero(state::PlayerIdentifier player, state::State & state, Json::Value const& json)
 		{
-			state::Cards::CardData raw_card;
-
-			// TODO: use CardDispatcher::CreateInstance to create card
 			// TODO: mark ctor of state::Cards::CardData as private, to make it only constructible from CardDispatcher::CreateInstance
-			raw_card.card_id = GetCardId(json["card_id"].asString());
-			raw_card.card_type = state::kCardTypeHero;
-			raw_card.zone = state::kCardZoneNewlyCreated;
 			
-			raw_card.enchanted_states.max_hp = json["max_hp"].asInt();
+			std::string card_id = json["card_id"].asString();
+			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(
+				GetCardId(card_id));
+			
 			raw_card.enchanted_states.player = player;
-			raw_card.enchanted_states.attack = 0;
+			assert(raw_card.card_type == state::kCardTypeHero);
+			raw_card.zone = state::kCardZoneNewlyCreated;
 			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
 
+			raw_card.enchanted_states.max_hp = json["max_hp"].asInt();
 			raw_card.damaged = json["damage"].asInt();
 			raw_card.armor = json["armor"].asInt();
 			raw_card.enchanted_states.attack = json["attack"].asInt();
