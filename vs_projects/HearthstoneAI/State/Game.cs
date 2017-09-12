@@ -29,6 +29,10 @@ namespace HearthstoneAI.State
 
         private Entities entities_;
         public ReadOnlyEntities Entities { get { return entities_; } }
+        public void CreateEntity(int id)
+        {
+            entities_.Add(id, new Entity(id, blocks_));
+        }
         public void AddEntity(int id, Entity data)
         {
             entities_.Add(id, data);
@@ -66,7 +70,7 @@ namespace HearthstoneAI.State
         {
             if (!entities_.Items.ContainsKey(id))
             {
-                var v = new Entity(id);
+                var v = new Entity(id, blocks_);
                 v.SetName("GameEntity");
                 entities_.Add(id, v);
             }
@@ -75,9 +79,11 @@ namespace HearthstoneAI.State
 
         public bool TryGetGameEntity(out ReadOnlyEntity entity)
         {
-            entity = new Entity(-1);
-
-            if (this.GameEntityId < 0) return false;
+            if (this.GameEntityId < 0)
+            {
+                entity = null;
+                return false;
+            }
 
             entity = entities_.Items[this.GameEntityId];
             return true;
@@ -85,16 +91,22 @@ namespace HearthstoneAI.State
 
         public bool TryGetPlayerEntity(out ReadOnlyEntity entity)
         {
-            entity = new Entity(-1);
-            if (!this.entities_.Items.ContainsKey(this.PlayerEntityId)) return false;
+            if (!this.entities_.Items.ContainsKey(this.PlayerEntityId))
+            {
+                entity = null;
+                return false;
+            }
             entity = this.entities_.Items[this.PlayerEntityId];
             return true;
         }
 
         public bool TryGetOpponentEntity(out ReadOnlyEntity entity)
         {
-            entity = new Entity(-1);
-            if (!this.entities_.Items.ContainsKey(this.OpponentEntityId)) return false;
+            if (!this.entities_.Items.ContainsKey(this.OpponentEntityId))
+            {
+                entity = null;
+                return false;
+            }
             entity = this.entities_.Items[this.OpponentEntityId];
             return true;
         }
@@ -113,7 +125,7 @@ namespace HearthstoneAI.State
                 return true;
             }
 
-            out_entity = new Entity(-1);
+            out_entity = null;
             return false;
         }
 
@@ -121,7 +133,7 @@ namespace HearthstoneAI.State
         {
             if (!this.entities_.Items.ContainsKey(entity_id))
             {
-                this.entities_.Add(entity_id, new Entity(entity_id));
+                this.entities_.Add(entity_id, new Entity(entity_id, blocks_));
             }
 
             int prev_value = -1;
@@ -163,7 +175,7 @@ namespace HearthstoneAI.State
             var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_str);
             if (tmpEntity == null)
             {
-                tmpEntity = new Entity(this.tmp_entities.Count + 1);
+                tmpEntity = new Entity(this.tmp_entities.Count + 1, blocks_);
                 tmpEntity.SetName(entity_str);
                 this.tmp_entities.Add(tmpEntity);
             }
@@ -259,6 +271,31 @@ namespace HearthstoneAI.State
                 logger.Info(string.Format(
                     "Entity {0} moved from controller {1}'s deck",
                     id.ToString(), prev_controller.ToString()));
+            }
+        }
+
+        public List<State.BlockInfo> blocks_ = new List<BlockInfo>();
+        public void NotifyBlockStarted(int entity_id, string block_type)
+        {
+            blocks_.Add(new State.BlockInfo()
+            {
+                entity_id = entity_id,
+                block_type = block_type
+            });
+        }
+        public void NotifyBlockEnded(int entity_id, string block_type, LogWatcher.Logger logger)
+        {
+            if (blocks_[blocks_.Count - 1].block_type != block_type)
+            {
+                logger.Info("block type not matched in BlockEnd");
+            }
+            else if (blocks_[blocks_.Count - 1].entity_id != entity_id)
+            {
+                logger.Info("entity id not matched in BlockEnd");
+            }
+            else
+            {
+                blocks_.RemoveAt(blocks_.Count - 1);
             }
         }
     }

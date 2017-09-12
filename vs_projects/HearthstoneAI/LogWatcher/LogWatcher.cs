@@ -65,10 +65,14 @@ namespace HearthstoneAI.LogWatcher
             game_state_.StartWaitingMainAction += StartWaitingMainAction;
             this.log_reader.BlockStart += (sender, e) =>
             {
+                game_state_.NotifyBlockStarted(e.entity_id, e.block_type);
+
                 if (this.BlockStart != null) this.BlockStart(this, new BlockStartEventArgs(e, game_state_));
             };
             this.log_reader.BlockEnd += (sender, e) =>
             {
+                game_state_.NotifyBlockEnded(e.entity_id, e.block_type, logger_);
+
                 if (e.block_type == "PLAY")
                 {
                     AnalyzePlayHandCardAction(e.entity_id);

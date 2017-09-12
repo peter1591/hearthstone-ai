@@ -166,7 +166,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 logger_.Info("[ERROR] entity already exists.");
                 yield break;
             }
-            this.game_state.AddEntity(id, new State.Entity(id));
+            this.game_state.CreateEntity(id);
             yield return true;
 
             while (true)
@@ -280,7 +280,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
 
             if (!this.game_state.Entities.Items.ContainsKey(entityId))
             {
-                this.game_state.AddEntity(entityId, new State.Entity(entityId));
+                this.game_state.CreateEntity(entityId);
             }
             var prev_entity = game_state.Entities.Items[entityId].Clone();
             this.game_state.ChangeEntityCardId(entityId, cardId);
@@ -308,9 +308,8 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var cardId = match.Groups["cardId"].Value;
             if (!this.game_state.Entities.Items.ContainsKey(id))
             {
-                var v = new State.Entity(id);
-                v.SetCardId(cardId);
-                this.game_state.AddEntity(id, v);
+                this.game_state.CreateEntity(id);
+                this.game_state.ChangeEntityCardId(id, cardId);
             }
 
             var prev_entity = game_state.Entities.Items[id].Clone();
