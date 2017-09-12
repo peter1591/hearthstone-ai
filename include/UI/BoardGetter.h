@@ -98,6 +98,8 @@ namespace ui
 
 			MakePlayer(state::kPlayerFirst, state, random, board["player"]);
 			MakePlayer(state::kPlayerSecond, state, random, board["opponent"]);
+			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should not waiting for an action
+			state.SetTurn(board["turn"].asInt());
 
 			return state;
 		}
