@@ -3,6 +3,7 @@
 #include <random>
 #include <sstream>
 #include <string>
+#include <shared_mutex>
 
 #include <json/json.h>
 
@@ -45,6 +46,7 @@ namespace ui
 
 		int ResetBoard()
 		{
+			std::lock_guard<std::shared_mutex> lock(lock_);
 			board_raw_.clear();
 			need_restart_ai_ = true;
 			return 0;
@@ -52,6 +54,8 @@ namespace ui
 
 		int UpdateBoard(std::string const& board)
 		{
+			std::lock_guard<std::shared_mutex> lock(lock_);
+
 			if (board_raw_ == board) return 0;
 
 			logger_.Log("Updating board.");
@@ -64,6 +68,8 @@ namespace ui
 
 		int PrepareToRun(ui::AIController * controller, bool * restart_ai)
 		{
+			std::lock_guard<std::shared_mutex> lock(lock_);
+
 			if (need_restart_ai_) {
 				*restart_ai = true;
 				return 0;
@@ -77,19 +83,23 @@ namespace ui
 
 		state::State GetStartBoard(int seed)
 		{
+			std::shared_lock<std::shared_mutex> lock(lock_);
+
+			state::State state;
 			Json::Reader reader;
 			std::stringstream ss(board_raw_);
 			Json::Value board;
-			reader.parse(ss, board);
+			if (!reader.parse(ss, board)) {
+				logger_.Log("Failed to parse board.");
+				return state;
+			}
 
-			state::State state;
 			MyRandomGenerator random(seed);
 
 			MakePlayer(state::kPlayerFirst, state, random, board["player"]);
 			MakePlayer(state::kPlayerSecond, state, random, board["opponent"]);
 
-			// TODO: use board
-			return TestStateBuilder().GetState(seed);
+			return state;
 		}
 
 	private:
@@ -276,6 +286,7 @@ namespace ui
 		}
 
 	private:
+		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
 		bool need_restart_ai_;
 		std::string board_raw_;
