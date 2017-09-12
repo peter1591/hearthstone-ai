@@ -50,6 +50,7 @@ namespace Cards
 			static std::unordered_set<state::CardSet> card_sets = {
 				state::kCardSetCore,
 				state::kCardSetExpert1,
+				state::kCardSetHeroSkin,
 				state::kCardSetOldGods,
 				state::kCardSetKara,
 				state::kCardSetGangs,
@@ -174,11 +175,11 @@ namespace Cards
 			if (set == "ICECROWN") return state::kCardSetIceCrown;
 
 			if (set == "TB") return state::kCardSetTB;
+			if (set == "HERO_SKINS") return state::kCardSetHeroSkin;
 
 			if (set == "CHEAT") return state::kCardSetInvalid;
 			if (set == "MISSIONS") return state::kCardSetInvalid;
 			if (set == "CREDITS") return state::kCardSetInvalid;
-			if (set == "HERO_SKINS") return state::kCardSetInvalid;
 			throw std::runtime_error("unknown set");
 		}
 

@@ -52,6 +52,7 @@ namespace state
 		kCardSetInvalid,
 		kCardSetCore,
 		kCardSetExpert1,
+		kCardSetHeroSkin,
 		kCardSetGVG,
 		kCardSetTGT,
 		kCardSetNaxx,
