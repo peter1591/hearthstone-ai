@@ -34,19 +34,6 @@ namespace HearthstoneAI.State
         public void Add(int id, Entity data)
         {
             items_.Add(id, data);
-
-            if (ZoneChanged != null)
-            {
-                if (data.HasTag(GameTag.ZONE))
-                {
-                    ZoneChanged(this, new ZoneChangedArgs()
-                    {
-                        entity_id = id,
-                        prev_zone = TAG_ZONE.INVALID,
-                        current_zone = (TAG_ZONE)data.GetTag(GameTag.ZONE)
-                    });
-                }
-            }
         }
         public void ChangeCardId(int id, string card_id)
         {
@@ -61,25 +48,6 @@ namespace HearthstoneAI.State
             TAG_ZONE prev_zone = (TAG_ZONE)items_[id].GetTagOrDefault(GameTag.ZONE, (int)TAG_ZONE.INVALID);
 
             items_[id].SetTag(tag, value);
-
-            if (ZoneChanged != null && tag == GameTag.ZONE)
-            {
-                ZoneChanged(this, new ZoneChangedArgs()
-                {
-                    entity_id = id,
-                    prev_zone = prev_zone,
-                    current_zone = (TAG_ZONE)value
-                });
-            }
         }
-
-        // TODO: remove this
-        public class ZoneChangedArgs
-        {
-            public int entity_id;
-            public TAG_ZONE prev_zone; // invalid if newly added
-            public TAG_ZONE current_zone;
-        }
-        public event EventHandler<ZoneChangedArgs> ZoneChanged;
     }
 }

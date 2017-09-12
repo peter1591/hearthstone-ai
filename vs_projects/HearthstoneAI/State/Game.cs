@@ -20,7 +20,6 @@ namespace HearthstoneAI.State
             this.OpponentEntityId = -1;
 
             this.entities_ = new Entities();
-            entities_.ZoneChanged += (sender, e) => ZoneChanged(sender, e);
 
             this.EntityChoices = new Dictionary<int, EntityChoice>();
             this.joust_information = new JoustInformation();
@@ -42,7 +41,6 @@ namespace HearthstoneAI.State
         {
             entities_.ChangeName(id, name);
         }
-        public event EventHandler<Entities.ZoneChangedArgs> ZoneChanged;
 
         public Dictionary<int, EntityChoice> EntityChoices { get; set; }
         public int GameEntityId { get; set; }

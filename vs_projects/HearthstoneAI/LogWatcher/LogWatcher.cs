@@ -58,7 +58,6 @@ namespace HearthstoneAI.LogWatcher
         public void Reset(string hearthstone_path)
         {
             game_state_ = new State.Game();
-            game_state_.ZoneChanged += EntityZoneChanged;
 
             this.stable_decider_ = new StableDecider(100); // 100 ms
 
@@ -96,24 +95,6 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs(e, game_state_));
             };
-        }
-
-        private void EntityZoneChanged(object sender, State.Entities.ZoneChangedArgs e)
-        {
-            if (e.prev_zone == State.TAG_ZONE.INVALID && e.current_zone == State.TAG_ZONE.DECK)
-            {
-                var card = game_state_.Entities.Items[e.entity_id];
-                //card.GetTag(State.GameTag.PLAYER_ID)
-                logger_.Info(String.Format("Entity {0} moved to deck.", e.entity_id));
-            }
-
-            if (e.prev_zone == State.TAG_ZONE.DECK && e.current_zone != State.TAG_ZONE.DECK)
-            {
-                logger_.Info(string.Format(
-                    "Zone changed! Entity {0} moved from deck to {1}.",
-                    e.entity_id.ToString(),
-                    e.current_zone.ToString()));
-            }
         }
 
         private bool tick_processing_ = false;
