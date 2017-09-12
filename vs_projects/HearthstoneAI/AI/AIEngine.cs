@@ -44,7 +44,7 @@ namespace HearthstoneAI.AI
 
         public bool IsRunning() {
             if (!IsInitialized()) return false;
-            if (runner_ != null) return false;
+            if (runner_ == null) return false;
             return runner_.IsAlive;
         }
 
@@ -60,6 +60,12 @@ namespace HearthstoneAI.AI
             if (!IsInitialized())
             {
                 logger_.Info("Engine is not initialized.");
+                return -1;
+            }
+
+            if (IsRunning())
+            {
+                logger_.Info("Engine is running. Please stop the runner before updaing the board.");
                 return -1;
             }
 
