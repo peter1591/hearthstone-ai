@@ -26,7 +26,7 @@ namespace Cards
 
 	struct Card_CS2_052 : public MinionCardBase<Card_CS2_052, SpellDamage<1>> {};
 
-	struct Card_CS2_049 : public HeroPowerCardBase<Card_CS2_017> {
+	struct Card_CS2_049 : public HeroPowerCardBase<Card_CS2_049> {
 	private:
 		static constexpr std::array<Cards::CardId, 4> basic_totems_{
 			Cards::ID_CS2_050,
@@ -83,6 +83,7 @@ namespace Cards
 			});
 		}
 	};
+	struct Card_CS2_049_H1 : public Card_CS2_049 {};
 
 	struct Card_CS2_045e : public EnchantmentForThisTurn<Card_CS2_045e, Attack<3>> {};
 	struct Card_CS2_045 : public SpellCardBase<Card_CS2_045> {
@@ -176,5 +177,6 @@ REGISTER_CARD(EX1_565)
 REGISTER_CARD(CS2_039)
 REGISTER_CARD(CS2_045)
 REGISTER_CARD(CS2_049)
+REGISTER_CARD(CS2_049_H1)
 REGISTER_CARD(CS2_051)
 REGISTER_CARD(NEW1_009)

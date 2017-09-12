@@ -18,6 +18,9 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_034_H1 : public Card_CS2_034 {};
+	struct Card_CS2_034_H2 : public Card_CS2_034 {};
+
 	struct Card_EX1_277 : SpellCardBase<Card_EX1_277> {
 		Card_EX1_277() {
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
@@ -148,3 +151,5 @@ REGISTER_CARD(CS2_027)
 REGISTER_CARD(CS2_mirror)
 REGISTER_CARD(EX1_277)
 REGISTER_CARD(CS2_034)
+REGISTER_CARD(CS2_034_H1)
+REGISTER_CARD(CS2_034_H2)

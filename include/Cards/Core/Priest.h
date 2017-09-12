@@ -18,6 +18,8 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS1h_001_H1 : public Card_CS1h_001 {};
+
 	struct Card_CS1_130 : public SpellCardBase<Card_CS1_130> {
 		Card_CS1_130() {
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
@@ -168,3 +170,4 @@ REGISTER_CARD(CS2_004)
 REGISTER_CARD(CS2_003)
 REGISTER_CARD(CS1_130)
 REGISTER_CARD(CS1h_001)
+REGISTER_CARD(CS1h_001_H1)

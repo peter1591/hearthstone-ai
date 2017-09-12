@@ -17,6 +17,9 @@ namespace Cards
 		}
 	};
 
+	struct Card_CS2_101_H1 : public Card_CS2_101 {};
+	struct Card_CS2_101_H2 : public Card_CS2_101 {};
+
 	struct Card_CS2_087e : public Enchantment<Card_CS2_087e, Attack<3>> {};
 	struct Card_CS2_087 : public SpellCardBase<Card_CS2_087> {
 		Card_CS2_087() {
@@ -141,3 +144,5 @@ REGISTER_CARD(EX1_360)
 REGISTER_CARD(EX1_371)
 REGISTER_CARD(CS2_087)
 REGISTER_CARD(CS2_101)
+REGISTER_CARD(CS2_101_H1)
+REGISTER_CARD(CS2_101_H2)

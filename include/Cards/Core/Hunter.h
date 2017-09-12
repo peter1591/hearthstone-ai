@@ -12,6 +12,7 @@ namespace Cards
 			});
 		}
 	};
+	struct Card_DS1h_292_H1 : public Card_DS1h_292 {};
 
 	struct Card_DS1_185 : public SpellCardBase<Card_DS1_185> {
 		Card_DS1_185() {
@@ -218,3 +219,4 @@ REGISTER_CARD(DS1_184)
 REGISTER_CARD(CS2_084)
 REGISTER_CARD(DS1_185)
 REGISTER_CARD(DS1h_292)
+REGISTER_CARD(DS1h_292_H1)
