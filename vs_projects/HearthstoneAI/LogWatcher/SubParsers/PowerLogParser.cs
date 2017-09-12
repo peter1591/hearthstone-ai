@@ -113,14 +113,8 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             }
         }
 
-        private IEnumerable<bool> ParseCreateGame()
+        private IEnumerable<bool> ParseGameEntityCreation()
         {
-            if (!CreateGameRegex.IsMatch(this.parsing_log)) yield break;
-
-            if (this.CreateGameEvent != null) this.CreateGameEvent(this, new CreateGameEventArgs());
-
-            yield return true;
-
             if (!GameEntityRegex.IsMatch(this.parsing_log))
             {
                 logger_.Info("[ERROR] Expecting the game entity log.");
@@ -137,30 +131,60 @@ namespace HearthstoneAI.LogWatcher.SubParsers
                 if (this.ParseCreatingTag(game_entity_id)) yield return true;
                 else break;
             }
+        }
+
+        private IEnumerable<bool> ParsePlayerEntityCreation()
+        {
+            if (!PlayerEntityRegex.IsMatch(this.parsing_log))
+            {
+                logger_.Info("[ERROR] Expecting the player entity log.");
+                yield break;
+            }
+
+            var match = PlayerEntityRegex.Match(this.parsing_log);
+            var id = int.Parse(match.Groups["id"].Value);
+            if (this.game_state.Entities.Items.ContainsKey(id))
+            {
+                logger_.Info("[ERROR] entity already exists.");
+                yield break;
+            }
+            this.game_state.AddEntity(id, new State.Entity(id));
+            yield return true;
+
+            while (true)
+            {
+                if (this.ParseCreatingTag(id)) yield return true;
+                else break;
+            }
+        }
+
+        private IEnumerable<bool> ParseCreateGame()
+        {
+            if (!CreateGameRegex.IsMatch(this.parsing_log)) yield break;
+
+            if (this.CreateGameEvent != null) this.CreateGameEvent(this, new CreateGameEventArgs());
+
+            yield return true;
+
+            {
+                bool matched = false;
+                foreach (var ret in this.ParseGameEntityCreation())
+                {
+                    matched = true;
+                    yield return ret;
+                }
+                if (!matched) yield break;
+            }
 
             for (int i = 0; i < 2; i++) // two players
             {
-                if (!PlayerEntityRegex.IsMatch(this.parsing_log))
+                bool matched = false;
+                foreach (var ret in this.ParsePlayerEntityCreation())
                 {
-                    logger_.Info("[ERROR] Expecting the player entity log.");
-                    yield break;
+                    matched = true;
+                    yield return ret;
                 }
-
-                var match = PlayerEntityRegex.Match(this.parsing_log);
-                var id = int.Parse(match.Groups["id"].Value);
-                if (this.game_state.Entities.Items.ContainsKey(id))
-                {
-                    logger_.Info("[ERROR] entity already exists.");
-                    yield break;
-                }
-                this.game_state.AddEntity(id, new State.Entity(id));
-                yield return true;
-
-                while (true)
-                {
-                    if (this.ParseCreatingTag(id)) yield return true;
-                    else break;
-                }
+                if (!matched) yield break;
             }
 
             while (true)
