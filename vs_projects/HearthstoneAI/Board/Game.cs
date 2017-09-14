@@ -21,30 +21,19 @@ namespace HearthstoneAI.Board
 
         public bool Parse(State.Game game)
         {
-            bool ret = true;
-
             State.ReadOnlyEntity game_entity;
-            if (!game.TryGetGameEntity(out game_entity)) ret = false;
-            else
-            {
-                this.turn = game_entity.GetTagOrDefault(State.GameTag.TURN, 0);
-            }
+            if (!game.TryGetGameEntity(out game_entity)) return false;
+            this.turn = game_entity.GetTagOrDefault(State.GameTag.TURN, 0);
 
             State.ReadOnlyEntity player_entity;
-            if (!game.TryGetPlayerEntity(out player_entity)) ret = false;
-            else
-            {
-                ret = this.player.Parse(game, player_entity) && ret;
-            }
+            if (!game.TryGetPlayerEntity(out player_entity)) return false;
+            if (!this.player.Parse(game, player_entity)) return false;
 
             State.ReadOnlyEntity opponent_entity;
-            if (!game.TryGetOpponentEntity(out opponent_entity)) ret = false;
-            else
-            {
-                ret = this.opponent.Parse(game, opponent_entity) && ret;
-            }
+            if (!game.TryGetOpponentEntity(out opponent_entity)) return false;
+            if (!this.opponent.Parse(game, opponent_entity)) return false;
 
-            return ret;
+            return true;
         }
 
         public override bool Equals(object obj)
