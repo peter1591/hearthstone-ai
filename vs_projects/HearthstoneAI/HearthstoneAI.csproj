@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Board\BlockInfo.cs" />
     <Compile Include="Board\Deck.cs" />
+    <Compile Include="Board\Entity.cs" />
     <Compile Include="Board\Game.cs" />
     <Compile Include="Board\Crystal.cs" />
     <Compile Include="Board\Enchantment.cs" />

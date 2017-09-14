@@ -17,6 +17,12 @@ namespace HearthstoneAI.Board
         public Player opponent = new Player();
 
         [DataMember]
+        public BlocksInfo blocks = new BlocksInfo();
+
+        [DataMember]
+        public Entities entities = new Entities();
+
+        [DataMember]
         public int turn;
 
         public bool Parse(State.Game game)
@@ -24,6 +30,9 @@ namespace HearthstoneAI.Board
             State.ReadOnlyEntity game_entity;
             if (!game.TryGetGameEntity(out game_entity)) return false;
             this.turn = game_entity.GetTagOrDefault(State.GameTag.TURN, 0);
+
+            if (!blocks.Parse(game)) return false;
+            if (!entities.Parse(game)) return false;
 
             State.ReadOnlyEntity player_entity;
             if (!game.TryGetPlayerEntity(out player_entity)) return false;
