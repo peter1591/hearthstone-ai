@@ -6,23 +6,17 @@ using System.Threading.Tasks;
 
 namespace HearthstoneAI.State
 {
-    public class BlockInfo
-    {
-        public string block_type;
-        public int entity_id;
-    }
-
     public class ReadOnlyEntity
     {
-        public readonly List<BlockInfo> generate_under_blocks_;
+        public readonly List<int> generate_under_blocks_;
 
-        protected ReadOnlyEntity(int id, List<BlockInfo> generate_under_blocks)
+        protected ReadOnlyEntity(int id, List<int> generate_under_blocks)
         {
             Id = id;
             Tags = new Dictionary<GameTag, int>();
             Name = "";
             CardId = "";
-            generate_under_blocks_ = new List<BlockInfo>(generate_under_blocks);
+            generate_under_blocks_ = new List<int>(generate_under_blocks);
         }
 
         public ReadOnlyEntity(ReadOnlyEntity rhs)
@@ -64,7 +58,7 @@ namespace HearthstoneAI.State
 
     public class Entity : ReadOnlyEntity
     {
-        public Entity(int id, List<BlockInfo> generate_under_blocks) : base(id, generate_under_blocks)
+        public Entity(int id, List<int> generate_under_blocks) : base(id, generate_under_blocks)
         {
         }
 

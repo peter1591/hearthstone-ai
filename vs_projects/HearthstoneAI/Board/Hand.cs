@@ -20,7 +20,7 @@ namespace HearthstoneAI.Board
             int controller = player.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
             if (controller < 0) return false;
 
-            SortedDictionary<int, string> sorted_cards = new SortedDictionary<int, string>();
+            SortedDictionary<int, int> sorted_cards = new SortedDictionary<int, int>();
 
             foreach (var entity in game.Entities.Items)
             {
@@ -32,15 +32,27 @@ namespace HearthstoneAI.Board
                 var zone_pos = entity.Value.GetTagOrDefault(State.GameTag.ZONE_POSITION, -1);
                 if (zone_pos < 0) ret = false;
 
-                sorted_cards.Add(zone_pos, entity.Value.CardId);
+                sorted_cards.Add(zone_pos, entity.Key);
             }
 
             foreach (var sorted_card in sorted_cards)
             {
-                this.cards.Add(sorted_card.Value);
+                AddHandCard(game, sorted_card.Value);
             }
 
             return ret;
+        }
+
+        private void AddHandCard(State.Game game, int entity_id)
+        {
+            var entity = game.Entities.Items[entity_id];
+            this.cards.Add(entity.CardId);
+            // TODO:
+            // fill entity id to json, instead of card id
+            // another 'entities' field to json
+            // each entity in 'entities' has:
+            //    card id
+            //    generation under blocks
         }
 
         public override bool Equals(object obj)

@@ -19,6 +19,7 @@ namespace HearthstoneAI.State
             this.PlayerEntityId = -1;
             this.OpponentEntityId = -1;
 
+            this.blocks_ = new Dictionary<int, BlockInfo>();
             this.entities_ = new Entities();
 
             this.EntityChoices = new Dictionary<int, EntityChoice>();
@@ -31,7 +32,7 @@ namespace HearthstoneAI.State
         public ReadOnlyEntities Entities { get { return entities_; } }
         public void CreateEntity(int id)
         {
-            entities_.Add(id, new Entity(id, blocks_));
+            entities_.Add(id, new Entity(id, current_blocks_));
         }
         public void AddEntity(int id, Entity data)
         {
@@ -70,7 +71,7 @@ namespace HearthstoneAI.State
         {
             if (!entities_.Items.ContainsKey(id))
             {
-                var v = new Entity(id, blocks_);
+                var v = new Entity(id, current_blocks_);
                 v.SetName("GameEntity");
                 entities_.Add(id, v);
             }
@@ -133,7 +134,7 @@ namespace HearthstoneAI.State
         {
             if (!this.entities_.Items.ContainsKey(entity_id))
             {
-                this.entities_.Add(entity_id, new Entity(entity_id, blocks_));
+                this.entities_.Add(entity_id, new Entity(entity_id, current_blocks_));
             }
 
             int prev_value = -1;
@@ -175,7 +176,7 @@ namespace HearthstoneAI.State
             var tmpEntity = this.tmp_entities.FirstOrDefault(x => x.Name == entity_str);
             if (tmpEntity == null)
             {
-                tmpEntity = new Entity(this.tmp_entities.Count + 1, blocks_);
+                tmpEntity = new Entity(this.tmp_entities.Count + 1, current_blocks_);
                 tmpEntity.SetName(entity_str);
                 this.tmp_entities.Add(tmpEntity);
             }
@@ -274,29 +275,53 @@ namespace HearthstoneAI.State
             }
         }
 
-        public List<State.BlockInfo> blocks_ = new List<BlockInfo>();
+        public Dictionary<int, State.BlockInfo> blocks_
+        {
+            get;
+            private set;
+        }
+        public List<int> current_blocks_ = new List<int>();
+        private int GetParentBlockId()
+        {
+            if (current_blocks_.Count == 0) return -1;
+            return current_blocks_[current_blocks_.Count - 1];
+        }
+        private int CreateNewBlock(int entity_id, string block_type)
+        {
+            State.BlockInfo new_block = new BlockInfo();
+            new_block.block_id = blocks_.Count + 1;
+            new_block.parent_block_id = GetParentBlockId();
+            new_block.entity_id = entity_id;
+            new_block.block_type = block_type;
+            blocks_.Add(new_block.block_id, new_block);
+            return new_block.block_id;
+        }
+
         public void NotifyBlockStarted(int entity_id, string block_type)
         {
-            blocks_.Add(new State.BlockInfo()
-            {
-                entity_id = entity_id,
-                block_type = block_type
-            });
+            current_blocks_.Add(CreateNewBlock(entity_id, block_type));
         }
         public void NotifyBlockEnded(int entity_id, string block_type, LogWatcher.Logger logger)
         {
-            if (blocks_[blocks_.Count - 1].block_type != block_type)
+            if (current_blocks_.Count == 0)
+            {
+                logger.Info("not inside any block.");
+                return;
+            }
+
+            State.BlockInfo current_block = blocks_[current_blocks_[current_blocks_.Count - 1]];
+            if (current_block.block_type != block_type)
             {
                 logger.Info("block type not matched in BlockEnd");
+                return;
             }
-            else if (blocks_[blocks_.Count - 1].entity_id != entity_id)
+            if (current_block.entity_id != entity_id)
             {
                 logger.Info("entity id not matched in BlockEnd");
+                return;
             }
-            else
-            {
-                blocks_.RemoveAt(blocks_.Count - 1);
-            }
+
+            current_blocks_.RemoveAt(current_blocks_.Count - 1);
         }
     }
 }
