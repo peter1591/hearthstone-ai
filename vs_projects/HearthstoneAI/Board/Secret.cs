@@ -11,6 +11,9 @@ namespace HearthstoneAI.Board
     class Secret
     {
         [DataMember]
+        public int entity_id;
+
+        [DataMember]
         public string card_id;
 
         [DataMember]
@@ -20,6 +23,7 @@ namespace HearthstoneAI.Board
         {
             bool ret = true;
 
+            this.entity_id = entity.Id;
             this.card_id = entity.CardId;
             if (entity.HasTag(State.GameTag.CLASS) == false)
             {
@@ -37,6 +41,7 @@ namespace HearthstoneAI.Board
         {
             Secret rhs = obj as Secret;
             if (rhs == null) return false;
+            if (!this.entity_id.Equals(rhs.entity_id)) return false;
             if (!this.card_id.Equals(rhs.card_id)) return false;
             if (!this.@class.Equals(rhs.@class)) return false;
             return true;
@@ -46,6 +51,7 @@ namespace HearthstoneAI.Board
         {
             return new
             {
+                this.entity_id,
                 this.card_id,
                 this.@class
             }.GetHashCode();

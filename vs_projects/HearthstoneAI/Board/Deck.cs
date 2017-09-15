@@ -14,6 +14,9 @@ namespace HearthstoneAI.Board
         public int total_cards;
 
         [DataMember]
+        public List<int> entities = new List<int>();
+
+        [DataMember]
         public List<string> known_cards = new List<string>();
 
         [DataMember]
@@ -39,6 +42,7 @@ namespace HearthstoneAI.Board
                 if (entity.Value.GetTag(State.GameTag.ZONE) != (int)State.TAG_ZONE.DECK) continue;
 
                 this.total_cards++;
+                this.entities.Add(entity.Value.Id);
                 if (entity.Value.CardId != "") this.known_cards.Add(entity.Value.CardId);
             }
 
@@ -69,6 +73,7 @@ namespace HearthstoneAI.Board
         {
             Deck rhs = obj as Deck;
             if (rhs == null) return false;
+            if (!this.entities.Equals(rhs.entities)) return false;
             if (!this.total_cards.Equals(rhs.total_cards)) return false;
             if (!this.known_cards.SequenceEqual(rhs.known_cards)) return false;
             if (!this.joust_cards.SequenceEqual(rhs.joust_cards)) return false;
@@ -80,6 +85,8 @@ namespace HearthstoneAI.Board
         {
             int hash = HashHelper.init;
             HashHelper.Update(ref hash, this.total_cards);
+            foreach (var obj in this.entities)
+                HashHelper.Update(ref hash, obj);
             foreach (var obj in this.known_cards)
                HashHelper.Update(ref hash, obj);
             foreach (var obj in this.joust_cards)

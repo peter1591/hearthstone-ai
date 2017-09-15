@@ -206,7 +206,7 @@ namespace HearthstoneAI
                 case "HERO_09":
                     return "Priest";
             }
-            return "(unknown)";
+            return string.Format("(unknown: {0})", card_id);
         }
 
         private string PrintStateText(string name, int value)
@@ -292,13 +292,14 @@ namespace HearthstoneAI
             return result;
         }
 
-        private string GetHandText(Board.Hand hand)
+        private string GetHandText(Board.Hand hand, ReadOnlyEntities entities)
         {
             string result = "";
 
-            foreach (var card in hand.cards)
+            foreach (var entity_id in hand.entities)
             {
-                result += "[Card] Card ID = " + card + Environment.NewLine;
+                var entity = entities.Items[entity_id];
+                result += "[Card] Card ID = " + entity.CardId + Environment.NewLine;
             }
 
             return result;
@@ -465,8 +466,8 @@ namespace HearthstoneAI
             this.txtOpponentHero.Text = GetPlayerEntityText(game.opponent);
             this.txtPlayerSecrets.Text = this.GetSecretsText(game.player.secrets);
             this.txtOpponentSecrets.Text = this.GetSecretsText(game.opponent.secrets);
-            this.txtPlayerHand.Text = this.GetHandText(game.player.hand);
-            this.txtOpponentHand.Text = this.GetHandText(game.opponent.hand);
+            this.txtPlayerHand.Text = this.GetHandText(game.player.hand, game_state.Entities);
+            this.txtOpponentHand.Text = this.GetHandText(game.opponent.hand, game_state.Entities);
             this.txtPlayerDeck.Text = this.GetDeckText(game.player.deck);
             this.txtOpponentDeck.Text = this.GetDeckText(game.opponent.deck);
             this.txtPlayerMinions.Text = this.GetPlayMinionsText(game.player.minions);

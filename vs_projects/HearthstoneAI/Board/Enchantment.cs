@@ -11,6 +11,9 @@ namespace HearthstoneAI.Board
     class Enchantment
     {
         [DataMember]
+        public int entity_id;
+
+        [DataMember]
         public string card_id;
 
         [DataMember]
@@ -18,6 +21,7 @@ namespace HearthstoneAI.Board
 
         public bool Parse(State.Game game, State.ReadOnlyEntity enchant)
         {
+            this.entity_id = enchant.Id;
             this.card_id = enchant.CardId;
             this.creator_entity_id = enchant.GetTagOrDefault(State.GameTag.CREATOR, -1);
 
@@ -28,6 +32,7 @@ namespace HearthstoneAI.Board
         {
             Enchantment rhs = obj as Enchantment;
             if (rhs == null) return false;
+            if (!this.entity_id.Equals(rhs.entity_id)) return false;
             if (!this.card_id.Equals(rhs.card_id)) return false;
             if (!this.creator_entity_id.Equals(rhs.creator_entity_id)) return false;
             return true;
@@ -37,6 +42,7 @@ namespace HearthstoneAI.Board
         {
             return new
             {
+                this.entity_id,
                 this.card_id,
                 this.creator_entity_id
             }.GetHashCode();

@@ -11,7 +11,7 @@ namespace HearthstoneAI.Board
     class Hand
     {
         [DataMember]
-        public List<string> cards = new List<string>();
+        public List<int> entities = new List<int>();
 
         public bool Parse(State.Game game, State.ReadOnlyEntity player)
         {
@@ -32,40 +32,28 @@ namespace HearthstoneAI.Board
                 var zone_pos = entity.Value.GetTagOrDefault(State.GameTag.ZONE_POSITION, -1);
                 if (zone_pos < 0) ret = false;
 
-                sorted_cards.Add(zone_pos, entity.Key);
+                sorted_cards.Add(zone_pos, entity.Value.Id);
             }
 
             foreach (var sorted_card in sorted_cards)
             {
-                AddHandCard(game, sorted_card.Value);
+                this.entities.Add(sorted_card.Value);
             }
 
             return ret;
-        }
-
-        private void AddHandCard(State.Game game, int entity_id)
-        {
-            var entity = game.Entities.Items[entity_id];
-            this.cards.Add(entity.CardId);
-            // TODO:
-            // fill entity id to json, instead of card id
-            // another 'entities' field to json
-            // each entity in 'entities' has:
-            //    card id
-            //    generation under blocks
         }
 
         public override bool Equals(object obj)
         {
             Hand rhs = obj as Hand;
             if (rhs == null) return false;
-            return this.cards.SequenceEqual(rhs.cards);
+            return this.entities.SequenceEqual(rhs.entities);
         }
 
         public override int GetHashCode()
         {
             int hash = HashHelper.init;
-            foreach (var card in this.cards)
+            foreach (var card in this.entities)
                 HashHelper.Update(ref hash, card);
             return hash;
         }

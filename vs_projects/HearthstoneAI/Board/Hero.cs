@@ -11,6 +11,9 @@ namespace HearthstoneAI.Board
     class Hero
     {
         [DataMember]
+        public int entity_id;
+
+        [DataMember]
         public string card_id;
 
         [DataMember]
@@ -41,6 +44,7 @@ namespace HearthstoneAI.Board
         {
             bool ret = true;
 
+            this.entity_id = entity.Id;
             this.card_id = entity.CardId;
 
             this.max_hp = entity.GetTagOrDefault(State.GameTag.HEALTH, -1);
@@ -71,6 +75,7 @@ namespace HearthstoneAI.Board
         {
             Hero rhs = obj as Hero;
             if (rhs == null) return false;
+            if (!this.entity_id.Equals(rhs.entity_id)) return false;
             if (!this.card_id.Equals(rhs.card_id)) return false;
             if (!this.max_hp.Equals(rhs.max_hp)) return false;
             if (!this.damage.Equals(rhs.damage)) return false;
@@ -87,6 +92,7 @@ namespace HearthstoneAI.Board
         {
             return new
             {
+                this.entity_id,
                 this.card_id,
                 this.max_hp,
                 this.damage,

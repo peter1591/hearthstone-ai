@@ -11,6 +11,9 @@ namespace HearthstoneAI.Board
     class HeroPower
     {
         [DataMember]
+        public int entity_id;
+
+        [DataMember]
         public string card_id;
 
         [DataMember]
@@ -18,6 +21,7 @@ namespace HearthstoneAI.Board
 
         public bool Parse(State.Game game, State.ReadOnlyEntity entity)
         {
+            this.entity_id = entity.Id;
             this.card_id = entity.CardId;
             this.used = (entity.GetTagOrDefault(State.GameTag.EXHAUSTED, 0) != 0);
 
@@ -28,6 +32,7 @@ namespace HearthstoneAI.Board
         {
             HeroPower rhs = obj as HeroPower;
             if (rhs == null) return false;
+            if (!this.entity_id.Equals(rhs.entity_id)) return false;
             if (!this.card_id.Equals(rhs.card_id)) return false;
             if (!this.used.Equals(rhs.used)) return false;
             return true;
@@ -37,6 +42,7 @@ namespace HearthstoneAI.Board
         {
             return new
             {
+                this.entity_id,
                 this.card_id,
                 this.used
             }.GetHashCode();
