@@ -139,6 +139,9 @@
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
     <ClInclude Include="..\..\include\UI\AIController.h" />
     <ClInclude Include="..\..\include\UI\BoardGetter.h" />
+    <ClInclude Include="..\..\include\UI\Board\Board.h" />
+    <ClInclude Include="..\..\include\UI\Board\Entity.h" />
+    <ClInclude Include="..\..\include\UI\Board\UnknownCards.h" />
     <ClInclude Include="..\..\include\UI\GameEngine.h" />
     <ClInclude Include="..\..\include\UI\GameEngineLogger.h" />
   </ItemGroup>

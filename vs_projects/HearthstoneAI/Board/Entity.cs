@@ -32,11 +32,16 @@ namespace HearthstoneAI.Board
         public int id;
 
         [DataMember]
+        public string card_id;
+
+        [DataMember]
         public EntityGenerationInfo generate_under_blocks;
 
         public bool Parse(State.Game game, State.ReadOnlyEntity entity)
         {
             this.id = entity.Id;
+
+            this.card_id = entity.CardId;
 
             this.generate_under_blocks = new EntityGenerationInfo();
             foreach (var obj in entity.generate_under_blocks_)
@@ -52,6 +57,7 @@ namespace HearthstoneAI.Board
             Entity rhs = obj as Entity;
             if (rhs == null) return false;
             if (!this.id.Equals(rhs.id)) return false;
+            if (!this.card_id.Equals(rhs.card_id)) return false;
             if (!this.generate_under_blocks.Equals(rhs.generate_under_blocks)) return false;
             return true;
         }
@@ -61,6 +67,7 @@ namespace HearthstoneAI.Board
             return new
             {
                 this.id,
+                this.card_id,
                 this.generate_under_blocks
             }.GetHashCode();
         }

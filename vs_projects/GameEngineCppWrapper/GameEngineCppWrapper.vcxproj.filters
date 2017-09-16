@@ -16,6 +16,9 @@
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{d4bf4df7-7cb4-4b7c-8fe8-037b64b2ea4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI\Board">
+      <UniqueIdentifier>{6c65812d-46e6-44b1-89ca-57ea8f9c36f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\UI\AIController.h">
@@ -32,6 +35,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\UI\BoardGetter.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\Board\UnknownCards.h">
+      <Filter>Header Files\UI\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\Board\Board.h">
+      <Filter>Header Files\UI\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\Board\Entity.h">
+      <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

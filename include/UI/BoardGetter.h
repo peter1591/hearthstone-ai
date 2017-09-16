@@ -10,6 +10,7 @@
 #include "Cards/Database.h"
 #include "UI/AIController.h"
 #include "UI/Decks.h"
+#include "UI/Board/Board.h"
 #include "UI/GameEngineLogger.h"
 #include "MCTS/TestStateBuilder.h"
 
@@ -52,23 +53,32 @@ namespace ui
 			return 0;
 		}
 
-		int UpdateBoard(std::string const& board)
+		int UpdateBoard(std::string const& board_str)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
-			if (board_raw_ == board) return 0;
+			if (board_raw_ == board_str) return 0;
 
 			logger_.Log("Updating board.");
+			board_raw_ = board_str;
 
 			// TODO: reuse MCTS tree
-
-			board_raw_ = board;
 			return 0;
 		}
 
 		int PrepareToRun(ui::AIController * controller, bool * restart_ai)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
+
+			Json::Reader reader;
+			std::stringstream ss(board_raw_);
+			Json::Value board;
+			if (!reader.parse(ss, board)) {
+				logger_.Log("Failed to parse board.");
+				return -1;
+			}
+
+			board_.Parse(board);
 
 			if (need_restart_ai_) {
 				*restart_ai = true;
@@ -78,6 +88,7 @@ namespace ui
 			// TODO: reuse last MCTS tree
 			(void)controller;
 			*restart_ai = true;
+
 			return 0;
 		}
 
@@ -85,6 +96,7 @@ namespace ui
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
 
+			// TODO: should only read board_
 			state::State state;
 			Json::Reader reader;
 			std::stringstream ss(board_raw_);
@@ -293,6 +305,7 @@ namespace ui
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
 		bool need_restart_ai_;
-		std::string board_raw_;
+		std::string board_raw_; // TODO: remove this one, parse all necessary info to board
+		board::Board board_;
 	};
 }
