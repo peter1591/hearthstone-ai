@@ -6,6 +6,7 @@
 
 #include <json/json.h>
 
+#include <Cards/Database.h>
 #include <Cards/id-map.h>
 #include "UI/Board/UnknownCards.h"
 #include "UI/Board/Entity.h"
@@ -14,62 +15,134 @@ namespace ui
 {
 	namespace board
 	{
+		class OrderedEntities
+		{
+		public:
+			void SetEntityId(size_t pos, int entity_id) {
+				if (pos >= items_.size()) {
+					items_.resize(pos + 1);
+				}
+				items_[pos] = entity_id;
+			}
+
+			template <class Functor>
+			void ForEach(Functor && functor) const {
+				for (int entity_id : items_) {
+					functor(entity_id);
+				}
+			}
+
+		private:
+			std::vector<int> items_;
+		};
+
+		struct Player
+		{
+			int player_entity_id;
+			int hero_entity_id;
+			int weapon_entity_id;
+			int hero_power_entity_id;
+
+			OrderedEntities minions;
+			OrderedEntities hand;
+			std::vector<int> deck;
+		};
+
 		class Board
 		{
 		public:
-			void SetDeckCards(std::vector<Cards::CardId> const& deck_cards)
+			void Reset() {
+				entities_.clear();
+				ResetControllerInfo(first_controller_);
+				ResetControllerInfo(second_controller_);
+			}
+
+			void SetDeckCards(int controller, std::vector<Cards::CardId> const& deck_cards)
 			{
-				deck_cards_ = deck_cards;
+				GetControllerInfo(controller).deck_cards_ = deck_cards;
 			}
 
 			void Parse(Json::Value const& board)
 			{
 				ParseEntities(board);
+			}
 
-				// TODO: define a board structure, and read json to there
-				// board structure:
-				//   blocks:
-				//   entities:
-				//   player:
-				//      hand:
-				//          0: entity_id
-				//          1: entity_id
-				//      deck:
-				//          0: entity_id
-				//      minions:
-				//          0: entity_id
-				//          1: entity_id
-				//   opponent:
-				//       (similar)
+			// TODO: should return const&
+			auto & GetUnknownCardsSets(int controller) {
+				return GetControllerInfo(controller).unknown_cards_sets_;
+			}
+
+			Cards::CardId GetCardId(int entity_id, UnknownCardsSetsManager const& unknown_cards_mgr) const
+			{
+				Entity const& entity = entities_[entity_id];
+				if (entity.card_id_ != Cards::kInvalidCardId) {
+					return entity.card_id_;
+				}
+				else {
+					return unknown_cards_mgr.GetCardId(
+						entity.unknown_cards_set_id_,
+						entity.unknown_cards_set_card_idx_);
+				}
 			}
 
 		private:
+			struct ControllerInfo {
+				static constexpr int kDeckBlockId = -1;
+				std::vector<Cards::CardId> deck_cards_;
+				UnknownCardsSets unknown_cards_sets_;
+				std::map<int, size_t> sets_indics_; // block id -> set idx
+			};
+
+		private:
+			void ResetControllerInfo(ControllerInfo & info) {
+				info.deck_cards_.clear();
+				info.sets_indics_.clear();
+				info.unknown_cards_sets_.Reset();
+			}
+
 			void ParseEntities(Json::Value const& board) {
-				Json::Value const& entities = board["entities"];
-				for (Json::ArrayIndex idx = 0; idx < entities.size(); ++idx) {
-					ParseEntity(board, entities[idx]);
+				ParseEntitiesFromArray(board, board["player"]["hand"]["entities"]);
+				ParseEntitiesFromArray(board, board["opponent"]["hand"]["entities"]);
+				ParseEntitiesFromArray(board, board["player"]["deck"]["entities"]);
+				ParseEntitiesFromArray(board, board["opponent"]["deck"]["entities"]);
+			}
+
+			void ParseEntitiesFromArray(Json::Value const& board, Json::Value const& json_entities) {
+				for (Json::ArrayIndex idx = 0; idx < json_entities.size(); ++idx) {
+					ParseEntity(board, json_entities[idx].asInt());
 				}
 			}
 
-			void ParseEntity(Json::Value const& board, Json::Value const& json_entity) {
-				int id = json_entity["id"].asInt();
-				Entity & entity = GetEntity(id);
-				entity.id_ = id;
-				FillCardIdInfo(entity, board, json_entity);
+			void ParseEntity(Json::Value const& board, int entity_id) {
+				Entity & entity = GetEntity(entity_id);
+				entity.id_ = entity_id;
+				FillCardIdInfo(entity, board, board["entities"][entity_id]);
 			}
 
 			void FillCardIdInfo(Entity & entity, Json::Value const& board, Json::Value const& json_entity) {
+				entity.controller_ = json_entity["controller"].asInt();
+				assert(entity.controller_ > 0);
+
 				std::string json_card_id = json_entity["card_id"].asString();
 				if (!json_card_id.empty()) {
 					entity.card_id_ = GetCardId(json_card_id);
-					if (entity.card_id_ != Cards::kInvalidCardId) {
-						entity.unknown_cards_set_id_ = -1;
-						return;
+					if (entity.card_id_ == Cards::kInvalidCardId) assert(false);
+
+					if (entity.card_id_ != Cards::ID_GAME_005) {
+						entity.unknown_cards_set_id_ = GetUnknownCardSetId(
+							board, entity.controller_, json_entity["generate_under_blocks"]);
+						GetControllerInfo(entity.controller_).unknown_cards_sets_.RemoveCardFromSet(
+							entity.unknown_cards_set_id_,
+							entity.card_id_);
 					}
+					return;
 				}
+
 				entity.card_id_ = Cards::kInvalidCardId;
 				entity.unknown_cards_set_id_ = GetUnknownCardSetId(
-					board, json_entity["generate_under_blocks"]);
+					board, entity.controller_, json_entity["generate_under_blocks"]);
+				entity.unknown_cards_set_card_idx_ = GetControllerInfo(entity.controller_)
+					.unknown_cards_sets_.AssignCardToSet(entity.unknown_cards_set_id_);
 			}
 
 			Cards::CardId GetCardId(std::string const& card_id)
@@ -90,41 +163,50 @@ namespace ui
 				return entities_[id];
 			}
 
-			size_t GetUnknownCardSetId(Json::Value const& board, Json::Value const& json_under_blocks)
+			size_t GetUnknownCardSetId(Json::Value const& board, int controller, Json::Value const& json_under_blocks)
 			{
 				if (json_under_blocks.size() == 0) {
-					return GetUnknownCardSetId(board, kDeckBlockId, [&]() {
-						return deck_cards_;
+					return GetUnknownCardSetId(board, controller, ControllerInfo::kDeckBlockId, [&]() {
+						return GetControllerInfo(controller).deck_cards_;
 					});
 				}
 				else {
 					int block_id = json_under_blocks[json_under_blocks.size() - 1].asInt();
-					return GetUnknownCardSetId(board, block_id, [&]() {
-						return deck_cards_; // TODO: prepare cards according to block info
+					return GetUnknownCardSetId(board, controller, block_id, [&]() {
+						return GetControllerInfo(controller).deck_cards_; // TODO: prepare cards according to block info
 					});
 				}
 			}
 
 			template <class CardsGetter>
-			size_t GetUnknownCardSetId(Json::Value const& board, int block_idx, CardsGetter && cards_getter)
+			size_t GetUnknownCardSetId(Json::Value const& board, int controller, int block_idx, CardsGetter && cards_getter)
 			{
-				auto it = sets_indics_.find(block_idx);
-				if (it == sets_indics_.end()) {
-					size_t set_idx = unknown_cards_sets_.AddCardsSet(cards_getter());
-					sets_indics_.insert(std::make_pair(block_idx, set_idx));
+				auto & sets_indics = GetControllerInfo(controller).sets_indics_;
+				auto it = sets_indics.find(block_idx);
+				if (it == sets_indics.end()) {
+					size_t set_idx = GetControllerInfo(controller).unknown_cards_sets_.AddCardsSet(cards_getter());
+					sets_indics.insert(std::make_pair(block_idx, set_idx));
 					return set_idx;
 				}
 
 				return it->second;
 			}
 
+			ControllerInfo & GetControllerInfo(int controller) {
+				if (controller == 1) return first_controller_;
+				else if (controller == 2) return second_controller_;
+				else assert(false);
+			}
+
 		private:
-			static constexpr int kDeckBlockId = -1;
+			// TODO: parse json format to fill these
+			//Player first_player_;
+			//Player second_player_;
 
 			std::vector<Entity> entities_;
-			std::vector<Cards::CardId> deck_cards_;
-			UnknownCardsSets unknown_cards_sets_;
-			std::map<int, size_t> sets_indics_; // block id -> set idx
+
+			ControllerInfo first_controller_;
+			ControllerInfo second_controller_;
 		};
 	}
 }

@@ -12,6 +12,7 @@
 #include "UI/Decks.h"
 #include "UI/Board/Board.h"
 #include "UI/GameEngineLogger.h"
+#include "UI/Board/UnknownCards.h"
 #include "MCTS/TestStateBuilder.h"
 
 namespace ui
@@ -62,6 +63,13 @@ namespace ui
 			logger_.Log("Updating board.");
 			board_raw_ = board_str;
 
+			Json::Reader reader;
+			std::stringstream ss(board_raw_);
+			if (!reader.parse(ss, json_board_)) {
+				logger_.Log("Failed to parse board.");
+				return -1;
+			}
+
 			// TODO: reuse MCTS tree
 			return 0;
 		}
@@ -70,15 +78,29 @@ namespace ui
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
-			Json::Reader reader;
-			std::stringstream ss(board_raw_);
-			Json::Value board;
-			if (!reader.parse(ss, board)) {
-				logger_.Log("Failed to parse board.");
-				return -1;
-			}
+			int player_entity_id = json_board_["player"]["entity_id"].asInt();
+			int opponent_entity_id = json_board_["opponent"]["entity_id"].asInt();
 
-			board_.Parse(board);
+			board_.Reset();
+
+			std::string player_deck_type = "InnKeeperBasicMage";
+			std::vector<Cards::CardId> player_deck_cards;
+			for (auto const& card_name : Decks::GetDeck(player_deck_type)) {
+				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
+				player_deck_cards.push_back(card_id);
+			}
+			board_.SetDeckCards(1, player_deck_cards);
+
+			// TODO: guess oppoennt deck type
+			std::string opponent_deck_type = "InnKeeperBasicMage";
+			std::vector<Cards::CardId> opponent_deck_cards;
+			for (auto const& card_name : Decks::GetDeck(opponent_deck_type)) {
+				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
+				opponent_deck_cards.push_back(card_id);
+			}
+			board_.SetDeckCards(2, opponent_deck_cards);
+
+			board_.Parse(json_board_);
 
 			if (need_restart_ai_) {
 				*restart_ai = true;
@@ -96,22 +118,20 @@ namespace ui
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
 
-			// TODO: should only read board_
+			std::mt19937 rand(seed);
+			board::UnknownCardsSetsManager first_unknown_cards_sets_mgr(board_.GetUnknownCardsSets(1));
+			first_unknown_cards_sets_mgr.Prepare(rand);
+			board::UnknownCardsSetsManager second_unknown_cards_sets_mgr(board_.GetUnknownCardsSets(2));
+			second_unknown_cards_sets_mgr.Prepare(rand);
+
 			state::State state;
-			Json::Reader reader;
-			std::stringstream ss(board_raw_);
-			Json::Value board;
-			if (!reader.parse(ss, board)) {
-				logger_.Log("Failed to parse board.");
-				return state;
-			}
 
-			MyRandomGenerator random(seed);
+			MyRandomGenerator random(rand());
 
-			MakePlayer(state::kPlayerFirst, state, random, board["player"]);
-			MakePlayer(state::kPlayerSecond, state, random, board["opponent"]);
+			MakePlayer(state::kPlayerFirst, state, random, json_board_["player"], first_unknown_cards_sets_mgr);
+			MakePlayer(state::kPlayerSecond, state, random, json_board_["opponent"], second_unknown_cards_sets_mgr);
 			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should not waiting for an action
-			state.SetTurn(board["turn"].asInt());
+			state.SetTurn(json_board_["turn"].asInt());
 
 			return state;
 		}
@@ -127,12 +147,13 @@ namespace ui
 			return (Cards::CardId)it->second;
 		}
 
-		void MakePlayer(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json)
+		void MakePlayer(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json,
+			board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 		{
 			MakeHero(player, state, json["hero"]);
 			MakeHeroPower(player, state, json["hero"]["hero_power"]);
-			MakeDeck(player, state, random, json["deck"]);
-			MakeHand(player, state, random, json["hand"]);
+			MakeDeck(player, state, random, json["deck"], unknown_cards_sets_mgr);
+			MakeHand(player, state, random, json["hand"], unknown_cards_sets_mgr);
 			MakeMinions(player, state, random, json["minions"]);
 			// TODO: enchantments
 			// TODO: weapon
@@ -247,12 +268,13 @@ namespace ui
 			assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
 		}
 
-		void MakeDeck(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json)
+		void MakeDeck(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json,
+			board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 		{
-			auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage"); // TODO: read deck info from json
-			// TODO: remove drawn cards
-			for (auto const& card_name : deck1) {
-				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
+			Json::Value const& entities = json["entities"];
+			for (Json::ArrayIndex idx = 0; idx < entities.size(); ++idx) {
+				int entity_id = entities[idx].asInt();
+				Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
 				PushBackDeckCard(card_id, random, state, player);
 			}
 		}
@@ -287,17 +309,14 @@ namespace ui
 			return ref;
 		}
 
-		void MakeHand(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json)
+		void MakeHand(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json,
+			board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 		{
-			auto const& cards = json["cards"];
-			for (Json::ArrayIndex idx = 0; idx < cards.size(); ++idx) {
-				auto card_id = GetCardId(cards[idx].asString());
-				if (card_id == Cards::kInvalidCardId) {
-					// TODO: get a random card from deck
-				}
-				else {
-					AddHandCard(player, state, random, card_id);
-				}
+			auto const& entities = json["entities"];
+			for (Json::ArrayIndex idx = 0; idx < entities.size(); ++idx) {
+				int entity_id = entities[idx].asInt();
+				Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
+				AddHandCard(player, state, random, card_id);
 			}
 		}
 
@@ -305,7 +324,8 @@ namespace ui
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
 		bool need_restart_ai_;
-		std::string board_raw_; // TODO: remove this one, parse all necessary info to board
+		std::string board_raw_;
+		Json::Value json_board_; // TODO: remove this one, parse all necessary info board
 		board::Board board_;
 	};
 }

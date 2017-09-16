@@ -25,7 +25,7 @@ namespace ui
 						return;
 					}
 				}
-				assert(false);
+				// TOOD: wrong deck guess, what to do?
 			}
 
 			void ResetState()
@@ -86,6 +86,13 @@ namespace ui
 				return idx;
 			}
 
+			void RemoveCardFromSet(size_t set_idx, Cards::CardId card_id) {
+				sets_[set_idx].cards_.Remove(card_id);
+			}
+
+			void Reset() {
+				sets_.clear();
+			}
 			void ResetState()
 			{
 				for (auto & set : sets_) {
@@ -139,64 +146,6 @@ namespace ui
 		private:
 			UnknownCardsSets & data_; // TODO: should use const& ideally
 			std::vector<std::vector<Cards::CardId>> shuffled_cards_;
-		};
-
-		class Card
-		{
-		public:
-			enum Type
-			{
-				kKnownCardId,
-				kUnknownCardIdDrawnFromSet,
-				kInvalidType
-			};
-
-		private:
-			Card(UnknownCardsSets const& unknown_cards_sets) :
-				unknown_cards_sets_(unknown_cards_sets),
-				type_(kInvalidType),
-				card_id_(Cards::kInvalidCardId),
-				unknown_card_drawn_set_id_(0),
-				unknown_card_idx_(0)
-			{}
-
-		public:
-			static Card CreateCardWithKnownCardId(UnknownCardsSets const& sets, Cards::CardId card_id)
-			{
-				Card ret(sets);
-				ret.type_ = kKnownCardId;
-				ret.card_id_ = card_id;
-				return ret;
-			}
-
-			static Card CreateCardWithUnknownCardId(UnknownCardsSets & sets, size_t set_idx)
-			{
-				Card ret(sets);
-				ret.type_ = kUnknownCardIdDrawnFromSet;
-				ret.unknown_card_drawn_set_id_ = set_idx;
-				ret.unknown_card_idx_ = sets.AssignCardToSet(set_idx);
-				return ret;
-			}
-
-			Cards::CardId GetCardId(UnknownCardsSetsManager const& mgr)
-			{
-				if (type_ == kKnownCardId) {
-					return card_id_;
-				}
-				else if (type_ == kUnknownCardIdDrawnFromSet) {
-					return mgr.GetCardId(unknown_card_drawn_set_id_, unknown_card_idx_);
-				}
-				else {
-					return Cards::kInvalidCardId;
-				}
-			}
-
-		private:
-			UnknownCardsSets const& unknown_cards_sets_;
-			Type type_;
-			Cards::CardId card_id_;
-			size_t unknown_card_drawn_set_id_; // set-idx in sets
-			size_t unknown_card_idx_; // idx in set
 		};
 	}
 }

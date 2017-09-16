@@ -20,7 +20,7 @@ namespace HearthstoneAI
         private AI.AIEngine ai_engine_;
         private AI.AILogger ai_logger_;
 
-        private Board.Game last_run_board_ = new Board.Game();
+        private Board.Game last_board = null;
 
         public frmMain()
         {
@@ -46,6 +46,9 @@ namespace HearthstoneAI
                     return;
                 }
 
+                if (last_board != null && last_board.Equals(board)) return;
+                last_board = board;
+
                 this.UpdateBoard(game_state, board);
 
                 var game_stage = GameStageHelper.GetGameStage(game_state);
@@ -53,18 +56,13 @@ namespace HearthstoneAI
 
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
-                    if (!last_run_board_.Equals(board))
+                    ai_engine_.UpdateBoard(board);
+
+                    if (game_state.GetCurrentPlayerEntityId() == game_state.PlayerEntityId)
                     {
-                        ai_engine_.UpdateBoard(board);
-
-                        if (game_state.GetCurrentPlayerEntityId() == game_state.PlayerEntityId)
-                        {
-                            int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
-                            int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
-                            ai_engine_.Run(seconds, threads);
-                        }
-
-                        last_run_board_ = board;
+                        int seconds = Convert.ToInt32(Math.Round(nudSeconds.Value, 0));
+                        int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
+                        ai_engine_.Run(seconds, threads);
                     }
                 }
                 else

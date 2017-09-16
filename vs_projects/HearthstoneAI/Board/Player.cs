@@ -11,6 +11,9 @@ namespace HearthstoneAI.Board
     class Player
     {
         [DataMember]
+        public int entity_id;
+
+        [DataMember]
         public Crystal crystal = new Crystal();
 
         [DataMember]
@@ -43,6 +46,7 @@ namespace HearthstoneAI.Board
         public bool Parse(State.Game game, State.ReadOnlyEntity entity)
         {
             bool ret = true;
+            entity_id = entity.Id;
 
             ret = this.crystal.Parse(game, entity) && ret;
 
@@ -79,6 +83,7 @@ namespace HearthstoneAI.Board
         {
             Player rhs = obj as Player;
             if (rhs == null) return false;
+            if (!this.entity_id.Equals(rhs.entity_id)) return false;
             if (!this.crystal.Equals(rhs.crystal)) return false;
             if (!this.fatigue.Equals(rhs.fatigue)) return false;
             if (!this.first_player.Equals(rhs.first_player)) return false;
@@ -97,6 +102,7 @@ namespace HearthstoneAI.Board
         {
             return new
             {
+                this.entity_id,
                 this.crystal,
                 this.fatigue,
                 this.first_player,

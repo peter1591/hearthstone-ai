@@ -149,7 +149,7 @@
             this.nudThreads.Size = new System.Drawing.Size(120, 29);
             this.nudThreads.TabIndex = 4;
             this.nudThreads.Value = new decimal(new int[] {
-            4,
+            1,
             0,
             0,
             0});
@@ -166,7 +166,7 @@
             this.nudSeconds.Size = new System.Drawing.Size(120, 29);
             this.nudSeconds.TabIndex = 4;
             this.nudSeconds.Value = new decimal(new int[] {
-            90,
+            1,
             0,
             0,
             0});

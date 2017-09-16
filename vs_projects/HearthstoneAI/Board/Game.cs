@@ -57,7 +57,11 @@ namespace HearthstoneAI.Board
 
         public override int GetHashCode()
         {
-            return new { this.player, this.opponent, this.turn }.GetHashCode();
+            return new {
+                this.player,
+                this.opponent,
+                this.turn,
+            }.GetHashCode();
         }
     }
 }
