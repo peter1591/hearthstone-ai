@@ -40,6 +40,9 @@ namespace HearthstoneAI.Board
         [DataMember]
         public EntityGenerationInfo generate_under_blocks;
 
+        [DataMember]
+        public Dictionary<string, int> tags;
+
         public bool Parse(State.Game game, State.ReadOnlyEntity entity)
         {
             this.id = entity.Id;
@@ -51,6 +54,12 @@ namespace HearthstoneAI.Board
             foreach (var obj in entity.generate_under_blocks_)
             {
                 this.generate_under_blocks.Add(obj);
+            }
+
+            tags = new Dictionary<string, int>();
+            foreach (var kv in entity.Tags)
+            {
+                tags[kv.Key.ToString()] = kv.Value;
             }
 
             return true;

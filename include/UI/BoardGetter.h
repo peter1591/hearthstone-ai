@@ -63,13 +63,6 @@ namespace ui
 			logger_.Log("Updating board.");
 			board_raw_ = board_str;
 
-			Json::Reader reader;
-			std::stringstream ss(board_raw_);
-			if (!reader.parse(ss, json_board_)) {
-				logger_.Log("Failed to parse board.");
-				return -1;
-			}
-
 			// TODO: reuse MCTS tree
 			return 0;
 		}
@@ -78,8 +71,16 @@ namespace ui
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
-			int player_entity_id = json_board_["player"]["entity_id"].asInt();
-			int opponent_entity_id = json_board_["opponent"]["entity_id"].asInt();
+			Json::Reader reader;
+			Json::Value json_board;
+			std::stringstream ss(board_raw_);
+			if (!reader.parse(ss, json_board)) {
+				logger_.Log("Failed to parse board.");
+				return -1;
+			}
+
+			int player_entity_id = json_board["player"]["entity_id"].asInt();
+			int opponent_entity_id = json_board["opponent"]["entity_id"].asInt();
 
 			board_.Reset();
 
@@ -100,7 +101,7 @@ namespace ui
 			}
 			board_.SetDeckCards(2, opponent_deck_cards);
 
-			board_.Parse(json_board_);
+			board_.Parse(json_board);
 
 			if (need_restart_ai_) {
 				*restart_ai = true;
@@ -128,10 +129,10 @@ namespace ui
 
 			MyRandomGenerator random(rand());
 
-			MakePlayer(state::kPlayerFirst, state, random, json_board_["player"], first_unknown_cards_sets_mgr);
-			MakePlayer(state::kPlayerSecond, state, random, json_board_["opponent"], second_unknown_cards_sets_mgr);
+			MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr);
+			MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr);
 			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should not waiting for an action
-			state.SetTurn(json_board_["turn"].asInt());
+			state.SetTurn(board_.GetTurn());
 
 			return state;
 		}
@@ -147,55 +148,54 @@ namespace ui
 			return (Cards::CardId)it->second;
 		}
 
-		void MakePlayer(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json,
-			board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
+		void MakePlayer(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random,
+			board::Player const& board_player, board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 		{
-			MakeHero(player, state, json["hero"]);
-			MakeHeroPower(player, state, json["hero"]["hero_power"]);
-			MakeDeck(player, state, random, json["deck"], unknown_cards_sets_mgr);
-			MakeHand(player, state, random, json["hand"], unknown_cards_sets_mgr);
-			MakeMinions(player, state, random, json["minions"]);
+			MakeHero(player, state, board_player.hero);
+			MakeHeroPower(player, state, board_player.hero_power);
+			MakeDeck(player, state, random, board_player.deck, unknown_cards_sets_mgr);
+			MakeHand(player, state, random, board_player.hand, unknown_cards_sets_mgr);
+			MakeMinions(player, state, random, board_player.minions);
 			// TODO: enchantments
 			// TODO: weapon
 			// TODO: secrets
 
-			state.GetBoard().Get(player).SetFatigueDamage(json["fatigue"].asInt());
-			MakeResource(state.GetBoard().Get(player).GetResource(), json["crystal"]);
+			state.GetBoard().Get(player).SetFatigueDamage(board_player.fatigue);
+			MakeResource(state.GetBoard().Get(player).GetResource(), board_player.resource);
 		}
 
-		void ApplyStatus(state::Cards::CardData & raw_card, Json::Value const& json)
+		void ApplyStatus(state::Cards::CardData & raw_card, board::CharacterStatus const& status)
 		{
-			raw_card.enchanted_states.charge = json["charge"].asBool();
-			raw_card.taunt = json["taunt"].asBool();
-			raw_card.shielded = json["divine_shield"].asBool();
-			raw_card.enchanted_states.stealth = json["stealth"].asBool();
+			raw_card.enchanted_states.charge = status.charge;
+			raw_card.taunt = status.taunt;
+			raw_card.shielded = status.divine_shield;
+			raw_card.enchanted_states.stealth = status.stealth;
 			// TODO: forgetful
-			raw_card.enchanted_states.freeze_attack = json["freeze"].asBool();
-			raw_card.freezed = json["frozen"].asBool();
-			raw_card.enchanted_states.poisonous = json["poisonous"].asBool();
+			raw_card.enchanted_states.freeze_attack = status.freeze;
+			raw_card.freezed = status.frozon;
+			raw_card.enchanted_states.poisonous = status.poisonous;
 
 			int max_attacks_per_turn = 1;
-			if (json["windfury"].asBool()) max_attacks_per_turn = 2;
+			if (status.windfury) max_attacks_per_turn = 2;
 			raw_card.enchanted_states.max_attacks_per_turn = max_attacks_per_turn;
 		}
 
-		void AddMinion(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json, int pos)
+		void AddMinion(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, board::Minion const& minion, int pos)
 		{
-			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(
-				GetCardId(json["card_id"].asString()));
+			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(minion.card_id);
 			raw_card.enchanted_states.player = player;
 			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
 
-			raw_card.enchanted_states.max_hp = json["max_hp"].asInt();
-			raw_card.damaged = json["damaged"].asInt();
-			raw_card.enchanted_states.attack = json["attack"].asInt();
-			raw_card.num_attacks_this_turn = json["attacks_this_turn"].asInt();
+			raw_card.enchanted_states.max_hp = minion.max_hp;
+			raw_card.damaged = minion.damage;
+			raw_card.enchanted_states.attack = minion.attack;
+			raw_card.num_attacks_this_turn = minion.attack_this_turn;
 			// TODO: exhausted (needed?)
-			raw_card.silenced = json["silenced"].asBool();
-			raw_card.enchanted_states.spell_damage = json["spellpower"].asInt();
-			raw_card.just_played = json["summoned_this_turn"].asBool();
+			raw_card.silenced = minion.silenced;
+			raw_card.enchanted_states.spell_damage = minion.spellpower;
+			raw_card.just_played = minion.summoned_this_turn;
 			// TODO: enchantments
-			ApplyStatus(raw_card, json["status"]);
+			ApplyStatus(raw_card, minion.status);
 
 			raw_card.zone = state::kCardZoneNewlyCreated;
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
@@ -203,41 +203,40 @@ namespace ui
 				.ChangeTo<state::kCardZonePlay>(player, pos);
 		}
 
-		void MakeMinions(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json)
+		void MakeMinions(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, board::Minions const& minions)
 		{
-			for (Json::ArrayIndex idx = 0; idx < json.size(); ++idx)
-			{
-				AddMinion(player, state, random, json[idx], (int)idx);
+			int pos = 0;
+			for (auto const& minion : minions.minions) {
+				AddMinion(player, state, random, minion, pos);
+				++pos;
 			}
 		}
 
-		void MakeResource(state::board::PlayerResource & resource, Json::Value const& json)
+		void MakeResource(state::board::PlayerResource & resource, board::Resource const& board_resource)
 		{
-			resource.SetCurrent(json["this_turn"].asInt());
-			resource.SetCurrentOverloaded(json["overload"].asInt());
-			resource.SetTotal(json["total"].asInt());
-			resource.SetNextOverload(json["overload_next_turn"].asInt());
+			resource.SetCurrent(board_resource.this_turn);
+			resource.SetTotal(board_resource.total);
+			resource.SetCurrentOverloaded(board_resource.overload);
+			resource.SetNextOverload(board_resource.overload_next_turn);
 		}
 
-		void MakeHero(state::PlayerIdentifier player, state::State & state, Json::Value const& json)
+		void MakeHero(state::PlayerIdentifier player, state::State & state, board::Hero const& board_hero)
 		{
 			// TODO: mark ctor of state::Cards::CardData as private, to make it only constructible from CardDispatcher::CreateInstance
 			
-			std::string card_id = json["card_id"].asString();
-			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(
-				GetCardId(card_id));
+			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(board_hero.card_id);
 			
 			raw_card.enchanted_states.player = player;
 			assert(raw_card.card_type == state::kCardTypeHero);
 			raw_card.zone = state::kCardZoneNewlyCreated;
 			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
 
-			raw_card.enchanted_states.max_hp = json["max_hp"].asInt();
-			raw_card.damaged = json["damage"].asInt();
-			raw_card.armor = json["armor"].asInt();
-			raw_card.enchanted_states.attack = json["attack"].asInt();
-			raw_card.num_attacks_this_turn = json["attacks_this_turn"].asInt();
-			ApplyStatus(raw_card, json["status"]);
+			raw_card.enchanted_states.max_hp = board_hero.max_hp;
+			raw_card.damaged = board_hero.damage;
+			raw_card.armor = board_hero.armor;
+			raw_card.enchanted_states.attack = board_hero.attack;
+			raw_card.num_attacks_this_turn = board_hero.attack_this_turn;
+			ApplyStatus(raw_card, board_hero.status);
 
 			// TODO: enchantments
 
@@ -246,13 +245,11 @@ namespace ui
 				.ChangeTo<state::kCardZonePlay>(player);
 		}
 
-		void MakeHeroPower(state::PlayerIdentifier player, state::State & state, Json::Value const& json)
+		void MakeHeroPower(state::PlayerIdentifier player, state::State & state, board::HeroPower const& hero_power)
 		{
-			std::string card_id = json["card_id"].asString();
-			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(
-				GetCardId(card_id));
+			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(hero_power.card_id);
 			assert(raw_card.card_type == state::kCardTypeHeroPower);
-			raw_card.used_this_turn = json["used"].asBool();
+			raw_card.used_this_turn = hero_power.used;
 
 			raw_card.zone = state::kCardZoneNewlyCreated;
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
@@ -268,12 +265,10 @@ namespace ui
 			assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
 		}
 
-		void MakeDeck(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json,
+		void MakeDeck(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, std::vector<int> entities,
 			board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 		{
-			Json::Value const& entities = json["entities"];
-			for (Json::ArrayIndex idx = 0; idx < entities.size(); ++idx) {
-				int entity_id = entities[idx].asInt();
+			for (int entity_id : entities) {
 				Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
 				PushBackDeckCard(card_id, random, state, player);
 			}
@@ -309,12 +304,10 @@ namespace ui
 			return ref;
 		}
 
-		void MakeHand(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Json::Value const& json,
+		void MakeHand(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, std::vector<int> const& entities,
 			board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 		{
-			auto const& entities = json["entities"];
-			for (Json::ArrayIndex idx = 0; idx < entities.size(); ++idx) {
-				int entity_id = entities[idx].asInt();
+			for (int entity_id : entities) {
 				Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
 				AddHandCard(player, state, random, card_id);
 			}
@@ -325,7 +318,6 @@ namespace ui
 		GameEngineLogger & logger_;
 		bool need_restart_ai_;
 		std::string board_raw_;
-		Json::Value json_board_; // TODO: remove this one, parse all necessary info board
 		board::Board board_;
 	};
 }

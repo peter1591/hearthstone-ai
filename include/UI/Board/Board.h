@@ -10,47 +10,23 @@
 #include <Cards/id-map.h>
 #include "UI/Board/UnknownCards.h"
 #include "UI/Board/Entity.h"
+#include "UI/Board/Player.h"
 
 namespace ui
 {
 	namespace board
 	{
-		class OrderedEntities
-		{
-		public:
-			void SetEntityId(size_t pos, int entity_id) {
-				if (pos >= items_.size()) {
-					items_.resize(pos + 1);
-				}
-				items_[pos] = entity_id;
-			}
-
-			template <class Functor>
-			void ForEach(Functor && functor) const {
-				for (int entity_id : items_) {
-					functor(entity_id);
-				}
-			}
-
-		private:
-			std::vector<int> items_;
-		};
-
-		struct Player
-		{
-			int player_entity_id;
-			int hero_entity_id;
-			int weapon_entity_id;
-			int hero_power_entity_id;
-
-			OrderedEntities minions;
-			OrderedEntities hand;
-			std::vector<int> deck;
-		};
 
 		class Board
 		{
 		public:
+			Board() :
+				turn_(-1),
+				first_player_(), second_player_()
+			{
+
+			}
+
 			void Reset() {
 				entities_.clear();
 				ResetControllerInfo(first_controller_);
@@ -64,9 +40,17 @@ namespace ui
 
 			void Parse(Json::Value const& board)
 			{
+				turn_ = board["turn"].asInt();
+				first_player_.Parse(board["player"]);
+				second_player_.Parse(board["opponent"]);
 				ParseEntities(board);
 			}
 
+		public:
+			int GetTurn() const { return turn_; }
+			auto const& GetFirstPlayer() const { return first_player_; }
+			auto const& GetSecondPlayer() const { return second_player_; }
+			
 			// TODO: should return const&
 			auto & GetUnknownCardsSets(int controller) {
 				return GetControllerInfo(controller).unknown_cards_sets_;
@@ -109,14 +93,24 @@ namespace ui
 
 			void ParseEntitiesFromArray(Json::Value const& board, Json::Value const& json_entities) {
 				for (Json::ArrayIndex idx = 0; idx < json_entities.size(); ++idx) {
-					ParseEntity(board, json_entities[idx].asInt());
+					Entity & entity = ParseEntity(board, json_entities[idx].asInt());
+					FillCardIdInfo(entity, board, board["entities"][entity.id_]);
 				}
 			}
 
-			void ParseEntity(Json::Value const& board, int entity_id) {
+			Entity & ParseEntity(Json::Value const& board, int entity_id) {
 				Entity & entity = GetEntity(entity_id);
+				Json::Value const& json_entity = board["entities"][entity_id];
 				entity.id_ = entity_id;
-				FillCardIdInfo(entity, board, board["entities"][entity_id]);
+
+				std::unordered_map<std::string, int> tags;
+				Json::Value const& json_tags = json_entity["tags"];
+				for (Json::ArrayIndex idx = 0; idx < json_tags.size(); ++idx) {
+					tags[json_tags[idx]["Key"].asString()] = json_tags[idx]["Value"].asInt();
+				}
+				entity.ParseTags(tags);
+
+				return entity;
 			}
 
 			void FillCardIdInfo(Entity & entity, Json::Value const& board, Json::Value const& json_entity) {
@@ -194,14 +188,16 @@ namespace ui
 
 			ControllerInfo & GetControllerInfo(int controller) {
 				if (controller == 1) return first_controller_;
-				else if (controller == 2) return second_controller_;
-				else assert(false);
+				else {
+					assert(controller == 2);
+					return second_controller_;
+				}
 			}
 
 		private:
-			// TODO: parse json format to fill these
-			//Player first_player_;
-			//Player second_player_;
+			int turn_;
+			Player first_player_;
+			Player second_player_;
 
 			std::vector<Entity> entities_;
 

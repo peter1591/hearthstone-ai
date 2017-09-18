@@ -141,6 +141,7 @@
     <ClInclude Include="..\..\include\UI\BoardGetter.h" />
     <ClInclude Include="..\..\include\UI\Board\Board.h" />
     <ClInclude Include="..\..\include\UI\Board\Entity.h" />
+    <ClInclude Include="..\..\include\UI\Board\Player.h" />
     <ClInclude Include="..\..\include\UI\Board\UnknownCards.h" />
     <ClInclude Include="..\..\include\UI\Decks.h" />
     <ClInclude Include="..\..\include\UI\GameEngine.h" />
