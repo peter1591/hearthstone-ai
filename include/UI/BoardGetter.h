@@ -67,7 +67,7 @@ namespace ui
 			return 0;
 		}
 
-		int PrepareToRun(ui::AIController * controller, bool * restart_ai)
+		int PrepareToRun(std::unique_ptr<ui::AIController> & controller)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
@@ -104,15 +104,12 @@ namespace ui
 			board_.Parse(json_board);
 
 			if (need_restart_ai_) {
-				*restart_ai = true;
+				controller.reset(new ui::AIController());
+			}
+			else {
+				// TODO: re-use MCTS tree
 				return 0;
 			}
-
-			// TODO: reuse last MCTS tree
-			(void)controller;
-			*restart_ai = true;
-
-			return 0;
 		}
 
 		state::State GetStartBoard(int seed)
@@ -131,7 +128,7 @@ namespace ui
 
 			MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr);
 			MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr);
-			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should not waiting for an action
+			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
 			state.SetTurn(board_.GetTurn());
 
 			return state;

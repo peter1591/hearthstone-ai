@@ -85,16 +85,8 @@ namespace ui
 				controller_.reset(new ui::AIController());
 			}
 
-			bool restart_ai = false;
-			if (board_getter_.PrepareToRun(controller_.get(), &restart_ai) < 0) {
+			if (board_getter_.PrepareToRun(controller_) < 0) {
 				Log("Failed at board_getter_.PrepareToRun().");
-				return -1;
-			}
-			if (restart_ai) {
-				controller_.reset(new ui::AIController());
-			}
-			else {
-				// TODO: re-use MCTS tree
 				return -1;
 			}
 
