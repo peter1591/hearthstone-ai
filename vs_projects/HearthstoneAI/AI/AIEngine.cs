@@ -32,9 +32,9 @@ namespace HearthstoneAI.AI
         }
 
         private bool initialized_ = false;
-        public int Initialize()
+        public int Initialize(int root_sample_count)
         {
-            if (engine_.Initialize() != 0) return -1;
+            if (engine_.Initialize(root_sample_count) != 0) return -1;
 
             initialized_ = true;
             logger_.Info("Engine is now initialized.");

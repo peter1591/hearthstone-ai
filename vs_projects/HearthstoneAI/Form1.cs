@@ -90,10 +90,11 @@ namespace HearthstoneAI
         private void btnStart_Click(object sender, EventArgs e)
         {
             this.btnStart.Enabled = false;
+            int root_sample_count = (int)nudRootSampleCount.Value;
 
             var engine_initializer = new System.Threading.Thread(() =>
             {
-                if (ai_engine_.Initialize() != 0)
+                if (ai_engine_.Initialize(root_sample_count) != 0)
                 {
                     AddLog("Failed to initialize ai engine.");
                     return;
@@ -492,6 +493,11 @@ namespace HearthstoneAI
         }
 
         private void tabPageSettings_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
 
         }

@@ -15,7 +15,7 @@ namespace ui
 
 		GameEngine();
 
-		int Initialize() const;
+		int Initialize(int root_sample_count) const;
 		void SetOutputMessageCallback(OutputMessageCallback cb);
 
 		int ResetBoard();

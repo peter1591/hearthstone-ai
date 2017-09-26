@@ -16,7 +16,7 @@ namespace GameEngineCppWrapper
 			~GameEngine();
 			!GameEngine();
 
-			int Initialize();
+			int Initialize(int root_sample_count);
 
 			void SetOutputMessageCallback(OutputMessageCallback^ cb);
 

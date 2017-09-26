@@ -42,12 +42,18 @@ namespace ui
 		};
 
 	public:
+		static constexpr int kDefaultRootSampleCount = 100;
+
 		BoardGetter(GameEngineLogger & logger) :
 			logger_(logger), board_raw_(),
 			board_(),
-			first_unknown_cards_sets_mgr_(board_.GetUnknownCardsSets(1)),
-			second_unknown_cards_sets_mgr_(board_.GetUnknownCardsSets(2))
+			root_sample_count_(kDefaultRootSampleCount)
 		{}
+
+		// @note Should be set before running
+		void SetRootSampleCount(int v) {
+			root_sample_count_ = v;
+		}
 
 		int ResetBoard()
 		{
@@ -106,10 +112,8 @@ namespace ui
 
 			board_.Parse(json_board);
 
-			// TODO: we should prepare N samples
 			std::mt19937 rand(seed);
-			first_unknown_cards_sets_mgr_.Prepare(rand);
-			second_unknown_cards_sets_mgr_.Prepare(rand);
+			PrepareRootSamples(rand);
 
 			if (need_restart_ai_) {
 				controller.reset(new ui::AIController());
@@ -129,9 +133,11 @@ namespace ui
 			state::State state;
 			std::mt19937 rand(seed);
 
+			int root_sample_idx = rand() % root_sample_count_;
+
 			MyRandomGenerator random(rand());
-			MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr_);
-			MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr_);
+			MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgrs_[root_sample_idx]);
+			MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgrs_[root_sample_idx]);
 			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
 			state.SetTurn(board_.GetTurn());
 
@@ -139,6 +145,24 @@ namespace ui
 		}
 
 	private:
+		void PrepareRootSamples(std::mt19937 & rand)
+		{
+			if (first_unknown_cards_sets_mgrs_.size() != root_sample_count_) {
+				first_unknown_cards_sets_mgrs_.clear();
+				second_unknown_cards_sets_mgrs_.clear();
+
+				for (int i = 0; i < root_sample_count_; ++i) {
+					first_unknown_cards_sets_mgrs_.emplace_back(board_.GetUnknownCardsSets(1));
+					second_unknown_cards_sets_mgrs_.emplace_back(board_.GetUnknownCardsSets(2));
+				}
+			}
+
+			for (int i = 0; i < root_sample_count_; ++i) {
+				first_unknown_cards_sets_mgrs_[i].Prepare(rand);
+				second_unknown_cards_sets_mgrs_[i].Prepare(rand);
+			}
+		}
+
 		Cards::CardId GetCardId(std::string const& card_id)
 		{
 			auto const& container = Cards::Database::GetInstance().GetIdMap();
@@ -320,7 +344,8 @@ namespace ui
 		bool need_restart_ai_;
 		std::string board_raw_;
 		board::Board board_;
-		board::UnknownCardsSetsManager first_unknown_cards_sets_mgr_;
-		board::UnknownCardsSetsManager second_unknown_cards_sets_mgr_;
+		int root_sample_count_;
+		std::vector<board::UnknownCardsSetsManager> first_unknown_cards_sets_mgrs_;
+		std::vector<board::UnknownCardsSetsManager> second_unknown_cards_sets_mgrs_;
 	};
 }

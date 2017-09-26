@@ -71,6 +71,8 @@
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.label17 = new System.Windows.Forms.Label();
+            this.nudRootSampleCount = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).BeginInit();
@@ -78,6 +80,7 @@
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -96,6 +99,8 @@
             // 
             // tabPageSettings
             // 
+            this.tabPageSettings.Controls.Add(this.label17);
+            this.tabPageSettings.Controls.Add(this.nudRootSampleCount);
             this.tabPageSettings.Controls.Add(this.label16);
             this.tabPageSettings.Controls.Add(this.label15);
             this.tabPageSettings.Controls.Add(this.nudThreads);
@@ -173,7 +178,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(16, 189);
+            this.btnStart.Location = new System.Drawing.Point(16, 213);
             this.btnStart.Margin = new System.Windows.Forms.Padding(6);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(138, 42);
@@ -563,6 +568,38 @@
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(11, 166);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(179, 25);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "Root sample count:";
+            // 
+            // nudRootSampleCount
+            // 
+            this.nudRootSampleCount.Location = new System.Drawing.Point(196, 164);
+            this.nudRootSampleCount.Maximum = new decimal(new int[] {
+            32,
+            0,
+            0,
+            0});
+            this.nudRootSampleCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudRootSampleCount.Name = "nudRootSampleCount";
+            this.nudRootSampleCount.Size = new System.Drawing.Size(120, 29);
+            this.nudRootSampleCount.TabIndex = 6;
+            this.nudRootSampleCount.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nudRootSampleCount.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -585,6 +622,7 @@
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -633,6 +671,8 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.NumericUpDown nudThreads;
         private System.Windows.Forms.NumericUpDown nudSeconds;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.NumericUpDown nudRootSampleCount;
     }
 }
 

@@ -9,7 +9,7 @@ namespace GameEngineCppWrapper
 {
 	namespace CLI
 	{
-		int GameEngine::Initialize()
+		int GameEngine::Initialize(int root_sample_count)
 		{
 			output_message_cb_cpp_ = gcnew OutputMessageCallbackCpp(
 				this, &GameEngine::UnmanagedOutputMessageCallback);
@@ -18,7 +18,7 @@ namespace GameEngineCppWrapper
 			impl_->SetOutputMessageCallback(
 				static_cast<ui::GameEngine::OutputMessageCallback>(cb_ptr.ToPointer()));
 
-			return impl_->Initialize();
+			return impl_->Initialize(root_sample_count);
 		}
 
 		void GameEngine::SetOutputMessageCallback(OutputMessageCallback ^ cb)

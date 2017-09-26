@@ -21,7 +21,7 @@ namespace ui
 			board_getter_(logger_)
 		{}
 
-		int Initialize() {
+		int Initialize(int root_sample_count) {
 			try {
 				if (!Cards::Database::GetInstance().Initialize("cards.json")) {
 					Log("Failed to load cards.json.");
@@ -37,6 +37,8 @@ namespace ui
 			Log("Successfully load cards.json.");
 
 			if (ResetBoard() < 0) return -1;
+
+			board_getter_.SetRootSampleCount(root_sample_count);
 
 			return 0;
 		}
@@ -145,9 +147,9 @@ namespace ui
 		impl_ = new GameEngineImpl();
 	}
 
-	int GameEngine::Initialize() const
+	int GameEngine::Initialize(int root_sample_count) const
 	{
-		return impl_->Initialize();
+		return impl_->Initialize(root_sample_count);
 	}
 
 	void GameEngine::SetOutputMessageCallback(OutputMessageCallback cb)
