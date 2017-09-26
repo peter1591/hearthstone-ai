@@ -21,13 +21,12 @@ namespace ui
 		{}
 
 		template <class ContinueChecker>
-		void Run(ContinueChecker continue_checker, int thread_count, StartingStateGetter state_getter)
+		void Run(ContinueChecker continue_checker, int thread_count, int seed, StartingStateGetter state_getter)
 		{
 			std::vector<std::thread> threads;
 			stop_flag_ = false;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
-					auto seed = std::random_device()();
 					std::mt19937 rand(seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, rand);
 					while (true) {
@@ -81,14 +80,14 @@ namespace ui
 		AICompetitor(AICompetitor const&) = delete;
 		AICompetitor & operator=(AICompetitor const&) = delete;
 
-		void Think(state::State const& state, int threads, std::function<bool(uint64_t)> cb) {
+		void Think(state::State const& state, int threads, int seed, std::function<bool(uint64_t)> cb) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				return cb(iterations);
 			};
 
 			controller_.reset(new AIController());
-			controller_->Run(continue_checker, threads, [&](int seed) {
+			controller_->Run(continue_checker, threads, seed, [&](int seed) {
 				(void)seed;
 				return state;
 			});

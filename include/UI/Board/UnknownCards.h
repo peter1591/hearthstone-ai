@@ -120,6 +120,7 @@ namespace ui
 			void Prepare(std::mt19937 & rand)
 			{
 				data_.ResetState();
+				shuffled_cards_.clear();
 				
 				std::vector<Cards::CardId> cards_pool;
 				data_.ForEach([&](UnknownCardsSet const& set, size_t ref_cards) {

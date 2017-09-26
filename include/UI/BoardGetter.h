@@ -43,7 +43,10 @@ namespace ui
 
 	public:
 		BoardGetter(GameEngineLogger & logger) :
-			logger_(logger), board_raw_()
+			logger_(logger), board_raw_(),
+			board_(),
+			first_unknown_cards_sets_mgr_(board_.GetUnknownCardsSets(1)),
+			second_unknown_cards_sets_mgr_(board_.GetUnknownCardsSets(2))
 		{}
 
 		int ResetBoard()
@@ -67,7 +70,7 @@ namespace ui
 			return 0;
 		}
 
-		int PrepareToRun(std::unique_ptr<ui::AIController> & controller)
+		int PrepareToRun(std::unique_ptr<ui::AIController> & controller, int seed)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
@@ -103,6 +106,11 @@ namespace ui
 
 			board_.Parse(json_board);
 
+			// TODO: we should prepare N samples
+			std::mt19937 rand(seed);
+			first_unknown_cards_sets_mgr_.Prepare(rand);
+			second_unknown_cards_sets_mgr_.Prepare(rand);
+
 			if (need_restart_ai_) {
 				controller.reset(new ui::AIController());
 			}
@@ -110,24 +118,20 @@ namespace ui
 				// TODO: re-use MCTS tree
 				return 0;
 			}
+
+			return 0;
 		}
 
 		state::State GetStartBoard(int seed)
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
 
-			std::mt19937 rand(seed);
-			board::UnknownCardsSetsManager first_unknown_cards_sets_mgr(board_.GetUnknownCardsSets(1));
-			first_unknown_cards_sets_mgr.Prepare(rand);
-			board::UnknownCardsSetsManager second_unknown_cards_sets_mgr(board_.GetUnknownCardsSets(2));
-			second_unknown_cards_sets_mgr.Prepare(rand);
-
 			state::State state;
+			std::mt19937 rand(seed);
 
 			MyRandomGenerator random(rand());
-
-			MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr);
-			MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr);
+			MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr_);
+			MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr_);
 			state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
 			state.SetTurn(board_.GetTurn());
 
@@ -316,5 +320,7 @@ namespace ui
 		bool need_restart_ai_;
 		std::string board_raw_;
 		board::Board board_;
+		board::UnknownCardsSetsManager first_unknown_cards_sets_mgr_;
+		board::UnknownCardsSetsManager second_unknown_cards_sets_mgr_;
 	};
 }

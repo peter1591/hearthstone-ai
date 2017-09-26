@@ -79,13 +79,15 @@ namespace ui
 
 		int InternalRun(int seconds, int threads)
 		{
+			auto seed = std::random_device()();
+
 			Log("Start to run.");
 
 			if (!controller_) {
 				controller_.reset(new ui::AIController());
 			}
 
-			if (board_getter_.PrepareToRun(controller_) < 0) {
+			if (board_getter_.PrepareToRun(controller_, seed) < 0) {
 				Log("Failed at board_getter_.PrepareToRun().");
 				return -1;
 			}
@@ -123,7 +125,7 @@ namespace ui
 			};
 
 			try {
-				controller_->Run(continue_checker, threads, start_board_getter);
+				controller_->Run(continue_checker, threads, seed, start_board_getter);
 			}
 			catch (...) {
 				return -1;
