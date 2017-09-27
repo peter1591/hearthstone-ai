@@ -85,10 +85,6 @@ namespace ui
 
 			Log("Start to run.");
 
-			if (!controller_) {
-				controller_.reset(new ui::AIController());
-			}
-
 			if (board_getter_.PrepareToRun(controller_, seed) < 0) {
 				Log("Failed at board_getter_.PrepareToRun().");
 				return -1;

@@ -54,8 +54,11 @@ public:
 			else if (cmd == "s" || cmd == "start") {
 				int secs = 0;
 				std::cin >> secs;
+				
+				auto seed = std::random_device()();
 
-				std::cout << "Running for " << secs << " seconds with " << threads << " threads." << std::endl;
+				std::cout << "Running for " << secs << " seconds with " << threads << " threads "
+					<< "(seed = " << seed << ")" << std::endl;
 
 				auto start = std::chrono::steady_clock::now();
 				std::chrono::steady_clock::time_point run_until =
@@ -76,7 +79,7 @@ public:
 				};
 
 				auto start_i = controller_.GetStatistic().GetSuccededIterates();
-				controller_.Run(continue_checker, threads, start_board_getter);
+				controller_.Run(continue_checker, threads, seed, start_board_getter);
 				auto end_i = controller_.GetStatistic().GetSuccededIterates();
 
 				std::cout << std::endl;

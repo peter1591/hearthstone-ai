@@ -16,9 +16,13 @@ namespace ui
 		using StartingStateGetter = std::function<state::State(int)>;
 
 	public:
-		AIController() :
-			first_tree_(), second_tree_(), statistic_(), stop_flag_(false)
-		{}
+		AIController(int tree_samples, std::mt19937 & rand) :
+			first_tree_(), second_tree_(), statistic_(), stop_flag_(false), tree_sample_randoms_()
+		{
+			for (int i = 0; i < tree_samples; ++i) {
+				tree_sample_randoms_.push_back(rand());
+			}
+		}
 
 		template <class ContinueChecker>
 		void Run(ContinueChecker continue_checker, int thread_count, int seed, StartingStateGetter state_getter)
@@ -27,14 +31,28 @@ namespace ui
 			stop_flag_ = false;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
-					std::mt19937 selection_rand(seed);
-					std::mt19937 simulation_rand(seed);
+					std::mt19937 rand(seed);
+					std::mt19937 selection_rand(rand());
+					std::mt19937 simulation_rand(rand());
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, selection_rand, simulation_rand);
+
+					int tree_sample_random_idx = 0;
+					auto get_next_selection_seed = [tree_sample_random_idx, this]() mutable {
+						int v = tree_sample_randoms_[tree_sample_random_idx];
+						++tree_sample_random_idx;
+						if (tree_sample_random_idx >= tree_sample_randoms_.size()) {
+							tree_sample_random_idx = 0;
+						}
+						return v;
+					};
+
 					while (true) {
 						if (stop_flag_ == true) break; // TODO: use compare_exchange_weak
 
+						int sample_seed = get_next_selection_seed();
+						selection_rand.seed(sample_seed);
 						mcts.Iterate([&]() {
-							return state_getter(rand());
+							return state_getter(sample_seed);
 						});
 
 						statistic_.IterateSucceeded();
@@ -72,6 +90,7 @@ namespace ui
 		mcts::builder::TreeBuilder::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;
 		std::atomic_bool stop_flag_;
+		std::vector<int> tree_sample_randoms_;
 	};
 
 	class AICompetitor : public ICompetitor {
@@ -81,14 +100,15 @@ namespace ui
 		AICompetitor(AICompetitor const&) = delete;
 		AICompetitor & operator=(AICompetitor const&) = delete;
 
-		void Think(state::State const& state, int threads, int seed, std::function<bool(uint64_t)> cb) {
+		void Think(state::State const& state, int threads, int seed, int tree_samples, std::function<bool(uint64_t)> cb) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				return cb(iterations);
 			};
 
-			controller_.reset(new AIController());
-			controller_->Run(continue_checker, threads, seed, [&](int seed) {
+			std::mt19937 rand(seed);
+			controller_.reset(new AIController(tree_samples, rand));
+			controller_->Run(continue_checker, threads, rand(), [&](int seed) {
 				(void)seed;
 				return state;
 			});

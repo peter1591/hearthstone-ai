@@ -116,8 +116,8 @@ namespace ui
 			std::mt19937 rand(seed);
 			PrepareRootSamples(rand);
 
-			if (need_restart_ai_) {
-				controller.reset(new ui::AIController());
+			if (!controller || need_restart_ai_) {
+				controller.reset(new ui::AIController(root_sample_count_, rand));
 			}
 			else {
 				// TODO: re-use MCTS tree
