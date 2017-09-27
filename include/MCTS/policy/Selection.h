@@ -27,7 +27,7 @@ namespace mcts
 				}
 				int SelectChoice() {
 					if (choices_.empty()) return -1;
-					int target = rand() % choices_.size();
+					int target = rand() % choices_.size(); // TODO: should take seed in constructor
 					return choices_[target].choice;
 				}
 

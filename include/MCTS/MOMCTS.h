@@ -14,10 +14,10 @@ namespace mcts
 		MOMCTS(builder::TreeBuilder::TreeNode & first_tree,
 			builder::TreeBuilder::TreeNode & second_tree,
 			Statistic<> & statistic,
-			std::mt19937 & rand
+			std::mt19937 & selection_rand, std::mt19937 & simulation_rand
 		) :
-			first_(state::kPlayerFirst, first_tree, statistic, rand),
-			second_(state::kPlayerSecond, second_tree, statistic, rand)
+			first_(state::kPlayerFirst, first_tree, statistic, selection_rand, simulation_rand),
+			second_(state::kPlayerSecond, second_tree, statistic, selection_rand, simulation_rand)
 		{}
 
 		template <typename StartBoardGetter>

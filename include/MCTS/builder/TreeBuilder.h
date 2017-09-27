@@ -22,12 +22,14 @@ namespace mcts
 		public:
 			typedef selection::TreeNode TreeNode;
 
-			TreeBuilder(state::PlayerSide side, SOMCTS & caller, Statistic<> & statistic, std::mt19937 & rand) :
+			TreeBuilder(state::PlayerSide side, SOMCTS & caller, Statistic<> & statistic,
+				std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
+				:
 				statistic_(statistic),
 				action_parameter_getter_(caller), random_generator_(caller),
 				board_(nullptr),
 				flow_context_(),
-				selection_stage_(rand), simulation_stage_(side, rand, flow_context_)
+				selection_stage_(selection_rand), simulation_stage_(side, simulation_rand, flow_context_)
 			{
 			}
 

@@ -99,6 +99,7 @@ namespace ui
 				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 				player_deck_cards.push_back(card_id);
 			}
+			// TODO: remove revealed deck cards
 			board_.SetDeckCards(1, player_deck_cards);
 
 			// TODO: guess oppoennt deck type
