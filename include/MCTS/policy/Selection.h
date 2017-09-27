@@ -16,6 +16,8 @@ namespace mcts
 
 			class RandomPolicy {
 			public:
+				RandomPolicy(std::mt19937 & rand) : rand_(rand) {}
+
 				void ReportChoicesCount(int count) {
 					// the count here contains the invalid actions
 					// cannot use directly
@@ -27,7 +29,7 @@ namespace mcts
 				}
 				int SelectChoice() {
 					if (choices_.empty()) return -1;
-					int target = rand() % choices_.size(); // TODO: should take seed in constructor
+					int target = rand_() % choices_.size();
 					return choices_[target].choice;
 				}
 
@@ -38,6 +40,7 @@ namespace mcts
 					TreeNode* node;
 				};
 				std::vector<Item> choices_;
+				std::mt19937 & rand_;
 			};
 
 			class UCBPolicy {

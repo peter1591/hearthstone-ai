@@ -395,7 +395,7 @@ namespace mcts
 				{
 					size_t count = choice_getter.Size();
 					assert(count > 0);
-					size_t rand_idx = (size_t)(std::rand() % count);
+					size_t rand_idx = (size_t)(rand_() % count);
 					return choice_getter.Get(rand_idx);
 				}
 
@@ -456,7 +456,7 @@ namespace mcts
 					size_t count = choice_getter.Size();
 					assert(count > 0);
 					size_t idx = 0;
-					size_t rand_idx = (size_t)(std::rand() % count);
+					size_t rand_idx = (size_t)(rand_() % count);
 					int result = -1;
 					choice_getter.ForEachChoice([&](int choice) {
 						if (idx == rand_idx) {
@@ -636,7 +636,7 @@ namespace mcts
 					assert(count > 0);
 
 					// otherwise, choose randomly
-					size_t rand_idx = (size_t)(std::rand() % count);
+					size_t rand_idx = (size_t)(rand_() % count);
 					return choice_getter.Get(rand_idx);
 				}
 
