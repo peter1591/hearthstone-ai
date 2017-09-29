@@ -99,7 +99,9 @@ namespace state {
 		{
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneHand);
-			int pos = (int)board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).hand_.PushBack(card_ref);
+			int pos = (int)board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).hand_.Add(card_ref, [&](CardRef ref) {
+				return cards_mgr.Get(ref).GetCardId();
+			});
 			cards_mgr.GetMutable(card_ref).SetZonePos()(pos);
 		}
 		template <CardType TargetCardType>
@@ -109,12 +111,18 @@ namespace state {
 			assert(cards_mgr.Get(card_ref).GetCardType() == TargetCardType);
 			assert(cards_mgr.Get(card_ref).GetZone() == kCardZoneHand);
 
-			int pos = cards_mgr.Get(card_ref).GetZonePosition();
-			assert(board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).hand_.Get(pos) == card_ref);
 			auto& hand = board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).hand_;
-			hand.Remove(pos, [&cards_mgr](CardRef ref, size_t pos) {
-				cards_mgr.SetCardZonePos(ref, (int)pos);
-			});
+
+			if constexpr (state::kOrderHandCardsByCardId) {
+				hand.Remove(card_ref);
+			}
+			else {
+				int pos = cards_mgr.Get(card_ref).GetZonePosition();
+				assert(board.Get(cards_mgr.Get(card_ref).GetPlayerIdentifier()).hand_.Get(pos) == card_ref);
+				hand.Remove(pos, [&cards_mgr](CardRef ref, size_t pos) {
+					cards_mgr.SetCardZonePos(ref, (int)pos);
+				});
+			}
 		}
 
 		inline void PlayerDataStructureMaintainer<kCardTypeHero, kCardZonePlay>::

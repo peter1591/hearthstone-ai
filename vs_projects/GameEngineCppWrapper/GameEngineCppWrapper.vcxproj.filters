@@ -51,6 +51,9 @@
     <ClInclude Include="..\..\include\UI\Board\Player.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\UI\InteractiveShell.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">

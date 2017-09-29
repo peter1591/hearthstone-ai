@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <array>
 #include "state/Types.h"
+#include "state/Configs.h"
 
 namespace state
 {
@@ -43,14 +44,32 @@ namespace state
 			}
 
 		private:
-			size_t PushBack(CardRef ref)
+			template <typename CardIdGetter>
+			size_t Add(CardRef ref, CardIdGetter card_id_getter)
 			{
 				assert(size_ < max_cards_);
-				size_t ret = size_;
-				cards_[size_] = ref;
-				++size_;
-				++change_id_;
-				return ret;
+				if constexpr (state::kOrderHandCardsByCardId) {
+					// sort card by card_id
+					auto new_id = card_id_getter(ref);
+					size_t i = 0;
+					for (i = 0; i < size_; ++i) {
+						if (card_id_getter(cards_[i]) > new_id) break;
+					}
+					while (i <= size_) {
+						std::swap(ref, cards_[i]);
+						++i;
+					}
+					++size_;
+					++change_id_;
+					return (size_t)-1;
+				}
+				else {
+					size_t ret = size_;
+					cards_[size_] = ref;
+					++size_;
+					++change_id_;
+					return ret;
+				}
 			}
 
 			template <typename AdjustFunctor>
@@ -66,6 +85,15 @@ namespace state
 					++spot;
 				}
 				--size_;
+			}
+
+			void Remove(CardRef ref) {
+				for (size_t i = 0; i < size_; ++i) {
+					if (cards_[i] == ref) {
+						return Remove(i, [&](CardRef ref, size_t pos) {});
+					}
+				}
+				assert(false);
 			}
 
 		private:

@@ -7,6 +7,7 @@
 
 #include <json/json.h>
 
+#include "state/Configs.h"
 #include "Cards/Database.h"
 #include "UI/AIController.h"
 #include "UI/Decks.h"
@@ -322,9 +323,11 @@ namespace ui
 			else {
 				++hand_count;
 				assert((int)state.GetBoard().Get(player).hand_.Size() == hand_count);
-				assert(state.GetBoard().Get(player).hand_.Get(hand_count - 1) == ref);
 				assert(state.GetCardsManager().Get(ref).GetZone() == state::kCardZoneHand);
-				assert(state.GetCardsManager().Get(ref).GetZonePosition() == (hand_count - 1));
+				if constexpr (!state::kOrderHandCardsByCardId) {
+					assert(state.GetBoard().Get(player).hand_.Get(hand_count - 1) == ref);
+					assert(state.GetCardsManager().Get(ref).GetZonePosition() == (hand_count - 1));
+				}
 			}
 
 			return ref;

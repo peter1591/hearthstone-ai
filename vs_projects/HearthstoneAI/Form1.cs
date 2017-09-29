@@ -524,7 +524,18 @@ namespace HearthstoneAI
 
         private void tabPage3_Click(object sender, EventArgs e)
         {
-            txtAIShell.Focus();
+        }
+
+        private void tabControl1_TabIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabPageAI)
+            {
+                txtAIShell.Focus();
+            }
         }
     }
 }

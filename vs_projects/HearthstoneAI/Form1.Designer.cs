@@ -69,12 +69,12 @@
             this.txtPlayerHero = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtGameEntity = new System.Windows.Forms.TextBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPageAI = new System.Windows.Forms.TabPage();
+            this.txtAIShell = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.label18 = new System.Windows.Forms.Label();
-            this.txtAIShell = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).BeginInit();
@@ -82,7 +82,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage3.SuspendLayout();
+            this.tabPageAI.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -90,7 +90,7 @@
             this.tabControl1.Controls.Add(this.tabPageSettings);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPageAI);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(6);
@@ -98,6 +98,8 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1745, 1458);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl1.TabIndexChanged += new System.EventHandler(this.tabControl1_TabIndexChanged);
             // 
             // tabPageSettings
             // 
@@ -134,7 +136,7 @@
             // 
             this.nudRootSampleCount.Location = new System.Drawing.Point(196, 164);
             this.nudRootSampleCount.Maximum = new decimal(new int[] {
-            1000,
+            10000,
             0,
             0,
             0});
@@ -578,19 +580,41 @@
             this.txtGameEntity.TabIndex = 0;
             this.txtGameEntity.WordWrap = false;
             // 
-            // tabPage3
+            // tabPageAI
             // 
-            this.tabPage3.Controls.Add(this.txtAIShell);
-            this.tabPage3.Controls.Add(this.label18);
-            this.tabPage3.Controls.Add(this.txtAIEngine);
-            this.tabPage3.Location = new System.Drawing.Point(4, 33);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1737, 1421);
-            this.tabPage3.TabIndex = 3;
-            this.tabPage3.Text = "AI";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
+            this.tabPageAI.Controls.Add(this.txtAIShell);
+            this.tabPageAI.Controls.Add(this.label18);
+            this.tabPageAI.Controls.Add(this.txtAIEngine);
+            this.tabPageAI.Location = new System.Drawing.Point(4, 33);
+            this.tabPageAI.Name = "tabPageAI";
+            this.tabPageAI.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageAI.Size = new System.Drawing.Size(1737, 1421);
+            this.tabPageAI.TabIndex = 3;
+            this.tabPageAI.Text = "AI";
+            this.tabPageAI.UseVisualStyleBackColor = true;
+            this.tabPageAI.Click += new System.EventHandler(this.tabPage3_Click);
+            // 
+            // txtAIShell
+            // 
+            this.txtAIShell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAIShell.Location = new System.Drawing.Point(165, 1389);
+            this.txtAIShell.Name = "txtAIShell";
+            this.txtAIShell.Size = new System.Drawing.Size(1566, 29);
+            this.txtAIShell.TabIndex = 2;
+            this.txtAIShell.TextChanged += new System.EventHandler(this.txtAIShell_TextChanged);
+            this.txtAIShell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAIShell_KeyDown);
+            this.txtAIShell.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAIShell_KeyPress);
+            // 
+            // label18
+            // 
+            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(3, 1391);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(156, 25);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "Interactive Shell:";
             // 
             // txtAIEngine
             // 
@@ -607,28 +631,6 @@
             // timerMainLoop
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
-            // 
-            // label18
-            // 
-            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(3, 1391);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(156, 25);
-            this.label18.TabIndex = 1;
-            this.label18.Text = "Interactive Shell:";
-            // 
-            // txtAIShell
-            // 
-            this.txtAIShell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAIShell.Location = new System.Drawing.Point(165, 1389);
-            this.txtAIShell.Name = "txtAIShell";
-            this.txtAIShell.Size = new System.Drawing.Size(1566, 29);
-            this.txtAIShell.TabIndex = 2;
-            this.txtAIShell.TextChanged += new System.EventHandler(this.txtAIShell_TextChanged);
-            this.txtAIShell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAIShell_KeyDown);
-            this.txtAIShell.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAIShell_KeyPress);
             // 
             // frmMain
             // 
@@ -651,8 +653,8 @@
             this.tabPage2.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
+            this.tabPageAI.ResumeLayout(false);
+            this.tabPageAI.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -695,7 +697,7 @@
         private System.Windows.Forms.TextBox txtOpponentMinions;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox txtChoices;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPageAI;
         private System.Windows.Forms.TextBox txtAIEngine;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label15;

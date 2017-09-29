@@ -102,7 +102,11 @@ namespace state
 			}
 
 		public: // getters and setters
+			// Do not provide interface to change 'card_id'
+			// You should remove the old card, and add a new one later
+			// Reason: Hand use card_id to sort cards.
 			::Cards::CardId GetCardId() const { return data_.card_id; }
+
 			CardType GetCardType() const { return data_.card_type; }
 			bool IsSecretCard() const { return data_.is_secret_card; }
 			CardRace GetRace() const { return data_.card_race; }

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <assert.h>
+
+#include "state/Configs.h"
 #include "FlowControl/FlowController.h"
 #include "FlowControl/FlowController-impl.h"
 
@@ -41,6 +43,8 @@ void test_compile()
 
 int main(void)
 {
+	static_assert(!state::kOrderHandCardsByCardId); // Need to turn off this setting.
+
 	std::cout << "Reading json file...";
 	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
 	Cards::PreIndexedCards::GetInstance().Initialize();
