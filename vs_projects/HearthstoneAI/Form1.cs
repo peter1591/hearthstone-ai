@@ -501,5 +501,30 @@ namespace HearthstoneAI
         {
 
         }
+
+        private void txtAIShell_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtAIShell_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            
+        }
+
+        private void txtAIShell_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ai_engine_.InteractiveShell(txtAIShell.Text);
+                txtAIShell.Text = "";
+                e.Handled = true;
+            }
+        }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+            txtAIShell.Focus();
+        }
     }
 }

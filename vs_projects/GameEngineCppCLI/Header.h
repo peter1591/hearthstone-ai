@@ -26,6 +26,8 @@ namespace GameEngineCppWrapper
 			int Run(int seconds, int threads);
 			int NotifyStop();
 
+			int InteractiveShell(System::String^ cmd);
+
 			void Destroy();
 
 			void UnmanagedOutputMessageCallback(std::string const& msg);

@@ -29,7 +29,8 @@ void TestAI()
 		return TestStateBuilder().GetState(seed);
 	};
 
-	ui::InteractiveShellHandler handler(tree_samples, rand, start_board_getter);
+	ui::AIController controller(tree_samples, rand);
+	ui::InteractiveShell handler(&controller, start_board_getter);
 
 	while (std::cin) {
 		std::string cmdline;

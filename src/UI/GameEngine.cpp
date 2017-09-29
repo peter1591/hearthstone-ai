@@ -7,6 +7,7 @@
 #include "UI/AIController.h"
 #include "UI/BoardGetter.h"
 #include "UI/GameEngine.h"
+#include "UI/InteractiveShell.h"
 #include "FlowControl/FlowController-impl.h"
 #include "Cards/PreIndexedCards.h"
 
@@ -61,6 +62,17 @@ namespace ui
 			int rc = InternalRun(seconds, threads);
 			running_ = false;
 			return rc;
+		}
+
+		int InteractiveShell(std::string const& cmd)
+		{
+			shell_.SetController(controller_.get());
+			// TODO: do not use the 'run' command here
+			std::ostringstream oss;
+			std::istringstream iss(cmd);
+			shell_.DoCommand(iss, oss);
+			Log(oss.str());
+			return 0;
 		}
 
 		int NotifyStop()
@@ -136,6 +148,7 @@ namespace ui
 		GameEngineLogger logger_;
 		std::atomic<bool> running_;
 		std::unique_ptr<ui::AIController> controller_;
+		ui::InteractiveShell shell_;
 		ui::BoardGetter board_getter_;
 	};
 
@@ -157,4 +170,5 @@ namespace ui
 	int GameEngine::UpdateBoard(std::string const& board) { return impl_->UpdateBoard(board); }
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
 	int GameEngine::NotifyStop() { return impl_->NotifyStop(); }
+	int GameEngine::InteractiveShell(std::string const& cmd) { return impl_->InteractiveShell(cmd); }
 }

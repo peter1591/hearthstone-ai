@@ -103,6 +103,11 @@ namespace HearthstoneAI.AI
             return 0;
         }
 
+        public int InteractiveShell(String cmd)
+        {
+            return engine_.InteractiveShell(cmd);
+        }
+
         public void Destroy()
         {
             AbortRunner();

@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.label17 = new System.Windows.Forms.Label();
+            this.nudRootSampleCount = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.nudThreads = new System.Windows.Forms.NumericUpDown();
@@ -71,16 +73,16 @@
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.label17 = new System.Windows.Forms.Label();
-            this.nudRootSampleCount = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtAIShell = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -118,6 +120,38 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             this.tabPageSettings.Click += new System.EventHandler(this.tabPageSettings_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(11, 166);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(179, 25);
+            this.label17.TabIndex = 7;
+            this.label17.Text = "Root sample count:";
+            // 
+            // nudRootSampleCount
+            // 
+            this.nudRootSampleCount.Location = new System.Drawing.Point(196, 164);
+            this.nudRootSampleCount.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudRootSampleCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudRootSampleCount.Name = "nudRootSampleCount";
+            this.nudRootSampleCount.Size = new System.Drawing.Size(120, 29);
+            this.nudRootSampleCount.TabIndex = 6;
+            this.nudRootSampleCount.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudRootSampleCount.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label16
             // 
@@ -546,6 +580,8 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.txtAIShell);
+            this.tabPage3.Controls.Add(this.label18);
             this.tabPage3.Controls.Add(this.txtAIEngine);
             this.tabPage3.Location = new System.Drawing.Point(4, 33);
             this.tabPage3.Name = "tabPage3";
@@ -554,51 +590,45 @@
             this.tabPage3.TabIndex = 3;
             this.tabPage3.Text = "AI";
             this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage3.Click += new System.EventHandler(this.tabPage3_Click);
             // 
             // txtAIEngine
             // 
-            this.txtAIEngine.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtAIEngine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAIEngine.Location = new System.Drawing.Point(3, 3);
             this.txtAIEngine.Multiline = true;
             this.txtAIEngine.Name = "txtAIEngine";
-            this.txtAIEngine.Size = new System.Drawing.Size(1731, 1415);
+            this.txtAIEngine.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtAIEngine.Size = new System.Drawing.Size(1731, 1380);
             this.txtAIEngine.TabIndex = 0;
             // 
             // timerMainLoop
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
             // 
-            // label17
+            // label18
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(11, 166);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(179, 25);
-            this.label17.TabIndex = 7;
-            this.label17.Text = "Root sample count:";
+            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(3, 1391);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(156, 25);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "Interactive Shell:";
             // 
-            // nudRootSampleCount
+            // txtAIShell
             // 
-            this.nudRootSampleCount.Location = new System.Drawing.Point(196, 164);
-            this.nudRootSampleCount.Maximum = new decimal(new int[] {
-            32,
-            0,
-            0,
-            0});
-            this.nudRootSampleCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudRootSampleCount.Name = "nudRootSampleCount";
-            this.nudRootSampleCount.Size = new System.Drawing.Size(120, 29);
-            this.nudRootSampleCount.TabIndex = 6;
-            this.nudRootSampleCount.Value = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.nudRootSampleCount.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.txtAIShell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAIShell.Location = new System.Drawing.Point(165, 1389);
+            this.txtAIShell.Name = "txtAIShell";
+            this.txtAIShell.Size = new System.Drawing.Size(1566, 29);
+            this.txtAIShell.TabIndex = 2;
+            this.txtAIShell.TextChanged += new System.EventHandler(this.txtAIShell_TextChanged);
+            this.txtAIShell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtAIShell_KeyDown);
+            this.txtAIShell.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtAIShell_KeyPress);
             // 
             // frmMain
             // 
@@ -614,6 +644,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
             this.tabPageSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudThreads)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSeconds)).EndInit();
             this.tabPage2.ResumeLayout(false);
@@ -622,7 +653,6 @@
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -673,6 +703,8 @@
         private System.Windows.Forms.NumericUpDown nudSeconds;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.NumericUpDown nudRootSampleCount;
+        private System.Windows.Forms.TextBox txtAIShell;
+        private System.Windows.Forms.Label label18;
     }
 }
 

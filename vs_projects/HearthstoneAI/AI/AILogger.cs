@@ -16,6 +16,7 @@ namespace HearthstoneAI.AI
 
         public void Info(System.String msg)
         {
+            msg = msg.Replace("\n", "\r\n");
             LogMsg(DateTime.Now.ToShortTimeString() +
                 " [INFO]" +
                 " " + msg);

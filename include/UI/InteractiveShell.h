@@ -8,16 +8,27 @@
 
 namespace ui
 {
-	class InteractiveShellHandler
+	class InteractiveShell
 	{
 	public:
 		using StartBoardGetter = std::function<state::State(int)>;
-		InteractiveShellHandler(int tree_samples, std::mt19937 & rand, StartBoardGetter start_board_getter) :
-			controller_(tree_samples, rand), node_(nullptr), threads_(1), start_board_getter_(start_board_getter)
+
+		InteractiveShell() : InteractiveShell(nullptr, nullptr) {}
+
+		InteractiveShell(AIController * controller, StartBoardGetter start_board_getter) :
+			controller_(controller), node_(nullptr), threads_(1), start_board_getter_(start_board_getter)
 		{}
 
-		InteractiveShellHandler(InteractiveShellHandler const&) = delete;
-		InteractiveShellHandler & operator=(InteractiveShellHandler const&) = delete;
+		InteractiveShell(InteractiveShell const&) = delete;
+		InteractiveShell & operator=(InteractiveShell const&) = delete;
+
+		void SetController(AIController * controller) {
+			controller_ = controller;
+		}
+
+		void SetStartBoardGetter(StartBoardGetter getter) {
+			start_board_getter_ = getter;
+		}
 
 		void DoCommand(std::istream & is, std::ostream & s)
 		{
@@ -64,14 +75,14 @@ namespace ui
 					return true;
 				};
 
-				auto start_i = controller_.GetStatistic().GetSuccededIterates();
-				controller_.Run(continue_checker, threads_, seed, start_board_getter_);
-				auto end_i = controller_.GetStatistic().GetSuccededIterates();
+				auto start_i = controller_->GetStatistic().GetSuccededIterates();
+				controller_->Run(continue_checker, threads_, seed, start_board_getter_);
+				auto end_i = controller_->GetStatistic().GetSuccededIterates();
 
 				s << std::endl;
 				s << "Done iterations: " << (end_i - start_i) << std::endl;
 				s << "====== Statistics =====" << std::endl;
-				controller_.GetStatistic().GetDebugMessage();
+				controller_->GetStatistic().GetDebugMessage();
 
 				auto now = std::chrono::steady_clock::now();
 				auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
@@ -109,7 +120,7 @@ namespace ui
 				s << "invalid input" << std::endl;
 				return;
 			}
-			node_ = controller_.GetRootNode(side);
+			node_ = controller_->GetRootNode(side);
 			s << "Current node set to: " << node_ << std::endl;
 		}
 
@@ -253,7 +264,7 @@ namespace ui
 		}
 
 	private:
-		ui::AIController controller_;
+		ui::AIController * controller_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		int threads_;
 		StartBoardGetter start_board_getter_;

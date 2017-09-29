@@ -61,5 +61,10 @@ namespace GameEngineCppWrapper
 		{
 			return impl_->NotifyStop();
 		}
+
+		int GameEngine::InteractiveShell(System::String^ cmd)
+		{
+			return impl_->InteractiveShell(msclr::interop::marshal_as<std::string>(cmd));
+		}
 	}
 }

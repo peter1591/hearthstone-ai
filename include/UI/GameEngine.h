@@ -21,6 +21,8 @@ namespace ui
 		int ResetBoard();
 		int UpdateBoard(std::string const& board);
 
+		int InteractiveShell(std::string const& cmd);
+
 		int Run(int seconds, int threads);
 		int NotifyStop();
 
