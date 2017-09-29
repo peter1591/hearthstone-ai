@@ -33,16 +33,20 @@ namespace ui
 
 		struct Resource
 		{
-			int this_turn;
+			int this_turn; // crystals earns temporary this turn
+			int used;
+			int current;
 			int total;
 			int overload;
 			int overload_next_turn;
 
 			void Parse(Json::Value const& json) {
 				this_turn = json["this_turn"].asInt();
+				used = json["used"].asInt();
 				total = json["total"].asInt();
 				overload = json["overload"].asInt();
 				overload_next_turn = json["overload_next_turn"].asInt();
+				current = total + this_turn - used;
 			}
 		};
 

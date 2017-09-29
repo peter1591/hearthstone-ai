@@ -240,7 +240,7 @@ namespace ui
 
 		void MakeResource(state::board::PlayerResource & resource, board::Resource const& board_resource)
 		{
-			resource.SetCurrent(board_resource.this_turn);
+			resource.SetCurrent(board_resource.current);
 			resource.SetTotal(board_resource.total);
 			resource.SetCurrentOverloaded(board_resource.overload);
 			resource.SetNextOverload(board_resource.overload_next_turn);
