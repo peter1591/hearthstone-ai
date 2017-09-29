@@ -236,7 +236,7 @@ namespace ui
 
 			s << line_prefix << "Self Minions: ";
 			for (auto const& minion : view.GetSelfMinions()) {
-				s << minion.hp << "/" << minion.max_hp << " ";
+				s << minion.attack << "/" << minion.hp << "(" << minion.max_hp << ") ";
 			}
 			s << std::endl;
 
