@@ -31,9 +31,8 @@ namespace ui
 			stop_flag_ = false;
 			for (int i = 0; i < thread_count; ++i) {
 				threads.emplace_back([&]() {
-					std::mt19937 rand(seed);
-					std::mt19937 selection_rand(rand());
-					std::mt19937 simulation_rand(rand());
+					std::mt19937 selection_rand;
+					std::mt19937 simulation_rand(seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, selection_rand, simulation_rand);
 
 					int tree_sample_random_idx = 0;

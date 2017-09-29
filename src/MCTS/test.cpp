@@ -22,7 +22,7 @@ void TestAI()
 {
 	srand(0);
 
-	int tree_samples = 100;
+	int tree_samples = 10000;
 	std::mt19937 rand;
 
 	auto start_board_getter = [](int seed) -> state::State {

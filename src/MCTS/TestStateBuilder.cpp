@@ -187,7 +187,8 @@ state::State TestStateBuilder::GetState(int seed)
 	//MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
 	MoveFromDeckToHand(deck1, "Bloodfen Raptor", state, state::PlayerIdentifier::First());
 	MoveFromDeckToHand(deck1, "Wolfrider", state, state::PlayerIdentifier::First());
-	AddHandCard(Cards::ID_NEW1_007, state, state::PlayerIdentifier::First());
+	AddHandCard(Cards::ID_GAME_005, state, state::PlayerIdentifier::First());
+	//AddHandCard(Cards::ID_NEW1_007, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
@@ -196,7 +197,6 @@ state::State TestStateBuilder::GetState(int seed)
 	MoveFromDeckToHand(deck2, "Bloodfen Raptor", state, state::PlayerIdentifier::Second());
 	MoveFromDeckToHand(deck2, "River Crocolisk", state, state::PlayerIdentifier::Second());
 	MoveFromDeckToHand(deck2, "Arcane Explosion", state, state::PlayerIdentifier::Second());
-	AddHandCard(Cards::ID_GAME_005, state, state::PlayerIdentifier::Second());
 	PrepareDeck(deck2, my_random, state, state::PlayerIdentifier::Second());
 
 	state.GetMutableCurrentPlayerId().SetFirst();
