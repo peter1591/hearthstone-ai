@@ -230,5 +230,8 @@
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\UI\InteractiveShell.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

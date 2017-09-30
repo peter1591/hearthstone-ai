@@ -205,6 +205,7 @@
     <ClInclude Include="..\..\include\UI\AIController.h" />
     <ClInclude Include="..\..\include\UI\CompetitionGuide.h" />
     <ClInclude Include="..\..\include\UI\Decks.h" />
+    <ClInclude Include="..\..\include\UI\InteractiveShell.h" />
     <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
     <ClInclude Include="..\..\include\Utils\FuncPtrArray.h" />
     <ClInclude Include="..\..\include\Utils\HashCombine.h" />

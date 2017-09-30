@@ -11,12 +11,10 @@ namespace ui
 	class InteractiveShell
 	{
 	public:
-		using StartBoardGetter = std::function<state::State(int)>;
+		InteractiveShell() : InteractiveShell(nullptr) {}
 
-		InteractiveShell() : InteractiveShell(nullptr, nullptr) {}
-
-		InteractiveShell(AIController * controller, StartBoardGetter start_board_getter) :
-			controller_(controller), node_(nullptr), threads_(1), start_board_getter_(start_board_getter)
+		InteractiveShell(AIController * controller) :
+			controller_(controller), node_(nullptr)
 		{}
 
 		InteractiveShell(InteractiveShell const&) = delete;
@@ -26,10 +24,6 @@ namespace ui
 			controller_ = controller;
 		}
 
-		void SetStartBoardGetter(StartBoardGetter getter) {
-			start_board_getter_ = getter;
-		}
-
 		void DoCommand(std::istream & is, std::ostream & s)
 		{
 			std::string cmd;
@@ -37,58 +31,9 @@ namespace ui
 			if (cmd == "h" || cmd == "help") {
 				s << "Commands: " << std::endl
 					<< "h or help: show this message" << std::endl
-					<< "threads: set number of threads" << std::endl
-					<< "s or start (secs): to run for a specified seconds" << std::endl
 					<< "root (1 or 2): set node to root node of player 1 or 2" << std::endl
 					<< "info: show info for selected node" << std::endl
 					<< "node (addr): set node to specified address." << std::endl;
-			}
-			else if (cmd == "threads") {
-				is >> threads_;
-				s << "Set thread count to " << threads_ << std::endl;
-			}
-			else if (cmd == "s" || cmd == "start") {
-
-				int secs = 0;
-				is >> secs;
-
-				auto seed = std::random_device()();
-
-				s << "Running for " << secs << " seconds with " << threads_ << " threads "
-					<< "(seed = " << seed << ")" << std::endl;
-
-				auto start = std::chrono::steady_clock::now();
-				std::chrono::steady_clock::time_point run_until =
-					std::chrono::steady_clock::now() +
-					std::chrono::seconds(secs);
-
-				long long last_show_rest_sec = -1;
-				auto continue_checker = [&]() {
-					auto now = std::chrono::steady_clock::now();
-					if (now > run_until) return false;
-
-					auto rest_sec = std::chrono::duration_cast<std::chrono::seconds>(run_until - now).count();
-					if (rest_sec != last_show_rest_sec) {
-						s << "Rest seconds: " << rest_sec << std::endl;
-						last_show_rest_sec = rest_sec;
-					}
-					return true;
-				};
-
-				auto start_i = controller_->GetStatistic().GetSuccededIterates();
-				controller_->Run(continue_checker, threads_, seed, start_board_getter_);
-				auto end_i = controller_->GetStatistic().GetSuccededIterates();
-
-				s << std::endl;
-				s << "Done iterations: " << (end_i - start_i) << std::endl;
-				s << "====== Statistics =====" << std::endl;
-				controller_->GetStatistic().GetDebugMessage();
-
-				auto now = std::chrono::steady_clock::now();
-				auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
-				auto speed = (double)(end_i - start_i) / ms * 1000;
-				s << "Iterations per second: " << speed << std::endl;
-				s << std::endl;
 			}
 			else if (cmd == "root") {
 				DoRoot(is, s);
@@ -266,7 +211,5 @@ namespace ui
 	private:
 		ui::AIController * controller_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
-		int threads_;
-		StartBoardGetter start_board_getter_;
 	};
 }
