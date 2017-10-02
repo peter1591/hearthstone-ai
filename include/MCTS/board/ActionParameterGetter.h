@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+
+#include "state/State.h"
 #include "FlowControl/IActionParameterGetter.h"
 #include "MCTS/Types.h"
 #include "MCTS/board/ActionChoices.h"
@@ -10,7 +13,14 @@ namespace mcts
 
 	namespace board
 	{
-		class IActionParameterGetter : public FlowControl::IActionParameterGetter
+		class IRawActionParameterGetter : public FlowControl::IActionParameterGetter
+		{
+		public:
+			virtual int ChooseHandCard(std::vector<size_t> const& playable_cards) = 0;
+			virtual int	ChooseAttacker(std::vector<int> const& attackers) = 0;
+		};
+
+		class IActionParameterGetter : public IRawActionParameterGetter
 		{
 		public:
 			state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
@@ -46,6 +56,14 @@ namespace mcts
 			{
 				assert(!cards.empty());
 				return (Cards::CardId)GetNumber(ActionType::kChooseOne, ActionChoices(cards));
+			}
+
+			int ChooseHandCard(std::vector<size_t> const& playable_cards) final {
+				return GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards.size()));
+			}
+
+			int ChooseAttacker(std::vector<int> const& attackers) final {
+				return GetNumber(ActionType::kChooseAttacker, (int)attackers.size());
 			}
 
 			int GetNumber(ActionType::Types action_type, int exclusive_max) {

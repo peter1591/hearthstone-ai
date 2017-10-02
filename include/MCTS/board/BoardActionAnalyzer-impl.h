@@ -51,7 +51,7 @@ namespace mcts
 			return (int)op_map_size_;
 		}
 
-		inline Result BoardActionAnalyzer::ApplyAction(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView board, int action, IRandomGenerator & random, IActionParameterGetter & action_parameters) {
+		inline Result BoardActionAnalyzer::ApplyAction(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView board, int action, IRandomGenerator & random, IRawActionParameterGetter & action_parameters) {
 			std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 
 			assert(op_map_size_ > 0);
@@ -60,12 +60,12 @@ namespace mcts
 			return (this->*op_map_[action])(flow_context, board, random, action_parameters);
 		}
 
-		inline Result BoardActionAnalyzer::PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters)
 		{
 			assert(!playable_cards_.empty());
 			int idx = 0;
 			if (playable_cards_.size() >= 2) {
-				idx = action_parameters.GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards_.size()));
+				idx = action_parameters.ChooseHandCard(playable_cards_);
 				if (idx < 0) return Result::kResultInvalid;
 			}
 			size_t hand_idx = playable_cards_[idx];
@@ -74,7 +74,7 @@ namespace mcts
 			return ConvertResult(board.PlayCard(flow_context, (int)hand_idx));
 		}
 
-		inline Result BoardActionAnalyzer::Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters)
 		{
 			assert([&]() {
 				std::set<int> current;
@@ -90,20 +90,20 @@ namespace mcts
 			if (attackers_.empty()) return Result::kResultInvalid;
 
 			assert(!attackers_.empty());
-			int idx = action_parameters.GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
+			int idx = action_parameters.ChooseAttacker(attackers_);
 			if (idx < 0) return Result::kResultInvalid;
 
 			flow_context.SetCallback(random, action_parameters);
 			return ConvertResult(board.Attack(flow_context, attackers_[idx]));
 		}
 
-		inline Result BoardActionAnalyzer::HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters)
 		{
 			flow_context.SetCallback(random, action_parameters);
 			return ConvertResult(board.HeroPower(flow_context));
 		}
 
-		inline Result BoardActionAnalyzer::EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters)
 		{
 			flow_context.SetCallback(random, action_parameters);
 			return ConvertResult(board.EndTurn(flow_context));
