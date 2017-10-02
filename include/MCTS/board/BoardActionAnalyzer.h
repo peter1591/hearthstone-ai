@@ -70,6 +70,10 @@ namespace mcts
 					if (!functor(hand_idx)) break;
 				}
 			}
+			size_t GetPlaybleCard(size_t idx) const {
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
+				return playable_cards_[idx];
+			}
 
 		private:
 			Result ConvertResult(FlowControl::Result flow_result) {

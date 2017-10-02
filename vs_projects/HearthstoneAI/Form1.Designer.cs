@@ -149,7 +149,7 @@
             this.nudRootSampleCount.Size = new System.Drawing.Size(120, 29);
             this.nudRootSampleCount.TabIndex = 6;
             this.nudRootSampleCount.Value = new decimal(new int[] {
-            100,
+            10,
             0,
             0,
             0});

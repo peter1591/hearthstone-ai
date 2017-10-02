@@ -31,9 +31,13 @@ namespace ui
 			if (cmd == "h" || cmd == "help") {
 				s << "Commands: " << std::endl
 					<< "h or help: show this message" << std::endl
+					<< "b or best: show the best action to do" << std::endl
 					<< "root (1 or 2): set node to root node of player 1 or 2" << std::endl
 					<< "info: show info for selected node" << std::endl
 					<< "node (addr): set node to specified address." << std::endl;
+			}
+			else if (cmd == "b" || cmd == "best") {
+				DoBest(s);
 			}
 			else if (cmd == "root") {
 				DoRoot(is, s);
@@ -53,6 +57,135 @@ namespace ui
 		}
 
 	private:
+		void ShowBestNodeInfo(
+			std::ostream & s,
+			const mcts::selection::TreeNode* main_node,
+			const mcts::selection::TreeNode* node,
+			int indent)
+		{
+			std::string indent_padding;
+			for (int i = 0; i < indent; ++i) indent_padding.append("   ");
+
+			uint64_t total_chosen_time = 0;
+			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				auto const* edge_addon = node->GetEdgeAddon(choice);
+				if (edge_addon) {
+					total_chosen_time += edge_addon->GetChosenTimes();
+				}
+				return true;
+			});
+			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				s << indent_padding << "Choice " << choice
+					<< ": " << GetChoiceString(main_node, node, choice)
+					<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
+					<< std::endl;
+				return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, indent+1);
+			});
+		}
+
+		std::string GetChoiceString(
+			const mcts::selection::TreeNode* main_node,
+			const mcts::selection::TreeNode* node, int choice)
+		{
+			if (node->GetActionType() == mcts::ActionType::kMainAction) {
+				auto op = node->GetAddon().action_analyzer.GetMainOpType(choice);
+				return GetOpType(op);
+			}
+			
+			if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
+				auto * board_view = main_node->GetAddon().consistency_checker.GetBoard();
+				size_t idx = main_node->GetAddon().action_analyzer.GetPlaybleCard(choice);
+				if (!board_view) {
+					return "(error: no board view)";
+				}
+				auto card_id = board_view->GetSelfHand()[idx].card_id;
+				return Cards::Database::GetInstance().Get((int)card_id).name;
+			}
+
+			if (node->GetActionType() == mcts::ActionType::kChooseMinionPutLocation) {
+				std::stringstream ss;
+				ss << "Put minion before index " << choice;
+				return ss.str();
+			}
+
+			return "(unknown)";
+		}
+
+		std::string GetChoiceSuggestionRate(
+			const mcts::selection::TreeNode* node,
+			int choice,
+			uint64_t total_chosen_times)
+		{
+			auto const* edge_addon = node->GetEdgeAddon(choice);
+			auto chosen_times = edge_addon->GetChosenTimes();
+			double chosen_percent = 100.0 * chosen_times / total_chosen_times;
+
+			std::stringstream ss;
+			ss << chosen_percent << "% (" << chosen_times << "/" << total_chosen_times << ")";
+			return ss.str();
+		}
+
+		bool ShowBestSubNodeInfo(
+			std::ostream & s,
+			const mcts::selection::TreeNode* main_node,
+			const mcts::selection::TreeNode* node,
+			int choice,
+			uint64_t total_chosen_times,
+ 			mcts::selection::ChildType const& child,
+			int indent)
+		{
+			std::string indent_padding;
+			for (int i = 0; i < indent; ++i) indent_padding.append("   ");
+
+			auto const* edge_addon = node->GetEdgeAddon(choice);
+			if (!edge_addon) {
+				s << "[ERROR] Children of main action should with edge addon" << std::endl;
+				return false;
+			}
+
+			double credit_percentage = (double)edge_addon->GetCredit() / edge_addon->GetTotal() * 100;
+			s << indent_padding
+				<< "Estimated win rate: " << edge_addon->GetCredit() << " / " << edge_addon->GetTotal() << " (" << credit_percentage << "%)"
+				<< std::endl;
+
+			if (!child.IsRedirectNode()) {
+				ShowBestNodeInfo(s, main_node, child.GetNode(), indent);
+			}
+			return true;
+		}
+
+		void DoBest(std::ostream & s)
+		{
+			s << "Best action: " << std::endl;
+
+			auto node = controller_->GetRootNode(state::kPlayerFirst);
+			if (!node) {
+				s << "[ERROR] no root node exists." << std::endl;
+				return;
+			}
+
+			if (node->GetActionType() != mcts::ActionType::kMainAction) {
+				s << "[ERROR] root node should be with type 'kMainAction'" << std::endl;
+				return;
+			}
+
+			if (node->GetActionType() == mcts::ActionType::kMainAction) {
+				s << "Playable hand cards:";
+				auto * board_view = node->GetAddon().consistency_checker.GetBoard();
+				node->GetAddon().action_analyzer.ForEachPlayableCard([&](size_t idx) {
+					s << " [" << idx << "] ";
+					if (board_view) {
+						auto card_id = board_view->GetSelfHand()[idx].card_id;
+						s << Cards::Database::GetInstance().Get((int)card_id).name;
+					}
+					return true;
+				});
+				s << std::endl;
+			}
+
+			ShowBestNodeInfo(s, node, node, 0);
+		}
+
 		void DoRoot(std::istream & is, std::ostream & s)
 		{
 			int v = 0;
