@@ -19,6 +19,7 @@ namespace Cards
 		struct CardData
 		{
 			CardData() :
+				name(),
 				card_id(-1),
 				player_class(state::kPlayerClassInvalid),
 				card_type(state::kCardTypeInvalid), card_race(state::kCardRaceInvalid),
@@ -26,6 +27,7 @@ namespace Cards
 				cost(-1), attack(-1), max_hp(-1), collectible(false)
 			{}
 
+			std::string name;
 			int card_id;
 			state::PlayerClass player_class;
 			state::CardType card_type;
@@ -39,7 +41,7 @@ namespace Cards
 
 			bool collectible;
 
-			static constexpr int kFieldChangeId = 2; // modify this if any field changed. This helps to track which codes should be modified accordingly.
+			static constexpr int kFieldChangeId = 3; // modify this if any field changed. This helps to track which codes should be modified accordingly.
 		};
 
 		static Database & GetInstance()
@@ -229,7 +231,8 @@ namespace Cards
 			if (origin_id == "PlaceholderCard") return;
 
 			CardData new_card;
-			static_assert(CardData::kFieldChangeId == 2); // fill all the fields
+			static_assert(CardData::kFieldChangeId == 3); // fill all the fields
+			new_card.name = name;
 			new_card.card_id = (int)cards.size();
 
 			new_card.cost = json["cost"].asInt();
