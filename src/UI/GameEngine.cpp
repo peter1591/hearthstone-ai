@@ -41,6 +41,10 @@ namespace ui
 
 			board_getter_.SetRootSampleCount(root_sample_count);
 
+			shell_.SetStartBoardGetter([this](int seed) -> state::State {
+				return board_getter_.GetStartBoard(seed);
+			});
+
 			return 0;
 		}
 

@@ -5,16 +5,21 @@
 #include <random>
 
 #include "UI/AIController.h"
+#include "UI/ActionCallbackInfoGetter.h"
 
 namespace ui
 {
 	class InteractiveShell
 	{
 	public:
-		InteractiveShell() : InteractiveShell(nullptr) {}
+		using StartBoardGetter = std::function<state::State(int)>;
 
-		InteractiveShell(AIController * controller) :
-			controller_(controller), node_(nullptr)
+		InteractiveShell() :
+			controller_(), start_board_getter_(), node_(nullptr)
+		{}
+
+		InteractiveShell(AIController * controller, StartBoardGetter start_board_getter) :
+			controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
 		{}
 
 		InteractiveShell(InteractiveShell const&) = delete;
@@ -22,6 +27,10 @@ namespace ui
 
 		void SetController(AIController * controller) {
 			controller_ = controller;
+		}
+
+		void SetStartBoardGetter(StartBoardGetter start_board_getter) {
+			start_board_getter_ = start_board_getter;
 		}
 
 		void DoCommand(std::istream & is, std::ostream & s)
@@ -61,6 +70,7 @@ namespace ui
 			std::ostream & s,
 			const mcts::selection::TreeNode* main_node,
 			const mcts::selection::TreeNode* node,
+			ui::ActionCallbackInfoGetter const& action_cb_info_getter,
 			int indent)
 		{
 			std::string indent_padding;
@@ -76,16 +86,60 @@ namespace ui
 			});
 			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
 				s << indent_padding << "Choice " << choice
-					<< ": " << GetChoiceString(main_node, node, choice)
+					<< ": " << GetChoiceString(main_node, node, choice, action_cb_info_getter)
 					<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
 					<< std::endl;
-				return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, indent+1);
+				ui::ActionCallbackInfoGetter new_cb_getter = action_cb_info_getter;
+				new_cb_getter.AppendChoice(choice);
+				return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, new_cb_getter, indent+1);
 			});
+		}
+
+		std::string GetTargetString(state::CardRef card_ref) {
+
+			state::State board = start_board_getter_(0);
+			if (board.GetBoard().GetFirst().GetHeroRef() == card_ref) {
+				return "Your Hero";
+			}
+			if (board.GetBoard().GetSecond().GetHeroRef() == card_ref) {
+				return "Opponent Hero";
+			}
+
+			auto FindInMinions = [&](std::vector<state::CardRef> const& minions) -> int {
+				for (size_t i = 0; i < minions.size(); ++i) {
+					if (minions[i] == card_ref) return (int)i;
+				}
+				return -1;
+			};
+			
+			int idx = FindInMinions(board.GetBoard().GetFirst().minions_.GetAll());
+			if (idx >= 0) {
+				std::stringstream ss;
+				ss << "Your " << idx << "th minion";
+				return ss.str();
+			}
+
+			idx = FindInMinions(board.GetBoard().GetSecond().minions_.GetAll());
+			if (idx >= 0) {
+				std::stringstream ss;
+				ss << "Opponent's " << idx << "th minion";
+				return ss.str();
+			}
+
+			return "[UNKNOWN TARGET]";
+		}
+
+		std::string GetTargetStringFromEncodedIndex(int idx) {
+			// encoded index is defined in FlowControl::ValidActionGetter
+			// encoded index:
+			//   0 ~ 6: minion index from left to right
+			//   7: hero
 		}
 
 		std::string GetChoiceString(
 			const mcts::selection::TreeNode* main_node,
-			const mcts::selection::TreeNode* node, int choice)
+			const mcts::selection::TreeNode* node, int choice,
+			ui::ActionCallbackInfoGetter const& action_cb_info_getter)
 		{
 			if (node->GetActionType() == mcts::ActionType::kMainAction) {
 				auto op = node->GetAddon().action_analyzer.GetMainOpType(choice);
@@ -93,18 +147,31 @@ namespace ui
 			}
 			
 			if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
-				auto * board_view = main_node->GetAddon().consistency_checker.GetBoard();
-				size_t idx = main_node->GetAddon().action_analyzer.GetPlaybleCard(choice);
-				if (!board_view) {
-					return "(error: no board view)";
-				}
-				auto card_id = board_view->GetSelfHand()[idx].card_id;
+				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseHandCardInfo>(
+					action_cb_info_getter.GetCallbackInfo());
+				size_t idx = info.cards[choice];
+
+				state::State start_board = start_board_getter_(0);
+				state::CardRef card_ref = start_board.GetBoard().GetFirst().hand_.Get(idx);
+				auto card_id = start_board.GetCard(card_ref).GetCardId();
+
 				return Cards::Database::GetInstance().Get((int)card_id).name;
 			}
 
 			if (node->GetActionType() == mcts::ActionType::kChooseMinionPutLocation) {
+				auto info = std::get<ui::ActionCallbackInfoGetter::MinionPutLocationInfo>(
+					action_cb_info_getter.GetCallbackInfo());
 				std::stringstream ss;
-				ss << "Put minion before index " << choice;
+				ss << "Put minion before index " << choice
+					<< " (total " << info.minions << ")";
+				return ss.str();
+			}
+
+			if (node->GetActionType() == mcts::ActionType::kChooseTarget) {
+				auto info = std::get<ui::ActionCallbackInfoGetter::GetSpecifiedTargetInfo>(
+					action_cb_info_getter.GetCallbackInfo());
+				std::stringstream ss;
+				ss << "Target at [" << GetTargetString(info.targets[choice]) << "]";
 				return ss.str();
 			}
 
@@ -132,6 +199,7 @@ namespace ui
 			int choice,
 			uint64_t total_chosen_times,
  			mcts::selection::ChildType const& child,
+			ui::ActionCallbackInfoGetter const& action_cb_info_getter,
 			int indent)
 		{
 			std::string indent_padding;
@@ -149,7 +217,7 @@ namespace ui
 				<< std::endl;
 
 			if (!child.IsRedirectNode()) {
-				ShowBestNodeInfo(s, main_node, child.GetNode(), indent);
+				ShowBestNodeInfo(s, main_node, child.GetNode(), action_cb_info_getter, indent);
 			}
 			return true;
 		}
@@ -169,21 +237,8 @@ namespace ui
 				return;
 			}
 
-			if (node->GetActionType() == mcts::ActionType::kMainAction) {
-				s << "Playable hand cards:";
-				auto * board_view = node->GetAddon().consistency_checker.GetBoard();
-				node->GetAddon().action_analyzer.ForEachPlayableCard([&](size_t idx) {
-					s << " [" << idx << "] ";
-					if (board_view) {
-						auto card_id = board_view->GetSelfHand()[idx].card_id;
-						s << Cards::Database::GetInstance().Get((int)card_id).name;
-					}
-					return true;
-				});
-				s << std::endl;
-			}
-
-			ShowBestNodeInfo(s, node, node, 0);
+			ui::ActionCallbackInfoGetter action_cb_info_getter(start_board_getter_);
+			ShowBestNodeInfo(s, node, node, action_cb_info_getter, 0);
 		}
 
 		void DoRoot(std::istream & is, std::ostream & s)
@@ -343,6 +398,7 @@ namespace ui
 
 	private:
 		ui::AIController * controller_;
+		StartBoardGetter start_board_getter_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 	};
 }
