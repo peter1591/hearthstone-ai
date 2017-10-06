@@ -12,7 +12,7 @@ namespace FlowControl
 	class PlayerStateView
 	{
 	public:
-		PlayerStateView(state::State & state) : state_(state) {}
+		PlayerStateView(state::State const& state) : state_(state) {}
 
 		int GetTurn() const { return state_.GetTurn(); }
 
@@ -101,18 +101,18 @@ namespace FlowControl
 		}
 
 	private:
-		state::board::Player & GetPlayer(state::PlayerIdentifier player) const {
+		state::board::Player const& GetPlayer(state::PlayerIdentifier player) const {
 			return state_.GetBoard().Get(player);
 		}
-		state::board::Player & GetPlayer(state::PlayerSide checking_side) const {
+		state::board::Player const& GetPlayer(state::PlayerSide checking_side) const {
 			return GetPlayer(state::PlayerIdentifier(checking_side));
 		}
-		state::board::Player & GetOpponentPlayer(state::PlayerSide checking_side) const {
+		state::board::Player const& GetOpponentPlayer(state::PlayerSide checking_side) const {
 			return GetPlayer(state::PlayerIdentifier(checking_side).Opposite());
 		}
 
 	private:
-		state::State & state_;
+		state::State const& state_;
 	};
 
 	// Constraint access to the information visible to current player
