@@ -74,6 +74,11 @@ namespace mcts
 
 		Result() : type_(kResultInvalid), score_(0.0) {}
 		Result(Type type) : type_(type), score_(1.0) {}
+
+		// Score is in range [-1.0, 1.0]
+		// If the first player has 100% chance to win, set the value to 1.0
+		// If the first plyaer has 100% chance to loss, set the value to -1.0
+		// If it's a 50-50, set the value to 0.0
 		Result(Type type, double score) : type_(type), score_(score) {
 			assert(score <= 1.0);
 			assert(score >= 0.0);
