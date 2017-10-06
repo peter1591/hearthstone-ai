@@ -134,6 +134,12 @@ namespace ui
 			// encoded index:
 			//   0 ~ 6: minion index from left to right
 			//   7: hero
+			if (idx == 7) return "Your Hero";
+			assert(idx >= 0);
+			assert(idx <= 6);
+			std::stringstream ss;
+			ss << "Your " << (idx + 1) << "th Minion";
+			return ss.str();
 		}
 
 		std::string GetChoiceString(
@@ -164,6 +170,22 @@ namespace ui
 				std::stringstream ss;
 				ss << "Put minion before index " << choice
 					<< " (total " << info.minions << ")";
+				return ss.str();
+			}
+
+			if (node->GetActionType() == mcts::ActionType::kChooseAttacker) {
+				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseAttackerInfo>(
+					action_cb_info_getter.GetCallbackInfo());
+				std::stringstream ss;
+				ss << "Attacker: " << GetTargetStringFromEncodedIndex(choice);
+				return ss.str();
+			}
+
+			if (node->GetActionType() == mcts::ActionType::kChooseDefender) {
+				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseDefenderInfo>(
+					action_cb_info_getter.GetCallbackInfo());
+				std::stringstream ss;
+				ss << "Defender: " << GetTargetString(info.targets[choice]);
 				return ss.str();
 			}
 
@@ -219,12 +241,25 @@ namespace ui
 			if (!child.IsRedirectNode()) {
 				ShowBestNodeInfo(s, main_node, child.GetNode(), action_cb_info_getter, indent);
 			}
+			else {
+				state::State game_state;
+				auto dummy_cb_info = action_cb_info_getter.GetCallbackInfo(game_state);
+				double v = state_value_func_.GetStateValue(game_state);
+				s << indent_padding << "State-value: " << v << std::endl;
+			}
 			return true;
 		}
 
 		void DoBest(std::ostream & s)
 		{
 			s << "Best action: " << std::endl;
+
+			{
+				int seed = 0; // an arbitrarily random seed number
+				state::State game_state = start_board_getter_(0);
+				double v = state_value_func_.GetStateValue(game_state);
+				s << "State-value: " << v << std::endl;
+			}
 
 			auto node = controller_->GetRootNode(state::kPlayerFirst);
 			if (!node) {
@@ -400,5 +435,7 @@ namespace ui
 		ui::AIController * controller_;
 		StartBoardGetter start_board_getter_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
+		mcts::policy::simulation::NeuralNetworkStateValueFunction state_value_func_;
+		//mcts::policy::simulation::WeakHeuristicStateValueFunction state_value_func_;
 	};
 }
