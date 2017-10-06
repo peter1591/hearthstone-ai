@@ -55,6 +55,7 @@ namespace FlowControl {
 	public: // action parameter
 		state::CardRef GetDefender(std::vector<state::CardRef> const& defenders) {
 			assert(!defenders.empty());
+			if (defenders.size() <= 1) return defenders[0];
 			return action_parameters_->GetDefender(defenders);
 		}
 
@@ -77,6 +78,7 @@ namespace FlowControl {
 		state::CardRef GetSpecifiedTarget() const { return specified_target_; }
 
 		Cards::CardId UserChooseOne(std::vector<Cards::CardId> const& cards) {
+			if (cards.size() <= 1) return cards[0];
 			return action_parameters_->ChooseOne(cards);
 		}
 

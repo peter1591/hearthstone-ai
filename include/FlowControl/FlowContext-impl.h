@@ -17,6 +17,11 @@ namespace FlowControl {
 			return;
 		}
 
+		if (targets_.size() <= 1) {
+			specified_target_ = targets_[0];
+			return;
+		}
+
 		specified_target_ = action_parameters_->GetSpecifiedTarget(state, card_ref, targets_);
 		assert(specified_target_.IsValid());
 	}

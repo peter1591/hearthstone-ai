@@ -55,14 +55,19 @@ namespace mcts
 			Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) final
 			{
 				assert(!cards.empty());
+				assert(cards.size() > 1);
 				return (Cards::CardId)GetNumber(ActionType::kChooseOne, ActionChoices(cards));
 			}
 
 			int ChooseHandCard(std::vector<size_t> const& playable_cards) final {
+				assert(!playable_cards.empty());
+				assert(playable_cards.size() > 1);
 				return GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards.size()));
 			}
 
 			int ChooseAttacker(std::vector<int> const& attackers) final {
+				assert(!attackers.empty());
+				assert(attackers.size() > 1);
 				return GetNumber(ActionType::kChooseAttacker, (int)attackers.size());
 			}
 

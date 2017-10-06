@@ -90,7 +90,10 @@ namespace mcts
 			if (attackers_.empty()) return Result::kResultInvalid;
 
 			assert(!attackers_.empty());
-			int idx = action_parameters.ChooseAttacker(attackers_);
+			int idx = 0;
+			if (attackers_.size() >= 2) {
+				idx = action_parameters.ChooseAttacker(attackers_);
+			}
 			if (idx < 0) return Result::kResultInvalid;
 
 			flow_context.SetCallback(random, action_parameters);

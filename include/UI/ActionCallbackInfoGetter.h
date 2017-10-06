@@ -66,6 +66,7 @@ namespace ui
 				if (choices_idx_ >= choices_.size() &&
 					std::holds_alternative<NullInfo>(result_))
 				{
+					assert(playable_cards.size() > 1);
 					result_ = ChooseHandCardInfo(playable_cards);
 				}
 				return GetNextChoice(0, (int)playable_cards.size());
@@ -75,15 +76,17 @@ namespace ui
 				if (choices_idx_ >= choices_.size() &&
 					std::holds_alternative<NullInfo>(result_))
 				{
+					assert(minions > 0);
 					result_ = MinionPutLocationInfo(minions);
 				}
-				return GetNextChoice(0, minions);
+				return GetNextChoice(0, minions+1);
 			}
 
 			int	ChooseAttacker(std::vector<int> const& attackers) {
 				if (choices_idx_ >= choices_.size() &&
 					std::holds_alternative<NullInfo>(result_))
 				{
+					assert(attackers.size() > 1);
 					result_ = ChooseAttackerInfo(attackers);
 				}
 				return GetNextChoice(0, (int)attackers.size());
@@ -93,6 +96,7 @@ namespace ui
 				if (choices_idx_ >= choices_.size() &&
 					std::holds_alternative<NullInfo>(result_))
 				{
+					assert(targets.size() > 1);
 					result_ = ChooseDefenderInfo(targets);
 				}
 				int choice = GetNextChoice(0, (int)targets.size());
@@ -106,6 +110,7 @@ namespace ui
 				if (choices_idx_ >= choices_.size() &&
 					std::holds_alternative<NullInfo>(result_))
 				{
+					assert(targets.size() > 1);
 					result_ = GetSpecifiedTargetInfo(card_ref, targets);
 				}
 				int choice = GetNextChoice(0, (int)targets.size());
@@ -156,13 +161,19 @@ namespace ui
 			}
 			choices_.push_back(choice);
 		}
-
+		
 		CallbackInfo GetCallbackInfo() const
+		{
+			state::State game_state;
+			return GetCallbackInfo(game_state);
+		}
+
+		CallbackInfo GetCallbackInfo(state::State & game_state) const
 		{
 			constexpr static int start_board_seed = 0; // an arbitrary number
 			CallbackInfo info = NullInfo();
 
-			state::State game_state = start_board_getter_(start_board_seed);
+			game_state = start_board_getter_(start_board_seed);
 
 			RandomCallback rand_cb;
 			ActionParameterCallback action_cb(info, choices_);
