@@ -59,8 +59,8 @@ namespace mcts
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
 					result = builder_.PerformSimulate(board);
-					assert(result != Result::kResultInvalid);
-					if (result != Result::kResultNotDetermined) return result;
+					assert(result.type_ != Result::kResultInvalid);
+					if (result.type_ != Result::kResultNotDetermined) return result;
 				}
 				else {
 					// Selection stage
@@ -71,10 +71,10 @@ namespace mcts
 						return node->GetActionType().GetType() == ActionType::kMainAction;
 					}(node_));
 					auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map, &updater_);
-					assert(perform_result.result != Result::kResultInvalid);
+					assert(perform_result.result.type_ != Result::kResultInvalid);
 					
 					result = perform_result.result;
-					if (result != Result::kResultNotDetermined) return result;
+					if (result.type_ != Result::kResultNotDetermined) return result;
 
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node) return false;
@@ -91,7 +91,7 @@ namespace mcts
 					}
 				}
 			}
-			assert(result == Result::kResultNotDetermined);
+			assert(result.type_ == Result::kResultNotDetermined);
 			return result;
 		}
 
@@ -109,9 +109,9 @@ namespace mcts
 			node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 		}
 
-		void EpisodeFinished(Result result)
+		void EpisodeFinished(state::State const& state, Result result)
 		{
-			bool credit = mcts::StaticConfigs::CreditPolicy::GetCredit(side_, result);
+			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state, side_, result);
 			updater_.Update(credit);
 		}
 		

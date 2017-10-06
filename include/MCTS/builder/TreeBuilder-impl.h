@@ -29,7 +29,7 @@ namespace mcts
 
 			TreeBuilder::SelectResult perform_result(ApplyAction(
 				flow_context_, node->GetAddon().action_analyzer, selection_stage_));
-			assert(perform_result.result != Result::kResultInvalid);
+			assert(perform_result.result.type_ != Result::kResultInvalid);
 
 			// we use mutable here, since we will throw it away after all
 			auto & traversed_path = selection_stage_.GetMutableTraversedPath();
@@ -38,18 +38,18 @@ namespace mcts
 			traversed_path.back().ConstructRedirectNode();
 
 			bool new_node_created = false;
-			if (perform_result.result == Result::kResultNotDetermined) {
+			if (perform_result.result.type_ == Result::kResultNotDetermined) {
 				perform_result.node = last_node_map.GetOrCreateNode(board, &new_node_created);
 				assert(perform_result.node);
 			}
 			else {
 				assert(perform_result.node == nullptr);
 
-				if (perform_result.result == Result::kResultWin) {
+				if (perform_result.result.type_ == Result::kResultWin) {
 					perform_result.node = mcts::selection::TreeNode::GetWinNode();
 				}
 				else {
-					assert(perform_result.result == Result::kResultLoss);
+					assert(perform_result.result.type_ == Result::kResultLoss);
 					perform_result.node = mcts::selection::TreeNode::GetLossNode();
 				}
 				assert(perform_result.node != nullptr);
@@ -71,7 +71,7 @@ namespace mcts
 			updater->PushBackNodes(traversed_path, perform_result.node);
 
 			assert([&](builder::TreeBuilder::TreeNode* node) {
-				if (perform_result.result != Result::kResultNotDetermined) return true;
+				if (perform_result.result.type_ != Result::kResultNotDetermined) return true;
 				if (!node->GetActionType().IsValid()) return true;
 				return node->GetActionType().GetType() == ActionType::kMainAction;
 			}(perform_result.node));
@@ -109,8 +109,8 @@ namespace mcts
 			Result result = Result::kResultInvalid;
 			if constexpr (is_simulation) {
 				result = this->SimulationCutoffCheck();
-				assert(result != Result::kResultInvalid);
-				if (result != Result::kResultNotDetermined) return result;
+				assert(result.type_ != Result::kResultInvalid);
+				if (result.type_ != Result::kResultNotDetermined) return result;
 
 				choice = this->ChooseSimulateAction(
 					ActionType(ActionType::kMainAction),
@@ -123,7 +123,7 @@ namespace mcts
 			}
 
 			result = board_->ApplyAction(choice, action_analyzer, flow_context, random_generator_, action_parameter_getter_);
-			assert(result != Result::kResultInvalid);
+			assert(result.type_ != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);
 			return result;

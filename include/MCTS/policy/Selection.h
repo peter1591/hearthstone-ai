@@ -45,6 +45,10 @@ namespace mcts
 
 			class UCBPolicy {
 			public:
+				static constexpr double kExploreWeight = 0.8;
+
+				UCBPolicy(state::PlayerSide side) : side_(side) {}
+
 				template <typename ChoiceIterator>
 				int SelectChoice(ChoiceIterator && choice_iterator)
 				{
@@ -96,16 +100,16 @@ namespace mcts
 						auto total = item.edge_addon->GetTotal();
 						auto wins = item.edge_addon->GetCredit();
 						assert(total > 0);
+						assert(wins <= total);
 						double exploit_score = ((double)wins) / total;
 
-						constexpr double explore_weight = 0.8;
 						auto chosen_times = item.edge_addon->GetChosenTimes();
 						// in case another thread visited it
 						if (chosen_times > total_chosen_times) chosen_times = total_chosen_times;
 						double explore_score = std::sqrt(
 							std::log((double)total_chosen_times) / chosen_times);
 
-						return exploit_score + explore_weight * explore_score;
+						return exploit_score + kExploreWeight * explore_score;
 					};
 
 					assert(choices_size > 0);
@@ -125,6 +129,9 @@ namespace mcts
 
 					return (int)choices[best_choice].choice;
 				}
+
+			private:
+				state::PlayerSide side_;
 			};
 		}
 	}

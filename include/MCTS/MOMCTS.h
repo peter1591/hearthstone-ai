@@ -34,11 +34,11 @@ namespace mcts
 				
 				Result result = GetSOMCTS(side).PerformOwnTurnActions(
 					board::Board(state, side.GetSide()));
-				assert(result != Result::kResultInvalid);
+				assert(result.type_ != Result::kResultInvalid);
 				
-				if (result != Result::kResultNotDetermined) {
-					first_.EpisodeFinished(result);
-					second_.EpisodeFinished(result);
+				if (result.type_ != Result::kResultNotDetermined) {
+					first_.EpisodeFinished(state, result);
+					second_.EpisodeFinished(state, result);
 					break;
 				}
 

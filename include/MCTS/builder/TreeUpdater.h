@@ -19,7 +19,7 @@ namespace mcts
 			TreeUpdater(TreeUpdater const&) = delete;
 			TreeUpdater & operator=(TreeUpdater const&) = delete;
 
-			void Update(bool credit)
+			void Update(double credit)
 			{
 				UpdateChosenTimes();
 				TreeLikeUpdateWinRate(credit);
@@ -108,17 +108,17 @@ namespace mcts
 				}
 			}
 
-			void LinearlyUpdateWinRate(bool credit) {
+			void LinearlyUpdateWinRate(double credit) {
 				for (auto const& item : nodes_) {
 					auto * edge_addon = item.GetEdgeAddon();
 					if (!edge_addon) continue;
 
-					edge_addon->AddTotal(1);
-					if (credit) edge_addon->AddCredit(1);
+					edge_addon->AddTotal(100);
+					edge_addon->AddCredit((int)(credit * 100.0));
 				}
 			}
 
-			void TreeLikeUpdateWinRate(bool credit) {
+			void TreeLikeUpdateWinRate(double credit) {
 				if (nodes_.empty()) return;
 
 				assert([&](){
@@ -154,7 +154,7 @@ namespace mcts
 				assert(should_visits_.empty());
 			}
 
-			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, int start_choice, bool credit)
+			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, int start_choice, double credit)
 			{
 				assert(start_node);
 				
@@ -172,8 +172,8 @@ namespace mcts
 						should_visits_.erase(edge_addon);
 						return true;
 					}());
-					edge_addon->AddTotal(1);
-					if (credit) edge_addon->AddCredit(1);
+					edge_addon->AddTotal(100);
+					edge_addon->AddCredit((int)(credit*100.0));
 
 					// use BFS to reduce the lock time
 					node->GetAddon().leading_nodes.ForEachLeadingNode(

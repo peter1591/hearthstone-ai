@@ -64,11 +64,20 @@ namespace mcts
 		Types type_;
 	};
 
-	enum Result {
-		kResultInvalid,
-		kResultWin,
-		kResultLoss, // including draw
-		kResultNotDetermined
+	struct Result {
+		enum Type {
+			kResultInvalid,
+			kResultWin,
+			kResultLoss, // including draw
+			kResultNotDetermined
+		};
+
+		Result() : type_(kResultInvalid), score_(0.0) {}
+		Result(Type type) : type_(type), score_(1.0) {}
+		Result(Type type, double score) : type_(type), score_(score) {}
+
+		Type type_;
+		double score_; // range 0~1
 	};
 
 	enum Stage {

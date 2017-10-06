@@ -95,8 +95,8 @@ namespace ui
 				json_.append(obj);
 			}
 
-			assert(result != mcts::Result::kResultInvalid);
-			assert(result != mcts::Result::kResultNotDetermined);
+			assert(result.type_ != mcts::Result::kResultInvalid);
+			assert(result.type_ != mcts::Result::kResultNotDetermined);
 
 			time_t now;
 			time(&now);
@@ -173,7 +173,7 @@ namespace ui
 		}
 
 		std::string GetResultString(mcts::Result result) {
-			switch (result) {
+			switch (result.type_) {
 			case mcts::Result::kResultWin:
 				return "kResultWin";
 			case mcts::Result::kResultLoss:

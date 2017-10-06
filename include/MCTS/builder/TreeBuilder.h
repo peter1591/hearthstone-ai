@@ -29,7 +29,7 @@ namespace mcts
 				action_parameter_getter_(caller), random_generator_(caller),
 				board_(nullptr),
 				flow_context_(),
-				selection_stage_(selection_rand), simulation_stage_(side, simulation_rand, flow_context_)
+				selection_stage_(side, selection_rand), simulation_stage_(side, simulation_rand, flow_context_)
 			{
 			}
 
