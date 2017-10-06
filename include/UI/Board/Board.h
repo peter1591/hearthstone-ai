@@ -21,13 +21,14 @@ namespace ui
 		{
 		public:
 			Board() :
-				turn_(-1),
-				first_player_(), second_player_()
+				turn_(-1), first_player_(), second_player_(),
+				entities_(), first_controller_(), second_controller_()
 			{
 
 			}
 
 			void Reset() {
+				turn_ = -1;
 				entities_.clear();
 				ResetControllerInfo(first_controller_);
 				ResetControllerInfo(second_controller_);

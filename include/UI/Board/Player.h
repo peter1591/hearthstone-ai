@@ -144,6 +144,7 @@ namespace ui
 			std::vector<Minion> minions;
 
 			void Parse(Json::Value const& json) {
+				minions.clear();
 				for (Json::ArrayIndex idx = 0; idx < json.size(); ++idx)
 				{
 					minions.emplace_back();
