@@ -220,7 +220,6 @@ namespace ui
 			// TODO: exhausted (needed?)
 			raw_card.silenced = minion.silenced;
 			raw_card.enchanted_states.spell_damage = minion.spellpower;
-			raw_card.just_played = minion.summoned_this_turn;
 			// TODO: enchantments
 			ApplyStatus(raw_card, minion.status);
 
@@ -228,6 +227,11 @@ namespace ui
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 			state.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneNewlyCreated>(ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);
+
+			// TODO:
+			// Check stats changed after put in board
+			// Stats might changed due to some triggers, e.g., just_played flag
+			state.GetMutableCard(ref).SetJustPlayedFlag(minion.summoned_this_turn);
 		}
 
 		void MakeMinions(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, board::Minions const& minions)
