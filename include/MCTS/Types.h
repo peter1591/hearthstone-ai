@@ -74,7 +74,10 @@ namespace mcts
 
 		Result() : type_(kResultInvalid), score_(0.0) {}
 		Result(Type type) : type_(type), score_(1.0) {}
-		Result(Type type, double score) : type_(type), score_(score) {}
+		Result(Type type, double score) : type_(type), score_(score) {
+			assert(score <= 1.0);
+			assert(score >= 0.0);
+		}
 
 		Type type_;
 		double score_; // range 0~1

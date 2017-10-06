@@ -79,20 +79,22 @@ namespace mcts
 
 			class WeakHeuristicStateValueFunction
 			{
-			public:
-				double GetStateValue(board::Board const& board) {
-					return board.ApplyWithPlayerStateView([&](auto const& view) {
-						return GetStateValueForSide(board.GetViewSide(), view);
-					});
-				}
-
-				bool GuessWillWin(board::Board const& board) {
-					double v = GetStateValue(board);
-					static constexpr double draw_v = 0.0;
-					return (v > draw_v);
-				}
-
 			private:
+				static constexpr double kMaxMinionValue = 12.5;
+				double GetMinionValue(state::Cards::Card const& card) {
+					return 1.0 * card.GetAttack() + 1.5 * card.GetHP();
+				}
+
+				static constexpr double kMaxHeroValue = 30.0;
+				double GetHeroValue(state::Cards::Card const& card) {
+					double v = card.GetHP() + card.GetArmor();
+					if (v >= 30) v = 30;
+
+					return v;
+				}
+
+				//static constexpr double kMaxSideValue = 3.0 * kMaxHeroValue + 10.0 * kMaxMinionValue * 7;
+				static constexpr double kMaxSideValue = kMaxHeroValue;
 				template <state::PlayerSide Side>
 				double GetStateValueForSide(state::PlayerSide self_side, FlowControl::PlayerStateView<Side> view) {
 					assert(self_side == Side);
@@ -100,30 +102,39 @@ namespace mcts
 
 					double v = 0.0;
 
-					view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
-						v += 10.0 * GetMinionValue(card);
-						return true;
-					});
-					view.ForEachMinion(opponent_side, [&](state::Cards::Card const& card, bool attackable) {
-						v += -10.0 * GetMinionValue(card);
-						return true;
-					});
+					//view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
+					//	v += 10.0 * GetMinionValue(card);
+					//	return true;
+					//});
+					//view.ForEachMinion(opponent_side, [&](state::Cards::Card const& card, bool attackable) {
+					//	v += -10.0 * GetMinionValue(card);
+					//	return true;
+					//});
 
-					v += 3.0 * GetHeroValue(view.GetSelfHero());
-					v += -3.0 * GetHeroValue(view.GetOpponentHero());
+					//v += 3.0 * GetHeroValue(view.GetSelfHero());
+					//v += -3.0 * GetHeroValue(view.GetOpponentHero());
+					v += 30.0 - GetHeroValue(view.GetOpponentHero());
+					
+					v = v / kMaxSideValue;
 
 					return v;
 				}
 
-				double GetMinionValue(state::Cards::Card const& card) {
-					return 1.0 * card.GetAttack() + 1.5 * card.GetHP();
+			public:
+				double GetStateValue(state::State const& game_state) {
+					FlowControl::PlayerStateView<state::kPlayerFirst> view(game_state);
+					return GetStateValueForSide(state::kPlayerFirst, view);
 				}
 
-				double GetHeroValue(state::Cards::Card const& card) {
-					double v = card.GetHP() + card.GetArmor();
-					if (v >= 15) v = 15;
-
-					return v;
+				// State value is in range [-1, 1]
+				// If 100% wins, score = 1.0
+				// If 50% wins, 50%loss, score = 0.0
+				// If 100% loss, score = -1.0
+				double GetStateValue(board::Board const& board) {
+					// TODO: should always return state value for first player?
+					return board.ApplyWithPlayerStateView([&](auto const& view) {
+						return GetStateValueForSide(board.GetViewSide(), view);
+					});
 				}
 			};
 
@@ -141,14 +152,27 @@ namespace mcts
 					net_.InitializePredict(filename_);
 				}
 
-				bool GuessWillWin(board::Board const& board) {
-					double v = GetStateValue(board);
-					static constexpr double draw_v = 0.0;
-					return (v > draw_v);
+				// State value is in range [-1, 1]
+				// If first player is 100% wins, score = 1.0
+				// If first player is 50% wins, 50%loss, score = 0.0
+				// If first player is 100% loss, score = -1.0
+				double GetStateValue(board::Board const& board) {
+					return GetStateValue(board.RevealHiddenInformationForSimulation());
 				}
 
-				double GetStateValue(board::Board const& board) {
-					return GetStateValue(board.RevealHiddenInformationForSimulation(), board.GetViewSide());
+				double GetStateValue(state::State const& state) {
+					current_player_viewer_.Reset(state);
+
+					double score = net_.Predict(&current_player_viewer_);
+
+					if (!state.GetCurrentPlayerId().IsFirst()) {
+						score = -score;
+					}
+
+					if (score > 1.0) score = 1.0;
+					if (score < -1.0) score = -1.0;
+
+					return score;
 				}
 
 			private:
@@ -335,19 +359,6 @@ namespace mcts
 					bool hero_power_playable_;
 				};
 
-				double GetStateValue(state::State const& state, state::PlayerSide view_side) {
-					state::PlayerSide current_side = state.GetCurrentPlayerId().GetSide();
-					current_player_viewer_.Reset(state);
-					double score_from_current_player = net_.Predict(&current_player_viewer_);
-
-					if (view_side != current_side) {
-						return -score_from_current_player;
-					}
-					else {
-						return score_from_current_player;
-					}
-				}
-
 			private:
 				std::string filename_;
 				NeuralNetworkWrapper net_;
@@ -374,9 +385,13 @@ namespace mcts
 						return Result::kResultNotDetermined;
 					}
 
-					bool self_win = state_value_func_.GuessWillWin(board);
-					if (self_win) return Result::kResultWin;
-					else return Result::kResultLoss;
+					double score = state_value_func_.GetStateValue(board);
+					if (score >= 0.0) {
+						return Result(Result::kResultWin, score);
+					}
+					else {
+						return Result(Result::kResultLoss, -score);
+					}
 				}
 
 			public:
@@ -395,6 +410,82 @@ namespace mcts
 				{
 					size_t count = choice_getter.Size();
 					assert(count > 0);
+					size_t rand_idx = (size_t)(rand_() % count);
+					return choice_getter.Get(rand_idx);
+				}
+
+			private:
+				std::mt19937 & rand_;
+				NeuralNetworkStateValueFunction state_value_func_;
+			};
+
+			class HardCodedPlayoutWithHeuristicEarlyCutoffPolicy
+			{
+			public:
+				// Simulation cutoff:
+				// For each simulation choice, a small probability is defined so the simulation ends here,
+				//    and the game result is defined by a heuristic state-value function.
+				// Assume the cutoff probability is p,
+				//    The expected number of simulation runs is 1/p.
+				//    So, if the expected number of runs is N, the probability p = 1.0 / N
+				static constexpr bool kEnableCutoff = true;
+				static constexpr double kCutoffExpectedRuns = 10;
+				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
+
+				Result GetCutoffResult(board::Board const& board) {
+					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
+					double v = rand_gen(rand_);
+					if (v >= kCutoffProbability) {
+						return Result::kResultNotDetermined;
+					}
+					
+					WeakHeuristicStateValueFunction func; // TODO: just debug
+					double score = func.GetStateValue(board);
+					//double score = state_value_func_.GetStateValue(board);
+					if (score >= 0.0) {
+						return Result(Result::kResultWin, score);
+					}
+					else {
+						return Result(Result::kResultLoss, -score);
+					}
+				}
+
+			public:
+				HardCodedPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
+					rand_(rand),
+					state_value_func_()
+				{
+				}
+
+				int GetChoice(
+					board::Board const& board,
+					FlowControl::FlowContext & flow_context,
+					board::BoardActionAnalyzer & action_analyzer,
+					ActionType action_type,
+					ChoiceGetter const& choice_getter)
+				{
+					if (action_type != ActionType::kMainAction) {
+						size_t count = choice_getter.Size();
+						assert(count > 0);
+						size_t rand_idx = (size_t)(rand_() % count);
+						return choice_getter.Get(rand_idx);
+					}
+					
+					// choose end-turn only when it is the only option
+					size_t count = choice_getter.Size();
+					assert(count > 0);
+					if (count == 1) {
+						// should be end-turn
+						assert(action_analyzer.GetMainOpType((size_t)0) == board::BoardActionAnalyzer::kEndTurn);
+						return 0;
+					}
+
+					// rule out the end-turn action
+					assert(action_analyzer.GetMainOpType(count - 1) == board::BoardActionAnalyzer::kEndTurn);
+					--count;
+					assert(count > 0);
+
+					// otherwise, choose randomly
 					size_t rand_idx = (size_t)(rand_() % count);
 					return choice_getter.Get(rand_idx);
 				}
@@ -424,9 +515,13 @@ namespace mcts
 						return Result::kResultNotDetermined;
 					}
 
-					bool self_win = state_value_func_.GuessWillWin(board);
-					if (self_win) return Result::kResultWin;
-					else return Result::kResultLoss;
+					double score = state_value_func_.GetStateValue(board);
+					if (score >= 0.0) {
+						return Result(Result::kResultWin, score);
+					}
+					else {
+						return Result(Result::kResultLoss, -score);
+					}
 				}
 
 			public:
@@ -581,16 +676,16 @@ namespace mcts
 								cb_random,
 								cb_user_choice);
 
-							if (result != Result::kResultInvalid) {
+							if (result.type_ != Result::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();
-								if (result == Result::kResultWin) {
+								if (result.type_ == Result::kResultWin) {
 									value = std::numeric_limits<double>::infinity();
 								}
-								else if (result == Result::kResultLoss) {
+								else if (result.type_ == Result::kResultLoss) {
 									value = -std::numeric_limits<double>::infinity();
 								}
 								else {
-									assert(result == Result::kResultNotDetermined);
+									assert(result.type_ == Result::kResultNotDetermined);
 									state_value_func_.GetStateValue(copy_board_.GetBoard());
 								}
 
