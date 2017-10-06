@@ -111,7 +111,12 @@ namespace mcts
 
 		void EpisodeFinished(state::State const& state, Result result)
 		{
-			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state, side_, result);
+			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state, result);
+			assert(credit >= 0.0);
+			assert(credit <= 1.0); // TODO: should take into account episilon precision
+			if (side_ == state::kPlayerSecond) {
+				credit = 1.0 - credit;
+			}
 			updater_.Update(credit);
 		}
 		

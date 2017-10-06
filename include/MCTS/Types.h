@@ -79,9 +79,11 @@ namespace mcts
 		// If the first player has 100% chance to win, set the value to 1.0
 		// If the first plyaer has 100% chance to loss, set the value to -1.0
 		// If it's a 50-50, set the value to 0.0
-		Result(Type type, double score) : type_(type), score_(score) {
+		explicit Result(double score) : type_(kResultInvalid), score_(score) {
 			assert(score <= 1.0);
-			assert(score >= 0.0);
+			assert(score >= -1.0);
+			if (score > 0.0) type_ = kResultWin;
+			else type_ = kResultLoss;
 		}
 
 		Type type_;

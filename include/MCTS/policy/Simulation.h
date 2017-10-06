@@ -386,12 +386,7 @@ namespace mcts
 					}
 
 					double score = state_value_func_.GetStateValue(board);
-					if (score >= 0.0) {
-						return Result(Result::kResultWin, score);
-					}
-					else {
-						return Result(Result::kResultLoss, -score);
-					}
+					return Result(score);
 				}
 
 			public:
@@ -439,15 +434,8 @@ namespace mcts
 						return Result::kResultNotDetermined;
 					}
 					
-					WeakHeuristicStateValueFunction func; // TODO: just debug
-					double score = func.GetStateValue(board);
-					//double score = state_value_func_.GetStateValue(board);
-					if (score >= 0.0) {
-						return Result(Result::kResultWin, score);
-					}
-					else {
-						return Result(Result::kResultLoss, -score);
-					}
+					double score = state_value_func_.GetStateValue(board);
+					return Result(score);
 				}
 
 			public:
@@ -516,12 +504,7 @@ namespace mcts
 					}
 
 					double score = state_value_func_.GetStateValue(board);
-					if (score >= 0.0) {
-						return Result(Result::kResultWin, score);
-					}
-					else {
-						return Result(Result::kResultLoss, -score);
-					}
+					return Result(score);
 				}
 
 			public:
