@@ -121,7 +121,7 @@ namespace ui
 			int max_hp;
 			int damage;
 			int attack;
-			int attack_this_turn;
+			int attacks_this_turn;
 			CharacterStatus status;
 			bool silenced;
 			int spellpower;
@@ -132,7 +132,7 @@ namespace ui
 				max_hp = json["max_hp"].asInt();
 				damage = json["damage"].asInt();
 				attack = json["attack"].asInt();
-				attack_this_turn = json["attack_this_turn"].asInt();
+				attacks_this_turn = json["attacks_this_turn"].asInt();
 				status.Parse(json["status"]);
 				silenced = json["silenced"].asBool();
 				spellpower = json["spellpower"].asInt();

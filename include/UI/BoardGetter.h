@@ -216,7 +216,7 @@ namespace ui
 			raw_card.enchanted_states.max_hp = minion.max_hp;
 			raw_card.damaged = minion.damage;
 			raw_card.enchanted_states.attack = minion.attack;
-			raw_card.num_attacks_this_turn = minion.attack_this_turn;
+			raw_card.num_attacks_this_turn = minion.attacks_this_turn;
 			// TODO: exhausted (needed?)
 			raw_card.silenced = minion.silenced;
 			raw_card.enchanted_states.spell_damage = minion.spellpower;
@@ -232,6 +232,7 @@ namespace ui
 			// Check stats changed after put in board
 			// Stats might changed due to some triggers, e.g., just_played flag
 			state.GetMutableCard(ref).SetJustPlayedFlag(minion.summoned_this_turn);
+			state.GetMutableCard(ref).SetNumAttacksThisTurn(minion.attacks_this_turn);
 		}
 
 		void MakeMinions(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, board::Minions const& minions)
