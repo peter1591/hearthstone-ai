@@ -21,6 +21,7 @@ namespace mcts
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
+		//using SimulationPhaseSelectActionPolicy = policy::simulation::HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHeuristicEarlyCutoffPolicy;
 
 		using CreditPolicy = policy::CreditPolicy;
