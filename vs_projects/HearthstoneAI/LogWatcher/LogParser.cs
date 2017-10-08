@@ -11,6 +11,7 @@ namespace HearthstoneAI.LogWatcher
     {
         private static string PowerLogPrefix = "GameState.DebugPrintPower() - ";
         private static string EntityChoicesLogPrefix = "GameState.DebugPrintEntityChoices() - ";
+        private static string DebugPrintOptionsPrefix = "GameState.DebugPrintOptions() = ";
         private static string SendChoicesLogPrefix = "GameState.SendChoices() - ";
         private static string PowerTaskListDebugDumpLogPrefix = "PowerTaskList.DebugDump() - ";
         private static string PowerTaskListDebugPrintPowerLogPrefix = "PowerTaskList.DebugPrintPower() - ";
@@ -25,6 +26,7 @@ namespace HearthstoneAI.LogWatcher
             this.entity_choices_parser = new SubParsers.EntityChoicesParser(game_state_, logger_);
             this.send_choices_parser = new SubParsers.SendChoicesParser(game_state_, logger_);
             this.debug_print_power_parser = new SubParsers.DebugPrintPowerParser(game_state_, logger_);
+            this.debug_print_options_parser = new SubParsers.DebugPrintOptions(logger_);
 
             this.power_log_parser.BlockStart += (sender, e) =>
             {
@@ -36,12 +38,17 @@ namespace HearthstoneAI.LogWatcher
             {
                 if (this.CreateGameEvent != null) this.CreateGameEvent(this, e);
             };
+            this.debug_print_options_parser.StartWaitingMainAction += (sender, e) =>
+            {
+                if (this.StartWaitingMainActionEvent != null) this.StartWaitingMainActionEvent(sender, e);
+            };
         }
 
         private SubParsers.PowerLogParser power_log_parser;
         private SubParsers.SendChoicesParser send_choices_parser;
         private SubParsers.EntityChoicesParser entity_choices_parser;
         private SubParsers.DebugPrintPowerParser debug_print_power_parser;
+        private SubParsers.DebugPrintOptions debug_print_options_parser;
 
         private Logger logger_;
 
@@ -49,6 +56,7 @@ namespace HearthstoneAI.LogWatcher
         public event EventHandler<SubParsers.PowerLogParser.BlockEndEventArgs> BlockEnd;
         public event EventHandler<SubParsers.PowerLogParser.EntityTagChangedEventArgs> EntityTagChanged;
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
+        public event EventHandler<SubParsers.DebugPrintOptions.StartWaitingMainActionEventArgs> StartWaitingMainActionEvent;
 
         public void Process(string log_line)
         {
@@ -68,6 +76,10 @@ namespace HearthstoneAI.LogWatcher
             if (log.StartsWith(PowerLogPrefix))
             {
                 this.power_log_parser.Process(log.Substring(PowerLogPrefix.Length));
+            }
+            else if (log.StartsWith(DebugPrintOptionsPrefix))
+            {
+                this.debug_print_options_parser.Process(log.Substring(DebugPrintOptionsPrefix.Length));
             }
             else if (log.StartsWith(EntityChoicesLogPrefix))
             {

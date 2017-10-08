@@ -73,6 +73,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="AI\AIEngine.cs" />
+    <Compile Include="LogWatcher\SubParsers\DebugPrintOptions.cs" />
     <Compile Include="State\BlockInfo.cs" />
     <Compile Include="State\Entities.cs" />
     <Compile Include="State\Entity.cs" />

@@ -34,7 +34,6 @@ namespace HearthstoneAI
             log_watcher.BlockStart += Log_reader_ActionStart;
             log_watcher.CreateGameEvent += Log_reader_CreateGameEvent;
             log_watcher.EndTurnEvent += Log_reader_EndTurnEvent;
-            log_watcher.StartWaitingMainAction += Log_reader_StartWaitingMainAction;
             log_watcher.game_state_changed += (Game game_state) =>
             {
                 Board.Game board = new Board.Game();
@@ -54,6 +53,7 @@ namespace HearthstoneAI
                 var game_stage = GameStageHelper.GetGameStage(game_state);
                 txtGameEntity.Text = "Stage: " + game_stage.ToString() + Environment.NewLine;
 
+                ai_engine_.AbortRunner();
                 if (game_stage == GameStage.STAGE_PLAYER_CHOICE)
                 {
                     ai_engine_.UpdateBoard(board);
@@ -64,10 +64,6 @@ namespace HearthstoneAI
                         int threads = Convert.ToInt32(Math.Round(nudThreads.Value, 0));
                         ai_engine_.Run(seconds, threads);
                     }
-                }
-                else
-                {
-                    ai_engine_.AbortRunner();
                 }
             };
 
@@ -124,6 +120,7 @@ namespace HearthstoneAI
                 this.AddLog("!!!!!!!!!!!!!!!!!!!! Failed to parse board in action start callback!!!!!!!!!!!!!!!");
                 return;
             }
+            ai_engine_.AbortRunner();
             ai_engine_.UpdateBoard(board);
         }
 
@@ -146,10 +143,6 @@ namespace HearthstoneAI
             }
 
             this.TriggerAIHandleBoardAction(e.game);
-        }
-
-        private void Log_reader_StartWaitingMainAction(object sender, Game.StartWaitingMainActionEventArgs e)
-        {
         }
 
         private void timerMainLoop_Tick(object sender, EventArgs e)

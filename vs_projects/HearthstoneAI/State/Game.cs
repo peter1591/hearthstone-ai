@@ -57,9 +57,6 @@ namespace HearthstoneAI.State
         public List<string> player_played_hand_cards = new List<string>();
         public List<string> opponent_played_hand_cards = new List<string>();
 
-        public class StartWaitingMainActionEventArgs : EventArgs { }
-        public event EventHandler<StartWaitingMainActionEventArgs> StartWaitingMainAction;
-
         public class EndTurnEventArgs : EventArgs
         {
             public EndTurnEventArgs() { }
@@ -154,11 +151,6 @@ namespace HearthstoneAI.State
             if (entity_id == this.GameEntityId && tag == GameTag.STEP && tag_value == (int)TAG_STEP.MAIN_END)
             {
                 if (this.EndTurnEvent != null) this.EndTurnEvent(this, new EndTurnEventArgs());
-            }
-
-            if (entity_id == this.GameEntityId && tag == GameTag.STEP && tag_value == (int)TAG_STEP.MAIN_ACTION)
-            {
-                if (this.StartWaitingMainAction != null) StartWaitingMainAction(this, new StartWaitingMainActionEventArgs());
             }
         }
 

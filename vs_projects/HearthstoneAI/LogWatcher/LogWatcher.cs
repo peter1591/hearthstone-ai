@@ -18,7 +18,7 @@ namespace HearthstoneAI.LogWatcher
             logger_ = logger;
         }
 
-        public event EventHandler<State.Game.StartWaitingMainActionEventArgs> StartWaitingMainAction;
+        public event EventHandler<SubParsers.DebugPrintOptions.StartWaitingMainActionEventArgs> StartWaitingMainAction;
 
         public class BlockStartEventArgs : SubParsers.PowerLogParser.BlockStartEventArgs
         {
@@ -62,7 +62,7 @@ namespace HearthstoneAI.LogWatcher
             this.stable_decider_ = new StableDecider(100); // 100 ms
 
             this.log_reader = new LogReader(hearthstone_path, game_state_, logger_);
-            game_state_.StartWaitingMainAction += StartWaitingMainAction;
+            this.log_reader.StartWaitingMainActionEvent += StartWaitingMainAction;
             this.log_reader.BlockStart += (sender, e) =>
             {
                 game_state_.NotifyBlockStarted(e.entity_id, e.block_type);

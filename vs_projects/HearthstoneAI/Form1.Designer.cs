@@ -149,7 +149,7 @@
             this.nudRootSampleCount.Size = new System.Drawing.Size(120, 29);
             this.nudRootSampleCount.TabIndex = 6;
             this.nudRootSampleCount.Value = new decimal(new int[] {
-            10,
+            30,
             0,
             0,
             0});
@@ -207,7 +207,7 @@
             this.nudSeconds.Size = new System.Drawing.Size(120, 29);
             this.nudSeconds.TabIndex = 4;
             this.nudSeconds.Value = new decimal(new int[] {
-            1,
+            60,
             0,
             0,
             0});
@@ -599,6 +599,7 @@
             this.txtAIShell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAIShell.Location = new System.Drawing.Point(165, 1389);
+            this.txtAIShell.Multiline = true;
             this.txtAIShell.Name = "txtAIShell";
             this.txtAIShell.Size = new System.Drawing.Size(1566, 29);
             this.txtAIShell.TabIndex = 2;
