@@ -82,7 +82,9 @@ namespace HearthstoneAI.LogWatcher
             };
             this.log_reader.CreateGameEvent += (sender, e) =>
             {
-                game_state_.Reset();
+                // if game is auto-restarted, we don't want to reset the game info
+                // because this loses the player/opponent's entity id
+                game_state_.SoftReset();
 
                 CreateGameEvent(sender, e);
             };

@@ -132,8 +132,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var game_entity_id = int.Parse(game_entity_match.Groups["id"].Value);
             if (game_state.Entities.Items.ContainsKey(game_entity_id))
             {
-                logger_.Info("[ERROR] entity already exists.");
-                yield break;
+                logger_.Info("[WARNING] entity already exists.");
             }
             yield return true;
 
@@ -163,8 +162,7 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             var id = int.Parse(match.Groups["id"].Value);
             if (this.game_state.Entities.Items.ContainsKey(id))
             {
-                logger_.Info("[ERROR] entity already exists.");
-                yield break;
+                logger_.Info("[WARNING] entity already exists.");
             }
             this.game_state.CreateEntity(id);
             yield return true;

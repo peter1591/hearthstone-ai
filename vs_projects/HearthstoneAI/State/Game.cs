@@ -13,6 +13,11 @@ namespace HearthstoneAI.State
             this.Reset();
         }
 
+        public void SoftReset()
+        {
+            this.entities_ = new Entities();
+        }
+
         public void Reset()
         {
             this.GameEntityId = -1;
@@ -20,7 +25,6 @@ namespace HearthstoneAI.State
             this.OpponentEntityId = -1;
 
             this.blocks_ = new Dictionary<int, BlockInfo>();
-            this.entities_ = new Entities();
 
             this.EntityChoices = new Dictionary<int, EntityChoice>();
             this.joust_information = new JoustInformation();
