@@ -80,7 +80,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>GAME_ENGINE_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GAME_ENGINE_DLL_EXPORT;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -139,6 +139,7 @@
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
     <ClInclude Include="..\..\include\UI\AIController.h" />
     <ClInclude Include="..\..\include\UI\BoardGetter.h" />
+    <ClInclude Include="..\..\include\UI\ActionCallbackInfoGetter.h" />
     <ClInclude Include="..\..\include\UI\Board\Board.h" />
     <ClInclude Include="..\..\include\UI\Board\Entity.h" />
     <ClInclude Include="..\..\include\UI\Board\Player.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp" />
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
+    <ClCompile Include="..\..\src\NeuralNetwork.cpp" />
     <ClCompile Include="..\..\src\UI\GameEngine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
