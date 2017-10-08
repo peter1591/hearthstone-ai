@@ -40,13 +40,13 @@ namespace ui
 			if (cmd == "h" || cmd == "help") {
 				s << "Commands: " << std::endl
 					<< "h or help: show this message" << std::endl
-					<< "b or best: show the best action to do" << std::endl
+					<< "b or best: show the best action to do (add -v for verbose)" << std::endl
 					<< "root (1 or 2): set node to root node of player 1 or 2" << std::endl
 					<< "info: show info for selected node" << std::endl
 					<< "node (addr): set node to specified address." << std::endl;
 			}
 			else if (cmd == "b" || cmd == "best") {
-				DoBest(s);
+				DoBest(is, s);
 			}
 			else if (cmd == "root") {
 				DoRoot(is, s);
@@ -71,27 +71,40 @@ namespace ui
 			const mcts::selection::TreeNode* main_node,
 			const mcts::selection::TreeNode* node,
 			ui::ActionCallbackInfoGetter const& action_cb_info_getter,
-			int indent)
+			int indent,
+			bool only_show_best_choice = true)
 		{
 			std::string indent_padding;
 			for (int i = 0; i < indent; ++i) indent_padding.append("   ");
 
 			uint64_t total_chosen_time = 0;
+			int best_choice = -1;
+			uint64_t best_choice_chosen_times = 0;
 			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
 				auto const* edge_addon = node->GetEdgeAddon(choice);
 				if (edge_addon) {
-					total_chosen_time += edge_addon->GetChosenTimes();
+					auto chosen_times = edge_addon->GetChosenTimes();
+					total_chosen_time += chosen_times;
+
+					if (chosen_times > best_choice_chosen_times) {
+						best_choice_chosen_times = chosen_times;
+						best_choice = choice;
+					}
 				}
 				return true;
 			});
 			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				if (only_show_best_choice) {
+					if (choice != best_choice) return true;
+				}
+
 				s << indent_padding << "Choice " << choice
 					<< ": " << GetChoiceString(main_node, node, choice, action_cb_info_getter)
 					<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
 					<< std::endl;
 				ui::ActionCallbackInfoGetter new_cb_getter = action_cb_info_getter;
 				new_cb_getter.AppendChoice(choice);
-				return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, new_cb_getter, indent+1);
+				return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, new_cb_getter, indent+1, only_show_best_choice);
 			});
 		}
 
@@ -115,14 +128,14 @@ namespace ui
 			int idx = FindInMinions(board.GetBoard().GetFirst().minions_.GetAll());
 			if (idx >= 0) {
 				std::stringstream ss;
-				ss << "Your " << idx << "th minion";
+				ss << "Your " << (idx+1) << "th minion";
 				return ss.str();
 			}
 
 			idx = FindInMinions(board.GetBoard().GetSecond().minions_.GetAll());
 			if (idx >= 0) {
 				std::stringstream ss;
-				ss << "Opponent's " << idx << "th minion";
+				ss << "Opponent's " << (idx+1) << "th minion";
 				return ss.str();
 			}
 
@@ -222,7 +235,8 @@ namespace ui
 			uint64_t total_chosen_times,
  			mcts::selection::ChildType const& child,
 			ui::ActionCallbackInfoGetter const& action_cb_info_getter,
-			int indent)
+			int indent,
+			bool only_show_best_choice = true)
 		{
 			std::string indent_padding;
 			for (int i = 0; i < indent; ++i) indent_padding.append("   ");
@@ -239,7 +253,7 @@ namespace ui
 				<< std::endl;
 
 			if (!child.IsRedirectNode()) {
-				ShowBestNodeInfo(s, main_node, child.GetNode(), action_cb_info_getter, indent);
+				ShowBestNodeInfo(s, main_node, child.GetNode(), action_cb_info_getter, indent, only_show_best_choice);
 			}
 			else {
 				state::State game_state;
@@ -250,8 +264,23 @@ namespace ui
 			return true;
 		}
 
-		void DoBest(std::ostream & s)
+		void DoBest(std::istream& is, std::ostream & s)
 		{
+			std::string str_verbose;
+			if (is) is >> str_verbose;
+
+			bool verbose = false;
+			if (str_verbose == "-v") {
+				verbose = true;
+			}
+			else if (str_verbose.empty()) {
+				verbose = false;
+			}
+			else {
+				s << "Unknown option: " << str_verbose;
+				return;
+			}
+
 			s << "Best action: " << std::endl;
 
 			{
@@ -273,7 +302,7 @@ namespace ui
 			}
 
 			ui::ActionCallbackInfoGetter action_cb_info_getter(start_board_getter_);
-			ShowBestNodeInfo(s, node, node, action_cb_info_getter, 0);
+			ShowBestNodeInfo(s, node, node, action_cb_info_getter, 0, !verbose);
 		}
 
 		void DoRoot(std::istream & is, std::ostream & s)
