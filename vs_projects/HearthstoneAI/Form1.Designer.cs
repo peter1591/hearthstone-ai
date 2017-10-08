@@ -625,6 +625,7 @@
             this.txtAIEngine.Location = new System.Drawing.Point(3, 3);
             this.txtAIEngine.Multiline = true;
             this.txtAIEngine.Name = "txtAIEngine";
+            this.txtAIEngine.ReadOnly = true;
             this.txtAIEngine.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtAIEngine.Size = new System.Drawing.Size(1731, 1380);
             this.txtAIEngine.TabIndex = 0;
