@@ -79,6 +79,16 @@ namespace ui
 			return 0;
 		}
 
+		std::string GetBestChoice()
+		{
+			shell_.SetController(controller_.get());
+			std::string cmd = "best"; // for the 'best' command
+			std::ostringstream oss;
+			std::istringstream iss(cmd);
+			shell_.DoCommand(iss, oss);
+			return oss.str();
+		}
+
 		int NotifyStop()
 		{
 			return controller_->NotifyStop();
@@ -175,4 +185,5 @@ namespace ui
 	int GameEngine::Run(int seconds, int threads) { return impl_->Run(seconds, threads); }
 	int GameEngine::NotifyStop() { return impl_->NotifyStop(); }
 	int GameEngine::InteractiveShell(std::string const& cmd) { return impl_->InteractiveShell(cmd); }
+	std::string GameEngine::GetBestChoice() { return impl_->GetBestChoice(); }
 }

@@ -190,7 +190,7 @@ namespace ui
 				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseAttackerInfo>(
 					action_cb_info_getter.GetCallbackInfo());
 				std::stringstream ss;
-				ss << "Attacker: " << GetTargetStringFromEncodedIndex(choice);
+				ss << "Attacker: " << GetTargetStringFromEncodedIndex(info.targets[choice]);
 				return ss.str();
 			}
 
@@ -247,19 +247,23 @@ namespace ui
 				return false;
 			}
 
-			double credit_percentage = (double)edge_addon->GetCredit() / edge_addon->GetTotal() * 100;
-			s << indent_padding
-				<< "Estimated win rate: " << edge_addon->GetCredit() << " / " << edge_addon->GetTotal() << " (" << credit_percentage << "%)"
-				<< std::endl;
+			if (!only_show_best_choice) {
+				double credit_percentage = (double)edge_addon->GetCredit() / edge_addon->GetTotal() * 100;
+				s << indent_padding
+					<< "Estimated win rate: " << edge_addon->GetCredit() << " / " << edge_addon->GetTotal() << " (" << credit_percentage << "%)"
+					<< std::endl;
+			}
 
 			if (!child.IsRedirectNode()) {
 				ShowBestNodeInfo(s, main_node, child.GetNode(), action_cb_info_getter, indent, only_show_best_choice);
 			}
 			else {
-				state::State game_state;
-				auto dummy_cb_info = action_cb_info_getter.GetCallbackInfo(game_state);
-				double v = state_value_func_.GetStateValue(game_state);
-				s << indent_padding << "State-value: " << v << std::endl;
+				if (!only_show_best_choice) {
+					state::State game_state;
+					auto dummy_cb_info = action_cb_info_getter.GetCallbackInfo(game_state);
+					double v = state_value_func_.GetStateValue(game_state);
+					s << indent_padding << "State-value: " << v << std::endl;
+				}
 			}
 			return true;
 		}
@@ -283,7 +287,7 @@ namespace ui
 
 			s << "Best action: " << std::endl;
 
-			{
+			if (verbose) {
 				int seed = 0; // an arbitrarily random seed number
 				state::State game_state = start_board_getter_(0);
 				double v = state_value_func_.GetStateValue(game_state);

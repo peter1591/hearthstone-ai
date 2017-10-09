@@ -148,6 +148,21 @@ namespace HearthstoneAI
         private void timerMainLoop_Tick(object sender, EventArgs e)
         {
             log_watcher.Tick();
+            UpdateBestChoice();
+        }
+
+        private DateTime last_update_best_choice_ = DateTime.Now;
+        private TimeSpan span_update_best_choice_ = new TimeSpan(0, 0, 1);
+        private void UpdateBestChoice()
+        {
+            if (!ai_engine_.IsRunning()) return;
+            if ((DateTime.Now - last_update_best_choice_) < span_update_best_choice_) return;
+
+            String msg = ai_engine_.GetBestChoice();
+            msg = msg.Replace("\n", Environment.NewLine);
+            txtAIEngineTop.Text = msg;
+
+            last_update_best_choice_ = DateTime.Now;
         }
 
         private string GetGameEntityText(Game game)

@@ -82,6 +82,7 @@ namespace HearthstoneAI.AI
             return engine_.UpdateBoard(json);
         }
 
+        private DateTime last_run_start = DateTime.MaxValue;
         public int Run(int seconds, int threads)
         {
             if (!IsInitialized())
@@ -99,6 +100,7 @@ namespace HearthstoneAI.AI
                 logger_.Info("Finish run.");
             });
             runner_.Start();
+            last_run_start = DateTime.Now;
 
             return 0;
         }
@@ -106,6 +108,17 @@ namespace HearthstoneAI.AI
         public int InteractiveShell(String cmd)
         {
             return engine_.InteractiveShell(cmd);
+        }
+
+        private TimeSpan min_time_to_get_best_choice = new TimeSpan(0, 0, 3);
+        public String GetBestChoice()
+        {
+            if ((DateTime.Now - last_run_start) < min_time_to_get_best_choice)
+            {
+                return "(Preparing)";
+            }
+
+            return engine_.GetBestChoice();
         }
 
         public void Destroy()

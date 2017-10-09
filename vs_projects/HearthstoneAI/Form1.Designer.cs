@@ -75,6 +75,7 @@
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.txtAIEngineTop = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).BeginInit();
@@ -582,6 +583,7 @@
             // 
             // tabPageAI
             // 
+            this.tabPageAI.Controls.Add(this.txtAIEngineTop);
             this.tabPageAI.Controls.Add(this.txtAIShell);
             this.tabPageAI.Controls.Add(this.label18);
             this.tabPageAI.Controls.Add(this.txtAIEngine);
@@ -622,17 +624,29 @@
             this.txtAIEngine.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAIEngine.Location = new System.Drawing.Point(3, 3);
+            this.txtAIEngine.Location = new System.Drawing.Point(3, 315);
             this.txtAIEngine.Multiline = true;
             this.txtAIEngine.Name = "txtAIEngine";
             this.txtAIEngine.ReadOnly = true;
             this.txtAIEngine.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtAIEngine.Size = new System.Drawing.Size(1731, 1380);
+            this.txtAIEngine.Size = new System.Drawing.Size(1731, 1068);
             this.txtAIEngine.TabIndex = 0;
             // 
             // timerMainLoop
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
+            // 
+            // txtAIEngineTop
+            // 
+            this.txtAIEngineTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAIEngineTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.85714F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAIEngineTop.Location = new System.Drawing.Point(3, 6);
+            this.txtAIEngineTop.Multiline = true;
+            this.txtAIEngineTop.Name = "txtAIEngineTop";
+            this.txtAIEngineTop.ReadOnly = true;
+            this.txtAIEngineTop.Size = new System.Drawing.Size(1731, 303);
+            this.txtAIEngineTop.TabIndex = 3;
             // 
             // frmMain
             // 
@@ -709,6 +723,7 @@
         private System.Windows.Forms.NumericUpDown nudRootSampleCount;
         private System.Windows.Forms.TextBox txtAIShell;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox txtAIEngineTop;
     }
 }
 

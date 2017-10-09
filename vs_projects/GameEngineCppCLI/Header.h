@@ -25,6 +25,7 @@ namespace GameEngineCppWrapper
 
 			int Run(int seconds, int threads);
 			int NotifyStop();
+			System::String^ GetBestChoice();
 
 			int InteractiveShell(System::String^ cmd);
 

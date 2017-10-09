@@ -25,6 +25,7 @@ namespace ui
 
 		int Run(int seconds, int threads);
 		int NotifyStop();
+		std::string GetBestChoice();
 
 	private:
 		GameEngineImpl * impl_;

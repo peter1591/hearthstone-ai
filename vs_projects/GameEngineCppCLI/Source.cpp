@@ -66,5 +66,11 @@ namespace GameEngineCppWrapper
 		{
 			return impl_->InteractiveShell(msclr::interop::marshal_as<std::string>(cmd));
 		}
+
+		System::String^ GameEngine::GetBestChoice()
+		{
+			std::string msg = impl_->GetBestChoice();
+			return msclr::interop::marshal_as<System::String^>(msg);
+		}
 	}
 }
