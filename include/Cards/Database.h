@@ -55,6 +55,7 @@ namespace Cards
 			static std::unordered_set<state::CardSet> card_sets = {
 				state::kCardSetCore,
 				state::kCardSetExpert1,
+				state::kCardSetHOF,
 				state::kCardSetHeroSkin,
 				state::kCardSetOldGods,
 				state::kCardSetKara,
@@ -74,7 +75,7 @@ namespace Cards
 		int GetIdByCardName(std::string const& name) const
 		{
 			auto it = name_id_map_.find(name);
-			if (it == name_id_map_.end()) return -1;
+			if (it == name_id_map_.end()) assert(false);
 			return it->second;
 		}
 
