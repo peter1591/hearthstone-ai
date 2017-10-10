@@ -49,6 +49,7 @@ namespace state
 				PrepareForWrite();
 
 				assert(size_ < max_size);
+				assert(card_id != ::Cards::kInvalidCardId);
 
 				++change_id_;
 				cards_[size_] = card_id;

@@ -94,7 +94,8 @@ namespace ui
 
 			board_.Reset();
 
-			std::string player_deck_type = "InnKeeperBasicMage";
+			//std::string player_deck_type = "InnKeeperBasicMage"; // TODO: use correct deck
+			std::string player_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
 			std::vector<Cards::CardId> player_deck_cards;
 			for (auto const& card_name : Decks::GetDeck(player_deck_type)) {
 				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
@@ -104,7 +105,8 @@ namespace ui
 			board_.SetDeckCards(1, player_deck_cards);
 
 			// TODO: guess oppoennt deck type
-			std::string opponent_deck_type = "InnKeeperBasicMage";
+			//std::string opponent_deck_type = "InnKeeperBasicMage";
+			std::string opponent_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
 			std::vector<Cards::CardId> opponent_deck_cards;
 			for (auto const& card_name : Decks::GetDeck(opponent_deck_type)) {
 				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
@@ -267,7 +269,6 @@ namespace ui
 			raw_card.damaged = board_hero.damage;
 			raw_card.armor = board_hero.armor;
 			raw_card.enchanted_states.attack = board_hero.attack;
-			raw_card.num_attacks_this_turn = board_hero.attack_this_turn;
 			ApplyStatus(raw_card, board_hero.status);
 
 			// TODO: enchantments
@@ -275,18 +276,21 @@ namespace ui
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 			state.GetZoneChanger<state::kCardTypeHero, state::kCardZoneNewlyCreated>(ref)
 				.ChangeTo<state::kCardZonePlay>(player);
+
+			state.GetMutableCard(ref).SetNumAttacksThisTurn(board_hero.attacks_this_turn);
 		}
 
 		void MakeHeroPower(state::PlayerIdentifier player, state::State & state, board::HeroPower const& hero_power)
 		{
 			state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(hero_power.card_id);
 			assert(raw_card.card_type == state::kCardTypeHeroPower);
-			raw_card.used_this_turn = hero_power.used;
 
 			raw_card.zone = state::kCardZoneNewlyCreated;
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 			state.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZoneNewlyCreated>(ref)
 				.ChangeTo<state::kCardZonePlay>(player);
+
+			state.GetMutableCard(ref).SetUsable(!hero_power.used);
 		}
 
 		void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
