@@ -92,7 +92,7 @@ namespace ui
 			int damage;
 			int armor;
 			int attack;
-			int attack_this_turn;
+			int attacks_this_turn;
 			CharacterStatus status;
 
 			void Parse(Json::Value const& json) {
@@ -101,7 +101,7 @@ namespace ui
 				damage = json["damage"].asInt();
 				armor = json["armor"].asInt();
 				attack = json["attack"].asInt();
-				attack_this_turn = json["attack_this_turn"].asInt();
+				attacks_this_turn = json["attacks_this_turn"].asInt();
 				status.Parse(json["status"]);
 			}
 		};
@@ -126,6 +126,7 @@ namespace ui
 			bool silenced;
 			int spellpower;
 			bool summoned_this_turn;
+			bool exhausted;
 
 			void Parse(Json::Value const& json) {
 				card_id = Utils::GetCardId(json["card_id"].asString());
@@ -137,6 +138,15 @@ namespace ui
 				silenced = json["silenced"].asBool();
 				spellpower = json["spellpower"].asInt();
 				summoned_this_turn = json["summoned_this_turn"].asBool();
+				exhausted = json["exhausted"].asBool();
+
+				// Patch summoned_this_turn flag
+				// If a minion is summoned from hero power or spell card, this flag will not be set
+				if (exhausted) {
+					if (attacks_this_turn == 0) {
+						summoned_this_turn = true;
+					}
+				}
 			}
 		};
 
