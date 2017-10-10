@@ -45,16 +45,16 @@ namespace Cards
 			});
 			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
 				bool friendly_demon = false;
-				if (context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier() == context.player_) {
-					if (context.manipulate_.GetCard(context.card_ref_).GetRace() == state::kCardRaceDemon) {
+				if (context.manipulate_.GetCard(context.GetTarget()).GetPlayerIdentifier() == context.player_) {
+					if (context.manipulate_.GetCard(context.GetTarget()).GetRace() == state::kCardRaceDemon) {
 						friendly_demon = true;
 					}
 				}
 				if (friendly_demon) {
-					context.manipulate_.OnBoardMinion(context.card_ref_).Enchant().Add<Card_EX1_596e>();
+					context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_596e>();
 				}
 				else {
-					context.manipulate_.OnBoardMinion(context.card_ref_).Damage(context.card_ref_, 2);
+					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 2);
 				}
 			});
 		}
