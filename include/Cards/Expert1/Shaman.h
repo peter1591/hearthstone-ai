@@ -154,6 +154,27 @@ namespace Cards
 	struct Card_EX1_250 : MinionCardBase<Card_EX1_250, Overload<3>, Taunt> {};
 
 	struct Card_NEW1_010 : MinionCardBase<Card_NEW1_010, Charge, Shield, Taunt, Windfury> {};
+
+	struct Card_EX1_316e : public EventHookedEnchantment<Card_EX1_316e, Attack<4>, MaxHP<4>> {
+		using EventType = state::Events::EventTypes::OnTurnEnd;
+		static void HandleEvent(EventHookedEnchantmentHandler<Card_EX1_316e> const& handler) {
+			if (handler.context.manipulate_.Board().GetCurrentPlayerId() != handler.aux_data.player) return;
+			handler.context.manipulate_.OnBoardMinion(handler.card_ref).Destroy();
+		}
+	};
+	struct Card_EX1_316 : public SpellCardBase<Card_EX1_316> {
+		Card_EX1_316() {
+			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
+				context.SetRequiredSpellTargets(context.player_).Ally().Minion();
+			});
+			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+				FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;
+				aux_data.player = context.player_;
+				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().AddEventHooked(
+					Card_EX1_316e(), aux_data);
+			});
+		}
+	};
 }
 
 REGISTER_CARD(NEW1_010)
@@ -172,3 +193,4 @@ REGISTER_CARD(EX1_243)
 REGISTER_CARD(EX1_238)
 REGISTER_CARD(EX1_251)
 REGISTER_CARD(EX1_245)
+REGISTER_CARD(EX1_316)
