@@ -44,17 +44,9 @@ namespace HearthstoneAI.State
             TAG_STEP game_entity_step = (TAG_STEP)game_entity.GetTag(GameTag.STEP);
             if (game_entity_step != TAG_STEP.MAIN_ACTION) return GameStage.STAGE_GAME_FLOW;
 
-            bool player_first = false;
-            if (player_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = true;
-            else if (opponent_entity.GetTagOrDefault(GameTag.FIRST_PLAYER, 0) == 1) player_first = false;
-            else throw new Exception("parse failed");
-
-            int turn = game_entity.GetTagOrDefault(GameTag.TURN, -1);
-            if (turn < 0) return GameStage.STAGE_UNKNOWN;
-
-            if (player_first && (turn % 2 == 1)) return GameStage.STAGE_PLAYER_CHOICE;
-            else if (!player_first && (turn % 2 == 0)) return GameStage.STAGE_PLAYER_CHOICE;
-            else return GameStage.STAGE_OPPONENT_CHOICE;
+            if (player_entity.GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1) return GameStage.STAGE_PLAYER_CHOICE;
+            if (opponent_entity.GetTagOrDefault(GameTag.CURRENT_PLAYER, 0) == 1) return GameStage.STAGE_OPPONENT_CHOICE;
+            return GameStage.STAGE_UNKNOWN;
         }
     }
 }
