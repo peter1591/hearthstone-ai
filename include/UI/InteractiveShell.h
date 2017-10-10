@@ -77,9 +77,9 @@ namespace ui
 			std::string indent_padding;
 			for (int i = 0; i < indent; ++i) indent_padding.append("   ");
 
-			uint64_t total_chosen_time = 0;
+			int64_t total_chosen_time = 0;
 			int best_choice = -1;
-			uint64_t best_choice_chosen_times = 0;
+			int64_t best_choice_chosen_times = 0;
 			node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
 				auto const* edge_addon = node->GetEdgeAddon(choice);
 				if (edge_addon) {
