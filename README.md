@@ -1,7 +1,8 @@
 ## BREAKING NEWS
 First demo video is on!!! https://youtu.be/z0I1nM6_k0w
+Another demo video with higher quality: https://youtu.be/L6kr_zJKCQI
 
-The AI wins the basic InnKeeper in a mage-to-mage duel. Played 6 games so far, AI wins all the 6 games!
+The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
 
 ## Synopsis
 
