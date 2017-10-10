@@ -1,3 +1,9 @@
+## BREAKING NEWS
+First demo video is on!!! https://youtu.be/z0I1nM6_k0w
+Another demo video with higher quality: https://youtu.be/L6kr_zJKCQI
+
+The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
+
 ## Synopsis
 
 UNDER DEVELOPMENT!!!!
