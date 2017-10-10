@@ -394,17 +394,16 @@ namespace FlowControl
 	inline bool FlowController::HeroPowerPhase()
 	{
 		state::CardRef card_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
-		state::Cards::Card const& card = state_.GetCard(card_ref);
 
-		assert(card.GetPlayerIdentifier() == state_.GetCurrentPlayerId());
-		assert(card.GetCardType() == state::kCardTypeHeroPower);
+		assert(state_.GetCard(card_ref).GetPlayerIdentifier() == state_.GetCurrentPlayerId());
+		assert(state_.GetCard(card_ref).GetCardType() == state::kCardTypeHeroPower);
 		
-		assert(card.GetRawData().usable);
+		assert(state_.GetCard(card_ref).GetRawData().usable);
 
 		if (!PlayCardPhase<state::kCardTypeHeroPower>(card_ref)) return false;
 
 		Manipulate(state_, flow_context_).HeroPower(card_ref).IncreaseUsedThisTurn();
-		if (card.GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {
+		if (state_.GetCard(card_ref).GetRawData().used_this_turn >= GetMaxHeroPowerUseThisTurn()) {
 			Manipulate(state_, flow_context_).HeroPower(card_ref).SetUnusable();
 		}
 
