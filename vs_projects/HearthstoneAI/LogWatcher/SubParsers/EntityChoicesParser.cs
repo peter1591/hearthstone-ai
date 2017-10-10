@@ -158,25 +158,36 @@ namespace HearthstoneAI.LogWatcher.SubParsers
             // patch player entity id
             if (mulligan.player_entity_id < 0)
             {
-                // heuristic: find the first entity with PLAYSTATE=PLAYING
-                int patch_entity_id = -1;
+                // we know the card id of our own's mulligan choices
+                int controller = -1;
+
+                foreach (var kv in mulligan.choices)
+                {
+                    var entity = game_state.Entities.Items[kv.Value];
+                    controller = entity.GetTagOrDefault(State.GameTag.CONTROLLER, -1);
+                    break;
+                }
+
+                if (controller < 0) {
+                    return;
+                }
+
+                int player_entity_id = -1;
                 foreach (var entity in game_state.Entities.Items)
                 {
-                    foreach (var tag in entity.Value.Tags)
+                    if (entity.Value.GetTagOrDefault(State.GameTag.CONTROLLER, -1) == controller)
                     {
-                        if (tag.Key == State.GameTag.PLAYSTATE && tag.Value == (int)State.TAG_PLAYSTATE.PLAYING)
-                        {
-                            patch_entity_id = entity.Key;
-                        }
+                        player_entity_id = entity.Key;
+                        break;
                     }
                 }
 
-                if (patch_entity_id > 0)
+                if (player_entity_id > 0)
                 {
-                    game_state.ChangeEntityName(patch_entity_id, mulligan.player_entity_str);
-                    mulligan.player_entity_id = patch_entity_id;
+                    game_state.ChangeEntityName(player_entity_id, mulligan.player_entity_str);
+                    mulligan.player_entity_id = player_entity_id;
                     logger_.Info(String.Format("Patch player name {0} with entity id {1}.",
-                        mulligan.player_entity_str, patch_entity_id));
+                        mulligan.player_entity_str, player_entity_id));
                 }
             }
 
