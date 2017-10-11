@@ -59,8 +59,6 @@ int main(int argc, char *argv[])
 	ui::AICompetitor first;
 	ui::AICompetitor second;
 
-	TestStateBuilder().GetState(rand());
-
 	auto start_board_getter = [&]() -> state::State {
 		return TestStateBuilder().GetStateWithRandomStartCard(rand());
 	};
@@ -69,7 +67,8 @@ int main(int argc, char *argv[])
 	guide.SetSecondCompetitor(&second);
 
 	auto last_show = std::chrono::steady_clock::now();
-	guide.Start(start_board_getter, threads, [&](state::State const& state) {
+	int root_samples = 10;
+	guide.Start(start_board_getter, threads, rand(), root_samples, [&](state::State const& state) {
 		std::cout << "Turn: " << state.GetTurn() << std::endl;
 	}, [iterations, last_show](uint64_t	now_iterations) mutable {
 		if (now_iterations >= iterations) {
