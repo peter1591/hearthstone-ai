@@ -73,7 +73,10 @@ namespace mcts
 		};
 
 		Result() : type_(kResultInvalid), score_(0.0) {}
-		Result(Type type) : type_(type), score_(1.0) {}
+		Result(Type type) : type_(type), score_(0.0) {
+			if (type_ == kResultWin) score_ = 1.0;
+			else if (type_ == kResultLoss) score_ = -1.0;
+		}
 
 		// Score is in range [-1.0, 1.0]
 		// If the first player has 100% chance to win, set the value to 1.0
