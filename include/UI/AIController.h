@@ -35,7 +35,7 @@ namespace ui
 					std::mt19937 simulation_rand(seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, selection_rand, simulation_rand);
 
-					int tree_sample_random_idx = 0;
+					size_t tree_sample_random_idx = 0;
 					auto get_next_selection_seed = [tree_sample_random_idx, this]() mutable {
 						int v = tree_sample_randoms_[tree_sample_random_idx];
 						++tree_sample_random_idx;

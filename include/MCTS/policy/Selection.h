@@ -16,7 +16,7 @@ namespace mcts
 
 			class RandomPolicy {
 			public:
-				RandomPolicy(std::mt19937 & rand) : rand_(rand) {}
+				RandomPolicy(std::mt19937 & rand) : choices_(), rand_(rand) {}
 
 				void ReportChoicesCount(int count) {
 					// the count here contains the invalid actions

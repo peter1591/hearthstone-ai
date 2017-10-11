@@ -31,7 +31,7 @@ namespace ui
 
 		// TODO: The underlying truth state is passed. It means the competitor can acquire
 		// hidden information (e.g., opponents hand cards).
-		virtual void Think(state::State const& state, int threads, std::function<bool(uint64_t)> cb) = 0;
+		virtual void Think(state::State const& state, int threads, int seed, int tree_samples, std::function<bool(uint64_t)> cb) = 0;
 
 		virtual int GetMainAction() = 0;
 
@@ -240,7 +240,7 @@ namespace ui
 		void SetSecondCompetitor(ICompetitor * second) { second_ = second; }
 
 		template <class ProgressCallback, class IterationProgressCallback>
-		void Start(StartingStateGetter state_getter, int threads,
+		void Start(StartingStateGetter state_getter, int threads, int seed, int tree_samples,
 			ProgressCallback && cb, IterationProgressCallback && iteration_cb)
 		{
 			state::State current_state = state_getter();
@@ -262,7 +262,7 @@ namespace ui
 					next_competitor = second_;
 				}
 
-				next_competitor->Think(current_state, threads, iteration_cb);
+				next_competitor->Think(current_state, threads, seed, tree_samples, iteration_cb);
 
 				FlowControl::FlowContext flow_context;
 
@@ -277,8 +277,8 @@ namespace ui
 					main_action,
 					random_callback_, action_callback_);
 
-				assert(result != mcts::Result::kResultInvalid);
-				if (result != mcts::Result::kResultNotDetermined) {
+				assert(result.type_ != mcts::Result::kResultInvalid);
+				if (result.type_ != mcts::Result::kResultNotDetermined) {
 					break;
 				}
 			}

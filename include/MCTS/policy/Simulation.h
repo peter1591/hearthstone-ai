@@ -98,7 +98,7 @@ namespace mcts
 				template <state::PlayerSide Side>
 				double GetStateValueForSide(state::PlayerSide self_side, FlowControl::PlayerStateView<Side> view) {
 					assert(self_side == Side);
-					state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
+					//state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
 
 					double v = 0.0;
 
