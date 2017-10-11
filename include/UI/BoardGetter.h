@@ -203,6 +203,7 @@ namespace ui
 			raw_card.enchanted_states.freeze_attack = status.freeze;
 			raw_card.freezed = status.frozon;
 			raw_card.enchanted_states.poisonous = status.poisonous;
+			raw_card.enchanted_states.stealth = status.stealth;
 
 			int max_attacks_per_turn = 1;
 			if (status.windfury) max_attacks_per_turn = 2;
@@ -226,6 +227,7 @@ namespace ui
 			ApplyStatus(raw_card, minion.status);
 
 			raw_card.zone = state::kCardZoneNewlyCreated;
+			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 			state.GetZoneChanger<state::kCardTypeMinion, state::kCardZoneNewlyCreated>(ref)
 				.ChangeTo<state::kCardZonePlay>(player, pos);
@@ -273,6 +275,7 @@ namespace ui
 
 			// TODO: enchantments
 
+			raw_card.enchantment_handler.SetOriginalStates(raw_card.enchanted_states);
 			state::CardRef ref = state.AddCard(state::Cards::Card(raw_card));
 			state.GetZoneChanger<state::kCardTypeHero, state::kCardZoneNewlyCreated>(ref)
 				.ChangeTo<state::kCardZonePlay>(player);
