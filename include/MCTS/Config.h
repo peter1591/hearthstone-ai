@@ -20,7 +20,8 @@ namespace mcts
 		static constexpr int kSwitchToSimulationUnderChosenTimes = 1;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
-		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
+		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
+		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHardCodedRules;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHeuristicEarlyCutoffPolicy;
 
