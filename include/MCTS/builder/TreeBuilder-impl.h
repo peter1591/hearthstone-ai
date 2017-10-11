@@ -87,6 +87,10 @@ namespace mcts
 
 			simulation_stage_.GetActionAnalyzer().Reset();
 
+			Result result = simulation_stage_.CutoffCheck(*board_);
+			assert(result.type_ != Result::kResultInvalid);
+			if (result.type_ != Result::kResultNotDetermined) return result;
+
 			return ApplyAction(
 				flow_context_,
 				simulation_stage_.GetActionAnalyzer(), simulation_stage_);
@@ -108,10 +112,6 @@ namespace mcts
 			int choice = -1;
 			Result result = Result::kResultInvalid;
 			if constexpr (is_simulation) {
-				result = this->SimulationCutoffCheck();
-				assert(result.type_ != Result::kResultInvalid);
-				if (result.type_ != Result::kResultNotDetermined) return result;
-
 				choice = this->ChooseSimulateAction(
 					ActionType(ActionType::kMainAction),
 					board::ActionChoices(choices));
@@ -135,11 +135,6 @@ namespace mcts
 			int choice = selection_stage_.ChooseAction(*board_, action_type, choices);
 			assert(choice >= 0); // always return a valid choice
 			return choice;
-		}
-
-		inline Result TreeBuilder::SimulationCutoffCheck()
-		{
-			return simulation_stage_.CutoffCheck(*board_);
 		}
 
 		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)
