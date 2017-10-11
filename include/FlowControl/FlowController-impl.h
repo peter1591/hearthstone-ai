@@ -375,7 +375,9 @@ namespace FlowControl
 				defenders.push_back(player.GetHeroRef());
 			}
 			player.minions_.ForEach([&](state::CardRef card_ref) {
-				// TODO: immune character cannot be attacked/targeted
+				state::Cards::Card const& card = state_.GetCard(card_ref);
+				if (card.HasStealth()) return true;
+				if (card.GetImmune()) return true;
 				defenders.push_back(card_ref);
 				return true;
 			});
