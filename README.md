@@ -2,6 +2,7 @@
 * First demo video is on!!! https://youtu.be/z0I1nM6_k0w
 * Another demo video with higher quality: https://youtu.be/L6kr_zJKCQI
 * First demo video with expert warlock: https://youtu.be/wLvBlKChFW0
+* Another demo video played with expert warlock innkeeper: https://youtu.be/yVX8nTo8o00
 
 The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
 
