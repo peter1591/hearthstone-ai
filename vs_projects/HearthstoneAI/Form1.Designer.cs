@@ -70,12 +70,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtGameEntity = new System.Windows.Forms.TextBox();
             this.tabPageAI = new System.Windows.Forms.TabPage();
+            this.txtAIEngineTop = new System.Windows.Forms.TextBox();
             this.txtAIShell = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.txtAIEngine = new System.Windows.Forms.TextBox();
             this.timerMainLoop = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.txtAIEngineTop = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRootSampleCount)).BeginInit();
@@ -150,7 +150,7 @@
             this.nudRootSampleCount.Size = new System.Drawing.Size(120, 29);
             this.nudRootSampleCount.TabIndex = 6;
             this.nudRootSampleCount.Value = new decimal(new int[] {
-            30,
+            10,
             0,
             0,
             0});
@@ -208,7 +208,7 @@
             this.nudSeconds.Size = new System.Drawing.Size(120, 29);
             this.nudSeconds.TabIndex = 4;
             this.nudSeconds.Value = new decimal(new int[] {
-            60,
+            600,
             0,
             0,
             0});
@@ -596,6 +596,18 @@
             this.tabPageAI.UseVisualStyleBackColor = true;
             this.tabPageAI.Click += new System.EventHandler(this.tabPage3_Click);
             // 
+            // txtAIEngineTop
+            // 
+            this.txtAIEngineTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAIEngineTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.85714F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAIEngineTop.Location = new System.Drawing.Point(3, 6);
+            this.txtAIEngineTop.Multiline = true;
+            this.txtAIEngineTop.Name = "txtAIEngineTop";
+            this.txtAIEngineTop.ReadOnly = true;
+            this.txtAIEngineTop.Size = new System.Drawing.Size(1731, 303);
+            this.txtAIEngineTop.TabIndex = 3;
+            // 
             // txtAIShell
             // 
             this.txtAIShell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -635,18 +647,6 @@
             // timerMainLoop
             // 
             this.timerMainLoop.Tick += new System.EventHandler(this.timerMainLoop_Tick);
-            // 
-            // txtAIEngineTop
-            // 
-            this.txtAIEngineTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAIEngineTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.85714F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAIEngineTop.Location = new System.Drawing.Point(3, 6);
-            this.txtAIEngineTop.Multiline = true;
-            this.txtAIEngineTop.Name = "txtAIEngineTop";
-            this.txtAIEngineTop.ReadOnly = true;
-            this.txtAIEngineTop.Size = new System.Drawing.Size(1731, 303);
-            this.txtAIEngineTop.TabIndex = 3;
             // 
             // frmMain
             // 
