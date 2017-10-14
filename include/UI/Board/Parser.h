@@ -49,8 +49,7 @@ namespace ui
 			static constexpr int kDefaultRootSampleCount = 100;
 
 			Parser(GameEngineLogger & logger) :
-				logger_(logger), board_raw_(),
-				board_(),
+				logger_(logger), board_(),
 				root_sample_count_(kDefaultRootSampleCount)
 			{}
 
@@ -59,28 +58,11 @@ namespace ui
 				root_sample_count_ = v;
 			}
 			
-			int ResetBoard()
-			{
-				board_raw_.clear();
-				return 0;
-			}
-
-			int UpdateBoard(std::string const& board_str)
-			{
-				if (board_raw_ == board_str) return 0;
-
-				logger_.Log("Updating board.");
-				board_raw_ = board_str;
-
-				// TODO: reuse MCTS tree
-				return 0;
-			}
-
-			int PrepareToRun(std::mt19937 & rand)
+			int ChangeBoard(std::string const& board_raw, std::mt19937 & rand)
 			{
 				Json::Reader reader;
 				Json::Value json_board;
-				std::stringstream ss(board_raw_);
+				std::stringstream ss(board_raw);
 				if (!reader.parse(ss, json_board)) {
 					logger_.Log("Failed to parse board.");
 					return -1;
@@ -342,7 +324,6 @@ namespace ui
 
 		private:
 			GameEngineLogger & logger_;
-			std::string board_raw_;
 			board::Board board_;
 			int root_sample_count_;
 			std::vector<board::UnknownCardsSetsManager> first_unknown_cards_sets_mgrs_;

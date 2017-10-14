@@ -30,7 +30,7 @@ namespace ui
 		int ResetBoard()
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
-			if (parser_.ResetBoard() < 0) return -1;
+			board_raw_.clear();
 			need_restart_ai_ = true;
 			return 0;
 		}
@@ -38,7 +38,13 @@ namespace ui
 		int UpdateBoard(std::string const& board_str)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
-			return parser_.UpdateBoard(board_str);
+			if (board_raw_ == board_str) return 0;
+
+			logger_.Log("Updating board.");
+			board_raw_ = board_str;
+
+			// TODO: reuse MCTS tree
+			return 0;
 		}
 
 		int PrepareToRun(std::unique_ptr<ui::AIController> & controller, int seed)
@@ -46,7 +52,7 @@ namespace ui
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
 			std::mt19937 rand(seed);
-			parser_.PrepareToRun(rand);
+			parser_.ChangeBoard(board_raw_, rand);
 			
 			if (!controller || need_restart_ai_) {
 				controller.reset(new ui::AIController(root_sample_count_, rand));
@@ -69,6 +75,7 @@ namespace ui
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
 		board::Parser parser_;
+		std::string board_raw_;
 		int root_sample_count_;
 		bool need_restart_ai_;
 	};
