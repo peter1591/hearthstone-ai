@@ -132,11 +132,10 @@ namespace HearthstoneAI.AI
             if (runner_ != null)
             {
                 engine_.NotifyStop(); // request to early-stop
-                while (IsRunning())
+                while (!runner_.Join(100))
                 {
                     System.Windows.Forms.Application.DoEvents();
                 }
-                runner_.Join();
                 runner_ = null;
             }
         }

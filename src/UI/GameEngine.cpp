@@ -148,7 +148,15 @@ namespace ui
 			};
 
 			try {
-				controller_->Run(continue_checker, threads, seed, start_board_getter);
+				controller_->Run(threads, seed, start_board_getter);
+
+				while (true) {
+					if (!continue_checker()) break;
+					if (controller_->IsStopping()) break;
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				}
+
+				controller_->WaitUntilStopped();
 			}
 			catch (...) {
 				return -1;

@@ -54,7 +54,10 @@
     <ClInclude Include="..\..\include\UI\InteractiveShell.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\ActionCallbackInfoGetter.h">
+    <ClInclude Include="..\..\include\UI\Board\Parser.h">
+      <Filter>Header Files\UI\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\UI\ActionApplyHelper.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -17,6 +17,7 @@ namespace ui
 
 	public:
 		AIController(int tree_samples, std::mt19937 & rand) :
+			threads_(),
 			first_tree_(), second_tree_(), statistic_(), stop_flag_(false), tree_sample_randoms_()
 		{
 			for (int i = 0; i < tree_samples; ++i) {
@@ -24,13 +25,17 @@ namespace ui
 			}
 		}
 
-		template <class ContinueChecker>
-		void Run(ContinueChecker continue_checker, int thread_count, int seed, StartingStateGetter state_getter)
+		~AIController()
 		{
-			std::vector<std::thread> threads;
+			WaitUntilStopped();
+		}
+
+		void Run(int thread_count, int seed, StartingStateGetter state_getter)
+		{
+			assert(threads_.empty());
 			stop_flag_ = false;
 			for (int i = 0; i < thread_count; ++i) {
-				threads.emplace_back([&]() {
+				threads_.emplace_back([this, seed, state_getter]() {
 					std::mt19937 selection_rand;
 					std::mt19937 simulation_rand(seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, selection_rand, simulation_rand);
@@ -58,22 +63,24 @@ namespace ui
 					}
 				});
 			}
-
-			while (true) {
-				if (stop_flag_ == true) break; // TODO: use compare_exchange_weak
-				if (!continue_checker()) break;
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
-			}
-
-			stop_flag_ = true;
-			for (auto & thread : threads) {
-				thread.join();
-			}
 		}
 
 		int NotifyStop() {
 			stop_flag_ = true;
 			return 0;
+		}
+
+		bool IsStopping() const {
+			return stop_flag_;
+		}
+
+		void WaitUntilStopped()
+		{
+			NotifyStop();
+			for (auto & thread : threads_) {
+				thread.join();
+			}
+			threads_.clear();
 		}
 
 		auto const& GetStatistic() const { return statistic_; }
@@ -85,6 +92,7 @@ namespace ui
 		}
 
 	private:
+		std::vector<std::thread> threads_;
 		mcts::builder::TreeBuilder::TreeNode first_tree_;
 		mcts::builder::TreeBuilder::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;
@@ -107,10 +115,17 @@ namespace ui
 
 			std::mt19937 rand(seed);
 			controller_.reset(new AIController(tree_samples, rand));
-			controller_->Run(continue_checker, threads, rand(), [&](int seed) {
+			controller_->Run(threads, rand(), [&](int seed) {
 				(void)seed;
 				return state;
 			});
+
+			while (true) {
+				if (continue_checker()) break;
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			}
+			controller_->WaitUntilStopped();
+
 			node_ = controller_->GetRootNode(state.GetCurrentPlayerId());
 			root_node_ = node_;
 		}

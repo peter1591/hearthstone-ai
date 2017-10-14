@@ -10,6 +10,7 @@
 #include "state/Configs.h"
 #include "Cards/Database.h"
 #include "UI/Board/Parser.h"
+#include "UI/ActionApplyHelper.h"
 
 namespace ui
 {
@@ -19,7 +20,8 @@ namespace ui
 		static constexpr int kDefaultRootSampleCount = 100;
 
 		BoardGetter(GameEngineLogger & logger) :
-			logger_(logger), parser_(logger), root_sample_count_(kDefaultRootSampleCount)
+			lock_(), logger_(logger), parser_(logger), action_apply_helper_(),
+			board_raw_(), root_sample_count_(kDefaultRootSampleCount), need_restart_ai_()
 		{}
 
 		// @note Should be set before running
@@ -44,6 +46,8 @@ namespace ui
 			board_raw_ = board_str;
 
 			// TODO: reuse MCTS tree
+			need_restart_ai_ = true;
+
 			return 0;
 		}
 
@@ -56,6 +60,7 @@ namespace ui
 			
 			if (!controller || need_restart_ai_) {
 				controller.reset(new ui::AIController(root_sample_count_, rand));
+				action_apply_helper_.ClearChoices();
 			}
 			else {
 				// TODO: re-use MCTS tree
@@ -68,13 +73,17 @@ namespace ui
 		state::State GetStartBoard(int seed)
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
-			return parser_.GetStartBoard(seed);
+
+			state::State game_state = parser_.GetStartBoard(seed);
+			action_apply_helper_.ApplyChoices(game_state);
+			return game_state;
 		}
 
 	private:
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
 		board::Parser parser_;
+		ActionApplyHelper action_apply_helper_;
 		std::string board_raw_;
 		int root_sample_count_;
 		bool need_restart_ai_;
