@@ -16,7 +16,6 @@ namespace ui
 {
 	namespace board
 	{
-
 		class Board
 		{
 		public:
