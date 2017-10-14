@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
+            this.btnReset = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.nudRootSampleCount = new System.Windows.Forms.NumericUpDown();
             this.label16 = new System.Windows.Forms.Label();
@@ -104,6 +105,7 @@
             // 
             // tabPageSettings
             // 
+            this.tabPageSettings.Controls.Add(this.btnReset);
             this.tabPageSettings.Controls.Add(this.label17);
             this.tabPageSettings.Controls.Add(this.nudRootSampleCount);
             this.tabPageSettings.Controls.Add(this.label16);
@@ -123,6 +125,16 @@
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
             this.tabPageSettings.Click += new System.EventHandler(this.tabPageSettings_Click);
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(179, 213);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(201, 42);
+            this.btnReset.TabIndex = 8;
+            this.btnReset.Text = "Current Game Ends";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // label17
             // 
@@ -724,6 +736,7 @@
         private System.Windows.Forms.TextBox txtAIShell;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TextBox txtAIEngineTop;
+        private System.Windows.Forms.Button btnReset;
     }
 }
 

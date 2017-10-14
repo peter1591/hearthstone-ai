@@ -36,6 +36,7 @@ namespace HearthstoneAI.LogWatcher
 
         private void Reset()
         {
+            this.logger_.Info("LogReader is doing a (hard) reset.");
             this.power_log_offset = 0;
             this.game_state_.Reset();
             this.CreateLogParser();
@@ -64,9 +65,18 @@ namespace HearthstoneAI.LogWatcher
             return Path.Combine(this.hearthstone_path, "Logs\\Power.log");
         }
 
+        public void NewGameStart()
+        {
+            this.game_state_.Reset();
+        }
+
         public void Process()
         {
-            if (File.Exists(this.GetPowerLogPath()) == false) return;
+            if (File.Exists(this.GetPowerLogPath()) == false)
+            {
+                this.logger_.Info("Log file does not exist.");
+                return;
+            }
 
             var power_log = new FileStream(this.GetPowerLogPath(), FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 
@@ -74,7 +84,7 @@ namespace HearthstoneAI.LogWatcher
 
             if (power_log.Length < this.power_log_offset)
             {
-                // log shrinked -> reload
+                this.logger_.Info("Log file shrinked. Doing a reset.");
                 this.Reset();
             }
 
@@ -97,7 +107,7 @@ namespace HearthstoneAI.LogWatcher
             foreach (var new_log_line in new_log_lines)
             {
                 this.log_parser.Process(new_log_line);
-                System.Windows.Forms.Application.DoEvents();
+                //System.Windows.Forms.Application.DoEvents();
             }
 
             log_changed();

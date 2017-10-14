@@ -545,5 +545,10 @@ namespace HearthstoneAI
                 txtAIShell.Focus();
             }
         }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            log_watcher.NewGameStart();
+        }
     }
 }

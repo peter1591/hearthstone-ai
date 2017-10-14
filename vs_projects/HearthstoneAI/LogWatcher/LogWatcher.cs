@@ -55,6 +55,11 @@ namespace HearthstoneAI.LogWatcher
 
         public event EventHandler<SubParsers.PowerLogParser.CreateGameEventArgs> CreateGameEvent;
 
+        public void NewGameStart()
+        {
+            this.log_reader.NewGameStart();
+        }
+
         public void Reset(string hearthstone_path)
         {
             game_state_ = new State.Game();
