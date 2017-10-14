@@ -5,7 +5,7 @@
 #include <random>
 
 #include "UI/AIController.h"
-#include "UI/ActionCallbackInfoGetter.h"
+#include "UI/ActionApplyHelper.h"
 
 namespace ui
 {
@@ -70,7 +70,7 @@ namespace ui
 			std::ostream & s,
 			const mcts::selection::TreeNode* main_node,
 			const mcts::selection::TreeNode* node,
-			ui::ActionCallbackInfoGetter const& action_cb_info_getter,
+			ui::ActionApplyHelper const& action_cb_info_getter,
 			int indent,
 			bool only_show_best_choice = true)
 		{
@@ -102,7 +102,7 @@ namespace ui
 					<< ": " << GetChoiceString(main_node, node, choice, action_cb_info_getter)
 					<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
 					<< std::endl;
-				ui::ActionCallbackInfoGetter new_cb_getter = action_cb_info_getter;
+				ui::ActionApplyHelper new_cb_getter = action_cb_info_getter;
 				new_cb_getter.AppendChoice(choice);
 				return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, new_cb_getter, indent+1, only_show_best_choice);
 			});
@@ -158,7 +158,7 @@ namespace ui
 		std::string GetChoiceString(
 			const mcts::selection::TreeNode* main_node,
 			const mcts::selection::TreeNode* node, int choice,
-			ui::ActionCallbackInfoGetter const& action_cb_info_getter)
+			ui::ActionApplyHelper const& action_cb_info_getter)
 		{
 			if (node->GetActionType() == mcts::ActionType::kMainAction) {
 				auto op = node->GetAddon().action_analyzer.GetMainOpType(choice);
@@ -166,7 +166,7 @@ namespace ui
 			}
 			
 			if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
-				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseHandCardInfo>(
+				auto info = std::get<ui::ActionApplyHelper::ChooseHandCardInfo>(
 					action_cb_info_getter.GetCallbackInfo([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
@@ -180,7 +180,7 @@ namespace ui
 			}
 
 			if (node->GetActionType() == mcts::ActionType::kChooseMinionPutLocation) {
-				auto info = std::get<ui::ActionCallbackInfoGetter::MinionPutLocationInfo>(
+				auto info = std::get<ui::ActionApplyHelper::MinionPutLocationInfo>(
 					action_cb_info_getter.GetCallbackInfo([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
@@ -191,7 +191,7 @@ namespace ui
 			}
 
 			if (node->GetActionType() == mcts::ActionType::kChooseAttacker) {
-				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseAttackerInfo>(
+				auto info = std::get<ui::ActionApplyHelper::ChooseAttackerInfo>(
 					action_cb_info_getter.GetCallbackInfo([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
@@ -201,7 +201,7 @@ namespace ui
 			}
 
 			if (node->GetActionType() == mcts::ActionType::kChooseDefender) {
-				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseDefenderInfo>(
+				auto info = std::get<ui::ActionApplyHelper::ChooseDefenderInfo>(
 					action_cb_info_getter.GetCallbackInfo([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
@@ -211,7 +211,7 @@ namespace ui
 			}
 
 			if (node->GetActionType() == mcts::ActionType::kChooseTarget) {
-				auto info = std::get<ui::ActionCallbackInfoGetter::GetSpecifiedTargetInfo>(
+				auto info = std::get<ui::ActionApplyHelper::GetSpecifiedTargetInfo>(
 					action_cb_info_getter.GetCallbackInfo([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
@@ -244,7 +244,7 @@ namespace ui
 			int choice,
 			uint64_t total_chosen_times,
  			mcts::selection::ChildType const& child,
-			ui::ActionCallbackInfoGetter const& action_cb_info_getter,
+			ui::ActionApplyHelper const& action_cb_info_getter,
 			int indent,
 			bool only_show_best_choice = true)
 		{
@@ -315,7 +315,7 @@ namespace ui
 				return;
 			}
 
-			ui::ActionCallbackInfoGetter action_cb_info_getter;
+			ui::ActionApplyHelper action_cb_info_getter;
 			ShowBestNodeInfo(s, node, node, action_cb_info_getter, 0, !verbose);
 		}
 

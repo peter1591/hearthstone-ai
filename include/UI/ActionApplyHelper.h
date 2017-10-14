@@ -8,7 +8,7 @@
 
 namespace ui
 {
-	class ActionCallbackInfoGetter
+	class ActionApplyHelper
 	{
 	public:
 		struct NullInfo {};
@@ -149,7 +149,7 @@ namespace ui
 		};
 
 	public:
-		ActionCallbackInfoGetter() : choices_() {}
+		ActionApplyHelper() : choices_() {}
 
 		void AppendChoice(int choice) {
 			choices_.push_back(choice);
