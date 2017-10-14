@@ -154,15 +154,19 @@ namespace ui
 		void AppendChoice(int choice) {
 			choices_.push_back(choice);
 		}
+
+		void ClearChoices() {
+			choices_.clear();
+		}
 		
 		template <class StartBoardGetter>
-		CallbackInfo GetCallbackInfo(StartBoardGetter && start_board_getter) const
+		CallbackInfo ApplyChoices(StartBoardGetter && start_board_getter) const
 		{
 			state::State game_state = start_board_getter();
-			return GetCallbackInfo(game_state);
+			return ApplyChoices(game_state);
 		}
 
-		CallbackInfo GetCallbackInfo(state::State & game_state) const
+		CallbackInfo ApplyChoices(state::State & game_state) const
 		{
 			CallbackInfo info = NullInfo();
 

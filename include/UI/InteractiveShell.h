@@ -167,7 +167,7 @@ namespace ui
 			
 			if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
 				auto info = std::get<ui::ActionApplyHelper::ChooseHandCardInfo>(
-					action_cb_info_getter.GetCallbackInfo([&]() {
+					action_cb_info_getter.ApplyChoices([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
 				size_t idx = info.cards[choice];
@@ -181,7 +181,7 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseMinionPutLocation) {
 				auto info = std::get<ui::ActionApplyHelper::MinionPutLocationInfo>(
-					action_cb_info_getter.GetCallbackInfo([&]() {
+					action_cb_info_getter.ApplyChoices([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
 				std::stringstream ss;
@@ -192,7 +192,7 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseAttacker) {
 				auto info = std::get<ui::ActionApplyHelper::ChooseAttackerInfo>(
-					action_cb_info_getter.GetCallbackInfo([&]() {
+					action_cb_info_getter.ApplyChoices([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
 				std::stringstream ss;
@@ -202,7 +202,7 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseDefender) {
 				auto info = std::get<ui::ActionApplyHelper::ChooseDefenderInfo>(
-					action_cb_info_getter.GetCallbackInfo([&]() {
+					action_cb_info_getter.ApplyChoices([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
 				std::stringstream ss;
@@ -212,7 +212,7 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseTarget) {
 				auto info = std::get<ui::ActionApplyHelper::GetSpecifiedTargetInfo>(
-					action_cb_info_getter.GetCallbackInfo([&]() {
+					action_cb_info_getter.ApplyChoices([&]() {
 					return start_board_getter_(0); // any seed number is okay
 				}));
 				std::stringstream ss;
@@ -270,7 +270,7 @@ namespace ui
 			else {
 				if (!only_show_best_choice) {
 					state::State game_state = start_board_getter_(0); // any seed number is okay
-					auto dummy_cb_info = action_cb_info_getter.GetCallbackInfo(game_state);
+					auto dummy_cb_info = action_cb_info_getter.ApplyChoices(game_state);
 					double v = state_value_func_.GetStateValue(game_state);
 					s << indent_padding << "State-value: " << v << std::endl;
 				}
