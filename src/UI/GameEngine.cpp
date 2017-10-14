@@ -57,13 +57,13 @@ namespace ui
 		}
 		
 		int Run(int seconds, int threads) {
-			if (running_) {
+			if (running_.exchange(true)) {
 				Log("Still running.");
 				return -1;
 			}
 
-			running_ = true;
 			int rc = InternalRun(seconds, threads);
+			
 			running_ = false;
 			return rc;
 		}
@@ -71,7 +71,6 @@ namespace ui
 		int InteractiveShell(std::string const& cmd)
 		{
 			shell_.SetController(controller_.get());
-			// TODO: do not use the 'run' command here
 			std::ostringstream oss;
 			std::istringstream iss(cmd);
 			shell_.DoCommand(iss, oss);
