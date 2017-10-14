@@ -149,9 +149,7 @@ namespace ui
 		};
 
 	public:
-		ActionCallbackInfoGetter(StartBoardGetter start_board_getter)
-			: start_board_getter_(start_board_getter), main_op_(-1), choices_()
-		{}
+		ActionCallbackInfoGetter() : main_op_(-1), choices_() {}
 
 		void AppendChoice(int choice) {
 			if (main_op_ < 0) {
@@ -162,18 +160,16 @@ namespace ui
 			choices_.push_back(choice);
 		}
 		
-		CallbackInfo GetCallbackInfo() const
+		template <class StartBoardGetter>
+		CallbackInfo GetCallbackInfo(StartBoardGetter && start_board_getter) const
 		{
-			state::State game_state;
+			state::State game_state = start_board_getter();
 			return GetCallbackInfo(game_state);
 		}
 
 		CallbackInfo GetCallbackInfo(state::State & game_state) const
 		{
-			constexpr static int start_board_seed = 0; // an arbitrary number
 			CallbackInfo info = NullInfo();
-
-			game_state = start_board_getter_(start_board_seed);
 
 			RandomCallback rand_cb;
 			ActionParameterCallback action_cb(info, choices_);
@@ -189,7 +185,6 @@ namespace ui
 		}
 
 	private:
-		StartBoardGetter start_board_getter_;
 		int main_op_;
 		std::vector<int> choices_;
 	};

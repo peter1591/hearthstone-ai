@@ -167,7 +167,9 @@ namespace ui
 			
 			if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
 				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseHandCardInfo>(
-					action_cb_info_getter.GetCallbackInfo());
+					action_cb_info_getter.GetCallbackInfo([&]() {
+					return start_board_getter_(0); // any seed number is okay
+				}));
 				size_t idx = info.cards[choice];
 
 				state::State start_board = start_board_getter_(0);
@@ -179,7 +181,9 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseMinionPutLocation) {
 				auto info = std::get<ui::ActionCallbackInfoGetter::MinionPutLocationInfo>(
-					action_cb_info_getter.GetCallbackInfo());
+					action_cb_info_getter.GetCallbackInfo([&]() {
+					return start_board_getter_(0); // any seed number is okay
+				}));
 				std::stringstream ss;
 				ss << "Put minion before index " << choice
 					<< " (total " << info.minions << ")";
@@ -188,7 +192,9 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseAttacker) {
 				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseAttackerInfo>(
-					action_cb_info_getter.GetCallbackInfo());
+					action_cb_info_getter.GetCallbackInfo([&]() {
+					return start_board_getter_(0); // any seed number is okay
+				}));
 				std::stringstream ss;
 				ss << "Attacker: " << GetTargetStringFromEncodedIndex(info.targets[choice]);
 				return ss.str();
@@ -196,7 +202,9 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseDefender) {
 				auto info = std::get<ui::ActionCallbackInfoGetter::ChooseDefenderInfo>(
-					action_cb_info_getter.GetCallbackInfo());
+					action_cb_info_getter.GetCallbackInfo([&]() {
+					return start_board_getter_(0); // any seed number is okay
+				}));
 				std::stringstream ss;
 				ss << "Defender: " << GetTargetString(info.targets[choice]);
 				return ss.str();
@@ -204,7 +212,9 @@ namespace ui
 
 			if (node->GetActionType() == mcts::ActionType::kChooseTarget) {
 				auto info = std::get<ui::ActionCallbackInfoGetter::GetSpecifiedTargetInfo>(
-					action_cb_info_getter.GetCallbackInfo());
+					action_cb_info_getter.GetCallbackInfo([&]() {
+					return start_board_getter_(0); // any seed number is okay
+				}));
 				std::stringstream ss;
 				ss << "Target at [" << GetTargetString(info.targets[choice]) << "]";
 				return ss.str();
@@ -259,7 +269,7 @@ namespace ui
 			}
 			else {
 				if (!only_show_best_choice) {
-					state::State game_state;
+					state::State game_state = start_board_getter_(0); // any seed number is okay
 					auto dummy_cb_info = action_cb_info_getter.GetCallbackInfo(game_state);
 					double v = state_value_func_.GetStateValue(game_state);
 					s << indent_padding << "State-value: " << v << std::endl;
@@ -305,7 +315,7 @@ namespace ui
 				return;
 			}
 
-			ui::ActionCallbackInfoGetter action_cb_info_getter(start_board_getter_);
+			ui::ActionCallbackInfoGetter action_cb_info_getter;
 			ShowBestNodeInfo(s, node, node, action_cb_info_getter, 0, !verbose);
 		}
 
