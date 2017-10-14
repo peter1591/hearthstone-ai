@@ -58,8 +58,8 @@ namespace ui
 
 		class ActionParameterCallback : public mcts::board::IRawActionParameterGetter {
 		public:
-			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices) : 
-				result_(result), choices_(choices), choices_idx_(0)
+			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) : 
+				result_(result), choices_(choices), choices_idx_(choices_idx)
 			{}
 
 			int ChooseHandCard(std::vector<size_t> const& playable_cards) {
@@ -145,18 +145,13 @@ namespace ui
 		private:
 			CallbackInfo & result_;
 			std::vector<int> const& choices_;
-			size_t choices_idx_;
+			size_t & choices_idx_;
 		};
 
 	public:
-		ActionCallbackInfoGetter() : main_op_(-1), choices_() {}
+		ActionCallbackInfoGetter() : choices_() {}
 
 		void AppendChoice(int choice) {
-			if (main_op_ < 0) {
-				main_op_ = choice;
-				assert(main_op_ >= 0);
-				return;
-			}
 			choices_.push_back(choice);
 		}
 		
@@ -171,21 +166,27 @@ namespace ui
 		{
 			CallbackInfo info = NullInfo();
 
+			size_t choices_idx = 0;
+
 			RandomCallback rand_cb;
-			ActionParameterCallback action_cb(info, choices_);
+			ActionParameterCallback action_cb(info, choices_, choices_idx);
 			FlowControl::FlowContext flow_context;
 			flow_context.SetCallback(rand_cb, action_cb);
 
-			mcts::board::BoardActionAnalyzer analyzer;
-			FlowControl::CurrentPlayerStateView state_view(game_state);
-			analyzer.GetActionsCount(state_view);
-			analyzer.ApplyAction(flow_context, state_view, main_op_, rand_cb, action_cb);
+			while (choices_.size() > choices_idx) {
+				int main_op = choices_[choices_idx];
+				++choices_idx;
+
+				mcts::board::BoardActionAnalyzer analyzer;
+				FlowControl::CurrentPlayerStateView state_view(game_state);
+				analyzer.GetActionsCount(state_view);
+				analyzer.ApplyAction(flow_context, state_view, main_op, rand_cb, action_cb);
+			}
 
 			return info;
 		}
 
 	private:
-		int main_op_;
 		std::vector<int> choices_;
 	};
 }
