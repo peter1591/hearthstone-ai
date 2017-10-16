@@ -121,7 +121,7 @@ namespace ui
 			});
 
 			while (true) {
-				if (continue_checker()) break;
+				if (!continue_checker()) break;
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
 			controller_->WaitUntilStopped();
