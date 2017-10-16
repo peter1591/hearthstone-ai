@@ -46,8 +46,11 @@ int main(int argc, char *argv[])
 	}
 
 	static_assert(std::is_same_v<
-                mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
-                mcts::policy::simulation::RandomPlayouts>);
+								mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
+								mcts::policy::simulation::RandomPlayouts> ||
+								std::is_same_v<
+								mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
+								mcts::policy::simulation::RandomPlayoutWithHardCodedRules>);
 
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\tThreads: " << threads << std::endl;

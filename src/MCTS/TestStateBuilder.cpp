@@ -155,14 +155,14 @@ state::State TestStateBuilder::GetStateWithRandomStartCard(int seed)
 	MyRandomGenerator my_random(rand());
 
 	MakeHero(state, state::PlayerIdentifier::First());
-	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	auto deck1 = ui::Decks::GetDeck("InnKeeperExpertWarlock");
 	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
 	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
 	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
-	auto deck2 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	auto deck2 = ui::Decks::GetDeck("InnKeeperExpertWarlock");
 	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
 	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
 	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
