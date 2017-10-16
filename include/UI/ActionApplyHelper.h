@@ -39,6 +39,10 @@ namespace ui
 			ChooseOneInfo(std::vector<Cards::CardId> const& cards) : cards(cards) {}
 			std::vector<Cards::CardId> cards;
 		};
+		struct ChooseRandomInfo {
+			ChooseRandomInfo(int exclusive_max) : exclusive_max(exclusive_max) {}
+			int exclusive_max;
+		};
 		using CallbackInfo = std::variant<
 			NullInfo, // no callback called
 			ChooseHandCardInfo,

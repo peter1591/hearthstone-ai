@@ -16,7 +16,14 @@ namespace ui
 
 		InteractiveShell() :
 			controller_(), start_board_getter_(), node_(nullptr)
-		{}
+		{
+			try {
+				state_value_func_.reset(new mcts::policy::simulation::NeuralNetworkStateValueFunction());
+			}
+			catch (std::exception ex) {
+				state_value_func_.reset(nullptr);
+			}
+		}
 
 		InteractiveShell(AIController * controller, StartBoardGetter start_board_getter) :
 			controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
@@ -66,6 +73,11 @@ namespace ui
 		}
 
 	private:
+		double GetStateValue(state::State const& s) {
+			if (!state_value_func_) return std::numeric_limits<double>::quiet_NaN();
+			return state_value_func_->GetStateValue(s);
+		}
+
 		void ShowBestNodeInfo(
 			std::ostream & s,
 			const mcts::selection::TreeNode* main_node,
@@ -271,7 +283,7 @@ namespace ui
 				if (!only_show_best_choice) {
 					state::State game_state = start_board_getter_(0); // any seed number is okay
 					auto dummy_cb_info = action_cb_info_getter.ApplyChoices(game_state);
-					double v = state_value_func_.GetStateValue(game_state);
+					double v = GetStateValue(game_state);
 					s << indent_padding << "State-value: " << v << std::endl;
 				}
 			}
@@ -300,7 +312,7 @@ namespace ui
 			if (verbose) {
 				int seed = 0; // an arbitrarily random seed number
 				state::State game_state = start_board_getter_(0);
-				double v = state_value_func_.GetStateValue(game_state);
+				double v = GetStateValue(game_state);
 				s << "State-value: " << v << std::endl;
 			}
 
@@ -478,7 +490,6 @@ namespace ui
 		ui::AIController * controller_;
 		StartBoardGetter start_board_getter_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
-		mcts::policy::simulation::NeuralNetworkStateValueFunction state_value_func_;
-		//mcts::policy::simulation::WeakHeuristicStateValueFunction state_value_func_;
+		std::unique_ptr<mcts::policy::simulation::NeuralNetworkStateValueFunction> state_value_func_;
 	};
 }

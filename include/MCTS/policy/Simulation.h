@@ -494,8 +494,7 @@ namespace mcts
 
 			public:
 				RandomPlayoutWithHardCodedRules(state::PlayerSide side, std::mt19937 & rand) :
-					rand_(rand),
-					state_value_func_()
+					rand_(rand)
 				{
 				}
 
@@ -534,7 +533,6 @@ namespace mcts
 
 			private:
 				std::mt19937 & rand_;
-				NeuralNetworkStateValueFunction state_value_func_;
 			};
 
 			class HeuristicPlayoutWithHeuristicEarlyCutoffPolicy
