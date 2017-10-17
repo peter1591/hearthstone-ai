@@ -1,7 +1,10 @@
 #include "FlowControl/FlowController-impl.h"
 
+#include <stdlib.h>
+
 #include <chrono>
 #include <iostream>
+#include <random>
 #include <sstream>
 
 #include "Cards/PreIndexedCards.h"
@@ -15,6 +18,10 @@ static void Initialize()
 	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
 	Cards::PreIndexedCards::GetInstance().Initialize();
 	std::cout << " Done." << std::endl;
+
+  unsigned int rand_seed = std::random_device()();
+  srand(rand_seed);
+  std::cout << "Initialize with random seed: " << rand_seed << std::endl;
 }
 
 int main(int argc, char *argv[])
