@@ -547,6 +547,7 @@ namespace mcts
 				static constexpr bool kEnableCutoff = true;
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
+				static constexpr bool kRandomlyPutMinions = true;
 
 				Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
@@ -562,7 +563,7 @@ namespace mcts
 			public:
 				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
 					rand_(rand),
-					decision_(),
+					decision_(), decision_idx_(0),
 					state_value_func_(),
 					copy_board_(side)
 				{
@@ -577,30 +578,13 @@ namespace mcts
 				{
 					if (action_type == ActionType::kMainAction) {
 						StartNewAction(board, flow_context, action_analyzer);
-
-						return GetChoiceForMainAction(
-							board, action_analyzer, choice_getter);
 					}
 
-					// TODO: use value network to enhance simulation
-					size_t count = choice_getter.Size();
-					assert(count > 0);
-					size_t idx = 0;
-					size_t rand_idx = (size_t)(rand_() % count);
-					int result = -1;
-					choice_getter.ForEachChoice([&](int choice) {
-						if (idx == rand_idx) {
-							result = choice;
-							return false;
-						}
-						++idx;
-						return true;
-					});
-					assert([&]() {
-						int result2 = choice_getter.Get(rand_idx);
-						return result == result2;
-					}());
-					return result;
+					if constexpr (kRandomlyPutMinions) {
+						return GetChoiceRandomly(board, action_analyzer, choice_getter);
+					}
+
+					return GetChoiceForMainAction(board, action_analyzer, choice_getter);
 				}
 
 			private:
@@ -609,8 +593,8 @@ namespace mcts
 					FlowControl::FlowContext & flow_context,
 					board::BoardActionAnalyzer & action_analyzer)
 				{
+					decision_idx_ = 0;
 					DFSBestStateValue(board, flow_context, action_analyzer);
-					assert(!decision_.empty());
 				}
 
 				void DFSBestStateValue(
@@ -648,10 +632,12 @@ namespace mcts
 
 							assert(action_type != ActionType::kRandom);
 
-							if (action_type == ActionType::kChooseMinionPutLocation) {
-								assert(total >= 1);
-								int idx = rand_.GetRandom(total);
-								return action_choices.Get(idx);
+							if constexpr (kRandomlyPutMinions) {
+								if (action_type == ActionType::kChooseMinionPutLocation) {
+									assert(total >= 1);
+									int idx = rand_.GetRandom(total);
+									return action_choices.Get(idx);
+								}
 							}
 
 							if (dfs_it_ == dfs_.end()) {
@@ -746,34 +732,48 @@ namespace mcts
 					board::BoardActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
-					// TODO: should follow decision_
-
-					// TODO: maybe we don't need to rule out end-turn manually
-					// it will be naturally ruled out, since its state-value should be lower
-
-					// choose end-turn only when it is the only option
-					size_t count = choice_getter.Size();
-					assert(count > 0);
-					if (count == 1) {
-						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == board::BoardActionAnalyzer::kEndTurn);
-						return 0;
+					if (decision_idx_ < decision_.size()) {
+						return decision_[decision_idx_++];
 					}
 
-					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == board::BoardActionAnalyzer::kEndTurn);
-					--count;
-					assert(count > 0);
+					// TODO: We fix the random when running dfs search,
+					// and in concept, a random might change the best decision.
+					// For example, a choose-one with randomly-chosen three cards,
+					// we definitely need to re-run the DFS after the random cards are shown.
+					// Here, use a pure random choice in these cases
+					return GetChoiceRandomly(board, action_analyzer, choice_getter);
+				}
 
-					// otherwise, choose randomly
+				int GetChoiceRandomly(
+					board::Board const& board,
+					board::BoardActionAnalyzer const& action_analyzer,
+					ChoiceGetter const& choice_getter)
+				{
+					size_t count = choice_getter.Size();
+					assert(count > 0);
+					size_t idx = 0;
 					size_t rand_idx = (size_t)(rand_() % count);
-					return choice_getter.Get(rand_idx);
+					int result = -1;
+					choice_getter.ForEachChoice([&](int choice) {
+						if (idx == rand_idx) {
+							result = choice;
+							return false;
+						}
+						++idx;
+						return true;
+					});
+					assert([&]() {
+						int result2 = choice_getter.Get(rand_idx);
+						return result == result2;
+					}());
+					return result;
 				}
 
 			private:
 				std::mt19937 & rand_;
 
 				std::vector<int> decision_;
+				size_t decision_idx_;
 				NeuralNetworkStateValueFunction state_value_func_;
 				board::CopiedBoard copy_board_;
 			};
