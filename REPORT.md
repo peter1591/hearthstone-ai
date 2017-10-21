@@ -45,8 +45,22 @@ No simulation engine is available elsewhere, so I wrote one by myselves. Here ar
 3. Great performance. E.g., Zero-overhead abstraction, lambda optimization, profile-guided optimization, etc.
 4. Framework for client cards. So cards in future expansion can be implemented easily.
 
+## Monte Carlo Tree Search
+
+* Wiki page: https://en.wikipedia.org/wiki/Monte_Carlo_tree_search
+* Survey paper
+* Parallel MCTS
+* MO-MCTS
+
+## Reinforcement Learning
+
 ## Neural Network
 
+* Deal with structured data
+** Continuous data: health, attack, armor, etc.
+** Categorized data: card id, enchantment id, aura id
+
+Libraries:
 * Tensorflow
 * tiny-dnn: C++, header only, but slow.
 
