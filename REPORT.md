@@ -194,8 +194,13 @@ My favorite programming language is C++, especially modern C++! It's so good to 
 ## References
 
 [1] mentioned strategy fusion in MCTS. also mentioned MOMCTS
+
 [2] the ai competition
+
 [3] AlphaGo paper
+
 [4] simluation early cutoff
+
 [5] MCTS survey. Mentioned 'history'
+
 [6] MCTS virtual loss
