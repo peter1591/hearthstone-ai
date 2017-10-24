@@ -193,7 +193,7 @@ My favorite programming language is C++, especially modern C++! It's so good to 
 
 ## References
 
-[1] mentioned strategy fusion in MCTS. also mentioned MOMCTS
+[1] Cowling, Peter I., Edward J. Powley, and Daniel Whitehouse. "Information set monte carlo tree search." IEEE Transactions on Computational Intelligence and AI in Games 4.2 (2012): 120-143.
 
 [2] the ai competition
 
