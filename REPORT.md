@@ -195,12 +195,12 @@ My favorite programming language is C++, especially modern C++! It's so good to 
 
 [1] Cowling, Peter I., Edward J. Powley, and Daniel Whitehouse. "Information set monte carlo tree search." IEEE Transactions on Computational Intelligence and AI in Games 4.2 (2012): 120-143.
 
-[2] the ai competition
+[2] AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone, https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022
 
-[3] AlphaGo paper
+[3] Silver, David, et al. "Mastering the game of Go with deep neural networks and tree search." Nature 529.7587 (2016): 484-489.
 
-[4] simluation early cutoff
+[4] (missing, mentioned early-cutoff in simulation phase)
 
-[5] MCTS survey. Mentioned 'history'
+[5] Browne, Cameron B., et al. "A survey of monte carlo tree search methods." IEEE Transactions on Computational Intelligence and AI in games 4.1 (2012): 1-43.
 
-[6] MCTS virtual loss
+[6] Chaslot, Guillaume, Mark HM Winands, and H. Jaap van Den Herik. "Parallel monte-carlo tree search." Computers and Games 5131 (2008): 60-71.
