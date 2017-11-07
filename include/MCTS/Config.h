@@ -17,13 +17,13 @@ namespace mcts
 
 		// Switch to simulation mode if node is chosen too few times
 		// This can lower down the rate we allocate new nodes
-		static constexpr int kSwitchToSimulationUnderChosenTimes = 1;
+		static constexpr int kSwitchToSimulationUnderChosenTimes = 10;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
-		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHardCodedRules;
+		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHardCodedRules;
+		using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
-		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHeuristicEarlyCutoffPolicy;
 
 		using CreditPolicy = policy::CreditPolicy;
 	};
