@@ -35,6 +35,20 @@ The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
   * An example: AI should *NOT* play *arcane missiles* in first turn.
   * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
   * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
+  
+### Neural Network
+
+The goal of the neural network is to guess who is going to win this game. Currently, the accuracy is about 79% for expert-practice decks.
+
+Input data:
+* Minions on board
+  * HP, Max-HP, Attack
+  * [TODO] Taunt / Charge / Attackable
+  * [TODO] Card id, enchantment ids, deathrattle ids
+* [TODO] Hand cards
+  * Card ids, enchantment ids
+* [TODO] Deck cards
+  * Card ids
 
 ### Game Board Recognition
 * Use the logging feature in HearthStone
@@ -51,6 +65,19 @@ The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
 2. Enable logging to HearthStone, so we can know what's the board looks like.
 3. Open the C# project under 'ui' folder.
 4. Run it.
+
+## Next Step
+
+### Neural Network
+
+The goal of the neural network is to guess who is going to win this game, by looking at only the current board. Several improvements could be done:
+
+1. Take history data into account: secret cards, played cards, etc.
+2. Take hand cards into account.
+3. Take card id into account. Currently, only HP/Max-HP/Attack are considered.
+4. Take cards in deck into account.
+
+Hope we can have a better accuracy than current result (~79%, which also aligned to the result of AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)).
 
 ## Contributors
 
