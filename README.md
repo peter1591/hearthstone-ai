@@ -1,3 +1,7 @@
+## Introduction
+
+The is an AI for the card game HearthStone.
+
 ## Demo Videos
 * First demo video is on!!! https://youtu.be/z0I1nM6_k0w
 * Another demo video with higher quality: https://youtu.be/L6kr_zJKCQI
@@ -6,15 +10,9 @@
 
 The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
 
-## Synopsis
-
-UNDER DEVELOPMENT!!!!
-
-The is a game bot for HearthStone.
-
 ## Motivation
 * AlphaGo successfully combines MCTS and deep neural networks to beat human on Go.
-* Games with hidden information still a big challenge in many ways.
+* Games with hidden information are still a big challenge in many ways.
 * Give it a try on Hearhstone.
 
 ## Components
