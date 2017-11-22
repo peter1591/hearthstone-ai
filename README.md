@@ -79,7 +79,7 @@ The goal of the neural network is to guess who is going to win this game, by loo
 
 Hope we can have a better accuracy than current result (~79%, which also aligned to the result of AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)).
 
-TensorFlow has many great articles. Like https://www.tensorflow.org/tutorials/wide.
+We can use embedding to encode battlecry and deathrattle features for each different card IDs. TensorFlow has many great articles. Like https://www.tensorflow.org/tutorials/wide.
 
 ### Balance Between Wide and Deep
 
@@ -98,7 +98,7 @@ Even if there are only one card is different, we still need two tree nodes. Othe
 
 ### Tensor Flow
 
-Try out Tensor Flow. The neural network can be trained easily on a distributed system thanks to the great support in Tensor Flow.
+Try out Tensor Flow. It's a great machine learning library, with some great visualization support.
 
 ## Contributors
 
