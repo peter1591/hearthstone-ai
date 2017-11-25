@@ -110,7 +110,7 @@ class DataReader:
     for (dirpath, _, filenames) in os.walk(self._dirname):
       for idx, filename in enumerate(filenames):
         fullpath = os.path.join(dirpath, filename)
-        print("Reading file (%d / %d): %s " % (idx, len(filenames), fullpath))
+        print("Reading file (%d / %d): %s " % (idx+1, len(filenames), fullpath))
         with open(fullpath) as data_file:
           json_data = json.load(data_file)
           self._read_one_json(data, label, json_data)
