@@ -6,11 +6,10 @@ import tensorflow as tf
 
 import data_reader
 
-kTrainingPercent = 0.7
-kThreads = 20
+kTrainingPercent = 0.5
 
 def model_fn(features, labels, mode):
-  input_layer = tf.reshape(features["x"], [-1, 100])
+  input_layer = features["x"]
   labels = tf.reshape(labels, [-1, 1])
 
   dense1 = tf.layers.dense(
@@ -86,23 +85,24 @@ def main(_):
       model_fn=model_fn,
       model_dir="model_output")
 
-  train_input_fn = tf.estimator.inputs.numpy_input_fn(
-      x={"x": data_training},
-      y=label_training,
-      num_epochs=100,
-      batch_size=32,
-      shuffle=False)
+  for _ in range(10):
+    train_input_fn = tf.estimator.inputs.numpy_input_fn(
+        x={"x": data_training},
+        y=label_training,
+        num_epochs=1,
+        batch_size=32,
+        shuffle=False)
 
-  classifier.train(
-      input_fn=train_input_fn)
+    classifier.train(
+        input_fn=train_input_fn)
 
-  evaluate_input_gn = tf.estimator.inputs.numpy_input_fn(
-      x={"x": data_validation},
-      y=label_validation,
-      num_epochs=1,
-      shuffle=False)
-  eval_result = classifier.evaluate(input_fn=evaluate_input_gn)
-  print(eval_result)
+    evaluate_input_gn = tf.estimator.inputs.numpy_input_fn(
+        x={"x": data_validation},
+        y=label_validation,
+        num_epochs=1,
+        shuffle=False)
+    eval_result = classifier.evaluate(input_fn=evaluate_input_gn)
+    print(eval_result)
 
 if __name__ == "__main__":
   tf.logging.set_verbosity(tf.logging.INFO)

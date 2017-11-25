@@ -67,6 +67,42 @@ class DataReader:
 
     return data
 
+  def _add_resource(self, resource):
+    return [
+        resource['current'],
+        resource['total'],
+        resource['overload_next']]
+
+  def _add_current_hand(self, hand):
+    data = []
+
+    if hand is None:
+      hand = {}
+
+    playable = 0
+    for card in hand:
+      if card['playable']:
+        playable = playable + 1
+    data.append(playable)
+
+    for card in hand:
+      data.append(card['cost'])
+    for i in range(10 - len(hand)):
+      data.append(-1)  # placeholder if hand is not full
+
+    return data
+
+  def _add_opponent_hand(self, hand):
+    if hand is None:
+      hand = {}
+
+    return [
+        len(hand)]
+
+  def _add_heropower(self, hero_power):
+    return [
+        self.from_bool(hero_power['playable'])]
+
   def _read_board(self, board):
     data = []
 
@@ -74,6 +110,11 @@ class DataReader:
     data.extend(self._read_hero_data(board['opponent_player']))
     data.extend(self._read_minions_data(board['current_player']['minions']))
     data.extend(self._read_minions_data(board['opponent_player']['minions']))
+
+    data.extend(self._add_resource(board['current_player']['resource']))
+    data.extend(self._add_current_hand(board['current_player']['hand']))
+    data.extend(self._add_opponent_hand(board['opponent_player']['hand']))
+    data.extend(self._add_heropower(board['current_player']['hero_power']))
 
     return data
 
