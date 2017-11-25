@@ -11,6 +11,7 @@ kThreads = 20
 
 def model_fn(features, labels, mode):
   input_layer = tf.reshape(features["x"], [-1, 100])
+  labels = tf.reshape(labels, [-1, 1])
 
   dense1 = tf.layers.dense(
       inputs=input_layer,
@@ -29,19 +30,16 @@ def model_fn(features, labels, mode):
 
   final = tf.layers.dense(
       inputs=dense3,
-      units=2,
+      units=1,
       activation=None)
 
   predictions = {
       "classes": tf.argmax(input=final, axis=1),
       "probabilities": tf.nn.softmax(final, name="softmax_tensor")}
 
-  onehot_labels = tf.one_hot(
-      indices=tf.cast(labels, tf.int32),
-      depth=2)
-  loss = tf.losses.softmax_cross_entropy(
-      onehot_labels=onehot_labels,
-      logits=final)
+  loss = tf.losses.mean_squared_error(
+      labels=labels,
+      predictions=final)
 
   if mode == tf.estimator.ModeKeys.TRAIN:
     train_step = tf.train.AdamOptimizer(1e-4).minimize(
@@ -54,9 +52,13 @@ def model_fn(features, labels, mode):
         train_op=train_step)
 
   else:  # EVAL mode
+    binary_labels = tf.equal(labels, data_reader.kLabelIfFirstPlayerWin)
+    predictions = tf.greater(final,
+        data_reader.kLabelFirstPlayerWinIfGreaterThan)
     eval_metric_ops = {
         "accuracy": tf.metrics.accuracy(
-          labels=labels, predictions=predictions["classes"])}
+          labels=binary_labels,
+          predictions=predictions)}
 
     return tf.estimator.EstimatorSpec(
         mode=mode, loss=loss,
@@ -87,13 +89,12 @@ def main(_):
   train_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={"x": data_training},
       y=label_training,
-      num_epochs=None,
+      num_epochs=100,
       batch_size=32,
       shuffle=False)
 
   classifier.train(
-      input_fn=train_input_fn,
-      steps=20000)
+      input_fn=train_input_fn)
 
   evaluate_input_gn = tf.estimator.inputs.numpy_input_fn(
       x={"x": data_validation},

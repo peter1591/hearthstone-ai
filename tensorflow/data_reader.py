@@ -4,8 +4,9 @@ import os
 import json
 
 
-kLabelIfFirstPlayerWin = 0
-kLabelIfFirstPlayerLoss = 1
+kLabelIfFirstPlayerLoss = -1
+kLabelIfFirstPlayerWin = 1
+kLabelFirstPlayerWinIfGreaterThan = 0
 
 
 class DataReader:
