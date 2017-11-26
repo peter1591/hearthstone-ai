@@ -8,16 +8,14 @@ kLabelIfFirstPlayerLoss = -1
 kLabelIfFirstPlayerWin = 1
 kLabelFirstPlayerWinIfGreaterThan = 0
 
+kHeroFeatures = 1
+kMinionFeatures = 7
+kMinions = 7
+
 
 class DataReader:
   def __init__(self, dirname='data'):
     self._dirname = dirname
-
-  def _read_hero_data(self, data):
-    hp = data['hero']['hp']
-    armor = data['hero']['armor']
-
-    return [hp+armor]
 
   @classmethod
   def from_bool(cls, v):
@@ -25,6 +23,12 @@ class DataReader:
       return 1.0
     else:
       return -1.0
+
+  def _read_hero_data(self, data):
+    hp = data['hero']['hp']
+    armor = data['hero']['armor']
+
+    return [hp+armor]
 
   def _add_minion_data_placeholder(self):
     return [
