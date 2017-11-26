@@ -9,9 +9,14 @@ kLabelIfFirstPlayerWin = 1
 kLabelFirstPlayerWinIfGreaterThan = 0
 
 kHeroFeatures = 1
-kMinionFeatures = 7
+kMinionFeatures = 7  # exclude card id
 kMinions = 7
 
+kCurrentHandCards = 10
+kCurrentHandCardFeatures = 1  # exclude card id
+kCurrentHandFeatures = 1
+
+kMaxCardId = 1860
 
 class DataReader:
   def __init__(self, dirname='data'):
@@ -35,6 +40,7 @@ class DataReader:
       0,
       0,
       0,
+      0,
       -1.0,
       -1.0,
       -1.0,
@@ -48,6 +54,7 @@ class DataReader:
       attackable = False
 
     return [
+      minion['card_id'],
       minion['hp'],
       minion['max_hp'],
       minion['attack'],
@@ -90,9 +97,10 @@ class DataReader:
     data.append(playable)
 
     for card in hand:
+      data.append(card['card_id'])
       data.append(card['cost'])
-    for i in range(10 - len(hand)):
-      data.append(-1)  # placeholder if hand is not full
+    for _ in range(10 - len(hand)):
+      data.extend([0, -1])
 
     return data
 
@@ -114,10 +122,10 @@ class DataReader:
     data.extend(self._read_hero_data(board['opponent_player']))
     data.extend(self._read_minions_data(board['current_player']['minions']))
     data.extend(self._read_minions_data(board['opponent_player']['minions']))
-
-    data.extend(self._add_resource(board['current_player']['resource']))
     data.extend(self._add_current_hand(board['current_player']['hand']))
     data.extend(self._add_opponent_hand(board['opponent_player']['hand']))
+
+    data.extend(self._add_resource(board['current_player']['resource']))
     data.extend(self._add_heropower(board['current_player']['hero_power']))
 
     return data
@@ -158,7 +166,11 @@ class DataReader:
         fullpath = os.path.join(dirpath, filename)
         print("Reading file (%d / %d): %s " % (idx+1, len(filenames), fullpath))
         with open(fullpath) as data_file:
-          json_data = json.load(data_file)
+          try:
+            json_data = json.load(data_file)
+          except Exception:
+            print("Skipped file %s: Failed to read json" % fullpath)
+            continue
           self._read_one_json(data, label, json_data)
       break
 

@@ -7,6 +7,9 @@ import tensorflow as tf
 import data_reader
 
 kTrainingPercent = 0.5
+kThreads = 20
+kEnableCardIdEmbed = False
+kEnableHandCardIdEmbed = False
 
 class NextInputGetter:
   def __init__(self, data):
@@ -25,23 +28,58 @@ def model_hero(inputs):
   hero1 = tf.layers.dense(
       name='hero1',
       inputs=inputs,
-      units=3,
+      units=2,
       reuse=tf.AUTO_REUSE,
       activation=tf.nn.relu)
 
-  hero2 = tf.layers.dense(
-      name='hero2',
-      inputs=hero1,
-      units=3,
-      reuse=tf.AUTO_REUSE,
-      activation=tf.nn.relu)
+  return hero1
 
-  return hero2
+def get_embedded_onboard_card_id(card_id):
+  if not kEnableCardIdEmbed:
+    return None
 
-def model_minion(inputs):
+  kCardIdDimension = 3
+  card_id = tf.to_int32(card_id, name='card_id_to_int32')
+  with tf.variable_scope("onboard", reuse=tf.AUTO_REUSE):
+    card_id_matrix = tf.get_variable(
+        'card_embed_matrix',
+        [data_reader.kMaxCardId, kCardIdDimension],
+        initializer=tf.zeros_initializer())
+  card_id_embed = tf.nn.embedding_lookup(
+    card_id_matrix, card_id, name='card_id_embed')
+  card_id_embed = tf.reshape(card_id_embed, [-1, kCardIdDimension])
+  return tf.to_double(card_id_embed)
+
+def get_embedded_hand_card_id(card_id):
+  if not kEnableHandCardIdEmbed:
+    return None
+
+  kCardIdDimension = 3
+  card_id = tf.to_int32(card_id, name='card_id_to_int32')
+  with tf.variable_scope("current_hand", reuse=tf.AUTO_REUSE):
+    card_id_matrix = tf.get_variable(
+        'card_embed_matrix',
+        [data_reader.kMaxCardId, kCardIdDimension],
+        initializer=tf.zeros_initializer())
+  card_id_embed = tf.nn.embedding_lookup(
+    card_id_matrix, card_id, name='card_id_embed')
+  card_id_embed = tf.reshape(card_id_embed, [-1, kCardIdDimension])
+  return tf.to_double(card_id_embed)
+
+def model_minion(input_getter):
+  inputs = []
+
+  card_id = input_getter.get_next_slice(1)
+  card_id_embed = get_embedded_onboard_card_id(card_id)
+  if card_id_embed is not None:
+    inputs.append(card_id_embed)
+
+  features = input_getter.get_next_slice(data_reader.kMinionFeatures)
+  inputs.append(features)
+
   minion1 = tf.layers.dense(
       name='minion1',
-      inputs=inputs,
+      inputs=tf.concat(inputs, 1),
       units=10,
       reuse=tf.AUTO_REUSE,
       activation=tf.nn.relu)
@@ -58,42 +96,100 @@ def model_minion(inputs):
 def model_minions(input_getter):
   features = []
   for _ in range(data_reader.kMinions):
-    inputs = input_getter.get_next_slice(data_reader.kMinionFeatures)
-    features.append(model_minion(inputs))
+    features.append(model_minion(input_getter))
 
   minions1 = tf.layers.dense(
       name='minions1',
       inputs=tf.concat(features, 1),
+      units=30,
+      reuse=tf.AUTO_REUSE,
+      activation=tf.nn.relu)
+
+  return minions1
+
+def model_current_hand_card(input_getter):
+  inputs = []
+
+  card_id = input_getter.get_next_slice(1)
+  card_id_embed = get_embedded_hand_card_id(card_id)
+  if card_id_embed is not None:
+    inputs.append(card_id_embed)
+
+  inputs.append(
+      input_getter.get_next_slice(data_reader.kCurrentHandCardFeatures))
+
+  card1 = tf.layers.dense(
+      name='hand_card_1',
+      inputs=tf.concat(inputs, 1),
       units=10,
       reuse=tf.AUTO_REUSE,
       activation=tf.nn.relu)
 
-  minions2 = tf.layers.dense(
-      name='minions2',
-      inputs=minions1,
+  card2 = tf.layers.dense(
+      name='hand_card_2',
+      inputs=card1,
       units=10,
       reuse=tf.AUTO_REUSE,
       activation=tf.nn.relu)
 
-  return minions2
+  return card2
+
+def model_current_hand(input_getter):
+  inputs = []
+  inputs.append(input_getter.get_next_slice(data_reader.kCurrentHandFeatures))
+
+  for _ in range(data_reader.kCurrentHandCards):
+    inputs.append(model_current_hand_card(input_getter))
+
+  hand1 = tf.layers.dense(
+    name='hand_1',
+    inputs=tf.concat(inputs, 1),
+    units=10,
+    reuse=tf.AUTO_REUSE,
+    activation=tf.nn.relu)
+
+  hand2 = tf.layers.dense(
+    name='hand_2',
+    inputs=hand1,
+    units=10,
+    reuse=tf.AUTO_REUSE,
+    activation=tf.nn.relu)
+
+  return hand2
+
+def model_rest_features(inputs):
+  rest1 = tf.layers.dense(
+      name='rest1',
+      inputs=inputs,
+      units=20,
+      activation=tf.nn.relu)
+
+  rest2 = tf.layers.dense(
+      name='rest2',
+      inputs=rest1,
+      units=20,
+      activation=tf.nn.relu)
+
+  return rest2
 
 def model_fn(features, labels, mode):
   input_getter = NextInputGetter(features["x"])
 
-  current_hero = input_getter.get_next_slice(data_reader.kHeroFeatures)
-  opponent_hero = input_getter.get_next_slice(data_reader.kHeroFeatures)
+  current_hero = model_hero(
+      input_getter.get_next_slice(data_reader.kHeroFeatures))
+  opponent_hero = model_hero(
+      input_getter.get_next_slice(data_reader.kHeroFeatures))
   current_minions = model_minions(input_getter)
   opponent_minions = model_minions(input_getter)
-  rest = input_getter.get_rest()
-
-  current_hero_features = model_hero(current_hero)
-  opponent_hero_features = model_hero(opponent_hero)
+  current_hand = model_current_hand(input_getter)
+  rest = model_rest_features(input_getter.get_rest())
 
   dense1_input_features = [
-      current_hero_features,
-      opponent_hero_features,
+      current_hero,
+      opponent_hero,
       current_minions,
       opponent_minions,
+      current_hand,
       rest]
 
   dense1_input = tf.concat(dense1_input_features, 1)
@@ -101,24 +197,18 @@ def model_fn(features, labels, mode):
   dense1 = tf.layers.dense(
       name='dense1',
       inputs=dense1_input,
-      units=20,
+      units=30,
       activation=tf.nn.relu)
 
   dense2 = tf.layers.dense(
       name='dense2',
       inputs=dense1,
-      units=20,
-      activation=tf.nn.relu)
-
-  dense3 = tf.layers.dense(
-      name='dense3',
-      inputs=dense2,
-      units=20,
+      units=30,
       activation=tf.nn.relu)
 
   final = tf.layers.dense(
       name='final',
-      inputs=dense3,
+      inputs=dense2,
       units=1,
       activation=None)
 
@@ -172,9 +262,15 @@ def main(_):
   data_validation = data[rows_training:]
   label_validation = label[rows_training:]
 
+  sess_config = tf.ConfigProto(
+      intra_op_parallelism_threads=kThreads,
+      inter_op_parallelism_threads=kThreads)
+  estimator_config = tf.estimator.RunConfig(session_config=sess_config)
+
   estimator = tf.estimator.Estimator(
       model_fn=model_fn,
-      model_dir="model_output")
+      model_dir="model_output",
+      config=estimator_config)
 
   train_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={"x": data_training},
@@ -182,7 +278,7 @@ def main(_):
       shuffle=True)
   train_spec = tf.estimator.TrainSpec(
       input_fn=train_input_fn,
-      max_steps=50000)
+      max_steps=5000000)
 
   evaluate_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={"x": data_validation},
