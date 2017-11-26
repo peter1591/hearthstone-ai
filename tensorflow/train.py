@@ -13,21 +13,25 @@ def model_fn(features, labels, mode):
   labels = tf.reshape(labels, [-1, 1])
 
   dense1 = tf.layers.dense(
+      name='dense1',
       inputs=input_layer,
       units=20,
       activation=tf.nn.relu)
 
   dense2 = tf.layers.dense(
+      name='dense2',
       inputs=dense1,
       units=20,
       activation=tf.nn.relu)
 
   dense3 = tf.layers.dense(
+      name='dense3',
       inputs=dense2,
       units=20,
       activation=tf.nn.relu)
 
   final = tf.layers.dense(
+      name='final',
       inputs=dense3,
       units=1,
       activation=None)
@@ -81,28 +85,26 @@ def main(_):
   data_validation = data[rows_training:]
   label_validation = label[rows_training:]
 
-  classifier = tf.estimator.Estimator(
+  estimator = tf.estimator.Estimator(
       model_fn=model_fn,
       model_dir="model_output")
 
-  for _ in range(10):
-    train_input_fn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": data_training},
-        y=label_training,
-        num_epochs=1,
-        batch_size=32,
-        shuffle=False)
+  train_input_fn = tf.estimator.inputs.numpy_input_fn(
+      x={"x": data_training},
+      y=label_training,
+      shuffle=True)
+  train_spec = tf.estimator.TrainSpec(
+      input_fn=train_input_fn,
+      max_steps=50000)
 
-    classifier.train(
-        input_fn=train_input_fn)
+  evaluate_input_fn = tf.estimator.inputs.numpy_input_fn(
+      x={"x": data_validation},
+      y=label_validation,
+      shuffle=False)
+  eval_spec = tf.estimator.EvalSpec(
+      input_fn=evaluate_input_fn)
 
-    evaluate_input_gn = tf.estimator.inputs.numpy_input_fn(
-        x={"x": data_validation},
-        y=label_validation,
-        num_epochs=1,
-        shuffle=False)
-    eval_result = classifier.evaluate(input_fn=evaluate_input_gn)
-    print(eval_result)
+  tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
 
 if __name__ == "__main__":
   tf.logging.set_verbosity(tf.logging.INFO)
