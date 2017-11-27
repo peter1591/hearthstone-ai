@@ -18,9 +18,32 @@ kCurrentHandFeatures = 1
 
 kMaxCardId = 1860
 
+class DynamicMapper:
+  def __init__(self, start_index = 0):
+    self._dict_v_to_index = {}
+    self._dict_index_to_v = {}
+    self._next_index = start_index
+
+  def _add_map(self, v):
+    idx = self._next_index
+    self._next_index = idx + 1
+
+    self._dict_v_to_index[v] = idx
+    self._dict_index_to_v[idx] = v
+
+  def get_index(self, v):
+    if v not in self._dict_v_to_index:
+      self._add_map(v)
+    return self._dict_v_to_index[v]
+
+  def get_index_to_v_dict(self):
+    return self._dict_index_to_v
+
 class DataReader:
   def __init__(self, dirname='data'):
     self._dirname = dirname
+    self._data = []
+    self._hand_card_mapper = DynamicMapper(1)
 
   @classmethod
   def from_bool(cls, v):
@@ -33,10 +56,11 @@ class DataReader:
     hp = data['hero']['hp']
     armor = data['hero']['armor']
 
-    return [hp+armor]
+    self._data.extend([
+      hp + armor])
 
   def _add_minion_data_placeholder(self):
-    return [
+    self._data.extend([
       0,
       0,
       0,
@@ -44,7 +68,7 @@ class DataReader:
       -1.0,
       -1.0,
       -1.0,
-      -1.0]
+      -1.0])
 
   def _add_minion_data(self, minion):
     attackable = False
@@ -53,7 +77,7 @@ class DataReader:
     except Exception as _:
       attackable = False
 
-    return [
+    self._data.extend([
       minion['card_id'],
       minion['hp'],
       minion['max_hp'],
@@ -61,32 +85,27 @@ class DataReader:
       self.from_bool(attackable),
       self.from_bool(minion['taunt']),
       self.from_bool(minion['shield']),
-      self.from_bool(minion['stealth'])]
+      self.from_bool(minion['stealth'])])
 
   def _read_minions_data(self, minions):
     if minions is None:
       minions = []
 
     count = len(minions)
-    data = []
 
     for idx in range(0, 7):
       if idx < count:
-        data.extend(self._add_minion_data(minions[idx]))
+        self._add_minion_data(minions[idx])
       else:
-        data.extend(self._add_minion_data_placeholder())
-
-    return data
+        self._add_minion_data_placeholder()
 
   def _add_resource(self, resource):
-    return [
+    self._data.extend([
         resource['current'],
         resource['total'],
-        resource['overload_next']]
+        resource['overload_next']])
 
   def _add_current_hand(self, hand):
-    data = []
-
     if hand is None:
       hand = {}
 
@@ -94,41 +113,47 @@ class DataReader:
     for card in hand:
       if card['playable']:
         playable = playable + 1
-    data.append(playable)
+    self._data.append(playable)
+
+    def add_data(card_id, cost):
+      mapped_card_id = self._hand_card_mapper.get_index(card_id)
+      self._data.append(mapped_card_id)
+      self._data.append(cost)
 
     for card in hand:
-      data.append(card['card_id'])
-      data.append(card['cost'])
+      card_id = card['card_id']
+      cost = card['cost']
+      add_data(card_id, cost)
     for _ in range(10 - len(hand)):
-      data.extend([0, -1])
-
-    return data
+      card_id = 0
+      cost = -1
+      add_data(card_id, cost)
 
   def _add_opponent_hand(self, hand):
     if hand is None:
       hand = {}
 
-    return [
-        len(hand)]
+    self._data.extend([
+        len(hand)])
 
   def _add_heropower(self, hero_power):
-    return [
-        self.from_bool(hero_power['playable'])]
+    self._data.extend([
+        self.from_bool(hero_power['playable'])])
 
   def _read_board(self, board):
-    data = []
+    self._data.clear()
 
-    data.extend(self._read_hero_data(board['current_player']))
-    data.extend(self._read_hero_data(board['opponent_player']))
-    data.extend(self._read_minions_data(board['current_player']['minions']))
-    data.extend(self._read_minions_data(board['opponent_player']['minions']))
-    data.extend(self._add_current_hand(board['current_player']['hand']))
-    data.extend(self._add_opponent_hand(board['opponent_player']['hand']))
+    self._read_hero_data(board['current_player'])
+    self._read_hero_data(board['opponent_player'])
+    self._read_minions_data(board['current_player']['minions'])
+    self._read_minions_data(board['opponent_player']['minions'])
+    self._add_current_hand(board['current_player']['hand'])
+    self._add_opponent_hand(board['opponent_player']['hand'])
 
-    data.extend(self._add_resource(board['current_player']['resource']))
-    data.extend(self._add_heropower(board['current_player']['hero_power']))
+    self._add_resource(board['current_player']['resource'])
+    self._add_heropower(board['current_player']['hero_power'])
 
-    return data
+    return self._data
 
   def _get_label(self, board, first_player_win):
     current_player_is_first = (board['current_player_id'] == 'kFirstPlayer')
@@ -174,4 +199,4 @@ class DataReader:
           self._read_one_json(data, label, json_data)
       break
 
-    return data, label
+    return data, label, self._hand_card_mapper.get_index_to_v_dict()

@@ -246,7 +246,7 @@ def model_fn(features, labels, mode):
 
 def main(_):
   dr = data_reader.DataReader()
-  data, label = dr.parse()
+  data, label, _ = dr.parse()
 
   data_label = list(zip(data, label))
   random.shuffle(data_label)
