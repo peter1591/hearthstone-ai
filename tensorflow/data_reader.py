@@ -155,29 +155,47 @@ class DataReader:
 
     return list(self._data)
 
-  def _get_label(self, board, first_player_win):
-    current_player_is_first = (board['current_player_id'] == 'kFirstPlayer')
-    assert current_player_is_first is not None
-    assert first_player_win is not None
+  def _get_label(self, current_player, first_player_win):
+    kFirstPlayerString = 'kFirstPlayer'
+    kSecondPlayerString = 'kSecondPlayer'
 
+    if kFirstPlayerString == current_player:
+      current_player_is_first = True
+    elif current_player == kSecondPlayerString:
+      current_player_is_first = False
+    else:
+      assert False
+
+    assert first_player_win is not None
     if current_player_is_first == first_player_win:
       return kLabelIfFirstPlayerWin
     else:
       return kLabelIfFirstPlayerLoss
+
+  def _win_or_loss(self, result):
+    kWinString = 'kResultFirstPlayerWin'  # kResultWin for newer datasets
+    kLossString = 'kResultSecondPlayerWin'  # kResultLoss for newer datasets
+
+    if result == kWinString:
+      return True
+
+    assert result == kLossString
+    return False
 
   def _read_one_json(self, all_data, all_label, json_data):
     first_player_win = None
     for block_data in json_data:
       action_type = block_data['type']
       if action_type == 'kEnd':
-        first_player_win = (block_data['result'] == 'kResultWin')
+        first_player_win = self._win_or_loss(block_data['result'])
+    assert first_player_win is not None
 
     for block_data in json_data:
       action_type = block_data['type']
       if action_type == 'kMainAction':
         board = block_data['board']
         data = self._read_board(board)
-        label = self._get_label(board, first_player_win)
+        label = self._get_label(board['current_player_id'], first_player_win)
 
         all_data.append(data)
         all_label.append(label)
