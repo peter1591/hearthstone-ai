@@ -153,7 +153,7 @@ class DataReader:
     self._add_resource(board['current_player']['resource'])
     self._add_heropower(board['current_player']['hero_power'])
 
-    return self._data
+    return list(self._data)
 
   def _get_label(self, board, first_player_win):
     current_player_is_first = (board['current_player_id'] == 'kFirstPlayer')
