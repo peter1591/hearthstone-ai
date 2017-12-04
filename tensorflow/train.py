@@ -36,7 +36,8 @@ def main(_):
 
   training_model = model.Model()
   def model_fn(features, labels, mode):
-    return training_model.get_model(features, labels, mode)
+    training_model.set_mode(mode)
+    return training_model.get_model(features, labels)
 
   estimator = tf.estimator.Estimator(
       model_fn=model_fn,

@@ -22,6 +22,8 @@ class NextInputGetter:
 
 class Model:
   def __init__(self):
+    self._mode = None
+
     self.kEnableCardIdEmbed = False
     self.kEnableHandCardIdEmbed = False
     self.kCardIdDimension = 3
@@ -31,6 +33,9 @@ class Model:
     self.kHeroConvolutionHidden1 = 2
 
     self.kHandConvolutionHidden1 = 2
+
+    self.kResidualBlockFeatures = 30
+    self.kResidualBlocks = 5
 
   def _model_hero(self, input_getter):
     inputs = input_getter.get_next_slice(data_reader.kHeroFeatures)
@@ -84,14 +89,7 @@ class Model:
     for _ in range(data_reader.kMinions):
       features.append(self._model_minion(input_getter))
 
-    minions1 = tf.layers.dense(
-        name='minions1',
-        inputs=tf.concat(features, 1),
-        units=30,
-        reuse=tf.AUTO_REUSE,
-        activation=tf.nn.relu)
-
-    return [minions1]
+    return features
 
   def _get_embedded_hand_card_id(self, card_id):
     if not self.kEnableHandCardIdEmbed:
@@ -130,7 +128,8 @@ class Model:
 
   def _model_current_hand(self, input_getter):
     outputs = []
-    outputs.append(input_getter.get_next_slice(data_reader.kCurrentHandFeatures))
+    outputs.append(
+        input_getter.get_next_slice(data_reader.kCurrentHandFeatures))
 
     for _ in range(data_reader.kCurrentHandCards):
       outputs.extend(self._model_current_hand_card(input_getter))
@@ -140,7 +139,46 @@ class Model:
   def _model_board_features(self, input_getter):
     return [input_getter.get_rest()]
 
-  def get_model(self, features, labels, mode):
+  def _dense_norm_relu(self, scope, inputs, hidden):
+    with tf.variable_scope(scope):
+      dense = tf.contrib.layers.fully_connected(
+          inputs,
+          hidden,
+          activation_fn=None,
+          scope='dense')
+
+      #norm = tf.contrib.layers.batch_norm(
+      #    dense,
+      #    center=True,
+      #    scale=True,
+      #    is_training=(self._mode == tf.estimator.ModeKeys.TRAIN),
+      #    scope='norm')
+
+      relu = tf.nn.relu(dense, 'relu')
+
+      return relu
+
+  def _residual_block(self, idx, inputs, hidden):
+    name = 'residual_' + str(idx)
+
+    dense1 = self._dense_norm_relu(
+        name + '_1',
+        inputs,
+        hidden)
+
+    dense2 = self._dense_norm_relu(
+        name + '_2',
+        dense1,
+        hidden)
+
+    added = tf.add(dense2, inputs)
+
+    return added
+
+  def set_mode(self, mode):
+    self._mode = mode
+
+  def get_model(self, features, labels):
     input_getter = NextInputGetter(features["x"])
 
     inputs = []
@@ -157,30 +195,16 @@ class Model:
     dense1 = tf.layers.dense(
         name='dense1',
         inputs=inputs,
-        units=30,
+        units=self.kResidualBlockFeatures,
         activation=tf.nn.relu)
 
-    dense2 = tf.layers.dense(
-        name='dense2',
-        inputs=dense1,
-        units=30,
-        activation=tf.nn.relu)
-
-    dense3 = tf.layers.dense(
-        name='dense3',
-        inputs=dense2,
-        units=30,
-        activation=tf.nn.relu)
-
-    dense4 = tf.layers.dense(
-        name='dense4',
-        inputs=dense3,
-        units=30,
-        activation=tf.nn.relu)
+    prev = tf.to_float(dense1)
+    for i in range(0, self.kResidualBlocks):
+      prev = self._residual_block(i+1, prev, self.kResidualBlockFeatures)
 
     final = tf.layers.dense(
         name='final',
-        inputs=dense4,
+        inputs=prev,
         units=1,
         activation=None)
 
@@ -193,13 +217,13 @@ class Model:
         labels=labels,
         predictions=final)
 
-    if mode == tf.estimator.ModeKeys.TRAIN:
+    if self._mode == tf.estimator.ModeKeys.TRAIN:
       train_step = tf.train.AdamOptimizer(1e-4).minimize(
           loss,
           global_step=tf.train.get_global_step())
 
       return tf.estimator.EstimatorSpec(
-          mode=mode,
+          mode=self._mode,
           loss=loss,
           train_op=train_step)
 
@@ -213,5 +237,5 @@ class Model:
             predictions=predictions)}
 
       return tf.estimator.EstimatorSpec(
-          mode=mode, loss=loss,
+          mode=self._mode, loss=loss,
           eval_metric_ops=eval_metric_ops)
