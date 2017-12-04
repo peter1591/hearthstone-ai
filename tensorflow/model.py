@@ -42,7 +42,7 @@ class Model:
         reuse=tf.AUTO_REUSE,
         activation=tf.nn.relu)
 
-    return hero1
+    return [hero1]
 
   def _get_embedded_onboard_card_id(self, card_id):
     if not self.kEnableCardIdEmbed:
@@ -91,7 +91,7 @@ class Model:
         reuse=tf.AUTO_REUSE,
         activation=tf.nn.relu)
 
-    return minions1
+    return [minions1]
 
   def _get_embedded_hand_card_id(self, card_id):
     if not self.kEnableHandCardIdEmbed:
@@ -129,54 +129,34 @@ class Model:
     return outputs
 
   def _model_current_hand(self, input_getter):
-    inputs = []
-    inputs.append(input_getter.get_next_slice(data_reader.kCurrentHandFeatures))
+    outputs = []
+    outputs.append(input_getter.get_next_slice(data_reader.kCurrentHandFeatures))
 
     for _ in range(data_reader.kCurrentHandCards):
-      inputs.extend(self._model_current_hand_card(input_getter))
+      outputs.extend(self._model_current_hand_card(input_getter))
 
-    return tf.concat(inputs, 1)
+    return outputs
 
   def _model_board_features(self, input_getter):
-    inputs = input_getter.get_rest()
-
-    rest1 = tf.layers.dense(
-        name='rest1',
-        inputs=inputs,
-        units=20,
-        activation=tf.nn.relu)
-
-    rest2 = tf.layers.dense(
-        name='rest2',
-        inputs=rest1,
-        units=20,
-        activation=tf.nn.relu)
-
-    return rest2
+    return [input_getter.get_rest()]
 
   def get_model(self, features, labels, mode):
     input_getter = NextInputGetter(features["x"])
 
-    current_hero = self._model_hero(input_getter)
-    opponent_hero = self._model_hero(input_getter)
-    current_minions = self._model_minions(input_getter)
-    opponent_minions = self._model_minions(input_getter)
-    current_hand = self._model_current_hand(input_getter)
-    board = self._model_board_features(input_getter)
+    inputs = []
 
-    dense1_input_features = [
-        current_hero,
-        opponent_hero,
-        current_minions,
-        opponent_minions,
-        current_hand,
-        board]
+    inputs.extend(self._model_hero(input_getter))  # current hero
+    inputs.extend(self._model_hero(input_getter))  # opponent hero
+    inputs.extend(self._model_minions(input_getter))  # current minions
+    inputs.extend(self._model_minions(input_getter))  # opponent minions
+    inputs.extend(self._model_current_hand(input_getter))  # current hand
+    inputs.extend(self._model_board_features(input_getter))  # board features
 
-    dense1_input = tf.concat(dense1_input_features, 1)
+    inputs = tf.concat(inputs, 1)
 
     dense1 = tf.layers.dense(
         name='dense1',
-        inputs=dense1_input,
+        inputs=inputs,
         units=30,
         activation=tf.nn.relu)
 
