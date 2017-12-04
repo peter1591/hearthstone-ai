@@ -62,7 +62,7 @@ class Model:
     card_id_embed = tf.nn.embedding_lookup(
       card_id_matrix, card_id, name='card_id_embed')
     card_id_embed = tf.reshape(card_id_embed, [-1, self.kCardIdDimension])
-    return tf.to_double(card_id_embed)
+    return card_id_embed
 
   def _model_minion(self, input_getter):
     inputs = []
@@ -104,7 +104,7 @@ class Model:
     card_id_embed = tf.nn.embedding_lookup(
       card_id_matrix, card_id, name='card_id_embed')
     card_id_embed = tf.reshape(card_id_embed, [-1, self.kCardIdDimension])
-    return tf.to_double(card_id_embed)
+    return card_id_embed
 
   def _model_current_hand_card(self, input_getter):
     outputs = []
@@ -179,7 +179,10 @@ class Model:
     self._mode = mode
 
   def get_model(self, features, labels):
-    input_getter = NextInputGetter(features["x"])
+    feature = features["x"]
+    feature = tf.to_float(feature)
+
+    input_getter = NextInputGetter(feature)
 
     inputs = []
 
@@ -198,7 +201,7 @@ class Model:
         units=self.kResidualBlockFeatures,
         activation=tf.nn.relu)
 
-    prev = tf.to_float(dense1)
+    prev = dense1
     for i in range(0, self.kResidualBlocks):
       prev = self._residual_block(i+1, prev, self.kResidualBlockFeatures)
 
