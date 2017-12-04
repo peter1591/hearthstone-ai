@@ -26,11 +26,19 @@ class Model:
     self.kEnableHandCardIdEmbed = False
     self.kCardIdDimension = 3
 
-  def _model_hero(self, inputs):
+    self.kMinionConvolutionHidden1 = 10
+
+    self.kHeroConvolutionHidden1 = 2
+
+    self.kHandConvolutionHidden1 = 2
+
+  def _model_hero(self, input_getter):
+    inputs = input_getter.get_next_slice(data_reader.kHeroFeatures)
+
     hero1 = tf.layers.dense(
         name='hero1',
         inputs=inputs,
-        units=2,
+        units=self.kHeroConvolutionHidden1,
         reuse=tf.AUTO_REUSE,
         activation=tf.nn.relu)
 
@@ -65,18 +73,11 @@ class Model:
     minion1 = tf.layers.dense(
         name='minion1',
         inputs=tf.concat(inputs, 1),
-        units=10,
+        units=self.kMinionConvolutionHidden1,
         reuse=tf.AUTO_REUSE,
         activation=tf.nn.relu)
 
-    minion2 = tf.layers.dense(
-        name='minion2',
-        inputs=minion1,
-        units=10,
-        reuse=tf.AUTO_REUSE,
-        activation=tf.nn.relu)
-
-    return minion2
+    return minion1
 
   def _model_minions(self, input_getter):
     features = []
@@ -108,56 +109,37 @@ class Model:
     return tf.to_double(card_id_embed)
 
   def _model_current_hand_card(self, input_getter):
-    inputs = []
+    outputs = []
 
     card_id = input_getter.get_next_slice(1)
     card_id_embed = self._get_embedded_hand_card_id(card_id)
     if card_id_embed is not None:
-      inputs.append(card_id_embed)
+      outputs.append(card_id_embed)
 
-    inputs.append(
-        input_getter.get_next_slice(data_reader.kCurrentHandCardFeatures))
-
+    card_features = input_getter.get_next_slice(
+        data_reader.kCurrentHandCardFeatures)
     card1 = tf.layers.dense(
         name='hand_card_1',
-        inputs=tf.concat(inputs, 1),
-        units=10,
+        inputs=card_features,
+        units=self.kHandConvolutionHidden1,
         reuse=tf.AUTO_REUSE,
         activation=tf.nn.relu)
+    outputs.append(card1)
 
-    card2 = tf.layers.dense(
-        name='hand_card_2',
-        inputs=card1,
-        units=10,
-        reuse=tf.AUTO_REUSE,
-        activation=tf.nn.relu)
-
-    return card2
+    return outputs
 
   def _model_current_hand(self, input_getter):
     inputs = []
     inputs.append(input_getter.get_next_slice(data_reader.kCurrentHandFeatures))
 
     for _ in range(data_reader.kCurrentHandCards):
-      inputs.append(self._model_current_hand_card(input_getter))
+      inputs.extend(self._model_current_hand_card(input_getter))
 
-    hand1 = tf.layers.dense(
-      name='hand_1',
-      inputs=tf.concat(inputs, 1),
-      units=10,
-      reuse=tf.AUTO_REUSE,
-      activation=tf.nn.relu)
+    return tf.concat(inputs, 1)
 
-    hand2 = tf.layers.dense(
-      name='hand_2',
-      inputs=hand1,
-      units=10,
-      reuse=tf.AUTO_REUSE,
-      activation=tf.nn.relu)
+  def _model_board_features(self, input_getter):
+    inputs = input_getter.get_rest()
 
-    return hand2
-
-  def _model_rest_features(self, inputs):
     rest1 = tf.layers.dense(
         name='rest1',
         inputs=inputs,
@@ -174,14 +156,13 @@ class Model:
 
   def get_model(self, features, labels, mode):
     input_getter = NextInputGetter(features["x"])
-    current_hero = self._model_hero(
-        input_getter.get_next_slice(data_reader.kHeroFeatures))
-    opponent_hero = self._model_hero(
-        input_getter.get_next_slice(data_reader.kHeroFeatures))
+
+    current_hero = self._model_hero(input_getter)
+    opponent_hero = self._model_hero(input_getter)
     current_minions = self._model_minions(input_getter)
     opponent_minions = self._model_minions(input_getter)
     current_hand = self._model_current_hand(input_getter)
-    rest = self._model_rest_features(input_getter.get_rest())
+    board = self._model_board_features(input_getter)
 
     dense1_input_features = [
         current_hero,
@@ -189,7 +170,7 @@ class Model:
         current_minions,
         opponent_minions,
         current_hand,
-        rest]
+        board]
 
     dense1_input = tf.concat(dense1_input_features, 1)
 
@@ -205,9 +186,21 @@ class Model:
         units=30,
         activation=tf.nn.relu)
 
+    dense3 = tf.layers.dense(
+        name='dense3',
+        inputs=dense2,
+        units=30,
+        activation=tf.nn.relu)
+
+    dense4 = tf.layers.dense(
+        name='dense4',
+        inputs=dense3,
+        units=30,
+        activation=tf.nn.relu)
+
     final = tf.layers.dense(
         name='final',
-        inputs=dense2,
+        inputs=dense4,
         units=1,
         activation=None)
 
