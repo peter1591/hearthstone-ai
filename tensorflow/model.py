@@ -139,41 +139,36 @@ class Model:
   def _model_board_features(self, input_getter):
     return [input_getter.get_rest()]
 
-  def _dense_norm_relu(self, scope, inputs, hidden):
+  def _residual_block_unit(self, scope, inputs, hidden, add_input=None):
     with tf.variable_scope(scope):
-      dense = tf.contrib.layers.fully_connected(
+      output = tf.contrib.layers.fully_connected(
           inputs,
           hidden,
           activation_fn=None,
           scope='dense')
 
-      #norm = tf.contrib.layers.batch_norm(
-      #    dense,
-      #    center=True,
-      #    scale=True,
-      #    is_training=(self._mode == tf.estimator.ModeKeys.TRAIN),
-      #    scope='norm')
+      if add_input:
+        output = tf.add(output, add_input)
 
-      relu = tf.nn.relu(dense, 'relu')
+      output = tf.nn.relu(output, 'relu')
 
-      return relu
+      return output
 
   def _residual_block(self, idx, inputs, hidden):
     name = 'residual_' + str(idx)
 
-    dense1 = self._dense_norm_relu(
+    dense1 = self._residual_block_unit(
         name + '_1',
         inputs,
         hidden)
 
-    dense2 = self._dense_norm_relu(
+    dense2 = self._residual_block_unit(
         name + '_2',
         dense1,
-        hidden)
+        hidden,
+        add_input=inputs)
 
-    added = tf.add(dense2, inputs)
-
-    return added
+    return dense2
 
   def set_mode(self, mode):
     self._mode = mode
