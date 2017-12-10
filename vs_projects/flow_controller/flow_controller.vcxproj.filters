@@ -105,19 +105,19 @@
     <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flow_control_test\CardDispatcher.cpp">
+    <ClCompile Include="..\..\engine\test\CardDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flow_control_test\main.cpp">
+    <ClCompile Include="..\..\engine\test\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flow_control_test\test2.cpp">
+    <ClCompile Include="..\..\engine\test\test2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flow_control_test\test3.cpp">
+    <ClCompile Include="..\..\engine\test\test3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\flow_control_test\test4.cpp">
+    <ClCompile Include="..\..\engine\test\test4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
