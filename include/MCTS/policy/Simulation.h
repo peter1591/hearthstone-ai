@@ -583,8 +583,9 @@ namespace mcts
 					if constexpr (kRandomlyPutMinions) {
 						return GetChoiceRandomly(board, action_analyzer, choice_getter);
 					}
-
-					return GetChoiceForMainAction(board, action_analyzer, choice_getter);
+					else {
+						return GetChoiceForMainAction(board, action_analyzer, choice_getter);
+					}
 				}
 
 			private:

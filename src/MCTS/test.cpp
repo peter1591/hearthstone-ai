@@ -57,7 +57,15 @@ void Run(ui::AIController * controller, int secs)
 	};
 
 	auto start_i = controller->GetStatistic().GetSuccededIterates();
-	controller->Run(continue_checker, Configs::threads, seed, start_board_getter);
+	controller->Run(Configs::threads, seed, start_board_getter);
+	while (true) {
+		if (continue_checker()) {
+			break;
+		}
+		std::this_thread::sleep_for(std::chrono::microseconds(100));
+	}
+	controller->NotifyStop();
+	controller->WaitUntilStopped();
 	auto end_i = controller->GetStatistic().GetSuccededIterates();
 
 	s << std::endl;

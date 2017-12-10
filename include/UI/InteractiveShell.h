@@ -14,8 +14,8 @@ namespace ui
 	public:
 		using StartBoardGetter = std::function<state::State(int)>;
 
-		InteractiveShell() :
-			controller_(), start_board_getter_(), node_(nullptr)
+		InteractiveShell(AIController * controller = nullptr, StartBoardGetter start_board_getter = StartBoardGetter()) :
+			controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
 		{
 			try {
 				state_value_func_.reset(new mcts::policy::simulation::NeuralNetworkStateValueFunction());
@@ -24,10 +24,6 @@ namespace ui
 				state_value_func_.reset(nullptr);
 			}
 		}
-
-		InteractiveShell(AIController * controller, StartBoardGetter start_board_getter) :
-			controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
-		{}
 
 		InteractiveShell(InteractiveShell const&) = delete;
 		InteractiveShell & operator=(InteractiveShell const&) = delete;
@@ -310,7 +306,6 @@ namespace ui
 			s << "Best action: " << std::endl;
 
 			if (verbose) {
-				int seed = 0; // an arbitrarily random seed number
 				state::State game_state = start_board_getter_(0);
 				double v = GetStateValue(game_state);
 				s << "State-value: " << v << std::endl;
