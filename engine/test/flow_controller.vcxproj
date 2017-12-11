@@ -91,7 +91,7 @@
       <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,7 +109,7 @@
       <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +129,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -153,7 +153,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
