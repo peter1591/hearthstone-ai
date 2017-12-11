@@ -122,7 +122,9 @@ namespace mcts
 					board::ActionChoices(choices));
 			}
 
-			result = board_->ApplyAction(choice, action_analyzer, flow_context, random_generator_, action_parameter_getter_);
+			auto main_op = action_analyzer.GetMainOpType(choice);
+			action_parameter_getter_.SetMainOp(main_op);
+			result = board_->ApplyAction(action_analyzer, flow_context, random_generator_, action_parameter_getter_);
 			assert(result.type_ != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);

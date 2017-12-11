@@ -464,12 +464,12 @@ namespace mcts
 					assert(count > 0);
 					if (count == 1) {
 						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == board::BoardActionAnalyzer::kEndTurn);
+						assert(action_analyzer.GetMainOpType((size_t)0) == FlowControl::utils::MainOpType::kMainOpEndTurn);
 						return 0;
 					}
 
 					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == board::BoardActionAnalyzer::kEndTurn);
+					assert(action_analyzer.GetMainOpType(count - 1) == FlowControl::utils::MainOpType::kMainOpEndTurn);
 					--count;
 					assert(count > 0);
 
@@ -517,12 +517,12 @@ namespace mcts
 					assert(count > 0);
 					if (count == 1) {
 						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == board::BoardActionAnalyzer::kEndTurn);
+						assert(action_analyzer.GetMainOpType((size_t)0) == FlowControl::utils::MainOpType::kMainOpEndTurn);
 						return 0;
 					}
 
 					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == board::BoardActionAnalyzer::kEndTurn);
+					assert(action_analyzer.GetMainOpType(count - 1) == FlowControl::utils::MainOpType::kMainOpEndTurn);
 					--count;
 					assert(count > 0);
 
@@ -627,6 +627,9 @@ namespace mcts
 							dfs_(dfs), dfs_it_(dfs_it), rand_(seed)
 						{}
 
+						void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
+						FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
+
 						int GetNumber(ActionType::Types action_type, board::ActionChoices const& action_choices) {
 
 							int total = action_choices.Size();
@@ -659,6 +662,7 @@ namespace mcts
 						std::vector<DFSItem> & dfs_;
 						std::vector<DFSItem>::iterator & dfs_it_;
 						FastRandom rand_;
+						FlowControl::utils::MainOpType main_op_;
 					};
 
 					std::vector<DFSItem> dfs;
@@ -685,18 +689,18 @@ namespace mcts
 					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
 
 					double best_value = -std::numeric_limits<double>::infinity();
-					action_analyzer.ForEachMainOp([&](size_t idx, board::BoardActionAnalyzer::OpType main_op) {
+					action_analyzer.ForEachMainOp([&](size_t idx, FlowControl::utils::MainOpType main_op) {
 						assert(board.GetViewSide() == copy_board_.GetBoard().GetViewSide());
+
+						cb_user_choice.SetMainOp(main_op);
 
 						while (true) {
 							copy_board_.FillWithBase(board);
 
 							dfs_it = dfs.begin();
 							auto result = copy_board_.GetBoard().ApplyAction(
-								(int)idx,
 								action_analyzer, flow_context,
-								cb_random,
-								cb_user_choice);
+								cb_random, cb_user_choice);
 
 							if (result.type_ != Result::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();

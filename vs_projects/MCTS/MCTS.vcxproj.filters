@@ -46,6 +46,12 @@
     <Filter Include="Source Files\libjson">
       <UniqueIdentifier>{36dd16eb-12c4-49df-bb13-05bb8c1f7150}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl">
+      <UniqueIdentifier>{58418007-6267-4019-bbb6-246eedcb397b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\FlowControl\utils">
+      <UniqueIdentifier>{68181fa6-d3e2-475c-acf3-34e6ba3c7278}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
@@ -235,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\UI\InteractiveShell.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h">
+      <Filter>Header Files\FlowControl\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

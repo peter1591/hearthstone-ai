@@ -71,7 +71,7 @@ namespace mcts
 					FlowControl::CurrentPlayerStateView(board_));
 			}
 
-			Result ApplyAction(int action,
+			Result ApplyAction(
 				BoardActionAnalyzer & action_analyzer,
 				FlowControl::FlowContext & flow_context,
 				IRandomGenerator & random, IActionParameterGetter & action_parameters) const
@@ -80,7 +80,7 @@ namespace mcts
 				return action_analyzer.ApplyAction(
 					flow_context,
 					FlowControl::CurrentPlayerStateView(board_),
-					action, random, action_parameters);
+					random, action_parameters);
 			}
 
 		public:

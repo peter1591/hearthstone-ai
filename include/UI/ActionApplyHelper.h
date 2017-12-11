@@ -3,7 +3,7 @@
 #include <functional>
 
 #include "state/State.h"
-#include "FlowControl/ActionApplier.h"
+#include "FlowControl/utils/ActionApplier.h"
 #include "FlowControl/FlowController.h"
 #include "mcts/board/BoardActionAnalyzer.h"
 
@@ -61,11 +61,16 @@ namespace ui
 			int Get(int exclusive_max) { return 0; }
 		};
 
-		class ActionParameterCallback : public FlowControl::ActionApplier::IActionParameterGetter {
+		// TODO: move to FlowControl::utils
+		class ActionParameterCallback : public FlowControl::utils::ActionApplier::IActionParameterGetter {
 		public:
-			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) : 
-				result_(result), choices_(choices), choices_idx_(choices_idx)
+			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
+				result_(result), choices_(choices), choices_idx_(choices_idx),
+				main_op_(FlowControl::utils::MainOpType::kMainOpInvalid)
 			{}
+
+			void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
+			FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
 
 			int ChooseHandCard(std::vector<size_t> const& playable_cards) {
 				if (choices_idx_ >= choices_.size() &&
@@ -151,6 +156,7 @@ namespace ui
 			CallbackInfo & result_;
 			std::vector<int> const& choices_;
 			size_t & choices_idx_;
+			FlowControl::utils::MainOpType main_op_;
 		};
 
 	public:
@@ -183,13 +189,15 @@ namespace ui
 			flow_context.SetCallback(rand_cb, action_cb);
 
 			while (choices_.size() > choices_idx) {
-				int main_op = choices_[choices_idx];
+				int main_op_idx = choices_[choices_idx];
 				++choices_idx;
 
 				mcts::board::BoardActionAnalyzer analyzer;
 				FlowControl::CurrentPlayerStateView state_view(game_state);
 				analyzer.GetActionsCount(state_view);
-				analyzer.ApplyAction(flow_context, state_view, main_op, rand_cb, action_cb);
+				auto main_op = analyzer.GetMainOpType(main_op_idx);
+				action_cb.SetMainOp(main_op);
+				analyzer.ApplyAction(flow_context, state_view, rand_cb, action_cb);
 			}
 
 			return info;

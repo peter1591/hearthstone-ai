@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />

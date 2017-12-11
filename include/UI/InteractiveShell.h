@@ -170,7 +170,7 @@ namespace ui
 		{
 			if (node->GetActionType() == mcts::ActionType::kMainAction) {
 				auto op = node->GetAddon().action_analyzer.GetMainOpType(choice);
-				return GetOpType(op);
+				return FlowControl::utils::GetMainOpString(op);
 			}
 			
 			if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
@@ -378,7 +378,7 @@ namespace ui
 
 				if (node_->GetActionType() == mcts::ActionType::kMainAction) {
 					auto op = node_->GetAddon().action_analyzer.GetMainOpType(choice);
-					s << "    Main Action Op: " << GetOpType(op) << std::endl;
+					s << "    Main Action Op: " << FlowControl::utils::GetMainOpString(op) << std::endl;
 				}
 
 				if (edge_addon) {
@@ -417,18 +417,6 @@ namespace ui
 			case ActionType::kChooseMinionPutLocation: return "kChooseMinionPutLocation";
 			case ActionType::kChooseTarget: return "kChooseTarget";
 			case ActionType::kChooseOne: return "kChooseOne";
-			default: return "Unknown!!!";
-			}
-		}
-
-		std::string GetOpType(mcts::board::BoardActionAnalyzer::OpType op) {
-			using mcts::board::BoardActionAnalyzer;
-			switch (op) {
-			case BoardActionAnalyzer::kInvalid: return "kInvalid";
-			case BoardActionAnalyzer::kPlayCard: return "kPlayCard";
-			case BoardActionAnalyzer::kAttack: return "kAttack";
-			case BoardActionAnalyzer::kHeroPower: return "kHeroPower";
-			case BoardActionAnalyzer::kEndTurn: return "kEndTurn";
 			default: return "Unknown!!!";
 			}
 		}

@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "state/State.h"
-#include "FlowControl/ActionApplier.h"
+#include "FlowControl/utils/ActionApplier.h"
 #include "MCTS/Types.h"
 #include "MCTS/board/ActionChoices.h"
 
@@ -13,7 +13,7 @@ namespace mcts
 
 	namespace board
 	{
-		class IActionParameterGetter : public FlowControl::ActionApplier::IActionParameterGetter
+		class IActionParameterGetter : public FlowControl::utils::ActionApplier::IActionParameterGetter
 		{
 		public:
 			state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
@@ -78,10 +78,14 @@ namespace mcts
 		public:
 			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
 
+			void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
+			FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
+
 			int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) final;
 
 		private:
 			SOMCTS & callback_;
+			FlowControl::utils::MainOpType main_op_;
 		};
 	}
 }

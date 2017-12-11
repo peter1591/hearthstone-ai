@@ -51,16 +51,27 @@ namespace mcts
 			return (int)op_map_size_;
 		}
 
-		inline Result BoardActionAnalyzer::ApplyAction(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView board, int action, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters) {
+		inline Result BoardActionAnalyzer::ApplyAction(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters) {
 			std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 
-			assert(op_map_size_ > 0);
-			assert(action >= 0);
-			assert(action < (int)op_map_size_);
-			return (this->*op_map_[action])(flow_context, board, random, action_parameters);
+			auto main_op = action_parameters.ChooseMainOp();
+
+			switch (main_op) {
+			case FlowControl::utils::MainOpType::kMainOpPlayCard:
+				return PlayCard(flow_context, board, random, action_parameters);
+			case FlowControl::utils::MainOpType::kMainOpAttack:
+				return Attack(flow_context, board, random, action_parameters);
+			case FlowControl::utils::MainOpType::kMainOpHeroPower:
+				return HeroPower(flow_context, board, random, action_parameters);
+			case FlowControl::utils::MainOpType::kMainOpEndTurn:
+				return EndTurn(flow_context, board, random, action_parameters);
+			default:
+				assert(false);
+				return Result::kResultInvalid;
+			}
 		}
 
-		inline Result BoardActionAnalyzer::PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters)
 		{
 			assert(!playable_cards_.empty());
 			int idx = 0;
@@ -74,7 +85,7 @@ namespace mcts
 			return ConvertResult(board.PlayCard(flow_context, (int)hand_idx));
 		}
 
-		inline Result BoardActionAnalyzer::Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters)
 		{
 			assert([&]() {
 				std::set<int> current;
@@ -100,13 +111,13 @@ namespace mcts
 			return ConvertResult(board.Attack(flow_context, attackers_[idx]));
 		}
 
-		inline Result BoardActionAnalyzer::HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters)
 		{
 			flow_context.SetCallback(random, action_parameters);
 			return ConvertResult(board.HeroPower(flow_context));
 		}
 
-		inline Result BoardActionAnalyzer::EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters)
+		inline Result BoardActionAnalyzer::EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters)
 		{
 			flow_context.SetCallback(random, action_parameters);
 			return ConvertResult(board.EndTurn(flow_context));

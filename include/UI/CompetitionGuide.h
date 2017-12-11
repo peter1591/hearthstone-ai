@@ -50,14 +50,12 @@ namespace ui
 			json_.clear();
 		}
 
-		void RecordMainAction(state::State const& state, mcts::board::BoardActionAnalyzer const& analyzer, int action)
+		void RecordMainAction(state::State const& state, FlowControl::utils::MainOpType op)
 		{
 			Json::Value obj;
 			obj["type"] = "kMainAction";
 			obj["board"] = FlowControl::JsonSerializer::Serialize(state);
-
-			auto op = analyzer.GetMainOpType(action);
-			obj["choice"] = GetMainOpString(op);
+			obj["choice"] = FlowControl::utils::GetMainOpString(op);
 
 			json_.append(obj);
 		}
@@ -123,20 +121,6 @@ namespace ui
 		}
 
 	private:
-		std::string GetMainOpString(mcts::board::BoardActionAnalyzer::OpType op) {
-			using mcts::board::BoardActionAnalyzer;
-			switch (op) {
-			case BoardActionAnalyzer::kInvalid: return "kInvalid";
-			case BoardActionAnalyzer::kPlayCard: return "kPlayCard";
-			case BoardActionAnalyzer::kAttack: return "kAttack";
-			case BoardActionAnalyzer::kHeroPower: return "kHeroPower";
-			case BoardActionAnalyzer::kEndTurn: return "kEndTurn";
-			default:
-				assert(false);
-				return "Unknown!!!";
-			}
-		}
-
 		std::string GetActionTypeString(mcts::ActionType type) {
 			using mcts::ActionType;
 			switch (type.GetType()) {
@@ -210,12 +194,15 @@ namespace ui
 
 		class ActionCallback : public mcts::board::IActionParameterGetter {
 		public:
-			ActionCallback(CompetitionGuide & guide) : guide_(guide), cb_(nullptr) {}
+			ActionCallback(CompetitionGuide & guide) : guide_(guide), cb_(nullptr), main_op_(FlowControl::utils::MainOpType::kMainOpInvalid) {}
 
 			ActionCallback(ActionCallback const&) = delete;
 			ActionCallback & operator=(ActionCallback const&) = delete;
 
 			void SetCallback(ICompetitor * cb) { cb_ = cb; }
+			
+			void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
+			FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
 
 			int GetNumber(mcts::ActionType::Types action_type, mcts::board::ActionChoices const& action_choices) final {
 				int action = cb_->GetSubAction(action_type, action_choices);
@@ -226,6 +213,7 @@ namespace ui
 		private:
 			CompetitionGuide & guide_;
 			ICompetitor * cb_;
+			FlowControl::utils::MainOpType main_op_;
 		};
 
 		CompetitionGuide(std::mt19937 & rand) :
@@ -268,13 +256,14 @@ namespace ui
 
 				int main_action = next_competitor->GetMainAction();
 				auto action_analyzer = next_competitor->GetActionApplier();
+				auto main_op = action_analyzer.GetMainOpType(main_action);
 
-				recorder_.RecordMainAction(current_state, action_analyzer, main_action);
+				recorder_.RecordMainAction(current_state, main_op);
 				action_callback_.SetCallback(next_competitor);
+				action_callback_.SetMainOp(main_op);
 
 				result = action_analyzer.ApplyAction(
 					flow_context, FlowControl::CurrentPlayerStateView(current_state),
-					main_action,
 					random_callback_, action_callback_);
 
 				assert(result.type_ != mcts::Result::kResultInvalid);
