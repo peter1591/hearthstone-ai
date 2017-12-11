@@ -38,7 +38,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="cloneable_containers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
