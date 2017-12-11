@@ -1,3 +1,3 @@
 [submodule "third_party/tiny-dnn"]
-	path = contrib/tiny-dnn
+	path = third_party/tiny-dnn
 	url = https://github.com/tiny-dnn/tiny-dnn
