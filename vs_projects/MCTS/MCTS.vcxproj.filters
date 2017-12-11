@@ -43,18 +43,12 @@
     <Filter Include="Source Files\MCTS">
       <UniqueIdentifier>{2de484c4-2d05-4afa-b831-0d382a7b7cfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\libjson">
+      <UniqueIdentifier>{36dd16eb-12c4-49df-bb13-05bb8c1f7150}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\MCTS\test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\contrib\lib_json\json_value.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
@@ -65,6 +59,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
       <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\lib_json\json_reader.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\lib_json\json_value.cpp">
+      <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\lib_json\json_writer.cpp">
+      <Filter>Source Files\libjson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

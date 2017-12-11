@@ -153,13 +153,13 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
-    <ClCompile Include="..\..\contrib\lib_json\json_value.cpp" />
-    <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp" />
     <ClCompile Include="..\..\src\MCTS\test.cpp" />
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
     <ClCompile Include="..\..\src\NeuralNetwork.cpp" />
+    <ClCompile Include="..\..\third_party\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\third_party\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\third_party\lib_json\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h" />
