@@ -20,7 +20,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\utils\test\e2etest_static_event_manager.cpp">
+    <ClCompile Include="..\..\..\engine\test\e2etest_static_event_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
