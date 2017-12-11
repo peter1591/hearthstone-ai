@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "state/State.h"
+#include "FlowControl/ActionApplier.h"
 #include "FlowControl/FlowController.h"
 #include "mcts/board/BoardActionAnalyzer.h"
 
@@ -60,7 +61,7 @@ namespace ui
 			int Get(int exclusive_max) { return 0; }
 		};
 
-		class ActionParameterCallback : public mcts::board::IRawActionParameterGetter {
+		class ActionParameterCallback : public FlowControl::ActionApplier::IActionParameterGetter {
 		public:
 			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) : 
 				result_(result), choices_(choices), choices_idx_(choices_idx)

@@ -2,6 +2,7 @@
 
 #include <shared_mutex>
 #include "MCTS/Types.h"
+#include "FlowControl/ActionApplier.h"
 #include "FlowControl/PlayerStateView.h"
 #include "Utils/SpinLocks.h"
 
@@ -42,7 +43,7 @@ namespace mcts
 				FlowControl::CurrentPlayerStateView board,
 				int action,
 				IRandomGenerator & random,
-				IRawActionParameterGetter & action_parameters);
+				FlowControl::ActionApplier::IActionParameterGetter & action_parameters);
 
 			enum OpType {
 				kPlayCard,
@@ -95,11 +96,11 @@ namespace mcts
 				}
 			}
 
-			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters);
-			Result PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters);
-			Result Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters);
-			Result HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters);
-			Result EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, IRawActionParameterGetter & action_parameters);
+			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters);
+			Result PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters);
+			Result Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters);
+			Result HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters);
+			Result EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::ActionApplier::IActionParameterGetter & action_parameters);
 
 			OpType GetMainOpType(OpFunc func) const {
 				if (func == &BoardActionAnalyzer::PlayCard) return kPlayCard;

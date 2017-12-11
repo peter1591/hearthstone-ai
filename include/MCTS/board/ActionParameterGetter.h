@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "state/State.h"
-#include "FlowControl/IActionParameterGetter.h"
+#include "FlowControl/ActionApplier.h"
 #include "MCTS/Types.h"
 #include "MCTS/board/ActionChoices.h"
 
@@ -13,14 +13,7 @@ namespace mcts
 
 	namespace board
 	{
-		class IRawActionParameterGetter : public FlowControl::IActionParameterGetter
-		{
-		public:
-			virtual int ChooseHandCard(std::vector<size_t> const& playable_cards) = 0;
-			virtual int	ChooseAttacker(std::vector<int> const& attackers) = 0;
-		};
-
-		class IActionParameterGetter : public IRawActionParameterGetter
+		class IActionParameterGetter : public FlowControl::ActionApplier::IActionParameterGetter
 		{
 		public:
 			state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
