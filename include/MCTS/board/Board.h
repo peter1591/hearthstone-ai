@@ -77,10 +77,9 @@ namespace mcts
 				IRandomGenerator & random, IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer.ApplyAction(
-					flow_context,
-					FlowControl::CurrentPlayerStateView(board_),
-					random, action_parameters);
+				auto flow_result = action_analyzer.GetActionApplierByRefThis().Apply(
+					board_, action_parameters, random);
+				return Result::ConvertFrom(flow_result);
 			}
 
 		public:

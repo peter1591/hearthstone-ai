@@ -78,6 +78,25 @@ namespace mcts
 			else if (type_ == kResultLoss) score_ = -1.0;
 		}
 
+		static Result ConvertFrom(FlowControl::Result result) {
+			// The player AI is helping is defined to be the first player
+			switch (result) {
+			case FlowControl::Result::kResultFirstPlayerWin:
+				return Result::kResultWin;
+
+			case FlowControl::Result::kResultSecondPlayerWin:
+			case FlowControl::Result::kResultDraw:
+				return Result::kResultLoss;
+
+			case FlowControl::Result::kResultNotDetermined:
+				return Result::kResultNotDetermined;
+
+			case FlowControl::Result::kResultInvalid:
+			default:
+				return Result::kResultInvalid;
+			}
+		}
+
 		// Score is in range [-1.0, 1.0]
 		// If the first player has 100% chance to win, set the value to 1.0
 		// If the first plyaer has 100% chance to loss, set the value to -1.0

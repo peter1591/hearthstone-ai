@@ -262,9 +262,9 @@ namespace ui
 				action_callback_.SetCallback(next_competitor);
 				action_callback_.SetMainOp(main_op);
 
-				result = action_analyzer.ApplyAction(
-					flow_context, FlowControl::CurrentPlayerStateView(current_state),
-					random_callback_, action_callback_);
+				auto flow_result = action_analyzer.GetActionApplierByRefThis().Apply(
+					current_state, action_callback_, random_callback_);
+				result = mcts::Result::ConvertFrom(flow_result);
 
 				assert(result.type_ != mcts::Result::kResultInvalid);
 				if (result.type_ != mcts::Result::kResultNotDetermined) {

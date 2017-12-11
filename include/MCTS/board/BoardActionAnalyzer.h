@@ -38,11 +38,11 @@ namespace mcts
 
 			int GetActionsCount(FlowControl::CurrentPlayerStateView const& board);
 
-			Result ApplyAction(
-				FlowControl::FlowContext & flow_context,
-				FlowControl::CurrentPlayerStateView board,
-				IRandomGenerator & random,
-				FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters);
+			// @note the return object refer to some internal objects in *this, caller
+			// need to ensure the lifetime.
+			FlowControl::utils::ActionApplier GetActionApplierByRefThis() {
+				return FlowControl::utils::ActionApplier(attackers_, playable_cards_);
+			}
 
 			template <class Functor>
 			void ForEachMainOp(Functor && functor) const {
@@ -53,7 +53,7 @@ namespace mcts
 			}
 			FlowControl::utils::MainOpType GetMainOpType(size_t choice) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				return GetMainOpType(op_map_[choice]);
+				return op_map_[choice];
 			}
 			template <class Functor>
 			void ForEachPlayableCard(Functor && functor) const {
@@ -68,42 +68,8 @@ namespace mcts
 			}
 
 		private:
-			Result ConvertResult(FlowControl::Result flow_result) {
-				// The player AI is helping is defined to be the first player
-				switch (flow_result) {
-				case FlowControl::Result::kResultFirstPlayerWin:
-					return Result::kResultWin;
-
-				case FlowControl::Result::kResultSecondPlayerWin:
-				case FlowControl::Result::kResultDraw:
-					return Result::kResultLoss;
-
-				case FlowControl::Result::kResultNotDetermined:
-					return Result::kResultNotDetermined;
-
-				case FlowControl::Result::kResultInvalid:
-				default:
-					return Result::kResultInvalid;
-				}
-			}
-
-			typedef Result (BoardActionAnalyzer::*OpFunc)(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters);
-			Result PlayCard(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters);
-			Result Attack(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters);
-			Result HeroPower(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters);
-			Result EndTurn(FlowControl::FlowContext & flow_context, FlowControl::CurrentPlayerStateView & board, IRandomGenerator & random, FlowControl::utils::ActionApplier::IActionParameterGetter & action_parameters);
-
-			FlowControl::utils::MainOpType GetMainOpType(OpFunc func) const {
-				if (func == &BoardActionAnalyzer::PlayCard) return FlowControl::utils::MainOpType::kMainOpPlayCard;
-				if (func == &BoardActionAnalyzer::Attack) return FlowControl::utils::MainOpType::kMainOpAttack;
-				if (func == &BoardActionAnalyzer::HeroPower) return FlowControl::utils::MainOpType::kMainOpHeroPower;
-				if (func == &BoardActionAnalyzer::EndTurn) return FlowControl::utils::MainOpType::kMainOpEndTurn;
-				return FlowControl::utils::MainOpType::kMainOpInvalid;
-			}
-
-		private:
 			mutable Utils::SharedSpinLock mutex_;
-			std::array<OpFunc, FlowControl::utils::MainOpType::kMainOpMax> op_map_;
+			std::array<FlowControl::utils::MainOpType, FlowControl::utils::MainOpType::kMainOpMax> op_map_;
 			size_t op_map_size_;
 			std::vector<int> attackers_;
 			std::vector<size_t> playable_cards_;

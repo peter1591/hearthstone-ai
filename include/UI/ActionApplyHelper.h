@@ -197,7 +197,8 @@ namespace ui
 				analyzer.GetActionsCount(state_view);
 				auto main_op = analyzer.GetMainOpType(main_op_idx);
 				action_cb.SetMainOp(main_op);
-				analyzer.ApplyAction(flow_context, state_view, rand_cb, action_cb);
+				
+				analyzer.GetActionApplierByRefThis().Apply(game_state, action_cb, rand_cb);
 			}
 
 			return info;
