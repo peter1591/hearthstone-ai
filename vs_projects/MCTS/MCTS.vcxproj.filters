@@ -60,13 +60,13 @@
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
       <Filter>Source Files\MCTS</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\lib_json\json_reader.cpp">
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\lib_json\json_value.cpp">
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\lib_json\json_writer.cpp">
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
   </ItemGroup>
