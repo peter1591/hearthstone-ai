@@ -51,7 +51,7 @@ namespace ui
 			return 0;
 		}
 
-		int PrepareToRun(std::unique_ptr<ui::AIController> & controller, int seed)
+		int PrepareToRun(std::unique_ptr<agents::MCTSRunner> & controller, int seed)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
@@ -59,7 +59,7 @@ namespace ui
 			parser_.ChangeBoard(board_raw_, rand);
 			
 			if (!controller || need_restart_ai_) {
-				controller.reset(new ui::AIController(root_sample_count_, rand));
+				controller.reset(new agents::MCTSRunner(root_sample_count_, rand));
 				action_apply_helper_.ClearChoices();
 			}
 			else {

@@ -9,15 +9,15 @@
 #include "judge/IAgent.h"
 #include "judge/Judger.h"
 
-namespace ui
+namespace agents
 {
-	class AIController
+	class MCTSRunner
 	{
 	private:
 		using StartingStateGetter = std::function<state::State(int)>;
 
 	public:
-		AIController(int tree_samples, std::mt19937 & rand) :
+		MCTSRunner(int tree_samples, std::mt19937 & rand) :
 			threads_(),
 			first_tree_(), second_tree_(), statistic_(), stop_flag_(false), tree_sample_randoms_()
 		{
@@ -26,7 +26,7 @@ namespace ui
 			}
 		}
 
-		~AIController()
+		~MCTSRunner()
 		{
 			WaitUntilStopped();
 		}
@@ -101,12 +101,12 @@ namespace ui
 		std::vector<int> tree_sample_randoms_;
 	};
 
-	class AICompetitor : public judge::IAgent {
+	class MCTSAgent : public judge::IAgent {
 	public:
-		AICompetitor() : root_node_(nullptr), node_(nullptr), controller_() {}
+		MCTSAgent() : root_node_(nullptr), node_(nullptr), controller_() {}
 
-		AICompetitor(AICompetitor const&) = delete;
-		AICompetitor & operator=(AICompetitor const&) = delete;
+		MCTSAgent(MCTSAgent const&) = delete;
+		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
 		void Think(state::State const& state, int threads, int seed, int tree_samples, std::function<bool(uint64_t)> cb) {
 			auto continue_checker = [&]() {
@@ -115,7 +115,7 @@ namespace ui
 			};
 
 			std::mt19937 rand(seed);
-			controller_.reset(new AIController(tree_samples, rand));
+			controller_.reset(new MCTSRunner(tree_samples, rand));
 			controller_->Run(threads, rand(), [&](int seed) {
 				(void)seed;
 				return state;
@@ -199,6 +199,6 @@ namespace ui
 	private:
 		mcts::builder::TreeBuilder::TreeNode const* root_node_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
-		std::unique_ptr<AIController> controller_;
+		std::unique_ptr<MCTSRunner> controller_;
 	};
 }

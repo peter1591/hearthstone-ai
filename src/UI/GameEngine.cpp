@@ -4,7 +4,7 @@
 #include <sstream>
 #include <memory>
 
-#include "UI/AIController.h"
+#include "agents/MCTSAgent.h"
 #include "UI/BoardGetter.h"
 #include "UI/GameEngine.h"
 #include "UI/InteractiveShell.h"
@@ -168,7 +168,7 @@ namespace ui
 	private:
 		GameEngineLogger logger_;
 		std::atomic<bool> running_;
-		std::unique_ptr<ui::AIController> controller_;
+		std::unique_ptr<agents::MCTSRunner> controller_;
 		ui::InteractiveShell shell_;
 		ui::BoardGetter board_getter_;
 	};

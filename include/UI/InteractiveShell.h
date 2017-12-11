@@ -4,7 +4,7 @@
 #include <ostream>
 #include <random>
 
-#include "UI/AIController.h"
+#include "agents/MCTSAgent.h"
 #include "UI/ActionApplyHelper.h"
 
 namespace ui
@@ -14,7 +14,7 @@ namespace ui
 	public:
 		using StartBoardGetter = std::function<state::State(int)>;
 
-		InteractiveShell(AIController * controller = nullptr, StartBoardGetter start_board_getter = StartBoardGetter()) :
+		InteractiveShell(agents::MCTSRunner * controller = nullptr, StartBoardGetter start_board_getter = StartBoardGetter()) :
 			controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
 		{
 			try {
@@ -28,7 +28,7 @@ namespace ui
 		InteractiveShell(InteractiveShell const&) = delete;
 		InteractiveShell & operator=(InteractiveShell const&) = delete;
 
-		void SetController(AIController * controller) {
+		void SetController(agents::MCTSRunner * controller) {
 			controller_ = controller;
 		}
 
@@ -470,7 +470,7 @@ namespace ui
 		}
 
 	private:
-		ui::AIController * controller_;
+		agents::MCTSRunner * controller_;
 		StartBoardGetter start_board_getter_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		std::unique_ptr<mcts::policy::simulation::NeuralNetworkStateValueFunction> state_value_func_;

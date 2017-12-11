@@ -68,8 +68,8 @@ namespace judge
 		Judger(Judger const& rhs) = delete;
 		Judger & operator=(Judger const& rhs) = delete;
 
-		void SetFirstCompetitor(IAgent * first) { first_ = first; }
-		void SetSecondCompetitor(IAgent * second) { second_ = second; }
+		void SetFirstAgent(IAgent * first) { first_ = first; }
+		void SetSecondAgent(IAgent * second) { second_ = second; }
 
 		template <class ProgressCallback, class IterationProgressCallback>
 		void Start(StartingStateGetter state_getter, int threads, int seed, int tree_samples,
@@ -82,28 +82,28 @@ namespace judge
 			recorder_.Start();
 
 			mcts::Result result = mcts::Result::kResultInvalid;
-			IAgent * next_competitor = nullptr;
+			IAgent * next_agent = nullptr;
 			while (true) {
 				cb(current_state);
 
 				if (current_state.GetCurrentPlayerId().IsFirst()) {
-					next_competitor = first_;
+					next_agent = first_;
 				}
 				else {
 					assert(current_state.GetCurrentPlayerId().IsSecond());
-					next_competitor = second_;
+					next_agent = second_;
 				}
 
-				next_competitor->Think(current_state, threads, seed, tree_samples, iteration_cb);
+				next_agent->Think(current_state, threads, seed, tree_samples, iteration_cb);
 
 				FlowControl::FlowContext flow_context;
 
-				int main_action = next_competitor->GetMainAction();
-				auto action_analyzer = next_competitor->GetActionApplier();
+				int main_action = next_agent->GetMainAction();
+				auto action_analyzer = next_agent->GetActionApplier();
 				auto main_op = action_analyzer.GetMainOpType(main_action);
 
 				recorder_.RecordMainAction(current_state, main_op);
-				action_callback_.SetCallback(next_competitor);
+				action_callback_.SetCallback(next_agent);
 				action_callback_.SetMainOp(main_op);
 
 				auto flow_result = action_analyzer.GetActionApplierByRefThis().Apply(

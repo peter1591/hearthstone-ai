@@ -9,7 +9,6 @@
 
 #include "state/Configs.h"
 #include "Cards/Database.h"
-#include "UI/AIController.h"
 #include "UI/Decks.h"
 #include "UI/Board/Board.h"
 #include "UI/GameEngineLogger.h"

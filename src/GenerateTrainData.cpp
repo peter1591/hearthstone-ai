@@ -9,8 +9,8 @@
 
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
-#include "UI/AIController.h"
 #include "judge/Judger.h"
+#include "agents/MCTSAgent.h"
 
 static void Initialize()
 {
@@ -66,15 +66,15 @@ int main(int argc, char *argv[])
 
 	judge::Judger judger(rand);
 
-	ui::AICompetitor first;
-	ui::AICompetitor second;
+	agents::MCTSAgent first;
+	agents::MCTSAgent second;
 
 	auto start_board_getter = [&]() -> state::State {
 		return TestStateBuilder().GetStateWithRandomStartCard(rand());
 	};
 
-	judger.SetFirstCompetitor(&first);
-	judger.SetSecondCompetitor(&second);
+	judger.SetFirstAgent(&first);
+	judger.SetSecondAgent(&second);
 
 	auto last_show = std::chrono::steady_clock::now();
 	int root_samples = 10;

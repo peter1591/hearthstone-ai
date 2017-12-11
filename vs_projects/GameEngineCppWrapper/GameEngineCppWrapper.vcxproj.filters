@@ -28,11 +28,11 @@
     <Filter Include="Header Files\engine">
       <UniqueIdentifier>{011bed25-6e57-46c5-8f14-e83dd3b8f81d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\agents">
+      <UniqueIdentifier>{95b69149-e812-4437-88c3-9d15cf3a8cb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\UI\AIController.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -77,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="..\..\engine\include\FlowControl\ActionApplier.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\agents\include\agents\MCTSAgent.h">
+      <Filter>Header Files\agents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
