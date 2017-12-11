@@ -24,13 +24,13 @@ static void WriteMapHeader()
 {
 	std::cout << "Generating map header" << std::endl;
 
-	if (!Cards::Database::GetInstance().Initialize("../../include/Cards/cards.json")) {
+	if (!Cards::Database::GetInstance().Initialize("../../../engine/include/Cards/cards.json")) {
 		std::cout << "Failed to initialize card database." << std::endl;
 		return;
 	}
 
 	// write mapping header
-	std::ofstream header_file("../../include/Cards/id-map.h");
+	std::ofstream header_file("../../../engine/include/Cards/id-map.h");
 	header_file
 		<< "#ifndef BOOTSTRAP_CARDS_ID_MAP_H" << std::endl
 		<< "#define BOOTSTRAP_CARDS_ID_MAP_H" << std::endl
@@ -62,7 +62,7 @@ static void WriteMapHeader()
 
 int main(void)
 {
-	WriteFormattedJson("../../include/Cards/cards.json", "../../include/Cards/formatted_cards.json");
+	WriteFormattedJson("../../../engine/include/Cards/cards.json", "../../../engine/include/Cards/formatted_cards.json");
 
 	WriteMapHeader();
 

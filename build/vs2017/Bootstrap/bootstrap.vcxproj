@@ -69,16 +69,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\utils\include;..\..\..\engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\utils\include;..\..\..\engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\utils\include;..\..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\utils\include;..\..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -126,13 +126,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\contrib\lib_json\json_reader.cpp" />
-    <ClCompile Include="..\..\contrib\lib_json\json_value.cpp" />
-    <ClCompile Include="..\..\contrib\lib_json\json_writer.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClInclude Include="..\..\include\Cards\Database.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Cards\Database.h" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp" />
+    <ClCompile Include="bootstrap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
