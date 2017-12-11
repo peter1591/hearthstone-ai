@@ -152,6 +152,7 @@
     <ClInclude Include="..\..\engine\include\FlowControl\utils\MainOp.h" />
     <ClInclude Include="..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\judge\include\judge\Judger.h" />
+    <ClInclude Include="..\..\judge\include\judge\Recorder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

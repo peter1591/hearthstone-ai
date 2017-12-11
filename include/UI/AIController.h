@@ -6,6 +6,7 @@
 
 #include "state/State.h"
 #include "MCTS/MOMCTS.h"
+#include "judge/IAgent.h"
 #include "judge/Judger.h"
 
 namespace ui
@@ -100,7 +101,7 @@ namespace ui
 		std::vector<int> tree_sample_randoms_;
 	};
 
-	class AICompetitor : public judge::ICompetitor {
+	class AICompetitor : public judge::IAgent {
 	public:
 		AICompetitor() : root_node_(nullptr), node_(nullptr), controller_() {}
 

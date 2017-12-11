@@ -56,5 +56,8 @@
     <ClInclude Include="..\..\judge\include\judge\Judger.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\judge\include\judge\Recorder.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

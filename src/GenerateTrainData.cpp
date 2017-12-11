@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	std::cout << "\tIterations: " << iterations << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
-	judge::CompetitionGuide guide(rand);
+	judge::Judger judger(rand);
 
 	ui::AICompetitor first;
 	ui::AICompetitor second;
@@ -73,12 +73,12 @@ int main(int argc, char *argv[])
 		return TestStateBuilder().GetStateWithRandomStartCard(rand());
 	};
 
-	guide.SetFirstCompetitor(&first);
-	guide.SetSecondCompetitor(&second);
+	judger.SetFirstCompetitor(&first);
+	judger.SetSecondCompetitor(&second);
 
 	auto last_show = std::chrono::steady_clock::now();
 	int root_samples = 10;
-	guide.Start(start_board_getter, threads, rand(), root_samples, [&](state::State const& state) {
+	judger.Start(start_board_getter, threads, rand(), root_samples, [&](state::State const& state) {
 		std::cout << "Turn: " << state.GetTurn() << std::endl;
 	}, [iterations, last_show](uint64_t	now_iterations) mutable {
 		if (now_iterations >= iterations) {
