@@ -153,13 +153,13 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp" />
-    <ClCompile Include="..\..\src\MCTS\test.cpp" />
-    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
     <ClCompile Include="..\..\src\NeuralNetwork.cpp" />
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp" />
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp" />
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp" />
+    <ClCompile Include="..\src\MCTS\CardDispatcher.cpp" />
+    <ClCompile Include="..\src\MCTS\test.cpp" />
+    <ClCompile Include="..\src\MCTS\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h" />

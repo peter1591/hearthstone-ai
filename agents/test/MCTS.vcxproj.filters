@@ -54,17 +54,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\MCTS\test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\NeuralNetwork.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
-      <Filter>Source Files\MCTS</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
@@ -74,6 +65,15 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files\libjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MCTS\TestStateBuilder.cpp">
+      <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MCTS\CardDispatcher.cpp">
+      <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MCTS\test.cpp">
+      <Filter>Source Files\MCTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
