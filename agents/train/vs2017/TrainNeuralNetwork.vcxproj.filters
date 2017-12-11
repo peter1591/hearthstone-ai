@@ -18,20 +18,20 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Train\Source.cpp">
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\NeuralNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\NeuralNetwork.cpp">
+    <ClCompile Include="..\src\Train.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
-      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

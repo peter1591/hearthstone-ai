@@ -19,28 +19,31 @@
     <Filter Include="Header Files\judge">
       <UniqueIdentifier>{760eea32-485b-4207-931a-8c342e85fc95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\MCTS">
+      <UniqueIdentifier>{dae6271f-2f23-40c9-8523-406d4a3277cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\GenerateTrainData.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\NeuralNetwork.cpp">
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\NeuralNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MCTS</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
+      <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GenerateTrainData.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp">
-      <Filter>Source Files\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
-      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
