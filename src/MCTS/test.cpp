@@ -6,8 +6,7 @@
 #include "FlowControl/FlowController-impl.h"
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
-#include "UI/AIController.h"
-#include "UI/CompetitionGuide.h"
+#include "agents/MCTSAgent.h"
 #include "UI/InteractiveShell.h"
 
 static void Initialize()
@@ -25,7 +24,7 @@ struct Configs
 
 int Configs::threads = 0;
 
-void Run(ui::AIController * controller, int secs)
+void Run(agents::MCTSRunner * controller, int secs)
 {
 	auto & s = std::cout;
 
@@ -80,7 +79,7 @@ void Run(ui::AIController * controller, int secs)
 	s << std::endl;
 }
 
-bool CheckRun(std::string const& cmdline, ui::AIController * controller)
+bool CheckRun(std::string const& cmdline, agents::MCTSRunner * controller)
 {
 	std::stringstream ss(cmdline);
 
@@ -110,7 +109,7 @@ void TestAI()
 	int tree_samples = 10000;
 	std::mt19937 rand;
 
-	ui::AIController controller(tree_samples, rand);
+	agents::MCTSRunner controller(tree_samples, rand);
 	ui::InteractiveShell handler(&controller);
 
 	while (std::cin) {
