@@ -69,16 +69,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\include;..\..\engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\third_party\jsoncpp\include;..\..\include;..\..\engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\include;..\..\engine\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\third_party\jsoncpp\include;..\..\include;..\..\engine\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\include;..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\third_party\jsoncpp\include;..\..\include;..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\include;..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\third_party\jsoncpp\include;..\..\include;..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,14 +157,14 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\third_party\lib_json\json_reader.cpp" />
-    <ClCompile Include="..\..\third_party\lib_json\json_value.cpp" />
-    <ClCompile Include="..\..\third_party\lib_json\json_writer.cpp" />
     <ClCompile Include="..\..\engine\test\CardDispatcher.cpp" />
     <ClCompile Include="..\..\engine\test\main.cpp" />
     <ClCompile Include="..\..\engine\test\test2.cpp" />
     <ClCompile Include="..\..\engine\test\test3.cpp" />
     <ClCompile Include="..\..\engine\test\test4.cpp" />
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp" />
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp" />
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\Cards\AuraHelper.h" />

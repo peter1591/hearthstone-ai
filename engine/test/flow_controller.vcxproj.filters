@@ -91,7 +91,7 @@
     <Filter Include="Header Files\Cards\Ungoro">
       <UniqueIdentifier>{bd97fb4d-052d-4210-8082-efe1260fa8aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\libjson">
+    <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{1ef37f11-5646-4fd9-ab53-8a11047b7d90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -111,14 +111,14 @@
     <ClCompile Include="..\..\engine\test\test4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\lib_json\json_reader.cpp">
-      <Filter>Source Files\libjson</Filter>
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\lib_json\json_value.cpp">
-      <Filter>Source Files\libjson</Filter>
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\lib_json\json_writer.cpp">
-      <Filter>Source Files\libjson</Filter>
+    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
