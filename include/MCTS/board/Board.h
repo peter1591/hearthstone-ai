@@ -62,13 +62,12 @@ namespace mcts
 			}
 
 		public: // bridge to action analyzer
-			int GetActionsCount(BoardActionAnalyzer & action_analyzer) const
+			void PrepareActionAnalyzer(BoardActionAnalyzer & action_analyzer) const
 			{
 				// board action analyzer will not access hidden information
 				//   as long as the current-player is the viewer
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer.GetActionsCount(
-					FlowControl::CurrentPlayerStateView(board_));
+				return action_analyzer.Prepare(FlowControl::CurrentPlayerStateView(board_));
 			}
 
 			Result ApplyAction(

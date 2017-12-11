@@ -106,7 +106,8 @@ namespace mcts
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
 
-			int choices = board_->GetActionsCount(action_analyzer);
+			board_->PrepareActionAnalyzer(action_analyzer);
+			int choices = action_analyzer.GetActionsCount();
 			assert(choices > 0); // at least end-turn should be valid
 
 			int choice = -1;

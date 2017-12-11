@@ -11,15 +11,15 @@ namespace mcts
 {
 	namespace board
 	{
-		inline int BoardActionAnalyzer::GetActionsCount(FlowControl::CurrentPlayerStateView const& board)
+		inline void BoardActionAnalyzer::Prepare(FlowControl::CurrentPlayerStateView const& board)
 		{
 			{
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				if (op_map_size_ > 0) return (int)op_map_size_;
+				if (op_map_size_ > 0) return;
 			}
 
 			std::lock_guard<Utils::SharedSpinLock> write_lock(mutex_);
-			if (op_map_size_ > 0) return (int)op_map_size_;
+			if (op_map_size_ > 0) return;
 
 			playable_cards_.clear();
 			board.ForEachPlayableCard([&](size_t idx) {
@@ -48,7 +48,6 @@ namespace mcts
 
 			op_map_[op_map_size_] = FlowControl::utils::MainOpType::kMainOpEndTurn;
 			++op_map_size_;
-			return (int)op_map_size_;
 		}
 	}
 }

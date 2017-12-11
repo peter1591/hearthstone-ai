@@ -36,7 +36,8 @@ namespace mcts
 
 			void Reset() { op_map_size_ = 0; }
 
-			int GetActionsCount(FlowControl::CurrentPlayerStateView const& board);
+			void Prepare(FlowControl::CurrentPlayerStateView const& board);
+			int GetActionsCount() { return (int)op_map_size_; }
 
 			// @note the return object refer to some internal objects in *this, caller
 			// need to ensure the lifetime.

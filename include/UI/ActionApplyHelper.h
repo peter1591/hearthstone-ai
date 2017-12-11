@@ -194,7 +194,7 @@ namespace ui
 
 				mcts::board::BoardActionAnalyzer analyzer;
 				FlowControl::CurrentPlayerStateView state_view(game_state);
-				analyzer.GetActionsCount(state_view);
+				analyzer.Prepare(state_view);
 				auto main_op = analyzer.GetMainOpType(main_op_idx);
 				action_cb.SetMainOp(main_op);
 				
