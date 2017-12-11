@@ -10,7 +10,7 @@
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
 #include "UI/AIController.h"
-#include "UI/CompetitionGuide.h"
+#include "judge/Judger.h"
 
 static void Initialize()
 {
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	std::cout << "\tIterations: " << iterations << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
-	ui::CompetitionGuide guide(rand);
+	judge::CompetitionGuide guide(rand);
 
 	ui::AICompetitor first;
 	ui::AICompetitor second;

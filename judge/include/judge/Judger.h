@@ -13,7 +13,7 @@
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/RandomGenerator.h"
 
-namespace ui
+namespace judge
 {
 	class ICompetitor {
 	public:

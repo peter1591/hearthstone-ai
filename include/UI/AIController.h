@@ -6,7 +6,7 @@
 
 #include "state/State.h"
 #include "MCTS/MOMCTS.h"
-#include "UI/CompetitionGuide.h"
+#include "judge/Judger.h"
 
 namespace ui
 {
@@ -100,7 +100,7 @@ namespace ui
 		std::vector<int> tree_sample_randoms_;
 	};
 
-	class AICompetitor : public ICompetitor {
+	class AICompetitor : public judge::ICompetitor {
 	public:
 		AICompetitor() : root_node_(nullptr), node_(nullptr), controller_() {}
 

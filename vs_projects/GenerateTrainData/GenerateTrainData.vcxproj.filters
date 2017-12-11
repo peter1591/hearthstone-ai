@@ -16,6 +16,9 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{46cc5632-6981-40c0-a753-f78e42a9ecc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\judge">
+      <UniqueIdentifier>{760eea32-485b-4207-931a-8c342e85fc95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\GenerateTrainData.cpp">
@@ -46,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="..\..\engine\include\FlowControl\utils\MainOp.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\judge\include\judge\IAgent.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\judge\include\judge\Judger.h">
+      <Filter>Header Files\judge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
