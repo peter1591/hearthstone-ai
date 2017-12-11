@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D1D61963-B288-44D6-842D-C047046C9E28}</ProjectGuid>
+    <RootNamespace>flow_controller</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>..\..\include;..\..\engine\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>..\..\include;..\..\engine\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\..\include;..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\..\include;..\..\engine\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+    </ClCompile>
+    <PreBuildEvent>
+      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ShowIncludes>false</ShowIncludes>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+    </ClCompile>
+    <PreBuildEvent>
+      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ShowIncludes>false</ShowIncludes>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /y ..\..\include\Cards\cards.json .</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\third_party\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\third_party\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\third_party\lib_json\json_writer.cpp" />
+    <ClCompile Include="..\..\engine\test\CardDispatcher.cpp" />
+    <ClCompile Include="..\..\engine\test\main.cpp" />
+    <ClCompile Include="..\..\engine\test\test2.cpp" />
+    <ClCompile Include="..\..\engine\test\test3.cpp" />
+    <ClCompile Include="..\..\engine\test\test4.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\Cards\AuraHelper.h" />
+    <ClInclude Include="..\..\include\Cards\BattlecryHelper.h" />
+    <ClInclude Include="..\..\include\Cards\CardAttributes.h" />
+    <ClInclude Include="..\..\include\Cards\CardBase-cleanup.h" />
+    <ClInclude Include="..\..\include\Cards\CardBase.h" />
+    <ClInclude Include="..\..\include\Cards\CardDispatcher-impl.h" />
+    <ClInclude Include="..\..\include\Cards\CardDispatcher.h" />
+    <ClInclude Include="..\..\include\Cards\Cards.h" />
+    <ClInclude Include="..\..\include\Cards\Contexts.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Druid.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Hunter.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Mage.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Paladin.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Priest.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Rogue.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Shaman.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Warlock.h" />
+    <ClInclude Include="..\..\include\Cards\Core\Warrior.h" />
+    <ClInclude Include="..\..\include\Cards\Database.h" />
+    <ClInclude Include="..\..\include\Cards\EventRegister.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Druid.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Mage.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Priest.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Rogue.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h" />
+    <ClInclude Include="..\..\include\Cards\Expert1\Warrior.h" />
+    <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\GeneralCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\MinionCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\SecretCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\SpellCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h" />
+    <ClInclude Include="..\..\include\Cards\Gangs\Hunter.h" />
+    <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h" />
+    <ClInclude Include="..\..\include\Cards\Gangs\Warrior.h" />
+    <ClInclude Include="..\..\include\Cards\id-map.h" />
+    <ClInclude Include="..\..\include\Cards\MinionCardUtils.h" />
+    <ClInclude Include="..\..\include\Cards\OG\Shaman.h" />
+    <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
+    <ClInclude Include="..\..\include\Cards\PreIndexedCards.h" />
+    <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Context.h" />
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\enchantment\TieredEnchantments.h" />
+    <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
+    <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
+    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
+    <ClInclude Include="..\..\include\FlowControl\JsonSerializer.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardCharacterManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h" />
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h" />
+    <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h" />
+    <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h" />
+    <ClInclude Include="..\..\include\state\aura\Manager.h" />
+    <ClInclude Include="..\..\include\state\board\Board.h" />
+    <ClInclude Include="..\..\include\State\board\Deck.h" />
+    <ClInclude Include="..\..\include\state\board\Graveyard.h" />
+    <ClInclude Include="..\..\include\state\board\Hand.h" />
+    <ClInclude Include="..\..\include\state\board\Minions.h" />
+    <ClInclude Include="..\..\include\state\board\Player.h" />
+    <ClInclude Include="..\..\include\state\board\PlayerResource.h" />
+    <ClInclude Include="..\..\include\state\board\Secrets.h" />
+    <ClInclude Include="..\..\include\state\Cards\Callbacks.h" />
+    <ClInclude Include="..\..\include\state\Cards\Card.h" />
+    <ClInclude Include="..\..\include\state\Cards\CardData.h" />
+    <ClInclude Include="..\..\include\state\Cards\EnchantableStates.h" />
+    <ClInclude Include="..\..\include\state\Cards\Manager.h" />
+    <ClInclude Include="..\..\include\state\Configs.h" />
+    <ClInclude Include="..\..\include\state\detail\InvokeCallback-impl.h" />
+    <ClInclude Include="..\..\include\state\detail\InvokeCallback.h" />
+    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h" />
+    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h" />
+    <ClInclude Include="..\..\include\state\Events\EventListener.h" />
+    <ClInclude Include="..\..\include\state\Events\EventTypes.h" />
+    <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h" />
+    <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h" />
+    <ClInclude Include="..\..\include\state\Events\Manager.h" />
+    <ClInclude Include="..\..\include\state\IRandomGenerator.h" />
+    <ClInclude Include="..\..\include\state\JsonSerializer.h" />
+    <ClInclude Include="..\..\include\state\State.h" />
+    <ClInclude Include="..\..\include\state\targetor\Targets-impl.h" />
+    <ClInclude Include="..\..\include\state\targetor\Targets.h" />
+    <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h" />
+    <ClInclude Include="..\..\include\state\Types.h" />
+    <ClInclude Include="..\..\include\state\ZoneChanger.h" />
+    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
+    <ClInclude Include="..\..\include\Utils\FuncPtrArray.h" />
+    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h" />
+    <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
+    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />
+    <ClInclude Include="..\..\include\Utils\StaticInvokables.h" />
+    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
