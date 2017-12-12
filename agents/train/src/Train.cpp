@@ -9,7 +9,9 @@
 
 #include "json/json.h"
 
-#include "NeuralNetwork.h"
+#include "neural_net/NeuralNetwork.h"
+
+using neural_net::NeuralNetworkWrapper;
 
 class JsonDataParser : public NeuralNetworkWrapper::IInputGetter
 {

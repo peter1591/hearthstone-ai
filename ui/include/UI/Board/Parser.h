@@ -9,7 +9,7 @@
 
 #include "state/Configs.h"
 #include "Cards/Database.h"
-#include "UI/Decks.h"
+#include "decks/Decks.h"
 #include "UI/Board/Board.h"
 #include "UI/GameEngineLogger.h"
 #include "UI/Board/UnknownCards.h"
@@ -75,7 +75,7 @@ namespace ui
 				//std::string player_deck_type = "InnKeeperBasicMage"; // TODO: use correct deck
 				std::string player_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
 				std::vector<Cards::CardId> player_deck_cards;
-				for (auto const& card_name : Decks::GetDeck(player_deck_type)) {
+				for (auto const& card_name : decks::Decks::GetDeck(player_deck_type)) {
 					Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 					player_deck_cards.push_back(card_id);
 				}
@@ -86,7 +86,7 @@ namespace ui
 				//std::string opponent_deck_type = "InnKeeperBasicMage";
 				std::string opponent_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
 				std::vector<Cards::CardId> opponent_deck_cards;
-				for (auto const& card_name : Decks::GetDeck(opponent_deck_type)) {
+				for (auto const& card_name : decks::Decks::GetDeck(opponent_deck_type)) {
 					Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 					opponent_deck_cards.push_back(card_id);
 				}

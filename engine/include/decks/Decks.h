@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_set>
 
-namespace ui
+namespace decks
 {
 	class Decks
 	{

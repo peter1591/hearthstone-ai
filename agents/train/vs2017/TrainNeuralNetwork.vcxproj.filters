@@ -27,15 +27,15 @@
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\NeuralNetwork.cpp">
+    <ClCompile Include="..\src\Train.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Train.cpp">
+    <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\NeuralNetwork.h">
+    <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

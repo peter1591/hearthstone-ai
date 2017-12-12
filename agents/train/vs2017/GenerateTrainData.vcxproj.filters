@@ -33,17 +33,17 @@
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\NeuralNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
-      <Filter>Source Files\MCTS</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
-      <Filter>Source Files\MCTS</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\GenerateTrainData.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\CardDispatcher.cpp">
+      <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\TestStateBuilder.cpp">
+      <Filter>Source Files\MCTS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

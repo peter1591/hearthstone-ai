@@ -4,7 +4,7 @@
 
 #include "state/Configs.h"
 #include "FlowControl/FlowController-impl.h"
-#include "UI/Decks.h"
+#include "decks/Decks.h"
 
 class MyRandomGenerator : public state::IRandomGenerator
 {
@@ -155,14 +155,14 @@ state::State TestStateBuilder::GetStateWithRandomStartCard(int seed)
 	MyRandomGenerator my_random(rand());
 
 	MakeHero(state, state::PlayerIdentifier::First());
-	auto deck1 = ui::Decks::GetDeck("InnKeeperExpertWarlock");
+	auto deck1 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
 	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
 	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
 	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
-	auto deck2 = ui::Decks::GetDeck("InnKeeperExpertWarlock");
+	auto deck2 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
 	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
 	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
 	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
@@ -185,7 +185,7 @@ state::State TestStateBuilder::GetState(int seed)
 	MyRandomGenerator my_random(seed);
 
 	MakeHero(state, state::PlayerIdentifier::First());
-	auto deck1 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	auto deck1 = decks::Decks::GetDeck("InnKeeperBasicMage");
 	MoveFromDeckToHand(deck1, "Arcane Missiles", state, state::PlayerIdentifier::First());
 	//MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
 	MoveFromDeckToHand(deck1, "Bloodfen Raptor", state, state::PlayerIdentifier::First());
@@ -195,7 +195,7 @@ state::State TestStateBuilder::GetState(int seed)
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
-	auto deck2 = ui::Decks::GetDeck("InnKeeperBasicMage");
+	auto deck2 = decks::Decks::GetDeck("InnKeeperBasicMage");
 	MoveFromDeckToHand(deck2, "Arcane Missiles", state, state::PlayerIdentifier::Second());
 	MoveFromDeckToHand(deck2, "Bloodfen Raptor", state, state::PlayerIdentifier::Second());
 	MoveFromDeckToHand(deck2, "River Crocolisk", state, state::PlayerIdentifier::Second());
