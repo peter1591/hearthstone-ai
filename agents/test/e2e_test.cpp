@@ -6,8 +6,8 @@
 #include "FlowControl/FlowController-impl.h"
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
+#include "MCTS/inspector/InteractiveShell.h"
 #include "agents/MCTSAgent.h"
-#include "UI/InteractiveShell.h"
 
 static void Initialize()
 {
@@ -108,7 +108,7 @@ void TestAI()
 	std::mt19937 rand;
 
 	agents::MCTSRunner controller(tree_samples, rand);
-	ui::InteractiveShell handler(&controller);
+	mcts::inspector::InteractiveShell handler(&controller);
 
 	while (std::cin) {
 		std::string cmdline;

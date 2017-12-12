@@ -10,7 +10,7 @@
 #include "state/Configs.h"
 #include "Cards/Database.h"
 #include "UI/Board/Parser.h"
-#include "UI/ActionApplyHelper.h"
+#include "MCTS/inspector/ActionApplyHelper.h"
 
 namespace ui
 {
@@ -83,7 +83,7 @@ namespace ui
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
 		board::Parser parser_;
-		ActionApplyHelper action_apply_helper_;
+		mcts::inspector::ActionApplyHelper action_apply_helper_;
 		std::string board_raw_;
 		int root_sample_count_;
 		bool need_restart_ai_;

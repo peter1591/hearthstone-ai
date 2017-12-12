@@ -5,9 +5,9 @@
 #include <memory>
 
 #include "agents/MCTSAgent.h"
+#include "MCTS/inspector/InteractiveShell.h"
 #include "UI/BoardGetter.h"
 #include "UI/GameEngine.h"
-#include "UI/InteractiveShell.h"
 #include "FlowControl/FlowController-impl.h"
 #include "Cards/PreIndexedCards.h"
 
@@ -169,7 +169,7 @@ namespace ui
 		GameEngineLogger logger_;
 		std::atomic<bool> running_;
 		std::unique_ptr<agents::MCTSRunner> controller_;
-		ui::InteractiveShell shell_;
+		mcts::inspector::InteractiveShell shell_;
 		ui::BoardGetter board_getter_;
 	};
 

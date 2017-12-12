@@ -43,9 +43,6 @@
     <Filter Include="Source Files\MCTS">
       <UniqueIdentifier>{2de484c4-2d05-4afa-b831-0d382a7b7cfe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\libjson">
-      <UniqueIdentifier>{36dd16eb-12c4-49df-bb13-05bb8c1f7150}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\FlowControl">
       <UniqueIdentifier>{58418007-6267-4019-bbb6-246eedcb397b}</UniqueIdentifier>
     </Filter>
@@ -58,17 +55,17 @@
     <Filter Include="Header Files\neural_net">
       <UniqueIdentifier>{27380b77-c6b3-4789-91bf-1bf993370664}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\jsoncpp">
+      <UniqueIdentifier>{36dd16eb-12c4-49df-bb13-05bb8c1f7150}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\agents">
+      <UniqueIdentifier>{0e2486e0-67c3-4dfc-ad37-59c6d573c418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MCTS\inspector">
+      <UniqueIdentifier>{1096e278-ba5b-469b-a5a8-d3a20eda180e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\test\CardDispatcher.cpp">
       <Filter>Source Files\MCTS</Filter>
     </ClCompile>
@@ -81,175 +78,151 @@
     <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp">
       <Filter>Source Files\neural_net</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\neural_net\NeuralNetwork.h">
       <Filter>Header Files\neural_net</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\ActionApplier.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\agents\MCTSAgent.h">
+      <Filter>Header Files\agents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\ActionChoices.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\agents\MCTSRunner.h">
+      <Filter>Header Files\agents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\ActionParameterGetter-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\agents\MCTSInspector.h">
+      <Filter>Header Files\agents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\ActionParameterGetter.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\Board.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\BoardActionAnalyzer-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\BoardActionAnalyzer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\Board.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\BoardView-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\BoardView.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\BoardViewTypes.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\BoardView.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\RandomGenerator-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\BoardView-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\board\RandomGenerator.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\BoardViewTypes.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\builder\ActionReplayer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\builder\ActionApplyState.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator-impl.h">
+      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\builder\TreeBuilder-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
+      <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\builder\TreeBuilder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h">
+      <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\builder\TreeUpdater.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h">
+      <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\Config.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h">
+      <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\detail\BoardNodeMap-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h">
+      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\detail\BoardNodeMap.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h">
+      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\detail\TreeNodeBase.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h">
+      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\detail\NodeIndexMap.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h">
+      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\MOMCTS.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h">
+      <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\policy\CreditPolicy.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\policy\RandomByRand.h">
+      <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\policy\RandomByRand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\policy\Selection.h">
+      <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\policy\Selection.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\policy\Simulation.h">
+      <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\policy\Simulation.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\ChildNodeMap-impl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\ChildNodeMap.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\EdgeAddon.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\Selection.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\Selection.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\TraversedNodeInfo.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\TreeNode.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\selection\TreeNodeAddon.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\simulation\Simulation.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\simulation\TreeNodeAddon.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h">
+      <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\SOMCTS.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\Config.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\Statistic.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\MOMCTS.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\TestStateBuilder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\SOMCTS.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\MCTS\Types.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\Statistic.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\UI\AIController.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\UI\CompetitionGuide.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\Types.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\UI\Decks.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\inspector\InteractiveShell.h">
+      <Filter>Header Files\MCTS\inspector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\UI\InteractiveShell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\CopyByCloneWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\FuncPtrArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\HashCombine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\InvokableWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\InvokableWrappers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\NeverShrinkVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\SpinLocks.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\StaticDispatcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\StaticEventTriggerer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\StaticInvokables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Utils\UnorderedInvokables.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\include\MCTS\inspector\ActionApplyHelper.h">
+      <Filter>Header Files\MCTS\inspector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
