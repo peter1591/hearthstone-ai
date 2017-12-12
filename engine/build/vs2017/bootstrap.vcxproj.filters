@@ -29,7 +29,7 @@
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bootstrap.cpp">
+    <ClCompile Include="..\..\src\bootstrap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

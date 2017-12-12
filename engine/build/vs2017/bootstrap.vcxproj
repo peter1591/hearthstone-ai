@@ -132,7 +132,7 @@
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp" />
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp" />
-    <ClCompile Include="bootstrap.cpp" />
+    <ClCompile Include="..\..\src\bootstrap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
