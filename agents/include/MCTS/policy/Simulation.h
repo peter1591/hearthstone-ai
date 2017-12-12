@@ -3,7 +3,7 @@
 #include <random>
 #include "MCTS/board/Board.h"
 #include "MCTS/policy/RandomByRand.h"
-#include "NeuralNetwork.h"
+#include "neural_net/NeuralNetwork.h"
 
 namespace mcts
 {
@@ -176,7 +176,7 @@ namespace mcts
 				}
 
 			private:
-				class StateDataBridge : public NeuralNetworkWrapper::IInputGetter
+				class StateDataBridge : public neural_net::NeuralNetworkWrapper::IInputGetter
 				{
 				public:
 					StateDataBridge() : state_(nullptr), attackable_indics_(),
@@ -207,48 +207,48 @@ namespace mcts
 					}
 
 					double GetField(
-						NeuralNetworkWrapper::FieldSide field_side,
-						NeuralNetworkWrapper::FieldType field_type,
+						neural_net::NeuralNetworkWrapper::FieldSide field_side,
+						neural_net::NeuralNetworkWrapper::FieldType field_type,
 						int arg1 = 0) override final
 					{
-						if (field_side == NeuralNetworkWrapper::kCurrent) {
+						if (field_side == neural_net::NeuralNetworkWrapper::kCurrent) {
 							return GetSideField(field_type, arg1, state_->GetCurrentPlayer());
 						}
-						else if (field_side == NeuralNetworkWrapper::kOpponent) {
+						else if (field_side == neural_net::NeuralNetworkWrapper::kOpponent) {
 							return GetSideField(field_type, arg1, state_->GetOppositePlayer());
 						}
 						throw std::runtime_error("invalid side");
 					}
 
 				private:
-					double GetSideField(NeuralNetworkWrapper::FieldType field_type, int arg1, state::board::Player const& player) {
+					double GetSideField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1, state::board::Player const& player) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kResourceCurrent:
-						case NeuralNetworkWrapper::kResourceTotal:
-						case NeuralNetworkWrapper::kResourceOverload:
-						case NeuralNetworkWrapper::kResourceOverloadNext:
+						case neural_net::NeuralNetworkWrapper::kResourceCurrent:
+						case neural_net::NeuralNetworkWrapper::kResourceTotal:
+						case neural_net::NeuralNetworkWrapper::kResourceOverload:
+						case neural_net::NeuralNetworkWrapper::kResourceOverloadNext:
 							return GetResourceField(field_type, arg1, player.GetResource());
 
-						case NeuralNetworkWrapper::kHeroHP:
-						case NeuralNetworkWrapper::kHeroArmor:
+						case neural_net::NeuralNetworkWrapper::kHeroHP:
+						case neural_net::NeuralNetworkWrapper::kHeroArmor:
 							return GetHeroField(field_type, arg1, state_->GetCard(player.GetHeroRef()));
 
-						case NeuralNetworkWrapper::kMinionCount:
-						case NeuralNetworkWrapper::kMinionHP:
-						case NeuralNetworkWrapper::kMinionMaxHP:
-						case NeuralNetworkWrapper::kMinionAttack:
-						case NeuralNetworkWrapper::kMinionAttackable:
-						case NeuralNetworkWrapper::kMinionTaunt:
-						case NeuralNetworkWrapper::kMinionShield:
-						case NeuralNetworkWrapper::kMinionStealth:
+						case neural_net::NeuralNetworkWrapper::kMinionCount:
+						case neural_net::NeuralNetworkWrapper::kMinionHP:
+						case neural_net::NeuralNetworkWrapper::kMinionMaxHP:
+						case neural_net::NeuralNetworkWrapper::kMinionAttack:
+						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
+						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
+						case neural_net::NeuralNetworkWrapper::kMinionShield:
+						case neural_net::NeuralNetworkWrapper::kMinionStealth:
 							return GetMinionsField(field_type, arg1, player.minions_);
 
-						case NeuralNetworkWrapper::kHandCount:
-						case NeuralNetworkWrapper::kHandPlayable:
-						case NeuralNetworkWrapper::kHandCost:
+						case neural_net::NeuralNetworkWrapper::kHandCount:
+						case neural_net::NeuralNetworkWrapper::kHandPlayable:
+						case neural_net::NeuralNetworkWrapper::kHandCost:
 							return GetHandField(field_type, arg1, player.hand_);
 
-						case NeuralNetworkWrapper::kHeroPowerPlayable:
+						case neural_net::NeuralNetworkWrapper::kHeroPowerPlayable:
 							return GetHeroPowerField(field_type, arg1);
 
 						default:
@@ -256,96 +256,96 @@ namespace mcts
 						}
 					}
 
-					double GetResourceField(NeuralNetworkWrapper::FieldType field_type, int arg1, state::board::PlayerResource const& resource) {
+					double GetResourceField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1, state::board::PlayerResource const& resource) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kResourceCurrent:
+						case neural_net::NeuralNetworkWrapper::kResourceCurrent:
 							return resource.GetCurrent();
-						case NeuralNetworkWrapper::kResourceTotal:
+						case neural_net::NeuralNetworkWrapper::kResourceTotal:
 							return resource.GetTotal();
-						case NeuralNetworkWrapper::kResourceOverload:
+						case neural_net::NeuralNetworkWrapper::kResourceOverload:
 							return resource.GetCurrentOverloaded();
-						case NeuralNetworkWrapper::kResourceOverloadNext:
+						case neural_net::NeuralNetworkWrapper::kResourceOverloadNext:
 							return resource.GetNextOverload();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHeroField(NeuralNetworkWrapper::FieldType field_type, int arg1, state::Cards::Card const& hero) {
+					double GetHeroField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1, state::Cards::Card const& hero) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kHeroHP:
+						case neural_net::NeuralNetworkWrapper::kHeroHP:
 							return hero.GetHP();
-						case NeuralNetworkWrapper::kHeroArmor:
+						case neural_net::NeuralNetworkWrapper::kHeroArmor:
 							return hero.GetArmor();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetMinionsField(NeuralNetworkWrapper::FieldType field_type, int minion_idx, state::board::Minions const& minions) {
+					double GetMinionsField(neural_net::NeuralNetworkWrapper::FieldType field_type, int minion_idx, state::board::Minions const& minions) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kMinionCount:
+						case neural_net::NeuralNetworkWrapper::kMinionCount:
 							return (double)minions.Size();
-						case NeuralNetworkWrapper::kMinionHP:
-						case NeuralNetworkWrapper::kMinionMaxHP:
-						case NeuralNetworkWrapper::kMinionAttack:
-						case NeuralNetworkWrapper::kMinionAttackable:
-						case NeuralNetworkWrapper::kMinionTaunt:
-						case NeuralNetworkWrapper::kMinionShield:
-						case NeuralNetworkWrapper::kMinionStealth:
+						case neural_net::NeuralNetworkWrapper::kMinionHP:
+						case neural_net::NeuralNetworkWrapper::kMinionMaxHP:
+						case neural_net::NeuralNetworkWrapper::kMinionAttack:
+						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
+						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
+						case neural_net::NeuralNetworkWrapper::kMinionShield:
+						case neural_net::NeuralNetworkWrapper::kMinionStealth:
 							return GetMinionField(field_type, minion_idx, state_->GetCard(minions.Get(minion_idx)));
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetMinionField(NeuralNetworkWrapper::FieldType field_type, int minion_idx, state::Cards::Card const& minion) {
+					double GetMinionField(neural_net::NeuralNetworkWrapper::FieldType field_type, int minion_idx, state::Cards::Card const& minion) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kMinionHP:
+						case neural_net::NeuralNetworkWrapper::kMinionHP:
 							return minion.GetHP();
-						case NeuralNetworkWrapper::kMinionMaxHP:
+						case neural_net::NeuralNetworkWrapper::kMinionMaxHP:
 							return minion.GetMaxHP();
-						case NeuralNetworkWrapper::kMinionAttack:
+						case neural_net::NeuralNetworkWrapper::kMinionAttack:
 							return minion.GetAttack();
-						case NeuralNetworkWrapper::kMinionAttackable:
+						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
 							return (std::find(attackable_indics_.begin(), attackable_indics_.end(), minion_idx) != attackable_indics_.end());
-						case NeuralNetworkWrapper::kMinionTaunt:
+						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
 							return minion.HasTaunt();
-						case NeuralNetworkWrapper::kMinionShield:
+						case neural_net::NeuralNetworkWrapper::kMinionShield:
 							return minion.HasShield();
-						case NeuralNetworkWrapper::kMinionStealth:
+						case neural_net::NeuralNetworkWrapper::kMinionStealth:
 							return minion.HasStealth();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHandField(NeuralNetworkWrapper::FieldType field_type, int hand_idx, state::board::Hand const& hand) {
+					double GetHandField(neural_net::NeuralNetworkWrapper::FieldType field_type, int hand_idx, state::board::Hand const& hand) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kHandCount:
+						case neural_net::NeuralNetworkWrapper::kHandCount:
 							return (double)hand.Size();
-						case NeuralNetworkWrapper::kHandPlayable:
-						case NeuralNetworkWrapper::kHandCost:
+						case neural_net::NeuralNetworkWrapper::kHandPlayable:
+						case neural_net::NeuralNetworkWrapper::kHandCost:
 							return GetHandCardField(field_type, hand_idx, state_->GetCard(hand.Get(hand_idx)));
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHandCardField(NeuralNetworkWrapper::FieldType field_type, int hand_idx, state::Cards::Card const& card) {
+					double GetHandCardField(neural_net::NeuralNetworkWrapper::FieldType field_type, int hand_idx, state::Cards::Card const& card) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kHandPlayable:
+						case neural_net::NeuralNetworkWrapper::kHandPlayable:
 							return (std::find(playable_cards_.begin(), playable_cards_.end(), hand_idx) != playable_cards_.end());
-						case NeuralNetworkWrapper::kHandCost:
+						case neural_net::NeuralNetworkWrapper::kHandCost:
 							return card.GetCost();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHeroPowerField(NeuralNetworkWrapper::FieldType field_type, int arg1) {
+					double GetHeroPowerField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1) {
 						switch (field_type) {
-						case NeuralNetworkWrapper::kHeroPowerPlayable:
+						case neural_net::NeuralNetworkWrapper::kHeroPowerPlayable:
 							return hero_power_playable_;
 						default:
 							throw std::runtime_error("unknown field type");
@@ -361,7 +361,7 @@ namespace mcts
 
 			private:
 				std::string filename_;
-				NeuralNetworkWrapper net_;
+				neural_net::NeuralNetworkWrapper net_;
 				StateDataBridge current_player_viewer_;
 			};
 

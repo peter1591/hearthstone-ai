@@ -52,11 +52,14 @@
     <Filter Include="Header Files\FlowControl\utils">
       <UniqueIdentifier>{68181fa6-d3e2-475c-acf3-34e6ba3c7278}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\neural_net">
+      <UniqueIdentifier>{d46240db-d198-4f14-ac4a-aa62cd716d5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\neural_net">
+      <UniqueIdentifier>{27380b77-c6b3-4789-91bf-1bf993370664}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\NeuralNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
       <Filter>Source Files\libjson</Filter>
     </ClCompile>
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="..\src\MCTS\test.cpp">
       <Filter>Source Files\MCTS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\neural_net\NeuralNetwork.cpp">
+      <Filter>Source Files\neural_net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,9 +239,6 @@
     <ClInclude Include="..\..\include\UI\CompetitionGuide.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\NeuralNetwork.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h">
       <Filter>Header Files\FlowControl\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\neural_net\NeuralNetwork.h">
+      <Filter>Header Files\neural_net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
