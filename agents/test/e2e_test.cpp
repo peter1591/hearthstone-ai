@@ -58,9 +58,7 @@ void Run(agents::MCTSRunner * controller, int secs)
 	auto start_i = controller->GetStatistic().GetSuccededIterates();
 	controller->Run(Configs::threads, seed, start_board_getter);
 	while (true) {
-		if (continue_checker()) {
-			break;
-		}
+		if (!continue_checker()) break;
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 	controller->NotifyStop();

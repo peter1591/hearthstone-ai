@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\third_party\jsoncpp\include;..\..\third_party\tiny-dnn\;..\..\engine\include;..\..\agents\include;..\..\judge\include;..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\third_party\jsoncpp\include;..\..\third_party\tiny-dnn\;..\..\engine\include;..\..\agents\include;..\..\judge\include;..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\third_party\jsoncpp\include;..\..\third_party\tiny-dnn\;..\..\engine\include;..\..\agents\include;..\..\judge\include;..\..\include;..\..\contrib\tiny-dnn;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\..\include;..\..\..\contrib\tiny-dnn;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\third_party\jsoncpp\include;..\..\third_party\tiny-dnn\;..\..\engine\include;..\..\agents\include;..\..\judge\include;..\..\include;..\..\contrib\tiny-dnn;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\..\include;..\..\..\contrib\tiny-dnn;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -107,7 +107,7 @@
       <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -128,7 +128,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,74 +149,74 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PreBuildEvent>
-      <Command>copy /y ..\..\engine\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp" />
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp" />
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp" />
-    <ClCompile Include="..\src\MCTS\CardDispatcher.cpp" />
-    <ClCompile Include="..\src\MCTS\test.cpp" />
-    <ClCompile Include="..\src\MCTS\TestStateBuilder.cpp" />
-    <ClCompile Include="..\src\neural_net\NeuralNetwork.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp" />
+    <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp" />
+    <ClCompile Include="..\..\test\CardDispatcher.cpp" />
+    <ClCompile Include="..\..\test\e2e_test.cpp" />
+    <ClCompile Include="..\..\test\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h" />
-    <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h" />
-    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />
-    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer.h" />
-    <ClInclude Include="..\..\include\MCTS\board\Board.h" />
-    <ClInclude Include="..\..\include\MCTS\board\BoardView-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\board\BoardView.h" />
-    <ClInclude Include="..\..\include\MCTS\board\BoardViewTypes.h" />
-    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\ActionApplyState.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h" />
-    <ClInclude Include="..\..\include\MCTS\Config.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h" />
-    <ClInclude Include="..\..\include\MCTS\MOMCTS.h" />
-    <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h" />
-    <ClInclude Include="..\..\include\MCTS\policy\RandomByRand.h" />
-    <ClInclude Include="..\..\include\MCTS\policy\Selection.h" />
-    <ClInclude Include="..\..\include\MCTS\policy\Simulation.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\Selection.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h" />
-    <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
-    <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h" />
-    <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
-    <ClInclude Include="..\..\include\MCTS\Statistic.h" />
-    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
-    <ClInclude Include="..\..\include\MCTS\Types.h" />
-    <ClInclude Include="..\..\include\UI\AIController.h" />
-    <ClInclude Include="..\..\include\UI\CompetitionGuide.h" />
-    <ClInclude Include="..\..\include\UI\Decks.h" />
-    <ClInclude Include="..\..\include\UI\InteractiveShell.h" />
-    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h" />
-    <ClInclude Include="..\..\include\Utils\FuncPtrArray.h" />
-    <ClInclude Include="..\..\include\Utils\HashCombine.h" />
-    <ClInclude Include="..\..\include\Utils\InvokableWrapper.h" />
-    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h" />
-    <ClInclude Include="..\..\include\Utils\NeverShrinkVector.h" />
-    <ClInclude Include="..\..\include\Utils\SpinLocks.h" />
-    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h" />
-    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h" />
-    <ClInclude Include="..\..\include\Utils\StaticInvokables.h" />
-    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\ActionApplier.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\ActionChoices.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\ActionParameterGetter.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\BoardActionAnalyzer-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\BoardActionAnalyzer.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\Board.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\BoardView-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\BoardView.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\BoardViewTypes.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\RandomGenerator-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\board\RandomGenerator.h" />
+    <ClInclude Include="..\..\..\include\MCTS\builder\ActionReplayer.h" />
+    <ClInclude Include="..\..\..\include\MCTS\builder\ActionApplyState.h" />
+    <ClInclude Include="..\..\..\include\MCTS\builder\TreeBuilder-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\builder\TreeBuilder.h" />
+    <ClInclude Include="..\..\..\include\MCTS\builder\TreeUpdater.h" />
+    <ClInclude Include="..\..\..\include\MCTS\Config.h" />
+    <ClInclude Include="..\..\..\include\MCTS\detail\BoardNodeMap-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\detail\BoardNodeMap.h" />
+    <ClInclude Include="..\..\..\include\MCTS\detail\TreeNodeBase.h" />
+    <ClInclude Include="..\..\..\include\MCTS\detail\NodeIndexMap.h" />
+    <ClInclude Include="..\..\..\include\MCTS\MOMCTS.h" />
+    <ClInclude Include="..\..\..\include\MCTS\policy\CreditPolicy.h" />
+    <ClInclude Include="..\..\..\include\MCTS\policy\RandomByRand.h" />
+    <ClInclude Include="..\..\..\include\MCTS\policy\Selection.h" />
+    <ClInclude Include="..\..\..\include\MCTS\policy\Simulation.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\ChildNodeMap-impl.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\ChildNodeMap.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\EdgeAddon.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\Selection.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\TraversedNodeInfo.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\TreeNode.h" />
+    <ClInclude Include="..\..\..\include\MCTS\selection\TreeNodeAddon.h" />
+    <ClInclude Include="..\..\..\include\MCTS\simulation\Simulation.h" />
+    <ClInclude Include="..\..\..\include\MCTS\simulation\TreeNodeAddon.h" />
+    <ClInclude Include="..\..\..\include\MCTS\SOMCTS.h" />
+    <ClInclude Include="..\..\..\include\MCTS\Statistic.h" />
+    <ClInclude Include="..\..\..\include\MCTS\TestStateBuilder.h" />
+    <ClInclude Include="..\..\..\include\MCTS\Types.h" />
+    <ClInclude Include="..\..\..\include\UI\AIController.h" />
+    <ClInclude Include="..\..\..\include\UI\CompetitionGuide.h" />
+    <ClInclude Include="..\..\..\include\UI\Decks.h" />
+    <ClInclude Include="..\..\..\include\UI\InteractiveShell.h" />
+    <ClInclude Include="..\..\..\include\Utils\CopyByCloneWrapper.h" />
+    <ClInclude Include="..\..\..\include\Utils\FuncPtrArray.h" />
+    <ClInclude Include="..\..\..\include\Utils\HashCombine.h" />
+    <ClInclude Include="..\..\..\include\Utils\InvokableWrapper.h" />
+    <ClInclude Include="..\..\..\include\Utils\InvokableWrappers.h" />
+    <ClInclude Include="..\..\..\include\Utils\NeverShrinkVector.h" />
+    <ClInclude Include="..\..\..\include\Utils\SpinLocks.h" />
+    <ClInclude Include="..\..\..\include\Utils\StaticDispatcher.h" />
+    <ClInclude Include="..\..\..\include\Utils\StaticEventTriggerer.h" />
+    <ClInclude Include="..\..\..\include\Utils\StaticInvokables.h" />
+    <ClInclude Include="..\..\..\include\Utils\UnorderedInvokables.h" />
     <ClInclude Include="..\include\neural_net\NeuralNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
