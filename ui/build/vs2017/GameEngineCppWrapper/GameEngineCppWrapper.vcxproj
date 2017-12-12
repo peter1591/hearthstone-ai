@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\third_party\tiny-dnn;..\..\third_party\jsoncpp\include;..\..\engine\include;..\..\judge\include;..\..\agents\include;..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\..\third_party\tiny-dnn;..\..\..\..\third_party\jsoncpp\include;..\..\..\..\engine\include;..\..\..\..\judge\include;..\..\..\..\agents\include;..\..\..\..\ui\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\third_party\tiny-dnn;..\..\third_party\jsoncpp\include;..\..\engine\include;..\..\judge\include;..\..\agents\include;..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\..\third_party\tiny-dnn;..\..\..\..\third_party\jsoncpp\include;..\..\..\..\engine\include;..\..\..\..\judge\include;..\..\..\..\agents\include;..\..\..\..\ui\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\third_party\tiny-dnn;..\..\third_party\jsoncpp\include;..\..\engine\include;..\..\judge\include;..\..\agents\include;..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\..\third_party\tiny-dnn;..\..\..\..\third_party\jsoncpp\include;..\..\..\..\engine\include;..\..\..\..\judge\include;..\..\..\..\agents\include;..\..\..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\third_party\tiny-dnn;..\..\third_party\jsoncpp\include;..\..\engine\include;..\..\judge\include;..\..\agents\include;..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\..\third_party\tiny-dnn;..\..\..\..\third_party\jsoncpp\include;..\..\..\..\engine\include;..\..\..\..\judge\include;..\..\..\..\agents\include;..\..\..\..\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -142,31 +142,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\agents\include\agents\MCTSAgent.h" />
-    <ClInclude Include="..\..\controller\controller.h" />
-    <ClInclude Include="..\..\engine\include\FlowControl\ActionApplier.h" />
-    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
-    <ClInclude Include="..\..\include\UI\BoardGetter.h" />
-    <ClInclude Include="..\..\include\UI\ActionApplyHelper.h" />
-    <ClInclude Include="..\..\include\UI\Board\Board.h" />
-    <ClInclude Include="..\..\include\UI\Board\Entity.h" />
-    <ClInclude Include="..\..\include\UI\Board\Parser.h" />
-    <ClInclude Include="..\..\include\UI\Board\Player.h" />
-    <ClInclude Include="..\..\include\UI\Board\UnknownCards.h" />
-    <ClInclude Include="..\..\include\UI\CompetitionGuide.h" />
-    <ClInclude Include="..\..\include\UI\Decks.h" />
-    <ClInclude Include="..\..\include\UI\GameEngine.h" />
-    <ClInclude Include="..\..\include\UI\GameEngineLogger.h" />
-    <ClInclude Include="..\..\include\UI\InteractiveShell.h" />
+    <ClInclude Include="..\..\..\..\agents\include\agents\MCTSAgent.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\BoardGetter.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\ActionApplyHelper.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Board.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Entity.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Parser.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Player.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\UnknownCards.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\CompetitionGuide.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\Decks.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\GameEngine.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\GameEngineLogger.h" />
+    <ClInclude Include="..\..\..\..\ui\include\UI\InteractiveShell.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp" />
-    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp" />
-    <ClCompile Include="..\..\src\NeuralNetwork.cpp" />
-    <ClCompile Include="..\..\src\UI\GameEngine.cpp" />
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp" />
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp" />
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp" />
+    <ClCompile Include="..\..\..\..\agents\src\neural_net\NeuralNetwork.cpp" />
+    <ClCompile Include="..\..\..\..\agents\test\CardDispatcher.cpp" />
+    <ClCompile Include="..\..\..\..\agents\test\TestStateBuilder.cpp" />
+    <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
+    <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_value.cpp" />
+    <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_writer.cpp" />
+    <ClCompile Include="..\..\..\src\UI\GameEngine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

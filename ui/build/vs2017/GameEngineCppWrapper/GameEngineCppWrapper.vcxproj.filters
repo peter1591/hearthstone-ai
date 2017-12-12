@@ -22,87 +22,78 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{ced3bcb7-aa45-4d69-bede-e893920cf98a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\controller">
-      <UniqueIdentifier>{e36fcf8d-0067-4301-b977-3f0770300390}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\engine">
-      <UniqueIdentifier>{011bed25-6e57-46c5-8f14-e83dd3b8f81d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\agents">
       <UniqueIdentifier>{95b69149-e812-4437-88c3-9d15cf3a8cb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\neural_net">
+      <UniqueIdentifier>{05edf9a8-4fa4-49e1-99b8-af5b9e179677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\mcts">
+      <UniqueIdentifier>{fd7b56fa-58d5-44bb-a193-3b2800a3d2a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\UI\GameEngine.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\GameEngine.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\GameEngineLogger.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\GameEngineLogger.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\BoardGetter.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\BoardGetter.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\Board\UnknownCards.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\UnknownCards.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\Board\Board.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Board.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\Board\Entity.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Entity.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\Decks.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\Decks.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\Board\Player.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Player.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\InteractiveShell.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\InteractiveShell.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\Board\Parser.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Parser.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\ActionApplyHelper.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\ActionApplyHelper.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\UI\CompetitionGuide.h">
+    <ClInclude Include="..\..\..\..\ui\include\UI\CompetitionGuide.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\controller\controller.h">
-      <Filter>Header Files\controller</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\engine\include\FlowControl\ActionApplier.h">
-      <Filter>Header Files\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\agents\include\agents\MCTSAgent.h">
+    <ClInclude Include="..\..\..\..\agents\include\agents\MCTSAgent.h">
       <Filter>Header Files\agents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\MCTS\TestStateBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MCTS\CardDispatcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\UI\GameEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\NeuralNetwork.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
+    <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_value.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp">
+    <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
+    <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_reader.cpp">
       <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\agents\src\neural_net\NeuralNetwork.cpp">
+      <Filter>Source Files\neural_net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\agents\test\CardDispatcher.cpp">
+      <Filter>Source Files\mcts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\agents\test\TestStateBuilder.cpp">
+      <Filter>Source Files\mcts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\UI\GameEngine.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,11 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameEngineCppCLI", "GameEng
 		{99A32839-8456-467D-AB8E-1788CBB42094} = {99A32839-8456-467D-AB8E-1788CBB42094}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TrainNeuralNetwork", "TrainNeuralNetwork\TrainNeuralNetwork.vcxproj", "{08FB5556-8B1B-4A9E-974D-AB66F4027093}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HearthstoneAI", "HearthstoneAI\HearthstoneAI.csproj", "{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GenerateTrainData", "GenerateTrainData\GenerateTrainData.vcxproj", "{917C566F-8D5E-4804-99E0-8A8D513CC108}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,16 +42,6 @@ Global
 		{91345FA5-5810-4103-B058-655A536B3E44}.Release|x64.Build.0 = Release|x64
 		{91345FA5-5810-4103-B058-655A536B3E44}.Release|x86.ActiveCfg = Release|Win32
 		{91345FA5-5810-4103-B058-655A536B3E44}.Release|x86.Build.0 = Release|Win32
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Debug|x64.ActiveCfg = Debug|x64
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Debug|x64.Build.0 = Debug|x64
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Debug|x86.ActiveCfg = Debug|Win32
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Debug|x86.Build.0 = Debug|Win32
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Release|Any CPU.ActiveCfg = Release|Win32
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Release|x64.ActiveCfg = Release|x64
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Release|x64.Build.0 = Release|x64
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Release|x86.ActiveCfg = Release|Win32
-		{08FB5556-8B1B-4A9E-974D-AB66F4027093}.Release|x86.Build.0 = Release|Win32
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -68,16 +54,6 @@ Global
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x64.Build.0 = Release|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x86.ActiveCfg = Release|Any CPU
 		{5CB9618B-5CF5-4851-9FE6-120AF0459B3C}.Release|x86.Build.0 = Release|Any CPU
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Debug|x64.ActiveCfg = Debug|x64
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Debug|x64.Build.0 = Debug|x64
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Debug|x86.ActiveCfg = Debug|Win32
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Debug|x86.Build.0 = Debug|Win32
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Release|Any CPU.ActiveCfg = Release|Win32
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Release|x64.ActiveCfg = Release|x64
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Release|x64.Build.0 = Release|x64
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Release|x86.ActiveCfg = Release|Win32
-		{917C566F-8D5E-4804-99E0-8A8D513CC108}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
