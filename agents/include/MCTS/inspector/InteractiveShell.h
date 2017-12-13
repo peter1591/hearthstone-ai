@@ -4,7 +4,7 @@
 #include <ostream>
 #include <random>
 
-#include "agents/MCTSAgent.h"
+#include "agents/MCTSRunner.h"
 #include "MCTS/inspector/ActionApplyHelper.h"
 
 namespace mcts

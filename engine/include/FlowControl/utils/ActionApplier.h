@@ -6,6 +6,7 @@
 #include "state/State.h"
 #include "FlowControl/FlowController.h"
 #include "FlowControl/IActionParameterGetter.h"
+#include "FlowControl/ValidActionGetter.h"
 #include "FlowControl/utils/MainOp.h"
 
 namespace FlowControl

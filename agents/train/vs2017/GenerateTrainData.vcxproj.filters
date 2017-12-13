@@ -22,6 +22,9 @@
     <Filter Include="Source Files\MCTS">
       <UniqueIdentifier>{dae6271f-2f23-40c9-8523-406d4a3277cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\agent">
+      <UniqueIdentifier>{d66a571c-b618-4821-9e3e-65f68d56808d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
@@ -53,14 +56,20 @@
     <ClInclude Include="..\..\engine\include\FlowControl\utils\MainOp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\judge\include\judge\IAgent.h">
+    <ClInclude Include="..\..\..\judge\include\judge\IAgent.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\judge\include\judge\Judger.h">
+    <ClInclude Include="..\..\..\judge\include\judge\Judger.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\judge\include\judge\Recorder.h">
+    <ClInclude Include="..\..\..\judge\include\judge\Recorder.h">
       <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\agents\MCTSAgent.h">
+      <Filter>Header Files\agent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\agents\MCTSRunner.h">
+      <Filter>Header Files\agent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

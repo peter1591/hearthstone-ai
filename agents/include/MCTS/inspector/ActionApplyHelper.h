@@ -5,6 +5,7 @@
 #include "state/State.h"
 #include "FlowControl/utils/ActionApplier.h"
 #include "FlowControl/FlowController.h"
+#include "mcts/board/RandomGenerator.h"
 #include "mcts/board/BoardActionAnalyzer.h"
 
 namespace mcts

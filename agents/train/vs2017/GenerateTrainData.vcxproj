@@ -148,11 +148,13 @@
     <ClCompile Include="..\src\GenerateTrainData.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
+    <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
+    <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />
     <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h" />
     <ClInclude Include="..\..\engine\include\FlowControl\utils\MainOp.h" />
-    <ClInclude Include="..\..\judge\include\judge\IAgent.h" />
-    <ClInclude Include="..\..\judge\include\judge\Judger.h" />
-    <ClInclude Include="..\..\judge\include\judge\Recorder.h" />
+    <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
+    <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

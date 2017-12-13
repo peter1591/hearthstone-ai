@@ -4,7 +4,6 @@
 #include <sstream>
 #include <memory>
 
-#include "agents/MCTSAgent.h"
 #include "MCTS/inspector/InteractiveShell.h"
 #include "UI/BoardGetter.h"
 #include "UI/GameEngine.h"

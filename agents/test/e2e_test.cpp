@@ -7,7 +7,6 @@
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
 #include "MCTS/inspector/InteractiveShell.h"
-#include "agents/MCTSAgent.h"
 
 static void Initialize()
 {
