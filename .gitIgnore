@@ -245,5 +245,5 @@ a.out
 # run-time files
 /pilot_run/beautified.json
 /pilot_run/data.json
-/engine/test/cards.json
+*/build/*/cards.json
 /gcc-7/flow_control/cards.json
