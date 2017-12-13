@@ -1,13 +1,13 @@
 ## Introduction
-The game engine for the card game [Hearthstone](https://playhearthstone.com).
+The game engine for the card game [Hearthstone](https://playhearthstone.com) written in C++17. Used in [AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone](https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022) to generate training/validation datasets.
 
 ## Features
 
-### Header-only Implementation
+### Header-only implementation
 * No dependency issue.
 * (Free/Automatically) whole program optimization
 
-### Performance
+### Modern C++
 Use template programming to move workload to compile-time as much as possible. With C++14/17 features like [std::variant](http://en.cppreference.com/w/cpp/utility/variant), [SFINAE](http://en.cppreference.com/w/cpp/language/sfinae) and much more, we can write structured code with zero overhead.
 
 ## Components
@@ -36,6 +36,9 @@ void test()
 }
 ```
 Refer to [e2e test](./test) for concrete examples.
+
+## Build
+This library uses some language features in the latest C++17, compiler newer than gcc 7.0+ or Visual Studio 2017 Preview 2.1+ is needed. Please refer to the [build folder](./build) for working examples.
 
 ## Troubleshooting
 
