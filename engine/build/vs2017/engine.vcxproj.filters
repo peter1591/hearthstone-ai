@@ -94,167 +94,146 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{1ef37f11-5646-4fd9-ab53-8a11047b7d90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FlowControl\utils">
+      <UniqueIdentifier>{504f6f2c-ab3d-4df0-bbf1-5d744cb38b1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utils\CloneableContainers">
+      <UniqueIdentifier>{8108174a-3742-4ef3-9ec8-447fc01770b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_reader.cpp">
+    <ClCompile Include="..\..\..\engine\test\e2e_card_dispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\test\e2e_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\test\e2e_test1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\test\e2e_test2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\test\e2e_test3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_value.cpp">
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\jsoncpp\src\json_writer.cpp">
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
       <Filter>Source Files\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\engine\test\e2e_card_dispatcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\engine\test\e2e_main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\engine\test\e2e_test1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\engine\test\e2e_test2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\engine\test\e2e_test3.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\FlowControl\FlowController.h">
-      <Filter>Header Files\FlowControl</Filter>
+    <ClInclude Include="..\..\include\Cards\Core\Druid.h">
+      <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\State\board\Deck.h">
-      <Filter>Header Files\state\board</Filter>
+    <ClInclude Include="..\..\include\Cards\Core\Hunter.h">
+      <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulate.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h">
-      <Filter>Header Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Database.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\id-map.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Cards.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\MinionCardUtils.h">
-      <Filter>Header Files\Cards</Filter>
+    <ClInclude Include="..\..\include\Cards\Core\Mage.h">
+      <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Neutral.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\AuraHelper.h">
-      <Filter>Header Files\Cards</Filter>
+    <ClInclude Include="..\..\include\Cards\Core\Paladin.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Priest.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Rogue.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Shaman.h">
+      <Filter>Header Files\Cards\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Core\Warlock.h">
+      <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\Core\Warrior.h">
       <Filter>Header Files\Cards\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Druid.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Mage.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Neutral.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h">
-      <Filter>Header Files\FlowControl\Manipulators\detail</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Utils\InvokableWrapper.h">
-      <Filter>Header Files\Utils</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Priest.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\IRandomGenerator.h">
-      <Filter>Header Files\state</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Rogue.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h">
-      <Filter>Header Files\Utils</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\targetor\Targets.h">
-      <Filter>Header Files\state\targetor</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h">
-      <Filter>Header Files\state\targetor</Filter>
+    <ClInclude Include="..\..\include\Cards\Expert1\Warrior.h">
+      <Filter>Header Files\Cards\Expert1</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h">
-      <Filter>Header Files\Utils</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Utils\FuncPtrArray.h">
-      <Filter>Header Files\Utils</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\GeneralCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\ZoneChanger.h">
-      <Filter>Header Files\state</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h">
-      <Filter>Header Files\state\detail</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\MinionCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h">
-      <Filter>Header Files\state\detail</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\SecretCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\SpellCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
-      <Filter>Header Files\FlowControl</Filter>
+    <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h">
+      <Filter>Header Files\Cards\framework</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
-      <Filter>Header Files\FlowControl</Filter>
+    <ClInclude Include="..\..\include\Cards\Gangs\Hunter.h">
+      <Filter>Header Files\Cards\Gangs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\aura\Manager.h">
-      <Filter>Header Files\state\aura</Filter>
+    <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h">
+      <Filter>Header Files\Cards\Gangs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\EventRegister.h">
+    <ClInclude Include="..\..\include\Cards\Gangs\Warrior.h">
+      <Filter>Header Files\Cards\Gangs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\OG\Shaman.h">
+      <Filter>Header Files\Cards\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\OG\Warlock.h">
+      <Filter>Header Files\Cards\OG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h">
+      <Filter>Header Files\Cards\Ungoro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\AuraHelper.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\detail\InvokeCallback.h">
-      <Filter>Header Files\state\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Cards\BattlecryHelper.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardAttributes.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Cards\CardBase.h">
@@ -263,7 +242,247 @@
     <ClInclude Include="..\..\include\Cards\CardBase-cleanup.h">
       <Filter>Header Files\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardDispatcher.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\CardDispatcher-impl.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Cards.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Contexts.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\Database.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\EventRegister.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\id-map.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\MinionCardUtils.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Cards\PreIndexedCards.h">
+      <Filter>Header Files\Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\FlowContext.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\FlowController.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\JsonSerializer.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulate.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Result.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag-impl.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment-impl.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments-impl.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag-impl.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h">
+      <Filter>Header Files\FlowControl\aura</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Context.h">
+      <Filter>Header Files\FlowControl\deathrattle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h">
+      <Filter>Header Files\FlowControl\deathrattle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h">
+      <Filter>Header Files\FlowControl\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\detail\Resolver-impl.h">
+      <Filter>Header Files\FlowControl\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\TieredEnchantments.h">
+      <Filter>Header Files\FlowControl\enchantment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider.h">
+      <Filter>Header Files\FlowControl\enchantment\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider-impl.h">
+      <Filter>Header Files\FlowControl\enchantment\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CardManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\CharacterManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardCharacterManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\WeaponManipulator.h">
+      <Filter>Header Files\FlowControl\Manipulators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\detail\DamageSetter.h">
+      <Filter>Header Files\FlowControl\Manipulators\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\DamageHelper-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\Manipulators\Helpers\EnchantmentHelper-impl.h">
+      <Filter>Header Files\FlowControl\Manipulators\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts-impl.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h">
+      <Filter>Header Files\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\utils\ActionApplier.h">
+      <Filter>Header Files\FlowControl\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\utils\MainOp.h">
+      <Filter>Header Files\FlowControl\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Configs.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\IRandomGenerator.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\JsonSerializer.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\State.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Types.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\ZoneChanger.h">
+      <Filter>Header Files\state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\aura\Manager.h">
+      <Filter>Header Files\state\aura</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\state\board\Board.h">
+      <Filter>Header Files\state\board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\board\Deck.h">
       <Filter>Header Files\state\board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\board\Graveyard.h">
@@ -284,6 +503,9 @@
     <ClInclude Include="..\..\include\state\board\Secrets.h">
       <Filter>Header Files\state\board</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\Cards\Callbacks.h">
+      <Filter>Header Files\state\Cards</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\state\Cards\Card.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
@@ -296,269 +518,83 @@
     <ClInclude Include="..\..\include\state\Cards\Manager.h">
       <Filter>Header Files\state\Cards</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\InvokeCallback.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\InvokeCallback-impl.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\detail\PlayerDataStructureMaintainer-impl.h">
+      <Filter>Header Files\state\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\EventTypes.h">
+      <Filter>Header Files\state\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\state\Events\Manager.h">
+      <Filter>Header Files\state\Events</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\state\Events\impl\CategorizedHandlersContainer.h">
       <Filter>Header Files\state\Events\impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\Events\impl\HandlersContainer.h">
       <Filter>Header Files\state\Events\impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\Manager.h">
-      <Filter>Header Files\state\Events</Filter>
+    <ClInclude Include="..\..\include\state\targetor\Targets.h">
+      <Filter>Header Files\state\targetor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\state\State.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Types.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\FlowContext-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventTypes.h">
-      <Filter>Header Files\state\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\CardAttributes.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Contexts.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\Handler.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\Handler-impl.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\TieredEnchantments.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\Handler-impl.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
+    <ClInclude Include="..\..\include\state\targetor\TargetsGenerator.h">
+      <Filter>Header Files\state\targetor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\state\targetor\Targets-impl.h">
       <Filter>Header Files\state\targetor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\deathrattle\Handler.h">
-      <Filter>Header Files\FlowControl\deathrattle</Filter>
+    <ClInclude Include="..\..\include\Utils\CopyByCloneWrapper.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\detail\Resolver.h">
-      <Filter>Header Files\FlowControl\detail</Filter>
+    <ClInclude Include="..\..\include\Utils\FuncPtrArray.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Priest.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
+    <ClInclude Include="..\..\include\Utils\HashCombine.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\InvokableWrapper.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\InvokableWrappers.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\NeverShrinkVector.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\SpinLocks.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticDispatcher.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Utils\StaticEventTriggerer.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Utils\StaticInvokables.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\CardDispatcher.h">
-      <Filter>Header Files\Cards</Filter>
+    <ClInclude Include="..\..\include\Utils\UnorderedInvokables.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Priest.h">
-      <Filter>Header Files\Cards\Core</Filter>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\PtrVector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts.h">
-      <Filter>Header Files\FlowControl\onplay</Filter>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\RemovablePtrVector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\onplay\Contexts-impl.h">
-      <Filter>Header Files\FlowControl\onplay</Filter>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\RemovableVector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h">
-      <Filter>Header Files\FlowControl\onplay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h">
-      <Filter>Header Files\FlowControl\onplay</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Gangs\Neutral.h">
-      <Filter>Header Files\Cards\Gangs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Mage.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\OG\Warlock.h">
-      <Filter>Header Files\Cards\OG</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Shaman.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\OG\Shaman.h">
-      <Filter>Header Files\Cards\OG</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Paladin.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\Enchantments-impl.h">
-      <Filter>Header Files\FlowControl\enchantment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Shaman.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\HeroPowerManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\MinionCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\EnchantmentCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\HeroPowerCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\SpellCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\WeaponCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\SecretCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\framework\GeneralCardBase.h">
-      <Filter>Header Files\Cards\framework</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\SecretManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Events\EventListener.h">
-      <Filter>Header Files\state\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Cards\Callbacks.h">
-      <Filter>Header Files\state\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\detail\InvokeCallback-impl.h">
-      <Filter>Header Files\state\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Warlock.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Hunter.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Gangs\Hunter.h">
-      <Filter>Header Files\Cards\Gangs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Paladin.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\CardDispatcher-impl.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantments-impl.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_Enchantment-impl.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag-impl.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_OwnerPlayerFlag-impl.h">
-      <Filter>Header Files\FlowControl\aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardMinionManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\MinionManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Druid.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Hunter.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Mage.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Rogue.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Core\Warlock.h">
-      <Filter>Header Files\Cards\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\OnBoardCharacterManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Druid.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider.h">
-      <Filter>Header Files\FlowControl\enchantment\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\enchantment\detail\UpdateDecider-impl.h">
-      <Filter>Header Files\FlowControl\enchantment\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Rogue.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Expert1\Warrior.h">
-      <Filter>Header Files\Cards\Expert1</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Manipulators\PlayerManipulator-impl.h">
-      <Filter>Header Files\FlowControl\Manipulators</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\deathrattle\Context.h">
-      <Filter>Header Files\FlowControl\deathrattle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h">
-      <Filter>Header Files\Cards\Ungoro</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\Gangs\Warrior.h">
-      <Filter>Header Files\Cards\Gangs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Cards\PreIndexedCards.h">
-      <Filter>Header Files\Cards</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\JsonSerializer.h">
-      <Filter>Header Files\state</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\JsonSerializer.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\state\Configs.h">
-      <Filter>Header Files\state</Filter>
+    <ClInclude Include="..\..\include\Utils\CloneableContainers\Vector.h">
+      <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
