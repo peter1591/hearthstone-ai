@@ -30,4 +30,4 @@ int main()
 }
 ```
 
-The neural network also uses this judge framework to [generate training dataset](../agents/train).
+The neural network also uses this judge framework to [generate training dataset](../agents/train/src/GenerateTrainData.cpp).
