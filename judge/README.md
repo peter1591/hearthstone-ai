@@ -1,10 +1,12 @@
 ## Introduction
-The judgement framework which allows two agents to compete with each other, and make sure they're following the game rules.
+A judgement framework allowing two agents to compete with each other, and make sure they're following the game rules.
+
+## Usage
 
 ## Implement agent
 Implement your own agent following the interface [IAgent](./include/judge/IAgent.h). Please refer to [agents](../agents) for examples.
 
-## Usage
+### Invoke judger
 ```c++
 #include "judge/judger.h"
 
