@@ -15,7 +15,7 @@ namespace agents
 
 	public:
 		MCTSRunner(int tree_samples, std::mt19937 & rand) :
-			threads_(),
+			threads_(), rand_(rand),
 			first_tree_(), second_tree_(), statistic_(), stop_flag_(false), tree_sample_randoms_()
 		{
 			for (int i = 0; i < tree_samples; ++i) {
@@ -28,14 +28,15 @@ namespace agents
 			WaitUntilStopped();
 		}
 
-		void Run(int thread_count, int seed, StartingStateGetter state_getter)
+		void Run(int thread_count, StartingStateGetter state_getter)
 		{
 			assert(threads_.empty());
 			stop_flag_ = false;
 			for (int i = 0; i < thread_count; ++i) {
-				threads_.emplace_back([this, seed, state_getter]() {
+				int thread_seed = rand_();
+				threads_.emplace_back([this, thread_seed, state_getter]() {
 					std::mt19937 selection_rand;
-					std::mt19937 simulation_rand(seed);
+					std::mt19937 simulation_rand(thread_seed);
 					mcts::MOMCTS mcts(first_tree_, second_tree_, statistic_, selection_rand, simulation_rand);
 
 					size_t tree_sample_random_idx = 0;
@@ -91,6 +92,7 @@ namespace agents
 
 	private:
 		std::vector<std::thread> threads_;
+		std::mt19937 & rand_;
 		mcts::builder::TreeBuilder::TreeNode first_tree_;
 		mcts::builder::TreeBuilder::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;

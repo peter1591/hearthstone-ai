@@ -23,15 +23,14 @@ namespace agents
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
-		void Think(state::State const& state, int seed, std::function<bool(uint64_t)> cb) {
+		void Think(state::State const& state, std::mt19937 & random, std::function<bool(uint64_t)> cb) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				return cb(iterations);
 			};
 
-			std::mt19937 rand(seed);
-			controller_.reset(new MCTSRunner(tree_samples_, rand));
-			controller_->Run(threads_, rand(), [&](int seed) {
+			controller_.reset(new MCTSRunner(tree_samples_, random));
+			controller_->Run(threads_, [&](int seed) {
 				(void)seed;
 				return state;
 			});

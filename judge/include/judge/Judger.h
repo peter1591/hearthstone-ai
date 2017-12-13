@@ -80,6 +80,7 @@ namespace judge
 			assert(second_);
 			
 			recorder_.Start();
+			std::mt19937 random(seed);
 
 			mcts::Result result = mcts::Result::kResultInvalid;
 			IAgent * next_agent = nullptr;
@@ -94,7 +95,7 @@ namespace judge
 					next_agent = second_;
 				}
 
-				next_agent->Think(current_state, seed, iteration_cb);
+				next_agent->Think(current_state, random, iteration_cb);
 
 				FlowControl::FlowContext flow_context;
 
