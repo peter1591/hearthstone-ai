@@ -14,20 +14,24 @@ namespace agents
 {
 	class MCTSAgent : public judge::IAgent {
 	public:
-		MCTSAgent() : root_node_(nullptr), node_(nullptr), controller_() {}
+		MCTSAgent(int threads, int tree_samples) :
+			threads_(threads),
+			tree_samples_(tree_samples),
+			root_node_(nullptr), node_(nullptr), controller_()
+		{}
 
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
-		void Think(state::State const& state, int threads, int seed, int tree_samples, std::function<bool(uint64_t)> cb) {
+		void Think(state::State const& state, int seed, std::function<bool(uint64_t)> cb) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				return cb(iterations);
 			};
 
 			std::mt19937 rand(seed);
-			controller_.reset(new MCTSRunner(tree_samples, rand));
-			controller_->Run(threads, rand(), [&](int seed) {
+			controller_.reset(new MCTSRunner(tree_samples_, rand));
+			controller_->Run(threads_, rand(), [&](int seed) {
 				(void)seed;
 				return state;
 			});
@@ -108,6 +112,8 @@ namespace agents
 		}
 
 	private:
+		int threads_;
+		int tree_samples_;
 		mcts::builder::TreeBuilder::TreeNode const* root_node_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;

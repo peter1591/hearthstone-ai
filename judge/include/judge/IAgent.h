@@ -22,7 +22,7 @@ namespace judge
 
 		// TODO: The underlying truth state is passed. It means the competitor can acquire
 		// hidden information (e.g., opponents hand cards).
-		virtual void Think(state::State const& state, int threads, int seed, int tree_samples, std::function<bool(uint64_t)> cb) = 0;
+		virtual void Think(state::State const& state, int seed, std::function<bool(uint64_t)> cb) = 0;
 
 		virtual int GetMainAction() = 0;
 

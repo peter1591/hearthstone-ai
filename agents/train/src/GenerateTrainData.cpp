@@ -65,9 +65,10 @@ int main(int argc, char *argv[])
 	std::cout << "\tSeed: " << seed << std::endl;
 
 	judge::Judger judger(rand);
+	constexpr int root_samples = 10;
 
-	agents::MCTSAgent first;
-	agents::MCTSAgent second;
+	agents::MCTSAgent first(threads, root_samples);
+	agents::MCTSAgent second(threads, root_samples);
 
 	auto start_board_getter = [&]() -> state::State {
 		return TestStateBuilder().GetStateWithRandomStartCard(rand());
@@ -77,8 +78,7 @@ int main(int argc, char *argv[])
 	judger.SetSecondAgent(&second);
 
 	auto last_show = std::chrono::steady_clock::now();
-	int root_samples = 10;
-	judger.Start(start_board_getter, threads, rand(), root_samples, [&](state::State const& state) {
+	judger.Start(start_board_getter, rand(), [&](state::State const& state) {
 		std::cout << "Turn: " << state.GetTurn() << std::endl;
 	}, [iterations, last_show](uint64_t	now_iterations) mutable {
 		if (now_iterations >= iterations) {

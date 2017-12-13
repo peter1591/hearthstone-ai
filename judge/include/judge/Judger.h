@@ -72,7 +72,7 @@ namespace judge
 		void SetSecondAgent(IAgent * second) { second_ = second; }
 
 		template <class ProgressCallback, class IterationProgressCallback>
-		void Start(StartingStateGetter state_getter, int threads, int seed, int tree_samples,
+		void Start(StartingStateGetter state_getter, int seed,
 			ProgressCallback && cb, IterationProgressCallback && iteration_cb)
 		{
 			state::State current_state = state_getter();
@@ -94,7 +94,7 @@ namespace judge
 					next_agent = second_;
 				}
 
-				next_agent->Think(current_state, threads, seed, tree_samples, iteration_cb);
+				next_agent->Think(current_state, seed, iteration_cb);
 
 				FlowControl::FlowContext flow_context;
 
