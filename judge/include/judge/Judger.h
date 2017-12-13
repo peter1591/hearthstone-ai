@@ -17,6 +17,7 @@
 
 namespace judge
 {
+	template <class AgentType = IAgent>
 	class Judger
 	{
 	public:
@@ -43,7 +44,7 @@ namespace judge
 			ActionCallback(ActionCallback const&) = delete;
 			ActionCallback & operator=(ActionCallback const&) = delete;
 
-			void SetCallback(IAgent * cb) { cb_ = cb; }
+			void SetCallback(AgentType * cb) { cb_ = cb; }
 			
 			void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
 			FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
@@ -56,7 +57,7 @@ namespace judge
 
 		private:
 			Judger & guide_;
-			IAgent * cb_;
+			AgentType * cb_;
 			FlowControl::utils::MainOpType main_op_;
 		};
 
@@ -68,8 +69,8 @@ namespace judge
 		Judger(Judger const& rhs) = delete;
 		Judger & operator=(Judger const& rhs) = delete;
 
-		void SetFirstAgent(IAgent * first) { first_ = first; }
-		void SetSecondAgent(IAgent * second) { second_ = second; }
+		void SetFirstAgent(AgentType * first) { first_ = first; }
+		void SetSecondAgent(AgentType * second) { second_ = second; }
 
 		template <class ProgressCallback, class IterationProgressCallback>
 		void Start(StartingStateGetter state_getter, int seed,
@@ -83,7 +84,7 @@ namespace judge
 			std::mt19937 random(seed);
 
 			mcts::Result result = mcts::Result::kResultInvalid;
-			IAgent * next_agent = nullptr;
+			AgentType * next_agent = nullptr;
 			while (true) {
 				cb(current_state);
 
@@ -124,8 +125,8 @@ namespace judge
 		std::mt19937 & rand_;
 		RandomCallback random_callback_;
 		ActionCallback action_callback_;
-		IAgent * first_;
-		IAgent * second_;
+		AgentType * first_;
+		AgentType * second_;
 		Recorder recorder_;
 	};
 }

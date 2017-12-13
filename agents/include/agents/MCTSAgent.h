@@ -7,12 +7,11 @@
 #include "state/State.h"
 #include "MCTS/MOMCTS.h"
 #include "judge/IAgent.h"
-#include "judge/Judger.h"
 #include "agents/MCTSRunner.h"
 
 namespace agents
 {
-	class MCTSAgent : public judge::IAgent {
+	class MCTSAgent {
 	public:
 		MCTSAgent(int threads, int tree_samples) :
 			threads_(threads),
@@ -45,7 +44,7 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		int GetMainAction() final {
+		int GetMainAction() {
 			assert(root_node_ == node_);
 			assert(node_);
 			assert(node_->GetActionType().GetType() == mcts::ActionType::kMainAction);
@@ -68,11 +67,11 @@ namespace agents
 			return best_choice;
 		}
 
-		mcts::board::BoardActionAnalyzer GetActionApplier() final {
+		mcts::board::BoardActionAnalyzer GetActionApplier() {
 			return root_node_->GetAddon().action_analyzer;
 		}
 
-		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) final {
+		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
 			assert(node_);
 
 			if (node_->GetActionType() != action_type) {

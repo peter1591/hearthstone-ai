@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 	std::cout << "\tIterations: " << iterations << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
-	judge::Judger judger(rand);
+	judge::Judger<agents::MCTSAgent> judger(rand);
 	constexpr int root_samples = 10;
 
 	agents::MCTSAgent first(threads, root_samples);
