@@ -22,7 +22,7 @@ state::State GetStartBoard()
 
 int main()
 {
-  judge::Judger judger;
+  judge::Judger<> judger;
   MyAgent agent1;
   MyAgent agent2;
   judger.SetFirstAgent(agent1);
