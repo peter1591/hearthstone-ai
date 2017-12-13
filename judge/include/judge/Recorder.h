@@ -9,10 +9,10 @@
 
 namespace judge
 {
-	class Recorder
+	class JsonRecorder
 	{
 	public:
-		Recorder(std::mt19937 & rand) : rand_(rand), json_() {}
+		JsonRecorder(std::mt19937 & rand) : rand_(rand), json_() {}
 
 		void Start() {
 			json_.clear();

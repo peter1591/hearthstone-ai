@@ -17,7 +17,7 @@
 
 namespace judge
 {
-	template <class AgentType = IAgent>
+	template <class AgentType = IAgent, class RecorderType = JsonRecorder>
 	class Judger
 	{
 	public:
@@ -127,6 +127,6 @@ namespace judge
 		ActionCallback action_callback_;
 		AgentType * first_;
 		AgentType * second_;
-		Recorder recorder_;
+		RecorderType recorder_;
 	};
 }
