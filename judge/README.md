@@ -26,7 +26,7 @@ int main()
   MyAgent agent1;
   MyAgent agent2;
   judger.SetFirstAgent(agent1);
-  judger.SetFirstAgent(agent2);
+  judger.SetSecondAgent(agent2);
   judger.Start(GetStartBoard, agent1, agent2);
   return 0;
 }
