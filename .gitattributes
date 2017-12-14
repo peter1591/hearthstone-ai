@@ -1,5 +1,3 @@
-include/Cards/cards.json linguist-vendored
-include/Cards/formatted_cards.json linguist-vendored
-include/json/* linguist-vendored
-contrib/* linguist-vendored
-data/* linguist-vendored
+*/cards.json linguist-vendored
+*/formatted_cards.json linguist-vendored
+third_party/* linguist-vendored
