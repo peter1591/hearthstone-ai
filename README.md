@@ -1,6 +1,6 @@
 ## Introduction
 
-The is an AI for the card game HearthStone.
+The is an AI for the card game HearthStone which originally motivated by AlphaGo! This work combines Monte Carlo tree search (with extensions for imperfection game), deep neural network, and a high-performance game engine.
 
 ## Demo Videos
 * First demo video is on!!! https://youtu.be/z0I1nM6_k0w
@@ -17,56 +17,46 @@ The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
 
 ## Components
 
-### Simulation Engine
-* There's no HearthStone simulation engine written in C++, so I decided to write one.
+### [Game engine](./engine)
 * Header-only implementation. No dependency. No need to compile anything!
-* The most important goal is **speed**.
-* Written in C++14/C++17.
-  * Need gcc 7.0+ or Visual Studio 2017 Preview 2.1+ to compile.
-  * Heavily use template programming.
-* Profile-guided optimization is integrated in the build script.
-* Used in AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)
+* Use template programming intensively for higher performance.
 
-### AI Engine
+### [Judgement framework](./judge)
+* A judgement framework allowing two agents to compete with each other.
+
+### [MCTS Agent](./agents/include/agents)
 * Monte Carlo tree search
 * Use Multiple-Observer MCTS to handle hidden information
 * Share tree nodes for identical boards
-* Use neural network in default policy to *greatly* boost play strength
-  * An example: AI should *NOT* play *arcane missiles* in first turn.
-  * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
-  * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
   
-### Neural Network
+### [Neural Network](./agents/include/neural_net)
 
 The goal of the neural network is to guess who is going to win this game. Currently, the accuracy is about 79% for expert-practice decks.
 
-Input data:
-* Minions on board
-  * HP, Max-HP, Attack
-  * [TODO] Taunt / Charge / Attackable
-  * [TODO] Card id, enchantment ids, deathrattle ids
-* [TODO] Hand cards
-  * Card ids, enchantment ids
-* [TODO] Deck cards
-  * Card ids
+A simple example shows a weak neural network can *greatly* boost MCTS play strength:
+  * A person player learns in one day or so that *arcane missiles* should generally not be played in the first turn.
+  * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
+  * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
+  
+Tensorflow is also used [here](./agents/train/tensorflow) in this project to implement different models and compare there performance.
 
-### Game Board Recognition
+### [Game Board Recognition](./ui/build/vs2017/HearthstoneAI/LogWatcher)
 * Use the logging feature in HearthStone
 * Written in C# since no critical performance issue occurs here.
 * Parse the logs to get a picture of the game board.
 * Use the C# coroutine to parse the logs in a cleaner way.
 
-### Automatic Play bot
-* The automatic play bot is not implemented yet
-* Just refer to the move the AI suggested, and do it manually on the game client.
+### [Graphical User Interface](./ui)
+* Integrate everything in one piece.
+* Automatically show a suggestion move as you play the game. See videos like [this](https://youtu.be/L6kr_zJKCQI) for a demo.
 
 ## Installation
 1. Install HearthStone on Windows.
 2. Enable logging to HearthStone, so we can know what's the board looks like.
-3. Open the C# project under 'ui' folder.
-4. Run it.
+3. Open the C# project under [this folder](./ui/build/vs2017).
+4. Compile and run it.
 
-## Next Step
+## Future Works
 
 ### Neural Network
 
@@ -95,12 +85,11 @@ In a naive implementation of MCTS, all the children nodes must be expanded befor
 
 Even if there are only one card is different, we still need two tree nodes. Otherwise, we will fuse the strategy decision in Monte-Carlo tree search. However, this does *not* means that, we cannot share information between nodes. On the contrary, AMAF (all-move-as-first) and RAVE (rapid action value estimation) are based on this basic idea.
 
+### Automatic Play bot
 
-### Tensor Flow
+Right now, Just refer to the move the AI suggested, and do it manually on the game client.
 
-Try out Tensor Flow. It's a great machine learning library, with some great visualization support.
-
-## Contributors
+## Contribution
 
 Just me. Any idea/help is always welcomed.
 
