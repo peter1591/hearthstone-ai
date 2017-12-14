@@ -2,13 +2,11 @@
 
 The is an AI for the card game HearthStone which originally motivated by AlphaGo! This work combines Monte Carlo tree search (with extensions for imperfection game), deep neural network, and a high-performance game engine.
 
-## Demo Videos
-* First demo video is on!!! https://youtu.be/z0I1nM6_k0w
-* Another demo video with higher quality: https://youtu.be/L6kr_zJKCQI
-* First demo video with expert warlock: https://youtu.be/wLvBlKChFW0
-* Another demo video played with expert warlock innkeeper: https://youtu.be/yVX8nTo8o00
+Compete with Mage in basic practice mode. Running on Macbook Pro. AI can easily beat innkeeper (8 = 0).
+[![Video](https://img.youtube.com/vi/L6kr_zJKCQI/0.jpg)](http://www.youtube.com/watch?v=L6kr_zJKCQI)
 
-The AI beats the basic InnKeeper mage-to-mage duel so far (8 - 0).
+Compete with Warlock in expert practice mode. Running on Macbook Pro.
+[![Video](https://img.youtube.com/vi/wLvBlKChFW0/0.jpg)](http://www.youtube.com/watch?v=wLvBlKChFW0)
 
 ## Motivation
 * AlphaGo successfully combines MCTS and deep neural networks to beat human on Go.
@@ -88,6 +86,12 @@ Even if there are only one card is different, we still need two tree nodes. Othe
 ### Automatic Play bot
 
 Right now, Just refer to the move the AI suggested, and do it manually on the game client.
+
+## Demo Videos
+* First demo video is on!!! https://youtu.be/z0I1nM6_k0w
+* Another demo video with higher quality: https://youtu.be/L6kr_zJKCQI
+* First demo video with expert warlock: https://youtu.be/wLvBlKChFW0
+* Another demo video played with expert warlock innkeeper: https://youtu.be/yVX8nTo8o00
 
 ## Contribution
 
