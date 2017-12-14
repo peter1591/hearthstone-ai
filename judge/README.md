@@ -3,22 +3,33 @@ A judgement framework allowing two agents to compete with each other, and make s
 
 ## Usage
 
-## Implement agent
+### Implement agent
 Implement your own agent following the interface [IAgent](./include/judge/IAgent.h). Please refer to [agents](../agents) for examples.
 
-### Invoke judger
 ```c++
-#include "judge/judger.h"
+#include "judge/IAgent.h"
 
 class MyAgent : public judge::IAgent
 {
   // Implement your own agent
 };
+```
+
+### Feed start board
+There are hidden information like cards held in opponent's hand, but a game state is a state that all hidden information is already determined. So, typically there are multiple possible start boards. A callback function will be invoked by the judger to get a start board. Typically one can do a sampling on all possible hidden information over a predefined distribution.
+
+```c++
+#include "state/State.h"
 
 state::State GetStartBoard()
 {
   // Return the starting board
 }
+```
+
+### Invoke judger
+```c++
+#include "judge/judger.h"
 
 int main()
 {
