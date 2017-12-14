@@ -67,7 +67,7 @@ void test()
 Refer to [e2e test](./test) for a full examples.
 
 ## Build
-This library uses some language features in the latest C++17, compiler newer than gcc 7.0+ or Visual Studio 2017 Preview 2.1+ is needed. Please refer to the [build folder](./build) for working examples.
+This library uses some language features only available in the latest C++17, so compiler newer than gcc 7.0+ or Visual Studio 2017 Preview 2.1+ is needed. Please refer to the [build folder](./build) for working examples.
 
 ## Troubleshooting
 
