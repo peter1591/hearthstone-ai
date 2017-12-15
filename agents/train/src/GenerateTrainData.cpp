@@ -27,16 +27,23 @@ static void Initialize()
 class IterationCallback
 {
 public:
-	IterationCallback() : max_iterations_(0), last_shown_(){}
+	IterationCallback() : first_time_(true), max_iterations_(0), last_shown_(){}
 
 	void Initialize(uint64_t max_iterations) {
+		first_time_ = true;
 		max_iterations_ = max_iterations;
 		last_shown_ = std::chrono::steady_clock::now();
 	}
 
-	bool operator()(uint64_t iteration) {
+	bool operator()(state::State const& game_state, uint64_t iteration) {
+		if (first_time_) {
+			std::cout << "Turn: " << game_state.GetTurn() << std::endl;
+			first_time_ = false;
+		}
+
 		if (iteration >= max_iterations_) {
 			std::cout << "Total iterations: " << iteration << std::endl;
+			first_time_ = true;
 			return false;
 		}
 
@@ -51,6 +58,7 @@ public:
 	}
 
 private:
+	bool first_time_;
 	uint64_t max_iterations_;
 	std::chrono::steady_clock::time_point last_shown_;
 };
@@ -114,9 +122,7 @@ int main(int argc, char *argv[])
 	judger.SetFirstAgent(&first);
 	judger.SetSecondAgent(&second);
 
-	judger.Start(start_board_getter, rand(), [&](state::State const& state) {
-		std::cout << "Turn: " << state.GetTurn() << std::endl;
-	});
+	judger.Start(start_board_getter, rand());
 
 	return 0;
 }

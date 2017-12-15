@@ -76,8 +76,7 @@ namespace judge
 		void SetFirstAgent(AgentType * first) { first_ = first; }
 		void SetSecondAgent(AgentType * second) { second_ = second; }
 
-		template <class ProgressCallback>
-		void Start(StartingStateGetter state_getter, int seed, ProgressCallback && cb)
+		void Start(StartingStateGetter state_getter, int seed)
 		{
 			state::State current_state = state_getter();
 			assert(first_);
@@ -90,8 +89,6 @@ namespace judge
 			AgentType * next_agent = nullptr;
 			action_callback_.SetState(current_state);
 			while (true) {
-				cb(current_state);
-
 				if (current_state.GetCurrentPlayerId().IsFirst()) {
 					next_agent = first_;
 				}

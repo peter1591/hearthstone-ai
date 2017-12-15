@@ -32,7 +32,7 @@ namespace agents
 		void Think(state::State const& state, std::mt19937 & random) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				return iteration_cb_(iterations);
+				return iteration_cb_(state, iterations);
 			};
 
 			controller_.reset(new MCTSRunner(tree_samples_, random));
