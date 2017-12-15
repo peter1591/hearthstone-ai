@@ -11,21 +11,28 @@
 
 namespace agents
 {
+	template <class IterationCallback>
 	class MCTSAgent {
 	public:
 		MCTSAgent(int threads, int tree_samples) :
 			threads_(threads),
 			tree_samples_(tree_samples),
-			root_node_(nullptr), node_(nullptr), controller_()
+			root_node_(nullptr), node_(nullptr), controller_(),
+			iteration_cb_()
 		{}
 
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
-		void Think(state::State const& state, std::mt19937 & random, std::function<bool(uint64_t)> cb) {
+		template <class... Args>
+		void SetupIterationCallback(Args&&... args) {
+			this->iteration_cb_.Initialize(std::forward<Args>(args)...);
+		}
+
+		void Think(state::State const& state, std::mt19937 & random) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				return cb(iterations);
+				return iteration_cb_(iterations);
 			};
 
 			controller_.reset(new MCTSRunner(tree_samples_, random));
@@ -111,5 +118,6 @@ namespace agents
 		mcts::builder::TreeBuilder::TreeNode const* root_node_;
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;
+		IterationCallback iteration_cb_;
 	};
 }

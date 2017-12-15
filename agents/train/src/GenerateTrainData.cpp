@@ -24,6 +24,37 @@ static void Initialize()
   std::cout << "Initialize with random seed: " << rand_seed << std::endl;
 }
 
+class IterationCallback
+{
+public:
+	IterationCallback() : max_iterations_(0), last_shown_(){}
+
+	void Initialize(uint64_t max_iterations) {
+		max_iterations_ = max_iterations;
+		last_shown_ = std::chrono::steady_clock::now();
+	}
+
+	bool operator()(uint64_t iteration) {
+		if (iteration >= max_iterations_) {
+			std::cout << "Total iterations: " << iteration << std::endl;
+			return false;
+		}
+
+		auto now = std::chrono::steady_clock::now();
+		auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_shown_).count();
+		if (after_last_shown > 5) {
+			double percent = (double)iteration / max_iterations_;
+			std::cout << "Iterations: " << iteration << " (" << percent * 100.0 << "%)" << std::endl;
+			last_shown_ = now;
+		}
+		return true;
+	}
+
+private:
+	uint64_t max_iterations_;
+	std::chrono::steady_clock::time_point last_shown_;
+};
+
 int main(int argc, char *argv[])
 {
 	Initialize();
@@ -64,11 +95,17 @@ int main(int argc, char *argv[])
 	std::cout << "\tIterations: " << iterations << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
-	judge::Judger<agents::MCTSAgent> judger(rand);
+	using MCTSAgent = agents::MCTSAgent<IterationCallback>;
+
+	judge::Judger<MCTSAgent> judger(rand);
 	constexpr int root_samples = 10;
 
-	agents::MCTSAgent first(threads, root_samples);
-	agents::MCTSAgent second(threads, root_samples);
+	IterationCallback iteration_cb;
+	MCTSAgent first(threads, root_samples);
+	MCTSAgent second(threads, root_samples);
+
+	first.SetupIterationCallback(iterations);
+	second.SetupIterationCallback(iterations);
 
 	auto start_board_getter = [&]() -> state::State {
 		return TestStateBuilder().GetStateWithRandomStartCard(rand());
@@ -77,23 +114,8 @@ int main(int argc, char *argv[])
 	judger.SetFirstAgent(&first);
 	judger.SetSecondAgent(&second);
 
-	auto last_show = std::chrono::steady_clock::now();
 	judger.Start(start_board_getter, rand(), [&](state::State const& state) {
 		std::cout << "Turn: " << state.GetTurn() << std::endl;
-	}, [iterations, last_show](uint64_t	now_iterations) mutable {
-		if (now_iterations >= iterations) {
-			std::cout << "Total iterations: " << now_iterations << std::endl;
-			return false;
-		}
-
-		auto now = std::chrono::steady_clock::now();
-		auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_show).count();
-		if (after_last_shown > 5) {
-			double percent = (double)now_iterations / iterations;
-			std::cout << "Iterations: " << now_iterations << " (" << percent * 100.0 << "%)" << std::endl;
-			last_show = now;
-		}
-		return true;
 	});
 
 	return 0;

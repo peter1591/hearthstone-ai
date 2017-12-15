@@ -76,9 +76,8 @@ namespace judge
 		void SetFirstAgent(AgentType * first) { first_ = first; }
 		void SetSecondAgent(AgentType * second) { second_ = second; }
 
-		template <class ProgressCallback, class IterationProgressCallback>
-		void Start(StartingStateGetter state_getter, int seed,
-			ProgressCallback && cb, IterationProgressCallback && iteration_cb)
+		template <class ProgressCallback>
+		void Start(StartingStateGetter state_getter, int seed, ProgressCallback && cb)
 		{
 			state::State current_state = state_getter();
 			assert(first_);
@@ -101,7 +100,7 @@ namespace judge
 					next_agent = second_;
 				}
 
-				next_agent->Think(current_state, random, iteration_cb);
+				next_agent->Think(current_state, random);
 
 				std::vector<size_t> playable_cards;
 				FlowControl::ValidActionGetter(current_state).ForEachPlayableCard([&](size_t idx) {
