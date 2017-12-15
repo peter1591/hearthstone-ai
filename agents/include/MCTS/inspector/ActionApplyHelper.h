@@ -59,7 +59,7 @@ namespace mcts
 			using StartBoardGetter = std::function<state::State(int)>;
 
 		private:
-			class RandomCallback : public mcts::board::IRandomGenerator {
+			class RandomCallback : public judge::IRandomGenerator {
 			public:
 				int Get(int exclusive_max) { return 0; }
 			};

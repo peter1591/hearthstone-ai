@@ -603,7 +603,7 @@ namespace mcts
 					FlowControl::FlowContext & flow_context,
 					board::BoardActionAnalyzer & action_analyzer)
 				{
-					class RandomPolicy : public mcts::board::IRandomGenerator {
+					class RandomPolicy : public judge::IRandomGenerator {
 					public:
 						RandomPolicy(int seed) : rand_(seed) {}
 						int Get(int exclusive_max) final { return rand_.GetRandom(exclusive_max); }

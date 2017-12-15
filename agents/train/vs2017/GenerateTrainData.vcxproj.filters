@@ -71,5 +71,8 @@
     <ClInclude Include="..\..\include\agents\MCTSRunner.h">
       <Filter>Header Files\agent</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\IRandomGenerator.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

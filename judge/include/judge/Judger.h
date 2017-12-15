@@ -14,6 +14,7 @@
 #include "MCTS/board/RandomGenerator.h"
 #include "judge/Recorder.h"
 #include "judge/IAgent.h"
+#include "judge/IRandomGenerator.h"
 
 namespace judge
 {
@@ -23,7 +24,7 @@ namespace judge
 	public:
 		using StartingStateGetter = std::function<state::State()>;
 
-		class RandomCallback : public mcts::board::IRandomGenerator {
+		class RandomCallback : public IRandomGenerator {
 		public:
 			RandomCallback(Judger & guide) : guide_(guide) {}
 			
