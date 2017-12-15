@@ -31,10 +31,7 @@ void Run(agents::MCTSRunner * controller, int secs)
 		return TestStateBuilder().GetState(seed);
 	};
 
-	auto seed = std::random_device()();
-
-	s << "Running for " << secs << " seconds with " << Configs::threads << " threads "
-		<< "(seed = " << seed << ")" << std::endl;
+	s << "Running for " << secs << " seconds with " << Configs::threads << " threads ";
 
 	auto start = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point run_until =
@@ -55,7 +52,7 @@ void Run(agents::MCTSRunner * controller, int secs)
 	};
 
 	auto start_i = controller->GetStatistic().GetSuccededIterates();
-	controller->Run(Configs::threads, seed, start_board_getter);
+	controller->Run(Configs::threads, start_board_getter);
 	while (true) {
 		if (!continue_checker()) break;
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
@@ -104,7 +101,8 @@ void TestAI()
 	srand(0);
 
 	int tree_samples = 10000;
-	std::mt19937 rand;
+	unsigned int seed = std::random_device()();
+	std::mt19937 rand(seed);
 
 	agents::MCTSRunner controller(tree_samples, rand);
 	mcts::inspector::InteractiveShell handler(&controller);
