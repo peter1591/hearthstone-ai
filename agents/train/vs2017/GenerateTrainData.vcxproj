@@ -148,6 +148,7 @@
     <ClCompile Include="..\src\GenerateTrainData.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\judge\include\judge\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IRandomGenerator.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
