@@ -1,6 +1,6 @@
 #pragma once
 
-#include "judge/IRandomGenerator.h"
+#include "state/IRandomGenerator.h"
 
 namespace mcts
 {
@@ -8,7 +8,7 @@ namespace mcts
 
 	namespace board
 	{
-		class RandomGenerator : public judge::IRandomGenerator
+		class RandomGenerator : public state::IRandomGenerator
 		{
 		public:
 			RandomGenerator(SOMCTS & callback) : callback_(callback) {}

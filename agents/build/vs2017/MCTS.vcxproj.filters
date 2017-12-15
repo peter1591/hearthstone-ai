@@ -233,14 +233,17 @@
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\IRandomGenerator.h">
-      <Filter>Header Files\judge</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h">
       <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\ActionApplier.h">
+      <Filter>Header Files\FlowControl\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\MainOp.h">
+      <Filter>Header Files\FlowControl\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

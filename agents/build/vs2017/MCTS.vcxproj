@@ -162,9 +162,10 @@
     <ClCompile Include="..\..\test\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\ActionApplier.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\MainOp.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
-    <ClInclude Include="..\..\..\judge\include\judge\IRandomGenerator.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />

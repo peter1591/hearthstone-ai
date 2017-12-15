@@ -11,10 +11,14 @@ namespace state {
 		IRandomGenerator & operator=(IRandomGenerator const&) = delete;
 
 		virtual int Get(int exclusive_max) = 0;
-		virtual size_t Get(size_t exclusive_max) = 0;
+
+		size_t Get(size_t exclusive_max) { return (size_t)Get((int)exclusive_max); }
 
 		// @param min Inclusive minimum
 		// @param max Inclusive maximum
-		virtual int Get(int min, int max) = 0;
+		int Get(int min, int max) {
+			assert(max >= min);
+			return min + Get(max - min + 1);
+		}
 	};
 }

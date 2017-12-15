@@ -73,7 +73,7 @@ namespace mcts
 			Result ApplyAction(
 				BoardActionAnalyzer & action_analyzer,
 				FlowControl::FlowContext & flow_context,
-				judge::IRandomGenerator & random, judge::IActionParameterGetter & action_parameters) const
+				state::IRandomGenerator & random, judge::IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				auto flow_result = action_analyzer.GetActionApplierByRefThis().Apply(
