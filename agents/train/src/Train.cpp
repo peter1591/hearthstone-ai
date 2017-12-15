@@ -190,8 +190,9 @@ private:
 	}
 
 	bool IsResultWin(std::string const& win_player) {
-		if (win_player == "kResultWin") return true;
-		if (win_player == "kResultLoss") return false;
+		if (win_player == "kResultFirstPlayerWin") return true;
+		if (win_player == "kResultSecondPlayerWin") return false;
+		if (win_player == "kResultDraw") return false;
 		throw std::runtime_error("Failed to parse winning player");
 	}
 

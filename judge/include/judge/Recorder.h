@@ -53,16 +53,16 @@ namespace judge
 			json_.append(obj);
 		}
 
-		void End(mcts::Result result) {
+		void End(FlowControl::Result result) {
+			assert(result != FlowControl::kResultInvalid);
+			assert(result != FlowControl::kResultNotDetermined);
+
 			{
 				Json::Value obj;
 				obj["type"] = "kEnd";
 				obj["result"] = GetResultString(result);
 				json_.append(obj);
 			}
-
-			assert(result.type_ != mcts::Result::kResultInvalid);
-			assert(result.type_ != mcts::Result::kResultNotDetermined);
 
 			time_t now;
 			time(&now);
@@ -124,12 +124,14 @@ namespace judge
 			}
 		}
 
-		std::string GetResultString(mcts::Result result) {
-			switch (result.type_) {
-			case mcts::Result::kResultWin:
-				return "kResultWin";
-			case mcts::Result::kResultLoss:
-				return "kResultLoss";
+		std::string GetResultString(FlowControl::Result result) {
+			switch (result) {
+			case FlowControl::kResultDraw:
+				return "kResultDraw";
+			case FlowControl::kResultFirstPlayerWin:
+				return "kResultFirstPlayerWin";
+			case FlowControl::kResultSecondPlayerWin:
+				return "kResultSecondPlayerWin";
 			default:
 				assert(false);
 				return "kResultInvalid";

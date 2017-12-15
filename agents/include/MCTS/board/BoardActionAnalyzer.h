@@ -41,7 +41,7 @@ namespace mcts
 
 			// @note the return object refer to some internal objects in *this, caller
 			// need to ensure the lifetime.
-			FlowControl::utils::ActionApplier GetActionApplierByRefThis() {
+			FlowControl::utils::ActionApplier GetActionApplierByRefThis() const {
 				return FlowControl::utils::ActionApplier(attackers_, playable_cards_);
 			}
 

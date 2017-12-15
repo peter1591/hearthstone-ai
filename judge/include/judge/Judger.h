@@ -14,7 +14,6 @@
 #include "MCTS/board/RandomGenerator.h"
 #include "judge/Recorder.h"
 #include "judge/IAgent.h"
-#include "judge/IRandomGenerator.h"
 
 namespace judge
 {
@@ -24,7 +23,7 @@ namespace judge
 	public:
 		using StartingStateGetter = std::function<state::State()>;
 
-		class RandomCallback : public IRandomGenerator {
+		class RandomCallback : public state::IRandomGenerator {
 		public:
 			RandomCallback(Judger & guide) : guide_(guide) {}
 			
@@ -40,15 +39,19 @@ namespace judge
 
 		class ActionCallback : public judge::IActionParameterGetter {
 		public:
-			ActionCallback(Judger & guide) : guide_(guide), cb_(nullptr), main_op_(FlowControl::utils::MainOpType::kMainOpInvalid) {}
+			ActionCallback(Judger & guide) : guide_(guide), cb_(nullptr), state_(nullptr) {}
 
 			ActionCallback(ActionCallback const&) = delete;
 			ActionCallback & operator=(ActionCallback const&) = delete;
 
 			void SetCallback(AgentType * cb) { cb_ = cb; }
+			void SetState(state::State const& state) { state_ = &state; }
 			
-			void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
-			FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
+			FlowControl::utils::MainOpType ChooseMainOp() {
+				auto main_op = cb_->GetMainAction();
+				guide_.recorder_.RecordMainAction(*state_, main_op);
+				return main_op;
+			}
 
 			int GetNumber(mcts::ActionType::Types action_type, mcts::board::ActionChoices const& action_choices) final {
 				int action = cb_->GetSubAction(action_type, action_choices);
@@ -59,7 +62,7 @@ namespace judge
 		private:
 			Judger & guide_;
 			AgentType * cb_;
-			FlowControl::utils::MainOpType main_op_;
+			state::State const* state_;
 		};
 
 		Judger(std::mt19937 & rand) :
@@ -84,8 +87,9 @@ namespace judge
 			recorder_.Start();
 			std::mt19937 random(seed);
 
-			mcts::Result result = mcts::Result::kResultInvalid;
+			FlowControl::Result result = FlowControl::kResultInvalid;
 			AgentType * next_agent = nullptr;
+			action_callback_.SetState(current_state);
 			while (true) {
 				cb(current_state);
 
@@ -99,24 +103,23 @@ namespace judge
 
 				next_agent->Think(current_state, random, iteration_cb);
 
-				FlowControl::FlowContext flow_context;
+				std::vector<size_t> playable_cards;
+				FlowControl::ValidActionGetter(current_state).ForEachPlayableCard([&](size_t idx) {
+					playable_cards.push_back(idx);
+					return true;
+				});
+				std::vector<int> attackers;
+				FlowControl::ValidActionGetter(current_state).ForEachAttacker([&](int idx) {
+					attackers.push_back(idx);
+					return true;
+				});
+				FlowControl::utils::ActionApplier action_applier(attackers, playable_cards);
 
-				int main_action = next_agent->GetMainAction();
-				auto action_analyzer = next_agent->GetActionApplier();
-				auto main_op = action_analyzer.GetMainOpType(main_action);
-
-				recorder_.RecordMainAction(current_state, main_op);
 				action_callback_.SetCallback(next_agent);
-				action_callback_.SetMainOp(main_op);
+				result = action_applier.Apply(current_state, action_callback_, random_callback_);
 
-				auto flow_result = action_analyzer.GetActionApplierByRefThis().Apply(
-					current_state, action_callback_, random_callback_);
-				result = mcts::Result::ConvertFrom(flow_result);
-
-				assert(result.type_ != mcts::Result::kResultInvalid);
-				if (result.type_ != mcts::Result::kResultNotDetermined) {
-					break;
-				}
+				assert(result != FlowControl::kResultInvalid);
+				if (result != FlowControl::kResultNotDetermined) break;
 			}
 
 			recorder_.End(result);

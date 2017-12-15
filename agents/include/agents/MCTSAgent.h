@@ -44,8 +44,8 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		int GetMainAction() {
-			assert(root_node_ == node_);
+		FlowControl::utils::MainOpType GetMainAction() {
+			node_ = root_node_;
 			assert(node_);
 			assert(node_->GetActionType().GetType() == mcts::ActionType::kMainAction);
 
@@ -64,11 +64,7 @@ namespace agents
 
 			node_ = best_node;
 
-			return best_choice;
-		}
-
-		mcts::board::BoardActionAnalyzer GetActionApplier() {
-			return root_node_->GetAddon().action_analyzer;
+			return root_node_->GetAddon().action_analyzer.GetMainOpType(best_choice);
 		}
 
 		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
