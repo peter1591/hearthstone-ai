@@ -619,7 +619,7 @@ namespace mcts
 						DFSItem(size_t choice, size_t total) : choice_(choice), total_(total) {}
 					};
 
-					class UserChoicePolicy : public mcts::board::IActionParameterGetter {
+					class UserChoicePolicy : public judge::IActionParameterGetter {
 					public:
 						UserChoicePolicy(std::vector<DFSItem> & dfs,
 							std::vector<DFSItem>::iterator & dfs_it,

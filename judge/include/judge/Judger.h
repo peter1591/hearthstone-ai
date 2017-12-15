@@ -38,7 +38,7 @@ namespace judge
 			Judger & guide_;
 		};
 
-		class ActionCallback : public mcts::board::IActionParameterGetter {
+		class ActionCallback : public judge::IActionParameterGetter {
 		public:
 			ActionCallback(Judger & guide) : guide_(guide), cb_(nullptr), main_op_(FlowControl::utils::MainOpType::kMainOpInvalid) {}
 

@@ -64,6 +64,9 @@
     <Filter Include="Header Files\MCTS\inspector">
       <UniqueIdentifier>{1096e278-ba5b-469b-a5a8-d3a20eda180e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\judge">
+      <UniqueIdentifier>{b5feb7d1-ceb7-48e8-8908-037bb2927191}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\CardDispatcher.cpp">
@@ -223,6 +226,21 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\inspector\ActionApplyHelper.h">
       <Filter>Header Files\MCTS\inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\IActionParameterGetter.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\IAgent.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\IRandomGenerator.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\Judger.h">
+      <Filter>Header Files\judge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\Recorder.h">
+      <Filter>Header Files\judge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
