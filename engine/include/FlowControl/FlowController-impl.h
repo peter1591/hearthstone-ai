@@ -7,6 +7,24 @@
 
 namespace FlowControl
 {
+	inline Result FlowController::PerformOperation()
+	{
+		auto main_op = flow_context_.GetMainOp();
+
+		switch (main_op) {
+		case kMainOpPlayCard:
+			return PlayCard(flow_context_.ChooseHandCard());
+		case kMainOpAttack:
+			return Attack(flow_context_.GetAttacker());
+		case kMainOpHeroPower:
+			return HeroPower();
+		case kMainOpEndTurn:
+			return EndTurn();
+		default:
+			return Result::kResultInvalid;
+		}
+	}
+
 	inline Result FlowController::PlayCard(int hand_idx)
 	{
 		assert(ValidActionGetter(state_).IsPlayable(hand_idx));

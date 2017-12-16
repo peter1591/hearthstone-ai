@@ -52,7 +52,7 @@ namespace mcts
 					if (!functor(i, GetMainOpType(op_map_[i]))) return;
 				}
 			}
-			FlowControl::utils::MainOpType GetMainOpType(size_t choice) const {
+			FlowControl::MainOpType GetMainOpType(size_t choice) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				return op_map_[choice];
 			}
@@ -70,7 +70,7 @@ namespace mcts
 
 		private:
 			mutable Utils::SharedSpinLock mutex_;
-			std::array<FlowControl::utils::MainOpType, FlowControl::utils::MainOpType::kMainOpMax> op_map_;
+			std::array<FlowControl::MainOpType, FlowControl::utils::MainOpType::kMainOpMax> op_map_;
 			size_t op_map_size_;
 			std::vector<int> attackers_;
 			std::vector<size_t> playable_cards_;

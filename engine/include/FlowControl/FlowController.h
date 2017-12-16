@@ -35,6 +35,9 @@ namespace FlowControl
 		}
 
 	public: // main flow
+		Result PerformOperation();
+
+	private:
 		Result PlayCard(int hand_idx);
 		Result Attack(state::CardRef attacker);
 		Result HeroPower();

@@ -53,6 +53,14 @@ namespace FlowControl {
 		}
 
 	public: // action parameter
+		auto GetMainOp() {
+			return action_parameters_->ChooseMainOp();
+		}
+
+		auto ChooseHandCard() { return action_parameters_->ChooseHandCard(); }
+
+		auto GetAttacker() { return action_parameters_->GetAttacker(); }
+
 		state::CardRef GetDefender(std::vector<state::CardRef> const& defenders) {
 			assert(!defenders.empty());
 			if (defenders.size() <= 1) return defenders[0];

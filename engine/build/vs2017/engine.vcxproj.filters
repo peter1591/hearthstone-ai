@@ -596,5 +596,8 @@
     <ClInclude Include="..\..\include\Utils\CloneableContainers\Vector.h">
       <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\MainOp.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

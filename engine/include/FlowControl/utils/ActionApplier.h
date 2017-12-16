@@ -15,14 +15,6 @@ namespace FlowControl
 		class ActionApplier
 		{
 		public:
-			class IActionParameterGetter : public FlowControl::IActionParameterGetter
-			{
-			public:
-				virtual MainOpType ChooseMainOp() = 0;
-				virtual int ChooseHandCard(std::vector<size_t> const& playable_cards) = 0;
-				virtual int	ChooseAttacker(std::vector<int> const& attackers) = 0;
-			};
-
 			ActionApplier(std::vector<int> const& attackers, std::vector<size_t> const& playable_cards)
 				: attackers_(attackers), playable_cards_(playable_cards)
 			{
@@ -60,7 +52,7 @@ namespace FlowControl
 				assert(!playable_cards_.empty());
 				int idx = 0;
 				if (playable_cards_.size() >= 2) {
-					idx = action.ChooseHandCard(playable_cards_);
+					idx = action.ChooseHandCard();
 					if (idx < 0) return Result::kResultInvalid;
 				}
 				size_t hand_idx = playable_cards_[idx];

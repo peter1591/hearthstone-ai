@@ -17,8 +17,7 @@ namespace mcts
 		public:
 			struct NullInfo {};
 			struct ChooseHandCardInfo {
-				ChooseHandCardInfo(std::vector<size_t> const& cards) : cards(cards) {}
-				std::vector<size_t> cards;
+				ChooseHandCardInfo() {}
 			};
 			struct MinionPutLocationInfo {
 				MinionPutLocationInfo(int minions) : minions(minions) {}
@@ -65,24 +64,28 @@ namespace mcts
 			};
 
 			// TODO: move to FlowControl::utils
-			class ActionParameterCallback : public FlowControl::utils::ActionApplier::IActionParameterGetter {
+			class ActionParameterCallback : public FlowControl::IActionParameterGetter {
 			public:
 				ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
 					result_(result), choices_(choices), choices_idx_(choices_idx),
-					main_op_(FlowControl::utils::MainOpType::kMainOpInvalid)
+					main_op_(FlowControl::MainOpType::kMainOpInvalid)
 				{}
 
-				void SetMainOp(FlowControl::utils::MainOpType main_op) { main_op_ = main_op; }
-				FlowControl::utils::MainOpType ChooseMainOp() { return main_op_; }
+				void SetMainOp(FlowControl::MainOpType main_op) { main_op_ = main_op; }
+				FlowControl::MainOpType ChooseMainOp() { return main_op_; }
 
-				int ChooseHandCard(std::vector<size_t> const& playable_cards) {
+				void SetPlayableCards(std::vector<size_t> const& playable_cards) {
+					playable_cards_ = &playable_cards;
+				}
+
+				int ChooseHandCard() {
 					if (choices_idx_ >= choices_.size() &&
 						std::holds_alternative<NullInfo>(result_))
 					{
-						assert(playable_cards.size() > 1);
-						result_ = ChooseHandCardInfo(playable_cards);
+						assert(playable_cards_->size() > 1);
+						result_ = ChooseHandCardInfo();
 					}
-					return GetNextChoice(0, (int)playable_cards.size());
+					return GetNextChoice(0, (int)playable_cards_->size());
 				}
 
 				int GetMinionPutLocation(int minions) {
@@ -159,7 +162,8 @@ namespace mcts
 				CallbackInfo & result_;
 				std::vector<int> const& choices_;
 				size_t & choices_idx_;
-				FlowControl::utils::MainOpType main_op_;
+				FlowControl::MainOpType main_op_;
+				std::vector<size_t> const* playable_cards_;
 			};
 
 		public:
