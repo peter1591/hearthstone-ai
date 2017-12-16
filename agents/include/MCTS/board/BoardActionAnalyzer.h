@@ -29,7 +29,7 @@ namespace mcts
 
 			void Reset() { analyzer_.Reset(); }
 
-			void Prepare(FlowControl::CurrentPlayerStateView const& board) { analyzer_.Analyze(board); }
+			void Prepare(FlowControl::CurrentPlayerStateView const& board) { analyzer_.Analyze(board.GetValidActionGetter()); }
 
 			auto GetMainActionsCount() {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);

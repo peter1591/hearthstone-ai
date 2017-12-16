@@ -125,6 +125,8 @@ namespace FlowControl
 			return state_.GetCurrentPlayerId().GetSide();
 		}
 
+		auto GetValidActionGetter() const { return ValidActionGetter(state_); }
+
 		template <typename Functor>
 		void ForEachPlayableCard(Functor && functor) const {
 			ValidActionGetter(state_).ForEachPlayableCard(std::forward<Functor>(functor));

@@ -15,7 +15,7 @@ namespace FlowControl
 			// These functions can return valid for ones actually are not valid actions
 
 		template <class Functor>
-		void ForEachPlayableCard(Functor && op)
+		void ForEachPlayableCard(Functor && op) const
 		{
 			auto const& hand = state_.GetCurrentPlayer().hand_;
 			for (size_t idx = 0; idx < hand.Size(); ++idx) {
@@ -24,7 +24,7 @@ namespace FlowControl
 			}
 		}
 
-		bool IsPlayable(size_t hand_idx)
+		bool IsPlayable(size_t hand_idx) const
 		{
 			auto const& hand = state_.GetCurrentPlayer().hand_;
 			state::CardRef card_ref = hand.Get(hand_idx);
@@ -47,7 +47,7 @@ namespace FlowControl
 			return true;
 		}
 
-		bool CanUseHeroPower() {
+		bool CanUseHeroPower() const {
 			state::CardRef card_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
 			state::Cards::Card const& card = state_.GetCard(card_ref);
 
@@ -60,11 +60,11 @@ namespace FlowControl
 		}
 
 	public:
-		bool IsAttackable(state::CardRef card_ref) {
+		bool IsAttackable(state::CardRef card_ref) const {
 			return IsAttackable(state_.GetCardsManager().Get(card_ref));
 		}
 
-		bool IsAttackable(state::Cards::Card const& card) {
+		bool IsAttackable(state::Cards::Card const& card) const {
 			assert(card.GetHP() > 0);
 			assert(card.GetZone() == state::kCardZonePlay);
 
@@ -82,12 +82,13 @@ namespace FlowControl
 			return true;
 		}
 
+		// TODO: why encode attacker? just return state::CardRef
 		// return list of encoded indices
 		// encoded index:
 		//   0 ~ 6: minion index from left to right
 		//   7: hero
 		template <typename Functor>
-		void ForEachAttacker(Functor&& functor) {
+		void ForEachAttacker(Functor&& functor) const {
 			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId());
 			auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
@@ -107,7 +108,7 @@ namespace FlowControl
 		}
 
 		// Decode attacker index. See @ForEachAttacker
-		state::CardRef GetFromAttackerIndex(int attacker_idx) {
+		state::CardRef GetFromAttackerIndex(int attacker_idx) const {
 			if (attacker_idx == 7) {
 				return state_.GetCurrentPlayer().GetHeroRef();
 			}
@@ -119,7 +120,7 @@ namespace FlowControl
 			return minions.Get((size_t)(attacker_idx));
 		}
 
-		std::array<state::CardRef, 8> GetAttackerIndics() {
+		std::array<state::CardRef, 8> GetAttackerIndics() const {
 			std::array<state::CardRef, 8> ret;
 			for (int i = 0; i < 8; ++i) {
 				ret[i] = GetFromAttackerIndex(i);
@@ -127,7 +128,7 @@ namespace FlowControl
 			return ret;
 		}
 
-		std::vector<state::CardRef> GetDefenders() {
+		std::vector<state::CardRef> GetDefenders() const {
 			std::vector<state::CardRef> defenders;
 			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
 
@@ -142,7 +143,7 @@ namespace FlowControl
 			return defenders;
 		}
 
-		bool HeroPowerUsable() {
+		bool HeroPowerUsable() const {
 			state::CardRef hero_power_ref = state_.GetCurrentPlayer().GetHeroPowerRef();
 			if (!hero_power_ref.IsValid()) return false;
 			if (!state_.GetCard(hero_power_ref).GetRawData().usable) return false;
@@ -155,7 +156,7 @@ namespace FlowControl
 		}
 
 	private:
-		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card)
+		bool CheckCost(state::CardRef card_ref, state::Cards::Card const& card) const
 		{
 			int cost = card.GetCost();
 			bool cost_health_instead = false;

@@ -2,6 +2,7 @@
 
 // TODO: move this file back to MCTS folder
 #include "FlowControl/PlayerStateView.h"
+#include "FlowControl/ValidActionAnalyzer.h"
 #include "MCTS/Types.h"
 #include "MCTS/board/ActionChoices.h"
 
@@ -15,31 +16,11 @@ namespace judge
 
 	public:
 		void Initialize(state::State const& game_state) {
-			FlowControl::ValidActionGetter(game_state).ForEachPlayableCard([&](size_t idx) {
-				playable_cards_.push_back(idx);
-				return true;
-			});
-			FlowControl::ValidActionGetter(game_state).ForEachAttacker([&](int idx) {
-				attackers_.push_back(idx);
-				return true;
-			});
-			attacker_indics_ = FlowControl::ValidActionGetter(game_state).GetAttackerIndics();
+			analyzer_.Analyze(FlowControl::ValidActionGetter(game_state));
 		}
 
 		void Initialize(FlowControl::CurrentPlayerStateView const& board) {
-			playable_cards_.clear();
-			board.ForEachPlayableCard([&](size_t idx) {
-				playable_cards_.push_back(idx);
-				return true;
-			});
-
-			attackers_.clear();
-			board.ForEachAttacker([&](int idx) {
-				attackers_.push_back(idx);
-				return true;
-			});
-
-			attacker_indics_ = board.GetAttackerIndics();
+			analyzer_.Analyze(board.GetValidActionGetter());
 		}
 
 	public:
@@ -82,15 +63,18 @@ namespace judge
 		}
 
 		int ChooseHandCard() final {
-			assert(!playable_cards_.empty());
-			int idx = GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards_.size()));
-			return (int)playable_cards_[idx];
+			auto const& playable_cards = analyzer_.GetPlayableCards();
+			assert(!playable_cards.empty());
+			int idx = GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards.size()));
+			return (int)playable_cards[idx];
 		}
 
 		state::CardRef GetAttacker() final {
-			assert(!attackers_.empty());
-			int idx = GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
-			return attacker_indics_[attackers_[idx]];
+			auto const& attackers = analyzer_.GetAttackers();
+			auto const& attacker_indics = analyzer_.GetAttackerIndics();
+			assert(!attackers.empty());
+			int idx = GetNumber(ActionType::kChooseAttacker, (int)attackers.size());
+			return attacker_indics[attackers[idx]];
 		}
 
 		int GetNumber(ActionType::Types action_type, int exclusive_max) {
@@ -102,8 +86,6 @@ namespace judge
 		virtual int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) = 0;
 
 	private:
-		std::vector<size_t> playable_cards_;
-		std::array<state::CardRef, 8> attacker_indics_;
-		std::vector<int> attackers_;
+		FlowControl::ValidActionAnalyzer analyzer_;
 	};
 }

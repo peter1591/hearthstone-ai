@@ -277,6 +277,7 @@
     <ClInclude Include="..\..\include\FlowControl\Result.h" />
     <ClInclude Include="..\..\include\FlowControl\utils\ActionApplier.h" />
     <ClInclude Include="..\..\include\FlowControl\utils\MainOp.h" />
+    <ClInclude Include="..\..\include\FlowControl\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />

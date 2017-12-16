@@ -599,5 +599,8 @@
     <ClInclude Include="..\..\include\FlowControl\MainOp.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\FlowControl\ValidActionAnalyzer.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

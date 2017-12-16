@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "FlowControl/MainOp.h"
-#include "FlowControl/PlayerStateView.h"
+#include "FlowControl/ValidActionGetter.h"
 
 namespace FlowControl
 {
@@ -30,11 +30,11 @@ namespace FlowControl
 
 		void Reset() { op_map_size_ = 0; }
 
-		void Analyze(FlowControl::CurrentPlayerStateView const& board) {
+		void Analyze(ValidActionGetter const& getter) {
 			Reset();
 
 			playable_cards_.clear();
-			board.ForEachPlayableCard([&](size_t idx) {
+			getter.ForEachPlayableCard([&](size_t idx) {
 				playable_cards_.push_back(idx);
 				return true;
 			});
@@ -44,7 +44,7 @@ namespace FlowControl
 			}
 
 			attackers_.clear();
-			board.ForEachAttacker([&](int idx) {
+			getter.ForEachAttacker([&](int idx) {
 				attackers_.push_back(idx);
 				return true;
 			});
@@ -53,7 +53,9 @@ namespace FlowControl
 				++op_map_size_;
 			}
 
-			if (board.CanUseHeroPower()) {
+			attacker_indics_ = getter.GetAttackerIndics();
+
+			if (getter.CanUseHeroPower()) {
 				op_map_[op_map_size_] = FlowControl::MainOpType::kMainOpHeroPower;
 				++op_map_size_;
 			}
@@ -65,6 +67,7 @@ namespace FlowControl
 		auto const& GetMainActions() const { return op_map_; }
 		int GetMainActionsCount() const { return (int)op_map_size_; }
 		auto const& GetAttackers() const { return attackers_; }
+		auto const& GetAttackerIndics() const { return attacker_indics_; }
 		auto const& GetPlayableCards() const { return playable_cards_; }
 
 		template <class Functor>
@@ -94,6 +97,7 @@ namespace FlowControl
 		std::array<FlowControl::MainOpType, FlowControl::MainOpType::kMainOpMax> op_map_;
 		size_t op_map_size_;
 		std::vector<int> attackers_;
+		std::array<state::CardRef, 8> attacker_indics_;
 		std::vector<size_t> playable_cards_;
 	};
 }
