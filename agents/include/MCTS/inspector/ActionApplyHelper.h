@@ -3,10 +3,10 @@
 #include <functional>
 
 #include "state/State.h"
-#include "FlowControl/utils/ActionApplier.h"
 #include "FlowControl/FlowController.h"
 #include "mcts/board/RandomGenerator.h"
 #include "mcts/board/BoardActionAnalyzer.h"
+#include "judge/IActionParameterGetter.h"
 
 namespace mcts
 {
@@ -63,8 +63,7 @@ namespace mcts
 				int Get(int exclusive_max) { return 0; }
 			};
 
-			// TODO: move to FlowControl::utils
-			class ActionParameterCallback : public FlowControl::IActionParameterGetter {
+			class ActionParameterCallback : public judge::IActionParameterGetter {
 			public:
 				ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
 					result_(result), choices_(choices), choices_idx_(choices_idx),
@@ -74,74 +73,8 @@ namespace mcts
 				void SetMainOp(FlowControl::MainOpType main_op) { main_op_ = main_op; }
 				FlowControl::MainOpType ChooseMainOp() { return main_op_; }
 
-				void SetPlayableCards(std::vector<size_t> const& playable_cards) {
-					playable_cards_ = &playable_cards;
-				}
-
-				int ChooseHandCard() {
-					if (choices_idx_ >= choices_.size() &&
-						std::holds_alternative<NullInfo>(result_))
-					{
-						assert(playable_cards_->size() > 1);
-						result_ = ChooseHandCardInfo();
-					}
-					return GetNextChoice(0, (int)playable_cards_->size());
-				}
-
-				int GetMinionPutLocation(int minions) {
-					if (choices_idx_ >= choices_.size() &&
-						std::holds_alternative<NullInfo>(result_))
-					{
-						assert(minions > 0);
-						result_ = MinionPutLocationInfo(minions);
-					}
-					return GetNextChoice(0, minions + 1);
-				}
-
-				int	ChooseAttacker(std::vector<int> const& attackers) {
-					if (choices_idx_ >= choices_.size() &&
-						std::holds_alternative<NullInfo>(result_))
-					{
-						assert(attackers.size() > 1);
-						result_ = ChooseAttackerInfo(attackers);
-					}
-					return GetNextChoice(0, (int)attackers.size());
-				}
-
-				state::CardRef GetDefender(std::vector<state::CardRef> const& targets) {
-					if (choices_idx_ >= choices_.size() &&
-						std::holds_alternative<NullInfo>(result_))
-					{
-						assert(targets.size() > 1);
-						result_ = ChooseDefenderInfo(targets);
-					}
-					int choice = GetNextChoice(0, (int)targets.size());
-					return targets[choice];
-				}
-
-				state::CardRef GetSpecifiedTarget(
-					state::State & state, state::CardRef card_ref,
-					std::vector<state::CardRef> const& targets)
-				{
-					if (choices_idx_ >= choices_.size() &&
-						std::holds_alternative<NullInfo>(result_))
-					{
-						assert(targets.size() > 1);
-						result_ = GetSpecifiedTargetInfo(card_ref, targets);
-					}
-					int choice = GetNextChoice(0, (int)targets.size());
-					return targets[choice];
-				}
-
-				Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards)
-				{
-					if (choices_idx_ >= choices_.size() &&
-						std::holds_alternative<NullInfo>(result_))
-					{
-						result_ = ChooseOneInfo(cards);
-					}
-					int choice = GetNextChoice(0, (int)cards.size());
-					return cards[choice];
+				int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) {
+					return GetNextChoice(0, action_choices.Size());
 				}
 
 			private:
@@ -192,6 +125,8 @@ namespace mcts
 
 				RandomCallback rand_cb;
 				ActionParameterCallback action_cb(info, choices_, choices_idx);
+				action_cb.Initialize(game_state);
+
 				FlowControl::FlowContext flow_context;
 				flow_context.SetCallback(rand_cb, action_cb);
 
@@ -205,7 +140,7 @@ namespace mcts
 					auto main_op = analyzer.GetMainOpType(main_op_idx);
 					action_cb.SetMainOp(main_op);
 
-					analyzer.GetActionApplierByRefThis().Apply(game_state, action_cb, rand_cb);
+					FlowControl::FlowController(game_state, flow_context).PerformOperation();
 				}
 
 				return info;

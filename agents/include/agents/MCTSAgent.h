@@ -30,6 +30,8 @@ namespace agents
 		}
 
 		void Think(state::State const& state, std::mt19937 & random) {
+			attacker_indics_ = FlowControl::ValidActionGetter(state).GetAttackerIndics();
+
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				return iteration_cb_(state, iterations);
@@ -51,7 +53,7 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		FlowControl::utils::MainOpType GetMainAction() {
+		FlowControl::MainOpType GetMainAction() {
 			node_ = root_node_;
 			assert(node_);
 			assert(node_->GetActionType().GetType() == mcts::ActionType::kMainAction);
@@ -75,6 +77,24 @@ namespace agents
 		}
 
 		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
+			int raw = GetRawSubAction(action_type, action_choices);
+
+			if (action_type == mcts::ActionType::kChooseHandCard) {
+				return root_node_->GetAddon().action_analyzer.GetPlaybleCard(raw)
+			}
+			else if (action_type == mcts::ActionType::kChooseAttacker) {
+				int attacker_idx = root_node_->GetAddon().action_analyzer.GetEncodedAttackerIndex(raw);
+				state::CardRef attacker = attacker_indics_[attacker_idx];
+				assert(attacker.IsValid());
+				return attacker;
+			}
+			else {
+				return raw;
+			}
+		}
+
+	private:
+		int GetRawSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
 			assert(node_);
 
 			if (node_->GetActionType() != action_type) {
@@ -119,5 +139,6 @@ namespace agents
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;
 		IterationCallback iteration_cb_;
+		std::array<state::CardRef, 8> attacker_indics_;
 	};
 }

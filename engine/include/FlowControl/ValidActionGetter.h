@@ -114,7 +114,17 @@ namespace FlowControl
 
 			assert(attacker_idx >= 0);
 			assert(attacker_idx < 7);
-			return state_.GetCurrentPlayer().minions_.Get((size_t)(attacker_idx));
+			auto const& minions = state_.GetCurrentPlayer().minions_;
+			if (attacker_idx >= minions.Size()) return state::CardRef(); // invalid card ref
+			return minions.Get((size_t)(attacker_idx));
+		}
+
+		std::array<state::CardRef, 8> GetAttackerIndics() {
+			std::array<state::CardRef, 8> ret;
+			for (int i = 0; i < 8; ++i) {
+				ret[i] = GetFromAttackerIndex(i);
+			}
+			return ret;
 		}
 
 		std::vector<state::CardRef> GetDefenders() {

@@ -3,7 +3,6 @@
 #include <shared_mutex>
 #include "MCTS/Types.h"
 #include "FlowControl/PlayerStateView.h"
-#include "FlowControl/utils/ActionApplier.h"
 #include "Utils/SpinLocks.h"
 
 namespace mcts
@@ -37,13 +36,10 @@ namespace mcts
 			void Reset() { op_map_size_ = 0; }
 
 			void Prepare(FlowControl::CurrentPlayerStateView const& board);
-			int GetActionsCount() { return (int)op_map_size_; }
+			int GetActionsCount() const { return (int)op_map_size_; }
+			auto const& GetAttackers() const { return attackers_; }
+			auto const& GetPlayableCards() const { return playable_cards_; }
 
-			// @note the return object refer to some internal objects in *this, caller
-			// need to ensure the lifetime.
-			FlowControl::utils::ActionApplier GetActionApplierByRefThis() const {
-				return FlowControl::utils::ActionApplier(attackers_, playable_cards_);
-			}
 
 			template <class Functor>
 			void ForEachMainOp(Functor && functor) const {
@@ -68,9 +64,14 @@ namespace mcts
 				return playable_cards_[idx];
 			}
 
+			int GetEncodedAttackerIndex(size_t idx) const {
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
+				return attackers_[idx];
+			}
+
 		private:
 			mutable Utils::SharedSpinLock mutex_;
-			std::array<FlowControl::MainOpType, FlowControl::utils::MainOpType::kMainOpMax> op_map_;
+			std::array<FlowControl::MainOpType, FlowControl::MainOpType::kMainOpMax> op_map_;
 			size_t op_map_size_;
 			std::vector<int> attackers_;
 			std::vector<size_t> playable_cards_;

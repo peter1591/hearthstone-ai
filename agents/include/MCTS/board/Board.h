@@ -1,5 +1,6 @@
 #pragma once
 
+#include "judge/IActionParameterGetter.h"
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/BoardActionAnalyzer-impl.h"
 #include "MCTS/board/BoardView.h"
@@ -61,23 +62,23 @@ namespace mcts
 				}
 			}
 
-		public: // bridge to action analyzer
-			void PrepareActionAnalyzer(BoardActionAnalyzer & action_analyzer) const
-			{
-				// board action analyzer will not access hidden information
-				//   as long as the current-player is the viewer
-				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				return action_analyzer.Prepare(FlowControl::CurrentPlayerStateView(board_));
+			auto GetCurrentPlayerStateView() const {
+				if (board_.GetCurrentPlayerId().GetSide() != side_) {
+					assert(false);
+					throw std::runtime_error("current player does not match.");
+				}
+				return FlowControl::CurrentPlayerStateView(board_);
 			}
 
+		public: // bridge to action analyzer
 			Result ApplyAction(
 				BoardActionAnalyzer & action_analyzer,
-				FlowControl::FlowContext & flow_context,
 				state::IRandomGenerator & random, judge::IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				auto flow_result = action_analyzer.GetActionApplierByRefThis().Apply(
-					board_, action_parameters, random);
+				FlowControl::FlowContext flow_context(random, action_parameters);
+				FlowControl::FlowController flow_controller(board_, flow_context);
+				auto flow_result = flow_controller.PerformOperation();
 				return Result::ConvertFrom(flow_result);
 			}
 

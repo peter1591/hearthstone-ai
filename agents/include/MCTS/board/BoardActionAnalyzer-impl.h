@@ -2,7 +2,6 @@
 
 #include <set>
 
-#include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 #include "FlowControl/FlowController.h"
 #include "FlowControl/ValidActionGetter.h"
@@ -27,7 +26,7 @@ namespace mcts
 				return true;
 			});
 			if (!playable_cards_.empty()) {
-				op_map_[op_map_size_] = FlowControl::utils::MainOpType::kMainOpPlayCard;
+				op_map_[op_map_size_] = FlowControl::MainOpType::kMainOpPlayCard;
 				++op_map_size_;
 			}
 
@@ -37,16 +36,16 @@ namespace mcts
 				return true;
 			});
 			if (!attackers_.empty()) {
-				op_map_[op_map_size_] = FlowControl::utils::MainOpType::kMainOpAttack;
+				op_map_[op_map_size_] = FlowControl::MainOpType::kMainOpAttack;
 				++op_map_size_;
 			}
 
 			if (board.CanUseHeroPower()) {
-				op_map_[op_map_size_] = FlowControl::utils::MainOpType::kMainOpHeroPower;
+				op_map_[op_map_size_] = FlowControl::MainOpType::kMainOpHeroPower;
 				++op_map_size_;
 			}
 
-			op_map_[op_map_size_] = FlowControl::utils::MainOpType::kMainOpEndTurn;
+			op_map_[op_map_size_] = FlowControl::MainOpType::kMainOpEndTurn;
 			++op_map_size_;
 		}
 	}

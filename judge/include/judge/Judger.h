@@ -23,6 +23,7 @@ namespace judge
 	public:
 		using StartingStateGetter = std::function<state::State()>;
 
+	private:
 		class RandomCallback : public state::IRandomGenerator {
 		public:
 			RandomCallback(Judger & guide) : guide_(guide) {}
@@ -45,9 +46,12 @@ namespace judge
 			ActionCallback & operator=(ActionCallback const&) = delete;
 
 			void SetCallback(AgentType * cb) { cb_ = cb; }
-			void SetState(state::State const& state) { state_ = &state; }
+			void SetState(state::State const& state) {
+				state_ = &state;
+				this->Initialize(*state_);
+			}
 			
-			FlowControl::utils::MainOpType ChooseMainOp() {
+			FlowControl::MainOpType ChooseMainOp() {
 				auto main_op = cb_->GetMainAction();
 				guide_.recorder_.RecordMainAction(*state_, main_op);
 				return main_op;
@@ -65,6 +69,7 @@ namespace judge
 			state::State const* state_;
 		};
 
+	public:
 		Judger(std::mt19937 & rand) :
 			rand_(rand), random_callback_(*this), action_callback_(*this),
 			first_(nullptr), second_(nullptr), recorder_(rand_)
@@ -99,20 +104,10 @@ namespace judge
 
 				next_agent->Think(current_state, random);
 
-				std::vector<size_t> playable_cards;
-				FlowControl::ValidActionGetter(current_state).ForEachPlayableCard([&](size_t idx) {
-					playable_cards.push_back(idx);
-					return true;
-				});
-				std::vector<int> attackers;
-				FlowControl::ValidActionGetter(current_state).ForEachAttacker([&](int idx) {
-					attackers.push_back(idx);
-					return true;
-				});
-				FlowControl::utils::ActionApplier action_applier(attackers, playable_cards);
-
 				action_callback_.SetCallback(next_agent);
-				result = action_applier.Apply(current_state, action_callback_, random_callback_);
+				FlowControl::FlowContext flow_context(random_callback_, action_callback_);
+				FlowControl::FlowController flow_controller(current_state, flow_context);
+				result = flow_controller.PerformOperation();
 
 				assert(result != FlowControl::kResultInvalid);
 				if (result != FlowControl::kResultNotDetermined) break;

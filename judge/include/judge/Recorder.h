@@ -18,7 +18,7 @@ namespace judge
 			json_.clear();
 		}
 
-		void RecordMainAction(state::State const& state, FlowControl::utils::MainOpType op)
+		void RecordMainAction(state::State const& state, FlowControl::MainOpType op)
 		{
 			Json::Value obj;
 			obj["type"] = "kMainAction";

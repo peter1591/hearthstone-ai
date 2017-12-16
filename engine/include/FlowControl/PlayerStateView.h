@@ -139,6 +139,10 @@ namespace FlowControl
 			return ValidActionGetter(state_).ForEachAttacker(std::forward<Functor>(functor));
 		}
 
+		auto GetAttackerIndics() const {
+			return ValidActionGetter(state_).GetAttackerIndics();
+		}
+
 		template <typename Functor>
 		static void ApplyWithCurrentPlayerStateView(state::State const& state, Functor && functor) {
 			state::PlayerSide side = state.GetCurrentPlayerId().GetSide();
@@ -149,25 +153,6 @@ namespace FlowControl
 				assert(side == state::kPlayerSecond);
 				functor(PlayerStateView<state::kPlayerSecond>(state));
 			}
-		}
-
-	public: // bridge to flow controller
-		template <typename... Args> auto PlayCard(FlowControl::FlowContext & context, Args&&... args) {
-			return FlowControl::FlowController(state_, context).PlayCard(std::forward<Args>(args)...);
-		}
-
-		auto Attack(FlowControl::FlowContext & context, int attacker_idx) {
-			state::CardRef attacker = ValidActionGetter(state_).GetFromAttackerIndex(attacker_idx);
-			assert(attacker.IsValid());
-			return FlowControl::FlowController(state_, context).Attack(attacker);
-		}
-
-		auto HeroPower(FlowControl::FlowContext & context) {
-			return FlowControl::FlowController(state_, context).HeroPower();
-		}
-
-		auto EndTurn(FlowControl::FlowContext & context) {
-			return FlowControl::FlowController(state_, context).EndTurn();
 		}
 
 	private:

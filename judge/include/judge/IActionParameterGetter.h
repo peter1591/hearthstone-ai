@@ -1,18 +1,50 @@
 #pragma once
 
-#include "FlowControl/utils/ActionApplier.h"
-#include "MCTS/Types.h" // TODO: move to this namespace
-#include "MCTS/board/ActionChoices.h" // TODO: move to this namespace
+// TODO: move this file back to MCTS folder
+#include "FlowControl/PlayerStateView.h"
+#include "MCTS/Types.h"
+#include "MCTS/board/ActionChoices.h"
 
 namespace judge
 {
-	class IActionParameterGetter : public FlowControl::utils::ActionApplier::IActionParameterGetter
+	class IActionParameterGetter : public FlowControl::IActionParameterGetter
 	{
 	public:
 		using ActionType = mcts::ActionType; // TODO: remove this
 		using ActionChoices = mcts::board::ActionChoices; // TODO: remove this
 
 	public:
+		void Initialize(state::State const& game_state) {
+			FlowControl::ValidActionGetter(game_state).ForEachPlayableCard([&](size_t idx) {
+				playable_cards_.push_back(idx);
+				return true;
+			});
+			FlowControl::ValidActionGetter(game_state).ForEachAttacker([&](int idx) {
+				attackers_.push_back(idx);
+				return true;
+			});
+			attacker_indics_ = FlowControl::ValidActionGetter(game_state).GetAttackerIndics();
+		}
+
+		void Initialize(FlowControl::CurrentPlayerStateView const& board) {
+			playable_cards_.clear();
+			board.ForEachPlayableCard([&](size_t idx) {
+				playable_cards_.push_back(idx);
+				return true;
+			});
+
+			attackers_.clear();
+			board.ForEachAttacker([&](int idx) {
+				attackers_.push_back(idx);
+				return true;
+			});
+
+			attacker_indics_ = board.GetAttackerIndics();
+		}
+
+	public:
+		// TODO: also redirect ChooseMainAction() call
+
 		state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
 		{
 			assert(!targets.empty());
@@ -49,16 +81,16 @@ namespace judge
 			return (Cards::CardId)GetNumber(ActionType::kChooseOne, ActionChoices(cards));
 		}
 
-		int ChooseHandCard(std::vector<size_t> const& playable_cards) final {
-			assert(!playable_cards.empty());
-			assert(playable_cards.size() > 1);
-			return GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards.size()));
+		int ChooseHandCard() final {
+			assert(!playable_cards_.empty());
+			int idx = GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards_.size()));
+			return (int)playable_cards_[idx];
 		}
 
-		int ChooseAttacker(std::vector<int> const& attackers) final {
-			assert(!attackers.empty());
-			assert(attackers.size() > 1);
-			return GetNumber(ActionType::kChooseAttacker, (int)attackers.size());
+		state::CardRef GetAttacker() final {
+			assert(!attackers_.empty());
+			int idx = GetNumber(ActionType::kChooseAttacker, (int)attackers_.size());
+			return attacker_indics_[attackers_[idx]];
 		}
 
 		int GetNumber(ActionType::Types action_type, int exclusive_max) {
@@ -68,5 +100,10 @@ namespace judge
 		}
 
 		virtual int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) = 0;
+
+	private:
+		std::vector<size_t> playable_cards_;
+		std::array<state::CardRef, 8> attacker_indics_;
+		std::vector<int> attackers_;
 	};
 }

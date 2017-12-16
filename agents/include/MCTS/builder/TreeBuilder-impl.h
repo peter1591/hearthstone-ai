@@ -28,7 +28,7 @@ namespace mcts
 			selection_stage_.StartNewMainAction(node);
 
 			TreeBuilder::SelectResult perform_result(ApplyAction(
-				flow_context_, node->GetAddon().action_analyzer, selection_stage_));
+				node->GetAddon().action_analyzer, selection_stage_));
 			assert(perform_result.result.type_ != Result::kResultInvalid);
 
 			// we use mutable here, since we will throw it away after all
@@ -92,13 +92,11 @@ namespace mcts
 			if (result.type_ != Result::kResultNotDetermined) return result;
 
 			return ApplyAction(
-				flow_context_,
 				simulation_stage_.GetActionAnalyzer(), simulation_stage_);
 		}
 
 		template <typename StageHandler>
 		inline Result TreeBuilder::ApplyAction(
-			FlowControl::FlowContext & flow_context,
 			board::BoardActionAnalyzer & action_analyzer,
 			StageHandler&& stage_handler)
 		{
@@ -106,7 +104,9 @@ namespace mcts
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
 
-			board_->PrepareActionAnalyzer(action_analyzer);
+			auto current_state_view = board_->GetCurrentPlayerStateView();
+			action_analyzer.Prepare(current_state_view);
+			action_parameter_getter_.Initialize(current_state_view);
 			int choices = action_analyzer.GetActionsCount();
 			assert(choices > 0); // at least end-turn should be valid
 
@@ -125,8 +125,7 @@ namespace mcts
 
 			auto main_op = action_analyzer.GetMainOpType(choice);
 			action_parameter_getter_.SetMainOp(main_op);
-
-			result = board_->ApplyAction(action_analyzer, flow_context, random_generator_, action_parameter_getter_);
+			result = board_->ApplyAction(action_analyzer, random_generator_, action_parameter_getter_);
 			assert(result.type_ != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);

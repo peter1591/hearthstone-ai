@@ -28,8 +28,7 @@ namespace mcts
 				statistic_(statistic),
 				action_parameter_getter_(caller), random_generator_(caller),
 				board_(nullptr),
-				flow_context_(),
-				selection_stage_(side, selection_rand), simulation_stage_(side, simulation_rand, flow_context_)
+				selection_stage_(side, selection_rand), simulation_stage_(side, simulation_rand)
 			{
 			}
 
@@ -59,7 +58,6 @@ namespace mcts
 		private:
 			template <typename StageHandler>
 			Result ApplyAction(
-				FlowControl::FlowContext & flow_context,
 				board::BoardActionAnalyzer & action_analyzer,
 				StageHandler&& stage_handler);
 
@@ -74,7 +72,6 @@ namespace mcts
 			board::RandomGenerator random_generator_;
 			board::Board const* board_;
 
-			FlowControl::FlowContext flow_context_;
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;
 		};

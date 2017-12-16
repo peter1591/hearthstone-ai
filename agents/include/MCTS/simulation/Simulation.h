@@ -10,8 +10,8 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation(state::PlayerSide side, std::mt19937 & rand, FlowControl::FlowContext & flow_context) :
-				random_(rand), select_(side, rand), flow_context_(flow_context), action_analyzer_()
+			Simulation(state::PlayerSide side, std::mt19937 & rand) :
+				random_(rand), select_(side, rand), action_analyzer_()
 			{}
 
 			void StartNewAction() {
@@ -50,7 +50,7 @@ namespace mcts
 				assert(action_type.IsChosenManually());
 
 				int choice = select_.GetChoice(
-					board, flow_context_, action_analyzer_, action_type,
+					board, action_analyzer_, action_type,
 					policy::simulation::ChoiceGetter(choices)
 				);
 				assert(choice >= 0); // always return a valid choice
@@ -59,13 +59,11 @@ namespace mcts
 			}
 
 		public:
-			auto & GetFlowContext() { return flow_context_; }
 			auto & GetActionAnalyzer() { return action_analyzer_; }
 
 		private:
 			StaticConfigs::SimulationPhaseRandomActionPolicy random_;
 			StaticConfigs::SimulationPhaseSelectActionPolicy select_;
-			FlowControl::FlowContext & flow_context_;
 			board::BoardActionAnalyzer action_analyzer_;
 		};
 	}

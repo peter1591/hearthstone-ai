@@ -172,15 +172,12 @@ namespace mcts
 			{
 				if (node->GetActionType() == mcts::ActionType::kMainAction) {
 					auto op = node->GetAddon().action_analyzer.GetMainOpType(choice);
-					return FlowControl::utils::GetMainOpString(op);
+					return FlowControl::GetMainOpString(op);
 				}
 
 				if (node->GetActionType() == mcts::ActionType::kChooseHandCard) {
-					auto info = std::get<ActionApplyHelper::ChooseHandCardInfo>(
-						action_cb_info_getter.ApplyChoices([&]() {
-						return start_board_getter_(0); // any seed number is okay
-					}));
-					size_t idx = info.cards[choice];
+					auto const& playable_cards = main_node->GetAddon().action_analyzer.GetPlayableCards();
+					size_t idx = playable_cards[choice];
 
 					state::State start_board = start_board_getter_(0);
 					state::CardRef card_ref = start_board.GetBoard().GetFirst().hand_.Get(idx);
@@ -380,7 +377,7 @@ namespace mcts
 
 					if (node_->GetActionType() == mcts::ActionType::kMainAction) {
 						auto op = node_->GetAddon().action_analyzer.GetMainOpType(choice);
-						s << "    Main Action Op: " << FlowControl::utils::GetMainOpString(op) << std::endl;
+						s << "    Main Action Op: " << FlowControl::GetMainOpString(op) << std::endl;
 					}
 
 					if (edge_addon) {
