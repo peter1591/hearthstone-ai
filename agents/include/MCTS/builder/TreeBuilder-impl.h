@@ -9,7 +9,6 @@
 #include "MCTS/detail/BoardNodeMap-impl.h"
 
 #include "MCTS/board/BoardActionAnalyzer.h"
-#include "MCTS/board/BoardActionAnalyzer-impl.h"
 
 namespace mcts
 {
@@ -107,7 +106,7 @@ namespace mcts
 			auto current_state_view = board_->GetCurrentPlayerStateView();
 			action_analyzer.Prepare(current_state_view);
 			action_parameter_getter_.Initialize(current_state_view);
-			int choices = action_analyzer.GetActionsCount();
+			int choices = action_analyzer.GetMainActionsCount();
 			assert(choices > 0); // at least end-turn should be valid
 
 			int choice = -1;

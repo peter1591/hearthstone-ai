@@ -3,6 +3,7 @@
 #include <shared_mutex>
 #include "MCTS/Types.h"
 #include "FlowControl/PlayerStateView.h"
+#include "FlowControl/ValidActionAnalyzer.h"
 #include "Utils/SpinLocks.h"
 
 namespace mcts
@@ -15,66 +16,59 @@ namespace mcts
 		class BoardActionAnalyzer
 		{
 		public:
-			BoardActionAnalyzer() : mutex_(), op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
+			BoardActionAnalyzer() : mutex_(), analyzer_() {}
 
 			BoardActionAnalyzer(BoardActionAnalyzer const& rhs) :
-				mutex_(),
-				op_map_(rhs.op_map_),
-				op_map_size_(rhs.op_map_size_),
-				attackers_(rhs.attackers_),
-				playable_cards_(rhs.playable_cards_)
+				mutex_(), analyzer_(rhs.analyzer_)
 			{}
 
 			BoardActionAnalyzer & operator=(BoardActionAnalyzer const& rhs) {
-				op_map_ = rhs.op_map_;
-				op_map_size_ = rhs.op_map_size_;
-				attackers_ = rhs.attackers_;
-				playable_cards_ = rhs.playable_cards_;
+				analyzer_ = rhs.analyzer_;
 				return *this;
 			}
 
-			void Reset() { op_map_size_ = 0; }
+			void Reset() { analyzer_.Reset(); }
 
-			void Prepare(FlowControl::CurrentPlayerStateView const& board);
-			int GetActionsCount() const { return (int)op_map_size_; }
-			auto const& GetAttackers() const { return attackers_; }
-			auto const& GetPlayableCards() const { return playable_cards_; }
+			void Prepare(FlowControl::CurrentPlayerStateView const& board) { analyzer_.Analyze(board); }
 
+			auto GetMainActionsCount() {
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
+				return analyzer_.GetMainActionsCount();
+			}
 
 			template <class Functor>
 			void ForEachMainOp(Functor && functor) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				for (size_t i = 0; i < op_map_size_; ++i) {
-					if (!functor(i, GetMainOpType(op_map_[i]))) return;
-				}
+				analyzer_.ForEachMainOp(std::forward<Functor>(functor));
 			}
 			FlowControl::MainOpType GetMainOpType(size_t choice) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				return op_map_[choice];
+				return analyzer_.GetMainOpType(choice);
 			}
 			template <class Functor>
 			void ForEachPlayableCard(Functor && functor) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				for (auto hand_idx : playable_cards_) {
-					if (!functor(hand_idx)) break;
-				}
+				analyzer_.ForEachPlayableCard(std::forward<Functor>(functor));
 			}
 			size_t GetPlaybleCard(size_t idx) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				return playable_cards_[idx];
+				return analyzer_.GetPlayableCards()[idx];
+			}
+
+			auto GetPlayableCards() const {
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
+				auto ret = analyzer_.GetPlayableCards();
+				return ret; // return by copy to ensure locking protection
 			}
 
 			int GetEncodedAttackerIndex(size_t idx) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
-				return attackers_[idx];
+				return analyzer_.GetAttackers()[idx];
 			}
 
 		private:
 			mutable Utils::SharedSpinLock mutex_;
-			std::array<FlowControl::MainOpType, FlowControl::MainOpType::kMainOpMax> op_map_;
-			size_t op_map_size_;
-			std::vector<int> attackers_;
-			std::vector<size_t> playable_cards_;
+			FlowControl::ValidActionAnalyzer analyzer_;
 		};
 	}
 }

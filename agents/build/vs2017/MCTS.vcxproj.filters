@@ -119,9 +119,6 @@
     <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer-impl.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\BoardView.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>

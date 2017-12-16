@@ -2,7 +2,6 @@
 
 #include "judge/IActionParameterGetter.h"
 #include "MCTS/board/BoardActionAnalyzer.h"
-#include "MCTS/board/BoardActionAnalyzer-impl.h"
 #include "MCTS/board/BoardView.h"
 
 namespace mcts
