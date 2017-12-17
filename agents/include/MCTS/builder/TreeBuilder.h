@@ -9,7 +9,6 @@
 #include "MCTS/board/Board.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
-#include "MCTS/board/ActionChoices.h"
 #include "MCTS/builder/ActionReplayer.h"
 
 namespace mcts
@@ -62,8 +61,8 @@ namespace mcts
 				StageHandler&& stage_handler);
 
 		public: // for callbacks: action-parameter-getter and random-generator
-			int ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices);
-			int ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices);
+			int ChooseSelectAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices);
+			int ChooseSimulateAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices);
 
 		private:
 			Statistic<> & statistic_;

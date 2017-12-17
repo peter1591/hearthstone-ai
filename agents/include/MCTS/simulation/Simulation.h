@@ -31,8 +31,8 @@ namespace mcts
 
 			int ChooseAction(
 				board::Board const& board,
-				ActionType action_type,
-				board::ActionChoices const& action_choices)
+				FlowControl::ActionType action_type,
+				FlowControl::ActionChoices const& action_choices)
 			{
 				assert(!action_choices.Empty());
 

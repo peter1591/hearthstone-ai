@@ -8,11 +8,11 @@ namespace mcts
 		{
 		private:
 			struct Item {
-				ActionType action_type_; // TODO: debug only
+				FlowControl::ActionType action_type_; // TODO: debug only
 				int choice_;
 
 				Item() : action_type_(), choice_(-1) {}
-				Item(ActionType action_type, int choice) :
+				Item(FlowControl::ActionType action_type, int choice) :
 					action_type_(action_type), choice_(choice)
 				{}
 			};
@@ -20,12 +20,12 @@ namespace mcts
 		public:
 			ActionReplayer() : choices_(), idx_(0) {}
 
-			int GetChoice(ActionType action_type) const {
+			int GetChoice(FlowControl::ActionType action_type) const {
 				assert(action_type == choices_[idx_].action_type_);
 				return choices_[idx_].choice_;
 			}
 
-			void RecordChoice(ActionType action_type, int choice) {
+			void RecordChoice(FlowControl::ActionType action_type, int choice) {
 				assert(choice >= 0);
 				choices_.emplace_back(action_type, choice);
 			}

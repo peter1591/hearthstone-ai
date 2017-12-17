@@ -91,6 +91,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4100</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <PreBuildEvent>
       <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
@@ -105,6 +106,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <PreBuildEvent>
       <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
@@ -122,6 +124,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4100;4127</DisableSpecificWarnings>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -143,6 +146,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4100</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);NDEBUG</PreprocessorDefinitions>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -162,7 +166,24 @@
     <ClCompile Include="..\..\test\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ActionChoices.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ActionType.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowContext-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowContext.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowController-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowController.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\IActionParameterGetter-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\IActionParameterGetter.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\JsonSerializer.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\MainOp.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\Manipulate-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\Manipulate.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\PlayerStateView.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\Result.h" />
     <ClInclude Include="..\..\..\engine\include\FlowControl\utils\MainOp.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer.h" />
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />

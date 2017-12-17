@@ -51,7 +51,7 @@ namespace mcts
 				assert([](builder::TreeBuilder::TreeNode* node) {
 					if (!node) return false;
 					if (!node->GetActionType().IsValid()) return true;
-					return node->GetActionType().GetType() == ActionType::kMainAction;
+					return node->GetActionType().GetType() == FlowControl::ActionType::kMainAction;
 				}(node_));
 				turn_node_map = &node_->GetAddon().board_node_map;
 			}
@@ -68,7 +68,7 @@ namespace mcts
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node) return false;
 						if (!node->GetActionType().IsValid()) return true;
-						return node->GetActionType().GetType() == ActionType::kMainAction;
+						return node->GetActionType().GetType() == FlowControl::ActionType::kMainAction;
 					}(node_));
 					auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map, &updater_);
 					assert(perform_result.result.type_ != Result::kResultInvalid);
@@ -79,7 +79,7 @@ namespace mcts
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node) return false;
 						if (!node->GetActionType().IsValid()) return true;
-						return node->GetActionType().GetType() == ActionType::kMainAction;
+						return node->GetActionType().GetType() == FlowControl::ActionType::kMainAction;
 					}(perform_result.node));
 
 					if (perform_result.change_to_simulation) {
@@ -120,7 +120,7 @@ namespace mcts
 			updater_.Update(credit);
 		}
 		
-		int ChooseAction(ActionType action_type, board::ActionChoices const& choices) {
+		int ChooseAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices) {
 			if (stage_ == kStageSelection) {
 				return builder_.ChooseSelectAction(action_type, choices);
 			}

@@ -23,7 +23,7 @@ namespace FlowControl {
 			resolver_()
 		{}
 
-		FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
+		FlowContext(state::IRandomGenerator & random, IActionParameterGetterWithoutAnalyzer & action_parameters) :
 			result_(FlowControl::kResultNotDetermined),
 			action_parameters_(&action_parameters), random_(&random),
 			dead_entity_hints_(),
@@ -37,7 +37,7 @@ namespace FlowControl {
 		FlowContext(FlowContext const&) = default;
 		FlowContext & operator=(FlowContext const&) = default;
 
-		void SetCallback(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) {
+		void SetCallback(state::IRandomGenerator & random, IActionParameterGetterWithoutAnalyzer & action_parameters) {
 			random_ = &random;
 			action_parameters_ = &action_parameters;
 		}
@@ -129,7 +129,7 @@ namespace FlowControl {
 
 	private:
 		Result result_;
-		IActionParameterGetter * action_parameters_;
+		IActionParameterGetterWithoutAnalyzer * action_parameters_;
 		state::IRandomGenerator * random_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 		int minion_put_location_;

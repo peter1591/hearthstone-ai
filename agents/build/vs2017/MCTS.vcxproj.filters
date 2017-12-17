@@ -239,5 +239,56 @@
     <ClInclude Include="..\..\..\engine\include\FlowControl\utils\MainOp.h">
       <Filter>Header Files\FlowControl\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ActionChoices.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ActionType.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowContext.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowContext-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowController.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowController-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\IActionParameterGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\JsonSerializer.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\MainOp.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\Manipulate.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\Manipulate-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\PlayerStateView.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\Result.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionGetter.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\IActionParameterGetter-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer-impl.h">
+      <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

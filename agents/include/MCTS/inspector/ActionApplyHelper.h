@@ -6,7 +6,6 @@
 #include "FlowControl/FlowController.h"
 #include "mcts/board/RandomGenerator.h"
 #include "mcts/board/BoardActionAnalyzer.h"
-#include "judge/IActionParameterGetter.h"
 
 namespace mcts
 {
@@ -63,7 +62,7 @@ namespace mcts
 				int Get(int exclusive_max) { return 0; }
 			};
 
-			class ActionParameterCallback : public judge::IActionParameterGetter {
+			class ActionParameterCallback : public FlowControl::IActionParameterGetter {
 			public:
 				ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
 					result_(result), choices_(choices), choices_idx_(choices_idx), main_op_idx_(-1)
@@ -71,7 +70,7 @@ namespace mcts
 
 				void SetMainOpIdx(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-				int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) {
+				int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) {
 					return GetNextChoice(0, action_choices.Size());
 				}
 
@@ -129,6 +128,7 @@ namespace mcts
 				flow_context.SetCallback(rand_cb, action_cb);
 
 				while (choices_.size() > choices_idx) {
+					// TODO: no need to special care on main op
 					int main_op_idx = choices_[choices_idx];
 					++choices_idx;
 

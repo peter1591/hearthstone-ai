@@ -49,7 +49,7 @@ namespace mcts
 				int GetChoice(
 					board::Board const& board,
 					board::BoardActionAnalyzer & action_analyzer,
-					ActionType action_type,
+					FlowControl::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
 					size_t count = choice_getter.Size();
@@ -398,7 +398,7 @@ namespace mcts
 				int GetChoice(
 					board::Board const& board,
 					board::BoardActionAnalyzer & action_analyzer,
-					ActionType action_type,
+					FlowControl::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
 					size_t count = choice_getter.Size();
@@ -446,10 +446,10 @@ namespace mcts
 				int GetChoice(
 					board::Board const& board,
 					board::BoardActionAnalyzer & action_analyzer,
-					ActionType action_type,
+					FlowControl::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type != ActionType::kMainAction) {
+					if (action_type != FlowControl::ActionType::kMainAction) {
 						size_t count = choice_getter.Size();
 						assert(count > 0);
 						size_t rand_idx = (size_t)(rand_() % count);
@@ -498,10 +498,10 @@ namespace mcts
 				int GetChoice(
 					board::Board const& board,
 					board::BoardActionAnalyzer & action_analyzer,
-					ActionType action_type,
+					FlowControl::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type != ActionType::kMainAction) {
+					if (action_type != FlowControl::ActionType::kMainAction) {
 						size_t count = choice_getter.Size();
 						assert(count > 0);
 						size_t rand_idx = (size_t)(rand_() % count);
@@ -568,10 +568,10 @@ namespace mcts
 				int GetChoice(
 					board::Board const& board,
 					board::BoardActionAnalyzer & action_analyzer,
-					ActionType action_type,
+					FlowControl::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type == ActionType::kMainAction) {
+					if (action_type == FlowControl::ActionType::kMainAction) {
 						StartNewAction(board, action_analyzer);
 					}
 
@@ -612,7 +612,7 @@ namespace mcts
 						DFSItem(size_t choice, size_t total) : choice_(choice), total_(total) {}
 					};
 
-					class UserChoicePolicy : public judge::IActionParameterGetter {
+					class UserChoicePolicy : public FlowControl::IActionParameterGetter {
 					public:
 						UserChoicePolicy(std::vector<DFSItem> & dfs,
 							std::vector<DFSItem>::iterator & dfs_it,
@@ -622,18 +622,18 @@ namespace mcts
 
 						void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-						int GetNumber(ActionType::Types action_type, board::ActionChoices const& action_choices) {
+						int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) {
 
-							if (action_type == ActionType::kMainAction) {
+							if (action_type == FlowControl::ActionType::kMainAction) {
 								return main_op_idx_;
 							}
 
 							int total = action_choices.Size();
 
-							assert(action_type != ActionType::kRandom);
+							assert(action_type != FlowControl::ActionType::kRandom);
 
 							if constexpr (kRandomlyPutMinions) {
-								if (action_type == ActionType::kChooseMinionPutLocation) {
+								if (action_type == FlowControl::ActionType::kChooseMinionPutLocation) {
 									assert(total >= 1);
 									int idx = rand_.GetRandom(total);
 									return action_choices.Get(idx);

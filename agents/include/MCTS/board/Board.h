@@ -1,6 +1,6 @@
 #pragma once
 
-#include "judge/IActionParameterGetter.h"
+#include "FlowControl/IActionParameterGetter.h"
 #include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/BoardView.h"
 
@@ -72,7 +72,7 @@ namespace mcts
 		public: // bridge to action analyzer
 			Result ApplyAction(
 				BoardActionAnalyzer & action_analyzer,
-				state::IRandomGenerator & random, judge::IActionParameterGetter & action_parameters) const
+				state::IRandomGenerator & random, FlowControl::IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				FlowControl::FlowContext flow_context(random, action_parameters);

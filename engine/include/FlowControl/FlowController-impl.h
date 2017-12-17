@@ -3,7 +3,9 @@
 #include "FlowControl/FlowController.h"
 
 #include "FlowControl/ValidActionGetter.h"
+#include "FlowControl/ValidActionAnalyzer-impl.h"
 #include "FlowControl/Manipulate-impl.h"
+#include "FlowControl/IActionParameterGetter-impl.h"
 
 namespace FlowControl
 {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <mutex>
+#include "FlowControl/ActionType.h"
 #include "MCTS/detail/BoardNodeMap.h"
 #include "MCTS/board/BoardView.h"
-#include "MCTS/board/ActionChoices.h"
 #include "Utils/HashCombine.h"
 #include "Utils/SpinLocks.h"
 
@@ -51,8 +51,8 @@ namespace mcts
 
 			bool Check(
 				board::Board const& board,
-				ActionType action_type,
-				board::ActionChoices const& choices)
+				FlowControl::ActionType action_type,
+				FlowControl::ActionChoices const& choices)
 			{
 				std::lock_guard<Utils::SpinLock> lock(mutex_);
 
@@ -81,7 +81,7 @@ namespace mcts
 				return *board_view_ == new_view;
 			}
 
-			bool CheckActionType(ActionType action_type) {
+			bool CheckActionType(FlowControl::ActionType action_type) {
 				if (!action_type_.IsValid()) {
 					action_type_ = action_type;
 					return true;
@@ -92,7 +92,7 @@ namespace mcts
 		private:
 			mutable Utils::SpinLock mutex_;
 			std::unique_ptr<board::BoardView> board_view_;
-			ActionType action_type_;
+			FlowControl::ActionType action_type_;
 		};
 
 		class TreeNodeLeadingNodes

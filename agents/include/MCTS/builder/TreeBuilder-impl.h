@@ -72,7 +72,7 @@ namespace mcts
 			assert([&](builder::TreeBuilder::TreeNode* node) {
 				if (perform_result.result.type_ != Result::kResultNotDetermined) return true;
 				if (!node->GetActionType().IsValid()) return true;
-				return node->GetActionType().GetType() == ActionType::kMainAction;
+				return node->GetActionType().GetType() == FlowControl::ActionType::kMainAction;
 			}(perform_result.node));
 
 			return perform_result;
@@ -113,13 +113,13 @@ namespace mcts
 			Result result = Result::kResultInvalid;
 			if constexpr (is_simulation) {
 				choice = this->ChooseSimulateAction(
-					ActionType(ActionType::kMainAction),
-					board::ActionChoices(choices));
+					FlowControl::ActionType(FlowControl::ActionType::kMainAction),
+					FlowControl::ActionChoices(choices));
 			}
 			else {
 				choice = this->ChooseSelectAction(
-					ActionType(ActionType::kMainAction),
-					board::ActionChoices(choices));
+					FlowControl::ActionType(FlowControl::ActionType::kMainAction),
+					FlowControl::ActionChoices(choices));
 			}
 
 			action_parameter_getter_.SetMainOpIndex(choice);
@@ -130,7 +130,7 @@ namespace mcts
 			return result;
 		}
 
-		inline int TreeBuilder::ChooseSelectAction(ActionType action_type, board::ActionChoices const& choices)
+		inline int TreeBuilder::ChooseSelectAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices)
 		{
 			assert(!choices.Empty());
 			int choice = selection_stage_.ChooseAction(*board_, action_type, choices);
@@ -138,7 +138,7 @@ namespace mcts
 			return choice;
 		}
 
-		inline int TreeBuilder::ChooseSimulateAction(ActionType action_type, board::ActionChoices const& choices)
+		inline int TreeBuilder::ChooseSimulateAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices)
 		{
 			int choice = simulation_stage_.ChooseAction(*board_, action_type, choices);
 			assert(choice >= 0);
