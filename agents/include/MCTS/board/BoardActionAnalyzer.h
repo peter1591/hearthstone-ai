@@ -10,9 +10,6 @@ namespace mcts
 {
 	namespace board
 	{
-		class IRawActionParameterGetter;
-		class IRandomGenerator;
-
 		class BoardActionAnalyzer
 		{
 		public:

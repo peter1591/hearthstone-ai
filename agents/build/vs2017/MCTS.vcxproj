@@ -191,7 +191,6 @@
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSInspector.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
-    <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />
     <ClInclude Include="..\..\include\MCTS\board\Board.h" />

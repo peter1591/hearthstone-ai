@@ -107,9 +107,6 @@
     <ClInclude Include="..\..\include\MCTS\board\Board.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\ActionChoices.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>

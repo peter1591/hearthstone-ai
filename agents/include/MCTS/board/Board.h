@@ -105,7 +105,7 @@ namespace mcts
 
 		class CopiedBoard {
 		public:
-			CopiedBoard(state::PlayerSide side) : state_(), board_(state_, side) {}
+			explicit CopiedBoard(state::PlayerSide side) : state_(), board_(state_, side) {}
 
 			void FillWithBase(Board const& board) {
 				state_.FillWithBase(board.board_);
