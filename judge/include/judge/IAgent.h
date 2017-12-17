@@ -29,5 +29,4 @@ namespace judge
 		virtual FlowControl::MainOpType GetMainAction() = 0;
 		virtual int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) = 0;
 	};
-
 }

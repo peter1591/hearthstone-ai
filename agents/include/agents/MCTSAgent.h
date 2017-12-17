@@ -77,24 +77,6 @@ namespace agents
 		}
 
 		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
-			int raw = GetRawSubAction(action_type, action_choices);
-
-			if (action_type == mcts::ActionType::kChooseHandCard) {
-				return root_node_->GetAddon().action_analyzer.GetPlaybleCard(raw)
-			}
-			else if (action_type == mcts::ActionType::kChooseAttacker) {
-				int attacker_idx = root_node_->GetAddon().action_analyzer.GetEncodedAttackerIndex(raw);
-				state::CardRef attacker = attacker_indics_[attacker_idx];
-				assert(attacker.IsValid());
-				return attacker;
-			}
-			else {
-				return raw;
-			}
-		}
-
-	private:
-		int GetRawSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
 			assert(node_);
 
 			if (node_->GetActionType() != action_type) {

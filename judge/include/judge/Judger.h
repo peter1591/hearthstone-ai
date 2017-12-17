@@ -45,10 +45,10 @@ namespace judge
 			ActionCallback(ActionCallback const&) = delete;
 			ActionCallback & operator=(ActionCallback const&) = delete;
 
-			void SetCallback(AgentType * cb) { cb_ = cb; }
-			void SetState(state::State const& state) {
+			void Initialize(state::State const& state, AgentType * cb) {
 				state_ = &state;
-				this->Initialize(*state_);
+				cb_ = cb;
+				judge::IActionParameterGetter::Initialize(*state_);
 			}
 			
 			FlowControl::MainOpType ChooseMainOp() {
@@ -92,7 +92,6 @@ namespace judge
 
 			FlowControl::Result result = FlowControl::kResultInvalid;
 			AgentType * next_agent = nullptr;
-			action_callback_.SetState(current_state);
 			while (true) {
 				if (current_state.GetCurrentPlayerId().IsFirst()) {
 					next_agent = first_;
@@ -104,7 +103,7 @@ namespace judge
 
 				next_agent->Think(current_state, random);
 
-				action_callback_.SetCallback(next_agent);
+				action_callback_.Initialize(current_state, next_agent);
 				FlowControl::FlowContext flow_context(random_callback_, action_callback_);
 				FlowControl::FlowController flow_controller(current_state, flow_context);
 				result = flow_controller.PerformOperation();

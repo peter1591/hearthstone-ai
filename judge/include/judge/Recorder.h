@@ -23,7 +23,7 @@ namespace judge
 			Json::Value obj;
 			obj["type"] = "kMainAction";
 			obj["board"] = FlowControl::JsonSerializer::Serialize(state);
-			obj["choice"] = FlowControl::utils::GetMainOpString(op);
+			obj["choice"] = FlowControl::GetMainOpString(op);
 
 			json_.append(obj);
 		}
