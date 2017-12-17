@@ -53,30 +53,7 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		int GetMainActionIndex() {
-			node_ = root_node_;
-			assert(node_);
-			assert(node_->GetActionType().GetType() == mcts::ActionType::kMainAction);
-
-			int best_choice = -1;
-			double best_chosen_times = -std::numeric_limits<double>::infinity();
-			mcts::builder::TreeBuilder::TreeNode const* best_node = nullptr;
-			root_node_->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
-				double chosen_times = (double)child.GetEdgeAddon().GetChosenTimes();
-				if (chosen_times > best_chosen_times) {
-					best_chosen_times = chosen_times;
-					best_choice = choice;
-					best_node = child.GetNode();
-				}
-				return true;
-			});
-
-			node_ = best_node;
-
-			return best_choice;
-		}
-
-		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
+		int GetAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
 			assert(node_);
 
 			if (node_->GetActionType() != action_type) {
