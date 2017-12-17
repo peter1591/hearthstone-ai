@@ -11,7 +11,12 @@ namespace mcts
 			ActionType::Types action_type,
 			ActionChoices const& action_choices)
 		{
-			return callback_.ChooseAction(ActionType(action_type), action_choices);
+			if (action_type == ActionType::kMainAction) {
+				return main_op_idx_;
+			}
+			else {
+				return callback_.ChooseAction(ActionType(action_type), action_choices);
+			}
 		}
 	}
 }

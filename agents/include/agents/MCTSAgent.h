@@ -53,7 +53,7 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		FlowControl::MainOpType GetMainAction() {
+		int GetMainActionIndex() {
 			node_ = root_node_;
 			assert(node_);
 			assert(node_->GetActionType().GetType() == mcts::ActionType::kMainAction);
@@ -73,7 +73,7 @@ namespace agents
 
 			node_ = best_node;
 
-			return root_node_->GetAddon().action_analyzer.GetMainOpType(best_choice);
+			return best_choice;
 		}
 
 		int GetSubAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {

@@ -18,14 +18,13 @@ namespace mcts
 		public:
 			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
 
-			void SetMainOp(FlowControl::MainOpType main_op) { main_op_ = main_op; }
-			FlowControl::MainOpType ChooseMainOp() { return main_op_; }
+			void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
 			int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) final;
 
 		private:
 			SOMCTS & callback_;
-			FlowControl::MainOpType main_op_;
+			int main_op_idx_;
 		};
 	}
 }

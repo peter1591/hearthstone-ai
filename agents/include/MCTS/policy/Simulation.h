@@ -620,10 +620,13 @@ namespace mcts
 							dfs_(dfs), dfs_it_(dfs_it), rand_(seed)
 						{}
 
-						void SetMainOp(FlowControl::MainOpType main_op) { main_op_ = main_op; }
-						FlowControl::MainOpType ChooseMainOp() { return main_op_; }
+						void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
 						int GetNumber(ActionType::Types action_type, board::ActionChoices const& action_choices) {
+
+							if (action_type == ActionType::kMainAction) {
+								return main_op_idx_;
+							}
 
 							int total = action_choices.Size();
 
@@ -655,7 +658,7 @@ namespace mcts
 						std::vector<DFSItem> & dfs_;
 						std::vector<DFSItem>::iterator & dfs_it_;
 						FastRandom rand_;
-						FlowControl::MainOpType main_op_;
+						int main_op_idx_;
 					};
 
 					std::vector<DFSItem> dfs;
@@ -683,10 +686,10 @@ namespace mcts
 					cb_user_choice.Initialize(board.GetCurrentPlayerStateView());
 
 					double best_value = -std::numeric_limits<double>::infinity();
-					action_analyzer.ForEachMainOp([&](size_t idx, FlowControl::MainOpType main_op) {
+					action_analyzer.ForEachMainOp([&](size_t main_op_idx, FlowControl::MainOpType main_op) {
 						assert(board.GetViewSide() == copy_board_.GetBoard().GetViewSide());
 
-						cb_user_choice.SetMainOp(main_op);
+						cb_user_choice.SetMainOpIndex((int)main_op_idx);
 
 						while (true) {
 							copy_board_.FillWithBase(board);
@@ -713,7 +716,7 @@ namespace mcts
 									best_value = value;
 
 									decision_.clear();
-									decision_.push_back((int)idx);
+									decision_.push_back((int)main_op_idx);
 									for (auto const& item : dfs) {
 										decision_.push_back((int)item.choice_);
 									}

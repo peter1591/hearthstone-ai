@@ -122,8 +122,7 @@ namespace mcts
 					board::ActionChoices(choices));
 			}
 
-			auto main_op = action_analyzer.GetMainOpType(choice);
-			action_parameter_getter_.SetMainOp(main_op);
+			action_parameter_getter_.SetMainOpIndex(choice);
 			result = board_->ApplyAction(action_analyzer, random_generator_, action_parameter_getter_);
 			assert(result.type_ != Result::kResultInvalid);
 

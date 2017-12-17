@@ -51,16 +51,18 @@ namespace judge
 				judge::IActionParameterGetter::Initialize(*state_);
 			}
 			
-			FlowControl::MainOpType ChooseMainOp() {
-				auto main_op = cb_->GetMainAction();
-				guide_.recorder_.RecordMainAction(*state_, main_op);
-				return main_op;
-			}
-
 			int GetNumber(mcts::ActionType::Types action_type, mcts::board::ActionChoices const& action_choices) final {
-				int action = cb_->GetSubAction(action_type, action_choices);
-				guide_.recorder_.RecordManualAction(action_type, action_choices, action);
-				return action;
+				if (action_type == mcts::ActionType::kMainAction) {
+					int action = cb_->GetMainActionIndex();
+					auto main_op = analyzer_.GetMainActions()[action];
+					guide_.recorder_.RecordMainAction(*state_, main_op);
+					return action;
+				}
+				else {
+					int action = cb_->GetSubAction(action_type, action_choices);
+					guide_.recorder_.RecordManualAction(action_type, action_choices, action);
+					return action;
+				}
 			}
 
 		private:

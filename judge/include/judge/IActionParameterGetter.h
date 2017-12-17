@@ -24,7 +24,13 @@ namespace judge
 		}
 
 	public:
-		// TODO: also redirect ChooseMainAction() call
+		FlowControl::MainOpType ChooseMainOp() final
+		{
+			auto main_ops_count = analyzer_.GetMainActionsCount();
+			auto const& main_ops = analyzer_.GetMainActions();
+			int main_op_idx = GetNumber(ActionType::kMainAction, main_ops_count);
+			return main_ops[main_op_idx];
+		}
 
 		state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
 		{
@@ -85,7 +91,7 @@ namespace judge
 
 		virtual int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) = 0;
 
-	private:
+	protected:
 		FlowControl::ValidActionAnalyzer analyzer_;
 	};
 }

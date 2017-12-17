@@ -66,12 +66,10 @@ namespace mcts
 			class ActionParameterCallback : public judge::IActionParameterGetter {
 			public:
 				ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
-					result_(result), choices_(choices), choices_idx_(choices_idx),
-					main_op_(FlowControl::MainOpType::kMainOpInvalid)
+					result_(result), choices_(choices), choices_idx_(choices_idx), main_op_idx_(-1)
 				{}
 
-				void SetMainOp(FlowControl::MainOpType main_op) { main_op_ = main_op; }
-				FlowControl::MainOpType ChooseMainOp() { return main_op_; }
+				void SetMainOpIdx(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
 				int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) {
 					return GetNextChoice(0, action_choices.Size());
@@ -95,7 +93,7 @@ namespace mcts
 				CallbackInfo & result_;
 				std::vector<int> const& choices_;
 				size_t & choices_idx_;
-				FlowControl::MainOpType main_op_;
+				int main_op_idx_;
 				std::vector<size_t> const* playable_cards_;
 			};
 
@@ -137,8 +135,7 @@ namespace mcts
 					mcts::board::BoardActionAnalyzer analyzer;
 					FlowControl::CurrentPlayerStateView state_view(game_state);
 					analyzer.Prepare(state_view);
-					auto main_op = analyzer.GetMainOpType(main_op_idx);
-					action_cb.SetMainOp(main_op);
+					action_cb.SetMainOpIdx(main_op_idx);
 
 					FlowControl::FlowController(game_state, flow_context).PerformOperation();
 				}
