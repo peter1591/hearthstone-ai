@@ -69,7 +69,7 @@ namespace mcts
 
 				void SetMainOpIdx(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-				int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) {
+				int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
 					return GetNextChoice(0, action_choices.Size());
 				}
 

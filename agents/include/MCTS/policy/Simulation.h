@@ -622,7 +622,7 @@ namespace mcts
 
 						void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-						int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) {
+						int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
 
 							if (action_type == FlowControl::ActionType::kMainAction) {
 								return main_op_idx_;
