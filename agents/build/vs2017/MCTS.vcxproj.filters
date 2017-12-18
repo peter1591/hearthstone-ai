@@ -113,9 +113,6 @@
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\BoardActionAnalyzer.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\BoardView.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
@@ -286,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer-impl.h">
       <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\detail\BoardActionAnalyzer.h">
+      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,8 +8,6 @@
 #include "MCTS/board/RandomGenerator-impl.h"
 #include "MCTS/detail/BoardNodeMap-impl.h"
 
-#include "MCTS/board/BoardActionAnalyzer.h"
-
 namespace mcts
 {
 	namespace builder
@@ -26,8 +24,7 @@ namespace mcts
 			assert(node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 			selection_stage_.StartNewMainAction(node);
 
-			TreeBuilder::SelectResult perform_result(ApplyAction(
-				node->GetAddon().action_analyzer, selection_stage_));
+			TreeBuilder::SelectResult perform_result(ApplyAction(selection_stage_));
 			assert(perform_result.result.type_ != Result::kResultInvalid);
 
 			// we use mutable here, since we will throw it away after all
@@ -84,29 +81,23 @@ namespace mcts
 		{
 			board_ = &board;
 
-			simulation_stage_.GetActionAnalyzer().Reset();
-
 			Result result = simulation_stage_.CutoffCheck(*board_);
 			assert(result.type_ != Result::kResultInvalid);
 			if (result.type_ != Result::kResultNotDetermined) return result;
 
-			return ApplyAction(
-				simulation_stage_.GetActionAnalyzer(), simulation_stage_);
+			return ApplyAction(simulation_stage_);
 		}
 
 		template <typename StageHandler>
-		inline Result TreeBuilder::ApplyAction(
-			board::BoardActionAnalyzer & action_analyzer,
-			StageHandler&& stage_handler)
+		inline Result TreeBuilder::ApplyAction(StageHandler&& stage_handler)
 		{
 			constexpr bool is_simulation = std::is_same_v<
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
 
 			auto current_state_view = board_->GetCurrentPlayerStateView();
-			action_analyzer.Prepare(current_state_view);
 			action_parameter_getter_.Initialize(current_state_view);
-			int choices = action_analyzer.GetMainActionsCount();
+			int choices = action_parameter_getter_.GetAnalyzer().GetMainActionsCount();
 			assert(choices > 0); // at least end-turn should be valid
 
 			int choice = -1;
@@ -123,7 +114,7 @@ namespace mcts
 			}
 
 			action_parameter_getter_.SetMainOpIndex(choice);
-			result = board_->ApplyAction(action_analyzer, random_generator_, action_parameter_getter_);
+			result = board_->ApplyAction(random_generator_, action_parameter_getter_);
 			assert(result.type_ != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);
@@ -140,7 +131,10 @@ namespace mcts
 
 		inline int TreeBuilder::ChooseSimulateAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices)
 		{
-			int choice = simulation_stage_.ChooseAction(*board_, action_type, choices);
+			int choice = simulation_stage_.ChooseAction(
+				*board_,
+				action_parameter_getter_.GetAnalyzer(),
+				action_type, choices);
 			assert(choice >= 0);
 			return choice;
 		}

@@ -49,7 +49,7 @@ namespace mcts
 		public:
 			TreeNodeConsistencyCheckAddons() : mutex_(), board_view_(), action_type_() {}
 
-			bool Check(
+			bool SetAndCheck(
 				board::Board const& board,
 				FlowControl::ActionType action_type,
 				FlowControl::ActionChoices const& choices)
@@ -126,18 +126,16 @@ namespace mcts
 		};
 
 		// Add abilities to tree node to use in SO-MCTS
-		// Note: this will lived in *every* tree node, so careful about memory footprints
+		// Note: this will live in *every* tree node, so careful about memory footprints
 		// Thread safety: No.
 		struct TreeNodeAddon
 		{
 			TreeNodeAddon() :
-				action_analyzer(),
 				consistency_checker(),
 				board_node_map(),
 				leading_nodes()
 			{}
 
-			board::BoardActionAnalyzer action_analyzer;
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			detail::BoardNodeMap board_node_map;
 			TreeNodeLeadingNodes leading_nodes;

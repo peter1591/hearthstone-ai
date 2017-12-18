@@ -10,7 +10,6 @@
 #include "FlowControl/FlowController.h"
 #include "FlowControl/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
-#include "MCTS/board/BoardActionAnalyzer.h"
 #include "MCTS/board/RandomGenerator.h"
 #include "judge/Recorder.h"
 #include "judge/IAgent.h"

@@ -8,7 +8,7 @@
 
 namespace mcts
 {
-	namespace board
+	namespace detail
 	{
 		class BoardActionAnalyzer
 		{

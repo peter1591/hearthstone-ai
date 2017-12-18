@@ -83,10 +83,10 @@ namespace mcts
 					//    The random outcome *influences* the player's decision
 					// So, if this assertion failed
 					//    It means a random node is necessary before this node
-					assert(current_node->GetAddon().consistency_checker.Check(board, action_type, choices));
+					assert(current_node->GetAddon().consistency_checker.SetAndCheck(board, action_type, choices));
 				}
 				else {
-					assert(current_node->GetAddon().consistency_checker.Check(board, action_type, choices));
+					assert(current_node->GetAddon().consistency_checker.SetAndCheck(board, action_type, choices));
 				}
 
 				int next_choice = current_node->Select(action_type, choices, policy_);

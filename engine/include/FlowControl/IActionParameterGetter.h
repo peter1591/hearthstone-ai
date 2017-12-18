@@ -49,6 +49,8 @@ namespace FlowControl {
 		void Initialize(state::State const& game_state);
 		void Initialize(CurrentPlayerStateView const& board);
 
+		auto const& GetAnalyzer() { return analyzer_; }
+
 	public:
 		MainOpType ChooseMainOp() final
 		{

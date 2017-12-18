@@ -79,6 +79,7 @@ namespace mcts
 			void ShowBestNodeInfo(
 				std::ostream & s,
 				const mcts::selection::TreeNode* main_node,
+				FlowControl::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
 				ActionApplyHelper const& action_cb_info_getter,
 				int indent,
@@ -109,12 +110,12 @@ namespace mcts
 					}
 
 					s << indent_padding << "Choice " << choice
-						<< ": " << GetChoiceString(main_node, node, choice, action_cb_info_getter)
+						<< ": " << GetChoiceString(main_node, action_analyzer, node, choice, action_cb_info_getter)
 						<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
 						<< std::endl;
 					ActionApplyHelper new_cb_getter = action_cb_info_getter;
 					new_cb_getter.AppendChoice(choice);
-					return ShowBestSubNodeInfo(s, main_node, node, choice, total_chosen_time, child, new_cb_getter, indent + 1, only_show_best_choice);
+					return ShowBestSubNodeInfo(s, main_node, action_analyzer, node, choice, total_chosen_time, child, new_cb_getter, indent + 1, only_show_best_choice);
 				});
 			}
 
@@ -167,16 +168,17 @@ namespace mcts
 
 			std::string GetChoiceString(
 				const mcts::selection::TreeNode* main_node,
+				FlowControl::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node, int choice,
 				ActionApplyHelper const& action_cb_info_getter)
 			{
 				if (node->GetActionType() == FlowControl::ActionType::kMainAction) {
-					auto op = node->GetAddon().action_analyzer.GetMainOpType(choice);
+					auto op = action_analyzer.GetMainOpType(choice);
 					return FlowControl::GetMainOpString(op);
 				}
 
 				if (node->GetActionType() == FlowControl::ActionType::kChooseHandCard) {
-					auto const& playable_cards = main_node->GetAddon().action_analyzer.GetPlayableCards();
+					auto const& playable_cards = action_analyzer.GetPlayableCards();
 					size_t idx = playable_cards[choice];
 
 					state::State start_board = start_board_getter_(0);
@@ -247,6 +249,7 @@ namespace mcts
 			bool ShowBestSubNodeInfo(
 				std::ostream & s,
 				const mcts::selection::TreeNode* main_node,
+				FlowControl::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
 				int choice,
 				uint64_t total_chosen_times,
@@ -272,7 +275,7 @@ namespace mcts
 				}
 
 				if (!child.IsRedirectNode()) {
-					ShowBestNodeInfo(s, main_node, child.GetNode(), action_cb_info_getter, indent, only_show_best_choice);
+					ShowBestNodeInfo(s, main_node, action_analyzer, child.GetNode(), action_cb_info_getter, indent, only_show_best_choice);
 				}
 				else {
 					if (!only_show_best_choice) {
@@ -304,8 +307,10 @@ namespace mcts
 
 				s << "Best action: " << std::endl;
 
+				state::State game_state = start_board_getter_(0);
+				FlowControl::ValidActionAnalyzer action_analyzer;
+				action_analyzer.Analyze(FlowControl::ValidActionGetter(game_state));
 				if (verbose) {
-					state::State game_state = start_board_getter_(0);
 					double v = GetStateValue(game_state);
 					s << "State-value: " << v << std::endl;
 				}
@@ -322,7 +327,7 @@ namespace mcts
 				}
 
 				ActionApplyHelper action_cb_info_getter;
-				ShowBestNodeInfo(s, node, node, action_cb_info_getter, 0, !verbose);
+				ShowBestNodeInfo(s, node, action_analyzer, node, action_cb_info_getter, 0, !verbose);
 			}
 
 			void DoRoot(std::istream & is, std::ostream & s)
@@ -343,6 +348,8 @@ namespace mcts
 
 			void DoInfo(std::ostream & s)
 			{
+				s << "Action analyzer is no longer recorded in treenode. We cannot generate useful action info for an arbitrarily node anymore." << std::endl;
+				/*
 				if (!node_) {
 					s << "Should set node first." << std::endl;
 					return;
@@ -402,6 +409,7 @@ namespace mcts
 					PrintBoardView(board_view, "    ", s);
 					return true;
 				});
+				*/
 			}
 
 			std::string GetActionType(FlowControl::ActionType type) {

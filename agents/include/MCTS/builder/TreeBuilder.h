@@ -56,9 +56,7 @@ namespace mcts
 
 		private:
 			template <typename StageHandler>
-			Result ApplyAction(
-				board::BoardActionAnalyzer & action_analyzer,
-				StageHandler&& stage_handler);
+			Result ApplyAction(StageHandler&& stage_handler);
 
 		public: // for callbacks: action-parameter-getter and random-generator
 			int ChooseSelectAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices);

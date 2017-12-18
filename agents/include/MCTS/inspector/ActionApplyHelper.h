@@ -5,7 +5,6 @@
 #include "state/State.h"
 #include "FlowControl/FlowController.h"
 #include "mcts/board/RandomGenerator.h"
-#include "mcts/board/BoardActionAnalyzer.h"
 
 namespace mcts
 {
@@ -122,21 +121,19 @@ namespace mcts
 
 				RandomCallback rand_cb;
 				ActionParameterCallback action_cb(info, choices_, choices_idx);
-				action_cb.Initialize(game_state);
 
 				FlowControl::FlowContext flow_context;
 				flow_context.SetCallback(rand_cb, action_cb);
 
 				while (choices_.size() > choices_idx) {
+					action_cb.Initialize(game_state);
+
 					// TODO: no need to special care on main op
 					int main_op_idx = choices_[choices_idx];
 					++choices_idx;
 
-					mcts::board::BoardActionAnalyzer analyzer;
 					FlowControl::CurrentPlayerStateView state_view(game_state);
-					analyzer.Prepare(state_view);
 					action_cb.SetMainOpIdx(main_op_idx);
-
 					FlowControl::FlowController(game_state, flow_context).PerformOperation();
 				}
 
