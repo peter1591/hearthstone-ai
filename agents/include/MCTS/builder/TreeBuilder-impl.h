@@ -97,24 +97,7 @@ namespace mcts
 
 			auto current_state_view = board_->GetCurrentPlayerStateView();
 			action_parameter_getter_.Initialize(current_state_view);
-			int choices = action_parameter_getter_.GetAnalyzer().GetMainActionsCount();
-			assert(choices > 0); // at least end-turn should be valid
-
-			int choice = -1;
-			Result result = Result::kResultInvalid;
-			if constexpr (is_simulation) {
-				choice = this->ChooseSimulateAction(
-					FlowControl::ActionType(FlowControl::ActionType::kMainAction),
-					FlowControl::ActionChoices(choices));
-			}
-			else {
-				choice = this->ChooseSelectAction(
-					FlowControl::ActionType(FlowControl::ActionType::kMainAction),
-					FlowControl::ActionChoices(choices));
-			}
-
-			action_parameter_getter_.SetMainOpIndex(choice);
-			result = board_->ApplyAction(random_generator_, action_parameter_getter_);
+			auto result = board_->ApplyAction(random_generator_, action_parameter_getter_);
 			assert(result.type_ != Result::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);
