@@ -69,19 +69,21 @@ namespace mcts
 			//   Also, the element ChildType in ChildNodeMap will never be removed
 			//   And thus, the EdgeAddon of ChildType will never be removed
 
-			TreeNode() : 
+			TreeNode() :
 				action_type_(FlowControl::ActionType::kInvalid),
 				choices_type_(FlowControl::ActionChoices::kInvalid),
 				children_mutex_(), children_(), addon_()
 			{}
 
 			// it is assumed we will never create a node at these special addresses
-			static TreeNode* GetWinNode() { return reinterpret_cast<TreeNode *>(0x1); }
-			static TreeNode* GetLossNode() { return reinterpret_cast<TreeNode *>((uint64_t)0x2); }
+			static TreeNode* GetFirstPlayerWinNode() { return reinterpret_cast<TreeNode *>(0x1); }
+			static TreeNode* GetSecondPlayerWinNode() { return reinterpret_cast<TreeNode *>((uint64_t)0x2); }
+			static TreeNode* GetDrawNode() { return reinterpret_cast<TreeNode *>((uint64_t)0x3); }
 
-			bool IsWinNode() const { return this == GetWinNode(); }
-			bool IsLossNode() const { return this == GetLossNode(); }
-			bool IsWinLossNode() const { return IsWinNode() || IsLossNode(); }
+			bool IsFirstPlayerWinNode() const { return this == GetFirstPlayerWinNode(); }
+			bool IsSecondPlayerWinNode() const { return this == GetSecondPlayerWinNode(); }
+			bool IsDrawNode() const { return this == GetDrawNode(); }
+			bool IsTerminateNode() const { return IsFirstPlayerWinNode() || IsSecondPlayerWinNode() || IsDrawNode(); }
 
 			// select among specific choices
 			// if any of the choices does not exist, return the edge to expand it

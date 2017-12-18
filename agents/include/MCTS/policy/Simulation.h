@@ -41,9 +41,9 @@ namespace mcts
 				{
 				}
 
-				Result GetCutoffResult(board::Board const& board) {
+				FlowControl::Result GetCutoffResult(board::Board const& board) {
 					assert(false);
-					return Result::kResultNotDetermined;
+					return FlowControl::kResultNotDetermined;
 				}
 
 				int GetChoice(
@@ -377,15 +377,17 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				Result GetCutoffResult(board::Board const& board) {
+				FlowControl::Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
-						return Result::kResultNotDetermined;
+						return FlowControl::kResultNotDetermined;
 					}
 
 					double score = state_value_func_.GetStateValue(board);
-					return Result(score);
+					if (score > 0.0) return FlowControl::kResultFirstPlayerWin;
+					else if (score == 0.0) return FlowControl::kResultDraw;
+					else return FlowControl::kResultSecondPlayerWin;
 				}
 
 			public:
@@ -425,15 +427,17 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				Result GetCutoffResult(board::Board const& board) {
+				FlowControl::Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
-						return Result::kResultNotDetermined;
+						return FlowControl::kResultNotDetermined;
 					}
 					
 					double score = state_value_func_.GetStateValue(board);
-					return Result(score);
+					if (score > 0.0) return FlowControl::kResultFirstPlayerWin;
+					else if (score == 0.0) return FlowControl::kResultDraw;
+					else return FlowControl::kResultSecondPlayerWin;
 				}
 
 			public:
@@ -485,8 +489,8 @@ namespace mcts
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				Result GetCutoffResult(board::Board const& board) {
-					return Result::kResultNotDetermined;
+				FlowControl::Result GetCutoffResult(board::Board const& board) {
+					return FlowControl::kResultNotDetermined;
 				}
 
 			public:
@@ -545,15 +549,17 @@ namespace mcts
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 				static constexpr bool kRandomlyPutMinions = true;
 
-				Result GetCutoffResult(board::Board const& board) {
+				FlowControl::Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
-						return Result::kResultNotDetermined;
+						return FlowControl::kResultNotDetermined;
 					}
 
 					double score = state_value_func_.GetStateValue(board);
-					return Result(score);
+					if (score > 0.0) return FlowControl::kResultFirstPlayerWin;
+					else if (score == 0.0) return FlowControl::kResultDraw;
+					else return FlowControl::kResultSecondPlayerWin;
 				}
 
 			public:
@@ -700,17 +706,20 @@ namespace mcts
 							dfs_it = dfs.begin();
 							auto result = copy_board_.GetBoard().ApplyAction(cb_random, cb_user_choice);
 
-							if (result.type_ != Result::kResultInvalid) {
+							if (result != FlowControl::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();
-								if (result.type_ == Result::kResultWin) {
+								if (result == FlowControl::kResultFirstPlayerWin) {
 									value = std::numeric_limits<double>::infinity();
 								}
-								else if (result.type_ == Result::kResultLoss) {
+								else if (result == FlowControl::kResultSecondPlayerWin) {
 									value = -std::numeric_limits<double>::infinity();
 								}
+								else if (result == FlowControl::kResultDraw) {
+									value = 0.0;
+								}
 								else {
-									assert(result.type_ == Result::kResultNotDetermined);
-									state_value_func_.GetStateValue(copy_board_.GetBoard());
+									assert(result == FlowControl::kResultNotDetermined);
+									value = state_value_func_.GetStateValue(copy_board_.GetBoard());
 								}
 
 								if (decision_.empty() || value > best_value) {

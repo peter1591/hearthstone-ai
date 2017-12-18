@@ -17,7 +17,7 @@ namespace mcts
 			void StartNewAction() {
 			}
 
-			Result CutoffCheck(board::Board const& board)
+			FlowControl::Result CutoffCheck(board::Board const& board)
 			{
 				using Policy = std::decay_t<decltype(select_)>;
 
@@ -25,7 +25,7 @@ namespace mcts
 					return select_.GetCutoffResult(board);
 				}
 				else {
-					return Result::kResultNotDetermined;
+					return FlowControl::kResultNotDetermined;
 				}
 			}
 

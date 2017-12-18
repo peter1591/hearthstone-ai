@@ -32,11 +32,11 @@ namespace mcts
 			{
 				state::PlayerIdentifier side = state.GetCurrentPlayerId();
 				
-				Result result = GetSOMCTS(side).PerformOwnTurnActions(
+				FlowControl::Result result = GetSOMCTS(side).PerformOwnTurnActions(
 					board::Board(state, side.GetSide()));
-				assert(result.type_ != Result::kResultInvalid);
+				assert(result != FlowControl::kResultInvalid);
 				
-				if (result.type_ != Result::kResultNotDetermined) {
+				if (result != FlowControl::kResultNotDetermined) {
 					first_.EpisodeFinished(state, result);
 					second_.EpisodeFinished(state, result);
 					break;

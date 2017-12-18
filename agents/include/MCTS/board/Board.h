@@ -70,13 +70,12 @@ namespace mcts
 			}
 
 		public: // bridge to action analyzer
-			Result ApplyAction(state::IRandomGenerator & random, FlowControl::IActionParameterGetter & action_parameters) const
+			FlowControl::Result ApplyAction(state::IRandomGenerator & random, FlowControl::IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				FlowControl::FlowContext flow_context(random, action_parameters);
 				FlowControl::FlowController flow_controller(board_, flow_context);
-				auto flow_result = flow_controller.PerformOperation();
-				return Result::ConvertFrom(flow_result);
+				return flow_controller.PerformOperation();
 			}
 
 		public:

@@ -38,12 +38,12 @@ namespace mcts
 		}
 
 		// Include to perform the end-turn action at last to switch side
-		Result PerformOwnTurnActions(board::Board const& board)
+		FlowControl::Result PerformOwnTurnActions(board::Board const& board)
 		{
 			assert(side_ == board.GetViewSide()); // prevent information leak
 			assert(board.GetCurrentPlayer().GetSide() == side_);
 
-			Result result = Result::kResultInvalid;
+			FlowControl::Result result = FlowControl::kResultInvalid;
 
 			detail::BoardNodeMap * turn_node_map = nullptr;
 			if (stage_ == kStageSelection) {
@@ -59,8 +59,8 @@ namespace mcts
 			while (board.GetCurrentPlayer().GetSide() == side_) {
 				if (stage_ == kStageSimulation) {
 					result = builder_.PerformSimulate(board);
-					assert(result.type_ != Result::kResultInvalid);
-					if (result.type_ != Result::kResultNotDetermined) return result;
+					assert(result != FlowControl::kResultInvalid);
+					if (result!= FlowControl::kResultNotDetermined) return result;
 				}
 				else {
 					// Selection stage
@@ -71,10 +71,10 @@ namespace mcts
 						return node->GetActionType().GetType() == FlowControl::ActionType::kMainAction;
 					}(node_));
 					auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map, &updater_);
-					assert(perform_result.result.type_ != Result::kResultInvalid);
+					assert(perform_result.result != FlowControl::kResultInvalid);
 					
 					result = perform_result.result;
-					if (result.type_ != Result::kResultNotDetermined) return result;
+					if (result!= FlowControl::kResultNotDetermined) return result;
 
 					assert([](builder::TreeBuilder::TreeNode* node) {
 						if (!node) return false;
@@ -91,7 +91,7 @@ namespace mcts
 					}
 				}
 			}
-			assert(result.type_ == Result::kResultNotDetermined);
+			assert(result == FlowControl::kResultNotDetermined);
 			return result;
 		}
 
@@ -109,14 +109,11 @@ namespace mcts
 			node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 		}
 
-		void EpisodeFinished(state::State const& state, Result result)
+		void EpisodeFinished(state::State const& state, FlowControl::Result result)
 		{
-			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(state, result);
+			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(side_, state, result);
 			assert(credit >= 0.0);
 			assert(credit <= 1.0); // TODO: should take into account episilon precision
-			if (side_ == state::kPlayerSecond) {
-				credit = 1.0 - credit;
-			}
 			updater_.Update(credit);
 		}
 		
