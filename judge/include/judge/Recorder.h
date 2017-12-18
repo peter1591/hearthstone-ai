@@ -36,7 +36,7 @@ namespace judge
 			json_.append(obj);
 		}
 
-		void RecordManualAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices, int action) {
+		void RecordManualAction(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices action_choices, int action) {
 			Json::Value obj;
 			obj["type"] = GetActionTypeString(action_type);
 			obj["choices_type"] = GetChoiceTypeString(action_choices);
@@ -89,8 +89,8 @@ namespace judge
 		}
 
 	private:
-		std::string GetActionTypeString(mcts::ActionType type) {
-			using mcts::ActionType;
+		std::string GetActionTypeString(FlowControl::ActionType type) {
+			using FlowControl::ActionType;
 			switch (type.GetType()) {
 			case ActionType::kMainAction: return "kMainAction";
 			case ActionType::kChooseHandCard: return "kChooseHandCard";
@@ -112,11 +112,11 @@ namespace judge
 			}
 		}
 
-		std::string GetChoiceTypeString(mcts::board::ActionChoices const& action_choices) {
+		std::string GetChoiceTypeString(FlowControl::ActionChoices const& action_choices) {
 			switch (action_choices.GetType()) {
-			case mcts::board::ActionChoices::kChooseFromCardIds:
+			case FlowControl::ActionChoices::kChooseFromCardIds:
 				return "kChooseFromCardIds";
-			case mcts::board::ActionChoices::kChooseFromZeroToExclusiveMax:
+			case FlowControl::ActionChoices::kChooseFromZeroToExclusiveMax:
 				return "kChooseFromZeroToExclusiveMax";
 			default:
 				assert(false);

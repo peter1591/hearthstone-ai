@@ -53,7 +53,13 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		int GetAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) {
+		int GetAction(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices action_choices) {
+			if (action_type != FlowControl::ActionType::kMainAction)
+			{
+				assert(action_choices.Size() > 0);
+				if (action_choices.Size() == 1) return 0;
+			}
+
 			assert(node_);
 
 			if (node_->GetActionType() != action_type) {

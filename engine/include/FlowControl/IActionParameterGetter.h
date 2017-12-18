@@ -112,12 +112,6 @@ namespace FlowControl {
 		}
 
 		int GetNumber(ActionType::Types action_type, int exclusive_max) {
-			// TODO: move this shortcut to derived classes
-			if (action_type != ActionType::kMainAction)
-			{
-				if (exclusive_max <= 0) return -1;
-				if (exclusive_max == 1) return 0;
-			}
 			return GetNumber(action_type, ActionChoices(exclusive_max));
 		}
 

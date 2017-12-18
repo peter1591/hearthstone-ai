@@ -620,15 +620,18 @@ namespace mcts
 							dfs_(dfs), dfs_it_(dfs_it), rand_(seed)
 						{}
 
+						// TODO: can we remove this? need special care on main op?
 						void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
 						int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
-
 							if (action_type == FlowControl::ActionType::kMainAction) {
 								return main_op_idx_;
 							}
 
 							int total = action_choices.Size();
+
+							assert(total >= 1);
+							if (total == 1) return 0;
 
 							assert(action_type != FlowControl::ActionType::kRandom);
 

@@ -37,7 +37,7 @@ namespace judge
 			Judger & guide_;
 		};
 
-		class ActionCallback : public judge::IActionParameterGetter {
+		class ActionCallback : public FlowControl::IActionParameterGetter {
 		public:
 			ActionCallback(Judger & guide) : guide_(guide), cb_(nullptr), state_(nullptr) {}
 
@@ -47,13 +47,13 @@ namespace judge
 			void Initialize(state::State const& state, AgentType * cb) {
 				state_ = &state;
 				cb_ = cb;
-				judge::IActionParameterGetter::Initialize(*state_);
+				FlowControl::IActionParameterGetter::Initialize(*state_);
 			}
 			
-			int GetNumber(mcts::ActionType::Types action_type, mcts::board::ActionChoices const& action_choices) final {
+			int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
 				int action = cb_->GetAction(action_type, action_choices);
 
-				if (action_type == mcts::ActionType::kMainAction) {
+				if (action_type == FlowControl::ActionType::kMainAction) {
 					auto main_op = analyzer_.GetMainActions()[action];
 					guide_.recorder_.RecordMainAction(*state_, main_op);
 					return action;

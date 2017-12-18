@@ -26,6 +26,6 @@ namespace judge
 		// should pass StartingStateGetter instead?
 		virtual void Think(state::State const& state, std::mt19937 & random) = 0;
 
-		virtual int GetAction(mcts::ActionType::Types action_type, mcts::board::ActionChoices action_choices) = 0;
+		virtual int GetAction(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices action_choices) = 0;
 	};
 }

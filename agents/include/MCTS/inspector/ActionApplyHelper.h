@@ -70,13 +70,18 @@ namespace mcts
 				void SetMainOpIdx(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
 				int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
+					if (action_type != FlowControl::ActionType::kMainAction)
+					{
+						assert(action_choices.Size() > 0);
+						if (action_choices.Size() == 1) return 0;
+					}
 					return GetNextChoice(0, action_choices.Size());
 				}
 
 			private:
 				int GetNextChoice(int min, int exclusive_max) {
 					if (choices_idx_ >= choices_.size()) {
-						return min;
+						return min; // just an arbitrary valid choice
 					}
 
 					int choice = choices_[choices_idx_];
