@@ -121,29 +121,11 @@ namespace FlowControl
 	public:
 		CurrentPlayerStateView(state::State & state) : state_(state) {}
 
-		state::PlayerSide GetCurrentPlayer() const {
+		state::PlayerSide GetCurrentPlayer() const { 
 			return state_.GetCurrentPlayerId().GetSide();
 		}
 
 		auto GetValidActionGetter() const { return ValidActionGetter(state_); }
-
-		template <typename Functor>
-		void ForEachPlayableCard(Functor && functor) const {
-			ValidActionGetter(state_).ForEachPlayableCard(std::forward<Functor>(functor));
-		}
-
-		bool CanUseHeroPower() const {
-			return ValidActionGetter(state_).CanUseHeroPower();
-		}
-
-		template <typename Functor>
-		void ForEachAttacker(Functor&& functor) const {
-			return ValidActionGetter(state_).ForEachAttacker(std::forward<Functor>(functor));
-		}
-
-		auto GetAttackerIndics() const {
-			return ValidActionGetter(state_).GetAttackerIndics();
-		}
 
 		template <typename Functor>
 		static void ApplyWithCurrentPlayerStateView(state::State const& state, Functor && functor) {
