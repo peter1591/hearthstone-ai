@@ -12,16 +12,14 @@
 #include "judge/Judger.h"
 #include "agents/MCTSAgent.h"
 
-static void Initialize()
+static void Initialize(unsigned int rand_seed)
 {
 	std::cout << "Reading json file...";
 	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
 	Cards::PreIndexedCards::GetInstance().Initialize();
 	std::cout << " Done." << std::endl;
 
-  unsigned int rand_seed = std::random_device()();
-  srand(rand_seed);
-  std::cout << "Initialize with random seed: " << rand_seed << std::endl;
+	srand(rand_seed);
 }
 
 class IterationCallback
@@ -65,7 +63,11 @@ private:
 
 int main(int argc, char *argv[])
 {
-	Initialize();
+	auto seed = std::random_device()();
+	std::cout << "Initialize with random seed: " << seed << std::endl;
+	std::mt19937 rand(seed);
+
+	Initialize(rand());
 
 	if (argc != 3) {
 		std::cout << "Usage: "
@@ -78,9 +80,6 @@ int main(int argc, char *argv[])
 
 	int threads = 1;
 	uint64_t iterations = 1000;
-
-	auto seed = std::random_device()();
-	std::mt19937 rand(seed);
 
 	{
 		std::istringstream ss(argv[1]);
