@@ -115,15 +115,17 @@ namespace ui
 		class UnknownCardsSetsManager
 		{
 		public:
-			UnknownCardsSetsManager(UnknownCardsSets & data) : data_(data), shuffled_cards_() {}
+			UnknownCardsSetsManager() : data_(nullptr), shuffled_cards_() {}
+
+			void Setup(UnknownCardsSets & data) { data_ = &data; }
 
 			void Prepare(std::mt19937 & rand)
 			{
-				data_.ResetState();
+				data_->ResetState();
 				shuffled_cards_.clear();
 				
 				std::vector<Cards::CardId> cards_pool;
-				data_.ForEach([&](UnknownCardsSet const& set, size_t ref_cards) {
+				data_->ForEach([&](UnknownCardsSet const& set, size_t ref_cards) {
 					set.ForEachRestCard([&](Cards::CardId card_id) {
 						cards_pool.push_back(card_id);
 					});
@@ -145,7 +147,7 @@ namespace ui
 			}
 
 		private:
-			UnknownCardsSets & data_; // TODO: should use const& ideally
+			UnknownCardsSets * data_; // TODO: should use const* ideally
 			std::vector<std::vector<Cards::CardId>> shuffled_cards_;
 		};
 	}

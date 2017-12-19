@@ -45,18 +45,8 @@ namespace ui
 			};
 
 		public:
-			static constexpr int kDefaultRootSampleCount = 100;
+			Parser(GameEngineLogger & logger) : logger_(logger), board_() {}
 
-			Parser(GameEngineLogger & logger) :
-				logger_(logger), board_(),
-				root_sample_count_(kDefaultRootSampleCount)
-			{}
-
-			// @note Should be set before running
-			void SetRootSampleCount(int v) {
-				root_sample_count_ = v;
-			}
-			
 			int ChangeBoard(std::string const& board_raw, std::mt19937 & rand)
 			{
 				Json::Reader reader;
@@ -94,21 +84,23 @@ namespace ui
 
 				board_.Parse(json_board);
 
-				PrepareRootSamples(rand);
+				first_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(1));
+				first_unknown_cards_sets_mgr_.Prepare(rand);
+
+				second_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(2));
+				second_unknown_cards_sets_mgr_.Prepare(rand);
 
 				return 0;
 			}
 
-			state::State GetStartBoard(int seed)
+			state::State GetState(int seed)
 			{
 				state::State state;
 				std::mt19937 rand(seed);
 
-				int root_sample_idx = rand() % root_sample_count_;
-
 				MyRandomGenerator random(rand());
-				MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgrs_[root_sample_idx]);
-				MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgrs_[root_sample_idx]);
+				MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr_);
+				MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr_);
 				state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
 				state.SetTurn(board_.GetTurn());
 
@@ -116,24 +108,6 @@ namespace ui
 			}
 
 		private:
-			void PrepareRootSamples(std::mt19937 & rand)
-			{
-				if (first_unknown_cards_sets_mgrs_.size() != root_sample_count_) {
-					first_unknown_cards_sets_mgrs_.clear();
-					second_unknown_cards_sets_mgrs_.clear();
-
-					for (int i = 0; i < root_sample_count_; ++i) {
-						first_unknown_cards_sets_mgrs_.emplace_back(board_.GetUnknownCardsSets(1));
-						second_unknown_cards_sets_mgrs_.emplace_back(board_.GetUnknownCardsSets(2));
-					}
-				}
-
-				for (int i = 0; i < root_sample_count_; ++i) {
-					first_unknown_cards_sets_mgrs_[i].Prepare(rand);
-					second_unknown_cards_sets_mgrs_[i].Prepare(rand);
-				}
-			}
-
 			Cards::CardId GetCardId(std::string const& card_id)
 			{
 				auto const& container = Cards::Database::GetInstance().GetIdMap();
@@ -150,8 +124,8 @@ namespace ui
 				MakeHero(player, state, board_player.hero);
 				MakeHeroPower(player, state, board_player.hero_power);
 				MakeDeck(player, state, random, board_player.deck, unknown_cards_sets_mgr);
-				MakeHand(player, state, random, board_player.hand, unknown_cards_sets_mgr);
-				MakeMinions(player, state, random, board_player.minions);
+				MakeHand(player, state, board_player.hand, unknown_cards_sets_mgr);
+				MakeMinions(player, state, board_player.minions);
 				// TODO: enchantments
 				// TODO: weapon
 				// TODO: secrets
@@ -177,7 +151,7 @@ namespace ui
 				raw_card.enchanted_states.max_attacks_per_turn = max_attacks_per_turn;
 			}
 
-			void AddMinion(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, board::Minion const& minion, int pos)
+			void AddMinion(state::PlayerIdentifier player, state::State & state, board::Minion const& minion, int pos)
 			{
 				state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(minion.card_id);
 				raw_card.enchanted_states.player = player;
@@ -206,11 +180,11 @@ namespace ui
 				state.GetMutableCard(ref).SetNumAttacksThisTurn(minion.attacks_this_turn);
 			}
 
-			void MakeMinions(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, board::Minions const& minions)
+			void MakeMinions(state::PlayerIdentifier player, state::State & state, board::Minions const& minions)
 			{
 				int pos = 0;
 				for (auto const& minion : minions.minions) {
-					AddMinion(player, state, random, minion, pos);
+					AddMinion(player, state, minion, pos);
 					++pos;
 				}
 			}
@@ -280,7 +254,7 @@ namespace ui
 				}
 			}
 
-			state::CardRef AddHandCard(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, Cards::CardId card_id)
+			state::CardRef AddHandCard(state::PlayerIdentifier player, state::State & state, Cards::CardId card_id)
 			{
 				state::Cards::CardData raw_card = Cards::CardDispatcher::CreateInstance(card_id);
 				raw_card.enchanted_states.player = player;
@@ -312,21 +286,20 @@ namespace ui
 				return ref;
 			}
 
-			void MakeHand(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, std::vector<int> const& entities,
+			void MakeHand(state::PlayerIdentifier player, state::State & state, std::vector<int> const& entities,
 				board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 			{
 				for (int entity_id : entities) {
 					Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
-					AddHandCard(player, state, random, card_id);
+					AddHandCard(player, state, card_id);
 				}
 			}
 
 		private:
 			GameEngineLogger & logger_;
 			board::Board board_;
-			int root_sample_count_;
-			std::vector<board::UnknownCardsSetsManager> first_unknown_cards_sets_mgrs_;
-			std::vector<board::UnknownCardsSetsManager> second_unknown_cards_sets_mgrs_;
+			board::UnknownCardsSetsManager first_unknown_cards_sets_mgr_;
+			board::UnknownCardsSetsManager second_unknown_cards_sets_mgr_;
 		};
 	}
 }

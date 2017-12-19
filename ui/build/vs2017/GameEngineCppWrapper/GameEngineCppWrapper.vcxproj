@@ -154,7 +154,7 @@
     <ClInclude Include="..\..\..\..\ui\include\UI\Decks.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\GameEngine.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\GameEngineLogger.h" />
-    <ClInclude Include="..\..\..\..\ui\include\UI\InteractiveShell.h" />
+    <ClInclude Include="..\..\..\include\UI\SampledBoards.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\agents\src\neural_net\NeuralNetwork.cpp" />

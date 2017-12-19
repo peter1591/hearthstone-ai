@@ -9,8 +9,9 @@
 
 #include "state/Configs.h"
 #include "Cards/Database.h"
-#include "UI/Board/Parser.h"
 #include "MCTS/inspector/ActionApplyHelper.h"
+#include "UI/Board/Parser.h"
+#include "UI/SampledBoards.h"
 
 namespace ui
 {
@@ -20,8 +21,9 @@ namespace ui
 		static constexpr int kDefaultRootSampleCount = 100;
 
 		BoardGetter(GameEngineLogger & logger) :
-			lock_(), logger_(logger), parser_(logger), action_apply_helper_(),
-			board_raw_(), root_sample_count_(kDefaultRootSampleCount), need_restart_ai_()
+			lock_(), logger_(logger), action_apply_helper_(),
+			board_raw_(), root_sample_count_(kDefaultRootSampleCount), need_restart_ai_(),
+			sampled_boards_(logger)
 		{}
 
 		// @note Should be set before running
@@ -56,7 +58,12 @@ namespace ui
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
 			std::mt19937 rand(seed);
-			parser_.ChangeBoard(board_raw_, rand);
+			
+			ui::board::Parser parser(logger_);
+			sampled_boards_.Prepare(root_sample_count_, rand, [&]() {
+				parser.ChangeBoard(board_raw_, rand);
+				return parser.GetState(seed);
+			});
 			
 			if (!controller || need_restart_ai_) {
 				controller.reset(new agents::MCTSRunner(root_sample_count_, rand));
@@ -70,22 +77,19 @@ namespace ui
 			return 0;
 		}
 
-		state::State GetStartBoard(int seed)
+		state::State GetStartBoard(unsigned int seed)
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
-
-			state::State game_state = parser_.GetStartBoard(seed);
-			action_apply_helper_.ApplyChoices(game_state);
-			return game_state;
+			return sampled_boards_.GetState(seed % root_sample_count_);
 		}
 
 	private:
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
-		board::Parser parser_;
 		mcts::inspector::ActionApplyHelper action_apply_helper_;
 		std::string board_raw_;
 		int root_sample_count_;
 		bool need_restart_ai_;
+		SampledBoards sampled_boards_;
 	};
 }

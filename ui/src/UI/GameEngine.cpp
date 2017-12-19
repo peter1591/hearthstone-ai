@@ -147,7 +147,7 @@ namespace ui
 			};
 
 			try {
-				controller_->Run(threads, seed, start_board_getter);
+				controller_->Run(threads, start_board_getter);
 
 				while (true) {
 					if (!continue_checker()) break;

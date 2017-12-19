@@ -57,9 +57,6 @@
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Player.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\ui\include\UI\InteractiveShell.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Parser.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
@@ -71,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\agents\include\agents\MCTSAgent.h">
       <Filter>Header Files\agents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\UI\SampledBoards.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
