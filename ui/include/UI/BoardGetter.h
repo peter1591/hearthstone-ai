@@ -61,8 +61,7 @@ namespace ui
 			
 			ui::board::Parser parser(logger_);
 			sampled_boards_.Prepare(root_sample_count_, rand, [&]() {
-				parser.ChangeBoard(board_raw_, rand);
-				return parser.GetState(seed);
+				return parser.GetState(board_raw_, rand);
 			});
 			
 			if (!controller || need_restart_ai_) {

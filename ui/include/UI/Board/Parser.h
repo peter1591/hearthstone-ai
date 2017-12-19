@@ -26,35 +26,27 @@ namespace ui
 			class MyRandomGenerator : public state::IRandomGenerator
 			{
 			public:
-				MyRandomGenerator(int seed) : random_(seed) {}
+				MyRandomGenerator(std::mt19937 & random) : random_(random) {}
 
-				int Get(int exclusive_max)
+				int Get(int exclusive_max) final
 				{
 					return random_() % exclusive_max;
 				}
 
-				size_t Get(size_t exclusive_max) { return (size_t)Get((int)exclusive_max); }
-
-				int Get(int min, int max)
-				{
-					return min + Get(max - min + 1);
-				}
-
 			public:
-				std::mt19937 random_;
+				std::mt19937 & random_;
 			};
 
 		public:
 			Parser(GameEngineLogger & logger) : logger_(logger), board_() {}
 
-			int ChangeBoard(std::string const& board_raw, std::mt19937 & rand)
+			state::State GetState(std::string const& board_raw, std::mt19937 & rand)
 			{
 				Json::Reader reader;
 				Json::Value json_board;
 				std::stringstream ss(board_raw);
 				if (!reader.parse(ss, json_board)) {
-					logger_.Log("Failed to parse board.");
-					return -1;
+					throw std::runtime_error("failed to parse board");
 				}
 
 				int player_entity_id = json_board["player"]["entity_id"].asInt();
@@ -90,15 +82,8 @@ namespace ui
 				second_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(2));
 				second_unknown_cards_sets_mgr_.Prepare(rand);
 
-				return 0;
-			}
-
-			state::State GetState(int seed)
-			{
 				state::State state;
-				std::mt19937 rand(seed);
-
-				MyRandomGenerator random(rand());
+				MyRandomGenerator random(rand);
 				MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr_);
 				MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr_);
 				state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
