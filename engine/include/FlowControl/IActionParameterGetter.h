@@ -46,6 +46,8 @@ namespace FlowControl {
 	class IActionParameterGetter : public IActionParameterGetterWithoutAnalyzer
 	{
 	public:
+    IActionParameterGetter() : analyzer_() {}
+
 		void Initialize(state::State const& game_state);
 		void Initialize(CurrentPlayerStateView const& board);
 

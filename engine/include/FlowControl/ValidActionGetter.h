@@ -116,7 +116,7 @@ namespace FlowControl
 			assert(attacker_idx >= 0);
 			assert(attacker_idx < 7);
 			auto const& minions = state_.GetCurrentPlayer().minions_;
-			if (attacker_idx >= minions.Size()) return state::CardRef(); // invalid card ref
+			if (attacker_idx >= (int)minions.Size()) return state::CardRef(); // invalid card ref
 			return minions.Get((size_t)(attacker_idx));
 		}
 

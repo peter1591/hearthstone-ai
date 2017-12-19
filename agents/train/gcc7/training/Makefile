@@ -1,12 +1,12 @@
-CXX=g++-7
+CXX=g++-7.2
 #CXX=/usr/local/gcc-7.1/bin/g++-7.1
 
 CFLAGS=-std=c++17
 
-TOP_SOURCE=../../
+TOP_SOURCE=../../../../
 
-CFLAGS+=-I${TOP_SOURCE}include \
-        -I${TOP_SOURCE}contrib/tiny-dnn
+CFLAGS+=-I${TOP_SOURCE}third_party/jsoncpp/include \
+        -I${TOP_SOURCE}third_party/tiny-dnn
 CFLAGS+=-g
 LDFLAGS+=-lpthread
 
@@ -15,13 +15,13 @@ CFLAGS+=-O3 -march=native
 #CFLAGS+=-DNDEBUG
 LDFLAGS+=-O3
 
-THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_reader.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp
+THIRD_PARTY_SRCS=${TOP_SOURCE}third_party/jsoncpp/src/json_value.cpp \
+								 ${TOP_SOURCE}third_party/jsoncpp/src/json_reader.cpp \
+								 ${TOP_SOURCE}third_party/jsoncpp/src/json_writer.cpp
 THIRD_PARTY_OBJS=$(THIRD_PARTY_SRCS:.cpp=.o)
 
-SRCS=${TOP_SOURCE}src/Train/Source.cpp \
-     ${TOP_SOURCE}src/NeuralNetwork.cpp
+SRCS=${TOP_SOURCE}agents/train/src/GenerateTrainData.cpp \
+     ${TOP_SOURCE}agents/src/neural_net/NeuralNetwork.cpp
 OBJS=$(SRCS:.cpp=.o)
 
 EXE=train

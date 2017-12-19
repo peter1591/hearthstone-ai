@@ -623,7 +623,7 @@ namespace mcts
 						UserChoicePolicy(std::vector<DFSItem> & dfs,
 							std::vector<DFSItem>::iterator & dfs_it,
 							int seed) :
-							dfs_(dfs), dfs_it_(dfs_it), rand_(seed)
+							dfs_(dfs), dfs_it_(dfs_it), rand_(seed), main_op_idx_(-1)
 						{}
 
 						// TODO: can we remove this? need special care on main op?

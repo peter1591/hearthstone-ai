@@ -1,4 +1,4 @@
-CXX=g++-7
+CXX=g++-7.2
 CFLAGS=-std=c++17
 CFLAGS_OWN_SRC += -Wall -Wextra -Wpedantic \
 									-Wno-implicit-fallthrough \
@@ -8,9 +8,13 @@ CFLAGS_OWN_SRC += -Wall -Wextra -Wpedantic \
 #CXX=clang-5.0
 #CFLAGS=-std=c++1z
 
-TOP_SOURCE=../../
+TOP_SOURCE=../../../../
 
-CFLAGS+=-I$(TOP_SOURCE)include -I${TOP_SOURCE}contrib/tiny-dnn
+CFLAGS+=-I$(TOP_SOURCE)engine/include \
+				-I$(TOP_SOURCE)judge/include \
+				-I$(TOP_SOURCE)agents/include \
+				-I$(TOP_SOURCE)third_party/jsoncpp/include \
+				-I${TOP_SOURCE}third_party/tiny-dnn
 CFLAGS+=-ggdb
 LDFLAGS=-lpthread
 
@@ -44,15 +48,15 @@ CFLAGS+=-flto -fuse-linker-plugin
 LDFLAGS+=-flto -fuse-linker-plugin
 endif
 
-THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_reader.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp \
-								 ${TOP_SOURCE}src/NeuralNetwork.cpp
+THIRD_PARTY_SRCS=${TOP_SOURCE}third_party/jsoncpp/src/json_value.cpp \
+								 ${TOP_SOURCE}third_party/jsoncpp/src/json_reader.cpp \
+								 ${TOP_SOURCE}third_party/jsoncpp/src/json_writer.cpp \
+								 ${TOP_SOURCE}agents/src/neural_net/NeuralNetwork.cpp
 THIRD_PARTY_OBJS=$(THIRD_PARTY_SRCS:.cpp=.o)
 
-SRCS=${TOP_SOURCE}src/MCTS/CardDispatcher.cpp \
-     ${TOP_SOURCE}src/MCTS/TestStateBuilder.cpp \
-     ${TOP_SOURCE}src/GenerateTrainData.cpp
+SRCS=${TOP_SOURCE}agents/test/CardDispatcher.cpp \
+     ${TOP_SOURCE}agents/test/TestStateBuilder.cpp \
+     ${TOP_SOURCE}agents/train/src/GenerateTrainData.cpp
 OBJS=$(SRCS:.cpp=.o)
 
 CARDS_JSON="cards.json"

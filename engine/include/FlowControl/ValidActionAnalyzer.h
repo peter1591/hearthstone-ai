@@ -11,12 +11,13 @@ namespace FlowControl
 	class ValidActionAnalyzer
 	{
 	public:
-		ValidActionAnalyzer() : op_map_(), op_map_size_(0), attackers_(), playable_cards_() {}
+		ValidActionAnalyzer() : op_map_(), op_map_size_(0), attackers_(), attacker_indics_(), playable_cards_() {}
 
 		ValidActionAnalyzer(ValidActionAnalyzer const& rhs) :
 			op_map_(rhs.op_map_),
 			op_map_size_(rhs.op_map_size_),
 			attackers_(rhs.attackers_),
+      attacker_indics_(rhs.attacker_indics_),
 			playable_cards_(rhs.playable_cards_)
 		{}
 
@@ -24,6 +25,7 @@ namespace FlowControl
 			op_map_ = rhs.op_map_;
 			op_map_size_ = rhs.op_map_size_;
 			attackers_ = rhs.attackers_;
+      attacker_indics_ = rhs.attacker_indics_;
 			playable_cards_ = rhs.playable_cards_;
 			return *this;
 		}

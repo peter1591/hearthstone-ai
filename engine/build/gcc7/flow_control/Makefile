@@ -1,4 +1,4 @@
-CXX=g++-7
+CXX=g++-7.2
 CFLAGS=-std=c++17
 CFLAGS += -Wall -Wextra -Wpedantic \
 					-Wno-implicit-fallthrough \
@@ -9,25 +9,27 @@ CFLAGS_OWN_SRC += -Weffc++
 #CXX=clang-5.0
 #CFLAGS=-std=c++1z
 
-TOP_SOURCE=../../
+TOP_SOURCE=../../../../
 
 CFLAGS+=-O2
-CFLAGS+=-I$(TOP_SOURCE)include
+CFLAGS+=-I$(TOP_SOURCE)third_party/jsoncpp/include \
+				-I$(TOP_SOURCE)third_party/tiny-dnn \
+				-I$(TOP_SOURCE)engine/include
 
-THIRD_PARTY_SRCS=${TOP_SOURCE}contrib/lib_json/json_value.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_reader.cpp \
-								 ${TOP_SOURCE}contrib/lib_json/json_writer.cpp
+THIRD_PARTY_SRCS=${TOP_SOURCE}third_party/jsoncpp/src/json_value.cpp \
+								 ${TOP_SOURCE}third_party/jsoncpp/src/json_reader.cpp \
+								 ${TOP_SOURCE}third_party/jsoncpp/src/json_writer.cpp
 THIRD_PARTY_OBJS=$(THIRD_PARTY_SRCS:.cpp=.o)
 
-SRCS=${TOP_SOURCE}src/flow_control_test/CardDispatcher.cpp \
-		 ${TOP_SOURCE}src/flow_control_test/main.cpp \
-		 ${TOP_SOURCE}src/flow_control_test/test2.cpp \
-		 ${TOP_SOURCE}src/flow_control_test/test3.cpp \
-		 ${TOP_SOURCE}src/flow_control_test/test4.cpp
+SRCS=${TOP_SOURCE}engine/test/e2e_card_dispatcher.cpp \
+		 ${TOP_SOURCE}engine/test/e2e_main.cpp \
+		 ${TOP_SOURCE}engine/test/e2e_test1.cpp \
+		 ${TOP_SOURCE}engine/test/e2e_test2.cpp \
+		 ${TOP_SOURCE}engine/test/e2e_test3.cpp
 OBJS=$(SRCS:.cpp=.o)
 
 CARDS_JSON="cards.json"
-CARDS_JSON_SRC=${TOP_SOURCE}include/Cards/cards.json
+CARDS_JSON_SRC=${TOP_SOURCE}engine/include/Cards/cards.json
 
 EXE=flow_control_test
 
