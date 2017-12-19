@@ -33,7 +33,9 @@ public:
 		last_shown_ = std::chrono::steady_clock::now();
 	}
 
-	bool operator()(state::State const& game_state, uint64_t iteration) {
+	template<class StateGetter>
+	bool operator()(StateGetter && state_getter, uint64_t iteration) {
+		state::State game_state = state_getter(0); // any random number will do
 		if (first_time_) {
 			std::cout << "Turn: " << game_state.GetTurn() << std::endl;
 			first_time_ = false;
@@ -114,8 +116,9 @@ int main(int argc, char *argv[])
 	first.SetupIterationCallback(iterations);
 	second.SetupIterationCallback(iterations);
 
-	auto start_board_getter = [&]() -> state::State {
-		return TestStateBuilder().GetStateWithRandomStartCard(rand());
+	auto start_board_seed = rand();
+	auto start_board_getter = [&](int rnd) -> state::State {
+		return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, rnd);
 	};
 
 	judger.SetFirstAgent(&first);

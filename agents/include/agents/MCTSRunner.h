@@ -5,14 +5,12 @@
 
 #include <state/State.h>
 #include "MCTS/MOMCTS.h"
+#include "judge/Judger.h"
 
 namespace agents
 {
 	class MCTSRunner
 	{
-	private:
-		using StartingStateGetter = std::function<state::State(int)>;
-
 	public:
 		MCTSRunner(int tree_samples, std::mt19937 & rand) :
 			threads_(), rand_(rand),
@@ -28,7 +26,8 @@ namespace agents
 			WaitUntilStopped();
 		}
 
-		void Run(int thread_count, StartingStateGetter state_getter)
+		template <class StateGetter>
+		void Run(int thread_count, StateGetter && state_getter)
 		{
 			assert(threads_.empty());
 			stop_flag_ = false;

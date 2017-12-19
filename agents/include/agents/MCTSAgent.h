@@ -29,19 +29,15 @@ namespace agents
 			this->iteration_cb_.Initialize(std::forward<Args>(args)...);
 		}
 
-		void Think(state::State const& state, std::mt19937 & random) {
-			attacker_indics_ = FlowControl::ValidActionGetter(state).GetAttackerIndics();
-
+		template <class StateGetter>
+		void Think(state::PlayerIdentifier side, StateGetter && state_getter, std::mt19937 & random) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				return iteration_cb_(state, iterations);
+				return iteration_cb_(std::forward<StateGetter>(state_getter), iterations);
 			};
 
 			controller_.reset(new MCTSRunner(tree_samples_, random));
-			controller_->Run(threads_, [&](int seed) {
-				(void)seed;
-				return state;
-			});
+			controller_->Run(threads_, std::forward<StateGetter>(state_getter));
 
 			while (true) {
 				if (!continue_checker()) break;
@@ -49,7 +45,7 @@ namespace agents
 			}
 			controller_->WaitUntilStopped();
 
-			node_ = controller_->GetRootNode(state.GetCurrentPlayerId());
+			node_ = controller_->GetRootNode(side);
 			root_node_ = node_;
 		}
 
@@ -104,6 +100,5 @@ namespace agents
 		mcts::builder::TreeBuilder::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;
 		IterationCallback iteration_cb_;
-		std::array<state::CardRef, 8> attacker_indics_;
 	};
 }

@@ -19,9 +19,6 @@ namespace judge
 	template <class AgentType = IAgent, class RecorderType = JsonRecorder>
 	class Judger
 	{
-	public:
-		using StartingStateGetter = std::function<state::State()>;
-
 	private:
 		class RandomCallback : public state::IRandomGenerator {
 		public:
@@ -83,14 +80,15 @@ namespace judge
 		void SetFirstAgent(AgentType * first) { first_ = first; }
 		void SetSecondAgent(AgentType * second) { second_ = second; }
 
-		void Start(StartingStateGetter state_getter, int seed)
+		template <class StateGetter>
+		void Start(StateGetter && state_getter, int seed)
 		{
-			state::State current_state = state_getter();
 			assert(first_);
 			assert(second_);
 			
 			recorder_.Start();
 			std::mt19937 random(seed);
+			state::State current_state = state_getter(random());
 
 			FlowControl::Result result = FlowControl::kResultInvalid;
 			AgentType * next_agent = nullptr;
@@ -103,7 +101,11 @@ namespace judge
 					next_agent = second_;
 				}
 
-				next_agent->Think(current_state, random);
+				auto current_state_getter = [&](int rnd) -> state::State const& {
+					// TODO: should randomize hidden information from the board view
+					return current_state;
+				};
+				next_agent->Think(current_state.GetCurrentPlayerId(), current_state_getter, random);
 
 				action_callback_.Initialize(current_state, next_agent);
 				FlowControl::FlowContext flow_context(random_callback_, action_callback_);

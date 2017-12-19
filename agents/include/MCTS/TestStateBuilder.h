@@ -5,6 +5,6 @@
 class TestStateBuilder
 {
 public:
-	state::State GetStateWithRandomStartCard(int seed);
+	state::State TestStateBuilder::GetStateWithRandomStartCard(int start_card_seed, int state_seed);
 	state::State GetState(int seed);
 };

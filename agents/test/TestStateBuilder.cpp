@@ -148,25 +148,25 @@ void RandomlyMoveFromDeckToHand(
 	AddHandCard(card_id, state, player);
 }
 
-state::State TestStateBuilder::GetStateWithRandomStartCard(int seed)
+state::State TestStateBuilder::GetStateWithRandomStartCard(int start_card_seed, int state_seed)
 {
-	std::mt19937 rand(seed);
+	std::mt19937 start_card_rand(start_card_seed);
 	state::State state;
-	MyRandomGenerator my_random(rand());
+	MyRandomGenerator my_random(state_seed);
 
 	MakeHero(state, state::PlayerIdentifier::First());
 	auto deck1 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
-	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
-	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
-	RandomlyMoveFromDeckToHand(rand, deck1, state, state::PlayerIdentifier::First());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck1, state, state::PlayerIdentifier::First());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck1, state, state::PlayerIdentifier::First());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck1, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
 	MakeHero(state, state::PlayerIdentifier::Second());
 	auto deck2 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
-	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
-	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
-	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
-	RandomlyMoveFromDeckToHand(rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck2, state, state::PlayerIdentifier::Second());
+	RandomlyMoveFromDeckToHand(start_card_rand, deck2, state, state::PlayerIdentifier::Second());
 	AddHandCard(Cards::ID_GAME_005, state, state::PlayerIdentifier::Second());
 	PrepareDeck(deck2, my_random, state, state::PlayerIdentifier::Second());
 
