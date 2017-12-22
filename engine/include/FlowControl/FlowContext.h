@@ -4,8 +4,8 @@
 
 #include "state/IRandomGenerator.h"
 #include "state/Types.h"
-#include "FlowControl/Result.h"
-#include "FlowControl/IActionParameterGetter.h"
+#include "engine/Result.h"
+#include "engine/IActionParameterGetter.h"
 #include "FlowControl/detail/Resolver.h"
 
 namespace FlowControl {
@@ -13,7 +13,7 @@ namespace FlowControl {
 	{
 	public:
 		FlowContext() :
-			result_(FlowControl::kResultNotDetermined),
+			result_(engine::kResultNotDetermined),
 			action_parameters_(nullptr), random_(nullptr),
 			dead_entity_hints_(),
 			minion_put_location_(-1),
@@ -23,8 +23,8 @@ namespace FlowControl {
 			resolver_()
 		{}
 
-		FlowContext(state::IRandomGenerator & random, IActionParameterGetterWithoutAnalyzer & action_parameters) :
-			result_(FlowControl::kResultNotDetermined),
+		FlowContext(state::IRandomGenerator & random, engine::IActionParameterGetterWithoutAnalyzer & action_parameters) :
+			result_(engine::kResultNotDetermined),
 			action_parameters_(&action_parameters), random_(&random),
 			dead_entity_hints_(),
 			minion_put_location_(-1),
@@ -37,14 +37,14 @@ namespace FlowControl {
 		FlowContext(FlowContext const&) = default;
 		FlowContext & operator=(FlowContext const&) = default;
 
-		void SetCallback(state::IRandomGenerator & random, IActionParameterGetterWithoutAnalyzer & action_parameters) {
+		void SetCallback(state::IRandomGenerator & random, engine::IActionParameterGetterWithoutAnalyzer & action_parameters) {
 			random_ = &random;
 			action_parameters_ = &action_parameters;
 		}
 
 		void Reset()
 		{
-			result_ = FlowControl::kResultNotDetermined;
+			result_ = engine::kResultNotDetermined;
 			ClearDeadEntryHint();
 			minion_put_location_ = -1;
 			specified_target_.Invalidate();
@@ -111,8 +111,8 @@ namespace FlowControl {
 		state::IRandomGenerator & GetRandom() { return *random_; }
 
 	public:
-		void SetResult(Result v) { result_ = v; }
-		Result GetResult() const { return result_; }
+		void SetResult(engine::Result v) { result_ = v; }
+		engine::Result GetResult() const { return result_; }
 
 	public:
 		void SetDestroyedWeapon(state::CardRef ref)
@@ -128,8 +128,8 @@ namespace FlowControl {
 		auto & GetResolver() { return resolver_; }
 
 	private:
-		Result result_;
-		IActionParameterGetterWithoutAnalyzer * action_parameters_;
+		engine::Result result_;
+		engine::IActionParameterGetterWithoutAnalyzer * action_parameters_;
 		state::IRandomGenerator * random_;
 		std::multimap<int, state::CardRef> dead_entity_hints_;
 		int minion_put_location_;

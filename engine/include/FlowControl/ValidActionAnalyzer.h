@@ -3,7 +3,7 @@
 #include <array>
 #include <vector>
 
-#include "FlowControl/MainOp.h"
+#include "engine/MainOp.h"
 
 namespace FlowControl
 {
@@ -46,7 +46,7 @@ namespace FlowControl
 				if (!functor(i, GetMainOpType(op_map_[i]))) return;
 			}
 		}
-		FlowControl::MainOpType GetMainOpType(size_t choice) const {
+		engine::MainOpType GetMainOpType(size_t choice) const {
 			return op_map_[choice];
 		}
 		template <class Functor>
@@ -64,7 +64,7 @@ namespace FlowControl
 		}
 
 	private:
-		std::array<FlowControl::MainOpType, FlowControl::MainOpType::kMainOpMax> op_map_;
+		std::array<engine::MainOpType, engine::MainOpType::kMainOpMax> op_map_;
 		size_t op_map_size_;
 		std::vector<int> attackers_;
 		std::array<state::CardRef, 8> attacker_indics_;

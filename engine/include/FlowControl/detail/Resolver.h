@@ -2,7 +2,7 @@
 
 #include <unordered_set>
 #include <map>
-#include "FlowControl/Result.h"
+#include "engine/Result.h"
 
 namespace state {
 	class State;
@@ -40,7 +40,7 @@ namespace FlowControl
 
 			bool CreateDeaths(state::State & state, FlowContext & flow_context);
 			bool RemoveDeaths(state::State & state, FlowContext & flow_context);
-			bool SetResult(FlowContext & flow_context, Result result);
+			bool SetResult(FlowContext & flow_context, engine::Result result);
 
 		private:
 			void UpdateAura(state::State & state, FlowContext & flow_context);

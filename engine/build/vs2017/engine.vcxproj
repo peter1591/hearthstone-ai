@@ -214,6 +214,13 @@
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
     <ClInclude Include="..\..\include\Cards\PreIndexedCards.h" />
     <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h" />
+    <ClInclude Include="..\..\include\engine\ActionChoices.h" />
+    <ClInclude Include="..\..\include\engine\ActionType.h" />
+    <ClInclude Include="..\..\include\engine\Engine.h" />
+    <ClInclude Include="..\..\include\engine\IActionParameterGetter-impl.h" />
+    <ClInclude Include="..\..\include\engine\IActionParameterGetter.h" />
+    <ClInclude Include="..\..\include\engine\MainOp.h" />
+    <ClInclude Include="..\..\include\engine\Result.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\aura\EffectHandler_BoardFlag.h" />
@@ -240,9 +247,7 @@
     <ClInclude Include="..\..\include\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\FlowController.h" />
-    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\FlowControl\JsonSerializer.h" />
-    <ClInclude Include="..\..\include\FlowControl\MainOp.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulate.h" />
     <ClInclude Include="..\..\include\FlowControl\Manipulators\BoardManipulator-impl.h" />
@@ -274,9 +279,6 @@
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h" />
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler.h" />
     <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h" />
-    <ClInclude Include="..\..\include\FlowControl\Result.h" />
-    <ClInclude Include="..\..\include\FlowControl\utils\ActionApplier.h" />
-    <ClInclude Include="..\..\include\FlowControl\utils\MainOp.h" />
     <ClInclude Include="..\..\include\FlowControl\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />

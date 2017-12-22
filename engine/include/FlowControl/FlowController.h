@@ -35,19 +35,19 @@ namespace FlowControl
 		}
 
 	public: // main flow
-		Result PerformOperation();
+		engine::Result PerformOperation();
 
 	private:
-		Result PlayCard(int hand_idx);
-		Result Attack(state::CardRef attacker);
-		Result HeroPower();
-		Result EndTurn();
+		engine::Result PlayCard(int hand_idx);
+		engine::Result Attack(state::CardRef attacker);
+		engine::Result HeroPower();
+		engine::Result EndTurn();
 
 	private:
 		state::CardRef GetDefender(state::CardRef attacker);
 
 	private:
-		Result Resolve();
+		engine::Result Resolve();
 
 		void PlayCardInternal(state::CardRef card_ref);
 		void CostCrystal(int amount);
@@ -73,9 +73,9 @@ namespace FlowControl
 		bool HeroPowerPhase();
 		int GetMaxHeroPowerUseThisTurn();
 
-		bool SetResult(Result result);
+		bool SetResult(engine::Result result);
 		bool SetInvalid() {
-			return SetResult(Result::kResultInvalid);
+			return SetResult(engine::Result::kResultInvalid);
 		}
 
 	private:

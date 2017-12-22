@@ -71,9 +71,9 @@ namespace FlowControl
 
 			flow_context.ClearDeadEntryHint();
 
-			if (first_dead && second_dead) return SetResult(flow_context, kResultDraw);
-			if (first_dead) return SetResult(flow_context, kResultSecondPlayerWin);
-			if (second_dead) return SetResult(flow_context, kResultFirstPlayerWin);
+			if (first_dead && second_dead) return SetResult(flow_context, engine::kResultDraw);
+			if (first_dead) return SetResult(flow_context, engine::kResultSecondPlayerWin);
+			if (second_dead) return SetResult(flow_context, engine::kResultFirstPlayerWin);
 
 			return true;
 		}
@@ -118,9 +118,9 @@ namespace FlowControl
 			return true;
 		}
 
-		inline bool Resolver::SetResult(FlowContext & flow_context, Result result)
+		inline bool Resolver::SetResult(FlowContext & flow_context, engine::Result result)
 		{
-			assert(result != kResultNotDetermined);
+			assert(result != engine::kResultNotDetermined);
 			flow_context.SetResult(result);
 			return false;
 		}

@@ -5,29 +5,29 @@
 #include "FlowControl/ValidActionGetter.h"
 #include "FlowControl/ValidActionAnalyzer-impl.h"
 #include "FlowControl/Manipulate-impl.h"
-#include "FlowControl/IActionParameterGetter-impl.h"
+#include "engine/IActionParameterGetter-impl.h"
 
 namespace FlowControl
 {
-	inline Result FlowController::PerformOperation()
+	inline engine::Result FlowController::PerformOperation()
 	{
 		auto main_op = flow_context_.GetMainOp();
 
 		switch (main_op) {
-		case kMainOpPlayCard:
+		case engine::kMainOpPlayCard:
 			return PlayCard(flow_context_.ChooseHandCard());
-		case kMainOpAttack:
+		case engine::kMainOpAttack:
 			return Attack(flow_context_.GetAttacker());
-		case kMainOpHeroPower:
+		case engine::kMainOpHeroPower:
 			return HeroPower();
-		case kMainOpEndTurn:
+		case engine::kMainOpEndTurn:
 			return EndTurn();
 		default:
-			return Result::kResultInvalid;
+			return engine::Result::kResultInvalid;
 		}
 	}
 
-	inline Result FlowController::PlayCard(int hand_idx)
+	inline engine::Result FlowController::PlayCard(int hand_idx)
 	{
 		assert(ValidActionGetter(state_).IsPlayable(hand_idx));
 
@@ -41,7 +41,7 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
-	inline Result FlowController::EndTurn()
+	inline engine::Result FlowController::EndTurn()
 	{
 		flow_context_.Reset();
 		EndTurnInternal();
@@ -50,7 +50,7 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
-	inline Result FlowController::Attack(state::CardRef attacker)
+	inline engine::Result FlowController::Attack(state::CardRef attacker)
 	{
 		assert(attacker.IsValid());
 
@@ -61,7 +61,7 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
-	inline Result FlowController::HeroPower()
+	inline engine::Result FlowController::HeroPower()
 	{
 		flow_context_.Reset();
 		HeroPowerInternal();
@@ -70,7 +70,7 @@ namespace FlowControl
 		return flow_context_.GetResult();
 	}
 
-	inline Result FlowController::Resolve()
+	inline engine::Result FlowController::Resolve()
 	{
 		flow_context_.GetResolver().Resolve(state_, flow_context_);
 		return flow_context_.GetResult();
@@ -327,7 +327,7 @@ namespace FlowControl
 		// do resolve here since some enchantments might be added in 'PrepareAttackTarget' event
 		if (!flow_context_.GetResolver().Resolve(state_, flow_context_)) return false;
 
-		if (!defender.IsValid()) return kResultNotDetermined;
+		if (!defender.IsValid()) return engine::kResultNotDetermined;
 		if (state_.GetCardsManager().Get(defender).GetHP() <= 0) return true;
 		if (state_.GetCardsManager().Get(defender).GetZone() != state::kCardZonePlay) return true;
 
@@ -441,7 +441,7 @@ namespace FlowControl
 	inline void FlowController::EndTurnInternal()
 	{
 		if (state_.GetTurn() >= 89) {
-			flow_context_.SetResult(kResultDraw);
+			flow_context_.SetResult(engine::kResultDraw);
 			return;
 		}
 		state_.IncreaseTurn();
@@ -507,9 +507,9 @@ namespace FlowControl
 		Manipulate(state_, flow_context_).CurrentPlayer().DrawCard();
 	}
 
-	inline bool FlowController::SetResult(Result result)
+	inline bool FlowController::SetResult(engine::Result result)
 	{
-		assert(result != kResultNotDetermined);
+		assert(result != engine::kResultNotDetermined);
 		flow_context_.SetResult(result);
 		return false;
 	}

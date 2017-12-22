@@ -4,9 +4,9 @@
 #include "state/Types.h"
 #include "state/targetor/Targets.h"
 #include "Cards/id-map.h"
-#include "FlowControl/MainOp.h"
-#include "FlowControl/ActionType.h"
-#include "FlowControl/ActionChoices.h"
+#include "engine/MainOp.h"
+#include "engine/ActionType.h"
+#include "engine/ActionChoices.h"
 #include "FlowControl/ValidActionAnalyzer.h"
 
 namespace state {
@@ -14,6 +14,10 @@ namespace state {
 }
 
 namespace FlowControl {
+	class CurrentPlayerStateView;
+}
+
+namespace engine {
 	class IActionParameterGetterWithoutAnalyzer
 	{
 	public:
@@ -42,14 +46,13 @@ namespace FlowControl {
 		virtual Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) = 0;
 	};
 
-	class CurrentPlayerStateView;
 	class IActionParameterGetter : public IActionParameterGetterWithoutAnalyzer
 	{
 	public:
     IActionParameterGetter() : analyzer_() {}
 
 		void Initialize(state::State const& game_state);
-		void Initialize(CurrentPlayerStateView const& board);
+		void Initialize(FlowControl::CurrentPlayerStateView const& board);
 
 		auto const& GetAnalyzer() { return analyzer_; }
 

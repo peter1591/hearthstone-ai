@@ -94,11 +94,11 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{1ef37f11-5646-4fd9-ab53-8a11047b7d90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl\utils">
-      <UniqueIdentifier>{504f6f2c-ab3d-4df0-bbf1-5d744cb38b1a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Utils\CloneableContainers">
       <UniqueIdentifier>{8108174a-3742-4ef3-9ec8-447fc01770b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{0b834858-e96b-4d18-bc95-7984a6a70570}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -281,9 +281,6 @@
     <ClInclude Include="..\..\include\FlowControl\FlowController-impl.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\IActionParameterGetter.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\JsonSerializer.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
@@ -294,9 +291,6 @@
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\PlayerStateView.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\Result.h">
       <Filter>Header Files\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\ValidActionGetter.h">
@@ -452,12 +446,6 @@
     <ClInclude Include="..\..\include\FlowControl\onplay\Handler-impl.h">
       <Filter>Header Files\FlowControl\onplay</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\utils\ActionApplier.h">
-      <Filter>Header Files\FlowControl\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\utils\MainOp.h">
-      <Filter>Header Files\FlowControl\utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\state\Configs.h">
       <Filter>Header Files\state</Filter>
     </ClInclude>
@@ -596,11 +584,29 @@
     <ClInclude Include="..\..\include\Utils\CloneableContainers\Vector.h">
       <Filter>Header Files\Utils\CloneableContainers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\FlowControl\MainOp.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\FlowControl\ValidActionAnalyzer.h">
       <Filter>Header Files\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Engine.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\IActionParameterGetter.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\IActionParameterGetter-impl.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\MainOp.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\ActionType.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\ActionChoices.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\Result.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
