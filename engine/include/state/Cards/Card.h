@@ -6,25 +6,27 @@
 #include "Cards/id-map.h"
 #include "state/Cards/CardData.h"
 
-namespace FlowControl
-{
-	namespace Manipulators
+namespace engine {
+	namespace FlowControl
 	{
-		namespace detail
+		namespace Manipulators
 		{
-			class DamageSetter;
-		}
+			namespace detail
+			{
+				class DamageSetter;
+			}
 
-		namespace Helpers
-		{
-			class EnchantmentHelper;
-			class AuraHelper;
-			class FlagAuraHelper;
-			class DeathrattlesHelper;
-			class TransformHelper;
-		}
+			namespace Helpers
+			{
+				class EnchantmentHelper;
+				class AuraHelper;
+				class FlagAuraHelper;
+				class DeathrattlesHelper;
+				class TransformHelper;
+			}
 
-		class CardManipulator;
+			class CardManipulator;
+		}
 	}
 }
 
@@ -72,8 +74,8 @@ namespace state
 
 			class DamageSetter
 			{
-				friend class FlowControl::Manipulators::detail::DamageSetter;
-				friend class FlowControl::Manipulators::CardManipulator;
+				friend class engine::FlowControl::Manipulators::detail::DamageSetter;
+				friend class engine::FlowControl::Manipulators::CardManipulator;
 			public:
 				DamageSetter(CardData & data) : data_(data) {}
 			private:

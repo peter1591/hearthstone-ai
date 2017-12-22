@@ -2,7 +2,7 @@
 
 #include "state/State.h"
 #include "state/targetor/TargetsGenerator.h"
-#include "FlowControl/Manipulate.h"
+#include "engine/FlowControl/Manipulate.h"
 #include "Cards/id-map.h"
 #include "Cards/Contexts.h"
 
@@ -47,7 +47,7 @@ namespace Cards
 
 	public:
 		template <typename Context>
-		static FlowControl::Manipulate Manipulate(Context&& context)
+		static engine::FlowControl::Manipulate Manipulate(Context&& context)
 		{
 			return context.manipulate_;
 		}

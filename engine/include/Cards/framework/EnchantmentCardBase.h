@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FlowControl/enchantment/TieredEnchantments.h"
+#include "engine/FlowControl/enchantment/TieredEnchantments.h"
 #include "Cards/CardAttributes.h"
 
 namespace Cards
@@ -23,7 +23,7 @@ namespace Cards
 	public:
 		EnchantmentCardBase() : apply_functor(nullptr), valid_this_turn(false), force_update_every_time(false) {}
 
-		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
+		engine::FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
 		bool valid_this_turn;
 		bool force_update_every_time;
 	};
@@ -53,7 +53,7 @@ namespace Cards
 			// Since, the Enchant concept has the 'tier_if_aura' field, we use it to detect misuse
 			static_assert(detail::HasTierIfAura<T>::value == false);
 
-			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+			apply_functor = [](engine::FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
 				Enchant1::Apply(*context.stats_);
 				Enchant2::Apply(*context.stats_);
 				Enchant3::Apply(*context.stats_);
@@ -78,22 +78,22 @@ namespace Cards
 
 		EventHookedEnchantmentHandler(
 			state::CardRef card_ref,
-			FlowControl::enchantment::Enchantments::IdentifierType enchant_id,
+			engine::FlowControl::enchantment::Enchantments::IdentifierType enchant_id,
 			ContextType const& context,
-			FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
+			engine::FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
 			: card_ref(card_ref), enchant_id(enchant_id), context(context), aux_data(aux_data)
 		{
 		}
 
 		void RemoveEnchantment() const {
 			context.manipulate_.Card(card_ref).Enchant().Remove(
-				FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, enchant_id });
+				engine::FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, enchant_id });
 		}
 
 		state::CardRef const card_ref;
-		FlowControl::enchantment::Enchantments::IdentifierType enchant_id;
+		engine::FlowControl::enchantment::Enchantments::IdentifierType enchant_id;
 		ContextType const& context;
-		FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data;
+		engine::FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data;
 	};
 
 	template <
@@ -116,7 +116,7 @@ namespace Cards
 			// Since, the Enchant concept has the 'tier_if_aura' field, we use it to detect misuse
 			static_assert(detail::HasTierIfAura<T>::value == false);
 
-			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+			apply_functor = [](engine::FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
 				Enchant1::Apply(*context.stats_);
 				Enchant2::Apply(*context.stats_);
 				Enchant3::Apply(*context.stats_);
@@ -124,14 +124,14 @@ namespace Cards
 				Enchant5::Apply(*context.stats_);
 			};
 
-			register_functor = [](FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
-					FlowControl::enchantment::Enchantments::IdentifierType id,
-					FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
+			register_functor = [](engine::FlowControl::Manipulate const& manipulate, state::CardRef card_ref,
+					engine::FlowControl::enchantment::Enchantments::IdentifierType id,
+					engine::FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData & aux_data)
 			{
 				using EventType = typename T::EventType;
 				manipulate.AddEvent<EventType>([card_ref, id, aux_data](typename EventType::Context const& context) mutable {
 					if (!context.manipulate_.Card(card_ref).Enchant().Exists(
-						FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, id })) return false;
+						engine::FlowControl::enchantment::TieredEnchantments::IdentifierType{ T::tier, id })) return false;
 
 					T::HandleEvent(EventHookedEnchantmentHandler<T>(card_ref, id, context, aux_data));
 					return true;
@@ -139,7 +139,7 @@ namespace Cards
 			};
 		}
 
-		FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
-		FlowControl::enchantment::Enchantments::EventHookedEnchantment::RegisterEventFunctor register_functor;
+		engine::FlowControl::enchantment::Enchantments::ApplyFunctor apply_functor;
+		engine::FlowControl::enchantment::Enchantments::EventHookedEnchantment::RegisterEventFunctor register_functor;
 	};
 }

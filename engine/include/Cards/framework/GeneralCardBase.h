@@ -36,14 +36,14 @@ namespace Cards
 			this->enchanted_states.max_hp = data.max_hp;
 		}
 
-		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+		template <typename EnchantmentType, typename EmitPolicy, engine::FlowControl::aura::UpdatePolicy UpdatePolicy>
 		auto Aura() { return AuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
-		template <typename EnchantmentType, typename EmitPolicy, FlowControl::aura::UpdatePolicy UpdatePolicy>
+		template <typename EnchantmentType, typename EmitPolicy, engine::FlowControl::aura::UpdatePolicy UpdatePolicy>
 		auto SingleEnchantmentAura() { return SingleEnchantmentAuraHelper<T, EnchantmentType, EmitPolicy, UpdatePolicy>(*this); }
 		template <typename EmitPolicy>
-		auto BoardFlagAura() { return BoardFlagAuraHelper<T, EmitPolicy, FlowControl::aura::kUpdateOnlyFirstTime>(*this); }
+		auto BoardFlagAura() { return BoardFlagAuraHelper<T, EmitPolicy, engine::FlowControl::aura::kUpdateOnlyFirstTime>(*this); }
 		template <typename EmitPolicy>
-		auto OwnerPlayerFlagAura() { return  OwnerPlayerFlagAuraHelper<T, EmitPolicy, FlowControl::aura::kUpdateOwnerChanges>(*this); }
+		auto OwnerPlayerFlagAura() { return  OwnerPlayerFlagAuraHelper<T, EmitPolicy, engine::FlowControl::aura::kUpdateOwnerChanges>(*this); }
 
 		template <typename Types>
 		auto Enrage() { return EnrageHelper<T, Types>(*this); }
@@ -76,7 +76,7 @@ namespace Cards
 			int pos = card.GetZonePosition() + 1;
 			return SummonInternal(context.manipulate_, card_id, card.GetPlayerIdentifier(), pos);
 		}
-		static state::CardRef SummonToRight(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Cards::CardId card_id)
+		static state::CardRef SummonToRight(engine::FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = manipulate.GetCard(card_ref);
 			int pos = card.GetZonePosition() + 1;
@@ -90,7 +90,7 @@ namespace Cards
 			int pos = card.GetZonePosition();
 			return SummonInternal(context.manipulate_, card_id, card.GetPlayerIdentifier(), pos);
 		}
-		static state::CardRef SummonToLeft(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Cards::CardId card_id)
+		static state::CardRef SummonToLeft(engine::FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Cards::CardId card_id)
 		{
 			state::Cards::Card const& card = manipulate.GetCard(card_ref);
 			int pos = card.GetZonePosition();
@@ -104,7 +104,7 @@ namespace Cards
 			return SummonInternal(context.manipulate_, card_id, player, pos);
 		}
 
-		static state::CardRef SummonToRightmost(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
+		static state::CardRef SummonToRightmost(engine::FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player, Cards::CardId card_id)
 		{
 			int pos = (int)manipulate.Board().Player(player).minions_.Size();
 			return SummonInternal(manipulate, card_id, player, pos);
@@ -117,7 +117,7 @@ namespace Cards
 			return SummonInternalByCopy(context.manipulate_, card, player, pos);
 		}
 
-		static std::pair<int, int> GetRandomTwoNumbers(FlowControl::Manipulate const& manipulate, int size) {
+		static std::pair<int, int> GetRandomTwoNumbers(engine::FlowControl::Manipulate const& manipulate, int size) {
 			assert(size >= 2);
 			int v1 = manipulate.GetRandom().Get(size);
 			int v2 = manipulate.GetRandom().Get(size - 1);
@@ -125,7 +125,7 @@ namespace Cards
 			return std::make_pair(v1, v2);
 		}
 
-		static std::array<int, 3> GetRandomThreeNumbers(FlowControl::Manipulate const& manipulate, int size) {
+		static std::array<int, 3> GetRandomThreeNumbers(engine::FlowControl::Manipulate const& manipulate, int size) {
 			assert(size >= 3);
 			
 			// pick number in order: v1 -> v2 -> v3
@@ -144,14 +144,14 @@ namespace Cards
 			return result;
 		}
 
-		static std::array<int, 3> GetAtMostRandomThreeNumbers(FlowControl::Manipulate const& manipulate, int size) {
+		static std::array<int, 3> GetAtMostRandomThreeNumbers(engine::FlowControl::Manipulate const& manipulate, int size) {
 			if (size == 0) return std::array<int, 3>{};
 			if (size == 1) return std::array<int, 3>{0};
 			if (size == 2) return std::array<int, 3>{0, 1};
 			return GetRandomThreeNumbers(manipulate, size);
 		}
 
-		static void DiscardOneRandomHandCard(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
+		static void DiscardOneRandomHandCard(engine::FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
 			auto & hand = manipulate.Board().Player(player).hand_;
 			size_t hand_cards = hand.Size();
 			if (hand_cards < 1) return;
@@ -161,7 +161,7 @@ namespace Cards
 		}
 
 		template <typename Functor>
-		static void ApplyToAdjacent(FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Functor&& functor) {
+		static void ApplyToAdjacent(engine::FlowControl::Manipulate const& manipulate, state::CardRef card_ref, Functor&& functor) {
 			state::PlayerIdentifier player = manipulate.GetCard(card_ref).GetPlayerIdentifier();
 			assert(manipulate.GetCard(card_ref).GetZone() == state::kCardZonePlay);
 
@@ -175,14 +175,14 @@ namespace Cards
 		}
 
 	public:
-		static Cards::CardId GetRandomCardFromDatabase(FlowControl::Manipulate const& manipulate, PreIndexedCards::IndexedType type) {
+		static Cards::CardId GetRandomCardFromDatabase(engine::FlowControl::Manipulate const& manipulate, PreIndexedCards::IndexedType type) {
 			std::vector<int> const& container = PreIndexedCards::GetInstance().GetIndexedCards(type);
 			if (container.empty()) return kInvalidCardId;
 			size_t idx = manipulate.GetRandom().Get(container.size());
 			return (Cards::CardId)container[idx];
 		}
 
-		static Cards::CardId DiscoverFromDatabase(FlowControl::Manipulate const& manipulate, PreIndexedCards::IndexedType type) {
+		static Cards::CardId DiscoverFromDatabase(engine::FlowControl::Manipulate const& manipulate, PreIndexedCards::IndexedType type) {
 			std::vector<int> const& container = PreIndexedCards::GetInstance().GetIndexedCards(type);
 			assert(!container.empty());
 			
@@ -199,7 +199,7 @@ namespace Cards
 		}
 
 	private:
-		static state::CardRef SummonInternal(FlowControl::Manipulate const& manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
+		static state::CardRef SummonInternal(engine::FlowControl::Manipulate const& manipulate, Cards::CardId card_id, state::PlayerIdentifier player, int pos)
 		{
 			assert(IsValidCardId(card_id));
 
@@ -208,7 +208,7 @@ namespace Cards
 			return manipulate.Board().SummonMinionById(card_id, player, pos);
 		}
 
-		static void SummonInternalByCopy(FlowControl::Manipulate const& manipulate, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)
+		static void SummonInternalByCopy(engine::FlowControl::Manipulate const& manipulate, state::Cards::Card const& card, state::PlayerIdentifier player, int pos)
 		{
 			if (manipulate.Board().Player(player).minions_.Full()) return;
 

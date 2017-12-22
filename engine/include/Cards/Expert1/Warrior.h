@@ -11,7 +11,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_607e>();
 			});
@@ -23,7 +23,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef hero_ref = context.manipulate_.Board().Player(context.player_).GetHeroRef();
 				int damage = context.manipulate_.GetCard(hero_ref).GetArmor();
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, damage);
@@ -34,7 +34,7 @@ namespace Cards
 	struct Card_EX1_409e : Enchantment<Card_EX1_409e, Attack<1>, MaxHP<1>> {};
 	struct Card_EX1_409 : SpellCardBase<Card_EX1_409> {
 		Card_EX1_409() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef weapon_ref = context.manipulate_.Board().Player(context.player_).GetWeaponRef();
 				if (!weapon_ref.IsValid()) {
 					context.manipulate_.Player(context.player_).EquipWeapon(Cards::ID_EX1_409t);
@@ -47,7 +47,7 @@ namespace Cards
 
 	struct Card_EX1_392 : SpellCardBase<Card_EX1_392> {
 		Card_EX1_392() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int draw_count = 0;
 				
 				auto op = [&](state::CardRef card_ref) {
@@ -67,7 +67,7 @@ namespace Cards
 
 	struct Card_NEW1_036 : SpellCardBase<Card_NEW1_036> {
 		Card_NEW1_036() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Player(context.player_).DrawCard();
 
 				state::PlayerIdentifier player = context.player_;
@@ -93,7 +93,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion().Damaged();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_CS2_104e>();
 			});
 		}
@@ -104,7 +104,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 2);
 				if (context.manipulate_.GetCard(context.GetTarget()).GetHP() <= 0) return;
 				context.manipulate_.Player(context.player_).DrawCard();
@@ -162,7 +162,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef hero_ref = context.manipulate_.Board().Player(context.player_).GetHeroRef();
 
 				int damage = 4;
@@ -186,7 +186,7 @@ namespace Cards
 					context.state_.GetBoard().GetSecond().minions_.Size();
 				return minions >= 2;
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				size_t first_minions = context.manipulate_.Board().FirstPlayer().minions_.Size();
 				size_t second_minions = context.manipulate_.Board().SecondPlayer().minions_.Size();
 
@@ -243,7 +243,7 @@ namespace Cards
 
 	struct Card_EX1_414e : public Enchantment<Card_EX1_414e, Attack<6>> {};
 	struct Card_EX1_414 : public MinionCardBase<Card_EX1_414, Charge> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetEnrageTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_414() {

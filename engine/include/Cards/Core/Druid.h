@@ -8,7 +8,7 @@ namespace Cards
 	struct Card_CS2_017o : public EnchantmentForThisTurn<Card_CS2_017o, Attack<1>> {};
 	struct Card_CS2_017 : public HeroPowerCardBase<Card_CS2_017> {
 		Card_CS2_017() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Hero(context.player_).Enchant().Add<Card_CS2_017o>();
 				context.manipulate_.Hero(context.player_).GainArmor(1);
 			});
@@ -17,7 +17,7 @@ namespace Cards
 
 	struct Card_EX1_169 : public SpellCardBase<Card_EX1_169> {
 		Card_EX1_169() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int old_current = context.manipulate_.Board().Player(context.player_).GetResource().GetCurrent();
 				context.manipulate_.Board().Player(context.player_).GetResource().SetCurrent(old_current + 2);
 			});
@@ -29,7 +29,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 1);
@@ -40,7 +40,7 @@ namespace Cards
 	struct Card_CS2_005o : public EnchantmentForThisTurn<Card_CS2_005o, Attack<2>> {};
 	struct Card_CS2_005 : public SpellCardBase<Card_CS2_005> {
 		Card_CS2_005() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef hero_ref = context.manipulate_.Board().Player(context.player_).GetHeroRef();
 				context.manipulate_.Hero(hero_ref).Enchant().Add<Card_CS2_005o>();
 				context.manipulate_.Hero(hero_ref).GainArmor(2);
@@ -54,7 +54,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardMinion(target).Taunt(true);
@@ -65,14 +65,14 @@ namespace Cards
 
 	struct Card_CS2_013t : public SpellCardBase<Card_CS2_013t>{
 		Card_CS2_013t() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
 	};
 	struct Card_CS2_013 : public SpellCardBase<Card_CS2_013> {
 		Card_CS2_013() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.Board().Player(context.player_).GetResource().GetTotal() == 10) {
 					context.manipulate_.Player(context.player_).AddHandCard(Cards::ID_CS2_013t);
 					return;
@@ -87,7 +87,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardCharacter(target).Heal(context.card_ref_, 8);
@@ -98,7 +98,7 @@ namespace Cards
 	struct Card_CS2_011o : public EnchantmentForThisTurn<Card_CS2_011o, Attack<2>> {};
 	struct Card_CS2_011 : public SpellCardBase<Card_CS2_011> {
 		Card_CS2_011() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Hero(context.player_).Enchant().Add<Card_CS2_011o>();
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_011o>();
@@ -113,7 +113,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Enemy();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				state::PlayerIdentifier player = context.manipulate_.GetCard(target).GetPlayerIdentifier();
 				if (target.IsValid()) context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 4);
@@ -134,7 +134,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 5);

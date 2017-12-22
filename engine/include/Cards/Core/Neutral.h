@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_GAME_005 : public SpellCardBase<Card_GAME_005> {
 		Card_GAME_005() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int old_current = context.manipulate_.Board().Player(context.player_).GetResource().GetCurrent();
 				context.manipulate_.Board().Player(context.player_).GetResource().SetCurrent(old_current + 1);
 			});
@@ -30,7 +30,7 @@ namespace Cards
 
 	struct Card_EX1_508o : public Enchantment<Card_EX1_508o, Attack<1>> {};
 	struct Card_EX1_508 : public MinionCardBase<Card_EX1_508> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Murlocs() // friendly murlocs only
@@ -38,7 +38,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_EX1_508() {
-			Aura<Card_EX1_508o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_EX1_508o, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -94,7 +94,7 @@ namespace Cards
 
 	struct Card_CS2_122e : public Enchantment<Card_CS2_122e, Attack<1>> {};
 	struct Card_CS2_122 : public MinionCardBase<Card_CS2_122> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
@@ -102,7 +102,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_CS2_122() {
-			Aura<Card_CS2_122e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_CS2_122e, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -222,7 +222,7 @@ namespace Cards
 
 	struct Card_CS2_222o : public Enchantment<Card_CS2_222o, Attack<1>, MaxHP<1>> {};
 	struct Card_CS2_222 : public MinionCardBase<Card_CS2_222> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
@@ -230,7 +230,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_CS2_222() {
-			Aura<Card_CS2_222o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_CS2_222o, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 }

@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "state/Types.h"
-#include "FlowControl/aura/Handler.h"
+#include "engine/FlowControl/aura/Handler.h"
 
 namespace state {
 	namespace aura {
@@ -11,7 +11,7 @@ namespace state {
 		public:
 			Manager() : auras_() {}
 
-			void Add(FlowControl::aura::Handler handler) {
+			void Add(engine::FlowControl::aura::Handler handler) {
 				auras_.push_back(std::move(handler));
 			}
 
@@ -28,7 +28,7 @@ namespace state {
 			}
 
 		private:
-			std::vector<FlowControl::aura::Handler> auras_;
+			std::vector<engine::FlowControl::aura::Handler> auras_;
 		};
 	}
 }

@@ -33,7 +33,7 @@ namespace Cards
 			Cards::ID_CS2_051,
 			Cards::ID_CS2_052,
 			Cards::ID_NEW1_009 };
-		static std::array<bool, 4> GetTotemExists(FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
+		static std::array<bool, 4> GetTotemExists(engine::FlowControl::Manipulate const& manipulate, state::PlayerIdentifier player) {
 			return GetTotemExists(manipulate.Board().Player(player), [&](state::CardRef ref) {
 				return manipulate.GetCard(ref);
 			});
@@ -69,7 +69,7 @@ namespace Cards
 				}
 				return false;
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				std::array<bool, 4> totems_exists = GetTotemExists(context.manipulate_, context.player_);
 				std::vector<Cards::CardId> totems_candidates;
 				for (int i = 0; i < 4; ++i) {
@@ -88,10 +88,10 @@ namespace Cards
 	struct Card_CS2_045e : public EnchantmentForThisTurn<Card_CS2_045e, Attack<3>> {};
 	struct Card_CS2_045 : public SpellCardBase<Card_CS2_045> {
 		Card_CS2_045() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
+			onplay_handler.SetSpecifyTargetCallback([](engine::FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Enchant().Add<Card_CS2_045e>();
 			});
 		}
@@ -100,10 +100,10 @@ namespace Cards
 	struct Card_CS2_039e : public Enchantment<Card_CS2_039e, Windfury> {};
 	struct Card_CS2_039 : public SpellCardBase<Card_CS2_039> {
 		Card_CS2_039() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
+			onplay_handler.SetSpecifyTargetCallback([](engine::FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Enchant().Add<Card_CS2_039e>();
 			});
 		}
@@ -119,10 +119,10 @@ namespace Cards
 	struct Card_hexfrog : public MinionCardBase<Card_hexfrog, Taunt> {};
 	struct Card_EX1_246 : public SpellCardBase<Card_EX1_246> {
 		Card_EX1_246() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
+			onplay_handler.SetSpecifyTargetCallback([](engine::FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
 					.OnBoardMinion(context.GetTarget())
 					.Transform(CardId::ID_hexfrog);
@@ -147,7 +147,7 @@ namespace Cards
 	struct Card_CS2_046e : public EnchantmentForThisTurn<Card_CS2_046e, Attack<3>> {};
 	struct Card_CS2_046 : public SpellCardBase<Card_CS2_046> {
 		Card_CS2_046() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_CS2_046e>();
 					return true;

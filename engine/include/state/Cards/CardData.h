@@ -7,9 +7,9 @@
 #include "Utils/FuncPtrArray.h"
 #include "state/Cards/EnchantableStates.h"
 #include "state/Cards/Callbacks.h"
-#include "FlowControl/onplay/Handler.h"
-#include "FlowControl/deathrattle/Handler.h"
-#include "FlowControl/enchantment/Handler.h"
+#include "engine/FlowControl/onplay/Handler.h"
+#include "engine/FlowControl/deathrattle/Handler.h"
+#include "engine/FlowControl/enchantment/Handler.h"
 
 namespace state
 {
@@ -103,9 +103,9 @@ namespace state
 			Utils::FuncPtrArray<AddedToHandZoneCallback*, 1> added_to_hand_zone;
 
 		public:
-			FlowControl::enchantment::Handler enchantment_handler;
-			FlowControl::onplay::Handler onplay_handler;
-			FlowControl::deathrattle::Handler deathrattle_handler;
+			engine::FlowControl::enchantment::Handler enchantment_handler;
+			engine::FlowControl::onplay::Handler onplay_handler;
+			engine::FlowControl::deathrattle::Handler deathrattle_handler;
 		};
 	}
 }

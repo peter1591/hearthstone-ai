@@ -3,8 +3,8 @@
 #include "Cards/CardDispatcher.h"
 
 #include "state/State.h"
-#include "FlowControl/FlowController.h"
-#include "FlowControl/FlowController-impl.h"
+#include "engine/FlowControl/FlowController.h"
+#include "engine/FlowControl/FlowController-impl.h"
 #include "Cards/Database.h"
 #include "Cards/Cards.h"
 

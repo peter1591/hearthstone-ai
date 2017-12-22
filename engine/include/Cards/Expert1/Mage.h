@@ -160,7 +160,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				ApplyToAdjacent(context.manipulate_, context.GetTarget(), [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Freeze(true);
 				});
@@ -190,7 +190,7 @@ namespace Cards
 
 	struct Card_CS2_028 : public SpellCardBase<Card_CS2_028> {
 		Card_CS2_028() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach([&](state::CardRef minion) {
 					context.manipulate_.OnBoardMinion(minion).Damage(context.card_ref_, 2);
 					context.manipulate_.OnBoardMinion(minion).Freeze(true);
@@ -223,7 +223,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 10);

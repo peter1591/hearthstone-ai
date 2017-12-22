@@ -10,7 +10,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
 				context.manipulate_.Player(context.player_.Opposite()).DrawCard();
 				context.manipulate_.Player(context.player_.Opposite()).DrawCard();
@@ -23,7 +23,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				auto & hero = context.manipulate_.Board().Player(context.player_);
 				state::CardRef hero_ref = hero.GetHeroRef();
 				context.manipulate_.OnBoardMinion(context.GetTarget())
@@ -39,7 +39,7 @@ namespace Cards
 				Cards::ID_EX1_160a,
 				Cards::ID_EX1_160b
 			};
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_160t);
@@ -63,7 +63,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 3);
@@ -87,7 +87,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_155ae>();
@@ -103,7 +103,7 @@ namespace Cards
 	struct Card_EX1_570e : public EnchantmentForThisTurn<Card_EX1_570e, Attack<4>> {};
 	struct Card_EX1_570 : public SpellCardBase<Card_EX1_570> {
 		Card_EX1_570() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Hero(context.player_).Enchant().Add<Card_EX1_570e>();
 				context.manipulate_.Hero(context.player_).GainArmor(4);
 			});
@@ -112,9 +112,9 @@ namespace Cards
 
 	struct Card_EX1_158 : public SpellCardBase<Card_EX1_158> {
 		Card_EX1_158() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
-					context.manipulate_.OnBoardMinion(card_ref).AddDeathrattle([](FlowControl::deathrattle::context::Deathrattle const& context) {
+					context.manipulate_.OnBoardMinion(card_ref).AddDeathrattle([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 						SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_158t);
 					});
 					return true;
@@ -147,7 +147,7 @@ namespace Cards
 
 	struct Card_EX1_571 : public SpellCardBase<Card_EX1_571> {
 		Card_EX1_571() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_158t);
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_158t);
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_158t);
@@ -161,7 +161,7 @@ namespace Cards
 				Cards::ID_EX1_164a,
 				Cards::ID_EX1_164b
 			};
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				Cards::CardId choice = context.manipulate_.UserChooseOne(choices);
 				if (choice == choices[0]) {
 					context.manipulate_.Board().Player(context.player_).GetResource().GainCrystal(2);
@@ -196,7 +196,7 @@ namespace Cards
 					context.SetOptionalSpellTargets(context.player_).Minion();
 				}
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.GetSavedUserChoice() == choices[0]) {
 					context.manipulate_.Board().Player(context.player_).minions_.ForEach([&](state::CardRef card_ref) {
 						context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
@@ -255,7 +255,7 @@ namespace Cards
 					context.SetOptionalBattlecryTargets(context.player_);
 				}
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				if (context.manipulate_.GetSavedUserChoice() == choices[0]) {
 					context.manipulate_.Player(context.player_).DrawCard();
 				}

@@ -1,6 +1,8 @@
 #pragma once
 
-namespace FlowControl { class Manipulate; }
+namespace engine {
+	namespace FlowControl { class Manipulate; }
+}
 
 namespace state {
 	namespace detail {

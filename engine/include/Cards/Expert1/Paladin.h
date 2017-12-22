@@ -14,10 +14,10 @@ namespace Cards
 	};
 	struct Card_EX1_363 : public SpellCardBase<Card_EX1_363> {
 		Card_EX1_363() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
+			onplay_handler.SetSpecifyTargetCallback([](engine::FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().AddEventHooked(Card_EX1_363e());
 			});
 		}
@@ -88,7 +88,7 @@ namespace Cards
 	struct Card_EX1_619e : public Enchantment<Card_EX1_619e, MaxHP<1>> {};
 	struct Card_EX1_619 : public SpellCardBase<Card_EX1_619> {
 		Card_EX1_619() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Enchant().Add<Card_EX1_619e>();
 					return true;
@@ -129,7 +129,7 @@ namespace Cards
 
 	struct Card_EX1_349 : public SpellCardBase<Card_EX1_349> {
 		Card_EX1_349() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int owner_hand = (int)context.manipulate_.Board().Player(context.player_).hand_.Size();
 				int opponent_hand = (int)context.manipulate_.Board().Player(context.player_.Opposite()).hand_.Size();
 				if (opponent_hand >= owner_hand) return;
@@ -160,7 +160,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				int attack = context.manipulate_.GetCard(target).GetAttack();
@@ -174,7 +174,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				assert(target.IsValid());
 				Cards::CardId drawn_card_id = kInvalidCardId;
@@ -188,7 +188,7 @@ namespace Cards
 
 	struct Card_EX1_384 : SpellCardBase<Card_EX1_384> {
 		Card_EX1_384() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int damage = 0;
 				context.manipulate_
 					.Board()
@@ -211,7 +211,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Heal(context.card_ref_, 8);
 				context.manipulate_.Player(context.player_).DrawCard();
 				context.manipulate_.Player(context.player_).DrawCard();
@@ -222,7 +222,7 @@ namespace Cards
 
 	struct Card_EX1_383 : public MinionCardBase<Card_EX1_383, Taunt, Shield> {
 		Card_EX1_383() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Player(context.player_).EquipWeapon(Cards::ID_EX1_383t);
 			});
 		}

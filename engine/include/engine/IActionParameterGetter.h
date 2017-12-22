@@ -7,17 +7,17 @@
 #include "engine/MainOp.h"
 #include "engine/ActionType.h"
 #include "engine/ActionChoices.h"
-#include "FlowControl/ValidActionAnalyzer.h"
+#include "engine/FlowControl/ValidActionAnalyzer.h"
 
 namespace state {
 	class State;
 }
 
-namespace FlowControl {
-	class CurrentPlayerStateView;
-}
-
 namespace engine {
+	namespace FlowControl {
+		class CurrentPlayerStateView;
+	}
+
 	class IActionParameterGetterWithoutAnalyzer
 	{
 	public:

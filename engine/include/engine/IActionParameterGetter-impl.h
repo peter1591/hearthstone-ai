@@ -1,8 +1,8 @@
 #pragma once
 
 #include "engine/IActionParameterGetter.h"
-#include "FlowControl/ValidActionGetter.h"
-#include "FlowControl/PlayerStateView.h"
+#include "engine/FlowControl/ValidActionGetter.h"
+#include "engine/FlowControl/PlayerStateView.h"
 
 namespace engine
 {

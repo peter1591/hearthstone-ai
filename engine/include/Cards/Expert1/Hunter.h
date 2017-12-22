@@ -28,7 +28,7 @@ namespace Cards
 
 	struct Card_EX1_544 : public SpellCardBase<Card_EX1_544> {
 		Card_EX1_544() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Board().Player(context.player_.Opposite()).secrets_.ForEach([&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardSecret(card_ref).Remove();
 				});
@@ -150,7 +150,7 @@ namespace Cards
 				if (context.state_.GetBoard().Get(context.player_.Opposite()).minions_.Size() == 0) return false;
 				return true;
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.manipulate_.GetRandomTarget(
 					TargetsGenerator(context.player_).Enemy().Minion().GetInfo()
 				);
@@ -167,7 +167,7 @@ namespace Cards
 				if (context.state_.GetBoard().Get(context.player_.Opposite()).minions_.Size() == 0) return false;
 				return true;
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				size_t count = context.manipulate_.Board().Player(context.player_.Opposite()).minions_.Size();
 				for (size_t i = 0; i < count; ++i) {
 					SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_538t);
@@ -181,7 +181,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target_ref = context.GetTarget();
 				auto const& target_card = context.manipulate_.GetCard(target_ref);
 				if (target_card.GetZone() != state::kCardZonePlay) return;
@@ -205,7 +205,7 @@ namespace Cards
 
 	struct Card_EX1_534 : MinionCardBase<Card_EX1_534> {
 		Card_EX1_534() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_534t);
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_534t);
 			});

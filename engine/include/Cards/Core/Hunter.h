@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_DS1h_292 : public HeroPowerCardBase<Card_DS1h_292> {
 		Card_DS1h_292() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Hero(context.player_.Opposite()).Damage(context.card_ref_, 2);
 			});
 		}
@@ -19,7 +19,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardCharacter(target).Damage(context.card_ref_, 2);
@@ -33,7 +33,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 				context.manipulate_.OnBoardMinion(target).Enchant().Add<Card_CS2_084e>();
@@ -43,7 +43,7 @@ namespace Cards
 
 	struct Card_DS1_184 : public SpellCardBase<Card_DS1_184> {
 		Card_DS1_184() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				auto & deck = context.manipulate_.Board().Player(context.player_).deck_;
 				std::vector<Cards::CardId> cards;
 				for (int i = 0; i < 3; ++i) {
@@ -60,7 +60,7 @@ namespace Cards
 
 	struct Card_DS1_175o : public Enchantment<Card_DS1_175o, Attack<1>> {};
 	struct Card_DS1_175 : public MinionCardBase<Card_DS1_175> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Beasts() // friendly beasts
@@ -68,7 +68,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_DS1_175() {
-			Aura<Card_DS1_175o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_DS1_175o, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -76,7 +76,7 @@ namespace Cards
 
 	struct Card_NEW1_033o : public Enchantment<Card_NEW1_033o, Attack<1>> {};
 	struct Card_NEW1_033 : public MinionCardBase<Card_NEW1_033> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion() // friendly minions
@@ -84,7 +84,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_NEW1_033() {
-			Aura<Card_NEW1_033o, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_NEW1_033o, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -97,7 +97,7 @@ namespace Cards
 				return true;
 			});
 
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				std::array<Cards::CardId, 3> cards{
 					Cards::ID_NEW1_032,
 					Cards::ID_NEW1_033,
@@ -116,7 +116,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				state::CardRef target = context.GetTarget();
 				if (!target.IsValid()) return;
 
@@ -142,7 +142,7 @@ namespace Cards
 				return true;
 			});
 
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				auto & minions = context.manipulate_.Board().Player(context.player_.Opposite()).minions_;
 
 				auto op = [&](state::CardRef card_ref) {
@@ -193,14 +193,14 @@ namespace Cards
 
 	struct Card_DS1_178e : public Enchantment<Card_DS1_178e, Charge> {};
 	struct Card_DS1_178 : public MinionCardBase<Card_DS1_178> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Beasts() // friendly beasts
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_DS1_178() {
-			Aura<Card_DS1_178e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_DS1_178e, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 }

@@ -43,7 +43,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				bool friendly_demon = false;
 				if (context.manipulate_.GetCard(context.GetTarget()).GetPlayerIdentifier() == context.player_) {
 					if (context.manipulate_.GetCard(context.GetTarget()).GetRace() == state::kCardRaceDemon) {
@@ -62,7 +62,7 @@ namespace Cards
 
 	struct Card_EX1_317 : SpellCardBase<Card_EX1_317> {
 		Card_EX1_317() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				std::vector<Cards::CardId> possibles;
 				context.manipulate_.Board().Player(context.player_).deck_.ForEach([&](Cards::CardId in_card_id) {
 					if (Cards::CardDispatcher::CreateInstance(in_card_id).card_race == state::kCardRaceDemon) {
@@ -123,7 +123,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Ally().Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int attack = context.manipulate_.GetCard(context.GetTarget()).GetAttack();
 				context.manipulate_.Board().Player(context.player_.Opposite()).minions_.ForEach(
 					[&](state::CardRef card_ref) {
@@ -144,7 +144,7 @@ namespace Cards
 	struct Card_EX1_315o : Enchantment<Card_EX1_315o> {
 		static constexpr EnchantmentTiers aura_tier = EnchantmentTiers::kEnchantmentTier3; // always apply at the last stage
 		Card_EX1_315o() {
-			apply_functor = [](FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
+			apply_functor = [](engine::FlowControl::enchantment::Enchantments::ApplyFunctorContext const& context) {
 				context.stats_->cost -= 2;
 				if (context.stats_->cost <= 0) context.stats_->cost = 1;
 			};
@@ -170,7 +170,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
 				if (context.manipulate_.GetCard(context.GetTarget()).GetZone() == state::kCardZonePlay) {
 					if (context.manipulate_.GetCard(context.GetTarget()).GetHP() > 0) {
@@ -196,7 +196,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Destroy();
 				context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 3);
 			});
@@ -205,7 +205,7 @@ namespace Cards
 
 	struct Card_EX1_312 : SpellCardBase<Card_EX1_312> {
 		Card_EX1_312() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				auto functor = [&](state::CardRef ref) {
 					context.manipulate_.OnBoardMinion(ref).Destroy();
 					return true;
@@ -222,7 +222,7 @@ namespace Cards
 				if (context.state_.GetBoard().Get(context.player_).minions_.Full()) return false;
 				return true;
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				SummonToRightmost(context.manipulate_, context.player_, Cards::ID_EX1_tk34);
 			});
 		}

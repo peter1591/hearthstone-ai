@@ -2,8 +2,8 @@
 #include <assert.h>
 
 #include "state/Configs.h"
-#include "FlowControl/FlowController.h"
-#include "FlowControl/FlowController-impl.h"
+#include "engine/FlowControl/FlowController.h"
+#include "engine/FlowControl/FlowController-impl.h"
 
 #include "Cards/PreIndexedCards.h"
 #include "Cards/Database.h"

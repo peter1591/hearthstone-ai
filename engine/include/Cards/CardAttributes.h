@@ -4,7 +4,7 @@
 
 namespace Cards {
 
-	using FlowControl::enchantment::EnchantmentTiers;
+	using engine::FlowControl::enchantment::EnchantmentTiers;
 
 	struct NoAttribute {
 		static void Apply(state::Cards::CardData & card_data) {}

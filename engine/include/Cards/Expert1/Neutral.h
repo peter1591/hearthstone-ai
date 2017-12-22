@@ -18,7 +18,7 @@ namespace Cards
 
 	struct Card_EX1_009_Enchant : public Enchantment<Card_EX1_009_Enchant, Attack<5>> {};
 	struct Card_EX1_009 : public MinionCardBase<Card_EX1_009, Taunt> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetEnrageTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_009() {
@@ -54,7 +54,7 @@ namespace Cards
 
 	struct Card_EX1_029 : public MinionCardBase<Card_EX1_029> {
 		Card_EX1_029() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Hero(context.player_.Opposite())
 					.Damage(context.card_ref_, 2);
 			});
@@ -105,13 +105,13 @@ namespace Cards
 
 	struct Card_CS2_146o : public Enchantment<Card_CS2_146o, Charge> {};
 	struct Card_CS2_146 : public MinionCardBase<Card_CS2_146> {
-		static auto GetAuraTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetAuraTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			state::PlayerIdentifier owner_player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			if (!context.manipulate_.Board().Player(owner_player).GetWeaponRef().IsValid()) return;
 			context.new_target = context.card_ref_;
 		}
 		Card_CS2_146() {
-			SingleEnchantmentAura<Card_CS2_146o, EmitWhenAlive, FlowControl::aura::kUpdateAlways>();
+			SingleEnchantmentAura<Card_CS2_146o, EmitWhenAlive, engine::FlowControl::aura::kUpdateAlways>();
 		}
 	};
 
@@ -138,7 +138,7 @@ namespace Cards
 
 	struct Card_EX1_393_Enchant : public Enchantment<Card_EX1_393_Enchant, Attack<3>> {};
 	struct Card_EX1_393 : public MinionCardBase<Card_EX1_393> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetEnrageTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_393() {
@@ -149,7 +149,7 @@ namespace Cards
 	struct Card_EX1_045 : public MinionCardBase<Card_EX1_045, CantAttack> {};
 	struct Card_EX1_012 : public MinionCardBase<Card_EX1_012, SpellDamage<1>> {
 		Card_EX1_012() {
-			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
@@ -233,7 +233,7 @@ namespace Cards
 
 	struct Card_EX1_096 : public MinionCardBase<Card_EX1_096> {
 		Card_EX1_096() {
-			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				context.manipulate_.Player(context.player_).DrawCard();
 			});
 		}
@@ -539,7 +539,7 @@ namespace Cards
 
 	struct Card_EX1_556 : public MinionCardBase<Card_EX1_556> {
 		Card_EX1_556() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_skele21);
 			});
 		}
@@ -584,7 +584,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().Add<Card_EX1_014te>();
 			});
 		}
@@ -610,7 +610,7 @@ namespace Cards
 
 	struct Card_EX1_507e : public Enchantment<Card_EX1_507e, Attack<2>, MaxHP<1>> {};
 	struct Card_EX1_507 : public MinionCardBase<Card_EX1_507> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Murlocs() // friendly murlocs
@@ -618,7 +618,7 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_EX1_507() {
-			Aura<Card_EX1_507e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_EX1_507e, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
@@ -638,7 +638,7 @@ namespace Cards
 
 	struct Card_EX1_412e : public Enchantment<Card_EX1_412e, Windfury> {};
 	struct Card_EX1_412 : public MinionCardBase<Card_EX1_412> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetEnrageTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_412() {
@@ -650,7 +650,7 @@ namespace Cards
 
 	struct Card_NEW1_027e : public Enchantment<Card_NEW1_027e, Attack<1>, MaxHP<1>> {};
 	struct Card_NEW1_027 : public MinionCardBase<Card_NEW1_027> {
-		static auto GetAuraTargets(FlowControl::aura::contexts::AuraGetTargets const& context) {
+		static auto GetAuraTargets(engine::FlowControl::aura::contexts::AuraGetTargets const& context) {
 			state::PlayerIdentifier player = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			TargetsGenerator(player)
 				.Ally().Minion().Pirates() // friendly murlocs
@@ -658,13 +658,13 @@ namespace Cards
 				.GetInfo().Fill(context.manipulate_.GetState(), context.new_targets);
 		}
 		Card_NEW1_027() {
-			Aura<Card_NEW1_027e, EmitWhenAlive, FlowControl::aura::kUpdateWhenMinionChanges>();
+			Aura<Card_NEW1_027e, EmitWhenAlive, engine::FlowControl::aura::kUpdateWhenMinionChanges>();
 		}
 	};
 
 	struct Card_EX1_390_Enchant : public Enchantment<Card_EX1_390_Enchant, Attack<3>> {};
 	struct Card_EX1_390 : public MinionCardBase<Card_EX1_390, Taunt> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetEnrageTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			context.new_target = context.card_ref_;
 		}
 		Card_EX1_390() {
@@ -798,7 +798,7 @@ namespace Cards
 
 	struct Card_EX1_097 : public MinionCardBase<Card_EX1_097, Taunt> {
 		Card_EX1_097() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardMinion(card_ref).Damage(context.card_ref_, 2);
 					return true;
@@ -873,7 +873,7 @@ namespace Cards
 
 	struct Card_CS2_221e : public Enchantment<Card_CS2_221e, Attack<2>> {};
 	struct Card_CS2_221 : public MinionCardBase<Card_CS2_221> {
-		static auto GetEnrageTarget(FlowControl::aura::contexts::AuraGetTarget const& context) {
+		static auto GetEnrageTarget(engine::FlowControl::aura::contexts::AuraGetTarget const& context) {
 			state::PlayerIdentifier owner = context.manipulate_.GetCard(context.card_ref_).GetPlayerIdentifier();
 			state::CardRef weapon_ref = context.manipulate_.Board().Player(owner).GetWeaponRef();
 			context.new_target = weapon_ref;
@@ -911,7 +911,7 @@ namespace Cards
 
 	struct Card_EX1_110 : public MinionCardBase<Card_EX1_110> {
 		Card_EX1_110() {
-			deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonAt(context, context.player_, context.zone_pos_, Cards::ID_EX1_110t);
 			});
 		}
@@ -974,7 +974,7 @@ namespace Cards
 
 	struct Card_EX1_577 : public MinionCardBase<Card_EX1_577> {
 		Card_EX1_577() {
-			this->deathrattle_handler.Add([](FlowControl::deathrattle::context::Deathrattle const& context) {
+			this->deathrattle_handler.Add([](engine::FlowControl::deathrattle::context::Deathrattle const& context) {
 				SummonToRightmost(context.manipulate_, context.player_.Opposite(), Cards::ID_EX1_finkle);
 			});
 		}
@@ -1055,7 +1055,7 @@ namespace Cards
 	struct Card_DREAM_01 : public MinionCardBase<Card_DREAM_01, ImmuneToSpellAndHeroPower> {};
 	struct Card_DREAM_02 : public SpellCardBase<Card_DREAM_02> {
 		Card_DREAM_02() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				auto op = [&](state::CardRef card_ref) {
 					if (context.manipulate_.GetCard(card_ref).GetCardId() == Cards::ID_EX1_572) return true;
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 5);
@@ -1073,7 +1073,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).MoveTo<state::kCardZoneHand>();
 			});
 		}
@@ -1090,8 +1090,8 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
+				engine::FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;
 				aux_data.player = context.player_;
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().AddEventHooked(
 					Card_DREAM_05e(), aux_data);

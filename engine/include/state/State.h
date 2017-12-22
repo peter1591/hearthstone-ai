@@ -11,7 +11,9 @@
 // implementation details
 #include "state/detail/PlayerDataStructureMaintainer-impl.h"
 
-namespace FlowControl { class Manipulate; }
+namespace engine {
+	namespace FlowControl { class Manipulate; }
+}
 
 namespace state
 {

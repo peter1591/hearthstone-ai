@@ -1,8 +1,8 @@
 #include <assert.h>
 #include <iostream>
 
-#include "FlowControl/FlowController.h"
-#include "FlowControl/FlowController-impl.h"
+#include "engine/FlowControl/FlowController.h"
+#include "engine/FlowControl/FlowController-impl.h"
 
 class Test4_ActionParameterGetter : public engine::IActionParameterGetterWithoutAnalyzer
 {
@@ -88,7 +88,7 @@ public:
 	int next_rand;
 };
 
-static void PushBackDeckCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static void PushBackDeckCard(Cards::CardId id, engine::FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
@@ -114,7 +114,7 @@ static state::Cards::Card CreateHandCard(Cards::CardId id, state::State & state,
 	return state::Cards::Card(raw_card);
 }
 
-static state::CardRef AddHandCard(Cards::CardId id, FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
+static state::CardRef AddHandCard(Cards::CardId id, engine::FlowControl::FlowContext & flow_context, state::State & state, state::PlayerIdentifier player)
 {
 	int hand_count = (int)state.GetBoard().Get(player).hand_.Size();
 
@@ -139,12 +139,12 @@ static state::CardRef AddHandCard(Cards::CardId id, FlowControl::FlowContext & f
 	return ref;
 }
 
-static void MakeHand(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
+static void MakeHand(state::State & state, engine::FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	AddHandCard(Cards::ID_CS2_141, flow_context, state, player);
 }
 
-static void MakeHero(state::State & state, FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
+static void MakeHero(state::State & state, engine::FlowControl::FlowContext & flow_context, state::PlayerIdentifier player)
 {
 	state::Cards::CardData raw_card;
 	raw_card.card_id = (Cards::CardId)8;
@@ -220,7 +220,7 @@ void test4()
 	Test4_ActionParameterGetter parameter_getter;
 	Test4_RandomGenerator random;
 	state::State state;
-	FlowControl::FlowContext flow_context(random, parameter_getter);
+	engine::FlowControl::FlowContext flow_context(random, parameter_getter);
 
 	MakeHero(state, flow_context, state::PlayerIdentifier::First());
 	MakeHand(state, flow_context, state::PlayerIdentifier::First());
@@ -245,7 +245,7 @@ void test4()
 	state.SetTurn(1);
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -281,7 +281,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -333,7 +333,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -385,7 +385,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -455,7 +455,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -539,7 +539,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -609,9 +609,9 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034_H1); // mage hero power, test hero skin
 
@@ -647,9 +647,9 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -684,17 +684,17 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
 		AddHandCard(Cards::ID_EX1_360, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
-		if (FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
+		if (engine::FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -732,7 +732,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -786,7 +786,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -804,7 +804,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -836,7 +836,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest hero power
 
@@ -853,7 +853,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -872,7 +872,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -905,7 +905,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -936,7 +936,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -953,7 +953,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 
@@ -972,7 +972,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1003,7 +1003,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -1020,7 +1020,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 
@@ -1037,7 +1037,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -1054,7 +1054,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 
@@ -1088,7 +1088,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 		parameter_getter.next_specified_target_count = 4;
@@ -1105,7 +1105,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS1h_001); // priest
 		parameter_getter.next_specified_target_count = 4;
@@ -1123,7 +1123,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1145,7 +1145,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1211,7 +1211,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1360,7 +1360,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1382,13 +1382,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1440,13 +1440,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1539,7 +1539,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1646,7 +1646,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1770,13 +1770,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -1913,7 +1913,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2024,13 +2024,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2169,7 +2169,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2189,7 +2189,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -2208,7 +2208,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2239,7 +2239,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::Second())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 		parameter_getter.next_specified_target_count = 2;
@@ -2257,7 +2257,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2279,13 +2279,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2348,13 +2348,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2419,13 +2419,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		state.GetBoard().GetSecond().GetResource().Refill();
@@ -2490,13 +2490,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_203, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2516,7 +2516,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_019, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2536,7 +2536,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_004, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2578,7 +2578,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_004, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2636,7 +2636,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_045, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2669,13 +2669,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_045, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2738,13 +2738,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_018, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2764,7 +2764,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_091, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -2797,7 +2797,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_059, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2862,7 +2862,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -2905,7 +2905,7 @@ void test4()
 		// This is because its maximum Health is increased from 4 to 5 by the Silence effect,
 		// so this also causes the current Health to go up from 3 to 4.
 
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_182, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -2939,7 +2939,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -2975,7 +2975,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_162, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3043,7 +3043,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_021, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3076,7 +3076,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3094,7 +3094,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::First())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 
@@ -3113,7 +3113,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_019, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3207,7 +3207,7 @@ void test4()
 		assert(state.GetBoard().Get(state::PlayerIdentifier::First()).hand_.Size() == 1);
 		assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).hand_.Size() == 1);
 
-		FlowControl::Manipulate(state, flow_context)
+		engine::FlowControl::Manipulate(state, flow_context)
 			.Player(state::PlayerIdentifier::Second())
 			.ReplaceHeroPower(Cards::ID_CS2_034); // mage hero power
 		parameter_getter.next_specified_target_count = 8;
@@ -3240,7 +3240,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_019, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3351,7 +3351,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_019, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3462,7 +3462,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_100, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3547,7 +3547,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_082, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3587,7 +3587,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_055, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3634,7 +3634,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_616, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3754,7 +3754,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_557, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3799,7 +3799,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_557, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3844,7 +3844,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_076, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -3954,7 +3954,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_049, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4035,7 +4035,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_006, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4078,7 +4078,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_006, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4209,7 +4209,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_597, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4350,7 +4350,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		AddHandCard(Cards::ID_EX1_085, flow_context, state, state::PlayerIdentifier::First());
@@ -4552,7 +4552,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		AddHandCard(Cards::ID_EX1_044, flow_context, state, state::PlayerIdentifier::First());
@@ -4624,7 +4624,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		state.GetBoard().GetFirst().GetResource().Refill();
 		AddHandCard(Cards::ID_NEW1_022, flow_context, state, state::PlayerIdentifier::First());
@@ -4645,7 +4645,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_106, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4681,7 +4681,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_112, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4717,7 +4717,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_043, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4737,7 +4737,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_043, flow_context, state, state::PlayerIdentifier::First());
 		AddHandCard(Cards::ID_EX1_043, flow_context, state, state::PlayerIdentifier::First());
@@ -4761,7 +4761,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_283, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4781,7 +4781,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_283, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4801,7 +4801,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_067, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4835,7 +4835,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_067, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4872,13 +4872,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_067, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -4942,7 +4942,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_067, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -5006,13 +5006,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(1)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_067, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -5103,7 +5103,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_561, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -5123,7 +5123,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_572, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -5222,7 +5222,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_030, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -5275,7 +5275,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		parameter_getter.next_minion_put_location = 0;
 		parameter_getter.next_specified_target_count = 0;
@@ -5291,13 +5291,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().GetHeroRef()
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_005, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -5342,7 +5342,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.choose_one_called = false;
@@ -5362,7 +5362,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
 
@@ -5386,7 +5386,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
@@ -5411,7 +5411,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
@@ -5436,7 +5436,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
@@ -5462,7 +5462,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
 		PushBackDeckCard(Cards::ID_DS1_184, flow_context, state, state::PlayerIdentifier::First());
@@ -5490,7 +5490,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_033, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -5567,13 +5567,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetSecond().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_033, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -5661,13 +5661,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().minions_.Get(0)
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_033, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -5780,7 +5780,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_CS2_097, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -5849,7 +5849,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_DS1_188, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -5929,14 +5929,14 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_334, flow_context, state, state::PlayerIdentifier::First());
-		if (FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
+		if (engine::FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -5968,11 +5968,11 @@ void test4()
 		if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
 
 		AddHandCard(Cards::ID_EX1_334, flow_context, state, state::PlayerIdentifier::Second());
-		if (FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
+		if (engine::FlowControl::ValidActionGetter(state).IsPlayable(1)) assert(false);
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6032,7 +6032,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6092,7 +6092,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6166,7 +6166,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6240,7 +6240,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6316,7 +6316,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_NEW1_023, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6391,7 +6391,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_591, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6450,7 +6450,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_335, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.SetMainOp(engine::kMainOpPlayCard);
@@ -6505,7 +6505,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_131, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6552,7 +6552,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_137, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6592,7 +6592,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_137, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6646,7 +6646,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_137, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6714,7 +6714,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_323, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6771,7 +6771,7 @@ void test4()
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_411, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6816,13 +6816,13 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetFirst().GetHeroRef()
 		));
 	}();
 
 	[state, flow_context, &parameter_getter, &random]() mutable {
-		FlowControl::FlowController controller(state, flow_context);
+		engine::FlowControl::FlowController controller(state, flow_context);
 
 		AddHandCard(Cards::ID_EX1_414, flow_context, state, state::PlayerIdentifier::First());
 		parameter_getter.next_minion_put_location = 0;
@@ -6933,7 +6933,7 @@ void test4()
 
 		parameter_getter.next_defender_count = -1;
 		parameter_getter.next_defender_idx = 0;
-		assert(!FlowControl::ValidActionGetter(state).IsAttackable(
+		assert(!engine::FlowControl::ValidActionGetter(state).IsAttackable(
 			state.GetBoard().GetSecond().GetHeroRef()
 		));
 	}();

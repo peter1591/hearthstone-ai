@@ -7,7 +7,7 @@ namespace Cards
 {
 	struct Card_CS2_056 : public HeroPowerCardBase<Card_CS2_056> {
 		Card_CS2_056() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.Hero(context.player_).Damage(context.card_ref_, 2);
 				context.manipulate_.Player(context.player_).DrawCard();
 			});
@@ -16,10 +16,10 @@ namespace Cards
 
 	struct Card_NEW1_003 : public SpellCardBase<Card_NEW1_003> {
 		Card_NEW1_003() {
-			onplay_handler.SetSpecifyTargetCallback([](FlowControl::onplay::context::GetSpecifiedTarget & context) {
+			onplay_handler.SetSpecifyTargetCallback([](engine::FlowControl::onplay::context::GetSpecifiedTarget & context) {
 				context.SetRequiredSpellTargets(context.player_).Demons();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_
 					.OnBoardCharacter(context.GetTarget())
 					.Destroy();
@@ -39,8 +39,8 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
-				FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
+				engine::FlowControl::enchantment::Enchantments::EventHookedEnchantment::AuxData aux_data;
 				aux_data.player = context.player_;
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Enchant().AddEventHooked(
 					Card_CS2_063e(), aux_data);
@@ -53,7 +53,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardMinion(context.GetTarget()).Damage(context.card_ref_, 1);
 
 				if (context.manipulate_.OnBoardMinion(context.GetTarget()).Alive()) return;
@@ -67,7 +67,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4);
 				DiscardOneRandomHandCard(context.manipulate_, context.player_);
 			});
@@ -87,7 +87,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_);
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 2);
 				context.manipulate_.Hero(context.player_).Heal(context.card_ref_, 2);
 			});
@@ -99,7 +99,7 @@ namespace Cards
 			onplay_handler.SetSpecifyTargetCallback([](Contexts::SpecifiedTargetGetter & context) {
 				context.SetRequiredSpellTargets(context.player_).Minion();
 			});
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				context.manipulate_.OnBoardCharacter(context.GetTarget()).Damage(context.card_ref_, 4);
 			});
 		}
@@ -107,7 +107,7 @@ namespace Cards
 
 	struct Card_CS2_062 : public SpellCardBase<Card_CS2_062> {
 		Card_CS2_062() {
-			onplay_handler.SetOnPlayCallback([](FlowControl::onplay::context::OnPlay const& context) {
+			onplay_handler.SetOnPlayCallback([](engine::FlowControl::onplay::context::OnPlay const& context) {
 				int spell_damage = context.manipulate_.Board().GetSpellDamage(context.player_);
 				auto op = [&](state::CardRef card_ref) {
 					context.manipulate_.OnBoardCharacter(card_ref).Damage(context.card_ref_, 3 + spell_damage);
