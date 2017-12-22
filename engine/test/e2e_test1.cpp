@@ -261,7 +261,7 @@ void test2()
 	CheckMinions(state, state::PlayerIdentifier::Second(), {});
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(0);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 5, 8 });
@@ -282,7 +282,7 @@ void test2()
 	random.called = false;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(0);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(!random.called);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -304,7 +304,7 @@ void test2()
 	}
 
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 0, 8 });
@@ -326,7 +326,7 @@ void test2()
 	}
 
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetCurrentPlayerId() == state::PlayerIdentifier::First());
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 30, 0, 0);
@@ -339,7 +339,7 @@ void test2()
 	parameter_getter.next_defender_idx = 0;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
 	parameter_getter.SetAttacker(state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(1));
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 9 });
@@ -373,7 +373,7 @@ void test2()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetCurrentPlayerId() == state::PlayerIdentifier::Second());
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
@@ -389,7 +389,7 @@ void test2()
 	parameter_getter.next_specified_target_idx = 2;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(9);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 9 });
@@ -412,7 +412,7 @@ void test2()
 
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(9);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 9 });
@@ -436,7 +436,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 1;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(9);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 9, 9 });
@@ -447,9 +447,9 @@ void test2()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).graveyard_.GetTotalMinions() == 0);
 
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -463,7 +463,7 @@ void test2()
 	parameter_getter.next_defender_idx = 2;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().minions_.Get(2));
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -476,7 +476,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 1;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(7);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -489,7 +489,7 @@ void test2()
 	parameter_getter.next_defender_idx = 1;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().minions_.Get(1));
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 21, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -512,7 +512,7 @@ void test2()
 	parameter_getter.next_specified_target_idx = 3;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(9);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 23, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -532,7 +532,7 @@ void test2()
 
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(9);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 23, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -546,7 +546,7 @@ void test2()
 	parameter_getter.next_defender_idx = 2;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().GetHeroRef());
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 11, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -558,9 +558,9 @@ void test2()
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 3);
 
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 4);
 	CheckHero(state, state::PlayerIdentifier::Second(), 7, 0, 0);
@@ -575,7 +575,7 @@ void test2()
 	parameter_getter.next_defender_idx = 1;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().GetHeroRef());
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 3, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -597,7 +597,7 @@ void test2()
 
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(9);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 3, 0, 0);
 	CheckCrystals(state, state::PlayerIdentifier::First(), { 10, 10 });
@@ -608,7 +608,7 @@ void test2()
 	assert(state.GetCurrentPlayer().GetWeaponRef().IsValid());
 
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).GetFatigueDamage() == 1);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 3, 0, 0);
@@ -633,7 +633,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 1;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(8);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).GetFatigueDamage() == 1);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
 	CheckHero(state, state::PlayerIdentifier::Second(), 3, 0, 0);
@@ -658,7 +658,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 2;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(8);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).GetFatigueDamage() == 1);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 4);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
@@ -685,7 +685,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 1;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(8);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).GetFatigueDamage() == 1);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 4);
 	CheckHero(state, state::PlayerIdentifier::First(), 29, 0, 0);
@@ -712,7 +712,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 0;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(8);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).GetFatigueDamage() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 4);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
@@ -739,7 +739,7 @@ void test2()
 	parameter_getter.next_minion_put_location = 4;
 	parameter_getter.SetMainOp(engine::kMainOpPlayCard);
 	parameter_getter.SetHandCard(8);
-	if (controller.PerformOperation() != engine::kResultNotDetermined) assert(false);
+	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::First()).GetFatigueDamage() == 2);
 	assert(state.GetBoard().Get(state::PlayerIdentifier::Second()).GetFatigueDamage() == 4);
 	CheckHero(state, state::PlayerIdentifier::First(), 27, 0, 0);
@@ -751,5 +751,5 @@ void test2()
 	assert(state.GetCurrentPlayer().hand_.Size() == 8);
 	assert(!state.GetCurrentPlayer().GetWeaponRef().IsValid());
 	parameter_getter.SetMainOp(engine::kMainOpEndTurn);
-	assert(controller.PerformOperation() == engine::kResultFirstPlayerWin);
+	assert(controller.PerformAction() == engine::kResultFirstPlayerWin);
 }

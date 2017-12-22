@@ -16,10 +16,10 @@ namespace engine
 
 		state::State const& GetCurrentState() const { return state_; }
 
-		Result PerformOperation(state::IRandomGenerator & random_cb, engine::IActionParameterGetterWithoutAnalyzer & action_cb) {
+		Result PerformAction(state::IRandomGenerator & random_cb, engine::IActionParameterGetterWithoutAnalyzer & action_cb) {
 			FlowControl::FlowContext flow_context(random_cb, action_cb);
 			FlowControl::FlowController flow_controller(state_, flow_context);
-			return flow_controller.PerformOperation();
+			return flow_controller.PerformAction();
 		}
 
 	private:

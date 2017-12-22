@@ -111,7 +111,7 @@ namespace judge
 				next_agent->Think(game_engine.GetCurrentState().GetCurrentPlayerId(), current_state_getter, random);
 
 				action_callback_.Initialize(game_engine.GetCurrentState(), next_agent);
-				result = game_engine.PerformOperation(random_callback_, action_callback_);
+				result = game_engine.PerformAction(random_callback_, action_callback_);
 
 				assert(result != engine::kResultInvalid);
 				if (result != engine::kResultNotDetermined) break;

@@ -10,7 +10,7 @@
 namespace engine {
 	namespace FlowControl
 	{
-		inline engine::Result FlowController::PerformOperation()
+		inline engine::Result FlowController::PerformAction()
 		{
 			auto main_op = flow_context_.GetMainOp();
 

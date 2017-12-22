@@ -36,7 +36,7 @@ namespace engine {
 			}
 
 		public: // main flow
-			engine::Result PerformOperation();
+			engine::Result PerformAction();
 
 		private:
 			engine::Result PlayCard(int hand_idx);
