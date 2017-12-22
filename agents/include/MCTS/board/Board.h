@@ -75,7 +75,7 @@ namespace mcts
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
 				engine::FlowControl::FlowContext flow_context(random, action_parameters);
 				engine::FlowControl::FlowController flow_controller(board_, flow_context);
-				return flow_controller.PerformOperation();
+				return flow_controller.PerformAction();
 			}
 
 		public:

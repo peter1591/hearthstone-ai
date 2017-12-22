@@ -276,13 +276,14 @@
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler-impl.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\ValidActionAnalyzer-impl.h" />
-    <ClInclude Include="..\..\include\engine\FlowControl\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\include\engine\IActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\include\engine\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\engine\MainOp.h" />
     <ClInclude Include="..\..\include\engine\PlayerStateView.h" />
     <ClInclude Include="..\..\include\engine\Result.h" />
+    <ClInclude Include="..\..\include\engine\ValidActionAnalyzer-impl.h" />
+    <ClInclude Include="..\..\include\engine\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\include\state\aura\Manager.h" />
     <ClInclude Include="..\..\include\state\board\Board.h" />
     <ClInclude Include="..\..\include\state\board\Deck.h" />

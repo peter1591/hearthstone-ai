@@ -31,7 +31,7 @@ namespace mcts
 
 			int ChooseAction(
 				board::Board const& board,
-				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::ValidActionAnalyzer const& action_analyzer,
 				engine::ActionType action_type,
 				engine::ActionChoices const& action_choices)
 			{

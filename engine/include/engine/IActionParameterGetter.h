@@ -7,7 +7,7 @@
 #include "engine/MainOp.h"
 #include "engine/ActionType.h"
 #include "engine/ActionChoices.h"
-#include "engine/FlowControl/ValidActionAnalyzer.h"
+#include "engine/ValidActionAnalyzer.h"
 
 namespace state {
 	class State;
@@ -121,6 +121,6 @@ namespace engine {
 		virtual int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) = 0;
 
 	protected:
-		FlowControl::ValidActionAnalyzer analyzer_;
+		ValidActionAnalyzer analyzer_;
 	};
 }

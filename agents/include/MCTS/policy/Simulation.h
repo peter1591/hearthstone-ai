@@ -48,7 +48,7 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
@@ -399,7 +399,7 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
@@ -449,7 +449,7 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
@@ -501,7 +501,7 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
@@ -573,7 +573,7 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
@@ -592,7 +592,7 @@ namespace mcts
 			private:
 				void StartNewAction(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer)
+					engine::ValidActionAnalyzer const& action_analyzer)
 				{
 					decision_idx_ = 0;
 					DFSBestStateValue(board, action_analyzer);
@@ -600,7 +600,7 @@ namespace mcts
 
 				void DFSBestStateValue(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer)
+					engine::ValidActionAnalyzer const& action_analyzer)
 				{
 					class RandomPolicy : public state::IRandomGenerator {
 					public:
@@ -741,7 +741,7 @@ namespace mcts
 
 				int GetChoiceForMainAction(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
 					if (decision_idx_ < decision_.size()) {
@@ -758,7 +758,7 @@ namespace mcts
 
 				int GetChoiceRandomly(
 					board::Board const& board,
-					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
 					size_t count = choice_getter.Size();

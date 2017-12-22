@@ -139,7 +139,7 @@ namespace mcts
 
 					engine::CurrentPlayerStateView state_view(game_state);
 					action_cb.SetMainOpIdx(main_op_idx);
-					engine::FlowControl::FlowController(game_state, flow_context).PerformOperation();
+					engine::FlowControl::FlowController(game_state, flow_context).PerformAction();
 				}
 
 				return info;

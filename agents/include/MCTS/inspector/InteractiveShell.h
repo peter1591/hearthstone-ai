@@ -79,7 +79,7 @@ namespace mcts
 			void ShowBestNodeInfo(
 				std::ostream & s,
 				const mcts::selection::TreeNode* main_node,
-				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
 				ActionApplyHelper const& action_cb_info_getter,
 				int indent,
@@ -168,7 +168,7 @@ namespace mcts
 
 			std::string GetChoiceString(
 				const mcts::selection::TreeNode* main_node,
-				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node, int choice,
 				ActionApplyHelper const& action_cb_info_getter)
 			{
@@ -249,7 +249,7 @@ namespace mcts
 			bool ShowBestSubNodeInfo(
 				std::ostream & s,
 				const mcts::selection::TreeNode* main_node,
-				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
 				int choice,
 				uint64_t total_chosen_times,
@@ -308,7 +308,7 @@ namespace mcts
 				s << "Best action: " << std::endl;
 
 				state::State game_state = start_board_getter_(0);
-				engine::FlowControl::ValidActionAnalyzer action_analyzer;
+				engine::ValidActionAnalyzer action_analyzer;
 				action_analyzer.Analyze(engine::FlowControl::ValidActionGetter(game_state));
 				if (verbose) {
 					double v = GetStateValue(game_state);
