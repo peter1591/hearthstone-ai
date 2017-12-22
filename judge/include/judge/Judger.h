@@ -8,7 +8,7 @@
 
 #include "state/State.h"
 #include "engine/FlowControl/FlowController.h"
-#include "engine/FlowControl/JsonSerializer.h"
+#include "engine/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 #include "judge/Recorder.h"

@@ -25,6 +25,9 @@
     <Filter Include="Header Files\agent">
       <UniqueIdentifier>{d66a571c-b618-4821-9e3e-65f68d56808d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{e6d8a1fc-64f2-4e6d-b606-14ccaaedf4ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
@@ -50,12 +53,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\engine\include\FlowControl\utils\ActionApplier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\engine\include\FlowControl\utils\MainOp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
@@ -71,11 +68,32 @@
     <ClInclude Include="..\..\include\agents\MCTSRunner.h">
       <Filter>Header Files\agent</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\IRandomGenerator.h">
-      <Filter>Header Files\judge</Filter>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionChoices.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\IActionParameterGetter.h">
-      <Filter>Header Files\judge</Filter>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionType.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\Engine.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter-impl.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\MainOp.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\playerstateview.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\Result.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\JsonSerializer.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

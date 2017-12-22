@@ -22,7 +22,7 @@ namespace judge
 		{
 			Json::Value obj;
 			obj["type"] = "kMainAction";
-			obj["board"] = engine::FlowControl::JsonSerializer::Serialize(state);
+			obj["board"] = engine::JsonSerializer::Serialize(state);
 			obj["choice"] = engine::GetMainOpString(op);
 
 			json_.append(obj);
