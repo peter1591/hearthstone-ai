@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "state/State.h"
-#include "engine/FlowControl/FlowController.h"
+#include "engine/Engine.h"
 #include "engine/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
@@ -88,29 +88,30 @@ namespace judge
 			
 			recorder_.Start();
 			std::mt19937 random(seed);
-			state::State current_state = state_getter(random());
+
+			engine::Engine game_engine;
+
+			game_engine.SetStartState(state_getter(random()));
 
 			engine::Result result = engine::kResultInvalid;
 			AgentType * next_agent = nullptr;
 			while (true) {
-				if (current_state.GetCurrentPlayerId().IsFirst()) {
+				if (game_engine.GetCurrentState().GetCurrentPlayerId().IsFirst()) {
 					next_agent = first_;
 				}
 				else {
-					assert(current_state.GetCurrentPlayerId().IsSecond());
+					assert(game_engine.GetCurrentState().GetCurrentPlayerId().IsSecond());
 					next_agent = second_;
 				}
 
 				auto current_state_getter = [&](int rnd) -> state::State const& {
 					// TODO: should randomize hidden information from the board view
-					return current_state;
+					return game_engine.GetCurrentState();
 				};
-				next_agent->Think(current_state.GetCurrentPlayerId(), current_state_getter, random);
+				next_agent->Think(game_engine.GetCurrentState().GetCurrentPlayerId(), current_state_getter, random);
 
-				action_callback_.Initialize(current_state, next_agent);
-				engine::FlowControl::FlowContext flow_context(random_callback_, action_callback_);
-				engine::FlowControl::FlowController flow_controller(current_state, flow_context);
-				result = flow_controller.PerformOperation();
+				action_callback_.Initialize(game_engine.GetCurrentState(), next_agent);
+				result = game_engine.PerformOperation(random_callback_, action_callback_);
 
 				assert(result != engine::kResultInvalid);
 				if (result != engine::kResultNotDetermined) break;
