@@ -4,6 +4,10 @@
 #include "engine/FlowControl/ValidActionGetter.h"
 
 namespace engine {
+	inline void ValidActionAnalyzer::Analyze(state::State const& game_state) {
+		return Analyze(FlowControl::ValidActionGetter(game_state));
+	}
+	
 	inline void ValidActionAnalyzer::Analyze(FlowControl::ValidActionGetter const& getter) {
 		Reset();
 

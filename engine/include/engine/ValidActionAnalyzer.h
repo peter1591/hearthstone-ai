@@ -35,6 +35,7 @@ namespace engine {
 
 		void Reset() { op_map_size_ = 0; }
 
+		void Analyze(state::State const& state);
 		void Analyze(FlowControl::ValidActionGetter const& getter);
 
 		auto const& GetMainActions() const { return op_map_; }
