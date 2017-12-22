@@ -41,15 +41,15 @@ namespace mcts
 				{
 				}
 
-				FlowControl::Result GetCutoffResult(board::Board const& board) {
+				engine::Result GetCutoffResult(board::Board const& board) {
 					assert(false);
-					return FlowControl::kResultNotDetermined;
+					return engine::kResultNotDetermined;
 				}
 
 				int GetChoice(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
-					FlowControl::ActionType action_type,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
 					size_t count = choice_getter.Size();
@@ -95,7 +95,7 @@ namespace mcts
 				//static constexpr double kMaxSideValue = 3.0 * kMaxHeroValue + 10.0 * kMaxMinionValue * 7;
 				static constexpr double kMaxSideValue = kMaxHeroValue;
 				template <state::PlayerSide Side>
-				double GetStateValueForSide(state::PlayerSide self_side, FlowControl::PlayerStateView<Side> view) {
+				double GetStateValueForSide(state::PlayerSide self_side, engine::PlayerStateView<Side> view) {
 					assert(self_side == Side);
 					//state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
 
@@ -121,7 +121,7 @@ namespace mcts
 
 			public:
 				double GetStateValue(state::State const& game_state) {
-					FlowControl::PlayerStateView<state::kPlayerFirst> view(game_state);
+					engine::PlayerStateView<state::kPlayerFirst> view(game_state);
 					return GetStateValueForSide(state::kPlayerFirst, view);
 				}
 
@@ -188,7 +188,7 @@ namespace mcts
 					void Reset(state::State const& state) {
 						state_ = &state;
 
-						FlowControl::ValidActionGetter valid_action(*state_);
+						engine::FlowControl::ValidActionGetter valid_action(*state_);
 
 						attackable_indics_.clear();
 						valid_action.ForEachAttacker([this](int encoded_idx) {
@@ -377,17 +377,17 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				FlowControl::Result GetCutoffResult(board::Board const& board) {
+				engine::Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
-						return FlowControl::kResultNotDetermined;
+						return engine::kResultNotDetermined;
 					}
 
 					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return FlowControl::kResultFirstPlayerWin;
-					else if (score == 0.0) return FlowControl::kResultDraw;
-					else return FlowControl::kResultSecondPlayerWin;
+					if (score > 0.0) return engine::kResultFirstPlayerWin;
+					else if (score == 0.0) return engine::kResultDraw;
+					else return engine::kResultSecondPlayerWin;
 				}
 
 			public:
@@ -399,8 +399,8 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
-					FlowControl::ActionType action_type,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
 					size_t count = choice_getter.Size();
@@ -427,17 +427,17 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				FlowControl::Result GetCutoffResult(board::Board const& board) {
+				engine::Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
-						return FlowControl::kResultNotDetermined;
+						return engine::kResultNotDetermined;
 					}
 					
 					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return FlowControl::kResultFirstPlayerWin;
-					else if (score == 0.0) return FlowControl::kResultDraw;
-					else return FlowControl::kResultSecondPlayerWin;
+					if (score > 0.0) return engine::kResultFirstPlayerWin;
+					else if (score == 0.0) return engine::kResultDraw;
+					else return engine::kResultSecondPlayerWin;
 				}
 
 			public:
@@ -449,11 +449,11 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
-					FlowControl::ActionType action_type,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type != FlowControl::ActionType::kMainAction) {
+					if (action_type != engine::ActionType::kMainAction) {
 						size_t count = choice_getter.Size();
 						assert(count > 0);
 						size_t rand_idx = (size_t)(rand_() % count);
@@ -465,12 +465,12 @@ namespace mcts
 					assert(count > 0);
 					if (count == 1) {
 						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == FlowControl::MainOpType::kMainOpEndTurn);
+						assert(action_analyzer.GetMainOpType((size_t)0) == engine::MainOpType::kMainOpEndTurn);
 						return 0;
 					}
 
 					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == FlowControl::MainOpType::kMainOpEndTurn);
+					assert(action_analyzer.GetMainOpType(count - 1) == engine::MainOpType::kMainOpEndTurn);
 					--count;
 					assert(count > 0);
 
@@ -489,8 +489,8 @@ namespace mcts
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				FlowControl::Result GetCutoffResult(board::Board const& board) {
-					return FlowControl::kResultNotDetermined;
+				engine::Result GetCutoffResult(board::Board const& board) {
+					return engine::kResultNotDetermined;
 				}
 
 			public:
@@ -501,11 +501,11 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
-					FlowControl::ActionType action_type,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type != FlowControl::ActionType::kMainAction) {
+					if (action_type != engine::ActionType::kMainAction) {
 						size_t count = choice_getter.Size();
 						assert(count > 0);
 						size_t rand_idx = (size_t)(rand_() % count);
@@ -517,12 +517,12 @@ namespace mcts
 					assert(count > 0);
 					if (count == 1) {
 						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == FlowControl::MainOpType::kMainOpEndTurn);
+						assert(action_analyzer.GetMainOpType((size_t)0) == engine::MainOpType::kMainOpEndTurn);
 						return 0;
 					}
 
 					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == FlowControl::MainOpType::kMainOpEndTurn);
+					assert(action_analyzer.GetMainOpType(count - 1) == engine::MainOpType::kMainOpEndTurn);
 					--count;
 					assert(count > 0);
 
@@ -549,17 +549,17 @@ namespace mcts
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 				static constexpr bool kRandomlyPutMinions = true;
 
-				FlowControl::Result GetCutoffResult(board::Board const& board) {
+				engine::Result GetCutoffResult(board::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
-						return FlowControl::kResultNotDetermined;
+						return engine::kResultNotDetermined;
 					}
 
 					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return FlowControl::kResultFirstPlayerWin;
-					else if (score == 0.0) return FlowControl::kResultDraw;
-					else return FlowControl::kResultSecondPlayerWin;
+					if (score > 0.0) return engine::kResultFirstPlayerWin;
+					else if (score == 0.0) return engine::kResultDraw;
+					else return engine::kResultSecondPlayerWin;
 				}
 
 			public:
@@ -573,11 +573,11 @@ namespace mcts
 
 				int GetChoice(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
-					FlowControl::ActionType action_type,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type == FlowControl::ActionType::kMainAction) {
+					if (action_type == engine::ActionType::kMainAction) {
 						StartNewAction(board, action_analyzer);
 					}
 
@@ -592,7 +592,7 @@ namespace mcts
 			private:
 				void StartNewAction(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer)
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer)
 				{
 					decision_idx_ = 0;
 					DFSBestStateValue(board, action_analyzer);
@@ -600,7 +600,7 @@ namespace mcts
 
 				void DFSBestStateValue(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer)
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer)
 				{
 					class RandomPolicy : public state::IRandomGenerator {
 					public:
@@ -618,7 +618,7 @@ namespace mcts
 						DFSItem(size_t choice, size_t total) : choice_(choice), total_(total) {}
 					};
 
-					class UserChoicePolicy : public FlowControl::IActionParameterGetter {
+					class UserChoicePolicy : public engine::IActionParameterGetter {
 					public:
 						UserChoicePolicy(std::vector<DFSItem> & dfs,
 							std::vector<DFSItem>::iterator & dfs_it,
@@ -629,8 +629,8 @@ namespace mcts
 						// TODO: can we remove this? need special care on main op?
 						void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-						int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
-							if (action_type == FlowControl::ActionType::kMainAction) {
+						int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+							if (action_type == engine::ActionType::kMainAction) {
 								return main_op_idx_;
 							}
 
@@ -639,10 +639,10 @@ namespace mcts
 							assert(total >= 1);
 							if (total == 1) return 0;
 
-							assert(action_type != FlowControl::ActionType::kRandom);
+							assert(action_type != engine::ActionType::kRandom);
 
 							if constexpr (kRandomlyPutMinions) {
-								if (action_type == FlowControl::ActionType::kChooseMinionPutLocation) {
+								if (action_type == engine::ActionType::kChooseMinionPutLocation) {
 									assert(total >= 1);
 									int idx = rand_.GetRandom(total);
 									return action_choices.Get(idx);
@@ -695,7 +695,7 @@ namespace mcts
 					cb_user_choice.Initialize(board.GetCurrentPlayerStateView());
 
 					double best_value = -std::numeric_limits<double>::infinity();
-					action_analyzer.ForEachMainOp([&](size_t main_op_idx, FlowControl::MainOpType main_op) {
+					action_analyzer.ForEachMainOp([&](size_t main_op_idx, engine::MainOpType main_op) {
 						assert(board.GetViewSide() == copy_board_.GetBoard().GetViewSide());
 
 						cb_user_choice.SetMainOpIndex((int)main_op_idx);
@@ -706,19 +706,19 @@ namespace mcts
 							dfs_it = dfs.begin();
 							auto result = copy_board_.GetBoard().ApplyAction(cb_random, cb_user_choice);
 
-							if (result != FlowControl::kResultInvalid) {
+							if (result != engine::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();
-								if (result == FlowControl::kResultFirstPlayerWin) {
+								if (result == engine::kResultFirstPlayerWin) {
 									value = std::numeric_limits<double>::infinity();
 								}
-								else if (result == FlowControl::kResultSecondPlayerWin) {
+								else if (result == engine::kResultSecondPlayerWin) {
 									value = -std::numeric_limits<double>::infinity();
 								}
-								else if (result == FlowControl::kResultDraw) {
+								else if (result == engine::kResultDraw) {
 									value = 0.0;
 								}
 								else {
-									assert(result == FlowControl::kResultNotDetermined);
+									assert(result == engine::kResultNotDetermined);
 									value = state_value_func_.GetStateValue(copy_board_.GetBoard());
 								}
 
@@ -741,7 +741,7 @@ namespace mcts
 
 				int GetChoiceForMainAction(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
 					if (decision_idx_ < decision_.size()) {
@@ -758,7 +758,7 @@ namespace mcts
 
 				int GetChoiceRandomly(
 					board::Board const& board,
-					FlowControl::ValidActionAnalyzer const& action_analyzer,
+					engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
 					size_t count = choice_getter.Size();

@@ -18,12 +18,12 @@ namespace judge
 			json_.clear();
 		}
 
-		void RecordMainAction(state::State const& state, FlowControl::MainOpType op)
+		void RecordMainAction(state::State const& state, engine::MainOpType op)
 		{
 			Json::Value obj;
 			obj["type"] = "kMainAction";
-			obj["board"] = FlowControl::JsonSerializer::Serialize(state);
-			obj["choice"] = FlowControl::GetMainOpString(op);
+			obj["board"] = engine::FlowControl::JsonSerializer::Serialize(state);
+			obj["choice"] = engine::GetMainOpString(op);
 
 			json_.append(obj);
 		}
@@ -36,7 +36,7 @@ namespace judge
 			json_.append(obj);
 		}
 
-		void RecordManualAction(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices action_choices, int action) {
+		void RecordManualAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices, int action) {
 			Json::Value obj;
 			obj["type"] = GetActionTypeString(action_type);
 			obj["choices_type"] = GetChoiceTypeString(action_choices);
@@ -53,9 +53,9 @@ namespace judge
 			json_.append(obj);
 		}
 
-		void End(FlowControl::Result result) {
-			assert(result != FlowControl::kResultInvalid);
-			assert(result != FlowControl::kResultNotDetermined);
+		void End(engine::Result result) {
+			assert(result != engine::kResultInvalid);
+			assert(result != engine::kResultNotDetermined);
 
 			{
 				Json::Value obj;
@@ -89,8 +89,8 @@ namespace judge
 		}
 
 	private:
-		std::string GetActionTypeString(FlowControl::ActionType type) {
-			using FlowControl::ActionType;
+		std::string GetActionTypeString(engine::ActionType type) {
+			using engine::ActionType;
 			switch (type.GetType()) {
 			case ActionType::kMainAction: return "kMainAction";
 			case ActionType::kChooseHandCard: return "kChooseHandCard";
@@ -112,11 +112,11 @@ namespace judge
 			}
 		}
 
-		std::string GetChoiceTypeString(FlowControl::ActionChoices const& action_choices) {
+		std::string GetChoiceTypeString(engine::ActionChoices const& action_choices) {
 			switch (action_choices.GetType()) {
-			case FlowControl::ActionChoices::kChooseFromCardIds:
+			case engine::ActionChoices::kChooseFromCardIds:
 				return "kChooseFromCardIds";
-			case FlowControl::ActionChoices::kChooseFromZeroToExclusiveMax:
+			case engine::ActionChoices::kChooseFromZeroToExclusiveMax:
 				return "kChooseFromZeroToExclusiveMax";
 			default:
 				assert(false);
@@ -124,13 +124,13 @@ namespace judge
 			}
 		}
 
-		std::string GetResultString(FlowControl::Result result) {
+		std::string GetResultString(engine::Result result) {
 			switch (result) {
-			case FlowControl::kResultDraw:
+			case engine::kResultDraw:
 				return "kResultDraw";
-			case FlowControl::kResultFirstPlayerWin:
+			case engine::kResultFirstPlayerWin:
 				return "kResultFirstPlayerWin";
-			case FlowControl::kResultSecondPlayerWin:
+			case engine::kResultSecondPlayerWin:
 				return "kResultSecondPlayerWin";
 			default:
 				assert(false);

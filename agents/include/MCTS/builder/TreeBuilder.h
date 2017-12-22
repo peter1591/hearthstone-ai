@@ -36,11 +36,11 @@ namespace mcts
 
 			struct SelectResult
 			{
-				FlowControl::Result result; // Never returns kResultInvalid
+				engine::Result result; // Never returns kResultInvalid
 				bool change_to_simulation;
 				TreeNode * node;
 
-				SelectResult(FlowControl::Result new_result) :
+				SelectResult(engine::Result new_result) :
 					result(new_result),
 					change_to_simulation(false),
 					node(nullptr)
@@ -52,15 +52,15 @@ namespace mcts
 				detail::BoardNodeMap & last_node_map, TreeUpdater * updater);
 
 			// Note: can only be called when current player is the viewer of 'board'
-			FlowControl::Result PerformSimulate(board::Board const& board);
+			engine::Result PerformSimulate(board::Board const& board);
 
 		private:
 			template <typename StageHandler>
-			FlowControl::Result ApplyAction(StageHandler&& stage_handler);
+			engine::Result ApplyAction(StageHandler&& stage_handler);
 
 		public: // for callbacks: action-parameter-getter and random-generator
-			int ChooseSelectAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices);
-			int ChooseSimulateAction(FlowControl::ActionType action_type, FlowControl::ActionChoices const& choices);
+			int ChooseSelectAction(engine::ActionType action_type, engine::ActionChoices const& choices);
+			int ChooseSimulateAction(engine::ActionType action_type, engine::ActionChoices const& choices);
 
 		private:
 			Statistic<> & statistic_;

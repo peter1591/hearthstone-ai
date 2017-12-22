@@ -14,9 +14,7 @@ namespace state {
 }
 
 namespace engine {
-	namespace FlowControl {
-		class CurrentPlayerStateView;
-	}
+	class CurrentPlayerStateView;
 
 	class IActionParameterGetterWithoutAnalyzer
 	{
@@ -52,7 +50,7 @@ namespace engine {
     IActionParameterGetter() : analyzer_() {}
 
 		void Initialize(state::State const& game_state);
-		void Initialize(FlowControl::CurrentPlayerStateView const& board);
+		void Initialize(engine::CurrentPlayerStateView const& board);
 
 		auto const& GetAnalyzer() { return analyzer_; }
 

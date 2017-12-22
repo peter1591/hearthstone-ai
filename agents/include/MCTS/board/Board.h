@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FlowControl/IActionParameterGetter.h"
+#include "engine/IActionParameterGetter.h"
 #include "MCTS/board/BoardView.h"
 #include "MCTS/Types.h"
 
@@ -42,22 +42,22 @@ namespace mcts
 
 			BoardView CreateView() const {
 				if (side_ == state::kPlayerFirst) {
-					return BoardView(FlowControl::PlayerStateView<state::kPlayerFirst>(board_));
+					return BoardView(engine::PlayerStateView<state::kPlayerFirst>(board_));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return BoardView(FlowControl::PlayerStateView<state::kPlayerSecond>(board_));
+					return BoardView(engine::PlayerStateView<state::kPlayerSecond>(board_));
 				}
 			}
 
 			template <class Functor>
 			auto ApplyWithPlayerStateView(Functor && functor) const {
 				if (side_ == state::kPlayerFirst) {
-					return functor(FlowControl::PlayerStateView<state::kPlayerFirst>(board_));
+					return functor(engine::PlayerStateView<state::kPlayerFirst>(board_));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return functor(FlowControl::PlayerStateView<state::kPlayerSecond>(board_));
+					return functor(engine::PlayerStateView<state::kPlayerSecond>(board_));
 				}
 			}
 
@@ -66,15 +66,15 @@ namespace mcts
 					assert(false);
 					throw std::runtime_error("current player does not match.");
 				}
-				return FlowControl::CurrentPlayerStateView(board_);
+				return engine::CurrentPlayerStateView(board_);
 			}
 
 		public: // bridge to action analyzer
-			FlowControl::Result ApplyAction(state::IRandomGenerator & random, FlowControl::IActionParameterGetter & action_parameters) const
+			engine::Result ApplyAction(state::IRandomGenerator & random, engine::IActionParameterGetter & action_parameters) const
 			{
 				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				FlowControl::FlowContext flow_context(random, action_parameters);
-				FlowControl::FlowController flow_controller(board_, flow_context);
+				engine::FlowControl::FlowContext flow_context(random, action_parameters);
+				engine::FlowControl::FlowController flow_controller(board_, flow_context);
 				return flow_controller.PerformOperation();
 			}
 

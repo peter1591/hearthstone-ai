@@ -7,8 +7,8 @@
 #include <sstream>
 
 #include "state/State.h"
-#include "FlowControl/FlowController.h"
-#include "FlowControl/JsonSerializer.h"
+#include "engine/FlowControl/FlowController.h"
+#include "engine/FlowControl/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
 #include "judge/Recorder.h"
@@ -34,7 +34,7 @@ namespace judge
 			Judger & guide_;
 		};
 
-		class ActionCallback : public FlowControl::IActionParameterGetter {
+		class ActionCallback : public engine::IActionParameterGetter {
 		public:
 			ActionCallback(Judger & guide) : guide_(guide), cb_(nullptr), state_(nullptr) {}
 
@@ -44,13 +44,13 @@ namespace judge
 			void Initialize(state::State const& state, AgentType * cb) {
 				state_ = &state;
 				cb_ = cb;
-				FlowControl::IActionParameterGetter::Initialize(*state_);
+				engine::IActionParameterGetter::Initialize(*state_);
 			}
 			
-			int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
+			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
 				int action = cb_->GetAction(action_type, action_choices);
 
-				if (action_type == FlowControl::ActionType::kMainAction) {
+				if (action_type == engine::ActionType::kMainAction) {
 					auto main_op = analyzer_.GetMainActions()[action];
 					guide_.recorder_.RecordMainAction(*state_, main_op);
 					return action;
@@ -90,7 +90,7 @@ namespace judge
 			std::mt19937 random(seed);
 			state::State current_state = state_getter(random());
 
-			FlowControl::Result result = FlowControl::kResultInvalid;
+			engine::Result result = engine::kResultInvalid;
 			AgentType * next_agent = nullptr;
 			while (true) {
 				if (current_state.GetCurrentPlayerId().IsFirst()) {
@@ -108,12 +108,12 @@ namespace judge
 				next_agent->Think(current_state.GetCurrentPlayerId(), current_state_getter, random);
 
 				action_callback_.Initialize(current_state, next_agent);
-				FlowControl::FlowContext flow_context(random_callback_, action_callback_);
-				FlowControl::FlowController flow_controller(current_state, flow_context);
+				engine::FlowControl::FlowContext flow_context(random_callback_, action_callback_);
+				engine::FlowControl::FlowController flow_controller(current_state, flow_context);
 				result = flow_controller.PerformOperation();
 
-				assert(result != FlowControl::kResultInvalid);
-				if (result != FlowControl::kResultNotDetermined) break;
+				assert(result != engine::kResultInvalid);
+				if (result != engine::kResultNotDetermined) break;
 			}
 
 			recorder_.End(result);

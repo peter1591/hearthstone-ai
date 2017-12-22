@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "state/State.h"
-#include "FlowControl/IActionParameterGetter.h"
+#include "engine/IActionParameterGetter.h"
 #include "MCTS/Types.h"
 
 namespace mcts
@@ -12,12 +12,12 @@ namespace mcts
 
 	namespace board
 	{
-		class ActionParameterGetter : public FlowControl::IActionParameterGetter
+		class ActionParameterGetter : public engine::IActionParameterGetter
 		{
 		public:
 			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
 
-			int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final;
+			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final;
 
 		private:
 			SOMCTS & callback_;

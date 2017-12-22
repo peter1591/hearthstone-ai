@@ -43,12 +43,6 @@
     <Filter Include="Source Files\MCTS">
       <UniqueIdentifier>{2de484c4-2d05-4afa-b831-0d382a7b7cfe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\FlowControl">
-      <UniqueIdentifier>{58418007-6267-4019-bbb6-246eedcb397b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\FlowControl\utils">
-      <UniqueIdentifier>{68181fa6-d3e2-475c-acf3-34e6ba3c7278}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\neural_net">
       <UniqueIdentifier>{d46240db-d198-4f14-ac4a-aa62cd716d5a}</UniqueIdentifier>
     </Filter>
@@ -66,6 +60,12 @@
     </Filter>
     <Filter Include="Header Files\judge">
       <UniqueIdentifier>{b5feb7d1-ceb7-48e8-8908-037bb2927191}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{6cf14fae-05d0-4860-a87e-014203b5faab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\FlowControl">
+      <UniqueIdentifier>{c07d0e3f-5ba7-4e6e-a4e8-dbc465e19af7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -215,9 +215,6 @@
     <ClInclude Include="..\..\include\MCTS\inspector\ActionApplyHelper.h">
       <Filter>Header Files\MCTS\inspector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\IActionParameterGetter.h">
-      <Filter>Header Files\judge</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
@@ -227,62 +224,62 @@
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\utils\MainOp.h">
-      <Filter>Header Files\FlowControl\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\ActionChoices.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\ActionType.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowContext.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowContext-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowController.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\FlowController-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\IActionParameterGetter.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\JsonSerializer.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\MainOp.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\Manipulate.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\Manipulate-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\PlayerStateView.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\Result.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionGetter.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\IActionParameterGetter-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\FlowControl\ValidActionAnalyzer-impl.h">
-      <Filter>Header Files\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\BoardActionAnalyzer.h">
       <Filter>Header Files\MCTS\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\Engine.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionChoices.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionType.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter-impl.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\MainOp.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\Result.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowContext.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowContext-impl.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController-impl.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\JsonSerializer.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\Manipulate.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\Manipulate-impl.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\PlayerStateView.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionAnalyzer.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionAnalyzer-impl.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionGetter.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

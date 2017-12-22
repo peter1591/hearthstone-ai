@@ -56,7 +56,7 @@ namespace mcts
 						int choice;
 						mcts::selection::EdgeAddon const* edge_addon;
 					};
-					constexpr size_t kMaxChoices = FlowControl::IActionParameterGetter::kMaxChoices;
+					constexpr size_t kMaxChoices = engine::IActionParameterGetter::kMaxChoices;
 					std::array<Item, kMaxChoices> choices;
 					size_t choices_size = 0;
 

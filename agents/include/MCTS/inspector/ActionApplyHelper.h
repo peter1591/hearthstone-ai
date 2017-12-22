@@ -3,7 +3,7 @@
 #include <functional>
 
 #include "state/State.h"
-#include "FlowControl/FlowController.h"
+#include "engine/FlowControl/FlowController.h"
 #include "mcts/board/RandomGenerator.h"
 
 namespace mcts
@@ -61,7 +61,7 @@ namespace mcts
 				int Get(int exclusive_max) { return 0; }
 			};
 
-			class ActionParameterCallback : public FlowControl::IActionParameterGetter {
+			class ActionParameterCallback : public engine::IActionParameterGetter {
 			public:
 				ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
 					result_(result), choices_(choices), choices_idx_(choices_idx), main_op_idx_(-1)
@@ -69,8 +69,8 @@ namespace mcts
 
 				void SetMainOpIdx(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-				int GetNumber(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices const& action_choices) final {
-					if (action_type != FlowControl::ActionType::kMainAction)
+				int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+					if (action_type != engine::ActionType::kMainAction)
 					{
 						assert(action_choices.Size() > 0);
 						if (action_choices.Size() == 1) return 0;
@@ -127,7 +127,7 @@ namespace mcts
 				RandomCallback rand_cb;
 				ActionParameterCallback action_cb(info, choices_, choices_idx);
 
-				FlowControl::FlowContext flow_context;
+				engine::FlowControl::FlowContext flow_context;
 				flow_context.SetCallback(rand_cb, action_cb);
 
 				while (choices_.size() > choices_idx) {
@@ -137,9 +137,9 @@ namespace mcts
 					int main_op_idx = choices_[choices_idx];
 					++choices_idx;
 
-					FlowControl::CurrentPlayerStateView state_view(game_state);
+					engine::CurrentPlayerStateView state_view(game_state);
 					action_cb.SetMainOpIdx(main_op_idx);
-					FlowControl::FlowController(game_state, flow_context).PerformOperation();
+					engine::FlowControl::FlowController(game_state, flow_context).PerformOperation();
 				}
 
 				return info;

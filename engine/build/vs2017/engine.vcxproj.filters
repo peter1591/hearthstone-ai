@@ -449,9 +449,6 @@
     <ClInclude Include="..\..\include\engine\FlowControl\Manipulate-impl.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\FlowControl\PlayerStateView.h">
-      <Filter>Header Files\engine\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\FlowControl\ValidActionAnalyzer.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
@@ -610,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler-impl.h">
       <Filter>Header Files\engine\FlowControl\onplay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\PlayerStateView.h">
+      <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

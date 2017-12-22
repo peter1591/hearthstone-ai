@@ -17,7 +17,7 @@ namespace mcts
 			void StartNewAction() {
 			}
 
-			FlowControl::Result CutoffCheck(board::Board const& board)
+			engine::Result CutoffCheck(board::Board const& board)
 			{
 				using Policy = std::decay_t<decltype(select_)>;
 
@@ -25,15 +25,15 @@ namespace mcts
 					return select_.GetCutoffResult(board);
 				}
 				else {
-					return FlowControl::kResultNotDetermined;
+					return engine::kResultNotDetermined;
 				}
 			}
 
 			int ChooseAction(
 				board::Board const& board,
-				FlowControl::ValidActionAnalyzer const& action_analyzer,
-				FlowControl::ActionType action_type,
-				FlowControl::ActionChoices const& action_choices)
+				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::ActionType action_type,
+				engine::ActionChoices const& action_choices)
 			{
 				assert(!action_choices.Empty());
 

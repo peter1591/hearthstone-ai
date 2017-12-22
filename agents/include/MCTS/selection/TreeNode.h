@@ -21,7 +21,7 @@ namespace mcts
 			// Note: only calls children's Get(), so a caller can acquire a read-lock only
 			class ChoiceIterator {
 			public:
-				ChoiceIterator(FlowControl::ActionChoices & choices, ChildNodeMap & children) :
+				ChoiceIterator(engine::ActionChoices & choices, ChildNodeMap & children) :
 					choices_(choices), children_(children),
 					current_choice_(0), current_child_(nullptr)
 				{}
@@ -52,7 +52,7 @@ namespace mcts
 				}
 
 			private:
-				FlowControl::ActionChoices & choices_;
+				engine::ActionChoices & choices_;
 				ChildNodeMap & children_;
 
 				int current_choice_;
@@ -70,8 +70,8 @@ namespace mcts
 			//   And thus, the EdgeAddon of ChildType will never be removed
 
 			TreeNode() :
-				action_type_(FlowControl::ActionType::kInvalid),
-				choices_type_(FlowControl::ActionChoices::kInvalid),
+				action_type_(engine::ActionType::kInvalid),
+				choices_type_(engine::ActionChoices::kInvalid),
 				children_mutex_(), children_(), addon_()
 			{}
 
@@ -97,21 +97,21 @@ namespace mcts
 			// Return -1 if all choices are invalid.
 			//    (or, the force_choice is invalid)
 			template <typename SelectCallback>
-			int Select(FlowControl::ActionType action_type, FlowControl::ActionChoices choices, SelectCallback && select_callback)
+			int Select(engine::ActionType action_type, engine::ActionChoices choices, SelectCallback && select_callback)
 			{
 				auto choices_type_loaded = choices_type_.load();
-				if (choices_type_loaded == FlowControl::ActionChoices::kInvalid) {
+				if (choices_type_loaded == engine::ActionChoices::kInvalid) {
 					choices_type_loaded = choices_type_.exchange(choices.GetType());
 				}
-				if (choices_type_loaded != FlowControl::ActionChoices::kInvalid) {
+				if (choices_type_loaded != engine::ActionChoices::kInvalid) {
 					assert(choices_type_loaded == choices.GetType());
 				}
 
 				auto action_type_loaded = action_type_.load();
-				if (action_type_loaded == FlowControl::ActionType::kInvalid) {
+				if (action_type_loaded == engine::ActionType::kInvalid) {
 					action_type_loaded = action_type_.exchange(action_type.GetType());
 				}
-				if (action_type_loaded != FlowControl::ActionType::kInvalid) {
+				if (action_type_loaded != engine::ActionType::kInvalid) {
 					assert(action_type_loaded == action_type.GetType());
 				}
 
@@ -200,8 +200,8 @@ namespace mcts
 			}
 
 		public:
-			FlowControl::ActionType GetActionType() const {
-				return FlowControl::ActionType(action_type_.load());
+			engine::ActionType GetActionType() const {
+				return engine::ActionType(action_type_.load());
 			}
 
 		public:
@@ -217,8 +217,8 @@ namespace mcts
 			}
 
 		private:
-			std::atomic<FlowControl::ActionType::Types> action_type_;
-			std::atomic<FlowControl::ActionChoices::Type> choices_type_; // TODO: debug only
+			std::atomic<engine::ActionType::Types> action_type_;
+			std::atomic<engine::ActionChoices::Type> choices_type_; // TODO: debug only
 
 			mutable Utils::SharedSpinLock children_mutex_;
 			ChildNodeMap children_;

@@ -23,6 +23,6 @@ namespace judge
 		// hidden information (e.g., opponents hand cards).
 		virtual void Think(state::PlayerIdentifier side, std::function<state::State(int)> state_getter, std::mt19937 & random) = 0;
 
-		virtual int GetAction(FlowControl::ActionType::Types action_type, FlowControl::ActionChoices action_choices) = 0;
+		virtual int GetAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices) = 0;
 	};
 }

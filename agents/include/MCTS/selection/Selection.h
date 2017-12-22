@@ -32,13 +32,13 @@ namespace mcts
 			// @return >= 0 for the chosen action
 			int ChooseAction(
 				board::Board const& board,
-				FlowControl::ActionType action_type,
-				FlowControl::ActionChoices const& choices)
+				engine::ActionType action_type,
+				engine::ActionChoices const& choices)
 			{
 				assert(!choices.Empty());
 
 				if (action_type.IsChosenRandomly()) {
-					assert(choices.GetType() == FlowControl::ActionChoices::kChooseFromZeroToExclusiveMax);
+					assert(choices.GetType() == engine::ActionChoices::kChooseFromZeroToExclusiveMax);
 					pending_randoms_ = true;
 					return random_.GetRandom(choices.Size());
 				}
@@ -56,7 +56,7 @@ namespace mcts
 
 				if (pending_randoms_) {
 					switch (action_type.GetType()) {
-					case FlowControl::ActionType::kChooseOne:
+					case engine::ActionType::kChooseOne:
 						// choose-one card might be triggered after random
 						break;
 

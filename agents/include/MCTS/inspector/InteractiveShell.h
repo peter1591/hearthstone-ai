@@ -79,7 +79,7 @@ namespace mcts
 			void ShowBestNodeInfo(
 				std::ostream & s,
 				const mcts::selection::TreeNode* main_node,
-				FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
 				ActionApplyHelper const& action_cb_info_getter,
 				int indent,
@@ -168,16 +168,16 @@ namespace mcts
 
 			std::string GetChoiceString(
 				const mcts::selection::TreeNode* main_node,
-				FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node, int choice,
 				ActionApplyHelper const& action_cb_info_getter)
 			{
-				if (node->GetActionType() == FlowControl::ActionType::kMainAction) {
+				if (node->GetActionType() == engine::ActionType::kMainAction) {
 					auto op = action_analyzer.GetMainOpType(choice);
-					return FlowControl::GetMainOpString(op);
+					return engine::GetMainOpString(op);
 				}
 
-				if (node->GetActionType() == FlowControl::ActionType::kChooseHandCard) {
+				if (node->GetActionType() == engine::ActionType::kChooseHandCard) {
 					auto const& playable_cards = action_analyzer.GetPlayableCards();
 					size_t idx = playable_cards[choice];
 
@@ -188,7 +188,7 @@ namespace mcts
 					return Cards::Database::GetInstance().Get((int)card_id).name;
 				}
 
-				if (node->GetActionType() == FlowControl::ActionType::kChooseMinionPutLocation) {
+				if (node->GetActionType() == engine::ActionType::kChooseMinionPutLocation) {
 					auto info = std::get<ActionApplyHelper::MinionPutLocationInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
@@ -199,7 +199,7 @@ namespace mcts
 					return ss.str();
 				}
 
-				if (node->GetActionType() == FlowControl::ActionType::kChooseAttacker) {
+				if (node->GetActionType() == engine::ActionType::kChooseAttacker) {
 					auto info = std::get<ActionApplyHelper::ChooseAttackerInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
@@ -209,7 +209,7 @@ namespace mcts
 					return ss.str();
 				}
 
-				if (node->GetActionType() == FlowControl::ActionType::kChooseDefender) {
+				if (node->GetActionType() == engine::ActionType::kChooseDefender) {
 					auto info = std::get<ActionApplyHelper::ChooseDefenderInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
@@ -219,7 +219,7 @@ namespace mcts
 					return ss.str();
 				}
 
-				if (node->GetActionType() == FlowControl::ActionType::kChooseTarget) {
+				if (node->GetActionType() == engine::ActionType::kChooseTarget) {
 					auto info = std::get<ActionApplyHelper::GetSpecifiedTargetInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
@@ -249,7 +249,7 @@ namespace mcts
 			bool ShowBestSubNodeInfo(
 				std::ostream & s,
 				const mcts::selection::TreeNode* main_node,
-				FlowControl::ValidActionAnalyzer const& action_analyzer,
+				engine::FlowControl::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
 				int choice,
 				uint64_t total_chosen_times,
@@ -308,8 +308,8 @@ namespace mcts
 				s << "Best action: " << std::endl;
 
 				state::State game_state = start_board_getter_(0);
-				FlowControl::ValidActionAnalyzer action_analyzer;
-				action_analyzer.Analyze(FlowControl::ValidActionGetter(game_state));
+				engine::FlowControl::ValidActionAnalyzer action_analyzer;
+				action_analyzer.Analyze(engine::FlowControl::ValidActionGetter(game_state));
 				if (verbose) {
 					double v = GetStateValue(game_state);
 					s << "State-value: " << v << std::endl;
@@ -321,7 +321,7 @@ namespace mcts
 					return;
 				}
 
-				if (node->GetActionType() != FlowControl::ActionType::kMainAction) {
+				if (node->GetActionType() != engine::ActionType::kMainAction) {
 					s << "[ERROR] root node should be with type 'kMainAction'" << std::endl;
 					return;
 				}
@@ -357,7 +357,7 @@ namespace mcts
 
 				s << "Action type: " << GetActionType(node_->GetActionType()) << std::endl;
 
-				if (node_->GetActionType() == FlowControl::ActionType::kMainAction) {
+				if (node_->GetActionType() == engine::ActionType::kMainAction) {
 					s << "Playable hand cards:";
 					auto * board_view = node_->GetAddon().consistency_checker.GetBoard();
 					node_->GetAddon().action_analyzer.ForEachPlayableCard([&](size_t idx) {
@@ -382,7 +382,7 @@ namespace mcts
 							<< child.GetNode() << std::endl;
 					}
 
-					if (node_->GetActionType() == FlowControl::ActionType::kMainAction) {
+					if (node_->GetActionType() == engine::ActionType::kMainAction) {
 						auto op = node_->GetAddon().action_analyzer.GetMainOpType(choice);
 						s << "    Main Action Op: " << FlowControl::GetMainOpString(op) << std::endl;
 					}
@@ -412,18 +412,18 @@ namespace mcts
 				*/
 			}
 
-			std::string GetActionType(FlowControl::ActionType type) {
-				using FlowControl::ActionType;
+			std::string GetActionType(engine::ActionType type) {
+				using engine::ActionType;
 				switch (type.GetType()) {
-				case FlowControl::ActionType::kInvalid: return "kInvalid";
-				case FlowControl::ActionType::kMainAction: return "kMainAction";
-				case FlowControl::ActionType::kRandom: return "kRandom";
-				case FlowControl::ActionType::kChooseHandCard: return "kChooseHandCard";
-				case FlowControl::ActionType::kChooseAttacker: return "kChooseAttacker";
-				case FlowControl::ActionType::kChooseDefender: return "kChooseDefender";
-				case FlowControl::ActionType::kChooseMinionPutLocation: return "kChooseMinionPutLocation";
-				case FlowControl::ActionType::kChooseTarget: return "kChooseTarget";
-				case FlowControl::ActionType::kChooseOne: return "kChooseOne";
+				case engine::ActionType::kInvalid: return "kInvalid";
+				case engine::ActionType::kMainAction: return "kMainAction";
+				case engine::ActionType::kRandom: return "kRandom";
+				case engine::ActionType::kChooseHandCard: return "kChooseHandCard";
+				case engine::ActionType::kChooseAttacker: return "kChooseAttacker";
+				case engine::ActionType::kChooseDefender: return "kChooseDefender";
+				case engine::ActionType::kChooseMinionPutLocation: return "kChooseMinionPutLocation";
+				case engine::ActionType::kChooseTarget: return "kChooseTarget";
+				case engine::ActionType::kChooseOne: return "kChooseOne";
 				default: return "Unknown!!!";
 				}
 			}

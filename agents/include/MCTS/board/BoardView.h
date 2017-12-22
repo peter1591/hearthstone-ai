@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Types.h"
-#include "FlowControl/PlayerStateView.h"
+#include "engine/PlayerStateView.h"
 #include "MCTS/board/BoardViewTypes.h"
 #include "Utils/HashCombine.h"
 
@@ -15,7 +15,7 @@ namespace mcts
 
 		public:
 			template <state::PlayerSide Side>
-			BoardView(FlowControl::PlayerStateView<Side> const& board);
+			BoardView(engine::PlayerStateView<Side> const& board);
 
 			BoardView(BoardView const&) = default;
 			BoardView(BoardView &&) = default;

@@ -14,7 +14,8 @@ namespace mcts
 			// * If the first player has 100% to loss, the credit should be 0.0
 			// * If the first player has 50% to win, the credit should be 0.5
 			// * The credit value should be in range [0.0, 1.0]
-			static double GetCredit(state::PlayerSide side, state::State const& game_state, FlowControl::Result result) {
+
+			static double GetCredit(state::PlayerSide side, state::State const& game_state, engine::Result result) {
 				bool winning = WinOrLoss(side, result);
 
 				double score = 0.0;
@@ -30,13 +31,13 @@ namespace mcts
 			}
 
 		private:
-			static bool WinOrLoss(state::PlayerSide side, FlowControl::Result result) {
+			static bool WinOrLoss(state::PlayerSide side, engine::Result result) {
 				if (side == state::kPlayerFirst) {
 					switch (result) {
-					case FlowControl::kResultFirstPlayerWin:
+					case engine::kResultFirstPlayerWin:
 						return true;
-					case FlowControl::kResultSecondPlayerWin:
-					case FlowControl::kResultDraw:
+					case engine::kResultSecondPlayerWin:
+					case engine::kResultDraw:
 						return false;
 					default:
 						assert(false);
@@ -45,10 +46,10 @@ namespace mcts
 				}
 				else if (side == state::kPlayerSecond) {
 					switch (result) {
-					case FlowControl::kResultSecondPlayerWin:
+					case engine::kResultSecondPlayerWin:
 						return true;
-					case FlowControl::kResultFirstPlayerWin:
-					case FlowControl::kResultDraw:
+					case engine::kResultFirstPlayerWin:
+					case engine::kResultDraw:
 						return false;
 					default:
 						assert(false);
