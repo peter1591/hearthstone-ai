@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "state/State.h"
-#include "engine/Engine.h"
+#include "engine/Game.h"
 #include "engine/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/board/RandomGenerator.h"
@@ -89,29 +89,29 @@ namespace judge
 			recorder_.Start();
 			std::mt19937 random(seed);
 
-			engine::Engine game_engine;
+			engine::Game game;
 
-			game_engine.SetStartState(state_getter(random()));
+			game.SetStartState(state_getter(random()));
 
 			engine::Result result = engine::kResultInvalid;
 			AgentType * next_agent = nullptr;
 			while (true) {
-				if (game_engine.GetCurrentState().GetCurrentPlayerId().IsFirst()) {
+				if (game.GetCurrentState().GetCurrentPlayerId().IsFirst()) {
 					next_agent = first_;
 				}
 				else {
-					assert(game_engine.GetCurrentState().GetCurrentPlayerId().IsSecond());
+					assert(game.GetCurrentState().GetCurrentPlayerId().IsSecond());
 					next_agent = second_;
 				}
 
 				auto current_state_getter = [&](int rnd) -> state::State const& {
 					// TODO: should randomize hidden information from the board view
-					return game_engine.GetCurrentState();
+					return game.GetCurrentState();
 				};
-				next_agent->Think(game_engine.GetCurrentState().GetCurrentPlayerId(), current_state_getter, random);
+				next_agent->Think(game.GetCurrentState().GetCurrentPlayerId(), current_state_getter, random);
 
-				action_callback_.Initialize(game_engine.GetCurrentState(), next_agent);
-				result = game_engine.PerformAction(random_callback_, action_callback_);
+				action_callback_.Initialize(game.GetCurrentState(), next_agent);
+				result = game.PerformAction(random_callback_, action_callback_);
 
 				assert(result != engine::kResultInvalid);
 				if (result != engine::kResultNotDetermined) break;

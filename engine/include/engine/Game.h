@@ -7,7 +7,7 @@
 
 namespace engine
 {
-	class Engine
+	class Game
 	{
 	public:
 		void SetStartState(state::State const& state) {
@@ -23,7 +23,7 @@ namespace engine
 		}
 
 	public:
-		void RefCopyFrom(Engine const& rhs) {
+		void RefCopyFrom(Game const& rhs) {
 			state_.FillWithBase(rhs.state_);
 		}
 

@@ -169,7 +169,6 @@
     <ClInclude Include="..\..\..\engine\include\engine\ActionApplyHelper.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionChoices.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionType.h" />
-    <ClInclude Include="..\..\..\engine\include\engine\Engine.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowContext-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController-impl.h" />
@@ -181,6 +180,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionAnalyzer-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionGetter.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\Game-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\Game.h" />
     <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\engine\include\engine\MainOp.h" />

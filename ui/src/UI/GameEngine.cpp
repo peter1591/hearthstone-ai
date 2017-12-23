@@ -7,7 +7,7 @@
 #include "MCTS/inspector/InteractiveShell.h"
 #include "UI/BoardGetter.h"
 #include "UI/GameEngine.h"
-#include "engine/engine-impl.h"
+#include "engine/Game-impl.h"
 #include "Cards/PreIndexedCards.h"
 
 namespace ui

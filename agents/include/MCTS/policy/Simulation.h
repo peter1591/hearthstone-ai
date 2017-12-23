@@ -698,8 +698,8 @@ namespace mcts
 						cb_user_choice.SetMainOpIndex((int)main_op_idx);
 
 						while (true) {
-							engine::Engine copied_engine;
-							board::Board copy_board(copied_engine, board.GetViewSide());
+							engine::Game copied_game;
+							board::Board copy_board(copied_game, board.GetViewSide());
 							copy_board.RefCopyFrom(board);
 
 							dfs_it = dfs.begin();

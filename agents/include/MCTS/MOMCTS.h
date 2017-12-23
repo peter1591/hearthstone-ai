@@ -23,30 +23,30 @@ namespace mcts
 		template <typename StartBoardGetter>
 		void Iterate(StartBoardGetter&& start_board_getter)
 		{
-			engine::Engine game_engine;
-			game_engine.SetStartState(start_board_getter());
+			engine::Game game;
+			game.SetStartState(start_board_getter());
 
 			first_.StartEpisode();
 			second_.StartEpisode();
 
 			while (true)
 			{
-				state::PlayerIdentifier side = game_engine.GetCurrentState().GetCurrentPlayerId();
+				state::PlayerIdentifier side = game.GetCurrentState().GetCurrentPlayerId();
 				
 				engine::Result result = GetSOMCTS(side).PerformOwnTurnActions(
-					board::Board(game_engine, side.GetSide()));
+					board::Board(game, side.GetSide()));
 				assert(result != engine::kResultInvalid);
 				
 				if (result != engine::kResultNotDetermined) {
-					first_.EpisodeFinished(game_engine.GetCurrentState(), result);
-					second_.EpisodeFinished(game_engine.GetCurrentState(), result);
+					first_.EpisodeFinished(game.GetCurrentState(), result);
+					second_.EpisodeFinished(game.GetCurrentState(), result);
 					break;
 				}
 
-				assert(game_engine.GetCurrentState().GetCurrentPlayerId() == side.Opposite());
+				assert(game.GetCurrentState().GetCurrentPlayerId() == side.Opposite());
 
 				GetSOMCTS(side.Opposite()).ApplyOthersActions(
-					board::Board(game_engine, side.Opposite().GetSide()));
+					board::Board(game, side.Opposite().GetSide()));
 			}
 		}
 

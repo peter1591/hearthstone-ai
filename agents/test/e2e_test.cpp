@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "engine/engine-impl.h"
+#include "engine/Game-impl.h"
 #include "Cards/PreIndexedCards.h"
 #include "MCTS/TestStateBuilder.h"
 #include "MCTS/inspector/InteractiveShell.h"
