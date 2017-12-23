@@ -5,7 +5,7 @@
 
 #include "engine/Game-impl.h"
 #include "Cards/PreIndexedCards.h"
-#include "MCTS/TestStateBuilder.h"
+#include "TestStateBuilder.h"
 #include "MCTS/inspector/InteractiveShell.h"
 
 static void Initialize()

@@ -203,9 +203,6 @@
     <ClInclude Include="..\..\include\MCTS\Statistic.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Types.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>

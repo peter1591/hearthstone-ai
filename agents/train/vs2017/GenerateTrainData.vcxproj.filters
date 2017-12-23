@@ -95,5 +95,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\JsonSerializer.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\test\TestStateBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

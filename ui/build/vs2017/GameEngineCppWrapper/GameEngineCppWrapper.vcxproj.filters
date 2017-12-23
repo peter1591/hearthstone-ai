@@ -89,9 +89,6 @@
     <ClCompile Include="..\..\..\..\agents\test\CardDispatcher.cpp">
       <Filter>Source Files\mcts</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\agents\test\TestStateBuilder.cpp">
-      <Filter>Source Files\mcts</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\UI\GameEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

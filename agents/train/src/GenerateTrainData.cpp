@@ -8,7 +8,7 @@
 #include <sstream>
 
 #include "Cards/PreIndexedCards.h"
-#include "MCTS/TestStateBuilder.h"
+#include "TestStateBuilder.h"
 #include "judge/Judger.h"
 #include "agents/MCTSAgent.h"
 

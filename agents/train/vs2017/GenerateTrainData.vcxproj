@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;..\..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;..\..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;..\..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;..\..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -162,6 +162,7 @@
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
+    <ClInclude Include="..\..\test\TestStateBuilder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

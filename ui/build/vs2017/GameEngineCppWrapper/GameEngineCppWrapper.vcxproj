@@ -159,7 +159,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\agents\src\neural_net\NeuralNetwork.cpp" />
     <ClCompile Include="..\..\..\..\agents\test\CardDispatcher.cpp" />
-    <ClCompile Include="..\..\..\..\agents\test\TestStateBuilder.cpp" />
     <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
     <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_value.cpp" />
     <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_writer.cpp" />

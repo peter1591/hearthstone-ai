@@ -1,6 +1,6 @@
 #include <random>
 
-#include "MCTS/TestStateBuilder.h"
+#include "TestStateBuilder.h"
 
 #include "Cards/Database.h"
 #include "state/Configs.h"

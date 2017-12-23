@@ -13,7 +13,6 @@
 #include "UI/Board/Board.h"
 #include "UI/GameEngineLogger.h"
 #include "UI/Board/UnknownCards.h"
-#include "MCTS/TestStateBuilder.h"
 
 namespace ui
 {

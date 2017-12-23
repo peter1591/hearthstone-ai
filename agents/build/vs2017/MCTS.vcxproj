@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\jsoncpp\include;..\..\..\third_party\tiny-dnn\;..\..\..\engine\include;..\..\..\agents\include;..\..\..\judge\include;..\..\agents\test;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -228,7 +228,6 @@
     <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />
-    <ClInclude Include="..\..\include\MCTS\TestStateBuilder.h" />
     <ClInclude Include="..\..\include\MCTS\Types.h" />
     <ClInclude Include="..\include\neural_net\NeuralNetwork.h" />
   </ItemGroup>
