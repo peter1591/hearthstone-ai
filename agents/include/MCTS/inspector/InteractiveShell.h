@@ -309,7 +309,7 @@ namespace mcts
 
 				state::State game_state = start_board_getter_(0);
 				engine::ValidActionAnalyzer action_analyzer;
-				action_analyzer.Analyze(engine::FlowControl::ValidActionGetter(game_state));
+				action_analyzer.Analyze(game_state);
 				if (verbose) {
 					double v = GetStateValue(game_state);
 					s << "State-value: " << v << std::endl;
