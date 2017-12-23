@@ -224,9 +224,6 @@
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\BoardActionAnalyzer.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\Engine.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
