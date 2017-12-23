@@ -23,29 +23,30 @@ namespace mcts
 		template <typename StartBoardGetter>
 		void Iterate(StartBoardGetter&& start_board_getter)
 		{
-			state::State state = start_board_getter();
+			engine::Engine game_engine;
+			game_engine.SetStartState(start_board_getter());
 
 			first_.StartEpisode();
 			second_.StartEpisode();
 
 			while (true)
 			{
-				state::PlayerIdentifier side = state.GetCurrentPlayerId();
+				state::PlayerIdentifier side = game_engine.GetCurrentState().GetCurrentPlayerId();
 				
 				engine::Result result = GetSOMCTS(side).PerformOwnTurnActions(
-					board::Board(state, side.GetSide()));
+					board::Board(game_engine, side.GetSide()));
 				assert(result != engine::kResultInvalid);
 				
 				if (result != engine::kResultNotDetermined) {
-					first_.EpisodeFinished(state, result);
-					second_.EpisodeFinished(state, result);
+					first_.EpisodeFinished(game_engine.GetCurrentState(), result);
+					second_.EpisodeFinished(game_engine.GetCurrentState(), result);
 					break;
 				}
 
-				assert(state.GetCurrentPlayerId() == side.Opposite());
+				assert(game_engine.GetCurrentState().GetCurrentPlayerId() == side.Opposite());
 
 				GetSOMCTS(side.Opposite()).ApplyOthersActions(
-					board::Board(state, side.Opposite().GetSide()));
+					board::Board(game_engine, side.Opposite().GetSide()));
 			}
 		}
 

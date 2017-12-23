@@ -184,6 +184,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\engine\include\engine\MainOp.h" />
     <ClInclude Include="..\..\..\engine\include\engine\Result.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\ValidActionAnalyzer-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />

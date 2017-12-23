@@ -1,5 +1,6 @@
 #pragma once
 
+#include "engine/Engine.h"
 #include "engine/IActionParameterGetter.h"
 #include "MCTS/board/BoardView.h"
 #include "MCTS/Types.h"
@@ -23,68 +24,73 @@ namespace mcts
 			state::State state_;
 		};
 
-		class CopiedBoard;
-
 		// Make sure no hidden information is accessed by a player
 		class Board
 		{
-			friend CopiedBoard;
+		public:
+			Board(engine::Engine & game_engine, state::PlayerSide side) :
+				game_engine_(game_engine), side_(side)
+			{}
 
 		public:
-			Board(state::State & board, state::PlayerSide side) : board_(board), side_(side) {}
+			void RefCopyFrom(Board const& rhs) {
+				game_engine_.RefCopyFrom(rhs.game_engine_);
+			}
 
 		public:
 			state::PlayerIdentifier GetCurrentPlayer() const {
-				return board_.GetCurrentPlayerId();
+				return game_engine_.GetCurrentState().GetCurrentPlayerId();
 			}
 
 			state::PlayerSide GetViewSide() const { return side_; }
 
 			BoardView CreateView() const {
 				if (side_ == state::kPlayerFirst) {
-					return BoardView(engine::PlayerStateView<state::kPlayerFirst>(board_));
+					return BoardView(engine::PlayerStateView<state::kPlayerFirst>(
+						game_engine_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return BoardView(engine::PlayerStateView<state::kPlayerSecond>(board_));
+					return BoardView(engine::PlayerStateView<state::kPlayerSecond>(
+						game_engine_.GetCurrentState()));
 				}
 			}
 
 			template <class Functor>
 			auto ApplyWithPlayerStateView(Functor && functor) const {
 				if (side_ == state::kPlayerFirst) {
-					return functor(engine::PlayerStateView<state::kPlayerFirst>(board_));
+					return functor(engine::PlayerStateView<state::kPlayerFirst>(
+						game_engine_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return functor(engine::PlayerStateView<state::kPlayerSecond>(board_));
+					return functor(engine::PlayerStateView<state::kPlayerSecond>(
+						game_engine_.GetCurrentState()));
 				}
 			}
 
 			auto GetCurrentPlayerStateView() const {
-				if (board_.GetCurrentPlayerId().GetSide() != side_) {
+				if (game_engine_.GetCurrentState().GetCurrentPlayerId().GetSide() != side_) {
 					assert(false);
 					throw std::runtime_error("current player does not match.");
 				}
-				return engine::CurrentPlayerStateView(board_);
+				return engine::CurrentPlayerStateView(game_engine_.GetCurrentState());
 			}
 
 		public: // bridge to action analyzer
 			engine::Result ApplyAction(state::IRandomGenerator & random, engine::IActionParameterGetter & action_parameters) const
 			{
-				assert(board_.GetCurrentPlayerId().GetSide() == side_);
-				engine::FlowControl::FlowContext flow_context(random, action_parameters);
-				engine::FlowControl::FlowController flow_controller(board_, flow_context);
-				return flow_controller.PerformAction();
+				assert(game_engine_.GetCurrentState().GetCurrentPlayerId().GetSide() == side_);
+				return game_engine_.PerformAction(random, action_parameters);
 			}
 
 		public:
 			void Save(SavedBoard & save) const {
-				save.state_ = board_;
+				save.state_ = game_engine_.GetCurrentState();
 			}
 
-			void Restore(SavedBoard const& save) const {
-				board_ = save.state_;
+			void Restore(SavedBoard const& save) {
+				game_engine_.SetStartState(save.state_);
 			}
 
 		public:
@@ -92,27 +98,12 @@ namespace mcts
 				// For simulation, it needs state information to estimate who's going to win
 				// Hidden information is sometimes a big boost to make a better predict.
 				// NOTE: THIS SHOULD ONLY BE USED FOR SIMULATION STATE-VALUE ESTIMATION
-				return board_;
+				return game_engine_.GetCurrentState();
 			}
 
 		private:
-			state::State & board_;
+			engine::Engine & game_engine_;
 			state::PlayerSide side_;
-		};
-
-		class CopiedBoard {
-		public:
-			explicit CopiedBoard(state::PlayerSide side) : state_(), board_(state_, side) {}
-
-			void FillWithBase(Board const& board) {
-				state_.FillWithBase(board.board_);
-			}
-
-			Board & GetBoard() { return board_; }
-
-		private:
-			state::State state_;
-			Board board_;
 		};
 	}
 }

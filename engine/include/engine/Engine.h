@@ -22,6 +22,11 @@ namespace engine
 			return flow_controller.PerformAction();
 		}
 
+	public:
+		void RefCopyFrom(Engine const& rhs) {
+			state_.FillWithBase(rhs.state_);
+		}
+
 	private:
 		state::State state_;
 	};

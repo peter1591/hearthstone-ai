@@ -566,8 +566,7 @@ namespace mcts
 				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
 					rand_(rand),
 					decision_(), decision_idx_(0),
-					state_value_func_(),
-					copy_board_(side)
+					state_value_func_()
 				{
 				}
 
@@ -696,15 +695,15 @@ namespace mcts
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t main_op_idx, engine::MainOpType main_op) {
-						assert(board.GetViewSide() == copy_board_.GetBoard().GetViewSide());
-
 						cb_user_choice.SetMainOpIndex((int)main_op_idx);
 
 						while (true) {
-							copy_board_.FillWithBase(board);
+							engine::Engine copied_engine;
+							board::Board copy_board(copied_engine, board.GetViewSide());
+							copy_board.RefCopyFrom(board);
 
 							dfs_it = dfs.begin();
-							auto result = copy_board_.GetBoard().ApplyAction(cb_random, cb_user_choice);
+							auto result = copy_board.ApplyAction(cb_random, cb_user_choice);
 
 							if (result != engine::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();
@@ -719,7 +718,7 @@ namespace mcts
 								}
 								else {
 									assert(result == engine::kResultNotDetermined);
-									value = state_value_func_.GetStateValue(copy_board_.GetBoard());
+									value = state_value_func_.GetStateValue(copy_board);
 								}
 
 								if (decision_.empty() || value > best_value) {
@@ -787,7 +786,6 @@ namespace mcts
 				std::vector<int> decision_;
 				size_t decision_idx_;
 				NeuralNetworkStateValueFunction state_value_func_;
-				board::CopiedBoard copy_board_;
 			};
 		}
 	}

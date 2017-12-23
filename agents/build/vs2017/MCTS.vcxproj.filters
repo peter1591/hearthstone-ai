@@ -281,5 +281,11 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionGetter.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ValidActionAnalyzer.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ValidActionAnalyzer-impl.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

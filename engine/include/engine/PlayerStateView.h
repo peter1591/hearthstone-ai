@@ -120,7 +120,7 @@ namespace engine {
 	class CurrentPlayerStateView
 	{
 	public:
-		CurrentPlayerStateView(state::State & state) : state_(state) {}
+		CurrentPlayerStateView(state::State const& state) : state_(state) {}
 
 		state::PlayerSide GetCurrentPlayer() const {
 			return state_.GetCurrentPlayerId().GetSide();
@@ -141,6 +141,6 @@ namespace engine {
 		}
 
 	private:
-		state::State & state_;
+		state::State const& state_;
 	};
 }
