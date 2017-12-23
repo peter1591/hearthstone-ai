@@ -212,9 +212,6 @@
     <ClInclude Include="..\..\include\MCTS\inspector\InteractiveShell.h">
       <Filter>Header Files\MCTS\inspector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\inspector\ActionApplyHelper.h">
-      <Filter>Header Files\MCTS\inspector</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h">
       <Filter>Header Files\judge</Filter>
     </ClInclude>
@@ -282,6 +279,9 @@
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\ValidActionAnalyzer-impl.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionApplyHelper.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
   </ItemGroup>

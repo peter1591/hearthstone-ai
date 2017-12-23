@@ -7,7 +7,7 @@
 #include "MCTS/inspector/InteractiveShell.h"
 #include "UI/BoardGetter.h"
 #include "UI/GameEngine.h"
-#include "FlowControl/FlowController-impl.h"
+#include "engine/FlowControl/FlowController-impl.h" // TODO: add an engine/engine-impl.h for this
 #include "Cards/PreIndexedCards.h"
 
 namespace ui

@@ -166,6 +166,7 @@
     <ClCompile Include="..\..\test\TestStateBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionApplyHelper.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionChoices.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionType.h" />
     <ClInclude Include="..\..\..\engine\include\engine\Engine.h" />
@@ -208,7 +209,6 @@
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h" />
     <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h" />
     <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h" />
-    <ClInclude Include="..\..\include\MCTS\inspector\ActionApplyHelper.h" />
     <ClInclude Include="..\..\include\MCTS\inspector\InteractiveShell.h" />
     <ClInclude Include="..\..\include\MCTS\MOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h" />

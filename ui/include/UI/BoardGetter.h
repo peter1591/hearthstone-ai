@@ -9,7 +9,7 @@
 
 #include "state/Configs.h"
 #include "Cards/Database.h"
-#include "MCTS/inspector/ActionApplyHelper.h"
+#include "engine/ActionApplyHelper.h"
 #include "UI/Board/Parser.h"
 #include "UI/SampledBoards.h"
 
@@ -85,7 +85,7 @@ namespace ui
 	private:
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
-		mcts::inspector::ActionApplyHelper action_apply_helper_;
+		engine::ActionApplyHelper action_apply_helper_;
 		std::string board_raw_;
 		int root_sample_count_;
 		bool need_restart_ai_;

@@ -5,7 +5,7 @@
 #include <random>
 
 #include "agents/MCTSRunner.h"
-#include "MCTS/inspector/ActionApplyHelper.h"
+#include "engine/ActionApplyHelper.h"
 
 namespace mcts
 {
@@ -81,7 +81,7 @@ namespace mcts
 				const mcts::selection::TreeNode* main_node,
 				engine::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node,
-				ActionApplyHelper const& action_cb_info_getter,
+				engine::ActionApplyHelper const& action_cb_info_getter,
 				int indent,
 				bool only_show_best_choice = true)
 			{
@@ -113,7 +113,7 @@ namespace mcts
 						<< ": " << GetChoiceString(main_node, action_analyzer, node, choice, action_cb_info_getter)
 						<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
 						<< std::endl;
-					ActionApplyHelper new_cb_getter = action_cb_info_getter;
+					engine::ActionApplyHelper new_cb_getter = action_cb_info_getter;
 					new_cb_getter.AppendChoice(choice);
 					return ShowBestSubNodeInfo(s, main_node, action_analyzer, node, choice, total_chosen_time, child, new_cb_getter, indent + 1, only_show_best_choice);
 				});
@@ -170,7 +170,7 @@ namespace mcts
 				const mcts::selection::TreeNode* main_node,
 				engine::ValidActionAnalyzer const& action_analyzer,
 				const mcts::selection::TreeNode* node, int choice,
-				ActionApplyHelper const& action_cb_info_getter)
+				engine::ActionApplyHelper const& action_cb_info_getter)
 			{
 				if (node->GetActionType() == engine::ActionType::kMainAction) {
 					auto op = action_analyzer.GetMainOpType(choice);
@@ -189,7 +189,7 @@ namespace mcts
 				}
 
 				if (node->GetActionType() == engine::ActionType::kChooseMinionPutLocation) {
-					auto info = std::get<ActionApplyHelper::MinionPutLocationInfo>(
+					auto info = std::get<engine::ActionApplyHelper::MinionPutLocationInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
 					}));
@@ -200,7 +200,7 @@ namespace mcts
 				}
 
 				if (node->GetActionType() == engine::ActionType::kChooseAttacker) {
-					auto info = std::get<ActionApplyHelper::ChooseAttackerInfo>(
+					auto info = std::get<engine::ActionApplyHelper::ChooseAttackerInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
 					}));
@@ -210,7 +210,7 @@ namespace mcts
 				}
 
 				if (node->GetActionType() == engine::ActionType::kChooseDefender) {
-					auto info = std::get<ActionApplyHelper::ChooseDefenderInfo>(
+					auto info = std::get<engine::ActionApplyHelper::ChooseDefenderInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
 					}));
@@ -220,7 +220,7 @@ namespace mcts
 				}
 
 				if (node->GetActionType() == engine::ActionType::kChooseTarget) {
-					auto info = std::get<ActionApplyHelper::GetSpecifiedTargetInfo>(
+					auto info = std::get<engine::ActionApplyHelper::GetSpecifiedTargetInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						return start_board_getter_(0); // any seed number is okay
 					}));
@@ -254,7 +254,7 @@ namespace mcts
 				int choice,
 				uint64_t total_chosen_times,
 				mcts::selection::ChildType const& child,
-				ActionApplyHelper const& action_cb_info_getter,
+				engine::ActionApplyHelper const& action_cb_info_getter,
 				int indent,
 				bool only_show_best_choice = true)
 			{
@@ -326,7 +326,7 @@ namespace mcts
 					return;
 				}
 
-				ActionApplyHelper action_cb_info_getter;
+				engine::ActionApplyHelper action_cb_info_getter;
 				ShowBestNodeInfo(s, node, action_analyzer, node, action_cb_info_getter, 0, !verbose);
 			}
 
