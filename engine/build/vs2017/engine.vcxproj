@@ -215,8 +215,10 @@
     <ClInclude Include="..\..\include\Cards\OG\Warlock.h" />
     <ClInclude Include="..\..\include\Cards\PreIndexedCards.h" />
     <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h" />
+    <ClInclude Include="..\..\include\engine\ActionApplyHelper.h" />
     <ClInclude Include="..\..\include\engine\ActionChoices.h" />
     <ClInclude Include="..\..\include\engine\ActionType.h" />
+    <ClInclude Include="..\..\include\engine\Engine-impl.h" />
     <ClInclude Include="..\..\include\engine\Engine.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />
