@@ -29,10 +29,10 @@ namespace engine {
 
 				TieredEnchantments() : tier1_(), tier2_(), tier3_() {}
 
-				void FillWithBase(TieredEnchantments const& base) {
-					tier1_.FillWithBase(base.tier1_);
-					tier2_.FillWithBase(base.tier2_);
-					tier3_.FillWithBase(base.tier3_);
+				void RefCopy(TieredEnchantments const& base) {
+					tier1_.RefCopy(base.tier1_);
+					tier2_.RefCopy(base.tier2_);
+					tier3_.RefCopy(base.tier3_);
 				}
 
 				template <typename EnchantmentType>

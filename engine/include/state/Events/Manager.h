@@ -28,7 +28,7 @@ namespace state
 					template <class Tuple>
 					static void Do(Tuple & tuple, Tuple const& base) {
 						if constexpr (N >= 0) {
-							std::get<N>(tuple).FillWithBase(std::get<N>(base));
+							std::get<N>(tuple).RefCopy(std::get<N>(base));
 							ForEachUnroll<N - 1>::Do(tuple, base);
 						}
 					}
@@ -44,7 +44,7 @@ namespace state
 		public:
 			Manager() : event_trigger_recursive_count_(0), event_tuple_(), categorized_event_tuple_() {}
 
-			void FillWithBase(Manager const& base) {
+			void RefCopy(Manager const& base) {
 				event_trigger_recursive_count_ = base.event_trigger_recursive_count_;
 				CopyOnWriteHelper::CopyOnWrite(this->event_tuple_, base.event_tuple_);
 				CopyOnWriteHelper::CopyOnWrite(this->categorized_event_tuple_, base.categorized_event_tuple_);

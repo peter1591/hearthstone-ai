@@ -42,7 +42,7 @@ namespace engine {
 					return *this;
 				}
 
-				void FillWithBase(Enchantments const& base) {
+				void RefCopy(Enchantments const& base) {
 					assert(base.base_enchantments_ == nullptr);
 					base_enchantments_ = &base.enchantments_;
 					update_decider_ = base.update_decider_;

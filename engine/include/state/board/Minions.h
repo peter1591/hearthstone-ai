@@ -20,7 +20,7 @@ namespace state
 				minions_.reserve(max_size_);
 			}
 
-			void FillWithBase(Minions const& base) {
+			void RefCopy(Minions const& base) {
 				minions_ = base.minions_;
 				change_id_ = base.change_id_;
 			}

@@ -33,7 +33,7 @@ namespace state
 				static_assert(kFieldChangeId == 2);
 			}
 
-			void FillWithBase(CardData const& base) {
+			void RefCopy(CardData const& base) {
 				static_assert(kFieldChangeId == 2);
 
 				card_id = base.card_id;
@@ -60,9 +60,9 @@ namespace state
 				silenced = base.silenced;
 				added_to_play_zone = base.added_to_play_zone;
 				added_to_hand_zone = base.added_to_hand_zone;
-				enchantment_handler.FillWithBase(base.enchantment_handler);
+				enchantment_handler.RefCopy(base.enchantment_handler);
 				onplay_handler = base.onplay_handler;
-				deathrattle_handler.FillWithBase(base.deathrattle_handler);
+				deathrattle_handler.RefCopy(base.deathrattle_handler);
 			}
 
 			static constexpr int kFieldChangeId = 2;

@@ -31,7 +31,7 @@ namespace state
 				cards_(rhs.cards_)
 			{}
 
-			void FillWithBase(Deck const& base) {
+			void RefCopy(Deck const& base) {
 				assert(base.base_cards_ == nullptr);
 
 				change_id_ = base.change_id_;

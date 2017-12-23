@@ -24,7 +24,7 @@ namespace engine
 
 	public:
 		void RefCopyFrom(Game const& rhs) {
-			state_.FillWithBase(rhs.state_);
+			state_.RefCopy(rhs.state_);
 		}
 
 	private:

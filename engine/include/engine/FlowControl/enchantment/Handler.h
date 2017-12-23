@@ -27,10 +27,10 @@ namespace engine {
 					return *this;
 				}
 
-				void FillWithBase(Handler const& base) {
+				void RefCopy(Handler const& base) {
 					assert(base.base_origin_states == nullptr);
 					base_origin_states = &base.origin_states;
-					enchantments.FillWithBase(base.enchantments);
+					enchantments.RefCopy(base.enchantments);
 				}
 
 				state::Cards::EnchantableStates const& GetOriginalStates() const {

@@ -26,7 +26,7 @@ namespace state
 				return *this;
 			}
 
-			void FillWithBase(Secrets const& base) {
+			void RefCopy(Secrets const& base) {
 				assert(base.base_ == nullptr);
 				base_ = &base.secrets_;
 			}

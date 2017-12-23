@@ -26,7 +26,7 @@ namespace state
 					return *this;
 				}
 
-				void FillWithBase(ContainerType const& base) {
+				void RefCopy(ContainerType const& base) {
 					assert(base.base_ == nullptr);
 					base_ = &base.items_;
 				}
@@ -77,10 +77,10 @@ namespace state
 		public:
 			Graveyard() : minions_(), spells_(), others_() {}
 
-			void FillWithBase(Graveyard const& base) {
-				minions_.FillWithBase(base.minions_);
-				spells_.FillWithBase(base.spells_);
-				others_.FillWithBase(base.others_);
+			void RefCopy(Graveyard const& base) {
+				minions_.RefCopy(base.minions_);
+				spells_.RefCopy(base.spells_);
+				others_.RefCopy(base.others_);
 			}
 
 			size_t GetTotalMinions() const { return minions_.size(); }

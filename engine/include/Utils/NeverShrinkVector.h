@@ -24,9 +24,9 @@ namespace Utils
 			item_ = item;
 		}
 
-		void SetWithBase(ItemType const& item) {
+		void RefCopy(ItemType const& item) {
 			exist_ = true;
-			item_.FillWithBase(item);
+			item_.RefCopy(item);
 		}
 
 		void UnSet() {

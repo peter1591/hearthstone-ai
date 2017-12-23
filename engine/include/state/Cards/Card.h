@@ -89,8 +89,8 @@ namespace state
 			explicit Card(const CardData & data) : data_(data) {}
 			explicit Card(CardData&& data) : data_(std::move(data)) {}
 
-			void FillWithBase(Card const& base) {
-				data_.FillWithBase(base.data_);
+			void RefCopy(Card const& base) {
+				data_.RefCopy(base.data_);
 			}
 
 			void RestoreToDefault() {

@@ -12,10 +12,10 @@ namespace state
 		public:
 			Board() : first_(), second_() {}
 
-			void FillWithBase(Board const& base)
+			void RefCopy(Board const& base)
 			{
-				first_.FillWithBase(base.first_);
-				second_.FillWithBase(base.second_);
+				first_.RefCopy(base.first_);
+				second_.RefCopy(base.second_);
 			}
 
 			Player & Get(PlayerSide side) { return Get(PlayerIdentifier(side)); }

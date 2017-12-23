@@ -32,7 +32,7 @@ namespace engine {
 					return *this;
 				}
 
-				void FillWithBase(Handler const& base) {
+				void RefCopy(Handler const& base) {
 					assert(base.base_deathrattles_ == nullptr);
 					base_deathrattles_ = &base.deathrattles_;
 					deathrattles_.clear();

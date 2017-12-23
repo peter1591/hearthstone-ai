@@ -26,7 +26,7 @@ namespace state
 				base_(rhs.base_), cards_(rhs.cards_)
 			{}
 
-			void FillWithBase(Manager const& base) {
+			void RefCopy(Manager const& base) {
 				assert(base.base_ == nullptr);
 				base_ = &base;
 
@@ -55,7 +55,7 @@ namespace state
 
 				assert(base_);
 				assert(id.id < (int)base_->cards_.Size());
-				item.SetWithBase(base_->Get(id)); // copy-on-write
+				item.RefCopy(base_->Get(id)); // copy-on-write
 				return item.Get();
 			}
 

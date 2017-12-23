@@ -27,13 +27,13 @@ namespace state
 				resource_(), fatigue_damage_(0)
 			{}
 
-			void FillWithBase(Player const& base)
+			void RefCopy(Player const& base)
 			{
-				deck_.FillWithBase(base.deck_);
-				hand_.FillWithBase(base.hand_);
-				minions_.FillWithBase(base.minions_);
-				secrets_.FillWithBase(base.secrets_);
-				graveyard_.FillWithBase(base.graveyard_);
+				deck_.RefCopy(base.deck_);
+				hand_.RefCopy(base.hand_);
+				minions_.RefCopy(base.minions_);
+				secrets_.RefCopy(base.secrets_);
+				graveyard_.RefCopy(base.graveyard_);
 				played_minions_this_turn_ = base.played_minions_this_turn_;
 				played_cards_this_turn_ = base.played_cards_this_turn_;
 				hero_ref_ = base.hero_ref_;

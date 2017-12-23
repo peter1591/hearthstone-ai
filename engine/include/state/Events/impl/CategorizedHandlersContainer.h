@@ -34,7 +34,7 @@ namespace state
 					return *this;
 				}
 
-				void FillWithBase(CategorizedHandlersContainer<TriggerType> const& base) {
+				void RefCopy(CategorizedHandlersContainer<TriggerType> const& base) {
 					assert(base.base_ == nullptr);
 					base_ = &base.handlers_;
 				}

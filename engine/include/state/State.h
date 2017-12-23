@@ -27,11 +27,11 @@ namespace state
 			current_player_(), turn_(0), play_order_(1)
 		{}
 
-		void FillWithBase(State const& base)
+		void RefCopy(State const& base)
 		{
-			board_.FillWithBase(base.board_);
-			cards_mgr_.FillWithBase(base.cards_mgr_);
-			event_mgr_.FillWithBase(base.event_mgr_);
+			board_.RefCopy(base.board_);
+			cards_mgr_.RefCopy(base.cards_mgr_);
+			event_mgr_.RefCopy(base.event_mgr_);
 			aura_mgr_ = base.aura_mgr_;
 			current_player_ = base.current_player_;
 			turn_ = base.turn_;
