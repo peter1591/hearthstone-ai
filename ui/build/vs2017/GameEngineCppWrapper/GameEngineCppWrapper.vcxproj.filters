@@ -34,6 +34,9 @@
     <Filter Include="Header Files\engine">
       <UniqueIdentifier>{40bc5d71-70c5-48d4-a606-e0300255af58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine\view">
+      <UniqueIdentifier>{7934a63a-0511-4fae-b1e9-1ecef82107d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\ui\include\UI\GameEngine.h">
@@ -54,20 +57,11 @@
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Entity.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\ui\include\UI\Decks.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Player.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Parser.h">
       <Filter>Header Files\UI\Board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\ui\include\UI\ActionApplyHelper.h">
-      <Filter>Header Files\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\ui\include\UI\CompetitionGuide.h">
-      <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\agents\include\agents\MCTSAgent.h">
       <Filter>Header Files\agents</Filter>
@@ -80,6 +74,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\engine\include\engine\Game-impl.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\Board.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardRefView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView-impl.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardViewTypes.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\UI\Board\StateRestorer.h">
+      <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

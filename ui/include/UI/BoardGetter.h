@@ -60,8 +60,9 @@ namespace ui
 			std::mt19937 rand(seed);
 			
 			ui::board::Parser parser(logger_);
+			auto state_restorer = parser.Parse(board_raw_);
 			sampled_boards_.Prepare(root_sample_count_, rand, [&]() {
-				return parser.GetState(board_raw_, rand);
+				return state_restorer.RestoreState(rand);
 			});
 			
 			if (!controller || need_restart_ai_) {

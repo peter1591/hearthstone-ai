@@ -147,7 +147,7 @@ namespace ui
 			}
 
 		private:
-			UnknownCardsSets * data_; // TODO: should use const* ideally
+			UnknownCardsSets * data_;
 			std::vector<std::vector<Cards::CardId>> shuffled_cards_;
 		};
 	}
