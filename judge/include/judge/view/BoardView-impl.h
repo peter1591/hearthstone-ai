@@ -1,10 +1,10 @@
 #pragma once
 
-#include "MCTS/board/BoardView.h"
+#include "judge/view/BoardView.h"
 
-namespace mcts
+namespace judge
 {
-	namespace board
+	namespace view
 	{
 		template <state::PlayerSide Side>
 		inline BoardView::BoardView(judge::view::PlayerStateRefView<Side> const& board) :

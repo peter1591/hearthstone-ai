@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <unordered_map>
-#include "MCTS/board/Board.h"
+#include "judge/view/Board.h"
 #include "Utils/SpinLocks.h"
 
 namespace mcts
@@ -15,12 +15,12 @@ namespace mcts
 		{
 		private:
 			using TreeNode = mcts::selection::TreeNode;
-			using MapType = std::unordered_map<board::BoardView, std::unique_ptr<TreeNode>>;
+			using MapType = std::unordered_map<judge::view::BoardView, std::unique_ptr<TreeNode>>;
 
 		public:
 			BoardNodeMap() : mutex_(), map_() {}
 
-			TreeNode* GetOrCreateNode(board::Board const& board, bool * new_node_created = nullptr);
+			TreeNode* GetOrCreateNode(judge::view::Board const& board, bool * new_node_created = nullptr);
 
 			template <typename Functor>
 			void ForEach(Functor&& functor) const {

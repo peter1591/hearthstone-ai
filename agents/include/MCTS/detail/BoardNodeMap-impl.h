@@ -9,7 +9,7 @@ namespace mcts
 
 	namespace detail
 	{
-		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(board::Board const& board, bool * new_node_created)
+		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(judge::view::Board const& board, bool * new_node_created)
 		{
 			std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 

@@ -31,7 +31,7 @@ namespace mcts
 
 			// @return >= 0 for the chosen action
 			int ChooseAction(
-				board::Board const& board,
+				judge::view::Board const& board,
 				engine::ActionType action_type,
 				engine::ActionChoices const& choices)
 			{

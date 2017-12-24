@@ -5,9 +5,9 @@
 #include "state/Types.h"
 #include "Utils/HashCombine.h"
 
-namespace mcts
+namespace judge
 {
-	namespace board
+	namespace view
 	{
 		namespace boardview
 		{
@@ -320,8 +320,8 @@ namespace mcts
 
 namespace std {
 	template <>
-	struct hash<mcts::board::boardview::Hero> {
-		std::size_t operator()(mcts::board::boardview::Hero const& v) const
+	struct hash<judge::view::boardview::Hero> {
+		std::size_t operator()(judge::view::boardview::Hero const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -334,19 +334,19 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::SelfHero> {
-		std::size_t operator()(mcts::board::boardview::SelfHero const& v) const
+	struct hash<judge::view::boardview::SelfHero> {
+		std::size_t operator()(judge::view::boardview::SelfHero const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result = std::hash<mcts::board::boardview::Hero>()(v);
+			std::size_t result = std::hash<judge::view::boardview::Hero>()(v);
 			Utils::HashCombine::hash_combine(result, v.attackable);
 			return result;
 		}
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::Crystal> {
-		std::size_t operator()(mcts::board::boardview::Crystal const& v) const
+	struct hash<judge::view::boardview::Crystal> {
+		std::size_t operator()(judge::view::boardview::Crystal const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -359,8 +359,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::HeroPower> {
-		std::size_t operator()(mcts::board::boardview::HeroPower const& v) const
+	struct hash<judge::view::boardview::HeroPower> {
+		std::size_t operator()(judge::view::boardview::HeroPower const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -371,8 +371,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::Weapon> {
-		std::size_t operator()(mcts::board::boardview::Weapon const& v) const
+	struct hash<judge::view::boardview::Weapon> {
+		std::size_t operator()(judge::view::boardview::Weapon const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -387,8 +387,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::Minion> {
-		std::size_t operator()(mcts::board::boardview::Minion const& v) const
+	struct hash<judge::view::boardview::Minion> {
+		std::size_t operator()(judge::view::boardview::Minion const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -402,19 +402,19 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::SelfMinion> {
-		std::size_t operator()(mcts::board::boardview::SelfMinion const& v) const
+	struct hash<judge::view::boardview::SelfMinion> {
+		std::size_t operator()(judge::view::boardview::SelfMinion const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
-			std::size_t result = std::hash<mcts::board::boardview::Minion>()(v);
+			std::size_t result = std::hash<judge::view::boardview::Minion>()(v);
 			Utils::HashCombine::hash_combine(result, v.attackable);
 			return result;
 		}
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::Minions> {
-		std::size_t operator()(mcts::board::boardview::Minions const& v) const
+	struct hash<judge::view::boardview::Minions> {
+		std::size_t operator()(judge::view::boardview::Minions const& v) const
 		{
 			std::size_t result = 0;
 			for (auto const& minion : v) {
@@ -425,8 +425,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::SelfMinions> {
-		std::size_t operator()(mcts::board::boardview::SelfMinions const& v) const
+	struct hash<judge::view::boardview::SelfMinions> {
+		std::size_t operator()(judge::view::boardview::SelfMinions const& v) const
 		{
 			std::size_t result = 0;
 			for (auto const& minion : v) {
@@ -437,8 +437,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::SelfHandCard> {
-		std::size_t operator()(mcts::board::boardview::SelfHandCard const& v) const
+	struct hash<judge::view::boardview::SelfHandCard> {
+		std::size_t operator()(judge::view::boardview::SelfHandCard const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -451,8 +451,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::OpponentHandCard> {
-		std::size_t operator()(mcts::board::boardview::OpponentHandCard const& v) const
+	struct hash<judge::view::boardview::OpponentHandCard> {
+		std::size_t operator()(judge::view::boardview::OpponentHandCard const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -461,8 +461,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::SelfHand> {
-		std::size_t operator()(mcts::board::boardview::SelfHand const& v) const
+	struct hash<judge::view::boardview::SelfHand> {
+		std::size_t operator()(judge::view::boardview::SelfHand const& v) const
 		{
 			std::size_t result = 0;
 			for (auto const& item : v) {
@@ -473,8 +473,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::OpponentHand> {
-		std::size_t operator()(mcts::board::boardview::OpponentHand const& v) const
+	struct hash<judge::view::boardview::OpponentHand> {
+		std::size_t operator()(judge::view::boardview::OpponentHand const& v) const
 		{
 			std::size_t result = 0;
 			for (auto const& item : v) {
@@ -485,8 +485,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::SelfDeck> {
-		std::size_t operator()(mcts::board::boardview::SelfDeck const& v) const
+	struct hash<judge::view::boardview::SelfDeck> {
+		std::size_t operator()(judge::view::boardview::SelfDeck const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;
@@ -496,8 +496,8 @@ namespace std {
 	};
 
 	template <>
-	struct hash<mcts::board::boardview::OpponentDeck> {
-		std::size_t operator()(mcts::board::boardview::OpponentDeck const& v) const
+	struct hash<judge::view::boardview::OpponentDeck> {
+		std::size_t operator()(judge::view::boardview::OpponentDeck const& v) const
 		{
 			static_assert(std::decay_t<decltype(v)>::change_id == 1);
 			std::size_t result = 0;

@@ -2,13 +2,15 @@
 
 #include "state/Types.h"
 #include "judge/view/PlayerStateRefView.h"
-#include "MCTS/board/BoardViewTypes.h"
+#include "judge/view/BoardViewTypes.h"
 #include "Utils/HashCombine.h"
 
-namespace mcts
+namespace judge
 {
-	namespace board
+	namespace view
 	{
+		// TODO: rename to BoardRefView
+		// TODO: PlayerStateRefView is only used in this class? move to 'detail' namespace?
 		class BoardView
 		{
 			friend std::hash<BoardView>;
@@ -98,10 +100,10 @@ namespace mcts
 
 namespace std {
 	template <>
-	struct hash<mcts::board::BoardView> {
-		std::size_t operator()(mcts::board::BoardView const& v) const
+	struct hash<judge::view::BoardView> {
+		std::size_t operator()(judge::view::BoardView const& v) const
 		{
-			static_assert(mcts::board::BoardView::change_id == 3);
+			static_assert(judge::view::BoardView::change_id == 3);
 
 			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.turn_);

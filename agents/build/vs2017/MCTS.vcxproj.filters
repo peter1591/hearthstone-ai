@@ -104,22 +104,10 @@
     <ClInclude Include="..\..\include\agents\MCTSRunner.h">
       <Filter>Header Files\agents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\Board.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\BoardView.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\BoardView-impl.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\BoardViewTypes.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h">
@@ -288,6 +276,18 @@
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\view\PlayerStateRefView.h">
+      <Filter>Header Files\judge\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\view\Board.h">
+      <Filter>Header Files\judge\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\view\BoardView.h">
+      <Filter>Header Files\judge\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\view\BoardView-impl.h">
+      <Filter>Header Files\judge\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\view\BoardViewTypes.h">
       <Filter>Header Files\judge\view</Filter>
     </ClInclude>
   </ItemGroup>

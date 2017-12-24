@@ -6,6 +6,7 @@
 
 namespace judge {
 	namespace view {
+		// TODO: move to 'detail' namespace
 		// Constraint access to the information visible to 'Side' player
 		template <state::PlayerSide Side,
 			typename = std::enable_if_t<state::ValidPlayerSide<Side>::valid>>

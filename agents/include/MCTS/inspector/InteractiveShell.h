@@ -398,7 +398,7 @@ namespace mcts
 					return true;
 				});
 				s << "BoardNodeMap:" << std::endl;
-				node_->GetAddon().board_node_map.ForEach([&](mcts::board::BoardView board_view, mcts::builder::TreeBuilder::TreeNode* node) {
+				node_->GetAddon().board_node_map.ForEach([&](judge::view::BoardView board_view, mcts::builder::TreeBuilder::TreeNode* node) {
 					uint64_t total_chosen_time = 0;
 					node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
 						total_chosen_time += child.GetEdgeAddon().GetChosenTimes();
@@ -428,7 +428,7 @@ namespace mcts
 				}
 			}
 
-			void PrintBoardView(mcts::board::BoardView const& view, std::string const& line_prefix, std::ostream & s) {
+			void PrintBoardView(judge::view::BoardView const& view, std::string const& line_prefix, std::ostream & s) {
 				s << line_prefix << "Side: " << GetSideStr(view.GetSide())
 					<< std::endl;
 

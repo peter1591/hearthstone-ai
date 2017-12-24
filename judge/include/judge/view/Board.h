@@ -2,12 +2,12 @@
 
 #include "engine/Game.h"
 #include "engine/IActionParameterGetter.h"
-#include "MCTS/board/BoardView.h"
 #include "MCTS/Types.h"
+#include "judge/view/BoardView.h"
 
-namespace mcts
+namespace judge
 {
-	namespace board
+	namespace view
 	{
 		class Board;
 		class SavedBoard {

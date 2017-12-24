@@ -2,8 +2,8 @@
 
 #include <cstdlib>
 
+#include "judge/view/BoardView-impl.h"
 #include "MCTS/builder/TreeBuilder.h"
-#include "MCTS/board/BoardView-impl.h"
 #include "MCTS/board/ActionParameterGetter-impl.h"
 #include "MCTS/board/RandomGenerator-impl.h"
 #include "MCTS/detail/BoardNodeMap-impl.h"
@@ -14,7 +14,7 @@ namespace mcts
 	{
 		// Note: can only be called when current player is the viewer of 'board'
 		inline TreeBuilder::SelectResult TreeBuilder::PerformSelect(
-			TreeNode * node, board::Board const& board, 
+			TreeNode * node, judge::view::Board const& board, 
 			detail::BoardNodeMap & last_node_map, TreeUpdater * updater)
 		{
 			assert(node);
@@ -80,7 +80,7 @@ namespace mcts
 		
 		// Never returns kResultInvalid. Will automatically retry if an invalid action is applied
 		// Note: can only be called when current player is the viewer of 'board'
-		inline engine::Result TreeBuilder::PerformSimulate(board::Board const& board)
+		inline engine::Result TreeBuilder::PerformSimulate(judge::view::Board const& board)
 		{
 			board_ = &board;
 

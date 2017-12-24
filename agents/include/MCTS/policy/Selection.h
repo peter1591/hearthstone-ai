@@ -3,8 +3,8 @@
 #include <cmath>
 
 #include "MCTS/selection/TreeNode.h"
-#include "MCTS/board/Board.h"
 #include "MCTS/selection/EdgeAddon.h"
+#include "judge/view/Board.h"
 
 namespace mcts
 {
