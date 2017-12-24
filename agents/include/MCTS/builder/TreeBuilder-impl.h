@@ -99,7 +99,7 @@ namespace mcts
 				simulation::Simulation>;
 
 			auto current_state_view = board_->GetCurrentPlayerStateView();
-			action_parameter_getter_.Initialize(current_state_view);
+			action_parameter_getter_.Initialize(current_state_view.GetValidActionGetter());
 			auto result = board_->ApplyAction(random_generator_, action_parameter_getter_);
 			assert(result != engine::kResultInvalid);
 

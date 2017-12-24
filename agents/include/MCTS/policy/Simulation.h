@@ -691,7 +691,7 @@ namespace mcts
 					// For example, choose one card from randomly-chosen three cards
 					RandomPolicy cb_random(rand_());
 					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
-					cb_user_choice.Initialize(board.GetCurrentPlayerStateView());
+					cb_user_choice.Initialize(board.GetCurrentPlayerStateView().GetValidActionGetter());
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t main_op_idx, engine::MainOpType main_op) {

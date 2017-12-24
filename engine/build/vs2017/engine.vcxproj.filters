@@ -446,9 +446,6 @@
     <ClInclude Include="..\..\include\engine\FlowControl\Manipulate-impl.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\FlowControl\ValidActionAnalyzer-impl.h">
-      <Filter>Header Files\engine\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\FlowControl\ValidActionGetter.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>

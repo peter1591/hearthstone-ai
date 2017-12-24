@@ -24,8 +24,8 @@ namespace engine {
 		void Initialize(state::State const& game_state) {
 			analyzer_.Analyze(game_state);
 		}
-		void Initialize(engine::CurrentPlayerStateView const& board) {
-			analyzer_.Analyze(board.GetValidActionGetter());
+		void Initialize(FlowControl::ValidActionGetter const& valid_action_getter) {
+			analyzer_.Analyze(valid_action_getter);
 		}
 
 		auto const& GetAnalyzer() { return analyzer_; }

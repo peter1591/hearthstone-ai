@@ -278,7 +278,6 @@
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Contexts.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler-impl.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler.h" />
-    <ClInclude Include="..\..\include\engine\FlowControl\ValidActionAnalyzer-impl.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\include\engine\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\engine\MainOp.h" />
