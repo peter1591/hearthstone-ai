@@ -685,7 +685,7 @@ namespace mcts
 					// Since, some callbacks might depend on a random
 					// For example, choose one card from randomly-chosen three cards
 					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
-					cb_user_choice.Initialize(board.GetCurrentPlayerStateView().GetValidActionGetter());
+					cb_user_choice.Initialize(board.GetCurrentPlayerStateRefView().GetValidActionGetter());
 
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t main_op_idx, engine::MainOpType main_op) {

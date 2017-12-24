@@ -96,8 +96,7 @@ namespace mcts
 				std::decay_t<StageHandler>,
 				simulation::Simulation>;
 
-			auto current_state_view = board_->GetCurrentPlayerStateView();
-			action_cb_.Initialize(current_state_view.GetValidActionGetter());
+			action_cb_.Initialize(board_->GetCurrentPlayerStateRefView().GetValidActionGetter());
 			auto result = board_->ApplyAction(action_cb_);
 			assert(result != engine::kResultInvalid);
 

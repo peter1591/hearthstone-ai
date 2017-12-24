@@ -69,7 +69,7 @@ namespace judge
 				}
 			}
 
-			auto GetCurrentPlayerStateView() const {
+			auto GetCurrentPlayerStateRefView() const {
 				if (game_.GetCurrentState().GetCurrentPlayerId().GetSide() != side_) {
 					assert(false);
 					throw std::runtime_error("current player does not match.");
