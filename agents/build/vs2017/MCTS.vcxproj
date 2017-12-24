@@ -191,6 +191,7 @@
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />
+    <ClInclude Include="..\..\..\judge\include\judge\view\PlayerStateRefView.h" />
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />

@@ -8,7 +8,6 @@
 #include "engine/ActionType.h"
 #include "engine/ActionChoices.h"
 #include "engine/ValidActionAnalyzer.h"
-#include "engine/PlayerStateView.h"
 #include "engine/FlowControl/IActionParameterGetter.h"
 
 namespace state {

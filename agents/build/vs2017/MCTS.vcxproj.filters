@@ -67,6 +67,9 @@
     <Filter Include="Header Files\engine\FlowControl">
       <UniqueIdentifier>{c07d0e3f-5ba7-4e6e-a4e8-dbc465e19af7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\judge\view">
+      <UniqueIdentifier>{65f673be-b792-4b80-9fc7-2908b2db4351}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\CardDispatcher.cpp">
@@ -283,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IActionParameterGetter.h">
       <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\view\PlayerStateRefView.h">
+      <Filter>Header Files\judge\view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

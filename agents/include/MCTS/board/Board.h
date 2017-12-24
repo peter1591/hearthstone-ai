@@ -46,12 +46,12 @@ namespace mcts
 
 			BoardView CreateView() const {
 				if (side_ == state::kPlayerFirst) {
-					return BoardView(engine::PlayerStateView<state::kPlayerFirst>(
+					return BoardView(judge::view::PlayerStateRefView<state::kPlayerFirst>(
 						game_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return BoardView(engine::PlayerStateView<state::kPlayerSecond>(
+					return BoardView(judge::view::PlayerStateRefView<state::kPlayerSecond>(
 						game_.GetCurrentState()));
 				}
 			}
@@ -59,12 +59,12 @@ namespace mcts
 			template <class Functor>
 			auto ApplyWithPlayerStateView(Functor && functor) const {
 				if (side_ == state::kPlayerFirst) {
-					return functor(engine::PlayerStateView<state::kPlayerFirst>(
+					return functor(judge::view::PlayerStateRefView<state::kPlayerFirst>(
 						game_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return functor(engine::PlayerStateView<state::kPlayerSecond>(
+					return functor(judge::view::PlayerStateRefView<state::kPlayerSecond>(
 						game_.GetCurrentState()));
 				}
 			}
@@ -74,7 +74,7 @@ namespace mcts
 					assert(false);
 					throw std::runtime_error("current player does not match.");
 				}
-				return engine::CurrentPlayerStateView(game_.GetCurrentState());
+				return judge::view::CurrentPlayerStateRefView(game_.GetCurrentState());
 			}
 
 		public: // bridge to action analyzer
