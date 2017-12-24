@@ -78,10 +78,10 @@ namespace judge
 			}
 
 		public: // bridge to action analyzer
-			engine::Result ApplyAction(state::IRandomGenerator & random, engine::IActionParameterGetter & action_parameters) const
+			engine::Result ApplyAction(engine::IActionParameterGetter & action_parameters) const
 			{
 				assert(game_.GetCurrentState().GetCurrentPlayerId().GetSide() == side_);
-				return game_.PerformAction(random, action_parameters);
+				return game_.PerformAction(action_parameters);
 			}
 
 		public:

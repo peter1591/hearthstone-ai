@@ -8,7 +8,6 @@
 #include "MCTS/Types.h"
 #include "MCTS/builder/TreeUpdater.h"
 #include "MCTS/board/ActionParameterGetter.h"
-#include "MCTS/board/RandomGenerator.h"
 #include "MCTS/builder/ActionReplayer.h"
 
 namespace mcts
@@ -25,7 +24,7 @@ namespace mcts
 				std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
 				:
 				statistic_(statistic),
-				action_parameter_getter_(caller), random_generator_(caller),
+				action_parameter_getter_(caller),
 				board_(nullptr),
 				selection_stage_(side, selection_rand), simulation_stage_(side, simulation_rand)
 			{
@@ -66,7 +65,6 @@ namespace mcts
 			Statistic<> & statistic_;
 
 			board::ActionParameterGetter action_parameter_getter_;
-			board::RandomGenerator random_generator_;
 			judge::view::Board const* board_;
 
 			selection::Selection selection_stage_;

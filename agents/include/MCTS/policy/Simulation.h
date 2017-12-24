@@ -601,15 +601,6 @@ namespace mcts
 					judge::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer)
 				{
-					class RandomPolicy : public state::IRandomGenerator {
-					public:
-						RandomPolicy(int seed) : rand_(seed) {}
-						int Get(int exclusive_max) final { return rand_.GetRandom(exclusive_max); }
-
-					private:
-						FastRandom rand_;
-					};
-
 					struct DFSItem {
 						size_t choice_;
 						size_t total_;
@@ -637,6 +628,10 @@ namespace mcts
 
 							assert(total >= 1);
 							if (total == 1) return 0;
+
+							if (action_type == engine::ActionType::kRandom) {
+								return rand_.GetRandom(total);
+							}
 
 							assert(action_type != engine::ActionType::kRandom);
 
@@ -689,7 +684,6 @@ namespace mcts
 					// Need to fix a random sequence for a particular run
 					// Since, some callbacks might depend on a random
 					// For example, choose one card from randomly-chosen three cards
-					RandomPolicy cb_random(rand_());
 					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
 					cb_user_choice.Initialize(board.GetCurrentPlayerStateView().GetValidActionGetter());
 
@@ -703,7 +697,7 @@ namespace mcts
 							copy_board.RefCopyFrom(board);
 
 							dfs_it = dfs.begin();
-							auto result = copy_board.ApplyAction(cb_random, cb_user_choice);
+							auto result = copy_board.ApplyAction(cb_user_choice);
 
 							if (result != engine::kResultInvalid) {
 								double value = -std::numeric_limits<double>::infinity();

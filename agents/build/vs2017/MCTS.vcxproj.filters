@@ -110,12 +110,6 @@
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h">
       <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator-impl.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>

@@ -10,7 +10,6 @@
 #include "engine/Game.h"
 #include "engine/JsonSerializer.h"
 #include "MCTS/board/ActionParameterGetter.h"
-#include "MCTS/board/RandomGenerator.h"
 #include "judge/Recorder.h"
 #include "judge/IAgent.h"
 
@@ -20,20 +19,6 @@ namespace judge
 	class Judger
 	{
 	private:
-		class RandomCallback : public state::IRandomGenerator {
-		public:
-			RandomCallback(Judger & guide) : guide_(guide) {}
-			
-			int Get(int exclusive_max) final {
-				int action = guide_.rand_() % exclusive_max;
-				guide_.recorder_.RecordRandomAction(exclusive_max, action);
-				return action;
-			}
-
-		private:
-			Judger & guide_;
-		};
-
 		class ActionCallback : public engine::IActionParameterGetter {
 		public:
 			ActionCallback(Judger & guide) : guide_(guide), cb_(nullptr), state_(nullptr) {}
@@ -48,6 +33,13 @@ namespace judge
 			}
 			
 			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+				if (action_type == engine::ActionType::kRandom) {
+					int exclusive_max = action_choices.Size();
+					int action = guide_.rand_() % exclusive_max;
+					guide_.recorder_.RecordRandomAction(exclusive_max, action);
+					return action;
+				}
+				
 				int action = cb_->GetAction(action_type, action_choices);
 
 				if (action_type == engine::ActionType::kMainAction) {
@@ -70,7 +62,7 @@ namespace judge
 
 	public:
 		Judger(std::mt19937 & rand) :
-			rand_(rand), random_callback_(*this), action_callback_(*this),
+			rand_(rand), action_callback_(*this),
 			first_(nullptr), second_(nullptr), recorder_(rand_)
 		{}
 
@@ -111,7 +103,7 @@ namespace judge
 				next_agent->Think(game.GetCurrentState().GetCurrentPlayerId(), current_state_getter, random);
 
 				action_callback_.Initialize(game.GetCurrentState(), next_agent);
-				result = game.PerformAction(random_callback_, action_callback_);
+				result = game.PerformAction(action_callback_);
 
 				assert(result != engine::kResultInvalid);
 				if (result != engine::kResultNotDetermined) break;
@@ -122,7 +114,6 @@ namespace judge
 
 	private:
 		std::mt19937 & rand_;
-		RandomCallback random_callback_;
 		ActionCallback action_callback_;
 		AgentType * first_;
 		AgentType * second_;

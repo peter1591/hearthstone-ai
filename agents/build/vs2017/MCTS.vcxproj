@@ -200,8 +200,6 @@
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />
-    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\board\RandomGenerator.h" />
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h" />
