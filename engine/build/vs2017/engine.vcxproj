@@ -218,8 +218,6 @@
     <ClInclude Include="..\..\include\engine\ActionApplyHelper.h" />
     <ClInclude Include="..\..\include\engine\ActionChoices.h" />
     <ClInclude Include="..\..\include\engine\ActionType.h" />
-    <ClInclude Include="..\..\include\engine\Engine-impl.h" />
-    <ClInclude Include="..\..\include\engine\Engine.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\EffectHandler_BoardFlag.h" />
@@ -279,6 +277,8 @@
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler-impl.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\onplay\Handler.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\ValidActionGetter.h" />
+    <ClInclude Include="..\..\include\engine\Game-impl.h" />
+    <ClInclude Include="..\..\include\engine\Game.h" />
     <ClInclude Include="..\..\include\engine\IActionParameterGetter.h" />
     <ClInclude Include="..\..\include\engine\MainOp.h" />
     <ClInclude Include="..\..\include\engine\PlayerStateView.h" />

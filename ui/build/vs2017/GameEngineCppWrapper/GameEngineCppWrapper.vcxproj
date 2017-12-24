@@ -143,6 +143,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\agents\include\agents\MCTSAgent.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\Game-impl.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\Game.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\BoardGetter.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\ActionApplyHelper.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Board.h" />

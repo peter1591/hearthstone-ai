@@ -101,6 +101,31 @@ namespace engine {
 				state_.GetZoneChanger<state::kCardTypeHeroPower, state::kCardZonePlay>(old_ref)
 					.ReplaceBy(new_ref);
 			}
+
+			// @note This differs from GetLast() since you cannot remove this random card.
+			// @return kInvalidCardId if no card left; otherwise, the card id of the chosen random card
+			inline ::Cards::CardId PlayerManipulator::GetOneRandomDeckCard() {
+				auto const& deck = state_.GetBoard().Get(player_).deck_;
+				auto deck_size = deck.Size();
+				if (deck_size <= 0) return ::Cards::kInvalidCardId;
+
+				int rand_idx = 0;
+				if (deck_size > 1) rand_idx = flow_context_.GetRandom().Get(deck_size);
+				return deck.GetCard(rand_idx);
+			}
+
+			inline std::pair< ::Cards::CardId, ::Cards::CardId> PlayerManipulator::GetTwoRandomDeckCards() {
+				auto const& deck = state_.GetBoard().Get(player_).deck_;
+				auto deck_size = deck.Size();
+				if (deck_size < 2) return std::make_pair(GetOneRandomDeckCard(), ::Cards::kInvalidCardId);
+
+				int v1 = flow_context_.GetRandom().Get(deck_size);
+				int v2 = flow_context_.GetRandom().Get(deck_size - 1);
+				if (v2 >= v1) ++v2;
+				return std::make_pair(
+					deck.GetCard(v1),
+					deck.GetCard(v2));
+			}
 		}
 	}
 }

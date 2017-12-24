@@ -29,6 +29,9 @@ namespace engine {
 				state::CardRef AddHandCard(Cards::CardId card_id);
 				state::CardRef DrawCard(Cards::CardId * drawn_card_id = nullptr);
 
+				::Cards::CardId GetOneRandomDeckCard();
+				std::pair< ::Cards::CardId, ::Cards::CardId> GetTwoRandomDeckCards();
+
 			private:
 				state::State & state_;
 				FlowContext & flow_context_;

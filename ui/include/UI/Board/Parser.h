@@ -224,7 +224,9 @@ namespace ui
 			void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
 			{
 				int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
-				state.GetBoard().Get(player).deck_.ShuffleAdd(id, random);
+				state.GetBoard().Get(player).deck_.ShuffleAdd(id, [&](int exclusive_max) {
+					return random.Get(exclusive_max);
+				});
 				++deck_count;
 				assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
 			}

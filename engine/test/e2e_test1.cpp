@@ -94,7 +94,9 @@ static void PushBackDeckCard(Cards::CardId id, engine::FlowControl::FlowContext 
 	((Test2_RandomGenerator&)(flow_context.GetRandom())).next_rand = deck_count;
 	((Test2_RandomGenerator&)(flow_context.GetRandom())).called = false;
 
-	state.GetBoard().Get(player).deck_.ShuffleAdd(id, flow_context.GetRandom());
+	state.GetBoard().Get(player).deck_.ShuffleAdd(id, [&](int exclusive_max) {
+		return flow_context.GetRandom().Get(exclusive_max);
+	});
 
 	if (deck_count > 0) assert(((Test2_RandomGenerator&)(flow_context.GetRandom())).called);
 	++deck_count;

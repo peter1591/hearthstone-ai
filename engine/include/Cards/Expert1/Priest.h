@@ -107,11 +107,12 @@ namespace Cards
 				if (max_steal_cards == 0) return;
 				else if (max_steal_cards == 1) {
 					context.manipulate_.Player(context.player_).AddHandCard(
-						context.manipulate_.Board().Player(context.player_).deck_.GetOneRandomCard(context.manipulate_.GetRandom())
+						context.manipulate_.Player(context.player_).GetOneRandomDeckCard()
 					);
 				}
 				else {
-					std::pair<Cards::CardId, Cards::CardId> steal_cards_id = context.manipulate_.Board().Player(context.player_).deck_.GetTwoRandomCards(context.manipulate_.GetRandom());
+					std::pair<Cards::CardId, Cards::CardId> steal_cards_id = 
+						context.manipulate_.Player(context.player_).GetTwoRandomDeckCards();
 					context.manipulate_.Player(context.player_).AddHandCard(steal_cards_id.first);
 					context.manipulate_.Player(context.player_).AddHandCard(steal_cards_id.second);
 				}

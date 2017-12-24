@@ -5,7 +5,6 @@
 
 #include "Cards/id-map.h"
 #include "state/Types.h"
-#include "state/IRandomGenerator.h"
 
 namespace state
 {
@@ -44,7 +43,8 @@ namespace state
 			::Cards::CardId GetLast() const { return GetCard(size_ - 1); }
 			int GetChangeId() const { return change_id_; }
 
-			void ShuffleAdd(::Cards::CardId card_id, IRandomGenerator & random)
+			template <class RandomGetter>
+			void ShuffleAdd(::Cards::CardId card_id, RandomGetter && random_getter)
 			{
 				PrepareForWrite();
 
@@ -56,7 +56,7 @@ namespace state
 				++size_;
 
 				if (size_ <= 1) return;
-				auto rand_idx = random.Get(size_);
+				auto rand_idx = random_getter(size_);
 				std::swap(cards_[rand_idx], cards_[size_ - 1]);
 			}
 
@@ -64,27 +64,6 @@ namespace state
 			{
 				++change_id_;
 				--size_;
-			}
-
-			// @note This differs from GetLast() since you cannot remove this random card.
-			// @return kInvalidCardId if no card left; otherwise, the card id of the chosen random card
-			::Cards::CardId GetOneRandomCard(IRandomGenerator & random) {
-				if (size_ <= 0) return ::Cards::kInvalidCardId;
-
-				int rand_idx = 0;
-				if (size_ > 1) rand_idx = random.Get(size_);
-				return GetCard(rand_idx);
-			}
-
-			std::pair< ::Cards::CardId, ::Cards::CardId> GetTwoRandomCards(IRandomGenerator & random) {
-				if (size_ < 2) return std::make_pair(GetOneRandomCard(random), ::Cards::kInvalidCardId);
-
-				int v1 = random.Get(size_);
-				int v2 = random.Get(size_ - 1);
-				if (v2 >= v1) ++v2;
-				return std::make_pair(
-					GetCard(v1),
-					GetCard(v2));
 			}
 
 			template <typename Functor>
@@ -108,11 +87,11 @@ namespace state
 				return false;
 			}
 
-		private:
 			::Cards::CardId GetCard(size_t idx) const {
 				return GetCards()[idx];
 			}
 
+		private:
 			CardsContainer const& GetCards() const {
 				if (base_cards_) return *base_cards_;
 				else return cards_;
