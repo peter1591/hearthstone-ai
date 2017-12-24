@@ -7,7 +7,6 @@
 #include "MCTS/Statistic.h"
 #include "MCTS/Types.h"
 #include "MCTS/builder/TreeUpdater.h"
-#include "MCTS/board/ActionParameterGetter.h"
 #include "MCTS/builder/ActionReplayer.h"
 
 namespace mcts
@@ -20,11 +19,11 @@ namespace mcts
 		public:
 			typedef selection::TreeNode TreeNode;
 
-			TreeBuilder(state::PlayerSide side, SOMCTS & caller, Statistic<> & statistic,
+			TreeBuilder(state::PlayerSide side, engine::IActionParameterGetter & action_cb, Statistic<> & statistic,
 				std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
 				:
 				statistic_(statistic),
-				action_parameter_getter_(caller),
+				action_cb_(action_cb),
 				board_(nullptr),
 				selection_stage_(side, selection_rand), simulation_stage_(side, simulation_rand)
 			{
@@ -64,7 +63,7 @@ namespace mcts
 		private:
 			Statistic<> & statistic_;
 
-			board::ActionParameterGetter action_parameter_getter_;
+			engine::IActionParameterGetter & action_cb_;
 			judge::view::Board const* board_;
 
 			selection::Selection selection_stage_;

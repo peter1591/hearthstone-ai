@@ -9,7 +9,6 @@
 #include "state/State.h"
 #include "engine/Game.h"
 #include "engine/JsonSerializer.h"
-#include "MCTS/board/ActionParameterGetter.h"
 #include "judge/Recorder.h"
 #include "judge/IAgent.h"
 

@@ -25,9 +25,6 @@
     <Filter Include="Header Files\MCTS\simulation">
       <UniqueIdentifier>{ef59716c-5103-4379-875b-fe9dfbcf9b9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MCTS\board">
-      <UniqueIdentifier>{63f31f86-6ea9-44ae-9213-278747326062}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\MCTS\builder">
       <UniqueIdentifier>{bcaac893-2244-43af-8bef-0c3780f183d5}</UniqueIdentifier>
     </Filter>
@@ -103,12 +100,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\agents\MCTSRunner.h">
       <Filter>Header Files\agents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h">
-      <Filter>Header Files\MCTS\board</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h">
-      <Filter>Header Files\MCTS\board</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
       <Filter>Header Files\MCTS\builder</Filter>

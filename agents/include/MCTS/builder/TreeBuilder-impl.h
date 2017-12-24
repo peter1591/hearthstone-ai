@@ -4,7 +4,6 @@
 
 #include "judge/view/BoardView-impl.h"
 #include "MCTS/builder/TreeBuilder.h"
-#include "MCTS/board/ActionParameterGetter-impl.h"
 #include "MCTS/detail/BoardNodeMap-impl.h"
 
 namespace mcts
@@ -98,8 +97,8 @@ namespace mcts
 				simulation::Simulation>;
 
 			auto current_state_view = board_->GetCurrentPlayerStateView();
-			action_parameter_getter_.Initialize(current_state_view.GetValidActionGetter());
-			auto result = board_->ApplyAction(action_parameter_getter_);
+			action_cb_.Initialize(current_state_view.GetValidActionGetter());
+			auto result = board_->ApplyAction(action_cb_);
 			assert(result != engine::kResultInvalid);
 
 			statistic_.ApplyActionSucceeded(is_simulation);
@@ -118,7 +117,7 @@ namespace mcts
 		{
 			int choice = simulation_stage_.ChooseAction(
 				*board_,
-				action_parameter_getter_.GetAnalyzer(),
+				action_cb_.GetAnalyzer(),
 				action_type, choices);
 			assert(choice >= 0);
 			return choice;

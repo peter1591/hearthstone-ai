@@ -198,8 +198,6 @@
     <ClInclude Include="..\..\..\judge\include\judge\view\BoardViewTypes.h" />
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
-    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter.h" />
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h" />

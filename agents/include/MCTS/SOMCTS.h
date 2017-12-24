@@ -17,13 +17,32 @@ namespace mcts
 	//       we use the SOMCTS_TreeNodeAddon to create a hash table for some tree noes
 	//       so we can find a node corresponds to the given board, and step on it
 	class SOMCTS
-	{		
+	{
+	private:
+		class ActionParameterGetter : public engine::IActionParameterGetter
+		{
+		public:
+			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
+
+			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+				if (action_type != engine::ActionType::kMainAction)
+				{
+					assert(action_choices.Size() > 0);
+					if (action_choices.Size() == 1) return 0;
+				}
+				return callback_.ChooseAction(engine::ActionType(action_type), action_choices);
+			}
+
+		private:
+			SOMCTS & callback_;
+		};
+
 	public:
 		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
 			:
-			side_(side), root_(root), statistic_(statistic),
-			builder_(side, *this, statistic_, selection_rand, simulation_rand),
+			action_cb_(*this), side_(side), root_(root), statistic_(statistic),
+			builder_(side, action_cb_, statistic_, selection_rand, simulation_rand),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
 
@@ -135,6 +154,7 @@ namespace mcts
 		Statistic<> & statistic_;
 
 	private: // traversal progress
+		ActionParameterGetter action_cb_;
 		builder::TreeBuilder builder_;
 		builder::TreeBuilder::TreeNode* node_;
 		Stage stage_;
