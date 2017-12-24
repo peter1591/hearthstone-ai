@@ -54,9 +54,6 @@
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Board.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Entity.h">
-      <Filter>Header Files\UI\Board</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\ui\include\UI\Board\Player.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
@@ -81,16 +78,19 @@
     <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardRefView.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView.h">
-      <Filter>Header Files\engine\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView-impl.h">
-      <Filter>Header Files\engine\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardViewTypes.h">
-      <Filter>Header Files\engine\view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\UI\Board\StateRestorer.h">
+      <Filter>Header Files\UI\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardView-impl.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardViewTypes.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\UI\Board\CardInfo.h">
       <Filter>Header Files\UI\Board</Filter>
     </ClInclude>
   </ItemGroup>

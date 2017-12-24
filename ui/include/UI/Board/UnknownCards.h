@@ -25,7 +25,7 @@ namespace ui
 						return;
 					}
 				}
-				// TOOD: wrong deck guess, what to do?
+				// Maybe guess a wrong deck guess. Ignore.
 			}
 
 			void ResetState()
