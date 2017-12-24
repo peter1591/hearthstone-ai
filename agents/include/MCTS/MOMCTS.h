@@ -1,6 +1,6 @@
 #pragma once
 
-#include "judge/view/Board.h"
+#include "engine/view/Board.h"
 #include "MCTS/SOMCTS.h"
 #include "MCTS/builder/TreeBuilder-impl.h"
 
@@ -34,7 +34,7 @@ namespace mcts
 				state::PlayerIdentifier side = game.GetCurrentState().GetCurrentPlayerId();
 				
 				engine::Result result = GetSOMCTS(side).PerformOwnTurnActions(
-					judge::view::Board(game, side.GetSide()));
+					engine::view::Board(game, side.GetSide()));
 				assert(result != engine::kResultInvalid);
 				
 				if (result != engine::kResultNotDetermined) {
@@ -46,7 +46,7 @@ namespace mcts
 				assert(game.GetCurrentState().GetCurrentPlayerId() == side.Opposite());
 
 				GetSOMCTS(side.Opposite()).ApplyOthersActions(
-					judge::view::Board(game, side.Opposite().GetSide()));
+					engine::view::Board(game, side.Opposite().GetSide()));
 			}
 		}
 

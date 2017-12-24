@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "judge/view/Board.h"
+#include "engine/view/Board.h"
 #include "builder/TreeBuilder.h"
 #include "MCTS/detail/BoardNodeMap.h"
 
@@ -57,7 +57,7 @@ namespace mcts
 		}
 
 		// Include to perform the end-turn action at last to switch side
-		engine::Result PerformOwnTurnActions(judge::view::Board const& board)
+		engine::Result PerformOwnTurnActions(engine::view::Board const& board)
 		{
 			assert(side_ == board.GetViewSide()); // prevent information leak
 			assert(board.GetCurrentPlayer().GetSide() == side_);
@@ -116,7 +116,7 @@ namespace mcts
 
 		// Another player finished his actions
 		// Just jump to the node present the new state
-		void ApplyOthersActions(judge::view::Board const& board)
+		void ApplyOthersActions(engine::view::Board const& board)
 		{
 			assert(side_ == board.GetViewSide()); // prevent information leak
 

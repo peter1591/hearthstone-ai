@@ -64,8 +64,8 @@
     <Filter Include="Header Files\engine\FlowControl">
       <UniqueIdentifier>{c07d0e3f-5ba7-4e6e-a4e8-dbc465e19af7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\judge\view">
-      <UniqueIdentifier>{65f673be-b792-4b80-9fc7-2908b2db4351}</UniqueIdentifier>
+    <Filter Include="Header Files\engine\view">
+      <UniqueIdentifier>{42c26551-dafb-45ea-b85b-a08f4b196d84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -260,23 +260,23 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IActionParameterGetter.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\view\Board.h">
-      <Filter>Header Files\judge\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\view\BoardView.h">
-      <Filter>Header Files\judge\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\view\BoardView-impl.h">
-      <Filter>Header Files\judge\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\view\BoardViewTypes.h">
-      <Filter>Header Files\judge\view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\view\BoardRefView.h">
-      <Filter>Header Files\judge\view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IRandomGenerator.h">
       <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\Board.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardRefView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView-impl.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardViewTypes.h">
+      <Filter>Header Files\engine\view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

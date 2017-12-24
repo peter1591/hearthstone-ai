@@ -17,7 +17,7 @@ namespace mcts
 			void StartNewAction() {
 			}
 
-			engine::Result CutoffCheck(judge::view::Board const& board)
+			engine::Result CutoffCheck(engine::view::Board const& board)
 			{
 				using Policy = std::decay_t<decltype(select_)>;
 
@@ -30,7 +30,7 @@ namespace mcts
 			}
 
 			int ChooseAction(
-				judge::view::Board const& board,
+				engine::view::Board const& board,
 				engine::ValidActionAnalyzer const& action_analyzer,
 				engine::ActionType action_type,
 				engine::ActionChoices const& action_choices)

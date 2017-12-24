@@ -1,11 +1,11 @@
 #pragma once
 
 #include "state/Types.h"
-#include "judge/view/BoardRefView.h"
-#include "judge/view/BoardViewTypes.h"
+#include "engine/view/BoardRefView.h"
+#include "engine/view/BoardViewTypes.h"
 #include "Utils/HashCombine.h"
 
-namespace judge
+namespace engine
 {
 	namespace view
 	{
@@ -15,7 +15,7 @@ namespace judge
 
 		public:
 			template <state::PlayerSide Side>
-			BoardView(judge::view::BoardRefView<Side> const& board);
+			BoardView(engine::view::BoardRefView<Side> const& board);
 
 			BoardView(BoardView const&) = default;
 			BoardView(BoardView &&) = default;
@@ -98,10 +98,10 @@ namespace judge
 
 namespace std {
 	template <>
-	struct hash<judge::view::BoardView> {
-		std::size_t operator()(judge::view::BoardView const& v) const
+	struct hash<engine::view::BoardView> {
+		std::size_t operator()(engine::view::BoardView const& v) const
 		{
-			static_assert(judge::view::BoardView::change_id == 3);
+			static_assert(engine::view::BoardView::change_id == 3);
 
 			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.turn_);

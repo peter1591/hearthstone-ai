@@ -1,13 +1,13 @@
 #pragma once
 
-#include "judge/view/BoardView.h"
+#include "engine/view/BoardView.h"
 
-namespace judge
+namespace engine
 {
 	namespace view
 	{
 		template <state::PlayerSide Side>
-		inline BoardView::BoardView(judge::view::BoardRefView<Side> const& board) :
+		inline BoardView::BoardView(engine::view::BoardRefView<Side> const& board) :
 			turn_(board.GetTurn()), side_(Side),
 			self_hero_(), self_crystal_(), self_hero_power_(), self_weapon_(),
 			self_minions_(), self_hand_(), self_deck_(),

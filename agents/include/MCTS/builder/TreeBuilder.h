@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include "judge/view/Board.h"
+#include "engine/view/Board.h"
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
 #include "MCTS/Statistic.h"
@@ -46,11 +46,11 @@ namespace mcts
 			};
 			
 			// Note: can only be called when current player is the viewer of 'board'
-			SelectResult PerformSelect(TreeNode * node, judge::view::Board const& board,
+			SelectResult PerformSelect(TreeNode * node, engine::view::Board const& board,
 				detail::BoardNodeMap & last_node_map, TreeUpdater * updater);
 
 			// Note: can only be called when current player is the viewer of 'board'
-			engine::Result PerformSimulate(judge::view::Board const& board);
+			engine::Result PerformSimulate(engine::view::Board const& board);
 
 		private:
 			template <typename StageHandler>
@@ -64,7 +64,7 @@ namespace mcts
 			Statistic<> & statistic_;
 
 			engine::IActionParameterGetter & action_cb_;
-			judge::view::Board const* board_;
+			engine::view::Board const* board_;
 
 			selection::Selection selection_stage_;
 			simulation::Simulation simulation_stage_;

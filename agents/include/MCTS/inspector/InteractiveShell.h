@@ -428,7 +428,7 @@ namespace mcts
 				}
 			}
 
-			void PrintBoardView(judge::view::BoardView const& view, std::string const& line_prefix, std::ostream & s) {
+			void PrintBoardView(engine::view::BoardView const& view, std::string const& line_prefix, std::ostream & s) {
 				s << line_prefix << "Side: " << GetSideStr(view.GetSide())
 					<< std::endl;
 

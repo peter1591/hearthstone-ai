@@ -1,7 +1,7 @@
 #pragma once
 
 #include <random>
-#include "judge/view/Board.h"
+#include "engine/view/Board.h"
 #include "MCTS/policy/RandomByRand.h"
 #include "neural_net/NeuralNetwork.h"
 
@@ -41,13 +41,13 @@ namespace mcts
 				{
 				}
 
-				engine::Result GetCutoffResult(judge::view::Board const& board) {
+				engine::Result GetCutoffResult(engine::view::Board const& board) {
 					assert(false);
 					return engine::kResultNotDetermined;
 				}
 
 				int GetChoice(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -95,7 +95,7 @@ namespace mcts
 				//static constexpr double kMaxSideValue = 3.0 * kMaxHeroValue + 10.0 * kMaxMinionValue * 7;
 				static constexpr double kMaxSideValue = kMaxHeroValue;
 				template <state::PlayerSide Side>
-				double GetStateValueForSide(state::PlayerSide self_side, judge::view::BoardRefView<Side> view) {
+				double GetStateValueForSide(state::PlayerSide self_side, engine::view::BoardRefView<Side> view) {
 					assert(self_side == Side);
 					//state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
 
@@ -121,7 +121,7 @@ namespace mcts
 
 			public:
 				double GetStateValue(state::State const& game_state) {
-					judge::view::BoardRefView<state::kPlayerFirst> view(game_state);
+					engine::view::BoardRefView<state::kPlayerFirst> view(game_state);
 					return GetStateValueForSide(state::kPlayerFirst, view);
 				}
 
@@ -129,7 +129,7 @@ namespace mcts
 				// If 100% wins, score = 1.0
 				// If 50% wins, 50%loss, score = 0.0
 				// If 100% loss, score = -1.0
-				double GetStateValue(judge::view::Board const& board) {
+				double GetStateValue(engine::view::Board const& board) {
 					// TODO: should always return state value for first player?
 					return board.ApplyWithPlayerStateView([&](auto const& view) {
 						return GetStateValueForSide(board.GetViewSide(), view);
@@ -155,7 +155,7 @@ namespace mcts
 				// If first player is 100% wins, score = 1.0
 				// If first player is 50% wins, 50%loss, score = 0.0
 				// If first player is 100% loss, score = -1.0
-				double GetStateValue(judge::view::Board const& board) {
+				double GetStateValue(engine::view::Board const& board) {
 					return GetStateValue(board.RevealHiddenInformationForSimulation());
 				}
 
@@ -377,7 +377,7 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				engine::Result GetCutoffResult(judge::view::Board const& board) {
+				engine::Result GetCutoffResult(engine::view::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
@@ -398,7 +398,7 @@ namespace mcts
 				}
 
 				int GetChoice(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -427,7 +427,7 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				engine::Result GetCutoffResult(judge::view::Board const& board) {
+				engine::Result GetCutoffResult(engine::view::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
@@ -448,7 +448,7 @@ namespace mcts
 				}
 
 				int GetChoice(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -489,7 +489,7 @@ namespace mcts
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				engine::Result GetCutoffResult(judge::view::Board const& board) {
+				engine::Result GetCutoffResult(engine::view::Board const& board) {
 					return engine::kResultNotDetermined;
 				}
 
@@ -500,7 +500,7 @@ namespace mcts
 				}
 
 				int GetChoice(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -549,7 +549,7 @@ namespace mcts
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 				static constexpr bool kRandomlyPutMinions = true;
 
-				engine::Result GetCutoffResult(judge::view::Board const& board) {
+				engine::Result GetCutoffResult(engine::view::Board const& board) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
 					if (v >= kCutoffProbability) {
@@ -571,7 +571,7 @@ namespace mcts
 				}
 
 				int GetChoice(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -590,7 +590,7 @@ namespace mcts
 
 			private:
 				void StartNewAction(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer)
 				{
 					decision_idx_ = 0;
@@ -598,7 +598,7 @@ namespace mcts
 				}
 
 				void DFSBestStateValue(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer)
 				{
 					struct DFSItem {
@@ -693,7 +693,7 @@ namespace mcts
 
 						while (true) {
 							engine::Game copied_game;
-							judge::view::Board copy_board(copied_game, board.GetViewSide());
+							engine::view::Board copy_board(copied_game, board.GetViewSide());
 							copy_board.RefCopyFrom(board);
 
 							dfs_it = dfs.begin();
@@ -733,7 +733,7 @@ namespace mcts
 				}
 
 				int GetChoiceForMainAction(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
@@ -750,7 +750,7 @@ namespace mcts
 				}
 
 				int GetChoiceRandomly(
-					judge::view::Board const& board,
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{

@@ -4,7 +4,7 @@
 #include "engine/FlowControl/ValidActionGetter.h"
 #include "engine/FlowControl/FlowController.h"
 
-namespace judge {
+namespace engine {
 	namespace view {
 		// Constraint access to the information visible to 'Side' player
 		template <state::PlayerSide Side,
