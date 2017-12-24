@@ -275,5 +275,8 @@
     <ClInclude Include="..\..\..\judge\include\judge\view\BoardRefView.h">
       <Filter>Header Files\judge\view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IRandomGenerator.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

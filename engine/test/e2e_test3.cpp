@@ -71,7 +71,7 @@ public:
 	int next_choose_one_idx;
 };
 
-class Test4_RandomGenerator : public state::IRandomGenerator
+class Test4_RandomGenerator : public engine::FlowControl::IRandomGenerator
 {
 public:
 	Test4_RandomGenerator() :called_times(0), next_rand(0) {}

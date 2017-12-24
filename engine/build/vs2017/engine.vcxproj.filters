@@ -617,5 +617,8 @@
     <ClInclude Include="..\..\include\engine\Game-impl.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\FlowControl\IRandomGenerator.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

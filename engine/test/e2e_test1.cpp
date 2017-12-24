@@ -63,7 +63,7 @@ public:
 	int next_specified_target_idx;
 };
 
-class Test2_RandomGenerator : public state::IRandomGenerator
+class Test2_RandomGenerator : public engine::FlowControl::IRandomGenerator
 {
 public:
 	Test2_RandomGenerator() :called(false), next_rand(0) {}

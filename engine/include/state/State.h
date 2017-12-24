@@ -5,7 +5,6 @@
 #include "state/board/Board.h"
 #include "state/Cards/Manager.h"
 #include "state/Events/Manager.h"
-#include "state/IRandomGenerator.h"
 #include "state/ZoneChanger.h"
 
 // implementation details

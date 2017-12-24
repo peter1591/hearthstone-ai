@@ -53,7 +53,7 @@ namespace engine
 		using StartBoardGetter = std::function<state::State(int)>;
 
 	private:
-		class RandomCallback : public state::IRandomGenerator {
+		class RandomCallback : public engine::FlowControl::IRandomGenerator {
 		public:
 			int Get(int exclusive_max) { return 0; }
 		};

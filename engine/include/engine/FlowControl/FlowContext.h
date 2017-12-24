@@ -2,10 +2,10 @@
 
 #include <map>
 
-#include "state/IRandomGenerator.h"
 #include "state/Types.h"
 #include "engine/Result.h"
 #include "engine/FlowControl/IActionParameterGetter.h"
+#include "engine/FlowControl/IRandomGenerator.h"
 #include "engine/FlowControl/detail/Resolver.h"
 
 namespace engine {
@@ -24,7 +24,7 @@ namespace engine {
 				resolver_()
 			{}
 
-			FlowContext(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) :
+			FlowContext(IRandomGenerator & random, IActionParameterGetter & action_parameters) :
 				result_(engine::kResultNotDetermined),
 				action_parameters_(&action_parameters), random_(&random),
 				dead_entity_hints_(),
@@ -38,7 +38,7 @@ namespace engine {
 			FlowContext(FlowContext const&) = default;
 			FlowContext & operator=(FlowContext const&) = default;
 
-			void SetCallback(state::IRandomGenerator & random, IActionParameterGetter & action_parameters) {
+			void SetCallback(IRandomGenerator & random, IActionParameterGetter & action_parameters) {
 				random_ = &random;
 				action_parameters_ = &action_parameters;
 			}
@@ -109,7 +109,7 @@ namespace engine {
 			bool Empty() const;
 
 		public:
-			state::IRandomGenerator & GetRandom() { return *random_; }
+			IRandomGenerator & GetRandom() { return *random_; }
 
 		public:
 			void SetResult(engine::Result v) { result_ = v; }
@@ -131,7 +131,7 @@ namespace engine {
 		private:
 			engine::Result result_;
 			IActionParameterGetter * action_parameters_;
-			state::IRandomGenerator * random_;
+			IRandomGenerator * random_;
 			std::multimap<int, state::CardRef> dead_entity_hints_;
 			int minion_put_location_;
 			state::CardRef specified_target_;

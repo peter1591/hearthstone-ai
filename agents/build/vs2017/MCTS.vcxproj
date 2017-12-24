@@ -174,6 +174,7 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IActionParameterGetter.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IRandomGenerator.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\JsonSerializer.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\Manipulate.h" />

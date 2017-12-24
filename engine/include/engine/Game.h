@@ -11,7 +11,7 @@ namespace engine
 	class Game
 	{
 	private:
-		class RandomGenerator : public state::IRandomGenerator
+		class RandomGenerator : public engine::FlowControl::IRandomGenerator
 		{
 		public:
 			RandomGenerator(engine::IActionParameterGetter & callback) : callback_(callback) {}

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "state/IRandomGenerator.h"
 #include "state/Cards/CardData.h"
 #include "engine/FlowControl/FlowContext.h"
 #include "Cards/id-map.h"

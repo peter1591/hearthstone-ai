@@ -74,7 +74,7 @@ namespace engine {
 		public: // bridge to flow context
 			state::CardRef GetSpecifiedTarget() const { return flow_context_.GetSpecifiedTarget(); }
 			Cards::CardId UserChooseOne(std::vector<Cards::CardId> const& cards) const { return flow_context_.UserChooseOne(cards); }
-			state::IRandomGenerator & GetRandom() const { return flow_context_.GetRandom(); }
+			IRandomGenerator & GetRandom() const { return flow_context_.GetRandom(); }
 
 			void SaveUserChoice(Cards::CardId choice) const { flow_context_.SaveUserChoice(choice); }
 			Cards::CardId GetSavedUserChoice() const { return flow_context_.GetSavedUserChoice(); }

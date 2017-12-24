@@ -6,7 +6,7 @@
 #include "state/Configs.h"
 #include "decks/Decks.h"
 
-class MyRandomGenerator : public state::IRandomGenerator
+class MyRandomGenerator : public engine::FlowControl::IRandomGenerator
 {
 public:
 	MyRandomGenerator(int seed) : random_(seed) {}
@@ -31,11 +31,13 @@ public:
 #pragma warning( push )
 #pragma warning( disable: 4505 )
 #endif
-static void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
+static void PushBackDeckCard(Cards::CardId id, engine::FlowControl::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
 {
 	int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 
-	state.GetBoard().Get(player).deck_.ShuffleAdd(id, random);
+	state.GetBoard().Get(player).deck_.ShuffleAdd(id, [&](int exclusive_max) {
+		return random.Get(exclusive_max);
+	});
 
 	++deck_count;
 
@@ -118,7 +120,7 @@ static void MakeHero(state::State & state, state::PlayerIdentifier player)
 #pragma warning( pop )
 #endif
 
-void PrepareDeck(std::unordered_multiset<std::string> const& cards, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
+void PrepareDeck(std::unordered_multiset<std::string> const& cards, engine::FlowControl::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
 {
 	for (auto const& card_name : cards) {
 		Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
