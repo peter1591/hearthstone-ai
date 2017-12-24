@@ -3,7 +3,6 @@
 #include <functional>
 
 #include "state/State.h"
-#include "engine/PlayerStateView.h"
 #include "engine/FlowControl/FlowController.h"
 #include "mcts/board/RandomGenerator.h"
 
@@ -136,7 +135,6 @@ namespace engine
 				int main_op_idx = choices_[choices_idx];
 				++choices_idx;
 
-				engine::CurrentPlayerStateView state_view(game_state);
 				action_cb.SetMainOpIdx(main_op_idx);
 				engine::FlowControl::FlowController(game_state, flow_context).PerformAction();
 			}
