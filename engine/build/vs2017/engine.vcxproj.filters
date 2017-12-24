@@ -413,9 +413,6 @@
     <ClInclude Include="..\..\include\engine\IActionParameterGetter.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\engine\IActionParameterGetter-impl.h">
-      <Filter>Header Files\engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\engine\MainOp.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
@@ -619,6 +616,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\engine\Engine-impl.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\engine\FlowControl\IActionParameterGetter.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

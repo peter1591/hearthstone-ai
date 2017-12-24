@@ -4,7 +4,7 @@
 #include "engine/FlowControl/FlowController.h"
 #include "engine/FlowControl/FlowController-impl.h"
 
-class Test3_ActionParameterGetter : public engine::IActionParameterGetterWithoutAnalyzer
+class Test3_ActionParameterGetter : public engine::FlowControl::IActionParameterGetter
 {
 public:
 	Test3_ActionParameterGetter() :

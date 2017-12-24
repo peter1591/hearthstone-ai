@@ -227,9 +227,6 @@
     <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter-impl.h">
-      <Filter>Header Files\engine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\MainOp.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
@@ -283,6 +280,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\Game-impl.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IActionParameterGetter.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

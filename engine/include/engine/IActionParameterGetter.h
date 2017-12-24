@@ -8,49 +8,25 @@
 #include "engine/ActionType.h"
 #include "engine/ActionChoices.h"
 #include "engine/ValidActionAnalyzer.h"
+#include "engine/PlayerStateView.h"
+#include "engine/FlowControl/IActionParameterGetter.h"
 
 namespace state {
 	class State;
 }
 
 namespace engine {
-	class CurrentPlayerStateView;
-
-	class IActionParameterGetterWithoutAnalyzer
+	class IActionParameterGetter : public FlowControl::IActionParameterGetter
 	{
 	public:
-		IActionParameterGetterWithoutAnalyzer() {}
-		virtual ~IActionParameterGetterWithoutAnalyzer() {}
-		IActionParameterGetterWithoutAnalyzer(IActionParameterGetterWithoutAnalyzer const&) = delete;
-		IActionParameterGetterWithoutAnalyzer & operator=(IActionParameterGetterWithoutAnalyzer const&) = delete;
+		IActionParameterGetter() : analyzer_() {}
 
-		static constexpr size_t kMaxChoices = 16; // max #-of-choices: choose target
-
-		virtual MainOpType ChooseMainOp() = 0;
-
-		// TODO: should we return size_t?
-		virtual int ChooseHandCard() = 0;
-
-		virtual state::CardRef GetAttacker() = 0;
-		virtual state::CardRef GetDefender(std::vector<state::CardRef> const& targets) = 0;
-
-		virtual int GetMinionPutLocation(int minions) = 0;
-
-		// spell target
-		virtual state::CardRef GetSpecifiedTarget(
-			state::State & state, state::CardRef card_ref,
-			std::vector<state::CardRef> const& targets) = 0;
-
-		virtual Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) = 0;
-	};
-
-	class IActionParameterGetter : public IActionParameterGetterWithoutAnalyzer
-	{
-	public:
-    IActionParameterGetter() : analyzer_() {}
-
-		void Initialize(state::State const& game_state);
-		void Initialize(engine::CurrentPlayerStateView const& board);
+		void Initialize(state::State const& game_state) {
+			analyzer_.Analyze(game_state);
+		}
+		void Initialize(engine::CurrentPlayerStateView const& board) {
+			analyzer_.Analyze(board.GetValidActionGetter());
+		}
 
 		auto const& GetAnalyzer() { return analyzer_; }
 

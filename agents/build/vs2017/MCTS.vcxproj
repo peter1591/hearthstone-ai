@@ -173,6 +173,7 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowContext.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowController.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\JsonSerializer.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\Manipulate-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\Manipulate.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionGetter.h" />
     <ClInclude Include="..\..\..\engine\include\engine\Game-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\Game.h" />
-    <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\IActionParameterGetter.h" />
     <ClInclude Include="..\..\..\engine\include\engine\MainOp.h" />
     <ClInclude Include="..\..\..\engine\include\engine\Result.h" />
