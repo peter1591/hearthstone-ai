@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#include "engine/view/BoardView-impl.h"
+#include "engine/view/ReducedBoardView-impl.h"
 #include "MCTS/builder/TreeBuilder.h"
 #include "MCTS/detail/BoardNodeMap-impl.h"
 

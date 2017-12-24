@@ -191,9 +191,9 @@
     <ClInclude Include="..\..\..\engine\include\engine\ValidActionAnalyzer.h" />
     <ClInclude Include="..\..\..\engine\include\engine\view\Board.h" />
     <ClInclude Include="..\..\..\engine\include\engine\view\BoardRefView.h" />
-    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView-impl.h" />
-    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView.h" />
-    <ClInclude Include="..\..\..\engine\include\engine\view\BoardViewTypes.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardViewTypes.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />

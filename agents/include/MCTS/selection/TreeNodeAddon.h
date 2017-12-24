@@ -3,7 +3,7 @@
 #include <mutex>
 #include "engine/ActionType.h"
 #include "MCTS/detail/BoardNodeMap.h"
-#include "engine/view/BoardView.h"
+#include "engine/view/ReducedBoardView.h"
 #include "Utils/HashCombine.h"
 #include "Utils/SpinLocks.h"
 
@@ -62,7 +62,7 @@ namespace mcts
 				return true;
 			}
 
-			bool CheckBoard(engine::view::BoardView const& new_view) {
+			bool CheckBoard(engine::view::ReducedBoardView const& new_view) {
 				std::lock_guard<Utils::SpinLock> lock(mutex_);
 				return LockedCheckBoard(new_view);
 			}
@@ -73,9 +73,9 @@ namespace mcts
 			}
 
 		private:
-			bool LockedCheckBoard(engine::view::BoardView const& new_view) {
+			bool LockedCheckBoard(engine::view::ReducedBoardView const& new_view) {
 				if (!board_view_) {
-					board_view_.reset(new engine::view::BoardView(new_view));
+					board_view_.reset(new engine::view::ReducedBoardView(new_view));
 					return true;
 				}
 				return *board_view_ == new_view;
@@ -91,7 +91,7 @@ namespace mcts
 
 		private:
 			mutable Utils::SpinLock mutex_;
-			std::unique_ptr<engine::view::BoardView> board_view_;
+			std::unique_ptr<engine::view::ReducedBoardView> board_view_;
 			engine::ActionType action_type_;
 		};
 

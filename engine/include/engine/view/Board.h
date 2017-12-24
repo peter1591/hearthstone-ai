@@ -3,7 +3,7 @@
 #include "engine/Game.h"
 #include "engine/IActionParameterGetter.h"
 #include "MCTS/Types.h"
-#include "engine/view/BoardView.h"
+#include "engine/view/ReducedBoardView.h"
 
 namespace engine
 {
@@ -44,14 +44,14 @@ namespace engine
 
 			state::PlayerSide GetViewSide() const { return side_; }
 
-			BoardView CreateView() const {
+			ReducedBoardView CreateView() const {
 				if (side_ == state::kPlayerFirst) {
-					return BoardView(engine::view::BoardRefView<state::kPlayerFirst>(
+					return ReducedBoardView(engine::view::BoardRefView<state::kPlayerFirst>(
 						game_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return BoardView(engine::view::BoardRefView<state::kPlayerSecond>(
+					return ReducedBoardView(engine::view::BoardRefView<state::kPlayerSecond>(
 						game_.GetCurrentState()));
 				}
 			}

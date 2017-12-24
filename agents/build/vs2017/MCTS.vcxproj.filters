@@ -269,13 +269,13 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\BoardRefView.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView.h">
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView-impl.h">
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView-impl.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\view\BoardViewTypes.h">
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardViewTypes.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
   </ItemGroup>

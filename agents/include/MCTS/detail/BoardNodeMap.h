@@ -15,7 +15,7 @@ namespace mcts
 		{
 		private:
 			using TreeNode = mcts::selection::TreeNode;
-			using MapType = std::unordered_map<engine::view::BoardView, std::unique_ptr<TreeNode>>;
+			using MapType = std::unordered_map<engine::view::ReducedBoardView, std::unique_ptr<TreeNode>>;
 
 		public:
 			BoardNodeMap() : mutex_(), map_() {}
