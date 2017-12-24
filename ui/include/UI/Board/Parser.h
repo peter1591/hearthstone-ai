@@ -21,21 +21,6 @@ namespace ui
 		// Thread safety: No
 		class Parser
 		{
-		private:
-			class MyRandomGenerator : public state::IRandomGenerator
-			{
-			public:
-				MyRandomGenerator(std::mt19937 & random) : random_(random) {}
-
-				int Get(int exclusive_max) final
-				{
-					return random_() % exclusive_max;
-				}
-
-			public:
-				std::mt19937 & random_;
-			};
-
 		public:
 			Parser(GameEngineLogger & logger) : logger_(logger), board_() {}
 
@@ -82,9 +67,8 @@ namespace ui
 				second_unknown_cards_sets_mgr_.Prepare(rand);
 
 				state::State state;
-				MyRandomGenerator random(rand);
-				MakePlayer(state::kPlayerFirst, state, random, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr_);
-				MakePlayer(state::kPlayerSecond, state, random, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr_);
+				MakePlayer(state::kPlayerFirst, state, rand, board_.GetFirstPlayer(), first_unknown_cards_sets_mgr_);
+				MakePlayer(state::kPlayerSecond, state, rand, board_.GetSecondPlayer(), second_unknown_cards_sets_mgr_);
 				state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
 				state.SetTurn(board_.GetTurn());
 
@@ -102,7 +86,7 @@ namespace ui
 				return (Cards::CardId)it->second;
 			}
 
-			void MakePlayer(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random,
+			void MakePlayer(state::PlayerIdentifier player, state::State & state, std::mt19937 & random,
 				board::Player const& board_player, board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 			{
 				MakeHero(player, state, board_player.hero);
@@ -221,17 +205,17 @@ namespace ui
 				state.GetMutableCard(ref).SetUsable(!hero_power.used);
 			}
 
-			void PushBackDeckCard(Cards::CardId id, state::IRandomGenerator & random, state::State & state, state::PlayerIdentifier player)
+			void PushBackDeckCard(Cards::CardId id, std::mt19937 & random, state::State & state, state::PlayerIdentifier player)
 			{
 				int deck_count = (int)state.GetBoard().Get(player).deck_.Size();
 				state.GetBoard().Get(player).deck_.ShuffleAdd(id, [&](int exclusive_max) {
-					return random.Get(exclusive_max);
+					return random() % exclusive_max;
 				});
 				++deck_count;
 				assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
 			}
 
-			void MakeDeck(state::PlayerIdentifier player, state::State & state, state::IRandomGenerator & random, std::vector<int> entities,
+			void MakeDeck(state::PlayerIdentifier player, state::State & state, std::mt19937 & random, std::vector<int> entities,
 				board::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 			{
 				for (int entity_id : entities) {
