@@ -192,10 +192,10 @@
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />
     <ClInclude Include="..\..\..\judge\include\judge\view\Board.h" />
+    <ClInclude Include="..\..\..\judge\include\judge\view\BoardRefView.h" />
     <ClInclude Include="..\..\..\judge\include\judge\view\BoardView-impl.h" />
     <ClInclude Include="..\..\..\judge\include\judge\view\BoardView.h" />
     <ClInclude Include="..\..\..\judge\include\judge\view\BoardViewTypes.h" />
-    <ClInclude Include="..\..\..\judge\include\judge\view\PlayerStateRefView.h" />
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
     <ClInclude Include="..\..\include\MCTS\board\ActionParameterGetter-impl.h" />

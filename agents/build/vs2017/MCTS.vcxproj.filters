@@ -275,9 +275,6 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\IActionParameterGetter.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\judge\include\judge\view\PlayerStateRefView.h">
-      <Filter>Header Files\judge\view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\view\Board.h">
       <Filter>Header Files\judge\view</Filter>
     </ClInclude>
@@ -288,6 +285,9 @@
       <Filter>Header Files\judge\view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\judge\include\judge\view\BoardViewTypes.h">
+      <Filter>Header Files\judge\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\view\BoardRefView.h">
       <Filter>Header Files\judge\view</Filter>
     </ClInclude>
   </ItemGroup>

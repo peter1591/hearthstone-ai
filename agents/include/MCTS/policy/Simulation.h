@@ -95,7 +95,7 @@ namespace mcts
 				//static constexpr double kMaxSideValue = 3.0 * kMaxHeroValue + 10.0 * kMaxMinionValue * 7;
 				static constexpr double kMaxSideValue = kMaxHeroValue;
 				template <state::PlayerSide Side>
-				double GetStateValueForSide(state::PlayerSide self_side, judge::view::PlayerStateRefView<Side> view) {
+				double GetStateValueForSide(state::PlayerSide self_side, judge::view::BoardRefView<Side> view) {
 					assert(self_side == Side);
 					//state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
 
@@ -121,7 +121,7 @@ namespace mcts
 
 			public:
 				double GetStateValue(state::State const& game_state) {
-					judge::view::PlayerStateRefView<state::kPlayerFirst> view(game_state);
+					judge::view::BoardRefView<state::kPlayerFirst> view(game_state);
 					return GetStateValueForSide(state::kPlayerFirst, view);
 				}
 

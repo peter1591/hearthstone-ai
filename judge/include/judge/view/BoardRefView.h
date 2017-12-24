@@ -6,14 +6,13 @@
 
 namespace judge {
 	namespace view {
-		// TODO: move to 'detail' namespace
 		// Constraint access to the information visible to 'Side' player
 		template <state::PlayerSide Side,
 			typename = std::enable_if_t<state::ValidPlayerSide<Side>::valid>>
-			class PlayerStateRefView
+			class BoardRefView
 		{
 		public:
-			PlayerStateRefView(state::State const& state) : state_(state) {}
+			BoardRefView(state::State const& state) : state_(state) {}
 
 			int GetTurn() const { return state_.GetTurn(); }
 
@@ -117,10 +116,10 @@ namespace judge {
 		};
 
 		// Constraint access to the information visible to current player
-		class CurrentPlayerStateRefView
+		class CurrentPlayerBoardRefView
 		{
 		public:
-			CurrentPlayerStateRefView(state::State const& state) : state_(state) {}
+			CurrentPlayerBoardRefView(state::State const& state) : state_(state) {}
 
 			state::PlayerSide GetCurrentPlayer() const {
 				return state_.GetCurrentPlayerId().GetSide();

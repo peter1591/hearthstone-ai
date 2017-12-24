@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state/Types.h"
-#include "judge/view/PlayerStateRefView.h"
+#include "judge/view/BoardRefView.h"
 #include "judge/view/BoardViewTypes.h"
 #include "Utils/HashCombine.h"
 
@@ -9,15 +9,13 @@ namespace judge
 {
 	namespace view
 	{
-		// TODO: rename to BoardRefView
-		// TODO: PlayerStateRefView is only used in this class? move to 'detail' namespace?
 		class BoardView
 		{
 			friend std::hash<BoardView>;
 
 		public:
 			template <state::PlayerSide Side>
-			BoardView(judge::view::PlayerStateRefView<Side> const& board);
+			BoardView(judge::view::BoardRefView<Side> const& board);
 
 			BoardView(BoardView const&) = default;
 			BoardView(BoardView &&) = default;

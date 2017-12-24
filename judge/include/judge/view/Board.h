@@ -46,12 +46,12 @@ namespace judge
 
 			BoardView CreateView() const {
 				if (side_ == state::kPlayerFirst) {
-					return BoardView(judge::view::PlayerStateRefView<state::kPlayerFirst>(
+					return BoardView(judge::view::BoardRefView<state::kPlayerFirst>(
 						game_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return BoardView(judge::view::PlayerStateRefView<state::kPlayerSecond>(
+					return BoardView(judge::view::BoardRefView<state::kPlayerSecond>(
 						game_.GetCurrentState()));
 				}
 			}
@@ -59,12 +59,12 @@ namespace judge
 			template <class Functor>
 			auto ApplyWithPlayerStateView(Functor && functor) const {
 				if (side_ == state::kPlayerFirst) {
-					return functor(judge::view::PlayerStateRefView<state::kPlayerFirst>(
+					return functor(judge::view::BoardRefView<state::kPlayerFirst>(
 						game_.GetCurrentState()));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return functor(judge::view::PlayerStateRefView<state::kPlayerSecond>(
+					return functor(judge::view::BoardRefView<state::kPlayerSecond>(
 						game_.GetCurrentState()));
 				}
 			}
@@ -74,7 +74,7 @@ namespace judge
 					assert(false);
 					throw std::runtime_error("current player does not match.");
 				}
-				return judge::view::CurrentPlayerStateRefView(game_.GetCurrentState());
+				return judge::view::CurrentPlayerBoardRefView(game_.GetCurrentState());
 			}
 
 		public: // bridge to action analyzer
