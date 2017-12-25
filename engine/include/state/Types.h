@@ -98,6 +98,11 @@ namespace state
 		kPlayerFirst = 1,
 		kPlayerSecond = 2,
 	};
+	inline PlayerSide OppositePlayerSide(PlayerSide side)
+	{
+		assert(side == kPlayerFirst || side == kPlayerSecond);
+		return (PlayerSide)(3 - side);
+	}
 
 	template <PlayerSide Side> struct ValidPlayerSide {
 		static constexpr bool valid = false;
@@ -128,13 +133,13 @@ namespace state
 
 		PlayerIdentifier Opposite() const
 		{
-			return PlayerIdentifier(OppositeSide());
+			return PlayerIdentifier(OppositePlayerSide(side_));
 		}
 
 		void ChangeSide()
 		{
 			assert(AssertCheck());
-			side_ = OppositeSide();
+			side_ = OppositePlayerSide(side_);
 		}
 
 		PlayerSide GetSide() const { return side_; }
@@ -158,13 +163,6 @@ namespace state
 		bool AssertCheck() const
 		{
 			return side_ == kPlayerFirst || side_ == kPlayerSecond;
-		}
-
-	private:
-		PlayerSide OppositeSide() const
-		{
-			assert(side_ == kPlayerFirst || side_ == kPlayerSecond);
-			return (PlayerSide)(3 - side_);
 		}
 
 	private:
