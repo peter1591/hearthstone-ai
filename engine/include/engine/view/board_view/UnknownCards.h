@@ -148,7 +148,7 @@ namespace engine
 				}
 
 			private:
-				UnknownCardsSets * data_;
+				UnknownCardsSets * data_; // TODO: use const*?
 				std::vector<std::vector<Cards::CardId>> shuffled_cards_;
 			};
 		}

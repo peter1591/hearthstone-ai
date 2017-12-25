@@ -7,7 +7,6 @@
 #include "Cards/id-map.h"
 #include "Cards/Database.h"
 #include "engine/view/board_view/CardInfo.h"
-#include "engine/view/board_view/Controllers.h"
 
 namespace engine
 {
@@ -187,7 +186,21 @@ namespace engine
 				std::vector<CardInfo> hand;
 				std::vector<CardInfo> deck;
 
-				void Parse(Json::Value const& json, Json::Value const& json_entities, Controllers & controllers) {
+				struct UnknownCardsInfo {
+					static constexpr int kDeckBlockId = -1;
+					std::vector<Cards::CardId> deck_cards_;
+					board_view::UnknownCardsSets unknown_cards_sets_;
+					std::map<int, size_t> sets_indics_; // block id -> set idx
+
+					void Reset() {
+						deck_cards_.clear();
+						sets_indics_.clear();
+						unknown_cards_sets_.Reset();
+					}
+				};
+				UnknownCardsInfo unknown_cards_info_;
+
+				void Parse(Json::Value const& json, Json::Value const& json_entities) {
 					hero.Parse(json["hero"]);
 					hero_power.Parse(json["hero"]["hero_power"]);
 					minions.Parse(json["minions"]);
@@ -198,57 +211,54 @@ namespace engine
 					deck.clear();
 					for (Json::ArrayIndex idx = 0; idx < deck_entities.size(); ++idx) {
 						int entity_id = deck_entities[idx].asInt();
-						deck.push_back(ParseCardInfo(entity_id, json_entities[entity_id], controllers));
+						deck.push_back(ParseCardInfo(entity_id, json_entities[entity_id]));
 					}
 
 					Json::Value const& hand_entities = json["hand"]["entities"];
 					hand.clear();
 					for (Json::ArrayIndex idx = 0; idx < hand_entities.size(); ++idx) {
 						int entity_id = hand_entities[idx].asInt();
-						hand.push_back(ParseCardInfo(entity_id, json_entities[entity_id], controllers));
+						hand.push_back(ParseCardInfo(entity_id, json_entities[entity_id]));
 					}
 				}
 
 			private:
-				CardInfo ParseCardInfo(int entity_id, Json::Value const& json_entity, Controllers & controllers) {
+				CardInfo ParseCardInfo(int entity_id, Json::Value const& json_entity) {
 					CardInfo card_info;
-					int controller = json_entity["controller"].asInt();
 
 					std::string json_card_id = json_entity["card_id"].asString();
 
 					int block_id = GetBlockIndex(json_entity["generate_under_blocks"]);
 					auto block_cards_getter = [&]() {
-						if (block_id == ControllerInfo::kDeckBlockId) {
-							return controllers.Get(controller).deck_cards_;
+						if (block_id == UnknownCardsInfo::kDeckBlockId) {
+							return unknown_cards_info_.deck_cards_;
 						}
 						else {
-							return controllers.Get(controller).deck_cards_; // TODO: prepare cards according to block info
+							return unknown_cards_info_.deck_cards_; // TODO: prepare cards according to block info
 						}
 					};
 
 					if (!json_card_id.empty()) {
 						Cards::CardId card_id = GetCardId(json_card_id);
 
-						size_t unknown_cards_set_id = GetUnknownCardSetId(
-							controller, block_id, block_cards_getter, controllers);
-						controllers.Get(controller).unknown_cards_sets_.RemoveCardFromSet(
+						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter);
+						unknown_cards_info_.unknown_cards_sets_.RemoveCardFromSet(
 							unknown_cards_set_id, card_id);
 
-						card_info.SetAsRevealedCard(entity_id, controller, card_id);
+						card_info.SetAsRevealedCard(entity_id, card_id);
 					}
 					else {
-						size_t unknown_cards_set_id = GetUnknownCardSetId(
-							controller, block_id, block_cards_getter, controllers);
-						size_t unknown_cards_set_card_idx = controllers.Get(controller)
+						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter);
+						size_t unknown_cards_set_card_idx = unknown_cards_info_
 							.unknown_cards_sets_.AssignCardToSet(unknown_cards_set_id);
-						card_info.SetAsHiddenCard(entity_id, controller, unknown_cards_set_id, unknown_cards_set_card_idx);
+						card_info.SetAsHiddenCard(entity_id, unknown_cards_set_id, unknown_cards_set_card_idx);
 					}
 
 					return card_info;
 				}
 
 				int GetBlockIndex(Json::Value const& json_under_blocks) {
-					if (json_under_blocks.size() == 0) return ControllerInfo::kDeckBlockId;
+					if (json_under_blocks.size() == 0) return UnknownCardsInfo::kDeckBlockId;
 					else return json_under_blocks[json_under_blocks.size() - 1].asInt();
 				}
 
@@ -263,12 +273,12 @@ namespace engine
 				}
 
 				template <class CardsGetter>
-				size_t GetUnknownCardSetId(int controller, int block_idx, CardsGetter && cards_getter, Controllers & controllers)
+				size_t GetUnknownCardSetId(int block_idx, CardsGetter && cards_getter)
 				{
-					auto & sets_indics = controllers.Get(controller).sets_indics_;
+					auto & sets_indics = unknown_cards_info_.sets_indics_;
 					auto it = sets_indics.find(block_idx);
 					if (it == sets_indics.end()) {
-						size_t set_idx = controllers.Get(controller).unknown_cards_sets_.AddCardsSet(cards_getter());
+						size_t set_idx = unknown_cards_info_.unknown_cards_sets_.AddCardsSet(cards_getter());
 						sets_indics.insert(std::make_pair(block_idx, set_idx));
 						return set_idx;
 					}

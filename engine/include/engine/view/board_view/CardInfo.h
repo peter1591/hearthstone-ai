@@ -14,25 +14,19 @@ namespace engine
 			public:
 				CardInfo() :
 					id_(-1),
-					controller_(-1),
 					card_id_(Cards::kInvalidCardId),
 					unknown_cards_set_id_(0), unknown_cards_set_card_idx_(0)
 				{}
 
-				void SetAsRevealedCard(int id, int controller, Cards::CardId card_id) {
-					assert(controller > 0);
+				void SetAsRevealedCard(int id, Cards::CardId card_id) {
 					assert(card_id != Cards::kInvalidCardId);
 
 					id_ = id;
-					controller_ = controller;
 					card_id_ = card_id;
 				}
 
-				void SetAsHiddenCard(int id, int controller, size_t set_id, size_t card_idx) {
-					assert(controller > 0);
-
+				void SetAsHiddenCard(int id, size_t set_id, size_t card_idx) {
 					id_ = id;
-					controller_ = controller;
 					card_id_ = Cards::kInvalidCardId;
 					unknown_cards_set_id_ = set_id;
 					unknown_cards_set_card_idx_ = card_idx;
@@ -52,7 +46,6 @@ namespace engine
 			public:
 				int id_;
 
-				int controller_;
 				Cards::CardId card_id_;
 				size_t unknown_cards_set_id_;
 				size_t unknown_cards_set_card_idx_;

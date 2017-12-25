@@ -10,7 +10,6 @@
 #include "engine/view/board_view/UnknownCards.h"
 #include "engine/view/board_view/CardInfo.h"
 #include "engine/view/board_view/Player.h"
-#include "engine/view/board_view/Controllers.h"
 
 namespace engine
 {
@@ -19,39 +18,34 @@ namespace engine
 		class BoardView
 		{
 		public:
-			BoardView() :
-				turn_(-1), first_player_(), second_player_(),
-				cards_info_(), controllers_()
-			{
-
-			}
+			BoardView() : turn_(-1), first_player_(), second_player_(), cards_info_() {}
 
 			void Reset() {
 				turn_ = -1;
 				cards_info_.clear();
-				controllers_.Reset();
 			}
 
-			void SetDeckCards(int controller, std::vector<Cards::CardId> const& deck_cards)
+			void SetDeckCards(state::PlayerSide side, std::vector<Cards::CardId> const& deck_cards)
 			{
-				controllers_.Get(controller).deck_cards_ = deck_cards;
+				GetPlayer(side).unknown_cards_info_.deck_cards_ = deck_cards;
 			}
 
 			void Parse(Json::Value const& board)
 			{
 				turn_ = board["turn"].asInt();
-				first_player_.Parse(board["player"], board["entities"], controllers_);
-				second_player_.Parse(board["opponent"], board["entities"], controllers_);
+				first_player_.Parse(board["player"], board["entities"]);
+				second_player_.Parse(board["opponent"], board["entities"]);
 			}
 
 		public:
 			int GetTurn() const { return turn_; }
-			auto const& GetFirstPlayer() const { return first_player_; }
-			auto const& GetSecondPlayer() const { return second_player_; }
+
+			board_view::Player const& GetFirstPlayer() const { return first_player_; }
+			board_view::Player const& GetSecondPlayer() const { return second_player_; }
 			
 			// TODO: should return const&
-			auto & GetUnknownCardsSets(int controller) {
-				return controllers_.Get(controller).unknown_cards_sets_;
+			auto & GetUnknownCardsSets(state::PlayerSide side) {
+				return GetPlayer(side).unknown_cards_info_.unknown_cards_sets_;
 			}
 
 			// TODO: should be private?
@@ -59,6 +53,12 @@ namespace engine
 			{
 				board_view::CardInfo const& card_info = cards_info_[card_info_id];
 				return card_info.GetCardId(unknown_cards_mgr);
+			}
+
+		private:
+			board_view::Player & GetPlayer(state::PlayerSide side) {
+				if (side == state::kPlayerFirst) return first_player_;
+				else return second_player_;
 			}
 
 		private:
@@ -76,8 +76,6 @@ namespace engine
 			board_view::Player second_player_;
 
 			std::vector<board_view::CardInfo> cards_info_;
-
-			board_view::Controllers controllers_;
 		};
 	}
 }

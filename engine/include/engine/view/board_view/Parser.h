@@ -46,7 +46,7 @@ namespace engine
 						player_deck_cards.push_back(card_id);
 					}
 					// TODO: remove revealed deck cards
-					board_.SetDeckCards(1, player_deck_cards);
+					board_.SetDeckCards(state::kPlayerFirst, player_deck_cards);
 
 					// TODO: guess oppoennt deck type
 					//std::string opponent_deck_type = "InnKeeperBasicMage";
@@ -56,12 +56,12 @@ namespace engine
 						Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 						opponent_deck_cards.push_back(card_id);
 					}
-					board_.SetDeckCards(2, opponent_deck_cards);
+					board_.SetDeckCards(state::kPlayerSecond, opponent_deck_cards);
 
 					board_.Parse(json_board);
-					first_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(1));
-					second_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(2));
 
+					first_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(state::kPlayerFirst));
+					second_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(state::kPlayerSecond));
 					StateRestorer state_restorer(board_, first_unknown_cards_sets_mgr_, second_unknown_cards_sets_mgr_);
 					return state_restorer;
 				}
