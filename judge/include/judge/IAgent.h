@@ -21,6 +21,7 @@ namespace judge
 
 		// TODO: The underlying truth state is passed. It means the competitor can acquire
 		// hidden information (e.g., opponents hand cards).
+		// Should pass engine/view/BoardView instead. Agents can use state-restorer to sample a determined state
 		virtual void Think(state::PlayerIdentifier side, std::function<state::State(int)> state_getter, std::mt19937 & random) = 0;
 
 		virtual int GetAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices) = 0;

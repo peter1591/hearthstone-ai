@@ -10,7 +10,7 @@
 #include "state/Configs.h"
 #include "Cards/Database.h"
 #include "engine/ActionApplyHelper.h"
-#include "UI/Board/Parser.h"
+#include "engine/view/board_view/Parser.h"
 #include "UI/SampledBoards.h"
 
 namespace ui
@@ -59,7 +59,7 @@ namespace ui
 
 			std::mt19937 rand(seed);
 			
-			ui::board::Parser parser(logger_);
+			engine::view::board_view::Parser parser;
 			auto state_restorer = parser.Parse(board_raw_);
 			sampled_boards_.Prepare(root_sample_count_, rand, [&]() {
 				return state_restorer.RestoreState(rand);

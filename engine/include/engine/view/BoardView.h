@@ -8,18 +8,18 @@
 
 #include <Cards/Database.h>
 #include <Cards/id-map.h>
-#include "UI/Board/UnknownCards.h"
-#include "UI/Board/CardInfo.h"
-#include "UI/Board/Player.h"
+#include "engine/view/board_view/UnknownCards.h"
+#include "engine/view/board_view/CardInfo.h"
+#include "engine/view/board_view/Player.h"
 
-namespace ui
+namespace engine
 {
-	namespace board
+	namespace view
 	{
-		class Board
+		class BoardView
 		{
 		public:
-			Board() :
+			BoardView() :
 				turn_(-1), first_player_(), second_player_(),
 				cards_info_(), first_controller_(), second_controller_()
 			{
@@ -57,9 +57,9 @@ namespace ui
 			}
 
 			// TODO: should be private?
-			Cards::CardId GetCardId(int card_info_id, UnknownCardsSetsManager const& unknown_cards_mgr) const
+			Cards::CardId GetCardId(int card_info_id, board_view::UnknownCardsSetsManager const& unknown_cards_mgr) const
 			{
-				CardInfo const& card_info = cards_info_[card_info_id];
+				board_view::CardInfo const& card_info = cards_info_[card_info_id];
 				return card_info.GetCardId(unknown_cards_mgr);
 			}
 
@@ -67,7 +67,7 @@ namespace ui
 			struct ControllerInfo {
 				static constexpr int kDeckBlockId = -1;
 				std::vector<Cards::CardId> deck_cards_;
-				UnknownCardsSets unknown_cards_sets_;
+				board_view::UnknownCardsSets unknown_cards_sets_;
 				std::map<int, size_t> sets_indics_; // block id -> set idx
 			};
 
@@ -126,7 +126,7 @@ namespace ui
 				return (Cards::CardId)it->second;
 			}
 
-			CardInfo & GetCardInfo(int id)
+			board_view::CardInfo & GetCardInfo(int id)
 			{
 				if (id >= cards_info_.size()) {
 					cards_info_.resize(id + 1);
@@ -173,10 +173,10 @@ namespace ui
 
 		private:
 			int turn_;
-			Player first_player_;
-			Player second_player_;
+			board_view::Player first_player_;
+			board_view::Player second_player_;
 
-			std::vector<CardInfo> cards_info_;
+			std::vector<board_view::CardInfo> cards_info_;
 
 			ControllerInfo first_controller_;
 			ControllerInfo second_controller_;

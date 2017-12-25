@@ -157,6 +157,16 @@
     <ClInclude Include="..\..\..\engine\include\engine\MainOp.h" />
     <ClInclude Include="..\..\..\engine\include\engine\playerstateview.h" />
     <ClInclude Include="..\..\..\engine\include\engine\Result.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\Board.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardRefView.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\CardInfo.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Parser.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Player.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\StateRestorer.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\UnknownCards.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView-impl.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />

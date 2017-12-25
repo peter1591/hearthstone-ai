@@ -147,18 +147,18 @@
     <ClInclude Include="..\..\..\..\engine\include\engine\Game.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\Board.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardRefView.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\CardInfo.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\Parser.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\Player.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\StateRestorer.h" />
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\UnknownCards.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardView-impl.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardView.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\reduced_board_view\Types.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\BoardGetter.h" />
-    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Board.h" />
-    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Parser.h" />
-    <ClInclude Include="..\..\..\..\ui\include\UI\Board\Player.h" />
-    <ClInclude Include="..\..\..\..\ui\include\UI\Board\UnknownCards.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\GameEngine.h" />
     <ClInclude Include="..\..\..\..\ui\include\UI\GameEngineLogger.h" />
-    <ClInclude Include="..\..\..\include\UI\Board\CardInfo.h" />
-    <ClInclude Include="..\..\..\include\UI\Board\StateRestorer.h" />
     <ClInclude Include="..\..\..\include\UI\SampledBoards.h" />
   </ItemGroup>
   <ItemGroup>

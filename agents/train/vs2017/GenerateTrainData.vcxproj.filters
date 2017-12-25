@@ -28,6 +28,12 @@
     <Filter Include="Header Files\engine">
       <UniqueIdentifier>{e6d8a1fc-64f2-4e6d-b606-14ccaaedf4ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine\view">
+      <UniqueIdentifier>{3c48944d-9847-4c55-9b52-317590d7bdf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine\view\board_view">
+      <UniqueIdentifier>{9c9acffb-e99d-4cd5-af8c-4c338c5cc766}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
@@ -97,6 +103,36 @@
     </ClInclude>
     <ClInclude Include="..\..\test\TestStateBuilder.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\Board.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardRefView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\BoardView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView-impl.h">
+      <Filter>Header Files\engine\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\CardInfo.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Parser.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Player.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\StateRestorer.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\UnknownCards.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
