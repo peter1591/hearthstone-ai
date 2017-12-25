@@ -70,6 +70,9 @@
     <Filter Include="Header Files\engine\view\reduced_board_view">
       <UniqueIdentifier>{50174700-0917-4f52-b6c7-d6f55dc0f905}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine\view\board_view">
+      <UniqueIdentifier>{83739ea4-af97-42d1-8883-7805a3a8e446}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\CardDispatcher.cpp">

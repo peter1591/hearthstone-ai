@@ -215,11 +215,22 @@ namespace engine
 					int controller = json_entity["controller"].asInt();
 
 					std::string json_card_id = json_entity["card_id"].asString();
+
+					int block_id = GetBlockIndex(json_entity["generate_under_blocks"]);
+					auto block_cards_getter = [&]() {
+						if (block_id == ControllerInfo::kDeckBlockId) {
+							return controllers.Get(controller).deck_cards_;
+						}
+						else {
+							return controllers.Get(controller).deck_cards_; // TODO: prepare cards according to block info
+						}
+					};
+
 					if (!json_card_id.empty()) {
 						Cards::CardId card_id = GetCardId(json_card_id);
 
 						size_t unknown_cards_set_id = GetUnknownCardSetId(
-							controller, json_entity["generate_under_blocks"], controllers);
+							controller, block_id, block_cards_getter, controllers);
 						controllers.Get(controller).unknown_cards_sets_.RemoveCardFromSet(
 							unknown_cards_set_id, card_id);
 
@@ -227,13 +238,18 @@ namespace engine
 					}
 					else {
 						size_t unknown_cards_set_id = GetUnknownCardSetId(
-							controller, json_entity["generate_under_blocks"], controllers);
+							controller, block_id, block_cards_getter, controllers);
 						size_t unknown_cards_set_card_idx = controllers.Get(controller)
 							.unknown_cards_sets_.AssignCardToSet(unknown_cards_set_id);
 						card_info.SetAsHiddenCard(entity_id, controller, unknown_cards_set_id, unknown_cards_set_card_idx);
 					}
 
 					return card_info;
+				}
+
+				int GetBlockIndex(Json::Value const& json_under_blocks) {
+					if (json_under_blocks.size() == 0) return ControllerInfo::kDeckBlockId;
+					else return json_under_blocks[json_under_blocks.size() - 1].asInt();
 				}
 
 				Cards::CardId GetCardId(std::string const& card_id)
@@ -244,21 +260,6 @@ namespace engine
 						return Cards::kInvalidCardId;
 					}
 					return (Cards::CardId)it->second;
-				}
-
-				size_t GetUnknownCardSetId(int controller, Json::Value const& json_under_blocks, Controllers & controllers)
-				{
-					if (json_under_blocks.size() == 0) {
-						return GetUnknownCardSetId(controller, ControllerInfo::kDeckBlockId, [&]() {
-							return controllers.Get(controller).deck_cards_;
-						}, controllers);
-					}
-					else {
-						int block_id = json_under_blocks[json_under_blocks.size() - 1].asInt();
-						return GetUnknownCardSetId(controller, block_id, [&]() {
-							return controllers.Get(controller).deck_cards_; // TODO: prepare cards according to block info
-						}, controllers);
-					}
 				}
 
 				template <class CardsGetter>
