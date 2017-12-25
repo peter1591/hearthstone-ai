@@ -67,7 +67,7 @@ namespace state
 			}
 
 			template <typename Functor>
-			void ForEach(Functor const& functor) {
+			void ForEach(Functor const& functor) const {
 				auto const& container = GetCards();
 				for (int i = size_ - 1; i >= 0; --i) {
 					if (!functor(container[i])) return;
