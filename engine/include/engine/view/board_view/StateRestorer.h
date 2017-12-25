@@ -170,11 +170,12 @@ namespace engine
 					assert(state.GetBoard().Get(player).deck_.Size() == deck_count);
 				}
 
-				void MakeDeck(state::PlayerIdentifier player, state::State & state, std::mt19937 & random, std::vector<int> entities,
+				void MakeDeck(state::PlayerIdentifier player, state::State & state, std::mt19937 & random,
+					std::vector<CardInfo> cards,
 					board_view::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 				{
-					for (int entity_id : entities) {
-						Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
+					for (auto const& card : cards) {
+						Cards::CardId card_id = card.GetCardId(unknown_cards_sets_mgr);
 						PushBackDeckCard(card_id, random, state, player);
 					}
 				}
@@ -211,11 +212,12 @@ namespace engine
 					return ref;
 				}
 
-				void MakeHand(state::PlayerIdentifier player, state::State & state, std::vector<int> const& entities,
+				void MakeHand(state::PlayerIdentifier player, state::State & state,
+					std::vector<CardInfo> const& cards,
 					board_view::UnknownCardsSetsManager const& unknown_cards_sets_mgr)
 				{
-					for (int entity_id : entities) {
-						Cards::CardId card_id = board_.GetCardId(entity_id, unknown_cards_sets_mgr);
+					for (auto const& card : cards) {
+						Cards::CardId card_id = card.GetCardId(unknown_cards_sets_mgr);
 						AddHandCard(player, state, card_id);
 					}
 				}

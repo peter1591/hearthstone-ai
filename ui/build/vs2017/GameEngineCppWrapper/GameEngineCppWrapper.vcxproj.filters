@@ -96,6 +96,9 @@
     <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\Controllers.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\third_party\jsoncpp\src\json_value.cpp">
