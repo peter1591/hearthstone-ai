@@ -2,7 +2,7 @@
 
 #include "state/Types.h"
 #include "engine/view/BoardRefView.h"
-#include "engine/view/ReducedBoardViewTypes.h"
+#include "engine/view/reduced_board_view/Types.h"
 #include "Utils/HashCombine.h"
 
 namespace engine

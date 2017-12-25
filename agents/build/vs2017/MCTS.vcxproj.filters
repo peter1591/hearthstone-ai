@@ -67,6 +67,9 @@
     <Filter Include="Header Files\engine\view">
       <UniqueIdentifier>{42c26551-dafb-45ea-b85b-a08f4b196d84}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine\view\reduced_board_view">
+      <UniqueIdentifier>{50174700-0917-4f52-b6c7-d6f55dc0f905}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\test\CardDispatcher.cpp">
@@ -275,8 +278,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView-impl.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardViewTypes.h">
-      <Filter>Header Files\engine\view</Filter>
+    <ClInclude Include="..\..\..\engine\include\engine\view\reduced_board_view\Types.h">
+      <Filter>Header Files\engine\view\reduced_board_view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

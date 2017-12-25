@@ -193,7 +193,7 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\BoardRefView.h" />
     <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardView.h" />
-    <ClInclude Include="..\..\..\engine\include\engine\view\ReducedBoardViewTypes.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\view\reduced_board_view\Types.h" />
     <ClInclude Include="..\..\..\judge\include\judge\IAgent.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Judger.h" />
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />

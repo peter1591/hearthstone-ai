@@ -37,6 +37,9 @@
     <Filter Include="Header Files\engine\view">
       <UniqueIdentifier>{7934a63a-0511-4fae-b1e9-1ecef82107d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine\view\reduced_board_view">
+      <UniqueIdentifier>{a2a94559-917e-443e-933e-16af434411ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\ui\include\UI\GameEngine.h">
@@ -87,11 +90,11 @@
     <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardView-impl.h">
       <Filter>Header Files\engine\view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\engine\include\engine\view\ReducedBoardViewTypes.h">
-      <Filter>Header Files\engine\view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\UI\Board\CardInfo.h">
       <Filter>Header Files\UI\Board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\engine\include\engine\view\reduced_board_view\Types.h">
+      <Filter>Header Files\engine\view\reduced_board_view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
