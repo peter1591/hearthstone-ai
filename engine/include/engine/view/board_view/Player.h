@@ -36,16 +36,19 @@ namespace engine
 
 			struct Resource
 			{
-				int this_turn; // crystals earns temporary this turn
-				int used;
+				// TODO: use state::board::PlayerResource directly?
+
 				int current;
 				int total;
 				int overload;
 				int overload_next_turn;
 
 				void Parse(Json::Value const& json) {
+					int this_turn = 0; // crystals earns temporary this turn
 					this_turn = json["this_turn"].asInt();
-					used = json["used"].asInt();
+
+					int used = json["used"].asInt();
+
 					total = json["total"].asInt();
 					overload = json["overload"].asInt();
 					overload_next_turn = json["overload_next_turn"].asInt();
