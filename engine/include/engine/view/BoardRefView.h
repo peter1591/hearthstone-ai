@@ -6,13 +6,14 @@
 
 namespace engine {
 	namespace view {
-		// Constraint access to the information visible to 'Side' player
-		template <state::PlayerSide Side,
-			typename = std::enable_if_t<state::ValidPlayerSide<Side>::valid>>
-			class BoardRefView
+		class BoardRefView
 		{
 		public:
-			BoardRefView(state::State const& state) : state_(state) {}
+			BoardRefView(state::State const& state, state::PlayerSide side) :
+				state_(state), side_(side)
+			{}
+
+			state::PlayerSide GetSide() const { return side_; }
 
 			int GetTurn() const { return state_.GetTurn(); }
 
@@ -27,13 +28,13 @@ namespace engine {
 
 		public: // hero
 			state::Cards::Card const& GetSelfHero() const {
-				auto ref = GetPlayer(Side).GetHeroRef();
+				auto ref = GetPlayer(side_).GetHeroRef();
 				assert(ref.IsValid());
 				return state_.GetCard(ref);
 			}
 
 			state::Cards::Card const& GetOpponentHero() const {
-				auto ref = GetOpponentPlayer(Side).GetHeroRef();
+				auto ref = GetOpponentPlayer(side_).GetHeroRef();
 				assert(ref.IsValid());
 				return state_.GetCard(ref);
 			}
@@ -42,7 +43,7 @@ namespace engine {
 			// Functor parameters: state::Cards::Card const&
 			template <typename Functor>
 			void ForEachSelfHandCard(Functor && functor) const {
-				GetPlayer(Side).hand_.ForEach([&](state::CardRef card_ref) {
+				GetPlayer(side_).hand_.ForEach([&](state::CardRef card_ref) {
 					return functor(state_.GetCard(card_ref));
 				});
 			}
@@ -52,7 +53,7 @@ namespace engine {
 			//    (TODO) [bool] enchanted
 			template <typename Functor>
 			void ForEachOpponentHandCard(Functor && functor) const {
-				GetOpponentPlayer(Side).hand_.ForEach([&](state::CardRef card_ref) {
+				GetOpponentPlayer(side_).hand_.ForEach([&](state::CardRef card_ref) {
 					state::Cards::Card const& card = state_.GetCard(card_ref);
 
 					// TODO: implement
@@ -63,7 +64,7 @@ namespace engine {
 			}
 
 			size_t GetOpponentHandCardCount() const {
-				return GetOpponentPlayer().hand_.Size();
+				return GetOpponentPlayer(side_).hand_.Size();
 			}
 
 		public:
@@ -122,6 +123,7 @@ namespace engine {
 
 		private:
 			state::State const& state_;
+			state::PlayerSide side_;
 		};
 
 		// Constraint access to the information visible to current player
@@ -140,11 +142,11 @@ namespace engine {
 			static void ApplyWithCurrentPlayerStateView(state::State const& state, Functor && functor) {
 				state::PlayerSide side = state.GetCurrentPlayerId().GetSide();
 				if (side == state::kPlayerFirst) {
-					functor(BoardRefView<state::kPlayerFirst>(state));
+					functor(BoardRefView(state, state::kPlayerFirst));
 				}
 				else {
 					assert(side == state::kPlayerSecond);
-					functor(BoardRefView<state::kPlayerSecond>(state));
+					functor(BoardRefView(state, state::kPlayerSecond));
 				}
 			}
 

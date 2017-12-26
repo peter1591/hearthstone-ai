@@ -46,26 +46,26 @@ namespace engine
 
 			ReducedBoardView CreateView() const {
 				if (side_ == state::kPlayerFirst) {
-					return ReducedBoardView(engine::view::BoardRefView<state::kPlayerFirst>(
-						game_.GetCurrentState()));
+					return ReducedBoardView(engine::view::BoardRefView(
+						game_.GetCurrentState(), state::kPlayerFirst));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return ReducedBoardView(engine::view::BoardRefView<state::kPlayerSecond>(
-						game_.GetCurrentState()));
+					return ReducedBoardView(engine::view::BoardRefView(
+						game_.GetCurrentState(), state::kPlayerSecond));
 				}
 			}
 
 			template <class Functor>
 			auto ApplyWithPlayerStateView(Functor && functor) const {
 				if (side_ == state::kPlayerFirst) {
-					return functor(engine::view::BoardRefView<state::kPlayerFirst>(
-						game_.GetCurrentState()));
+					return functor(engine::view::BoardRefView(
+						game_.GetCurrentState(), state::kPlayerFirst));
 				}
 				else {
 					assert(side_ == state::kPlayerSecond);
-					return functor(engine::view::BoardRefView<state::kPlayerSecond>(
-						game_.GetCurrentState()));
+					return functor(engine::view::BoardRefView(
+						game_.GetCurrentState(), state::kPlayerSecond));
 				}
 			}
 

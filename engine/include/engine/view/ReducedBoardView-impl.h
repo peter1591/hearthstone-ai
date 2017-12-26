@@ -6,27 +6,26 @@ namespace engine
 {
 	namespace view
 	{
-		template <state::PlayerSide Side>
-		inline ReducedBoardView::ReducedBoardView(engine::view::BoardRefView<Side> const& board) :
-			turn_(board.GetTurn()), side_(Side),
+		inline ReducedBoardView::ReducedBoardView(engine::view::BoardRefView const& board) :
+			turn_(board.GetTurn()), side_(board.GetSide()),
 			self_hero_(), self_crystal_(), self_hero_power_(), self_weapon_(),
 			self_minions_(), self_hand_(), self_deck_(),
 			opponent_hero_(), opponent_crystal_(), opponent_hero_power_(),
 			opponent_weapon_(), opponent_minions_(), opponent_hand_(), opponent_deck_()
 		{
 			{
-				self_hero_.Fill(board.GetSelfHero(), board.IsHeroAttackable(Side));
+				self_hero_.Fill(board.GetSelfHero(), board.IsHeroAttackable(side_));
 
-				self_crystal_.Fill(board.GetPlayerResource(Side));
+				self_crystal_.Fill(board.GetPlayerResource(side_));
 
-				self_hero_power_.Fill(board.GetHeroPower(Side));
+				self_hero_power_.Fill(board.GetHeroPower(side_));
 
 				self_weapon_.Invalidate();
-				board.GetWeapon(Side, [&](state::Cards::Card const& card) {
+				board.GetWeapon(side_, [&](state::Cards::Card const& card) {
 					self_weapon_.Fill(card);
 				});
 
-				board.ForEachMinion(Side, [&](state::Cards::Card const& card, bool attackable) {
+				board.ForEachMinion(side_, [&](state::Cards::Card const& card, bool attackable) {
 					self_minions_.emplace_back(card, attackable);
 					return true;
 				});
@@ -36,11 +35,11 @@ namespace engine
 					return true;
 				});
 
-				self_deck_.Fill(board.GetDeckCardCount(Side));
+				self_deck_.Fill(board.GetDeckCardCount(side_));
 			}
 
 			{
-				state::PlayerSide opponent_side = state::PlayerIdentifier(Side).Opposite().GetSide();
+				state::PlayerSide opponent_side = state::PlayerIdentifier(side_).Opposite().GetSide();
 
 				opponent_hero_.Fill(board.GetOpponentHero());
 

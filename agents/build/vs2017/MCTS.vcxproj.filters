@@ -284,5 +284,20 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\reduced_board_view\Types.h">
       <Filter>Header Files\engine\view\reduced_board_view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\CardInfo.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Parser.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Player.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\StateRestorer.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\UnknownCards.h">
+      <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

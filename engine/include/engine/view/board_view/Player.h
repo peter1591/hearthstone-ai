@@ -135,9 +135,8 @@ namespace engine
 					status.Parse(json["status"]);
 				}
 
-				template <state::PlayerSide Side>
-				void Parse(BoardRefView<Side> game_state, state::PlayerSide side) {
-					if constexpr (side == Side) Parse(game_state.GetSelfHero());
+				void Parse(BoardRefView game_state, state::PlayerSide side) {
+					if (side == game_state.GetSide()) Parse(game_state.GetSelfHero());
 					else Parse(game_state.GetOpponentHero());
 				}
 
@@ -162,8 +161,7 @@ namespace engine
 					used = json["used"].asBool();
 				}
 
-				template <state::PlayerSide Side>
-				void Parse(BoardRefView<Side> game_state, state::PlayerSide side) {
+				void Parse(BoardRefView game_state, state::PlayerSide side) {
 					auto const& card = game_state.GetHeroPower(side);
 					card_id = card.GetCardId();
 					used = (card.GetUsedThisTurn() > 0);
@@ -227,21 +225,13 @@ namespace engine
 					}
 				}
 
-				template <state::PlayerSide Side>
-				void Parse(BoardRefView<Side> game_state, state::PlayerSide side) {
+				void Parse(BoardRefView game_state, state::PlayerSide side) {
 					minions.clear();
-					if constexpr (side == Side) {
-						game_state.ForEachSelfMinions([&](state::Cards::Card const& card, bool attackable) {
-							minions.emplace_back();
-							minions.back().Parse(card);
-						});
-					}
-					else {
-						game_state.ForEachOpponentMinions([&](state::Cards::Card const& card) {
-							minions.emplace_back();
-							minions.back().Parse(card);
-						});
-					}
+					game_state.ForEachMinion(side, [&](state::Cards::Card const& card, bool attackable) {
+						minions.emplace_back();
+						minions.back().Parse(card);
+						return true;
+					});
 				}
 			};
 
@@ -287,36 +277,73 @@ namespace engine
 					resource.Parse(json["crystal"]);
 
 					Json::Value const& deck_entities = json["deck"]["entities"];
+
+					auto card_info_getter = [&](int entity_id) {
+						Json::Value const& json_entity = json_entities[entity_id];
+						std::string json_card_id = json_entity["card_id"].asString();
+						Cards::CardId card_id = GetCardIdFromString(json_card_id);
+						int block_id = GetBlockIndex(json_entity["generate_under_blocks"]);
+						return ParseCardInfo(card_id, block_id);
+					};
+
 					deck.clear();
 					for (Json::ArrayIndex idx = 0; idx < deck_entities.size(); ++idx) {
-						int entity_id = deck_entities[idx].asInt();
-						deck.push_back(ParseCardInfo(json_entities[entity_id]));
+						deck.push_back(card_info_getter(deck_entities[idx].asInt()));
 					}
 
 					Json::Value const& hand_entities = json["hand"]["entities"];
 					hand.clear();
 					for (Json::ArrayIndex idx = 0; idx < hand_entities.size(); ++idx) {
-						int entity_id = hand_entities[idx].asInt();
-						hand.push_back(ParseCardInfo(json_entities[entity_id]));
+						hand.push_back(card_info_getter(hand_entities[idx].asInt()));
+					}
+				}
+
+				void Parse(BoardRefView game_state, state::PlayerSide side) {
+					hero.Parse(game_state, side);
+					hero_power.Parse(game_state, side);
+					minions.Parse(game_state, side);
+					fatigue = game_state.GetFatigueDamage(side);
+					resource.Parse(game_state.GetPlayerResource(side));
+
+					// TODO: store block id in game state
+					int block_id = UnknownCardsInfo::kDeckBlockId;
+
+					deck.clear();
+					for (int i = 0; i < game_state.GetDeckCardCount(side); ++i) {
+						deck.push_back(ParseCardInfo(Cards::kInvalidCardId, block_id));
+					}
+
+					hand.clear();
+					if (side == game_state.GetSide()) {
+						game_state.ForEachSelfHandCard([&](state::Cards::Card const& card) {
+							hand.push_back(ParseCardInfo(card.GetCardId(), block_id));
+							return true;
+						});
+					}
+					else {
+						game_state.ForEachOpponentHandCard([&]() {
+							hand.push_back(ParseCardInfo(Cards::kInvalidCardId, block_id));
+							return true;
+						});
 					}
 				}
 
 			private:
 				::Cards::CardId GetCardIdFromString(std::string const& card_id) {
+					if (card_id.empty()) return Cards::kInvalidCardId;
+
 					auto const& container = Cards::Database::GetInstance().GetIdMap();
 					auto it = container.find(card_id);
 					if (it == container.end()) {
-						return Cards::kInvalidCardId;
+						assert(false);
+						throw std::runtime_error("invalid card id: " + card_id);
 					}
 					return (Cards::CardId)it->second;
 				}
 
-				CardInfo ParseCardInfo(Json::Value const& json_entity) {
+				CardInfo ParseCardInfo(Cards::CardId card_id, int block_id) {
 					CardInfo card_info;
 
-					std::string json_card_id = json_entity["card_id"].asString();
-
-					int block_id = GetBlockIndex(json_entity["generate_under_blocks"]);
 					auto block_cards_getter = [&]() {
 						if (block_id == UnknownCardsInfo::kDeckBlockId) {
 							return unknown_cards_info_.deck_cards_;
@@ -326,9 +353,7 @@ namespace engine
 						}
 					};
 
-					if (!json_card_id.empty()) {
-						Cards::CardId card_id = GetCardIdFromString(json_card_id);
-
+					if (card_id != Cards::kInvalidCardId) {
 						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter);
 						unknown_cards_info_.unknown_cards_sets_.RemoveCardFromSet(
 							unknown_cards_set_id, card_id);

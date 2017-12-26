@@ -18,8 +18,7 @@ namespace engine
 			friend std::hash<ReducedBoardView>;
 
 		public:
-			template <state::PlayerSide Side>
-			ReducedBoardView(engine::view::BoardRefView<Side> const& board);
+			ReducedBoardView(engine::view::BoardRefView const& board);
 
 			ReducedBoardView(ReducedBoardView const&) = default;
 			ReducedBoardView(ReducedBoardView &&) = default;
