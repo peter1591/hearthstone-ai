@@ -16,6 +16,15 @@ namespace engine {
 
 			int GetTurn() const { return state_.GetTurn(); }
 
+		public: // player
+			int GetFatigueDamage(state::PlayerSide side) const {
+				return state_.GetBoard().Get(side).GetFatigueDamage();
+			}
+
+			auto const& GetResource(state::PlayerSide side) const {
+				return state_.GetBoard().Get(side).GetResource();
+			}
+
 		public: // hero
 			state::Cards::Card const& GetSelfHero() const {
 				auto ref = GetPlayer(Side).GetHeroRef();

@@ -54,6 +54,13 @@ namespace engine
 					overload_next_turn = json["overload_next_turn"].asInt();
 					current = total + this_turn - used;
 				}
+
+				void Parse(state::board::PlayerResource const& resource) {
+					current = resource.GetCurrent();
+					total = resource.GetTotal();
+					overload = resource.GetCurrentOverloaded();
+					overload_next_turn = resource.GetNextOverload();
+				}
 			};
 
 			struct CharacterStatus
@@ -65,7 +72,7 @@ namespace engine
 				bool freeze;
 				bool frozon;
 				bool poisonous;
-				bool windfury;
+				int max_attacks_per_turn;
 
 				void Parse(Json::Value const& json) {
 					charge = json["charge"].asBool();
@@ -75,7 +82,24 @@ namespace engine
 					freeze = json["freeze"].asBool();
 					frozon = json["frozon"].asBool();
 					poisonous = json["poisonous"].asBool();
-					windfury = json["windfury"].asBool();
+
+					if (json["windfury"].asBool()) {
+						max_attacks_per_turn = 2;
+					}
+					else {
+						max_attacks_per_turn = 1;
+					}
+				}
+
+				void Parse(state::Cards::Card const& card) {
+					charge = card.HasCharge();
+					taunt = card.HasTaunt();
+					divine_shield = card.HasShield();
+					stealth = card.HasStealth();
+					freeze = card.IsFreezeAttack();
+					frozon = card.GetFreezed();
+					poisonous = card.IsPoisonous();
+					max_attacks_per_turn = card.GetMaxAttacksPerTurn();
 				}
 			};
 
@@ -110,6 +134,23 @@ namespace engine
 					attacks_this_turn = json["attacks_this_turn"].asInt();
 					status.Parse(json["status"]);
 				}
+
+				template <state::PlayerSide Side>
+				void Parse(BoardRefView<Side> game_state, state::PlayerSide side) {
+					if constexpr (side == Side) Parse(game_state.GetSelfHero());
+					else Parse(game_state.GetOpponentHero());
+				}
+
+			private:
+				void Parse(state::Cards::Card const& hero) {
+					card_id = hero.GetCardId();
+					max_hp = hero.GetMaxHP();
+					damage = hero.GetDamage();
+					armor = hero.GetArmor();
+					attack = hero.GetAttack();
+					attacks_this_turn = hero.GetNumAttacksThisTurn();
+					status.Parse(hero);
+				}
 			};
 
 			struct HeroPower {
@@ -119,6 +160,13 @@ namespace engine
 				void Parse(Json::Value const& json) {
 					card_id = Utils::GetCardId(json["card_id"].asString());
 					used = json["used"].asBool();
+				}
+
+				template <state::PlayerSide Side>
+				void Parse(BoardRefView<Side> game_state, state::PlayerSide side) {
+					auto const& card = game_state.GetHeroPower(side);
+					card_id = card.GetCardId();
+					used = (card.GetUsedThisTurn() > 0);
 				}
 			};
 
@@ -132,7 +180,6 @@ namespace engine
 				bool silenced;
 				int spellpower;
 				bool summoned_this_turn;
-				bool exhausted;
 
 				void Parse(Json::Value const& json) {
 					card_id = Utils::GetCardId(json["card_id"].asString());
@@ -144,8 +191,8 @@ namespace engine
 					silenced = json["silenced"].asBool();
 					spellpower = json["spellpower"].asInt();
 					summoned_this_turn = json["summoned_this_turn"].asBool();
-					exhausted = json["exhausted"].asBool();
-
+					
+					bool exhausted = json["exhausted"].asBool();
 					// Patch summoned_this_turn flag
 					// If a minion is summoned from hero power or spell card, this flag will not be set
 					if (exhausted) {
@@ -153,6 +200,18 @@ namespace engine
 							summoned_this_turn = true;
 						}
 					}
+				}
+
+				void Parse(state::Cards::Card const& card) {
+					card_id = card.GetCardId();
+					max_hp = card.GetMaxHP();
+					damage = card.GetDamage();
+					attack = card.GetAttack();
+					attacks_this_turn = card.GetNumAttacksThisTurn();
+					status.Parse(card);
+					silenced = card.IsSilenced();
+					spellpower = card.GetSpellDamage();
+					summoned_this_turn = card.GetJustPlayedFlag();
 				}
 			};
 
@@ -165,6 +224,23 @@ namespace engine
 					{
 						minions.emplace_back();
 						minions.back().Parse(json[idx]);
+					}
+				}
+
+				template <state::PlayerSide Side>
+				void Parse(BoardRefView<Side> game_state, state::PlayerSide side) {
+					minions.clear();
+					if constexpr (side == Side) {
+						game_state.ForEachSelfMinions([&](state::Cards::Card const& card, bool attackable) {
+							minions.emplace_back();
+							minions.back().Parse(card);
+						});
+					}
+					else {
+						game_state.ForEachOpponentMinions([&](state::Cards::Card const& card) {
+							minions.emplace_back();
+							minions.back().Parse(card);
+						});
 					}
 				}
 			};

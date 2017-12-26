@@ -145,7 +145,9 @@ namespace state
 
 			void SetCantAttack(bool v) { data_.cant_attack = v; }
 
+			// TODO: rename to frozen
 			void SetFreezed(bool v) { data_.freezed = v; }
+			bool GetFreezed() const { return data_.freezed; }
 
 			void SetCharge(bool v) { data_.enchanted_states.charge = v; }
 			bool HasCharge() const { return data_.enchanted_states.charge; }
@@ -173,14 +175,17 @@ namespace state
 
 			void IncreaseNumAttacksThisTurn() { ++data_.num_attacks_this_turn; }
 			void ClearNumAttacksThisTurn() { data_.num_attacks_this_turn = 0; }
+			void SetNumAttacksThisTurn(int v) { data_.num_attacks_this_turn = v; }
+			int GetNumAttacksThisTurn() const { return data_.num_attacks_this_turn; }
 
 			void IncreaseUsedThisTurn() { ++data_.used_this_turn; }
 			void ClearUsedThisTurn() { data_.used_this_turn = 0; }
+			int GetUsedThisTurn() const { return data_.used_this_turn; }
 
 			void SetUsable(bool v = true) { data_.usable = v; }
 
 			void SetJustPlayedFlag(bool v) { data_.just_played = v; }
-			void SetNumAttacksThisTurn(int v) { data_.num_attacks_this_turn = v; }
+			bool GetJustPlayedFlag() const { return data_.just_played; }
 
 			auto const& GetEnchantmentHandler() const { return data_.enchantment_handler; }
 			auto& GetMutableEnchantmentHandler() { return data_.enchantment_handler; }

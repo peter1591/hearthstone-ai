@@ -37,6 +37,14 @@ namespace engine
 				second_player_.Parse(board["opponent"], board["entities"]);
 			}
 
+			template <state::PlayerSide Side>
+			void Parse(BoardRefView<Side> game_state, state::PlayerSide player_side)
+			{
+				turn_ = game_state.GetTurn();
+				first_player_.Parse(game_state, player_side);
+				second_player_.Parse(game_state, state::OppositePlayerSide(player_side));
+			}
+
 		public:
 			int GetTurn() const { return turn_; }
 

@@ -68,10 +68,7 @@ namespace engine
 					raw_card.freezed = status.frozon;
 					raw_card.enchanted_states.poisonous = status.poisonous;
 					raw_card.enchanted_states.stealth = status.stealth;
-
-					int max_attacks_per_turn = 1;
-					if (status.windfury) max_attacks_per_turn = 2;
-					raw_card.enchanted_states.max_attacks_per_turn = max_attacks_per_turn;
+					raw_card.enchanted_states.max_attacks_per_turn = status.max_attacks_per_turn;
 				}
 
 				void AddMinion(state::PlayerIdentifier player, state::State & state, board_view::Minion const& minion, int pos)
