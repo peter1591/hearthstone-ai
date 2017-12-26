@@ -19,27 +19,35 @@ namespace engine
 				int max_hp;
 				int armor;
 
+				bool stealth;
+				bool immune;
+
+				static int constexpr change_id = 2;
+
 				void Fill(state::Cards::Card const& hero) {
+					static_assert(change_id == 2);
 					attack = hero.GetAttack();
 					hp = hero.GetHP();
 					max_hp = hero.GetMaxHP();
 					armor = hero.GetArmor();
+					stealth = hero.HasStealth();
+					immune = hero.GetImmune();
 				}
 
 				bool operator==(Hero const& v) const {
-					static_assert(change_id == 1);
+					static_assert(change_id == 2);
 					if (attack != v.attack) return false;
 					if (hp != v.hp) return false;
 					if (max_hp != v.max_hp) return false;
 					if (armor != v.armor) return false;
+					if (stealth != v.stealth) return false;
+					if (immune != v.immune) return false;
 					return true;
 				}
 
 				bool operator!=(Hero const& v) const {
 					return !(*this == v);
 				}
-
-				static int constexpr change_id = 1;
 			};
 
 			struct SelfHero : public Hero
@@ -163,32 +171,46 @@ namespace engine
 				int max_hp;
 
 				bool silenced;
+				bool taunt;
+				bool cant_attack_hero;
+				bool stealth;
+				bool immune;
 				// TODO: more flags
 				//   charge, cant_attack, cant_attack_hero, has enchant?, has deathrattle?
+
+				static int constexpr change_id = 3;
 
 				Minion(state::Cards::Card const& card) :
 					card_id(card.GetCardId()),
 					attack(card.GetAttack()),
 					hp(card.GetHP()),
 					max_hp(card.GetMaxHP()),
-					silenced(card.IsSilenced())
+					silenced(card.IsSilenced()),
+					taunt(card.HasTaunt()),
+					cant_attack_hero(card.GetRawData().enchanted_states.cant_attack_hero),
+					stealth(card.HasStealth()),
+					immune(card.GetImmune())
 				{
 				}
 
 				bool operator==(Minion const& v) const {
-					static_assert(change_id == 1);
+					static_assert(change_id == 3);
 					if (card_id != v.card_id) return false;
 					if (attack != v.attack) return false;
 					if (hp != v.hp) return false;
 					if (max_hp != v.max_hp) return false;
+					if (silenced != v.silenced) return false;
+					if (taunt != v.taunt) return false;
+					if (cant_attack_hero != v.cant_attack_hero) return false;
+					if (stealth != v.stealth) return false;
+					if (immune != v.immune) return false;
+
 					return true;
 				}
 
 				bool operator!=(Minion const& v) const {
 					return !(*this == v);
 				}
-
-				static int constexpr change_id = 1;
 			};
 
 			struct SelfMinion : public Minion
@@ -323,12 +345,14 @@ namespace std {
 	struct hash<engine::view::reduced_board_view::Hero> {
 		std::size_t operator()(engine::view::reduced_board_view::Hero const& v) const
 		{
-			static_assert(std::decay_t<decltype(v)>::change_id == 1);
+			static_assert(std::decay_t<decltype(v)>::change_id == 2);
 			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.attack);
 			Utils::HashCombine::hash_combine(result, v.hp);
 			Utils::HashCombine::hash_combine(result, v.max_hp);
 			Utils::HashCombine::hash_combine(result, v.armor);
+			Utils::HashCombine::hash_combine(result, v.stealth);
+			Utils::HashCombine::hash_combine(result, v.immune);
 			return result;
 		}
 	};
@@ -390,13 +414,17 @@ namespace std {
 	struct hash<engine::view::reduced_board_view::Minion> {
 		std::size_t operator()(engine::view::reduced_board_view::Minion const& v) const
 		{
-			static_assert(std::decay_t<decltype(v)>::change_id == 1);
+			static_assert(std::decay_t<decltype(v)>::change_id == 3);
 			std::size_t result = 0;
 			Utils::HashCombine::hash_combine(result, v.card_id);
 			Utils::HashCombine::hash_combine(result, v.attack);
 			Utils::HashCombine::hash_combine(result, v.hp);
 			Utils::HashCombine::hash_combine(result, v.max_hp);
 			Utils::HashCombine::hash_combine(result, v.silenced);
+			Utils::HashCombine::hash_combine(result, v.taunt);
+			Utils::HashCombine::hash_combine(result, v.cant_attack_hero);
+			Utils::HashCombine::hash_combine(result, v.stealth);
+			Utils::HashCombine::hash_combine(result, v.immune);
 			return result;
 		}
 	};

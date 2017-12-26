@@ -34,6 +34,9 @@
     <Filter Include="Header Files\engine\view\board_view">
       <UniqueIdentifier>{9c9acffb-e99d-4cd5-af8c-4c338c5cc766}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\engine\view\reduced_board_view">
+      <UniqueIdentifier>{409d106c-051f-4b0d-a3f3-1a7a3d2124f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\view\board_view\UnknownCards.h">
       <Filter>Header Files\engine\view\board_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\view\reduced_board_view\Types.h">
+      <Filter>Header Files\engine\view\reduced_board_view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

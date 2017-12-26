@@ -11,6 +11,8 @@ namespace engine
 	{
 		// Reduced board view which is designed to determine if an identical game state is reached
 		// via different action orderings, and is also designed to be storable and hasable
+		// The information here should be enough so that available actions are identical if the
+		// reduced-board-view are identical.
 		class ReducedBoardView
 		{
 			friend std::hash<ReducedBoardView>;
