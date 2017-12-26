@@ -27,6 +27,8 @@ namespace engine
 		};
 
 	public:
+		Game() : state_() {}
+
 		void SetStartState(state::State const& state) {
 			state_ = state;
 		}

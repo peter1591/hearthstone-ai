@@ -41,8 +41,8 @@ namespace mcts
 		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
 			:
-			action_cb_(*this), side_(side), root_(root), statistic_(statistic),
-			builder_(side, action_cb_, statistic_, selection_rand, simulation_rand),
+			side_(side), root_(root), statistic_(statistic),
+			action_cb_(*this), builder_(side, action_cb_, statistic_, selection_rand, simulation_rand),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
 

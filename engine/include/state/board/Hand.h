@@ -64,6 +64,7 @@ namespace state
 					return (size_t)-1;
 				}
 				else {
+					(void)card_id_getter;
 					size_t ret = size_;
 					cards_[size_] = ref;
 					++size_;

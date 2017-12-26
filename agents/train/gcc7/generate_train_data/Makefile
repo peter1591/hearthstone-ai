@@ -13,6 +13,7 @@ TOP_SOURCE=../../../../
 CFLAGS+=-I$(TOP_SOURCE)engine/include \
 				-I$(TOP_SOURCE)judge/include \
 				-I$(TOP_SOURCE)agents/include \
+				-I$(TOP_SOURCE)agents/test \
 				-I$(TOP_SOURCE)third_party/jsoncpp/include \
 				-I${TOP_SOURCE}third_party/tiny-dnn
 CFLAGS+=-ggdb
@@ -60,7 +61,7 @@ SRCS=${TOP_SOURCE}agents/test/CardDispatcher.cpp \
 OBJS=$(SRCS:.cpp=.o)
 
 CARDS_JSON="cards.json"
-CARDS_JSON_SRC=${TOP_SOURCE}include/Cards/cards.json
+CARDS_JSON_SRC=${TOP_SOURCE}engine/include/Cards/cards.json
 
 EXE=generate_train_data
 

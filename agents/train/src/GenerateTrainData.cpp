@@ -66,7 +66,6 @@ private:
 int main(int argc, char *argv[])
 {
 	auto seed = std::random_device()();
-	seed = 0; // TODO: debug only
 
 	std::cout << "Initialize with random seed: " << seed << std::endl;
 	std::mt19937 rand(seed);

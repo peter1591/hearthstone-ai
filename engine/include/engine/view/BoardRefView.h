@@ -140,11 +140,11 @@ namespace engine {
 			static void ApplyWithCurrentPlayerStateView(state::State const& state, Functor && functor) {
 				state::PlayerSide side = state.GetCurrentPlayerId().GetSide();
 				if (side == state::kPlayerFirst) {
-					functor(PlayerStateRefView<state::kPlayerFirst>(state));
+					functor(BoardRefView<state::kPlayerFirst>(state));
 				}
 				else {
 					assert(side == state::kPlayerSecond);
-					functor(PlayerStateRefView<state::kPlayerSecond>(state));
+					functor(BoardRefView<state::kPlayerSecond>(state));
 				}
 			}
 

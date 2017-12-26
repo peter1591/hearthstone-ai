@@ -6,6 +6,9 @@
 #include "state/Configs.h"
 #include "decks/Decks.h"
 
+#include "state/targetor/Targets-impl.h"
+#include "state/detail/InvokeCallback-impl.h"
+
 class MyRandomGenerator : public engine::FlowControl::IRandomGenerator
 {
 public:
