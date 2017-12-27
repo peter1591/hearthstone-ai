@@ -27,8 +27,8 @@ void Run(agents::MCTSRunner * controller, int secs)
 {
 	auto & s = std::cout;
 
-	auto start_board_getter = [](int seed) -> state::State {
-		return TestStateBuilder().GetState(seed);
+	auto start_board_getter = [](std::mt19937 & rand) -> state::State {
+		return TestStateBuilder().GetState(rand());
 	};
 
 	s << "Running for " << secs << " seconds with " << Configs::threads << " threads ";

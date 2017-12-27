@@ -14,7 +14,7 @@ namespace mcts
 		class InteractiveShell
 		{
 		public:
-			using StartBoardGetter = std::function<state::State(int)>;
+			using StartBoardGetter = std::function<state::State(std::mt19937 &)>;
 
 			InteractiveShell(agents::MCTSRunner * controller = nullptr, StartBoardGetter start_board_getter = StartBoardGetter()) :
 				controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
@@ -120,8 +120,8 @@ namespace mcts
 			}
 
 			std::string GetTargetString(state::CardRef card_ref) {
-
-				state::State board = start_board_getter_(0);
+				std::mt19937 rand; // not random seeded; just to get one of the possible boards
+				state::State board = start_board_getter_(rand);
 				if (board.GetBoard().GetFirst().GetHeroRef() == card_ref) {
 					return "Your Hero";
 				}
@@ -181,7 +181,8 @@ namespace mcts
 					auto const& playable_cards = action_analyzer.GetPlayableCards();
 					size_t idx = playable_cards[choice];
 
-					state::State start_board = start_board_getter_(0);
+					std::mt19937 rand; // not random seeded; just to get one of the possible boards
+					state::State start_board = start_board_getter_(rand);
 					state::CardRef card_ref = start_board.GetBoard().GetFirst().hand_.Get(idx);
 					auto card_id = start_board.GetCard(card_ref).GetCardId();
 
@@ -191,7 +192,8 @@ namespace mcts
 				if (node->GetActionType() == engine::ActionType::kChooseMinionPutLocation) {
 					auto info = std::get<engine::ActionApplyHelper::MinionPutLocationInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
-						return start_board_getter_(0); // any seed number is okay
+						std::mt19937 rand; // not random seeded; just to get one of the possible boards
+						return start_board_getter_(rand);
 					}));
 					std::stringstream ss;
 					ss << "Put minion before index " << choice
@@ -202,7 +204,8 @@ namespace mcts
 				if (node->GetActionType() == engine::ActionType::kChooseAttacker) {
 					auto info = std::get<engine::ActionApplyHelper::ChooseAttackerInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
-						return start_board_getter_(0); // any seed number is okay
+						std::mt19937 rand; // not random seeded; just to get one of the possible boards
+						return start_board_getter_(rand);
 					}));
 					std::stringstream ss;
 					ss << "Attacker: " << GetTargetStringFromEncodedIndex(info.targets[choice]);
@@ -212,7 +215,8 @@ namespace mcts
 				if (node->GetActionType() == engine::ActionType::kChooseDefender) {
 					auto info = std::get<engine::ActionApplyHelper::ChooseDefenderInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
-						return start_board_getter_(0); // any seed number is okay
+						std::mt19937 rand; // not random seeded; just to get one of the possible boards
+						return start_board_getter_(rand);
 					}));
 					std::stringstream ss;
 					ss << "Defender: " << GetTargetString(info.targets[choice]);
@@ -222,7 +226,8 @@ namespace mcts
 				if (node->GetActionType() == engine::ActionType::kChooseTarget) {
 					auto info = std::get<engine::ActionApplyHelper::GetSpecifiedTargetInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
-						return start_board_getter_(0); // any seed number is okay
+						std::mt19937 rand; // not random seeded; just to get one of the possible boards
+						return start_board_getter_(rand);
 					}));
 					std::stringstream ss;
 					ss << "Target at [" << GetTargetString(info.targets[choice]) << "]";
@@ -279,7 +284,8 @@ namespace mcts
 				}
 				else {
 					if (!only_show_best_choice) {
-						state::State game_state = start_board_getter_(0); // any seed number is okay
+						std::mt19937 rand; // not random seeded; just to get one of the possible boards
+						state::State game_state = start_board_getter_(rand);
 						auto dummy_cb_info = action_cb_info_getter.ApplyChoices(game_state);
 						double v = GetStateValue(game_state);
 						s << indent_padding << "State-value: " << v << std::endl;
@@ -307,7 +313,8 @@ namespace mcts
 
 				s << "Best action: " << std::endl;
 
-				state::State game_state = start_board_getter_(0);
+				std::mt19937 rand; // not random seeded; just to get one of the possible boards
+				state::State game_state = start_board_getter_(rand);
 				engine::ValidActionAnalyzer action_analyzer;
 				action_analyzer.Analyze(game_state);
 				if (verbose) {
