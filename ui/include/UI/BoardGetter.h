@@ -21,8 +21,7 @@ namespace ui
 		static constexpr int kDefaultRootSampleCount = 100;
 
 		BoardGetter(GameEngineLogger & logger) :
-			lock_(), logger_(logger), action_apply_helper_(),
-			board_raw_(), root_sample_count_(kDefaultRootSampleCount), need_restart_ai_(),
+			lock_(), logger_(logger), board_raw_(), root_sample_count_(kDefaultRootSampleCount), need_restart_ai_(),
 			sampled_boards_(logger)
 		{}
 
@@ -69,7 +68,6 @@ namespace ui
 			
 			if (!controller || need_restart_ai_) {
 				controller.reset(new agents::MCTSRunner(root_sample_count_, rand));
-				action_apply_helper_.ClearChoices();
 			}
 			else {
 				// TODO: re-use MCTS tree
@@ -88,7 +86,6 @@ namespace ui
 	private:
 		std::shared_mutex lock_;
 		GameEngineLogger & logger_;
-		engine::ActionApplyHelper action_apply_helper_;
 		std::string board_raw_;
 		int root_sample_count_;
 		bool need_restart_ai_;

@@ -61,10 +61,8 @@ namespace engine
 		class ActionParameterCallback : public engine::IActionParameterGetter {
 		public:
 			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
-				result_(result), choices_(choices), choices_idx_(choices_idx), main_op_idx_(-1)
+				result_(result), choices_(choices), choices_idx_(choices_idx)
 			{}
-
-			void SetMainOpIdx(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
 			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
 				if (action_type != engine::ActionType::kMainAction)
@@ -93,7 +91,6 @@ namespace engine
 			CallbackInfo & result_;
 			std::vector<int> const& choices_;
 			size_t & choices_idx_;
-			int main_op_idx_;
 			std::vector<size_t> const* playable_cards_;
 		};
 
@@ -129,12 +126,6 @@ namespace engine
 
 			while (choices_.size() > choices_idx) {
 				action_cb.Initialize(game_state);
-
-				// TODO: no need to special care on main op
-				int main_op_idx = choices_[choices_idx];
-				++choices_idx;
-
-				action_cb.SetMainOpIdx(main_op_idx);
 				engine::FlowControl::FlowController(game_state, flow_context).PerformAction();
 			}
 
