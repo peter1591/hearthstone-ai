@@ -38,7 +38,7 @@ namespace mcts
 				assert(!choices.Empty());
 
 				if (action_type.IsChosenRandomly()) {
-					assert(choices.GetType() == engine::ActionChoices::kChooseFromZeroToExclusiveMax);
+					assert(choices.CheckType<engine::ActionChoices::ChooseFromZeroToExclusiveMax>());
 					pending_randoms_ = true;
 					return random_.GetRandom(choices.Size());
 				}

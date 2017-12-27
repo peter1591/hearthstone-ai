@@ -1,8 +1,10 @@
 #pragma once
 
 #include <assert.h>
-#include <vector>
 #include <functional>
+#include <vector>
+#include <variant>
+
 #include "Cards/id-map.h"
 
 namespace engine
@@ -10,122 +12,143 @@ namespace engine
 	class ActionChoices
 	{
 	public:
-		enum Type {
-			kInvalid,
-			kChooseFromZeroToExclusiveMax,
-			kChooseFromCardIds
+		class InvalidChoice {
+		public:
+			int Get(size_t idx) const { throw std::exception(); }
+
+			bool Empty() const { throw std::exception(); }
+
+			int Size() const { throw std::exception(); }
+
+			void Begin() { throw std::exception(); }
+
+			int Get() const { throw std::exception(); }
+
+			void StepNext() { throw std::exception(); }
+
+			bool IsEnd() const { throw std::exception(); }
 		};
+		class ChooseFromZeroToExclusiveMax {
+		public:
+			ChooseFromZeroToExclusiveMax(int exclusive_max)
+				: exclusive_max_(exclusive_max), it_(0)
+			{}
 
-	public:
-		explicit ActionChoices(int exclusive_max) :
-			type_(kChooseFromZeroToExclusiveMax),
-			exclusive_max_(exclusive_max), card_ids_(),
-			range_it_(0), card_ids_it_()
-		{}
-
-		explicit ActionChoices(std::vector<Cards::CardId> const& cards) :
-			type_(kChooseFromCardIds),
-			exclusive_max_(0), card_ids_(cards),
-			range_it_(0), card_ids_it_()
-		{}
-
-		Type GetType() const { return type_; }
-
-		static bool HasSameChoices(ActionChoices const& lhs, ActionChoices const& rhs) {
-			if (lhs.type_ != rhs.type_) return false;
-
-			if (lhs.type_ == kChooseFromZeroToExclusiveMax) {
-				if (lhs.exclusive_max_ != rhs.exclusive_max_) return false;
-			}
-			else if (lhs.type_ == kChooseFromCardIds) {
-				if (lhs.card_ids_ != rhs.card_ids_) return false;
+			int Get(size_t idx) const {
+				assert(idx < exclusive_max_);
+				return (int)idx;
 			}
 
-			return true;
-		}
+			bool Empty() const { return exclusive_max_ <= 0; }
 
-		int Get(size_t idx) const {
-			if (type_ == kChooseFromCardIds) {
+			int Size() const { return exclusive_max_; }
+
+			void Begin() { it_ = 0; }
+
+			int Get() const { return it_; }
+
+			void StepNext() { ++it_; }
+
+			bool IsEnd() const { return it_ >= exclusive_max_; }
+
+		private:
+			int exclusive_max_;
+			int it_;
+		};
+		class ChooseFromCardIds {
+		public:
+			ChooseFromCardIds(std::vector<::Cards::CardId> const& card_ids) :
+				card_ids_(card_ids), it_()
+			{}
+
+			int Get(size_t idx) const {
 				assert(idx < card_ids_.size());
 				return (int)card_ids_[idx];
 			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				assert((int)idx < exclusive_max_);
-				return (int)idx;
-			}
+
+			bool Empty() const { return card_ids_.empty(); }
+
+			int Size() const { return (int)card_ids_.size(); }
+
+			void Begin() { it_ = card_ids_.begin(); }
+
+			int Get() const { return (int)*it_; }
+
+			void StepNext() { ++it_; }
+
+			bool IsEnd() const { return it_ == card_ids_.end(); }
+
+		private:
+			std::vector<::Cards::CardId> card_ids_;
+			std::vector<::Cards::CardId>::const_iterator it_;
+		};
+
+	public:
+		explicit ActionChoices(ChooseFromZeroToExclusiveMax const& v) : item_(v) {}
+
+		explicit ActionChoices(ChooseFromCardIds const& v) : item_(v) {}
+
+		static bool HasSameChoices(ActionChoices const& lhs, ActionChoices const& rhs) {
+			// TODO: compare two variants
+			throw std::exception();
+		}
+
+		template <class T>
+		bool CheckType() const {
+			return std::holds_alternative<T>(item_);
+		}
+
+		size_t GetIndex() const { return item_.index(); }
+
+		int Get(size_t idx) const {
+			return std::visit([&](auto&& item) -> int {
+				return item.Get(idx);
+			}, item_);
 		}
 
 	public: // iterate
 		bool Empty() const {
-			if (type_ == kChooseFromCardIds) {
-				return card_ids_.empty();
-			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				return exclusive_max_ <= 0;
-			}
+			return std::visit([&](auto&& item) {
+				return item.Empty();
+			}, item_);
 		}
 
 		int Size() const {
-			if (type_ == kChooseFromCardIds) {
-				return (int)card_ids_.size();
-			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				return exclusive_max_;
-			}
+			return std::visit([&](auto&& item) {
+				return item.Size();
+			}, item_);
 		}
 
 		void Begin() {
-			if (type_ == kChooseFromCardIds) {
-				card_ids_it_ = card_ids_.begin();
-			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				range_it_ = 0;
-			}
+			return std::visit([&](auto&& item) {
+				return item.Begin();
+			}, item_);
 		}
 
 		int Get() const {
-			if (type_ == kChooseFromCardIds) {
-				return (int)*card_ids_it_;
-			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				return range_it_;
-			}
+			return std::visit([&](auto&& item) {
+				return item.Get();
+			}, item_);
 		}
 
 		void StepNext() {
-			if (type_ == kChooseFromCardIds) {
-				++card_ids_it_;
-			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				++range_it_;
-			}
+			return std::visit([&](auto&& item) {
+				return item.StepNext();
+			}, item_);
 		}
 
 		bool IsEnd() const {
-			if (type_ == kChooseFromCardIds) {
-				return card_ids_it_ == card_ids_.end();
-			}
-			else {
-				assert(type_ == kChooseFromZeroToExclusiveMax);
-				return range_it_ >= exclusive_max_;
-			}
+			return std::visit([&](auto&& item) {
+				return item.IsEnd();
+			}, item_);
 		}
 
 	private:
-		Type type_;
+		using ItemType = std::variant<
+			InvalidChoice,
+			ChooseFromZeroToExclusiveMax,
+			ChooseFromCardIds>;
 
-		int exclusive_max_;
-
-		std::vector<Cards::CardId> card_ids_;
-
-	private: // iterate progress
-		int range_it_;
-		std::vector<Cards::CardId>::iterator card_ids_it_;
+		ItemType item_;
 	};
 }

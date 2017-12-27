@@ -71,7 +71,7 @@ namespace mcts
 
 			TreeNode() :
 				action_type_(engine::ActionType::kInvalid),
-				choices_type_(engine::ActionChoices::kInvalid),
+				choices_index_(0),
 				children_mutex_(), children_(), addon_()
 			{}
 
@@ -99,12 +99,12 @@ namespace mcts
 			template <typename SelectCallback>
 			int Select(engine::ActionType action_type, engine::ActionChoices choices, SelectCallback && select_callback)
 			{
-				auto choices_type_loaded = choices_type_.load();
-				if (choices_type_loaded == engine::ActionChoices::kInvalid) {
-					choices_type_loaded = choices_type_.exchange(choices.GetType());
+				auto choices_index_loaded = choices_index_.load();
+				if (choices_index_loaded == 0) {
+					choices_index_loaded = choices_index_.exchange(choices.GetIndex());
 				}
-				if (choices_type_loaded != engine::ActionChoices::kInvalid) {
-					assert(choices_type_loaded == choices.GetType());
+				if (choices_index_loaded != engine::ActionType::kInvalid) {
+					assert(choices_index_loaded == choices.GetIndex());
 				}
 
 				auto action_type_loaded = action_type_.load();
@@ -218,7 +218,7 @@ namespace mcts
 
 		private:
 			std::atomic<engine::ActionType::Types> action_type_;
-			std::atomic<engine::ActionChoices::Type> choices_type_; // TODO: debug only
+			std::atomic<size_t> choices_index_; // TODO: debug only
 
 			mutable Utils::SharedSpinLock children_mutex_;
 			ChildNodeMap children_;

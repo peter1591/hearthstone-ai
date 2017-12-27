@@ -113,12 +113,13 @@ namespace judge
 		}
 
 		std::string GetChoiceTypeString(engine::ActionChoices const& action_choices) {
-			switch (action_choices.GetType()) {
-			case engine::ActionChoices::kChooseFromCardIds:
-				return "kChooseFromCardIds";
-			case engine::ActionChoices::kChooseFromZeroToExclusiveMax:
-				return "kChooseFromZeroToExclusiveMax";
-			default:
+			if (action_choices.CheckType<engine::ActionChoices::ChooseFromZeroToExclusiveMax>()) {
+				return "ChooseFromZeroToExclusiveMax";
+			}
+			else if (action_choices.CheckType<engine::ActionChoices::ChooseFromCardIds>()) {
+				return "ChooseFromCardIds";
+			}
+			else {
 				assert(false);
 				return "Invalid";
 			}
