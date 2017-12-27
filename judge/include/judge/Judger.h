@@ -87,19 +87,18 @@ namespace judge
 			engine::Result result = engine::kResultInvalid;
 			AgentType * next_agent = nullptr;
 			while (true) {
-				if (game.GetCurrentState().GetCurrentPlayerId().IsFirst()) {
+				state::PlayerIdentifier next_player = game.GetCurrentState().GetCurrentPlayerId();
+				if (next_player.IsFirst()) {
 					next_agent = first_;
 				}
 				else {
-					assert(game.GetCurrentState().GetCurrentPlayerId().IsSecond());
+					assert(next_player.IsSecond());
 					next_agent = second_;
 				}
 
-				auto current_state_getter = [&](int rnd) -> state::State const& {
-					// TODO: should randomize hidden information from the board view
-					return game.GetCurrentState();
-				};
-				next_agent->Think(game.GetCurrentState().GetCurrentPlayerId(), current_state_getter, random);
+				next_agent->Think(next_player,
+					engine::view::BoardRefView(game.GetCurrentState(), next_player.GetSide()),
+					random);
 
 				action_callback_.Initialize(game.GetCurrentState(), next_agent);
 				result = game.PerformAction(action_callback_);

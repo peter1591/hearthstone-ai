@@ -6,7 +6,8 @@
 
 #include <json/json.h>
 
-#include <Cards/id-map.h>
+#include "Cards/id-map.h"
+#include "decks/Decks.h"
 #include "engine/view/board_view/UnknownCards.h"
 #include "engine/view/board_view/CardInfo.h"
 #include "engine/view/board_view/Player.h"
@@ -30,22 +31,37 @@ namespace engine
 				GetPlayer(side).unknown_cards_info_.deck_cards_ = deck_cards;
 			}
 
+			void SetDeckCards(state::PlayerSide side, std::string const& deck_type) {
+				std::vector<Cards::CardId> player_deck_cards;
+				for (auto const& card_name : decks::Decks::GetDeck(deck_type)) {
+					Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
+					player_deck_cards.push_back(card_id);
+				}
+				SetDeckCards(side, player_deck_cards);
+			}
+
 			void Parse(Json::Value const& board)
 			{
 				turn_ = board["turn"].asInt();
+
+				// TODO: make this more clearer. should this be here?
+				current_player_ = state::kPlayerFirst; // AI is helping first player, and should now waiting for an action
+				
 				first_player_.Parse(board["player"], board["entities"]);
 				second_player_.Parse(board["opponent"], board["entities"]);
 			}
 
-			void Parse(BoardRefView game_state, state::PlayerSide player_side)
+			void Parse(BoardRefView game_state)
 			{
 				turn_ = game_state.GetTurn();
-				first_player_.Parse(game_state, player_side);
-				second_player_.Parse(game_state, state::OppositePlayerSide(player_side));
+				current_player_ = game_state.GetCurrentPlayer();
+				first_player_.Parse(game_state, state::kPlayerFirst);
+				second_player_.Parse(game_state, state::kPlayerSecond);
 			}
 
 		public:
 			int GetTurn() const { return turn_; }
+			auto GetCurrentPlayer() const { return current_player_; }
 
 			board_view::Player const& GetFirstPlayer() const { return first_player_; }
 			board_view::Player const& GetSecondPlayer() const { return second_player_; }
@@ -55,7 +71,7 @@ namespace engine
 				return GetPlayer(side).unknown_cards_info_.unknown_cards_sets_;
 			}
 
-			// TODO: should be private?
+			// TODO: should be removed?
 			Cards::CardId GetCardIdA(int card_info_id, board_view::UnknownCardsSetsManager const& unknown_cards_mgr) const
 			{
 				board_view::CardInfo const& card_info = cards_info_[card_info_id];
@@ -79,6 +95,7 @@ namespace engine
 
 		private:
 			int turn_;
+			state::PlayerIdentifier current_player_;
 			board_view::Player first_player_;
 			board_view::Player second_player_;
 

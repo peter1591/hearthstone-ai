@@ -58,7 +58,7 @@ namespace engine
 					return true;
 				});
 
-				board.ForEachOpponentHandCard([&]() {
+				board.ForEachOpponentHandCard([&](Cards::CardId card_id) {
 					opponent_hand_.emplace_back();
 					return true;
 				});

@@ -33,11 +33,9 @@ public:
 		last_shown_ = std::chrono::steady_clock::now();
 	}
 
-	template<class StateGetter>
-	bool operator()(StateGetter && state_getter, uint64_t iteration) {
-		state::State game_state = state_getter(0); // any random number will do
+	bool operator()(engine::view::BoardRefView board_view, uint64_t iteration) {
 		if (first_time_) {
-			std::cout << "Turn: " << game_state.GetTurn() << std::endl;
+			std::cout << "Turn: " << board_view.GetTurn() << std::endl;
 			first_time_ = false;
 		}
 

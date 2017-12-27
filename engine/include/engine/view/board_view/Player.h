@@ -321,8 +321,8 @@ namespace engine
 						});
 					}
 					else {
-						game_state.ForEachOpponentHandCard([&]() {
-							hand.push_back(ParseCardInfo(Cards::kInvalidCardId, block_id));
+						game_state.ForEachOpponentHandCard([&](Cards::CardId card_id) {
+							hand.push_back(ParseCardInfo(card_id, block_id));
 							return true;
 						});
 					}

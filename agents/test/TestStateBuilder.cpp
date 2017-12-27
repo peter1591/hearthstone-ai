@@ -95,10 +95,10 @@ static void MakeHand(state::State & state, state::PlayerIdentifier player)
 	//AddHandCard(Cards::ID_CFM_940, state, player);
 }
 
-static void MakeHero(state::State & state, state::PlayerIdentifier player)
+static void MakeHero(state::State & state, state::PlayerIdentifier player, Cards::CardId card_id)
 {
 	state::Cards::CardData raw_card;
-	raw_card.card_id = (Cards::CardId)8;
+	raw_card.card_id = card_id;
 	raw_card.card_type = state::kCardTypeHero;
 	raw_card.zone = state::kCardZoneNewlyCreated;
 	raw_card.enchanted_states.max_hp = 30;
@@ -159,14 +159,14 @@ state::State TestStateBuilder::GetStateWithRandomStartCard(int start_card_seed, 
 	state::State state;
 	MyRandomGenerator my_random(state_seed);
 
-	MakeHero(state, state::PlayerIdentifier::First());
+	MakeHero(state, state::PlayerIdentifier::First(), Cards::ID_HERO_07);
 	auto deck1 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
 	RandomlyMoveFromDeckToHand(start_card_rand, deck1, state, state::PlayerIdentifier::First());
 	RandomlyMoveFromDeckToHand(start_card_rand, deck1, state, state::PlayerIdentifier::First());
 	RandomlyMoveFromDeckToHand(start_card_rand, deck1, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
-	MakeHero(state, state::PlayerIdentifier::Second());
+	MakeHero(state, state::PlayerIdentifier::Second(), Cards::ID_HERO_07);
 	auto deck2 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
 	RandomlyMoveFromDeckToHand(start_card_rand, deck2, state, state::PlayerIdentifier::Second());
 	RandomlyMoveFromDeckToHand(start_card_rand, deck2, state, state::PlayerIdentifier::Second());
@@ -189,7 +189,7 @@ state::State TestStateBuilder::GetState(int seed)
 	state::State state;
 	MyRandomGenerator my_random(seed);
 
-	MakeHero(state, state::PlayerIdentifier::First());
+	MakeHero(state, state::PlayerIdentifier::First(), Cards::ID_HERO_08);
 	auto deck1 = decks::Decks::GetDeck("InnKeeperBasicMage");
 	MoveFromDeckToHand(deck1, "Arcane Missiles", state, state::PlayerIdentifier::First());
 	//MoveFromDeckToHand(deck1, "Murloc Raider", state, state::PlayerIdentifier::First());
@@ -199,7 +199,7 @@ state::State TestStateBuilder::GetState(int seed)
 	//AddHandCard(Cards::ID_NEW1_007, state, state::PlayerIdentifier::First());
 	PrepareDeck(deck1, my_random, state, state::PlayerIdentifier::First());
 
-	MakeHero(state, state::PlayerIdentifier::Second());
+	MakeHero(state, state::PlayerIdentifier::Second(), Cards::ID_HERO_08);
 	auto deck2 = decks::Decks::GetDeck("InnKeeperBasicMage");
 	MoveFromDeckToHand(deck2, "Arcane Missiles", state, state::PlayerIdentifier::Second());
 	MoveFromDeckToHand(deck2, "Bloodfen Raptor", state, state::PlayerIdentifier::Second());

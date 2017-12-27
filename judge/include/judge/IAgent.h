@@ -3,7 +3,8 @@
 #include <functional>
 #include <random>
 
-#include <state/State.h>
+#include "state/State.h"
+#include "engine/view/BoardRefView.h"
 
 namespace judge
 {
@@ -19,10 +20,7 @@ namespace judge
 
 		virtual ~IAgent() {}
 
-		// TODO: The underlying truth state is passed. It means the competitor can acquire
-		// hidden information (e.g., opponents hand cards).
-		// Should pass engine/view/BoardView instead. Agents can use state-restorer to sample a determined state
-		virtual void Think(state::PlayerIdentifier side, std::function<state::State(int)> state_getter, std::mt19937 & random) = 0;
+		virtual void Think(state::PlayerIdentifier side, engine::view::BoardRefView game_state , std::mt19937 & random) = 0;
 
 		virtual int GetAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices) = 0;
 	};

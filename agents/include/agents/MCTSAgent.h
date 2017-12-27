@@ -5,6 +5,8 @@
 #include <thread>
 
 #include "state/State.h"
+#include "engine/view/BoardView.h"
+#include "engine/view/board_view/StateRestorer.h"
 #include "MCTS/MOMCTS.h"
 #include "judge/IAgent.h"
 #include "agents/MCTSRunner.h"
@@ -29,15 +31,27 @@ namespace agents
 			this->iteration_cb_.Initialize(std::forward<Args>(args)...);
 		}
 
-		template <class StateGetter>
-		void Think(state::PlayerIdentifier side, StateGetter && state_getter, std::mt19937 & random) {
+		void Think(state::PlayerIdentifier side, engine::view::BoardRefView game_state , std::mt19937 & random) {
+			engine::view::BoardView board_view;
+
+			// TODO: guess/feed deck type
+			// TODO: remove revealed/played/removed cards
+			board_view.SetDeckCards(state::kPlayerFirst, "InnKeeperExpertWarlock");
+			board_view.SetDeckCards(state::kPlayerSecond, "InnKeeperExpertWarlock");
+
+			board_view.Parse(game_state);
+			auto state_restorer = engine::view::board_view::StateRestorer::Prepare(board_view);
+			auto state_getter = [&](std::mt19937 & rnd) -> state::State {
+				return state_restorer.RestoreState(rnd);
+			};
+
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				return iteration_cb_(std::forward<StateGetter>(state_getter), iterations);
+				return iteration_cb_(game_state, iterations);
 			};
 
 			controller_.reset(new MCTSRunner(tree_samples_, random));
-			controller_->Run(threads_, std::forward<StateGetter>(state_getter));
+			controller_->Run(threads_, state_getter);
 
 			while (true) {
 				if (!continue_checker()) break;

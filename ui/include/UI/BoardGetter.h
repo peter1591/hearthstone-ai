@@ -79,10 +79,10 @@ namespace ui
 			return 0;
 		}
 
-		state::State GetStartBoard(unsigned int seed)
+		state::State GetStartBoard(std::mt19937 & rand)
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
-			return sampled_boards_.GetState(seed % root_sample_count_);
+			return sampled_boards_.GetState(rand() % root_sample_count_);
 		}
 
 	private:

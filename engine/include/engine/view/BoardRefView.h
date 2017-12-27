@@ -16,6 +16,7 @@ namespace engine {
 			state::PlayerSide GetSide() const { return side_; }
 
 			int GetTurn() const { return state_.GetTurn(); }
+			auto GetCurrentPlayer() const { return state_.GetCurrentPlayerId(); }
 
 		public: // player
 			int GetFatigueDamage(state::PlayerSide side) const {
@@ -55,11 +56,18 @@ namespace engine {
 			void ForEachOpponentHandCard(Functor && functor) const {
 				GetOpponentPlayer(side_).hand_.ForEach([&](state::CardRef card_ref) {
 					state::Cards::Card const& card = state_.GetCard(card_ref);
+					Cards::CardId card_id = card.GetCardId();
 
-					// TODO: implement
-					(void)card;
+					// TODO: make another module to deal with this special-generated cards
+					if (card.GetCardId() == Cards::ID_GAME_005) {
+						// The Coin. This also reveals to oppoennt.
+					}
+					else {
+						// hide it
+						card_id = Cards::kInvalidCardId;
+					}
 
-					return functor();
+					return functor(card_id);
 				});
 			}
 

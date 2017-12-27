@@ -32,7 +32,7 @@ namespace engine
 					state::State state;
 					MakePlayer(state::kPlayerFirst, state, rand, board_.GetFirstPlayer(), first_unknown_cards_mgr_);
 					MakePlayer(state::kPlayerSecond, state, rand, board_.GetSecondPlayer(), second_unknown_cards_mgr_);
-					state.GetMutableCurrentPlayerId().SetFirst(); // AI is helping first player, and should now waiting for an action
+					state.GetMutableCurrentPlayerId() = board_.GetCurrentPlayer();
 					state.SetTurn(board_.GetTurn());
 
 					return state;

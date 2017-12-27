@@ -54,7 +54,7 @@ namespace agents
 						int sample_seed = get_next_selection_seed();
 						selection_rand.seed(sample_seed);
 						mcts.Iterate([&]() {
-							return state_getter(sample_seed);
+							return state_getter(selection_rand);
 						});
 
 						statistic_.IterateSucceeded();

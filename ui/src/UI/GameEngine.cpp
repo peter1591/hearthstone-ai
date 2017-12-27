@@ -142,8 +142,8 @@ namespace ui
 				return true;
 			};
 
-			auto start_board_getter = [this](int seed) -> state::State {
-				return board_getter_.GetStartBoard(seed);
+			auto start_board_getter = [this](std::mt19937 & rand) -> state::State {
+				return board_getter_.GetStartBoard(rand);
 			};
 
 			try {
