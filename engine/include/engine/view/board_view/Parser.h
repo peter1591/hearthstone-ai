@@ -19,13 +19,12 @@ namespace engine
 	namespace view
 	{
 		namespace board_view {
+			// TODO: move this to ui module
 			// Thread safety: No
 			class Parser
 			{
 			public:
-				Parser() : board_() {}
-
-				StateRestorer Parse(std::string const& board_raw) {
+				void Parse(std::string const& board_raw, BoardView & board) {
 					Json::Reader reader;
 					Json::Value json_board;
 					std::stringstream ss(board_raw);
@@ -36,7 +35,7 @@ namespace engine
 					int player_entity_id = json_board["player"]["entity_id"].asInt();
 					int opponent_entity_id = json_board["opponent"]["entity_id"].asInt();
 
-					board_.Reset();
+					board.Reset();
 
 					//std::string player_deck_type = "InnKeeperBasicMage"; // TODO: use correct deck
 					std::string player_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
@@ -46,7 +45,7 @@ namespace engine
 						player_deck_cards.push_back(card_id);
 					}
 					// TODO: remove revealed deck cards
-					board_.SetDeckCards(state::kPlayerFirst, player_deck_cards);
+					board.SetDeckCards(state::kPlayerFirst, player_deck_cards);
 
 					// TODO: guess oppoennt deck type
 					//std::string opponent_deck_type = "InnKeeperBasicMage";
@@ -56,20 +55,10 @@ namespace engine
 						Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
 						opponent_deck_cards.push_back(card_id);
 					}
-					board_.SetDeckCards(state::kPlayerSecond, opponent_deck_cards);
+					board.SetDeckCards(state::kPlayerSecond, opponent_deck_cards);
 
-					board_.Parse(json_board);
-
-					first_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(state::kPlayerFirst));
-					second_unknown_cards_sets_mgr_.Setup(board_.GetUnknownCardsSets(state::kPlayerSecond));
-					StateRestorer state_restorer(board_, first_unknown_cards_sets_mgr_, second_unknown_cards_sets_mgr_);
-					return state_restorer;
+					board.Parse(json_board);
 				}
-
-			private:
-				BoardView board_;
-				board_view::UnknownCardsSetsManager first_unknown_cards_sets_mgr_;
-				board_view::UnknownCardsSetsManager second_unknown_cards_sets_mgr_;
 			};
 		}
 	}
