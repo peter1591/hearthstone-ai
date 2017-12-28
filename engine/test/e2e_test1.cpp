@@ -3,6 +3,9 @@
 
 #include "engine/FlowControl/FlowController.h"
 #include "engine/FlowControl/FlowController-impl.h"
+#include "engine/FlowControl/ValidActionGetter.h"
+#include "engine/ActionTargets.h"
+#include "engine/ActionTargets-impl.h"
 
 class Test2_ActionParameterGetter : public engine::FlowControl::IActionParameterGetter
 {
@@ -18,26 +21,31 @@ public:
 	void SetMainOp(engine::MainOpType main_op) { main_op_ = main_op; }
 	engine::MainOpType ChooseMainOp() { return main_op_; }
 
+	void AnalyzeTargets(state::State const& game) {
+		targets_.Analyze(engine::FlowControl::ValidActionGetter(game));
+	}
+
 	void SetHandCard(int hand_card) { hand_card_ = hand_card; }
 	int ChooseHandCard() { return hand_card_; }
 
 	void SetAttacker(state::CardRef attacker) { attacker_ = attacker; }
-	state::CardRef GetAttacker() { return attacker_; }
+	state::CardRef GetAttacker() override { return attacker_; }
 
-	state::CardRef GetDefender(std::vector<state::CardRef> const& targets)
+	state::CardRef GetDefender(std::vector<int> const& targets) override
 	{
 		assert(next_defender_count == (int)targets.size());
 		assert(next_defender_idx >= 0);
 		assert(next_defender_idx < (int)targets.size());
-		return targets[next_defender_idx];
+		int target_idx = targets[next_defender_idx];
+		return targets_.GetCardRef(target_idx);
 	}
 
-	int GetMinionPutLocation(int minions)
+	int GetMinionPutLocation(int minions) override
 	{
 		return next_minion_put_location;
 	}
 
-	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, std::vector<state::CardRef> const& targets)
+	state::CardRef GetSpecifiedTarget(state::State & state, state::CardRef card_ref, std::vector<state::CardRef> const& targets) override
 	{
 		assert((int)targets.size() == next_specified_target_count);
 
@@ -45,12 +53,14 @@ public:
 		else return targets[next_specified_target_idx];
 	}
 
-	Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) {
+	Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) override {
 		assert(false);
 		return cards[0];
 	}
 
 	engine::MainOpType main_op_;
+	engine::ActionTargets targets_;
+
 	int hand_card_;
 	state::CardRef attacker_;
 
@@ -340,6 +350,7 @@ void test2()
 	parameter_getter.next_defender_count = 1;
 	parameter_getter.next_defender_idx = 0;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
+	parameter_getter.AnalyzeTargets(state);
 	parameter_getter.SetAttacker(state.GetBoard().Get(state::PlayerIdentifier::First()).minions_.Get(1));
 	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -464,6 +475,7 @@ void test2()
 	parameter_getter.next_defender_count = 3;
 	parameter_getter.next_defender_idx = 2;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
+	parameter_getter.AnalyzeTargets(state);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().minions_.Get(2));
 	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -490,6 +502,7 @@ void test2()
 	parameter_getter.next_defender_count = 3;
 	parameter_getter.next_defender_idx = 1;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
+	parameter_getter.AnalyzeTargets(state);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().minions_.Get(1));
 	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -547,6 +560,7 @@ void test2()
 	parameter_getter.next_defender_count = 3;
 	parameter_getter.next_defender_idx = 2;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
+	parameter_getter.AnalyzeTargets(state);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().GetHeroRef());
 	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);
@@ -576,6 +590,7 @@ void test2()
 	parameter_getter.next_defender_count = 3;
 	parameter_getter.next_defender_idx = 1;
 	parameter_getter.SetMainOp(engine::kMainOpAttack);
+	parameter_getter.AnalyzeTargets(state);
 	parameter_getter.SetAttacker(state.GetCurrentPlayer().GetHeroRef());
 	if (controller.PerformAction() != engine::kResultNotDetermined) assert(false);
 	CheckHero(state, state::PlayerIdentifier::First(), 30, 0, 0);

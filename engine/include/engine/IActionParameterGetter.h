@@ -38,13 +38,15 @@ namespace engine {
 			return main_ops[main_op_idx];
 		}
 
-		state::CardRef GetDefender(std::vector<state::CardRef> const& targets) final
+		state::CardRef GetDefender(std::vector<int> const& targets) final
 		{
 			assert(!targets.empty());
 			int size = (int)targets.size();
-			int idx = GetNumber(ActionType::kChooseDefender, size);
+			int idx = 0;
+			if (size > 1) idx = GetNumber(ActionType::kChooseDefender, size);
 			assert(idx >= 0 && idx < size);
-			return targets[idx];
+			int target_idx = targets[idx];
+			return analyzer_.GetCardRefFromTargetIndex(target_idx);
 		}
 
 		// Inclusive min & max

@@ -31,7 +31,7 @@ namespace engine {
 			virtual int ChooseHandCard() = 0;
 
 			virtual state::CardRef GetAttacker() = 0;
-			virtual state::CardRef GetDefender(std::vector<state::CardRef> const& targets) = 0;
+			virtual state::CardRef GetDefender(std::vector<int> const& targets) = 0;
 
 			virtual int GetMinionPutLocation(int minions) = 0;
 

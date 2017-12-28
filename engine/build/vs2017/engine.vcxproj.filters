@@ -620,5 +620,8 @@
     <ClInclude Include="..\..\include\engine\FlowControl\IRandomGenerator.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\engine\ActionTargets.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

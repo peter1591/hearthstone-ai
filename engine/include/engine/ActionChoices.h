@@ -57,7 +57,7 @@ namespace engine
 		};
 		class ChooseFromCardIds {
 		public:
-			ChooseFromCardIds(std::vector<::Cards::CardId> const& card_ids) :
+			ChooseFromCardIds(std::vector< ::Cards::CardId> const& card_ids) :
 				card_ids_(card_ids), it_()
 			{}
 
@@ -79,8 +79,8 @@ namespace engine
 			bool IsEnd() const { return it_ == card_ids_.end(); }
 
 		private:
-			std::vector<::Cards::CardId> card_ids_;
-			std::vector<::Cards::CardId>::const_iterator it_;
+			std::vector< ::Cards::CardId> card_ids_;
+			std::vector< ::Cards::CardId>::const_iterator it_;
 		};
 
 	public:

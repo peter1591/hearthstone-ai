@@ -217,6 +217,7 @@
     <ClInclude Include="..\..\include\Cards\Ungoro\Neutral.h" />
     <ClInclude Include="..\..\include\engine\ActionApplyHelper.h" />
     <ClInclude Include="..\..\include\engine\ActionChoices.h" />
+    <ClInclude Include="..\..\include\engine\ActionTargets.h" />
     <ClInclude Include="..\..\include\engine\ActionType.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\Contexts.h" />
     <ClInclude Include="..\..\include\engine\FlowControl\aura\EffectHandler_BoardFlag-impl.h" />

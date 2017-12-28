@@ -62,9 +62,8 @@ namespace engine {
 
 			auto GetAttacker() { return action_parameters_->GetAttacker(); }
 
-			state::CardRef GetDefender(std::vector<state::CardRef> const& defenders) {
+			state::CardRef GetDefender(std::vector<int> const& defenders) {
 				assert(!defenders.empty());
-				if (defenders.size() <= 1) return defenders[0];
 				return action_parameters_->GetDefender(defenders);
 			}
 

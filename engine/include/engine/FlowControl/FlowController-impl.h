@@ -2,6 +2,7 @@
 
 #include "engine/FlowControl/FlowController.h"
 #include "engine/FlowControl/ValidActionGetter.h"
+#include "engine/FlowControl/ActionTargetIndex.h"
 
 #include "engine/FlowControl/Manipulate-impl.h"
 
@@ -364,24 +365,29 @@ namespace engine {
 
 		inline state::CardRef FlowController::GetDefender(state::CardRef attacker)
 		{
-			std::vector<state::CardRef> defenders;
+			std::vector<int> defenders;
 
-			auto HasTaunt = [&](state::CardRef card_ref) {
-				state::Cards::Card const& card = state_.GetCard(card_ref);
-				if (!card.HasTaunt()) return false;
-				if (card.HasStealth()) return false; // stealth overrides taunt
-				if (card.GetImmune()) return false; // immune overrides taunt
-				return true;
-			};
+			auto side = state::OppositePlayerSide(state_.GetCurrentPlayerId().GetSide());
+			auto const& player = state_.GetBoard().Get(side);
 
-			auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId().Opposite());
-			player.minions_.ForEach([&](state::CardRef card_ref) {
-				if (HasTaunt(card_ref)) defenders.push_back(card_ref);
-				return true;
-			});
+			{
+				auto HasTaunt = [&](state::CardRef card_ref) {
+					state::Cards::Card const& card = state_.GetCard(card_ref);
+					if (!card.HasTaunt()) return false;
+					if (card.HasStealth()) return false; // stealth overrides taunt
+					if (card.GetImmune()) return false; // immune overrides taunt
+					return true;
+				};
 
-			// TODO: hero does not have taunt unless in tavern brawl. so we skip the check here
-			assert(!HasTaunt(player.GetHeroRef()));
+				int target_idx = ActionTargetIndex::GetIndexForMinion(side, 0);
+				player.minions_.ForEach([&](state::CardRef card_ref) {
+					if (HasTaunt(card_ref)) defenders.push_back(target_idx);
+					++target_idx;
+					return true;
+				});
+				// TODO: hero does not have taunt unless in tavern brawl. so we skip the check here
+				assert(!HasTaunt(player.GetHeroRef()));
+			}
 
 			if (defenders.empty()) {
 				// no taunt, all characters can be the target
@@ -391,13 +397,18 @@ namespace engine {
 				});
 
 				if (!cant_attack_hero) {
-					defenders.push_back(player.GetHeroRef());
+					defenders.push_back(ActionTargetIndex::GetIndexForHero(side));
 				}
+
+				int target_idx = ActionTargetIndex::GetIndexForMinion(side, 0);
 				player.minions_.ForEach([&](state::CardRef card_ref) {
-					state::Cards::Card const& card = state_.GetCard(card_ref);
-					if (card.HasStealth()) return true;
-					if (card.GetImmune()) return true;
-					defenders.push_back(card_ref);
+					[&](state::CardRef card_ref) {
+						state::Cards::Card const& card = state_.GetCard(card_ref);
+						if (card.HasStealth()) return;
+						if (card.GetImmune()) return;
+						defenders.push_back(target_idx);
+					}(card_ref);
+					++target_idx;
 					return true;
 				});
 			}
