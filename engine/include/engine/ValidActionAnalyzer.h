@@ -17,24 +17,9 @@ namespace engine {
 	public:
 		ValidActionAnalyzer() : op_map_(), op_map_size_(0), attackers_(), attacker_indics_(), playable_cards_() {}
 
-		ValidActionAnalyzer(ValidActionAnalyzer const& rhs) :
-			op_map_(rhs.op_map_),
-			op_map_size_(rhs.op_map_size_),
-			attackers_(rhs.attackers_),
-			attacker_indics_(rhs.attacker_indics_),
-			playable_cards_(rhs.playable_cards_)
-		{}
-
-		ValidActionAnalyzer & operator=(ValidActionAnalyzer const& rhs) {
-			op_map_ = rhs.op_map_;
-			op_map_size_ = rhs.op_map_size_;
-			attackers_ = rhs.attackers_;
-			attacker_indics_ = rhs.attacker_indics_;
-			playable_cards_ = rhs.playable_cards_;
-			return *this;
+		void Reset() {
+			op_map_size_ = 0;
 		}
-
-		void Reset() { op_map_size_ = 0; }
 
 		void Analyze(state::State const& state);
 		void Analyze(FlowControl::ValidActionGetter const& getter);

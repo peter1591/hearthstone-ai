@@ -299,5 +299,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\board_view\UnknownCards.h">
       <Filter>Header Files\engine\view\board_view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionTargets.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
