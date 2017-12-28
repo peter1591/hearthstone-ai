@@ -11,6 +11,17 @@ namespace engine {
 		public:
 			ValidActionGetter(state::State const& state) : state_(state) {}
 
+		public:
+			state::CardRef GetHeroRef(state::PlayerSide side) const {
+				return state_.GetBoard().Get(side).GetHeroRef();
+			}
+
+			template <class Functor>
+			void ForEachMinion(state::PlayerSide side, Functor&& functor) const {
+				state_.GetBoard().Get(side).minions_.ForEach(
+					std::forward<Functor>(functor));
+			}
+
 		public: // check valid actions
 				// These functions MUST return valid for all actually available actions
 				// These functions can return valid for ones actually are not valid actions
