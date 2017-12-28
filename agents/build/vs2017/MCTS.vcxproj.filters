@@ -302,5 +302,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\ActionTargets.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\ActionTargets-impl.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 
 #include "state/State.h"
 #include "engine/MainOp.h"
+#include "engine/ActionTargets.h"
 
 namespace engine {
 	namespace FlowControl
@@ -15,11 +16,11 @@ namespace engine {
 	class ValidActionAnalyzer
 	{
 	public:
-		ValidActionAnalyzer() : op_map_(), op_map_size_(0), attackers_(), attacker_indics_(), playable_cards_() {}
+		ValidActionAnalyzer() : 
+			op_map_(), op_map_size_(0), attackers_(), playable_cards_(), action_targets_()
+		{}
 
-		void Reset() {
-			op_map_size_ = 0;
-		}
+		void Reset() { op_map_size_ = 0; }
 
 		void Analyze(state::State const& state);
 		void Analyze(FlowControl::ValidActionGetter const& getter);
@@ -27,8 +28,11 @@ namespace engine {
 		auto const& GetMainActions() const { return op_map_; }
 		int GetMainActionsCount() const { return (int)op_map_size_; }
 		auto const& GetAttackers() const { return attackers_; }
-		auto const& GetAttackerIndics() const { return attacker_indics_; }
 		auto const& GetPlayableCards() const { return playable_cards_; }
+
+		auto GetCardRefFromTargetIndex(int idx) const {
+			return action_targets_.GetCardRef(idx);
+		}
 
 		template <class Functor>
 		void ForEachMainOp(Functor && functor) const {
@@ -49,7 +53,7 @@ namespace engine {
 			return playable_cards_[idx];
 		}
 
-		int GetEncodedAttackerIndex(size_t idx) const {
+		int GetAttackerIndex(size_t idx) const {
 			return attackers_[idx];
 		}
 
@@ -57,7 +61,7 @@ namespace engine {
 		std::array<engine::MainOpType, engine::MainOpType::kMainOpMax> op_map_;
 		size_t op_map_size_;
 		std::vector<int> attackers_;
-		std::array<state::CardRef, 8> attacker_indics_;
 		std::vector<size_t> playable_cards_;
+		ActionTargets action_targets_;
 	};
 }

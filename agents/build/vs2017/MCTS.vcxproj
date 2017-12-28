@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\engine\include\engine\ActionApplyHelper.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionChoices.h" />
+    <ClInclude Include="..\..\..\engine\include\engine\ActionTargets-impl.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionTargets.h" />
     <ClInclude Include="..\..\..\engine\include\engine\ActionType.h" />
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\FlowContext-impl.h" />

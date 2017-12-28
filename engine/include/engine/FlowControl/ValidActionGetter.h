@@ -94,50 +94,26 @@ namespace engine {
 				return true;
 			}
 
-			// TODO: why encode attacker? just return state::CardRef
-			// return list of encoded indices
-			// encoded index:
-			//   0 ~ 6: minion index from left to right
-			//   7: hero
+			// Invoke callback with ActionTargetsIndics
 			template <typename Functor>
 			void ForEachAttacker(Functor&& functor) const {
-				auto const& player = state_.GetBoard().Get(state_.GetCurrentPlayerId());
+				auto side = state_.GetCurrentPlayerId().GetSide();
+				auto const& player = state_.GetBoard().Get(side);
 				auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
-				int minion_idx = 0;
+				int idx = ActionTargetIndices::GetIndexForMinion(side, 0);
 				if (!player.minions_.ForEach([&](state::CardRef card_ref) {
 					if (op(card_ref)) {
-						if (!functor(minion_idx)) return false;
+						if (!functor(idx)) return false;
 					}
-					++minion_idx;
+					++idx;
 					return true;
 				})) return;
 
 				state::CardRef hero_ref = player.GetHeroRef();
 				if (op(hero_ref)) {
-					if (!functor(7)) return;
+					if (!functor(ActionTargetIndices::GetIndexForHero(side))) return;
 				}
-			}
-
-			// Decode attacker index. See @ForEachAttacker
-			state::CardRef GetFromAttackerIndex(int attacker_idx) const {
-				if (attacker_idx == 7) {
-					return state_.GetCurrentPlayer().GetHeroRef();
-				}
-
-				assert(attacker_idx >= 0);
-				assert(attacker_idx < 7);
-				auto const& minions = state_.GetCurrentPlayer().minions_;
-				if (attacker_idx >= (int)minions.Size()) return state::CardRef(); // invalid card ref
-				return minions.Get((size_t)(attacker_idx));
-			}
-
-			std::array<state::CardRef, 8> GetAttackerIndics() const {
-				std::array<state::CardRef, 8> ret;
-				for (int i = 0; i < 8; ++i) {
-					ret[i] = GetFromAttackerIndex(i);
-				}
-				return ret;
 			}
 
 			std::vector<state::CardRef> GetDefenders() const {

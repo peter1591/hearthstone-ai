@@ -83,10 +83,10 @@ namespace engine {
 
 		state::CardRef GetAttacker() final {
 			auto const& attackers = analyzer_.GetAttackers();
-			auto const& attacker_indics = analyzer_.GetAttackerIndics();
 			assert(!attackers.empty());
 			int idx = GetNumber(ActionType::kChooseAttacker, (int)attackers.size());
-			return attacker_indics[attackers[idx]];
+			int target_idx = attackers[idx];
+			return analyzer_.GetCardRefFromTargetIndex(target_idx);
 		}
 
 		int GetNumber(ActionType::Types action_type, int exclusive_max) {

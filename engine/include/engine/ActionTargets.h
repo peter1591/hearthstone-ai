@@ -3,10 +3,14 @@
 #include <array>
 
 #include "state/Types.h"
-#include "engine/FlowControl/ValidActionGetter.h"
 
 namespace engine
 {
+	namespace FlowControl
+	{
+		class ValidActionGetter;
+	}
+
 	class ActionTargetIndices
 	{
 	public:
@@ -32,7 +36,7 @@ namespace engine
 
 		static int GetIndexForMinion(state::PlayerSide side, size_t minion_idx) {
 			assert(minion_idx < 7);
-			int ret = minion_idx;
+			int ret = (int)minion_idx;
 			if (side != state::kPlayerFirst) ret |= kPlayerMask;
 			return ret;
 		}
@@ -68,16 +72,7 @@ namespace engine
 		}
 
 	private:
-		void Fill(state::PlayerSide side, FlowControl::ValidActionGetter const& game) {
-			card_refs_[ActionTargetIndices::GetIndexForHero(side)] = game.GetHeroRef(side);
-
-			int idx = ActionTargetIndices::GetIndexForMinion(side, 0);
-			game.ForEachMinion(side, [&](state::CardRef card_ref) {
-				assert(ActionTargetIndices::ParseHero(idx) == false);
-				card_refs_[idx] = card_ref;
-				++idx;
-			});
-		}
+		void Fill(state::PlayerSide side, FlowControl::ValidActionGetter const& game);
 
 	private:
 		std::array<state::CardRef, ActionTargetIndices::kMaxValue> card_refs_;

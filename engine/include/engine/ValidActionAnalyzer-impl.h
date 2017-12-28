@@ -3,6 +3,8 @@
 #include "engine/ValidActionAnalyzer.h"
 #include "engine/FlowControl/ValidActionGetter.h"
 
+#include "engine/ActionTargets-impl.h"
+
 namespace engine {
 	inline void ValidActionAnalyzer::Analyze(state::State const& game_state) {
 		return Analyze(FlowControl::ValidActionGetter(game_state));
@@ -10,6 +12,8 @@ namespace engine {
 	
 	inline void ValidActionAnalyzer::Analyze(FlowControl::ValidActionGetter const& getter) {
 		Reset();
+
+		action_targets_.Analyze(getter);
 
 		playable_cards_.clear();
 		getter.ForEachPlayableCard([&](size_t idx) {
@@ -30,8 +34,6 @@ namespace engine {
 			op_map_[op_map_size_] = engine::MainOpType::kMainOpAttack;
 			++op_map_size_;
 		}
-
-		attacker_indics_ = getter.GetAttackerIndics();
 
 		if (getter.CanUseHeroPower()) {
 			op_map_[op_map_size_] = engine::MainOpType::kMainOpHeroPower;
