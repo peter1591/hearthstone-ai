@@ -62,16 +62,13 @@ namespace engine {
 			obj["hero"]["attackable"] = false;
 
 			FlowControl::ValidActionGetter valid_action_getter(state);
-			valid_action_getter.ForEachAttacker([&](int encoded_idx) {
-				if (encoded_idx >= 0 && encoded_idx <= 6) {
-					// minion
-					auto json_idx = (Json::Value::ArrayIndex)encoded_idx;
-					obj["minions"][json_idx]["attackable"] = true;
+			valid_action_getter.ForEachAttacker([&](int target_idx) {
+				if (engine::FlowControl::ActionTargetIndex::ParseHero(target_idx)) {
+					obj["hero"]["attackable"] = true;
 				}
 				else {
-					// hero
-					assert(encoded_idx == 7);
-					obj["hero"]["attackable"] = true;
+					int minion_idx = engine::FlowControl::ActionTargetIndex::ParseMinionIndex(target_idx);
+					obj["minions"][minion_idx]["attackable"] = true;
 				}
 				return true;
 			});

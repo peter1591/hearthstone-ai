@@ -177,7 +177,7 @@ namespace mcts
 				class StateDataBridge : public neural_net::NeuralNetworkWrapper::IInputGetter
 				{
 				public:
-					StateDataBridge() : state_(nullptr), attackable_indics_(),
+					StateDataBridge() : state_(nullptr), attackable_indices_(),
 						playable_cards_(), hero_power_playable_()
 					{}
 
@@ -189,9 +189,9 @@ namespace mcts
 
 						engine::FlowControl::ValidActionGetter valid_action(*state_);
 
-						attackable_indics_.clear();
+						attackable_indices_.clear();
 						valid_action.ForEachAttacker([this](int encoded_idx) {
-							attackable_indics_.push_back(encoded_idx);
+							attackable_indices_.push_back(encoded_idx);
 							return true;
 						});
 
@@ -306,7 +306,12 @@ namespace mcts
 						case neural_net::NeuralNetworkWrapper::kMinionAttack:
 							return minion.GetAttack();
 						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
-							return (std::find(attackable_indics_.begin(), attackable_indics_.end(), minion_idx) != attackable_indics_.end());
+							for (auto target_index : attackable_indices_) {
+								if (engine::FlowControl::ActionTargetIndex::ParseMinionIndex(target_index) == minion_idx) {
+									return true;
+								}
+							}
+							return false;
 						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
 							return minion.HasTaunt();
 						case neural_net::NeuralNetworkWrapper::kMinionShield:
@@ -352,7 +357,7 @@ namespace mcts
 
 				private:
 					state::State const* state_;
-					std::vector<int> attackable_indics_;
+					std::vector<int> attackable_indices_;
 					std::vector<int> playable_cards_;
 					bool hero_power_playable_;
 				};
