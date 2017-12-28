@@ -5,11 +5,11 @@
 
 namespace engine {
 	inline void ActionTargets::Fill(state::PlayerSide side, FlowControl::ValidActionGetter const& game) {
-		card_refs_[ActionTargetIndices::GetIndexForHero(side)] = game.GetHeroRef(side);
+		card_refs_[FlowControl::ActionTargetIndex::GetIndexForHero(side)] = game.GetHeroRef(side);
 
-		int idx = ActionTargetIndices::GetIndexForMinion(side, 0);
+		int idx = FlowControl::ActionTargetIndex::GetIndexForMinion(side, 0);
 		game.ForEachMinion(side, [&](state::CardRef card_ref) {
-			assert(ActionTargetIndices::ParseHero(idx) == false);
+			assert(FlowControl::ActionTargetIndex::ParseHero(idx) == false);
 			card_refs_[idx] = card_ref;
 			++idx;
 			return true;

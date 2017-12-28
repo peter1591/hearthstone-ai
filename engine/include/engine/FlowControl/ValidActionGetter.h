@@ -101,7 +101,7 @@ namespace engine {
 				auto const& player = state_.GetBoard().Get(side);
 				auto op = [&](state::CardRef card_ref) { return IsAttackable(card_ref); };
 
-				int idx = ActionTargetIndices::GetIndexForMinion(side, 0);
+				int idx = FlowControl::ActionTargetIndex::GetIndexForMinion(side, 0);
 				if (!player.minions_.ForEach([&](state::CardRef card_ref) {
 					if (op(card_ref)) {
 						if (!functor(idx)) return false;
@@ -112,7 +112,7 @@ namespace engine {
 
 				state::CardRef hero_ref = player.GetHeroRef();
 				if (op(hero_ref)) {
-					if (!functor(ActionTargetIndices::GetIndexForHero(side))) return;
+					if (!functor(FlowControl::ActionTargetIndex::GetIndexForHero(side))) return;
 				}
 			}
 

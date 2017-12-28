@@ -242,9 +242,6 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionAnalyzer.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionAnalyzer-impl.h">
-      <Filter>Header Files\engine\FlowControl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ValidActionGetter.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
@@ -304,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\ActionTargets-impl.h">
       <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ActionTargetIndex.h">
+      <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
