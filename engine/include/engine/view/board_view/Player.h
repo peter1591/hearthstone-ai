@@ -255,21 +255,7 @@ namespace engine
 				std::vector<CardInfo> hand;
 				std::vector<CardInfo> deck;
 
-				struct UnknownCardsInfo {
-					static constexpr int kDeckBlockId = -1;
-					std::vector<Cards::CardId> deck_cards_;
-					board_view::UnknownCardsSets unknown_cards_sets_;
-					std::map<int, size_t> sets_indics_; // block id -> set idx
-
-					void Reset() {
-						deck_cards_.clear();
-						sets_indics_.clear();
-						unknown_cards_sets_.Reset();
-					}
-				};
-				UnknownCardsInfo unknown_cards_info_;
-
-				void Parse(Json::Value const& json, Json::Value const& json_entities) {
+				void Parse(Json::Value const& json, Json::Value const& json_entities, UnknownCardsInfo & unknown_cards_info) {
 					hero.Parse(json["hero"]);
 					hero_power.Parse(json["hero"]["hero_power"]);
 					minions.Parse(json["minions"]);
@@ -283,7 +269,7 @@ namespace engine
 						std::string json_card_id = json_entity["card_id"].asString();
 						Cards::CardId card_id = GetCardIdFromString(json_card_id);
 						int block_id = GetBlockIndex(json_entity["generate_under_blocks"]);
-						return ParseCardInfo(card_id, block_id);
+						return ParseCardInfo(card_id, block_id, unknown_cards_info);
 					};
 
 					deck.clear();
@@ -298,7 +284,7 @@ namespace engine
 					}
 				}
 
-				void Parse(BoardRefView game_state, state::PlayerSide side) {
+				void Parse(BoardRefView game_state, state::PlayerSide side, UnknownCardsInfo & unknown_cards_info) {
 					hero.Parse(game_state, side);
 					hero_power.Parse(game_state, side);
 					minions.Parse(game_state, side);
@@ -310,19 +296,19 @@ namespace engine
 
 					deck.clear();
 					for (int i = 0; i < game_state.GetDeckCardCount(side); ++i) {
-						deck.push_back(ParseCardInfo(Cards::kInvalidCardId, block_id));
+						deck.push_back(ParseCardInfo(Cards::kInvalidCardId, block_id, unknown_cards_info));
 					}
 
 					hand.clear();
 					if (side == game_state.GetSide()) {
 						game_state.ForEachSelfHandCard([&](state::Cards::Card const& card) {
-							hand.push_back(ParseCardInfo(card.GetCardId(), block_id));
+							hand.push_back(ParseCardInfo(card.GetCardId(), block_id, unknown_cards_info));
 							return true;
 						});
 					}
 					else {
 						game_state.ForEachOpponentHandCard([&](Cards::CardId card_id) {
-							hand.push_back(ParseCardInfo(card_id, block_id));
+							hand.push_back(ParseCardInfo(card_id, block_id, unknown_cards_info));
 							return true;
 						});
 					}
@@ -341,28 +327,28 @@ namespace engine
 					return (Cards::CardId)it->second;
 				}
 
-				CardInfo ParseCardInfo(Cards::CardId card_id, int block_id) {
+				CardInfo ParseCardInfo(Cards::CardId card_id, int block_id, UnknownCardsInfo & unknown_cards_info) {
 					CardInfo card_info;
 
 					auto block_cards_getter = [&]() {
 						if (block_id == UnknownCardsInfo::kDeckBlockId) {
-							return unknown_cards_info_.deck_cards_;
+							return unknown_cards_info.deck_cards_;
 						}
 						else {
-							return unknown_cards_info_.deck_cards_; // TODO: prepare cards according to block info
+							return unknown_cards_info.deck_cards_; // TODO: prepare cards according to block info
 						}
 					};
 
 					if (card_id != Cards::kInvalidCardId) {
-						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter);
-						unknown_cards_info_.unknown_cards_sets_.RemoveCardFromSet(
+						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter, unknown_cards_info);
+						unknown_cards_info.unknown_cards_sets_.RemoveCardFromSet(
 							unknown_cards_set_id, card_id);
 
 						card_info.SetAsRevealedCard(card_id);
 					}
 					else {
-						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter);
-						size_t unknown_cards_set_card_idx = unknown_cards_info_
+						size_t unknown_cards_set_id = GetUnknownCardSetId(block_id, block_cards_getter, unknown_cards_info);
+						size_t unknown_cards_set_card_idx = unknown_cards_info
 							.unknown_cards_sets_.AssignCardToSet(unknown_cards_set_id);
 						card_info.SetAsHiddenCard(unknown_cards_set_id, unknown_cards_set_card_idx);
 					}
@@ -376,12 +362,12 @@ namespace engine
 				}
 
 				template <class CardsGetter>
-				size_t GetUnknownCardSetId(int block_idx, CardsGetter && cards_getter)
+				size_t GetUnknownCardSetId(int block_idx, CardsGetter && cards_getter, UnknownCardsInfo & unknown_cards_info)
 				{
-					auto & sets_indics = unknown_cards_info_.sets_indics_;
+					auto & sets_indics = unknown_cards_info.sets_indics_;
 					auto it = sets_indics.find(block_idx);
 					if (it == sets_indics.end()) {
-						size_t set_idx = unknown_cards_info_.unknown_cards_sets_.AddCardsSet(cards_getter());
+						size_t set_idx = unknown_cards_info.unknown_cards_sets_.AddCardsSet(cards_getter());
 						sets_indics.insert(std::make_pair(block_idx, set_idx));
 						return set_idx;
 					}

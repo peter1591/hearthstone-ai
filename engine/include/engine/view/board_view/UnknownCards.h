@@ -5,6 +5,7 @@
 #include <random>
 
 #include "Cards/id-map.h"
+#include "engine/view/board_view/UnknownCards.h"
 
 namespace engine
 {
@@ -111,6 +112,19 @@ namespace engine
 
 			private:
 				std::vector<SetItem> sets_;
+			};
+
+			struct UnknownCardsInfo {
+				static constexpr int kDeckBlockId = -1;
+				std::vector<Cards::CardId> deck_cards_;
+				board_view::UnknownCardsSets unknown_cards_sets_;
+				std::map<int, size_t> sets_indics_; // block id -> set idx
+
+				void Reset() {
+					deck_cards_.clear();
+					sets_indics_.clear();
+					unknown_cards_sets_.Reset();
+				}
 			};
 
 			class UnknownCardsSetsManager

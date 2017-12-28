@@ -26,37 +26,23 @@ namespace engine
 				cards_info_.clear();
 			}
 
-			void SetDeckCards(state::PlayerSide side, std::vector<Cards::CardId> const& deck_cards)
-			{
-				GetPlayer(side).unknown_cards_info_.deck_cards_ = deck_cards;
-			}
-
-			void SetDeckCards(state::PlayerSide side, std::string const& deck_type) {
-				std::vector<Cards::CardId> player_deck_cards;
-				for (auto const& card_name : decks::Decks::GetDeck(deck_type)) {
-					Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
-					player_deck_cards.push_back(card_id);
-				}
-				SetDeckCards(side, player_deck_cards);
-			}
-
-			void Parse(Json::Value const& board)
+			void Parse(Json::Value const& board, board_view::UnknownCardsInfo & first_unknown, board_view::UnknownCardsInfo & second_unknown)
 			{
 				turn_ = board["turn"].asInt();
 
 				// TODO: make this more clearer. should this be here?
 				current_player_ = state::kPlayerFirst; // AI is helping first player, and should now waiting for an action
 				
-				first_player_.Parse(board["player"], board["entities"]);
-				second_player_.Parse(board["opponent"], board["entities"]);
+				first_player_.Parse(board["player"], board["entities"], first_unknown);
+				second_player_.Parse(board["opponent"], board["entities"], second_unknown);
 			}
 
-			void Parse(BoardRefView game_state)
+			void Parse(BoardRefView game_state, board_view::UnknownCardsInfo & first_unknown, board_view::UnknownCardsInfo & second_unknown)
 			{
 				turn_ = game_state.GetTurn();
 				current_player_ = game_state.GetCurrentPlayer();
-				first_player_.Parse(game_state, state::kPlayerFirst);
-				second_player_.Parse(game_state, state::kPlayerSecond);
+				first_player_.Parse(game_state, state::kPlayerFirst, first_unknown);
+				second_player_.Parse(game_state, state::kPlayerSecond, second_unknown);
 			}
 
 		public:
@@ -65,11 +51,6 @@ namespace engine
 
 			board_view::Player const& GetFirstPlayer() const { return first_player_; }
 			board_view::Player const& GetSecondPlayer() const { return second_player_; }
-			
-			// TODO: should return const&
-			auto & GetUnknownCardsSets(state::PlayerSide side) {
-				return GetPlayer(side).unknown_cards_info_.unknown_cards_sets_;
-			}
 
 		private:
 			board_view::Player & GetPlayer(state::PlayerSide side) {

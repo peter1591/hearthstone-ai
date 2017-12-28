@@ -4,6 +4,8 @@
 #include <string>
 #include <unordered_set>
 
+#include "Cards/id-map.h"
+
 namespace decks
 {
 	class Decks
@@ -151,6 +153,15 @@ namespace decks
 			}
 
 			throw std::runtime_error("invalid deck name");
+		}
+
+		static std::vector<Cards::CardId> GetDeckCards(std::string const& deck_type) {
+			std::vector<Cards::CardId> deck_cards;
+			for (auto const& card_name : GetDeck(deck_type)) {
+				Cards::CardId card_id = (Cards::CardId)Cards::Database::GetInstance().GetIdByCardName(card_name);
+				deck_cards.push_back(card_id);
+			}
+			return deck_cards;
 		}
 	};
 }

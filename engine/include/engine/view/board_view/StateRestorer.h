@@ -18,10 +18,10 @@ namespace engine
 				{}
 
 			public:
-				static StateRestorer Prepare(BoardView & board) {
+				static StateRestorer Prepare(BoardView & board, UnknownCardsInfo & first_unknown, UnknownCardsInfo & second_unknown) {
 					StateRestorer restorer(board);
-					restorer.first_unknown_cards_mgr_.Setup(board.GetUnknownCardsSets(state::kPlayerFirst));
-					restorer.second_unknown_cards_mgr_.Setup(board.GetUnknownCardsSets(state::kPlayerSecond));
+					restorer.first_unknown_cards_mgr_.Setup(first_unknown.unknown_cards_sets_);
+					restorer.second_unknown_cards_mgr_.Setup(second_unknown.unknown_cards_sets_);
 					return restorer;
 				}
 
@@ -229,6 +229,10 @@ namespace engine
 
 			private:
 				BoardView const& board_;
+
+				UnknownCardsInfo first_unknown_cards_info_;
+				UnknownCardsInfo second_unknown_cards_info_;
+
 				board_view::UnknownCardsSetsManager first_unknown_cards_mgr_;
 				board_view::UnknownCardsSetsManager second_unknown_cards_mgr_;
 			};

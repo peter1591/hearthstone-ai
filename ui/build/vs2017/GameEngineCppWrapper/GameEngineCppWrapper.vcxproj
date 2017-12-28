@@ -149,7 +149,6 @@
     <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardRefView.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\BoardView.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\CardInfo.h" />
-    <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\Parser.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\Player.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\StateRestorer.h" />
     <ClInclude Include="..\..\..\..\engine\include\engine\view\board_view\UnknownCards.h" />

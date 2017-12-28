@@ -10,8 +10,9 @@
 #include "state/Configs.h"
 #include "Cards/Database.h"
 #include "engine/ActionApplyHelper.h"
-#include "engine/view/board_view/Parser.h"
 #include "UI/SampledBoards.h"
+#include "engine/view/BoardView.h"
+#include "engine/view/board_view/StateRestorer.h"
 
 namespace ui
 {
@@ -58,10 +59,12 @@ namespace ui
 
 			std::mt19937 rand(seed);
 			
-			engine::view::board_view::Parser parser;
 			engine::view::BoardView board;
-			parser.Parse(board_raw_, board);
-			auto state_restorer = engine::view::board_view::StateRestorer::Prepare(board);
+			engine::view::board_view::UnknownCardsInfo first_unknown;
+			engine::view::board_view::UnknownCardsInfo second_unknown;
+			Parse(board_raw_, board, first_unknown, second_unknown);
+			auto state_restorer = engine::view::board_view::StateRestorer::Prepare(
+				board, first_unknown, second_unknown);
 			sampled_boards_.Prepare(root_sample_count_, rand, [&]() {
 				return state_restorer.RestoreState(rand);
 			});
@@ -81,6 +84,35 @@ namespace ui
 		{
 			std::shared_lock<std::shared_mutex> lock(lock_);
 			return sampled_boards_.GetState(rand() % root_sample_count_);
+		}
+
+	private:
+		void Parse(std::string const& board_raw,
+			engine::view::BoardView & board,
+			engine::view::board_view::UnknownCardsInfo & first_unknown,
+			engine::view::board_view::UnknownCardsInfo & second_unknown)
+		{
+			Json::Reader reader;
+			Json::Value json_board;
+			std::stringstream ss(board_raw);
+			if (!reader.parse(ss, json_board)) {
+				throw std::runtime_error("failed to parse board");
+			}
+
+			board.Reset();
+
+			//std::string player_deck_type = "InnKeeperBasicMage"; // TODO: use correct deck
+			std::string player_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
+			// TODO: remove revealed deck cards
+			first_unknown.deck_cards_ = decks::Decks::GetDeckCards(player_deck_type);
+
+			// TODO: guess oppoennt deck type
+			//std::string opponent_deck_type = "InnKeeperBasicMage";
+			std::string opponent_deck_type = "InnKeeperExpertWarlock"; // TODO: use correct deck
+			// TODO: remove revealed deck cards
+			second_unknown.deck_cards_ = decks::Decks::GetDeckCards(opponent_deck_type);
+
+			board.Parse(json_board, first_unknown, second_unknown);
 		}
 
 	private:

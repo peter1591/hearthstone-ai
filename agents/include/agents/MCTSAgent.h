@@ -33,14 +33,17 @@ namespace agents
 
 		void Think(state::PlayerIdentifier side, engine::view::BoardRefView game_state , std::mt19937 & random) {
 			engine::view::BoardView board_view;
+			engine::view::board_view::UnknownCardsInfo first_unknown;
+			engine::view::board_view::UnknownCardsInfo second_unknown;
 
 			// TODO: guess/feed deck type
 			// TODO: remove revealed/played/removed cards
-			board_view.SetDeckCards(state::kPlayerFirst, "InnKeeperExpertWarlock");
-			board_view.SetDeckCards(state::kPlayerSecond, "InnKeeperExpertWarlock");
+			first_unknown.deck_cards_ = decks::Decks::GetDeckCards("InnKeeperExpertWarlock");
+			second_unknown.deck_cards_ = decks::Decks::GetDeckCards("InnKeeperExpertWarlock");
 
-			board_view.Parse(game_state);
-			auto state_restorer = engine::view::board_view::StateRestorer::Prepare(board_view);
+			board_view.Parse(game_state, first_unknown, second_unknown);
+			auto state_restorer = engine::view::board_view::StateRestorer::Prepare(
+				board_view, first_unknown, second_unknown);
 			auto state_getter = [&](std::mt19937 & rnd) -> state::State {
 				return state_restorer.RestoreState(rnd);
 			};

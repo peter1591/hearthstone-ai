@@ -125,9 +125,6 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\board_view\CardInfo.h">
       <Filter>Header Files\engine\view\board_view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Parser.h">
-      <Filter>Header Files\engine\view\board_view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\engine\include\engine\view\board_view\Player.h">
       <Filter>Header Files\engine\view\board_view</Filter>
     </ClInclude>
