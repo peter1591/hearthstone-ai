@@ -71,13 +71,6 @@ namespace engine
 				return GetPlayer(side).unknown_cards_info_.unknown_cards_sets_;
 			}
 
-			// TODO: should be removed?
-			Cards::CardId GetCardIdA(int card_info_id, board_view::UnknownCardsSetsManager const& unknown_cards_mgr) const
-			{
-				board_view::CardInfo const& card_info = cards_info_[card_info_id];
-				return card_info.GetCardId(unknown_cards_mgr);
-			}
-
 		private:
 			board_view::Player & GetPlayer(state::PlayerSide side) {
 				if (side == state::kPlayerFirst) return first_player_;
