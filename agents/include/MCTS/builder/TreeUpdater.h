@@ -2,6 +2,7 @@
 
 #include <queue>
 #include "MCTS/selection/TraversedNodeInfo.h"
+#include "MCTS/Config.h"
 
 namespace mcts
 {

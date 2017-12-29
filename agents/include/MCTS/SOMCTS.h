@@ -127,15 +127,7 @@ namespace mcts
 				traversed_path.back().ConstructRedirectNode();
 
 				bool new_node_created = false;
-				if (result == engine::kResultNotDetermined) {
-					next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
-					assert(next_node);
-					assert([&](selection::TreeNode* node) {
-						if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
-						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-					}(next_node));
-				}
-				else {
+				if (result != engine::kResultNotDetermined) {
 					if (result == engine::kResultFirstPlayerWin) {
 						next_node = mcts::selection::TreeNode::GetFirstPlayerWinNode();
 					}
@@ -147,7 +139,17 @@ namespace mcts
 						next_node = mcts::selection::TreeNode::GetSecondPlayerWinNode();
 					}
 					assert(next_node != nullptr);
+
+					updater_.PushBackNodes(traversed_path, next_node);
+					return result;
 				}
+
+				next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
+				assert(next_node);
+				assert([&](selection::TreeNode* node) {
+					if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
+					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}(next_node));
 
 				if (!new_node_created) {
 					new_node_created = selection_stage_.HasNewNodeCreated();
@@ -161,17 +163,15 @@ namespace mcts
 					change_to_simulation = true;
 				}
 
-				updater_.PushBackNodes(traversed_path, next_node);
-
-				if (result == engine::kResultNotDetermined) {
-					if (change_to_simulation) {
-						stage_ = kStageSimulation;
-						node_ = nullptr;
-					}
-					else {
-						node_ = next_node;
-					}
+				if (change_to_simulation) {
+					stage_ = kStageSimulation;
+					node_ = nullptr;
 				}
+				else {
+					node_ = next_node;
+				}
+
+				updater_.PushBackNodes(traversed_path, next_node);
 
 				return result;
 			}
