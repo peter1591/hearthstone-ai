@@ -110,12 +110,6 @@
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h">
-      <Filter>Header Files\MCTS\builder</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h">
-      <Filter>Header Files\MCTS\builder</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>

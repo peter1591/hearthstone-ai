@@ -5,8 +5,6 @@
 
 namespace mcts
 {
-	namespace selection { class TreeNode; }
-
 	namespace detail
 	{
 		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(engine::view::Board const& board, bool * new_node_created)

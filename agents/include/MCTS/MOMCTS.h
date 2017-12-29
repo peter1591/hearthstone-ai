@@ -1,7 +1,6 @@
 #pragma once
 
 #include "MCTS/SOMCTS.h"
-#include "MCTS/builder/TreeBuilder-impl.h"
 
 namespace mcts
 {
@@ -9,8 +8,8 @@ namespace mcts
 	class MOMCTS
 	{
 	public:
-		MOMCTS(builder::TreeBuilder::TreeNode & first_tree,
-			builder::TreeBuilder::TreeNode & second_tree,
+		MOMCTS(selection::TreeNode & first_tree,
+			selection::TreeNode & second_tree,
 			Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand
 		) :

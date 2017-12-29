@@ -207,8 +207,6 @@
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\TreeBuilder.h" />
     <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h" />

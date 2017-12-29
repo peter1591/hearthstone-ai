@@ -62,7 +62,7 @@ namespace mcts
 				else if (cmd == "node") {
 					uint64_t v = 0;
 					is >> std::hex >> v >> std::dec;
-					node_ = (mcts::builder::TreeBuilder::TreeNode *)(v);
+					node_ = (mcts::selection::TreeNode *)(v);
 					s << "Node set to: " << node_ << std::endl;
 				}
 				else {
@@ -486,7 +486,7 @@ namespace mcts
 		private:
 			agents::MCTSRunner * controller_;
 			StartBoardGetter start_board_getter_;
-			mcts::builder::TreeBuilder::TreeNode const* node_;
+			mcts::selection::TreeNode const* node_;
 			std::unique_ptr<mcts::policy::simulation::NeuralNetworkStateValueFunction> state_value_func_;
 		};
 	}

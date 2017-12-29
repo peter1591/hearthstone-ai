@@ -92,8 +92,8 @@ namespace agents
 	private:
 		std::vector<std::thread> threads_;
 		std::mt19937 & rand_;
-		mcts::builder::TreeBuilder::TreeNode first_tree_;
-		mcts::builder::TreeBuilder::TreeNode second_tree_;
+		mcts::selection::TreeNode first_tree_;
+		mcts::selection::TreeNode second_tree_;
 		mcts::Statistic<> statistic_;
 		std::atomic_bool stop_flag_;
 		std::vector<int> tree_sample_randoms_;

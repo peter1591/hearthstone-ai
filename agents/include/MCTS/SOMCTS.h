@@ -4,8 +4,13 @@
 #include <memory>
 
 #include "engine/view/Board.h"
-#include "builder/TreeBuilder.h"
+#include "MCTS/Statistic.h"
+#include "MCTS/builder/TreeUpdater.h"
 #include "MCTS/detail/BoardNodeMap.h"
+#include "MCTS/selection/Selection.h"
+#include "MCTS/simulation/Simulation.h"
+
+#include "MCTS/detail/BoardNodeMap-impl.h"
 
 namespace mcts
 {
@@ -22,27 +27,36 @@ namespace mcts
 		class ActionParameterGetter : public engine::IActionParameterGetter
 		{
 		public:
-			ActionParameterGetter(SOMCTS & callback) : callback_(callback) {}
+			ActionParameterGetter(SOMCTS & callback) : board_(nullptr), callback_(callback) {}
+
+			void Initialize(engine::view::Board const& board) {
+				board_ = &board;
+				engine::IActionParameterGetter::Initialize(
+					board_->GetCurrentPlayerStateRefView().GetValidActionGetter());
+			}
 
 			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+				assert(board_);
 				if (action_type != engine::ActionType::kMainAction)
 				{
 					assert(action_choices.Size() > 0);
 					if (action_choices.Size() == 1) return 0;
 				}
-				return callback_.ChooseAction(engine::ActionType(action_type), action_choices);
+				return callback_.ChooseAction(*board_, engine::ActionType(action_type), action_choices);
 			}
 
 		private:
+			engine::view::Board const* board_;
 			SOMCTS & callback_;
 		};
 
 	public:
-		SOMCTS(builder::TreeBuilder::TreeNode & root, Statistic<> & statistic,
+		SOMCTS(selection::TreeNode & root, Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
 			turn_node_map_(nullptr), root_(root), statistic_(statistic),
-			action_cb_(*this), builder_(action_cb_, statistic_, selection_rand, simulation_rand),
-			node_(nullptr), stage_(Stage::kStageSelection), updater_()
+			action_cb_(*this),
+			node_(nullptr), stage_(Stage::kStageSelection), updater_(),
+			selection_stage_(selection_rand), simulation_stage_(simulation_rand)
 		{}
 
 		SOMCTS(SOMCTS const&) = delete;
@@ -58,7 +72,7 @@ namespace mcts
 		void StartActions() {
 			if (stage_ == kStageSelection) {
 				assert(node_);
-				assert([](builder::TreeBuilder::TreeNode* node) {
+				assert([](selection::TreeNode * node) {
 					if (!node) return false;
 					if (!node->GetActionType().IsValid()) return true;
 					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
@@ -71,38 +85,96 @@ namespace mcts
 		{
 			assert(board.GetCurrentPlayer().GetSide() == board.GetViewSide());
 
+			action_cb_.Initialize(board);
+
 			if (stage_ == kStageSimulation) {
-				return builder_.PerformSimulate(board);
+				engine::Result result = simulation_stage_.CutoffCheck(board);
+				assert(result != engine::kResultInvalid);
+				if (result != engine::kResultNotDetermined) return result;
+
+				result = board.ApplyAction(action_cb_);
+				assert(result != engine::kResultInvalid);
+
+				constexpr bool is_simulation = true;
+				statistic_.ApplyActionSucceeded(is_simulation);
+
+				return result;
 			}
 			else {
 				assert(stage_ == kStageSelection);
 				assert(turn_node_map_);
-				assert([](builder::TreeBuilder::TreeNode* node) {
-					if (!node) return false;
+				assert(node_);
+				assert([](selection::TreeNode* node) {
 					if (!node->GetActionType().IsValid()) return true;
 					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
 				}(node_));
-				auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map_, &updater_);
-				assert(perform_result.result != engine::kResultInvalid);
+				assert(node_->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 
-				assert([&](builder::TreeBuilder::TreeNode* node) {
-					if (perform_result.result != engine::kResultNotDetermined) return true;
-					if (!node) return false;
-					if (!node->GetActionType().IsValid()) return true;
-					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(perform_result.node));
+				selection_stage_.StartNewMainAction(node_);
 
-				if (perform_result.result == engine::kResultNotDetermined) {
-					if (perform_result.change_to_simulation) {
+				auto result = board.ApplyAction(action_cb_);
+				assert(result != engine::kResultInvalid);
+
+				constexpr bool is_simulation = false;
+				statistic_.ApplyActionSucceeded(is_simulation);
+
+				selection::TreeNode * next_node = nullptr;
+				assert(result != engine::kResultInvalid);
+
+				// we use mutable here, since we will throw it away after all
+				auto & traversed_path = selection_stage_.GetMutableTraversedPath();
+
+				// mark the last action as a redirect node
+				traversed_path.back().ConstructRedirectNode();
+
+				bool new_node_created = false;
+				if (result == engine::kResultNotDetermined) {
+					next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
+					assert(next_node);
+					assert([&](selection::TreeNode* node) {
+						if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
+						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
+					}(next_node));
+				}
+				else {
+					if (result == engine::kResultFirstPlayerWin) {
+						next_node = mcts::selection::TreeNode::GetFirstPlayerWinNode();
+					}
+					else if (result == engine::kResultDraw) {
+						next_node = mcts::selection::TreeNode::GetDrawNode();
+					}
+					else {
+						assert(result == engine::kResultSecondPlayerWin);
+						next_node = mcts::selection::TreeNode::GetSecondPlayerWinNode();
+					}
+					assert(next_node != nullptr);
+				}
+
+				if (!new_node_created) {
+					new_node_created = selection_stage_.HasNewNodeCreated();
+				}
+
+				bool change_to_simulation = false;
+				if (new_node_created) {
+					change_to_simulation = true;
+				}
+				else if (traversed_path.back().GetEdgeAddon()->GetChosenTimes() < StaticConfigs::kSwitchToSimulationUnderChosenTimes) {
+					change_to_simulation = true;
+				}
+
+				updater_.PushBackNodes(traversed_path, next_node);
+
+				if (result == engine::kResultNotDetermined) {
+					if (change_to_simulation) {
 						stage_ = kStageSimulation;
 						node_ = nullptr;
 					}
 					else {
-						node_ = perform_result.node;
+						node_ = next_node;
 					}
 				}
 
-				return perform_result.result;
+				return result;
 			}
 		}
 
@@ -126,28 +198,38 @@ namespace mcts
 			updater_.Update(credit);
 		}
 		
-		int ChooseAction(engine::ActionType action_type, engine::ActionChoices const& choices) {
+		int ChooseAction(engine::view::Board const& board, engine::ActionType action_type, engine::ActionChoices const& choices) {
+			assert(!choices.Empty());
+
 			if (stage_ == kStageSelection) {
-				return builder_.ChooseSelectAction(action_type, choices);
+				int choice = selection_stage_.ChooseAction(board, action_type, choices);
+				assert(choice >= 0); // always return a valid choice
+				return choice;
 			}
 			else {
 				assert(stage_ == kStageSimulation);
-				return builder_.ChooseSimulateAction(action_type, choices);
+				int choice = simulation_stage_.ChooseAction(
+					board,
+					action_cb_.GetAnalyzer(),
+					action_type, choices);
+				assert(choice >= 0);
+				return choice;
 			}
 		}
 
 		auto GetRootNode() const { return &root_; }
 
 	private:
-		builder::TreeBuilder::TreeNode & root_;
+		selection::TreeNode & root_;
 		Statistic<> & statistic_;
 
 	private: // traversal progress
 		detail::BoardNodeMap * turn_node_map_;
 		ActionParameterGetter action_cb_;
-		builder::TreeBuilder builder_;
-		builder::TreeBuilder::TreeNode* node_;
+		selection::TreeNode * node_;
 		Stage stage_;
 		builder::TreeUpdater updater_;
+		selection::Selection selection_stage_;
+		simulation::Simulation simulation_stage_;
 	};
 }
