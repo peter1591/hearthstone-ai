@@ -40,7 +40,7 @@ namespace mcts
 	public:
 		SOMCTS(builder::TreeBuilder::TreeNode & root, Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
-			root_(root), statistic_(statistic),
+			turn_node_map_(nullptr), root_(root), statistic_(statistic),
 			action_cb_(*this), builder_(action_cb_, statistic_, selection_rand, simulation_rand),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
@@ -55,15 +55,7 @@ namespace mcts
 			updater_.Clear();
 		}
 
-		// Include to perform the end-turn action at last to switch side
-		engine::Result PerformOwnTurnActions(engine::view::Board const& board)
-		{
-			auto side = board.GetViewSide();
-			assert(board.GetCurrentPlayer().GetSide() == side);
-
-			engine::Result result = engine::kResultInvalid;
-
-			detail::BoardNodeMap * turn_node_map = nullptr;
+		void StartActions() {
 			if (stage_ == kStageSelection) {
 				assert(node_);
 				assert([](builder::TreeBuilder::TreeNode* node) {
@@ -71,35 +63,36 @@ namespace mcts
 					if (!node->GetActionType().IsValid()) return true;
 					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
 				}(node_));
-				turn_node_map = &node_->GetAddon().board_node_map;
+				turn_node_map_ = &node_->GetAddon().board_node_map;
 			}
+		}
 
-			while (board.GetCurrentPlayer().GetSide() == side) {
-				if (stage_ == kStageSimulation) {
-					result = builder_.PerformSimulate(board);
-					assert(result != engine::kResultInvalid);
-					if (result!= engine::kResultNotDetermined) return result;
-				}
-				else {
-					// Selection stage
-					assert(stage_ == kStageSelection);
-					assert([](builder::TreeBuilder::TreeNode* node) {
-						if (!node) return false;
-						if (!node->GetActionType().IsValid()) return true;
-						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-					}(node_));
-					auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map, &updater_);
-					assert(perform_result.result != engine::kResultInvalid);
-					
-					result = perform_result.result;
-					if (result!= engine::kResultNotDetermined) return result;
+		engine::Result PerformAction(engine::view::Board const& board)
+		{
+			assert(board.GetCurrentPlayer().GetSide() == board.GetViewSide());
 
-					assert([](builder::TreeBuilder::TreeNode* node) {
-						if (!node) return false;
-						if (!node->GetActionType().IsValid()) return true;
-						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-					}(perform_result.node));
+			if (stage_ == kStageSimulation) {
+				return builder_.PerformSimulate(board);
+			}
+			else {
+				assert(stage_ == kStageSelection);
+				assert(turn_node_map_);
+				assert([](builder::TreeBuilder::TreeNode* node) {
+					if (!node) return false;
+					if (!node->GetActionType().IsValid()) return true;
+					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}(node_));
+				auto perform_result = builder_.PerformSelect(node_, board, *turn_node_map_, &updater_);
+				assert(perform_result.result != engine::kResultInvalid);
 
+				assert([&](builder::TreeBuilder::TreeNode* node) {
+					if (perform_result.result != engine::kResultNotDetermined) return true;
+					if (!node) return false;
+					if (!node->GetActionType().IsValid()) return true;
+					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}(perform_result.node));
+
+				if (perform_result.result == engine::kResultNotDetermined) {
 					if (perform_result.change_to_simulation) {
 						stage_ = kStageSimulation;
 						node_ = nullptr;
@@ -108,11 +101,9 @@ namespace mcts
 						node_ = perform_result.node;
 					}
 				}
+
+				return perform_result.result;
 			}
-			
-			assert(board.GetCurrentPlayer().GetSide() != side);
-			assert(result == engine::kResultNotDetermined);
-			return result;
 		}
 
 		// Another player finished his actions
@@ -152,6 +143,7 @@ namespace mcts
 		Statistic<> & statistic_;
 
 	private: // traversal progress
+		detail::BoardNodeMap * turn_node_map_;
 		ActionParameterGetter action_cb_;
 		builder::TreeBuilder builder_;
 		builder::TreeBuilder::TreeNode* node_;
