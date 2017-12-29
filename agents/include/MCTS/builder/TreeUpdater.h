@@ -27,6 +27,22 @@ namespace mcts
 				//LinearlyUpdateWinRate(credit);
 			}
 
+			void PushTerminateNode(std::vector<selection::TraversedNodeInfo> & nodes, engine::Result result)
+			{
+				selection::TreeNode * node = nullptr;
+				if (result == engine::kResultFirstPlayerWin) {
+					node = mcts::selection::TreeNode::GetFirstPlayerWinNode();
+				}
+				else if (result == engine::kResultDraw) {
+					node = mcts::selection::TreeNode::GetDrawNode();
+				}
+				else {
+					assert(result == engine::kResultSecondPlayerWin);
+					node = mcts::selection::TreeNode::GetSecondPlayerWinNode();
+				}
+				return PushBackNodes(nodes, node);
+			}
+
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
 			{
 				assert([&]() {
@@ -46,7 +62,8 @@ namespace mcts
 					return true;
 				}());
 
-				if (HasLastNode()) {
+				if (last_node_) {
+					assert(HasLastNode());
 					if (nodes.front().GetNode() != last_node_) {
 						nodes_.emplace_back(last_node_);
 					}

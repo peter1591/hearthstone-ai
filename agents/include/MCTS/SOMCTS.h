@@ -117,7 +117,6 @@ namespace mcts
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
 
-				selection::TreeNode * next_node = nullptr;
 				assert(result != engine::kResultInvalid);
 
 				// we use mutable here, since we will throw it away after all
@@ -128,23 +127,11 @@ namespace mcts
 
 				bool new_node_created = false;
 				if (result != engine::kResultNotDetermined) {
-					if (result == engine::kResultFirstPlayerWin) {
-						next_node = mcts::selection::TreeNode::GetFirstPlayerWinNode();
-					}
-					else if (result == engine::kResultDraw) {
-						next_node = mcts::selection::TreeNode::GetDrawNode();
-					}
-					else {
-						assert(result == engine::kResultSecondPlayerWin);
-						next_node = mcts::selection::TreeNode::GetSecondPlayerWinNode();
-					}
-					assert(next_node != nullptr);
-
-					updater_.PushBackNodes(traversed_path, next_node);
+					updater_.PushTerminateNode(traversed_path, result);
 					return result;
 				}
 
-				next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
+				selection::TreeNode * next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
 				assert(next_node);
 				assert([&](selection::TreeNode* node) {
 					if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
