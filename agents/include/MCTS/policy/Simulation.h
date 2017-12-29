@@ -36,7 +36,7 @@ namespace mcts
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				RandomPlayouts(state::PlayerSide side, std::mt19937 & rand) :
+				RandomPlayouts(std::mt19937 & rand) :
 					rand_(rand)
 				{
 				}

@@ -47,8 +47,6 @@ namespace mcts
 			public:
 				static constexpr double kExploreWeight = 0.8;
 
-				UCBPolicy(state::PlayerSide side) : side_(side) {}
-
 				template <typename ChoiceIterator>
 				int SelectChoice(ChoiceIterator && choice_iterator)
 				{
@@ -129,9 +127,6 @@ namespace mcts
 
 					return (int)choices[best_choice].choice;
 				}
-
-			private:
-				state::PlayerSide side_;
 			};
 		}
 	}

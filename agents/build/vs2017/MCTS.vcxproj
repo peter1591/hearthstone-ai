@@ -220,6 +220,7 @@
     <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h" />
     <ClInclude Include="..\..\include\MCTS\policy\RandomByRand.h" />
     <ClInclude Include="..\..\include\MCTS\policy\Selection.h" />
+    <ClInclude Include="..\..\include\MCTS\policy\SideController.h" />
     <ClInclude Include="..\..\include\MCTS\policy\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h" />
     <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h" />

@@ -10,8 +10,8 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation(state::PlayerSide side, std::mt19937 & rand) :
-				random_(rand), select_(side, rand)
+			Simulation(std::mt19937 & rand) :
+				random_(rand), select_(rand)
 			{}
 
 			void StartNewAction() {

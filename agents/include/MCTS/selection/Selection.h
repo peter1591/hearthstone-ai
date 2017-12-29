@@ -14,9 +14,8 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection(state::PlayerSide side, std::mt19937 & rand) :
-				side_(side),
-				path_(), random_(rand), policy_(side), new_node_created_(false), pending_randoms_(false)
+			Selection(std::mt19937 & rand) :
+				path_(), random_(rand), policy_(), new_node_created_(false), pending_randoms_(false)
 			{}
 
 			Selection(Selection const&) = delete;
@@ -103,7 +102,6 @@ namespace mcts
 			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
-			state::PlayerSide side_;
 			std::vector<TraversedNodeInfo> path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;

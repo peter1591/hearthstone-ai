@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MCTS/policy/SideController.h"
 #include "MCTS/policy/CreditPolicy.h"
 #include "MCTS/policy/RandomByRand.h"
 #include "MCTS/policy/Selection.h"
@@ -10,6 +11,8 @@ namespace mcts
 	struct StaticConfigs
 	{
 		static constexpr bool enable_statistic = true; // TODO: disable for release builds
+
+		using SideController = policy::SideController;
 
 		using SelectionPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;

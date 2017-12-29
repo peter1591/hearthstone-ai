@@ -1,13 +1,11 @@
 #pragma once
 
-#include "engine/view/Board.h"
 #include "MCTS/SOMCTS.h"
 #include "MCTS/builder/TreeBuilder-impl.h"
 
 namespace mcts
 {
 	// multiple-observer MCTS
-	// The first player is defined to be the player AI is helping
 	class MOMCTS
 	{
 	public:
@@ -16,46 +14,46 @@ namespace mcts
 			Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand
 		) :
-			first_(state::kPlayerFirst, first_tree, statistic, selection_rand, simulation_rand),
-			second_(state::kPlayerSecond, second_tree, statistic, selection_rand, simulation_rand)
+			first_(first_tree, statistic, selection_rand, simulation_rand),
+			second_(second_tree, statistic, selection_rand, simulation_rand)
 		{}
 
-		template <typename StartBoardGetter>
-		void Iterate(StartBoardGetter&& start_board_getter)
+		template <class... StartArgs>
+		void Iterate(StartArgs&&... start_args)
 		{
-			engine::Game game;
-			game.SetStartState(start_board_getter());
-
+			side_controller_.StartEpisode(std::forward<StartArgs>(start_args)...);
 			first_.StartEpisode();
 			second_.StartEpisode();
 
 			while (true)
 			{
-				state::PlayerIdentifier side = game.GetCurrentState().GetCurrentPlayerId();
+				StaticConfigs::SideController::Side side = side_controller_.GetActionSide();
 				
 				engine::Result result = GetSOMCTS(side).PerformOwnTurnActions(
-					engine::view::Board(game, side.GetSide()));
+					side_controller_.GetSideView(side));
 				assert(result != engine::kResultInvalid);
 				
 				if (result != engine::kResultNotDetermined) {
-					first_.EpisodeFinished(game.GetCurrentState(), result);
-					second_.EpisodeFinished(game.GetCurrentState(), result);
+					first_.EpisodeFinished(
+						side_controller_.GetSideView(StaticConfigs::SideController::Side::First()),
+						result);
+					second_.EpisodeFinished(
+						side_controller_.GetSideView(StaticConfigs::SideController::Side::Second()),
+						result);
 					break;
 				}
 
-				assert(game.GetCurrentState().GetCurrentPlayerId() == side.Opposite());
-
 				GetSOMCTS(side.Opposite()).ApplyOthersActions(
-					engine::view::Board(game, side.Opposite().GetSide()));
+					side_controller_.GetSideView(side.Opposite()));
 			}
 		}
 
-		auto GetRootNode(state::PlayerIdentifier side) const {
+		auto GetRootNode(StaticConfigs::SideController::Side side) const {
 			return GetSOMCTS(side).GetRootNode();
 		}
 
 	private:
-		SOMCTS & GetSOMCTS(state::PlayerIdentifier side) {
+		SOMCTS & GetSOMCTS(StaticConfigs::SideController::Side side) {
 			if (side.IsFirst()) return first_;
 			else {
 				assert(side.IsSecond());
@@ -63,7 +61,7 @@ namespace mcts
 			}
 		}
 
-		SOMCTS const& GetSOMCTS(state::PlayerIdentifier side) const {
+		SOMCTS const& GetSOMCTS(StaticConfigs::SideController::Side side) const {
 			if (side.IsFirst()) return first_;
 			else {
 				assert(side.IsSecond());
@@ -72,6 +70,7 @@ namespace mcts
 		}
 
 	private:
+		StaticConfigs::SideController side_controller_;
 		SOMCTS first_;
 		SOMCTS second_;
 	};

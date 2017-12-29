@@ -305,5 +305,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\FlowControl\ActionTargetIndex.h">
       <Filter>Header Files\engine\FlowControl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\policy\SideController.h">
+      <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

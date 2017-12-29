@@ -38,11 +38,10 @@ namespace mcts
 		};
 
 	public:
-		SOMCTS(state::PlayerSide side, builder::TreeBuilder::TreeNode & root, Statistic<> & statistic,
-			std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
-			:
-			side_(side), root_(root), statistic_(statistic),
-			action_cb_(*this), builder_(side, action_cb_, statistic_, selection_rand, simulation_rand),
+		SOMCTS(builder::TreeBuilder::TreeNode & root, Statistic<> & statistic,
+			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
+			root_(root), statistic_(statistic),
+			action_cb_(*this), builder_(action_cb_, statistic_, selection_rand, simulation_rand),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_()
 		{}
 
@@ -59,8 +58,8 @@ namespace mcts
 		// Include to perform the end-turn action at last to switch side
 		engine::Result PerformOwnTurnActions(engine::view::Board const& board)
 		{
-			assert(side_ == board.GetViewSide()); // prevent information leak
-			assert(board.GetCurrentPlayer().GetSide() == side_);
+			auto side = board.GetViewSide();
+			assert(board.GetCurrentPlayer().GetSide() == side);
 
 			engine::Result result = engine::kResultInvalid;
 
@@ -75,7 +74,7 @@ namespace mcts
 				turn_node_map = &node_->GetAddon().board_node_map;
 			}
 
-			while (board.GetCurrentPlayer().GetSide() == side_) {
+			while (board.GetCurrentPlayer().GetSide() == side) {
 				if (stage_ == kStageSimulation) {
 					result = builder_.PerformSimulate(board);
 					assert(result != engine::kResultInvalid);
@@ -110,6 +109,8 @@ namespace mcts
 					}
 				}
 			}
+			
+			assert(board.GetCurrentPlayer().GetSide() != side);
 			assert(result == engine::kResultNotDetermined);
 			return result;
 		}
@@ -118,8 +119,6 @@ namespace mcts
 		// Just jump to the node present the new state
 		void ApplyOthersActions(engine::view::Board const& board)
 		{
-			assert(side_ == board.GetViewSide()); // prevent information leak
-
 			if (stage_ == kStageSimulation) return;
 
 			assert(stage_ == kStageSelection);
@@ -128,9 +127,9 @@ namespace mcts
 			node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 		}
 
-		void EpisodeFinished(state::State const& state, engine::Result result)
+		void EpisodeFinished(engine::view::Board const& board, engine::Result result)
 		{
-			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(side_, state, result);
+			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(board, result);
 			assert(credit >= 0.0);
 			assert(credit <= 1.0); // TODO: should take into account episilon precision
 			updater_.Update(credit);
@@ -149,7 +148,6 @@ namespace mcts
 		auto GetRootNode() const { return &root_; }
 
 	private:
-		const state::PlayerSide side_;
 		builder::TreeBuilder::TreeNode & root_;
 		Statistic<> & statistic_;
 

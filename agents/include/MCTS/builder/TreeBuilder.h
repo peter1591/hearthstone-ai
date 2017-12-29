@@ -19,13 +19,13 @@ namespace mcts
 		public:
 			typedef selection::TreeNode TreeNode;
 
-			TreeBuilder(state::PlayerSide side, engine::IActionParameterGetter & action_cb, Statistic<> & statistic,
+			TreeBuilder(engine::IActionParameterGetter & action_cb, Statistic<> & statistic,
 				std::mt19937 & selection_rand, std::mt19937 & simulation_rand)
 				:
 				statistic_(statistic),
 				action_cb_(action_cb),
 				board_(nullptr),
-				selection_stage_(side, selection_rand), simulation_stage_(side, simulation_rand)
+				selection_stage_(selection_rand), simulation_stage_(simulation_rand)
 			{
 			}
 
