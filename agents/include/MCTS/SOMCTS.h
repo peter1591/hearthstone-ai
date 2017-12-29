@@ -51,10 +51,9 @@ namespace mcts
 		};
 
 	public:
-		SOMCTS(selection::TreeNode & root, Statistic<> & statistic,
+		SOMCTS(Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
-			turn_node_map_(nullptr), root_(root), statistic_(statistic),
-			action_cb_(*this),
+			statistic_(statistic), turn_node_map_(nullptr), action_cb_(*this),
 			node_(nullptr), stage_(Stage::kStageSelection), updater_(),
 			selection_stage_(selection_rand), simulation_stage_(simulation_rand)
 		{}
@@ -62,9 +61,9 @@ namespace mcts
 		SOMCTS(SOMCTS const&) = delete;
 		SOMCTS & operator=(SOMCTS const&) = delete;
 
-		void StartEpisode()
+		void StartEpisode(selection::TreeNode * root)
 		{
-			node_ = &root_;
+			node_ = root;
 			stage_ = kStageSelection;
 			updater_.Clear();
 		}
@@ -217,10 +216,7 @@ namespace mcts
 			}
 		}
 
-		auto GetRootNode() const { return &root_; }
-
 	private:
-		selection::TreeNode & root_;
 		Statistic<> & statistic_;
 
 	private: // traversal progress

@@ -13,16 +13,16 @@ namespace mcts
 			Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand
 		) :
-			first_(first_tree, statistic, selection_rand, simulation_rand),
-			second_(second_tree, statistic, selection_rand, simulation_rand)
+			first_root_(&first_tree), first_(statistic, selection_rand, simulation_rand),
+			second_root_(&second_tree), second_(statistic, selection_rand, simulation_rand)
 		{}
 
 		template <class... StartArgs>
 		void Iterate(StartArgs&&... start_args)
 		{
 			side_controller_.StartEpisode(std::forward<StartArgs>(start_args)...);
-			first_.StartEpisode();
-			second_.StartEpisode();
+			first_.StartEpisode(first_root_);
+			second_.StartEpisode(second_root_);
 
 			while (true)
 			{
@@ -54,7 +54,8 @@ namespace mcts
 		}
 
 		auto GetRootNode(StaticConfigs::SideController::Side side) const {
-			return GetSOMCTS(side).GetRootNode();
+			if (side.IsFirst()) return first_root_;
+			else return second_root_;
 		}
 
 	private:
@@ -76,7 +77,11 @@ namespace mcts
 
 	private:
 		StaticConfigs::SideController side_controller_;
+		
+		selection::TreeNode * first_root_;
 		SOMCTS first_;
+		
+		selection::TreeNode * second_root_;
 		SOMCTS second_;
 	};
 }
