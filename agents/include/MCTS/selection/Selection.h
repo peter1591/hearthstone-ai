@@ -96,6 +96,27 @@ namespace mcts
 				return next_choice;
 			}
 
+			selection::TreeNode * FinishMainAction(engine::view::Board const& board, detail::BoardNodeMap * turn_node_map_, engine::Result result) {
+				// mark the last action as a redirect node
+				path_.back().ConstructRedirectNode();
+
+				if (result != engine::kResultNotDetermined) {
+					return nullptr;
+				}
+
+				bool new_node_created = false;
+				selection::TreeNode * next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
+				assert(next_node);
+				assert([&](selection::TreeNode* node) {
+					if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
+					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}(next_node));
+
+				if (new_node_created) new_node_created_ = true;
+
+				return next_node;
+			}
+
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 			std::vector<TraversedNodeInfo> & GetMutableTraversedPath() { return path_; }
 

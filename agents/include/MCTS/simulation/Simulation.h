@@ -14,9 +14,6 @@ namespace mcts
 				random_(rand), select_(rand)
 			{}
 
-			void StartNewAction() {
-			}
-
 			engine::Result CutoffCheck(engine::view::Board const& board)
 			{
 				using Policy = std::decay_t<decltype(select_)>;

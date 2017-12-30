@@ -114,52 +114,32 @@ namespace mcts
 				auto result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
 
+				auto next_node = selection_stage_.FinishMainAction(board, turn_node_map_, result);
+
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
 
 				assert(result != engine::kResultInvalid);
 
-				// we use mutable here, since we will throw it away after all
-				auto & traversed_path = selection_stage_.GetMutableTraversedPath();
+				if (result == engine::kResultNotDetermined) {
+					bool change_to_simulation = false;
+					if (selection_stage_.HasNewNodeCreated()) {
+						change_to_simulation = true;
+					}
+					else if (selection_stage_.GetTraversedPath().back().GetEdgeAddon()->GetChosenTimes() < StaticConfigs::kSwitchToSimulationUnderChosenTimes) {
+						change_to_simulation = true;
+					}
 
-				// mark the last action as a redirect node
-				traversed_path.back().ConstructRedirectNode();
-
-				bool new_node_created = false;
-				if (result != engine::kResultNotDetermined) {
-					updater_.PushTerminateNode(traversed_path, result);
-					return result;
+					if (change_to_simulation) {
+						stage_ = kStageSimulation;
+						node_ = nullptr;
+					}
+					else {
+						node_ = next_node;
+					}
 				}
 
-				selection::TreeNode * next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
-				assert(next_node);
-				assert([&](selection::TreeNode* node) {
-					if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
-					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(next_node));
-
-				if (!new_node_created) {
-					new_node_created = selection_stage_.HasNewNodeCreated();
-				}
-
-				bool change_to_simulation = false;
-				if (new_node_created) {
-					change_to_simulation = true;
-				}
-				else if (traversed_path.back().GetEdgeAddon()->GetChosenTimes() < StaticConfigs::kSwitchToSimulationUnderChosenTimes) {
-					change_to_simulation = true;
-				}
-
-				if (change_to_simulation) {
-					stage_ = kStageSimulation;
-					node_ = nullptr;
-				}
-				else {
-					node_ = next_node;
-				}
-
-				updater_.PushBackNodes(traversed_path, next_node);
-
+				updater_.PushBackNodes(selection_stage_.GetMutableTraversedPath(), next_node);
 				return result;
 			}
 		}
