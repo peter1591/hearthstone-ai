@@ -114,10 +114,9 @@ namespace mcts
 				assert(result != engine::kResultInvalid);
 
 				if (result == engine::kResultNotDetermined) {
-					if (selection_stage_.HasNewNodeCreated()) {
-						stage_ = kStageSimulation;
-					}
-					else if (selection_stage_.GetTraversedPath().back().GetEdgeAddon()->GetChosenTimes() < StaticConfigs::kSwitchToSimulationUnderChosenTimes) {
+					if (StaticConfigs::StageController::SwitchToSimulation(
+						selection_stage_.HasNewNodeCreated(),
+						selection_stage_.GetTraversedPath().back().GetEdgeAddon()->GetChosenTimes())) {
 						stage_ = kStageSimulation;
 					}
 				}
