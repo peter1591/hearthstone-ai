@@ -2,11 +2,12 @@
 
 #include <queue>
 #include "MCTS/selection/TraversedNodeInfo.h"
+#include "MCTS/selection/TreeUpdater.h"
 #include "MCTS/Config.h"
 
 namespace mcts
 {
-	namespace builder
+	namespace selection
 	{
 		class TreeUpdater
 		{

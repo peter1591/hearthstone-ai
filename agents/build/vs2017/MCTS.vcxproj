@@ -207,7 +207,6 @@
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h" />
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h" />
@@ -228,6 +227,7 @@
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\TreeUpdater.h" />
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />

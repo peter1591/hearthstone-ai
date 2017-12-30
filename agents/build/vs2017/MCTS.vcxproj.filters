@@ -110,9 +110,6 @@
     <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
       <Filter>Header Files\MCTS\builder</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\builder\TreeUpdater.h">
-      <Filter>Header Files\MCTS\builder</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
@@ -298,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\policy\StageController.h">
       <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\TreeUpdater.h">
+      <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

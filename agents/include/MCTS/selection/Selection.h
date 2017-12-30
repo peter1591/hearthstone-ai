@@ -4,7 +4,7 @@
 #include "MCTS/Config.h"
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/selection/TraversedNodeInfo.h"
-#include "MCTS/builder/TreeUpdater.h"
+#include "MCTS/selection/TreeUpdater.h"
 
 #include "MCTS/selection/ChildNodeMap-impl.h"
 
@@ -170,7 +170,7 @@ namespace mcts
 			}
 
 		private:
-			selection::TreeNode & root_;
+			TreeNode & root_;
 			TreeNode * node_;
 			detail::BoardNodeMap * turn_node_map_;
 			std::vector<TraversedNodeInfo> path_;
@@ -178,7 +178,7 @@ namespace mcts
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
 			bool new_node_created_;
 			bool pending_randoms_;
-			builder::TreeUpdater updater_;
+			TreeUpdater updater_;
 		};
 	}
 }
