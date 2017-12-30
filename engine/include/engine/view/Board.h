@@ -2,7 +2,6 @@
 
 #include "engine/Game.h"
 #include "engine/IActionParameterGetter.h"
-#include "MCTS/Types.h"
 #include "engine/view/ReducedBoardView.h"
 
 namespace engine

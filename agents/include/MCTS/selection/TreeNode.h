@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <memory>
 
-#include "MCTS/Types.h"
 #include "MCTS/detail/TreeNodeBase.h"
 #include "MCTS/selection/TreeNodeAddon.h"
 #include "MCTS/selection/EdgeAddon.h"

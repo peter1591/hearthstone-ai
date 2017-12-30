@@ -24,6 +24,11 @@ namespace mcts
 	class SOMCTS
 	{
 	private:
+		enum Stage {
+			kStageSelection,
+			kStageSimulation
+		};
+
 		class ActionParameterGetter : public engine::IActionParameterGetter
 		{
 		public:
@@ -53,9 +58,9 @@ namespace mcts
 	public:
 		SOMCTS(selection::TreeNode & tree, Statistic<> & statistic, 
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
-			statistic_(statistic), action_cb_(*this),
-			stage_(Stage::kStageSelection), updater_(),
-			selection_stage_(tree, selection_rand), simulation_stage_(simulation_rand)
+			action_cb_(*this), stage_(Stage::kStageSelection),
+			selection_stage_(tree, selection_rand), simulation_stage_(simulation_rand),
+			updater_(), statistic_(statistic)
 		{}
 
 		SOMCTS(SOMCTS const&) = delete;
@@ -89,9 +94,9 @@ namespace mcts
 
 				result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
-
 				constexpr bool is_simulation = true;
 				statistic_.ApplyActionSucceeded(is_simulation);
+
 				return result;
 			}
 			else {
@@ -101,11 +106,10 @@ namespace mcts
 
 				auto result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
-
-				selection_stage_.FinishMainAction(board, result);
-
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
+
+				selection_stage_.FinishMainAction(board, result);
 
 				assert(result != engine::kResultInvalid);
 
@@ -162,13 +166,11 @@ namespace mcts
 		}
 
 	private:
-		Statistic<> & statistic_;
-
-	private: // traversal progress
 		ActionParameterGetter action_cb_;
 		Stage stage_;
-		builder::TreeUpdater updater_;
 		selection::Selection selection_stage_;
 		simulation::Simulation simulation_stage_;
+		builder::TreeUpdater updater_;
+		Statistic<> & statistic_;
 	};
 }

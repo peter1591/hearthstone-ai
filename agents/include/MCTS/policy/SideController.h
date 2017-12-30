@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/view/Board.h"
-#include "MCTS/Types.h"
 
 namespace mcts {
 	namespace policy {

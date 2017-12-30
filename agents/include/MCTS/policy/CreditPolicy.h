@@ -1,7 +1,5 @@
 #pragma once
 
-#include "MCTS/Types.h"
-
 namespace mcts
 {
 	namespace policy
