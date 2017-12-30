@@ -15,15 +15,41 @@ namespace mcts
 		{
 		public:
 			Selection(std::mt19937 & rand) :
-				path_(), random_(rand), policy_(), new_node_created_(false), pending_randoms_(false)
+				node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
+				new_node_created_(false), pending_randoms_(false)
 			{}
 
 			Selection(Selection const&) = delete;
 			Selection & operator=(Selection const&) = delete;
 
-			void StartNewMainAction(TreeNode * root) {
+			// TODO: root node should be managed by this class?
+			void SetRootNode(TreeNode * node) { node_ = node; }
+
+			TreeNode* GetNode() const { return node_; }
+
+			void StartNewMainActions() {
+				assert(node_);
+				assert([](selection::TreeNode * node) {
+					if (!node) return false;
+					if (!node->GetActionType().IsValid()) return true;
+					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}(node_));
+				turn_node_map_ = &node_->GetAddon().board_node_map;
+			}
+
+			void StartNewMainAction(engine::view::Board const& board) {
+				assert(node_);
+				assert([&]() {
+					if (!node_->GetActionType().IsValid()) return true;
+					return node_->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}());
+				(void)board;
+				assert(node_->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
+				
+				assert(turn_node_map_);
+
 				path_.clear();
-				path_.emplace_back(root);
+				path_.emplace_back(node_);
 				new_node_created_ = false;
 				pending_randoms_ = false;
 			}
@@ -96,25 +122,29 @@ namespace mcts
 				return next_choice;
 			}
 
-			selection::TreeNode * FinishMainAction(engine::view::Board const& board, detail::BoardNodeMap * turn_node_map_, engine::Result result) {
+			void FinishMainAction(engine::view::Board const& board, engine::Result result) {
 				// mark the last action as a redirect node
 				path_.back().ConstructRedirectNode();
 
 				if (result != engine::kResultNotDetermined) {
-					return nullptr;
+					node_ = nullptr;
+					return;
 				}
 
 				bool new_node_created = false;
-				selection::TreeNode * next_node = turn_node_map_->GetOrCreateNode(board, &new_node_created);
-				assert(next_node);
+				node_ = turn_node_map_->GetOrCreateNode(board, &new_node_created);
+				assert(node_);
 				assert([&](selection::TreeNode* node) {
 					if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
 					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(next_node));
+				}(node_));
 
 				if (new_node_created) new_node_created_ = true;
+			}
 
-				return next_node;
+			void JumpToBoardNode(engine::view::Board const& board) {
+				assert(node_);
+				node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 			}
 
 			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
@@ -123,6 +153,8 @@ namespace mcts
 			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
+			TreeNode * node_;
+			detail::BoardNodeMap * turn_node_map_;
 			std::vector<TraversedNodeInfo> path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;

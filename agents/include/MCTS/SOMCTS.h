@@ -53,8 +53,8 @@ namespace mcts
 	public:
 		SOMCTS(Statistic<> & statistic,
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
-			statistic_(statistic), turn_node_map_(nullptr), action_cb_(*this),
-			node_(nullptr), stage_(Stage::kStageSelection), updater_(),
+			statistic_(statistic), action_cb_(*this),
+			stage_(Stage::kStageSelection), updater_(),
 			selection_stage_(selection_rand), simulation_stage_(simulation_rand)
 		{}
 
@@ -63,20 +63,14 @@ namespace mcts
 
 		void StartEpisode(selection::TreeNode * root)
 		{
-			node_ = root;
+			selection_stage_.SetRootNode(root);
 			stage_ = kStageSelection;
 			updater_.Clear();
 		}
 
 		void StartActions() {
 			if (stage_ == kStageSelection) {
-				assert(node_);
-				assert([](selection::TreeNode * node) {
-					if (!node) return false;
-					if (!node->GetActionType().IsValid()) return true;
-					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(node_));
-				turn_node_map_ = &node_->GetAddon().board_node_map;
+				selection_stage_.StartNewMainActions();
 			}
 		}
 
@@ -96,25 +90,17 @@ namespace mcts
 
 				constexpr bool is_simulation = true;
 				statistic_.ApplyActionSucceeded(is_simulation);
-
 				return result;
 			}
 			else {
 				assert(stage_ == kStageSelection);
-				assert(turn_node_map_);
-				assert(node_);
-				assert([](selection::TreeNode* node) {
-					if (!node->GetActionType().IsValid()) return true;
-					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(node_));
-				assert(node_->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 
-				selection_stage_.StartNewMainAction(node_);
+				selection_stage_.StartNewMainAction(board);
 
 				auto result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
 
-				auto next_node = selection_stage_.FinishMainAction(board, turn_node_map_, result);
+				selection_stage_.FinishMainAction(board, result);
 
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
@@ -122,24 +108,15 @@ namespace mcts
 				assert(result != engine::kResultInvalid);
 
 				if (result == engine::kResultNotDetermined) {
-					bool change_to_simulation = false;
 					if (selection_stage_.HasNewNodeCreated()) {
-						change_to_simulation = true;
+						stage_ = kStageSimulation;
 					}
 					else if (selection_stage_.GetTraversedPath().back().GetEdgeAddon()->GetChosenTimes() < StaticConfigs::kSwitchToSimulationUnderChosenTimes) {
-						change_to_simulation = true;
-					}
-
-					if (change_to_simulation) {
 						stage_ = kStageSimulation;
-						node_ = nullptr;
-					}
-					else {
-						node_ = next_node;
 					}
 				}
 
-				updater_.PushBackNodes(selection_stage_.GetMutableTraversedPath(), next_node);
+				updater_.PushBackNodes(selection_stage_.GetMutableTraversedPath(), selection_stage_.GetNode());
 				return result;
 			}
 		}
@@ -151,9 +128,8 @@ namespace mcts
 			if (stage_ == kStageSimulation) return;
 
 			assert(stage_ == kStageSelection);
-			assert(node_);
 
-			node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
+			selection_stage_.JumpToBoardNode(board);
 		}
 
 		void EpisodeFinished(engine::view::Board const& board, engine::Result result)
@@ -187,9 +163,7 @@ namespace mcts
 		Statistic<> & statistic_;
 
 	private: // traversal progress
-		detail::BoardNodeMap * turn_node_map_;
 		ActionParameterGetter action_cb_;
-		selection::TreeNode * node_;
 		Stage stage_;
 		builder::TreeUpdater updater_;
 		selection::Selection selection_stage_;
