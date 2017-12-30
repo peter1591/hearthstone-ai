@@ -296,5 +296,8 @@
     <ClInclude Include="..\..\include\MCTS\policy\SideController.h">
       <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\policy\StageController.h">
+      <Filter>Header Files\MCTS\policy</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

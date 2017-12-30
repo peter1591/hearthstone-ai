@@ -125,13 +125,14 @@ namespace mcts
 				return next_choice;
 			}
 
-			void FinishAction(engine::view::Board const& board, engine::Result result) {
+			// @return  If we should switch to simulation stage
+			bool FinishAction(engine::view::Board const& board, engine::Result result) {
 				// mark the last action as a redirect node
 				path_.back().ConstructRedirectNode();
 
 				if (result != engine::kResultNotDetermined) {
 					node_ = nullptr;
-					return;
+					return false;
 				}
 
 				bool new_node_created = false;
@@ -143,6 +144,9 @@ namespace mcts
 				}(node_));
 
 				if (new_node_created) new_node_created_ = true;
+
+				return StaticConfigs::StageController::SwitchToSimulation(
+					new_node_created_, path_.back().GetEdgeAddon()->GetChosenTimes());
 			}
 
 			void JumpToNodeWithBoard(engine::view::Board const& board) {
@@ -150,10 +154,7 @@ namespace mcts
 				node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 			}
 
-			std::vector<TraversedNodeInfo> const& GetTraversedPath() const { return path_; }
 			std::vector<TraversedNodeInfo> & GetMutableTraversedPath() { return path_; }
-
-			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
 			selection::TreeNode & root_;

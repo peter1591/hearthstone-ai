@@ -109,16 +109,8 @@ namespace mcts
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
 
-				selection_stage_.FinishAction(board, result);
-
-				assert(result != engine::kResultInvalid);
-
-				if (result == engine::kResultNotDetermined) {
-					if (StaticConfigs::StageController::SwitchToSimulation(
-						selection_stage_.HasNewNodeCreated(),
-						selection_stage_.GetTraversedPath().back().GetEdgeAddon()->GetChosenTimes())) {
-						stage_ = kStageSimulation;
-					}
+				if (selection_stage_.FinishAction(board, result)) {
+					stage_ = kStageSimulation;
 				}
 
 				updater_.PushBackNodes(selection_stage_.GetMutableTraversedPath(), selection_stage_.GetNode());
@@ -133,7 +125,6 @@ namespace mcts
 			if (stage_ == kStageSimulation) return;
 
 			assert(stage_ == kStageSelection);
-
 			selection_stage_.JumpToNodeWithBoard(board);
 		}
 
