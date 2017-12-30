@@ -51,19 +51,21 @@ namespace mcts
 		};
 
 	public:
-		SOMCTS(Statistic<> & statistic,
+		SOMCTS(selection::TreeNode & tree, Statistic<> & statistic, 
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
 			statistic_(statistic), action_cb_(*this),
 			stage_(Stage::kStageSelection), updater_(),
-			selection_stage_(selection_rand), simulation_stage_(simulation_rand)
+			selection_stage_(tree, selection_rand), simulation_stage_(simulation_rand)
 		{}
 
 		SOMCTS(SOMCTS const&) = delete;
 		SOMCTS & operator=(SOMCTS const&) = delete;
+		
+		auto GetRootNode() const { return selection_stage_.GetRootNode(); }
 
-		void StartEpisode(selection::TreeNode * root)
+		void StartIteration()
 		{
-			selection_stage_.SetRootNode(root);
+			selection_stage_.StartIteration();
 			stage_ = kStageSelection;
 			updater_.Clear();
 		}

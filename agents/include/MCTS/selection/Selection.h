@@ -14,18 +14,21 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection(std::mt19937 & rand) :
-				node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
+			Selection(TreeNode & tree, std::mt19937 & rand) :
+				root_(tree), node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
 				new_node_created_(false), pending_randoms_(false)
 			{}
 
 			Selection(Selection const&) = delete;
 			Selection & operator=(Selection const&) = delete;
 
-			// TODO: root node should be managed by this class?
-			void SetRootNode(TreeNode * node) { node_ = node; }
+			auto GetRootNode() const { return &root_; }
 
 			TreeNode* GetNode() const { return node_; }
+			
+			void StartIteration() {
+				node_ = &root_;
+			}
 
 			void StartNewMainActions() {
 				assert(node_);
@@ -153,6 +156,7 @@ namespace mcts
 			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
+			selection::TreeNode & root_;
 			TreeNode * node_;
 			detail::BoardNodeMap * turn_node_map_;
 			std::vector<TraversedNodeInfo> path_;
