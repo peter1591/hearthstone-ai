@@ -128,7 +128,7 @@ namespace mcts
 			selection_stage_.JumpToNodeWithBoard(board);
 		}
 
-		void ActionsFinished(engine::view::Board const& board, engine::Result result)
+		void FinishIteration(engine::view::Board const& board, engine::Result result)
 		{
 			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(board, result);
 			assert(credit >= 0.0);
