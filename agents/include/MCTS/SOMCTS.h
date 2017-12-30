@@ -77,7 +77,7 @@ namespace mcts
 
 		void StartActions() {
 			if (stage_ == kStageSelection) {
-				selection_stage_.StartNewMainActions();
+				selection_stage_.StartActions();
 			}
 		}
 
@@ -102,14 +102,14 @@ namespace mcts
 			else {
 				assert(stage_ == kStageSelection);
 
-				selection_stage_.StartNewMainAction(board);
+				selection_stage_.StartAction(board);
 
 				auto result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
 
-				selection_stage_.FinishMainAction(board, result);
+				selection_stage_.FinishAction(board, result);
 
 				assert(result != engine::kResultInvalid);
 
@@ -134,10 +134,10 @@ namespace mcts
 
 			assert(stage_ == kStageSelection);
 
-			selection_stage_.JumpToBoardNode(board);
+			selection_stage_.JumpToNodeWithBoard(board);
 		}
 
-		void EpisodeFinished(engine::view::Board const& board, engine::Result result)
+		void ActionsFinished(engine::view::Board const& board, engine::Result result)
 		{
 			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(board, result);
 			assert(credit >= 0.0);

@@ -30,7 +30,7 @@ namespace mcts
 				node_ = &root_;
 			}
 
-			void StartNewMainActions() {
+			void StartActions() {
 				assert(node_);
 				assert([](selection::TreeNode * node) {
 					if (!node) return false;
@@ -40,7 +40,7 @@ namespace mcts
 				turn_node_map_ = &node_->GetAddon().board_node_map;
 			}
 
-			void StartNewMainAction(engine::view::Board const& board) {
+			void StartAction(engine::view::Board const& board) {
 				assert(node_);
 				assert([&]() {
 					if (!node_->GetActionType().IsValid()) return true;
@@ -125,7 +125,7 @@ namespace mcts
 				return next_choice;
 			}
 
-			void FinishMainAction(engine::view::Board const& board, engine::Result result) {
+			void FinishAction(engine::view::Board const& board, engine::Result result) {
 				// mark the last action as a redirect node
 				path_.back().ConstructRedirectNode();
 
@@ -145,7 +145,7 @@ namespace mcts
 				if (new_node_created) new_node_created_ = true;
 			}
 
-			void JumpToBoardNode(engine::view::Board const& board) {
+			void JumpToNodeWithBoard(engine::view::Board const& board) {
 				assert(node_);
 				node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 			}

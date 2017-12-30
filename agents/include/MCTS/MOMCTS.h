@@ -39,10 +39,10 @@ namespace mcts
 				assert(result != engine::kResultInvalid);
 				
 				if (result != engine::kResultNotDetermined) {
-					first_.EpisodeFinished(
+					first_.ActionsFinished(
 						side_controller_.GetSideView(StaticConfigs::SideController::Side::First()),
 						result);
-					second_.EpisodeFinished(
+					second_.ActionsFinished(
 						side_controller_.GetSideView(StaticConfigs::SideController::Side::Second()),
 						result);
 					break;
