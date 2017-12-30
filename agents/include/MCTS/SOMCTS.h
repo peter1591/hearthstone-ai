@@ -5,7 +5,6 @@
 
 #include "engine/view/Board.h"
 #include "MCTS/Statistic.h"
-#include "MCTS/builder/TreeUpdater.h"
 #include "MCTS/detail/BoardNodeMap.h"
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
@@ -60,7 +59,7 @@ namespace mcts
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
 			action_cb_(*this), stage_(Stage::kStageSelection),
 			selection_stage_(tree, selection_rand), simulation_stage_(simulation_rand),
-			updater_(), statistic_(statistic)
+			statistic_(statistic)
 		{}
 
 		SOMCTS(SOMCTS const&) = delete;
@@ -72,7 +71,6 @@ namespace mcts
 		{
 			selection_stage_.StartIteration();
 			stage_ = kStageSelection;
-			updater_.Clear();
 		}
 
 		void StartActions() {
@@ -113,7 +111,6 @@ namespace mcts
 					stage_ = kStageSimulation;
 				}
 
-				updater_.PushBackNodes(selection_stage_.GetMutableTraversedPath(), selection_stage_.GetNode());
 				return result;
 			}
 		}
@@ -130,10 +127,7 @@ namespace mcts
 
 		void FinishIteration(engine::view::Board const& board, engine::Result result)
 		{
-			double credit = mcts::StaticConfigs::CreditPolicy::GetCredit(board, result);
-			assert(credit >= 0.0);
-			assert(credit <= 1.0); // TODO: should take into account episilon precision
-			updater_.Update(credit);
+			selection_stage_.FinishIteration(board, result);
 		}
 		
 		int ChooseAction(engine::view::Board const& board, engine::ActionType action_type, engine::ActionChoices const& choices) {
@@ -160,7 +154,6 @@ namespace mcts
 		Stage stage_;
 		selection::Selection selection_stage_;
 		simulation::Simulation simulation_stage_;
-		builder::TreeUpdater updater_;
 		Statistic<> & statistic_;
 	};
 }

@@ -4,6 +4,7 @@
 #include "MCTS/Config.h"
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/selection/TraversedNodeInfo.h"
+#include "MCTS/builder/TreeUpdater.h"
 
 #include "MCTS/selection/ChildNodeMap-impl.h"
 
@@ -16,7 +17,7 @@ namespace mcts
 		public:
 			Selection(TreeNode & tree, std::mt19937 & rand) :
 				root_(tree), node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
-				new_node_created_(false), pending_randoms_(false)
+				new_node_created_(false), pending_randoms_(false), updater_()
 			{}
 
 			Selection(Selection const&) = delete;
@@ -28,6 +29,7 @@ namespace mcts
 			
 			void StartIteration() {
 				node_ = &root_;
+				updater_.Clear();
 			}
 
 			void StartActions() {
@@ -132,6 +134,7 @@ namespace mcts
 
 				if (result != engine::kResultNotDetermined) {
 					node_ = nullptr;
+					updater_.PushBackNodes(path_, node_);
 					return false;
 				}
 
@@ -145,8 +148,12 @@ namespace mcts
 
 				if (new_node_created) new_node_created_ = true;
 
-				return StaticConfigs::StageController::SwitchToSimulation(
+				bool switch_to_simulation = StaticConfigs::StageController::SwitchToSimulation(
 					new_node_created_, path_.back().GetEdgeAddon()->GetChosenTimes());
+
+				updater_.PushBackNodes(path_, node_);
+
+				return switch_to_simulation;
 			}
 
 			void JumpToNodeWithBoard(engine::view::Board const& board) {
@@ -154,7 +161,13 @@ namespace mcts
 				node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
 			}
 
-			std::vector<TraversedNodeInfo> & GetMutableTraversedPath() { return path_; }
+			void FinishIteration(engine::view::Board const& board, engine::Result result)
+			{
+				double credit = StaticConfigs::CreditPolicy::GetCredit(board, result);
+				assert(credit >= 0.0);
+				assert(credit <= 1.0); // TODO: should take into account episilon precision
+				updater_.Update(credit);
+			}
 
 		private:
 			selection::TreeNode & root_;
@@ -165,6 +178,7 @@ namespace mcts
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
 			bool new_node_created_;
 			bool pending_randoms_;
+			builder::TreeUpdater updater_;
 		};
 	}
 }
