@@ -1,5 +1,6 @@
 #pragma once
 
+#include <assert.h>
 #include <unordered_map>
 #include <memory>
 #include "MCTS/selection/EdgeAddon.h"

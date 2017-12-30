@@ -13,7 +13,7 @@ namespace mcts
 		public:
 			TreeUpdater() : last_node_(nullptr), nodes_(), bfs_()
 #ifndef NDEBUG
-				,should_visits_()
+				, should_visits_(), pushed_terminate_node_(false)
 #endif
 			{}
 
@@ -29,18 +29,13 @@ namespace mcts
 
 			void PushTerminateNode(std::vector<selection::TraversedNodeInfo> & nodes, engine::Result result)
 			{
-				selection::TreeNode * node = nullptr;
-				if (result == engine::kResultFirstPlayerWin) {
-					node = mcts::selection::TreeNode::GetFirstPlayerWinNode();
-				}
-				else if (result == engine::kResultDraw) {
-					node = mcts::selection::TreeNode::GetDrawNode();
-				}
-				else {
-					assert(result == engine::kResultSecondPlayerWin);
-					node = mcts::selection::TreeNode::GetSecondPlayerWinNode();
-				}
-				return PushBackNodes(nodes, node);
+				(void)result; // don't need result. we just need push the last node as nullptr.
+				PushBackNodes(nodes, nullptr);
+
+				assert([&]() {
+					pushed_terminate_node_ = true;
+					return true;
+				}());
 			}
 
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
@@ -62,8 +57,9 @@ namespace mcts
 					return true;
 				}());
 
+				assert(!pushed_terminate_node_);
+
 				if (last_node_) {
-					assert(HasLastNode());
 					if (nodes.front().GetNode() != last_node_) {
 						nodes_.emplace_back(last_node_);
 					}
@@ -84,17 +80,13 @@ namespace mcts
 			{
 				last_node_ = nullptr;
 				nodes_.clear();
+				assert([&]() {
+					pushed_terminate_node_ = false;
+					return true;
+				}());
 			}
 
 		private:
-			// Note: should never touch the last_node, since it might be a sink node (win or lose)
-			// sink node is at address 0x1 or 0x2
-			bool HasLastNode() const {
-				if (!last_node_) return false;
-				if (last_node_->IsTerminateNode()) return false;
-				return true;
-			}
-
 			void UpdateChosenTimes() {
 				for (size_t i = 0; i < nodes_.size(); ++i) {
 					auto const& item = nodes_[i];
@@ -105,7 +97,7 @@ namespace mcts
 							next_node_addon = &nodes_[i + 1].GetNode()->GetAddon();
 						}
 						else {
-							if (HasLastNode()) {
+							if (last_node_) {
 								next_node_addon = &last_node_->GetAddon();
 							}
 						}
@@ -215,6 +207,7 @@ namespace mcts
 
 #ifndef NDEBUG
 			std::unordered_set<selection::EdgeAddon*> should_visits_;
+			bool pushed_terminate_node_;
 #endif
 		};
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <random>
 
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/selection/EdgeAddon.h"

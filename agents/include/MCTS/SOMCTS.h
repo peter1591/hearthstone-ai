@@ -17,7 +17,7 @@ namespace mcts
 	// single observer MCTS
 	// Need to support the action 'ApplyOtherTurnAction'
 	// Implementation details:
-	//    Use builder::TreeBuilder to construct the game tree in a Monte-Carlo fashion
+	//    Construct the game tree in a Monte-Carlo fashion
 	//    To support the action 'ApplyOtherTurnAction',
 	//       we use the SOMCTS_TreeNodeAddon to create a hash table for some tree noes
 	//       so we can find a node corresponds to the given board, and step on it
