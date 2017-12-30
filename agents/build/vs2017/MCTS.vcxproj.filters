@@ -161,12 +161,6 @@
     <ClInclude Include="..\..\include\MCTS\simulation\Simulation.h">
       <Filter>Header Files\MCTS\simulation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\TreeNode.h">
-      <Filter>Header Files\MCTS\simulation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\simulation\TreeNodeAddon.h">
-      <Filter>Header Files\MCTS\simulation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\Config.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
