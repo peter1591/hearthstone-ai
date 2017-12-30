@@ -42,8 +42,7 @@ namespace engine {
 		{
 			assert(!targets.empty());
 			int size = (int)targets.size();
-			int idx = 0;
-			if (size > 1) idx = GetNumber(ActionType::kChooseDefender, size);
+			int idx = GetNumber(ActionType::kChooseDefender, size);
 			assert(idx >= 0 && idx < size);
 			int target_idx = targets[idx];
 			return analyzer_.GetCardRefFromTargetIndex(target_idx);
