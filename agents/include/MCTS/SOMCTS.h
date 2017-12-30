@@ -40,7 +40,7 @@ namespace mcts
 				if (action_type != engine::ActionType::kMainAction)
 				{
 					assert(action_choices.Size() > 0);
-					if (action_choices.Size() == 1) return 0;
+					if (action_choices.Size() == 1) return action_choices.Get(0);
 				}
 				return callback_.ChooseAction(*board_, engine::ActionType(action_type), action_choices);
 			}
