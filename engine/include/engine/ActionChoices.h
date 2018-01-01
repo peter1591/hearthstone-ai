@@ -88,14 +88,20 @@ namespace engine
 
 		explicit ActionChoices(ChooseFromCardIds const& v) : item_(v) {}
 
-		static bool HasSameChoices(ActionChoices const& lhs, ActionChoices const& rhs) {
-			// TODO: compare two variants
-			throw std::exception();
-		}
+		ActionChoices() : item_(InvalidChoice()) {}
 
 		template <class T>
 		bool CheckType() const {
 			return std::holds_alternative<T>(item_);
+		}
+
+		template <class Comparator>
+		bool Compare(ActionChoices const& rhs, Comparator&& comparator) const {
+			return std::visit([&](auto&& arg1, auto&& arg2) -> bool {
+				return comparator(
+					std::forward<decltype(arg1)>(arg1),
+					std::forward<decltype(arg2)>(arg2));
+			}, item_, rhs.item_);
 		}
 
 		size_t GetIndex() const { return item_.index(); }

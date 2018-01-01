@@ -47,7 +47,7 @@ namespace mcts
 		class TreeNodeConsistencyCheckAddons
 		{
 		public:
-			TreeNodeConsistencyCheckAddons() : mutex_(), board_view_(), action_type_() {}
+			TreeNodeConsistencyCheckAddons() : mutex_(), board_view_(), action_type_(), action_choices_() {}
 
 			bool SetAndCheck(
 				engine::view::Board const& board,
@@ -57,7 +57,7 @@ namespace mcts
 				std::lock_guard<Utils::SpinLock> lock(mutex_);
 
 				assert(action_type.IsValid());
-				if (!CheckActionType(action_type)) return false;
+				if (!CheckActionTypeAndChoices(action_type, choices)) return false;
 				if (!LockedCheckBoard(board.CreateView())) return false;
 				return true;
 			}
@@ -81,18 +81,43 @@ namespace mcts
 				return *board_view_ == new_view;
 			}
 
-			bool CheckActionType(engine::ActionType action_type) {
+			bool CheckActionTypeAndChoices(engine::ActionType action_type, engine::ActionChoices const& choices) {
 				if (!action_type_.IsValid()) {
 					action_type_ = action_type;
+					action_choices_ = choices;
 					return true;
 				}
-				return action_type_ == action_type;
+
+				if (action_type_ != action_type) return false;
+
+				if (action_choices_.GetIndex() != choices.GetIndex()) return false;
+				if (!action_choices_.Compare(choices, [](auto&& lhs, auto&& rhs) {
+					using Type1 = std::decay_t<decltype(lhs)>;
+					using Type2 = std::decay_t<decltype(rhs)>;
+
+					if constexpr (std::is_same_v<Type1, engine::ActionChoices::ChooseFromCardIds>) {
+						// allow different set of card ids
+						return true;
+					}
+					else if constexpr (std::is_same_v<Type1, engine::ActionChoices::ChooseFromZeroToExclusiveMax>) {
+						return lhs.Size() == rhs.Size();
+					}
+					else if constexpr (std::is_same_v<Type1, engine::ActionChoices::InvalidChoice>) {
+						return false; // should be valid choices
+					}
+					else {
+						return false; // type mismatch
+					}
+				})) return false;
+
+				return true;
 			}
 
 		private:
 			mutable Utils::SpinLock mutex_;
 			std::unique_ptr<engine::view::ReducedBoardView> board_view_;
 			engine::ActionType action_type_;
+			engine::ActionChoices action_choices_;
 		};
 
 		class TreeNodeLeadingNodes
