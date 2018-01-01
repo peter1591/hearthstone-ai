@@ -28,17 +28,6 @@ namespace mcts
 				//LinearlyUpdateWinRate(credit);
 			}
 
-			void PushTerminateNode(std::vector<selection::TraversedNodeInfo> & nodes, engine::Result result)
-			{
-				(void)result; // don't need result. we just need push the last node as nullptr.
-				PushBackNodes(nodes, nullptr);
-
-				assert([&]() {
-					pushed_terminate_node_ = true;
-					return true;
-				}());
-			}
-
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
 			{
 				assert([&]() {
@@ -59,6 +48,13 @@ namespace mcts
 				}());
 
 				assert(!pushed_terminate_node_);
+
+				assert([&]() {
+					if (last_node_ == nullptr) {
+						pushed_terminate_node_ = true;
+					}
+					return true;
+				}());
 
 				if (last_node_) {
 					if (nodes.front().node_ != last_node_) {
