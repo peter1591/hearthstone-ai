@@ -32,11 +32,11 @@ namespace mcts
 
 			void StartActions() {
 				assert(node_);
-				assert([](selection::TreeNode * node) {
-					if (!node) return false;
-					if (!node->GetActionType().IsValid()) return true;
-					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(node_));
+				assert([&]() {
+					if (!node_) return false;
+					if (!node_->GetActionType().IsValid()) return true;
+					return node_->GetActionType().GetType() == engine::ActionType::kMainAction;
+				}());
 				turn_node_map_ = &node_->GetAddon().board_node_map;
 			}
 
@@ -72,8 +72,8 @@ namespace mcts
 				assert(action_type.IsChosenManually());
 				if (path_.HasCurrentNodeMadeChoice()) {
 					path_.ConstructNode();
+					assert(!path_.HasCurrentNodeMadeChoice());
 				}
-				assert(!path_.HasCurrentNodeMadeChoice());
 
 				TreeNode* current_node = path_.GetCurrentNode();
 
@@ -123,32 +123,20 @@ namespace mcts
 
 			// @return  If we should switch to simulation stage
 			bool FinishAction(engine::view::Board const& board, engine::Result result) {
+				assert(path_.HasCurrentNodeMadeChoice()); // at least a ChooseAction() is called
 				// mark the last action as a redirect node
-				path_.ConstructRedirectNode();
+				path_.ConstructRedirectNode(turn_node_map_, board, result);
+				node_ = path_.GetCurrentNode(); // nullptr if game ends
 
-				if (result != engine::kResultNotDetermined) {
-					node_ = nullptr;
-					updater_.PushBackNodes(path_.GetMutablePath(), node_);
-					return false;
+				bool switch_to_simulation = false;
+				if (result == engine::kResultNotDetermined) {
+					switch_to_simulation = StaticConfigs::StageController::SwitchToSimulation(
+						path_.HasNewNodeCreated(),
+						path_.GetPath().back().edge_addon_->GetChosenTimes());
 				}
-
-				bool new_node_created = false;
-				node_ = turn_node_map_->GetOrCreateNode(board, &new_node_created);
-				assert(node_);
-				assert([&](selection::TreeNode* node) {
-					if (!node->GetActionType().IsValid()) return true; // TODO: should not in this case?
-					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}(node_));
-
-				if (!new_node_created) {
-					new_node_created = path_.HasNewNodeCreated();
-				}
-
-				bool switch_to_simulation = StaticConfigs::StageController::SwitchToSimulation(
-					new_node_created, path_.GetPath().back().edge_addon_->GetChosenTimes());
 
 				updater_.PushBackNodes(path_.GetMutablePath(), node_);
-
+				
 				return switch_to_simulation;
 			}
 

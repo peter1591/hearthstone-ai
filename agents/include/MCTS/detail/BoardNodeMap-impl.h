@@ -11,8 +11,6 @@ namespace mcts
 		{
 			std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 
-			if (new_node_created) *new_node_created = false;
-
 			auto & item = GetMap()[board.CreateView()];
 			if (!item) {
 				item.reset(new TreeNode());
