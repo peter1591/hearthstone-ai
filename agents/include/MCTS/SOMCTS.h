@@ -134,7 +134,7 @@ namespace mcts
 			assert(!choices.Empty());
 
 			if (stage_ == kStageSelection) {
-				int choice = selection_stage_.ChooseAction(board, action_type, choices);
+				int choice = selection_stage_.ChooseAction(action_type, choices);
 				assert(choice >= 0); // always return a valid choice
 				return choice;
 			}

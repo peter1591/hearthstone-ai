@@ -50,7 +50,6 @@ namespace mcts
 			TreeNodeConsistencyCheckAddons() : mutex_(), board_view_(), action_type_(), action_choices_() {}
 
 			bool SetAndCheck(
-				engine::view::Board const& board,
 				engine::ActionType action_type,
 				engine::ActionChoices const& choices)
 			{
@@ -58,7 +57,6 @@ namespace mcts
 
 				assert(action_type.IsValid());
 				if (!CheckActionTypeAndChoices(action_type, choices)) return false;
-				if (!LockedCheckBoard(board.CreateView())) return false;
 				return true;
 			}
 

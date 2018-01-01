@@ -17,7 +17,7 @@ namespace mcts
 		public:
 			Selection(TreeNode & tree, std::mt19937 & rand) :
 				root_(tree), node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
-				pending_randoms_(false), updater_()
+				updater_()
 			{}
 
 			Selection(Selection const&) = delete;
@@ -52,20 +52,15 @@ namespace mcts
 				assert(turn_node_map_);
 
 				path_.Restart(node_);
-				pending_randoms_ = false;
 			}
 
 			// @return >= 0 for the chosen action
-			int ChooseAction(
-				engine::view::Board const& board,
-				engine::ActionType action_type,
-				engine::ActionChoices const& choices)
+			int ChooseAction(engine::ActionType action_type, engine::ActionChoices const& choices)
 			{
 				assert(!choices.Empty());
 
 				if (action_type.IsChosenRandomly()) {
 					assert(choices.CheckType<engine::ActionChoices::ChooseFromZeroToExclusiveMax>());
-					pending_randoms_ = true;
 					return random_.GetRandom(choices.Size());
 				}
 
@@ -76,43 +71,7 @@ namespace mcts
 				}
 
 				TreeNode* current_node = path_.GetCurrentNode();
-
-				(void)board;
-				// TODO: debug only
-				if (pending_randoms_) {
-					switch (action_type.GetType()) {
-					case engine::ActionType::kChooseOne:
-						// choose-one card might be triggered after random
-						break;
-
-					default:
-						// Not allow random actions to be conducted first before any sub-action
-						// That is, the player
-						//    1. Choose the hand card
-						//    2. Choose minion put location
-						// Then, random gets started
-						// Similar to other sub-actions
-						assert(false);
-						throw std::runtime_error("not allow random to be conducted before any sub-action.");
-					}
-
-					// Check if the board-view and sub-action-type are consistency
-					// Currently, we have an assumption that
-					//    * A random action can be swapped to the end of a sub-action sequence
-					//      without any distinguishable difference
-					// But, it may not be this case if...
-					//    1. You have a 50% chance to choose a card
-					//    2. Summon a random minion, then choose a card
-					// In both cases, a random node should be added before the sub-action 'choose-a-card'
-					// From a game-play view, that is to say
-					//    The random outcome *influences* the player's decision
-					// So, if this assertion failed
-					//    It means a random node is necessary before this node
-					assert(current_node->GetAddon().consistency_checker.SetAndCheck(board, action_type, choices));
-				}
-				else {
-					assert(current_node->GetAddon().consistency_checker.SetAndCheck(board, action_type, choices));
-				}
+				assert(current_node->GetAddon().consistency_checker.SetAndCheck(action_type, choices));
 
 				int next_choice = current_node->Select(action_type, choices, policy_);
 				assert(next_choice >= 0); // should report a valid action
@@ -160,7 +119,6 @@ namespace mcts
 			TraversedNodesInfo path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
-			bool pending_randoms_;
 			TreeUpdater updater_;
 		};
 	}
