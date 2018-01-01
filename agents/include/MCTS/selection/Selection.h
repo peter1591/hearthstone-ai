@@ -72,7 +72,9 @@ namespace mcts
 				}
 
 				assert(action_type.IsChosenManually());
-				path_.ConstructNode();
+				if (path_.HasCurrentNodeMadeChoice()) {
+					path_.ConstructNode();
+				}
 				assert(!path_.HasCurrentNodeMadeChoice());
 
 				TreeNode* current_node = path_.GetCurrentNode();
