@@ -26,7 +26,6 @@ namespace mcts
 
 			void StartIteration() {
 				path_.Restart(&root_);
-				updater_.Clear();
 			}
 
 			void StartActions() {
@@ -101,12 +100,10 @@ namespace mcts
 
 			void FinishIteration(engine::view::Board const& board, engine::Result result)
 			{
-				updater_.PushBackNodes(path_.GetMutablePath(), path_.GetCurrentNode());
-
 				double credit = StaticConfigs::CreditPolicy::GetCredit(board, result);
 				assert(credit >= 0.0);
 				assert(credit <= 1.0); // TODO: should take into account episilon precision
-				updater_.Update(credit);
+				updater_.Update(path_.GetPath(), path_.GetCurrentNode(), credit);
 			}
 
 		private:

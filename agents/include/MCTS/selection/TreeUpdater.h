@@ -12,69 +12,42 @@ namespace mcts
 		class TreeUpdater
 		{
 		public:
-			TreeUpdater() : last_node_(nullptr), nodes_(), bfs_()
+			TreeUpdater() : bfs_()
 #ifndef NDEBUG
-				, should_visits_(), pushed_terminate_node_(false)
+				, should_visits_()
 #endif
 			{}
 
 			TreeUpdater(TreeUpdater const&) = delete;
 			TreeUpdater & operator=(TreeUpdater const&) = delete;
 
-			void Update(double credit)
+			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, selection::TreeNode * last_node, double credit)
 			{
-				UpdateChosenTimes();
-				TreeLikeUpdateWinRate(credit);
-				//LinearlyUpdateWinRate(credit);
-			}
-
-			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
-			{
-				assert(!pushed_terminate_node_);
-
-				assert([&]() {
-					if (last_node_ == nullptr) {
-						pushed_terminate_node_ = true;
-					}
-					return true;
-				}());
-
-				assert(!last_node_);
-				last_node_ = last_node;
-
 				for (auto & new_node : nodes) {
 					auto * edge_addon = new_node.edge_addon_;
 					if (edge_addon) {
 						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
 					}
-					nodes_.emplace_back(std::move(new_node));
 				}
-				nodes.clear();
-			}
 
-			void Clear()
-			{
-				last_node_ = nullptr;
-				nodes_.clear();
-				assert([&]() {
-					pushed_terminate_node_ = false;
-					return true;
-				}());
+				UpdateChosenTimes(nodes, last_node);
+				TreeLikeUpdateWinRate(nodes, credit);
+				//LinearlyUpdateWinRate(credit);
 			}
 
 		private:
-			void UpdateChosenTimes() {
-				for (size_t i = 0; i < nodes_.size(); ++i) {
-					auto const& item = nodes_[i];
+			void UpdateChosenTimes(std::vector<selection::TraversedNodeInfo> const& nodes, selection::TreeNode * last_node) {
+				for (size_t i = 0; i < nodes.size(); ++i) {
+					auto const& item = nodes[i];
 
 					if (item.choice_ >= 0) {
 						selection::TreeNodeAddon * next_node_addon = nullptr;
-						if ((i + 1) < nodes_.size()) {
-							next_node_addon = &nodes_[i + 1].node_->GetAddon();
+						if ((i + 1) < nodes.size()) {
+							next_node_addon = &nodes[i + 1].node_->GetAddon();
 						}
 						else {
-							if (last_node_) {
-								next_node_addon = &last_node_->GetAddon();
+							if (last_node) {
+								next_node_addon = &last_node->GetAddon();
 							}
 						}
 
@@ -94,8 +67,8 @@ namespace mcts
 				}
 			}
 
-			void LinearlyUpdateWinRate(double credit) {
-				for (auto const& item : nodes_) {
+			void LinearlyUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, double credit) {
+				for (auto const& item : nodes) {
 					auto * edge_addon = item.edge_addon_;
 					if (!edge_addon) continue;
 
@@ -104,12 +77,12 @@ namespace mcts
 				}
 			}
 
-			void TreeLikeUpdateWinRate(double credit) {
-				if (nodes_.empty()) return;
+			void TreeLikeUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, double credit) {
+				if (nodes.empty()) return;
 
 				assert([&](){
 					should_visits_.clear();
-					for (auto const& item : nodes_) {
+					for (auto const& item : nodes) {
 						if (item.edge_addon_) {
 							should_visits_.insert(item.edge_addon_);
 						}
@@ -117,21 +90,18 @@ namespace mcts
 					return true;
 				}());
 
-				auto it = nodes_.rbegin();
-				while (it != nodes_.rend()) {
-					TreeLikeUpdateWinRate(
-						it->node_,
-						it->choice_,
-						credit);
+				auto it = nodes.rbegin();
+				while (it != nodes.rend()) {
+					TreeLikeUpdateWinRate(it->node_, it->choice_, credit);
 
 					// skip to next redirect node
 					// all intermediate nodes are already updated
 					++it;
-					while (it != nodes_.rend()) {
+					while (it != nodes.rend()) {
 						if (it->choice_ < 0) break;
 						++it;
 					}
-					if (it == nodes_.rend()) break;
+					if (it == nodes.rend()) break;
 
 					assert(it->edge_addon_ == nullptr);
 					++it;
@@ -172,9 +142,6 @@ namespace mcts
 			}
 
 		private:
-			selection::TreeNode * last_node_;
-			std::vector<selection::TraversedNodeInfo> nodes_;
-
 			struct Item {
 				selection::TreeNode * node;
 				int choice;
@@ -183,7 +150,6 @@ namespace mcts
 
 #ifndef NDEBUG
 			std::unordered_set<selection::EdgeAddon*> should_visits_;
-			bool pushed_terminate_node_;
 #endif
 		};
 	}

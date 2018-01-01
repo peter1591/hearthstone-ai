@@ -45,7 +45,7 @@ namespace mcts
 				assert(pending_choice_ >= 0);
 
 				auto result = current_node_->FollowChoice(pending_choice_);
-				path_.emplace_back(current_node_, pending_choice_, &result.edge_addon);
+				AddPathNode(current_node_, pending_choice_, &result.edge_addon);
 				new_node_created_ = result.just_expanded;
 				
 				assert(result.node);
@@ -57,7 +57,7 @@ namespace mcts
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 				auto & edge_addon = current_node_->MarkChoiceRedirect(pending_choice_);
-				path_.emplace_back(current_node_, pending_choice_, &edge_addon);
+				AddPathNode(current_node_, pending_choice_, &edge_addon);
 
 				if (result != engine::kResultNotDetermined) {
 					// Don't need to construct a node for leave nodes.
@@ -79,14 +79,18 @@ namespace mcts
 			void JumpToNode(engine::view::Board const& board) {
 				assert(current_node_);
 				assert(pending_choice_ < 0);
-				path_.emplace_back(current_node_, -1, nullptr);
+				AddPathNode(current_node_, -1, nullptr);
 				current_node_ = current_node_->GetAddon().board_node_map.GetOrCreateNode(board);
 			}
 
-			auto & GetMutablePath() { return path_; }
 			auto const& GetPath() const { return path_; }
 
 			bool HasNewNodeCreated() const { return new_node_created_; }
+
+		private:
+			void AddPathNode(TreeNode * node, int choice, EdgeAddon * edge_addon) {
+				path_.emplace_back(node, choice, edge_addon);
+			}
 
 		private:
 			std::vector<TraversedNodeInfo> path_;
