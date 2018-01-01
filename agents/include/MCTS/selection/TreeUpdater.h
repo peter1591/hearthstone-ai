@@ -45,14 +45,14 @@ namespace mcts
 					for (size_t i = 0; i < nodes.size(); ++i) {
 						auto const& item = nodes[i];
 						
-						if (!item.GetNode()) return false;
+						if (!item.node_) return false;
 
 						// every node should have an edge to the next node,
-						if (!item.GetEdgeAddon()) return false;
+						if (!item.edge_addon_) return false;
 
 						if (i > 0) {
-							if (nodes[i - 1].GetNode()->GetChildNode(nodes[i - 1].GetChoice())
-								!= nodes[i].GetNode()) return false;
+							if (nodes[i - 1].node_->GetChildNode(nodes[i - 1].choice_)
+								!= nodes[i].node_) return false;
 						}
 					}
 					return true;
@@ -61,14 +61,14 @@ namespace mcts
 				assert(!pushed_terminate_node_);
 
 				if (last_node_) {
-					if (nodes.front().GetNode() != last_node_) {
-						nodes_.emplace_back(last_node_);
+					if (nodes.front().node_ != last_node_) {
+						nodes_.emplace_back(last_node_, -1, nullptr);
 					}
 				}
 				last_node_ = last_node;
 
 				for (auto & new_node : nodes) {
-					auto * edge_addon = new_node.GetEdgeAddon();
+					auto * edge_addon = new_node.edge_addon_;
 					if (edge_addon) {
 						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
 					}
@@ -92,10 +92,10 @@ namespace mcts
 				for (size_t i = 0; i < nodes_.size(); ++i) {
 					auto const& item = nodes_[i];
 
-					if (item.GetChoice() >= 0) {
+					if (item.choice_ >= 0) {
 						selection::TreeNodeAddon * next_node_addon = nullptr;
 						if ((i + 1) < nodes_.size()) {
-							next_node_addon = &nodes_[i + 1].GetNode()->GetAddon();
+							next_node_addon = &nodes_[i + 1].node_->GetAddon();
 						}
 						else {
 							if (last_node_) {
@@ -105,12 +105,12 @@ namespace mcts
 
 						if (next_node_addon) {
 							next_node_addon->leading_nodes.AddLeadingNodes(
-								item.GetNode(), item.GetChoice());
+								item.node_, item.choice_);
 						}
 					}
 
-					if (item.GetEdgeAddon()) {
-						auto & edge_addon = *item.GetEdgeAddon();
+					if (item.edge_addon_) {
+						auto & edge_addon = *item.edge_addon_;
 						edge_addon.AddChosenTimes(1);
 
 						edge_addon.AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
@@ -121,7 +121,7 @@ namespace mcts
 
 			void LinearlyUpdateWinRate(double credit) {
 				for (auto const& item : nodes_) {
-					auto * edge_addon = item.GetEdgeAddon();
+					auto * edge_addon = item.edge_addon_;
 					if (!edge_addon) continue;
 
 					edge_addon->AddTotal(100);
@@ -135,8 +135,8 @@ namespace mcts
 				assert([&](){
 					should_visits_.clear();
 					for (auto const& item : nodes_) {
-						if (item.GetEdgeAddon()) {
-							should_visits_.insert(item.GetEdgeAddon());
+						if (item.edge_addon_) {
+							should_visits_.insert(item.edge_addon_);
 						}
 					}
 					return true;
@@ -145,20 +145,20 @@ namespace mcts
 				auto it = nodes_.rbegin();
 				while (it != nodes_.rend()) {
 					TreeLikeUpdateWinRate(
-						it->GetNode(),
-						it->GetChoice(),
+						it->node_,
+						it->choice_,
 						credit);
 
 					// skip to next redirect node
 					// all intermediate nodes are already updated
 					++it;
 					while (it != nodes_.rend()) {
-						if (it->GetChoice() < 0) break;
+						if (it->choice_ < 0) break;
 						++it;
 					}
 					if (it == nodes_.rend()) break;
 
-					assert(it->GetEdgeAddon() == nullptr);
+					assert(it->edge_addon_ == nullptr);
 					++it;
 				}
 

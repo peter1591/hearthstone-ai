@@ -6,38 +6,38 @@ namespace mcts
 {
 	namespace selection
 	{
-		class TraversedNodeInfo
-		{
+		struct TraversedNodeInfo {
+			TreeNode* node_;
+			int choice_; // choice lead to next node
+			EdgeAddon * edge_addon_;
+
+			TraversedNodeInfo(TreeNode* node, int choice, EdgeAddon * edge_addon) :
+				node_(node), choice_(choice), edge_addon_(edge_addon)
+			{}
+		};
+
+		class TraversedNodesInfo {
 		public:
-			TraversedNodeInfo(TreeNode* node) : node_(node), choice_(-1), edge_addon_(nullptr) {}
+			TraversedNodesInfo() : path_(), new_node_created_(false), pending_choice_(-1) {}
 
-			TreeNode* GetNode() const { return node_; }
-			int GetChoice() const { return choice_; }
-			EdgeAddon* GetEdgeAddon() const { return edge_addon_; }
-
-			bool HasMadeChoice() const { return choice_ >= 0; }
-
-		public:
-			void MakeChoice(int choice)
-			{
-				assert(!HasMadeChoice());
-				choice_ = choice;
+			void Restart(TreeNode * node) {
+				path_.clear();
+				current_node_ = node;
+				assert(current_node_);
+				new_node_created_ = false;
+				pending_choice_ = -1;
 			}
 
-			TreeNode* ConstructNextNode(bool * new_node_created)
-			{
-				assert(choice_ >= 0);
-				auto result = node_->FollowChoice(choice_);
-				edge_addon_ = &result.edge_addon;
-				*new_node_created = result.just_expanded;
-				assert(result.node);
-				return result.node;
+			void ConstructNode() {
+				if (pending_choice_ >= 0) {
+					TreeNode* new_node = AddNodeToPath();
+					assert(new_node);
+					current_node_ = new_node;
+					pending_choice_ = -1;
+				}
 			}
 
-			void ConstructRedirectNode()
-			{
-				assert(choice_ >= 0);
-
+			void ConstructRedirectNode() {
 				// The reason we need to construct a redirect node is:
 				// we need edge addon to record the win-rate and so on...
 				// Note that, from a specific node, it may leads to DIFFERENT redirect nodes
@@ -47,55 +47,19 @@ namespace mcts
 				// and these nodes are leads from a same node
 				// In this sense, we do not need to know which redirect node it redirects to
 				// only mark it as a redirect node, and use its edge addon
-				edge_addon_ = &node_->MarkChoiceRedirect(choice_);
-			}
-
-			TreeNode* GetNextNode() {
-				assert(choice_ >= 0);
-				assert(node_);
-				return node_->GetChildNode(choice_);
-			}
-
-		private:
-			TreeNode* node_;
-			int choice_; // choice lead to next node
-			EdgeAddon * edge_addon_;
-		};
-
-		class TraversedNodesInfo {
-		public:
-			TraversedNodesInfo() : path_(), new_node_created_(false) {}
-
-			bool Empty() const { return path_.empty(); }
-
-			void Restart(TreeNode * node) {
-				path_.clear();
-				path_.emplace_back(node);
-				new_node_created_ = false;
-			}
-
-			void ConstructNodeForCurrentNode() {
-				if (path_.back().HasMadeChoice()) {
-					TreeNode* new_node = path_.back().ConstructNextNode(&new_node_created_);
-					assert(new_node);
-					path_.emplace_back(new_node);
-				}
-			}
-
-			void ConstructRedirectNodeForCurrentNode() {
-				path_.back().ConstructRedirectNode();
-			}
-
-			bool HasCurrentNodeMadeChoice() const {
-				return path_.back().HasMadeChoice();
+				AddRedirectNodeToPath();
 			}
 
 			TreeNode * GetCurrentNode() const {
-				return path_.back().GetNode();
+				return current_node_;
 			}
 
 			void MakeChoiceForCurrentNode(int choice) {
-				path_.back().MakeChoice(choice);
+				pending_choice_ = choice;
+			}
+
+			bool HasCurrentNodeMadeChoice() const {
+				return pending_choice_ >= 0;
 			}
 
 			auto & GetMutablePath() { return path_; }
@@ -104,8 +68,27 @@ namespace mcts
 			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
+			TreeNode* AddNodeToPath() {
+				assert(current_node_);
+				assert(pending_choice_ >= 0);
+				auto result = current_node_->FollowChoice(pending_choice_);
+				path_.emplace_back(current_node_, pending_choice_, &result.edge_addon);
+				new_node_created_ = result.just_expanded;
+				return result.node;
+			}
+
+			void AddRedirectNodeToPath() {
+				assert(current_node_);
+				assert(pending_choice_ >= 0);
+				auto & edge_addon = current_node_->MarkChoiceRedirect(pending_choice_);
+				path_.emplace_back(current_node_, pending_choice_, &edge_addon);
+			}
+
+		private:
 			std::vector<TraversedNodeInfo> path_;
 			bool new_node_created_;
+			TreeNode * current_node_;
+			int pending_choice_;
 		};
 	}
 }

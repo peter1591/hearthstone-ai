@@ -72,8 +72,7 @@ namespace mcts
 				}
 
 				assert(action_type.IsChosenManually());
-				assert(!path_.Empty());
-				path_.ConstructNodeForCurrentNode();
+				path_.ConstructNode();
 				assert(!path_.HasCurrentNodeMadeChoice());
 
 				TreeNode* current_node = path_.GetCurrentNode();
@@ -125,7 +124,7 @@ namespace mcts
 			// @return  If we should switch to simulation stage
 			bool FinishAction(engine::view::Board const& board, engine::Result result) {
 				// mark the last action as a redirect node
-				path_.ConstructRedirectNodeForCurrentNode();
+				path_.ConstructRedirectNode();
 
 				if (result != engine::kResultNotDetermined) {
 					node_ = nullptr;
@@ -146,7 +145,7 @@ namespace mcts
 				}
 
 				bool switch_to_simulation = StaticConfigs::StageController::SwitchToSimulation(
-					new_node_created, path_.GetPath().back().GetEdgeAddon()->GetChosenTimes());
+					new_node_created, path_.GetPath().back().edge_addon_->GetChosenTimes());
 
 				updater_.PushBackNodes(path_.GetMutablePath(), node_);
 
