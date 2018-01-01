@@ -3,8 +3,7 @@
 #include <assert.h>
 #include "MCTS/Config.h"
 #include "MCTS/selection/TreeNode.h"
-#include "MCTS/selection/TraversedNodeInfo.h"
-#include "MCTS/selection/TreeUpdater.h"
+#include "MCTS/selection/TraversedNodesInfo.h"
 
 #include "MCTS/selection/ChildNodeMap-impl.h"
 
@@ -16,7 +15,7 @@ namespace mcts
 		{
 		public:
 			Selection(TreeNode & tree, std::mt19937 & rand) :
-				root_(tree), turn_node_map_(nullptr), path_(), random_(rand), policy_(), updater_()
+				root_(tree), turn_node_map_(nullptr), path_(), random_(rand), policy_()
 			{}
 
 			Selection(Selection const&) = delete;
@@ -103,7 +102,7 @@ namespace mcts
 				double credit = StaticConfigs::CreditPolicy::GetCredit(board, result);
 				assert(credit >= 0.0);
 				assert(credit <= 1.0); // TODO: should take into account episilon precision
-				updater_.Update(path_.GetPath(), path_.GetCurrentNode(), credit);
+				path_.Update(credit);
 			}
 
 		private:
@@ -112,7 +111,6 @@ namespace mcts
 			TraversedNodesInfo path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
-			TreeUpdater updater_;
 		};
 	}
 }

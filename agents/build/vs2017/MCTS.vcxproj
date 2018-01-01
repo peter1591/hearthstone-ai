@@ -225,6 +225,7 @@
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodeInfo.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\TraversedNodesInfo.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNode.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeNodeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\selection\TreeUpdater.h" />
