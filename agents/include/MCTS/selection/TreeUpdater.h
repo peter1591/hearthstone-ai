@@ -51,13 +51,10 @@ namespace mcts
 					}
 
 					if (item.edge_addon_) {
-						auto & edge_addon = *item.edge_addon_;
-						edge_addon.AddChosenTimes(1);
-
 						if constexpr (StaticConfigs::kVirtualLoss != 0) {
 							static_assert(StaticConfigs::kVirtualLoss > 0);
-							edge_addon.AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
-							assert(edge_addon.GetTotal() >= 0);
+							item.edge_addon_->AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
+							assert(item.edge_addon_->GetTotal() >= 0);
 						}
 					}
 				}
