@@ -25,6 +25,10 @@ namespace mcts
 					return engine::kResultNotDetermined;
 				}
 			}
+			
+			void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+				select_.StartAction(board, action_analyzer);
+			}
 
 			int ChooseAction(
 				engine::view::Board const& board,

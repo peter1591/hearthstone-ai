@@ -46,6 +46,11 @@ namespace mcts
 					return engine::kResultNotDetermined;
 				}
 
+				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+					(void)board;
+					(void)action_analyzer;
+				}
+
 				int GetChoice(
 					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
@@ -401,8 +406,12 @@ namespace mcts
 				{
 				}
 
+				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+					(void)board;
+					(void)action_analyzer;
+				}
+
 				int GetChoice(
-					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -451,8 +460,12 @@ namespace mcts
 				{
 				}
 
+				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+					(void)board;
+					(void)action_analyzer;
+				}
+
 				int GetChoice(
-					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -503,8 +516,12 @@ namespace mcts
 				{
 				}
 
+				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+					(void)board;
+					(void)action_analyzer;
+				}
+
 				int GetChoice(
-					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -574,21 +591,20 @@ namespace mcts
 				{
 				}
 
+				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+					StartNewAction(board, action_analyzer);
+				}
+
 				int GetChoice(
-					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
 				{
-					if (action_type == engine::ActionType::kMainAction) {
-						StartNewAction(board, action_analyzer);
-					}
-
 					if constexpr (kRandomlyPutMinions) {
-						return GetChoiceRandomly(board, action_analyzer, choice_getter);
+						return GetChoiceRandomly(action_analyzer, choice_getter);
 					}
 					else {
-						return GetChoiceForMainAction(board, action_analyzer, choice_getter);
+						return GetChoiceForMainAction(action_analyzer, choice_getter);
 					}
 				}
 
@@ -737,7 +753,6 @@ namespace mcts
 				}
 
 				int GetChoiceForMainAction(
-					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{
@@ -750,11 +765,10 @@ namespace mcts
 					// For example, a choose-one with randomly-chosen three cards,
 					// we definitely need to re-run the DFS after the random cards are shown.
 					// Here, use a pure random choice in these cases
-					return GetChoiceRandomly(board, action_analyzer, choice_getter);
+					return GetChoiceRandomly(action_analyzer, choice_getter);
 				}
 
 				int GetChoiceRandomly(
-					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					ChoiceGetter const& choice_getter)
 				{

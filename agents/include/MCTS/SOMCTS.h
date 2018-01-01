@@ -89,6 +89,8 @@ namespace mcts
 				engine::Result result = simulation_stage_.CutoffCheck(board);
 				assert(result != engine::kResultInvalid);
 				if (result != engine::kResultNotDetermined) return result;
+				
+				simulation_stage_.StartAction(board, action_cb_.GetAnalyzer());
 
 				result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
