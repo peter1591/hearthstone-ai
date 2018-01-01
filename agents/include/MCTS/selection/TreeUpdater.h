@@ -23,13 +23,6 @@ namespace mcts
 
 			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, selection::TreeNode * last_node, double credit)
 			{
-				for (auto & new_node : nodes) {
-					auto * edge_addon = new_node.edge_addon_;
-					if (edge_addon) {
-						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
-					}
-				}
-
 				UpdateChosenTimes(nodes, last_node);
 				TreeLikeUpdateWinRate(nodes, credit);
 				//LinearlyUpdateWinRate(credit);
@@ -61,8 +54,11 @@ namespace mcts
 						auto & edge_addon = *item.edge_addon_;
 						edge_addon.AddChosenTimes(1);
 
-						edge_addon.AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
-						assert(edge_addon.GetTotal() >= 0);
+						if constexpr (StaticConfigs::kVirtualLoss != 0) {
+							static_assert(StaticConfigs::kVirtualLoss > 0);
+							edge_addon.AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
+							assert(edge_addon.GetTotal() >= 0);
+						}
 					}
 				}
 			}

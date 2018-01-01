@@ -90,6 +90,13 @@ namespace mcts
 		private:
 			void AddPathNode(TreeNode * node, int choice, EdgeAddon * edge_addon) {
 				path_.emplace_back(node, choice, edge_addon);
+
+				if constexpr (StaticConfigs::kVirtualLoss != 0) {
+					static_assert(StaticConfigs::kVirtualLoss > 0);
+					if (edge_addon) {
+						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
+					}
+				}
 			}
 
 		private:
