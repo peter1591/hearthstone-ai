@@ -63,15 +63,24 @@ namespace mcts
 					// Don't need to construct a node for leave nodes.
 					// We only need the edge to record win-rate, which is already got before.
 					current_node_ = nullptr;
+					pending_choice_ = -1;
 				}
 				else {
 					current_node_ = turn_node_map->GetOrCreateNode(board, &new_node_created_);
+					pending_choice_ = -1;
 					assert(current_node_);
 					assert([&](selection::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
 					}(current_node_));
 				}
+			}
+
+			void JumpToNode(engine::view::Board const& board) {
+				assert(current_node_);
+				assert(pending_choice_ < 0);
+				path_.emplace_back(current_node_, -1, nullptr);
+				current_node_ = current_node_->GetAddon().board_node_map.GetOrCreateNode(board);
 			}
 
 			auto & GetMutablePath() { return path_; }

@@ -30,23 +30,6 @@ namespace mcts
 
 			void PushBackNodes(std::vector<selection::TraversedNodeInfo> & nodes, selection::TreeNode * last_node)
 			{
-				assert([&]() {
-					for (size_t i = 0; i < nodes.size(); ++i) {
-						auto const& item = nodes[i];
-						
-						if (!item.node_) return false;
-
-						// every node should have an edge to the next node,
-						if (!item.edge_addon_) return false;
-
-						if (i > 0) {
-							if (nodes[i - 1].node_->GetChildNode(nodes[i - 1].choice_)
-								!= nodes[i].node_) return false;
-						}
-					}
-					return true;
-				}());
-
 				assert(!pushed_terminate_node_);
 
 				assert([&]() {
@@ -56,11 +39,7 @@ namespace mcts
 					return true;
 				}());
 
-				if (last_node_) {
-					if (nodes.front().node_ != last_node_) {
-						nodes_.emplace_back(last_node_, -1, nullptr);
-					}
-				}
+				assert(!last_node_);
 				last_node_ = last_node;
 
 				for (auto & new_node : nodes) {

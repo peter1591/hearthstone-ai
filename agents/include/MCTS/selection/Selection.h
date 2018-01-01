@@ -16,8 +16,7 @@ namespace mcts
 		{
 		public:
 			Selection(TreeNode & tree, std::mt19937 & rand) :
-				root_(tree), node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
-				updater_()
+				root_(tree), turn_node_map_(nullptr), path_(), random_(rand), policy_(), updater_()
 			{}
 
 			Selection(Selection const&) = delete;
@@ -26,32 +25,32 @@ namespace mcts
 			auto GetRootNode() const { return &root_; }
 
 			void StartIteration() {
-				node_ = &root_;
+				path_.Restart(&root_);
 				updater_.Clear();
 			}
 
 			void StartActions() {
-				assert(node_);
+				auto current_node = path_.GetCurrentNode();
+				assert(current_node);
 				assert([&]() {
-					if (!node_) return false;
-					if (!node_->GetActionType().IsValid()) return true;
-					return node_->GetActionType().GetType() == engine::ActionType::kMainAction;
+					if (!current_node) return false;
+					if (!current_node->GetActionType().IsValid()) return true;
+					return current_node->GetActionType().GetType() == engine::ActionType::kMainAction;
 				}());
-				turn_node_map_ = &node_->GetAddon().board_node_map;
+				turn_node_map_ = &current_node->GetAddon().board_node_map;
 			}
 
 			void StartAction(engine::view::Board const& board) {
-				assert(node_);
+				auto current_node = path_.GetCurrentNode();
+				assert(current_node);
 				assert([&]() {
-					if (!node_->GetActionType().IsValid()) return true;
-					return node_->GetActionType().GetType() == engine::ActionType::kMainAction;
+					if (!current_node->GetActionType().IsValid()) return true;
+					return current_node->GetActionType().GetType() == engine::ActionType::kMainAction;
 				}());
 				(void)board;
-				assert(node_->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
+				assert(current_node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 				
 				assert(turn_node_map_);
-
-				path_.Restart(node_);
 			}
 
 			// @return >= 0 for the chosen action
@@ -85,7 +84,6 @@ namespace mcts
 				assert(path_.HasCurrentNodeMadeChoice()); // at least a ChooseAction() is called
 				// mark the last action as a redirect node
 				path_.ConstructRedirectNode(turn_node_map_, board, result);
-				node_ = path_.GetCurrentNode(); // nullptr if game ends
 
 				bool switch_to_simulation = false;
 				if (result == engine::kResultNotDetermined) {
@@ -94,18 +92,17 @@ namespace mcts
 						path_.GetPath().back().edge_addon_->GetChosenTimes());
 				}
 
-				updater_.PushBackNodes(path_.GetMutablePath(), node_);
-				
 				return switch_to_simulation;
 			}
 
 			void JumpToNodeWithBoard(engine::view::Board const& board) {
-				assert(node_);
-				node_ = node_->GetAddon().board_node_map.GetOrCreateNode(board);
+				path_.JumpToNode(board);
 			}
 
 			void FinishIteration(engine::view::Board const& board, engine::Result result)
 			{
+				updater_.PushBackNodes(path_.GetMutablePath(), path_.GetCurrentNode());
+
 				double credit = StaticConfigs::CreditPolicy::GetCredit(board, result);
 				assert(credit >= 0.0);
 				assert(credit <= 1.0); // TODO: should take into account episilon precision
@@ -114,7 +111,6 @@ namespace mcts
 
 		private:
 			TreeNode & root_;
-			TreeNode * node_;
 			detail::BoardNodeMap * turn_node_map_;
 			TraversedNodesInfo path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
