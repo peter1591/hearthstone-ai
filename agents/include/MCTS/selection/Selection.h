@@ -25,8 +25,6 @@ namespace mcts
 
 			auto GetRootNode() const { return &root_; }
 
-			TreeNode* GetNode() const { return node_; }
-			
 			void StartIteration() {
 				node_ = &root_;
 				updater_.Clear();
