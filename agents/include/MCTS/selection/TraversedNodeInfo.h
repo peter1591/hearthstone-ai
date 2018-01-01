@@ -61,5 +61,51 @@ namespace mcts
 			int choice_; // choice lead to next node
 			EdgeAddon * edge_addon_;
 		};
+
+		class TraversedNodesInfo {
+		public:
+			TraversedNodesInfo() : path_(), new_node_created_(false) {}
+
+			bool Empty() const { return path_.empty(); }
+
+			void Restart(TreeNode * node) {
+				path_.clear();
+				path_.emplace_back(node);
+				new_node_created_ = false;
+			}
+
+			void ConstructNodeForCurrentNode() {
+				if (path_.back().HasMadeChoice()) {
+					TreeNode* new_node = path_.back().ConstructNextNode(&new_node_created_);
+					assert(new_node);
+					path_.emplace_back(new_node);
+				}
+			}
+
+			void ConstructRedirectNodeForCurrentNode() {
+				path_.back().ConstructRedirectNode();
+			}
+
+			bool HasCurrentNodeMadeChoice() const {
+				return path_.back().HasMadeChoice();
+			}
+
+			TreeNode * GetCurrentNode() const {
+				return path_.back().GetNode();
+			}
+
+			void MakeChoiceForCurrentNode(int choice) {
+				path_.back().MakeChoice(choice);
+			}
+
+			auto & GetMutablePath() { return path_; }
+			auto const& GetPath() const { return path_; }
+
+			bool HasNewNodeCreated() const { return new_node_created_; }
+
+		private:
+			std::vector<TraversedNodeInfo> path_;
+			bool new_node_created_;
+		};
 	}
 }

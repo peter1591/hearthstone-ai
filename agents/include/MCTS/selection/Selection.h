@@ -17,7 +17,7 @@ namespace mcts
 		public:
 			Selection(TreeNode & tree, std::mt19937 & rand) :
 				root_(tree), node_(nullptr), turn_node_map_(nullptr), path_(), random_(rand), policy_(),
-				new_node_created_(false), pending_randoms_(false), updater_()
+				pending_randoms_(false), updater_()
 			{}
 
 			Selection(Selection const&) = delete;
@@ -53,9 +53,7 @@ namespace mcts
 				
 				assert(turn_node_map_);
 
-				path_.clear();
-				path_.emplace_back(node_);
-				new_node_created_ = false;
+				path_.Restart(node_);
 				pending_randoms_ = false;
 			}
 
@@ -74,16 +72,14 @@ namespace mcts
 				}
 
 				assert(action_type.IsChosenManually());
-				assert(!path_.empty());
-				if (path_.back().HasMadeChoice()) {
-					TreeNode* new_node = path_.back().ConstructNextNode(&new_node_created_);
-					assert(new_node);
-					path_.emplace_back(new_node);
-				}
+				assert(!path_.Empty());
+				path_.ConstructNodeForCurrentNode();
+				assert(!path_.HasCurrentNodeMadeChoice());
 
-				assert(!path_.back().HasMadeChoice());
-				TreeNode* current_node = path_.back().GetNode();
+				TreeNode* current_node = path_.GetCurrentNode();
 
+				(void)board;
+				// TODO: debug only
 				if (pending_randoms_) {
 					switch (action_type.GetType()) {
 					case engine::ActionType::kChooseOne:
@@ -121,8 +117,7 @@ namespace mcts
 
 				int next_choice = current_node->Select(action_type, choices, policy_);
 				assert(next_choice >= 0); // should report a valid action
-
-				path_.back().MakeChoice(next_choice);
+				path_.MakeChoiceForCurrentNode(next_choice);
 
 				return next_choice;
 			}
@@ -130,11 +125,11 @@ namespace mcts
 			// @return  If we should switch to simulation stage
 			bool FinishAction(engine::view::Board const& board, engine::Result result) {
 				// mark the last action as a redirect node
-				path_.back().ConstructRedirectNode();
+				path_.ConstructRedirectNodeForCurrentNode();
 
 				if (result != engine::kResultNotDetermined) {
 					node_ = nullptr;
-					updater_.PushBackNodes(path_, node_);
+					updater_.PushBackNodes(path_.GetMutablePath(), node_);
 					return false;
 				}
 
@@ -146,12 +141,14 @@ namespace mcts
 					return node->GetActionType().GetType() == engine::ActionType::kMainAction;
 				}(node_));
 
-				if (new_node_created) new_node_created_ = true;
+				if (!new_node_created) {
+					new_node_created = path_.HasNewNodeCreated();
+				}
 
 				bool switch_to_simulation = StaticConfigs::StageController::SwitchToSimulation(
-					new_node_created_, path_.back().GetEdgeAddon()->GetChosenTimes());
+					new_node_created, path_.GetPath().back().GetEdgeAddon()->GetChosenTimes());
 
-				updater_.PushBackNodes(path_, node_);
+				updater_.PushBackNodes(path_.GetMutablePath(), node_);
 
 				return switch_to_simulation;
 			}
@@ -173,10 +170,9 @@ namespace mcts
 			TreeNode & root_;
 			TreeNode * node_;
 			detail::BoardNodeMap * turn_node_map_;
-			std::vector<TraversedNodeInfo> path_;
+			TraversedNodesInfo path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
-			bool new_node_created_;
 			bool pending_randoms_;
 			TreeUpdater updater_;
 		};
