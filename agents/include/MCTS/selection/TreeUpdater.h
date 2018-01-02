@@ -36,7 +36,7 @@ namespace mcts
 				}
 
 				TreeLikeUpdateWinRate(nodes, credit);
-				//LinearlyUpdateWinRate(credit);
+				//LinearlyUpdateWinRate(nodes, credit);
 			}
 
 		private:
