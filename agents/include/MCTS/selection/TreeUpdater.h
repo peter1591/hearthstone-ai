@@ -63,21 +63,10 @@ namespace mcts
 					return true;
 				}());
 
-				auto it = nodes.rbegin();
-				while (it != nodes.rend()) {
+				for (auto it = nodes.crbegin(); it != nodes.crend(); ++it) {
+					if (!it->edge_addon_) continue;
 					TreeLikeUpdateWinRate(it->node_, it->edge_addon_, credit);
-
-					// skip to next redirect node
-					// all intermediate nodes are already updated
-					++it;
-					while (it != nodes.rend()) {
-						if (it->choice_ < 0) break;
-						++it;
-					}
-					if (it == nodes.rend()) break;
-
-					assert(it->edge_addon_ == nullptr);
-					++it;
+					break;
 				}
 
 				assert(should_visits_.empty());
@@ -95,13 +84,14 @@ namespace mcts
 					auto * edge_addon = bfs_.front().edge_addon;
 					bfs_.pop();
 
-					assert(edge_addon);
-					assert([&]() {
-						should_visits_.erase(edge_addon);
-						return true;
-					}());
-					edge_addon->AddTotal(100);
-					edge_addon->AddCredit((int)(credit*100.0));
+					if (edge_addon) {
+						assert([&]() {
+							should_visits_.erase(edge_addon);
+							return true;
+						}());
+						edge_addon->AddTotal(100);
+						edge_addon->AddCredit((int)(credit*100.0));
+					}
 
 					// use BFS to reduce the lock time
 					node->GetAddon().leading_nodes.ForEachLeadingNode(

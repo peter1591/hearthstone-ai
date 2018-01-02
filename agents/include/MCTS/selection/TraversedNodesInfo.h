@@ -88,8 +88,7 @@ namespace mcts {
 					}
 				}
 
-				if (choice >= 0 && next_node) {
-					assert(edge_addon);
+				if (next_node) {
 					next_node->GetAddon().leading_nodes.AddLeadingNodes(node, edge_addon);
 				}
 

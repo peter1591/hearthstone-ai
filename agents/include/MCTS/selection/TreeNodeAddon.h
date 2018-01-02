@@ -130,7 +130,6 @@ namespace mcts
 			void AddLeadingNodes(TreeNode * node, EdgeAddon * edge_addon) {
 				std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 				assert(node);
-				assert(edge_addon);
 				items_.insert(TreeNodeLeadingNodesItem{ node, edge_addon });
 			}
 
