@@ -39,7 +39,7 @@ namespace mcts {
 				new_node_created_ = result.just_expanded;
 			}
 
-			void ConstructRedirectNode(detail::BoardNodeMap * turn_node_map, engine::view::Board const& board, engine::Result result) {
+			void ConstructRedirectNode(detail::BoardNodeMap * redirect_node_map, engine::view::Board const& board, engine::Result result) {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 				auto & edge_addon = current_node_->MarkChoiceRedirect(pending_choice_);
@@ -51,7 +51,7 @@ namespace mcts {
 					AddPathNode(current_node_, pending_choice_, &edge_addon, next_node);
 				}
 				else {
-					TreeNode * next_node = turn_node_map->GetOrCreateNode(board, &new_node_created_);
+					TreeNode * next_node = redirect_node_map->GetOrCreateNode(board, &new_node_created_);
 					assert(next_node);
 					assert([&](selection::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
@@ -70,7 +70,7 @@ namespace mcts {
 
 			void Update(double credit) {
 				TreeUpdater updater;
-				updater.Update(path_, current_node_, credit);
+				updater.Update(path_, credit);
 			}
 
 			auto const& GetPath() const { return path_; }

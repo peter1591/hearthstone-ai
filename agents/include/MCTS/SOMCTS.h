@@ -74,9 +74,6 @@ namespace mcts
 		}
 
 		void StartActions() {
-			if (stage_ == kStageSelection) {
-				selection_stage_.StartActions();
-			}
 		}
 
 		engine::Result PerformAction(engine::view::Board const& board)
@@ -124,7 +121,7 @@ namespace mcts
 			if (stage_ == kStageSimulation) return;
 
 			assert(stage_ == kStageSelection);
-			selection_stage_.JumpToNodeWithBoard(board);
+			selection_stage_.ApplyOthersActions(board);
 		}
 
 		void FinishIteration(engine::view::Board const& board, engine::Result result)

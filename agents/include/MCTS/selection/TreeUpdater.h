@@ -21,7 +21,7 @@ namespace mcts
 			TreeUpdater(TreeUpdater const&) = delete;
 			TreeUpdater & operator=(TreeUpdater const&) = delete;
 
-			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, selection::TreeNode * last_node, double credit)
+			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, double credit)
 			{
 				for (size_t i = 0; i < nodes.size(); ++i) {
 					auto const& item = nodes[i];

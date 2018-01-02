@@ -15,7 +15,8 @@ namespace mcts
 		{
 		public:
 			Selection(TreeNode & tree, std::mt19937 & rand) :
-				root_(tree), turn_node_map_(nullptr), path_(), random_(rand), policy_()
+				root_(tree), board_changed_(false), redirect_node_map_(nullptr),
+				path_(), random_(rand), policy_()
 			{}
 
 			Selection(Selection const&) = delete;
@@ -25,30 +26,30 @@ namespace mcts
 
 			void StartIteration() {
 				path_.Restart(&root_);
-			}
-
-			void StartActions() {
-				auto current_node = path_.GetCurrentNode();
-				assert(current_node);
-				assert([&]() {
-					if (!current_node) return false;
-					if (!current_node->GetActionType().IsValid()) return true;
-					return current_node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}());
-				turn_node_map_ = &current_node->GetAddon().board_node_map;
+				board_changed_ = false;
+				redirect_node_map_ = nullptr;
 			}
 
 			void StartAction(engine::view::Board const& board) {
+				if (board_changed_) {
+					path_.JumpToNode(board);
+					board_changed_ = false;
+				}
+
 				auto current_node = path_.GetCurrentNode();
 				assert(current_node);
+
 				assert([&]() {
 					if (!current_node->GetActionType().IsValid()) return true;
 					return current_node->GetActionType().GetType() == engine::ActionType::kMainAction;
 				}());
 				(void)board;
 				assert(current_node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
-				
-				assert(turn_node_map_);
+
+				if (redirect_node_map_ == nullptr) {
+					redirect_node_map_ = &current_node->GetAddon().board_node_map;
+					assert(redirect_node_map_);
+				}
 			}
 
 			// @return >= 0 for the chosen action
@@ -79,9 +80,13 @@ namespace mcts
 
 			// @return  If we should switch to simulation stage
 			bool FinishAction(engine::view::Board const& board, engine::Result result) {
-				assert(path_.HasCurrentNodeMadeChoice()); // at least a ChooseAction() is called
-				// mark the last action as a redirect node
-				path_.ConstructRedirectNode(turn_node_map_, board, result);
+				assert(path_.HasCurrentNodeMadeChoice()); // at least a ChooseAction() should be called
+
+				// We tackle the randomness by using a board-node-map.
+				// This *flatten* the tree structure, and effectively *forgot* the history
+				// (Note that history here referring to the parent nodes of this node)
+				assert(redirect_node_map_);
+				path_.ConstructRedirectNode(redirect_node_map_, board, result);
 
 				bool switch_to_simulation = false;
 				if (result == engine::kResultNotDetermined) {
@@ -93,8 +98,12 @@ namespace mcts
 				return switch_to_simulation;
 			}
 
-			void JumpToNodeWithBoard(engine::view::Board const& board) {
-				path_.JumpToNode(board);
+			void ApplyOthersActions(engine::view::Board const& board) {
+				board_changed_ = true;
+
+				// Preserve the history when any other player performed their actions
+				// So we need another redirect node
+				redirect_node_map_ = nullptr;
 			}
 
 			void FinishIteration(engine::view::Board const& board, engine::Result result)
@@ -107,7 +116,8 @@ namespace mcts
 
 		private:
 			TreeNode & root_;
-			detail::BoardNodeMap * turn_node_map_;
+			bool board_changed_;
+			detail::BoardNodeMap * redirect_node_map_; // To tackle randomness, the next node is found from this map after each action
 			TraversedNodesInfo path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;
