@@ -23,32 +23,8 @@ namespace mcts
 
 			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, selection::TreeNode * last_node, double credit)
 			{
-				UpdateChosenTimes(nodes, last_node);
-				TreeLikeUpdateWinRate(nodes, credit);
-				//LinearlyUpdateWinRate(credit);
-			}
-
-		private:
-			void UpdateChosenTimes(std::vector<selection::TraversedNodeInfo> const& nodes, selection::TreeNode * last_node) {
 				for (size_t i = 0; i < nodes.size(); ++i) {
 					auto const& item = nodes[i];
-
-					if (item.choice_ >= 0) {
-						selection::TreeNodeAddon * next_node_addon = nullptr;
-						if ((i + 1) < nodes.size()) {
-							next_node_addon = &nodes[i + 1].node_->GetAddon();
-						}
-						else {
-							if (last_node) {
-								next_node_addon = &last_node->GetAddon();
-							}
-						}
-
-						if (next_node_addon) {
-							next_node_addon->leading_nodes.AddLeadingNodes(
-								item.node_, item.choice_);
-						}
-					}
 
 					if (item.edge_addon_) {
 						if constexpr (StaticConfigs::kVirtualLoss != 0) {
@@ -58,8 +34,12 @@ namespace mcts
 						}
 					}
 				}
+
+				TreeLikeUpdateWinRate(nodes, credit);
+				//LinearlyUpdateWinRate(credit);
 			}
 
+		private:
 			void LinearlyUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, double credit) {
 				for (auto const& item : nodes) {
 					auto * edge_addon = item.edge_addon_;

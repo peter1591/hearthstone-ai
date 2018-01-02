@@ -34,6 +34,7 @@ namespace mcts {
 				assert(pending_choice_ >= 0);
 
 				auto result = current_node_->FollowChoice(pending_choice_);
+				assert(result.node);
 				AddPathNode(current_node_, pending_choice_, &result.edge_addon, result.node);
 				new_node_created_ = result.just_expanded;
 			}
@@ -87,9 +88,12 @@ namespace mcts {
 					}
 				}
 
+				if (choice >= 0 && next_node) {
+					next_node->GetAddon().leading_nodes.AddLeadingNodes(node, choice);
+				}
+
 				path_.emplace_back(node, choice, edge_addon);
 
-				assert(next_node);
 				current_node_ = next_node;
 				pending_choice_ = -1;
 			}
