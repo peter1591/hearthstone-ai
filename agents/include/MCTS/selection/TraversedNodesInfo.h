@@ -34,42 +34,37 @@ namespace mcts {
 				assert(pending_choice_ >= 0);
 
 				auto result = current_node_->FollowChoice(pending_choice_);
-				AddPathNode(current_node_, pending_choice_, &result.edge_addon);
+				AddPathNode(current_node_, pending_choice_, &result.edge_addon, result.node);
 				new_node_created_ = result.just_expanded;
-
-				assert(result.node);
-				current_node_ = result.node;
-				pending_choice_ = -1;
 			}
 
 			void ConstructRedirectNode(detail::BoardNodeMap * turn_node_map, engine::view::Board const& board, engine::Result result) {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 				auto & edge_addon = current_node_->MarkChoiceRedirect(pending_choice_);
-				AddPathNode(current_node_, pending_choice_, &edge_addon);
 
 				if (result != engine::kResultNotDetermined) {
 					// Don't need to construct a node for leave nodes.
 					// We only need the edge to record win-rate, which is already got before.
-					current_node_ = nullptr;
-					pending_choice_ = -1;
+					TreeNode * next_node = nullptr;
+					AddPathNode(current_node_, pending_choice_, &edge_addon, next_node);
 				}
 				else {
-					current_node_ = turn_node_map->GetOrCreateNode(board, &new_node_created_);
-					pending_choice_ = -1;
-					assert(current_node_);
+					TreeNode * next_node = turn_node_map->GetOrCreateNode(board, &new_node_created_);
+					assert(next_node);
 					assert([&](selection::TreeNode* node) {
 						if (!node->GetActionType().IsValid()) return true;
 						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-					}(current_node_));
+					}(next_node));
+					AddPathNode(current_node_, pending_choice_, &edge_addon, next_node);
 				}
 			}
 
 			void JumpToNode(engine::view::Board const& board) {
 				assert(current_node_);
 				assert(pending_choice_ < 0);
-				AddPathNode(current_node_, -1, nullptr);
-				current_node_ = current_node_->GetAddon().board_node_map.GetOrCreateNode(board);
+				TreeNode * next_node = current_node_->GetAddon().board_node_map.GetOrCreateNode(board);
+				AddPathNode(current_node_, -1, nullptr, next_node);
 			}
 
 			void Update(double credit) {
@@ -82,9 +77,7 @@ namespace mcts {
 			bool HasNewNodeCreated() const { return new_node_created_; }
 
 		private:
-			void AddPathNode(TreeNode * node, int choice, EdgeAddon * edge_addon) {
-				path_.emplace_back(node, choice, edge_addon);
-
+			void AddPathNode(TreeNode * node, int choice, EdgeAddon * edge_addon, TreeNode * next_node) {
 				if (edge_addon) {
 					edge_addon->AddChosenTimes(1);
 
@@ -93,6 +86,12 @@ namespace mcts {
 						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
 					}
 				}
+
+				path_.emplace_back(node, choice, edge_addon);
+
+				assert(next_node);
+				current_node_ = next_node;
+				pending_choice_ = -1;
 			}
 
 		private:
