@@ -53,10 +53,7 @@ namespace mcts {
 				else {
 					TreeNode * next_node = redirect_node_map->GetOrCreateNode(board, &new_node_created_);
 					assert(next_node);
-					assert([&](selection::TreeNode* node) {
-						if (!node->GetActionType().IsValid()) return true;
-						return node->GetActionType().GetType() == engine::ActionType::kMainAction;
-					}(next_node));
+					assert(next_node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction));
 					AddPathNode(current_node_, pending_choice_, &edge_addon, next_node);
 				}
 			}

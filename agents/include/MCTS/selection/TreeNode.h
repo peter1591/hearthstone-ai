@@ -68,11 +68,7 @@ namespace mcts
 			//   Also, the element ChildType in ChildNodeMap will never be removed
 			//   And thus, the EdgeAddon of ChildType will never be removed
 
-			TreeNode() :
-				action_type_(engine::ActionType::kInvalid),
-				choices_index_(0),
-				children_mutex_(), children_(), addon_()
-			{}
+			TreeNode() : children_mutex_(), children_(), addon_() {}
 
 			// select among specific choices
 			// if any of the choices does not exist, return the edge to expand it
@@ -88,21 +84,7 @@ namespace mcts
 			template <typename SelectCallback>
 			int Select(engine::ActionType action_type, engine::ActionChoices choices, SelectCallback && select_callback)
 			{
-				auto choices_index_loaded = choices_index_.load();
-				if (choices_index_loaded == 0) {
-					choices_index_loaded = choices_index_.exchange(choices.GetIndex());
-				}
-				if (choices_index_loaded != engine::ActionType::kInvalid) {
-					assert(choices_index_loaded == choices.GetIndex());
-				}
-
-				auto action_type_loaded = action_type_.load();
-				if (action_type_loaded == engine::ActionType::kInvalid) {
-					action_type_loaded = action_type_.exchange(action_type.GetType());
-				}
-				if (action_type_loaded != engine::ActionType::kInvalid) {
-					assert(action_type_loaded == action_type.GetType());
-				}
+				// TODO: move to selection stage class
 
 				// We can only acquire a shared lock,
 				// since ChoiceIterator only calls children_.Get()
@@ -189,11 +171,6 @@ namespace mcts
 			}
 
 		public:
-			engine::ActionType GetActionType() const {
-				return engine::ActionType(action_type_.load());
-			}
-
-		public:
 			TreeNodeAddon const& GetAddon() const { return addon_; }
 			TreeNodeAddon & GetAddon() { return addon_; }
 
@@ -206,9 +183,6 @@ namespace mcts
 			}
 
 		private:
-			std::atomic<engine::ActionType::Types> action_type_;
-			std::atomic<size_t> choices_index_; // TODO: debug only
-
 			mutable Utils::SharedSpinLock children_mutex_;
 			ChildNodeMap children_;
 

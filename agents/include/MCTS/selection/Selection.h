@@ -38,11 +38,7 @@ namespace mcts
 
 				auto current_node = path_.GetCurrentNode();
 				assert(current_node);
-
-				assert([&]() {
-					if (!current_node->GetActionType().IsValid()) return true;
-					return current_node->GetActionType().GetType() == engine::ActionType::kMainAction;
-				}());
+				assert(current_node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction));
 				(void)board;
 				assert(current_node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
 

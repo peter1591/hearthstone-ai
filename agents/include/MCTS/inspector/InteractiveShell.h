@@ -172,12 +172,13 @@ namespace mcts
 				const mcts::selection::TreeNode* node, int choice,
 				engine::ActionApplyHelper const& action_cb_info_getter)
 			{
-				if (node->GetActionType() == engine::ActionType::kMainAction) {
+				auto action_type = node->GetAddon().consistency_checker.GetActionType();
+				if (action_type == engine::ActionType::kMainAction) {
 					auto op = action_analyzer.GetMainOpType(choice);
 					return engine::GetMainOpString(op);
 				}
 
-				if (node->GetActionType() == engine::ActionType::kChooseHandCard) {
+				if (action_type == engine::ActionType::kChooseHandCard) {
 					auto const& playable_cards = action_analyzer.GetPlayableCards();
 					size_t idx = playable_cards[choice];
 
@@ -189,7 +190,7 @@ namespace mcts
 					return Cards::Database::GetInstance().Get((int)card_id).name;
 				}
 
-				if (node->GetActionType() == engine::ActionType::kChooseMinionPutLocation) {
+				if (action_type == engine::ActionType::kChooseMinionPutLocation) {
 					auto info = std::get<engine::ActionApplyHelper::MinionPutLocationInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
@@ -201,7 +202,7 @@ namespace mcts
 					return ss.str();
 				}
 
-				if (node->GetActionType() == engine::ActionType::kChooseAttacker) {
+				if (action_type == engine::ActionType::kChooseAttacker) {
 					auto info = std::get<engine::ActionApplyHelper::ChooseAttackerInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
@@ -212,7 +213,7 @@ namespace mcts
 					return ss.str();
 				}
 
-				if (node->GetActionType() == engine::ActionType::kChooseDefender) {
+				if (action_type == engine::ActionType::kChooseDefender) {
 					auto info = std::get<engine::ActionApplyHelper::ChooseDefenderInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
@@ -223,7 +224,7 @@ namespace mcts
 					return ss.str();
 				}
 
-				if (node->GetActionType() == engine::ActionType::kChooseTarget) {
+				if (action_type == engine::ActionType::kChooseTarget) {
 					auto info = std::get<engine::ActionApplyHelper::GetSpecifiedTargetInfo>(
 						action_cb_info_getter.ApplyChoices([&]() {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
@@ -328,7 +329,7 @@ namespace mcts
 					return;
 				}
 
-				if (node->GetActionType() != engine::ActionType::kMainAction) {
+				if (!node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction)) {
 					s << "[ERROR] root node should be with type 'kMainAction'" << std::endl;
 					return;
 				}

@@ -64,9 +64,25 @@ namespace mcts
 				return true;
 			}
 
-			bool CheckBoard(engine::view::ReducedBoardView const& new_view) {
+			bool SetAndCheckBoard(engine::view::ReducedBoardView const& new_view) {
 				std::lock_guard<Utils::SpinLock> lock(mutex_);
-				return LockedCheckBoard(new_view);
+				return LockedSetAndCheckBoard(new_view);
+			}
+
+			bool CheckBoard(engine::view::ReducedBoardView const& new_view) const {
+				std::lock_guard<Utils::SpinLock> lock(mutex_);
+				if (!board_view_) return true;
+				return *board_view_ == new_view;
+			}
+
+			bool CheckActionType(engine::ActionType action_type) const {
+				std::lock_guard<Utils::SpinLock> lock(mutex_);
+				return LockedCheckActionType(action_type);
+			}
+
+			auto GetActionType() const {
+				std::lock_guard<Utils::SpinLock> lock(mutex_);
+				return action_type_;
 			}
 
 			auto GetBoard() const {
@@ -75,12 +91,17 @@ namespace mcts
 			}
 
 		private:
-			bool LockedCheckBoard(engine::view::ReducedBoardView const& new_view) {
+			bool LockedSetAndCheckBoard(engine::view::ReducedBoardView const& new_view) {
 				if (!board_view_) {
 					board_view_.reset(new engine::view::ReducedBoardView(new_view));
 					return true;
 				}
 				return *board_view_ == new_view;
+			}
+
+			bool LockedCheckActionType(engine::ActionType action_type) const {
+				if (!action_type_.IsValid()) return true;
+				return action_type_ == action_type;
 			}
 
 			bool CheckActionTypeAndChoices(engine::ActionType action_type, engine::ActionChoices const& choices) {
