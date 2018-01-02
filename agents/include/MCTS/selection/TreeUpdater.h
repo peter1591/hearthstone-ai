@@ -65,7 +65,7 @@ namespace mcts
 
 				auto it = nodes.rbegin();
 				while (it != nodes.rend()) {
-					TreeLikeUpdateWinRate(it->node_, it->choice_, credit);
+					TreeLikeUpdateWinRate(it->node_, it->edge_addon_, credit);
 
 					// skip to next redirect node
 					// all intermediate nodes are already updated
@@ -83,17 +83,16 @@ namespace mcts
 				assert(should_visits_.empty());
 			}
 
-			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, int start_choice, double credit)
+			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, EdgeAddon * start_edge, double credit)
 			{
 				assert(start_node);
 				
 				assert(bfs_.empty());
-				bfs_.push({ start_node, start_choice });
+				bfs_.push({ start_node, start_edge });
 
 				while (!bfs_.empty()) {
 					auto node = bfs_.front().node;
-					int choice = bfs_.front().choice;
-					auto * edge_addon = node->GetEdgeAddon(choice);
+					auto * edge_addon = bfs_.front().edge_addon;
 					bfs_.pop();
 
 					assert(edge_addon);
@@ -106,9 +105,10 @@ namespace mcts
 
 					// use BFS to reduce the lock time
 					node->GetAddon().leading_nodes.ForEachLeadingNode(
-						[&](selection::TreeNode * leading_node, int leading_choice)
+						[&](selection::TreeNode * leading_node, EdgeAddon *leading_edge)
 					{
-						bfs_.push({ leading_node, leading_choice });
+						// TODO: search for identitical nodes. if found, just update it multiple times. don't need to traverse multiple times
+						bfs_.push({ leading_node, leading_edge });
 						return true;
 					});
 				}
@@ -116,13 +116,13 @@ namespace mcts
 
 		private:
 			struct Item {
-				selection::TreeNode * node;
-				int choice;
+				TreeNode * node;
+				EdgeAddon * edge_addon;
 			};
 			std::queue<Item> bfs_;
 
 #ifndef NDEBUG
-			std::unordered_set<selection::EdgeAddon*> should_visits_;
+			std::unordered_set<EdgeAddon*> should_visits_;
 #endif
 		};
 	}

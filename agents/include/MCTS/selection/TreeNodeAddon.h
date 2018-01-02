@@ -3,6 +3,7 @@
 #include <mutex>
 #include "engine/ActionType.h"
 #include "MCTS/detail/BoardNodeMap.h"
+#include "MCTS/selection/EdgeAddon.h"
 #include "engine/view/ReducedBoardView.h"
 #include "Utils/HashCombine.h"
 #include "Utils/SpinLocks.h"
@@ -12,12 +13,15 @@ namespace mcts
 	namespace selection
 	{
 		struct TreeNodeLeadingNodesItem {
+			// We need to store both *leading node* and *edge* to support redirect nodes.
+			// Since *edge* might be coming from a board node map
+
 			TreeNode * node;
-			int choice;
+			EdgeAddon * edge_addon;
 
 			bool operator==(TreeNodeLeadingNodesItem const& v) const {
 				if (node != v.node) return false;
-				if (choice != v.choice) return false;
+				if (edge_addon != v.edge_addon) return false;
 				return true;
 			}
 
@@ -34,7 +38,7 @@ namespace std {
 		inline std::size_t operator()(mcts::selection::TreeNodeLeadingNodesItem const& v) const
 		{
 			std::size_t result = std::hash<mcts::selection::TreeNode*>()(v.node);
-			Utils::HashCombine::hash_combine(result, v.choice);
+			Utils::HashCombine::hash_combine(result, v.edge_addon);
 			return result;
 		}
 	};
@@ -123,18 +127,18 @@ namespace mcts
 		public:
 			TreeNodeLeadingNodes() : mutex_(), items_() {}
 
-			void AddLeadingNodes(TreeNode * node, int choice) {
+			void AddLeadingNodes(TreeNode * node, EdgeAddon * edge_addon) {
 				std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 				assert(node);
-				assert(choice >= 0);
-				items_.insert(TreeNodeLeadingNodesItem{ node, choice });
+				assert(edge_addon);
+				items_.insert(TreeNodeLeadingNodesItem{ node, edge_addon });
 			}
 
 			template <class Functor>
 			void ForEachLeadingNode(Functor&& op) {
 				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 				for (auto const& item : items_) {
-					if (!op(item.node, item.choice)) break;
+					if (!op(item.node, item.edge_addon)) break;
 				}
 			}
 

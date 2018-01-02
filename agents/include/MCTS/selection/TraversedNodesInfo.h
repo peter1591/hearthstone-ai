@@ -89,7 +89,8 @@ namespace mcts {
 				}
 
 				if (choice >= 0 && next_node) {
-					next_node->GetAddon().leading_nodes.AddLeadingNodes(node, choice);
+					assert(edge_addon);
+					next_node->GetAddon().leading_nodes.AddLeadingNodes(node, edge_addon);
 				}
 
 				path_.emplace_back(node, choice, edge_addon);
