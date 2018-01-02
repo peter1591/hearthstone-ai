@@ -5,8 +5,6 @@
 #include "MCTS/selection/TreeNode.h"
 #include "MCTS/selection/TraversedNodesInfo.h"
 
-#include "MCTS/selection/ChildNodeMap-impl.h"
-
 namespace mcts
 {
 	namespace selection

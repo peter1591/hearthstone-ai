@@ -31,7 +31,7 @@ namespace judge
 				engine::IActionParameterGetter::Initialize(*state_);
 			}
 			
-			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices & action_choices) final {
 				if (action_type == engine::ActionType::kRandom) {
 					int exclusive_max = action_choices.Size();
 					int action = guide_.rand_() % exclusive_max;

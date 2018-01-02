@@ -206,7 +206,6 @@
     <ClInclude Include="..\..\..\judge\include\judge\Recorder.h" />
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
-    <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h" />
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h" />
@@ -220,7 +219,6 @@
     <ClInclude Include="..\..\include\MCTS\policy\SideController.h" />
     <ClInclude Include="..\..\include\MCTS\policy\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\policy\StageController.h" />
-    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h" />
     <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h" />
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h" />
     <ClInclude Include="..\..\include\MCTS\selection\Selection.h" />

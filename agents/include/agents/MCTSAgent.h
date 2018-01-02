@@ -75,7 +75,7 @@ namespace agents
 
 			assert(node_);
 
-			if (node_->GetActionType() != action_type) {
+			if (!node_->GetAddon().consistency_checker.CheckActionType(action_type)) {
 				assert(false);
 				throw std::runtime_error("Action type not match");
 			}
@@ -89,7 +89,7 @@ namespace agents
 
 			int best_choice = -1;
 			double best_chosen_times = -std::numeric_limits<double>::infinity();
-			mcts::builder::TreeBuilder::TreeNode const* best_node = nullptr;
+			mcts::selection::TreeNode const* best_node = nullptr;
 			node_->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
 				if (!CanBeChosen(choice)) return true;
 
@@ -113,8 +113,8 @@ namespace agents
 	private:
 		int threads_;
 		int tree_samples_;
-		mcts::builder::TreeBuilder::TreeNode const* root_node_;
-		mcts::builder::TreeBuilder::TreeNode const* node_;
+		mcts::selection::TreeNode const* root_node_;
+		mcts::selection::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;
 		IterationCallback iteration_cb_;
 	};

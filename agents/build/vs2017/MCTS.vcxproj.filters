@@ -25,9 +25,6 @@
     <Filter Include="Header Files\MCTS\simulation">
       <UniqueIdentifier>{ef59716c-5103-4379-875b-fe9dfbcf9b9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MCTS\builder">
-      <UniqueIdentifier>{bcaac893-2244-43af-8bef-0c3780f183d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\MCTS\policy">
       <UniqueIdentifier>{4151e70f-0c2f-479a-892e-8eaf0c63d78a}</UniqueIdentifier>
     </Filter>
@@ -107,9 +104,6 @@
     <ClInclude Include="..\..\include\agents\MCTSRunner.h">
       <Filter>Header Files\agents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\builder\ActionReplayer.h">
-      <Filter>Header Files\MCTS\builder</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
@@ -135,9 +129,6 @@
       <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h">
-      <Filter>Header Files\MCTS\selection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap-impl.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h">
