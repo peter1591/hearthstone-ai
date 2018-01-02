@@ -34,44 +34,23 @@ namespace mcts
 				return functor(children_);
 			}
 
-			struct FollowStatus {
-				bool just_expanded;
-				EdgeAddon & edge_addon;
-				TreeNode * node; // will be a non-nullptr
-			};
-			// Note: the choice should not be marked as redirect
-			// If it's a redirect node, we should follow it by board view, not by choice
-			FollowStatus FollowChoice(int choice)
-			{
+			// @return  A boolean indicating if a new node is created; then the child data
+			std::pair<bool, ChildType *> GetOrCreateChild(int choice) {
 				// Optimize to only acquire a read lock if no need to create a new node
-
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-				ChildType* child = children_.Get(choice);
-
-				bool just_expanded = false;
-				if (!child) {
-					lock.unlock();
-
-					{
-						std::lock_guard<Utils::SharedSpinLock> write_lock(children_mutex_);
-						child = children_.Get(choice);
-						if (!child) {
-							child = children_.CreateNewNode(choice, std::make_unique<TreeNode>());
-							just_expanded = true;
-						}
-					}
-
-					lock.lock();
-					assert(children_.Get(choice)); // a child should never be removed by any thread
+				{
+					std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
+					ChildType* child = children_.Get(choice);
+					if (child) return { false, child };
 				}
 
-				// Since a redirect node should only appear at the end of a main-action-sequence,
-				// it should not be followed.
-				assert(!child->IsRedirectNode());
-
-				TreeNode* child_node = child->GetNode();
-				assert(child_node);
-				return { just_expanded, child->GetEdgeAddon(), child_node };
+				{
+					std::lock_guard<Utils::SharedSpinLock> write_lock(children_mutex_);
+					ChildType* child = children_.Get(choice);
+					if (child) return { false, child };
+					
+					child = children_.CreateNewNode(choice, std::make_unique<TreeNode>());
+					return { true, child };
+				}
 			}
 
 			EdgeAddon& MarkChoiceRedirect(int choice)

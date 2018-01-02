@@ -33,10 +33,17 @@ namespace mcts {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 
-				auto result = current_node_->FollowChoice(pending_choice_);
-				assert(result.node);
-				AddPathNode(current_node_, pending_choice_, &result.edge_addon, result.node);
-				new_node_created_ = result.just_expanded;
+				auto result = current_node_->GetOrCreateChild(pending_choice_);
+				bool new_node_created = result.first;
+				auto child = result.second;
+
+				// Since a redirect node should only appear at the end of a main-action-sequence,
+				// it should not be followed.
+				assert(!child->IsRedirectNode());
+				assert(child->GetNode());
+
+				AddPathNode(current_node_, pending_choice_, &child->GetEdgeAddon(), child->GetNode());
+				if (new_node_created) new_node_created_ = true;
 			}
 
 			void ConstructRedirectNode(detail::BoardNodeMap * redirect_node_map, engine::view::Board const& board, engine::Result result) {
