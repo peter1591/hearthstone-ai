@@ -94,7 +94,7 @@ namespace mcts
 					}
 
 					// use BFS to reduce the lock time
-					node->GetAddon().leading_nodes.ForEachLeadingNode(
+					node->addon_.leading_nodes.ForEachLeadingNode(
 						[&](selection::TreeNode * leading_node, EdgeAddon *leading_edge)
 					{
 						// TODO: search for identitical nodes. if found, just update it multiple times. don't need to traverse multiple times

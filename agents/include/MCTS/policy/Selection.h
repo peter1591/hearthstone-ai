@@ -19,7 +19,7 @@ namespace mcts
 			public:
 				ChoiceIterator(engine::ActionChoices & choices, mcts::selection::ChildNodeMap const& children) :
 					choices_(choices), children_(children),
-					current_choice_(0), current_child_(nullptr)
+					current_choice_(0), current_edge_addon_(nullptr)
 				{}
 
 				void Begin() { choices_.Begin(); }
@@ -34,17 +34,17 @@ namespace mcts
 					current_choice_ = choices_.Get();
 					assert(current_choice_ >= 0);
 
-					current_child_ = children_.Get(current_choice_);
-					return CheckChild(current_child_);
+					current_edge_addon_ = children_.Get(current_choice_).first;
+					return CheckChild(current_edge_addon_);
 				}
-				static CheckResult CheckChild(mcts::selection::ChildType const* child) {
-					if (!child) return kForceSelectChoice; // not expanded before
+				static CheckResult CheckChild(mcts::selection::EdgeAddon const* edge) {
+					if (!edge) return kForceSelectChoice; // not expanded before
 					return kNormalChoice;
 				}
 
 				int GetChoice() const { return current_choice_; }
 				mcts::selection::EdgeAddon const& GetAddon() const {
-					return current_child_->GetEdgeAddon();
+					return *current_edge_addon_;
 				}
 
 			private:
@@ -52,7 +52,7 @@ namespace mcts
 				mcts::selection::ChildNodeMap const& children_;
 
 				int current_choice_;
-				mcts::selection::ChildType const* current_child_;
+				mcts::selection::EdgeAddon const* current_edge_addon_;
 			};
 
 			class RandomPolicy {

@@ -6,83 +6,111 @@
 
 #include "MCTS/selection/TreeNodeAddon.h"
 #include "MCTS/selection/EdgeAddon.h"
-#include "MCTS/selection/ChildNodeMap.h"
 #include "Utils/SpinLocks.h"
 
 namespace mcts
 {
 	namespace selection
 	{
-		class TreeNode
+		struct TreeNode;
+
+		// Thread safe
+		class ChildNodeMap
 		{
-		public:
-			// Thread safety:
-			//   the ChildNodeMap is not thread-safe
-			//   the element ChildType within ChildNodeMap is also not thread-safe
-			//   we use a read-write lock on ChildNodeMap
-			//      if calling only Get(), we can acquire read lock only
-			//      otherwise, need write lock
-			//   Also, the element ChildType in ChildNodeMap will never be removed
-			//   And thus, the EdgeAddon of ChildType will never be removed
+		private:
+			// Note: this is not thread safe. do not expose it to outside
+			struct ChildType
+			{
+			public:
+				ChildType() : edge_addon_(), node_() {}
 
-			TreeNode() : children_mutex_(), children_(), addon_() {}
+				EdgeAddon edge_addon_; // must be thread safe
+				std::unique_ptr<TreeNode> node_;
+			};
 
-			template <class Functor>
-			auto GetChildren(Functor&& functor) const {
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-				return functor(children_);
-			}
-
+		private:
 			// @return  A boolean indicating if a new node is created; then the child data
-			template <class CreateChildFunctor>
-			std::pair<bool, ChildType *> GetOrCreateChild(int choice, CreateChildFunctor&& create_child_functor) {
+			template <class CreateFunctor>
+			std::tuple<bool, EdgeAddon*, TreeNode*> GetOrCreate(int choice, CreateFunctor&& create_child_functor) {
 				// Optimize to only acquire a read lock if no need to create a new node
 				{
-					std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-					ChildType* child = children_.Get(choice);
-					if (child) return { false, child };
+					std::shared_lock<Utils::SharedSpinLock> lock(map_mutex_);
+					auto it = map_.find(choice);
+					if (it != map_.end()) return { false, &it->second.edge_addon_, it->second.node_.get() };
 				}
 
 				{
-					std::lock_guard<Utils::SharedSpinLock> write_lock(children_mutex_);
-					ChildType* child = children_.Get(choice);
-					if (child) return { false, child };
-					child = create_child_functor(children_);
-					return { true, child };
+					std::lock_guard<Utils::SharedSpinLock> write_lock(map_mutex_);
+					auto it = map_.find(choice);
+					if (it != map_.end()) return { false, &it->second.edge_addon_, it->second.node_.get() };
+					auto & child = map_[choice];
+					create_child_functor(child);
+					return { true, &child.edge_addon_, child.node_.get() };
+				}
+			}
+
+		public:
+			ChildNodeMap() : map_() {}
+
+			bool HasChild(int choice) const {
+				std::shared_lock<Utils::SharedSpinLock> lock(map_mutex_);
+				return (map_.find(choice) != map_.end());
+			}
+
+			// The EdgeAddon is exposed. It should be thread-safe by itself
+			std::pair<EdgeAddon const*, TreeNode*> Get(int choice) const {
+				std::shared_lock<Utils::SharedSpinLock> lock(map_mutex_);
+				auto it = map_.find(choice);
+				if (it == map_.end()) return { nullptr, nullptr };
+				else return { &it->second.edge_addon_, it->second.node_.get() };
+			}
+
+			template <typename Functor>
+			void ForEach(Functor&& functor) const {
+				std::shared_lock<Utils::SharedSpinLock> lock(map_mutex_);
+				for (auto const& kv : map_) {
+					if (!functor(kv.first, &kv.second.edge_addon_, kv.second.node_.get())) return;
+				}
+			}
+
+			template <typename Functor>
+			void ForEach(Functor&& functor) {
+				std::shared_lock<Utils::SharedSpinLock> lock(map_mutex_);
+				for (auto & kv : map_) {
+					if (!functor(kv.first, &kv.second.edge_addon_, kv.second.node_.get())) return;
 				}
 			}
 
 		public:
 			EdgeAddon const* GetEdgeAddon(int choice) const {
-				return GetChildren([choice](ChildNodeMap const& children) -> EdgeAddon const* {
-					ChildType const* child = children.Get(choice);
-					if (!child) return nullptr;
-					return &child->GetEdgeAddon();
-				});
-			}
-			EdgeAddon * GetMutableEdgeAddon(int choice) {
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-				ChildType * child = children_.Get(choice);
-				if (!child) return nullptr;
-				return &child->GetEdgeAddon();
+				return Get(choice).first;
 			}
 
-			template <typename Functor>
-			void ForEachChild(Functor&& functor) const {
-				return GetChildren([&](ChildNodeMap const& children) {
-					children.ForEach(std::forward<Functor>(functor));
+			std::tuple<bool, EdgeAddon*, TreeNode*> GetOrCreateNewNode(int choice, std::unique_ptr<TreeNode> node) {
+				return GetOrCreate(choice, [&](ChildType & child) {
+					child.node_ = std::move(node);
 				});
 			}
-
-		public:
-			TreeNodeAddon const& GetAddon() const { return addon_; }
-			TreeNodeAddon & GetAddon() { return addon_; }
+			std::tuple<bool, EdgeAddon*, TreeNode*> GetOrCreatRedirectNode(int choice) {
+				return GetOrCreate(choice, [](ChildType & child) {
+					assert(child.node_.get() == nullptr);
+				});
+			}
 
 		private:
-			mutable Utils::SharedSpinLock children_mutex_;
-			ChildNodeMap children_;
+			mutable Utils::SharedSpinLock map_mutex_;
 
-			TreeNodeAddon addon_;
+			// Hash table is used here, since
+			//   1. we don't know the total choices in advance
+			//   2. the key is 'choice', which might be card id for choose-one action
+			// TODO: maybe use std::vector is enough; or use linked-list for lock-free algorithms
+			std::unordered_map<int, ChildType> map_;
+		};
+
+		struct TreeNode
+		{
+			ChildNodeMap children_; // thread safe
+			TreeNodeAddon addon_; // must be thread safe
 		};
 	}
 }

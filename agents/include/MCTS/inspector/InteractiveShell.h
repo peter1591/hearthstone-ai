@@ -91,8 +91,7 @@ namespace mcts
 				int64_t total_chosen_time = 0;
 				int best_choice = -1;
 				int64_t best_choice_chosen_times = 0;
-				node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
-					auto const* edge_addon = node->GetEdgeAddon(choice);
+				node->children_.ForEach([&](int choice, mcts::selection::EdgeAddon const* edge_addon, mcts::selection::TreeNode* child) {
 					if (edge_addon) {
 						auto chosen_times = edge_addon->GetChosenTimes();
 						total_chosen_time += chosen_times;
@@ -104,7 +103,7 @@ namespace mcts
 					}
 					return true;
 				});
-				node->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+				node->children_.ForEach([&](int choice, mcts::selection::EdgeAddon const* edge_addon, mcts::selection::TreeNode* child) {
 					if (only_show_best_choice) {
 						if (choice != best_choice) return true;
 					}
@@ -115,7 +114,8 @@ namespace mcts
 						<< std::endl;
 					engine::ActionApplyHelper new_cb_getter = action_cb_info_getter;
 					new_cb_getter.AppendChoice(choice);
-					return ShowBestSubNodeInfo(s, main_node, action_analyzer, node, choice, total_chosen_time, child, new_cb_getter, indent + 1, only_show_best_choice);
+					return ShowBestSubNodeInfo(s, main_node, action_analyzer, node, choice, total_chosen_time,
+						edge_addon, child, new_cb_getter, indent + 1, only_show_best_choice);
 				});
 			}
 
@@ -172,7 +172,7 @@ namespace mcts
 				const mcts::selection::TreeNode* node, int choice,
 				engine::ActionApplyHelper const& action_cb_info_getter)
 			{
-				auto action_type = node->GetAddon().consistency_checker.GetActionType();
+				auto action_type = node->addon_.consistency_checker.GetActionType();
 				if (action_type == engine::ActionType::kMainAction) {
 					auto op = action_analyzer.GetMainOpType(choice);
 					return engine::GetMainOpString(op);
@@ -243,7 +243,7 @@ namespace mcts
 				int choice,
 				uint64_t total_chosen_times)
 			{
-				auto const* edge_addon = node->GetEdgeAddon(choice);
+				auto const* edge_addon = node->children_.GetEdgeAddon(choice);
 				auto chosen_times = edge_addon->GetChosenTimes();
 				double chosen_percent = 100.0 * chosen_times / total_chosen_times;
 
@@ -259,7 +259,8 @@ namespace mcts
 				const mcts::selection::TreeNode* node,
 				int choice,
 				uint64_t total_chosen_times,
-				mcts::selection::ChildType const& child,
+				mcts::selection::EdgeAddon const* edge_addon,
+				mcts::selection::TreeNode * child,
 				engine::ActionApplyHelper const& action_cb_info_getter,
 				int indent,
 				bool only_show_best_choice = true)
@@ -267,7 +268,6 @@ namespace mcts
 				std::string indent_padding;
 				for (int i = 0; i < indent; ++i) indent_padding.append("   ");
 
-				auto const* edge_addon = node->GetEdgeAddon(choice);
 				if (!edge_addon) {
 					s << "[ERROR] Children of main action should with edge addon" << std::endl;
 					return false;
@@ -280,8 +280,8 @@ namespace mcts
 						<< std::endl;
 				}
 
-				if (!child.IsRedirectNode()) {
-					ShowBestNodeInfo(s, main_node, action_analyzer, child.GetNode(), action_cb_info_getter, indent, only_show_best_choice);
+				if (child) {
+					ShowBestNodeInfo(s, main_node, action_analyzer, child, action_cb_info_getter, indent, only_show_best_choice);
 				}
 				else {
 					if (!only_show_best_choice) {
@@ -329,7 +329,7 @@ namespace mcts
 					return;
 				}
 
-				if (!node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction)) {
+				if (!node->addon_.consistency_checker.CheckActionType(engine::ActionType::kMainAction)) {
 					s << "[ERROR] root node should be with type 'kMainAction'" << std::endl;
 					return;
 				}

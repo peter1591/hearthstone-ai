@@ -33,18 +33,15 @@ namespace mcts {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 
-				auto result = current_node_->GetOrCreateChild(pending_choice_, [&](ChildNodeMap & children) {
-					return children.CreateNewNode(pending_choice_, std::make_unique<TreeNode>());
-				});
-				bool new_node_created = result.first;
-				auto child = result.second;
+				auto result = current_node_->children_.GetOrCreateNewNode(
+					pending_choice_, std::make_unique<TreeNode>());
+				bool new_node_created = std::get<0>(result);
+				auto edge_addon = std::get<1>(result);
+				auto node = std::get<2>(result);
 
-				// Since a redirect node should only appear at the end of a main-action-sequence,
-				// it should not be followed.
-				assert(!child->IsRedirectNode());
-				assert(child->GetNode());
+				assert(node);
 
-				AddPathNode(current_node_, pending_choice_, &child->GetEdgeAddon(), child->GetNode());
+				AddPathNode(current_node_, pending_choice_,edge_addon, node);
 				if (new_node_created) new_node_created_ = true;
 			}
 
@@ -52,11 +49,12 @@ namespace mcts {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 
-				auto child_result = current_node_->GetOrCreateChild(pending_choice_, [&](ChildNodeMap & children) {
-					return children.CreateRedirectNode(pending_choice_);
-				});
-				bool new_node_created = child_result.first;
-				auto child = child_result.second;
+				auto child_result = current_node_->children_.GetOrCreatRedirectNode(pending_choice_);
+				bool new_node_created = std::get<0>(child_result);
+				auto edge_addon = std::get<1>(child_result);
+				auto node = std::get<2>(child_result);
+				(void)node;
+				assert(node == nullptr); // should be a redirect node
 
 				if (new_node_created) new_node_created_ = true;
 
@@ -64,20 +62,20 @@ namespace mcts {
 					// Don't need to construct a node for leaf nodes.
 					// We only need the edge to record win-rate, which is already got before.
 					TreeNode * next_node = nullptr;
-					AddPathNode(current_node_, pending_choice_, &child->GetEdgeAddon(), next_node);
+					AddPathNode(current_node_, pending_choice_, edge_addon, next_node);
 				}
 				else {
 					TreeNode * next_node = redirect_node_map->GetOrCreateNode(board, &new_node_created_);
 					assert(next_node);
-					assert(next_node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction));
-					AddPathNode(current_node_, pending_choice_, &child->GetEdgeAddon(), next_node);
+					assert(next_node->addon_.consistency_checker.CheckActionType(engine::ActionType::kMainAction));
+					AddPathNode(current_node_, pending_choice_, edge_addon, next_node);
 				}
 			}
 
 			void JumpToNode(engine::view::Board const& board) {
 				assert(current_node_);
 				assert(pending_choice_ < 0);
-				TreeNode * next_node = current_node_->GetAddon().board_node_map.GetOrCreateNode(board);
+				TreeNode * next_node = current_node_->addon_.board_node_map.GetOrCreateNode(board);
 				AddPathNode(current_node_, -1, nullptr, next_node);
 			}
 
@@ -102,7 +100,7 @@ namespace mcts {
 				}
 
 				if (next_node) {
-					next_node->GetAddon().leading_nodes.AddLeadingNodes(node, edge_addon);
+					next_node->addon_.leading_nodes.AddLeadingNodes(node, edge_addon);
 				}
 
 				path_.emplace_back(node, choice, edge_addon);

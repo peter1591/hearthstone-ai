@@ -7,7 +7,7 @@
 
 namespace mcts
 {
-	namespace selection { class TreeNode; }
+	namespace selection { struct TreeNode; }
 
 	namespace detail
 	{

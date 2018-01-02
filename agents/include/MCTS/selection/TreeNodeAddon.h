@@ -178,6 +178,7 @@ namespace mcts
 		// Add abilities to tree node to use in SO-MCTS
 		// Note: this will live in *every* tree node, so careful about memory footprints
 		// Thread safety: No.
+		// TODO: should be thread safe
 		struct TreeNodeAddon
 		{
 			TreeNodeAddon() :

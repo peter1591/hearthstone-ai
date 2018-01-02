@@ -1,7 +1,8 @@
 #pragma once
 
-#include "MCTS/selection/TreeNode.h"
 #include "MCTS/detail/BoardNodeMap.h"
+
+#include "MCTS/selection/TreeNode.h"
 
 namespace mcts
 {

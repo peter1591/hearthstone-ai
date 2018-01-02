@@ -36,12 +36,12 @@ namespace mcts
 
 				auto current_node = path_.GetCurrentNode();
 				assert(current_node);
-				assert(current_node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction));
+				assert(current_node->addon_.consistency_checker.CheckActionType(engine::ActionType::kMainAction));
 				(void)board;
-				assert(current_node->GetAddon().consistency_checker.CheckBoard(board.CreateView()));
+				assert(current_node->addon_.consistency_checker.CheckBoard(board.CreateView()));
 
 				if (redirect_node_map_ == nullptr) {
-					redirect_node_map_ = &current_node->GetAddon().board_node_map;
+					redirect_node_map_ = &current_node->addon_.board_node_map;
 					assert(redirect_node_map_);
 				}
 			}
@@ -63,12 +63,10 @@ namespace mcts
 				}
 
 				TreeNode* current_node = path_.GetCurrentNode();
-				assert(current_node->GetAddon().consistency_checker.SetAndCheck(action_type, choices));
+				assert(current_node->addon_.consistency_checker.SetAndCheck(action_type, choices));
 
-				int next_choice = current_node->GetChildren([&](ChildNodeMap const& children) {
-					return policy_.SelectChoice(
-						mcts::policy::selection::ChoiceIterator(choices, children));
-				});
+				int next_choice = policy_.SelectChoice(
+					mcts::policy::selection::ChoiceIterator(choices, current_node->children_));
 
 				assert(next_choice >= 0); // should report a valid action
 				path_.MakeChoiceForCurrentNode(next_choice);
