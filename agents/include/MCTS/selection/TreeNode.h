@@ -32,11 +32,6 @@ namespace mcts
 				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 				return functor(children_);
 			}
-			template <class Functor>
-			auto GetMutableChildren(Functor&& functor) {
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-				return functor(children_);
-			}
 
 			// @return  A boolean indicating if a new node is created; then the child data
 			template <class CreateChildFunctor>
@@ -66,11 +61,10 @@ namespace mcts
 				});
 			}
 			EdgeAddon * GetMutableEdgeAddon(int choice) {
-				return GetMutableChildren([choice](ChildNodeMap & children) -> EdgeAddon * {
-					ChildType * child = children.Get(choice);
-					if (!child) return nullptr;
-					return &child->GetEdgeAddon();
-				});
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
+				ChildType * child = children_.Get(choice);
+				if (!child) return nullptr;
+				return &child->GetEdgeAddon();
 			}
 
 			template <typename Functor>
