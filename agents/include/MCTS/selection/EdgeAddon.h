@@ -8,9 +8,7 @@ namespace mcts
 {
 	namespace selection
 	{
-		// Thread safety:
-		//    Can be read from several threads concurrently
-		//    Can only be write from one thread
+		// Thread safe
 		class EdgeAddon
 		{
 		public:

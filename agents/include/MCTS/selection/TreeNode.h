@@ -107,9 +107,10 @@ namespace mcts
 			std::unordered_map<int, ChildType> map_;
 		};
 
+		// Thread safe
 		struct TreeNode
 		{
-			ChildNodeMap children_; // thread safe
+			ChildNodeMap children_; // must be thread safe
 			TreeNodeAddon addon_; // must be thread safe
 		};
 	}

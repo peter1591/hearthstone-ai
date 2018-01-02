@@ -11,6 +11,7 @@ namespace mcts
 
 	namespace detail
 	{
+		// Thread safe
 		class BoardNodeMap
 		{
 		private:
@@ -24,7 +25,7 @@ namespace mcts
 
 			template <typename Functor>
 			void ForEach(Functor&& functor) const {
-				std::shared_lock<Utils::SharedSpinLock> lock_(mutex_);
+				std::shared_lock<Utils::SharedSpinLock> lock(mutex_);
 
 				if (!map_) return;
 				for (auto const& kv : *map_) {
@@ -33,7 +34,7 @@ namespace mcts
 			}
 
 		private:
-			MapType & GetMap()
+			MapType & LockedGetMap()
 			{
 				if (!map_) map_.reset(new MapType());
 				return *map_.get();
