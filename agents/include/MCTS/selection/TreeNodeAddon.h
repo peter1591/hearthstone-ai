@@ -130,7 +130,15 @@ namespace mcts
 			void AddLeadingNodes(TreeNode * node, EdgeAddon * edge_addon) {
 				std::lock_guard<Utils::SharedSpinLock> lock(mutex_);
 				assert(node);
-				items_.insert(TreeNodeLeadingNodesItem{ node, edge_addon });
+
+				for (auto const& item : items_) {
+					if (item.node == node && item.edge_addon == edge_addon) {
+						// duplicated, ignore
+						return;
+					}
+				}
+
+				items_.push_back(TreeNodeLeadingNodesItem{ node, edge_addon });
 			}
 
 			template <class Functor>
@@ -143,12 +151,7 @@ namespace mcts
 
 		private:
 			mutable Utils::SharedSpinLock mutex_;
-
-			// both node and choice are in the key field,
-			// since different choices might need to an identical node
-			// these might happened when trying to heal two different targets,
-			// but both targets are already fully-healed
-			std::unordered_set<TreeNodeLeadingNodesItem> items_;
+			std::vector<TreeNodeLeadingNodesItem> items_;
 		};
 
 		// Add abilities to tree node to use in SO-MCTS
