@@ -17,48 +17,6 @@ namespace mcts
 		class TreeNode
 		{
 		public:
-			// Note: only calls children's Get(), so a caller can acquire a read-lock only
-			class ChoiceIterator {
-			public:
-				ChoiceIterator(engine::ActionChoices & choices, ChildNodeMap & children) :
-					choices_(choices), children_(children),
-					current_choice_(0), current_child_(nullptr)
-				{}
-
-				void Begin() { choices_.Begin(); }
-				void StepNext() { choices_.StepNext(); }
-				bool IsEnd() { return choices_.IsEnd(); }
-
-				enum CheckResult {
-					kForceSelectChoice,
-					kNormalChoice
-				};
-				CheckResult Check() {
-					current_choice_ = choices_.Get();
-					assert(current_choice_ >= 0);
-
-					current_child_ = children_.Get(current_choice_);
-					return CheckChild(current_child_);
-				}
-				static CheckResult CheckChild(ChildType* child) {
-					if (!child) return kForceSelectChoice; // not expanded before
-					return kNormalChoice;
-				}
-
-				int GetChoice() const { return current_choice_; }
-				mcts::selection::EdgeAddon const& GetAddon() const {
-					return current_child_->GetEdgeAddon();
-				}
-
-			private:
-				engine::ActionChoices & choices_;
-				ChildNodeMap & children_;
-
-				int current_choice_;
-				ChildType * current_child_;
-			};
-
-		public:
 			// Thread safety:
 			//   the ChildNodeMap is not thread-safe
 			//   the element ChildType within ChildNodeMap is also not thread-safe
@@ -70,28 +28,10 @@ namespace mcts
 
 			TreeNode() : children_mutex_(), children_(), addon_() {}
 
-			// select among specific choices
-			// if any of the choices does not exist, return the edge to expand it
-			//    A new node will be allocated
-			// if all of the specific exist, use select_callback to select one of them
-			//    Call select_callback.ReportChoicesCount(int count)
-			//        Include invalid choices
-			//    Call select_callback.AddChoice(int choice, EdgeAddon, TreeNode* node) for each choices
-			//        If an action is marked invalid before, a nullptr is passed to the 'node' parameter
-			//    Call select_callback.SelectChoice() -> TreeNode to get result
-			// Return -1 if all choices are invalid.
-			//    (or, the force_choice is invalid)
-			template <typename SelectCallback>
-			int Select(engine::ActionType action_type, engine::ActionChoices choices, SelectCallback && select_callback)
-			{
-				// TODO: move to selection stage class
-
-				// We can only acquire a shared lock,
-				// since ChoiceIterator only calls children_.Get()
+			template <class Functor>
+			auto GetChildren(Functor&& functor) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-				return select_callback.SelectChoice(
-					ChoiceIterator(choices, children_)
-				);
+				return functor(children_);
 			}
 
 			struct FollowStatus {

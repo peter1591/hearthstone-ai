@@ -15,6 +15,46 @@ namespace mcts
 		{
 			using TreeNode = mcts::selection::TreeNode;
 
+			class ChoiceIterator {
+			public:
+				ChoiceIterator(engine::ActionChoices & choices, mcts::selection::ChildNodeMap const& children) :
+					choices_(choices), children_(children),
+					current_choice_(0), current_child_(nullptr)
+				{}
+
+				void Begin() { choices_.Begin(); }
+				void StepNext() { choices_.StepNext(); }
+				bool IsEnd() { return choices_.IsEnd(); }
+
+				enum CheckResult {
+					kForceSelectChoice,
+					kNormalChoice
+				};
+				CheckResult Check() {
+					current_choice_ = choices_.Get();
+					assert(current_choice_ >= 0);
+
+					current_child_ = children_.Get(current_choice_);
+					return CheckChild(current_child_);
+				}
+				static CheckResult CheckChild(mcts::selection::ChildType const* child) {
+					if (!child) return kForceSelectChoice; // not expanded before
+					return kNormalChoice;
+				}
+
+				int GetChoice() const { return current_choice_; }
+				mcts::selection::EdgeAddon const& GetAddon() const {
+					return current_child_->GetEdgeAddon();
+				}
+
+			private:
+				engine::ActionChoices & choices_;
+				mcts::selection::ChildNodeMap const& children_;
+
+				int current_choice_;
+				mcts::selection::ChildType const* current_child_;
+			};
+
 			class RandomPolicy {
 			public:
 				RandomPolicy(std::mt19937 & rand) : choices_(), rand_(rand) {}

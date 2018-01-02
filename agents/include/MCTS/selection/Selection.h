@@ -67,7 +67,11 @@ namespace mcts
 				TreeNode* current_node = path_.GetCurrentNode();
 				assert(current_node->GetAddon().consistency_checker.SetAndCheck(action_type, choices));
 
-				int next_choice = current_node->Select(action_type, choices, policy_);
+				int next_choice = current_node->GetChildren([&](ChildNodeMap const& children) {
+					return policy_.SelectChoice(
+						mcts::policy::selection::ChoiceIterator(choices, children));
+				});
+
 				assert(next_choice >= 0); // should report a valid action
 				path_.MakeChoiceForCurrentNode(next_choice);
 
