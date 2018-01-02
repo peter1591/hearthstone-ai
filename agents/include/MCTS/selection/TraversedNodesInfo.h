@@ -79,7 +79,7 @@ namespace mcts {
 				AddPathNode(current_node_, -1, nullptr, next_node);
 			}
 
-			void Update(double credit) {
+			void Update(float credit) {
 				TreeUpdater updater;
 				updater.Update(path_, credit);
 			}
@@ -95,7 +95,7 @@ namespace mcts {
 
 					if constexpr (StaticConfigs::kVirtualLoss != 0) {
 						static_assert(StaticConfigs::kVirtualLoss > 0);
-						edge_addon->AddTotal(StaticConfigs::kVirtualLoss);
+						edge_addon->AddCredit(0.0, StaticConfigs::kVirtualLoss);
 					}
 				}
 

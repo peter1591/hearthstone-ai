@@ -136,11 +136,9 @@ namespace mcts
 
 					// Phase 2: use UCB to make a choice
 					auto get_score = [total_chosen_times](Item const& item) {
-						auto total = item.edge_addon->GetTotal();
-						auto wins = item.edge_addon->GetCredit();
-						assert(total > 0);
-						assert(wins <= total);
-						double exploit_score = ((double)wins) / total;
+						double exploit_score = item.edge_addon->GetAverageCredit();
+						assert(exploit_score >= 0.0);
+						assert(exploit_score <= 1.0);
 
 						auto chosen_times = item.edge_addon->GetChosenTimes();
 						// in case another thread visited it

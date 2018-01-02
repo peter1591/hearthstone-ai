@@ -287,5 +287,8 @@
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodesInfo.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon-impl.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include "MCTS/simulation/Simulation.h"
 
 #include "MCTS/detail/BoardNodeMap-impl.h"
+#include "MCTS/selection/EdgeAddon-impl.h"
 
 namespace mcts
 {

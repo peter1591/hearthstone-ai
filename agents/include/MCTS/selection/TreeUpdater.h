@@ -21,7 +21,7 @@ namespace mcts
 			TreeUpdater(TreeUpdater const&) = delete;
 			TreeUpdater & operator=(TreeUpdater const&) = delete;
 
-			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, double credit)
+			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, float credit)
 			{
 				for (size_t i = 0; i < nodes.size(); ++i) {
 					auto const& item = nodes[i];
@@ -29,8 +29,9 @@ namespace mcts
 					if (item.edge_addon_) {
 						if constexpr (StaticConfigs::kVirtualLoss != 0) {
 							static_assert(StaticConfigs::kVirtualLoss > 0);
-							item.edge_addon_->AddTotal(-StaticConfigs::kVirtualLoss); // remove virtual loss
-							assert(item.edge_addon_->GetTotal() >= 0);
+							item.edge_addon_->AddCredit(1.0, StaticConfigs::kVirtualLoss); // remove virtual loss
+							assert(item.edge_addon_->GetAverageCredit() >= 0.0);
+							assert(item.edge_addon_->GetAverageCredit() <= 1.0);
 						}
 					}
 				}
@@ -40,17 +41,15 @@ namespace mcts
 			}
 
 		private:
-			void LinearlyUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, double credit) {
+			void LinearlyUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, float credit) {
 				for (auto const& item : nodes) {
 					auto * edge_addon = item.edge_addon_;
 					if (!edge_addon) continue;
-
-					edge_addon->AddTotal(100);
-					edge_addon->AddCredit((int)(credit * 100.0));
+					edge_addon->AddCredit(credit);
 				}
 			}
 
-			void TreeLikeUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, double credit) {
+			void TreeLikeUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, float credit) {
 				if (nodes.empty()) return;
 
 				assert([&](){
@@ -72,7 +71,7 @@ namespace mcts
 				assert(should_visits_.empty());
 			}
 
-			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, EdgeAddon * start_edge, double credit)
+			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, EdgeAddon * start_edge, float credit)
 			{
 				assert(start_node);
 				
@@ -89,8 +88,7 @@ namespace mcts
 							should_visits_.erase(edge_addon);
 							return true;
 						}());
-						edge_addon->AddTotal(100);
-						edge_addon->AddCredit((int)(credit*100.0));
+						edge_addon->AddCredit(credit);
 					}
 
 					// use BFS to reduce the lock time

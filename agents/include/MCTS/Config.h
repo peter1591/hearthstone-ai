@@ -16,16 +16,17 @@ namespace mcts
 		using SideController = policy::SideController;
 		using StageController = policy::StageController;
 
+		using CreditPolicy = policy::CreditPolicy;
+		static constexpr int kCreditGranularity = 100; // this effctively increase the 'total' field by 100 for each simulation
+
 		using SelectionPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;
-		static constexpr int kVirtualLoss = 300;
+		static constexpr int kVirtualLoss = 3;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHardCodedRules;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
-
-		using CreditPolicy = policy::CreditPolicy;
 	};
 }

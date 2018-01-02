@@ -274,9 +274,8 @@ namespace mcts
 				}
 
 				if (!only_show_best_choice) {
-					double credit_percentage = (double)edge_addon->GetCredit() / edge_addon->GetTotal() * 100;
 					s << indent_padding
-						<< "Estimated win rate: " << edge_addon->GetCredit() << " / " << edge_addon->GetTotal() << " (" << credit_percentage << "%)"
+						<< "Estimated win rate: " << edge_addon->GetAverageCredit() * 100.0 << "%"
 						<< std::endl;
 				}
 
