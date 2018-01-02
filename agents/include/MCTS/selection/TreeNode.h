@@ -35,7 +35,8 @@ namespace mcts
 			}
 
 			// @return  A boolean indicating if a new node is created; then the child data
-			std::pair<bool, ChildType *> GetOrCreateChild(int choice) {
+			template <class CreateChildFunctor>
+			std::pair<bool, ChildType *> GetOrCreateChild(int choice, CreateChildFunctor&& create_child_functor) {
 				// Optimize to only acquire a read lock if no need to create a new node
 				{
 					std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
@@ -47,23 +48,9 @@ namespace mcts
 					std::lock_guard<Utils::SharedSpinLock> write_lock(children_mutex_);
 					ChildType* child = children_.Get(choice);
 					if (child) return { false, child };
-					
-					child = children_.CreateNewNode(choice, std::make_unique<TreeNode>());
+					child = create_child_functor(children_);
 					return { true, child };
 				}
-			}
-
-			EdgeAddon& MarkChoiceRedirect(int choice)
-			{
-				// Need a write lock since we modify child state
-				std::lock_guard<Utils::SharedSpinLock> lock(children_mutex_);
-
-				// the child node is not yet created
-				// since we delay the node creation as late as possible
-				ChildType* child = children_.Get(choice);
-				if (!child) child = children_.CreateRedirectNode(choice);
-				assert(child);
-				return child->GetEdgeAddon();
 			}
 
 			EdgeAddon * GetEdgeAddon(int choice) {

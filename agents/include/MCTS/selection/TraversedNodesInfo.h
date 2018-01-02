@@ -33,7 +33,9 @@ namespace mcts {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 
-				auto result = current_node_->GetOrCreateChild(pending_choice_);
+				auto result = current_node_->GetOrCreateChild(pending_choice_, [&](ChildNodeMap & children) {
+					return children.CreateNewNode(pending_choice_, std::make_unique<TreeNode>());
+				});
 				bool new_node_created = result.first;
 				auto child = result.second;
 
@@ -49,19 +51,26 @@ namespace mcts {
 			void ConstructRedirectNode(detail::BoardNodeMap * redirect_node_map, engine::view::Board const& board, engine::Result result) {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
-				auto & edge_addon = current_node_->MarkChoiceRedirect(pending_choice_);
+
+				auto child_result = current_node_->GetOrCreateChild(pending_choice_, [&](ChildNodeMap & children) {
+					return children.CreateRedirectNode(pending_choice_);
+				});
+				bool new_node_created = child_result.first;
+				auto child = child_result.second;
+
+				if (new_node_created) new_node_created_ = true;
 
 				if (result != engine::kResultNotDetermined) {
-					// Don't need to construct a node for leave nodes.
+					// Don't need to construct a node for leaf nodes.
 					// We only need the edge to record win-rate, which is already got before.
 					TreeNode * next_node = nullptr;
-					AddPathNode(current_node_, pending_choice_, &edge_addon, next_node);
+					AddPathNode(current_node_, pending_choice_, &child->GetEdgeAddon(), next_node);
 				}
 				else {
 					TreeNode * next_node = redirect_node_map->GetOrCreateNode(board, &new_node_created_);
 					assert(next_node);
 					assert(next_node->GetAddon().consistency_checker.CheckActionType(engine::ActionType::kMainAction));
-					AddPathNode(current_node_, pending_choice_, &edge_addon, next_node);
+					AddPathNode(current_node_, pending_choice_, &child->GetEdgeAddon(), next_node);
 				}
 			}
 
