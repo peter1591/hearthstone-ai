@@ -110,12 +110,6 @@
     <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h">
       <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\NodeIndexMap.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\TreeNodeBase.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h">
       <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
