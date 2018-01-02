@@ -72,13 +72,14 @@ namespace engine {
 		{
 			assert(!cards.empty());
 			assert(cards.size() > 1);
-			return (Cards::CardId)GetNumber(ActionType::kChooseOne, ActionChoices(cards));
+			ActionChoices action_choices(cards);
+			return (Cards::CardId)GetNumber(ActionType::kChooseOne, action_choices);
 		}
 
 		int ChooseHandCard() final {
 			auto const& playable_cards = analyzer_.GetPlayableCards();
 			assert(!playable_cards.empty());
-			int idx = GetNumber(ActionType::kChooseHandCard, ActionChoices((int)playable_cards.size()));
+			int idx = GetNumber(ActionType::kChooseHandCard, (int)playable_cards.size());
 			return (int)playable_cards[idx];
 		}
 
@@ -91,10 +92,11 @@ namespace engine {
 		}
 
 		int GetNumber(ActionType::Types action_type, int exclusive_max) {
-			return GetNumber(action_type, ActionChoices(exclusive_max));
+			ActionChoices action_choices(exclusive_max);
+			return GetNumber(action_type, action_choices);
 		}
 
-		virtual int GetNumber(ActionType::Types action_type, ActionChoices const& action_choices) = 0;
+		virtual int GetNumber(ActionType::Types action_type, ActionChoices & action_choices) = 0;
 
 	protected:
 		ValidActionAnalyzer analyzer_;

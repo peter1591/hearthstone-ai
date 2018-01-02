@@ -39,7 +39,7 @@ namespace mcts
 					board_->GetCurrentPlayerStateRefView().GetValidActionGetter());
 			}
 
-			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices & action_choices) final {
 				assert(board_);
 				if (action_type != engine::ActionType::kMainAction)
 				{
@@ -129,7 +129,7 @@ namespace mcts
 			selection_stage_.FinishIteration(board, result);
 		}
 		
-		int ChooseAction(engine::view::Board const& board, engine::ActionType action_type, engine::ActionChoices const& choices) {
+		int ChooseAction(engine::view::Board const& board, engine::ActionType action_type, engine::ActionChoices & choices) {
 			assert(!choices.Empty());
 
 			if (stage_ == kStageSelection) {

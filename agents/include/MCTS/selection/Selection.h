@@ -49,7 +49,7 @@ namespace mcts
 			}
 
 			// @return >= 0 for the chosen action
-			int ChooseAction(engine::ActionType action_type, engine::ActionChoices const& choices)
+			int ChooseAction(engine::ActionType action_type, engine::ActionChoices & choices)
 			{
 				assert(!choices.Empty());
 

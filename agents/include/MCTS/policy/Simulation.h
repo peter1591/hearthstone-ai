@@ -639,7 +639,7 @@ namespace mcts
 						// TODO: can we remove this? need special care on main op?
 						void SetMainOpIndex(int main_op_idx) { main_op_idx_ = main_op_idx; }
 
-						int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+						int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices & action_choices) final {
 							if (action_type == engine::ActionType::kMainAction) {
 								return main_op_idx_;
 							}

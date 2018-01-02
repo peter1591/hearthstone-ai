@@ -17,9 +17,8 @@ namespace engine
 			RandomGenerator(engine::IActionParameterGetter & callback) : callback_(callback) {}
 
 			int Get(int exclusive_max) final {
-				return callback_.GetNumber(
-					engine::ActionType::kRandom,
-					engine::ActionChoices(exclusive_max));
+				ActionChoices action_choices(exclusive_max);
+				return callback_.GetNumber(engine::ActionType::kRandom, action_choices);
 			}
 
 		private:

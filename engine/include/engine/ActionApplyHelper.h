@@ -64,7 +64,7 @@ namespace engine
 				result_(result), choices_(choices), choices_idx_(choices_idx)
 			{}
 
-			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices const& action_choices) final {
+			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices & action_choices) final {
 				if (action_type != engine::ActionType::kMainAction)
 				{
 					assert(action_choices.Size() > 0);
