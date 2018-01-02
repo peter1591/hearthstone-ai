@@ -33,6 +33,11 @@ namespace mcts
 				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
 				return functor(children_);
 			}
+			template <class Functor>
+			auto GetMutableChildren(Functor&& functor) {
+				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
+				return functor(children_);
+			}
 
 			// @return  A boolean indicating if a new node is created; then the child data
 			template <class CreateChildFunctor>
@@ -53,40 +58,32 @@ namespace mcts
 				}
 			}
 
-			EdgeAddon * GetEdgeAddon(int choice) {
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-
-				ChildType * child = children_.Get(choice);
-				if (!child) return nullptr;
-				return &child->GetEdgeAddon();
-			}
-
+		public:
 			EdgeAddon const* GetEdgeAddon(int choice) const {
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-
-				ChildType const* child = children_.Get(choice);
-				if (!child) return nullptr;
-				return &child->GetEdgeAddon();
+				return GetChildren([choice](ChildNodeMap const& children) -> EdgeAddon const* {
+					ChildType const* child = children.Get(choice);
+					if (!child) return nullptr;
+					return &child->GetEdgeAddon();
+				});
+			}
+			EdgeAddon * GetMutableEdgeAddon(int choice) {
+				return GetMutableChildren([choice](ChildNodeMap & children) -> EdgeAddon * {
+					ChildType * child = children.Get(choice);
+					if (!child) return nullptr;
+					return &child->GetEdgeAddon();
+				});
 			}
 
 			template <typename Functor>
 			void ForEachChild(Functor&& functor) const {
-				std::shared_lock<Utils::SharedSpinLock> lock(children_mutex_);
-
-				children_.ForEach(std::forward<Functor>(functor));
+				return GetChildren([&](ChildNodeMap const& children) {
+					children.ForEach(std::forward<Functor>(functor));
+				});
 			}
 
 		public:
 			TreeNodeAddon const& GetAddon() const { return addon_; }
 			TreeNodeAddon & GetAddon() { return addon_; }
-
-		public:
-			// return nullptr if child does not exists, or its an invalid/redirect node
-			TreeNode* GetChildNode(int choice) {
-				auto item = children_.Get(choice);
-				if (!item) return nullptr;
-				return item->GetNode();
-			}
 
 		private:
 			mutable Utils::SharedSpinLock children_mutex_;
