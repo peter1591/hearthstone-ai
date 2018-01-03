@@ -3,6 +3,7 @@
 #include <atomic>
 #include <cstdint>
 
+#include "MCTS/Config.h"
 
 namespace mcts
 {
@@ -17,8 +18,24 @@ namespace mcts
 			void AddChosenTimes(int v) { chosen_times += v; }
 			auto GetChosenTimes() const { return chosen_times.load(); }
 
-			float GetAverageCredit() const;
-			void AddCredit(float score, int repeat_times = 1);
+			float GetAverageCredit() const {
+				auto total_load = total.load();
+				assert(total_load > 0);
+				float ret = (float)credit.load() / total_load;
+				assert(ret >= 0.0);
+				assert(ret <= 1.0);
+				return ret;
+			}
+
+			void AddCredit(float score, int repeat_times = 1) {
+				int total_increment = StaticConfigs::kCreditGranularity;
+				int credit_increment = (int)(score * StaticConfigs::kCreditGranularity);
+
+				// These two fields are not updated in an atomic operation. But this should be fine...
+				total += total_increment * repeat_times;
+				credit += credit_increment * repeat_times;
+			}
+			
 			auto GetTotal() const { return total.load(); }
 
 		private:

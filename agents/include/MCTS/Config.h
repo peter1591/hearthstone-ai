@@ -1,16 +1,28 @@
 #pragma once
 
-#include "MCTS/policy/SideController.h"
-#include "MCTS/policy/StageController.h"
-#include "MCTS/policy/CreditPolicy.h"
-#include "MCTS/policy/RandomByRand.h"
-#include "MCTS/policy/Selection.h"
-#include "MCTS/policy/Simulation.h"
-
 namespace mcts
 {
+	namespace policy {
+		class SideController;
+		class StageController;
+		class CreditPolicy;
+		class RandomByMt19937;
+
+		namespace selection {
+			class UCBPolicy;
+		}
+
+		namespace simulation {
+			class RandomPlayouts;
+			class RandomPlayoutWithHardCodedRules;
+			class HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
+			class HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
+		}
+	}
+
 	struct StaticConfigs
 	{
+
 		static constexpr bool enable_statistic = true; // TODO: disable for release builds
 
 		using SideController = policy::SideController;

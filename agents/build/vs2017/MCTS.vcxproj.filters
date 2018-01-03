@@ -113,9 +113,6 @@
     <ClInclude Include="..\..\include\MCTS\policy\Simulation.h">
       <Filter>Header Files\MCTS\policy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h">
-      <Filter>Header Files\MCTS\selection</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
@@ -276,9 +273,6 @@
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\TraversedNodesInfo.h">
-      <Filter>Header Files\MCTS\selection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon-impl.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap.h">

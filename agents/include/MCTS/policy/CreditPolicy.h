@@ -1,5 +1,7 @@
 #pragma once
 
+#include "engine/view/Board.h"
+
 namespace mcts
 {
 	namespace policy

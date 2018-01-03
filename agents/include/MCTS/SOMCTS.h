@@ -3,13 +3,20 @@
 #include <unordered_map>
 #include <memory>
 
+#include "MCTS/policy/CreditPolicy.h"
+#include "MCTS/policy/RandomByRand.h"
+#include "MCTS/policy/Selection.h"
+#include "MCTS/policy/SideController.h"
+#include "MCTS/policy/Simulation.h"
+#include "MCTS/policy/StageController.h"
+
+
 #include "engine/view/Board.h"
 #include "MCTS/Statistic.h"
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
 
 #include "MCTS/selection/BoardNodeMap-impl.h"
-#include "MCTS/selection/EdgeAddon-impl.h"
 
 namespace mcts
 {
