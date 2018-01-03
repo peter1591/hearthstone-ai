@@ -1,14 +1,14 @@
 #pragma once
 
-#include "MCTS/detail/BoardNodeMap.h"
+#include "MCTS/selection/BoardNodeMap.h"
 
 #include "MCTS/selection/TreeNode.h"
 
 namespace mcts
 {
-	namespace detail
+	namespace selection
 	{
-		inline BoardNodeMap::TreeNode* BoardNodeMap::GetOrCreateNode(engine::view::Board const& board, bool * new_node_created)
+		inline TreeNode* BoardNodeMap::GetOrCreateNode(engine::view::Board const& board, bool * new_node_created)
 		{
 			auto board_view = board.CreateView();
 			{

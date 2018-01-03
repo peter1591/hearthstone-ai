@@ -5,11 +5,10 @@
 
 #include "engine/view/Board.h"
 #include "MCTS/Statistic.h"
-#include "MCTS/detail/BoardNodeMap.h"
 #include "MCTS/selection/Selection.h"
 #include "MCTS/simulation/Simulation.h"
 
-#include "MCTS/detail/BoardNodeMap-impl.h"
+#include "MCTS/selection/BoardNodeMap-impl.h"
 #include "MCTS/selection/EdgeAddon-impl.h"
 
 namespace mcts

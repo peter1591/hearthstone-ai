@@ -45,7 +45,7 @@ namespace mcts {
 				if (new_node_created) new_node_created_ = true;
 			}
 
-			void ConstructRedirectNode(detail::BoardNodeMap * redirect_node_map, engine::view::Board const& board, engine::Result result) {
+			void ConstructRedirectNode(BoardNodeMap * redirect_node_map, engine::view::Board const& board, engine::Result result) {
 				assert(current_node_);
 				assert(pending_choice_ >= 0);
 

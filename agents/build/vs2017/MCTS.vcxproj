@@ -207,8 +207,6 @@
     <ClInclude Include="..\..\include\agents\MCTSAgent.h" />
     <ClInclude Include="..\..\include\agents\MCTSRunner.h" />
     <ClInclude Include="..\..\include\MCTS\Config.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h" />
-    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h" />
     <ClInclude Include="..\..\include\MCTS\inspector\InteractiveShell.h" />
     <ClInclude Include="..\..\include\MCTS\MOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h" />
@@ -217,6 +215,8 @@
     <ClInclude Include="..\..\include\MCTS\policy\SideController.h" />
     <ClInclude Include="..\..\include\MCTS\policy\Simulation.h" />
     <ClInclude Include="..\..\include\MCTS\policy\StageController.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap-impl.h" />
+    <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap.h" />
     <ClInclude Include="..\..\include\MCTS\selection\ChildNodeMap.h" />
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon-impl.h" />
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon.h" />

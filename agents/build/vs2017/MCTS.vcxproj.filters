@@ -16,9 +16,6 @@
     <Filter Include="Header Files\MCTS">
       <UniqueIdentifier>{05520c9c-440b-4fb9-9b33-55a880279bdf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\MCTS\detail">
-      <UniqueIdentifier>{b98b6334-272c-4321-8d82-8a745c6d816a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\MCTS\selection">
       <UniqueIdentifier>{756b656e-dca2-4912-9875-8237db3a81b7}</UniqueIdentifier>
     </Filter>
@@ -103,12 +100,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\agents\MCTSRunner.h">
       <Filter>Header Files\agents</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap.h">
-      <Filter>Header Files\MCTS\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\detail\BoardNodeMap-impl.h">
-      <Filter>Header Files\MCTS\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\policy\CreditPolicy.h">
       <Filter>Header Files\MCTS\policy</Filter>
@@ -288,6 +279,12 @@
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\EdgeAddon-impl.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap.h">
+      <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap-impl.h">
       <Filter>Header Files\MCTS\selection</Filter>
     </ClInclude>
   </ItemGroup>

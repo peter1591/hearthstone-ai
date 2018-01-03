@@ -2,7 +2,7 @@
 
 #include <mutex>
 #include "engine/ActionType.h"
-#include "MCTS/detail/BoardNodeMap.h"
+#include "MCTS/selection/BoardNodeMap.h"
 #include "MCTS/selection/EdgeAddon.h"
 #include "engine/view/ReducedBoardView.h"
 #include "Utils/HashCombine.h"
@@ -188,7 +188,7 @@ namespace mcts
 			{}
 
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
-			detail::BoardNodeMap board_node_map;
+			BoardNodeMap board_node_map;
 			TreeNodeLeadingNodes leading_nodes;
 		};
 	}

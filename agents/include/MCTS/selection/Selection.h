@@ -113,7 +113,7 @@ namespace mcts
 		private:
 			TreeNode & root_;
 			bool board_changed_;
-			detail::BoardNodeMap * redirect_node_map_; // To tackle randomness, the next node is found from this map after each action
+			BoardNodeMap * redirect_node_map_; // To tackle randomness, the next node is found from this map after each action
 			TraversedNodesInfo path_;
 			StaticConfigs::SelectionPhaseRandomActionPolicy random_;
 			StaticConfigs::SelectionPhaseSelectActionPolicy policy_;

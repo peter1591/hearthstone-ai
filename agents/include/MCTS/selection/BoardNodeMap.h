@@ -7,15 +7,14 @@
 
 namespace mcts
 {
-	namespace selection { struct TreeNode; }
-
-	namespace detail
+	namespace selection
 	{
+		struct TreeNode;
+
 		// Thread safe
 		class BoardNodeMap
 		{
 		private:
-			using TreeNode = mcts::selection::TreeNode;
 			using MapType = std::unordered_map<engine::view::ReducedBoardView, std::unique_ptr<TreeNode>>;
 
 		public:
