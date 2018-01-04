@@ -13,7 +13,7 @@ Compete with Warlock in expert practice mode. Running on Macbook Pro.
 * Games with hidden information are still a big challenge in many ways.
 * Give it a try on Hearhstone.
 
-## Components
+## Modules
 
 ### [Game engine](./engine)
 * Header-only implementation. No dependency. No need to compile anything!
@@ -23,20 +23,20 @@ Compete with Warlock in expert practice mode. Running on Macbook Pro.
 * A judgement framework allowing two agents to compete with each other.
 
 ### [MCTS Agent](./agents/include/agents)
-* Monte Carlo tree search
-* Use Multiple-Observer MCTS to handle hidden information
-* Share tree nodes for identical boards
-  
-### [Neural Network](./agents/include/neural_net)
+* [Monte Carlo tree search](./agents/include/MCTS)
+  * Use Multiple-Observer MCTS to handle hidden information
+  * Share tree nodes for identical boards
+* Combine with a [neural network](./agents/include/neural_net)
+  * Act as a policy network to choose the promising steps with higher probabilities
+  * Also act as a default network to play the game in simulation phase
+  * Guess the game result for early cutoff in MCTS
 
-The goal of the neural network is to guess who is going to win this game. Currently, the accuracy is about 79% for expert-practice decks.
-
-A simple example shows a weak neural network can *greatly* boost MCTS play strength:
-  * A person player learns in one day or so that *arcane missiles* should generally not be played in the first turn.
+A simple example shows the neural network can *greatly* boost MCTS play strength:
+  * A mid-level person knows the *arcane missiles* should generally not be played in the first turn.
   * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
   * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
   
-Tensorflow is also used [here](./agents/train/tensorflow) in this project to implement different models and compare there performance.
+Tensorflow is also [used] (./agents/train/tensorflow) in this project to design/implement different models, and compare their performance.
 
 ### [Game Board Recognition](./ui/build/vs2017/HearthstoneAI/LogWatcher)
 * Use the logging feature in HearthStone
