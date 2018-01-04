@@ -56,7 +56,7 @@ Tensorflow is also [used] (./agents/train/tensorflow) in this project to design/
 
 ## Future Works
 
-### Neural Network
+### Neural Network Improvements
 
 The goal of the neural network is to guess who is going to win this game, by looking at only the current board. Several improvements could be done:
 
@@ -67,7 +67,7 @@ The goal of the neural network is to guess who is going to win this game, by loo
 
 Hope we can have a better accuracy than current result (~79%, which also aligned to the result of AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)).
 
-We can use embedding to encode battlecry and deathrattle features for each different card IDs. TensorFlow has many great articles. Like https://www.tensorflow.org/tutorials/wide.
+I have tried to embedding the card id to encode the battlecry and deathrattle features for each different card. Maybe we need to find a better way to generate game data automatically, so the neural network can learn the embeddings separately and hopefully more accurately.
 
 ### Balance Between Wide and Deep
 
