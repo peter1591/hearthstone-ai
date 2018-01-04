@@ -7,8 +7,11 @@ This is the Monte Carlo tree search module, which explore and expand the game tr
 * Tackle randomness by creating redirect nodes
 * Share identical game state in one single tree node
   * For example, if two actions can be swapped without any notable difference, the corresponding two tree nodes can in fact map to the one single node.
-* Support virtual loss to improve multi-thread performance
+* Parallel Monte Carlo tree search
+
+## Thread Safety
 * Support multi-thread environment
+* Support virtual loss to improve multi-thread performance
 
 ## Reference
 1. [Information Set Monte Carlo Tree Search](http://eprints.whiterose.ac.uk/75048/1/CowlingPowleyWhitehouse2012.pdf)
