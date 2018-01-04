@@ -5,6 +5,8 @@ This is the Monte Carlo tree search module, which explore and expand the game tr
 ## Features
 * Tackle **hidden information** using information set. Method proposed in the paper [Information Set Monte Carlo Tree Search](http://eprints.whiterose.ac.uk/75048/1/CowlingPowleyWhitehouse2012.pdf)
 * Tackle randomness by creating redirect nodes
+* Share identical game state in one single tree node
+  * For example, if two actions can be swapped without any notable difference, the corresponding two tree nodes can in fact map to the one single node.
 * Support virtual loss to improve multi-thread performance
 * Support multi-thread environment
 
