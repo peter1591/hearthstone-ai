@@ -9,6 +9,9 @@ This is the Monte Carlo tree search module, which explore and expand the game tr
   * For example, if two actions can be swapped without any notable difference, the corresponding two tree nodes can in fact map to the one single node.
 * Parallel Monte Carlo tree search
 
+## Framework Architecture
+The MCTS algorithm are separated from different application-specific settings/configurations. The application-specific settings are collected in the [config header](./Config.h) file, and all related classes are collected in the [policy](./policy) namespace.
+
 ## Thread Safety
 * Support multi-thread environment
 * Support virtual loss to improve multi-thread performance
