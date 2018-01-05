@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 namespace mcts
 {
 	namespace policy {
@@ -20,9 +22,8 @@ namespace mcts
 		}
 	}
 
-	struct StaticConfigs
+	namespace StaticConfigs
 	{
-
 		static constexpr bool enable_statistic = true; // TODO: disable for release builds
 
 		using SideController = policy::SideController;
@@ -31,9 +32,16 @@ namespace mcts
 		using CreditPolicy = policy::CreditPolicy;
 		static constexpr int kCreditGranularity = 100; // this effctively increase the 'total' field by 100 for each simulation
 
+		namespace updater_policy {
+			struct TreeUpdate {};
+			struct LinearUpdate {};
+		}
+		using UpdaterPolicy = updater_policy::TreeUpdate;
+
 		using SelectionPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SelectionPhaseSelectActionPolicy = policy::selection::UCBPolicy;
 		static constexpr int kVirtualLoss = 3;
+		static constexpr bool kRecordLeadingNodes = std::is_same_v<UpdaterPolicy, updater_policy::TreeUpdate>;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;

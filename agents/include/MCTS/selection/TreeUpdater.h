@@ -21,27 +21,10 @@ namespace mcts
 			TreeUpdater(TreeUpdater const&) = delete;
 			TreeUpdater & operator=(TreeUpdater const&) = delete;
 
-			void Update(std::vector<selection::TraversedNodeInfo> const& nodes, float credit)
+			template <class RetType = void>
+			auto Update(std::vector<selection::TraversedNodeInfo> const& nodes, float credit)
+				-> std::enable_if_t<std::is_same_v<StaticConfigs::UpdaterPolicy, StaticConfigs::updater_policy::LinearUpdate>, RetType>
 			{
-				for (size_t i = 0; i < nodes.size(); ++i) {
-					auto const& item = nodes[i];
-
-					if (item.edge_addon_) {
-						if constexpr (StaticConfigs::kVirtualLoss != 0) {
-							static_assert(StaticConfigs::kVirtualLoss > 0);
-							item.edge_addon_->AddCredit(1.0, StaticConfigs::kVirtualLoss); // remove virtual loss
-							assert(item.edge_addon_->GetAverageCredit() >= 0.0);
-							assert(item.edge_addon_->GetAverageCredit() <= 1.0);
-						}
-					}
-				}
-
-				TreeLikeUpdateWinRate(nodes, credit);
-				//LinearlyUpdateWinRate(nodes, credit);
-			}
-
-		private:
-			void LinearlyUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, float credit) {
 				for (auto const& item : nodes) {
 					auto * edge_addon = item.edge_addon_;
 					if (!edge_addon) continue;
@@ -49,7 +32,10 @@ namespace mcts
 				}
 			}
 
-			void TreeLikeUpdateWinRate(std::vector<selection::TraversedNodeInfo> const& nodes, float credit) {
+			template <class RetType = void>
+			auto Update(std::vector<selection::TraversedNodeInfo> const& nodes, float credit)
+				-> std::enable_if_t<std::is_same_v<StaticConfigs::UpdaterPolicy, StaticConfigs::updater_policy::TreeUpdate>, RetType>
+			{
 				if (nodes.empty()) return;
 
 				assert([&](){
@@ -71,7 +57,10 @@ namespace mcts
 				assert(should_visits_.empty());
 			}
 
-			void TreeLikeUpdateWinRate(selection::TreeNode * start_node, EdgeAddon * start_edge, float credit)
+		private:
+			template <class RetType = void>
+			auto TreeLikeUpdateWinRate(selection::TreeNode * start_node, EdgeAddon * start_edge, float credit)
+				-> std::enable_if_t<std::is_same_v<StaticConfigs::UpdaterPolicy, StaticConfigs::updater_policy::TreeUpdate>, RetType>
 			{
 				assert(start_node);
 				

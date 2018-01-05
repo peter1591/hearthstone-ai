@@ -181,6 +181,8 @@ namespace mcts
 		// TODO: should be thread safe
 		struct TreeNodeAddon
 		{
+			struct Dummy {};
+
 			TreeNodeAddon() :
 				consistency_checker(),
 				board_node_map(),
@@ -189,7 +191,8 @@ namespace mcts
 
 			TreeNodeConsistencyCheckAddons consistency_checker; // TODO: debug only
 			BoardNodeMap board_node_map;
-			TreeNodeLeadingNodes leading_nodes;
+			std::conditional_t<StaticConfigs::kRecordLeadingNodes,
+				TreeNodeLeadingNodes, Dummy> leading_nodes;
 		};
 	}
 }

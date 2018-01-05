@@ -80,6 +80,19 @@ namespace mcts {
 			}
 
 			void Update(float credit) {
+				for (size_t i = 0; i < path_.size(); ++i) {
+					auto const& item = path_[i];
+
+					if (item.edge_addon_) {
+						if constexpr (StaticConfigs::kVirtualLoss != 0) {
+							static_assert(StaticConfigs::kVirtualLoss > 0);
+							item.edge_addon_->AddCredit(1.0, StaticConfigs::kVirtualLoss); // remove virtual loss
+							assert(item.edge_addon_->GetAverageCredit() >= 0.0);
+							assert(item.edge_addon_->GetAverageCredit() <= 1.0);
+						}
+					}
+				}
+
 				TreeUpdater updater;
 				updater.Update(path_, credit);
 			}
@@ -99,14 +112,25 @@ namespace mcts {
 					}
 				}
 
-				if (next_node) {
-					next_node->addon_.leading_nodes.AddLeadingNodes(node, edge_addon);
-				}
+				AddLeadingNodes(node, edge_addon, next_node);
 
 				path_.emplace_back(node, choice, edge_addon);
 
 				current_node_ = next_node;
 				pending_choice_ = -1;
+			}
+
+			template <class Dummy = void>
+			auto AddLeadingNodes(TreeNode * node, EdgeAddon * edge_addon, TreeNode * child_node)
+				-> std::enable_if_t<!StaticConfigs::kRecordLeadingNodes, Dummy>
+			{
+			}
+			template <class Dummy = void>
+			auto AddLeadingNodes(TreeNode * node, EdgeAddon * edge_addon, TreeNode * child_node)
+				->std::enable_if_t<StaticConfigs::kRecordLeadingNodes, Dummy>
+			{
+				if (!child_node) return;
+				child_node->addon_.leading_nodes.AddLeadingNodes(node, edge_addon);
 			}
 
 		private:
