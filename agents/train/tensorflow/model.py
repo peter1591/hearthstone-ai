@@ -35,7 +35,7 @@ class Model:
     self.kHandConvolutionHidden1 = 2
 
     self.kResidualBlockFeatures = 30
-    self.kResidualBlocks = 5
+    self.kResidualBlocks = 2
 
   def _model_hero(self, input_getter):
     inputs = input_getter.get_next_slice(data_reader.kHeroFeatures)
@@ -147,7 +147,7 @@ class Model:
           activation_fn=None,
           scope='dense')
 
-      if add_input:
+      if add_input is not None:
         output = tf.add(output, add_input)
 
       output = tf.nn.relu(output, 'relu')

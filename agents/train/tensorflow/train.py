@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import argparse
 import numpy
 import random
 import tensorflow as tf
@@ -12,7 +13,11 @@ kThreads = 20
 
 
 def main(_):
-  dr = data_reader.DataReader()
+  parser = argparse.ArgumentParser(description="Train Model")
+  parser.add_argument('data_dir', type=str, help="Data folder name")
+  args = parser.parse_args()
+
+  dr = data_reader.DataReader(args.data_dir)
   data, label, _ = dr.parse()
 
   data_label = list(zip(data, label))
@@ -47,7 +52,8 @@ def main(_):
   train_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={"x": data_training},
       y=label_training,
-      shuffle=True)
+      shuffle=True,
+      num_epochs=None)
   train_spec = tf.estimator.TrainSpec(
       input_fn=train_input_fn,
       max_steps=5000000)
@@ -57,7 +63,8 @@ def main(_):
       y=label_validation,
       shuffle=False)
   eval_spec = tf.estimator.EvalSpec(
-      input_fn=evaluate_input_fn)
+      input_fn=evaluate_input_fn,
+      throttle_secs=30)
 
   tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
 

@@ -40,7 +40,7 @@ class DynamicMapper:
     return self._dict_index_to_v
 
 class DataReader:
-  def __init__(self, dirname='data'):
+  def __init__(self, dirname):
     self._dirname = dirname
     self._data = []
     self._hand_card_mapper = DynamicMapper(1)
