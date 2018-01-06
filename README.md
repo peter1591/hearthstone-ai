@@ -26,17 +26,24 @@ Compete with Warlock in expert practice mode. Running on Macbook Pro.
 * [Monte Carlo tree search](./agents/include/MCTS)
   * Use Multiple-Observer MCTS to handle hidden information
   * Share tree nodes for identical boards
-* Combine with a [neural network](./agents/include/neural_net)
+* Combine with a [neural network](./agents/train/tensorflow)
   * Act as a policy network to choose the promising steps with higher probabilities
   * Also act as a default network to play the game in simulation phase
-  * Guess the game result for early cutoff in MCTS
+  * Guess the game result for early cutoff
+
+### Neural Network
+
+Use [TensorFlow](https://www.tensorflow.org) for training and prediction. The neural network model is defined in [`model.py`](./agents/train/tensorflow/model.py). A neural network model can be trained and integrated into the [MCTS agent](./agents/include/agents) by the following steps:
+
+1. Prepare [training data](./agents/train/gcc7/generate_train_data).
+2. [Train](./agents/train/tensorflow) the model using Tensorflow.
+3. Save andfreeze the model.
+4. Set the model path to MCTS agent.
 
 A simple example shows the neural network can *greatly* boost MCTS play strength:
   * A mid-level person knows the *arcane missiles* should generally not be played in the first turn.
   * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
   * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
-  
-Tensorflow is also [used] (./agents/train/tensorflow) in this project to design/implement different models, and compare their performance.
 
 ### [Game Board Recognition](./ui/build/vs2017/HearthstoneAI/LogWatcher)
 * Use the logging feature in HearthStone
