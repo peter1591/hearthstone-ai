@@ -210,6 +210,11 @@ class Model:
         "classes": tf.argmax(input=final, axis=1),
         "probabilities": tf.nn.softmax(final, name="softmax_tensor")}
 
+    if self._mode == tf.estimator.ModeKeys.PREDICT:
+      return tf.estimator.EstimatorSpec(
+          mode=self._mode, predictions=final,
+          export_outputs={"y": tf.estimator.export.PredictOutput({"y": final})})
+    
     labels = tf.reshape(labels, [-1, 1])
     loss = tf.losses.mean_squared_error(
         labels=labels,

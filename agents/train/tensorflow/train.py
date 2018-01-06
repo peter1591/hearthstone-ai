@@ -12,12 +12,24 @@ kTrainingPercent = 0.5
 kThreads = 20
 
 
-def main(_):
-  parser = argparse.ArgumentParser(description="Train Model")
-  parser.add_argument('data_dir', type=str, help="Data folder name")
-  args = parser.parse_args()
+def _get_estimator():
+  sess_config = tf.ConfigProto(
+      intra_op_parallelism_threads=kThreads,
+      inter_op_parallelism_threads=kThreads)
+  estimator_config = tf.estimator.RunConfig(session_config=sess_config)
+  
+  training_model = model.Model()
+  def model_fn(features, labels, mode):
+    training_model.set_mode(mode)
+    return training_model.get_model(features, labels)
 
-  dr = data_reader.DataReader(args.data_dir)
+  return tf.estimator.Estimator(
+      model_fn=model_fn,
+      model_dir="model_output",
+      config=estimator_config)
+	  
+def train_model(data_dir):
+  dr = data_reader.DataReader(data_dir)
   data, label, _ = dr.parse()
 
   data_label = list(zip(data, label))
@@ -34,20 +46,7 @@ def main(_):
   data_validation = data[rows_training:]
   label_validation = label[rows_training:]
 
-  sess_config = tf.ConfigProto(
-      intra_op_parallelism_threads=kThreads,
-      inter_op_parallelism_threads=kThreads)
-  estimator_config = tf.estimator.RunConfig(session_config=sess_config)
-
-  training_model = model.Model()
-  def model_fn(features, labels, mode):
-    training_model.set_mode(mode)
-    return training_model.get_model(features, labels)
-
-  estimator = tf.estimator.Estimator(
-      model_fn=model_fn,
-      model_dir="model_output",
-      config=estimator_config)
+  estimator = _get_estimator()
 
   train_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={"x": data_training},
@@ -67,8 +66,33 @@ def main(_):
       throttle_secs=30)
 
   tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
+	  
+def export_saved_model():
+  estimator = _get_estimator()
+  
+  # TODO: remove magic number of batch=32, size=140
+  feature = {"x": tf.placeholder(dtype=tf.float32, shape=[32, 140])}
+  
+  # TODO: create export folder first
+  estimator.export_savedmodel(
+	  "./export",
+	  tf.estimator.export.build_raw_serving_input_receiver_fn(feature))
+
+def main():
+  parser = argparse.ArgumentParser(description="Train Model")
+  parser.add_argument('-d', '--data', nargs='?', required=True, help="Data folder name")
+  parser.add_argument('--export', action='store_true', help="Export model")
+  try:
+    args = parser.parse_args()
+  except Exception:
+    parser.print_help()
+    sys.exit(0)
+
+  if args.export:
+    export_saved_model()
+  else:
+    train_model(args.data)
 
 if __name__ == "__main__":
   tf.logging.set_verbosity(tf.logging.INFO)
-
-  tf.app.run()
+  main()
