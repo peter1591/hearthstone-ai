@@ -3,7 +3,18 @@
 import argparse
 import numpy
 import random
+import os
+import shutil
+import tempfile
+
 import tensorflow as tf
+from tensorflow.python.tools import freeze_graph
+from tensorflow.python.tools import saved_model_utils
+from tensorflow.python.saved_model import tag_constants
+from tensorflow.python.framework import graph_util
+from tensorflow.python.framework import importer
+from tensorflow.python.saved_model import loader
+from tensorflow.python.platform import gfile
 
 import data_reader
 import model
@@ -66,22 +77,39 @@ def train_model(data_dir):
       throttle_secs=30)
 
   tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
-	  
+
 def export_saved_model():
+  batch = 1
+  input_dim = 140
+  freezed_output = "./freezed"
+
   estimator = _get_estimator()
-  
-  # TODO: remove magic number of batch=32, size=140
-  feature = {"x": tf.placeholder(dtype=tf.float32, shape=[32, 140])}
-  
-  # TODO: create export folder first
-  estimator.export_savedmodel(
-	  "./export",
-	  tf.estimator.export.build_raw_serving_input_receiver_fn(feature))
+  feature = {"x": tf.placeholder(dtype=tf.float32, shape=[batch, input_dim])}
+
+  export_dir = tempfile.mkdtemp()
+  saved_model = estimator.export_savedmodel(
+      export_dir,
+      tf.estimator.export.build_raw_serving_input_receiver_fn(feature))
+
+  graph_def = saved_model_utils.get_meta_graph_def(
+      saved_model, tag_constants.SERVING).graph_def
+
+  _ = importer.import_graph_def(graph_def, name="")
+
+  with tf.Session() as sess:
+    loader.load(sess, [tag_constants.SERVING], saved_model)
+    output_graph_def = graph_util.convert_variables_to_constants(
+        sess, graph_def, [model.kOutputNodeName])
+
+  with gfile.GFile(freezed_output, "wb") as f:
+    f.write(output_graph_def.SerializeToString())
+
+  shutil.rmtree(export_dir)
 
 def main():
   parser = argparse.ArgumentParser(description="Train Model")
   parser.add_argument('-d', '--data', nargs='?', required=True, help="Data folder name")
-  parser.add_argument('--export', action='store_true', help="Export model")
+  parser.add_argument('--export', action='store_true', help="Export and freeze model")
   try:
     args = parser.parse_args()
   except Exception:

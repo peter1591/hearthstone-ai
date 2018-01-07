@@ -7,6 +7,8 @@ import tensorflow as tf
 import data_reader
 
 
+kOutputNodeName = 'final_argmax'
+
 class NextInputGetter:
   def __init__(self, data):
     self._idx = 0
@@ -34,8 +36,8 @@ class Model:
 
     self.kHandConvolutionHidden1 = 2
 
-    self.kResidualBlockFeatures = 30
-    self.kResidualBlocks = 2
+    self.kResidualBlockFeatures = 50
+    self.kResidualBlocks = 3
 
   def _model_hero(self, input_getter):
     inputs = input_getter.get_next_slice(data_reader.kHeroFeatures)
@@ -205,9 +207,14 @@ class Model:
         inputs=prev,
         units=1,
         activation=None)
+		
+    final_argmax = tf.argmax(
+        name=kOutputNodeName,
+        input=final,
+        axis=1)
 
     predictions = {
-        "classes": tf.argmax(input=final, axis=1),
+        "classes": final_argmax,
         "probabilities": tf.nn.softmax(final, name="softmax_tensor")}
 
     if self._mode == tf.estimator.ModeKeys.PREDICT:
