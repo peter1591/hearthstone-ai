@@ -33,12 +33,15 @@ namespace alphazero
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, neural_net::Optimizer & optimizer, Args&&... args) {
 			auto start = std::chrono::steady_clock::now();
 
-			thread.AsyncRun([&]() -> void {
-				optimizer.RunOnce(optimizer_options_, std::forward<Args>(args)...);
+			thread.AsyncRun([start, milliseconds, &optimizer, &args..., this]() -> void {
+				while (true) {
+					optimizer.RunOnce(optimizer_options_, std::forward<Args>(args)...);
 
-				auto now = std::chrono::steady_clock::now();
-				if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
-					return; // time's up!
+					auto now = std::chrono::steady_clock::now();
+					auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+					if (duration > milliseconds) {
+						return; // time's up!
+					}
 				}
 			});
 
@@ -51,11 +54,13 @@ namespace alphazero
 			auto start = std::chrono::steady_clock::now();
 
 			thread.AsyncRun([&]() -> void {
-				evaluator.RunOnce(std::forward<Args>(args)..., evaluation_options_);
+				while (true) {
+					evaluator.RunOnce(std::forward<Args>(args)..., evaluation_options_);
 
-				auto now = std::chrono::steady_clock::now();
-				if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
-					return; // time's up!
+					auto now = std::chrono::steady_clock::now();
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
+						return; // time's up!
+					}
 				}
 			});
 
@@ -68,11 +73,13 @@ namespace alphazero
 			auto start = std::chrono::steady_clock::now();
 
 			thread.AsyncRun([&]() -> void {
-				self_play.RunOnce(std::forward<Args>(args)..., self_player_options_);
+				while (true) {
+					self_play.RunOnce(std::forward<Args>(args)..., self_player_options_);
 
-				auto now = std::chrono::steady_clock::now();
-				if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
-					return; // time's up!
+					auto now = std::chrono::steady_clock::now();
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
+						return; // time's up!
+					}
 				}
 			});
 
