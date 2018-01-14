@@ -1,9 +1,9 @@
 #pragma once
 
-#include "optimizer_options.h"
-#include "neural_net.h"
+#include "alphazero/neural_net/optimizer_options.h"
+#include "alphazero/neural_net/neural_net.h"
 
-namespace  alphazero
+namespace alphazero
 {
 	namespace neural_net {
 		class Optimizer

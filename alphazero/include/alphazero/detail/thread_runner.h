@@ -6,7 +6,7 @@
 #include <memory>
 #include <condition_variable>
 
-#include "neural_net/optimizer.h"
+#include "alphazero/neural_net/optimizer.h"
 
 namespace alphazero
 {

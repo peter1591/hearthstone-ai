@@ -1,8 +1,8 @@
 #pragma once
 
-#include "neural_net/neural_net.h"
-#include "evaluation/competition_result.h"
-#include "evaluation/evaluator_options.h"
+#include "alphazero/neural_net/neural_net.h"
+#include "alphazero/evaluation/competition_result.h"
+#include "alphazero/evaluation/evaluator_options.h"
 
 namespace alphazero
 {

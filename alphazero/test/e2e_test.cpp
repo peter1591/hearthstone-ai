@@ -1,4 +1,4 @@
-#include "trainer.h"
+#include "alphazero/trainer.h"
 
 int main(void)
 {

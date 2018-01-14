@@ -1,10 +1,10 @@
 #pragma once
 
-#include "detail/thread_pool.h"
-#include "neural_net/neural_net.h"
-#include "neural_net/optimizer.h"
-#include "runner.h"
-#include "logger.h"
+#include "alphazero/detail/thread_pool.h"
+#include "alphazero/neural_net/neural_net.h"
+#include "alphazero/neural_net/optimizer.h"
+#include "alphazero/runner.h"
+#include "alphazero/logger.h"
 
 namespace alphazero
 {

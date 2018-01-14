@@ -7,10 +7,10 @@
 #include <memory>
 #include <condition_variable>
 
-#include "neural_net/optimizer.h"
-#include "evaluation/evaluator.h"
-#include "self_play/self_player.h"
-#include "detail/thread_runner.h"
+#include "alphazero/neural_net/optimizer.h"
+#include "alphazero/evaluation/evaluator.h"
+#include "alphazero/self_play/self_player.h"
+#include "alphazero/detail/thread_runner.h"
 
 namespace alphazero
 {

@@ -13,63 +13,66 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\neural_net">
-      <UniqueIdentifier>{4cbd1cb9-76db-4569-839c-ac639d8a3fe3}</UniqueIdentifier>
+    <Filter Include="Header Files\alphazero">
+      <UniqueIdentifier>{b5124b13-22c1-43e6-8d43-e18dd6bea69c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\detail">
-      <UniqueIdentifier>{35ca6756-65be-414e-8020-94a6edfd3924}</UniqueIdentifier>
+    <Filter Include="Header Files\alphazero\detail">
+      <UniqueIdentifier>{a718bfba-db42-4815-b93f-d357625c5477}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\evaluation">
-      <UniqueIdentifier>{e252360c-2f46-487b-b32b-5b85b5660425}</UniqueIdentifier>
+    <Filter Include="Header Files\alphazero\evaluation">
+      <UniqueIdentifier>{fc36ec4d-8efa-44a1-8e43-e3c94e71f5c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\self_play">
-      <UniqueIdentifier>{b80abcce-a142-46c3-9a34-fb2813f482d3}</UniqueIdentifier>
+    <Filter Include="Header Files\alphazero\neural_net">
+      <UniqueIdentifier>{ba4965cd-7cde-49dd-83e8-80f06e1082a2}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\include\trainer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\neural_net\optimizer_options.h">
-      <Filter>Header Files\neural_net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\neural_net\optimizer.h">
-      <Filter>Header Files\neural_net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\runner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\neural_net\neural_net.h">
-      <Filter>Header Files\neural_net</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\detail\thread_runner.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\detail\thread_pool.h">
-      <Filter>Header Files\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\evaluation\competition_result.h">
-      <Filter>Header Files\evaluation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\evaluation\evaluator.h">
-      <Filter>Header Files\evaluation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\evaluation\evaluator_options.h">
-      <Filter>Header Files\evaluation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\self_play\self_player.h">
-      <Filter>Header Files\self_play</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\include\self_play\self_player_options.h">
-      <Filter>Header Files\self_play</Filter>
-    </ClInclude>
+    <Filter Include="Header Files\alphazero\self_play">
+      <UniqueIdentifier>{3d4dc913-ede6-4531-b1d9-50c2fab63309}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\test\e2e_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\include\alphazero\logger.h">
+      <Filter>Header Files\alphazero</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\runner.h">
+      <Filter>Header Files\alphazero</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\trainer.h">
+      <Filter>Header Files\alphazero</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_pool.h">
+      <Filter>Header Files\alphazero\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_runner.h">
+      <Filter>Header Files\alphazero\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\competition_result.h">
+      <Filter>Header Files\alphazero\evaluation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator.h">
+      <Filter>Header Files\alphazero\evaluation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator_options.h">
+      <Filter>Header Files\alphazero\evaluation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\neural_net.h">
+      <Filter>Header Files\alphazero\neural_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer.h">
+      <Filter>Header Files\alphazero\neural_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer_options.h">
+      <Filter>Header Files\alphazero\neural_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h">
+      <Filter>Header Files\alphazero\self_play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player_options.h">
+      <Filter>Header Files\alphazero\self_play</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

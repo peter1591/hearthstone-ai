@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <vector>
 
-#include "detail/thread_runner.h"
+#include "alphazero/detail/thread_runner.h"
 
 namespace alphazero
 {

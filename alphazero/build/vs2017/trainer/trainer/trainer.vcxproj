@@ -115,22 +115,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\include\detail\thread_pool.h" />
-    <ClInclude Include="..\..\..\..\include\detail\thread_runner.h" />
-    <ClInclude Include="..\..\..\..\include\evaluation\competition_result.h" />
-    <ClInclude Include="..\..\..\..\include\evaluation\evaluator.h" />
-    <ClInclude Include="..\..\..\..\include\evaluation\evaluator_options.h" />
-    <ClInclude Include="..\..\..\..\include\logger.h" />
-    <ClInclude Include="..\..\..\..\include\neural_net\neural_net.h" />
-    <ClInclude Include="..\..\..\..\include\neural_net\optimizer.h" />
-    <ClInclude Include="..\..\..\..\include\neural_net\optimizer_options.h" />
-    <ClInclude Include="..\..\..\..\include\runner.h" />
-    <ClInclude Include="..\..\..\..\include\self_play\self_player.h" />
-    <ClInclude Include="..\..\..\..\include\self_play\self_player_options.h" />
-    <ClInclude Include="..\..\..\..\include\trainer.h" />
+    <ClCompile Include="..\..\..\..\test\e2e_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\test\e2e_test.cpp" />
+    <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_pool.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\competition_result.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator_options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\logger.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\neural_net.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer_options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player_options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\trainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

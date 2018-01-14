@@ -1,7 +1,7 @@
 #pragma once
 
-#include "neural_net/neural_net.h"
-#include "self_play/self_player_options.h"
+#include "alphazero/neural_net/neural_net.h"
+#include "alphazero/self_play/self_player_options.h"
 
 namespace alphazero
 {
