@@ -15,10 +15,16 @@
 namespace alphazero
 {
 	// Runner controls what should be done on a specific thread
+	// Thread safety: No
 	class Runner
 	{
 	public:
-		Runner() : running_threads_(), optimizer_options_() {}
+		Runner() :
+			running_threads_(),
+			optimizer_options_(),
+			evaluation_options_(),
+			self_player_options_()
+		{}
 
 		void Initialize() {
 			// TODO: adjust at runtime?
@@ -28,7 +34,6 @@ namespace alphazero
 			self_player_options_.MCTS_iterations_per_run = 1000;
 		}
 
-		// Thread safety: Can only be invoked at main thread
 		template <class... Args>
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, neural_net::Optimizer & optimizer, Args&&... args) {
 			InternalAsyncRun(thread, milliseconds, [&]() {
@@ -36,7 +41,6 @@ namespace alphazero
 			});
 		}
 
-		// Thread safety: Can only be invoked at main thread
 		template <class... Args>
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, evaluation::Evaluator & evaluator, Args&&... args) {
 			InternalAsyncRun(thread, milliseconds, [&]() {
@@ -44,7 +48,6 @@ namespace alphazero
 			});
 		}
 
-		// Thread safety: Can only be invoked at main thread
 		template <class... Args>
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, self_play::SelfPlayer & self_play, Args&&... args) {
 			InternalAsyncRun(thread, milliseconds, [&]() {
@@ -52,7 +55,6 @@ namespace alphazero
 			});
 		}
 
-		// Thread safety: Can only be invoked at main thread
 		void WaitAll() {
 			for (auto thread : running_threads_) {
 				thread->Wait();
@@ -61,7 +63,6 @@ namespace alphazero
 		}
 
 	private:
-		// Thread safety: Can only be invoked at main thread
 		void InternalAsyncRun(detail::ThreadRunner & thread, int milliseconds, std::function<void()> func) {
 			auto start = std::chrono::steady_clock::now();
 

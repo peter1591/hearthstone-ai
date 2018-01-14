@@ -7,10 +7,11 @@ int main(void)
 
 	alphazero::TrainerConfigs trainer_config;
 	trainer_config.kEvaluationWinRate = 0.55f;
+	trainer_config.kTrainingData = 100000; // 100k
+	trainer_config.kTrainingDataNotFullyFilledProb = 0.01f; // 1%
 
 	std::string model_path = "";
-	trainer.Initialize(model_path);
-	trainer.SetConfigs(trainer_config);
+	trainer.Initialize(trainer_config, model_path);
 
 	trainer.Train();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "alphazero/detail/thread_pool.h"
+#include "alphazero/shared_data/training_data.h"
 #include "alphazero/neural_net/neural_net.h"
 #include "alphazero/neural_net/optimizer.h"
 #include "alphazero/runner.h"
@@ -9,13 +10,16 @@
 namespace alphazero
 {
 	struct TrainerConfigs {
+		size_t kTrainingData;
+		float kTrainingDataNotFullyFilledProb;
+
 		// if new competitor's win rate larger than this one, use it to replace the best neural net so far
 		float kEvaluationWinRate;
 	};
 
 	// Target to end-user devices. Eliminate context switch as much as possible.
 	// Don't rely on threads and OS scheduling.
-	// Not target for distributed environments.
+	// Not targeting for distributed environments.
 	class EndDeviceTrainer {
 	private:
 		struct Schedule {
@@ -31,16 +35,15 @@ namespace alphazero
 			schedule_(),
 			threads_(),
 			runner_(),
+			training_data_(),
 			best_neural_nets_(),
 			neural_net_(),
 			optimizer_()
 		{}
 
-		void SetConfigs(TrainerConfigs const& configs) {
+		void Initialize(TrainerConfigs const& configs, std::string const& neural_net_model) {
 			configs_ = configs;
-		}
 
-		void Initialize(std::string const& neural_net_model) {
 			int kThreads = 4; // TODO: adjust at runtime
 
 			schedule_.self_play_milliseconds = 10 * 1000;
@@ -49,6 +52,10 @@ namespace alphazero
 
 			threads_.Initialize(kThreads);
 			runner_.Initialize();
+			training_data_.Initialize(
+				configs_.kTrainingData,
+				kThreads, // number of writers = number of threads
+				configs_.kTrainingDataNotFullyFilledProb);
 
 			if (neural_net_model.empty()) {
 				neural_net_ = neural_net::NeuralNet::CreateRandomNeuralNet();
@@ -94,6 +101,8 @@ namespace alphazero
 			logger_.Info("Start self play.");
 
 			for (size_t i = 0; i < threads_.Size(); ++i) {
+				self_players_[i].SetData(training_data_.GetWriter());
+
 				runner_.AsyncRun(
 					threads_.Get(i),
 					schedule_.self_play_milliseconds,
@@ -163,6 +172,7 @@ namespace alphazero
 		Schedule schedule_;
 		detail::ThreadPool threads_;
 		Runner runner_;
+		shared_data::TrainingDataManager training_data_;
 
 		// one for each thread
 		// TODO: if neural net can be shared safely across multiple threads, we can save this

@@ -28,6 +28,9 @@
     <Filter Include="Header Files\alphazero\self_play">
       <UniqueIdentifier>{3d4dc913-ede6-4531-b1d9-50c2fab63309}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\alphazero\shared_data">
+      <UniqueIdentifier>{e904f3de-4f78-461e-a7b2-d537f5eea5f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\test\e2e_test.cpp">
@@ -73,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player_options.h">
       <Filter>Header Files\alphazero\self_play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\training_data.h">
+      <Filter>Header Files\alphazero\shared_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_buffer.h">
+      <Filter>Header Files\alphazero\shared_data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\batch_items.h">
+      <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
