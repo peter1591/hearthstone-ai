@@ -1,6 +1,3 @@
 [submodule "third_party/tiny-dnn"]
 	path = third_party/tiny-dnn
 	url = https://github.com/tiny-dnn/tiny-dnn
-[submodule "third_party/tensorflow"]
-	path = third_party/tensorflow
-	url = https://github.com/peter1591/tensorflow-prebuilt.git
