@@ -34,9 +34,6 @@
     <Filter Include="Source Files\MCTS">
       <UniqueIdentifier>{2de484c4-2d05-4afa-b831-0d382a7b7cfe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\neural_net">
-      <UniqueIdentifier>{d46240db-d198-4f14-ac4a-aa62cd716d5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\neural_net">
       <UniqueIdentifier>{27380b77-c6b3-4789-91bf-1bf993370664}</UniqueIdentifier>
     </Filter>
@@ -78,9 +75,6 @@
     <ClCompile Include="..\..\test\TestStateBuilder.cpp">
       <Filter>Source Files\MCTS</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp">
-      <Filter>Source Files\neural_net</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
       <Filter>Source Files\jsoncpp</Filter>
     </ClCompile>
@@ -92,9 +86,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\neural_net\NeuralNetwork.h">
-      <Filter>Header Files\neural_net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\agents\MCTSAgent.h">
       <Filter>Header Files\agents</Filter>
     </ClInclude>
@@ -280,6 +271,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap-impl.h">
       <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\neural_net\IInputGetter.h">
+      <Filter>Header Files\neural_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\neural_net\TensorFlowAdaptor.h">
+      <Filter>Header Files\neural_net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

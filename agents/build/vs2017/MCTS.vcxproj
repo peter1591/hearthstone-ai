@@ -89,13 +89,17 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4702</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <PreBuildEvent>
-      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .
+copy /y .\x64\Release\tensorflow_dll.dll .</Command>
     </PreBuildEvent>
+    <Link>
+      <AdditionalDependencies>.\x64\Release\tensorflow_dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -144,23 +148,24 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4100</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4702</DisableSpecificWarnings>
       <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>.\x64\Release\tensorflow_dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .</Command>
+      <Command>copy /y ..\..\..\engine\include\Cards\cards.json .
+copy /y .\x64\Release\tensorflow_dll.dll .</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp" />
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp" />
-    <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp" />
     <ClCompile Include="..\..\test\CardDispatcher.cpp" />
     <ClCompile Include="..\..\test\e2e_test.cpp" />
     <ClCompile Include="..\..\test\TestStateBuilder.cpp" />
@@ -228,7 +233,8 @@
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />
     <ClInclude Include="..\..\include\MCTS\Types.h" />
-    <ClInclude Include="..\include\neural_net\NeuralNetwork.h" />
+    <ClInclude Include="..\..\include\neural_net\IInputGetter.h" />
+    <ClInclude Include="..\..\include\neural_net\TensorFlowAdaptor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

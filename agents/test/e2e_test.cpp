@@ -128,7 +128,21 @@ void TestAI()
 
 int main(int argc, char *argv[])
 {
+	neural_net::TensorFlowAdaptorManager::Initialize("./freezed.pb");
+
+	/*while (true) {
+		constexpr int kIterations = 100;
+		float input[140];
+		for (int i = 0; i < kIterations; ++i) {
+			neural_net::TensorFlowAdaptorManager::GetInstance().Predict(input);
+		}
+		std::cout << "done " << kIterations << " iterations." << std::endl;
+	}*/
+
 	Initialize();
 	TestAI();
+
+	neural_net::TensorFlowAdaptorManager::Release();
+
 	return 0;
 }

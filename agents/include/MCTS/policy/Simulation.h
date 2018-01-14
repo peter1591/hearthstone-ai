@@ -3,7 +3,7 @@
 #include <random>
 #include "engine/view/Board.h"
 #include "MCTS/policy/RandomByRand.h"
-#include "neural_net/NeuralNetwork.h"
+#include "neural_net/TensorFlowAdaptor.h"
 
 namespace mcts
 {
@@ -84,26 +84,26 @@ namespace mcts
 			class WeakHeuristicStateValueFunction
 			{
 			private:
-				static constexpr double kMaxMinionValue = 12.5;
-				double GetMinionValue(state::Cards::Card const& card) {
-					return 1.0 * card.GetAttack() + 1.5 * card.GetHP();
+				static constexpr float kMaxMinionValue = 12.5f;
+				float GetMinionValue(state::Cards::Card const& card) {
+					return 1.0f * card.GetAttack() + 1.5f * card.GetHP();
 				}
 
-				static constexpr double kMaxHeroValue = 30.0;
-				double GetHeroValue(state::Cards::Card const& card) {
-					double v = card.GetHP() + card.GetArmor();
-					if (v >= 30) v = 30;
+				static constexpr float kMaxHeroValue = 30.0f;
+				float GetHeroValue(state::Cards::Card const& card) {
+					float v = (float)card.GetHP() + (float)card.GetArmor();
+					if (v >= 30.0f) v = 30.0f;
 
 					return v;
 				}
 
 				//static constexpr double kMaxSideValue = 3.0 * kMaxHeroValue + 10.0 * kMaxMinionValue * 7;
-				static constexpr double kMaxSideValue = kMaxHeroValue;
-				double GetStateValueForSide(state::PlayerSide self_side, engine::view::BoardRefView view) {
+				static constexpr float kMaxSideValue = kMaxHeroValue;
+				float GetStateValueForSide(state::PlayerSide self_side, engine::view::BoardRefView view) {
 					assert(self_side == view.GetSide());
 					//state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
 
-					double v = 0.0;
+					float v = 0.0;
 
 					//view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
 					//	v += 10.0 * GetMinionValue(card);
@@ -116,7 +116,7 @@ namespace mcts
 
 					//v += 3.0 * GetHeroValue(view.GetSelfHero());
 					//v += -3.0 * GetHeroValue(view.GetOpponentHero());
-					v += 30.0 - GetHeroValue(view.GetOpponentHero());
+					v += 30.0f - GetHeroValue(view.GetOpponentHero());
 					
 					v = v / kMaxSideValue;
 
@@ -124,7 +124,7 @@ namespace mcts
 				}
 
 			public:
-				double GetStateValue(state::State const& game_state) {
+				float GetStateValue(state::State const& game_state) {
 					engine::view::BoardRefView view(game_state, state::kPlayerFirst);
 					return GetStateValueForSide(state::kPlayerFirst, view);
 				}
@@ -133,7 +133,7 @@ namespace mcts
 				// If 100% wins, score = 1.0
 				// If 50% wins, 50%loss, score = 0.0
 				// If 100% loss, score = -1.0
-				double GetStateValue(engine::view::Board const& board) {
+				float GetStateValue(engine::view::Board const& board) {
 					// TODO: should always return state value for first player?
 					return board.ApplyWithPlayerStateView([&](auto const& view) {
 						return GetStateValueForSide(board.GetViewSide(), view);
@@ -144,42 +144,35 @@ namespace mcts
 			class NeuralNetworkStateValueFunction
 			{
 			public:
-				NeuralNetworkStateValueFunction()
-					: filename_(), net_(), current_player_viewer_()
-				{
-					filename_ = "simulation_net";
-					LoadNetwork();
-				}
-
-				void LoadNetwork() {
-					net_.InitializePredict(filename_);
-				}
+				NeuralNetworkStateValueFunction() : current_player_viewer_() {}
 
 				// State value is in range [-1, 1]
 				// If first player is 100% wins, score = 1.0
 				// If first player is 50% wins, 50%loss, score = 0.0
 				// If first player is 100% loss, score = -1.0
-				double GetStateValue(engine::view::Board const& board) {
+				float GetStateValue(engine::view::Board const& board) {
 					return GetStateValue(board.RevealHiddenInformationForSimulation());
 				}
-
-				double GetStateValue(state::State const& state) {
+				float GetStateValue(state::State const& state) {
 					current_player_viewer_.Reset(state);
 
-					double score = net_.Predict(&current_player_viewer_);
+					// TODO: fill array
+					float input[140];
 
-					if (!state.GetCurrentPlayerId().IsFirst()) {
-						score = -score;
-					}
+					float score = neural_net::TensorFlowAdaptorManager::GetInstance()
+						.Predict(input);
+					score = 0.0;
 
-					if (score > 1.0) score = 1.0;
-					if (score < -1.0) score = -1.0;
+					if (score > 1.0f) score = 1.0f;
+					if (score < -1.0f) score = -1.0f;
 
 					return score;
 				}
 
 			private:
-				class StateDataBridge : public neural_net::NeuralNetworkWrapper::IInputGetter
+
+				// TODO: use engine::view::Board directly
+				class StateDataBridge : public neural_net::IInputGetter
 				{
 				public:
 					StateDataBridge() : state_(nullptr), attackable_indices_(),
@@ -209,49 +202,49 @@ namespace mcts
 						hero_power_playable_ = valid_action.CanUseHeroPower();
 					}
 
-					double GetField(
-						neural_net::NeuralNetworkWrapper::FieldSide field_side,
-						neural_net::NeuralNetworkWrapper::FieldType field_type,
+					float GetField(
+						neural_net::FieldSide field_side,
+						neural_net::FieldType field_type,
 						int arg1 = 0) override final
 					{
-						if (field_side == neural_net::NeuralNetworkWrapper::kCurrent) {
+						if (field_side == neural_net::kCurrent) {
 							return GetSideField(field_type, arg1, state_->GetCurrentPlayer());
 						}
-						else if (field_side == neural_net::NeuralNetworkWrapper::kOpponent) {
+						else if (field_side == neural_net::kOpponent) {
 							return GetSideField(field_type, arg1, state_->GetOppositePlayer());
 						}
 						throw std::runtime_error("invalid side");
 					}
 
 				private:
-					double GetSideField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1, state::board::Player const& player) {
+					float GetSideField(neural_net::FieldType field_type, int arg1, state::board::Player const& player) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kResourceCurrent:
-						case neural_net::NeuralNetworkWrapper::kResourceTotal:
-						case neural_net::NeuralNetworkWrapper::kResourceOverload:
-						case neural_net::NeuralNetworkWrapper::kResourceOverloadNext:
+						case neural_net::kResourceCurrent:
+						case neural_net::kResourceTotal:
+						case neural_net::kResourceOverload:
+						case neural_net::kResourceOverloadNext:
 							return GetResourceField(field_type, arg1, player.GetResource());
 
-						case neural_net::NeuralNetworkWrapper::kHeroHP:
-						case neural_net::NeuralNetworkWrapper::kHeroArmor:
+						case neural_net::kHeroHP:
+						case neural_net::kHeroArmor:
 							return GetHeroField(field_type, arg1, state_->GetCard(player.GetHeroRef()));
 
-						case neural_net::NeuralNetworkWrapper::kMinionCount:
-						case neural_net::NeuralNetworkWrapper::kMinionHP:
-						case neural_net::NeuralNetworkWrapper::kMinionMaxHP:
-						case neural_net::NeuralNetworkWrapper::kMinionAttack:
-						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
-						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
-						case neural_net::NeuralNetworkWrapper::kMinionShield:
-						case neural_net::NeuralNetworkWrapper::kMinionStealth:
+						case neural_net::kMinionCount:
+						case neural_net::kMinionHP:
+						case neural_net::kMinionMaxHP:
+						case neural_net::kMinionAttack:
+						case neural_net::kMinionAttackable:
+						case neural_net::kMinionTaunt:
+						case neural_net::kMinionShield:
+						case neural_net::kMinionStealth:
 							return GetMinionsField(field_type, arg1, player.minions_);
 
-						case neural_net::NeuralNetworkWrapper::kHandCount:
-						case neural_net::NeuralNetworkWrapper::kHandPlayable:
-						case neural_net::NeuralNetworkWrapper::kHandCost:
+						case neural_net::kHandCount:
+						case neural_net::kHandPlayable:
+						case neural_net::kHandCost:
 							return GetHandField(field_type, arg1, player.hand_);
 
-						case neural_net::NeuralNetworkWrapper::kHeroPowerPlayable:
+						case neural_net::kHeroPowerPlayable:
 							return GetHeroPowerField(field_type, arg1);
 
 						default:
@@ -259,102 +252,102 @@ namespace mcts
 						}
 					}
 
-					double GetResourceField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1, state::board::PlayerResource const& resource) {
+					float GetResourceField(neural_net::FieldType field_type, int arg1, state::board::PlayerResource const& resource) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kResourceCurrent:
-							return resource.GetCurrent();
-						case neural_net::NeuralNetworkWrapper::kResourceTotal:
-							return resource.GetTotal();
-						case neural_net::NeuralNetworkWrapper::kResourceOverload:
-							return resource.GetCurrentOverloaded();
-						case neural_net::NeuralNetworkWrapper::kResourceOverloadNext:
-							return resource.GetNextOverload();
+						case neural_net::kResourceCurrent:
+							return (float)resource.GetCurrent();
+						case neural_net::kResourceTotal:
+							return (float)resource.GetTotal();
+						case neural_net::kResourceOverload:
+							return (float)resource.GetCurrentOverloaded();
+						case neural_net::kResourceOverloadNext:
+							return (float)resource.GetNextOverload();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHeroField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1, state::Cards::Card const& hero) {
+					float GetHeroField(neural_net::FieldType field_type, int arg1, state::Cards::Card const& hero) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kHeroHP:
-							return hero.GetHP();
-						case neural_net::NeuralNetworkWrapper::kHeroArmor:
-							return hero.GetArmor();
+						case neural_net::kHeroHP:
+							return (float)hero.GetHP();
+						case neural_net::kHeroArmor:
+							return (float)hero.GetArmor();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetMinionsField(neural_net::NeuralNetworkWrapper::FieldType field_type, int minion_idx, state::board::Minions const& minions) {
+					float GetMinionsField(neural_net::FieldType field_type, int minion_idx, state::board::Minions const& minions) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kMinionCount:
-							return (double)minions.Size();
-						case neural_net::NeuralNetworkWrapper::kMinionHP:
-						case neural_net::NeuralNetworkWrapper::kMinionMaxHP:
-						case neural_net::NeuralNetworkWrapper::kMinionAttack:
-						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
-						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
-						case neural_net::NeuralNetworkWrapper::kMinionShield:
-						case neural_net::NeuralNetworkWrapper::kMinionStealth:
+						case neural_net::kMinionCount:
+							return (float)minions.Size();
+						case neural_net::kMinionHP:
+						case neural_net::kMinionMaxHP:
+						case neural_net::kMinionAttack:
+						case neural_net::kMinionAttackable:
+						case neural_net::kMinionTaunt:
+						case neural_net::kMinionShield:
+						case neural_net::kMinionStealth:
 							return GetMinionField(field_type, minion_idx, state_->GetCard(minions.Get(minion_idx)));
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetMinionField(neural_net::NeuralNetworkWrapper::FieldType field_type, int minion_idx, state::Cards::Card const& minion) {
+					float GetMinionField(neural_net::FieldType field_type, int minion_idx, state::Cards::Card const& minion) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kMinionHP:
-							return minion.GetHP();
-						case neural_net::NeuralNetworkWrapper::kMinionMaxHP:
-							return minion.GetMaxHP();
-						case neural_net::NeuralNetworkWrapper::kMinionAttack:
-							return minion.GetAttack();
-						case neural_net::NeuralNetworkWrapper::kMinionAttackable:
+						case neural_net::kMinionHP:
+							return (float)minion.GetHP();
+						case neural_net::kMinionMaxHP:
+							return (float)minion.GetMaxHP();
+						case neural_net::kMinionAttack:
+							return (float)minion.GetAttack();
+						case neural_net::kMinionAttackable:
 							for (auto target_index : attackable_indices_) {
 								if (engine::FlowControl::ActionTargetIndex::ParseMinionIndex(target_index) == minion_idx) {
 									return true;
 								}
 							}
 							return false;
-						case neural_net::NeuralNetworkWrapper::kMinionTaunt:
-							return minion.HasTaunt();
-						case neural_net::NeuralNetworkWrapper::kMinionShield:
-							return minion.HasShield();
-						case neural_net::NeuralNetworkWrapper::kMinionStealth:
-							return minion.HasStealth();
+						case neural_net::kMinionTaunt:
+							return (float)minion.HasTaunt();
+						case neural_net::kMinionShield:
+							return (float)minion.HasShield();
+						case neural_net::kMinionStealth:
+							return (float)minion.HasStealth();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHandField(neural_net::NeuralNetworkWrapper::FieldType field_type, int hand_idx, state::board::Hand const& hand) {
+					float GetHandField(neural_net::FieldType field_type, int hand_idx, state::board::Hand const& hand) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kHandCount:
-							return (double)hand.Size();
-						case neural_net::NeuralNetworkWrapper::kHandPlayable:
-						case neural_net::NeuralNetworkWrapper::kHandCost:
+						case neural_net::kHandCount:
+							return (float)hand.Size();
+						case neural_net::kHandPlayable:
+						case neural_net::kHandCost:
 							return GetHandCardField(field_type, hand_idx, state_->GetCard(hand.Get(hand_idx)));
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHandCardField(neural_net::NeuralNetworkWrapper::FieldType field_type, int hand_idx, state::Cards::Card const& card) {
+					float GetHandCardField(neural_net::FieldType field_type, int hand_idx, state::Cards::Card const& card) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kHandPlayable:
+						case neural_net::kHandPlayable:
 							return (std::find(playable_cards_.begin(), playable_cards_.end(), hand_idx) != playable_cards_.end());
-						case neural_net::NeuralNetworkWrapper::kHandCost:
-							return card.GetCost();
+						case neural_net::kHandCost:
+							return (float)card.GetCost();
 						default:
 							throw std::runtime_error("unknown field type");
 						}
 					}
 
-					double GetHeroPowerField(neural_net::NeuralNetworkWrapper::FieldType field_type, int arg1) {
+					float GetHeroPowerField(neural_net::FieldType field_type, int arg1) {
 						switch (field_type) {
-						case neural_net::NeuralNetworkWrapper::kHeroPowerPlayable:
-							return hero_power_playable_;
+						case neural_net::kHeroPowerPlayable:
+							return (float)hero_power_playable_;
 						default:
 							throw std::runtime_error("unknown field type");
 						}
@@ -369,7 +362,6 @@ namespace mcts
 
 			private:
 				std::string filename_;
-				neural_net::NeuralNetworkWrapper net_;
 				StateDataBridge current_player_viewer_;
 			};
 
@@ -393,9 +385,9 @@ namespace mcts
 						return engine::kResultNotDetermined;
 					}
 
-					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return engine::kResultFirstPlayerWin;
-					else if (score == 0.0) return engine::kResultDraw;
+					float score = state_value_func_.GetStateValue(board);
+					if (score > 0.0f) return engine::kResultFirstPlayerWin;
+					else if (score == 0.0f) return engine::kResultDraw;
 					else return engine::kResultSecondPlayerWin;
 				}
 
@@ -412,6 +404,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -447,9 +440,9 @@ namespace mcts
 						return engine::kResultNotDetermined;
 					}
 					
-					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return engine::kResultFirstPlayerWin;
-					else if (score == 0.0) return engine::kResultDraw;
+					float score = state_value_func_.GetStateValue(board);
+					if (score > 0.0f) return engine::kResultFirstPlayerWin;
+					else if (score == 0.0f) return engine::kResultDraw;
 					else return engine::kResultSecondPlayerWin;
 				}
 
@@ -466,6 +459,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -522,6 +516,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -577,14 +572,14 @@ namespace mcts
 						return engine::kResultNotDetermined;
 					}
 
-					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return engine::kResultFirstPlayerWin;
-					else if (score == 0.0) return engine::kResultDraw;
+					float score = state_value_func_.GetStateValue(board);
+					if (score > 0.0f) return engine::kResultFirstPlayerWin;
+					else if (score == 0.0f) return engine::kResultDraw;
 					else return engine::kResultSecondPlayerWin;
 				}
 
 			public:
-				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
+				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(std::mt19937 & rand) :
 					rand_(rand),
 					decision_(), decision_idx_(0),
 					state_value_func_()
@@ -596,6 +591,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -707,7 +703,7 @@ namespace mcts
 					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
 					cb_user_choice.Initialize(board.GetCurrentPlayerStateRefView().GetValidActionGetter());
 
-					double best_value = -std::numeric_limits<double>::infinity();
+					float best_value = -std::numeric_limits<float>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t main_op_idx, engine::MainOpType main_op) {
 						cb_user_choice.SetMainOpIndex((int)main_op_idx);
 
@@ -720,12 +716,12 @@ namespace mcts
 							auto result = copy_board.ApplyAction(cb_user_choice);
 
 							if (result != engine::kResultInvalid) {
-								double value = -std::numeric_limits<double>::infinity();
+								float value = -std::numeric_limits<float>::infinity();
 								if (result == engine::kResultFirstPlayerWin) {
-									value = std::numeric_limits<double>::infinity();
+									value = std::numeric_limits<float>::infinity();
 								}
 								else if (result == engine::kResultSecondPlayerWin) {
-									value = -std::numeric_limits<double>::infinity();
+									value = -std::numeric_limits<float>::infinity();
 								}
 								else if (result == engine::kResultDraw) {
 									value = 0.0;
@@ -733,6 +729,11 @@ namespace mcts
 								else {
 									assert(result == engine::kResultNotDetermined);
 									value = state_value_func_.GetStateValue(copy_board);
+								}
+
+								// state value is from the viewpoint of first player, so need to reverse
+								if (copy_board.GetViewSide() != state::kPlayerFirst) {
+									value = -value;
 								}
 
 								if (decision_.empty() || value > best_value) {

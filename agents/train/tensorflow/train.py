@@ -81,7 +81,7 @@ def train_model(data_dir):
 def export_saved_model():
   batch = 1
   input_dim = 140
-  freezed_output = "./freezed"
+  freezed_output = "./freezed.pb"
 
   estimator = _get_estimator()
   feature = {"x": tf.placeholder(dtype=tf.float32, shape=[batch, input_dim])}

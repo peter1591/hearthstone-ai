@@ -7,7 +7,7 @@ import tensorflow as tf
 import data_reader
 
 
-kOutputNodeName = 'final_argmax'
+kOutputNodeName = 'final/BiasAdd'
 
 class NextInputGetter:
   def __init__(self, data):
@@ -207,15 +207,6 @@ class Model:
         inputs=prev,
         units=1,
         activation=None)
-		
-    final_argmax = tf.argmax(
-        name=kOutputNodeName,
-        input=final,
-        axis=1)
-
-    predictions = {
-        "classes": final_argmax,
-        "probabilities": tf.nn.softmax(final, name="softmax_tensor")}
 
     if self._mode == tf.estimator.ModeKeys.PREDICT:
       return tf.estimator.EstimatorSpec(
