@@ -168,7 +168,7 @@ namespace alphazero
 		// TODO: if neural net can be shared safely across multiple threads, we can save this
 		std::vector<neural_net::NeuralNet> best_neural_nets_;
 		
-		// training neural net, aka the competitor
+		// training neural net
 		neural_net::NeuralNet neural_net_;
 
 		neural_net::Optimizer optimizer_;

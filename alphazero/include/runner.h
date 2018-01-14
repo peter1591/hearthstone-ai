@@ -31,59 +31,25 @@ namespace alphazero
 		// Thread safety: Can only be invoked at main thread
 		template <class... Args>
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, neural_net::Optimizer & optimizer, Args&&... args) {
-			auto start = std::chrono::steady_clock::now();
-
-			thread.AsyncRun([start, milliseconds, &optimizer, &args..., this]() -> void {
-				while (true) {
-					optimizer.RunOnce(optimizer_options_, std::forward<Args>(args)...);
-
-					auto now = std::chrono::steady_clock::now();
-					auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
-					if (duration > milliseconds) {
-						return; // time's up!
-					}
-				}
+			InternalAsyncRun(thread, milliseconds, [&]() {
+				optimizer.RunOnce(optimizer_options_, std::forward<Args>(args)...);
 			});
-
-			running_threads_.push_back(&thread);
 		}
 
 		// Thread safety: Can only be invoked at main thread
 		template <class... Args>
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, evaluation::Evaluator & evaluator, Args&&... args) {
-			auto start = std::chrono::steady_clock::now();
-
-			thread.AsyncRun([&]() -> void {
-				while (true) {
-					evaluator.RunOnce(std::forward<Args>(args)..., evaluation_options_);
-
-					auto now = std::chrono::steady_clock::now();
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
-						return; // time's up!
-					}
-				}
+			InternalAsyncRun(thread, milliseconds, [&]() {
+				evaluator.RunOnce(std::forward<Args>(args)..., evaluation_options_);
 			});
-
-			running_threads_.push_back(&thread);
 		}
 
 		// Thread safety: Can only be invoked at main thread
 		template <class... Args>
 		void AsyncRun(detail::ThreadRunner & thread, int milliseconds, self_play::SelfPlayer & self_play, Args&&... args) {
-			auto start = std::chrono::steady_clock::now();
-
-			thread.AsyncRun([&]() -> void {
-				while (true) {
-					self_play.RunOnce(std::forward<Args>(args)..., self_player_options_);
-
-					auto now = std::chrono::steady_clock::now();
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
-						return; // time's up!
-					}
-				}
+			InternalAsyncRun(thread, milliseconds, [&]() {
+				self_play.RunOnce(std::forward<Args>(args)..., self_player_options_);
 			});
-
-			running_threads_.push_back(&thread);
 		}
 
 		// Thread safety: Can only be invoked at main thread
@@ -92,6 +58,25 @@ namespace alphazero
 				thread->Wait();
 			}
 			running_threads_.clear();
+		}
+
+	private:
+		// Thread safety: Can only be invoked at main thread
+		void InternalAsyncRun(detail::ThreadRunner & thread, int milliseconds, std::function<void()> func) {
+			auto start = std::chrono::steady_clock::now();
+
+			thread.AsyncRun([start, milliseconds, func]() -> void {
+				while (true) {
+					func();
+
+					auto now = std::chrono::steady_clock::now();
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() > milliseconds) {
+						return; // time's up!
+					}
+				}
+			});
+
+			running_threads_.push_back(&thread);
 		}
 
 	private:

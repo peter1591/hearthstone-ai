@@ -10,10 +10,9 @@ namespace  alphazero
 		{
 		public:
 			void Initialize() {
-				// TODO: load existing model, or create a one with random weights
 			}
 
-			// Thread safety: 
+			// Thread safety: No
 			void RunOnce(OptimizerRunOptions const& options, NeuralNet & neural_net) {
 				// TODO:
 			}
