@@ -46,19 +46,21 @@ namespace neural_net {
 			virtual double GetField(FieldSide field_side, FieldType field_type, int arg1 = 0) = 0;
 		};
 
-		NeuralNetworkWrapper() : impl_(nullptr) {}
+		NeuralNetworkWrapper();
 		~NeuralNetworkWrapper();
 
 		NeuralNetworkWrapper(NeuralNetworkWrapper const& rhs) = delete;
 		NeuralNetworkWrapper & operator=(NeuralNetworkWrapper const& rhs) = delete;
 
+	public:
+		void InitializeModel(std::string const& path);
+		void LoadModel(std::string const& path);
+
 	public: // for training
-		void InitializeTrain();
 		void AddTrainData(IInputGetter * getter, int label, bool for_validate);
 		void Train();
 
 	public: // for prediction
-		void InitializePredict(std::string const& filename);
 		double Predict(IInputGetter * getter);
 
 	private:

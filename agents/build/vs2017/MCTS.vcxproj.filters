@@ -92,9 +92,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\neural_net\NeuralNetwork.h">
-      <Filter>Header Files\neural_net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\agents\MCTSAgent.h">
       <Filter>Header Files\agents</Filter>
     </ClInclude>
@@ -280,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\MCTS\selection\BoardNodeMap-impl.h">
       <Filter>Header Files\MCTS\selection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h">
+      <Filter>Header Files\neural_net</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

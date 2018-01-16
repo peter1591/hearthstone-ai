@@ -24,27 +24,7 @@ namespace neural_net {
 		class NeuralNetworkWrapperImpl
 		{
 		public:
-			void InitializeTrain() {
-			}
-
-			void AddTrainData(NeuralNetworkWrapper::IInputGetter * getter, int label, bool for_validate) {
-				tiny_dnn::tensor_t input;
-				GetInputData(getter, input);
-
-				tiny_dnn::vec_t output;
-				output.push_back((float)label);
-
-				if (for_validate) {
-					validate_input_.push_back(input);
-					validate_output_.push_back(output);
-				}
-				else {
-					input_.push_back(input);
-					output_.push_back(output);
-				}
-			}
-
-			void Train() {
+			static void InitializeModel(std::string const& filename) {
 				static constexpr int hero_in_dim = 1;
 				static constexpr int hero_out_dim = 1;
 
@@ -97,8 +77,36 @@ namespace neural_net {
 				auto fc2 = tiny_dnn::fully_connected_layer(10, 1);
 				fc1 << fc1a << fc2;
 
-				tiny_dnn::construct_graph(net_, { &in_heroes, &in_minions, &in_standalone }, { &fc2 });
+				tiny_dnn::network<tiny_dnn::graph> net;
+				tiny_dnn::construct_graph(net, { &in_heroes, &in_minions, &in_standalone }, { &fc2 });
 
+				net.init_weight();
+
+				net.save(filename);
+			}
+
+			void LoadModel(std::string const& filename) {
+				net_.load(filename);
+			}
+
+			void AddTrainData(NeuralNetworkWrapper::IInputGetter * getter, int label, bool for_validate) {
+				tiny_dnn::tensor_t input;
+				GetInputData(getter, input);
+
+				tiny_dnn::vec_t output;
+				output.push_back((float)label);
+
+				if (for_validate) {
+					validate_input_.push_back(input);
+					validate_output_.push_back(output);
+				}
+				else {
+					input_.push_back(input);
+					output_.push_back(output);
+				}
+			}
+
+			void Train() {
 				size_t batch_size = 32;
 				int epoch = 10;
 				size_t total_epoch = 0;
@@ -148,10 +156,6 @@ namespace neural_net {
 						<< rate * 100.0 << "% ("
 						<< correct << " / " << validate_input_.size() << ")" << std::endl;
 				}
-			}
-
-			void InitializePredict(std::string const& filename) {
-				net_.load(filename);
 			}
 
 			double Predict(NeuralNetworkWrapper::IInputGetter * getter) {
@@ -305,16 +309,19 @@ namespace neural_net {
 		};
 	}
 
-	NeuralNetworkWrapper::~NeuralNetworkWrapper()
+	NeuralNetworkWrapper::NeuralNetworkWrapper() :
+		impl_(new impl::NeuralNetworkWrapperImpl())
 	{
-		if (impl_) delete impl_;
 	}
 
-	void NeuralNetworkWrapper::InitializeTrain()
+	NeuralNetworkWrapper::~NeuralNetworkWrapper()
 	{
-		if (!impl_) impl_ = new impl::NeuralNetworkWrapperImpl();
-		impl_->InitializeTrain();
+		delete impl_;
 	}
+
+	void NeuralNetworkWrapper::InitializeModel(std::string const& path) { impl_->InitializeModel(path); }
+	void NeuralNetworkWrapper::LoadModel(std::string const& path) { impl_->LoadModel(path); }
+
 
 	void NeuralNetworkWrapper::AddTrainData(IInputGetter * getter, int label, bool for_validate)
 	{
@@ -324,12 +331,6 @@ namespace neural_net {
 	void NeuralNetworkWrapper::Train()
 	{
 		impl_->Train();
-	}
-
-	void NeuralNetworkWrapper::InitializePredict(std::string const& filename)
-	{
-		if (!impl_) impl_ = new impl::NeuralNetworkWrapperImpl();
-		impl_->InitializePredict(filename);
 	}
 
 	double NeuralNetworkWrapper::Predict(IInputGetter * getter)

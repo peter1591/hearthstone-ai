@@ -148,7 +148,8 @@ class Trainer
 {
 public:
 	Trainer() : net_() {
-		net_.InitializeTrain();
+		net_.InitializeModel("initial_model");
+		net_.LoadModel("initial_model");
 	}
 
 	void AddJsonFile(std::string const& filename, bool for_validate) {

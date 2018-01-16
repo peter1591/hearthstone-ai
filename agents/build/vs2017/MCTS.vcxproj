@@ -228,7 +228,7 @@
     <ClInclude Include="..\..\include\MCTS\SOMCTS.h" />
     <ClInclude Include="..\..\include\MCTS\Statistic.h" />
     <ClInclude Include="..\..\include\MCTS\Types.h" />
-    <ClInclude Include="..\include\neural_net\NeuralNetwork.h" />
+    <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

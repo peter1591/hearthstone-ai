@@ -152,7 +152,7 @@ namespace mcts
 				}
 
 				void LoadNetwork() {
-					net_.InitializePredict(filename_);
+					net_.LoadModel(filename_);
 				}
 
 				// State value is in range [-1, 1]
@@ -412,6 +412,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -466,6 +467,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -522,6 +524,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
@@ -584,7 +587,7 @@ namespace mcts
 				}
 
 			public:
-				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
+				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(std::mt19937 & rand) :
 					rand_(rand),
 					decision_(), decision_idx_(0),
 					state_value_func_()
@@ -596,6 +599,7 @@ namespace mcts
 				}
 
 				int GetChoice(
+					engine::view::Board const& board,
 					engine::ValidActionAnalyzer const& action_analyzer,
 					engine::ActionType action_type,
 					ChoiceGetter const& choice_getter)
