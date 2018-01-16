@@ -80,10 +80,10 @@
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\training_data.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_buffer.h">
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_array.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\batch_items.h">
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\shared_ptr_item.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
   </ItemGroup>

@@ -130,8 +130,8 @@
     <ClInclude Include="..\..\..\..\include\alphazero\runner.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player_options.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\batch_items.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_buffer.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_array.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\shared_ptr_item.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\training_data.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\trainer.h" />
   </ItemGroup>

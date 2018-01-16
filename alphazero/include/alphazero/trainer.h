@@ -10,8 +10,8 @@
 namespace alphazero
 {
 	struct TrainerConfigs {
-		size_t kTrainingData;
-		float kTrainingDataNotFullyFilledProb;
+		size_t kTrainingDataCapacityPowerOfTwo;
+		int kNeuralNetTrainingBatch;
 
 		// if new competitor's win rate larger than this one, use it to replace the best neural net so far
 		float kEvaluationWinRate;
@@ -29,9 +29,10 @@ namespace alphazero
 		};
 
 	public:
-		EndDeviceTrainer(ILogger & logger) :
+		EndDeviceTrainer(ILogger & logger, std::mt19937 & random) :
 			logger_(logger),
 			configs_(),
+			random_(random),
 			schedule_(),
 			threads_(),
 			runner_(),
@@ -46,16 +47,13 @@ namespace alphazero
 
 			int kThreads = 4; // TODO: adjust at runtime
 
-			schedule_.self_play_milliseconds = 10 * 1000;
-			schedule_.neural_net_train_milliseconds = 10 * 1000;
-			schedule_.evaluation_milliseconds = 10 * 1000;
+			schedule_.self_play_milliseconds = 3 * 1000;
+			schedule_.neural_net_train_milliseconds = 3 * 1000;
+			schedule_.evaluation_milliseconds = 3 * 1000;
 
 			threads_.Initialize(kThreads);
 			runner_.Initialize();
-			training_data_.Initialize(
-				configs_.kTrainingData,
-				kThreads, // number of writers = number of threads
-				configs_.kTrainingDataNotFullyFilledProb);
+			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
 
 			if (neural_net_model.empty()) {
 				neural_net_ = neural_net::NeuralNet::CreateRandomNeuralNet();
@@ -69,7 +67,7 @@ namespace alphazero
 			for (size_t i = 0; i < threads_.Size(); ++i) {
 				best_neural_nets_.emplace_back(neural_net_);
 				evaluators_.emplace_back();
-				self_players_.emplace_back();
+				self_players_.emplace_back(logger_);
 			}
 		}
 
@@ -98,34 +96,79 @@ namespace alphazero
 		}
 
 		void SelfPlay() {
-			logger_.Info("Start self play.");
-
+			std::vector<size_t> thread_ids;
 			for (size_t i = 0; i < threads_.Size(); ++i) {
-				self_players_[i].SetData(training_data_.GetWriter());
-
-				runner_.AsyncRun(
-					threads_.Get(i),
-					schedule_.self_play_milliseconds,
-					self_players_[i],
-					best_neural_nets_[i]);
+				thread_ids.push_back(i);
 			}
 
+			BeforeSelfPlay(thread_ids);
 			runner_.WaitAll();
+			AfterSelfPlay(thread_ids);
+		}
+
+		void BeforeSelfPlay(std::vector<size_t> const& threads) {
+			logger_.Info("Start self play.");
+
+			for (size_t tid : threads) self_players_[tid].BeforeRun(training_data_);
+
+			for (size_t tid : threads) {
+				runner_.AsyncRun(
+					threads_.Get(tid),
+					schedule_.self_play_milliseconds,
+					self_players_[tid],
+					best_neural_nets_[tid]);
+			}
+		}
+
+		void AfterSelfPlay(std::vector<size_t> const& threads) {
+			for (size_t tid : threads) self_players_[tid].AfterRun();
 		}
 
 		void TrainNeuralNetwork() {
 			logger_.Info("Start training neural network.");
 
+			auto start = std::chrono::steady_clock::now();
+			int rest_ms = schedule_.neural_net_train_milliseconds;
+			int past_ms = 0;
+			std::vector<shared_data::TrainingDataItem> data;
+			logger_.Info("Preparing training data...");
+			int i = 0;
+			while (data.size() < configs_.kNeuralNetTrainingBatch) {
+				training_data_.RandomGet(random_, [&](shared_data::TrainingDataItem const& item) {
+					data.push_back(item); // copy
+				});
+
+				++i;
+				if (i % 10000 == 0) {
+					auto now = std::chrono::steady_clock::now();
+					past_ms = (int)std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+					if (past_ms > rest_ms) {
+						logger_.Info("Failed to prepare training data. Maybe the data is not large enough.");
+						return;
+					}
+				}
+			}
+			rest_ms -= past_ms;
+
+			logger_.Info("Training neural network...");
 			// Train neural network in the first thread
 			// TODO: can tiny_dnn be trained at multiple threads?
-			// TODO: use rest threads to generate self-play data
 			runner_.AsyncRun(
 				threads_.Get(0),
 				schedule_.neural_net_train_milliseconds,
 				optimizer_,
 				neural_net_);
 
+			// Utilize the rest threads to generate self-play data
+			std::vector<size_t> thread_ids;
+			for (size_t i = 1; i < threads_.Size(); ++i) {
+				thread_ids.push_back(i);
+			}
+			BeforeSelfPlay(thread_ids);
+
 			runner_.WaitAll();
+
+			AfterSelfPlay(thread_ids);
 		}
 
 		void EvaluateNeuralNetwork() {
@@ -168,11 +211,12 @@ namespace alphazero
 	private:
 		ILogger & logger_;
 		TrainerConfigs configs_;
+		std::mt19937 & random_;
 
 		Schedule schedule_;
 		detail::ThreadPool threads_;
 		Runner runner_;
-		shared_data::TrainingDataManager training_data_;
+		shared_data::TrainingData training_data_;
 
 		// one for each thread
 		// TODO: if neural net can be shared safely across multiple threads, we can save this
