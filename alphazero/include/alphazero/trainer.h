@@ -81,7 +81,7 @@ namespace alphazero
 			PrepareData();
 
 			while (true) {
-				AdjustRunOptions();
+				AdjustSchedule();
 
 				TrainNeuralNetwork();
 
@@ -92,7 +92,7 @@ namespace alphazero
 		}
 
 	private:
-		void AdjustRunOptions() {
+		void AdjustSchedule() {
 			//schedule_.neural_net_train_milliseconds = 10 * 1000; // TODO: adjust at runtime
 			//schedule_.evaluation_milliseconds = 10 * 1000; // TODO: adjust at runtime
 		}
