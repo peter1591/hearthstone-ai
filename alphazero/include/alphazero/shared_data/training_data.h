@@ -23,6 +23,10 @@ namespace alphazero
 				data_.Initialize(capacity_power_two);
 			}
 
+			size_t GetCapacity() const {
+				return data_.GetCapacity();
+			}
+
 			void Push(std::shared_ptr<TrainingDataItem> item) {
 				data_.AllocateNext().Write(std::move(item));
 			}

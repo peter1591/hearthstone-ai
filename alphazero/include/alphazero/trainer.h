@@ -26,6 +26,7 @@ namespace alphazero
 	class EndDeviceTrainer {
 	private:
 		struct Schedule {
+			int prepare_data_milliseconds;
 			int self_play_milliseconds;
 			int neural_net_train_milliseconds;
 			int evaluation_milliseconds;
@@ -51,6 +52,7 @@ namespace alphazero
 
 			int kThreads = 4; // TODO: adjust at runtime
 
+			schedule_.prepare_data_milliseconds = 100;
 			schedule_.self_play_milliseconds = 3000;
 			schedule_.neural_net_train_milliseconds = 3000;
 			schedule_.evaluation_milliseconds = 3000;
@@ -76,9 +78,7 @@ namespace alphazero
 		}
 
 		void Train() {
-			// warm up: fill up the training data
-			// TODO: wait until traiing data are fully filled
-			SelfPlay();
+			PrepareData();
 
 			while (true) {
 				std::this_thread::sleep_for(std::chrono::seconds(0));
@@ -98,25 +98,45 @@ namespace alphazero
 			//schedule_.evaluation_milliseconds = 10 * 1000; // TODO: adjust at runtime
 		}
 
+		void PrepareData() {
+			logger_.Info("Start to prepare training data.");
+
+			auto capacity = training_data_.GetCapacity();
+
+			self_play::RunResult result;
+
+			while (true) {
+				result += InternalSelfPlay(schedule_.prepare_data_milliseconds);
+
+				std::stringstream ss;
+				ss << "Generated " << result.generated_count_ << " records.";
+				logger_.Info(ss.str());
+
+				if (result.generated_count_ > capacity) break;
+			}
+		}
+
 		void SelfPlay() {
 			logger_.Info("Start self play.");
+			auto result = InternalSelfPlay(schedule_.self_play_milliseconds);
+			std::stringstream ss;
+			ss << "Generated " << result.generated_count_ << " records.";
+			logger_.Info(ss.str());
+		}
 
+		self_play::RunResult InternalSelfPlay(int milliseconds) {
 			std::vector<detail::ThreadRunner*> threads;
 			for (size_t i = 0; i < threads_.Size(); ++i) {
 				threads.push_back(&threads_.Get(i));
 			}
 			self_players_.BeforeRun(
-				schedule_.self_play_milliseconds,
+				milliseconds,
 				threads,
 				neural_net_);
 
 			for (auto thread : threads) thread->Wait();
 
-			auto result = self_players_.AfterRun();
-
-			std::stringstream ss;
-			ss << "Generated " << result.generated_count_ << " records.";
-			logger_.Info(ss.str());
+			return self_players_.AfterRun();
 		}
 
 		void TrainNeuralNetwork() {

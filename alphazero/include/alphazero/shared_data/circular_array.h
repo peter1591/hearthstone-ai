@@ -36,6 +36,10 @@ namespace alphazero
 				items_.resize(capacity);
 			}
 
+			size_t GetCapacity() const {
+				return items_.size();
+			}
+
 			// Thread-safe if number of concurrent callers less than array size
 			T & AllocateNext() {
 				size_t idx = head_.fetch_add(1);
