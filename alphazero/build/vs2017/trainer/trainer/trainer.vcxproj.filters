@@ -74,9 +74,6 @@
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\shared_ptr_item.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\thread_data.h">
-      <Filter>Header Files\alphazero</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\options.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>

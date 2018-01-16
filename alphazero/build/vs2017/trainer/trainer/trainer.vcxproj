@@ -136,7 +136,6 @@
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_array.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\shared_ptr_item.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\training_data.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\thread_data.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\trainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
