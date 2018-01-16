@@ -31,6 +31,9 @@
     <Filter Include="Header Files\alphazero\shared_data">
       <UniqueIdentifier>{e904f3de-4f78-461e-a7b2-d537f5eea5f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\alphazero\optimizer">
+      <UniqueIdentifier>{290b7af0-1f8d-4258-b5ac-368f22894e8c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\test\e2e_test.cpp">
@@ -59,9 +62,6 @@
     <ClInclude Include="..\..\..\..\include\alphazero\neural_net\neural_net.h">
       <Filter>Header Files\alphazero\neural_net</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer.h">
-      <Filter>Header Files\alphazero\neural_net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>
@@ -83,17 +83,20 @@
     <ClInclude Include="..\..\..\..\include\alphazero\evaluation\options.h">
       <Filter>Header Files\alphazero\evaluation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\options.h">
-      <Filter>Header Files\alphazero\neural_net</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\include\alphazero\evaluation\runner.h">
       <Filter>Header Files\alphazero\evaluation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\runner.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\runner.h">
-      <Filter>Header Files\alphazero\neural_net</Filter>
+    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\optimizer.h">
+      <Filter>Header Files\alphazero\optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\options.h">
+      <Filter>Header Files\alphazero\optimizer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\runner.h">
+      <Filter>Header Files\alphazero\optimizer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

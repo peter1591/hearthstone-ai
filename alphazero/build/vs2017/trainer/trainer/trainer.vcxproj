@@ -126,9 +126,9 @@
     <ClInclude Include="..\..\..\..\include\alphazero\evaluation\options.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\logger.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\neural_net\neural_net.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\runner.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\optimizer.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\runner.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\runner.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\options.h" />

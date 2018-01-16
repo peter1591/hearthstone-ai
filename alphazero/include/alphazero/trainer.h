@@ -3,7 +3,7 @@
 #include "alphazero/detail/thread_pool.h"
 #include "alphazero/shared_data/training_data.h"
 #include "alphazero/neural_net/neural_net.h"
-#include "alphazero/neural_net/runner.h" // TODO: move to optimizer/runner.h
+#include "alphazero/optimizer/runner.h"
 #include "alphazero/self_play/runner.h"
 #include "alphazero/evaluation/runner.h"
 #include "alphazero/logger.h"
@@ -179,7 +179,7 @@ namespace alphazero
 		neural_net::NeuralNet best_neural_net_;
 		neural_net::NeuralNet neural_net_;
 
-		neural_net::Runner optimizer_;
+		optimizer::Runner optimizer_;
 		evaluation::Runner evaluators_;
 		self_play::Runner self_players_;
 	};

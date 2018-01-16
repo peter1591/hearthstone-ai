@@ -6,12 +6,12 @@
 
 #include "alphazero/logger.h"
 #include "alphazero/detail/thread_runner.h"
-#include "alphazero/neural_net/optimizer.h"
+#include "alphazero/optimizer/optimizer.h"
 #include "alphazero/shared_data/training_data.h"
 
 namespace alphazero
 {
-	namespace neural_net
+	namespace optimizer
 	{
 		class Runner
 		{

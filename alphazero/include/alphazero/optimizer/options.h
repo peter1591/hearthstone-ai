@@ -2,7 +2,7 @@
 
 namespace alphazero
 {
-	namespace neural_net
+	namespace optimizer
 	{
 		struct RunOptions
 		{
