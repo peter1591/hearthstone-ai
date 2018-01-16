@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include "alphazero/detail/thread_pool.h"
 #include "alphazero/shared_data/training_data.h"
 #include "alphazero/neural_net/neural_net.h"
@@ -110,7 +112,11 @@ namespace alphazero
 
 			for (auto thread : threads) thread->Wait();
 
-			self_players_.AfterRun();
+			auto result = self_players_.AfterRun();
+
+			std::stringstream ss;
+			ss << "Generated " << result.generated_count_ << " records.";
+			logger_.Info(ss.str());
 		}
 
 		void TrainNeuralNetwork() {
@@ -137,7 +143,11 @@ namespace alphazero
 			for (size_t i = 0; i < threads_.Size(); ++i) threads_.Get(i).Wait();
 
 			optimizer_.AfterRun();
-			self_players_.AfterRun();
+			auto self_player_result = self_players_.AfterRun();
+
+			std::stringstream ss;
+			ss << "Generated " << self_player_result.generated_count_ << " records.";
+			logger_.Info(ss.str());
 		}
 
 		void EvaluateNeuralNetwork() {

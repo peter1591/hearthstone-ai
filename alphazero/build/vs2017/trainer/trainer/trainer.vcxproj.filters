@@ -98,5 +98,8 @@
     <ClInclude Include="..\..\..\..\include\alphazero\optimizer\runner.h">
       <Filter>Header Files\alphazero\optimizer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\result.h">
+      <Filter>Header Files\alphazero\self_play</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

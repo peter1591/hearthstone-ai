@@ -129,6 +129,7 @@
     <ClInclude Include="..\..\..\..\include\alphazero\optimizer\optimizer.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\optimizer\options.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\optimizer\runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\result.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\runner.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\options.h" />

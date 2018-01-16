@@ -21,7 +21,7 @@ namespace alphazero
 
 			void Initialize(int threads, shared_data::TrainingData & training_data) {
 				for (int i = 0; i < threads; ++i) {
-					players_.emplace_back(logger_);
+					players_.emplace_back();
 				}
 				training_data_ = &training_data;
 			}
@@ -46,10 +46,12 @@ namespace alphazero
 				running_players_ = threads.size();
 			}
 
-			void AfterRun() {
+			RunResult AfterRun() {
+				RunResult result;
 				for (size_t i = 0; i < running_players_; ++i) {
-					players_[i].AfterRun();
+					result += players_[i].AfterRun();
 				}
+				return result;
 			}
 
 		private:
