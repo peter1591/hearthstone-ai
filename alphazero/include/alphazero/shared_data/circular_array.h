@@ -56,8 +56,8 @@ namespace alphazero
 			}
 
 			// don't need to fetch head index, since we're fetching a random item
-			T const& RandomGet(size_t idx) const {
-				return items_[GetIndex(idx)];
+			T const& RandomGet(std::mt19937 & random) const {
+				return items_[GetIndex((size_t)random())];
 			}
 
 		private:

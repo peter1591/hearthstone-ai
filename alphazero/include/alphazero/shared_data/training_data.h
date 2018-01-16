@@ -36,8 +36,8 @@ namespace alphazero
 
 			// callback should make a copy of the data.
 			template <class Callback>
-			void RandomGet(std::mt19937 random, Callback&& callback) {
-				auto shared_ptr_item = data_.RandomGet((size_t)random()).Get();
+			void RandomGet(std::mt19937 & random, Callback&& callback) {
+				auto shared_ptr_item = data_.RandomGet(random).Get();
 				callback(*shared_ptr_item);
 			}
 

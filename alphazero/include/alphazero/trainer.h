@@ -47,9 +47,9 @@ namespace alphazero
 
 			int kThreads = 4; // TODO: adjust at runtime
 
-			schedule_.self_play_milliseconds = 3 * 1000;
-			schedule_.neural_net_train_milliseconds = 3 * 1000;
-			schedule_.evaluation_milliseconds = 3 * 1000;
+			schedule_.self_play_milliseconds = 3000;
+			schedule_.neural_net_train_milliseconds = 3000;
+			schedule_.evaluation_milliseconds = 3000;
 
 			threads_.Initialize(kThreads);
 			runner_.Initialize();
@@ -76,16 +76,19 @@ namespace alphazero
 		}
 
 		void Train() {
+			// warm up: fill up the training data
+			// TODO: wait until traiing data are fully filled
+			SelfPlay();
+
 			while (true) {
 				std::this_thread::sleep_for(std::chrono::seconds(0));
-
 				AdjustRunOptions();
-
-				SelfPlay();
 
 				TrainNeuralNetwork();
 
 				EvaluateNeuralNetwork();
+
+				SelfPlay();
 			}
 		}
 
