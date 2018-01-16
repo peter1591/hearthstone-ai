@@ -36,67 +36,67 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\test\e2e_test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\include\alphazero\logger.h">
+    <ClInclude Include="..\..\include\alphazero\logger.h">
       <Filter>Header Files\alphazero</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\trainer.h">
+    <ClInclude Include="..\..\include\alphazero\trainer.h">
       <Filter>Header Files\alphazero</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_pool.h">
+    <ClInclude Include="..\..\include\alphazero\detail\thread_pool.h">
       <Filter>Header Files\alphazero\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_runner.h">
+    <ClInclude Include="..\..\include\alphazero\detail\thread_runner.h">
       <Filter>Header Files\alphazero\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\competition_result.h">
+    <ClInclude Include="..\..\include\alphazero\evaluation\competition_result.h">
       <Filter>Header Files\alphazero\evaluation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator.h">
+    <ClInclude Include="..\..\include\alphazero\evaluation\evaluator.h">
       <Filter>Header Files\alphazero\evaluation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\neural_net.h">
+    <ClInclude Include="..\..\include\alphazero\neural_net\neural_net.h">
       <Filter>Header Files\alphazero\neural_net</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h">
+    <ClInclude Include="..\..\include\alphazero\self_play\self_player.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\training_data.h">
+    <ClInclude Include="..\..\include\alphazero\shared_data\training_data.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_array.h">
+    <ClInclude Include="..\..\include\alphazero\shared_data\circular_array.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\shared_data\shared_ptr_item.h">
+    <ClInclude Include="..\..\include\alphazero\shared_data\shared_ptr_item.h">
       <Filter>Header Files\alphazero\shared_data</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\self_play\options.h">
+    <ClInclude Include="..\..\include\alphazero\self_play\options.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\options.h">
+    <ClInclude Include="..\..\include\alphazero\evaluation\options.h">
       <Filter>Header Files\alphazero\evaluation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\runner.h">
+    <ClInclude Include="..\..\include\alphazero\evaluation\runner.h">
       <Filter>Header Files\alphazero\evaluation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\self_play\runner.h">
+    <ClInclude Include="..\..\include\alphazero\self_play\runner.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\optimizer.h">
+    <ClInclude Include="..\..\include\alphazero\optimizer\optimizer.h">
       <Filter>Header Files\alphazero\optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\options.h">
+    <ClInclude Include="..\..\include\alphazero\optimizer\options.h">
       <Filter>Header Files\alphazero\optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\optimizer\runner.h">
+    <ClInclude Include="..\..\include\alphazero\optimizer\runner.h">
       <Filter>Header Files\alphazero\optimizer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\include\alphazero\self_play\result.h">
+    <ClInclude Include="..\..\include\alphazero\self_play\result.h">
       <Filter>Header Files\alphazero\self_play</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\test\alphazero_e2e_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
