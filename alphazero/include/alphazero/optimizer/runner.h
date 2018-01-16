@@ -38,7 +38,7 @@ namespace alphazero
 				auto until = start + std::chrono::milliseconds(milliseconds);
 
 				std::vector<shared_data::TrainingDataItem> data;
-				logger_.Info("Preparing training data...");
+				logger_.Info() << "Preparing training data...";
 				int i = 0;
 				for (int i = 0; i < batch_size; ++i) {
 					training_data.RandomGet(random, [&](shared_data::TrainingDataItem const& item) {
@@ -46,7 +46,7 @@ namespace alphazero
 					});
 				}
 
-				logger_.Info("Training neural network...");
+				logger_.Info() << "Training neural network...";
 				// Train neural network in the first thread
 				// TODO: can tiny_dnn be trained at multiple threads?
 				optimizer_.BeforeRun();

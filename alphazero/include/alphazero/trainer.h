@@ -99,7 +99,7 @@ namespace alphazero
 		}
 
 		void PrepareData() {
-			logger_.Info("Start to prepare training data.");
+			logger_.Info() << "Start to prepare training data.";
 
 			auto capacity = training_data_.GetCapacity();
 
@@ -108,20 +108,16 @@ namespace alphazero
 			while (true) {
 				result += InternalSelfPlay(schedule_.prepare_data_milliseconds);
 
-				std::stringstream ss;
-				ss << "Generated " << result.generated_count_ << " records.";
-				logger_.Info(ss.str());
+				logger_.Info() << "Generated " << result.generated_count_ << " records.";
 
 				if (result.generated_count_ > capacity) break;
 			}
 		}
 
 		void SelfPlay() {
-			logger_.Info("Start self play.");
+			logger_.Info() << "Start self play.";
 			auto result = InternalSelfPlay(schedule_.self_play_milliseconds);
-			std::stringstream ss;
-			ss << "Generated " << result.generated_count_ << " records.";
-			logger_.Info(ss.str());
+			logger_.Info() << "Generated " << result.generated_count_ << " records.";
 		}
 
 		self_play::RunResult InternalSelfPlay(int milliseconds) {
@@ -140,7 +136,7 @@ namespace alphazero
 		}
 
 		void TrainNeuralNetwork() {
-			logger_.Info("Start training neural network.");
+			logger_.Info() << "Start training neural network.";
 
 			optimizer_.BeforeRun(
 				schedule_.neural_net_train_milliseconds,
@@ -164,14 +160,11 @@ namespace alphazero
 
 			optimizer_.AfterRun();
 			auto self_player_result = self_players_.AfterRun();
-
-			std::stringstream ss;
-			ss << "Generated " << self_player_result.generated_count_ << " records.";
-			logger_.Info(ss.str());
+			logger_.Info() << "Generated " << self_player_result.generated_count_ << " records.";
 		}
 
 		void EvaluateNeuralNetwork() {
-			logger_.Info("Start evaluation neural network.");
+			logger_.Info() << "Start evaluation neural network.";
 
 			std::vector<detail::ThreadRunner*> threads;
 			for (size_t i = 0; i < threads_.Size(); ++i) {
@@ -189,11 +182,11 @@ namespace alphazero
 
 			int win_threshold = (int)(configs_.kEvaluationWinRate * result.total_games);
 			if (result.competitor_wins > win_threshold) {
-				logger_.Info("Replace the best neural network with the new competitor!");
+				logger_.Info() << "Replace the best neural network with the new competitor!";
 				best_neural_net_ = neural_net_;
 			}
 			else {
-				logger_.Info("Competitor not strong enough. Continue to use the best neural network so far.");
+				logger_.Info() << "Competitor not strong enough. Continue to use the best neural network so far.";
 			}
 		}
 

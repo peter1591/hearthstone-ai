@@ -5,19 +5,50 @@
 
 namespace alphazero
 {
+	class LoggerStream {
+	public:
+		LoggerStream(
+			std::ostream & stream,
+			std::string const& prefix,
+			std::string const& postfix) :
+			stream_(stream),
+			prefix_(prefix),
+			postfix_(postfix)
+		{
+			stream_ << prefix_;
+		}
+
+		~LoggerStream() {
+			stream_ << postfix_;
+		}
+
+		template <class T>
+		std::ostream & operator<<(T&& msg) {
+			return stream_ << std::forward<T>(msg);
+		}
+
+	private:
+		std::ostream & stream_;
+		std::string prefix_;
+		std::string postfix_;
+	};
+
 	class ILogger
 	{
 	public:
 		virtual ~ILogger() {}
 
-		virtual void Info(std::string const& msg) = 0;
+		virtual LoggerStream Info() = 0;
 	};
 
 	class StdoutLogger : public ILogger
 	{
 	public:
-		void Info(std::string const& msg) {
-			std::cout << "[INFO] " << msg << std::endl;
+		LoggerStream Info() {
+			return LoggerStream(
+				std::cout,
+				"[INFO] ",
+				"\n");
 		}
 	};
 }
