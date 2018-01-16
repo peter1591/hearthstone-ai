@@ -11,57 +11,55 @@
 
 #include "neural_net/NeuralNetwork.h"
 
-using neural_net::NeuralNetworkWrapper;
-
-class JsonDataParser : public NeuralNetworkWrapper::IInputGetter
+class JsonDataParser : public neural_net::IInputGetter
 {
 public:
 	JsonDataParser(Json::Value const& obj) : obj_(obj) {
 	}
 
 	double GetField(
-		NeuralNetworkWrapper::FieldSide field_side,
-		NeuralNetworkWrapper::FieldType field_type,
+		neural_net::FieldSide field_side,
+		neural_net::FieldType field_type,
 		int arg1 = 0) override final
 	{
-		if (field_side == NeuralNetworkWrapper::kCurrent) {
+		if (field_side == neural_net::FieldSide::kCurrent) {
 			return GetSideField(field_type, arg1, obj_["current_player"]);
 		}
-		else if (field_side == NeuralNetworkWrapper::kOpponent) {
+		else if (field_side == neural_net::FieldSide::kOpponent) {
 			return GetSideField(field_type, arg1, obj_["opponent_player"]);
 		}
 		throw std::runtime_error("invalid side");
 	}
 
 private:
-	double GetSideField(NeuralNetworkWrapper::FieldType field_type, int arg1, Json::Value const& side) {
+	double GetSideField(neural_net::FieldType field_type, int arg1, Json::Value const& side) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kResourceCurrent:
-		case NeuralNetworkWrapper::kResourceTotal:
-		case NeuralNetworkWrapper::kResourceOverload:
-		case NeuralNetworkWrapper::kResourceOverloadNext:
+		case neural_net::FieldType::kResourceCurrent:
+		case neural_net::FieldType::kResourceTotal:
+		case neural_net::FieldType::kResourceOverload:
+		case neural_net::FieldType::kResourceOverloadNext:
 			return GetResourceField(field_type, arg1, side["resource"]);
 
-		case NeuralNetworkWrapper::kHeroHP:
-		case NeuralNetworkWrapper::kHeroArmor:
+		case neural_net::FieldType::kHeroHP:
+		case neural_net::FieldType::kHeroArmor:
 			return GetHeroField(field_type, arg1, side["hero"]);
 
-		case NeuralNetworkWrapper::kMinionCount:
-		case NeuralNetworkWrapper::kMinionHP:
-		case NeuralNetworkWrapper::kMinionMaxHP:
-		case NeuralNetworkWrapper::kMinionAttack:
-		case NeuralNetworkWrapper::kMinionAttackable:
-		case NeuralNetworkWrapper::kMinionTaunt:
-		case NeuralNetworkWrapper::kMinionShield:
-		case NeuralNetworkWrapper::kMinionStealth:
+		case neural_net::FieldType::kMinionCount:
+		case neural_net::FieldType::kMinionHP:
+		case neural_net::FieldType::kMinionMaxHP:
+		case neural_net::FieldType::kMinionAttack:
+		case neural_net::FieldType::kMinionAttackable:
+		case neural_net::FieldType::kMinionTaunt:
+		case neural_net::FieldType::kMinionShield:
+		case neural_net::FieldType::kMinionStealth:
 			return GetMinionsField(field_type, arg1, side["minions"]);
 
-		case NeuralNetworkWrapper::kHandCount:
-		case NeuralNetworkWrapper::kHandPlayable:
-		case NeuralNetworkWrapper::kHandCost:
+		case neural_net::FieldType::kHandCount:
+		case neural_net::FieldType::kHandPlayable:
+		case neural_net::FieldType::kHandCost:
 			return GetHandField(field_type, arg1, side["hand"]);
 
-		case NeuralNetworkWrapper::kHeroPowerPlayable:
+		case neural_net::FieldType::kHeroPowerPlayable:
 			return GetHeroPowerField(field_type, arg1, side["hero_power"]);
 
 		default:
@@ -69,71 +67,71 @@ private:
 		}
 	}
 
-	double GetResourceField(NeuralNetworkWrapper::FieldType field_type, int arg1, Json::Value const& resource) {
+	double GetResourceField(neural_net::FieldType field_type, int arg1, Json::Value const& resource) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kResourceCurrent:
+		case neural_net::FieldType::kResourceCurrent:
 			return resource["current"].asInt();
-		case NeuralNetworkWrapper::kResourceTotal:
+		case neural_net::FieldType::kResourceTotal:
 			return resource["total"].asInt();
-		case NeuralNetworkWrapper::kResourceOverload:
+		case neural_net::FieldType::kResourceOverload:
 			return resource["overload_current"].asInt();
-		case NeuralNetworkWrapper::kResourceOverloadNext:
+		case neural_net::FieldType::kResourceOverloadNext:
 			return resource["overload_next"].asInt();
 		default:
 			throw std::runtime_error("unknown field type");
 		}
 	}
 
-	double GetHeroField(NeuralNetworkWrapper::FieldType field_type, int arg1, Json::Value const& hero) {
+	double GetHeroField(neural_net::FieldType field_type, int arg1, Json::Value const& hero) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kHeroHP:
+		case neural_net::FieldType::kHeroHP:
 			return hero["hp"].asInt();
-		case NeuralNetworkWrapper::kHeroArmor:
+		case neural_net::FieldType::kHeroArmor:
 			return hero["armor"].asInt();
 		default:
 			throw std::runtime_error("unknown field type");
 		}
 	}
 
-	double GetMinionsField(NeuralNetworkWrapper::FieldType field_type, int minion_idx, Json::Value const& minions) {
+	double GetMinionsField(neural_net::FieldType field_type, int minion_idx, Json::Value const& minions) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kMinionCount:
+		case neural_net::FieldType::kMinionCount:
 			return minions.size();
-		case NeuralNetworkWrapper::kMinionHP:
+		case neural_net::FieldType::kMinionHP:
 			return minions[minion_idx]["hp"].asInt();
-		case NeuralNetworkWrapper::kMinionMaxHP:
+		case neural_net::FieldType::kMinionMaxHP:
 			return minions[minion_idx]["max_hp"].asInt();
-		case NeuralNetworkWrapper::kMinionAttack:
+		case neural_net::FieldType::kMinionAttack:
 			return minions[minion_idx]["attack"].asInt();
-		case NeuralNetworkWrapper::kMinionAttackable:
+		case neural_net::FieldType::kMinionAttackable:
 			return minions[minion_idx]["attackable"].asBool();
-		case NeuralNetworkWrapper::kMinionTaunt:
+		case neural_net::FieldType::kMinionTaunt:
 			return minions[minion_idx]["taunt"].asBool();
-		case NeuralNetworkWrapper::kMinionShield:
+		case neural_net::FieldType::kMinionShield:
 			return minions[minion_idx]["shield"].asBool();
-		case NeuralNetworkWrapper::kMinionStealth:
+		case neural_net::FieldType::kMinionStealth:
 			return minions[minion_idx]["stealth"].asBool();
 		default:
 			throw std::runtime_error("unknown field type");
 		}
 	}
 
-	double GetHandField(NeuralNetworkWrapper::FieldType field_type, int hand_idx, Json::Value const& hand) {
+	double GetHandField(neural_net::FieldType field_type, int hand_idx, Json::Value const& hand) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kHandCount:
+		case neural_net::FieldType::kHandCount:
 			return hand.size();
-		case NeuralNetworkWrapper::kHandPlayable:
+		case neural_net::FieldType::kHandPlayable:
 			return hand[hand_idx]["playable"].asBool();
-		case NeuralNetworkWrapper::kHandCost:
+		case neural_net::FieldType::kHandCost:
 			return hand[hand_idx]["cost"].asInt();
 		default:
 			throw std::runtime_error("unknown field type");
 		}
 	}
 
-	double GetHeroPowerField(NeuralNetworkWrapper::FieldType field_type, int arg1, Json::Value const& hero_power) {
+	double GetHeroPowerField(neural_net::FieldType field_type, int arg1, Json::Value const& hero_power) {
 		switch (field_type) {
-		case NeuralNetworkWrapper::kHeroPowerPlayable:
+		case neural_net::FieldType::kHeroPowerPlayable:
 			return hero_power["playable"].asBool();
 		default:
 			throw std::runtime_error("unknown field type");
@@ -169,7 +167,15 @@ public:
 				JsonDataParser board_parser(board);
 				int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
 
-				net_.AddTrainData(&board_parser, label, for_validate);
+				if (for_validate) {
+					validate_input_.AddData(&board_parser);
+					validate_output_.AddData(label);
+				}
+				else {
+					train_input_.AddData(&board_parser);
+					train_output_.AddData(label);
+				}
+
 				++seq;
 			}
 		}
@@ -177,7 +183,34 @@ public:
 
 	void Train()
 	{
-		net_.Train();
+		size_t batch_size = 32;
+		int epoch = 10;
+		size_t total_epoch = 0;
+
+		while (true) {
+			net_.Train(train_input_, train_output_, batch_size, epoch);
+			total_epoch += epoch;
+
+			std::stringstream ss;
+			ss << "net_result_epoch_" << total_epoch;
+			net_.Save(ss.str());
+
+			{
+				auto train_verify = net_.Verify(train_input_, train_output_);
+				double rate = ((double)train_verify.first) / train_verify.second;
+				std::cout << "test data correct rate: "
+					<< rate * 100.0 << "% ("
+					<< train_verify.first << " / " << train_verify.second << ")" << std::endl;
+			}
+
+			{
+				auto validate_verify = net_.Verify(validate_input_, validate_output_);
+				double rate = ((double)validate_verify.first) / validate_verify.second;
+				std::cout << "validation data correct rate: "
+					<< rate * 100.0 << "% ("
+					<< validate_verify.first << " / " << validate_verify.second << ")" << std::endl;
+			}
+		}
 	}
 
 private:
@@ -212,7 +245,11 @@ private:
 	}
 
 private:
-	NeuralNetworkWrapper net_;
+	neural_net::NeuralNetworkWrapper net_;
+	neural_net::NeuralNetworkInputDataWrapper train_input_;
+	neural_net::NeuralNetworkOutputDataWrapper train_output_;
+	neural_net::NeuralNetworkInputDataWrapper validate_input_;
+	neural_net::NeuralNetworkOutputDataWrapper validate_output_;
 };
 
 int main(int argc, char **argv)

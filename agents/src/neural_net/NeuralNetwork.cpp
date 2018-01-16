@@ -21,6 +21,172 @@
 
 namespace neural_net {
 	namespace impl {
+		class NeuralNetworkOutputDataWrapperImpl
+		{
+		public:
+			void AddData(int label) {
+				tiny_dnn::vec_t output;
+				output.push_back((float)label);
+				output_.push_back(output);
+			}
+			
+			auto const& GetData() const { return output_; }
+
+		private:
+			std::vector<tiny_dnn::vec_t> output_;
+		};
+
+		class NeuralNetworkInputDataWrapperImpl
+		{
+		public:
+			void AddData(IInputGetter * getter) {
+				tiny_dnn::tensor_t input;
+				GetInputData(getter, input);
+				input_.push_back(input);
+			}
+
+			auto const& GetData() const { return input_; }
+
+		private:
+			void GetInputData(IInputGetter * getter, tiny_dnn::tensor_t & data) {
+				tiny_dnn::vec_t input1;
+				AddHeroData(FieldSide::kCurrent, getter, input1);
+				AddHeroData(FieldSide::kOpponent, getter, input1);
+				data.push_back(std::move(input1));
+
+				tiny_dnn::vec_t input2;
+				AddMinionsData(FieldSide::kCurrent, getter, input2);
+				AddMinionsData(FieldSide::kOpponent, getter, input2);
+				data.push_back(std::move(input2));
+
+				tiny_dnn::vec_t input3;
+				AddStandAloneData(getter, input3);
+				data.push_back(std::move(input3));
+			}
+
+			void AddHeroData(
+				FieldSide side,
+				IInputGetter * getter,
+				tiny_dnn::vec_t & data)
+			{
+				double hp = getter->GetField(side, FieldType::kHeroHP) +
+					getter->GetField(side, FieldType::kHeroArmor);
+				data.push_back(NormalizeFromUniformDist(hp, 0.0, 30.0));
+				//data.push_back(player["attack"].asFloat());
+				//data.push_back(player["attackable"].asBool());
+			}
+
+			void AddMinionsData(
+				FieldSide side,
+				IInputGetter * getter,
+				tiny_dnn::vec_t & data)
+			{
+				int rest = 7;
+				for (int i = 0; i < (int)getter->GetField(side, FieldType::kMinionCount); ++i) {
+					if (rest <= 0) throw std::runtime_error("too many minions");
+					AddMinionData(side, getter, i, data);
+					--rest;
+				}
+				while (rest > 0) {
+					AddMinionPlaceHolderData(data);
+					--rest;
+				}
+			}
+
+			void AddMinionData(
+				FieldSide side,
+				IInputGetter * getter,
+				int minion_idx,
+				tiny_dnn::vec_t & data)
+			{
+				data.push_back(NormalizeFromUniformDist(getter->GetField(side, FieldType::kMinionHP, minion_idx), 1.0, 7.0));
+				data.push_back(NormalizeFromUniformDist(getter->GetField(side, FieldType::kMinionMaxHP, minion_idx), 1.0, 7.0));
+				data.push_back(NormalizeFromUniformDist(getter->GetField(side, FieldType::kMinionAttack, minion_idx), 0.0, 7.0));
+				data.push_back(NormalizeBool(getter->GetField(side, FieldType::kMinionAttackable, minion_idx)));
+				data.push_back(NormalizeBool(getter->GetField(side, FieldType::kMinionTaunt, minion_idx)));
+				data.push_back(NormalizeBool(getter->GetField(side, FieldType::kMinionShield, minion_idx)));
+				data.push_back(NormalizeBool(getter->GetField(side, FieldType::kMinionStealth, minion_idx)));
+			}
+
+			void AddMinionPlaceHolderData(tiny_dnn::vec_t & data) {
+				data.push_back(0.0);
+				data.push_back(0.0);
+				data.push_back(0.0);
+				data.push_back(NormalizeBool(false));
+				data.push_back(NormalizeBool(false));
+				data.push_back(NormalizeBool(false));
+				data.push_back(NormalizeBool(false));
+			}
+
+			void AddStandAloneData(
+				IInputGetter * getter,
+				tiny_dnn::vec_t & data)
+			{
+				data.push_back(NormalizeFromUniformDist(getter->GetField(
+					FieldSide::kCurrent, FieldType::kResourceCurrent), 0, 10));
+				data.push_back(NormalizeFromUniformDist(getter->GetField(
+					FieldSide::kCurrent, FieldType::kResourceTotal), 0, 10));
+				data.push_back(NormalizeFromUniformDist(getter->GetField(
+					FieldSide::kCurrent, FieldType::kResourceOverloadNext), 0, 10));
+
+				int cur_hand_count = (int)getter->GetField(FieldSide::kCurrent, FieldType::kHandCount);
+				data.push_back(NormalizeFromUniformDist(cur_hand_count, 0, 10));
+
+				int cur_hand_playable = 0;
+				for (int i = 0; i < cur_hand_count; ++i) {
+					bool playable = getter->GetField(FieldSide::kCurrent, FieldType::kHandPlayable, i);
+					if (playable) {
+						++cur_hand_playable;
+					}
+				}
+				data.push_back(NormalizeFromUniformDist(cur_hand_playable, 0, 10));
+
+				int hand_cards = 0;
+				for (int i = 0; i < cur_hand_count; ++i) {
+					data.push_back(NormalizeFromUniformDist(
+						getter->GetField(FieldSide::kCurrent, FieldType::kHandCost, i), 0, 10));
+					++hand_cards;
+				}
+				while (hand_cards < 10) {
+					data.push_back(NormalizeFromUniformDist(-1, 0, 10));
+					++hand_cards;
+				}
+
+				int opn_hand_count = (int)getter->GetField(FieldSide::kOpponent, FieldType::kHandCount);
+				data.push_back(NormalizeFromUniformDist(opn_hand_count, 0, 10));
+
+				data.push_back(NormalizeBool(
+					getter->GetField(FieldSide::kCurrent, FieldType::kHeroPowerPlayable)));
+			}
+
+			tiny_dnn::float_t NormalizeFromUniformDist(double v, double min, double max) {
+				// normalize to mean = 0, var = 1.0
+				// uniform dist is with variance = (max-min)^2 / 12
+				// --> so we should have (max-min)^2 / 12 = 1.0
+				// --> (max-min)^2 = 12.0
+				// --> (max-min) = sqrt(12.0)
+				static double sqrt_12 = std::sqrt(12.0);
+
+				double mean = (min + max) / 2;
+				double range = (max - min);
+				double scale = sqrt_12 / range;
+
+				double ret = (v - mean) * scale;
+				return (tiny_dnn::float_t)ret;
+			}
+
+			tiny_dnn::float_t NormalizeBool(bool v) {
+				double vv = 0.0;
+				if (v) vv = 1.0;
+				else vv = -1.0;
+				double ret = NormalizeFromUniformDist(vv, -1.0, 1.0);
+				return (tiny_dnn::float_t)ret;
+			}
+
+		private:
+			std::vector<tiny_dnn::tensor_t> input_;
+		};
+		
 		class NeuralNetworkWrapperImpl
 		{
 		public:
@@ -89,225 +255,76 @@ namespace neural_net {
 				net_.load(filename);
 			}
 
-			void AddTrainData(NeuralNetworkWrapper::IInputGetter * getter, int label, bool for_validate) {
-				tiny_dnn::tensor_t input;
-				GetInputData(getter, input);
-
-				tiny_dnn::vec_t output;
-				output.push_back((float)label);
-
-				if (for_validate) {
-					validate_input_.push_back(input);
-					validate_output_.push_back(output);
-				}
-				else {
-					input_.push_back(input);
-					output_.push_back(output);
-				}
-			}
-
-			void Train() {
-				size_t batch_size = 32;
-				int epoch = 10;
-				size_t total_epoch = 0;
+			void Train(
+				impl::NeuralNetworkInputDataWrapperImpl const& input,
+				impl::NeuralNetworkOutputDataWrapperImpl const& output,
+				size_t batch_size, int epoch) 
+			{
 				tiny_dnn::adam opt;
-
-				while (true) {
-					int batch_op_counter = 0;
-					auto batch_op = [batch_op_counter]() mutable {
-						++batch_op_counter;
-						if (batch_op_counter % 10000 == 0) {
-							std::cout << "completed batches: " << batch_op_counter << std::endl;
-						}
-					};
-
-					auto epoch_op = [&total_epoch]() mutable {
-						++total_epoch;
-						std::cout << "completed epoch: " << total_epoch << std::endl;
-					};
-					net_.fit<tiny_dnn::mse>(opt, input_, output_, batch_size, epoch, batch_op, epoch_op);
-
-					std::stringstream ss;
-					ss << "net_result_epoch_" << total_epoch;
-					net_.save(ss.str());
-
-					size_t correct = 0;
-
-					for (size_t idx = 0; idx < input_.size(); ++idx) {
-						auto result = net_.predict(input_[idx]);
-						bool predict_win = (result[0][0] > 0.0);
-						bool actual_win = (output_[idx][0] > 0.0);
-						if (predict_win == actual_win) ++correct;
-					}
-					double rate = ((double)correct) / input_.size();
-					std::cout << "test data correct rate: "
-						<< rate * 100.0 << "% ("
-						<< correct << " / " << input_.size() << ")" << std::endl;
-
-					correct = 0;
-					for (size_t idx = 0; idx < validate_input_.size(); ++idx) {
-						auto result = net_.predict(validate_input_[idx]);
-						bool predict_win = (result[0][0] > 0.0);
-						bool actual_win = (validate_output_[idx][0] > 0.0);
-						if (predict_win == actual_win) ++correct;
-					}
-					rate = ((double)correct) / validate_input_.size();
-					std::cout << "validation correct rate: "
-						<< rate * 100.0 << "% ("
-						<< correct << " / " << validate_input_.size() << ")" << std::endl;
-				}
+				net_.fit<tiny_dnn::mse>(opt, input.GetData(), output.GetData(), batch_size, epoch, []() {}, []() {});
 			}
 
-			double Predict(NeuralNetworkWrapper::IInputGetter * getter) {
-				tiny_dnn::tensor_t input;
-				GetInputData(getter, input);
-				return net_.predict(input)[0][0];
+			void Save(std::string const& name) {
+				net_.save(name);
+			}
+
+			std::pair<uint64_t, uint64_t> Verify(
+				impl::NeuralNetworkInputDataWrapperImpl const& input,
+				impl::NeuralNetworkOutputDataWrapperImpl const& output)
+			{
+				uint64_t correct = 0;
+				uint64_t total = 0;
+
+				auto const& input_data = input.GetData();
+				auto const& output_data = output.GetData();
+
+				total = input_data.size();
+				for (size_t idx = 0; idx < input_data.size(); ++idx) {
+					auto result = net_.predict(input_data[idx]);
+					bool predict_win = (result[0][0] > 0.0); // TODO: this logic should move to caller
+					bool actual_win = (output_data[idx][0] > 0.0);
+					if (predict_win == actual_win) ++correct;
+				}
+
+				return { correct, total };
+			}
+
+			void Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results) {
+				auto const& input_data = input.GetData();
+				results.clear();
+				results.reserve(input_data.size());
+				for (size_t idx = 0; idx < input_data.size(); ++idx) {
+					results.push_back(net_.predict(input_data[0])[0][0]);
+				}
 			}
 
 		private:
-			void GetInputData(NeuralNetworkWrapper::IInputGetter * getter, tiny_dnn::tensor_t & data) {
-				tiny_dnn::vec_t input1;
-				AddHeroData(NeuralNetworkWrapper::kCurrent, getter, input1);
-				AddHeroData(NeuralNetworkWrapper::kOpponent, getter, input1);
-				data.push_back(std::move(input1));
-
-				tiny_dnn::vec_t input2;
-				AddMinionsData(NeuralNetworkWrapper::kCurrent, getter, input2);
-				AddMinionsData(NeuralNetworkWrapper::kOpponent, getter, input2);
-				data.push_back(std::move(input2));
-
-				tiny_dnn::vec_t input3;
-				AddStandAloneData(getter, input3);
-				data.push_back(std::move(input3));
-			}
-
-			void AddHeroData(
-				NeuralNetworkWrapper::FieldSide side,
-				NeuralNetworkWrapper::IInputGetter * getter,
-				tiny_dnn::vec_t & data)
-			{
-				double hp = getter->GetField(side, NeuralNetworkWrapper::kHeroHP) +
-					getter->GetField(side, NeuralNetworkWrapper::kHeroArmor);
-				data.push_back(NormalizeFromUniformDist(hp, 0.0, 30.0));
-				//data.push_back(player["attack"].asFloat());
-				//data.push_back(player["attackable"].asBool());
-			}
-
-			void AddMinionsData(
-				NeuralNetworkWrapper::FieldSide side,
-				NeuralNetworkWrapper::IInputGetter * getter,
-				tiny_dnn::vec_t & data)
-			{
-				int rest = 7;
-				for (int i = 0; i < (int)getter->GetField(side, NeuralNetworkWrapper::kMinionCount); ++i) {
-					if (rest <= 0) throw std::runtime_error("too many minions");
-					AddMinionData(side, getter, i, data);
-					--rest;
-				}
-				while (rest > 0) {
-					AddMinionPlaceHolderData(data);
-					--rest;
-				}
-			}
-
-			void AddMinionData(
-				NeuralNetworkWrapper::FieldSide side,
-				NeuralNetworkWrapper::IInputGetter * getter,
-				int minion_idx,
-				tiny_dnn::vec_t & data)
-			{
-				data.push_back(NormalizeFromUniformDist(getter->GetField(side, NeuralNetworkWrapper::kMinionHP, minion_idx), 1.0, 7.0));
-				data.push_back(NormalizeFromUniformDist(getter->GetField(side, NeuralNetworkWrapper::kMinionMaxHP, minion_idx), 1.0, 7.0));
-				data.push_back(NormalizeFromUniformDist(getter->GetField(side, NeuralNetworkWrapper::kMinionAttack, minion_idx), 0.0, 7.0));
-				data.push_back(NormalizeBool(getter->GetField(side, NeuralNetworkWrapper::kMinionAttackable, minion_idx)));
-				data.push_back(NormalizeBool(getter->GetField(side, NeuralNetworkWrapper::kMinionTaunt, minion_idx)));
-				data.push_back(NormalizeBool(getter->GetField(side, NeuralNetworkWrapper::kMinionShield, minion_idx)));
-				data.push_back(NormalizeBool(getter->GetField(side, NeuralNetworkWrapper::kMinionStealth, minion_idx)));
-			}
-
-			void AddMinionPlaceHolderData(tiny_dnn::vec_t & data) {
-				data.push_back(0.0);
-				data.push_back(0.0);
-				data.push_back(0.0);
-				data.push_back(NormalizeBool(false));
-				data.push_back(NormalizeBool(false));
-				data.push_back(NormalizeBool(false));
-				data.push_back(NormalizeBool(false));
-			}
-
-			void AddStandAloneData(
-				NeuralNetworkWrapper::IInputGetter * getter,
-				tiny_dnn::vec_t & data)
-			{
-				data.push_back(NormalizeFromUniformDist(getter->GetField(
-					NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kResourceCurrent), 0, 10));
-				data.push_back(NormalizeFromUniformDist(getter->GetField(
-					NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kResourceTotal), 0, 10));
-				data.push_back(NormalizeFromUniformDist(getter->GetField(
-					NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kResourceOverloadNext), 0, 10));
-
-				int cur_hand_count = (int)getter->GetField(NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kHandCount);
-				data.push_back(NormalizeFromUniformDist(cur_hand_count, 0, 10));
-
-				int cur_hand_playable = 0;
-				for (int i = 0; i < cur_hand_count; ++i) {
-					bool playable = getter->GetField(NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kHandPlayable, i);
-					if (playable) {
-						++cur_hand_playable;
-					}
-				}
-				data.push_back(NormalizeFromUniformDist(cur_hand_playable, 0, 10));
-
-				int hand_cards = 0;
-				for (int i = 0; i < cur_hand_count; ++i) {
-					data.push_back(NormalizeFromUniformDist(
-						getter->GetField(NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kHandCost, i), 0, 10));
-					++hand_cards;
-				}
-				while (hand_cards < 10) {
-					data.push_back(NormalizeFromUniformDist(-1, 0, 10));
-					++hand_cards;
-				}
-
-				int opn_hand_count = (int)getter->GetField(NeuralNetworkWrapper::kOpponent, NeuralNetworkWrapper::kHandCount);
-				data.push_back(NormalizeFromUniformDist(opn_hand_count, 0, 10));
-
-				data.push_back(NormalizeBool(
-					getter->GetField(NeuralNetworkWrapper::kCurrent, NeuralNetworkWrapper::kHeroPowerPlayable)));
-			}
-
-			tiny_dnn::float_t NormalizeFromUniformDist(double v, double min, double max) {
-				// normalize to mean = 0, var = 1.0
-				// uniform dist is with variance = (max-min)^2 / 12
-				// --> so we should have (max-min)^2 / 12 = 1.0
-				// --> (max-min)^2 = 12.0
-				// --> (max-min) = sqrt(12.0)
-				static double sqrt_12 = std::sqrt(12.0);
-
-				double mean = (min + max) / 2;
-				double range = (max - min);
-				double scale = sqrt_12 / range;
-
-				double ret = (v - mean) * scale;
-				return (tiny_dnn::float_t)ret;
-			}
-
-			tiny_dnn::float_t NormalizeBool(bool v) {
-				double vv = 0.0;
-				if (v) vv = 1.0;
-				else vv = -1.0;
-				double ret = NormalizeFromUniformDist(vv, -1.0, 1.0);
-				return (tiny_dnn::float_t)ret;
-			}
-
-		private:
-			std::vector<tiny_dnn::tensor_t> input_;
-			std::vector<tiny_dnn::vec_t> output_;
-			std::vector<tiny_dnn::tensor_t> validate_input_;
-			std::vector<tiny_dnn::vec_t> validate_output_;
 			tiny_dnn::network<tiny_dnn::graph> net_;
 		};
 	}
+
+	NeuralNetworkInputDataWrapper::NeuralNetworkInputDataWrapper() {
+		impl_ = new impl::NeuralNetworkInputDataWrapperImpl();
+	}
+	NeuralNetworkInputDataWrapper::~NeuralNetworkInputDataWrapper() {
+		delete impl_;
+	}
+	void NeuralNetworkInputDataWrapper::AddData(IInputGetter * getter)
+	{
+		impl_->AddData(getter);
+	}
+
+	NeuralNetworkOutputDataWrapper::NeuralNetworkOutputDataWrapper() {
+		impl_ = new impl::NeuralNetworkOutputDataWrapperImpl();
+	}
+	NeuralNetworkOutputDataWrapper::~NeuralNetworkOutputDataWrapper() {
+		delete impl_;
+	}
+	void NeuralNetworkOutputDataWrapper::AddData(int label)
+	{
+		impl_->AddData(label);
+	}
+
 
 	NeuralNetworkWrapper::NeuralNetworkWrapper() :
 		impl_(new impl::NeuralNetworkWrapperImpl())
@@ -322,19 +339,26 @@ namespace neural_net {
 	void NeuralNetworkWrapper::InitializeModel(std::string const& path) { impl_->InitializeModel(path); }
 	void NeuralNetworkWrapper::LoadModel(std::string const& path) { impl_->LoadModel(path); }
 
-
-	void NeuralNetworkWrapper::AddTrainData(IInputGetter * getter, int label, bool for_validate)
+	void NeuralNetworkWrapper::Train(
+		NeuralNetworkInputDataWrapper const& input,
+		NeuralNetworkOutputDataWrapper const& output,
+		size_t batch_size, int epoch)
 	{
-		impl_->AddTrainData(getter, label, for_validate);
+		impl_->Train(*input.impl_, *output.impl_, batch_size, epoch);
+	}
+	
+	void NeuralNetworkWrapper::Save(std::string const& path) { return impl_->Save(path); }
+
+	// @return tuple of (correct, total)
+	std::pair<uint64_t, uint64_t> NeuralNetworkWrapper::Verify(
+		NeuralNetworkInputDataWrapper const& input,
+		NeuralNetworkOutputDataWrapper const& output)
+	{
+		return impl_->Verify(*input.impl_, *output.impl_);
 	}
 
-	void NeuralNetworkWrapper::Train()
+	void NeuralNetworkWrapper::Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results)
 	{
-		impl_->Train();
-	}
-
-	double NeuralNetworkWrapper::Predict(IInputGetter * getter)
-	{
-		return impl_->Predict(getter);
+		return impl_->Predict(input, results);
 	}
 }
