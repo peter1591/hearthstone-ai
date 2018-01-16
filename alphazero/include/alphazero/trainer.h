@@ -110,7 +110,7 @@ namespace alphazero
 
 			for (auto thread : threads) thread->Wait();
 
-			self_players_.AfterRun(threads);
+			self_players_.AfterRun();
 		}
 
 		void TrainNeuralNetwork() {
@@ -137,7 +137,7 @@ namespace alphazero
 			for (size_t i = 0; i < threads_.Size(); ++i) threads_.Get(i).Wait();
 
 			optimizer_.AfterRun();
-			self_players_.AfterRun(threads);
+			self_players_.AfterRun();
 		}
 
 		void EvaluateNeuralNetwork() {
@@ -155,7 +155,7 @@ namespace alphazero
 
 			for (auto thread : threads) thread->Wait();
 
-			auto result = evaluators_.AfterRun(threads);
+			auto result = evaluators_.AfterRun();
 
 			int win_threshold = (int)(configs_.kEvaluationWinRate * result.total_games);
 			if (result.competitor_wins > win_threshold) {

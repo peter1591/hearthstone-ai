@@ -14,7 +14,8 @@ namespace alphazero
 			Runner(ILogger & logger) :
 				logger_(logger),
 				run_options_(),
-				evaluators_()
+				evaluators_(),
+				running_evaluators_(0)
 			{}
 
 			void Initialize(int threads) {
@@ -44,12 +45,13 @@ namespace alphazero
 						evaluator.RunOnce(run_options_);
 					});
 				}
+
+				running_evaluators_ = threads.size();
 			}
 
-			// TODO: should not require argument
-			evaluation::CompetitionResult AfterRun(std::vector<detail::ThreadRunner*> const& threads) {
+			evaluation::CompetitionResult AfterRun() {
 				evaluation::CompetitionResult result;
-				for (size_t i = 0; i < threads.size(); ++i) {
+				for (size_t i = 0; i < running_evaluators_; ++i) {
 					result += evaluators_[i].AfterRun();
 				}
 
@@ -60,6 +62,8 @@ namespace alphazero
 			ILogger & logger_;
 			RunOptions run_options_;
 			std::vector<evaluation::Evaluator> evaluators_;
+
+			size_t running_evaluators_;
 		};
 	}
 }

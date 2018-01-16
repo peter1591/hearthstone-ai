@@ -14,7 +14,9 @@ namespace alphazero
 			Runner(ILogger & logger) :
 				logger_(logger),
 				run_options_(),
-				players_()
+				training_data_(nullptr),
+				players_(),
+				running_players_(0)
 			{}
 
 			void Initialize(int threads, shared_data::TrainingData & training_data) {
@@ -40,11 +42,12 @@ namespace alphazero
 						player.RunOnce(run_options_);
 					});
 				}
+
+				running_players_ = threads.size();
 			}
 
-			// TODO: should not require argument
-			void AfterRun(std::vector<detail::ThreadRunner*> const& threads) {
-				for (size_t i = 0; i < threads.size(); ++i) {
+			void AfterRun() {
+				for (size_t i = 0; i < running_players_; ++i) {
 					players_[i].AfterRun();
 				}
 			}
@@ -54,6 +57,8 @@ namespace alphazero
 			RunOptions run_options_;
 			shared_data::TrainingData * training_data_;
 			std::vector<self_play::SelfPlayer> players_;
+
+			size_t running_players_;
 		};
 	}
 }
