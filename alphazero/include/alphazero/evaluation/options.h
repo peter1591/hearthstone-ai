@@ -4,10 +4,10 @@ namespace alphazero
 {
 	namespace evaluation
 	{
-		struct EvaluatorRunOptions
+		struct RunOptions
 		{
-			EvaluatorRunOptions() :
-				epochs_per_run(0)
+			RunOptions() :
+				epochs_per_run(1000)
 			{}
 
 			int epochs_per_run;

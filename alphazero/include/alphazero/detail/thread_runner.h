@@ -42,6 +42,19 @@ namespace alphazero
 			}
 
 			// Thread safety: should be called in main thread
+			void AsyncRunUntil(std::chrono::steady_clock::time_point until, std::function<void()> task) {
+				AsyncRun([until, task]() -> void {
+					while (true) {
+						task();
+						
+						if (std::chrono::steady_clock::now() > until) {
+							return; // time's up!
+						}
+					}
+				});
+			}
+
+			// Thread safety: should be called in main thread
 			void Wait() {
 				std::unique_lock<std::mutex> lock(task_mutex_);
 				while (task_) task_cv_.wait(lock);

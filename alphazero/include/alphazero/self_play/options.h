@@ -4,10 +4,10 @@ namespace alphazero
 {
 	namespace self_play
 	{
-		struct SelfPlayerRunOptions
+		struct RunOptions
 		{
-			SelfPlayerRunOptions() :
-				MCTS_iterations_per_run(0)
+			RunOptions() :
+				MCTS_iterations_per_run(1000)
 			{}
 
 			int MCTS_iterations_per_run;

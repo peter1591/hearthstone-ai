@@ -122,17 +122,20 @@
     <ClInclude Include="..\..\..\..\include\alphazero\detail\thread_runner.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\evaluation\competition_result.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\evaluator_options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\evaluation\options.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\logger.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\neural_net\neural_net.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\optimizer_options.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\neural_net\options.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player.h" />
-    <ClInclude Include="..\..\..\..\include\alphazero\self_play\self_player_options.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\runner.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\self_play\options.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\circular_array.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\shared_ptr_item.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\shared_data\training_data.h" />
+    <ClInclude Include="..\..\..\..\include\alphazero\thread_data.h" />
     <ClInclude Include="..\..\..\..\include\alphazero\trainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
