@@ -17,10 +17,10 @@ int main(void)
 
 	// create a random model
 	std::string net_path = "neural_net";
-	neural_net::NeuralNetworkWrapper::CreateWithRandomWeights(net_path);
+	neural_net::NeuralNetwork::CreateWithRandomWeights(net_path);
 
-	neural_net::NeuralNetworkWrapper net;
-	net.LoadModel(net_path);
+	neural_net::NeuralNetwork net;
+	net.Load(net_path);
 
 	std::string model_path = "";
 	trainer.Initialize(trainer_config, net);

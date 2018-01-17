@@ -26,7 +26,7 @@ namespace alphazero
 				training_data_ = &training_data;
 			}
 
-			void BeforeRun(int milliseconds, std::vector<detail::ThreadRunner*> const& threads, neural_net::NeuralNetworkWrapper const& neural_net) {
+			void BeforeRun(int milliseconds, std::vector<detail::ThreadRunner*> const& threads, neural_net::NeuralNetwork const& neural_net) {
 				assert(threads.size() <= players_.size());
 
 				auto start = std::chrono::steady_clock::now();

@@ -18,7 +18,7 @@ namespace alphazero
 		public:
 			SelfPlayer() : items_(), neural_net_(), data_(nullptr) {}
 
-			void BeforeRun(shared_data::TrainingData & data, neural_net::NeuralNetworkWrapper const& neural_net) {
+			void BeforeRun(shared_data::TrainingData & data, neural_net::NeuralNetwork const& neural_net) {
 				assert(items_.empty());
 				data_ = &data;
 				neural_net_.CopyFrom(neural_net);
@@ -47,7 +47,7 @@ namespace alphazero
 
 		private:
 			std::vector<std::shared_ptr<shared_data::TrainingDataItem>> items_;
-			neural_net::NeuralNetworkWrapper neural_net_;
+			neural_net::NeuralNetwork neural_net_;
 			shared_data::TrainingData * data_;
 
 			RunResult result_;

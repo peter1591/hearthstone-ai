@@ -28,7 +28,7 @@
 
 namespace neural_net {
 	namespace impl {
-		class NeuralNetworkOutputDataWrapperImpl
+		class NeuralNetworkOutputImpl
 		{
 		public:
 			void AddData(int label) {
@@ -187,7 +187,7 @@ namespace neural_net {
 			}
 		};
 
-		class NeuralNetworkInputDataWrapperImpl
+		class NeuralNetworkInputImpl
 		{
 		public:
 			void AddData(IInputGetter * getter) {
@@ -202,7 +202,7 @@ namespace neural_net {
 			std::vector<tiny_dnn::tensor_t> input_;
 		};
 		
-		class NeuralNetworkWrapperImpl
+		class NeuralNetworkImpl
 		{
 		public:
 			static void CreateWithRandomWeights(std::string const& filename) {
@@ -266,11 +266,11 @@ namespace neural_net {
 				net.save(filename);
 			}
 
-			void LoadModel(std::string const& filename) {
+			void Load(std::string const& filename) {
 				net_.load(filename);
 			}
 
-			void CopyFrom(NeuralNetworkWrapperImpl const& rhs) {
+			void CopyFrom(NeuralNetworkImpl const& rhs) {
 				// TODO: Consider to use binary memory stream for this
 				//std::string tmpfile = std::tmpnam(nullptr);
 				//rhs.net_.save(tmpfile);
@@ -279,8 +279,8 @@ namespace neural_net {
 			}
 
 			void Train(
-				impl::NeuralNetworkInputDataWrapperImpl const& input,
-				impl::NeuralNetworkOutputDataWrapperImpl const& output,
+				impl::NeuralNetworkInputImpl const& input,
+				impl::NeuralNetworkOutputImpl const& output,
 				size_t batch_size, int epoch) 
 			{
 				tiny_dnn::adam opt;
@@ -292,8 +292,8 @@ namespace neural_net {
 			}
 
 			std::pair<uint64_t, uint64_t> Verify(
-				impl::NeuralNetworkInputDataWrapperImpl const& input,
-				impl::NeuralNetworkOutputDataWrapperImpl const& output)
+				impl::NeuralNetworkInputImpl const& input,
+				impl::NeuralNetworkOutputImpl const& output)
 			{
 				uint64_t correct = 0;
 				uint64_t total = 0;
@@ -312,7 +312,7 @@ namespace neural_net {
 				return { correct, total };
 			}
 
-			void Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results) {
+			void Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results) {
 				auto const& input_data = input.GetData();
 				results.clear();
 				results.reserve(input_data.size());
@@ -332,43 +332,43 @@ namespace neural_net {
 		};
 	}
 
-	NeuralNetworkInputDataWrapper::NeuralNetworkInputDataWrapper() {
-		impl_ = new impl::NeuralNetworkInputDataWrapperImpl();
+	NeuralNetworkInput::NeuralNetworkInput() {
+		impl_ = new impl::NeuralNetworkInputImpl();
 	}
-	NeuralNetworkInputDataWrapper::~NeuralNetworkInputDataWrapper() {
+	NeuralNetworkInput::~NeuralNetworkInput() {
 		delete impl_;
 	}
-	void NeuralNetworkInputDataWrapper::AddData(IInputGetter * getter)
+	void NeuralNetworkInput::AddData(IInputGetter * getter)
 	{
 		impl_->AddData(getter);
 	}
 
-	NeuralNetworkOutputDataWrapper::NeuralNetworkOutputDataWrapper() {
-		impl_ = new impl::NeuralNetworkOutputDataWrapperImpl();
+	NeuralNetworkOutput::NeuralNetworkOutput() {
+		impl_ = new impl::NeuralNetworkOutputImpl();
 	}
-	NeuralNetworkOutputDataWrapper::~NeuralNetworkOutputDataWrapper() {
+	NeuralNetworkOutput::~NeuralNetworkOutput() {
 		delete impl_;
 	}
-	void NeuralNetworkOutputDataWrapper::AddData(int label)
+	void NeuralNetworkOutput::AddData(int label)
 	{
 		impl_->AddData(label);
 	}
 
 
-	NeuralNetworkWrapper::NeuralNetworkWrapper() :
-		impl_(new impl::NeuralNetworkWrapperImpl())
+	NeuralNetwork::NeuralNetwork() :
+		impl_(new impl::NeuralNetworkImpl())
 	{
 	}
 
-	NeuralNetworkWrapper::~NeuralNetworkWrapper()
+	NeuralNetwork::~NeuralNetwork()
 	{
 		delete impl_;
 	}
 
-	NeuralNetworkWrapper::NeuralNetworkWrapper(NeuralNetworkWrapper && rhs) : impl_(nullptr) {
+	NeuralNetwork::NeuralNetwork(NeuralNetwork && rhs) : impl_(nullptr) {
 		std::swap(impl_, rhs.impl_);
 	}
-	NeuralNetworkWrapper & NeuralNetworkWrapper::operator=(NeuralNetworkWrapper && rhs) {
+	NeuralNetwork & NeuralNetwork::operator=(NeuralNetwork && rhs) {
 		if (impl_) {
 			delete impl_;
 			impl_ = nullptr;
@@ -377,39 +377,39 @@ namespace neural_net {
 		return *this;
 	}
 
-	void NeuralNetworkWrapper::CreateWithRandomWeights(std::string const& path) {
-		return impl::NeuralNetworkWrapperImpl::CreateWithRandomWeights(path);
+	void NeuralNetwork::CreateWithRandomWeights(std::string const& path) {
+		return impl::NeuralNetworkImpl::CreateWithRandomWeights(path);
 	}
-	void NeuralNetworkWrapper::LoadModel(std::string const& path) { impl_->LoadModel(path); }
+	void NeuralNetwork::Load(std::string const& path) { impl_->Load(path); }
 
-	void NeuralNetworkWrapper::CopyFrom(NeuralNetworkWrapper const& rhs) {
+	void NeuralNetwork::CopyFrom(NeuralNetwork const& rhs) {
 		impl_->CopyFrom(*rhs.impl_);
 	}
 
-	void NeuralNetworkWrapper::Train(
-		NeuralNetworkInputDataWrapper const& input,
-		NeuralNetworkOutputDataWrapper const& output,
+	void NeuralNetwork::Train(
+		NeuralNetworkInput const& input,
+		NeuralNetworkOutput const& output,
 		size_t batch_size, int epoch)
 	{
 		impl_->Train(*input.impl_, *output.impl_, batch_size, epoch);
 	}
 	
-	void NeuralNetworkWrapper::Save(std::string const& path) { return impl_->Save(path); }
+	void NeuralNetwork::Save(std::string const& path) { return impl_->Save(path); }
 
 	// @return tuple of (correct, total)
-	std::pair<uint64_t, uint64_t> NeuralNetworkWrapper::Verify(
-		NeuralNetworkInputDataWrapper const& input,
-		NeuralNetworkOutputDataWrapper const& output)
+	std::pair<uint64_t, uint64_t> NeuralNetwork::Verify(
+		NeuralNetworkInput const& input,
+		NeuralNetworkOutput const& output)
 	{
 		return impl_->Verify(*input.impl_, *output.impl_);
 	}
 
-	void NeuralNetworkWrapper::Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results)
+	void NeuralNetwork::Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results)
 	{
 		return impl_->Predict(input, results);
 	}
 
-	double NeuralNetworkWrapper::Predict(IInputGetter * input)
+	double NeuralNetwork::Predict(IInputGetter * input)
 	{
 		return impl_->Predict(input);
 	}

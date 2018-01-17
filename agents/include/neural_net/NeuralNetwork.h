@@ -5,9 +5,9 @@
 
 namespace neural_net {
 	namespace impl {
-		class NeuralNetworkWrapperImpl;
-		class NeuralNetworkInputDataWrapperImpl;
-		class NeuralNetworkOutputDataWrapperImpl;
+		class NeuralNetworkImpl;
+		class NeuralNetworkInputImpl;
+		class NeuralNetworkOutputImpl;
 	}
 
 	enum class FieldSide {
@@ -45,74 +45,74 @@ namespace neural_net {
 		virtual double GetField(FieldSide field_side, FieldType field_type, int arg1 = 0) = 0;
 	};
 
-	class NeuralNetworkInputDataWrapper
+	class NeuralNetworkInput
 	{
-		friend class NeuralNetworkWrapper;
+		friend class NeuralNetwork;
 
 	public:
-		NeuralNetworkInputDataWrapper();
-		~NeuralNetworkInputDataWrapper();
+		NeuralNetworkInput();
+		~NeuralNetworkInput();
 
-		NeuralNetworkInputDataWrapper(NeuralNetworkInputDataWrapper const&) = delete;
-		NeuralNetworkInputDataWrapper & operator=(NeuralNetworkInputDataWrapper const&) = delete;
+		NeuralNetworkInput(NeuralNetworkInput const&) = delete;
+		NeuralNetworkInput & operator=(NeuralNetworkInput const&) = delete;
 
 		void AddData(IInputGetter * getter);
 
 	private:
-		impl::NeuralNetworkInputDataWrapperImpl * impl_;
+		impl::NeuralNetworkInputImpl * impl_;
 	};
 
-	class NeuralNetworkOutputDataWrapper
+	class NeuralNetworkOutput
 	{
-		friend class NeuralNetworkWrapper;
+		friend class NeuralNetwork;
 
 	public:
-		NeuralNetworkOutputDataWrapper();
-		~NeuralNetworkOutputDataWrapper();
+		NeuralNetworkOutput();
+		~NeuralNetworkOutput();
 
-		NeuralNetworkOutputDataWrapper(NeuralNetworkOutputDataWrapper const&) = delete;
-		NeuralNetworkOutputDataWrapper & operator=(NeuralNetworkOutputDataWrapper const&) = delete;
+		NeuralNetworkOutput(NeuralNetworkOutput const&) = delete;
+		NeuralNetworkOutput & operator=(NeuralNetworkOutput const&) = delete;
 
 		void AddData(int label);
 
 	private:
-		impl::NeuralNetworkOutputDataWrapperImpl * impl_;
+		impl::NeuralNetworkOutputImpl * impl_;
 	};
 
-	class NeuralNetworkWrapper
+	class NeuralNetwork
 	{
 	public:
-		NeuralNetworkWrapper();
-		~NeuralNetworkWrapper();
+		NeuralNetwork();
+		~NeuralNetwork();
 
-		NeuralNetworkWrapper(NeuralNetworkWrapper const&) = delete;
-		NeuralNetworkWrapper & operator=(NeuralNetworkWrapper const&) = delete;
+		NeuralNetwork(NeuralNetwork const&) = delete;
+		NeuralNetwork & operator=(NeuralNetwork const&) = delete;
 
-		NeuralNetworkWrapper(NeuralNetworkWrapper &&);
-		NeuralNetworkWrapper & operator=(NeuralNetworkWrapper &&);
+		NeuralNetwork(NeuralNetwork &&);
+		NeuralNetwork & operator=(NeuralNetwork &&);
 
 	public:
 		static void CreateWithRandomWeights(std::string const& path);
-		void LoadModel(std::string const& path);
-
-		void CopyFrom(NeuralNetworkWrapper const& rhs);
-
-		void Train(
-			NeuralNetworkInputDataWrapper const& input,
-			NeuralNetworkOutputDataWrapper const& output,
-			size_t batch_size, int epoch);
 
 		void Save(std::string const& path);
+		void Load(std::string const& path);
+
+		void CopyFrom(NeuralNetwork const& rhs);
+
+		void Train(
+			NeuralNetworkInput const& input,
+			NeuralNetworkOutput const& output,
+			size_t batch_size, int epoch);
 
 		// @return tuple of (correct, total)
 		std::pair<uint64_t, uint64_t> Verify(
-			NeuralNetworkInputDataWrapper const& input,
-			NeuralNetworkOutputDataWrapper const& output);
+			NeuralNetworkInput const& input,
+			NeuralNetworkOutput const& output);
 
 		double Predict(IInputGetter * input);
-		void Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results);
+		void Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results);
 
 	private:
-		impl::NeuralNetworkWrapperImpl * impl_;
+		impl::NeuralNetworkImpl * impl_;
 	};
 }

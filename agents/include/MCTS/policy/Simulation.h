@@ -152,7 +152,7 @@ namespace mcts
 				}
 
 				void LoadNetwork() {
-					net_.LoadModel(filename_);
+					net_.Load(filename_);
 				}
 
 				// State value is in range [-1, 1]
@@ -369,7 +369,7 @@ namespace mcts
 
 			private:
 				std::string filename_;
-				neural_net::NeuralNetworkWrapper net_;
+				neural_net::NeuralNetwork net_;
 				StateDataBridge current_player_viewer_;
 			};
 

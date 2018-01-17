@@ -47,7 +47,7 @@ namespace alphazero
 			self_players_(logger)
 		{}
 
-		void Initialize(TrainerConfigs const& configs, ::neural_net::NeuralNetworkWrapper const& net) {
+		void Initialize(TrainerConfigs const& configs, ::neural_net::NeuralNetwork const& net) {
 			configs_ = configs;
 
 			int kThreads = 4; // TODO: adjust at runtime
@@ -193,8 +193,8 @@ namespace alphazero
 		detail::ThreadPool threads_;
 
 		shared_data::TrainingData training_data_;
-		neural_net::NeuralNetworkWrapper best_neural_net_;
-		neural_net::NeuralNetworkWrapper neural_net_;
+		neural_net::NeuralNetwork best_neural_net_;
+		neural_net::NeuralNetwork neural_net_;
 
 		optimizer::Runner optimizer_;
 		evaluation::Runner evaluators_;

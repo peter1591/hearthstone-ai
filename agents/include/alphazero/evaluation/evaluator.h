@@ -19,7 +19,7 @@ namespace alphazero
 			Evaluator(Evaluator &&) = default;
 			Evaluator & operator=(Evaluator &&) = default;
 
-			void BeforeRun(neural_net::NeuralNetworkWrapper const& baseline, neural_net::NeuralNetworkWrapper const& competitor) {
+			void BeforeRun(neural_net::NeuralNetwork const& baseline, neural_net::NeuralNetwork const& competitor) {
 				result_.Clear();
 				baseline_.CopyFrom(baseline);
 				competitor_.CopyFrom(competitor); // copy
@@ -37,8 +37,8 @@ namespace alphazero
 
 		private:
 			CompetitionResult result_;
-			neural_net::NeuralNetworkWrapper baseline_;
-			neural_net::NeuralNetworkWrapper competitor_;
+			neural_net::NeuralNetwork baseline_;
+			neural_net::NeuralNetwork competitor_;
 		};
 	}
 }

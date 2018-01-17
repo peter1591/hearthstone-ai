@@ -17,7 +17,7 @@ namespace alphazero
 			}
 
 			// Thread safety: No
-			void RunOnce(RunOptions const& options, neural_net::NeuralNetworkWrapper & neural_net) {
+			void RunOnce(RunOptions const& options, neural_net::NeuralNetwork & neural_net) {
 				// TODO:
 			}
 

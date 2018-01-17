@@ -30,8 +30,8 @@ namespace alphazero
 			void BeforeRun(
 				int milliseconds,
 				std::vector<detail::ThreadRunner*> const& threads,
-				neural_net::NeuralNetworkWrapper const& baseline,
-				neural_net::NeuralNetworkWrapper const& competitor)
+				neural_net::NeuralNetwork const& baseline,
+				neural_net::NeuralNetwork const& competitor)
 			{
 				assert(threads.size() <= evaluators_.size());
 
