@@ -36,7 +36,7 @@ namespace mcts
 			public:
 				static constexpr bool kEnableCutoff = false;
 
-				RandomPlayouts(std::mt19937 & rand) :
+				RandomPlayouts(std::mt19937 & rand, Config const& config) :
 					rand_(rand)
 				{
 				}
@@ -144,15 +144,10 @@ namespace mcts
 			class NeuralNetworkStateValueFunction
 			{
 			public:
-				NeuralNetworkStateValueFunction()
-					: filename_(), net_(), current_player_viewer_()
+				NeuralNetworkStateValueFunction(Config const& config)
+					: net_(), current_player_viewer_()
 				{
-					filename_ = "simulation_net";
-					LoadNetwork();
-				}
-
-				void LoadNetwork() {
-					net_.Load(filename_);
+					net_.Load(config.GetNeuralNetPath());
 				}
 
 				// State value is in range [-1, 1]
@@ -368,7 +363,6 @@ namespace mcts
 				};
 
 			private:
-				std::string filename_;
 				neural_net::NeuralNetwork net_;
 				StateDataBridge current_player_viewer_;
 			};
@@ -400,9 +394,9 @@ namespace mcts
 				}
 
 			public:
-				RandomPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
+				RandomPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand, Config & config) :
 					rand_(rand),
-					state_value_func_()
+					state_value_func_(config)
 				{
 				}
 
@@ -426,137 +420,6 @@ namespace mcts
 			private:
 				std::mt19937 & rand_;
 				NeuralNetworkStateValueFunction state_value_func_;
-			};
-
-			class HardCodedPlayoutWithHeuristicEarlyCutoffPolicy
-			{
-			public:
-				// Simulation cutoff:
-				// For each simulation choice, a small probability is defined so the simulation ends here,
-				//    and the game result is defined by a heuristic state-value function.
-				// Assume the cutoff probability is p,
-				//    The expected number of simulation runs is 1/p.
-				//    So, if the expected number of runs is N, the probability p = 1.0 / N
-				static constexpr bool kEnableCutoff = true;
-				static constexpr double kCutoffExpectedRuns = 10;
-				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
-
-				engine::Result GetCutoffResult(engine::view::Board const& board) {
-					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
-					double v = rand_gen(rand_);
-					if (v >= kCutoffProbability) {
-						return engine::kResultNotDetermined;
-					}
-					
-					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return engine::kResultFirstPlayerWin;
-					else if (score == 0.0) return engine::kResultDraw;
-					else return engine::kResultSecondPlayerWin;
-				}
-
-			public:
-				HardCodedPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand) :
-					rand_(rand),
-					state_value_func_()
-				{
-				}
-
-				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
-					(void)board;
-					(void)action_analyzer;
-				}
-
-				int GetChoice(
-					engine::view::Board const& board,
-					engine::ValidActionAnalyzer const& action_analyzer,
-					engine::ActionType action_type,
-					ChoiceGetter const& choice_getter)
-				{
-					if (action_type != engine::ActionType::kMainAction) {
-						size_t count = choice_getter.Size();
-						assert(count > 0);
-						size_t rand_idx = (size_t)(rand_() % count);
-						return choice_getter.Get(rand_idx);
-					}
-					
-					// choose end-turn only when it is the only option
-					size_t count = choice_getter.Size();
-					assert(count > 0);
-					if (count == 1) {
-						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == engine::MainOpType::kMainOpEndTurn);
-						return 0;
-					}
-
-					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == engine::MainOpType::kMainOpEndTurn);
-					--count;
-					assert(count > 0);
-
-					// otherwise, choose randomly
-					size_t rand_idx = (size_t)(rand_() % count);
-					return choice_getter.Get(rand_idx);
-				}
-
-			private:
-				std::mt19937 & rand_;
-				NeuralNetworkStateValueFunction state_value_func_;
-			};
-
-			class RandomPlayoutWithHardCodedRules
-			{
-			public:
-				static constexpr bool kEnableCutoff = false;
-
-				engine::Result GetCutoffResult(engine::view::Board const& board) {
-					return engine::kResultNotDetermined;
-				}
-
-			public:
-				RandomPlayoutWithHardCodedRules(state::PlayerSide side, std::mt19937 & rand) :
-					rand_(rand)
-				{
-				}
-
-				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
-					(void)board;
-					(void)action_analyzer;
-				}
-
-				int GetChoice(
-					engine::view::Board const& board,
-					engine::ValidActionAnalyzer const& action_analyzer,
-					engine::ActionType action_type,
-					ChoiceGetter const& choice_getter)
-				{
-					if (action_type != engine::ActionType::kMainAction) {
-						size_t count = choice_getter.Size();
-						assert(count > 0);
-						size_t rand_idx = (size_t)(rand_() % count);
-						return choice_getter.Get(rand_idx);
-					}
-
-					// choose end-turn only when it is the only option
-					size_t count = choice_getter.Size();
-					assert(count > 0);
-					if (count == 1) {
-						// should be end-turn
-						assert(action_analyzer.GetMainOpType((size_t)0) == engine::MainOpType::kMainOpEndTurn);
-						return 0;
-					}
-
-					// rule out the end-turn action
-					assert(action_analyzer.GetMainOpType(count - 1) == engine::MainOpType::kMainOpEndTurn);
-					--count;
-					assert(count > 0);
-
-					// otherwise, choose randomly
-					size_t rand_idx = (size_t)(rand_() % count);
-					return choice_getter.Get(rand_idx);
-				}
-
-			private:
-				std::mt19937 & rand_;
 			};
 
 			class HeuristicPlayoutWithHeuristicEarlyCutoffPolicy
@@ -587,10 +450,10 @@ namespace mcts
 				}
 
 			public:
-				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(std::mt19937 & rand) :
+				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(std::mt19937 & rand, Config const& config) :
 					rand_(rand),
 					decision_(), decision_idx_(0),
-					state_value_func_()
+					state_value_func_(config)
 				{
 				}
 

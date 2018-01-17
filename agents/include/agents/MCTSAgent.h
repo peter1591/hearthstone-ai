@@ -10,15 +10,15 @@
 #include "MCTS/MOMCTS.h"
 #include "judge/IAgent.h"
 #include "agents/MCTSRunner.h"
+#include "agents/MCTSConfig.h"
 
 namespace agents
 {
 	template <class IterationCallback>
 	class MCTSAgent {
 	public:
-		MCTSAgent(int threads, int tree_samples) :
-			threads_(threads),
-			tree_samples_(tree_samples),
+		MCTSAgent(MCTSAgentConfig const& config) :
+			config_(config),
 			root_node_(nullptr), node_(nullptr), controller_(),
 			iteration_cb_()
 		{}
@@ -31,30 +31,14 @@ namespace agents
 			this->iteration_cb_.Initialize(std::forward<Args>(args)...);
 		}
 
-		void Think(state::PlayerIdentifier side, engine::view::BoardRefView game_state , std::mt19937 & random) {
-			engine::view::BoardView board_view;
-			engine::view::board_view::UnknownCardsInfo first_unknown;
-			engine::view::board_view::UnknownCardsInfo second_unknown;
-
-			// TODO: guess/feed deck type
-			// TODO: remove revealed/played/removed cards
-			first_unknown.deck_cards_ = decks::Decks::GetDeckCards("InnKeeperExpertWarlock");
-			second_unknown.deck_cards_ = decks::Decks::GetDeckCards("InnKeeperExpertWarlock");
-
-			board_view.Parse(game_state, first_unknown, second_unknown);
-			auto state_restorer = engine::view::board_view::StateRestorer::Prepare(
-				board_view, first_unknown, second_unknown);
-			auto state_getter = [&](std::mt19937 & rnd) -> state::State {
-				return state_restorer.RestoreState(rnd);
-			};
-
+		void Think(state::PlayerIdentifier side, engine::view::BoardRefView const& game_state , std::mt19937 & random) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				return iteration_cb_(game_state, iterations);
 			};
 
-			controller_.reset(new MCTSRunner(tree_samples_, random));
-			controller_->Run(threads_, state_getter);
+			controller_.reset(new MCTSRunner(config_, random));
+			controller_->Run(game_state);
 
 			while (true) {
 				if (!continue_checker()) break;
@@ -75,7 +59,7 @@ namespace agents
 
 			assert(node_);
 
-			if (!node_->GetAddon().consistency_checker.CheckActionType(action_type)) {
+			if (!node_->addon_.consistency_checker.CheckActionType(action_type)) {
 				assert(false);
 				throw std::runtime_error("Action type not match");
 			}
@@ -90,14 +74,14 @@ namespace agents
 			int best_choice = -1;
 			double best_chosen_times = -std::numeric_limits<double>::infinity();
 			mcts::selection::TreeNode const* best_node = nullptr;
-			node_->ForEachChild([&](int choice, mcts::selection::ChildType const& child) {
+			node_->children_.ForEach([&](int choice, mcts::selection::EdgeAddon const* edge_addon, mcts::selection::TreeNode * child) {
 				if (!CanBeChosen(choice)) return true;
 
-				double chosen_times = (double)child.GetEdgeAddon().GetChosenTimes();
+				double chosen_times = (double)edge_addon->GetChosenTimes();
 				if (chosen_times > best_chosen_times) {
 					best_chosen_times = chosen_times;
 					best_choice = choice;
-					best_node = child.GetNode();
+					best_node = child;
 				}
 				return true;
 			});
@@ -111,8 +95,7 @@ namespace agents
 		}
 
 	private:
-		int threads_;
-		int tree_samples_;
+		MCTSAgentConfig config_;
 		mcts::selection::TreeNode const* root_node_;
 		mcts::selection::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;

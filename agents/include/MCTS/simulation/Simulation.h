@@ -10,8 +10,8 @@ namespace mcts
 		class Simulation
 		{
 		public:
-			Simulation(std::mt19937 & rand) :
-				random_(rand), select_(rand)
+			Simulation(std::mt19937 & rand, Config const& config) :
+				random_(rand), select_(rand, config)
 			{}
 
 			engine::Result CutoffCheck(engine::view::Board const& board)

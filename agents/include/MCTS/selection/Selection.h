@@ -12,7 +12,7 @@ namespace mcts
 		class Selection
 		{
 		public:
-			Selection(TreeNode & tree, std::mt19937 & rand) :
+			Selection(TreeNode & tree, std::mt19937 & rand, Config const& config) :
 				root_(tree), board_changed_(false), redirect_node_map_(nullptr),
 				path_(), random_(rand), policy_()
 			{}

@@ -63,9 +63,10 @@ namespace mcts
 
 	public:
 		SOMCTS(selection::TreeNode & tree, Statistic<> & statistic, 
-			std::mt19937 & selection_rand, std::mt19937 & simulation_rand) :
+			std::mt19937 & selection_rand, std::mt19937 & simulation_rand,
+			Config const& config) :
 			action_cb_(*this), stage_(Stage::kStageSelection),
-			selection_stage_(tree, selection_rand), simulation_stage_(simulation_rand),
+			selection_stage_(tree, selection_rand, config), simulation_stage_(simulation_rand, config),
 			statistic_(statistic)
 		{}
 

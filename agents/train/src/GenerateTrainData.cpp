@@ -79,12 +79,15 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	int threads = 1;
+	agents::MCTSAgentConfig config;
+	config.tree_samples = 10;
+	config.threads = 1;
+
 	uint64_t iterations = 1000;
 
 	{
 		std::istringstream ss(argv[1]);
-		ss >> threads;
+		ss >> config.threads;
 	}
 	{
 		std::istringstream ss(argv[2]);
@@ -93,24 +96,20 @@ int main(int argc, char *argv[])
 
 	static_assert(std::is_same_v<
 								mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
-								mcts::policy::simulation::RandomPlayouts> ||
-								std::is_same_v<
-								mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
-								mcts::policy::simulation::RandomPlayoutWithHardCodedRules>);
+								mcts::policy::simulation::RandomPlayouts>);
 
 	std::cout << "Parameters: " << std::endl;
-	std::cout << "\tThreads: " << threads << std::endl;
+	std::cout << "\tThreads: " << config.threads << std::endl;
 	std::cout << "\tIterations: " << iterations << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
 	using MCTSAgent = agents::MCTSAgent<IterationCallback>;
 
 	judge::Judger<MCTSAgent> judger(rand);
-	constexpr int root_samples = 10;
 
 	IterationCallback iteration_cb;
-	MCTSAgent first(threads, root_samples);
-	MCTSAgent second(threads, root_samples);
+	MCTSAgent first(config);
+	MCTSAgent second(config);
 
 	first.SetupIterationCallback(iterations);
 	second.SetupIterationCallback(iterations);

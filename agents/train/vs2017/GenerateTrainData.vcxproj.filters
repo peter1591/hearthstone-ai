@@ -137,5 +137,8 @@
     <ClInclude Include="..\..\..\engine\include\engine\view\reduced_board_view\Types.h">
       <Filter>Header Files\engine\view\reduced_board_view</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\agents\MCTSConfig.h">
+      <Filter>Header Files\agent</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -146,8 +146,8 @@ class Trainer
 {
 public:
 	Trainer() : net_() {
-		net_.InitializeModel("initial_model");
-		net_.LoadModel("initial_model");
+		neural_net::NeuralNetwork::CreateWithRandomWeights("initial_mode");
+		net_.Load("initial_model");
 	}
 
 	void AddJsonFile(std::string const& filename, bool for_validate) {
@@ -245,11 +245,11 @@ private:
 	}
 
 private:
-	neural_net::NeuralNetworkWrapper net_;
-	neural_net::NeuralNetworkInputDataWrapper train_input_;
-	neural_net::NeuralNetworkOutputDataWrapper train_output_;
-	neural_net::NeuralNetworkInputDataWrapper validate_input_;
-	neural_net::NeuralNetworkOutputDataWrapper validate_output_;
+	neural_net::NeuralNetwork net_;
+	neural_net::NeuralNetworkInput train_input_;
+	neural_net::NeuralNetworkOutput train_output_;
+	neural_net::NeuralNetworkInput validate_input_;
+	neural_net::NeuralNetworkOutput validate_output_;
 };
 
 int main(int argc, char **argv)

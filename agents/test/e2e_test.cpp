@@ -16,14 +16,15 @@ static void Initialize()
 	std::cout << " Done." << std::endl;
 }
 
-struct Configs
+struct Config
 {
-	static int threads;
+	int threads;
+	mcts::Config mcts;
 };
 
-int Configs::threads = 0;
+static Config global_config;
 
-void Run(agents::MCTSRunner * controller, int secs)
+void Run(Config const& config, agents::MCTSRunner * controller, int secs)
 {
 	auto & s = std::cout;
 
@@ -31,7 +32,7 @@ void Run(agents::MCTSRunner * controller, int secs)
 		return TestStateBuilder().GetState(rand());
 	};
 
-	s << "Running for " << secs << " seconds with " << Configs::threads << " threads ";
+	s << "Running for " << secs << " seconds with " << config.threads << " threads ";
 
 	auto start = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point run_until =
@@ -52,7 +53,7 @@ void Run(agents::MCTSRunner * controller, int secs)
 	};
 
 	auto start_i = controller->GetStatistic().GetSuccededIterates();
-	controller->Run(Configs::threads, start_board_getter);
+	controller->Run(config.mcts, config.threads, start_board_getter);
 	while (true) {
 		if (!continue_checker()) break;
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
@@ -81,14 +82,14 @@ bool CheckRun(std::string const& cmdline, agents::MCTSRunner * controller)
 	ss >> cmd;
 
 	if (cmd == "t" || cmd == "threads") {
-		ss >> Configs::threads;
+		ss >> global_config.threads;
 		return true;
 	}
 
 	if (cmd == "s" || cmd == "start") {
 		int secs = 0;
 		ss >> secs;
-		Run(controller, secs);
+		Run(global_config, controller, secs);
 		return true;
 	}
 	return false;
@@ -96,7 +97,8 @@ bool CheckRun(std::string const& cmdline, agents::MCTSRunner * controller)
 
 void TestAI()
 {
-	Configs::threads = 1;
+	global_config.threads = 1;
+	global_config.mcts.SetNeuralNetPath("neural_net_e2e_test");
 
 	srand(0);
 
@@ -105,7 +107,7 @@ void TestAI()
 	std::mt19937 rand(seed);
 
 	agents::MCTSRunner controller(tree_samples, rand);
-	mcts::inspector::InteractiveShell handler(&controller);
+	mcts::inspector::InteractiveShell handler(global_config.mcts, &controller);
 
 	while (std::cin) {
 		std::string cmdline;

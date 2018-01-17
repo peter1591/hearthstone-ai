@@ -8,13 +8,15 @@ namespace mcts
 	class MOMCTS
 	{
 	public:
-		MOMCTS(selection::TreeNode & first_tree,
+		MOMCTS(
+			selection::TreeNode & first_tree,
 			selection::TreeNode & second_tree,
 			Statistic<> & statistic,
-			std::mt19937 & selection_rand, std::mt19937 & simulation_rand
+			std::mt19937 & selection_rand, std::mt19937 & simulation_rand,
+			Config const& config
 		) :
-			first_(first_tree, statistic, selection_rand, simulation_rand),
-			second_(second_tree, statistic, selection_rand, simulation_rand)
+			first_(first_tree, statistic, selection_rand, simulation_rand, config),
+			second_(second_tree, statistic, selection_rand, simulation_rand, config)
 		{}
 
 		template <class... StartArgs>

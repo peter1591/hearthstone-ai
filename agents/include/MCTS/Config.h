@@ -16,9 +16,7 @@ namespace mcts
 
 		namespace simulation {
 			class RandomPlayouts;
-			class RandomPlayoutWithHardCodedRules;
 			class HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
-			class HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
 		}
 	}
 
@@ -44,9 +42,17 @@ namespace mcts
 		static constexpr bool kRecordLeadingNodes = std::is_same_v<UpdaterPolicy, updater_policy::TreeUpdate>;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
-		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
-		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayoutWithHardCodedRules;
-		using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
-		//using SimulationPhaseSelectActionPolicy = policy::simulation::HardCodedPlayoutWithHeuristicEarlyCutoffPolicy;
+		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
+		//using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
+	};
+
+	// Thread safety: Yes
+	class Config {
+	public:
+		void SetNeuralNetPath(std::string const& filename) { neural_net_path_ = filename; }
+		std::string const& GetNeuralNetPath() const { return neural_net_path_; }
+		
+	private:
+		std::string neural_net_path_;
 	};
 }
