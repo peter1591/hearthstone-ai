@@ -76,7 +76,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -84,7 +86,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,7 +98,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -108,7 +114,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -123,7 +131,6 @@
     <ClInclude Include="..\..\include\alphazero\evaluation\runner.h" />
     <ClInclude Include="..\..\include\alphazero\evaluation\options.h" />
     <ClInclude Include="..\..\include\alphazero\logger.h" />
-    <ClInclude Include="..\..\include\alphazero\neural_net\neural_net.h" />
     <ClInclude Include="..\..\include\alphazero\optimizer\optimizer.h" />
     <ClInclude Include="..\..\include\alphazero\optimizer\options.h" />
     <ClInclude Include="..\..\include\alphazero\optimizer\runner.h" />
@@ -135,8 +142,10 @@
     <ClInclude Include="..\..\include\alphazero\shared_data\shared_ptr_item.h" />
     <ClInclude Include="..\..\include\alphazero\shared_data\training_data.h" />
     <ClInclude Include="..\..\include\alphazero\trainer.h" />
+    <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp" />
     <ClCompile Include="..\..\test\alphazero_e2e_test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

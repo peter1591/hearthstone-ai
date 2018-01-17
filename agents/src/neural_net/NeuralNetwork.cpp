@@ -1,6 +1,11 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // for tmpnam
+#endif
+
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable: 4083 4244 4267)
+#define _SCL_SECURE_NO_WARNINGS
 #endif
 
 #define CNN_SINGLE_THREAD
@@ -16,6 +21,8 @@
 #ifdef _MSC_VER
 #pragma warning (pop)
 #endif
+
+#include <cstdio>
 
 #include "neural_net/NeuralNetwork.h"
 
@@ -36,16 +43,12 @@ namespace neural_net {
 			std::vector<tiny_dnn::vec_t> output_;
 		};
 
-		class NeuralNetworkInputDataWrapperImpl
+		class InputDataConverter
 		{
 		public:
-			void AddData(IInputGetter * getter) {
-				tiny_dnn::tensor_t input;
-				GetInputData(getter, input);
-				input_.push_back(input);
+			void Convert(IInputGetter * getter, tiny_dnn::tensor_t & data) {
+				GetInputData(getter, data);
 			}
-
-			auto const& GetData() const { return input_; }
 
 		private:
 			void GetInputData(IInputGetter * getter, tiny_dnn::tensor_t & data) {
@@ -182,6 +185,18 @@ namespace neural_net {
 				double ret = NormalizeFromUniformDist(vv, -1.0, 1.0);
 				return (tiny_dnn::float_t)ret;
 			}
+		};
+
+		class NeuralNetworkInputDataWrapperImpl
+		{
+		public:
+			void AddData(IInputGetter * getter) {
+				tiny_dnn::tensor_t input;
+				InputDataConverter().Convert(getter, input);
+				input_.push_back(input);
+			}
+
+			auto const& GetData() const { return input_; }
 
 		private:
 			std::vector<tiny_dnn::tensor_t> input_;
@@ -190,7 +205,7 @@ namespace neural_net {
 		class NeuralNetworkWrapperImpl
 		{
 		public:
-			static void InitializeModel(std::string const& filename) {
+			static void CreateWithRandomWeights(std::string const& filename) {
 				static constexpr int hero_in_dim = 1;
 				static constexpr int hero_out_dim = 1;
 
@@ -255,6 +270,14 @@ namespace neural_net {
 				net_.load(filename);
 			}
 
+			void CopyFrom(NeuralNetworkWrapperImpl const& rhs) {
+				// TODO: Consider to use binary memory stream for this
+				//std::string tmpfile = std::tmpnam(nullptr);
+				//rhs.net_.save(tmpfile);
+				//net_.load(tmpfile);
+				//std::remove(tmpfile.c_str());
+			}
+
 			void Train(
 				impl::NeuralNetworkInputDataWrapperImpl const& input,
 				impl::NeuralNetworkOutputDataWrapperImpl const& output,
@@ -298,6 +321,12 @@ namespace neural_net {
 				}
 			}
 
+			double Predict(IInputGetter * input) {
+				tiny_dnn::tensor_t data;
+				impl::InputDataConverter().Convert(input, data);
+				return net_.predict(data)[0][0];
+			}
+
 		private:
 			tiny_dnn::network<tiny_dnn::graph> net_;
 		};
@@ -336,8 +365,26 @@ namespace neural_net {
 		delete impl_;
 	}
 
-	void NeuralNetworkWrapper::InitializeModel(std::string const& path) { impl_->InitializeModel(path); }
+	NeuralNetworkWrapper::NeuralNetworkWrapper(NeuralNetworkWrapper && rhs) : impl_(nullptr) {
+		std::swap(impl_, rhs.impl_);
+	}
+	NeuralNetworkWrapper & NeuralNetworkWrapper::operator=(NeuralNetworkWrapper && rhs) {
+		if (impl_) {
+			delete impl_;
+			impl_ = nullptr;
+		}
+		std::swap(impl_, rhs.impl_);
+		return *this;
+	}
+
+	void NeuralNetworkWrapper::CreateWithRandomWeights(std::string const& path) {
+		return impl::NeuralNetworkWrapperImpl::CreateWithRandomWeights(path);
+	}
 	void NeuralNetworkWrapper::LoadModel(std::string const& path) { impl_->LoadModel(path); }
+
+	void NeuralNetworkWrapper::CopyFrom(NeuralNetworkWrapper const& rhs) {
+		impl_->CopyFrom(*rhs.impl_);
+	}
 
 	void NeuralNetworkWrapper::Train(
 		NeuralNetworkInputDataWrapper const& input,
@@ -360,5 +407,10 @@ namespace neural_net {
 	void NeuralNetworkWrapper::Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results)
 	{
 		return impl_->Predict(input, results);
+	}
+
+	double NeuralNetworkWrapper::Predict(IInputGetter * input)
+	{
+		return impl_->Predict(input);
 	}
 }

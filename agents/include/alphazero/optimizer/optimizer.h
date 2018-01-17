@@ -1,6 +1,6 @@
 #pragma once
 
-#include "alphazero/neural_net/neural_net.h"
+#include "neural_net/NeuralNetwork.h"
 #include "alphazero/optimizer/options.h"
 
 namespace alphazero
@@ -17,7 +17,7 @@ namespace alphazero
 			}
 
 			// Thread safety: No
-			void RunOnce(RunOptions const& options, neural_net::NeuralNet & neural_net) {
+			void RunOnce(RunOptions const& options, neural_net::NeuralNetworkWrapper & neural_net) {
 				// TODO:
 			}
 

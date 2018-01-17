@@ -4,11 +4,11 @@
 
 #include "alphazero/detail/thread_pool.h"
 #include "alphazero/shared_data/training_data.h"
-#include "alphazero/neural_net/neural_net.h"
 #include "alphazero/optimizer/runner.h"
 #include "alphazero/self_play/runner.h"
 #include "alphazero/evaluation/runner.h"
 #include "alphazero/logger.h"
+#include "neural_net/NeuralNetwork.h"
 
 namespace alphazero
 {
@@ -47,7 +47,7 @@ namespace alphazero
 			self_players_(logger)
 		{}
 
-		void Initialize(TrainerConfigs const& configs, std::string const& neural_net_model) {
+		void Initialize(TrainerConfigs const& configs, ::neural_net::NeuralNetworkWrapper const& net) {
 			configs_ = configs;
 
 			int kThreads = 4; // TODO: adjust at runtime
@@ -60,13 +60,8 @@ namespace alphazero
 			threads_.Initialize(kThreads);
 			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
 
-			if (neural_net_model.empty()) {
-				neural_net_ = neural_net::NeuralNet::CreateRandomNeuralNet();
-			}
-			else {
-				neural_net_ = neural_net::NeuralNet::LoadFromFile(neural_net_model);
-			}
-			best_neural_net_ = neural_net_;
+			neural_net_.CopyFrom(net);
+			best_neural_net_.CopyFrom(neural_net_);
 
 			optimizer_.Initialize();
 			evaluators_.Initialize(kThreads);
@@ -182,7 +177,7 @@ namespace alphazero
 			int win_threshold = (int)(configs_.kEvaluationWinRate * result.total_games);
 			if (result.competitor_wins > win_threshold) {
 				logger_.Info() << "Replace the best neural network with the new competitor!";
-				best_neural_net_ = neural_net_;
+				best_neural_net_.CopyFrom(neural_net_);
 			}
 			else {
 				logger_.Info() << "Competitor not strong enough. Continue to use the best neural network so far.";
@@ -198,8 +193,8 @@ namespace alphazero
 		detail::ThreadPool threads_;
 
 		shared_data::TrainingData training_data_;
-		neural_net::NeuralNet best_neural_net_;
-		neural_net::NeuralNet neural_net_;
+		neural_net::NeuralNetworkWrapper best_neural_net_;
+		neural_net::NeuralNetworkWrapper neural_net_;
 
 		optimizer::Runner optimizer_;
 		evaluation::Runner evaluators_;

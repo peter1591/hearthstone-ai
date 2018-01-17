@@ -18,6 +18,9 @@ namespace alphazero
 				running_evaluators_(0)
 			{}
 
+			Runner(Runner const&) = delete;
+			Runner & operator=(Runner const&) = delete;
+
 			void Initialize(int threads) {
 				for (int i = 0; i < threads; ++i) {
 					evaluators_.emplace_back();
@@ -27,8 +30,8 @@ namespace alphazero
 			void BeforeRun(
 				int milliseconds,
 				std::vector<detail::ThreadRunner*> const& threads,
-				neural_net::NeuralNet const& baseline,
-				neural_net::NeuralNet const& competitor)
+				neural_net::NeuralNetworkWrapper const& baseline,
+				neural_net::NeuralNetworkWrapper const& competitor)
 			{
 				assert(threads.size() <= evaluators_.size());
 

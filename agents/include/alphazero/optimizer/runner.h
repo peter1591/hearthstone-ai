@@ -30,7 +30,7 @@ namespace alphazero
 				int milliseconds,
 				detail::ThreadRunner* thread,
 				int batch_size,
-				neural_net::NeuralNet & neural_net,
+				neural_net::NeuralNetworkWrapper & neural_net,
 				shared_data::TrainingData & training_data,
 				std::mt19937 & random)
 			{

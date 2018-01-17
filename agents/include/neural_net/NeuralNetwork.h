@@ -53,6 +53,9 @@ namespace neural_net {
 		NeuralNetworkInputDataWrapper();
 		~NeuralNetworkInputDataWrapper();
 
+		NeuralNetworkInputDataWrapper(NeuralNetworkInputDataWrapper const&) = delete;
+		NeuralNetworkInputDataWrapper & operator=(NeuralNetworkInputDataWrapper const&) = delete;
+
 		void AddData(IInputGetter * getter);
 
 	private:
@@ -67,6 +70,9 @@ namespace neural_net {
 		NeuralNetworkOutputDataWrapper();
 		~NeuralNetworkOutputDataWrapper();
 
+		NeuralNetworkOutputDataWrapper(NeuralNetworkOutputDataWrapper const&) = delete;
+		NeuralNetworkOutputDataWrapper & operator=(NeuralNetworkOutputDataWrapper const&) = delete;
+
 		void AddData(int label);
 
 	private:
@@ -79,12 +85,17 @@ namespace neural_net {
 		NeuralNetworkWrapper();
 		~NeuralNetworkWrapper();
 
-		NeuralNetworkWrapper(NeuralNetworkWrapper const& rhs) = delete;
-		NeuralNetworkWrapper & operator=(NeuralNetworkWrapper const& rhs) = delete;
+		NeuralNetworkWrapper(NeuralNetworkWrapper const&) = delete;
+		NeuralNetworkWrapper & operator=(NeuralNetworkWrapper const&) = delete;
+
+		NeuralNetworkWrapper(NeuralNetworkWrapper &&);
+		NeuralNetworkWrapper & operator=(NeuralNetworkWrapper &&);
 
 	public:
-		void InitializeModel(std::string const& path);
+		static void CreateWithRandomWeights(std::string const& path);
 		void LoadModel(std::string const& path);
+
+		void CopyFrom(NeuralNetworkWrapper const& rhs);
 
 		void Train(
 			NeuralNetworkInputDataWrapper const& input,
@@ -98,6 +109,7 @@ namespace neural_net {
 			NeuralNetworkInputDataWrapper const& input,
 			NeuralNetworkOutputDataWrapper const& output);
 
+		double Predict(IInputGetter * input);
 		void Predict(impl::NeuralNetworkInputDataWrapperImpl const& input, std::vector<double> & results);
 
 	private:

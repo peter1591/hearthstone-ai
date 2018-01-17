@@ -1,6 +1,7 @@
 #include <random>
 
 #include "alphazero/trainer.h"
+#include "neural_net/NeuralNetwork.h"
 
 int main(void)
 {
@@ -14,8 +15,15 @@ int main(void)
 	trainer_config.kTrainingDataCapacityPowerOfTwo = 17; // 131072
 	trainer_config.kNeuralNetTrainingBatch = 32;
 
+	// create a random model
+	std::string net_path = "neural_net";
+	neural_net::NeuralNetworkWrapper::CreateWithRandomWeights(net_path);
+
+	neural_net::NeuralNetworkWrapper net;
+	net.LoadModel(net_path);
+
 	std::string model_path = "";
-	trainer.Initialize(trainer_config, model_path);
+	trainer.Initialize(trainer_config, net);
 
 	trainer.Train();
 

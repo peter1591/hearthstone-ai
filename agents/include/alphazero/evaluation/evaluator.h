@@ -1,6 +1,6 @@
 #pragma once
 
-#include "alphazero/neural_net/neural_net.h"
+#include "neural_net/NeuralNetwork.h"
 #include "alphazero/evaluation/competition_result.h"
 #include "alphazero/evaluation/options.h"
 
@@ -13,10 +13,16 @@ namespace alphazero
 		public:
 			Evaluator() : result_(), baseline_(), competitor_() {}
 
-			void BeforeRun(neural_net::NeuralNet const& baseline, neural_net::NeuralNet const& competitor) {
+			Evaluator(Evaluator const&) = delete;
+			Evaluator & operator=(Evaluator const&) = delete;
+
+			Evaluator(Evaluator &&) = default;
+			Evaluator & operator=(Evaluator &&) = default;
+
+			void BeforeRun(neural_net::NeuralNetworkWrapper const& baseline, neural_net::NeuralNetworkWrapper const& competitor) {
 				result_.Clear();
-				baseline_ = baseline; // copy
-				competitor_ = competitor; // copy
+				baseline_.CopyFrom(baseline);
+				competitor_.CopyFrom(competitor); // copy
 			}
 
 			void RunOnce(RunOptions const& options) {
@@ -31,8 +37,8 @@ namespace alphazero
 
 		private:
 			CompetitionResult result_;
-			neural_net::NeuralNet baseline_;
-			neural_net::NeuralNet competitor_;
+			neural_net::NeuralNetworkWrapper baseline_;
+			neural_net::NeuralNetworkWrapper competitor_;
 		};
 	}
 }
