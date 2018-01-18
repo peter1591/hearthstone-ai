@@ -60,9 +60,9 @@ namespace judge
 		};
 
 	public:
-		Judger(std::mt19937 & rand) :
+		Judger(std::mt19937 & rand, RecorderType & recorder) :
 			rand_(rand), action_callback_(*this),
-			first_(nullptr), second_(nullptr), recorder_(rand_)
+			first_(nullptr), second_(nullptr), recorder_(recorder)
 		{}
 
 		Judger(Judger const& rhs) = delete;

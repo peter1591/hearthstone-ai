@@ -101,7 +101,8 @@ int main(int argc, char *argv[])
 	std::cout << "\tSeed: " << seed << std::endl;
 
 	using MCTSAgent = agents::MCTSAgent<AgentCallback>;
-	judge::Judger<MCTSAgent> judger(rand);
+	judge::JsonRecorder recorder(rand);
+	judge::Judger<MCTSAgent> judger(rand, recorder);
 	MCTSAgent first(config, AgentCallback(config.iterations_per_action));
 	MCTSAgent second(config, AgentCallback(config.iterations_per_action));
 

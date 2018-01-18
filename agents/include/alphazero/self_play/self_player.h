@@ -97,7 +97,8 @@ namespace alphazero
 					mcts::policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy>);
 
 				using MCTSAgent = agents::MCTSAgent<AgentCallback>;
-				judge::Judger<MCTSAgent> judger(random_);
+				judge::JsonRecorder recorder(random_);
+				judge::Judger<MCTSAgent> judger(random_, recorder);
 				MCTSAgent first(config_.agent_config, AgentCallback(logger_));
 				MCTSAgent second(config_.agent_config, AgentCallback(logger_));
 
