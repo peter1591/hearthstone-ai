@@ -14,33 +14,34 @@
 
 namespace agents
 {
-	template <class IterationCallback>
+	template <class AgentCallback>
 	class MCTSAgent {
 	public:
-		MCTSAgent(MCTSAgentConfig const& config, IterationCallback iteration_cb = IterationCallback()) :
+		MCTSAgent(MCTSAgentConfig const& config, AgentCallback cb = AgentCallback()) :
 			config_(config),
 			root_node_(nullptr), node_(nullptr), controller_(),
-			iteration_cb_(iteration_cb)
+			cb_(cb)
 		{}
 
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
 		void Think(state::PlayerIdentifier side, engine::view::BoardRefView const& game_state , std::mt19937 & random) {
-			auto continue_checker = [&]() {
-				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				iteration_cb_(game_state, iterations);
-				return (iterations < config_.iterations_per_action);
-			};
+			cb_.BeforeThink();
 
 			controller_.reset(new MCTSRunner(config_, random));
 			controller_->Run(game_state);
 
 			while (true) {
-				if (!continue_checker()) break;
+				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
+				cb_.Thinking(game_state, iterations);
+				if (iterations >= config_.iterations_per_action) break;
+
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			}
 			controller_->WaitUntilStopped();
+
+			cb_.AfterThink(controller_->GetStatistic().GetSuccededIterates());
 
 			node_ = controller_->GetRootNode(side);
 			root_node_ = node_;
@@ -95,6 +96,6 @@ namespace agents
 		mcts::selection::TreeNode const* root_node_;
 		mcts::selection::TreeNode const* node_;
 		std::unique_ptr<MCTSRunner> controller_;
-		IterationCallback iteration_cb_;
+		AgentCallback cb_;
 	};
 }

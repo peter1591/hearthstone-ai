@@ -22,21 +22,21 @@ static void Initialize(unsigned int rand_seed)
 	srand(rand_seed);
 }
 
-class IterationCallback
+class AgentCallback
 {
 public:
-	IterationCallback(int max_iterations) :
+	AgentCallback(int max_iterations) :
 		first_time_(true), max_iterations_(max_iterations), last_shown_()
 	{}
 
-	void Initialize() {
+	void BeforeThink() {
 		first_time_ = true;
-		last_shown_ = std::chrono::steady_clock::now();
 	}
 
-	void operator()(engine::view::BoardRefView board_view, uint64_t iteration) {
+	void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {
 		if (first_time_) {
 			std::cout << "Turn: " << board_view.GetTurn() << std::endl;
+			last_shown_ = std::chrono::steady_clock::now();
 			first_time_ = false;
 		}
 
@@ -47,6 +47,10 @@ public:
 			std::cout << "Iterations: " << iteration << " (" << percent * 100.0 << "%)" << std::endl;
 			last_shown_ = now;
 		}
+	}
+
+	void AfterThink(uint64_t iteration) {
+		std::cout << "Total iterations: " << iteration << std::endl;
 	}
 
 private:
@@ -96,10 +100,10 @@ int main(int argc, char *argv[])
 	std::cout << "\tIterations: " << config.iterations_per_action << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
-	using MCTSAgent = agents::MCTSAgent<IterationCallback>;
+	using MCTSAgent = agents::MCTSAgent<AgentCallback>;
 	judge::Judger<MCTSAgent> judger(rand);
-	MCTSAgent first(config, IterationCallback(config.iterations_per_action));
-	MCTSAgent second(config, IterationCallback(config.iterations_per_action));
+	MCTSAgent first(config, AgentCallback(config.iterations_per_action));
+	MCTSAgent second(config, AgentCallback(config.iterations_per_action));
 
 	auto start_board_seed = rand();
 	auto start_board_getter = [&](int rnd) -> state::State {
