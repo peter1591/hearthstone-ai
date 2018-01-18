@@ -4,13 +4,18 @@
 #include <chrono>
 #include <vector>
 #include <memory>
+#include <random>
 
+#include "engine/Game-impl.h"
+#include "agents/MCTSAgent.h"
 #include "engine/view/BoardRefView.h"
 #include "neural_net/NeuralNetwork.h"
 #include "alphazero/self_play/options.h"
 #include "alphazero/self_play/result.h"
 #include "alphazero/shared_data/training_data.h"
 #include "alphazero/logger.h"
+#include "judge/Judger.h"
+#include "TestStateBuilder.h"
 
 namespace alphazero
 {
@@ -19,8 +24,8 @@ namespace alphazero
 		class AgentCallback
 		{
 		public:
-			AgentCallback(int max_iterations) :
-				first_time_(true), max_iterations_(max_iterations), last_shown_()
+			AgentCallback(ILogger & logger) :
+				logger_(logger), first_time_(true), last_shown_()
 			{}
 
 			void BeforeThink() {
@@ -29,7 +34,9 @@ namespace alphazero
 
 			void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {
 				if (first_time_) {
-					std::cout << "Turn: " << board_view.GetTurn() << std::endl;
+					logger_.Info([&](auto& s) {
+						s << "Turn: " << board_view.GetTurn();
+					});
 					last_shown_ = std::chrono::steady_clock::now();
 					first_time_ = false;
 				}
@@ -37,26 +44,29 @@ namespace alphazero
 				auto now = std::chrono::steady_clock::now();
 				auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_shown_).count();
 				if (after_last_shown > 5) {
-					double percent = (double)iteration / max_iterations_;
-					std::cout << "Iterations: " << iteration << " (" << percent * 100.0 << "%)" << std::endl;
+					logger_.Info([&](auto& s) {
+						s << "Iterations: " << iteration;
+					});
 					last_shown_ = now;
 				}
 			}
 
 			void AfterThink(uint64_t iteration) {
-				std::cout << "Total iterations: " << iteration << std::endl;
 			}
 
 		private:
+			ILogger & logger_;
 			bool first_time_;
-			uint64_t max_iterations_;
 			std::chrono::steady_clock::time_point last_shown_;
 		};
 
 		class SelfPlayer
 		{
 		public:
-			SelfPlayer(ILogger & logger) : logger_(logger), items_(), data_(nullptr), config_(), tmp_file_() {}
+			SelfPlayer(ILogger & logger, int rand_seed) :
+				logger_(logger), random_(rand_seed),
+				items_(), data_(nullptr), config_(), tmp_file_()
+			{}
 			~SelfPlayer() { RemoveTempFile(); }
 
 			void BeforeRun(shared_data::TrainingData & data, neural_net::NeuralNetwork const& neural_net, RunOptions const& config) {
@@ -71,6 +81,8 @@ namespace alphazero
 
 				config_ = config;
 				config_.agent_config.mcts.SetNeuralNetPath(tmp_file_);
+				config_.agent_config.threads = 1;
+				config_.agent_config.iterations_per_action = 10;
 			}
 
 			// Thread safety: No
@@ -84,7 +96,22 @@ namespace alphazero
 					mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
 					mcts::policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy>);
 
+				using MCTSAgent = agents::MCTSAgent<AgentCallback>;
+				judge::Judger<MCTSAgent> judger(random_);
+				MCTSAgent first(config_.agent_config, AgentCallback(logger_));
+				MCTSAgent second(config_.agent_config, AgentCallback(logger_));
+
+				auto start_board_seed = random_();
+				auto start_board_getter = [&](std::mt19937 & random) -> state::State {
+					return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
+				};
+
+				judger.SetFirstAgent(&first);
+				judger.SetSecondAgent(&second);
+
 				while (callback()) {
+					judger.Start(start_board_getter, random_);
+
 					for (int i = 0; i < 100; ++i) {
 						items_.push_back(std::make_shared<shared_data::TrainingDataItem>());
 						++result_.generated_count_;
@@ -92,8 +119,6 @@ namespace alphazero
 
 					data_->PushN(items_);
 					assert(items_.empty());
-
-					logger_.Info("hello");
 				}
 			}
 
@@ -113,6 +138,7 @@ namespace alphazero
 
 		private:
 			ILogger & logger_;
+			std::mt19937 random_;
 			std::vector<std::shared_ptr<shared_data::TrainingDataItem>> items_;
 			shared_data::TrainingData * data_;
 			RunOptions config_;

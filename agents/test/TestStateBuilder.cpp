@@ -12,7 +12,7 @@
 class MyRandomGenerator : public engine::FlowControl::IRandomGenerator
 {
 public:
-	MyRandomGenerator(int seed) : random_(seed) {}
+	MyRandomGenerator(std::mt19937 & random) : random_(random) {}
 
 	int Get(int exclusive_max)
 	{
@@ -27,7 +27,7 @@ public:
 	}
 
 public:
-	std::mt19937 random_;
+	std::mt19937 & random_;
 };
 
 #if defined(_MSC_VER)
@@ -153,11 +153,11 @@ void RandomlyMoveFromDeckToHand(
 	AddHandCard(card_id, state, player);
 }
 
-state::State TestStateBuilder::GetStateWithRandomStartCard(int start_card_seed, int state_seed)
+state::State TestStateBuilder::GetStateWithRandomStartCard(int start_card_seed, std::mt19937 & random)
 {
 	std::mt19937 start_card_rand(start_card_seed);
 	state::State state;
-	MyRandomGenerator my_random(state_seed);
+	MyRandomGenerator my_random(random);
 
 	MakeHero(state, state::PlayerIdentifier::First(), Cards::ID_HERO_07);
 	auto deck1 = decks::Decks::GetDeck("InnKeeperExpertWarlock");
@@ -184,10 +184,10 @@ state::State TestStateBuilder::GetStateWithRandomStartCard(int start_card_seed, 
 	return state;
 }
 
-state::State TestStateBuilder::GetState(int seed)
+state::State TestStateBuilder::GetState(std::mt19937 & random)
 {
 	state::State state;
-	MyRandomGenerator my_random(seed);
+	MyRandomGenerator my_random(random);
 
 	MakeHero(state, state::PlayerIdentifier::First(), Cards::ID_HERO_08);
 	auto deck1 = decks::Decks::GetDeck("InnKeeperBasicMage");

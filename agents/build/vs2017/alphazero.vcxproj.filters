@@ -34,6 +34,9 @@
     <Filter Include="Header Files\neural_net">
       <UniqueIdentifier>{37ea06d3-3a45-465e-b5ad-153190dfbe01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\jsoncpp">
+      <UniqueIdentifier>{cc858937-0577-41d4-9f61-9319f2aa7990}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\alphazero\logger.h">
@@ -99,6 +102,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp">
+      <Filter>Source Files\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\CardDispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\test\TestStateBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

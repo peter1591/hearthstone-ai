@@ -47,7 +47,7 @@ namespace alphazero
 			self_players_(logger)
 		{}
 
-		void Initialize(TrainerConfigs const& configs, ::neural_net::NeuralNetwork const& net) {
+		void Initialize(TrainerConfigs const& configs, ::neural_net::NeuralNetwork const& net, std::mt19937 & random) {
 			configs_ = configs;
 
 			int kThreads = 4; // TODO: adjust at runtime
@@ -65,7 +65,7 @@ namespace alphazero
 
 			optimizer_.Initialize();
 			evaluators_.Initialize(kThreads);
-			self_players_.Initialize(kThreads, training_data_);
+			self_players_.Initialize(kThreads, training_data_, random);
 		}
 
 		void Release() {

@@ -43,11 +43,18 @@ namespace alphazero
 		// not thread safe
 		virtual LoggerStream Info() = 0;
 
+		// thread safe
+		void Info(std::function<void(LoggerStream &)> func) {
+			std::lock_guard<std::mutex> guard(mutex_);
+			func(Info());
+		}
+
 		// thread safe, if not using any not-thread-safe interface
 		void Info(std::string const& msg) {
 			std::lock_guard<std::mutex> guard(mutex_);
 			Info() << msg;
 		}
+
 
 	private:
 		std::mutex mutex_;

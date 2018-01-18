@@ -76,7 +76,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\test;..\..\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -86,7 +86,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\test;..\..\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -98,7 +98,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\test;..\..\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -114,7 +114,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\include;..\..\..\engine\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\test;..\..\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -145,8 +145,13 @@
     <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_value.cpp" />
+    <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_writer.cpp" />
     <ClCompile Include="..\..\src\neural_net\NeuralNetwork.cpp" />
     <ClCompile Include="..\..\test\alphazero_e2e_test.cpp" />
+    <ClCompile Include="..\..\test\CardDispatcher.cpp" />
+    <ClCompile Include="..\..\test\TestStateBuilder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

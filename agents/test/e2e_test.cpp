@@ -26,7 +26,8 @@ static Config global_config;
 
 void Run(Config const& config, agents::MCTSRunner * controller, int secs)
 {
-	auto game_state = TestStateBuilder().GetState(rand());
+	std::mt19937 random(rand());
+	auto game_state = TestStateBuilder().GetState(random);
 
 	auto & s = std::cout;
 

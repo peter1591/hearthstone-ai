@@ -106,14 +106,14 @@ int main(int argc, char *argv[])
 	MCTSAgent second(config, AgentCallback(config.iterations_per_action));
 
 	auto start_board_seed = rand();
-	auto start_board_getter = [&](int rnd) -> state::State {
-		return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, rnd);
+	auto start_board_getter = [&](std::mt19937 & random) -> state::State {
+		return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
 	};
 
 	judger.SetFirstAgent(&first);
 	judger.SetSecondAgent(&second);
 
-	judger.Start(start_board_getter, rand());
+	judger.Start(start_board_getter, rand);
 
 	return 0;
 }

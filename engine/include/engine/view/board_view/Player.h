@@ -6,6 +6,7 @@
 
 #include "Cards/id-map.h"
 #include "Cards/Database.h"
+#include "engine/view/BoardRefView.h"
 #include "engine/view/board_view/CardInfo.h"
 
 namespace engine

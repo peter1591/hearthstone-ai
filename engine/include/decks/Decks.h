@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_set>
 
+#include "Cards/Database.h"
 #include "Cards/id-map.h"
 
 namespace decks

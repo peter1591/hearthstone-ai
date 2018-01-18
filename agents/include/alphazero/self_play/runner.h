@@ -19,9 +19,9 @@ namespace alphazero
 				running_players_(0)
 			{}
 
-			void Initialize(int threads, shared_data::TrainingData & training_data) {
+			void Initialize(int threads, shared_data::TrainingData & training_data, std::mt19937 & random) {
 				for (int i = 0; i < threads; ++i) {
-					players_.emplace_back(logger_);
+					players_.emplace_back(logger_, random());
 				}
 				training_data_ = &training_data;
 			}

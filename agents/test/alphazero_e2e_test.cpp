@@ -4,11 +4,22 @@
 
 #include <random>
 
+#include "Cards/PreIndexedCards.h"
 #include "alphazero/trainer.h"
 #include "neural_net/NeuralNetwork.h"
 
+static void Initialize()
+{
+	std::cout << "Reading json file...";
+	if (!Cards::Database::GetInstance().Initialize("cards.json")) assert(false);
+	Cards::PreIndexedCards::GetInstance().Initialize();
+	std::cout << " Done." << std::endl;
+}
+
 int main(void)
 {
+	Initialize();
+
 	alphazero::StdoutLogger logger;
 	auto seed = std::random_device()();
 	std::mt19937 random(seed);
@@ -27,7 +38,7 @@ int main(void)
 	net.Load(net_path);
 
 	std::string model_path = "";
-	trainer.Initialize(trainer_config, net);
+	trainer.Initialize(trainer_config, net, random);
 
 	trainer.Train();
 
