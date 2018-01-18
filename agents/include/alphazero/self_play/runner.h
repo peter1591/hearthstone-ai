@@ -21,7 +21,7 @@ namespace alphazero
 
 			void Initialize(int threads, shared_data::TrainingData & training_data) {
 				for (int i = 0; i < threads; ++i) {
-					players_.emplace_back();
+					players_.emplace_back(logger_);
 				}
 				training_data_ = &training_data;
 			}

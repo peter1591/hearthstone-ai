@@ -1,9 +1,11 @@
 #pragma once
 
 #include <cstdio>
+#include <chrono>
 #include <vector>
 #include <memory>
 
+#include "engine/view/BoardRefView.h"
 #include "neural_net/NeuralNetwork.h"
 #include "alphazero/self_play/options.h"
 #include "alphazero/self_play/result.h"
@@ -14,10 +16,47 @@ namespace alphazero
 {
 	namespace self_play
 	{
+		class AgentCallback
+		{
+		public:
+			AgentCallback(int max_iterations) :
+				first_time_(true), max_iterations_(max_iterations), last_shown_()
+			{}
+
+			void BeforeThink() {
+				first_time_ = true;
+			}
+
+			void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {
+				if (first_time_) {
+					std::cout << "Turn: " << board_view.GetTurn() << std::endl;
+					last_shown_ = std::chrono::steady_clock::now();
+					first_time_ = false;
+				}
+
+				auto now = std::chrono::steady_clock::now();
+				auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_shown_).count();
+				if (after_last_shown > 5) {
+					double percent = (double)iteration / max_iterations_;
+					std::cout << "Iterations: " << iteration << " (" << percent * 100.0 << "%)" << std::endl;
+					last_shown_ = now;
+				}
+			}
+
+			void AfterThink(uint64_t iteration) {
+				std::cout << "Total iterations: " << iteration << std::endl;
+			}
+
+		private:
+			bool first_time_;
+			uint64_t max_iterations_;
+			std::chrono::steady_clock::time_point last_shown_;
+		};
+
 		class SelfPlayer
 		{
 		public:
-			SelfPlayer() : items_(), data_(nullptr), config_(), tmp_file_() {}
+			SelfPlayer(ILogger & logger) : logger_(logger), items_(), data_(nullptr), config_(), tmp_file_() {}
 			~SelfPlayer() { RemoveTempFile(); }
 
 			void BeforeRun(shared_data::TrainingData & data, neural_net::NeuralNetwork const& neural_net, RunOptions const& config) {
@@ -53,6 +92,8 @@ namespace alphazero
 
 					data_->PushN(items_);
 					assert(items_.empty());
+
+					logger_.Info("hello");
 				}
 			}
 
@@ -71,6 +112,7 @@ namespace alphazero
 			}
 
 		private:
+			ILogger & logger_;
 			std::vector<std::shared_ptr<shared_data::TrainingDataItem>> items_;
 			shared_data::TrainingData * data_;
 			RunOptions config_;

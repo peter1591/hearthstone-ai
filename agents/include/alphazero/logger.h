@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <mutex>
 
 namespace alphazero
 {
@@ -36,9 +37,20 @@ namespace alphazero
 	class ILogger
 	{
 	public:
+		ILogger() : mutex_() {}
 		virtual ~ILogger() {}
 
+		// not thread safe
 		virtual LoggerStream Info() = 0;
+
+		// thread safe, if not using any not-thread-safe interface
+		void Info(std::string const& msg) {
+			std::lock_guard<std::mutex> guard(mutex_);
+			Info() << msg;
+		}
+
+	private:
+		std::mutex mutex_;
 	};
 
 	class StdoutLogger : public ILogger
