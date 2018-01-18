@@ -25,24 +25,19 @@ static void Initialize(unsigned int rand_seed)
 class IterationCallback
 {
 public:
-	IterationCallback() : first_time_(true), max_iterations_(0), last_shown_(){}
+	IterationCallback(int max_iterations) :
+		first_time_(true), max_iterations_(max_iterations), last_shown_()
+	{}
 
-	void Initialize(uint64_t max_iterations) {
+	void Initialize() {
 		first_time_ = true;
-		max_iterations_ = max_iterations;
 		last_shown_ = std::chrono::steady_clock::now();
 	}
 
-	bool operator()(engine::view::BoardRefView board_view, uint64_t iteration) {
+	void operator()(engine::view::BoardRefView board_view, uint64_t iteration) {
 		if (first_time_) {
 			std::cout << "Turn: " << board_view.GetTurn() << std::endl;
 			first_time_ = false;
-		}
-
-		if (iteration >= max_iterations_) {
-			std::cout << "Total iterations: " << iteration << std::endl;
-			first_time_ = true;
-			return false;
 		}
 
 		auto now = std::chrono::steady_clock::now();
@@ -52,7 +47,6 @@ public:
 			std::cout << "Iterations: " << iteration << " (" << percent * 100.0 << "%)" << std::endl;
 			last_shown_ = now;
 		}
-		return true;
 	}
 
 private:
@@ -82,8 +76,7 @@ int main(int argc, char *argv[])
 	agents::MCTSAgentConfig config;
 	config.tree_samples = 10;
 	config.threads = 1;
-
-	uint64_t iterations = 1000;
+	config.iterations_per_action = 1000;
 
 	{
 		std::istringstream ss(argv[1]);
@@ -91,7 +84,7 @@ int main(int argc, char *argv[])
 	}
 	{
 		std::istringstream ss(argv[2]);
-		ss >> iterations;
+		ss >> config.iterations_per_action;
 	}
 
 	static_assert(std::is_same_v<
@@ -100,19 +93,13 @@ int main(int argc, char *argv[])
 
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\tThreads: " << config.threads << std::endl;
-	std::cout << "\tIterations: " << iterations << std::endl;
+	std::cout << "\tIterations: " << config.iterations_per_action << std::endl;
 	std::cout << "\tSeed: " << seed << std::endl;
 
 	using MCTSAgent = agents::MCTSAgent<IterationCallback>;
-
 	judge::Judger<MCTSAgent> judger(rand);
-
-	IterationCallback iteration_cb;
-	MCTSAgent first(config);
-	MCTSAgent second(config);
-
-	first.SetupIterationCallback(iterations);
-	second.SetupIterationCallback(iterations);
+	MCTSAgent first(config, IterationCallback(config.iterations_per_action));
+	MCTSAgent second(config, IterationCallback(config.iterations_per_action));
 
 	auto start_board_seed = rand();
 	auto start_board_getter = [&](int rnd) -> state::State {

@@ -17,24 +17,20 @@ namespace agents
 	template <class IterationCallback>
 	class MCTSAgent {
 	public:
-		MCTSAgent(MCTSAgentConfig const& config) :
+		MCTSAgent(MCTSAgentConfig const& config, IterationCallback iteration_cb = IterationCallback()) :
 			config_(config),
 			root_node_(nullptr), node_(nullptr), controller_(),
-			iteration_cb_()
+			iteration_cb_(iteration_cb)
 		{}
 
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
-		template <class... Args>
-		void SetupIterationCallback(Args&&... args) {
-			this->iteration_cb_.Initialize(std::forward<Args>(args)...);
-		}
-
 		void Think(state::PlayerIdentifier side, engine::view::BoardRefView const& game_state , std::mt19937 & random) {
 			auto continue_checker = [&]() {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
-				return iteration_cb_(game_state, iterations);
+				iteration_cb_(game_state, iterations);
+				return (iterations < config_.iterations_per_action);
 			};
 
 			controller_.reset(new MCTSRunner(config_, random));
