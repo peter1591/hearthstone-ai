@@ -96,12 +96,6 @@ namespace alphazero
 					mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
 					mcts::policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy>);
 
-				using MCTSAgent = agents::MCTSAgent<AgentCallback>;
-				judge::JsonRecorder recorder(random_);
-				judge::Judger<MCTSAgent> judger(random_, recorder);
-				MCTSAgent first(config_.agent_config, AgentCallback(logger_));
-				MCTSAgent second(config_.agent_config, AgentCallback(logger_));
-
 				auto start_board_seed = random_();
 				auto start_board_getter = [&](std::mt19937 & random) -> state::State {
 					return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
@@ -111,6 +105,12 @@ namespace alphazero
 				judger.SetSecondAgent(&second);
 
 				while (callback()) {
+					using MCTSAgent = agents::MCTSAgent<AgentCallback>;
+					judge::JsonRecorder recorder(random_);
+					judge::Judger<MCTSAgent> judger(random_, recorder);
+					MCTSAgent first(config_.agent_config, AgentCallback(logger_));
+					MCTSAgent second(config_.agent_config, AgentCallback(logger_));
+
 					judger.Start(start_board_getter, random_);
 
 					for (int i = 0; i < 100; ++i) {
