@@ -18,7 +18,7 @@ static void Initialize()
 
 struct Config
 {
-	int threads;
+	agents::MCTSAgentConfig agent;
 	mcts::Config mcts;
 };
 
@@ -26,13 +26,11 @@ static Config global_config;
 
 void Run(Config const& config, agents::MCTSRunner * controller, int secs)
 {
+	auto game_state = TestStateBuilder().GetState(rand());
+
 	auto & s = std::cout;
 
-	auto start_board_getter = [](std::mt19937 & rand) -> state::State {
-		return TestStateBuilder().GetState(rand());
-	};
-
-	s << "Running for " << secs << " seconds with " << config.threads << " threads ";
+	s << "Running for " << secs << " seconds with " << config.agent.threads << " threads ";
 
 	auto start = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point run_until =
@@ -53,7 +51,7 @@ void Run(Config const& config, agents::MCTSRunner * controller, int secs)
 	};
 
 	auto start_i = controller->GetStatistic().GetSuccededIterates();
-	controller->Run(config.mcts, config.threads, start_board_getter);
+	controller->Run(engine::view::BoardRefView(game_state, game_state.GetCurrentPlayerId().GetSide()));
 	while (true) {
 		if (!continue_checker()) break;
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
@@ -82,7 +80,7 @@ bool CheckRun(std::string const& cmdline, agents::MCTSRunner * controller)
 	ss >> cmd;
 
 	if (cmd == "t" || cmd == "threads") {
-		ss >> global_config.threads;
+		ss >> global_config.agent.threads;
 		return true;
 	}
 
@@ -97,16 +95,16 @@ bool CheckRun(std::string const& cmdline, agents::MCTSRunner * controller)
 
 void TestAI()
 {
-	global_config.threads = 1;
 	global_config.mcts.SetNeuralNetPath("neural_net_e2e_test");
+	global_config.agent.threads = 1;
+	global_config.agent.tree_samples = 10;
 
 	srand(0);
 
-	int tree_samples = 10000;
 	unsigned int seed = std::random_device()();
 	std::mt19937 rand(seed);
 
-	agents::MCTSRunner controller(tree_samples, rand);
+	agents::MCTSRunner controller(global_config.agent, rand);
 	mcts::inspector::InteractiveShell handler(global_config.mcts, &controller);
 
 	while (std::cin) {

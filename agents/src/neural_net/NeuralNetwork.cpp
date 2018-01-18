@@ -271,11 +271,10 @@ namespace neural_net {
 			}
 
 			void CopyFrom(NeuralNetworkImpl const& rhs) {
-				// TODO: Consider to use binary memory stream for this
-				//std::string tmpfile = std::tmpnam(nullptr);
-				//rhs.net_.save(tmpfile);
-				//net_.load(tmpfile);
-				//std::remove(tmpfile.c_str());
+				std::string tmpfile = std::tmpnam(nullptr);
+				rhs.net_.save(tmpfile);
+				net_.load(tmpfile);
+				std::remove(tmpfile.c_str());
 			}
 
 			void Train(
@@ -287,7 +286,7 @@ namespace neural_net {
 				net_.fit<tiny_dnn::mse>(opt, input.GetData(), output.GetData(), batch_size, epoch, []() {}, []() {});
 			}
 
-			void Save(std::string const& name) {
+			void Save(std::string const& name) const {
 				net_.save(name);
 			}
 
@@ -394,7 +393,7 @@ namespace neural_net {
 		impl_->Train(*input.impl_, *output.impl_, batch_size, epoch);
 	}
 	
-	void NeuralNetwork::Save(std::string const& path) { return impl_->Save(path); }
+	void NeuralNetwork::Save(std::string const& path) const { return impl_->Save(path); }
 
 	// @return tuple of (correct, total)
 	std::pair<uint64_t, uint64_t> NeuralNetwork::Verify(

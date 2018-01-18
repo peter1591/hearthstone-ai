@@ -1,3 +1,7 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // std::tmpnam
+#endif
+
 #include <random>
 
 #include "alphazero/trainer.h"

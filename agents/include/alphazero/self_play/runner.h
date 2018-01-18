@@ -33,13 +33,13 @@ namespace alphazero
 				auto until = start + std::chrono::milliseconds(milliseconds);
 
 				for (size_t i = 0; i < threads.size(); ++i) {
-					players_[i].BeforeRun(*training_data_, neural_net);
+					players_[i].BeforeRun(*training_data_, neural_net, run_options_);
 				}
 
 				for (size_t i = 0; i < threads.size(); ++i) {
 					auto & player = players_[i];
 					threads[i]->AsyncRunUntil(until, [&player, this]() {
-						player.RunOnce(run_options_);
+						player.RunOnce();
 					});
 				}
 

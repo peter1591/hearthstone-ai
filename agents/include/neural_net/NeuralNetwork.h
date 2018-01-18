@@ -94,7 +94,7 @@ namespace neural_net {
 	public:
 		static void CreateWithRandomWeights(std::string const& path);
 
-		void Save(std::string const& path);
+		void Save(std::string const& path) const;
 		void Load(std::string const& path);
 
 		void CopyFrom(NeuralNetwork const& rhs);

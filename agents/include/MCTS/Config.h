@@ -42,8 +42,8 @@ namespace mcts
 		static constexpr bool kRecordLeadingNodes = std::is_same_v<UpdaterPolicy, updater_policy::TreeUpdate>;
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
-		using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
-		//using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
+		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
+		using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
 	};
 
 	// Thread safety: Yes

@@ -3,6 +3,8 @@
 #include <functional>
 #include <random>
 
+#include "engine/view/BoardView.h"
+#include "engine/view/board_view/StateRestorer.h"
 #include "state/State.h"
 #include "MCTS/MOMCTS.h"
 #include "judge/Judger.h"
