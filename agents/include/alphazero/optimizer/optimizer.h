@@ -17,8 +17,11 @@ namespace alphazero
 			}
 
 			// Thread safety: No
-			void RunOnce(RunOptions const& options, neural_net::NeuralNetwork & neural_net) {
-				// TODO:
+			template <class Callback>
+			void Run(RunOptions const& options, neural_net::NeuralNetwork & neural_net, Callback cb) {
+				while (cb()) {
+					// TODO:
+				}
 			}
 
 			void AfterRun() {

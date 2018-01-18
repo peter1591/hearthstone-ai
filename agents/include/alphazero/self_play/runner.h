@@ -38,8 +38,8 @@ namespace alphazero
 
 				for (size_t i = 0; i < threads.size(); ++i) {
 					auto & player = players_[i];
-					threads[i]->AsyncRunUntil(until, [&player, this]() {
-						player.RunOnce();
+					threads[i]->AsyncRunUntil(until, [&](auto&& cb) {
+						player.Run(cb);
 					});
 				}
 

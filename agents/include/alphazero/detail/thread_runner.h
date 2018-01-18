@@ -39,17 +39,12 @@ namespace alphazero
 				task_cv_.notify_one();
 			}
 
-			// Thread safety: should be called in main thread
-			void AsyncRunUntil(std::chrono::steady_clock::time_point until, std::function<void()> task) {
-				AsyncRun([until, task]() -> void {
-					while (true) {
-						task();
-						
-						if (std::chrono::steady_clock::now() > until) {
-							return; // time's up!
-						}
-					}
-				});
+			using AsyncCallback = std::function<bool()>;
+			void AsyncRunUntil(std::chrono::steady_clock::time_point until, std::function<void(AsyncCallback)> task) {
+				auto checker = [until]() -> bool {
+					return std::chrono::steady_clock::now() < until;
+				};
+				AsyncRun(std::bind(task, checker));
 			}
 
 			// Thread safety: should be called in main thread

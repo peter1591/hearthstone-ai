@@ -35,7 +35,8 @@ namespace alphazero
 			}
 
 			// Thread safety: No
-			void RunOnce() {
+			template <class Callback>
+			void Run(Callback && callback) {
 				// TODO: use MCTS to generate self play data
 				// Choose actions proportions to its visit counts.
 				// TODO: Add Dirchlet distribution to root node. This further ensures the variety.
@@ -44,13 +45,15 @@ namespace alphazero
 					mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
 					mcts::policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy>);
 
-				for (int i = 0; i < 100; ++i) {
-					items_.push_back(std::make_shared<shared_data::TrainingDataItem>());
-					++result_.generated_count_;
-				}
+				while (callback()) {
+					for (int i = 0; i < 100; ++i) {
+						items_.push_back(std::make_shared<shared_data::TrainingDataItem>());
+						++result_.generated_count_;
+					}
 
-				data_->PushN(items_);
-				assert(items_.empty());
+					data_->PushN(items_);
+					assert(items_.empty());
+				}
 			}
 
 			RunResult AfterRun() {

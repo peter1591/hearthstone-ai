@@ -25,8 +25,11 @@ namespace alphazero
 				competitor_.CopyFrom(competitor); // copy
 			}
 
-			void RunOnce(RunOptions const& options) {
-				// TODO: compete several games
+			template <class Callback>
+			void Run(RunOptions const& options, Callback&& callback) {
+				while (callback()) {
+					// TODO: compete several games
+				}
 			}
 
 			CompetitionResult AfterRun()

@@ -50,8 +50,8 @@ namespace alphazero
 				// Train neural network in the first thread
 				// TODO: can tiny_dnn be trained at multiple threads?
 				optimizer_.BeforeRun();
-				thread->AsyncRunUntil(until, [&]() {
-					optimizer_.RunOnce(run_options_, neural_net);
+				thread->AsyncRunUntil(until, [&](auto&& cb) {
+					optimizer_.Run(run_options_, neural_net, cb);
 				});
 			}
 

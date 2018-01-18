@@ -44,8 +44,8 @@ namespace alphazero
 
 				for (size_t i = 0; i < threads.size(); ++i) {
 					auto & evaluator = evaluators_[i];
-					threads[i]->AsyncRunUntil(until, [&evaluator, this]() {
-						evaluator.RunOnce(run_options_);
+					threads[i]->AsyncRunUntil(until, [&evaluator, this](auto&& cb) {
+						evaluator.Run(run_options_, cb);
 					});
 				}
 
