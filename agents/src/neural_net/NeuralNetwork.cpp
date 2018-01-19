@@ -46,12 +46,12 @@ namespace neural_net {
 		class InputDataConverter
 		{
 		public:
-			void Convert(IInputGetter * getter, tiny_dnn::tensor_t & data) {
+			void Convert(IInputGetter const* getter, tiny_dnn::tensor_t & data) {
 				GetInputData(getter, data);
 			}
 
 		private:
-			void GetInputData(IInputGetter * getter, tiny_dnn::tensor_t & data) {
+			void GetInputData(IInputGetter const* getter, tiny_dnn::tensor_t & data) {
 				tiny_dnn::vec_t input1;
 				AddHeroData(FieldSide::kCurrent, getter, input1);
 				AddHeroData(FieldSide::kOpponent, getter, input1);
@@ -69,7 +69,7 @@ namespace neural_net {
 
 			void AddHeroData(
 				FieldSide side,
-				IInputGetter * getter,
+				IInputGetter const* getter,
 				tiny_dnn::vec_t & data)
 			{
 				double hp = getter->GetField(side, FieldType::kHeroHP) +
@@ -81,7 +81,7 @@ namespace neural_net {
 
 			void AddMinionsData(
 				FieldSide side,
-				IInputGetter * getter,
+				IInputGetter const* getter,
 				tiny_dnn::vec_t & data)
 			{
 				int rest = 7;
@@ -98,7 +98,7 @@ namespace neural_net {
 
 			void AddMinionData(
 				FieldSide side,
-				IInputGetter * getter,
+				IInputGetter const* getter,
 				int minion_idx,
 				tiny_dnn::vec_t & data)
 			{
@@ -122,7 +122,7 @@ namespace neural_net {
 			}
 
 			void AddStandAloneData(
-				IInputGetter * getter,
+				IInputGetter const* getter,
 				tiny_dnn::vec_t & data)
 			{
 				data.push_back(NormalizeFromUniformDist(getter->GetField(
@@ -190,7 +190,7 @@ namespace neural_net {
 		class NeuralNetworkInputImpl
 		{
 		public:
-			void AddData(IInputGetter * getter) {
+			void AddData(IInputGetter const* getter) {
 				tiny_dnn::tensor_t input;
 				InputDataConverter().Convert(getter, input);
 				input_.push_back(input);
@@ -337,7 +337,7 @@ namespace neural_net {
 	NeuralNetworkInput::~NeuralNetworkInput() {
 		delete impl_;
 	}
-	void NeuralNetworkInput::AddData(IInputGetter * getter)
+	void NeuralNetworkInput::AddData(IInputGetter const* getter)
 	{
 		impl_->AddData(getter);
 	}

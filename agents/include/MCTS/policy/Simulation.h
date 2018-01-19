@@ -174,6 +174,7 @@ namespace mcts
 				}
 
 			private:
+				// TODO: move to nerual_net namespace
 				class StateDataBridge : public neural_net::IInputGetter
 				{
 				public:
@@ -207,7 +208,7 @@ namespace mcts
 					double GetField(
 						neural_net::FieldSide field_side,
 						neural_net::FieldType field_type,
-						int arg1 = 0) override final
+						int arg1 = 0) const override final
 					{
 						if (field_side == neural_net::FieldSide::kCurrent) {
 							return GetSideField(field_type, arg1, state_->GetCurrentPlayer());
@@ -219,7 +220,7 @@ namespace mcts
 					}
 
 				private:
-					double GetSideField(neural_net::FieldType field_type, int arg1, state::board::Player const& player) {
+					double GetSideField(neural_net::FieldType field_type, int arg1, state::board::Player const& player) const {
 						switch (field_type) {
 						case neural_net::FieldType::kResourceCurrent:
 						case neural_net::FieldType::kResourceTotal:
@@ -254,7 +255,7 @@ namespace mcts
 						}
 					}
 
-					double GetResourceField(neural_net::FieldType field_type, int arg1, state::board::PlayerResource const& resource) {
+					double GetResourceField(neural_net::FieldType field_type, int arg1, state::board::PlayerResource const& resource) const {
 						switch (field_type) {
 						case neural_net::FieldType::kResourceCurrent:
 							return resource.GetCurrent();
@@ -269,7 +270,7 @@ namespace mcts
 						}
 					}
 
-					double GetHeroField(neural_net::FieldType field_type, int arg1, state::Cards::Card const& hero) {
+					double GetHeroField(neural_net::FieldType field_type, int arg1, state::Cards::Card const& hero) const {
 						switch (field_type) {
 						case neural_net::FieldType::kHeroHP:
 							return hero.GetHP();
@@ -280,7 +281,7 @@ namespace mcts
 						}
 					}
 
-					double GetMinionsField(neural_net::FieldType field_type, int minion_idx, state::board::Minions const& minions) {
+					double GetMinionsField(neural_net::FieldType field_type, int minion_idx, state::board::Minions const& minions) const {
 						switch (field_type) {
 						case neural_net::FieldType::kMinionCount:
 							return (double)minions.Size();
@@ -297,7 +298,7 @@ namespace mcts
 						}
 					}
 
-					double GetMinionField(neural_net::FieldType field_type, int minion_idx, state::Cards::Card const& minion) {
+					double GetMinionField(neural_net::FieldType field_type, int minion_idx, state::Cards::Card const& minion) const {
 						switch (field_type) {
 						case neural_net::FieldType::kMinionHP:
 							return minion.GetHP();
@@ -323,7 +324,7 @@ namespace mcts
 						}
 					}
 
-					double GetHandField(neural_net::FieldType field_type, int hand_idx, state::board::Hand const& hand) {
+					double GetHandField(neural_net::FieldType field_type, int hand_idx, state::board::Hand const& hand) const {
 						switch (field_type) {
 						case neural_net::FieldType::kHandCount:
 							return (double)hand.Size();
@@ -335,7 +336,7 @@ namespace mcts
 						}
 					}
 
-					double GetHandCardField(neural_net::FieldType field_type, int hand_idx, state::Cards::Card const& card) {
+					double GetHandCardField(neural_net::FieldType field_type, int hand_idx, state::Cards::Card const& card) const {
 						switch (field_type) {
 						case neural_net::FieldType::kHandPlayable:
 							return (std::find(playable_cards_.begin(), playable_cards_.end(), hand_idx) != playable_cards_.end());
@@ -346,7 +347,7 @@ namespace mcts
 						}
 					}
 
-					double GetHeroPowerField(neural_net::FieldType field_type, int arg1) {
+					double GetHeroPowerField(neural_net::FieldType field_type, int arg1) const {
 						switch (field_type) {
 						case neural_net::FieldType::kHeroPowerPlayable:
 							return hero_power_playable_;

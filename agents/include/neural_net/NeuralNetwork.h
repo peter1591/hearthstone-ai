@@ -42,7 +42,7 @@ namespace neural_net {
 		virtual ~IInputGetter() {}
 
 		// for boolean value: 1 for true; 0 for false
-		virtual double GetField(FieldSide field_side, FieldType field_type, int arg1 = 0) = 0;
+		virtual double GetField(FieldSide field_side, FieldType field_type, int arg1 = 0) const = 0;
 	};
 
 	class NeuralNetworkInput
@@ -56,7 +56,7 @@ namespace neural_net {
 		NeuralNetworkInput(NeuralNetworkInput const&) = delete;
 		NeuralNetworkInput & operator=(NeuralNetworkInput const&) = delete;
 
-		void AddData(IInputGetter * getter);
+		void AddData(IInputGetter const* getter);
 
 	private:
 		impl::NeuralNetworkInputImpl * impl_;

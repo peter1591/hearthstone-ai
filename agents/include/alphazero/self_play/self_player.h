@@ -15,6 +15,7 @@
 #include "alphazero/shared_data/training_data.h"
 #include "alphazero/logger.h"
 #include "judge/Judger.h"
+#include "judge/json/Reader.h"
 #include "TestStateBuilder.h"
 
 namespace alphazero
@@ -88,8 +89,7 @@ namespace alphazero
 			// Thread safety: No
 			template <class Callback>
 			void Run(Callback && callback) {
-				// TODO: use MCTS to generate self play data
-				// Choose actions proportions to its visit counts.
+				// TODO: Choose actions proportions to its visit counts.
 				// TODO: Add Dirchlet distribution to root node. This further ensures the variety.
 
 				static_assert(std::is_same_v<
@@ -101,22 +101,23 @@ namespace alphazero
 					return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
 				};
 
-				judger.SetFirstAgent(&first);
-				judger.SetSecondAgent(&second);
-
 				while (callback()) {
 					using MCTSAgent = agents::MCTSAgent<AgentCallback>;
-					judge::JsonRecorder recorder(random_);
+					judge::json::Recorder recorder(random_);
 					judge::Judger<MCTSAgent> judger(random_, recorder);
 					MCTSAgent first(config_.agent_config, AgentCallback(logger_));
 					MCTSAgent second(config_.agent_config, AgentCallback(logger_));
 
+					judger.SetFirstAgent(&first);
+					judger.SetSecondAgent(&second);
+
 					judger.Start(start_board_getter, random_);
 
-					for (int i = 0; i < 100; ++i) {
-						items_.push_back(std::make_shared<shared_data::TrainingDataItem>());
+					judge::json::Reader reader;
+					reader.Parse(recorder.GetJson(), [&](judge::json::NeuralNetInputGetter const& input, int label) {
+						items_.push_back(std::make_shared<shared_data::TrainingDataItem>(input, label));
 						++result_.generated_count_;
-					}
+					});
 
 					data_->PushN(items_);
 					assert(items_.empty());

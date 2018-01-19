@@ -7,16 +7,16 @@ namespace judge
 {
 	namespace json
 	{
-		class Reader : public neural_net::IInputGetter
+		class NeuralNetRefInputGetter : public neural_net::IInputGetter
 		{
 		public:
-			Reader(Json::Value const& obj) : obj_(obj) {
+			NeuralNetRefInputGetter(Json::Value const& obj) : obj_(obj) {
 			}
 
 			double GetField(
 				neural_net::FieldSide field_side,
 				neural_net::FieldType field_type,
-				int arg1 = 0) override final
+				int arg1 = 0) const override final
 			{
 				if (field_side == neural_net::FieldSide::kCurrent) {
 					return GetSideField(field_type, arg1, obj_["current_player"]);
@@ -28,7 +28,7 @@ namespace judge
 			}
 
 		private:
-			double GetSideField(neural_net::FieldType field_type, int arg1, Json::Value const& side) {
+			double GetSideField(neural_net::FieldType field_type, int arg1, Json::Value const& side) const {
 				switch (field_type) {
 				case neural_net::FieldType::kResourceCurrent:
 				case neural_net::FieldType::kResourceTotal:
@@ -63,7 +63,7 @@ namespace judge
 				}
 			}
 
-			double GetResourceField(neural_net::FieldType field_type, int arg1, Json::Value const& resource) {
+			double GetResourceField(neural_net::FieldType field_type, int arg1, Json::Value const& resource) const {
 				switch (field_type) {
 				case neural_net::FieldType::kResourceCurrent:
 					return resource["current"].asInt();
@@ -78,7 +78,7 @@ namespace judge
 				}
 			}
 
-			double GetHeroField(neural_net::FieldType field_type, int arg1, Json::Value const& hero) {
+			double GetHeroField(neural_net::FieldType field_type, int arg1, Json::Value const& hero) const {
 				switch (field_type) {
 				case neural_net::FieldType::kHeroHP:
 					return hero["hp"].asInt();
@@ -89,7 +89,7 @@ namespace judge
 				}
 			}
 
-			double GetMinionsField(neural_net::FieldType field_type, int minion_idx, Json::Value const& minions) {
+			double GetMinionsField(neural_net::FieldType field_type, int minion_idx, Json::Value const& minions) const {
 				switch (field_type) {
 				case neural_net::FieldType::kMinionCount:
 					return minions.size();
@@ -112,7 +112,7 @@ namespace judge
 				}
 			}
 
-			double GetHandField(neural_net::FieldType field_type, int hand_idx, Json::Value const& hand) {
+			double GetHandField(neural_net::FieldType field_type, int hand_idx, Json::Value const& hand) const {
 				switch (field_type) {
 				case neural_net::FieldType::kHandCount:
 					return hand.size();
@@ -125,7 +125,7 @@ namespace judge
 				}
 			}
 
-			double GetHeroPowerField(neural_net::FieldType field_type, int arg1, Json::Value const& hero_power) {
+			double GetHeroPowerField(neural_net::FieldType field_type, int arg1, Json::Value const& hero_power) const {
 				switch (field_type) {
 				case neural_net::FieldType::kHeroPowerPlayable:
 					return hero_power["playable"].asBool();
@@ -136,6 +136,75 @@ namespace judge
 
 		private:
 			Json::Value const& obj_;
+		};
+
+		class NeuralNetInputGetter : public neural_net::IInputGetter
+		{
+		public:
+			NeuralNetInputGetter(Json::Value const& obj) 
+				: obj_(obj) // copy
+			{}
+
+			double GetField(
+				neural_net::FieldSide field_side,
+				neural_net::FieldType field_type,
+				int arg1 = 0) const override final
+			{
+				return NeuralNetRefInputGetter(obj_).GetField(field_side, field_type, arg1);
+			}
+
+		private:
+			Json::Value obj_;
+		};
+
+		class Reader
+		{
+		public:
+			template <class Callback, class GetterType = NeuralNetInputGetter>
+			void Parse(Json::Value const& obj, Callback&& cb) {
+				std::string result = GetResult(obj);
+				for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
+					if (obj[idx]["type"].asString() == "kMainAction") {
+						Json::Value const& board = obj[idx]["board"];
+
+						if (board["turn"].asInt() <= 4) continue;
+
+						int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
+						cb(GetterType(board), label);
+					}
+				}
+			}
+
+		private:
+			std::string GetResult(Json::Value const& obj) {
+				for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
+					if (obj[idx]["type"].asString() == "kEnd") {
+						return obj[idx]["result"].asString();
+					}
+				}
+				throw std::runtime_error("Cannot find win player");
+			}
+
+			bool IsResultWin(std::string const& win_player) {
+				if (win_player == "kResultFirstPlayerWin") return true;
+				if (win_player == "kResultSecondPlayerWin") return false;
+				if (win_player == "kResultDraw") return false;
+				throw std::runtime_error("Failed to parse winning player");
+			}
+
+			bool IsCurrentPlayerWin(Json::Value const& board, std::string const& result) {
+				std::string current_player = board["current_player_id"].asString();
+
+				bool current_player_is_first = false;
+				if (current_player == "kFirstPlayer") current_player_is_first = true;
+				else if (current_player == "kSecondPlayer") current_player_is_first = false;
+				else throw std::runtime_error("Failed to parse current player");
+
+				// Note: AI is always helping first player
+				bool win_player_is_first = IsResultWin(result);
+
+				return current_player_is_first == win_player_is_first;
+			}
 		};
 	}
 }

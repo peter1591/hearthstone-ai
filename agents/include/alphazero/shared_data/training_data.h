@@ -3,15 +3,28 @@
 #include <random>
 #include <mutex>
 
+#include "json/value.h"
+
 #include "alphazero/shared_data/circular_array.h"
 #include "alphazero/shared_data/shared_ptr_item.h"
+#include "judge/json/Reader.h"
 
 namespace alphazero
 {
 	namespace shared_data
 	{
 		class TrainingDataItem {
-			// TODO
+		public:
+			TrainingDataItem(judge::json::NeuralNetInputGetter input, int label) :
+				input_(input), label_(label)
+			{}
+
+			auto const& GetInput() const { return input_; }
+			auto GetLabel() const { return label_; }
+
+		private:
+			judge::json::NeuralNetInputGetter input_;
+			int label_;
 		};
 
 		class TrainingData

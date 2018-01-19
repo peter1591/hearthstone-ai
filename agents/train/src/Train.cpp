@@ -26,8 +26,20 @@ public:
 		std::ifstream fs(filename);
 		reader.parse(fs, obj);
 
-		std::string result = GetResult(obj);
 		int seq = 1;
+		judge::json::Reader board_reader;
+		board_reader.Parse(obj, [&](judge::json::NeuralNetInputGetter const& input, int label) {
+			if (for_validate) {
+				validate_input_.AddData(&input);
+				validate_output_.AddData(label);
+			}
+			else {
+				train_input_.AddData(&input);
+				train_output_.AddData(label);
+			}
+		});
+
+		std::string result = GetResult(obj);
 		for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
 			if (obj[idx]["type"].asString() == "kMainAction") {
 				Json::Value const& board = obj[idx]["board"];
@@ -37,14 +49,6 @@ public:
 				judge::json::Reader board_parser(board);
 				int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
 
-				if (for_validate) {
-					validate_input_.AddData(&board_parser);
-					validate_output_.AddData(label);
-				}
-				else {
-					train_input_.AddData(&board_parser);
-					train_output_.AddData(label);
-				}
 
 				++seq;
 			}
@@ -81,37 +85,6 @@ public:
 					<< validate_verify.first << " / " << validate_verify.second << ")" << std::endl;
 			}
 		}
-	}
-
-private:
-	std::string GetResult(Json::Value const& obj) {
-		for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
-			if (obj[idx]["type"].asString() == "kEnd") {
-				return obj[idx]["result"].asString();
-			}
-		}
-		throw std::runtime_error("Cannot find win player");
-	}
-
-	bool IsResultWin(std::string const& win_player) {
-		if (win_player == "kResultFirstPlayerWin") return true;
-		if (win_player == "kResultSecondPlayerWin") return false;
-		if (win_player == "kResultDraw") return false;
-		throw std::runtime_error("Failed to parse winning player");
-	}
-
-	bool IsCurrentPlayerWin(Json::Value const& board, std::string const& result) {
-		std::string current_player = board["current_player_id"].asString();
-
-		bool current_player_is_first = false;
-		if (current_player == "kFirstPlayer") current_player_is_first = true;
-		else if (current_player == "kSecondPlayer") current_player_is_first = false;
-		else throw std::runtime_error("Failed to parse current player");
-
-		// Note: AI is always helping first player
-		bool win_player_is_first = IsResultWin(result);
-
-		return current_player_is_first == win_player_is_first;
 	}
 
 private:
