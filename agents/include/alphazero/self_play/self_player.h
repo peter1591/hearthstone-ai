@@ -22,45 +22,6 @@ namespace alphazero
 {
 	namespace self_play
 	{
-		class AgentCallback
-		{
-		public:
-			AgentCallback(ILogger & logger) :
-				logger_(logger), first_time_(true), last_shown_()
-			{}
-
-			void BeforeThink() {
-				first_time_ = true;
-			}
-
-			void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {
-				if (first_time_) {
-					logger_.Info([&](auto& s) {
-						s << "Turn: " << board_view.GetTurn();
-					});
-					last_shown_ = std::chrono::steady_clock::now();
-					first_time_ = false;
-				}
-
-				auto now = std::chrono::steady_clock::now();
-				auto after_last_shown = std::chrono::duration_cast<std::chrono::seconds>(now - last_shown_).count();
-				if (after_last_shown > 5) {
-					logger_.Info([&](auto& s) {
-						s << "Iterations: " << iteration;
-					});
-					last_shown_ = now;
-				}
-			}
-
-			void AfterThink(uint64_t iteration) {
-			}
-
-		private:
-			ILogger & logger_;
-			bool first_time_;
-			std::chrono::steady_clock::time_point last_shown_;
-		};
-
 		class SelfPlayer
 		{
 		public:
@@ -83,7 +44,7 @@ namespace alphazero
 				config_ = config;
 				config_.agent_config.mcts.SetNeuralNetPath(tmp_file_);
 				config_.agent_config.threads = 1;
-				config_.agent_config.iterations_per_action = 10;
+				config_.agent_config.iterations_per_action = 1;
 			}
 
 			// Thread safety: No
@@ -102,11 +63,11 @@ namespace alphazero
 				};
 
 				while (callback()) {
-					using MCTSAgent = agents::MCTSAgent<AgentCallback>;
+					using MCTSAgent = agents::MCTSAgent<>;
 					judge::json::Recorder recorder(random_);
 					judge::Judger<MCTSAgent> judger(random_, recorder);
-					MCTSAgent first(config_.agent_config, AgentCallback(logger_));
-					MCTSAgent second(config_.agent_config, AgentCallback(logger_));
+					MCTSAgent first(config_.agent_config);
+					MCTSAgent second(config_.agent_config);
 
 					judger.SetFirstAgent(&first);
 					judger.SetSecondAgent(&second);

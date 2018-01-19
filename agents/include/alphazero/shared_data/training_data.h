@@ -30,24 +30,29 @@ namespace alphazero
 		class TrainingData
 		{
 		public:
-			TrainingData() : data_() {}
+			TrainingData() : data_(), size_() {}
 
 			void Initialize(size_t capacity_power_two) {
 				data_.Initialize(capacity_power_two);
+				size_ = 0;
 			}
 
 			size_t GetCapacity() const {
 				return data_.GetCapacity();
 			}
 
+			size_t GetSize() const { return size_.load(); }
+
 			void Push(std::shared_ptr<TrainingDataItem> item) {
 				data_.AllocateNext().Write(std::move(item));
+				++size_;
 			}
 
 			void PushN(std::vector<std::shared_ptr<TrainingDataItem>> & items) {
 				data_.AllocateNextN(items.size(), [&](size_t idx, SharedPtrItem<TrainingDataItem> & item) {
 					item.Write(std::move(items[idx]));
 				});
+				size_ += items.size();
 				items.clear();
 			}
 
@@ -60,6 +65,7 @@ namespace alphazero
 
 		private:
 			CircularArray<SharedPtrItem<TrainingDataItem>> data_;
+			std::atomic<size_t> size_;
 		};
 	}
 }

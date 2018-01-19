@@ -27,10 +27,15 @@ namespace alphazero
 			}
 
 			void BeforeRun(int milliseconds, std::vector<detail::ThreadRunner*> const& threads, neural_net::NeuralNetwork const& neural_net) {
-				assert(threads.size() <= players_.size());
-
 				auto start = std::chrono::steady_clock::now();
 				auto until = start + std::chrono::milliseconds(milliseconds);
+				return BeforeRun([until]() {
+					return std::chrono::steady_clock::now() < until;
+				}, threads, neural_net);
+			}
+			
+			void BeforeRun(detail::ThreadRunner::ConditionCallback condition, std::vector<detail::ThreadRunner*> const& threads, neural_net::NeuralNetwork const& neural_net) {
+				assert(threads.size() <= players_.size());
 
 				for (size_t i = 0; i < threads.size(); ++i) {
 					players_[i].BeforeRun(*training_data_, neural_net, run_options_);
@@ -38,7 +43,7 @@ namespace alphazero
 
 				for (size_t i = 0; i < threads.size(); ++i) {
 					auto & player = players_[i];
-					threads[i]->AsyncRunUntil(until, [&](auto&& cb) {
+					threads[i]->AsyncRunUnderCondition(condition, [&](auto&& cb) {
 						player.Run(cb);
 					});
 				}

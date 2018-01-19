@@ -26,7 +26,6 @@ namespace alphazero
 	class EndDeviceTrainer {
 	private:
 		struct Schedule {
-			int prepare_data_milliseconds;
 			int self_play_milliseconds;
 			int neural_net_train_milliseconds;
 			int evaluation_milliseconds;
@@ -52,7 +51,6 @@ namespace alphazero
 
 			int kThreads = 4; // TODO: adjust at runtime
 
-			schedule_.prepare_data_milliseconds = 100;
 			schedule_.self_play_milliseconds = 3000;
 			schedule_.neural_net_train_milliseconds = 3000;
 			schedule_.evaluation_milliseconds = 3000;
@@ -99,28 +97,49 @@ namespace alphazero
 
 			self_play::RunResult result;
 
-			while (true) {
-				result += InternalSelfPlay(schedule_.prepare_data_milliseconds);
+			std::mutex next_show_mutex;
+			auto next_show = std::chrono::steady_clock::now();
+			auto condition = [&next_show_mutex, &next_show, this]() mutable -> bool {
+				auto records = training_data_.GetSize();
+				
+				bool show = false;
+				{
+					std::lock_guard<std::mutex> lock(next_show_mutex);
+					auto now = std::chrono::steady_clock::now();
+					if (now > next_show) {
+						next_show = now + std::chrono::seconds(5);
+						show = true; // no need to logger lock here, so use a flag to release lock
+					}
+				}
+				if (show) {
+					logger_.Info([&](auto& s) {
+						s << "Generated " << records << " records.";
+					});
+				}
+				return records < training_data_.GetCapacity();
+			};
 
-				logger_.Info() << "Generated " << result.generated_count_ << " records.";
-
-				if (result.generated_count_ > capacity) break;
-			}
+			InternalSelfPlay(condition);
 		}
 
 		void SelfPlay() {
 			logger_.Info() << "Start self play.";
-			auto result = InternalSelfPlay(schedule_.self_play_milliseconds);
+			
+			auto start = std::chrono::steady_clock::now();
+			auto until = start + std::chrono::milliseconds(schedule_.self_play_milliseconds);
+			auto result = InternalSelfPlay([until]() {
+				return std::chrono::steady_clock::now() < until;
+			});
 			logger_.Info() << "Generated " << result.generated_count_ << " records.";
 		}
 
-		self_play::RunResult InternalSelfPlay(int milliseconds) {
+		self_play::RunResult InternalSelfPlay(detail::ThreadRunner::ConditionCallback condition) {
 			std::vector<detail::ThreadRunner*> threads;
 			for (size_t i = 0; i < threads_.Size(); ++i) {
 				threads.push_back(&threads_.Get(i));
 			}
 			self_players_.BeforeRun(
-				milliseconds,
+				condition,
 				threads,
 				neural_net_);
 

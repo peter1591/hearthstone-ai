@@ -14,7 +14,17 @@
 
 namespace agents
 {
-	template <class AgentCallback>
+	class DummyAgentCallback
+	{
+	public:
+		DummyAgentCallback() {}
+
+		void BeforeThink() {}
+		void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {}
+		void AfterThink(uint64_t iteration) {}
+	};
+
+	template <class AgentCallback = DummyAgentCallback>
 	class MCTSAgent {
 	public:
 		MCTSAgent(MCTSAgentConfig const& config, AgentCallback cb = AgentCallback()) :
