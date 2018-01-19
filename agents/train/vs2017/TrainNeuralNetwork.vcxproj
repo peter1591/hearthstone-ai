@@ -70,16 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\agents\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -134,6 +134,7 @@
     <ClCompile Include="..\src\Train.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\judge\include\judge\json\Reader.h" />
     <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

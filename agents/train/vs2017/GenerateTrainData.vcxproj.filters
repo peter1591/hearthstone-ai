@@ -37,6 +37,9 @@
     <Filter Include="Header Files\engine\view\reduced_board_view">
       <UniqueIdentifier>{409d106c-051f-4b0d-a3f3-1a7a3d2124f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\judge\json">
+      <UniqueIdentifier>{ea07b805-f556-429d-8c4c-f7415f341522}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\agents\MCTSConfig.h">
       <Filter>Header Files\agent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\json\Recorder.h">
+      <Filter>Header Files\judge\json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -16,6 +16,12 @@
     <Filter Include="Source Files\jsoncpp">
       <UniqueIdentifier>{75a1d3f4-5999-4ae3-baa8-7d9aea1ea330}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\judge">
+      <UniqueIdentifier>{6f94cc21-dc9f-46c2-9cc8-efaa16f77ac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\judge\json">
+      <UniqueIdentifier>{6be24deb-fbba-4baf-84ee-99cd15f3f76c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\third_party\jsoncpp\src\json_reader.cpp">
@@ -37,6 +43,9 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\judge\include\judge\json\Reader.h">
+      <Filter>Header Files\judge\json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

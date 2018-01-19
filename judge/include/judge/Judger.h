@@ -9,12 +9,12 @@
 #include "state/State.h"
 #include "engine/Game.h"
 #include "engine/JsonSerializer.h"
-#include "judge/Recorder.h"
+#include "judge/json/Recorder.h"
 #include "judge/IAgent.h"
 
 namespace judge
 {
-	template <class AgentType = IAgent, class RecorderType = JsonRecorder>
+	template <class AgentType = IAgent, class RecorderType = json::Recorder>
 	class Judger
 	{
 	private:
@@ -114,6 +114,6 @@ namespace judge
 		ActionCallback action_callback_;
 		AgentType * first_;
 		AgentType * second_;
-		RecorderType recorder_;
+		RecorderType & recorder_;
 	};
 }

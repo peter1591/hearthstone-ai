@@ -59,6 +59,31 @@ private:
 	std::chrono::steady_clock::time_point last_shown_;
 };
 
+void SaveJson(Json::Value const& json) {
+	time_t now;
+	time(&now);
+
+	struct tm timeinfo;
+#ifdef _MSC_VER
+	localtime_s(&timeinfo, &now);
+#else
+	localtime_r(&now, &timeinfo);
+#endif
+
+	char buffer[80];
+	strftime(buffer, 80, "%Y%m%d-%H%M%S", &timeinfo);
+
+	std::ostringstream ss;
+	int postfix = rand() % 90000 + 10000;
+	ss << buffer << "-" << postfix << ".json";
+	std::string filename = ss.str();
+
+	std::ofstream fs(filename, std::ofstream::trunc);
+	Json::StyledStreamWriter json_writer;
+	json_writer.write(fs, json);
+	fs.close();
+}
+
 int main(int argc, char *argv[])
 {
 	auto seed = std::random_device()();
@@ -101,7 +126,7 @@ int main(int argc, char *argv[])
 	std::cout << "\tSeed: " << seed << std::endl;
 
 	using MCTSAgent = agents::MCTSAgent<AgentCallback>;
-	judge::JsonRecorder recorder(rand);
+	judge::json::Recorder recorder(rand);
 	judge::Judger<MCTSAgent> judger(rand, recorder);
 	MCTSAgent first(config, AgentCallback(config.iterations_per_action));
 	MCTSAgent second(config, AgentCallback(config.iterations_per_action));
@@ -115,6 +140,8 @@ int main(int argc, char *argv[])
 	judger.SetSecondAgent(&second);
 
 	judger.Start(start_board_getter, rand);
+
+	SaveJson(recorder.GetJson());
 
 	return 0;
 }
