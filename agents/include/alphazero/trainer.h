@@ -14,6 +14,10 @@ namespace alphazero
 {
 	struct TrainerConfigs {
 		size_t kTrainingDataCapacityPowerOfTwo;
+
+		// Need at least this number of training data to start training
+		size_t kMinimumTraningData;
+
 		int kNeuralNetTrainingBatch;
 
 		// if new competitor's win rate larger than this one, use it to replace the best neural net so far
@@ -113,10 +117,10 @@ namespace alphazero
 				}
 				if (show) {
 					logger_.Info([&](auto& s) {
-						s << "Generated " << records << " records.";
+						s << "Generated " << records << " / " << configs_.kMinimumTraningData << " records.";
 					});
 				}
-				return records < training_data_.GetCapacity();
+				return records < configs_.kMinimumTraningData;
 			};
 
 			InternalSelfPlay(condition);

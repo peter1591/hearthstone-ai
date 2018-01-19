@@ -27,8 +27,9 @@ int main(void)
 
 	alphazero::TrainerConfigs trainer_config;
 	trainer_config.kEvaluationWinRate = 0.55f;
-	trainer_config.kTrainingDataCapacityPowerOfTwo = 17; // 131072
+	trainer_config.kTrainingDataCapacityPowerOfTwo = 13; // 8192
 	trainer_config.kNeuralNetTrainingBatch = 32;
+	trainer_config.kMinimumTraningData = trainer_config.kNeuralNetTrainingBatch * 10;
 
 	// create a random model
 	std::string net_path = "neural_net";

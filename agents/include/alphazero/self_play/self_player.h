@@ -27,12 +27,11 @@ namespace alphazero
 		public:
 			SelfPlayer(ILogger & logger, int rand_seed) :
 				logger_(logger), random_(rand_seed),
-				items_(), data_(nullptr), config_(), tmp_file_()
+				data_(nullptr), config_(), tmp_file_()
 			{}
 			~SelfPlayer() { RemoveTempFile(); }
 
 			void BeforeRun(shared_data::TrainingData & data, neural_net::NeuralNetwork const& neural_net, RunOptions const& config) {
-				assert(items_.empty());
 				data_ = &data;
 
 				RemoveTempFile();
@@ -76,17 +75,13 @@ namespace alphazero
 
 					judge::json::Reader reader;
 					reader.Parse(recorder.GetJson(), [&](judge::json::NeuralNetInputGetter const& input, int label) {
-						items_.push_back(std::make_shared<shared_data::TrainingDataItem>(input, label));
+						data_->Push(std::make_shared<shared_data::TrainingDataItem>(input, label));
 						++result_.generated_count_;
 					});
-
-					data_->PushN(items_);
-					assert(items_.empty());
 				}
 			}
 
 			RunResult AfterRun() {
-				assert(items_.empty());
 				RemoveTempFile();
 				return result_;
 			}
@@ -102,7 +97,6 @@ namespace alphazero
 		private:
 			ILogger & logger_;
 			std::mt19937 random_;
-			std::vector<std::shared_ptr<shared_data::TrainingDataItem>> items_;
 			shared_data::TrainingData * data_;
 			RunOptions config_;
 

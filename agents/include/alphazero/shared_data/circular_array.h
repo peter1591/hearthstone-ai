@@ -10,10 +10,8 @@ namespace alphazero
 	namespace shared_data
 	{
 		// A lockless circular array.
-		// Limitation:
-		//    capacity must be a power of 2, since we use lower bits to be the index
 		// Thread safety: Yes, with two restrictions:
-		//   1. #-of-allocating-items < capacity
+		//   1. capacity must be a power of 2, since we use lower bits to be the index
 		//   2. Item type T is exposed as it is. It should be thread-safe.
 		template <class T>
 		class CircularArray
@@ -43,25 +41,18 @@ namespace alphazero
 			// Thread-safe if number of concurrent callers less than array size
 			T & AllocateNext() {
 				size_t idx = head_.fetch_add(1);
-				return items_[GetIndex(idx)];
-			}
-
-			template <class Filler>
-			void AllocateNextN(size_t n, Filler&& filler) {
-				size_t idx = head_.fetch_add(n);
-				for (size_t i = 0; i < n; ++i) {
-					filler(i, items_[GetIndex(idx + i)]);
-				}
+				auto & ret = items_[GetIndex(idx)];
+				return ret;
 			}
 
 			T const& Get(size_t idx) const {
-				idx = idx + head_.load();
+				idx += head_.load();
 				return items_[GetIndex(idx)];
 			}
 
 			// don't need to fetch head index, since we're fetching a random item
-			T const& RandomGet(std::mt19937 & random) const {
-				return items_[GetIndex((size_t)random())];
+			T const& RandomGet(size_t idx) const {
+				return items_[GetIndex(idx)];
 			}
 
 		private:

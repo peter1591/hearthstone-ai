@@ -48,19 +48,18 @@ namespace alphazero
 				++size_;
 			}
 
-			void PushN(std::vector<std::shared_ptr<TrainingDataItem>> & items) {
-				data_.AllocateNextN(items.size(), [&](size_t idx, SharedPtrItem<TrainingDataItem> & item) {
-					item.Write(std::move(items[idx]));
-				});
-				size_ += items.size();
-				items.clear();
-			}
-
-			// callback should make a copy of the data.
 			template <class Callback>
 			void RandomGet(std::mt19937 & random, Callback&& callback) {
-				auto shared_ptr_item = data_.RandomGet(random).Get();
-				callback(*shared_ptr_item);
+				// Fetch the item according to the size. This increase the probability to actually
+				// fetch an item which is already written by a writer. But noted that we still has
+				// a chance to get an empty (or very old data) if the writer is slow.
+				int idx = random() % size_.load();
+
+				// acquire ownership, so it will not be rotated out.
+				auto shared_ptr_item = data_.RandomGet(idx).Get();
+				
+				// We still has a chance to read an empty data.
+				if (shared_ptr_item) callback(*shared_ptr_item);
 			}
 
 		private:
