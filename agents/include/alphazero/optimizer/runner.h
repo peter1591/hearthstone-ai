@@ -17,8 +17,7 @@ namespace alphazero
 		{
 		public:
 			Runner(ILogger & logger) :
-				logger_(logger),
-				run_options_()
+				logger_(logger), optimizer_(), input_(), output_()
 			{}
 
 			void Initialize()
@@ -28,8 +27,8 @@ namespace alphazero
 
 			void BeforeRun(
 				int milliseconds,
+				RunOptions const& options,
 				detail::ThreadRunner* thread,
-				int batch_size,
 				neural_net::NeuralNetwork & neural_net,
 				shared_data::TrainingData & training_data,
 				std::mt19937 & random)
@@ -37,21 +36,44 @@ namespace alphazero
 				auto start = std::chrono::steady_clock::now();
 				auto until = start + std::chrono::milliseconds(milliseconds);
 
-				std::vector<shared_data::TrainingDataItem> data;
 				logger_.Info() << "Preparing training data...";
-				int i = 0;
-				for (int i = 0; i < batch_size; ++i) {
-					training_data.RandomGet(random, [&](shared_data::TrainingDataItem const& item) {
-						data.push_back(item); // copy
+
+				input_.Clear();
+				output_.Clear();
+
+				int fetched = 0;
+				int rest_tries = options.batches * options.batch_size;
+				int allowed_fetch_failures = (int)(options.maximum_fetch_failure_rate * rest_tries);
+
+				while (--rest_tries >= 0) {
+					bool success = training_data.RandomGet(random, [&](shared_data::TrainingDataItem const& item) {
+						input_.AddData(&item.GetInput());
+						output_.AddData(item.GetLabel());
+						++fetched;
 					});
+					if (!success) {
+						if (--allowed_fetch_failures < 0) {
+							logger_.Info() << "Failed to fetch training data. (Too high failure rate).";
+							return;
+						}
+					}
 				}
 
-				logger_.Info() << "Training neural network...";
-				// Train neural network in the first thread
-				// TODO: can tiny_dnn be trained at multiple threads?
+				if (fetched < options.batch_size) {
+					logger_.Info() << "Not enough training data for batch.";
+					return;
+				}
+
+				logger_.Info() << "Training neural network... (fetched " << fetched << " data)";
 				optimizer_.BeforeRun();
 				thread->AsyncRunUntil(until, [&](auto&& cb) {
-					optimizer_.Run(run_options_, neural_net, cb);
+					int epoch = 0;
+					auto cb2 = [&]() {
+						epoch += options.epochs_per_run;
+						logger_.Info() << "Trained " << epoch << " epoches.";
+						return cb();
+					};
+					optimizer_.Run(input_, output_, options, neural_net, cb2);
 				});
 			}
 
@@ -61,8 +83,9 @@ namespace alphazero
 
 		private:
 			ILogger & logger_;
-			RunOptions run_options_;
 			Optimizer optimizer_;
+			neural_net::NeuralNetworkInput input_;
+			neural_net::NeuralNetworkOutput output_;
 		};
 	}
 }

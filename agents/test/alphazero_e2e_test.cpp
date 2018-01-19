@@ -28,18 +28,18 @@ int main(void)
 	alphazero::TrainerConfigs trainer_config;
 	trainer_config.kEvaluationWinRate = 0.55f;
 	trainer_config.kTrainingDataCapacityPowerOfTwo = 13; // 8192
-	trainer_config.kNeuralNetTrainingBatch = 32;
-	trainer_config.kMinimumTraningData = trainer_config.kNeuralNetTrainingBatch * 10;
+	trainer_config.optimizer.batch_size = 32;
+	trainer_config.optimizer.batches = 32;
+	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 10;
+	trainer_config.best_net_path_ = "best_net";
+	trainer_config.competitor_net_path_ = "competitor_net";
 
 	// create a random model
-	std::string net_path = "neural_net";
-	neural_net::NeuralNetwork::CreateWithRandomWeights(net_path);
-
-	neural_net::NeuralNetwork net;
-	net.Load(net_path);
+	// TODO: only create a random model if best_net does not exist
+	neural_net::NeuralNetwork::CreateWithRandomWeights(trainer_config.best_net_path_);
 
 	std::string model_path = "";
-	trainer.Initialize(trainer_config, net, random);
+	trainer.Initialize(trainer_config, random);
 
 	trainer.Train();
 

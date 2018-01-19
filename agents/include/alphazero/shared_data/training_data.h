@@ -49,7 +49,7 @@ namespace alphazero
 			}
 
 			template <class Callback>
-			void RandomGet(std::mt19937 & random, Callback&& callback) {
+			bool RandomGet(std::mt19937 & random, Callback&& callback) {
 				// Fetch the item according to the size. This increase the probability to actually
 				// fetch an item which is already written by a writer. But noted that we still has
 				// a chance to get an empty (or very old data) if the writer is slow.
@@ -59,7 +59,10 @@ namespace alphazero
 				auto shared_ptr_item = data_.RandomGet(idx).Get();
 				
 				// We still has a chance to read an empty data.
-				if (shared_ptr_item) callback(*shared_ptr_item);
+				if (!shared_ptr_item) return false;
+
+				callback(*shared_ptr_item);
+				return true;
 			}
 
 		private:

@@ -57,6 +57,7 @@ namespace neural_net {
 		NeuralNetworkInput & operator=(NeuralNetworkInput const&) = delete;
 
 		void AddData(IInputGetter const* getter);
+		void Clear();
 
 	private:
 		impl::NeuralNetworkInputImpl * impl_;
@@ -74,6 +75,7 @@ namespace neural_net {
 		NeuralNetworkOutput & operator=(NeuralNetworkOutput const&) = delete;
 
 		void AddData(int label);
+		void Clear();
 
 	private:
 		impl::NeuralNetworkOutputImpl * impl_;

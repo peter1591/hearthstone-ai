@@ -18,9 +18,17 @@ namespace alphazero
 
 			// Thread safety: No
 			template <class Callback>
-			void Run(RunOptions const& options, neural_net::NeuralNetwork & neural_net, Callback cb) {
+			void Run(
+				neural_net::NeuralNetworkInput const& input, neural_net::NeuralNetworkOutput const& output,
+				RunOptions const& options, neural_net::NeuralNetwork & neural_net, Callback cb)
+			{
 				while (cb()) {
-					// TODO:
+					// TODO: Train tiny_dnn in multiple threads
+					neural_net.Train(
+						input,
+						output,
+						options.batch_size,
+						options.epochs_per_run);
 				}
 			}
 

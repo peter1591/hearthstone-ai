@@ -36,6 +36,9 @@ namespace neural_net {
 				output.push_back((float)label);
 				output_.push_back(output);
 			}
+			void Clear() {
+				output_.clear();
+			}
 			
 			auto const& GetData() const { return output_; }
 
@@ -195,6 +198,9 @@ namespace neural_net {
 				InputDataConverter().Convert(getter, input);
 				input_.push_back(input);
 			}
+			void Clear() {
+				input_.clear();
+			}
 
 			auto const& GetData() const { return input_; }
 
@@ -341,6 +347,10 @@ namespace neural_net {
 	{
 		impl_->AddData(getter);
 	}
+	void NeuralNetworkInput::Clear()
+	{
+		impl_->Clear();
+	}
 
 	NeuralNetworkOutput::NeuralNetworkOutput() {
 		impl_ = new impl::NeuralNetworkOutputImpl();
@@ -351,6 +361,10 @@ namespace neural_net {
 	void NeuralNetworkOutput::AddData(int label)
 	{
 		impl_->AddData(label);
+	}
+	void NeuralNetworkOutput::Clear()
+	{
+		impl_->Clear();
 	}
 
 

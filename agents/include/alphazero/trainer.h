@@ -13,12 +13,15 @@
 namespace alphazero
 {
 	struct TrainerConfigs {
+		std::string best_net_path_;
+		std::string competitor_net_path_;
+
 		size_t kTrainingDataCapacityPowerOfTwo;
 
 		// Need at least this number of training data to start training
 		size_t kMinimumTraningData;
 
-		int kNeuralNetTrainingBatch;
+		optimizer::RunOptions optimizer;
 
 		// if new competitor's win rate larger than this one, use it to replace the best neural net so far
 		float kEvaluationWinRate;
@@ -50,7 +53,7 @@ namespace alphazero
 			self_players_(logger)
 		{}
 
-		void Initialize(TrainerConfigs const& configs, ::neural_net::NeuralNetwork const& net, std::mt19937 & random) {
+		void Initialize(TrainerConfigs const& configs, std::mt19937 & random) {
 			configs_ = configs;
 
 			int kThreads = 4; // TODO: adjust at runtime
@@ -62,8 +65,8 @@ namespace alphazero
 			threads_.Initialize(kThreads);
 			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
 
-			neural_net_.CopyFrom(net);
-			best_neural_net_.CopyFrom(neural_net_);
+			best_neural_net_.Load(configs.best_net_path_);
+			neural_net_.Load(configs.best_net_path_);
 
 			optimizer_.Initialize();
 			evaluators_.Initialize(kThreads);
@@ -157,8 +160,8 @@ namespace alphazero
 
 			optimizer_.BeforeRun(
 				schedule_.neural_net_train_milliseconds,
+				configs_.optimizer,
 				&threads_.Get(0),
-				configs_.kNeuralNetTrainingBatch,
 				neural_net_,
 				training_data_,
 				random_);
@@ -176,6 +179,10 @@ namespace alphazero
 			for (size_t i = 0; i < threads_.Size(); ++i) threads_.Get(i).Wait();
 
 			optimizer_.AfterRun();
+			neural_net_.Save(configs_.competitor_net_path_);
+			logger_.Info() << "Saved trained neural net as competitor. "
+				<< "(path=" << configs_.competitor_net_path_ << ")";
+
 			auto self_player_result = self_players_.AfterRun();
 			logger_.Info() << "Generated " << self_player_result.generated_count_ << " records.";
 		}
