@@ -14,7 +14,17 @@
 
 namespace judge
 {
-	template <class AgentType = IAgent, class RecorderType = json::Recorder>
+	class NullRecorder
+	{
+	public:
+		void Start() {}
+		void RecordMainAction(state::State const& state, engine::MainOpType op) {}
+		void RecordRandomAction(int exclusive_max, int action) {}
+		void RecordManualAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices, int action) {}
+		void End(engine::Result result) {}
+	};
+
+	template <class AgentType = IAgent, class RecorderType = NullRecorder>
 	class Judger
 	{
 	private:
@@ -39,7 +49,7 @@ namespace judge
 					return action;
 				}
 				
-				int action = cb_->GetAction(action_type, action_choices);
+				int action = cb_->GetAction(action_type, action_choices, guide_.rand_);
 
 				if (action_type == engine::ActionType::kMainAction) {
 					auto main_op = analyzer_.GetMainActions()[action];
@@ -72,7 +82,7 @@ namespace judge
 		void SetSecondAgent(AgentType * second) { second_ = second; }
 
 		template <class StateGetter>
-		void Start(StateGetter && state_getter, std::mt19937 & random)
+		engine::Result Start(StateGetter && state_getter, std::mt19937 & random)
 		{
 			assert(first_);
 			assert(second_);
@@ -107,6 +117,8 @@ namespace judge
 			}
 
 			recorder_.End(result);
+
+			return result;
 		}
 
 	private:

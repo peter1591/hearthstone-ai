@@ -35,7 +35,7 @@ namespace alphazero
 		struct Schedule {
 			int self_play_milliseconds;
 			int neural_net_train_milliseconds;
-			int evaluation_milliseconds;
+			int evaluation_runs;
 		};
 
 	public:
@@ -49,7 +49,7 @@ namespace alphazero
 			best_neural_net_(),
 			neural_net_(),
 			optimizer_(logger),
-			evaluators_(logger),
+			evaluators_(logger, random_),
 			self_players_(logger)
 		{}
 
@@ -190,6 +190,9 @@ namespace alphazero
 		void EvaluateNeuralNetwork() {
 			logger_.Info() << "Start evaluation neural network.";
 
+			best_neural_net_.Save(configs_.best_net_path_);
+			neural_net_.Save(configs_.competitor_net_path_);
+			
 			evaluation::RunOptions options;
 			options.runs = schedule_.evaluation_runs;
 
@@ -200,8 +203,8 @@ namespace alphazero
 			evaluators_.BeforeRun(
 				options,
 				threads,
-				best_neural_net_,
-				neural_net_);
+				configs_.best_net_path_,
+				configs_.competitor_net_path_);
 
 			for (auto thread : threads) thread->Wait();
 

@@ -36,7 +36,7 @@ namespace agents
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
-		void Think(state::PlayerIdentifier side, engine::view::BoardRefView const& game_state , std::mt19937 & random) {
+		void Think(state::PlayerIdentifier side, engine::view::BoardRefView const& game_state, std::mt19937 & random) {
 			cb_.BeforeThink();
 
 			controller_.reset(new MCTSRunner(config_, random));
@@ -57,7 +57,7 @@ namespace agents
 			root_node_ = node_;
 		}
 
-		int GetAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices) {
+		int GetAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices, std::mt19937 & random) {
 			if (action_type != engine::ActionType::kMainAction)
 			{
 				assert(action_choices.Size() > 0);
@@ -94,7 +94,8 @@ namespace agents
 			});
 
 			if (best_choice < 0) {
-				throw std::runtime_error("No any choice is evaluated.");
+				// no any choice is evaluated. randomly choose one.
+				return random() % action_choices.Size();
 			}
 
 			node_ = best_node;

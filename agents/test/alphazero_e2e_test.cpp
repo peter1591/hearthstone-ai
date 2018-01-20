@@ -30,7 +30,7 @@ int main(void)
 	trainer_config.kTrainingDataCapacityPowerOfTwo = 13; // 8192
 	trainer_config.optimizer.batch_size = 32;
 	trainer_config.optimizer.batches = 32;
-	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 10;
+	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 1;
 	trainer_config.best_net_path_ = "best_net";
 	trainer_config.competitor_net_path_ = "competitor_net";
 

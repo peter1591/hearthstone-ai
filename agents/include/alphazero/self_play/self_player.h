@@ -56,15 +56,15 @@ namespace alphazero
 					mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
 					mcts::policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy>);
 
-				auto start_board_seed = random_();
-				auto start_board_getter = [&](std::mt19937 & random) -> state::State {
-					return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
-				};
-
 				while (callback()) {
+					auto start_board_seed = random_();
+					auto start_board_getter = [&](std::mt19937 & random) -> state::State {
+						return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
+					};
+
 					using MCTSAgent = agents::MCTSAgent<>;
 					judge::json::Recorder recorder(random_);
-					judge::Judger<MCTSAgent> judger(random_, recorder);
+					judge::Judger<MCTSAgent, judge::json::Recorder> judger(random_, recorder);
 					MCTSAgent first(config_.agent_config);
 					MCTSAgent second(config_.agent_config);
 

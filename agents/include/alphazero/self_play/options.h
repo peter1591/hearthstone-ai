@@ -11,9 +11,8 @@ namespace alphazero
 			RunOptions() :
 				agent_config()
 			{
-				agent_config.iterations_per_action = 100;
 				agent_config.threads = 1;
-				agent_config.tree_samples = 10;
+				agent_config.tree_samples = 1;
 			}
 
 			agents::MCTSAgentConfig agent_config;

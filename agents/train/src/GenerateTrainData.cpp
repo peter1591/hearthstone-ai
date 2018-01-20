@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
 
 	using MCTSAgent = agents::MCTSAgent<AgentCallback>;
 	judge::json::Recorder recorder(rand);
-	judge::Judger<MCTSAgent> judger(rand, recorder);
+	judge::Judger<MCTSAgent, judge::json::Recorder> judger(rand, recorder);
 	MCTSAgent first(config, AgentCallback(config.iterations_per_action));
 	MCTSAgent second(config, AgentCallback(config.iterations_per_action));
 

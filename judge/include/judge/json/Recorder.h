@@ -67,6 +67,7 @@ namespace judge
 				}
 			}
 
+		public:
 			Json::Value const& GetJson() const { return json_; }
 
 		private:
