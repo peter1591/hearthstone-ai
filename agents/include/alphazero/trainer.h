@@ -60,7 +60,7 @@ namespace alphazero
 
 			schedule_.self_play_milliseconds = 3000;
 			schedule_.neural_net_train_milliseconds = 3000;
-			schedule_.evaluation_milliseconds = 3000;
+			schedule_.evaluation_runs = 1000;
 
 			threads_.Initialize(kThreads);
 			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
@@ -190,22 +190,25 @@ namespace alphazero
 		void EvaluateNeuralNetwork() {
 			logger_.Info() << "Start evaluation neural network.";
 
+			evaluation::RunOptions options;
+			options.runs = schedule_.evaluation_runs;
+
 			std::vector<detail::ThreadRunner*> threads;
 			for (size_t i = 0; i < threads_.Size(); ++i) {
 				threads.push_back(&threads_.Get(i));
 			}
 			evaluators_.BeforeRun(
-				schedule_.evaluation_milliseconds,
+				options,
 				threads,
 				best_neural_net_,
 				neural_net_);
 
 			for (auto thread : threads) thread->Wait();
 
-			auto result = evaluators_.AfterRun();
+			auto const& result = evaluators_.AfterRun();
 
-			int win_threshold = (int)(configs_.kEvaluationWinRate * result.total_games);
-			if (result.competitor_wins > win_threshold) {
+			int win_threshold = (int)(configs_.kEvaluationWinRate * result.GetTotal());
+			if (result.GetWin() > win_threshold) {
 				logger_.Info() << "Replace the best neural network with the new competitor!";
 				best_neural_net_.CopyFrom(neural_net_);
 			}

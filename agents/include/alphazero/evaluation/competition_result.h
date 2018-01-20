@@ -4,8 +4,9 @@ namespace alphazero
 {
 	namespace evaluation
 	{
-		struct CompetitionResult
+		class CompetitionResult
 		{
+		public:
 			CompetitionResult() :
 				total_games(0),
 				competitor_wins(0)
@@ -16,14 +17,18 @@ namespace alphazero
 				competitor_wins = 0;
 			}
 
-			CompetitionResult & operator+=(CompetitionResult const& rhs) {
-				total_games += rhs.total_games;
-				competitor_wins += rhs.competitor_wins;
-				return *this;
+			// Thread safe
+			void AddResult(bool win) {
+				++total_games;
+				if (win) ++competitor_wins;
 			}
 
-			int total_games;
-			int competitor_wins;
+			int GetTotal() const { return total_games.load(); }
+			int GetWin() const { return competitor_wins.load(); }
+
+		private:
+			std::atomic<int> total_games;
+			std::atomic<int> competitor_wins;
 		};
 	}
 }

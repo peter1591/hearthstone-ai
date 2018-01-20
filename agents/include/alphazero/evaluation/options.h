@@ -7,10 +7,12 @@ namespace alphazero
 		struct RunOptions
 		{
 			RunOptions() :
-				epochs_per_run(1000)
+				runs(1000),
+				show_interval_ms(1000)
 			{}
 
-			int epochs_per_run;
+			int runs;
+			int show_interval_ms;
 		};
 	}
 }

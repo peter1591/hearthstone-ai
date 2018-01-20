@@ -11,7 +11,7 @@ namespace alphazero
 		class Evaluator
 		{
 		public:
-			Evaluator() : result_(), baseline_(), competitor_() {}
+			Evaluator() : result_(nullptr), baseline_(), competitor_() {}
 
 			Evaluator(Evaluator const&) = delete;
 			Evaluator & operator=(Evaluator const&) = delete;
@@ -19,8 +19,12 @@ namespace alphazero
 			Evaluator(Evaluator &&) = default;
 			Evaluator & operator=(Evaluator &&) = default;
 
-			void BeforeRun(neural_net::NeuralNetwork const& baseline, neural_net::NeuralNetwork const& competitor) {
-				result_.Clear();
+			void BeforeRun(
+				neural_net::NeuralNetwork const& baseline,
+				neural_net::NeuralNetwork const& competitor,
+				CompetitionResult & result)
+			{
+				result_ = &result;
 				baseline_.CopyFrom(baseline);
 				competitor_.CopyFrom(competitor); // copy
 			}
@@ -29,17 +33,17 @@ namespace alphazero
 			void Run(RunOptions const& options, Callback&& callback) {
 				while (callback()) {
 					// TODO: compete several games
+					result_->AddResult(false);
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
 			}
 
-			CompetitionResult AfterRun()
+			void AfterRun()
 			{
-				// TODO: fill result_
-				return result_;
 			}
 
 		private:
-			CompetitionResult result_;
+			CompetitionResult * result_;
 			neural_net::NeuralNetwork baseline_;
 			neural_net::NeuralNetwork competitor_;
 		};
