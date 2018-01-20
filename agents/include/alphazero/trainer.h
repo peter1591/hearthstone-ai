@@ -148,7 +148,7 @@ namespace alphazero
 			self_players_.BeforeRun(
 				condition,
 				threads,
-				neural_net_);
+				best_neural_net_);
 
 			for (auto thread : threads) thread->Wait();
 
@@ -162,7 +162,7 @@ namespace alphazero
 				schedule_.neural_net_train_milliseconds,
 				configs_.optimizer,
 				&threads_.Get(0),
-				neural_net_,
+				best_neural_net_,
 				training_data_,
 				random_);
 
@@ -174,7 +174,7 @@ namespace alphazero
 			self_players_.BeforeRun(
 				schedule_.self_play_milliseconds,
 				threads,
-				neural_net_);
+				best_neural_net_);
 
 			for (size_t i = 0; i < threads_.Size(); ++i) threads_.Get(i).Wait();
 
