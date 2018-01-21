@@ -28,7 +28,7 @@ namespace alphazero
 						input,
 						output,
 						options.batch_size,
-						options.epochs_per_run);
+						options.epoches_per_run);
 				}
 			}
 

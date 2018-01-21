@@ -26,16 +26,12 @@ namespace alphazero
 			}
 
 			void BeforeRun(
-				int milliseconds,
 				RunOptions const& options,
 				detail::ThreadRunner* thread,
 				neural_net::NeuralNetwork & neural_net,
 				shared_data::TrainingData & training_data,
 				std::mt19937 & random)
 			{
-				auto start = std::chrono::steady_clock::now();
-				auto until = start + std::chrono::milliseconds(milliseconds);
-
 				logger_.Info() << "Preparing training data...";
 
 				input_.Clear();
@@ -66,12 +62,12 @@ namespace alphazero
 
 				logger_.Info() << "Training neural network... (fetched " << fetched << " data)";
 				optimizer_.BeforeRun();
-				thread->AsyncRunUntil(until, [&](auto&& cb) {
+				thread->AsyncRun([&]() {
 					int epoch = 0;
 					auto cb2 = [&]() {
-						epoch += options.epochs_per_run;
+						epoch += options.epoches_per_run;
 						logger_.Info() << "Trained " << epoch << " epoches.";
-						return cb();
+						return epoch < options.epoches;
 					};
 					optimizer_.Run(input_, output_, options, neural_net, cb2);
 				});

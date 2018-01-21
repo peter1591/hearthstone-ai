@@ -43,7 +43,6 @@ namespace alphazero
 				config_ = config;
 				config_.agent_config.mcts.SetNeuralNetPath(tmp_file_);
 				config_.agent_config.threads = 1;
-				config_.agent_config.iterations_per_action = 1;
 			}
 
 			// Thread safety: No

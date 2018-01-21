@@ -28,8 +28,17 @@ int main(void)
 	alphazero::TrainerConfigs trainer_config;
 	trainer_config.kEvaluationWinRate = 0.55f;
 	trainer_config.kTrainingDataCapacityPowerOfTwo = 13; // 8192
+
+	trainer_config.self_play.agent_config.iterations_per_action = 1000;
+	
 	trainer_config.optimizer.batch_size = 32;
-	trainer_config.optimizer.batches = 32;
+	trainer_config.optimizer.batches = 100;
+	trainer_config.optimizer.epoches = 10000;
+	trainer_config.optimizer.epoches_per_run = trainer_config.optimizer.epoches / 100;
+
+	trainer_config.evaluation.runs = 1000;
+	trainer_config.evaluation.agent_config.iterations_per_action = 10000;
+
 	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 1;
 	trainer_config.best_net_path_ = "best_net";
 	trainer_config.competitor_net_path_ = "competitor_net";

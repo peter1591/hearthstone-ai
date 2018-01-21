@@ -7,15 +7,17 @@ namespace alphazero
 		struct RunOptions
 		{
 			RunOptions() :
-				epochs_per_run(10),
 				batch_size(32),
-				batches(16),
+				batches(100),
+				epoches(10000),
+				epoches_per_run(100),
 				maximum_fetch_failure_rate(0.1)
 			{}
 
-			int epochs_per_run;
 			int batch_size;
 			int batches; // how many batches for training
+			int epoches;
+			int epoches_per_run;
 			double maximum_fetch_failure_rate; // maximum failure rate to fetch training data
 		};
 	}

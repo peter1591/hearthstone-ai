@@ -21,7 +21,9 @@ namespace alphazero
 		// Need at least this number of training data to start training
 		size_t kMinimumTraningData;
 
+		self_play::RunOptions self_play;
 		optimizer::RunOptions optimizer;
+		evaluation::RunOptions evaluation;
 
 		// if new competitor's win rate larger than this one, use it to replace the best neural net so far
 		float kEvaluationWinRate;
@@ -34,7 +36,7 @@ namespace alphazero
 	private:
 		struct Schedule {
 			int self_play_milliseconds;
-			int neural_net_train_milliseconds;
+			int train_epochs;
 			int evaluation_runs;
 		};
 
@@ -59,7 +61,7 @@ namespace alphazero
 			int kThreads = 4; // TODO: adjust at runtime
 
 			schedule_.self_play_milliseconds = 3000;
-			schedule_.neural_net_train_milliseconds = 3000;
+			schedule_.train_epochs = 1000;
 			schedule_.evaluation_runs = 1000;
 
 			threads_.Initialize(kThreads);
@@ -70,7 +72,7 @@ namespace alphazero
 
 			optimizer_.Initialize();
 			evaluators_.Initialize(kThreads);
-			self_players_.Initialize(kThreads, training_data_, random);
+			self_players_.Initialize(kThreads, training_data_, random, configs_.self_play);
 		}
 
 		void Release() {
@@ -159,13 +161,20 @@ namespace alphazero
 			logger_.Info() << "Start training neural network.";
 
 			optimizer_.BeforeRun(
-				schedule_.neural_net_train_milliseconds,
 				configs_.optimizer,
 				&threads_.Get(0),
 				best_neural_net_,
 				training_data_,
 				random_);
 
+			threads_.Get(0).Wait();
+
+			optimizer_.AfterRun();
+			neural_net_.Save(configs_.competitor_net_path_);
+			logger_.Info() << "Saved trained neural net as competitor. "
+				<< "(path=" << configs_.competitor_net_path_ << ")";
+
+			/*
 			// Utilize the rest threads to generate self-play data
 			std::vector<detail::ThreadRunner*> threads;
 			for (size_t i = 1; i < threads_.Size(); ++i) {
@@ -185,6 +194,7 @@ namespace alphazero
 
 			auto self_player_result = self_players_.AfterRun();
 			logger_.Info() << "Generated " << self_player_result.generated_count_ << " records.";
+			*/
 		}
 
 		void EvaluateNeuralNetwork() {

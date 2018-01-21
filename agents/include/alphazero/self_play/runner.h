@@ -19,11 +19,12 @@ namespace alphazero
 				running_players_(0)
 			{}
 
-			void Initialize(int threads, shared_data::TrainingData & training_data, std::mt19937 & random) {
+			void Initialize(int threads, shared_data::TrainingData & training_data, std::mt19937 & random, RunOptions const& options) {
 				for (int i = 0; i < threads; ++i) {
 					players_.emplace_back(logger_, random());
 				}
 				training_data_ = &training_data;
+				run_options_ = options;
 			}
 
 			void BeforeRun(int milliseconds, std::vector<detail::ThreadRunner*> const& threads, neural_net::NeuralNetwork const& neural_net) {
