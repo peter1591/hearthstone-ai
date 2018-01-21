@@ -204,7 +204,7 @@ namespace alphazero
 			best_neural_net_.Save(configs_.best_net_path_);
 			neural_net_.Save(configs_.competitor_net_path_);
 			
-			evaluation::RunOptions options;
+			evaluation::RunOptions options = configs_.evaluation;
 			options.runs = schedule_.evaluation_runs;
 
 			std::vector<detail::ThreadRunner*> threads;
