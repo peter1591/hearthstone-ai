@@ -159,15 +159,23 @@ namespace mcts
 			}
 
 			std::string GetTargetStringFromEncodedIndex(int idx) {
+				std::string side;
+				if (idx >= 8) {
+					side = "Opponent";
+					idx -= 8;
+				}
+				else {
+					side = "Your";
+				}
 				// encoded index is defined in FlowControl::ValidActionGetter
 				// encoded index:
 				//   0 ~ 6: minion index from left to right
 				//   7: hero
-				if (idx == 7) return "Your Hero";
+				if (idx == 7) return side + " Hero";
 				assert(idx >= 0);
 				assert(idx <= 6);
 				std::stringstream ss;
-				ss << "Your " << (idx + 1) << "th Minion";
+				ss << side << " " << (idx + 1) << "th Minion";
 				return ss.str();
 			}
 
@@ -225,7 +233,7 @@ namespace mcts
 						return start_board_getter_(rand);
 					}));
 					std::stringstream ss;
-					ss << "Defender: " << GetTargetString(info.targets[choice]);
+					ss << "Defender: " << GetTargetStringFromEncodedIndex(info.targets[choice]);
 					return ss.str();
 				}
 
