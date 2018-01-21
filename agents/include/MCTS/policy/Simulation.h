@@ -373,7 +373,7 @@ namespace mcts
 				//    The expected number of simulation runs is 1/p.
 				//    So, if the expected number of runs is N, the probability p = 1.0 / N
 				static constexpr bool kEnableCutoff = true;
-				static constexpr double kCutoffExpectedRuns = 10;
+				static constexpr double kCutoffExpectedRuns = 1;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 				static constexpr bool kRandomlyPutMinions = true;
 
