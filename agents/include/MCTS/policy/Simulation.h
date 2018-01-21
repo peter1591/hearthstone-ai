@@ -81,66 +81,6 @@ namespace mcts
 				std::mt19937 & rand_;
 			};
 
-			class WeakHeuristicStateValueFunction
-			{
-			private:
-				static constexpr double kMaxMinionValue = 12.5;
-				double GetMinionValue(state::Cards::Card const& card) {
-					return 1.0 * card.GetAttack() + 1.5 * card.GetHP();
-				}
-
-				static constexpr double kMaxHeroValue = 30.0;
-				double GetHeroValue(state::Cards::Card const& card) {
-					double v = card.GetHP() + card.GetArmor();
-					if (v >= 30) v = 30;
-
-					return v;
-				}
-
-				//static constexpr double kMaxSideValue = 3.0 * kMaxHeroValue + 10.0 * kMaxMinionValue * 7;
-				static constexpr double kMaxSideValue = kMaxHeroValue;
-				double GetStateValueForSide(state::PlayerSide self_side, engine::view::BoardRefView view) {
-					assert(self_side == view.GetSide());
-					//state::PlayerSide opponent_side = state::PlayerIdentifier(self_side).Opposite().GetSide();
-
-					double v = 0.0;
-
-					//view.ForEachMinion(self_side, [&](state::Cards::Card const& card, bool attackable) {
-					//	v += 10.0 * GetMinionValue(card);
-					//	return true;
-					//});
-					//view.ForEachMinion(opponent_side, [&](state::Cards::Card const& card, bool attackable) {
-					//	v += -10.0 * GetMinionValue(card);
-					//	return true;
-					//});
-
-					//v += 3.0 * GetHeroValue(view.GetSelfHero());
-					//v += -3.0 * GetHeroValue(view.GetOpponentHero());
-					v += 30.0 - GetHeroValue(view.GetOpponentHero());
-					
-					v = v / kMaxSideValue;
-
-					return v;
-				}
-
-			public:
-				double GetStateValue(state::State const& game_state) {
-					engine::view::BoardRefView view(game_state, state::kPlayerFirst);
-					return GetStateValueForSide(state::kPlayerFirst, view);
-				}
-
-				// State value is in range [-1, 1]
-				// If 100% wins, score = 1.0
-				// If 50% wins, 50%loss, score = 0.0
-				// If 100% loss, score = -1.0
-				double GetStateValue(engine::view::Board const& board) {
-					// TODO: should always return state value for first player?
-					return board.ApplyWithPlayerStateView([&](auto const& view) {
-						return GetStateValueForSide(board.GetViewSide(), view);
-					});
-				}
-			};
-
 			class NeuralNetworkStateValueFunction
 			{
 			public:
