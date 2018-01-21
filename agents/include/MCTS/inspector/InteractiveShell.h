@@ -204,11 +204,11 @@ namespace mcts
 				}
 
 				if (action_type == engine::ActionType::kChooseMinionPutLocation) {
-					auto info = std::get<engine::ActionApplyHelper::MinionPutLocationInfo>(
-						action_cb_info_getter.ApplyChoices([&]() {
+					auto v = action_cb_info_getter.ApplyChoices([&]() {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
 						return start_board_getter_(rand);
-					}));
+					});
+					auto info = std::get<engine::ActionApplyHelper::MinionPutLocationInfo>(v);
 					std::stringstream ss;
 					ss << "Put minion before index " << choice
 						<< " (total " << info.minions << ")";
@@ -216,13 +216,8 @@ namespace mcts
 				}
 
 				if (action_type == engine::ActionType::kChooseAttacker) {
-					auto info = std::get<engine::ActionApplyHelper::ChooseAttackerInfo>(
-						action_cb_info_getter.ApplyChoices([&]() {
-						std::mt19937 rand; // not random seeded; just to get one of the possible boards
-						return start_board_getter_(rand);
-					}));
 					std::stringstream ss;
-					ss << "Attacker: " << GetTargetStringFromEncodedIndex(info.targets[choice]);
+					ss << "Attacker: " << choice;
 					return ss.str();
 				}
 

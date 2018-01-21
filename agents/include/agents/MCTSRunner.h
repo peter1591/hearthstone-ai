@@ -109,7 +109,7 @@ namespace agents
 		}
 
 	private:
-		MCTSAgentConfig const& config_;
+		MCTSAgentConfig config_;
 		std::vector<std::thread> threads_;
 		std::mt19937 & rand_;
 		mcts::selection::TreeNode first_tree_;

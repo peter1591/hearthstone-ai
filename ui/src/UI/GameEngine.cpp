@@ -18,7 +18,9 @@ namespace ui
 			logger_(),
 			running_(false),
 			controller_(),
-			board_getter_(logger_)
+			shell_(),
+			board_getter_(logger_),
+			config_()
 		{}
 
 		int Initialize(int root_sample_count) {
@@ -44,6 +46,8 @@ namespace ui
 				return board_getter_.GetStartBoard(rand);
 			});
 
+			config_.tree_samples = root_sample_count;
+			config_.mcts.SetNeuralNetPath("neural_net");
 
 			shell_.SetConfig(config_);
 
@@ -109,10 +113,13 @@ namespace ui
 		int InternalRun(int seconds, int threads)
 		{
 			auto seed = std::random_device()();
+			std::mt19937 rand(seed);
 
 			Log("Start to run.");
 
-			if (board_getter_.PrepareToRun(controller_, seed) < 0) {
+			config_.threads = threads;
+
+			if (board_getter_.PrepareToRun(controller_, config_, rand) < 0) {
 				Log("Failed at board_getter_.PrepareToRun().");
 				return -1;
 			}
@@ -145,12 +152,10 @@ namespace ui
 				return true;
 			};
 
-			auto start_board_getter = [this](std::mt19937 & rand) -> state::State {
-				return board_getter_.GetStartBoard(rand);
-			};
+			auto start_state = board_getter_.GetStartBoard(rand);
 
 			try {
-				controller_->Run(threads, start_board_getter);
+				controller_->Run(engine::view::BoardRefView(start_state, start_state.GetCurrentPlayerId().GetSide()));
 
 				while (true) {
 					if (!continue_checker()) break;
@@ -173,6 +178,7 @@ namespace ui
 		std::unique_ptr<agents::MCTSRunner> controller_;
 		mcts::inspector::InteractiveShell shell_;
 		ui::BoardGetter board_getter_;
+		agents::MCTSAgentConfig config_;
 	};
 
 	GameEngine::GameEngine() : impl_(nullptr) {

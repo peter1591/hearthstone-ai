@@ -190,10 +190,40 @@ namespace HearthstoneAI.State
             }
         }
 
+        private List<int> GetHandCards(int player)
+        {
+            List<int> ret = new List<int>();
+            int controller = this.entities_.Items[player].GetTag(GameTag.CONTROLLER);
+            foreach (var t in this.entities_.Items)
+            {
+                if (t.Value.GetTag(GameTag.ZONE) != (int)TAG_ZONE.HAND) continue;
+                if (t.Value.GetTag(GameTag.CONTROLLER) != controller) continue;
+                ret.Add(t.Key);
+            }
+            return ret;
+        }
+
         private void MulliganStateChanged(int entity_id, GameTag tag, bool has_prev, int prev_value, int value)
         {
             // set player when mulligan
+            
+            // fill up the coin for opponent
+            if (value == (int)TAG_MULLIGAN.DONE)
+            {
+                var player_hand = GetHandCards(this.PlayerEntityId);
 
+                void PatchCoinCard(int player_entity_id)
+                {
+                    var hand_cards = GetHandCards(player_entity_id);
+                    if (hand_cards.Count == 5)
+                    {
+                        int coin_entity = hand_cards[4];
+                        entities_.ChangeCardId(coin_entity, "GAME_005");
+                    }
+                };
+                PatchCoinCard(PlayerEntityId);
+                PatchCoinCard(OpponentEntityId);
+            }
         }
 
         public static int ZonePositionSorter(Entity lhs, Entity rhs)

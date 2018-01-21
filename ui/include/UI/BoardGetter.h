@@ -53,12 +53,10 @@ namespace ui
 			return 0;
 		}
 
-		int PrepareToRun(std::unique_ptr<agents::MCTSRunner> & controller, int seed)
+		int PrepareToRun(std::unique_ptr<agents::MCTSRunner> & controller, agents::MCTSAgentConfig const& config, std::mt19937 & rand)
 		{
 			std::lock_guard<std::shared_mutex> lock(lock_);
 
-			std::mt19937 rand(seed);
-			
 			engine::view::BoardView board;
 			engine::view::board_view::UnknownCardsInfo first_unknown;
 			engine::view::board_view::UnknownCardsInfo second_unknown;
@@ -70,7 +68,7 @@ namespace ui
 			});
 			
 			if (!controller || need_restart_ai_) {
-				controller.reset(new agents::MCTSRunner(root_sample_count_, rand));
+				controller.reset(new agents::MCTSRunner(config, rand));
 			}
 			else {
 				// TODO: re-use MCTS tree
