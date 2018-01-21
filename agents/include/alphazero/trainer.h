@@ -144,7 +144,8 @@ namespace alphazero
 
 		self_play::RunResult InternalSelfPlay(detail::ThreadRunner::ConditionCallback condition) {
 			std::vector<detail::ThreadRunner*> threads;
-			for (size_t i = 0; i < threads_.Size(); ++i) {
+			int threads_use = 1;
+			for (size_t i = 0; i < threads_use; ++i) {
 				threads.push_back(&threads_.Get(i));
 			}
 			self_players_.BeforeRun(

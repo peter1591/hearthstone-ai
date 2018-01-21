@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 #include <random>
+#include <fstream>
+#include <time.h>
 
 #include "engine/Game-impl.h"
 #include "agents/MCTSAgent.h"
@@ -22,6 +24,36 @@ namespace alphazero
 {
 	namespace self_play
 	{
+		class AgentCallback
+		{
+		public:
+			AgentCallback(ILogger & logger) : logger_(logger), next_show_(), show_interval_() {
+				show_interval_ = std::chrono::milliseconds(5000);
+			}
+
+			void BeforeThink(engine::view::BoardRefView const& board_view) {
+				logger_.Info([&](auto& s) {
+					s << "Start thinking... Turn: " << board_view.GetTurn() << ". ";
+				});
+				next_show_ = std::chrono::steady_clock::now() + show_interval_;
+			}
+			void Thinking(engine::view::BoardRefView const& board_view, uint64_t iteration) {
+				auto now = std::chrono::steady_clock::now();
+				if (now > next_show_) {
+					logger_.Info([&](auto& s) {
+						s << "Iterations: " << iteration;
+					});
+					next_show_ = now + show_interval_;
+				}
+			}
+			void AfterThink(uint64_t iteration) {}
+
+		private:
+			ILogger & logger_;
+			std::chrono::steady_clock::time_point next_show_;
+			std::chrono::milliseconds show_interval_;
+		};
+
 		class SelfPlayer
 		{
 		public:
@@ -42,7 +74,6 @@ namespace alphazero
 
 				config_ = config;
 				config_.agent_config.mcts.SetNeuralNetPath(tmp_file_);
-				config_.agent_config.threads = 1;
 			}
 
 			// Thread safety: No
@@ -56,21 +87,22 @@ namespace alphazero
 					mcts::policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy>);
 
 				while (callback()) {
-					auto start_board_seed = random_();
-					auto start_board_getter = [&](std::mt19937 & random) -> state::State {
-						return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
-					};
+					auto hand_card_seed = random_();
+					state::State start_state =
+						TestStateBuilder().GetStateWithRandomStartCard(hand_card_seed, random_);
 
-					using MCTSAgent = agents::MCTSAgent<>;
+					using MCTSAgent = agents::MCTSAgent<AgentCallback>;
 					judge::json::Recorder recorder(random_);
 					judge::Judger<MCTSAgent, judge::json::Recorder> judger(random_, recorder);
-					MCTSAgent first(config_.agent_config);
-					MCTSAgent second(config_.agent_config);
+					MCTSAgent first(config_.agent_config, AgentCallback(logger_));
+					MCTSAgent second(config_.agent_config, AgentCallback(logger_));
 
 					judger.SetFirstAgent(&first);
 					judger.SetSecondAgent(&second);
 
-					judger.Start(start_board_getter, random_);
+					judger.Start(start_state, random_);
+
+					SaveJson(recorder.GetJson());
 
 					judge::json::Reader reader;
 					reader.Parse(recorder.GetJson(), [&](judge::json::NeuralNetInputGetter const& input, int label) {
@@ -91,6 +123,33 @@ namespace alphazero
 					std::remove(tmp_file_.c_str());
 					tmp_file_.clear();
 				}
+			}
+
+			void SaveJson(Json::Value const& json) {
+				if (config_.save_dir.empty()) return;
+
+				time_t now;
+				time(&now);
+
+				struct tm timeinfo;
+#ifdef _MSC_VER
+				localtime_s(&timeinfo, &now);
+#else
+				localtime_r(&now, &timeinfo);
+#endif
+
+				char buffer[80];
+				strftime(buffer, 80, "%Y%m%d-%H%M%S", &timeinfo);
+
+				std::ostringstream ss;
+				int postfix = rand() % 90000 + 10000;
+				ss << config_.save_dir << "/" << buffer << "-" << postfix << ".json";
+				std::string filename = ss.str();
+
+				std::ofstream fs(filename, std::ofstream::trunc);
+				Json::StyledStreamWriter json_writer;
+				json_writer.write(fs, json);
+				fs.close();
 			}
 
 		private:

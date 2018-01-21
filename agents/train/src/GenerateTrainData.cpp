@@ -29,11 +29,11 @@ public:
 		first_time_(true), max_iterations_(max_iterations), last_shown_()
 	{}
 
-	void BeforeThink() {
+	void BeforeThink(engine::view::BoardRefView const& board_view) {
 		first_time_ = true;
 	}
 
-	void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {
+	void Thinking(engine::view::BoardRefView const& board_view, uint64_t iteration) {
 		if (first_time_) {
 			std::cout << "Turn: " << board_view.GetTurn() << std::endl;
 			last_shown_ = std::chrono::steady_clock::now();
@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
 	config.tree_samples = 10;
 	config.threads = 1;
 	config.iterations_per_action = 1000;
+	config.mcts.SetNeuralNetPath("neural_net");
 
 	{
 		std::istringstream ss(argv[1]);
@@ -115,10 +116,6 @@ int main(int argc, char *argv[])
 		std::istringstream ss(argv[2]);
 		ss >> config.iterations_per_action;
 	}
-
-	static_assert(std::is_same_v<
-								mcts::StaticConfigs::SimulationPhaseSelectActionPolicy,
-								mcts::policy::simulation::RandomPlayouts>);
 
 	std::cout << "Parameters: " << std::endl;
 	std::cout << "\tThreads: " << config.threads << std::endl;
@@ -131,15 +128,11 @@ int main(int argc, char *argv[])
 	MCTSAgent first(config, AgentCallback(config.iterations_per_action));
 	MCTSAgent second(config, AgentCallback(config.iterations_per_action));
 
-	auto start_board_seed = rand();
-	auto start_board_getter = [&](std::mt19937 & random) -> state::State {
-		return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
-	};
-
 	judger.SetFirstAgent(&first);
 	judger.SetSecondAgent(&second);
 
-	judger.Start(start_board_getter, rand);
+	state::State start_state = TestStateBuilder().GetStateWithRandomStartCard(rand(), rand);
+	judger.Start(start_state, rand);
 
 	SaveJson(recorder.GetJson());
 

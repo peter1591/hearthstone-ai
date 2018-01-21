@@ -19,8 +19,8 @@ namespace agents
 	public:
 		DummyAgentCallback() {}
 
-		void BeforeThink() {}
-		void Thinking(engine::view::BoardRefView board_view, uint64_t iteration) {}
+		void BeforeThink(engine::view::BoardRefView const& board_view) {}
+		void Thinking(engine::view::BoardRefView const& board_view, uint64_t iteration) {}
 		void AfterThink(uint64_t iteration) {}
 	};
 
@@ -36,8 +36,8 @@ namespace agents
 		MCTSAgent(MCTSAgent const&) = delete;
 		MCTSAgent & operator=(MCTSAgent const&) = delete;
 
-		void Think(state::PlayerIdentifier side, engine::view::BoardRefView const& game_state, std::mt19937 & random) {
-			cb_.BeforeThink();
+		void Think(engine::view::BoardRefView const& game_state, std::mt19937 & random) {
+			cb_.BeforeThink(game_state);
 
 			controller_.reset(new MCTSRunner(config_, random));
 			controller_->Run(game_state);
@@ -47,13 +47,13 @@ namespace agents
 				cb_.Thinking(game_state, iterations);
 				if (iterations >= config_.iterations_per_action) break;
 
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				std::this_thread::sleep_for(std::chrono::milliseconds(config_.callback_interval_ms));
 			}
 			controller_->WaitUntilStopped();
 
 			cb_.AfterThink(controller_->GetStatistic().GetSuccededIterates());
 
-			node_ = controller_->GetRootNode(side);
+			node_ = controller_->GetRootNode(game_state.GetSide());
 			root_node_ = node_;
 		}
 

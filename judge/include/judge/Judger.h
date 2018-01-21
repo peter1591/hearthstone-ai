@@ -81,8 +81,7 @@ namespace judge
 		void SetFirstAgent(AgentType * first) { first_ = first; }
 		void SetSecondAgent(AgentType * second) { second_ = second; }
 
-		template <class StateGetter>
-		engine::Result Start(StateGetter && state_getter, std::mt19937 & random)
+		engine::Result Start(state::State const& state, std::mt19937 & random)
 		{
 			assert(first_);
 			assert(second_);
@@ -90,8 +89,7 @@ namespace judge
 			recorder_.Start();
 
 			engine::Game game;
-
-			game.SetStartState(state_getter(random));
+			game.SetStartState(state);
 
 			engine::Result result = engine::kResultInvalid;
 			AgentType * next_agent = nullptr;
@@ -105,7 +103,7 @@ namespace judge
 					next_agent = second_;
 				}
 
-				next_agent->Think(next_player,
+				next_agent->Think(
 					engine::view::BoardRefView(game.GetCurrentState(), next_player.GetSide()),
 					random);
 

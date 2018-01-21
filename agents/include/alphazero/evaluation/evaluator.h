@@ -40,10 +40,9 @@ namespace alphazero
 				competitor_agent_config.mcts.SetNeuralNetPath(competitor_net_path_);
 
 				while (callback()) {
-					auto start_board_seed = random_();
-					auto start_board_getter = [&](std::mt19937 & random) -> state::State {
-						return TestStateBuilder().GetStateWithRandomStartCard(start_board_seed, random);
-					};
+					auto hand_card_seed = random_();
+					state::State start_state =
+						TestStateBuilder().GetStateWithRandomStartCard(hand_card_seed, random_);
 
 					using MCTSAgent = agents::MCTSAgent<>;
 					judge::NullRecorder recorder;
@@ -65,7 +64,7 @@ namespace alphazero
 						competitor_win_result = engine::kResultSecondPlayerWin;
 					}
 
-					engine::Result result = judger.Start(start_board_getter, random_);
+					engine::Result result = judger.Start(start_state, random_);
 					bool competitor_win = (result == competitor_win_result);
 
 					result_->AddResult(competitor_win);

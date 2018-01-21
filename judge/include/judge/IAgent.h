@@ -20,7 +20,7 @@ namespace judge
 
 		virtual ~IAgent() {}
 
-		virtual void Think(state::PlayerIdentifier side, engine::view::BoardRefView game_state , std::mt19937 & random) = 0;
+		virtual void Think(engine::view::BoardRefView game_state , std::mt19937 & random) = 0;
 
 		virtual int GetAction(engine::ActionType::Types action_type, engine::ActionChoices action_choices) = 0;
 	};
