@@ -38,21 +38,6 @@ public:
 				train_output_.AddData(label);
 			}
 		});
-
-		std::string result = GetResult(obj);
-		for (Json::ArrayIndex idx = 0; idx < obj.size(); ++idx) {
-			if (obj[idx]["type"].asString() == "kMainAction") {
-				Json::Value const& board = obj[idx]["board"];
-
-				if (board["turn"].asInt() <= 4) continue;
-
-				judge::json::Reader board_parser(board);
-				int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
-
-
-				++seq;
-			}
-		}
 	}
 
 	void Train()

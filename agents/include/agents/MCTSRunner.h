@@ -67,9 +67,7 @@ namespace agents
 						return v;
 					};
 
-					while (true) {
-						if (stop_flag_ == true) break; // TODO: use compare_exchange_weak
-
+					while (!stop_flag_.load()) {
 						int sample_seed = get_next_selection_seed();
 						selection_rand.seed(sample_seed);
 						mcts.Iterate([&]() {

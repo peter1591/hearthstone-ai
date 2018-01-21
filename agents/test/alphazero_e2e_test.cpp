@@ -40,8 +40,10 @@ int main(void)
 	trainer_config.optimizer.epoches_per_run = trainer_config.optimizer.epoches / 10;
 
 	trainer_config.evaluation.runs = 100;
+	trainer_config.evaluation.agent_config.threads = 1;
 	trainer_config.evaluation.agent_config.tree_samples = 1;
 	trainer_config.evaluation.agent_config.iterations_per_action = 10000;
+	trainer_config.evaluation.agent_config.callback_interval_ms = 100;
 
 	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 1;
 	trainer_config.best_net_path_ = "best_net";

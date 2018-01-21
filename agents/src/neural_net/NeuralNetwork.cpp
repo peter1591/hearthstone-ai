@@ -393,7 +393,13 @@ namespace neural_net {
 	void NeuralNetwork::CreateWithRandomWeights(std::string const& path) {
 		return impl::NeuralNetworkImpl::CreateWithRandomWeights(path);
 	}
-	void NeuralNetwork::Load(std::string const& path) { impl_->Load(path); }
+	void NeuralNetwork::Load(std::string const& path) { 
+		// reload neural net
+		delete impl_;
+		impl_ = new impl::NeuralNetworkImpl();
+
+		impl_->Load(path);
+	}
 
 	void NeuralNetwork::CopyFrom(NeuralNetwork const& rhs) {
 		impl_->CopyFrom(*rhs.impl_);
