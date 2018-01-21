@@ -101,6 +101,7 @@
       <AdditionalIncludeDirectories>..\..\test;..\..\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -117,6 +118,7 @@
       <AdditionalIncludeDirectories>..\..\test;..\..\include;..\..\..\engine\include;..\..\..\judge\include;..\..\..\third_party\tiny-dnn;..\..\..\third_party\jsoncpp\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
