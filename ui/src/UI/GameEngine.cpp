@@ -44,6 +44,9 @@ namespace ui
 				return board_getter_.GetStartBoard(rand);
 			});
 
+
+			shell_.SetConfig(config_);
+
 			return 0;
 		}
 

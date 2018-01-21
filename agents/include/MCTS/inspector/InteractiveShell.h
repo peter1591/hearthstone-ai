@@ -17,17 +17,10 @@ namespace mcts
 			using StartBoardGetter = std::function<state::State(std::mt19937 &)>;
 
 			InteractiveShell(
-				mcts::Config & config,
 				agents::MCTSRunner * controller = nullptr,
 				StartBoardGetter start_board_getter = StartBoardGetter()) :
 				controller_(controller), start_board_getter_(start_board_getter), node_(nullptr)
 			{
-				try {
-					state_value_func_.reset(new mcts::policy::simulation::NeuralNetworkStateValueFunction(config));
-				}
-				catch (std::exception ex) {
-					state_value_func_.reset(nullptr);
-				}
 			}
 
 			InteractiveShell(InteractiveShell const&) = delete;
@@ -35,6 +28,15 @@ namespace mcts
 
 			void SetController(agents::MCTSRunner * controller) {
 				controller_ = controller;
+			}
+
+			void SetConfig(agents::MCTSAgentConfig const& config) {
+				try {
+					state_value_func_.reset(new mcts::policy::simulation::NeuralNetworkStateValueFunction(config.mcts));
+				}
+				catch (std::exception ex) {
+					state_value_func_.reset(nullptr);
+				}
 			}
 
 			void SetStartBoardGetter(StartBoardGetter start_board_getter) {
