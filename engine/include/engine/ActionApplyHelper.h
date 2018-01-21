@@ -11,20 +11,16 @@ namespace engine
 	{
 	public:
 		struct NullInfo {};
-		struct ChooseHandCardInfo {
-			ChooseHandCardInfo() {}
-		};
+		struct ChooseHandCardInfo {};
+		struct MainOpInfo {};
 		struct MinionPutLocationInfo {
 			MinionPutLocationInfo(int minions) : minions(minions) {}
 			int minions;
 		};
-		struct ChooseAttackerInfo {
-			ChooseAttackerInfo(std::vector<int> targets) : targets(targets) {}
-			std::vector<int> targets;
-		};
+		struct ChooseAttackerInfo {};
 		struct ChooseDefenderInfo {
-			ChooseDefenderInfo(std::vector<state::CardRef> targets) : targets(targets) {}
-			std::vector<state::CardRef> targets;
+			ChooseDefenderInfo(std::vector<int> const& targets) : targets(targets) {}
+			std::vector<int> targets;
 		};
 		struct GetSpecifiedTargetInfo {
 			GetSpecifiedTargetInfo(state::CardRef card_ref, std::vector<state::CardRef> targets) :
@@ -43,6 +39,7 @@ namespace engine
 		};
 		using CallbackInfo = std::variant<
 			NullInfo, // no callback called
+			MainOpInfo,
 			ChooseHandCardInfo,
 			MinionPutLocationInfo,
 			ChooseAttackerInfo,
@@ -58,17 +55,29 @@ namespace engine
 			int Get(int exclusive_max) { return 0; }
 		};
 
-		class ActionParameterCallback : public engine::IActionParameterGetter {
+		class ActionParameterChoser : public engine::IActionParameterGetter {
 		public:
-			ActionParameterCallback(CallbackInfo & result, std::vector<int> const& choices, size_t & choices_idx) :
-				result_(result), choices_(choices), choices_idx_(choices_idx)
+			ActionParameterChoser(std::vector<int> const& choices, size_t & choices_idx) :
+				choices_(choices), choices_idx_(choices_idx), should_skip_(false)
 			{}
 
+			// should be called after GetNumber()
+			bool HasFurtherChoices() const {
+				return choices_idx_ < choices_.size();
+			}
+
+			// should be called after GetNumber()
+			bool ShouldSkip() const { return should_skip_; }
+
 			int GetNumber(engine::ActionType::Types action_type, engine::ActionChoices & action_choices) final {
+				should_skip_ = false;
 				if (action_type != engine::ActionType::kMainAction)
 				{
 					assert(action_choices.Size() > 0);
-					if (action_choices.Size() == 1) return 0;
+					if (action_choices.Size() == 1) {
+						should_skip_ = true;
+						return 0;
+					}
 				}
 				return GetNextChoice(0, action_choices.Size());
 			}
@@ -88,10 +97,75 @@ namespace engine
 			}
 
 		private:
-			CallbackInfo & result_;
 			std::vector<int> const& choices_;
 			size_t & choices_idx_;
-			std::vector<size_t> const* playable_cards_;
+			bool should_skip_;
+		};
+
+		class ActionParameterCallback : public engine::FlowControl::IActionParameterGetter {
+		public:
+			ActionParameterCallback(std::vector<int> const& choices, size_t & choices_idx, CallbackInfo & result) :
+				result_(result), choser_(choices, choices_idx)
+			{}
+			
+			void Initialize(state::State const& game_state) {
+				choser_.Initialize(game_state);
+			}
+
+			MainOpType ChooseMainOp() {
+				auto ret = choser_.ChooseMainOp();
+				if (ShouldRecord()) result_ = MainOpInfo();
+				return ret;
+			}
+
+			int ChooseHandCard() {
+				auto ret = choser_.ChooseHandCard();
+				if (ShouldRecord()) result_ = ChooseHandCardInfo();
+				return ret;
+			}
+
+			state::CardRef GetAttacker() {
+				auto ret = choser_.GetAttacker();
+				if (ShouldRecord()) result_ = ChooseAttackerInfo();
+				return ret;
+			}
+
+			state::CardRef GetDefender(std::vector<int> const& targets) {
+				auto ret = choser_.GetDefender(targets);
+				if (ShouldRecord()) result_ = ChooseDefenderInfo(targets);
+				return ret;
+			}
+
+			int GetMinionPutLocation(int minions) {
+				auto ret = choser_.GetMinionPutLocation(minions);
+				if (ShouldRecord()) result_ = MinionPutLocationInfo(minions);
+				return ret;
+			}
+
+			state::CardRef GetSpecifiedTarget(
+				state::State & state, state::CardRef card_ref,
+				std::vector<state::CardRef> const& targets) {
+				auto ret = choser_.GetSpecifiedTarget(state, card_ref, targets);
+				if (ShouldRecord()) result_ = GetSpecifiedTargetInfo(card_ref, targets);
+				return ret;
+			}
+
+			Cards::CardId ChooseOne(std::vector<Cards::CardId> const& cards) {
+				auto ret = choser_.ChooseOne(cards);
+				if (ShouldRecord()) result_ = ChooseOneInfo(cards);
+				return ret;
+			}
+
+		private:
+			bool ShouldRecord() const {
+				if (choser_.ShouldSkip()) return false;
+				if (choser_.HasFurtherChoices()) return false;
+				return true;
+			}
+
+		private:
+			CallbackInfo & result_;
+			ActionParameterChoser choser_;
 		};
 
 	public:
@@ -119,7 +193,7 @@ namespace engine
 			size_t choices_idx = 0;
 
 			RandomCallback rand_cb;
-			ActionParameterCallback action_cb(info, choices_, choices_idx);
+			ActionParameterCallback action_cb(choices_, choices_idx, info);
 
 			engine::FlowControl::FlowContext flow_context;
 			flow_context.SetCallback(rand_cb, action_cb);

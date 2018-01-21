@@ -167,8 +167,6 @@ namespace judge
 					if (obj[idx]["type"].asString() == "kMainAction") {
 						Json::Value const& board = obj[idx]["board"];
 
-						if (board["turn"].asInt() <= 4) continue;
-
 						int label = IsCurrentPlayerWin(board, result) ? 1 : -1;
 						cb(GetterType(board), label);
 					}
