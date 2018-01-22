@@ -13,6 +13,17 @@
 namespace alphazero
 {
 	struct TrainerConfigs {
+		TrainerConfigs() :
+			best_net_path_(),
+			competitor_net_path_(),
+			kTrainingDataCapacityPowerOfTwo(10),
+			kMinimumTraningData(0),
+			self_play(),
+			optimizer(),
+			evaluation(),
+			kEvaluationWinRate(0.55)
+		{}
+
 		std::string best_net_path_;
 		std::string competitor_net_path_;
 
@@ -102,8 +113,6 @@ namespace alphazero
 		void PrepareData() {
 			logger_.Info() << "Start to prepare training data.";
 
-			auto capacity = training_data_.GetCapacity();
-
 			self_play::RunResult result;
 
 			std::mutex next_show_mutex;
@@ -144,7 +153,7 @@ namespace alphazero
 
 		self_play::RunResult InternalSelfPlay(detail::ThreadRunner::ConditionCallback condition) {
 			std::vector<detail::ThreadRunner*> threads;
-			int threads_use = 1;
+			size_t threads_use = 1;
 			for (size_t i = 0; i < threads_use; ++i) {
 				threads.push_back(&threads_.Get(i));
 			}

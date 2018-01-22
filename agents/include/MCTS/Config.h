@@ -44,11 +44,13 @@ namespace mcts
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
-	};
+	}
 
 	// Thread safety: Yes
 	class Config {
 	public:
+		Config() : neural_net_path_() {}
+
 		void SetNeuralNetPath(std::string const& filename) { neural_net_path_ = filename; }
 		std::string const& GetNeuralNetPath() const { return neural_net_path_; }
 		

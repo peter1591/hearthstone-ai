@@ -35,7 +35,7 @@ namespace engine
 			{}
 
 			int Get(size_t idx) const {
-				assert(idx < exclusive_max_);
+				assert((int)idx < exclusive_max_);
 				return (int)idx;
 			}
 

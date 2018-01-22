@@ -19,7 +19,13 @@ namespace engine
 		class BoardView
 		{
 		public:
-			BoardView() : turn_(-1), first_player_(), second_player_(), cards_info_() {}
+			BoardView() :
+				turn_(-1),
+				current_player_(),
+				first_player_(),
+				second_player_(),
+				cards_info_()
+			{}
 
 			void Reset() {
 				turn_ = -1;
@@ -61,7 +67,7 @@ namespace engine
 		private:
 			board_view::CardInfo & GetCardInfo(int id)
 			{
-				if (id >= cards_info_.size()) {
+				if (id >= (int)cards_info_.size()) {
 					cards_info_.resize(id + 1);
 				}
 				return cards_info_[id];

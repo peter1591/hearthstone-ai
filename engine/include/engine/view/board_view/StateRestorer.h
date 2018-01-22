@@ -13,8 +13,10 @@ namespace engine
 			class StateRestorer
 			{
 			private:
-				StateRestorer(BoardView const& board)
-					: board_(board), first_unknown_cards_mgr_(), second_unknown_cards_mgr_()
+				StateRestorer(BoardView const& board) :
+					board_(board),
+					first_unknown_cards_info_(), second_unknown_cards_info_(),
+					first_unknown_cards_mgr_(), second_unknown_cards_mgr_()
 				{}
 
 			public:
@@ -22,7 +24,7 @@ namespace engine
 					StateRestorer restorer(board);
 					restorer.first_unknown_cards_mgr_.Setup(first_unknown.unknown_cards_sets_);
 					restorer.second_unknown_cards_mgr_.Setup(second_unknown.unknown_cards_sets_);
-					return restorer;
+					return std::move(restorer);
 				}
 
 				state::State RestoreState(std::mt19937 & rand) {

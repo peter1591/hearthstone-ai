@@ -63,13 +63,16 @@ namespace engine
 			private:
 				struct SetItem
 				{
-					SetItem(std::vector<Cards::CardId> const& cards) : cards_(cards) {}
+					SetItem(std::vector<Cards::CardId> const& cards)
+						: cards_(cards), ref_cards_() {}
 
 					UnknownCardsSet cards_;
 					size_t ref_cards_; // how many cards drawn from set
 				};
 
 			public:
+				UnknownCardsSets() : sets_() {}
+
 				size_t AddCardsSet(std::vector<Cards::CardId> const& cards)
 				{
 					SetItem new_item(cards);
@@ -120,6 +123,12 @@ namespace engine
 				board_view::UnknownCardsSets unknown_cards_sets_;
 				std::map<int, size_t> sets_indics_; // block id -> set idx
 
+				UnknownCardsInfo() :
+					deck_cards_(),
+					unknown_cards_sets_(),
+					sets_indics_()
+				{}
+
 				void Reset() {
 					deck_cards_.clear();
 					sets_indics_.clear();
@@ -131,6 +140,12 @@ namespace engine
 			{
 			public:
 				UnknownCardsSetsManager() : data_(nullptr), shuffled_cards_() {}
+
+				UnknownCardsSetsManager(UnknownCardsSetsManager const&) = delete;
+				UnknownCardsSetsManager & operator=(UnknownCardsSetsManager const&) = delete;
+
+				UnknownCardsSetsManager(UnknownCardsSetsManager &&) = default;
+				UnknownCardsSetsManager & operator=(UnknownCardsSetsManager &&) = default;
 
 				void Setup(UnknownCardsSets & data) { data_ = &data; }
 

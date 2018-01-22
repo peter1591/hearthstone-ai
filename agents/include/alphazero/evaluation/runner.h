@@ -16,6 +16,8 @@ namespace alphazero
 				random_(random),
 				evaluators_(),
 				result_(),
+				next_show_mutex_(),
+				next_show_(),
 				running_evaluators_(0)
 			{}
 

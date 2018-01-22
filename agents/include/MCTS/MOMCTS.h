@@ -15,6 +15,7 @@ namespace mcts
 			std::mt19937 & selection_rand, std::mt19937 & simulation_rand,
 			Config const& config
 		) :
+			side_controller_(),
 			first_(first_tree, statistic, selection_rand, simulation_rand, config),
 			second_(second_tree, statistic, selection_rand, simulation_rand, config)
 		{}

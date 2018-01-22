@@ -40,6 +40,9 @@ namespace mcts
 		public:
 			ActionParameterGetter(SOMCTS & callback) : board_(nullptr), callback_(callback) {}
 
+			ActionParameterGetter(ActionParameterGetter const&) = delete;
+			ActionParameterGetter & operator=(ActionParameterGetter const&) = delete;
+
 			void Initialize(engine::view::Board const& board) {
 				board_ = &board;
 				engine::IActionParameterGetter::Initialize(

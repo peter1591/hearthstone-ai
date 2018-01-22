@@ -45,7 +45,7 @@ namespace agents
 			while (true) {
 				uint64_t iterations = controller_->GetStatistic().GetSuccededIterates();
 				cb_.Thinking(game_state, iterations);
-				if (iterations >= config_.iterations_per_action) break;
+				if (iterations >= (uint64_t)config_.iterations_per_action) break;
 
 				std::this_thread::sleep_for(std::chrono::milliseconds(config_.callback_interval_ms));
 			}

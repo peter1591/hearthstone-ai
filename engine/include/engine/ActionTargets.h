@@ -15,6 +15,8 @@ namespace engine
 	class ActionTargets
 	{
 	public:
+		ActionTargets() : card_refs_() {}
+
 		void Analyze(FlowControl::ValidActionGetter const& game) {
 			// TODO: no need to reset entries for release builds
 			for (auto& item : card_refs_) item.Invalidate();

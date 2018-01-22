@@ -16,8 +16,14 @@ namespace agents
 	{
 	public:
 		MCTSRunner(MCTSAgentConfig const& config, std::mt19937 & rand) :
-			config_(config), rand_(rand),
-			first_tree_(), second_tree_(), statistic_(), stop_flag_(false), tree_sample_randoms_()
+			config_(config),
+			threads_(),
+			rand_(rand),
+			first_tree_(),
+			second_tree_(),
+			statistic_(),
+			stop_flag_(false),
+			tree_sample_randoms_()
 		{
 			for (int i = 0; i < config_.tree_samples; ++i) {
 				tree_sample_randoms_.push_back(rand());

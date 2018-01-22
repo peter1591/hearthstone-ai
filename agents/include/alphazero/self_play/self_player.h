@@ -59,9 +59,16 @@ namespace alphazero
 		public:
 			SelfPlayer(ILogger & logger, int rand_seed) :
 				logger_(logger), random_(rand_seed),
-				data_(nullptr), config_(), tmp_file_()
+				data_(nullptr), config_(), tmp_file_(),
+				result_()
 			{}
 			~SelfPlayer() { RemoveTempFile(); }
+
+			SelfPlayer(SelfPlayer const&) = delete;
+			SelfPlayer & operator=(SelfPlayer const&) = delete;
+
+			SelfPlayer(SelfPlayer &&) = default;
+			SelfPlayer & operator=(SelfPlayer &&) = default;
 
 			void BeforeRun(shared_data::TrainingData & data, neural_net::NeuralNetwork const& neural_net, RunOptions const& config) {
 				data_ = &data;

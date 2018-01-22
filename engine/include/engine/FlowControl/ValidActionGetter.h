@@ -1,7 +1,9 @@
 #pragma once
 
 #include <vector>
+
 #include "state/State.h"
+#include "engine/FlowControl/ActionTargetIndex.h"
 
 namespace engine {
 	namespace FlowControl

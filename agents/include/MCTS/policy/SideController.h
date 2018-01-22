@@ -29,7 +29,7 @@ namespace mcts {
 			};
 
 		public:
-			SideController() {}
+			SideController() : game_() {}
 
 			template <class StartBoardGetter>
 			void StartEpisode(StartBoardGetter&& start_board_getter) {

@@ -7,7 +7,15 @@ namespace mcts {
 	namespace selection {
 		class TraversedNodesInfo {
 		public:
-			TraversedNodesInfo() : path_(), new_node_created_(false), pending_choice_(-1) {}
+			TraversedNodesInfo() :
+				path_(),
+				new_node_created_(false),
+				current_node_(nullptr),
+				pending_choice_(-1)
+			{}
+
+			TraversedNodesInfo(TraversedNodesInfo const&) = delete;
+			TraversedNodesInfo & operator=(TraversedNodesInfo const&) = delete;
 
 			void Restart(TreeNode * node) {
 				path_.clear();

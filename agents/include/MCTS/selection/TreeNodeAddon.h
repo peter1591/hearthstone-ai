@@ -118,6 +118,10 @@ namespace mcts
 					using Type1 = std::decay_t<decltype(lhs)>;
 					using Type2 = std::decay_t<decltype(rhs)>;
 
+					if constexpr (!std::is_same_v<Type1, Type2>) {
+						return false;
+					}
+
 					if constexpr (std::is_same_v<Type1, engine::ActionChoices::ChooseFromCardIds>) {
 						// allow different set of card ids
 						return true;

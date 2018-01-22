@@ -50,7 +50,7 @@ namespace mcts
 			}
 
 		public:
-			ChildNodeMap() : map_() {}
+			ChildNodeMap() : map_mutex_(), map_() {}
 
 			bool HasChild(int choice) const {
 				std::shared_lock<Utils::SharedSpinLock> lock(map_mutex_);
@@ -110,6 +110,8 @@ namespace mcts
 		// Thread safe
 		struct TreeNode
 		{
+			TreeNode() : children_(), addon_() {}
+
 			ChildNodeMap children_; // must be thread safe
 			TreeNodeAddon addon_; // must be thread safe
 		};

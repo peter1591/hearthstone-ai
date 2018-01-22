@@ -215,6 +215,8 @@ namespace engine
 			};
 
 			struct Minions {
+				Minions() : minions() {}
+
 				std::vector<Minion> minions;
 
 				void Parse(Json::Value const& json) {
@@ -246,6 +248,16 @@ namespace engine
 
 				OrderedEntities hand;
 				*/
+
+				Player() :
+					hero(),
+					hero_power(),
+					minions(),
+					fatigue(0),
+					resource(),
+					hand(),
+					deck()
+				{}
 
 				Hero hero;
 				HeroPower hero_power;

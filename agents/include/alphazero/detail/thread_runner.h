@@ -13,7 +13,7 @@ namespace alphazero
 		class ThreadRunner
 		{
 		public:
-			ThreadRunner() : thread_(), task_() {}
+			ThreadRunner() : thread_(), task_(), task_mutex_(), task_cv_() {}
 
 			ThreadRunner(ThreadRunner const&) = delete;
 			ThreadRunner & operator=(ThreadRunner const&) = delete;
