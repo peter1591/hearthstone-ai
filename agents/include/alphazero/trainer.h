@@ -14,6 +14,7 @@ namespace alphazero
 {
 	struct TrainerConfigs {
 		TrainerConfigs() :
+			threads_(2),
 			best_net_path_(),
 			competitor_net_path_(),
 			kTrainingDataCapacityPowerOfTwo(10),
@@ -23,6 +24,8 @@ namespace alphazero
 			evaluation(),
 			kEvaluationWinRate(0.55)
 		{}
+
+		int threads_;
 
 		std::string best_net_path_;
 		std::string competitor_net_path_;
@@ -69,21 +72,19 @@ namespace alphazero
 		void Initialize(TrainerConfigs const& configs, std::mt19937 & random) {
 			configs_ = configs;
 
-			int kThreads = 4; // TODO: adjust at runtime
-
 			schedule_.self_play_milliseconds = 3000;
 			schedule_.train_epochs = 1000;
 			schedule_.evaluation_runs = 1000;
 
-			threads_.Initialize(kThreads);
+			threads_.Initialize(configs_.threads_);
 			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
 
 			best_neural_net_.Load(configs.best_net_path_);
 			neural_net_.Load(configs.best_net_path_);
 
 			optimizer_.Initialize();
-			evaluators_.Initialize(kThreads);
-			self_players_.Initialize(kThreads, training_data_, random, configs_.self_play);
+			evaluators_.Initialize(configs_.threads_);
+			self_players_.Initialize(configs_.threads_, training_data_, random, configs_.self_play);
 		}
 
 		void Release() {
@@ -153,7 +154,7 @@ namespace alphazero
 
 		self_play::RunResult InternalSelfPlay(detail::ThreadRunner::ConditionCallback condition) {
 			std::vector<detail::ThreadRunner*> threads;
-			size_t threads_use = 1;
+			size_t threads_use = threads_.Size();
 			for (size_t i = 0; i < threads_use; ++i) {
 				threads.push_back(&threads_.Get(i));
 			}

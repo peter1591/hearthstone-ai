@@ -26,17 +26,19 @@ int main(void)
 	alphazero::EndDeviceTrainer trainer(logger, random);
 
 	alphazero::TrainerConfigs trainer_config;
+	trainer_config.threads_ = 28;
+
 	trainer_config.kEvaluationWinRate = 0.55f;
 	trainer_config.kTrainingDataCapacityPowerOfTwo = 13; // 8192
 	
 	trainer_config.self_play.save_dir = "./self_play";
-	trainer_config.self_play.agent_config.threads = 4;
+	trainer_config.self_play.agent_config.threads = 1;
 	trainer_config.self_play.agent_config.tree_samples = 1;
 	trainer_config.self_play.agent_config.iterations_per_action = 100000;
 
 	trainer_config.optimizer.batch_size = 32;
 	trainer_config.optimizer.batches = 100;
-	trainer_config.optimizer.epoches = 1000;
+	trainer_config.optimizer.epoches = 10000;
 	trainer_config.optimizer.epoches_per_run = trainer_config.optimizer.epoches / 10;
 
 	trainer_config.evaluation.runs = 100;
