@@ -16,6 +16,7 @@ namespace mcts
 
 		namespace simulation {
 			class RandomPlayouts;
+			class RandomCutoff;
 			class HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
 		}
 	}
@@ -43,6 +44,7 @@ namespace mcts
 
 		using SimulationPhaseRandomActionPolicy = policy::RandomByMt19937;
 		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomPlayouts;
+		//using SimulationPhaseSelectActionPolicy = policy::simulation::RandomCutoff;
 		using SimulationPhaseSelectActionPolicy = policy::simulation::HeuristicPlayoutWithHeuristicEarlyCutoffPolicy;
 	}
 

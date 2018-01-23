@@ -81,6 +81,58 @@ namespace mcts
 				std::mt19937 & rand_;
 			};
 
+			class RandomCutoff
+			{
+			public:
+				static constexpr bool kEnableCutoff = true;
+				static constexpr bool kRandomlyPutMinions = true;
+
+				RandomCutoff(std::mt19937 & rand, Config const& config) :
+					rand_(rand)
+				{
+				}
+
+				engine::Result GetCutoffResult(engine::view::Board const& board) {
+					bool win = (rand_() % 2 == 0);
+					if (win) return engine::kResultFirstPlayerWin;
+					else return engine::kResultSecondPlayerWin;
+				}
+
+				void StartAction(engine::view::Board const& board, engine::ValidActionAnalyzer const& action_analyzer) {
+					(void)board;
+					(void)action_analyzer;
+				}
+
+				int GetChoice(
+					engine::view::Board const& board,
+					engine::ValidActionAnalyzer const& action_analyzer,
+					engine::ActionType action_type,
+					ChoiceGetter const& choice_getter)
+				{
+					size_t count = choice_getter.Size();
+					assert(count > 0);
+					size_t rand_idx = (size_t)(rand_() % count);
+					int result = choice_getter.Get(rand_idx);
+					assert([&]() {
+						int result2 = -1;
+						size_t idx = 0;
+						choice_getter.ForEachChoice([&](int choice) {
+							if (idx == rand_idx) {
+								result2 = choice;
+								return false;
+							}
+							++idx;
+							return true;
+						});
+						return result == result2;
+					}());
+					return result;
+				}
+
+			private:
+				std::mt19937 & rand_;
+			};
+
 			class NeuralNetworkStateValueFunction
 			{
 			public:
