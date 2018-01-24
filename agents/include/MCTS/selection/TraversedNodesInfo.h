@@ -95,7 +95,7 @@ namespace mcts {
 						if constexpr (StaticConfigs::kVirtualLoss != 0) {
 							static_assert(StaticConfigs::kVirtualLoss > 0);
 							item.edge_addon_->AddCredit(1.0, StaticConfigs::kVirtualLoss); // remove virtual loss
-							assert(item.edge_addon_->GetAverageCredit() >= 0.0);
+							assert(item.edge_addon_->GetAverageCredit() >= -1.0);
 							assert(item.edge_addon_->GetAverageCredit() <= 1.0);
 						}
 					}

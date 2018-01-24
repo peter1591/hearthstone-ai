@@ -105,8 +105,6 @@ namespace mcts
 			void FinishIteration(engine::view::Board const& board, engine::Result result)
 			{
 				float credit = StaticConfigs::CreditPolicy::GetCredit(board, result);
-				assert(credit >= 0.0);
-				assert(credit <= 1.0); // TODO: should take into account episilon precision
 				path_.Update(credit);
 			}
 

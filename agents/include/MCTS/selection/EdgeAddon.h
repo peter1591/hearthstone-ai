@@ -22,7 +22,7 @@ namespace mcts
 				auto total_load = total.load();
 				assert(total_load > 0);
 				float ret = (float)credit.load() / total_load;
-				assert(ret >= 0.0);
+				assert(ret >= -1.0);
 				assert(ret <= 1.0);
 				return ret;
 			}
@@ -30,6 +30,9 @@ namespace mcts
 			void AddCredit(float score, int repeat_times = 1) {
 				int total_increment = StaticConfigs::kCreditGranularity;
 				int credit_increment = (int)(score * StaticConfigs::kCreditGranularity);
+
+				assert(credit_increment >= -total_increment);
+				assert(credit_increment <= total_increment);
 
 				// These two fields are not updated in an atomic operation. But this should be fine...
 				total += total_increment * repeat_times;
