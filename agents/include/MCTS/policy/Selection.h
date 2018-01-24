@@ -72,7 +72,7 @@ namespace mcts
 
 			class UCBPolicy {
 			public:
-				static constexpr double kExploreWeight = 0.8;
+				static constexpr double kExploreWeight = 0.2;
 
 				int SelectChoice(ChoiceIterator choice_iterator)
 				{
