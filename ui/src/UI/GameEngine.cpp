@@ -16,12 +16,15 @@ namespace ui
 	public:
 		GameEngineImpl() :
 			logger_(),
+			random_(),
 			running_(false),
 			controller_(),
 			shell_(),
 			board_getter_(logger_),
 			config_()
-		{}
+		{
+			random_.seed(std::random_device()());
+		}
 
 		int Initialize(int root_sample_count) {
 			try {
@@ -49,7 +52,7 @@ namespace ui
 			config_.tree_samples = root_sample_count;
 			config_.mcts.SetNeuralNetPath("neural_net");
 
-			shell_.SetConfig(config_);
+			shell_.SetConfig(config_, random_);
 
 			return 0;
 		}
@@ -174,6 +177,7 @@ namespace ui
 
 	private:
 		GameEngineLogger logger_;
+		std::mt19937 random_;
 		std::atomic<bool> running_;
 		std::unique_ptr<agents::MCTSRunner> controller_;
 		mcts::inspector::InteractiveShell shell_;

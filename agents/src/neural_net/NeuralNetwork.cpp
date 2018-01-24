@@ -272,8 +272,9 @@ namespace neural_net {
 				net.save(filename);
 			}
 
-			void Load(std::string const& filename) {
+			void Load(std::string const& filename, bool is_random) {
 				net_.load(filename);
+				random_net_ = is_random;
 			}
 
 			void CopyFrom(NeuralNetworkImpl const& rhs) {
@@ -317,23 +318,31 @@ namespace neural_net {
 				return { correct, total };
 			}
 
-			void Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results) {
+			void Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results, std::mt19937 & random) {
 				auto const& input_data = input.GetData();
 				results.clear();
 				results.reserve(input_data.size());
 				for (size_t idx = 0; idx < input_data.size(); ++idx) {
-					results.push_back(net_.predict(input_data[0])[0][0]);
+					results.push_back(Predict(input_data[0], random));
 				}
 			}
 
-			double Predict(IInputGetter * input) {
+			double Predict(IInputGetter * input, std::mt19937 & random) {
 				tiny_dnn::tensor_t data;
 				impl::InputDataConverter().Convert(input, data);
+				return Predict(data, random);
+			}
+
+			double Predict(tiny_dnn::tensor_t const& data, std::mt19937 & random) {
+				if (random_net_) {
+					return std::uniform_real_distribution<double>(-1.0, 1.0)(random);
+				}
 				return net_.predict(data)[0][0];
 			}
 
 		private:
 			tiny_dnn::network<tiny_dnn::graph> net_;
+			bool random_net_;
 		};
 	}
 
@@ -393,12 +402,12 @@ namespace neural_net {
 	void NeuralNetwork::CreateWithRandomWeights(std::string const& path) {
 		return impl::NeuralNetworkImpl::CreateWithRandomWeights(path);
 	}
-	void NeuralNetwork::Load(std::string const& path) { 
+	void NeuralNetwork::Load(std::string const& path, bool is_random) { 
 		// reload neural net
 		delete impl_;
 		impl_ = new impl::NeuralNetworkImpl();
 
-		impl_->Load(path);
+		impl_->Load(path, is_random);
 	}
 
 	void NeuralNetwork::CopyFrom(NeuralNetwork const& rhs) {
@@ -423,13 +432,13 @@ namespace neural_net {
 		return impl_->Verify(*input.impl_, *output.impl_);
 	}
 
-	void NeuralNetwork::Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results)
+	void NeuralNetwork::Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results, std::mt19937 & random)
 	{
-		return impl_->Predict(input, results);
+		return impl_->Predict(input, results, random);
 	}
 
-	double NeuralNetwork::Predict(IInputGetter * input)
+	double NeuralNetwork::Predict(IInputGetter * input, std::mt19937 & random)
 	{
-		return impl_->Predict(input);
+		return impl_->Predict(input, random);
 	}
 }

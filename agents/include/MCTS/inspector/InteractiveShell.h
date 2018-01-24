@@ -30,9 +30,9 @@ namespace mcts
 				controller_ = controller;
 			}
 
-			void SetConfig(agents::MCTSAgentConfig const& config) {
+			void SetConfig(agents::MCTSAgentConfig const& config, std::mt19937 & random) {
 				try {
-					state_value_func_.reset(new mcts::policy::simulation::NeuralNetworkStateValueFunction(config.mcts));
+					state_value_func_.reset(new mcts::policy::simulation::NeuralNetworkStateValueFunction(config.mcts, random));
 				}
 				catch (std::exception ex) {
 					state_value_func_.reset(nullptr);

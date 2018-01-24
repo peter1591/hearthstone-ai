@@ -16,6 +16,7 @@ namespace alphazero
 		TrainerConfigs() :
 			threads_(2),
 			best_net_path_(),
+			best_net_is_random_(false),
 			competitor_net_path_(),
 			kTrainingDataCapacityPowerOfTwo(10),
 			kMinimumTraningData(0),
@@ -28,6 +29,8 @@ namespace alphazero
 		int threads_;
 
 		std::string best_net_path_;
+		bool best_net_is_random_;
+
 		std::string competitor_net_path_;
 
 		size_t kTrainingDataCapacityPowerOfTwo;
@@ -79,7 +82,7 @@ namespace alphazero
 			threads_.Initialize(configs_.threads_);
 			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
 
-			best_neural_net_.Load(configs.best_net_path_);
+			best_neural_net_.Load(configs.best_net_path_, configs.best_net_is_random_);
 			neural_net_.Load(configs.best_net_path_);
 
 			optimizer_.Initialize();

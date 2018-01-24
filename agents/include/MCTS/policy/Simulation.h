@@ -136,10 +136,10 @@ namespace mcts
 			class NeuralNetworkStateValueFunction
 			{
 			public:
-				NeuralNetworkStateValueFunction(Config const& config)
-					: net_(), current_player_viewer_()
+				NeuralNetworkStateValueFunction(Config const& config, std::mt19937 & random)
+					: net_(), current_player_viewer_(), random_(random)
 				{
-					net_.Load(config.GetNeuralNetPath());
+					net_.Load(config.GetNeuralNetPath(), config.IsNeuralNetRandom());
 				}
 
 				// State value is in range [-1, 1]
@@ -153,7 +153,7 @@ namespace mcts
 				double GetStateValue(state::State const& state) {
 					current_player_viewer_.Reset(state);
 
-					double score = net_.Predict(&current_player_viewer_);
+					double score = net_.Predict(&current_player_viewer_, random_);
 
 					if (!state.GetCurrentPlayerId().IsFirst()) {
 						score = -score;
@@ -358,6 +358,7 @@ namespace mcts
 			private:
 				neural_net::NeuralNetwork net_;
 				StateDataBridge current_player_viewer_;
+				std::mt19937 & random_;
 			};
 
 			class RandomPlayoutWithHeuristicEarlyCutoffPolicy
@@ -389,7 +390,7 @@ namespace mcts
 			public:
 				RandomPlayoutWithHeuristicEarlyCutoffPolicy(state::PlayerSide side, std::mt19937 & rand, Config & config) :
 					rand_(rand),
-					state_value_func_(config)
+					state_value_func_(config, rand_)
 				{
 				}
 
@@ -446,7 +447,7 @@ namespace mcts
 				HeuristicPlayoutWithHeuristicEarlyCutoffPolicy(std::mt19937 & rand, Config const& config) :
 					rand_(rand),
 					decision_(), decision_idx_(0),
-					state_value_func_(config)
+					state_value_func_(config, rand_)
 				{
 				}
 

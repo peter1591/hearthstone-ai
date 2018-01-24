@@ -53,10 +53,16 @@ namespace mcts
 	public:
 		Config() : neural_net_path_() {}
 
-		void SetNeuralNetPath(std::string const& filename) { neural_net_path_ = filename; }
+		void SetNeuralNetPath(std::string const& filename, bool is_random = false) {
+			neural_net_path_ = filename;
+			neural_net_is_random_ = is_random;
+		}
 		std::string const& GetNeuralNetPath() const { return neural_net_path_; }
+		bool IsNeuralNetRandom() const { return neural_net_is_random_; }
+
 		
 	private:
 		std::string neural_net_path_;
+		bool neural_net_is_random_;
 	};
 }

@@ -97,7 +97,7 @@ namespace neural_net {
 		static void CreateWithRandomWeights(std::string const& path);
 
 		void Save(std::string const& path) const;
-		void Load(std::string const& path);
+		void Load(std::string const& path, bool is_random = false);
 
 		void CopyFrom(NeuralNetwork const& rhs);
 
@@ -111,8 +111,8 @@ namespace neural_net {
 			NeuralNetworkInput const& input,
 			NeuralNetworkOutput const& output);
 
-		double Predict(IInputGetter * input);
-		void Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results);
+		double Predict(IInputGetter * input, std::mt19937 & random);
+		void Predict(impl::NeuralNetworkInputImpl const& input, std::vector<double> & results, std::mt19937 & random);
 
 	private:
 		impl::NeuralNetworkImpl * impl_;
