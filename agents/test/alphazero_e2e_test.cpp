@@ -49,8 +49,8 @@ int main(void)
 
 	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 1;
 
-	neural_net::NeuralNetwork::CreateWithRandomWeights(trainer_config.best_net_path_);
 	trainer_config.best_net_path_ = "best_net";
+	neural_net::NeuralNetwork::CreateWithRandomWeights(trainer_config.best_net_path_);
 	trainer_config.best_net_is_random_ = true;
 	
 	trainer_config.competitor_net_path_ = "competitor_net";

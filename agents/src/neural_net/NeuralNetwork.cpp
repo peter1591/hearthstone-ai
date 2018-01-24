@@ -277,10 +277,13 @@ namespace neural_net {
 				random_net_ = is_random;
 			}
 
+			bool IsRandom() const { return random_net_; }
+
 			void CopyFrom(NeuralNetworkImpl const& rhs) {
 				std::string tmpfile = std::tmpnam(nullptr);
 				rhs.net_.save(tmpfile);
 				net_.load(tmpfile);
+				random_net_ = rhs.random_net_;
 				std::remove(tmpfile.c_str());
 			}
 
@@ -408,6 +411,9 @@ namespace neural_net {
 		impl_ = new impl::NeuralNetworkImpl();
 
 		impl_->Load(path, is_random);
+	}
+	bool NeuralNetwork::IsRandom() const {
+		return impl_->IsRandom();
 	}
 
 	void NeuralNetwork::CopyFrom(NeuralNetwork const& rhs) {

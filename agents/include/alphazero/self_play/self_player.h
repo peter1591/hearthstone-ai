@@ -80,7 +80,7 @@ namespace alphazero
 				result_.Clear();
 
 				config_ = config;
-				config_.agent_config.mcts.SetNeuralNetPath(tmp_file_);
+				config_.agent_config.mcts.SetNeuralNetPath(tmp_file_, neural_net.IsRandom());
 			}
 
 			// Thread safety: No

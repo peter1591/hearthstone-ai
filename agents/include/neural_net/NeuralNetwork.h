@@ -99,6 +99,8 @@ namespace neural_net {
 		void Save(std::string const& path) const;
 		void Load(std::string const& path, bool is_random = false);
 
+		bool IsRandom() const;
+
 		void CopyFrom(NeuralNetwork const& rhs);
 
 		void Train(
