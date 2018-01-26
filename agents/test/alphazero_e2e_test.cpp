@@ -34,7 +34,8 @@ int main(void)
 	trainer_config.self_play.save_dir = "./self_play";
 	trainer_config.self_play.agent_config.threads = 1;
 	trainer_config.self_play.agent_config.tree_samples = 1;
-	trainer_config.self_play.agent_config.iterations_per_action = 100000;
+	trainer_config.self_play.agent_config.iterations_per_action = 1000;
+	trainer_config.self_play.agent_config.action_follow_temperature = 1.0;
 
 	trainer_config.optimizer.batch_size = 32;
 	trainer_config.optimizer.batches = 100;
@@ -44,8 +45,9 @@ int main(void)
 	trainer_config.evaluation.runs = 100;
 	trainer_config.evaluation.agent_config.threads = 1;
 	trainer_config.evaluation.agent_config.tree_samples = 1;
-	trainer_config.evaluation.agent_config.iterations_per_action = 10000;
+	trainer_config.evaluation.agent_config.iterations_per_action = 1000;
 	trainer_config.evaluation.agent_config.callback_interval_ms = 100;
+	trainer_config.evaluation.agent_config.action_follow_temperature = 0.0;
 
 	trainer_config.kMinimumTraningData = trainer_config.optimizer.batch_size * 1;
 

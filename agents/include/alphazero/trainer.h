@@ -23,7 +23,7 @@ namespace alphazero
 			self_play(),
 			optimizer(),
 			evaluation(),
-			kEvaluationWinRate(0.55)
+			kEvaluationWinRate(0.55f)
 		{}
 
 		int threads_;

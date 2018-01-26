@@ -78,28 +78,47 @@ namespace agents
 				return false;
 			};
 
-			int best_choice = -1;
-			double best_chosen_times = -std::numeric_limits<double>::infinity();
-			mcts::selection::TreeNode const* best_node = nullptr;
+			struct Item {
+				double value;
+				int choice;
+				mcts::selection::TreeNode const* node;
+			};
+			std::vector<Item> items;
+			double total_value = 0.0;
+
+			double temperature = config_.action_follow_temperature;
+			if (temperature < 0.1) temperature = 0.1;
+
 			node_->children_.ForEach([&](int choice, mcts::selection::EdgeAddon const* edge_addon, mcts::selection::TreeNode * child) {
 				if (!CanBeChosen(choice)) return true;
 
-				double chosen_times = (double)edge_addon->GetChosenTimes();
-				if (chosen_times > best_chosen_times) {
-					best_chosen_times = chosen_times;
-					best_choice = choice;
-					best_node = child;
-				}
+				double choice_value = (double)edge_addon->GetChosenTimes();
+				choice_value = pow(choice_value, 1.0 / temperature);
+				total_value += choice_value;
+
+				items.push_back({ choice_value, choice, child });
 				return true;
 			});
 
-			if (best_choice < 0) {
-				// no any choice is evaluated. randomly choose one.
-				return random() % action_choices.Size();
+			// normalize
+			double accumulated = 0.0;
+			for (auto & item : items) {
+				double normalized = item.value / total_value;
+				accumulated += normalized;
+				item.value = accumulated;
 			}
 
-			node_ = best_node;
-			return best_choice;
+			double v = std::uniform_real_distribution<double>(0.0, accumulated)(random);
+			for (auto const& item : items) {
+				if (v < item.value) {
+					node_ = item.node;
+					return item.choice;
+				}
+			}
+
+			// if goes here, the only possible reason is we don't have any child nodes
+			// no any choice is evaluated. randomly choose one.
+			return random() % action_choices.Size();
 		}
 
 	private:
