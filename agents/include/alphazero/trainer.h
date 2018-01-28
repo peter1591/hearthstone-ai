@@ -54,7 +54,6 @@ namespace alphazero
 		struct Schedule {
 			int self_play_milliseconds;
 			int train_epochs;
-			int evaluation_runs;
 		};
 
 	public:
@@ -77,7 +76,6 @@ namespace alphazero
 
 			schedule_.self_play_milliseconds = 3000;
 			schedule_.train_epochs = 1000;
-			schedule_.evaluation_runs = 1000;
 
 			threads_.Initialize(configs_.threads_);
 			training_data_.Initialize(configs.kTrainingDataCapacityPowerOfTwo);
@@ -218,7 +216,6 @@ namespace alphazero
 			neural_net_.Save(configs_.competitor_net_path_);
 			
 			evaluation::RunOptions options = configs_.evaluation;
-			options.runs = schedule_.evaluation_runs;
 
 			std::vector<detail::ThreadRunner*> threads;
 			for (size_t i = 0; i < threads_.Size(); ++i) {
