@@ -420,6 +420,10 @@ namespace neural_net {
 	}
 
 	void NeuralNetwork::CopyFrom(NeuralNetwork const& rhs) {
+		// reload neural net
+		delete impl_;
+		impl_ = new impl::NeuralNetworkImpl();
+
 		impl_->CopyFrom(*rhs.impl_);
 	}
 
