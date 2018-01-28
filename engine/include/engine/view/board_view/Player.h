@@ -165,7 +165,7 @@ namespace engine
 				void Parse(BoardRefView game_state, state::PlayerSide side) {
 					auto const& card = game_state.GetHeroPower(side);
 					card_id = card.GetCardId();
-					used = (card.GetUsedThisTurn() > 0);
+					used = !card.GetRawData().usable;
 				}
 			};
 
