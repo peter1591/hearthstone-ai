@@ -264,8 +264,11 @@ namespace neural_net {
 				auto fc2 = tiny_dnn::fully_connected_layer(10, 1);
 				fc1 << fc1a << fc2;
 
+				auto output = tiny_dnn::activation::tanh(1);
+				fc2 << output;
+
 				tiny_dnn::network<tiny_dnn::graph> net;
-				tiny_dnn::construct_graph(net, { &in_heroes, &in_minions, &in_standalone }, { &fc2 });
+				tiny_dnn::construct_graph(net, { &in_heroes, &in_minions, &in_standalone }, { &output });
 
 				net.init_weight();
 
