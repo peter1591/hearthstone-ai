@@ -117,8 +117,10 @@ namespace mcts
 						<< ": " << GetChoiceString(main_node, action_analyzer, node, choice, action_cb_info_getter)
 						<< " " << GetChoiceSuggestionRate(node, choice, total_chosen_time)
 						<< std::endl;
+
 					engine::ActionApplyHelper new_cb_getter = action_cb_info_getter;
 					new_cb_getter.AppendChoice(choice);
+
 					return ShowBestSubNodeInfo(s, main_node, action_analyzer, node, choice, total_chosen_time,
 						edge_addon, child, new_cb_getter, indent + 1, only_show_best_choice);
 				});
@@ -233,11 +235,11 @@ namespace mcts
 				}
 
 				if (action_type == engine::ActionType::kChooseTarget) {
-					auto info = std::get<engine::ActionApplyHelper::GetSpecifiedTargetInfo>(
-						action_cb_info_getter.ApplyChoices([&]() {
+					auto cb_info = action_cb_info_getter.ApplyChoices([&]() {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
 						return start_board_getter_(rand);
-					}));
+					});
+					auto info = std::get<engine::ActionApplyHelper::GetSpecifiedTargetInfo>(cb_info);
 					std::stringstream ss;
 					ss << "Target at [" << GetTargetString(info.targets[choice]) << "]";
 					return ss.str();

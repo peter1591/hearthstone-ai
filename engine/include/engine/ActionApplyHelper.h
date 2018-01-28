@@ -63,7 +63,7 @@ namespace engine
 
 			// should be called after GetNumber()
 			bool HasFurtherChoices() const {
-				return choices_idx_ < choices_.size();
+				return choices_idx_ <= choices_.size();
 			}
 
 			// should be called after GetNumber()
@@ -85,6 +85,7 @@ namespace engine
 		private:
 			int GetNextChoice(int min, int exclusive_max) {
 				if (choices_idx_ >= choices_.size()) {
+					++choices_idx_;
 					return min; // just an arbitrary valid choice
 				}
 
@@ -109,6 +110,7 @@ namespace engine
 			{}
 			
 			void Initialize(state::State const& game_state) {
+				result_ = NullInfo();
 				choser_.Initialize(game_state);
 			}
 
@@ -158,6 +160,7 @@ namespace engine
 
 		private:
 			bool ShouldRecord() const {
+				if (!std::holds_alternative<NullInfo>(result_)) return false;
 				if (choser_.ShouldSkip()) return false;
 				if (choser_.HasFurtherChoices()) return false;
 				return true;
