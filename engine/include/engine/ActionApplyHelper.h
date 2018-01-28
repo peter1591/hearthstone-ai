@@ -191,6 +191,12 @@ namespace engine
 
 		CallbackInfo ApplyChoices(state::State & game_state) const
 		{
+			engine::Result result;
+			return ApplyChoices(game_state, result);
+		}
+
+		CallbackInfo ApplyChoices(state::State & game_state, engine::Result & result) const
+		{
 			CallbackInfo info = NullInfo();
 
 			size_t choices_idx = 0;
@@ -203,7 +209,7 @@ namespace engine
 
 			while (choices_.size() > choices_idx) {
 				action_cb.Initialize(game_state);
-				engine::FlowControl::FlowController(game_state, flow_context).PerformAction();
+				result = engine::FlowControl::FlowController(game_state, flow_context).PerformAction();
 			}
 
 			return info;

@@ -296,9 +296,12 @@ namespace mcts
 					if (!only_show_best_choice) {
 						std::mt19937 rand; // not random seeded; just to get one of the possible boards
 						state::State game_state = start_board_getter_(rand);
-						auto dummy_cb_info = action_cb_info_getter.ApplyChoices(game_state);
-						double v = GetStateValue(game_state);
-						s << indent_padding << "State-value: " << v << std::endl;
+						engine::Result result = engine::kResultInvalid;
+						auto dummy_cb_info = action_cb_info_getter.ApplyChoices(game_state, result);
+						if (result == engine::kResultNotDetermined) {
+							double v = GetStateValue(game_state);
+							s << indent_padding << "State-value: " << v << std::endl;
+						}
 					}
 				}
 				return true;
