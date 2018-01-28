@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/view/Board.h"
+#include "MCTS/Types.h"
 
 namespace mcts
 {
@@ -14,44 +15,9 @@ namespace mcts
 			// * If the first player has 100% to loss, the credit should be -1.0
 			// * If the first player has 50% to win, the credit should be 0.0
 			// * The credit value should be in range [-1.0, 1.0]
-			static float GetCredit(engine::view::Board const& board, engine::Result result) {
+			static float GetCredit(engine::view::Board const& board, StateValue state_value) {
 				auto side = board.GetViewSide();
-				bool winning = WinOrLoss(side, result);
-
-				if (winning) return 1.0f;
-				else return -1.0f;
-			}
-
-		private:
-			static bool WinOrLoss(state::PlayerSide side, engine::Result result) {
-				if (side == state::kPlayerFirst) {
-					switch (result) {
-					case engine::kResultFirstPlayerWin:
-						return true;
-					case engine::kResultSecondPlayerWin:
-					case engine::kResultDraw:
-						return false;
-					default:
-						assert(false);
-						throw std::runtime_error("logic error");
-					}
-				}
-				else if (side == state::kPlayerSecond) {
-					switch (result) {
-					case engine::kResultSecondPlayerWin:
-						return true;
-					case engine::kResultFirstPlayerWin:
-					case engine::kResultDraw:
-						return false;
-					default:
-						assert(false);
-						throw std::runtime_error("logic error");
-					}
-				}
-				else {
-					assert(false);
-					throw std::runtime_error("logic error");
-				}
+				return state_value.GetValue(side);
 			}
 		};
 	}

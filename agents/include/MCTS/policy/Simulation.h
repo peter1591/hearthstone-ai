@@ -2,6 +2,7 @@
 
 #include <random>
 #include "engine/view/Board.h"
+#include "MCTS/Types.h"
 #include "MCTS/policy/RandomByRand.h"
 #include "neural_net/NeuralNetwork.h"
 
@@ -142,27 +143,21 @@ namespace mcts
 					net_.Load(config.GetNeuralNetPath(), config.IsNeuralNetRandom());
 				}
 
-				// State value is in range [-1, 1]
-				// If first player is 100% wins, score = 1.0
-				// If first player is 50% wins, 50%loss, score = 0.0
-				// If first player is 100% loss, score = -1.0
-				double GetStateValue(engine::view::Board const& board) {
+				StateValue GetStateValue(engine::view::Board const& board) {
 					return GetStateValue(board.RevealHiddenInformationForSimulation());
 				}
 
-				double GetStateValue(state::State const& state) {
+				StateValue GetStateValue(state::State const& state) {
 					current_player_viewer_.Reset(state);
 
-					double score = net_.Predict(&current_player_viewer_, random_);
+					float score = (float)net_.Predict(&current_player_viewer_, random_);
 
-					if (!state.GetCurrentPlayerId().IsFirst()) {
-						score = -score;
-					}
+					if (score > 1.0f) score = 1.0f;
+					if (score < -1.0f) score = -1.0f;
 
-					if (score > 1.0) score = 1.0;
-					if (score < -1.0) score = -1.0;
-
-					return score;
+					StateValue ret;
+					ret.SetValue(score, state.GetCurrentPlayerId().GetSide());
+					return ret;
 				}
 
 			private:
@@ -374,17 +369,13 @@ namespace mcts
 				static constexpr double kCutoffExpectedRuns = 10;
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 
-				engine::Result GetCutoffResult(engine::view::Board const& board) {
+				bool GetCutoffResult(engine::view::Board const& board, StateValue & state_value) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
-					if (v >= kCutoffProbability) {
-						return engine::kResultNotDetermined;
-					}
+					if (v >= kCutoffProbability) return false;
 
-					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return engine::kResultFirstPlayerWin;
-					else if (score == 0.0) return engine::kResultDraw;
-					else return engine::kResultSecondPlayerWin;
+					state_value = state_value_func_.GetStateValue(board);
+					return true;
 				}
 
 			public:
@@ -430,17 +421,13 @@ namespace mcts
 				static constexpr double kCutoffProbability = 1.0 / kCutoffExpectedRuns;
 				static constexpr bool kRandomlyPutMinions = true;
 
-				engine::Result GetCutoffResult(engine::view::Board const& board) {
+				bool GetCutoffResult(engine::view::Board const& board, StateValue & state_value) {
 					std::uniform_real_distribution<double> rand_gen(0.0, 1.0);
 					double v = rand_gen(rand_);
-					if (v >= kCutoffProbability) {
-						return engine::kResultNotDetermined;
-					}
+					if (v >= kCutoffProbability) return false;
 
-					double score = state_value_func_.GetStateValue(board);
-					if (score > 0.0) return engine::kResultFirstPlayerWin;
-					else if (score == 0.0) return engine::kResultDraw;
-					else return engine::kResultSecondPlayerWin;
+					state_value = state_value_func_.GetStateValue(board);
+					return true;
 				}
 
 			public:
@@ -568,6 +555,8 @@ namespace mcts
 					UserChoicePolicy cb_user_choice(dfs, dfs_it, rand_());
 					cb_user_choice.Initialize(board.GetCurrentPlayerStateRefView().GetValidActionGetter());
 
+					auto side = board.GetCurrentPlayer();
+
 					double best_value = -std::numeric_limits<double>::infinity();
 					action_analyzer.ForEachMainOp([&](size_t main_op_idx, engine::MainOpType main_op) {
 						cb_user_choice.SetMainOpIndex((int)main_op_idx);
@@ -581,20 +570,15 @@ namespace mcts
 							auto result = copy_board.ApplyAction(cb_user_choice);
 
 							if (result != engine::kResultInvalid) {
-								double value = -std::numeric_limits<double>::infinity();
-								if (result == engine::kResultFirstPlayerWin) {
-									value = std::numeric_limits<double>::infinity();
-								}
-								else if (result == engine::kResultSecondPlayerWin) {
-									value = -std::numeric_limits<double>::infinity();
-								}
-								else if (result == engine::kResultDraw) {
-									value = 0.0;
+								StateValue state_value;
+								if (result == engine::kResultNotDetermined) {
+									state_value = state_value_func_.GetStateValue(copy_board);
 								}
 								else {
-									assert(result == engine::kResultNotDetermined);
-									value = state_value_func_.GetStateValue(copy_board);
+									state_value.SetValue(result);
 								}
+
+								float value = state_value.GetValue(side.GetSide());
 
 								if (decision_.empty() || value > best_value) {
 									best_value = value;

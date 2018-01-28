@@ -102,9 +102,9 @@ namespace mcts
 				redirect_node_map_ = nullptr;
 			}
 
-			void FinishIteration(engine::view::Board const& board, engine::Result result)
+			void FinishIteration(engine::view::Board const& board, StateValue state_value)
 			{
-				float credit = StaticConfigs::CreditPolicy::GetCredit(board, result);
+				float credit = StaticConfigs::CreditPolicy::GetCredit(board, state_value);
 				path_.Update(credit);
 			}
 

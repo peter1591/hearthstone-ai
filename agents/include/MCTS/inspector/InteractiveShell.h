@@ -78,7 +78,7 @@ namespace mcts
 		private:
 			double GetStateValue(state::State const& s) {
 				if (!state_value_func_) return std::numeric_limits<double>::quiet_NaN();
-				return state_value_func_->GetStateValue(s);
+				return state_value_func_->GetStateValue(s).GetValue(state::kPlayerFirst);
 			}
 
 			void ShowBestNodeInfo(

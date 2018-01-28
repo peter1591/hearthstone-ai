@@ -14,15 +14,15 @@ namespace mcts
 				random_(rand), select_(rand, config)
 			{}
 
-			engine::Result CutoffCheck(engine::view::Board const& board)
+			bool CutoffCheck(engine::view::Board const& board, StateValue & state_value)
 			{
 				using Policy = std::decay_t<decltype(select_)>;
 
 				if constexpr (Policy::kEnableCutoff) {
-					return select_.GetCutoffResult(board);
+					return select_.GetCutoffResult(board, state_value);
 				}
 				else {
-					return engine::kResultNotDetermined;
+					return false;
 				}
 			}
 			

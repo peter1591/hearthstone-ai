@@ -32,22 +32,20 @@ namespace mcts
 				StaticConfigs::SideController::Side side = side_controller_.GetActionSide();
 				
 				GetSOMCTS(side).StartActions();
-				engine::Result result = engine::kResultInvalid;
+				bool iteration_ends = false;
+				StateValue state_value;
 				while (side_controller_.GetActionSide() == side) {
-					result = GetSOMCTS(side).PerformAction(side_controller_.GetSideView(side));
-					assert(result != engine::kResultInvalid);
-					if (result != engine::kResultNotDetermined) break;
+					iteration_ends = GetSOMCTS(side).PerformAction(side_controller_.GetSideView(side), state_value);
+					if (iteration_ends) break;
 				}
 
-				assert(result != engine::kResultInvalid);
-				
-				if (result != engine::kResultNotDetermined) {
+				if (iteration_ends) {
 					first_.FinishIteration(
 						side_controller_.GetSideView(StaticConfigs::SideController::Side::First()),
-						result);
+						state_value);
 					second_.FinishIteration(
 						side_controller_.GetSideView(StaticConfigs::SideController::Side::Second()),
-						result);
+						state_value);
 					break;
 				}
 

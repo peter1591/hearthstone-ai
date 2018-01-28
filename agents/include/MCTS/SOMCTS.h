@@ -87,16 +87,16 @@ namespace mcts
 		void StartActions() {
 		}
 
-		engine::Result PerformAction(engine::view::Board const& board)
+		// return true if iteration should end (early cutoff, or game ends)
+		bool PerformAction(engine::view::Board const& board, StateValue & state_value)
 		{
 			assert(board.GetCurrentPlayer().GetSide() == board.GetViewSide());
 
 			action_cb_.Initialize(board);
 
+			engine::Result result;
 			if (stage_ == kStageSimulation) {
-				engine::Result result = simulation_stage_.CutoffCheck(board);
-				assert(result != engine::kResultInvalid);
-				if (result != engine::kResultNotDetermined) return result;
+				if (simulation_stage_.CutoffCheck(board, state_value)) return true;
 				
 				simulation_stage_.StartAction(board, action_cb_.GetAnalyzer());
 
@@ -104,15 +104,13 @@ namespace mcts
 				assert(result != engine::kResultInvalid);
 				constexpr bool is_simulation = true;
 				statistic_.ApplyActionSucceeded(is_simulation);
-
-				return result;
 			}
 			else {
 				assert(stage_ == kStageSelection);
 
 				selection_stage_.StartAction(board);
 
-				auto result = board.ApplyAction(action_cb_);
+				result = board.ApplyAction(action_cb_);
 				assert(result != engine::kResultInvalid);
 				constexpr bool is_simulation = false;
 				statistic_.ApplyActionSucceeded(is_simulation);
@@ -120,8 +118,14 @@ namespace mcts
 				if (selection_stage_.FinishAction(board, result)) {
 					stage_ = kStageSimulation;
 				}
+			}
 
-				return result;
+			if (result != engine::kResultNotDetermined) {
+				state_value.SetValue(result);
+				return true;
+			}
+			else {
+				return false;
 			}
 		}
 
@@ -135,9 +139,9 @@ namespace mcts
 			selection_stage_.ApplyOthersActions(board);
 		}
 
-		void FinishIteration(engine::view::Board const& board, engine::Result result)
+		void FinishIteration(engine::view::Board const& board, StateValue state_value)
 		{
-			selection_stage_.FinishIteration(board, result);
+			selection_stage_.FinishIteration(board, state_value);
 		}
 		
 		int ChooseAction(engine::view::Board const& board, engine::ActionType action_type, engine::ActionChoices & choices) {

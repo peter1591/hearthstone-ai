@@ -19,7 +19,6 @@ static void Initialize()
 struct Config
 {
 	agents::MCTSAgentConfig agent;
-	mcts::Config mcts;
 };
 
 static Config global_config;
@@ -96,9 +95,9 @@ bool CheckRun(std::string const& cmdline, agents::MCTSRunner * controller)
 
 void TestAI()
 {
-	global_config.mcts.SetNeuralNetPath("neural_net_e2e_test");
 	global_config.agent.threads = 1;
 	global_config.agent.tree_samples = 10;
+	global_config.agent.mcts.SetNeuralNetPath("neural_net_e2e_test");
 
 	srand(0);
 
@@ -106,7 +105,8 @@ void TestAI()
 	std::mt19937 rand(seed);
 
 	agents::MCTSRunner controller(global_config.agent, rand);
-	mcts::inspector::InteractiveShell handler(global_config.mcts, &controller);
+	mcts::inspector::InteractiveShell handler(&controller);
+	handler.SetConfig(global_config.agent, rand);
 
 	while (std::cin) {
 		std::string cmdline;

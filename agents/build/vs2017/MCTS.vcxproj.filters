@@ -140,9 +140,6 @@
     <ClInclude Include="..\..\include\MCTS\Statistic.h">
       <Filter>Header Files\MCTS</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\MCTS\Types.h">
-      <Filter>Header Files\MCTS</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\MCTS\inspector\InteractiveShell.h">
       <Filter>Header Files\MCTS\inspector</Filter>
     </ClInclude>
@@ -280,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\neural_net\NeuralNetwork.h">
       <Filter>Header Files\neural_net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\MCTS\Types.h">
+      <Filter>Header Files\MCTS</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
