@@ -74,7 +74,7 @@ namespace mcts
 			public:
 				static constexpr double kExploreWeight = 0.2;
 
-				int SelectChoice(ChoiceIterator choice_iterator)
+				int SelectChoice(engine::ActionType action_type, ChoiceIterator choice_iterator)
 				{
 					constexpr size_t kMaxChoices = engine::IActionParameterGetter::kMaxChoices;
 					std::array<ChoiceIterator::Item, kMaxChoices> choices;
@@ -112,7 +112,20 @@ namespace mcts
 					assert(total_chosen_times > 0);
 
 					// Phase 2: use UCB to make a choice
-					auto get_score = [total_chosen_times](ChoiceIterator::Item const& item) {
+					auto get_score = [total_chosen_times](
+						engine::ActionType action_type,
+						size_t choice_idx, size_t choice_count,
+						ChoiceIterator::Item const& item)
+					{
+						double explore_weight = kExploreWeight;
+						if (action_type == engine::ActionType::kMainAction) {
+							if (choice_idx == choice_count - 1) {
+								// do not choose end-turn action
+								// this is a simple mimic to policy network as in AlphaZero
+								explore_weight *= 0.1;
+							}
+						}
+
 						double exploit_score = item.edge_addon->GetAverageCredit();
 						assert(exploit_score >= -1.0);
 						assert(exploit_score <= 1.0);
@@ -123,18 +136,16 @@ namespace mcts
 						double explore_score = std::sqrt(
 							std::log((double)total_chosen_times) / chosen_times);
 
-						return exploit_score + kExploreWeight * explore_score;
+						return exploit_score + explore_weight * explore_score;
 					};
 
 					assert(choices_size > 0);
-					size_t idx = 0;
 
-					size_t best_choice = idx;
-					double best_score = get_score(choices[idx]);
-					++idx;
+					size_t best_choice = 0;
+					double best_score = -std::numeric_limits<double>::infinity();
 
-					for (; idx < choices_size; ++idx) {
-						double score = get_score(choices[idx]);
+					for (size_t idx = 0; idx < choices_size; ++idx) {
+						double score = get_score(action_type, idx, choices_size, choices[idx]);
 						if (score > best_score) {
 							best_choice = idx;
 							best_score = score;

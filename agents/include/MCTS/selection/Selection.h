@@ -66,6 +66,7 @@ namespace mcts
 				assert(current_node->addon_.consistency_checker.SetAndCheck(action_type, choices));
 
 				int next_choice = policy_.SelectChoice(
+					action_type,
 					mcts::policy::selection::ChoiceIterator(choices, current_node->children_));
 
 				assert(next_choice >= 0); // should report a valid action
