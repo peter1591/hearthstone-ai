@@ -106,6 +106,6 @@ Just me. Any idea/help is always welcomed.
 
 ## License
 
-The newest GPL license is applied to this project.
+Latest GPL license is applied to this project.
 
 Some third party libraries are used, please also obey to their licenses.
