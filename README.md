@@ -45,6 +45,13 @@ A simple example shows the neural network can *greatly* boost MCTS play strength
   * If using random default policy, it takes more than 300k iterations (8G+ RAM) to realize this.
   * If using neural network as default policy, it only takes < 15k iterations (less than 5 seconds) to realize this.
 
+### Reinforcement Learning Pipeline
+
+Similar to AlphaZero proposed by DeepMind, a reinforcement learning pipeline
+is also implemented [here](./agents/train/gcc7/alphazero). The pipeline works,
+but requires intensive computation resource to do a great job. Some results
+are also outlined [there](./agents/train/gcc7/alphazero).
+
 ### [Game Board Recognition](./ui/build/vs2017/HearthstoneAI/LogWatcher)
 * Use the logging feature in HearthStone
 * Written in C# since no critical performance issue occurs here.
