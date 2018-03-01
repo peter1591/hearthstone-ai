@@ -83,7 +83,7 @@ Hope we can have a better accuracy than current result (~79%, which also aligned
 
 I have tried to embedding the card id to encode the battlecry and deathrattle features for each different card. Maybe we need to find a better way to generate game data automatically, so the neural network can learn the embeddings separately and hopefully more accurately.
 
-This is now dealt with by [a separated repository on github)[https://github.com/peter1591/hearthstone-card2vec].
+This is now dealt with by [a separated repository on github](https://github.com/peter1591/hearthstone-card2vec).
 
 ### Balance Between Wide and Deep
 
