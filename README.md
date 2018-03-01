@@ -70,7 +70,7 @@ are also outlined.
 
 ## Future Works
 
-### Neural Network Improvements
+### [Neural Network Improvements](https://github.com/peter1591/hearthstone-card2vec)
 
 The goal of the neural network is to guess who is going to win this game, by looking at only the current board. Several improvements could be done:
 
@@ -82,6 +82,8 @@ The goal of the neural network is to guess who is going to win this game, by loo
 Hope we can have a better accuracy than current result (~79%, which also aligned to the result of AAIA'17 Data Mining Challenge: Helping AI to Play Hearthstone (https://knowledgepit.fedcsis.org/mod/page/view.php?id=1022)).
 
 I have tried to embedding the card id to encode the battlecry and deathrattle features for each different card. Maybe we need to find a better way to generate game data automatically, so the neural network can learn the embeddings separately and hopefully more accurately.
+
+This is now dealt with by [a separated repository on github)[https://github.com/peter1591/hearthstone-card2vec].
 
 ### Balance Between Wide and Deep
 
